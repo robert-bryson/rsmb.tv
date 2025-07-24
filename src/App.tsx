@@ -1,7 +1,12 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { useEffect } from 'react';
+import type { ReactNode } from 'react';
 
-const Layout = ({ children }) => (
+interface LayoutProps {
+  children: ReactNode;
+}
+
+const Layout = ({ children }: LayoutProps) => (
   <div className="min-h-screen bg-gray-900 text-gray-100 font-sans">
     <header className="bg-gray-800 p-4 shadow-md">
       <nav className="container mx-auto flex justify-between">
