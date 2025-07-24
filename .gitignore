@@ -128,3 +128,56 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# amplify
+.amplify
+amplify_outputs*
+amplifyconfiguration*
+
+# === Terraform ===
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+crash.log
+terraform.tfvars
+terraform.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# === Amplify CLI (if you ever use it locally) ===
+amplify/
+aws-exports.js
+awsconfiguration.json
+
+# === Node.js/Frontend (e.g. React, Vue, etc.) ===
+node_modules/
+dist/
+build/
+.cache/
+.next/
+out/
+.vite/
+*.log
+npm-debug.log*
+
+# === macOS ===
+.DS_Store
+
+# === VSCode ===
+.vscode/
+.history/
+
+# === System ===
+.env
+*.bak
+*.tmp
+
+# === General Secrets ===
+*.pem
+*.key
+*.crt
+*.env.*
+
