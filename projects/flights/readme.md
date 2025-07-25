@@ -40,6 +40,9 @@ This GeoJSON file is then loaded by the CesiumJS component in `src/pages/Flights
 
 ## 📍 Future Ideas
 
-* Animate flights over time
-* Group by airline or year
-* Add altitude arcs or great circle curves
+- Animate flights over time
+- Group by airline or year
+- Add altitude arcs or great circle curves
+- Add general stats
+- Add airport points
+- Add visited countries/regions
