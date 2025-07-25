@@ -181,3 +181,6 @@ npm-debug.log*
 *.crt
 *.env.*
 
+# === Project: Flights ===
+/public/cesium/
+/public/cesium/**

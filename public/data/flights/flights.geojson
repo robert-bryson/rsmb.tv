@@ -1,0 +1,101 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1,
+        "date": "2024-03-12",
+        "airline": "Delta",
+        "origin_code": "STL",
+        "origin_name": "St. Louis Lambert International",
+        "origin_city": "St. Louis",
+        "origin_state": "MO",
+        "origin_country": "USA",
+        "destination_code": "ORD",
+        "destination_name": "Chicago O'Hare International",
+        "destination_city": "Chicago",
+        "destination_state": "IL",
+        "destination_country": "USA",
+        "altitude": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -90.37,
+            38.7487
+          ],
+          [
+            -87.9073,
+            41.9742
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2,
+        "date": "2024-05-01",
+        "airline": "British Airways",
+        "origin_code": "ORD",
+        "origin_name": "Chicago O'Hare International",
+        "origin_city": "Chicago",
+        "origin_state": "IL",
+        "origin_country": "USA",
+        "destination_code": "SEA",
+        "destination_name": "Seattle-Tacoma International",
+        "destination_city": "Seattle",
+        "destination_state": "WA",
+        "destination_country": "USA",
+        "altitude": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -87.9073,
+            41.9742
+          ],
+          [
+            -122.3094,
+            47.4489
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3,
+        "date": "2024-07-15",
+        "airline": "Alaska",
+        "origin_code": "SAN",
+        "origin_name": "San Diego International",
+        "origin_city": "San Diego",
+        "origin_state": "CA",
+        "origin_country": "USA",
+        "destination_code": "SEA",
+        "destination_name": "Seattle-Tacoma International",
+        "destination_city": "Seattle",
+        "destination_state": "WA",
+        "destination_country": "USA",
+        "altitude": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -117.1933,
+            32.7338
+          ],
+          [
+            -122.3094,
+            47.4489
+          ]
+        ]
+      }
+    }
+  ]
+}
