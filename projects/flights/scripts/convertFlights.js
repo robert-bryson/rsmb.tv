@@ -18,13 +18,15 @@ const airports = parse(airportsRaw, {
 
 const airportMap = {}
 airports.forEach((a) => {
-    airportMap[a.code] = {
+    airportMap[a.iata_code] = {
         name: a.name,
-        city: a.city,
-        state: a.state,
-        country: a.country,
-        lat: parseFloat(a.lat),
-        lon: parseFloat(a.lon),
+        municipality: a.municipality,
+        region: a.iso_region,
+        country: a.iso_country,
+        continent: a.continent,
+        lat: parseFloat(a.latitude_deg),
+        lon: parseFloat(a.longitude_deg),
+        elev_ft: parseFloat(a.elevation_ft)
     }
 })
 
@@ -49,15 +51,16 @@ const features = flights.map((row, index) => {
       airline: row.airline,
       origin_code: row.origin,
       origin_name: origin.name,
-      origin_city: origin.city,
-      origin_state: origin.state,
+      origin_municipality: origin.municipality,
+      origin_region: origin.region,
       origin_country: origin.country,
+      origin_continent: origin.continent,
       destination_code: row.destination,
       destination_name: destination.name,
-      destination_city: destination.city,
-      destination_state: destination.state,
+      destination_municipality: destination.municipality,
+      destination_region: destination.region,
       destination_country: destination.country,
-      altitude: parseFloat(row.altitude),
+      destination_continent: destination.continent,
     },
     geometry: {
       type: 'LineString',

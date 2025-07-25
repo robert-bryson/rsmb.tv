@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Viewer, Entity, CameraFlyTo, GeoJsonDataSource} from 'resium';
+import { Viewer, CameraFlyTo, GeoJsonDataSource} from 'resium';
 import { Cartesian3, Color} from 'cesium';
 import 'cesium/Build/Cesium/Widgets/widgets.css'
 
