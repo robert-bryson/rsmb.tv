@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, Suspense, lazy } from 'react';
 import type { ReactNode } from 'react';
 
-import Flights from './pages/Flights';
+const Flights = lazy(() => import('./pages/Flights'))
 
 interface LayoutProps {
   children: ReactNode;
@@ -73,13 +73,15 @@ export default function App() {
   return (
     <Router>
       <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/projects/flights" element={<Flights />} />
-          <Route path="/blog" element={<Blog />} />
-        </Routes>
+        <Suspense fallback={<div className='text-white p-4'>Loading...</div>}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/projects/flights" element={<Flights />} />
+            <Route path="/blog" element={<Blog />} />
+          </Routes>
+        </Suspense>
       </Layout>
     </Router>
   );
