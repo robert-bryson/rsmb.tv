@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
-import { Viewer, CameraFlyTo,ImageryLayer, GeoJsonDataSource, Entity} from 'resium';
-import { Cartesian3, Color, Ion, UrlTemplateImageryProvider} from 'cesium';
-import type { FeatureCollection, Feature, Point } from 'geojson'
+import { Viewer, CameraFlyTo,ImageryLayer, Entity} from 'resium';
+import { Cartesian3, Color, Ion, UrlTemplateImageryProvider, PolylineGlowMaterialProperty, ArcType} from 'cesium';
+import type { FeatureCollection, Feature, Point, LineString } from 'geojson'
 import 'cesium/Build/Cesium/Widgets/widgets.css'
 // import 'styles/cesium-dark.css'
 
@@ -52,6 +52,50 @@ const AirportEntities = () => {
    )
 }
 
+const FlightEntities = () => {
+    const [flights, setFlights] = useState<FeatureCollection<LineString> | null>(null)
+
+    useEffect(() => {
+        fetch('/data/flights/flights.geojson')
+            .then(res => res.json())
+            .then(data => setFlights(data))
+            .catch(err => console.error('Error loading flights.geojson', err))
+    }, [])
+
+    if (!flights) return null
+
+    return (
+    <>
+        {flights.features.map((f: Feature<LineString>, i: number) => {
+            const props = f.properties ?? {};
+
+            const name = `${props.origin_code || ''}->${props.destination_code || ''}`
+            const description = `<strong>${name}</strong>`;
+
+            return (
+                <Entity
+                    key={i}
+                    name={name}
+                    description={description}
+                    polyline={{
+                        positions: [
+                            Cartesian3.fromDegrees(props.origin_lon, props.origin_lat, 10000),
+                            Cartesian3.fromDegrees(props.destination_lon, props.destination_lat, 10000),
+                        ],
+                        width: 4,
+                        material: new PolylineGlowMaterialProperty({
+                            glowPower: 0.5,
+                            color: Color.WHITE.withAlpha(0.8),
+                        }),
+                        arcType: ArcType.GEODESIC,
+                    }}
+                />
+            );
+        })}
+    </>
+   )
+}
+
 const Flights = () => {
     // Optional: disable Cesium Ion access token if unused
     Ion.defaultAccessToken = ''
@@ -73,14 +117,7 @@ const Flights = () => {
                     destination={Cartesian3.fromDegrees(-90.0, 38.6, 10000000)}
                 />
 
-                <GeoJsonDataSource
-                    data="/data/flights/flights.geojson"
-                    markerSize={0}
-                    stroke={Color.PURPLE}
-                    strokeWidth={2}
-                    fill={Color.PURPLE.withAlpha(0.3)}
-                />
-
+                <FlightEntities />
                 <AirportEntities />
 
                 <ImageryLayer
