@@ -5,22 +5,20 @@ import type { FeatureCollection, Feature, Point, LineString } from 'geojson'
 import 'cesium/Build/Cesium/Widgets/widgets.css'
 // import 'styles/cesium-dark.css'
 
-const AirportEntities = () => {
-   const [airports, setAirports] = useState<FeatureCollection<Point> | null>(null)
+type AirportProps = {
+    airports: FeatureCollection<Point>;
+    hoveredFlight?: Feature<LineString>;
+}
 
-   useEffect(() => {
-    fetch('/data/flights/visitedAirports.geojson')
-        .then(res => res.json())
-        .then(data => setAirports(data))
-        .catch(err => console.error('Error loading visitedAirports.geojson', err))
-   }, [])
-
-   if (!airports) return null
-
-   return (
+const AirportEntities = ({ airports, hoveredFlight}: AirportProps) => (
     <>
         {airports.features.map((a: Feature<Point>, i: number) => {
             const props = a.properties ?? {};
+
+            const isOriginOrDest = hoveredFlight &&
+                (hoveredFlight.properties?.origin_code === props.code ||
+                 hoveredFlight.properties?.destination_code === props.code
+                )
             
             const description = `
                 <strong>${props.name || props.code}</strong><br/>
@@ -36,38 +34,35 @@ const AirportEntities = () => {
                     name={a.properties?.name ?? ''}
                     description={description}
                     position={Cartesian3.fromDegrees(...a.geometry.coordinates as [number, number])}
-                    point={{ pixelSize: 6, color: Color.YELLOW }}
-                    label={{
+                    point={{ 
+                        pixelSize: isOriginOrDest ? 20: 6,
+                        color: isOriginOrDest ? Color.PURPLE: Color.WHITE }}
+                    label={ isOriginOrDest ? {
                         text: props?.code ?? '',
                         scale: 0.5,
                         fillColor: Color.WHITE,
                         showBackground: true,
                         horizontalOrigin: 0,
                         verticalOrigin: -1,
-                    }}
+                    }: ''}
                 />
             );
         })}
     </>
-   )
+)
+
+type FlightProps = {
+    flights: FeatureCollection<LineString>;
+    hoveredFlightId: number | null;
+    setHoveredFlightID: (id: number | null) => void;
 }
 
-const FlightEntities = () => {
-    const [flights, setFlights] = useState<FeatureCollection<LineString> | null>(null)
-
-    useEffect(() => {
-        fetch('/data/flights/flights.geojson')
-            .then(res => res.json())
-            .then(data => setFlights(data))
-            .catch(err => console.error('Error loading flights.geojson', err))
-    }, [])
-
-    if (!flights) return null
-
-    return (
+const FlightEntities = ({ flights, hoveredFlightId, setHoveredFlightID}: FlightProps) => (
     <>
         {flights.features.map((f: Feature<LineString>, i: number) => {
             const props = f.properties ?? {};
+            
+            const isHovered = hoveredFlightId === props.id
 
             const name = `${props.origin_code || ''}->${props.destination_code || ''}`
             const description = `<strong>${name}</strong>`;
@@ -77,15 +72,17 @@ const FlightEntities = () => {
                     key={i}
                     name={name}
                     description={description}
+                    onMouseEnter={() => setHoveredFlightID(props.id)}
+                    onMouseLeave={() => setHoveredFlightID(null)}
                     polyline={{
                         positions: [
                             Cartesian3.fromDegrees(props.origin_lon, props.origin_lat, 10000),
                             Cartesian3.fromDegrees(props.destination_lon, props.destination_lat, 10000),
                         ],
-                        width: 4,
+                        width: isHovered ? 10: 2,
                         material: new PolylineGlowMaterialProperty({
-                            glowPower: 0.5,
-                            color: Color.WHITE.withAlpha(0.8),
+                            glowPower: isHovered ? 1 : 0.1,
+                            color: isHovered ? Color.PURPLE: Color.WHITE.withAlpha(0.6),
                         }),
                         arcType: ArcType.GEODESIC,
                     }}
@@ -93,14 +90,36 @@ const FlightEntities = () => {
             );
         })}
     </>
-   )
-}
+)
 
 const Flights = () => {
     // Optional: disable Cesium Ion access token if unused
     Ion.defaultAccessToken = ''
 
     const viewerRef = useRef(null)
+
+    const [airports, setAirports] = useState<FeatureCollection<Point> | null>(null)
+    const [flights, setFlights] = useState<FeatureCollection<LineString> | null>(null)
+    const [hoveredFlightId, setHoveredFlightID] = useState<number | null>(null)
+    
+    const hoveredFlight = flights?.features.find(
+        (f: Feature<LineString>) => f.properties?.id === hoveredFlightId)
+
+    useEffect(() => {
+        fetch('/data/flights/flights.geojson')
+            .then(res => res.json())
+            .then(data => setFlights(data))
+            .catch(err => console.error('Error loading flights.geojson', err))
+    }, [])
+    useEffect(() => {
+        fetch('/data/flights/visitedAirports.geojson')
+            .then(res => res.json())
+            .then(data => setAirports(data))
+            .catch(err => console.error('Error loading visitedAirports.geojson', err))
+    }, [])
+
+    if (!flights || !airports) return null
+
 
     return (
         <section className="h-[calc(100vh-4rem)] w-full">
@@ -117,8 +136,15 @@ const Flights = () => {
                     destination={Cartesian3.fromDegrees(-90.0, 38.6, 10000000)}
                 />
 
-                <FlightEntities />
-                <AirportEntities />
+                <FlightEntities
+                    flights={flights}
+                    hoveredFlightId={hoveredFlightId}
+                    setHoveredFlightID={setHoveredFlightID}
+                />
+                <AirportEntities 
+                    airports={airports}
+                    hoveredFlight={hoveredFlight}
+                />
 
                 <ImageryLayer
                     imageryProvider={new UrlTemplateImageryProvider({
