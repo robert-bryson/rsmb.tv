@@ -44,7 +44,7 @@ const AirportEntities = ({ airports, hoveredFlight}: AirportProps) => (
                         showBackground: true,
                         horizontalOrigin: 0,
                         verticalOrigin: -1,
-                    }: ''}
+                    }: undefined }
                 />
             );
         })}
