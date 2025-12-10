@@ -1,48 +1,85 @@
 import type { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
+const navLinks = [
+  { to: '/', label: 'Home' },
+  { to: '/projects', label: 'Projects' },
+  { to: '/about', label: 'About' },
+];
+
 export function Layout({ children }: LayoutProps) {
+  const location = useLocation();
+  const isFlightsPage = location.pathname === '/projects/flights';
+
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 font-sans flex flex-col">
-      <header className="bg-gray-800 p-4 shadow-md">
-        <nav className="container mx-auto flex justify-between items-center">
-          <Link to="/" className="text-xl font-bold text-purple-300 hover:text-purple-200">
-            rsmb.tv
+    <div className="min-h-screen bg-[#0a0a0a] text-zinc-100 flex flex-col">
+      {/* Header */}
+      <header className="border-b border-zinc-800/50">
+        <nav className="max-w-2xl mx-auto px-6 py-4 flex justify-between items-center">
+          <Link 
+            to="/" 
+            className="text-lg font-medium text-zinc-100 hover:text-violet-400"
+          >
+            rsmb
           </Link>
           <ul className="flex gap-6 text-sm">
-            <li>
-              <Link to="/" className="hover:text-purple-300 transition-colors">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link to="/about" className="hover:text-purple-300 transition-colors">
-                About
-              </Link>
-            </li>
-            <li>
-              <Link to="/projects" className="hover:text-purple-300 transition-colors">
-                Projects
-              </Link>
-            </li>
-            <li>
-              <Link to="/blog" className="hover:text-purple-300 transition-colors">
-                Blog
-              </Link>
-            </li>
+            {navLinks.map(({ to, label }) => (
+              <li key={to}>
+                <Link
+                  to={to}
+                  className={`hover:text-violet-400 ${
+                    location.pathname === to 
+                      ? 'text-violet-400' 
+                      : 'text-zinc-400'
+                  }`}
+                >
+                  {label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
       </header>
 
-      <main className="container mx-auto py-8 px-4 flex-1">{children}</main>
+      {/* Main content - full width for flights, contained otherwise */}
+      {isFlightsPage ? (
+        <main className="flex-1">{children}</main>
+      ) : (
+        <main className="max-w-2xl mx-auto px-6 py-12 flex-1 w-full">
+          {children}
+        </main>
+      )}
 
-      <footer className="bg-gray-800 text-center py-4 text-xs text-gray-400">
-        &copy; {new Date().getFullYear()} rsmb.tv
-      </footer>
+      {/* Footer - hidden on flights page for immersion */}
+      {!isFlightsPage && (
+        <footer className="border-t border-zinc-800/50">
+          <div className="max-w-2xl mx-auto px-6 py-6 flex justify-between items-center text-sm text-zinc-500">
+            <span>© {new Date().getFullYear()}</span>
+            <div className="flex gap-4">
+              <a 
+                href="https://github.com/robert-bryson" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:text-zinc-300"
+              >
+                GitHub
+              </a>
+              <a 
+                href="https://linkedin.com/in/robert-bryson" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:text-zinc-300"
+              >
+                LinkedIn
+              </a>
+            </div>
+          </div>
+        </footer>
+      )}
     </div>
   );
 }

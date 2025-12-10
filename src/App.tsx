@@ -1,21 +1,21 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useEffect, Suspense, lazy } from 'react';
 import { Layout } from './components/Layout';
-import { Home, About, Projects, Blog } from './pages';
+import { Home, About, Projects } from './pages';
 
 const Flights = lazy(() => import('./pages/Flights'));
 
 function LoadingFallback() {
   return (
     <div className="flex items-center justify-center p-8">
-      <div className="text-gray-400">Loading...</div>
+      <div className="text-zinc-500">Loading...</div>
     </div>
   );
 }
 
 export default function App() {
   useEffect(() => {
-    document.title = 'rsmb.tv';
+    document.title = 'rsmb';
   }, []);
 
   return (
@@ -27,7 +27,6 @@ export default function App() {
             <Route path="/about" element={<About />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/projects/flights" element={<Flights />} />
-            <Route path="/blog" element={<Blog />} />
           </Routes>
         </Suspense>
       </Layout>
