@@ -1,10 +1,8 @@
 // Components
 export { FlightsMap } from './components/FlightsMap';
-export { AirportEntities } from './components/AirportEntities';
-export { FlightEntities } from './components/FlightEntities';
 
 // Hooks
-export { useAirports, useFlights } from './hooks/useFlightData';
+export { useAirports, useFlights, useGlobeData } from './hooks/useFlightData';
 
 // Types
 export type {
@@ -14,4 +12,7 @@ export type {
   FlightFeature,
   AirportsCollection,
   FlightsCollection,
+  GlobeArc,
+  GlobePoint,
+  GlobeLabel,
 } from './types';

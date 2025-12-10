@@ -1,25 +1,17 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [react()],
-  define: {
-    CESIUM_BASE_URL: JSON.stringify('/cesium'),
-  },
-  resolve: {
-    alias: {
-      cesium: resolve(__dirname, 'node_modules/cesium'),
-    },
-  },
+  assetsInclude: ['**/*.glb'],
   build: {
     rollupOptions: {
       output: {
         manualChunks: {
-          cesium: ['cesium'],
+          'three': ['three'],
+          'three-globe': ['three-globe', 'react-globe.gl'],
         },
       },
     },
   },
-  assetsInclude: ['**/*.glb'],
 })
