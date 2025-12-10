@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 import { parse } from 'csv-parse/sync'
-import { features } from 'process'
 
 const base = path.resolve('projects', 'flights')
 
@@ -79,6 +78,7 @@ const flightFeatures = flights.map((row, index) => {
         name: origin.name,
         dates: new Set([row.date]),
         visitCount: 1,
+        arrivalCount: 0,
         departureCount: 1
       }
     }
@@ -98,6 +98,7 @@ const flightFeatures = flights.map((row, index) => {
         name: destination.name,
         dates: new Set([row.date]),
         visitCount: 1,
+        departureCount: 0,
         arrivalCount: 1
       }
     }

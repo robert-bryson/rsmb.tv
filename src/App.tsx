@@ -1,79 +1,27 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useEffect, Suspense, lazy } from 'react';
-import type { ReactNode } from 'react';
+import { Layout } from './components/Layout';
+import { Home, About, Projects, Blog } from './pages';
 
-const Flights = lazy(() => import('./pages/Flights'))
+const Flights = lazy(() => import('./pages/Flights'));
 
-interface LayoutProps {
-  children: ReactNode;
+function LoadingFallback() {
+  return (
+    <div className="flex items-center justify-center p-8">
+      <div className="text-gray-400">Loading...</div>
+    </div>
+  );
 }
-
-const Layout = ({ children }: LayoutProps) => (
-  <div className="min-h-screen bg-gray-900 text-gray-100 font-sans">
-    <header className="bg-gray-800 p-4 shadow-md">
-      <nav className="container mx-auto flex justify-between">
-        <h1 className="text-xl font-bold text-purple-300">rsmb.tv</h1>
-        <ul className="flex gap-4 text-sm">
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/about">About</Link></li>
-          <li><Link to="/projects">Projects</Link></li>
-          <li><Link to="/blog">Blog</Link></li>
-        </ul>
-      </nav>
-    </header>
-    <main className="container mx-auto py-8 px-4">
-      {children}
-    </main>
-    <footer className="bg-gray-800 text-center py-4 text-xs text-gray-400">
-      &copy; {new Date().getFullYear()} rsmb.tv
-    </footer>
-  </div>
-);
-
-const Home = () => (
-  <section className="text-center">
-    <h2 className="text-3xl font-semibold text-purple-200 mb-4">Welcome</h2>
-    <p>Hi, I'm Robby. </p>
-  </section>
-);
-
-const About = () => (
-  <section>
-    <h2 className="text-2xl font-semibold text-blue-200 mb-2">About Me</h2>
-    <p></p>
-  </section>
-);
-
-const Projects = () => (
-  <section>
-    <h2 className="text-2xl font-semibold text-purple-200 mb-2">Projects</h2>
-    <ul className="list-disc pl-5">
-      <li>
-        <Link to='/projects/flights' className='text-blue-300 hover:underline'>
-          Flights - A 3D webmap of places I've been
-        </Link>
-      </li>
-      <li>Project 2 – Description</li>
-    </ul>
-  </section>
-);
-
-const Blog = () => (
-  <section>
-    <h2 className="text-2xl font-semibold text-blue-200 mb-2">Blog</h2>
-    <p>Coming soon...</p>
-  </section>
-);
 
 export default function App() {
   useEffect(() => {
-    document.title = "My Portfolio";
+    document.title = 'rsmb.tv';
   }, []);
 
   return (
     <Router>
       <Layout>
-        <Suspense fallback={<div className='text-white p-4'>Loading...</div>}>
+        <Suspense fallback={<LoadingFallback />}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
