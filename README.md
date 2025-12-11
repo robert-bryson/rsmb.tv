@@ -49,6 +49,7 @@ npm run dev
 | `npm run preview` | Preview production build locally |
 | `npm run lint` | Run ESLint |
 | `npm run build-flights` | Convert flight CSV data to GeoJSON |
+| `npm run sync-flights` | Sync flight data from Google Sheets (requires `GOOGLE_SHEET_ID`) |
 
 ## Project Structure
 
@@ -79,6 +80,54 @@ The site is deployed on AWS Amplify with infrastructure managed via Terraform. T
 ## Data
 
 The flight tracker uses personal travel data stored in CSV format, which is converted to GeoJSON at build time. Airport coordinates are sourced from a separate airports database.
+
+### Flight Data Sync
+
+Flight data is maintained in a Google Sheet and synced to the repository using an automated script. This allows for easy updates when new flights are added.
+
+#### Manual Sync
+
+```bash
+GOOGLE_SHEET_ID=your-sheet-id npm run sync-flights
+```
+
+#### Automated Sync (GitHub Actions)
+
+A GitHub Actions workflow runs nightly to:
+
+1. Fetch the latest data from Google Sheets
+2. Run QA/QC validation checks
+3. Commit any changes to the repository
+4. Rebuild and deploy the site if data changed
+
+To set up automated sync, add these secrets to your GitHub repository:
+
+- `GOOGLE_SHEET_ID` — The ID from your Google Sheet URL
+- `GOOGLE_SHEET_NAME` — (optional) Sheet tab name, defaults to "Flights"
+
+#### QA/QC Validation
+
+The sync script validates all flight data:
+
+| Check | Type | Description |
+|-------|------|-------------|
+| Date format | Error | Must be M/D/YYYY |
+| Date range | Error | Must be 1990 – 1 year from now |
+| Airport codes | Error | Must be 3-4 letter IATA/ICAO codes |
+| Same origin/dest | Error | Origin and destination must differ |
+| Empty airline | Warning | Informational only |
+| Duplicate flights | Warning | Same date + route flagged |
+| Airline naming | Warning | Inconsistent names are normalized |
+
+The script also normalizes data (trims whitespace, uppercases codes, sorts by date) and removes empty columns.
+
+#### Expected CSV Format
+
+```csv
+date,airline,flightNumber,origin,destination
+6/15/2008,Continental Airlines,,LAX,IAH
+7/19/2009,Swiss,LX 41,LAX,ZRH
+```
 
 ## License
 

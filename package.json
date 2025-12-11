@@ -7,6 +7,7 @@
     "dev": "npm run build-flights && vite",
     "build": "npm run build-flights && tsc -b && vite build",
     "build-flights": "node projects/flights/scripts/convertFlights.js",
+    "sync-flights": "node scripts/sync-flights.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
