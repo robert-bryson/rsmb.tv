@@ -91,8 +91,8 @@ export interface SelectedAirportInfo {
   totalVisits: number;
   arrivals: number;
   departures: number;
-  firstVisit: { date: string; from: string } | null;
-  lastVisit: { date: string; to: string } | null;
+  firstVisit: { date: string; from: string; direction: 'arrival' | 'departure' } | null;
+  lastVisit: { date: string; to: string; direction: 'arrival' | 'departure' } | null;
   connectedAirports: number;
   connectedCountries: string[];
   topDestinations: { code: string; count: number }[];

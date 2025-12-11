@@ -18,6 +18,7 @@ interface StatsPanelProps {
   onRouteClick: (origin: string, destination: string) => void;
   onCountryClick: (countryCode: string) => void;
   onRegionClick: (regionCode: string) => void;
+  validAirportCodes: Set<string>;
 }
 
 export function StatsPanel({
@@ -32,6 +33,7 @@ export function StatsPanel({
   onRouteClick,
   onCountryClick,
   onRegionClick,
+  validAirportCodes,
 }: StatsPanelProps) {
   const earthCircumference = 40075;
   const timesAroundEarth = (stats.totalDistance / earthCircumference).toFixed(1);
@@ -96,6 +98,7 @@ export function StatsPanel({
               onAirportClick={onAirportClick}
               getSectionOpen={getSectionOpen}
               toggleSection={toggleSection}
+              validAirportCodes={validAirportCodes}
             />
           ) : (
             <OverallStats
@@ -111,6 +114,7 @@ export function StatsPanel({
               domesticFlights={domesticFlights}
               getSectionOpen={getSectionOpen}
               toggleSection={toggleSection}
+              validAirportCodes={validAirportCodes}
             />
           )}
         </div>
@@ -127,6 +131,7 @@ function AirportStats({
   onAirportClick,
   getSectionOpen,
   toggleSection,
+  validAirportCodes,
 }: {
   airportInfo: NonNullable<FlightStats['selectedAirportInfo']>;
   stats: FlightStats;
@@ -134,6 +139,7 @@ function AirportStats({
   onAirportClick: (code: string) => void;
   getSectionOpen: (id: string, defaultOpen?: boolean) => boolean;
   toggleSection: (id: string) => void;
+  validAirportCodes: Set<string>;
 }) {
   return (
     <>
@@ -185,8 +191,15 @@ function AirportStats({
             <span className="text-gray-400">First visit:</span>
             <span className="text-gray-300">
               {airportInfo.firstVisit.date}{' '}
-              <span className="text-gray-500">from </span>
-              <ClickableAirport code={airportInfo.firstVisit.from} onClick={onAirportClick} className="text-gray-400" />
+              <span className="text-gray-500">
+                {airportInfo.firstVisit.direction === 'arrival' ? 'from ' : 'to '}
+              </span>
+              <ClickableAirport 
+                code={airportInfo.firstVisit.from} 
+                onClick={onAirportClick} 
+                className="text-gray-400" 
+                validAirports={validAirportCodes}
+              />
             </span>
           </div>
         )}
@@ -195,8 +208,15 @@ function AirportStats({
             <span className="text-gray-400">Last visit:</span>
             <span className="text-gray-300">
               {airportInfo.lastVisit.date}{' '}
-              <span className="text-gray-500">to </span>
-              <ClickableAirport code={airportInfo.lastVisit.to} onClick={onAirportClick} className="text-gray-400" />
+              <span className="text-gray-500">
+                {airportInfo.lastVisit.direction === 'arrival' ? 'from ' : 'to '}
+              </span>
+              <ClickableAirport 
+                code={airportInfo.lastVisit.to} 
+                onClick={onAirportClick} 
+                className="text-gray-400" 
+                validAirports={validAirportCodes}
+              />
             </span>
           </div>
         )}
@@ -238,7 +258,12 @@ function AirportStats({
           <div className="space-y-1">
             {airportInfo.topDestinations.map((d) => (
               <div key={d.code} className="flex justify-between text-xs">
-                <ClickableAirport code={d.code} onClick={onAirportClick} className="text-gray-300" />
+                <ClickableAirport 
+                  code={d.code} 
+                  onClick={onAirportClick} 
+                  className="text-gray-300" 
+                  validAirports={validAirportCodes}
+                />
                 <span className="text-blue-400">×{d.count}</span>
               </div>
             ))}
@@ -257,7 +282,12 @@ function AirportStats({
           <div className="space-y-1">
             {airportInfo.topOrigins.map((o) => (
               <div key={o.code} className="flex justify-between text-xs">
-                <ClickableAirport code={o.code} onClick={onAirportClick} className="text-gray-300" />
+                <ClickableAirport 
+                  code={o.code} 
+                  onClick={onAirportClick} 
+                  className="text-gray-300" 
+                  validAirports={validAirportCodes}
+                />
                 <span className="text-green-400">×{o.count}</span>
               </div>
             ))}
@@ -316,6 +346,7 @@ function OverallStats({
   domesticFlights,
   getSectionOpen,
   toggleSection,
+  validAirportCodes,
 }: {
   stats: FlightStats;
   selectedYear: number | null;
@@ -329,6 +360,7 @@ function OverallStats({
   domesticFlights: number;
   getSectionOpen: (id: string, defaultOpen?: boolean) => boolean;
   toggleSection: (id: string) => void;
+  validAirportCodes: Set<string>;
 }) {
   return (
     <>
@@ -473,7 +505,12 @@ function OverallStats({
             <div>
               <div className="text-gray-400 text-xs">Busiest Airport</div>
               <div className="text-white font-medium">
-                <ClickableAirport code={stats.busiestAirport.code} onClick={onAirportClick} className="text-gray-300" />
+                <ClickableAirport 
+                  code={stats.busiestAirport.code} 
+                  onClick={onAirportClick} 
+                  className="text-gray-300" 
+                  validAirports={validAirportCodes}
+                />
               </div>
               <div className="text-gray-500 text-xs">
                 <FlightCount
@@ -545,6 +582,7 @@ function OverallStats({
                     code={stats.highestAirport.code}
                     onClick={onAirportClick}
                     className="text-gray-300"
+                    validAirports={validAirportCodes}
                   />
                 </div>
                 <div className="text-gray-500 text-xs truncate max-w-[200px]" title={stats.highestAirport.name}>
@@ -567,6 +605,7 @@ function OverallStats({
                     code={stats.lowestAirport.code}
                     onClick={onAirportClick}
                     className="text-gray-300"
+                    validAirports={validAirportCodes}
                   />
                 </div>
                 <div className="text-gray-500 text-xs truncate max-w-[200px]" title={stats.lowestAirport.name}>

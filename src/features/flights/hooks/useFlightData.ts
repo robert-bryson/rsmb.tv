@@ -432,26 +432,28 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
         const lastVisitFlight = sortedByDate[sortedByDate.length - 1];
         
         // Get first visit info (was it arrival or departure?)
-        let firstVisit: { date: string; from: string } | null = null;
+        let firstVisit: { date: string; from: string; direction: 'arrival' | 'departure' } | null = null;
         if (firstVisitFlight) {
           const isArrival = firstVisitFlight.properties.destination_code === selectedAirport;
           firstVisit = {
             date: firstVisitFlight.properties.date,
             from: isArrival 
-              ? `from ${firstVisitFlight.properties.origin_code}` 
-              : `to ${firstVisitFlight.properties.destination_code}`,
+              ? firstVisitFlight.properties.origin_code 
+              : firstVisitFlight.properties.destination_code,
+            direction: isArrival ? 'arrival' : 'departure',
           };
         }
         
         // Get last visit info
-        let lastVisit: { date: string; to: string } | null = null;
+        let lastVisit: { date: string; to: string; direction: 'arrival' | 'departure' } | null = null;
         if (lastVisitFlight) {
           const isArrival = lastVisitFlight.properties.destination_code === selectedAirport;
           lastVisit = {
             date: lastVisitFlight.properties.date,
             to: isArrival 
-              ? `from ${lastVisitFlight.properties.origin_code}` 
-              : `to ${lastVisitFlight.properties.destination_code}`,
+              ? lastVisitFlight.properties.origin_code 
+              : lastVisitFlight.properties.destination_code,
+            direction: isArrival ? 'arrival' : 'departure',
           };
         }
         
@@ -650,11 +652,11 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
         }
         
         // Stroke width using square root scaling for better visual hierarchy
-        // Routes flown once: thin (0.3), busiest routes: thicker (up to 1.5)
+        // Routes flown once: thin (0.2), busiest routes: thicker (up to 1.0)
         const normalizedCount = routeCount / maxRouteCount;
         const sqrtScale = Math.sqrt(normalizedCount);
-        const minStroke = 0.3;
-        const maxStroke = 1.5;
+        const minStroke = 0.2;
+        const maxStroke = 1.0;
         const stroke = minStroke + sqrtScale * (maxStroke - minStroke);
         
         // Calculate distance for animation speed (constant speed across all routes)
