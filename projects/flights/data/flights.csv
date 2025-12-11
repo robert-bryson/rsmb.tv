@@ -1,4 +1,10 @@
-date,airline,flightNumber,origin,destination,
+date,airline,flightNumber,origin,destination,notes
+6/1/2006,,,LAX,LHR,"Family Ireland trip, not sure on detail"
+6/15/2006,,,LHR,DUB,"Family Ireland trip, not sure on detail"
+6/30/2006,,,DUB,LAX,"Family Ireland trip, not sure on detail"
+6/1/2007,,,LAX,CDG,"High school europe trip, not sure on detail"
+6/15/2007,,,VIE,FRA,"High school europe trip, not sure on detail"
+6/15/2007,,,FRA,LAX,"High school europe trip, not sure on detail"
 6/15/2008,Continental Airlines,,IAH,SJO,
 6/15/2008,Continental Airlines,,LAX,IAH,
 7/12/2008,Continental Airlines,,IAH,LAX,
@@ -174,7 +180,7 @@ date,airline,flightNumber,origin,destination,
 4/13/2019,Ryan Air,FR 8348,OPO,STN,
 4/14/2019,Wizz Air,W6 2204,LTN,BUD,
 4/21/2019,Ryan Air,FR 1643,LWO,STN,
-4/22/2019,,,LHR,SEA,"There must be some flight London -> US, this is a placeholder"
+4/22/2019,,,LGW,SEA,
 5/10/2019,Alaska,AS 618,SEA,DEN,
 5/12/2019,Alaska,AS 443,DEN,SEA,
 5/24/2019,Delta,DL 2440,MSP,MSN,

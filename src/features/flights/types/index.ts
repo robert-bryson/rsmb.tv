@@ -91,6 +91,7 @@ export interface FlightStats {
   firstFlight: { route: string; date: string } | null;
   lastFlight: { route: string; date: string } | null;
   selectedAirportInfo: SelectedAirportInfo | null;
+  airlineCounts: { airline: string; count: number }[];
 }
 
 // Color mode options
@@ -107,6 +108,7 @@ export interface GlobeArc {
   animateTime: number;
   dashLength: number;
   dashGap: number;
+  dashInitialGap: number;
   label: string;
   flight: FlightProperties;
   year: number;
