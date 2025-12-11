@@ -67,7 +67,7 @@ export function useAirports(): UseFlightDataResult<AirportsCollection> {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    fetch('/data/flights/visitedAirports.geojson')
+    fetch(`${import.meta.env.BASE_URL}data/flights/visitedAirports.geojson`)
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();
@@ -92,7 +92,7 @@ export function useFlights(): UseFlightDataResult<FlightsCollection> {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    fetch('/data/flights/flights.geojson')
+    fetch(`${import.meta.env.BASE_URL}data/flights/flights.geojson`)
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();

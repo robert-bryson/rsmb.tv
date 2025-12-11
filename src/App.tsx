@@ -5,6 +5,8 @@ import { Home, About, Projects } from './pages';
 
 const Flights = lazy(() => import('./pages/Flights'));
 
+const basename = import.meta.env.BASE_URL;
+
 function LoadingFallback() {
   return (
     <div className="flex items-center justify-center p-8">
@@ -19,7 +21,7 @@ export default function App() {
   }, []);
 
   return (
-    <Router>
+    <Router basename={basename}>
       <Layout>
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
