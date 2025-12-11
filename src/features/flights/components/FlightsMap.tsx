@@ -114,6 +114,114 @@ function AirlinesSection({
   );
 }
 
+// Countries Section with Show More/Less
+function CountriesSection({
+  topCountries,
+  onCountryClick,
+  isOpen,
+  onToggle,
+}: {
+  topCountries: { code: string; name: string; count: number; departures: number; arrivals: number }[];
+  onCountryClick: (countryCode: string) => void;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  const [showAll, setShowAll] = useState(false);
+  
+  const INITIAL_VISIBLE = 5;
+  const hasMore = topCountries.length > INITIAL_VISIBLE;
+  const visibleCountries = showAll ? topCountries : topCountries.slice(0, INITIAL_VISIBLE);
+  
+  return (
+    <CollapsibleSection 
+      title={`Countries (${topCountries.length})`} 
+      icon="🌍"
+      isOpen={isOpen}
+      onToggle={onToggle}
+    >
+      <div className="space-y-1">
+        {visibleCountries.map(({ code, name, count, arrivals, departures }) => (
+          <div key={code} className="flex justify-between items-center text-xs">
+            <button
+              onClick={() => onCountryClick(code)}
+              className="text-gray-300 hover:text-cyan-400 transition-colors text-left truncate max-w-[180px]"
+              title={name}
+            >
+              {name}
+            </button>
+            <span className="text-gray-500 ml-2 whitespace-nowrap">
+              <span className="text-yellow-400">{count}</span>
+              <span className="text-gray-600 mx-1">•</span>
+              <span className="text-green-400">{arrivals}</span>↓
+              <span className="text-blue-400">{departures}</span>↑
+            </span>
+          </div>
+        ))}
+      </div>
+      {hasMore && (
+        <button
+          onClick={() => setShowAll(!showAll)}
+          className="mt-2 text-xs text-purple-400 hover:text-purple-300 transition-colors"
+        >
+          {showAll ? '← Show less' : `Show ${topCountries.length - INITIAL_VISIBLE} more →`}
+        </button>
+      )}
+    </CollapsibleSection>
+  );
+}
+
+// Regions Section with Show More/Less
+function RegionsSection({
+  topRegions,
+  onRegionClick,
+  isOpen,
+  onToggle,
+}: {
+  topRegions: { code: string; name: string; country: string; count: number }[];
+  onRegionClick: (regionCode: string) => void;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  const [showAll, setShowAll] = useState(false);
+  
+  const INITIAL_VISIBLE = 5;
+  const hasMore = topRegions.length > INITIAL_VISIBLE;
+  const visibleRegions = showAll ? topRegions : topRegions.slice(0, INITIAL_VISIBLE);
+  
+  return (
+    <CollapsibleSection 
+      title={`Regions (${topRegions.length})`} 
+      icon="📍"
+      isOpen={isOpen}
+      onToggle={onToggle}
+    >
+      <div className="space-y-1">
+        {visibleRegions.map(({ code, name, country, count }) => (
+          <div key={code} className="flex justify-between items-center text-xs">
+            <button
+              onClick={() => onRegionClick(code)}
+              className="text-gray-300 hover:text-cyan-400 transition-colors text-left truncate max-w-[180px]"
+              title={`${name}, ${country}`}
+            >
+              {name}
+              <span className="text-gray-600 ml-1">({country})</span>
+            </button>
+            <span className="text-purple-400 ml-2">×{count}</span>
+          </div>
+        ))}
+      </div>
+      {hasMore && (
+        <button
+          onClick={() => setShowAll(!showAll)}
+          className="mt-2 text-xs text-purple-400 hover:text-purple-300 transition-colors"
+        >
+          {showAll ? '← Show less' : `Show ${topRegions.length - INITIAL_VISIBLE} more →`}
+        </button>
+      )}
+    </CollapsibleSection>
+  );
+}
+
 // Clickable Airport Code Component
 function ClickableAirport({ 
   code, 
@@ -150,7 +258,7 @@ function ClickableRoute({
 }) {
   return (
     <span className={className}>
-      <ClickableAirport code={origin} onClick={onAirportClick} />
+      <ClickableAirport code={origin} onClick={onAirportClick} className="text-gray-300" />
       <button
         onClick={() => onRouteClick(origin, destination)}
         className="text-gray-400 hover:text-purple-400 mx-1 transition-colors cursor-pointer"
@@ -158,7 +266,7 @@ function ClickableRoute({
       >
         ↔
       </button>
-      <ClickableAirport code={destination} onClick={onAirportClick} />
+      <ClickableAirport code={destination} onClick={onAirportClick} className="text-gray-300" />
     </span>
   );
 }
@@ -173,7 +281,7 @@ function FlightCount({ count, showArrivals, showDepartures, arrivals, departures
 }) {
   return (
     <>
-      <span className="text-yellow-400">✈{count}</span>
+      <><span className="text-yellow-400">{count}</span>✈</>
       {showArrivals && arrivals !== undefined && (
         <> <span className="text-green-400">{arrivals}</span>↓</>
       )}
@@ -185,7 +293,7 @@ function FlightCount({ count, showArrivals, showDepartures, arrivals, departures
 }
 
 // Stats Panel Component
-function StatsPanel({ stats, isOpen, onToggle, selectedYear, onClearAirport, selectedAirline, onAirlineSelect, onAirportClick, onRouteClick }: { 
+function StatsPanel({ stats, isOpen, onToggle, selectedYear, onClearAirport, selectedAirline, onAirlineSelect, onAirportClick, onRouteClick, onCountryClick, onRegionClick }: { 
   stats: FlightStats; 
   isOpen: boolean; 
   onToggle: () => void;
@@ -195,6 +303,8 @@ function StatsPanel({ stats, isOpen, onToggle, selectedYear, onClearAirport, sel
   onAirlineSelect: (airline: string | null) => void;
   onAirportClick: (code: string) => void;
   onRouteClick: (origin: string, destination: string) => void;
+  onCountryClick: (countryCode: string) => void;
+  onRegionClick: (regionCode: string) => void;
 }) {
   const earthCircumference = 40075;
   const timesAroundEarth = (stats.totalDistance / earthCircumference).toFixed(1);
@@ -262,7 +372,11 @@ function StatsPanel({ stats, isOpen, onToggle, selectedYear, onClearAirport, sel
                 </button>
               </div>
               <div className="text-gray-300 text-sm mb-1">{airportInfo.name}</div>
-              <div className="text-gray-500 text-xs mb-3">{airportInfo.municipality}, {airportInfo.country}</div>
+              <div className="text-gray-500 text-xs mb-1">{airportInfo.municipality}, {airportInfo.regionName}</div>
+              <div className="text-gray-500 text-xs mb-1">{airportInfo.countryName} • {airportInfo.continentName}</div>
+              <div className="text-gray-600 text-xs mb-3">
+                📍 {airportInfo.elevationFt.toLocaleString()} ft ({airportInfo.elevationM.toLocaleString()} m)
+              </div>
               
               {/* Visit Summary */}
               <div className="grid grid-cols-3 gap-3 mb-4">
@@ -290,13 +404,21 @@ function StatsPanel({ stats, isOpen, onToggle, selectedYear, onClearAirport, sel
                 {airportInfo.firstVisit && (
                   <div className="flex justify-between text-xs mb-1">
                     <span className="text-gray-400">First visit:</span>
-                    <span className="text-gray-300">{airportInfo.firstVisit.date} <span className="text-gray-500">{airportInfo.firstVisit.from}</span></span>
+                    <span className="text-gray-300">
+                      {airportInfo.firstVisit.date}{' '}
+                      <span className="text-gray-500">from </span>
+                      <ClickableAirport code={airportInfo.firstVisit.from} onClick={onAirportClick} className="text-gray-400" />
+                    </span>
                   </div>
                 )}
                 {airportInfo.lastVisit && (
                   <div className="flex justify-between text-xs">
                     <span className="text-gray-400">Last visit:</span>
-                    <span className="text-gray-300">{airportInfo.lastVisit.date} <span className="text-gray-500">{airportInfo.lastVisit.to}</span></span>
+                    <span className="text-gray-300">
+                      {airportInfo.lastVisit.date}{' '}
+                      <span className="text-gray-500">to </span>
+                      <ClickableAirport code={airportInfo.lastVisit.to} onClick={onAirportClick} className="text-gray-400" />
+                    </span>
                   </div>
                 )}
               </CollapsibleSection>
@@ -493,7 +615,7 @@ function StatsPanel({ stats, isOpen, onToggle, selectedYear, onClearAirport, sel
                       icon="🏆" 
                       label="Top Country" 
                       value={stats.mostVisitedCountry.country} 
-                      subValue={<><span className="text-yellow-400">{stats.mostVisitedCountry.count}</span> <span className="text-green-400">{stats.mostVisitedCountry.arrivals}</span>↓ <span className="text-blue-400">{stats.mostVisitedCountry.departures}</span>↑</>}
+                      subValue={<><span className="text-yellow-400">{stats.mostVisitedCountry.count}</span>✈ <span className="text-green-400">{stats.mostVisitedCountry.arrivals}</span>↓ <span className="text-blue-400">{stats.mostVisitedCountry.departures}</span>↑</>}
                     />
                   )}
                 </div>
@@ -507,6 +629,26 @@ function StatsPanel({ stats, isOpen, onToggle, selectedYear, onClearAirport, sel
                   onAirlineSelect={onAirlineSelect}
                   isOpen={getSectionOpen('overall-airlines')}
                   onToggle={() => toggleSection('overall-airlines')}
+                />
+              )}
+              
+              {/* Countries */}
+              {stats.topCountries.length > 0 && (
+                <CountriesSection
+                  topCountries={stats.topCountries}
+                  onCountryClick={onCountryClick}
+                  isOpen={getSectionOpen('overall-countries')}
+                  onToggle={() => toggleSection('overall-countries')}
+                />
+              )}
+              
+              {/* Regions */}
+              {stats.topRegions.length > 0 && (
+                <RegionsSection
+                  topRegions={stats.topRegions}
+                  onRegionClick={onRegionClick}
+                  isOpen={getSectionOpen('overall-regions')}
+                  onToggle={() => toggleSection('overall-regions')}
                 />
               )}
               
@@ -544,7 +686,7 @@ function StatsPanel({ stats, isOpen, onToggle, selectedYear, onClearAirport, sel
                     <div>
                       <div className="text-gray-400 text-xs">Busiest Airport</div>
                       <div className="text-white font-medium">
-                        <ClickableAirport code={stats.busiestAirport.code} onClick={onAirportClick} />
+                        <ClickableAirport code={stats.busiestAirport.code} onClick={onAirportClick} className="text-gray-300" />
                       </div>
                       <div className="text-gray-500 text-xs">
                         <FlightCount 
@@ -593,6 +735,51 @@ function StatsPanel({ stats, isOpen, onToggle, selectedYear, onClearAirport, sel
                   </div>
                 )}
               </CollapsibleSection>
+              
+              {/* Elevation Extremes */}
+              {(stats.highestAirport || stats.lowestAirport) && (
+                <CollapsibleSection 
+                  title="Elevation Extremes" 
+                  icon="⛰️"
+                  isOpen={getSectionOpen('overall-elevation')}
+                  onToggle={() => toggleSection('overall-elevation')}
+                >
+                  {stats.highestAirport && (
+                    <div className="flex items-start gap-2 mb-2">
+                      <span className="text-lg">🔺</span>
+                      <div>
+                        <div className="text-gray-400 text-xs">Highest Airport</div>
+                        <div className="text-white font-medium">
+                          <ClickableAirport code={stats.highestAirport.code} onClick={onAirportClick} className="text-gray-300" />
+                        </div>
+                        <div className="text-gray-500 text-xs truncate max-w-[200px]" title={stats.highestAirport.name}>
+                          {stats.highestAirport.name}
+                        </div>
+                        <div className="text-gray-500 text-xs">
+                          {stats.highestAirport.elevationFt.toLocaleString()} ft ({stats.highestAirport.elevationM.toLocaleString()} m)
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {stats.lowestAirport && (
+                    <div className="flex items-start gap-2">
+                      <span className="text-lg">🔻</span>
+                      <div>
+                        <div className="text-gray-400 text-xs">Lowest Airport</div>
+                        <div className="text-white font-medium">
+                          <ClickableAirport code={stats.lowestAirport.code} onClick={onAirportClick} className="text-gray-300" />
+                        </div>
+                        <div className="text-gray-500 text-xs truncate max-w-[200px]" title={stats.lowestAirport.name}>
+                          {stats.lowestAirport.name}
+                        </div>
+                        <div className="text-gray-500 text-xs">
+                          {stats.lowestAirport.elevationFt.toLocaleString()} ft ({stats.lowestAirport.elevationM.toLocaleString()} m)
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </CollapsibleSection>
+              )}
               
               {/* Top Routes */}
               {stats.busiestRoutes.length > 0 && (
@@ -1069,6 +1256,80 @@ export function FlightsMap() {
     }
   }, [stopAutoRotate, pointsData]);
 
+  // Handle clicking on a country in the stats panel - zoom to fit all airports in that country
+  const handleCountryClick = useCallback((countryCode: string) => {
+    stopAutoRotate();
+    // Find all airports in this country
+    const countryAirports = pointsData.filter(p => p.airport.country === countryCode);
+    
+    if (countryAirports.length > 0 && globeRef.current) {
+      if (countryAirports.length === 1) {
+        // Single airport - zoom to it
+        globeRef.current.pointOfView({ 
+          lat: countryAirports[0].lat, 
+          lng: countryAirports[0].lng, 
+          altitude: 0.5 
+        }, 1000);
+      } else {
+        // Multiple airports - calculate bounding box
+        let minLat = 90, maxLat = -90, minLng = 180, maxLng = -180;
+        countryAirports.forEach(ap => {
+          minLat = Math.min(minLat, ap.lat);
+          maxLat = Math.max(maxLat, ap.lat);
+          minLng = Math.min(minLng, ap.lng);
+          maxLng = Math.max(maxLng, ap.lng);
+        });
+        
+        const centerLat = (minLat + maxLat) / 2;
+        const centerLng = (minLng + maxLng) / 2;
+        const latSpan = maxLat - minLat;
+        const lngSpan = maxLng - minLng;
+        const adjustedLngSpan = lngSpan > 180 ? 360 - lngSpan : lngSpan;
+        const maxSpan = Math.max(latSpan, adjustedLngSpan);
+        const altitude = Math.min(2.5, Math.max(0.5, maxSpan / 50 + 0.3));
+        
+        globeRef.current.pointOfView({ lat: centerLat, lng: centerLng, altitude }, 1000);
+      }
+    }
+  }, [stopAutoRotate, pointsData]);
+
+  // Handle clicking on a region in the stats panel - zoom to fit all airports in that region
+  const handleRegionClick = useCallback((regionCode: string) => {
+    stopAutoRotate();
+    // Find all airports in this region
+    const regionAirports = pointsData.filter(p => p.airport.region === regionCode);
+    
+    if (regionAirports.length > 0 && globeRef.current) {
+      if (regionAirports.length === 1) {
+        // Single airport - zoom to it
+        globeRef.current.pointOfView({ 
+          lat: regionAirports[0].lat, 
+          lng: regionAirports[0].lng, 
+          altitude: 0.5 
+        }, 1000);
+      } else {
+        // Multiple airports - calculate bounding box
+        let minLat = 90, maxLat = -90, minLng = 180, maxLng = -180;
+        regionAirports.forEach(ap => {
+          minLat = Math.min(minLat, ap.lat);
+          maxLat = Math.max(maxLat, ap.lat);
+          minLng = Math.min(minLng, ap.lng);
+          maxLng = Math.max(maxLng, ap.lng);
+        });
+        
+        const centerLat = (minLat + maxLat) / 2;
+        const centerLng = (minLng + maxLng) / 2;
+        const latSpan = maxLat - minLat;
+        const lngSpan = maxLng - minLng;
+        const adjustedLngSpan = lngSpan > 180 ? 360 - lngSpan : lngSpan;
+        const maxSpan = Math.max(latSpan, adjustedLngSpan);
+        const altitude = Math.min(2.5, Math.max(0.5, maxSpan / 50 + 0.3));
+        
+        globeRef.current.pointOfView({ lat: centerLat, lng: centerLng, altitude }, 1000);
+      }
+    }
+  }, [stopAutoRotate, pointsData]);
+
   if (error) {
     return (
       <div className="flex items-center justify-center h-full bg-gray-900 text-red-400">
@@ -1203,7 +1464,8 @@ export function FlightsMap() {
             <div class="bg-gray-900/95 px-3 py-2 rounded-lg shadow-xl border border-gray-700 text-sm">
               <div class="font-bold text-yellow-300">${a.code}</div>
               <div class="text-gray-300">${a.name}</div>
-              <div class="text-gray-400 text-xs">${a.municipality}, ${a.country}</div>
+              <div class="text-gray-400 text-xs">${a.municipality}, ${a.countryName}</div>
+              <div class="text-gray-500 text-xs">${a.elevationFt.toLocaleString()} ft (${a.elevationM.toLocaleString()} m)</div>
               <div class="text-gray-500 mt-2 pt-2 border-t border-gray-700">
                 <span class="text-yellow-400">${a.visitCount}</span> visits
                 <span class="text-gray-600 mx-1">•</span>
@@ -1245,6 +1507,8 @@ export function FlightsMap() {
         onAirlineSelect={setSelectedAirline}
         onAirportClick={handleAirportCodeClick}
         onRouteClick={handleRouteCodeClick}
+        onCountryClick={handleCountryClick}
+        onRegionClick={handleRegionClick}
       />
 
       {/* Color Mode Selector */}

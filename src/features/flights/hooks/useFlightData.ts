@@ -193,6 +193,10 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
         lastFlight: null,
         selectedAirportInfo: null,
         airlineCounts: [],
+        topCountries: [],
+        topRegions: [],
+        highestAirport: null,
+        lowestAirport: null,
       };
     }
 
@@ -237,6 +241,10 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
     const countryVisitCounts: Record<string, number> = {};
     const countryDepartureCounts: Record<string, number> = {};
     const countryArrivalCounts: Record<string, number> = {};
+    const countryNames: Record<string, string> = {};
+    const regionVisitCounts: Record<string, number> = {};
+    const regionNames: Record<string, string> = {};
+    const regionCountries: Record<string, string> = {};
     const airportVisitCounts: Record<string, number> = {};
     const airportDepartureCounts: Record<string, number> = {};
     const airportArrivalCounts: Record<string, number> = {};
@@ -263,11 +271,23 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
       continentCounts[props.origin_continent] = (continentCounts[props.origin_continent] || 0) + 1;
       continentCounts[props.destination_continent] = (continentCounts[props.destination_continent] || 0) + 1;
       
-      // Count country visits
+      // Count country visits (with names for display)
       countryVisitCounts[props.origin_country] = (countryVisitCounts[props.origin_country] || 0) + 1;
       countryVisitCounts[props.destination_country] = (countryVisitCounts[props.destination_country] || 0) + 1;
       countryDepartureCounts[props.origin_country] = (countryDepartureCounts[props.origin_country] || 0) + 1;
       countryArrivalCounts[props.destination_country] = (countryArrivalCounts[props.destination_country] || 0) + 1;
+      // Store country names for lookup
+      countryNames[props.origin_country] = props.origin_countryName;
+      countryNames[props.destination_country] = props.destination_countryName;
+      
+      // Count region visits (with names for display)
+      regionVisitCounts[props.origin_region] = (regionVisitCounts[props.origin_region] || 0) + 1;
+      regionVisitCounts[props.destination_region] = (regionVisitCounts[props.destination_region] || 0) + 1;
+      // Store region names and countries for lookup
+      regionNames[props.origin_region] = props.origin_regionName;
+      regionNames[props.destination_region] = props.destination_regionName;
+      regionCountries[props.origin_region] = props.origin_countryName;
+      regionCountries[props.destination_region] = props.destination_countryName;
       
       // Count airport visits for filtered data
       airportVisitCounts[props.origin_code] = (airportVisitCounts[props.origin_code] || 0) + 1;
@@ -473,8 +493,14 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
           code: ap.code,
           name: ap.name,
           municipality: ap.municipality,
+          region: ap.region,
+          regionName: ap.regionName,
           country: ap.country,
+          countryName: ap.countryName,
           continent: ap.continent,
+          continentName: ap.continentName,
+          elevationFt: ap.elevationFt,
+          elevationM: ap.elevationM,
           totalVisits: filteredFlights.length,
           arrivals: arrivals.length,
           departures: departures.length,
@@ -488,6 +514,54 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
         };
       }
     }
+
+    // Calculate top countries
+    const topCountries = Object.entries(countryVisitCounts)
+      .map(([code, count]) => ({
+        code,
+        name: countryNames[code] || code,
+        count,
+        departures: countryDepartureCounts[code] || 0,
+        arrivals: countryArrivalCounts[code] || 0,
+      }))
+      .sort((a, b) => b.count - a.count);
+
+    // Calculate top regions
+    const topRegions = Object.entries(regionVisitCounts)
+      .map(([code, count]) => ({
+        code,
+        name: regionNames[code] || code,
+        country: regionCountries[code] || '',
+        count,
+      }))
+      .sort((a, b) => b.count - a.count);
+
+    // Find highest and lowest airports from visited airports
+    let highestAirport: { code: string; name: string; elevationFt: number; elevationM: number } | null = null;
+    let lowestAirport: { code: string; name: string; elevationFt: number; elevationM: number } | null = null;
+    
+    // Get airports that were visited in filtered flights
+    airports.features.forEach(ap => {
+      const props = ap.properties;
+      if (!filteredAirportCodes.has(props.code)) return;
+      
+      if (!highestAirport || props.elevationFt > highestAirport.elevationFt) {
+        highestAirport = {
+          code: props.code,
+          name: props.name,
+          elevationFt: props.elevationFt,
+          elevationM: props.elevationM,
+        };
+      }
+      if (!lowestAirport || props.elevationFt < lowestAirport.elevationFt) {
+        lowestAirport = {
+          code: props.code,
+          name: props.name,
+          elevationFt: props.elevationFt,
+          elevationM: props.elevationM,
+        };
+      }
+    });
 
     return {
       totalFlights: filteredFlights.length,
@@ -511,6 +585,10 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
       lastFlight: lastFlight as { route: string; date: string } | null,
       selectedAirportInfo,
       airlineCounts,
+      topCountries,
+      topRegions,
+      highestAirport,
+      lowestAirport,
     };
   }, [flights, airports, selectedYear, selectedAirport, selectedAirline]);
 

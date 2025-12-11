@@ -5,8 +5,13 @@ export interface AirportProperties {
   name: string;
   municipality: string;
   region: string;
+  regionName: string;
   country: string;
+  countryName: string;
   continent: string;
+  continentName: string;
+  elevationFt: number;
+  elevationM: number;
   visitCount: number;
   arrivalCount: number;
   departureCount: number;
@@ -21,16 +26,22 @@ export interface FlightProperties {
   origin_name: string;
   origin_municipality: string;
   origin_region: string;
+  origin_regionName: string;
   origin_country: string;
+  origin_countryName: string;
   origin_continent: string;
+  origin_continentName: string;
   origin_lon: number;
   origin_lat: number;
   destination_code: string;
   destination_name: string;
   destination_municipality: string;
   destination_region: string;
+  destination_regionName: string;
   destination_country: string;
+  destination_countryName: string;
   destination_continent: string;
+  destination_continentName: string;
   destination_lon: number;
   destination_lat: number;
 }
@@ -55,8 +66,14 @@ export interface SelectedAirportInfo {
   code: string;
   name: string;
   municipality: string;
+  region: string;
+  regionName: string;
   country: string;
+  countryName: string;
   continent: string;
+  continentName: string;
+  elevationFt: number;
+  elevationM: number;
   totalVisits: number;
   arrivals: number;
   departures: number;
@@ -92,6 +109,10 @@ export interface FlightStats {
   lastFlight: { route: string; date: string } | null;
   selectedAirportInfo: SelectedAirportInfo | null;
   airlineCounts: { airline: string; count: number }[];
+  topCountries: { code: string; name: string; count: number; departures: number; arrivals: number }[];
+  topRegions: { code: string; name: string; country: string; count: number }[];
+  highestAirport: { code: string; name: string; elevationFt: number; elevationM: number } | null;
+  lowestAirport: { code: string; name: string; elevationFt: number; elevationM: number } | null;
 }
 
 // Color mode options
