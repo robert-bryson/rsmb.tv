@@ -1,69 +1,92 @@
-# React + TypeScript + Vite
+# rsmb.tv
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A personal website and portfolio showcasing interactive projects, with a focus on data visualization and geospatial applications.
 
-Currently, two official plugins are available:
+🌐 **Live site:** [rsmb.tv](https://rsmb.tv)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- **Flight Tracker** — An interactive 3D globe visualization built with [react-globe.gl](https://github.com/vasturiano/react-globe.gl) that displays flights I've taken around the world. Includes filtering by year, route frequency analysis, and travel statistics.
+- **Project Portfolio** — Showcases various side projects including web tools and data visualizations.
+- **About** — Background on my experience in geospatial engineering and software development.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tech Stack
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Frontend:** React 19, TypeScript, Tailwind CSS
+- **Build:** Vite
+- **3D Globe:** react-globe.gl (Three.js/WebGL)
+- **Routing:** React Router
+- **Infrastructure:** AWS Amplify, Terraform
+- **CI/CD:** AWS Amplify auto-builds on push
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## Getting Started
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Prerequisites
+
+- Node.js (see `.nvmrc` for version)
+- npm
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/robert-bryson/rsmb.tv.git
+cd rsmb.tv
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Available Scripts
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server (builds flight data first) |
+| `npm run build` | Build for production |
+| `npm run preview` | Preview production build locally |
+| `npm run lint` | Run ESLint |
+| `npm run build-flights` | Convert flight CSV data to GeoJSON |
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Project Structure
+
+```text
+├── src/
+│   ├── components/     # Shared UI components
+│   ├── content/        # Static content (projects list)
+│   ├── features/       # Feature modules (e.g., flights)
+│   └── pages/          # Route pages
+├── projects/
+│   └── flights/        # Flight data and conversion scripts
+├── public/
+│   └── data/           # Generated GeoJSON files
+├── infra/              # Terraform infrastructure config
+└── amplify/            # AWS Amplify backend config
 ```
+
+## Infrastructure
+
+The site is deployed on AWS Amplify with infrastructure managed via Terraform. The Terraform configuration provisions:
+
+- AWS Amplify app connected to GitHub
+- Auto-build on push to `main` branch
+- Production deployment
+
+> **Note:** Terraform state and variable files containing sensitive data are gitignored and not included in this repository.
+
+## Data
+
+The flight tracker uses personal travel data stored in CSV format, which is converted to GeoJSON at build time. Airport coordinates are sourced from a separate airports database.
+
+## License
+
+This project is open source. Feel free to use it as inspiration for your own personal site.
+
+## Author
+
+**Robby Bryson** — [rsmb.tv](https://rsmb.tv)
+
+- Geospatial engineer with experience at Microsoft (Azure Maps), federal agencies, and startups
+- Based in St. Louis
