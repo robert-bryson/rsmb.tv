@@ -71,7 +71,10 @@ const visitedAirports = {}
 const stats = {
   internationalFlights: 0,
   intercontinentalFlights: 0,
-  domesticFlights: 0
+  domesticFlights: 0,
+  years: new Set(),
+  minYear: Infinity,
+  maxYear: -Infinity
 }
 
 const flightFeatures = flights.map((row, index) => {
@@ -82,6 +85,13 @@ const flightFeatures = flights.map((row, index) => {
         console.warn(`⚠️ Skipping flight with missing airport: ${row.origin} → ${row.destination}`)
         return null
     }
+  
+    // Parse year from date
+    const dateParts = row.date.split('/')
+    const year = parseInt(dateParts[2], 10)
+    stats.years.add(year)
+    stats.minYear = Math.min(stats.minYear, year)
+    stats.maxYear = Math.max(stats.maxYear, year)
   
     if (origin.country == destination.country) {
       stats.domesticFlights += 1
@@ -186,11 +196,22 @@ const flightFeatures = flights.map((row, index) => {
 const flightsGeojson = {
     type: 'FeatureCollection',
     features: flightFeatures,
+    metadata: {
+      totalFlights: flightFeatures.length,
+      years: Array.from(stats.years).sort((a, b) => a - b),
+      minYear: stats.minYear,
+      maxYear: stats.maxYear,
+      internationalFlights: stats.internationalFlights,
+      intercontinentalFlights: stats.intercontinentalFlights,
+      domesticFlights: stats.domesticFlights,
+      generatedAt: new Date().toISOString()
+    }
 }
 
 fs.mkdirSync(path.dirname(flightsOutputPath), {recursive: true})
 fs.writeFileSync(flightsOutputPath, JSON.stringify(flightsGeojson, null, 2))
 console.log(`✅ Generated ${flightFeatures.length} flights to ${flightsOutputPath}`)
+console.log(`   Years: ${stats.minYear} - ${stats.maxYear} (${stats.years.size} unique)`)
 
 const visitedAirportsFeatures = Object.values(visitedAirports)
   .map(a => ({

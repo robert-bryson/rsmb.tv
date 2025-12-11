@@ -46,10 +46,24 @@ export interface FlightProperties {
   destination_lat: number;
 }
 
+// Metadata pre-computed at build time
+export interface FlightsMetadata {
+  totalFlights: number;
+  years: number[];
+  minYear: number;
+  maxYear: number;
+  internationalFlights: number;
+  intercontinentalFlights: number;
+  domesticFlights: number;
+  generatedAt: string;
+}
+
 export type AirportFeature = Feature<Point, AirportProperties>;
 export type FlightFeature = Feature<LineString, FlightProperties>;
 export type AirportsCollection = FeatureCollection<Point, AirportProperties>;
-export type FlightsCollection = FeatureCollection<LineString, FlightProperties>;
+export type FlightsCollection = FeatureCollection<LineString, FlightProperties> & {
+  metadata?: FlightsMetadata;
+};
 
 // Route statistics for frequency analysis
 export interface RouteStats {

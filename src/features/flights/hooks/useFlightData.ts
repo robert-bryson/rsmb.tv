@@ -267,9 +267,9 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
       airlines.add(props.airline);
       uniqueRouteKeys.add(getRouteKey(props.origin_code, props.destination_code));
       
-      // Count continent visits
-      continentCounts[props.origin_continent] = (continentCounts[props.origin_continent] || 0) + 1;
-      continentCounts[props.destination_continent] = (continentCounts[props.destination_continent] || 0) + 1;
+      // Count continent visits (use full names for display)
+      continentCounts[props.origin_continentName] = (continentCounts[props.origin_continentName] || 0) + 1;
+      continentCounts[props.destination_continentName] = (continentCounts[props.destination_continentName] || 0) + 1;
       
       // Count country visits (with names for display)
       countryVisitCounts[props.origin_country] = (countryVisitCounts[props.origin_country] || 0) + 1;
