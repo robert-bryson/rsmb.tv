@@ -114,6 +114,7 @@ export function useFlights(): UseFlightDataResult<FlightsCollection> {
 interface UseGlobeDataOptions {
   selectedYear?: number | null;
   colorMode?: ColorMode;
+  selectedAirport?: string | null;
 }
 
 // Estimate flight time based on distance (rough average speed of 800 km/h + 1 hour for takeoff/landing)
@@ -129,7 +130,7 @@ function parseDateForSort(dateStr: string): Date {
 
 // Transform GeoJSON data to react-globe.gl format with filtering and stats
 export function useGlobeData(options: UseGlobeDataOptions = {}) {
-  const { selectedYear = null, colorMode = 'default' } = options;
+  const { selectedYear = null, colorMode = 'default', selectedAirport = null } = options;
   const { data: airports, loading: airportsLoading, error: airportsError } = useAirports();
   const { data: flights, loading: flightsLoading, error: flightsError } = useFlights();
 
@@ -166,7 +167,7 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
     return stats;
   }, [flights]);
 
-  // Compute overall statistics - NOW FILTERED BY SELECTED YEAR
+  // Compute overall statistics - NOW FILTERED BY SELECTED YEAR AND SELECTED AIRPORT
   const flightStats = useMemo<FlightStats>(() => {
     if (!flights || !airports) {
       return {
@@ -189,13 +190,25 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
         mostVisitedCountry: null,
         firstFlight: null,
         lastFlight: null,
+        selectedAirportInfo: null,
       };
     }
 
-    // Filter flights by selected year
-    const filteredFlights = selectedYear === null 
+    // Filter flights by selected year first
+    let filteredFlights = selectedYear === null 
       ? flights.features 
       : flights.features.filter(f => parseYear(f.properties.date) === selectedYear);
+    
+    // Further filter by selected airport if one is selected
+    const airportFilteredFlights = selectedAirport
+      ? filteredFlights.filter(f => 
+          f.properties.origin_code === selectedAirport || 
+          f.properties.destination_code === selectedAirport
+        )
+      : filteredFlights;
+    
+    // Use airport-filtered flights for stats when an airport is selected
+    filteredFlights = airportFilteredFlights;
 
     const years = new Set<number>();
     const countries = new Set<string>();
@@ -203,7 +216,11 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
     const uniqueRouteKeys = new Set<string>();
     const continentCounts: Record<string, number> = {};
     const countryVisitCounts: Record<string, number> = {};
+    const countryDepartureCounts: Record<string, number> = {};
+    const countryArrivalCounts: Record<string, number> = {};
     const airportVisitCounts: Record<string, number> = {};
+    const airportDepartureCounts: Record<string, number> = {};
+    const airportArrivalCounts: Record<string, number> = {};
     
     let totalDistance = 0;
     let totalFlightTime = 0;
@@ -230,10 +247,14 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
       // Count country visits
       countryVisitCounts[props.origin_country] = (countryVisitCounts[props.origin_country] || 0) + 1;
       countryVisitCounts[props.destination_country] = (countryVisitCounts[props.destination_country] || 0) + 1;
+      countryDepartureCounts[props.origin_country] = (countryDepartureCounts[props.origin_country] || 0) + 1;
+      countryArrivalCounts[props.destination_country] = (countryArrivalCounts[props.destination_country] || 0) + 1;
       
       // Count airport visits for filtered data
       airportVisitCounts[props.origin_code] = (airportVisitCounts[props.origin_code] || 0) + 1;
       airportVisitCounts[props.destination_code] = (airportVisitCounts[props.destination_code] || 0) + 1;
+      airportDepartureCounts[props.origin_code] = (airportDepartureCounts[props.origin_code] || 0) + 1;
+      airportArrivalCounts[props.destination_code] = (airportArrivalCounts[props.destination_code] || 0) + 1;
       
       // International flight check
       if (props.origin_country !== props.destination_country) {
@@ -317,18 +338,28 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
       .slice(0, 10);
 
     // Find busiest airport from filtered flights
-    let busiestAirport: { code: string; count: number } | null = null;
+    let busiestAirport: { code: string; count: number; departures: number; arrivals: number } | null = null;
     Object.entries(airportVisitCounts).forEach(([code, count]) => {
       if (!busiestAirport || count > busiestAirport.count) {
-        busiestAirport = { code, count };
+        busiestAirport = { 
+          code, 
+          count,
+          departures: airportDepartureCounts[code] || 0,
+          arrivals: airportArrivalCounts[code] || 0,
+        };
       }
     });
 
     // Find most visited country
-    let mostVisitedCountry: { country: string; count: number } | null = null;
+    let mostVisitedCountry: { country: string; count: number; departures: number; arrivals: number } | null = null;
     Object.entries(countryVisitCounts).forEach(([country, count]) => {
       if (!mostVisitedCountry || count > mostVisitedCountry.count) {
-        mostVisitedCountry = { country, count };
+        mostVisitedCountry = { 
+          country, 
+          count,
+          departures: countryDepartureCounts[country] || 0,
+          arrivals: countryArrivalCounts[country] || 0,
+        };
       }
     });
 
@@ -342,6 +373,102 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
       filteredAirportCodes.add(f.properties.origin_code);
       filteredAirportCodes.add(f.properties.destination_code);
     });
+
+    // Calculate selected airport info if an airport is selected
+    let selectedAirportInfo: FlightStats['selectedAirportInfo'] = null;
+    if (selectedAirport) {
+      const airportFeature = airports.features.find(a => a.properties.code === selectedAirport);
+      if (airportFeature) {
+        const ap = airportFeature.properties;
+        
+        // Count arrivals and departures to/from this airport in the filtered flights
+        const arrivals = filteredFlights.filter(f => f.properties.destination_code === selectedAirport);
+        const departures = filteredFlights.filter(f => f.properties.origin_code === selectedAirport);
+        
+        // Find first and last visits
+        const sortedByDate = [...filteredFlights].sort((a, b) => 
+          parseDateForSort(a.properties.date).getTime() - parseDateForSort(b.properties.date).getTime()
+        );
+        const firstVisitFlight = sortedByDate[0];
+        const lastVisitFlight = sortedByDate[sortedByDate.length - 1];
+        
+        // Get first visit info (was it arrival or departure?)
+        let firstVisit: { date: string; from: string } | null = null;
+        if (firstVisitFlight) {
+          const isArrival = firstVisitFlight.properties.destination_code === selectedAirport;
+          firstVisit = {
+            date: firstVisitFlight.properties.date,
+            from: isArrival 
+              ? `from ${firstVisitFlight.properties.origin_code}` 
+              : `to ${firstVisitFlight.properties.destination_code}`,
+          };
+        }
+        
+        // Get last visit info
+        let lastVisit: { date: string; to: string } | null = null;
+        if (lastVisitFlight) {
+          const isArrival = lastVisitFlight.properties.destination_code === selectedAirport;
+          lastVisit = {
+            date: lastVisitFlight.properties.date,
+            to: isArrival 
+              ? `from ${lastVisitFlight.properties.origin_code}` 
+              : `to ${lastVisitFlight.properties.destination_code}`,
+          };
+        }
+        
+        // Count connected airports and countries
+        const connectedSet = new Set<string>();
+        const connectedCountriesSet = new Set<string>();
+        const destinationCounts: Record<string, number> = {};
+        const originCounts: Record<string, number> = {};
+        const airlinesSet = new Set<string>();
+        
+        filteredFlights.forEach(f => {
+          const props = f.properties;
+          airlinesSet.add(props.airline);
+          
+          if (props.origin_code === selectedAirport) {
+            connectedSet.add(props.destination_code);
+            connectedCountriesSet.add(props.destination_country);
+            destinationCounts[props.destination_code] = (destinationCounts[props.destination_code] || 0) + 1;
+          }
+          if (props.destination_code === selectedAirport) {
+            connectedSet.add(props.origin_code);
+            connectedCountriesSet.add(props.origin_country);
+            originCounts[props.origin_code] = (originCounts[props.origin_code] || 0) + 1;
+          }
+        });
+        
+        // Top destinations and origins
+        const topDestinations = Object.entries(destinationCounts)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 5)
+          .map(([code, count]) => ({ code, count }));
+        
+        const topOrigins = Object.entries(originCounts)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 5)
+          .map(([code, count]) => ({ code, count }));
+        
+        selectedAirportInfo = {
+          code: ap.code,
+          name: ap.name,
+          municipality: ap.municipality,
+          country: ap.country,
+          continent: ap.continent,
+          totalVisits: filteredFlights.length,
+          arrivals: arrivals.length,
+          departures: departures.length,
+          firstVisit,
+          lastVisit,
+          connectedAirports: connectedSet.size,
+          connectedCountries: Array.from(connectedCountriesSet),
+          topDestinations,
+          topOrigins,
+          airlines: Array.from(airlinesSet).filter(a => a), // Filter out empty airline names
+        };
+      }
+    }
 
     return {
       totalFlights: filteredFlights.length,
@@ -363,8 +490,9 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
       mostVisitedCountry,
       firstFlight: firstFlight as { route: string; date: string } | null,
       lastFlight: lastFlight as { route: string; date: string } | null,
+      selectedAirportInfo,
     };
-  }, [flights, airports, selectedYear]);
+  }, [flights, airports, selectedYear, selectedAirport]);
 
   // Max route count for frequency coloring
   const maxRouteCount = useMemo(() => {
@@ -397,20 +525,60 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
             color = `hsl(${hash % 360}, 70%, 60%)`;
             break;
           }
-          default:
-            color = ['rgba(180, 150, 255, 0.6)', 'rgba(255, 255, 255, 0.6)'];
+          default: {
+            // Gradient from purple to white, with opacity based on frequency
+            const baseOpacity = 0.5 + Math.min(routeCount / maxRouteCount, 1) * 0.4;
+            color = [`rgba(180, 150, 255, ${baseOpacity})`, `rgba(255, 255, 255, ${baseOpacity})`];
+          }
         }
         
-        // Stroke width based on route frequency
-        const stroke = 0.3 + Math.min(routeCount * 0.15, 1.2);
+        // Stroke width using square root scaling for better visual hierarchy
+        // Routes flown once: thin (0.3), busiest routes: thicker (up to 1.5)
+        const normalizedCount = routeCount / maxRouteCount;
+        const sqrtScale = Math.sqrt(normalizedCount);
+        const minStroke = 0.3;
+        const maxStroke = 1.5;
+        const stroke = minStroke + sqrtScale * (maxStroke - minStroke);
+        
+        // Calculate distance for animation speed (constant speed across all routes)
+        const distance = calculateDistance(
+          props.origin_lat, props.origin_lon,
+          props.destination_lat, props.destination_lon
+        );
+        // Base speed: ~1000km takes 3 seconds, so animation time scales with distance
+        const animateTime = Math.max(2000, (distance / 1000) * 3000);
+        
+        // Check if this arc connects to the selected airport
+        const isConnected = selectedAirport && (
+          props.origin_code === selectedAirport || props.destination_code === selectedAirport
+        );
+        
+        // Modify color based on selection
+        let finalColor = color;
+        let finalStroke = stroke;
+        if (selectedAirport) {
+          if (isConnected) {
+            finalColor = ['rgba(0, 255, 255, 0.9)', 'rgba(255, 255, 255, 0.9)'];
+            finalStroke = stroke * 1.5;
+          } else {
+            // Dim non-connected arcs but keep them visible
+            finalColor = typeof color === 'string' 
+              ? color.replace(/[\d.]+\)$/, '0.15)')
+              : [`rgba(180, 150, 255, 0.15)`, `rgba(255, 255, 255, 0.15)`];
+            finalStroke = stroke * 0.7;
+          }
+        }
         
         return {
           startLat: props.origin_lat,
           startLng: props.origin_lon,
           endLat: props.destination_lat,
           endLng: props.destination_lon,
-          color,
-          stroke,
+          color: finalColor,
+          stroke: finalStroke,
+          animateTime,
+          dashLength: 0.01,
+          dashGap: 0.99,
           label: `${props.origin_code} → ${props.destination_code}`,
           flight: props,
           year,
@@ -419,7 +587,7 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
         };
       })
       .filter((arc) => selectedYear === null || arc.year === selectedYear);
-  }, [flights, selectedYear, colorMode, routeStats, maxRouteCount]);
+  }, [flights, selectedYear, colorMode, routeStats, maxRouteCount, selectedAirport]);
 
   // Filter airports based on selected year
   const filteredAirportCodes = useMemo<Set<string>>(() => {
@@ -436,21 +604,72 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
   const pointsData = useMemo<GlobePoint[]>(() => {
     if (!airports) return [];
     
+    // Find max visit count for scaling
+    const maxVisits = Math.max(...airports.features.map(a => a.properties.visitCount), 1);
+    
+    // Get set of connected airport codes when an airport is selected
+    const connectedAirports = new Set<string>();
+    if (selectedAirport) {
+      connectedAirports.add(selectedAirport);
+      arcsData.forEach((arc) => {
+        if (arc.flight.origin_code === selectedAirport) {
+          connectedAirports.add(arc.flight.destination_code);
+        } else if (arc.flight.destination_code === selectedAirport) {
+          connectedAirports.add(arc.flight.origin_code);
+        }
+      });
+    }
+    
     return airports.features
       .filter((a) => selectedYear === null || filteredAirportCodes.has(a.properties.code))
       .map((a) => {
         const props = a.properties;
         const [lng, lat] = a.geometry.coordinates;
+        
+        // Use square root scaling for proportional symbols (standard cartographic practice)
+        // This prevents high-traffic airports from dominating while keeping small ones visible
+        const normalizedVisits = props.visitCount / maxVisits;
+        const sqrtScale = Math.sqrt(normalizedVisits);
+        
+        // Size range: 0.15 (min) to 0.6 (max) - ensures visibility at all levels
+        const minSize = 0.15;
+        const maxSize = 0.6;
+        let size = minSize + sqrtScale * (maxSize - minSize);
+        
+        // Color intensity based on visits - busier airports are brighter/more saturated
+        // Using purple-to-gold gradient matching the app's aesthetic
+        const hue = 45 - sqrtScale * 15; // Gold (45) to warm yellow (30) for busiest
+        const saturation = 70 + sqrtScale * 30; // 70% to 100% saturation
+        const lightness = 50 + sqrtScale * 15; // 50% to 65% lightness
+        let color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+        
+        // Highlight selected airport and connected airports
+        if (selectedAirport) {
+          if (props.code === selectedAirport) {
+            // Selected airport: bright cyan, larger
+            color = 'hsl(180, 100%, 60%)';
+            size = Math.max(size * 1.5, 0.5);
+          } else if (connectedAirports.has(props.code)) {
+            // Connected airports: cyan tint
+            color = 'hsl(180, 80%, 55%)';
+            size = size * 1.2;
+          } else {
+            // Dim non-connected airports
+            color = `hsl(${hue}, ${saturation * 0.3}%, ${lightness * 0.5}%)`;
+            size = size * 0.7;
+          }
+        }
+        
         return {
           lat,
           lng,
-          size: Math.min(0.4, 0.15 + props.visitCount * 0.05),
-          color: '#ffd700',
+          size,
+          color,
           label: props.code,
           airport: props,
         };
       });
-  }, [airports, selectedYear, filteredAirportCodes]);
+  }, [airports, selectedYear, filteredAirportCodes, selectedAirport, arcsData]);
 
   const labelsData = useMemo<GlobeLabel[]>(() => {
     if (!airports) return [];
@@ -470,8 +689,64 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
       });
   }, [airports, selectedYear, filteredAirportCodes]);
 
+  // Create static arcs for background route lines (one per unique route) with tooltip info
+  // Using arcs instead of paths so they follow the same elevated curve as animated dots
+  const staticArcsData = useMemo(() => {
+    if (!flights) return [];
+    
+    // Group by route to collect all flights on that route
+    const routeArcs = new Map<string, { 
+      startLat: number;
+      startLng: number;
+      endLat: number;
+      endLng: number;
+      stroke: number; 
+      routeCount: number;
+      flights: typeof arcsData[0]['flight'][];
+    }>();
+    
+    arcsData.forEach((arc) => {
+      if (!routeArcs.has(arc.routeKey)) {
+        routeArcs.set(arc.routeKey, {
+          startLat: arc.startLat,
+          startLng: arc.startLng,
+          endLat: arc.endLat,
+          endLng: arc.endLng,
+          stroke: arc.stroke * 0.8, // Slightly thinner than animated arcs
+          routeCount: arc.routeCount,
+          flights: [],
+        });
+      }
+      routeArcs.get(arc.routeKey)!.flights.push(arc.flight);
+    });
+    
+    return Array.from(routeArcs.entries()).map(([routeKey, route]) => {
+      // Check if this route connects to the selected airport
+      const isConnected = selectedAirport && route.flights.some(
+        f => f.origin_code === selectedAirport || f.destination_code === selectedAirport
+      );
+      
+      return {
+        startLat: route.startLat,
+        startLng: route.startLng,
+        endLat: route.endLat,
+        endLng: route.endLng,
+        // Highlight connected routes in bright cyan, dim unconnected when airport selected
+        color: selectedAirport 
+          ? (isConnected ? 'rgba(0, 255, 255, 0.7)' : 'rgba(140, 120, 200, 0.15)')
+          : 'rgba(140, 120, 200, 0.5)',
+        stroke: isConnected ? route.stroke * 1.5 : route.stroke,
+        routeKey,
+        routeCount: route.routeCount,
+        flights: route.flights,
+        isConnected: !!isConnected,
+      };
+    });
+  }, [flights, arcsData, selectedAirport]);
+
   return {
     arcsData,
+    staticArcsData,
     pointsData,
     labelsData,
     flightStats,

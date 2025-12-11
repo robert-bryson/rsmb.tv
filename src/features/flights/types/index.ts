@@ -50,6 +50,25 @@ export interface RouteStats {
   dates: string[];
 }
 
+// Selected airport info for filtered stats
+export interface SelectedAirportInfo {
+  code: string;
+  name: string;
+  municipality: string;
+  country: string;
+  continent: string;
+  totalVisits: number;
+  arrivals: number;
+  departures: number;
+  firstVisit: { date: string; from: string } | null;
+  lastVisit: { date: string; to: string } | null;
+  connectedAirports: number;
+  connectedCountries: string[];
+  topDestinations: { code: string; count: number }[];
+  topOrigins: { code: string; count: number }[];
+  airlines: string[];
+}
+
 // Overall flight statistics
 export interface FlightStats {
   totalFlights: number;
@@ -59,7 +78,7 @@ export interface FlightStats {
   totalDistance: number; // in km
   years: number[];
   busiestRoutes: RouteStats[];
-  busiestAirport: { code: string; count: number } | null;
+  busiestAirport: { code: string; count: number; departures: number; arrivals: number } | null;
   longestFlight: { route: string; distance: number } | null;
   shortestFlight: { route: string; distance: number } | null;
   internationalFlights: number;
@@ -68,9 +87,10 @@ export interface FlightStats {
   averageDistance: number;
   totalFlightTime: number; // estimated hours
   uniqueRoutes: number;
-  mostVisitedCountry: { country: string; count: number } | null;
+  mostVisitedCountry: { country: string; count: number; departures: number; arrivals: number } | null;
   firstFlight: { route: string; date: string } | null;
   lastFlight: { route: string; date: string } | null;
+  selectedAirportInfo: SelectedAirportInfo | null;
 }
 
 // Color mode options
@@ -84,11 +104,27 @@ export interface GlobeArc {
   endLng: number;
   color: string | [string, string];
   stroke: number;
+  animateTime: number;
+  dashLength: number;
+  dashGap: number;
   label: string;
   flight: FlightProperties;
   year: number;
   routeKey: string;
   routeCount: number;
+}
+
+export interface GlobeStaticArc {
+  startLat: number;
+  startLng: number;
+  endLat: number;
+  endLng: number;
+  color: string;
+  stroke: number;
+  routeKey: string;
+  routeCount: number;
+  flights: FlightProperties[];
+  isConnected: boolean;
 }
 
 export interface GlobePoint {

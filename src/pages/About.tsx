@@ -7,13 +7,13 @@ export function About() {
         <p>
           I'm a software developer based in St. Louis with a background in 
           geospatial engineering. I started out building GIS applications for 
-          county and state governments, then moved into startup land doing 
-          geospatial backend work.
+          county and state governments, then moved into startups doing 
+          geospatial backend development.
         </p>
         
         <p>
-          I spent several years at Microsoft working on Azure Maps and location 
-          services. Now I'm at{' '}
+          I spent several years at Microsoft working on Azure Cloud Infrastructure and Operations.
+           Now I'm at{' '}
           <a href="https://xentity.com" target="_blank" rel="noopener noreferrer">Xentity</a>, 
           where I work on federal projects including{' '}
           <a href="https://data.gov" target="_blank" rel="noopener noreferrer">Data.gov</a>{' '}
@@ -34,7 +34,7 @@ export function About() {
           </li>
           <li className="flex gap-4">
             <span className="text-zinc-600 w-28 shrink-0">Microsoft</span>
-            <span className="text-zinc-300">Geospatial Engineer — Azure Maps, location services</span>
+            <span className="text-zinc-300">Geospatial Engineer — Azure Cloud Infrastructure and Operations</span>
           </li>
           <li className="flex gap-4">
             <span className="text-zinc-600 w-28 shrink-0">Startups</span>
