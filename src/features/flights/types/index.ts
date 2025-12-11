@@ -61,6 +61,16 @@ export interface FlightStats {
   busiestRoutes: RouteStats[];
   busiestAirport: { code: string; count: number } | null;
   longestFlight: { route: string; distance: number } | null;
+  shortestFlight: { route: string; distance: number } | null;
+  internationalFlights: number;
+  intercontinentalFlights: number;
+  continentCounts: Record<string, number>;
+  averageDistance: number;
+  totalFlightTime: number; // estimated hours
+  uniqueRoutes: number;
+  mostVisitedCountry: { country: string; count: number } | null;
+  firstFlight: { route: string; date: string } | null;
+  lastFlight: { route: string; date: string } | null;
 }
 
 // Color mode options

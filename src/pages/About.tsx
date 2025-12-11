@@ -20,11 +20,6 @@ export function About() {
           and USFS Enterprise Geospatial Platform applications.
         </p>
 
-        <p>
-          Outside of work, I enjoy building interactive web experiences and 
-          data visualizations. I've been lucky enough to travel to many places, 
-          which inspired my <a href="/projects/flights">flight tracker project</a>.
-        </p>
       </div>
 
       {/* Experience */}

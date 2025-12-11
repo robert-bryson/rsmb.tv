@@ -15,6 +15,15 @@ export function Layout({ children }: LayoutProps) {
   const location = useLocation();
   const isFlightsPage = location.pathname === '/projects/flights';
 
+  // Full screen mode for flights page
+  if (isFlightsPage) {
+    return (
+      <div className="h-screen w-screen overflow-hidden bg-[#000011]">
+        {children}
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-zinc-100 flex flex-col">
       {/* Header */}
@@ -45,41 +54,35 @@ export function Layout({ children }: LayoutProps) {
         </nav>
       </header>
 
-      {/* Main content - full width for flights, contained otherwise */}
-      {isFlightsPage ? (
-        <main className="flex-1">{children}</main>
-      ) : (
-        <main className="max-w-2xl mx-auto px-6 py-12 flex-1 w-full">
-          {children}
-        </main>
-      )}
+      {/* Main content */}
+      <main className="max-w-2xl mx-auto px-6 py-12 flex-1 w-full">
+        {children}
+      </main>
 
-      {/* Footer - hidden on flights page for immersion */}
-      {!isFlightsPage && (
-        <footer className="border-t border-zinc-800/50">
-          <div className="max-w-2xl mx-auto px-6 py-6 flex justify-between items-center text-sm text-zinc-500">
-            <span>© {new Date().getFullYear()}</span>
-            <div className="flex gap-4">
-              <a 
-                href="https://github.com/robert-bryson" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="hover:text-zinc-300"
-              >
-                GitHub
-              </a>
-              <a 
-                href="https://linkedin.com/in/robert-bryson" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="hover:text-zinc-300"
-              >
-                LinkedIn
-              </a>
-            </div>
+      {/* Footer */}
+      <footer className="border-t border-zinc-800/50">
+        <div className="max-w-2xl mx-auto px-6 py-6 flex justify-between items-center text-sm text-zinc-500">
+          <span>© {new Date().getFullYear()}</span>
+          <div className="flex gap-4">
+            <a 
+              href="https://github.com/robert-bryson" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-zinc-300"
+            >
+              GitHub
+            </a>
+            <a 
+              href="https://linkedin.com/in/robert-bryson" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-zinc-300"
+            >
+              LinkedIn
+            </a>
           </div>
-        </footer>
-      )}
+        </div>
+      </footer>
     </div>
   );
 }

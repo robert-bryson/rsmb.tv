@@ -1,4 +1,5 @@
 import { useRef, useCallback, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Globe, { type GlobeMethods } from 'react-globe.gl';
 import { useGlobeData } from '../hooks/useFlightData';
 import type { GlobeArc, GlobePoint, ColorMode, FlightStats } from '../types';
@@ -8,16 +9,18 @@ const GLOBE_IMAGE = '//unpkg.com/three-globe/example/img/earth-night.jpg';
 const BUMP_IMAGE = '//unpkg.com/three-globe/example/img/earth-topology.png';
 
 // Stats Panel Component
-function StatsPanel({ stats, isOpen, onToggle }: { 
+function StatsPanel({ stats, isOpen, onToggle, selectedYear }: { 
   stats: FlightStats; 
   isOpen: boolean; 
   onToggle: () => void;
+  selectedYear: number | null;
 }) {
   const earthCircumference = 40075;
   const timesAroundEarth = (stats.totalDistance / earthCircumference).toFixed(1);
+  const domesticFlights = stats.totalFlights - stats.internationalFlights;
   
   return (
-    <div className={`absolute top-4 left-4 transition-all duration-300 ${isOpen ? 'w-72' : 'w-auto'}`}>
+    <div className={`absolute top-4 left-4 transition-all duration-300 ${isOpen ? 'w-80' : 'w-auto'} z-10`}>
       <button
         onClick={onToggle}
         className="bg-gray-900/90 backdrop-blur px-3 py-2 rounded-lg border border-gray-700 text-sm text-gray-300 hover:bg-gray-800/90 transition-colors flex items-center gap-2"
@@ -27,51 +30,131 @@ function StatsPanel({ stats, isOpen, onToggle }: {
       </button>
       
       {isOpen && (
-        <div className="mt-2 bg-gray-900/90 backdrop-blur rounded-lg border border-gray-700 p-4 text-sm">
-          <h3 className="text-white font-semibold mb-3 text-base">Flight Statistics</h3>
+        <div className="mt-2 bg-gray-900/90 backdrop-blur rounded-lg border border-gray-700 p-4 text-sm max-h-[calc(100vh-120px)] overflow-y-auto">
+          <h3 className="text-white font-semibold mb-1 text-base">
+            Flight Statistics
+          </h3>
+          {selectedYear && (
+            <div className="text-purple-400 text-xs mb-3">Filtered: {selectedYear}</div>
+          )}
+          {!selectedYear && stats.firstFlight && stats.lastFlight && (
+            <div className="text-gray-500 text-xs mb-3">
+              {stats.firstFlight.date} — {stats.lastFlight.date}
+            </div>
+          )}
           
+          {/* Overview Grid */}
           <div className="grid grid-cols-2 gap-3">
             <StatItem icon="✈️" label="Total Flights" value={stats.totalFlights.toLocaleString()} />
             <StatItem icon="🛬" label="Airports" value={stats.totalAirports.toString()} />
             <StatItem icon="🌍" label="Countries" value={stats.totalCountries.toString()} />
             <StatItem icon="🏢" label="Airlines" value={stats.totalAirlines.toString()} />
+            <StatItem icon="🔀" label="Unique Routes" value={stats.uniqueRoutes.toString()} />
+            <StatItem icon="⏱️" label="Est. Flight Time" value={`${stats.totalFlightTime.toLocaleString()}h`} />
           </div>
           
+          {/* Distance Stats */}
           <div className="mt-4 pt-3 border-t border-gray-700">
+            <h4 className="text-gray-400 text-xs uppercase tracking-wide mb-2">Distance</h4>
             <StatItem 
               icon="📏" 
               label="Total Distance" 
               value={`${stats.totalDistance.toLocaleString()} km`} 
               className="mb-2"
             />
-            <StatItem 
-              icon="🔄" 
-              label="Around Earth" 
-              value={`${timesAroundEarth}×`} 
-            />
+            <div className="grid grid-cols-2 gap-3">
+              <StatItem 
+                icon="🔄" 
+                label="Around Earth" 
+                value={`${timesAroundEarth}×`} 
+              />
+              <StatItem 
+                icon="📐" 
+                label="Avg Distance" 
+                value={`${stats.averageDistance.toLocaleString()} km`} 
+              />
+            </div>
+          </div>
+
+          {/* Flight Types */}
+          <div className="mt-4 pt-3 border-t border-gray-700">
+            <h4 className="text-gray-400 text-xs uppercase tracking-wide mb-2">Flight Types</h4>
+            <div className="grid grid-cols-2 gap-3">
+              <StatItem 
+                icon="🏠" 
+                label="Domestic" 
+                value={domesticFlights.toString()} 
+              />
+              <StatItem 
+                icon="🌐" 
+                label="International" 
+                value={stats.internationalFlights.toString()} 
+              />
+              <StatItem 
+                icon="🌏" 
+                label="Intercontinental" 
+                value={stats.intercontinentalFlights.toString()} 
+              />
+              {stats.mostVisitedCountry && (
+                <StatItem 
+                  icon="🏆" 
+                  label="Top Country" 
+                  value={stats.mostVisitedCountry.country} 
+                  subValue={`${stats.mostVisitedCountry.count} visits`}
+                />
+              )}
+            </div>
           </div>
           
-          {stats.busiestAirport && (
+          {/* Continents */}
+          {Object.keys(stats.continentCounts).length > 0 && (
             <div className="mt-4 pt-3 border-t border-gray-700">
+              <h4 className="text-gray-400 text-xs uppercase tracking-wide mb-2">Continents Visited</h4>
+              <div className="flex flex-wrap gap-2">
+                {Object.entries(stats.continentCounts)
+                  .sort((a, b) => b[1] - a[1])
+                  .map(([continent, count]) => (
+                    <span key={continent} className="bg-gray-800 px-2 py-1 rounded text-xs">
+                      <span className="text-gray-300">{continent}</span>
+                      <span className="text-purple-400 ml-1">×{count}</span>
+                    </span>
+                  ))}
+              </div>
+            </div>
+          )}
+
+          {/* Notable Flights */}
+          <div className="mt-4 pt-3 border-t border-gray-700">
+            <h4 className="text-gray-400 text-xs uppercase tracking-wide mb-2">Notable Flights</h4>
+            {stats.busiestAirport && (
               <StatItem 
                 icon="🏠" 
                 label="Busiest Airport" 
-                value={`${stats.busiestAirport.code} (${stats.busiestAirport.count})`} 
+                value={`${stats.busiestAirport.code}`}
+                subValue={`${stats.busiestAirport.count} visits`}
+                className="mb-2"
               />
-            </div>
-          )}
-          
-          {stats.longestFlight && (
-            <div className="mt-2">
+            )}
+            {stats.longestFlight && (
               <StatItem 
                 icon="🛫" 
                 label="Longest Flight" 
-                value={`${stats.longestFlight.route}`} 
+                value={stats.longestFlight.route} 
                 subValue={`${Math.round(stats.longestFlight.distance).toLocaleString()} km`}
+                className="mb-2"
               />
-            </div>
-          )}
+            )}
+            {stats.shortestFlight && (
+              <StatItem 
+                icon="🛬" 
+                label="Shortest Flight" 
+                value={stats.shortestFlight.route} 
+                subValue={`${Math.round(stats.shortestFlight.distance).toLocaleString()} km`}
+              />
+            )}
+          </div>
           
+          {/* Top Routes */}
           {stats.busiestRoutes.length > 0 && (
             <div className="mt-4 pt-3 border-t border-gray-700">
               <h4 className="text-gray-400 text-xs uppercase tracking-wide mb-2">Top Routes</h4>
@@ -121,7 +204,7 @@ function YearFilter({
   onYearChange: (year: number | null) => void;
 }) {
   return (
-    <div className="absolute top-4 right-4 bg-gray-900/90 backdrop-blur rounded-lg border border-gray-700 p-3">
+    <div className="absolute top-16 right-4 bg-gray-900/90 backdrop-blur rounded-lg border border-gray-700 p-3 z-10">
       <div className="text-gray-400 text-xs uppercase tracking-wide mb-2">Filter by Year</div>
       <div className="flex flex-wrap gap-1 max-w-xs">
         <button
@@ -239,6 +322,15 @@ export function FlightsMap() {
 
   return (
     <div className="relative w-full h-full bg-[#000011]">
+      {/* Back button */}
+      <Link 
+        to="/projects" 
+        className="absolute top-4 right-4 z-20 bg-gray-900/90 backdrop-blur px-3 py-2 rounded-lg border border-gray-700 text-sm text-gray-300 hover:bg-gray-800/90 hover:text-white transition-colors flex items-center gap-2"
+      >
+        <span>←</span>
+        <span>Back</span>
+      </Link>
+
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center z-10">
           <div className="text-white/70 text-lg">Loading flights...</div>
@@ -326,7 +418,8 @@ export function FlightsMap() {
       <StatsPanel 
         stats={flightStats} 
         isOpen={showStats} 
-        onToggle={() => setShowStats(!showStats)} 
+        onToggle={() => setShowStats(!showStats)}
+        selectedYear={selectedYear}
       />
 
       {/* Year Filter */}
