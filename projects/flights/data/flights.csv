@@ -315,3 +315,7 @@ date,airline,flightNumber,origin,destination,notes
 1/2/2026,Azores Airlines,S4 0507,BCN,PDL,
 1/3/2026,Azores Airlines,S4 0247,PDL,JFK,
 1/4/2026,United,UA 2477,EWR,STL,
+2/14/2026,American,AA 1992,STL,CLT,
+2/14/2026,American,AA 2150,CLT,SJU,
+2/23/2026,American,AA 3149,SJU,MIA,
+2/23/2026,American,AA 3065,MIA,STL,
