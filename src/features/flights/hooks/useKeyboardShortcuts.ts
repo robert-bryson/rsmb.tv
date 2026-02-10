@@ -6,6 +6,8 @@ interface UseKeyboardShortcutsOptions {
   onResetView: () => void;
   onClearSelection: () => void;
   onColorModeChange: (mode: number) => void;
+  onToggleAllAirports?: () => void;
+  onToggleUSStates?: () => void;
 }
 
 export function useKeyboardShortcuts({
@@ -14,6 +16,8 @@ export function useKeyboardShortcuts({
   onResetView,
   onClearSelection,
   onColorModeChange,
+  onToggleAllAirports,
+  onToggleUSStates,
 }: UseKeyboardShortcutsOptions) {
   const [showHelp, setShowHelp] = useState(false);
 
@@ -37,6 +41,20 @@ export function useKeyboardShortcuts({
         case 'r':
           onResetView();
           break;
+        case 'a':
+          // Shift+A toggles all airports layer
+          if (e.shiftKey && onToggleAllAirports) {
+            e.preventDefault();
+            onToggleAllAirports();
+          }
+          break;
+        case 'u':
+          // Shift+U toggles US states layer
+          if (e.shiftKey && onToggleUSStates) {
+            e.preventDefault();
+            onToggleUSStates();
+          }
+          break;
         case 'escape':
           setShowHelp(false);
           onClearSelection();
@@ -58,7 +76,7 @@ export function useKeyboardShortcuts({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onToggleStats, onToggleFilter, onResetView, onClearSelection, onColorModeChange]);
+  }, [onToggleStats, onToggleFilter, onResetView, onClearSelection, onColorModeChange, onToggleAllAirports, onToggleUSStates]);
 
   return { showHelp, setShowHelp };
 }

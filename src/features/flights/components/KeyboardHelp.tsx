@@ -1,19 +1,33 @@
+import { useFocusTrap } from '../hooks/useFocusTrap';
+
 interface KeyboardHelpProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
 export function KeyboardHelp({ isOpen, onClose }: KeyboardHelpProps) {
+  const dialogRef = useFocusTrap<HTMLDivElement>(isOpen);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-      <div className="bg-gray-900 border border-gray-700 rounded-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="keyboard-help-title"
+    >
+      <div
+        ref={dialogRef}
+        className="bg-gray-900 border border-gray-700 rounded-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden"
+        tabIndex={-1}
+      >
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700">
-          <h2 className="text-lg font-semibold text-white">Keyboard Shortcuts</h2>
+          <h2 id="keyboard-help-title" className="text-lg font-semibold text-white">Keyboard Shortcuts</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-white transition-colors"
+            aria-label="Close keyboard shortcuts"
           >
             ✕
           </button>
@@ -23,6 +37,8 @@ export function KeyboardHelp({ isOpen, onClose }: KeyboardHelpProps) {
           <ShortcutRow keys={['S']} description="Toggle stats panel" />
           <ShortcutRow keys={['F']} description="Open filter panel" />
           <ShortcutRow keys={['R']} description="Reset view to default" />
+          <ShortcutRow keys={['Shift', 'A']} description="Toggle all airports layer" />
+          <ShortcutRow keys={['Shift', 'U']} description="Toggle US states layer" />
           <ShortcutRow keys={['Esc']} description="Clear selection / close panels" />
           <ShortcutRow keys={['1-4']} description="Switch color modes" />
           <div className="pt-3 border-t border-gray-700">

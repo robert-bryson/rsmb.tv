@@ -1,5 +1,6 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
 import type { GlobePoint } from '../types';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 
 interface FilterPanelProps {
   years: number[];
@@ -24,6 +25,7 @@ export function FilterPanel({
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const panelRef = useFocusTrap<HTMLDivElement>(isOpen);
 
   const toggleSection = (section: string) => {
     setExpandedSections((prev) => ({ ...prev, [section]: !prev[section] }));
@@ -75,11 +77,10 @@ export function FilterPanel({
       {/* Filter Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`bg-gray-900/90 backdrop-blur px-3 py-2 rounded-lg border text-sm transition-all flex items-center gap-2 ${
-          hasActiveFilters
+        className={`bg-gray-900/90 backdrop-blur px-3 py-2 rounded-lg border text-sm transition-all flex items-center gap-2 ${hasActiveFilters
             ? 'border-purple-500 text-purple-300'
             : 'border-gray-700 text-gray-300 hover:bg-gray-800/90'
-        }`}
+          }`}
       >
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -96,10 +97,17 @@ export function FilterPanel({
 
       {/* Filter Panel */}
       {isOpen && (
-        <div className="absolute top-12 right-0 w-72 bg-gray-900/95 backdrop-blur rounded-lg border border-gray-700 shadow-xl overflow-hidden z-30">
+        <div
+          ref={panelRef}
+          className="absolute top-12 right-0 w-72 bg-gray-900/95 backdrop-blur rounded-lg border border-gray-700 shadow-xl overflow-hidden z-30"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="filter-panel-title"
+          tabIndex={-1}
+        >
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-700">
-            <h3 className="text-white font-medium text-sm">Filters</h3>
+            <h3 id="filter-panel-title" className="text-white font-medium text-sm">Filters</h3>
             {hasActiveFilters && (
               <button
                 onClick={() => onYearChange(null)}
@@ -185,11 +193,10 @@ export function FilterPanel({
                   {/* All Years Button */}
                   <button
                     onClick={() => onYearChange(null)}
-                    className={`w-full mb-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      selectedYear === null
+                    className={`w-full mb-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${selectedYear === null
                         ? 'bg-purple-600 text-white'
                         : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-                    }`}
+                      }`}
                   >
                     All Years ({flightCount} flights)
                   </button>
@@ -208,11 +215,10 @@ export function FilterPanel({
                               <button
                                 key={year}
                                 onClick={() => onYearChange(year)}
-                                className={`px-2 py-1.5 rounded text-xs font-medium transition-colors ${
-                                  selectedYear === year
+                                className={`px-2 py-1.5 rounded text-xs font-medium transition-colors ${selectedYear === year
                                     ? 'bg-purple-600 text-white'
                                     : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200'
-                                }`}
+                                  }`}
                               >
                                 {year}
                               </button>

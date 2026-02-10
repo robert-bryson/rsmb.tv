@@ -1,5 +1,48 @@
-import type { FeatureCollection, Feature, Point, LineString } from 'geojson';
+import type { FeatureCollection, Feature, Point, LineString, Polygon, MultiPolygon } from 'geojson';
 
+// All airports (full dataset) properties
+export interface AllAirportProperties {
+  code: string;
+  name: string;
+  municipality: string;
+  region: string;
+  regionName: string;
+  country: string;
+  countryName: string;
+  continent: string;
+  continentName: string;
+  elevationFt: number;
+  elevationM: number;
+  visited: boolean;
+}
+
+// Metadata for all airports collection
+export interface AllAirportsMetadata {
+  totalAirports: number;
+  visitedCount: number;
+  unvisitedCount: number;
+  continents: string[];
+  countries: string[];
+  generatedAt: string;
+}
+
+export type AllAirportFeature = Feature<Point, AllAirportProperties>;
+export type AllAirportsCollection = FeatureCollection<Point, AllAirportProperties> & {
+  metadata?: AllAirportsMetadata;
+};
+
+// Symbolization modes for all airports layer
+export type AirportSymbolMode = 'visited' | 'continent' | 'country' | 'elevation';
+
+// All airports layer configuration
+export interface AllAirportsLayerConfig {
+  visible: boolean;
+  symbolMode: AirportSymbolMode;
+  showLabels: boolean;
+  opacity: number;
+}
+
+// Visited airports properties (with visit statistics)
 export interface AirportProperties {
   code: string;
   name: string;
@@ -179,4 +222,61 @@ export interface GlobeLabel {
   text: string;
   color: string;
   size: number;
+}
+
+// Globe point for all airports layer
+export interface GlobeAllAirportPoint {
+  lat: number;
+  lng: number;
+  size: number;
+  color: string;
+  label: string;
+  airport: AllAirportProperties;
+}
+
+// ========================================
+// US States Layer Types
+// ========================================
+
+// US State properties from GeoJSON
+export interface USStateProperties {
+  code: string; // e.g., "US-CA"
+  name: string; // e.g., "California"
+  abbr: string; // e.g., "CA"
+}
+
+// Computed state statistics (derived from flight data)
+export interface USStateStats {
+  code: string;
+  name: string;
+  abbr: string;
+  visited: boolean;
+  airportCount: number; // airports visited in this state
+  totalAirports: number; // total airports in state (from allAirports)
+  flightCount: number; // total flights to/from this state
+  firstVisitDate: string | null;
+  lastVisitDate: string | null;
+  airlines: string[];
+}
+
+// US States collection from GeoJSON
+export interface USStatesMetadata {
+  totalStates: number;
+  generatedAt: string;
+}
+
+export type USStateFeature = Feature<Polygon | MultiPolygon, USStateProperties>;
+export type USStatesCollection = FeatureCollection<Polygon | MultiPolygon, USStateProperties> & {
+  metadata?: USStatesMetadata;
+};
+
+// State symbolization modes
+export type StateSymbolMode = 'visited' | 'visitCount' | 'flightCount';
+
+// Globe polygon for state layer
+export interface GlobeStatePolygon {
+  geometry: Polygon | MultiPolygon;
+  properties: USStateProperties;
+  stats: USStateStats;
+  color: string;
 }

@@ -1,14 +1,6 @@
 import { useState } from 'react';
 import type { ColorMode } from '../types';
-
-// Year color scale for legend
-const YEAR_COLORS: Record<number, string> = {
-  2008: '#3b82f6', 2009: '#6366f1', 2010: '#8b5cf6', 2011: '#a855f7',
-  2012: '#c026d3', 2013: '#d946ef', 2014: '#e879f9', 2015: '#f472b6',
-  2016: '#fb7185', 2017: '#f43f5e', 2018: '#ef4444', 2019: '#f97316',
-  2020: '#fb923c', 2021: '#fbbf24', 2022: '#facc15', 2023: '#a3e635',
-  2024: '#4ade80', 2025: '#22d3ee',
-};
+import { YEAR_COLORS, FREQUENCY_COLORS, FREQUENCY_THRESHOLDS } from '../constants';
 
 interface ColorModeSelectorProps {
   mode: ColorMode;
@@ -67,11 +59,10 @@ export function ColorModeSelector({ mode, onModeChange, years = [] }: ColorModeS
                     setIsOpen(false);
                   }
                 }}
-                className={`px-3 py-1.5 rounded text-xs text-left transition-colors flex items-center gap-2 ${
-                  mode === m.value
+                className={`px-3 py-1.5 rounded text-xs text-left transition-colors flex items-center gap-2 ${mode === m.value
                     ? 'bg-purple-600 text-white'
                     : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
-                }`}
+                  }`}
               >
                 <span>{m.icon}</span>
                 <span>{m.label}</span>
@@ -107,20 +98,20 @@ export function ColorModeSelector({ mode, onModeChange, years = [] }: ColorModeS
               <div className="text-gray-500 text-xs mb-2">Frequency Legend</div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2 text-xs">
-                  <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: '#ef4444' }} />
-                  <span className="text-gray-400">Very frequent (70%+)</span>
+                  <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: FREQUENCY_COLORS.VERY_FREQUENT }} />
+                  <span className="text-gray-400">Very frequent ({Math.round(FREQUENCY_THRESHOLDS.VERY_FREQUENT * 100)}%+)</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs">
-                  <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: '#f97316' }} />
-                  <span className="text-gray-400">Frequent (40-70%)</span>
+                  <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: FREQUENCY_COLORS.FREQUENT }} />
+                  <span className="text-gray-400">Frequent ({Math.round(FREQUENCY_THRESHOLDS.FREQUENT * 100)}-{Math.round(FREQUENCY_THRESHOLDS.VERY_FREQUENT * 100)}%)</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs">
-                  <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: '#facc15' }} />
-                  <span className="text-gray-400">Moderate (20-40%)</span>
+                  <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: FREQUENCY_COLORS.MODERATE }} />
+                  <span className="text-gray-400">Moderate ({Math.round(FREQUENCY_THRESHOLDS.MODERATE * 100)}-{Math.round(FREQUENCY_THRESHOLDS.FREQUENT * 100)}%)</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs">
-                  <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: '#a855f7' }} />
-                  <span className="text-gray-400">Occasional (&lt;20%)</span>
+                  <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: FREQUENCY_COLORS.OCCASIONAL }} />
+                  <span className="text-gray-400">Occasional (&lt;{Math.round(FREQUENCY_THRESHOLDS.MODERATE * 100)}%)</span>
                 </div>
               </div>
             </div>
