@@ -1,7 +1,9 @@
+import { memo } from 'react';
+
 /**
  * Skeleton loading state for the globe visualization.
  */
-export function LoadingSkeleton() {
+export const LoadingSkeleton = memo(function LoadingSkeleton() {
     return (
         <div className="absolute inset-0 flex items-center justify-center z-10">
             {/* Skeleton globe */}
@@ -19,4 +21,4 @@ export function LoadingSkeleton() {
             </div>
         </div>
     );
-}
+});

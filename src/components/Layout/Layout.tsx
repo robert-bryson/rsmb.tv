@@ -7,6 +7,7 @@ interface LayoutProps {
 
 const navLinks = [
   { to: '/', label: 'Home' },
+  { to: '/blog', label: 'Blog' },
   { to: '/projects', label: 'Projects' },
   { to: '/about', label: 'About' },
 ];
@@ -29,8 +30,8 @@ export function Layout({ children }: LayoutProps) {
       {/* Header */}
       <header className="border-b border-zinc-800/50">
         <nav className="max-w-2xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className="text-lg font-medium text-zinc-100 hover:text-violet-400"
           >
             rsmb
@@ -40,11 +41,10 @@ export function Layout({ children }: LayoutProps) {
               <li key={to}>
                 <Link
                   to={to}
-                  className={`hover:text-violet-400 ${
-                    location.pathname === to 
-                      ? 'text-violet-400' 
+                  className={`hover:text-violet-400 ${location.pathname === to
+                      ? 'text-violet-400'
                       : 'text-zinc-400'
-                  }`}
+                    }`}
                 >
                   {label}
                 </Link>
@@ -64,17 +64,17 @@ export function Layout({ children }: LayoutProps) {
         <div className="max-w-2xl mx-auto px-6 py-6 flex justify-between items-center text-sm text-zinc-500">
           <span>© {new Date().getFullYear()}</span>
           <div className="flex gap-4">
-            <a 
-              href="https://github.com/robert-bryson" 
-              target="_blank" 
+            <a
+              href="https://github.com/robert-bryson"
+              target="_blank"
               rel="noopener noreferrer"
               className="hover:text-zinc-300"
             >
               GitHub
             </a>
-            <a 
-              href="https://linkedin.com/in/robert-bryson" 
-              target="_blank" 
+            <a
+              href="https://linkedin.com/in/robert-bryson"
+              target="_blank"
               rel="noopener noreferrer"
               className="hover:text-zinc-300"
             >

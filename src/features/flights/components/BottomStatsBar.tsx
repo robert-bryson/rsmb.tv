@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 interface BottomStatsBarProps {
     totalFlights: number;
     totalAirports: number;
@@ -10,7 +12,7 @@ interface BottomStatsBarProps {
 /**
  * Bottom status bar showing summary statistics.
  */
-export function BottomStatsBar({
+export const BottomStatsBar = memo(function BottomStatsBar({
     totalFlights,
     totalAirports,
     totalDistance,
@@ -65,4 +67,4 @@ export function BottomStatsBar({
             </div>
         </div>
     );
-}
+});

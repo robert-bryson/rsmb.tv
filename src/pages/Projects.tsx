@@ -1,23 +1,29 @@
 import { Link } from 'react-router-dom';
 import { projects } from '../content/projects';
+import { useDocumentHead } from '../hooks/useDocumentHead';
 
 function isExternalUrl(url: string): boolean {
   return url.startsWith('http://') || url.startsWith('https://');
 }
 
 export function Projects() {
+  useDocumentHead({
+    title: 'Projects',
+    description: 'Interactive projects and data visualizations by Robby Bryson — flight tracker, route converter, and more.',
+  });
+
   return (
     <div>
       <h1 className="text-2xl font-semibold text-zinc-100 mb-2">Projects</h1>
       <p className="text-zinc-500 mb-8">
         Things I've built, mostly for fun.
       </p>
-      
+
       <ul className="space-y-6">
         {projects.map((project) => {
           const linkUrl = project.demoUrl || project.sourceUrl;
           const isExternal = linkUrl && isExternalUrl(linkUrl);
-          
+
           if (linkUrl && isExternal) {
             return (
               <li key={project.slug}>
@@ -32,7 +38,7 @@ export function Projects() {
               </li>
             );
           }
-          
+
           if (linkUrl) {
             return (
               <li key={project.slug}>
@@ -45,7 +51,7 @@ export function Projects() {
               </li>
             );
           }
-          
+
           return (
             <li key={project.slug}>
               <div className="p-4 -mx-4">
@@ -73,8 +79,8 @@ function ProjectContent({ project }: { project: typeof projects[0] }) {
       </p>
       <div className="mt-3 flex flex-wrap gap-2">
         {project.tech.map((t) => (
-          <span 
-            key={t} 
+          <span
+            key={t}
             className="px-2 py-0.5 text-xs rounded-full bg-zinc-800 text-zinc-400"
           >
             {t}

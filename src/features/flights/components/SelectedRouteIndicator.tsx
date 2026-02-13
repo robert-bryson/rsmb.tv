@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 interface SelectedRouteIndicatorProps {
     route: string;
     onClear: () => void;
@@ -6,7 +8,7 @@ interface SelectedRouteIndicatorProps {
 /**
  * Small chip indicator showing the currently selected route.
  */
-export function SelectedRouteIndicator({ route, onClear }: SelectedRouteIndicatorProps) {
+export const SelectedRouteIndicator = memo(function SelectedRouteIndicator({ route, onClear }: SelectedRouteIndicatorProps) {
     return (
         <div className="absolute top-16 left-1/2 -translate-x-1/2 z-20">
             <button
@@ -21,4 +23,4 @@ export function SelectedRouteIndicator({ route, onClear }: SelectedRouteIndicato
             </button>
         </div>
     );
-}
+});

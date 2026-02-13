@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { GlobeStaticArc } from '../types';
 
 interface MobileInfoOverlayProps {
@@ -10,7 +11,7 @@ interface MobileInfoOverlayProps {
  * Mobile-specific info overlay for route details.
  * Shown when tapping on a route on touch devices.
  */
-export function MobileInfoOverlay({ arc, onClose, onSelect }: MobileInfoOverlayProps) {
+export const MobileInfoOverlay = memo(function MobileInfoOverlay({ arc, onClose, onSelect }: MobileInfoOverlayProps) {
     if (!arc) return null;
 
     const firstFlight = arc.flights[0];
@@ -59,4 +60,4 @@ export function MobileInfoOverlay({ arc, onClose, onSelect }: MobileInfoOverlayP
             </div>
         </div>
     );
-}
+});

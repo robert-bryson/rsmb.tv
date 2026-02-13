@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 interface EmptyStateProps {
   selectedYear: number | null;
   selectedAirline: string | null;
@@ -5,7 +7,7 @@ interface EmptyStateProps {
   onClearFilters: () => void;
 }
 
-export function EmptyState({
+export const EmptyState = memo(function EmptyState({
   selectedYear,
   selectedAirline,
   selectedAirport,
@@ -53,4 +55,4 @@ export function EmptyState({
       </div>
     </div>
   );
-}
+});

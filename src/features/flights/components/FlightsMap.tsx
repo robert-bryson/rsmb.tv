@@ -1,6 +1,7 @@
 import { useRef, useCallback, useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Globe, { type GlobeMethods } from 'react-globe.gl';
+import { usePersistedState } from '../../../hooks/usePersistedState';
 import { useGlobeData, useFlights } from '../hooks/useFlightData';
 import { useAllAirports, useAllAirportsLayer } from '../hooks/useAllAirports';
 import { useUSStates, useUSStateStats, useUSStatesLayer } from '../hooks/useUSStates';
@@ -8,6 +9,7 @@ import { useStatsPanelState } from '../hooks/useStatsPanelState';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import { useYearSwipeNavigation } from '../hooks/useSwipeGesture';
+import { useZoomNavigation } from '../hooks/useZoomNavigation';
 import { StatsPanel } from './StatsPanel';
 import { ColorModeSelector } from './ColorModeSelector';
 import { KeyboardHelp } from './KeyboardHelp';
@@ -41,47 +43,18 @@ import {
   LABEL_RESOLUTION,
   LABEL_MIN_VISITS,
   COLOR_MODES,
-  ZOOM_ALTITUDE_MIN,
-  ZOOM_ALTITUDE_MAX,
-  ZOOM_SPAN_DIVISOR,
-  ZOOM_BASE_OFFSET,
   ALL_AIRPORTS_POINT_ALTITUDE,
   STATE_POLYGON_ALTITUDE,
   STATE_POLYGON_SIDE_COLOR,
 } from '../constants';
 import type { GlobeArc, GlobePoint, GlobeStaticArc, ColorMode, AirportSymbolMode, GlobeAllAirportPoint, StateSymbolMode, GlobeStatePolygon } from '../types';
 
-// Custom hook for persisted state
-function usePersistedState<T>(key: string, defaultValue: T): [T, (value: T | ((prev: T) => T)) => void] {
-  const [state, setState] = useState<T>(() => {
-    try {
-      const saved = localStorage.getItem(key);
-      return saved !== null ? JSON.parse(saved) : defaultValue;
-    } catch {
-      return defaultValue;
-    }
-  });
-
-  const setPersistedState = useCallback((value: T | ((prev: T) => T)) => {
-    setState(prev => {
-      const newValue = typeof value === 'function' ? (value as (prev: T) => T)(prev) : value;
-      try {
-        localStorage.setItem(key, JSON.stringify(newValue));
-      } catch {
-        // Ignore localStorage errors
-      }
-      return newValue;
-    });
-  }, [key]);
-
-  return [state, setPersistedState];
-}
-
 export function FlightsMap() {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const [searchParams, setSearchParams] = useSearchParams();
   const prefersReducedMotion = useReducedMotion();
   const textureState = useGlobeTextures();
+  const { resetView, zoomToPoints, zoomToRoute, zoomToPoint, zoomToAirportWithConnections } = useZoomNavigation(globeRef);
 
   // URL state for filters
   const selectedYear = searchParams.get('year') ? Number(searchParams.get('year')) : null;
@@ -217,11 +190,6 @@ export function FlightsMap() {
     }
   }, []);
 
-  // Helper to calculate optimal zoom altitude for a span
-  const calculateZoomAltitude = useCallback((maxSpan: number, divisor: number = ZOOM_SPAN_DIVISOR) => {
-    return Math.min(ZOOM_ALTITUDE_MAX, Math.max(ZOOM_ALTITUDE_MIN, maxSpan / divisor + ZOOM_BASE_OFFSET));
-  }, []);
-
   const { arcsData, staticArcsData, pointsData, flightStats, loading, error } = useGlobeData({
     selectedYear,
     colorMode,
@@ -282,13 +250,6 @@ export function FlightsMap() {
     return [...taggedAllAirports, ...taggedVisited];
   }, [pointsData, allAirportsPoints, allAirportsVisible]);
 
-  // Reset view callback for keyboard shortcuts
-  const resetView = useCallback(() => {
-    if (globeRef.current) {
-      globeRef.current.pointOfView(DEFAULT_VIEW, VIEW_TRANSITION_MS);
-    }
-  }, []);
-
   // Share URL handler
   const handleShareUrl = useCallback(async () => {
     try {
@@ -296,15 +257,24 @@ export function FlightsMap() {
       setCopiedUrl(true);
       setTimeout(() => setCopiedUrl(false), COPY_FEEDBACK_MS);
     } catch {
-      // Fallback for older browsers
-      const textArea = document.createElement('textarea');
-      textArea.value = window.location.href;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textArea);
-      setCopiedUrl(true);
-      setTimeout(() => setCopiedUrl(false), COPY_FEEDBACK_MS);
+      // Fallback: create a temporary input for older browsers
+      const input = document.createElement('input');
+      input.style.position = 'fixed';
+      input.style.opacity = '0';
+      input.value = window.location.href;
+      document.body.appendChild(input);
+      input.select();
+      input.setSelectionRange(0, input.value.length);
+      // Note: document.execCommand is deprecated but serves as last-resort fallback
+      try {
+        document.execCommand('copy');
+        setCopiedUrl(true);
+        setTimeout(() => setCopiedUrl(false), COPY_FEEDBACK_MS);
+      } catch {
+        // If even execCommand fails, open a prompt with the URL
+        window.prompt('Copy this URL:', window.location.href);
+      }
+      document.body.removeChild(input);
     }
   }, []);
 
@@ -380,27 +350,8 @@ export function FlightsMap() {
 
   // Calculate bounds for zoom-to-fit when year changes
   const zoomToBounds = useCallback((points: typeof pointsData) => {
-    if (!globeRef.current || points.length === 0) return;
-
-    let minLat = 90, maxLat = -90, minLng = 180, maxLng = -180;
-
-    points.forEach(point => {
-      minLat = Math.min(minLat, point.lat);
-      maxLat = Math.max(maxLat, point.lat);
-      minLng = Math.min(minLng, point.lng);
-      maxLng = Math.max(maxLng, point.lng);
-    });
-
-    const centerLat = (minLat + maxLat) / 2;
-    const centerLng = (minLng + maxLng) / 2;
-    const latSpan = maxLat - minLat;
-    const lngSpan = maxLng - minLng;
-    const adjustedLngSpan = lngSpan > 180 ? 360 - lngSpan : lngSpan;
-    const maxSpan = Math.max(latSpan, adjustedLngSpan);
-    const altitude = calculateZoomAltitude(maxSpan);
-
-    globeRef.current.pointOfView({ lat: centerLat, lng: centerLng, altitude }, VIEW_TRANSITION_MS);
-  }, [calculateZoomAltitude]);
+    zoomToPoints(points);
+  }, [zoomToPoints]);
 
   // Year change handler with zoom-to-fit
   const handleYearChange = useCallback((year: number | null) => {
@@ -411,12 +362,12 @@ export function FlightsMap() {
   // US States visibility handler - zoom to US when enabling
   const handleUSStatesVisibilityChange = useCallback((visible: boolean) => {
     setUSStatesVisible(visible);
-    if (visible && globeRef.current) {
+    if (visible) {
       // Zoom to continental US view
-      globeRef.current.pointOfView({ lat: 39.8283, lng: -98.5795, altitude: 1.8 }, VIEW_TRANSITION_MS);
+      zoomToPoint({ lat: 39.8283, lng: -98.5795 }, 1.8, VIEW_TRANSITION_MS);
       stopAutoRotate();
     }
-  }, [setUSStatesVisible, stopAutoRotate]);
+  }, [setUSStatesVisible, stopAutoRotate, zoomToPoint]);
 
   // Effect to zoom to bounds when year filter changes
   const prevYearRef = useRef<number | null>(null);
@@ -445,18 +396,13 @@ export function FlightsMap() {
     const newRoute = selectedRoute === arc.routeKey ? null : arc.routeKey;
     setSelectedRoute(newRoute);
 
-    if (globeRef.current && newRoute) {
-      const midLat = (arc.startLat + arc.endLat) / 2;
-      const midLng = (arc.startLng + arc.endLng) / 2;
-      const latDiff = Math.abs(arc.startLat - arc.endLat);
-      const lngDiff = Math.abs(arc.startLng - arc.endLng);
-      const adjustedLngDiff = lngDiff > 180 ? 360 - lngDiff : lngDiff;
-      const maxDiff = Math.max(latDiff, adjustedLngDiff);
-      const altitude = Math.min(2.0, Math.max(0.6, maxDiff / 70));
-
-      globeRef.current.pointOfView({ lat: midLat, lng: midLng, altitude }, 1000);
+    if (newRoute) {
+      zoomToRoute(
+        { lat: arc.startLat, lng: arc.startLng },
+        { lat: arc.endLat, lng: arc.endLng }
+      );
     }
-  }, [stopAutoRotate, selectedRoute, setSelectedRoute]);
+  }, [stopAutoRotate, selectedRoute, setSelectedRoute, zoomToRoute]);
 
   // Point click - fly to airport showing all its routes, and toggle selection
   const handlePointClick = useCallback((point: GlobePoint) => {
@@ -465,7 +411,7 @@ export function FlightsMap() {
     const newSelection = selectedAirport === point.airport.code ? null : point.airport.code;
     setSelectedAirport(newSelection);
 
-    if (newSelection && globeRef.current) {
+    if (newSelection) {
       // Find all connected airports to calculate bounds
       const connectedAirports = staticArcsData
         .filter(arc => {
@@ -482,49 +428,23 @@ export function FlightsMap() {
             : [{ lat: f.origin_lat, lng: f.origin_lon }];
         });
 
-      if (connectedAirports.length > 0) {
-        // Calculate bounds including the selected airport and all connections
-        let minLat = point.lat, maxLat = point.lat;
-        let minLng = point.lng, maxLng = point.lng;
-
-        connectedAirports.forEach(({ lat, lng }) => {
-          minLat = Math.min(minLat, lat);
-          maxLat = Math.max(maxLat, lat);
-          minLng = Math.min(minLng, lng);
-          maxLng = Math.max(maxLng, lng);
-        });
-
-        // Center on the selected airport, but zoom out to show connections
-        const latSpan = maxLat - minLat;
-        const lngSpan = maxLng - minLng;
-        const adjustedLngSpan = lngSpan > 180 ? 360 - lngSpan : lngSpan;
-        const maxSpan = Math.max(latSpan, adjustedLngSpan);
-        const altitude = Math.min(2.5, Math.max(0.5, maxSpan / 45 + 0.3));
-
-        globeRef.current.pointOfView({ lat: point.lat, lng: point.lng, altitude }, 1000);
-      } else {
-        // No connections, just zoom to the airport
-        globeRef.current.pointOfView({ lat: point.lat, lng: point.lng, altitude: 0.5 }, 1000);
-      }
-    }
-
-    if (newSelection) {
+      zoomToAirportWithConnections(point, connectedAirports);
       setShowStats(true);
     } else {
       setShowStats(false);
     }
-  }, [stopAutoRotate, selectedAirport, setSelectedAirport, setShowStats, staticArcsData]);
+  }, [stopAutoRotate, selectedAirport, setSelectedAirport, setShowStats, staticArcsData, zoomToAirportWithConnections]);
 
   // Handle clicking on an airport code in the stats panel
   const handleAirportCodeClick = useCallback((code: string) => {
     stopAutoRotate();
     const airport = pointsData.find(p => p.airport.code === code);
-    if (airport && globeRef.current) {
-      globeRef.current.pointOfView({ lat: airport.lat, lng: airport.lng, altitude: 0.5 }, 1000);
+    if (airport) {
+      zoomToPoint(airport, 0.5);
     }
     setSelectedAirport(code);
     setShowStats(true);
-  }, [stopAutoRotate, pointsData, setSelectedAirport, setShowStats]);
+  }, [stopAutoRotate, pointsData, setSelectedAirport, setShowStats, zoomToPoint]);
 
   // Handle clicking on a route in the stats panel
   const handleRouteCodeClick = useCallback((origin: string, destination: string) => {
@@ -532,86 +452,28 @@ export function FlightsMap() {
     const originAirport = pointsData.find(p => p.airport.code === origin);
     const destAirport = pointsData.find(p => p.airport.code === destination);
 
-    if (originAirport && destAirport && globeRef.current) {
-      const midLat = (originAirport.lat + destAirport.lat) / 2;
-      const midLng = (originAirport.lng + destAirport.lng) / 2;
-      const latDiff = Math.abs(originAirport.lat - destAirport.lat);
-      const lngDiff = Math.abs(originAirport.lng - destAirport.lng);
-      const adjustedLngDiff = lngDiff > 180 ? 360 - lngDiff : lngDiff;
-      const maxDiff = Math.max(latDiff, adjustedLngDiff);
-      const altitude = Math.min(2.5, Math.max(0.8, maxDiff / 60));
-
-      globeRef.current.pointOfView({ lat: midLat, lng: midLng, altitude }, 1000);
+    if (originAirport && destAirport) {
+      zoomToRoute(originAirport, destAirport, { divisor: 60 });
     }
-  }, [stopAutoRotate, pointsData]);
+  }, [stopAutoRotate, pointsData, zoomToRoute]);
 
   // Handle clicking on a country in the stats panel
   const handleCountryClick = useCallback((countryCode: string) => {
     stopAutoRotate();
     const countryAirports = pointsData.filter(p => p.airport.country === countryCode);
-
-    if (countryAirports.length > 0 && globeRef.current) {
-      if (countryAirports.length === 1) {
-        globeRef.current.pointOfView({
-          lat: countryAirports[0].lat,
-          lng: countryAirports[0].lng,
-          altitude: 0.5
-        }, 1000);
-      } else {
-        let minLat = 90, maxLat = -90, minLng = 180, maxLng = -180;
-        countryAirports.forEach(ap => {
-          minLat = Math.min(minLat, ap.lat);
-          maxLat = Math.max(maxLat, ap.lat);
-          minLng = Math.min(minLng, ap.lng);
-          maxLng = Math.max(maxLng, ap.lng);
-        });
-
-        const centerLat = (minLat + maxLat) / 2;
-        const centerLng = (minLng + maxLng) / 2;
-        const latSpan = maxLat - minLat;
-        const lngSpan = maxLng - minLng;
-        const adjustedLngSpan = lngSpan > 180 ? 360 - lngSpan : lngSpan;
-        const maxSpan = Math.max(latSpan, adjustedLngSpan);
-        const altitude = Math.min(2.5, Math.max(0.5, maxSpan / 50 + 0.3));
-
-        globeRef.current.pointOfView({ lat: centerLat, lng: centerLng, altitude }, 1000);
-      }
+    if (countryAirports.length > 0) {
+      zoomToPoints(countryAirports);
     }
-  }, [stopAutoRotate, pointsData]);
+  }, [stopAutoRotate, pointsData, zoomToPoints]);
 
   // Handle clicking on a region in the stats panel
   const handleRegionClick = useCallback((regionCode: string) => {
     stopAutoRotate();
     const regionAirports = pointsData.filter(p => p.airport.region === regionCode);
-
-    if (regionAirports.length > 0 && globeRef.current) {
-      if (regionAirports.length === 1) {
-        globeRef.current.pointOfView({
-          lat: regionAirports[0].lat,
-          lng: regionAirports[0].lng,
-          altitude: 0.5
-        }, 1000);
-      } else {
-        let minLat = 90, maxLat = -90, minLng = 180, maxLng = -180;
-        regionAirports.forEach(ap => {
-          minLat = Math.min(minLat, ap.lat);
-          maxLat = Math.max(maxLat, ap.lat);
-          minLng = Math.min(minLng, ap.lng);
-          maxLng = Math.max(maxLng, ap.lng);
-        });
-
-        const centerLat = (minLat + maxLat) / 2;
-        const centerLng = (minLng + maxLng) / 2;
-        const latSpan = maxLat - minLat;
-        const lngSpan = maxLng - minLng;
-        const adjustedLngSpan = lngSpan > 180 ? 360 - lngSpan : lngSpan;
-        const maxSpan = Math.max(latSpan, adjustedLngSpan);
-        const altitude = Math.min(2.5, Math.max(0.5, maxSpan / 50 + 0.3));
-
-        globeRef.current.pointOfView({ lat: centerLat, lng: centerLng, altitude }, 1000);
-      }
+    if (regionAirports.length > 0) {
+      zoomToPoints(regionAirports);
     }
-  }, [stopAutoRotate, pointsData]);
+  }, [stopAutoRotate, pointsData, zoomToPoints]);
 
   // Swipe navigation for year changes on mobile
   const swipeRef = useYearSwipeNavigation(flightStats.years, selectedYear, handleYearChange);

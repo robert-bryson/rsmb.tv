@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 interface ControlButtonsProps {
     onResetView: () => void;
     animationEnabled: boolean;
@@ -9,7 +11,7 @@ interface ControlButtonsProps {
 /**
  * Bottom-right control buttons for the globe visualization.
  */
-export function ControlButtons({
+export const ControlButtons = memo(function ControlButtons({
     onResetView,
     animationEnabled,
     onToggleAnimation,
@@ -35,8 +37,8 @@ export function ControlButtons({
             <button
                 onClick={onToggleAnimation}
                 className={`bg-gray-900/90 backdrop-blur p-2 rounded-lg border transition-colors ${animationEnabled
-                        ? 'border-purple-500/50 text-purple-400 hover:bg-purple-900/30'
-                        : 'border-gray-700 text-gray-500 hover:text-gray-300 hover:bg-gray-800/90'
+                    ? 'border-purple-500/50 text-purple-400 hover:bg-purple-900/30'
+                    : 'border-gray-700 text-gray-500 hover:text-gray-300 hover:bg-gray-800/90'
                     }`}
                 title={animationEnabled ? 'Pause animations' : 'Play animations'}
                 aria-label={animationEnabled ? 'Pause flight animations' : 'Play flight animations'}
@@ -57,8 +59,8 @@ export function ControlButtons({
             <button
                 onClick={onShareUrl}
                 className={`bg-gray-900/90 backdrop-blur p-2 rounded-lg border transition-colors ${copiedUrl
-                        ? 'border-green-500/50 text-green-400'
-                        : 'border-gray-700 text-gray-400 hover:text-white hover:bg-gray-800/90'
+                    ? 'border-green-500/50 text-green-400'
+                    : 'border-gray-700 text-gray-400 hover:text-white hover:bg-gray-800/90'
                     }`}
                 title={copiedUrl ? 'URL copied!' : 'Copy URL to share'}
                 aria-label="Copy current view URL to clipboard"
@@ -75,4 +77,4 @@ export function ControlButtons({
             </button>
         </div>
     );
-}
+});

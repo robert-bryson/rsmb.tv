@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { GlobeStaticArc, GlobePoint } from '../types';
 
 interface HoverInfoProps {
@@ -9,7 +10,7 @@ interface HoverInfoProps {
  * Hover information tooltip displayed in the bottom right.
  * Hidden on small screens.
  */
-export function HoverInfo({ hoveredArc, hoveredPoint }: HoverInfoProps) {
+export const HoverInfo = memo(function HoverInfo({ hoveredArc, hoveredPoint }: HoverInfoProps) {
     if (!hoveredArc && !hoveredPoint) return null;
 
     return (
@@ -32,4 +33,4 @@ export function HoverInfo({ hoveredArc, hoveredPoint }: HoverInfoProps) {
             )}
         </div>
     );
-}
+});

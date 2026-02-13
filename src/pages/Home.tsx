@@ -1,11 +1,17 @@
 import { Link } from 'react-router-dom';
 import { featuredProjects } from '../content/projects';
+import { useDocumentHead } from '../hooks/useDocumentHead';
 
 function isExternalUrl(url: string): boolean {
   return url.startsWith('http://') || url.startsWith('https://');
 }
 
 export function Home() {
+  useDocumentHead({
+    title: 'rsmb',
+    description: 'Personal site and portfolio of Robby Bryson — interactive data visualizations, geospatial projects, and web tools.',
+  });
+
   return (
     <div className="space-y-12">
       {/* Intro */}
@@ -16,7 +22,7 @@ export function Home() {
         <div className="prose">
           <p>
             I'm a developer who likes building interactive things on the web.
-            I'm particularly interested in data visualization, maps, and 
+            I'm particularly interested in data visualization, maps, and
             tools that help people explore information in new ways.
           </p>
         </div>
@@ -34,7 +40,7 @@ export function Home() {
             const linkProps = {
               className: "group block p-4 -mx-4 rounded-lg hover:bg-zinc-900/50 transition-colors"
             };
-            
+
             const content = (
               <>
                 <div className="flex items-baseline justify-between gap-4">
@@ -56,7 +62,7 @@ export function Home() {
                 </div>
               </>
             );
-            
+
             return (
               <li key={project.slug}>
                 {isExternal ? (

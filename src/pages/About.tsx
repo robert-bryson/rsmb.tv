@@ -1,20 +1,27 @@
+import { useDocumentHead } from '../hooks/useDocumentHead';
+
 export function About() {
+  useDocumentHead({
+    title: 'About',
+    description: 'Robby Bryson — software developer and geospatial engineer based in St. Louis. Background in Azure Maps, federal GIS, and startups.',
+  });
+
   return (
     <div>
       <h1 className="text-2xl font-semibold text-zinc-100 mb-6">About</h1>
-      
+
       <div className="prose space-y-4">
         <p>
-          I'm a software developer based in St. Louis with a background in 
-          geospatial engineering. I started out building GIS applications for 
-          county and state governments, then moved into startups doing 
+          I'm a software developer based in St. Louis with a background in
+          geospatial engineering. I started out building GIS applications for
+          county and state governments, then moved into startups doing
           geospatial backend development.
         </p>
-        
+
         <p>
           I spent several years at Microsoft working on Azure Cloud Infrastructure and Operations.
-           Now I'm at{' '}
-          <a href="https://xentity.com" target="_blank" rel="noopener noreferrer">Xentity</a>, 
+          Now I'm at{' '}
+          <a href="https://xentity.com" target="_blank" rel="noopener noreferrer">Xentity</a>,
           where I work on federal projects including{' '}
           <a href="https://data.gov" target="_blank" rel="noopener noreferrer">Data.gov</a>{' '}
           and USFS Enterprise Geospatial Platform applications.
@@ -46,7 +53,7 @@ export function About() {
           </li>
         </ul>
       </section>
-      
+
       {/* Contact */}
       <section className="mt-12">
         <h2 className="text-sm font-medium text-zinc-500 uppercase tracking-wide mb-4">
@@ -54,9 +61,9 @@ export function About() {
         </h2>
         <ul className="space-y-2 text-sm">
           <li>
-            <a 
-              href="https://github.com/robert-bryson" 
-              target="_blank" 
+            <a
+              href="https://github.com/robert-bryson"
+              target="_blank"
               rel="noopener noreferrer"
               className="text-zinc-400 hover:text-violet-400"
             >
@@ -64,9 +71,9 @@ export function About() {
             </a>
           </li>
           <li>
-            <a 
-              href="https://linkedin.com/in/robert-bryson" 
-              target="_blank" 
+            <a
+              href="https://linkedin.com/in/robert-bryson"
+              target="_blank"
               rel="noopener noreferrer"
               className="text-zinc-400 hover:text-violet-400"
             >
