@@ -22,7 +22,7 @@ export const BottomStatsBar = memo(function BottomStatsBar({
 }: BottomStatsBarProps) {
     return (
         <div
-            className="absolute bottom-4 left-4 right-20 sm:right-auto bg-gray-900/80 backdrop-blur px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-700 text-xs sm:text-sm"
+            className="absolute bottom-4 left-4 right-16 sm:right-auto bg-gray-900/80 backdrop-blur px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-700 text-xs sm:text-sm pb-[env(safe-area-inset-bottom,0.5rem)]"
             role="status"
             aria-live="polite"
         >

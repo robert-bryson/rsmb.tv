@@ -67,7 +67,7 @@ export function StatsPanel({
   };
 
   return (
-    <div className={`absolute top-16 left-4 transition-all duration-300 ${isOpen ? 'w-80' : 'w-auto'} z-10`}>
+    <div className={`absolute top-16 left-4 transition-all duration-300 ${isOpen ? 'w-80' : 'w-auto'} z-20`}>
       <button
         onClick={onToggle}
         className="bg-gray-900/90 backdrop-blur px-3 py-2 rounded-lg border border-gray-700 text-sm text-gray-300 hover:bg-gray-800/90 transition-colors flex items-center gap-2"
@@ -194,10 +194,10 @@ function AirportStats({
               <span className="text-gray-500">
                 {airportInfo.firstVisit.direction === 'arrival' ? 'from ' : 'to '}
               </span>
-              <ClickableAirport 
-                code={airportInfo.firstVisit.from} 
-                onClick={onAirportClick} 
-                className="text-gray-400" 
+              <ClickableAirport
+                code={airportInfo.firstVisit.from}
+                onClick={onAirportClick}
+                className="text-gray-400"
                 validAirports={validAirportCodes}
               />
             </span>
@@ -211,10 +211,10 @@ function AirportStats({
               <span className="text-gray-500">
                 {airportInfo.lastVisit.direction === 'arrival' ? 'from ' : 'to '}
               </span>
-              <ClickableAirport 
-                code={airportInfo.lastVisit.to} 
-                onClick={onAirportClick} 
-                className="text-gray-400" 
+              <ClickableAirport
+                code={airportInfo.lastVisit.to}
+                onClick={onAirportClick}
+                className="text-gray-400"
                 validAirports={validAirportCodes}
               />
             </span>
@@ -258,10 +258,10 @@ function AirportStats({
           <div className="space-y-1">
             {airportInfo.topDestinations.map((d) => (
               <div key={d.code} className="flex justify-between text-xs">
-                <ClickableAirport 
-                  code={d.code} 
-                  onClick={onAirportClick} 
-                  className="text-gray-300" 
+                <ClickableAirport
+                  code={d.code}
+                  onClick={onAirportClick}
+                  className="text-gray-300"
                   validAirports={validAirportCodes}
                 />
                 <span className="text-blue-400">×{d.count}</span>
@@ -282,10 +282,10 @@ function AirportStats({
           <div className="space-y-1">
             {airportInfo.topOrigins.map((o) => (
               <div key={o.code} className="flex justify-between text-xs">
-                <ClickableAirport 
-                  code={o.code} 
-                  onClick={onAirportClick} 
-                  className="text-gray-300" 
+                <ClickableAirport
+                  code={o.code}
+                  onClick={onAirportClick}
+                  className="text-gray-300"
                   validAirports={validAirportCodes}
                 />
                 <span className="text-green-400">×{o.count}</span>
@@ -505,10 +505,10 @@ function OverallStats({
             <div>
               <div className="text-gray-400 text-xs">Busiest Airport</div>
               <div className="text-white font-medium">
-                <ClickableAirport 
-                  code={stats.busiestAirport.code} 
-                  onClick={onAirportClick} 
-                  className="text-gray-300" 
+                <ClickableAirport
+                  code={stats.busiestAirport.code}
+                  onClick={onAirportClick}
+                  className="text-gray-300"
                   validAirports={validAirportCodes}
                 />
               </div>

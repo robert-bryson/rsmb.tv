@@ -15,7 +15,7 @@ export const HoverInfo = memo(function HoverInfo({ hoveredArc, hoveredPoint }: H
 
     return (
         <div
-            className="hidden sm:block absolute bottom-16 right-4 bg-gray-900/80 backdrop-blur px-4 py-2 rounded-lg border border-gray-700 text-sm text-gray-300 max-w-xs"
+            className="hidden sm:block absolute bottom-20 left-4 bg-gray-900/80 backdrop-blur px-4 py-2 rounded-lg border border-gray-700 text-sm text-gray-300 max-w-xs"
             role="tooltip"
         >
             {hoveredArc && (

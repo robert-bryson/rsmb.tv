@@ -24,7 +24,7 @@ export function ColorModeSelector({ mode, onModeChange, years = [] }: ColorModeS
   const sortedYears = [...years].sort((a, b) => a - b);
 
   return (
-    <div className="absolute bottom-4 right-4 z-10">
+    <div className="absolute bottom-[9.5rem] right-4 z-10">
       {/* Collapsed: just show icon button */}
       {!isOpen && (
         <button
@@ -60,8 +60,8 @@ export function ColorModeSelector({ mode, onModeChange, years = [] }: ColorModeS
                   }
                 }}
                 className={`px-3 py-1.5 rounded text-xs text-left transition-colors flex items-center gap-2 ${mode === m.value
-                    ? 'bg-purple-600 text-white'
-                    : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
                   }`}
               >
                 <span>{m.icon}</span>

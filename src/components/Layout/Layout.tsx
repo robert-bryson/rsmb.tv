@@ -19,7 +19,7 @@ export function Layout({ children }: LayoutProps) {
   // Full screen mode for flights page
   if (isFlightsPage) {
     return (
-      <div className="h-screen w-screen overflow-hidden bg-[#000011]">
+      <div className="h-dvh w-screen overflow-hidden bg-[#000011]">
         {children}
       </div>
     );
@@ -42,8 +42,8 @@ export function Layout({ children }: LayoutProps) {
                 <Link
                   to={to}
                   className={`hover:text-violet-400 ${location.pathname === to
-                      ? 'text-violet-400'
-                      : 'text-zinc-400'
+                    ? 'text-violet-400'
+                    : 'text-zinc-400'
                     }`}
                 >
                   {label}
