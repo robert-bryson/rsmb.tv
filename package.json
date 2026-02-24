@@ -21,7 +21,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.1",
     "react-globe.gl": "^2.37.0",
-    "react-router-dom": "^7.9.0",
+    "react-router-dom": "^7.13.1",
     "remark-frontmatter": "^5.0.0",
     "remark-mdx-frontmatter": "^5.2.0"
   },
