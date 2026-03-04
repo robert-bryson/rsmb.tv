@@ -1,14 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { getAllPosts } from '../content/posts';
-
-function formatDate(dateStr: string): string {
-    return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    });
-}
+import { formatDate } from '../utils/formatDate';
 
 export function Blog() {
     useDocumentHead({

@@ -9,9 +9,8 @@ import type {
   FlightStats,
   ColorMode,
 } from '../types';
-import { fetchWithCache } from '../utils/fetchCache';
+import { fetchWithCache, calculateDistance } from '../utils';
 import {
-  EARTH_RADIUS_KM,
   AVERAGE_FLIGHT_SPEED_KMH,
   FLIGHT_OVERHEAD_HOURS,
   MIN_VALID_FLIGHT_DISTANCE_KM,
@@ -53,17 +52,7 @@ function hexToRgba(hex: string, alpha: number): string {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-// Calculate distance between two points using Haversine formula
-function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return EARTH_RADIUS_KM * c;
-}
+
 
 export function useAirports(): UseFlightDataResult<AirportsCollection> {
   const [data, setData] = useState<AirportsCollection | null>(null);

@@ -36,17 +36,17 @@ TILE_SERVERS = {
     "positron": {
         "url": "https://basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}@2x.png",
         "label": "Light (Gray Canvas)",
-        "filename": "basemap-positron.jpg",
+        "filename": "basemap-positron.webp",
     },
     "dark-matter": {
         "url": "https://basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}@2x.png",
         "label": "Dark Matter",
-        "filename": "basemap-dark-matter.jpg",
+        "filename": "basemap-dark-matter.webp",
     },
     "voyager": {
         "url": "https://basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}@2x.png",
         "label": "Voyager (Clean Topo)",
-        "filename": "basemap-voyager.jpg",
+        "filename": "basemap-voyager.webp",
     },
 }
 
@@ -203,7 +203,7 @@ def generate_basemap(name: str, config: dict, zoom: int, output_dir: str, output
 
     # Step 3: Save
     output_path = os.path.join(output_dir, config["filename"])
-    equirect_img.save(output_path, "JPEG", quality=90, optimize=True)
+    equirect_img.save(output_path, "WEBP", quality=80, method=6)
     file_size = os.path.getsize(output_path)
     print(f"  Saved: {output_path} ({file_size / 1024 / 1024:.1f} MB)")
 

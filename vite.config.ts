@@ -4,7 +4,6 @@ import mdx from '@mdx-js/rollup'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
 import tailwindcss from '@tailwindcss/vite'
-import compression from 'vite-plugin-compression'
 
 export default defineConfig({
   base: '/',
@@ -14,16 +13,6 @@ export default defineConfig({
     }),
     react(),
     tailwindcss(),
-    // Gzip compression
-    compression({
-      algorithm: 'gzip',
-      ext: '.gz',
-    }),
-    // Brotli compression (better compression ratio)
-    compression({
-      algorithm: 'brotliCompress',
-      ext: '.br',
-    }),
   ],
   assetsInclude: ['**/*.glb'],
   build: {

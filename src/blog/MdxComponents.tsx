@@ -17,12 +17,16 @@ export const mdxComponents = {
     p: (props: ComponentPropsWithoutRef<'p'>) => (
         <p className="text-zinc-300 leading-relaxed mb-4" {...props} />
     ),
-    a: (props: ComponentPropsWithoutRef<'a'>) => (
-        <a
-            className="text-violet-400 hover:text-violet-300 underline underline-offset-2"
-            {...props}
-        />
-    ),
+    a: (props: ComponentPropsWithoutRef<'a'>) => {
+        const isExternal = props.href && /^https?:\/\//.test(props.href);
+        return (
+            <a
+                className="text-violet-400 hover:text-violet-300 underline underline-offset-2"
+                {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                {...props}
+            />
+        );
+    },
     ul: (props: ComponentPropsWithoutRef<'ul'>) => (
         <ul className="list-disc list-inside text-zinc-300 mb-4 space-y-1" {...props} />
     ),

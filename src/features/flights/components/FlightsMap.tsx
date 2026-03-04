@@ -18,6 +18,7 @@ import { GlobeErrorBoundary } from './GlobeErrorBoundary';
 import { GlobeLoadingOverlay } from './GlobeLoadingOverlay';
 import { useGlobeTextures } from '../hooks/useGlobeTextures';
 import { SkipLink } from './SkipLink';
+import { escapeHtml, calculateDistance } from '../utils';
 import { TopNavigationBar } from './TopNavigationBar';
 import { ControlButtons } from './ControlButtons';
 import { BottomStatsBar } from './BottomStatsBar';
@@ -51,7 +52,7 @@ import {
   ZOOM_ALTITUDE_MIN,
 } from '../constants';
 import type { GlobeArc, GlobePoint, GlobeStaticArc, ColorMode, AirportSymbolMode, GlobeAllAirportPoint, StateSymbolMode, GlobeStatePolygon, BasemapId, SelectedRouteInfo, SelectedCountryInfo, SelectedRegionInfo } from '../types';
-import { EARTH_RADIUS_KM } from '../constants';
+
 
 export function FlightsMap() {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
@@ -458,14 +459,7 @@ export function FlightsMap() {
       const db = new Date(+pb[2], +pb[0] - 1, +pb[1]);
       return db.getTime() - da.getTime();
     });
-    // Haversine distance
-    const toRad = (d: number) => d * Math.PI / 180;
-    const dLat = toRad(first.destination_lat - first.origin_lat);
-    const dLon = toRad(first.destination_lon - first.origin_lon);
-    const a2 = Math.sin(dLat / 2) ** 2 +
-      Math.cos(toRad(first.origin_lat)) * Math.cos(toRad(first.destination_lat)) *
-      Math.sin(dLon / 2) ** 2;
-    const distanceKm = Math.round(EARTH_RADIUS_KM * 2 * Math.atan2(Math.sqrt(a2), Math.sqrt(1 - a2)));
+    const distanceKm = Math.round(calculateDistance(first.origin_lat, first.origin_lon, first.destination_lat, first.destination_lon));
     return {
       routeKey: selectedRoute,
       originCode: first.origin_code,
@@ -921,15 +915,15 @@ export function FlightsMap() {
                 const recentFlights = arcData.flights.slice(0, 5);
                 return `
               <div class="bg-gray-900/95 px-3 py-2 rounded-lg shadow-xl border border-gray-700 text-sm">
-                <div class="font-bold text-purple-300">${firstFlight.origin_code} ↔ ${firstFlight.destination_code}</div>
-                <div class="text-gray-300 text-xs">${firstFlight.origin_name}</div>
+                <div class="font-bold text-purple-300">${escapeHtml(firstFlight.origin_code)} ↔ ${escapeHtml(firstFlight.destination_code)}</div>
+                <div class="text-gray-300 text-xs">${escapeHtml(firstFlight.origin_name)}</div>
                 <div class="text-gray-400 text-xs">↕</div>
-                <div class="text-gray-300 text-xs">${firstFlight.destination_name}</div>
+                <div class="text-gray-300 text-xs">${escapeHtml(firstFlight.destination_name)}</div>
                 <div class="mt-2 pt-2 border-t border-gray-700">
                   <span class="text-purple-400">${arcData.routeCount} flight${arcData.routeCount > 1 ? 's' : ''}</span>
                 </div>
                 <div class="text-gray-500 text-xs mt-1">
-                  ${recentFlights.map((f: { date: string }) => f.date).join(', ')}${arcData.flights.length > 5 ? '...' : ''}
+                  ${escapeHtml(recentFlights.map((f: { date: string }) => f.date).join(', '))}${arcData.flights.length > 5 ? '...' : ''}
                 </div>
                 <div class="text-gray-600 text-xs mt-2 italic">Click for details</div>
               </div>
@@ -943,10 +937,10 @@ export function FlightsMap() {
 
               return `
             <div class="bg-gray-900/95 px-4 py-3 rounded-lg shadow-xl border border-yellow-500/50 text-sm min-w-64">
-              <div class="font-bold text-yellow-400 text-base">${firstFlight.origin_code} ↔ ${firstFlight.destination_code}</div>
-              <div class="text-gray-300 text-xs mt-1">${firstFlight.origin_name}</div>
+              <div class="font-bold text-yellow-400 text-base">${escapeHtml(firstFlight.origin_code)} ↔ ${escapeHtml(firstFlight.destination_code)}</div>
+              <div class="text-gray-300 text-xs mt-1">${escapeHtml(firstFlight.origin_name)}</div>
               <div class="text-gray-400 text-xs">↕</div>
-              <div class="text-gray-300 text-xs">${firstFlight.destination_name}</div>
+              <div class="text-gray-300 text-xs">${escapeHtml(firstFlight.destination_name)}</div>
               
               <div class="mt-3 pt-3 border-t border-gray-700 grid grid-cols-2 gap-x-4 gap-y-2">
                 <div>
@@ -955,22 +949,22 @@ export function FlightsMap() {
                 </div>
                 <div>
                   <div class="text-gray-500 text-xs">Years Active</div>
-                  <div class="text-gray-300">${years.length > 3 ? years[0] + '–' + years[years.length - 1] : years.join(', ')}</div>
+                  <div class="text-gray-300">${escapeHtml(years.length > 3 ? years[0] + '–' + years[years.length - 1] : years.join(', '))}</div>
                 </div>
                 <div>
                   <div class="text-gray-500 text-xs">Airlines</div>
-                  <div class="text-orange-400">${airlines.slice(0, 3).join(', ')}${airlines.length > 3 ? '...' : ''}</div>
+                  <div class="text-orange-400">${escapeHtml(airlines.slice(0, 3).join(', '))}${airlines.length > 3 ? '...' : ''}</div>
                 </div>
                 <div>
                   <div class="text-gray-500 text-xs">Last Flight</div>
-                  <div class="text-gray-300">${allDates[0]}</div>
+                  <div class="text-gray-300">${escapeHtml(allDates[0])}</div>
                 </div>
               </div>
               
               <div class="mt-3 pt-3 border-t border-gray-700">
                 <div class="text-gray-500 text-xs mb-1">All Flights</div>
                 <div class="text-gray-400 text-xs max-h-24 overflow-y-auto">
-                  ${allDates.join(', ')}
+                  ${escapeHtml(allDates.join(', '))}
                 </div>
               </div>
               
@@ -1072,10 +1066,10 @@ export function FlightsMap() {
               if (point.isAllAirports) {
                 return `
             <div class="bg-gray-900/95 px-3 py-2 rounded-lg shadow-xl border border-gray-600 text-sm">
-              <div class="font-bold text-gray-300">${a.code}</div>
-              <div class="text-gray-400">${a.name}</div>
-              <div class="text-gray-500 text-xs mt-1">${a.municipality ? a.municipality + ', ' : ''}${a.countryName}</div>
-              <div class="text-gray-500 text-xs">${a.continentName}</div>
+              <div class="font-bold text-gray-300">${escapeHtml(a.code)}</div>
+              <div class="text-gray-400">${escapeHtml(a.name)}</div>
+              <div class="text-gray-500 text-xs mt-1">${a.municipality ? escapeHtml(a.municipality) + ', ' : ''}${escapeHtml(a.countryName)}</div>
+              <div class="text-gray-500 text-xs">${escapeHtml(a.continentName)}</div>
               <div class="text-gray-600 text-xs mt-2 pt-2 border-t border-gray-700">
                 ${a.elevationFt.toLocaleString()} ft (${a.elevationM.toLocaleString()} m)
               </div>
@@ -1088,9 +1082,9 @@ export function FlightsMap() {
               const visitedAirport = a as GlobePoint['airport'];
               return `
             <div class="bg-gray-900/95 px-3 py-2 rounded-lg shadow-xl border border-gray-700 text-sm">
-              <div class="font-bold text-yellow-300">${visitedAirport.code}</div>
-              <div class="text-gray-300">${visitedAirport.name}</div>
-              <div class="text-gray-400 text-xs">${visitedAirport.municipality}, ${visitedAirport.countryName}</div>
+              <div class="font-bold text-yellow-300">${escapeHtml(visitedAirport.code)}</div>
+              <div class="text-gray-300">${escapeHtml(visitedAirport.name)}</div>
+              <div class="text-gray-400 text-xs">${escapeHtml(visitedAirport.municipality)}, ${escapeHtml(visitedAirport.countryName)}</div>
               <div class="text-gray-500 text-xs">${visitedAirport.elevationFt.toLocaleString()} ft (${visitedAirport.elevationM.toLocaleString()} m)</div>
               <div class="text-gray-500 mt-2 pt-2 border-t border-gray-700">
                 <span class="text-yellow-400">${visitedAirport.visitCount}</span> visits
@@ -1125,8 +1119,8 @@ export function FlightsMap() {
               const { stats } = poly;
               return `
                 <div class="bg-gray-900/95 px-3 py-2 rounded-lg shadow-xl border border-blue-700 text-sm">
-                  <div class="font-bold text-blue-300">${stats.name}</div>
-                  <div class="text-gray-400 text-xs">${stats.abbr}</div>
+                  <div class="font-bold text-blue-300">${escapeHtml(stats.name)}</div>
+                  <div class="text-gray-400 text-xs">${escapeHtml(stats.abbr)}</div>
                   ${stats.visited ? `
                     <div class="mt-2 pt-2 border-t border-gray-700">
                       <div class="text-xs text-gray-500">Airports Visited</div>
@@ -1138,7 +1132,7 @@ export function FlightsMap() {
                     </div>
                     ${stats.firstVisitDate ? `
                       <div class="mt-1 text-xs text-gray-500">
-                        First: ${stats.firstVisitDate}
+                        First: ${escapeHtml(stats.firstVisitDate)}
                       </div>
                     ` : ''}
                   ` : `

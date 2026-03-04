@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 interface DocumentHeadOptions {
     title: string;
@@ -11,6 +12,7 @@ interface DocumentHeadOptions {
 
 /**
  * Sets document title and meta tags for SEO and social sharing.
+ * Automatically sets og:url and canonical link from the current route.
  * Cleans up meta tags on unmount. No extra dependencies needed.
  */
 export function useDocumentHead({
@@ -21,11 +23,14 @@ export function useDocumentHead({
     ogImage,
     ogUrl,
 }: DocumentHeadOptions) {
+    const { pathname } = useLocation();
+
     useEffect(() => {
         const fullTitle = title === 'rsmb' ? 'rsmb' : `${title} — rsmb`;
         document.title = fullTitle;
 
         const metas: HTMLMetaElement[] = [];
+        let canonicalLink: HTMLLinkElement | null = null;
 
         function setMeta(property: string, content: string) {
             let el = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement | null;
@@ -63,9 +68,17 @@ export function useDocumentHead({
         const image = ogImage || 'https://rsmb.tv/og-image.png';
         setMeta('og:image', image);
 
-        if (ogUrl) {
-            setMeta('og:url', ogUrl);
+        const url = ogUrl || `https://rsmb.tv${pathname}`;
+        setMeta('og:url', url);
+
+        // Set canonical link
+        canonicalLink = document.querySelector('link[rel="canonical"]');
+        if (!canonicalLink) {
+            canonicalLink = document.createElement('link');
+            canonicalLink.setAttribute('rel', 'canonical');
+            document.head.appendChild(canonicalLink);
         }
+        canonicalLink.setAttribute('href', url);
 
         // Twitter card tags
         setNameMeta('twitter:card', 'summary_large_image');
@@ -76,8 +89,11 @@ export function useDocumentHead({
         setNameMeta('twitter:image', image);
 
         return () => {
-            // Remove dynamically created meta tags
             metas.forEach(el => el.remove());
+            // Only remove canonical if we created it
+            if (canonicalLink && !document.querySelector('link[rel="canonical"][data-static]')) {
+                canonicalLink.remove();
+            }
         };
-    }, [title, description, ogTitle, ogDescription, ogImage, ogUrl]);
+    }, [title, description, ogTitle, ogDescription, ogImage, ogUrl, pathname]);
 }
