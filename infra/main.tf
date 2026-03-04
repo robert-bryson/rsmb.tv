@@ -56,7 +56,7 @@ resource "aws_amplify_app" "rsmbtv" {
           - key: 'Permissions-Policy'
             value: 'camera=(), microphone=(), geolocation=()'
           - key: 'Content-Security-Policy'
-            value: "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.cartocdn.com; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+            value: "default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.cartocdn.com; connect-src 'self'; font-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
   HEADERS
 }
 
