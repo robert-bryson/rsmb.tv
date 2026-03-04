@@ -74,19 +74,19 @@ resource "aws_amplify_domain_association" "rsmbtv" {
   domain_name = "rsmb.tv"
 
   # Apex domain → main branch
-  sub_domain_setting {
+  sub_domain {
     branch_name = aws_amplify_branch.main.branch_name
     prefix      = ""
   }
 
   # www.rsmb.tv → main branch
-  sub_domain_setting {
+  sub_domain {
     branch_name = aws_amplify_branch.main.branch_name
     prefix      = "www"
   }
 
   # dev.rsmb.tv → dev branch
-  sub_domain_setting {
+  sub_domain {
     branch_name = aws_amplify_branch.dev.branch_name
     prefix      = "dev"
   }

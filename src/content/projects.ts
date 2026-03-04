@@ -25,7 +25,7 @@ export const projects: Project[] = [
     description: 'Convert Google Routes into GPX files for GPS devices and bike computers. A privacy-focused web app that runs entirely in your browser—your routes never touch a server.',
     tech: ['JavaScript', 'Leaflet', 'Google Routes API'],
     featured: true,
-    demoUrl: 'https://robert-bryson.github.io/route2gpx/',
+    demoUrl: 'https://route2gpx.rsmb.tv',
     sourceUrl: 'https://github.com/robert-bryson/route2gpx',
     year: 2024,
   },
