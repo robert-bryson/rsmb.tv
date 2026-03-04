@@ -59,9 +59,10 @@ export function useDocumentHead({
         if (ogDescription || description) {
             setMeta('og:description', ogDescription || description || '');
         }
-        if (ogImage) {
-            setMeta('og:image', ogImage);
-        }
+
+        const image = ogImage || 'https://rsmb.tv/og-image.png';
+        setMeta('og:image', image);
+
         if (ogUrl) {
             setMeta('og:url', ogUrl);
         }
@@ -72,9 +73,7 @@ export function useDocumentHead({
         if (ogDescription || description) {
             setNameMeta('twitter:description', ogDescription || description || '');
         }
-        if (ogImage) {
-            setNameMeta('twitter:image', ogImage);
-        }
+        setNameMeta('twitter:image', image);
 
         return () => {
             // Remove dynamically created meta tags

@@ -27,6 +27,14 @@ export function Layout({ children }: LayoutProps) {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-zinc-100 flex flex-col">
+      {/* Skip to content — visible on focus for keyboard users */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:bg-violet-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-md focus:text-sm"
+      >
+        Skip to content
+      </a>
+
       {/* Header */}
       <header className="border-b border-zinc-800/50">
         <nav className="max-w-2xl mx-auto px-6 py-4 flex justify-between items-center">
@@ -55,7 +63,7 @@ export function Layout({ children }: LayoutProps) {
       </header>
 
       {/* Main content */}
-      <main className="max-w-2xl mx-auto px-6 py-12 flex-1 w-full">
+      <main id="main-content" className="max-w-2xl mx-auto px-6 py-12 flex-1 w-full">
         {children}
       </main>
 

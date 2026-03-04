@@ -4,10 +4,14 @@ output "account_id" {
   value = data.aws_caller_identity.current.account_id
 }
 
-output "caller_arn" {
-  value = data.aws_caller_identity.current.arn
+output "amplify_app_id" {
+  value = aws_amplify_app.rsmbtv.id
 }
 
-output "caller_user" {
-  value = data.aws_caller_identity.current.user_id
+output "amplify_default_domain" {
+  value = aws_amplify_app.rsmbtv.default_domain
+}
+
+output "amplify_production_url" {
+  value = "https://www.rsmb.tv"
 }

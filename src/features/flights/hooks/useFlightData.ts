@@ -846,13 +846,9 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
       );
 
       // Calculate stroke: boost for connected routes, or keep base stroke
-      let stroke = route.stroke;
-      if (selectedAirport) {
-        stroke = isConnected ? route.stroke * CONNECTED_ARC_MULTIPLIER : route.stroke;
-      } else {
-        // Ensure minimum stroke width for hover detectability
-        stroke = Math.max(MIN_STATIC_ARC_STROKE, route.stroke);
-      }
+      const stroke = selectedAirport
+        ? (isConnected ? route.stroke * CONNECTED_ARC_MULTIPLIER : route.stroke)
+        : Math.max(MIN_STATIC_ARC_STROKE, route.stroke);
 
       // Determine color based on color mode and selection state
       let color: string;

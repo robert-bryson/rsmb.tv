@@ -1,32 +1,93 @@
-# Terraform: Create an Amplify App connected to a GitHub repo
+# Terraform: AWS Amplify App for rsmb.tv
 resource "aws_amplify_app" "rsmbtv" {
   name                     = "rsmbtv"
-  platform                 = "WEB" # for static websites
+  platform                 = "WEB"
   repository               = "https://github.com/robert-bryson/rsmb.tv"
-  access_token             = var.github_token # GitHub personal access token for repo access
-  enable_branch_auto_build = true             # enable auto CI/CD on pushes
+  access_token             = var.github_token
+  enable_branch_auto_build = true
 
-  # SPA rewrite: serve index.html for all routes that don't match a file
+  # SPA rewrite: serve index.html for all routes that don't match a static file
   custom_rule {
     source = "</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map|json|webp|xml|gz|br|geojson|glb)$)([^.]+$)/>"
     target = "/index.html"
     status = "200"
   }
+
+  # Redirect apex to www
+  custom_rule {
+    source = "https://rsmb.tv"
+    target = "https://www.rsmb.tv"
+    status = "302"
+  }
+
+  # Cache headers for hashed static assets (immutable)
+  custom_headers = <<-HEADERS
+    customHeaders:
+      - pattern: '/assets/**'
+        headers:
+          - key: 'Cache-Control'
+            value: 'public, max-age=31536000, immutable'
+      - pattern: '*.js'
+        headers:
+          - key: 'Cache-Control'
+            value: 'public, max-age=31536000, immutable'
+      - pattern: '*.css'
+        headers:
+          - key: 'Cache-Control'
+            value: 'public, max-age=31536000, immutable'
+      - pattern: '/basemaps/**'
+        headers:
+          - key: 'Cache-Control'
+            value: 'public, max-age=604800'
+      - pattern: '/data/**'
+        headers:
+          - key: 'Cache-Control'
+            value: 'public, max-age=3600'
+      - pattern: '**'
+        headers:
+          - key: 'X-Content-Type-Options'
+            value: 'nosniff'
+          - key: 'X-Frame-Options'
+            value: 'DENY'
+          - key: 'Referrer-Policy'
+            value: 'strict-origin-when-cross-origin'
+  HEADERS
 }
 
+# Production branch
 resource "aws_amplify_branch" "main" {
   app_id      = aws_amplify_app.rsmbtv.id
   branch_name = "main"
   stage       = "PRODUCTION"
-  # environment_variables can be set here if branch-specific overrides are needed
 }
 
-# # (Optional) Custom domain association, if you have a domain ready in Route 53
-# resource "aws_amplify_domain_association" "domain" {
-#   app_id      = aws_amplify_app.site.id
-#   domain_name = "yourdomain.com" # e.g., example.com (should exist in Route 53 hosted zone)
-#   sub_domain {
-#     branch_name = aws_amplify_branch.main.branch_name # which branch to map to the domain
-#     prefix      = ""                                  # prefix for the domain, "" indicates root domain. Use "www" for www.yourdomain.com etc.
-#   }
-# }
+# Dev branch
+resource "aws_amplify_branch" "dev" {
+  app_id      = aws_amplify_app.rsmbtv.id
+  branch_name = "dev"
+  stage       = "DEVELOPMENT"
+}
+
+# Custom domain: rsmb.tv
+resource "aws_amplify_domain_association" "rsmbtv" {
+  app_id      = aws_amplify_app.rsmbtv.id
+  domain_name = "rsmb.tv"
+
+  # Apex domain → main branch
+  sub_domain_setting {
+    branch_name = aws_amplify_branch.main.branch_name
+    prefix      = ""
+  }
+
+  # www.rsmb.tv → main branch
+  sub_domain_setting {
+    branch_name = aws_amplify_branch.main.branch_name
+    prefix      = "www"
+  }
+
+  # dev.rsmb.tv → dev branch
+  sub_domain_setting {
+    branch_name = aws_amplify_branch.dev.branch_name
+    prefix      = "dev"
+  }
+}

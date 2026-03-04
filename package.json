@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "npm run build-flights && vite",
-    "build": "npm run build-flights && npm run build-rss && tsc -b && vite build",
+    "build": "npm run build-flights && npm run build-rss && npm run build-sitemap && tsc -b && vite build",
     "build-flights": "node projects/flights/scripts/convertFlights.js && node projects/flights/scripts/generateAllAirports.js",
     "build-rss": "node scripts/generate-rss.js",
+    "build-sitemap": "node scripts/generate-sitemap.js",
     "generate-mappings": "node projects/flights/scripts/generateNameMappings.js",
     "sync-flights": "node scripts/sync-flights.js",
     "lint": "eslint .",
