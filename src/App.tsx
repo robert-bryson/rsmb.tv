@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import { Layout } from './components/Layout';
-import { Home, About, Projects } from './pages';
+import { Home, About, Projects, NotFound } from './pages';
 
 const Flights = lazy(() => import('./pages/Flights'));
 const Blog = lazy(() => import('./pages/Blog'));
@@ -29,6 +29,7 @@ export default function App() {
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/projects/flights" element={<Flights />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
       </Layout>

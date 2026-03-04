@@ -1,8 +1,80 @@
 // Shared constants for the flights feature
+import type { BasemapId } from './types';
 
-// Earth textures for the globe
-export const GLOBE_IMAGE = '//unpkg.com/three-globe/example/img/earth-night.jpg';
-export const BUMP_IMAGE = '//unpkg.com/three-globe/example/img/earth-topology.png';
+// Basemap definitions
+export interface BasemapConfig {
+    id: BasemapId;
+    label: string;
+    image: string;
+    bump: string | null;
+    atmosphere: string;
+    bg: string;
+}
+
+const base = import.meta.env.BASE_URL;
+
+export const BASEMAPS: BasemapConfig[] = [
+    {
+        id: 'night',
+        label: 'Night',
+        image: `${base}basemaps/earth-night.jpg`,
+        bump: `${base}basemaps/earth-topology.png`,
+        atmosphere: 'lightskyblue',
+        bg: 'rgba(0,0,17,1)',
+    },
+    {
+        id: 'blue-marble',
+        label: 'Blue Marble',
+        image: `${base}basemaps/earth-blue-marble.jpg`,
+        bump: `${base}basemaps/earth-topology.png`,
+        atmosphere: 'lightskyblue',
+        bg: 'rgba(0,0,17,1)',
+    },
+    {
+        id: 'day',
+        label: 'Natural',
+        image: `${base}basemaps/earth-natural.jpg`,
+        bump: `${base}basemaps/earth-topology.png`,
+        atmosphere: 'lightskyblue',
+        bg: 'rgba(0,0,20,1)',
+    },
+    {
+        id: 'dark',
+        label: 'Dark',
+        image: `${base}basemaps/earth-dark.jpg`,
+        bump: null,
+        atmosphere: 'rgb(100,100,150)',
+        bg: 'rgba(0,0,8,1)',
+    },
+    {
+        id: 'positron',
+        label: 'Light',
+        image: `${base}basemaps/basemap-positron.jpg`,
+        bump: null,
+        atmosphere: 'rgb(180,200,220)',
+        bg: 'rgba(220,220,220,1)',
+    },
+    {
+        id: 'voyager',
+        label: 'Voyager',
+        image: `${base}basemaps/basemap-voyager.jpg`,
+        bump: null,
+        atmosphere: 'rgb(150,180,210)',
+        bg: 'rgba(200,210,220,1)',
+    },
+];
+
+export const DEFAULT_BASEMAP_ID: BasemapId = 'night';
+
+const VALID_BASEMAP_IDS = new Set<string>(BASEMAPS.map(b => b.id));
+
+export function isValidBasemapId(id: unknown): id is BasemapId {
+    return typeof id === 'string' && VALID_BASEMAP_IDS.has(id);
+}
+
+export function getBasemap(id: string): BasemapConfig {
+    return BASEMAPS.find(b => b.id === id) ?? BASEMAPS[0];
+}
 
 // Geographic constants
 export const EARTH_CIRCUMFERENCE_KM = 40075;
@@ -23,7 +95,7 @@ export const COPY_FEEDBACK_MS = 2000;
 
 // Globe rendering
 export const ARC_ALTITUDE_AUTOSCALE = 0.3;
-export const LINE_HOVER_PRECISION = 1;
+export const LINE_HOVER_PRECISION = 3;
 export const ATMOSPHERE_ALTITUDE = 0.15;
 
 // Arc styling
@@ -41,7 +113,7 @@ export const DIM_ARC_COLOR = 'rgba(140, 120, 200, 0.12)';
 // Point sizing (using square root scaling for proportional symbols)
 export const MIN_POINT_SIZE = 0.15;
 export const MAX_POINT_SIZE = 0.6;
-export const POINT_ALTITUDE = 0.015;
+export const POINT_ALTITUDE = 0.025;
 export const SELECTED_POINT_ALTITUDE = 0.05;
 
 // Label styling
@@ -114,8 +186,9 @@ export function getFrequencyColor(count: number, maxCount: number): string {
 export const COLOR_MODES = ['default', 'year', 'frequency', 'airline'] as const;
 
 // Zoom calculation constants
-export const ZOOM_ALTITUDE_MIN = 0.5;
+export const ZOOM_ALTITUDE_MIN = 0.15;
 export const ZOOM_ALTITUDE_MAX = 2.5;
+export const DBLCLICK_ZOOM_FACTOR = 0.5; // Halve altitude on double-click
 export const ZOOM_SPAN_DIVISOR = 50;
 export const ZOOM_BASE_OFFSET = 0.3;
 

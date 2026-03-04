@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const SITE_URL = 'https://robert-bryson.github.io/rsmb.tv';
+const SITE_URL = 'https://rsmb.tv';
 const SITE_TITLE = 'rsmb';
 const SITE_DESCRIPTION = 'Personal site and blog by Robert Bryson — projects, engineering, and things I find interesting.';
 

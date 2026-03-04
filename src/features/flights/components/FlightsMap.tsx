@@ -11,7 +11,7 @@ import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import { useYearSwipeNavigation } from '../hooks/useSwipeGesture';
 import { useZoomNavigation } from '../hooks/useZoomNavigation';
 import { StatsPanel } from './StatsPanel';
-import { ColorModeSelector } from './ColorModeSelector';
+// ColorModeSelector is now integrated into LayersControl
 import { KeyboardHelp } from './KeyboardHelp';
 import { EmptyState } from './EmptyState';
 import { GlobeErrorBoundary } from './GlobeErrorBoundary';
@@ -26,8 +26,9 @@ import { HoverInfo } from './HoverInfo';
 import { LoadingSkeleton } from './LoadingSkeleton';
 import { LayersControl } from './LayersControl';
 import {
-  GLOBE_IMAGE,
-  BUMP_IMAGE,
+  DEFAULT_BASEMAP_ID,
+  getBasemap,
+  isValidBasemapId,
   DEFAULT_VIEW,
   AUTO_ROTATION_DELAY_MS,
   AUTO_ROTATION_SPEED,
@@ -38,22 +39,28 @@ import {
   ATMOSPHERE_ALTITUDE,
   POINT_ALTITUDE,
   SELECTED_POINT_ALTITUDE,
-  LABEL_SIZE,
   LABEL_ALTITUDE,
-  LABEL_RESOLUTION,
   LABEL_MIN_VISITS,
   COLOR_MODES,
   ALL_AIRPORTS_POINT_ALTITUDE,
+  ALL_AIRPORTS_POINT_SIZE,
   STATE_POLYGON_ALTITUDE,
   STATE_POLYGON_SIDE_COLOR,
+  DBLCLICK_ZOOM_FACTOR,
+  ZOOM_ALTITUDE_MIN,
 } from '../constants';
-import type { GlobeArc, GlobePoint, GlobeStaticArc, ColorMode, AirportSymbolMode, GlobeAllAirportPoint, StateSymbolMode, GlobeStatePolygon } from '../types';
+import type { GlobeArc, GlobePoint, GlobeStaticArc, ColorMode, AirportSymbolMode, GlobeAllAirportPoint, StateSymbolMode, GlobeStatePolygon, BasemapId, SelectedRouteInfo, SelectedCountryInfo, SelectedRegionInfo } from '../types';
+import { EARTH_RADIUS_KM } from '../constants';
 
 export function FlightsMap() {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const [searchParams, setSearchParams] = useSearchParams();
   const prefersReducedMotion = useReducedMotion();
-  const textureState = useGlobeTextures();
+  const [rawBasemapId, setBasemapId] = usePersistedState<BasemapId>('flights-basemap', DEFAULT_BASEMAP_ID);
+  // Guard against stale/invalid basemap IDs from localStorage
+  const basemapId = isValidBasemapId(rawBasemapId) ? rawBasemapId : DEFAULT_BASEMAP_ID;
+  const basemap = useMemo(() => getBasemap(basemapId), [basemapId]);
+  const textureState = useGlobeTextures(basemap);
   const { resetView, zoomToPoints, zoomToRoute, zoomToPoint, zoomToAirportWithConnections } = useZoomNavigation(globeRef);
 
   // URL state for filters
@@ -61,6 +68,8 @@ export function FlightsMap() {
   const selectedAirport = searchParams.get('airport') || null;
   const selectedAirline = searchParams.get('airline') || null;
   const selectedRoute = searchParams.get('route') || null; // Format: "JFK-LAX"
+  const selectedCountry = searchParams.get('country') || null;
+  const selectedRegion = searchParams.get('region') || null;
 
   const [colorMode, setColorMode] = usePersistedState<ColorMode>('flights-color-mode', 'default');
   const [animationEnabled, setAnimationEnabled] = usePersistedState('flights-animation-enabled', true);
@@ -136,6 +145,38 @@ export function FlightsMap() {
     });
   }, [setSearchParams]);
 
+  const setSelectedCountry = useCallback((country: string | null) => {
+    setSearchParams(prev => {
+      const newParams = new URLSearchParams(prev);
+      if (country === null) {
+        newParams.delete('country');
+      } else {
+        newParams.set('country', country);
+      }
+      // Clear other detail selections
+      newParams.delete('airport');
+      newParams.delete('route');
+      newParams.delete('region');
+      return newParams;
+    });
+  }, [setSearchParams]);
+
+  const setSelectedRegion = useCallback((region: string | null) => {
+    setSearchParams(prev => {
+      const newParams = new URLSearchParams(prev);
+      if (region === null) {
+        newParams.delete('region');
+      } else {
+        newParams.set('region', region);
+      }
+      // Clear other detail selections
+      newParams.delete('airport');
+      newParams.delete('route');
+      newParams.delete('country');
+      return newParams;
+    });
+  }, [setSearchParams]);
+
   const clearAllFilters = useCallback(() => {
     setSearchParams(new URLSearchParams());
   }, [setSearchParams]);
@@ -153,7 +194,7 @@ export function FlightsMap() {
   }, []);
 
   // Check if any URL filters are active (don't auto-rotate if user came via direct link)
-  const hasUrlFilters = selectedYear !== null || selectedAirport !== null || selectedAirline !== null || selectedRoute !== null;
+  const hasUrlFilters = selectedYear !== null || selectedAirport !== null || selectedAirline !== null || selectedRoute !== null || selectedCountry !== null || selectedRegion !== null;
 
   // Start auto-rotation after a delay (gives user time to explore first)
   // Skip if user prefers reduced motion, has interacted, or came via filtered URL
@@ -190,6 +231,24 @@ export function FlightsMap() {
     }
   }, []);
 
+  // Double-click to zoom in toward clicked point
+  useEffect(() => {
+    const globe = globeRef.current;
+    if (!globe) return;
+
+    const domEl = globe.renderer().domElement;
+    const handler = (e: MouseEvent) => {
+      stopAutoRotate();
+      const coords = globe.toGlobeCoords(e.offsetX, e.offsetY);
+      if (!coords) return;
+      const pov = globe.pointOfView();
+      const newAltitude = Math.max(ZOOM_ALTITUDE_MIN, pov.altitude * DBLCLICK_ZOOM_FACTOR);
+      globe.pointOfView({ lat: coords.lat, lng: coords.lng, altitude: newAltitude }, VIEW_TRANSITION_MS);
+    };
+    domEl.addEventListener('dblclick', handler);
+    return () => domEl.removeEventListener('dblclick', handler);
+  }, [stopAutoRotate]);
+
   const { arcsData, staticArcsData, pointsData, flightStats, loading, error } = useGlobeData({
     selectedYear,
     colorMode,
@@ -220,26 +279,100 @@ export function FlightsMap() {
   });
 
   // Combined points: all airports (rendered below) + visited airports (rendered on top)
-  // Filter labels to only show high-traffic airports for legibility
-  const labeledAirports = useMemo(() =>
-    pointsData.filter(p => p.airport.visitCount >= LABEL_MIN_VISITS),
-    [pointsData]
-  );
+  // When an airport is selected, only label it and its connected airports
+  // When a country/region is selected, only label airports in that country/region
+  // Otherwise, label high-traffic airports for legibility
+  const labeledAirports = useMemo(() => {
+    if (selectedAirport) {
+      const connectedCodes = new Set<string>([selectedAirport]);
+      staticArcsData.forEach(arc => {
+        if (arc.flights.some(f => f.origin_code === selectedAirport || f.destination_code === selectedAirport)) {
+          arc.flights.forEach(f => {
+            connectedCodes.add(f.origin_code);
+            connectedCodes.add(f.destination_code);
+          });
+        }
+      });
+      return pointsData.filter(p => connectedCodes.has(p.airport.code));
+    }
+    if (selectedCountry) {
+      const visited = pointsData.filter(p => p.airport.country === selectedCountry);
+      if (allAirportsData) {
+        const visitedCodes = new Set(visited.map(p => p.airport.code));
+        const unvisited = allAirportsData.features
+          .filter(f => f.properties.country === selectedCountry && !visitedCodes.has(f.properties.code))
+          .map(f => {
+            const [lng, lat] = f.geometry.coordinates;
+            return { lat, lng, size: ALL_AIRPORTS_POINT_SIZE, color: '', label: f.properties.code, airport: f.properties } as unknown as GlobePoint;
+          });
+        return [...visited, ...unvisited];
+      }
+      return visited;
+    }
+    if (selectedRegion) {
+      const visited = pointsData.filter(p => p.airport.region === selectedRegion);
+      if (allAirportsData) {
+        const visitedCodes = new Set(visited.map(p => p.airport.code));
+        const unvisited = allAirportsData.features
+          .filter(f => f.properties.region === selectedRegion && !visitedCodes.has(f.properties.code))
+          .map(f => {
+            const [lng, lat] = f.geometry.coordinates;
+            return { lat, lng, size: ALL_AIRPORTS_POINT_SIZE, color: '', label: f.properties.code, airport: f.properties } as unknown as GlobePoint;
+          });
+        return [...visited, ...unvisited];
+      }
+      return visited;
+    }
+    return pointsData.filter(p => p.airport.visitCount >= LABEL_MIN_VISITS);
+  }, [pointsData, selectedAirport, selectedCountry, selectedRegion, staticArcsData, allAirportsData]);
 
   const combinedPointsData = useMemo(() => {
-    if (!allAirportsVisible) return pointsData;
-
-    // Filter out visited airports from the all-airports layer to avoid duplicates
     const visitedCodes = new Set(pointsData.map(p => p.airport.code));
-    const unvisitedAllAirports = allAirportsPoints.filter(
-      p => !visitedCodes.has(p.airport.code)
-    );
+
+    // When a country/region is selected, show ALL airports in that area (including unvisited)
+    const showCountryRegionAirports = (selectedCountry || selectedRegion) && allAirportsData;
+    let countryRegionUnvisited: GlobeAllAirportPoint[] = [];
+    if (showCountryRegionAirports) {
+      countryRegionUnvisited = allAirportsData!.features
+        .filter(f => {
+          if (visitedCodes.has(f.properties.code)) return false;
+          if (selectedCountry) return f.properties.country === selectedCountry;
+          if (selectedRegion) return f.properties.region === selectedRegion;
+          return false;
+        })
+        .map(f => {
+          const [lng, lat] = f.geometry.coordinates;
+          return {
+            lat, lng,
+            size: ALL_AIRPORTS_POINT_SIZE,
+            color: 'rgba(100, 116, 139, 0.5)',
+            label: f.properties.code,
+            airport: f.properties,
+          };
+        });
+    }
+
+    if (!allAirportsVisible && countryRegionUnvisited.length === 0) return pointsData;
+
+    // Include all-airports layer points when visible
+    const globalUnvisited = allAirportsVisible
+      ? allAirportsPoints.filter(p => !visitedCodes.has(p.airport.code))
+      : [];
+
+    // Merge: country/region unvisited may overlap with global unvisited, dedupe
+    const addedCodes = new Set(globalUnvisited.map(p => p.airport.code));
+    const extraCountryRegion = countryRegionUnvisited.filter(p => !addedCodes.has(p.airport.code));
 
     // Tag points with their type for styling
-    type CombinedPoint = (GlobePoint | GlobeAllAirportPoint) & { isAllAirports?: boolean };
-    const taggedAllAirports: CombinedPoint[] = unvisitedAllAirports.map(p => ({
+    type CombinedPoint = (GlobePoint | GlobeAllAirportPoint) & { isAllAirports?: boolean; isCountryRegionUnvisited?: boolean };
+    const taggedGlobal: CombinedPoint[] = globalUnvisited.map(p => ({
       ...p,
       isAllAirports: true,
+    }));
+    const taggedCountryRegion: CombinedPoint[] = extraCountryRegion.map(p => ({
+      ...p,
+      isAllAirports: true,
+      isCountryRegionUnvisited: true,
     }));
     const taggedVisited: CombinedPoint[] = pointsData.map(p => ({
       ...p,
@@ -247,8 +380,8 @@ export function FlightsMap() {
     }));
 
     // All airports rendered first (below), visited airports on top
-    return [...taggedAllAirports, ...taggedVisited];
-  }, [pointsData, allAirportsPoints, allAirportsVisible]);
+    return [...taggedGlobal, ...taggedCountryRegion, ...taggedVisited];
+  }, [pointsData, allAirportsPoints, allAirportsVisible, allAirportsData, selectedCountry, selectedRegion]);
 
   // Share URL handler
   const handleShareUrl = useCallback(async () => {
@@ -306,6 +439,149 @@ export function FlightsMap() {
     const [origin, destination] = selectedRoute.split('-');
     return { origin, destination };
   }, [selectedRoute]);
+
+  // Compute selected route info for stats panel
+  const selectedRouteInfo = useMemo<SelectedRouteInfo | null>(() => {
+    if (!selectedRoute) return null;
+    const arc = staticArcsData.find(a => a.routeKey === selectedRoute);
+    if (!arc || arc.flights.length === 0) return null;
+    const first = arc.flights[0];
+    const airlines = [...new Set(arc.flights.map(f => f.airline).filter(Boolean))];
+    const years = [...new Set(arc.flights.map(f => {
+      const parts = f.date.split('/');
+      return parseInt(parts[2], 10);
+    }))].sort((a, b) => a - b);
+    const dates = arc.flights.map(f => f.date).sort((a, b) => {
+      const pa = a.split('/'); const pb = b.split('/');
+      const da = new Date(+pa[2], +pa[0] - 1, +pa[1]);
+      const db = new Date(+pb[2], +pb[0] - 1, +pb[1]);
+      return db.getTime() - da.getTime();
+    });
+    // Haversine distance
+    const toRad = (d: number) => d * Math.PI / 180;
+    const dLat = toRad(first.destination_lat - first.origin_lat);
+    const dLon = toRad(first.destination_lon - first.origin_lon);
+    const a2 = Math.sin(dLat / 2) ** 2 +
+      Math.cos(toRad(first.origin_lat)) * Math.cos(toRad(first.destination_lat)) *
+      Math.sin(dLon / 2) ** 2;
+    const distanceKm = Math.round(EARTH_RADIUS_KM * 2 * Math.atan2(Math.sqrt(a2), Math.sqrt(1 - a2)));
+    return {
+      routeKey: selectedRoute,
+      originCode: first.origin_code,
+      originName: first.origin_name,
+      originMunicipality: first.origin_municipality,
+      originCountry: first.origin_country,
+      originCountryName: first.origin_countryName,
+      originRegion: first.origin_region,
+      originRegionName: first.origin_regionName,
+      originContinentName: first.origin_continentName,
+      destinationCode: first.destination_code,
+      destinationName: first.destination_name,
+      destinationMunicipality: first.destination_municipality,
+      destinationCountry: first.destination_country,
+      destinationCountryName: first.destination_countryName,
+      destinationRegion: first.destination_region,
+      destinationRegionName: first.destination_regionName,
+      destinationContinentName: first.destination_continentName,
+      totalFlights: arc.routeCount,
+      airlines,
+      years,
+      dates,
+      distanceKm,
+      isInternational: first.origin_country !== first.destination_country,
+      isIntercontinental: first.origin_continent !== first.destination_continent,
+    };
+  }, [selectedRoute, staticArcsData]);
+
+  // Compute selected country info for stats panel
+  const selectedCountryInfo = useMemo<SelectedCountryInfo | null>(() => {
+    if (!selectedCountry) return null;
+    const countryPoints = pointsData.filter(p => p.airport.country === selectedCountry);
+    if (countryPoints.length === 0) return null;
+    const first = countryPoints[0].airport;
+    // Gather flights touching this country
+    const countryFlights = staticArcsData.flatMap(arc =>
+      arc.flights.filter(f => f.origin_country === selectedCountry || f.destination_country === selectedCountry)
+    );
+    const airlines = [...new Set(countryFlights.map(f => f.airline).filter(Boolean))];
+    const years = [...new Set(countryFlights.map(f => parseInt(f.date.split('/')[2], 10)))].sort((a, b) => a - b);
+    // Top routes
+    const routeCounts = new Map<string, { origin: string; destination: string; count: number }>();
+    countryFlights.forEach(f => {
+      const key = [f.origin_code, f.destination_code].sort().join('-');
+      const existing = routeCounts.get(key);
+      if (existing) { existing.count++; } else {
+        routeCounts.set(key, { origin: f.origin_code, destination: f.destination_code, count: 1 });
+      }
+    });
+    const topRoutes = [...routeCounts.values()].sort((a, b) => b.count - a.count).slice(0, 5);
+    // Connected countries
+    const connCountries = new Map<string, { code: string; name: string; count: number }>();
+    countryFlights.forEach(f => {
+      const otherCode = f.origin_country === selectedCountry ? f.destination_country : f.origin_country;
+      const otherName = f.origin_country === selectedCountry ? f.destination_countryName : f.origin_countryName;
+      if (otherCode === selectedCountry) return;
+      const existing = connCountries.get(otherCode);
+      if (existing) { existing.count++; } else {
+        connCountries.set(otherCode, { code: otherCode, name: otherName, count: 1 });
+      }
+    });
+    const departures = countryFlights.filter(f => f.origin_country === selectedCountry).length;
+    const arrivals = countryFlights.filter(f => f.destination_country === selectedCountry).length;
+    return {
+      code: selectedCountry,
+      name: first.countryName,
+      continent: first.continent,
+      continentName: first.continentName,
+      totalFlights: countryFlights.length,
+      departures,
+      arrivals,
+      airports: countryPoints.map(p => ({ code: p.airport.code, name: p.airport.name, visitCount: p.airport.visitCount }))
+        .sort((a, b) => b.visitCount - a.visitCount),
+      airlines,
+      years,
+      topRoutes,
+      connectedCountries: [...connCountries.values()].sort((a, b) => b.count - a.count).slice(0, 10),
+    };
+  }, [selectedCountry, pointsData, staticArcsData]);
+
+  // Compute selected region info for stats panel
+  const selectedRegionInfo = useMemo<SelectedRegionInfo | null>(() => {
+    if (!selectedRegion) return null;
+    const regionPoints = pointsData.filter(p => p.airport.region === selectedRegion);
+    if (regionPoints.length === 0) return null;
+    const first = regionPoints[0].airport;
+    const regionFlights = staticArcsData.flatMap(arc =>
+      arc.flights.filter(f => f.origin_region === selectedRegion || f.destination_region === selectedRegion)
+    );
+    const airlines = [...new Set(regionFlights.map(f => f.airline).filter(Boolean))];
+    const years = [...new Set(regionFlights.map(f => parseInt(f.date.split('/')[2], 10)))].sort((a, b) => a - b);
+    const routeCounts = new Map<string, { origin: string; destination: string; count: number }>();
+    regionFlights.forEach(f => {
+      const key = [f.origin_code, f.destination_code].sort().join('-');
+      const existing = routeCounts.get(key);
+      if (existing) { existing.count++; } else {
+        routeCounts.set(key, { origin: f.origin_code, destination: f.destination_code, count: 1 });
+      }
+    });
+    const topRoutes = [...routeCounts.values()].sort((a, b) => b.count - a.count).slice(0, 5);
+    const departures = regionFlights.filter(f => f.origin_region === selectedRegion).length;
+    const arrivals = regionFlights.filter(f => f.destination_region === selectedRegion).length;
+    return {
+      code: selectedRegion,
+      name: first.regionName,
+      country: first.country,
+      countryName: first.countryName,
+      totalFlights: regionFlights.length,
+      departures,
+      arrivals,
+      airports: regionPoints.map(p => ({ code: p.airport.code, name: p.airport.name, visitCount: p.airport.visitCount }))
+        .sort((a, b) => b.visitCount - a.visitCount),
+      airlines,
+      years,
+      topRoutes,
+    };
+  }, [selectedRegion, pointsData, staticArcsData]);
 
   // Combine static arcs and animated arcs (keep stable - don't depend on selection state)
   const combinedArcsData = useMemo(() => {
@@ -401,8 +677,11 @@ export function FlightsMap() {
         { lat: arc.startLat, lng: arc.startLng },
         { lat: arc.endLat, lng: arc.endLng }
       );
+      setShowStats(true);
+    } else {
+      setShowStats(false);
     }
-  }, [stopAutoRotate, selectedRoute, setSelectedRoute, zoomToRoute]);
+  }, [stopAutoRotate, selectedRoute, setSelectedRoute, zoomToRoute, setShowStats]);
 
   // Point click - fly to airport showing all its routes, and toggle selection
   const handlePointClick = useCallback((point: GlobePoint) => {
@@ -460,20 +739,24 @@ export function FlightsMap() {
   // Handle clicking on a country in the stats panel
   const handleCountryClick = useCallback((countryCode: string) => {
     stopAutoRotate();
+    setSelectedCountry(countryCode);
     const countryAirports = pointsData.filter(p => p.airport.country === countryCode);
     if (countryAirports.length > 0) {
       zoomToPoints(countryAirports);
     }
-  }, [stopAutoRotate, pointsData, zoomToPoints]);
+    setShowStats(true);
+  }, [stopAutoRotate, pointsData, zoomToPoints, setSelectedCountry, setShowStats]);
 
   // Handle clicking on a region in the stats panel
   const handleRegionClick = useCallback((regionCode: string) => {
     stopAutoRotate();
+    setSelectedRegion(regionCode);
     const regionAirports = pointsData.filter(p => p.airport.region === regionCode);
     if (regionAirports.length > 0) {
       zoomToPoints(regionAirports);
     }
-  }, [stopAutoRotate, pointsData, zoomToPoints]);
+    setShowStats(true);
+  }, [stopAutoRotate, pointsData, zoomToPoints, setSelectedRegion, setShowStats]);
 
   // Swipe navigation for year changes on mobile
   const swipeRef = useYearSwipeNavigation(flightStats.years, selectedYear, handleYearChange);
@@ -550,10 +833,10 @@ export function FlightsMap() {
         >
           <Globe
             ref={globeRef}
-            globeImageUrl={GLOBE_IMAGE}
-            bumpImageUrl={BUMP_IMAGE}
-            backgroundColor="rgba(0,0,17,1)"
-            atmosphereColor="lightskyblue"
+            globeImageUrl={basemap.image}
+            bumpImageUrl={basemap.bump ?? ''}
+            backgroundColor={basemap.bg}
+            atmosphereColor={basemap.atmosphere}
             atmosphereAltitude={ATMOSPHERE_ALTITUDE}
             lineHoverPrecision={LINE_HOVER_PRECISION}
             onGlobeReady={() => {
@@ -603,14 +886,26 @@ export function FlightsMap() {
               }
             }}
             onArcClick={(arc: object) => {
-              const arcData = arc as GlobeStaticArc & { isStatic?: boolean };
+              const arcData = arc as (GlobeStaticArc & { isStatic?: boolean; routeKey?: string });
+              // Find the static arc for this route (works for both static and animated arcs)
+              const routeKey = arcData?.routeKey;
               if (arcData?.isStatic) {
-                // On mobile, show info panel first; on desktop, select directly
                 const isMobile = window.matchMedia('(max-width: 640px)').matches;
                 if (isMobile && !selectedRoute) {
                   setMobileInfoArc(arcData as GlobeStaticArc);
                 } else {
                   handleStaticArcClick(arcData as GlobeStaticArc);
+                }
+              } else if (routeKey) {
+                // Clicked on an animated arc — find the matching static arc and select it
+                const matchingStatic = staticArcsData.find(s => s.routeKey === routeKey);
+                if (matchingStatic) {
+                  const isMobile = window.matchMedia('(max-width: 640px)').matches;
+                  if (isMobile && !selectedRoute) {
+                    setMobileInfoArc(matchingStatic);
+                  } else {
+                    handleStaticArcClick(matchingStatic);
+                  }
                 }
               }
             }}
@@ -687,24 +982,40 @@ export function FlightsMap() {
             pointLat={(d: object) => (d as GlobePoint).lat}
             pointLng={(d: object) => (d as GlobePoint).lng}
             pointColor={(d: object) => {
-              const point = d as GlobePoint & { isAllAirports?: boolean };
+              const point = d as GlobePoint & { isAllAirports?: boolean; isCountryRegionUnvisited?: boolean };
               // Handle all airports layer styling
               if (point.isAllAirports) {
+                // Unvisited airports in selected country/region get a distinct color
+                if (point.isCountryRegionUnvisited || (selectedCountry && point.airport.country === selectedCountry) || (selectedRegion && point.airport.region === selectedRegion)) {
+                  return selectedCountry ? 'hsla(150, 50%, 45%, 0.6)' : 'hsla(40, 60%, 50%, 0.6)';
+                }
                 return point.color; // Color is set by the symbol mode
               }
               // Regular visited airports
               if (selectedRouteAirports) {
                 const isRouteEndpoint = point.airport.code === selectedRouteAirports.origin ||
                   point.airport.code === selectedRouteAirports.destination;
-                if (isRouteEndpoint) return 'rgba(255, 200, 50, 1)'; // Bright gold for route endpoints
+                if (isRouteEndpoint) return 'hsl(50, 100%, 65%)'; // Bright gold for route endpoints
                 return 'rgba(100, 100, 120, 0.4)'; // Dim other airports
+              }
+              if (selectedCountry) {
+                if (point.airport.country === selectedCountry) return 'hsl(150, 80%, 55%)';
+                return 'rgba(100, 100, 120, 0.3)';
+              }
+              if (selectedRegion) {
+                if (point.airport.region === selectedRegion) return 'hsl(40, 90%, 60%)';
+                return 'rgba(100, 100, 120, 0.3)';
               }
               return point.color;
             }}
             pointAltitude={(d: object) => {
-              const point = d as GlobePoint & { isAllAirports?: boolean };
+              const point = d as GlobePoint & { isAllAirports?: boolean; isCountryRegionUnvisited?: boolean };
               // All airports render at a lower altitude
               if (point.isAllAirports) {
+                // Unvisited airports in selected country/region render slightly higher than normal all-airports
+                if (point.isCountryRegionUnvisited || (selectedCountry && point.airport.country === selectedCountry) || (selectedRegion && point.airport.region === selectedRegion)) {
+                  return POINT_ALTITUDE;
+                }
                 return ALL_AIRPORTS_POINT_ALTITUDE;
               }
               if (selectedRouteAirports) {
@@ -712,12 +1023,18 @@ export function FlightsMap() {
                   point.airport.code === selectedRouteAirports.destination;
                 if (isRouteEndpoint) return SELECTED_POINT_ALTITUDE; // Raise route endpoints higher
               }
+              if (selectedCountry && point.airport.country === selectedCountry) return SELECTED_POINT_ALTITUDE;
+              if (selectedRegion && point.airport.region === selectedRegion) return SELECTED_POINT_ALTITUDE;
               return POINT_ALTITUDE;
             }}
             pointRadius={(d: object) => {
-              const point = d as GlobePoint & { isAllAirports?: boolean };
+              const point = d as GlobePoint & { isAllAirports?: boolean; isCountryRegionUnvisited?: boolean };
               // All airports use smaller point size
               if (point.isAllAirports) {
+                // Unvisited airports in selected country/region are slightly larger than default all-airports
+                if (point.isCountryRegionUnvisited || (selectedCountry && point.airport.country === selectedCountry) || (selectedRegion && point.airport.region === selectedRegion)) {
+                  return ALL_AIRPORTS_POINT_SIZE * 1.2;
+                }
                 return point.size;
               }
               if (selectedRouteAirports) {
@@ -725,6 +1042,14 @@ export function FlightsMap() {
                   point.airport.code === selectedRouteAirports.destination;
                 if (isRouteEndpoint) return point.size * 2; // Bigger for route endpoints
                 return point.size * 0.6; // Smaller for others
+              }
+              if (selectedCountry) {
+                if (point.airport.country === selectedCountry) return Math.max(point.size * 1.5, 0.3);
+                return point.size * 0.5;
+              }
+              if (selectedRegion) {
+                if (point.airport.region === selectedRegion) return Math.max(point.size * 1.5, 0.3);
+                return point.size * 0.5;
               }
               return point.size;
             }}
@@ -775,16 +1100,18 @@ export function FlightsMap() {
             </div>
           `;
             }}
-            // Labels - only show for airports with enough visits
-            labelsData={labeledAirports}
-            labelLat={(d: object) => (d as GlobePoint).lat}
-            labelLng={(d: object) => (d as GlobePoint).lng}
-            labelText={(d: object) => (d as GlobePoint).label}
-            labelSize={LABEL_SIZE}
-            labelDotRadius={0}
-            labelColor={() => 'rgba(255, 255, 255, 0.95)'}
-            labelAltitude={LABEL_ALTITUDE}
-            labelResolution={LABEL_RESOLUTION}
+            // Labels - HTML overlay for readability on any basemap
+            htmlElementsData={labeledAirports}
+            htmlLat={(d: object) => (d as GlobePoint).lat}
+            htmlLng={(d: object) => (d as GlobePoint).lng}
+            htmlAltitude={LABEL_ALTITUDE}
+            htmlElement={(d: object) => {
+              const point = d as GlobePoint;
+              const el = document.createElement('div');
+              el.textContent = point.label;
+              el.style.cssText = 'color: white; font-size: 10px; font-family: ui-monospace, monospace; font-weight: 600; text-shadow: 0 0 4px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,1), 1px 1px 1px rgba(0,0,0,0.8); pointer-events: none; user-select: none; white-space: nowrap;';
+              return el;
+            }}
             // US States polygons layer
             polygonsData={usStatesPolygons}
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -824,6 +1151,8 @@ export function FlightsMap() {
               stopAutoRotate();
               setSelectedAirport(null);
               setSelectedRoute(null);
+              setSelectedCountry(null);
+              setSelectedRegion(null);
               setShowStats(false);
             }}
           />
@@ -847,17 +1176,27 @@ export function FlightsMap() {
         onCountryClick={handleCountryClick}
         onRegionClick={handleRegionClick}
         validAirportCodes={validAirportCodes}
+        selectedRouteInfo={selectedRouteInfo}
+        onClearRoute={() => {
+          setSelectedRoute(null);
+          setShowStats(false);
+        }}
+        selectedCountryInfo={selectedCountryInfo}
+        onClearCountry={() => {
+          setSelectedCountry(null);
+          setShowStats(false);
+        }}
+        selectedRegionInfo={selectedRegionInfo}
+        onClearRegion={() => {
+          setSelectedRegion(null);
+          setShowStats(false);
+        }}
       />
 
-      {/* Color Mode Selector with Legend */}
-      <ColorModeSelector
-        mode={colorMode}
-        onModeChange={setColorMode}
-        years={flightStats.years}
-      />
-
-      {/* Layers Control (All Airports, US States, Flight Paths) */}
+      {/* Layers Control (Flight Paths, All Airports, US States, Basemap) */}
       <LayersControl
+        basemapId={basemapId}
+        onBasemapChange={setBasemapId}
         allAirportsVisible={allAirportsVisible}
         onAllAirportsVisibilityChange={setAllAirportsVisible}
         airportSymbolMode={airportSymbolMode}
@@ -866,6 +1205,9 @@ export function FlightsMap() {
         airportsLoading={allAirportsLoading}
         showFlightPaths={showFlightPaths}
         onShowFlightPathsChange={setShowFlightPaths}
+        colorMode={colorMode}
+        onColorModeChange={setColorMode}
+        years={flightStats.years}
         usStatesVisible={usStatesVisible}
         onUSStatesVisibilityChange={handleUSStatesVisibilityChange}
         stateSymbolMode={stateSymbolMode}

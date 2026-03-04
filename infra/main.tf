@@ -6,31 +6,12 @@ resource "aws_amplify_app" "rsmbtv" {
   access_token             = var.github_token # GitHub personal access token for repo access
   enable_branch_auto_build = true             # enable auto CI/CD on pushes
 
-  #   # (Optional) Custom build settings (build spec). If omitted, Amplify can use default builds.
-  #   build_spec = <<-YAML
-  #     version: 1
-  #     frontend:
-  #       phases:
-  #         preBuild:
-  #           commands:
-  #             - npm ci       # install dependencies
-  #         build:
-  #           commands:
-  #             - npm run build  # build the static site
-  #       artifacts:
-  #         baseDirectory: build    # directory to deploy (from build output)
-  #         files:
-  #           - '**/*'
-  #       cache:
-  #         paths:
-  #           - node_modules/**/*  # cache dependencies to speed up builds
-  #   YAML
-  #
-  #   # (Optional) Environment variables for the app (accessible during build)
-  #   environment_variables = {
-  #     NODE_ENV     = "production"
-  #     API_BASE_URL = "https://api.example.com"
-  #   }
+  # SPA rewrite: serve index.html for all routes that don't match a file
+  custom_rule {
+    source = "</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map|json|webp|xml|gz|br|geojson|glb)$)([^.]+$)/>"
+    target = "/index.html"
+    status = "200"
+  }
 }
 
 resource "aws_amplify_branch" "main" {

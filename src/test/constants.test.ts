@@ -6,7 +6,12 @@ import {
     getCountryColor,
     getVisitCountColor,
     getFlightCountColor,
+    BASEMAPS,
+    DEFAULT_BASEMAP_ID,
+    getBasemap,
+    isValidBasemapId,
 } from '../features/flights/constants';
+import type { BasemapId } from '../features/flights/types';
 
 describe('getYearColor', () => {
     it('returns the mapped color for a known year', () => {
@@ -79,5 +84,104 @@ describe('getFlightCountColor', () => {
 
     it('returns a higher-tier color for 50+ flights', () => {
         expect(getFlightCountColor(55)).toBe('rgba(234, 88, 12, 0.5)');
+    });
+});
+
+describe('BASEMAPS', () => {
+    it('contains at least one basemap', () => {
+        expect(BASEMAPS.length).toBeGreaterThan(0);
+    });
+
+    it('has unique IDs', () => {
+        const ids = BASEMAPS.map(b => b.id);
+        expect(new Set(ids).size).toBe(ids.length);
+    });
+
+    it('uses only local image paths (no external URLs)', () => {
+        for (const basemap of BASEMAPS) {
+            expect(basemap.image).not.toMatch(/^https?:\/\//);
+            expect(basemap.image).toContain('basemaps/');
+            if (basemap.bump) {
+                expect(basemap.bump).not.toMatch(/^https?:\/\//);
+                expect(basemap.bump).toContain('basemaps/');
+            }
+        }
+    });
+
+    it('does not use rgba for atmosphere colors (THREE.Color ignores alpha)', () => {
+        for (const basemap of BASEMAPS) {
+            expect(basemap.atmosphere).not.toMatch(/rgba\(/);
+        }
+    });
+
+    it('each basemap has required properties', () => {
+        for (const basemap of BASEMAPS) {
+            expect(basemap.id).toBeTruthy();
+            expect(basemap.label).toBeTruthy();
+            expect(basemap.image).toBeTruthy();
+            expect(typeof basemap.atmosphere).toBe('string');
+            expect(typeof basemap.bg).toBe('string');
+        }
+    });
+});
+
+describe('DEFAULT_BASEMAP_ID', () => {
+    it('refers to an existing basemap', () => {
+        expect(BASEMAPS.some(b => b.id === DEFAULT_BASEMAP_ID)).toBe(true);
+    });
+});
+
+describe('isValidBasemapId', () => {
+    it('returns true for all defined basemap IDs', () => {
+        for (const basemap of BASEMAPS) {
+            expect(isValidBasemapId(basemap.id)).toBe(true);
+        }
+    });
+
+    it('returns false for unknown strings', () => {
+        expect(isValidBasemapId('nonexistent')).toBe(false);
+        expect(isValidBasemapId('')).toBe(false);
+    });
+
+    it('returns false for non-string values', () => {
+        expect(isValidBasemapId(null)).toBe(false);
+        expect(isValidBasemapId(undefined)).toBe(false);
+        expect(isValidBasemapId(42)).toBe(false);
+    });
+});
+
+describe('getBasemap', () => {
+    it('returns the correct basemap for a valid ID', () => {
+        const night = getBasemap('night');
+        expect(night.id).toBe('night');
+        expect(night.label).toBe('Night');
+    });
+
+    it('returns each basemap by its ID', () => {
+        for (const basemap of BASEMAPS) {
+            expect(getBasemap(basemap.id)).toBe(basemap);
+        }
+    });
+
+    it('returns the first basemap as fallback for invalid IDs', () => {
+        const fallback = getBasemap('nonexistent');
+        expect(fallback).toBe(BASEMAPS[0]);
+    });
+
+    it('returns the first basemap for empty string', () => {
+        expect(getBasemap('')).toBe(BASEMAPS[0]);
+    });
+
+    it('works with the DEFAULT_BASEMAP_ID', () => {
+        const basemap = getBasemap(DEFAULT_BASEMAP_ID);
+        expect(basemap.id).toBe(DEFAULT_BASEMAP_ID);
+    });
+
+    it('type-narrowed ID matches BasemapId union', () => {
+        const validIds: BasemapId[] = ['night', 'blue-marble', 'day', 'dark', 'positron', 'voyager'];
+        for (const id of validIds) {
+            const basemap = getBasemap(id);
+            expect(basemap.id).toBe(id);
+        }
     });
 });

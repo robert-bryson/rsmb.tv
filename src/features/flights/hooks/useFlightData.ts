@@ -45,6 +45,14 @@ function getRouteKey(origin: string, destination: string): string {
   return [origin, destination].sort().join('-');
 }
 
+// Convert hex color to rgba with alpha
+function hexToRgba(hex: string, alpha: number): string {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
 // Calculate distance between two points using Haversine formula
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -748,10 +756,10 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
         let size = MIN_POINT_SIZE + sqrtScale * (MAX_POINT_SIZE - MIN_POINT_SIZE);
 
         // Color intensity based on visits - busier airports are brighter/more saturated
-        // Using purple-to-gold gradient matching the app's aesthetic
-        const hue = 45 - sqrtScale * 15; // Gold (45) to warm yellow (30) for busiest
-        const saturation = 70 + sqrtScale * 30; // 70% to 100% saturation
-        const lightness = 50 + sqrtScale * 15; // 50% to 65% lightness
+        // Using cyan-to-white gradient for contrast against all basemaps
+        const hue = 190 - sqrtScale * 20; // Cyan (190) to teal-blue (170) for busiest
+        const saturation = 80 + sqrtScale * 20; // 80% to 100% saturation
+        const lightness = 55 + sqrtScale * 20; // 55% to 75% lightness
         let color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 
         // Highlight selected airport and connected airports
@@ -846,15 +854,48 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
         stroke = Math.max(MIN_STATIC_ARC_STROKE, route.stroke);
       }
 
+      // Determine color based on color mode and selection state
+      let color: string;
+      if (selectedAirport) {
+        // When an airport is selected, use connected/dim override
+        color = isConnected ? CONNECTED_ARC_COLOR : DIM_ARC_COLOR;
+      } else {
+        switch (colorMode) {
+          case 'year': {
+            const mostRecentYear = Math.max(...route.flights.map(f => parseYear(f.date)));
+            color = hexToRgba(getYearColor(mostRecentYear), 0.55);
+            break;
+          }
+          case 'frequency': {
+            color = hexToRgba(getFrequencyColor(route.routeCount, maxRouteCount), 0.55);
+            break;
+          }
+          case 'airline': {
+            // Use the most common airline on this route
+            const airlineCounts = new Map<string, number>();
+            route.flights.forEach(f => {
+              airlineCounts.set(f.airline, (airlineCounts.get(f.airline) || 0) + 1);
+            });
+            let primaryAirline = '';
+            let maxCount = 0;
+            airlineCounts.forEach((count, airline) => {
+              if (count > maxCount) { maxCount = count; primaryAirline = airline; }
+            });
+            const hash = primaryAirline.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+            color = `hsla(${hash % 360}, 70%, 60%, 0.55)`;
+            break;
+          }
+          default:
+            color = DEFAULT_ARC_COLOR;
+        }
+      }
+
       return {
         startLat: route.startLat,
         startLng: route.startLng,
         endLat: route.endLat,
         endLng: route.endLng,
-        // Highlight connected routes in bright cyan, dim unconnected when airport selected
-        color: selectedAirport
-          ? (isConnected ? CONNECTED_ARC_COLOR : DIM_ARC_COLOR)
-          : DEFAULT_ARC_COLOR,
+        color,
         stroke,
         routeKey,
         routeCount: route.routeCount,
@@ -862,7 +903,7 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
         isConnected: !!isConnected,
       };
     });
-  }, [flights, arcsData, selectedAirport]);
+  }, [flights, arcsData, selectedAirport, colorMode, maxRouteCount]);
 
   return {
     arcsData,

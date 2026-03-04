@@ -143,6 +143,65 @@ export interface SelectedAirportInfo {
   airlines: string[];
 }
 
+// Selected route info for stats panel
+export interface SelectedRouteInfo {
+  routeKey: string;
+  originCode: string;
+  originName: string;
+  originMunicipality: string;
+  originCountry: string;
+  originCountryName: string;
+  originRegion: string;
+  originRegionName: string;
+  originContinentName: string;
+  destinationCode: string;
+  destinationName: string;
+  destinationMunicipality: string;
+  destinationCountry: string;
+  destinationCountryName: string;
+  destinationRegion: string;
+  destinationRegionName: string;
+  destinationContinentName: string;
+  totalFlights: number;
+  airlines: string[];
+  years: number[];
+  dates: string[];
+  distanceKm: number;
+  isInternational: boolean;
+  isIntercontinental: boolean;
+}
+
+// Selected country info for stats panel
+export interface SelectedCountryInfo {
+  code: string;
+  name: string;
+  continent: string;
+  continentName: string;
+  totalFlights: number;
+  departures: number;
+  arrivals: number;
+  airports: { code: string; name: string; visitCount: number }[];
+  airlines: string[];
+  years: number[];
+  topRoutes: { origin: string; destination: string; count: number }[];
+  connectedCountries: { code: string; name: string; count: number }[];
+}
+
+// Selected region info for stats panel
+export interface SelectedRegionInfo {
+  code: string;
+  name: string;
+  country: string;
+  countryName: string;
+  totalFlights: number;
+  departures: number;
+  arrivals: number;
+  airports: { code: string; name: string; visitCount: number }[];
+  airlines: string[];
+  years: number[];
+  topRoutes: { origin: string; destination: string; count: number }[];
+}
+
 // Overall flight statistics
 export interface FlightStats {
   totalFlights: number;
@@ -272,6 +331,9 @@ export type USStatesCollection = FeatureCollection<Polygon | MultiPolygon, USSta
 
 // State symbolization modes
 export type StateSymbolMode = 'visited' | 'visitCount' | 'flightCount';
+
+// Basemap options
+export type BasemapId = 'night' | 'blue-marble' | 'day' | 'dark' | 'positron' | 'voyager';
 
 // Globe polygon for state layer
 export interface GlobeStatePolygon {

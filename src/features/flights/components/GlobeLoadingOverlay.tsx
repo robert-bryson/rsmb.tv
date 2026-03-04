@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { GLOBE_IMAGE, BUMP_IMAGE } from '../constants';
+import type { BasemapConfig } from '../constants';
 
 interface TextureLoadingState {
     isLoading: boolean;
@@ -10,22 +10,28 @@ interface TextureLoadingState {
 /**
  * Hook to preload globe textures and track loading progress.
  */
-export function useGlobeTextures(): TextureLoadingState {
+export function useGlobeTextures(basemap?: BasemapConfig): TextureLoadingState {
     const [state, setState] = useState<TextureLoadingState>({
         isLoading: true,
         progress: 0,
         error: null,
     });
 
+    const imageUrl = basemap?.image;
+    const bumpUrl = basemap?.bump;
+
     useEffect(() => {
-        const textures = [GLOBE_IMAGE, BUMP_IMAGE];
+        if (!imageUrl) return;
+
+        const textures = [imageUrl, ...(bumpUrl ? [bumpUrl] : [])];
         let loadedCount = 0;
         let cancelled = false;
+
+        setState({ isLoading: true, progress: 0, error: null });
 
         const loadTexture = (url: string): Promise<void> => {
             return new Promise((resolve, reject) => {
                 const img = new Image();
-                img.crossOrigin = 'anonymous';
 
                 img.onload = () => {
                     if (cancelled) return;
@@ -42,8 +48,7 @@ export function useGlobeTextures(): TextureLoadingState {
                     reject(new Error(`Failed to load texture: ${url}`));
                 };
 
-                // Handle protocol-relative URLs
-                img.src = url.startsWith('//') ? `https:${url}` : url;
+                img.src = url;
             });
         };
 
@@ -62,7 +67,7 @@ export function useGlobeTextures(): TextureLoadingState {
         return () => {
             cancelled = true;
         };
-    }, []);
+    }, [imageUrl, bumpUrl]);
 
     return state;
 }

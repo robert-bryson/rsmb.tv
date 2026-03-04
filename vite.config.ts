@@ -7,7 +7,7 @@ import tailwindcss from '@tailwindcss/vite'
 import compression from 'vite-plugin-compression'
 
 export default defineConfig({
-  base: '/rsmb.tv/',
+  base: '/',
   plugins: [
     mdx({
       remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
