@@ -11,6 +11,16 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    slug: 'through-routes',
+    title: 'Through Routes',
+    description: 'Find scenic, twisty motorcycle loop routes on rural roads. Processes OpenStreetMap data to build a loop-friendly road graph, scores roads by curviness and elevation change, and generates ranked circular routes from any start point.',
+    tech: ['Python', 'NumPy', 'FastAPI', 'TypeScript', 'MapLibre GL', 'Docker'],
+    featured: true,
+    demoUrl: 'https://through-routes.rsmb.tv/',
+    sourceUrl: 'https://github.com/robert-bryson/through-routes',
+    year: 2026,
+  },
+  {
     slug: 'flights',
     title: 'Flight Tracker',
     description: 'An interactive 3D globe visualization of flights I\'ve taken around the world. Filter by year, see route frequencies, and explore travel statistics.',
