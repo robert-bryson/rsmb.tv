@@ -1,5 +1,20 @@
 variable "github_token" {
-  description = "GitHub personal access token with repo and admin:repo_hook scopes"
+  description = "GitHub personal access token with repo and admin:repo_hook scopes. Only needed when rotating the token — ignored during normal operations."
   type        = string
   sensitive   = true
+  default     = null
+}
+
+variable "domain_name" {
+  description = "Root domain name"
+  type        = string
+  default     = "rsmb.tv"
+}
+
+locals {
+  www_domain = "www.${var.domain_name}"
+  common_tags = {
+    Project   = var.domain_name
+    ManagedBy = "terraform"
+  }
 }

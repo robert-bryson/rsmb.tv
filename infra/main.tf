@@ -6,6 +6,14 @@ resource "aws_amplify_app" "rsmbtv" {
   access_token             = var.github_token
   enable_branch_auto_build = true
 
+  tags = local.common_tags
+
+  # Prevent Terraform from overwriting the token that's already configured in AWS.
+  # To rotate the token, temporarily remove this block and apply with the new value.
+  lifecycle {
+    ignore_changes = [access_token, custom_headers]
+  }
+
   # SPA rewrite: serve index.html for all routes that don't match a static file
   custom_rule {
     source = "</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map|json|webp|xml|gz|br|geojson|glb)$)([^.]+$)/>"
@@ -14,6 +22,9 @@ resource "aws_amplify_app" "rsmbtv" {
   }
 
   # Cache headers for hashed static assets (immutable)
+  # Note: Amplify API requires YAML input but returns JSON, causing perpetual
+  # plan drift. custom_headers is in ignore_changes to suppress this.
+  # To update headers, temporarily remove from ignore_changes and apply.
   custom_headers = <<-HEADERS
     customHeaders:
       - pattern: '/assets/**'
@@ -67,10 +78,10 @@ resource "aws_amplify_branch" "dev" {
   stage       = "DEVELOPMENT"
 }
 
-# Custom domain: rsmb.tv (www + dev only; apex redirect handled by CloudFront)
+# Custom domain (www + dev only; apex redirect handled by CloudFront)
 resource "aws_amplify_domain_association" "rsmbtv" {
   app_id      = aws_amplify_app.rsmbtv.id
-  domain_name = "rsmb.tv"
+  domain_name = var.domain_name
 
   # www.rsmb.tv → main branch
   sub_domain {
@@ -92,7 +103,7 @@ resource "aws_amplify_domain_association" "rsmbtv" {
 resource "aws_cloudfront_function" "apex_redirect" {
   name    = "rsmbtv-apex-redirect"
   runtime = "cloudfront-js-2.0"
-  comment = "Redirect rsmb.tv to www.rsmb.tv"
+  comment = "Redirect ${var.domain_name} to ${local.www_domain}"
   publish = true
   code    = <<-JS
     function handler(event) {
@@ -117,23 +128,29 @@ resource "aws_cloudfront_function" "apex_redirect" {
   JS
 }
 
+data "aws_route53_zone" "rsmbtv" {
+  name = "${var.domain_name}."
+}
+
 data "aws_acm_certificate" "rsmbtv" {
-  domain      = "rsmb.tv"
+  domain      = var.domain_name
   statuses    = ["ISSUED"]
   most_recent = true
+  key_types   = ["RSA_2048"]
 }
 
 resource "aws_cloudfront_distribution" "apex_redirect" {
-  comment             = "Redirect rsmb.tv apex to www.rsmb.tv"
+  comment             = "Redirect ${var.domain_name} apex to ${local.www_domain}"
   enabled             = true
   is_ipv6_enabled     = true
   http_version        = "http2and3"
   price_class         = "PriceClass_100"
-  aliases             = ["rsmb.tv"]
+  aliases             = [var.domain_name]
   wait_for_deployment = false
+  tags                = local.common_tags
 
   origin {
-    domain_name = "www.rsmb.tv"
+    domain_name = local.www_domain
     origin_id   = "dummy-origin"
 
     custom_origin_config {
@@ -173,13 +190,25 @@ resource "aws_cloudfront_distribution" "apex_redirect" {
 }
 
 resource "aws_route53_record" "apex" {
-  zone_id = "Z01438012QVABV96CTNJJ"
-  name    = "rsmb.tv"
+  zone_id = data.aws_route53_zone.rsmbtv.zone_id
+  name    = var.domain_name
   type    = "A"
 
   alias {
     name                   = aws_cloudfront_distribution.apex_redirect.domain_name
-    zone_id                = "Z2FDTNDATAQYW2" # CloudFront hosted zone ID (global constant)
+    zone_id                = aws_cloudfront_distribution.apex_redirect.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "apex_aaaa" {
+  zone_id = data.aws_route53_zone.rsmbtv.zone_id
+  name    = var.domain_name
+  type    = "AAAA"
+
+  alias {
+    name                   = aws_cloudfront_distribution.apex_redirect.domain_name
+    zone_id                = aws_cloudfront_distribution.apex_redirect.hosted_zone_id
     evaluate_target_health = false
   }
 }

@@ -8,6 +8,15 @@ terraform {
       version = "~> 5.0"
     }
   }
+
+  backend "s3" {
+    bucket         = "rsmbtv-terraform-state"
+    key            = "rsmb.tv/terraform.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "terraform-locks"
+    encrypt        = true
+    profile        = "rsmbtv-admin"
+  }
 }
 
 provider "aws" {

@@ -1,0 +1,6 @@
+# Copy to terraform.tfvars and fill in values.
+# terraform.tfvars is gitignored and will not be committed.
+
+# Only required when rotating the GitHub access token on the Amplify app.
+# For normal plan/apply operations this can be omitted (defaults to null).
+# github_token = "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"

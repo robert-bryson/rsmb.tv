@@ -13,5 +13,5 @@ output "amplify_default_domain" {
 }
 
 output "amplify_production_url" {
-  value = "https://www.rsmb.tv"
+  value = "https://${local.www_domain}"
 }
