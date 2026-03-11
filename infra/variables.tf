@@ -11,6 +11,17 @@ variable "domain_name" {
   default     = "rsmb.tv"
 }
 
+variable "alert_email" {
+  description = "Email address for monitoring alerts (budget, anomaly, health check)"
+  type        = string
+}
+
+variable "monthly_budget_limit" {
+  description = "Monthly AWS spend budget limit in USD"
+  type        = string
+  default     = "35"
+}
+
 locals {
   www_domain = "www.${var.domain_name}"
   common_tags = {

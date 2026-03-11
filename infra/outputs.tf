@@ -15,3 +15,15 @@ output "amplify_default_domain" {
 output "amplify_production_url" {
   value = "https://${local.www_domain}"
 }
+
+output "sns_alerts_topic_arn" {
+  value = aws_sns_topic.alerts.arn
+}
+
+output "health_check_id" {
+  value = aws_route53_health_check.website.id
+}
+
+output "dashboard_url" {
+  value = "https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#dashboards/dashboard/rsmbtv"
+}

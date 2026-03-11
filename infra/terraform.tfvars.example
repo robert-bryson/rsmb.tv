@@ -4,3 +4,9 @@
 # Only required when rotating the GitHub access token on the Amplify app.
 # For normal plan/apply operations this can be omitted (defaults to null).
 # github_token = "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# Email address for monitoring alerts (budget, anomaly, health checks).
+# alert_email = "you@example.com"
+
+# Monthly budget limit in USD (default: 35).
+# monthly_budget_limit = "35"

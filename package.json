@@ -11,6 +11,7 @@
     "build-sitemap": "node scripts/generate-sitemap.js",
     "generate-mappings": "node projects/flights/scripts/generateNameMappings.js",
     "sync-flights": "node scripts/sync-flights.js",
+    "aws-status": "bash scripts/aws-status.sh",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
