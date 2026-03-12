@@ -30,6 +30,15 @@ export const projects: Project[] = [
     year: 2025,
   },
   {
+    slug: 'anki-artisan',
+    title: 'Anki Artisan',
+    description: 'Craft Anki flashcard decks from iNaturalist observations and eBird region data. Automatically fetches species photos, audio, and taxonomy to generate visual ID, nomenclature, sound ID, and confusion species cards.',
+    tech: ['Python', 'Click', 'eBird API', 'iNaturalist API', 'SQLite'],
+    featured: true,
+    sourceUrl: 'https://github.com/robert-bryson/anki-artisan',
+    year: 2026,
+  },
+  {
     slug: 'route2gpx',
     title: 'route2gpx',
     description: 'Convert Google Routes into GPX files for GPS devices and bike computers. A privacy-focused web app that runs entirely in your browser—your routes never touch a server.',
