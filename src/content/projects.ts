@@ -35,6 +35,7 @@ export const projects: Project[] = [
     description: 'Craft Anki flashcard decks from iNaturalist observations and eBird region data. Automatically fetches species photos, audio, and taxonomy to generate visual ID, nomenclature, sound ID, and confusion species cards.',
     tech: ['Python', 'Click', 'eBird API', 'iNaturalist API', 'SQLite'],
     featured: true,
+    demoUrl: '/projects/anki-artisan',
     sourceUrl: 'https://github.com/robert-bryson/anki-artisan',
     year: 2026,
   },
