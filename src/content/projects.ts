@@ -40,6 +40,15 @@ export const projects: Project[] = [
     year: 2026,
   },
   {
+    slug: 'bookend',
+    title: 'Bookend',
+    description: 'A personal book-tracking app to log reads, organize books into lists, and explore reading stats. Integrates with Google Books, Open Library, and Wikidata for enrichment—covers, descriptions, author links, and more.',
+    tech: ['Next.js', 'TypeScript', 'Prisma', 'PostgreSQL', 'Tailwind CSS', 'Docker'],
+    featured: true,
+    sourceUrl: 'https://github.com/robert-bryson/bookend',
+    year: 2026,
+  },
+  {
     slug: 'route2gpx',
     title: 'route2gpx',
     description: 'Convert Google Routes into GPX files for GPS devices and bike computers. A privacy-focused web app that runs entirely in your browser—your routes never touch a server.',
