@@ -18,9 +18,9 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          'three': ['three'],
-          'three-globe': ['three-globe', 'react-globe.gl'],
+        manualChunks(id) {
+          if (id.includes('node_modules/three/')) return 'three'
+          if (id.includes('node_modules/three-globe/') || id.includes('node_modules/react-globe.gl/')) return 'three-globe'
         },
       },
     },
