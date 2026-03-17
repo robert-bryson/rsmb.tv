@@ -13,9 +13,11 @@
     "sync-flights": "node scripts/sync-flights.js",
     "aws-status": "bash scripts/aws-status.sh",
     "lint": "eslint .",
+    "bundle-report": "node scripts/bundle-report.js",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "prepare": "husky"
   },
   "dependencies": {
     "@mdx-js/react": "^3.1.1",
@@ -41,9 +43,11 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.4.0",
+    "husky": "^9.1.7",
     "i18n-iso-countries": "^7.14.0",
     "iso-3166-2": "^1.0.0",
     "jsdom": "^28.1.0",
+    "lint-staged": "^16.4.0",
     "remark-frontmatter": "^5.0.0",
     "remark-mdx-frontmatter": "^5.2.0",
     "tailwindcss": "^4.2.1",
@@ -51,5 +55,10 @@
     "typescript-eslint": "^8.56.1",
     "vite": "^8.0.0",
     "vitest": "^4.1.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --max-warnings=0"
+    ]
   }
 }

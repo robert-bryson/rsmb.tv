@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Suspense } from 'react';
 import { MDXProvider } from '@mdx-js/react';
 import { useDocumentHead } from '../hooks/useDocumentHead';
+import { useJsonLd } from '../hooks/useJsonLd';
 import { getPostBySlug } from '../content/posts';
 import { mdxComponents } from '../blog/MdxComponents';
 import { formatDate } from '../utils/formatDate';
@@ -14,6 +15,27 @@ export function BlogPost() {
         title: post ? `${post.title} | rsmb` : 'Post Not Found | rsmb',
         description: post?.description ?? 'Blog post not found.',
     });
+
+    useJsonLd(post ? {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: post.title,
+        description: post.description,
+        datePublished: post.date,
+        author: { '@type': 'Person', name: 'Robby Bryson', url: 'https://rsmb.tv' },
+        url: `https://rsmb.tv/blog/${post.slug}`,
+        keywords: post.tags,
+    } : null);
+
+    useJsonLd(post ? {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://rsmb.tv' },
+            { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://rsmb.tv/blog' },
+            { '@type': 'ListItem', position: 3, name: post.title, item: `https://rsmb.tv/blog/${post.slug}` },
+        ],
+    } : null);
 
     if (!post) {
         return (

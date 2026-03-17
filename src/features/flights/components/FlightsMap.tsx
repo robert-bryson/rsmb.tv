@@ -1,5 +1,4 @@
 import { useRef, useCallback, useState, useMemo, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import Globe, { type GlobeMethods } from 'react-globe.gl';
 import { usePersistedState } from '../../../hooks/usePersistedState';
 import { useGlobeData, useFlights } from '../hooks/useFlightData';
@@ -10,6 +9,8 @@ import { useReducedMotion } from '../hooks/useReducedMotion';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import { useYearSwipeNavigation } from '../hooks/useSwipeGesture';
 import { useZoomNavigation } from '../hooks/useZoomNavigation';
+import { useFlightsFilters } from '../hooks/useFlightsFilters';
+import { useSelectionInfo } from '../hooks/useSelectionInfo';
 import { StatsPanel } from './StatsPanel';
 // ColorModeSelector is now integrated into LayersControl
 import { KeyboardHelp } from './KeyboardHelp';
@@ -18,7 +19,7 @@ import { GlobeErrorBoundary } from './GlobeErrorBoundary';
 import { GlobeLoadingOverlay } from './GlobeLoadingOverlay';
 import { useGlobeTextures } from '../hooks/useGlobeTextures';
 import { SkipLink } from './SkipLink';
-import { escapeHtml, calculateDistance } from '../utils';
+import { escapeHtml } from '../utils';
 import { TopNavigationBar } from './TopNavigationBar';
 import { ControlButtons } from './ControlButtons';
 import { BottomStatsBar } from './BottomStatsBar';
@@ -51,12 +52,11 @@ import {
   DBLCLICK_ZOOM_FACTOR,
   ZOOM_ALTITUDE_MIN,
 } from '../constants';
-import type { GlobeArc, GlobePoint, GlobeStaticArc, ColorMode, AirportSymbolMode, GlobeAllAirportPoint, StateSymbolMode, GlobeStatePolygon, BasemapId, SelectedRouteInfo, SelectedCountryInfo, SelectedRegionInfo } from '../types';
+import type { GlobeArc, GlobePoint, GlobeStaticArc, ColorMode, AirportSymbolMode, GlobeAllAirportPoint, StateSymbolMode, GlobeStatePolygon, BasemapId } from '../types';
 
 
 export function FlightsMap() {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
-  const [searchParams, setSearchParams] = useSearchParams();
   const prefersReducedMotion = useReducedMotion();
   const [rawBasemapId, setBasemapId] = usePersistedState<BasemapId>('flights-basemap', DEFAULT_BASEMAP_ID);
   // Guard against stale/invalid basemap IDs from localStorage
@@ -65,13 +65,13 @@ export function FlightsMap() {
   const textureState = useGlobeTextures(basemap);
   const { resetView, zoomToPoints, zoomToRoute, zoomToPoint, zoomToAirportWithConnections } = useZoomNavigation(globeRef);
 
-  // URL state for filters
-  const selectedYear = searchParams.get('year') ? Number(searchParams.get('year')) : null;
-  const selectedAirport = searchParams.get('airport') || null;
-  const selectedAirline = searchParams.get('airline') || null;
-  const selectedRoute = searchParams.get('route') || null; // Format: "JFK-LAX"
-  const selectedCountry = searchParams.get('country') || null;
-  const selectedRegion = searchParams.get('region') || null;
+  // URL-driven filter state
+  const {
+    selectedYear, selectedAirport, selectedAirline, selectedRoute,
+    selectedCountry, selectedRegion, hasUrlFilters, selectedRouteAirports,
+    setSelectedYear, setSelectedAirport, setSelectedAirline, setSelectedRoute,
+    setSelectedCountry, setSelectedRegion, clearAllFilters,
+  } = useFlightsFilters();
 
   const [colorMode, setColorMode] = usePersistedState<ColorMode>('flights-color-mode', 'default');
   const [animationEnabled, setAnimationEnabled] = usePersistedState('flights-animation-enabled', true);
@@ -92,97 +92,6 @@ export function FlightsMap() {
   const [usStatesVisible, setUSStatesVisible] = usePersistedState('flights-us-states-visible', false);
   const [stateSymbolMode, setStateSymbolMode] = usePersistedState<StateSymbolMode>('flights-state-symbol-mode', 'visited');
 
-  // URL state setters
-  const setSelectedYear = useCallback((year: number | null) => {
-    setSearchParams(prev => {
-      const newParams = new URLSearchParams(prev);
-      if (year === null) {
-        newParams.delete('year');
-      } else {
-        newParams.set('year', String(year));
-      }
-      // Clear airport selection when changing year
-      newParams.delete('airport');
-      return newParams;
-    });
-  }, [setSearchParams]);
-
-  const setSelectedAirport = useCallback((airport: string | null) => {
-    setSearchParams(prev => {
-      const newParams = new URLSearchParams(prev);
-      if (airport === null) {
-        newParams.delete('airport');
-      } else {
-        newParams.set('airport', airport);
-      }
-      // Clear route selection when selecting an airport
-      newParams.delete('route');
-      return newParams;
-    });
-  }, [setSearchParams]);
-
-  const setSelectedAirline = useCallback((airline: string | null) => {
-    setSearchParams(prev => {
-      const newParams = new URLSearchParams(prev);
-      if (airline === null) {
-        newParams.delete('airline');
-      } else {
-        newParams.set('airline', airline);
-      }
-      return newParams;
-    });
-  }, [setSearchParams]);
-
-  const setSelectedRoute = useCallback((route: string | null) => {
-    setSearchParams(prev => {
-      const newParams = new URLSearchParams(prev);
-      if (route === null) {
-        newParams.delete('route');
-      } else {
-        newParams.set('route', route);
-      }
-      // Clear airport selection when selecting a route
-      newParams.delete('airport');
-      return newParams;
-    });
-  }, [setSearchParams]);
-
-  const setSelectedCountry = useCallback((country: string | null) => {
-    setSearchParams(prev => {
-      const newParams = new URLSearchParams(prev);
-      if (country === null) {
-        newParams.delete('country');
-      } else {
-        newParams.set('country', country);
-      }
-      // Clear other detail selections
-      newParams.delete('airport');
-      newParams.delete('route');
-      newParams.delete('region');
-      return newParams;
-    });
-  }, [setSearchParams]);
-
-  const setSelectedRegion = useCallback((region: string | null) => {
-    setSearchParams(prev => {
-      const newParams = new URLSearchParams(prev);
-      if (region === null) {
-        newParams.delete('region');
-      } else {
-        newParams.set('region', region);
-      }
-      // Clear other detail selections
-      newParams.delete('airport');
-      newParams.delete('route');
-      newParams.delete('country');
-      return newParams;
-    });
-  }, [setSearchParams]);
-
-  const clearAllFilters = useCallback(() => {
-    setSearchParams(new URLSearchParams());
-  }, [setSearchParams]);
-
   // Set initial view centered on USA and disable rotation initially
   useEffect(() => {
     if (globeRef.current) {
@@ -194,9 +103,6 @@ export function FlightsMap() {
       }
     }
   }, []);
-
-  // Check if any URL filters are active (don't auto-rotate if user came via direct link)
-  const hasUrlFilters = selectedYear !== null || selectedAirport !== null || selectedAirline !== null || selectedRoute !== null || selectedCountry !== null || selectedRegion !== null;
 
   // Start auto-rotation after a delay (gives user time to explore first)
   // Skip if user prefers reduced motion, has interacted, or came via filtered URL
@@ -435,148 +341,14 @@ export function FlightsMap() {
     onToggleUSStates: () => setUSStatesVisible(prev => !prev),
   });
 
-  // Parse selected route into origin/destination codes
-  const selectedRouteAirports = useMemo(() => {
-    if (!selectedRoute) return null;
-    const [origin, destination] = selectedRoute.split('-');
-    return { origin, destination };
-  }, [selectedRoute]);
-
-  // Compute selected route info for stats panel
-  const selectedRouteInfo = useMemo<SelectedRouteInfo | null>(() => {
-    if (!selectedRoute) return null;
-    const arc = staticArcsData.find(a => a.routeKey === selectedRoute);
-    if (!arc || arc.flights.length === 0) return null;
-    const first = arc.flights[0];
-    const airlines = [...new Set(arc.flights.map(f => f.airline).filter(Boolean))];
-    const years = [...new Set(arc.flights.map(f => {
-      const parts = f.date.split('/');
-      return parseInt(parts[2], 10);
-    }))].sort((a, b) => a - b);
-    const dates = arc.flights.map(f => f.date).sort((a, b) => {
-      const pa = a.split('/'); const pb = b.split('/');
-      const da = new Date(+pa[2], +pa[0] - 1, +pa[1]);
-      const db = new Date(+pb[2], +pb[0] - 1, +pb[1]);
-      return db.getTime() - da.getTime();
-    });
-    const distanceKm = Math.round(calculateDistance(first.origin_lat, first.origin_lon, first.destination_lat, first.destination_lon));
-    return {
-      routeKey: selectedRoute,
-      originCode: first.origin_code,
-      originName: first.origin_name,
-      originMunicipality: first.origin_municipality,
-      originCountry: first.origin_country,
-      originCountryName: first.origin_countryName,
-      originRegion: first.origin_region,
-      originRegionName: first.origin_regionName,
-      originContinentName: first.origin_continentName,
-      destinationCode: first.destination_code,
-      destinationName: first.destination_name,
-      destinationMunicipality: first.destination_municipality,
-      destinationCountry: first.destination_country,
-      destinationCountryName: first.destination_countryName,
-      destinationRegion: first.destination_region,
-      destinationRegionName: first.destination_regionName,
-      destinationContinentName: first.destination_continentName,
-      totalFlights: arc.routeCount,
-      airlines,
-      years,
-      dates,
-      distanceKm,
-      isInternational: first.origin_country !== first.destination_country,
-      isIntercontinental: first.origin_continent !== first.destination_continent,
-    };
-  }, [selectedRoute, staticArcsData]);
-
-  // Compute selected country info for stats panel
-  const selectedCountryInfo = useMemo<SelectedCountryInfo | null>(() => {
-    if (!selectedCountry) return null;
-    const countryPoints = pointsData.filter(p => p.airport.country === selectedCountry);
-    if (countryPoints.length === 0) return null;
-    const first = countryPoints[0].airport;
-    // Gather flights touching this country
-    const countryFlights = staticArcsData.flatMap(arc =>
-      arc.flights.filter(f => f.origin_country === selectedCountry || f.destination_country === selectedCountry)
-    );
-    const airlines = [...new Set(countryFlights.map(f => f.airline).filter(Boolean))];
-    const years = [...new Set(countryFlights.map(f => parseInt(f.date.split('/')[2], 10)))].sort((a, b) => a - b);
-    // Top routes
-    const routeCounts = new Map<string, { origin: string; destination: string; count: number }>();
-    countryFlights.forEach(f => {
-      const key = [f.origin_code, f.destination_code].sort().join('-');
-      const existing = routeCounts.get(key);
-      if (existing) { existing.count++; } else {
-        routeCounts.set(key, { origin: f.origin_code, destination: f.destination_code, count: 1 });
-      }
-    });
-    const topRoutes = [...routeCounts.values()].sort((a, b) => b.count - a.count).slice(0, 5);
-    // Connected countries
-    const connCountries = new Map<string, { code: string; name: string; count: number }>();
-    countryFlights.forEach(f => {
-      const otherCode = f.origin_country === selectedCountry ? f.destination_country : f.origin_country;
-      const otherName = f.origin_country === selectedCountry ? f.destination_countryName : f.origin_countryName;
-      if (otherCode === selectedCountry) return;
-      const existing = connCountries.get(otherCode);
-      if (existing) { existing.count++; } else {
-        connCountries.set(otherCode, { code: otherCode, name: otherName, count: 1 });
-      }
-    });
-    const departures = countryFlights.filter(f => f.origin_country === selectedCountry).length;
-    const arrivals = countryFlights.filter(f => f.destination_country === selectedCountry).length;
-    return {
-      code: selectedCountry,
-      name: first.countryName,
-      continent: first.continent,
-      continentName: first.continentName,
-      totalFlights: countryFlights.length,
-      departures,
-      arrivals,
-      airports: countryPoints.map(p => ({ code: p.airport.code, name: p.airport.name, visitCount: p.airport.visitCount }))
-        .sort((a, b) => b.visitCount - a.visitCount),
-      airlines,
-      years,
-      topRoutes,
-      connectedCountries: [...connCountries.values()].sort((a, b) => b.count - a.count).slice(0, 10),
-    };
-  }, [selectedCountry, pointsData, staticArcsData]);
-
-  // Compute selected region info for stats panel
-  const selectedRegionInfo = useMemo<SelectedRegionInfo | null>(() => {
-    if (!selectedRegion) return null;
-    const regionPoints = pointsData.filter(p => p.airport.region === selectedRegion);
-    if (regionPoints.length === 0) return null;
-    const first = regionPoints[0].airport;
-    const regionFlights = staticArcsData.flatMap(arc =>
-      arc.flights.filter(f => f.origin_region === selectedRegion || f.destination_region === selectedRegion)
-    );
-    const airlines = [...new Set(regionFlights.map(f => f.airline).filter(Boolean))];
-    const years = [...new Set(regionFlights.map(f => parseInt(f.date.split('/')[2], 10)))].sort((a, b) => a - b);
-    const routeCounts = new Map<string, { origin: string; destination: string; count: number }>();
-    regionFlights.forEach(f => {
-      const key = [f.origin_code, f.destination_code].sort().join('-');
-      const existing = routeCounts.get(key);
-      if (existing) { existing.count++; } else {
-        routeCounts.set(key, { origin: f.origin_code, destination: f.destination_code, count: 1 });
-      }
-    });
-    const topRoutes = [...routeCounts.values()].sort((a, b) => b.count - a.count).slice(0, 5);
-    const departures = regionFlights.filter(f => f.origin_region === selectedRegion).length;
-    const arrivals = regionFlights.filter(f => f.destination_region === selectedRegion).length;
-    return {
-      code: selectedRegion,
-      name: first.regionName,
-      country: first.country,
-      countryName: first.countryName,
-      totalFlights: regionFlights.length,
-      departures,
-      arrivals,
-      airports: regionPoints.map(p => ({ code: p.airport.code, name: p.airport.name, visitCount: p.airport.visitCount }))
-        .sort((a, b) => b.visitCount - a.visitCount),
-      airlines,
-      years,
-      topRoutes,
-    };
-  }, [selectedRegion, pointsData, staticArcsData]);
+  // Derived selection info for stats panel
+  const { selectedRouteInfo, selectedCountryInfo, selectedRegionInfo } = useSelectionInfo({
+    selectedRoute,
+    selectedCountry,
+    selectedRegion,
+    staticArcsData,
+    pointsData,
+  });
 
   // Combine static arcs and animated arcs (keep stable - don't depend on selection state)
   const combinedArcsData = useMemo(() => {
@@ -758,8 +530,30 @@ export function FlightsMap() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-full bg-gray-900 text-red-400">
-        Error loading flight data: {error.message}
+      <div className="flex items-center justify-center h-full bg-gray-900">
+        <div className="bg-gray-800 border border-gray-700 rounded-xl p-8 max-w-md mx-4 text-center">
+          <div className="text-4xl mb-4">🌍</div>
+          <h2 className="text-white font-semibold text-lg mb-2">
+            Unable to load flight data
+          </h2>
+          <p className="text-gray-400 text-sm mb-4">
+            There was a problem fetching the flight data. Check your connection and try again.
+          </p>
+          <details className="text-left mb-4">
+            <summary className="text-gray-500 text-xs cursor-pointer hover:text-gray-400">
+              Technical details
+            </summary>
+            <pre className="mt-2 p-2 bg-gray-900 rounded text-red-400 text-xs overflow-auto max-h-24">
+              {error.message}
+            </pre>
+          </details>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-sm rounded-lg transition-colors"
+          >
+            Reload Page
+          </button>
+        </div>
       </div>
     );
   }

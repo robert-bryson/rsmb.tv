@@ -1,8 +1,9 @@
 /**
  * Blog post metadata and registry.
  *
- * Each MDX file in content/blog/ exports `frontmatter` via remark-mdx-frontmatter.
- * This module provides a typed registry so pages can list / look up posts.
+ * Post metadata lives in posts.json (the single source of truth shared by
+ * build scripts like generate-rss.js and generate-sitemap.js).
+ * This module adds the lazily-loaded MDX component for each post.
  */
 
 export interface BlogPostMeta {
@@ -21,22 +22,28 @@ export interface BlogPost extends BlogPostMeta {
 // ── Post registry ──────────────────────────────────────────────────
 // To add a new post:
 //   1. Create src/content/blog/<slug>.mdx with YAML frontmatter
-//   2. Add an entry here with matching slug + metadata
-//   3. The MDX file is lazy-loaded automatically
+//   2. Add an entry to posts.json with matching slug + metadata
+//   MDX components are auto-discovered via import.meta.glob
 
 import { lazy } from 'react';
+import postsMeta from './posts.json';
 
-const posts: BlogPost[] = [
-    {
-        slug: 'hello-world',
-        title: 'Hello World',
-        date: '2025-01-01',
-        description:
-            'Welcome to my blog — a space for writing about projects, engineering, and things I find interesting.',
-        tags: ['meta'],
-        Component: lazy(() => import('./blog/hello-world.mdx')),
-    },
-];
+// Auto-discover MDX files — no manual mapping needed
+const mdxModules = import.meta.glob<{ default: React.ComponentType }>('./blog/*.mdx');
+
+function lazyComponent(slug: string): React.LazyExoticComponent<React.ComponentType> {
+    const path = `./blog/${slug}.mdx`;
+    const loader = mdxModules[path];
+    if (!loader) {
+        return lazy(() => Promise.reject(new Error(`No MDX file found for slug: ${slug}`)));
+    }
+    return lazy(() => loader().then((mod) => ({ default: mod.default })));
+}
+
+const posts: BlogPost[] = postsMeta.map((meta) => ({
+    ...meta,
+    Component: lazyComponent(meta.slug),
+}));
 
 // Sort newest-first
 posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());

@@ -15,29 +15,14 @@ const SITE_TITLE = 'rsmb';
 const SITE_DESCRIPTION = 'Personal site and blog by Robert Bryson — projects, engineering, and things I find interesting.';
 
 /**
- * Read the post registry from src/content/posts.ts and extract metadata.
- * We parse the file as text instead of importing to avoid needing tsx/ts-node.
+ * Load post metadata from the shared JSON registry.
  */
-function extractPosts() {
-    const postsFile = fs.readFileSync(
-        path.join(__dirname, '../src/content/posts.ts'),
+function loadPosts() {
+    const raw = fs.readFileSync(
+        path.join(__dirname, '../src/content/posts.json'),
         'utf-8'
     );
-
-    // Match post object literals in the array
-    const postRegex = /\{\s*slug:\s*'([^']+)',\s*title:\s*'([^']+)',\s*date:\s*'([^']+)',\s*description:\s*\n?\s*'([^']+)'/g;
-    const posts = [];
-    let match;
-
-    while ((match = postRegex.exec(postsFile)) !== null) {
-        posts.push({
-            slug: match[1],
-            title: match[2],
-            date: match[3],
-            description: match[4],
-        });
-    }
-
+    const posts = JSON.parse(raw);
     // Sort newest first
     posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     return posts;
@@ -53,7 +38,7 @@ function escapeXml(str) {
 }
 
 function generateRss() {
-    const posts = extractPosts();
+    const posts = loadPosts();
 
     const items = posts
         .map(

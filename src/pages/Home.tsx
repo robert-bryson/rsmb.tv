@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { featuredProjects } from '../content/projects';
 import { useDocumentHead } from '../hooks/useDocumentHead';
+import { useJsonLd } from '../hooks/useJsonLd';
 
 function isExternalUrl(url: string): boolean {
   return url.startsWith('http://') || url.startsWith('https://');
@@ -12,18 +13,28 @@ export function Home() {
     description: 'Personal site and portfolio of Robby Bryson — interactive data visualizations, geospatial projects, and web tools.',
   });
 
+  useJsonLd({
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'rsmb',
+    url: 'https://rsmb.tv',
+    author: {
+      '@type': 'Person',
+      name: 'Robby Bryson',
+      url: 'https://rsmb.tv',
+    },
+  });
+
   return (
     <div className="space-y-12">
       {/* Intro */}
       <section>
         <h1 className="text-2xl font-semibold text-zinc-100 mb-4">
-          Hey, I'm Robby
+          Hi, I'm Robby
         </h1>
         <div className="prose">
           <p>
-            I'm a developer who likes building interactive things on the web.
-            I'm particularly interested in data visualization, maps, and
-            tools that help people explore information in new ways.
+            I'm a developer who likes building maps and apps and interactive ways to see the world.
           </p>
         </div>
       </section>

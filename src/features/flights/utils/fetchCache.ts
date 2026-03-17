@@ -14,6 +14,8 @@ const pendingRequests = new Map<string, Promise<unknown>>();
 
 // Default cache TTL: 5 minutes
 const DEFAULT_TTL_MS = 5 * 60 * 1000;
+// Default request timeout: 30 seconds
+const DEFAULT_TIMEOUT_MS = 30 * 1000;
 
 /**
  * Fetch data with caching and in-flight deduplication.
@@ -30,9 +32,10 @@ export async function fetchWithCache<T>(
     options: {
         ttl?: number;
         forceRefresh?: boolean;
+        timeout?: number;
     } = {}
 ): Promise<T> {
-    const { ttl = DEFAULT_TTL_MS, forceRefresh = false } = options;
+    const { ttl = DEFAULT_TTL_MS, forceRefresh = false, timeout = DEFAULT_TIMEOUT_MS } = options;
 
     // Check cache first
     if (!forceRefresh) {
@@ -49,8 +52,10 @@ export async function fetchWithCache<T>(
 
     // Create the fetch promise and track it
     const fetchPromise = (async () => {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
         try {
-            const response = await fetch(url);
+            const response = await fetch(url, { signal: controller.signal });
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
@@ -65,6 +70,7 @@ export async function fetchWithCache<T>(
 
             return data as T;
         } finally {
+            clearTimeout(timeoutId);
             // Remove from pending regardless of success/failure
             pendingRequests.delete(url);
         }

@@ -43,6 +43,17 @@ const airports = parse(airportsRaw, {
   skip_empty_lines: true
 })
 
+// Validate airport CSV columns
+const requiredAirportCols = ['iata_code', 'name', 'municipality', 'iso_region', 'iso_country', 'continent', 'latitude_deg', 'longitude_deg', 'elevation_ft']
+if (airports.length > 0) {
+  const cols = Object.keys(airports[0])
+  const missingAirportCols = requiredAirportCols.filter(c => !cols.includes(c))
+  if (missingAirportCols.length > 0) {
+    console.error(`❌ airports.csv is missing required columns: ${missingAirportCols.join(', ')}`)
+    process.exit(1)
+  }
+}
+
 const airportMap = {}
 airports.forEach((a) => {
   const elevFt = parseFloat(a.elevation_ft) || 0
@@ -66,6 +77,17 @@ const flights = parse(flightsRaw, {
   columns: true,
   skip_empty_lines: true,
 })
+
+// Validate flight CSV columns
+const requiredFlightCols = ['date', 'airline', 'origin', 'destination']
+if (flights.length > 0) {
+  const cols = Object.keys(flights[0])
+  const missingFlightCols = requiredFlightCols.filter(c => !cols.includes(c))
+  if (missingFlightCols.length > 0) {
+    console.error(`❌ flights.csv is missing required columns: ${missingFlightCols.join(', ')}`)
+    process.exit(1)
+  }
+}
 
 const visitedAirports = {}
 const stats = {

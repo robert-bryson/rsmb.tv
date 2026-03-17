@@ -13,8 +13,13 @@ const basename = import.meta.env.BASE_URL;
 
 function LoadingFallback() {
   return (
-    <div className="flex items-center justify-center p-8">
-      <div className="text-zinc-500">Loading...</div>
+    <div className="animate-pulse space-y-4 p-8">
+      <div className="h-6 w-48 bg-zinc-800 rounded" />
+      <div className="space-y-2">
+        <div className="h-4 w-full bg-zinc-800/60 rounded" />
+        <div className="h-4 w-5/6 bg-zinc-800/60 rounded" />
+        <div className="h-4 w-4/6 bg-zinc-800/60 rounded" />
+      </div>
     </div>
   );
 }

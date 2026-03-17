@@ -88,6 +88,12 @@ export function Layout({ children }: LayoutProps) {
             >
               LinkedIn
             </a>
+            <a href="/rss.xml" className="hover:text-zinc-300">
+              RSS
+            </a>
+            <a href="/sitemap.xml" className="hover:text-zinc-300">
+              Sitemap
+            </a>
           </div>
         </div>
       </footer>

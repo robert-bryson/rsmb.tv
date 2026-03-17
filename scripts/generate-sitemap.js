@@ -23,30 +23,18 @@ const STATIC_ROUTES = [
 ];
 
 /**
- * Extract blog posts from the registry (same approach as generate-rss.js).
+ * Load post metadata from the shared JSON registry.
  */
-function extractPosts() {
-    const postsFile = fs.readFileSync(
-        path.join(__dirname, '../src/content/posts.ts'),
+function loadPosts() {
+    const raw = fs.readFileSync(
+        path.join(__dirname, '../src/content/posts.json'),
         'utf-8'
     );
-
-    const postRegex = /\{\s*slug:\s*'([^']+)',\s*title:\s*'([^']+)',\s*date:\s*'([^']+)',\s*description:\s*\n?\s*'([^']+)'/g;
-    const posts = [];
-    let match;
-
-    while ((match = postRegex.exec(postsFile)) !== null) {
-        posts.push({
-            slug: match[1],
-            date: match[3],
-        });
-    }
-
-    return posts;
+    return JSON.parse(raw);
 }
 
 function generateSitemap() {
-    const posts = extractPosts();
+    const posts = loadPosts();
     const today = new Date().toISOString().split('T')[0];
 
     const staticUrls = STATIC_ROUTES.map(
