@@ -45,6 +45,7 @@ export const projects: Project[] = [
     description: 'A personal book-tracking app to log reads, organize books into lists, and explore reading stats. Integrates with Google Books, Open Library, and Wikidata for enrichment—covers, descriptions, author links, and more.',
     tech: ['Next.js', 'TypeScript', 'Prisma', 'PostgreSQL', 'Tailwind CSS', 'Docker'],
     featured: true,
+    demoUrl: '/projects/bookend',
     sourceUrl: 'https://github.com/robert-bryson/bookend',
     year: 2026,
   },
