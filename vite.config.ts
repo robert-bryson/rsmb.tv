@@ -21,6 +21,7 @@ export default defineConfig({
         manualChunks(id) {
           if (id.includes('node_modules/three/')) return 'three'
           if (id.includes('node_modules/three-globe/') || id.includes('node_modules/react-globe.gl/')) return 'three-globe'
+          if (id.includes('node_modules/maplibre-gl/')) return 'maplibre-gl'
         },
       },
     },

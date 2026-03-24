@@ -50,6 +50,15 @@ export const projects: Project[] = [
     year: 2026,
   },
   {
+    slug: 'temperature-records',
+    title: 'US Temperature Records',
+    description: 'Interactive map of all-time record high and low temperatures across US states and counties, powered by NOAA and ACIS data. Includes a summary panel of recent temperature extremes.',
+    tech: ['React', 'MapLibre GL', 'NOAA ACIS', 'GeoJSON'],
+    featured: true,
+    demoUrl: '/projects/temperature-records',
+    year: 2025,
+  },
+  {
     slug: 'route2gpx',
     title: 'route2gpx',
     description: 'Convert Google Routes into GPX files for GPS devices and bike computers. A privacy-focused web app that runs entirely in your browser—your routes never touch a server.',

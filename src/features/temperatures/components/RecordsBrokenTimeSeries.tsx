@@ -1,0 +1,158 @@
+import { useState } from 'react';
+import type { YearData } from '../types';
+import { HIGH_TEMP_COLOR, LOW_TEMP_COLOR } from '../constants';
+
+interface Props {
+    data: YearData[];
+}
+
+/**
+ * Area chart overlaying record highs set per year (red) vs record lows set per year (blue).
+ * Shows how frequency of record-setting has changed over time.
+ */
+export function RecordsBrokenTimeSeries({ data }: Props) {
+    const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+
+    // Compute 5-year rolling averages for smoother visualization
+    const rolling = data.map((d, i) => {
+        const windowSize = 5;
+        const start = Math.max(0, i - windowSize + 1);
+        const window = data.slice(start, i + 1);
+        return {
+            year: d.year,
+            highs: d.highs,
+            lows: d.lows,
+            highsAvg: window.reduce((s, w) => s + w.highs, 0) / window.length,
+            lowsAvg: window.reduce((s, w) => s + w.lows, 0) / window.length,
+        };
+    });
+
+    const filtered = rolling.filter(d => d.year >= 1900);
+    const maxAvg = Math.max(...filtered.flatMap(d => [d.highsAvg, d.lowsAvg]), 1);
+
+    const padding = { top: 20, right: 20, bottom: 30, left: 36 };
+    const width = 700;
+    const height = 260;
+    const plotW = width - padding.left - padding.right;
+    const plotH = height - padding.top - padding.bottom;
+
+    const xScale = (year: number) => padding.left + ((year - filtered[0].year) / (filtered[filtered.length - 1].year - filtered[0].year)) * plotW;
+    const yScale = (val: number) => padding.top + plotH - (val / maxAvg) * plotH;
+
+    const buildPath = (key: 'highsAvg' | 'lowsAvg') => {
+        return filtered
+            .map((d, i) => `${i === 0 ? 'M' : 'L'}${xScale(d.year).toFixed(1)},${yScale(d[key]).toFixed(1)}`)
+            .join(' ');
+    };
+
+    const buildAreaPath = (key: 'highsAvg' | 'lowsAvg') => {
+        const line = filtered.map(d => `${xScale(d.year).toFixed(1)},${yScale(d[key]).toFixed(1)}`);
+        const baseline = `${xScale(filtered[filtered.length - 1].year).toFixed(1)},${yScale(0).toFixed(1)} ${xScale(filtered[0].year).toFixed(1)},${yScale(0).toFixed(1)}`;
+        return `M${line.join(' L')} L${baseline} Z`;
+    };
+
+    // Year ticks
+    const yearTicks = filtered.filter(d => d.year % 20 === 0);
+
+    // Y-axis ticks
+    const yTicks = Array.from({ length: 5 }, (_, i) => Math.round((maxAvg / 4) * i));
+
+    const hoveredData = hoveredIdx !== null ? filtered[hoveredIdx] : null;
+
+    return (
+        <div>
+            <h3 className="text-sm font-semibold text-zinc-200 mb-1">Record-Setting Frequency Over Time</h3>
+            <p className="text-xs text-zinc-500 mb-4">
+                How many county all-time records were set each year (5-year rolling average).
+                In a stable climate, both lines should decline equally as records become harder to break.
+            </p>
+            <div className="overflow-x-auto">
+                <svg
+                    viewBox={`0 0 ${width} ${height}`}
+                    className="w-full min-w-[500px]"
+                    role="img"
+                    aria-label="Records broken per year time series"
+                    onMouseLeave={() => setHoveredIdx(null)}
+                >
+                    {/* Grid lines */}
+                    {yTicks.map(v => (
+                        <g key={v}>
+                            <line
+                                x1={padding.left} y1={yScale(v)} x2={width - padding.right} y2={yScale(v)}
+                                stroke="#27272a" strokeWidth={1}
+                            />
+                            <text x={padding.left - 4} y={yScale(v) + 3} fill="#71717a" fontSize={9} textAnchor="end">
+                                {v}
+                            </text>
+                        </g>
+                    ))}
+
+                    {/* X-axis ticks */}
+                    {yearTicks.map(d => (
+                        <text key={d.year} x={xScale(d.year)} y={height - 4} fill="#71717a" fontSize={9} textAnchor="middle">
+                            {d.year}
+                        </text>
+                    ))}
+
+                    {/* Area fills */}
+                    <path d={buildAreaPath('highsAvg')} fill={HIGH_TEMP_COLOR} opacity={0.12} />
+                    <path d={buildAreaPath('lowsAvg')} fill={LOW_TEMP_COLOR} opacity={0.12} />
+
+                    {/* Lines */}
+                    <path d={buildPath('highsAvg')} fill="none" stroke={HIGH_TEMP_COLOR} strokeWidth={2} opacity={0.9} />
+                    <path d={buildPath('lowsAvg')} fill="none" stroke={LOW_TEMP_COLOR} strokeWidth={2} opacity={0.9} />
+
+                    {/* Hover interaction */}
+                    {filtered.map((d, i) => (
+                        <rect
+                            key={d.year}
+                            x={xScale(d.year) - plotW / filtered.length / 2}
+                            y={padding.top}
+                            width={plotW / filtered.length}
+                            height={plotH}
+                            fill="transparent"
+                            onMouseEnter={() => setHoveredIdx(i)}
+                        />
+                    ))}
+
+                    {/* Hover indicator */}
+                    {hoveredData && (
+                        <>
+                            <line
+                                x1={xScale(hoveredData.year)} y1={padding.top}
+                                x2={xScale(hoveredData.year)} y2={padding.top + plotH}
+                                stroke="#71717a" strokeWidth={1} strokeDasharray="3,3"
+                            />
+                            <circle cx={xScale(hoveredData.year)} cy={yScale(hoveredData.highsAvg)} r={4}
+                                fill={HIGH_TEMP_COLOR} stroke="#18181b" strokeWidth={2} />
+                            <circle cx={xScale(hoveredData.year)} cy={yScale(hoveredData.lowsAvg)} r={4}
+                                fill={LOW_TEMP_COLOR} stroke="#18181b" strokeWidth={2} />
+                        </>
+                    )}
+
+                    {/* Legend */}
+                    <line x1={width - 150} y1={12} x2={width - 134} y2={12} stroke={HIGH_TEMP_COLOR} strokeWidth={2} />
+                    <text x={width - 130} y={15} fill="#fca5a5" fontSize={10}>Record Highs</text>
+                    <line x1={width - 150} y1={26} x2={width - 134} y2={26} stroke={LOW_TEMP_COLOR} strokeWidth={2} />
+                    <text x={width - 130} y={29} fill="#93c5fd" fontSize={10}>Record Lows</text>
+                </svg>
+            </div>
+            {/* Tooltip */}
+            {hoveredData && (
+                <div className="text-xs text-zinc-400 mt-1">
+                    <span className="text-zinc-200 font-medium">{hoveredData.year}</span>
+                    {' — '}
+                    <span style={{ color: '#fca5a5' }}>{hoveredData.highs} highs</span>
+                    {', '}
+                    <span style={{ color: '#93c5fd' }}>{hoveredData.lows} lows</span>
+                    <span className="text-zinc-500">
+                        {' '}(5yr avg: {hoveredData.highsAvg.toFixed(1)}h / {hoveredData.lowsAvg.toFixed(1)}l)
+                    </span>
+                </div>
+            )}
+            <p className="text-[10px] text-zinc-600 mt-2">
+                Since ~1990, new record lows have nearly vanished while record highs continue to be set — a hallmark of warming.
+            </p>
+        </div>
+    );
+}

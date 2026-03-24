@@ -11,6 +11,7 @@
     "build-sitemap": "node scripts/generate-sitemap.js",
     "generate-mappings": "node projects/flights/scripts/generateNameMappings.js",
     "sync-flights": "node scripts/sync-flights.js",
+    "sync-temperatures": "node scripts/sync-temperatures.js",
     "aws-status": "bash scripts/aws-status.sh",
     "lint": "eslint .",
     "bundle-report": "node scripts/bundle-report.js",
@@ -21,6 +22,7 @@
   },
   "dependencies": {
     "@mdx-js/react": "^3.1.1",
+    "maplibre-gl": "^5.21.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-globe.gl": "^2.37.0",

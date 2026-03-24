@@ -14,10 +14,10 @@ const navLinks = [
 
 export function Layout({ children }: LayoutProps) {
   const location = useLocation();
-  const isFlightsPage = location.pathname === '/projects/flights';
+  const isFullScreenPage = location.pathname === '/projects/flights' || location.pathname === '/projects/temperature-records';
 
-  // Full screen mode for flights page
-  if (isFlightsPage) {
+  // Full screen mode for map pages
+  if (isFullScreenPage) {
     return (
       <div className="h-dvh w-screen overflow-hidden bg-[#000011]">
         {children}

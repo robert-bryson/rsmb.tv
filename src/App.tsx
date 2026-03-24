@@ -9,6 +9,8 @@ const AnkiArtisan = lazy(() => import('./pages/AnkiArtisan'));
 const Bookend = lazy(() => import('./pages/Bookend'));
 const Blog = lazy(() => import('./pages/Blog'));
 const BlogPost = lazy(() => import('./pages/BlogPost'));
+const TemperatureRecords = lazy(() => import('./pages/TemperatureRecords'));
+const ClimateTrendsPage = lazy(() => import('./pages/ClimateTrends'));
 
 const basename = import.meta.env.BASE_URL;
 
@@ -40,6 +42,8 @@ export default function App() {
               <Route path="/projects/flights" element={<Flights />} />
               <Route path="/projects/anki-artisan" element={<AnkiArtisan />} />
               <Route path="/projects/bookend" element={<Bookend />} />
+              <Route path="/projects/temperature-records" element={<TemperatureRecords />} />
+              <Route path="/projects/temperature-records/trends" element={<ClimateTrendsPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
