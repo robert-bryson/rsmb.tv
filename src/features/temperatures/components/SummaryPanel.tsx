@@ -50,14 +50,71 @@ export function SummaryPanel({ viewMode, recentRecords, countyRecords, freshness
     return <RecordsPanel recentRecords={recentRecords} useCelsius={useCelsius} onFlyTo={onFlyTo} />;
 }
 
-/* ---------- Records mode panel (unchanged behavior) ---------- */
+/* ---------- Records mode panel ---------- */
+
+type RecordSort = 'temp' | 'margin' | 'departure';
+
+const RECORD_SORT_LABELS: Record<RecordSort, string> = {
+    temp: 'Temp',
+    margin: 'Margin',
+    departure: 'vs Normal',
+};
+const RECORD_SORT_OPTIONS: RecordSort[] = ['temp', 'margin', 'departure'];
+const PAGE_SIZE = 100;
+
+function getMargin(r: BrokenRecord): number {
+    return r.type === 'high' ? r.tempF - r.prevRecordF : r.prevRecordF - r.tempF;
+}
+
+function getDeparture(r: BrokenRecord): number {
+    if (r.normalF == null) return 0;
+    return r.type === 'high' ? r.tempF - r.normalF : r.normalF - r.tempF;
+}
+
+function sortRecords(records: BrokenRecord[], sort: RecordSort): BrokenRecord[] {
+    const copy = [...records];
+    switch (sort) {
+        case 'temp':
+            return copy.sort((a, b) =>
+                a.type === 'high' ? b.tempF - a.tempF : a.tempF - b.tempF
+            );
+        case 'margin':
+            return copy.sort((a, b) => getMargin(b) - getMargin(a));
+        case 'departure':
+            return copy.sort((a, b) => getDeparture(b) - getDeparture(a));
+    }
+}
 
 function RecordsPanel({ recentRecords, useCelsius, onFlyTo }: { recentRecords: RecentRecords; useCelsius: boolean; onFlyTo?: (lng: number, lat: number) => void }) {
     const [activePeriod, setActivePeriod] = useState<TimePeriod>('yesterday');
+    const [sort, setSort] = useState<RecordSort>('temp');
+    const [highsVisible, setHighsVisible] = useState(PAGE_SIZE);
+    const [lowsVisible, setLowsVisible] = useState(PAGE_SIZE);
 
-    const records = recentRecords[activePeriod] || [];
-    const highs = records.filter((r: BrokenRecord) => r.type === 'high').sort((a, b) => b.tempF - a.tempF);
-    const lows = records.filter((r: BrokenRecord) => r.type === 'low').sort((a, b) => a.tempF - b.tempF);
+    // Reset pagination when switching tabs or sort
+    const handlePeriodChange = (period: TimePeriod) => {
+        setActivePeriod(period);
+        setHighsVisible(PAGE_SIZE);
+        setLowsVisible(PAGE_SIZE);
+    };
+    const handleSortChange = (s: RecordSort) => {
+        setSort(s);
+        setHighsVisible(PAGE_SIZE);
+        setLowsVisible(PAGE_SIZE);
+    };
+
+    const records = useMemo(
+        () => recentRecords[activePeriod] || [],
+        [recentRecords, activePeriod]
+    );
+    const highs = useMemo(
+        () => sortRecords(records.filter((r: BrokenRecord) => r.type === 'high'), sort),
+        [records, sort]
+    );
+    const lows = useMemo(
+        () => sortRecords(records.filter((r: BrokenRecord) => r.type === 'low'), sort),
+        [records, sort]
+    );
 
     const handleRowClick = (record: BrokenRecord) => {
         if (onFlyTo) onFlyTo(record.lon, record.lat);
@@ -70,7 +127,7 @@ function RecordsPanel({ recentRecords, useCelsius, onFlyTo }: { recentRecords: R
                 {TIME_PERIODS.map(period => (
                     <button
                         key={period}
-                        onClick={() => setActivePeriod(period)}
+                        onClick={() => handlePeriodChange(period)}
                         className={`flex-1 min-w-0 px-3 py-2 text-xs whitespace-nowrap transition-colors ${activePeriod === period
                             ? 'text-violet-400 border-b-2 border-violet-400'
                             : 'text-zinc-400 hover:text-zinc-200'
@@ -87,6 +144,23 @@ function RecordsPanel({ recentRecords, useCelsius, onFlyTo }: { recentRecords: R
                 <span style={{ color: LOW_TEMP_COLOR }}>❄️ {lows.length} record low{lows.length !== 1 ? 's' : ''}</span>
             </div>
 
+            {/* Sort bar */}
+            <div className="px-3 py-2 border-b border-zinc-800 flex items-center gap-2 text-xs shrink-0">
+                <span className="text-zinc-500">Sort:</span>
+                {RECORD_SORT_OPTIONS.map(opt => (
+                    <button
+                        key={opt}
+                        onClick={() => handleSortChange(opt)}
+                        className={`px-2 py-0.5 rounded transition-colors ${sort === opt
+                            ? 'bg-zinc-700 text-zinc-100'
+                            : 'text-zinc-400 hover:text-zinc-200'
+                            }`}
+                    >
+                        {RECORD_SORT_LABELS[opt]}
+                    </button>
+                ))}
+            </div>
+
             {/* Content */}
             <div className="overflow-y-auto flex-1 p-3 space-y-4">
                 {records.length === 0 ? (
@@ -101,10 +175,18 @@ function RecordsPanel({ recentRecords, useCelsius, onFlyTo }: { recentRecords: R
                                     Record Highs Broken
                                 </h3>
                                 <ol className="space-y-0.5">
-                                    {highs.map((r, i) => (
-                                        <RecordRow key={`high-${r.uid}-${r.date}`} record={r} rank={i + 1} useCelsius={useCelsius} onClick={handleRowClick} />
+                                    {highs.slice(0, highsVisible).map((r, i) => (
+                                        <RecordRow key={`high-${r.uid}-${r.date}`} record={r} rank={i + 1} sort={sort} useCelsius={useCelsius} onClick={handleRowClick} />
                                     ))}
                                 </ol>
+                                {highs.length > highsVisible && (
+                                    <button
+                                        onClick={() => setHighsVisible(v => v + PAGE_SIZE)}
+                                        className="w-full mt-2 py-1.5 text-xs text-violet-400 hover:text-violet-300 hover:bg-zinc-800/50 rounded transition-colors"
+                                    >
+                                        Show more ({(highs.length - highsVisible).toLocaleString()} remaining)
+                                    </button>
+                                )}
                             </div>
                         )}
 
@@ -114,10 +196,18 @@ function RecordsPanel({ recentRecords, useCelsius, onFlyTo }: { recentRecords: R
                                     Record Lows Broken
                                 </h3>
                                 <ol className="space-y-0.5">
-                                    {lows.map((r, i) => (
-                                        <RecordRow key={`low-${r.uid}-${r.date}`} record={r} rank={i + 1} useCelsius={useCelsius} onClick={handleRowClick} />
+                                    {lows.slice(0, lowsVisible).map((r, i) => (
+                                        <RecordRow key={`low-${r.uid}-${r.date}`} record={r} rank={i + 1} sort={sort} useCelsius={useCelsius} onClick={handleRowClick} />
                                     ))}
                                 </ol>
+                                {lows.length > lowsVisible && (
+                                    <button
+                                        onClick={() => setLowsVisible(v => v + PAGE_SIZE)}
+                                        className="w-full mt-2 py-1.5 text-xs text-violet-400 hover:text-violet-300 hover:bg-zinc-800/50 rounded transition-colors"
+                                    >
+                                        Show more ({(lows.length - lowsVisible).toLocaleString()} remaining)
+                                    </button>
+                                )}
                             </div>
                         )}
                     </>
@@ -260,12 +350,47 @@ function FreshnessRowItem({ row, rank, useCelsius, onFlyTo }: { row: FreshnessRo
 
 /* ---------- Broken records row (unchanged) ---------- */
 
-function RecordRow({ record, rank, useCelsius, onClick }: { record: BrokenRecord; rank: number; useCelsius: boolean; onClick: (r: BrokenRecord) => void }) {
+function RecordRow({ record, rank, sort, useCelsius, onClick }: { record: BrokenRecord; rank: number; sort: RecordSort; useCelsius: boolean; onClick: (r: BrokenRecord) => void }) {
     const color = record.type === 'high' ? HIGH_TEMP_COLOR : LOW_TEMP_COLOR;
-    const margin = record.type === 'high'
-        ? record.tempF - record.prevRecordF
-        : record.prevRecordF - record.tempF;
+    const margin = getMargin(record);
+    const departure = getDeparture(record);
     const arrow = record.type === 'high' ? '↑' : '↓';
+
+    const formatMargin = (val: number) =>
+        useCelsius ? (val * 5 / 9).toFixed(1) : val.toFixed(1);
+
+    // Secondary info line changes based on sort mode
+    const secondaryInfo = (() => {
+        switch (sort) {
+            case 'temp':
+                return (
+                    <span style={{ color: color + '99' }}>
+                        {arrow}{formatMargin(margin)}° vs prev {formatTemp(record.prevRecordF, useCelsius)} ({record.prevRecordDate.slice(0, 4)})
+                    </span>
+                );
+            case 'margin':
+                return (
+                    <span style={{ color: color + '99' }}>
+                        {arrow}{formatMargin(margin)}° — prev {formatTemp(record.prevRecordF, useCelsius)} ({record.prevRecordDate.slice(0, 4)})
+                    </span>
+                );
+            case 'departure':
+                return record.normalF != null ? (
+                    <span style={{ color: color + '99' }}>
+                        {arrow}{formatMargin(departure)}° from normal {formatTemp(record.normalF, useCelsius)}
+                    </span>
+                ) : (
+                    <span className="text-zinc-600">normal unavailable</span>
+                );
+        }
+    })();
+
+    // Bold metric shown next to temp when sort != 'temp'
+    const sortBadge = sort === 'margin'
+        ? <span className="text-[10px] tabular-nums" style={{ color: color + 'cc' }}>+{formatMargin(margin)}°</span>
+        : sort === 'departure' && record.normalF != null
+            ? <span className="text-[10px] tabular-nums" style={{ color: color + 'cc' }}>+{formatMargin(departure)}°</span>
+            : null;
 
     return (
         <li>
@@ -277,13 +402,14 @@ function RecordRow({ record, rank, useCelsius, onClick }: { record: BrokenRecord
                 <div className="flex items-baseline gap-2 text-xs">
                     <span className="text-zinc-600 w-4 text-right shrink-0">{rank}.</span>
                     <span className="font-semibold tabular-nums shrink-0" style={{ color }}>{formatTemp(record.tempF, useCelsius)}</span>
+                    {sortBadge}
                     <span className="text-zinc-300 truncate group-hover:text-white">{record.stationName}</span>
                     <span className="text-zinc-600 ml-auto shrink-0">{formatShortDate(record.date)}</span>
                 </div>
                 <div className="flex items-baseline gap-2 text-[10px] text-zinc-500 ml-6">
                     <span>{record.stateName}</span>
-                    <span className="ml-auto" style={{ color: color + '99' }}>
-                        {arrow}{useCelsius ? (margin * 5 / 9).toFixed(1) : margin.toFixed(1)}° vs prev {formatTemp(record.prevRecordF, useCelsius)} ({record.prevRecordDate.slice(0, 4)})
+                    <span className="ml-auto">
+                        {secondaryInfo}
                     </span>
                 </div>
             </button>

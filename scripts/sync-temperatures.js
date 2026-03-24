@@ -397,164 +397,173 @@ async function fetchCountyMeta() {
 // ─── 4. Fetch Daily Record-Breaking Temperatures from ACIS ───────────
 
 /**
- * For each CONUS state, compare yesterday's station observations against the
- * all-time record for that calendar date.  A "broken record" is when a station's
- * observed max exceeds the previous all-time max for that day of year, or its
- * observed min is below the previous all-time min.
- *
- * To build the "last 7 days" view, we also load the previous output file and
- * merge, keeping only records from the most recent 7 calendar days.
+ * For each of the last 7 days, compare station observations against the
+ * all-time record for that calendar date across all CONUS states.
+ * A "broken record" is when a station's observed max exceeds the previous
+ * all-time max for that day of year, or its observed min is below the
+ * previous all-time min.
  */
 async function fetchRecentRecords() {
-    console.log('\n📅 Detecting daily record-breaking temperatures...');
+    console.log('\n📅 Detecting daily record-breaking temperatures (last 7 days)...');
 
     const now = new Date();
-    const yesterday = new Date(now);
-    yesterday.setDate(yesterday.getDate() - 1);
     const todayStr = formatDate(now);
-    const yesterdayStr = formatDate(yesterday);
-    const mmdd = yesterdayStr.slice(5); // "MM-DD"
-
     const stateAbbrs = Object.keys(US_STATES).filter(s => s !== 'AK' && s !== 'HI');
-    const brokenRecords = [];
 
-    for (let i = 0; i < stateAbbrs.length; i++) {
-        const abbr = stateAbbrs[i];
-        process.stdout.write(`  [${i + 1}/${stateAbbrs.length}] ${abbr}...`);
+    // Build array of the last 7 dates (most recent first)
+    const dates = [];
+    for (let d = 1; d <= 7; d++) {
+        const dt = new Date(now);
+        dt.setDate(dt.getDate() - d);
+        dates.push(formatDate(dt));
+    }
+    const yesterdayStr = dates[0];
 
-        try {
-            // Query 1: yesterday's observations for all stations in this state
-            const obs = await postJson('https://data.rcc-acis.org/MultiStnData', {
-                state: abbr,
-                date: yesterdayStr,
-                meta: ['name', 'll', 'state', 'county', 'elev', 'uid'],
-                elems: ['maxt', 'mint'],
-            });
+    console.log(`  Checking dates: ${dates.join(', ')}`);
 
-            if (obs.error) { console.log(` ACIS error: ${obs.error}`); continue; }
+    // Collect broken records for all 7 days
+    const allBroken = []; // { ...record, date }
+
+    for (const dateStr of dates) {
+        const mmdd = dateStr.slice(5); // "MM-DD"
+        const year = parseInt(dateStr.slice(0, 4), 10);
+        console.log(`\n  ── ${dateStr} ──`);
+
+        let dayBroken = 0;
+
+        for (let i = 0; i < stateAbbrs.length; i++) {
+            const abbr = stateAbbrs[i];
+            process.stdout.write(`\r    [${i + 1}/${stateAbbrs.length}] ${abbr}...  `);
+
+            try {
+                // Query 1: observations for this date
+                const obs = await postJson('https://data.rcc-acis.org/MultiStnData', {
+                    state: abbr,
+                    date: dateStr,
+                    meta: ['name', 'll', 'state', 'county', 'elev', 'uid'],
+                    elems: ['maxt', 'mint'],
+                });
+
+                if (obs.error) continue;
+                await sleep(200);
+
+                // Query 2: historical records + normals for this calendar date (all prior years)
+                const hist = await postJson('https://data.rcc-acis.org/MultiStnData', {
+                    state: abbr,
+                    sdate: `1950-${mmdd}`,
+                    edate: `${year - 1}-${mmdd}`,
+                    meta: ['uid'],
+                    elems: [
+                        { name: 'maxt', interval: [1, 0, 0], duration: 1, smry: { reduce: 'max', add: 'date' }, smry_only: 1 },
+                        { name: 'mint', interval: [1, 0, 0], duration: 1, smry: { reduce: 'min', add: 'date' }, smry_only: 1 },
+                        { name: 'maxt', interval: [1, 0, 0], duration: 1, smry: { reduce: 'mean' }, smry_only: 1 },
+                        { name: 'mint', interval: [1, 0, 0], duration: 1, smry: { reduce: 'mean' }, smry_only: 1 },
+                    ],
+                });
+
+                if (hist.error) continue;
+
+                // Build uid → historical record map
+                const histMap = {};
+                for (const stn of hist.data || []) {
+                    const uid = stn.meta?.uid;
+                    const smry = stn.smry;
+                    if (!uid || !smry || smry.length < 2) continue;
+                    if (smry[0][0] === 'M' && smry[1][0] === 'M') continue;
+                    histMap[uid] = {
+                        recordHigh: smry[0][0] !== 'M' ? parseFloat(smry[0][0]) : null,
+                        recordHighDate: smry[0][1] || '',
+                        recordLow: smry[1][0] !== 'M' ? parseFloat(smry[1][0]) : null,
+                        recordLowDate: smry[1][1] || '',
+                        normalHigh: smry.length > 2 && smry[2] !== 'M' ? Math.round(parseFloat(smry[2])) : null,
+                        normalLow: smry.length > 3 && smry[3] !== 'M' ? Math.round(parseFloat(smry[3])) : null,
+                    };
+                }
+
+                // Compare observations against historical records
+                for (const stn of obs.data || []) {
+                    const uid = stn.meta?.uid;
+                    if (!uid || !histMap[uid]) continue;
+                    const row = stn.data;
+                    if (!Array.isArray(row) || row.length < 2) continue;
+
+                    const [maxtStr, mintStr] = row;
+                    const meta = stn.meta;
+                    const rec = histMap[uid];
+
+                    if (maxtStr !== 'M' && maxtStr !== 'T' && rec.recordHigh != null) {
+                        const maxt = parseFloat(maxtStr);
+                        if (!isNaN(maxt) && maxt > rec.recordHigh) {
+                            allBroken.push({
+                                stationName: meta.name || 'Unknown',
+                                uid,
+                                state: abbr,
+                                stateName: US_STATES[abbr]?.name || abbr,
+                                county: meta.county || '',
+                                lat: meta.ll?.[1] ?? 0,
+                                lon: meta.ll?.[0] ?? 0,
+                                elev: meta.elev ?? null,
+                                type: 'high',
+                                tempF: maxt,
+                                prevRecordF: rec.recordHigh,
+                                prevRecordDate: rec.recordHighDate,
+                                normalF: rec.normalHigh,
+                                date: dateStr,
+                            });
+                            dayBroken++;
+                        }
+                    }
+
+                    if (mintStr !== 'M' && mintStr !== 'T' && rec.recordLow != null) {
+                        const mint = parseFloat(mintStr);
+                        if (!isNaN(mint) && mint < rec.recordLow) {
+                            allBroken.push({
+                                stationName: meta.name || 'Unknown',
+                                uid,
+                                state: abbr,
+                                stateName: US_STATES[abbr]?.name || abbr,
+                                county: meta.county || '',
+                                lat: meta.ll?.[1] ?? 0,
+                                lon: meta.ll?.[0] ?? 0,
+                                elev: meta.elev ?? null,
+                                type: 'low',
+                                tempF: mint,
+                                prevRecordF: rec.recordLow,
+                                prevRecordDate: rec.recordLowDate,
+                                normalF: rec.normalLow,
+                                date: dateStr,
+                            });
+                            dayBroken++;
+                        }
+                    }
+                }
+            } catch {
+                // continue on failure
+            }
 
             await sleep(300);
-
-            // Query 2: historical all-time record for this calendar date (prior years)
-            const hist = await postJson('https://data.rcc-acis.org/MultiStnData', {
-                state: abbr,
-                sdate: `1950-${mmdd}`,
-                edate: `${yesterday.getFullYear() - 1}-${mmdd}`,
-                meta: ['uid'],
-                elems: [
-                    { name: 'maxt', interval: [1, 0, 0], duration: 1, smry: { reduce: 'max', add: 'date' }, smry_only: 1 },
-                    { name: 'mint', interval: [1, 0, 0], duration: 1, smry: { reduce: 'min', add: 'date' }, smry_only: 1 },
-                ],
-            });
-
-            if (hist.error) { console.log(` ACIS hist error: ${hist.error}`); continue; }
-
-            // Build uid → historical record map
-            const histMap = {};
-            for (const stn of hist.data || []) {
-                const uid = stn.meta?.uid;
-                const smry = stn.smry;
-                if (!uid || !smry || smry.length < 2) continue;
-                if (smry[0][0] === 'M' && smry[1][0] === 'M') continue;
-                histMap[uid] = {
-                    recordHigh: smry[0][0] !== 'M' ? parseFloat(smry[0][0]) : null,
-                    recordHighDate: smry[0][1] || '',
-                    recordLow: smry[1][0] !== 'M' ? parseFloat(smry[1][0]) : null,
-                    recordLowDate: smry[1][1] || '',
-                };
-            }
-
-            // Compare each station's observation against the historical record
-            let broken = 0;
-            for (const stn of obs.data || []) {
-                const uid = stn.meta?.uid;
-                if (!uid || !histMap[uid]) continue;
-                // Single-date MultiStnData returns data as flat array [maxt, mint]
-                const row = stn.data;
-                if (!Array.isArray(row) || row.length < 2) continue;
-
-                const [maxtStr, mintStr] = row;
-                const meta = stn.meta;
-                const rec = histMap[uid];
-
-                // Check broken high record
-                if (maxtStr !== 'M' && maxtStr !== 'T' && rec.recordHigh != null) {
-                    const maxt = parseFloat(maxtStr);
-                    if (!isNaN(maxt) && maxt > rec.recordHigh) {
-                        brokenRecords.push({
-                            stationName: meta.name || 'Unknown',
-                            uid,
-                            state: abbr,
-                            stateName: US_STATES[abbr]?.name || abbr,
-                            county: meta.county || '',
-                            lat: meta.ll?.[1] ?? 0,
-                            lon: meta.ll?.[0] ?? 0,
-                            elev: meta.elev ?? null,
-                            type: 'high',
-                            tempF: maxt,
-                            prevRecordF: rec.recordHigh,
-                            prevRecordDate: rec.recordHighDate,
-                            date: yesterdayStr,
-                        });
-                        broken++;
-                    }
-                }
-
-                // Check broken low record
-                if (mintStr !== 'M' && mintStr !== 'T' && rec.recordLow != null) {
-                    const mint = parseFloat(mintStr);
-                    if (!isNaN(mint) && mint < rec.recordLow) {
-                        brokenRecords.push({
-                            stationName: meta.name || 'Unknown',
-                            uid,
-                            state: abbr,
-                            stateName: US_STATES[abbr]?.name || abbr,
-                            county: meta.county || '',
-                            lat: meta.ll?.[1] ?? 0,
-                            lon: meta.ll?.[0] ?? 0,
-                            elev: meta.elev ?? null,
-                            type: 'low',
-                            tempF: mint,
-                            prevRecordF: rec.recordLow,
-                            prevRecordDate: rec.recordLowDate,
-                            date: yesterdayStr,
-                        });
-                        broken++;
-                    }
-                }
-            }
-
-            console.log(
-                ` ${(obs.data || []).length} stations, ` +
-                `${Object.keys(histMap).length} with history → ${broken} broken`
-            );
-        } catch (err) {
-            console.log(` failed: ${err.message}`);
         }
 
-        await sleep(500);
+        const dayHighs = allBroken.filter(r => r.date === dateStr && r.type === 'high').length;
+        const dayLows = allBroken.filter(r => r.date === dateStr && r.type === 'low').length;
+        console.log(`  ${dateStr}: 🔥 ${dayHighs} highs, ❄️ ${dayLows} lows (${dayBroken} total)`);
     }
 
-    // Sort: highs by temperature descending, lows by temperature ascending
-    const brokenHighs = brokenRecords.filter(r => r.type === 'high').sort((a, b) => b.tempF - a.tempF);
-    const brokenLows = brokenRecords.filter(r => r.type === 'low').sort((a, b) => a.tempF - b.tempF);
-    const yesterdayRecords = [...brokenHighs, ...brokenLows];
+    // Split into yesterday vs full 7-day window
+    const yesterdayRecords = allBroken
+        .filter(r => r.date === yesterdayStr)
+        .sort((a, b) => a.type === 'high' ? b.tempF - a.tempF : a.tempF - b.tempF);
 
-    console.log(`\n  🔥 ${brokenHighs.length} record highs broken`);
-    console.log(`  ❄️  ${brokenLows.length} record lows broken`);
+    const last7Days = allBroken
+        .sort((a, b) => a.type === 'high' ? b.tempF - a.tempF : a.tempF - b.tempF);
 
-    // Merge with previous days to build "last 7 days" view
-    let last7Days = [...yesterdayRecords];
-    const prevPath = resolve(OUTPUT_DIR, 'recentRecords.json');
-    if (existsSync(prevPath)) {
-        try {
-            const prev = JSON.parse(readFileSync(prevPath, 'utf-8'));
-            const cutoff = formatDate(new Date(now.getTime() - 7 * 86400000));
-            const prevRecords = (prev.last7Days || []).filter(r => r.date >= cutoff && r.date !== yesterdayStr);
-            last7Days = [...yesterdayRecords, ...prevRecords];
-            console.log(`  Merged ${prevRecords.length} records from previous days into last7Days`);
-        } catch { /* fresh start */ }
-    }
+    const yHighs = yesterdayRecords.filter(r => r.type === 'high').length;
+    const yLows = yesterdayRecords.filter(r => r.type === 'low').length;
+    const tHighs = last7Days.filter(r => r.type === 'high').length;
+    const tLows = last7Days.filter(r => r.type === 'low').length;
+
+    console.log(`\n  Yesterday: 🔥 ${yHighs} highs, ❄️ ${yLows} lows`);
+    console.log(`  Last 7 days: 🔥 ${tHighs} highs, ❄️ ${tLows} lows`);
 
     return {
         asOf: todayStr,
@@ -626,6 +635,8 @@ function buildCountyGeoJson(records, countyMeta) {
 // ─── Main ────────────────────────────────────────────────────────────
 
 async function main() {
+    const recentOnly = process.argv.includes('--recent-only');
+
     console.log('🌡️  Temperature Records Sync');
     console.log('='.repeat(50));
 
@@ -633,44 +644,60 @@ async function main() {
         mkdirSync(OUTPUT_DIR, { recursive: true });
     }
 
-    // 1. State records from SCEC
-    const stateRecords = await fetchStateRecords();
-    const stateGeoJson = buildStateGeoJson(stateRecords);
+    if (!recentOnly) {
+        // 1. State records from SCEC
+        const stateRecords = await fetchStateRecords();
+        const stateGeoJson = buildStateGeoJson(stateRecords);
 
-    writeFileSync(
-        resolve(OUTPUT_DIR, 'stateRecords.json'),
-        JSON.stringify(stateGeoJson, null, 2)
-    );
-    console.log(`\n✅ Wrote stateRecords.json (${stateRecords.length} features)`);
+        writeFileSync(
+            resolve(OUTPUT_DIR, 'stateRecords.json'),
+            JSON.stringify(stateGeoJson, null, 2)
+        );
+        console.log(`\n✅ Wrote stateRecords.json (${stateRecords.length} features)`);
 
-    // 2. County records from ACIS (process states in batches)
-    console.log('\n📊 Fetching county-level records from ACIS...');
-    console.log('  (This queries each state individually — will take a few minutes)');
+        // 2. County records from ACIS (process states in batches)
+        console.log('\n📊 Fetching county-level records from ACIS...');
+        console.log('  (This queries each state individually — will take a few minutes)');
 
-    const allStationRecords = [];
-    const stateAbbrs = Object.keys(US_STATES).filter(s => s !== 'AK' && s !== 'HI');
+        const allStationRecords = [];
+        const stateAbbrs = Object.keys(US_STATES).filter(s => s !== 'AK' && s !== 'HI');
 
-    for (let i = 0; i < stateAbbrs.length; i++) {
-        const abbr = stateAbbrs[i];
-        process.stdout.write(`  [${i + 1}/${stateAbbrs.length}] ${abbr}...`);
-        const records = await fetchCountyRecordsForState(abbr);
-        allStationRecords.push(...records);
-        console.log(` ${records.length} station records`);
-        await sleep(200); // Be nice to ACIS
+        for (let i = 0; i < stateAbbrs.length; i++) {
+            const abbr = stateAbbrs[i];
+            process.stdout.write(`  [${i + 1}/${stateAbbrs.length}] ${abbr}...`);
+            const records = await fetchCountyRecordsForState(abbr);
+            allStationRecords.push(...records);
+            console.log(` ${records.length} station records`);
+            await sleep(200); // Be nice to ACIS
+        }
+
+        const countyRecords = aggregateToCounty(allStationRecords);
+        console.log(`  Aggregated to ${countyRecords.length} county-level records`);
+
+        // 3. County metadata (centroids)
+        const countyMeta = await fetchCountyMeta();
+        const countyGeoJson = buildCountyGeoJson(countyRecords, countyMeta);
+
+        writeFileSync(
+            resolve(OUTPUT_DIR, 'countyRecords.json'),
+            JSON.stringify(countyGeoJson)  // No pretty print — this file can be large
+        );
+        console.log(`✅ Wrote countyRecords.json (${countyGeoJson.features.length} features)`);
+
+        // 5. Summary metadata
+        const summary = {
+            lastUpdated: new Date().toISOString(),
+            stateRecordCount: stateRecords.length,
+            countyRecordCount: countyGeoJson.features.length,
+            statesProcessed: stateAbbrs.length,
+        };
+
+        writeFileSync(
+            resolve(OUTPUT_DIR, 'summary.json'),
+            JSON.stringify(summary, null, 2)
+        );
+        console.log(`✅ Wrote summary.json`);
     }
-
-    const countyRecords = aggregateToCounty(allStationRecords);
-    console.log(`  Aggregated to ${countyRecords.length} county-level records`);
-
-    // 3. County metadata (centroids)
-    const countyMeta = await fetchCountyMeta();
-    const countyGeoJson = buildCountyGeoJson(countyRecords, countyMeta);
-
-    writeFileSync(
-        resolve(OUTPUT_DIR, 'countyRecords.json'),
-        JSON.stringify(countyGeoJson)  // No pretty print — this file can be large
-    );
-    console.log(`✅ Wrote countyRecords.json (${countyGeoJson.features.length} features)`);
 
     // 4. Recent records summary
     const recentRecords = await fetchRecentRecords();
@@ -680,20 +707,6 @@ async function main() {
         JSON.stringify(recentRecords, null, 2)
     );
     console.log(`✅ Wrote recentRecords.json`);
-
-    // 5. Summary metadata
-    const summary = {
-        lastUpdated: new Date().toISOString(),
-        stateRecordCount: stateRecords.length,
-        countyRecordCount: countyGeoJson.features.length,
-        statesProcessed: stateAbbrs.length,
-    };
-
-    writeFileSync(
-        resolve(OUTPUT_DIR, 'summary.json'),
-        JSON.stringify(summary, null, 2)
-    );
-    console.log(`✅ Wrote summary.json`);
 
     console.log('\n🎉 Temperature records sync complete!');
 
