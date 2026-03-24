@@ -1,16 +1,17 @@
 import { useState } from 'react';
-import type { YearData } from '../types';
+import type { YearData, HighlightRange } from '../types';
 import { HIGH_TEMP_COLOR, LOW_TEMP_COLOR } from '../constants';
 
 interface Props {
     data: YearData[];
+    onHoverPeriod?: (range: HighlightRange | null) => void;
 }
 
 /**
  * Area chart overlaying record highs set per year (red) vs record lows set per year (blue).
  * Shows how frequency of record-setting has changed over time.
  */
-export function RecordsBrokenTimeSeries({ data }: Props) {
+export function RecordsBrokenTimeSeries({ data, onHoverPeriod }: Props) {
     const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
     // Compute 5-year rolling averages for smoother visualization
@@ -72,7 +73,7 @@ export function RecordsBrokenTimeSeries({ data }: Props) {
                     className="w-full min-w-[500px]"
                     role="img"
                     aria-label="Records broken per year time series"
-                    onMouseLeave={() => setHoveredIdx(null)}
+                    onMouseLeave={() => { setHoveredIdx(null); onHoverPeriod?.(null); }}
                 >
                     {/* Grid lines */}
                     {yTicks.map(v => (
@@ -111,7 +112,7 @@ export function RecordsBrokenTimeSeries({ data }: Props) {
                             width={plotW / filtered.length}
                             height={plotH}
                             fill="transparent"
-                            onMouseEnter={() => setHoveredIdx(i)}
+                            onMouseEnter={() => { setHoveredIdx(i); onHoverPeriod?.({ startYear: d.year, endYear: d.year }); }}
                         />
                     ))}
 

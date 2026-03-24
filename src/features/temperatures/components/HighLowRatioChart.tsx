@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import type { DecadeData, RollingRatioData } from '../types';
+import type { DecadeData, RollingRatioData, HighlightRange } from '../types';
 import { HIGH_TEMP_COLOR, LOW_TEMP_COLOR } from '../constants';
 
 interface Props {
     decadeData: DecadeData[];
     rollingData: RollingRatioData[];
+    onHoverPeriod?: (range: HighlightRange | null) => void;
 }
 
 type View = 'decade' | 'rolling';
@@ -13,7 +14,7 @@ type View = 'decade' | 'rolling';
  * The "Meehl Metric" — ratio of record highs to record lows.
  * In a stable climate this should be ~1:1. Deviation indicates warming or cooling.
  */
-export function HighLowRatioChart({ decadeData, rollingData }: Props) {
+export function HighLowRatioChart({ decadeData, rollingData, onHoverPeriod }: Props) {
     const [view, setView] = useState<View>('decade');
     const [hovered, setHovered] = useState<number | null>(null);
 
@@ -24,6 +25,7 @@ export function HighLowRatioChart({ decadeData, rollingData }: Props) {
                 hovered={hovered}
                 setHovered={setHovered}
                 onSwitchView={() => setView('rolling')}
+                onHoverPeriod={onHoverPeriod}
             />
         );
     }
@@ -34,15 +36,17 @@ export function HighLowRatioChart({ decadeData, rollingData }: Props) {
             hovered={hovered}
             setHovered={setHovered}
             onSwitchView={() => setView('decade')}
+            onHoverPeriod={onHoverPeriod}
         />
     );
 }
 
-function DecadeRatioView({ data, hovered, setHovered, onSwitchView }: {
+function DecadeRatioView({ data, hovered, setHovered, onSwitchView, onHoverPeriod }: {
     data: DecadeData[];
     hovered: number | null;
     setHovered: (i: number | null) => void;
     onSwitchView: () => void;
+    onHoverPeriod?: (range: HighlightRange | null) => void;
 }) {
     const filtered = data.filter(d => d.decade >= 1900 && d.ratio !== null);
     const maxRatio = Math.max(...filtered.map(d => d.ratio!), 2);
@@ -76,6 +80,7 @@ function DecadeRatioView({ data, hovered, setHovered, onSwitchView }: {
                     className="w-full min-w-[400px]"
                     role="img"
                     aria-label="High to low ratio by decade"
+                    onMouseLeave={() => onHoverPeriod?.(null)}
                 >
                     {/* Equilibrium line at 1:1 */}
                     <line
@@ -109,7 +114,10 @@ function DecadeRatioView({ data, hovered, setHovered, onSwitchView }: {
                         return (
                             <g
                                 key={d.decade}
-                                onMouseEnter={() => setHovered(i)}
+                                onMouseEnter={() => {
+                                    setHovered(i);
+                                    onHoverPeriod?.({ startYear: d.decade, endYear: d.decade + 9 });
+                                }}
                                 onMouseLeave={() => setHovered(null)}
                                 style={{ cursor: 'default' }}
                             >
@@ -141,11 +149,12 @@ function DecadeRatioView({ data, hovered, setHovered, onSwitchView }: {
     );
 }
 
-function RollingRatioView({ data, hovered, setHovered, onSwitchView }: {
+function RollingRatioView({ data, hovered, setHovered, onSwitchView, onHoverPeriod }: {
     data: RollingRatioData[];
     hovered: number | null;
     setHovered: (i: number | null) => void;
     onSwitchView: () => void;
+    onHoverPeriod?: (range: HighlightRange | null) => void;
 }) {
     const filtered = data.filter(d => d.year >= 1910 && d.ratio !== null);
     const maxRatio = Math.min(Math.max(...filtered.map(d => d.ratio!), 3), 10);
@@ -190,7 +199,7 @@ function RollingRatioView({ data, hovered, setHovered, onSwitchView }: {
                     className="w-full min-w-[500px]"
                     role="img"
                     aria-label="Rolling 10-year high to low ratio"
-                    onMouseLeave={() => setHovered(null)}
+                    onMouseLeave={() => { setHovered(null); onHoverPeriod?.(null); }}
                 >
                     {/* Equilibrium */}
                     <line x1={padding.left} y1={equilibriumY} x2={width - padding.right} y2={equilibriumY}
@@ -223,7 +232,7 @@ function RollingRatioView({ data, hovered, setHovered, onSwitchView }: {
                             x={xScale(d.year) - plotW / filtered.length / 2}
                             y={padding.top} width={plotW / filtered.length} height={plotH}
                             fill="transparent"
-                            onMouseEnter={() => setHovered(i)}
+                            onMouseEnter={() => { setHovered(i); onHoverPeriod?.({ startYear: d.year - 9, endYear: d.year }); }}
                         />
                     ))}
 

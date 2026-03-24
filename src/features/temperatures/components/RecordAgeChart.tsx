@@ -1,16 +1,17 @@
 import { useState } from 'react';
-import type { DecadeData } from '../types';
+import type { DecadeData, HighlightRange } from '../types';
 import { HIGH_TEMP_COLOR, LOW_TEMP_COLOR } from '../constants';
 
 interface Props {
     data: DecadeData[];
+    onHoverPeriod?: (range: HighlightRange | null) => void;
 }
 
 /**
  * Mirrored bar chart: record highs go up (red), record lows go down (blue).
  * Shows when all-time county records were set, grouped by decade.
  */
-export function RecordAgeChart({ data }: Props) {
+export function RecordAgeChart({ data, onHoverPeriod }: Props) {
     const [hovered, setHovered] = useState<number | null>(null);
 
     // Filter to decades with meaningful data (skip very early sparse ones)
@@ -39,6 +40,7 @@ export function RecordAgeChart({ data }: Props) {
                     className="w-full min-w-[500px]"
                     role="img"
                     aria-label="Record age distribution by decade"
+                    onMouseLeave={() => onHoverPeriod?.(null)}
                 >
                     {/* Center line */}
                     <line
@@ -72,7 +74,10 @@ export function RecordAgeChart({ data }: Props) {
                         return (
                             <g
                                 key={d.decade}
-                                onMouseEnter={() => setHovered(i)}
+                                onMouseEnter={() => {
+                                    setHovered(i);
+                                    onHoverPeriod?.({ startYear: d.decade, endYear: d.decade + 9 });
+                                }}
                                 onMouseLeave={() => setHovered(null)}
                                 style={{ cursor: 'default' }}
                             >

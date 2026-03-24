@@ -2,8 +2,12 @@ import { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useTemperatureData } from '../hooks/useTemperatureData';
+import { useClimateTrends } from '../hooks/useClimateTrends';
 import { SummaryPanel } from './SummaryPanel';
-import type { BrokenRecord, ViewMode } from '../types';
+import { RecordAgeChart } from './RecordAgeChart';
+import { RecordsBrokenTimeSeries } from './RecordsBrokenTimeSeries';
+import { HighLowRatioChart } from './HighLowRatioChart';
+import type { BrokenRecord, ViewMode, HighlightRange } from '../types';
 import {
     INITIAL_CENTER,
     INITIAL_ZOOM,
@@ -117,8 +121,13 @@ export function TemperatureMap() {
     const [viewMode, setViewMode] = useState<ViewMode>('records');
     const [freshnessType, setFreshnessType] = useState<'high' | 'low'>('high');
     const [useCelsius, setUseCelsius] = useState(false);
+    const [showTrends, setShowTrends] = useState(false);
+    const [highlightRange, setHighlightRange] = useState<HighlightRange | null>(null);
+    const [activeChart, setActiveChart] = useState<'age' | 'timeseries' | 'ratio'>('age');
+    const prevViewMode = useRef<ViewMode>('records');
 
     const { stateRecords, countyRecords, recentRecords, loading, error } = useTemperatureData();
+    const { trends } = useClimateTrends();
 
     /** Build GeoJSON from broken records for the map layer */
     const brokenRecordsGeoJson = useMemo(() => {
@@ -545,6 +554,63 @@ export function TemperatureMap() {
         }
     }, [mapLoaded, viewMode, showCounty]);
 
+    // Auto-switch to freshness view when trends panel opens
+    useEffect(() => {
+        if (showTrends) {
+            prevViewMode.current = viewMode;
+            if (viewMode !== 'freshness') setViewMode('freshness');
+        } else {
+            setHighlightRange(null);
+            if (prevViewMode.current === 'records') setViewMode('records');
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [showTrends]);
+
+    // Highlight map features matching hovered chart period
+    useEffect(() => {
+        const map = mapRef.current;
+        if (!map || !mapLoaded) return;
+
+        if (!map.getLayer('freshness-circles')) return;
+
+        if (highlightRange) {
+            map.setPaintProperty('freshness-circles', 'circle-opacity', [
+                'case',
+                ['all',
+                    ['>=', ['get', 'year'], highlightRange.startYear],
+                    ['<=', ['get', 'year'], highlightRange.endYear],
+                ],
+                1,
+                0.07,
+            ]);
+            map.setPaintProperty('freshness-circles', 'circle-radius', [
+                'case',
+                ['all',
+                    ['>=', ['get', 'year'], highlightRange.startYear],
+                    ['<=', ['get', 'year'], highlightRange.endYear],
+                ],
+                ['interpolate', ['linear'], ['zoom'], 3, 5, 6, 8, 9, 12],
+                ['interpolate', ['linear'], ['zoom'], 3, 2, 6, 3, 9, 5],
+            ]);
+            map.setPaintProperty('freshness-circles', 'circle-stroke-width', [
+                'case',
+                ['all',
+                    ['>=', ['get', 'year'], highlightRange.startYear],
+                    ['<=', ['get', 'year'], highlightRange.endYear],
+                ],
+                1.5,
+                0,
+            ]);
+            map.setPaintProperty('freshness-circles', 'circle-stroke-color', 'rgba(255,255,255,0.4)');
+        } else {
+            map.setPaintProperty('freshness-circles', 'circle-opacity', 0.8);
+            map.setPaintProperty('freshness-circles', 'circle-radius',
+                ['interpolate', ['linear'], ['zoom'], 3, 3, 6, 5, 9, 8]);
+            map.setPaintProperty('freshness-circles', 'circle-stroke-width', 0.5);
+            map.setPaintProperty('freshness-circles', 'circle-stroke-color', 'rgba(255,255,255,0.15)');
+        }
+    }, [mapLoaded, highlightRange]);
+
     // Update state layer opacity when zooming to county level
     useEffect(() => {
         const map = mapRef.current;
@@ -687,13 +753,17 @@ export function TemperatureMap() {
                 ← Projects
             </a>
 
-            {/* Climate Trends link */}
-            <a
-                href="/projects/temperature-records/trends"
-                className="absolute top-4 left-32 z-20 bg-zinc-900/80 backdrop-blur text-violet-400 hover:text-violet-300 px-3 py-1.5 rounded text-sm border border-violet-500/30 hover:border-violet-400/50 transition-colors"
+            {/* Climate Trends toggle */}
+            <button
+                onClick={() => setShowTrends(s => !s)}
+                className={`absolute top-4 left-32 z-20 bg-zinc-900/80 backdrop-blur px-3 py-1.5 rounded text-sm border transition-colors ${
+                    showTrends
+                        ? 'text-violet-300 border-violet-400/50 bg-violet-900/30'
+                        : 'text-violet-400 border-violet-500/30 hover:text-violet-300 hover:border-violet-400/50'
+                }`}
             >
-                📊 Climate Trends
-            </a>
+                📊 Trends
+            </button>
 
             {/* View mode toggle */}
             <div className="absolute top-14 left-4 z-20 flex gap-1 bg-zinc-900/80 backdrop-blur rounded-lg border border-zinc-700/50 p-1">
@@ -719,7 +789,7 @@ export function TemperatureMap() {
 
             {/* Legend — changes depending on view mode */}
             {viewMode === 'records' ? (
-                <div className="absolute bottom-6 left-4 z-20 bg-zinc-900/80 backdrop-blur rounded-lg px-4 py-3 text-xs text-zinc-300 border border-zinc-700/50">
+                <div className={`absolute left-4 z-20 bg-zinc-900/80 backdrop-blur rounded-lg px-4 py-3 text-xs text-zinc-300 border border-zinc-700/50 transition-all ${showTrends ? 'bottom-[44%]' : 'bottom-6'}`}>
                     <div className="flex items-center gap-2 mb-1.5">
                         <span className="inline-block w-3 h-3 rounded-full" style={{ backgroundColor: HIGH_TEMP_COLOR }} />
                         Record High
@@ -735,7 +805,7 @@ export function TemperatureMap() {
                     )}
                 </div>
             ) : (
-                <div className="absolute bottom-6 left-4 z-20 bg-zinc-900/80 backdrop-blur rounded-lg px-4 py-3 text-xs text-zinc-300 border border-zinc-700/50">
+                <div className={`absolute left-4 z-20 bg-zinc-900/80 backdrop-blur rounded-lg px-4 py-3 text-xs text-zinc-300 border border-zinc-700/50 transition-all ${showTrends ? 'bottom-[44%]' : 'bottom-6'}`}>
                     <div className="flex items-center gap-1 mb-1.5 text-zinc-200 font-medium">Year record was set</div>
                     <div className="flex gap-0.5">
                         {FRESHNESS_COLORS.map(([year, color]) => (
@@ -767,7 +837,7 @@ export function TemperatureMap() {
             </button>
 
             {/* Summary panel */}
-            {panelOpen && (
+            {panelOpen && !showTrends && (
                 <SummaryPanel
                     viewMode={viewMode}
                     recentRecords={recentRecords}
@@ -777,6 +847,59 @@ export function TemperatureMap() {
                     useCelsius={useCelsius}
                     onFlyTo={flyToLocation}
                 />
+            )}
+
+            {/* Climate Trends drawer */}
+            {showTrends && trends && (
+                <div
+                    className="absolute bottom-0 left-0 right-0 z-30 bg-zinc-900/95 backdrop-blur-sm border-t border-zinc-700/50 flex flex-col"
+                    style={{ height: '42%', minHeight: 300 }}
+                >
+                    {/* Drawer header */}
+                    <div className="shrink-0 flex items-center justify-between px-4 py-2 border-b border-zinc-800">
+                        <div className="flex items-center gap-4">
+                            <h2 className="text-sm font-semibold text-zinc-200">Climate Trends</h2>
+                            <nav className="flex gap-1">
+                                {([
+                                    { id: 'age' as const, label: 'Record Age' },
+                                    { id: 'timeseries' as const, label: 'Frequency' },
+                                    { id: 'ratio' as const, label: 'H:L Ratio' },
+                                ] as const).map(s => (
+                                    <button
+                                        key={s.id}
+                                        onClick={() => setActiveChart(s.id)}
+                                        className={`px-2.5 py-1 text-xs rounded transition-colors ${
+                                            activeChart === s.id
+                                                ? 'bg-zinc-700 text-violet-400'
+                                                : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50'
+                                        }`}
+                                    >
+                                        {s.label}
+                                    </button>
+                                ))}
+                            </nav>
+                        </div>
+                        <button
+                            onClick={() => setShowTrends(false)}
+                            className="text-zinc-400 hover:text-zinc-200 w-7 h-7 flex items-center justify-center rounded hover:bg-zinc-800 transition-colors text-sm"
+                        >
+                            ✕
+                        </button>
+                    </div>
+
+                    {/* Drawer content */}
+                    <div className="flex-1 overflow-y-auto px-4 py-3">
+                        {activeChart === 'age' && (
+                            <RecordAgeChart data={trends.byDecade} onHoverPeriod={setHighlightRange} />
+                        )}
+                        {activeChart === 'timeseries' && (
+                            <RecordsBrokenTimeSeries data={trends.byYear} onHoverPeriod={setHighlightRange} />
+                        )}
+                        {activeChart === 'ratio' && (
+                            <HighLowRatioChart decadeData={trends.byDecade} rollingData={trends.rollingRatio} onHoverPeriod={setHighlightRange} />
+                        )}
+                    </div>
+                </div>
             )}
         </div>
     );

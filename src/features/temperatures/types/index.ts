@@ -50,6 +50,7 @@ export interface BrokenRecord {
     tempF: number;
     prevRecordF: number;
     prevRecordDate: string;
+    normalF: number | null;
     date: string;
 }
 
@@ -69,6 +70,11 @@ export interface TemperatureSummary {
 export type TimePeriod = 'yesterday' | 'last7Days';
 
 export type ViewMode = 'records' | 'freshness';
+
+export interface HighlightRange {
+    startYear: number;
+    endYear: number;
+}
 
 export interface DecadeData {
     decade: number;
