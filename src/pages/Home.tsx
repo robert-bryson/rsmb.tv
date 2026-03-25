@@ -3,10 +3,6 @@ import { featuredProjects } from '../content/projects';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 
-function isExternalUrl(url: string): boolean {
-  return url.startsWith('http://') || url.startsWith('https://');
-}
-
 export function Home() {
   useDocumentHead({
     title: 'rsmb',
@@ -46,8 +42,7 @@ export function Home() {
         </h2>
         <ul className="space-y-4">
           {featuredProjects.map((project) => {
-            const linkUrl = project.demoUrl || `/projects/${project.slug}`;
-            const isExternal = isExternalUrl(linkUrl);
+            const linkUrl = `/projects/${project.slug}`;
             const linkProps = {
               className: "group block p-4 -mx-4 rounded-lg hover:bg-zinc-900/50 transition-colors"
             };
@@ -57,7 +52,6 @@ export function Home() {
                 <div className="flex items-baseline justify-between gap-4">
                   <h3 className="text-lg font-medium text-zinc-100 group-hover:text-violet-400">
                     {project.title}
-                    {isExternal && <span className="text-zinc-600 ml-1">↗</span>}
                   </h3>
                   <span className="text-sm text-zinc-600">{project.year}</span>
                 </div>
@@ -76,15 +70,9 @@ export function Home() {
 
             return (
               <li key={project.slug}>
-                {isExternal ? (
-                  <a href={linkUrl} target="_blank" rel="noopener noreferrer" {...linkProps}>
-                    {content}
-                  </a>
-                ) : (
-                  <Link to={linkUrl} {...linkProps}>
-                    {content}
-                  </Link>
-                )}
+                <Link to={linkUrl} {...linkProps}>
+                  {content}
+                </Link>
               </li>
             );
           })}

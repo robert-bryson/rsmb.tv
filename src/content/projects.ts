@@ -26,7 +26,7 @@ export const projects: Project[] = [
     description: 'An interactive 3D globe visualization of flights I\'ve taken around the world. Filter by year, see route frequencies, and explore travel statistics.',
     tech: ['React', 'Three.js', 'WebGL', 'GeoJSON'],
     featured: true,
-    demoUrl: '/projects/flights',
+    demoUrl: '/projects/flights/map',
     year: 2025,
   },
   {
@@ -35,7 +35,6 @@ export const projects: Project[] = [
     description: 'Craft Anki flashcard decks from iNaturalist observations and eBird region data. Automatically fetches species photos, audio, and taxonomy to generate visual ID, nomenclature, sound ID, and confusion species cards.',
     tech: ['Python', 'Click', 'eBird API', 'iNaturalist API', 'SQLite'],
     featured: true,
-    demoUrl: '/projects/anki-artisan',
     sourceUrl: 'https://github.com/robert-bryson/anki-artisan',
     year: 2026,
   },
@@ -45,7 +44,6 @@ export const projects: Project[] = [
     description: 'A personal book-tracking app to log reads, organize books into lists, and explore reading stats. Integrates with Google Books, Open Library, and Wikidata for enrichment—covers, descriptions, author links, and more.',
     tech: ['Next.js', 'TypeScript', 'Prisma', 'PostgreSQL', 'Tailwind CSS', 'Docker'],
     featured: true,
-    demoUrl: '/projects/bookend',
     sourceUrl: 'https://github.com/robert-bryson/bookend',
     year: 2026,
   },
@@ -55,7 +53,7 @@ export const projects: Project[] = [
     description: 'Interactive map of all-time record high and low temperatures across US states and counties, powered by NOAA and ACIS data. Includes a summary panel of recent temperature extremes.',
     tech: ['React', 'MapLibre GL', 'NOAA ACIS', 'GeoJSON'],
     featured: true,
-    demoUrl: '/projects/temperature-records',
+    demoUrl: '/projects/temperature-records/map',
     year: 2025,
   },
   {

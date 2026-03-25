@@ -4,13 +4,17 @@ import { Layout } from './components/Layout';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Home, About, Projects, NotFound } from './pages';
 
+const Blog = lazy(() => import('./pages/Blog'));
+const BlogPost = lazy(() => import('./pages/BlogPost'));
+const ThroughRoutes = lazy(() => import('./pages/ThroughRoutes'));
+const FlightTrackerAbout = lazy(() => import('./pages/FlightTrackerAbout'));
 const Flights = lazy(() => import('./pages/Flights'));
 const AnkiArtisan = lazy(() => import('./pages/AnkiArtisan'));
 const Bookend = lazy(() => import('./pages/Bookend'));
-const Blog = lazy(() => import('./pages/Blog'));
-const BlogPost = lazy(() => import('./pages/BlogPost'));
+const TemperatureRecordsAbout = lazy(() => import('./pages/TemperatureRecordsAbout'));
 const TemperatureRecords = lazy(() => import('./pages/TemperatureRecords'));
 const ClimateTrendsPage = lazy(() => import('./pages/ClimateTrends'));
+const Route2Gpx = lazy(() => import('./pages/Route2Gpx'));
 
 const basename = import.meta.env.BASE_URL;
 
@@ -39,11 +43,15 @@ export default function App() {
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/projects" element={<Projects />} />
-              <Route path="/projects/flights" element={<Flights />} />
+              <Route path="/projects/through-routes" element={<ThroughRoutes />} />
+              <Route path="/projects/flights" element={<FlightTrackerAbout />} />
+              <Route path="/projects/flights/map" element={<Flights />} />
               <Route path="/projects/anki-artisan" element={<AnkiArtisan />} />
               <Route path="/projects/bookend" element={<Bookend />} />
-              <Route path="/projects/temperature-records" element={<TemperatureRecords />} />
+              <Route path="/projects/temperature-records" element={<TemperatureRecordsAbout />} />
+              <Route path="/projects/temperature-records/map" element={<TemperatureRecords />} />
               <Route path="/projects/temperature-records/trends" element={<ClimateTrendsPage />} />
+              <Route path="/projects/route2gpx" element={<Route2Gpx />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

@@ -2,10 +2,6 @@ import { Link } from 'react-router-dom';
 import { projects } from '../content/projects';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 
-function isExternalUrl(url: string): boolean {
-  return url.startsWith('http://') || url.startsWith('https://');
-}
-
 export function Projects() {
   useDocumentHead({
     title: 'Projects',
@@ -20,46 +16,16 @@ export function Projects() {
       </p>
 
       <ul className="space-y-6">
-        {projects.map((project) => {
-          const linkUrl = project.demoUrl || project.sourceUrl;
-          const isExternal = linkUrl && isExternalUrl(linkUrl);
-
-          if (linkUrl && isExternal) {
-            return (
-              <li key={project.slug}>
-                <a
-                  href={linkUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block p-4 -mx-4 rounded-lg hover:bg-zinc-900/50 transition-colors"
-                >
-                  <ProjectContent project={project} />
-                </a>
-              </li>
-            );
-          }
-
-          if (linkUrl) {
-            return (
-              <li key={project.slug}>
-                <Link
-                  to={linkUrl}
-                  className="group block p-4 -mx-4 rounded-lg hover:bg-zinc-900/50 transition-colors"
-                >
-                  <ProjectContent project={project} />
-                </Link>
-              </li>
-            );
-          }
-
-          return (
-            <li key={project.slug}>
-              <div className="p-4 -mx-4">
-                <ProjectContent project={project} />
-              </div>
-            </li>
-          );
-        })}
+        {projects.map((project) => (
+          <li key={project.slug}>
+            <Link
+              to={`/projects/${project.slug}`}
+              className="group block p-4 -mx-4 rounded-lg hover:bg-zinc-900/50 transition-colors"
+            >
+              <ProjectContent project={project} />
+            </Link>
+          </li>
+        ))}
       </ul>
     </div>
   );
@@ -89,10 +55,10 @@ function ProjectContent({ project }: { project: typeof projects[0] }) {
       </div>
       <div className="mt-3 flex gap-4 text-xs">
         {project.demoUrl && (
-          <span className="text-violet-400">View demo →</span>
+          <span className="text-violet-400">Live demo</span>
         )}
         {project.sourceUrl && (
-          <span className="text-zinc-500">Source ↗</span>
+          <span className="text-zinc-500">Source</span>
         )}
       </div>
     </>
