@@ -69,7 +69,7 @@ export interface TemperatureSummary {
 
 export type TimePeriod = 'yesterday' | 'last7Days';
 
-export type ViewMode = 'records' | 'freshness';
+export type ViewMode = 'recent' | 'county' | 'state' | 'freshness';
 
 export interface HighlightRange {
     startYear: number;

@@ -1,13 +1,15 @@
 import { useRef, useEffect, useState, useCallback, useMemo } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useTemperatureData } from '../hooks/useTemperatureData';
 import { useClimateTrends } from '../hooks/useClimateTrends';
 import { SummaryPanel } from './SummaryPanel';
+import { StationDetailPanel } from './StationDetailPanel';
 import { RecordAgeChart } from './RecordAgeChart';
 import { RecordsBrokenTimeSeries } from './RecordsBrokenTimeSeries';
 import { HighLowRatioChart } from './HighLowRatioChart';
-import type { BrokenRecord, ViewMode, HighlightRange } from '../types';
+import type { BrokenRecord, ViewMode, HighlightRange, GeoJsonFeature, CountyRecordProperties } from '../types';
 import {
     INITIAL_CENTER,
     INITIAL_ZOOM,
@@ -19,6 +21,18 @@ import {
     FRESHNESS_COLORS,
     yearToColor,
 } from '../constants';
+
+function useIsMobile() {
+    const mq = typeof window !== 'undefined' ? window.matchMedia('(max-width: 768px)') : null;
+    const [isMobile, setIsMobile] = useState(() => mq?.matches ?? false);
+    useEffect(() => {
+        if (!mq) return;
+        const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+        mq.addEventListener('change', handler);
+        return () => mq.removeEventListener('change', handler);
+    }, [mq]);
+    return isMobile;
+}
 
 /** Format a date string like "1925-09-06" as "Sep 6, 1925" */
 function formatDate(dateStr: string): string {
@@ -33,7 +47,7 @@ function fToC(f: number): string {
     return ((f - 32) * 5 / 9).toFixed(1);
 }
 
-function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'county' | 'broken'): string {
+function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'county' | 'broken', counterpart?: Record<string, unknown> | null): string {
     const type = props.type as string;
     const tempF = props.tempF as number;
     const isHigh = type === 'high';
@@ -46,6 +60,8 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
         const margin = isHigh ? tempF - prevF : prevF - tempF;
         const arrow = isHigh ? '↑' : '↓';
         const typeLabel = isHigh ? 'NEW RECORD HIGH' : 'NEW RECORD LOW';
+        const normalF = props.normalF as number | null;
+        const vsNormal = normalF != null ? (tempF - normalF) : null;
         return `<div style="
             font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
             background:#18181b;color:#e4e4e7;padding:12px 14px;border-radius:8px;
@@ -66,19 +82,65 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
                 <div style="display:flex;justify-content:space-between;margin-bottom:2px">
                     <span style="color:#71717a">Margin</span>
                     <span style="color:${color}">${arrow}${margin.toFixed(1)}°F</span>
-                </div>
+                </div>${vsNormal != null ? `
+                <div style="display:flex;justify-content:space-between;margin-bottom:2px">
+                    <span style="color:#71717a">vs Normal</span>
+                    <span style="color:${vsNormal > 0 ? HIGH_TEMP_COLOR : LOW_TEMP_COLOR}">${vsNormal > 0 ? '+' : ''}${vsNormal.toFixed(0)}°F</span>
+                </div>` : ''}
                 <div style="display:flex;justify-content:space-between">
                     <span style="color:#71717a">Date</span>
                     <span style="color:#d4d4d8">${formatDate(props.date as string)}</span>
                 </div>
             </div>
+            <div style="border-top:1px solid #27272a;margin-top:6px;padding-top:5px;font-size:11px;color:#71717a;text-align:center">
+                📊 Station history loaded in panel →
+            </div>
         </div>`;
     }
 
-    const typeLabel = isHigh ? 'All-Time Record High' : 'All-Time Record Low';
+    // State or county record
     const title = layerType === 'state'
         ? props.stateName as string
         : `${props.countyName}, ${props.state}`;
+
+    // For state or county records, show both high and low if counterpart is available
+    if ((layerType === 'county' || layerType === 'state') && counterpart) {
+        const highRec = isHigh ? props : counterpart;
+        const lowRec = isHigh ? counterpart : props;
+        const hF = highRec.tempF as number;
+        const lF = lowRec.tempF as number;
+        const range = hF - lF;
+
+        return `<div style="
+            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+            background:#18181b;color:#e4e4e7;padding:12px 14px;border-radius:8px;
+            min-width:220px;line-height:1.5;font-size:13px;
+            border:1px solid #3f3f46;box-shadow:0 4px 20px rgba(0,0,0,.5)">
+            <div style="font-size:14px;font-weight:600;margin-bottom:8px">${title}</div>
+            <div style="display:flex;gap:12px;margin-bottom:8px">
+                <div style="flex:1;background:#27272a;border-radius:6px;padding:8px 10px;border-left:3px solid ${HIGH_TEMP_COLOR}">
+                    <div style="font-size:10px;color:#a1a1aa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">🔥 Record High</div>
+                    <div style="color:${HIGH_TEMP_COLOR};font-size:20px;font-weight:700">${hF}°F</div>
+                    <div style="color:#71717a;font-size:11px">${fToC(hF)}°C</div>
+                    <div style="color:#a1a1aa;font-size:11px;margin-top:4px">${formatDate(highRec.date as string)}</div>
+                    <div style="color:#71717a;font-size:10px">${highRec.stationName || highRec.location || ''}</div>
+                </div>
+                <div style="flex:1;background:#27272a;border-radius:6px;padding:8px 10px;border-left:3px solid ${LOW_TEMP_COLOR}">
+                    <div style="font-size:10px;color:#a1a1aa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">❄️ Record Low</div>
+                    <div style="color:${LOW_TEMP_COLOR};font-size:20px;font-weight:700">${lF}°F</div>
+                    <div style="color:#71717a;font-size:11px">${fToC(lF)}°C</div>
+                    <div style="color:#a1a1aa;font-size:11px;margin-top:4px">${formatDate(lowRec.date as string)}</div>
+                    <div style="color:#71717a;font-size:10px">${lowRec.stationName || lowRec.location || ''}</div>
+                </div>
+            </div>
+            <div style="text-align:center;font-size:11px;color:#71717a;border-top:1px solid #27272a;padding-top:6px">
+                Temperature range: <span style="color:#d4d4d8;font-weight:600">${range}°F</span> (${fToC(range + 32)}°C)
+            </div>
+        </div>`;
+    }
+
+    // Fallback: single record (state records, or county without counterpart)
+    const typeLabel = isHigh ? 'All-Time Record High' : 'All-Time Record Low';
     const location = layerType === 'state' ? props.location as string : props.stationName as string;
     const station = layerType === 'state' ? props.station as string : '';
     const date = formatDate(props.date as string);
@@ -115,16 +177,61 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
 export function TemperatureMap() {
     const mapContainer = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibregl.Map | null>(null);
+    const popupRef = useRef<maplibregl.Popup | null>(null);
+    const clickHandlersAttached = useRef(false);
+    const isMobile = useIsMobile();
+    const [searchParams, setSearchParams] = useSearchParams();
     const [mapLoaded, setMapLoaded] = useState(false);
     const [showCounty, setShowCounty] = useState(false);
     const [panelOpen, setPanelOpen] = useState(true);
-    const [viewMode, setViewMode] = useState<ViewMode>('records');
-    const [freshnessType, setFreshnessType] = useState<'high' | 'low'>('high');
-    const [useCelsius, setUseCelsius] = useState(false);
     const [showTrends, setShowTrends] = useState(false);
     const [highlightRange, setHighlightRange] = useState<HighlightRange | null>(null);
-    const [activeChart, setActiveChart] = useState<'age' | 'timeseries' | 'ratio'>('age');
-    const prevViewMode = useRef<ViewMode>('records');
+    const [selectedDecade, setSelectedDecade] = useState<number | null>(null);
+    const [selectedStation, setSelectedStation] = useState<{ uid: number; name: string; state: string } | null>(null);
+    const prevViewMode = useRef<ViewMode>('recent');
+
+    // URL-driven state for shareable views
+    const viewParam = searchParams.get('view');
+    const viewMode: ViewMode = (viewParam === 'county' || viewParam === 'state' || viewParam === 'freshness') ? viewParam : 'recent';
+    const freshnessType: 'high' | 'low' = searchParams.get('type') === 'low' ? 'low' : 'high';
+    const useCelsius = searchParams.get('unit') === 'C';
+
+    const setViewMode = useCallback((mode: ViewMode) => {
+        setSearchParams(prev => {
+            const next = new URLSearchParams(prev);
+            if (mode === 'recent') next.delete('view');
+            else next.set('view', mode);
+            return next;
+        }, { replace: true });
+    }, [setSearchParams]);
+
+    const setFreshnessType = useCallback((type: 'high' | 'low') => {
+        setSearchParams(prev => {
+            const next = new URLSearchParams(prev);
+            if (type === 'high') next.delete('type');
+            else next.set('type', type);
+            return next;
+        }, { replace: true });
+    }, [setSearchParams]);
+
+    const setUseCelsius = useCallback((fn: boolean | ((prev: boolean) => boolean)) => {
+        const newVal = typeof fn === 'function' ? fn(useCelsius) : fn;
+        setSearchParams(prev => {
+            const next = new URLSearchParams(prev);
+            if (!newVal) next.delete('unit');
+            else next.set('unit', 'C');
+            return next;
+        }, { replace: true });
+    }, [setSearchParams, useCelsius]);
+
+    const handleSelectDecade = useCallback((decade: number | null) => {
+        setSelectedDecade(decade);
+        if (decade !== null) {
+            setHighlightRange({ startYear: decade, endYear: decade + 9 });
+        } else {
+            setHighlightRange(null);
+        }
+    }, []);
 
     const { stateRecords, countyRecords, recentRecords, loading, error } = useTemperatureData();
     const { trends } = useClimateTrends();
@@ -142,6 +249,7 @@ export function TemperatureMap() {
                     geometry: { type: 'Point' as const, coordinates: [r.lon, r.lat] },
                     properties: {
                         stationName: r.stationName,
+                        uid: r.uid,
                         state: r.state,
                         stateName: r.stateName,
                         county: r.county,
@@ -149,6 +257,7 @@ export function TemperatureMap() {
                         tempF: r.tempF,
                         prevRecordF: r.prevRecordF,
                         prevRecordDate: r.prevRecordDate,
+                        normalF: r.normalF,
                         date: r.date,
                     },
                 })),
@@ -175,6 +284,38 @@ export function TemperatureMap() {
             });
         return { type: 'FeatureCollection' as const, features };
     }, [countyRecords, freshnessType]);
+
+    /** Merged county GeoJSON — one feature per county with both high and low temps for combined labels */
+    const countyMergedGeoJson = useMemo(() => {
+        if (!countyRecords) return null;
+        const byFips = new Map<string, { high?: GeoJsonFeature<CountyRecordProperties>; low?: GeoJsonFeature<CountyRecordProperties> }>();
+        for (const f of countyRecords.features) {
+            const fips = f.properties.countyFips;
+            if (!byFips.has(fips)) byFips.set(fips, {});
+            byFips.get(fips)![f.properties.type] = f;
+        }
+        const features = Array.from(byFips.values()).map(pair => {
+            const base = pair.high || pair.low!;
+            return {
+                type: 'Feature' as const,
+                geometry: base.geometry,
+                properties: {
+                    countyFips: base.properties.countyFips,
+                    countyName: base.properties.countyName,
+                    state: base.properties.state,
+                    highTempF: pair.high?.properties.tempF ?? null,
+                    lowTempF: pair.low?.properties.tempF ?? null,
+                },
+            };
+        });
+        return { type: 'FeatureCollection' as const, features };
+    }, [countyRecords]);
+
+    // Keep refs so click handlers can look up both high+low counterparts
+    const countyRecordsRef = useRef(countyRecords);
+    useEffect(() => { countyRecordsRef.current = countyRecords; }, [countyRecords]);
+    const stateRecordsRef = useRef(stateRecords);
+    useEffect(() => { stateRecordsRef.current = stateRecords; }, [stateRecords]);
 
     /** Fly to a specific location (station or state) */
     const flyToLocation = useCallback((lng: number, lat: number) => {
@@ -258,57 +399,69 @@ export function TemperatureMap() {
             data: stateRecords,
         });
 
-        // High records — red circles with radius encoding temperature magnitude
+        // High record labels — state abbrev above in red
         map.addLayer({
             id: 'state-highs',
-            type: 'circle',
+            type: 'symbol',
             source: sourceId,
             filter: ['==', ['get', 'type'], 'high'],
+            layout: {
+                'text-field': ['concat', ['to-string', ['get', 'tempF']], '°F'],
+                'text-font': ['Open Sans Bold'],
+                'text-size': ['interpolate', ['linear'], ['zoom'], 3, 11, 6, 14, 9, 18],
+                'text-offset': [0, -0.8],
+                'text-anchor': 'bottom',
+                'text-allow-overlap': true,
+                visibility: 'none',
+            },
             paint: {
-                'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 6, 6, 10, 9, 14],
-                'circle-color': HIGH_TEMP_COLOR,
-                'circle-opacity': 0.75,
-                'circle-stroke-width': 2,
-                'circle-stroke-color': 'rgba(239,68,68,0.3)',
+                'text-color': '#fca5a5',
+                'text-halo-color': '#18181b',
+                'text-halo-width': 2,
             },
         });
 
-        // Low records — blue circles
+        // Low record labels — temp below in blue
         map.addLayer({
             id: 'state-lows',
-            type: 'circle',
+            type: 'symbol',
             source: sourceId,
             filter: ['==', ['get', 'type'], 'low'],
+            layout: {
+                'text-field': ['concat', ['to-string', ['get', 'tempF']], '°F'],
+                'text-font': ['Open Sans Bold'],
+                'text-size': ['interpolate', ['linear'], ['zoom'], 3, 11, 6, 14, 9, 18],
+                'text-offset': [0, 0.8],
+                'text-anchor': 'top',
+                'text-allow-overlap': true,
+                visibility: 'none',
+            },
             paint: {
-                'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 6, 6, 10, 9, 14],
-                'circle-color': LOW_TEMP_COLOR,
-                'circle-opacity': 0.75,
-                'circle-stroke-width': 2,
-                'circle-stroke-color': 'rgba(59,130,246,0.3)',
+                'text-color': '#93c5fd',
+                'text-halo-color': '#18181b',
+                'text-halo-width': 2,
             },
         });
 
-        // Temperature labels — color-coded red/blue with the temp value
+        // State abbreviation labels — centered between high and low
         map.addLayer({
             id: 'state-labels',
             type: 'symbol',
             source: sourceId,
+            filter: ['==', ['get', 'type'], 'high'],
             layout: {
-                'text-field': ['concat', ['to-string', ['get', 'tempF']], '°F'],
+                'text-field': ['get', 'state'],
                 'text-font': ['Open Sans Bold'],
-                'text-size': ['interpolate', ['linear'], ['zoom'], 3, 10, 6, 13],
-                'text-offset': [0, -0.1],
-                'text-allow-overlap': false,
+                'text-size': ['interpolate', ['linear'], ['zoom'], 3, 9, 6, 11, 9, 14],
+                'text-offset': [0, 0],
                 'text-anchor': 'center',
+                'text-allow-overlap': true,
+                visibility: 'none',
             },
             paint: {
-                'text-color': [
-                    'case',
-                    ['==', ['get', 'type'], 'high'], '#fca5a5',
-                    '#93c5fd',
-                ],
-                'text-halo-color': '#000000',
-                'text-halo-width': 1.5,
+                'text-color': '#d4d4d8',
+                'text-halo-color': '#18181b',
+                'text-halo-width': 2,
             },
         });
     }, [mapLoaded, stateRecords, showCounty]);
@@ -327,66 +480,76 @@ export function TemperatureMap() {
                 data: countyRecords,
             });
 
+            // High dots — small red circles, offset slightly left
             map.addLayer({
                 id: 'county-highs',
                 type: 'circle',
                 source: sourceId,
                 filter: ['==', ['get', 'type'], 'high'],
                 paint: {
-                    'circle-radius': ['interpolate', ['linear'], ['zoom'], 5, 4, 8, 7, 11, 11],
+                    'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 1.5, 6, 2.5, 9, 4, 12, 6],
                     'circle-color': HIGH_TEMP_COLOR,
-                    'circle-opacity': 0.7,
-                    'circle-stroke-width': 1.5,
-                    'circle-stroke-color': 'rgba(239,68,68,0.3)',
+                    'circle-opacity': ['interpolate', ['linear'], ['zoom'], 3, 0.6, 6, 0.8, 8, 0.3],
+                    'circle-translate': [-2, 0],
+                    'circle-stroke-width': 0,
                 },
             });
 
+            // Low dots — small blue circles, offset slightly right
             map.addLayer({
                 id: 'county-lows',
                 type: 'circle',
                 source: sourceId,
                 filter: ['==', ['get', 'type'], 'low'],
                 paint: {
-                    'circle-radius': ['interpolate', ['linear'], ['zoom'], 5, 4, 8, 7, 11, 11],
+                    'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 1.5, 6, 2.5, 9, 4, 12, 6],
                     'circle-color': LOW_TEMP_COLOR,
-                    'circle-opacity': 0.7,
-                    'circle-stroke-width': 1.5,
-                    'circle-stroke-color': 'rgba(59,130,246,0.3)',
+                    'circle-opacity': ['interpolate', ['linear'], ['zoom'], 3, 0.6, 6, 0.8, 8, 0.3],
+                    'circle-translate': [2, 0],
+                    'circle-stroke-width': 0,
                 },
             });
+        }
+    }, [mapLoaded, countyRecords]);
 
+    // Add/update combined county labels layer (one feature per county, shows both high and low)
+    useEffect(() => {
+        const map = mapRef.current;
+        if (!map || !mapLoaded || !countyMergedGeoJson) return;
+
+        const sourceId = 'county-labels-source';
+        if (map.getSource(sourceId)) {
+            (map.getSource(sourceId) as maplibregl.GeoJSONSource).setData(countyMergedGeoJson as GeoJSON.GeoJSON);
+        } else {
+            map.addSource(sourceId, { type: 'geojson', data: countyMergedGeoJson as GeoJSON.GeoJSON });
+
+            // Combined label — shows high (red) above and low (blue) below
             map.addLayer({
                 id: 'county-labels',
                 type: 'symbol',
                 source: sourceId,
+                minzoom: 7,
                 layout: {
-                    'text-field': ['concat', ['to-string', ['get', 'tempF']], '°'],
+                    'text-field': [
+                        'format',
+                        ['concat', ['to-string', ['coalesce', ['get', 'highTempF'], '']], '°'], { 'text-color': '#fca5a5' },
+                        '\n', {},
+                        ['concat', ['to-string', ['coalesce', ['get', 'lowTempF'], '']], '°'], { 'text-color': '#93c5fd' },
+                    ],
                     'text-font': ['Open Sans Bold'],
-                    'text-size': ['interpolate', ['linear'], ['zoom'], 6, 9, 10, 12],
-                    'text-offset': [0, -0.1],
+                    'text-size': ['interpolate', ['linear'], ['zoom'], 7, 9, 10, 12],
                     'text-anchor': 'center',
                     'text-allow-overlap': false,
+                    'text-padding': 4,
+                    visibility: 'none',
                 },
                 paint: {
-                    'text-color': [
-                        'case',
-                        ['==', ['get', 'type'], 'high'], '#fca5a5',
-                        '#93c5fd',
-                    ],
                     'text-halo-color': '#000000',
-                    'text-halo-width': 1,
+                    'text-halo-width': 1.2,
                 },
             });
         }
-
-        // Toggle county layer visibility based on zoom
-        const countyLayers = ['county-highs', 'county-lows', 'county-labels'];
-        for (const layerId of countyLayers) {
-            if (map.getLayer(layerId)) {
-                map.setLayoutProperty(layerId, 'visibility', showCounty ? 'visible' : 'none');
-            }
-        }
-    }, [mapLoaded, countyRecords, showCounty]);
+    }, [mapLoaded, countyMergedGeoJson]);
 
     // Add/update broken records layer (yesterday's record breakers)
     useEffect(() => {
@@ -436,18 +599,19 @@ export function TemperatureMap() {
             },
         });
 
+        // Low records as hollow rings for shape differentiation (a11y)
         map.addLayer({
             id: 'broken-lows',
             type: 'circle',
             source: sourceId,
             filter: ['==', ['get', 'type'], 'low'],
             paint: {
-                'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 5, 7, 8, 10, 11],
-                'circle-color': LOW_TEMP_COLOR,
-                'circle-opacity': 0.9,
-                'circle-stroke-width': 2,
-                'circle-stroke-color': '#ffffff',
-                'circle-stroke-opacity': 0.6,
+                'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 6, 7, 9, 10, 12],
+                'circle-color': 'transparent',
+                'circle-opacity': 1,
+                'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 3, 2, 7, 2.5, 10, 3],
+                'circle-stroke-color': LOW_TEMP_COLOR,
+                'circle-stroke-opacity': 0.9,
             },
         });
 
@@ -530,24 +694,37 @@ export function TemperatureMap() {
         const map = mapRef.current;
         if (!map || !mapLoaded) return;
 
-        const recordLayers = ['state-highs', 'state-lows', 'state-labels', 'broken-glow', 'broken-highs', 'broken-lows', 'broken-labels'];
+        const recentLayers = ['broken-glow', 'broken-highs', 'broken-lows', 'broken-labels'];
+        const stateLayers = ['state-highs', 'state-lows', 'state-labels'];
         const countyLayers = ['county-highs', 'county-lows', 'county-labels'];
         const freshnessLayers = ['freshness-circles', 'freshness-labels'];
 
-        if (viewMode === 'records') {
-            for (const id of recordLayers) {
+        const allLayers = [...recentLayers, ...stateLayers, ...countyLayers, ...freshnessLayers];
+
+        // Close any open popup and station detail when switching views
+        popupRef.current?.remove();
+        popupRef.current = null;
+        setSelectedStation(null);
+
+        // Hide everything first
+        for (const id of allLayers) {
+            if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'none');
+        }
+
+        // Show only layers for the active view
+        if (viewMode === 'recent') {
+            for (const id of recentLayers) {
                 if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'visible');
             }
+        } else if (viewMode === 'county') {
             for (const id of countyLayers) {
-                if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', showCounty ? 'visible' : 'none');
+                if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'visible');
             }
-            for (const id of freshnessLayers) {
-                if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'none');
+        } else if (viewMode === 'state') {
+            for (const id of stateLayers) {
+                if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'visible');
             }
         } else {
-            for (const id of [...recordLayers, ...countyLayers]) {
-                if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'none');
-            }
             for (const id of freshnessLayers) {
                 if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'visible');
             }
@@ -561,9 +738,9 @@ export function TemperatureMap() {
             if (viewMode !== 'freshness') setViewMode('freshness');
         } else {
             setHighlightRange(null);
-            if (prevViewMode.current === 'records') setViewMode('records');
+            if (prevViewMode.current !== 'freshness') setViewMode(prevViewMode.current);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [showTrends]);
 
     // Highlight map features matching hovered chart period
@@ -611,83 +788,175 @@ export function TemperatureMap() {
         }
     }, [mapLoaded, highlightRange]);
 
-    // Update state layer opacity when zooming to county level
+    // State labels are symbol layers now — no circle opacity to manage
+    // (state layers only show in state view mode, not in recent)
+
+    // Style a dark popup element
+    const styleDarkPopup = useCallback((popup: maplibregl.Popup) => {
+        const el = popup.getElement();
+        if (!el) return;
+        el.querySelectorAll('.maplibregl-popup-content').forEach(node => {
+            (node as HTMLElement).style.cssText = 'background:transparent;padding:0;box-shadow:none;border:none;';
+        });
+        el.querySelectorAll('.maplibregl-popup-tip').forEach(node => {
+            (node as HTMLElement).style.borderTopColor = '#18181b';
+        });
+        el.querySelectorAll('.maplibregl-popup-close-button').forEach(node => {
+            (node as HTMLElement).style.cssText = 'color:#a1a1aa;font-size:18px;right:6px;top:6px;';
+        });
+    }, []);
+
+    // Set up click + hover handlers once — guarded to avoid duplicate listeners
     useEffect(() => {
         const map = mapRef.current;
-        if (!map || !mapLoaded) return;
+        if (!map || !mapLoaded || clickHandlersAttached.current) return;
+        clickHandlersAttached.current = true;
 
-        const stateLayers = ['state-highs', 'state-lows'];
-        const stateOpacity = showCounty ? 0.3 : 0.8;
-        for (const layerId of stateLayers) {
-            if (map.getLayer(layerId)) {
-                map.setPaintProperty(layerId, 'circle-opacity', stateOpacity);
-                map.setPaintProperty(layerId, 'circle-stroke-opacity', showCounty ? 0.2 : 0.6);
-            }
-        }
+        // Persistent hover tooltip (lightweight preview on mousemove)
+        let hoverPopup: maplibregl.Popup | null = null;
 
-        if (map.getLayer('state-labels')) {
-            map.setPaintProperty('state-labels', 'text-opacity', showCounty ? 0.2 : 1);
-        }
-    }, [mapLoaded, showCounty]);
+        const allClickLayers = ['broken-highs', 'broken-lows', 'broken-glow', 'state-highs', 'state-lows', 'county-highs', 'county-lows', 'county-labels'];
 
-    // Popup on click — dark themed with full info
-    const handleMapClick = useCallback((layerIds: string[]) => {
-        const map = mapRef.current;
-        if (!map) return;
-
-        for (const layerId of layerIds) {
+        for (const layerId of allClickLayers) {
             map.on('click', layerId, (e) => {
                 if (!e.features?.length) return;
+                hoverPopup?.remove();
                 const props = e.features[0].properties;
                 const coords = (e.features[0].geometry as GeoJSON.Point).coordinates.slice() as [number, number];
                 const layerType: 'state' | 'county' | 'broken' = layerId.startsWith('broken-')
                     ? 'broken'
                     : layerId.startsWith('state-') ? 'state' : 'county';
 
-                const popup = new maplibregl.Popup({
-                    closeButton: true,
-                    maxWidth: '300px',
-                    className: 'dark-popup',
-                })
-                    .setLngLat(coords)
-                    .setHTML(buildPopupHTML(props, layerType))
-                    .addTo(map);
+                // For merged county-labels layer, look up the actual records and show both
+                if (layerId === 'county-labels' && props.countyFips && countyRecordsRef.current) {
+                    const fips = props.countyFips as string;
+                    const highRec = countyRecordsRef.current.features.find(f => f.properties.countyFips === fips && f.properties.type === 'high');
+                    const lowRec = countyRecordsRef.current.features.find(f => f.properties.countyFips === fips && f.properties.type === 'low');
+                    const primary = highRec || lowRec;
+                    if (primary) {
+                        const counterpart = highRec && lowRec ? (primary === highRec ? lowRec.properties : highRec.properties) as unknown as Record<string, unknown> : null;
+                        popupRef.current?.remove();
+                        const popup = new maplibregl.Popup({ closeButton: true, maxWidth: counterpart ? '360px' : '300px', className: 'dark-popup' })
+                            .setLngLat(coords)
+                            .setHTML(buildPopupHTML(primary.properties as unknown as Record<string, unknown>, 'county', counterpart))
+                            .addTo(map);
+                        popupRef.current = popup;
+                        popup.on('close', () => { if (popupRef.current === popup) popupRef.current = null; });
+                        styleDarkPopup(popup);
+                    }
+                    return;
+                }
 
-                // Ensure the popup tip + close button match the dark theme
-                const el = popup.getElement();
+                // Find the counterpart (high↔low) to show both in popup
+                let counterpart: Record<string, unknown> | null = null;
+                if (layerType === 'county' && props.countyFips && countyRecordsRef.current) {
+                    const fips = props.countyFips as string;
+                    const otherType = props.type === 'high' ? 'low' : 'high';
+                    const match = countyRecordsRef.current.features.find(
+                        f => f.properties.countyFips === fips && f.properties.type === otherType
+                    );
+                    if (match) counterpart = match.properties as unknown as Record<string, unknown>;
+                }
+                if (layerType === 'state' && props.state && stateRecordsRef.current) {
+                    const st = props.state as string;
+                    const otherType = props.type === 'high' ? 'low' : 'high';
+                    const match = stateRecordsRef.current.features.find(
+                        f => f.properties.state === st && f.properties.type === otherType
+                    );
+                    if (match) counterpart = match.properties as unknown as Record<string, unknown>;
+                }
+
+                popupRef.current?.remove();
+                const popup = new maplibregl.Popup({ closeButton: true, maxWidth: (counterpart || layerType === 'state') ? '360px' : '300px', className: 'dark-popup' })
+                    .setLngLat(coords)
+                    .setHTML(buildPopupHTML(props, layerType, counterpart))
+                    .addTo(map);
+                popupRef.current = popup;
+                popup.on('close', () => { if (popupRef.current === popup) popupRef.current = null; });
+                styleDarkPopup(popup);
+
+                // Open station detail for broken records (which have uid)
+                if (layerType === 'broken' && props.uid) {
+                    setSelectedStation({
+                        uid: typeof props.uid === 'string' ? parseInt(props.uid, 10) : props.uid as number,
+                        name: (props.stationName as string) || 'Unknown',
+                        state: (props.stateName as string) || (props.state as string) || '',
+                    });
+                }
+            });
+
+            // Hover tooltip — show station/state name + temp on mousemove
+            map.on('mouseenter', layerId, () => { map.getCanvas().style.cursor = 'pointer'; });
+            map.on('mouseleave', layerId, () => {
+                map.getCanvas().style.cursor = '';
+                hoverPopup?.remove();
+                hoverPopup = null;
+            });
+            map.on('mousemove', layerId, (e) => {
+                if (!e.features?.length) return;
+                const props = e.features[0].properties;
+                const coords = (e.features[0].geometry as GeoJSON.Point).coordinates.slice() as [number, number];
+                const isStateLayer = layerId.startsWith('state-');
+                const isCountyLayer = layerId.startsWith('county-');
+
+                let hoverHTML: string;
+                if (isCountyLayer && countyRecordsRef.current) {
+                    // County hover: show both high and low stacked
+                    const fips = props.countyFips as string;
+                    const highRec = countyRecordsRef.current.features.find(f => f.properties.countyFips === fips && f.properties.type === 'high');
+                    const lowRec = countyRecordsRef.current.features.find(f => f.properties.countyFips === fips && f.properties.type === 'low');
+                    const countyName = props.countyName || '';
+                    const state = props.state || '';
+                    const highF = highRec?.properties.tempF;
+                    const lowF = lowRec?.properties.tempF;
+                    hoverHTML = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#18181b;color:#e4e4e7;padding:6px 10px;border-radius:6px;font-size:12px;white-space:nowrap;border:1px solid #3f3f46;box-shadow:0 2px 8px rgba(0,0,0,.4)">`
+                        + (highF != null ? `<div><span style="color:${HIGH_TEMP_COLOR};font-weight:700">${highF}°F</span></div>` : '')
+                        + (lowF != null ? `<div><span style="color:${LOW_TEMP_COLOR};font-weight:700">${lowF}°F</span></div>` : '')
+                        + `<div style="color:#a1a1aa;font-size:11px;margin-top:2px">${countyName}, ${state}</div></div>`;
+                } else if (isStateLayer && stateRecordsRef.current) {
+                    // State hover: show both high and low stacked
+                    const st = props.state as string;
+                    const highRec = stateRecordsRef.current.features.find(f => f.properties.state === st && f.properties.type === 'high');
+                    const lowRec = stateRecordsRef.current.features.find(f => f.properties.state === st && f.properties.type === 'low');
+                    const stateName = props.stateName || st || '';
+                    const highF = highRec?.properties.tempF;
+                    const lowF = lowRec?.properties.tempF;
+                    hoverHTML = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#18181b;color:#e4e4e7;padding:6px 10px;border-radius:6px;font-size:12px;white-space:nowrap;border:1px solid #3f3f46;box-shadow:0 2px 8px rgba(0,0,0,.4)">`
+                        + (highF != null ? `<div><span style="color:${HIGH_TEMP_COLOR};font-weight:700">${highF}°F</span></div>` : '')
+                        + (lowF != null ? `<div><span style="color:${LOW_TEMP_COLOR};font-weight:700">${lowF}°F</span></div>` : '')
+                        + `<div style="color:#a1a1aa;font-size:11px;margin-top:2px">${stateName}</div></div>`;
+                } else {
+                    const name = props.stationName || props.stateName || props.countyName || '';
+                    const tempF = props.tempF;
+                    const type = props.type as string;
+                    const color = type === 'high' ? HIGH_TEMP_COLOR : LOW_TEMP_COLOR;
+                    hoverHTML = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#18181b;color:#e4e4e7;padding:4px 8px;border-radius:6px;font-size:12px;white-space:nowrap;border:1px solid #3f3f46;box-shadow:0 2px 8px rgba(0,0,0,.4)"><span style="color:${color};font-weight:700">${tempF}°F</span> <span style="color:#a1a1aa">${name}</span></div>`;
+                }
+
+                if (!hoverPopup) {
+                    hoverPopup = new maplibregl.Popup({ closeButton: false, closeOnClick: false, className: 'dark-popup hover-tip', offset: 12 });
+                }
+                hoverPopup
+                    .setLngLat(coords)
+                    .setHTML(hoverHTML)
+                    .addTo(map);
+                const el = hoverPopup.getElement();
                 if (el) {
                     el.querySelectorAll('.maplibregl-popup-content').forEach(node => {
                         (node as HTMLElement).style.cssText = 'background:transparent;padding:0;box-shadow:none;border:none;';
                     });
                     el.querySelectorAll('.maplibregl-popup-tip').forEach(node => {
-                        (node as HTMLElement).style.borderTopColor = '#18181b';
-                    });
-                    el.querySelectorAll('.maplibregl-popup-close-button').forEach(node => {
-                        (node as HTMLElement).style.cssText = 'color:#a1a1aa;font-size:18px;right:6px;top:6px;';
+                        (node as HTMLElement).style.display = 'none';
                     });
                 }
             });
-
-            map.on('mouseenter', layerId, () => {
-                map.getCanvas().style.cursor = 'pointer';
-            });
-            map.on('mouseleave', layerId, () => {
-                map.getCanvas().style.cursor = '';
-            });
         }
-    }, []);
 
-    // Set up click handlers once map + data are ready
-    useEffect(() => {
-        if (!mapLoaded) return;
-        handleMapClick(['broken-highs', 'broken-lows', 'broken-glow', 'state-highs', 'state-lows', 'county-highs', 'county-lows']);
-
-        // Freshness layer click — separate popup style
-        const map = mapRef.current;
-        if (!map) return;
-
+        // Freshness layer click
         map.on('click', 'freshness-circles', (e) => {
             if (!e.features?.length) return;
+            hoverPopup?.remove();
+            popupRef.current?.remove();
             const p = e.features[0].properties;
             const coords = (e.features[0].geometry as GeoJSON.Point).coordinates.slice() as [number, number];
             const typeLabel = p.type === 'high' ? 'Record High' : 'Record Low';
@@ -705,31 +974,56 @@ export function TemperatureMap() {
                     <div style="font-size:11px;color:#a1a1aa">Set in <strong style="color:#e4e4e7">${p.year}</strong></div>
                 </div>`)
                 .addTo(map);
+            popupRef.current = popup;
+            popup.on('close', () => { if (popupRef.current === popup) popupRef.current = null; });
+            styleDarkPopup(popup);
+        });
 
-            const el = popup.getElement();
+        // Freshness hover
+        map.on('mouseenter', 'freshness-circles', () => { map.getCanvas().style.cursor = 'pointer'; });
+        map.on('mouseleave', 'freshness-circles', () => {
+            map.getCanvas().style.cursor = '';
+            hoverPopup?.remove();
+            hoverPopup = null;
+        });
+        map.on('mousemove', 'freshness-circles', (e) => {
+            if (!e.features?.length) return;
+            const p = e.features[0].properties;
+            const coords = (e.features[0].geometry as GeoJSON.Point).coordinates.slice() as [number, number];
+            const name = p.countyName || '';
+            const color = p.color || '#a1a1aa';
+
+            if (!hoverPopup) {
+                hoverPopup = new maplibregl.Popup({ closeButton: false, closeOnClick: false, className: 'dark-popup hover-tip', offset: 12 });
+            }
+            hoverPopup
+                .setLngLat(coords)
+                .setHTML(`<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#18181b;color:#e4e4e7;padding:4px 8px;border-radius:6px;font-size:12px;white-space:nowrap;border:1px solid #3f3f46;box-shadow:0 2px 8px rgba(0,0,0,.4)"><span style="color:${color};font-weight:700">${p.tempF}°F</span> <span style="color:#a1a1aa">${name} (${p.year})</span></div>`)
+                .addTo(map);
+            const el = hoverPopup.getElement();
             if (el) {
                 el.querySelectorAll('.maplibregl-popup-content').forEach(node => {
                     (node as HTMLElement).style.cssText = 'background:transparent;padding:0;box-shadow:none;border:none;';
                 });
                 el.querySelectorAll('.maplibregl-popup-tip').forEach(node => {
-                    (node as HTMLElement).style.borderTopColor = '#18181b';
-                });
-                el.querySelectorAll('.maplibregl-popup-close-button').forEach(node => {
-                    (node as HTMLElement).style.cssText = 'color:#a1a1aa;font-size:16px;right:4px;top:4px;';
+                    (node as HTMLElement).style.display = 'none';
                 });
             }
         });
-
-        map.on('mouseenter', 'freshness-circles', () => { map.getCanvas().style.cursor = 'pointer'; });
-        map.on('mouseleave', 'freshness-circles', () => { map.getCanvas().style.cursor = ''; });
-    }, [mapLoaded, handleMapClick]);
+    }, [mapLoaded, styleDarkPopup]);
 
     if (error) {
         return (
             <div className="flex items-center justify-center h-full bg-[#0a0a0a] text-zinc-400">
                 <div className="text-center p-8">
                     <p className="text-lg mb-2">Failed to load temperature data</p>
-                    <p className="text-sm text-zinc-500">{error}</p>
+                    <p className="text-sm text-zinc-500 mb-4">{error}</p>
+                    <button
+                        onClick={() => window.location.reload()}
+                        className="px-4 py-2 text-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg border border-zinc-700 transition-colors"
+                    >
+                        Retry
+                    </button>
                 </div>
             </div>
         );
@@ -740,56 +1034,106 @@ export function TemperatureMap() {
             <div ref={mapContainer} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
 
             {loading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-[#0a0a0a]/80 z-10">
-                    <div className="text-zinc-400 text-sm animate-pulse">Loading temperature records...</div>
+                <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+                    <div className="flex items-center gap-2.5 bg-zinc-900/90 backdrop-blur rounded-lg px-4 py-2.5 border border-zinc-700/50 pointer-events-auto">
+                        <div className="w-4 h-4 border-2 border-zinc-600 border-t-zinc-300 rounded-full animate-spin" />
+                        <span className="text-zinc-300 text-sm">Loading temperature records…</span>
+                    </div>
                 </div>
             )}
 
-            {/* Back button */}
-            <a
-                href="/projects"
-                className="absolute top-4 left-4 z-20 bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white px-3 py-1.5 rounded text-sm border border-zinc-700/50 hover:border-zinc-600 transition-colors"
-            >
-                ← Projects
-            </a>
-
-            {/* Climate Trends toggle */}
-            <button
-                onClick={() => setShowTrends(s => !s)}
-                className={`absolute top-4 left-32 z-20 bg-zinc-900/80 backdrop-blur px-3 py-1.5 rounded text-sm border transition-colors ${
-                    showTrends
-                        ? 'text-violet-300 border-violet-400/50 bg-violet-900/30'
-                        : 'text-violet-400 border-violet-500/30 hover:text-violet-300 hover:border-violet-400/50'
-                }`}
-            >
-                📊 Trends
-            </button>
-
-            {/* View mode toggle */}
-            <div className="absolute top-14 left-4 z-20 flex gap-1 bg-zinc-900/80 backdrop-blur rounded-lg border border-zinc-700/50 p-1">
-                <button
-                    onClick={() => setViewMode('records')}
-                    className={`px-3 py-1.5 text-xs rounded transition-colors ${viewMode === 'records'
-                        ? 'bg-zinc-700 text-white'
-                        : 'text-zinc-400 hover:text-zinc-200'
-                        }`}
-                >
-                    🌡️ Records
-                </button>
-                <button
-                    onClick={() => setViewMode('freshness')}
-                    className={`px-3 py-1.5 text-xs rounded transition-colors ${viewMode === 'freshness'
-                        ? 'bg-zinc-700 text-white'
-                        : 'text-zinc-400 hover:text-zinc-200'
-                        }`}
-                >
-                    📅 Freshness
-                </button>
+            {/* Unified toolbar */}
+            <div className="absolute top-3 left-3 z-20 flex flex-col gap-1.5">
+                <div className="flex items-center gap-1.5">
+                    <Link
+                        to="/projects"
+                        className="bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white px-3 py-1.5 rounded-lg text-sm border border-zinc-700/50 hover:border-zinc-600 transition-colors"
+                    >
+                        ← Projects
+                    </Link>
+                    <button
+                        onClick={() => setShowTrends(s => !s)}
+                        className={`bg-zinc-900/80 backdrop-blur px-3 py-1.5 rounded-lg text-sm border transition-colors ${showTrends
+                            ? 'text-violet-300 border-violet-400/50 bg-violet-900/30'
+                            : 'text-violet-400 border-violet-500/30 hover:text-violet-300 hover:border-violet-400/50'
+                            }`}
+                    >
+                        📊 Trends
+                    </button>
+                </div>
+                <div className="flex gap-0.5 bg-zinc-900/80 backdrop-blur rounded-lg border border-zinc-700/50 p-0.5">
+                    <button
+                        onClick={() => setViewMode('recent')}
+                        className={`px-2.5 py-1.5 text-xs rounded transition-colors ${viewMode === 'recent'
+                            ? 'bg-zinc-700 text-white'
+                            : 'text-zinc-400 hover:text-zinc-200'
+                            }`}
+                        title="Recent records broken across US weather stations"
+                    >
+                        🌡️ Records
+                    </button>
+                    <button
+                        onClick={() => setViewMode('county')}
+                        className={`px-2.5 py-1.5 text-xs rounded transition-colors ${viewMode === 'county'
+                            ? 'bg-zinc-700 text-white'
+                            : 'text-zinc-400 hover:text-zinc-200'
+                            }`}
+                        title="All-time county temperature records"
+                    >
+                        📍 County
+                    </button>
+                    <button
+                        onClick={() => setViewMode('state')}
+                        className={`px-2.5 py-1.5 text-xs rounded transition-colors ${viewMode === 'state'
+                            ? 'bg-zinc-700 text-white'
+                            : 'text-zinc-400 hover:text-zinc-200'
+                            }`}
+                        title="All-time state temperature records"
+                    >
+                        🏛️ State
+                    </button>
+                    <button
+                        onClick={() => setViewMode('freshness')}
+                        className={`px-2.5 py-1.5 text-xs rounded transition-colors ${viewMode === 'freshness'
+                            ? 'bg-zinc-700 text-white'
+                            : 'text-zinc-400 hover:text-zinc-200'
+                            }`}
+                        title="All-time county records colored by the decade they were set"
+                    >
+                        📅 Freshness
+                    </button>
+                </div>
+                {/* Context headline — promoted */}
+                <div className="max-w-md" aria-live="polite">
+                    {viewMode === 'recent' && recentRecords && (
+                        <p className="text-xs text-zinc-200 bg-zinc-900/80 backdrop-blur rounded-lg px-3 py-1.5 border border-zinc-700/50">
+                            <span className="font-semibold" style={{ color: HIGH_TEMP_COLOR }}>{(recentRecords.yesterday?.filter((r: BrokenRecord) => r.type === 'high').length || 0).toLocaleString()}</span>
+                            {' record highs and '}
+                            <span className="font-semibold" style={{ color: LOW_TEMP_COLOR }}>{(recentRecords.yesterday?.filter((r: BrokenRecord) => r.type === 'low').length || 0).toLocaleString()}</span>
+                            {' record lows broken yesterday'}
+                        </p>
+                    )}
+                    {viewMode === 'county' && countyRecords && (
+                        <p className="text-xs text-zinc-200 bg-zinc-900/80 backdrop-blur rounded-lg px-3 py-1.5 border border-zinc-700/50">
+                            <span className="font-semibold text-zinc-100">{countyRecords.features.length.toLocaleString()}</span> all-time county temperature records
+                        </p>
+                    )}
+                    {viewMode === 'state' && stateRecords && (
+                        <p className="text-xs text-zinc-200 bg-zinc-900/80 backdrop-blur rounded-lg px-3 py-1.5 border border-zinc-700/50">
+                            <span className="font-semibold text-zinc-100">{stateRecords.features.length.toLocaleString()}</span> all-time state temperature records
+                        </p>
+                    )}
+                    {viewMode === 'freshness' && (
+                        <p className="text-xs text-zinc-200 bg-zinc-900/80 backdrop-blur rounded-lg px-3 py-1.5 border border-zinc-700/50">
+                            All-time county records colored by decade — older records are cooler colors
+                        </p>
+                    )}
+                </div>
             </div>
 
             {/* Legend — changes depending on view mode */}
-            {viewMode === 'records' ? (
-                <div className={`absolute left-4 z-20 bg-zinc-900/80 backdrop-blur rounded-lg px-4 py-3 text-xs text-zinc-300 border border-zinc-700/50 transition-all ${showTrends ? 'bottom-[44%]' : 'bottom-6'}`}>
+            {(viewMode === 'recent' || viewMode === 'county' || viewMode === 'state') ? (
+                <div className={`absolute left-4 z-20 bg-zinc-900/80 backdrop-blur rounded-lg px-4 py-3 text-xs text-zinc-300 border border-zinc-700/50 transition-all ${showTrends ? (isMobile ? 'bottom-[55%]' : 'bottom-[37%]') : 'bottom-6'}`}>
                     <div className="flex items-center gap-2 mb-1.5">
                         <span className="inline-block w-3 h-3 rounded-full" style={{ backgroundColor: HIGH_TEMP_COLOR }} />
                         Record High
@@ -798,50 +1142,49 @@ export function TemperatureMap() {
                         <span className="inline-block w-3 h-3 rounded-full" style={{ backgroundColor: LOW_TEMP_COLOR }} />
                         Record Low
                     </div>
-                    {showCounty && (
-                        <div className="mt-2 pt-2 border-t border-zinc-700/50 text-zinc-400">
-                            County records visible
-                        </div>
-                    )}
                 </div>
             ) : (
-                <div className={`absolute left-4 z-20 bg-zinc-900/80 backdrop-blur rounded-lg px-4 py-3 text-xs text-zinc-300 border border-zinc-700/50 transition-all ${showTrends ? 'bottom-[44%]' : 'bottom-6'}`}>
+                <div className={`absolute left-4 z-20 bg-zinc-900/80 backdrop-blur rounded-lg px-3 py-2 sm:px-4 sm:py-3 text-xs text-zinc-300 border border-zinc-700/50 transition-all max-w-[calc(100vw-2rem)] ${showTrends ? (isMobile ? 'bottom-[55%]' : 'bottom-[37%]') : 'bottom-6'}`}>
                     <div className="flex items-center gap-1 mb-1.5 text-zinc-200 font-medium">Year record was set</div>
-                    <div className="flex gap-0.5">
-                        {FRESHNESS_COLORS.map(([year, color]) => (
-                            <div key={year} className="flex flex-col items-center">
-                                <div className="w-5 h-3 rounded-sm" style={{ backgroundColor: color }} />
-                                <span className="mt-0.5 text-[10px] text-zinc-400">{year}</span>
+                    <div className="flex gap-0.5 overflow-x-auto">
+                        {FRESHNESS_COLORS.filter((_, i) => isMobile ? i % 2 === 0 : true).map(([year, color]) => (
+                            <div key={year} className="flex flex-col items-center shrink-0">
+                                <div className="w-4 h-3 sm:w-5 rounded-sm" style={{ backgroundColor: color }} />
+                                <span className="mt-0.5 text-[10px] sm:text-xs text-zinc-400">{year}</span>
                             </div>
                         ))}
                     </div>
                 </div>
             )}
 
-            {/* °F / °C toggle */}
+            {/* °F / °C toggle — min 44px touch target for accessibility */}
             <button
                 onClick={() => setUseCelsius(c => !c)}
-                className="absolute top-4 right-24 z-20 bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white w-8 h-8 rounded flex items-center justify-center text-xs font-semibold border border-zinc-700/50 hover:border-zinc-600 transition-colors"
+                className="absolute top-4 right-24 z-20 bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white w-10 h-10 sm:w-8 sm:h-8 rounded flex items-center justify-center text-xs font-semibold border border-zinc-700/50 hover:border-zinc-600 transition-colors"
                 title={useCelsius ? 'Switch to °F' : 'Switch to °C'}
+                aria-label={useCelsius ? 'Switch to Fahrenheit' : 'Switch to Celsius'}
             >
                 {useCelsius ? '°C' : '°F'}
             </button>
 
-            {/* Summary panel toggle */}
+            {/* Summary panel toggle — min 44px touch target */}
             <button
                 onClick={() => setPanelOpen(p => !p)}
-                className="absolute top-4 right-14 z-20 bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white w-8 h-8 rounded flex items-center justify-center text-sm border border-zinc-700/50 hover:border-zinc-600 transition-colors"
+                className="absolute top-4 right-14 z-20 bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white w-10 h-10 sm:w-8 sm:h-8 rounded flex items-center justify-center text-sm border border-zinc-700/50 hover:border-zinc-600 transition-colors"
                 title={panelOpen ? 'Hide summary' : 'Show summary'}
+                aria-label={panelOpen ? 'Hide summary panel' : 'Show summary panel'}
+                aria-expanded={panelOpen}
             >
                 {panelOpen ? '✕' : '☰'}
             </button>
 
             {/* Summary panel */}
-            {panelOpen && !showTrends && (
+            {panelOpen && !showTrends && !selectedStation && (
                 <SummaryPanel
                     viewMode={viewMode}
                     recentRecords={recentRecords}
                     countyRecords={countyRecords}
+                    stateRecords={stateRecords}
                     freshnessType={freshnessType}
                     onFreshnessTypeChange={setFreshnessType}
                     useCelsius={useCelsius}
@@ -849,58 +1192,109 @@ export function TemperatureMap() {
                 />
             )}
 
-            {/* Climate Trends drawer */}
+            {/* Station detail panel — shown when a broken record station is clicked */}
+            {selectedStation && !showTrends && (
+                <StationDetailPanel
+                    uid={selectedStation.uid}
+                    stationName={selectedStation.name}
+                    state={selectedStation.state}
+                    useCelsius={useCelsius}
+                    onClose={() => setSelectedStation(null)}
+                />
+            )}
+
+            {/* Climate Trends drawer — responsive: side-by-side on desktop, tabbed on mobile */}
             {showTrends && trends && (
                 <div
                     className="absolute bottom-0 left-0 right-0 z-30 bg-zinc-900/95 backdrop-blur-sm border-t border-zinc-700/50 flex flex-col"
-                    style={{ height: '42%', minHeight: 300 }}
+                    style={{ height: isMobile ? '50%' : '35%', minHeight: 220 }}
                 >
                     {/* Drawer header */}
-                    <div className="shrink-0 flex items-center justify-between px-4 py-2 border-b border-zinc-800">
-                        <div className="flex items-center gap-4">
-                            <h2 className="text-sm font-semibold text-zinc-200">Climate Trends</h2>
-                            <nav className="flex gap-1">
-                                {([
-                                    { id: 'age' as const, label: 'Record Age' },
-                                    { id: 'timeseries' as const, label: 'Frequency' },
-                                    { id: 'ratio' as const, label: 'H:L Ratio' },
-                                ] as const).map(s => (
-                                    <button
-                                        key={s.id}
-                                        onClick={() => setActiveChart(s.id)}
-                                        className={`px-2.5 py-1 text-xs rounded transition-colors ${
-                                            activeChart === s.id
-                                                ? 'bg-zinc-700 text-violet-400'
-                                                : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50'
-                                        }`}
-                                    >
-                                        {s.label}
-                                    </button>
-                                ))}
-                            </nav>
-                        </div>
+                    <div className="shrink-0 flex items-center justify-between px-4 py-1.5 border-b border-zinc-800">
+                        <h2 className="text-sm font-semibold text-zinc-200">Climate Trends</h2>
                         <button
                             onClick={() => setShowTrends(false)}
                             className="text-zinc-400 hover:text-zinc-200 w-7 h-7 flex items-center justify-center rounded hover:bg-zinc-800 transition-colors text-sm"
+                            aria-label="Close trends panel"
                         >
                             ✕
                         </button>
                     </div>
 
-                    {/* Drawer content */}
-                    <div className="flex-1 min-h-0 px-4 py-2">
-                        {activeChart === 'age' && (
-                            <RecordAgeChart data={trends.byDecade} onHoverPeriod={setHighlightRange} compact />
-                        )}
-                        {activeChart === 'timeseries' && (
-                            <RecordsBrokenTimeSeries data={trends.byYear} onHoverPeriod={setHighlightRange} compact />
-                        )}
-                        {activeChart === 'ratio' && (
-                            <HighLowRatioChart decadeData={trends.byDecade} rollingData={trends.rollingRatio} onHoverPeriod={setHighlightRange} compact />
-                        )}
-                    </div>
+                    {/* Charts: side-by-side on desktop, tabs on mobile */}
+                    {isMobile ? (
+                        <MobileTrendsDrawer
+                            trends={trends}
+                            setHighlightRange={setHighlightRange}
+                            selectedDecade={selectedDecade}
+                            handleSelectDecade={handleSelectDecade}
+                        />
+                    ) : (
+                        <div className="flex-1 min-h-0 flex gap-1 px-2 py-1.5">
+                            <div className="flex-1 min-w-0 flex flex-col">
+                                <span className="text-xs text-zinc-500 px-1 mb-0.5 shrink-0">Record Age</span>
+                                <div className="flex-1 min-h-0">
+                                    <RecordAgeChart data={trends.byDecade} onHoverPeriod={setHighlightRange} selectedDecade={selectedDecade} onSelectDecade={handleSelectDecade} compact />
+                                </div>
+                            </div>
+                            <div className="w-px bg-zinc-800 shrink-0" />
+                            <div className="flex-1 min-w-0 flex flex-col">
+                                <span className="text-xs text-zinc-500 px-1 mb-0.5 shrink-0">Frequency</span>
+                                <div className="flex-1 min-h-0">
+                                    <RecordsBrokenTimeSeries data={trends.byYear} onHoverPeriod={setHighlightRange} selectedDecade={selectedDecade} onSelectDecade={handleSelectDecade} compact />
+                                </div>
+                            </div>
+                            <div className="w-px bg-zinc-800 shrink-0" />
+                            <div className="flex-1 min-w-0 flex flex-col">
+                                <span className="text-xs text-zinc-500 px-1 mb-0.5 shrink-0">H:L Ratio</span>
+                                <div className="flex-1 min-h-0">
+                                    <HighLowRatioChart decadeData={trends.byDecade} rollingData={trends.rollingRatio} onHoverPeriod={setHighlightRange} selectedDecade={selectedDecade} onSelectDecade={handleSelectDecade} compact />
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             )}
         </div>
+    );
+}
+
+/** Mobile trends drawer — swipeable tabs instead of side-by-side charts */
+function MobileTrendsDrawer({ trends, setHighlightRange, selectedDecade, handleSelectDecade }: {
+    trends: { byDecade: import('../types').DecadeData[]; byYear: import('../types').YearData[]; rollingRatio: import('../types').RollingRatioData[] };
+    setHighlightRange: (range: HighlightRange | null) => void;
+    selectedDecade: number | null;
+    handleSelectDecade: (decade: number | null) => void;
+}) {
+    const [activeTab, setActiveTab] = useState<'age' | 'freq' | 'ratio'>('age');
+
+    return (
+        <>
+            <div className="flex border-b border-zinc-800 shrink-0">
+                {([['age', 'Record Age'], ['freq', 'Frequency'], ['ratio', 'H:L Ratio']] as const).map(([id, label]) => (
+                    <button
+                        key={id}
+                        onClick={() => setActiveTab(id)}
+                        className={`flex-1 px-2 py-1.5 text-[11px] transition-colors ${activeTab === id
+                            ? 'text-violet-400 border-b-2 border-violet-400'
+                            : 'text-zinc-500 hover:text-zinc-300'
+                            }`}
+                    >
+                        {label}
+                    </button>
+                ))}
+            </div>
+            <div className="flex-1 min-h-0 px-2 py-1.5">
+                {activeTab === 'age' && (
+                    <RecordAgeChart data={trends.byDecade} onHoverPeriod={setHighlightRange} selectedDecade={selectedDecade} onSelectDecade={handleSelectDecade} compact />
+                )}
+                {activeTab === 'freq' && (
+                    <RecordsBrokenTimeSeries data={trends.byYear} onHoverPeriod={setHighlightRange} selectedDecade={selectedDecade} onSelectDecade={handleSelectDecade} compact />
+                )}
+                {activeTab === 'ratio' && (
+                    <HighLowRatioChart decadeData={trends.byDecade} rollingData={trends.rollingRatio} onHoverPeriod={setHighlightRange} selectedDecade={selectedDecade} onSelectDecade={handleSelectDecade} compact />
+                )}
+            </div>
+        </>
     );
 }

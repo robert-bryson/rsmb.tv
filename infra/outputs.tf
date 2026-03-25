@@ -27,3 +27,15 @@ output "health_check_id" {
 output "dashboard_url" {
   value = "https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#dashboards/dashboard/rsmbtv"
 }
+
+output "temperature_data_bucket" {
+  value = aws_s3_bucket.temperature_data.bucket
+}
+
+output "temperature_data_cdn_domain" {
+  value = "https://data.${var.domain_name}"
+}
+
+output "temperature_data_cloudfront_id" {
+  value = aws_cloudfront_distribution.temperature_data.id
+}

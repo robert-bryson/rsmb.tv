@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useClimateTrends } from '../hooks/useClimateTrends';
 import { RecordAgeChart } from './RecordAgeChart';
 import { RecordsBrokenTimeSeries } from './RecordsBrokenTimeSeries';
@@ -41,12 +42,12 @@ export function ClimateTrends() {
             {/* Header */}
             <div className="shrink-0 px-4 pt-4 pb-2 border-b border-zinc-800">
                 <div className="flex items-center gap-3 mb-3">
-                    <a
-                        href="/projects/temperature-records"
+                    <Link
+                        to="/projects/temperature-records"
                         className="text-zinc-400 hover:text-zinc-200 text-sm transition-colors"
                     >
                         ← Map
-                    </a>
+                    </Link>
                     <h1 className="text-base font-semibold text-zinc-100">Climate Trends</h1>
                 </div>
                 <p className="text-xs text-zinc-500 mb-3">

@@ -2,25 +2,9 @@ import { useRef, useEffect, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useTemperatureData } from '../hooks/useTemperatureData';
-import { INITIAL_CENTER, MIN_ZOOM, MAX_ZOOM } from '../constants';
+import { INITIAL_CENTER, MIN_ZOOM, MAX_ZOOM, FRESHNESS_COLORS, yearToColor } from '../constants';
 
 type RecordType = 'high' | 'low';
-
-const FRESHNESS_COLORS: [number, string][] = [
-    [1900, '#1e3a5f'],  // oldest — deep blue
-    [1930, '#1e5f3a'],  // dust bowl era — green
-    [1960, '#5f5f1e'],  // mid-century — yellow-green
-    [1980, '#8b6914'],  // warming begins — amber
-    [2000, '#c2410c'],  // modern warming — orange
-    [2020, '#dc2626'],  // most recent — red
-];
-
-function yearToColor(year: number): string {
-    for (let i = FRESHNESS_COLORS.length - 1; i >= 0; i--) {
-        if (year >= FRESHNESS_COLORS[i][0]) return FRESHNESS_COLORS[i][1];
-    }
-    return FRESHNESS_COLORS[0][1];
-}
 
 /**
  * Map showing county all-time records colored by when they were set.

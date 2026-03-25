@@ -5,6 +5,8 @@ import { HIGH_TEMP_COLOR, LOW_TEMP_COLOR } from '../constants';
 interface Props {
     data: YearData[];
     onHoverPeriod?: (range: HighlightRange | null) => void;
+    selectedDecade?: number | null;
+    onSelectDecade?: (decade: number | null) => void;
     compact?: boolean;
 }
 
@@ -12,7 +14,7 @@ interface Props {
  * Area chart overlaying record highs set per year (red) vs record lows set per year (blue).
  * Shows how frequency of record-setting has changed over time.
  */
-export function RecordsBrokenTimeSeries({ data, onHoverPeriod, compact }: Props) {
+export function RecordsBrokenTimeSeries({ data, onHoverPeriod, selectedDecade, onSelectDecade, compact }: Props) {
     const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
     // Compute 5-year rolling averages for smoother visualization
@@ -81,6 +83,7 @@ export function RecordsBrokenTimeSeries({ data, onHoverPeriod, compact }: Props)
                     aria-label="Records broken per year time series"
                     onMouseLeave={() => { setHoveredIdx(null); onHoverPeriod?.(null); }}
                 >
+                    <desc>Area chart showing the number of county all-time record highs (red) and lows (blue) set each year from 1900 to present, with 5-year rolling average smoothing.</desc>
                     {/* Grid lines */}
                     {yTicks.map(v => (
                         <g key={v}>
@@ -101,6 +104,19 @@ export function RecordsBrokenTimeSeries({ data, onHoverPeriod, compact }: Props)
                         </text>
                     ))}
 
+                    {/* Selected decade highlight band */}
+                    {selectedDecade != null && (() => {
+                        const x1 = xScale(Math.max(selectedDecade, filtered[0].year));
+                        const x2 = xScale(Math.min(selectedDecade + 9, filtered[filtered.length - 1].year));
+                        return (
+                            <rect
+                                x={x1} y={padding.top} width={Math.max(0, x2 - x1)} height={plotH}
+                                fill="#a78bfa" opacity={0.1} rx={2}
+                                style={{ pointerEvents: 'none' }}
+                            />
+                        );
+                    })()}
+
                     {/* Area fills */}
                     <path d={buildAreaPath('highsAvg')} fill={HIGH_TEMP_COLOR} opacity={0.12} />
                     <path d={buildAreaPath('lowsAvg')} fill={LOW_TEMP_COLOR} opacity={0.12} />
@@ -119,6 +135,11 @@ export function RecordsBrokenTimeSeries({ data, onHoverPeriod, compact }: Props)
                             height={plotH}
                             fill="transparent"
                             onMouseEnter={() => { setHoveredIdx(i); onHoverPeriod?.({ startYear: d.year, endYear: d.year }); }}
+                            onClick={() => {
+                                const decade = Math.floor(d.year / 10) * 10;
+                                onSelectDecade?.(selectedDecade === decade ? null : decade);
+                            }}
+                            style={{ cursor: 'pointer' }}
                         />
                     ))}
 

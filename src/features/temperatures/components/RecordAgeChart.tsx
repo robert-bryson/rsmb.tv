@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import type { DecadeData, HighlightRange } from '../types';
-import { HIGH_TEMP_COLOR, LOW_TEMP_COLOR } from '../constants';
+import { HIGH_TEMP_COLOR, LOW_TEMP_COLOR, yearToColor } from '../constants';
 
 interface Props {
     data: DecadeData[];
     onHoverPeriod?: (range: HighlightRange | null) => void;
+    selectedDecade?: number | null;
+    onSelectDecade?: (decade: number | null) => void;
     compact?: boolean;
 }
 
@@ -12,12 +14,39 @@ interface Props {
  * Mirrored bar chart: record highs go up (red), record lows go down (blue).
  * Shows when all-time county records were set, grouped by decade.
  */
-export function RecordAgeChart({ data, onHoverPeriod, compact }: Props) {
+export function RecordAgeChart({ data, onHoverPeriod, selectedDecade, onSelectDecade, compact }: Props) {
     const [hovered, setHovered] = useState<number | null>(null);
+    const [localSelected, setLocalSelected] = useState<number | null>(null);
 
     // Filter to decades with meaningful data (skip very early sparse ones)
     const filtered = data.filter(d => d.decade >= 1890);
+
+    // Use shared selection if provided, otherwise fall back to local
+    const selectedIdx = selectedDecade !== undefined
+        ? filtered.findIndex(d => d.decade === selectedDecade)
+        : localSelected;
+    const selected = selectedIdx === -1 ? null : selectedIdx;
+    const setSelected = (idx: number | null) => {
+        const decade = idx !== null ? filtered[idx]?.decade ?? null : null;
+        if (onSelectDecade) onSelectDecade(decade);
+        else setLocalSelected(idx);
+    };
     const maxVal = Math.max(...filtered.flatMap(d => [d.highs, d.lows]));
+
+    // Cumulative records set up to each decade
+    const cumTotal: number[] = [];
+    const cumHighs: number[] = [];
+    const cumLows: number[] = [];
+    let runTotal = 0, runHighs = 0, runLows = 0;
+    for (const d of filtered) {
+        runTotal += d.highs + d.lows;
+        runHighs += d.highs;
+        runLows += d.lows;
+        cumTotal.push(runTotal);
+        cumHighs.push(runHighs);
+        cumLows.push(runLows);
+    }
+    const maxCumulative = cumTotal[cumTotal.length - 1] || 1;
 
     const barWidth = 44;
     const gap = 6;
@@ -27,6 +56,9 @@ export function RecordAgeChart({ data, onHoverPeriod, compact }: Props) {
     const midY = halfHeight + 10;
 
     const scale = (val: number) => (val / maxVal) * halfHeight;
+    const cumulativeY = (val: number) => midY - (val / maxCumulative) * halfHeight * 0.85;
+
+    const activeIndex = hovered ?? selected;
 
     return (
         <div className={compact ? 'flex flex-col h-full' : ''}>
@@ -35,7 +67,7 @@ export function RecordAgeChart({ data, onHoverPeriod, compact }: Props) {
                     <h3 className="text-sm font-semibold text-zinc-200 mb-1">When Were All-Time Records Set?</h3>
                     <p className="text-xs text-zinc-500 mb-4">
                         Distribution of 6,078 county all-time record highs and lows by the decade they were set.
-                        Highs (red) go up, lows (blue) go down.
+                        Highs go up, lows go down. Color matches the freshness map. Click a decade to lock selection.
                     </p>
                 </>
             )}
@@ -46,8 +78,18 @@ export function RecordAgeChart({ data, onHoverPeriod, compact }: Props) {
                     preserveAspectRatio={compact ? 'xMidYMid meet' : undefined}
                     role="img"
                     aria-label="Record age distribution by decade"
-                    onMouseLeave={() => onHoverPeriod?.(null)}
+                    onClick={() => { setSelected(null); onHoverPeriod?.(null); }}
+                    onMouseLeave={() => {
+                        setHovered(null);
+                        if (selected !== null) {
+                            const sd = filtered[selected];
+                            onHoverPeriod?.({ startYear: sd.decade, endYear: sd.decade + 9 });
+                        } else {
+                            onHoverPeriod?.(null);
+                        }
+                    }}
                 >
+                    <desc>Mirrored bar chart showing when county all-time temperature records were set, grouped by decade from 1890s to 2020s. Record highs extend upward, record lows extend downward.</desc>
                     {/* Center line */}
                     <line
                         x1={30} y1={midY} x2={chartWidth + 40} y2={midY}
@@ -74,8 +116,9 @@ export function RecordAgeChart({ data, onHoverPeriod, compact }: Props) {
                         const x = 35 + i * (barWidth + gap);
                         const hH = scale(d.highs);
                         const hL = scale(d.lows);
-                        const isHovered = hovered === i;
-                        const opacity = hovered === null || isHovered ? 1 : 0.4;
+                        const isActive = activeIndex === i;
+                        const opacity = activeIndex === null || isActive ? 1 : 0.4;
+                        const decadeColor = yearToColor(d.decade);
 
                         return (
                             <g
@@ -84,19 +127,36 @@ export function RecordAgeChart({ data, onHoverPeriod, compact }: Props) {
                                     setHovered(i);
                                     onHoverPeriod?.({ startYear: d.decade, endYear: d.decade + 9 });
                                 }}
-                                onMouseLeave={() => setHovered(null)}
-                                style={{ cursor: 'default' }}
+                                onMouseLeave={() => {
+                                    setHovered(null);
+                                    if (selected !== null) {
+                                        const sd = filtered[selected];
+                                        onHoverPeriod?.({ startYear: sd.decade, endYear: sd.decade + 9 });
+                                    }
+                                }}
+                                onClick={(e) => { e.stopPropagation(); setSelected(selected === i ? null : i); }}
+                                style={{ cursor: 'pointer' }}
                             >
-                                {/* High bar (going up) */}
+                                {/* Selected indicator */}
+                                {selected === i && (
+                                    <rect
+                                        x={x - 3} y={midY - hH - 3}
+                                        width={barWidth + 6} height={hH + hL + 6}
+                                        fill="none" stroke="#a78bfa" strokeWidth={1.5}
+                                        rx={4} strokeDasharray="4 2"
+                                    />
+                                )}
+
+                                {/* High bar (going up) — colored by decade */}
                                 <rect
                                     x={x} y={midY - hH} width={barWidth} height={hH}
-                                    fill={HIGH_TEMP_COLOR} opacity={opacity * 0.85}
+                                    fill={decadeColor} opacity={opacity * 0.85}
                                     rx={2}
                                 />
-                                {/* Low bar (going down) */}
+                                {/* Low bar (going down) — colored by decade */}
                                 <rect
                                     x={x} y={midY} width={barWidth} height={hL}
-                                    fill={LOW_TEMP_COLOR} opacity={opacity * 0.85}
+                                    fill={decadeColor} opacity={opacity * 0.85}
                                     rx={2}
                                 />
 
@@ -108,8 +168,8 @@ export function RecordAgeChart({ data, onHoverPeriod, compact }: Props) {
                                     {d.label}
                                 </text>
 
-                                {/* Values on hover */}
-                                {isHovered && (
+                                {/* Values on hover/select */}
+                                {isActive && (
                                     <>
                                         <text x={x + barWidth / 2} y={midY - hH - 6}
                                             fill="#fca5a5" fontSize={11} fontWeight={600} textAnchor="middle">
@@ -130,11 +190,92 @@ export function RecordAgeChart({ data, onHoverPeriod, compact }: Props) {
                             </g>
                         );
                     })}
+
+                    {/* Cumulative highs line */}
+                    <polyline
+                        points={filtered.map((_, i) => {
+                            const x = 35 + i * (barWidth + gap) + barWidth / 2;
+                            return `${x},${cumulativeY(cumHighs[i])}`;
+                        }).join(' ')}
+                        fill="none" stroke={HIGH_TEMP_COLOR} strokeWidth={1.5}
+                        strokeLinejoin="round" opacity={0.35}
+                        style={{ pointerEvents: 'none' }}
+                    />
+                    {/* Cumulative lows line */}
+                    <polyline
+                        points={filtered.map((_, i) => {
+                            const x = 35 + i * (barWidth + gap) + barWidth / 2;
+                            return `${x},${cumulativeY(cumLows[i])}`;
+                        }).join(' ')}
+                        fill="none" stroke={LOW_TEMP_COLOR} strokeWidth={1.5}
+                        strokeLinejoin="round" opacity={0.35}
+                        style={{ pointerEvents: 'none' }}
+                    />
+                    {/* Cumulative total line */}
+                    <polyline
+                        points={filtered.map((_, i) => {
+                            const x = 35 + i * (barWidth + gap) + barWidth / 2;
+                            return `${x},${cumulativeY(cumTotal[i])}`;
+                        }).join(' ')}
+                        fill="none" stroke="#d4d4d8" strokeWidth={1.5}
+                        strokeLinejoin="round" opacity={0.5}
+                        style={{ pointerEvents: 'none' }}
+                    />
+                    {/* Dots for all three lines */}
+                    {filtered.map((_, i) => {
+                        const x = 35 + i * (barWidth + gap) + barWidth / 2;
+                        const isAct = activeIndex === i;
+                        const r = isAct ? 3.5 : 2;
+                        const opac = isAct ? 1 : 0.35;
+                        return (
+                            <g key={`dots-${i}`} style={{ pointerEvents: 'none' }}>
+                                <circle cx={x} cy={cumulativeY(cumTotal[i])} r={r}
+                                    fill={isAct ? '#ffffff' : '#d4d4d8'} opacity={opac} />
+                                <circle cx={x} cy={cumulativeY(cumHighs[i])} r={r}
+                                    fill={HIGH_TEMP_COLOR} opacity={opac} />
+                                <circle cx={x} cy={cumulativeY(cumLows[i])} r={r}
+                                    fill={LOW_TEMP_COLOR} opacity={opac} />
+                            </g>
+                        );
+                    })}
+                    {/* Tooltip on hover/select */}
+                    {activeIndex !== null && (() => {
+                        const tx = 35 + activeIndex * (barWidth + gap) + barWidth / 2;
+                        const topY = cumulativeY(cumTotal[activeIndex]);
+                        return (
+                            <g style={{ pointerEvents: 'none' }}>
+                                <rect x={tx - 52} y={topY - 48} width={104} height={42}
+                                    fill="#18181b" fillOpacity={0.9} rx={4}
+                                    stroke="#3f3f46" strokeWidth={0.5} />
+                                <text x={tx} y={topY - 34} fill="#e4e4e7" fontSize={10} fontWeight={600} textAnchor="middle">
+                                    {cumTotal[activeIndex].toLocaleString()} total
+                                </text>
+                                <text x={tx} y={topY - 22} fill="#fca5a5" fontSize={9} textAnchor="middle">
+                                    {cumHighs[activeIndex].toLocaleString()} highs
+                                </text>
+                                <text x={tx} y={topY - 11} fill="#93c5fd" fontSize={9} textAnchor="middle">
+                                    {cumLows[activeIndex].toLocaleString()} lows
+                                </text>
+                            </g>
+                        );
+                    })()}
+                    {/* End label when nothing is active */}
+                    {activeIndex === null && (
+                        <text
+                            x={35 + (filtered.length - 1) * (barWidth + gap) + barWidth / 2}
+                            y={cumulativeY(maxCumulative) - 8}
+                            fill="#71717a" fontSize={9} textAnchor="middle"
+                            style={{ pointerEvents: 'none' }}
+                        >
+                            {maxCumulative.toLocaleString()}
+                        </text>
+                    )}
                 </svg>
             </div>
             {!compact && (
                 <p className="text-[10px] text-zinc-600 mt-2">
                     The 1930s Dust Bowl dominates record highs. Recent decades (2000s–2010s) show a resurgence of record highs relative to lows.
+                    Lines show cumulative standing records over time (total, highs, lows).
                 </p>
             )}
         </div>

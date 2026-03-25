@@ -35,6 +35,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUTPUT_DIR = resolve(__dirname, '../public/data/temperatures');
+const DAILY_DIR = resolve(__dirname, '../.temp/temperatures/daily');
 
 // US state codes and approximate centroids for mapping
 const US_STATES = {
@@ -402,6 +403,9 @@ async function fetchCountyMeta() {
  * A "broken record" is when a station's observed max exceeds the previous
  * all-time max for that day of year, or its observed min is below the
  * previous all-time min.
+ *
+ * Also collects ALL daily observations (not just broken) for archival to S3.
+ * Returns { recentRecords, dailyObservations, stationIndex }.
  */
 async function fetchRecentRecords() {
     console.log('\n📅 Detecting daily record-breaking temperatures (last 7 days)...');
@@ -423,6 +427,13 @@ async function fetchRecentRecords() {
 
     // Collect broken records for all 7 days
     const allBroken = []; // { ...record, date }
+
+    // Collect ALL observations per date for S3 archival
+    const dailyObservations = new Map(); // dateStr → observation[]
+    for (const d of dates) dailyObservations.set(d, []);
+
+    // Collect unique station metadata for station index
+    const stationIndex = new Map(); // uid → { uid, name, ll, state, county, elev }
 
     for (const dateStr of dates) {
         const mmdd = dateStr.slice(5); // "MM-DD"
@@ -481,18 +492,49 @@ async function fetchRecentRecords() {
                 }
 
                 // Compare observations against historical records
+                // and collect ALL observations for S3 archival
+                const dayObs = dailyObservations.get(dateStr);
+
                 for (const stn of obs.data || []) {
                     const uid = stn.meta?.uid;
-                    if (!uid || !histMap[uid]) continue;
+                    if (!uid) continue;
+                    const meta = stn.meta;
                     const row = stn.data;
                     if (!Array.isArray(row) || row.length < 2) continue;
 
                     const [maxtStr, mintStr] = row;
-                    const meta = stn.meta;
                     const rec = histMap[uid];
 
-                    if (maxtStr !== 'M' && maxtStr !== 'T' && rec.recordHigh != null) {
-                        const maxt = parseFloat(maxtStr);
+                    // Collect station metadata for index
+                    if (!stationIndex.has(uid) && meta.ll) {
+                        stationIndex.set(uid, {
+                            uid,
+                            name: meta.name || 'Unknown',
+                            ll: meta.ll,
+                            state: abbr,
+                            county: meta.county || '',
+                            elev: meta.elev ?? null,
+                        });
+                    }
+
+                    // Archive ALL valid observations
+                    const maxt = maxtStr !== 'M' && maxtStr !== 'T' ? parseFloat(maxtStr) : null;
+                    const mint = mintStr !== 'M' && mintStr !== 'T' ? parseFloat(mintStr) : null;
+                    if (maxt != null || mint != null) {
+                        const obsEntry = { uid, maxt, mint };
+                        if (rec) {
+                            if (rec.recordHigh != null) obsEntry.rh = rec.recordHigh;
+                            if (rec.recordLow != null) obsEntry.rl = rec.recordLow;
+                            if (rec.normalHigh != null) obsEntry.nh = rec.normalHigh;
+                            if (rec.normalLow != null) obsEntry.nl = rec.normalLow;
+                        }
+                        dayObs.push(obsEntry);
+                    }
+
+                    // Detect broken records
+                    if (!rec) continue;
+
+                    if (maxt != null && rec.recordHigh != null) {
                         if (!isNaN(maxt) && maxt > rec.recordHigh) {
                             allBroken.push({
                                 stationName: meta.name || 'Unknown',
@@ -515,8 +557,7 @@ async function fetchRecentRecords() {
                     }
 
                     if (mintStr !== 'M' && mintStr !== 'T' && rec.recordLow != null) {
-                        const mint = parseFloat(mintStr);
-                        if (!isNaN(mint) && mint < rec.recordLow) {
+                        if (mint != null && mint < rec.recordLow) {
                             allBroken.push({
                                 stationName: meta.name || 'Unknown',
                                 uid,
@@ -564,11 +605,20 @@ async function fetchRecentRecords() {
 
     console.log(`\n  Yesterday: 🔥 ${yHighs} highs, ❄️ ${yLows} lows`);
     console.log(`  Last 7 days: 🔥 ${tHighs} highs, ❄️ ${tLows} lows`);
+    console.log(`  📦 Collected ${stationIndex.size} unique stations across all dates`);
+
+    let totalObs = 0;
+    for (const obs of dailyObservations.values()) totalObs += obs.length;
+    console.log(`  📦 Collected ${totalObs} total observations for archival`);
 
     return {
-        asOf: todayStr,
-        yesterday: yesterdayRecords,
-        last7Days,
+        recentRecords: {
+            asOf: todayStr,
+            yesterday: yesterdayRecords,
+            last7Days,
+        },
+        dailyObservations,
+        stationIndex,
     };
 }
 
@@ -577,6 +627,106 @@ function formatDate(d) {
 }
 
 // ─── 5. Build Output Files ───────────────────────────────────────────
+
+/**
+ * Generate climate trends data from county records.
+ * Produces decade aggregations, yearly counts, and 10-year rolling ratios.
+ */
+function generateClimateTrends(countyGeoJson) {
+    const yearCounts = {}; // year → { highs, lows }
+
+    for (const feature of countyGeoJson.features) {
+        const { type, date } = feature.properties;
+        if (!date || date.length < 4) continue;
+        const year = parseInt(date.slice(0, 4), 10);
+        if (isNaN(year) || year < 1890) continue;
+
+        if (!yearCounts[year]) yearCounts[year] = { highs: 0, lows: 0 };
+        if (type === 'high') yearCounts[year].highs++;
+        else if (type === 'low') yearCounts[year].lows++;
+    }
+
+    // By year (sorted)
+    const years = Object.keys(yearCounts).map(Number).sort((a, b) => a - b);
+    const byYear = years.map(year => ({
+        year,
+        highs: yearCounts[year].highs,
+        lows: yearCounts[year].lows,
+    }));
+
+    // By decade
+    const decadeCounts = {};
+    for (const { year, highs, lows } of byYear) {
+        const decade = Math.floor(year / 10) * 10;
+        if (!decadeCounts[decade]) decadeCounts[decade] = { highs: 0, lows: 0 };
+        decadeCounts[decade].highs += highs;
+        decadeCounts[decade].lows += lows;
+    }
+
+    const decades = Object.keys(decadeCounts).map(Number).sort((a, b) => a - b);
+    const byDecade = decades.map(decade => ({
+        decade,
+        label: `${decade}s`,
+        highs: decadeCounts[decade].highs,
+        lows: decadeCounts[decade].lows,
+        ratio: decadeCounts[decade].lows > 0
+            ? Math.round((decadeCounts[decade].highs / decadeCounts[decade].lows) * 100) / 100
+            : null,
+    }));
+
+    // 10-year rolling ratio
+    const rollingRatio = [];
+    for (let i = 9; i < byYear.length; i++) {
+        let h = 0, l = 0;
+        for (let j = i - 9; j <= i; j++) {
+            h += byYear[j].highs;
+            l += byYear[j].lows;
+        }
+        rollingRatio.push({
+            year: byYear[i].year,
+            ratio: l > 0 ? Math.round((h / l) * 100) / 100 : null,
+            highs10yr: h,
+            lows10yr: l,
+        });
+    }
+
+    let totalHighs = 0, totalLows = 0;
+    for (const d of byYear) { totalHighs += d.highs; totalLows += d.lows; }
+
+    return {
+        source: 'Derived from countyRecords.json',
+        description: 'County all-time temperature record age analysis',
+        totalHighs,
+        totalLows,
+        byDecade,
+        byYear,
+        rollingRatio,
+    };
+}
+
+/**
+ * Write daily observation files and station index to temp directory for S3 upload.
+ */
+function writeDailyObservations(dailyObservations, stationIndex) {
+    mkdirSync(DAILY_DIR, { recursive: true });
+
+    for (const [dateStr, observations] of dailyObservations) {
+        if (observations.length === 0) continue;
+        const filePath = resolve(DAILY_DIR, `${dateStr}.json`);
+        writeFileSync(filePath, JSON.stringify({ date: dateStr, count: observations.length, observations }));
+        console.log(`  📁 ${dateStr}.json — ${observations.length} observations`);
+    }
+
+    // Station index
+    const stations = Array.from(stationIndex.values()).sort((a, b) => a.uid - b.uid);
+    const indexPath = resolve(DAILY_DIR, '..', 'stations.json');
+    writeFileSync(indexPath, JSON.stringify({
+        generated: new Date().toISOString(),
+        count: stations.length,
+        stations,
+    }));
+    console.log(`  📁 stations.json — ${stations.length} stations`);
+}
 
 function buildStateGeoJson(records) {
     return {
@@ -684,6 +834,14 @@ async function main() {
         );
         console.log(`✅ Wrote countyRecords.json (${countyGeoJson.features.length} features)`);
 
+        // Climate trends (derived from county records)
+        const climateTrends = generateClimateTrends(countyGeoJson);
+        writeFileSync(
+            resolve(OUTPUT_DIR, 'climateTrends.json'),
+            JSON.stringify(climateTrends, null, 2)
+        );
+        console.log(`✅ Wrote climateTrends.json (${climateTrends.byYear.length} years, ${climateTrends.byDecade.length} decades)`);
+
         // 5. Summary metadata
         const summary = {
             lastUpdated: new Date().toISOString(),
@@ -699,14 +857,18 @@ async function main() {
         console.log(`✅ Wrote summary.json`);
     }
 
-    // 4. Recent records summary
-    const recentRecords = await fetchRecentRecords();
+    // 4. Recent records summary + daily observations
+    const { recentRecords, dailyObservations, stationIndex } = await fetchRecentRecords();
 
     writeFileSync(
         resolve(OUTPUT_DIR, 'recentRecords.json'),
         JSON.stringify(recentRecords, null, 2)
     );
     console.log(`✅ Wrote recentRecords.json`);
+
+    // 6. Write daily observation archives for S3 upload
+    console.log('\n📦 Writing daily observation archives...');
+    writeDailyObservations(dailyObservations, stationIndex);
 
     console.log('\n🎉 Temperature records sync complete!');
 

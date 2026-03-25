@@ -1,0 +1,93 @@
+name: Sync Temperatures
+
+on:
+  schedule:
+    # Run at 7 AM UTC daily (1 AM CST / 2 AM CDT) — after ACIS daily data is finalized
+    - cron: '0 7 * * *'
+  workflow_dispatch:
+    inputs:
+      full_sync:
+        description: 'Run full sync (all-time county records + state records). Default is recent-only.'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-temperatures
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Sync temperature records (recent only)
+        if: ${{ !inputs.full_sync }}
+        id: sync-recent
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.TEMP_DATA_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TEMP_DATA_AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-east-1
+          TEMPERATURE_DATA_BUCKET: rsmbtv-temperature-data
+          TEMPERATURE_DATA_CDN_ID: ${{ secrets.TEMP_DATA_CLOUDFRONT_ID }}
+        run: node scripts/sync-temperatures.js --recent-only
+
+      - name: Sync temperature records (full)
+        if: ${{ inputs.full_sync }}
+        id: sync-full
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.TEMP_DATA_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TEMP_DATA_AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-east-1
+          TEMPERATURE_DATA_BUCKET: rsmbtv-temperature-data
+          TEMPERATURE_DATA_CDN_ID: ${{ secrets.TEMP_DATA_CLOUDFRONT_ID }}
+        run: node scripts/sync-temperatures.js
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/temperatures/
+          git diff --staged --quiet || {
+            git commit -m "chore: sync temperature records"
+            git push
+          }
+
+      - name: Upload daily observations to S3
+        if: env.TEMPERATURE_DATA_BUCKET != ''
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.TEMP_DATA_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TEMP_DATA_AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-east-1
+          TEMPERATURE_DATA_BUCKET: rsmbtv-temperature-data
+        run: |
+          if [ -d ".temp/temperatures" ]; then
+            aws s3 sync .temp/temperatures/ "s3://${TEMPERATURE_DATA_BUCKET}/" \
+              --content-type "application/json" \
+              --cache-control "public, max-age=86400"
+            echo "✅ Uploaded daily observations to S3"
+          else
+            echo "⚠️ No daily observations to upload"
+          fi
+
+      - name: Invalidate CloudFront cache
+        if: env.TEMPERATURE_DATA_CDN_ID != '' && env.TEMPERATURE_DATA_BUCKET != ''
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.TEMP_DATA_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TEMP_DATA_AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-east-1
+          TEMPERATURE_DATA_CDN_ID: ${{ secrets.TEMP_DATA_CLOUDFRONT_ID }}
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "${TEMPERATURE_DATA_CDN_ID}" \
+            --paths "/stations.json"
