@@ -6,6 +6,7 @@ interface Props {
     decadeData: DecadeData[];
     rollingData: RollingRatioData[];
     onHoverPeriod?: (range: HighlightRange | null) => void;
+    compact?: boolean;
 }
 
 type View = 'decade' | 'rolling';
@@ -14,7 +15,7 @@ type View = 'decade' | 'rolling';
  * The "Meehl Metric" — ratio of record highs to record lows.
  * In a stable climate this should be ~1:1. Deviation indicates warming or cooling.
  */
-export function HighLowRatioChart({ decadeData, rollingData, onHoverPeriod }: Props) {
+export function HighLowRatioChart({ decadeData, rollingData, onHoverPeriod, compact }: Props) {
     const [view, setView] = useState<View>('decade');
     const [hovered, setHovered] = useState<number | null>(null);
 
@@ -26,6 +27,7 @@ export function HighLowRatioChart({ decadeData, rollingData, onHoverPeriod }: Pr
                 setHovered={setHovered}
                 onSwitchView={() => setView('rolling')}
                 onHoverPeriod={onHoverPeriod}
+                compact={compact}
             />
         );
     }
@@ -37,16 +39,18 @@ export function HighLowRatioChart({ decadeData, rollingData, onHoverPeriod }: Pr
             setHovered={setHovered}
             onSwitchView={() => setView('decade')}
             onHoverPeriod={onHoverPeriod}
+            compact={compact}
         />
     );
 }
 
-function DecadeRatioView({ data, hovered, setHovered, onSwitchView, onHoverPeriod }: {
+function DecadeRatioView({ data, hovered, setHovered, onSwitchView, onHoverPeriod, compact }: {
     data: DecadeData[];
     hovered: number | null;
     setHovered: (i: number | null) => void;
     onSwitchView: () => void;
     onHoverPeriod?: (range: HighlightRange | null) => void;
+    compact?: boolean;
 }) {
     const filtered = data.filter(d => d.decade >= 1900 && d.ratio !== null);
     const maxRatio = Math.max(...filtered.map(d => d.ratio!), 2);
@@ -63,21 +67,24 @@ function DecadeRatioView({ data, hovered, setHovered, onSwitchView, onHoverPerio
     const equilibriumY = yScale(1);
 
     return (
-        <div>
-            <div className="flex items-baseline gap-3 mb-1">
+        <div className={compact ? 'flex flex-col h-full' : ''}>
+            <div className="flex items-baseline gap-3 mb-1 shrink-0">
                 <h3 className="text-sm font-semibold text-zinc-200">High:Low Ratio by Decade</h3>
                 <button onClick={onSwitchView} className="text-[10px] text-violet-400 hover:text-violet-300 transition-colors">
                     Show rolling →
                 </button>
             </div>
-            <p className="text-xs text-zinc-500 mb-4">
-                Ratio of record highs to record lows set per decade. A value of 1.0 means equal;
-                above 1.0 means more highs than lows — a warming signal.
-            </p>
-            <div className="overflow-x-auto">
+            {!compact && (
+                <p className="text-xs text-zinc-500 mb-4">
+                    Ratio of record highs to record lows set per decade. A value of 1.0 means equal;
+                    above 1.0 means more highs than lows — a warming signal.
+                </p>
+            )}
+            <div className={compact ? 'flex-1 min-h-0' : 'overflow-x-auto'}>
                 <svg
                     viewBox={`0 0 ${width} ${chartHeight}`}
-                    className="w-full min-w-[400px]"
+                    className={compact ? 'w-full h-full' : 'w-full min-w-[400px]'}
+                    preserveAspectRatio={compact ? 'xMidYMid meet' : undefined}
                     role="img"
                     aria-label="High to low ratio by decade"
                     onMouseLeave={() => onHoverPeriod?.(null)}
@@ -142,19 +149,22 @@ function DecadeRatioView({ data, hovered, setHovered, onSwitchView, onHoverPerio
                     })}
                 </svg>
             </div>
-            <p className="text-[10px] text-zinc-600 mt-2">
-                The dashed line marks the expected 1:1 equilibrium. Decades above the line set more record highs than lows.
-            </p>
+            {!compact && (
+                <p className="text-[10px] text-zinc-600 mt-2">
+                    The dashed line marks the expected 1:1 equilibrium. Decades above the line set more record highs than lows.
+                </p>
+            )}
         </div>
     );
 }
 
-function RollingRatioView({ data, hovered, setHovered, onSwitchView, onHoverPeriod }: {
+function RollingRatioView({ data, hovered, setHovered, onSwitchView, onHoverPeriod, compact }: {
     data: RollingRatioData[];
     hovered: number | null;
     setHovered: (i: number | null) => void;
     onSwitchView: () => void;
     onHoverPeriod?: (range: HighlightRange | null) => void;
+    compact?: boolean;
 }) {
     const filtered = data.filter(d => d.year >= 1910 && d.ratio !== null);
     const maxRatio = Math.min(Math.max(...filtered.map(d => d.ratio!), 3), 10);
@@ -183,20 +193,23 @@ function RollingRatioView({ data, hovered, setHovered, onSwitchView, onHoverPeri
     const hoveredData = hovered !== null && hovered < filtered.length ? filtered[hovered] : null;
 
     return (
-        <div>
-            <div className="flex items-baseline gap-3 mb-1">
+        <div className={compact ? 'flex flex-col h-full' : ''}>
+            <div className="flex items-baseline gap-3 mb-1 shrink-0">
                 <h3 className="text-sm font-semibold text-zinc-200">Rolling 10-Year H:L Ratio</h3>
                 <button onClick={onSwitchView} className="text-[10px] text-violet-400 hover:text-violet-300 transition-colors">
                     ← Show decades
                 </button>
             </div>
-            <p className="text-xs text-zinc-500 mb-4">
-                10-year rolling ratio of record highs to lows. Above 1.0 (dashed) means more highs than lows being set.
-            </p>
-            <div className="overflow-x-auto">
+            {!compact && (
+                <p className="text-xs text-zinc-500 mb-4">
+                    10-year rolling ratio of record highs to lows. Above 1.0 (dashed) means more highs than lows being set.
+                </p>
+            )}
+            <div className={compact ? 'flex-1 min-h-0' : 'overflow-x-auto'}>
                 <svg
                     viewBox={`0 0 ${width} ${height}`}
-                    className="w-full min-w-[500px]"
+                    className={compact ? 'w-full h-full' : 'w-full min-w-[500px]'}
+                    preserveAspectRatio={compact ? 'xMidYMid meet' : undefined}
                     role="img"
                     aria-label="Rolling 10-year high to low ratio"
                     onMouseLeave={() => { setHovered(null); onHoverPeriod?.(null); }}
@@ -248,7 +261,7 @@ function RollingRatioView({ data, hovered, setHovered, onSwitchView, onHoverPeri
                 </svg>
             </div>
             {hoveredData && (
-                <div className="text-xs text-zinc-400 mt-1">
+                <div className={`text-xs text-zinc-400 ${compact ? 'shrink-0 px-1 py-0.5' : 'mt-1'}`}>
                     <span className="text-zinc-200 font-medium">{hoveredData.year}</span>
                     {' — '}ratio: <span className="text-zinc-100 font-medium">{hoveredData.ratio?.toFixed(1)}:1</span>
                     <span className="text-zinc-500">

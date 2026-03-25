@@ -5,13 +5,14 @@ import { HIGH_TEMP_COLOR, LOW_TEMP_COLOR } from '../constants';
 interface Props {
     data: DecadeData[];
     onHoverPeriod?: (range: HighlightRange | null) => void;
+    compact?: boolean;
 }
 
 /**
  * Mirrored bar chart: record highs go up (red), record lows go down (blue).
  * Shows when all-time county records were set, grouped by decade.
  */
-export function RecordAgeChart({ data, onHoverPeriod }: Props) {
+export function RecordAgeChart({ data, onHoverPeriod, compact }: Props) {
     const [hovered, setHovered] = useState<number | null>(null);
 
     // Filter to decades with meaningful data (skip very early sparse ones)
@@ -28,16 +29,21 @@ export function RecordAgeChart({ data, onHoverPeriod }: Props) {
     const scale = (val: number) => (val / maxVal) * halfHeight;
 
     return (
-        <div>
-            <h3 className="text-sm font-semibold text-zinc-200 mb-1">When Were All-Time Records Set?</h3>
-            <p className="text-xs text-zinc-500 mb-4">
-                Distribution of 6,078 county all-time record highs and lows by the decade they were set.
-                Highs (red) go up, lows (blue) go down.
-            </p>
-            <div className="overflow-x-auto">
+        <div className={compact ? 'flex flex-col h-full' : ''}>
+            {!compact && (
+                <>
+                    <h3 className="text-sm font-semibold text-zinc-200 mb-1">When Were All-Time Records Set?</h3>
+                    <p className="text-xs text-zinc-500 mb-4">
+                        Distribution of 6,078 county all-time record highs and lows by the decade they were set.
+                        Highs (red) go up, lows (blue) go down.
+                    </p>
+                </>
+            )}
+            <div className={compact ? 'flex-1 min-h-0' : 'overflow-x-auto'}>
                 <svg
                     viewBox={`0 0 ${chartWidth + 60} ${svgHeight + 20}`}
-                    className="w-full min-w-[500px]"
+                    className={compact ? 'w-full h-full' : 'w-full min-w-[500px]'}
+                    preserveAspectRatio={compact ? 'xMidYMid meet' : undefined}
                     role="img"
                     aria-label="Record age distribution by decade"
                     onMouseLeave={() => onHoverPeriod?.(null)}
@@ -126,9 +132,11 @@ export function RecordAgeChart({ data, onHoverPeriod }: Props) {
                     })}
                 </svg>
             </div>
-            <p className="text-[10px] text-zinc-600 mt-2">
-                The 1930s Dust Bowl dominates record highs. Recent decades (2000s–2010s) show a resurgence of record highs relative to lows.
-            </p>
+            {!compact && (
+                <p className="text-[10px] text-zinc-600 mt-2">
+                    The 1930s Dust Bowl dominates record highs. Recent decades (2000s–2010s) show a resurgence of record highs relative to lows.
+                </p>
+            )}
         </div>
     );
 }

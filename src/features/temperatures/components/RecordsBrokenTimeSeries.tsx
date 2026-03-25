@@ -5,13 +5,14 @@ import { HIGH_TEMP_COLOR, LOW_TEMP_COLOR } from '../constants';
 interface Props {
     data: YearData[];
     onHoverPeriod?: (range: HighlightRange | null) => void;
+    compact?: boolean;
 }
 
 /**
  * Area chart overlaying record highs set per year (red) vs record lows set per year (blue).
  * Shows how frequency of record-setting has changed over time.
  */
-export function RecordsBrokenTimeSeries({ data, onHoverPeriod }: Props) {
+export function RecordsBrokenTimeSeries({ data, onHoverPeriod, compact }: Props) {
     const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
     // Compute 5-year rolling averages for smoother visualization
@@ -61,16 +62,21 @@ export function RecordsBrokenTimeSeries({ data, onHoverPeriod }: Props) {
     const hoveredData = hoveredIdx !== null ? filtered[hoveredIdx] : null;
 
     return (
-        <div>
-            <h3 className="text-sm font-semibold text-zinc-200 mb-1">Record-Setting Frequency Over Time</h3>
-            <p className="text-xs text-zinc-500 mb-4">
-                How many county all-time records were set each year (5-year rolling average).
-                In a stable climate, both lines should decline equally as records become harder to break.
-            </p>
-            <div className="overflow-x-auto">
+        <div className={compact ? 'flex flex-col h-full' : ''}>
+            {!compact && (
+                <>
+                    <h3 className="text-sm font-semibold text-zinc-200 mb-1">Record-Setting Frequency Over Time</h3>
+                    <p className="text-xs text-zinc-500 mb-4">
+                        How many county all-time records were set each year (5-year rolling average).
+                        In a stable climate, both lines should decline equally as records become harder to break.
+                    </p>
+                </>
+            )}
+            <div className={compact ? 'flex-1 min-h-0' : 'overflow-x-auto'}>
                 <svg
                     viewBox={`0 0 ${width} ${height}`}
-                    className="w-full min-w-[500px]"
+                    className={compact ? 'w-full h-full' : 'w-full min-w-[500px]'}
+                    preserveAspectRatio={compact ? 'xMidYMid meet' : undefined}
                     role="img"
                     aria-label="Records broken per year time series"
                     onMouseLeave={() => { setHoveredIdx(null); onHoverPeriod?.(null); }}
@@ -140,7 +146,7 @@ export function RecordsBrokenTimeSeries({ data, onHoverPeriod }: Props) {
             </div>
             {/* Tooltip */}
             {hoveredData && (
-                <div className="text-xs text-zinc-400 mt-1">
+                <div className={`text-xs text-zinc-400 ${compact ? 'shrink-0 px-1 py-0.5' : 'mt-1'}`}>
                     <span className="text-zinc-200 font-medium">{hoveredData.year}</span>
                     {' — '}
                     <span style={{ color: '#fca5a5' }}>{hoveredData.highs} highs</span>
@@ -151,9 +157,11 @@ export function RecordsBrokenTimeSeries({ data, onHoverPeriod }: Props) {
                     </span>
                 </div>
             )}
-            <p className="text-[10px] text-zinc-600 mt-2">
-                Since ~1990, new record lows have nearly vanished while record highs continue to be set — a hallmark of warming.
-            </p>
+            {!compact && (
+                <p className="text-[10px] text-zinc-600 mt-2">
+                    Since ~1990, new record lows have nearly vanished while record highs continue to be set — a hallmark of warming.
+                </p>
+            )}
         </div>
     );
 }
