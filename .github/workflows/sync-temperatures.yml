@@ -63,6 +63,21 @@ jobs:
             git push
           }
 
+      - name: Upload record files to S3
+        if: env.TEMPERATURE_DATA_BUCKET != ''
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.TEMP_DATA_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TEMP_DATA_AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-east-1
+          TEMPERATURE_DATA_BUCKET: rsmbtv-temperature-data
+        run: |
+          aws s3 sync public/data/temperatures/ "s3://${TEMPERATURE_DATA_BUCKET}/" \
+            --content-type "application/json" \
+            --cache-control "public, max-age=3600" \
+            --exclude "*" \
+            --include "*.json"
+          echo "✅ Uploaded record files to S3"
+
       - name: Upload daily observations to S3
         if: env.TEMPERATURE_DATA_BUCKET != ''
         env:
@@ -90,4 +105,4 @@ jobs:
         run: |
           aws cloudfront create-invalidation \
             --distribution-id "${TEMPERATURE_DATA_CDN_ID}" \
-            --paths "/stations.json"
+            --paths "/stations.json" "/recentRecords.json" "/countyRecords.json" "/stateRecords.json" "/climateTrends.json" "/summary.json"
