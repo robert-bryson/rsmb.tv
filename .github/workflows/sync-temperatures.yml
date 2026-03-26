@@ -40,6 +40,7 @@ jobs:
           AWS_REGION: us-east-1
           TEMPERATURE_DATA_BUCKET: rsmbtv-temperature-data
           TEMPERATURE_DATA_CDN_ID: ${{ secrets.TEMP_DATA_CLOUDFRONT_ID }}
+          TEMP_DATA_DIR: .temp/temperatures
         run: node scripts/sync-temperatures.js --recent-only
 
       - name: Sync temperature records (full)
@@ -51,6 +52,7 @@ jobs:
           AWS_REGION: us-east-1
           TEMPERATURE_DATA_BUCKET: rsmbtv-temperature-data
           TEMPERATURE_DATA_CDN_ID: ${{ secrets.TEMP_DATA_CLOUDFRONT_ID }}
+          TEMP_DATA_DIR: .temp/temperatures
         run: node scripts/sync-temperatures.js
 
       - name: Upload record files to S3

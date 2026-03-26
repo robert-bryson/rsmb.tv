@@ -35,7 +35,8 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUTPUT_DIR = resolve(__dirname, '../public/data/temperatures');
-const DAILY_DIR = resolve(__dirname, '../.temp/temperatures/daily');
+const TEMP_DATA_DIR = process.env.TEMP_DATA_DIR || '/mnt/nas/record-highs';
+const DAILY_DIR = resolve(TEMP_DATA_DIR, 'daily');
 
 // US state codes and approximate centroids for mapping
 const US_STATES = {
@@ -594,16 +595,16 @@ async function fetchStateForDate(abbr, dateStr, mmdd, year) {
  * Also collects ALL daily observations (not just broken) for archival to S3.
  * Returns { recentRecords, dailyObservations, stationIndex }.
  */
-async function fetchRecentRecords() {
-    console.log('\n📅 Detecting daily record-breaking temperatures (last 7 days)...');
+async function fetchRecentRecords(numDays = 7) {
+    console.log(`\n📅 Detecting daily record-breaking temperatures (last ${numDays} days)...`);
 
     const now = new Date();
     const todayStr = formatDate(now);
     const stateAbbrs = Object.keys(US_STATES).filter(s => s !== 'AK' && s !== 'HI');
 
-    // Build array of the last 7 dates (most recent first)
+    // Build array of the last N dates (most recent first)
     const allDates = [];
-    for (let d = 1; d <= 7; d++) {
+    for (let d = 1; d <= numDays; d++) {
         const dt = new Date(now);
         dt.setDate(dt.getDate() - d);
         allDates.push(formatDate(dt));
@@ -885,9 +886,15 @@ function buildCountyGeoJson(records, countyMeta) {
 
 async function main() {
     const recentOnly = process.argv.includes('--recent-only');
+    const backfillArg = process.argv.find(a => a.startsWith('--backfill-days'));
+    const backfillDays = backfillArg
+        ? parseInt(process.argv[process.argv.indexOf(backfillArg) + 1] || backfillArg.split('=')[1], 10)
+        : 7;
 
     console.log('🌡️  Temperature Records Sync');
     console.log('='.repeat(50));
+    console.log(`  📂 Intermediary dir: ${TEMP_DATA_DIR}`);
+    if (backfillDays !== 7) console.log(`  📅 Backfill: ${backfillDays} days`);
 
     if (!existsSync(OUTPUT_DIR)) {
         mkdirSync(OUTPUT_DIR, { recursive: true });
@@ -957,7 +964,7 @@ async function main() {
     }
 
     // 4. Recent records summary + daily observations
-    const { recentRecords, dailyObservations, stationIndex } = await fetchRecentRecords();
+    const { recentRecords, dailyObservations, stationIndex } = await fetchRecentRecords(backfillDays);
 
     writeFileSync(
         resolve(OUTPUT_DIR, 'recentRecords.json'),
