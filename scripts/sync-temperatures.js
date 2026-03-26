@@ -116,8 +116,44 @@ const ABBR_TO_FIPS = Object.fromEntries(
 
 // ─── Helpers ─────────────────────────────────────────────────────────
 
+const S3_BUCKET = process.env.TEMPERATURE_DATA_BUCKET || '';
+
 function sleep(ms) {
     return new Promise(r => setTimeout(r, ms));
+}
+
+/**
+ * Check if a daily observation file already exists on S3.
+ * Returns true if the file exists, false otherwise.
+ */
+async function dailyExistsOnS3(dateStr) {
+    if (!S3_BUCKET) return false;
+    try {
+        const { execSync } = await import('child_process');
+        execSync(
+            `aws s3api head-object --bucket "${S3_BUCKET}" --key "daily/${dateStr}.json"`,
+            { stdio: 'ignore' }
+        );
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+/**
+ * Load broken records for specific dates from the existing recentRecords.json.
+ * Used to carry forward data for dates we skip fetching.
+ */
+function loadPreviousBrokenRecords(dates) {
+    const recentPath = resolve(OUTPUT_DIR, 'recentRecords.json');
+    if (!existsSync(recentPath)) return [];
+    try {
+        const prev = JSON.parse(readFileSync(recentPath, 'utf-8'));
+        const dateSet = new Set(dates);
+        return (prev.last7Days || []).filter(r => dateSet.has(r.date));
+    } catch {
+        return [];
+    }
 }
 
 async function fetchJson(url, options = {}) {
@@ -397,6 +433,151 @@ async function fetchCountyMeta() {
 
 // ─── 4. Fetch Daily Record-Breaking Temperatures from ACIS ───────────
 
+const STATE_CONCURRENCY = 8; // Number of states to fetch in parallel
+
+/**
+ * Fetch observations and historical records for a single state on a single date.
+ * Returns { broken, observations, stations } for merging into the main result.
+ */
+async function fetchStateForDate(abbr, dateStr, mmdd, year) {
+    const broken = [];
+    const observations = [];
+    const stations = new Map();
+
+    try {
+        // Query 1: observations for this date
+        const obs = await postJson('https://data.rcc-acis.org/MultiStnData', {
+            state: abbr,
+            date: dateStr,
+            meta: ['name', 'll', 'state', 'county', 'elev', 'uid'],
+            elems: ['maxt', 'mint'],
+        });
+
+        if (obs.error) return { broken, observations, stations };
+        await sleep(200);
+
+        // Query 2: historical records + normals for this calendar date (all prior years)
+        const hist = await postJson('https://data.rcc-acis.org/MultiStnData', {
+            state: abbr,
+            sdate: `1950-${mmdd}`,
+            edate: `${year - 1}-${mmdd}`,
+            meta: ['uid'],
+            elems: [
+                { name: 'maxt', interval: [1, 0, 0], duration: 1, smry: { reduce: 'max', add: 'date' }, smry_only: 1 },
+                { name: 'mint', interval: [1, 0, 0], duration: 1, smry: { reduce: 'min', add: 'date' }, smry_only: 1 },
+                { name: 'maxt', interval: [1, 0, 0], duration: 1, smry: { reduce: 'mean' }, smry_only: 1 },
+                { name: 'mint', interval: [1, 0, 0], duration: 1, smry: { reduce: 'mean' }, smry_only: 1 },
+            ],
+        });
+
+        if (hist.error) return { broken, observations, stations };
+
+        // Build uid → historical record map
+        const histMap = {};
+        for (const stn of hist.data || []) {
+            const uid = stn.meta?.uid;
+            const smry = stn.smry;
+            if (!uid || !smry || smry.length < 2) continue;
+            if (smry[0][0] === 'M' && smry[1][0] === 'M') continue;
+            histMap[uid] = {
+                recordHigh: smry[0][0] !== 'M' ? parseFloat(smry[0][0]) : null,
+                recordHighDate: smry[0][1] || '',
+                recordLow: smry[1][0] !== 'M' ? parseFloat(smry[1][0]) : null,
+                recordLowDate: smry[1][1] || '',
+                normalHigh: smry.length > 2 && smry[2] !== 'M' ? Math.round(parseFloat(smry[2])) : null,
+                normalLow: smry.length > 3 && smry[3] !== 'M' ? Math.round(parseFloat(smry[3])) : null,
+            };
+        }
+
+        // Compare observations against historical records
+        for (const stn of obs.data || []) {
+            const uid = stn.meta?.uid;
+            if (!uid) continue;
+            const meta = stn.meta;
+            const row = stn.data;
+            if (!Array.isArray(row) || row.length < 2) continue;
+
+            const [maxtStr, mintStr] = row;
+            const rec = histMap[uid];
+
+            // Collect station metadata for index
+            if (!stations.has(uid) && meta.ll) {
+                stations.set(uid, {
+                    uid,
+                    name: meta.name || 'Unknown',
+                    ll: meta.ll,
+                    state: abbr,
+                    county: meta.county || '',
+                    elev: meta.elev ?? null,
+                });
+            }
+
+            // Archive ALL valid observations
+            const maxt = maxtStr !== 'M' && maxtStr !== 'T' ? parseFloat(maxtStr) : null;
+            const mint = mintStr !== 'M' && mintStr !== 'T' ? parseFloat(mintStr) : null;
+            if (maxt != null || mint != null) {
+                const obsEntry = { uid, maxt, mint };
+                if (rec) {
+                    if (rec.recordHigh != null) obsEntry.rh = rec.recordHigh;
+                    if (rec.recordLow != null) obsEntry.rl = rec.recordLow;
+                    if (rec.normalHigh != null) obsEntry.nh = rec.normalHigh;
+                    if (rec.normalLow != null) obsEntry.nl = rec.normalLow;
+                }
+                observations.push(obsEntry);
+            }
+
+            // Detect broken records
+            if (!rec) continue;
+
+            if (maxt != null && rec.recordHigh != null) {
+                if (!isNaN(maxt) && maxt > rec.recordHigh) {
+                    broken.push({
+                        stationName: meta.name || 'Unknown',
+                        uid,
+                        state: abbr,
+                        stateName: US_STATES[abbr]?.name || abbr,
+                        county: meta.county || '',
+                        lat: meta.ll?.[1] ?? 0,
+                        lon: meta.ll?.[0] ?? 0,
+                        elev: meta.elev ?? null,
+                        type: 'high',
+                        tempF: maxt,
+                        prevRecordF: rec.recordHigh,
+                        prevRecordDate: rec.recordHighDate,
+                        normalF: rec.normalHigh,
+                        date: dateStr,
+                    });
+                }
+            }
+
+            if (mintStr !== 'M' && mintStr !== 'T' && rec.recordLow != null) {
+                if (mint != null && mint < rec.recordLow) {
+                    broken.push({
+                        stationName: meta.name || 'Unknown',
+                        uid,
+                        state: abbr,
+                        stateName: US_STATES[abbr]?.name || abbr,
+                        county: meta.county || '',
+                        lat: meta.ll?.[1] ?? 0,
+                        lon: meta.ll?.[0] ?? 0,
+                        elev: meta.elev ?? null,
+                        type: 'low',
+                        tempF: mint,
+                        prevRecordF: rec.recordLow,
+                        prevRecordDate: rec.recordLowDate,
+                        normalF: rec.normalLow,
+                        date: dateStr,
+                    });
+                }
+            }
+        }
+    } catch {
+        // continue on failure
+    }
+
+    return { broken, observations, stations };
+}
+
 /**
  * For each of the last 7 days, compare station observations against the
  * all-time record for that calendar date across all CONUS states.
@@ -415,187 +596,99 @@ async function fetchRecentRecords() {
     const stateAbbrs = Object.keys(US_STATES).filter(s => s !== 'AK' && s !== 'HI');
 
     // Build array of the last 7 dates (most recent first)
-    const dates = [];
+    const allDates = [];
     for (let d = 1; d <= 7; d++) {
         const dt = new Date(now);
         dt.setDate(dt.getDate() - d);
-        dates.push(formatDate(dt));
+        allDates.push(formatDate(dt));
     }
-    const yesterdayStr = dates[0];
+    const yesterdayStr = allDates[0];
 
-    console.log(`  Checking dates: ${dates.join(', ')}`);
+    console.log(`  Checking dates: ${allDates.join(', ')}`);
 
-    // Collect broken records for all 7 days
-    const allBroken = []; // { ...record, date }
+    // Check S3 for already-archived dates and skip them
+    const skippedDates = [];
+    const datesToFetch = [];
+    for (const d of allDates) {
+        if (await dailyExistsOnS3(d)) {
+            console.log(`  ✅ ${d} — already on S3, skipping ACIS fetch`);
+            skippedDates.push(d);
+        } else {
+            datesToFetch.push(d);
+        }
+    }
 
-    // Collect ALL observations per date for S3 archival
+    if (datesToFetch.length === 0) {
+        console.log('\n  All dates already archived on S3, nothing to fetch.');
+        // Still need to write recentRecords.json — load from previous
+        const prevBroken = loadPreviousBrokenRecords(allDates);
+        const yesterdayRecords = prevBroken.filter(r => r.date === yesterdayStr);
+        return {
+            recentRecords: { asOf: todayStr, yesterday: yesterdayRecords, last7Days: prevBroken },
+            dailyObservations: new Map(),
+            stationIndex: new Map(),
+        };
+    }
+
+    console.log(`  📡 Fetching ${datesToFetch.length} missing date(s): ${datesToFetch.join(', ')}`);
+
+    // Carry forward broken records from previous run for skipped dates
+    const allBroken = loadPreviousBrokenRecords(skippedDates);
+    if (allBroken.length > 0) {
+        console.log(`  📋 Loaded ${allBroken.length} broken records from previous run for skipped dates`);
+    }
+
+    // Collect ALL observations per date for S3 archival (only for fetched dates)
     const dailyObservations = new Map(); // dateStr → observation[]
-    for (const d of dates) dailyObservations.set(d, []);
+    for (const d of datesToFetch) dailyObservations.set(d, []);
 
     // Collect unique station metadata for station index
     const stationIndex = new Map(); // uid → { uid, name, ll, state, county, elev }
 
-    for (const dateStr of dates) {
+    for (const dateStr of datesToFetch) {
         const mmdd = dateStr.slice(5); // "MM-DD"
         const year = parseInt(dateStr.slice(0, 4), 10);
         console.log(`\n  ── ${dateStr} ──`);
 
-        let dayBroken = 0;
+        const dayObs = dailyObservations.get(dateStr);
 
-        for (let i = 0; i < stateAbbrs.length; i++) {
-            const abbr = stateAbbrs[i];
-            process.stdout.write(`\r    [${i + 1}/${stateAbbrs.length}] ${abbr}...  `);
+        // Process states in parallel batches
+        for (let i = 0; i < stateAbbrs.length; i += STATE_CONCURRENCY) {
+            const batch = stateAbbrs.slice(i, i + STATE_CONCURRENCY);
+            process.stdout.write(`\r    [${Math.min(i + STATE_CONCURRENCY, stateAbbrs.length)}/${stateAbbrs.length}] ${batch.join(', ')}...  `);
 
-            try {
-                // Query 1: observations for this date
-                const obs = await postJson('https://data.rcc-acis.org/MultiStnData', {
-                    state: abbr,
-                    date: dateStr,
-                    meta: ['name', 'll', 'state', 'county', 'elev', 'uid'],
-                    elems: ['maxt', 'mint'],
-                });
+            const results = await Promise.all(
+                batch.map(abbr => fetchStateForDate(abbr, dateStr, mmdd, year))
+            );
 
-                if (obs.error) continue;
-                await sleep(200);
-
-                // Query 2: historical records + normals for this calendar date (all prior years)
-                const hist = await postJson('https://data.rcc-acis.org/MultiStnData', {
-                    state: abbr,
-                    sdate: `1950-${mmdd}`,
-                    edate: `${year - 1}-${mmdd}`,
-                    meta: ['uid'],
-                    elems: [
-                        { name: 'maxt', interval: [1, 0, 0], duration: 1, smry: { reduce: 'max', add: 'date' }, smry_only: 1 },
-                        { name: 'mint', interval: [1, 0, 0], duration: 1, smry: { reduce: 'min', add: 'date' }, smry_only: 1 },
-                        { name: 'maxt', interval: [1, 0, 0], duration: 1, smry: { reduce: 'mean' }, smry_only: 1 },
-                        { name: 'mint', interval: [1, 0, 0], duration: 1, smry: { reduce: 'mean' }, smry_only: 1 },
-                    ],
-                });
-
-                if (hist.error) continue;
-
-                // Build uid → historical record map
-                const histMap = {};
-                for (const stn of hist.data || []) {
-                    const uid = stn.meta?.uid;
-                    const smry = stn.smry;
-                    if (!uid || !smry || smry.length < 2) continue;
-                    if (smry[0][0] === 'M' && smry[1][0] === 'M') continue;
-                    histMap[uid] = {
-                        recordHigh: smry[0][0] !== 'M' ? parseFloat(smry[0][0]) : null,
-                        recordHighDate: smry[0][1] || '',
-                        recordLow: smry[1][0] !== 'M' ? parseFloat(smry[1][0]) : null,
-                        recordLowDate: smry[1][1] || '',
-                        normalHigh: smry.length > 2 && smry[2] !== 'M' ? Math.round(parseFloat(smry[2])) : null,
-                        normalLow: smry.length > 3 && smry[3] !== 'M' ? Math.round(parseFloat(smry[3])) : null,
-                    };
+            // Merge batch results
+            for (const { broken, observations, stations } of results) {
+                allBroken.push(...broken);
+                dayObs.push(...observations);
+                for (const [uid, meta] of stations) {
+                    if (!stationIndex.has(uid)) stationIndex.set(uid, meta);
                 }
-
-                // Compare observations against historical records
-                // and collect ALL observations for S3 archival
-                const dayObs = dailyObservations.get(dateStr);
-
-                for (const stn of obs.data || []) {
-                    const uid = stn.meta?.uid;
-                    if (!uid) continue;
-                    const meta = stn.meta;
-                    const row = stn.data;
-                    if (!Array.isArray(row) || row.length < 2) continue;
-
-                    const [maxtStr, mintStr] = row;
-                    const rec = histMap[uid];
-
-                    // Collect station metadata for index
-                    if (!stationIndex.has(uid) && meta.ll) {
-                        stationIndex.set(uid, {
-                            uid,
-                            name: meta.name || 'Unknown',
-                            ll: meta.ll,
-                            state: abbr,
-                            county: meta.county || '',
-                            elev: meta.elev ?? null,
-                        });
-                    }
-
-                    // Archive ALL valid observations
-                    const maxt = maxtStr !== 'M' && maxtStr !== 'T' ? parseFloat(maxtStr) : null;
-                    const mint = mintStr !== 'M' && mintStr !== 'T' ? parseFloat(mintStr) : null;
-                    if (maxt != null || mint != null) {
-                        const obsEntry = { uid, maxt, mint };
-                        if (rec) {
-                            if (rec.recordHigh != null) obsEntry.rh = rec.recordHigh;
-                            if (rec.recordLow != null) obsEntry.rl = rec.recordLow;
-                            if (rec.normalHigh != null) obsEntry.nh = rec.normalHigh;
-                            if (rec.normalLow != null) obsEntry.nl = rec.normalLow;
-                        }
-                        dayObs.push(obsEntry);
-                    }
-
-                    // Detect broken records
-                    if (!rec) continue;
-
-                    if (maxt != null && rec.recordHigh != null) {
-                        if (!isNaN(maxt) && maxt > rec.recordHigh) {
-                            allBroken.push({
-                                stationName: meta.name || 'Unknown',
-                                uid,
-                                state: abbr,
-                                stateName: US_STATES[abbr]?.name || abbr,
-                                county: meta.county || '',
-                                lat: meta.ll?.[1] ?? 0,
-                                lon: meta.ll?.[0] ?? 0,
-                                elev: meta.elev ?? null,
-                                type: 'high',
-                                tempF: maxt,
-                                prevRecordF: rec.recordHigh,
-                                prevRecordDate: rec.recordHighDate,
-                                normalF: rec.normalHigh,
-                                date: dateStr,
-                            });
-                            dayBroken++;
-                        }
-                    }
-
-                    if (mintStr !== 'M' && mintStr !== 'T' && rec.recordLow != null) {
-                        if (mint != null && mint < rec.recordLow) {
-                            allBroken.push({
-                                stationName: meta.name || 'Unknown',
-                                uid,
-                                state: abbr,
-                                stateName: US_STATES[abbr]?.name || abbr,
-                                county: meta.county || '',
-                                lat: meta.ll?.[1] ?? 0,
-                                lon: meta.ll?.[0] ?? 0,
-                                elev: meta.elev ?? null,
-                                type: 'low',
-                                tempF: mint,
-                                prevRecordF: rec.recordLow,
-                                prevRecordDate: rec.recordLowDate,
-                                normalF: rec.normalLow,
-                                date: dateStr,
-                            });
-                            dayBroken++;
-                        }
-                    }
-                }
-            } catch {
-                // continue on failure
             }
 
-            await sleep(300);
+            await sleep(200); // Brief pause between batches
         }
 
         const dayHighs = allBroken.filter(r => r.date === dateStr && r.type === 'high').length;
         const dayLows = allBroken.filter(r => r.date === dateStr && r.type === 'low').length;
+        const dayBroken = dayHighs + dayLows;
         console.log(`  ${dateStr}: 🔥 ${dayHighs} highs, ❄️ ${dayLows} lows (${dayBroken} total)`);
     }
 
+    // Filter to only dates in the full 7-day window (includes carried-forward data)
+    const allDateSet = new Set(allDates);
+    const windowBroken = allBroken.filter(r => allDateSet.has(r.date));
+
     // Split into yesterday vs full 7-day window
-    const yesterdayRecords = allBroken
+    const yesterdayRecords = windowBroken
         .filter(r => r.date === yesterdayStr)
         .sort((a, b) => a.type === 'high' ? b.tempF - a.tempF : a.tempF - b.tempF);
 
-    const last7Days = allBroken
+    const last7Days = windowBroken
         .sort((a, b) => a.type === 'high' ? b.tempF - a.tempF : a.tempF - b.tempF);
 
     const yHighs = yesterdayRecords.filter(r => r.type === 'high').length;
@@ -604,7 +697,7 @@ async function fetchRecentRecords() {
     const tLows = last7Days.filter(r => r.type === 'low').length;
 
     console.log(`\n  Yesterday: 🔥 ${yHighs} highs, ❄️ ${yLows} lows`);
-    console.log(`  Last 7 days: 🔥 ${tHighs} highs, ❄️ ${tLows} lows`);
+    console.log(`  Last 7 days: 🔥 ${tHighs} highs, ❄️ ${tLows} lows (${skippedDates.length} days from cache)`);
     console.log(`  📦 Collected ${stationIndex.size} unique stations across all dates`);
 
     let totalObs = 0;
