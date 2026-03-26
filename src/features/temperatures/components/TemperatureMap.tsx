@@ -486,6 +486,7 @@ export function TemperatureMap() {
                 type: 'circle',
                 source: sourceId,
                 filter: ['==', ['get', 'type'], 'high'],
+                layout: { visibility: 'none' },
                 paint: {
                     'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 1.5, 6, 2.5, 9, 4, 12, 6],
                     'circle-color': HIGH_TEMP_COLOR,
@@ -501,6 +502,7 @@ export function TemperatureMap() {
                 type: 'circle',
                 source: sourceId,
                 filter: ['==', ['get', 'type'], 'low'],
+                layout: { visibility: 'none' },
                 paint: {
                     'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 1.5, 6, 2.5, 9, 4, 12, 6],
                     'circle-color': LOW_TEMP_COLOR,

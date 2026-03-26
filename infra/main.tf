@@ -60,7 +60,7 @@ resource "aws_amplify_app" "rsmbtv" {
           - key: 'Permissions-Policy'
             value: 'camera=(), microphone=(), geolocation=()'
           - key: 'Content-Security-Policy'
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.cartocdn.com; connect-src 'self' https://data.rcc-acis.org https://data.rsmb.tv; font-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+            value: "default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.cartocdn.com; connect-src 'self' https://data.rcc-acis.org https://data.rsmb.tv https://*.cartocdn.com https://demotiles.maplibre.org; font-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
   HEADERS
 }
 
