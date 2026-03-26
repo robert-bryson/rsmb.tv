@@ -122,6 +122,12 @@ function sleep(ms) {
     return new Promise(r => setTimeout(r, ms));
 }
 
+/** Build the S3 key / local subpath for a daily observation file: YYYY/MM/YYYY-MM-DD.json */
+function dailySubpath(dateStr) {
+    const [yyyy, mm] = dateStr.split('-');
+    return `${yyyy}/${mm}/${dateStr}.json`;
+}
+
 /**
  * Check if a daily observation file already exists on S3.
  * Returns true if the file exists, false otherwise.
@@ -131,7 +137,7 @@ async function dailyExistsOnS3(dateStr) {
     try {
         const { execSync } = await import('child_process');
         execSync(
-            `aws s3api head-object --bucket "${S3_BUCKET}" --key "daily/${dateStr}.json"`,
+            `aws s3api head-object --bucket "${S3_BUCKET}" --key "daily/${dailySubpath(dateStr)}"`,
             { stdio: 'ignore' }
         );
         return true;
@@ -801,13 +807,13 @@ function generateClimateTrends(countyGeoJson) {
  * Write daily observation files and station index to temp directory for S3 upload.
  */
 function writeDailyObservations(dailyObservations, stationIndex) {
-    mkdirSync(DAILY_DIR, { recursive: true });
-
     for (const [dateStr, observations] of dailyObservations) {
         if (observations.length === 0) continue;
-        const filePath = resolve(DAILY_DIR, `${dateStr}.json`);
+        const subpath = dailySubpath(dateStr);
+        const filePath = resolve(DAILY_DIR, subpath);
+        mkdirSync(dirname(filePath), { recursive: true });
         writeFileSync(filePath, JSON.stringify({ date: dateStr, count: observations.length, observations }));
-        console.log(`  📁 ${dateStr}.json — ${observations.length} observations`);
+        console.log(`  📁 daily/${subpath} — ${observations.length} observations`);
     }
 
     // Station index

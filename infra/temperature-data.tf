@@ -3,7 +3,7 @@
 # or too frequently updated to commit to the repo.
 #
 # Structure:
-#   daily/YYYY-MM-DD.json   — all CONUS station observations for that date
+#   daily/YYYY/MM/YYYY-MM-DD.json  — all CONUS station observations for that date
 #   stations.json            — station catalog (metadata + date ranges)
 
 resource "aws_s3_bucket" "temperature_data" {
