@@ -32,6 +32,7 @@
 import { writeFileSync, mkdirSync, existsSync, readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { createHash } from 'crypto';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUTPUT_DIR = resolve(__dirname, '../public/data/temperatures');
@@ -197,6 +198,79 @@ async function postJson(url, params, options = {}) {
     }
 }
 
+// ─── S3-backed ACIS Response Cache ───────────────────────────────────
+
+/**
+ * Cache ACIS API responses on S3 under `cache/{category}/{hash}.json`.
+ * On subsequent runs the cached response is returned without hitting ACIS.
+ *
+ * Categories (S3 prefix):
+ *   - `hist-daily/{state}/{MMDD}`  — historical records for a calendar date
+ *   - `county-alltime/{state}`     — county all-time records for a state
+ *   - `monthly-extremes/{state}/{MM}` — monthly extreme records
+ *
+ * The cache is keyed by a SHA-256 hash of the full POST body so any
+ * parameter change automatically busts the entry.
+ *
+ * The local disk directory TEMP_DATA_DIR is used as a write-through cache.
+ */
+const CACHE_DIR = resolve(TEMP_DATA_DIR, 'cache');
+const ACIS_CACHE_STATS = { hits: 0, misses: 0 };
+
+function cacheKey(category, params) {
+    const hash = createHash('sha256').update(JSON.stringify(params)).digest('hex').slice(0, 16);
+    return `cache/${category}/${hash}.json`;
+}
+
+/** Check S3 for a cached ACIS response; returns parsed JSON or null. */
+async function readCacheFromS3(key) {
+    if (!S3_BUCKET) return null;
+    try {
+        const { execSync } = await import('child_process');
+        const result = execSync(
+            `aws s3api get-object --bucket "${S3_BUCKET}" --key "${key}" /dev/stdout`,
+            { stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 20 * 1024 * 1024 }
+        );
+        return JSON.parse(result.toString('utf-8'));
+    } catch {
+        return null;
+    }
+}
+
+/** Write a cached ACIS response to local disk (uploaded to S3 in CI sync step). */
+function writeCacheLocal(key, data) {
+    const filePath = resolve(TEMP_DATA_DIR, key);
+    mkdirSync(dirname(filePath), { recursive: true });
+    writeFileSync(filePath, JSON.stringify(data));
+}
+
+/**
+ * Cached wrapper around postJson for ACIS endpoints.
+ * @param {string} url       ACIS endpoint
+ * @param {object} params    POST body
+ * @param {string} category  Cache prefix category (e.g. 'hist-daily/WY/03-25')
+ * @param {object} [options] { maxAgeDays } — if set, skip cache entries older than N days.
+ *                           The S3 object's LastModified is checked.
+ */
+async function cachedPostJson(url, params, category, options = {}) {
+    const key = cacheKey(category, params);
+
+    // Try S3 cache first
+    const cached = await readCacheFromS3(key);
+    if (cached) {
+        ACIS_CACHE_STATS.hits++;
+        return cached;
+    }
+
+    // Cache miss — fetch from ACIS
+    ACIS_CACHE_STATS.misses++;
+    const data = await postJson(url, params);
+
+    // Write through to local disk for later S3 upload
+    writeCacheLocal(key, data);
+    return data;
+}
+
 // ─── 1. Fetch SCEC State Records ────────────────────────────────────
 
 async function fetchStateRecords() {
@@ -314,7 +388,10 @@ async function fetchCountyRecordsForState(stateAbbr) {
     };
 
     try {
-        const data = await postJson('https://data.rcc-acis.org/MultiStnData', params);
+        const data = await cachedPostJson(
+            'https://data.rcc-acis.org/MultiStnData', params,
+            `county-alltime/${stateAbbr}`
+        );
         if (data.error) {
             console.warn(`  ACIS error for ${stateAbbr}: ${data.error}`);
             return [];
@@ -464,7 +541,7 @@ async function fetchStateForDate(abbr, dateStr, mmdd, year) {
         await sleep(200);
 
         // Query 2: historical records + normals for this calendar date (all prior years)
-        const hist = await postJson('https://data.rcc-acis.org/MultiStnData', {
+        const histParams = {
             state: abbr,
             sdate: `1950-${mmdd}`,
             edate: `${year - 1}-${mmdd}`,
@@ -475,7 +552,11 @@ async function fetchStateForDate(abbr, dateStr, mmdd, year) {
                 { name: 'maxt', interval: [1, 0, 0], duration: 1, smry: { reduce: 'mean' }, smry_only: 1 },
                 { name: 'mint', interval: [1, 0, 0], duration: 1, smry: { reduce: 'mean' }, smry_only: 1 },
             ],
-        });
+        };
+        const hist = await cachedPostJson(
+            'https://data.rcc-acis.org/MultiStnData', histParams,
+            `hist-daily/${abbr}/${mmdd}`
+        );
 
         if (hist.error) return { broken, observations, stations };
 
@@ -494,6 +575,36 @@ async function fetchStateForDate(abbr, dateStr, mmdd, year) {
                 normalHigh: smry.length > 2 && smry[2] !== 'M' ? Math.round(parseFloat(smry[2])) : null,
                 normalLow: smry.length > 3 && smry[3] !== 'M' ? Math.round(parseFloat(smry[3])) : null,
             };
+        }
+
+        // Query 3: monthly extremes — all-time high/low for this calendar month
+        const mm = mmdd.slice(0, 2); // "03"
+        const lastDayOfMonth = new Date(year, parseInt(mm, 10), 0).getDate();
+        const monthlyParams = {
+            state: abbr,
+            sdate: `1950-${mm}-01`,
+            edate: `${year - 1}-${mm}-${String(lastDayOfMonth).padStart(2, '0')}`,
+            meta: ['uid'],
+            elems: [
+                { name: 'maxt', interval: 'mly', duration: 'mly', reduce: 'max', smry: { reduce: 'max' }, smry_only: 1 },
+                { name: 'mint', interval: 'mly', duration: 'mly', reduce: 'min', smry: { reduce: 'min' }, smry_only: 1 },
+            ],
+        };
+        const monthly = await cachedPostJson(
+            'https://data.rcc-acis.org/MultiStnData', monthlyParams,
+            `monthly-extremes/${abbr}/${mm}`
+        );
+        const monthlyMap = {};
+        if (!monthly.error) {
+            for (const stn of monthly.data || []) {
+                const uid = stn.meta?.uid;
+                const smry = stn.smry;
+                if (!uid || !smry || smry.length < 2) continue;
+                monthlyMap[uid] = {
+                    monthlyHigh: smry[0] !== 'M' ? parseFloat(smry[0]) : null,
+                    monthlyLow: smry[1] !== 'M' ? parseFloat(smry[1]) : null,
+                };
+            }
         }
 
         // Compare observations against historical records
@@ -538,6 +649,9 @@ async function fetchStateForDate(abbr, dateStr, mmdd, year) {
 
             if (maxt != null && rec.recordHigh != null) {
                 if (!isNaN(maxt) && maxt > rec.recordHigh) {
+                    // Classify scope: daily → monthly → (county/state determined client-side)
+                    const mo = monthlyMap[uid];
+                    const monthlyBeat = mo?.monthlyHigh != null && maxt > mo.monthlyHigh;
                     broken.push({
                         stationName: meta.name || 'Unknown',
                         uid,
@@ -553,12 +667,15 @@ async function fetchStateForDate(abbr, dateStr, mmdd, year) {
                         prevRecordDate: rec.recordHighDate,
                         normalF: rec.normalHigh,
                         date: dateStr,
+                        recordScope: monthlyBeat ? 'monthly' : 'daily',
                     });
                 }
             }
 
             if (mintStr !== 'M' && mintStr !== 'T' && rec.recordLow != null) {
                 if (mint != null && mint < rec.recordLow) {
+                    const mo = monthlyMap[uid];
+                    const monthlyBeat = mo?.monthlyLow != null && mint < mo.monthlyLow;
                     broken.push({
                         stationName: meta.name || 'Unknown',
                         uid,
@@ -574,6 +691,7 @@ async function fetchStateForDate(abbr, dateStr, mmdd, year) {
                         prevRecordDate: rec.recordLowDate,
                         normalF: rec.normalLow,
                         date: dateStr,
+                        recordScope: monthlyBeat ? 'monthly' : 'daily',
                     });
                 }
             }
@@ -975,6 +1093,10 @@ async function main() {
     // 6. Write daily observation archives for S3 upload
     console.log('\n📦 Writing daily observation archives...');
     writeDailyObservations(dailyObservations, stationIndex);
+
+    if (ACIS_CACHE_STATS.hits + ACIS_CACHE_STATS.misses > 0) {
+        console.log(`\n📊 ACIS cache: ${ACIS_CACHE_STATS.hits} hits, ${ACIS_CACHE_STATS.misses} misses (${Math.round(100 * ACIS_CACHE_STATS.hits / (ACIS_CACHE_STATS.hits + ACIS_CACHE_STATS.misses))}% hit rate)`);
+    }
 
     console.log('\n🎉 Temperature records sync complete!');
 

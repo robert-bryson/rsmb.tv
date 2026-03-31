@@ -31,11 +31,12 @@ interface SummaryPanelProps {
     onFreshnessTypeChange: (type: 'high' | 'low') => void;
     useCelsius: boolean;
     onFlyTo?: (lng: number, lat: number) => void;
+    onSelectState?: (state: string) => void;
     activePeriod: TimePeriod;
     onPeriodChange: (period: TimePeriod) => void;
 }
 
-export function SummaryPanel({ viewMode, recentRecords, countyRecords, stateRecords, freshnessType, onFreshnessTypeChange, useCelsius, onFlyTo, activePeriod, onPeriodChange }: SummaryPanelProps) {
+export function SummaryPanel({ viewMode, recentRecords, countyRecords, stateRecords, freshnessType, onFreshnessTypeChange, useCelsius, onFlyTo, onSelectState, activePeriod, onPeriodChange }: SummaryPanelProps) {
     if (viewMode === 'freshness') {
         return (
             <FreshnessPanel
@@ -63,7 +64,7 @@ export function SummaryPanel({ viewMode, recentRecords, countyRecords, stateReco
             <StateRecordsPanel
                 stateRecords={stateRecords}
                 useCelsius={useCelsius}
-                onFlyTo={onFlyTo}
+                onSelectState={onSelectState}
             />
         );
     }
@@ -441,7 +442,7 @@ interface StateRow {
     lat: number;
 }
 
-function StateRecordsPanel({ stateRecords, useCelsius, onFlyTo }: { stateRecords?: StateRecordsCollection | null; useCelsius: boolean; onFlyTo?: (lng: number, lat: number) => void }) {
+function StateRecordsPanel({ stateRecords, useCelsius, onSelectState }: { stateRecords?: StateRecordsCollection | null; useCelsius: boolean; onSelectState?: (state: string) => void }) {
     const [filterType, setFilterType] = useState<'high' | 'low'>('high');
     const [sort, setSort] = useState<StateSort>('hottest');
 
@@ -527,7 +528,9 @@ function StateRecordsPanel({ stateRecords, useCelsius, onFlyTo }: { stateRecords
                 {sorted.map((r, i) => (
                     <button
                         key={`${r.state}-${r.type}-${i}`}
-                        onClick={() => onFlyTo?.(r.lng, r.lat)}
+                        onClick={() => {
+                            onSelectState?.(r.state);
+                        }}
                         className="w-full text-left rounded px-1.5 py-1 -mx-1 hover:bg-zinc-800/80 transition-colors cursor-pointer group"
                         title={`${r.stateName} — click to fly to location`}
                     >

@@ -9,7 +9,7 @@ import { StationDetailPanel } from './StationDetailPanel';
 import { RecordAgeChart } from './RecordAgeChart';
 import { RecordsBrokenTimeSeries } from './RecordsBrokenTimeSeries';
 import { HighLowRatioChart } from './HighLowRatioChart';
-import type { BrokenRecord, ViewMode, HighlightRange, GeoJsonFeature, CountyRecordProperties, TimePeriod } from '../types';
+import type { BrokenRecord, ViewMode, HighlightRange, GeoJsonFeature, CountyRecordProperties, TimePeriod, RecordScope, StateRecordsCollection, CountyRecordsCollection } from '../types';
 import {
     INITIAL_CENTER,
     INITIAL_ZOOM,
@@ -47,7 +47,41 @@ function fToC(f: number): string {
     return ((f - 32) * 5 / 9).toFixed(1);
 }
 
-function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'county' | 'broken', counterpart?: Record<string, unknown> | null): string {
+/**
+ * Classify a broken record's significance.
+ * Starts from the backend-computed recordScope (daily vs monthly) and promotes
+ * to county-alltime or state-alltime if the temp also beats those records.
+ */
+function classifyBrokenRecord(
+    props: Record<string, unknown>,
+    stateRecs: StateRecordsCollection | null,
+    countyRecs: CountyRecordsCollection | null,
+): RecordScope {
+    const type = props.type as string;
+    const tempF = props.tempF as number;
+    const state = props.state as string;
+    const county = props.county as string;
+    // Backend already determined daily vs monthly
+    const baseScope = (props.recordScope as RecordScope) || 'daily';
+    if (stateRecs) {
+        const sr = stateRecs.features.find(f => f.properties.state === state && f.properties.type === type);
+        if (sr && (type === 'high' ? tempF >= sr.properties.tempF : tempF <= sr.properties.tempF)) return 'state-alltime';
+    }
+    if (countyRecs && county) {
+        const cr = countyRecs.features.find(f => f.properties.countyFips === county && f.properties.type === type);
+        if (cr && (type === 'high' ? tempF >= cr.properties.tempF : tempF <= cr.properties.tempF)) return 'county-alltime';
+    }
+    return baseScope;
+}
+
+const SCOPE_BADGE: Record<RecordScope, string> = {
+    'daily': '',
+    'monthly': '<div style="display:inline-block;background:#1e3a5f;color:#7dd3fc;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:700;letter-spacing:.3px;margin-bottom:4px">📅 MONTHLY RECORD</div>',
+    'county-alltime': '<div style="display:inline-block;background:#422006;color:#fbbf24;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:700;letter-spacing:.3px;margin-bottom:4px">📊 COUNTY ALL-TIME</div>',
+    'state-alltime': '<div style="display:inline-block;background:#78350f;color:#f59e0b;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:700;letter-spacing:.3px;margin-bottom:4px">🏆 STATE ALL-TIME</div>',
+};
+
+function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'county' | 'broken', counterpart?: Record<string, unknown> | null, scope?: RecordScope): string {
     const type = props.type as string;
     const tempF = props.tempF as number;
     const isHigh = type === 'high';
@@ -62,12 +96,14 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
         const typeLabel = isHigh ? 'NEW RECORD HIGH' : 'NEW RECORD LOW';
         const normalF = props.normalF as number | null;
         const vsNormal = normalF != null ? (tempF - normalF) : null;
+        const scopeBadge = scope ? SCOPE_BADGE[scope] : '';
         return `<div style="
             font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
             background:#18181b;color:#e4e4e7;padding:12px 14px;border-radius:8px;
             min-width:220px;line-height:1.6;font-size:13px;
             border:1px solid ${color}44;box-shadow:0 4px 20px rgba(0,0,0,.5)">
             <div style="font-size:12px;font-weight:700;color:${color};letter-spacing:.5px;margin-bottom:4px">${icon} ${typeLabel}</div>
+            ${scopeBadge}
             <div style="font-size:14px;font-weight:600;margin-bottom:4px">${props.stationName}</div>
             <div style="color:#a1a1aa;font-size:12px;margin-bottom:6px">${props.stateName}</div>
             <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:6px">
@@ -188,6 +224,7 @@ export function TemperatureMap() {
     const [highlightRange, setHighlightRange] = useState<HighlightRange | null>(null);
     const [selectedDecade, setSelectedDecade] = useState<number | null>(null);
     const [selectedStation, setSelectedStation] = useState<{ uid: number; name: string; state: string } | null>(null);
+    const [selectedState, setSelectedState] = useState<string | null>(null);
     const prevViewMode = useRef<ViewMode>('recent');
 
     // URL-driven state for shareable views
@@ -260,6 +297,7 @@ export function TemperatureMap() {
                         prevRecordDate: r.prevRecordDate,
                         normalF: r.normalF,
                         date: r.date,
+                        recordScope: r.recordScope,
                     },
                 })),
         };
@@ -311,6 +349,22 @@ export function TemperatureMap() {
         });
         return { type: 'FeatureCollection' as const, features };
     }, [countyRecords]);
+
+    /** GeoJSON for the selected state's extreme station locations (from county records) */
+    const stateDetailGeoJson = useMemo(() => {
+        if (!selectedState || !countyRecords) return { type: 'FeatureCollection' as const, features: [] as GeoJsonFeature<CountyRecordProperties>[] };
+        const stateFeatures = countyRecords.features.filter(f => f.properties.state === selectedState);
+        const highRec = stateFeatures
+            .filter(f => f.properties.type === 'high')
+            .reduce((best, f) => !best || f.properties.tempF > best.properties.tempF ? f : best, null as GeoJsonFeature<CountyRecordProperties> | null);
+        const lowRec = stateFeatures
+            .filter(f => f.properties.type === 'low')
+            .reduce((best, f) => !best || f.properties.tempF < best.properties.tempF ? f : best, null as GeoJsonFeature<CountyRecordProperties> | null);
+        return {
+            type: 'FeatureCollection' as const,
+            features: [highRec, lowRec].filter((f): f is GeoJsonFeature<CountyRecordProperties> => f !== null),
+        };
+    }, [selectedState, countyRecords]);
 
     // Keep refs so click handlers can look up both high+low counterparts
     const countyRecordsRef = useRef(countyRecords);
@@ -692,6 +746,93 @@ export function TemperatureMap() {
         });
     }, [mapLoaded, freshnessGeoJson]);
 
+    // State detail markers — shown when a state is selected in state view
+    useEffect(() => {
+        const map = mapRef.current;
+        if (!map || !mapLoaded) return;
+        const sourceId = 'state-detail-records';
+        if (map.getSource(sourceId)) return;
+        map.addSource(sourceId, { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+        map.addLayer({
+            id: 'state-detail-glow',
+            type: 'circle',
+            source: sourceId,
+            paint: {
+                'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 20, 8, 30, 12, 40],
+                'circle-color': ['case', ['==', ['get', 'type'], 'high'], 'rgba(239,68,68,0.2)', 'rgba(59,130,246,0.2)'],
+                'circle-stroke-width': 0,
+            },
+            layout: { visibility: 'none' },
+        });
+        map.addLayer({
+            id: 'state-detail-circle',
+            type: 'circle',
+            source: sourceId,
+            paint: {
+                'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 12, 12, 16],
+                'circle-color': ['case', ['==', ['get', 'type'], 'high'], HIGH_TEMP_COLOR, LOW_TEMP_COLOR],
+                'circle-stroke-width': 3,
+                'circle-stroke-color': '#ffffff',
+            },
+            layout: { visibility: 'none' },
+        });
+        map.addLayer({
+            id: 'state-detail-label',
+            type: 'symbol',
+            source: sourceId,
+            layout: {
+                'text-field': ['concat', ['to-string', ['get', 'tempF']], '°F · ', ['get', 'stationName']],
+                'text-font': ['Open Sans Bold'],
+                'text-size': 13,
+                'text-offset': [0, 2.2],
+                'text-anchor': 'top',
+                'text-allow-overlap': true,
+                visibility: 'none',
+            },
+            paint: {
+                'text-color': ['case', ['==', ['get', 'type'], 'high'], '#fca5a5', '#93c5fd'],
+                'text-halo-color': '#000000',
+                'text-halo-width': 2,
+            },
+        });
+    }, [mapLoaded]);
+
+    // Update state detail source data and zoom when selectedState changes
+    useEffect(() => {
+        const map = mapRef.current;
+        if (!map || !mapLoaded) return;
+        const sourceId = 'state-detail-records';
+        const source = map.getSource(sourceId) as maplibregl.GeoJSONSource | undefined;
+        if (!source) return;
+        const detailLayers = ['state-detail-glow', 'state-detail-circle', 'state-detail-label'];
+        if (!selectedState || !stateDetailGeoJson.features.length) {
+            source.setData({ type: 'FeatureCollection', features: [] });
+            for (const id of detailLayers) {
+                if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'none');
+            }
+            return;
+        }
+        source.setData(stateDetailGeoJson as GeoJSON.GeoJSON);
+        for (const id of detailLayers) {
+            if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'visible');
+        }
+        // Zoom to fit the selected state's county records
+        if (countyRecords) {
+            const sf = countyRecords.features.filter(f => f.properties.state === selectedState);
+            if (sf.length > 0) {
+                let minLng = Infinity, maxLng = -Infinity, minLat = Infinity, maxLat = -Infinity;
+                for (const f of sf) {
+                    const [lng, lat] = f.geometry.coordinates;
+                    if (lng < minLng) minLng = lng;
+                    if (lng > maxLng) maxLng = lng;
+                    if (lat < minLat) minLat = lat;
+                    if (lat > maxLat) maxLat = lat;
+                }
+                map.fitBounds([[minLng, minLat], [maxLng, maxLat]], { padding: 60, duration: 1200, maxZoom: 9 });
+            }
+        }
+    }, [mapLoaded, selectedState, stateDetailGeoJson, countyRecords]);
+
     // Toggle layer visibility based on viewMode
     useEffect(() => {
         const map = mapRef.current;
@@ -701,13 +842,15 @@ export function TemperatureMap() {
         const stateLayers = ['state-highs', 'state-lows', 'state-labels'];
         const countyLayers = ['county-highs', 'county-lows', 'county-labels'];
         const freshnessLayers = ['freshness-circles', 'freshness-labels'];
+        const stateDetailLayers = ['state-detail-glow', 'state-detail-circle', 'state-detail-label'];
 
-        const allLayers = [...recentLayers, ...stateLayers, ...countyLayers, ...freshnessLayers];
+        const allLayers = [...recentLayers, ...stateLayers, ...countyLayers, ...freshnessLayers, ...stateDetailLayers];
 
         // Close any open popup and station detail when switching views
         popupRef.current?.remove();
         popupRef.current = null;
         setSelectedStation(null);
+        setSelectedState(null);
 
         // Hide everything first
         for (const id of allLayers) {
@@ -870,13 +1013,21 @@ export function TemperatureMap() {
                 }
 
                 popupRef.current?.remove();
+                const scope = layerType === 'broken'
+                    ? classifyBrokenRecord(props, stateRecordsRef.current, countyRecordsRef.current)
+                    : undefined;
                 const popup = new maplibregl.Popup({ closeButton: true, maxWidth: (counterpart || layerType === 'state') ? '360px' : '300px', className: 'dark-popup' })
                     .setLngLat(coords)
-                    .setHTML(buildPopupHTML(props, layerType, counterpart))
+                    .setHTML(buildPopupHTML(props, layerType, counterpart, scope))
                     .addTo(map);
                 popupRef.current = popup;
                 popup.on('close', () => { if (popupRef.current === popup) popupRef.current = null; });
                 styleDarkPopup(popup);
+
+                // Zoom to state and show station detail markers
+                if (layerType === 'state') {
+                    setSelectedState(props.state as string);
+                }
 
                 // Open station detail for broken records (which have uid)
                 if (layerType === 'broken' && props.uid) {
@@ -1011,6 +1162,46 @@ export function TemperatureMap() {
                 el.querySelectorAll('.maplibregl-popup-tip').forEach(node => {
                     (node as HTMLElement).style.display = 'none';
                 });
+            }
+        });
+
+        // State detail marker clicks — show popup with county record info
+        map.on('click', 'state-detail-circle', (e) => {
+            if (!e.features?.length) return;
+            hoverPopup?.remove();
+            const props = e.features[0].properties;
+            const coords = (e.features[0].geometry as GeoJSON.Point).coordinates.slice() as [number, number];
+            // Find the counterpart (high↔low) in the detail markers
+            let counterpart: Record<string, unknown> | null = null;
+            if (props.countyFips && countyRecordsRef.current) {
+                const otherType = props.type === 'high' ? 'low' : 'high';
+                const match = countyRecordsRef.current.features.find(
+                    f => f.properties.countyFips === (props.countyFips as string) && f.properties.type === otherType
+                );
+                if (match) counterpart = match.properties as unknown as Record<string, unknown>;
+            }
+            popupRef.current?.remove();
+            const popup = new maplibregl.Popup({ closeButton: true, maxWidth: '360px', className: 'dark-popup' })
+                .setLngLat(coords)
+                .setHTML(buildPopupHTML(props, 'county', counterpart))
+                .addTo(map);
+            popupRef.current = popup;
+            popup.on('close', () => { if (popupRef.current === popup) popupRef.current = null; });
+            styleDarkPopup(popup);
+        });
+        map.on('mouseenter', 'state-detail-circle', () => { map.getCanvas().style.cursor = 'pointer'; });
+        map.on('mouseleave', 'state-detail-circle', () => { map.getCanvas().style.cursor = ''; });
+
+        // Click-away: clear state selection when clicking empty space
+        map.on('click', (e) => {
+            const interactiveLayers = [
+                'state-highs', 'state-lows', 'state-labels',
+                'state-detail-circle', 'state-detail-glow', 'state-detail-label',
+            ].filter(id => map.getLayer(id));
+            if (interactiveLayers.length === 0) return;
+            const features = map.queryRenderedFeatures(e.point, { layers: interactiveLayers });
+            if (features.length === 0) {
+                setSelectedState(null);
             }
         });
     }, [mapLoaded, styleDarkPopup]);
@@ -1192,6 +1383,7 @@ export function TemperatureMap() {
                     onFreshnessTypeChange={setFreshnessType}
                     useCelsius={useCelsius}
                     onFlyTo={flyToLocation}
+                    onSelectState={setSelectedState}
                     activePeriod={activePeriod}
                     onPeriodChange={setActivePeriod}
                 />

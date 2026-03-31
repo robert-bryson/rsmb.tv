@@ -52,6 +52,8 @@ export interface BrokenRecord {
     prevRecordDate: string;
     normalF: number | null;
     date: string;
+    /** Scope of the record: daily calendar-date, monthly, or promoted to county/state all-time on the client */
+    recordScope?: RecordScope;
 }
 
 export interface RecentRecords {
@@ -75,6 +77,9 @@ export interface HighlightRange {
     startYear: number;
     endYear: number;
 }
+
+/** How significant a broken record is relative to historical context */
+export type RecordScope = 'daily' | 'monthly' | 'county-alltime' | 'state-alltime';
 
 export interface DecadeData {
     decade: number;
