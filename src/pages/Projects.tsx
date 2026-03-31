@@ -35,6 +35,14 @@ export function Projects() {
 function ProjectContent({ project }: { project: typeof projects[0] }) {
   return (
     <>
+      {project.previewImage && (
+        <img
+          src={project.previewImage}
+          alt={`${project.title} preview`}
+          className="w-full rounded-md mb-3 border border-zinc-800"
+          loading="lazy"
+        />
+      )}
       <div className="flex items-baseline justify-between gap-4">
         <h2 className="text-lg font-medium text-zinc-100 group-hover:text-violet-400">
           {project.title}

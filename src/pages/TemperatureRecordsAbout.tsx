@@ -69,6 +69,42 @@ export default function TemperatureRecordsAbout() {
                 </Link>
             </div>
 
+            <div className="space-y-6 mb-8">
+                <figure>
+                    <img
+                        src="/images/temperature-records/records-daily.png"
+                        alt="Map showing 626 record highs and 42 record lows broken yesterday across the US"
+                        className="rounded-lg border border-zinc-800"
+                        loading="eager"
+                    />
+                    <figcaption className="mt-2 text-xs text-zinc-500 text-center">
+                        Daily records view — 626 record highs and 42 record lows broken in a single day
+                    </figcaption>
+                </figure>
+                <figure>
+                    <img
+                        src="/images/temperature-records/state-records.png"
+                        alt="Map of all-time state temperature records across the US with record highs and lows"
+                        className="rounded-lg border border-zinc-800"
+                        loading="lazy"
+                    />
+                    <figcaption className="mt-2 text-xs text-zinc-500 text-center">
+                        State records view — all-time high and low temperature records for each state
+                    </figcaption>
+                </figure>
+                <figure>
+                    <img
+                        src="/images/temperature-records/freshness-county.png"
+                        alt="County records colored by decade showing when each record was set"
+                        className="rounded-lg border border-zinc-800"
+                        loading="lazy"
+                    />
+                    <figcaption className="mt-2 text-xs text-zinc-500 text-center">
+                        Freshness view — county records colored by decade, showing when each record was set
+                    </figcaption>
+                </figure>
+            </div>
+
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Features</h2>
             <ul className="space-y-1.5 text-zinc-400 text-sm mb-6 list-disc list-inside">
                 <li>Choropleth map of record highs and lows at state and county level</li>

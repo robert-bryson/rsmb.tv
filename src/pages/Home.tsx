@@ -50,6 +50,14 @@ export function Home() {
 
             const content = (
               <>
+                {project.previewImage && (
+                  <img
+                    src={project.previewImage}
+                    alt={`${project.title} preview`}
+                    className="w-full rounded-md mb-3 border border-zinc-800"
+                    loading="lazy"
+                  />
+                )}
                 <div className="flex items-baseline justify-between gap-4">
                   <h3 className="text-lg font-medium text-zinc-100 group-hover:text-violet-400">
                     {project.title}

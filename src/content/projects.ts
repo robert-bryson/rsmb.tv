@@ -6,6 +6,7 @@ export interface Project {
   featured?: boolean;
   demoUrl?: string;
   sourceUrl?: string;
+  previewImage?: string;
   year: number;
 }
 
@@ -55,6 +56,7 @@ export const projects: Project[] = [
     tech: ['React', 'MapLibre GL', 'NOAA ACIS', 'GeoJSON'],
     featured: true,
     demoUrl: '/projects/temperature-records/map',
+    previewImage: '/images/temperature-records/records-daily.png',
     year: 2025,
   },
   {
