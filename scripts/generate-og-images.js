@@ -16,11 +16,15 @@ const OUT_DIR = path.join(__dirname, '../public/og');
 
 const pages = [
     { slug: 'home', title: 'rsmb', subtitle: 'Interactive data visualizations, geospatial projects, and web tools' },
+    { slug: 'about', title: 'About', subtitle: 'Robby Bryson — software developer and geospatial engineer' },
+    { slug: 'blog', title: 'Blog', subtitle: 'Thoughts on projects, engineering, and things I find interesting' },
+    { slug: 'projects', title: 'Projects', subtitle: 'Interactive data visualizations, geospatial tools, and more' },
     { slug: 'through-routes', title: 'Through Routes', subtitle: 'Find scenic, twisty motorcycle loop routes on rural roads' },
     { slug: 'flights', title: 'Flight Tracker', subtitle: 'Interactive 3D globe visualization of flights around the world' },
     { slug: 'anki-artisan', title: 'Anki Artisan', subtitle: 'Generate Anki flashcard decks from iNaturalist and eBird data' },
     { slug: 'bookend', title: 'Bookend', subtitle: 'A personal book-tracking app with reading stats and enrichment' },
-    { slug: 'temperature-records', title: 'US Temperature Records', subtitle: 'Interactive map of all-time record temperatures across US counties' },
+    { slug: 'temperature-records', title: 'Record Highs', subtitle: 'Interactive map of all-time record temperatures across US counties' },
+    { slug: 'climate-trends', title: 'Climate Trends', subtitle: 'Are temperature records being broken more frequently?' },
     { slug: 'route2gpx', title: 'route2gpx', subtitle: 'Convert Google Routes into GPX files for GPS devices' },
 ];
 
@@ -50,4 +54,14 @@ for (const page of pages) {
     fs.writeFileSync(outPath, svg, 'utf-8');
 }
 
-console.log(`OG images generated → ${OUT_DIR} (${pages.length} images)`);
+// Also generate OG images for blog posts from posts.json
+const BLOG_DIR = path.join(OUT_DIR, 'blog');
+fs.mkdirSync(BLOG_DIR, { recursive: true });
+const postsJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../src/content/posts.json'), 'utf-8'));
+for (const post of postsJson) {
+    const svg = generateSvg({ title: post.title, subtitle: post.description });
+    const outPath = path.join(BLOG_DIR, `${post.slug}.svg`);
+    fs.writeFileSync(outPath, svg, 'utf-8');
+}
+
+console.log(`OG images generated → ${OUT_DIR} (${pages.length} pages + ${postsJson.length} blog posts)`);

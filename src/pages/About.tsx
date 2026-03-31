@@ -4,6 +4,7 @@ export function About() {
   useDocumentHead({
     title: 'About',
     description: 'Robby Bryson — software developer and geospatial engineer based in St. Louis. Background in Azure Maps, federal GIS, and startups.',
+    ogImage: 'https://rsmb.tv/og/about.svg',
   });
 
   return (

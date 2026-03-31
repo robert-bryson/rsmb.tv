@@ -7,6 +7,7 @@ export function Blog() {
     useDocumentHead({
         title: 'Blog | rsmb',
         description: 'Thoughts on projects, engineering, and things I find interesting.',
+        ogImage: 'https://rsmb.tv/og/blog.svg',
     });
 
     const posts = getAllPosts();

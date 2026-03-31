@@ -3,8 +3,9 @@ import { useDocumentHead } from '../hooks/useDocumentHead';
 
 export default function TemperatureRecords() {
     useDocumentHead({
-        title: 'US Temperature Records',
+        title: 'Record Highs',
         description: 'Interactive map of all-time record high and low temperatures across US states and counties, with recent extremes summary.',
+        ogImage: 'https://rsmb.tv/og/temperature-records.svg',
     });
 
     return (

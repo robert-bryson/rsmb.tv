@@ -1,6 +1,7 @@
 import { useState, useMemo, useRef } from 'react';
 import type { RecentRecords, TimePeriod, BrokenRecord, CountyRecordsCollection, StateRecordsCollection, ViewMode } from '../types';
 import { TIME_PERIODS, TIME_PERIOD_LABELS, HIGH_TEMP_COLOR, LOW_TEMP_COLOR, yearToColor } from '../constants';
+import { formatTemp } from '../utils/temperature';
 
 type FreshnessSort = 'hottest' | 'coldest' | 'oldest' | 'newest';
 
@@ -12,15 +13,6 @@ const SORT_LABELS: Record<FreshnessSort, string> = {
 };
 
 const SORT_OPTIONS: FreshnessSort[] = ['hottest', 'coldest', 'oldest', 'newest'];
-
-function fToC(f: number): number {
-    return (f - 32) * 5 / 9;
-}
-
-function formatTemp(tempF: number, useCelsius: boolean): string {
-    if (useCelsius) return `${fToC(tempF).toFixed(1)}°C`;
-    return `${tempF}°F`;
-}
 
 interface SummaryPanelProps {
     viewMode: ViewMode;

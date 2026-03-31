@@ -4,7 +4,7 @@ import { useJsonLd } from '../hooks/useJsonLd';
 
 export default function TemperatureRecordsAbout() {
     useDocumentHead({
-        title: 'US Temperature Records',
+        title: 'Record Highs',
         description:
             'Interactive map of all-time record high and low temperatures across US states and counties, powered by NOAA and ACIS data.',
         ogImage: 'https://rsmb.tv/og/temperature-records.svg',
@@ -13,7 +13,7 @@ export default function TemperatureRecordsAbout() {
     useJsonLd({
         '@context': 'https://schema.org',
         '@type': 'SoftwareApplication',
-        name: 'US Temperature Records',
+        name: 'Record Highs',
         description: 'Interactive map of all-time record high and low temperatures across US states and counties, powered by NOAA and ACIS data.',
         url: 'https://rsmb.tv/projects/temperature-records',
         applicationCategory: 'UtilitiesApplication',
@@ -24,7 +24,7 @@ export default function TemperatureRecordsAbout() {
     return (
         <div className="max-w-2xl">
             <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
-                US Temperature Records
+                Record Highs
             </h1>
             <p className="text-zinc-500 mb-6 text-sm">
                 2025 · React + MapLibre GL

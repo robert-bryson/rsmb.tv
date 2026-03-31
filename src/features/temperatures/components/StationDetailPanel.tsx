@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useStationHistory } from '../hooks/useStationHistory';
 import type { StationDailyObs } from '../hooks/useStationHistory';
+import { fToC } from '../utils/temperature';
 
 interface StationDetailPanelProps {
     uid: number;
@@ -10,13 +11,9 @@ interface StationDetailPanelProps {
     onClose: () => void;
 }
 
-function fToC(f: number): number {
-    return Math.round(((f - 32) * 5) / 9);
-}
-
 function formatTemp(f: number | null, celsius: boolean): string {
     if (f == null) return '—';
-    return celsius ? `${fToC(f)}°C` : `${f}°F`;
+    return celsius ? `${Math.round(fToC(f))}°C` : `${f}°F`;
 }
 
 /** Simple SVG sparkline for a series of daily temps */

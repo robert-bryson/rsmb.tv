@@ -21,6 +21,7 @@ import {
     FRESHNESS_COLORS,
     yearToColor,
 } from '../constants';
+import { fToC, formatTemp } from '../utils/temperature';
 
 function useIsMobile() {
     const mq = typeof window !== 'undefined' ? window.matchMedia('(max-width: 768px)') : null;
@@ -40,11 +41,6 @@ function formatDate(dateStr: string): string {
     const d = new Date(dateStr + 'T00:00:00');
     if (isNaN(d.getTime())) return dateStr;
     return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-}
-
-/** Convert °F to °C */
-function fToC(f: number): string {
-    return ((f - 32) * 5 / 9).toFixed(1);
 }
 
 /**
@@ -81,7 +77,7 @@ const SCOPE_BADGE: Record<RecordScope, string> = {
     'state-alltime': '<div style="display:inline-block;background:#78350f;color:#f59e0b;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:700;letter-spacing:.3px;margin-bottom:4px">🏆 STATE ALL-TIME</div>',
 };
 
-function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'county' | 'broken', counterpart?: Record<string, unknown> | null, scope?: RecordScope): string {
+function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'county' | 'broken', counterpart?: Record<string, unknown> | null, scope?: RecordScope, useCelsius = false): string {
     const type = props.type as string;
     const tempF = props.tempF as number;
     const isHigh = type === 'high';
@@ -107,21 +103,21 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
             <div style="font-size:14px;font-weight:600;margin-bottom:4px">${props.stationName}</div>
             <div style="color:#a1a1aa;font-size:12px;margin-bottom:6px">${props.stateName}</div>
             <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:6px">
-                <span style="color:${color};font-size:22px;font-weight:700">${tempF}°F</span>
-                <span style="color:#71717a;font-size:12px">(${fToC(tempF)}°C)</span>
+                <span style="color:${color};font-size:22px;font-weight:700">${formatTemp(tempF, useCelsius)}</span>
+                <span style="color:#71717a;font-size:12px">(${formatTemp(tempF, !useCelsius)})</span>
             </div>
             <div style="border-top:1px solid #27272a;padding-top:6px;font-size:12px;color:#a1a1aa">
                 <div style="display:flex;justify-content:space-between;margin-bottom:2px">
                     <span style="color:#71717a">Previous record</span>
-                    <span style="color:#d4d4d8">${prevF}°F on ${prevDate}</span>
+                    <span style="color:#d4d4d8">${formatTemp(prevF, useCelsius)} on ${prevDate}</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;margin-bottom:2px">
                     <span style="color:#71717a">Margin</span>
-                    <span style="color:${color}">${arrow}${margin.toFixed(1)}°F</span>
+                    <span style="color:${color}">${arrow}${useCelsius ? ((margin * 5 / 9)).toFixed(1) : margin.toFixed(1)}°${useCelsius ? 'C' : 'F'}</span>
                 </div>${vsNormal != null ? `
                 <div style="display:flex;justify-content:space-between;margin-bottom:2px">
                     <span style="color:#71717a">vs Normal</span>
-                    <span style="color:${vsNormal > 0 ? HIGH_TEMP_COLOR : LOW_TEMP_COLOR}">${vsNormal > 0 ? '+' : ''}${vsNormal.toFixed(0)}°F</span>
+                    <span style="color:${vsNormal > 0 ? HIGH_TEMP_COLOR : LOW_TEMP_COLOR}">${useCelsius ? (vsNormal > 0 ? '+' : '') + ((vsNormal * 5 / 9)).toFixed(0) + '°C' : (vsNormal > 0 ? '+' : '') + vsNormal.toFixed(0) + '°F'}</span>
                 </div>` : ''}
                 <div style="display:flex;justify-content:space-between">
                     <span style="color:#71717a">Date</span>
@@ -156,21 +152,21 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
             <div style="display:flex;gap:12px;margin-bottom:8px">
                 <div style="flex:1;background:#27272a;border-radius:6px;padding:8px 10px;border-left:3px solid ${HIGH_TEMP_COLOR}">
                     <div style="font-size:10px;color:#a1a1aa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">🔥 Record High</div>
-                    <div style="color:${HIGH_TEMP_COLOR};font-size:20px;font-weight:700">${hF}°F</div>
-                    <div style="color:#71717a;font-size:11px">${fToC(hF)}°C</div>
+                    <div style="color:${HIGH_TEMP_COLOR};font-size:20px;font-weight:700">${formatTemp(hF, useCelsius)}</div>
+                    <div style="color:#71717a;font-size:11px">${formatTemp(hF, !useCelsius)}</div>
                     <div style="color:#a1a1aa;font-size:11px;margin-top:4px">${formatDate(highRec.date as string)}</div>
                     <div style="color:#71717a;font-size:10px">${highRec.stationName || highRec.location || ''}</div>
                 </div>
                 <div style="flex:1;background:#27272a;border-radius:6px;padding:8px 10px;border-left:3px solid ${LOW_TEMP_COLOR}">
                     <div style="font-size:10px;color:#a1a1aa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">❄️ Record Low</div>
-                    <div style="color:${LOW_TEMP_COLOR};font-size:20px;font-weight:700">${lF}°F</div>
-                    <div style="color:#71717a;font-size:11px">${fToC(lF)}°C</div>
+                    <div style="color:${LOW_TEMP_COLOR};font-size:20px;font-weight:700">${formatTemp(lF, useCelsius)}</div>
+                    <div style="color:#71717a;font-size:11px">${formatTemp(lF, !useCelsius)}</div>
                     <div style="color:#a1a1aa;font-size:11px;margin-top:4px">${formatDate(lowRec.date as string)}</div>
                     <div style="color:#71717a;font-size:10px">${lowRec.stationName || lowRec.location || ''}</div>
                 </div>
             </div>
             <div style="text-align:center;font-size:11px;color:#71717a;border-top:1px solid #27272a;padding-top:6px">
-                Temperature range: <span style="color:#d4d4d8;font-weight:600">${range}°F</span> (${fToC(range + 32)}°C)
+                Temperature range: <span style="color:#d4d4d8;font-weight:600">${useCelsius ? fToC(range + 32).toFixed(1) + '°C' : range + '°F'}</span> (${useCelsius ? range + '°F' : fToC(range + 32).toFixed(1) + '°C'})
             </div>
         </div>`;
     }
@@ -189,8 +185,8 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
         <div style="font-size:14px;font-weight:600;margin-bottom:6px">${title}</div>
         <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:4px">
             <span style="font-size:11px">${icon}</span>
-            <span style="color:${color};font-size:20px;font-weight:700">${tempF}°F</span>
-            <span style="color:#71717a;font-size:12px">(${fToC(tempF)}°C)</span>
+            <span style="color:${color};font-size:20px;font-weight:700">${formatTemp(tempF, useCelsius)}</span>
+            <span style="color:#71717a;font-size:12px">(${formatTemp(tempF, !useCelsius)})</span>
         </div>
         <div style="font-size:11px;color:#a1a1aa;font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">${typeLabel}</div>
         <div style="border-top:1px solid #27272a;padding-top:6px;font-size:12px;color:#a1a1aa">
@@ -271,7 +267,7 @@ export function TemperatureMap() {
     }, []);
 
     const { stateRecords, countyRecords, recentRecords, loading, error } = useTemperatureData();
-    const { trends } = useClimateTrends();
+    const { trends, loading: trendsLoading } = useClimateTrends();
     const [activePeriod, setActivePeriod] = useState<TimePeriod>('yesterday');
 
     /** Build GeoJSON from broken records for the map layer */
@@ -371,6 +367,8 @@ export function TemperatureMap() {
     useEffect(() => { countyRecordsRef.current = countyRecords; }, [countyRecords]);
     const stateRecordsRef = useRef(stateRecords);
     useEffect(() => { stateRecordsRef.current = stateRecords; }, [stateRecords]);
+    const useCelsiusRef = useRef(useCelsius);
+    useEffect(() => { useCelsiusRef.current = useCelsius; }, [useCelsius]);
 
     /** Fly to a specific location (station or state) */
     const flyToLocation = useCallback((lng: number, lat: number) => {
@@ -797,6 +795,51 @@ export function TemperatureMap() {
         });
     }, [mapLoaded]);
 
+    // Update all map layer text-fields when unit (°F / °C) changes
+    useEffect(() => {
+        const map = mapRef.current;
+        if (!map || !mapLoaded) return;
+
+        // MapLibre expression to convert °F → °C inline: round((tempF - 32) * 5/9)
+        const tempExpr = (prop: string): maplibregl.ExpressionSpecification =>
+            useCelsius
+                ? ['concat', ['to-string', ['round', ['*', ['/', ['-', ['get', prop], 32], 9], 5]]], '°C']
+                : ['concat', ['to-string', ['get', prop]], '°F'];
+
+        // State high/low labels
+        if (map.getLayer('state-highs')) map.setLayoutProperty('state-highs', 'text-field', tempExpr('tempF'));
+        if (map.getLayer('state-lows')) map.setLayoutProperty('state-lows', 'text-field', tempExpr('tempF'));
+
+        // Broken record labels
+        if (map.getLayer('broken-labels')) map.setLayoutProperty('broken-labels', 'text-field', tempExpr('tempF'));
+
+        // State detail labels
+        if (map.getLayer('state-detail-label')) {
+            const detailExpr: maplibregl.ExpressionSpecification = useCelsius
+                ? ['concat', ['to-string', ['round', ['*', ['/', ['-', ['get', 'tempF'], 32], 9], 5]]], '°C · ', ['get', 'stationName']]
+                : ['concat', ['to-string', ['get', 'tempF']], '°F · ', ['get', 'stationName']];
+            map.setLayoutProperty('state-detail-label', 'text-field', detailExpr);
+        }
+
+        // County merged labels (high on top, low below)
+        if (map.getLayer('county-labels')) {
+            const countyExpr: maplibregl.ExpressionSpecification = useCelsius
+                ? [
+                    'format',
+                    ['concat', ['to-string', ['round', ['*', ['/', ['-', ['coalesce', ['get', 'highTempF'], 0], 32], 9], 5]]], '°'], { 'text-color': '#fca5a5' },
+                    '\n', {},
+                    ['concat', ['to-string', ['round', ['*', ['/', ['-', ['coalesce', ['get', 'lowTempF'], 0], 32], 9], 5]]], '°'], { 'text-color': '#93c5fd' },
+                ]
+                : [
+                    'format',
+                    ['concat', ['to-string', ['coalesce', ['get', 'highTempF'], '']], '°'], { 'text-color': '#fca5a5' },
+                    '\n', {},
+                    ['concat', ['to-string', ['coalesce', ['get', 'lowTempF'], '']], '°'], { 'text-color': '#93c5fd' },
+                ];
+            map.setLayoutProperty('county-labels', 'text-field', countyExpr);
+        }
+    }, [mapLoaded, useCelsius]);
+
     // Update state detail source data and zoom when selectedState changes
     useEffect(() => {
         const map = mapRef.current;
@@ -984,7 +1027,7 @@ export function TemperatureMap() {
                         popupRef.current?.remove();
                         const popup = new maplibregl.Popup({ closeButton: true, maxWidth: counterpart ? '360px' : '300px', className: 'dark-popup' })
                             .setLngLat(coords)
-                            .setHTML(buildPopupHTML(primary.properties as unknown as Record<string, unknown>, 'county', counterpart))
+                            .setHTML(buildPopupHTML(primary.properties as unknown as Record<string, unknown>, 'county', counterpart, undefined, useCelsiusRef.current))
                             .addTo(map);
                         popupRef.current = popup;
                         popup.on('close', () => { if (popupRef.current === popup) popupRef.current = null; });
@@ -1018,7 +1061,7 @@ export function TemperatureMap() {
                     : undefined;
                 const popup = new maplibregl.Popup({ closeButton: true, maxWidth: (counterpart || layerType === 'state') ? '360px' : '300px', className: 'dark-popup' })
                     .setLngLat(coords)
-                    .setHTML(buildPopupHTML(props, layerType, counterpart, scope))
+                    .setHTML(buildPopupHTML(props, layerType, counterpart, scope, useCelsiusRef.current))
                     .addTo(map);
                 popupRef.current = popup;
                 popup.on('close', () => { if (popupRef.current === popup) popupRef.current = null; });
@@ -1183,7 +1226,7 @@ export function TemperatureMap() {
             popupRef.current?.remove();
             const popup = new maplibregl.Popup({ closeButton: true, maxWidth: '360px', className: 'dark-popup' })
                 .setLngLat(coords)
-                .setHTML(buildPopupHTML(props, 'county', counterpart))
+                .setHTML(buildPopupHTML(props, 'county', counterpart, undefined, useCelsiusRef.current))
                 .addTo(map);
             popupRef.current = popup;
             popup.on('close', () => { if (popupRef.current === popup) popupRef.current = null; });
@@ -1237,7 +1280,7 @@ export function TemperatureMap() {
             )}
 
             {/* Unified toolbar */}
-            <div className="absolute top-3 left-3 z-20 flex flex-col gap-1.5">
+            <div className="absolute top-3 left-3 z-20 flex flex-col gap-1.5 max-w-[calc(100vw-7rem)]">
                 <div className="flex items-center gap-1.5">
                     <Link
                         to="/projects"
@@ -1255,7 +1298,7 @@ export function TemperatureMap() {
                         📊 Trends
                     </button>
                 </div>
-                <div className="flex gap-0.5 bg-zinc-900/80 backdrop-blur rounded-lg border border-zinc-700/50 p-0.5">
+                <div className="flex gap-0.5 bg-zinc-900/80 backdrop-blur rounded-lg border border-zinc-700/50 p-0.5 overflow-x-auto">
                     <button
                         onClick={() => setViewMode('recent')}
                         className={`px-2.5 py-1.5 text-xs rounded transition-colors ${viewMode === 'recent'
@@ -1351,26 +1394,26 @@ export function TemperatureMap() {
                 </div>
             )}
 
-            {/* °F / °C toggle — min 44px touch target for accessibility */}
-            <button
-                onClick={() => setUseCelsius(c => !c)}
-                className="absolute top-4 right-24 z-20 bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white w-10 h-10 sm:w-8 sm:h-8 rounded flex items-center justify-center text-xs font-semibold border border-zinc-700/50 hover:border-zinc-600 transition-colors"
-                title={useCelsius ? 'Switch to °F' : 'Switch to °C'}
-                aria-label={useCelsius ? 'Switch to Fahrenheit' : 'Switch to Celsius'}
-            >
-                {useCelsius ? '°C' : '°F'}
-            </button>
-
-            {/* Summary panel toggle — min 44px touch target */}
-            <button
-                onClick={() => setPanelOpen(p => !p)}
-                className="absolute top-4 right-14 z-20 bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white w-10 h-10 sm:w-8 sm:h-8 rounded flex items-center justify-center text-sm border border-zinc-700/50 hover:border-zinc-600 transition-colors"
-                title={panelOpen ? 'Hide summary' : 'Show summary'}
-                aria-label={panelOpen ? 'Hide summary panel' : 'Show summary panel'}
-                aria-expanded={panelOpen}
-            >
-                {panelOpen ? '✕' : '☰'}
-            </button>
+            {/* Top-right controls — grouped to avoid overlap on mobile */}
+            <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5">
+                <button
+                    onClick={() => setUseCelsius(c => !c)}
+                    className="bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white w-10 h-10 sm:w-8 sm:h-8 rounded flex items-center justify-center text-xs font-semibold border border-zinc-700/50 hover:border-zinc-600 transition-colors"
+                    title={useCelsius ? 'Switch to °F' : 'Switch to °C'}
+                    aria-label={useCelsius ? 'Switch to Fahrenheit' : 'Switch to Celsius'}
+                >
+                    {useCelsius ? '°C' : '°F'}
+                </button>
+                <button
+                    onClick={() => setPanelOpen(p => !p)}
+                    className="bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white w-10 h-10 sm:w-8 sm:h-8 rounded flex items-center justify-center text-sm border border-zinc-700/50 hover:border-zinc-600 transition-colors"
+                    title={panelOpen ? 'Hide summary' : 'Show summary'}
+                    aria-label={panelOpen ? 'Hide summary panel' : 'Show summary panel'}
+                    aria-expanded={panelOpen}
+                >
+                    {panelOpen ? '✕' : '☰'}
+                </button>
+            </div>
 
             {/* Summary panel */}
             {panelOpen && !showTrends && !selectedStation && (
@@ -1401,7 +1444,7 @@ export function TemperatureMap() {
             )}
 
             {/* Climate Trends drawer — responsive: side-by-side on desktop, tabbed on mobile */}
-            {showTrends && trends && (
+            {showTrends && (
                 <div
                     className="absolute bottom-0 left-0 right-0 z-30 bg-zinc-900/95 backdrop-blur-sm border-t border-zinc-700/50 flex flex-col"
                     style={{ height: isMobile ? '50%' : '35%', minHeight: 220 }}
@@ -1418,8 +1461,14 @@ export function TemperatureMap() {
                         </button>
                     </div>
 
-                    {/* Charts: side-by-side on desktop, tabs on mobile */}
-                    {isMobile ? (
+                    {trendsLoading || !trends ? (
+                        <div className="flex-1 flex items-center justify-center">
+                            <div className="flex items-center gap-2.5">
+                                <div className="w-4 h-4 border-2 border-zinc-600 border-t-zinc-300 rounded-full animate-spin" />
+                                <span className="text-zinc-400 text-sm">Loading trends…</span>
+                            </div>
+                        </div>
+                    ) : isMobile ? (
                         <MobileTrendsDrawer
                             trends={trends}
                             setHighlightRange={setHighlightRange}

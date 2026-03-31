@@ -50,7 +50,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'temperature-records',
-    title: 'US Temperature Records',
+    title: 'Record Highs',
     description: 'Interactive map of all-time record high and low temperatures across US states and counties, powered by NOAA and ACIS data. Includes a summary panel of recent temperature extremes.',
     tech: ['React', 'MapLibre GL', 'NOAA ACIS', 'GeoJSON'],
     featured: true,

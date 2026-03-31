@@ -14,6 +14,7 @@ export function BlogPost() {
     useDocumentHead({
         title: post ? `${post.title} | rsmb` : 'Post Not Found | rsmb',
         description: post?.description ?? 'Blog post not found.',
+        ogImage: post ? `https://rsmb.tv/og/blog/${post.slug}.svg` : undefined,
     });
 
     useJsonLd(post ? {
