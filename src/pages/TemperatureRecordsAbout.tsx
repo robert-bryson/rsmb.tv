@@ -72,9 +72,11 @@ export default function TemperatureRecordsAbout() {
             <div className="space-y-6 mb-8">
                 <figure>
                     <img
-                        src="/images/temperature-records/records-daily.png"
+                        src="/images/temperature-records/records-daily.webp"
                         alt="Map showing 626 record highs and 42 record lows broken yesterday across the US"
                         className="rounded-lg border border-zinc-800"
+                        width={1633}
+                        height={973}
                         loading="eager"
                     />
                     <figcaption className="mt-2 text-xs text-zinc-500 text-center">
@@ -83,9 +85,11 @@ export default function TemperatureRecordsAbout() {
                 </figure>
                 <figure>
                     <img
-                        src="/images/temperature-records/state-records.png"
+                        src="/images/temperature-records/state-records.webp"
                         alt="Map of all-time state temperature records across the US with record highs and lows"
                         className="rounded-lg border border-zinc-800"
+                        width={1624}
+                        height={967}
                         loading="lazy"
                     />
                     <figcaption className="mt-2 text-xs text-zinc-500 text-center">
@@ -94,9 +98,11 @@ export default function TemperatureRecordsAbout() {
                 </figure>
                 <figure>
                     <img
-                        src="/images/temperature-records/freshness-county.png"
+                        src="/images/temperature-records/freshness-county.webp"
                         alt="County records colored by decade showing when each record was set"
                         className="rounded-lg border border-zinc-800"
+                        width={1628}
+                        height={968}
                         loading="lazy"
                     />
                     <figcaption className="mt-2 text-xs text-zinc-500 text-center">

@@ -56,7 +56,7 @@ export const projects: Project[] = [
     tech: ['React', 'MapLibre GL', 'NOAA ACIS', 'GeoJSON'],
     featured: true,
     demoUrl: '/projects/temperature-records/map',
-    previewImage: '/images/temperature-records/records-daily.png',
+    previewImage: '/images/temperature-records/records-daily.webp',
     year: 2025,
   },
   {
