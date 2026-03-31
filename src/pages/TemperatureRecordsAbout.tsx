@@ -56,7 +56,7 @@ export default function TemperatureRecordsAbout() {
 
             <div className="flex gap-3 mb-8">
                 <Link
-                    to="/projects/temperature-records/map"
+                    to="/projects/temperature-records/map?view=freshness"
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium transition-colors"
                 >
                     Open interactive map →

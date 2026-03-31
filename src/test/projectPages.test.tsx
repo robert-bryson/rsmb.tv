@@ -54,7 +54,7 @@ describe('TemperatureRecordsAbout page', () => {
     it('renders heading and map/trends links', () => {
         renderWithRouter(<TemperatureRecordsAbout />, { route: '/projects/temperature-records' });
         expect(screen.getByRole('heading', { level: 1, name: /Record Highs/i })).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: /Open interactive map/i })).toHaveAttribute('href', '/projects/temperature-records/map');
+        expect(screen.getByRole('link', { name: /Open interactive map/i })).toHaveAttribute('href', '/projects/temperature-records/map?view=freshness');
         expect(screen.getByRole('link', { name: /View climate trends/i })).toHaveAttribute('href', '/projects/temperature-records/trends');
     });
 });
