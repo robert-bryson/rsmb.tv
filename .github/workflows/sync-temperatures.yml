@@ -35,8 +35,8 @@ jobs:
         if: ${{ !inputs.full_sync }}
         id: sync-recent
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.TEMP_DATA_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.TEMP_DATA_AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
           TEMPERATURE_DATA_BUCKET: rsmbtv-temperature-data
           TEMPERATURE_DATA_CDN_ID: ${{ secrets.TEMP_DATA_CLOUDFRONT_ID }}
@@ -47,8 +47,8 @@ jobs:
         if: ${{ inputs.full_sync }}
         id: sync-full
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.TEMP_DATA_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.TEMP_DATA_AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
           TEMPERATURE_DATA_BUCKET: rsmbtv-temperature-data
           TEMPERATURE_DATA_CDN_ID: ${{ secrets.TEMP_DATA_CLOUDFRONT_ID }}
@@ -58,8 +58,8 @@ jobs:
       - name: Upload record files to S3
         if: env.TEMPERATURE_DATA_BUCKET != ''
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.TEMP_DATA_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.TEMP_DATA_AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
           TEMPERATURE_DATA_BUCKET: rsmbtv-temperature-data
         run: |
@@ -73,8 +73,8 @@ jobs:
       - name: Upload daily observations to S3
         if: env.TEMPERATURE_DATA_BUCKET != ''
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.TEMP_DATA_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.TEMP_DATA_AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
           TEMPERATURE_DATA_BUCKET: rsmbtv-temperature-data
         run: |
@@ -90,8 +90,8 @@ jobs:
       - name: Invalidate CloudFront cache
         if: env.TEMPERATURE_DATA_CDN_ID != '' && env.TEMPERATURE_DATA_BUCKET != ''
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.TEMP_DATA_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.TEMP_DATA_AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
           TEMPERATURE_DATA_CDN_ID: ${{ secrets.TEMP_DATA_CLOUDFRONT_ID }}
         run: |
