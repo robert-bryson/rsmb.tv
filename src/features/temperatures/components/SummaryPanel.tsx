@@ -31,9 +31,11 @@ interface SummaryPanelProps {
     onFreshnessTypeChange: (type: 'high' | 'low') => void;
     useCelsius: boolean;
     onFlyTo?: (lng: number, lat: number) => void;
+    activePeriod: TimePeriod;
+    onPeriodChange: (period: TimePeriod) => void;
 }
 
-export function SummaryPanel({ viewMode, recentRecords, countyRecords, stateRecords, freshnessType, onFreshnessTypeChange, useCelsius, onFlyTo }: SummaryPanelProps) {
+export function SummaryPanel({ viewMode, recentRecords, countyRecords, stateRecords, freshnessType, onFreshnessTypeChange, useCelsius, onFlyTo, activePeriod, onPeriodChange }: SummaryPanelProps) {
     if (viewMode === 'freshness') {
         return (
             <FreshnessPanel
@@ -68,7 +70,7 @@ export function SummaryPanel({ viewMode, recentRecords, countyRecords, stateReco
 
     if (!recentRecords) return null;
 
-    return <RecordsPanel recentRecords={recentRecords} useCelsius={useCelsius} onFlyTo={onFlyTo} />;
+    return <RecordsPanel recentRecords={recentRecords} useCelsius={useCelsius} onFlyTo={onFlyTo} activePeriod={activePeriod} onPeriodChange={onPeriodChange} />;
 }
 
 /* ---------- Records mode panel ---------- */
@@ -106,8 +108,7 @@ function sortRecords(records: BrokenRecord[], sort: RecordSort): BrokenRecord[] 
     }
 }
 
-function RecordsPanel({ recentRecords, useCelsius, onFlyTo }: { recentRecords: RecentRecords; useCelsius: boolean; onFlyTo?: (lng: number, lat: number) => void }) {
-    const [activePeriod, setActivePeriod] = useState<TimePeriod>('yesterday');
+function RecordsPanel({ recentRecords, useCelsius, onFlyTo, activePeriod, onPeriodChange }: { recentRecords: RecentRecords; useCelsius: boolean; onFlyTo?: (lng: number, lat: number) => void; activePeriod: TimePeriod; onPeriodChange: (period: TimePeriod) => void }) {
     const [sort, setSort] = useState<RecordSort>('temp');
     const [highsVisible, setHighsVisible] = useState(PAGE_SIZE);
     const [lowsVisible, setLowsVisible] = useState(PAGE_SIZE);
@@ -116,7 +117,7 @@ function RecordsPanel({ recentRecords, useCelsius, onFlyTo }: { recentRecords: R
 
     // Reset pagination when switching tabs or sort
     const handlePeriodChange = (period: TimePeriod) => {
-        setActivePeriod(period);
+        onPeriodChange(period);
         setHighsVisible(PAGE_SIZE);
         setLowsVisible(PAGE_SIZE);
     };
@@ -155,6 +156,17 @@ function RecordsPanel({ recentRecords, useCelsius, onFlyTo }: { recentRecords: R
                             ? 'text-violet-400 border-b-2 border-violet-400'
                             : 'text-zinc-400 hover:text-zinc-200'
                             }`}
+                        title={recentRecords.asOf
+                            ? period === 'yesterday'
+                                ? recentRecords.asOf
+                                : (() => {
+                                    const end = new Date(recentRecords.asOf + 'T00:00:00');
+                                    const start = new Date(end);
+                                    start.setDate(start.getDate() - 6);
+                                    const fmt = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                                    return `${fmt(start)} – ${fmt(end)}`;
+                                })()
+                            : undefined}
                     >
                         {TIME_PERIOD_LABELS[period]}
                     </button>

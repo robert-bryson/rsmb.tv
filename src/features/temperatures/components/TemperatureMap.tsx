@@ -9,7 +9,7 @@ import { StationDetailPanel } from './StationDetailPanel';
 import { RecordAgeChart } from './RecordAgeChart';
 import { RecordsBrokenTimeSeries } from './RecordsBrokenTimeSeries';
 import { HighLowRatioChart } from './HighLowRatioChart';
-import type { BrokenRecord, ViewMode, HighlightRange, GeoJsonFeature, CountyRecordProperties } from '../types';
+import type { BrokenRecord, ViewMode, HighlightRange, GeoJsonFeature, CountyRecordProperties, TimePeriod } from '../types';
 import {
     INITIAL_CENTER,
     INITIAL_ZOOM,
@@ -235,11 +235,12 @@ export function TemperatureMap() {
 
     const { stateRecords, countyRecords, recentRecords, loading, error } = useTemperatureData();
     const { trends } = useClimateTrends();
+    const [activePeriod, setActivePeriod] = useState<TimePeriod>('yesterday');
 
     /** Build GeoJSON from broken records for the map layer */
     const brokenRecordsGeoJson = useMemo(() => {
         if (!recentRecords) return null;
-        const records = recentRecords.yesterday || [];
+        const records = recentRecords[activePeriod] || [];
         return {
             type: 'FeatureCollection' as const,
             features: records
@@ -262,7 +263,7 @@ export function TemperatureMap() {
                     },
                 })),
         };
-    }, [recentRecords]);
+    }, [recentRecords, activePeriod]);
 
     /** Build freshness GeoJSON — county records colored by the year they were set */
     const freshnessGeoJson = useMemo(() => {
@@ -1109,10 +1110,10 @@ export function TemperatureMap() {
                 <div className="max-w-md" aria-live="polite">
                     {viewMode === 'recent' && recentRecords && (
                         <p className="text-xs text-zinc-200 bg-zinc-900/80 backdrop-blur rounded-lg px-3 py-1.5 border border-zinc-700/50">
-                            <span className="font-semibold" style={{ color: HIGH_TEMP_COLOR }}>{(recentRecords.yesterday?.filter((r: BrokenRecord) => r.type === 'high').length || 0).toLocaleString()}</span>
+                            <span className="font-semibold" style={{ color: HIGH_TEMP_COLOR }}>{(recentRecords[activePeriod]?.filter((r: BrokenRecord) => r.type === 'high').length || 0).toLocaleString()}</span>
                             {' record highs and '}
-                            <span className="font-semibold" style={{ color: LOW_TEMP_COLOR }}>{(recentRecords.yesterday?.filter((r: BrokenRecord) => r.type === 'low').length || 0).toLocaleString()}</span>
-                            {' record lows broken yesterday'}
+                            <span className="font-semibold" style={{ color: LOW_TEMP_COLOR }}>{(recentRecords[activePeriod]?.filter((r: BrokenRecord) => r.type === 'low').length || 0).toLocaleString()}</span>
+                            {activePeriod === 'yesterday' ? ' record lows broken yesterday' : ' record lows broken in the last 7 days'}
                         </p>
                     )}
                     {viewMode === 'county' && countyRecords && (
@@ -1191,6 +1192,8 @@ export function TemperatureMap() {
                     onFreshnessTypeChange={setFreshnessType}
                     useCelsius={useCelsius}
                     onFlyTo={flyToLocation}
+                    activePeriod={activePeriod}
+                    onPeriodChange={setActivePeriod}
                 />
             )}
 
