@@ -1,10 +1,23 @@
 import { useDocumentHead } from '../hooks/useDocumentHead';
+import { useJsonLd } from '../hooks/useJsonLd';
 
 export default function AnkiArtisan() {
     useDocumentHead({
         title: 'Anki Artisan',
         description:
             'A CLI tool that generates Anki flashcard decks from iNaturalist observations and eBird region data.',
+        ogImage: 'https://rsmb.tv/og/anki-artisan.svg',
+    });
+
+    useJsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: 'Anki Artisan',
+        description: 'A CLI tool that generates Anki flashcard decks from iNaturalist observations and eBird region data.',
+        url: 'https://rsmb.tv/projects/anki-artisan',
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Cross-platform',
+        author: { '@type': 'Person', name: 'Robby Bryson', url: 'https://rsmb.tv' },
     });
 
     return (

@@ -1,10 +1,23 @@
 import { useDocumentHead } from '../hooks/useDocumentHead';
+import { useJsonLd } from '../hooks/useJsonLd';
 
 export default function Bookend() {
     useDocumentHead({
         title: 'Bookend',
         description:
             'A personal book-tracking app to log reads, organize books into lists, and explore reading stats.',
+        ogImage: 'https://rsmb.tv/og/bookend.svg',
+    });
+
+    useJsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: 'Bookend',
+        description: 'A personal book-tracking app to log reads, organize books into lists, and explore reading stats.',
+        url: 'https://bookend.rsmb.tv',
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Web',
+        author: { '@type': 'Person', name: 'Robby Bryson', url: 'https://rsmb.tv' },
     });
 
     return (
@@ -83,10 +96,18 @@ export default function Bookend() {
 
             <div className="flex gap-4 text-sm">
                 <a
-                    href="https://github.com/robert-bryson/bookend"
+                    href="https://bookend.rsmb.tv"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-violet-400 hover:underline"
+                >
+                    Visit Bookend ↗
+                </a>
+                <a
+                    href="https://github.com/robert-bryson/bookend"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-zinc-400 hover:underline"
                 >
                     Source on GitHub ↗
                 </a>

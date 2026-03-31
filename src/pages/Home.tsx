@@ -7,6 +7,7 @@ export function Home() {
   useDocumentHead({
     title: 'rsmb',
     description: 'Personal site and portfolio of Robby Bryson — interactive data visualizations, geospatial projects, and web tools.',
+    ogImage: 'https://rsmb.tv/og/home.svg',
   });
 
   useJsonLd({

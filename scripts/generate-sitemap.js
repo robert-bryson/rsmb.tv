@@ -17,8 +17,13 @@ const STATIC_ROUTES = [
     { path: '/', priority: '1.0', changefreq: 'weekly' },
     { path: '/about', priority: '0.8', changefreq: 'monthly' },
     { path: '/projects', priority: '0.8', changefreq: 'monthly' },
+    { path: '/projects/through-routes', priority: '0.7', changefreq: 'monthly' },
     { path: '/projects/flights', priority: '0.9', changefreq: 'weekly' },
     { path: '/projects/anki-artisan', priority: '0.7', changefreq: 'monthly' },
+    { path: '/projects/bookend', priority: '0.7', changefreq: 'monthly' },
+    { path: '/projects/temperature-records', priority: '0.7', changefreq: 'monthly' },
+    { path: '/projects/route2gpx', priority: '0.7', changefreq: 'monthly' },
+    { path: '/projects/temperature-records/trends', priority: '0.6', changefreq: 'monthly' },
     { path: '/blog', priority: '0.7', changefreq: 'weekly' },
 ];
 

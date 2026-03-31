@@ -1,10 +1,23 @@
 import { useDocumentHead } from '../hooks/useDocumentHead';
+import { useJsonLd } from '../hooks/useJsonLd';
 
 export default function Route2Gpx() {
     useDocumentHead({
         title: 'route2gpx',
         description:
             'Convert Google Routes into GPX files for GPS devices and bike computers — a privacy-focused web app that runs entirely in your browser.',
+        ogImage: 'https://rsmb.tv/og/route2gpx.svg',
+    });
+
+    useJsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: 'route2gpx',
+        description: 'Convert Google Routes into GPX files for GPS devices and bike computers — a privacy-focused web app that runs entirely in your browser.',
+        url: 'https://route2gpx.rsmb.tv',
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Web',
+        author: { '@type': 'Person', name: 'Robby Bryson', url: 'https://rsmb.tv' },
     });
 
     return (

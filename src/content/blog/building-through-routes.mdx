@@ -1,0 +1,91 @@
+---
+title: "Building Through Routes: Scoring Roads for Scenic Motorcycle Loops"
+date: "2026-03-31"
+description: "How I built a system that processes OpenStreetMap data to find the most scenic, twisty motorcycle routes — scoring roads by curviness, elevation change, and traffic."
+tags: ["projects", "geospatial", "python", "openstreetmap"]
+---
+
+# Building Through Routes: Scoring Roads for Scenic Motorcycle Loops
+
+I've spent a lot of time on Google Maps planning motorcycle rides — zooming in on squiggly roads, checking elevation profiles, and trying to string together a loop that avoids highways. It's tedious. So I built [Through Routes](https://through-routes.rsmb.tv/) to automate it.
+
+The idea is simple: give it a starting point and a target distance, and it returns ranked loop routes that favor twisty, hilly, low-traffic roads. Under the hood, it processes OpenStreetMap data into a weighted road graph and uses that graph to generate and score circular routes.
+
+## The road scoring problem
+
+Not all roads are created equal. A straight, flat highway is boring on a motorcycle. A winding mountain road with elevation changes is exactly what you want. The challenge is turning that intuition into a number.
+
+I settled on three factors for scoring each road segment:
+
+1. **Curviness** — how much the road geometry deviates from a straight line
+2. **Elevation gain** — total climbing along the segment
+3. **Road class** — penalizing highways and busy arterials
+
+### Measuring curviness
+
+Each road in OpenStreetMap is a sequence of coordinate nodes. To measure curviness, I calculate the deflection angle at each interior node — the angle between the incoming and outgoing bearing. Summing these angles and normalizing by segment length gives a curviness-per-kilometer score.
+
+```python
+def curviness_score(coords: np.ndarray) -> float:
+    """Sum of absolute bearing changes, normalized by total length."""
+    bearings = np.arctan2(
+        np.diff(coords[:, 1]),  # delta lon
+        np.diff(coords[:, 0]),  # delta lat
+    )
+    deflections = np.abs(np.diff(bearings))
+    # Wrap to [0, π]
+    deflections = np.minimum(deflections, 2 * np.pi - deflections)
+    total_length = haversine_length(coords)
+    if total_length < 0.01:
+        return 0.0
+    return float(np.sum(deflections) / total_length)
+```
+
+A dead-straight road scores near zero. A road that winds back and forth scores high. This maps well to what riders actually want.
+
+### Elevation from DEM data
+
+For elevation, I sample a digital elevation model (SRTM 30m tiles) at each node and sum the positive elevation changes along the segment. Roads with sustained climbing score higher than flat roads, even if they're curvy. A rolling ridge road with 500m of gain over 20km beats a flat twisty road.
+
+### Road class weighting
+
+I pull the `highway` tag from OSM and assign multipliers. Residential streets and service roads get a penalty since they're usually short and uninteresting. Trunk roads and motorways get a heavy penalty. The sweet spot is tertiary and unclassified roads — the quiet back roads that make great riding.
+
+## Building the graph
+
+Raw OSM data is messy. Roads are split into many small segments at intersections, and there's no guarantee they form a clean graph. The pipeline:
+
+1. **Extract** all road ways from a regional OSM PBF extract
+2. **Split** ways at intersection nodes to create proper edges
+3. **Score** each edge using the curviness + elevation + class formula
+4. **Build** a NetworkX directed graph with scored edges
+
+The result is a graph where each edge weight represents how "interesting" that road segment is — higher is better.
+
+## Generating loop routes
+
+Given a start point and a target distance, the route generator needs to find circular paths through the graph that:
+
+- Start and end at (or near) the same node
+- Stay close to the target distance
+- Maximize the total road score
+
+This is a variant of the orienteering problem, which is NP-hard in general. I use a beam search approach: expand the most promising partial routes first, pruning branches that are too far from the target distance or moving too far from the start point.
+
+For each candidate loop, the final score is the sum of all edge scores, with a penalty for deviating from the target distance. The top-N routes are returned, ranked by score.
+
+## The web interface
+
+The frontend is a TypeScript app using [MapLibre GL](https://maplibre.org/) for the map. You click a start point, set a target distance, and the backend returns a set of routes. Each route is drawn on the map with an elevation profile chart.
+
+The backend is a [FastAPI](https://fastapi.tiangolo.com/) service with precomputed graph data loaded into memory. Route generation takes 1–3 seconds for a typical request, which is fast enough for interactive use.
+
+## What I learned
+
+A few things that surprised me during the build:
+
+- **Curviness alone isn't enough.** Early versions ranked some suburban cul-de-sac neighborhoods highly because the roads technically had lots of turns. Adding road class weighting fixed this.
+- **OSM data quality varies.** Some regions have detailed node placement (every curve is well-digitized), while others have sparse nodes that make curvy roads look straight. Using higher-resolution DEM data helps compensate.
+- **Loop generation is hard.** Naive DFS/BFS blows up combinatorially. The beam search with distance-to-start heuristics was the key insight for making it practical.
+
+If you're into motorcycling (or cycling, or just scenic driving), give [Through Routes](https://through-routes.rsmb.tv/) a try. The source is on [GitHub](https://github.com/robert-bryson/through-routes).

@@ -1,10 +1,23 @@
 import { useDocumentHead } from '../hooks/useDocumentHead';
+import { useJsonLd } from '../hooks/useJsonLd';
 
 export default function ThroughRoutes() {
     useDocumentHead({
         title: 'Through Routes',
         description:
             'Find scenic, twisty motorcycle loop routes on rural roads using OpenStreetMap data.',
+        ogImage: 'https://rsmb.tv/og/through-routes.svg',
+    });
+
+    useJsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: 'Through Routes',
+        description: 'Find scenic, twisty motorcycle loop routes on rural roads using OpenStreetMap data.',
+        url: 'https://through-routes.rsmb.tv/',
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Web',
+        author: { '@type': 'Person', name: 'Robby Bryson', url: 'https://rsmb.tv' },
     });
 
     return (

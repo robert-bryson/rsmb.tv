@@ -1,5 +1,17 @@
 [
     {
+        "slug": "building-through-routes",
+        "title": "Building Through Routes: Scoring Roads for Scenic Motorcycle Loops",
+        "date": "2026-03-31",
+        "description": "How I built a system that processes OpenStreetMap data to find the most scenic, twisty motorcycle routes — scoring roads by curviness, elevation change, and traffic.",
+        "tags": [
+            "projects",
+            "geospatial",
+            "python",
+            "openstreetmap"
+        ]
+    },
+    {
         "slug": "hello-world",
         "title": "Hello World",
         "date": "2025-01-01",

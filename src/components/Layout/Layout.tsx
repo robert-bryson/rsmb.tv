@@ -14,7 +14,7 @@ const navLinks = [
 
 export function Layout({ children }: LayoutProps) {
   const location = useLocation();
-  const isFullScreenPage = location.pathname === '/projects/flights/map' || location.pathname === '/projects/temperature-records/map';
+  const isFullScreenPage = location.pathname.endsWith('/map');
 
   // Full screen mode for map pages
   if (isFullScreenPage) {

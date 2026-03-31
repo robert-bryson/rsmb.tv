@@ -1,11 +1,24 @@
 import { Link } from 'react-router-dom';
 import { useDocumentHead } from '../hooks/useDocumentHead';
+import { useJsonLd } from '../hooks/useJsonLd';
 
 export default function TemperatureRecordsAbout() {
     useDocumentHead({
         title: 'US Temperature Records',
         description:
             'Interactive map of all-time record high and low temperatures across US states and counties, powered by NOAA and ACIS data.',
+        ogImage: 'https://rsmb.tv/og/temperature-records.svg',
+    });
+
+    useJsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: 'US Temperature Records',
+        description: 'Interactive map of all-time record high and low temperatures across US states and counties, powered by NOAA and ACIS data.',
+        url: 'https://rsmb.tv/projects/temperature-records',
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Web',
+        author: { '@type': 'Person', name: 'Robby Bryson', url: 'https://rsmb.tv' },
     });
 
     return (

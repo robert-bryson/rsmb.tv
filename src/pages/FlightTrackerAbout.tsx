@@ -1,11 +1,24 @@
 import { Link } from 'react-router-dom';
 import { useDocumentHead } from '../hooks/useDocumentHead';
+import { useJsonLd } from '../hooks/useJsonLd';
 
 export default function FlightTrackerAbout() {
     useDocumentHead({
         title: 'Flight Tracker',
         description:
             'An interactive 3D globe visualization of flights around the world — filter by year, see route frequencies, and explore travel statistics.',
+        ogImage: 'https://rsmb.tv/og/flights.svg',
+    });
+
+    useJsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: 'Flight Tracker',
+        description: 'An interactive 3D globe visualization of flights around the world — filter by year, see route frequencies, and explore travel statistics.',
+        url: 'https://rsmb.tv/projects/flights',
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Web',
+        author: { '@type': 'Person', name: 'Robby Bryson', url: 'https://rsmb.tv' },
     });
 
     return (
