@@ -109,7 +109,7 @@ export function ExternalHealthPanel({
     if (mode === 'calm') {
         return (
             <Box gap={1}>
-                <Text dimColor> Health</Text>
+                <Text dimColor> Uptime.com</Text>
                 {isLoading && !data ? (
                     <Text color="cyan"><Spinner type="dots" /></Text>
                 ) : error && !data ? (
@@ -133,7 +133,7 @@ export function ExternalHealthPanel({
     return (
         <Box flexDirection="column">
             <Box gap={1}>
-                <Text bold> HEALTH</Text>
+                <Text bold> UPTIME.COM</Text>
                 {isLoading && !data ? (
                     <Text color="cyan"><Spinner type="dots" /></Text>
                 ) : !hasProblems ? (

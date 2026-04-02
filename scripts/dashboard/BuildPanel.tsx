@@ -263,6 +263,8 @@ export function BuildPanel({
                     <Text dimColor> Builds</Text>
                     {isLoading && !data ? (
                         <Text color="cyan"><Spinner type="dots" /></Text>
+                    ) : error && !data ? (
+                        <Text color="red">⚠ connection error</Text>
                     ) : (
                         <>
                             {(data ?? []).map((b) => (
@@ -273,6 +275,7 @@ export function BuildPanel({
                             {!hasProblems && running.length === 0 && <Text dimColor>All passing</Text>}
                         </>
                     )}
+                    {isStale && <Text color="yellow">⚠ stale</Text>}
                 </Box>
                 {running.map((b) => (
                     <Box key={`${b.source}:${b.label}`} gap={1}>
