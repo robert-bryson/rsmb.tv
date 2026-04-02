@@ -54,6 +54,11 @@ function isFailure(status: string): boolean {
     return ['FAILED', 'FAILURE', 'CANCELLED', 'ERROR'].includes(s);
 }
 
+function isRunning(status: string): boolean {
+    const s = status.toUpperCase();
+    return ['PENDING', 'RUNNING', 'IN_PROGRESS', 'QUEUED'].includes(s);
+}
+
 async function fetchAmplifyBuilds(
     client: AmplifyClient,
     project: ProjectConfig,
@@ -75,7 +80,7 @@ async function fetchAmplifyBuilds(
 
         return {
             project: project.name,
-            label: `${project.name} (Amp)`,
+            label: project.name,
             source: 'amplify',
             status: job.status ?? 'UNKNOWN',
             id: `#${job.jobId}`,
@@ -86,7 +91,7 @@ async function fetchAmplifyBuilds(
     } catch {
         return {
             project: project.name,
-            label: `${project.name} (Amp)`,
+            label: project.name,
             source: 'amplify',
             status: 'ERROR',
             id: '—',
@@ -120,7 +125,7 @@ async function fetchGitHubBuilds(
 
         return {
             project: project.name,
-            label: `${project.name} (GHA)`,
+            label: project.name,
             source: 'github',
             status,
             id: `#${run.run_number}`,
@@ -131,7 +136,7 @@ async function fetchGitHubBuilds(
     } catch {
         return {
             project: project.name,
-            label: `${project.name} (GHA)`,
+            label: project.name,
             source: 'github',
             status: 'ERROR',
             id: '—',
@@ -243,29 +248,41 @@ export function BuildPanel({
     );
 
     const failures = (data ?? []).filter((b) => isFailure(b.status));
+    const running = (data ?? []).filter((b) => isRunning(b.status));
     const hasProblems = failures.length > 0;
 
     useEffect(() => {
         onProblems(hasProblems);
     }, [hasProblems, onProblems]);
 
-    // Calm mode: summary dots
+    // Calm mode: summary dots + running builds on second line
     if (mode === 'calm') {
         return (
-            <Box gap={1}>
-                <Text dimColor> Builds</Text>
-                {isLoading && !data ? (
-                    <Text color="cyan"><Spinner type="dots" /></Text>
-                ) : (
-                    <>
-                        {(data ?? []).map((b) => (
-                            <Text key={`${b.label}`} color={statusColor(b.status)}>
-                                {statusLabel(b.status)}
-                            </Text>
-                        ))}
-                        {!hasProblems && <Text dimColor>All passing</Text>}
-                    </>
-                )}
+            <Box flexDirection="column">
+                <Box gap={1}>
+                    <Text dimColor> Builds</Text>
+                    {isLoading && !data ? (
+                        <Text color="cyan"><Spinner type="dots" /></Text>
+                    ) : (
+                        <>
+                            {(data ?? []).map((b) => (
+                                <Text key={`${b.label}`} color={statusColor(b.status)}>
+                                    {statusLabel(b.status)}
+                                </Text>
+                            ))}
+                            {!hasProblems && running.length === 0 && <Text dimColor>All passing</Text>}
+                        </>
+                    )}
+                </Box>
+                {running.map((b) => (
+                    <Box key={`${b.label}`} gap={1}>
+                        <Text>  </Text>
+                        <Text color="yellow"><Spinner type="dots" /></Text>
+                        <Text color="yellow"> {b.label}</Text>
+                        <Text>{link(b.url, b.id)}</Text>
+                        <Text dimColor>{b.time}</Text>
+                    </Box>
+                ))}
             </Box>
         );
     }

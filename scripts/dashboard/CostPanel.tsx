@@ -120,12 +120,13 @@ export function CostPanel({
     const overBudget = fcst > BUDGET;
     const approaching = fcst > BUDGET * 0.8;
 
-    // Calm: just the forecast fraction, dim — minimal noise
+    // Calm: MTD + Forecast, dim
     if (mode === 'calm' && !approaching) {
         return (
             <Box gap={1}>
                 <Text dimColor> Cost</Text>
-                <Text dimColor>~${fcst.toFixed(0)}/${BUDGET}</Text>
+                <Text dimColor>MTD ${mtd.toFixed(2)}</Text>
+                <Text dimColor>Fcst ${fcst.toFixed(0)}</Text>
             </Box>
         );
     }
