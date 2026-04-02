@@ -16,6 +16,17 @@ export interface ProjectConfig {
     workflows?: WorkflowConfig[];
 }
 
+export interface ExternalSite {
+    name: string;
+}
+
+export interface SiteGroup {
+    id: string;
+    label: string;
+    statusPageUrl: string;
+    sites: ExternalSite[];
+}
+
 export type DisplayMode = 'calm' | 'alert' | 'detail';
 
 export interface DashboardConfig {
@@ -23,11 +34,13 @@ export interface DashboardConfig {
     region: string;
     githubToken: string | undefined;
     projects: ProjectConfig[];
+    externalGroups: SiteGroup[];
     intervals: {
         health: number;
         alarms: number;
         builds: number;
         costs: number;
+        external: number;
     };
 }
 
@@ -93,6 +106,26 @@ function buildProjects(): ProjectConfig[] {
 
 export const PROJECTS: ProjectConfig[] = buildProjects();
 
+function buildExternalGroups(): SiteGroup[] {
+    return [
+        {
+            id: 'egp',
+            label: 'EGP',
+            statusPageUrl: 'https://uptime.com/statuspage/egp',
+            sites: [
+                { name: 'EGP Website' },
+                { name: 'WildfireSA' },
+                { name: 'WildfireSA Advanced' },
+                { name: 'ATBDirectory' },
+                { name: 'FLIGHT' },
+                { name: 'SmokeJumper' },
+                { name: 'CFETS' },
+                { name: 'WPSAPS' },
+            ],
+        },
+    ];
+}
+
 export function createConfig(flags: {
     profile?: string;
     region?: string;
@@ -104,11 +137,13 @@ export function createConfig(flags: {
         region: flags.region ?? process.env.AWS_REGION ?? 'us-east-1',
         githubToken: process.env.GITHUB_TOKEN,
         projects: PROJECTS,
+        externalGroups: buildExternalGroups(),
         intervals: {
             health: Math.max(30, baseInterval),
             alarms: Math.max(60, baseInterval),
             builds: Math.max(60, baseInterval),
             costs: Math.max(300, baseInterval * 5),
+            external: Math.max(60, baseInterval),
         },
     };
 }

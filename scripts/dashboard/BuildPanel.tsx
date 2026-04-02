@@ -266,7 +266,7 @@ export function BuildPanel({
                     ) : (
                         <>
                             {(data ?? []).map((b) => (
-                                <Text key={`${b.label}`} color={statusColor(b.status)}>
+                                <Text key={`${b.source}:${b.label}`} color={statusColor(b.status)}>
                                     {statusLabel(b.status)}
                                 </Text>
                             ))}
@@ -275,7 +275,7 @@ export function BuildPanel({
                     )}
                 </Box>
                 {running.map((b) => (
-                    <Box key={`${b.label}`} gap={1}>
+                    <Box key={`${b.source}:${b.label}`} gap={1}>
                         <Text>  </Text>
                         <Text color="yellow"><Spinner type="dots" /></Text>
                         <Text color="yellow"> {b.label}</Text>
@@ -300,7 +300,7 @@ export function BuildPanel({
                 ) : !hasProblems ? (
                     <>
                         {(data ?? []).map((b) => (
-                            <Text key={`${b.label}`} color={statusColor(b.status)}>
+                            <Text key={`${b.source}:${b.label}`} color={statusColor(b.status)}>
                                 {statusLabel(b.status)}
                             </Text>
                         ))}
@@ -319,7 +319,7 @@ export function BuildPanel({
             )}
 
             {items.map((b) => (
-                <Box key={`${b.label}`} gap={1}>
+                <Box key={`${b.source}:${b.label}`} gap={1}>
                     <Text>  </Text>
                     <Text color={statusColor(b.status)}>●</Text>
                     <Text> </Text>
