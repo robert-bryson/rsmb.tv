@@ -321,26 +321,39 @@ export function BuildPanel({
                 <Text color="red">  Error: {error}</Text>
             )}
 
-            {items.map((b) => (
-                <Box key={`${b.source}:${b.label}`} gap={1}>
-                    <Text>  </Text>
-                    <Text color={statusColor(b.status)}>●</Text>
-                    <Text> </Text>
-                    <Box width={24}>
-                        <Text>{b.label}</Text>
+            {(() => {
+                const amplifyItems = items.filter((b) => b.source === 'amplify');
+                const githubItems = items.filter((b) => b.source === 'github');
+                const sections: { label: string; builds: BuildInfo[] }[] = [];
+                if (amplifyItems.length > 0) sections.push({ label: 'AWS Amplify', builds: amplifyItems });
+                if (githubItems.length > 0) sections.push({ label: 'GitHub Actions', builds: githubItems });
+
+                return sections.map((section) => (
+                    <Box key={section.label} flexDirection="column">
+                        <Text dimColor>  {section.label}</Text>
+                        {section.builds.map((b) => (
+                            <Box key={`${b.source}:${b.label}`} gap={1}>
+                                <Text>    </Text>
+                                <Text color={statusColor(b.status)}>●</Text>
+                                <Text> </Text>
+                                <Box width={24}>
+                                    <Text>{b.label}</Text>
+                                </Box>
+                                <Box width={4}>
+                                    <Text color={statusColor(b.status)}>{statusLabel(b.status)}</Text>
+                                </Box>
+                                <Box width={8}>
+                                    <Text>{link(b.url, b.id)}</Text>
+                                </Box>
+                                <Box width={6}>
+                                    <Text dimColor>{b.branch}</Text>
+                                </Box>
+                                <Text dimColor>{b.time}</Text>
+                            </Box>
+                        ))}
                     </Box>
-                    <Box width={4}>
-                        <Text color={statusColor(b.status)}>{statusLabel(b.status)}</Text>
-                    </Box>
-                    <Box width={8}>
-                        <Text>{link(b.url, b.id)}</Text>
-                    </Box>
-                    <Box width={6}>
-                        <Text dimColor>{b.branch}</Text>
-                    </Box>
-                    <Text dimColor>{b.time}</Text>
-                </Box>
-            ))}
+                ));
+            })()}
 
             {!config.githubToken && mode === 'detail' && (
                 <Text dimColor>  ⚠ Set GITHUB_TOKEN for GitHub Actions builds</Text>
