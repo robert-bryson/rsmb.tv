@@ -92,6 +92,7 @@ function buildProjects(): ProjectConfig[] {
             name: 'route2gpx',
             domain: 'route2gpx.rsmb.tv',
             kind: 'amplify',
+            githubRepo: 'robert-bryson/route2gpx',
             healthUrl: 'https://route2gpx.rsmb.tv/',
         },
     ];
