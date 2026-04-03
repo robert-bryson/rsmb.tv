@@ -43,9 +43,15 @@ async function checkRoute53Health(
     };
 }
 
+const DISCOVERY_CACHE_MAX_AGE_MS = 60 * 60 * 1000; // 1 hour
+let discoveryCache: { map: Map<string, string>; timestamp: number } | null = null;
+
 async function discoverHealthCheckIds(
     client: Route53Client,
 ): Promise<Map<string, string>> {
+    if (discoveryCache && Date.now() - discoveryCache.timestamp < DISCOVERY_CACHE_MAX_AGE_MS) {
+        return discoveryCache.map;
+    }
     const map = new Map<string, string>();
     const res = await client.send(new ListHealthChecksCommand({}));
     for (const hc of res.HealthChecks ?? []) {
@@ -54,6 +60,7 @@ async function discoverHealthCheckIds(
             map.set(domain, hc.Id);
         }
     }
+    discoveryCache = { map, timestamp: Date.now() };
     return map;
 }
 
@@ -250,13 +257,17 @@ export function HealthPanel({
                     <Box width={30}>
                         <Text>{link(h.url, h.domain)}</Text>
                     </Box>
-                    <Text color={h.healthy ? 'green' : h.healthy === false ? 'red' : 'gray'}>
-                        {h.healthy ? 'Healthy' : h.healthy === false ? 'DOWN' : 'Unknown'}
-                    </Text>
-                    <Text dimColor>  {h.detail}</Text>
-                    {h.latencyMs != null && (
-                        <Text dimColor>  {h.latencyMs}ms</Text>
-                    )}
+                    <Box width={10}>
+                        <Text color={h.healthy ? 'green' : h.healthy === false ? 'red' : 'gray'}>
+                            {h.healthy ? 'Healthy' : h.healthy === false ? 'DOWN' : 'Unknown'}
+                        </Text>
+                    </Box>
+                    <Box width={16}>
+                        <Text dimColor>{h.detail}</Text>
+                    </Box>
+                    <Box width={7} justifyContent="flex-end">
+                        <Text dimColor>{h.latencyMs != null ? `${h.latencyMs}ms` : ''}</Text>
+                    </Box>
                 </Box>
             ))}
         </Box>

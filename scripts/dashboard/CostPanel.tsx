@@ -6,17 +6,51 @@ import {
     GetCostAndUsageCommand,
     GetCostForecastCommand,
 } from '@aws-sdk/client-cost-explorer';
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { tmpdir } from 'node:os';
 import { useAwsPoll } from './useAwsPoll.js';
 import type { DashboardConfig, DisplayMode } from './config.js';
 import { awsCredentials } from './config.js';
 
 const BUDGET = 50;
+const COST_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000; // 24 hours
+const COST_CACHE_DIR = join(tmpdir(), 'rsmb-dashboard');
+const COST_CACHE_FILE = join(COST_CACHE_DIR, 'cost-cache.json');
 
 interface CostData {
     lastMonth: number | null;
     lastMonthLabel: string;
     mtdAmount: number | null;
     forecastAmount: number | null;
+}
+
+interface CostCache {
+    timestamp: number;
+    data: CostData;
+}
+
+function readCostCache(): CostData | null {
+    try {
+        const raw = readFileSync(COST_CACHE_FILE, 'utf-8');
+        const cache: CostCache = JSON.parse(raw);
+        if (Date.now() - cache.timestamp < COST_CACHE_MAX_AGE_MS) {
+            return cache.data;
+        }
+    } catch {
+        // No cache or invalid — will fetch fresh
+    }
+    return null;
+}
+
+function writeCostCache(data: CostData): void {
+    try {
+        mkdirSync(COST_CACHE_DIR, { recursive: true });
+        const cache: CostCache = { timestamp: Date.now(), data };
+        writeFileSync(COST_CACHE_FILE, JSON.stringify(cache), 'utf-8');
+    } catch {
+        // Non-critical — cache write failure is fine
+    }
 }
 
 function gaugeColor(amount: number, budget: number): string {
@@ -30,6 +64,9 @@ function shortMonth(date: Date): string {
 }
 
 async function fetchCosts(config: DashboardConfig): Promise<CostData> {
+    const cached = readCostCache();
+    if (cached) return cached;
+
     const ce = new CostExplorerClient({
         region: config.region,
         credentials: awsCredentials(config.profile),
@@ -87,7 +124,9 @@ async function fetchCosts(config: DashboardConfig): Promise<CostData> {
         // Forecast may fail early in month
     }
 
-    return { lastMonth, lastMonthLabel, mtdAmount, forecastAmount };
+    const data = { lastMonth, lastMonthLabel, mtdAmount, forecastAmount };
+    writeCostCache(data);
+    return data;
 }
 
 export function CostPanel({
