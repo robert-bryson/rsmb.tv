@@ -64,6 +64,20 @@ function buildProjects(): ProjectConfig[] {
 
     const projects: ProjectConfig[] = [
         {
+            name: 'bookend',
+            domain: 'bookend.rsmb.tv',
+            kind: 'lambda-cloudfront',
+            githubRepo: 'robert-bryson/bookend',
+            healthUrl: 'https://bookend.rsmb.tv/api/health',
+        },
+        {
+            name: 'route2gpx',
+            domain: 'route2gpx.rsmb.tv',
+            kind: 'amplify',
+            githubRepo: 'robert-bryson/route2gpx',
+            healthUrl: 'https://route2gpx.rsmb.tv/',
+        },
+        {
             name: 'rsmb.tv',
             domain: 'www.rsmb.tv',
             kind: 'amplify',
@@ -75,25 +89,11 @@ function buildProjects(): ProjectConfig[] {
             ],
         },
         {
-            name: 'bookend',
-            domain: 'bookend.rsmb.tv',
-            kind: 'lambda-cloudfront',
-            githubRepo: 'robert-bryson/bookend',
-            healthUrl: 'https://bookend.rsmb.tv/api/health',
-        },
-        {
             name: 'through-routes',
             domain: 'through-routes.rsmb.tv',
             kind: 'lambda-cloudfront',
             githubRepo: 'robert-bryson/through-routes',
             healthUrl: 'https://through-routes.rsmb.tv/api/health',
-        },
-        {
-            name: 'route2gpx',
-            domain: 'route2gpx.rsmb.tv',
-            kind: 'amplify',
-            githubRepo: 'robert-bryson/route2gpx',
-            healthUrl: 'https://route2gpx.rsmb.tv/',
         },
     ];
 
@@ -114,13 +114,13 @@ function buildExternalGroups(): SiteGroup[] {
             label: 'EGP',
             statusPageUrl: 'https://uptime.com/statuspage/egp',
             sites: [
-                { name: 'EGP Website' },
-                { name: 'WildfireSA' },
-                { name: 'WildfireSA Advanced' },
                 { name: 'ATBDirectory' },
+                { name: 'CFETS' },
+                { name: 'EGP Website' },
                 { name: 'FLIGHT' },
                 { name: 'SmokeJumper' },
-                { name: 'CFETS' },
+                { name: 'WildfireSA' },
+                { name: 'WildfireSA Advanced' },
                 { name: 'WPSAPS' },
             ],
         },

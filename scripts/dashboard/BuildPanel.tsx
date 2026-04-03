@@ -328,31 +328,66 @@ export function BuildPanel({
                 if (amplifyItems.length > 0) sections.push({ label: 'AWS Amplify', builds: amplifyItems });
                 if (githubItems.length > 0) sections.push({ label: 'GitHub Actions', builds: githubItems });
 
-                return sections.map((section) => (
-                    <Box key={section.label} flexDirection="column">
-                        <Text dimColor>  {section.label}</Text>
-                        {section.builds.map((b) => (
-                            <Box key={`${b.source}:${b.label}`} gap={1}>
-                                <Text>    </Text>
-                                <Text color={statusColor(b.status)}>●</Text>
-                                <Text> </Text>
-                                <Box width={24}>
-                                    <Text>{b.label}</Text>
-                                </Box>
-                                <Box width={4}>
-                                    <Text color={statusColor(b.status)}>{statusLabel(b.status)}</Text>
-                                </Box>
-                                <Box width={8}>
-                                    <Text>{link(b.url, b.id)}</Text>
-                                </Box>
-                                <Box width={6}>
-                                    <Text dimColor>{b.branch}</Text>
-                                </Box>
-                                <Text dimColor>{b.time}</Text>
-                            </Box>
-                        ))}
-                    </Box>
-                ));
+                return sections.map((section) => {
+                    // Group builds by project so workflows nest under their parent
+                    const mainBuilds = section.builds.filter((b) => b.label === b.project);
+                    const workflowsByProject = new Map<string, BuildInfo[]>();
+                    for (const b of section.builds) {
+                        if (b.label !== b.project) {
+                            const list = workflowsByProject.get(b.project) ?? [];
+                            list.push(b);
+                            workflowsByProject.set(b.project, list);
+                        }
+                    }
+
+                    return (
+                        <Box key={section.label} flexDirection="column">
+                            <Text dimColor>  {section.label}</Text>
+                            {mainBuilds.map((b) => (
+                                <React.Fragment key={`${b.source}:${b.label}`}>
+                                    <Box gap={1}>
+                                        <Text>    </Text>
+                                        <Text color={statusColor(b.status)}>●</Text>
+                                        <Text> </Text>
+                                        <Box width={24}>
+                                            <Text>{b.label}</Text>
+                                        </Box>
+                                        <Box width={4}>
+                                            <Text color={statusColor(b.status)}>{statusLabel(b.status)}</Text>
+                                        </Box>
+                                        <Box width={8}>
+                                            <Text>{link(b.url, b.id)}</Text>
+                                        </Box>
+                                        <Box width={6}>
+                                            <Text dimColor>{b.branch}</Text>
+                                        </Box>
+                                        <Text dimColor>{b.time}</Text>
+                                    </Box>
+                                    {(workflowsByProject.get(b.project) ?? []).map((wf) => (
+                                        <Box key={`${wf.source}:${wf.label}`} gap={1}>
+                                            <Text>      </Text>
+                                            <Text color={statusColor(wf.status)}>●</Text>
+                                            <Text> </Text>
+                                            <Box width={22}>
+                                                <Text dimColor>{wf.label}</Text>
+                                            </Box>
+                                            <Box width={4}>
+                                                <Text color={statusColor(wf.status)}>{statusLabel(wf.status)}</Text>
+                                            </Box>
+                                            <Box width={8}>
+                                                <Text>{link(wf.url, wf.id)}</Text>
+                                            </Box>
+                                            <Box width={6}>
+                                                <Text dimColor>{wf.branch}</Text>
+                                            </Box>
+                                            <Text dimColor>{wf.time}</Text>
+                                        </Box>
+                                    ))}
+                                </React.Fragment>
+                            ))}
+                        </Box>
+                    );
+                });
             })()}
 
             {!config.githubToken && mode === 'detail' && (
