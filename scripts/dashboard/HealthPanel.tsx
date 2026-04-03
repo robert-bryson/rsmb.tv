@@ -7,6 +7,10 @@ import {
     GetHealthCheckStatusCommand,
     ListHealthChecksCommand,
 } from '@aws-sdk/client-route-53';
+import {
+    CloudWatchClient,
+    GetMetricStatisticsCommand,
+} from '@aws-sdk/client-cloudwatch';
 import { useAwsPoll } from './useAwsPoll.js';
 import type { DashboardConfig, DisplayMode } from './config.js';
 import { awsCredentials, link } from './config.js';
@@ -18,6 +22,7 @@ interface HealthResult {
     detail: string;
     source: 'route53' | 'http';
     url: string;
+    latencyMs: number | null;
 }
 
 async function checkRoute53Health(
@@ -52,29 +57,60 @@ async function discoverHealthCheckIds(
     return map;
 }
 
-function httpPing(url: string): Promise<{ healthy: boolean; status: number }> {
+function httpPing(url: string): Promise<{ healthy: boolean; status: number; latencyMs: number }> {
     return new Promise((resolve) => {
+        const start = performance.now();
         const req = https.get(url, { timeout: 10_000 }, (res) => {
+            const latencyMs = Math.round(performance.now() - start);
             res.resume();
             resolve({
                 healthy: (res.statusCode ?? 0) >= 200 && (res.statusCode ?? 0) < 400,
                 status: res.statusCode ?? 0,
+                latencyMs,
             });
         });
-        req.on('error', () => resolve({ healthy: false, status: 0 }));
+        req.on('error', () => resolve({ healthy: false, status: 0, latencyMs: 0 }));
         req.on('timeout', () => {
             req.destroy();
-            resolve({ healthy: false, status: 0 });
+            resolve({ healthy: false, status: 0, latencyMs: 0 });
         });
     });
+}
+
+async function fetchLatency(
+    cw: CloudWatchClient,
+    healthCheckId: string,
+): Promise<number | null> {
+    const now = new Date();
+    const start = new Date(now.getTime() - 5 * 60_000);
+    const res = await cw.send(
+        new GetMetricStatisticsCommand({
+            Namespace: 'AWS/Route53',
+            MetricName: 'TimeToFirstByte',
+            Dimensions: [{ Name: 'HealthCheckId', Value: healthCheckId }],
+            StartTime: start,
+            EndTime: now,
+            Period: 60,
+            Statistics: ['Average'],
+        }),
+    );
+    const points = res.Datapoints ?? [];
+    if (points.length === 0) return null;
+    points.sort((a, b) => (b.Timestamp?.getTime() ?? 0) - (a.Timestamp?.getTime() ?? 0));
+    return Math.round(points[0].Average ?? 0);
 }
 
 async function fetchAllHealth(
     config: DashboardConfig,
 ): Promise<HealthResult[]> {
+    const creds = awsCredentials(config.profile);
     const client = new Route53Client({
         region: 'us-east-1', // Route53 is global but uses us-east-1
-        credentials: awsCredentials(config.profile),
+        credentials: creds,
+    });
+    const cw = new CloudWatchClient({
+        region: 'us-east-1',
+        credentials: creds,
     });
 
     // Discover health check IDs if not provided via env
@@ -88,10 +124,10 @@ async function fetchAllHealth(
 
         if (healthCheckId) {
             try {
-                const { healthy, detail } = await checkRoute53Health(
-                    client,
-                    healthCheckId,
-                );
+                const [{ healthy, detail }, latencyMs] = await Promise.all([
+                    checkRoute53Health(client, healthCheckId),
+                    fetchLatency(cw, healthCheckId).catch(() => null),
+                ]);
                 results.push({
                     domain: project.domain,
                     name: project.name,
@@ -99,6 +135,7 @@ async function fetchAllHealth(
                     detail,
                     source: 'route53',
                     url: project.healthUrl ?? `https://${project.domain}`,
+                    latencyMs,
                 });
             } catch {
                 results.push({
@@ -108,10 +145,11 @@ async function fetchAllHealth(
                     detail: 'Route53 error',
                     source: 'route53',
                     url: project.healthUrl ?? `https://${project.domain}`,
+                    latencyMs: null,
                 });
             }
         } else if (project.healthUrl) {
-            const { healthy, status } = await httpPing(project.healthUrl);
+            const { healthy, status, latencyMs } = await httpPing(project.healthUrl);
             results.push({
                 domain: project.domain,
                 name: project.name,
@@ -119,6 +157,7 @@ async function fetchAllHealth(
                 detail: healthy ? `HTTP ${status}` : status ? `HTTP ${status}` : 'Timeout',
                 source: 'http',
                 url: project.healthUrl,
+                latencyMs: healthy ? latencyMs : null,
             });
         }
     }
@@ -215,6 +254,9 @@ export function HealthPanel({
                         {h.healthy ? 'Healthy' : h.healthy === false ? 'DOWN' : 'Unknown'}
                     </Text>
                     <Text dimColor>  {h.detail}</Text>
+                    {h.latencyMs != null && (
+                        <Text dimColor>  {h.latencyMs}ms</Text>
+                    )}
                 </Box>
             ))}
         </Box>

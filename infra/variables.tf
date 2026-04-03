@@ -19,7 +19,7 @@ variable "alert_email" {
 variable "monthly_budget_limit" {
   description = "Monthly AWS spend budget limit in USD"
   type        = string
-  default     = "35"
+  default     = "50"
 }
 
 locals {

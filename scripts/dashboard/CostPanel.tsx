@@ -10,7 +10,7 @@ import { useAwsPoll } from './useAwsPoll.js';
 import type { DashboardConfig, DisplayMode } from './config.js';
 import { awsCredentials } from './config.js';
 
-const BUDGET = 35;
+const BUDGET = 50;
 
 interface CostData {
     lastMonth: number | null;
