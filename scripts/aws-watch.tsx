@@ -56,7 +56,7 @@ Options:
 Environment variables:
   AWS_PROFILE               AWS profile name
   AWS_REGION                AWS region
-  GITHUB_TOKEN              GitHub personal access token (for build status)
+  GITHUB_TOKEN              GitHub personal access token (builds, PRs, issues)
   RSMBTV_AMPLIFY_APP_ID     Override rsmb.tv Amplify app ID
   ROUTE2GPX_AMPLIFY_APP_ID  Override route2gpx Amplify app ID
   RSMBTV_HEALTH_CHECK_ID    Override rsmb.tv Route53 health check ID

@@ -4,6 +4,7 @@ import { HealthPanel } from './HealthPanel.js';
 import { AlarmPanel } from './AlarmPanel.js';
 import { BuildPanel } from './BuildPanel.js';
 import { CostPanel } from './CostPanel.js';
+import { GitHubPanel } from './GitHubPanel.js';
 import { ExternalHealthPanel } from './ExternalHealthPanel.js';
 import type { DashboardConfig } from './config.js';
 import type { DisplayMode } from './config.js';
@@ -106,6 +107,11 @@ export function App({ config }: { config: DashboardConfig }) {
 
                     {/* Builds */}
                     <BuildPanel config={config} mode={mode} onProblems={setBuildProblems} />
+
+                    {mode !== 'calm' && <Text> </Text>}
+
+                    {/* GitHub PRs & Issues */}
+                    <GitHubPanel config={config} mode={mode} />
 
                     {mode !== 'calm' && <Text> </Text>}
 

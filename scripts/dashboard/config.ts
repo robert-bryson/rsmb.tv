@@ -34,6 +34,7 @@ export interface DashboardConfig {
     region: string;
     githubToken: string | undefined;
     projects: ProjectConfig[];
+    githubRepos: string[];
     externalGroups: SiteGroup[];
     intervals: {
         health: number;
@@ -41,6 +42,7 @@ export interface DashboardConfig {
         builds: number;
         costs: number;
         external: number;
+        github: number;
     };
 }
 
@@ -138,6 +140,15 @@ export function createConfig(flags: {
         region: flags.region ?? process.env.AWS_REGION ?? 'us-east-1',
         githubToken: process.env.GITHUB_TOKEN,
         projects: PROJECTS,
+        githubRepos: [
+            'robert-bryson/bookend',
+            'robert-bryson/through-routes',
+            'robert-bryson/rsmb.tv',
+            'robert-bryson/route2gpx',
+            'robert-bryson/aborg',
+            'robert-bryson/kin-cal',
+            'robert-bryson/anki-artisan',
+        ],
         externalGroups: buildExternalGroups(),
         intervals: {
             health: Math.max(30, baseInterval),
@@ -145,6 +156,7 @@ export function createConfig(flags: {
             builds: Math.max(60, baseInterval),
             costs: Math.max(300, baseInterval * 5),
             external: Math.max(60, baseInterval),
+            github: Math.max(120, baseInterval * 2),
         },
     };
 }
