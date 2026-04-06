@@ -6,6 +6,7 @@ import { BuildPanel } from './BuildPanel.js';
 import { CostPanel } from './CostPanel.js';
 import { GitHubPanel } from './GitHubPanel.js';
 import { ExternalHealthPanel } from './ExternalHealthPanel.js';
+import { EventLogPanel, clearEvents } from './useEventLog.js';
 import type { DashboardConfig } from './config.js';
 import type { DisplayMode } from './config.js';
 
@@ -64,6 +65,7 @@ export function App({ config }: { config: DashboardConfig }) {
         (input: string, key: { upArrow: boolean; downArrow: boolean }) => {
             if (input === 'q') exit();
             if (input === 'h') { setForceDetail((v) => !v); setScrollOffset(0); }
+            if (input === 'e') clearEvents();
             if (input === 'j' || key.downArrow) setScrollOffset((v) => v + 1);
             if (input === 'k' || key.upArrow) setScrollOffset((v) => Math.max(0, v - 1));
         },
@@ -133,6 +135,9 @@ export function App({ config }: { config: DashboardConfig }) {
                         </Box>
                     ))}
 
+                    {/* Event Log — only in detail mode */}
+                    {mode === 'detail' && <EventLogPanel />}
+
                 </Box>
             </Box>
 
@@ -140,7 +145,7 @@ export function App({ config }: { config: DashboardConfig }) {
             <Text dimColor>{'─'.repeat(60)}</Text>
             <Text dimColor>
                 {' '}
-                [q] quit  [h] {forceDetail ? 'compact' : 'details'}  [↑↓] scroll  ({modeLabel}){scrollHint}
+                [q] quit  [h] {forceDetail ? 'compact' : 'details'}  [e] clear log  [↑↓] scroll  ({modeLabel}){scrollHint}
             </Text>
         </Box>
     );

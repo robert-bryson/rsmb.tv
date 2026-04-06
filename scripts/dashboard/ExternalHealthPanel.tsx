@@ -144,6 +144,7 @@ export function ExternalHealthPanel({
     const { data, isLoading, isStale, error } = useAwsPoll(
         () => fetchGroupHealth(group),
         intervalMs,
+        group.label,
     );
 
     const sites = data?.sites ?? [];
@@ -171,7 +172,7 @@ export function ExternalHealthPanel({
                         {sites.map((h) => (
                             <StatusDot key={h.name} healthy={h.healthy} stale={isStale} />
                         ))}
-                        <Text dimColor>All OK</Text>
+                        {isStale ? <Text color="yellow">stale</Text> : <Text dimColor>All OK</Text>}
                     </>
                 )}
             </Box>

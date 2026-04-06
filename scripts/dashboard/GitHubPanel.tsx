@@ -122,6 +122,7 @@ export function GitHubPanel({
     const { data, isLoading, isStale, error } = useAwsPoll(
         () => fetchGitHubData(config),
         config.intervals.github * 1000,
+        'GitHub',
     );
 
     const prCount = data?.prs.length ?? 0;

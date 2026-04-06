@@ -70,6 +70,7 @@ export function AlarmPanel({
     const { data, isLoading, isStale, error } = useAwsPoll(
         () => fetchAlarms(config),
         config.intervals.alarms * 1000,
+        'Alarms',
     );
 
     const firingAlarms = (data?.alarms ?? []).filter((a) => a.state !== 'OK');
@@ -95,8 +96,13 @@ export function AlarmPanel({
                 <Text dimColor> Alarms</Text>
                 {isLoading && !data ? (
                     <Text color="cyan"><Spinner type="dots" /></Text>
+                ) : error && !data ? (
+                    <Text color="red">error</Text>
                 ) : (
-                    <Text dimColor>{data?.alarms.length ?? 0} OK</Text>
+                    <>
+                        <Text dimColor>{data?.alarms.length ?? 0} OK</Text>
+                        {isStale && <Text color="yellow">(stale)</Text>}
+                    </>
                 )}
             </Box>
         );

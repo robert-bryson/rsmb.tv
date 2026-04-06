@@ -4,6 +4,7 @@ import React from 'react';
 import { render } from 'ink';
 import { App } from './dashboard/App.js';
 import { createConfig } from './dashboard/config.js';
+import { interceptConsole } from './dashboard/useEventLog.js';
 
 // Auto-detect timezone in WSL (where system TZ often defaults to UTC)
 if (!process.env.TZ) {
@@ -79,5 +80,8 @@ const config = createConfig({
     region: flags.region,
     interval: flags.interval ? parseInt(flags.interval, 10) : undefined,
 });
+
+// Capture stray console/stderr output before Ink takes over the terminal
+interceptConsole();
 
 render(React.createElement(App, { config }));

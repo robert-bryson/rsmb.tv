@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { addEvent } from './useEventLog.js';
 
 export interface PollState<T> {
     data: T | null;
@@ -12,6 +13,7 @@ export interface PollState<T> {
 export function useAwsPoll<T>(
     fetcher: () => Promise<T>,
     intervalMs: number,
+    source?: string,
 ): PollState<T> {
     const [data, setData] = useState<T | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -20,6 +22,10 @@ export function useAwsPoll<T>(
     const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
     const [tick, setTick] = useState(0);
     const mountedRef = useRef(true);
+    const hasDataRef = useRef(false);
+    const hadErrorRef = useRef(false);
+    const sourceRef = useRef(source);
+    sourceRef.current = source;
 
     const refresh = useCallback(() => setTick((t) => t + 1), []);
 
@@ -35,22 +41,31 @@ export function useAwsPoll<T>(
 
         const run = async () => {
             if (!mountedRef.current) return;
-            if (data !== null) setIsLoading(false);
-            else setIsLoading(true);
+            if (!hasDataRef.current) setIsLoading(true);
 
             try {
                 const result = await fetcher();
                 if (cancelled) return;
+                if (sourceRef.current && hadErrorRef.current) {
+                    addEvent('info', sourceRef.current, 'Recovered');
+                }
+                hasDataRef.current = true;
+                hadErrorRef.current = false;
                 setData(result);
-                setError(null);
-                setIsStale(false);
+                setError((prev) => prev !== null ? null : prev);
+                setIsStale((prev) => prev !== false ? false : prev);
                 setLastUpdated(new Date());
             } catch (err) {
                 if (cancelled) return;
                 const message =
                     err instanceof Error ? err.message : 'Unknown error';
+                // Only log to event log after first successful fetch — skip cold-start noise
+                if (sourceRef.current && hasDataRef.current) {
+                    addEvent('error', sourceRef.current, message);
+                }
+                hadErrorRef.current = true;
                 setError(message);
-                if (data !== null) setIsStale(true);
+                if (hasDataRef.current) setIsStale(true);
             } finally {
                 if (!cancelled) setIsLoading(false);
             }

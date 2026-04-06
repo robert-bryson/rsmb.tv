@@ -139,6 +139,7 @@ export function CostPanel({
     const { data, isLoading } = useAwsPoll(
         () => fetchCosts(config),
         config.intervals.costs * 1000,
+        'Cost',
     );
 
     if (isLoading && !data) {

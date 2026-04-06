@@ -245,6 +245,7 @@ export function BuildPanel({
     const { data, isLoading, isStale, error } = useAwsPoll(
         () => fetchAllBuilds(config),
         config.intervals.builds * 1000,
+        'Builds',
     );
 
     const failures = (data ?? []).filter((b) => isFailure(b.status));
