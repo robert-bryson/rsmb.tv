@@ -10,6 +10,13 @@ interface SiteResult {
     name: string;
     healthy: boolean | null;
     detail: string;
+    responseTimeMs: number | null;
+    drillDownUrl: string | null;
+}
+
+interface PageAlert {
+    kind: 'incident' | 'maintenance';
+    name: string;
 }
 
 function fetchJson(url: string): Promise<unknown> {
@@ -40,38 +47,81 @@ interface UptimeComponent {
     status: string;
     status_display: string;
     is_group: boolean;
+    cached_response_time: number | null;
+    service_url: string | null;
     subcomponents?: UptimeComponent[];
 }
 
-function extractStatuses(components: UptimeComponent[]): Map<string, string> {
-    const statuses = new Map<string, string>();
-    for (const comp of components) {
-        if (comp.is_group && comp.subcomponents?.length) {
-            for (const sub of comp.subcomponents) {
-                statuses.set(sub.name, sub.status_display);
-            }
-        } else if (!comp.is_group) {
-            statuses.set(comp.name, comp.status_display);
-        }
-    }
-    return statuses;
+interface UptimeIncident {
+    name?: string;
 }
 
-async function fetchGroupHealth(group: SiteGroup): Promise<SiteResult[]> {
+interface ComponentInfo {
+    statusDisplay: string;
+    responseTimeMs: number | null;
+    drillDownUrl: string | null;
+}
+
+function extractComponents(components: UptimeComponent[]): Map<string, ComponentInfo> {
+    const map = new Map<string, ComponentInfo>();
+    for (const comp of components) {
+        const subs = comp.is_group && comp.subcomponents?.length ? comp.subcomponents : [comp];
+        for (const sub of subs) {
+            if (sub.is_group) continue;
+            map.set(sub.name, {
+                statusDisplay: sub.status_display,
+                responseTimeMs: sub.cached_response_time != null
+                    ? Math.round(sub.cached_response_time * 1000)
+                    : null,
+                drillDownUrl: sub.service_url
+                    ? `https://uptime.com${sub.service_url}`
+                    : null,
+            });
+        }
+    }
+    return map;
+}
+
+interface GroupHealth {
+    sites: SiteResult[];
+    alerts: PageAlert[];
+}
+
+async function fetchGroupHealth(group: SiteGroup): Promise<GroupHealth> {
     const json = await fetchJson(`${group.statusPageUrl}/ajax`) as {
-        data?: { components?: UptimeComponent[] };
+        data?: {
+            components?: UptimeComponent[];
+            active_incidents?: UptimeIncident[];
+            upcoming_maintenance?: UptimeIncident[];
+        };
     };
     const components = json?.data?.components ?? [];
-    const statuses = extractStatuses(components);
+    const infos = extractComponents(components);
 
-    return group.sites.map((site) => {
-        const status = statuses.get(site.name);
-        if (!status) {
-            return { name: site.name, healthy: null, detail: 'Not found on status page' };
+    const alerts: PageAlert[] = [];
+    for (const inc of json?.data?.active_incidents ?? []) {
+        if (inc.name) alerts.push({ kind: 'incident', name: inc.name });
+    }
+    for (const m of json?.data?.upcoming_maintenance ?? []) {
+        if (m.name) alerts.push({ kind: 'maintenance', name: m.name });
+    }
+
+    const sites = group.sites.map((site) => {
+        const info = infos.get(site.name);
+        if (!info) {
+            return { name: site.name, healthy: null, detail: 'Not found on status page', responseTimeMs: null, drillDownUrl: null };
         }
-        const healthy = status === 'Operational';
-        return { name: site.name, healthy, detail: status };
+        const healthy = info.statusDisplay === 'Operational';
+        return {
+            name: site.name,
+            healthy,
+            detail: info.statusDisplay,
+            responseTimeMs: info.responseTimeMs,
+            drillDownUrl: info.drillDownUrl,
+        };
     });
+
+    return { sites, alerts };
 }
 
 function StatusDot({ healthy, stale }: { healthy: boolean | null; stale: boolean }) {
@@ -96,8 +146,10 @@ export function ExternalHealthPanel({
         intervalMs,
     );
 
-    const unhealthy = (data ?? []).filter((h) => h.healthy === false);
-    const hasProblems = unhealthy.length > 0;
+    const sites = data?.sites ?? [];
+    const alerts = data?.alerts ?? [];
+    const unhealthy = sites.filter((h) => h.healthy === false);
+    const hasProblems = unhealthy.length > 0 || alerts.some((a) => a.kind === 'incident');
 
     useEffect(() => {
         onProblems(hasProblems);
@@ -116,7 +168,7 @@ export function ExternalHealthPanel({
                     <Text color="red">error</Text>
                 ) : (
                     <>
-                        {(data ?? []).map((h) => (
+                        {sites.map((h) => (
                             <StatusDot key={h.name} healthy={h.healthy} stale={isStale} />
                         ))}
                         <Text dimColor>All OK</Text>
@@ -128,7 +180,7 @@ export function ExternalHealthPanel({
 
     // Alert/Detail mode
     const showAll = mode === 'detail';
-    const items = showAll ? (data ?? []) : unhealthy;
+    const items = showAll ? sites : unhealthy;
 
     return (
         <Box flexDirection="column">
@@ -138,14 +190,14 @@ export function ExternalHealthPanel({
                     <Text color="cyan"><Spinner type="dots" /></Text>
                 ) : !hasProblems ? (
                     <>
-                        {(data ?? []).map((h) => (
+                        {sites.map((h) => (
                             <StatusDot key={h.name} healthy={h.healthy} stale={isStale} />
                         ))}
                         <Text dimColor>All OK  {statusPageLink}</Text>
                     </>
                 ) : (
                     <Text color="red">
-                        {unhealthy.length}/{(data ?? []).length} down
+                        {unhealthy.length}/{sites.length} down
                     </Text>
                 )}
             </Box>
@@ -159,13 +211,30 @@ export function ExternalHealthPanel({
                     <Text>  </Text>
                     <StatusDot healthy={h.healthy} stale={isStale} />
                     <Text> </Text>
-                    <Box width={30}>
-                        <Text>{h.name}</Text>
+                    <Box width={24}>
+                        <Text>{h.drillDownUrl ? link(h.drillDownUrl, h.name) : h.name}</Text>
                     </Box>
-                    <Text color={h.healthy ? 'green' : h.healthy === false ? 'red' : 'gray'}>
-                        {h.healthy ? 'Operational' : h.healthy === false ? 'DOWN' : 'Unknown'}
+                    <Box width={14}>
+                        <Text color={h.healthy ? 'green' : h.healthy === false ? 'red' : 'gray'}>
+                            {h.healthy ? 'Operational' : h.healthy === false ? 'DOWN' : 'Unknown'}
+                        </Text>
+                    </Box>
+                    <Box width={7} justifyContent="flex-end">
+                        <Text dimColor>{h.responseTimeMs != null ? `${h.responseTimeMs}ms` : ''}</Text>
+                    </Box>
+                </Box>
+            ))}
+
+            {alerts.length > 0 && items.length > 0 && <Text> </Text>}
+            {alerts.map((a) => (
+                <Box key={a.name} gap={1}>
+                    <Text>  </Text>
+                    <Text color={a.kind === 'incident' ? 'red' : 'yellow'}>
+                        {a.kind === 'incident' ? '⚠' : '🔧'}
                     </Text>
-                    <Text dimColor>  {h.detail}</Text>
+                    <Text color={a.kind === 'incident' ? 'red' : 'yellow'}>
+                        {' '}{a.name}
+                    </Text>
                 </Box>
             ))}
         </Box>
