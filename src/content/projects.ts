@@ -67,6 +67,7 @@ export const projects: Project[] = [
     featured: true,
     demoUrl: 'https://route2gpx.rsmb.tv',
     sourceUrl: 'https://github.com/robert-bryson/route2gpx',
+    previewImage: '/images/route2gpx/route-planning.webp',
     year: 2024,
   },
 ];

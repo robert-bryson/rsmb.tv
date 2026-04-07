@@ -44,6 +44,48 @@ export default function Route2Gpx() {
                 your routes never touch a server.
             </p>
 
+            <div className="space-y-6 mb-8">
+                <figure>
+                    <img
+                        src="/images/route2gpx/route-planning.webp"
+                        alt="Route to GPX interface showing origin and destination inputs, waypoints, and route mode options"
+                        className="rounded-lg border border-zinc-800"
+                        width={1811}
+                        height={1390}
+                        loading="eager"
+                    />
+                    <figcaption className="mt-2 text-xs text-zinc-500 text-center">
+                        Route planning interface — enter origin, destination, waypoints, and travel mode
+                    </figcaption>
+                </figure>
+                <figure>
+                    <img
+                        src="/images/route2gpx/single-route.webp"
+                        alt="Single driving route from Mexico City to Teotihuacan displayed on a Leaflet map with Fog of World overlay"
+                        className="rounded-lg border border-zinc-800"
+                        width={1818}
+                        height={1392}
+                        loading="lazy"
+                    />
+                    <figcaption className="mt-2 text-xs text-zinc-500 text-center">
+                        Single route view — driving route with Fog of World overlay and GPX download
+                    </figcaption>
+                </figure>
+                <figure>
+                    <img
+                        src="/images/route2gpx/multi-route.webp"
+                        alt="Multiple routes across Mexico shown simultaneously with color-coded paths and a route list panel"
+                        className="rounded-lg border border-zinc-800"
+                        width={1814}
+                        height={1390}
+                        loading="lazy"
+                    />
+                    <figcaption className="mt-2 text-xs text-zinc-500 text-center">
+                        Multi-route view — multiple routes across Mexico with batch download
+                    </figcaption>
+                </figure>
+            </div>
+
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Features</h2>
             <ul className="space-y-1.5 text-zinc-400 text-sm mb-6 list-disc list-inside">
                 <li>Paste a Google Maps route URL and get a downloadable GPX file</li>
