@@ -236,6 +236,24 @@ if last_total > 0 and forecast_total is not None:
 print(f'{dim}╰{\"─\" * W}╯{reset}')
 
 print()
+
+# Write cache for --watch dashboard
+import os, tempfile
+cache_dir = os.path.join(tempfile.gettempdir(), 'rsmb-dashboard')
+os.makedirs(cache_dir, exist_ok=True)
+cache_file = os.path.join(cache_dir, 'cost-cache.json')
+import datetime
+cache = {
+    'date': datetime.date.today().isoformat(),
+    'data': {
+        'lastMonth': last_total,
+        'lastMonthLabel': last_month_name.split()[0],
+        'mtdAmount': this_total,
+        'forecastAmount': forecast_amt,
+    }
+}
+with open(cache_file, 'w') as f:
+    json.dump(cache, f)
 " 2>&1 || echo -e "  ${red}(cost data unavailable)${reset}"
 
   exit 0

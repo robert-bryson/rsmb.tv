@@ -25,9 +25,16 @@ interface IssueInfo {
     age: string;
 }
 
+interface RepoError {
+    repo: string;
+    scope: 'PRs' | 'issues';
+    message: string;
+}
+
 interface GitHubData {
     prs: PrInfo[];
     issues: IssueInfo[];
+    repoErrors: RepoError[];
 }
 
 function relativeTime(date: Date): string {
@@ -54,6 +61,7 @@ async function fetchGitHubData(config: DashboardConfig): Promise<GitHubData> {
 
     const prs: PrInfo[] = [];
     const issues: IssueInfo[] = [];
+    const repoErrors: RepoError[] = [];
 
     await Promise.all(
         repos.map(async (fullRepo) => {
@@ -78,8 +86,8 @@ async function fetchGitHubData(config: DashboardConfig): Promise<GitHubData> {
                         age: pr.created_at ? relativeTime(new Date(pr.created_at)) : '—',
                     });
                 }
-            } catch {
-                // API error — skip this repo's PRs
+            } catch (err) {
+                repoErrors.push({ repo, scope: 'PRs', message: err instanceof Error ? err.message : String(err) });
             }
 
             // Fetch open issues (excluding PRs)
@@ -103,13 +111,13 @@ async function fetchGitHubData(config: DashboardConfig): Promise<GitHubData> {
                         age: issue.created_at ? relativeTime(new Date(issue.created_at)) : '—',
                     });
                 }
-            } catch {
-                // API error — skip this repo's issues
+            } catch (err) {
+                repoErrors.push({ repo, scope: 'issues', message: err instanceof Error ? err.message : String(err) });
             }
         }),
     );
 
-    return { prs, issues };
+    return { prs, issues, repoErrors };
 }
 
 export function GitHubPanel({
@@ -214,6 +222,15 @@ export function GitHubPanel({
                             )}
                             <Text dimColor>{issue.age}</Text>
                         </Box>
+                    ))}
+                </Box>
+            )}
+
+            {data && data.repoErrors.length > 0 && (
+                <Box flexDirection="column">
+                    <Text dimColor>  Errors</Text>
+                    {data.repoErrors.map((e, i) => (
+                        <Text key={i} color="red">    ⚠ {e.repo} ({e.scope}): {e.message}</Text>
                     ))}
                 </Box>
             )}

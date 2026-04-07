@@ -14,7 +14,6 @@ import type { DashboardConfig, DisplayMode } from './config.js';
 import { awsCredentials } from './config.js';
 
 const BUDGET = 50;
-const COST_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000; // 24 hours
 const COST_CACHE_DIR = join(tmpdir(), 'rsmb-dashboard');
 const COST_CACHE_FILE = join(COST_CACHE_DIR, 'cost-cache.json');
 
@@ -26,15 +25,19 @@ interface CostData {
 }
 
 interface CostCache {
-    timestamp: number;
+    date: string;
     data: CostData;
+}
+
+function todayDateStr(): string {
+    return new Date().toISOString().slice(0, 10);
 }
 
 function readCostCache(): CostData | null {
     try {
         const raw = readFileSync(COST_CACHE_FILE, 'utf-8');
         const cache: CostCache = JSON.parse(raw);
-        if (Date.now() - cache.timestamp < COST_CACHE_MAX_AGE_MS) {
+        if (cache.date === todayDateStr()) {
             return cache.data;
         }
     } catch {
@@ -46,7 +49,7 @@ function readCostCache(): CostData | null {
 function writeCostCache(data: CostData): void {
     try {
         mkdirSync(COST_CACHE_DIR, { recursive: true });
-        const cache: CostCache = { timestamp: Date.now(), data };
+        const cache: CostCache = { date: todayDateStr(), data };
         writeFileSync(COST_CACHE_FILE, JSON.stringify(cache), 'utf-8');
     } catch {
         // Non-critical — cache write failure is fine
