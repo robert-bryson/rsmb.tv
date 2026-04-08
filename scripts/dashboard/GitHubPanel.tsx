@@ -146,14 +146,14 @@ export function GitHubPanel({
                     <Text color="cyan"><Spinner type="dots" /></Text>
                 ) : error && !data ? (
                     <Text color="red">⚠ error</Text>
-                ) : total === 0 ? (
-                    <Text dimColor>No open PRs or issues</Text>
                 ) : (
-                    <Text dimColor>
-                        {prCount > 0 ? `${prCount} PR${prCount !== 1 ? 's' : ''}` : ''}
-                        {prCount > 0 && issueCount > 0 ? ', ' : ''}
-                        {issueCount > 0 ? `${issueCount} issue${issueCount !== 1 ? 's' : ''}` : ''}
-                    </Text>
+                    <>
+                        {prCount > 0 ? (
+                            <Text color="green">{prCount} PR{prCount !== 1 ? 's' : ''} open</Text>
+                        ) : (
+                            <Text dimColor>0 PRs open</Text>
+                        )}
+                    </>
                 )}
                 {isStale && <Text color="yellow">⚠ stale</Text>}
             </Box>
