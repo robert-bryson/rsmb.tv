@@ -54,6 +54,48 @@ export default function FlightTrackerAbout() {
                 </Link>
             </div>
 
+            <div className="space-y-6 mb-8">
+                <figure>
+                    <img
+                        src="/images/flights/flight-globe.webp"
+                        alt="3D globe showing all flight routes with stats panel"
+                        className="rounded-lg border border-zinc-800"
+                        width={1852}
+                        height={1385}
+                        loading="eager"
+                    />
+                    <figcaption className="mt-2 text-xs text-zinc-500 text-center">
+                        Overview of all flights on the interactive 3D globe with aggregate statistics, airline breakdown, and country-level data
+                    </figcaption>
+                </figure>
+                <figure>
+                    <img
+                        src="/images/flights/flight-routes.webp"
+                        alt="Globe filtered to show routes from Seattle-Tacoma International Airport"
+                        className="rounded-lg border border-zinc-800"
+                        width={1853}
+                        height={1389}
+                        loading="lazy"
+                    />
+                    <figcaption className="mt-2 text-xs text-zinc-500 text-center">
+                        Filtering by airport — all routes from Seattle-Tacoma (SEA) with visit timeline, top destinations, and connected airports
+                    </figcaption>
+                </figure>
+                <figure>
+                    <img
+                        src="/images/flights/flight-stats.webp"
+                        alt="Globe zoomed into the United Kingdom showing airport markers and flight routes"
+                        className="rounded-lg border border-zinc-800"
+                        width={1860}
+                        height={1390}
+                        loading="lazy"
+                    />
+                    <figcaption className="mt-2 text-xs text-zinc-500 text-center">
+                        Country view — flights to and from the United Kingdom with airport markers, top routes, and airline details
+                    </figcaption>
+                </figure>
+            </div>
+
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Features</h2>
             <ul className="space-y-1.5 text-zinc-400 text-sm mb-6 list-disc list-inside">
                 <li>3D globe with animated flight arcs using WebGL</li>
