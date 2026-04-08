@@ -16,12 +16,19 @@ interface BucketMetrics {
     objects: number;
 }
 
+interface DistributionMetrics {
+    id: string;
+    requests: number;
+    bytesDownloaded: number;
+}
+
 interface ResourceData {
     buckets: BucketMetrics[];
     totalSizeBytes: number;
     totalObjects: number;
-    dataCdnRequests: number | null;
-    dataCdnBytes: number | null;
+    distributions: DistributionMetrics[];
+    totalCfRequests: number;
+    totalCfBytes: number;
 }
 
 function formatBytes(bytes: number): string {
@@ -63,13 +70,43 @@ async function discoverBuckets(cw: CloudWatchClient): Promise<string[]> {
     return [...buckets].sort();
 }
 
+/** Discover all CloudFront distributions that have Requests metrics. */
+async function discoverDistributions(cw: CloudWatchClient): Promise<string[]> {
+    const ids = new Set<string>();
+    let token: string | undefined;
+    do {
+        const resp = await cw.send(
+            new ListMetricsCommand({
+                Namespace: 'AWS/CloudFront',
+                MetricName: 'Requests',
+                NextToken: token,
+            }),
+        );
+        for (const m of resp.Metrics ?? []) {
+            const id = m.Dimensions?.find((d) => d.Name === 'DistributionId')?.Value;
+            if (id) ids.add(id);
+        }
+        token = resp.NextToken;
+    } while (token);
+    return [...ids].sort();
+}
+
 async function fetchResources(config: DashboardConfig): Promise<ResourceData> {
     const cw = new CloudWatchClient({
         region: config.region,
         credentials: awsCredentials(config.profile),
     });
 
-    const bucketNames = await discoverBuckets(cw);
+    // CloudFront metrics live in us-east-1
+    const cwGlobal = config.region === 'us-east-1' ? cw : new CloudWatchClient({
+        region: 'us-east-1',
+        credentials: awsCredentials(config.profile),
+    });
+
+    const [bucketNames, distIds] = await Promise.all([
+        discoverBuckets(cw),
+        discoverDistributions(cwGlobal),
+    ]);
 
     const now = new Date();
     const s3Start = new Date(now.getTime() - 2 * 86_400_000);
@@ -107,70 +144,86 @@ async function fetchResources(config: DashboardConfig): Promise<ResourceData> {
         },
     ]);
 
-    if (config.dataCdnDistributionId) {
-        queries.push(
-            {
-                Id: 'cfreqs',
-                MetricStat: {
-                    Metric: {
-                        Namespace: 'AWS/CloudFront',
-                        MetricName: 'Requests',
-                        Dimensions: [
-                            { Name: 'DistributionId', Value: config.dataCdnDistributionId },
-                            { Name: 'Region', Value: 'Global' },
-                        ],
-                    },
-                    Period: 3600,
-                    Stat: 'Sum',
+    const cfQueries = distIds.flatMap((id, i) => [
+        {
+            Id: `cfreqs${i}`,
+            MetricStat: {
+                Metric: {
+                    Namespace: 'AWS/CloudFront',
+                    MetricName: 'Requests',
+                    Dimensions: [
+                        { Name: 'DistributionId', Value: id },
+                        { Name: 'Region', Value: 'Global' },
+                    ],
                 },
+                Period: 3600,
+                Stat: 'Sum',
             },
-            {
-                Id: 'cfbytes',
-                MetricStat: {
-                    Metric: {
-                        Namespace: 'AWS/CloudFront',
-                        MetricName: 'BytesDownloaded',
-                        Dimensions: [
-                            { Name: 'DistributionId', Value: config.dataCdnDistributionId },
-                            { Name: 'Region', Value: 'Global' },
-                        ],
-                    },
-                    Period: 3600,
-                    Stat: 'Sum',
+        },
+        {
+            Id: `cfbytes${i}`,
+            MetricStat: {
+                Metric: {
+                    Namespace: 'AWS/CloudFront',
+                    MetricName: 'BytesDownloaded',
+                    Dimensions: [
+                        { Name: 'DistributionId', Value: id },
+                        { Name: 'Region', Value: 'Global' },
+                    ],
                 },
+                Period: 3600,
+                Stat: 'Sum',
             },
-        );
-    }
+        },
+    ]);
 
-    const resp = await cw.send(
-        new GetMetricDataCommand({
-            StartTime: s3Start,
-            EndTime: now,
-            MetricDataQueries: queries,
-        }),
-    );
+    // S3 and CF metrics may need different regions — fetch separately
+    const [s3Resp, cfResp] = await Promise.all([
+        queries.length > 0
+            ? cw.send(new GetMetricDataCommand({ StartTime: s3Start, EndTime: now, MetricDataQueries: queries }))
+            : Promise.resolve({ MetricDataResults: [] }),
+        cfQueries.length > 0
+            ? cwGlobal.send(new GetMetricDataCommand({ StartTime: s3Start, EndTime: now, MetricDataQueries: cfQueries }))
+            : Promise.resolve({ MetricDataResults: [] }),
+    ]);
 
-    const latest = (id: string): number | null => {
-        const result = resp.MetricDataResults?.find((r) => r.Id === id);
+    const s3Latest = (id: string): number | null => {
+        const result = s3Resp.MetricDataResults?.find((r) => r.Id === id);
+        if (!result?.Values?.length) return null;
+        return result.Values[0];
+    };
+
+    const cfLatest = (id: string): number | null => {
+        const result = cfResp.MetricDataResults?.find((r) => r.Id === id);
         if (!result?.Values?.length) return null;
         return result.Values[0];
     };
 
     const buckets: BucketMetrics[] = bucketNames.map((name, i) => ({
         name,
-        sizeBytes: latest(`size${i}`) ?? 0,
-        objects: latest(`obj${i}`) ?? 0,
+        sizeBytes: s3Latest(`size${i}`) ?? 0,
+        objects: s3Latest(`obj${i}`) ?? 0,
     }));
 
     // Sort largest first
     buckets.sort((a, b) => b.sizeBytes - a.sizeBytes);
 
+    const distributions: DistributionMetrics[] = distIds.map((id, i) => ({
+        id,
+        requests: cfLatest(`cfreqs${i}`) ?? 0,
+        bytesDownloaded: cfLatest(`cfbytes${i}`) ?? 0,
+    }));
+
+    // Sort most active first
+    distributions.sort((a, b) => b.requests - a.requests);
+
     return {
         buckets,
         totalSizeBytes: buckets.reduce((sum, b) => sum + b.sizeBytes, 0),
         totalObjects: buckets.reduce((sum, b) => sum + b.objects, 0),
-        dataCdnRequests: latest('cfreqs'),
-        dataCdnBytes: latest('cfbytes'),
+        distributions,
+        totalCfRequests: distributions.reduce((sum, d) => sum + d.requests, 0),
+        totalCfBytes: distributions.reduce((sum, d) => sum + d.bytesDownloaded, 0),
     };
 }
 
@@ -199,12 +252,12 @@ export function ResourcePanel({
     if (!data) return null;
 
     const hasBuckets = data.buckets.length > 0;
-    const hasCf = data.dataCdnRequests != null;
+    const hasCf = data.distributions.length > 0;
 
     if (mode === 'calm') {
         const parts: string[] = [];
-        if (hasBuckets) parts.push(`S3 ${formatBytes(data.totalSizeBytes)} · ${formatCount(data.totalObjects)} obj (${data.buckets.length})`);
-        if (hasCf) parts.push(`CDN ${formatCount(data.dataCdnRequests!)} req/h`);
+        if (hasBuckets) parts.push(`S3 (${data.buckets.length}) ${formatBytes(data.totalSizeBytes)} · ${formatCount(data.totalObjects)} obj`);
+        if (hasCf) parts.push(`CF (${data.distributions.length}) ${formatCount(data.totalCfRequests)} req/h`);
         if (parts.length === 0) return null;
         return (
             <Box gap={1}>
@@ -220,19 +273,17 @@ export function ResourcePanel({
                 <Text dimColor> Resources</Text>
                 {hasBuckets && (
                     <>
-                        <Text dimColor>S3</Text>
+                        <Text dimColor>S3 ({data.buckets.length})</Text>
                         <Text color="cyan">{formatBytes(data.totalSizeBytes)}</Text>
                         <Text dimColor>·</Text>
-                        <Text dimColor>{formatCount(data.totalObjects)} obj ({data.buckets.length})</Text>
+                        <Text dimColor>{formatCount(data.totalObjects)} obj</Text>
                     </>
                 )}
                 {hasCf && (
                     <>
-                        <Text dimColor>│ CDN</Text>
-                        <Text color="cyan">{formatCount(data.dataCdnRequests!)} req/h</Text>
-                        {data.dataCdnBytes != null && (
-                            <Text dimColor>({formatBytes(data.dataCdnBytes)})</Text>
-                        )}
+                        <Text dimColor>│ CloudFront ({data.distributions.length})</Text>
+                        <Text color="cyan">{formatCount(data.totalCfRequests)} req/h</Text>
+                        <Text dimColor>({formatBytes(data.totalCfBytes)})</Text>
                     </>
                 )}
                 {!hasBuckets && !hasCf && <Text dimColor>No data yet</Text>}
@@ -242,6 +293,13 @@ export function ResourcePanel({
                     <Box width={28}><Text dimColor>{stripAccountId(b.name)}</Text></Box>
                     <Box width={10} justifyContent="flex-end"><Text>{formatBytes(b.sizeBytes)}</Text></Box>
                     <Text dimColor>({formatCount(b.objects)} obj)</Text>
+                </Box>
+            ))}
+            {hasCf && data.distributions.map((d) => (
+                <Box key={d.id} gap={1} paddingLeft={2}>
+                    <Box width={28}><Text dimColor>{d.id}</Text></Box>
+                    <Box width={10} justifyContent="flex-end"><Text>{formatCount(d.requests)} req/h</Text></Box>
+                    <Text dimColor>({formatBytes(d.bytesDownloaded)})</Text>
                 </Box>
             ))}
         </Box>
