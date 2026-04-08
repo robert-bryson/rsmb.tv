@@ -93,14 +93,25 @@ export function AlarmPanel({
     if (mode === 'calm') {
         return (
             <Box gap={1}>
-                <Text dimColor> Alarms</Text>
+                <Box width={9}><Text dimColor> Alarms</Text></Box>
                 {isLoading && !data ? (
                     <Text color="cyan"><Spinner type="dots" /></Text>
                 ) : error && !data ? (
-                    <Text color="red">error</Text>
+                    <Text color="red">⚠ error</Text>
                 ) : (
                     <>
-                        <Text dimColor>{data?.alarms.length ?? 0} OK</Text>
+                        <Box width={25} gap={1}>
+                            <Text>
+                                {(data?.alarms ?? []).map((a, i) => (
+                                    <Text key={i} color={stateColor(a.state)}>
+                                        {a.state === 'OK' ? '✓' : '✗'}
+                                        {i < (data?.alarms.length ?? 0) - 1 ? ' ' : ''}
+                                    </Text>
+                                ))}
+                            </Text>
+                        </Box>
+                        {data?.allClear && <Text dimColor>OK</Text>}
+                        {!data?.allClear && <Text color="red">{firingAlarms.length} firing</Text>}
                         {isStale && <Text color="yellow">(stale)</Text>}
                     </>
                 )}

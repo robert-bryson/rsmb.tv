@@ -224,21 +224,23 @@ export function HealthPanel({
     if (mode === 'calm') {
         return (
             <Box gap={1}>
-                <Text dimColor> Health</Text>
+                <Box width={9}><Text dimColor> Health</Text></Box>
                 {isLoading && !data ? (
                     <Text color="cyan"><Spinner type="dots" /></Text>
                 ) : error && !data ? (
-                    <Text color="red">error</Text>
+                    <Text color="red">⚠ error</Text>
                 ) : (
                     <>
-                        {backend.map((h) => (
-                            <StatusDot key={h.domain} healthy={h.healthy} stale={isStale} />
-                        ))}
-                        <Text dimColor>│</Text>
-                        {frontend.map((h) => (
-                            <StatusDot key={`fe-${h.domain}`} healthy={h.healthy} stale={isStale} />
-                        ))}
-                        <Text dimColor>All OK</Text>
+                        <Box width={25} gap={1}>
+                            {backend.map((h) => (
+                                <StatusDot key={h.domain} healthy={h.healthy} stale={isStale} />
+                            ))}
+                            <Text dimColor>│</Text>
+                            {frontend.map((h) => (
+                                <StatusDot key={`fe-${h.domain}`} healthy={h.healthy} stale={isStale} />
+                            ))}
+                        </Box>
+                        <Text dimColor>OK</Text>
                     </>
                 )}
             </Box>

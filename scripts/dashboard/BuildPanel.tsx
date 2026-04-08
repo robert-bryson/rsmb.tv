@@ -19,6 +19,8 @@ interface BuildInfo {
     branch: string;
     time: string;
     url: string;
+    createdAt: Date | null;
+    staleThresholdHours: number | undefined;
 }
 
 function relativeTime(date: Date): string {
@@ -59,6 +61,12 @@ function isRunning(status: string): boolean {
     return ['PENDING', 'RUNNING', 'IN_PROGRESS', 'QUEUED'].includes(s);
 }
 
+function isStaleWorkflow(build: BuildInfo): boolean {
+    if (!build.staleThresholdHours || !build.createdAt) return false;
+    const ageHours = (Date.now() - build.createdAt.getTime()) / (1000 * 60 * 60);
+    return ageHours > build.staleThresholdHours;
+}
+
 async function fetchAmplifyBuilds(
     client: AmplifyClient,
     project: ProjectConfig,
@@ -87,6 +95,8 @@ async function fetchAmplifyBuilds(
             branch: 'main',
             time: job.startTime ? relativeTime(new Date(job.startTime)) : '—',
             url: `https://${region}.console.aws.amazon.com/amplify/home#/${project.amplifyAppId}/main/${job.jobId}`,
+            createdAt: job.startTime ? new Date(job.startTime) : null,
+            staleThresholdHours: undefined,
         };
     } catch {
         return {
@@ -98,6 +108,8 @@ async function fetchAmplifyBuilds(
             branch: 'main',
             time: 'fetch failed',
             url: `https://${region}.console.aws.amazon.com/amplify/home#/${project.amplifyAppId}`,
+            createdAt: null,
+            staleThresholdHours: undefined,
         };
     }
 }
@@ -132,6 +144,8 @@ async function fetchGitHubBuilds(
             branch: run.head_branch ?? 'main',
             time: run.created_at ? relativeTime(new Date(run.created_at)) : '—',
             url: run.html_url,
+            createdAt: run.created_at ? new Date(run.created_at) : null,
+            staleThresholdHours: undefined,
         };
     } catch {
         return {
@@ -143,6 +157,8 @@ async function fetchGitHubBuilds(
             branch: 'main',
             time: 'fetch failed',
             url: `https://github.com/${project.githubRepo}/actions`,
+            createdAt: null,
+            staleThresholdHours: undefined,
         };
     }
 }
@@ -180,6 +196,8 @@ async function fetchWorkflowRuns(
                 branch: run.head_branch ?? 'main',
                 time: run.created_at ? relativeTime(new Date(run.created_at)) : '—',
                 url: run.html_url,
+                createdAt: run.created_at ? new Date(run.created_at) : null,
+                staleThresholdHours: wf.staleThresholdHours,
             });
         } catch {
             results.push({
@@ -191,6 +209,8 @@ async function fetchWorkflowRuns(
                 branch: 'main',
                 time: 'fetch failed',
                 url: `https://github.com/${project.githubRepo}/actions`,
+                createdAt: null,
+                staleThresholdHours: wf.staleThresholdHours,
             });
         }
     }
@@ -250,6 +270,7 @@ export function BuildPanel({
 
     const failures = (data ?? []).filter((b) => isFailure(b.status));
     const running = (data ?? []).filter((b) => isRunning(b.status));
+    const staleWorkflows = (data ?? []).filter((b) => isStaleWorkflow(b));
     const hasProblems = failures.length > 0;
 
     useEffect(() => {
@@ -261,19 +282,24 @@ export function BuildPanel({
         return (
             <Box flexDirection="column">
                 <Box gap={1}>
-                    <Text dimColor> Builds</Text>
+                    <Box width={9}><Text dimColor> Builds</Text></Box>
                     {isLoading && !data ? (
                         <Text color="cyan"><Spinner type="dots" /></Text>
                     ) : error && !data ? (
                         <Text color="red">⚠ connection error</Text>
                     ) : (
                         <>
-                            {(data ?? []).map((b) => (
-                                <Text key={`${b.source}:${b.label}`} color={statusColor(b.status)}>
-                                    {statusLabel(b.status)}
-                                </Text>
-                            ))}
-                            {!hasProblems && running.length === 0 && <Text dimColor>All passing</Text>}
+                            <Box width={25} gap={1}>
+                                {(data ?? []).map((b) => (
+                                    <Text key={`${b.source}:${b.label}`} color={isStaleWorkflow(b) ? 'yellow' : statusColor(b.status)}>
+                                        {isStaleWorkflow(b) ? '⚠' : statusLabel(b.status)}
+                                    </Text>
+                                ))}
+                            </Box>
+                            {!hasProblems && running.length === 0 && staleWorkflows.length === 0 && <Text dimColor>OK</Text>}
+                            {staleWorkflows.length > 0 && !hasProblems && (
+                                <Text color="yellow">{staleWorkflows.map((b) => b.label).join(', ')} stale</Text>
+                            )}
                         </>
                     )}
                     {isStale && <Text color="yellow">⚠ stale</Text>}

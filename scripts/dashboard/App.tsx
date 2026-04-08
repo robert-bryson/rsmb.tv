@@ -87,6 +87,9 @@ export function App({ config }: { config: DashboardConfig }) {
                 <Text bold color="cyan">
                     Watch Dashboard{mode === 'detail' ? ' - Detail View' : ''}
                 </Text>
+                {mode === 'alert' && <Text bold color="red">ATTENTION</Text>}
+                {mode === 'calm' && <Text color="green">All OK</Text>}
+                {mode === 'detail' && <Text> </Text>}
                 <Clock timeZone={config.timeZone} />
             </Box>
 

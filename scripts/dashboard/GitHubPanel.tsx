@@ -141,19 +141,20 @@ export function GitHubPanel({
     if (mode === 'calm') {
         return (
             <Box gap={1}>
-                <Text dimColor> GitHub</Text>
+                <Box width={9}><Text dimColor> GitHub</Text></Box>
                 {isLoading && !data ? (
                     <Text color="cyan"><Spinner type="dots" /></Text>
                 ) : error && !data ? (
                     <Text color="red">⚠ error</Text>
+                ) : total > 0 ? (
+                    <Text color="yellow">
+                        {prCount > 0 ? `${prCount} PR${prCount !== 1 ? 's' : ''}` : ''}
+                        {prCount > 0 && issueCount > 0 ? ', ' : ''}
+                        {issueCount > 0 ? `${issueCount} issue${issueCount !== 1 ? 's' : ''}` : ''}
+                        {' open'}
+                    </Text>
                 ) : (
-                    <>
-                        {prCount > 0 ? (
-                            <Text color="green">{prCount} PR{prCount !== 1 ? 's' : ''} open</Text>
-                        ) : (
-                            <Text dimColor>0 PRs open</Text>
-                        )}
-                    </>
+                    <Text dimColor>OK</Text>
                 )}
                 {isStale && <Text color="yellow">⚠ stale</Text>}
             </Box>
@@ -186,7 +187,7 @@ export function GitHubPanel({
                     {data.prs.map((pr) => (
                         <Box key={`${pr.repo}#${pr.number}`} gap={1}>
                             <Text>    </Text>
-                            <Text color={pr.draft ? 'gray' : 'green'}>●</Text>
+                            <Text color={pr.draft ? 'gray' : 'yellow'}>●</Text>
                             <Text> </Text>
                             <Box width={12}>
                                 <Text dimColor>{pr.repo}</Text>

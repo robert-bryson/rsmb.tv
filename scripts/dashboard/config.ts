@@ -3,6 +3,8 @@ import { fromIni } from '@aws-sdk/credential-providers';
 export interface WorkflowConfig {
     name: string;
     file: string;
+    /** If the last successful run is older than this, flag it as stale. */
+    staleThresholdHours?: number;
 }
 
 export interface ProjectConfig {
@@ -74,6 +76,12 @@ function buildProjects(): ProjectConfig[] {
             healthUrl: 'https://bookend.rsmb.tv/api/health',
         },
         {
+            name: 'data',
+            domain: 'data.rsmb.tv',
+            kind: 'lambda-cloudfront',
+            healthUrl: 'https://data.rsmb.tv/',
+        },
+        {
             name: 'route2gpx',
             domain: 'route2gpx.rsmb.tv',
             kind: 'amplify',
@@ -87,8 +95,8 @@ function buildProjects(): ProjectConfig[] {
             githubRepo: 'robert-bryson/rsmb.tv',
             healthUrl: 'https://www.rsmb.tv/',
             workflows: [
-                { name: 'Sync Flights', file: 'sync-flights.yml' },
-                { name: 'Sync Temps', file: 'sync-temperatures.yml' },
+                { name: 'Sync Flights', file: 'sync-flights.yml', staleThresholdHours: 36 },
+                { name: 'Sync Temps', file: 'sync-temperatures.yml', staleThresholdHours: 36 },
             ],
         },
         {
