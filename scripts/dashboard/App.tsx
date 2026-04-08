@@ -82,15 +82,15 @@ export function App({ config }: { config: DashboardConfig }) {
 
     return (
         <Box flexDirection="column" paddingX={1} height={termHeight}>
-            {/* Header */}
-            <Box justifyContent="space-between">
+            {/* Header — always visible */}
+            <Box flexShrink={0} justifyContent="space-between">
                 <Text bold color="cyan">
-                    Watch Dashboard
+                    Watch Dashboard{mode === 'detail' ? ' - Detail View' : ''}
                 </Text>
                 <Clock timeZone={config.timeZone} />
             </Box>
 
-            <Text dimColor>{'─'.repeat(60)}</Text>
+            <Box flexShrink={0}><Text dimColor>{'─'.repeat(60)}</Text></Box>
 
             {/* Scrollable content area */}
             <Box flexDirection="column" flexGrow={1} overflow="hidden">
@@ -144,11 +144,13 @@ export function App({ config }: { config: DashboardConfig }) {
             </Box>
 
             {/* Footer */}
-            <Text dimColor>{'─'.repeat(60)}</Text>
-            <Text dimColor>
-                {' '}
-                [q] quit  [h] {forceDetail ? 'compact' : 'details'}  [e] clear log  [↑↓] scroll  ({modeLabel}){scrollHint}
-            </Text>
+            <Box flexShrink={0}><Text dimColor>{'─'.repeat(60)}</Text></Box>
+            <Box flexShrink={0}>
+                <Text dimColor>
+                    {' '}
+                    [q] quit  [h] {forceDetail ? 'compact' : 'details'}  [e] clear log  [↑↓] scroll  ({modeLabel}){scrollHint}
+                </Text>
+            </Box>
         </Box>
     );
 }
