@@ -429,9 +429,25 @@ export function ResourcePanel({
         }
         if (parts.length === 0) return null;
         return (
-            <Box gap={1}>
-                <Box width={9}><Text dimColor> Res</Text></Box>
-                <Text dimColor>{parts.join(' │ ')}</Text>
+            <Box flexDirection="column">
+                {hasBuckets && (
+                    <Box gap={1}>
+                        <Box width={9}><Text dimColor> AWS</Text></Box>
+                        <Text dimColor>S3 ({data.buckets.length}) {formatBytes(data.totalSizeBytes)} · {formatCount(data.totalObjects)} obj</Text>
+                    </Box>
+                )}
+                {hasCf && (
+                    <Box gap={1}>
+                        <Box width={9}><Text> </Text></Box>
+                        <Text dimColor>CF ({data.distributions.length}) {formatCount(data.totalCfRequests)} req/h</Text>
+                    </Box>
+                )}
+                {hasLambda && (
+                    <Box gap={1}>
+                        <Box width={9}><Text> </Text></Box>
+                        <Text dimColor>λ ({data.lambdas.length}) {formatCount(data.totalInvocations)} inv/h{data.totalErrors > 0 ? ` · ${formatCount(data.totalErrors)} err` : ''}</Text>
+                    </Box>
+                )}
             </Box>
         );
     }
