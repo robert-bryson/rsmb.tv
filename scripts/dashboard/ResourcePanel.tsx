@@ -28,6 +28,14 @@ interface DistributionMetrics {
     bytesDownloaded: number;
 }
 
+interface LambdaMetrics {
+    name: string;
+    consoleUrl: string;
+    invocations: number;
+    errors: number;
+    avgDurationMs: number;
+}
+
 interface ResourceData {
     buckets: BucketMetrics[];
     totalSizeBytes: number;
@@ -35,6 +43,9 @@ interface ResourceData {
     distributions: DistributionMetrics[];
     totalCfRequests: number;
     totalCfBytes: number;
+    lambdas: LambdaMetrics[];
+    totalInvocations: number;
+    totalErrors: number;
 }
 
 function formatBytes(bytes: number): string {
@@ -148,6 +159,34 @@ async function fetchDistributionLabels(
     return labels;
 }
 
+let lambdaCache: { data: string[]; timestamp: number } | null = null;
+
+/** Discover all Lambda functions that have Invocations metrics. Cached for 1 hour. */
+async function discoverLambdas(cw: CloudWatchClient): Promise<string[]> {
+    if (lambdaCache && Date.now() - lambdaCache.timestamp < DISCOVERY_CACHE_MAX_AGE_MS) {
+        return lambdaCache.data;
+    }
+    const fns = new Set<string>();
+    let token: string | undefined;
+    do {
+        const resp = await cw.send(
+            new ListMetricsCommand({
+                Namespace: 'AWS/Lambda',
+                MetricName: 'Invocations',
+                NextToken: token,
+            }),
+        );
+        for (const m of resp.Metrics ?? []) {
+            const name = m.Dimensions?.find((d) => d.Name === 'FunctionName')?.Value;
+            if (name) fns.add(name);
+        }
+        token = resp.NextToken;
+    } while (token);
+    const result = [...fns].sort();
+    lambdaCache = { data: result, timestamp: Date.now() };
+    return result;
+}
+
 async function fetchResources(config: DashboardConfig): Promise<ResourceData> {
     const cw = new CloudWatchClient({
         region: config.region,
@@ -160,9 +199,10 @@ async function fetchResources(config: DashboardConfig): Promise<ResourceData> {
         credentials: awsCredentials(config.profile),
     });
 
-    const [bucketNames, distIds] = await Promise.all([
+    const [bucketNames, distIds, lambdaNames] = await Promise.all([
         discoverBuckets(cw),
         discoverDistributions(cwGlobal),
+        discoverLambdas(cw),
     ]);
 
     const distLabels = await fetchDistributionLabels(config, distIds);
@@ -236,13 +276,55 @@ async function fetchResources(config: DashboardConfig): Promise<ResourceData> {
         },
     ]);
 
-    // S3 and CF metrics may need different regions — fetch separately
-    const [s3Resp, cfResp] = await Promise.all([
+    const lambdaQueries = lambdaNames.flatMap((name, i) => [
+        {
+            Id: `linv${i}`,
+            MetricStat: {
+                Metric: {
+                    Namespace: 'AWS/Lambda',
+                    MetricName: 'Invocations',
+                    Dimensions: [{ Name: 'FunctionName', Value: name }],
+                },
+                Period: 3600,
+                Stat: 'Sum',
+            },
+        },
+        {
+            Id: `lerr${i}`,
+            MetricStat: {
+                Metric: {
+                    Namespace: 'AWS/Lambda',
+                    MetricName: 'Errors',
+                    Dimensions: [{ Name: 'FunctionName', Value: name }],
+                },
+                Period: 3600,
+                Stat: 'Sum',
+            },
+        },
+        {
+            Id: `ldur${i}`,
+            MetricStat: {
+                Metric: {
+                    Namespace: 'AWS/Lambda',
+                    MetricName: 'Duration',
+                    Dimensions: [{ Name: 'FunctionName', Value: name }],
+                },
+                Period: 3600,
+                Stat: 'Average',
+            },
+        },
+    ]);
+
+    // S3, CF, and Lambda metrics may need different regions — fetch separately
+    const [s3Resp, cfResp, lambdaResp] = await Promise.all([
         queries.length > 0
             ? cw.send(new GetMetricDataCommand({ StartTime: s3Start, EndTime: now, MetricDataQueries: queries }))
             : Promise.resolve({ MetricDataResults: [] }),
         cfQueries.length > 0
             ? cwGlobal.send(new GetMetricDataCommand({ StartTime: s3Start, EndTime: now, MetricDataQueries: cfQueries }))
+            : Promise.resolve({ MetricDataResults: [] }),
+        lambdaQueries.length > 0
+            ? cw.send(new GetMetricDataCommand({ StartTime: s3Start, EndTime: now, MetricDataQueries: lambdaQueries }))
             : Promise.resolve({ MetricDataResults: [] }),
     ]);
 
@@ -254,6 +336,12 @@ async function fetchResources(config: DashboardConfig): Promise<ResourceData> {
 
     const cfLatest = (id: string): number | null => {
         const result = cfResp.MetricDataResults?.find((r) => r.Id === id);
+        if (!result?.Values?.length) return null;
+        return result.Values[0];
+    };
+
+    const lambdaLatest = (id: string): number | null => {
+        const result = lambdaResp.MetricDataResults?.find((r) => r.Id === id);
         if (!result?.Values?.length) return null;
         return result.Values[0];
     };
@@ -278,6 +366,17 @@ async function fetchResources(config: DashboardConfig): Promise<ResourceData> {
     // Sort most active first
     distributions.sort((a, b) => b.requests - a.requests);
 
+    const lambdas: LambdaMetrics[] = lambdaNames.map((name, i) => ({
+        name,
+        consoleUrl: `https://${config.region}.console.aws.amazon.com/lambda/home?region=${config.region}#/functions/${name}`,
+        invocations: lambdaLatest(`linv${i}`) ?? 0,
+        errors: lambdaLatest(`lerr${i}`) ?? 0,
+        avgDurationMs: Math.round(lambdaLatest(`ldur${i}`) ?? 0),
+    }));
+
+    // Sort most invoked first
+    lambdas.sort((a, b) => b.invocations - a.invocations);
+
     return {
         buckets,
         totalSizeBytes: buckets.reduce((sum, b) => sum + b.sizeBytes, 0),
@@ -285,6 +384,9 @@ async function fetchResources(config: DashboardConfig): Promise<ResourceData> {
         distributions,
         totalCfRequests: distributions.reduce((sum, d) => sum + d.requests, 0),
         totalCfBytes: distributions.reduce((sum, d) => sum + d.bytesDownloaded, 0),
+        lambdas,
+        totalInvocations: lambdas.reduce((sum, l) => sum + l.invocations, 0),
+        totalErrors: lambdas.reduce((sum, l) => sum + l.errors, 0),
     };
 }
 
@@ -314,11 +416,17 @@ export function ResourcePanel({
 
     const hasBuckets = data.buckets.length > 0;
     const hasCf = data.distributions.length > 0;
+    const hasLambda = data.lambdas.length > 0;
 
     if (mode === 'calm') {
         const parts: string[] = [];
         if (hasBuckets) parts.push(`S3 (${data.buckets.length}) ${formatBytes(data.totalSizeBytes)} · ${formatCount(data.totalObjects)} obj`);
         if (hasCf) parts.push(`CF (${data.distributions.length}) ${formatCount(data.totalCfRequests)} req/h`);
+        if (hasLambda) {
+            let lambdaPart = `λ (${data.lambdas.length}) ${formatCount(data.totalInvocations)} inv/h`;
+            if (data.totalErrors > 0) lambdaPart += ` · ${formatCount(data.totalErrors)} err`;
+            parts.push(lambdaPart);
+        }
         if (parts.length === 0) return null;
         return (
             <Box gap={1}>
@@ -363,7 +471,31 @@ export function ResourcePanel({
                     ))}
                 </>
             )}
-            {!hasBuckets && !hasCf && <Text dimColor> Resources — No data yet</Text>}
+            {hasLambda && (
+                <>
+                    <Box gap={1}>
+                        <Text dimColor> Lambda</Text>
+                        <Text color="cyan">{formatCount(data.totalInvocations)} inv/h</Text>
+                        {data.totalErrors > 0 && (
+                            <Text color="red">· {formatCount(data.totalErrors)} errors</Text>
+                        )}
+                        <Text dimColor>across {data.lambdas.length} functions</Text>
+                    </Box>
+                    {data.lambdas.map((l) => (
+                        <Box key={l.name} gap={1} paddingLeft={2}>
+                            <Box width={28}><Text dimColor>{link(l.consoleUrl, l.name)}</Text></Box>
+                            <Box width={10} justifyContent="flex-end"><Text>{formatCount(l.invocations)} inv/h</Text></Box>
+                            <Box width={8} justifyContent="flex-end">
+                                <Text dimColor>{l.avgDurationMs}ms</Text>
+                            </Box>
+                            {l.errors > 0 && (
+                                <Text color="red">{formatCount(l.errors)} err</Text>
+                            )}
+                        </Box>
+                    ))}
+                </>
+            )}
+            {!hasBuckets && !hasCf && !hasLambda && <Text dimColor> Resources — No data yet</Text>}
         </Box>
     );
 }
