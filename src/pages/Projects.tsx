@@ -12,7 +12,7 @@ export function Projects() {
   return (
     <div>
       <h1 className="text-2xl font-semibold text-zinc-100 mb-2">Projects</h1>
-      <p className="text-zinc-500 mb-8">
+      <p className="text-zinc-400 mb-8">
         Things I've built, mostly for fun.
       </p>
 
@@ -39,7 +39,7 @@ function ProjectContent({ project }: { project: typeof projects[0] }) {
         <h2 className="text-lg font-medium text-zinc-100 group-hover:text-violet-400">
           {project.title}
         </h2>
-        <span className="text-sm text-zinc-600">{project.year}</span>
+        <span className="text-sm text-zinc-500">{project.year}</span>
       </div>
       {project.previewImage && (
         <img
@@ -67,7 +67,7 @@ function ProjectContent({ project }: { project: typeof projects[0] }) {
           <span className="text-violet-400">Live demo</span>
         )}
         {project.sourceUrl && (
-          <span className="text-zinc-500">Source</span>
+          <span className="text-zinc-400">Source</span>
         )}
       </div>
     </>

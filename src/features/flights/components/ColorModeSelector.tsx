@@ -31,6 +31,7 @@ export function ColorModeSelector({ mode, onModeChange, years = [] }: ColorModeS
           onClick={() => setIsOpen(true)}
           className="bg-gray-900/90 backdrop-blur p-2.5 rounded-lg border border-gray-700 text-gray-300 hover:bg-gray-800/90 transition-colors"
           title={`Color: ${currentMode?.label}`}
+          aria-label={`Color mode: ${currentMode?.label}`}
         >
           <span className="text-lg">{currentMode?.icon}</span>
         </button>

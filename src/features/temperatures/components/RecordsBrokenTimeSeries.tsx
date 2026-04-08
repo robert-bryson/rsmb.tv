@@ -68,7 +68,7 @@ export function RecordsBrokenTimeSeries({ data, onHoverPeriod, selectedDecade, o
             {!compact && (
                 <>
                     <h3 className="text-sm font-semibold text-zinc-200 mb-1">Record-Setting Frequency Over Time</h3>
-                    <p className="text-xs text-zinc-500 mb-4">
+                    <p className="text-xs text-zinc-400 mb-4">
                         How many county all-time records were set each year (5-year rolling average).
                         In a stable climate, both lines should decline equally as records become harder to break.
                     </p>
@@ -91,7 +91,7 @@ export function RecordsBrokenTimeSeries({ data, onHoverPeriod, selectedDecade, o
                                 x1={padding.left} y1={yScale(v)} x2={width - padding.right} y2={yScale(v)}
                                 stroke="#27272a" strokeWidth={1}
                             />
-                            <text x={padding.left - 4} y={yScale(v) + 3} fill="#71717a" fontSize={9} textAnchor="end">
+                            <text x={padding.left - 4} y={yScale(v) + 3} fill="#a1a1aa" fontSize={9} textAnchor="end">
                                 {v}
                             </text>
                         </g>
@@ -99,7 +99,7 @@ export function RecordsBrokenTimeSeries({ data, onHoverPeriod, selectedDecade, o
 
                     {/* X-axis ticks */}
                     {yearTicks.map(d => (
-                        <text key={d.year} x={xScale(d.year)} y={height - 4} fill="#71717a" fontSize={9} textAnchor="middle">
+                        <text key={d.year} x={xScale(d.year)} y={height - 4} fill="#a1a1aa" fontSize={9} textAnchor="middle">
                             {d.year}
                         </text>
                     ))}
@@ -149,7 +149,7 @@ export function RecordsBrokenTimeSeries({ data, onHoverPeriod, selectedDecade, o
                             <line
                                 x1={xScale(hoveredData.year)} y1={padding.top}
                                 x2={xScale(hoveredData.year)} y2={padding.top + plotH}
-                                stroke="#71717a" strokeWidth={1} strokeDasharray="3,3"
+                                stroke="#a1a1aa" strokeWidth={1} strokeDasharray="3,3"
                             />
                             <circle cx={xScale(hoveredData.year)} cy={yScale(hoveredData.highsAvg)} r={4}
                                 fill={HIGH_TEMP_COLOR} stroke="#18181b" strokeWidth={2} />
@@ -173,13 +173,13 @@ export function RecordsBrokenTimeSeries({ data, onHoverPeriod, selectedDecade, o
                     <span style={{ color: '#fca5a5' }}>{hoveredData.highs} highs</span>
                     {', '}
                     <span style={{ color: '#93c5fd' }}>{hoveredData.lows} lows</span>
-                    <span className="text-zinc-500">
+                    <span className="text-zinc-400">
                         {' '}(5yr avg: {hoveredData.highsAvg.toFixed(1)}h / {hoveredData.lowsAvg.toFixed(1)}l)
                     </span>
                 </div>
             )}
             {!compact && (
-                <p className="text-[10px] text-zinc-600 mt-2">
+                <p className="text-[10px] text-zinc-500 mt-2">
                     Since ~1990, new record lows have nearly vanished while record highs continue to be set — a hallmark of warming.
                 </p>
             )}

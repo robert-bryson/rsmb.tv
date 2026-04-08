@@ -25,7 +25,7 @@ export default function Bookend() {
             <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
                 Bookend
             </h1>
-            <p className="text-zinc-500 mb-6 text-sm">
+            <p className="text-zinc-400 mb-6 text-sm">
                 2026 · Next.js + PostgreSQL
             </p>
 
@@ -36,7 +36,7 @@ export default function Bookend() {
                     href="https://developers.google.com/books"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-violet-400 hover:underline"
+                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
                 >
                     Google Books
                 </a>
@@ -45,7 +45,7 @@ export default function Bookend() {
                     href="https://openlibrary.org/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-violet-400 hover:underline"
+                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
                 >
                     Open Library
                 </a>
@@ -54,7 +54,7 @@ export default function Bookend() {
                     href="https://www.wikidata.org/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-violet-400 hover:underline"
+                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
                 >
                     Wikidata
                 </a>{' '}
@@ -99,7 +99,7 @@ export default function Bookend() {
                     href="https://bookend.rsmb.tv"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-violet-400 hover:underline"
+                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
                 >
                     Visit Bookend ↗
                 </a>
@@ -107,7 +107,7 @@ export default function Bookend() {
                     href="https://github.com/robert-bryson/bookend"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-zinc-400 hover:underline"
+                    className="text-zinc-400 underline decoration-zinc-400/30 hover:decoration-zinc-400"
                 >
                     Source on GitHub ↗
                 </a>

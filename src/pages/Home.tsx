@@ -38,7 +38,7 @@ export function Home() {
 
       {/* Featured Work */}
       <section>
-        <h2 className="text-sm font-medium text-zinc-500 uppercase tracking-wide mb-4">
+        <h2 className="text-sm font-medium text-zinc-400 uppercase tracking-wide mb-4">
           Featured
         </h2>
         <ul className="space-y-4">
@@ -54,7 +54,7 @@ export function Home() {
                   <h3 className="text-lg font-medium text-zinc-100 group-hover:text-violet-400">
                     {project.title}
                   </h3>
-                  <span className="text-sm text-zinc-600">{project.year}</span>
+                  <span className="text-sm text-zinc-500">{project.year}</span>
                 </div>
                 {project.previewImage && (
                   <img
@@ -69,7 +69,7 @@ export function Home() {
                 </p>
                 <div className="mt-2 flex gap-2">
                   {project.tech.slice(0, 3).map((t) => (
-                    <span key={t} className="text-xs text-zinc-600">
+                    <span key={t} className="text-xs text-zinc-500">
                       {t}
                     </span>
                   ))}
@@ -89,7 +89,7 @@ export function Home() {
         <div className="mt-6">
           <Link
             to="/projects"
-            className="text-sm text-zinc-500 hover:text-violet-400"
+            className="text-sm text-zinc-400 hover:text-violet-400"
           >
             View all projects →
           </Link>

@@ -186,7 +186,7 @@ function RecordsPanel({ recentRecords, useCelsius, onFlyTo, activePeriod, onPeri
 
             {/* Sort bar */}
             <div className="px-3 py-2 border-b border-zinc-800 flex items-center gap-2 text-xs shrink-0">
-                <span className="text-zinc-500">Sort:</span>
+                <span className="text-zinc-400">Sort:</span>
                 {RECORD_SORT_OPTIONS.map(opt => (
                     <button
                         key={opt}
@@ -261,7 +261,7 @@ function RecordsPanel({ recentRecords, useCelsius, onFlyTo, activePeriod, onPeri
                     </>
                 )}
 
-                <p className="text-xs text-zinc-600 pt-2 border-t border-zinc-800">
+                <p className="text-xs text-zinc-500 pt-2 border-t border-zinc-800">
                     Data: NOAA / ACIS · Records vs 1950–{new Date().getFullYear() - 1} · Updated {recentRecords.asOf}
                 </p>
             </div>
@@ -354,7 +354,7 @@ function CountyRecordsPanel({ countyRecords, useCelsius, onFlyTo }: { countyReco
 
             {/* Sort bar */}
             <div className="px-3 py-2 border-b border-zinc-800 flex items-center gap-2 text-xs shrink-0">
-                <span className="text-zinc-500">Sort:</span>
+                <span className="text-zinc-400">Sort:</span>
                 {COUNTY_SORT_OPTIONS.map(opt => (
                     <button
                         key={opt}
@@ -370,7 +370,7 @@ function CountyRecordsPanel({ countyRecords, useCelsius, onFlyTo }: { countyReco
             </div>
 
             {/* Count */}
-            <div className="px-3 py-1.5 text-xs text-zinc-500 shrink-0" aria-live="polite">
+            <div className="px-3 py-1.5 text-xs text-zinc-400 shrink-0" aria-live="polite">
                 {sorted.length.toLocaleString()} county {filterType === 'high' ? 'high' : 'low'} records
             </div>
 
@@ -384,12 +384,12 @@ function CountyRecordsPanel({ countyRecords, useCelsius, onFlyTo }: { countyReco
                         title={`${r.countyName}, ${r.state} — click to fly to location`}
                     >
                         <div className="flex items-baseline gap-2 text-xs">
-                            <span className="text-zinc-600 w-5 text-right shrink-0">{i + 1}.</span>
+                            <span className="text-zinc-500 w-5 text-right shrink-0">{i + 1}.</span>
                             <span className="font-semibold tabular-nums shrink-0" style={{ color: filterType === 'high' ? HIGH_TEMP_COLOR : LOW_TEMP_COLOR }}>{formatTemp(r.tempF, useCelsius)}</span>
                             <span className="text-zinc-300 truncate group-hover:text-white">{r.countyName}</span>
-                            <span className="text-zinc-500 ml-auto shrink-0">{r.year}</span>
+                            <span className="text-zinc-400 ml-auto shrink-0">{r.year}</span>
                         </div>
-                        <div className="flex items-baseline gap-2 text-xs text-zinc-500 ml-7">
+                        <div className="flex items-baseline gap-2 text-xs text-zinc-400 ml-7">
                             <span>{r.state}</span>
                             <span className="ml-auto truncate">{r.stationName}</span>
                         </div>
@@ -495,7 +495,7 @@ function StateRecordsPanel({ stateRecords, useCelsius, onSelectState }: { stateR
 
             {/* Sort bar */}
             <div className="px-3 py-2 border-b border-zinc-800 flex items-center gap-2 text-xs shrink-0">
-                <span className="text-zinc-500">Sort:</span>
+                <span className="text-zinc-400">Sort:</span>
                 {STATE_SORT_OPTIONS.map(opt => (
                     <button
                         key={opt}
@@ -511,7 +511,7 @@ function StateRecordsPanel({ stateRecords, useCelsius, onSelectState }: { stateR
             </div>
 
             {/* Count */}
-            <div className="px-3 py-1.5 text-xs text-zinc-500 shrink-0" aria-live="polite">
+            <div className="px-3 py-1.5 text-xs text-zinc-400 shrink-0" aria-live="polite">
                 {sorted.length.toLocaleString()} state {filterType === 'high' ? 'high' : 'low'} records
             </div>
 
@@ -527,19 +527,19 @@ function StateRecordsPanel({ stateRecords, useCelsius, onSelectState }: { stateR
                         title={`${r.stateName} — click to fly to location`}
                     >
                         <div className="flex items-baseline gap-2 text-xs">
-                            <span className="text-zinc-600 w-5 text-right shrink-0">{i + 1}.</span>
+                            <span className="text-zinc-500 w-5 text-right shrink-0">{i + 1}.</span>
                             <span className="font-semibold tabular-nums shrink-0" style={{ color: filterType === 'high' ? HIGH_TEMP_COLOR : LOW_TEMP_COLOR }}>{formatTemp(r.tempF, useCelsius)}</span>
                             <span className="text-zinc-300 truncate group-hover:text-white">{r.stateName}</span>
-                            <span className="text-zinc-500 ml-auto shrink-0">{r.year}</span>
+                            <span className="text-zinc-400 ml-auto shrink-0">{r.year}</span>
                         </div>
-                        <div className="flex items-baseline gap-2 text-xs text-zinc-500 ml-7">
+                        <div className="flex items-baseline gap-2 text-xs text-zinc-400 ml-7">
                             <span>{r.location}</span>
                             <span className="ml-auto truncate">{r.station}</span>
                         </div>
                     </button>
                 ))}
 
-                <p className="text-xs text-zinc-600 pt-2 border-t border-zinc-800">
+                <p className="text-xs text-zinc-500 pt-2 border-t border-zinc-800">
                     Data: NOAA / ACIS · All-time state records
                 </p>
             </div>
@@ -630,7 +630,7 @@ function FreshnessPanel({ countyRecords, freshnessType, onFreshnessTypeChange, u
 
             {/* Sort bar */}
             <div className="px-3 py-2 border-b border-zinc-800 flex items-center gap-2 text-xs shrink-0">
-                <span className="text-zinc-500">Sort:</span>
+                <span className="text-zinc-400">Sort:</span>
                 {SORT_OPTIONS.map(opt => (
                     <button
                         key={opt}
@@ -646,7 +646,7 @@ function FreshnessPanel({ countyRecords, freshnessType, onFreshnessTypeChange, u
             </div>
 
             {/* Count */}
-            <div className="px-3 py-1.5 text-xs text-zinc-500 shrink-0" aria-live="polite">
+            <div className="px-3 py-1.5 text-xs text-zinc-400 shrink-0" aria-live="polite">
                 {sorted.length.toLocaleString()} county {freshnessType === 'high' ? 'high' : 'low'} records
             </div>
 
@@ -676,12 +676,12 @@ function FreshnessRowItem({ row, rank, useCelsius, onFlyTo }: { row: FreshnessRo
             title={`${row.countyName}, ${row.state} — click to fly to location`}
         >
             <div className="flex items-baseline gap-2 text-xs">
-                <span className="text-zinc-600 w-5 text-right shrink-0">{rank}.</span>
+                <span className="text-zinc-500 w-5 text-right shrink-0">{rank}.</span>
                 <span className="font-semibold tabular-nums shrink-0 px-1.5 py-0.5 rounded text-white/90" style={{ backgroundColor: row.color }}>{formatTemp(row.tempF, useCelsius)}</span>
                 <span className="text-zinc-300 truncate group-hover:text-white">{row.countyName}</span>
-                <span className="text-zinc-500 ml-auto shrink-0">{row.year}</span>
+                <span className="text-zinc-400 ml-auto shrink-0">{row.year}</span>
             </div>
-            <div className="flex items-baseline gap-2 text-xs text-zinc-500 ml-7">
+            <div className="flex items-baseline gap-2 text-xs text-zinc-400 ml-7">
                 <span>{row.state}</span>
                 <span className="ml-auto truncate">{row.stationName}</span>
             </div>
@@ -721,7 +721,7 @@ function RecordRow({ record, rank, sort, useCelsius, onClick }: { record: Broken
                         {arrow}{formatMargin(departure)}° from normal {formatTemp(record.normalF, useCelsius)}
                     </span>
                 ) : (
-                    <span className="text-zinc-600">normal unavailable</span>
+                    <span className="text-zinc-500">normal unavailable</span>
                 );
         }
     })();
@@ -741,13 +741,13 @@ function RecordRow({ record, rank, sort, useCelsius, onClick }: { record: Broken
                 title={`${record.stationName}, ${record.stateName} — click to fly to location`}
             >
                 <div className="flex items-baseline gap-2 text-xs">
-                    <span className="text-zinc-600 w-4 text-right shrink-0">{rank}.</span>
+                    <span className="text-zinc-500 w-4 text-right shrink-0">{rank}.</span>
                     <span className="font-semibold tabular-nums shrink-0" style={{ color }}>{formatTemp(record.tempF, useCelsius)}</span>
                     {sortBadge}
                     <span className="text-zinc-300 truncate group-hover:text-white">{record.stationName}</span>
-                    <span className="text-zinc-600 ml-auto shrink-0">{formatShortDate(record.date)}</span>
+                    <span className="text-zinc-500 ml-auto shrink-0">{formatShortDate(record.date)}</span>
                 </div>
-                <div className="flex items-baseline gap-2 text-xs text-zinc-500 ml-6">
+                <div className="flex items-baseline gap-2 text-xs text-zinc-400 ml-6">
                     <span>{record.stateName}</span>
                     <span className="ml-auto">
                         {secondaryInfo}

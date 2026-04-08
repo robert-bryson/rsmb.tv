@@ -76,7 +76,7 @@ function TempSparkline({ data, useCelsius }: { data: StationDailyObs[]; useCelsi
         };
     }, [data, useCelsius]);
 
-    if (!highPath && !lowPath) return <div className="text-zinc-500 text-xs py-4 text-center">No chart data available</div>;
+    if (!highPath && !lowPath) return <div className="text-zinc-400 text-xs py-4 text-center">No chart data available</div>;
 
     return (
         <div className="mt-2">
@@ -87,7 +87,7 @@ function TempSparkline({ data, useCelsius }: { data: StationDailyObs[]; useCelsi
                 <text x="2" y="82" fill="#a1a1aa" fontSize="8">{yMin}°</text>
                 {/* Month labels */}
                 {labels.filter((_, i) => i % 2 === 0).map(({ x, label }) => (
-                    <text key={`${x}-${label}`} x={x} y="96" fill="#71717a" fontSize="7" textAnchor="middle">{label}</text>
+                    <text key={`${x}-${label}`} x={x} y="96" fill="#a1a1aa" fontSize="7" textAnchor="middle">{label}</text>
                 ))}
                 {/* Low temps */}
                 <path d={lowPath} fill="none" stroke="#3b82f6" strokeWidth="1" opacity="0.6" />
@@ -130,7 +130,7 @@ export function StationDetailPanel({ uid, stationName, state, useCelsius, onClos
                 <div className="flex items-center justify-between mb-1">
                     <button
                         onClick={onClose}
-                        className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+                        className="text-xs text-zinc-400 hover:text-zinc-300 transition-colors"
                     >
                         ← Back to records
                     </button>
@@ -144,7 +144,7 @@ export function StationDetailPanel({ uid, stationName, state, useCelsius, onClos
                 </div>
                 <div className="min-w-0">
                     <h2 className="text-sm font-semibold text-zinc-200 truncate">{meta?.name ?? stationName}</h2>
-                    <p className="text-xs text-zinc-500">
+                    <p className="text-xs text-zinc-400">
                         {state}
                         {meta?.elev != null && ` · ${meta.elev} ft`}
                     </p>
@@ -180,19 +180,19 @@ export function StationDetailPanel({ uid, stationName, state, useCelsius, onClos
                         {stats && (
                             <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
                                 <div className="bg-zinc-800/50 rounded px-2 py-1.5">
-                                    <div className="text-zinc-500">Avg High <span className="text-zinc-600">(30d)</span></div>
+                                    <div className="text-zinc-400">Avg High <span className="text-zinc-500">(30d)</span></div>
                                     <div className="text-red-400 font-semibold">{formatTemp(stats.avgHigh, useCelsius)}</div>
                                 </div>
                                 <div className="bg-zinc-800/50 rounded px-2 py-1.5">
-                                    <div className="text-zinc-500">Avg Low <span className="text-zinc-600">(30d)</span></div>
+                                    <div className="text-zinc-400">Avg Low <span className="text-zinc-500">(30d)</span></div>
                                     <div className="text-blue-400 font-semibold">{formatTemp(stats.avgLow, useCelsius)}</div>
                                 </div>
                                 <div className="bg-zinc-800/50 rounded px-2 py-1.5">
-                                    <div className="text-zinc-500">Max High <span className="text-zinc-600">(30d)</span></div>
+                                    <div className="text-zinc-400">Max High <span className="text-zinc-500">(30d)</span></div>
                                     <div className="text-red-400 font-semibold">{formatTemp(stats.maxHigh, useCelsius)}</div>
                                 </div>
                                 <div className="bg-zinc-800/50 rounded px-2 py-1.5">
-                                    <div className="text-zinc-500">Min Low <span className="text-zinc-600">(30d)</span></div>
+                                    <div className="text-zinc-400">Min Low <span className="text-zinc-500">(30d)</span></div>
                                     <div className="text-blue-400 font-semibold">{formatTemp(stats.minLow, useCelsius)}</div>
                                 </div>
                             </div>
@@ -204,7 +204,7 @@ export function StationDetailPanel({ uid, stationName, state, useCelsius, onClos
                             <div className="max-h-48 overflow-y-auto">
                                 <table className="w-full text-xs">
                                     <thead className="sticky top-0 bg-zinc-900">
-                                        <tr className="text-zinc-500 border-b border-zinc-800">
+                                        <tr className="text-zinc-400 border-b border-zinc-800">
                                             <th className="text-left py-1 font-medium">Date</th>
                                             <th className="text-right py-1 font-medium">High</th>
                                             <th className="text-right py-1 font-medium">Low</th>
@@ -217,7 +217,7 @@ export function StationDetailPanel({ uid, stationName, state, useCelsius, onClos
                                                 <td className="py-0.5">{obs.date.slice(5)}</td>
                                                 <td className="text-right text-red-400/80">{formatTemp(obs.maxt, useCelsius)}</td>
                                                 <td className="text-right text-blue-400/80">{formatTemp(obs.mint, useCelsius)}</td>
-                                                <td className="text-right text-zinc-500">{obs.pcpn != null ? `${obs.pcpn}"` : '—'}</td>
+                                                <td className="text-right text-zinc-400">{obs.pcpn != null ? `${obs.pcpn}"` : '—'}</td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -225,7 +225,7 @@ export function StationDetailPanel({ uid, stationName, state, useCelsius, onClos
                             </div>
                         </div>
 
-                        <p className="mt-2 text-[10px] text-zinc-600">
+                        <p className="mt-2 text-[10px] text-zinc-500">
                             {history.data.length} days loaded · Source: ACIS/RCC
                         </p>
                     </>

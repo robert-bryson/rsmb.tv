@@ -26,7 +26,7 @@ export default function TemperatureRecordsAbout() {
             <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
                 Record Highs
             </h1>
-            <p className="text-zinc-500 mb-6 text-sm">
+            <p className="text-zinc-400 mb-6 text-sm">
                 2025 · React + MapLibre GL
             </p>
 
@@ -37,7 +37,7 @@ export default function TemperatureRecordsAbout() {
                     href="https://www.ncei.noaa.gov/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-violet-400 hover:underline"
+                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
                 >
                     NOAA
                 </a>{' '}
@@ -46,7 +46,7 @@ export default function TemperatureRecordsAbout() {
                     href="https://www.rcc-acis.org/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-violet-400 hover:underline"
+                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
                 >
                     ACIS
                 </a>{' '}
@@ -79,7 +79,7 @@ export default function TemperatureRecordsAbout() {
                         height={973}
                         loading="eager"
                     />
-                    <figcaption className="mt-2 text-xs text-zinc-500 text-center">
+                    <figcaption className="mt-2 text-xs text-zinc-400 text-center">
                         Daily records view — 626 record highs and 42 record lows broken in a single day
                     </figcaption>
                 </figure>
@@ -92,7 +92,7 @@ export default function TemperatureRecordsAbout() {
                         height={967}
                         loading="lazy"
                     />
-                    <figcaption className="mt-2 text-xs text-zinc-500 text-center">
+                    <figcaption className="mt-2 text-xs text-zinc-400 text-center">
                         State records view — all-time high and low temperature records for each state
                     </figcaption>
                 </figure>
@@ -105,7 +105,7 @@ export default function TemperatureRecordsAbout() {
                         height={968}
                         loading="lazy"
                     />
-                    <figcaption className="mt-2 text-xs text-zinc-500 text-center">
+                    <figcaption className="mt-2 text-xs text-zinc-400 text-center">
                         Freshness view — county records colored by decade, showing when each record was set
                     </figcaption>
                 </figure>

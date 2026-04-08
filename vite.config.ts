@@ -16,6 +16,7 @@ export default defineConfig({
   ],
   assetsInclude: ['**/*.glb'],
   build: {
+    sourcemap: 'hidden',
     rollupOptions: {
       output: {
         manualChunks(id) {

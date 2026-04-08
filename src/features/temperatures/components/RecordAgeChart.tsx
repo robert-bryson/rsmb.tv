@@ -65,7 +65,7 @@ export function RecordAgeChart({ data, onHoverPeriod, selectedDecade, onSelectDe
             {!compact && (
                 <>
                     <h3 className="text-sm font-semibold text-zinc-200 mb-1">When Were All-Time Records Set?</h3>
-                    <p className="text-xs text-zinc-500 mb-4">
+                    <p className="text-xs text-zinc-400 mb-4">
                         Distribution of 6,078 county all-time record highs and lows by the decade they were set.
                         Highs go up, lows go down. Color matches the freshness map. Click a decade to lock selection.
                     </p>
@@ -97,10 +97,10 @@ export function RecordAgeChart({ data, onHoverPeriod, selectedDecade, onSelectDe
                     />
 
                     {/* Y-axis labels */}
-                    <text x={26} y={midY - scale(maxVal) + 4} fill="#71717a" fontSize={10} textAnchor="end">
+                    <text x={26} y={midY - scale(maxVal) + 4} fill="#a1a1aa" fontSize={10} textAnchor="end">
                         {maxVal}
                     </text>
-                    <text x={26} y={midY + scale(maxVal) + 4} fill="#71717a" fontSize={10} textAnchor="end">
+                    <text x={26} y={midY + scale(maxVal) + 4} fill="#a1a1aa" fontSize={10} textAnchor="end">
                         {maxVal}
                     </text>
                     <text x={2} y={midY - halfHeight / 2} fill={HIGH_TEMP_COLOR} fontSize={9} textAnchor="start"
@@ -264,7 +264,7 @@ export function RecordAgeChart({ data, onHoverPeriod, selectedDecade, onSelectDe
                         <text
                             x={35 + (filtered.length - 1) * (barWidth + gap) + barWidth / 2}
                             y={cumulativeY(maxCumulative) - 8}
-                            fill="#71717a" fontSize={9} textAnchor="middle"
+                            fill="#a1a1aa" fontSize={9} textAnchor="middle"
                             style={{ pointerEvents: 'none' }}
                         >
                             {maxCumulative.toLocaleString()}
@@ -273,7 +273,7 @@ export function RecordAgeChart({ data, onHoverPeriod, selectedDecade, onSelectDe
                 </svg>
             </div>
             {!compact && (
-                <p className="text-[10px] text-zinc-600 mt-2">
+                <p className="text-[10px] text-zinc-500 mt-2">
                     The 1930s Dust Bowl dominates record highs. Recent decades (2000s–2010s) show a resurgence of record highs relative to lows.
                     Lines show cumulative standing records over time (total, highs, lows).
                 </p>

@@ -25,7 +25,7 @@ export default function Route2Gpx() {
             <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
                 route2gpx
             </h1>
-            <p className="text-zinc-500 mb-6 text-sm">
+            <p className="text-zinc-400 mb-6 text-sm">
                 2024 · JavaScript + Leaflet
             </p>
 
@@ -35,7 +35,7 @@ export default function Route2Gpx() {
                     href="https://developers.google.com/maps/documentation/routes"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-violet-400 hover:underline"
+                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
                 >
                     Google Routes
                 </a>{' '}
@@ -54,7 +54,7 @@ export default function Route2Gpx() {
                         height={1390}
                         loading="eager"
                     />
-                    <figcaption className="mt-2 text-xs text-zinc-500 text-center">
+                    <figcaption className="mt-2 text-xs text-zinc-400 text-center">
                         Route planning interface — enter origin, destination, waypoints, and travel mode
                     </figcaption>
                 </figure>
@@ -67,7 +67,7 @@ export default function Route2Gpx() {
                         height={1392}
                         loading="lazy"
                     />
-                    <figcaption className="mt-2 text-xs text-zinc-500 text-center">
+                    <figcaption className="mt-2 text-xs text-zinc-400 text-center">
                         Single route view — driving route with Fog of World overlay and GPX download
                     </figcaption>
                 </figure>
@@ -80,7 +80,7 @@ export default function Route2Gpx() {
                         height={1390}
                         loading="lazy"
                     />
-                    <figcaption className="mt-2 text-xs text-zinc-500 text-center">
+                    <figcaption className="mt-2 text-xs text-zinc-400 text-center">
                         Multi-route view — multiple routes across Mexico with batch download
                     </figcaption>
                 </figure>
@@ -122,7 +122,7 @@ export default function Route2Gpx() {
                     href="https://route2gpx.rsmb.tv"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-violet-400 hover:underline"
+                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
                 >
                     Visit route2gpx ↗
                 </a>
@@ -130,7 +130,7 @@ export default function Route2Gpx() {
                     href="https://github.com/robert-bryson/route2gpx"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-zinc-400 hover:underline"
+                    className="text-zinc-400 underline decoration-zinc-400/30 hover:decoration-zinc-400"
                 >
                     Source on GitHub ↗
                 </a>

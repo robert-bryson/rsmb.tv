@@ -25,7 +25,7 @@ export default function AnkiArtisan() {
             <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
                 Anki Artisan
             </h1>
-            <p className="text-zinc-500 mb-6 text-sm">2026 · Python CLI</p>
+            <p className="text-zinc-400 mb-6 text-sm">2026 · Python CLI</p>
 
             <p className="text-zinc-300 leading-relaxed mb-6">
                 A CLI tool that generates{' '}
@@ -33,7 +33,7 @@ export default function AnkiArtisan() {
                     href="https://apps.ankiweb.net/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-violet-400 hover:underline"
+                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
                 >
                     Anki
                 </a>{' '}
@@ -42,7 +42,7 @@ export default function AnkiArtisan() {
                     href="https://www.inaturalist.org/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-violet-400 hover:underline"
+                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
                 >
                     iNaturalist
                 </a>{' '}
@@ -51,7 +51,7 @@ export default function AnkiArtisan() {
                     href="https://ebird.org/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-violet-400 hover:underline"
+                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
                 >
                     eBird
                 </a>{' '}
@@ -122,7 +122,7 @@ anki-artisan ebird add-region "Missouri"`}</code>
                     href="https://github.com/robert-bryson/anki-artisan"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-violet-400 hover:underline"
+                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
                 >
                     Source on GitHub ↗
                 </a>

@@ -25,7 +25,7 @@ export class ErrorBoundary extends Component<Props, State> {
             return (
                 <div className="flex flex-col items-center justify-center min-h-[50vh] p-8 text-center">
                     <h1 className="text-2xl font-bold text-zinc-200 mb-2">Something went wrong</h1>
-                    <p className="text-zinc-500 mb-4">An unexpected error occurred.</p>
+                    <p className="text-zinc-400 mb-4">An unexpected error occurred.</p>
                     <button
                         className="px-4 py-2 bg-zinc-700 text-zinc-200 rounded hover:bg-zinc-600 transition-colors"
                         onClick={() => this.setState({ hasError: false })}

@@ -55,13 +55,13 @@ export function BlogPost() {
         <article>
             <Link
                 to="/blog"
-                className="text-sm text-zinc-500 hover:text-violet-400 mb-6 inline-block"
+                className="text-sm text-zinc-400 hover:text-violet-400 mb-6 inline-block"
             >
                 ← Back to blog
             </Link>
 
             <header className="mb-8">
-                <time className="text-sm text-zinc-500">{formatDate(post.date)}</time>
+                <time className="text-sm text-zinc-400">{formatDate(post.date)}</time>
                 <h1 className="text-3xl font-bold text-zinc-100 mt-2">{post.title}</h1>
                 {post.tags.length > 0 && (
                     <div className="flex gap-2 mt-3">
@@ -79,7 +79,7 @@ export function BlogPost() {
 
             <Suspense
                 fallback={
-                    <div className="text-zinc-500 py-8">Loading post…</div>
+                    <div className="text-zinc-400 py-8">Loading post…</div>
                 }
             >
                 <MDXProvider components={mdxComponents}>

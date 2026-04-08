@@ -21,7 +21,7 @@ export function ClimateTrends() {
 
     if (error) {
         return (
-            <div className="p-6 text-center text-zinc-500">
+            <div className="p-6 text-center text-zinc-400">
                 <p>Failed to load climate trend data</p>
                 <p className="text-xs mt-1">{error}</p>
             </div>
@@ -50,7 +50,7 @@ export function ClimateTrends() {
                     </Link>
                     <h1 className="text-base font-semibold text-zinc-100">Climate Trends</h1>
                 </div>
-                <p className="text-xs text-zinc-500 mb-3">
+                <p className="text-xs text-zinc-400 mb-3">
                     Are temperature records being broken more frequently? Analysis of {trends.totalHighs.toLocaleString()} record highs
                     and {trends.totalLows.toLocaleString()} record lows across US counties.
                 </p>
@@ -63,7 +63,7 @@ export function ClimateTrends() {
                             onClick={() => setActive(s.id)}
                             className={`px-3 py-1.5 text-xs rounded-t transition-colors ${active === s.id
                                 ? 'bg-zinc-800 text-violet-400 border-b-2 border-violet-400'
-                                : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50'
+                                : 'text-zinc-400 hover:text-zinc-300 hover:bg-zinc-800/50'
                                 }`}
                         >
                             {s.label}
@@ -88,7 +88,7 @@ export function ClimateTrends() {
                 )}
 
                 {/* Common footer */}
-                <div className="mt-6 pt-4 border-t border-zinc-800 text-[10px] text-zinc-600 space-y-1">
+                <div className="mt-6 pt-4 border-t border-zinc-800 text-[10px] text-zinc-500 space-y-1">
                     <p>Data: NOAA / ACIS · County all-time records from period of record (1890s–present)</p>
                     <p>Analysis based on {(trends.totalHighs + trends.totalLows).toLocaleString()} county-level all-time records across 48 contiguous states.</p>
                 </div>

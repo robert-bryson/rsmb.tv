@@ -54,6 +54,13 @@ export const mdxComponents = {
             {...props}
         />
     ),
+    img: (props: ComponentPropsWithoutRef<'img'>) => (
+        <img
+            className="rounded-lg border border-zinc-800 my-4"
+            loading="lazy"
+            {...props}
+        />
+    ),
     hr: (props: ComponentPropsWithoutRef<'hr'>) => (
         <hr className="border-zinc-800 my-8" {...props} />
     ),

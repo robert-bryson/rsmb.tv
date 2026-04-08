@@ -3,8 +3,11 @@ import { Suspense, lazy } from 'react';
 import { Layout } from './components/Layout';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ScrollToTop } from './components/ScrollToTop';
-import { Home, About, Projects, NotFound } from './pages';
 
+const Home = lazy(() => import('./pages/Home').then(m => ({ default: m.Home })));
+const About = lazy(() => import('./pages/About').then(m => ({ default: m.About })));
+const Projects = lazy(() => import('./pages/Projects').then(m => ({ default: m.Projects })));
+const NotFound = lazy(() => import('./pages/NotFound').then(m => ({ default: m.NotFound })));
 const Blog = lazy(() => import('./pages/Blog'));
 const BlogPost = lazy(() => import('./pages/BlogPost'));
 const ThroughRoutes = lazy(() => import('./pages/ThroughRoutes'));
@@ -22,12 +25,18 @@ const basename = import.meta.env.BASE_URL;
 
 function LoadingFallback() {
   return (
-    <div className="animate-pulse space-y-4 p-8">
-      <div className="h-6 w-48 bg-zinc-800 rounded" />
+    <div className="animate-pulse space-y-6 p-8 max-w-2xl min-h-[60vh]">
+      <div className="h-7 w-48 bg-zinc-800 rounded" />
+      <div className="h-4 w-32 bg-zinc-800/40 rounded" />
       <div className="space-y-2">
         <div className="h-4 w-full bg-zinc-800/60 rounded" />
         <div className="h-4 w-5/6 bg-zinc-800/60 rounded" />
         <div className="h-4 w-4/6 bg-zinc-800/60 rounded" />
+      </div>
+      <div className="h-48 w-full bg-zinc-800/40 rounded-lg" />
+      <div className="space-y-2">
+        <div className="h-4 w-full bg-zinc-800/60 rounded" />
+        <div className="h-4 w-3/4 bg-zinc-800/60 rounded" />
       </div>
     </div>
   );

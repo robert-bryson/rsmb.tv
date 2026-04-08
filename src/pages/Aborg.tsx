@@ -25,7 +25,7 @@ export default function Aborg() {
             <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
                 aborg
             </h1>
-            <p className="text-zinc-500 mb-6 text-sm">2026 · Python CLI</p>
+            <p className="text-zinc-400 mb-6 text-sm">2026 · Python CLI</p>
 
             <p className="text-zinc-300 leading-relaxed mb-6">
                 A CLI tool to scan, organize, and manage audiobook file
@@ -34,7 +34,7 @@ export default function Aborg() {
                     href="https://www.audiobookshelf.org/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-violet-400 hover:underline"
+                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
                 >
                     Audiobookshelf
                 </a>
@@ -44,7 +44,7 @@ export default function Aborg() {
                     href="https://www.overdrive.com/apps/libby"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-violet-400 hover:underline"
+                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
                 >
                     Libby/OverDrive
                 </a>{' '}
@@ -140,7 +140,7 @@ aborg analyze --path /mnt/nas/audiobooks`}</code>
                     href="https://github.com/robert-bryson/aborg"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-violet-400 hover:underline"
+                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
                 >
                     Source on GitHub ↗
                 </a>

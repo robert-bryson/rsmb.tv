@@ -32,24 +32,24 @@ export function About() {
 
       {/* Experience */}
       <section className="mt-12">
-        <h2 className="text-sm font-medium text-zinc-500 uppercase tracking-wide mb-4">
+        <h2 className="text-sm font-medium text-zinc-400 uppercase tracking-wide mb-4">
           Experience
         </h2>
         <ul className="space-y-4 text-sm">
           <li className="flex gap-4">
-            <span className="text-zinc-600 w-28 shrink-0">Xentity</span>
+            <span className="text-zinc-500 w-28 shrink-0">Xentity</span>
             <span className="text-zinc-300">Federal geospatial projects — Data.gov, USFS EGP</span>
           </li>
           <li className="flex gap-4">
-            <span className="text-zinc-600 w-28 shrink-0">Microsoft</span>
+            <span className="text-zinc-500 w-28 shrink-0">Microsoft</span>
             <span className="text-zinc-300">Geospatial Engineer — Azure Cloud Infrastructure and Operations</span>
           </li>
           <li className="flex gap-4">
-            <span className="text-zinc-600 w-28 shrink-0">Startups</span>
+            <span className="text-zinc-500 w-28 shrink-0">Startups</span>
             <span className="text-zinc-300">Geospatial backend engineering</span>
           </li>
           <li className="flex gap-4">
-            <span className="text-zinc-600 w-28 shrink-0">State/County</span>
+            <span className="text-zinc-500 w-28 shrink-0">State/County</span>
             <span className="text-zinc-300">GIS applications for government agencies</span>
           </li>
         </ul>
@@ -57,7 +57,7 @@ export function About() {
 
       {/* Contact */}
       <section className="mt-12">
-        <h2 className="text-sm font-medium text-zinc-500 uppercase tracking-wide mb-4">
+        <h2 className="text-sm font-medium text-zinc-400 uppercase tracking-wide mb-4">
           Connect
         </h2>
         <ul className="space-y-2 text-sm">

@@ -26,7 +26,7 @@ export default function FlightsAbout() {
             <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
                 Flights
             </h1>
-            <p className="text-zinc-500 mb-6 text-sm">
+            <p className="text-zinc-400 mb-6 text-sm">
                 2025 · React + Three.js
             </p>
 
@@ -38,7 +38,7 @@ export default function FlightsAbout() {
                     href="https://github.com/vasturiano/react-globe.gl"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-violet-400 hover:underline"
+                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
                 >
                     react-globe.gl
                 </a>{' '}
@@ -64,7 +64,7 @@ export default function FlightsAbout() {
                         height={1385}
                         loading="eager"
                     />
-                    <figcaption className="mt-2 text-xs text-zinc-500 text-center">
+                    <figcaption className="mt-2 text-xs text-zinc-400 text-center">
                         Overview of all flights on the interactive 3D globe with aggregate statistics, airline breakdown, and country-level data
                     </figcaption>
                 </figure>
@@ -77,7 +77,7 @@ export default function FlightsAbout() {
                         height={1389}
                         loading="lazy"
                     />
-                    <figcaption className="mt-2 text-xs text-zinc-500 text-center">
+                    <figcaption className="mt-2 text-xs text-zinc-400 text-center">
                         Filtering by airport — all routes from Seattle-Tacoma (SEA) with visit timeline, top destinations, and connected airports
                     </figcaption>
                 </figure>
@@ -90,7 +90,7 @@ export default function FlightsAbout() {
                         height={1390}
                         loading="lazy"
                     />
-                    <figcaption className="mt-2 text-xs text-zinc-500 text-center">
+                    <figcaption className="mt-2 text-xs text-zinc-400 text-center">
                         Country view — flights to and from the United Kingdom with airport markers, top routes, and airline details
                     </figcaption>
                 </figure>

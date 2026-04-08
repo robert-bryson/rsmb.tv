@@ -100,7 +100,7 @@ function DecadeRatioView({ data, hovered, setHovered, selectedDecade, onSelectDe
                             Show rolling →
                         </button>
                     </div>
-                    <p className="text-xs text-zinc-500 mb-4">
+                    <p className="text-xs text-zinc-400 mb-4">
                         Ratio of record highs to record lows set per decade. A value of 1.0 means equal;
                         above 1.0 means more highs than lows — a warming signal.
                     </p>
@@ -139,7 +139,7 @@ function DecadeRatioView({ data, hovered, setHovered, selectedDecade, onSelectDe
                         <g key={v}>
                             <line x1={padding.left} y1={yScale(v)} x2={width - padding.right} y2={yScale(v)}
                                 stroke="#27272a" strokeWidth={1} />
-                            <text x={padding.left - 4} y={yScale(v) + 3} fill="#71717a" fontSize={9} textAnchor="end">
+                            <text x={padding.left - 4} y={yScale(v) + 3} fill="#a1a1aa" fontSize={9} textAnchor="end">
                                 {v}
                             </text>
                         </g>
@@ -201,7 +201,7 @@ function DecadeRatioView({ data, hovered, setHovered, selectedDecade, onSelectDe
                 </svg>
             </div>
             {!compact && (
-                <p className="text-[10px] text-zinc-600 mt-2">
+                <p className="text-[10px] text-zinc-500 mt-2">
                     The dashed line marks the expected 1:1 equilibrium. Decades above the line set more record highs than lows.
                 </p>
             )}
@@ -259,7 +259,7 @@ function RollingRatioView({ data, hovered, setHovered, onSwitchView, onHoverPeri
                             ← Show decades
                         </button>
                     </div>
-                    <p className="text-xs text-zinc-500 mb-4">
+                    <p className="text-xs text-zinc-400 mb-4">
                         10-year rolling ratio of record highs to lows. Above 1.0 (dashed) means more highs than lows being set.
                     </p>
                 </>
@@ -284,12 +284,12 @@ function RollingRatioView({ data, hovered, setHovered, onSwitchView, onHoverPeri
                         <g key={v}>
                             <line x1={padding.left} y1={yScale(v)} x2={width - padding.right} y2={yScale(v)}
                                 stroke="#27272a" strokeWidth={1} />
-                            <text x={padding.left - 4} y={yScale(v) + 3} fill="#71717a" fontSize={9} textAnchor="end">{v}</text>
+                            <text x={padding.left - 4} y={yScale(v) + 3} fill="#a1a1aa" fontSize={9} textAnchor="end">{v}</text>
                         </g>
                     ))}
 
                     {yearTicks.map(d => (
-                        <text key={d.year} x={xScale(d.year)} y={height - 4} fill="#71717a" fontSize={9} textAnchor="middle">
+                        <text key={d.year} x={xScale(d.year)} y={height - 4} fill="#a1a1aa" fontSize={9} textAnchor="middle">
                             {d.year}
                         </text>
                     ))}
@@ -313,7 +313,7 @@ function RollingRatioView({ data, hovered, setHovered, onSwitchView, onHoverPeri
                         <>
                             <line x1={xScale(hoveredData.year)} y1={padding.top}
                                 x2={xScale(hoveredData.year)} y2={padding.top + plotH}
-                                stroke="#71717a" strokeWidth={1} strokeDasharray="3,3" />
+                                stroke="#a1a1aa" strokeWidth={1} strokeDasharray="3,3" />
                             <circle cx={xScale(hoveredData.year)} cy={yScale(hoveredData.ratio!)} r={4}
                                 fill={HIGH_TEMP_COLOR} stroke="#18181b" strokeWidth={2} />
                         </>
@@ -324,7 +324,7 @@ function RollingRatioView({ data, hovered, setHovered, onSwitchView, onHoverPeri
                 <div className={`text-xs text-zinc-400 ${compact ? 'shrink-0 px-1 py-0.5' : 'mt-1'}`}>
                     <span className="text-zinc-200 font-medium">{hoveredData.year}</span>
                     {' — '}ratio: <span className="text-zinc-100 font-medium">{hoveredData.ratio?.toFixed(1)}:1</span>
-                    <span className="text-zinc-500">
+                    <span className="text-zinc-400">
                         {' '}({hoveredData.highs10yr} highs / {hoveredData.lows10yr} lows over 10yr)
                     </span>
                 </div>

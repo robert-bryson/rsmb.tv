@@ -19,6 +19,7 @@ export function GlobeLoadingOverlay({ progress, error, onRetry }: GlobeLoadingOv
                         <button
                             onClick={onRetry}
                             className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-sm rounded-lg transition-colors"
+                            aria-label="Retry loading globe textures"
                         >
                             Try Again
                         </button>

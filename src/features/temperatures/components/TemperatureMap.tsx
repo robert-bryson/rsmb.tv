@@ -104,27 +104,27 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
             <div style="color:#a1a1aa;font-size:12px;margin-bottom:6px">${props.stateName}</div>
             <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:6px">
                 <span style="color:${color};font-size:22px;font-weight:700">${formatTemp(tempF, useCelsius)}</span>
-                <span style="color:#71717a;font-size:12px">(${formatTemp(tempF, !useCelsius)})</span>
+                <span style="color:#a1a1aa;font-size:12px">(${formatTemp(tempF, !useCelsius)})</span>
             </div>
             <div style="border-top:1px solid #27272a;padding-top:6px;font-size:12px;color:#a1a1aa">
                 <div style="display:flex;justify-content:space-between;margin-bottom:2px">
-                    <span style="color:#71717a">Previous record</span>
+                    <span style="color:#a1a1aa">Previous record</span>
                     <span style="color:#d4d4d8">${formatTemp(prevF, useCelsius)} on ${prevDate}</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;margin-bottom:2px">
-                    <span style="color:#71717a">Margin</span>
+                    <span style="color:#a1a1aa">Margin</span>
                     <span style="color:${color}">${arrow}${useCelsius ? ((margin * 5 / 9)).toFixed(1) : margin.toFixed(1)}°${useCelsius ? 'C' : 'F'}</span>
                 </div>${vsNormal != null ? `
                 <div style="display:flex;justify-content:space-between;margin-bottom:2px">
-                    <span style="color:#71717a">vs Normal</span>
+                    <span style="color:#a1a1aa">vs Normal</span>
                     <span style="color:${vsNormal > 0 ? HIGH_TEMP_COLOR : LOW_TEMP_COLOR}">${useCelsius ? (vsNormal > 0 ? '+' : '') + ((vsNormal * 5 / 9)).toFixed(0) + '°C' : (vsNormal > 0 ? '+' : '') + vsNormal.toFixed(0) + '°F'}</span>
                 </div>` : ''}
                 <div style="display:flex;justify-content:space-between">
-                    <span style="color:#71717a">Date</span>
+                    <span style="color:#a1a1aa">Date</span>
                     <span style="color:#d4d4d8">${formatDate(props.date as string)}</span>
                 </div>
             </div>
-            <div style="border-top:1px solid #27272a;margin-top:6px;padding-top:5px;font-size:11px;color:#71717a;text-align:center">
+            <div style="border-top:1px solid #27272a;margin-top:6px;padding-top:5px;font-size:11px;color:#a1a1aa;text-align:center">
                 📊 Station history loaded in panel →
             </div>
         </div>`;
@@ -153,19 +153,19 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
                 <div style="flex:1;background:#27272a;border-radius:6px;padding:8px 10px;border-left:3px solid ${HIGH_TEMP_COLOR}">
                     <div style="font-size:10px;color:#a1a1aa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">🔥 Record High</div>
                     <div style="color:${HIGH_TEMP_COLOR};font-size:20px;font-weight:700">${formatTemp(hF, useCelsius)}</div>
-                    <div style="color:#71717a;font-size:11px">${formatTemp(hF, !useCelsius)}</div>
+                    <div style="color:#a1a1aa;font-size:11px">${formatTemp(hF, !useCelsius)}</div>
                     <div style="color:#a1a1aa;font-size:11px;margin-top:4px">${formatDate(highRec.date as string)}</div>
-                    <div style="color:#71717a;font-size:10px">${highRec.stationName || highRec.location || ''}</div>
+                    <div style="color:#a1a1aa;font-size:10px">${highRec.stationName || highRec.location || ''}</div>
                 </div>
                 <div style="flex:1;background:#27272a;border-radius:6px;padding:8px 10px;border-left:3px solid ${LOW_TEMP_COLOR}">
                     <div style="font-size:10px;color:#a1a1aa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">❄️ Record Low</div>
                     <div style="color:${LOW_TEMP_COLOR};font-size:20px;font-weight:700">${formatTemp(lF, useCelsius)}</div>
-                    <div style="color:#71717a;font-size:11px">${formatTemp(lF, !useCelsius)}</div>
+                    <div style="color:#a1a1aa;font-size:11px">${formatTemp(lF, !useCelsius)}</div>
                     <div style="color:#a1a1aa;font-size:11px;margin-top:4px">${formatDate(lowRec.date as string)}</div>
-                    <div style="color:#71717a;font-size:10px">${lowRec.stationName || lowRec.location || ''}</div>
+                    <div style="color:#a1a1aa;font-size:10px">${lowRec.stationName || lowRec.location || ''}</div>
                 </div>
             </div>
-            <div style="text-align:center;font-size:11px;color:#71717a;border-top:1px solid #27272a;padding-top:6px">
+            <div style="text-align:center;font-size:11px;color:#a1a1aa;border-top:1px solid #27272a;padding-top:6px">
                 Temperature range: <span style="color:#d4d4d8;font-weight:600">${useCelsius ? fToC(range + 32).toFixed(1) + '°C' : range + '°F'}</span> (${useCelsius ? range + '°F' : fToC(range + 32).toFixed(1) + '°C'})
             </div>
         </div>`;
@@ -186,20 +186,20 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
         <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:4px">
             <span style="font-size:11px">${icon}</span>
             <span style="color:${color};font-size:20px;font-weight:700">${formatTemp(tempF, useCelsius)}</span>
-            <span style="color:#71717a;font-size:12px">(${formatTemp(tempF, !useCelsius)})</span>
+            <span style="color:#a1a1aa;font-size:12px">(${formatTemp(tempF, !useCelsius)})</span>
         </div>
         <div style="font-size:11px;color:#a1a1aa;font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">${typeLabel}</div>
         <div style="border-top:1px solid #27272a;padding-top:6px;font-size:12px;color:#a1a1aa">
             <div style="display:flex;justify-content:space-between;margin-bottom:2px">
-                <span style="color:#71717a">Date</span>
+                <span style="color:#a1a1aa">Date</span>
                 <span style="color:#d4d4d8">${date}</span>
             </div>
             ${location ? `<div style="display:flex;justify-content:space-between;margin-bottom:2px">
-                <span style="color:#71717a">Location</span>
+                <span style="color:#a1a1aa">Location</span>
                 <span style="color:#d4d4d8">${location}</span>
             </div>` : ''}
             ${station ? `<div style="display:flex;justify-content:space-between">
-                <span style="color:#71717a">Station</span>
+                <span style="color:#a1a1aa">Station</span>
                 <span style="color:#d4d4d8">${station}</span>
             </div>` : ''}
         </div>
@@ -1254,7 +1254,7 @@ export function TemperatureMap() {
             <div className="flex items-center justify-center h-full bg-[#0a0a0a] text-zinc-400">
                 <div className="text-center p-8">
                     <p className="text-lg mb-2">Failed to load temperature data</p>
-                    <p className="text-sm text-zinc-500 mb-4">{error}</p>
+                    <p className="text-sm text-zinc-400 mb-4">{error}</p>
                     <button
                         onClick={() => window.location.reload()}
                         className="px-4 py-2 text-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg border border-zinc-700 transition-colors"
@@ -1478,21 +1478,21 @@ export function TemperatureMap() {
                     ) : (
                         <div className="flex-1 min-h-0 flex gap-1 px-2 py-1.5">
                             <div className="flex-1 min-w-0 flex flex-col">
-                                <span className="text-xs text-zinc-500 px-1 mb-0.5 shrink-0">Record Age</span>
+                                <span className="text-xs text-zinc-400 px-1 mb-0.5 shrink-0">Record Age</span>
                                 <div className="flex-1 min-h-0">
                                     <RecordAgeChart data={trends.byDecade} onHoverPeriod={setHighlightRange} selectedDecade={selectedDecade} onSelectDecade={handleSelectDecade} compact />
                                 </div>
                             </div>
                             <div className="w-px bg-zinc-800 shrink-0" />
                             <div className="flex-1 min-w-0 flex flex-col">
-                                <span className="text-xs text-zinc-500 px-1 mb-0.5 shrink-0">Frequency</span>
+                                <span className="text-xs text-zinc-400 px-1 mb-0.5 shrink-0">Frequency</span>
                                 <div className="flex-1 min-h-0">
                                     <RecordsBrokenTimeSeries data={trends.byYear} onHoverPeriod={setHighlightRange} selectedDecade={selectedDecade} onSelectDecade={handleSelectDecade} compact />
                                 </div>
                             </div>
                             <div className="w-px bg-zinc-800 shrink-0" />
                             <div className="flex-1 min-w-0 flex flex-col">
-                                <span className="text-xs text-zinc-500 px-1 mb-0.5 shrink-0">H:L Ratio</span>
+                                <span className="text-xs text-zinc-400 px-1 mb-0.5 shrink-0">H:L Ratio</span>
                                 <div className="flex-1 min-h-0">
                                     <HighLowRatioChart decadeData={trends.byDecade} rollingData={trends.rollingRatio} onHoverPeriod={setHighlightRange} selectedDecade={selectedDecade} onSelectDecade={handleSelectDecade} compact />
                                 </div>
@@ -1523,7 +1523,7 @@ function MobileTrendsDrawer({ trends, setHighlightRange, selectedDecade, handleS
                         onClick={() => setActiveTab(id)}
                         className={`flex-1 px-2 py-1.5 text-[11px] transition-colors ${activeTab === id
                             ? 'text-violet-400 border-b-2 border-violet-400'
-                            : 'text-zinc-500 hover:text-zinc-300'
+                            : 'text-zinc-400 hover:text-zinc-300'
                             }`}
                     >
                         {label}

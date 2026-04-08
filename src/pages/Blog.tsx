@@ -20,7 +20,7 @@ export function Blog() {
             </p>
 
             {posts.length === 0 ? (
-                <p className="text-zinc-500">No posts yet. Check back soon.</p>
+                <p className="text-zinc-400">No posts yet. Check back soon.</p>
             ) : (
                 <ul className="space-y-6">
                     {posts.map((post) => (
@@ -29,7 +29,7 @@ export function Blog() {
                                 to={`/blog/${post.slug}`}
                                 className="group block"
                             >
-                                <time className="text-sm text-zinc-500">{formatDate(post.date)}</time>
+                                <time className="text-sm text-zinc-400">{formatDate(post.date)}</time>
                                 <h2 className="text-lg font-medium text-zinc-100 group-hover:text-violet-400 mt-1">
                                     {post.title}
                                 </h2>

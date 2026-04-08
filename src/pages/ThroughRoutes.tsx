@@ -25,7 +25,7 @@ export default function ThroughRoutes() {
             <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
                 Through Routes
             </h1>
-            <p className="text-zinc-500 mb-6 text-sm">
+            <p className="text-zinc-400 mb-6 text-sm">
                 2026 · Python + TypeScript
             </p>
 
@@ -36,7 +36,7 @@ export default function ThroughRoutes() {
                     href="https://www.openstreetmap.org/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-violet-400 hover:underline"
+                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
                 >
                     OpenStreetMap
                 </a>{' '}
@@ -82,7 +82,7 @@ export default function ThroughRoutes() {
                     href="https://through-routes.rsmb.tv/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-violet-400 hover:underline"
+                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
                 >
                     Visit Through Routes ↗
                 </a>
@@ -90,7 +90,7 @@ export default function ThroughRoutes() {
                     href="https://github.com/robert-bryson/through-routes"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-zinc-400 hover:underline"
+                    className="text-zinc-400 underline decoration-zinc-400/30 hover:decoration-zinc-400"
                 >
                     Source on GitHub ↗
                 </a>
