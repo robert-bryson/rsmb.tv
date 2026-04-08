@@ -6,9 +6,13 @@ import {
     GetMetricDataCommand,
     ListMetricsCommand,
 } from '@aws-sdk/client-cloudwatch';
+import {
+    CloudFrontClient,
+    ListDistributionsCommand,
+} from '@aws-sdk/client-cloudfront';
 import { useAwsPoll } from './useAwsPoll.js';
 import type { DashboardConfig, DisplayMode } from './config.js';
-import { awsCredentials } from './config.js';
+import { awsCredentials, link } from './config.js';
 
 interface BucketMetrics {
     name: string;
@@ -18,6 +22,8 @@ interface BucketMetrics {
 
 interface DistributionMetrics {
     id: string;
+    label: string;
+    consoleUrl: string;
     requests: number;
     bytesDownloaded: number;
 }
@@ -49,8 +55,15 @@ function stripAccountId(name: string): string {
     return name.replace(/-\d{12}$/, '');
 }
 
-/** Discover all S3 buckets that have BucketSizeBytes metrics. */
+const DISCOVERY_CACHE_MAX_AGE_MS = 60 * 60 * 1000; // 1 hour
+
+let bucketCache: { data: string[]; timestamp: number } | null = null;
+
+/** Discover all S3 buckets that have BucketSizeBytes metrics. Cached for 1 hour. */
 async function discoverBuckets(cw: CloudWatchClient): Promise<string[]> {
+    if (bucketCache && Date.now() - bucketCache.timestamp < DISCOVERY_CACHE_MAX_AGE_MS) {
+        return bucketCache.data;
+    }
     const buckets = new Set<string>();
     let token: string | undefined;
     do {
@@ -67,11 +80,18 @@ async function discoverBuckets(cw: CloudWatchClient): Promise<string[]> {
         }
         token = resp.NextToken;
     } while (token);
-    return [...buckets].sort();
+    const result = [...buckets].sort();
+    bucketCache = { data: result, timestamp: Date.now() };
+    return result;
 }
 
-/** Discover all CloudFront distributions that have Requests metrics. */
+let distIdCache: { data: string[]; timestamp: number } | null = null;
+
+/** Discover all CloudFront distributions that have Requests metrics. Cached for 1 hour. */
 async function discoverDistributions(cw: CloudWatchClient): Promise<string[]> {
+    if (distIdCache && Date.now() - distIdCache.timestamp < DISCOVERY_CACHE_MAX_AGE_MS) {
+        return distIdCache.data;
+    }
     const ids = new Set<string>();
     let token: string | undefined;
     do {
@@ -88,7 +108,44 @@ async function discoverDistributions(cw: CloudWatchClient): Promise<string[]> {
         }
         token = resp.NextToken;
     } while (token);
-    return [...ids].sort();
+    const result = [...ids].sort();
+    distIdCache = { data: result, timestamp: Date.now() };
+    return result;
+}
+
+let distLabelCache: { data: Map<string, string>; knownIds: string } | null = null;
+
+/** Fetch human-readable labels for CloudFront distributions. Re-fetches only when distribution IDs change. */
+async function fetchDistributionLabels(
+    config: DashboardConfig,
+    distIds: string[],
+): Promise<Map<string, string>> {
+    const idsKey = distIds.join(',');
+    if (distLabelCache && distLabelCache.knownIds === idsKey) {
+        return distLabelCache.data;
+    }
+    const cf = new CloudFrontClient({
+        region: 'us-east-1',
+        credentials: awsCredentials(config.profile),
+    });
+    const labels = new Map<string, string>();
+    let marker: string | undefined;
+    do {
+        const resp = await cf.send(
+            new ListDistributionsCommand({ Marker: marker, MaxItems: 100 }),
+        );
+        for (const dist of resp.DistributionList?.Items ?? []) {
+            if (!dist.Id) continue;
+            const aliases = dist.Aliases?.Items ?? [];
+            const label = aliases[0] ?? dist.Comment ?? dist.Id;
+            labels.set(dist.Id, label);
+        }
+        marker = resp.DistributionList?.IsTruncated
+            ? resp.DistributionList.NextMarker
+            : undefined;
+    } while (marker);
+    distLabelCache = { data: labels, knownIds: idsKey };
+    return labels;
 }
 
 async function fetchResources(config: DashboardConfig): Promise<ResourceData> {
@@ -107,6 +164,8 @@ async function fetchResources(config: DashboardConfig): Promise<ResourceData> {
         discoverBuckets(cw),
         discoverDistributions(cwGlobal),
     ]);
+
+    const distLabels = await fetchDistributionLabels(config, distIds);
 
     const now = new Date();
     const s3Start = new Date(now.getTime() - 2 * 86_400_000);
@@ -210,6 +269,8 @@ async function fetchResources(config: DashboardConfig): Promise<ResourceData> {
 
     const distributions: DistributionMetrics[] = distIds.map((id, i) => ({
         id,
+        label: distLabels.get(id) ?? id,
+        consoleUrl: `https://us-east-1.console.aws.amazon.com/cloudfront/v4/home#/distributions/${id}`,
         requests: cfLatest(`cfreqs${i}`) ?? 0,
         bytesDownloaded: cfLatest(`cfbytes${i}`) ?? 0,
     }));
@@ -295,7 +356,7 @@ export function ResourcePanel({
                     </Box>
                     {data.distributions.map((d) => (
                         <Box key={d.id} gap={1} paddingLeft={2}>
-                            <Box width={28}><Text dimColor>{d.id}</Text></Box>
+                            <Box width={28}><Text dimColor>{link(d.consoleUrl, d.label)}</Text></Box>
                             <Box width={10} justifyContent="flex-end"><Text>{formatCount(d.requests)} req/h</Text></Box>
                             <Text dimColor>({formatBytes(d.bytesDownloaded)})</Text>
                         </Box>
