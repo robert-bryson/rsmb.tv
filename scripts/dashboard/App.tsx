@@ -10,7 +10,7 @@ import { EventLogPanel, clearEvents } from './useEventLog.js';
 import type { DashboardConfig } from './config.js';
 import type { DisplayMode } from './config.js';
 
-function Clock() {
+function Clock({ timeZone }: { timeZone: string }) {
     const [now, setNow] = useState(new Date());
 
     useEffect(() => {
@@ -18,16 +18,18 @@ function Clock() {
         return () => clearInterval(id);
     }, []);
 
-    return (
-        <Text dimColor>
-            {now.toLocaleTimeString('en-US', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true,
-            })}
-        </Text>
-    );
+    const parts = new Intl.DateTimeFormat('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+        timeZone,
+    }).formatToParts(now);
+    const get = (type: string) => parts.find((p) => p.type === type)?.value ?? '';
+    const h = get('hour').padStart(2, '0');
+    const time = `${h}:${get('minute')}:${get('second')} ${get('dayPeriod')}`;
+
+    return <Text dimColor>{time}</Text>;
 }
 
 export function App({ config }: { config: DashboardConfig }) {
@@ -85,7 +87,7 @@ export function App({ config }: { config: DashboardConfig }) {
                 <Text bold color="cyan">
                     Watch Dashboard
                 </Text>
-                <Clock />
+                <Clock timeZone={config.timeZone} />
             </Box>
 
             <Text dimColor>{'─'.repeat(60)}</Text>
@@ -136,7 +138,7 @@ export function App({ config }: { config: DashboardConfig }) {
                     ))}
 
                     {/* Event Log — only in detail mode */}
-                    {mode === 'detail' && <EventLogPanel />}
+                    {mode === 'detail' && <EventLogPanel timeZone={config.timeZone} />}
 
                 </Box>
             </Box>

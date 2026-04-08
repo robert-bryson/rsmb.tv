@@ -20,7 +20,7 @@ interface HealthResult {
     name: string;
     healthy: boolean | null;
     detail: string;
-    source: 'route53' | 'http';
+    source: 'route53' | 'http' | 'frontend';
     url: string;
     latencyMs: number | null;
 }
@@ -67,7 +67,7 @@ async function discoverHealthCheckIds(
 function httpPing(url: string): Promise<{ healthy: boolean; status: number; latencyMs: number }> {
     return new Promise((resolve) => {
         const start = performance.now();
-        const req = https.get(url, { timeout: 10_000 }, (res) => {
+        const req = https.get(url, { timeout: 10_000, headers: { 'User-Agent': 'rsmb-dashboard/1.0' } }, (res) => {
             const latencyMs = Math.round(performance.now() - start);
             res.resume();
             resolve({
@@ -169,6 +169,24 @@ async function fetchAllHealth(
         }
     }
 
+    // Frontend pings: naive GET to each domain root
+    const frontendPings = await Promise.all(
+        config.projects.map(async (project) => {
+            const url = `https://${project.domain}/`;
+            const { healthy, status, latencyMs } = await httpPing(url);
+            return {
+                domain: project.domain,
+                name: project.name,
+                healthy,
+                detail: healthy ? `HTTP ${status}` : status ? `HTTP ${status}` : 'Timeout',
+                source: 'frontend' as const,
+                url,
+                latencyMs: healthy ? latencyMs : null,
+            };
+        }),
+    );
+    results.push(...frontendPings);
+
     return results;
 }
 
@@ -199,6 +217,9 @@ export function HealthPanel({
         onProblems(hasProblems);
     }, [hasProblems, onProblems]);
 
+    const backend = (data ?? []).filter((h) => h.source !== 'frontend');
+    const frontend = (data ?? []).filter((h) => h.source === 'frontend');
+
     // Calm mode: single summary line
     if (mode === 'calm') {
         return (
@@ -210,8 +231,12 @@ export function HealthPanel({
                     <Text color="red">error</Text>
                 ) : (
                     <>
-                        {(data ?? []).map((h) => (
+                        {backend.map((h) => (
                             <StatusDot key={h.domain} healthy={h.healthy} stale={isStale} />
+                        ))}
+                        <Text dimColor>│</Text>
+                        {frontend.map((h) => (
+                            <StatusDot key={`fe-${h.domain}`} healthy={h.healthy} stale={isStale} />
                         ))}
                         <Text dimColor>All OK</Text>
                     </>
@@ -223,7 +248,8 @@ export function HealthPanel({
     // Alert mode: summary + only unhealthy expanded
     // Detail mode: all rows
     const showAll = mode === 'detail';
-    const items = showAll ? (data ?? []) : unhealthy;
+    const backendItems = showAll ? backend : backend.filter((h) => h.healthy === false);
+    const frontendItems = showAll ? frontend : frontend.filter((h) => h.healthy === false);
 
     return (
         <Box flexDirection="column">
@@ -233,8 +259,12 @@ export function HealthPanel({
                     <Text color="cyan"><Spinner type="dots" /></Text>
                 ) : !hasProblems ? (
                     <>
-                        {(data ?? []).map((h) => (
+                        {backend.map((h) => (
                             <StatusDot key={h.domain} healthy={h.healthy} stale={isStale} />
+                        ))}
+                        <Text dimColor>│</Text>
+                        {frontend.map((h) => (
+                            <StatusDot key={`fe-${h.domain}`} healthy={h.healthy} stale={isStale} />
                         ))}
                         <Text dimColor>All OK</Text>
                     </>
@@ -249,7 +279,7 @@ export function HealthPanel({
                 <Text color="red">  Error: {error}</Text>
             )}
 
-            {items.map((h) => (
+            {backendItems.map((h) => (
                 <Box key={h.domain} gap={1}>
                     <Text>  </Text>
                     <StatusDot healthy={h.healthy} stale={isStale} />
@@ -260,6 +290,34 @@ export function HealthPanel({
                     <Box width={10}>
                         <Text color={h.healthy ? 'green' : h.healthy === false ? 'red' : 'gray'}>
                             {h.healthy ? 'Healthy' : h.healthy === false ? 'DOWN' : 'Unknown'}
+                        </Text>
+                    </Box>
+                    <Box width={16}>
+                        <Text dimColor>{h.detail}</Text>
+                    </Box>
+                    <Box width={7} justifyContent="flex-end">
+                        <Text dimColor>{h.latencyMs != null ? `${h.latencyMs}ms` : ''}</Text>
+                    </Box>
+                </Box>
+            ))}
+
+            {(backendItems.length > 0 || frontendItems.length > 0) && frontendItems.length > 0 && (
+                <Box gap={1}>
+                    <Text dimColor>  ─ pings</Text>
+                </Box>
+            )}
+
+            {frontendItems.map((h) => (
+                <Box key={`fe-${h.domain}`} gap={1}>
+                    <Text>  </Text>
+                    <StatusDot healthy={h.healthy} stale={isStale} />
+                    <Text> </Text>
+                    <Box width={30}>
+                        <Text dimColor>{link(h.url, h.domain)}</Text>
+                    </Box>
+                    <Box width={10}>
+                        <Text color={h.healthy ? 'green' : h.healthy === false ? 'red' : 'gray'}>
+                            {h.healthy ? 'OK' : h.healthy === false ? 'FAIL' : 'Unknown'}
                         </Text>
                     </Box>
                     <Box width={16}>

@@ -32,6 +32,7 @@ export type DisplayMode = 'calm' | 'alert' | 'detail';
 export interface DashboardConfig {
     profile: string;
     region: string;
+    timeZone: string;
     githubToken: string | undefined;
     projects: ProjectConfig[];
     githubRepos: string[];
@@ -133,11 +134,13 @@ export function createConfig(flags: {
     profile?: string;
     region?: string;
     interval?: number;
+    timeZone?: string;
 }): DashboardConfig {
     const baseInterval = flags.interval ?? 60;
     return {
         profile: flags.profile ?? process.env.AWS_PROFILE ?? 'rsmbtv-admin',
         region: flags.region ?? process.env.AWS_REGION ?? 'us-east-1',
+        timeZone: flags.timeZone ?? process.env.DASHBOARD_TIMEZONE ?? 'America/Chicago',
         githubToken: process.env.GITHUB_TOKEN,
         projects: PROJECTS,
         githubRepos: [

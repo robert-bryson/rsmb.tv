@@ -126,7 +126,7 @@ function levelIcon(level: DashboardEvent['level']): string {
     return '✓';
 }
 
-export function EventLogPanel() {
+export function EventLogPanel({ timeZone }: { timeZone: string }) {
     const evts = useEvents();
 
     if (evts.length === 0) return null;
@@ -145,6 +145,7 @@ export function EventLogPanel() {
                             minute: '2-digit',
                             second: '2-digit',
                             hour12: false,
+                            timeZone,
                         })}
                     </Text>
                     <Text color={levelColor(e.level)}>{levelIcon(e.level)}</Text>
