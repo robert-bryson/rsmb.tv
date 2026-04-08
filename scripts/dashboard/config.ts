@@ -36,6 +36,7 @@ export interface DashboardConfig {
     region: string;
     timeZone: string;
     githubToken: string | undefined;
+    dataCdnDistributionId: string;
     projects: ProjectConfig[];
     githubRepos: string[];
     externalGroups: SiteGroup[];
@@ -150,6 +151,7 @@ export function createConfig(flags: {
         region: flags.region ?? process.env.AWS_REGION ?? 'us-east-1',
         timeZone: flags.timeZone ?? process.env.DASHBOARD_TIMEZONE ?? 'America/Chicago',
         githubToken: process.env.GITHUB_TOKEN,
+        dataCdnDistributionId: process.env.DATA_CDN_DISTRIBUTION_ID ?? '',
         projects: PROJECTS,
         githubRepos: [
             'robert-bryson/bookend',

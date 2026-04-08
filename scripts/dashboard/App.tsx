@@ -4,6 +4,7 @@ import { HealthPanel } from './HealthPanel.js';
 import { AlarmPanel } from './AlarmPanel.js';
 import { BuildPanel } from './BuildPanel.js';
 import { CostPanel } from './CostPanel.js';
+import { ResourcePanel } from './ResourcePanel.js';
 import { GitHubPanel } from './GitHubPanel.js';
 import { ExternalHealthPanel } from './ExternalHealthPanel.js';
 import { EventLogPanel, clearEvents } from './useEventLog.js';
@@ -124,6 +125,11 @@ export function App({ config }: { config: DashboardConfig }) {
 
                     {/* Cost */}
                     <CostPanel config={config} mode={mode} />
+
+                    {mode !== 'calm' && <Text> </Text>}
+
+                    {/* Resources (S3 size, CDN traffic) */}
+                    <ResourcePanel config={config} mode={mode} />
 
                     {/* ── External groups ─────────────────────────────── */}
                     {config.externalGroups.map((group) => (

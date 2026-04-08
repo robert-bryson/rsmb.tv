@@ -263,12 +263,78 @@ resource "aws_cloudwatch_dashboard" "main" {
         }
       },
 
-      # ── Row 5: Alarm status ────────────────────────────────────────────
+      # ── Row 5: S3 Storage & Temperature Data CDN ────────────────────────
+
+      {
+        type   = "text"
+        x      = 0
+        y      = 27
+        width  = 24
+        height = 1
+        properties = {
+          markdown = "## S3 Storage & Temperature Data CDN"
+        }
+      },
+
+      {
+        type   = "metric"
+        x      = 0
+        y      = 28
+        width  = 8
+        height = 6
+        properties = {
+          title  = "All Buckets — Size (bytes)"
+          region = "us-east-1"
+          period = 86400
+          view   = "timeSeries"
+          metrics = [
+            [{ expression = "SEARCH('{AWS/S3,BucketName,StorageType} MetricName=\"BucketSizeBytes\"', 'Average', 86400)", id = "s3size" }]
+          ]
+        }
+      },
+
+      {
+        type   = "metric"
+        x      = 8
+        y      = 28
+        width  = 8
+        height = 6
+        properties = {
+          title  = "All Buckets — Object Count"
+          region = "us-east-1"
+          period = 86400
+          view   = "timeSeries"
+          metrics = [
+            [{ expression = "SEARCH('{AWS/S3,BucketName,StorageType} MetricName=\"NumberOfObjects\" StorageType=\"AllStorageTypes\"', 'Average', 86400)", id = "s3obj" }]
+          ]
+        }
+      },
+
+      {
+        type   = "metric"
+        x      = 16
+        y      = 28
+        width  = 8
+        height = 6
+        properties = {
+          title  = "Data CDN Requests"
+          region = "us-east-1"
+          stat   = "Sum"
+          period = 300
+          view   = "timeSeries"
+          metrics = [
+            ["AWS/CloudFront", "Requests", "DistributionId", aws_cloudfront_distribution.temperature_data.id, "Region", "Global", { label = "Requests" }],
+            [".", "BytesDownloaded", ".", ".", ".", ".", { label = "Bytes", yAxis = "right" }]
+          ]
+        }
+      },
+
+      # ── Row 6: Alarm status ────────────────────────────────────────────
 
       {
         type   = "alarm"
         x      = 0
-        y      = 27
+        y      = 34
         width  = 24
         height = 3
         properties = {
