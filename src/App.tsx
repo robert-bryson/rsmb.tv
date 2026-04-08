@@ -16,6 +16,7 @@ const TemperatureRecordsAbout = lazy(() => import('./pages/TemperatureRecordsAbo
 const TemperatureRecords = lazy(() => import('./pages/TemperatureRecords'));
 const ClimateTrendsPage = lazy(() => import('./pages/ClimateTrends'));
 const Route2Gpx = lazy(() => import('./pages/Route2Gpx'));
+const Aborg = lazy(() => import('./pages/Aborg'));
 
 const basename = import.meta.env.BASE_URL;
 
@@ -54,6 +55,7 @@ export default function App() {
               <Route path="/projects/temperature-records/map" element={<TemperatureRecords />} />
               <Route path="/projects/temperature-records/trends" element={<ClimateTrendsPage />} />
               <Route path="/projects/route2gpx" element={<Route2Gpx />} />
+              <Route path="/projects/aborg" element={<Aborg />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

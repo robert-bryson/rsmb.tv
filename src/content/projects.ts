@@ -41,6 +41,14 @@ export const projects: Project[] = [
     year: 2026,
   },
   {
+    slug: 'aborg',
+    title: 'aborg',
+    description: 'A CLI tool to scan, organize, and manage audiobook file collections. Outputs an Audiobookshelf-compatible directory structure with smart filename parsing, metadata extraction, and Libby/OverDrive integration.',
+    tech: ['Python', 'Click', 'Mutagen', 'YAML'],
+    sourceUrl: 'https://github.com/robert-bryson/aborg',
+    year: 2026,
+  },
+  {
     slug: 'bookend',
     title: 'Bookend',
     description: 'A personal book-tracking app to log reads, organize books into lists, and explore reading stats. Integrates with Google Books, Open Library, and Wikidata for enrichment—covers, descriptions, author links, and more.',
