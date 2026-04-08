@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import { Layout } from './components/Layout';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { ScrollToTop } from './components/ScrollToTop';
 import { Home, About, Projects, NotFound } from './pages';
 
 const Blog = lazy(() => import('./pages/Blog'));
@@ -34,6 +35,7 @@ function LoadingFallback() {
 export default function App() {
   return (
     <Router basename={basename}>
+      <ScrollToTop />
       <ErrorBoundary>
         <Layout>
           <Suspense fallback={<LoadingFallback />}>

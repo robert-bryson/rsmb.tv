@@ -28,6 +28,7 @@ export const projects: Project[] = [
     tech: ['React', 'Three.js', 'WebGL', 'GeoJSON'],
     featured: true,
     demoUrl: '/projects/flights/map',
+    previewImage: '/images/flights/flight-globe.webp',
     year: 2025,
   },
   {

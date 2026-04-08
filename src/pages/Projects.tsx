@@ -35,6 +35,12 @@ export function Projects() {
 function ProjectContent({ project }: { project: typeof projects[0] }) {
   return (
     <>
+      <div className="flex items-baseline justify-between gap-4 mb-2">
+        <h2 className="text-lg font-medium text-zinc-100 group-hover:text-violet-400">
+          {project.title}
+        </h2>
+        <span className="text-sm text-zinc-600">{project.year}</span>
+      </div>
       {project.previewImage && (
         <img
           src={project.previewImage}
@@ -43,12 +49,6 @@ function ProjectContent({ project }: { project: typeof projects[0] }) {
           loading="lazy"
         />
       )}
-      <div className="flex items-baseline justify-between gap-4">
-        <h2 className="text-lg font-medium text-zinc-100 group-hover:text-violet-400">
-          {project.title}
-        </h2>
-        <span className="text-sm text-zinc-600">{project.year}</span>
-      </div>
       <p className="mt-1 text-zinc-400 text-sm leading-relaxed">
         {project.description}
       </p>

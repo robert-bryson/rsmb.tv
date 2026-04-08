@@ -50,6 +50,12 @@ export function Home() {
 
             const content = (
               <>
+                <div className="flex items-baseline justify-between gap-4 mb-2">
+                  <h3 className="text-lg font-medium text-zinc-100 group-hover:text-violet-400">
+                    {project.title}
+                  </h3>
+                  <span className="text-sm text-zinc-600">{project.year}</span>
+                </div>
                 {project.previewImage && (
                   <img
                     src={project.previewImage}
@@ -58,12 +64,6 @@ export function Home() {
                     loading="lazy"
                   />
                 )}
-                <div className="flex items-baseline justify-between gap-4">
-                  <h3 className="text-lg font-medium text-zinc-100 group-hover:text-violet-400">
-                    {project.title}
-                  </h3>
-                  <span className="text-sm text-zinc-600">{project.year}</span>
-                </div>
                 <p className="mt-1 text-zinc-400 text-sm">
                   {project.description}
                 </p>
