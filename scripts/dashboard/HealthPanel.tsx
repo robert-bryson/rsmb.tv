@@ -315,9 +315,11 @@ export function HealthPanel({
                     <Box width={7} justifyContent="flex-end">
                         <Text dimColor>{h.latencyMs != null ? `${h.latencyMs}ms` : ''}</Text>
                     </Box>
-                    {(latencyHistory[`${h.source}:${h.domain}`]?.length ?? 0) > 1 && (
-                        <Text dimColor>{sparkline(latencyHistory[`${h.source}:${h.domain}`])}</Text>
-                    )}
+                    <Box width={10}>
+                        {(latencyHistory[`${h.source}:${h.domain}`]?.length ?? 0) > 1 && (
+                            <Text dimColor>{sparkline(latencyHistory[`${h.source}:${h.domain}`], 10)}</Text>
+                        )}
+                    </Box>
                 </Box>
             ))}
 
@@ -346,9 +348,11 @@ export function HealthPanel({
                     <Box width={7} justifyContent="flex-end">
                         <Text dimColor>{h.latencyMs != null ? `${h.latencyMs}ms` : ''}</Text>
                     </Box>
-                    {(latencyHistory[`${h.source}:${h.domain}`]?.length ?? 0) > 1 && (
-                        <Text dimColor>{sparkline(latencyHistory[`${h.source}:${h.domain}`])}</Text>
-                    )}
+                    <Box width={10}>
+                        {(latencyHistory[`${h.source}:${h.domain}`]?.length ?? 0) > 1 && (
+                            <Text dimColor>{sparkline(latencyHistory[`${h.source}:${h.domain}`], 10)}</Text>
+                        )}
+                    </Box>
                 </Box>
             ))}
         </Box>

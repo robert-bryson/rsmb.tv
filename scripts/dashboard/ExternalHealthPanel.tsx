@@ -237,9 +237,11 @@ export function ExternalHealthPanel({
                     <Box width={7} justifyContent="flex-end">
                         <Text dimColor>{h.responseTimeMs != null ? `${h.responseTimeMs}ms` : ''}</Text>
                     </Box>
-                    {(responseHistory[h.name]?.length ?? 0) > 1 && (
-                        <Text dimColor>{sparkline(responseHistory[h.name])}</Text>
-                    )}
+                    <Box width={10}>
+                        {(responseHistory[h.name]?.length ?? 0) > 1 && (
+                            <Text dimColor>{sparkline(responseHistory[h.name], 10)}</Text>
+                        )}
+                    </Box>
                 </Box>
             ))}
 
