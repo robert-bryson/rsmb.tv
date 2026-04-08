@@ -6,7 +6,7 @@ A personal website and portfolio showcasing interactive projects, with a focus o
 
 ## Features
 
-- **Flight Tracker** — An interactive 3D globe visualization built with [react-globe.gl](https://github.com/vasturiano/react-globe.gl) that displays flights I've taken around the world. Includes filtering by year, route frequency analysis, and travel statistics.
+- **Flights** — An interactive 3D globe visualization built with [react-globe.gl](https://github.com/vasturiano/react-globe.gl) that displays flights I've taken around the world. Includes filtering by year, route frequency analysis, and travel statistics.
 - **Project Portfolio** — Showcases various side projects including web tools and data visualizations.
 - **About** — Background on my experience in geospatial engineering and software development.
 
@@ -79,7 +79,7 @@ The site is deployed on AWS Amplify with infrastructure managed via Terraform. T
 
 ## Data
 
-The flight tracker uses personal travel data stored in CSV format, which is converted to GeoJSON at build time. Airport coordinates are sourced from a separate airports database.
+The flights project uses personal travel data stored in CSV format, which is converted to GeoJSON at build time. Airport coordinates are sourced from a separate airports database.
 
 ### Flight Data Sync
 

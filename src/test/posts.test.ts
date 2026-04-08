@@ -46,9 +46,9 @@ describe('posts registry', () => {
     });
 
     it('getPostBySlug finds existing post', () => {
-        const post = getPostBySlug('hello-world');
+        const post = getPostBySlug('building-through-routes');
         expect(post).toBeDefined();
-        expect(post?.title).toBe('Hello World');
+        expect(post?.title).toBe('Building Through Routes: Scoring Roads for Scenic Motorcycle Loops');
         expect(post?.Component).toBeDefined();
     });
 

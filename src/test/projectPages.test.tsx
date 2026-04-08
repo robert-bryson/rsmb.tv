@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import ThroughRoutes from '../pages/ThroughRoutes';
-import FlightTrackerAbout from '../pages/FlightTrackerAbout';
+import FlightsAbout from '../pages/FlightsAbout';
 import AnkiArtisan from '../pages/AnkiArtisan';
 import Bookend from '../pages/Bookend';
 import TemperatureRecordsAbout from '../pages/TemperatureRecordsAbout';
@@ -25,10 +25,10 @@ describe('ThroughRoutes page', () => {
     });
 });
 
-describe('FlightTrackerAbout page', () => {
+describe('FlightsAbout page', () => {
     it('renders heading and map link', () => {
-        renderWithRouter(<FlightTrackerAbout />, { route: '/projects/flights' });
-        expect(screen.getByRole('heading', { level: 1, name: /Flight Tracker/i })).toBeInTheDocument();
+        renderWithRouter(<FlightsAbout />, { route: '/projects/flights' });
+        expect(screen.getByRole('heading', { level: 1, name: /Flights/i })).toBeInTheDocument();
         expect(screen.getByRole('link', { name: /Open interactive globe/i })).toHaveAttribute('href', '/projects/flights/map');
     });
 });

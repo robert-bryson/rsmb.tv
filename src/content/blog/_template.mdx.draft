@@ -1,0 +1,24 @@
+---
+title: "Post Title"
+date: "YYYY-MM-DD"
+description: "A short description for previews, RSS, and SEO."
+tags: ["topic"]
+---
+
+# Post Title
+
+Write your content here.
+
+## Section
+
+More content. You can use standard Markdown — links, code blocks, images, etc.
+
+```ts
+// Code blocks work as expected
+const x = 42;
+```
+
+When ready to publish:
+1. Rename this file to <slug>.mdx
+2. Add a matching entry to src/content/posts.json
+3. Run: node scripts/generate-rss.js && node scripts/generate-sitemap.js

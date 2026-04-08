@@ -10,14 +10,5 @@
             "python",
             "openstreetmap"
         ]
-    },
-    {
-        "slug": "hello-world",
-        "title": "Hello World",
-        "date": "2025-01-01",
-        "description": "Welcome to my blog — a space for writing about projects, engineering, and things I find interesting.",
-        "tags": [
-            "meta"
-        ]
     }
 ]

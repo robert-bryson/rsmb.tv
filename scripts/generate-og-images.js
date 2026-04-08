@@ -20,7 +20,7 @@ const pages = [
     { slug: 'blog', title: 'Blog', subtitle: 'Thoughts on projects, engineering, and things I find interesting' },
     { slug: 'projects', title: 'Projects', subtitle: 'Interactive data visualizations, geospatial tools, and more' },
     { slug: 'through-routes', title: 'Through Routes', subtitle: 'Find scenic, twisty motorcycle loop routes on rural roads' },
-    { slug: 'flights', title: 'Flight Tracker', subtitle: 'Interactive 3D globe visualization of flights around the world' },
+    { slug: 'flights', title: 'Flights', subtitle: 'Interactive 3D globe visualization of flights around the world' },
     { slug: 'anki-artisan', title: 'Anki Artisan', subtitle: 'Generate Anki flashcard decks from iNaturalist and eBird data' },
     { slug: 'bookend', title: 'Bookend', subtitle: 'A personal book-tracking app with reading stats and enrichment' },
     { slug: 'temperature-records', title: 'Record Highs', subtitle: 'Interactive map of all-time record temperatures across US counties' },

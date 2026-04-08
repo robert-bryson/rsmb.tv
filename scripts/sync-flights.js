@@ -4,7 +4,7 @@
  * sync-flights.js
  * ===============
  * Syncs flight data from a Google Sheet to the local CSV file used by the
- * flight tracker visualization. Includes comprehensive QA/QC validation.
+ * flights visualization. Includes comprehensive QA/QC validation.
  * 
  * USAGE
  * -----
@@ -101,22 +101,22 @@ const AIRLINE_CORRECTIONS = {
 async function fetchSheetAsCSV(sheetId, sheetName) {
   // Google Sheets CSV export URL with sheet name
   const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
-  
+
   console.log(`📥 Fetching sheet "${sheetName}" from Google Sheets...`);
-  
+
   const response = await fetch(url);
-  
+
   if (!response.ok) {
     throw new Error(`Failed to fetch sheet: ${response.status} ${response.statusText}`);
   }
-  
+
   const csv = await response.text();
-  
+
   // Basic validation - check if we got actual CSV data
   if (!csv || csv.includes('<!DOCTYPE html>')) {
     throw new Error('Received HTML instead of CSV. Make sure the sheet is publicly accessible.');
   }
-  
+
   return csv;
 }
 
@@ -126,15 +126,15 @@ async function fetchSheetAsCSV(sheetId, sheetName) {
 function parseCSV(csv) {
   const lines = csv.split('\n').filter(line => line.trim());
   const rows = [];
-  
+
   for (const line of lines) {
     const row = [];
     let current = '';
     let inQuotes = false;
-    
+
     for (let i = 0; i < line.length; i++) {
       const char = line[i];
-      
+
       if (char === '"') {
         if (inQuotes && line[i + 1] === '"') {
           current += '"';
@@ -152,7 +152,7 @@ function parseCSV(csv) {
     row.push(current);
     rows.push(row);
   }
-  
+
   return rows;
 }
 
@@ -160,7 +160,7 @@ function parseCSV(csv) {
  * Convert rows back to CSV
  */
 function toCSV(rows) {
-  return rows.map(row => 
+  return rows.map(row =>
     row.map(cell => {
       // Quote cells that contain commas, quotes, or newlines
       if (cell.includes(',') || cell.includes('"') || cell.includes('\n')) {
@@ -176,21 +176,21 @@ function toCSV(rows) {
  */
 function trimEmptyColumns(rows) {
   if (rows.length === 0) return rows;
-  
+
   const header = rows[0];
   const dataRows = rows.slice(1);
-  
+
   // Find columns that have at least one non-empty value (or have a header)
   const nonEmptyColIndices = [];
   for (let col = 0; col < header.length; col++) {
     const headerHasValue = header[col].trim() !== '';
     const colHasData = dataRows.some(row => row[col] && row[col].trim() !== '');
-    
+
     if (headerHasValue || colHasData) {
       nonEmptyColIndices.push(col);
     }
   }
-  
+
   // Filter to only non-empty columns
   return rows.map(row => nonEmptyColIndices.map(i => row[i] || ''));
 }
@@ -203,47 +203,47 @@ function validateDate(dateStr) {
   if (!dateStr || !dateStr.trim()) {
     return { valid: false, error: 'Empty date' };
   }
-  
+
   const trimmed = dateStr.trim();
   const parts = trimmed.split('/');
-  
+
   if (parts.length !== 3) {
     return { valid: false, error: `Invalid format: "${trimmed}" (expected M/D/YYYY)` };
   }
-  
+
   const [month, day, year] = parts.map(Number);
-  
+
   if (isNaN(month) || isNaN(day) || isNaN(year)) {
     return { valid: false, error: `Non-numeric values: "${trimmed}"` };
   }
-  
+
   if (month < 1 || month > 12) {
     return { valid: false, error: `Invalid month ${month}: "${trimmed}"` };
   }
-  
+
   if (day < 1 || day > 31) {
     return { valid: false, error: `Invalid day ${day}: "${trimmed}"` };
   }
-  
+
   if (year < 1990) {
     return { valid: false, error: `Year too old (${year}): "${trimmed}"` };
   }
-  
+
   const date = new Date(year, month - 1, day);
   const now = new Date();
-  
+
   // Check if date is valid (e.g., Feb 30 would fail)
   if (date.getMonth() !== month - 1 || date.getDate() !== day) {
     return { valid: false, error: `Invalid date: "${trimmed}"` };
   }
-  
+
   // Allow flights up to 1 year in the future (for booked flights)
   const oneYearFromNow = new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
-  
+
   if (date > oneYearFromNow) {
     return { valid: false, error: `Date too far in future (${year}): "${trimmed}" - likely a typo` };
   }
-  
+
   return { valid: true, date };
 }
 
@@ -254,13 +254,13 @@ function validateAirportCode(code) {
   if (!code || !code.trim()) {
     return { valid: false, error: 'Empty airport code' };
   }
-  
+
   const trimmed = code.trim().toUpperCase();
-  
+
   if (!/^[A-Z]{3,4}$/.test(trimmed)) {
     return { valid: false, error: `Invalid airport code: "${code}"` };
   }
-  
+
   return { valid: true, normalized: trimmed };
 }
 
@@ -271,24 +271,24 @@ function normalizeAirline(airline) {
   if (!airline || !airline.trim()) {
     return { normalized: '', warning: 'Empty airline name' };
   }
-  
+
   let trimmed = airline.trim();
-  
+
   // Check for corrections
   const lowerKey = trimmed.toLowerCase();
   if (AIRLINE_CORRECTIONS[lowerKey]) {
     const corrected = AIRLINE_CORRECTIONS[lowerKey];
     // Only report as corrected if it actually changed
     if (corrected !== trimmed) {
-      return { 
-        normalized: corrected, 
+      return {
+        normalized: corrected,
         corrected: true,
-        original: trimmed 
+        original: trimmed
       };
     }
     return { normalized: corrected };
   }
-  
+
   return { normalized: trimmed };
 }
 
@@ -297,35 +297,35 @@ function normalizeAirline(airline) {
  */
 function runQAQC(rows) {
   if (rows.length <= 1) return { rows, errors: [], warnings: [] };
-  
+
   const header = rows[0].map(h => h.trim().toLowerCase());
   const dataRows = rows.slice(1);
-  
+
   // Find column indices
   const dateIdx = header.findIndex(h => h === 'date');
   const airlineIdx = header.findIndex(h => h === 'airline');
   const originIdx = header.findIndex(h => h === 'origin');
   const destIdx = header.findIndex(h => h === 'destination');
   const flightNumIdx = header.findIndex(h => h === 'flightnumber' || h === 'flight number' || h === 'flight_number');
-  
+
   const errors = [];
   const warnings = [];
   const seenFlights = new Map(); // For duplicate detection
   const airlineVariations = new Map(); // Track airline name variations
-  
+
   const cleanedRows = [rows[0].map(h => h.trim())]; // Clean header
-  
+
   for (let i = 0; i < dataRows.length; i++) {
     const row = dataRows[i];
     const rowNum = i + 2; // 1-indexed, plus header
     const cleanRow = [...row];
     let hasError = false;
-    
+
     // Trim all fields
     for (let j = 0; j < cleanRow.length; j++) {
       cleanRow[j] = (cleanRow[j] || '').trim();
     }
-    
+
     // Validate date
     if (dateIdx !== -1) {
       const dateResult = validateDate(cleanRow[dateIdx]);
@@ -334,7 +334,7 @@ function runQAQC(rows) {
         hasError = true;
       }
     }
-    
+
     // Validate and normalize airline
     if (airlineIdx !== -1) {
       const airlineResult = normalizeAirline(cleanRow[airlineIdx]);
@@ -345,7 +345,7 @@ function runQAQC(rows) {
         warnings.push(`Row ${rowNum}: Corrected airline "${airlineResult.original}" → "${airlineResult.normalized}"`);
       }
       cleanRow[airlineIdx] = airlineResult.normalized;
-      
+
       // Track variations
       if (airlineResult.normalized) {
         const key = airlineResult.normalized.toLowerCase();
@@ -355,7 +355,7 @@ function runQAQC(rows) {
         airlineVariations.get(key).add(airlineResult.normalized);
       }
     }
-    
+
     // Validate origin airport
     if (originIdx !== -1) {
       const originResult = validateAirportCode(cleanRow[originIdx]);
@@ -366,7 +366,7 @@ function runQAQC(rows) {
         cleanRow[originIdx] = originResult.normalized;
       }
     }
-    
+
     // Validate destination airport
     if (destIdx !== -1) {
       const destResult = validateAirportCode(cleanRow[destIdx]);
@@ -377,16 +377,16 @@ function runQAQC(rows) {
         cleanRow[destIdx] = destResult.normalized;
       }
     }
-    
+
     // Check for same origin and destination
     if (originIdx !== -1 && destIdx !== -1) {
-      if (cleanRow[originIdx] && cleanRow[destIdx] && 
-          cleanRow[originIdx] === cleanRow[destIdx]) {
+      if (cleanRow[originIdx] && cleanRow[destIdx] &&
+        cleanRow[originIdx] === cleanRow[destIdx]) {
         errors.push(`Row ${rowNum}: Origin and destination are the same (${cleanRow[originIdx]})`);
         hasError = true;
       }
     }
-    
+
     // Check for duplicates (same date, origin, destination)
     if (dateIdx !== -1 && originIdx !== -1 && destIdx !== -1) {
       const flightKey = `${cleanRow[dateIdx]}|${cleanRow[originIdx]}|${cleanRow[destIdx]}`;
@@ -396,22 +396,22 @@ function runQAQC(rows) {
         seenFlights.set(flightKey, rowNum);
       }
     }
-    
+
     // Normalize flight number (trim, uppercase)
     if (flightNumIdx !== -1 && cleanRow[flightNumIdx]) {
       cleanRow[flightNumIdx] = cleanRow[flightNumIdx].toUpperCase();
     }
-    
+
     cleanedRows.push(cleanRow);
   }
-  
+
   // Check for inconsistent airline naming
   for (const [key, variations] of airlineVariations) {
     if (variations.size > 1) {
       warnings.push(`Inconsistent airline naming: ${Array.from(variations).join(', ')}`);
     }
   }
-  
+
   return { rows: cleanedRows, errors, warnings };
 }
 
@@ -431,23 +431,23 @@ function parseDateForSort(dateStr) {
  */
 function sortByDate(rows) {
   if (rows.length <= 1) return rows;
-  
+
   const header = rows[0];
   const dataRows = rows.slice(1);
-  
+
   // Find date column index (look for 'date' in header)
   const dateColIndex = header.findIndex(h => h.toLowerCase() === 'date');
   if (dateColIndex === -1) {
     console.log('⚠️  No "date" column found, skipping sort');
     return rows;
   }
-  
+
   dataRows.sort((a, b) => {
     const dateA = parseDateForSort(a[dateColIndex]);
     const dateB = parseDateForSort(b[dateColIndex]);
     return dateA - dateB;
   });
-  
+
   return [header, ...dataRows];
 }
 
@@ -475,26 +475,26 @@ async function main() {
 
   try {
     const rawCSV = await fetchSheetAsCSV(SHEET_ID, SHEET_NAME);
-    
+
     // Parse the data
     let rows = parseCSV(rawCSV);
     console.log(`📊 Fetched ${rows.length - 1} flights`);
-    
+
     // Trim empty columns
     rows = trimEmptyColumns(rows);
     console.log(`🧹 Trimmed to ${rows[0].length} columns`);
-    
+
     // Run QA/QC
     console.log(`\n🔍 Running QA/QC checks...`);
     const { rows: cleanedRows, errors, warnings } = runQAQC(rows);
     rows = cleanedRows;
-    
+
     // Report warnings
     if (warnings.length > 0) {
       console.log(`\n⚠️  ${warnings.length} warning(s):`);
       warnings.forEach(w => console.log(`   ${w}`));
     }
-    
+
     // Report errors
     if (errors.length > 0) {
       console.log(`\n❌ ${errors.length} error(s):`);
@@ -502,26 +502,26 @@ async function main() {
       console.error(`\n🛑 Fix the errors above before syncing.`);
       process.exit(1);
     }
-    
+
     console.log(`✅ QA/QC passed`);
-    
+
     // Sort by date
     rows = sortByDate(rows);
     console.log(`📅 Sorted by date`);
-    
+
     const cleanCSV = toCSV(rows);
-    
+
     if (hasChanges(cleanCSV, OUTPUT_PATH)) {
       writeFileSync(OUTPUT_PATH, cleanCSV);
       console.log(`\n✅ Updated ${OUTPUT_PATH}`);
-      
+
       // Output for GitHub Actions
       if (process.env.GITHUB_OUTPUT) {
         writeFileSync(process.env.GITHUB_OUTPUT, 'changed=true\n', { flag: 'a' });
       }
     } else {
       console.log('ℹ️  No changes detected');
-      
+
       if (process.env.GITHUB_OUTPUT) {
         writeFileSync(process.env.GITHUB_OUTPUT, 'changed=false\n', { flag: 'a' });
       }

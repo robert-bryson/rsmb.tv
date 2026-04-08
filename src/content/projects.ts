@@ -23,7 +23,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'flights',
-    title: 'Flight Tracker',
+    title: 'Flights',
     description: 'An interactive 3D globe visualization of flights I\'ve taken around the world. Filter by year, see route frequencies, and explore travel statistics.',
     tech: ['React', 'Three.js', 'WebGL', 'GeoJSON'],
     featured: true,

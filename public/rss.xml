@@ -14,12 +14,5 @@
       <description>How I built a system that processes OpenStreetMap data to find the most scenic, twisty motorcycle routes — scoring roads by curviness, elevation change, and traffic.</description>
       <pubDate>Tue, 31 Mar 2026 00:00:00 GMT</pubDate>
     </item>
-    <item>
-      <title>Hello World</title>
-      <link>https://rsmb.tv/blog/hello-world</link>
-      <guid>https://rsmb.tv/blog/hello-world</guid>
-      <description>Welcome to my blog — a space for writing about projects, engineering, and things I find interesting.</description>
-      <pubDate>Wed, 01 Jan 2025 00:00:00 GMT</pubDate>
-    </item>
   </channel>
 </rss>

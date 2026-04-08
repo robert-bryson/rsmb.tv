@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 
-export default function FlightTrackerAbout() {
+export default function FlightsAbout() {
     useDocumentHead({
-        title: 'Flight Tracker',
+        title: 'Flights',
         description:
             'An interactive 3D globe visualization of flights around the world — filter by year, see route frequencies, and explore travel statistics.',
         ogImage: 'https://rsmb.tv/og/flights.svg',
@@ -13,7 +13,7 @@ export default function FlightTrackerAbout() {
     useJsonLd({
         '@context': 'https://schema.org',
         '@type': 'SoftwareApplication',
-        name: 'Flight Tracker',
+        name: 'Flights',
         description: 'An interactive 3D globe visualization of flights around the world — filter by year, see route frequencies, and explore travel statistics.',
         url: 'https://rsmb.tv/projects/flights',
         applicationCategory: 'UtilitiesApplication',
@@ -24,7 +24,7 @@ export default function FlightTrackerAbout() {
     return (
         <div className="max-w-2xl">
             <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
-                Flight Tracker
+                Flights
             </h1>
             <p className="text-zinc-500 mb-6 text-sm">
                 2025 · React + Three.js

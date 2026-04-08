@@ -8,7 +8,7 @@ import { Home, About, Projects, NotFound } from './pages';
 const Blog = lazy(() => import('./pages/Blog'));
 const BlogPost = lazy(() => import('./pages/BlogPost'));
 const ThroughRoutes = lazy(() => import('./pages/ThroughRoutes'));
-const FlightTrackerAbout = lazy(() => import('./pages/FlightTrackerAbout'));
+const FlightsAbout = lazy(() => import('./pages/FlightsAbout'));
 const Flights = lazy(() => import('./pages/Flights'));
 const AnkiArtisan = lazy(() => import('./pages/AnkiArtisan'));
 const Bookend = lazy(() => import('./pages/Bookend'));
@@ -47,7 +47,7 @@ export default function App() {
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/projects/through-routes" element={<ThroughRoutes />} />
-              <Route path="/projects/flights" element={<FlightTrackerAbout />} />
+              <Route path="/projects/flights" element={<FlightsAbout />} />
               <Route path="/projects/flights/map" element={<Flights />} />
               <Route path="/projects/anki-artisan" element={<AnkiArtisan />} />
               <Route path="/projects/bookend" element={<Bookend />} />

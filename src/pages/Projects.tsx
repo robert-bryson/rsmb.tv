@@ -5,7 +5,7 @@ import { useDocumentHead } from '../hooks/useDocumentHead';
 export function Projects() {
   useDocumentHead({
     title: 'Projects',
-    description: 'Interactive projects and data visualizations by Robby Bryson — flight tracker, route converter, and more.',
+    description: 'Interactive projects and data visualizations by Robby Bryson — flights, route converter, and more.',
     ogImage: 'https://rsmb.tv/og/projects.svg',
   });
 
