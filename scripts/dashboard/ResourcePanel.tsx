@@ -433,19 +433,19 @@ export function ResourcePanel({
                 {hasBuckets && (
                     <Box gap={1}>
                         <Box width={9}><Text dimColor> AWS</Text></Box>
-                        <Text dimColor>S3 ({data.buckets.length}) {formatBytes(data.totalSizeBytes)} · {formatCount(data.totalObjects)} obj</Text>
+                        <Text dimColor>S3 ({data.buckets.length} buckets) {formatBytes(data.totalSizeBytes)} · {formatCount(data.totalObjects)} obj</Text>
                     </Box>
                 )}
                 {hasCf && (
                     <Box gap={1}>
                         <Box width={9}><Text> </Text></Box>
-                        <Text dimColor>CF ({data.distributions.length}) {formatCount(data.totalCfRequests)} req/h</Text>
+                        <Text dimColor>CF ({data.distributions.length} distributions) {formatCount(data.totalCfRequests)} req/h</Text>
                     </Box>
                 )}
                 {hasLambda && (
                     <Box gap={1}>
                         <Box width={9}><Text> </Text></Box>
-                        <Text dimColor>λ ({data.lambdas.length}) {formatCount(data.totalInvocations)} inv/h{data.totalErrors > 0 ? ` · ${formatCount(data.totalErrors)} err` : ''}</Text>
+                        <Text dimColor>λ ({data.lambdas.length} functions) {formatCount(data.totalInvocations)} inv/h{data.totalErrors > 0 ? ` · ${formatCount(data.totalErrors)} err` : ''}</Text>
                     </Box>
                 )}
             </Box>
