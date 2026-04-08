@@ -269,39 +269,40 @@ export function ResourcePanel({
 
     return (
         <Box flexDirection="column">
-            <Box gap={1}>
-                <Text dimColor> Resources</Text>
-                {hasBuckets && (
-                    <>
-                        <Text dimColor>S3 ({data.buckets.length})</Text>
+            {hasBuckets && (
+                <>
+                    <Box gap={1}>
+                        <Text dimColor> S3</Text>
                         <Text color="cyan">{formatBytes(data.totalSizeBytes)}</Text>
                         <Text dimColor>·</Text>
-                        <Text dimColor>{formatCount(data.totalObjects)} obj</Text>
-                    </>
-                )}
-                {hasCf && (
-                    <>
-                        <Text dimColor>│ CloudFront ({data.distributions.length})</Text>
+                        <Text dimColor>{formatCount(data.totalObjects)} obj across {data.buckets.length} buckets</Text>
+                    </Box>
+                    {data.buckets.map((b) => (
+                        <Box key={b.name} gap={1} paddingLeft={2}>
+                            <Box width={28}><Text dimColor>{stripAccountId(b.name)}</Text></Box>
+                            <Box width={10} justifyContent="flex-end"><Text>{formatBytes(b.sizeBytes)}</Text></Box>
+                            <Text dimColor>({formatCount(b.objects)} obj)</Text>
+                        </Box>
+                    ))}
+                </>
+            )}
+            {hasCf && (
+                <>
+                    <Box gap={1}>
+                        <Text dimColor> CloudFront</Text>
                         <Text color="cyan">{formatCount(data.totalCfRequests)} req/h</Text>
-                        <Text dimColor>({formatBytes(data.totalCfBytes)})</Text>
-                    </>
-                )}
-                {!hasBuckets && !hasCf && <Text dimColor>No data yet</Text>}
-            </Box>
-            {hasBuckets && data.buckets.map((b) => (
-                <Box key={b.name} gap={1} paddingLeft={2}>
-                    <Box width={28}><Text dimColor>{stripAccountId(b.name)}</Text></Box>
-                    <Box width={10} justifyContent="flex-end"><Text>{formatBytes(b.sizeBytes)}</Text></Box>
-                    <Text dimColor>({formatCount(b.objects)} obj)</Text>
-                </Box>
-            ))}
-            {hasCf && data.distributions.map((d) => (
-                <Box key={d.id} gap={1} paddingLeft={2}>
-                    <Box width={28}><Text dimColor>{d.id}</Text></Box>
-                    <Box width={10} justifyContent="flex-end"><Text>{formatCount(d.requests)} req/h</Text></Box>
-                    <Text dimColor>({formatBytes(d.bytesDownloaded)})</Text>
-                </Box>
-            ))}
+                        <Text dimColor>· {formatBytes(data.totalCfBytes)} across {data.distributions.length} distributions</Text>
+                    </Box>
+                    {data.distributions.map((d) => (
+                        <Box key={d.id} gap={1} paddingLeft={2}>
+                            <Box width={28}><Text dimColor>{d.id}</Text></Box>
+                            <Box width={10} justifyContent="flex-end"><Text>{formatCount(d.requests)} req/h</Text></Box>
+                            <Text dimColor>({formatBytes(d.bytesDownloaded)})</Text>
+                        </Box>
+                    ))}
+                </>
+            )}
+            {!hasBuckets && !hasCf && <Text dimColor> Resources — No data yet</Text>}
         </Box>
     );
 }
