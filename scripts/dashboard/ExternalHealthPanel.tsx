@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { Box, Text } from 'ink';
 import Spinner from 'ink-spinner';
 import https from 'node:https';
 import { useAwsPoll } from './useAwsPoll.js';
+import { useTimeSeries } from './useTimeSeries.js';
+import { sparkline } from './sparkline.js';
 import type { DisplayMode, SiteGroup } from './config.js';
 import { link } from './config.js';
 
@@ -147,6 +149,18 @@ export function ExternalHealthPanel({
         group.label,
     );
 
+    const extractResponseTime = useCallback(
+        (gh: GroupHealth) => {
+            const out: Record<string, number | null> = {};
+            for (const s of gh.sites) {
+                out[s.name] = s.responseTimeMs;
+            }
+            return out;
+        },
+        [],
+    );
+    const responseHistory = useTimeSeries(data, extractResponseTime);
+
     const sites = data?.sites ?? [];
     const alerts = data?.alerts ?? [];
     const unhealthy = sites.filter((h) => h.healthy === false);
@@ -223,6 +237,9 @@ export function ExternalHealthPanel({
                     <Box width={7} justifyContent="flex-end">
                         <Text dimColor>{h.responseTimeMs != null ? `${h.responseTimeMs}ms` : ''}</Text>
                     </Box>
+                    {(responseHistory[h.name]?.length ?? 0) > 1 && (
+                        <Text dimColor>{sparkline(responseHistory[h.name])}</Text>
+                    )}
                 </Box>
             ))}
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { Box, Text } from 'ink';
 import Spinner from 'ink-spinner';
 import https from 'node:https';
@@ -12,6 +12,8 @@ import {
     GetMetricStatisticsCommand,
 } from '@aws-sdk/client-cloudwatch';
 import { useAwsPoll } from './useAwsPoll.js';
+import { useTimeSeries } from './useTimeSeries.js';
+import { sparkline } from './sparkline.js';
 import type { DashboardConfig, DisplayMode } from './config.js';
 import { awsCredentials, link } from './config.js';
 
@@ -210,6 +212,19 @@ export function HealthPanel({
         config.intervals.health * 1000,
     );
 
+    const extractLatency = useCallback(
+        (results: HealthResult[]) => {
+            const out: Record<string, number | null> = {};
+            for (const r of results) {
+                const key = `${r.source}:${r.domain}`;
+                out[key] = r.latencyMs;
+            }
+            return out;
+        },
+        [],
+    );
+    const latencyHistory = useTimeSeries(data, extractLatency);
+
     const unhealthy = (data ?? []).filter((h) => h.healthy === false);
     const hasProblems = unhealthy.length > 0;
 
@@ -300,6 +315,9 @@ export function HealthPanel({
                     <Box width={7} justifyContent="flex-end">
                         <Text dimColor>{h.latencyMs != null ? `${h.latencyMs}ms` : ''}</Text>
                     </Box>
+                    {(latencyHistory[`${h.source}:${h.domain}`]?.length ?? 0) > 1 && (
+                        <Text dimColor>{sparkline(latencyHistory[`${h.source}:${h.domain}`])}</Text>
+                    )}
                 </Box>
             ))}
 
@@ -328,6 +346,9 @@ export function HealthPanel({
                     <Box width={7} justifyContent="flex-end">
                         <Text dimColor>{h.latencyMs != null ? `${h.latencyMs}ms` : ''}</Text>
                     </Box>
+                    {(latencyHistory[`${h.source}:${h.domain}`]?.length ?? 0) > 1 && (
+                        <Text dimColor>{sparkline(latencyHistory[`${h.source}:${h.domain}`])}</Text>
+                    )}
                 </Box>
             ))}
         </Box>
