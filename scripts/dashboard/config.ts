@@ -10,7 +10,7 @@ export interface WorkflowConfig {
 export interface ProjectConfig {
     name: string;
     domain: string;
-    kind: 'amplify' | 'lambda-cloudfront';
+    kind: 'amplify' | 'lambda-cloudfront' | 'github-only';
     amplifyAppId?: string;
     githubRepo?: string;
     healthCheckId?: string;
@@ -106,6 +106,27 @@ function buildProjects(): ProjectConfig[] {
             kind: 'lambda-cloudfront',
             githubRepo: 'robert-bryson/through-routes',
             healthUrl: 'https://through-routes.rsmb.tv/api/health',
+        },
+        {
+            name: 'aborg',
+            domain: '',
+            kind: 'github-only',
+            githubRepo: 'robert-bryson/aborg',
+            workflows: [
+                { name: 'CI', file: 'ci.yml' },
+            ],
+        },
+        {
+            name: 'anki-artisan',
+            domain: '',
+            kind: 'github-only',
+            githubRepo: 'robert-bryson/anki-artisan',
+        },
+        {
+            name: 'kin-cal',
+            domain: '',
+            kind: 'github-only',
+            githubRepo: 'robert-bryson/kin-cal',
         },
     ];
 

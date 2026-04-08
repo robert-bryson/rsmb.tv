@@ -127,7 +127,7 @@ async function fetchAllHealth(
 
     const results: HealthResult[] = [];
 
-    for (const project of config.projects) {
+    for (const project of config.projects.filter((p) => p.kind !== 'github-only')) {
         const healthCheckId =
             project.healthCheckId ?? discovered.get(project.domain);
 
@@ -173,7 +173,7 @@ async function fetchAllHealth(
 
     // Frontend pings: naive GET to each domain root
     const frontendPings = await Promise.all(
-        config.projects.map(async (project) => {
+        config.projects.filter((p) => p.kind !== 'github-only').map(async (project) => {
             const url = `https://${project.domain}/`;
             const { healthy, status, latencyMs } = await httpPing(url);
             return {
