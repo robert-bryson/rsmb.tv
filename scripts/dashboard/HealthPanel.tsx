@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { Box, Text } from 'ink';
 import Spinner from 'ink-spinner';
 import https from 'node:https';
@@ -192,8 +192,9 @@ async function fetchAllHealth(
     return results;
 }
 
-function StatusDot({ healthy, stale }: { healthy: boolean | null; stale: boolean }) {
+function StatusDot({ healthy, stale, warning }: { healthy: boolean | null; stale: boolean; warning?: boolean }) {
     if (stale) return <Text color="yellow">●</Text>;
+    if (warning) return <Text color="yellow">⚠</Text>;
     if (healthy === null) return <Text color="gray">●</Text>;
     return healthy ? <Text color="green">●</Text> : <Text color="red">●</Text>;
 }
@@ -225,8 +226,33 @@ export function HealthPanel({
     );
     const latencyHistory = useTimeSeries(data, extractLatency);
 
+    // Track consecutive failure streaks per check — first failure shows a
+    // yellow warning but stays calm; second consecutive failure fires the alarm.
+    // Uses the React-recommended "adjusting state when a prop changes" pattern.
+    const [prevData, setPrevData] = useState<HealthResult[] | null>(null);
+    const [failStreaks, setFailStreaks] = useState<Map<string, number>>(new Map());
+
+    if (data !== prevData) {
+        setPrevData(data);
+        if (data) {
+            setFailStreaks((prev) => {
+                const next = new Map<string, number>();
+                for (const h of data) {
+                    const key = `${h.source}:${h.domain}`;
+                    const streak = prev.get(key) ?? 0;
+                    next.set(key, h.healthy === false ? streak + 1 : 0);
+                }
+                return next;
+            });
+        }
+    }
+
+    const getFailStreak = (h: HealthResult) =>
+        failStreaks.get(`${h.source}:${h.domain}`) ?? 0;
+
     const unhealthy = (data ?? []).filter((h) => h.healthy === false);
-    const hasProblems = unhealthy.length > 0;
+    const confirmedUnhealthy = unhealthy.filter((h) => getFailStreak(h) >= 2);
+    const hasProblems = confirmedUnhealthy.length > 0;
 
     useEffect(() => {
         onProblems(hasProblems);
@@ -248,11 +274,11 @@ export function HealthPanel({
                     <>
                         <Box width={25} gap={1}>
                             {backend.map((h) => (
-                                <StatusDot key={h.domain} healthy={h.healthy} stale={isStale} />
+                                <StatusDot key={h.domain} healthy={h.healthy} stale={isStale} warning={getFailStreak(h) === 1} />
                             ))}
                             <Text dimColor>│</Text>
                             {frontend.map((h) => (
-                                <StatusDot key={`fe-${h.domain}`} healthy={h.healthy} stale={isStale} />
+                                <StatusDot key={`fe-${h.domain}`} healthy={h.healthy} stale={isStale} warning={getFailStreak(h) === 1} />
                             ))}
                         </Box>
                         <Text dimColor>OK</Text>
@@ -277,17 +303,17 @@ export function HealthPanel({
                 ) : !hasProblems ? (
                     <>
                         {backend.map((h) => (
-                            <StatusDot key={h.domain} healthy={h.healthy} stale={isStale} />
+                            <StatusDot key={h.domain} healthy={h.healthy} stale={isStale} warning={getFailStreak(h) === 1} />
                         ))}
                         <Text dimColor>│</Text>
                         {frontend.map((h) => (
-                            <StatusDot key={`fe-${h.domain}`} healthy={h.healthy} stale={isStale} />
+                            <StatusDot key={`fe-${h.domain}`} healthy={h.healthy} stale={isStale} warning={getFailStreak(h) === 1} />
                         ))}
                         <Text dimColor>All OK</Text>
                     </>
                 ) : (
                     <Text color="red">
-                        {unhealthy.length}/{(data ?? []).length} down
+                        {confirmedUnhealthy.length}/{(data ?? []).length} down
                     </Text>
                 )}
             </Box>
@@ -299,14 +325,14 @@ export function HealthPanel({
             {backendItems.map((h) => (
                 <Box key={h.domain} gap={1}>
                     <Text>  </Text>
-                    <StatusDot healthy={h.healthy} stale={isStale} />
+                    <StatusDot healthy={h.healthy} stale={isStale} warning={getFailStreak(h) === 1} />
                     <Text> </Text>
                     <Box width={30}>
                         <Text>{link(h.url, h.domain)}</Text>
                     </Box>
                     <Box width={10}>
-                        <Text color={h.healthy ? 'green' : h.healthy === false ? 'red' : 'gray'}>
-                            {h.healthy ? 'Healthy' : h.healthy === false ? 'DOWN' : 'Unknown'}
+                        <Text color={h.healthy ? 'green' : getFailStreak(h) === 1 ? 'yellow' : h.healthy === false ? 'red' : 'gray'}>
+                            {h.healthy ? 'Healthy' : getFailStreak(h) === 1 ? 'Warning' : h.healthy === false ? 'DOWN' : 'Unknown'}
                         </Text>
                     </Box>
                     <Box width={16}>
@@ -332,14 +358,14 @@ export function HealthPanel({
             {frontendItems.map((h) => (
                 <Box key={`fe-${h.domain}`} gap={1}>
                     <Text>  </Text>
-                    <StatusDot healthy={h.healthy} stale={isStale} />
+                    <StatusDot healthy={h.healthy} stale={isStale} warning={getFailStreak(h) === 1} />
                     <Text> </Text>
                     <Box width={30}>
                         <Text dimColor>{link(h.url, h.domain)}</Text>
                     </Box>
                     <Box width={10}>
-                        <Text color={h.healthy ? 'green' : h.healthy === false ? 'red' : 'gray'}>
-                            {h.healthy ? 'OK' : h.healthy === false ? 'FAIL' : 'Unknown'}
+                        <Text color={h.healthy ? 'green' : getFailStreak(h) === 1 ? 'yellow' : h.healthy === false ? 'red' : 'gray'}>
+                            {h.healthy ? 'OK' : getFailStreak(h) === 1 ? 'Warning' : h.healthy === false ? 'FAIL' : 'Unknown'}
                         </Text>
                     </Box>
                     <Box width={16}>

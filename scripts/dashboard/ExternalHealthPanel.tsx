@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { Box, Text } from 'ink';
 import Spinner from 'ink-spinner';
 import https from 'node:https';
@@ -126,8 +126,9 @@ async function fetchGroupHealth(group: SiteGroup): Promise<GroupHealth> {
     return { sites, alerts };
 }
 
-function StatusDot({ healthy, stale }: { healthy: boolean | null; stale: boolean }) {
+function StatusDot({ healthy, stale, warning }: { healthy: boolean | null; stale: boolean; warning?: boolean }) {
     if (stale) return <Text color="yellow">●</Text>;
+    if (warning) return <Text color="yellow">⚠</Text>;
     if (healthy === null) return <Text color="gray">●</Text>;
     return healthy ? <Text color="green">●</Text> : <Text color="red">●</Text>;
 }
@@ -161,10 +162,34 @@ export function ExternalHealthPanel({
     );
     const responseHistory = useTimeSeries(data, extractResponseTime);
 
+    // Track consecutive failure streaks — first failure shows a yellow warning
+    // but stays calm; second consecutive failure fires the alarm.
+    // Uses the React-recommended "adjusting state when a prop changes" pattern.
+    const [prevData, setPrevData] = useState<GroupHealth | null>(null);
+    const [failStreaks, setFailStreaks] = useState<Map<string, number>>(new Map());
+
+    if (data !== prevData) {
+        setPrevData(data);
+        if (data) {
+            setFailStreaks((prev) => {
+                const next = new Map<string, number>();
+                for (const s of data.sites) {
+                    const streak = prev.get(s.name) ?? 0;
+                    next.set(s.name, s.healthy === false ? streak + 1 : 0);
+                }
+                return next;
+            });
+        }
+    }
+
+    const getFailStreak = (name: string) =>
+        failStreaks.get(name) ?? 0;
+
     const sites = data?.sites ?? [];
     const alerts = data?.alerts ?? [];
     const unhealthy = sites.filter((h) => h.healthy === false);
-    const hasProblems = unhealthy.length > 0 || alerts.some((a) => a.kind === 'incident');
+    const confirmedUnhealthy = unhealthy.filter((h) => getFailStreak(h.name) >= 2);
+    const hasProblems = confirmedUnhealthy.length > 0 || alerts.some((a) => a.kind === 'incident');
 
     useEffect(() => {
         onProblems(hasProblems);
@@ -184,7 +209,7 @@ export function ExternalHealthPanel({
                 ) : (
                     <>
                         {sites.map((h) => (
-                            <StatusDot key={h.name} healthy={h.healthy} stale={isStale} />
+                            <StatusDot key={h.name} healthy={h.healthy} stale={isStale} warning={getFailStreak(h.name) === 1} />
                         ))}
                         {isStale ? <Text color="yellow">stale</Text> : <Text dimColor>All OK</Text>}
                     </>
@@ -206,13 +231,13 @@ export function ExternalHealthPanel({
                 ) : !hasProblems ? (
                     <>
                         {sites.map((h) => (
-                            <StatusDot key={h.name} healthy={h.healthy} stale={isStale} />
+                            <StatusDot key={h.name} healthy={h.healthy} stale={isStale} warning={getFailStreak(h.name) === 1} />
                         ))}
                         <Text dimColor>All OK  {statusPageLink}</Text>
                     </>
                 ) : (
                     <Text color="red">
-                        {unhealthy.length}/{sites.length} down
+                        {confirmedUnhealthy.length}/{sites.length} down
                     </Text>
                 )}
             </Box>
@@ -224,14 +249,14 @@ export function ExternalHealthPanel({
             {items.map((h) => (
                 <Box key={h.name} gap={1}>
                     <Text>  </Text>
-                    <StatusDot healthy={h.healthy} stale={isStale} />
+                    <StatusDot healthy={h.healthy} stale={isStale} warning={getFailStreak(h.name) === 1} />
                     <Text> </Text>
                     <Box width={24}>
                         <Text>{h.drillDownUrl ? link(h.drillDownUrl, h.name) : h.name}</Text>
                     </Box>
                     <Box width={14}>
-                        <Text color={h.healthy ? 'green' : h.healthy === false ? 'red' : 'gray'}>
-                            {h.healthy ? 'Operational' : h.healthy === false ? 'DOWN' : 'Unknown'}
+                        <Text color={h.healthy ? 'green' : getFailStreak(h.name) === 1 ? 'yellow' : h.healthy === false ? 'red' : 'gray'}>
+                            {h.healthy ? 'Operational' : getFailStreak(h.name) === 1 ? 'Warning' : h.healthy === false ? 'DOWN' : 'Unknown'}
                         </Text>
                     </Box>
                     <Box width={7} justifyContent="flex-end">
