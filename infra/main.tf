@@ -6,6 +6,11 @@ resource "aws_amplify_app" "rsmbtv" {
   access_token             = var.github_token
   enable_branch_auto_build = true
 
+  # Skip re-deploy when only non-app files change (scripts/, infra/, projects/, etc.)
+  environment_variables = {
+    AMPLIFY_DIFF_DEPLOY = "true"
+  }
+
   tags = local.common_tags
 
   # Prevent Terraform from overwriting the token that's already configured in AWS.

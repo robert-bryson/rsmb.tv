@@ -1,5 +1,7 @@
 import { fromIni } from '@aws-sdk/credential-providers';
 
+// ─── Types ───────────────────────────────────────────────────────────────────
+
 export interface WorkflowConfig {
     name: string;
     file: string;
@@ -36,7 +38,6 @@ export interface DashboardConfig {
     region: string;
     timeZone: string;
     githubToken: string | undefined;
-    dataCdnDistributionId: string;
     projects: ProjectConfig[];
     githubRepos: string[];
     externalGroups: SiteGroup[];
@@ -50,10 +51,109 @@ export interface DashboardConfig {
     };
 }
 
-/**
- * Parse a "key=value,key=value" env var into a Map.
- * e.g. "rsmb.tv=d38ki8k4lanh8s,route2gpx=d3cg0fxhpxa01e"
- */
+// ─── Projects to monitor ─────────────────────────────────────────────────────
+// Add, remove, or edit entries here. githubRepos is derived automatically.
+// amplifyAppId / healthCheckId can be set inline or via env vars (see below).
+
+const projects: ProjectConfig[] = [
+    {
+        name: 'bookend',
+        domain: 'bookend.rsmb.tv',
+        kind: 'lambda-cloudfront',
+        githubRepo: 'robert-bryson/bookend',
+        healthUrl: 'https://bookend.rsmb.tv/api/health',
+    },
+    {
+        name: 'data',
+        domain: 'data.rsmb.tv',
+        kind: 'lambda-cloudfront',
+        healthUrl: 'https://data.rsmb.tv/',
+    },
+    {
+        name: 'route2gpx',
+        domain: 'route2gpx.rsmb.tv',
+        kind: 'amplify',
+        githubRepo: 'robert-bryson/route2gpx',
+        healthUrl: 'https://route2gpx.rsmb.tv/',
+    },
+    {
+        name: 'rsmb.tv',
+        domain: 'www.rsmb.tv',
+        kind: 'amplify',
+        githubRepo: 'robert-bryson/rsmb.tv',
+        healthUrl: 'https://www.rsmb.tv/',
+        workflows: [
+            { name: 'Sync Flights', file: 'sync-flights.yml', staleThresholdHours: 36 },
+            { name: 'Sync Temps', file: 'sync-temperatures.yml', staleThresholdHours: 36 },
+        ],
+    },
+    {
+        name: 'through-routes',
+        domain: 'through-routes.rsmb.tv',
+        kind: 'lambda-cloudfront',
+        githubRepo: 'robert-bryson/through-routes',
+        healthUrl: 'https://through-routes.rsmb.tv/api/health',
+    },
+    {
+        name: 'aborg',
+        domain: '',
+        kind: 'github-only',
+        githubRepo: 'robert-bryson/aborg',
+        workflows: [
+            { name: 'CI', file: 'ci.yml' },
+        ],
+    },
+    {
+        name: 'anki-artisan',
+        domain: '',
+        kind: 'github-only',
+        githubRepo: 'robert-bryson/anki-artisan',
+    },
+    {
+        name: 'kin-cal',
+        domain: '',
+        kind: 'github-only',
+        githubRepo: 'robert-bryson/kin-cal',
+    },
+];
+
+// ─── External status pages to monitor ────────────────────────────────────────
+
+const externalGroups: SiteGroup[] = [
+    {
+        id: 'egp',
+        label: 'EGP',
+        statusPageUrl: 'https://uptime.com/statuspage/egp',
+        sites: [
+            { name: 'ATBDirectory' },
+            { name: 'CFETS' },
+            { name: 'EGP Website' },
+            { name: 'FLIGHT' },
+            { name: 'SmokeJumper' },
+            { name: 'WildfireSA' },
+            { name: 'WildfireSA Advanced' },
+            { name: 'WPSAPS' },
+        ],
+    },
+];
+
+// ─── Interval defaults (seconds) ────────────────────────────────────────────
+// Each panel has a minimum floor to avoid hammering APIs.
+
+const INTERVAL_FLOORS: Record<keyof DashboardConfig['intervals'], { min: number; multiplier: number }> = {
+    health: { min: 30, multiplier: 1 },
+    alarms: { min: 60, multiplier: 1 },
+    builds: { min: 60, multiplier: 1 },
+    costs: { min: 300, multiplier: 5 },
+    external: { min: 60, multiplier: 1 },
+    github: { min: 120, multiplier: 2 },
+};
+
+// ─── Env-var overrides for AWS resource IDs ──────────────────────────────────
+// Set AMPLIFY_APP_IDS="rsmb.tv=abc123,route2gpx=def456" in .env.local to
+// override amplifyAppId per project. Same format for HEALTH_CHECK_IDS.
+// Inline values on the project objects above take precedence.
+
 function parseIdMap(envVar: string | undefined): Map<string, string> {
     const map = new Map<string, string>();
     if (!envVar) return map;
@@ -64,101 +164,18 @@ function parseIdMap(envVar: string | undefined): Map<string, string> {
     return map;
 }
 
-function buildProjects(): ProjectConfig[] {
+function applyEnvOverrides(list: ProjectConfig[]): ProjectConfig[] {
     const amplifyIds = parseIdMap(process.env.AMPLIFY_APP_IDS);
     const healthCheckIds = parseIdMap(process.env.HEALTH_CHECK_IDS);
 
-    const projects: ProjectConfig[] = [
-        {
-            name: 'bookend',
-            domain: 'bookend.rsmb.tv',
-            kind: 'lambda-cloudfront',
-            githubRepo: 'robert-bryson/bookend',
-            healthUrl: 'https://bookend.rsmb.tv/api/health',
-        },
-        {
-            name: 'data',
-            domain: 'data.rsmb.tv',
-            kind: 'lambda-cloudfront',
-            healthUrl: 'https://data.rsmb.tv/',
-        },
-        {
-            name: 'route2gpx',
-            domain: 'route2gpx.rsmb.tv',
-            kind: 'amplify',
-            githubRepo: 'robert-bryson/route2gpx',
-            healthUrl: 'https://route2gpx.rsmb.tv/',
-        },
-        {
-            name: 'rsmb.tv',
-            domain: 'www.rsmb.tv',
-            kind: 'amplify',
-            githubRepo: 'robert-bryson/rsmb.tv',
-            healthUrl: 'https://www.rsmb.tv/',
-            workflows: [
-                { name: 'Sync Flights', file: 'sync-flights.yml', staleThresholdHours: 36 },
-                { name: 'Sync Temps', file: 'sync-temperatures.yml', staleThresholdHours: 36 },
-            ],
-        },
-        {
-            name: 'through-routes',
-            domain: 'through-routes.rsmb.tv',
-            kind: 'lambda-cloudfront',
-            githubRepo: 'robert-bryson/through-routes',
-            healthUrl: 'https://through-routes.rsmb.tv/api/health',
-        },
-        {
-            name: 'aborg',
-            domain: '',
-            kind: 'github-only',
-            githubRepo: 'robert-bryson/aborg',
-            workflows: [
-                { name: 'CI', file: 'ci.yml' },
-            ],
-        },
-        {
-            name: 'anki-artisan',
-            domain: '',
-            kind: 'github-only',
-            githubRepo: 'robert-bryson/anki-artisan',
-        },
-        {
-            name: 'kin-cal',
-            domain: '',
-            kind: 'github-only',
-            githubRepo: 'robert-bryson/kin-cal',
-        },
-    ];
-
-    for (const p of projects) {
-        if (amplifyIds.has(p.name)) p.amplifyAppId = amplifyIds.get(p.name);
-        if (healthCheckIds.has(p.name)) p.healthCheckId = healthCheckIds.get(p.name);
+    for (const p of list) {
+        if (!p.amplifyAppId && amplifyIds.has(p.name)) p.amplifyAppId = amplifyIds.get(p.name);
+        if (!p.healthCheckId && healthCheckIds.has(p.name)) p.healthCheckId = healthCheckIds.get(p.name);
     }
-
-    return projects;
+    return list;
 }
 
-export const PROJECTS: ProjectConfig[] = buildProjects();
-
-function buildExternalGroups(): SiteGroup[] {
-    return [
-        {
-            id: 'egp',
-            label: 'EGP',
-            statusPageUrl: 'https://uptime.com/statuspage/egp',
-            sites: [
-                { name: 'ATBDirectory' },
-                { name: 'CFETS' },
-                { name: 'EGP Website' },
-                { name: 'FLIGHT' },
-                { name: 'SmokeJumper' },
-                { name: 'WildfireSA' },
-                { name: 'WildfireSA Advanced' },
-                { name: 'WPSAPS' },
-            ],
-        },
-    ];
-}
+// ─── Config factory ──────────────────────────────────────────────────────────
 
 export function createConfig(flags: {
     profile?: string;
@@ -167,33 +184,30 @@ export function createConfig(flags: {
     timeZone?: string;
 }): DashboardConfig {
     const baseInterval = flags.interval ?? 60;
+    const resolvedProjects = applyEnvOverrides(projects);
+
+    const intervals = Object.fromEntries(
+        Object.entries(INTERVAL_FLOORS).map(([key, { min, multiplier }]) => [
+            key,
+            Math.max(min, baseInterval * multiplier),
+        ]),
+    ) as DashboardConfig['intervals'];
+
     return {
         profile: flags.profile ?? process.env.AWS_PROFILE ?? 'rsmbtv-admin',
         region: flags.region ?? process.env.AWS_REGION ?? 'us-east-1',
         timeZone: flags.timeZone ?? process.env.DASHBOARD_TIMEZONE ?? 'America/Chicago',
         githubToken: process.env.GITHUB_TOKEN,
-        dataCdnDistributionId: process.env.DATA_CDN_DISTRIBUTION_ID ?? '',
-        projects: PROJECTS,
-        githubRepos: [
-            'robert-bryson/bookend',
-            'robert-bryson/through-routes',
-            'robert-bryson/rsmb.tv',
-            'robert-bryson/route2gpx',
-            'robert-bryson/aborg',
-            'robert-bryson/kin-cal',
-            'robert-bryson/anki-artisan',
-        ],
-        externalGroups: buildExternalGroups(),
-        intervals: {
-            health: Math.max(30, baseInterval),
-            alarms: Math.max(60, baseInterval),
-            builds: Math.max(60, baseInterval),
-            costs: Math.max(300, baseInterval * 5),
-            external: Math.max(60, baseInterval),
-            github: Math.max(120, baseInterval * 2),
-        },
+        projects: resolvedProjects,
+        githubRepos: resolvedProjects
+            .map(p => p.githubRepo)
+            .filter((r): r is string => r !== undefined),
+        externalGroups,
+        intervals,
     };
 }
+
+// ─── Utilities (used by panels) ──────────────────────────────────────────────
 
 export function awsCredentials(profile: string) {
     return fromIni({ profile });
