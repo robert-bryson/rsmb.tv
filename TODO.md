@@ -17,8 +17,6 @@
 
 ### Temperature records
 
-- [x] Rename project to Record Highs
-- [x] When switching units to C -> F, or F -> C, tooltips/map icons, symbology scales, etc do not all honor. `https://www.rsmb.tv/projects/temperature-records/map?view=county&unit=C` Unit should trigger all units everywhere to use the `unit=` value
 - [ ] Sometimes it is confusing what the term record refers to. There are many types: local/state/county/all time/date/month/etc. Please review usage and improve
 - [ ] Add screenshots to project page
 - [ ] Improve map symbology (maybe gradient of county icons for whatever tab is selected on right panel)
@@ -32,17 +30,6 @@
 
 ## Next steps
 
-### SEO & Social
-
-- [x] Add `ogImage` to pages missing it: Blog, About, Projects, Flights (map), ClimateTrends, TemperatureRecords (map), BlogPost (dynamic)
-- [x] Regenerate OG image for temperature-records now that title is "Record Highs"
-
-### Quality of life
-
-- [x] Consolidate duplicate `fToC` helpers (defined separately in TemperatureMap, SummaryPanel, StationDetailPanel) into a shared util
-- [x] Add a loading/skeleton state for the ClimateTrends page when embedded in the map view
-- [x] Review map controls layout on mobile — some buttons overlap or get hidden at small viewports
-
 ### Content
 
 - [ ] Add screenshots to all project pages (aborg, Anki Artisan, Bookend, Temperature Records, Through Routes)
@@ -51,5 +38,5 @@
 
 ### Testing
 
-- [x] Add unit tests for temperature C/F conversion in map labels and popups
-- [x] Add test coverage for the ClimateTrends page
+- [ ] Add test coverage for Layout component
+- [ ] Add test coverage for ScrollToTop component

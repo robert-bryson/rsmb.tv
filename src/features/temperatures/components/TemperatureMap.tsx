@@ -22,6 +22,7 @@ import {
     yearToColor,
 } from '../constants';
 import { fToC, formatTemp } from '../utils/temperature';
+import { escapeHtml } from '../../../utils/escapeHtml';
 
 function useIsMobile() {
     const mq = typeof window !== 'undefined' ? window.matchMedia('(max-width: 768px)') : null;
@@ -100,8 +101,8 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
             border:1px solid ${color}44;box-shadow:0 4px 20px rgba(0,0,0,.5)">
             <div style="font-size:12px;font-weight:700;color:${color};letter-spacing:.5px;margin-bottom:4px">${icon} ${typeLabel}</div>
             ${scopeBadge}
-            <div style="font-size:14px;font-weight:600;margin-bottom:4px">${props.stationName}</div>
-            <div style="color:#a1a1aa;font-size:12px;margin-bottom:6px">${props.stateName}</div>
+            <div style="font-size:14px;font-weight:600;margin-bottom:4px">${escapeHtml(props.stationName as string)}</div>
+            <div style="color:#a1a1aa;font-size:12px;margin-bottom:6px">${escapeHtml(props.stateName as string)}</div>
             <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:6px">
                 <span style="color:${color};font-size:22px;font-weight:700">${formatTemp(tempF, useCelsius)}</span>
                 <span style="color:#a1a1aa;font-size:12px">(${formatTemp(tempF, !useCelsius)})</span>
@@ -132,8 +133,8 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
 
     // State or county record
     const title = layerType === 'state'
-        ? props.stateName as string
-        : `${props.countyName}, ${props.state}`;
+        ? escapeHtml(props.stateName as string)
+        : `${escapeHtml(props.countyName as string)}, ${escapeHtml(props.state as string)}`;
 
     // For state or county records, show both high and low if counterpart is available
     if ((layerType === 'county' || layerType === 'state') && counterpart) {
@@ -155,14 +156,14 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
                     <div style="color:${HIGH_TEMP_COLOR};font-size:20px;font-weight:700">${formatTemp(hF, useCelsius)}</div>
                     <div style="color:#a1a1aa;font-size:11px">${formatTemp(hF, !useCelsius)}</div>
                     <div style="color:#a1a1aa;font-size:11px;margin-top:4px">${formatDate(highRec.date as string)}</div>
-                    <div style="color:#a1a1aa;font-size:10px">${highRec.stationName || highRec.location || ''}</div>
+                    <div style="color:#a1a1aa;font-size:10px">${escapeHtml(highRec.stationName as string || highRec.location as string || '')}</div>
                 </div>
                 <div style="flex:1;background:#27272a;border-radius:6px;padding:8px 10px;border-left:3px solid ${LOW_TEMP_COLOR}">
                     <div style="font-size:10px;color:#a1a1aa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">❄️ Record Low</div>
                     <div style="color:${LOW_TEMP_COLOR};font-size:20px;font-weight:700">${formatTemp(lF, useCelsius)}</div>
                     <div style="color:#a1a1aa;font-size:11px">${formatTemp(lF, !useCelsius)}</div>
                     <div style="color:#a1a1aa;font-size:11px;margin-top:4px">${formatDate(lowRec.date as string)}</div>
-                    <div style="color:#a1a1aa;font-size:10px">${lowRec.stationName || lowRec.location || ''}</div>
+                    <div style="color:#a1a1aa;font-size:10px">${escapeHtml(lowRec.stationName as string || lowRec.location as string || '')}</div>
                 </div>
             </div>
             <div style="text-align:center;font-size:11px;color:#a1a1aa;border-top:1px solid #27272a;padding-top:6px">
@@ -173,8 +174,8 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
 
     // Fallback: single record (state records, or county without counterpart)
     const typeLabel = isHigh ? 'All-Time Record High' : 'All-Time Record Low';
-    const location = layerType === 'state' ? props.location as string : props.stationName as string;
-    const station = layerType === 'state' ? props.station as string : '';
+    const location = layerType === 'state' ? escapeHtml(props.location as string) : escapeHtml(props.stationName as string);
+    const station = layerType === 'state' ? escapeHtml(props.station as string) : '';
     const date = formatDate(props.date as string);
 
     return `<div style="
