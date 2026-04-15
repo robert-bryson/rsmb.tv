@@ -7,6 +7,7 @@ import { useTimeSeries } from './useTimeSeries.js';
 import { sparkline } from './sparkline.js';
 import type { DisplayMode, SiteGroup } from './config.js';
 import { link } from './config.js';
+import { StatusDot } from './StatusDot.js';
 
 interface SiteResult {
     name: string;
@@ -21,11 +22,15 @@ interface PageAlert {
     name: string;
 }
 
-function fetchJson(url: string): Promise<unknown> {
+function fetchJson(url: string, maxRedirects = 5): Promise<unknown> {
     return new Promise((resolve, reject) => {
+        if (maxRedirects <= 0) {
+            reject(new Error('Too many redirects'));
+            return;
+        }
         const req = https.get(url, { timeout: 15_000 }, (res) => {
             if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-                fetchJson(res.headers.location).then(resolve, reject);
+                fetchJson(res.headers.location, maxRedirects - 1).then(resolve, reject);
                 res.resume();
                 return;
             }
@@ -124,13 +129,6 @@ async function fetchGroupHealth(group: SiteGroup): Promise<GroupHealth> {
     });
 
     return { sites, alerts };
-}
-
-function StatusDot({ healthy, stale, warning }: { healthy: boolean | null; stale: boolean; warning?: boolean }) {
-    if (stale) return <Text color="yellow">●</Text>;
-    if (warning) return <Text color="yellow">⚠</Text>;
-    if (healthy === null) return <Text color="gray">●</Text>;
-    return healthy ? <Text color="green">●</Text> : <Text color="red">●</Text>;
 }
 
 export function ExternalHealthPanel({

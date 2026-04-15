@@ -154,12 +154,15 @@ const INTERVAL_FLOORS: Record<keyof DashboardConfig['intervals'], { min: number;
 // override amplifyAppId per project. Same format for HEALTH_CHECK_IDS.
 // Inline values on the project objects above take precedence.
 
-function parseIdMap(envVar: string | undefined): Map<string, string> {
+export function parseIdMap(envVar: string | undefined): Map<string, string> {
     const map = new Map<string, string>();
     if (!envVar) return map;
     for (const pair of envVar.split(',')) {
-        const [key, value] = pair.split('=', 2);
-        if (key && value) map.set(key.trim(), value.trim());
+        const eqIndex = pair.indexOf('=');
+        if (eqIndex === -1) continue;
+        const key = pair.slice(0, eqIndex).trim();
+        const value = pair.slice(eqIndex + 1).trim();
+        if (key && value) map.set(key, value);
     }
     return map;
 }

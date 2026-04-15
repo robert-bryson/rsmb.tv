@@ -1,10 +1,18 @@
 #!/usr/bin/env tsx
 import { execSync } from 'node:child_process';
+import { performance } from 'node:perf_hooks';
 import React from 'react';
 import { render } from 'ink';
 import { App } from './dashboard/App.js';
 import { createConfig } from './dashboard/config.js';
 import { interceptConsole } from './dashboard/useEventLog.js';
+
+// Node's built-in fetch creates a performance.measure() entry per request.
+// Over long-running sessions this fills the global buffer. Drain it periodically.
+setInterval(() => {
+    performance.clearMeasures();
+    performance.clearMarks();
+}, 60_000);
 
 // Auto-detect timezone in WSL (where system TZ often defaults to UTC)
 if (!process.env.TZ) {
@@ -65,7 +73,9 @@ Environment variables:
 
 Keyboard:
   q    Quit
-  h    Toggle alarm details
+  h    Toggle detail view
+  e    Clear event log
+  j/k  Scroll down/up (also ↑↓)
 `);
             process.exit(0);
         }

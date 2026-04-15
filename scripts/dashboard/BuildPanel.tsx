@@ -9,6 +9,7 @@ import { Octokit } from '@octokit/rest';
 import { useAwsPoll } from './useAwsPoll.js';
 import type { DashboardConfig, ProjectConfig, DisplayMode } from './config.js';
 import { awsCredentials, link } from './config.js';
+import { relativeTime } from './utils.js';
 
 interface BuildInfo {
     project: string;
@@ -21,17 +22,6 @@ interface BuildInfo {
     url: string;
     createdAt: Date | null;
     staleThresholdHours: number | undefined;
-}
-
-function relativeTime(date: Date): string {
-    const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
-    if (seconds < 60) return `${seconds}s ago`;
-    const minutes = Math.floor(seconds / 60);
-    if (minutes < 60) return `${minutes}m ago`;
-    const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `${hours}h ago`;
-    const days = Math.floor(hours / 24);
-    return `${days}d ago`;
 }
 
 function statusColor(status: string): string {

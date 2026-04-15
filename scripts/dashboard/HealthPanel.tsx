@@ -16,6 +16,7 @@ import { useTimeSeries } from './useTimeSeries.js';
 import { sparkline } from './sparkline.js';
 import type { DashboardConfig, DisplayMode } from './config.js';
 import { awsCredentials, link } from './config.js';
+import { StatusDot } from './StatusDot.js';
 
 interface HealthResult {
     domain: string;
@@ -190,13 +191,6 @@ async function fetchAllHealth(
     results.push(...frontendPings);
 
     return results;
-}
-
-function StatusDot({ healthy, stale, warning }: { healthy: boolean | null; stale: boolean; warning?: boolean }) {
-    if (stale) return <Text color="yellow">●</Text>;
-    if (warning) return <Text color="yellow">⚠</Text>;
-    if (healthy === null) return <Text color="gray">●</Text>;
-    return healthy ? <Text color="green">●</Text> : <Text color="red">●</Text>;
 }
 
 export function HealthPanel({
