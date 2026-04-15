@@ -38,23 +38,32 @@ export function App({ config }: { config: DashboardConfig }) {
     const { exit } = useApp();
     const { stdout } = useStdout();
     const [forceDetail, setForceDetail] = useState(false);
-    const [healthProblems, setHealthProblems] = useState(false);
-    const [alarmProblems, setAlarmProblems] = useState(false);
-    const [buildProblems, setBuildProblems] = useState(false);
-    const [externalProblems, setExternalProblems] = useState<Record<string, boolean>>({});
+    const [healthProblems, setHealthProblems] = useState<string[]>([]);
+    const [alarmProblems, setAlarmProblems] = useState<string[]>([]);
+    const [buildProblems, setBuildProblems] = useState<string[]>([]);
+    const [externalProblems, setExternalProblems] = useState<Record<string, string[]>>({});
     const [termHeight, setTermHeight] = useState(stdout.rows ?? 24);
     const [scrollOffset, setScrollOffset] = useState(0);
 
-    const hasExternalProblems = Object.values(externalProblems).some(Boolean);
-    const hasProblems = healthProblems || alarmProblems || buildProblems || hasExternalProblems;
-    const mode: DisplayMode = forceDetail ? 'detail' : hasProblems ? 'alert' : 'calm';
+    const allProblems = useMemo(() => [
+        ...healthProblems,
+        ...alarmProblems,
+        ...buildProblems,
+        ...Object.values(externalProblems).flat(),
+    ], [healthProblems, alarmProblems, buildProblems, externalProblems]);
+    const hasProblems = allProblems.length > 0;
+    const mode: DisplayMode = forceDetail ? 'detail' : 'calm';
 
     // Stable per-group callbacks — one per group id, never re-created
     const externalGroupCallbacks = useMemo(() => {
-        const map: Record<string, (v: boolean) => void> = {};
+        const map: Record<string, (v: string[]) => void> = {};
         for (const group of config.externalGroups) {
-            map[group.id] = (v: boolean) =>
-                setExternalProblems((prev) => prev[group.id] === v ? prev : { ...prev, [group.id]: v });
+            map[group.id] = (v: string[]) =>
+                setExternalProblems((prev) => {
+                    const prevLabels = prev[group.id];
+                    if (prevLabels && prevLabels.length === v.length && prevLabels.every((l, i) => l === v[i])) return prev;
+                    return { ...prev, [group.id]: v };
+                });
         }
         return map;
     }, [config.externalGroups]);
@@ -89,13 +98,24 @@ export function App({ config }: { config: DashboardConfig }) {
                 <Text bold color="cyan">
                     Watch Dashboard{mode === 'detail' ? ' - Detail View' : ''}
                 </Text>
-                {mode === 'alert' && <Text bold color="red">ATTENTION</Text>}
-                {mode === 'calm' && <Text color="green">All OK</Text>}
+                {mode !== 'detail' && hasProblems && <Text bold color="red">ATTENTION</Text>}
+                {mode !== 'detail' && !hasProblems && <Text color="green">All OK</Text>}
                 {mode === 'detail' && <Text> </Text>}
                 <Clock timeZone={config.timeZone} />
             </Box>
 
             <Box flexShrink={0}><Text dimColor>{'─'.repeat(60)}</Text></Box>
+
+            {/* Problem banner — prominent, visible from across the room */}
+            {hasProblems && mode !== 'detail' && (
+                <Box flexDirection="column" marginTop={1}>
+                    {allProblems.map((p, i) => (
+                        <Box key={i}>
+                            <Text bold backgroundColor="red" color="white">{`  ✗  ${p}  `}</Text>
+                        </Box>
+                    ))}
+                </Box>
+            )}
 
             {/* Incident summary — pinned below header when incidents exist */}
             {mode !== 'detail' && <IncidentSummary />}
@@ -110,27 +130,27 @@ export function App({ config }: { config: DashboardConfig }) {
                     {/* Health */}
                     <HealthPanel config={config} mode={mode} onProblems={setHealthProblems} />
 
-                    {mode !== 'calm' && <Text> </Text>}
+                    {mode === 'detail' && <Text> </Text>}
 
                     {/* Alarms */}
                     <AlarmPanel config={config} mode={mode} onProblems={setAlarmProblems} />
 
-                    {mode !== 'calm' && <Text> </Text>}
+                    {mode === 'detail' && <Text> </Text>}
 
                     {/* Builds */}
                     <BuildPanel config={config} mode={mode} onProblems={setBuildProblems} />
 
-                    {mode !== 'calm' && <Text> </Text>}
+                    {mode === 'detail' && <Text> </Text>}
 
                     {/* GitHub PRs & Issues */}
                     <GitHubPanel config={config} mode={mode} />
 
-                    {mode !== 'calm' && <Text> </Text>}
+                    {mode === 'detail' && <Text> </Text>}
 
                     {/* Cost */}
                     <CostPanel config={config} mode={mode} />
 
-                    {mode !== 'calm' && <Text> </Text>}
+                    {mode === 'detail' && <Text> </Text>}
 
                     {/* Resources (S3 size, CDN traffic) */}
                     <ResourcePanel config={config} mode={mode} />

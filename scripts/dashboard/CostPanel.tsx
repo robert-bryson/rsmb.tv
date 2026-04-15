@@ -173,7 +173,7 @@ export function CostPanel({
         );
     }
 
-    // Approaching or over budget, or alert/detail mode: show full breakdown
+    // Approaching or over budget, or detail mode: show full breakdown
     return (
         <Box gap={1}>
             <Text dimColor={!approaching} bold={approaching}> Cost</Text>

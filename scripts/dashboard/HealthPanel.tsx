@@ -201,7 +201,7 @@ export function HealthPanel({
 }: {
     config: DashboardConfig;
     mode: DisplayMode;
-    onProblems: (v: boolean) => void;
+    onProblems: (labels: string[]) => void;
 }) {
     const { data, isLoading, isStale, error } = useAwsPoll(
         () => fetchAllHealth(config),
@@ -249,9 +249,15 @@ export function HealthPanel({
     const confirmedUnhealthy = unhealthy.filter((h) => getFailStreak(h) >= 2);
     const hasProblems = confirmedUnhealthy.length > 0;
 
+    const problemLabels = useMemo(
+        () => confirmedUnhealthy.map((h) => `${h.name} down`),
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- confirmedUnhealthy is derived from data + failStreaks
+        [data],
+    );
+
     useEffect(() => {
-        onProblems(hasProblems);
-    }, [hasProblems, onProblems]);
+        onProblems(problemLabels);
+    }, [problemLabels, onProblems]);
 
     // Record incidents when health checks transition to/from confirmed failure
     const incidentDown = useMemo(
@@ -284,15 +290,14 @@ export function HealthPanel({
                                 <StatusDot key={`fe-${h.domain}`} healthy={h.healthy} stale={isStale} warning={getFailStreak(h) === 1} />
                             ))}
                         </Box>
-                        <Text dimColor>OK</Text>
+                        {hasProblems ? <Text color="red">{confirmedUnhealthy.length} down</Text> : <Text dimColor>All OK</Text>}
                     </>
                 )}
             </Box>
         );
     }
 
-    // Alert mode: summary + only unhealthy expanded
-    // Detail mode: all rows
+    // Detail mode: all rows. Otherwise only unhealthy.
     const showAll = mode === 'detail';
     const backendItems = showAll ? backend : backend.filter((h) => h.healthy === false);
     const frontendItems = showAll ? frontend : frontend.filter((h) => h.healthy === false);

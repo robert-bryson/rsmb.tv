@@ -174,7 +174,7 @@ export function IncidentPanel({ timeZone }: { timeZone: string }) {
     );
 }
 
-/** One-line summary — pinned below header in calm/alert modes. */
+/** One-line summary — pinned below header in calm mode. */
 export function IncidentSummary() {
     const { items, now } = useIncidents();
 

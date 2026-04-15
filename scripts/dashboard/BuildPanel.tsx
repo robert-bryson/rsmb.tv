@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Box, Text } from 'ink';
 import Spinner from 'ink-spinner';
 import {
@@ -250,7 +250,7 @@ export function BuildPanel({
 }: {
     config: DashboardConfig;
     mode: DisplayMode;
-    onProblems: (v: boolean) => void;
+    onProblems: (labels: string[]) => void;
 }) {
     const { data, isLoading, isStale, error } = useAwsPoll(
         () => fetchAllBuilds(config),
@@ -263,9 +263,15 @@ export function BuildPanel({
     const staleWorkflows = (data ?? []).filter((b) => isStaleWorkflow(b));
     const hasProblems = failures.length > 0;
 
+    const problemLabels = useMemo(
+        () => failures.map((b) => `${b.label} build failed`),
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- failures is derived from data
+        [data],
+    );
+
     useEffect(() => {
-        onProblems(hasProblems);
-    }, [hasProblems, onProblems]);
+        onProblems(problemLabels);
+    }, [problemLabels, onProblems]);
 
     // Calm mode: summary dots + running builds on second line
     if (mode === 'calm') {
@@ -286,6 +292,7 @@ export function BuildPanel({
                                     </Text>
                                 ))}
                             </Box>
+                            {hasProblems && <Text color="red">{failures.length} failed</Text>}
                             {!hasProblems && running.length === 0 && staleWorkflows.length === 0 && <Text dimColor>OK</Text>}
                             {staleWorkflows.length > 0 && !hasProblems && (
                                 <Text color="yellow">{staleWorkflows.map((b) => b.label).join(', ')} stale</Text>
@@ -307,7 +314,7 @@ export function BuildPanel({
         );
     }
 
-    // Alert: show header + only failures. Detail: show all.
+    // Detail: show all. Otherwise only failures.
     const showAll = mode === 'detail';
     const items = showAll ? (data ?? []) : failures;
 

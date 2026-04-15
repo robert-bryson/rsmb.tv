@@ -31,7 +31,7 @@ export interface SiteGroup {
     sites: ExternalSite[];
 }
 
-export type DisplayMode = 'calm' | 'alert' | 'detail';
+export type DisplayMode = 'calm' | 'detail';
 
 export interface DashboardConfig {
     profile: string;

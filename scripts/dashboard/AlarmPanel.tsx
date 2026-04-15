@@ -66,7 +66,7 @@ export function AlarmPanel({
 }: {
     config: DashboardConfig;
     mode: DisplayMode;
-    onProblems: (v: boolean) => void;
+    onProblems: (labels: string[]) => void;
 }) {
     const { data, isLoading, isStale, error } = useAwsPoll(
         () => fetchAlarms(config),
@@ -75,11 +75,16 @@ export function AlarmPanel({
     );
 
     const firingAlarms = (data?.alarms ?? []).filter((a) => a.state !== 'OK');
-    const hasProblems = firingAlarms.length > 0;
+
+    const problemLabels = useMemo(
+        () => firingAlarms.map((a) => `${a.name} alarm firing`),
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- firingAlarms is derived from data
+        [data],
+    );
 
     useEffect(() => {
-        onProblems(hasProblems);
-    }, [hasProblems, onProblems]);
+        onProblems(problemLabels);
+    }, [problemLabels, onProblems]);
 
     // Record incidents when alarms start/stop firing
     const incidentDown = useMemo(
@@ -128,12 +133,12 @@ export function AlarmPanel({
         );
     }
 
-    // Alert/Detail: show banner for firing alarms, expand details
+    // Detail: expand all alarms. Otherwise only show firing.
     const showAllAlarms = mode === 'detail';
 
     return (
         <Box flexDirection="column">
-            {/* Big red banner when alarms fire — always visible in alert/detail */}
+            {/* Big red banner when alarms fire — always visible in detail mode */}
             {firingAlarms.length > 0 && (
                 <Box>
                     <Text bold backgroundColor="red" color="white">
@@ -160,7 +165,7 @@ export function AlarmPanel({
                 <Text color="red">  Error: {error}</Text>
             )}
 
-            {/* Alert mode: only firing alarms. Detail mode: all alarms */}
+            {/* Calm mode shows firing only (via banner); detail mode shows all */}
             {data &&
                 (showAllAlarms ? data.alarms : firingAlarms).map((a) => (
                     <Box key={a.name} gap={1}>

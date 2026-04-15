@@ -141,7 +141,7 @@ export function ExternalHealthPanel({
     group: SiteGroup;
     intervalMs: number;
     mode: DisplayMode;
-    onProblems: (v: boolean) => void;
+    onProblems: (labels: string[]) => void;
 }) {
     const { data, isLoading, isStale, error } = useAwsPoll(
         () => fetchGroupHealth(group),
@@ -190,9 +190,18 @@ export function ExternalHealthPanel({
     const confirmedUnhealthy = unhealthy.filter((h) => getFailStreak(h.name) >= 2);
     const hasProblems = confirmedUnhealthy.length > 0 || alerts.some((a) => a.kind === 'incident');
 
+    const problemLabels = useMemo(
+        () => [
+            ...confirmedUnhealthy.map((h) => `${h.name} down`),
+            ...alerts.filter((a) => a.kind === 'incident').map((a) => `${a.name} incident`),
+        ],
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- confirmedUnhealthy + alerts are derived from data + failStreaks
+        [data],
+    );
+
     useEffect(() => {
-        onProblems(hasProblems);
-    }, [hasProblems, onProblems]);
+        onProblems(problemLabels);
+    }, [problemLabels, onProblems]);
 
     // Record incidents when external sites go down or status-page incidents appear
     const incidentDown = useMemo(
@@ -227,14 +236,14 @@ export function ExternalHealthPanel({
                         {sites.map((h) => (
                             <StatusDot key={h.name} healthy={h.healthy} stale={isStale} warning={getFailStreak(h.name) === 1} />
                         ))}
-                        {isStale ? <Text color="yellow">stale</Text> : <Text dimColor>All OK</Text>}
+                        {hasProblems ? <Text color="red">{confirmedUnhealthy.length} down</Text> : isStale ? <Text color="yellow">stale</Text> : <Text dimColor>All OK</Text>}
                     </>
                 )}
             </Box>
         );
     }
 
-    // Alert/Detail mode
+    // Detail mode: all sites. Otherwise only unhealthy.
     const showAll = mode === 'detail';
     const items = showAll ? sites : unhealthy;
 
