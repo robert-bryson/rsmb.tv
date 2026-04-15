@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import { Box, Text } from 'ink';
 import Spinner from 'ink-spinner';
 import https from 'node:https';
@@ -8,6 +8,7 @@ import { sparkline } from './sparkline.js';
 import type { DisplayMode, SiteGroup } from './config.js';
 import { link } from './config.js';
 import { StatusDot } from './StatusDot.js';
+import { useIncidentDetection } from './useIncidentLog.js';
 
 interface SiteResult {
     name: string;
@@ -192,6 +193,22 @@ export function ExternalHealthPanel({
     useEffect(() => {
         onProblems(hasProblems);
     }, [hasProblems, onProblems]);
+
+    // Record incidents when external sites go down or status-page incidents appear
+    const incidentDown = useMemo(
+        () => {
+            if (!data) return null;
+            const entries: [string, string][] = [
+                ...confirmedUnhealthy.map((h): [string, string] => [h.name, h.detail]),
+                ...(data.alerts ?? [])
+                    .filter((a) => a.kind === 'incident')
+                    .map((a): [string, string] => [a.name, 'Active incident']),
+            ];
+            return new Map(entries);
+        },
+        [data, confirmedUnhealthy],
+    );
+    useIncidentDetection(group.label, incidentDown);
 
     const statusPageLink = link(group.statusPageUrl, 'status page');
 

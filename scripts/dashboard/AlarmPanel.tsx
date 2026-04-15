@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import { Box, Text } from 'ink';
 import Spinner from 'ink-spinner';
 import {
@@ -9,6 +9,7 @@ import {
 import { useAwsPoll } from './useAwsPoll.js';
 import type { DashboardConfig, DisplayMode } from './config.js';
 import { awsCredentials, link } from './config.js';
+import { useIncidentDetection } from './useIncidentLog.js';
 
 interface AlarmInfo {
     name: string;
@@ -79,6 +80,13 @@ export function AlarmPanel({
     useEffect(() => {
         onProblems(hasProblems);
     }, [hasProblems, onProblems]);
+
+    // Record incidents when alarms start/stop firing
+    const incidentDown = useMemo(
+        () => data ? new Map(firingAlarms.map((a) => [a.name, a.state])) : null,
+        [data, firingAlarms],
+    );
+    useIncidentDetection('Alarms', incidentDown);
 
     // Ring terminal bell when new alarms start firing
     const prevFiringCount = useRef(0);

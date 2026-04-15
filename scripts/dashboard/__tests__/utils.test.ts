@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { relativeTime, truncate } from '../utils.js';
+import { relativeTime, truncate, formatDuration } from '../utils.js';
 
 describe('relativeTime', () => {
     beforeEach(() => {
@@ -56,5 +56,35 @@ describe('truncate', () => {
 
     it('handles empty string', () => {
         expect(truncate('', 5)).toBe('');
+    });
+});
+
+describe('formatDuration', () => {
+    it('returns seconds for < 60s', () => {
+        expect(formatDuration(0)).toBe('0s');
+        expect(formatDuration(30_000)).toBe('30s');
+        expect(formatDuration(59_999)).toBe('59s');
+    });
+
+    it('returns minutes for < 60m', () => {
+        expect(formatDuration(60_000)).toBe('1m');
+        expect(formatDuration(5 * 60_000)).toBe('5m');
+        expect(formatDuration(59 * 60_000)).toBe('59m');
+    });
+
+    it('returns hours with remainder for < 24h', () => {
+        expect(formatDuration(60 * 60_000)).toBe('1h');
+        expect(formatDuration(90 * 60_000)).toBe('1h 30m');
+        expect(formatDuration(3 * 60 * 60_000)).toBe('3h');
+    });
+
+    it('omits remainder minutes when zero', () => {
+        expect(formatDuration(2 * 60 * 60_000)).toBe('2h');
+    });
+
+    it('returns days with hours for >= 24h', () => {
+        expect(formatDuration(24 * 60 * 60_000)).toBe('1d 0h');
+        expect(formatDuration(25 * 60 * 60_000)).toBe('1d 1h');
+        expect(formatDuration(48 * 60 * 60_000)).toBe('2d 0h');
     });
 });

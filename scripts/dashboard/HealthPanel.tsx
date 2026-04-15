@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import { Box, Text } from 'ink';
 import Spinner from 'ink-spinner';
 import https from 'node:https';
@@ -17,6 +17,7 @@ import { sparkline } from './sparkline.js';
 import type { DashboardConfig, DisplayMode } from './config.js';
 import { awsCredentials, link } from './config.js';
 import { StatusDot } from './StatusDot.js';
+import { useIncidentDetection } from './useIncidentLog.js';
 
 interface HealthResult {
     domain: string;
@@ -251,6 +252,13 @@ export function HealthPanel({
     useEffect(() => {
         onProblems(hasProblems);
     }, [hasProblems, onProblems]);
+
+    // Record incidents when health checks transition to/from confirmed failure
+    const incidentDown = useMemo(
+        () => data ? new Map(confirmedUnhealthy.map((h) => [h.domain, h.detail])) : null,
+        [data, confirmedUnhealthy],
+    );
+    useIncidentDetection('Health', incidentDown);
 
     const backend = (data ?? []).filter((h) => h.source !== 'frontend');
     const frontend = (data ?? []).filter((h) => h.source === 'frontend');

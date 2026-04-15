@@ -8,6 +8,7 @@ import { ResourcePanel } from './ResourcePanel.js';
 import { GitHubPanel } from './GitHubPanel.js';
 import { ExternalHealthPanel } from './ExternalHealthPanel.js';
 import { EventLogPanel, clearEvents } from './useEventLog.js';
+import { IncidentSummary, IncidentPanel } from './useIncidentLog.js';
 import type { DashboardConfig } from './config.js';
 import type { DisplayMode } from './config.js';
 
@@ -96,6 +97,9 @@ export function App({ config }: { config: DashboardConfig }) {
 
             <Box flexShrink={0}><Text dimColor>{'─'.repeat(60)}</Text></Box>
 
+            {/* Incident summary — pinned below header when incidents exist */}
+            {mode !== 'detail' && <IncidentSummary />}
+
             {/* Scrollable content area */}
             <Box flexDirection="column" flexGrow={1} overflow="hidden">
                 <Box flexDirection="column" flexShrink={0} marginTop={-scrollOffset}>
@@ -146,7 +150,8 @@ export function App({ config }: { config: DashboardConfig }) {
                         </Box>
                     ))}
 
-                    {/* Event Log — only in detail mode */}
+                    {/* Event Log & Incidents — only in detail mode */}
+                    {mode === 'detail' && <IncidentPanel timeZone={config.timeZone} />}
                     {mode === 'detail' && <EventLogPanel timeZone={config.timeZone} />}
 
                 </Box>
