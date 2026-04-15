@@ -147,7 +147,7 @@ export function GitHubPanel({
         );
     }
 
-    // Alert/Detail mode
+    // Detail mode
     return (
         <Box flexDirection="column">
             <Box gap={1}>

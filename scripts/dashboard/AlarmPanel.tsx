@@ -34,6 +34,20 @@ function stateColor(state: string): string {
     return 'yellow';
 }
 
+function AlarmRow({ alarm, region, indent = 4 }: { alarm: AlarmInfo; region: string; indent?: number }) {
+    return (
+        <Box gap={1}>
+            <Text>{' '.repeat(indent)}</Text>
+            <Text color={stateColor(alarm.state)}>●</Text>
+            <Text> </Text>
+            <Box width={35}>
+                <Text>{link(alarmConsoleUrl(alarm.name, region), alarm.name)}</Text>
+            </Box>
+            <Text color={stateColor(alarm.state)}>{alarm.state}</Text>
+        </Box>
+    );
+}
+
 async function fetchAlarms(config: DashboardConfig): Promise<AlarmData> {
     const cw = new CloudWatchClient({
         region: config.region,
@@ -132,23 +146,13 @@ export function AlarmPanel({
                     )}
                 </Box>
                 {firingAlarms.map((a) => (
-                    <Box key={a.name} gap={1}>
-                        <Text>    </Text>
-                        <Text color={stateColor(a.state)}>●</Text>
-                        <Text> </Text>
-                        <Box width={35}>
-                            <Text>{link(alarmConsoleUrl(a.name, config.region), a.name)}</Text>
-                        </Box>
-                        <Text color={stateColor(a.state)}>{a.state}</Text>
-                    </Box>
+                    <AlarmRow key={a.name} alarm={a} region={config.region} />
                 ))}
             </Box>
         );
     }
 
-    // Detail: expand all alarms. Otherwise only show firing.
-    const showAllAlarms = mode === 'detail';
-
+    // Detail mode
     return (
         <Box flexDirection="column">
             {/* Big red banner when alarms fire — always visible in detail mode */}
@@ -178,18 +182,9 @@ export function AlarmPanel({
                 <Text color="red">  Error: {error}</Text>
             )}
 
-            {/* Calm mode shows firing only (via banner); detail mode shows all */}
             {data &&
-                (showAllAlarms ? data.alarms : firingAlarms).map((a) => (
-                    <Box key={a.name} gap={1}>
-                        <Text>  </Text>
-                        <Text color={stateColor(a.state)}>●</Text>
-                        <Text> </Text>
-                        <Box width={35}>
-                            <Text>{link(alarmConsoleUrl(a.name, config.region), a.name)}</Text>
-                        </Box>
-                        <Text color={stateColor(a.state)}>{a.state}</Text>
-                    </Box>
+                data.alarms.map((a) => (
+                    <AlarmRow key={a.name} alarm={a} region={config.region} indent={2} />
                 ))}
         </Box>
     );

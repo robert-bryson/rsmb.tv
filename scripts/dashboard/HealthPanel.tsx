@@ -313,10 +313,9 @@ export function HealthPanel({
         );
     }
 
-    // Detail mode: all rows. Otherwise only unhealthy.
-    const showAll = mode === 'detail';
-    const backendItems = showAll ? backend : backend.filter((h) => h.healthy === false);
-    const frontendItems = showAll ? frontend : frontend.filter((h) => h.healthy === false);
+    // Detail mode: all rows
+    const backendItems = backend;
+    const frontendItems = frontend;
 
     return (
         <Box flexDirection="column">

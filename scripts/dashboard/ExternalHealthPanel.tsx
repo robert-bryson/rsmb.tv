@@ -266,9 +266,8 @@ export function ExternalHealthPanel({
         );
     }
 
-    // Detail mode: all sites. Otherwise only unhealthy.
-    const showAll = mode === 'detail';
-    const items = showAll ? sites : unhealthy;
+    // Detail mode: all sites
+    const items = sites;
 
     return (
         <Box flexDirection="column">

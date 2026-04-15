@@ -41,6 +41,29 @@ function statusLabel(status: string): string {
     return '?';
 }
 
+function BuildRow({ build, indent = 4 }: { build: BuildInfo; indent?: number }) {
+    return (
+        <Box gap={1}>
+            <Text>{' '.repeat(indent)}</Text>
+            <Text color={statusColor(build.status)}>●</Text>
+            <Text> </Text>
+            <Box width={24}>
+                <Text>{build.label}</Text>
+            </Box>
+            <Box width={4}>
+                <Text color={statusColor(build.status)}>{statusLabel(build.status)}</Text>
+            </Box>
+            <Box width={8}>
+                <Text>{link(build.url, build.id)}</Text>
+            </Box>
+            <Box width={6}>
+                <Text dimColor>{build.branch}</Text>
+            </Box>
+            <Text dimColor>{build.time}</Text>
+        </Box>
+    );
+}
+
 function isFailure(status: string): boolean {
     const s = status.toUpperCase();
     return ['FAILED', 'FAILURE', 'CANCELLED', 'ERROR'].includes(s);
@@ -311,32 +334,14 @@ export function BuildPanel({
                     </Box>
                 ))}
                 {failures.map((b) => (
-                    <Box key={`fail:${b.source}:${b.label}`} gap={1}>
-                        <Text>    </Text>
-                        <Text color={statusColor(b.status)}>●</Text>
-                        <Text> </Text>
-                        <Box width={24}>
-                            <Text>{b.label}</Text>
-                        </Box>
-                        <Box width={4}>
-                            <Text color={statusColor(b.status)}>{statusLabel(b.status)}</Text>
-                        </Box>
-                        <Box width={8}>
-                            <Text>{link(b.url, b.id)}</Text>
-                        </Box>
-                        <Box width={6}>
-                            <Text dimColor>{b.branch}</Text>
-                        </Box>
-                        <Text dimColor>{b.time}</Text>
-                    </Box>
+                    <BuildRow key={`fail:${b.source}:${b.label}`} build={b} />
                 ))}
             </Box>
         );
     }
 
-    // Detail: show all. Otherwise only failures.
-    const showAll = mode === 'detail';
-    const items = showAll ? (data ?? []) : failures;
+    // Detail mode
+    const items = data ?? [];
 
     return (
         <Box flexDirection="column">
@@ -389,24 +394,7 @@ export function BuildPanel({
                             <Text dimColor>  {section.label}</Text>
                             {mainBuilds.map((b) => (
                                 <React.Fragment key={`${b.source}:${b.label}`}>
-                                    <Box gap={1}>
-                                        <Text>    </Text>
-                                        <Text color={statusColor(b.status)}>●</Text>
-                                        <Text> </Text>
-                                        <Box width={24}>
-                                            <Text>{b.label}</Text>
-                                        </Box>
-                                        <Box width={4}>
-                                            <Text color={statusColor(b.status)}>{statusLabel(b.status)}</Text>
-                                        </Box>
-                                        <Box width={8}>
-                                            <Text>{link(b.url, b.id)}</Text>
-                                        </Box>
-                                        <Box width={6}>
-                                            <Text dimColor>{b.branch}</Text>
-                                        </Box>
-                                        <Text dimColor>{b.time}</Text>
-                                    </Box>
+                                    <BuildRow build={b} />
                                     {(workflowsByProject.get(b.project) ?? []).map((wf) => (
                                         <Box key={`${wf.source}:${wf.label}`} gap={1}>
                                             <Text>      </Text>
