@@ -84,7 +84,8 @@ export function AlarmPanel({
     // Record incidents when alarms start/stop firing
     const incidentDown = useMemo(
         () => data ? new Map(firingAlarms.map((a) => [a.name, a.state])) : null,
-        [data, firingAlarms],
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- firingAlarms is derived from data
+        [data],
     );
     useIncidentDetection('Alarms', incidentDown);
 

@@ -206,7 +206,8 @@ export function ExternalHealthPanel({
             ];
             return new Map(entries);
         },
-        [data, confirmedUnhealthy],
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- confirmedUnhealthy is derived from data + failStreaks (which sync with data)
+        [data],
     );
     useIncidentDetection(group.label, incidentDown);
 

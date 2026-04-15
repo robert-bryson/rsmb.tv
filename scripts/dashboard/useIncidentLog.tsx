@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Text } from 'ink';
-import { relativeTime, formatDuration } from './utils.js';
+import { formatDuration } from './utils.js';
 
 export interface Incident {
     id: number;
@@ -17,7 +17,6 @@ const POLL_INTERVAL_MS = 2000;
 
 let incidents: Incident[] = [];
 let nextId = 1;
-let revision = 0;
 
 function pruneExpired(): void {
     const cutoff = Date.now() - INCIDENT_TTL_MS;
@@ -38,7 +37,6 @@ export function openIncident(
     if (active) {
         active.detail = detail;
         incidents = [...incidents];
-        revision++;
         return;
     }
 
@@ -46,7 +44,6 @@ export function openIncident(
         ...incidents,
         { id: nextId++, source, entity, detail, startedAt: new Date(), resolvedAt: null },
     ];
-    revision++;
 }
 
 export function resolveIncident(source: string, entity: string): void {
@@ -56,20 +53,17 @@ export function resolveIncident(source: string, entity: string): void {
     if (active) {
         active.resolvedAt = new Date();
         incidents = [...incidents];
-        revision++;
     }
 }
 
 export function clearIncidents(): void {
     incidents = [];
-    revision++;
 }
 
 /** Reset all state — for tests only. */
 export function _resetIncidents(): void {
     incidents = [];
     nextId = 1;
-    revision = 0;
 }
 
 /** Return a snapshot of the incident list — for tests only. */
@@ -80,15 +74,11 @@ export function _getIncidents(): Incident[] {
 /** Polls the incident store on a timer (same pattern as useEvents). */
 function useIncidents(): { items: Incident[]; now: number } {
     const [now, setNow] = useState(Date.now);
-    const lastRevision = useRef(revision);
 
     useEffect(() => {
         const id = setInterval(() => {
             pruneExpired();
             setNow(Date.now());
-            if (revision !== lastRevision.current) {
-                lastRevision.current = revision;
-            }
         }, POLL_INTERVAL_MS);
         return () => clearInterval(id);
     }, []);
@@ -186,7 +176,7 @@ export function IncidentPanel({ timeZone }: { timeZone: string }) {
 
 /** One-line summary — pinned below header in calm/alert modes. */
 export function IncidentSummary() {
-    const { items } = useIncidents();
+    const { items, now } = useIncidents();
 
     if (items.length === 0) return null;
 
@@ -202,13 +192,14 @@ export function IncidentSummary() {
         const bTime = (b.resolvedAt ?? b.startedAt).getTime();
         return bTime - aTime;
     })[0];
-    const ago = relativeTime(latest.resolvedAt ?? latest.startedAt);
+    const latestTime = (latest.resolvedAt ?? latest.startedAt).getTime();
+    const ago = formatDuration(now - latestTime);
 
     return (
         <Box flexShrink={0} gap={1}>
             <Text color="yellow"> ⚑</Text>
             <Text dimColor>
-                {parts.join(', ')} incident{items.length !== 1 ? 's' : ''} · last {ago}
+                {parts.join(', ')} incident{items.length !== 1 ? 's' : ''} · {ago} ago
             </Text>
         </Box>
     );

@@ -256,7 +256,8 @@ export function HealthPanel({
     // Record incidents when health checks transition to/from confirmed failure
     const incidentDown = useMemo(
         () => data ? new Map(confirmedUnhealthy.map((h) => [h.domain, h.detail])) : null,
-        [data, confirmedUnhealthy],
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- confirmedUnhealthy is derived from data + failStreaks (which sync with data)
+        [data],
     );
     useIncidentDetection('Health', incidentDown);
 
