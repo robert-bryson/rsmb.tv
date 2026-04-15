@@ -222,23 +222,46 @@ export function ExternalHealthPanel({
 
     const statusPageLink = link(group.statusPageUrl, 'status page');
 
-    // Calm mode: single summary line
+    // Calm mode: single summary line + problem details
     if (mode === 'calm') {
         return (
-            <Box gap={1}>
-                <Text dimColor> Uptime.com</Text>
-                {isLoading && !data ? (
-                    <Text color="cyan"><Spinner type="dots" /></Text>
-                ) : error && !data ? (
-                    <Text color="red">error</Text>
-                ) : (
-                    <>
-                        {sites.map((h) => (
-                            <StatusDot key={h.name} healthy={h.healthy} stale={isStale} warning={getFailStreak(h.name) === 1} />
-                        ))}
-                        {hasProblems ? <Text color="red">{confirmedUnhealthy.length} down</Text> : isStale ? <Text color="yellow">stale</Text> : <Text dimColor>All OK</Text>}
-                    </>
-                )}
+            <Box flexDirection="column">
+                <Box gap={1}>
+                    <Text dimColor> Uptime.com</Text>
+                    {isLoading && !data ? (
+                        <Text color="cyan"><Spinner type="dots" /></Text>
+                    ) : error && !data ? (
+                        <Text color="red">error</Text>
+                    ) : (
+                        <>
+                            {sites.map((h) => (
+                                <StatusDot key={h.name} healthy={h.healthy} stale={isStale} warning={getFailStreak(h.name) === 1} />
+                            ))}
+                            {hasProblems ? <Text color="red">{confirmedUnhealthy.length} down</Text> : isStale ? <Text color="yellow">stale</Text> : <Text dimColor>All OK</Text>}
+                        </>
+                    )}
+                </Box>
+                {confirmedUnhealthy.map((h) => (
+                    <Box key={h.name} gap={1}>
+                        <Text>    </Text>
+                        <StatusDot healthy={h.healthy} stale={isStale} warning={false} />
+                        <Text> </Text>
+                        <Box width={24}>
+                            <Text>{h.drillDownUrl ? link(h.drillDownUrl, h.name) : h.name}</Text>
+                        </Box>
+                        <Box width={14}>
+                            <Text color="red">DOWN</Text>
+                        </Box>
+                        <Text dimColor>{h.detail}</Text>
+                    </Box>
+                ))}
+                {alerts.filter((a) => a.kind === 'incident').map((a) => (
+                    <Box key={a.name} gap={1}>
+                        <Text>    </Text>
+                        <Text color="red">⚠</Text>
+                        <Text color="red"> {a.name}</Text>
+                    </Box>
+                ))}
             </Box>
         );
     }

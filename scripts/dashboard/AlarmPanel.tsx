@@ -106,29 +106,42 @@ export function AlarmPanel({
     // Calm mode: terse inline
     if (mode === 'calm') {
         return (
-            <Box gap={1}>
-                <Box width={9}><Text dimColor> Alarms</Text></Box>
-                {isLoading && !data ? (
-                    <Text color="cyan"><Spinner type="dots" /></Text>
-                ) : error && !data ? (
-                    <Text color="red">⚠ error</Text>
-                ) : (
-                    <>
-                        <Box width={25} gap={1}>
-                            <Text>
-                                {(data?.alarms ?? []).map((a, i) => (
-                                    <Text key={i} color={stateColor(a.state)}>
-                                        {a.state === 'OK' ? '✓' : '✗'}
-                                        {i < (data?.alarms.length ?? 0) - 1 ? ' ' : ''}
-                                    </Text>
-                                ))}
-                            </Text>
+            <Box flexDirection="column">
+                <Box gap={1}>
+                    <Box width={9}><Text dimColor> Alarms</Text></Box>
+                    {isLoading && !data ? (
+                        <Text color="cyan"><Spinner type="dots" /></Text>
+                    ) : error && !data ? (
+                        <Text color="red">⚠ error</Text>
+                    ) : (
+                        <>
+                            <Box width={25} gap={1}>
+                                <Text>
+                                    {(data?.alarms ?? []).map((a, i) => (
+                                        <Text key={i} color={stateColor(a.state)}>
+                                            {a.state === 'OK' ? '✓' : '✗'}
+                                            {i < (data?.alarms.length ?? 0) - 1 ? ' ' : ''}
+                                        </Text>
+                                    ))}
+                                </Text>
+                            </Box>
+                            {data?.allClear && <Text dimColor>OK</Text>}
+                            {!data?.allClear && <Text color="red">{firingAlarms.length} firing</Text>}
+                            {isStale && <Text color="yellow">(stale)</Text>}
+                        </>
+                    )}
+                </Box>
+                {firingAlarms.map((a) => (
+                    <Box key={a.name} gap={1}>
+                        <Text>    </Text>
+                        <Text color={stateColor(a.state)}>●</Text>
+                        <Text> </Text>
+                        <Box width={35}>
+                            <Text>{link(alarmConsoleUrl(a.name, config.region), a.name)}</Text>
                         </Box>
-                        {data?.allClear && <Text dimColor>OK</Text>}
-                        {!data?.allClear && <Text color="red">{firingAlarms.length} firing</Text>}
-                        {isStale && <Text color="yellow">(stale)</Text>}
-                    </>
-                )}
+                        <Text color={stateColor(a.state)}>{a.state}</Text>
+                    </Box>
+                ))}
             </Box>
         );
     }

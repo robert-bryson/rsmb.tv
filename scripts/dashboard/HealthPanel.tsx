@@ -270,29 +270,45 @@ export function HealthPanel({
     const backend = (data ?? []).filter((h) => h.source !== 'frontend');
     const frontend = (data ?? []).filter((h) => h.source === 'frontend');
 
-    // Calm mode: single summary line
+    // Calm mode: single summary line + problem details
     if (mode === 'calm') {
         return (
-            <Box gap={1}>
-                <Box width={9}><Text dimColor> Health</Text></Box>
-                {isLoading && !data ? (
-                    <Text color="cyan"><Spinner type="dots" /></Text>
-                ) : error && !data ? (
-                    <Text color="red">⚠ error</Text>
-                ) : (
-                    <>
-                        <Box width={25} gap={1}>
-                            {backend.map((h) => (
-                                <StatusDot key={h.domain} healthy={h.healthy} stale={isStale} warning={getFailStreak(h) === 1} />
-                            ))}
-                            <Text dimColor>│</Text>
-                            {frontend.map((h) => (
-                                <StatusDot key={`fe-${h.domain}`} healthy={h.healthy} stale={isStale} warning={getFailStreak(h) === 1} />
-                            ))}
+            <Box flexDirection="column">
+                <Box gap={1}>
+                    <Box width={9}><Text dimColor> Health</Text></Box>
+                    {isLoading && !data ? (
+                        <Text color="cyan"><Spinner type="dots" /></Text>
+                    ) : error && !data ? (
+                        <Text color="red">⚠ error</Text>
+                    ) : (
+                        <>
+                            <Box width={25} gap={1}>
+                                {backend.map((h) => (
+                                    <StatusDot key={h.domain} healthy={h.healthy} stale={isStale} warning={getFailStreak(h) === 1} />
+                                ))}
+                                <Text dimColor>│</Text>
+                                {frontend.map((h) => (
+                                    <StatusDot key={`fe-${h.domain}`} healthy={h.healthy} stale={isStale} warning={getFailStreak(h) === 1} />
+                                ))}
+                            </Box>
+                            {hasProblems ? <Text color="red">{confirmedUnhealthy.length} down</Text> : <Text dimColor>All OK</Text>}
+                        </>
+                    )}
+                </Box>
+                {confirmedUnhealthy.map((h) => (
+                    <Box key={h.domain} gap={1}>
+                        <Text>    </Text>
+                        <StatusDot healthy={h.healthy} stale={isStale} warning={false} />
+                        <Text> </Text>
+                        <Box width={30}>
+                            <Text>{link(h.url, h.domain)}</Text>
                         </Box>
-                        {hasProblems ? <Text color="red">{confirmedUnhealthy.length} down</Text> : <Text dimColor>All OK</Text>}
-                    </>
-                )}
+                        <Box width={10}>
+                            <Text color="red">DOWN</Text>
+                        </Box>
+                        <Text dimColor>{h.detail}</Text>
+                    </Box>
+                ))}
             </Box>
         );
     }

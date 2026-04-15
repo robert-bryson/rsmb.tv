@@ -310,6 +310,26 @@ export function BuildPanel({
                         <Text dimColor>{b.time}</Text>
                     </Box>
                 ))}
+                {failures.map((b) => (
+                    <Box key={`fail:${b.source}:${b.label}`} gap={1}>
+                        <Text>    </Text>
+                        <Text color={statusColor(b.status)}>●</Text>
+                        <Text> </Text>
+                        <Box width={24}>
+                            <Text>{b.label}</Text>
+                        </Box>
+                        <Box width={4}>
+                            <Text color={statusColor(b.status)}>{statusLabel(b.status)}</Text>
+                        </Box>
+                        <Box width={8}>
+                            <Text>{link(b.url, b.id)}</Text>
+                        </Box>
+                        <Box width={6}>
+                            <Text dimColor>{b.branch}</Text>
+                        </Box>
+                        <Text dimColor>{b.time}</Text>
+                    </Box>
+                ))}
             </Box>
         );
     }
