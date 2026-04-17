@@ -96,15 +96,25 @@ export default function Aborg() {
                     <span className="text-zinc-200 font-medium">undo</span> — revert the
                     last organize operation via a move log
                 </li>
+                <li>
+                    <span className="text-zinc-200 font-medium">config</span> — show or
+                    initialize configuration interactively
+                </li>
+                <li>
+                    <span className="text-zinc-200 font-medium">tldr</span> — quick-start
+                    examples grouped by task
+                </li>
             </ul>
 
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Features</h2>
             <ul className="space-y-1.5 text-zinc-400 text-sm mb-6 list-disc list-inside">
                 <li>Handles zip archives, .m4b, .mp3, and loose audio folders</li>
-                <li>Reads ID3/audio tags via Mutagen and merges with filename parsing</li>
+                <li>Merges metadata from sidecar JSON, audio tags, and filename parsing</li>
                 <li>Auto-extracts archives at the destination (with zip-slip protection)</li>
-                <li>Every destructive command supports --dry-run</li>
+                <li>Accent-aware author deduplication and near-duplicate title warnings</li>
+                <li>Every destructive command supports --dry-run; org supports --copy</li>
                 <li>Fingerprint-based caching to speed up repeated scans</li>
+                <li>Handles companion files (.pdf, .epub, .jpg, .nfo, .opf, and more)</li>
                 <li>YAML config for source dirs, destination, patterns, and more</li>
             </ul>
 
@@ -125,7 +135,7 @@ aborg analyze --path /mnt/nas/audiobooks`}</code>
 
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Tech Stack</h2>
             <div className="flex flex-wrap gap-2 mb-8">
-                {['Python', 'Click', 'Mutagen', 'YAML', 'odmpy'].map((t) => (
+                {['Python', 'Click', 'Mutagen', 'Rich', 'YAML', 'odmpy'].map((t) => (
                     <span
                         key={t}
                         className="px-2 py-0.5 text-xs rounded-full bg-zinc-800 text-zinc-400"

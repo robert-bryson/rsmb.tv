@@ -5,7 +5,7 @@
 ### aborg
 
 - [ ] Add screenshots to project page
-- [ ] add project page/links/etc
+- [x] add project page/links/etc
 
 ### Anki artisan
 
@@ -33,7 +33,7 @@
 ### Content
 
 - [ ] Add screenshots to all project pages (aborg, Anki Artisan, Bookend, Temperature Records, Through Routes)
-- [ ] Write project page for aborg (currently has no page, only a TODO)
+- [x] Write project page for aborg
 - [ ] Add more blog posts to RSS feed as they are published
 
 ### Testing
