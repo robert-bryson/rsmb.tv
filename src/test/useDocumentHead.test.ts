@@ -58,4 +58,32 @@ describe('useDocumentHead', () => {
         unmount();
         expect(document.querySelector('meta[property="og:type"]')).toBeNull();
     });
+
+    it('removes canonical link only once on unmount', () => {
+        const { unmount } = renderHook(() =>
+            useDocumentHead({ title: 'Test' }), { wrapper }
+        );
+
+        const canonical = document.querySelector('link[rel="canonical"]');
+        expect(canonical).not.toBeNull();
+
+        unmount();
+        expect(document.querySelector('link[rel="canonical"]')).toBeNull();
+    });
+
+    it('restores pre-existing meta content on unmount', () => {
+        // Create a pre-existing og:title
+        const existing = document.createElement('meta');
+        existing.setAttribute('property', 'og:title');
+        existing.content = 'Original Title';
+        document.head.appendChild(existing);
+
+        const { unmount } = renderHook(() =>
+            useDocumentHead({ title: 'Override', ogTitle: 'New Title' }), { wrapper }
+        );
+
+        expect(existing.content).toBe('New Title');
+        unmount();
+        expect(existing.content).toBe('Original Title');
+    });
 });

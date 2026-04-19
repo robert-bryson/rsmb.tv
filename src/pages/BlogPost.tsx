@@ -89,5 +89,3 @@ export function BlogPost() {
         </article>
     );
 }
-
-export default BlogPost;

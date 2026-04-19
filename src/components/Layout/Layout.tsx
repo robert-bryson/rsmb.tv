@@ -49,7 +49,7 @@ export function Layout({ children }: LayoutProps) {
               <li key={to}>
                 <Link
                   to={to}
-                  className={`hover:text-violet-400 ${location.pathname === to
+                  className={`hover:text-violet-400 ${(to === '/' ? location.pathname === '/' : location.pathname.startsWith(to))
                     ? 'text-violet-400'
                     : 'text-zinc-400'
                     }`}

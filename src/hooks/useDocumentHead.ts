@@ -100,7 +100,6 @@ export function useDocumentHead({
             originalValues.forEach((value, el) => { el.content = value; });
             if (createdCanonical && canonicalLink) {
                 canonicalLink.remove();
-                canonicalLink.remove();
             }
         };
     }, [title, description, ogTitle, ogDescription, ogImage, ogUrl, pathname]);

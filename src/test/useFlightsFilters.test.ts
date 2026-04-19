@@ -112,4 +112,19 @@ describe('useFlightsFilters', () => {
         expect(result.current.selectedAirline).toBeNull();
         expect(result.current.hasUrlFilters).toBe(false);
     });
+
+    it('returns null for malformed route param (no hyphen)', () => {
+        const { result } = renderHook(() => useFlightsFilters(), {
+            wrapper: wrapperWithParams('route=LAX'),
+        });
+        expect(result.current.selectedRoute).toBe('LAX');
+        expect(result.current.selectedRouteAirports).toBeNull();
+    });
+
+    it('returns null for route param with too many segments', () => {
+        const { result } = renderHook(() => useFlightsFilters(), {
+            wrapper: wrapperWithParams('route=A-B-C'),
+        });
+        expect(result.current.selectedRouteAirports).toBeNull();
+    });
 });

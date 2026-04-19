@@ -47,3 +47,7 @@
 - [x] Add test coverage for useReducedMotion hook
 - [x] Add test coverage for useGlobeTextures hook
 - [x] Add test coverage for useFlightsFilters hook
+- [x] Add test coverage for parseDateString and sortDatesDescending utilities
+- [x] Add test coverage for useDocumentHead meta restore and canonical cleanup
+- [x] Add test coverage for selectedRouteAirports validation edge cases
+- [x] Add test for useGeoJsonData stale closure prevention

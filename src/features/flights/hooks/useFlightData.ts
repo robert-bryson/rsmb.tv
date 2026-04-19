@@ -9,7 +9,7 @@ import type {
   FlightStats,
   ColorMode,
 } from '../types';
-import { calculateDistance, parseYear, getRouteKey, hexToRgba } from '../utils';
+import { calculateDistance, parseYear, getRouteKey, hexToRgba, parseDateString } from '../utils';
 import {
   AVERAGE_FLIGHT_SPEED_KMH,
   FLIGHT_OVERHEAD_HOURS,
@@ -46,12 +46,6 @@ interface UseGlobeDataOptions {
 // Estimate flight time based on distance
 function estimateFlightTime(distanceKm: number): number {
   return distanceKm / AVERAGE_FLIGHT_SPEED_KMH + FLIGHT_OVERHEAD_HOURS;
-}
-
-// Parse date string to comparable format for sorting
-function parseDateForSort(dateStr: string): Date {
-  const parts = dateStr.split('/');
-  return new Date(parseInt(parts[2]), parseInt(parts[0]) - 1, parseInt(parts[1]));
 }
 
 // Transform GeoJSON data to react-globe.gl format with filtering and stats
@@ -254,7 +248,7 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
       }
 
       // Track first and last flights
-      const dateObj = parseDateForSort(props.date);
+      const dateObj = parseDateString(props.date);
       if (!firstFlight || dateObj < firstFlight.dateObj) {
         firstFlight = {
           route: `${props.origin_code} → ${props.destination_code}`,
@@ -351,7 +345,7 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
 
         // Find first and last visits
         const sortedByDate = [...filteredFlights].sort((a, b) =>
-          parseDateForSort(a.properties.date).getTime() - parseDateForSort(b.properties.date).getTime()
+          parseDateString(a.properties.date).getTime() - parseDateString(b.properties.date).getTime()
         );
         const firstVisitFlight = sortedByDate[0];
         const lastVisitFlight = sortedByDate[sortedByDate.length - 1];

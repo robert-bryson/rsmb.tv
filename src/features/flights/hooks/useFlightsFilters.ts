@@ -105,8 +105,9 @@ export function useFlightsFilters() {
     // Parse selected route into origin/destination codes
     const selectedRouteAirports = useMemo(() => {
         if (!selectedRoute) return null;
-        const [origin, destination] = selectedRoute.split('-');
-        return { origin, destination };
+        const parts = selectedRoute.split('-');
+        if (parts.length !== 2 || !parts[0] || !parts[1]) return null;
+        return { origin: parts[0], destination: parts[1] };
     }, [selectedRoute]);
 
     return {

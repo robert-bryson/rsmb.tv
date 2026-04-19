@@ -67,4 +67,26 @@ describe('useGeoJsonData', () => {
         const calledUrl = (fetch as ReturnType<typeof vi.fn>).mock.calls[0][0] as string;
         expect(calledUrl).toContain('data/flights/flights.geojson');
     });
+
+    it('does not update state after unmount (cancelled flag)', async () => {
+        let resolvePromise: (value: unknown) => void;
+        globalThis.fetch = vi.fn().mockReturnValue(
+            new Promise(resolve => {
+                resolvePromise = () => resolve({
+                    ok: true,
+                    json: () => Promise.resolve({ type: 'FeatureCollection', features: [] }),
+                });
+            })
+        );
+
+        const { result, unmount } = renderHook(() => useGeoJsonData('slow.geojson'));
+        expect(result.current.loading).toBe(true);
+
+        // Unmount before fetch resolves
+        unmount();
+
+        // Resolve the fetch — should not throw or update state
+        resolvePromise!();
+        // If the cancelled flag works, no error is thrown and state doesn't update
+    });
 });

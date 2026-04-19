@@ -33,3 +33,14 @@ export function hexToRgba(hex: string, alpha: number): string {
     const b = parseInt(hex.slice(5, 7), 16);
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
+
+/** Parse M/D/YYYY date string into a Date object */
+export function parseDateString(dateStr: string): Date {
+    const parts = dateStr.split('/');
+    return new Date(parseInt(parts[2], 10), parseInt(parts[0], 10) - 1, parseInt(parts[1], 10));
+}
+
+/** Sort M/D/YYYY date strings newest-first */
+export function sortDatesDescending(dates: string[]): string[] {
+    return [...dates].sort((a, b) => parseDateString(b).getTime() - parseDateString(a).getTime());
+}

@@ -18,17 +18,21 @@ export function useGeoJsonData<T>(filename: string): UseGeoJsonDataResult<T> {
     const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
+        let cancelled = false;
         const url = `${import.meta.env.BASE_URL}data/flights/${filename}`;
         fetchWithCache<T>(url)
             .then((json) => {
+                if (cancelled) return;
                 setData(json);
                 setLoading(false);
             })
             .catch((err) => {
+                if (cancelled) return;
                 console.error(`Error loading ${filename}`, err);
                 setError(err);
                 setLoading(false);
             });
+        return () => { cancelled = true; };
     }, [filename]);
 
     return { data, loading, error };

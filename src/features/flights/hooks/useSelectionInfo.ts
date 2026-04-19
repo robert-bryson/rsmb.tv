@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { GlobeStaticArc, GlobePoint, SelectedRouteInfo, SelectedCountryInfo, SelectedRegionInfo } from '../types';
-import { calculateDistance, parseYear, getRouteKey } from '../utils';
+import { calculateDistance, parseYear, getRouteKey, sortDatesDescending } from '../utils';
 
 /**
  * Computes derived selection info (route, country, region) for the stats panel.
@@ -26,12 +26,7 @@ export function useSelectionInfo({
         const first = arc.flights[0];
         const airlines = [...new Set(arc.flights.map(f => f.airline).filter(Boolean))];
         const years = [...new Set(arc.flights.map(f => parseYear(f.date)))].sort((a, b) => a - b);
-        const dates = arc.flights.map(f => f.date).sort((a, b) => {
-            const pa = a.split('/'); const pb = b.split('/');
-            const da = new Date(+pa[2], +pa[0] - 1, +pa[1]);
-            const db = new Date(+pb[2], +pb[0] - 1, +pb[1]);
-            return db.getTime() - da.getTime();
-        });
+        const dates = sortDatesDescending(arc.flights.map(f => f.date));
         const distanceKm = Math.round(calculateDistance(first.origin_lat, first.origin_lon, first.destination_lat, first.destination_lon));
         return {
             routeKey: selectedRoute,
