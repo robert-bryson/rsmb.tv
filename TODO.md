@@ -40,3 +40,10 @@
 
 - [ ] Add test coverage for Layout component
 - [ ] Add test coverage for ScrollToTop component
+- [x] Add test coverage for flights utility functions (parseYear, getRouteKey, hexToRgba, calculateDistance)
+- [x] Add test coverage for useGeoJsonData hook
+- [x] Add test coverage for useStatsPanelState hook
+- [x] Add test coverage for useKeyboardShortcuts hook
+- [x] Add test coverage for useReducedMotion hook
+- [x] Add test coverage for useGlobeTextures hook
+- [x] Add test coverage for useFlightsFilters hook

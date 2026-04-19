@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { GlobeStaticArc, GlobePoint, SelectedRouteInfo, SelectedCountryInfo, SelectedRegionInfo } from '../types';
-import { calculateDistance } from '../utils';
+import { calculateDistance, parseYear, getRouteKey } from '../utils';
 
 /**
  * Computes derived selection info (route, country, region) for the stats panel.
@@ -25,10 +25,7 @@ export function useSelectionInfo({
         if (!arc || arc.flights.length === 0) return null;
         const first = arc.flights[0];
         const airlines = [...new Set(arc.flights.map(f => f.airline).filter(Boolean))];
-        const years = [...new Set(arc.flights.map(f => {
-            const parts = f.date.split('/');
-            return parseInt(parts[2], 10);
-        }))].sort((a, b) => a - b);
+        const years = [...new Set(arc.flights.map(f => parseYear(f.date)))].sort((a, b) => a - b);
         const dates = arc.flights.map(f => f.date).sort((a, b) => {
             const pa = a.split('/'); const pb = b.split('/');
             const da = new Date(+pa[2], +pa[0] - 1, +pa[1]);
@@ -73,10 +70,10 @@ export function useSelectionInfo({
             arc.flights.filter(f => f.origin_country === selectedCountry || f.destination_country === selectedCountry)
         );
         const airlines = [...new Set(countryFlights.map(f => f.airline).filter(Boolean))];
-        const years = [...new Set(countryFlights.map(f => parseInt(f.date.split('/')[2], 10)))].sort((a, b) => a - b);
+        const years = [...new Set(countryFlights.map(f => parseYear(f.date)))].sort((a, b) => a - b);
         const routeCounts = new Map<string, { origin: string; destination: string; count: number }>();
         countryFlights.forEach(f => {
-            const key = [f.origin_code, f.destination_code].sort().join('-');
+            const key = getRouteKey(f.origin_code, f.destination_code);
             const existing = routeCounts.get(key);
             if (existing) { existing.count++; } else {
                 routeCounts.set(key, { origin: f.origin_code, destination: f.destination_code, count: 1 });
@@ -121,10 +118,10 @@ export function useSelectionInfo({
             arc.flights.filter(f => f.origin_region === selectedRegion || f.destination_region === selectedRegion)
         );
         const airlines = [...new Set(regionFlights.map(f => f.airline).filter(Boolean))];
-        const years = [...new Set(regionFlights.map(f => parseInt(f.date.split('/')[2], 10)))].sort((a, b) => a - b);
+        const years = [...new Set(regionFlights.map(f => parseYear(f.date)))].sort((a, b) => a - b);
         const routeCounts = new Map<string, { origin: string; destination: string; count: number }>();
         regionFlights.forEach(f => {
-            const key = [f.origin_code, f.destination_code].sort().join('-');
+            const key = getRouteKey(f.origin_code, f.destination_code);
             const existing = routeCounts.get(key);
             if (existing) { existing.count++; } else {
                 routeCounts.set(key, { origin: f.origin_code, destination: f.destination_code, count: 1 });

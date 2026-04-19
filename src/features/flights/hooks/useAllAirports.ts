@@ -1,10 +1,9 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import type {
     AllAirportsCollection,
     GlobeAllAirportPoint,
     AirportSymbolMode,
 } from '../types';
-import { fetchWithCache } from '../utils/fetchCache';
 import {
     ALL_AIRPORTS_POINT_SIZE,
     CONTINENT_COLORS,
@@ -13,36 +12,13 @@ import {
     getElevationColor,
     getCountryColor,
 } from '../constants';
-
-interface UseAllAirportsResult {
-    data: AllAirportsCollection | null;
-    loading: boolean;
-    error: Error | null;
-}
+import { useGeoJsonData } from './useGeoJsonData';
 
 /**
  * Hook to fetch all airports data.
  */
-export function useAllAirports(): UseAllAirportsResult {
-    const [data, setData] = useState<AllAirportsCollection | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<Error | null>(null);
-
-    useEffect(() => {
-        const url = `${import.meta.env.BASE_URL}data/flights/allAirports.geojson`;
-        fetchWithCache<AllAirportsCollection>(url)
-            .then((json) => {
-                setData(json);
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.error('Error loading allAirports.geojson', err);
-                setError(err);
-                setLoading(false);
-            });
-    }, []);
-
-    return { data, loading, error };
+export function useAllAirports() {
+    return useGeoJsonData<AllAirportsCollection>('allAirports.geojson');
 }
 
 interface AllAirportsLayerOptions {

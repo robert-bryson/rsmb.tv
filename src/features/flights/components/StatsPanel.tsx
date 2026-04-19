@@ -535,7 +535,7 @@ function RouteStatsView({
       >
         <div className="space-y-0.5 max-h-48 overflow-y-auto">
           {routeInfo.dates.map((date, i) => (
-            <div key={i} className="text-xs text-gray-400">{date}</div>
+            <div key={`${date}-${i}`} className="text-xs text-gray-400">{date}</div>
           ))}
         </div>
       </CollapsibleSection>

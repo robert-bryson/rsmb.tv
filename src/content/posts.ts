@@ -49,8 +49,7 @@ const posts: BlogPost[] = postsMeta.map((meta) => ({
 posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 export function getAllPosts(): BlogPostMeta[] {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    return posts.map(({ Component, ...meta }) => meta);
+    return posts.map(({ slug, title, date, description, tags }) => ({ slug, title, date, description, tags }));
 }
 
 export function getPostBySlug(slug: string): BlogPost | undefined {

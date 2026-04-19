@@ -30,7 +30,9 @@ export function useDocumentHead({
         document.title = fullTitle;
 
         const metas: HTMLMetaElement[] = [];
+        const originalValues = new Map<HTMLMetaElement, string>();
         let canonicalLink: HTMLLinkElement | null = null;
+        let createdCanonical = false;
 
         function setMeta(property: string, content: string) {
             let el = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement | null;
@@ -39,6 +41,8 @@ export function useDocumentHead({
                 el.setAttribute('property', property);
                 document.head.appendChild(el);
                 metas.push(el);
+            } else if (!originalValues.has(el)) {
+                originalValues.set(el, el.content);
             }
             el.content = content;
         }
@@ -50,6 +54,8 @@ export function useDocumentHead({
                 el.setAttribute('name', name);
                 document.head.appendChild(el);
                 metas.push(el);
+            } else if (!originalValues.has(el)) {
+                originalValues.set(el, el.content);
             }
             el.content = content;
         }
@@ -77,6 +83,7 @@ export function useDocumentHead({
             canonicalLink = document.createElement('link');
             canonicalLink.setAttribute('rel', 'canonical');
             document.head.appendChild(canonicalLink);
+            createdCanonical = true;
         }
         canonicalLink.setAttribute('href', url);
 
@@ -90,8 +97,9 @@ export function useDocumentHead({
 
         return () => {
             metas.forEach(el => el.remove());
-            // Only remove canonical if we created it
-            if (canonicalLink && !document.querySelector('link[rel="canonical"][data-static]')) {
+            originalValues.forEach((value, el) => { el.content = value; });
+            if (createdCanonical && canonicalLink) {
+                canonicalLink.remove();
                 canonicalLink.remove();
             }
         };

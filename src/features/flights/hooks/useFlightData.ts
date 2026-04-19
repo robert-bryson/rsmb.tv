@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import type {
   AirportsCollection,
   FlightsCollection,
@@ -9,7 +9,7 @@ import type {
   FlightStats,
   ColorMode,
 } from '../types';
-import { fetchWithCache, calculateDistance } from '../utils';
+import { calculateDistance, parseYear, getRouteKey, hexToRgba } from '../utils';
 import {
   AVERAGE_FLIGHT_SPEED_KMH,
   FLIGHT_OVERHEAD_HOURS,
@@ -26,76 +26,14 @@ import {
   getYearColor,
   getFrequencyColor,
 } from '../constants';
+import { useGeoJsonData } from './useGeoJsonData';
 
-interface UseFlightDataResult<T> {
-  data: T | null;
-  loading: boolean;
-  error: Error | null;
+export function useAirports() {
+  return useGeoJsonData<AirportsCollection>('visitedAirports.geojson');
 }
 
-// Parse date string like "6/15/2008" to year
-function parseYear(dateStr: string): number {
-  const parts = dateStr.split('/');
-  return parseInt(parts[2], 10);
-}
-
-// Create route key (alphabetically sorted for consistency)
-function getRouteKey(origin: string, destination: string): string {
-  return [origin, destination].sort().join('-');
-}
-
-// Convert hex color to rgba with alpha
-function hexToRgba(hex: string, alpha: number): string {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-}
-
-
-
-export function useAirports(): UseFlightDataResult<AirportsCollection> {
-  const [data, setData] = useState<AirportsCollection | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    const url = `${import.meta.env.BASE_URL}data/flights/visitedAirports.geojson`;
-    fetchWithCache<AirportsCollection>(url)
-      .then((json) => {
-        setData(json);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Error loading visitedAirports.geojson', err);
-        setError(err);
-        setLoading(false);
-      });
-  }, []);
-
-  return { data, loading, error };
-}
-
-export function useFlights(): UseFlightDataResult<FlightsCollection> {
-  const [data, setData] = useState<FlightsCollection | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    const url = `${import.meta.env.BASE_URL}data/flights/flights.geojson`;
-    fetchWithCache<FlightsCollection>(url)
-      .then((json) => {
-        setData(json);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Error loading flights.geojson', err);
-        setError(err);
-        setLoading(false);
-      });
-  }, []);
-
-  return { data, loading, error };
+export function useFlights() {
+  return useGeoJsonData<FlightsCollection>('flights.geojson');
 }
 
 interface UseGlobeDataOptions {

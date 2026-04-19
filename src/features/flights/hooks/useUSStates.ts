@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import type {
     USStatesCollection,
     USStateStats,
@@ -7,43 +7,19 @@ import type {
     AllAirportsCollection,
     FlightsCollection,
 } from '../types';
-import { fetchWithCache } from '../utils/fetchCache';
 import {
     STATE_VISITED_COLOR,
     STATE_UNVISITED_COLOR,
     getVisitCountColor,
     getFlightCountColor,
 } from '../constants';
-
-interface UseUSStatesResult {
-    data: USStatesCollection | null;
-    loading: boolean;
-    error: Error | null;
-}
+import { useGeoJsonData } from './useGeoJsonData';
 
 /**
  * Hook to fetch US states GeoJSON data.
  */
-export function useUSStates(): UseUSStatesResult {
-    const [data, setData] = useState<USStatesCollection | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<Error | null>(null);
-
-    useEffect(() => {
-        const url = `${import.meta.env.BASE_URL}data/flights/usStates.geojson`;
-        fetchWithCache<USStatesCollection>(url)
-            .then((json) => {
-                setData(json);
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.error('Error loading usStates.geojson', err);
-                setError(err);
-                setLoading(false);
-            });
-    }, []);
-
-    return { data, loading, error };
+export function useUSStates() {
+    return useGeoJsonData<USStatesCollection>('usStates.geojson');
 }
 
 interface USStatesLayerOptions {
