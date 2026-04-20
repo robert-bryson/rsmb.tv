@@ -1,6 +1,9 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
+const SITE_URL = 'https://rsmb.tv';
+const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
+
 interface DocumentHeadOptions {
     title: string;
     description?: string;
@@ -34,24 +37,11 @@ export function useDocumentHead({
         let canonicalLink: HTMLLinkElement | null = null;
         let createdCanonical = false;
 
-        function setMeta(property: string, content: string) {
-            let el = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement | null;
+        function setMetaTag(attr: 'property' | 'name', key: string, content: string) {
+            let el = document.querySelector(`meta[${attr}="${key}"]`) as HTMLMetaElement | null;
             if (!el) {
                 el = document.createElement('meta');
-                el.setAttribute('property', property);
-                document.head.appendChild(el);
-                metas.push(el);
-            } else if (!originalValues.has(el)) {
-                originalValues.set(el, el.content);
-            }
-            el.content = content;
-        }
-
-        function setNameMeta(name: string, content: string) {
-            let el = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement | null;
-            if (!el) {
-                el = document.createElement('meta');
-                el.setAttribute('name', name);
+                el.setAttribute(attr, key);
                 document.head.appendChild(el);
                 metas.push(el);
             } else if (!originalValues.has(el)) {
@@ -61,21 +51,21 @@ export function useDocumentHead({
         }
 
         if (description) {
-            setNameMeta('description', description);
+            setMetaTag('name', 'description', description);
         }
 
-        setMeta('og:title', ogTitle || fullTitle);
-        setMeta('og:type', 'website');
+        setMetaTag('property', 'og:title', ogTitle || fullTitle);
+        setMetaTag('property', 'og:type', 'website');
 
         if (ogDescription || description) {
-            setMeta('og:description', ogDescription || description || '');
+            setMetaTag('property', 'og:description', ogDescription || description || '');
         }
 
-        const image = ogImage || 'https://rsmb.tv/og-image.png';
-        setMeta('og:image', image);
+        const image = ogImage || DEFAULT_OG_IMAGE;
+        setMetaTag('property', 'og:image', image);
 
-        const url = ogUrl || `https://rsmb.tv${pathname}`;
-        setMeta('og:url', url);
+        const url = ogUrl || `${SITE_URL}${pathname}`;
+        setMetaTag('property', 'og:url', url);
 
         // Set canonical link
         canonicalLink = document.querySelector('link[rel="canonical"]');
@@ -88,12 +78,12 @@ export function useDocumentHead({
         canonicalLink.setAttribute('href', url);
 
         // Twitter card tags
-        setNameMeta('twitter:card', 'summary_large_image');
-        setNameMeta('twitter:title', ogTitle || fullTitle);
+        setMetaTag('name', 'twitter:card', 'summary_large_image');
+        setMetaTag('name', 'twitter:title', ogTitle || fullTitle);
         if (ogDescription || description) {
-            setNameMeta('twitter:description', ogDescription || description || '');
+            setMetaTag('name', 'twitter:description', ogDescription || description || '');
         }
-        setNameMeta('twitter:image', image);
+        setMetaTag('name', 'twitter:image', image);
 
         return () => {
             metas.forEach(el => el.remove());

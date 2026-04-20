@@ -76,4 +76,8 @@ describe('calculateDistance', () => {
         expect(distance).toBeGreaterThan(20000);
         expect(distance).toBeLessThan(20100);
     });
+
+    it('returns NaN when given NaN inputs', () => {
+        expect(calculateDistance(NaN, -74, 40, -74)).toBeNaN();
+    });
 });

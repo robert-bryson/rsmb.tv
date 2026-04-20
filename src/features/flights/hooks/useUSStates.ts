@@ -13,6 +13,7 @@ import {
     getVisitCountColor,
     getFlightCountColor,
 } from '../constants';
+import { parseDateString } from '../utils';
 import { useGeoJsonData } from './useGeoJsonData';
 
 /**
@@ -27,11 +28,8 @@ interface USStatesLayerOptions {
     symbolMode: StateSymbolMode;
 }
 
-// Parse date string like "6/15/2008" to sortable format
-function parseDate(dateStr: string): Date {
-    const parts = dateStr.split('/');
-    return new Date(parseInt(parts[2]), parseInt(parts[0]) - 1, parseInt(parts[1]));
-}
+// Re-use the shared date parser from utils
+const parseDate = parseDateString;
 
 /**
  * Compute statistics for each US state based on airport and flight data.

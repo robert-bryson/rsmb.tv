@@ -228,6 +228,9 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
         props.origin_lat, props.origin_lon,
         props.destination_lat, props.destination_lon
       );
+
+      if (!isFinite(distance)) return;
+
       totalDistance += distance;
       totalFlightTime += estimateFlightTime(distance);
 
@@ -344,11 +347,15 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
         const departures = filteredFlights.filter(f => f.properties.origin_code === selectedAirport);
 
         // Find first and last visits
-        const sortedByDate = [...filteredFlights].sort((a, b) =>
+        const airportFlights = filteredFlights.filter(f =>
+          f.properties.origin_code === selectedAirport ||
+          f.properties.destination_code === selectedAirport
+        );
+        const sortedByDate = airportFlights.sort((a, b) =>
           parseDateString(a.properties.date).getTime() - parseDateString(b.properties.date).getTime()
         );
-        const firstVisitFlight = sortedByDate[0];
-        const lastVisitFlight = sortedByDate[sortedByDate.length - 1];
+        const firstVisitFlight = sortedByDate.length > 0 ? sortedByDate[0] : undefined;
+        const lastVisitFlight = sortedByDate.length > 0 ? sortedByDate[sortedByDate.length - 1] : undefined;
 
         // Get first visit info (was it arrival or departure?)
         let firstVisit: { date: string; from: string; direction: 'arrival' | 'departure' } | null = null;

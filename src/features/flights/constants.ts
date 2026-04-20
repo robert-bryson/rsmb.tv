@@ -316,24 +316,24 @@ export const FLIGHT_COUNT_COLORS = [
     { threshold: Infinity, color: 'rgba(194, 65, 12, 0.6)' }, // 50+ flights - dark orange
 ];
 
-// Get color based on visit count
-export function getVisitCountColor(count: number): string {
-    for (let i = VISIT_COUNT_COLORS.length - 1; i >= 0; i--) {
-        if (count >= VISIT_COUNT_COLORS[i].threshold) {
-            return VISIT_COUNT_COLORS[i].color;
+// Generic color threshold lookup (shared by visit count and flight count)
+function getThresholdColor(count: number, thresholds: readonly { threshold: number; color: string }[]): string {
+    for (let i = thresholds.length - 1; i >= 0; i--) {
+        if (count >= thresholds[i].threshold) {
+            return thresholds[i].color;
         }
     }
-    return VISIT_COUNT_COLORS[0].color;
+    return thresholds[0].color;
+}
+
+// Get color based on visit count
+export function getVisitCountColor(count: number): string {
+    return getThresholdColor(count, VISIT_COUNT_COLORS);
 }
 
 // Get color based on flight count
 export function getFlightCountColor(count: number): string {
-    for (let i = FLIGHT_COUNT_COLORS.length - 1; i >= 0; i--) {
-        if (count >= FLIGHT_COUNT_COLORS[i].threshold) {
-            return FLIGHT_COUNT_COLORS[i].color;
-        }
-    }
-    return FLIGHT_COUNT_COLORS[0].color;
+    return getThresholdColor(count, FLIGHT_COUNT_COLORS);
 }
 
 // State symbol mode labels for UI

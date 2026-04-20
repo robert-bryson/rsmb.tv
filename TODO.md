@@ -51,3 +51,8 @@
 - [x] Add test coverage for useDocumentHead meta restore and canonical cleanup
 - [x] Add test coverage for selectedRouteAirports validation edge cases
 - [x] Add test for useGeoJsonData stale closure prevention
+- [x] Add fetchCache error recovery and malformed JSON tests
+- [x] Add useDocumentHead OG image/URL customization tests
+- [x] Add formatDate leap year and boundary tests
+- [x] Add parseDateString zero-padded month test (radix bug prevention)
+- [x] Add calculateDistance NaN input test

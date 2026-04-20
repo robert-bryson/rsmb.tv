@@ -86,4 +86,22 @@ describe('useDocumentHead', () => {
         unmount();
         expect(existing.content).toBe('Original Title');
     });
+
+    it('uses default OG image when none provided', () => {
+        renderHook(() => useDocumentHead({ title: 'Test' }), { wrapper });
+        const ogImage = document.querySelector('meta[property="og:image"]');
+        expect(ogImage?.getAttribute('content')).toBe('https://rsmb.tv/og-image.png');
+    });
+
+    it('uses custom OG image when provided', () => {
+        renderHook(() => useDocumentHead({ title: 'Test', ogImage: 'https://rsmb.tv/og/custom.png' }), { wrapper });
+        const ogImage = document.querySelector('meta[property="og:image"]');
+        expect(ogImage?.getAttribute('content')).toBe('https://rsmb.tv/og/custom.png');
+    });
+
+    it('uses custom ogUrl when provided', () => {
+        renderHook(() => useDocumentHead({ title: 'Test', ogUrl: 'https://rsmb.tv/custom' }), { wrapper });
+        const ogUrl = document.querySelector('meta[property="og:url"]');
+        expect(ogUrl?.getAttribute('content')).toBe('https://rsmb.tv/custom');
+    });
 });

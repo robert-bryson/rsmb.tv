@@ -22,6 +22,13 @@ describe('parseDateString', () => {
         expect(d.getMonth()).toBe(0);
         expect(d.getDate()).toBe(1);
     });
+
+    it('correctly parses zero-padded months (no octal issue)', () => {
+        // This verifies parseInt uses radix 10 — "08" and "09" must not be treated as octal
+        const d = parseDateString('08/09/2020');
+        expect(d.getMonth()).toBe(7); // August, zero-indexed
+        expect(d.getDate()).toBe(9);
+    });
 });
 
 describe('sortDatesDescending', () => {

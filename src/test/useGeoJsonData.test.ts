@@ -86,7 +86,7 @@ describe('useGeoJsonData', () => {
         unmount();
 
         // Resolve the fetch — should not throw or update state
-        resolvePromise!();
+        resolvePromise!(undefined);
         // If the cancelled flag works, no error is thrown and state doesn't update
     });
 });

@@ -93,4 +93,41 @@ describe('fetchCache', () => {
         await fetchWithCache('/api/ttl', { ttl: 0 });
         expect(fetch).toHaveBeenCalledTimes(2);
     });
+
+    it('propagates JSON parse errors and cleans up pending state', async () => {
+        globalThis.fetch = vi.fn().mockResolvedValue({
+            ok: true,
+            json: () => Promise.reject(new SyntaxError('Unexpected token')),
+        });
+
+        await expect(fetchWithCache('/api/bad-json')).rejects.toThrow('Unexpected token');
+
+        // After failure, a fresh request should be made (not stuck on old pending promise)
+        globalThis.fetch = vi.fn().mockResolvedValue({
+            ok: true,
+            json: () => Promise.resolve({ recovered: true }),
+        });
+
+        const result = await fetchWithCache('/api/bad-json');
+        expect(result).toEqual({ recovered: true });
+    });
+
+    it('does not cache failed responses', async () => {
+        globalThis.fetch = vi.fn().mockResolvedValue({
+            ok: false,
+            status: 500,
+            statusText: 'Server Error',
+        });
+
+        await expect(fetchWithCache('/api/server-error')).rejects.toThrow('HTTP 500');
+
+        // Retry should make a new request
+        globalThis.fetch = vi.fn().mockResolvedValue({
+            ok: true,
+            json: () => Promise.resolve({ success: true }),
+        });
+
+        const result = await fetchWithCache('/api/server-error');
+        expect(result).toEqual({ success: true });
+    });
 });
