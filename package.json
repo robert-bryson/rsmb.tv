@@ -63,7 +63,7 @@
     "react": "^19.2.5",
     "remark-frontmatter": "^5.0.0",
     "remark-mdx-frontmatter": "^5.2.0",
-    "tailwindcss": "^4.2.2",
+    "tailwindcss": "^4.2.3",
     "tsx": "^4.21.0",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.58.2",
