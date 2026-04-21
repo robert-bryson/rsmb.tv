@@ -258,6 +258,26 @@ export function TemperatureMap() {
         }, { replace: true });
     }, [setSearchParams, useCelsius]);
 
+    const toggleTrends = useCallback(() => {
+        const nextShowTrends = !showTrends;
+
+        if (nextShowTrends) {
+            prevViewMode.current = viewMode;
+            if (viewMode !== 'freshness') setViewMode('freshness');
+        } else {
+            setHighlightRange(null);
+            if (prevViewMode.current !== 'freshness') setViewMode(prevViewMode.current);
+        }
+
+        setShowTrends(nextShowTrends);
+    }, [showTrends, viewMode, setViewMode]);
+
+    const closeTrends = useCallback(() => {
+        setShowTrends(false);
+        setHighlightRange(null);
+        if (prevViewMode.current !== 'freshness') setViewMode(prevViewMode.current);
+    }, [setViewMode]);
+
     const handleSelectDecade = useCallback((decade: number | null) => {
         setSelectedDecade(decade);
         if (decade !== null) {
@@ -921,18 +941,6 @@ export function TemperatureMap() {
         }
     }, [mapLoaded, viewMode, showCounty]);
 
-    // Auto-switch to freshness view when trends panel opens
-    useEffect(() => {
-        if (showTrends) {
-            prevViewMode.current = viewMode;
-            if (viewMode !== 'freshness') setViewMode('freshness');
-        } else {
-            setHighlightRange(null);
-            if (prevViewMode.current !== 'freshness') setViewMode(prevViewMode.current);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [showTrends]);
-
     // Highlight map features matching hovered chart period
     useEffect(() => {
         const map = mapRef.current;
@@ -1290,7 +1298,7 @@ export function TemperatureMap() {
                         ← Projects
                     </Link>
                     <button
-                        onClick={() => setShowTrends(s => !s)}
+                        onClick={toggleTrends}
                         className={`bg-zinc-900/80 backdrop-blur px-3 py-1.5 rounded-lg text-sm border transition-colors ${showTrends
                             ? 'text-violet-300 border-violet-400/50 bg-violet-900/30'
                             : 'text-violet-400 border-violet-500/30 hover:text-violet-300 hover:border-violet-400/50'
@@ -1454,7 +1462,7 @@ export function TemperatureMap() {
                     <div className="shrink-0 flex items-center justify-between px-4 py-1.5 border-b border-zinc-800">
                         <h2 className="text-sm font-semibold text-zinc-200">Climate Trends</h2>
                         <button
-                            onClick={() => setShowTrends(false)}
+                            onClick={closeTrends}
                             className="text-zinc-400 hover:text-zinc-200 w-7 h-7 flex items-center justify-center rounded hover:bg-zinc-800 transition-colors text-sm"
                             aria-label="Close trends panel"
                         >

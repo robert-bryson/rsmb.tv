@@ -49,6 +49,7 @@ npm run dev
 | `npm run build` | Build for production |
 | `npm run preview` | Preview production build locally |
 | `npm run lint` | Run ESLint |
+| `npm run test:coverage` | Run tests with V8 coverage report |
 | `npm run watch` | Run terminal operations dashboard (`scripts/aws-watch.tsx`) |
 | `npm run build-flights` | Convert flight CSV data to GeoJSON |
 | `npm run sync-flights` | Sync flight data from Google Sheets (requires `GOOGLE_SHEET_ID`) |
@@ -76,7 +77,8 @@ The watch dashboard supports the following keys:
 ├── public/
 │   └── data/           # Generated GeoJSON files
 ├── infra/              # Terraform infrastructure config
-└── amplify/            # AWS Amplify backend config
+├── scripts/            # Build/sync scripts + dashboard utilities
+└── amplify.yml         # AWS Amplify build configuration
 ```
 
 ## Infrastructure

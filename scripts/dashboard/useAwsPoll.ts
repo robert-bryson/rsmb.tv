@@ -25,7 +25,10 @@ export function useAwsPoll<T>(
     const hasDataRef = useRef(false);
     const hadErrorRef = useRef(false);
     const sourceRef = useRef(source);
-    sourceRef.current = source;
+
+    useEffect(() => {
+        sourceRef.current = source;
+    }, [source]);
 
     const refresh = useCallback(() => setTick((t) => t + 1), []);
 

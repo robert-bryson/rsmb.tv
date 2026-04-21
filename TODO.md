@@ -56,3 +56,4 @@
 - [x] Add formatDate leap year and boundary tests
 - [x] Add parseDateString zero-padded month test (radix bug prevention)
 - [x] Add calculateDistance NaN input test
+- [x] Add test coverage for useAwsPoll recovery/error event behavior

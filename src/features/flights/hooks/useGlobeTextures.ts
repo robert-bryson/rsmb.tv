@@ -7,18 +7,24 @@ interface TextureLoadingState {
     error: Error | null;
 }
 
+interface InternalTextureLoadingState extends TextureLoadingState {
+    loadKey: string;
+}
+
 /**
  * Hook to preload globe textures and track loading progress.
  */
 export function useGlobeTextures(basemap?: BasemapConfig): TextureLoadingState {
-    const [state, setState] = useState<TextureLoadingState>({
+    const imageUrl = basemap?.image;
+    const bumpUrl = basemap?.bump;
+    const loadKey = `${imageUrl ?? ''}|${bumpUrl ?? ''}`;
+
+    const [state, setState] = useState<InternalTextureLoadingState>({
         isLoading: true,
         progress: 0,
         error: null,
+        loadKey,
     });
-
-    const imageUrl = basemap?.image;
-    const bumpUrl = basemap?.bump;
 
     useEffect(() => {
         if (!imageUrl) return;
@@ -26,8 +32,6 @@ export function useGlobeTextures(basemap?: BasemapConfig): TextureLoadingState {
         const textures = [imageUrl, ...(bumpUrl ? [bumpUrl] : [])];
         let loadedCount = 0;
         let cancelled = false;
-
-        setState({ isLoading: true, progress: 0, error: null });
 
         const loadTexture = (url: string): Promise<void> => {
             return new Promise((resolve, reject) => {
@@ -38,7 +42,10 @@ export function useGlobeTextures(basemap?: BasemapConfig): TextureLoadingState {
                     loadedCount++;
                     setState(prev => ({
                         ...prev,
+                        loadKey,
+                        isLoading: loadedCount < textures.length,
                         progress: (loadedCount / textures.length) * 100,
+                        error: null,
                     }));
                     resolve();
                 };
@@ -55,19 +62,31 @@ export function useGlobeTextures(basemap?: BasemapConfig): TextureLoadingState {
         Promise.all(textures.map(loadTexture))
             .then(() => {
                 if (!cancelled) {
-                    setState({ isLoading: false, progress: 100, error: null });
+                    setState({ isLoading: false, progress: 100, error: null, loadKey });
                 }
             })
             .catch((error) => {
                 if (!cancelled) {
-                    setState({ isLoading: false, progress: 0, error });
+                    setState({ isLoading: false, progress: 0, error, loadKey });
                 }
             });
 
         return () => {
             cancelled = true;
         };
-    }, [imageUrl, bumpUrl]);
+    }, [imageUrl, bumpUrl, loadKey]);
 
-    return state;
+    if (state.loadKey !== loadKey) {
+        return {
+            isLoading: true,
+            progress: 0,
+            error: null,
+        };
+    }
+
+    return {
+        isLoading: state.isLoading,
+        progress: state.progress,
+        error: state.error,
+    };
 }
