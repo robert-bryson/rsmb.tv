@@ -60,6 +60,11 @@ export function clearIncidents(): void {
     incidents = [];
 }
 
+/** Clear only resolved incidents. */
+export function clearResolvedIncidents(): void {
+    incidents = incidents.filter((i) => !i.resolvedAt);
+}
+
 /** Reset all state — for tests only. */
 export function _resetIncidents(): void {
     incidents = [];
@@ -122,54 +127,65 @@ export function useIncidentDetection(
 // ─── Display helpers ─────────────────────────────────────────────────────────
 
 /** Full incident history — shown in detail mode. */
-export function IncidentPanel({ timeZone }: { timeZone: string }) {
+export function IncidentPanel({ timeZone, pollIterations }: { timeZone: string; pollIterations?: number }) {
     const { items, now } = useIncidents();
-
-    if (items.length === 0) return null;
 
     const sorted = [...items].sort(
         (a, b) => b.startedAt.getTime() - a.startedAt.getTime(),
     );
+
+    const uptimeMs = (pollIterations ?? 0) * POLL_INTERVAL_MS;
+    const uptime = formatDuration(uptimeMs);
 
     return (
         <Box flexDirection="column">
             <Text> </Text>
             <Text dimColor>{'─'.repeat(60)}</Text>
             <Text bold dimColor> Incidents (24h)</Text>
-            {sorted.map((i) => {
-                const time = i.startedAt.toLocaleTimeString('en-US', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: false,
-                    timeZone,
-                });
-                const duration = i.resolvedAt
-                    ? formatDuration(i.resolvedAt.getTime() - i.startedAt.getTime())
-                    : formatDuration(now - i.startedAt.getTime());
-                const resolved = !!i.resolvedAt;
+            {sorted.length === 0 ? (
+                <Text dimColor> no resolved incidents</Text>
+            ) : (
+                sorted.map((i) => {
+                    const time = i.startedAt.toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false,
+                        timeZone,
+                    });
+                    const duration = i.resolvedAt
+                        ? formatDuration(i.resolvedAt.getTime() - i.startedAt.getTime())
+                        : formatDuration(now - i.startedAt.getTime());
+                    const resolved = !!i.resolvedAt;
 
-                return (
-                    <Box key={i.id} gap={1}>
-                        <Text dimColor> {time}</Text>
-                        <Text color={resolved ? 'green' : 'red'}>
-                            {resolved ? '✓' : '✗'}
-                        </Text>
-                        <Box width={12}>
-                            <Text bold color={resolved ? 'green' : 'red'}>
-                                {i.source}
+                    return (
+                        <Box key={i.id} gap={1}>
+                            <Text dimColor> {time}</Text>
+                            <Text color={resolved ? 'green' : 'red'}>
+                                {resolved ? '✓' : '✗'}
+                            </Text>
+                            <Box width={12}>
+                                <Text bold color={resolved ? 'green' : 'red'}>
+                                    {i.source}
+                                </Text>
+                            </Box>
+                            <Box width={24}>
+                                <Text>{i.entity}</Text>
+                            </Box>
+                            <Text dimColor>{i.detail}</Text>
+                            <Text dimColor> · </Text>
+                            <Text color={resolved ? 'green' : 'yellow'}>
+                                {resolved ? `Resolved (${duration})` : `Active (${duration})`}
                             </Text>
                         </Box>
-                        <Box width={24}>
-                            <Text>{i.entity}</Text>
-                        </Box>
-                        <Text dimColor>{i.detail}</Text>
-                        <Text dimColor> · </Text>
-                        <Text color={resolved ? 'green' : 'yellow'}>
-                            {resolved ? `Resolved (${duration})` : `Active (${duration})`}
-                        </Text>
-                    </Box>
-                );
-            })}
+                    );
+                })
+            )}
+            {pollIterations !== undefined && (
+                <>
+                    <Text> </Text>
+                    <Text dimColor>Instance running for {uptime} · {pollIterations ?? 0} poll cycles</Text>
+                </>
+            )}
         </Box>
     );
 }

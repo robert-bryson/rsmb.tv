@@ -49,8 +49,19 @@ npm run dev
 | `npm run build` | Build for production |
 | `npm run preview` | Preview production build locally |
 | `npm run lint` | Run ESLint |
+| `npm run watch` | Run terminal operations dashboard (`scripts/aws-watch.tsx`) |
 | `npm run build-flights` | Convert flight CSV data to GeoJSON |
 | `npm run sync-flights` | Sync flight data from Google Sheets (requires `GOOGLE_SHEET_ID`) |
+
+### Watch Dashboard Controls
+
+The watch dashboard supports the following keys:
+
+- `q` quit
+- `h` toggle compact/detail view
+- `e` clear event log
+- `c` clear resolved incidents
+- `↑/↓` or `j/k` scroll in detail mode
 
 ## Project Structure
 

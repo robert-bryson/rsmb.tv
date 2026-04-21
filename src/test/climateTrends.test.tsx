@@ -12,6 +12,16 @@ import { useClimateTrends } from '../features/temperatures/hooks/useClimateTrend
 
 const mockUseClimateTrends = vi.mocked(useClimateTrends);
 
+const mockTrends = {
+    source: 'test',
+    description: 'test data',
+    totalHighs: 500,
+    totalLows: 400,
+    byDecade: [{ decade: 2020, label: '2020s', highs: 5, lows: 4, ratio: 1.25 }],
+    byYear: [{ year: 2024, highs: 3, lows: 2 }],
+    rollingRatio: [{ year: 2024, ratio: 1.1, highs10yr: 11, lows10yr: 10 }],
+} as const;
+
 function renderWithRouter(ui: React.ReactElement) {
     return render(<MemoryRouter>{ui}</MemoryRouter>);
 }
@@ -32,13 +42,7 @@ describe('ClimateTrends component', () => {
 
     it('renders heading and tabs when data is loaded', () => {
         mockUseClimateTrends.mockReturnValue({
-            trends: {
-                totalHighs: 500,
-                totalLows: 400,
-                byDecade: [],
-                byYear: [],
-                rollingRatio: [],
-            } as never,
+            trends: mockTrends as never,
             loading: false,
             error: null,
         });
@@ -52,13 +56,7 @@ describe('ClimateTrends component', () => {
 
     it('renders back link to map', () => {
         mockUseClimateTrends.mockReturnValue({
-            trends: {
-                totalHighs: 500,
-                totalLows: 400,
-                byDecade: [],
-                byYear: [],
-                rollingRatio: [],
-            } as never,
+            trends: mockTrends as never,
             loading: false,
             error: null,
         });

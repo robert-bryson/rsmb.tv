@@ -3,6 +3,7 @@ import {
     openIncident,
     resolveIncident,
     clearIncidents,
+    clearResolvedIncidents,
     _resetIncidents,
     _getIncidents,
 } from '../useIncidentLog.js';
@@ -104,6 +105,30 @@ describe('incident log', () => {
 
         clearIncidents();
         expect(_getIncidents()).toHaveLength(0);
+    });
+
+    it('clearResolvedIncidents removes only resolved incidents', () => {
+        openIncident('Health', 'a', 'down');
+        openIncident('Health', 'b', 'down');
+        resolveIncident('Health', 'a');
+
+        clearResolvedIncidents();
+
+        const items = _getIncidents();
+        expect(items).toHaveLength(1);
+        expect(items[0].entity).toBe('b');
+        expect(items[0].resolvedAt).toBeNull();
+    });
+
+    it('clearResolvedIncidents is a no-op when nothing is resolved', () => {
+        openIncident('Health', 'a', 'down');
+        openIncident('Health', 'b', 'down');
+
+        clearResolvedIncidents();
+
+        const items = _getIncidents();
+        expect(items).toHaveLength(2);
+        expect(items.every((i) => i.resolvedAt === null)).toBe(true);
     });
 
     it('prunes incidents older than 24 hours', () => {

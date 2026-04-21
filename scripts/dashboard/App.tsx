@@ -8,7 +8,7 @@ import { ResourcePanel } from './ResourcePanel.js';
 import { GitHubPanel } from './GitHubPanel.js';
 import { ExternalHealthPanel } from './ExternalHealthPanel.js';
 import { EventLogPanel, clearEvents } from './useEventLog.js';
-import { IncidentSummary, IncidentPanel } from './useIncidentLog.js';
+import { IncidentSummary, IncidentPanel, clearResolvedIncidents } from './useIncidentLog.js';
 import type { DashboardConfig } from './config.js';
 import type { DisplayMode } from './config.js';
 
@@ -44,6 +44,7 @@ export function App({ config }: { config: DashboardConfig }) {
     const [externalProblems, setExternalProblems] = useState<Record<string, string[]>>({});
     const [termHeight, setTermHeight] = useState(stdout.rows ?? 24);
     const [scrollOffset, setScrollOffset] = useState(0);
+    const [pollIterations, setPollIterations] = useState(0);
 
     const allProblems = useMemo(() => [
         ...healthProblems,
@@ -74,11 +75,18 @@ export function App({ config }: { config: DashboardConfig }) {
         return () => { stdout.off('resize', onResize); };
     }, [stdout]);
 
+    // Track poll iterations for display
+    useEffect(() => {
+        const id = setInterval(() => setPollIterations((v) => v + 1), 2000);
+        return () => clearInterval(id);
+    }, []);
+
     const handleInput = useCallback(
         (input: string, key: { upArrow: boolean; downArrow: boolean }) => {
             if (input === 'q') exit();
             if (input === 'h') { setForceDetail((v) => !v); setScrollOffset(0); }
             if (input === 'e') clearEvents();
+            if (input === 'c') clearResolvedIncidents();
             if (input === 'j' || key.downArrow) setScrollOffset((v) => v + 1);
             if (input === 'k' || key.upArrow) setScrollOffset((v) => Math.max(0, v - 1));
         },
@@ -171,7 +179,7 @@ export function App({ config }: { config: DashboardConfig }) {
                     ))}
 
                     {/* Event Log & Incidents — only in detail mode */}
-                    {mode === 'detail' && <IncidentPanel timeZone={config.timeZone} />}
+                    {mode === 'detail' && <IncidentPanel timeZone={config.timeZone} pollIterations={pollIterations} />}
                     {mode === 'detail' && <EventLogPanel timeZone={config.timeZone} />}
 
                 </Box>
@@ -182,7 +190,7 @@ export function App({ config }: { config: DashboardConfig }) {
             <Box flexShrink={0}>
                 <Text dimColor>
                     {' '}
-                    [q] quit  [h] {forceDetail ? 'compact' : 'details'}  [e] clear log  [↑↓] scroll  ({modeLabel}){scrollHint}
+                    [q] quit  [h] {forceDetail ? 'compact' : 'details'}  [e] clear log  [c] clear resolved  [↑↓] scroll  ({modeLabel}){scrollHint}
                 </Text>
             </Box>
         </Box>
