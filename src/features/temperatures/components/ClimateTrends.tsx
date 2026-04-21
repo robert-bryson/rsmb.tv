@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { Suspense, lazy, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useClimateTrends } from '../hooks/useClimateTrends';
 import { RecordAgeChart } from './RecordAgeChart';
 import { RecordsBrokenTimeSeries } from './RecordsBrokenTimeSeries';
 import { HighLowRatioChart } from './HighLowRatioChart';
-import { RecordFreshnessMap } from './RecordFreshnessMap';
+
+const RecordFreshnessMap = lazy(() =>
+    import('./RecordFreshnessMap').then((m) => ({ default: m.RecordFreshnessMap })),
+);
 
 type Section = 'age' | 'timeseries' | 'ratio' | 'map';
 
@@ -84,7 +87,15 @@ export function ClimateTrends() {
                     <HighLowRatioChart decadeData={trends.byDecade} rollingData={trends.rollingRatio} />
                 )}
                 {active === 'map' && (
-                    <RecordFreshnessMap />
+                    <Suspense
+                        fallback={
+                            <div className="h-64 grid place-items-center text-zinc-400 text-xs">
+                                Loading freshness map...
+                            </div>
+                        }
+                    >
+                        <RecordFreshnessMap />
+                    </Suspense>
                 )}
 
                 {/* Common footer */}

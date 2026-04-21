@@ -1,5 +1,11 @@
-import { TemperatureMap } from '../features/temperatures';
+import { Suspense, lazy } from 'react';
 import { useDocumentHead } from '../hooks/useDocumentHead';
+
+const TemperatureMap = lazy(() =>
+    import('../features/temperatures/components/TemperatureMap').then((m) => ({
+        default: m.TemperatureMap,
+    })),
+);
 
 export default function TemperatureRecords() {
     useDocumentHead({
@@ -10,7 +16,15 @@ export default function TemperatureRecords() {
 
     return (
         <section className="h-full w-full overflow-hidden">
-            <TemperatureMap />
+            <Suspense
+                fallback={
+                    <div className="h-full w-full grid place-items-center text-zinc-300 text-sm">
+                        Loading temperature map...
+                    </div>
+                }
+            >
+                <TemperatureMap />
+            </Suspense>
         </section>
     );
 }
