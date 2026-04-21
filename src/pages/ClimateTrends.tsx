@@ -1,5 +1,11 @@
-import { ClimateTrends } from '../features/temperatures';
+import { Suspense, lazy } from 'react';
 import { useDocumentHead } from '../hooks/useDocumentHead';
+
+const ClimateTrends = lazy(() =>
+    import('../features/temperatures/components/ClimateTrends').then((m) => ({
+        default: m.ClimateTrends,
+    })),
+);
 
 export default function ClimateTrendsPage() {
     useDocumentHead({
@@ -10,7 +16,15 @@ export default function ClimateTrendsPage() {
 
     return (
         <section className="h-full w-full overflow-hidden">
-            <ClimateTrends />
+            <Suspense
+                fallback={
+                    <div className="h-full w-full grid place-items-center text-zinc-300 text-sm">
+                        Loading climate trends...
+                    </div>
+                }
+            >
+                <ClimateTrends />
+            </Suspense>
         </section>
     );
 }
