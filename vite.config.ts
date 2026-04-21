@@ -23,20 +23,6 @@ export default defineConfig({
           if (id.includes('node_modules/three/')) return 'three'
           if (id.includes('node_modules/three-globe/') || id.includes('node_modules/react-globe.gl/')) return 'three-globe'
           if (id.includes('node_modules/maplibre-gl/')) return 'maplibre-gl'
-          if (id.includes('/src/features/temperatures/components/TemperatureMap') ||
-              id.includes('/src/features/temperatures/hooks/useTemperatureData')) {
-            return 'temperatures-map-feature'
-          }
-          if (id.includes('/src/features/temperatures/components/RecordFreshnessMap')) {
-            return 'temperatures-freshness-map'
-          }
-          if (id.includes('/src/features/temperatures/components/ClimateTrends') ||
-              id.includes('/src/features/temperatures/components/RecordAgeChart') ||
-              id.includes('/src/features/temperatures/components/RecordsBrokenTimeSeries') ||
-              id.includes('/src/features/temperatures/components/HighLowRatioChart') ||
-              id.includes('/src/features/temperatures/hooks/useClimateTrends')) {
-            return 'temperatures-trends-feature'
-          }
         },
       },
     },
