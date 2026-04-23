@@ -8,8 +8,18 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import {
+    formatRssDate,
+    loadJsonFile,
+    resolveLatestTimestamp,
+    sortByDateDescending,
+} from './siteMetadata.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const REPO_ROOT = path.join(__dirname, '..');
+const POSTS_PATH = path.join(REPO_ROOT, 'src/content/posts.json');
+const OUTPUT_PATH = path.join(REPO_ROOT, 'public/rss.xml');
+const FEED_SOURCES = ['src/content/posts.json', 'src/content/blog'];
 const SITE_URL = 'https://rsmb.tv';
 const SITE_TITLE = 'rsmb';
 const SITE_DESCRIPTION = 'Personal site and blog by Robert Bryson — projects, engineering, and things I find interesting.';
@@ -17,15 +27,8 @@ const SITE_DESCRIPTION = 'Personal site and blog by Robert Bryson — projects, 
 /**
  * Load post metadata from the shared JSON registry.
  */
-function loadPosts() {
-    const raw = fs.readFileSync(
-        path.join(__dirname, '../src/content/posts.json'),
-        'utf-8'
-    );
-    const posts = JSON.parse(raw);
-    // Sort newest first
-    posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    return posts;
+export function loadPosts(postsPath = POSTS_PATH) {
+    return sortByDateDescending(loadJsonFile(postsPath));
 }
 
 function escapeXml(str) {
@@ -37,9 +40,24 @@ function escapeXml(str) {
         .replace(/'/g, '&apos;');
 }
 
-function generateRss() {
-    const posts = loadPosts();
+export function resolveFeedBuildDate(posts, {
+    repoRoot = REPO_ROOT,
+    resolveLatestTimestampImpl = resolveLatestTimestamp,
+} = {}) {
+    const latestTimestamp = resolveLatestTimestampImpl(FEED_SOURCES, { repoRoot });
 
+    if (latestTimestamp !== undefined) {
+        return formatRssDate(latestTimestamp);
+    }
+
+    if (posts[0]?.date) {
+        return formatRssDate(Date.parse(`${posts[0].date}T00:00:00Z`));
+    }
+
+    return formatRssDate(0);
+}
+
+export function buildRssXml(posts, buildDate = resolveFeedBuildDate(posts)) {
     const items = posts
         .map(
             (post) => `    <item>
@@ -52,23 +70,38 @@ function generateRss() {
         )
         .join('\n');
 
-    const rss = `<?xml version="1.0" encoding="UTF-8" ?>
+    return `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${escapeXml(SITE_TITLE)}</title>
     <link>${SITE_URL}</link>
     <description>${escapeXml(SITE_DESCRIPTION)}</description>
     <language>en-us</language>
-    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <lastBuildDate>${buildDate}</lastBuildDate>
     <atom:link href="${SITE_URL}/rss.xml" rel="self" type="application/rss+xml" />
 ${items}
   </channel>
 </rss>
 `;
-
-    const outPath = path.join(__dirname, '../public/rss.xml');
-    fs.writeFileSync(outPath, rss, 'utf-8');
-    console.log(`RSS feed generated → ${outPath} (${posts.length} post(s))`);
 }
 
-generateRss();
+export function generateRss({
+    postsPath = POSTS_PATH,
+    outputPath = OUTPUT_PATH,
+    repoRoot = REPO_ROOT,
+    fsImpl = fs,
+} = {}) {
+    const posts = loadPosts(postsPath);
+    const rss = buildRssXml(posts, resolveFeedBuildDate(posts, { repoRoot }));
+
+    fsImpl.writeFileSync(outputPath, rss, 'utf-8');
+
+    return { outPath: outputPath, count: posts.length };
+}
+
+const isDirectRun = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+
+if (isDirectRun) {
+    const { outPath, count } = generateRss();
+    console.log(`RSS feed generated → ${outPath} (${count} post(s))`);
+}

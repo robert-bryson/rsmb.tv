@@ -47,8 +47,11 @@ npm run dev
 |---------|-------------|
 | `npm run dev` | Start development server (builds flight data first) |
 | `npm run build` | Build for production |
+| `npm run build-rss` | Generate `public/rss.xml` from the blog registry |
+| `npm run build-sitemap` | Generate `public/sitemap.xml` from route and content metadata |
 | `npm run preview` | Preview production build locally |
 | `npm run lint` | Run ESLint |
+| `npm run test` | Run the full Vitest suite |
 | `npm run test:coverage` | Run tests with V8 coverage report |
 | `npm run watch` | Run terminal operations dashboard (`scripts/aws-watch.tsx`) |
 | `npm run build-flights` | Convert flight CSV data to GeoJSON |
@@ -75,11 +78,17 @@ The watch dashboard supports the following keys:
 ├── projects/
 │   └── flights/        # Flight data and conversion scripts
 ├── public/
-│   └── data/           # Generated GeoJSON files
+│   ├── data/           # Generated GeoJSON files
+│   ├── rss.xml         # Generated RSS feed
+│   └── sitemap.xml     # Generated sitemap
 ├── infra/              # Terraform infrastructure config
 ├── scripts/            # Build/sync scripts + dashboard utilities
 └── amplify.yml         # AWS Amplify build configuration
 ```
+
+## Generated Metadata
+
+`public/rss.xml` and `public/sitemap.xml` are generated artifacts. Their timestamps are derived from git history when available, with filesystem metadata as a fallback, so repeat builds do not create timestamp-only diffs.
 
 ## Infrastructure
 
