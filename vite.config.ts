@@ -17,6 +17,7 @@ export default defineConfig({
   assetsInclude: ['**/*.glb'],
   build: {
     sourcemap: 'hidden',
+    chunkSizeWarningLimit: 1400,
     rollupOptions: {
       output: {
         manualChunks(id) {
