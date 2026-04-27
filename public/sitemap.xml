@@ -49,6 +49,18 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://rsmb.tv/projects/tornado-tracks</loc>
+    <lastmod>2026-04-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rsmb.tv/projects/tornado-tracks/map</loc>
+    <lastmod>2026-04-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://rsmb.tv/projects/route2gpx</loc>
     <lastmod>2026-04-08</lastmod>
     <changefreq>monthly</changefreq>

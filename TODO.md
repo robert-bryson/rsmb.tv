@@ -1,5 +1,7 @@
 # TODO
 
+- [ ] should data like public/data/temperatures/*.json be stored in the repo? or in s3? or somewhere else?
+
 ## Projects
 
 ### aborg

@@ -30,6 +30,8 @@ const STATIC_ROUTES = [
     { path: '/projects/anki-artisan', priority: '0.7', changefreq: 'monthly', sources: ['src/pages/AnkiArtisan.tsx'] },
     { path: '/projects/bookend', priority: '0.7', changefreq: 'monthly', sources: ['src/pages/Bookend.tsx'] },
     { path: '/projects/temperature-records', priority: '0.7', changefreq: 'monthly', sources: ['src/pages/TemperatureRecords.tsx', 'src/features/temperatures'] },
+    { path: '/projects/tornado-tracks', priority: '0.7', changefreq: 'monthly', sources: ['src/pages/TornadoTracksAbout.tsx', 'projects/tornado-tracks/readme.md'] },
+    { path: '/projects/tornado-tracks/map', priority: '0.8', changefreq: 'monthly', sources: ['src/pages/TornadoTracks.tsx', 'src/features/tornadoes', 'public/data/tornadoes'] },
     { path: '/projects/route2gpx', priority: '0.7', changefreq: 'monthly', sources: ['src/pages/Route2Gpx.tsx'] },
     { path: '/projects/temperature-records/trends', priority: '0.6', changefreq: 'monthly', sources: ['src/pages/ClimateTrends.tsx', 'src/features/temperatures'] },
     { path: '/blog', priority: '0.7', changefreq: 'weekly', sources: ['src/pages/Blog.tsx', 'src/content/posts.json', 'src/content/blog'] },

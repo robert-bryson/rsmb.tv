@@ -69,6 +69,15 @@ export const projects: Project[] = [
     year: 2025,
   },
   {
+    slug: 'tornado-tracks',
+    title: 'Tornado Tracks',
+    description: 'A time-first MapLibre archive of NOAA/NCEI tornado tracks with EF-scale filters, regional presets, density mode, and annual playback.',
+    tech: ['React', 'MapLibre GL', 'NOAA/NCEI', 'GeoJSON'],
+    featured: true,
+    demoUrl: '/projects/tornado-tracks/map',
+    year: 2026,
+  },
+  {
     slug: 'route2gpx',
     title: 'route2gpx',
     description: 'Convert Google Routes into GPX files for GPS devices and bike computers. A privacy-focused web app that runs entirely in your browser—your routes never touch a server.',

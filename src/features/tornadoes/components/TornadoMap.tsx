@@ -1,0 +1,718 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import maplibregl from 'maplibre-gl';
+import type { Feature, FeatureCollection, MultiPolygon, Point, Polygon, Position } from 'geojson';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import { escapeHtml } from '../../../utils/escapeHtml';
+import {
+    INITIAL_CENTER,
+    INITIAL_ZOOM,
+    MAX_ZOOM,
+    MIN_ZOOM,
+    REGION_LABELS,
+    REGION_STATES,
+    SCALE_COLORS,
+    minScaleForFilter,
+} from '../constants';
+import { useTornadoData } from '../hooks/useTornadoData';
+import { useTornadoFilters } from '../hooks/useTornadoFilters';
+import type {
+    NotableTornadoEvent,
+    TornadoPointCollection,
+    TornadoRegionPreset,
+    TornadoTrackProperties,
+    TornadoTrackCollection,
+    TornadoTrackFeature,
+} from '../types';
+import {
+    type FallbackViewBox,
+    INITIAL_VIEW_BOX,
+    SVG_CANVAS_HEIGHT,
+    SVG_CANVAS_WIDTH,
+    clampViewBox,
+    fallbackBounds,
+    projectFallbackPoint,
+    summarize,
+    toTrackPoints,
+    trackPassesScale,
+    zoomFallbackViewBox,
+} from '../utils';
+import { TornadoSummaryPanel } from './TornadoSummaryPanel';
+import { TornadoTimeline } from './TornadoTimeline';
+
+const EMPTY_TRACKS: TornadoTrackCollection = { type: 'FeatureCollection', features: [] };
+const EMPTY_POINTS: TornadoPointCollection = { type: 'FeatureCollection', features: [] };
+const EMPTY_TRACK_POINTS: FeatureCollection<Point, TornadoTrackProperties> = { type: 'FeatureCollection', features: [] };
+const US_STATES_URL = '/data/flights/usStates.geojson';
+
+interface StateBoundaryProperties {
+    code: string;
+    name: string;
+    abbr: string;
+}
+
+type StateBoundaryCollection = FeatureCollection<Polygon | MultiPolygon, StateBoundaryProperties>;
+type StateBoundaryFeature = Feature<Polygon | MultiPolygon, StateBoundaryProperties>;
+
+interface FallbackDragState {
+    pointerId: number;
+    clientX: number;
+    clientY: number;
+    viewBox: FallbackViewBox;
+    moved: boolean;
+}
+
+const SCALE_COLOR_EXPRESSION = [
+    'match', ['get', 'scale'],
+    -1, SCALE_COLORS[-1],
+    0, SCALE_COLORS[0],
+    1, SCALE_COLORS[1],
+    2, SCALE_COLORS[2],
+    3, SCALE_COLORS[3],
+    4, SCALE_COLORS[4],
+    5, SCALE_COLORS[5],
+    SCALE_COLORS[-1],
+] as unknown as maplibregl.ExpressionSpecification;
+
+const YEAR_COLOR_EXPRESSION = [
+    'interpolate', ['linear'], ['get', 'year'],
+    1950, '#38bdf8',
+    1975, '#2dd4bf',
+    1995, '#a3e635',
+    2010, '#facc15',
+    2020, '#fb7185',
+    new Date().getFullYear(), '#f0abfc',
+] as unknown as maplibregl.ExpressionSpecification;
+
+function formatPopup(feature: TornadoTrackFeature) {
+    const p = feature.properties;
+    const color = SCALE_COLORS[p.scale] ?? SCALE_COLORS[-1];
+    return `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#18181b;color:#e4e4e7;padding:10px 12px;border-radius:8px;border:1px solid ${color}66;min-width:190px;box-shadow:0 8px 24px rgba(0,0,0,.45)">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:5px">
+            <strong style="font-size:13px;color:#fafafa">${escapeHtml(p.county)}, ${escapeHtml(p.state)}</strong>
+            <span style="font-size:11px;background:${color};color:#09090b;border-radius:3px;padding:1px 5px;font-weight:700">${escapeHtml(p.scaleLabel)}</span>
+        </div>
+        <div style="font-size:12px;color:#a1a1aa;margin-bottom:7px">${escapeHtml(p.date)} · ${escapeHtml(p.wfo || 'Unknown WFO')}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;font-size:12px">
+            <span style="color:#71717a">Length</span><span>${p.lengthMiles.toLocaleString()} mi</span>
+            <span style="color:#71717a">Width</span><span>${p.widthYards.toLocaleString()} yd</span>
+            <span style="color:#71717a">Deaths</span><span>${p.deaths.toLocaleString()}</span>
+            <span style="color:#71717a">Injuries</span><span>${p.injuries.toLocaleString()}</span>
+        </div>
+    </div>`;
+}
+
+function formatPathNumber(value: number) {
+    return Math.round(value * 10) / 10;
+}
+
+function ringToPath(ring: Position[], bounds: ReturnType<typeof fallbackBounds>) {
+    return ring.map((coordinate, index) => {
+        const [x, y] = projectFallbackPoint(coordinate, bounds);
+        return `${index === 0 ? 'M' : 'L'}${formatPathNumber(x)} ${formatPathNumber(y)}`;
+    }).join(' ');
+}
+
+function statePath(feature: StateBoundaryFeature, bounds: ReturnType<typeof fallbackBounds>) {
+    const polygons = feature.geometry.type === 'Polygon'
+        ? [feature.geometry.coordinates]
+        : feature.geometry.coordinates;
+
+    return polygons
+        .map((polygon) => polygon.map((ring) => `${ringToPath(ring, bounds)} Z`).join(' '))
+        .join(' ');
+}
+
+function clientToFallbackPoint(svg: SVGSVGElement, viewBox: FallbackViewBox, clientX: number, clientY: number) {
+    const rect = svg.getBoundingClientRect();
+    return {
+        x: viewBox.x + ((clientX - rect.left) / rect.width) * viewBox.width,
+        y: viewBox.y + ((clientY - rect.top) / rect.height) * viewBox.height,
+    };
+}
+
+function StaticTornadoFallback({
+    tracks,
+    region,
+    states,
+    selectedTrackId,
+    onSelectTrack,
+}: {
+    tracks: TornadoTrackCollection;
+    region: TornadoRegionPreset;
+    states: StateBoundaryCollection | null;
+    selectedTrackId?: string;
+    onSelectTrack: (track: TornadoTrackFeature) => void;
+}) {
+    const bounds = fallbackBounds(region);
+    const longitudeTicks = Array.from({ length: 7 }, (_, index) => bounds.west + ((bounds.east - bounds.west) / 6) * index);
+    const latitudeTicks = Array.from({ length: 5 }, (_, index) => bounds.south + ((bounds.north - bounds.south) / 4) * index);
+    const svgRef = useRef<SVGSVGElement>(null);
+    const dragState = useRef<FallbackDragState | null>(null);
+    const suppressTrackClick = useRef(false);
+    const [viewBox, _setViewBox] = useState<FallbackViewBox>(INITIAL_VIEW_BOX);
+    // Keep a ref in sync with viewBox state so callbacks always read the current
+    // value without capturing stale closures (important for rapid wheel events).
+    const viewBoxRef = useRef<FallbackViewBox>(INITIAL_VIEW_BOX);
+    const setViewBox = useCallback((next: FallbackViewBox) => {
+        viewBoxRef.current = next;
+        _setViewBox(next);
+    }, []);
+
+    const zoomBy = useCallback((factor: number, clientX?: number, clientY?: number) => {
+        const svg = svgRef.current;
+        if (!svg) return;
+        const rect = svg.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+        const current = viewBoxRef.current;
+        const focus = clientX !== undefined && clientY !== undefined
+            ? clientToFallbackPoint(svg, current, clientX, clientY)
+            : { x: current.x + current.width / 2, y: current.y + current.height / 2 };
+        setViewBox(zoomFallbackViewBox(current, focus.x, focus.y, factor));
+    }, [setViewBox]);
+
+    const resetView = useCallback(() => {
+        setViewBox(INITIAL_VIEW_BOX);
+    }, [setViewBox]);
+
+    const handlePointerDown = useCallback((event: React.PointerEvent<SVGSVGElement>) => {
+        if (event.button !== 0) return;
+        event.currentTarget.setPointerCapture(event.pointerId);
+        dragState.current = {
+            pointerId: event.pointerId,
+            clientX: event.clientX,
+            clientY: event.clientY,
+            viewBox: viewBoxRef.current,
+            moved: false,
+        };
+    }, []);
+
+    const handlePointerMove = useCallback((event: React.PointerEvent<SVGSVGElement>) => {
+        const drag = dragState.current;
+        const svg = svgRef.current;
+        if (!drag || !svg || drag.pointerId !== event.pointerId) return;
+
+        const rect = svg.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+
+        const dx = ((event.clientX - drag.clientX) / rect.width) * drag.viewBox.width;
+        const dy = ((event.clientY - drag.clientY) / rect.height) * drag.viewBox.height;
+        if (Math.abs(event.clientX - drag.clientX) > 3 || Math.abs(event.clientY - drag.clientY) > 3) drag.moved = true;
+
+        setViewBox(clampViewBox({
+            ...drag.viewBox,
+            x: drag.viewBox.x - dx,
+            y: drag.viewBox.y - dy,
+        }));
+    }, [setViewBox]);
+
+    const handlePointerEnd = useCallback((event: React.PointerEvent<SVGSVGElement>) => {
+        const drag = dragState.current;
+        if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+            event.currentTarget.releasePointerCapture(event.pointerId);
+        }
+        suppressTrackClick.current = Boolean(drag?.moved);
+        dragState.current = null;
+        window.setTimeout(() => { suppressTrackClick.current = false; }, 0);
+    }, []);
+
+    const handleWheel = useCallback((event: WheelEvent) => {
+        event.preventDefault();
+        zoomBy(event.deltaY < 0 ? 0.78 : 1.28, event.clientX, event.clientY);
+    }, [zoomBy]);
+
+    useEffect(() => {
+        const svg = svgRef.current;
+        if (!svg) return;
+        svg.addEventListener('wheel', handleWheel, { passive: false });
+        return () => svg.removeEventListener('wheel', handleWheel);
+    }, [handleWheel]);
+
+    const handleDoubleClick = useCallback((event: React.MouseEvent<SVGSVGElement>) => {
+        event.preventDefault();
+        zoomBy(0.62, event.clientX, event.clientY);
+    }, [zoomBy]);
+
+    const handleTrackClick = useCallback((event: React.MouseEvent, feature: TornadoTrackFeature) => {
+        if (suppressTrackClick.current) return;
+        event.stopPropagation();
+        onSelectTrack(feature);
+    }, [onSelectTrack]);
+
+    return (
+        <div className="absolute inset-0 z-10 overflow-hidden bg-[#020617]">
+            <svg
+                ref={svgRef}
+                viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`}
+                preserveAspectRatio="xMidYMid slice"
+                className="h-full w-full cursor-grab touch-none active:cursor-grabbing"
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerEnd}
+                onPointerCancel={handlePointerEnd}
+                onDoubleClick={handleDoubleClick}
+            >
+                <defs>
+                    <radialGradient id="tornadoFallbackGlow" cx="50%" cy="45%" r="70%">
+                        <stop offset="0%" stopColor="#082f49" stopOpacity="0.38" />
+                        <stop offset="55%" stopColor="#020617" stopOpacity="0.45" />
+                        <stop offset="100%" stopColor="#020617" stopOpacity="1" />
+                    </radialGradient>
+                </defs>
+                <rect width={SVG_CANVAS_WIDTH} height={SVG_CANVAS_HEIGHT} fill="url(#tornadoFallbackGlow)" />
+                <g opacity="0.95">
+                    {states?.features.map((feature) => (
+                        <path
+                            key={feature.properties.code}
+                            d={statePath(feature, bounds)}
+                            fill="#0f172a"
+                            fillOpacity="0.45"
+                            stroke="#64748b"
+                            strokeOpacity="0.46"
+                            strokeWidth="1.1"
+                            vectorEffect="non-scaling-stroke"
+                        />
+                    ))}
+                </g>
+                {longitudeTicks.map((lon) => {
+                    const [x] = projectFallbackPoint([lon, bounds.south], bounds);
+                    return <line key={`lon-${lon}`} x1={x} x2={x} y1="0" y2={SVG_CANVAS_HEIGHT} stroke="#334155" strokeOpacity="0.28" strokeWidth="1" />;
+                })}
+                {latitudeTicks.map((lat) => {
+                    const [, y] = projectFallbackPoint([bounds.west, lat], bounds);
+                    return <line key={`lat-${lat}`} x1="0" x2={SVG_CANVAS_WIDTH} y1={y} y2={y} stroke="#334155" strokeOpacity="0.28" strokeWidth="1" />;
+                })}
+                <rect x="1" y="1" width={SVG_CANVAS_WIDTH - 2} height={SVG_CANVAS_HEIGHT - 2} fill="none" stroke="#475569" strokeOpacity="0.35" strokeWidth="2" />
+                {tracks.features.map((feature) => {
+                    const [start, end] = feature.geometry.coordinates as [[number, number], [number, number]];
+                    const [x1, y1] = projectFallbackPoint(start, bounds);
+                    const [x2, y2] = projectFallbackPoint(end, bounds);
+                    const color = SCALE_COLORS[feature.properties.scale] ?? SCALE_COLORS[-1];
+                    const samePoint = Math.abs(x1 - x2) < 0.5 && Math.abs(y1 - y2) < 0.5;
+                    const selected = feature.properties.id === selectedTrackId;
+
+                    if (samePoint) {
+                        return (
+                            <circle
+                                key={feature.properties.id}
+                                cx={x1}
+                                cy={y1}
+                                r={selected ? 5.2 : 2.9}
+                                fill={color}
+                                opacity="0.86"
+                                stroke={selected ? '#f8fafc' : '#020617'}
+                                strokeWidth={selected ? 1.6 : 0.7}
+                                vectorEffect="non-scaling-stroke"
+                                className="cursor-pointer"
+                                onClick={(event) => handleTrackClick(event, feature)}
+                            />
+                        );
+                    }
+
+                    return (
+                        <g key={feature.properties.id} opacity="0.86" className="cursor-pointer" onClick={(event) => handleTrackClick(event, feature)}>
+                            <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={selected ? '#f8fafc' : '#020617'} strokeWidth={selected ? 6 : 4} strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+                            <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={color} strokeWidth={selected ? 3 : 2} strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+                        </g>
+                    );
+                })}
+            </svg>
+            <div className="pointer-events-auto absolute right-3 top-3 z-10 flex overflow-hidden rounded-md border border-zinc-700/80 bg-zinc-950/90 text-xs shadow-xl backdrop-blur">
+                <button type="button" onClick={() => zoomBy(0.72)} className="h-8 w-8 border-r border-zinc-800 text-zinc-200 hover:bg-zinc-800" aria-label="Zoom in">+</button>
+                <button type="button" onClick={() => zoomBy(1.38)} className="h-8 w-8 border-r border-zinc-800 text-zinc-200 hover:bg-zinc-800" aria-label="Zoom out">-</button>
+                <button type="button" onClick={resetView} className="h-8 px-2.5 text-zinc-200 hover:bg-zinc-800">Reset</button>
+            </div>
+        </div>
+    );
+}
+
+export function TornadoMap() {
+    const mapContainer = useRef<HTMLDivElement>(null);
+    const mapRef = useRef<maplibregl.Map | null>(null);
+    const popupRef = useRef<maplibregl.Popup | null>(null);
+    const trackLookup = useRef(new Map<string, TornadoTrackFeature>());
+    const [mapLoaded, setMapLoaded] = useState(false);
+    const [selectedTrack, setSelectedTrack] = useState<TornadoTrackFeature | null>(null);
+    const [webglUnavailable, setWebglUnavailable] = useState(() => {
+        try {
+            const canvas = document.createElement('canvas');
+            return !(canvas.getContext('webgl2') || canvas.getContext('webgl'));
+        } catch {
+            return true;
+        }
+    });
+    const [stateBoundaries, setStateBoundaries] = useState<StateBoundaryCollection | null>(null);
+    const {
+        filters,
+        setYearRange,
+        setScaleFilter,
+        setRegion,
+        setMode,
+        setColorMode,
+    } = useTornadoFilters();
+    // useTornadoFilters.setYearRange always stores start <= end in URL params,
+    // so no additional normalization is needed before passing to useTornadoData.
+    const { tracks, points, annualSummary, notableEvents, loading, error, minYear, maxYear } = useTornadoData({
+        startYear: filters.startYear,
+        endYear: filters.endYear,
+        loadPoints: filters.mode === 'density',
+    });
+
+    const normalizedRange = useMemo(() => ({
+        startYear: Math.max(minYear, Math.min(filters.startYear, maxYear)),
+        endYear: Math.max(minYear, Math.min(filters.endYear, maxYear)),
+    }), [filters.startYear, filters.endYear, minYear, maxYear]);
+
+    const regionStates = REGION_STATES[filters.region];
+    const minScale = minScaleForFilter(filters.scaleFilter);
+
+    const timelineFeatures = useMemo(() => {
+        if (!tracks) return [];
+        return tracks.features.filter((feature) => {
+            const p = feature.properties;
+            return trackPassesScale(p.scale, minScale) && (regionStates.length === 0 || regionStates.includes(p.state));
+        });
+    }, [tracks, minScale, regionStates]);
+
+    const filteredTracks = useMemo<TornadoTrackCollection>(() => {
+        if (!tracks) return EMPTY_TRACKS;
+        return {
+            type: 'FeatureCollection',
+            metadata: tracks.metadata,
+            features: timelineFeatures.filter((feature) => {
+                const year = feature.properties.year;
+                return year >= normalizedRange.startYear && year <= normalizedRange.endYear;
+            }),
+        };
+    }, [tracks, timelineFeatures, normalizedRange.startYear, normalizedRange.endYear]);
+
+    const filteredPoints = useMemo<TornadoPointCollection>(() => {
+        if (!points) return EMPTY_POINTS;
+        return {
+            type: 'FeatureCollection',
+            metadata: points.metadata,
+            features: points.features.filter((feature) => {
+                const p = feature.properties;
+                return p.year >= normalizedRange.startYear
+                    && p.year <= normalizedRange.endYear
+                    && trackPassesScale(p.scale, minScale)
+                    && (regionStates.length === 0 || regionStates.includes(p.state));
+            }),
+        };
+    }, [points, normalizedRange.startYear, normalizedRange.endYear, minScale, regionStates]);
+
+    const filteredTrackPoints = useMemo(() => toTrackPoints(filteredTracks), [filteredTracks]);
+
+    const stats = useMemo(() => summarize(filteredTracks.features), [filteredTracks]);
+
+    useEffect(() => {
+        let cancelled = false;
+
+        async function loadStateBoundaries() {
+            try {
+                const response = await fetch(US_STATES_URL);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data = await response.json() as StateBoundaryCollection;
+                if (!cancelled) setStateBoundaries(data);
+            } catch (err) {
+                console.warn('Unable to load fallback state boundaries:', err);
+            }
+        }
+
+        loadStateBoundaries();
+        return () => { cancelled = true; };
+    }, []);
+
+    useEffect(() => {
+        trackLookup.current = new Map(filteredTracks.features.map((feature) => [feature.properties.id, feature]));
+    }, [filteredTracks]);
+
+    useEffect(() => {
+        if (!mapContainer.current || mapRef.current || webglUnavailable) return;
+
+        const map = new maplibregl.Map({
+            container: mapContainer.current,
+            style: {
+                version: 8,
+                glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
+                sources: {
+                    'carto-dark': {
+                        type: 'raster',
+                        tiles: [
+                            'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+                            'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+                            'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+                        ],
+                        tileSize: 256,
+                        attribution: '&copy; OpenStreetMap &copy; CARTO',
+                    },
+                },
+                layers: [{ id: 'carto-dark-layer', type: 'raster', source: 'carto-dark', minzoom: 0, maxzoom: 20 }],
+            },
+            center: INITIAL_CENTER,
+            zoom: INITIAL_ZOOM,
+            minZoom: MIN_ZOOM,
+            maxZoom: MAX_ZOOM,
+        });
+
+        map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
+        popupRef.current = new maplibregl.Popup({ closeButton: false, closeOnClick: false, maxWidth: '260px' });
+        const canvas = map.getCanvas();
+        const handleContextLost = (event: Event) => {
+            event.preventDefault();
+            setWebglUnavailable(true);
+        };
+        const handleContextRestored = () => {
+            setWebglUnavailable(false);
+        };
+        canvas.addEventListener('webglcontextlost', handleContextLost);
+        canvas.addEventListener('webglcontextrestored', handleContextRestored);
+
+        map.on('load', () => {
+            map.addSource('tornado-tracks', { type: 'geojson', data: EMPTY_TRACKS });
+            map.addSource('tornado-track-points', { type: 'geojson', data: EMPTY_TRACK_POINTS });
+            map.addSource('tornado-points', { type: 'geojson', data: EMPTY_POINTS });
+            map.addSource('selected-tornado-track', { type: 'geojson', data: EMPTY_TRACKS });
+
+            map.addLayer({
+                id: 'tornado-density',
+                type: 'heatmap',
+                source: 'tornado-points',
+                layout: { visibility: 'none' },
+                paint: {
+                    'heatmap-weight': ['interpolate', ['linear'], ['coalesce', ['get', 'scale'], 0], -1, 0.25, 0, 0.4, 2, 0.8, 5, 1.5],
+                    'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 2, 0.7, 6, 1.6],
+                    'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 2, 7, 6, 22, 9, 36],
+                    'heatmap-opacity': ['interpolate', ['linear'], ['zoom'], 3, 0.88, 8, 0.35],
+                    'heatmap-color': [
+                        'interpolate', ['linear'], ['heatmap-density'],
+                        0, 'rgba(8, 47, 73, 0)',
+                        0.2, '#155e75',
+                        0.45, '#14b8a6',
+                        0.7, '#facc15',
+                        0.88, '#fb923c',
+                        1, '#f0abfc',
+                    ],
+                },
+            });
+
+            map.addLayer({
+                id: 'tornado-track-halo',
+                type: 'line',
+                source: 'tornado-tracks',
+                layout: { 'line-cap': 'round', 'line-join': 'round' },
+                paint: {
+                    'line-color': '#020617',
+                    'line-opacity': 0.6,
+                    'line-width': ['interpolate', ['linear'], ['zoom'], 2, 1.2, 6, 2.2, 9, 4.2],
+                },
+            });
+
+            map.addLayer({
+                id: 'tornado-track-line',
+                type: 'line',
+                source: 'tornado-tracks',
+                layout: { 'line-cap': 'round', 'line-join': 'round' },
+                paint: {
+                    'line-color': SCALE_COLOR_EXPRESSION,
+                    'line-opacity': ['interpolate', ['linear'], ['zoom'], 2, 0.62, 5, 0.82, 8, 0.95],
+                    'line-width': ['interpolate', ['linear'], ['coalesce', ['get', 'scale'], 0], -1, 0.8, 0, 1, 2, 1.7, 5, 3],
+                },
+            });
+
+            map.addLayer({
+                id: 'tornado-track-point',
+                type: 'circle',
+                source: 'tornado-track-points',
+                paint: {
+                    'circle-color': SCALE_COLOR_EXPRESSION,
+                    'circle-opacity': ['interpolate', ['linear'], ['zoom'], 2, 0.68, 6, 0.86],
+                    'circle-radius': ['interpolate', ['linear'], ['zoom'], 2, 2.2, 5, 3.6, 8, 6.5],
+                    'circle-stroke-color': '#020617',
+                    'circle-stroke-opacity': 0.85,
+                    'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 2, 0.6, 6, 1.2],
+                },
+            });
+
+            map.addLayer({
+                id: 'selected-tornado-track-line',
+                type: 'line',
+                source: 'selected-tornado-track',
+                layout: { 'line-cap': 'round', 'line-join': 'round' },
+                paint: {
+                    'line-color': '#f8fafc',
+                    'line-opacity': 0.95,
+                    'line-width': ['interpolate', ['linear'], ['zoom'], 2, 2.5, 7, 5.5, 10, 8],
+                    'line-blur': 0.5,
+                },
+            });
+
+            for (const layerId of ['tornado-track-line', 'tornado-track-point']) {
+                map.on('mouseenter', layerId, () => {
+                    map.getCanvas().style.cursor = 'pointer';
+                });
+
+                map.on('mouseleave', layerId, () => {
+                    map.getCanvas().style.cursor = '';
+                    popupRef.current?.remove();
+                });
+
+                map.on('mousemove', layerId, (event) => {
+                    const rendered = event.features?.[0];
+                    const id = rendered?.properties?.id as string | undefined;
+                    const feature = id ? trackLookup.current.get(id) : null;
+                    if (!feature || !event.lngLat) return;
+                    popupRef.current?.setLngLat(event.lngLat).setHTML(formatPopup(feature)).addTo(map);
+                });
+
+                map.on('click', layerId, (event) => {
+                    const rendered = event.features?.[0];
+                    const id = rendered?.properties?.id as string | undefined;
+                    const feature = id ? trackLookup.current.get(id) : null;
+                    if (feature) setSelectedTrack(feature);
+                });
+            }
+
+            map.resize();
+            requestAnimationFrame(() => map.resize());
+            setMapLoaded(true);
+        });
+
+        map.on('error', (event) => {
+            const message = event.error?.message || String(event);
+            if (/webgl|context/i.test(message)) setWebglUnavailable(true);
+            console.error('MapLibre error:', message);
+        });
+
+        mapRef.current = map;
+
+        return () => {
+            canvas.removeEventListener('webglcontextlost', handleContextLost);
+            canvas.removeEventListener('webglcontextrestored', handleContextRestored);
+            popupRef.current?.remove();
+            map.remove();
+            mapRef.current = null;
+        };
+        // webglUnavailable intentionally omitted: the effect must only run once on mount.
+        // The upfront check (webglUnavailable initial state) prevents map creation when WebGL is
+        // already unavailable; the contextlost/contextrestored listeners handle runtime changes.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        const map = mapRef.current;
+        if (!map || !mapLoaded) return;
+        (map.getSource('tornado-tracks') as maplibregl.GeoJSONSource).setData(filteredTracks);
+        (map.getSource('tornado-track-points') as maplibregl.GeoJSONSource).setData(filteredTrackPoints);
+        (map.getSource('tornado-points') as maplibregl.GeoJSONSource).setData(filteredPoints);
+    }, [mapLoaded, filteredTracks, filteredTrackPoints, filteredPoints]);
+
+    useEffect(() => {
+        const map = mapRef.current;
+        if (!map || !mapLoaded) return;
+        map.setLayoutProperty('tornado-density', 'visibility', filters.mode === 'density' ? 'visible' : 'none');
+        map.setLayoutProperty('tornado-track-halo', 'visibility', filters.mode === 'density' ? 'none' : 'visible');
+        map.setLayoutProperty('tornado-track-line', 'visibility', filters.mode === 'density' ? 'none' : 'visible');
+        map.setLayoutProperty('tornado-track-point', 'visibility', filters.mode === 'density' ? 'none' : 'visible');
+        map.setPaintProperty('tornado-track-line', 'line-color', filters.colorMode === 'scale' ? SCALE_COLOR_EXPRESSION : YEAR_COLOR_EXPRESSION);
+        map.setPaintProperty('tornado-track-point', 'circle-color', filters.colorMode === 'scale' ? SCALE_COLOR_EXPRESSION : YEAR_COLOR_EXPRESSION);
+    }, [mapLoaded, filters.mode, filters.colorMode]);
+
+    useEffect(() => {
+        const map = mapRef.current;
+        if (!map || !mapLoaded) return;
+        const selectedCollection: TornadoTrackCollection = selectedTrack
+            ? { type: 'FeatureCollection', features: [selectedTrack] }
+            : EMPTY_TRACKS;
+        (map.getSource('selected-tornado-track') as maplibregl.GeoJSONSource).setData(selectedCollection);
+    }, [mapLoaded, selectedTrack]);
+
+    const selectNotableEvent = useCallback((event: NotableTornadoEvent) => {
+        // trackLookup is a Map<id, feature> kept in sync with filteredTracks —
+        // use it instead of a linear scan over tracks?.features.
+        const match = trackLookup.current.get(event.id) ?? null;
+        if (!match) return;
+        setSelectedTrack(match);
+        const map = mapRef.current;
+        const first = match.geometry.coordinates[0] as [number, number] | undefined;
+        if (map && first) map.flyTo({ center: first, zoom: 7, duration: 900 });
+    }, []);
+
+    const filterSummary = `${normalizedRange.startYear === normalizedRange.endYear ? normalizedRange.startYear : `${normalizedRange.startYear}-${normalizedRange.endYear}`} · ${REGION_LABELS[filters.region]}`;
+    const showStaticFallback = webglUnavailable;
+
+    return (
+        <div className="relative h-full w-full overflow-hidden bg-[#020617] text-zinc-100">
+            <div ref={mapContainer} className="absolute inset-0" />
+            {showStaticFallback && (
+                <StaticTornadoFallback
+                    tracks={filteredTracks}
+                    region={filters.region}
+                    states={stateBoundaries}
+                    selectedTrackId={selectedTrack?.properties.id}
+                    onSelectTrack={setSelectedTrack}
+                />
+            )}
+
+            <div className="absolute left-3 top-3 z-20 flex max-w-[calc(100vw-5.5rem)] flex-wrap items-center gap-2 rounded-lg border border-zinc-700/80 bg-zinc-950/90 p-2 text-xs shadow-2xl backdrop-blur-md md:left-6 md:top-6">
+                <Link to="/projects/tornado-tracks" className="rounded-md px-2 py-1.5 font-medium text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100">
+                    Projects
+                </Link>
+                <div className="h-5 w-px bg-zinc-700" />
+                <div className="grid grid-cols-3 rounded-md bg-zinc-900 p-1">
+                    {(['tracks', 'density', 'trends'] as const).map((mode) => (
+                        <button
+                            key={mode}
+                            type="button"
+                            onClick={() => setMode(mode)}
+                            className={`rounded px-2 py-1 capitalize ${filters.mode === mode ? 'bg-sky-500 text-zinc-950' : 'text-zinc-400 hover:text-zinc-100'}`}
+                        >
+                            {mode}
+                        </button>
+                    ))}
+                </div>
+                <div className="hidden text-zinc-400 sm:block">{filterSummary}</div>
+            </div>
+
+            <TornadoSummaryPanel
+                stats={stats}
+                selectedTrack={selectedTrack}
+                notableEvents={notableEvents}
+                annualSummary={annualSummary}
+                startYear={normalizedRange.startYear}
+                endYear={normalizedRange.endYear}
+                scaleFilter={filters.scaleFilter}
+                region={filters.region}
+                colorMode={filters.colorMode}
+                mode={filters.mode}
+                onScaleFilterChange={setScaleFilter}
+                onRegionChange={setRegion}
+                onColorModeChange={setColorMode}
+                onModeChange={setMode}
+                onSelectEvent={selectNotableEvent}
+                onCloseSelection={() => setSelectedTrack(null)}
+            />
+
+            <TornadoTimeline
+                annualSummary={annualSummary}
+                startYear={normalizedRange.startYear}
+                endYear={normalizedRange.endYear}
+                minYear={minYear}
+                maxYear={maxYear}
+                onYearRangeChange={setYearRange}
+            />
+
+            <div className="absolute bottom-[15rem] left-3 z-20 rounded-md border border-zinc-700/80 bg-zinc-950/85 px-2.5 py-1.5 text-xs text-zinc-400 shadow-xl backdrop-blur md:hidden">
+                {stats.count.toLocaleString()} tracks · {stats.ef2Plus.toLocaleString()} EF2+
+            </div>
+
+            {(loading || error) && (
+                <div className="absolute inset-0 z-30 grid place-items-center bg-zinc-950/60 backdrop-blur-sm">
+                    <div className="rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-zinc-300 shadow-2xl">
+                        {error ? `Unable to load tornado data: ${error}` : 'Loading tornado tracks...'}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}

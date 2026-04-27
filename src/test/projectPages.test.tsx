@@ -6,6 +6,7 @@ import FlightsAbout from '../pages/FlightsAbout';
 import AnkiArtisan from '../pages/AnkiArtisan';
 import Bookend from '../pages/Bookend';
 import TemperatureRecordsAbout from '../pages/TemperatureRecordsAbout';
+import TornadoTracksAbout from '../pages/TornadoTracksAbout';
 import Route2Gpx from '../pages/Route2Gpx';
 
 function renderWithRouter(ui: React.ReactElement, { route = '/' } = {}) {
@@ -56,6 +57,14 @@ describe('TemperatureRecordsAbout page', () => {
         expect(screen.getByRole('heading', { level: 1, name: /Record Highs/i })).toBeInTheDocument();
         expect(screen.getByRole('link', { name: /Open interactive map/i })).toHaveAttribute('href', '/projects/temperature-records/map?view=freshness');
         expect(screen.getByRole('link', { name: /View climate trends/i })).toHaveAttribute('href', '/projects/temperature-records/trends');
+    });
+});
+
+describe('TornadoTracksAbout page', () => {
+    it('renders heading and map link', () => {
+        renderWithRouter(<TornadoTracksAbout />, { route: '/projects/tornado-tracks' });
+        expect(screen.getByRole('heading', { level: 1, name: /Tornado Tracks/i })).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: /Open interactive map/i })).toHaveAttribute('href', '/projects/tornado-tracks/map');
     });
 });
 

@@ -13,6 +13,7 @@
     "generate-mappings": "node projects/flights/scripts/generateNameMappings.js",
     "sync-flights": "node scripts/sync-flights.js",
     "sync-temperatures": "node scripts/sync-temperatures.js",
+    "sync-tornadoes": "node projects/tornado-tracks/scripts/syncTornadoes.js",
     "aws-status": "bash scripts/aws-status.sh",
     "watch": "node --env-file-if-exists=.env.local --import tsx/esm scripts/aws-watch.tsx",
     "lint": "eslint .",
