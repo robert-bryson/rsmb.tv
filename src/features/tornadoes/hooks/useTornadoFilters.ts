@@ -3,12 +3,13 @@ import { useSearchParams } from 'react-router-dom';
 import { DEFAULT_END_YEAR, DEFAULT_START_YEAR } from '../constants';
 import type { TornadoColorMode, TornadoMode, TornadoRegionPreset, TornadoScaleFilter } from '../types';
 
-const SCALE_FILTERS = new Set<TornadoScaleFilter>(['all', 'ef1plus', 'ef2plus', 'ef3plus']);
+const SCALE_FILTERS = new Set<TornadoScaleFilter>(['all', 'ef0', 'ef1', 'ef2', 'ef3', 'ef4', 'ef5', 'ef1plus', 'ef2plus', 'ef3plus']);
 const REGIONS = new Set<TornadoRegionPreset>(['conus', 'midwest', 'plains', 'dixie']);
 const MODES = new Set<TornadoMode>(['tracks', 'density', 'trends']);
 const COLOR_MODES = new Set<TornadoColorMode>(['scale', 'year']);
 
 function parseYear(value: string | null, fallback: number) {
+    if (value === null || value === '') return fallback;
     const year = Number(value);
     return Number.isFinite(year) ? Math.round(year) : fallback;
 }
@@ -73,12 +74,22 @@ export function useTornadoFilters() {
         });
     }, [updateParams]);
 
+    const setSelectedTrackId = useCallback((id: string | null) => {
+        updateParams((next) => {
+            if (id === null) next.delete('track');
+            else next.set('track', id);
+        });
+    }, [updateParams]);
+
+    const selectedTrackId = searchParams.get('track') ?? null;
+
     return {
-        filters: { startYear, endYear, scaleFilter, region, mode, colorMode },
+        filters: { startYear, endYear, scaleFilter, region, mode, colorMode, selectedTrackId },
         setYearRange,
         setScaleFilter,
         setRegion,
         setMode,
         setColorMode,
+        setSelectedTrackId,
     };
 }

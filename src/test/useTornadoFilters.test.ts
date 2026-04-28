@@ -1,0 +1,178 @@
+import { describe, expect, it } from 'vitest';
+import { renderHook, act } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import type { ReactNode } from 'react';
+import { useTornadoFilters } from '../features/tornadoes/hooks/useTornadoFilters';
+import { DEFAULT_END_YEAR, DEFAULT_START_YEAR } from '../features/tornadoes/constants';
+
+function wrapper({ children }: { children: ReactNode }) {
+    return MemoryRouter({ initialEntries: ['/tornadoes'], children });
+}
+
+function wrapperWithParams(params: string) {
+    return ({ children }: { children: ReactNode }) =>
+        MemoryRouter({ initialEntries: [`/tornadoes?${params}`], children });
+}
+
+// ---------------------------------------------------------------------------
+// Default state
+// ---------------------------------------------------------------------------
+
+describe('useTornadoFilters — defaults', () => {
+    it('starts with default year range', () => {
+        const { result } = renderHook(() => useTornadoFilters(), { wrapper });
+        expect(result.current.filters.startYear).toBe(DEFAULT_START_YEAR);
+        expect(result.current.filters.endYear).toBe(DEFAULT_END_YEAR);
+    });
+
+    it('starts with scaleFilter=all', () => {
+        const { result } = renderHook(() => useTornadoFilters(), { wrapper });
+        expect(result.current.filters.scaleFilter).toBe('all');
+    });
+
+    it('starts with region=conus', () => {
+        const { result } = renderHook(() => useTornadoFilters(), { wrapper });
+        expect(result.current.filters.region).toBe('conus');
+    });
+
+    it('starts with mode=tracks', () => {
+        const { result } = renderHook(() => useTornadoFilters(), { wrapper });
+        expect(result.current.filters.mode).toBe('tracks');
+    });
+
+    it('starts with colorMode=scale', () => {
+        const { result } = renderHook(() => useTornadoFilters(), { wrapper });
+        expect(result.current.filters.colorMode).toBe('scale');
+    });
+
+    it('starts with selectedTrackId=null', () => {
+        const { result } = renderHook(() => useTornadoFilters(), { wrapper });
+        expect(result.current.filters.selectedTrackId).toBeNull();
+    });
+});
+
+// ---------------------------------------------------------------------------
+// URL param parsing
+// ---------------------------------------------------------------------------
+
+describe('useTornadoFilters — URL param parsing', () => {
+    it('reads year range from ?start= and ?end=', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('start=1990&end=2000'),
+        });
+        expect(result.current.filters.startYear).toBe(1990);
+        expect(result.current.filters.endYear).toBe(2000);
+    });
+
+    it('falls back to default for invalid year values', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('start=abc&end='),
+        });
+        expect(result.current.filters.startYear).toBe(DEFAULT_START_YEAR);
+        expect(result.current.filters.endYear).toBe(DEFAULT_END_YEAR);
+    });
+
+    it.each([
+        'ef0', 'ef1', 'ef2', 'ef3', 'ef4', 'ef5',
+        'ef1plus', 'ef2plus', 'ef3plus', 'all',
+    ] as const)('parses scale filter %s from URL', (value) => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams(`scale=${value}`),
+        });
+        expect(result.current.filters.scaleFilter).toBe(value);
+    });
+
+    it('falls back to "all" for unknown scale values', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('scale=invalid'),
+        });
+        expect(result.current.filters.scaleFilter).toBe('all');
+    });
+
+    it('reads selectedTrackId from ?track=', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('track=20240521-KS-001'),
+        });
+        expect(result.current.filters.selectedTrackId).toBe('20240521-KS-001');
+    });
+
+    it('reads region from URL', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('region=plains'),
+        });
+        expect(result.current.filters.region).toBe('plains');
+    });
+
+    it('falls back to conus for unknown region', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('region=atlantis'),
+        });
+        expect(result.current.filters.region).toBe('conus');
+    });
+});
+
+// ---------------------------------------------------------------------------
+// Setters
+// ---------------------------------------------------------------------------
+
+describe('useTornadoFilters — setters', () => {
+    it('setYearRange updates start and end', () => {
+        const { result } = renderHook(() => useTornadoFilters(), { wrapper });
+        act(() => result.current.setYearRange(2010, 2015));
+        expect(result.current.filters.startYear).toBe(2010);
+        expect(result.current.filters.endYear).toBe(2015);
+    });
+
+    it('setYearRange normalizes inverted range', () => {
+        const { result } = renderHook(() => useTornadoFilters(), { wrapper });
+        act(() => result.current.setYearRange(2020, 2005));
+        expect(result.current.filters.startYear).toBe(2005);
+        expect(result.current.filters.endYear).toBe(2020);
+    });
+
+    it('setScaleFilter updates scaleFilter', () => {
+        const { result } = renderHook(() => useTornadoFilters(), { wrapper });
+        act(() => result.current.setScaleFilter('ef3plus'));
+        expect(result.current.filters.scaleFilter).toBe('ef3plus');
+    });
+
+    it('setScaleFilter to "all" removes ?scale= from URL', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('scale=ef2plus'),
+        });
+        act(() => result.current.setScaleFilter('all'));
+        expect(result.current.filters.scaleFilter).toBe('all');
+    });
+
+    it('setRegion updates region', () => {
+        const { result } = renderHook(() => useTornadoFilters(), { wrapper });
+        act(() => result.current.setRegion('dixie'));
+        expect(result.current.filters.region).toBe('dixie');
+    });
+
+    it('setMode updates mode', () => {
+        const { result } = renderHook(() => useTornadoFilters(), { wrapper });
+        act(() => result.current.setMode('density'));
+        expect(result.current.filters.mode).toBe('density');
+    });
+
+    it('setColorMode updates colorMode', () => {
+        const { result } = renderHook(() => useTornadoFilters(), { wrapper });
+        act(() => result.current.setColorMode('year'));
+        expect(result.current.filters.colorMode).toBe('year');
+    });
+
+    it('setSelectedTrackId writes track ID to URL', () => {
+        const { result } = renderHook(() => useTornadoFilters(), { wrapper });
+        act(() => result.current.setSelectedTrackId('track-abc-123'));
+        expect(result.current.filters.selectedTrackId).toBe('track-abc-123');
+    });
+
+    it('setSelectedTrackId(null) removes ?track= from URL', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('track=abc'),
+        });
+        act(() => result.current.setSelectedTrackId(null));
+        expect(result.current.filters.selectedTrackId).toBeNull();
+    });
+});

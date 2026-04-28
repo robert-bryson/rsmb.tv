@@ -30,6 +30,18 @@
 
 - [ ] Add screenshots to project page
 
+### Tornado Tracks
+
+- [ ] Add screenshots to project page
+- [x] hover popups have weird, large white boundaries
+- [x] playing the timeline animation flickers annoyingly
+- [x] scale should include all possible values (0-5, i believe?)
+- [x] map is unusable when many years are chosen
+- [x] refreshing the page should not reset state. state should be part of the URL
+- [x] ui elements should be able to be minimized
+- [ ] some of the track data appears to be bad (like the San Bernardino, CA, May 18, 1997, 3:50 PM tornado track)
+
+
 ## Next steps
 
 ### Content
@@ -59,3 +71,5 @@
 - [x] Add parseDateString zero-padded month test (radix bug prevention)
 - [x] Add calculateDistance NaN input test
 - [x] Add test coverage for useAwsPoll recovery/error event behavior
+- [x] Add test coverage for tornado scale filter bounds (scaleFilterBounds)
+- [x] Add test coverage for useTornadoFilters (URL params, setters, selectedTrackId)

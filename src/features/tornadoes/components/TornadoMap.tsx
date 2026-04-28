@@ -12,7 +12,7 @@ import {
     REGION_LABELS,
     REGION_STATES,
     SCALE_COLORS,
-    minScaleForFilter,
+    scaleFilterBounds,
 } from '../constants';
 import { useTornadoData } from '../hooks/useTornadoData';
 import { useTornadoFilters } from '../hooks/useTornadoFilters';
@@ -34,11 +34,12 @@ import {
     projectFallbackPoint,
     summarize,
     toTrackPoints,
-    trackPassesScale,
     zoomFallbackViewBox,
 } from '../utils';
 import { TornadoSummaryPanel } from './TornadoSummaryPanel';
 import { TornadoTimeline } from './TornadoTimeline';
+
+const LARGE_TRACK_WARNING_THRESHOLD = 5_000;
 
 const EMPTY_TRACKS: TornadoTrackCollection = { type: 'FeatureCollection', features: [] };
 const EMPTY_POINTS: TornadoPointCollection = { type: 'FeatureCollection', features: [] };
@@ -332,7 +333,10 @@ export function TornadoMap() {
     const popupRef = useRef<maplibregl.Popup | null>(null);
     const trackLookup = useRef(new Map<string, TornadoTrackFeature>());
     const [mapLoaded, setMapLoaded] = useState(false);
-    const [selectedTrack, setSelectedTrack] = useState<TornadoTrackFeature | null>(null);
+    const [selectedTrack, setSelectedTrackState] = useState<TornadoTrackFeature | null>(null);
+    const [timelinePlaying, setTimelinePlaying] = useState(false);
+    const [timelineCollapsed, setTimelineCollapsed] = useState(false);
+    const [summaryCollapsed, setSummaryCollapsed] = useState(false);
     const [webglUnavailable, setWebglUnavailable] = useState(() => {
         try {
             const canvas = document.createElement('canvas');
@@ -349,7 +353,14 @@ export function TornadoMap() {
         setRegion,
         setMode,
         setColorMode,
+        setSelectedTrackId,
     } = useTornadoFilters();
+
+    // Must be declared after useTornadoFilters so setSelectedTrackId is in scope.
+    const setSelectedTrack = useCallback((track: TornadoTrackFeature | null) => {
+        setSelectedTrackState(track);
+        setSelectedTrackId(track?.properties.id ?? null);
+    }, [setSelectedTrackId]);
     // useTornadoFilters.setYearRange always stores start <= end in URL params,
     // so no additional normalization is needed before passing to useTornadoData.
     const { tracks, points, annualSummary, notableEvents, loading, error, minYear, maxYear } = useTornadoData({
@@ -364,15 +375,16 @@ export function TornadoMap() {
     }), [filters.startYear, filters.endYear, minYear, maxYear]);
 
     const regionStates = REGION_STATES[filters.region];
-    const minScale = minScaleForFilter(filters.scaleFilter);
+    const { min: minScale, max: maxScale } = scaleFilterBounds(filters.scaleFilter);
 
     const timelineFeatures = useMemo(() => {
         if (!tracks) return [];
         return tracks.features.filter((feature) => {
-            const p = feature.properties;
-            return trackPassesScale(p.scale, minScale) && (regionStates.length === 0 || regionStates.includes(p.state));
+            const { scale, state } = feature.properties;
+            return scale >= minScale && scale <= maxScale
+                && (regionStates.length === 0 || regionStates.includes(state));
         });
-    }, [tracks, minScale, regionStates]);
+    }, [tracks, minScale, maxScale, regionStates]);
 
     const filteredTracks = useMemo<TornadoTrackCollection>(() => {
         if (!tracks) return EMPTY_TRACKS;
@@ -392,14 +404,15 @@ export function TornadoMap() {
             type: 'FeatureCollection',
             metadata: points.metadata,
             features: points.features.filter((feature) => {
-                const p = feature.properties;
-                return p.year >= normalizedRange.startYear
-                    && p.year <= normalizedRange.endYear
-                    && trackPassesScale(p.scale, minScale)
-                    && (regionStates.length === 0 || regionStates.includes(p.state));
+                const { year, scale, state } = feature.properties;
+                return year >= normalizedRange.startYear
+                    && year <= normalizedRange.endYear
+                    && scale >= minScale
+                    && scale <= maxScale
+                    && (regionStates.length === 0 || regionStates.includes(state));
             }),
         };
-    }, [points, normalizedRange.startYear, normalizedRange.endYear, minScale, regionStates]);
+    }, [points, normalizedRange.startYear, normalizedRange.endYear, minScale, maxScale, regionStates]);
 
     const filteredTrackPoints = useMemo(() => toTrackPoints(filteredTracks), [filteredTracks]);
 
@@ -426,6 +439,14 @@ export function TornadoMap() {
     useEffect(() => {
         trackLookup.current = new Map(filteredTracks.features.map((feature) => [feature.properties.id, feature]));
     }, [filteredTracks]);
+
+    // Restore selected track from URL param when data loads or changes
+    useEffect(() => {
+        const id = filters.selectedTrackId;
+        if (!id) return;
+        const feature = trackLookup.current.get(id);
+        if (feature) setSelectedTrackState(feature);
+    }, [filters.selectedTrackId, filteredTracks]);
 
     useEffect(() => {
         if (!mapContainer.current || mapRef.current || webglUnavailable) return;
@@ -456,7 +477,7 @@ export function TornadoMap() {
         });
 
         map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
-        popupRef.current = new maplibregl.Popup({ closeButton: false, closeOnClick: false, maxWidth: '260px' });
+        popupRef.current = new maplibregl.Popup({ closeButton: false, closeOnClick: false, maxWidth: '260px', className: 'tornado-popup' });
         const canvas = map.getCanvas();
         const handleContextLost = (event: Event) => {
             event.preventDefault();
@@ -636,14 +657,14 @@ export function TornadoMap() {
         const map = mapRef.current;
         const first = match.geometry.coordinates[0] as [number, number] | undefined;
         if (map && first) map.flyTo({ center: first, zoom: 7, duration: 900 });
-    }, []);
+    }, [setSelectedTrack]);
 
     const filterSummary = `${normalizedRange.startYear === normalizedRange.endYear ? normalizedRange.startYear : `${normalizedRange.startYear}-${normalizedRange.endYear}`} · ${REGION_LABELS[filters.region]}`;
     const showStaticFallback = webglUnavailable;
 
     return (
         <div className="relative h-full w-full overflow-hidden bg-[#020617] text-zinc-100">
-            <div ref={mapContainer} className="absolute inset-0" />
+            <div ref={mapContainer} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
             {showStaticFallback && (
                 <StaticTornadoFallback
                     tracks={filteredTracks}
@@ -685,6 +706,8 @@ export function TornadoMap() {
                 region={filters.region}
                 colorMode={filters.colorMode}
                 mode={filters.mode}
+                collapsed={summaryCollapsed}
+                onCollapseChange={setSummaryCollapsed}
                 onScaleFilterChange={setScaleFilter}
                 onRegionChange={setRegion}
                 onColorModeChange={setColorMode}
@@ -700,13 +723,22 @@ export function TornadoMap() {
                 minYear={minYear}
                 maxYear={maxYear}
                 onYearRangeChange={setYearRange}
+                onPlayingChange={setTimelinePlaying}
+                collapsed={timelineCollapsed}
+                onCollapseChange={setTimelineCollapsed}
             />
 
             <div className="absolute bottom-[15rem] left-3 z-20 rounded-md border border-zinc-700/80 bg-zinc-950/85 px-2.5 py-1.5 text-xs text-zinc-400 shadow-xl backdrop-blur md:hidden">
                 {stats.count.toLocaleString()} tracks · {stats.ef2Plus.toLocaleString()} EF2+
             </div>
 
-            {(loading || error) && (
+            {filteredTracks.features.length > LARGE_TRACK_WARNING_THRESHOLD && !timelinePlaying && (
+                <div className="absolute left-3 top-[4.5rem] z-20 rounded-md border border-amber-700/60 bg-amber-950/90 px-3 py-2 text-xs text-amber-300 shadow-xl backdrop-blur md:left-6">
+                    {filteredTracks.features.length.toLocaleString()} tracks — map may be slow. Try narrowing the year range or scale filter.
+                </div>
+            )}
+
+            {(loading || error) && !timelinePlaying && (
                 <div className="absolute inset-0 z-30 grid place-items-center bg-zinc-950/60 backdrop-blur-sm">
                     <div className="rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-zinc-300 shadow-2xl">
                         {error ? `Unable to load tornado data: ${error}` : 'Loading tornado tracks...'}

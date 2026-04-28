@@ -25,6 +25,12 @@ export const MAX_ZOOM = 11;
 
 export const SCALE_FILTER_LABELS: Record<TornadoScaleFilter, string> = {
     all: 'All',
+    ef0: 'EF0',
+    ef1: 'EF1',
+    ef2: 'EF2',
+    ef3: 'EF3',
+    ef4: 'EF4',
+    ef5: 'EF5',
     ef1plus: 'EF1+',
     ef2plus: 'EF2+',
     ef3plus: 'EF3+',
@@ -69,9 +75,31 @@ export const SCALE_LABELS: Record<number, string> = {
     5: 'EF5/F5',
 };
 
+export interface ScaleFilterBounds {
+    min: number;
+    max: number;
+}
+
+/** Returns the inclusive [min, max] EF scale range for a given filter. */
+export function scaleFilterBounds(filter: TornadoScaleFilter): ScaleFilterBounds {
+    switch (filter) {
+        case 'ef0': return { min: 0, max: 0 };
+        case 'ef1': return { min: 1, max: 1 };
+        case 'ef2': return { min: 2, max: 2 };
+        case 'ef3': return { min: 3, max: 3 };
+        case 'ef4': return { min: 4, max: 4 };
+        case 'ef5': return { min: 5, max: 5 };
+        case 'ef1plus': return { min: 1, max: 5 };
+        case 'ef2plus': return { min: 2, max: 5 };
+        case 'ef3plus': return { min: 3, max: 5 };
+        default: return { min: -1, max: 5 }; // 'all'
+    }
+}
+
 export function minScaleForFilter(filter: TornadoScaleFilter): number {
-    if (filter === 'ef1plus') return 1;
-    if (filter === 'ef2plus') return 2;
-    if (filter === 'ef3plus') return 3;
-    return -1;
+    return scaleFilterBounds(filter).min;
+}
+
+export function maxScaleForFilter(filter: TornadoScaleFilter): number {
+    return scaleFilterBounds(filter).max;
 }
