@@ -82,11 +82,20 @@ export function TornadoTimeline({
         }
     }, [stride, startYear, endYear, minYear, maxYear, onYearRangeChange]);
 
-    const setStart = (value: number) => onYearRangeChange(Math.min(value, endYear), endYear);
-    const setEnd = (value: number) => onYearRangeChange(startYear, Math.max(value, startYear));
-    const selectedCount = annualSummary
-        .filter((summary) => summary.year >= startYear && summary.year <= endYear)
-        .reduce((sum, summary) => sum + summary.count, 0);
+    const setStart = useCallback(
+        (value: number) => onYearRangeChange(Math.min(value, endYear), endYear),
+        [onYearRangeChange, endYear],
+    );
+    const setEnd = useCallback(
+        (value: number) => onYearRangeChange(startYear, Math.max(value, startYear)),
+        [onYearRangeChange, startYear],
+    );
+    const selectedCount = useMemo(
+        () => annualSummary
+            .filter((summary) => summary.year >= startYear && summary.year <= endYear)
+            .reduce((sum, summary) => sum + summary.count, 0),
+        [annualSummary, startYear, endYear],
+    );
 
     return (
         <div className="absolute inset-x-3 bottom-3 z-20 rounded-lg border border-zinc-700/80 bg-zinc-950/90 backdrop-blur-md shadow-2xl md:inset-x-6">

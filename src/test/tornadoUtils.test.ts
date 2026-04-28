@@ -3,6 +3,7 @@ import type { AnnualTornadoSummary, TornadoTrackFeature, TornadoTrackCollection 
 import {
     clampViewBox,
     computeDecades,
+    computeFullHistory,
     computeSparklinePills,
     computeStateBreakdown,
     fallbackBounds,
@@ -690,5 +691,61 @@ describe('computeStateBreakdown', () => {
         const features = [makeTrack({ state: 'KS', stateName: 'Kansas' })];
         const [row] = computeStateBreakdown(features);
         expect(row.stateName).toBe('Kansas');
+    });
+});
+
+// ---------------------------------------------------------------------------
+// computeFullHistory
+// ---------------------------------------------------------------------------
+
+describe('computeFullHistory', () => {
+    const currentYear = new Date().getFullYear();
+
+    it('returns empty array for empty input', () => {
+        expect(computeFullHistory([])).toEqual([]);
+    });
+
+    it('returns the same reference when data does not include current year', () => {
+        // Data only through a safely past year — nothing should be excluded.
+        const years = [makeYear(1978), makeYear(1979), makeYear(1980)];
+        const result = computeFullHistory(years);
+        expect(result).toBe(years);
+        expect(result).toHaveLength(3);
+    });
+
+    it('excludes the current year when data includes it', () => {
+        const years = [
+            makeYear(currentYear - 2),
+            makeYear(currentYear - 1),
+            makeYear(currentYear, { count: 50 }),
+        ];
+        const result = computeFullHistory(years);
+        expect(result).toHaveLength(2);
+        expect(result.every(y => y.year < currentYear)).toBe(true);
+    });
+
+    it('keeps the most recent completed year when data stops before current year', () => {
+        // Simulates a sync run before any current-year events are published.
+        const years = [
+            makeYear(currentYear - 3),
+            makeYear(currentYear - 2),
+            makeYear(currentYear - 1),
+        ];
+        const result = computeFullHistory(years);
+        expect(result).toHaveLength(3);
+        expect(result[result.length - 1].year).toBe(currentYear - 1);
+    });
+
+    it('returns a single-element array without filtering when that year is past', () => {
+        const years = [makeYear(2000)];
+        const result = computeFullHistory(years);
+        expect(result).toHaveLength(1);
+        expect(result[0].year).toBe(2000);
+    });
+
+    it('returns empty array when the only entry is the current year', () => {
+        const years = [makeYear(currentYear)];
+        const result = computeFullHistory(years);
+        expect(result).toHaveLength(0);
     });
 });

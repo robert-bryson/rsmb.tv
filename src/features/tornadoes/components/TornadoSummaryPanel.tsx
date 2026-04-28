@@ -19,7 +19,7 @@ import type {
     TornadoScaleFilter,
     TornadoTrackFeature,
 } from '../types';
-import { computeDecades, computeSparklinePills, formatDamage, formatDateTime, linReg } from '../utils';
+import { computeDecades, computeFullHistory, computeSparklinePills, formatDamage, formatDateTime, linReg } from '../utils';
 
 interface TornadoSummaryPanelProps {
     stats: FilteredTornadoStats;
@@ -355,13 +355,7 @@ function TrendSnapshot({ annualSummary, startYear, endYear, stateBreakdown }: { 
     // Exclude the current in-progress year so partial data doesn't skew charts.
     // Use the actual max year in the summary rather than calling new Date() on
     // every render — the summary already stops at whatever NOAA has published.
-    const fullHistory = useMemo(
-        () => {
-            const latestComplete = annualSummary.length > 0 ? annualSummary[annualSummary.length - 1].year : 0;
-            return annualSummary.filter(y => y.year < latestComplete);
-        },
-        [annualSummary],
-    );
+    const fullHistory = useMemo(() => computeFullHistory(annualSummary), [annualSummary]);
 
     return (
         <section className="space-y-5 border-t border-zinc-800 pt-4">

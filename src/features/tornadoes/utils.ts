@@ -240,6 +240,24 @@ export function computeStateBreakdown(features: TornadoTrackFeature[]): StateAgg
 }
 
 /**
+ * Returns `allYears` filtered to exclude the current calendar year if it
+ * appears in the data. The current year is always a partial year (events
+ * still being recorded), so including it in trend charts would skew averages
+ * and regression lines downward.
+ *
+ * If the data does not yet include the current year — e.g. the sync ran
+ * before the first events of the year were published — all years are returned
+ * unchanged so that a fully-completed final year is never accidentally
+ * excluded.
+ */
+export function computeFullHistory(allYears: AnnualTornadoSummary[]): AnnualTornadoSummary[] {
+    if (allYears.length === 0) return allYears;
+    const currentYear = new Date().getFullYear();
+    const latestYear = allYears[allYears.length - 1].year;
+    return latestYear >= currentYear ? allYears.filter(y => y.year < currentYear) : allYears;
+}
+
+/**
  * Summarises `allYears` into per-decade rows starting from 1950.
  * The most recent decade is labelled with its actual year range when
  * it is incomplete (fewer than 10 years of data present).
