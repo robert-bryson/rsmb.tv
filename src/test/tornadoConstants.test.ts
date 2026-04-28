@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
     COLOR_MODE_LABELS,
+    DATA_BASE_URL,
     DECADE_COLORS,
     maxScaleForFilter,
     minScaleForFilter,
     scaleFilterBounds,
+    tornadoPointsYearUrl,
+    tornadoTracksYearUrl,
 } from '../features/tornadoes/constants';
 import type { TornadoColorMode, TornadoScaleFilter } from '../features/tornadoes/types';
 
@@ -153,5 +156,42 @@ describe('maxScaleForFilter', () => {
         for (const filter of filters) {
             expect(maxScaleForFilter(filter)).toBe(scaleFilterBounds(filter).max);
         }
+    });
+});
+
+// ---------------------------------------------------------------------------
+// tornadoTracksYearUrl
+// ---------------------------------------------------------------------------
+
+describe('tornadoTracksYearUrl', () => {
+    it('returns the correct URL for a given year', () => {
+        expect(tornadoTracksYearUrl(2024)).toBe(`${DATA_BASE_URL}/tracks/2024.geojson`);
+    });
+
+    it('works for the earliest data year (1950)', () => {
+        expect(tornadoTracksYearUrl(1950)).toBe(`${DATA_BASE_URL}/tracks/1950.geojson`);
+    });
+
+    it('uses a .geojson extension', () => {
+        expect(tornadoTracksYearUrl(2000)).toMatch(/\.geojson$/);
+    });
+});
+
+// ---------------------------------------------------------------------------
+// tornadoPointsYearUrl
+// ---------------------------------------------------------------------------
+
+describe('tornadoPointsYearUrl', () => {
+    it('returns the correct URL for a given year', () => {
+        expect(tornadoPointsYearUrl(2024)).toBe(`${DATA_BASE_URL}/track-points/2024.geojson`);
+    });
+
+    it('uses the track-points path segment (not tracks)', () => {
+        expect(tornadoPointsYearUrl(2020)).toContain('/track-points/');
+        expect(tornadoPointsYearUrl(2020)).not.toContain('/tracks/');
+    });
+
+    it('works for the earliest data year (1950)', () => {
+        expect(tornadoPointsYearUrl(1950)).toBe(`${DATA_BASE_URL}/track-points/1950.geojson`);
     });
 });

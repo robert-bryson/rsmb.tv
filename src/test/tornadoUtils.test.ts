@@ -68,7 +68,7 @@ describe('trackPassesScale', () => {
         expect(trackPassesScale(5, -1)).toBe(true);
     });
 
-    it('passes when scale meets or exceeds minimum', () => {
+    it('passes when scale meets or exceeds minimum (unbounded)', () => {
         expect(trackPassesScale(2, 2)).toBe(true);
         expect(trackPassesScale(4, 2)).toBe(true);
     });
@@ -76,6 +76,23 @@ describe('trackPassesScale', () => {
     it('fails when scale is below minimum', () => {
         expect(trackPassesScale(1, 2)).toBe(false);
         expect(trackPassesScale(0, 3)).toBe(false);
+    });
+
+    it('passes when scale is within [minScale, maxScale]', () => {
+        expect(trackPassesScale(0, 0, 0)).toBe(true);   // ef0 exact
+        expect(trackPassesScale(3, 2, 5)).toBe(true);   // ef2plus range
+        expect(trackPassesScale(2, 2, 2)).toBe(true);   // ef2 exact
+    });
+
+    it('fails when scale exceeds maxScale', () => {
+        expect(trackPassesScale(5, 0, 0)).toBe(false);  // ef5 not ef0
+        expect(trackPassesScale(1, 0, 0)).toBe(false);  // ef1 not ef0
+        expect(trackPassesScale(5, 3, 4)).toBe(false);  // ef5 outside ef3-ef4
+    });
+
+    it('unknown scale (-1) fails any non-all filter', () => {
+        expect(trackPassesScale(-1, 0, 5)).toBe(false);
+        expect(trackPassesScale(-1, 0, 0)).toBe(false);
     });
 });
 
@@ -549,6 +566,25 @@ describe('computeDecades', () => {
         expect(rows[0].label).toBe('1950s');
         expect(rows[1].label).toBe('1960s');
         expect(rows[2].label).toBe('1970–70');
+    });
+
+    it('starts from the actual data minimum decade, not a hardcoded year', () => {
+        // Data only covering 2020–2022 — should produce exactly one row, no empty
+        // placeholder rows for 1950-2010.
+        const years = [makeYear(2020, { count: 50 }), makeYear(2021, { count: 60 }), makeYear(2022, { count: 70 })];
+        const rows = computeDecades(years);
+        expect(rows).toHaveLength(1);
+        expect(rows[0].decadeStart).toBe(2020);
+        expect(rows[0].avgCount).toBeCloseTo((50 + 60 + 70) / 3, 5);
+    });
+
+    it('groups years starting mid-decade under the correct decade heading', () => {
+        // Data starts at 1952 — should be grouped under the 1950s decade, not skipped.
+        // Ends at 1959 (= start+9), so isPartial is false → label is '1950s'.
+        const years = Array.from({ length: 8 }, (_, i) => makeYear(1952 + i, { count: 100 }));
+        const rows = computeDecades(years);
+        expect(rows[0].decadeStart).toBe(1950);
+        expect(rows[0].label).toBe('1950s');
     });
 });
 

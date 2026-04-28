@@ -27,9 +27,15 @@ export const INITIAL_VIEW_BOX: FallbackViewBox = {
     height: SVG_CANVAS_HEIGHT,
 };
 
-/** Returns true if a track passes the active minimum scale filter. */
-export function trackPassesScale(scale: number, minScale: number): boolean {
-    return minScale < 0 || scale >= minScale;
+/**
+ * Returns true if a track's EF scale falls within [minScale, maxScale].
+ * When minScale is -1 (the 'all' sentinel), the track always passes.
+ * maxScale defaults to Infinity, making the check a one-sided minimum filter —
+ * pass the upper bound from scaleFilterBounds() when using exact-EF filters.
+ */
+export function trackPassesScale(scale: number, minScale: number, maxScale = Infinity): boolean {
+    if (minScale < 0) return true;
+    return scale >= minScale && scale <= maxScale;
 }
 
 /** Accumulates aggregate stats from a set of tornado track features. */
@@ -240,9 +246,13 @@ export function computeStateBreakdown(features: TornadoTrackFeature[]): StateAgg
  */
 export function computeDecades(allYears: AnnualTornadoSummary[]): DecadeRow[] {
     const rows: DecadeRow[] = [];
-    const maxYear = allYears.length > 0 ? allYears[allYears.length - 1].year : 0;
+    if (allYears.length === 0) return rows;
+    const maxYear = allYears[allYears.length - 1].year;
+    // Floor to the nearest decade so partial leading decades (e.g. data
+    // starting at 1952) are still grouped under their decade heading (1950s).
+    const minDecade = Math.floor(allYears[0].year / 10) * 10;
 
-    for (let start = 1950; start <= maxYear; start += 10) {
+    for (let start = minDecade; start <= maxYear; start += 10) {
         const slice = allYears.filter(y => y.year >= start && y.year < start + 10);
         if (!slice.length) continue;
         const len = slice.length;

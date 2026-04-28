@@ -137,7 +137,7 @@ export function parseDamage(value) {
     if (!Number.isFinite(amount)) return 0;
 
     const multiplier = match[2] === 'B' ? 1_000_000_000 : match[2] === 'M' ? 1_000_000 : match[2] === 'K' ? 1_000 : 1;
-    return Math.round(amount * multiplier);
+    return Math.max(0, Math.round(amount * multiplier));
 }
 
 export function normalizeTornadoScale(rawScale, year = DEFAULT_END_YEAR) {
@@ -282,12 +282,11 @@ function normalizeTornadoRow(row, { includeNarratives = false } = {}) {
         cropDamage: parseDamage(row.DAMAGE_CROPS),
         source: cleanText(row.SOURCE),
         dataSource: cleanText(row.DATA_SOURCE) || 'NCEI StormEvents',
+        ...(includeNarratives && {
+            narrative: cleanText(row.EVENT_NARRATIVE),
+            episodeNarrative: cleanText(row.EPISODE_NARRATIVE),
+        }),
     };
-
-    if (includeNarratives) {
-        properties.narrative = cleanText(row.EVENT_NARRATIVE);
-        properties.episodeNarrative = cleanText(row.EPISODE_NARRATIVE);
-    }
 
     return {
         type: 'Feature',

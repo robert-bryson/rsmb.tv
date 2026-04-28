@@ -21,6 +21,17 @@ describe('parseDamage', () => {
         expect(parseDamage('$2.5B')).toBe(2500000000);
         expect(parseDamage('')).toBe(0);
     });
+
+    it('clamps negative values to zero (damage cannot be negative)', () => {
+        // Malformed data like '-5K' should not produce negative output.
+        expect(parseDamage('-5K')).toBe(0);
+        expect(parseDamage('-100')).toBe(0);
+    });
+
+    it('returns 0 for missing or non-numeric values', () => {
+        expect(parseDamage('N/A')).toBe(0);
+        expect(parseDamage('unknown')).toBe(0);
+    });
 });
 
 describe('normalizeTornadoScale', () => {

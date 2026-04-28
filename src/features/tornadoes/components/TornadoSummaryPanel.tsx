@@ -155,7 +155,7 @@ function TrendDualMetric({ allYears, startYear, endYear }: {
     const W = 272; const H = 52;
     const barW = W / n;
 
-    const linePoints = allYears.map((d, i) => {
+    const linePoints = allYears.map((_d, i) => {
         const x = (i * barW + barW / 2).toFixed(1);
         const y = (H - (dPer100[i] / maxD) * H).toFixed(1);
         return `${x},${y}`;
@@ -353,7 +353,15 @@ function TrendByState({ stateBreakdown }: { stateBreakdown: StateAggregateSummar
 
 function TrendSnapshot({ annualSummary, startYear, endYear, stateBreakdown }: { annualSummary: AnnualTornadoSummary[]; startYear: number; endYear: number; stateBreakdown: StateAggregateSummary[] }) {
     // Exclude the current in-progress year so partial data doesn't skew charts.
-    const fullHistory = annualSummary.filter(y => y.year < new Date().getFullYear());
+    // Use the actual max year in the summary rather than calling new Date() on
+    // every render — the summary already stops at whatever NOAA has published.
+    const fullHistory = useMemo(
+        () => {
+            const latestComplete = annualSummary.length > 0 ? annualSummary[annualSummary.length - 1].year : 0;
+            return annualSummary.filter(y => y.year < latestComplete);
+        },
+        [annualSummary],
+    );
 
     return (
         <section className="space-y-5 border-t border-zinc-800 pt-4">
