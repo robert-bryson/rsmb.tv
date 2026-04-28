@@ -1,10 +1,17 @@
 # S3 bucket for temperature observation data
-# Stores daily observation archives and station index that are too large
-# or too frequently updated to commit to the repo.
+# Stores generated temperature record JSON, daily observation archives,
+# station index, and ACIS response cache entries that are too large or too
+# frequently updated to commit to the repo.
 #
 # Structure:
+#   recentRecords.json      — recent broken-record summary for the map
+#   stateRecords.json       — all-time state records
+#   countyRecords.json      — all-time county records
+#   climateTrends.json      — derived county-record trend summary
+#   summary.json            — metadata for generated record files
 #   daily/YYYY/MM/YYYY-MM-DD.json  — all CONUS station observations for that date
-#   stations.json            — station catalog (metadata + date ranges)
+#   stations.json           — station catalog
+#   cache/...               — ACIS response cache used by sync jobs
 
 resource "aws_s3_bucket" "temperature_data" {
   bucket = "rsmbtv-temperature-data"
@@ -35,6 +42,19 @@ resource "aws_s3_bucket_lifecycle_configuration" "temperature_data" {
     transition {
       days          = 90
       storage_class = "STANDARD_IA"
+    }
+  }
+
+  rule {
+    id     = "expire-old-acis-cache"
+    status = "Enabled"
+
+    filter {
+      prefix = "cache/"
+    }
+
+    expiration {
+      days = 365
     }
   }
 }

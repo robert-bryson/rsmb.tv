@@ -4,6 +4,8 @@ on:
   schedule:
     # Run at 7 AM UTC daily (1 AM CST / 2 AM CDT) — after ACIS daily data is finalized
     - cron: '0 7 * * *'
+    # Refresh slower-moving all-time/state/county/trend records monthly.
+    - cron: '30 8 1 * *'
   workflow_dispatch:
     inputs:
       full_sync:
@@ -22,6 +24,12 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      AWS_REGION: us-east-1
+      TEMPERATURE_DATA_BUCKET: rsmbtv-temperature-data
+      TEMPERATURE_DATA_BASE_URL: https://data.rsmb.tv
+      TEMPERATURE_DATA_CDN_ID: ${{ secrets.TEMP_DATA_CLOUDFRONT_ID }}
+      TEMP_DATA_DIR: .temp/temperatures
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -31,60 +39,55 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
-      - name: Sync temperature records (recent only)
-        if: ${{ !inputs.full_sync }}
-        id: sync-recent
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: us-east-1
-          TEMPERATURE_DATA_BUCKET: rsmbtv-temperature-data
-          TEMPERATURE_DATA_CDN_ID: ${{ secrets.TEMP_DATA_CLOUDFRONT_ID }}
-          TEMP_DATA_DIR: .temp/temperatures
-        run: node scripts/sync-temperatures.js --recent-only
+      - name: Determine sync mode
+        id: mode
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "schedule" && "${{ github.event.schedule }}" == "30 8 1 * *" ]]; then
+            echo "args=" >> "$GITHUB_OUTPUT"
+            echo "label=full" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ inputs.full_sync }}" == "true" ]]; then
+            echo "args=" >> "$GITHUB_OUTPUT"
+            echo "label=full" >> "$GITHUB_OUTPUT"
+          else
+            echo "args=--recent-only" >> "$GITHUB_OUTPUT"
+            echo "label=recent-only" >> "$GITHUB_OUTPUT"
+          fi
 
-      - name: Sync temperature records (full)
-        if: ${{ inputs.full_sync }}
-        id: sync-full
+      - name: Sync temperature records
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: us-east-1
-          TEMPERATURE_DATA_BUCKET: rsmbtv-temperature-data
-          TEMPERATURE_DATA_CDN_ID: ${{ secrets.TEMP_DATA_CLOUDFRONT_ID }}
-          TEMP_DATA_DIR: .temp/temperatures
-        run: node scripts/sync-temperatures.js
+        run: node scripts/sync-temperatures.js ${{ steps.mode.outputs.args }}
 
       - name: Upload record files to S3
         if: env.TEMPERATURE_DATA_BUCKET != ''
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: us-east-1
-          TEMPERATURE_DATA_BUCKET: rsmbtv-temperature-data
         run: |
+          set -euo pipefail
           aws s3 sync public/data/temperatures/ "s3://${TEMPERATURE_DATA_BUCKET}/" \
             --content-type "application/json" \
             --cache-control "public, max-age=3600" \
             --exclude "*" \
             --include "*.json"
-          echo "✅ Uploaded record files to S3"
+          echo "✅ Uploaded ${{ steps.mode.outputs.label }} record files to S3"
 
-      - name: Upload daily observations to S3
+      - name: Upload daily observations and cache to S3
         if: env.TEMPERATURE_DATA_BUCKET != ''
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: us-east-1
-          TEMPERATURE_DATA_BUCKET: rsmbtv-temperature-data
         run: |
-          if [ -d ".temp/temperatures" ]; then
-            aws s3 sync .temp/temperatures/ "s3://${TEMPERATURE_DATA_BUCKET}/" \
+          set -euo pipefail
+          if [[ -d "${TEMP_DATA_DIR}" ]]; then
+            aws s3 sync "${TEMP_DATA_DIR}/" "s3://${TEMPERATURE_DATA_BUCKET}/" \
               --content-type "application/json" \
               --cache-control "public, max-age=86400"
-            echo "✅ Uploaded daily observations to S3"
+            echo "✅ Uploaded daily observations, station index, and ACIS cache to S3"
           else
-            echo "⚠️ No daily observations to upload"
+            echo "⚠️ No generated daily observations or cache to upload"
           fi
 
       - name: Invalidate CloudFront cache
@@ -92,9 +95,14 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: us-east-1
-          TEMPERATURE_DATA_CDN_ID: ${{ secrets.TEMP_DATA_CLOUDFRONT_ID }}
         run: |
-          aws cloudfront create-invalidation \
-            --distribution-id "${TEMPERATURE_DATA_CDN_ID}" \
-            --paths "/stations.json" "/recentRecords.json" "/countyRecords.json" "/stateRecords.json" "/climateTrends.json" "/summary.json"
+          set -euo pipefail
+          if [[ "${{ steps.mode.outputs.label }}" == "full" ]]; then
+            aws cloudfront create-invalidation \
+              --distribution-id "${TEMPERATURE_DATA_CDN_ID}" \
+              --paths "/stations.json" "/recentRecords.json" "/countyRecords.json" "/stateRecords.json" "/climateTrends.json" "/summary.json"
+          else
+            aws cloudfront create-invalidation \
+              --distribution-id "${TEMPERATURE_DATA_CDN_ID}" \
+              --paths "/stations.json" "/recentRecords.json"
+          fi

@@ -27,8 +27,11 @@
  * USAGE
  * -----
  *   node scripts/sync-temperatures.js
+ *   node scripts/sync-temperatures.js --recent-only
+ *   node scripts/sync-temperatures.js --recent-only --backfill-days=14
  */
 
+import { execFileSync } from 'child_process';
 import { writeFileSync, mkdirSync, existsSync, readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -119,6 +122,11 @@ const ABBR_TO_FIPS = Object.fromEntries(
 // ─── Helpers ─────────────────────────────────────────────────────────
 
 const S3_BUCKET = process.env.TEMPERATURE_DATA_BUCKET || '';
+const TEMPERATURE_DATA_BASE_URL = (
+    process.env.TEMPERATURE_DATA_BASE_URL
+    || process.env.VITE_TEMPERATURE_DATA_BASE_URL
+    || 'https://data.rsmb.tv'
+).replace(/\/+$/, '');
 
 function sleep(ms) {
     return new Promise(r => setTimeout(r, ms));
@@ -137,11 +145,12 @@ function dailySubpath(dateStr) {
 async function dailyExistsOnS3(dateStr) {
     if (!S3_BUCKET) return false;
     try {
-        const { execSync } = await import('child_process');
-        execSync(
-            `aws s3api head-object --bucket "${S3_BUCKET}" --key "daily/${dailySubpath(dateStr)}"`,
-            { stdio: 'ignore' }
-        );
+        execFileSync('aws', [
+            's3api',
+            'head-object',
+            '--bucket', S3_BUCKET,
+            '--key', `daily/${dailySubpath(dateStr)}`,
+        ], { stdio: 'ignore' });
         return true;
     } catch {
         return false;
@@ -149,19 +158,75 @@ async function dailyExistsOnS3(dateStr) {
 }
 
 /**
- * Load broken records for specific dates from the existing recentRecords.json.
- * Used to carry forward data for dates we skip fetching.
+ * Read a JSON object from the S3 data bucket. Returns null when S3 is not
+ * configured or the object is unavailable.
  */
-function loadPreviousBrokenRecords(dates) {
-    const recentPath = resolve(OUTPUT_DIR, 'recentRecords.json');
-    if (!existsSync(recentPath)) return [];
+async function readJsonFromS3(key, options = {}) {
+    if (!S3_BUCKET) return null;
+    const { maxBuffer = 100 * 1024 * 1024 } = options;
     try {
-        const prev = JSON.parse(readFileSync(recentPath, 'utf-8'));
-        const dateSet = new Set(dates);
-        return (prev.last7Days || []).filter(r => dateSet.has(r.date));
+        const result = execFileSync('aws', [
+            's3api',
+            'get-object',
+            '--bucket', S3_BUCKET,
+            '--key', key,
+            '/dev/stdout',
+        ], { stdio: ['ignore', 'pipe', 'ignore'], maxBuffer });
+        return JSON.parse(result.toString('utf-8'));
     } catch {
-        return [];
+        return null;
     }
+}
+
+async function loadJsonFromDataStore(key, localPath, label) {
+    const fromS3 = await readJsonFromS3(key);
+    if (fromS3) {
+        console.log(`  📦 Loaded ${label} from S3`);
+        return fromS3;
+    }
+
+    try {
+        const fromCdn = await fetchJson(`${TEMPERATURE_DATA_BASE_URL}/${key}`, { retries: 2, delay: 500 });
+        console.log(`  🌐 Loaded ${label} from ${TEMPERATURE_DATA_BASE_URL}`);
+        return fromCdn;
+    } catch {
+        // Fall through to local snapshot for fully offline development.
+    }
+
+    if (!existsSync(localPath)) return null;
+    try {
+        console.log(`  📁 Loaded ${label} from local snapshot`);
+        return JSON.parse(readFileSync(localPath, 'utf-8'));
+    } catch {
+        return null;
+    }
+}
+
+export function filterBrokenRecordsForDates(recentRecords, dates) {
+    if (!recentRecords || !Array.isArray(recentRecords.last7Days)) return [];
+    const dateSet = new Set(dates);
+    return recentRecords.last7Days.filter(record => record && typeof record === 'object' && dateSet.has(record.date));
+}
+
+/**
+ * Load broken records for specific dates from the canonical S3/CDN summary.
+ * Falls back to a local snapshot only when the remote data store is unavailable.
+ */
+async function loadPreviousBrokenRecords(dates) {
+    const recentPath = resolve(OUTPUT_DIR, 'recentRecords.json');
+    const previous = await loadJsonFromDataStore('recentRecords.json', recentPath, 'previous recentRecords.json');
+    return filterBrokenRecordsForDates(previous, dates);
+}
+
+async function loadPreviousStationIndex() {
+    const localPath = resolve(TEMP_DATA_DIR, 'stations.json');
+    const previous = await loadJsonFromDataStore('stations.json', localPath, 'previous stations.json');
+    if (!previous || !Array.isArray(previous.stations)) return new Map();
+
+    const stations = previous.stations
+        .filter(station => station && typeof station === 'object' && Number.isFinite(Number(station.uid)))
+        .map(station => [Number(station.uid), { ...station, uid: Number(station.uid) }]);
+    return new Map(stations);
 }
 
 async function fetchJson(url, options = {}) {
@@ -224,17 +289,7 @@ function cacheKey(category, params) {
 
 /** Check S3 for a cached ACIS response; returns parsed JSON or null. */
 async function readCacheFromS3(key) {
-    if (!S3_BUCKET) return null;
-    try {
-        const { execSync } = await import('child_process');
-        const result = execSync(
-            `aws s3api get-object --bucket "${S3_BUCKET}" --key "${key}" /dev/stdout`,
-            { stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 20 * 1024 * 1024 }
-        );
-        return JSON.parse(result.toString('utf-8'));
-    } catch {
-        return null;
-    }
+    return readJsonFromS3(key, { maxBuffer: 20 * 1024 * 1024 });
 }
 
 /** Write a cached ACIS response to local disk (uploaded to S3 in CI sync step). */
@@ -731,37 +786,46 @@ async function fetchRecentRecords(numDays = 7) {
 
     console.log(`  Checking dates: ${allDates.join(', ')}`);
 
-    // Check S3 for already-archived dates and skip them
+    const previousBroken = await loadPreviousBrokenRecords(allDates);
+    const previousDateSet = new Set(previousBroken.map(record => record.date));
+    if (previousBroken.length > 0) {
+        console.log(`  📋 Loaded ${previousBroken.length} broken records from previous summary`);
+    }
+
+    // Check S3 for already-archived dates and skip only when the summary
+    // already contains their broken-record rows. Otherwise recompute the date
+    // so last7Days cannot silently collapse to a partial window.
     const skippedDates = [];
     const datesToFetch = [];
     for (const d of allDates) {
         if (await dailyExistsOnS3(d)) {
-            console.log(`  ✅ ${d} — already on S3, skipping ACIS fetch`);
-            skippedDates.push(d);
+            if (previousDateSet.has(d)) {
+                console.log(`  ✅ ${d} — already on S3 and present in summary, skipping ACIS fetch`);
+                skippedDates.push(d);
+            } else {
+                console.warn(`  ⚠️ ${d} — daily archive exists but summary is missing it; recomputing`);
+                datesToFetch.push(d);
+            }
         } else {
             datesToFetch.push(d);
         }
     }
 
+    const skippedDateSet = new Set(skippedDates);
+    const allBroken = previousBroken.filter(record => skippedDateSet.has(record.date));
+
     if (datesToFetch.length === 0) {
         console.log('\n  All dates already archived on S3, nothing to fetch.');
-        // Still need to write recentRecords.json — load from previous
-        const prevBroken = loadPreviousBrokenRecords(allDates);
-        const yesterdayRecords = prevBroken.filter(r => r.date === yesterdayStr);
+        const recentRecords = buildRecentRecords(todayStr, yesterdayStr, allBroken, allDates);
+        validateRecentRecords(recentRecords, allDates);
         return {
-            recentRecords: { asOf: todayStr, yesterday: yesterdayRecords, last7Days: prevBroken },
+            recentRecords,
             dailyObservations: new Map(),
             stationIndex: new Map(),
         };
     }
 
     console.log(`  📡 Fetching ${datesToFetch.length} missing date(s): ${datesToFetch.join(', ')}`);
-
-    // Carry forward broken records from previous run for skipped dates
-    const allBroken = loadPreviousBrokenRecords(skippedDates);
-    if (allBroken.length > 0) {
-        console.log(`  📋 Loaded ${allBroken.length} broken records from previous run for skipped dates`);
-    }
 
     // Collect ALL observations per date for S3 archival (only for fetched dates)
     const dailyObservations = new Map(); // dateStr → observation[]
@@ -804,22 +868,13 @@ async function fetchRecentRecords(numDays = 7) {
         console.log(`  ${dateStr}: 🔥 ${dayHighs} highs, ❄️ ${dayLows} lows (${dayBroken} total)`);
     }
 
-    // Filter to only dates in the full 7-day window (includes carried-forward data)
-    const allDateSet = new Set(allDates);
-    const windowBroken = allBroken.filter(r => allDateSet.has(r.date));
+    const recentRecords = buildRecentRecords(todayStr, yesterdayStr, allBroken, allDates);
+    validateRecentRecords(recentRecords, allDates);
 
-    // Split into yesterday vs full 7-day window
-    const yesterdayRecords = windowBroken
-        .filter(r => r.date === yesterdayStr)
-        .sort((a, b) => a.type === 'high' ? b.tempF - a.tempF : a.tempF - b.tempF);
-
-    const last7Days = windowBroken
-        .sort((a, b) => a.type === 'high' ? b.tempF - a.tempF : a.tempF - b.tempF);
-
-    const yHighs = yesterdayRecords.filter(r => r.type === 'high').length;
-    const yLows = yesterdayRecords.filter(r => r.type === 'low').length;
-    const tHighs = last7Days.filter(r => r.type === 'high').length;
-    const tLows = last7Days.filter(r => r.type === 'low').length;
+    const yHighs = recentRecords.yesterday.filter(r => r.type === 'high').length;
+    const yLows = recentRecords.yesterday.filter(r => r.type === 'low').length;
+    const tHighs = recentRecords.last7Days.filter(r => r.type === 'high').length;
+    const tLows = recentRecords.last7Days.filter(r => r.type === 'low').length;
 
     console.log(`\n  Yesterday: 🔥 ${yHighs} highs, ❄️ ${yLows} lows`);
     console.log(`  Last 7 days: 🔥 ${tHighs} highs, ❄️ ${tLows} lows (${skippedDates.length} days from cache)`);
@@ -830,18 +885,82 @@ async function fetchRecentRecords(numDays = 7) {
     console.log(`  📦 Collected ${totalObs} total observations for archival`);
 
     return {
-        recentRecords: {
-            asOf: todayStr,
-            yesterday: yesterdayRecords,
-            last7Days,
-        },
+        recentRecords,
         dailyObservations,
         stationIndex,
     };
 }
 
+function sortBrokenRecords(records) {
+    return [...records].sort((a, b) => {
+        if (a.type !== b.type) return a.type === 'high' ? -1 : 1;
+        return a.type === 'high' ? b.tempF - a.tempF : a.tempF - b.tempF;
+    });
+}
+
+export function buildRecentRecords(asOf, yesterdayStr, brokenRecords, expectedDates) {
+    const dateSet = new Set(expectedDates);
+    const windowBroken = brokenRecords.filter(record => dateSet.has(record.date));
+
+    return {
+        asOf,
+        yesterday: sortBrokenRecords(windowBroken.filter(record => record.date === yesterdayStr)),
+        last7Days: sortBrokenRecords(windowBroken),
+    };
+}
+
+export function validateRecentRecords(recentRecords, expectedDates, expectedYesterday = expectedDates[0]) {
+    if (!recentRecords || !Array.isArray(recentRecords.yesterday) || !Array.isArray(recentRecords.last7Days)) {
+        throw new Error('recentRecords.json must include yesterday and last7Days arrays');
+    }
+
+    const invalidSection = ['yesterday', 'last7Days'].find(section => (
+        recentRecords[section].some(record => !record || typeof record !== 'object' || typeof record.date !== 'string')
+    ));
+    if (invalidSection) {
+        throw new Error(`recentRecords.json ${invalidSection} includes records without valid dates`);
+    }
+
+    const expectedDateSet = new Set(expectedDates);
+    const actualDates = new Set(recentRecords.last7Days.map(record => record.date));
+    const unexpectedDates = [...actualDates].filter(date => !expectedDateSet.has(date));
+
+    if (unexpectedDates.length > 0) {
+        throw new Error(`recentRecords.json includes dates outside the requested window: ${unexpectedDates.join(', ')}`);
+    }
+
+    const unexpectedYesterdayDates = [...new Set(recentRecords.yesterday.map(record => record.date))]
+        .filter(date => date !== expectedYesterday);
+    if (unexpectedYesterdayDates.length > 0) {
+        throw new Error(`recentRecords.json yesterday includes dates other than ${expectedYesterday}: ${unexpectedYesterdayDates.join(', ')}`);
+    }
+
+    if (actualDates.size > expectedDateSet.size) {
+        throw new Error(`recentRecords.json includes ${actualDates.size} dates, expected at most ${expectedDateSet.size}`);
+    }
+}
+
 function formatDate(d) {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+export function parseBackfillDays(argv = process.argv) {
+    const defaultDays = 7;
+    const argIndex = argv.findIndex(arg => arg === '--backfill-days' || arg.startsWith('--backfill-days='));
+    if (argIndex === -1) return defaultDays;
+
+    const arg = argv[argIndex];
+    const rawValue = arg.includes('=') ? arg.slice(arg.indexOf('=') + 1) : argv[argIndex + 1];
+    if (!rawValue || rawValue.startsWith('--') || !/^\d+$/.test(rawValue)) {
+        throw new Error('Invalid --backfill-days value. Use an integer from 1 to 366.');
+    }
+
+    const days = Number(rawValue);
+    if (!Number.isSafeInteger(days) || days < 1 || days > 366) {
+        throw new Error('Invalid --backfill-days value. Use an integer from 1 to 366.');
+    }
+
+    return days;
 }
 
 // ─── 5. Build Output Files ───────────────────────────────────────────
@@ -925,7 +1044,28 @@ function generateClimateTrends(countyGeoJson) {
 /**
  * Write daily observation files and station index to temp directory for S3 upload.
  */
-function writeDailyObservations(dailyObservations, stationIndex) {
+function normalizeStationEntry(uid, meta) {
+    const numericUid = Number(uid);
+    if (!Number.isFinite(numericUid) || !meta || typeof meta !== 'object') return null;
+    return [numericUid, { ...meta, uid: numericUid }];
+}
+
+export function mergeStationIndexes(previousStationIndex, stationIndex) {
+    const merged = new Map();
+
+    for (const [uid, meta] of previousStationIndex) {
+        const entry = normalizeStationEntry(uid, meta);
+        if (entry) merged.set(entry[0], entry[1]);
+    }
+
+    for (const [uid, meta] of stationIndex) {
+        const entry = normalizeStationEntry(uid, meta);
+        if (entry) merged.set(entry[0], entry[1]);
+    }
+    return merged;
+}
+
+function writeDailyObservations(dailyObservations, stationIndex, previousStationIndex = new Map()) {
     for (const [dateStr, observations] of dailyObservations) {
         if (observations.length === 0) continue;
         const subpath = dailySubpath(dateStr);
@@ -935,8 +1075,13 @@ function writeDailyObservations(dailyObservations, stationIndex) {
         console.log(`  📁 daily/${subpath} — ${observations.length} observations`);
     }
 
-    // Station index
-    const stations = Array.from(stationIndex.values()).sort((a, b) => a.uid - b.uid);
+    if (stationIndex.size === 0) {
+        console.log('  📁 stations.json — no new stations to merge');
+        return;
+    }
+
+    const mergedStationIndex = mergeStationIndexes(previousStationIndex, stationIndex);
+    const stations = Array.from(mergedStationIndex.values()).sort((a, b) => a.uid - b.uid);
     const indexPath = resolve(DAILY_DIR, '..', 'stations.json');
     writeFileSync(indexPath, JSON.stringify({
         generated: new Date().toISOString(),
@@ -1004,10 +1149,7 @@ function buildCountyGeoJson(records, countyMeta) {
 
 async function main() {
     const recentOnly = process.argv.includes('--recent-only');
-    const backfillArg = process.argv.find(a => a.startsWith('--backfill-days'));
-    const backfillDays = backfillArg
-        ? parseInt(process.argv[process.argv.indexOf(backfillArg) + 1] || backfillArg.split('=')[1], 10)
-        : 7;
+    const backfillDays = parseBackfillDays(process.argv);
 
     console.log('🌡️  Temperature Records Sync');
     console.log('='.repeat(50));
@@ -1092,7 +1234,8 @@ async function main() {
 
     // 6. Write daily observation archives for S3 upload
     console.log('\n📦 Writing daily observation archives...');
-    writeDailyObservations(dailyObservations, stationIndex);
+    const previousStationIndex = stationIndex.size > 0 ? await loadPreviousStationIndex() : new Map();
+    writeDailyObservations(dailyObservations, stationIndex, previousStationIndex);
 
     if (ACIS_CACHE_STATS.hits + ACIS_CACHE_STATS.misses > 0) {
         console.log(`\n📊 ACIS cache: ${ACIS_CACHE_STATS.hits} hits, ${ACIS_CACHE_STATS.misses} misses (${Math.round(100 * ACIS_CACHE_STATS.hits / (ACIS_CACHE_STATS.hits + ACIS_CACHE_STATS.misses))}% hit rate)`);
@@ -1107,7 +1250,11 @@ async function main() {
     }
 }
 
-main().catch((err) => {
-    console.error('\n❌ Sync failed:', err.message);
-    process.exit(1);
-});
+const isMain = process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1]);
+
+if (isMain) {
+    main().catch((err) => {
+        console.error('\n❌ Sync failed:', err.message);
+        process.exit(1);
+    });
+}

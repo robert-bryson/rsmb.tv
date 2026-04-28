@@ -1,6 +1,6 @@
 # TODO
 
-- [ ] should data like public/data/temperatures/*.json be stored in the repo? or in s3? or somewhere else? what github actions need to be updated to where? what data needs to be cleaned up?
+- [x] Move generated temperature data to S3/CDN canonical storage; keep local JSON ignored, fix sync actions, and clean tracked generated data
 - [ ] JSON-LD for all pages
 
 ## Projects

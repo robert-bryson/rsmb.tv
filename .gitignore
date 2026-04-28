@@ -185,3 +185,6 @@ npm-debug.log*
 /public/cesium/
 /public/cesium/**
 public/data/flights/*.geojson
+
+# === Project: Temperature Records ===
+public/data/temperatures/*.json
