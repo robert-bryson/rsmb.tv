@@ -1,10 +1,55 @@
 import { describe, expect, it } from 'vitest';
 import {
+    COLOR_MODE_LABELS,
+    DECADE_COLORS,
     maxScaleForFilter,
     minScaleForFilter,
     scaleFilterBounds,
 } from '../features/tornadoes/constants';
-import type { TornadoScaleFilter } from '../features/tornadoes/types';
+import type { TornadoColorMode, TornadoScaleFilter } from '../features/tornadoes/types';
+
+// ---------------------------------------------------------------------------
+// COLOR_MODE_LABELS
+// ---------------------------------------------------------------------------
+
+describe('COLOR_MODE_LABELS', () => {
+    const expectedModes: TornadoColorMode[] = ['scale', 'year', 'decade'];
+
+    it('has a label for every TornadoColorMode', () => {
+        for (const mode of expectedModes) {
+            expect(COLOR_MODE_LABELS[mode]).toBeTruthy();
+        }
+    });
+
+    it('includes the decade mode', () => {
+        expect(COLOR_MODE_LABELS.decade).toBe('Decade');
+    });
+});
+
+// ---------------------------------------------------------------------------
+// DECADE_COLORS
+// ---------------------------------------------------------------------------
+
+describe('DECADE_COLORS', () => {
+    const expectedDecades = [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
+
+    it('has a colour entry for every expected decade', () => {
+        for (const decade of expectedDecades) {
+            expect(DECADE_COLORS[decade]).toBeTruthy();
+        }
+    });
+
+    it('all colour values are valid CSS hex strings', () => {
+        for (const color of Object.values(DECADE_COLORS)) {
+            expect(color).toMatch(/^#[0-9a-f]{6}$/i);
+        }
+    });
+
+    it('all colour values are distinct (no duplicates)', () => {
+        const colors = Object.values(DECADE_COLORS);
+        expect(new Set(colors).size).toBe(colors.length);
+    });
+});
 
 // ---------------------------------------------------------------------------
 // scaleFilterBounds

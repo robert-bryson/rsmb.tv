@@ -5,6 +5,7 @@ import type { Feature, FeatureCollection, MultiPolygon, Point, Polygon, Position
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { escapeHtml } from '../../../utils/escapeHtml';
 import {
+    DECADE_COLORS,
     INITIAL_CENTER,
     INITIAL_ZOOM,
     MAX_ZOOM,
@@ -74,6 +75,15 @@ const SCALE_COLOR_EXPRESSION = [
     4, SCALE_COLORS[4],
     5, SCALE_COLORS[5],
     SCALE_COLORS[-1],
+] as unknown as maplibregl.ExpressionSpecification;
+
+// Maps each track's year to its decade colour using floor division.
+// e.g. year 1987 -> decade 1980 -> DECADE_COLORS[1980]
+const DECADE_COLOR_EXPRESSION = [
+    'match',
+    ['*', ['floor', ['/', ['get', 'year'], 10]], 10],
+    ...Object.entries(DECADE_COLORS).flatMap(([decade, color]) => [Number(decade), color]),
+    DECADE_COLORS[2020], // fallback
 ] as unknown as maplibregl.ExpressionSpecification;
 
 const YEAR_COLOR_EXPRESSION = [
@@ -682,8 +692,13 @@ export function TornadoMap() {
         map.setLayoutProperty('tornado-track-halo', 'visibility', filters.mode === 'density' ? 'none' : 'visible');
         map.setLayoutProperty('tornado-track-line', 'visibility', filters.mode === 'density' ? 'none' : 'visible');
         map.setLayoutProperty('tornado-track-point', 'visibility', filters.mode === 'density' ? 'none' : 'visible');
-        map.setPaintProperty('tornado-track-line', 'line-color', filters.colorMode === 'scale' ? SCALE_COLOR_EXPRESSION : YEAR_COLOR_EXPRESSION);
-        map.setPaintProperty('tornado-track-point', 'circle-color', filters.colorMode === 'scale' ? SCALE_COLOR_EXPRESSION : YEAR_COLOR_EXPRESSION);
+        const trackColorExpr = filters.colorMode === 'scale'
+            ? SCALE_COLOR_EXPRESSION
+            : filters.colorMode === 'decade'
+                ? DECADE_COLOR_EXPRESSION
+                : YEAR_COLOR_EXPRESSION;
+        map.setPaintProperty('tornado-track-line', 'line-color', trackColorExpr);
+        map.setPaintProperty('tornado-track-point', 'circle-color', trackColorExpr);
     }, [mapLoaded, filters.mode, filters.colorMode]);
 
     useEffect(() => {

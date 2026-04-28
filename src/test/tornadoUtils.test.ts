@@ -336,19 +336,19 @@ describe('formatDateTime', () => {
 function makeYear(year: number, overrides: Partial<AnnualTornadoSummary> = {}): AnnualTornadoSummary {
     return {
         year,
-        count:          100,
-        unknown:        0,
-        ef0:            40,
-        ef1:            30,
-        ef2:            15,
-        ef3:            10,
-        ef4:            4,
-        ef5:            1,
-        ef1Plus:        60,
-        ef2Plus:        30,
-        deaths:         10,
-        injuries:       50,
-        trackMiles:     500,
+        count: 100,
+        unknown: 0,
+        ef0: 40,
+        ef1: 30,
+        ef2: 15,
+        ef3: 10,
+        ef4: 4,
+        ef5: 1,
+        ef1Plus: 60,
+        ef2Plus: 30,
+        deaths: 10,
+        injuries: 50,
+        trackMiles: 500,
         medianWidthYards: 75,
         ...overrides,
     };
@@ -474,6 +474,29 @@ describe('computeDecades', () => {
         const years = Array.from({ length: 10 }, (_, i) => makeYear(1950 + i, { count: 100, deaths: 10 }));
         const rows = computeDecades(years);
         expect(rows[0].label).toBe('1950s');
+    });
+
+    it('sets decadeStart to the decade opening year', () => {
+        const years = Array.from({ length: 10 }, (_, i) => makeYear(1960 + i));
+        const rows = computeDecades(years);
+        expect(rows[0].decadeStart).toBe(1960);
+    });
+
+    it('sets decadeStart correctly for a partial decade', () => {
+        const years = [makeYear(2020), makeYear(2021), makeYear(2022)];
+        const rows = computeDecades(years);
+        expect(rows[0].decadeStart).toBe(2020);
+        expect(rows[0].label).toBe('2020–22');
+    });
+
+    it('each row\'s decadeStart is a multiple of 10', () => {
+        const years = [
+            ...Array.from({ length: 10 }, (_, i) => makeYear(1950 + i)),
+            ...Array.from({ length: 10 }, (_, i) => makeYear(1960 + i)),
+        ];
+        for (const row of computeDecades(years)) {
+            expect(row.decadeStart % 10).toBe(0);
+        }
     });
 
     it('labels a partial decade with actual year range', () => {

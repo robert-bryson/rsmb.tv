@@ -1,7 +1,7 @@
 import type { Feature, FeatureCollection, LineString, Point } from 'geojson';
 
 export type TornadoMode = 'tracks' | 'density' | 'trends';
-export type TornadoColorMode = 'scale' | 'year';
+export type TornadoColorMode = 'scale' | 'year' | 'decade';
 export type TornadoScaleFilter = 'all' | 'ef0' | 'ef1' | 'ef2' | 'ef3' | 'ef4' | 'ef5' | 'ef1plus' | 'ef2plus' | 'ef3plus';
 export type TornadoRegionPreset = 'conus' | 'midwest' | 'plains' | 'dixie';
 

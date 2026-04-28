@@ -109,6 +109,20 @@ describe('useTornadoFilters — URL param parsing', () => {
         });
         expect(result.current.filters.region).toBe('conus');
     });
+
+    it.each(['scale', 'year', 'decade'] as const)('parses color mode %s from URL', (value) => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams(`color=${value}`),
+        });
+        expect(result.current.filters.colorMode).toBe(value);
+    });
+
+    it('falls back to "scale" for unknown color mode values', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('color=rainbow'),
+        });
+        expect(result.current.filters.colorMode).toBe('scale');
+    });
 });
 
 // ---------------------------------------------------------------------------
@@ -160,6 +174,20 @@ describe('useTornadoFilters — setters', () => {
         const { result } = renderHook(() => useTornadoFilters(), { wrapper });
         act(() => result.current.setColorMode('year'));
         expect(result.current.filters.colorMode).toBe('year');
+    });
+
+    it('setColorMode("decade") updates colorMode to decade', () => {
+        const { result } = renderHook(() => useTornadoFilters(), { wrapper });
+        act(() => result.current.setColorMode('decade'));
+        expect(result.current.filters.colorMode).toBe('decade');
+    });
+
+    it('setColorMode("scale") removes ?color= from URL (default)', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('color=decade'),
+        });
+        act(() => result.current.setColorMode('scale'));
+        expect(result.current.filters.colorMode).toBe('scale');
     });
 
     it('setSelectedTrackId writes track ID to URL', () => {

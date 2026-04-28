@@ -39,6 +39,19 @@ export const SCALE_FILTER_LABELS: Record<TornadoScaleFilter, string> = {
 export const COLOR_MODE_LABELS: Record<TornadoColorMode, string> = {
     scale: 'Scale',
     year: 'Year',
+    decade: 'Decade',
+};
+
+/** One colour per decade 1950–2020, used for the decade color mode. */
+export const DECADE_COLORS: Record<number, string> = {
+    1950: '#94a3b8',
+    1960: '#38bdf8',
+    1970: '#34d399',
+    1980: '#a3e635',
+    1990: '#facc15',
+    2000: '#fb923c',
+    2010: '#f87171',
+    2020: '#e879f9',
 };
 
 export const REGION_LABELS: Record<TornadoRegionPreset, string> = {

@@ -1,6 +1,7 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import {
     COLOR_MODE_LABELS,
+    DECADE_COLORS,
     REGION_LABELS,
     SCALE_COLORS,
     SCALE_FILTER_LABELS,
@@ -200,53 +201,71 @@ function TrendDualMetric({ allYears, startYear, endYear }: {
 }
 
 // ---------------------------------------------------------------------------
-// Option C — Decade comparison table. Heat-maps Avg/yr (sky→amber = more
-// tornadoes) and Deaths (green→red = more deaths).
+// Option C — Decade comparison. Horizontal bar chart with a metric toggle
+// (Avg/yr, Deaths/yr, EF2+%, Deaths per 100). Each bar is tinted with the
+// decade's map colour so users can link the chart back to the map.
 // ---------------------------------------------------------------------------
 
+type DecadeMetric = 'count' | 'deaths' | 'ef2pct' | 'd100';
+const DECADE_METRIC_LABELS: Record<DecadeMetric, string> = {
+    count: 'Avg/yr',
+    deaths: 'Deaths/yr',
+    ef2pct: 'EF2+%',
+    d100: 'D/100',
+};
+
 function TrendDecadeTable({ allYears }: { allYears: AnnualTornadoSummary[] }) {
+    const [metric, setMetric] = useState<DecadeMetric>('count');
     const decades = useMemo(() => computeDecades(allYears), [allYears]);
     if (!decades.length) return null;
 
-    const maxCount = Math.max(1, ...decades.map(d => d.avgCount));
-    const maxDeaths = Math.max(1, ...decades.map(d => d.avgDeaths));
+    const getValue = (d: ReturnType<typeof computeDecades>[number]) => {
+        if (metric === 'count') return d.avgCount;
+        if (metric === 'deaths') return d.avgDeaths;
+        if (metric === 'ef2pct') return d.ef2Pct;
+        return d.dPer100;
+    };
+
+    const maxValue = Math.max(1, ...decades.map(getValue));
 
     return (
-        <div className="overflow-hidden rounded-md border border-zinc-800 text-[11px]">
-            <table className="w-full border-collapse">
-                <thead>
-                    <tr className="border-b border-zinc-800 bg-zinc-900">
-                        <th className="px-2 py-1.5 text-left font-normal text-zinc-500">Decade</th>
-                        <th className="px-2 py-1.5 text-right font-normal text-zinc-500">Avg/yr</th>
-                        <th className="px-2 py-1.5 text-right font-normal text-zinc-500">Deaths</th>
-                        <th className="px-2 py-1.5 text-right font-normal text-zinc-500">EF2%</th>
-                        <th className="px-2 py-1.5 text-right font-normal text-zinc-500">D/100</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {decades.map((d, i) => {
-                        const ch = d.avgCount / maxCount;
-                        const dh = d.avgDeaths / maxDeaths;
-                        // count: low=sky, high=amber
-                        const countColor = `hsl(${210 - ch * 160}, 65%, 62%)`;
-                        // deaths: low=green, high=red
-                        const deathColor = `hsl(${120 - dh * 120}, 60%, 58%)`;
-                        return (
-                            <tr key={d.label} className={`border-t border-zinc-800/50 ${i % 2 ? 'bg-zinc-900/30' : ''}`}>
-                                <td className="px-2 py-1.5 font-medium text-zinc-200">{d.label}</td>
-                                <td className="px-2 py-1.5 text-right" style={{ color: countColor }}>
-                                    {Math.round(d.avgCount).toLocaleString()}
-                                </td>
-                                <td className="px-2 py-1.5 text-right" style={{ color: deathColor }}>
-                                    {Math.round(d.avgDeaths)}
-                                </td>
-                                <td className="px-2 py-1.5 text-right text-zinc-400">{d.ef2Pct.toFixed(0)}%</td>
-                                <td className="px-2 py-1.5 text-right text-zinc-400">{d.dPer100.toFixed(1)}</td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
+        <div>
+            {/* Metric toggle */}
+            <div className="mb-2 flex flex-wrap gap-1 text-[10px]">
+                {(Object.keys(DECADE_METRIC_LABELS) as DecadeMetric[]).map((key) => (
+                    <button
+                        key={key}
+                        type="button"
+                        onClick={() => setMetric(key)}
+                        className={`rounded px-1.5 py-0.5 ${metric === key ? 'bg-zinc-500 text-zinc-950' : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200'}`}
+                    >
+                        {DECADE_METRIC_LABELS[key]}
+                    </button>
+                ))}
+            </div>
+            {/* Bar chart */}
+            <div className="space-y-1.5">
+                {decades.map((d) => {
+                    const color = DECADE_COLORS[d.decadeStart] ?? '#94a3b8';
+                    const value = getValue(d);
+                    const pct = (value / maxValue) * 100;
+                    const display = metric === 'ef2pct' || metric === 'd100'
+                        ? value.toFixed(1)
+                        : Math.round(value).toLocaleString();
+                    return (
+                        <div key={d.label} className="flex items-center gap-2 text-[11px]">
+                            <span className="w-10 shrink-0 text-zinc-400">{d.label}</span>
+                            <div className="relative h-4 min-w-0 flex-1 overflow-hidden rounded-sm bg-zinc-900">
+                                <div
+                                    className="h-full rounded-sm transition-all duration-300"
+                                    style={{ width: `${pct}%`, backgroundColor: color, opacity: 0.75 }}
+                                />
+                            </div>
+                            <span className="w-10 shrink-0 text-right text-zinc-300">{display}</span>
+                        </div>
+                    );
+                })}
+            </div>
         </div>
     );
 }
@@ -394,7 +413,7 @@ export function TornadoSummaryPanel({
 
                         <div>
                             <div className="mb-1.5 text-xs uppercase tracking-wide text-zinc-500">Color</div>
-                            <div className="grid grid-cols-2 gap-1 text-xs">
+                            <div className="grid grid-cols-3 gap-1 text-xs">
                                 {(Object.keys(COLOR_MODE_LABELS) as TornadoColorMode[]).map((value) => (
                                     <button
                                         key={value}
@@ -422,6 +441,15 @@ export function TornadoSummaryPanel({
                                     <span>{YEAR_COLOR_STOPS[YEAR_COLOR_STOPS.length - 1].year}</span>
                                 </div>
                             </>
+                        ) : colorMode === 'decade' ? (
+                            <div className="grid grid-cols-2 gap-1.5 text-xs">
+                                {(Object.entries(DECADE_COLORS) as [string, string][]).map(([decade, color]) => (
+                                    <div key={decade} className="flex items-center gap-2">
+                                        <span className="h-2.5 w-5 rounded-full" style={{ backgroundColor: color }} />
+                                        <span className="text-zinc-400">{decade}s</span>
+                                    </div>
+                                ))}
+                            </div>
                         ) : (
                             <div className="grid grid-cols-2 gap-1.5 text-xs">
                                 {[-1, 0, 1, 2, 3, 4, 5].map((scale) => (

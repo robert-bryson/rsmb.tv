@@ -179,29 +179,22 @@ export function computeSparklinePills(
     endYear: number,
 ): SparklinePill[] {
     const selData = allYears.filter(d => d.year >= startYear && d.year <= endYear);
-    const selN = Math.max(1, selData.length);
-    const histN = Math.max(1, allYears.length);
 
     const avg = (arr: number[]) => arr.length > 0 ? arr.reduce((s, v) => s + v, 0) / arr.length : 0;
-
-    const selAvgCount = selData.reduce((s, d) => s + d.count, 0) / selN;
-    const histAvgCount = allYears.reduce((s, d) => s + d.count, 0) / histN;
-    const selAvgDeaths = selData.reduce((s, d) => s + d.deaths, 0) / selN;
-    const histAvgDeaths = allYears.reduce((s, d) => s + d.deaths, 0) / histN;
     const ef2Pct = (row: AnnualTornadoSummary) => (row.count > 0 ? (row.ef2Plus / row.count) * 100 : 0);
-    const selEf2Pct = avg(selData.map(ef2Pct));
-    const histEf2Pct = avg(allYears.map(ef2Pct));
 
     return [
-        { label: 'Avg/yr',   selValue: selAvgCount,  histValue: histAvgCount,  higherIsBad: false },
-        { label: 'Deaths/yr', selValue: selAvgDeaths, histValue: histAvgDeaths, higherIsBad: true  },
-        { label: 'EF2%',      selValue: selEf2Pct,    histValue: histEf2Pct,    higherIsBad: true  },
+        { label: 'Avg/yr', selValue: avg(selData.map(d => d.count)), histValue: avg(allYears.map(d => d.count)), higherIsBad: false },
+        { label: 'Deaths/yr', selValue: avg(selData.map(d => d.deaths)), histValue: avg(allYears.map(d => d.deaths)), higherIsBad: true },
+        { label: 'EF2%', selValue: avg(selData.map(ef2Pct)), histValue: avg(allYears.map(ef2Pct)), higherIsBad: true },
     ];
 }
 
 export interface DecadeRow {
     /** E.g. "1990s" or "2020–25" for the most recent partial decade. */
     label: string;
+    /** The decade's starting year, e.g. 1990 for the 1990s. */
+    decadeStart: number;
     avgCount: number;
     avgDeaths: number;
     ef2Pct: number;
@@ -227,10 +220,11 @@ export function computeDecades(allYears: AnnualTornadoSummary[]): DecadeRow[] {
             : `${start}s`;
         rows.push({
             label,
-            avgCount:  slice.reduce((s, y) => s + y.count, 0) / len,
+            decadeStart: start,
+            avgCount: slice.reduce((s, y) => s + y.count, 0) / len,
             avgDeaths: slice.reduce((s, y) => s + y.deaths, 0) / len,
-            ef2Pct:    slice.reduce((s, y) => s + (y.count > 0 ? y.ef2Plus / y.count * 100 : 0), 0) / len,
-            dPer100:   slice.reduce((s, y) => s + (y.count > 0 ? y.deaths / y.count * 100 : 0), 0) / len,
+            ef2Pct: slice.reduce((s, y) => s + (y.count > 0 ? y.ef2Plus / y.count * 100 : 0), 0) / len,
+            dPer100: slice.reduce((s, y) => s + (y.count > 0 ? y.deaths / y.count * 100 : 0), 0) / len,
         });
     }
     return rows;

@@ -6,7 +6,7 @@ import type { TornadoColorMode, TornadoMode, TornadoRegionPreset, TornadoScaleFi
 const SCALE_FILTERS = new Set<TornadoScaleFilter>(['all', 'ef0', 'ef1', 'ef2', 'ef3', 'ef4', 'ef5', 'ef1plus', 'ef2plus', 'ef3plus']);
 const REGIONS = new Set<TornadoRegionPreset>(['conus', 'midwest', 'plains', 'dixie']);
 const MODES = new Set<TornadoMode>(['tracks', 'density', 'trends']);
-const COLOR_MODES = new Set<TornadoColorMode>(['scale', 'year']);
+const COLOR_MODES = new Set<TornadoColorMode>(['scale', 'year', 'decade']);
 
 function parseYear(value: string | null, fallback: number) {
     if (value === null || value === '') return fallback;
