@@ -42,7 +42,16 @@
 - [ ] scrolling seems to reset the tracks/trends/density layer?
 - [ ] ← rsmb.tv button doesnt work correctly
 - [ ] should be able to click on a state, see tornadoes that went through, get stats
+- [ ] better share button somewhere else
+- [ ] what happened to the warnings data? id be curious to see:
+  - [ ] what areas get the most warnings?
+  - [ ] warnings over time
+  - [ ] likelyhood of watches/warnings producing thunderstorms
+  - [ ] etc
 
+### Status dashboard 
+
+- [ ] Forecast cost estimate seems way off
 
 ## Next steps
 

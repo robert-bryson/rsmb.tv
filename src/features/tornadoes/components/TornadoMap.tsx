@@ -385,6 +385,7 @@ export function TornadoMap() {
     const mapRef = useRef<maplibregl.Map | null>(null);
     const popupRef = useRef<maplibregl.Popup | null>(null);
     const trackLookup = useRef(new Map<string, TornadoTrackFeature>());
+    const pendingFlyTo = useRef<[number, number] | null>(null);
     const [mapLoaded, setMapLoaded] = useState(false);
     const [selectedTrack, setSelectedTrackState] = useState<TornadoTrackFeature | null>(null);
     const [timelinePlaying, setTimelinePlaying] = useState(false);
@@ -514,12 +515,20 @@ export function TornadoMap() {
         trackLookup.current = new Map(filteredTracks.features.map((feature) => [feature.properties.id, feature]));
     }, [filteredTracks]);
 
-    // Restore selected track from URL param when data loads or changes
+    // Restore selected track from URL param when data loads or changes.
+    // If selectNotableEvent stored a fly-to target (year-range navigation case), fly there too.
     useEffect(() => {
         const id = filters.selectedTrackId;
         if (!id) return;
         const feature = trackLookup.current.get(id);
-        if (feature) setSelectedTrackState(feature);
+        if (feature) {
+            setSelectedTrackState(feature);
+            const target = pendingFlyTo.current;
+            if (target) {
+                pendingFlyTo.current = null;
+                mapRef.current?.flyTo({ center: target, zoom: 7, duration: 900 });
+            }
+        }
     }, [filters.selectedTrackId, filteredTracks]);
 
     useEffect(() => {
@@ -739,12 +748,21 @@ export function TornadoMap() {
         // trackLookup is a Map<id, feature> kept in sync with filteredTracks —
         // use it instead of a linear scan over tracks?.features.
         const match = trackLookup.current.get(event.id) ?? null;
-        if (!match) return;
-        setSelectedTrack(match);
-        const map = mapRef.current;
-        const first = match.geometry.coordinates[0] as [number, number] | undefined;
-        if (map && first) map.flyTo({ center: first, zoom: 7, duration: 900 });
-    }, [setSelectedTrack]);
+        if (match) {
+            setSelectedTrack(match);
+            const map = mapRef.current;
+            const first = match.geometry.coordinates[0] as [number, number] | undefined;
+            if (map && first) map.flyTo({ center: first, zoom: 7, duration: 900 });
+        } else {
+            // The event is not in the current year filter — navigate to its year so the
+            // data loads, then auto-select via the URL selectedTrackId param.
+            // Store the first coordinate so the restore effect can fly to the track.
+            const firstCoord = event.coordinates[0] as [number, number] | undefined;
+            pendingFlyTo.current = firstCoord ?? null;
+            setYearRange(event.year, event.year);
+            setSelectedTrackId(event.id);
+        }
+    }, [setSelectedTrack, setYearRange, setSelectedTrackId]);
 
     const filterSummary = `${normalizedRange.startYear === normalizedRange.endYear ? normalizedRange.startYear : `${normalizedRange.startYear}-${normalizedRange.endYear}`} · ${REGION_LABELS[filters.region]}`;
     const showStaticFallback = webglUnavailable;
