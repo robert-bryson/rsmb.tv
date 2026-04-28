@@ -6,8 +6,6 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { escapeHtml } from '../../../utils/escapeHtml';
 import {
     DECADE_COLORS,
-    INITIAL_CENTER,
-    INITIAL_ZOOM,
     MAX_ZOOM,
     MIN_ZOOM,
     REGION_LABELS,
@@ -408,6 +406,7 @@ export function TornadoMap() {
         setMode,
         setColorMode,
         setSelectedTrackId,
+        setMapView,
     } = useTornadoFilters();
 
     // Must be declared after useTornadoFilters so setSelectedTrackId is in scope.
@@ -524,8 +523,8 @@ export function TornadoMap() {
                 },
                 layers: [{ id: 'carto-dark-layer', type: 'raster', source: 'carto-dark', minzoom: 0, maxzoom: 20 }],
             },
-            center: INITIAL_CENTER,
-            zoom: INITIAL_ZOOM,
+            center: [filters.mapLng, filters.mapLat],
+            zoom: filters.mapZoom,
             minZoom: MIN_ZOOM,
             maxZoom: MAX_ZOOM,
         });
@@ -660,6 +659,11 @@ export function TornadoMap() {
             const message = event.error?.message || String(event);
             if (/webgl|context/i.test(message)) setWebglUnavailable(true);
             console.error('MapLibre error:', message);
+        });
+
+        map.on('moveend', () => {
+            const center = map.getCenter();
+            setMapView(center.lat, center.lng, map.getZoom());
         });
 
         mapRef.current = map;

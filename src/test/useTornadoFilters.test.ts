@@ -3,7 +3,7 @@ import { renderHook, act } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import { useTornadoFilters } from '../features/tornadoes/hooks/useTornadoFilters';
-import { DEFAULT_END_YEAR, DEFAULT_START_YEAR } from '../features/tornadoes/constants';
+import { DEFAULT_END_YEAR, DEFAULT_START_YEAR, INITIAL_CENTER, INITIAL_ZOOM } from '../features/tornadoes/constants';
 
 function wrapper({ children }: { children: ReactNode }) {
     return MemoryRouter({ initialEntries: ['/tornadoes'], children });
@@ -48,6 +48,13 @@ describe('useTornadoFilters — defaults', () => {
     it('starts with selectedTrackId=null', () => {
         const { result } = renderHook(() => useTornadoFilters(), { wrapper });
         expect(result.current.filters.selectedTrackId).toBeNull();
+    });
+
+    it('starts with default map center and zoom', () => {
+        const { result } = renderHook(() => useTornadoFilters(), { wrapper });
+        expect(result.current.filters.mapLng).toBe(INITIAL_CENTER[0]);
+        expect(result.current.filters.mapLat).toBe(INITIAL_CENTER[1]);
+        expect(result.current.filters.mapZoom).toBe(INITIAL_ZOOM);
     });
 });
 
@@ -123,6 +130,33 @@ describe('useTornadoFilters — URL param parsing', () => {
         });
         expect(result.current.filters.colorMode).toBe('scale');
     });
+
+    it('reads map view from ?lat=, ?lng=, ?zoom=', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('lat=36.1&lng=-97.5&zoom=5.25'),
+        });
+        expect(result.current.filters.mapLat).toBe(36.1);
+        expect(result.current.filters.mapLng).toBe(-97.5);
+        expect(result.current.filters.mapZoom).toBe(5.25);
+    });
+
+    it('falls back to defaults for invalid map view params', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('lat=abc&lng=&zoom=NaN'),
+        });
+        expect(result.current.filters.mapLat).toBe(INITIAL_CENTER[1]);
+        expect(result.current.filters.mapLng).toBe(INITIAL_CENTER[0]);
+        expect(result.current.filters.mapZoom).toBe(INITIAL_ZOOM);
+    });
+
+    it('falls back to defaults for out-of-bounds map view params', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('lat=999&lng=9999&zoom=-5'),
+        });
+        expect(result.current.filters.mapLat).toBe(INITIAL_CENTER[1]);
+        expect(result.current.filters.mapLng).toBe(INITIAL_CENTER[0]);
+        expect(result.current.filters.mapZoom).toBe(INITIAL_ZOOM);
+    });
 });
 
 // ---------------------------------------------------------------------------
@@ -130,6 +164,15 @@ describe('useTornadoFilters — URL param parsing', () => {
 // ---------------------------------------------------------------------------
 
 describe('useTornadoFilters — setters', () => {
+    it('setYearRange to defaults removes start/end from URL', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('start=1990&end=2000'),
+        });
+        act(() => result.current.setYearRange(DEFAULT_START_YEAR, DEFAULT_END_YEAR));
+        expect(result.current.filters.startYear).toBe(DEFAULT_START_YEAR);
+        expect(result.current.filters.endYear).toBe(DEFAULT_END_YEAR);
+    });
+
     it('setYearRange updates start and end', () => {
         const { result } = renderHook(() => useTornadoFilters(), { wrapper });
         act(() => result.current.setYearRange(2010, 2015));
@@ -164,10 +207,26 @@ describe('useTornadoFilters — setters', () => {
         expect(result.current.filters.region).toBe('dixie');
     });
 
+    it('setRegion("conus") removes ?region= from URL', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('region=plains'),
+        });
+        act(() => result.current.setRegion('conus'));
+        expect(result.current.filters.region).toBe('conus');
+    });
+
     it('setMode updates mode', () => {
         const { result } = renderHook(() => useTornadoFilters(), { wrapper });
         act(() => result.current.setMode('density'));
         expect(result.current.filters.mode).toBe('density');
+    });
+
+    it('setMode("tracks") removes ?mode= from URL', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('mode=density'),
+        });
+        act(() => result.current.setMode('tracks'));
+        expect(result.current.filters.mode).toBe('tracks');
     });
 
     it('setColorMode updates colorMode', () => {
@@ -202,5 +261,23 @@ describe('useTornadoFilters — setters', () => {
         });
         act(() => result.current.setSelectedTrackId(null));
         expect(result.current.filters.selectedTrackId).toBeNull();
+    });
+
+    it('setMapView updates lat, lng, zoom in URL', () => {
+        const { result } = renderHook(() => useTornadoFilters(), { wrapper });
+        act(() => result.current.setMapView(35.5, -98.25, 6));
+        expect(result.current.filters.mapLat).toBe(35.5);
+        expect(result.current.filters.mapLng).toBe(-98.25);
+        expect(result.current.filters.mapZoom).toBe(6);
+    });
+
+    it('setMapView to defaults removes lat/lng/zoom params', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('lat=35.5&lng=-98.25&zoom=6'),
+        });
+        act(() => result.current.setMapView(INITIAL_CENTER[1], INITIAL_CENTER[0], INITIAL_ZOOM));
+        expect(result.current.filters.mapLat).toBe(INITIAL_CENTER[1]);
+        expect(result.current.filters.mapLng).toBe(INITIAL_CENTER[0]);
+        expect(result.current.filters.mapZoom).toBe(INITIAL_ZOOM);
     });
 });

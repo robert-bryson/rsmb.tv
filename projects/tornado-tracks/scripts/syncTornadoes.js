@@ -36,6 +36,30 @@ const STATE_ABBREVIATIONS = new Map(Object.entries({
     VIRGINIA: 'VA', WASHINGTON: 'WA', 'WEST VIRGINIA': 'WV', WISCONSIN: 'WI', WYOMING: 'WY',
 }));
 
+// Approximate bounding boxes [lonMin, latMin, lonMax, latMax] per state with a
+// generous ±2° buffer so legitimate near-border events are never excluded.
+// Used to detect source-data typos (e.g. -12.18 instead of -117.18).
+const STATE_BBOX = new Map(Object.entries({
+    AL: [-91, 28, -82, 37], AK: [-171, 49, -128, 74], AZ: [-117, 29, -107, 39],
+    AR: [-97, 31, -87, 38], CA: [-127, 30, -112, 44], CO: [-111, 35, -100, 43],
+    CT: [-76, 39, -69, 44], DC: [-80, 36, -74, 42], DE: [-78, 36, -73, 42],
+    FL: [-90, 22, -78, 33], GA: [-88, 28, -78, 37], HI: [-163, 16, -152, 25],
+    ID: [-119, 40, -109, 51], IL: [-94, 35, -85, 44], IN: [-90, 35, -82, 44],
+    IA: [-99, 38, -88, 45], KS: [-104, 35, -92, 42], KY: [-92, 34, -80, 41],
+    LA: [-96, 26, -86, 35], ME: [-73, 41, -65, 50], MD: [-81, 35, -73, 41],
+    MA: [-75, 39, -68, 44], MI: [-92, 39, -80, 50], MN: [-99, 41, -87, 51],
+    MS: [-94, 28, -86, 37], MO: [-98, 33, -87, 42], MT: [-119, 42, -102, 51],
+    NE: [-106, 38, -93, 45], NV: [-122, 33, -112, 44], NH: [-74, 40, -68, 47],
+    NJ: [-78, 37, -71, 43], NM: [-111, 29, -101, 39], NY: [-82, 38, -69, 47],
+    NC: [-87, 31, -73, 39], ND: [-106, 43, -94, 51], OH: [-87, 36, -78, 44],
+    OK: [-105, 31, -92, 39], OR: [-127, 39, -114, 48], PA: [-83, 37, -72, 44],
+    PR: [-70, 15, -63, 20], RI: [-74, 39, -69, 44], SC: [-86, 30, -76, 37],
+    SD: [-106, 41, -94, 48], TN: [-93, 32, -79, 38], TX: [-109, 23, -91, 39],
+    UT: [-117, 35, -107, 44], VT: [-76, 41, -69, 47], VA: [-86, 34, -73, 39],
+    WA: [-127, 43, -114, 51], WV: [-85, 35, -75, 42], WI: [-95, 40, -84, 49],
+    WY: [-113, 39, -102, 47],
+}));
+
 const TITLECASE_EXCEPTIONS = new Map([
     ['DC', 'DC'], ['WFO', 'WFO'], ['NWS', 'NWS'], ['USA', 'USA'],
 ]);
@@ -90,6 +114,16 @@ function isValidCoordinate(lat, lon) {
         && lat <= 90
         && lon >= -180
         && lon <= 180;
+}
+
+// Returns true when [lat, lon] falls within the generous bounding box for the
+// given state abbreviation. Unknown states always pass. Used to detect source
+// typos like -12.18 lon (missing digit) when the state is CA.
+function isCoordInStateBounds(lat, lon, state) {
+    const bbox = STATE_BBOX.get(state);
+    if (!bbox) return true;
+    const [lonMin, latMin, lonMax, latMax] = bbox;
+    return lon >= lonMin && lon <= lonMax && lat >= latMin && lat <= latMax;
 }
 
 export function parseDamage(value) {
@@ -205,6 +239,19 @@ function normalizeTornadoRow(row, { includeNarratives = false } = {}) {
     const { scale, scaleLabel } = normalizeTornadoScale(row.TOR_F_SCALE, year);
     const stateName = titleCase(row.STATE);
     const state = getStateAbbreviation(row.STATE);
+
+    // Clamp coordinates that are globally valid but outside the state's
+    // approximate bounds — these are source-data typos (e.g. a missing leading
+    // digit in a western-US longitude). If one endpoint is bad, degrade to a
+    // point using the good endpoint. If both are bad, drop the row.
+    const beginOk = isCoordInStateBounds(beginLat, beginLon, state);
+    const endOk = isCoordInStateBounds(endLat, endLon, state);
+    if (!beginOk && !endOk) return null;
+    const finalBeginLat = beginOk ? beginLat : endLat;
+    const finalBeginLon = beginOk ? beginLon : endLon;
+    const finalEndLat = endOk ? endLat : beginLat;
+    const finalEndLon = endOk ? endLon : beginLon;
+
     const deaths = parseNumeric(row.DEATHS_DIRECT) + parseNumeric(row.DEATHS_INDIRECT);
     const injuries = parseNumeric(row.INJURIES_DIRECT) + parseNumeric(row.INJURIES_INDIRECT);
     const lengthMiles = round(parseNumeric(row.TOR_LENGTH), 2);
@@ -246,7 +293,7 @@ function normalizeTornadoRow(row, { includeNarratives = false } = {}) {
         type: 'Feature',
         geometry: {
             type: 'LineString',
-            coordinates: [[beginLon, beginLat], [endLon, endLat]],
+            coordinates: [[finalBeginLon, finalBeginLat], [finalEndLon, finalEndLat]],
         },
         properties,
     };
@@ -415,7 +462,6 @@ export function buildTornadoOutputs(features) {
             type: 'FeatureCollection',
             metadata: {
                 source: 'NOAA/NCEI StormEvents details CSV',
-                generatedAt: new Date().toISOString(),
                 count: sortedFeatures.length,
             },
             features: sortedFeatures,
@@ -424,7 +470,6 @@ export function buildTornadoOutputs(features) {
             type: 'FeatureCollection',
             metadata: {
                 source: 'NOAA/NCEI StormEvents details CSV',
-                generatedAt: new Date().toISOString(),
                 count: sortedFeatures.length,
             },
             features: sortedFeatures.map(toPointFeature),
@@ -460,8 +505,10 @@ function writeYearCollections(outputDir, name, collection) {
     for (const [year, features] of groupFeaturesByYear(collection.features)) {
         writeJson(path.join(directory, `${year}.geojson`), {
             type: 'FeatureCollection',
+            // Omit generatedAt from per-year files so repeated full syncs
+            // don't produce git churn when the underlying data hasn't changed.
             metadata: {
-                ...collection.metadata,
+                source: collection.metadata.source,
                 count: features.length,
                 year,
             },

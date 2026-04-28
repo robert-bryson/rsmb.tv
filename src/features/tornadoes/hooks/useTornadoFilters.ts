@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { DEFAULT_END_YEAR, DEFAULT_START_YEAR } from '../constants';
+import { DEFAULT_END_YEAR, DEFAULT_START_YEAR, INITIAL_CENTER, INITIAL_ZOOM, MAX_ZOOM, MIN_ZOOM } from '../constants';
 import type { TornadoColorMode, TornadoMode, TornadoRegionPreset, TornadoScaleFilter } from '../types';
 
 const SCALE_FILTERS = new Set<TornadoScaleFilter>(['all', 'ef0', 'ef1', 'ef2', 'ef3', 'ef4', 'ef5', 'ef1plus', 'ef2plus', 'ef3plus']);
@@ -12,6 +12,13 @@ function parseYear(value: string | null, fallback: number) {
     if (value === null || value === '') return fallback;
     const year = Number(value);
     return Number.isFinite(year) ? Math.round(year) : fallback;
+}
+
+function parseFloatParam(value: string | null, fallback: number, min = -Infinity, max = Infinity) {
+    if (value === null || value === '') return fallback;
+    const n = Number(value);
+    if (!Number.isFinite(n) || n < min || n > max) return fallback;
+    return n;
 }
 
 function parseSetValue<T extends string>(value: string | null, allowed: Set<T>, fallback: T): T {
@@ -26,6 +33,9 @@ export function useTornadoFilters() {
     const region = parseSetValue(searchParams.get('region'), REGIONS, 'conus');
     const mode = parseSetValue(searchParams.get('mode'), MODES, 'tracks');
     const colorMode = parseSetValue(searchParams.get('color'), COLOR_MODES, 'scale');
+    const mapLng = parseFloatParam(searchParams.get('lng'), INITIAL_CENTER[0], -180, 180);
+    const mapLat = parseFloatParam(searchParams.get('lat'), INITIAL_CENTER[1], -90, 90);
+    const mapZoom = parseFloatParam(searchParams.get('zoom'), INITIAL_ZOOM, MIN_ZOOM, MAX_ZOOM);
 
     const updateParams = useCallback((updater: (next: URLSearchParams) => void) => {
         setSearchParams((prev) => {
@@ -81,15 +91,27 @@ export function useTornadoFilters() {
         });
     }, [updateParams]);
 
+    const setMapView = useCallback((lat: number, lng: number, zoom: number) => {
+        const roundedLat = Math.round(lat * 10000) / 10000;
+        const roundedLng = Math.round(lng * 10000) / 10000;
+        const roundedZoom = Math.round(zoom * 100) / 100;
+        updateParams((next) => {
+            if (roundedLat === INITIAL_CENTER[1]) next.delete('lat'); else next.set('lat', String(roundedLat));
+            if (roundedLng === INITIAL_CENTER[0]) next.delete('lng'); else next.set('lng', String(roundedLng));
+            if (roundedZoom === INITIAL_ZOOM) next.delete('zoom'); else next.set('zoom', String(roundedZoom));
+        });
+    }, [updateParams]);
+
     const selectedTrackId = searchParams.get('track') ?? null;
 
     return {
-        filters: { startYear, endYear, scaleFilter, region, mode, colorMode, selectedTrackId },
+        filters: { startYear, endYear, scaleFilter, region, mode, colorMode, selectedTrackId, mapLng, mapLat, mapZoom },
         setYearRange,
         setScaleFilter,
         setRegion,
         setMode,
         setColorMode,
         setSelectedTrackId,
+        setMapView,
     };
 }

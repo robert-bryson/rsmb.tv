@@ -1,13 +1,12 @@
 # TODO
 
-- [ ] should data like public/data/temperatures/*.json be stored in the repo? or in s3? or somewhere else?
+- [ ] should data like public/data/temperatures/*.json be stored in the repo? or in s3? or somewhere else? what github actions need to be updated to where? what data needs to be cleaned up?
 
 ## Projects
 
 ### aborg
 
 - [ ] Add screenshots to project page
-- [x] add project page/links/etc
 
 ### Anki artisan
 
@@ -25,7 +24,6 @@
 - [ ] random controls all over map UI, some get hidden. review and improve
 - [ ] it doesnt seem like the chart math is correct (or maybe just correct for a specific type of record?). Review, fix, and clarify
 
-
 ### Through Routes
 
 - [ ] Add screenshots to project page
@@ -33,28 +31,53 @@
 ### Tornado Tracks
 
 - [ ] Add screenshots to project page
-- [x] hover popups have weird, large white boundaries
-- [x] playing the timeline animation flickers annoyingly
-- [x] scale should include all possible values (0-5, i believe?)
-- [x] map is unusable when many years are chosen
-- [x] refreshing the page should not reset state. state should be part of the URL
-- [x] ui elements should be able to be minimized
-- [ ] some of the track data appears to be bad (like the San Bernardino, CA, May 18, 1997, 3:50 PM tornado track)
-- [ ] refreshing the page moves the map back to the starting zoom/bbox
-
+- [x] refreshing the page moves the map back to the starting zoom/bbox
+- [x] how to keep track data up to date?
+- [ ] add in state tornadoes over time? county?
+  - [ ] get a sense of how often tornadoes hit that geography
+  - [ ] get a sense of how common which strength of tornadoes is
+- [ ] Project button should be something like `rsmb.tv` or `←Back` and always go back to either the rsmb.tv homepage or the project homepage on rsmb.tv 
 
 ## Next steps
 
 ### Content
 
 - [ ] Add screenshots to all project pages (aborg, Anki Artisan, Bookend, Temperature Records, Through Routes)
-- [x] Write project page for aborg
 - [ ] Add more blog posts to RSS feed as they are published
 
 ### Testing
 
 - [ ] Add test coverage for Layout component
 - [ ] Add test coverage for ScrollToTop component
+
+---
+
+## Completed
+
+### Projects
+
+#### aborg
+
+- [x] add project page/links/etc
+
+#### Content
+
+- [x] Write project page for aborg
+
+#### Tornado Tracks
+
+- [x] hover popups have weird, large white boundaries
+- [x] playing the timeline animation flickers annoyingly
+- [x] scale should include all possible values (0-5, i believe?)
+- [x] map is unusable when many years are chosen
+- [x] refreshing the page should not reset state. state should be part of the URL
+- [x] ui elements should be able to be minimized
+- [x] refreshing the page moves the map back to the starting zoom/bbox
+- [x] how to keep track data up to date?
+- [x] some of the track data appears to be bad (like the San Bernardino, CA, May 18, 1997, 3:50 PM tornado track)
+
+### Testing
+
 - [x] Add test coverage for flights utility functions (parseYear, getRouteKey, hexToRgba, calculateDistance)
 - [x] Add test coverage for useGeoJsonData hook
 - [x] Add test coverage for useStatsPanelState hook

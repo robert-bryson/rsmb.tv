@@ -87,3 +87,37 @@ describe('discoverStormEventsFiles', () => {
         expect(files.get(2025)?.version).toBe('20260323');
     });
 });
+
+// ---------------------------------------------------------------------------
+// Coordinate clamping for out-of-state source data errors
+// ---------------------------------------------------------------------------
+
+const badBeginLonCsv = `BEGIN_YEARMONTH,BEGIN_DAY,BEGIN_TIME,END_DAY,END_TIME,EPISODE_ID,EVENT_ID,STATE,YEAR,MONTH_NAME,EVENT_TYPE,CZ_FIPS,CZ_NAME,WFO,BEGIN_DATE_TIME,CZ_TIMEZONE,END_DATE_TIME,INJURIES_DIRECT,INJURIES_INDIRECT,DEATHS_DIRECT,DEATHS_INDIRECT,DAMAGE_PROPERTY,DAMAGE_CROPS,SOURCE,TOR_F_SCALE,TOR_LENGTH,TOR_WIDTH,BEGIN_LAT,BEGIN_LON,END_LAT,END_LON,EPISODE_NARRATIVE,EVENT_NARRATIVE,DATA_SOURCE
+199705,18,1550,18,1600,2062475,5599610,CALIFORNIA,1997,May,Tornado,71,SAN BERNARDINO,SGX,18-MAY-97 15:50:00,PST,18-MAY-97 16:00:00,0,0,0,0,,,PDC,F1,9,40,34.6,-12.18,34.63,-117.03,,,PDC
+`;
+
+describe('parseTornadoCsv — coordinate clamping', () => {
+    it('clamps a bad begin coordinate to the valid end coordinate', () => {
+        const features = parseTornadoCsv(badBeginLonCsv);
+        expect(features).toHaveLength(1);
+        // begin should be clamped to the valid end point
+        expect(features[0].geometry.coordinates[0]).toEqual([-117.03, 34.63]);
+        expect(features[0].geometry.coordinates[1]).toEqual([-117.03, 34.63]);
+    });
+
+    it('clamps a bad end coordinate to the valid begin coordinate', () => {
+        // valid begin (-117.18 is in CA), bad end (-12.03 is not)
+        const badEndLonCsv = badBeginLonCsv.replace('34.6,-12.18,34.63,-117.03', '34.6,-117.18,34.63,-12.03');
+        const features = parseTornadoCsv(badEndLonCsv);
+        expect(features).toHaveLength(1);
+        // end should be clamped to the valid begin point
+        expect(features[0].geometry.coordinates[0]).toEqual([-117.18, 34.6]);
+        expect(features[0].geometry.coordinates[1]).toEqual([-117.18, 34.6]);
+    });
+
+    it('drops a row where both begin and end coordinates are outside state bounds', () => {
+        const bothBadCsv = badBeginLonCsv.replace('-12.18,34.63,-117.03', '-12.18,34.63,-12.03');
+        const features = parseTornadoCsv(bothBadCsv);
+        expect(features).toHaveLength(0);
+    });
+});
