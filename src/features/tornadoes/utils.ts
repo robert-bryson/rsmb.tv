@@ -1,5 +1,6 @@
 import type { FeatureCollection, Point, Position } from 'geojson';
 import type {
+    AnnualTornadoSummary,
     FilteredTornadoStats,
     TornadoRegionPreset,
     TornadoTrackCollection,
@@ -136,4 +137,101 @@ export function formatDateTime(value: string): string {
         hour: 'numeric',
         minute: '2-digit',
     });
+}
+
+// ---------------------------------------------------------------------------
+// Trend analytics — pure functions used by the Trends panel sub-components.
+// Extracted from component render bodies so they are testable in isolation
+// and can be memoized cheaply.
+// ---------------------------------------------------------------------------
+
+/**
+ * Computes the ordinary least-squares linear regression of (x, y) pairs.
+ * Returns slope = 0 and the single y-value as intercept when n < 2.
+ */
+export function linReg(pairs: { x: number; y: number }[]): { slope: number; intercept: number } {
+    const n = pairs.length;
+    if (n < 2) return { slope: 0, intercept: n === 1 ? pairs[0].y : 0 };
+    const xMean = pairs.reduce((s, p) => s + p.x, 0) / n;
+    const yMean = pairs.reduce((s, p) => s + p.y, 0) / n;
+    const denom = pairs.reduce((s, p) => s + (p.x - xMean) ** 2, 0) || 1;
+    const slope = pairs.reduce((s, p) => s + (p.x - xMean) * (p.y - yMean), 0) / denom;
+    return { slope, intercept: yMean - slope * xMean };
+}
+
+export interface SparklinePill {
+    label: string;
+    /** Raw numeric value for the selected period — use this for comparisons. */
+    selValue: number;
+    /** Raw numeric value for the full history baseline. */
+    histValue: number;
+    /** When true, a value higher than the baseline is considered unfavourable. */
+    higherIsBad: boolean;
+}
+
+/**
+ * Derives the three comparison pills (Avg/yr, Deaths/yr, EF2%) for the
+ * sparkline panel. Returns raw numeric values — formatting is left to the UI.
+ */
+export function computeSparklinePills(
+    allYears: AnnualTornadoSummary[],
+    startYear: number,
+    endYear: number,
+): SparklinePill[] {
+    const selData = allYears.filter(d => d.year >= startYear && d.year <= endYear);
+    const selN = Math.max(1, selData.length);
+    const histN = Math.max(1, allYears.length);
+
+    const avg = (arr: number[]) => arr.length > 0 ? arr.reduce((s, v) => s + v, 0) / arr.length : 0;
+
+    const selAvgCount = selData.reduce((s, d) => s + d.count, 0) / selN;
+    const histAvgCount = allYears.reduce((s, d) => s + d.count, 0) / histN;
+    const selAvgDeaths = selData.reduce((s, d) => s + d.deaths, 0) / selN;
+    const histAvgDeaths = allYears.reduce((s, d) => s + d.deaths, 0) / histN;
+    const ef2Pct = (row: AnnualTornadoSummary) => (row.count > 0 ? (row.ef2Plus / row.count) * 100 : 0);
+    const selEf2Pct = avg(selData.map(ef2Pct));
+    const histEf2Pct = avg(allYears.map(ef2Pct));
+
+    return [
+        { label: 'Avg/yr',   selValue: selAvgCount,  histValue: histAvgCount,  higherIsBad: false },
+        { label: 'Deaths/yr', selValue: selAvgDeaths, histValue: histAvgDeaths, higherIsBad: true  },
+        { label: 'EF2%',      selValue: selEf2Pct,    histValue: histEf2Pct,    higherIsBad: true  },
+    ];
+}
+
+export interface DecadeRow {
+    /** E.g. "1990s" or "2020–25" for the most recent partial decade. */
+    label: string;
+    avgCount: number;
+    avgDeaths: number;
+    ef2Pct: number;
+    dPer100: number;
+}
+
+/**
+ * Summarises `allYears` into per-decade rows starting from 1950.
+ * The most recent decade is labelled with its actual year range when
+ * it is incomplete (fewer than 10 years of data present).
+ */
+export function computeDecades(allYears: AnnualTornadoSummary[]): DecadeRow[] {
+    const rows: DecadeRow[] = [];
+    const maxYear = allYears.length > 0 ? allYears[allYears.length - 1].year : 0;
+
+    for (let start = 1950; start <= maxYear; start += 10) {
+        const slice = allYears.filter(y => y.year >= start && y.year < start + 10);
+        if (!slice.length) continue;
+        const len = slice.length;
+        const isPartial = slice[slice.length - 1].year < start + 9;
+        const label = isPartial
+            ? `${start}–${String(slice[slice.length - 1].year).slice(2)}`
+            : `${start}s`;
+        rows.push({
+            label,
+            avgCount:  slice.reduce((s, y) => s + y.count, 0) / len,
+            avgDeaths: slice.reduce((s, y) => s + y.deaths, 0) / len,
+            ef2Pct:    slice.reduce((s, y) => s + (y.count > 0 ? y.ef2Plus / y.count * 100 : 0), 0) / len,
+            dPer100:   slice.reduce((s, y) => s + (y.count > 0 ? y.deaths / y.count * 100 : 0), 0) / len,
+        });
+    }
+    return rows;
 }

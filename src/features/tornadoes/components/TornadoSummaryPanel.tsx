@@ -1,9 +1,11 @@
+import { useMemo } from 'react';
 import {
     COLOR_MODE_LABELS,
     REGION_LABELS,
     SCALE_COLORS,
     SCALE_FILTER_LABELS,
     SCALE_LABELS,
+    YEAR_COLOR_STOPS,
 } from '../constants';
 import type {
     AnnualTornadoSummary,
@@ -15,7 +17,7 @@ import type {
     TornadoScaleFilter,
     TornadoTrackFeature,
 } from '../types';
-import { formatDamage, formatDateTime } from '../utils';
+import { computeDecades, computeSparklinePills, formatDamage, formatDateTime, linReg } from '../utils';
 
 interface TornadoSummaryPanelProps {
     stats: FilteredTornadoStats;
@@ -47,26 +49,229 @@ function Stat({ label, value }: { label: string; value: string }) {
     );
 }
 
-function TrendSnapshot({ annualSummary, startYear, endYear }: { annualSummary: AnnualTornadoSummary[]; startYear: number; endYear: number }) {
-    const years = annualSummary.filter((summary) => summary.year >= startYear && summary.year <= endYear);
-    const peakYears = [...years].sort((a, b) => b.count - a.count).slice(0, 5);
-    const maxCount = Math.max(1, ...peakYears.map((summary) => summary.count));
+// ---------------------------------------------------------------------------
+// Option A — Full-history sparkline: selected range highlighted, regression
+// overlay, three comparison pills (selected vs full history)
+// ---------------------------------------------------------------------------
+
+function TrendSparkline({ allYears, startYear, endYear }: {
+    allYears: AnnualTornadoSummary[];
+    startYear: number;
+    endYear: number;
+}) {
+    const { slope, intercept } = useMemo(
+        () => linReg(allYears.map(d => ({ x: d.year, y: d.count }))),
+        [allYears],
+    );
+    const pills = useMemo(
+        () => computeSparklinePills(allYears, startYear, endYear),
+        [allYears, startYear, endYear],
+    );
+
+    const n = allYears.length;
+    if (n === 0) return null;
+
+    const maxCount = Math.max(1, ...allYears.map(d => d.count));
+    const W = 272; const H = 52;
+    const barW = W / n;
+    const minYear = allYears[0].year;
+    const maxYear = allYears[n - 1].year;
+    const toY = (v: number) => H - (v / maxCount) * H;
+    const ry1 = toY(slope * minYear + intercept);
+    const ry2 = toY(slope * maxYear + intercept);
+    const slopeLabel = `${slope >= 0 ? '+' : ''}${slope.toFixed(1)}/yr trend`;
 
     return (
-        <section className="border-t border-zinc-800 pt-4">
-            <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">Trend Snapshot</div>
-            <div className="space-y-2">
-                {peakYears.map((summary) => (
-                    <div key={summary.year}>
-                        <div className="mb-1 flex items-center justify-between gap-3 text-xs">
-                            <span className="font-medium text-zinc-200">{summary.year}</span>
-                            <span className="text-zinc-500">{summary.count.toLocaleString()} tracks · {summary.ef2Plus.toLocaleString()} EF2+</span>
+        <div>
+            <div className="mb-1 flex items-center justify-between text-[10px] text-zinc-500">
+                <span>Annual tornado count, {minYear}–{maxYear}</span>
+                <span className="text-orange-400/80">— {slopeLabel}</span>
+            </div>
+            <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={H} aria-hidden="true">
+                {allYears.map((d, i) => {
+                    const h = Math.max(1, (d.count / maxCount) * H);
+                    return (
+                        <rect
+                            key={d.year}
+                            x={i * barW + 0.3}
+                            y={H - h}
+                            width={Math.max(0.5, barW - 0.6)}
+                            height={h}
+                            fill={d.year >= startYear && d.year <= endYear ? '#38bdf8' : '#3f3f46'}
+                        />
+                    );
+                })}
+                <line x1={0} y1={ry1} x2={W} y2={ry2}
+                    stroke="#f97316" strokeWidth="1" strokeDasharray="3,2" opacity="0.75" />
+            </svg>
+            <div className="flex justify-between text-[10px] text-zinc-600">
+                <span>{minYear}</span><span>{maxYear}</span>
+            </div>
+            <div className="mt-2 grid grid-cols-3 gap-1 text-[11px]">
+                {pills.map(({ label, selValue, histValue, higherIsBad }) => {
+                    const higher = selValue > histValue;
+                    const accent = higher
+                        ? (higherIsBad ? 'text-orange-400' : 'text-sky-400')
+                        : (higherIsBad ? 'text-emerald-400' : 'text-zinc-500');
+                    const selDisplay = label === 'EF2%'
+                        ? `${selValue.toFixed(0)}%`
+                        : Math.round(selValue).toLocaleString();
+                    const histDisplay = label === 'EF2%'
+                        ? `${histValue.toFixed(0)}%`
+                        : Math.round(histValue).toLocaleString();
+                    return (
+                        <div key={label} className="rounded bg-zinc-900 p-1.5">
+                            <div className="text-[10px] text-zinc-500">{label}</div>
+                            <div className="font-semibold text-zinc-100">{selDisplay}</div>
+                            <div className={`text-[10px] ${accent}`}>{higher ? '▲' : '▼'} {histDisplay}</div>
                         </div>
-                        <div className="h-1.5 rounded-full bg-zinc-800">
-                            <div className="h-1.5 rounded-full bg-sky-400" style={{ width: `${Math.max(4, (summary.count / maxCount) * 100)}%` }} />
-                        </div>
-                    </div>
-                ))}
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
+
+// ---------------------------------------------------------------------------
+// Option B — Dual-metric: bar chart of annual count overlaid with a line
+// showing deaths per 100 tornadoes. The key story: counts tripled while
+// lethality dropped 7×. Selected range bars are highlighted.
+// ---------------------------------------------------------------------------
+
+function TrendDualMetric({ allYears, startYear, endYear }: {
+    allYears: AnnualTornadoSummary[];
+    startYear: number;
+    endYear: number;
+}) {
+    const n = allYears.length;
+    if (n === 0) return null;
+
+    const maxCount = Math.max(1, ...allYears.map(d => d.count));
+    const dPer100 = allYears.map(d => (d.count > 0 ? (d.deaths / d.count) * 100 : 0));
+    const maxD = Math.max(1, ...dPer100);
+    const W = 272; const H = 52;
+    const barW = W / n;
+
+    const linePoints = allYears.map((d, i) => {
+        const x = (i * barW + barW / 2).toFixed(1);
+        const y = (H - (dPer100[i] / maxD) * H).toFixed(1);
+        return `${x},${y}`;
+    }).join(' ');
+
+    const firstYear = allYears[0].year;
+    const lastYear = allYears[n - 1].year;
+    const firstD = dPer100[0].toFixed(0);
+    const lastD = dPer100[n - 1].toFixed(0);
+
+    return (
+        <div>
+            <div className="mb-1 flex gap-3 text-[10px] text-zinc-500">
+                <span className="flex items-center gap-1.5">
+                    <span className="inline-block h-2.5 w-3 rounded-sm bg-emerald-600/70" />
+                    Tornadoes/yr
+                </span>
+                <span className="flex items-center gap-1.5">
+                    <span className="inline-block h-0.5 w-3 bg-rose-400" />
+                    Deaths per 100
+                </span>
+            </div>
+            <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={H} aria-hidden="true">
+                {allYears.map((d, i) => {
+                    const h = Math.max(1, (d.count / maxCount) * H);
+                    return (
+                        <rect
+                            key={d.year}
+                            x={i * barW + 0.3}
+                            y={H - h}
+                            width={Math.max(0.5, barW - 0.6)}
+                            height={h}
+                            fill={d.year >= startYear && d.year <= endYear ? '#10b981' : '#27272a'}
+                        />
+                    );
+                })}
+                <polyline points={linePoints} fill="none" stroke="#fb7185" strokeWidth="1.3" opacity="0.9" />
+            </svg>
+            <div className="flex justify-between text-[10px] text-zinc-600">
+                <span>{firstYear} · ~{firstD} d/100</span>
+                <span>{lastYear} · ~{lastD} d/100</span>
+            </div>
+        </div>
+    );
+}
+
+// ---------------------------------------------------------------------------
+// Option C — Decade comparison table. Heat-maps Avg/yr (sky→amber = more
+// tornadoes) and Deaths (green→red = more deaths).
+// ---------------------------------------------------------------------------
+
+function TrendDecadeTable({ allYears }: { allYears: AnnualTornadoSummary[] }) {
+    const decades = useMemo(() => computeDecades(allYears), [allYears]);
+    if (!decades.length) return null;
+
+    const maxCount = Math.max(1, ...decades.map(d => d.avgCount));
+    const maxDeaths = Math.max(1, ...decades.map(d => d.avgDeaths));
+
+    return (
+        <div className="overflow-hidden rounded-md border border-zinc-800 text-[11px]">
+            <table className="w-full border-collapse">
+                <thead>
+                    <tr className="border-b border-zinc-800 bg-zinc-900">
+                        <th className="px-2 py-1.5 text-left font-normal text-zinc-500">Decade</th>
+                        <th className="px-2 py-1.5 text-right font-normal text-zinc-500">Avg/yr</th>
+                        <th className="px-2 py-1.5 text-right font-normal text-zinc-500">Deaths</th>
+                        <th className="px-2 py-1.5 text-right font-normal text-zinc-500">EF2%</th>
+                        <th className="px-2 py-1.5 text-right font-normal text-zinc-500">D/100</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {decades.map((d, i) => {
+                        const ch = d.avgCount / maxCount;
+                        const dh = d.avgDeaths / maxDeaths;
+                        // count: low=sky, high=amber
+                        const countColor = `hsl(${210 - ch * 160}, 65%, 62%)`;
+                        // deaths: low=green, high=red
+                        const deathColor = `hsl(${120 - dh * 120}, 60%, 58%)`;
+                        return (
+                            <tr key={d.label} className={`border-t border-zinc-800/50 ${i % 2 ? 'bg-zinc-900/30' : ''}`}>
+                                <td className="px-2 py-1.5 font-medium text-zinc-200">{d.label}</td>
+                                <td className="px-2 py-1.5 text-right" style={{ color: countColor }}>
+                                    {Math.round(d.avgCount).toLocaleString()}
+                                </td>
+                                <td className="px-2 py-1.5 text-right" style={{ color: deathColor }}>
+                                    {Math.round(d.avgDeaths)}
+                                </td>
+                                <td className="px-2 py-1.5 text-right text-zinc-400">{d.ef2Pct.toFixed(0)}%</td>
+                                <td className="px-2 py-1.5 text-right text-zinc-400">{d.dPer100.toFixed(1)}</td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
+        </div>
+    );
+}
+
+// ---------------------------------------------------------------------------
+// Wrapper — renders all three in sequence
+// ---------------------------------------------------------------------------
+
+function TrendSnapshot({ annualSummary, startYear, endYear }: { annualSummary: AnnualTornadoSummary[]; startYear: number; endYear: number }) {
+    // Exclude the current in-progress year so partial data doesn't skew charts.
+    const fullHistory = annualSummary.filter(y => y.year < new Date().getFullYear());
+
+    return (
+        <section className="space-y-5 border-t border-zinc-800 pt-4">
+            <div>
+                <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">A · Annual count vs selection</div>
+                <TrendSparkline allYears={fullHistory} startYear={startYear} endYear={endYear} />
+            </div>
+            <div>
+                <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">B · Frequency vs fatality rate</div>
+                <TrendDualMetric allYears={fullHistory} startYear={startYear} endYear={endYear} />
+            </div>
+            <div>
+                <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">C · Decade comparison</div>
+                <TrendDecadeTable allYears={fullHistory} />
             </div>
         </section>
     );
@@ -206,14 +411,27 @@ export function TornadoSummaryPanel({
 
                     <div className="mb-4">
                         <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">Legend</div>
-                        <div className="grid grid-cols-2 gap-1.5 text-xs">
-                            {[-1, 0, 1, 2, 3, 4, 5].map((scale) => (
-                                <div key={scale} className="flex items-center gap-2">
-                                    <span className="h-2.5 w-5 rounded-full" style={{ backgroundColor: SCALE_COLORS[scale] }} />
-                                    <span className="text-zinc-400">{SCALE_LABELS[scale]}</span>
+                        {colorMode === 'year' ? (
+                            <>
+                                <div
+                                    className="mb-1.5 h-3 w-full rounded-full"
+                                    style={{ background: `linear-gradient(to right, ${YEAR_COLOR_STOPS.map(s => s.color).join(', ')})` }}
+                                />
+                                <div className="flex justify-between text-xs text-zinc-500">
+                                    <span>{YEAR_COLOR_STOPS[0].year}</span>
+                                    <span>{YEAR_COLOR_STOPS[YEAR_COLOR_STOPS.length - 1].year}</span>
                                 </div>
-                            ))}
-                        </div>
+                            </>
+                        ) : (
+                            <div className="grid grid-cols-2 gap-1.5 text-xs">
+                                {[-1, 0, 1, 2, 3, 4, 5].map((scale) => (
+                                    <div key={scale} className="flex items-center gap-2">
+                                        <span className="h-2.5 w-5 rounded-full" style={{ backgroundColor: SCALE_COLORS[scale] }} />
+                                        <span className="text-zinc-400">{SCALE_LABELS[scale]}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     {selected ? (

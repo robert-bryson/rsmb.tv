@@ -13,6 +13,7 @@ import {
     REGION_STATES,
     SCALE_COLORS,
     scaleFilterBounds,
+    YEAR_COLOR_STOPS,
 } from '../constants';
 import { useTornadoData } from '../hooks/useTornadoData';
 import { useTornadoFilters } from '../hooks/useTornadoFilters';
@@ -77,12 +78,55 @@ const SCALE_COLOR_EXPRESSION = [
 
 const YEAR_COLOR_EXPRESSION = [
     'interpolate', ['linear'], ['get', 'year'],
-    1950, '#38bdf8',
-    1975, '#2dd4bf',
-    1995, '#a3e635',
-    2010, '#facc15',
-    2020, '#fb7185',
-    new Date().getFullYear(), '#f0abfc',
+    ...YEAR_COLOR_STOPS.flatMap(({ year, color }) => [year, color]),
+] as unknown as maplibregl.ExpressionSpecification;
+
+// EF scale shorthand used in expressions below.
+const EF = ['coalesce', ['get', 'scale'], -1] as unknown as maplibregl.ExpressionSpecification;
+
+// At national zoom (z2-z4) circles stay intentionally small so the spatial
+// distribution reads clearly. Size ramps up at closer zooms where individual
+// events don't overlap.  EF ratio at z2 is ~2x (EF5 vs EF0) not 4x, so the
+// map doesn't blob. At z7+ the 4x ratio becomes useful for identification.
+const EF_RADIUS_EXPRESSION = [
+    'interpolate', ['linear'], ['zoom'],
+    2, ['interpolate', ['linear'], EF, -1, 1.0, 0, 1.2, 1, 1.4, 2, 1.7, 3, 2.1, 4, 2.6, 5, 3.2],
+    4, ['interpolate', ['linear'], EF, -1, 1.4, 0, 1.8, 1, 2.2, 2, 2.8, 3, 3.6, 4, 4.8, 5, 6.0],
+    7, ['interpolate', ['linear'], EF, -1, 2.5, 0, 3.5, 1, 5.0, 2, 7.5, 3, 10.5, 4, 14.0, 5, 18.0],
+    10, ['interpolate', ['linear'], EF, -1, 5.0, 0, 7.0, 1, 10.0, 2, 15.0, 3, 20.0, 4, 26.0, 5, 32.0],
+] as unknown as maplibregl.ExpressionSpecification;
+
+// Low-EF events are dimmed at national view to let the significant events
+// pop visually without increasing their physical size too much.
+const EF_CIRCLE_OPACITY_EXPRESSION = [
+    'interpolate', ['linear'], ['zoom'],
+    2, ['interpolate', ['linear'], EF, -1, 0.28, 0, 0.36, 1, 0.48, 2, 0.62, 3, 0.78, 4, 0.90, 5, 0.96],
+    6, ['interpolate', ['linear'], EF, -1, 0.50, 0, 0.60, 1, 0.70, 2, 0.82, 3, 0.90, 4, 0.96, 5, 1.00],
+] as unknown as maplibregl.ExpressionSpecification;
+
+// Line widths kept narrow at national zoom — EF rating visible via colour.
+// Significant width differences only kick in at z5+ where overlap is lower.
+const EF_LINE_WIDTH_EXPRESSION = [
+    'interpolate', ['linear'], ['zoom'],
+    2, ['interpolate', ['linear'], EF, -1, 0.5, 0, 0.7, 1, 0.9, 2, 1.1, 3, 1.5, 4, 2.0, 5, 2.6],
+    5, ['interpolate', ['linear'], EF, -1, 0.8, 0, 1.1, 1, 1.5, 2, 2.2, 3, 3.2, 4, 4.5, 5, 6.0],
+    8, ['interpolate', ['linear'], EF, -1, 1.5, 0, 2.0, 1, 3.0, 2, 4.5, 3, 7.0, 4, 10.0, 5, 13.0],
+] as unknown as maplibregl.ExpressionSpecification;
+
+// Halo stays ~2 px wider than the track so it never dominates.
+const EF_HALO_WIDTH_EXPRESSION = [
+    'interpolate', ['linear'], ['zoom'],
+    2, ['interpolate', ['linear'], EF, -1, 1.8, 0, 2.0, 1, 2.2, 2, 2.5, 3, 3.0, 4, 3.6, 5, 4.4],
+    5, ['interpolate', ['linear'], EF, -1, 2.4, 0, 2.8, 1, 3.2, 2, 4.0, 3, 5.2, 4, 6.6, 5, 8.4],
+    8, ['interpolate', ['linear'], EF, -1, 3.5, 0, 4.5, 1, 5.5, 2, 7.0, 3, 10.0, 4, 14.0, 5, 18.0],
+] as unknown as maplibregl.ExpressionSpecification;
+
+// High-EF events are slightly more opaque than low-EF at any zoom.
+const EF_LINE_OPACITY_EXPRESSION = [
+    'interpolate', ['linear'], ['zoom'],
+    2, ['interpolate', ['linear'], EF, -1, 0.35, 0, 0.45, 1, 0.55, 2, 0.65, 3, 0.76, 4, 0.87, 5, 0.95],
+    6, 0.90,
+    9, 0.95,
 ] as unknown as maplibregl.ExpressionSpecification;
 
 function formatPopup(feature: TornadoTrackFeature) {
@@ -524,8 +568,8 @@ export function TornadoMap() {
                 layout: { 'line-cap': 'round', 'line-join': 'round' },
                 paint: {
                     'line-color': '#020617',
-                    'line-opacity': 0.6,
-                    'line-width': ['interpolate', ['linear'], ['zoom'], 2, 1.2, 6, 2.2, 9, 4.2],
+                    'line-opacity': 0.65,
+                    'line-width': EF_HALO_WIDTH_EXPRESSION,
                 },
             });
 
@@ -536,8 +580,8 @@ export function TornadoMap() {
                 layout: { 'line-cap': 'round', 'line-join': 'round' },
                 paint: {
                     'line-color': SCALE_COLOR_EXPRESSION,
-                    'line-opacity': ['interpolate', ['linear'], ['zoom'], 2, 0.62, 5, 0.82, 8, 0.95],
-                    'line-width': ['interpolate', ['linear'], ['coalesce', ['get', 'scale'], 0], -1, 0.8, 0, 1, 2, 1.7, 5, 3],
+                    'line-opacity': EF_LINE_OPACITY_EXPRESSION,
+                    'line-width': EF_LINE_WIDTH_EXPRESSION,
                 },
             });
 
@@ -545,13 +589,16 @@ export function TornadoMap() {
                 id: 'tornado-track-point',
                 type: 'circle',
                 source: 'tornado-track-points',
+                // Higher EF events are drawn on top so they are never buried
+                // under lower-EF dots in dense regions.
+                layout: { 'circle-sort-key': ['coalesce', ['get', 'scale'], -1] },
                 paint: {
                     'circle-color': SCALE_COLOR_EXPRESSION,
-                    'circle-opacity': ['interpolate', ['linear'], ['zoom'], 2, 0.68, 6, 0.86],
-                    'circle-radius': ['interpolate', ['linear'], ['zoom'], 2, 2.2, 5, 3.6, 8, 6.5],
+                    'circle-opacity': EF_CIRCLE_OPACITY_EXPRESSION,
+                    'circle-radius': EF_RADIUS_EXPRESSION,
                     'circle-stroke-color': '#020617',
-                    'circle-stroke-opacity': 0.85,
-                    'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 2, 0.6, 6, 1.2],
+                    'circle-stroke-opacity': 0.8,
+                    'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 2, 0.7, 6, 1.4, 9, 2.0],
                 },
             });
 

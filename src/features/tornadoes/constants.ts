@@ -75,6 +75,16 @@ export const SCALE_LABELS: Record<number, string> = {
     5: 'EF5/F5',
 };
 
+/** Ordered color stops for the year-based color mode, matching YEAR_COLOR_EXPRESSION in TornadoMap. */
+export const YEAR_COLOR_STOPS: { year: number; color: string }[] = [
+    { year: 1950, color: '#38bdf8' },
+    { year: 1975, color: '#2dd4bf' },
+    { year: 1995, color: '#a3e635' },
+    { year: 2010, color: '#facc15' },
+    { year: 2020, color: '#fb7185' },
+    { year: new Date().getFullYear(), color: '#f0abfc' },
+];
+
 export interface ScaleFilterBounds {
     min: number;
     max: number;

@@ -40,6 +40,7 @@
 - [x] refreshing the page should not reset state. state should be part of the URL
 - [x] ui elements should be able to be minimized
 - [ ] some of the track data appears to be bad (like the San Bernardino, CA, May 18, 1997, 3:50 PM tornado track)
+- [ ] refreshing the page moves the map back to the starting zoom/bbox
 
 
 ## Next steps

@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import type { TornadoTrackFeature, TornadoTrackCollection } from '../features/tornadoes/types';
+import type { AnnualTornadoSummary, TornadoTrackFeature, TornadoTrackCollection } from '../features/tornadoes/types';
 import {
     clampViewBox,
+    computeDecades,
+    computeSparklinePills,
     fallbackBounds,
     formatDamage,
     formatDateTime,
     INITIAL_VIEW_BOX,
+    linReg,
     projectFallbackPoint,
     summarize,
     SVG_CANVAS_HEIGHT,
@@ -323,5 +326,204 @@ describe('formatDateTime', () => {
         expect(result).toContain('2024');
         expect(result).toMatch(/May/i);
         expect(result).toContain('21');
+    });
+});
+
+// ---------------------------------------------------------------------------
+// Helpers shared by trend tests
+// ---------------------------------------------------------------------------
+
+function makeYear(year: number, overrides: Partial<AnnualTornadoSummary> = {}): AnnualTornadoSummary {
+    return {
+        year,
+        count:          100,
+        unknown:        0,
+        ef0:            40,
+        ef1:            30,
+        ef2:            15,
+        ef3:            10,
+        ef4:            4,
+        ef5:            1,
+        ef1Plus:        60,
+        ef2Plus:        30,
+        deaths:         10,
+        injuries:       50,
+        trackMiles:     500,
+        medianWidthYards: 75,
+        ...overrides,
+    };
+}
+
+// ---------------------------------------------------------------------------
+// linReg
+// ---------------------------------------------------------------------------
+
+describe('linReg', () => {
+    it('returns slope=0 and intercept=0 for empty input', () => {
+        const { slope, intercept } = linReg([]);
+        expect(slope).toBe(0);
+        expect(intercept).toBe(0);
+    });
+
+    it('returns slope=0 and the single value as intercept for one point', () => {
+        const { slope, intercept } = linReg([{ x: 5, y: 42 }]);
+        expect(slope).toBe(0);
+        expect(intercept).toBe(42);
+    });
+
+    it('fits a perfect positive slope', () => {
+        // y = 2x  =>  slope=2, intercept=0
+        const pairs = [0, 1, 2, 3, 4].map(x => ({ x, y: 2 * x }));
+        const { slope, intercept } = linReg(pairs);
+        expect(slope).toBeCloseTo(2, 6);
+        expect(intercept).toBeCloseTo(0, 6);
+    });
+
+    it('fits a perfect negative slope', () => {
+        const pairs = [0, 1, 2, 3].map(x => ({ x, y: 10 - 3 * x }));
+        const { slope, intercept } = linReg(pairs);
+        expect(slope).toBeCloseTo(-3, 6);
+        expect(intercept).toBeCloseTo(10, 6);
+    });
+
+    it('returns slope=0 for a constant series', () => {
+        const pairs = [1, 2, 3, 4, 5].map(x => ({ x, y: 7 }));
+        const { slope } = linReg(pairs);
+        expect(slope).toBeCloseTo(0, 6);
+    });
+
+    it('handles two-point degenerate case (duplicate x)', () => {
+        // denom would be 0 without the || 1 guard
+        const { slope } = linReg([{ x: 3, y: 1 }, { x: 3, y: 2 }]);
+        expect(Number.isFinite(slope)).toBe(true);
+    });
+});
+
+// ---------------------------------------------------------------------------
+// computeSparklinePills
+// ---------------------------------------------------------------------------
+
+describe('computeSparklinePills', () => {
+    const allYears = [
+        makeYear(2000, { count: 100, deaths: 10, ef2Plus: 20 }),
+        makeYear(2001, { count: 200, deaths: 20, ef2Plus: 40 }),
+        makeYear(2002, { count: 300, deaths: 30, ef2Plus: 30 }),
+    ];
+
+    it('returns exactly three pills with the expected labels', () => {
+        const pills = computeSparklinePills(allYears, 2000, 2002);
+        expect(pills.map(p => p.label)).toEqual(['Avg/yr', 'Deaths/yr', 'EF2%']);
+    });
+
+    it('computes selValue equal to histValue when selection covers all years', () => {
+        const pills = computeSparklinePills(allYears, 2000, 2002);
+        pills.forEach(p => expect(p.selValue).toBeCloseTo(p.histValue, 5));
+    });
+
+    it('computes Avg/yr correctly for a sub-selection', () => {
+        // selecting only 2001-2002: avg count = (200+300)/2 = 250
+        const pills = computeSparklinePills(allYears, 2001, 2002);
+        const avgYr = pills.find(p => p.label === 'Avg/yr')!;
+        expect(avgYr.selValue).toBeCloseTo(250, 5);
+        // full history avg = (100+200+300)/3 ≈ 200
+        expect(avgYr.histValue).toBeCloseTo(200, 5);
+    });
+
+    it('computes Deaths/yr correctly', () => {
+        const pills = computeSparklinePills(allYears, 2000, 2000);
+        const deaths = pills.find(p => p.label === 'Deaths/yr')!;
+        expect(deaths.selValue).toBeCloseTo(10, 5);
+    });
+
+    it('computes EF2% as a percentage of count', () => {
+        // 2000: ef2Plus=20, count=100 => 20%
+        const pills = computeSparklinePills(allYears, 2000, 2000);
+        const ef2 = pills.find(p => p.label === 'EF2%')!;
+        expect(ef2.selValue).toBeCloseTo(20, 5);
+    });
+
+    it('higherIsBad is false for Avg/yr and true for Deaths/yr and EF2%', () => {
+        const pills = computeSparklinePills(allYears, 2000, 2002);
+        expect(pills.find(p => p.label === 'Avg/yr')!.higherIsBad).toBe(false);
+        expect(pills.find(p => p.label === 'Deaths/yr')!.higherIsBad).toBe(true);
+        expect(pills.find(p => p.label === 'EF2%')!.higherIsBad).toBe(true);
+    });
+
+    it('handles a selection that matches no years without throwing (returns 0)', () => {
+        const pills = computeSparklinePills(allYears, 1990, 1995);
+        pills.forEach(p => expect(Number.isFinite(p.selValue)).toBe(true));
+    });
+
+    it('handles years with count=0 without dividing by zero', () => {
+        const years = [makeYear(2000, { count: 0, ef2Plus: 0, deaths: 5 })];
+        const pills = computeSparklinePills(years, 2000, 2000);
+        expect(Number.isFinite(pills.find(p => p.label === 'EF2%')!.selValue)).toBe(true);
+    });
+});
+
+// ---------------------------------------------------------------------------
+// computeDecades
+// ---------------------------------------------------------------------------
+
+describe('computeDecades', () => {
+    it('returns an empty array for empty input', () => {
+        expect(computeDecades([])).toEqual([]);
+    });
+
+    it('labels a complete decade as "1950s"', () => {
+        const years = Array.from({ length: 10 }, (_, i) => makeYear(1950 + i, { count: 100, deaths: 10 }));
+        const rows = computeDecades(years);
+        expect(rows[0].label).toBe('1950s');
+    });
+
+    it('labels a partial decade with actual year range', () => {
+        // Only 1950-1954 present (5 years, incomplete decade)
+        const years = Array.from({ length: 5 }, (_, i) => makeYear(1950 + i, { count: 100 }));
+        const rows = computeDecades(years);
+        expect(rows[0].label).toBe('1950–54');
+    });
+
+    it('computes avgCount correctly', () => {
+        const years = [
+            makeYear(1950, { count: 100 }),
+            makeYear(1951, { count: 200 }),
+            makeYear(1952, { count: 300 }),
+        ];
+        const rows = computeDecades(years);
+        expect(rows[0].avgCount).toBeCloseTo(200, 5);
+    });
+
+    it('computes dPer100 correctly', () => {
+        // count=100, deaths=20 => dPer100 = 20
+        const years = [makeYear(1950, { count: 100, deaths: 20 })];
+        const rows = computeDecades(years);
+        expect(rows[0].dPer100).toBeCloseTo(20, 5);
+    });
+
+    it('computes ef2Pct correctly', () => {
+        // count=100, ef2Plus=25 => 25%
+        const years = [makeYear(1950, { count: 100, ef2Plus: 25 })];
+        const rows = computeDecades(years);
+        expect(rows[0].ef2Pct).toBeCloseTo(25, 5);
+    });
+
+    it('handles count=0 rows without NaN', () => {
+        const years = [makeYear(1950, { count: 0, deaths: 0, ef2Plus: 0 })];
+        const rows = computeDecades(years);
+        expect(Number.isFinite(rows[0].dPer100)).toBe(true);
+        expect(Number.isFinite(rows[0].ef2Pct)).toBe(true);
+    });
+
+    it('produces one row per decade present in the data', () => {
+        const years = [
+            ...Array.from({ length: 10 }, (_, i) => makeYear(1950 + i)),
+            ...Array.from({ length: 10 }, (_, i) => makeYear(1960 + i)),
+            makeYear(1970),
+        ];
+        const rows = computeDecades(years);
+        expect(rows).toHaveLength(3);
+        expect(rows[0].label).toBe('1950s');
+        expect(rows[1].label).toBe('1960s');
+        expect(rows[2].label).toBe('1970–70');
     });
 });
