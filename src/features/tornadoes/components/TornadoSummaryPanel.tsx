@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
     COLOR_MODE_LABELS,
     DECADE_COLORS,
@@ -12,6 +12,7 @@ import type {
     AnnualTornadoSummary,
     FilteredTornadoStats,
     NotableTornadoEvent,
+    StateAggregateSummary,
     TornadoColorMode,
     TornadoMode,
     TornadoRegionPreset,
@@ -22,6 +23,7 @@ import { computeDecades, computeSparklinePills, formatDamage, formatDateTime, li
 
 interface TornadoSummaryPanelProps {
     stats: FilteredTornadoStats;
+    stateBreakdown: StateAggregateSummary[];
     selectedTrack: TornadoTrackFeature | null;
     notableEvents: NotableTornadoEvent[];
     annualSummary: AnnualTornadoSummary[];
@@ -271,10 +273,85 @@ function TrendDecadeTable({ allYears }: { allYears: AnnualTornadoSummary[] }) {
 }
 
 // ---------------------------------------------------------------------------
+// Option D — Top states. Horizontal bar chart of the states with the most
+// tornadoes in the selected filter window, with a metric toggle.
+// ---------------------------------------------------------------------------
+
+type StateMetric = 'count' | 'ef2pct' | 'deaths';
+const STATE_METRIC_LABELS: Record<StateMetric, string> = {
+    count: 'Count',
+    ef2pct: 'EF2+%',
+    deaths: 'Deaths',
+};
+
+/** Maximum number of states shown in the "Top states" bar chart. */
+const TOP_STATES_COUNT = 12;
+
+function TrendByState({ stateBreakdown }: { stateBreakdown: StateAggregateSummary[] }) {
+    const [metric, setMetric] = useState<StateMetric>('count');
+
+    const getValue = useCallback((row: StateAggregateSummary): number => {
+        if (metric === 'ef2pct') return row.ef2Pct;
+        if (metric === 'deaths') return row.deaths;
+        return row.count;
+    }, [metric]);
+
+    // Re-sort by the active metric so the chart always reflects the true top-N.
+    // `stateBreakdown` arrives sorted by count; slicing before re-sorting would
+    // omit states that rank highly by deaths/ef2pct but lower by count.
+    const rows = useMemo(
+        () => [...stateBreakdown].sort((a, b) => getValue(b) - getValue(a)).slice(0, TOP_STATES_COUNT),
+        [stateBreakdown, getValue],
+    );
+
+    if (!rows.length) return null;
+
+    const maxValue = Math.max(1, ...rows.map(getValue));
+
+    return (
+        <div>
+            <div className="mb-2 flex flex-wrap gap-1 text-[10px]">
+                {(Object.keys(STATE_METRIC_LABELS) as StateMetric[]).map((key) => (
+                    <button
+                        key={key}
+                        type="button"
+                        onClick={() => setMetric(key)}
+                        className={`rounded px-1.5 py-0.5 ${metric === key ? 'bg-zinc-500 text-zinc-950' : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200'}`}
+                    >
+                        {STATE_METRIC_LABELS[key]}
+                    </button>
+                ))}
+            </div>
+            <div className="space-y-1">
+                {rows.map((row) => {
+                    const value = getValue(row);
+                    const pct = (value / maxValue) * 100;
+                    const display = metric === 'ef2pct'
+                        ? `${value.toFixed(0)}%`
+                        : Math.round(value).toLocaleString();
+                    return (
+                        <div key={row.state} className="flex items-center gap-2 text-[11px]">
+                            <span className="w-6 shrink-0 text-zinc-400">{row.state}</span>
+                            <div className="relative h-3.5 min-w-0 flex-1 overflow-hidden rounded-sm bg-zinc-900">
+                                <div
+                                    className="h-full rounded-sm bg-sky-400/70 transition-all duration-300"
+                                    style={{ width: `${pct}%` }}
+                                />
+                            </div>
+                            <span className="w-10 shrink-0 text-right text-zinc-300">{display}</span>
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
+
+// ---------------------------------------------------------------------------
 // Wrapper — renders all three in sequence
 // ---------------------------------------------------------------------------
 
-function TrendSnapshot({ annualSummary, startYear, endYear }: { annualSummary: AnnualTornadoSummary[]; startYear: number; endYear: number }) {
+function TrendSnapshot({ annualSummary, startYear, endYear, stateBreakdown }: { annualSummary: AnnualTornadoSummary[]; startYear: number; endYear: number; stateBreakdown: StateAggregateSummary[] }) {
     // Exclude the current in-progress year so partial data doesn't skew charts.
     const fullHistory = annualSummary.filter(y => y.year < new Date().getFullYear());
 
@@ -292,12 +369,19 @@ function TrendSnapshot({ annualSummary, startYear, endYear }: { annualSummary: A
                 <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">C · Decade comparison</div>
                 <TrendDecadeTable allYears={fullHistory} />
             </div>
+            {stateBreakdown.length > 0 && (
+                <div>
+                    <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">D · Top states</div>
+                    <TrendByState stateBreakdown={stateBreakdown} />
+                </div>
+            )}
         </section>
     );
 }
 
 export function TornadoSummaryPanel({
     stats,
+    stateBreakdown,
     selectedTrack,
     notableEvents,
     annualSummary,
@@ -487,7 +571,7 @@ export function TornadoSummaryPanel({
                             )}
                         </section>
                     ) : mode === 'trends' ? (
-                        <TrendSnapshot annualSummary={annualSummary} startYear={startYear} endYear={endYear} />
+                        <TrendSnapshot annualSummary={annualSummary} startYear={startYear} endYear={endYear} stateBreakdown={stateBreakdown} />
                     ) : (
                         <section className="border-t border-zinc-800 pt-4">
                             <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">Notable</div>

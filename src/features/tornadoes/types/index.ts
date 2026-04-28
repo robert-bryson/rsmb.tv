@@ -113,3 +113,12 @@ export interface FilteredTornadoStats {
     ef2Plus: number;
     strongestScale: number;
 }
+
+export interface StateAggregateSummary {
+    state: string;
+    stateName: string;
+    count: number;
+    ef2Plus: number;
+    deaths: number;
+    ef2Pct: number;
+}

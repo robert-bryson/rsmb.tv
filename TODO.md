@@ -1,6 +1,7 @@
 # TODO
 
 - [ ] should data like public/data/temperatures/*.json be stored in the repo? or in s3? or somewhere else? what github actions need to be updated to where? what data needs to be cleaned up?
+- [ ] JSON-LD for all pages
 
 ## Projects
 
@@ -33,10 +34,15 @@
 - [ ] Add screenshots to project page
 - [x] refreshing the page moves the map back to the starting zoom/bbox
 - [x] how to keep track data up to date?
-- [ ] add in state tornadoes over time? county?
-  - [ ] get a sense of how often tornadoes hit that geography
-  - [ ] get a sense of how common which strength of tornadoes is
-- [ ] Project button should be something like `rsmb.tv` or `←Back` and always go back to either the rsmb.tv homepage or the project homepage on rsmb.tv 
+- [x] add in state tornadoes over time? county?
+  - [x] get a sense of how often tornadoes hit that geography
+  - [x] get a sense of how common which strength of tornadoes is
+- [x] Project button should be something like `rsmb.tv` or `←Back` and always go back to either the rsmb.tv homepage or the project homepage on rsmb.tv
+- [x] there should be a share button somewhere
+- [ ] scrolling seems to reset the tracks/trends/density layer?
+- [ ] ← rsmb.tv button doesnt work correctly
+- [ ] should be able to click on a state, see tornadoes that went through, get stats
+
 
 ## Next steps
 

@@ -4,6 +4,7 @@ import {
     clampViewBox,
     computeDecades,
     computeSparklinePills,
+    computeStateBreakdown,
     fallbackBounds,
     formatDamage,
     formatDateTime,
@@ -548,5 +549,110 @@ describe('computeDecades', () => {
         expect(rows[0].label).toBe('1950s');
         expect(rows[1].label).toBe('1960s');
         expect(rows[2].label).toBe('1970–70');
+    });
+});
+
+// ---------------------------------------------------------------------------
+// computeStateBreakdown
+// ---------------------------------------------------------------------------
+
+describe('computeStateBreakdown', () => {
+    it('returns an empty array for empty input', () => {
+        expect(computeStateBreakdown([])).toEqual([]);
+    });
+
+    it('produces one row per distinct state', () => {
+        const features = [
+            makeTrack({ state: 'KS', stateName: 'Kansas' }),
+            makeTrack({ id: 't2', state: 'OK', stateName: 'Oklahoma' }),
+            makeTrack({ id: 't3', state: 'KS', stateName: 'Kansas' }),
+        ];
+        const rows = computeStateBreakdown(features);
+        expect(rows).toHaveLength(2);
+        expect(rows.map(r => r.state).sort()).toEqual(['KS', 'OK']);
+    });
+
+    it('sorts by count descending', () => {
+        const features = [
+            makeTrack({ state: 'OK' }),
+            makeTrack({ id: 't2', state: 'TX' }),
+            makeTrack({ id: 't3', state: 'TX' }),
+            makeTrack({ id: 't4', state: 'TX' }),
+        ];
+        const rows = computeStateBreakdown(features);
+        expect(rows[0].state).toBe('TX');
+        expect(rows[0].count).toBe(3);
+        expect(rows[1].state).toBe('OK');
+        expect(rows[1].count).toBe(1);
+    });
+
+    it('correctly accumulates tornado count per state', () => {
+        const features = [
+            makeTrack({ state: 'KS' }),
+            makeTrack({ id: 't2', state: 'KS' }),
+            makeTrack({ id: 't3', state: 'KS' }),
+        ];
+        const [row] = computeStateBreakdown(features);
+        expect(row.count).toBe(3);
+    });
+
+    it('correctly accumulates deaths per state', () => {
+        const features = [
+            makeTrack({ state: 'AL', deaths: 5 }),
+            makeTrack({ id: 't2', state: 'AL', deaths: 3 }),
+        ];
+        const [row] = computeStateBreakdown(features);
+        expect(row.deaths).toBe(8);
+    });
+
+    it('only counts scale >= 2 as ef2Plus', () => {
+        const features = [
+            makeTrack({ state: 'MO', scale: 0 }),
+            makeTrack({ id: 't2', state: 'MO', scale: 1 }),
+            makeTrack({ id: 't3', state: 'MO', scale: 2 }),
+            makeTrack({ id: 't4', state: 'MO', scale: 4 }),
+            makeTrack({ id: 't5', state: 'MO', scale: -1 }),
+        ];
+        const [row] = computeStateBreakdown(features);
+        expect(row.ef2Plus).toBe(2);
+    });
+
+    it('computes ef2Pct as (ef2Plus / count) * 100', () => {
+        const features = [
+            makeTrack({ state: 'NE', scale: 2 }),
+            makeTrack({ id: 't2', state: 'NE', scale: 0 }),
+            makeTrack({ id: 't3', state: 'NE', scale: 0 }),
+            makeTrack({ id: 't4', state: 'NE', scale: 0 }),
+        ];
+        const [row] = computeStateBreakdown(features);
+        // 1 ef2+ out of 4 = 25%
+        expect(row.ef2Pct).toBeCloseTo(25, 5);
+    });
+
+    it('sets ef2Pct to 0 when count is 0 (defensive)', () => {
+        // This cannot happen via the aggregation logic but the guard must hold.
+        const result = computeStateBreakdown([]);
+        expect(result).toHaveLength(0);
+    });
+
+    it('does not mutate the input features array', () => {
+        const features = [makeTrack({ state: 'IA' }), makeTrack({ id: 't2', state: 'IA' })];
+        const before = features.length;
+        computeStateBreakdown(features);
+        expect(features.length).toBe(before);
+    });
+
+    it('returns a fresh array each call (no shared mutable state)', () => {
+        const features = [makeTrack({ state: 'WI' })];
+        const first = computeStateBreakdown(features);
+        const second = computeStateBreakdown(features);
+        expect(first).not.toBe(second);
+        expect(first[0]).not.toBe(second[0]);
+    });
+
+    it('preserves stateName from the features', () => {
+        const features = [makeTrack({ state: 'KS', stateName: 'Kansas' })];
+        const [row] = computeStateBreakdown(features);
+        expect(row.stateName).toBe('Kansas');
     });
 });

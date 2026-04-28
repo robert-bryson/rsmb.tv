@@ -30,6 +30,7 @@ import {
     SVG_CANVAS_HEIGHT,
     SVG_CANVAS_WIDTH,
     clampViewBox,
+    computeStateBreakdown,
     fallbackBounds,
     projectFallbackPoint,
     summarize,
@@ -389,6 +390,7 @@ export function TornadoMap() {
     const [timelinePlaying, setTimelinePlaying] = useState(false);
     const [timelineCollapsed, setTimelineCollapsed] = useState(false);
     const [summaryCollapsed, setSummaryCollapsed] = useState(false);
+    const [copiedUrl, setCopiedUrl] = useState(false);
     const [webglUnavailable, setWebglUnavailable] = useState(() => {
         try {
             const canvas = document.createElement('canvas');
@@ -414,6 +416,19 @@ export function TornadoMap() {
         setSelectedTrackState(track);
         setSelectedTrackId(track?.properties.id ?? null);
     }, [setSelectedTrackId]);
+
+    const handleShare = useCallback(() => {
+        const url = window.location.href;
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(url).then(() => {
+                setCopiedUrl(true);
+                setTimeout(() => setCopiedUrl(false), 2000);
+            }).catch(() => { window.prompt('Copy this link:', url); });
+        } else {
+            // Clipboard API unavailable (HTTP context or older browser).
+            window.prompt('Copy this link:', url);
+        }
+    }, []);
     // useTornadoFilters.setYearRange always stores start <= end in URL params,
     // so no additional normalization is needed before passing to useTornadoData.
     const { tracks, points, annualSummary, notableEvents, loading, error, minYear, maxYear } = useTornadoData({
@@ -470,6 +485,12 @@ export function TornadoMap() {
     const filteredTrackPoints = useMemo(() => toTrackPoints(filteredTracks), [filteredTracks]);
 
     const stats = useMemo(() => summarize(filteredTracks.features), [filteredTracks]);
+    // Only compute the per-state breakdown when the trends panel is active —
+    // it iterates all filtered features which can be 70k+ for broad year ranges.
+    const stateBreakdown = useMemo(
+        () => filters.mode === 'trends' ? computeStateBreakdown(filteredTracks.features) : [],
+        [filteredTracks, filters.mode],
+    );
 
     useEffect(() => {
         let cancelled = false;
@@ -743,8 +764,16 @@ export function TornadoMap() {
 
             <div className="absolute left-3 top-3 z-20 flex max-w-[calc(100vw-5.5rem)] flex-wrap items-center gap-2 rounded-lg border border-zinc-700/80 bg-zinc-950/90 p-2 text-xs shadow-2xl backdrop-blur-md md:left-6 md:top-6">
                 <Link to="/projects/tornado-tracks" className="rounded-md px-2 py-1.5 font-medium text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100">
-                    Projects
+                    ← rsmb.tv
                 </Link>
+                <button
+                    type="button"
+                    onClick={handleShare}
+                    className="rounded-md px-2 py-1.5 font-medium text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
+                    title="Copy link to clipboard"
+                >
+                    {copiedUrl ? '✓ Copied' : 'Share'}
+                </button>
                 <div className="h-5 w-px bg-zinc-700" />
                 <div className="grid grid-cols-3 rounded-md bg-zinc-900 p-1">
                     {(['tracks', 'density', 'trends'] as const).map((mode) => (
@@ -763,6 +792,7 @@ export function TornadoMap() {
 
             <TornadoSummaryPanel
                 stats={stats}
+                stateBreakdown={stateBreakdown}
                 selectedTrack={selectedTrack}
                 notableEvents={notableEvents}
                 annualSummary={annualSummary}

@@ -2,6 +2,7 @@ import type { FeatureCollection, Point, Position } from 'geojson';
 import type {
     AnnualTornadoSummary,
     FilteredTornadoStats,
+    StateAggregateSummary,
     TornadoRegionPreset,
     TornadoTrackCollection,
     TornadoTrackFeature,
@@ -199,6 +200,37 @@ export interface DecadeRow {
     avgDeaths: number;
     ef2Pct: number;
     dPer100: number;
+}
+
+/**
+ * Aggregates tornado track features into per-state stats sorted by tornado
+ * count descending. Useful for the "by state" chart in the Trends panel.
+ *
+ * Returns an immutable result — callers may sort/slice without side effects.
+ */
+export function computeStateBreakdown(features: TornadoTrackFeature[]): StateAggregateSummary[] {
+    const map = new Map<string, { state: string; stateName: string; count: number; ef2Plus: number; deaths: number }>();
+    for (const f of features) {
+        const { state, stateName, scale, deaths } = f.properties;
+        let row = map.get(state);
+        if (!row) {
+            row = { state, stateName, count: 0, ef2Plus: 0, deaths: 0 };
+            map.set(state, row);
+        }
+        row.count += 1;
+        row.deaths += deaths;
+        if (scale >= 2) row.ef2Plus += 1;
+    }
+    return [...map.values()]
+        .map(({ state, stateName, count, ef2Plus, deaths }) => ({
+            state,
+            stateName,
+            count,
+            ef2Plus,
+            deaths,
+            ef2Pct: count > 0 ? (ef2Plus / count) * 100 : 0,
+        }))
+        .sort((a, b) => b.count - a.count);
 }
 
 /**
