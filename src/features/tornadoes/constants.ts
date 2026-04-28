@@ -1,9 +1,11 @@
 import type { TornadoColorMode, TornadoRegionPreset, TornadoScaleFilter } from './types';
 
-export const DATA_BASE_URL = '/data/tornadoes';
+/** In production, serve tornado data from the CDN backed by S3 (data.rsmb.tv/tornadoes). */
+export const DATA_BASE_URL = import.meta.env.PROD
+    ? 'https://data.rsmb.tv/tornadoes'
+    : '/data/tornadoes';
 
 export const TORNADO_ANNUAL_SUMMARY_URL = `${DATA_BASE_URL}/annual-summary.json`;
-export const TORNADO_STATE_SUMMARY_URL = `${DATA_BASE_URL}/state-summary.json`;
 export const TORNADO_NOTABLE_EVENTS_URL = `${DATA_BASE_URL}/notable-events.json`;
 
 export const MIN_DATA_YEAR = 1950;

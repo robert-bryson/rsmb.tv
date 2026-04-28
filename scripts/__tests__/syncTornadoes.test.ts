@@ -132,3 +132,89 @@ describe('parseTornadoCsv — coordinate clamping', () => {
         expect(features).toHaveLength(0);
     });
 });
+
+// ---------------------------------------------------------------------------
+// buildTornadoOutputs — edge cases
+// ---------------------------------------------------------------------------
+
+describe('buildTornadoOutputs — empty input', () => {
+    it('returns empty collections and summaries for zero features', () => {
+        const outputs = buildTornadoOutputs([]);
+        expect(outputs.tracks.features).toHaveLength(0);
+        expect(outputs.trackPoints.features).toHaveLength(0);
+        expect(outputs.annualSummary).toHaveLength(0);
+        expect(outputs.stateSummary).toHaveLength(0);
+        expect(outputs.notableEvents).toHaveLength(0);
+    });
+});
+
+describe('buildTornadoOutputs — notable events ordering', () => {
+    const lowScoreCsv = `BEGIN_YEARMONTH,BEGIN_DAY,BEGIN_TIME,END_DAY,END_TIME,EPISODE_ID,EVENT_ID,STATE,YEAR,MONTH_NAME,EVENT_TYPE,CZ_FIPS,CZ_NAME,WFO,BEGIN_DATE_TIME,CZ_TIMEZONE,END_DATE_TIME,INJURIES_DIRECT,INJURIES_INDIRECT,DEATHS_DIRECT,DEATHS_INDIRECT,DAMAGE_PROPERTY,DAMAGE_CROPS,SOURCE,TOR_F_SCALE,TOR_LENGTH,TOR_WIDTH,BEGIN_LAT,BEGIN_LON,END_LAT,END_LON,EPISODE_NARRATIVE,EVENT_NARRATIVE,DATA_SOURCE
+202405,21,1520,21,1543,1,2001,IOWA,2024,May,Tornado,123,MAHASKA,DMX,21-MAY-24 15:20:00,CST-6,21-MAY-24 15:43:00,0,0,0,0,,,NWS Storm Survey,EF0,1.0,50,41.25,-92.64,41.31,-92.41,,,CSV
+202405,22,1600,22,1630,1,2002,IOWA,2024,May,Tornado,123,MAHASKA,DMX,22-MAY-24 16:00:00,CST-6,22-MAY-24 16:30:00,50,0,5,0,5.00M,,NWS Storm Survey,EF4,30.0,1200,41.10,-92.50,41.40,-91.90,,,CSV
+`;
+
+    it('sorts notable events by score (highest first) and strips the score field', () => {
+        const features = parseTornadoCsv(lowScoreCsv);
+        expect(features).toHaveLength(2);
+
+        const outputs = buildTornadoOutputs(features);
+        expect(outputs.notableEvents).toHaveLength(2);
+
+        // EF4 with deaths and injuries scores higher than EF0 with nothing
+        expect(outputs.notableEvents[0].id).toBe('ncei-2024-2002');
+        expect(outputs.notableEvents[1].id).toBe('ncei-2024-2001');
+
+        // score field must not leak into the output
+        for (const event of outputs.notableEvents) {
+            expect(event).not.toHaveProperty('score');
+        }
+    });
+});
+
+// ---------------------------------------------------------------------------
+// parseNoaaDateTime — fallback path
+// ---------------------------------------------------------------------------
+
+describe('parseNoaaDateTime — fallback path', () => {
+    it('uses row fields when BEGIN_DATE_TIME is empty', () => {
+        const result = parseNoaaDateTime('', { year: 2019, month: 6, day: 3, time: '1430' });
+        expect(result).toEqual({
+            year: 2019,
+            month: 6,
+            date: '2019-06-03',
+            dateTime: '2019-06-03T14:30:00',
+        });
+    });
+
+    it('uses row fields when BEGIN_DATE_TIME is malformed', () => {
+        const result = parseNoaaDateTime('BAD DATA', { year: 2010, month: 12, day: 25, time: '0000' });
+        expect(result).toEqual({
+            year: 2010,
+            month: 12,
+            date: '2010-12-25',
+            dateTime: '2010-12-25T00:00:00',
+        });
+    });
+
+    it('returns null when neither direct nor fallback fields are usable', () => {
+        expect(parseNoaaDateTime('', {})).toBeNull();
+        expect(parseNoaaDateTime('', { year: NaN, month: 5, day: 1 })).toBeNull();
+    });
+});
+
+// ---------------------------------------------------------------------------
+// discoverStormEventsFiles — URL construction
+// ---------------------------------------------------------------------------
+
+describe('discoverStormEventsFiles — sourceUrl without trailing slash', () => {
+    it('still constructs correct absolute URLs', () => {
+        const files = discoverStormEventsFiles(
+            '<a href="StormEvents_details-ftp_v1.0_d2023_c20240101.csv.gz">file</a>',
+            'https://example.test/data',
+        );
+        expect(files.get(2023)?.url).toBe(
+            'https://example.test/data/StormEvents_details-ftp_v1.0_d2023_c20240101.csv.gz',
+        );
+    });
+});

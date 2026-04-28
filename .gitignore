@@ -188,3 +188,8 @@ public/data/flights/*.geojson
 
 # === Project: Temperature Records ===
 public/data/temperatures/*.json
+
+# === Project: Tornado Tracks ===
+public/data/tornadoes/*.json
+public/data/tornadoes/tracks/*.geojson
+public/data/tornadoes/track-points/*.geojson

@@ -195,3 +195,18 @@ describe('tornadoPointsYearUrl', () => {
         expect(tornadoPointsYearUrl(1950)).toBe(`${DATA_BASE_URL}/track-points/1950.geojson`);
     });
 });
+
+// ---------------------------------------------------------------------------
+// DATA_BASE_URL — env-aware routing
+// ---------------------------------------------------------------------------
+
+describe('DATA_BASE_URL', () => {
+    // Tests run with import.meta.env.PROD = false, so the dev path is active.
+    it('uses the local dev path in the test environment', () => {
+        expect(DATA_BASE_URL).toBe('/data/tornadoes');
+    });
+
+    it('does not contain the CDN hostname in the test environment', () => {
+        expect(DATA_BASE_URL).not.toContain('data.rsmb.tv');
+    });
+});

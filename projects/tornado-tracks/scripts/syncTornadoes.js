@@ -537,19 +537,28 @@ function wait(ms) {
     return new Promise((resolve) => { setTimeout(resolve, ms); });
 }
 
-async function fetchWithRetries(url, { responseType = 'text', attempts = 4, log = console.warn } = {}) {
+async function fetchWithRetries(url, { responseType = 'text', attempts = 4, timeoutMs = 60_000, log = console.warn } = {}) {
     let lastError;
 
     for (let attempt = 1; attempt <= attempts; attempt += 1) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeoutMs);
         try {
             const response = await fetch(url, {
+                signal: controller.signal,
                 headers: { 'User-Agent': 'rsmb.tv tornado-tracks data sync (https://rsmb.tv)' },
             });
-            if (!response.ok) throw new Error(`HTTP ${response.status} fetching ${url}`);
-            return responseType === 'buffer'
+            if (!response.ok) {
+                clearTimeout(timer);
+                throw new Error(`HTTP ${response.status} fetching ${url}`);
+            }
+            const body = responseType === 'buffer'
                 ? Buffer.from(await response.arrayBuffer())
-                : response.text();
+                : await response.text();
+            clearTimeout(timer);
+            return body;
         } catch (error) {
+            clearTimeout(timer);
             lastError = error;
             if (attempt === attempts) break;
             log(`Retrying ${url} after failed attempt ${attempt}/${attempts}`);
