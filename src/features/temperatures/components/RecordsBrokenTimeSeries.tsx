@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { YearData, HighlightRange } from '../types';
 import { HIGH_TEMP_COLOR, LOW_TEMP_COLOR } from '../constants';
+import { ChartEmptyState } from './ChartEmptyState';
 
 interface Props {
     data: YearData[];
@@ -32,6 +33,10 @@ export function RecordsBrokenTimeSeries({ data, onHoverPeriod, selectedDecade, o
     });
 
     const filtered = rolling.filter(d => d.year >= 1900);
+    if (filtered.length === 0) {
+        return <ChartEmptyState message="No annual all-time county record data is available for this selection." />;
+    }
+
     const maxAvg = Math.max(...filtered.flatMap(d => [d.highsAvg, d.lowsAvg]), 1);
 
     const padding = { top: 20, right: 20, bottom: 30, left: 36 };
@@ -40,7 +45,10 @@ export function RecordsBrokenTimeSeries({ data, onHoverPeriod, selectedDecade, o
     const plotW = width - padding.left - padding.right;
     const plotH = height - padding.top - padding.bottom;
 
-    const xScale = (year: number) => padding.left + ((year - filtered[0].year) / (filtered[filtered.length - 1].year - filtered[0].year)) * plotW;
+    const firstYear = filtered[0].year;
+    const lastYear = filtered[filtered.length - 1].year;
+    const yearSpan = Math.max(1, lastYear - firstYear);
+    const xScale = (year: number) => padding.left + ((year - firstYear) / yearSpan) * plotW;
     const yScale = (val: number) => padding.top + plotH - (val / maxAvg) * plotH;
 
     const buildPath = (key: 'highsAvg' | 'lowsAvg') => {
@@ -59,7 +67,7 @@ export function RecordsBrokenTimeSeries({ data, onHoverPeriod, selectedDecade, o
     const yearTicks = filtered.filter(d => d.year % 20 === 0);
 
     // Y-axis ticks
-    const yTicks = Array.from({ length: 5 }, (_, i) => Math.round((maxAvg / 4) * i));
+    const yTicks = Array.from(new Set(Array.from({ length: 5 }, (_, i) => Math.round((maxAvg / 4) * i))));
 
     const hoveredData = hoveredIdx !== null ? filtered[hoveredIdx] : null;
 
@@ -67,9 +75,9 @@ export function RecordsBrokenTimeSeries({ data, onHoverPeriod, selectedDecade, o
         <div className={compact ? 'flex flex-col h-full' : ''}>
             {!compact && (
                 <>
-                    <h3 className="text-sm font-semibold text-zinc-200 mb-1">Record-Setting Frequency Over Time</h3>
+                    <h3 className="text-sm font-semibold text-zinc-200 mb-1">All-Time County Records Set Per Year</h3>
                     <p className="text-xs text-zinc-400 mb-4">
-                        How many county all-time records were set each year (5-year rolling average).
+                        How many all-time county high/low temperature records were newly set each year (5-year rolling average).
                         In a stable climate, both lines should decline equally as records become harder to break.
                     </p>
                 </>

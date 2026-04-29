@@ -3,7 +3,7 @@ export { ClimateTrends } from './components/ClimateTrends';
 export { useTemperatureData } from './hooks/useTemperatureData';
 export { useClimateTrends } from './hooks/useClimateTrends';
 export { useStationHistory } from './hooks/useStationHistory';
-export { fToC, formatTemp } from './utils/temperature';
+export { fToC, fDeltaToCDelta, formatTemp, formatTempDelta } from './utils/temperature';
 export type {
     StateRecordProperties,
     CountyRecordProperties,

@@ -18,11 +18,7 @@
 
 ### Temperature records
 
-- [ ] Sometimes it is confusing what the term record refers to. There are many types: local/state/county/all time/date/month/etc. Please review usage and improve
-- [ ] Add screenshots to project page
-- [ ] Improve map symbology (maybe gradient of county icons for whatever tab is selected on right panel)
-- [ ] random controls all over map UI, some get hidden. review and improve
-- [ ] it doesnt seem like the chart math is correct (or maybe just correct for a specific type of record?). Review, fix, and clarify
+No open items.
 
 ### Through Routes
 
@@ -41,7 +37,7 @@
 
 ### Content
 
-- [ ] Add screenshots to all project pages (aborg, Anki Artisan, Bookend, Temperature Records, Through Routes)
+- [ ] Add screenshots to all project pages (aborg, Anki Artisan, Bookend, Through Routes)
 - [ ] Add more blog posts to RSS feed as they are published
 
 ### Testing
@@ -68,6 +64,14 @@
 #### Content
 
 - [x] Write project page for aborg
+
+#### Temperature records
+
+- [x] Clarify record terminology across recent station records, county/state all-time records, record-age views, and trends
+- [x] Verify screenshots are present on the project page and clean up stale screenshot TODO
+- [x] Improve county/state all-time map symbology so high/low panel tabs drive map emphasis
+- [x] Consolidate scattered temperature map controls and prevent top-right control overlap
+- [x] Fix and clarify chart math: computed all-time county totals, explicit temperature-delta conversion, sparse-data chart guards
 
 #### Tornado Tracks
 

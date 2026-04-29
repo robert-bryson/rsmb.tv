@@ -21,7 +21,7 @@ import {
     FRESHNESS_COLORS,
     yearToColor,
 } from '../constants';
-import { fToC, formatTemp } from '../utils/temperature';
+import { formatTemp, formatTempDelta } from '../utils/temperature';
 import { escapeHtml } from '../../../utils/escapeHtml';
 
 function useIsMobile() {
@@ -90,7 +90,9 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
         const prevDate = formatDate(props.prevRecordDate as string);
         const margin = isHigh ? tempF - prevF : prevF - tempF;
         const arrow = isHigh ? '↑' : '↓';
-        const typeLabel = isHigh ? 'NEW RECORD HIGH' : 'NEW RECORD LOW';
+        const baseScope = (props.recordScope as RecordScope) || 'daily';
+        const scopeLabel = baseScope === 'monthly' ? 'MONTHLY STATION' : 'DAILY STATION';
+        const typeLabel = isHigh ? `NEW ${scopeLabel} RECORD HIGH` : `NEW ${scopeLabel} RECORD LOW`;
         const normalF = props.normalF as number | null;
         const vsNormal = normalF != null ? (tempF - normalF) : null;
         const scopeBadge = scope ? SCOPE_BADGE[scope] : '';
@@ -114,11 +116,11 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
                 </div>
                 <div style="display:flex;justify-content:space-between;margin-bottom:2px">
                     <span style="color:#a1a1aa">Margin</span>
-                    <span style="color:${color}">${arrow}${useCelsius ? ((margin * 5 / 9)).toFixed(1) : margin.toFixed(1)}°${useCelsius ? 'C' : 'F'}</span>
+                    <span style="color:${color}">${arrow}${formatTempDelta(margin, useCelsius)}</span>
                 </div>${vsNormal != null ? `
                 <div style="display:flex;justify-content:space-between;margin-bottom:2px">
                     <span style="color:#a1a1aa">vs Normal</span>
-                    <span style="color:${vsNormal > 0 ? HIGH_TEMP_COLOR : LOW_TEMP_COLOR}">${useCelsius ? (vsNormal > 0 ? '+' : '') + ((vsNormal * 5 / 9)).toFixed(0) + '°C' : (vsNormal > 0 ? '+' : '') + vsNormal.toFixed(0) + '°F'}</span>
+                    <span style="color:${vsNormal > 0 ? HIGH_TEMP_COLOR : LOW_TEMP_COLOR}">${vsNormal > 0 ? '+' : ''}${formatTempDelta(vsNormal, useCelsius)}</span>
                 </div>` : ''}
                 <div style="display:flex;justify-content:space-between">
                     <span style="color:#a1a1aa">Date</span>
@@ -167,7 +169,7 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
                 </div>
             </div>
             <div style="text-align:center;font-size:11px;color:#a1a1aa;border-top:1px solid #27272a;padding-top:6px">
-                Temperature range: <span style="color:#d4d4d8;font-weight:600">${useCelsius ? fToC(range + 32).toFixed(1) + '°C' : range + '°F'}</span> (${useCelsius ? range + '°F' : fToC(range + 32).toFixed(1) + '°C'})
+                Temperature range: <span style="color:#d4d4d8;font-weight:600">${formatTempDelta(range, useCelsius)}</span> (${formatTempDelta(range, !useCelsius)})
             </div>
         </div>`;
     }
@@ -227,7 +229,7 @@ export function TemperatureMap() {
     // URL-driven state for shareable views
     const viewParam = searchParams.get('view');
     const viewMode: ViewMode = (viewParam === 'county' || viewParam === 'state' || viewParam === 'freshness') ? viewParam : 'recent';
-    const freshnessType: 'high' | 'low' = searchParams.get('type') === 'low' ? 'low' : 'high';
+    const recordType: 'high' | 'low' = searchParams.get('type') === 'low' ? 'low' : 'high';
     const useCelsius = searchParams.get('unit') === 'C';
 
     const setViewMode = useCallback((mode: ViewMode) => {
@@ -239,7 +241,7 @@ export function TemperatureMap() {
         }, { replace: true });
     }, [setSearchParams]);
 
-    const setFreshnessType = useCallback((type: 'high' | 'low') => {
+    const setRecordType = useCallback((type: 'high' | 'low') => {
         setSearchParams(prev => {
             const next = new URLSearchParams(prev);
             if (type === 'high') next.delete('type');
@@ -324,7 +326,7 @@ export function TemperatureMap() {
     const freshnessGeoJson = useMemo(() => {
         if (!countyRecords) return null;
         const features = countyRecords.features
-            .filter(f => f.properties.type === freshnessType)
+            .filter(f => f.properties.type === recordType)
             .map(f => {
                 const dateStr = f.properties.date || '';
                 const year = dateStr.length >= 4 ? parseInt(dateStr.slice(0, 4), 10) : 1900;
@@ -339,7 +341,7 @@ export function TemperatureMap() {
                 };
             });
         return { type: 'FeatureCollection' as const, features };
-    }, [countyRecords, freshnessType]);
+    }, [countyRecords, recordType]);
 
     /** Merged county GeoJSON — one feature per county with both high and low temps for combined labels */
     const countyMergedGeoJson = useMemo(() => {
@@ -842,24 +844,42 @@ export function TemperatureMap() {
             map.setLayoutProperty('state-detail-label', 'text-field', detailExpr);
         }
 
-        // County merged labels (high on top, low below)
+        // County merged labels follow the same high/low type selected in the side panel.
         if (map.getLayer('county-labels')) {
+            const countyTempProp = recordType === 'high' ? 'highTempF' : 'lowTempF';
+            const countyTextColor = recordType === 'high' ? '#fca5a5' : '#93c5fd';
             const countyExpr: maplibregl.ExpressionSpecification = useCelsius
-                ? [
-                    'format',
-                    ['concat', ['to-string', ['round', ['*', ['/', ['-', ['coalesce', ['get', 'highTempF'], 0], 32], 9], 5]]], '°'], { 'text-color': '#fca5a5' },
-                    '\n', {},
-                    ['concat', ['to-string', ['round', ['*', ['/', ['-', ['coalesce', ['get', 'lowTempF'], 0], 32], 9], 5]]], '°'], { 'text-color': '#93c5fd' },
-                ]
-                : [
-                    'format',
-                    ['concat', ['to-string', ['coalesce', ['get', 'highTempF'], '']], '°'], { 'text-color': '#fca5a5' },
-                    '\n', {},
-                    ['concat', ['to-string', ['coalesce', ['get', 'lowTempF'], '']], '°'], { 'text-color': '#93c5fd' },
-                ];
+                ? ['format', ['concat', ['to-string', ['round', ['*', ['/', ['-', ['coalesce', ['get', countyTempProp], 0], 32], 9], 5]]], '°'], { 'text-color': countyTextColor }]
+                : ['format', ['concat', ['to-string', ['coalesce', ['get', countyTempProp], '']], '°'], { 'text-color': countyTextColor }];
             map.setLayoutProperty('county-labels', 'text-field', countyExpr);
         }
-    }, [mapLoaded, useCelsius]);
+    }, [countyMergedGeoJson, mapLoaded, recordType, useCelsius]);
+
+    // Keep county/state all-time symbology aligned with the selected high/low tab.
+    useEffect(() => {
+        const map = mapRef.current;
+        if (!map || !mapLoaded) return;
+
+        const selectedCountyOpacity: maplibregl.ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], 3, 0.65, 6, 0.85, 8, 0.45];
+        const mutedCountyOpacity: maplibregl.ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], 3, 0.12, 6, 0.18, 8, 0.08];
+
+        if (map.getLayer('county-highs')) {
+            map.setPaintProperty('county-highs', 'circle-opacity', recordType === 'high' ? selectedCountyOpacity : mutedCountyOpacity);
+            map.setPaintProperty('county-highs', 'circle-stroke-width', recordType === 'high' ? 0.75 : 0);
+            map.setPaintProperty('county-highs', 'circle-stroke-color', 'rgba(255,255,255,0.35)');
+        }
+        if (map.getLayer('county-lows')) {
+            map.setPaintProperty('county-lows', 'circle-opacity', recordType === 'low' ? selectedCountyOpacity : mutedCountyOpacity);
+            map.setPaintProperty('county-lows', 'circle-stroke-width', recordType === 'low' ? 0.75 : 0);
+            map.setPaintProperty('county-lows', 'circle-stroke-color', 'rgba(255,255,255,0.35)');
+        }
+        if (map.getLayer('state-highs')) {
+            map.setPaintProperty('state-highs', 'text-opacity', recordType === 'high' ? 1 : 0.25);
+        }
+        if (map.getLayer('state-lows')) {
+            map.setPaintProperty('state-lows', 'text-opacity', recordType === 'low' ? 1 : 0.25);
+        }
+    }, [countyRecords, mapLoaded, recordType, stateRecords]);
 
     // Update state detail source data and zoom when selectedState changes
     useEffect(() => {
@@ -1290,7 +1310,7 @@ export function TemperatureMap() {
 
             {/* Unified toolbar */}
             <div className="absolute top-3 left-3 z-20 flex flex-col gap-1.5 max-w-[calc(100vw-7rem)]">
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1.5 overflow-x-auto">
                     <Link
                         to="/projects"
                         className="bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white px-3 py-1.5 rounded-lg text-sm border border-zinc-700/50 hover:border-zinc-600 transition-colors"
@@ -1306,6 +1326,23 @@ export function TemperatureMap() {
                     >
                         📊 Trends
                     </button>
+                    <button
+                        onClick={() => setUseCelsius(c => !c)}
+                        className="bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white px-2.5 py-1.5 rounded-lg text-sm font-semibold border border-zinc-700/50 hover:border-zinc-600 transition-colors"
+                        title={useCelsius ? 'Switch to °F' : 'Switch to °C'}
+                        aria-label={useCelsius ? 'Switch to Fahrenheit' : 'Switch to Celsius'}
+                    >
+                        {useCelsius ? '°C' : '°F'}
+                    </button>
+                    <button
+                        onClick={() => setPanelOpen(p => !p)}
+                        className="bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white px-2.5 py-1.5 rounded-lg text-sm border border-zinc-700/50 hover:border-zinc-600 transition-colors"
+                        title={panelOpen ? 'Hide summary' : 'Show summary'}
+                        aria-label={panelOpen ? 'Hide summary panel' : 'Show summary panel'}
+                        aria-expanded={panelOpen}
+                    >
+                        {panelOpen ? 'Hide Panel' : 'Show Panel'}
+                    </button>
                 </div>
                 <div className="flex gap-0.5 bg-zinc-900/80 backdrop-blur rounded-lg border border-zinc-700/50 p-0.5 overflow-x-auto">
                     <button
@@ -1314,9 +1351,9 @@ export function TemperatureMap() {
                             ? 'bg-zinc-700 text-white'
                             : 'text-zinc-400 hover:text-zinc-200'
                             }`}
-                        title="Recent records broken across US weather stations"
+                        title="Daily/monthly station records broken recently (yesterday or last 7 days)"
                     >
-                        🌡️ Records
+                        🌡️ Recent
                     </button>
                     <button
                         onClick={() => setViewMode('county')}
@@ -1324,9 +1361,9 @@ export function TemperatureMap() {
                             ? 'bg-zinc-700 text-white'
                             : 'text-zinc-400 hover:text-zinc-200'
                             }`}
-                        title="All-time county temperature records"
+                        title="All-time high and low temperature records per county"
                     >
-                        📍 County
+                        📍 County All-Time
                     </button>
                     <button
                         onClick={() => setViewMode('state')}
@@ -1334,9 +1371,9 @@ export function TemperatureMap() {
                             ? 'bg-zinc-700 text-white'
                             : 'text-zinc-400 hover:text-zinc-200'
                             }`}
-                        title="All-time state temperature records"
+                        title="All-time high and low temperature records per state"
                     >
-                        🏛️ State
+                        🏛️ State All-Time
                     </button>
                     <button
                         onClick={() => setViewMode('freshness')}
@@ -1344,9 +1381,9 @@ export function TemperatureMap() {
                             ? 'bg-zinc-700 text-white'
                             : 'text-zinc-400 hover:text-zinc-200'
                             }`}
-                        title="All-time county records colored by the decade they were set"
+                        title="All-time county records colored by the decade they were set — shows how old the records are"
                     >
-                        📅 Freshness
+                        📅 Record Age
                     </button>
                 </div>
                 {/* Context headline — promoted */}
@@ -1354,24 +1391,24 @@ export function TemperatureMap() {
                     {viewMode === 'recent' && recentRecords && (
                         <p className="text-xs text-zinc-200 bg-zinc-900/80 backdrop-blur rounded-lg px-3 py-1.5 border border-zinc-700/50">
                             <span className="font-semibold" style={{ color: HIGH_TEMP_COLOR }}>{(recentRecords[activePeriod]?.filter((r: BrokenRecord) => r.type === 'high').length || 0).toLocaleString()}</span>
-                            {' record highs and '}
+                            {' daily/monthly station record highs and '}
                             <span className="font-semibold" style={{ color: LOW_TEMP_COLOR }}>{(recentRecords[activePeriod]?.filter((r: BrokenRecord) => r.type === 'low').length || 0).toLocaleString()}</span>
                             {activePeriod === 'yesterday' ? ' record lows broken yesterday' : ' record lows broken in the last 7 days'}
                         </p>
                     )}
                     {viewMode === 'county' && countyRecords && (
                         <p className="text-xs text-zinc-200 bg-zinc-900/80 backdrop-blur rounded-lg px-3 py-1.5 border border-zinc-700/50">
-                            <span className="font-semibold text-zinc-100">{countyRecords.features.length.toLocaleString()}</span> all-time county temperature records
+                            <span className="font-semibold text-zinc-100">{countyRecords.features.length.toLocaleString()}</span> all-time county temperature records (highest high and lowest low per county)
                         </p>
                     )}
                     {viewMode === 'state' && stateRecords && (
                         <p className="text-xs text-zinc-200 bg-zinc-900/80 backdrop-blur rounded-lg px-3 py-1.5 border border-zinc-700/50">
-                            <span className="font-semibold text-zinc-100">{stateRecords.features.length.toLocaleString()}</span> all-time state temperature records
+                            <span className="font-semibold text-zinc-100">{stateRecords.features.length.toLocaleString()}</span> all-time state temperature records (highest high and lowest low per state)
                         </p>
                     )}
                     {viewMode === 'freshness' && (
                         <p className="text-xs text-zinc-200 bg-zinc-900/80 backdrop-blur rounded-lg px-3 py-1.5 border border-zinc-700/50">
-                            All-time county records colored by decade — older records are cooler colors
+                            All-time county records colored by the decade they were set — warmer colors = more recently set
                         </p>
                     )}
                 </div>
@@ -1391,7 +1428,7 @@ export function TemperatureMap() {
                 </div>
             ) : (
                 <div className={`absolute left-4 z-20 bg-zinc-900/80 backdrop-blur rounded-lg px-3 py-2 sm:px-4 sm:py-3 text-xs text-zinc-300 border border-zinc-700/50 transition-all max-w-[calc(100vw-2rem)] ${showTrends ? (isMobile ? 'bottom-[55%]' : 'bottom-[37%]') : 'bottom-6'}`}>
-                    <div className="flex items-center gap-1 mb-1.5 text-zinc-200 font-medium">Year record was set</div>
+                    <div className="flex items-center gap-1 mb-1.5 text-zinc-200 font-medium">Decade record was set</div>
                     <div className="flex gap-0.5 overflow-x-auto">
                         {FRESHNESS_COLORS.filter((_, i) => isMobile ? i % 2 === 0 : true).map(([year, color]) => (
                             <div key={year} className="flex flex-col items-center shrink-0">
@@ -1402,28 +1439,6 @@ export function TemperatureMap() {
                     </div>
                 </div>
             )}
-
-            {/* Top-right controls — grouped to avoid overlap on mobile */}
-            <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5">
-                <button
-                    onClick={() => setUseCelsius(c => !c)}
-                    className="bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white w-10 h-10 sm:w-8 sm:h-8 rounded flex items-center justify-center text-xs font-semibold border border-zinc-700/50 hover:border-zinc-600 transition-colors"
-                    title={useCelsius ? 'Switch to °F' : 'Switch to °C'}
-                    aria-label={useCelsius ? 'Switch to Fahrenheit' : 'Switch to Celsius'}
-                >
-                    {useCelsius ? '°C' : '°F'}
-                </button>
-                <button
-                    onClick={() => setPanelOpen(p => !p)}
-                    className="bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white w-10 h-10 sm:w-8 sm:h-8 rounded flex items-center justify-center text-sm border border-zinc-700/50 hover:border-zinc-600 transition-colors"
-                    title={panelOpen ? 'Hide summary' : 'Show summary'}
-                    aria-label={panelOpen ? 'Hide summary panel' : 'Show summary panel'}
-                    aria-expanded={panelOpen}
-                >
-                    {panelOpen ? '✕' : '☰'}
-                </button>
-            </div>
-
             {/* Summary panel */}
             {panelOpen && !showTrends && !selectedStation && (
                 <SummaryPanel
@@ -1431,8 +1446,8 @@ export function TemperatureMap() {
                     recentRecords={recentRecords}
                     countyRecords={countyRecords}
                     stateRecords={stateRecords}
-                    freshnessType={freshnessType}
-                    onFreshnessTypeChange={setFreshnessType}
+                    recordType={recordType}
+                    onRecordTypeChange={setRecordType}
                     useCelsius={useCelsius}
                     onFlyTo={flyToLocation}
                     onSelectState={setSelectedState}
@@ -1494,7 +1509,7 @@ export function TemperatureMap() {
                             </div>
                             <div className="w-px bg-zinc-800 shrink-0" />
                             <div className="flex-1 min-w-0 flex flex-col">
-                                <span className="text-xs text-zinc-400 px-1 mb-0.5 shrink-0">Frequency</span>
+                                <span className="text-xs text-zinc-400 px-1 mb-0.5 shrink-0">Records Set/Year</span>
                                 <div className="flex-1 min-h-0">
                                     <RecordsBrokenTimeSeries data={trends.byYear} onHoverPeriod={setHighlightRange} selectedDecade={selectedDecade} onSelectDecade={handleSelectDecade} compact />
                                 </div>
@@ -1526,7 +1541,7 @@ function MobileTrendsDrawer({ trends, setHighlightRange, selectedDecade, handleS
     return (
         <>
             <div className="flex border-b border-zinc-800 shrink-0">
-                {([['age', 'Record Age'], ['freq', 'Frequency'], ['ratio', 'H:L Ratio']] as const).map(([id, label]) => (
+                {([['age', 'Record Age'], ['freq', 'Records/Year'], ['ratio', 'H:L Ratio']] as const).map(([id, label]) => (
                     <button
                         key={id}
                         onClick={() => setActiveTab(id)}

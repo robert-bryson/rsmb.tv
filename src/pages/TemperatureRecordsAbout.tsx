@@ -50,8 +50,9 @@ export default function TemperatureRecordsAbout() {
                 >
                     ACIS
                 </a>{' '}
-                data. Includes a summary panel of recent temperature extremes
-                and a companion trends analysis.
+                data. The map separates recent daily/monthly station records
+                from county and state all-time records, with a companion trends
+                analysis focused on county all-time records.
             </p>
 
             <div className="flex gap-3 mb-8">
@@ -80,7 +81,7 @@ export default function TemperatureRecordsAbout() {
                         loading="eager"
                     />
                     <figcaption className="mt-2 text-xs text-zinc-400 text-center">
-                        Daily records view — 626 record highs and 42 record lows broken in a single day
+                        Recent view — daily/monthly station records broken in a single day
                     </figcaption>
                 </figure>
                 <figure>
@@ -93,7 +94,7 @@ export default function TemperatureRecordsAbout() {
                         loading="lazy"
                     />
                     <figcaption className="mt-2 text-xs text-zinc-400 text-center">
-                        State records view — all-time high and low temperature records for each state
+                        State All-Time view — highest high and lowest low temperature records for each state
                     </figcaption>
                 </figure>
                 <figure>
@@ -106,18 +107,18 @@ export default function TemperatureRecordsAbout() {
                         loading="lazy"
                     />
                     <figcaption className="mt-2 text-xs text-zinc-400 text-center">
-                        Freshness view — county records colored by decade, showing when each record was set
+                        Record Age view — county all-time records colored by the decade each standing record was set
                     </figcaption>
                 </figure>
             </div>
 
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Features</h2>
             <ul className="space-y-1.5 text-zinc-400 text-sm mb-6 list-disc list-inside">
-                <li>Choropleth map of record highs and lows at state and county level</li>
-                <li>Toggle between all-time record highs and record lows</li>
+                <li>Map layers for recent station records, county all-time records, and state all-time records</li>
+                <li>High/low tabs that keep the side panel and map symbology synchronized</li>
                 <li>Click any state or county to see the record details — temperature, date, and station</li>
-                <li>Summary panel showing the most recent records broken across the country</li>
-                <li>Companion trends page analyzing whether records are being broken more frequently</li>
+                <li>Summary panel showing recent daily/monthly station records broken across the country</li>
+                <li>Companion trends page analyzing whether county all-time records skew increasingly hot</li>
             </ul>
 
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Data</h2>

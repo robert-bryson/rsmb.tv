@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { DecadeData, RollingRatioData, HighlightRange } from '../types';
 import { HIGH_TEMP_COLOR, yearToColor } from '../constants';
+import { ChartEmptyState } from './ChartEmptyState';
 
 interface Props {
     decadeData: DecadeData[];
@@ -60,6 +61,10 @@ function DecadeRatioView({ data, hovered, setHovered, selectedDecade, onSelectDe
 }) {
     const [localSelected, setLocalSelected] = useState<number | null>(null);
     const filtered = data.filter(d => d.decade >= 1900 && d.ratio !== null);
+    if (filtered.length === 0) {
+        return <ChartEmptyState message="No high-to-low ratio data is available for this selection." />;
+    }
+
     const maxRatio = Math.max(...filtered.map(d => d.ratio!), 2);
 
     const selectedIdx = selectedDecade !== undefined
@@ -101,7 +106,7 @@ function DecadeRatioView({ data, hovered, setHovered, selectedDecade, onSelectDe
                         </button>
                     </div>
                     <p className="text-xs text-zinc-400 mb-4">
-                        Ratio of record highs to record lows set per decade. A value of 1.0 means equal;
+                        Ratio of all-time county record highs to record lows set per decade. A value of 1.0 means equal;
                         above 1.0 means more highs than lows — a warming signal.
                     </p>
                 </>
@@ -218,6 +223,10 @@ function RollingRatioView({ data, hovered, setHovered, onSwitchView, onHoverPeri
     compact?: boolean;
 }) {
     const filtered = data.filter(d => d.year >= 1910 && d.ratio !== null);
+    if (filtered.length === 0) {
+        return <ChartEmptyState message="No rolling high-to-low ratio data is available for this selection." />;
+    }
+
     const maxRatio = Math.min(Math.max(...filtered.map(d => d.ratio!), 3), 10);
 
     const padding = { top: 20, right: 20, bottom: 30, left: 36 };
@@ -226,7 +235,10 @@ function RollingRatioView({ data, hovered, setHovered, onSwitchView, onHoverPeri
     const plotW = width - padding.left - padding.right;
     const plotH = height - padding.top - padding.bottom;
 
-    const xScale = (year: number) => padding.left + ((year - filtered[0].year) / (filtered[filtered.length - 1].year - filtered[0].year)) * plotW;
+    const firstYear = filtered[0].year;
+    const lastYear = filtered[filtered.length - 1].year;
+    const yearSpan = Math.max(1, lastYear - firstYear);
+    const xScale = (year: number) => padding.left + ((year - firstYear) / yearSpan) * plotW;
     const yScale = (val: number) => padding.top + plotH - (Math.min(val, maxRatio) / maxRatio) * plotH;
 
     const path = filtered
@@ -260,7 +272,7 @@ function RollingRatioView({ data, hovered, setHovered, onSwitchView, onHoverPeri
                         </button>
                     </div>
                     <p className="text-xs text-zinc-400 mb-4">
-                        10-year rolling ratio of record highs to lows. Above 1.0 (dashed) means more highs than lows being set.
+                        10-year rolling ratio of all-time county record highs to lows. Above 1.0 (dashed) means more highs than lows being set.
                     </p>
                 </>
             )}

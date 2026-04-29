@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { DecadeData, HighlightRange } from '../types';
 import { HIGH_TEMP_COLOR, LOW_TEMP_COLOR, yearToColor } from '../constants';
+import { ChartEmptyState } from './ChartEmptyState';
 
 interface Props {
     data: DecadeData[];
@@ -21,6 +22,10 @@ export function RecordAgeChart({ data, onHoverPeriod, selectedDecade, onSelectDe
     // Filter to decades with meaningful data (skip very early sparse ones)
     const filtered = data.filter(d => d.decade >= 1890);
 
+    if (filtered.length === 0) {
+        return <ChartEmptyState message="No all-time county record age data is available for this selection." />;
+    }
+
     // Use shared selection if provided, otherwise fall back to local
     const selectedIdx = selectedDecade !== undefined
         ? filtered.findIndex(d => d.decade === selectedDecade)
@@ -31,7 +36,8 @@ export function RecordAgeChart({ data, onHoverPeriod, selectedDecade, onSelectDe
         if (onSelectDecade) onSelectDecade(decade);
         else setLocalSelected(idx);
     };
-    const maxVal = Math.max(...filtered.flatMap(d => [d.highs, d.lows]));
+    const maxVal = Math.max(...filtered.flatMap(d => [d.highs, d.lows]), 1);
+    const totalRecords = filtered.reduce((sum, d) => sum + d.highs + d.lows, 0);
 
     // Cumulative records set up to each decade
     const cumTotal: number[] = [];
@@ -64,9 +70,9 @@ export function RecordAgeChart({ data, onHoverPeriod, selectedDecade, onSelectDe
         <div className={compact ? 'flex flex-col h-full' : ''}>
             {!compact && (
                 <>
-                    <h3 className="text-sm font-semibold text-zinc-200 mb-1">When Were All-Time Records Set?</h3>
+                    <h3 className="text-sm font-semibold text-zinc-200 mb-1">When Were All-Time County Records Set?</h3>
                     <p className="text-xs text-zinc-400 mb-4">
-                        Distribution of 6,078 county all-time record highs and lows by the decade they were set.
+                        Distribution of {totalRecords.toLocaleString()} all-time county temperature records (highs and lows) by the decade they were set.
                         Highs go up, lows go down. Color matches the freshness map. Click a decade to lock selection.
                     </p>
                 </>

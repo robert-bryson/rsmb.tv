@@ -4,6 +4,7 @@ import { TIME_PERIODS, TIME_PERIOD_LABELS, HIGH_TEMP_COLOR, LOW_TEMP_COLOR, year
 import { formatTemp } from '../utils/temperature';
 
 type FreshnessSort = 'hottest' | 'coldest' | 'oldest' | 'newest';
+type TemperatureRecordType = 'high' | 'low';
 
 const SORT_LABELS: Record<FreshnessSort, string> = {
     hottest: 'Hottest',
@@ -19,8 +20,8 @@ interface SummaryPanelProps {
     recentRecords?: RecentRecords | null;
     countyRecords?: CountyRecordsCollection | null;
     stateRecords?: StateRecordsCollection | null;
-    freshnessType: 'high' | 'low';
-    onFreshnessTypeChange: (type: 'high' | 'low') => void;
+    recordType: TemperatureRecordType;
+    onRecordTypeChange: (type: TemperatureRecordType) => void;
     useCelsius: boolean;
     onFlyTo?: (lng: number, lat: number) => void;
     onSelectState?: (state: string) => void;
@@ -28,13 +29,13 @@ interface SummaryPanelProps {
     onPeriodChange: (period: TimePeriod) => void;
 }
 
-export function SummaryPanel({ viewMode, recentRecords, countyRecords, stateRecords, freshnessType, onFreshnessTypeChange, useCelsius, onFlyTo, onSelectState, activePeriod, onPeriodChange }: SummaryPanelProps) {
+export function SummaryPanel({ viewMode, recentRecords, countyRecords, stateRecords, recordType, onRecordTypeChange, useCelsius, onFlyTo, onSelectState, activePeriod, onPeriodChange }: SummaryPanelProps) {
     if (viewMode === 'freshness') {
         return (
             <FreshnessPanel
                 countyRecords={countyRecords}
-                freshnessType={freshnessType}
-                onFreshnessTypeChange={onFreshnessTypeChange}
+                recordType={recordType}
+                onRecordTypeChange={onRecordTypeChange}
                 useCelsius={useCelsius}
                 onFlyTo={onFlyTo}
             />
@@ -45,6 +46,8 @@ export function SummaryPanel({ viewMode, recentRecords, countyRecords, stateReco
         return (
             <CountyRecordsPanel
                 countyRecords={countyRecords}
+                recordType={recordType}
+                onRecordTypeChange={onRecordTypeChange}
                 useCelsius={useCelsius}
                 onFlyTo={onFlyTo}
             />
@@ -55,6 +58,8 @@ export function SummaryPanel({ viewMode, recentRecords, countyRecords, stateReco
         return (
             <StateRecordsPanel
                 stateRecords={stateRecords}
+                recordType={recordType}
+                onRecordTypeChange={onRecordTypeChange}
                 useCelsius={useCelsius}
                 onSelectState={onSelectState}
             />
@@ -220,7 +225,7 @@ function RecordsPanel({ recentRecords, useCelsius, onFlyTo, activePeriod, onPeri
                         {highs.length > 0 && (
                             <div ref={highsRef}>
                                 <h3 className="text-xs font-semibold mb-2" style={{ color: HIGH_TEMP_COLOR }}>
-                                    Record Highs Broken
+                                    Daily/Monthly Record Highs Broken
                                 </h3>
                                 <ol className="space-y-0.5">
                                     {highs.slice(0, highsVisible).map((r, i) => (
@@ -241,7 +246,7 @@ function RecordsPanel({ recentRecords, useCelsius, onFlyTo, activePeriod, onPeri
                         {lows.length > 0 && (
                             <div ref={lowsRef}>
                                 <h3 className="text-xs font-semibold mb-2" style={{ color: LOW_TEMP_COLOR }}>
-                                    Record Lows Broken
+                                    Daily/Monthly Record Lows Broken
                                 </h3>
                                 <ol className="space-y-0.5">
                                     {lows.slice(0, lowsVisible).map((r, i) => (
@@ -262,7 +267,7 @@ function RecordsPanel({ recentRecords, useCelsius, onFlyTo, activePeriod, onPeri
                 )}
 
                 <p className="text-xs text-zinc-500 pt-2 border-t border-zinc-800">
-                    Data: NOAA / ACIS · Records vs 1950–{new Date().getFullYear() - 1} · Updated {recentRecords.asOf}
+                    Daily &amp; monthly station records vs 1950–{new Date().getFullYear() - 1} baseline · Data: NOAA/ACIS · Updated {recentRecords.asOf}
                 </p>
             </div>
         </div>
@@ -294,18 +299,17 @@ interface CountyRow {
     lat: number;
 }
 
-function CountyRecordsPanel({ countyRecords, useCelsius, onFlyTo }: { countyRecords?: CountyRecordsCollection | null; useCelsius: boolean; onFlyTo?: (lng: number, lat: number) => void }) {
-    const [filterType, setFilterType] = useState<'high' | 'low'>('high');
+function CountyRecordsPanel({ countyRecords, recordType, onRecordTypeChange, useCelsius, onFlyTo }: { countyRecords?: CountyRecordsCollection | null; recordType: TemperatureRecordType; onRecordTypeChange: (type: TemperatureRecordType) => void; useCelsius: boolean; onFlyTo?: (lng: number, lat: number) => void }) {
     const [sort, setSort] = useState<CountySort>('hottest');
     const [visibleCount, setVisibleCount] = useState(COUNTY_PAGE_SIZE);
 
     const handleSortChange = (s: CountySort) => { setSort(s); setVisibleCount(COUNTY_PAGE_SIZE); };
-    const handleTypeChange = (t: 'high' | 'low') => { setFilterType(t); setVisibleCount(COUNTY_PAGE_SIZE); };
+    const handleTypeChange = (t: TemperatureRecordType) => { onRecordTypeChange(t); setVisibleCount(COUNTY_PAGE_SIZE); };
 
     const rows = useMemo(() => {
         if (!countyRecords) return [];
         return countyRecords.features
-            .filter(f => f.properties.type === filterType)
+            .filter(f => f.properties.type === recordType)
             .map(f => {
                 const p = f.properties;
                 const dateStr = p.date || '';
@@ -322,7 +326,7 @@ function CountyRecordsPanel({ countyRecords, useCelsius, onFlyTo }: { countyReco
                     lat: f.geometry.coordinates[1],
                 } satisfies CountyRow;
             });
-    }, [countyRecords, filterType]);
+    }, [countyRecords, recordType]);
 
     const sorted = useMemo(() => {
         const copy = [...rows];
@@ -342,7 +346,7 @@ function CountyRecordsPanel({ countyRecords, useCelsius, onFlyTo }: { countyReco
                     <button
                         key={t}
                         onClick={() => handleTypeChange(t)}
-                        className={`flex-1 min-w-0 px-3 py-2 text-xs whitespace-nowrap transition-colors ${filterType === t
+                        className={`flex-1 min-w-0 px-3 py-2 text-xs whitespace-nowrap transition-colors ${recordType === t
                             ? 'text-violet-400 border-b-2 border-violet-400'
                             : 'text-zinc-400 hover:text-zinc-200'
                             }`}
@@ -371,7 +375,7 @@ function CountyRecordsPanel({ countyRecords, useCelsius, onFlyTo }: { countyReco
 
             {/* Count */}
             <div className="px-3 py-1.5 text-xs text-zinc-400 shrink-0" aria-live="polite">
-                {sorted.length.toLocaleString()} county {filterType === 'high' ? 'high' : 'low'} records
+                {sorted.length.toLocaleString()} county all-time {recordType === 'high' ? 'high' : 'low'} records
             </div>
 
             {/* Content — paginated */}
@@ -385,7 +389,7 @@ function CountyRecordsPanel({ countyRecords, useCelsius, onFlyTo }: { countyReco
                     >
                         <div className="flex items-baseline gap-2 text-xs">
                             <span className="text-zinc-500 w-5 text-right shrink-0">{i + 1}.</span>
-                            <span className="font-semibold tabular-nums shrink-0" style={{ color: filterType === 'high' ? HIGH_TEMP_COLOR : LOW_TEMP_COLOR }}>{formatTemp(r.tempF, useCelsius)}</span>
+                            <span className="font-semibold tabular-nums shrink-0" style={{ color: recordType === 'high' ? HIGH_TEMP_COLOR : LOW_TEMP_COLOR }}>{formatTemp(r.tempF, useCelsius)}</span>
                             <span className="text-zinc-300 truncate group-hover:text-white">{r.countyName}</span>
                             <span className="text-zinc-400 ml-auto shrink-0">{r.year}</span>
                         </div>
@@ -434,17 +438,16 @@ interface StateRow {
     lat: number;
 }
 
-function StateRecordsPanel({ stateRecords, useCelsius, onSelectState }: { stateRecords?: StateRecordsCollection | null; useCelsius: boolean; onSelectState?: (state: string) => void }) {
-    const [filterType, setFilterType] = useState<'high' | 'low'>('high');
+function StateRecordsPanel({ stateRecords, recordType, onRecordTypeChange, useCelsius, onSelectState }: { stateRecords?: StateRecordsCollection | null; recordType: TemperatureRecordType; onRecordTypeChange: (type: TemperatureRecordType) => void; useCelsius: boolean; onSelectState?: (state: string) => void }) {
     const [sort, setSort] = useState<StateSort>('hottest');
 
     const handleSortChange = (s: StateSort) => setSort(s);
-    const handleTypeChange = (t: 'high' | 'low') => setFilterType(t);
+    const handleTypeChange = (t: TemperatureRecordType) => onRecordTypeChange(t);
 
     const rows = useMemo(() => {
         if (!stateRecords) return [];
         return stateRecords.features
-            .filter(f => f.properties.type === filterType)
+            .filter(f => f.properties.type === recordType)
             .map(f => {
                 const p = f.properties;
                 const dateStr = p.date || '';
@@ -462,7 +465,7 @@ function StateRecordsPanel({ stateRecords, useCelsius, onSelectState }: { stateR
                     lat: f.geometry.coordinates[1],
                 } satisfies StateRow;
             });
-    }, [stateRecords, filterType]);
+    }, [stateRecords, recordType]);
 
     const sorted = useMemo(() => {
         const copy = [...rows];
@@ -483,7 +486,7 @@ function StateRecordsPanel({ stateRecords, useCelsius, onSelectState }: { stateR
                     <button
                         key={t}
                         onClick={() => handleTypeChange(t)}
-                        className={`flex-1 min-w-0 px-3 py-2 text-xs whitespace-nowrap transition-colors ${filterType === t
+                        className={`flex-1 min-w-0 px-3 py-2 text-xs whitespace-nowrap transition-colors ${recordType === t
                             ? 'text-violet-400 border-b-2 border-violet-400'
                             : 'text-zinc-400 hover:text-zinc-200'
                             }`}
@@ -512,7 +515,7 @@ function StateRecordsPanel({ stateRecords, useCelsius, onSelectState }: { stateR
 
             {/* Count */}
             <div className="px-3 py-1.5 text-xs text-zinc-400 shrink-0" aria-live="polite">
-                {sorted.length.toLocaleString()} state {filterType === 'high' ? 'high' : 'low'} records
+                {sorted.length.toLocaleString()} state all-time {recordType === 'high' ? 'high' : 'low'} records
             </div>
 
             {/* Content */}
@@ -528,7 +531,7 @@ function StateRecordsPanel({ stateRecords, useCelsius, onSelectState }: { stateR
                     >
                         <div className="flex items-baseline gap-2 text-xs">
                             <span className="text-zinc-500 w-5 text-right shrink-0">{i + 1}.</span>
-                            <span className="font-semibold tabular-nums shrink-0" style={{ color: filterType === 'high' ? HIGH_TEMP_COLOR : LOW_TEMP_COLOR }}>{formatTemp(r.tempF, useCelsius)}</span>
+                            <span className="font-semibold tabular-nums shrink-0" style={{ color: recordType === 'high' ? HIGH_TEMP_COLOR : LOW_TEMP_COLOR }}>{formatTemp(r.tempF, useCelsius)}</span>
                             <span className="text-zinc-300 truncate group-hover:text-white">{r.stateName}</span>
                             <span className="text-zinc-400 ml-auto shrink-0">{r.year}</span>
                         </div>
@@ -551,8 +554,8 @@ function StateRecordsPanel({ stateRecords, useCelsius, onSelectState }: { stateR
 
 interface FreshnessPanelProps {
     countyRecords?: CountyRecordsCollection | null;
-    freshnessType: 'high' | 'low';
-    onFreshnessTypeChange: (type: 'high' | 'low') => void;
+    recordType: TemperatureRecordType;
+    onRecordTypeChange: (type: TemperatureRecordType) => void;
     useCelsius: boolean;
     onFlyTo?: (lng: number, lat: number) => void;
 }
@@ -570,18 +573,18 @@ interface FreshnessRow {
 
 const FRESHNESS_PAGE_SIZE = 100;
 
-function FreshnessPanel({ countyRecords, freshnessType, onFreshnessTypeChange, useCelsius, onFlyTo }: FreshnessPanelProps) {
+function FreshnessPanel({ countyRecords, recordType, onRecordTypeChange, useCelsius, onFlyTo }: FreshnessPanelProps) {
     const [sort, setSort] = useState<FreshnessSort>('newest');
     const [visibleCount, setVisibleCount] = useState(FRESHNESS_PAGE_SIZE);
 
     // Reset pagination when switching type or sort
     const handleSortChange = (s: FreshnessSort) => { setSort(s); setVisibleCount(FRESHNESS_PAGE_SIZE); };
-    const handleTypeChange = (t: 'high' | 'low') => { onFreshnessTypeChange(t); setVisibleCount(FRESHNESS_PAGE_SIZE); };
+    const handleTypeChange = (t: TemperatureRecordType) => { onRecordTypeChange(t); setVisibleCount(FRESHNESS_PAGE_SIZE); };
 
     const rows = useMemo(() => {
         if (!countyRecords) return [];
         return countyRecords.features
-            .filter(f => f.properties.type === freshnessType)
+            .filter(f => f.properties.type === recordType)
             .map(f => {
                 const p = f.properties;
                 const dateStr = p.date || '';
@@ -598,7 +601,7 @@ function FreshnessPanel({ countyRecords, freshnessType, onFreshnessTypeChange, u
                     lat: f.geometry.coordinates[1],
                 } satisfies FreshnessRow;
             });
-    }, [countyRecords, freshnessType]);
+    }, [countyRecords, recordType]);
 
     const sorted = useMemo(() => {
         const copy = [...rows];
@@ -618,7 +621,7 @@ function FreshnessPanel({ countyRecords, freshnessType, onFreshnessTypeChange, u
                     <button
                         key={t}
                         onClick={() => handleTypeChange(t)}
-                        className={`flex-1 min-w-0 px-3 py-2 text-xs whitespace-nowrap transition-colors ${freshnessType === t
+                        className={`flex-1 min-w-0 px-3 py-2 text-xs whitespace-nowrap transition-colors ${recordType === t
                             ? 'text-violet-400 border-b-2 border-violet-400'
                             : 'text-zinc-400 hover:text-zinc-200'
                             }`}
@@ -647,7 +650,7 @@ function FreshnessPanel({ countyRecords, freshnessType, onFreshnessTypeChange, u
 
             {/* Count */}
             <div className="px-3 py-1.5 text-xs text-zinc-400 shrink-0" aria-live="polite">
-                {sorted.length.toLocaleString()} county {freshnessType === 'high' ? 'high' : 'low'} records
+                {sorted.length.toLocaleString()} county all-time {recordType === 'high' ? 'high' : 'low'} records by age
             </div>
 
             {/* Content — paginated */}

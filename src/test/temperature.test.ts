@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fToC, formatTemp } from '../features/temperatures/utils/temperature';
+import { fDeltaToCDelta, fToC, formatTemp, formatTempDelta } from '../features/temperatures/utils/temperature';
 
 describe('fToC', () => {
     it('converts 32°F to 0°C', () => {
@@ -42,5 +42,25 @@ describe('formatTemp', () => {
 
     it('shows one decimal place in Celsius', () => {
         expect(formatTemp(72, true)).toBe('22.2°C');
+    });
+});
+
+describe('fDeltaToCDelta', () => {
+    it('converts a Fahrenheit range without applying the 32°F absolute offset', () => {
+        expect(fDeltaToCDelta(18)).toBeCloseTo(10);
+    });
+
+    it('preserves the sign of departures from normal', () => {
+        expect(fDeltaToCDelta(-9)).toBeCloseTo(-5);
+    });
+});
+
+describe('formatTempDelta', () => {
+    it('formats Fahrenheit temperature differences', () => {
+        expect(formatTempDelta(12, false)).toBe('12.0°F');
+    });
+
+    it('formats Celsius temperature differences without an absolute-temperature offset', () => {
+        expect(formatTempDelta(18, true)).toBe('10.0°C');
     });
 });

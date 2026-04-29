@@ -112,6 +112,13 @@ Project data is handled differently depending on how it is authored and updated:
 
 Local development uses `https://data.rsmb.tv` for temperature data by default. To test freshly generated local temperature JSON instead, set `VITE_TEMPERATURE_DATA_BASE_URL=/data/temperatures` before starting Vite.
 
+Temperature record terminology in the UI is deliberately scoped:
+
+- **Recent** shows daily and monthly station records broken yesterday or in the last seven days, compared against the 1950–present ACIS baseline.
+- **County All-Time** and **State All-Time** show the highest high and lowest low currently known for each geography.
+- **Record Age** colors county all-time records by the decade when the standing record was set.
+- **Trends** analyze county all-time records only, not the recent daily/monthly station record feed.
+
 ### Temperature Data Sync
 
 Temperature data is maintained outside Git in the `rsmbtv-temperature-data` S3 bucket and served through `data.rsmb.tv`.

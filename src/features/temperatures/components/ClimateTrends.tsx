@@ -13,9 +13,9 @@ type Section = 'age' | 'timeseries' | 'ratio' | 'map';
 
 const SECTIONS: { id: Section; label: string }[] = [
     { id: 'age', label: 'Record Age' },
-    { id: 'timeseries', label: 'Frequency' },
+    { id: 'timeseries', label: 'Records/Year' },
     { id: 'ratio', label: 'H:L Ratio' },
-    { id: 'map', label: 'Freshness Map' },
+    { id: 'map', label: 'Record Age Map' },
 ];
 
 export function ClimateTrends() {
@@ -54,7 +54,7 @@ export function ClimateTrends() {
                     <h1 className="text-base font-semibold text-zinc-100">Climate Trends</h1>
                 </div>
                 <p className="text-xs text-zinc-400 mb-3">
-                    Are temperature records being broken more frequently? Analysis of {trends.totalHighs.toLocaleString()} record highs
+                    Are all-time county temperature records being reset more often by heat than cold? Analysis of {trends.totalHighs.toLocaleString()} record highs
                     and {trends.totalLows.toLocaleString()} record lows across US counties.
                 </p>
 
