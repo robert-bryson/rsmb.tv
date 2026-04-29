@@ -342,3 +342,63 @@ describe('useTornadoFilters — setters', () => {
         expect(result.current.filters.mapZoom).toBe(INITIAL_ZOOM);
     });
 });
+
+// ---------------------------------------------------------------------------
+// selectState (combined action)
+// ---------------------------------------------------------------------------
+
+describe('useTornadoFilters — selectState', () => {
+    it('sets state, switches mode to trends, clears track, and clears region — atomically', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('region=plains&mode=density&track=abc-123'),
+        });
+        act(() => result.current.selectState('OK'));
+        const { filters } = result.current;
+        expect(filters.selectedState).toBe('OK');
+        expect(filters.mode).toBe('trends');
+        expect(filters.selectedTrackId).toBeNull();
+        expect(filters.region).toBe('conus'); // region overridden by state
+    });
+
+    it('normalizes lowercase state abbreviation', () => {
+        const { result } = renderHook(() => useTornadoFilters(), { wrapper });
+        act(() => result.current.selectState('tx'));
+        expect(result.current.filters.selectedState).toBe('TX');
+    });
+
+    it('ignores invalid state abbreviations (> 2 letters)', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('state=TX'),
+        });
+        act(() => result.current.selectState('texas'));
+        // invalid input → selectState treats it as null → clears state
+        expect(result.current.filters.selectedState).toBeNull();
+    });
+
+    it('selectState(null) clears the selected state', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('state=KS&mode=trends'),
+        });
+        act(() => result.current.selectState(null));
+        expect(result.current.filters.selectedState).toBeNull();
+    });
+
+    it('selectState(null) does not alter mode (deselect stays in current mode)', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('state=KS&mode=trends'),
+        });
+        act(() => result.current.selectState(null));
+        // mode is intentionally left unchanged on deselect
+        expect(result.current.filters.mode).toBe('trends');
+    });
+
+    it('does not affect year range or scale filter', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('start=2010&end=2020&scale=ef3plus'),
+        });
+        act(() => result.current.selectState('NE'));
+        expect(result.current.filters.startYear).toBe(2010);
+        expect(result.current.filters.endYear).toBe(2020);
+        expect(result.current.filters.scaleFilter).toBe('ef3plus');
+    });
+});

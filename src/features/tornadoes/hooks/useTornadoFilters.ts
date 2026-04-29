@@ -112,6 +112,29 @@ export function useTornadoFilters() {
         });
     }, [updateParams]);
 
+    /**
+     * Combined action for map/UI state-selection: sets the state abbreviation,
+     * switches to Trends mode, clears the selected track, and removes the region
+     * preset — all in one `setSearchParams` call to avoid mid-render URL races.
+     *
+     * Use this when the user clicks a state polygon.
+     * Use `setSelectedState` when you want to change just the state (e.g. the
+     * summary panel's "clear" button) without forcing a mode switch.
+     */
+    const selectState = useCallback((state: string | null) => {
+        const normalized = parseState(state);
+        updateParams((next) => {
+            if (normalized === null) {
+                next.delete('state');
+            } else {
+                next.set('state', normalized);
+                next.delete('region');
+                next.set('mode', 'trends');
+                next.delete('track');
+            }
+        });
+    }, [updateParams]);
+
     const setMapView = useCallback((lat: number, lng: number, zoom: number) => {
         const roundedLat = Math.round(lat * 10000) / 10000;
         const roundedLng = Math.round(lng * 10000) / 10000;
@@ -133,6 +156,7 @@ export function useTornadoFilters() {
         setMode,
         setColorMode,
         setSelectedState,
+        selectState,
         setSelectedTrackId,
         setMapView,
     };

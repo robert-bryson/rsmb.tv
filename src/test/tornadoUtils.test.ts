@@ -719,10 +719,14 @@ describe('computeStateBreakdown', () => {
         expect(row.ef2Pct).toBeCloseTo(25, 5);
     });
 
-    it('sets ef2Pct to 0 when count is 0 (defensive)', () => {
-        // This cannot happen via the aggregation logic but the guard must hold.
-        const result = computeStateBreakdown([]);
-        expect(result).toHaveLength(0);
+    it('ef2Pct is 0 when a state has no EF2+ events', () => {
+        const features = [
+            makeTrack({ state: 'WY', scale: 0 }),
+            makeTrack({ id: 't2', state: 'WY', scale: 1 }),
+        ];
+        const [row] = computeStateBreakdown(features);
+        expect(row.ef2Pct).toBe(0);
+        expect(Number.isFinite(row.ef2Pct)).toBe(true);
     });
 
     it('does not mutate the input features array', () => {

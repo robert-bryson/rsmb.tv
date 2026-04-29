@@ -191,6 +191,7 @@ function clientToFallbackPoint(svg: SVGSVGElement, viewBox: FallbackViewBox, cli
 
 function StaticTornadoFallback({
     tracks,
+    bgTracks,
     region,
     states,
     selectedTrackId,
@@ -199,6 +200,7 @@ function StaticTornadoFallback({
     onSelectState,
 }: {
     tracks: TornadoTrackCollection;
+    bgTracks?: TornadoTrackCollection;
     region: TornadoRegionPreset;
     states: StateBoundaryCollection | null;
     selectedTrackId?: string;
@@ -211,7 +213,7 @@ function StaticTornadoFallback({
     const latitudeTicks = Array.from({ length: 5 }, (_, index) => bounds.south + ((bounds.north - bounds.south) / 4) * index);
     const svgRef = useRef<SVGSVGElement>(null);
     const dragState = useRef<FallbackDragState | null>(null);
-    const suppressTrackClick = useRef(false);
+    const suppressClick = useRef(false);
     const [viewBox, _setViewBox] = useState<FallbackViewBox>(INITIAL_VIEW_BOX);
     // Keep a ref in sync with viewBox state so callbacks always read the current
     // value without capturing stale closures (important for rapid wheel events).
@@ -273,9 +275,9 @@ function StaticTornadoFallback({
         if (event.currentTarget.hasPointerCapture(event.pointerId)) {
             event.currentTarget.releasePointerCapture(event.pointerId);
         }
-        suppressTrackClick.current = Boolean(drag?.moved);
+        suppressClick.current = Boolean(drag?.moved);
         dragState.current = null;
-        window.setTimeout(() => { suppressTrackClick.current = false; }, 0);
+        window.setTimeout(() => { suppressClick.current = false; }, 0);
     }, []);
 
     const handleWheel = useCallback((event: WheelEvent) => {
@@ -296,7 +298,7 @@ function StaticTornadoFallback({
     }, [zoomBy]);
 
     const handleTrackClick = useCallback((event: React.MouseEvent, feature: TornadoTrackFeature) => {
-        if (suppressTrackClick.current) return;
+        if (suppressClick.current) return;
         event.stopPropagation();
         onSelectTrack(feature);
     }, [onSelectTrack]);
@@ -335,6 +337,7 @@ function StaticTornadoFallback({
                             vectorEffect="non-scaling-stroke"
                             className="cursor-pointer"
                             onClick={(event) => {
+                                if (suppressClick.current) return;
                                 event.stopPropagation();
                                 onSelectState(feature.properties.abbr);
                             }}
@@ -350,6 +353,30 @@ function StaticTornadoFallback({
                     return <line key={`lat-${lat}`} x1="0" x2={SVG_CANVAS_WIDTH} y1={y} y2={y} stroke="#334155" strokeOpacity="0.28" strokeWidth="1" />;
                 })}
                 <rect x="1" y="1" width={SVG_CANVAS_WIDTH - 2} height={SVG_CANVAS_HEIGHT - 2} fill="none" stroke="#475569" strokeOpacity="0.35" strokeWidth="2" />
+                {bgTracks?.features.map((feature) => {
+                    const [start, end] = feature.geometry.coordinates as [[number, number], [number, number]];
+                    const [x1, y1] = projectFallbackPoint(start, bounds);
+                    const [x2, y2] = projectFallbackPoint(end, bounds);
+                    const samePoint = Math.abs(x1 - x2) < 0.5 && Math.abs(y1 - y2) < 0.5;
+                    if (samePoint) {
+                        return (
+                            <circle
+                                key={`bg-${feature.properties.id}`}
+                                cx={x1}
+                                cy={y1}
+                                r={2}
+                                fill="#52525b"
+                                opacity="0.2"
+                            />
+                        );
+                    }
+                    return (
+                        <g key={`bg-${feature.properties.id}`} opacity="0.2">
+                            <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="#09090b" strokeWidth={3} strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+                            <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="#52525b" strokeWidth={1.5} strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+                        </g>
+                    );
+                })}
                 {tracks.features.map((feature) => {
                     const [start, end] = feature.geometry.coordinates as [[number, number], [number, number]];
                     const [x1, y1] = projectFallbackPoint(start, bounds);
@@ -424,6 +451,7 @@ export function TornadoMap() {
         setMode,
         setColorMode,
         setSelectedState,
+        selectState,
         setSelectedTrackId,
         setMapView,
     } = useTornadoFilters();
@@ -447,10 +475,9 @@ export function TornadoMap() {
         }
     }, []);
     const handleSelectState = useCallback((state: string) => {
-        setSelectedTrack(null);
-        setSelectedState(state);
-        setMode('trends');
-    }, [setMode, setSelectedState, setSelectedTrack]);
+        setSelectedTrackState(null);
+        selectState(state);
+    }, [selectState]);
 
     useEffect(() => {
         selectStateRef.current = handleSelectState;
@@ -525,7 +552,34 @@ export function TornadoMap() {
         };
     }, [points, normalizedRange.startYear, normalizedRange.endYear, minScale, maxScale, trackMatchesGeography]);
 
-    const filteredTrackPoints = useMemo(() => toTrackPoints(filteredTracks), [filteredTracks]);
+    // When a state is selected, the map source needs ALL year+scale tracks so the grey
+    // out-of-state layer can render them. When no state is selected, reuse filteredTracks.
+    const mapAllTracks = useMemo<TornadoTrackCollection>(() => {
+        if (!tracks || !filters.selectedState) return filteredTracks;
+        return {
+            type: 'FeatureCollection',
+            metadata: tracks.metadata,
+            features: tracks.features.filter((f) => {
+                const { year, scale } = f.properties;
+                return year >= normalizedRange.startYear
+                    && year <= normalizedRange.endYear
+                    && scale >= minScale
+                    && scale <= maxScale;
+            }),
+        };
+    }, [tracks, filters.selectedState, filteredTracks, normalizedRange.startYear, normalizedRange.endYear, minScale, maxScale]);
+
+    const mapAllTrackPoints = useMemo(() => toTrackPoints(mapAllTracks), [mapAllTracks]);
+
+    // Out-of-state tracks passed to the SVG fallback for grey rendering.
+    const bgTracks = useMemo<TornadoTrackCollection>(() => {
+        if (!filters.selectedState) return EMPTY_TRACKS;
+        return {
+            type: 'FeatureCollection',
+            metadata: mapAllTracks.metadata,
+            features: mapAllTracks.features.filter((f) => f.properties.state !== filters.selectedState),
+        };
+    }, [mapAllTracks, filters.selectedState]);
 
     const stats = useMemo(() => summarize(filteredTracks.features), [filteredTracks]);
     const filteredAnnualSummary = useMemo(
@@ -649,6 +703,46 @@ export function TornadoMap() {
                 },
             });
 
+            // De-emphasized grey layers for out-of-state tracks (hidden until a state is selected).
+            map.addLayer({
+                id: 'tornado-tracks-bg-halo',
+                type: 'line',
+                source: 'tornado-tracks',
+                layout: { 'line-cap': 'round', 'line-join': 'round', visibility: 'none' },
+                paint: {
+                    'line-color': '#09090b',
+                    'line-opacity': 0.5,
+                    'line-width': EF_HALO_WIDTH_EXPRESSION,
+                },
+            });
+
+            map.addLayer({
+                id: 'tornado-tracks-bg-line',
+                type: 'line',
+                source: 'tornado-tracks',
+                layout: { 'line-cap': 'round', 'line-join': 'round', visibility: 'none' },
+                paint: {
+                    'line-color': '#52525b',
+                    'line-opacity': 0.22,
+                    'line-width': EF_LINE_WIDTH_EXPRESSION,
+                },
+            });
+
+            map.addLayer({
+                id: 'tornado-tracks-bg-point',
+                type: 'circle',
+                source: 'tornado-track-points',
+                layout: { 'circle-sort-key': ['coalesce', ['get', 'scale'], -1], visibility: 'none' },
+                paint: {
+                    'circle-color': '#52525b',
+                    'circle-opacity': 0.18,
+                    'circle-radius': EF_RADIUS_EXPRESSION,
+                    'circle-stroke-color': '#09090b',
+                    'circle-stroke-opacity': 0.5,
+                    'circle-stroke-width': 0.5,
+                },
+            });
+
             map.addLayer({
                 id: 'tornado-density',
                 type: 'heatmap',
@@ -725,6 +819,11 @@ export function TornadoMap() {
                 },
             });
 
+            // A simple flag to prevent a track click from also triggering state
+            // selection. Track handlers run first (registered first); they set this flag
+            // which is cleared after the current event via setTimeout.
+            let trackClickConsumed = false;
+
             for (const layerId of ['tornado-track-line', 'tornado-track-point']) {
                 map.on('mouseenter', layerId, () => {
                     map.getCanvas().style.cursor = 'pointer';
@@ -747,7 +846,11 @@ export function TornadoMap() {
                     const rendered = event.features?.[0];
                     const id = rendered?.properties?.id as string | undefined;
                     const feature = id ? trackLookup.current.get(id) : null;
-                    if (feature) setSelectedTrack(feature);
+                    if (feature) {
+                        trackClickConsumed = true;
+                        window.setTimeout(() => { trackClickConsumed = false; }, 0);
+                        setSelectedTrack(feature);
+                    }
                 });
             }
 
@@ -760,8 +863,7 @@ export function TornadoMap() {
             });
 
             map.on('click', 'us-state-fill', (event) => {
-                const trackHits = map.queryRenderedFeatures(event.point, { layers: ['tornado-track-line', 'tornado-track-point'] });
-                if (trackHits.length > 0) return;
+                if (trackClickConsumed) return;
                 const state = event.features?.[0]?.properties?.abbr as string | undefined;
                 if (state) selectStateRef.current(state);
             });
@@ -800,10 +902,10 @@ export function TornadoMap() {
     useEffect(() => {
         const map = mapRef.current;
         if (!map || !mapLoaded) return;
-        (map.getSource('tornado-tracks') as maplibregl.GeoJSONSource).setData(filteredTracks);
-        (map.getSource('tornado-track-points') as maplibregl.GeoJSONSource).setData(filteredTrackPoints);
+        (map.getSource('tornado-tracks') as maplibregl.GeoJSONSource).setData(mapAllTracks);
+        (map.getSource('tornado-track-points') as maplibregl.GeoJSONSource).setData(mapAllTrackPoints);
         (map.getSource('tornado-points') as maplibregl.GeoJSONSource).setData(filteredPoints);
-    }, [mapLoaded, filteredTracks, filteredTrackPoints, filteredPoints]);
+    }, [mapLoaded, mapAllTracks, mapAllTrackPoints, filteredPoints]);
 
     useEffect(() => {
         const map = mapRef.current;
@@ -814,10 +916,15 @@ export function TornadoMap() {
     useEffect(() => {
         const map = mapRef.current;
         if (!map || !mapLoaded) return;
+        const trackVisible = filters.mode !== 'density';
+        const bgVisible = trackVisible && !!filters.selectedState;
         map.setLayoutProperty('tornado-density', 'visibility', filters.mode === 'density' ? 'visible' : 'none');
-        map.setLayoutProperty('tornado-track-halo', 'visibility', filters.mode === 'density' ? 'none' : 'visible');
-        map.setLayoutProperty('tornado-track-line', 'visibility', filters.mode === 'density' ? 'none' : 'visible');
-        map.setLayoutProperty('tornado-track-point', 'visibility', filters.mode === 'density' ? 'none' : 'visible');
+        map.setLayoutProperty('tornado-track-halo', 'visibility', trackVisible ? 'visible' : 'none');
+        map.setLayoutProperty('tornado-track-line', 'visibility', trackVisible ? 'visible' : 'none');
+        map.setLayoutProperty('tornado-track-point', 'visibility', trackVisible ? 'visible' : 'none');
+        map.setLayoutProperty('tornado-tracks-bg-halo', 'visibility', bgVisible ? 'visible' : 'none');
+        map.setLayoutProperty('tornado-tracks-bg-line', 'visibility', bgVisible ? 'visible' : 'none');
+        map.setLayoutProperty('tornado-tracks-bg-point', 'visibility', bgVisible ? 'visible' : 'none');
         const trackColorExpr = filters.colorMode === 'scale'
             ? SCALE_COLOR_EXPRESSION
             : filters.colorMode === 'decade'
@@ -825,7 +932,7 @@ export function TornadoMap() {
                 : YEAR_COLOR_EXPRESSION;
         map.setPaintProperty('tornado-track-line', 'line-color', trackColorExpr);
         map.setPaintProperty('tornado-track-point', 'circle-color', trackColorExpr);
-    }, [mapLoaded, filters.mode, filters.colorMode]);
+    }, [mapLoaded, filters.mode, filters.colorMode, filters.selectedState]);
 
     useEffect(() => {
         const map = mapRef.current;
@@ -836,6 +943,25 @@ export function TornadoMap() {
         map.setPaintProperty('us-state-outline', 'line-color', ['case', selectedStateMatch, '#e0f2fe', '#334155']);
         map.setPaintProperty('us-state-outline', 'line-width', ['case', selectedStateMatch, 2.2, 0.8]);
         map.setPaintProperty('us-state-outline', 'line-opacity', ['case', selectedStateMatch, 0.95, 0.65]);
+        // Filter track layers so in-state tracks render in full colour and
+        // out-of-state tracks are caught by the grey background layers.
+        if (filters.selectedState) {
+            const inStateFilter = ['==', ['get', 'state'], filters.selectedState] as unknown as maplibregl.FilterSpecification;
+            const outStateFilter = ['!=', ['get', 'state'], filters.selectedState] as unknown as maplibregl.FilterSpecification;
+            map.setFilter('tornado-track-halo', inStateFilter);
+            map.setFilter('tornado-track-line', inStateFilter);
+            map.setFilter('tornado-track-point', inStateFilter);
+            map.setFilter('tornado-tracks-bg-halo', outStateFilter);
+            map.setFilter('tornado-tracks-bg-line', outStateFilter);
+            map.setFilter('tornado-tracks-bg-point', outStateFilter);
+        } else {
+            map.setFilter('tornado-track-halo', null);
+            map.setFilter('tornado-track-line', null);
+            map.setFilter('tornado-track-point', null);
+            map.setFilter('tornado-tracks-bg-halo', null);
+            map.setFilter('tornado-tracks-bg-line', null);
+            map.setFilter('tornado-tracks-bg-point', null);
+        }
     }, [mapLoaded, filters.selectedState]);
 
     useEffect(() => {
@@ -876,6 +1002,7 @@ export function TornadoMap() {
             {showStaticFallback && (
                 <StaticTornadoFallback
                     tracks={filteredTracks}
+                    bgTracks={bgTracks}
                     region={filters.region}
                     states={stateBoundaries}
                     selectedTrackId={selectedTrack?.properties.id}
