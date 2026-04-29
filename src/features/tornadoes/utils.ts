@@ -234,7 +234,7 @@ export function computeStateBreakdown(features: TornadoTrackFeature[]): StateAgg
             count,
             ef2Plus,
             deaths,
-            ef2Pct: count > 0 ? (ef2Plus / count) * 100 : 0,
+            ef2Pct: (ef2Plus / count) * 100,
         }))
         .sort((a, b) => b.count - a.count);
 }

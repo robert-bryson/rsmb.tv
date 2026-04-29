@@ -3,7 +3,7 @@
 - [x] Move generated temperature data to S3/CDN canonical storage; keep local JSON ignored, fix sync actions, and clean tracked generated data
 - [x] does it make sense to have tornado data in the repo or s3? → S3, same pattern as temperatures: serve via data.rsmb.tv/tornadoes, gitignore generated files, workflow uploads instead of commits
 - [x] create script to be run locally to backfill as much data as possible for all projects, having local & s3 storage options
-- [ ] JSON-LD for all pages
+- [ ] JSON-LD for all pages (partial — missing About, Projects, Blog index pages)
 
 ## Projects
 

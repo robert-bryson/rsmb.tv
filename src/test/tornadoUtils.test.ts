@@ -569,6 +569,19 @@ describe('computeDecades', () => {
         expect(rows[2].label).toBe('1970–70');
     });
 
+    it('skips decades with no data (gap in the data set)', () => {
+        // 1950s present, 1960s absent, 1970s present — the 1960 loop iteration
+        // should be skipped silently; result must have exactly two rows.
+        const years = [
+            ...Array.from({ length: 10 }, (_, i) => makeYear(1950 + i, { count: 100 })),
+            ...Array.from({ length: 10 }, (_, i) => makeYear(1970 + i, { count: 200 })),
+        ];
+        const rows = computeDecades(years);
+        expect(rows).toHaveLength(2);
+        expect(rows[0].decadeStart).toBe(1950);
+        expect(rows[1].decadeStart).toBe(1970);
+    });
+
     it('starts from the actual data minimum decade, not a hardcoded year', () => {
         // Data only covering 2020–2022 — should produce exactly one row, no empty
         // placeholder rows for 1950-2010.

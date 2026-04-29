@@ -103,6 +103,14 @@ export interface TornadoFilters {
     region: TornadoRegionPreset;
     mode: TornadoMode;
     colorMode: TornadoColorMode;
+    /** Currently-selected track ID (URL param `track`). */
+    selectedTrackId: string | null;
+    /** Map viewport longitude (URL param `lng`). */
+    mapLng: number;
+    /** Map viewport latitude (URL param `lat`). */
+    mapLat: number;
+    /** Map viewport zoom level (URL param `zoom`). */
+    mapZoom: number;
 }
 
 export interface FilteredTornadoStats {

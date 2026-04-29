@@ -8,6 +8,11 @@ import {
     backfillTornadoes,
     buildAwsSyncArgs,
     parseArgs,
+    printHelp,
+    resolveS3BucketSummary,
+    resolveTemperatureBucket,
+    resolveTornadoBucket,
+    run,
     validateArgs,
 } from '../backfill.js';
 
@@ -211,6 +216,40 @@ describe('buildAwsSyncArgs', () => {
     });
 });
 
+describe('S3 destination resolution', () => {
+    afterEach(() => {
+        delete process.env.TEMPERATURE_DATA_BUCKET;
+        delete process.env.TORNADO_DATA_BUCKET;
+    });
+
+    it('uses the shared default bucket when no overrides are set', () => {
+        expect(resolveTemperatureBucket(null)).toBe('rsmbtv-temperature-data');
+        expect(resolveTornadoBucket(null)).toBe('rsmbtv-temperature-data');
+    });
+
+    it('prefers TORNADO_DATA_BUCKET for tornado uploads', () => {
+        process.env.TEMPERATURE_DATA_BUCKET = 'temperature-bucket';
+        process.env.TORNADO_DATA_BUCKET = 'tornado-bucket';
+        expect(resolveTornadoBucket('arg-bucket')).toBe('tornado-bucket');
+    });
+
+    it('falls back to TEMPERATURE_DATA_BUCKET for tornado uploads', () => {
+        process.env.TEMPERATURE_DATA_BUCKET = 'shared-env-bucket';
+        expect(resolveTornadoBucket('arg-bucket')).toBe('shared-env-bucket');
+    });
+
+    it('summarizes different temperature and tornado buckets explicitly', () => {
+        process.env.TEMPERATURE_DATA_BUCKET = 'temperature-bucket';
+        process.env.TORNADO_DATA_BUCKET = 'tornado-bucket';
+        expect(resolveS3BucketSummary(['temperatures', 'tornadoes'], 'arg-bucket'))
+            .toBe('temperatures=temperature-bucket, tornadoes=tornado-bucket');
+    });
+
+    it('returns null when selected projects do not upload to S3', () => {
+        expect(resolveS3BucketSummary(['flights'], 'arg-bucket')).toBeNull();
+    });
+});
+
 describe('backfillFlights', () => {
     beforeEach(() => {
         spawnSyncMock.mockClear();
@@ -350,5 +389,44 @@ describe('backfillTemperatures', () => {
     it('does not invoke CloudFront when cdnId is null', () => {
         backfillTemperatures({ storage: ['s3'], bucket: 'b', region: 'us-east-1', cdnId: null });
         expect(capturedCommands().some(c => c.includes('create-invalidation'))).toBe(false);
+    });
+});
+
+// ---------------------------------------------------------------------------
+// printHelp
+// ---------------------------------------------------------------------------
+
+describe('printHelp', () => {
+    it('logs usage text without throwing', () => {
+        expect(() => printHelp()).not.toThrow();
+    });
+});
+
+// ---------------------------------------------------------------------------
+// run — error paths
+// ---------------------------------------------------------------------------
+
+describe('run', () => {
+    beforeEach(() => { spawnSyncMock.mockClear(); });
+
+    it('throws when the command exits with a non-zero status', () => {
+        spawnSyncMock.mockReturnValueOnce({ status: 1, error: null, pid: 1, output: [], signal: null, stderr: null, stdout: null });
+        expect(() => run('node', ['--bad-flag'])).toThrow('exited with status 1');
+    });
+
+    it('error message includes the command and arguments', () => {
+        spawnSyncMock.mockReturnValueOnce({ status: 2, error: null, pid: 1, output: [], signal: null, stderr: null, stdout: null });
+        expect(() => run('node', ['script.js', '--flag'])).toThrow('node script.js --flag');
+    });
+
+    it('rethrows the spawn error when the process cannot start', () => {
+        const spawnError = new Error('ENOENT: no such file or directory');
+        spawnSyncMock.mockReturnValueOnce({ status: null, error: spawnError, pid: 0, output: [], signal: null, stderr: null, stdout: null });
+        expect(() => run('nonexistent-binary')).toThrow('ENOENT');
+    });
+
+    it('does not throw when the command exits with status 0', () => {
+        spawnSyncMock.mockReturnValueOnce({ status: 0, error: null, pid: 1, output: [], signal: null, stderr: null, stdout: null });
+        expect(() => run('node', ['--version'])).not.toThrow();
     });
 });

@@ -72,8 +72,7 @@ export function useTornadoData({ startYear = DEFAULT_START_YEAR, endYear = DEFAU
     const [metadataError, setMetadataError] = useState<string | null>(null);
     const [dataError, setDataError] = useState<string | null>(null);
 
-    const selectedYears = useMemo(() => yearsInRange(startYear, endYear), [startYear, endYear]);
-    const selectedYearsKey = selectedYears.join(',');
+    const selectedYearsKey = useMemo(() => yearsInRange(startYear, endYear).join(','), [startYear, endYear]);
 
     useEffect(() => {
         let cancelled = false;

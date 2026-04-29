@@ -1,4 +1,8 @@
+// @vitest-environment node
 import { describe, expect, it } from 'vitest';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import {
     buildTornadoOutputs,
     discoverStormEventsFiles,
@@ -6,6 +10,7 @@ import {
     parseDamage,
     parseNoaaDateTime,
     parseTornadoCsv,
+    writeTornadoOutputs,
 } from '../../projects/tornado-tracks/scripts/syncTornadoes.js';
 
 const sampleCsv = `BEGIN_YEARMONTH,BEGIN_DAY,BEGIN_TIME,END_DAY,END_TIME,EPISODE_ID,EVENT_ID,STATE,YEAR,MONTH_NAME,EVENT_TYPE,CZ_FIPS,CZ_NAME,WFO,BEGIN_DATE_TIME,CZ_TIMEZONE,END_DATE_TIME,INJURIES_DIRECT,INJURIES_INDIRECT,DEATHS_DIRECT,DEATHS_INDIRECT,DAMAGE_PROPERTY,DAMAGE_CROPS,SOURCE,TOR_F_SCALE,TOR_LENGTH,TOR_WIDTH,BEGIN_LAT,BEGIN_LON,END_LAT,END_LON,EPISODE_NARRATIVE,EVENT_NARRATIVE,DATA_SOURCE
@@ -216,5 +221,86 @@ describe('discoverStormEventsFiles — sourceUrl without trailing slash', () => 
         expect(files.get(2023)?.url).toBe(
             'https://example.test/data/StormEvents_details-ftp_v1.0_d2023_c20240101.csv.gz',
         );
+    });
+});
+
+// ---------------------------------------------------------------------------
+// writeTornadoOutputs — filesystem integration
+// ---------------------------------------------------------------------------
+
+describe('writeTornadoOutputs', () => {
+    it('writes per-year track GeoJSON, track-point GeoJSON, and summary JSON files', () => {
+        const features = parseTornadoCsv(sampleCsv);
+        const outputs = buildTornadoOutputs(features);
+        const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'tornado-test-'));
+
+        try {
+            writeTornadoOutputs(outputs, tmpDir);
+
+            // Per-year track file
+            const trackPath = path.join(tmpDir, 'tracks', '2024.geojson');
+            expect(fs.existsSync(trackPath)).toBe(true);
+            const trackData = JSON.parse(fs.readFileSync(trackPath, 'utf-8'));
+            expect(trackData.type).toBe('FeatureCollection');
+            expect(trackData.features).toHaveLength(1);
+
+            // Per-year track-point file
+            const pointPath = path.join(tmpDir, 'track-points', '2024.geojson');
+            expect(fs.existsSync(pointPath)).toBe(true);
+            const pointData = JSON.parse(fs.readFileSync(pointPath, 'utf-8'));
+            expect(pointData.features[0].geometry.type).toBe('Point');
+
+            // Annual summary
+            const summaryPath = path.join(tmpDir, 'annual-summary.json');
+            expect(fs.existsSync(summaryPath)).toBe(true);
+            const summary = JSON.parse(fs.readFileSync(summaryPath, 'utf-8'));
+            expect(Array.isArray(summary)).toBe(true);
+            expect(summary[0].year).toBe(2024);
+
+            // State summary
+            const stateStatePath = path.join(tmpDir, 'state-summary.json');
+            expect(fs.existsSync(stateStatePath)).toBe(true);
+
+            // Notable events
+            const notablePath = path.join(tmpDir, 'notable-events.json');
+            expect(fs.existsSync(notablePath)).toBe(true);
+        } finally {
+            fs.rmSync(tmpDir, { recursive: true, force: true });
+        }
+    });
+
+    it('removes stale monolithic track/track-points GeoJSON files if they exist', () => {
+        const features = parseTornadoCsv(sampleCsv);
+        const outputs = buildTornadoOutputs(features);
+        const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'tornado-test-'));
+
+        try {
+            // Plant stale monolithic files that the old format used to produce.
+            fs.writeFileSync(path.join(tmpDir, 'tracks.geojson'), '{}');
+            fs.writeFileSync(path.join(tmpDir, 'track-points.geojson'), '{}');
+            writeTornadoOutputs(outputs, tmpDir);
+            expect(fs.existsSync(path.join(tmpDir, 'tracks.geojson'))).toBe(false);
+            expect(fs.existsSync(path.join(tmpDir, 'track-points.geojson'))).toBe(false);
+        } finally {
+            fs.rmSync(tmpDir, { recursive: true, force: true });
+        }
+    });
+
+    it('per-year track metadata includes source, count, and year fields', () => {
+        const features = parseTornadoCsv(sampleCsv);
+        const outputs = buildTornadoOutputs(features);
+        const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'tornado-test-'));
+
+        try {
+            writeTornadoOutputs(outputs, tmpDir);
+            const trackData = JSON.parse(
+                fs.readFileSync(path.join(tmpDir, 'tracks', '2024.geojson'), 'utf-8'),
+            );
+            expect(trackData.metadata).toMatchObject({ source: expect.any(String), count: 1, year: 2024 });
+            // The per-year file intentionally omits generatedAt to prevent git churn.
+            expect(trackData.metadata.generatedAt).toBeUndefined();
+        } finally {
+            fs.rmSync(tmpDir, { recursive: true, force: true });
+        }
     });
 });

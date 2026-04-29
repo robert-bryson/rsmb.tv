@@ -26,8 +26,10 @@
  *
  * ENVIRONMENT VARIABLES
  * ---------------------
- *   TEMPERATURE_DATA_BUCKET   S3 bucket for temperature + tornado data (overrides --bucket)
- *   TEMPERATURE_DATA_CDN_ID   CloudFront distribution ID              (overrides --cdn-id)
+ *   TEMPERATURE_DATA_BUCKET   S3 bucket for temperature data; fallback bucket for tornadoes
+ *   TEMPERATURE_DATA_CDN_ID   CloudFront distribution ID; fallback CDN ID for tornadoes
+ *   TORNADO_DATA_BUCKET       S3 bucket for tornado data              (overrides --bucket)
+ *   TORNADO_DATA_CDN_ID       CloudFront distribution ID              (overrides --cdn-id)
  *   TEMP_DATA_DIR             Temperature intermediary data dir        (default: .temp/temperatures)
  *   GOOGLE_SHEET_ID           Required for flights sync from Google Sheets
  *   GOOGLE_SHEET_NAME         Flights sheet tab name                   (default: Flights)
@@ -50,7 +52,7 @@
  *            Tornadoes:    public/data/tornadoes/ → s3://<bucket>/tornadoes/
  *            Flights do not use S3 (data is committed to the repository).
  *            Optionally invalidates a CloudFront distribution when --cdn-id
- *            (or TEMPERATURE_DATA_CDN_ID) is provided.
+ *            (or the project-specific CDN ID environment variable) is provided.
  *
  * PROJECT NOTES
  * -------------
@@ -103,7 +105,47 @@ Examples:
   node scripts/backfill.js --projects temperatures,tornadoes --storage local,s3
   node scripts/backfill.js --projects flights
   GOOGLE_SHEET_ID=<id> node scripts/backfill.js --projects flights
+
+Environment:
+  TEMPERATURE_DATA_BUCKET / TEMPERATURE_DATA_CDN_ID
+  TORNADO_DATA_BUCKET / TORNADO_DATA_CDN_ID
 `.trim());
+}
+
+export function resolveTemperatureBucket(bucket) {
+    return process.env.TEMPERATURE_DATA_BUCKET || bucket || DEFAULT_BUCKET;
+}
+
+export function resolveTornadoBucket(bucket) {
+    return process.env.TORNADO_DATA_BUCKET
+        || process.env.TEMPERATURE_DATA_BUCKET
+        || bucket
+        || DEFAULT_BUCKET;
+}
+
+function resolveTemperatureCdnId(cdnId) {
+    return process.env.TEMPERATURE_DATA_CDN_ID || cdnId;
+}
+
+function resolveTornadoCdnId(cdnId) {
+    return process.env.TORNADO_DATA_CDN_ID
+        || process.env.TEMPERATURE_DATA_CDN_ID
+        || cdnId;
+}
+
+function resolveRegion(region) {
+    return process.env.AWS_REGION || region || DEFAULT_REGION;
+}
+
+export function resolveS3BucketSummary(projects, bucket) {
+    const entries = [];
+    if (projects.includes('temperatures')) entries.push(['temperatures', resolveTemperatureBucket(bucket)]);
+    if (projects.includes('tornadoes')) entries.push(['tornadoes', resolveTornadoBucket(bucket)]);
+    if (!entries.length) return null;
+
+    const uniqueBuckets = new Set(entries.map(([, resolvedBucket]) => resolvedBucket));
+    if (uniqueBuckets.size === 1) return entries[0][1];
+    return entries.map(([project, resolvedBucket]) => `${project}=${resolvedBucket}`).join(', ');
 }
 
 /**
@@ -234,9 +276,9 @@ function awsSync(src, dest, opts) {
 
 export function backfillTemperatures({ storage, bucket, region, cdnId }) {
     const tempDataDir = process.env.TEMP_DATA_DIR || resolve(REPO_ROOT, '.temp/temperatures');
-    const resolvedBucket = process.env.TEMPERATURE_DATA_BUCKET || bucket || DEFAULT_BUCKET;
-    const resolvedRegion = process.env.AWS_REGION || region || DEFAULT_REGION;
-    const resolvedCdnId = process.env.TEMPERATURE_DATA_CDN_ID || cdnId;
+    const resolvedBucket = resolveTemperatureBucket(bucket);
+    const resolvedRegion = resolveRegion(region);
+    const resolvedCdnId = resolveTemperatureCdnId(cdnId);
 
     console.log('\n🌡️  Backfilling temperature records (full sync)...');
     console.log('   This fetches all-time state + county records from NOAA/ACIS.');
@@ -284,16 +326,9 @@ export function backfillTemperatures({ storage, bucket, region, cdnId }) {
 }
 
 export function backfillTornadoes({ storage, bucket, region, cdnId }) {
-    const resolvedBucket =
-        process.env.TORNADO_DATA_BUCKET
-        || process.env.TEMPERATURE_DATA_BUCKET
-        || bucket
-        || DEFAULT_BUCKET;
-    const resolvedRegion = process.env.AWS_REGION || region || DEFAULT_REGION;
-    const resolvedCdnId =
-        process.env.TORNADO_DATA_CDN_ID
-        || process.env.TEMPERATURE_DATA_CDN_ID
-        || cdnId;
+    const resolvedBucket = resolveTornadoBucket(bucket);
+    const resolvedRegion = resolveRegion(region);
+    const resolvedCdnId = resolveTornadoCdnId(cdnId);
 
     console.log('\n🌪️  Backfilling tornado tracks (1950–present)...');
     console.log('   StormEvents CSVs are cached in .cache/tornado-tracks between runs.');
@@ -377,8 +412,13 @@ function main() {
     console.log(`   Projects : ${args.projects.join(', ')}`);
     console.log(`   Storage  : ${args.storage.join(', ')}`);
     if (wantsS3) {
-        console.log(`   S3 bucket: ${process.env.TEMPERATURE_DATA_BUCKET || args.bucket || DEFAULT_BUCKET}`);
-        console.log(`   Region   : ${process.env.AWS_REGION || args.region || DEFAULT_REGION}`);
+        const bucketSummary = resolveS3BucketSummary(args.projects, args.bucket);
+        if (bucketSummary) {
+            console.log(`   S3 bucket: ${bucketSummary}`);
+            console.log(`   Region   : ${resolveRegion(args.region)}`);
+        } else {
+            console.log('   S3 bucket: not used by selected projects');
+        }
     }
 
     const opts = { storage: args.storage, bucket: args.bucket, region: args.region, cdnId: args.cdnId };
