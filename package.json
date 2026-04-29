@@ -26,7 +26,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@aws-sdk/client-cloudfront": "^3.1038.0",
+    "@aws-sdk/client-cloudfront": "^3.1039.0",
     "@mdx-js/react": "^3.1.1",
     "@playwright/test": "^1.59.1",
     "maplibre-gl": "^5.24.0",
