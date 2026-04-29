@@ -1,0 +1,86 @@
+name: Sync Tornado Tracks
+
+on:
+  schedule:
+    # Run every Monday at 9 AM UTC — NOAA/NCEI typically finalizes the prior
+    # week's data by then. Weekly cadence keeps the current year fresh;
+    # historical years rarely change after finalization.
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync-tornadoes
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      AWS_REGION: us-east-1
+      TORNADO_DATA_BUCKET: rsmbtv-temperature-data
+      TORNADO_DATA_CDN_ID: ${{ secrets.TEMP_DATA_CLOUDFRONT_ID }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Cache NOAA StormEvents CSV downloads
+        uses: actions/cache@v4
+        with:
+          path: .cache/tornado-tracks
+          # Historical CSV filenames are stable once finalized. Bust cache
+          # weekly so NOAA corrections to recent years are picked up.
+          key: tornado-csv-${{ github.run_id }}
+          restore-keys: |
+            tornado-csv-
+
+      - name: Install dependencies
+        run: npm ci --cache .npm --prefer-offline
+
+      - name: Sync tornado data (all years, cached downloads)
+        # Full sync every run. Historical years are served from the CSV cache
+        # above so only current/recent-year files are re-downloaded. Per-year
+        # GeoJSON output is deterministic (no generatedAt timestamp), so only
+        # files that actually changed will differ from the S3 copy.
+        run: node projects/tornado-tracks/scripts/syncTornadoes.js
+
+      - name: Upload tornado data to S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          set -euo pipefail
+          # JSON summary files (annual-summary, state-summary, notable-events)
+          aws s3 sync public/data/tornadoes/ "s3://${TORNADO_DATA_BUCKET}/tornadoes/" \
+            --content-type "application/json" \
+            --cache-control "public, max-age=3600" \
+            --delete \
+            --exclude "*.geojson"
+          # GeoJSON track files — RFC 7946 MIME type
+          aws s3 sync public/data/tornadoes/ "s3://${TORNADO_DATA_BUCKET}/tornadoes/" \
+            --content-type "application/geo+json" \
+            --cache-control "public, max-age=3600" \
+            --exclude "*" \
+            --include "*.geojson"
+          echo "✅ Uploaded tornado data to S3"
+
+      - name: Invalidate CloudFront cache
+        if: env.TORNADO_DATA_CDN_ID != ''
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          set -euo pipefail
+          aws cloudfront create-invalidation \
+            --distribution-id "${TORNADO_DATA_CDN_ID}" \
+            --paths "/tornadoes/*"
+          echo "✅ CloudFront cache invalidated"

@@ -1,9 +1,7 @@
 import type { TimePeriod } from './types';
 
-/** In production, serve temperature data from the CDN backed by S3. */
-export const DATA_BASE_URL = import.meta.env.PROD
-    ? 'https://data.rsmb.tv'
-    : '/data/temperatures';
+/** Serve generated temperature data from the S3-backed CDN by default. */
+export const DATA_BASE_URL = (import.meta.env.VITE_TEMPERATURE_DATA_BASE_URL || 'https://data.rsmb.tv').replace(/\/+$/, '');
 
 export const STATE_RECORDS_URL = `${DATA_BASE_URL}/stateRecords.json`;
 export const COUNTY_RECORDS_URL = `${DATA_BASE_URL}/countyRecords.json`;

@@ -2,8 +2,8 @@
 
 /* Base styles */
 html {
-  font-family: 
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', 
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -29,7 +29,8 @@ body {
 }
 
 /* Smooth transitions */
-a, button {
+a,
+button {
   transition: color 0.15s ease, background-color 0.15s ease;
 }
 
@@ -51,4 +52,16 @@ a, button {
 
 .prose a:hover {
   color: #c4b5fd;
+}
+
+/* Dark-themed MapLibre popup for tornado map */
+.tornado-popup .maplibregl-popup-content {
+  background: transparent;
+  padding: 0;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.tornado-popup .maplibregl-popup-tip {
+  display: none;
 }

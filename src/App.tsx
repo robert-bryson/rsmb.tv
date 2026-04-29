@@ -18,6 +18,8 @@ const Bookend = lazy(() => import('./pages/Bookend'));
 const TemperatureRecordsAbout = lazy(() => import('./pages/TemperatureRecordsAbout'));
 const TemperatureRecords = lazy(() => import('./pages/TemperatureRecords'));
 const ClimateTrendsPage = lazy(() => import('./pages/ClimateTrends'));
+const TornadoTracksAbout = lazy(() => import('./pages/TornadoTracksAbout'));
+const TornadoTracks = lazy(() => import('./pages/TornadoTracks'));
 const Route2Gpx = lazy(() => import('./pages/Route2Gpx'));
 const Aborg = lazy(() => import('./pages/Aborg'));
 
@@ -63,6 +65,8 @@ export default function App() {
               <Route path="/projects/temperature-records" element={<TemperatureRecordsAbout />} />
               <Route path="/projects/temperature-records/map" element={<TemperatureRecords />} />
               <Route path="/projects/temperature-records/trends" element={<ClimateTrendsPage />} />
+              <Route path="/projects/tornado-tracks" element={<TornadoTracksAbout />} />
+              <Route path="/projects/tornado-tracks/map" element={<TornadoTracks />} />
               <Route path="/projects/route2gpx" element={<Route2Gpx />} />
               <Route path="/projects/aborg" element={<Aborg />} />
               <Route path="*" element={<NotFound />} />

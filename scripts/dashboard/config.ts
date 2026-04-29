@@ -85,6 +85,7 @@ const projects: ProjectConfig[] = [
         workflows: [
             { name: 'Sync Flights', file: 'sync-flights.yml', staleThresholdHours: 36 },
             { name: 'Sync Temps', file: 'sync-temperatures.yml', staleThresholdHours: 36 },
+            { name: 'Sync Tornadoes', file: 'sync-tornadoes.yml', staleThresholdHours: 192 },
         ],
     },
     {
