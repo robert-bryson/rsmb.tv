@@ -8,8 +8,8 @@ MVP shipped. Core features implemented:
 
 - Full-screen MapLibre map at `/projects/tornado-tracks/map`
 - NOAA/NCEI StormEvents automated sync pipeline (`syncTornadoes.js`)
-- Per-year GeoJSON split under `public/data/tornadoes/tracks/{year}.geojson`
-- Density (heatmap) mode uses `public/data/tornadoes/track-points/{year}.geojson`
+- Per-year GeoJSON split under `https://data.rsmb.tv/tornadoes/tracks/{year}.geojson` in production
+- Density (heatmap) mode uses `https://data.rsmb.tv/tornadoes/track-points/{year}.geojson` in production
 - Annual summary and notable events JSON pre-baked at build time
 - EF-scale filter, region presets (CONUS / Midwest / Plains / Dixie Alley)
 - Year range timeline with play/pause animation
@@ -72,8 +72,10 @@ node scripts/backfill.js --projects tornadoes --storage local,s3
 
 Fetches the latest NOAA/NCEI StormEvents CSVs, normalizes F/EF scale labels,
 drops rows without valid coordinates, and writes per-year GeoJSON + summary
-JSON to `public/data/tornadoes/`. The sync is designed to be run as a scheduled
-job (monthly is sufficient for historical data; weekly for current-year freshness).
+JSON to the local `public/data/tornadoes/` staging directory before those
+artifacts are uploaded to `data.rsmb.tv/tornadoes`. The sync is designed to be
+run as a scheduled job (monthly is sufficient for historical data; weekly for
+current-year freshness).
 
 StormEvents CSV files are cached in `.cache/tornado-tracks/` between runs to
 avoid redundant network downloads.

@@ -33,7 +33,7 @@
 
 ### Tornado Tracks
 
-- [ ] Add screenshots to project page
+- [x] Add screenshots to project page
 - [x] refreshing the page moves the map back to the starting zoom/bbox
 - [x] how to keep track data up to date?
 - [x] add in state tornadoes over time? county?
@@ -42,14 +42,15 @@
 - [x] Project button should be something like `rsmb.tv` or `←Back` and always go back to either the rsmb.tv homepage or the project homepage on rsmb.tv
 - [x] there should be a share button somewhere
 - [ ] scrolling seems to reset the tracks/trends/density layer?
-- [ ] ← rsmb.tv button doesnt work correctly
-- [ ] should be able to click on a state, see tornadoes that went through, get stats
+- [x] ← rsmb.tv button doesnt work correctly
+- [x] should be able to click on a state, see tornadoes that went through, get stats
 - [ ] better share button somewhere else
 - [ ] what happened to the warnings data? id be curious to see:
   - [ ] what areas get the most warnings?
   - [ ] warnings over time
   - [ ] likelyhood of watches/warnings producing thunderstorms
   - [ ] etc
+- [x] trends charts dont update to the selected year/decade/geography correctly
 
 ### Status dashboard 
 

@@ -33,10 +33,13 @@ interface TornadoSummaryPanelProps {
     region: TornadoRegionPreset;
     colorMode: TornadoColorMode;
     mode: TornadoMode;
+    selectedState: string | null;
+    selectedStateName: string | null;
     collapsed?: boolean;
     onCollapseChange?: (collapsed: boolean) => void;
     onScaleFilterChange: (value: TornadoScaleFilter) => void;
     onRegionChange: (value: TornadoRegionPreset) => void;
+    onSelectedStateChange: (value: string | null) => void;
     onColorModeChange: (value: TornadoColorMode) => void;
     onModeChange: (value: TornadoMode) => void;
     onSelectEvent: (event: NotableTornadoEvent) => void;
@@ -393,10 +396,13 @@ export function TornadoSummaryPanel({
     region,
     colorMode,
     mode,
+    selectedState,
+    selectedStateName,
     collapsed = false,
     onCollapseChange,
     onScaleFilterChange,
     onRegionChange,
+    onSelectedStateChange,
     onColorModeChange,
     onModeChange,
     onSelectEvent,
@@ -410,6 +416,9 @@ export function TornadoSummaryPanel({
                 <div>
                     <div className="text-xs uppercase tracking-wide text-zinc-500">Tornado Tracks</div>
                     <h2 className="text-lg font-semibold text-zinc-100">{stats.count.toLocaleString()} tracks</h2>
+                    {selectedState && (
+                        <div className="mt-0.5 text-xs text-sky-300">{selectedStateName ?? selectedState}</div>
+                    )}
                 </div>
                 <div className="flex items-center gap-1">
                     {selected && (
@@ -496,6 +505,19 @@ export function TornadoSummaryPanel({
                                 ))}
                             </select>
                         </label>
+
+                        {selectedState && (
+                            <div className="flex items-center justify-between gap-2 rounded-md border border-sky-500/40 bg-sky-950/30 px-2.5 py-2 text-xs">
+                                <span className="text-sky-200">{selectedStateName ?? selectedState}</span>
+                                <button
+                                    type="button"
+                                    onClick={() => onSelectedStateChange(null)}
+                                    className="rounded px-2 py-1 text-sky-200 hover:bg-sky-900/60"
+                                >
+                                    Clear
+                                </button>
+                            </div>
+                        )}
 
                         <div>
                             <div className="mb-1.5 text-xs uppercase tracking-wide text-zinc-500">Color</div>

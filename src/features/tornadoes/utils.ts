@@ -55,6 +55,83 @@ export function summarize(features: TornadoTrackFeature[]): FilteredTornadoStats
     );
 }
 
+function emptyAnnualSummary(year: number): AnnualTornadoSummary {
+    return {
+        year,
+        count: 0,
+        unknown: 0,
+        ef0: 0,
+        ef1: 0,
+        ef2: 0,
+        ef3: 0,
+        ef4: 0,
+        ef5: 0,
+        ef1Plus: 0,
+        ef2Plus: 0,
+        deaths: 0,
+        injuries: 0,
+        trackMiles: 0,
+        medianWidthYards: 0,
+    };
+}
+
+function median(values: number[]): number {
+    if (values.length === 0) return 0;
+    const sorted = [...values].sort((a, b) => a - b);
+    const middle = Math.floor(sorted.length / 2);
+    return sorted.length % 2
+        ? sorted[middle]
+        : Math.round(((sorted[middle - 1] + sorted[middle]) / 2) * 10) / 10;
+}
+
+/** Builds annual summaries from track features for the active scale/geography filter. */
+export function computeAnnualSummaryFromTracks(
+    features: TornadoTrackFeature[],
+    yearDomain: number[] = [],
+): AnnualTornadoSummary[] {
+    const rows = new Map<number, AnnualTornadoSummary>();
+    const widths = new Map<number, number[]>();
+
+    for (const year of yearDomain) {
+        if (!Number.isFinite(year)) continue;
+        const roundedYear = Math.round(year);
+        rows.set(roundedYear, emptyAnnualSummary(roundedYear));
+        widths.set(roundedYear, []);
+    }
+
+    for (const feature of features) {
+        const p = feature.properties;
+        if (!Number.isFinite(p.year)) continue;
+        if (!rows.has(p.year)) {
+            rows.set(p.year, emptyAnnualSummary(p.year));
+            widths.set(p.year, []);
+        }
+
+        const summary = rows.get(p.year)!;
+        summary.count += 1;
+        summary.deaths += p.deaths;
+        summary.injuries += p.injuries;
+        summary.trackMiles += p.lengthMiles;
+        if (p.widthYards > 0) widths.get(p.year)!.push(p.widthYards);
+
+        if (p.scale >= 0 && p.scale <= 5) {
+            summary[`ef${p.scale}` as 'ef0'] += 1;
+            if (p.scale >= 1) summary.ef1Plus += 1;
+            if (p.scale >= 2) summary.ef2Plus += 1;
+        } else {
+            summary.unknown += 1;
+        }
+    }
+
+    return [...rows.values()]
+        .map((summary) => ({
+            ...summary,
+            trackMiles: Math.round(summary.trackMiles * 100) / 100,
+            medianWidthYards: median(widths.get(summary.year) ?? []),
+        }))
+        .sort((a, b) => a.year - b.year);
+}
+
 /**
  * Converts a track line collection to a point collection using each track's
  * start coordinate. Features with empty coordinate arrays are skipped.

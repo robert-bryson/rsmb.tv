@@ -6,7 +6,9 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { escapeHtml } from '../../../utils/escapeHtml';
 import {
     DECADE_COLORS,
+    DEFAULT_END_YEAR,
     MAX_ZOOM,
+    MIN_DATA_YEAR,
     MIN_ZOOM,
     REGION_LABELS,
     REGION_STATES,
@@ -31,6 +33,7 @@ import {
     SVG_CANVAS_WIDTH,
     clampViewBox,
     computeStateBreakdown,
+    computeAnnualSummaryFromTracks,
     fallbackBounds,
     projectFallbackPoint,
     summarize,
@@ -45,6 +48,7 @@ const LARGE_TRACK_WARNING_THRESHOLD = 5_000;
 const EMPTY_TRACKS: TornadoTrackCollection = { type: 'FeatureCollection', features: [] };
 const EMPTY_POINTS: TornadoPointCollection = { type: 'FeatureCollection', features: [] };
 const EMPTY_TRACK_POINTS: FeatureCollection<Point, TornadoTrackProperties> = { type: 'FeatureCollection', features: [] };
+const EMPTY_STATE_BOUNDARIES: StateBoundaryCollection = { type: 'FeatureCollection', features: [] };
 const US_STATES_URL = '/data/flights/usStates.geojson';
 
 interface StateBoundaryProperties {
@@ -190,13 +194,17 @@ function StaticTornadoFallback({
     region,
     states,
     selectedTrackId,
+    selectedState,
     onSelectTrack,
+    onSelectState,
 }: {
     tracks: TornadoTrackCollection;
     region: TornadoRegionPreset;
     states: StateBoundaryCollection | null;
     selectedTrackId?: string;
+    selectedState: string | null;
     onSelectTrack: (track: TornadoTrackFeature) => void;
+    onSelectState: (state: string) => void;
 }) {
     const bounds = fallbackBounds(region);
     const longitudeTicks = Array.from({ length: 7 }, (_, index) => bounds.west + ((bounds.east - bounds.west) / 6) * index);
@@ -319,12 +327,17 @@ function StaticTornadoFallback({
                         <path
                             key={feature.properties.code}
                             d={statePath(feature, bounds)}
-                            fill="#0f172a"
-                            fillOpacity="0.45"
-                            stroke="#64748b"
-                            strokeOpacity="0.46"
-                            strokeWidth="1.1"
+                            fill={feature.properties.abbr === selectedState ? '#0ea5e9' : '#0f172a'}
+                            fillOpacity={feature.properties.abbr === selectedState ? 0.26 : 0.45}
+                            stroke={feature.properties.abbr === selectedState ? '#e0f2fe' : '#64748b'}
+                            strokeOpacity={feature.properties.abbr === selectedState ? 0.86 : 0.46}
+                            strokeWidth={feature.properties.abbr === selectedState ? 2 : 1.1}
                             vectorEffect="non-scaling-stroke"
+                            className="cursor-pointer"
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                onSelectState(feature.properties.abbr);
+                            }}
                         />
                     ))}
                 </g>
@@ -386,6 +399,8 @@ export function TornadoMap() {
     const popupRef = useRef<maplibregl.Popup | null>(null);
     const trackLookup = useRef(new Map<string, TornadoTrackFeature>());
     const pendingFlyTo = useRef<[number, number] | null>(null);
+    const selectStateRef = useRef<(state: string) => void>(() => { });
+    const setMapViewRef = useRef<(lat: number, lng: number, zoom: number) => void>(() => { });
     const [mapLoaded, setMapLoaded] = useState(false);
     const [selectedTrack, setSelectedTrackState] = useState<TornadoTrackFeature | null>(null);
     const [timelinePlaying, setTimelinePlaying] = useState(false);
@@ -408,6 +423,7 @@ export function TornadoMap() {
         setRegion,
         setMode,
         setColorMode,
+        setSelectedState,
         setSelectedTrackId,
         setMapView,
     } = useTornadoFilters();
@@ -430,11 +446,27 @@ export function TornadoMap() {
             window.prompt('Copy this link:', url);
         }
     }, []);
+    const handleSelectState = useCallback((state: string) => {
+        setSelectedTrack(null);
+        setSelectedState(state);
+        setMode('trends');
+    }, [setMode, setSelectedState, setSelectedTrack]);
+
+    useEffect(() => {
+        selectStateRef.current = handleSelectState;
+    }, [handleSelectState]);
+
+    useEffect(() => {
+        setMapViewRef.current = setMapView;
+    }, [setMapView]);
+
     // useTornadoFilters.setYearRange always stores start <= end in URL params,
     // so no additional normalization is needed before passing to useTornadoData.
+    const dataStartYear = filters.mode === 'trends' ? MIN_DATA_YEAR : filters.startYear;
+    const dataEndYear = filters.mode === 'trends' ? DEFAULT_END_YEAR : filters.endYear;
     const { tracks, points, annualSummary, notableEvents, loading, error, minYear, maxYear } = useTornadoData({
-        startYear: filters.startYear,
-        endYear: filters.endYear,
+        startYear: dataStartYear,
+        endYear: dataEndYear,
         loadPoints: filters.mode === 'density',
     });
 
@@ -445,15 +477,25 @@ export function TornadoMap() {
 
     const regionStates = REGION_STATES[filters.region];
     const { min: minScale, max: maxScale } = scaleFilterBounds(filters.scaleFilter);
+    const selectedStateName = useMemo(() => {
+        if (!filters.selectedState) return null;
+        return stateBoundaries?.features.find((feature) => feature.properties.abbr === filters.selectedState)?.properties.name
+            ?? filters.selectedState;
+    }, [filters.selectedState, stateBoundaries]);
+
+    const trackMatchesGeography = useCallback((state: string) => {
+        if (filters.selectedState) return state === filters.selectedState;
+        return regionStates.length === 0 || regionStates.includes(state);
+    }, [filters.selectedState, regionStates]);
 
     const timelineFeatures = useMemo(() => {
         if (!tracks) return [];
         return tracks.features.filter((feature) => {
             const { scale, state } = feature.properties;
             return scale >= minScale && scale <= maxScale
-                && (regionStates.length === 0 || regionStates.includes(state));
+                && trackMatchesGeography(state);
         });
-    }, [tracks, minScale, maxScale, regionStates]);
+    }, [tracks, minScale, maxScale, trackMatchesGeography]);
 
     const filteredTracks = useMemo<TornadoTrackCollection>(() => {
         if (!tracks) return EMPTY_TRACKS;
@@ -478,14 +520,19 @@ export function TornadoMap() {
                     && year <= normalizedRange.endYear
                     && scale >= minScale
                     && scale <= maxScale
-                    && (regionStates.length === 0 || regionStates.includes(state));
+                    && trackMatchesGeography(state);
             }),
         };
-    }, [points, normalizedRange.startYear, normalizedRange.endYear, minScale, maxScale, regionStates]);
+    }, [points, normalizedRange.startYear, normalizedRange.endYear, minScale, maxScale, trackMatchesGeography]);
 
     const filteredTrackPoints = useMemo(() => toTrackPoints(filteredTracks), [filteredTracks]);
 
     const stats = useMemo(() => summarize(filteredTracks.features), [filteredTracks]);
+    const filteredAnnualSummary = useMemo(
+        () => computeAnnualSummaryFromTracks(timelineFeatures, annualSummary.map((summary) => summary.year)),
+        [timelineFeatures, annualSummary],
+    );
+    const panelAnnualSummary = filters.mode === 'trends' ? filteredAnnualSummary : annualSummary;
     // Only compute the per-state breakdown when the trends panel is active —
     // it iterates all filtered features which can be 70k+ for broad year ranges.
     const stateBreakdown = useMemo(
@@ -528,6 +575,8 @@ export function TornadoMap() {
                 pendingFlyTo.current = null;
                 mapRef.current?.flyTo({ center: target, zoom: 7, duration: 900 });
             }
+        } else {
+            setSelectedTrackState(null);
         }
     }, [filters.selectedTrackId, filteredTracks]);
 
@@ -577,6 +626,28 @@ export function TornadoMap() {
             map.addSource('tornado-track-points', { type: 'geojson', data: EMPTY_TRACK_POINTS });
             map.addSource('tornado-points', { type: 'geojson', data: EMPTY_POINTS });
             map.addSource('selected-tornado-track', { type: 'geojson', data: EMPTY_TRACKS });
+            map.addSource('us-states', { type: 'geojson', data: EMPTY_STATE_BOUNDARIES });
+
+            map.addLayer({
+                id: 'us-state-fill',
+                type: 'fill',
+                source: 'us-states',
+                paint: {
+                    'fill-color': '#0ea5e9',
+                    'fill-opacity': 0.04,
+                },
+            });
+
+            map.addLayer({
+                id: 'us-state-outline',
+                type: 'line',
+                source: 'us-states',
+                paint: {
+                    'line-color': '#334155',
+                    'line-opacity': 0.65,
+                    'line-width': 0.8,
+                },
+            });
 
             map.addLayer({
                 id: 'tornado-density',
@@ -680,6 +751,21 @@ export function TornadoMap() {
                 });
             }
 
+            map.on('mouseenter', 'us-state-fill', () => {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+
+            map.on('mouseleave', 'us-state-fill', () => {
+                map.getCanvas().style.cursor = '';
+            });
+
+            map.on('click', 'us-state-fill', (event) => {
+                const trackHits = map.queryRenderedFeatures(event.point, { layers: ['tornado-track-line', 'tornado-track-point'] });
+                if (trackHits.length > 0) return;
+                const state = event.features?.[0]?.properties?.abbr as string | undefined;
+                if (state) selectStateRef.current(state);
+            });
+
             map.resize();
             requestAnimationFrame(() => map.resize());
             setMapLoaded(true);
@@ -693,7 +779,7 @@ export function TornadoMap() {
 
         map.on('moveend', () => {
             const center = map.getCenter();
-            setMapView(center.lat, center.lng, map.getZoom());
+            setMapViewRef.current(center.lat, center.lng, map.getZoom());
         });
 
         mapRef.current = map;
@@ -722,6 +808,12 @@ export function TornadoMap() {
     useEffect(() => {
         const map = mapRef.current;
         if (!map || !mapLoaded) return;
+        (map.getSource('us-states') as maplibregl.GeoJSONSource).setData(stateBoundaries ?? EMPTY_STATE_BOUNDARIES);
+    }, [mapLoaded, stateBoundaries]);
+
+    useEffect(() => {
+        const map = mapRef.current;
+        if (!map || !mapLoaded) return;
         map.setLayoutProperty('tornado-density', 'visibility', filters.mode === 'density' ? 'visible' : 'none');
         map.setLayoutProperty('tornado-track-halo', 'visibility', filters.mode === 'density' ? 'none' : 'visible');
         map.setLayoutProperty('tornado-track-line', 'visibility', filters.mode === 'density' ? 'none' : 'visible');
@@ -734,6 +826,17 @@ export function TornadoMap() {
         map.setPaintProperty('tornado-track-line', 'line-color', trackColorExpr);
         map.setPaintProperty('tornado-track-point', 'circle-color', trackColorExpr);
     }, [mapLoaded, filters.mode, filters.colorMode]);
+
+    useEffect(() => {
+        const map = mapRef.current;
+        if (!map || !mapLoaded) return;
+        const selectedState = filters.selectedState ?? '';
+        const selectedStateMatch = ['==', ['get', 'abbr'], selectedState] as unknown as maplibregl.ExpressionSpecification;
+        map.setPaintProperty('us-state-fill', 'fill-opacity', ['case', selectedStateMatch, 0.22, 0.04]);
+        map.setPaintProperty('us-state-outline', 'line-color', ['case', selectedStateMatch, '#e0f2fe', '#334155']);
+        map.setPaintProperty('us-state-outline', 'line-width', ['case', selectedStateMatch, 2.2, 0.8]);
+        map.setPaintProperty('us-state-outline', 'line-opacity', ['case', selectedStateMatch, 0.95, 0.65]);
+    }, [mapLoaded, filters.selectedState]);
 
     useEffect(() => {
         const map = mapRef.current;
@@ -776,13 +879,18 @@ export function TornadoMap() {
                     region={filters.region}
                     states={stateBoundaries}
                     selectedTrackId={selectedTrack?.properties.id}
+                    selectedState={filters.selectedState}
                     onSelectTrack={setSelectedTrack}
+                    onSelectState={handleSelectState}
                 />
             )}
 
             <div className="absolute left-3 top-3 z-20 flex max-w-[calc(100vw-5.5rem)] flex-wrap items-center gap-2 rounded-lg border border-zinc-700/80 bg-zinc-950/90 p-2 text-xs shadow-2xl backdrop-blur-md md:left-6 md:top-6">
-                <Link to="/projects/tornado-tracks" className="rounded-md px-2 py-1.5 font-medium text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100">
+                <Link to="/" className="rounded-md px-2 py-1.5 font-medium text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100">
                     ← rsmb.tv
+                </Link>
+                <Link to="/projects/tornado-tracks" className="rounded-md px-2 py-1.5 font-medium text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100">
+                    Project
                 </Link>
                 <button
                     type="button"
@@ -805,7 +913,7 @@ export function TornadoMap() {
                         </button>
                     ))}
                 </div>
-                <div className="hidden text-zinc-400 sm:block">{filterSummary}</div>
+                <div className="hidden text-zinc-400 sm:block">{filters.selectedState ? `${selectedStateName} · ${filterSummary}` : filterSummary}</div>
             </div>
 
             <TornadoSummaryPanel
@@ -813,17 +921,20 @@ export function TornadoMap() {
                 stateBreakdown={stateBreakdown}
                 selectedTrack={selectedTrack}
                 notableEvents={notableEvents}
-                annualSummary={annualSummary}
+                annualSummary={panelAnnualSummary}
                 startYear={normalizedRange.startYear}
                 endYear={normalizedRange.endYear}
                 scaleFilter={filters.scaleFilter}
                 region={filters.region}
                 colorMode={filters.colorMode}
                 mode={filters.mode}
+                selectedState={filters.selectedState}
+                selectedStateName={selectedStateName}
                 collapsed={summaryCollapsed}
                 onCollapseChange={setSummaryCollapsed}
                 onScaleFilterChange={setScaleFilter}
                 onRegionChange={setRegion}
+                onSelectedStateChange={setSelectedState}
                 onColorModeChange={setColorMode}
                 onModeChange={setMode}
                 onSelectEvent={selectNotableEvent}
@@ -831,7 +942,7 @@ export function TornadoMap() {
             />
 
             <TornadoTimeline
-                annualSummary={annualSummary}
+                annualSummary={filters.mode === 'trends' ? panelAnnualSummary : annualSummary}
                 startYear={normalizedRange.startYear}
                 endYear={normalizedRange.endYear}
                 minYear={minYear}

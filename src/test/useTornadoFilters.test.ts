@@ -50,6 +50,11 @@ describe('useTornadoFilters — defaults', () => {
         expect(result.current.filters.selectedTrackId).toBeNull();
     });
 
+    it('starts with selectedState=null', () => {
+        const { result } = renderHook(() => useTornadoFilters(), { wrapper });
+        expect(result.current.filters.selectedState).toBeNull();
+    });
+
     it('starts with default map center and zoom', () => {
         const { result } = renderHook(() => useTornadoFilters(), { wrapper });
         expect(result.current.filters.mapLng).toBe(INITIAL_CENTER[0]);
@@ -101,6 +106,28 @@ describe('useTornadoFilters — URL param parsing', () => {
             wrapper: wrapperWithParams('track=20240521-KS-001'),
         });
         expect(result.current.filters.selectedTrackId).toBe('20240521-KS-001');
+    });
+
+    it('reads selectedState from ?state= and normalizes case', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('state=ks'),
+        });
+        expect(result.current.filters.selectedState).toBe('KS');
+    });
+
+    it('treats selectedState as the canonical geography when both state and region are present', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('state=ks&region=plains'),
+        });
+        expect(result.current.filters.selectedState).toBe('KS');
+        expect(result.current.filters.region).toBe('conus');
+    });
+
+    it('ignores invalid selectedState values', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('state=kansas'),
+        });
+        expect(result.current.filters.selectedState).toBeNull();
     });
 
     it('reads region from URL', () => {
@@ -215,6 +242,15 @@ describe('useTornadoFilters — setters', () => {
         expect(result.current.filters.region).toBe('conus');
     });
 
+    it('setRegion clears selected state', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('state=KS'),
+        });
+        act(() => result.current.setRegion('plains'));
+        expect(result.current.filters.region).toBe('plains');
+        expect(result.current.filters.selectedState).toBeNull();
+    });
+
     it('setMode updates mode', () => {
         const { result } = renderHook(() => useTornadoFilters(), { wrapper });
         act(() => result.current.setMode('density'));
@@ -261,6 +297,31 @@ describe('useTornadoFilters — setters', () => {
         });
         act(() => result.current.setSelectedTrackId(null));
         expect(result.current.filters.selectedTrackId).toBeNull();
+    });
+
+    it('setSelectedState writes normalized state to URL and clears region', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('region=plains'),
+        });
+        act(() => result.current.setSelectedState('ks'));
+        expect(result.current.filters.selectedState).toBe('KS');
+        expect(result.current.filters.region).toBe('conus');
+    });
+
+    it('setSelectedState(null) removes ?state= from URL', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('state=OK'),
+        });
+        act(() => result.current.setSelectedState(null));
+        expect(result.current.filters.selectedState).toBeNull();
+    });
+
+    it('setSelectedState ignores invalid state values', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('state=TX'),
+        });
+        act(() => result.current.setSelectedState('texas'));
+        expect(result.current.filters.selectedState).toBeNull();
     });
 
     it('setMapView updates lat, lng, zoom in URL', () => {

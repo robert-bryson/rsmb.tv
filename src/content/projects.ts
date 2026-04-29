@@ -75,6 +75,7 @@ export const projects: Project[] = [
     tech: ['React', 'MapLibre GL', 'NOAA/NCEI', 'GeoJSON'],
     featured: true,
     demoUrl: '/projects/tornado-tracks/map',
+    previewImage: '/images/tornado-tracks/conus-tracks.webp',
     year: 2026,
   },
   {

@@ -49,6 +49,48 @@ export default function TornadoTracksAbout() {
                 </a>
             </div>
 
+            <div className="mb-8 space-y-6">
+                <figure>
+                    <img
+                        src="/images/tornado-tracks/conus-tracks.webp"
+                        alt="Map of 2025 tornado tracks across the continental United States with EF-scale filters and timeline controls"
+                        className="rounded-lg border border-zinc-800"
+                        width={1440}
+                        height={1082}
+                        loading="eager"
+                    />
+                    <figcaption className="mt-2 text-center text-xs text-zinc-400">
+                        CONUS overview — 2025 tornado tracks colored by EF scale with timeline brushing, scale filters, and notable-event context
+                    </figcaption>
+                </figure>
+                <figure>
+                    <img
+                        src="/images/tornado-tracks/st-louis-detail.webp"
+                        alt="Map focused on St. Louis with a selected EF3 tornado track detail popup and decade range selected"
+                        className="rounded-lg border border-zinc-800"
+                        width={1440}
+                        height={1080}
+                        loading="lazy"
+                    />
+                    <figcaption className="mt-2 text-center text-xs text-zinc-400">
+                        Track detail — selected St. Louis EF3 event with path length, width, casualty totals, and the 2010s range highlighted
+                    </figcaption>
+                </figure>
+                <figure>
+                    <img
+                        src="/images/tornado-tracks/trends-dashboard.webp"
+                        alt="Tornado Trends view showing annual counts, fatality rate, decade comparison, and top states alongside mapped tracks"
+                        className="rounded-lg border border-zinc-800"
+                        width={1440}
+                        height={1079}
+                        loading="lazy"
+                    />
+                    <figcaption className="mt-2 text-center text-xs text-zinc-400">
+                        Trends view — annual counts, fatality rate, decade comparison, and top-state summaries next to the active map
+                    </figcaption>
+                </figure>
+            </div>
+
             <h2 className="mb-3 text-lg font-medium text-zinc-100">Features</h2>
             <ul className="mb-6 list-inside list-disc space-y-1.5 text-sm text-zinc-400">
                 <li>MapLibre track map with EF/F-scale color encoding and density mode</li>
@@ -64,7 +106,8 @@ export default function TornadoTracksAbout() {
                 tornado rows, normalizes legacy F-scale and modern EF-scale
                 labels, validates track coordinates, parses Storm Data damage
                 shorthand, and emits static GeoJSON plus annual, state, and
-                notable-event summaries under <span className="text-zinc-300">public/data/tornadoes</span>.
+                notable-event summaries for <span className="text-zinc-300">data.rsmb.tv/tornadoes</span>.
+                Local files under <span className="text-zinc-300">public/data/tornadoes</span> are only a development/backfill artifact.
             </p>
 
             <h2 className="mb-3 text-lg font-medium text-zinc-100">Next Layers</h2>

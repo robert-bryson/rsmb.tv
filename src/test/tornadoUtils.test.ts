@@ -3,6 +3,7 @@ import type { AnnualTornadoSummary, TornadoTrackFeature, TornadoTrackCollection 
 import {
     clampViewBox,
     computeDecades,
+    computeAnnualSummaryFromTracks,
     computeFullHistory,
     computeSparklinePills,
     computeStateBreakdown,
@@ -138,6 +139,45 @@ describe('summarize', () => {
         summarize(tracks);
         const second = summarize([]);
         expect(second.deaths).toBe(0);
+    });
+});
+
+// ---------------------------------------------------------------------------
+// computeAnnualSummaryFromTracks
+// ---------------------------------------------------------------------------
+
+describe('computeAnnualSummaryFromTracks', () => {
+    it('returns zero rows for a supplied year domain with no tracks', () => {
+        const rows = computeAnnualSummaryFromTracks([], [2020, 2021]);
+        expect(rows).toHaveLength(2);
+        expect(rows[0]).toMatchObject({ year: 2020, count: 0, deaths: 0, ef2Plus: 0 });
+        expect(rows[1]).toMatchObject({ year: 2021, count: 0, deaths: 0, ef2Plus: 0 });
+    });
+
+    it('aggregates tracks into annual summary rows', () => {
+        const rows = computeAnnualSummaryFromTracks([
+            makeTrack({ id: 't1', year: 2020, scale: 0, deaths: 0, injuries: 1, lengthMiles: 1.25, widthYards: 40 }),
+            makeTrack({ id: 't2', year: 2020, scale: 3, deaths: 2, injuries: 5, lengthMiles: 2.5, widthYards: 120 }),
+        ], [2020]);
+
+        expect(rows[0]).toMatchObject({
+            year: 2020,
+            count: 2,
+            ef0: 1,
+            ef3: 1,
+            ef1Plus: 1,
+            ef2Plus: 1,
+            deaths: 2,
+            injuries: 6,
+            trackMiles: 3.75,
+            medianWidthYards: 80,
+        });
+    });
+
+    it('counts unknown scales separately', () => {
+        const rows = computeAnnualSummaryFromTracks([makeTrack({ scale: -1, year: 2022 })]);
+        expect(rows[0].unknown).toBe(1);
+        expect(rows[0].ef1Plus).toBe(0);
     });
 });
 

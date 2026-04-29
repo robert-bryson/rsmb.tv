@@ -61,10 +61,13 @@ describe('TemperatureRecordsAbout page', () => {
 });
 
 describe('TornadoTracksAbout page', () => {
-    it('renders heading and map link', () => {
+    it('renders heading, map link, and screenshots', () => {
         renderWithRouter(<TornadoTracksAbout />, { route: '/projects/tornado-tracks' });
         expect(screen.getByRole('heading', { level: 1, name: /Tornado Tracks/i })).toBeInTheDocument();
         expect(screen.getByRole('link', { name: /Open interactive map/i })).toHaveAttribute('href', '/projects/tornado-tracks/map');
+        expect(screen.getByRole('img', { name: /Map of 2025 tornado tracks across the continental United States/i })).toBeInTheDocument();
+        expect(screen.getByRole('img', { name: /Map focused on St. Louis with a selected EF3 tornado track detail popup/i })).toBeInTheDocument();
+        expect(screen.getByRole('img', { name: /Tornado Trends view showing annual counts, fatality rate, decade comparison, and top states/i })).toBeInTheDocument();
     });
 });
 

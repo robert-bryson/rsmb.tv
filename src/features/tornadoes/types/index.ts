@@ -103,6 +103,8 @@ export interface TornadoFilters {
     region: TornadoRegionPreset;
     mode: TornadoMode;
     colorMode: TornadoColorMode;
+    /** Selected state abbreviation (URL param `state`) for state-level filtering. */
+    selectedState: string | null;
     /** Currently-selected track ID (URL param `track`). */
     selectedTrackId: string | null;
     /** Map viewport longitude (URL param `lng`). */

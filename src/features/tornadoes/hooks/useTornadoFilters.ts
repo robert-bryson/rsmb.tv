@@ -7,6 +7,7 @@ const SCALE_FILTERS = new Set<TornadoScaleFilter>(['all', 'ef0', 'ef1', 'ef2', '
 const REGIONS = new Set<TornadoRegionPreset>(['conus', 'midwest', 'plains', 'dixie']);
 const MODES = new Set<TornadoMode>(['tracks', 'density', 'trends']);
 const COLOR_MODES = new Set<TornadoColorMode>(['scale', 'year', 'decade']);
+const STATE_ABBR_RE = /^[A-Z]{2}$/;
 
 function parseYear(value: string | null, fallback: number) {
     if (value === null || value === '') return fallback;
@@ -25,14 +26,21 @@ function parseSetValue<T extends string>(value: string | null, allowed: Set<T>, 
     return value && allowed.has(value as T) ? value as T : fallback;
 }
 
+function parseState(value: string | null): string | null {
+    if (!value) return null;
+    const normalized = value.trim().toUpperCase();
+    return STATE_ABBR_RE.test(normalized) ? normalized : null;
+}
+
 export function useTornadoFilters() {
     const [searchParams, setSearchParams] = useSearchParams();
     const startYear = parseYear(searchParams.get('start'), DEFAULT_START_YEAR);
     const endYear = parseYear(searchParams.get('end'), DEFAULT_END_YEAR);
     const scaleFilter = parseSetValue(searchParams.get('scale'), SCALE_FILTERS, 'all');
-    const region = parseSetValue(searchParams.get('region'), REGIONS, 'conus');
     const mode = parseSetValue(searchParams.get('mode'), MODES, 'tracks');
     const colorMode = parseSetValue(searchParams.get('color'), COLOR_MODES, 'scale');
+    const selectedState = parseState(searchParams.get('state'));
+    const region = selectedState ? 'conus' : parseSetValue(searchParams.get('region'), REGIONS, 'conus');
     const mapLng = parseFloatParam(searchParams.get('lng'), INITIAL_CENTER[0], -180, 180);
     const mapLat = parseFloatParam(searchParams.get('lat'), INITIAL_CENTER[1], -90, 90);
     const mapZoom = parseFloatParam(searchParams.get('zoom'), INITIAL_ZOOM, MIN_ZOOM, MAX_ZOOM);
@@ -67,6 +75,7 @@ export function useTornadoFilters() {
         updateParams((next) => {
             if (value === 'conus') next.delete('region');
             else next.set('region', value);
+            next.delete('state');
         });
     }, [updateParams]);
 
@@ -91,6 +100,18 @@ export function useTornadoFilters() {
         });
     }, [updateParams]);
 
+    const setSelectedState = useCallback((state: string | null) => {
+        const normalized = parseState(state);
+        updateParams((next) => {
+            if (normalized === null) {
+                next.delete('state');
+            } else {
+                next.set('state', normalized);
+                next.delete('region');
+            }
+        });
+    }, [updateParams]);
+
     const setMapView = useCallback((lat: number, lng: number, zoom: number) => {
         const roundedLat = Math.round(lat * 10000) / 10000;
         const roundedLng = Math.round(lng * 10000) / 10000;
@@ -105,12 +126,13 @@ export function useTornadoFilters() {
     const selectedTrackId = searchParams.get('track') ?? null;
 
     return {
-        filters: { startYear, endYear, scaleFilter, region, mode, colorMode, selectedTrackId, mapLng, mapLat, mapZoom },
+        filters: { startYear, endYear, scaleFilter, region, mode, colorMode, selectedState, selectedTrackId, mapLng, mapLat, mapZoom },
         setYearRange,
         setScaleFilter,
         setRegion,
         setMode,
         setColorMode,
+        setSelectedState,
         setSelectedTrackId,
         setMapView,
     };
