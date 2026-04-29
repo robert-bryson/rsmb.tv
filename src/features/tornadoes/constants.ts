@@ -7,6 +7,7 @@ export const DATA_BASE_URL = import.meta.env.PROD
 
 export const TORNADO_ANNUAL_SUMMARY_URL = `${DATA_BASE_URL}/annual-summary.json`;
 export const TORNADO_NOTABLE_EVENTS_URL = `${DATA_BASE_URL}/notable-events.json`;
+export const TORNADO_WARNING_SUMMARY_URL = `${DATA_BASE_URL}/warning-summary.json`;
 
 export const MIN_DATA_YEAR = 1950;
 export const DEFAULT_START_YEAR = new Date().getFullYear() - 1;

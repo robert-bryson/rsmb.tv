@@ -5,11 +5,18 @@ import os from 'node:os';
 import path from 'node:path';
 import {
     buildTornadoOutputs,
+    buildWarningSummary,
     discoverStormEventsFiles,
     normalizeTornadoScale,
     parseDamage,
     parseNoaaDateTime,
+    parseSevereReportCsv,
+    parseStormEventsCsv,
     parseTornadoCsv,
+    parseWarningCsv,
+    parseWatchCsv,
+    warningCsvUrl,
+    watchCsvUrl,
     writeTornadoOutputs,
 } from '../../projects/tornado-tracks/scripts/syncTornadoes.js';
 
@@ -17,6 +24,16 @@ const sampleCsv = `BEGIN_YEARMONTH,BEGIN_DAY,BEGIN_TIME,END_DAY,END_TIME,EPISODE
 202405,21,1520,21,1543,1,1001,IOWA,2024,May,Tornado,123,MAHASKA,DMX,21-MAY-24 15:20:00,CST-6,21-MAY-24 15:43:00,2,1,0,1,120.00K,1.50M,NWS Storm Survey,EF3,12.4,600,41.25,-92.64,41.31,-92.41,Episode text,Event text,CSV
 202405,21,1600,21,1605,1,1002,IOWA,2024,May,Thunderstorm Wind,123,MAHASKA,DMX,21-MAY-24 16:00:00,CST-6,21-MAY-24 16:05:00,0,0,0,0,,,ASOS,,0,0,41.2,-92.6,41.2,-92.6,,,CSV
 202405,21,1700,21,1710,1,1003,IOWA,2024,May,Tornado,123,MAHASKA,DMX,21-MAY-24 17:00:00,CST-6,21-MAY-24 17:10:00,0,0,0,0,,,NWS Storm Survey,EF1,1.0,50,,,,,CSV
+`;
+
+const warningCsv = `wfo,utc_issue,utc_expire,utc_prodissue,utc_init_expire,phenomena,gtype,significance,eventid,status,ugc,area2d,utc_updated,hvtec_nwsli,hvtec_severity,hvtec_cause,hvtec_record,is_emergency,utc_polygon_begin,utc_polygon_end,windtag,hailtag,tornadotag,damagetag,product_id,fcster,vtec_year
+DMX,2024-05-21 21:00,2024-05-21 22:00,2024-05-21 21:00,202405212200,TO,P,W,48,NEW,,1201.4,2024-05-21 21:00,,,,,False,2024-05-21 21:00,2024-05-21 22:00,,1.0,RADAR INDICATED,,202405212100-KDMX-WFUS53-TORDMX,Donavon,2024
+DMX,2024-05-21 21:55,2024-05-21 22:15,2024-05-21 21:55,202405212215,SV,P,W,49,NEW,,800.5,2024-05-21 21:55,,,,,True,2024-05-21 21:55,2024-05-21 22:15,60.0,1.0,,,202405212155-KDMX-WUUS53-SVRDMX,Donavon,2024
+`;
+
+const watchCsv = `ISSUE,EXPIRE,SEL,TYPE,NUM,geom,P_TORTWO,P_TOREF2,P_WIND10,P_WIND65,P_HAIL10,P_HAIL2I,P_HAILWND,MAX_HAIL,MAX_GUST,MAX_TOPS,MV_DRCT,MV_SKNT,IS_PDS
+202405212100,202405212300,SEL7,TOR,277,"MULTIPOLYGON (((-94 42, -91 42, -91 40, -94 40, -94 42)))",90,80,80,60,60,50,95,4.0,80.0,50000,220,45,True
+202405210100,202405210300,SEL8,SVR,278,"MULTIPOLYGON (((-100 45, -98 45, -98 43, -100 43, -100 45)))",20,5,70,40,60,20,80,1.5,65.0,50000,230,35,False
 `;
 
 describe('parseDamage', () => {
@@ -75,6 +92,56 @@ describe('parseTornadoCsv', () => {
             cropDamage: 1500000,
             narrative: 'Event text',
         });
+    });
+});
+
+describe('parseSevereReportCsv', () => {
+    it('keeps tornado, hail, and thunderstorm wind reports with UTC times', () => {
+        const reports = parseSevereReportCsv(sampleCsv);
+
+        expect(reports).toHaveLength(2);
+        expect(reports[0]).toMatchObject({ eventType: 'TORNADO', wfo: 'DMX', time: '2024-05-21T21:20:00.000Z' });
+        expect(reports[1]).toMatchObject({ eventType: 'THUNDERSTORM WIND', wfo: 'DMX', time: '2024-05-21T22:00:00.000Z' });
+    });
+});
+
+describe('warning/watch parsing and summaries', () => {
+    it('parses IEM storm-based warnings and SPC watches', () => {
+        const warnings = parseWarningCsv(warningCsv);
+        const watches = parseWatchCsv(watchCsv);
+
+        expect(warnings).toHaveLength(2);
+        expect(warnings[1]).toMatchObject({ phenomena: 'SV', isEmergency: true, areaKm2: 800.5 });
+        expect(watches).toHaveLength(2);
+        expect(watches[0]).toMatchObject({ type: 'TOR', isPds: true, tornadoProbability: 90 });
+    });
+
+    it('matches warnings by WFO/time and watches by bbox/time against StormEvents reports', () => {
+        const summary = buildWarningSummary({
+            warnings: parseWarningCsv(warningCsv),
+            watches: parseWatchCsv(watchCsv),
+            severeReports: parseSevereReportCsv(sampleCsv),
+        });
+
+        expect(summary.annual[0]).toMatchObject({
+            year: 2024,
+            warnings: 2,
+            tornadoWarnings: 1,
+            severeThunderstormWarnings: 1,
+            emergencyWarnings: 1,
+            matchedWarnings: 2,
+            watches: 2,
+            tornadoWatches: 1,
+            pdsWatches: 1,
+            matchedWatches: 1,
+        });
+        expect(summary.wfoYear[0]).toMatchObject({ wfo: 'DMX', warnings: 2, matchedWarnings: 2 });
+    });
+
+    it('builds stable IEM warning and watch CSV URLs', () => {
+        expect(warningCsvUrl(2024)).toContain('phenomena=TO%2CSV');
+        expect(warningCsvUrl(2024)).toContain('significance=W%2CW');
+        expect(watchCsvUrl(2024)).toContain('format=csv');
     });
 });
 
@@ -264,6 +331,10 @@ describe('writeTornadoOutputs', () => {
             // Notable events
             const notablePath = path.join(tmpDir, 'notable-events.json');
             expect(fs.existsSync(notablePath)).toBe(true);
+
+            // Warning/watch summary
+            const warningPath = path.join(tmpDir, 'warning-summary.json');
+            expect(fs.existsSync(warningPath)).toBe(true);
         } finally {
             fs.rmSync(tmpDir, { recursive: true, force: true });
         }
@@ -302,5 +373,116 @@ describe('writeTornadoOutputs', () => {
         } finally {
             fs.rmSync(tmpDir, { recursive: true, force: true });
         }
+    });
+});
+
+// ---------------------------------------------------------------------------
+// parseStormEventsCsv — single-pass combined parser
+// ---------------------------------------------------------------------------
+
+describe('parseStormEventsCsv', () => {
+    it('returns the same features and severeReports as the individual parsers in one pass', () => {
+        const result = parseStormEventsCsv(sampleCsv);
+        const expectedFeatures = parseTornadoCsv(sampleCsv);
+        const expectedReports = parseSevereReportCsv(sampleCsv);
+
+        expect(result.features).toHaveLength(expectedFeatures.length);
+        expect(result.severeReports).toHaveLength(expectedReports.length);
+        expect(result.features[0].properties.id).toBe(expectedFeatures[0].properties.id);
+        expect(result.severeReports[0].eventType).toBe(expectedReports[0].eventType);
+    });
+
+    it('forwards includeNarratives option to feature normalizer', () => {
+        const withNarratives = parseStormEventsCsv(sampleCsv, { includeNarratives: true });
+        const withoutNarratives = parseStormEventsCsv(sampleCsv, { includeNarratives: false });
+
+        expect(withNarratives.features[0].properties).toHaveProperty('narrative');
+        expect(withoutNarratives.features[0].properties).not.toHaveProperty('narrative');
+    });
+});
+
+// ---------------------------------------------------------------------------
+// buildWarningSummary — edge cases
+// ---------------------------------------------------------------------------
+
+describe('buildWarningSummary — edge cases', () => {
+    it('returns empty annual and wfoYear arrays when called with no arguments', () => {
+        const summary = buildWarningSummary();
+        expect(summary.annual).toHaveLength(0);
+        expect(summary.wfoYear).toHaveLength(0);
+        expect(summary.source).toEqual(expect.any(String));
+        expect(summary.availability).toBeDefined();
+    });
+
+    it('returns empty arrays when called with empty arrays', () => {
+        const summary = buildWarningSummary({ warnings: [], watches: [], severeReports: [] });
+        expect(summary.annual).toHaveLength(0);
+        expect(summary.wfoYear).toHaveLength(0);
+    });
+
+    it('handles watches without reports and still records watch counts', () => {
+        const watchCsvText = `ISSUE,EXPIRE,SEL,TYPE,NUM,geom,P_TORTWO,P_TOREF2,P_WIND10,P_WIND65,P_HAIL10,P_HAIL2I,P_HAILWND,MAX_HAIL,MAX_GUST,MAX_TOPS,MV_DRCT,MV_SKNT,IS_PDS
+202406010000,202406010600,SEL1,TOR,300,"MULTIPOLYGON (((-100 40, -98 40, -98 38, -100 38, -100 40)))",70,50,60,40,50,20,80,3.0,70.0,45000,200,40,False
+`;
+        const summary = buildWarningSummary({ watches: parseWatchCsv(watchCsvText) });
+        expect(summary.annual[0]).toMatchObject({ year: 2024, watches: 1, tornadoWatches: 1, matchedWatches: 0 });
+    });
+});
+
+// ---------------------------------------------------------------------------
+// parseWarningCsv / parseWatchCsv — filtering unknown types
+// ---------------------------------------------------------------------------
+
+describe('parseWarningCsv — phenomena and significance filtering', () => {
+    const headerRow = 'wfo,utc_issue,utc_expire,utc_prodissue,utc_init_expire,phenomena,gtype,significance,eventid,status,ugc,area2d,utc_updated,hvtec_nwsli,hvtec_severity,hvtec_cause,hvtec_record,is_emergency,utc_polygon_begin,utc_polygon_end,windtag,hailtag,tornadotag,damagetag,product_id,fcster,vtec_year';
+    const row = (phenomena: string, significance: string) =>
+        `DMX,2024-06-01 20:00,2024-06-01 21:00,2024-06-01 20:00,202406012100,${phenomena},P,${significance},55,NEW,,500.0,2024-06-01 20:00,,,,,False,2024-06-01 20:00,2024-06-01 21:00,,,,,202406012000-KDMX,Donavon,2024`;
+
+    it('keeps TO.W and SV.W warnings', () => {
+        const csv = `${headerRow}\n${row('TO', 'W')}\n${row('SV', 'W')}\n`;
+        expect(parseWarningCsv(csv)).toHaveLength(2);
+    });
+
+    it('drops Flash Flood (FF) warnings — not in supported phenomena set', () => {
+        const csv = `${headerRow}\n${row('FF', 'W')}\n`;
+        expect(parseWarningCsv(csv)).toHaveLength(0);
+    });
+
+    it('drops advisory significance (TO.Y) — only warnings (W) are kept', () => {
+        const csv = `${headerRow}\n${row('TO', 'Y')}\n`;
+        expect(parseWarningCsv(csv)).toHaveLength(0);
+    });
+});
+
+describe('parseWatchCsv — type filtering', () => {
+    const headerRow = 'ISSUE,EXPIRE,SEL,TYPE,NUM,geom,P_TORTWO,P_TOREF2,P_WIND10,P_WIND65,P_HAIL10,P_HAIL2I,P_HAILWND,MAX_HAIL,MAX_GUST,MAX_TOPS,MV_DRCT,MV_SKNT,IS_PDS';
+    const row = (type: string) =>
+        `202406010000,202406010600,SEL1,${type},300,"MULTIPOLYGON (((-100 40, -98 40, -98 38, -100 38, -100 40)))",70,50,60,40,50,20,80,3.0,70.0,45000,200,40,False`;
+
+    it('keeps TOR and SVR watches', () => {
+        const csv = `${headerRow}\n${row('TOR')}\n${row('SVR')}\n`;
+        expect(parseWatchCsv(csv)).toHaveLength(2);
+    });
+
+    it('drops unknown watch types (e.g. MVT)', () => {
+        const csv = `${headerRow}\n${row('MVT')}\n`;
+        expect(parseWatchCsv(csv)).toHaveLength(0);
+    });
+});
+
+// ---------------------------------------------------------------------------
+// parseSevereReportCsv — event type coverage
+// ---------------------------------------------------------------------------
+
+describe('parseSevereReportCsv — event type coverage', () => {
+    const hailCsv = `BEGIN_YEARMONTH,BEGIN_DAY,BEGIN_TIME,END_DAY,END_TIME,EPISODE_ID,EVENT_ID,STATE,YEAR,MONTH_NAME,EVENT_TYPE,CZ_FIPS,CZ_NAME,WFO,BEGIN_DATE_TIME,CZ_TIMEZONE,END_DATE_TIME,INJURIES_DIRECT,INJURIES_INDIRECT,DEATHS_DIRECT,DEATHS_INDIRECT,DAMAGE_PROPERTY,DAMAGE_CROPS,SOURCE,TOR_F_SCALE,TOR_LENGTH,TOR_WIDTH,BEGIN_LAT,BEGIN_LON,END_LAT,END_LON,EPISODE_NARRATIVE,EVENT_NARRATIVE,DATA_SOURCE
+202406,15,1800,15,1802,99,5001,KANSAS,2024,June,Hail,55,PRATT,DDC,15-JUN-24 18:00:00,CST-6,15-JUN-24 18:02:00,0,0,0,0,,,CoCoRaHS,,,0,37.65,-98.73,37.65,-98.73,,,CSV
+202406,15,1830,15,1831,99,5002,KANSAS,2024,June,Lightning,55,PRATT,DDC,15-JUN-24 18:30:00,CST-6,15-JUN-24 18:31:00,0,0,0,0,,,mPING,,,0,37.60,-98.70,37.60,-98.70,,,CSV
+`;
+
+    it('includes Hail events and excludes Lightning (not a supported type)', () => {
+        const reports = parseSevereReportCsv(hailCsv);
+        expect(reports).toHaveLength(1);
+        expect(reports[0].eventType).toBe('HAIL');
     });
 });

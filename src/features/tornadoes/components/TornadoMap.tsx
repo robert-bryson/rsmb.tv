@@ -491,7 +491,7 @@ export function TornadoMap() {
     // so no additional normalization is needed before passing to useTornadoData.
     const dataStartYear = filters.mode === 'trends' ? MIN_DATA_YEAR : filters.startYear;
     const dataEndYear = filters.mode === 'trends' ? DEFAULT_END_YEAR : filters.endYear;
-    const { tracks, points, annualSummary, notableEvents, loading, error, minYear, maxYear } = useTornadoData({
+    const { tracks, points, annualSummary, notableEvents, warningSummary, loading, error, minYear, maxYear } = useTornadoData({
         startYear: dataStartYear,
         endYear: dataEndYear,
         loadPoints: filters.mode === 'density',
@@ -1013,11 +1013,8 @@ export function TornadoMap() {
             )}
 
             <div className="absolute left-3 top-3 z-20 flex max-w-[calc(100vw-5.5rem)] flex-wrap items-center gap-2 rounded-lg border border-zinc-700/80 bg-zinc-950/90 p-2 text-xs shadow-2xl backdrop-blur-md md:left-6 md:top-6">
-                <Link to="/" className="rounded-md px-2 py-1.5 font-medium text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100">
+                <Link to="/projects/tornado-tracks" className="rounded-md px-2 py-1.5 font-medium text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100">
                     ← rsmb.tv
-                </Link>
-                <Link to="/projects/tornado-tracks" className="rounded-md px-2 py-1.5 font-medium text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100">
-                    Project
                 </Link>
                 <button
                     type="button"
@@ -1049,6 +1046,7 @@ export function TornadoMap() {
                 selectedTrack={selectedTrack}
                 notableEvents={notableEvents}
                 annualSummary={panelAnnualSummary}
+                warningSummary={warningSummary}
                 startYear={normalizedRange.startYear}
                 endYear={normalizedRange.endYear}
                 scaleFilter={filters.scaleFilter}

@@ -96,6 +96,49 @@ export interface NotableTornadoEvent extends TornadoTrackProperties {
     coordinates: [number, number][];
 }
 
+export interface AnnualWarningSummary {
+    year: number;
+    warnings: number;
+    tornadoWarnings: number;
+    severeThunderstormWarnings: number;
+    emergencyWarnings: number;
+    matchedWarnings: number;
+    tornadoMatchedWarnings: number;
+    severeThunderstormMatchedWarnings: number;
+    warningAreaKm2: number;
+    watches: number;
+    tornadoWatches: number;
+    severeThunderstormWatches: number;
+    pdsWatches: number;
+    matchedWatches: number;
+    tornadoMatchedWatches: number;
+    severeThunderstormMatchedWatches: number;
+}
+
+export interface WfoWarningYearSummary {
+    year: number;
+    wfo: string;
+    warnings: number;
+    tornadoWarnings: number;
+    severeThunderstormWarnings: number;
+    emergencyWarnings: number;
+    matchedWarnings: number;
+    tornadoMatchedWarnings: number;
+    severeThunderstormMatchedWarnings: number;
+    warningAreaKm2: number;
+}
+
+export interface WarningSummary {
+    source: string;
+    availability: {
+        stormBasedWarningsStartYear: number;
+        spcWatchStartYear: number;
+        reportMatchMethod: string;
+    };
+    annual: AnnualWarningSummary[];
+    wfoYear: WfoWarningYearSummary[];
+}
+
 export interface TornadoFilters {
     startYear: number;
     endYear: number;

@@ -97,7 +97,7 @@ export default function TornadoTracksAbout() {
                 <li>Timeline histogram with range brushing, playback, and era presets</li>
                 <li>Filters for EF1+, EF2+, EF3+, Midwest, Plains, and Dixie Alley</li>
                 <li>Clickable track detail panel with length, width, casualties, damages, WFO, and source</li>
-                <li>NOAA sync script that scrapes the newest StormEvents details file for each year</li>
+                <li>NOAA/IEM sync script that scrapes StormEvents, warning, and watch archives</li>
             </ul>
 
             <h2 className="mb-3 text-lg font-medium text-zinc-100">Data Pipeline</h2>
@@ -105,16 +105,16 @@ export default function TornadoTracksAbout() {
                 The generator reads compressed StormEvents details CSVs, filters
                 tornado rows, normalizes legacy F-scale and modern EF-scale
                 labels, validates track coordinates, parses Storm Data damage
-                shorthand, and emits static GeoJSON plus annual, state, and
-                notable-event summaries for <span className="text-zinc-300">data.rsmb.tv/tornadoes</span>.
+                shorthand, and emits static GeoJSON plus annual, state,
+                warning/watch, and notable-event summaries for <span className="text-zinc-300">data.rsmb.tv/tornadoes</span>.
                 Local files under <span className="text-zinc-300">public/data/tornadoes</span> are only a development/backfill artifact.
             </p>
 
             <h2 className="mb-3 text-lg font-medium text-zinc-100">Next Layers</h2>
             <p className="mb-6 text-sm leading-relaxed text-zinc-400">
-                The map is structured for warning, watch, outlook, and DAT survey
-                overlays later. Those archives are intentionally kept out of the
-                initial load so broad historical browsing stays quick.
+                Warning and watch summaries are available in the Trends view; full
+                warning polygons, outlook overlays, and DAT survey layers are still
+                kept out of the initial map load so broad historical browsing stays quick.
             </p>
 
             <h2 className="mb-3 text-lg font-medium text-zinc-100">Tech Stack</h2>

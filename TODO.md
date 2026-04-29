@@ -1,8 +1,5 @@
 # TODO
 
-- [x] Move generated temperature data to S3/CDN canonical storage; keep local JSON ignored, fix sync actions, and clean tracked generated data
-- [x] does it make sense to have tornado data in the repo or s3? → S3, same pattern as temperatures: serve via data.rsmb.tv/tornadoes, gitignore generated files, workflow uploads instead of commits
-- [x] create script to be run locally to backfill as much data as possible for all projects, having local & s3 storage options
 - [ ] JSON-LD for all pages (partial — missing About, Projects, Blog index pages)
 
 ## Projects
@@ -33,26 +30,10 @@
 
 ### Tornado Tracks
 
-- [x] Add screenshots to project page
-- [x] refreshing the page moves the map back to the starting zoom/bbox
-- [x] how to keep track data up to date?
-- [x] add in state tornadoes over time? county?
-  - [x] get a sense of how often tornadoes hit that geography
-  - [x] get a sense of how common which strength of tornadoes is
-- [x] Project button should be something like `rsmb.tv` or `←Back` and always go back to either the rsmb.tv homepage or the project homepage on rsmb.tv
-- [x] there should be a share button somewhere
 - [ ] scrolling seems to reset the tracks/trends/density layer?
-- [x] ← rsmb.tv button doesnt work correctly
-- [x] should be able to click on a state, see tornadoes that went through, get stats
 - [ ] better share button somewhere else
-- [ ] what happened to the warnings data? id be curious to see:
-  - [ ] what areas get the most warnings?
-  - [ ] warnings over time
-  - [ ] likelyhood of watches/warnings producing thunderstorms
-  - [ ] etc
-- [x] trends charts dont update to the selected year/decade/geography correctly
 
-### Status dashboard 
+### Status dashboard
 
 - [ ] Forecast cost estimate seems way off
 
@@ -72,6 +53,12 @@
 
 ## Completed
 
+### General
+
+- [x] Move generated temperature data to S3/CDN canonical storage; keep local JSON ignored, fix sync actions, and clean tracked generated data
+- [x] does it make sense to have tornado data in the repo or s3? → S3, same pattern as temperatures: serve via data.rsmb.tv/tornadoes, gitignore generated files, workflow uploads instead of commits
+- [x] create script to be run locally to backfill as much data as possible for all projects, having local & s3 storage options
+
 ### Projects
 
 #### aborg
@@ -84,15 +71,28 @@
 
 #### Tornado Tracks
 
+- [x] Add screenshots to project page
+- [x] refreshing the page moves the map back to the starting zoom/bbox
+- [x] how to keep track data up to date?
+- [x] add in state tornadoes over time? county?
+  - [x] get a sense of how often tornadoes hit that geography
+  - [x] get a sense of how common which strength of tornadoes is
+- [x] Project button should be something like `rsmb.tv` or `←Back` and always go back to either the rsmb.tv homepage or the project homepage on rsmb.tv
+- [x] there should be a share button somewhere
+- [x] ← rsmb.tv button doesnt work correctly
+- [x] should be able to click on a state, see tornadoes that went through, get stats
+- [x] trends charts dont update to the selected year/decade/geography correctly
 - [x] hover popups have weird, large white boundaries
 - [x] playing the timeline animation flickers annoyingly
 - [x] scale should include all possible values (0-5, i believe?)
 - [x] map is unusable when many years are chosen
 - [x] refreshing the page should not reset state. state should be part of the URL
 - [x] ui elements should be able to be minimized
-- [x] refreshing the page moves the map back to the starting zoom/bbox
-- [x] how to keep track data up to date?
 - [x] some of the track data appears to be bad (like the San Bernardino, CA, May 18, 1997, 3:50 PM tornado track)
+- [x] what happened to the warnings data? → added IEM storm-based warning and SPC watch summaries to Tornado Tracks trends
+  - [x] what areas get the most warnings? → top WFOs in selected range
+  - [x] warnings over time → annual warning bars in Trends
+  - [x] likelihood of watches/warnings producing thunderstorms → approximate StormEvents report-match rates
 
 ### Testing
 

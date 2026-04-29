@@ -9,10 +9,15 @@ import { parse } from 'csv-parse/sync';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.join(__dirname, '../../..');
 const DEFAULT_SOURCE_URL = 'https://www.ncei.noaa.gov/pub/data/swdi/stormevents/csvfiles/';
+const DEFAULT_WARNING_SOURCE_URL = 'https://mesonet.agron.iastate.edu/cgi-bin/request/gis/watchwarn.py';
+const DEFAULT_WATCH_SOURCE_URL = 'https://mesonet.agron.iastate.edu/cgi-bin/request/gis/spc_watch.py';
 const DEFAULT_OUTPUT_DIR = path.join(REPO_ROOT, 'public/data/tornadoes');
 const DEFAULT_CACHE_DIR = path.join(REPO_ROOT, '.cache/tornado-tracks');
 const DEFAULT_START_YEAR = 1950;
 const DEFAULT_END_YEAR = new Date().getUTCFullYear();
+const STORM_BASED_WARNING_START_YEAR = 2002;
+const SPC_WATCH_START_YEAR = 1997;
+const SEVERE_REPORT_TYPES = new Set(['TORNADO', 'HAIL', 'THUNDERSTORM WIND']);
 
 const MONTHS = new Map([
     ['JAN', 1], ['FEB', 2], ['MAR', 3], ['APR', 4], ['MAY', 5], ['JUN', 6],
@@ -98,6 +103,74 @@ function parseNumeric(value) {
     if (value === null || value === undefined || value === '') return 0;
     const numeric = Number(String(value).replace(/,/g, '').trim());
     return Number.isFinite(numeric) ? numeric : 0;
+}
+
+function parseBoolean(value) {
+    return ['1', 'T', 'TRUE', 'Y', 'YES'].includes(cleanText(value).toUpperCase());
+}
+
+function parseTimezoneOffsetHours(value) {
+    const match = cleanText(value).match(/([+-]\d{1,2})(?::?\d{2})?$/);
+    if (!match) return null;
+    const offset = Number(match[1]);
+    return Number.isFinite(offset) ? offset : null;
+}
+
+function localNoaaTimeToUtcIso(dateTime, timezone) {
+    const parsed = cleanText(dateTime).match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})$/);
+    const offsetHours = parseTimezoneOffsetHours(timezone);
+    if (!parsed || offsetHours === null) return null;
+    const [, year, month, day, hour, minute, second] = parsed.map(Number);
+    const utcMs = Date.UTC(year, month - 1, day, hour, minute, second) - offsetHours * 60 * 60 * 1000;
+    return new Date(utcMs).toISOString();
+}
+
+function parseUtcTimestamp(value) {
+    const raw = cleanText(value);
+    if (!raw) return null;
+
+    const compact = raw.match(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})$/);
+    if (compact) {
+        const [, year, month, day, hour, minute] = compact;
+        return `${year}-${month}-${day}T${hour}:${minute}:00.000Z`;
+    }
+
+    const dashed = raw.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})(?::(\d{2}))?Z?$/);
+    if (dashed) {
+        const [, year, month, day, hour, minute, second = '00'] = dashed;
+        return `${year}-${month}-${day}T${hour}:${minute}:${second}.000Z`;
+    }
+
+    const date = new Date(raw);
+    return Number.isNaN(date.getTime()) ? null : date.toISOString();
+}
+
+function timestampMs(value) {
+    const iso = parseUtcTimestamp(value);
+    if (!iso) return null;
+    const ms = Date.parse(iso);
+    return Number.isFinite(ms) ? ms : null;
+}
+
+function extractWktBbox(wkt) {
+    const coordinates = [...cleanText(wkt).matchAll(/(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)/g)]
+        .map((match) => [Number(match[1]), Number(match[2])])
+        .filter(([lon, lat]) => Number.isFinite(lon) && Number.isFinite(lat));
+    if (!coordinates.length) return null;
+    return coordinates.reduce((bbox, [lon, lat]) => ({
+        west: Math.min(bbox.west, lon),
+        east: Math.max(bbox.east, lon),
+        south: Math.min(bbox.south, lat),
+        north: Math.max(bbox.north, lat),
+    }), { west: Infinity, east: -Infinity, south: Infinity, north: -Infinity });
+}
+
+function pointInBbox(report, bbox) {
+    return bbox
+        && report.lon >= bbox.west
+        && report.lon <= bbox.east
+        && report.lat >= bbox.south
+        && report.lat <= bbox.north;
 }
 
 function parseCoordinate(value) {
@@ -195,6 +268,20 @@ export function parseNoaaDateTime(dateTime, fallback = {}) {
     }
 
     return null;
+}
+
+function parseNoaaDateTimeUtc(row) {
+    const year = Number(row.YEAR);
+    const month = parseMonth(row);
+    const parsed = parseNoaaDateTime(row.BEGIN_DATE_TIME, {
+        year,
+        month,
+        day: row.BEGIN_DAY,
+        time: row.BEGIN_TIME,
+    });
+    if (!parsed) return null;
+    const utc = localNoaaTimeToUtcIso(parsed.dateTime, row.CZ_TIMEZONE);
+    return utc ? { ...parsed, dateTimeUtc: utc, timeMs: Date.parse(utc) } : null;
 }
 
 function parseMonth(row) {
@@ -298,17 +385,163 @@ function normalizeTornadoRow(row, { includeNarratives = false } = {}) {
     };
 }
 
-export function parseTornadoCsv(csvText, options = {}) {
-    const rows = parse(csvText, {
-        bom: true,
-        columns: true,
-        skip_empty_lines: true,
-        relax_column_count: true,
-        relax_quotes: true,
-    });
+const CSV_PARSE_OPTIONS = {
+    bom: true,
+    columns: true,
+    skip_empty_lines: true,
+    relax_column_count: true,
+    relax_quotes: true,
+};
 
-    return rows
+function parseRows(csvText) {
+    return parse(csvText, CSV_PARSE_OPTIONS);
+}
+
+export function parseTornadoCsv(csvText, options = {}) {
+    return parseRows(csvText)
         .map((row) => normalizeTornadoRow(row, options))
+        .filter(Boolean);
+}
+
+function normalizeSevereReportRow(row) {
+    const eventType = cleanText(row.EVENT_TYPE).toUpperCase();
+    if (!SEVERE_REPORT_TYPES.has(eventType)) return null;
+
+    const beginLat = parseCoordinate(row.BEGIN_LAT);
+    const beginLon = parseCoordinate(row.BEGIN_LON);
+    if (!isValidCoordinate(beginLat, beginLon)) return null;
+
+    const begin = parseNoaaDateTimeUtc(row);
+    if (!begin || !Number.isFinite(begin.timeMs)) return null;
+
+    return {
+        id: `ncei-report-${begin.year}-${cleanText(row.EVENT_ID)}`,
+        eventId: cleanText(row.EVENT_ID),
+        year: begin.year,
+        month: begin.month,
+        date: begin.date,
+        time: begin.dateTimeUtc,
+        timeMs: begin.timeMs,
+        eventType,
+        wfo: cleanText(row.WFO),
+        state: getStateAbbreviation(row.STATE),
+        stateName: titleCase(row.STATE),
+        lat: beginLat,
+        lon: beginLon,
+    };
+}
+
+export function parseSevereReportCsv(csvText) {
+    return parseRows(csvText)
+        .map(normalizeSevereReportRow)
+        .filter(Boolean);
+}
+
+/**
+ * Parse a StormEvents CSV in a single pass, returning tornado track features
+ * and all severe-report rows together. Prefer this over calling parseTornadoCsv
+ * and parseSevereReportCsv separately when you need both — it avoids parsing
+ * the same potentially-large CSV twice.
+ */
+export function parseStormEventsCsv(csvText, options = {}) {
+    const rows = parseRows(csvText);
+    return {
+        features: rows.map((row) => normalizeTornadoRow(row, options)).filter(Boolean),
+        severeReports: rows.map(normalizeSevereReportRow).filter(Boolean),
+    };
+}
+
+function normalizeWarningRow(row) {
+    const phenomena = cleanText(row.phenomena).toUpperCase();
+    const significance = cleanText(row.significance).toUpperCase();
+    if (!['TO', 'SV'].includes(phenomena) || significance !== 'W') return null;
+
+    const issueTime = parseUtcTimestamp(row.utc_issue);
+    const expireTime = parseUtcTimestamp(row.utc_expire);
+    const issueMs = timestampMs(row.utc_issue);
+    const expireMs = timestampMs(row.utc_expire);
+    if (!issueTime || !expireTime || issueMs === null || expireMs === null) return null;
+
+    const year = Number(row.vtec_year) || new Date(issueMs).getUTCFullYear();
+    const productId = cleanText(row.product_id);
+    const wfo = cleanText(row.wfo);
+    const eventId = cleanText(row.eventid);
+
+    return {
+        id: `iem-warning-${year}-${wfo}-${phenomena}-${eventId}-${productId || issueMs}`,
+        year,
+        month: new Date(issueMs).getUTCMonth() + 1,
+        date: issueTime.slice(0, 10),
+        wfo,
+        phenomena,
+        significance,
+        eventId,
+        status: cleanText(row.status).toUpperCase(),
+        issueTime,
+        expireTime,
+        issueMs,
+        expireMs,
+        productIssueTime: parseUtcTimestamp(row.utc_prodissue),
+        polygonBeginTime: parseUtcTimestamp(row.utc_polygon_begin),
+        polygonEndTime: parseUtcTimestamp(row.utc_polygon_end),
+        areaKm2: round(parseNumeric(row.area2d), 2),
+        isEmergency: parseBoolean(row.is_emergency),
+        windTag: parseNumeric(row.windtag),
+        hailTag: parseNumeric(row.hailtag),
+        tornadoTag: cleanText(row.tornadotag),
+        damageTag: cleanText(row.damagetag),
+        productId,
+        forecaster: cleanText(row.fcster),
+    };
+}
+
+export function parseWarningCsv(csvText) {
+    return parseRows(csvText)
+        .map(normalizeWarningRow)
+        .filter(Boolean);
+}
+
+function normalizeWatchRow(row) {
+    const type = cleanText(row.TYPE).toUpperCase();
+    if (!['TOR', 'SVR'].includes(type)) return null;
+    const issueTime = parseUtcTimestamp(row.ISSUE);
+    const expireTime = parseUtcTimestamp(row.EXPIRE);
+    const issueMs = timestampMs(row.ISSUE);
+    const expireMs = timestampMs(row.EXPIRE);
+    if (!issueTime || !expireTime || issueMs === null || expireMs === null) return null;
+
+    const year = new Date(issueMs).getUTCFullYear();
+    const watchNumber = cleanText(row.NUM) || cleanText(row.SEL);
+
+    return {
+        id: `iem-spc-watch-${year}-${watchNumber}`,
+        year,
+        month: new Date(issueMs).getUTCMonth() + 1,
+        date: issueTime.slice(0, 10),
+        type,
+        watchNumber,
+        sel: cleanText(row.SEL),
+        issueTime,
+        expireTime,
+        issueMs,
+        expireMs,
+        bbox: extractWktBbox(row.geom),
+        isPds: parseBoolean(row.IS_PDS),
+        tornadoProbability: parseNumeric(row.P_TORTWO),
+        strongTornadoProbability: parseNumeric(row.P_TOREF2),
+        windProbability: parseNumeric(row.P_WIND10),
+        significantWindProbability: parseNumeric(row.P_WIND65),
+        hailProbability: parseNumeric(row.P_HAIL10),
+        significantHailProbability: parseNumeric(row.P_HAIL2I),
+        combinedHailWindProbability: parseNumeric(row.P_HAILWND),
+        maxHailInches: parseNumeric(row.MAX_HAIL),
+        maxGustKnots: parseNumeric(row.MAX_GUST),
+    };
+}
+
+export function parseWatchCsv(csvText) {
+    return parseRows(csvText)
+        .map(normalizeWatchRow)
         .filter(Boolean);
 }
 
@@ -333,6 +566,26 @@ export function discoverStormEventsFiles(html, sourceUrl = DEFAULT_SOURCE_URL) {
     }
 
     return byYear;
+}
+
+export function warningCsvUrl(year, sourceUrl = DEFAULT_WARNING_SOURCE_URL) {
+    const url = new URL(sourceUrl);
+    url.searchParams.set('accept', 'csv');
+    url.searchParams.set('sts', `${year}-01-01T00:00Z`);
+    url.searchParams.set('ets', `${year + 1}-01-01T00:00Z`);
+    url.searchParams.set('limit1', '1');
+    url.searchParams.set('limitps', '1');
+    url.searchParams.set('phenomena', 'TO,SV');
+    url.searchParams.set('significance', 'W,W');
+    return url.toString();
+}
+
+export function watchCsvUrl(year, sourceUrl = DEFAULT_WATCH_SOURCE_URL) {
+    const url = new URL(sourceUrl);
+    url.searchParams.set('format', 'csv');
+    url.searchParams.set('sts', `${year}-01-01T00:00:00Z`);
+    url.searchParams.set('ets', `${year + 1}-01-01T00:00:00Z`);
+    return url.toString();
 }
 
 function toPointFeature(feature) {
@@ -377,6 +630,135 @@ function emptyAnnualSummary(year) {
     };
 }
 
+function emptyAnnualWarningSummary(year) {
+    return {
+        year,
+        warnings: 0,
+        tornadoWarnings: 0,
+        severeThunderstormWarnings: 0,
+        emergencyWarnings: 0,
+        matchedWarnings: 0,
+        tornadoMatchedWarnings: 0,
+        severeThunderstormMatchedWarnings: 0,
+        warningAreaKm2: 0,
+        watches: 0,
+        tornadoWatches: 0,
+        severeThunderstormWatches: 0,
+        pdsWatches: 0,
+        matchedWatches: 0,
+        tornadoMatchedWatches: 0,
+        severeThunderstormMatchedWatches: 0,
+    };
+}
+
+function emptyWfoWarningSummary(year, wfo) {
+    return {
+        year,
+        wfo,
+        warnings: 0,
+        tornadoWarnings: 0,
+        severeThunderstormWarnings: 0,
+        emergencyWarnings: 0,
+        matchedWarnings: 0,
+        tornadoMatchedWarnings: 0,
+        severeThunderstormMatchedWarnings: 0,
+        warningAreaKm2: 0,
+    };
+}
+
+function reportMatchesWarning(warning, report) {
+    if (warning.wfo !== report.wfo) return false;
+    if (report.timeMs < warning.issueMs || report.timeMs > warning.expireMs) return false;
+    if (warning.phenomena === 'TO') return report.eventType === 'TORNADO';
+    return report.eventType === 'HAIL' || report.eventType === 'THUNDERSTORM WIND' || report.eventType === 'TORNADO';
+}
+
+function reportMatchesWatch(watch, report) {
+    if (report.timeMs < watch.issueMs || report.timeMs > watch.expireMs) return false;
+    if (!pointInBbox(report, watch.bbox)) return false;
+    if (watch.type === 'TOR') return report.eventType === 'TORNADO';
+    return report.eventType === 'HAIL' || report.eventType === 'THUNDERSTORM WIND' || report.eventType === 'TORNADO';
+}
+
+function groupReportsByYearAndWfo(reports) {
+    const grouped = new Map();
+    for (const report of reports) {
+        const key = `${report.year}-${report.wfo}`;
+        if (!grouped.has(key)) grouped.set(key, []);
+        grouped.get(key).push(report);
+    }
+    return grouped;
+}
+
+function groupReportsByYear(reports) {
+    const grouped = new Map();
+    for (const report of reports) {
+        if (!grouped.has(report.year)) grouped.set(report.year, []);
+        grouped.get(report.year).push(report);
+    }
+    return grouped;
+}
+
+export function buildWarningSummary({ warnings = [], watches = [], severeReports = [] } = {}) {
+    const annual = new Map();
+    const wfoYear = new Map();
+    const reportsByYearAndWfo = groupReportsByYearAndWfo(severeReports);
+    const reportsByYear = groupReportsByYear(severeReports);
+
+    for (const warning of [...warnings].sort((a, b) => a.year - b.year || a.wfo.localeCompare(b.wfo))) {
+        if (!annual.has(warning.year)) annual.set(warning.year, emptyAnnualWarningSummary(warning.year));
+        const annualRow = annual.get(warning.year);
+
+        const wfoKey = `${warning.year}-${warning.wfo}`;
+        if (!wfoYear.has(wfoKey)) wfoYear.set(wfoKey, emptyWfoWarningSummary(warning.year, warning.wfo));
+        const wfoRow = wfoYear.get(wfoKey);
+
+        const candidates = reportsByYearAndWfo.get(wfoKey) ?? [];
+        const matched = candidates.some((report) => reportMatchesWarning(warning, report));
+
+        for (const row of [annualRow, wfoRow]) {
+            row.warnings += 1;
+            row.warningAreaKm2 = round(row.warningAreaKm2 + warning.areaKm2, 2);
+            if (warning.phenomena === 'TO') row.tornadoWarnings += 1;
+            if (warning.phenomena === 'SV') row.severeThunderstormWarnings += 1;
+            if (warning.isEmergency) row.emergencyWarnings += 1;
+            if (matched) {
+                row.matchedWarnings += 1;
+                if (warning.phenomena === 'TO') row.tornadoMatchedWarnings += 1;
+                if (warning.phenomena === 'SV') row.severeThunderstormMatchedWarnings += 1;
+            }
+        }
+    }
+
+    for (const watch of [...watches].sort((a, b) => a.year - b.year || a.watchNumber.localeCompare(b.watchNumber))) {
+        if (!annual.has(watch.year)) annual.set(watch.year, emptyAnnualWarningSummary(watch.year));
+        const row = annual.get(watch.year);
+        const candidates = reportsByYear.get(watch.year) ?? [];
+        const matched = candidates.some((report) => reportMatchesWatch(watch, report));
+
+        row.watches += 1;
+        if (watch.type === 'TOR') row.tornadoWatches += 1;
+        if (watch.type === 'SVR') row.severeThunderstormWatches += 1;
+        if (watch.isPds) row.pdsWatches += 1;
+        if (matched) {
+            row.matchedWatches += 1;
+            if (watch.type === 'TOR') row.tornadoMatchedWatches += 1;
+            if (watch.type === 'SVR') row.severeThunderstormMatchedWatches += 1;
+        }
+    }
+
+    return {
+        source: 'Iowa Environmental Mesonet VTEC/SPC archives with NOAA/NCEI StormEvents report matching',
+        availability: {
+            stormBasedWarningsStartYear: STORM_BASED_WARNING_START_YEAR,
+            spcWatchStartYear: SPC_WATCH_START_YEAR,
+            reportMatchMethod: 'StormEvents reports matched by WFO/time for warnings and by watch bounding box/time for SPC watches',
+        },
+        annual: [...annual.values()].sort((a, b) => a.year - b.year),
+        wfoYear: [...wfoYear.values()].sort((a, b) => a.year - b.year || a.wfo.localeCompare(b.wfo)),
+    };
+}
+
 function median(values) {
     if (values.length === 0) return 0;
     const sorted = [...values].sort((a, b) => a - b);
@@ -384,7 +766,7 @@ function median(values) {
     return sorted.length % 2 ? sorted[middle] : round((sorted[middle - 1] + sorted[middle]) / 2, 1);
 }
 
-export function buildTornadoOutputs(features) {
+export function buildTornadoOutputs(features, warningContext = {}) {
     const sortedFeatures = [...features].sort((a, b) => {
         const yearDelta = a.properties.year - b.properties.year;
         if (yearDelta !== 0) return yearDelta;
@@ -476,6 +858,7 @@ export function buildTornadoOutputs(features) {
         annualSummary,
         stateSummary: [...stateYears.values()].sort((a, b) => a.state.localeCompare(b.state) || a.year - b.year),
         notableEvents,
+        warningSummary: buildWarningSummary(warningContext),
     };
 }
 
@@ -525,6 +908,7 @@ export function writeTornadoOutputs(outputs, outputDir = DEFAULT_OUTPUT_DIR) {
     writeJson(path.join(outputDir, 'annual-summary.json'), outputs.annualSummary, true);
     writeJson(path.join(outputDir, 'state-summary.json'), outputs.stateSummary, true);
     writeJson(path.join(outputDir, 'notable-events.json'), outputs.notableEvents, true);
+    writeJson(path.join(outputDir, 'warning-summary.json'), outputs.warningSummary, true);
 }
 
 function range(start, end) {
@@ -590,6 +974,23 @@ async function fetchGzipCsv(url, { filename, cacheDir = DEFAULT_CACHE_DIR, log }
     return gunzipSync(buffer).toString('utf-8');
 }
 
+async function fetchCachedText(url, { filename, cacheDir = DEFAULT_CACHE_DIR, log } = {}) {
+    const cachePath = cacheDir && filename ? path.join(cacheDir, filename) : null;
+
+    if (cachePath && fs.existsSync(cachePath)) {
+        return fs.readFileSync(cachePath, 'utf-8');
+    }
+
+    const text = await fetchWithRetries(url, { responseType: 'text', log });
+
+    if (cachePath) {
+        fs.mkdirSync(path.dirname(cachePath), { recursive: true });
+        fs.writeFileSync(cachePath, text, 'utf-8');
+    }
+
+    return text;
+}
+
 export async function syncTornadoes({
     sourceUrl = DEFAULT_SOURCE_URL,
     outputDir = DEFAULT_OUTPUT_DIR,
@@ -599,17 +1000,23 @@ export async function syncTornadoes({
     fixturePath,
     cacheDir = DEFAULT_CACHE_DIR,
     includeNarratives = false,
+    includeWarnings = true,
+    warningSourceUrl = DEFAULT_WARNING_SOURCE_URL,
+    watchSourceUrl = DEFAULT_WATCH_SOURCE_URL,
     log = console.log,
 } = {}) {
     let features = [];
+    let severeReports = [];
+    let warnings = [];
+    let watches = [];
+    let selectedYears = years?.length ? years : range(startYear, endYear);
 
     if (fixturePath) {
         const csvText = fs.readFileSync(fixturePath, 'utf-8');
-        features = parseTornadoCsv(csvText, { includeNarratives });
+        ({ features, severeReports } = parseStormEventsCsv(csvText, { includeNarratives }));
     } else {
         const directoryHtml = await fetchText(sourceUrl, { log });
         const files = discoverStormEventsFiles(directoryHtml, sourceUrl);
-        const selectedYears = years?.length ? years : range(startYear, endYear);
 
         for (const year of selectedYears) {
             const file = files.get(year);
@@ -620,17 +1027,40 @@ export async function syncTornadoes({
 
             log(`Downloading ${file.filename}`);
             const csvText = await fetchGzipCsv(file.url, { filename: file.filename, cacheDir, log });
-            const yearFeatures = parseTornadoCsv(csvText, { includeNarratives });
+            const { features: yearFeatures, severeReports: yearReports } = parseStormEventsCsv(csvText, { includeNarratives });
             features.push(...yearFeatures);
+            severeReports.push(...yearReports);
             log(`  ${yearFeatures.length} tornado tracks`);
+        }
+
+        if (includeWarnings) {
+            for (const year of selectedYears) {
+                if (year >= STORM_BASED_WARNING_START_YEAR) {
+                    const warningUrl = warningCsvUrl(year, warningSourceUrl);
+                    const warningCsv = await fetchCachedText(warningUrl, { filename: `warnings/${year}.csv`, cacheDir, log });
+                    const yearWarnings = parseWarningCsv(warningCsv);
+                    warnings.push(...yearWarnings);
+                    log(`  ${yearWarnings.length} storm-based warnings for ${year}`);
+                }
+
+                if (year >= SPC_WATCH_START_YEAR) {
+                    const watchUrl = watchCsvUrl(year, watchSourceUrl);
+                    const watchCsv = await fetchCachedText(watchUrl, { filename: `watches/${year}.csv`, cacheDir, log });
+                    const yearWatches = parseWatchCsv(watchCsv);
+                    watches.push(...yearWatches);
+                    log(`  ${yearWatches.length} SPC watches for ${year}`);
+                }
+            }
         }
     }
 
-    const outputs = buildTornadoOutputs(features);
+    const outputs = buildTornadoOutputs(features, { warnings, watches, severeReports });
     writeTornadoOutputs(outputs, outputDir);
     return {
         outputDir,
         count: outputs.tracks.features.length,
+        warningCount: outputs.warningSummary.annual.reduce((sum, row) => sum + row.warnings, 0),
+        watchCount: outputs.warningSummary.annual.reduce((sum, row) => sum + row.watches, 0),
         years: outputs.annualSummary.map((summary) => summary.year),
     };
 }
@@ -677,6 +1107,17 @@ function parseArgs(argv) {
             case '--include-narratives':
                 options.includeNarratives = true;
                 break;
+            case '--no-warnings':
+                options.includeWarnings = false;
+                break;
+            case '--warning-source-url':
+                options.warningSourceUrl = next;
+                index += 1;
+                break;
+            case '--watch-source-url':
+                options.watchSourceUrl = next;
+                index += 1;
+                break;
             default:
                 throw new Error(`Unknown argument: ${arg}`);
         }
@@ -689,9 +1130,9 @@ const isDirectRun = process.argv[1] && path.resolve(process.argv[1]) === fileURL
 
 if (isDirectRun) {
     syncTornadoes(parseArgs(process.argv.slice(2)))
-        .then(({ outputDir, count, years }) => {
+        .then(({ outputDir, count, years, warningCount, watchCount }) => {
             const yearRange = years.length ? `${Math.min(...years)}-${Math.max(...years)}` : 'no years';
-            console.log(`Tornado data generated → ${outputDir} (${count} tracks, ${yearRange})`);
+            console.log(`Tornado data generated → ${outputDir} (${count} tracks, ${warningCount} warnings, ${watchCount} watches, ${yearRange})`);
         })
         .catch((error) => {
             console.error(error);

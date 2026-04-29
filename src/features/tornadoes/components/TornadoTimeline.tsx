@@ -99,7 +99,18 @@ export function TornadoTimeline({
 
     return (
         <div className="absolute inset-x-3 bottom-3 z-20 rounded-lg border border-zinc-700/80 bg-zinc-950/90 backdrop-blur-md shadow-2xl md:inset-x-6">
-            <div className="flex flex-col gap-3 p-3 md:p-4">
+            {onCollapseChange && (
+                <button
+                    type="button"
+                    onClick={() => onCollapseChange(!collapsed)}
+                    className="flex w-full items-center justify-center gap-1.5 rounded-t-lg pt-2 pb-1 text-zinc-500 transition-colors hover:bg-zinc-800/60 hover:text-zinc-300"
+                    aria-label={collapsed ? 'Expand timeline' : 'Collapse timeline'}
+                >
+                    <div className="h-1 w-8 rounded-full bg-zinc-600" />
+                    <span className="text-[10px] leading-none">{collapsed ? '▲' : '▼'}</span>
+                </button>
+            )}
+            <div className={`flex flex-col gap-3 p-3 md:p-4${onCollapseChange ? ' pt-1 md:pt-1' : ''}`}>
                 <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
                         <div className="text-xs uppercase tracking-wide text-zinc-500">Timeline</div>
@@ -147,16 +158,6 @@ export function TornadoTimeline({
                                 10yr
                             </button>
                         </div>
-                        {onCollapseChange && (
-                            <button
-                                type="button"
-                                onClick={() => onCollapseChange(!collapsed)}
-                                className="h-8 w-8 rounded-md border border-zinc-700 bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
-                                aria-label={collapsed ? 'Expand timeline' : 'Collapse timeline'}
-                            >
-                                {collapsed ? '▲' : '▼'}
-                            </button>
-                        )}
                     </div>
                 </div>
 

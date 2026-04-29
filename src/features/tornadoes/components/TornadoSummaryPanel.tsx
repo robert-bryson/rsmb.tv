@@ -10,6 +10,7 @@ import {
 } from '../constants';
 import type {
     AnnualTornadoSummary,
+    AnnualWarningSummary,
     FilteredTornadoStats,
     NotableTornadoEvent,
     StateAggregateSummary,
@@ -18,6 +19,8 @@ import type {
     TornadoRegionPreset,
     TornadoScaleFilter,
     TornadoTrackFeature,
+    WfoWarningYearSummary,
+    WarningSummary,
 } from '../types';
 import { computeDecades, computeFullHistory, computeSparklinePills, formatDamage, formatDateTime, linReg } from '../utils';
 
@@ -27,6 +30,7 @@ interface TornadoSummaryPanelProps {
     selectedTrack: TornadoTrackFeature | null;
     notableEvents: NotableTornadoEvent[];
     annualSummary: AnnualTornadoSummary[];
+    warningSummary: WarningSummary | null;
     startYear: number;
     endYear: number;
     scaleFilter: TornadoScaleFilter;
@@ -350,11 +354,186 @@ function TrendByState({ stateBreakdown }: { stateBreakdown: StateAggregateSummar
     );
 }
 
+type WarningAreaMetric = 'warnings' | 'tornadoWarnings' | 'matchedWarnings';
+const WARNING_AREA_METRIC_LABELS: Record<WarningAreaMetric, string> = {
+    warnings: 'Warnings',
+    tornadoWarnings: 'TOR',
+    matchedWarnings: 'Matched',
+};
+
+function emptyWarningTotals(): AnnualWarningSummary {
+    return {
+        year: 0,
+        warnings: 0,
+        tornadoWarnings: 0,
+        severeThunderstormWarnings: 0,
+        emergencyWarnings: 0,
+        matchedWarnings: 0,
+        tornadoMatchedWarnings: 0,
+        severeThunderstormMatchedWarnings: 0,
+        warningAreaKm2: 0,
+        watches: 0,
+        tornadoWatches: 0,
+        severeThunderstormWatches: 0,
+        pdsWatches: 0,
+        matchedWatches: 0,
+        tornadoMatchedWatches: 0,
+        severeThunderstormMatchedWatches: 0,
+    };
+}
+
+function addWarningRow(totals: AnnualWarningSummary, row: AnnualWarningSummary): AnnualWarningSummary {
+    totals.warnings += row.warnings;
+    totals.tornadoWarnings += row.tornadoWarnings;
+    totals.severeThunderstormWarnings += row.severeThunderstormWarnings;
+    totals.emergencyWarnings += row.emergencyWarnings;
+    totals.matchedWarnings += row.matchedWarnings;
+    totals.tornadoMatchedWarnings += row.tornadoMatchedWarnings;
+    totals.severeThunderstormMatchedWarnings += row.severeThunderstormMatchedWarnings;
+    totals.warningAreaKm2 += row.warningAreaKm2;
+    totals.watches += row.watches;
+    totals.tornadoWatches += row.tornadoWatches;
+    totals.severeThunderstormWatches += row.severeThunderstormWatches;
+    totals.pdsWatches += row.pdsWatches;
+    totals.matchedWatches += row.matchedWatches;
+    totals.tornadoMatchedWatches += row.tornadoMatchedWatches;
+    totals.severeThunderstormMatchedWatches += row.severeThunderstormMatchedWatches;
+    return totals;
+}
+
+function percent(numerator: number, denominator: number) {
+    return denominator > 0 ? Math.round((numerator / denominator) * 100) : 0;
+}
+
+function TrendWarnings({ warningSummary, startYear, endYear }: { warningSummary: WarningSummary | null; startYear: number; endYear: number }) {
+    const [areaMetric, setAreaMetric] = useState<WarningAreaMetric>('warnings');
+
+    const years = useMemo(() => {
+        if (!warningSummary) return [];
+        const currentYear = new Date().getFullYear();
+        return warningSummary.annual.filter((row) => row.year < currentYear);
+    }, [warningSummary]);
+
+    const selectedTotals = useMemo(() => years
+        .filter((row) => row.year >= startYear && row.year <= endYear)
+        .reduce(addWarningRow, emptyWarningTotals()), [years, startYear, endYear]);
+
+    const topWfos = useMemo(() => {
+        if (!warningSummary) return [];
+        const byWfo = new Map<string, WfoWarningYearSummary>();
+        for (const row of warningSummary.wfoYear) {
+            if (row.year < startYear || row.year > endYear) continue;
+            const existing = byWfo.get(row.wfo) ?? { ...row, year: 0, warnings: 0, tornadoWarnings: 0, severeThunderstormWarnings: 0, emergencyWarnings: 0, matchedWarnings: 0, tornadoMatchedWarnings: 0, severeThunderstormMatchedWarnings: 0, warningAreaKm2: 0 };
+            existing.warnings += row.warnings;
+            existing.tornadoWarnings += row.tornadoWarnings;
+            existing.severeThunderstormWarnings += row.severeThunderstormWarnings;
+            existing.emergencyWarnings += row.emergencyWarnings;
+            existing.matchedWarnings += row.matchedWarnings;
+            existing.tornadoMatchedWarnings += row.tornadoMatchedWarnings;
+            existing.severeThunderstormMatchedWarnings += row.severeThunderstormMatchedWarnings;
+            existing.warningAreaKm2 += row.warningAreaKm2;
+            byWfo.set(row.wfo, existing);
+        }
+        return [...byWfo.values()].sort((a, b) => b[areaMetric] - a[areaMetric]).slice(0, 10);
+    }, [warningSummary, startYear, endYear, areaMetric]);
+
+    const chartYears = years.filter((row) => row.warnings > 0);
+    if (!warningSummary || years.length === 0 || chartYears.length === 0) return null;
+
+    const W = 272; const H = 52;
+    const maxWarnings = Math.max(1, ...chartYears.map((row) => row.warnings));
+    const barW = W / chartYears.length;
+    const firstYear = chartYears[0].year;
+    const lastYear = chartYears[chartYears.length - 1].year;
+    const maxWfoValue = Math.max(1, ...topWfos.map((row) => row[areaMetric]));
+
+    return (
+        <div className="space-y-3">
+            <div className="grid grid-cols-4 gap-1 text-[11px]">
+                <div className="rounded bg-zinc-900 p-1.5">
+                    <div className="text-[10px] text-zinc-500">Warnings</div>
+                    <div className="font-semibold text-zinc-100">{selectedTotals.warnings.toLocaleString()}</div>
+                </div>
+                <div className="rounded bg-zinc-900 p-1.5">
+                    <div className="text-[10px] text-zinc-500">Warn %</div>
+                    <div className="font-semibold text-zinc-100">{percent(selectedTotals.matchedWarnings, selectedTotals.warnings)}%</div>
+                </div>
+                <div className="rounded bg-zinc-900 p-1.5">
+                    <div className="text-[10px] text-zinc-500">Watches</div>
+                    <div className="font-semibold text-zinc-100">{selectedTotals.watches.toLocaleString()}</div>
+                </div>
+                <div className="rounded bg-zinc-900 p-1.5">
+                    <div className="text-[10px] text-zinc-500">Watch %</div>
+                    <div className="font-semibold text-zinc-100">{percent(selectedTotals.matchedWatches, selectedTotals.watches)}%</div>
+                </div>
+            </div>
+
+            <div>
+                <div className="mb-1 flex items-center justify-between text-[10px] text-zinc-500">
+                    <span>Storm-based warnings, {firstYear}-{lastYear}</span>
+                    <span>{selectedTotals.tornadoWarnings.toLocaleString()} TOR warnings</span>
+                </div>
+                <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={H} aria-hidden="true">
+                    {chartYears.map((row, i) => {
+                        const h = Math.max(1, (row.warnings / maxWarnings) * H);
+                        return (
+                            <rect
+                                key={row.year}
+                                x={i * barW + 0.3}
+                                y={H - h}
+                                width={Math.max(0.5, barW - 0.6)}
+                                height={h}
+                                fill={row.year >= startYear && row.year <= endYear ? '#f97316' : '#3f3f46'}
+                            />
+                        );
+                    })}
+                </svg>
+                <div className="flex justify-between text-[10px] text-zinc-600">
+                    <span>{firstYear}</span><span>{lastYear}</span>
+                </div>
+            </div>
+
+            <div>
+                <div className="mb-2 flex flex-wrap gap-1 text-[10px]">
+                    {(Object.keys(WARNING_AREA_METRIC_LABELS) as WarningAreaMetric[]).map((key) => (
+                        <button
+                            key={key}
+                            type="button"
+                            onClick={() => setAreaMetric(key)}
+                            className={`rounded px-1.5 py-0.5 ${areaMetric === key ? 'bg-zinc-500 text-zinc-950' : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200'}`}
+                        >
+                            {WARNING_AREA_METRIC_LABELS[key]}
+                        </button>
+                    ))}
+                </div>
+                <div className="space-y-1">
+                    {topWfos.map((row) => {
+                        const value = row[areaMetric];
+                        const pct = (value / maxWfoValue) * 100;
+                        return (
+                            <div key={row.wfo} className="flex items-center gap-2 text-[11px]">
+                                <span className="w-8 shrink-0 text-zinc-400">{row.wfo}</span>
+                                <div className="relative h-3.5 min-w-0 flex-1 overflow-hidden rounded-sm bg-zinc-900">
+                                    <div
+                                        className="h-full rounded-sm bg-orange-400/75 transition-all duration-300"
+                                        style={{ width: `${pct}%` }}
+                                    />
+                                </div>
+                                <span className="w-10 shrink-0 text-right text-zinc-300">{value.toLocaleString()}</span>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        </div>
+    );
+}
+
 // ---------------------------------------------------------------------------
 // Wrapper — renders all three in sequence
 // ---------------------------------------------------------------------------
 
-function TrendSnapshot({ annualSummary, startYear, endYear, stateBreakdown }: { annualSummary: AnnualTornadoSummary[]; startYear: number; endYear: number; stateBreakdown: StateAggregateSummary[] }) {
+function TrendSnapshot({ annualSummary, warningSummary, startYear, endYear, stateBreakdown }: { annualSummary: AnnualTornadoSummary[]; warningSummary: WarningSummary | null; startYear: number; endYear: number; stateBreakdown: StateAggregateSummary[] }) {
     // Exclude the current in-progress year so partial data doesn't skew charts.
     // Use the actual max year in the summary rather than calling new Date() on
     // every render — the summary already stops at whatever NOAA has published.
@@ -380,6 +559,12 @@ function TrendSnapshot({ annualSummary, startYear, endYear, stateBreakdown }: { 
                     <TrendByState stateBreakdown={stateBreakdown} />
                 </div>
             )}
+            {warningSummary && (
+                <div>
+                    <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">E · Warnings and watches</div>
+                    <TrendWarnings warningSummary={warningSummary} startYear={startYear} endYear={endYear} />
+                </div>
+            )}
         </section>
     );
 }
@@ -390,6 +575,7 @@ export function TornadoSummaryPanel({
     selectedTrack,
     notableEvents,
     annualSummary,
+    warningSummary,
     startYear,
     endYear,
     scaleFilter,
@@ -595,7 +781,7 @@ export function TornadoSummaryPanel({
                             )}
                         </section>
                     ) : mode === 'trends' ? (
-                        <TrendSnapshot annualSummary={annualSummary} startYear={startYear} endYear={endYear} stateBreakdown={stateBreakdown} />
+                        <TrendSnapshot annualSummary={annualSummary} warningSummary={warningSummary} startYear={startYear} endYear={endYear} stateBreakdown={stateBreakdown} />
                     ) : (
                         <section className="border-t border-zinc-800 pt-4">
                             <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">Notable</div>

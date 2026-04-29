@@ -7,6 +7,7 @@ import {
     MIN_DATA_YEAR,
     TORNADO_ANNUAL_SUMMARY_URL,
     TORNADO_NOTABLE_EVENTS_URL,
+    TORNADO_WARNING_SUMMARY_URL,
     tornadoPointsYearUrl,
     tornadoTracksYearUrl,
 } from '../constants';
@@ -15,6 +16,7 @@ import type {
     NotableTornadoEvent,
     TornadoPointCollection,
     TornadoTrackCollection,
+    WarningSummary,
 } from '../types';
 
 interface TornadoDataState {
@@ -22,6 +24,7 @@ interface TornadoDataState {
     points: TornadoPointCollection | null;
     annualSummary: AnnualTornadoSummary[];
     notableEvents: NotableTornadoEvent[];
+    warningSummary: WarningSummary | null;
     loading: boolean;
     /** Non-null when any fetch has failed. Metadata errors survive independent
      *  of track/point load outcomes; data errors clear on the next successful
@@ -30,6 +33,7 @@ interface TornadoDataState {
     minYear: number;
     maxYear: number;
 }
+
 
 function clampYear(value: number) {
     if (!Number.isFinite(value)) return DEFAULT_START_YEAR;
@@ -63,6 +67,7 @@ export function useTornadoData({ startYear = DEFAULT_START_YEAR, endYear = DEFAU
     const [points, setPoints] = useState<TornadoPointCollection | null>(null);
     const [annualSummary, setAnnualSummary] = useState<AnnualTornadoSummary[]>([]);
     const [notableEvents, setNotableEvents] = useState<NotableTornadoEvent[]>([]);
+    const [warningSummary, setWarningSummary] = useState<WarningSummary | null>(null);
     const [metadataLoading, setMetadataLoading] = useState(true);
     const [loadedTracksKey, setLoadedTracksKey] = useState('');
     const [loadedPointsKey, setLoadedPointsKey] = useState('');
@@ -79,14 +84,16 @@ export function useTornadoData({ startYear = DEFAULT_START_YEAR, endYear = DEFAU
 
         async function load() {
             try {
-                const [annualData, notableData] = await Promise.all([
+                const [annualData, notableData, warningData] = await Promise.all([
                     fetchWithCache<AnnualTornadoSummary[]>(TORNADO_ANNUAL_SUMMARY_URL, { ttl: 30 * 60 * 1000 }),
                     fetchWithCache<NotableTornadoEvent[]>(TORNADO_NOTABLE_EVENTS_URL, { ttl: 30 * 60 * 1000 }),
+                    fetchWithCache<WarningSummary>(TORNADO_WARNING_SUMMARY_URL, { ttl: 30 * 60 * 1000 }).catch(() => null),
                 ]);
 
                 if (cancelled) return;
                 setAnnualSummary(annualData);
                 setNotableEvents(notableData);
+                setWarningSummary(warningData);
             } catch (err) {
                 if (!cancelled) setMetadataError(err instanceof Error ? err.message : 'Failed to load tornado data');
             } finally {
@@ -159,5 +166,5 @@ export function useTornadoData({ startYear = DEFAULT_START_YEAR, endYear = DEFAU
 
     const loading = metadataLoading || loadedTracksKey !== selectedYearsKey || (loadPoints && loadedPointsKey !== selectedYearsKey);
 
-    return { tracks, points, annualSummary, notableEvents, loading, error: metadataError ?? dataError, minYear, maxYear };
+    return { tracks, points, annualSummary, notableEvents, warningSummary, loading, error: metadataError ?? dataError, minYear, maxYear };
 }
