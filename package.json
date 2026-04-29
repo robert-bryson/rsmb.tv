@@ -11,6 +11,7 @@
     "build-rss": "node scripts/generate-rss.js",
     "build-sitemap": "node scripts/generate-sitemap.js",
     "generate-mappings": "node projects/flights/scripts/generateNameMappings.js",
+    "backfill": "node scripts/backfill.js",
     "sync-flights": "node scripts/sync-flights.js",
     "sync-temperatures": "node scripts/sync-temperatures.js",
     "sync-tornadoes": "node projects/tornado-tracks/scripts/syncTornadoes.js",
