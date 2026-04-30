@@ -31,7 +31,7 @@ No open items.
 
 ### Status dashboard
 
-- [ ] Forecast cost estimate seems way off
+- [x] Forecast cost estimate seems way off
 
 ## Next steps
 
