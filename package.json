@@ -4,8 +4,11 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "npm run sync-blogs:dev && npm run build-flights && vite",
-    "build": "npm run build-flights && npm run build-og && npm run build-rss && npm run build-sitemap && tsc -b && vite build",
+    "dev": "npm run build-blog:dev && npm run build-flights && vite",
+    "build": "npm run build-flights && npm run build-blog && tsc -b && vite build",
+    "build-blog": "npm run sync-blogs && npm run build-blog-artifacts",
+    "build-blog:dev": "npm run sync-blogs:dev && npm run build-blog-artifacts",
+    "build-blog-artifacts": "npm run build-og && npm run build-rss && npm run build-sitemap",
     "build-flights": "node projects/flights/scripts/convertFlights.js && node projects/flights/scripts/generateAllAirports.js && node projects/flights/scripts/generateUSStates.js",
     "build-og": "node scripts/generate-og-images.js",
     "build-rss": "node scripts/generate-rss.js",

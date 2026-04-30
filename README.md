@@ -46,7 +46,8 @@ npm run dev
 | Command | Description |
 |---------|-------------|
 | `npm run dev` | Sync configured blog posts, build flight data, and start development server |
-| `npm run build` | Build for production |
+| `npm run build` | Sync blog posts, build generated data/artifacts, typecheck, and build for production |
+| `npm run build-blog` | Sync Google-authored posts and rebuild blog RSS/sitemap/OG artifacts |
 | `npm run build-rss` | Generate `public/rss.xml` from the blog registry |
 | `npm run build-sitemap` | Generate `public/sitemap.xml` from route and content metadata |
 | `npm run preview` | Preview production build locally |
@@ -94,13 +95,13 @@ Build status is source-aware: AWS Amplify deployments are shown separately from 
 
 ## Generated Metadata
 
-`public/rss.xml` and `public/sitemap.xml` are generated artifacts. Their timestamps are derived from git history when available, with filesystem metadata as a fallback, so repeat builds do not create timestamp-only diffs.
+`src/content/posts.json`, `src/content/blog/*.mdx`, `public/rss.xml`, `public/sitemap.xml`, and `public/og/blog/*` are generated artifacts. They are ignored by git and rebuilt from Google Sheets/Docs during local dev and production builds.
 
 ## Blog Publishing
 
-The blog runtime still reads local MDX files from `src/content/blog/` and metadata from `src/content/posts.json`. Google Docs/Sheets publishing is a sync layer that generates those same local files, so RSS, sitemap, OG image generation, and the Vite build continue to use the existing blog pipeline.
+Google Sheets/Docs is the source of truth for blog content. The build syncs published rows from the Sheet, exports the referenced Google Docs to MDX, then generates RSS, sitemap, and blog OG images before Vite bundles the app. Generated post files are build artifacts and should not be committed.
 
-Manual MDX authoring remains supported. To publish through Google, maintain a Google Sheet tab named `Blog Posts` by default, with one row per post:
+Maintain a Google Sheet tab named `Blog Posts` by default, with one row per post:
 
 | Column | Required | Notes |
 |--------|----------|-------|
@@ -112,41 +113,36 @@ Manual MDX authoring remains supported. To publish through Google, maintain a Go
 | `google_doc_id` | Yes | Raw Doc ID or a `docs.google.com/document/d/...` URL. |
 | `published` | Yes | Syncs only rows set to `true`, `yes`, `y`, `1`, or `published`. |
 
-The first implementation uses public Google export endpoints, matching the existing flight sync model. Share the Sheet and Docs as viewer-accessible to anyone with the link. Private Google Docs would require a separate service-account or OAuth implementation.
-
-Google Docs exports are normalized before writing MDX. The sync preserves headings, lists, links, images, fenced code blocks, simple inline emphasis/highlights, and tables. Active or embedded HTML such as scripts, forms, iframes, objects, SVG, audio, and video is stripped, and links/media are limited to safe URL protocols before the generated MDX is written.
-
-### Manual Blog Sync
+### Build-Time Blog Sync
 
 ```bash
-GOOGLE_BLOG_SHEET_ID=your-sheet-id npm run sync-blogs
+GOOGLE_BLOG_SHEET_ID=your-sheet-id npm run build-blog
 ```
 
 Optional environment variables:
 
 - `GOOGLE_BLOG_SHEET_NAME` - Sheet tab name, defaults to `Blog Posts`
-- `GOOGLE_BLOG_REPLACE_ALL` - When `true`, `posts.json` is generated only from the Sheet. By default, existing local posts are preserved and synced rows override matching slugs.
+- `GOOGLE_BLOG_REPLACE_ALL` - Defaults to `true`. Keep this enabled so the Sheet remains the only blog registry.
 - `GOOGLE_BLOG_SYNC_ON_DEV` - Set to `false` to skip the automatic blog sync before `npm run dev`.
 
-`npm run dev` runs the blog sync first when `GOOGLE_BLOG_SHEET_ID` is available in the shell or local env files. If the sheet is not configured, it skips the sync and starts Vite with the existing local MDX files.
+`npm run build` runs `npm run build-blog` before typecheck and `vite build`. Amplify Hosting must have `GOOGLE_BLOG_SHEET_ID` configured in its own environment variables; GitHub Actions variables are not visible to Amplify builds.
 
-After syncing locally, rebuild generated blog artifacts when needed:
+`npm run dev` runs the blog sync first when `GOOGLE_BLOG_SHEET_ID` is available in the shell or local env files. If the sheet is not configured, it skips the sync, rebuilds empty blog artifacts if needed, and starts Vite.
 
-```bash
-npm run build-og
-npm run build-rss
-npm run build-sitemap
-```
+The sync uses public Google export endpoints, matching the existing flight sync model. Share the Sheet and Docs as viewer-accessible to anyone with the link. Private Google Docs would require a separate service-account or OAuth implementation.
 
-### Automated Blog Sync
+Google Docs exports are normalized before writing MDX. The sync preserves headings, lists, links, images, fenced code blocks, simple inline emphasis/highlights, and tables. Active or embedded HTML such as scripts, forms, iframes, objects, SVG, audio, and video is stripped, and links/media are limited to safe URL protocols before generated MDX is written.
 
-The `Sync Blogs` GitHub Actions workflow can be triggered manually and also runs weekly. Scheduled runs skip cleanly until `GOOGLE_BLOG_SHEET_ID` is configured. Add these as repository variables or secrets before relying on automated publishing:
+### Amplify Content Publishing
 
-- `GOOGLE_BLOG_SHEET_ID` - Required Sheet ID
-- `GOOGLE_BLOG_SHEET_NAME` - Optional tab name
-- `GOOGLE_BLOG_REPLACE_ALL` - Optional source-of-truth mode
+Changing a Google Doc does not deploy the site by itself; it only changes the source that the next build will read. To publish without a code commit:
 
-When the sync changes content, the workflow rebuilds OG images, RSS, and sitemap files, then commits the generated outputs back to the repository.
+1. In AWS Amplify, open the app and go to **Hosting > Build settings**.
+2. Create an incoming webhook for the production branch.
+3. Store the webhook URL somewhere private; anyone with it can start a build.
+4. Trigger that webhook after publishing content in Google. Options include a small Google Apps Script button/menu in the Sheet, a scheduled Apps Script check, Zapier/Make, or a private admin shortcut.
+
+The webhook should only start an Amplify build. The build itself performs the sync using Amplify environment variables, so generated posts still never pass through Git.
 
 ## SEO and Structured Data
 

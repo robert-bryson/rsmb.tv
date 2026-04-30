@@ -1,13 +1,12 @@
 /**
  * Blog post metadata and registry.
  *
- * Post metadata lives in posts.json (the single source of truth shared by
- * build scripts like generate-rss.js and generate-sitemap.js).
- * This module adds the compiled MDX component for each post.
+ * Blog post metadata and MDX files are generated from Google Sheets/Docs before
+ * local dev and production builds. A fresh clone can still typecheck/test before
+ * generation because both registries are discovered dynamically.
  */
 
 import type { ComponentType } from 'react';
-import postsMeta from './posts.json';
 
 export interface BlogPostMeta {
     slug: string;
@@ -26,11 +25,16 @@ export interface BlogPost extends BlogPostMeta {
     Component: ComponentType<MdxComponentProps>;
 }
 
-// ── Post registry ──────────────────────────────────────────────────
-// To add a new post:
-//   1. Create src/content/blog/<slug>.mdx with YAML frontmatter
-//   2. Add an entry to posts.json with matching slug + metadata
-//   MDX components are auto-discovered via import.meta.glob
+// ── Generated post registry ─────────────────────────────────────────
+// `npm run build-blog` writes src/content/posts.json and src/content/blog/*.mdx
+// from Google Sheets/Docs before Vite resolves these globs.
+
+const postsMetaModules = import.meta.glob<BlogPostMeta[]>('./posts.json', {
+    eager: true,
+    import: 'default',
+});
+
+const postsMeta = postsMetaModules['./posts.json'] ?? [];
 
 // Auto-discover MDX files — no manual mapping needed.
 // Eager imports avoid the nested "Loading post..." state when a post route opens.

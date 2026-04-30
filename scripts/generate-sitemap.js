@@ -41,7 +41,7 @@ const STATIC_ROUTES = [
  * Load post metadata from the shared JSON registry.
  */
 export function loadPosts(postsPath = POSTS_PATH) {
-    return loadJsonFile(postsPath);
+    return loadJsonFile(postsPath, { defaultValue: [] });
 }
 
 export function resolveRouteLastModifiedDate(sources, {

@@ -13,8 +13,9 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = path.join(__dirname, '../public/og');
+const POSTS_PATH = path.join(__dirname, '../src/content/posts.json');
 
-const pages = [
+export const DEFAULT_PAGES = [
     { slug: 'home', title: 'rsmb', subtitle: 'Interactive data visualizations, geospatial projects, and web tools' },
     { slug: 'about', title: 'About', subtitle: 'Robby Bryson — software developer and geospatial engineer' },
     { slug: 'blog', title: 'Blog', subtitle: 'Thoughts on projects, engineering, and things I find interesting' },
@@ -29,7 +30,7 @@ const pages = [
     { slug: 'route2gpx', title: 'route2gpx', subtitle: 'Convert Google Routes into GPX files for GPS devices' },
 ];
 
-function escapeXml(str) {
+export function escapeXml(str) {
     return str
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
@@ -37,7 +38,7 @@ function escapeXml(str) {
         .replace(/"/g, '&quot;');
 }
 
-function generateSvg({ title, subtitle }) {
+export function generateSvg({ title, subtitle }) {
     return `<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
   <rect width="1200" height="630" fill="#0a0a0a"/>
   <rect x="0" y="0" width="1200" height="4" fill="#7c3aed"/>
@@ -47,22 +48,42 @@ function generateSvg({ title, subtitle }) {
 </svg>`;
 }
 
-fs.mkdirSync(OUT_DIR, { recursive: true });
-
-for (const page of pages) {
-    const svg = generateSvg(page);
-    const outPath = path.join(OUT_DIR, `${page.slug}.svg`);
-    fs.writeFileSync(outPath, svg, 'utf-8');
+export function loadBlogPosts(postsPath = POSTS_PATH, { fsImpl = fs } = {}) {
+    if (!fsImpl.existsSync(postsPath)) return [];
+    return JSON.parse(fsImpl.readFileSync(postsPath, 'utf-8'));
 }
 
-// Also generate OG images for blog posts from posts.json
-const BLOG_DIR = path.join(OUT_DIR, 'blog');
-fs.mkdirSync(BLOG_DIR, { recursive: true });
-const postsJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../src/content/posts.json'), 'utf-8'));
-for (const post of postsJson) {
-    const svg = generateSvg({ title: post.title, subtitle: post.description });
-    const outPath = path.join(BLOG_DIR, `${post.slug}.svg`);
-    fs.writeFileSync(outPath, svg, 'utf-8');
+export function generateOgImages({
+    outDir = OUT_DIR,
+    postsPath = POSTS_PATH,
+    pages = DEFAULT_PAGES,
+    fsImpl = fs,
+} = {}) {
+    fsImpl.mkdirSync(outDir, { recursive: true });
+
+    for (const page of pages) {
+        const svg = generateSvg(page);
+        const outPath = path.join(outDir, `${page.slug}.svg`);
+        fsImpl.writeFileSync(outPath, svg, 'utf-8');
+    }
+
+    const blogDir = path.join(outDir, 'blog');
+    fsImpl.rmSync(blogDir, { recursive: true, force: true });
+    fsImpl.mkdirSync(blogDir, { recursive: true });
+
+    const posts = loadBlogPosts(postsPath, { fsImpl });
+    for (const post of posts) {
+        const svg = generateSvg({ title: post.title, subtitle: post.description });
+        const outPath = path.join(blogDir, `${post.slug}.svg`);
+        fsImpl.writeFileSync(outPath, svg, 'utf-8');
+    }
+
+    return { outDir, pageCount: pages.length, blogPostCount: posts.length };
 }
 
-console.log(`OG images generated → ${OUT_DIR} (${pages.length} pages + ${postsJson.length} blog posts)`);
+const isDirectRun = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+
+if (isDirectRun) {
+    const { outDir, pageCount, blogPostCount } = generateOgImages();
+    console.log(`OG images generated → ${outDir} (${pageCount} pages + ${blogPostCount} blog posts)`);
+}

@@ -24,8 +24,15 @@ function collectFiles(entryPath, fsImpl, pathImpl) {
         .flatMap((entry) => collectFiles(pathImpl.join(entryPath, entry.name), fsImpl, pathImpl));
 }
 
-export function loadJsonFile(filePath, { fsImpl = fs } = {}) {
-    return JSON.parse(fsImpl.readFileSync(filePath, 'utf-8'));
+export function loadJsonFile(filePath, { fsImpl = fs, defaultValue } = {}) {
+    try {
+        return JSON.parse(fsImpl.readFileSync(filePath, 'utf-8'));
+    } catch (error) {
+        if (error?.code === 'ENOENT' && defaultValue !== undefined) {
+            return defaultValue;
+        }
+        throw error;
+    }
 }
 
 export function sortByDateDescending(items) {

@@ -15,9 +15,9 @@
  * ---------------------
  *   GOOGLE_BLOG_SHEET_ID       Required Google Sheet ID.
  *   GOOGLE_BLOG_SHEET_NAME     Optional tab name, defaults to "Blog Posts".
- *   GOOGLE_BLOG_REPLACE_ALL    Optional. When true, posts.json is generated
- *                              only from the Sheet. By default, existing local
- *                              posts are preserved and Sheet rows override by slug.
+ *   GOOGLE_BLOG_REPLACE_ALL    Optional. Defaults to true so Google Sheets is
+ *                              the blog source of truth. Set false only if
+ *                              intentionally mixing generated and local posts.
  *
  * EXPECTED SHEET COLUMNS
  * ----------------------
@@ -952,8 +952,36 @@ export function writeIfChanged(filePath, content, { fsImpl = fs } = {}) {
     return true;
 }
 
-export function envFlag(value) {
-    return TRUE_VALUES.has(String(value ?? '').trim().toLowerCase());
+export function envFlag(value, defaultValue = false) {
+    const normalized = String(value ?? '').trim().toLowerCase();
+    if (!normalized) return defaultValue;
+    if (/^(0|false|no|off)$/i.test(normalized)) return false;
+    return TRUE_VALUES.has(normalized);
+}
+
+function removeStaleGeneratedBlogFiles(blogDir, syncedSlugs, { fsImpl = fs } = {}) {
+    let entries = [];
+    try {
+        entries = fsImpl.readdirSync(blogDir, { withFileTypes: true });
+    } catch (error) {
+        if (error?.code === 'ENOENT') return [];
+        throw error;
+    }
+
+    const expectedFiles = new Set([...syncedSlugs].map((slug) => `${slug}.mdx`));
+    const removedFiles = [];
+
+    for (const entry of entries) {
+        if (!entry.isFile() || !entry.name.endsWith('.mdx') || expectedFiles.has(entry.name)) {
+            continue;
+        }
+
+        const filePath = path.join(blogDir, entry.name);
+        fsImpl.rmSync(filePath);
+        removedFiles.push(filePath);
+    }
+
+    return removedFiles;
 }
 
 export function writeGithubOutput(outputPath, changed, { fsImpl = fs } = {}) {
@@ -967,7 +995,7 @@ export async function syncBlogPosts({
     repoRoot = REPO_ROOT,
     postsPath = path.join(repoRoot, 'src/content/posts.json'),
     blogDir = path.join(repoRoot, 'src/content/blog'),
-    replaceAll = envFlag(process.env.GOOGLE_BLOG_REPLACE_ALL),
+    replaceAll = envFlag(process.env.GOOGLE_BLOG_REPLACE_ALL, true),
     today = new Date(),
     fetchImpl = fetch,
     fsImpl = fs,
@@ -993,6 +1021,14 @@ export async function syncBlogPosts({
     const posts = mergePostMetadata(existingPosts, entries.map((entry) => entry.post), { replaceAll });
     const postsJson = `${JSON.stringify(posts, null, 4)}\n`;
     const changedFiles = [];
+
+    if (replaceAll) {
+        changedFiles.push(...removeStaleGeneratedBlogFiles(
+            blogDir,
+            entries.map((entry) => entry.post.slug),
+            { fsImpl }
+        ));
+    }
 
     if (writeIfChanged(postsPath, postsJson, { fsImpl })) changedFiles.push(postsPath);
     for (const mdxFile of mdxFiles) {

@@ -76,7 +76,7 @@
  *   blogs         Syncs Google-authored blog posts (requires GOOGLE_BLOG_SHEET_ID),
  *                 then rebuilds generated OG images, RSS, and sitemap files.
  *                 If GOOGLE_BLOG_SHEET_ID is not set the sync step is skipped and
- *                 generated metadata is rebuilt from the existing local posts.
+ *                 generated metadata is rebuilt from any existing local generated posts.
  */
 
 import { spawnSync } from 'child_process';
@@ -397,8 +397,7 @@ export function backfillBlogs() {
 
     if (!sheetId) {
         console.warn('\nGOOGLE_BLOG_SHEET_ID is not set - skipping Google blog sync.');
-        console.log('   Set GOOGLE_BLOG_SHEET_ID to pull Google-authored posts, or');
-        console.log('   proceed with the existing src/content/posts.json and MDX files.');
+        console.log('   Set GOOGLE_BLOG_SHEET_ID to pull Google-authored posts.');
     } else {
         console.log('\nSyncing blog posts from Google Docs/Sheets...');
         run('node', ['scripts/sync-blogs.js']);
@@ -409,7 +408,7 @@ export function backfillBlogs() {
     run('node', ['scripts/generate-rss.js']);
     run('node', ['scripts/generate-sitemap.js']);
 
-    console.log('\n   Blog content does not use S3 - files written to src/content/ and public/.');
+    console.log('\n   Blog content does not use S3 - generated files are written locally and ignored by git.');
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────

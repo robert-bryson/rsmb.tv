@@ -5,11 +5,13 @@ import { describe, expect, it, vi } from 'vitest';
 import {
     buildRssXml,
     generateRss,
+    loadPosts as loadRssPosts,
     resolveFeedBuildDate,
 } from '../generate-rss.js';
 import {
     buildSitemapXml,
     generateSitemap,
+    loadPosts as loadSitemapPosts,
     resolveRouteLastModifiedDate,
 } from '../generate-sitemap.js';
 
@@ -49,6 +51,10 @@ describe('resolveFeedBuildDate', () => {
 });
 
 describe('buildRssXml', () => {
+    it('treats a missing generated posts registry as empty', () => {
+        expect(loadRssPosts(path.join(createTempDir(), 'missing-posts.json'))).toEqual([]);
+    });
+
     it('escapes xml-sensitive characters and embeds the supplied build date', () => {
         const xml = buildRssXml(
             [
@@ -116,6 +122,10 @@ describe('resolveRouteLastModifiedDate', () => {
 });
 
 describe('buildSitemapXml', () => {
+    it('treats a missing generated posts registry as empty', () => {
+        expect(loadSitemapPosts(path.join(createTempDir(), 'missing-posts.json'))).toEqual([]);
+    });
+
     it('renders static routes and blog posts with caller-provided dates', () => {
         const xml = buildSitemapXml(
             [{ slug: 'building-through-routes', date: '2026-04-08' }],

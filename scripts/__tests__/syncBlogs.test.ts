@@ -8,6 +8,7 @@ import {
     buildMdx,
     buildSheetCsvUrl,
     convertHtmlToMarkdown,
+    envFlag,
     loadLocalEnvFiles,
     mergePostMetadata,
     parseBlogSheet,
@@ -420,8 +421,18 @@ describe('mergePostMetadata', () => {
     });
 });
 
+describe('envFlag', () => {
+    it('supports explicit false values and caller-provided defaults', () => {
+        expect(envFlag(undefined, true)).toBe(true);
+        expect(envFlag('', true)).toBe(true);
+        expect(envFlag('false', true)).toBe(false);
+        expect(envFlag('off', true)).toBe(false);
+        expect(envFlag('yes', false)).toBe(true);
+    });
+});
+
 describe('syncBlogPosts', () => {
-    it('writes posts.json and MDX files from published Google rows', async () => {
+    it('defaults to Sheet-authoritative posts.json and MDX generation', async () => {
         const repoRoot = createTempDir();
         const postsPath = path.join(repoRoot, 'src/content/posts.json');
         fs.mkdirSync(path.dirname(postsPath), { recursive: true });
@@ -471,7 +482,7 @@ describe('syncBlogPosts', () => {
             'src/content/blog/synced-post.mdx',
         ]);
         const posts = JSON.parse(fs.readFileSync(postsPath, 'utf-8'));
-        expect(posts.map((post: { slug: string }) => post.slug)).toEqual(['synced-post', 'manual']);
+        expect(posts.map((post: { slug: string }) => post.slug)).toEqual(['synced-post']);
         expect(fs.readFileSync(path.join(repoRoot, 'src/content/blog/synced-post.mdx'), 'utf-8'))
             .toContain('Published body.');
 
@@ -484,7 +495,7 @@ describe('syncBlogPosts', () => {
         expect(secondRun.changed).toBe(false);
     });
 
-    it('supports a Sheet-authoritative replace-all mode', async () => {
+    it('can preserve local metadata when replaceAll is disabled', async () => {
         const repoRoot = createTempDir();
         const postsPath = path.join(repoRoot, 'src/content/posts.json');
         fs.mkdirSync(path.dirname(postsPath), { recursive: true });
@@ -500,10 +511,31 @@ describe('syncBlogPosts', () => {
             doc_123: '<html><body><p>Published body.</p></body></html>',
         });
 
-        await syncBlogPosts({ sheetId: 'sheet_123', repoRoot, today, fetchImpl, replaceAll: true });
+        await syncBlogPosts({ sheetId: 'sheet_123', repoRoot, today, fetchImpl, replaceAll: false });
 
         const posts = JSON.parse(fs.readFileSync(postsPath, 'utf-8'));
-        expect(posts.map((post: { slug: string }) => post.slug)).toEqual(['synced-post']);
+        expect(posts.map((post: { slug: string }) => post.slug)).toEqual(['synced-post', 'manual']);
+    });
+
+    it('removes stale generated MDX files in Sheet-authoritative mode', async () => {
+        const repoRoot = createTempDir();
+        const blogDir = path.join(repoRoot, 'src/content/blog');
+        fs.mkdirSync(blogDir, { recursive: true });
+        fs.writeFileSync(path.join(blogDir, 'old-post.mdx'), '# Old post');
+
+        const csv = [
+            'slug,title,date,description,tags,google_doc_id,published',
+            'synced-post,Synced Post,2026-04-30,Synced summary,google,doc_123,true',
+        ].join('\n');
+        const fetchImpl = createFetch(csv, {
+            doc_123: '<html><body><p>Published body.</p></body></html>',
+        });
+
+        const result = await syncBlogPosts({ sheetId: 'sheet_123', repoRoot, today, fetchImpl });
+
+        expect(fs.existsSync(path.join(blogDir, 'old-post.mdx'))).toBe(false);
+        expect(fs.existsSync(path.join(blogDir, 'synced-post.mdx'))).toBe(true);
+        expect(result.changedFileLabels).toContain('src/content/blog/old-post.mdx');
     });
 });
 

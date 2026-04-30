@@ -18,13 +18,12 @@ More content. You can use standard Markdown — links, code blocks, images, etc.
 const x = 42;
 ```
 
-When ready to publish:
-1. Rename this file to <slug>.mdx
-2. Add a matching entry to src/content/posts.json
-3. Run: node scripts/generate-rss.js && node scripts/generate-sitemap.js
+This file is only a reference for supported MDX syntax. Published posts are
+generated from Google Docs/Sheets at build time and are ignored by git.
 
-Google Docs/Sheets publishing can generate these files instead:
-1. Add a row to the blog Google Sheet
-2. Put the Google Doc ID or URL in google_doc_id
-3. Set published to true
-4. Run: GOOGLE_BLOG_SHEET_ID=<sheet-id> npm run sync-blogs
+When ready to publish:
+1. Write the post in Google Docs
+2. Add a row to the blog Google Sheet
+3. Put the Google Doc ID or URL in google_doc_id
+4. Set published to true
+5. Run: GOOGLE_BLOG_SHEET_ID=<sheet-id> npm run build-blog

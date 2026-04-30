@@ -196,5 +196,12 @@ public/data/tornadoes/*.json
 public/data/tornadoes/tracks/*.geojson
 public/data/tornadoes/track-points/*.geojson
 
+# === Blog content generated from Google Sheets/Docs at build time ===
+/src/content/posts.json
+/src/content/blog/*.mdx
+/public/rss.xml
+/public/sitemap.xml
+/public/og/blog/
+
 ## Issue screenshots in TODO.md
 Screenshot*.png

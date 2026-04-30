@@ -28,7 +28,7 @@ const SITE_DESCRIPTION = 'Personal site and blog by Robert Bryson — projects, 
  * Load post metadata from the shared JSON registry.
  */
 export function loadPosts(postsPath = POSTS_PATH) {
-    return sortByDateDescending(loadJsonFile(postsPath));
+    return sortByDateDescending(loadJsonFile(postsPath, { defaultValue: [] }));
 }
 
 function escapeXml(str) {
