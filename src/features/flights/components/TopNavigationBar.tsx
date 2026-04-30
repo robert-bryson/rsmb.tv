@@ -7,6 +7,8 @@ interface TopNavigationBarProps {
     selectedYear: number | null;
     onYearChange: (year: number | null) => void;
     flightCount: number;
+    filterOpen?: boolean;
+    onFilterOpenChange?: (isOpen: boolean) => void;
     airports: GlobePoint[];
     onAirportSelect: (code: string) => void;
 }
@@ -19,6 +21,8 @@ export function TopNavigationBar({
     selectedYear,
     onYearChange,
     flightCount,
+    filterOpen,
+    onFilterOpenChange,
     airports,
     onAirportSelect,
 }: TopNavigationBarProps) {
@@ -45,6 +49,8 @@ export function TopNavigationBar({
                     selectedYear={selectedYear}
                     onYearChange={onYearChange}
                     flightCount={flightCount}
+                    isOpen={filterOpen}
+                    onOpenChange={onFilterOpenChange}
                     airports={airports}
                     onAirportSelect={onAirportSelect}
                 />

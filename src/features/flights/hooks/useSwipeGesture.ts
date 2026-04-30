@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useMemo } from 'react';
 
 interface SwipeHandlers {
     onSwipeLeft?: () => void;
@@ -97,7 +97,7 @@ export function useYearSwipeNavigation(
     selectedYear: number | null,
     onYearChange: (year: number | null) => void
 ) {
-    const sortedYears = [...years].sort((a, b) => a - b);
+    const sortedYears = useMemo(() => [...years].sort((a, b) => a - b), [years]);
 
     const handleSwipeLeft = useCallback(() => {
         // Swipe left = go to next year (or first year if none selected)
@@ -126,8 +126,10 @@ export function useYearSwipeNavigation(
         }
     }, [selectedYear, sortedYears, onYearChange]);
 
-    return useSwipeGesture<HTMLDivElement>({
+    const handlers = useMemo(() => ({
         onSwipeLeft: handleSwipeLeft,
         onSwipeRight: handleSwipeRight,
-    });
+    }), [handleSwipeLeft, handleSwipeRight]);
+
+    return useSwipeGesture<HTMLDivElement>(handlers);
 }

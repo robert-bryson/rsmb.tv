@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { FlightStats, SelectedRouteInfo, SelectedCountryInfo, SelectedRegionInfo } from '../types';
+import { EARTH_CIRCUMFERENCE_KM } from '../constants';
 import { StatItem, CollapsibleSection, ClickableAirport, ClickableRoute, ClickableCountry, ClickableRegion, FlightCount } from './shared';
 import { AirlinesSection } from './AirlinesSection';
 import { CountriesSection } from './CountriesSection';
@@ -47,8 +48,7 @@ export function StatsPanel({
   selectedRegionInfo,
   onClearRegion,
 }: StatsPanelProps) {
-  const earthCircumference = 40075;
-  const timesAroundEarth = (stats.totalDistance / earthCircumference).toFixed(1);
+  const timesAroundEarth = (stats.totalDistance / EARTH_CIRCUMFERENCE_KM).toFixed(1);
   const domesticFlights = stats.totalFlights - stats.internationalFlights;
   const airportInfo = stats.selectedAirportInfo;
 

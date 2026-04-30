@@ -35,11 +35,11 @@ export function KeyboardHelp({ isOpen, onClose }: KeyboardHelpProps) {
         <div className="px-6 py-4 space-y-3">
           <ShortcutRow keys={['H']} description="Show/hide this help" />
           <ShortcutRow keys={['S']} description="Toggle stats panel" />
-          <ShortcutRow keys={['F']} description="Open filter panel" />
+          <ShortcutRow keys={['F']} description="Toggle filter panel" />
           <ShortcutRow keys={['R']} description="Reset view to default" />
           <ShortcutRow keys={['Shift', 'A']} description="Toggle all airports layer" />
           <ShortcutRow keys={['Shift', 'U']} description="Toggle US states layer" />
-          <ShortcutRow keys={['Esc']} description="Clear selection / close panels" />
+          <ShortcutRow keys={['Esc']} description="Clear airport/route selection and close panels" />
           <ShortcutRow keys={['1-4']} description="Switch color modes" />
           <div className="pt-3 border-t border-gray-700">
             <div className="text-gray-500 text-xs uppercase tracking-wide mb-2">Mouse/Touch</div>

@@ -131,26 +131,15 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
       .map(([airline, count]) => ({ airline, count }))
       .sort((a, b) => b.count - a.count);
 
-    // Filter flights by selected year first
-    let filteredFlights = selectedYear === null
-      ? flights.features
-      : flights.features.filter(f => parseYear(f.properties.date) === selectedYear);
-
-    // Further filter by selected airport if one is selected
-    const airportFilteredFlights = selectedAirport
-      ? filteredFlights.filter(f =>
-        f.properties.origin_code === selectedAirport ||
-        f.properties.destination_code === selectedAirport
-      )
-      : filteredFlights;
-
-    // Further filter by selected airline if one is selected
-    const airlineFilteredFlights = selectedAirline
-      ? airportFilteredFlights.filter(f => f.properties.airline === selectedAirline)
-      : airportFilteredFlights;
-
-    // Use fully-filtered flights for stats
-    filteredFlights = airlineFilteredFlights;
+    // Filter flights by year, airport, and airline in a single pass
+    const filteredFlights = flights.features.filter(f => {
+      if (selectedYear !== null && parseYear(f.properties.date) !== selectedYear) return false;
+      if (selectedAirport &&
+        f.properties.origin_code !== selectedAirport &&
+        f.properties.destination_code !== selectedAirport) return false;
+      if (selectedAirline && f.properties.airline !== selectedAirline) return false;
+      return true;
+    });
 
     const years = new Set<number>();
     const countries = new Set<string>();

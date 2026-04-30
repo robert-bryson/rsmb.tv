@@ -16,9 +16,6 @@ import {
 import { parseDateString } from '../utils';
 import { useGeoJsonData } from './useGeoJsonData';
 
-/**
- * Hook to fetch US states GeoJSON data.
- */
 export function useUSStates() {
     return useGeoJsonData<USStatesCollection>('usStates.geojson');
 }
@@ -27,9 +24,6 @@ interface USStatesLayerOptions {
     visible: boolean;
     symbolMode: StateSymbolMode;
 }
-
-// Re-use the shared date parser from utils
-const parseDate = parseDateString;
 
 /**
  * Compute statistics for each US state based on airport and flight data.
@@ -80,7 +74,7 @@ export function useUSStateStats(
 
             flightsData.features.forEach((flight) => {
                 const props = flight.properties;
-                const flightDate = parseDate(props.date);
+                const flightDate = parseDateString(props.date);
 
                 // Process origin
                 const originState = props.origin_region; // e.g., "US-CA"

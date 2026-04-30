@@ -40,6 +40,10 @@ describe('getFrequencyColor', () => {
     it('returns occasional color for low ratio', () => {
         expect(getFrequencyColor(5, 100)).toBe('#a855f7');
     });
+
+    it('returns occasional color when maxCount is 0 (no division by zero)', () => {
+        expect(getFrequencyColor(0, 0)).toBe('#a855f7');
+    });
 });
 
 describe('getElevationColor', () => {

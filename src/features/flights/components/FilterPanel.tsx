@@ -7,6 +7,8 @@ interface FilterPanelProps {
   selectedYear: number | null;
   onYearChange: (year: number | null) => void;
   flightCount: number;
+  isOpen?: boolean;
+  onOpenChange?: (isOpen: boolean) => void;
   // Airport search
   airports: GlobePoint[];
   onAirportSelect: (code: string) => void;
@@ -17,15 +19,25 @@ export function FilterPanel({
   selectedYear,
   onYearChange,
   flightCount,
+  isOpen: controlledIsOpen,
+  onOpenChange,
   airports,
   onAirportSelect,
 }: FilterPanelProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({ year: true });
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const isOpen = controlledIsOpen ?? internalIsOpen;
   const panelRef = useFocusTrap<HTMLDivElement>(isOpen);
+
+  const setIsOpen = (nextIsOpen: boolean) => {
+    onOpenChange?.(nextIsOpen);
+    if (controlledIsOpen === undefined) {
+      setInternalIsOpen(nextIsOpen);
+    }
+  };
 
   const toggleSection = (section: string) => {
     setExpandedSections((prev) => ({ ...prev, [section]: !prev[section] }));
@@ -77,6 +89,9 @@ export function FilterPanel({
       {/* Filter Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle filters"
+        aria-haspopup="dialog"
+        aria-expanded={isOpen}
         className={`bg-gray-900/90 backdrop-blur px-3 py-2 rounded-lg border text-sm transition-all flex items-center gap-2 ${hasActiveFilters
             ? 'border-purple-500 text-purple-300'
             : 'border-gray-700 text-gray-300 hover:bg-gray-800/90'

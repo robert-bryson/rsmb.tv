@@ -175,6 +175,7 @@ export const FREQUENCY_COLORS = {
 
 // Get color based on frequency ratio
 export function getFrequencyColor(count: number, maxCount: number): string {
+    if (maxCount === 0) return FREQUENCY_COLORS.OCCASIONAL;
     const ratio = count / maxCount;
     if (ratio > FREQUENCY_THRESHOLDS.VERY_FREQUENT) return FREQUENCY_COLORS.VERY_FREQUENT;
     if (ratio > FREQUENCY_THRESHOLDS.FREQUENT) return FREQUENCY_COLORS.FREQUENT;
