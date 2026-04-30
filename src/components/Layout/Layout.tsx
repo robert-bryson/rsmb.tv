@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { projects } from '../../content/projects';
 
 interface LayoutProps {
   children: ReactNode;
@@ -11,6 +12,22 @@ const navLinks = [
   { to: '/projects', label: 'Projects' },
   { to: '/about', label: 'About' },
 ];
+
+function isNavLinkActive(pathname: string, to: string) {
+  return to === '/' ? pathname === '/' : pathname === to || pathname.startsWith(`${to}/`);
+}
+
+function getNavLinkClassName(isActive: boolean) {
+  return `hover:text-violet-400 ${isActive ? 'text-violet-400' : 'text-zinc-400'}`;
+}
+
+function getProjectLinkClassName(isActive: boolean) {
+  const activeClassName = isActive
+    ? 'bg-zinc-800/70 text-violet-300'
+    : 'text-zinc-400';
+
+  return `block truncate px-4 py-1.5 hover:bg-zinc-800/60 hover:text-violet-400 ${activeClassName}`;
+}
 
 export function Layout({ children }: LayoutProps) {
   const location = useLocation();
@@ -45,19 +62,52 @@ export function Layout({ children }: LayoutProps) {
             rsmb
           </Link>
           <ul className="flex gap-6 text-sm">
-            {navLinks.map(({ to, label }) => (
-              <li key={to}>
-                <Link
-                  to={to}
-                  className={`hover:text-violet-400 ${(to === '/' ? location.pathname === '/' : location.pathname.startsWith(to))
-                    ? 'text-violet-400'
-                    : 'text-zinc-400'
-                    }`}
-                >
-                  {label}
-                </Link>
-              </li>
-            ))}
+            {navLinks.map(({ to, label }) => {
+              if (to === '/projects') {
+                const isActive = isNavLinkActive(location.pathname, to);
+                return (
+                  <li
+                    key={to}
+                    className="group relative"
+                  >
+                    <Link
+                      to={to}
+                      aria-haspopup="true"
+                      className={getNavLinkClassName(isActive)}
+                    >
+                      {label}
+                    </Link>
+                    <div className="invisible absolute right-0 top-full z-50 min-w-52 pt-2 opacity-0 transition-opacity group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                      <ul
+                        aria-label="Project pages"
+                        className="rounded-lg border border-zinc-800 bg-zinc-900 py-1 shadow-lg"
+                      >
+                        {projects.map((project) => (
+                          <li key={project.slug}>
+                            <Link
+                              to={`/projects/${project.slug}`}
+                              className={getProjectLinkClassName(isNavLinkActive(location.pathname, `/projects/${project.slug}`))}
+                            >
+                              {project.title}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </li>
+                );
+              }
+              return (
+                <li key={to}>
+                  <Link
+                    to={to}
+                    className={getNavLinkClassName(isNavLinkActive(location.pathname, to))}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </nav>
       </header>

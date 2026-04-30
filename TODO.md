@@ -19,9 +19,7 @@
 
 ### rsmb.tv
 
-- [ ] Hovering over projects link on header should allow either:
-  - clicking and going to /projects
-  - hovering and having a list of direct links to projects pop down
+No open items.
 
 ### Status dashboard
 
@@ -51,7 +49,6 @@ No open items.
 
 ### Testing
 
-- [ ] Add test coverage for Layout component
 - [ ] Add test coverage for ScrollToTop component
 
 ---
@@ -73,6 +70,12 @@ No open items.
 #### Content
 
 - [x] Write project page for aborg
+
+#### rsmb.tv
+
+- [x] Hovering over projects link on header should allow either:
+  - clicking and going to /projects
+  - hovering and having a list of direct links to projects pop down
 
 #### Temperature records
 
@@ -128,3 +131,4 @@ No open items.
 - [x] Add test coverage for useAwsPoll recovery/error event behavior
 - [x] Add test coverage for tornado scale filter bounds (scaleFilterBounds)
 - [x] Add test coverage for useTornadoFilters (URL params, setters, selectedTrackId)
+- [x] Add test coverage for Layout component
