@@ -58,6 +58,7 @@ export interface BrokenRecord {
 
 export interface RecentRecords {
     asOf: string;
+    dates?: string[];
     yesterday: BrokenRecord[];
     last7Days: BrokenRecord[];
 }

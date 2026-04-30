@@ -19,10 +19,23 @@
  *
  * OUTPUTS
  * -------
- *   public/data/temperatures/stateRecords.json
- *   public/data/temperatures/countyRecords.json
- *   public/data/temperatures/recentRecords.json
- *   public/data/temperatures/summary.json
+ *   public/data/temperatures/stateRecords.json   — all-time state records (GeoJSON)
+ *   public/data/temperatures/countyRecords.json  — all-time county records (GeoJSON)
+ *   public/data/temperatures/recentRecords.json  — broken records for the last N days
+ *     Shape: { asOf, dates: string[], yesterday: BrokenRecord[], last7Days: BrokenRecord[] }
+ *     `dates` lists every date in the requested window so zero-record days are
+ *     distinguishable from days that were never fetched (used by --recent-only cache logic).
+ *   public/data/temperatures/climateTrends.json  — derived decade/year/rolling-ratio data
+ *   public/data/temperatures/summary.json        — metadata: counts, last-updated
+ *
+ *   $TEMP_DATA_DIR/daily/YYYY/MM/YYYY-MM-DD.json — per-day observation archive
+ *     Shape: { date, count, observations: ObsEntry[] }
+ *     ObsEntry compact fields written alongside maxt/mint:
+ *       rh / rl   — previous calendar-date record high / low (°F)
+ *       rhd / rld — date of that previous record (YYYY-MM-DD, empty on very old stations)
+ *       nh / nl   — 1950-baseline climatological normal high / low (°F)
+ *       mh / ml   — all-time monthly high / low (°F)
+ *   $TEMP_DATA_DIR/stations.json — cumulative station metadata index
  *
  * USAGE
  * -----
@@ -209,13 +222,44 @@ export function filterBrokenRecordsForDates(recentRecords, dates) {
 }
 
 /**
- * Load broken records for specific dates from the canonical S3/CDN summary.
- * Falls back to a local snapshot only when the remote data store is unavailable.
+ * Returns the set of requested dates that are already accounted for in a
+ * previously-generated recentRecords summary.
+ *
+ * A date is considered covered when:
+ *   - It appears in `recentRecords.dates` (explicit coverage list written by this
+ *     script starting with the fix for the 2026-04 timeout), OR
+ *   - At least one broken-record row exists for that date in `last7Days` (legacy
+ *     summaries generated before the `dates` field was added).
+ *
+ * Zero-record days (no station broke a record that day) are only detectable via
+ * `recentRecords.dates`; legacy summaries will silently treat them as uncovered
+ * and trigger an archive-rebuild attempt.
+ *
+ * @param {object|null} recentRecords  Previously-fetched recentRecords.json content.
+ * @param {string[]} dates             YYYY-MM-DD dates to check (most recent first).
+ * @returns {Set<string>} Dates that are provably covered.
  */
-async function loadPreviousBrokenRecords(dates) {
+export function coveredRecentRecordDates(recentRecords, dates) {
+    if (!recentRecords || typeof recentRecords !== 'object') return new Set();
+    const dateSet = new Set(dates);
+    const coveredDates = new Set();
+
+    if (Array.isArray(recentRecords.dates)) {
+        for (const date of recentRecords.dates) {
+            if (dateSet.has(date)) coveredDates.add(date);
+        }
+    }
+
+    for (const record of filterBrokenRecordsForDates(recentRecords, dates)) {
+        coveredDates.add(record.date);
+    }
+
+    return coveredDates;
+}
+
+async function loadPreviousRecentRecords() {
     const recentPath = resolve(OUTPUT_DIR, 'recentRecords.json');
-    const previous = await loadJsonFromDataStore('recentRecords.json', recentPath, 'previous recentRecords.json');
-    return filterBrokenRecordsForDates(previous, dates);
+    return loadJsonFromDataStore('recentRecords.json', recentPath, 'previous recentRecords.json');
 }
 
 async function loadPreviousStationIndex() {
@@ -227,6 +271,18 @@ async function loadPreviousStationIndex() {
         .filter(station => station && typeof station === 'object' && Number.isFinite(Number(station.uid)))
         .map(station => [Number(station.uid), { ...station, uid: Number(station.uid) }]);
     return new Map(stations);
+}
+
+async function loadDailyObservationArchive(dateStr) {
+    const archivePath = dailySubpath(dateStr);
+    const archive = await loadJsonFromDataStore(
+        `daily/${archivePath}`,
+        resolve(DAILY_DIR, archivePath),
+        `daily archive for ${dateStr}`
+    );
+
+    if (!archive || archive.date !== dateStr || !Array.isArray(archive.observations)) return null;
+    return archive;
 }
 
 async function fetchJson(url, options = {}) {
@@ -672,6 +728,7 @@ async function fetchStateForDate(abbr, dateStr, mmdd, year) {
 
             const [maxtStr, mintStr] = row;
             const rec = histMap[uid];
+            const monthlyExtremes = monthlyMap[uid];
 
             // Collect station metadata for index
             if (!stations.has(uid) && meta.ll) {
@@ -692,9 +749,15 @@ async function fetchStateForDate(abbr, dateStr, mmdd, year) {
                 const obsEntry = { uid, maxt, mint };
                 if (rec) {
                     if (rec.recordHigh != null) obsEntry.rh = rec.recordHigh;
+                    if (rec.recordHighDate) obsEntry.rhd = rec.recordHighDate;
                     if (rec.recordLow != null) obsEntry.rl = rec.recordLow;
+                    if (rec.recordLowDate) obsEntry.rld = rec.recordLowDate;
                     if (rec.normalHigh != null) obsEntry.nh = rec.normalHigh;
                     if (rec.normalLow != null) obsEntry.nl = rec.normalLow;
+                }
+                if (monthlyExtremes) {
+                    if (monthlyExtremes.monthlyHigh != null) obsEntry.mh = monthlyExtremes.monthlyHigh;
+                    if (monthlyExtremes.monthlyLow != null) obsEntry.ml = monthlyExtremes.monthlyLow;
                 }
                 observations.push(obsEntry);
             }
@@ -705,8 +768,7 @@ async function fetchStateForDate(abbr, dateStr, mmdd, year) {
             if (maxt != null && rec.recordHigh != null) {
                 if (!isNaN(maxt) && maxt > rec.recordHigh) {
                     // Classify scope: daily → monthly → (county/state determined client-side)
-                    const mo = monthlyMap[uid];
-                    const monthlyBeat = mo?.monthlyHigh != null && maxt > mo.monthlyHigh;
+                    const monthlyBeat = monthlyExtremes?.monthlyHigh != null && maxt > monthlyExtremes.monthlyHigh;
                     broken.push({
                         stationName: meta.name || 'Unknown',
                         uid,
@@ -729,8 +791,7 @@ async function fetchStateForDate(abbr, dateStr, mmdd, year) {
 
             if (mintStr !== 'M' && mintStr !== 'T' && rec.recordLow != null) {
                 if (mint != null && mint < rec.recordLow) {
-                    const mo = monthlyMap[uid];
-                    const monthlyBeat = mo?.monthlyLow != null && mint < mo.monthlyLow;
+                    const monthlyBeat = monthlyExtremes?.monthlyLow != null && mint < monthlyExtremes.monthlyLow;
                     broken.push({
                         stationName: meta.name || 'Unknown',
                         uid,
@@ -758,6 +819,111 @@ async function fetchStateForDate(abbr, dateStr, mmdd, year) {
     return { broken, observations, stations };
 }
 
+function numberOrNull(value) {
+    if (value == null || value === '' || value === 'M' || value === 'T') return null;
+    const numericValue = Number(value);
+    return Number.isFinite(numericValue) ? numericValue : null;
+}
+
+function previousRecordDate(obs, type) {
+    const compactKey = type === 'high' ? 'rhd' : 'rld';
+    const verboseKey = type === 'high' ? 'recordHighDate' : 'recordLowDate';
+    if (typeof obs[compactKey] === 'string') return obs[compactKey];
+    if (typeof obs[verboseKey] === 'string') return obs[verboseKey];
+    return '';
+}
+
+function archiveRecordScope(obs, type, tempF) {
+    const monthlyRecord = numberOrNull(type === 'high' ? obs.mh : obs.ml);
+    if (monthlyRecord == null) return 'daily';
+    if (type === 'high') return tempF > monthlyRecord ? 'monthly' : 'daily';
+    return tempF < monthlyRecord ? 'monthly' : 'daily';
+}
+
+function buildArchivedBrokenRecord(dateStr, obs, station, type, tempF, prevRecordF, normalF) {
+    const [lon = 0, lat = 0] = Array.isArray(station.ll) ? station.ll : [];
+    return {
+        stationName: station.name || 'Unknown',
+        uid: station.uid,
+        state: station.state || '',
+        stateName: US_STATES[station.state]?.name || station.state || '',
+        county: station.county || '',
+        lat,
+        lon,
+        elev: station.elev ?? null,
+        type,
+        tempF,
+        prevRecordF,
+        prevRecordDate: previousRecordDate(obs, type),
+        normalF,
+        date: dateStr,
+        recordScope: archiveRecordScope(obs, type, tempF),
+    };
+}
+
+/**
+ * Reconstructs broken-record rows from a daily observation archive without
+ * making any ACIS network requests.
+ *
+ * Each observation entry carries the raw observed temperature plus compact
+ * fields written by `fetchStateForDate`:
+ *   rh / rl   — previous calendar-date record high / low (°F)
+ *   rhd / rld — date of that previous record (YYYY-MM-DD, may be empty on old archives)
+ *   nh / nl   — 1950-baseline climatological normal high / low (°F)
+ *   mh / ml   — all-time monthly high / low (°F)
+ *
+ * Any observation whose uid is absent from `stationIndex` is silently skipped
+ * (station metadata is in a separate file and may lag archives for very new stations).
+ *
+ * @param {string} dateStr      YYYY-MM-DD date the archive covers.
+ * @param {object} archive      Parsed daily observation archive ({ date, observations }).
+ * @param {Map<number, object>} stationIndex  uid → station metadata map.
+ * @returns {import('../src/features/temperatures/types/index.ts').BrokenRecord[]}
+ */
+export function buildBrokenRecordsFromDailyArchive(dateStr, archive, stationIndex) {
+    if (!archive || !Array.isArray(archive.observations) || !(stationIndex instanceof Map)) return [];
+
+    const broken = [];
+    for (const obs of archive.observations) {
+        if (!obs || typeof obs !== 'object') continue;
+        const uid = Number(obs.uid);
+        if (!Number.isFinite(uid)) continue;
+
+        const station = stationIndex.get(uid);
+        if (!station) continue;
+
+        const maxt = numberOrNull(obs.maxt);
+        const recordHigh = numberOrNull(obs.rh);
+        if (maxt != null && recordHigh != null && maxt > recordHigh) {
+            broken.push(buildArchivedBrokenRecord(
+                dateStr,
+                obs,
+                station,
+                'high',
+                maxt,
+                recordHigh,
+                numberOrNull(obs.nh)
+            ));
+        }
+
+        const mint = numberOrNull(obs.mint);
+        const recordLow = numberOrNull(obs.rl);
+        if (mint != null && recordLow != null && mint < recordLow) {
+            broken.push(buildArchivedBrokenRecord(
+                dateStr,
+                obs,
+                station,
+                'low',
+                mint,
+                recordLow,
+                numberOrNull(obs.nl)
+            ));
+        }
+    }
+
+    return broken;
+}
+
 /**
  * For each of the last 7 days, compare station observations against the
  * all-time record for that calendar date across all CONUS states.
@@ -777,42 +943,63 @@ async function fetchRecentRecords(numDays = 7) {
 
     // Build array of the last N dates (most recent first)
     const allDates = [];
-    for (let d = 1; d <= numDays; d++) {
+    for (let daysBack = 1; daysBack <= numDays; daysBack++) {
         const dt = new Date(now);
-        dt.setDate(dt.getDate() - d);
+        dt.setDate(dt.getDate() - daysBack);
         allDates.push(formatDate(dt));
     }
     const yesterdayStr = allDates[0];
 
     console.log(`  Checking dates: ${allDates.join(', ')}`);
 
-    const previousBroken = await loadPreviousBrokenRecords(allDates);
-    const previousDateSet = new Set(previousBroken.map(record => record.date));
+    const previousRecentRecords = await loadPreviousRecentRecords();
+    const previousBroken = filterBrokenRecordsForDates(previousRecentRecords, allDates);
+    const previousDateSet = coveredRecentRecordDates(previousRecentRecords, allDates);
     if (previousBroken.length > 0) {
         console.log(`  📋 Loaded ${previousBroken.length} broken records from previous summary`);
     }
 
-    // Check S3 for already-archived dates and skip only when the summary
-    // already contains their broken-record rows. Otherwise recompute the date
-    // so last7Days cannot silently collapse to a partial window.
+    // Check S3 for already-archived dates. If the previous summary does not
+    // cover that date, rebuild its rows from the daily archive before falling
+    // back to slow ACIS fetches.
     const skippedDates = [];
     const datesToFetch = [];
-    for (const d of allDates) {
-        if (await dailyExistsOnS3(d)) {
-            if (previousDateSet.has(d)) {
-                console.log(`  ✅ ${d} — already on S3 and present in summary, skipping ACIS fetch`);
-                skippedDates.push(d);
+    const rebuiltBroken = [];
+    let previousStationIndex = null;
+
+    async function getPreviousStationIndex() {
+        if (!previousStationIndex) previousStationIndex = await loadPreviousStationIndex();
+        return previousStationIndex;
+    }
+
+    for (const dateStr of allDates) {
+        if (await dailyExistsOnS3(dateStr)) {
+            if (previousDateSet.has(dateStr)) {
+                console.log(`  ✅ ${dateStr} — already on S3 and present in summary, skipping ACIS fetch`);
+                skippedDates.push(dateStr);
             } else {
-                console.warn(`  ⚠️ ${d} — daily archive exists but summary is missing it; recomputing`);
-                datesToFetch.push(d);
+                const archive = await loadDailyObservationArchive(dateStr);
+                const archivedStationIndex = await getPreviousStationIndex();
+                if (archive && archivedStationIndex.size > 0) {
+                    const restoredBroken = buildBrokenRecordsFromDailyArchive(dateStr, archive, archivedStationIndex);
+                    console.log(`  ♻️ ${dateStr} — rebuilt ${restoredBroken.length} broken records from daily archive`);
+                    rebuiltBroken.push(...restoredBroken);
+                    skippedDates.push(dateStr);
+                } else {
+                    console.warn(`  ⚠️ ${dateStr} — daily archive exists but could not be rebuilt; recomputing`);
+                    datesToFetch.push(dateStr);
+                }
             }
         } else {
-            datesToFetch.push(d);
+            datesToFetch.push(dateStr);
         }
     }
 
     const skippedDateSet = new Set(skippedDates);
-    const allBroken = previousBroken.filter(record => skippedDateSet.has(record.date));
+    const allBroken = [
+        ...previousBroken.filter(record => skippedDateSet.has(record.date)),
+        ...rebuiltBroken,
+    ];
 
     if (datesToFetch.length === 0) {
         console.log('\n  All dates already archived on S3, nothing to fetch.');
@@ -904,6 +1091,7 @@ export function buildRecentRecords(asOf, yesterdayStr, brokenRecords, expectedDa
 
     return {
         asOf,
+        dates: [...expectedDates],
         yesterday: sortBrokenRecords(windowBroken.filter(record => record.date === yesterdayStr)),
         last7Days: sortBrokenRecords(windowBroken),
     };
