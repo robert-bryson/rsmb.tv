@@ -1,6 +1,4 @@
 import { useParams, Link } from 'react-router-dom';
-import { Suspense } from 'react';
-import { MDXProvider } from '@mdx-js/react';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { getPostBySlug } from '../content/posts';
@@ -81,15 +79,7 @@ export function BlogPost() {
                 )}
             </header>
 
-            <Suspense
-                fallback={
-                    <div className="text-zinc-400 py-8">Loading post…</div>
-                }
-            >
-                <MDXProvider components={mdxComponents}>
-                    <Component />
-                </MDXProvider>
-            </Suspense>
+            <Component components={mdxComponents} />
         </article>
     );
 }

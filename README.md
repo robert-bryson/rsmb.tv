@@ -45,7 +45,7 @@ npm run dev
 
 | Command | Description |
 |---------|-------------|
-| `npm run dev` | Start development server (builds flight data first) |
+| `npm run dev` | Sync configured blog posts, build flight data, and start development server |
 | `npm run build` | Build for production |
 | `npm run build-rss` | Generate `public/rss.xml` from the blog registry |
 | `npm run build-sitemap` | Generate `public/sitemap.xml` from route and content metadata |
@@ -55,6 +55,8 @@ npm run dev
 | `npm run test:coverage` | Run tests with V8 coverage report |
 | `npm run watch` | Run terminal operations dashboard (`scripts/aws-watch.tsx`) |
 | `npm run build-flights` | Convert flight CSV data to GeoJSON |
+| `npm run sync-blogs` | Sync blog metadata from Google Sheets and post bodies from Google Docs |
+| `npm run sync-blogs:dev` | Sync blogs before local dev when `GOOGLE_BLOG_SHEET_ID` is configured |
 | `npm run sync-flights` | Sync flight data from Google Sheets (requires `GOOGLE_SHEET_ID`) |
 | `npm run sync-temperatures` | Generate temperature record JSON for upload to the S3-backed data CDN |
 | `npm run sync-tornadoes` | Sync NOAA/NCEI tornado tracks and generated public GeoJSON |
@@ -93,6 +95,58 @@ Build status is source-aware: AWS Amplify deployments are shown separately from 
 ## Generated Metadata
 
 `public/rss.xml` and `public/sitemap.xml` are generated artifacts. Their timestamps are derived from git history when available, with filesystem metadata as a fallback, so repeat builds do not create timestamp-only diffs.
+
+## Blog Publishing
+
+The blog runtime still reads local MDX files from `src/content/blog/` and metadata from `src/content/posts.json`. Google Docs/Sheets publishing is a sync layer that generates those same local files, so RSS, sitemap, OG image generation, and the Vite build continue to use the existing blog pipeline.
+
+Manual MDX authoring remains supported. To publish through Google, maintain a Google Sheet tab named `Blog Posts` by default, with one row per post:
+
+| Column | Required | Notes |
+|--------|----------|-------|
+| `slug` | Optional | URL slug. If empty, the sync derives one from `title`. |
+| `title` | Yes | Used in frontmatter, the blog index, RSS, and OG image generation. |
+| `date` | Yes | Accepts `YYYY-MM-DD` or `M/D/YYYY`; written as `YYYY-MM-DD`. |
+| `description` | Yes | Short summary for previews, RSS, and SEO. |
+| `tags` | Yes | Comma- or pipe-separated list. Empty is allowed. |
+| `google_doc_id` | Yes | Raw Doc ID or a `docs.google.com/document/d/...` URL. |
+| `published` | Yes | Syncs only rows set to `true`, `yes`, `y`, `1`, or `published`. |
+
+The first implementation uses public Google export endpoints, matching the existing flight sync model. Share the Sheet and Docs as viewer-accessible to anyone with the link. Private Google Docs would require a separate service-account or OAuth implementation.
+
+Google Docs exports are normalized before writing MDX. The sync preserves headings, lists, links, images, fenced code blocks, simple inline emphasis/highlights, and tables. Active or embedded HTML such as scripts, forms, iframes, objects, SVG, audio, and video is stripped, and links/media are limited to safe URL protocols before the generated MDX is written.
+
+### Manual Blog Sync
+
+```bash
+GOOGLE_BLOG_SHEET_ID=your-sheet-id npm run sync-blogs
+```
+
+Optional environment variables:
+
+- `GOOGLE_BLOG_SHEET_NAME` - Sheet tab name, defaults to `Blog Posts`
+- `GOOGLE_BLOG_REPLACE_ALL` - When `true`, `posts.json` is generated only from the Sheet. By default, existing local posts are preserved and synced rows override matching slugs.
+- `GOOGLE_BLOG_SYNC_ON_DEV` - Set to `false` to skip the automatic blog sync before `npm run dev`.
+
+`npm run dev` runs the blog sync first when `GOOGLE_BLOG_SHEET_ID` is available in the shell or local env files. If the sheet is not configured, it skips the sync and starts Vite with the existing local MDX files.
+
+After syncing locally, rebuild generated blog artifacts when needed:
+
+```bash
+npm run build-og
+npm run build-rss
+npm run build-sitemap
+```
+
+### Automated Blog Sync
+
+The `Sync Blogs` GitHub Actions workflow can be triggered manually and also runs weekly. Scheduled runs skip cleanly until `GOOGLE_BLOG_SHEET_ID` is configured. Add these as repository variables or secrets before relying on automated publishing:
+
+- `GOOGLE_BLOG_SHEET_ID` - Required Sheet ID
+- `GOOGLE_BLOG_SHEET_NAME` - Optional tab name
+- `GOOGLE_BLOG_REPLACE_ALL` - Optional source-of-truth mode
+
+When the sync changes content, the workflow rebuilds OG images, RSS, and sitemap files, then commits the generated outputs back to the repository.
 
 ## SEO and Structured Data
 

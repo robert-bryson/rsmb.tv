@@ -54,6 +54,101 @@ button {
   color: #c4b5fd;
 }
 
+mark {
+  background: #fcd34d;
+  border-radius: 0.125rem;
+  color: #18181b;
+  padding: 0 0.1875rem;
+}
+
+u {
+  text-underline-offset: 0.15em;
+}
+
+.shiki {
+  background: #090c12 !important;
+  border: 1px solid #242936;
+  border-radius: 0.375rem;
+  box-shadow: inset 3px 0 0 #8b5cf6;
+  margin: 1rem 0;
+  overflow-x: auto;
+  padding: 0.625rem 0.75rem 0.625rem 1rem;
+  font-size: 0.8125rem;
+  line-height: 1.18;
+}
+
+.shiki code {
+  display: block;
+  min-width: max-content;
+  background: transparent;
+  color: inherit;
+  line-height: 1.18;
+  margin: 0;
+  padding: 0;
+}
+
+.shiki .line {
+  display: block;
+  line-height: 1.18;
+  margin: 0;
+  min-height: 0;
+  padding: 0;
+}
+
+.shiki .line:empty {
+  display: none;
+}
+
+.shiki .line span {
+  line-height: inherit;
+}
+
+.blog-table-scroll {
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+.blog-table {
+  width: 100%;
+  min-width: 28rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #3f3f46;
+  border-radius: 0.375rem;
+  color: #d4d4d8;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  overflow: hidden;
+}
+
+.blog-table-cell {
+  border-bottom: 1px solid #3f3f46;
+  border-right: 1px solid #3f3f46;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.blog-table-cell:last-child {
+  border-right: 0;
+}
+
+.blog-table tr:last-child .blog-table-cell {
+  border-bottom: 0;
+}
+
+.blog-table tbody tr:first-child .blog-table-cell {
+  background: #18181b;
+  color: #f4f4f5;
+  font-weight: 600;
+}
+
+.blog-table th.blog-table-cell {
+  background: #18181b;
+  color: #f4f4f5;
+  font-weight: 600;
+}
+
 /* Dark-themed MapLibre popup for tornado map */
 .tornado-popup .maplibregl-popup-content {
   background: transparent;

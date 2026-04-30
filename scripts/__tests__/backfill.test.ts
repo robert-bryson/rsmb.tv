@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
     VALID_PROJECTS,
     VALID_STORAGE,
+    backfillBlogs,
     backfillFlights,
     backfillTemperatures,
     backfillTornadoes,
@@ -277,6 +278,36 @@ describe('backfillFlights', () => {
         expect(cmds.some(c => c.includes('convertFlights.js'))).toBe(true);
         expect(cmds.some(c => c.includes('generateAllAirports.js'))).toBe(true);
         expect(cmds.some(c => c.includes('generateUSStates.js'))).toBe(true);
+    });
+});
+
+describe('backfillBlogs', () => {
+    beforeEach(() => {
+        spawnSyncMock.mockClear();
+        delete process.env.GOOGLE_BLOG_SHEET_ID;
+    });
+
+    afterEach(() => {
+        delete process.env.GOOGLE_BLOG_SHEET_ID;
+    });
+
+    it('skips Google blog sync when GOOGLE_BLOG_SHEET_ID is not set', () => {
+        backfillBlogs();
+        expect(capturedCommands().some(c => c.includes('sync-blogs.js'))).toBe(false);
+    });
+
+    it('runs Google blog sync when GOOGLE_BLOG_SHEET_ID is set', () => {
+        process.env.GOOGLE_BLOG_SHEET_ID = 'test-blog-sheet-id';
+        backfillBlogs();
+        expect(capturedCommands().some(c => c.includes('sync-blogs.js'))).toBe(true);
+    });
+
+    it('always rebuilds generated blog metadata artifacts', () => {
+        backfillBlogs();
+        const cmds = capturedCommands();
+        expect(cmds.some(c => c.includes('generate-og-images.js'))).toBe(true);
+        expect(cmds.some(c => c.includes('generate-rss.js'))).toBe(true);
+        expect(cmds.some(c => c.includes('generate-sitemap.js'))).toBe(true);
     });
 });
 

@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import mdx from '@mdx-js/rollup'
+import rehypeShiki from '@shikijs/rehype'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
 import tailwindcss from '@tailwindcss/vite'
@@ -10,6 +11,7 @@ export default defineConfig({
   plugins: [
     mdx({
       remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
+      rehypePlugins: [[rehypeShiki, { theme: 'github-dark-default' }]],
     }),
     react(),
     tailwindcss(),

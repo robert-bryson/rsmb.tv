@@ -3,6 +3,6 @@ declare module '*.mdx' {
 
     export const frontmatter: Record<string, unknown>;
 
-    const MDXComponent: ComponentType;
+    const MDXComponent: ComponentType<{ components?: Record<string, unknown> }>;
     export default MDXComponent;
 }

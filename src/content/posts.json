@@ -1,5 +1,16 @@
 [
     {
+        "slug": "test-post",
+        "title": "A first test post",
+        "date": "2026-04-30",
+        "description": "some description text",
+        "tags": [
+            "test",
+            "blog-post",
+            "etc"
+        ]
+    },
+    {
         "slug": "building-through-routes",
         "title": "Building Through Routes: Scoring Roads for Scenic Motorcycle Loops",
         "date": "2026-03-31",

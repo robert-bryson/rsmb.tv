@@ -8,6 +8,13 @@
     <lastBuildDate>Wed, 08 Apr 2026 21:55:30 GMT</lastBuildDate>
     <atom:link href="https://rsmb.tv/rss.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>A first test post</title>
+      <link>https://rsmb.tv/blog/test-post</link>
+      <guid>https://rsmb.tv/blog/test-post</guid>
+      <description>some description text</description>
+      <pubDate>Thu, 30 Apr 2026 00:00:00 GMT</pubDate>
+    </item>
+    <item>
       <title>Building Through Routes: Scoring Roads for Scenic Motorcycle Loops</title>
       <link>https://rsmb.tv/blog/building-through-routes</link>
       <guid>https://rsmb.tv/blog/building-through-routes</guid>

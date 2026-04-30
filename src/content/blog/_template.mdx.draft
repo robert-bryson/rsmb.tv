@@ -22,3 +22,9 @@ When ready to publish:
 1. Rename this file to <slug>.mdx
 2. Add a matching entry to src/content/posts.json
 3. Run: node scripts/generate-rss.js && node scripts/generate-sitemap.js
+
+Google Docs/Sheets publishing can generate these files instead:
+1. Add a row to the blog Google Sheet
+2. Put the Google Doc ID or URL in google_doc_id
+3. Set published to true
+4. Run: GOOGLE_BLOG_SHEET_ID=<sheet-id> npm run sync-blogs

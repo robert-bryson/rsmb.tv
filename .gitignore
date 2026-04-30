@@ -169,6 +169,7 @@ npm-debug.log*
 # === VSCode ===
 .vscode/
 .history/
+.codex
 
 # === System ===
 .env
@@ -180,6 +181,7 @@ npm-debug.log*
 *.key
 *.crt
 *.env.*
+!.env.example
 
 # === Project: Flights ===
 /public/cesium/

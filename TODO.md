@@ -34,6 +34,8 @@ No open items.
 
 - [ ] scrolling seems to reset the tracks/trends/density layer?
 - [ ] better share button somewhere else
+- [ ] Evaluate a vector-tile pipeline for large tornado datasets, similar to Through Routes' Tippecanoe processing
+- [ ] Revisit Tornado Tracks visual styling and capture usable reference notes instead of loose screenshots
 
 ## Next steps
 
@@ -53,6 +55,7 @@ No open items.
 ### General
 
 - [x] JSON-LD for all pages
+- [x] Add Google Sheets/Docs blog sync with MDX generation, syntax highlighting, table support, and GitHub Actions automation
 - [x] Move generated temperature data to S3/CDN canonical storage; keep local JSON ignored, fix sync actions, and clean tracked generated data
 - [x] does it make sense to have tornado data in the repo or s3? → S3, same pattern as temperatures: serve via data.rsmb.tv/tornadoes, gitignore generated files, workflow uploads instead of commits
 - [x] create script to be run locally to backfill as much data as possible for all projects, having local & s3 storage options

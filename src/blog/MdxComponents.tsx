@@ -1,5 +1,9 @@
 import type { ComponentPropsWithoutRef } from 'react';
 
+function classNames(...classes: Array<string | undefined>) {
+    return classes.filter(Boolean).join(' ');
+}
+
 /**
  * Custom MDX component overrides for consistent blog styling.
  * These map standard HTML elements to Tailwind-styled versions.
@@ -42,15 +46,24 @@ export const mdxComponents = {
             {...props}
         />
     ),
-    code: (props: ComponentPropsWithoutRef<'code'>) => (
+    em: (props: ComponentPropsWithoutRef<'em'>) => (
+        <em className="text-zinc-200 italic" {...props} />
+    ),
+    mark: (props: ComponentPropsWithoutRef<'mark'>) => (
+        <mark className="bg-amber-300 text-zinc-950 rounded-sm px-1 py-0" {...props} />
+    ),
+    u: (props: ComponentPropsWithoutRef<'u'>) => (
+        <u className="decoration-violet-300 underline-offset-2" {...props} />
+    ),
+    code: ({ className, ...props }: ComponentPropsWithoutRef<'code'>) => (
         <code
-            className="bg-zinc-800 text-violet-300 rounded px-1.5 py-0.5 text-sm font-mono"
+            className={classNames('bg-zinc-800 text-violet-300 rounded px-1.5 py-0.5 text-sm font-mono', className)}
             {...props}
         />
     ),
-    pre: (props: ComponentPropsWithoutRef<'pre'>) => (
+    pre: ({ className, ...props }: ComponentPropsWithoutRef<'pre'>) => (
         <pre
-            className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 overflow-x-auto mb-4 text-sm"
+            className={classNames('bg-zinc-950 border border-zinc-800 rounded-md px-3 py-2 overflow-x-auto mb-4 text-[0.8125rem] leading-snug', className)}
             {...props}
         />
     ),

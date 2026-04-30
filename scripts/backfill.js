@@ -9,14 +9,14 @@
  * USAGE
  * -----
  *   node scripts/backfill.js
- *   node scripts/backfill.js --projects temperatures,tornadoes,flights
+ *   node scripts/backfill.js --projects temperatures,tornadoes,flights,blogs
  *   node scripts/backfill.js --storage local,s3
  *   node scripts/backfill.js --projects temperatures --storage local,s3
  *
  * OPTIONS
  * -------
- *   --projects <list>   Comma-separated projects to backfill (default: temperatures,tornadoes,flights)
- *                       Valid values: temperatures, tornadoes, flights
+ *   --projects <list>   Comma-separated projects to backfill (default: all projects)
+ *                       Valid values: temperatures, tornadoes, flights, blogs
  *   --storage <list>    Comma-separated storage targets (default: local)
  *                       Valid values: local, s3
  *   --bucket <name>     S3 bucket name (default: rsmbtv-temperature-data)
@@ -33,6 +33,9 @@
  *   TEMP_DATA_DIR             Temperature intermediary data dir        (default: .temp/temperatures)
  *   GOOGLE_SHEET_ID           Required for flights sync from Google Sheets
  *   GOOGLE_SHEET_NAME         Flights sheet tab name                   (default: Flights)
+ *   GOOGLE_BLOG_SHEET_ID      Required for blog sync from Google Sheets
+ *   GOOGLE_BLOG_SHEET_NAME    Blog sheet tab name                      (default: Blog Posts)
+ *   GOOGLE_BLOG_REPLACE_ALL   Replace posts.json entirely from the blog sheet when true
  *   AWS_REGION                AWS region                               (overrides --region)
  *   AWS_ACCESS_KEY_ID         AWS credentials
  *   AWS_SECRET_ACCESS_KEY     AWS credentials
@@ -69,6 +72,11 @@
  *                 allAirports.geojson, and usStates.geojson under public/data/flights/.
  *                 If GOOGLE_SHEET_ID is not set the sync step is skipped and the
  *                 GeoJSON files are rebuilt from the existing flights.csv.
+ *
+ *   blogs         Syncs Google-authored blog posts (requires GOOGLE_BLOG_SHEET_ID),
+ *                 then rebuilds generated OG images, RSS, and sitemap files.
+ *                 If GOOGLE_BLOG_SHEET_ID is not set the sync step is skipped and
+ *                 generated metadata is rebuilt from the existing local posts.
  */
 
 import { spawnSync } from 'child_process';
@@ -78,7 +86,7 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, '..');
 
-export const VALID_PROJECTS = ['temperatures', 'tornadoes', 'flights'];
+export const VALID_PROJECTS = ['temperatures', 'tornadoes', 'flights', 'blogs'];
 export const VALID_STORAGE = ['local', 's3'];
 
 const DEFAULT_BUCKET = 'rsmbtv-temperature-data';
@@ -92,7 +100,7 @@ Usage: node scripts/backfill.js [options]
 
 Options:
   --projects <list>   Comma-separated projects: ${VALID_PROJECTS.join(', ')}
-                      Default: all three
+                      Default: all projects
   --storage <list>    Comma-separated storage targets: ${VALID_STORAGE.join(', ')}
                       Default: local
   --bucket <name>     S3 bucket name (default: ${DEFAULT_BUCKET})
@@ -105,6 +113,7 @@ Examples:
   node scripts/backfill.js --projects temperatures,tornadoes --storage local,s3
   node scripts/backfill.js --projects flights
   GOOGLE_SHEET_ID=<id> node scripts/backfill.js --projects flights
+  GOOGLE_BLOG_SHEET_ID=<id> node scripts/backfill.js --projects blogs
 
 Environment:
   TEMPERATURE_DATA_BUCKET / TEMPERATURE_DATA_CDN_ID
@@ -383,6 +392,26 @@ export function backfillFlights() {
     console.log('\n   Flights data does not use S3 — files written to public/data/flights/');
 }
 
+export function backfillBlogs() {
+    const sheetId = process.env.GOOGLE_BLOG_SHEET_ID;
+
+    if (!sheetId) {
+        console.warn('\nGOOGLE_BLOG_SHEET_ID is not set - skipping Google blog sync.');
+        console.log('   Set GOOGLE_BLOG_SHEET_ID to pull Google-authored posts, or');
+        console.log('   proceed with the existing src/content/posts.json and MDX files.');
+    } else {
+        console.log('\nSyncing blog posts from Google Docs/Sheets...');
+        run('node', ['scripts/sync-blogs.js']);
+    }
+
+    console.log('\nBuilding blog metadata artifacts...');
+    run('node', ['scripts/generate-og-images.js']);
+    run('node', ['scripts/generate-rss.js']);
+    run('node', ['scripts/generate-sitemap.js']);
+
+    console.log('\n   Blog content does not use S3 - files written to src/content/ and public/.');
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────
 
 function main() {
@@ -429,6 +458,7 @@ function main() {
                 case 'temperatures': backfillTemperatures(opts); break;
                 case 'tornadoes': backfillTornadoes(opts); break;
                 case 'flights': backfillFlights(); break;
+                case 'blogs': backfillBlogs(); break;
             }
         } catch (err) {
             console.error(`\n❌ Backfill failed for "${project}": ${err.message}`);
