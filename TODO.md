@@ -14,7 +14,19 @@
 
 ### Bookend
 
-- [ ] Add screenshots to project page
+- [x] better link to project on project page (like big button on flights project page)
+- [x] Add screenshots to project page
+
+### rsmb.tv
+
+- [ ] Hovering over projects link on header should allow either:
+  - clicking and going to /projects
+  - hovering and having a list of direct links to projects pop down
+
+### Status dashboard
+
+- [x] Forecast cost estimate seems way off
+- [ ] the build number links and time stamps should align ![alt text](<Screenshot 2026-04-30 112523.png>)
 
 ### Temperature records
 
@@ -22,22 +34,19 @@ No open items.
 
 ### Through Routes
 
-- [ ] Add screenshots to project page
+- [x] better link to project on project page (like big button on flights project page)
+- [x] Add screenshots to project page
 
 ### Tornado Tracks
 
 - [ ] scrolling seems to reset the tracks/trends/density layer?
 - [ ] better share button somewhere else
 
-### Status dashboard
-
-- [x] Forecast cost estimate seems way off
-
 ## Next steps
 
 ### Content
 
-- [ ] Add screenshots to all project pages (aborg, Anki Artisan, Bookend, Through Routes)
+- [ ] Add screenshots to remaining project pages (aborg, Anki Artisan)
 - [ ] Add more blog posts to RSS feed as they are published
 
 ### Testing

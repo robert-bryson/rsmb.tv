@@ -193,3 +193,6 @@ public/data/temperatures/*.json
 public/data/tornadoes/*.json
 public/data/tornadoes/tracks/*.geojson
 public/data/tornadoes/track-points/*.geojson
+
+## Issue screenshots in TODO.md
+Screenshot*.png

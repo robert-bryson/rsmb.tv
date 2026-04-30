@@ -1,6 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import { projects, featuredProjects } from '../content/projects';
 
+const committedWebpImages = import.meta.glob('/public/images/**/*.webp', {
+    eager: true,
+    import: 'default',
+    query: '?url',
+});
+
 describe('projects data', () => {
     it('has at least one project', () => {
         expect(projects.length).toBeGreaterThan(0);
@@ -46,6 +52,17 @@ describe('projects data', () => {
         expect(featuredProjects.length).toBeLessThanOrEqual(projects.length);
         for (const fp of featuredProjects) {
             expect(projects).toContain(fp);
+        }
+    });
+
+    it('preview images are optimized committed assets', () => {
+        for (const p of projects) {
+            if (!p.previewImage) {
+                continue;
+            }
+
+            expect(p.previewImage).toMatch(/^\/images\/.+\.webp$/);
+            expect(committedWebpImages).toHaveProperty(`/public${p.previewImage}`);
         }
     });
 });

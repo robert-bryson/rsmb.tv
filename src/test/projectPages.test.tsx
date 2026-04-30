@@ -18,11 +18,15 @@ function renderWithRouter(ui: React.ReactElement, { route = '/' } = {}) {
 }
 
 describe('ThroughRoutes page', () => {
-    it('renders heading and links', () => {
+    it('renders heading, links, and screenshots', () => {
         renderWithRouter(<ThroughRoutes />, { route: '/projects/through-routes' });
         expect(screen.getByRole('heading', { level: 1, name: /Through Routes/i })).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: /Visit Through Routes/i })).toHaveAttribute('href', 'https://through-routes.rsmb.tv/');
-        expect(screen.getByRole('link', { name: /Source on GitHub/i })).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: /Open Through Routes/i })).toHaveAttribute('href', 'https://through-routes.rsmb.tv/');
+        expect(screen.getByRole('link', { name: /Source on GitHub/i })).toHaveAttribute('href', 'https://github.com/robert-bryson/through-routes');
+        expect(screen.getByRole('img', { name: /roads colored by curviness score/i })).toHaveAttribute('src', '/images/through-routes/through-routes-curviness-map.webp');
+        expect(screen.getByRole('img', { name: /broad region with roads scored by curviness/i })).toHaveAttribute('src', '/images/through-routes/through-routes-overview.webp');
+        expect(screen.getByRole('img', { name: /Road detail panel for US 2 near Seattle/i })).toHaveAttribute('src', '/images/through-routes/through-routes-road-detail.webp');
+        expect(screen.getByText(/Curviness heat map/i)).toBeInTheDocument();
     });
 });
 
@@ -43,11 +47,15 @@ describe('AnkiArtisan page', () => {
 });
 
 describe('Bookend page', () => {
-    it('renders heading and both links', () => {
+    it('renders heading, links, and screenshots', () => {
         renderWithRouter(<Bookend />, { route: '/projects/bookend' });
         expect(screen.getByRole('heading', { level: 1, name: /Bookend/i })).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: /Visit Bookend/i })).toHaveAttribute('href', 'https://bookend.rsmb.tv');
+        expect(screen.getByRole('link', { name: /Open Bookend/i })).toHaveAttribute('href', 'https://bookend.rsmb.tv');
         expect(screen.getByRole('link', { name: /Source on GitHub/i })).toHaveAttribute('href', 'https://github.com/robert-bryson/bookend');
+        expect(screen.getByRole('img', { name: /Bookend home page/i })).toHaveAttribute('src', '/images/bookend/bookend-home.webp');
+        expect(screen.getByRole('img', { name: /Booker Prize Fiction award list/i })).toHaveAttribute('src', '/images/bookend/bookend-award-lists.webp');
+        expect(screen.getByRole('img', { name: /Book detail page for Lincoln in the Bardo/i })).toHaveAttribute('src', '/images/bookend/bookend-book-detail.webp');
+        expect(screen.getByText(/Award list view/i)).toBeInTheDocument();
     });
 });
 

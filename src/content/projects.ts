@@ -19,6 +19,7 @@ export const projects: Project[] = [
     featured: true,
     demoUrl: 'https://through-routes.rsmb.tv/',
     sourceUrl: 'https://github.com/robert-bryson/through-routes',
+    previewImage: '/images/through-routes/through-routes-curviness-map.webp',
     year: 2026,
   },
   {
@@ -56,6 +57,7 @@ export const projects: Project[] = [
     featured: true,
     demoUrl: 'https://bookend.rsmb.tv',
     sourceUrl: 'https://github.com/robert-bryson/bookend',
+    previewImage: '/images/bookend/bookend-home.webp',
     year: 2026,
   },
   {

@@ -1,5 +1,31 @@
+import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/ProjectScreenshotGallery';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
+
+const screenshots: ProjectScreenshot[] = [
+    {
+        src: '/images/through-routes/through-routes-curviness-map.webp',
+        alt: 'Through Routes map of the Midwest with roads colored by curviness score and filter controls',
+        caption: 'Curviness heat map — roads colored red-to-blue by twist score with filters for road type, length, and surface',
+        width: 1856,
+        height: 1394,
+        loading: 'eager',
+    },
+    {
+        src: '/images/through-routes/through-routes-overview.webp',
+        alt: 'Through Routes overview map showing a broad region with roads scored by curviness',
+        caption: 'Regional overview — Northern California road network scored by curviness, showing dense rural riding terrain east of the Bay',
+        width: 1860,
+        height: 1391,
+    },
+    {
+        src: '/images/through-routes/through-routes-road-detail.webp',
+        alt: 'Road detail panel for US 2 near Seattle showing flow score 6.3, curvature metrics, elevation gain, and road geometry stats',
+        caption: 'Road detail — US 2 near Seattle: flow score 6.3, length 11.4 mi, 180 m elevation gain, curvature/mile metrics, and surface data',
+        width: 1862,
+        height: 1395,
+    },
+];
 
 export default function ThroughRoutes() {
     useDocumentHead({
@@ -45,6 +71,27 @@ export default function ThroughRoutes() {
                 routes from any start point.
             </p>
 
+            <div className="mb-8 flex flex-wrap gap-3">
+                <a
+                    href="https://through-routes.rsmb.tv/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-violet-500"
+                >
+                    Open Through Routes →
+                </a>
+                <a
+                    href="https://github.com/robert-bryson/through-routes"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-700"
+                >
+                    Source on GitHub →
+                </a>
+            </div>
+
+            <ProjectScreenshotGallery screenshots={screenshots} />
+
             <h2 className="text-lg font-medium text-zinc-100 mb-3">How It Works</h2>
             <ul className="space-y-1.5 text-zinc-400 text-sm mb-6 list-disc list-inside">
                 <li>Ingests OSM road network data for a target region</li>
@@ -75,25 +122,6 @@ export default function ThroughRoutes() {
                         </span>
                     ),
                 )}
-            </div>
-
-            <div className="flex gap-4 text-sm">
-                <a
-                    href="https://through-routes.rsmb.tv/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
-                >
-                    Visit Through Routes ↗
-                </a>
-                <a
-                    href="https://github.com/robert-bryson/through-routes"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-zinc-400 underline decoration-zinc-400/30 hover:decoration-zinc-400"
-                >
-                    Source on GitHub ↗
-                </a>
             </div>
         </div>
     );
