@@ -9,6 +9,7 @@ import type { DisplayMode, SiteGroup } from './config.js';
 import { link } from './config.js';
 import { StatusDot } from './StatusDot.js';
 import { useIncidentDetection } from './useIncidentLog.js';
+import { getExternalProblemLabels } from './problemModel.js';
 
 interface SiteResult {
     name: string;
@@ -184,19 +185,25 @@ export function ExternalHealthPanel({
     const getFailStreak = (name: string) =>
         failStreaks.get(name) ?? 0;
 
-    const sites = data?.sites ?? [];
-    const alerts = data?.alerts ?? [];
-    const unhealthy = sites.filter((h) => h.healthy === false);
-    const confirmedUnhealthy = unhealthy.filter((h) => getFailStreak(h.name) >= 2);
-    const hasProblems = confirmedUnhealthy.length > 0 || alerts.some((a) => a.kind === 'incident');
+    const sites = useMemo(() => data?.sites ?? [], [data]);
+    const alerts = useMemo(() => data?.alerts ?? [], [data]);
+    const unhealthy = useMemo(
+        () => sites.filter((h) => h.healthy === false),
+        [sites],
+    );
+    const confirmedUnhealthy = useMemo(
+        () => unhealthy.filter((h) => (failStreaks.get(h.name) ?? 0) >= 2),
+        [unhealthy, failStreaks],
+    );
+    const incidentAlerts = useMemo(
+        () => alerts.filter((a) => a.kind === 'incident'),
+        [alerts],
+    );
+    const hasProblems = confirmedUnhealthy.length > 0 || incidentAlerts.length > 0;
 
     const problemLabels = useMemo(
-        () => [
-            ...confirmedUnhealthy.map((h) => `${h.name} down`),
-            ...alerts.filter((a) => a.kind === 'incident').map((a) => `${a.name} incident`),
-        ],
-        // eslint-disable-next-line react-hooks/exhaustive-deps -- confirmedUnhealthy + alerts are derived from data + failStreaks
-        [data],
+        () => getExternalProblemLabels(confirmedUnhealthy, alerts),
+        [confirmedUnhealthy, alerts],
     );
 
     useEffect(() => {
@@ -209,14 +216,11 @@ export function ExternalHealthPanel({
             if (!data) return null;
             const entries: [string, string][] = [
                 ...confirmedUnhealthy.map((h): [string, string] => [h.name, h.detail]),
-                ...(data.alerts ?? [])
-                    .filter((a) => a.kind === 'incident')
-                    .map((a): [string, string] => [a.name, 'Active incident']),
+                ...incidentAlerts.map((a): [string, string] => [a.name, 'Active incident']),
             ];
             return new Map(entries);
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps -- confirmedUnhealthy is derived from data + failStreaks (which sync with data)
-        [data],
+        [data, confirmedUnhealthy, incidentAlerts],
     );
     useIncidentDetection(group.label, incidentDown);
 
@@ -237,7 +241,11 @@ export function ExternalHealthPanel({
                             {sites.map((h) => (
                                 <StatusDot key={h.name} healthy={h.healthy} stale={isStale} warning={getFailStreak(h.name) === 1} />
                             ))}
-                            {hasProblems ? <Text color="red">{confirmedUnhealthy.length} down</Text> : isStale ? <Text color="yellow">stale</Text> : <Text dimColor>All OK</Text>}
+                            {confirmedUnhealthy.length > 0 && <Text color="red">{confirmedUnhealthy.length} down</Text>}
+                            {confirmedUnhealthy.length === 0 && incidentAlerts.length > 0 && (
+                                <Text color="red">{incidentAlerts.length} incident{incidentAlerts.length === 1 ? '' : 's'}</Text>
+                            )}
+                            {!hasProblems && (isStale ? <Text color="yellow">stale</Text> : <Text dimColor>All OK</Text>)}
                         </>
                     )}
                 </Box>
@@ -255,7 +263,7 @@ export function ExternalHealthPanel({
                         <Text dimColor>{h.detail}</Text>
                     </Box>
                 ))}
-                {alerts.filter((a) => a.kind === 'incident').map((a) => (
+                {incidentAlerts.map((a) => (
                     <Box key={a.name} gap={1}>
                         <Text>    </Text>
                         <Text color="red">⚠</Text>

@@ -18,6 +18,7 @@ import type { DashboardConfig, DisplayMode } from './config.js';
 import { awsCredentials, link } from './config.js';
 import { StatusDot } from './StatusDot.js';
 import { useIncidentDetection } from './useIncidentLog.js';
+import { getHealthProblemLabels } from './problemModel.js';
 
 interface HealthResult {
     domain: string;
@@ -245,14 +246,19 @@ export function HealthPanel({
     const getFailStreak = (h: HealthResult) =>
         failStreaks.get(`${h.source}:${h.domain}`) ?? 0;
 
-    const unhealthy = (data ?? []).filter((h) => h.healthy === false);
-    const confirmedUnhealthy = unhealthy.filter((h) => getFailStreak(h) >= 2);
+    const unhealthy = useMemo(
+        () => (data ?? []).filter((h) => h.healthy === false),
+        [data],
+    );
+    const confirmedUnhealthy = useMemo(
+        () => unhealthy.filter((h) => (failStreaks.get(`${h.source}:${h.domain}`) ?? 0) >= 2),
+        [unhealthy, failStreaks],
+    );
     const hasProblems = confirmedUnhealthy.length > 0;
 
     const problemLabels = useMemo(
-        () => confirmedUnhealthy.map((h) => `${h.name} down`),
-        // eslint-disable-next-line react-hooks/exhaustive-deps -- confirmedUnhealthy is derived from data + failStreaks
-        [data],
+        () => getHealthProblemLabels(confirmedUnhealthy),
+        [confirmedUnhealthy],
     );
 
     useEffect(() => {
@@ -262,8 +268,7 @@ export function HealthPanel({
     // Record incidents when health checks transition to/from confirmed failure
     const incidentDown = useMemo(
         () => data ? new Map(confirmedUnhealthy.map((h) => [h.domain, h.detail])) : null,
-        // eslint-disable-next-line react-hooks/exhaustive-deps -- confirmedUnhealthy is derived from data + failStreaks (which sync with data)
-        [data],
+        [data, confirmedUnhealthy],
     );
     useIncidentDetection('Health', incidentDown);
 

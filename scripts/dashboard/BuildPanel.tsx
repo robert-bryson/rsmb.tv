@@ -1,28 +1,20 @@
 import React, { useEffect, useMemo } from 'react';
 import { Box, Text } from 'ink';
 import Spinner from 'ink-spinner';
-import {
-    AmplifyClient,
-    ListJobsCommand,
-} from '@aws-sdk/client-amplify';
-import { Octokit } from '@octokit/rest';
 import { useAwsPoll } from './useAwsPoll.js';
-import type { DashboardConfig, ProjectConfig, DisplayMode } from './config.js';
-import { awsCredentials, link } from './config.js';
-import { relativeTime } from './utils.js';
-
-interface BuildInfo {
-    project: string;
-    label: string;
-    source: 'amplify' | 'github';
-    status: string;
-    id: string;
-    branch: string;
-    time: string;
-    url: string;
-    createdAt: Date | null;
-    staleThresholdHours: number | undefined;
-}
+import type { DashboardConfig, DisplayMode } from './config.js';
+import { link } from './config.js';
+import {
+    buildDisplayLabel,
+    buildKey,
+    getBuildDisplaySections,
+    getBuildProblemLabels,
+    isFailure,
+    isRunning,
+    isStaleWorkflow,
+    type BuildInfo,
+} from './buildModel.js';
+import { fetchAllBuilds } from './buildFetchers.js';
 
 function statusColor(status: string): string {
     const s = status.toUpperCase();
@@ -48,7 +40,7 @@ function BuildRow({ build, indent = 4 }: { build: BuildInfo; indent?: number }) 
             <Text color={statusColor(build.status)}>●</Text>
             <Text> </Text>
             <Box width={24}>
-                <Text>{build.label}</Text>
+                <Text>{buildDisplayLabel(build)}</Text>
             </Box>
             <Box width={4}>
                 <Text color={statusColor(build.status)}>{statusLabel(build.status)}</Text>
@@ -64,206 +56,27 @@ function BuildRow({ build, indent = 4 }: { build: BuildInfo; indent?: number }) 
     );
 }
 
-function isFailure(status: string): boolean {
-    const s = status.toUpperCase();
-    return ['FAILED', 'FAILURE', 'CANCELLED', 'ERROR'].includes(s);
-}
-
-function isRunning(status: string): boolean {
-    const s = status.toUpperCase();
-    return ['PENDING', 'RUNNING', 'IN_PROGRESS', 'QUEUED'].includes(s);
-}
-
-function isStaleWorkflow(build: BuildInfo): boolean {
-    if (!build.staleThresholdHours || !build.createdAt) return false;
-    const ageHours = (Date.now() - build.createdAt.getTime()) / (1000 * 60 * 60);
-    return ageHours > build.staleThresholdHours;
-}
-
-async function fetchAmplifyBuilds(
-    client: AmplifyClient,
-    project: ProjectConfig,
-    region: string,
-): Promise<BuildInfo | null> {
-    if (!project.amplifyAppId) return null;
-
-    try {
-        const res = await client.send(
-            new ListJobsCommand({
-                appId: project.amplifyAppId,
-                branchName: 'main',
-                maxResults: 1,
-            }),
-        );
-
-        const job = res.jobSummaries?.[0];
-        if (!job) return null;
-
-        return {
-            project: project.name,
-            label: project.name,
-            source: 'amplify',
-            status: job.status ?? 'UNKNOWN',
-            id: `#${job.jobId}`,
-            branch: 'main',
-            time: job.startTime ? relativeTime(new Date(job.startTime)) : '—',
-            url: `https://${region}.console.aws.amazon.com/amplify/home#/${project.amplifyAppId}/main/${job.jobId}`,
-            createdAt: job.startTime ? new Date(job.startTime) : null,
-            staleThresholdHours: undefined,
-        };
-    } catch {
-        return {
-            project: project.name,
-            label: project.name,
-            source: 'amplify',
-            status: 'ERROR',
-            id: '—',
-            branch: 'main',
-            time: 'fetch failed',
-            url: `https://${region}.console.aws.amazon.com/amplify/home#/${project.amplifyAppId}`,
-            createdAt: null,
-            staleThresholdHours: undefined,
-        };
-    }
-}
-
-async function fetchGitHubBuilds(
-    octokit: Octokit,
-    project: ProjectConfig,
-): Promise<BuildInfo | null> {
-    if (!project.githubRepo) return null;
-
-    const [owner, repo] = project.githubRepo.split('/');
-    try {
-        const { data } = await octokit.actions.listWorkflowRunsForRepo({
-            owner,
-            repo,
-            branch: 'main',
-            per_page: 1,
-        });
-
-        const run = data.workflow_runs[0];
-        if (!run) return null;
-
-        const status =
-            run.conclusion?.toUpperCase() ?? run.status?.toUpperCase() ?? 'UNKNOWN';
-
-        return {
-            project: project.name,
-            label: project.name,
-            source: 'github',
-            status,
-            id: `#${run.run_number}`,
-            branch: run.head_branch ?? 'main',
-            time: run.created_at ? relativeTime(new Date(run.created_at)) : '—',
-            url: run.html_url,
-            createdAt: run.created_at ? new Date(run.created_at) : null,
-            staleThresholdHours: undefined,
-        };
-    } catch {
-        return {
-            project: project.name,
-            label: project.name,
-            source: 'github',
-            status: 'ERROR',
-            id: '—',
-            branch: 'main',
-            time: 'fetch failed',
-            url: `https://github.com/${project.githubRepo}/actions`,
-            createdAt: null,
-            staleThresholdHours: undefined,
-        };
-    }
-}
-
-async function fetchWorkflowRuns(
-    octokit: Octokit,
-    project: ProjectConfig,
-): Promise<BuildInfo[]> {
-    if (!project.githubRepo || !project.workflows?.length) return [];
-
-    const [owner, repo] = project.githubRepo.split('/');
-    const results: BuildInfo[] = [];
-
-    for (const wf of project.workflows) {
-        try {
-            const { data } = await octokit.actions.listWorkflowRuns({
-                owner,
-                repo,
-                workflow_id: wf.file,
-                per_page: 1,
-            });
-
-            const run = data.workflow_runs[0];
-            if (!run) continue;
-
-            const status =
-                run.conclusion?.toUpperCase() ?? run.status?.toUpperCase() ?? 'UNKNOWN';
-
-            results.push({
-                project: project.name,
-                label: wf.name,
-                source: 'github',
-                status,
-                id: `#${run.run_number}`,
-                branch: run.head_branch ?? 'main',
-                time: run.created_at ? relativeTime(new Date(run.created_at)) : '—',
-                url: run.html_url,
-                createdAt: run.created_at ? new Date(run.created_at) : null,
-                staleThresholdHours: wf.staleThresholdHours,
-            });
-        } catch {
-            results.push({
-                project: project.name,
-                label: wf.name,
-                source: 'github',
-                status: 'ERROR',
-                id: '—',
-                branch: 'main',
-                time: 'fetch failed',
-                url: `https://github.com/${project.githubRepo}/actions`,
-                createdAt: null,
-                staleThresholdHours: wf.staleThresholdHours,
-            });
-        }
-    }
-
-    return results;
-}
-
-async function fetchAllBuilds(
-    config: DashboardConfig,
-): Promise<BuildInfo[]> {
-    const amplifyClient = new AmplifyClient({
-        region: config.region,
-        credentials: awsCredentials(config.profile),
-    });
-
-    const octokit = config.githubToken
-        ? new Octokit({ auth: config.githubToken })
-        : new Octokit();
-
-    const amplifyProjects = config.projects.filter(
-        (p) => p.kind === 'amplify' && p.amplifyAppId,
+function WorkflowRow({ build }: { build: BuildInfo }) {
+    return (
+        <Box gap={1}>
+            <Text>      </Text>
+            <Text color={statusColor(build.status)}>●</Text>
+            <Text> </Text>
+            <Box width={22}>
+                <Text dimColor>{build.label}</Text>
+            </Box>
+            <Box width={4}>
+                <Text color={statusColor(build.status)}>{statusLabel(build.status)}</Text>
+            </Box>
+            <Box width={8}>
+                <Text>{link(build.url, build.id)}</Text>
+            </Box>
+            <Box width={6}>
+                <Text dimColor>{build.branch}</Text>
+            </Box>
+            <Text dimColor>{build.time}</Text>
+        </Box>
     );
-    const githubProjects = config.projects.filter(
-        (p) => p.githubRepo,
-    );
-    const workflowProjects = config.projects.filter(
-        (p) => p.workflows?.length,
-    );
-
-    const [amplifyResults, githubResults, ...workflowResults] = await Promise.all([
-        Promise.all(amplifyProjects.map((p) => fetchAmplifyBuilds(amplifyClient, p, config.region))),
-        Promise.all(githubProjects.map((p) => fetchGitHubBuilds(octokit, p))),
-        ...workflowProjects.map((p) => fetchWorkflowRuns(octokit, p)),
-    ]);
-
-    return [
-        ...amplifyResults.filter((r): r is BuildInfo => r !== null),
-        ...githubResults.filter((r): r is BuildInfo => r !== null),
-        ...workflowResults.flat(),
-    ];
 }
 
 export function BuildPanel({
@@ -281,14 +94,14 @@ export function BuildPanel({
         'Builds',
     );
 
-    const failures = (data ?? []).filter((b) => isFailure(b.status));
-    const running = (data ?? []).filter((b) => isRunning(b.status));
-    const staleWorkflows = (data ?? []).filter((b) => isStaleWorkflow(b));
+    const items = data ?? [];
+    const failures = items.filter((b) => isFailure(b.status));
+    const running = items.filter((b) => isRunning(b.status));
+    const staleWorkflows = items.filter((b) => isStaleWorkflow(b));
     const hasProblems = failures.length > 0;
 
     const problemLabels = useMemo(
-        () => failures.map((b) => `${b.label} build failed`),
-        // eslint-disable-next-line react-hooks/exhaustive-deps -- failures is derived from data
+        () => getBuildProblemLabels(data ?? []),
         [data],
     );
 
@@ -309,8 +122,8 @@ export function BuildPanel({
                     ) : (
                         <>
                             <Box width={25} gap={1}>
-                                {(data ?? []).map((b) => (
-                                    <Text key={`${b.source}:${b.label}`} color={isStaleWorkflow(b) ? 'yellow' : statusColor(b.status)}>
+                                {items.map((b) => (
+                                    <Text key={buildKey(b)} color={isStaleWorkflow(b) ? 'yellow' : statusColor(b.status)}>
                                         {isStaleWorkflow(b) ? '⚠' : statusLabel(b.status)}
                                     </Text>
                                 ))}
@@ -325,23 +138,23 @@ export function BuildPanel({
                     {isStale && <Text color="yellow">⚠ stale</Text>}
                 </Box>
                 {running.map((b) => (
-                    <Box key={`${b.source}:${b.label}`} gap={1}>
+                    <Box key={buildKey(b)} gap={1}>
                         <Text>  </Text>
                         <Text color="yellow"><Spinner type="dots" /></Text>
-                        <Text color="yellow"> {b.label}</Text>
+                        <Text color="yellow"> {buildDisplayLabel(b)}</Text>
                         <Text>{link(b.url, b.id)}</Text>
                         <Text dimColor>{b.time}</Text>
                     </Box>
                 ))}
                 {failures.map((b) => (
-                    <BuildRow key={`fail:${b.source}:${b.label}`} build={b} />
+                    <BuildRow key={buildKey(b)} build={b} />
                 ))}
             </Box>
         );
     }
 
     // Detail mode
-    const items = data ?? [];
+    const sections = getBuildDisplaySections(items);
 
     return (
         <Box flexDirection="column">
@@ -351,8 +164,8 @@ export function BuildPanel({
                     <Text color="cyan"><Spinner type="dots" /></Text>
                 ) : !hasProblems ? (
                     <>
-                        {(data ?? []).map((b) => (
-                            <Text key={`${b.source}:${b.label}`} color={statusColor(b.status)}>
+                        {items.map((b) => (
+                            <Text key={buildKey(b)} color={statusColor(b.status)}>
                                 {statusLabel(b.status)}
                             </Text>
                         ))}
@@ -370,57 +183,27 @@ export function BuildPanel({
                 <Text color="red">  Error: {error}</Text>
             )}
 
-            {(() => {
-                const amplifyItems = items.filter((b) => b.source === 'amplify');
-                const githubItems = items.filter((b) => b.source === 'github');
-                const sections: { label: string; builds: BuildInfo[] }[] = [];
-                if (amplifyItems.length > 0) sections.push({ label: 'AWS Amplify', builds: amplifyItems });
-                if (githubItems.length > 0) sections.push({ label: 'GitHub Actions', builds: githubItems });
-
-                return sections.map((section) => {
-                    // Group builds by project so workflows nest under their parent
-                    const mainBuilds = section.builds.filter((b) => b.label === b.project);
-                    const workflowsByProject = new Map<string, BuildInfo[]>();
-                    for (const b of section.builds) {
-                        if (b.label !== b.project) {
-                            const list = workflowsByProject.get(b.project) ?? [];
-                            list.push(b);
-                            workflowsByProject.set(b.project, list);
-                        }
-                    }
-
-                    return (
-                        <Box key={section.label} flexDirection="column">
-                            <Text dimColor>  {section.label}</Text>
-                            {mainBuilds.map((b) => (
-                                <React.Fragment key={`${b.source}:${b.label}`}>
-                                    <BuildRow build={b} />
-                                    {(workflowsByProject.get(b.project) ?? []).map((wf) => (
-                                        <Box key={`${wf.source}:${wf.label}`} gap={1}>
-                                            <Text>      </Text>
-                                            <Text color={statusColor(wf.status)}>●</Text>
-                                            <Text> </Text>
-                                            <Box width={22}>
-                                                <Text dimColor>{wf.label}</Text>
-                                            </Box>
-                                            <Box width={4}>
-                                                <Text color={statusColor(wf.status)}>{statusLabel(wf.status)}</Text>
-                                            </Box>
-                                            <Box width={8}>
-                                                <Text>{link(wf.url, wf.id)}</Text>
-                                            </Box>
-                                            <Box width={6}>
-                                                <Text dimColor>{wf.branch}</Text>
-                                            </Box>
-                                            <Text dimColor>{wf.time}</Text>
-                                        </Box>
-                                    ))}
-                                </React.Fragment>
+            {sections.map((section) => (
+                <Box key={section.label} flexDirection="column">
+                    <Text dimColor>  {section.label}</Text>
+                    {section.mainBuilds.map((b) => (
+                        <React.Fragment key={buildKey(b)}>
+                            <BuildRow build={b} />
+                            {(section.workflowsByProject.get(b.project) ?? []).map((wf) => (
+                                <WorkflowRow key={buildKey(wf)} build={wf} />
                             ))}
-                        </Box>
-                    );
-                });
-            })()}
+                        </React.Fragment>
+                    ))}
+                    {section.orphanedWorkflowGroups.map((group) => (
+                        <React.Fragment key={`${section.label}:${group.project}:workflows`}>
+                            <Text dimColor>    {group.project}</Text>
+                            {group.workflows.map((wf) => (
+                                <WorkflowRow key={buildKey(wf)} build={wf} />
+                            ))}
+                        </React.Fragment>
+                    ))}
+                </Box>
+            ))}
 
             {!config.githubToken && mode === 'detail' && (
                 <Text dimColor>  ⚠ Set GITHUB_TOKEN for GitHub Actions builds</Text>

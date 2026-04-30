@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import type { DisplayMode } from '../config.js';
+import { aggregateProblems, getExternalProblemLabels, getHealthProblemLabels } from '../problemModel.js';
 
 /**
  * Pure-logic tests for the problem-label aggregation introduced when the
@@ -37,13 +38,22 @@ describe('problem label generation', () => {
                 { name: 'bookend', domain: 'bookend.rsmb.tv', detail: '0/8 checkers' },
                 { name: 'rsmb.tv', domain: 'www.rsmb.tv', detail: 'Timeout' },
             ];
-            const labels = confirmedUnhealthy.map((h) => `${h.name} down`);
+            const labels = getHealthProblemLabels(confirmedUnhealthy);
             expect(labels).toEqual(['bookend down', 'rsmb.tv down']);
+        });
+
+        it('dedupes multiple failed checks for the same project', () => {
+            const confirmedUnhealthy = [
+                { name: 'rsmb.tv', source: 'route53' },
+                { name: 'rsmb.tv', source: 'frontend' },
+            ];
+
+            expect(getHealthProblemLabels(confirmedUnhealthy)).toEqual(['rsmb.tv down']);
         });
 
         it('returns empty array when all healthy', () => {
             const confirmedUnhealthy: { name: string }[] = [];
-            const labels = confirmedUnhealthy.map((h) => `${h.name} down`);
+            const labels = getHealthProblemLabels(confirmedUnhealthy);
             expect(labels).toEqual([]);
         });
     });
@@ -101,10 +111,7 @@ describe('problem label generation', () => {
                 { kind: 'incident' as const, name: 'Network disruption' },
                 { kind: 'maintenance' as const, name: 'Scheduled update' },
             ];
-            const labels = [
-                ...confirmedUnhealthy.map((h) => `${h.name} down`),
-                ...alerts.filter((a) => a.kind === 'incident').map((a) => `${a.name} incident`),
-            ];
+            const labels = getExternalProblemLabels(confirmedUnhealthy, alerts);
             expect(labels).toEqual([
                 'FLIGHT down',
                 'Network disruption incident',
@@ -116,11 +123,17 @@ describe('problem label generation', () => {
             const alerts = [
                 { kind: 'maintenance' as const, name: 'Scheduled update' },
             ];
-            const labels = [
-                ...confirmedUnhealthy.map((h) => `${h.name} down`),
-                ...alerts.filter((a) => a.kind === 'incident').map((a) => `${a.name} incident`),
-            ];
+            const labels = getExternalProblemLabels(confirmedUnhealthy, alerts);
             expect(labels).toEqual([]);
+        });
+
+        it('dedupes repeated incidents from the status page payload', () => {
+            const labels = getExternalProblemLabels([], [
+                { kind: 'incident' as const, name: 'Network disruption' },
+                { kind: 'incident' as const, name: 'Network disruption' },
+            ]);
+
+            expect(labels).toEqual(['Network disruption incident']);
         });
     });
 });
@@ -128,20 +141,6 @@ describe('problem label generation', () => {
 // ─── Problem aggregation (mirrors App.tsx logic) ─────────────────────────────
 
 describe('problem aggregation', () => {
-    function aggregateProblems(
-        healthProblems: string[],
-        alarmProblems: string[],
-        buildProblems: string[],
-        externalProblems: Record<string, string[]>,
-    ): string[] {
-        return [
-            ...healthProblems,
-            ...alarmProblems,
-            ...buildProblems,
-            ...Object.values(externalProblems).flat(),
-        ];
-    }
-
     it('returns empty when no problems', () => {
         const result = aggregateProblems([], [], [], {});
         expect(result).toEqual([]);
@@ -183,6 +182,17 @@ describe('problem aggregation', () => {
     it('determines hasProblems correctly', () => {
         expect(aggregateProblems([], [], [], {}).length > 0).toBe(false);
         expect(aggregateProblems(['x down'], [], [], {}).length > 0).toBe(true);
+    });
+
+    it('dedupes exact duplicate labels while preserving first-seen order', () => {
+        const result = aggregateProblems(
+            ['rsmb.tv down', 'bookend down'],
+            [],
+            ['rsmb.tv down'],
+            { egp: ['bookend down', 'FLIGHT down'] },
+        );
+
+        expect(result).toEqual(['rsmb.tv down', 'bookend down', 'FLIGHT down']);
     });
 });
 

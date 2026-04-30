@@ -11,6 +11,7 @@ import { EventLogPanel, clearEvents } from './useEventLog.js';
 import { IncidentSummary, IncidentPanel, clearResolvedIncidents } from './useIncidentLog.js';
 import type { DashboardConfig } from './config.js';
 import type { DisplayMode } from './config.js';
+import { aggregateProblems } from './problemModel.js';
 
 function Clock({ timeZone }: { timeZone: string }) {
     const [now, setNow] = useState(new Date());
@@ -46,12 +47,10 @@ export function App({ config }: { config: DashboardConfig }) {
     const [scrollOffset, setScrollOffset] = useState(0);
     const [pollIterations, setPollIterations] = useState(0);
 
-    const allProblems = useMemo(() => [
-        ...healthProblems,
-        ...alarmProblems,
-        ...buildProblems,
-        ...Object.values(externalProblems).flat(),
-    ], [healthProblems, alarmProblems, buildProblems, externalProblems]);
+    const allProblems = useMemo(
+        () => aggregateProblems(healthProblems, alarmProblems, buildProblems, externalProblems),
+        [healthProblems, alarmProblems, buildProblems, externalProblems],
+    );
     const hasProblems = allProblems.length > 0;
     const mode: DisplayMode = forceDetail ? 'detail' : 'calm';
 
