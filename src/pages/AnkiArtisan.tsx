@@ -1,11 +1,14 @@
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
+import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
 
 export default function AnkiArtisan() {
+    const description =
+        'A CLI tool that generates Anki flashcard decks from iNaturalist observations and eBird region data.';
+
     useDocumentHead({
         title: 'Anki Artisan',
-        description:
-            'A CLI tool that generates Anki flashcard decks from iNaturalist observations and eBird region data.',
+        description,
         ogImage: 'https://rsmb.tv/og/anki-artisan.svg',
     });
 
@@ -13,11 +16,11 @@ export default function AnkiArtisan() {
         '@context': 'https://schema.org',
         '@type': 'SoftwareApplication',
         name: 'Anki Artisan',
-        description: 'A CLI tool that generates Anki flashcard decks from iNaturalist observations and eBird region data.',
-        url: 'https://rsmb.tv/projects/anki-artisan',
+        description,
+        url: absoluteUrl('/projects/anki-artisan'),
         applicationCategory: 'UtilitiesApplication',
         operatingSystem: 'Cross-platform',
-        author: { '@type': 'Person', name: 'Robby Bryson', url: 'https://rsmb.tv' },
+        author: AUTHOR_PERSON,
     });
 
     return (

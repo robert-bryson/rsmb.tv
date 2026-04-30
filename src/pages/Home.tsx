@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { featuredProjects } from '../content/projects';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
+import { AUTHOR_PERSON, SITE_URL } from '../utils/siteMetadata';
 
 export function Home() {
   useDocumentHead({
@@ -14,12 +15,8 @@ export function Home() {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'rsmb',
-    url: 'https://rsmb.tv',
-    author: {
-      '@type': 'Person',
-      name: 'Robby Bryson',
-      url: 'https://rsmb.tv',
-    },
+    url: SITE_URL,
+    author: AUTHOR_PERSON,
   });
 
   return (

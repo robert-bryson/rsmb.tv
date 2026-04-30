@@ -6,15 +6,18 @@ import { useJsonLd } from '../hooks/useJsonLd';
 import { getPostBySlug } from '../content/posts';
 import { mdxComponents } from '../blog/MdxComponents';
 import { formatDate } from '../utils/formatDate';
+import { AUTHOR_PERSON, SITE_URL, absoluteUrl } from '../utils/siteMetadata';
 
 export function BlogPost() {
     const { slug } = useParams<{ slug: string }>();
     const post = slug ? getPostBySlug(slug) : undefined;
+    const postUrl = post ? absoluteUrl(`/blog/${post.slug}`) : undefined;
+    const postImage = post ? absoluteUrl(`/og/blog/${post.slug}.svg`) : undefined;
 
     useDocumentHead({
         title: post ? `${post.title} | rsmb` : 'Post Not Found | rsmb',
         description: post?.description ?? 'Blog post not found.',
-        ogImage: post ? `https://rsmb.tv/og/blog/${post.slug}.svg` : undefined,
+        ogImage: postImage,
     });
 
     useJsonLd(post ? {
@@ -23,8 +26,9 @@ export function BlogPost() {
         headline: post.title,
         description: post.description,
         datePublished: post.date,
-        author: { '@type': 'Person', name: 'Robby Bryson', url: 'https://rsmb.tv' },
-        url: `https://rsmb.tv/blog/${post.slug}`,
+        author: AUTHOR_PERSON,
+        url: postUrl,
+        image: postImage,
         keywords: post.tags,
     } : null);
 
@@ -32,9 +36,9 @@ export function BlogPost() {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://rsmb.tv' },
-            { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://rsmb.tv/blog' },
-            { '@type': 'ListItem', position: 3, name: post.title, item: `https://rsmb.tv/blog/${post.slug}` },
+            { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+            { '@type': 'ListItem', position: 2, name: 'Blog', item: absoluteUrl('/blog') },
+            { '@type': 'ListItem', position: 3, name: post.title, item: postUrl },
         ],
     } : null);
 

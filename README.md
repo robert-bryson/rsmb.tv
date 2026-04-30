@@ -94,6 +94,19 @@ Build status is source-aware: AWS Amplify deployments are shown separately from 
 
 `public/rss.xml` and `public/sitemap.xml` are generated artifacts. Their timestamps are derived from git history when available, with filesystem metadata as a fallback, so repeat builds do not create timestamp-only diffs.
 
+## SEO and Structured Data
+
+Per-page `<head>` is set via the `useDocumentHead` hook (title, description, canonical, OpenGraph/Twitter tags). Page-level [JSON-LD](https://schema.org) is injected via the `useJsonLd` hook. Shared schema fragments (canonical site origin, the author `Person` reference, absolute-URL helper) live in `src/utils/siteMetadata.ts` so every page references the same identity.
+
+Coverage today:
+
+- `WebSite` on the home page
+- `ProfilePage` + `Person` on `/about`
+- `CollectionPage` containing an `ItemList` of `SoftwareApplication` entries on `/projects`
+- `Blog` containing `BlogPosting` entries on `/blog`, plus per-post `BlogPosting` and `BreadcrumbList` on `/blog/:slug`
+- `SoftwareApplication` on each project detail page
+- `WebPage` on full-screen app subroutes referencing the parent `SoftwareApplication` via `isPartOf`
+
 ## Infrastructure
 
 The site is deployed on AWS Amplify with infrastructure managed via Terraform. The Terraform configuration provisions:

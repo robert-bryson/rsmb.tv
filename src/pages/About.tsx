@@ -1,10 +1,33 @@
 import { useDocumentHead } from '../hooks/useDocumentHead';
+import { useJsonLd } from '../hooks/useJsonLd';
+import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+
+const description =
+  'Robby Bryson — software developer and geospatial engineer based in St. Louis. Background in Azure Maps, federal GIS, and startups.';
 
 export function About() {
   useDocumentHead({
     title: 'About',
-    description: 'Robby Bryson — software developer and geospatial engineer based in St. Louis. Background in Azure Maps, federal GIS, and startups.',
+    description,
     ogImage: 'https://rsmb.tv/og/about.svg',
+  });
+
+  useJsonLd({
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    name: 'About Robby Bryson',
+    description,
+    url: absoluteUrl('/about'),
+    mainEntity: {
+      ...AUTHOR_PERSON,
+      jobTitle: 'Software developer and geospatial engineer',
+      worksFor: { '@type': 'Organization', name: 'Xentity', url: 'https://xentity.com' },
+      alumniOf: { '@type': 'Organization', name: 'Microsoft', url: 'https://www.microsoft.com' },
+      sameAs: [
+        'https://github.com/robert-bryson',
+        'https://linkedin.com/in/robert-bryson',
+      ],
+    },
   });
 
   return (

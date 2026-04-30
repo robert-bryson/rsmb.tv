@@ -1,12 +1,41 @@
 import { Link } from 'react-router-dom';
 import { projects } from '../content/projects';
 import { useDocumentHead } from '../hooks/useDocumentHead';
+import { useJsonLd } from '../hooks/useJsonLd';
+import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+
+const description =
+  'Interactive projects and data visualizations by Robby Bryson — flights, route converter, and more.';
 
 export function Projects() {
   useDocumentHead({
     title: 'Projects',
-    description: 'Interactive projects and data visualizations by Robby Bryson — flights, route converter, and more.',
+    description,
     ogImage: 'https://rsmb.tv/og/projects.svg',
+  });
+
+  useJsonLd({
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Projects',
+    description,
+    url: absoluteUrl('/projects'),
+    author: AUTHOR_PERSON,
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: projects.map((project, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        item: {
+          '@type': 'SoftwareApplication',
+          name: project.title,
+          description: project.description,
+          url: absoluteUrl(`/projects/${project.slug}`),
+          applicationCategory: 'UtilitiesApplication',
+          keywords: project.tech,
+        },
+      })),
+    },
   });
 
   return (

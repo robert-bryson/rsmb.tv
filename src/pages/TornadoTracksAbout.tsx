@@ -1,11 +1,15 @@
 import { Link } from 'react-router-dom';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
+import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
 
 export default function TornadoTracksAbout() {
+    const description =
+        'A full-screen historical tornado track map powered by NOAA/NCEI StormEvents data and MapLibre GL.';
+
     useDocumentHead({
         title: 'Tornado Tracks',
-        description: 'A full-screen historical tornado track map powered by NOAA/NCEI StormEvents data and MapLibre GL.',
+        description,
         ogImage: 'https://rsmb.tv/og/tornado-tracks.svg',
     });
 
@@ -13,11 +17,11 @@ export default function TornadoTracksAbout() {
         '@context': 'https://schema.org',
         '@type': 'SoftwareApplication',
         name: 'Tornado Tracks',
-        description: 'A full-screen historical tornado track map powered by NOAA/NCEI StormEvents data and MapLibre GL.',
-        url: 'https://rsmb.tv/projects/tornado-tracks',
+        description,
+        url: absoluteUrl('/projects/tornado-tracks'),
         applicationCategory: 'UtilitiesApplication',
         operatingSystem: 'Web',
-        author: { '@type': 'Person', name: 'Robby Bryson', url: 'https://rsmb.tv' },
+        author: AUTHOR_PERSON,
     });
 
     return (

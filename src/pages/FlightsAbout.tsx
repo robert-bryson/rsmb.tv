@@ -1,12 +1,15 @@
 import { Link } from 'react-router-dom';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
+import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
 
 export default function FlightsAbout() {
+    const description =
+        'An interactive 3D globe visualization of flights around the world — filter by year, see route frequencies, and explore travel statistics.';
+
     useDocumentHead({
         title: 'Flights',
-        description:
-            'An interactive 3D globe visualization of flights around the world — filter by year, see route frequencies, and explore travel statistics.',
+        description,
         ogImage: 'https://rsmb.tv/og/flights.svg',
     });
 
@@ -14,11 +17,11 @@ export default function FlightsAbout() {
         '@context': 'https://schema.org',
         '@type': 'SoftwareApplication',
         name: 'Flights',
-        description: 'An interactive 3D globe visualization of flights around the world — filter by year, see route frequencies, and explore travel statistics.',
-        url: 'https://rsmb.tv/projects/flights',
+        description,
+        url: absoluteUrl('/projects/flights'),
         applicationCategory: 'UtilitiesApplication',
         operatingSystem: 'Web',
-        author: { '@type': 'Person', name: 'Robby Bryson', url: 'https://rsmb.tv' },
+        author: AUTHOR_PERSON,
     });
 
     return (

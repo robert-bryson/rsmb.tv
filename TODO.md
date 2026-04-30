@@ -1,6 +1,6 @@
 # TODO
 
-- [ ] JSON-LD for all pages (partial — missing About, Projects, Blog index pages)
+- [x] JSON-LD for all pages
 
 ## Projects
 

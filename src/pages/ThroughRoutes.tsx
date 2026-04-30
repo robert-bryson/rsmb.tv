@@ -1,6 +1,7 @@
 import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/ProjectScreenshotGallery';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
+import { AUTHOR_PERSON } from '../utils/siteMetadata';
 
 const screenshots: ProjectScreenshot[] = [
     {
@@ -28,10 +29,12 @@ const screenshots: ProjectScreenshot[] = [
 ];
 
 export default function ThroughRoutes() {
+    const description =
+        'Find scenic, twisty motorcycle loop routes on rural roads using OpenStreetMap data.';
+
     useDocumentHead({
         title: 'Through Routes',
-        description:
-            'Find scenic, twisty motorcycle loop routes on rural roads using OpenStreetMap data.',
+        description,
         ogImage: 'https://rsmb.tv/og/through-routes.svg',
     });
 
@@ -39,11 +42,11 @@ export default function ThroughRoutes() {
         '@context': 'https://schema.org',
         '@type': 'SoftwareApplication',
         name: 'Through Routes',
-        description: 'Find scenic, twisty motorcycle loop routes on rural roads using OpenStreetMap data.',
+        description,
         url: 'https://through-routes.rsmb.tv/',
         applicationCategory: 'UtilitiesApplication',
         operatingSystem: 'Web',
-        author: { '@type': 'Person', name: 'Robby Bryson', url: 'https://rsmb.tv' },
+        author: AUTHOR_PERSON,
     });
 
     return (

@@ -1,16 +1,39 @@
 import { Link } from 'react-router-dom';
 import { useDocumentHead } from '../hooks/useDocumentHead';
+import { useJsonLd } from '../hooks/useJsonLd';
 import { getAllPosts } from '../content/posts';
 import { formatDate } from '../utils/formatDate';
+import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+
+const description = 'Thoughts on projects, engineering, and things I find interesting.';
 
 export function Blog() {
+    const posts = getAllPosts();
+
     useDocumentHead({
         title: 'Blog | rsmb',
-        description: 'Thoughts on projects, engineering, and things I find interesting.',
+        description,
         ogImage: 'https://rsmb.tv/og/blog.svg',
     });
 
-    const posts = getAllPosts();
+    useJsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'Blog',
+        name: 'rsmb Blog',
+        description,
+        url: absoluteUrl('/blog'),
+        author: AUTHOR_PERSON,
+        blogPost: posts.map((post) => ({
+            '@type': 'BlogPosting',
+            headline: post.title,
+            description: post.description,
+            datePublished: post.date,
+            url: absoluteUrl(`/blog/${post.slug}`),
+            image: absoluteUrl(`/og/blog/${post.slug}.svg`),
+            author: AUTHOR_PERSON,
+            keywords: post.tags,
+        })),
+    });
 
     return (
         <div>

@@ -1,23 +1,25 @@
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
+import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
 
 export default function Aborg() {
+    const description =
+        'A CLI tool to scan, organize, and manage audiobook file collections into an Audiobookshelf-compatible directory structure.';
+
     useDocumentHead({
         title: 'aborg',
-        description:
-            'A CLI tool to scan, organize, and manage audiobook file collections into an Audiobookshelf-compatible directory structure.',
+        description,
     });
 
     useJsonLd({
         '@context': 'https://schema.org',
         '@type': 'SoftwareApplication',
         name: 'aborg',
-        description:
-            'A CLI tool to scan, organize, and manage audiobook file collections into an Audiobookshelf-compatible directory structure.',
-        url: 'https://rsmb.tv/projects/aborg',
+        description,
+        url: absoluteUrl('/projects/aborg'),
         applicationCategory: 'UtilitiesApplication',
         operatingSystem: 'Cross-platform',
-        author: { '@type': 'Person', name: 'Robby Bryson', url: 'https://rsmb.tv' },
+        author: AUTHOR_PERSON,
     });
 
     return (

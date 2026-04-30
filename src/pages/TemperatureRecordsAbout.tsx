@@ -1,12 +1,15 @@
 import { Link } from 'react-router-dom';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
+import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
 
 export default function TemperatureRecordsAbout() {
+    const description =
+        'Interactive map of all-time record high and low temperatures across US states and counties, powered by NOAA and ACIS data.';
+
     useDocumentHead({
         title: 'Record Highs',
-        description:
-            'Interactive map of all-time record high and low temperatures across US states and counties, powered by NOAA and ACIS data.',
+        description,
         ogImage: 'https://rsmb.tv/og/temperature-records.svg',
     });
 
@@ -14,11 +17,11 @@ export default function TemperatureRecordsAbout() {
         '@context': 'https://schema.org',
         '@type': 'SoftwareApplication',
         name: 'Record Highs',
-        description: 'Interactive map of all-time record high and low temperatures across US states and counties, powered by NOAA and ACIS data.',
-        url: 'https://rsmb.tv/projects/temperature-records',
+        description,
+        url: absoluteUrl('/projects/temperature-records'),
         applicationCategory: 'UtilitiesApplication',
         operatingSystem: 'Web',
-        author: { '@type': 'Person', name: 'Robby Bryson', url: 'https://rsmb.tv' },
+        author: AUTHOR_PERSON,
     });
 
     return (

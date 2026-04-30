@@ -1,5 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { useDocumentHead } from '../hooks/useDocumentHead';
+import { useJsonLd } from '../hooks/useJsonLd';
+import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
 
 const FlightsMap = lazy(() =>
   import('../features/flights/components/FlightsMap').then((m) => ({
@@ -8,10 +10,27 @@ const FlightsMap = lazy(() =>
 );
 
 export default function Flights() {
+  const description =
+    'Interactive 3D globe visualization of flights around the world. Filter by year, see route frequencies, and explore travel statistics.';
+
   useDocumentHead({
     title: 'Flights',
-    description: 'Interactive 3D globe visualization of flights around the world. Filter by year, see route frequencies, and explore travel statistics.',
+    description,
     ogImage: 'https://rsmb.tv/og/flights.svg',
+  });
+
+  useJsonLd({
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'Flights Map',
+    description,
+    url: absoluteUrl('/projects/flights/map'),
+    isPartOf: {
+      '@type': 'SoftwareApplication',
+      name: 'Flights',
+      url: absoluteUrl('/projects/flights'),
+    },
+    author: AUTHOR_PERSON,
   });
 
   return (

@@ -1,6 +1,7 @@
 import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/ProjectScreenshotGallery';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
+import { AUTHOR_PERSON } from '../utils/siteMetadata';
 
 const screenshots: ProjectScreenshot[] = [
     {
@@ -28,10 +29,12 @@ const screenshots: ProjectScreenshot[] = [
 ];
 
 export default function Bookend() {
+    const description =
+        'A personal book-tracking app to log reads, organize books into lists, and explore reading stats.';
+
     useDocumentHead({
         title: 'Bookend',
-        description:
-            'A personal book-tracking app to log reads, organize books into lists, and explore reading stats.',
+        description,
         ogImage: 'https://rsmb.tv/og/bookend.svg',
     });
 
@@ -39,11 +42,11 @@ export default function Bookend() {
         '@context': 'https://schema.org',
         '@type': 'SoftwareApplication',
         name: 'Bookend',
-        description: 'A personal book-tracking app to log reads, organize books into lists, and explore reading stats.',
+        description,
         url: 'https://bookend.rsmb.tv',
         applicationCategory: 'UtilitiesApplication',
         operatingSystem: 'Web',
-        author: { '@type': 'Person', name: 'Robby Bryson', url: 'https://rsmb.tv' },
+        author: AUTHOR_PERSON,
     });
 
     return (

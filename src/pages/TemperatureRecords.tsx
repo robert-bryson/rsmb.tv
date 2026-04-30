@@ -1,5 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { useDocumentHead } from '../hooks/useDocumentHead';
+import { useJsonLd } from '../hooks/useJsonLd';
+import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
 
 const TemperatureMap = lazy(() =>
     import('../features/temperatures/components/TemperatureMap').then((m) => ({
@@ -8,10 +10,27 @@ const TemperatureMap = lazy(() =>
 );
 
 export default function TemperatureRecords() {
+    const description =
+        'Interactive map of all-time record high and low temperatures across US states and counties, with recent extremes summary.';
+
     useDocumentHead({
         title: 'Record Highs',
-        description: 'Interactive map of all-time record high and low temperatures across US states and counties, with recent extremes summary.',
+        description,
         ogImage: 'https://rsmb.tv/og/temperature-records.svg',
+    });
+
+    useJsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: 'Record Highs Map',
+        description,
+        url: absoluteUrl('/projects/temperature-records/map'),
+        isPartOf: {
+            '@type': 'SoftwareApplication',
+            name: 'Record Highs',
+            url: absoluteUrl('/projects/temperature-records'),
+        },
+        author: AUTHOR_PERSON,
     });
 
     return (

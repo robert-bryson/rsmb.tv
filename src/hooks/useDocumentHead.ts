@@ -1,8 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-
-const SITE_URL = 'https://rsmb.tv';
-const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
+import { SITE_URL, DEFAULT_OG_IMAGE } from '../utils/siteMetadata';
 
 interface DocumentHeadOptions {
     title: string;
