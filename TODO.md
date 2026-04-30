@@ -1,7 +1,5 @@
 # TODO
 
-- [x] JSON-LD for all pages
-
 ## Projects
 
 ### aborg
@@ -14,8 +12,7 @@
 
 ### Bookend
 
-- [x] better link to project on project page (like big button on flights project page)
-- [x] Add screenshots to project page
+No open items.
 
 ### rsmb.tv
 
@@ -23,8 +20,7 @@ No open items.
 
 ### Status dashboard
 
-- [x] Forecast cost estimate seems way off
-- [ ] the build number links and time stamps should align ![alt text](<Screenshot 2026-04-30 112523.png>)
+No open items.
 
 ### Temperature records
 
@@ -32,8 +28,7 @@ No open items.
 
 ### Through Routes
 
-- [x] better link to project on project page (like big button on flights project page)
-- [x] Add screenshots to project page
+No open items.
 
 ### Tornado Tracks
 
@@ -57,6 +52,7 @@ No open items.
 
 ### General
 
+- [x] JSON-LD for all pages
 - [x] Move generated temperature data to S3/CDN canonical storage; keep local JSON ignored, fix sync actions, and clean tracked generated data
 - [x] does it make sense to have tornado data in the repo or s3? → S3, same pattern as temperatures: serve via data.rsmb.tv/tornadoes, gitignore generated files, workflow uploads instead of commits
 - [x] create script to be run locally to backfill as much data as possible for all projects, having local & s3 storage options
@@ -67,6 +63,11 @@ No open items.
 
 - [x] add project page/links/etc
 
+#### Bookend
+
+- [x] Add screenshots to project page
+- [x] Add prominent project page link
+
 #### Content
 
 - [x] Write project page for aborg
@@ -76,6 +77,16 @@ No open items.
 - [x] Hovering over projects link on header should allow either:
   - clicking and going to /projects
   - hovering and having a list of direct links to projects pop down
+
+#### Status dashboard
+
+- [x] Fix forecast cost estimate
+- [x] Align build number links and timestamps in calm-mode running build rows
+
+#### Through Routes
+
+- [x] Add screenshots to project page
+- [x] Add prominent project page link
 
 #### Temperature records
 

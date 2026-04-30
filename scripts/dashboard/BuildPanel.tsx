@@ -16,6 +16,12 @@ import {
 } from './buildModel.js';
 import { fetchAllBuilds } from './buildFetchers.js';
 
+const MAIN_LABEL_WIDTH = 24;
+const WORKFLOW_LABEL_WIDTH = 22;
+const STATUS_WIDTH = 4;
+const ID_WIDTH = 8;
+const BRANCH_WIDTH = 6;
+
 function statusColor(status: string): string {
     const s = status.toUpperCase();
     if (['SUCCEED', 'SUCCESS', 'COMPLETED'].includes(s)) return 'green';
@@ -39,18 +45,31 @@ function BuildRow({ build, indent = 4 }: { build: BuildInfo; indent?: number }) 
             <Text>{' '.repeat(indent)}</Text>
             <Text color={statusColor(build.status)}>●</Text>
             <Text> </Text>
-            <Box width={24}>
+            <Box width={MAIN_LABEL_WIDTH}>
                 <Text>{buildDisplayLabel(build)}</Text>
             </Box>
-            <Box width={4}>
+            <Box width={STATUS_WIDTH}>
                 <Text color={statusColor(build.status)}>{statusLabel(build.status)}</Text>
             </Box>
-            <Box width={8}>
+            <Box width={ID_WIDTH}>
                 <Text>{link(build.url, build.id)}</Text>
             </Box>
-            <Box width={6}>
+            <Box width={BRANCH_WIDTH}>
                 <Text dimColor>{build.branch}</Text>
             </Box>
+            <Text dimColor>{build.time}</Text>
+        </Box>
+    );
+}
+
+export function RunningBuildRow({ build }: { build: BuildInfo }) {
+    return (
+        <Box gap={1}>
+            <Text>    </Text>
+            <Text color="yellow"><Spinner type="dots" /></Text>
+            <Text> </Text>
+            <Box width={MAIN_LABEL_WIDTH}><Text color="yellow">{buildDisplayLabel(build)}</Text></Box>
+            <Box width={ID_WIDTH}><Text>{link(build.url, build.id)}</Text></Box>
             <Text dimColor>{build.time}</Text>
         </Box>
     );
@@ -62,16 +81,16 @@ function WorkflowRow({ build }: { build: BuildInfo }) {
             <Text>      </Text>
             <Text color={statusColor(build.status)}>●</Text>
             <Text> </Text>
-            <Box width={22}>
+            <Box width={WORKFLOW_LABEL_WIDTH}>
                 <Text dimColor>{build.label}</Text>
             </Box>
-            <Box width={4}>
+            <Box width={STATUS_WIDTH}>
                 <Text color={statusColor(build.status)}>{statusLabel(build.status)}</Text>
             </Box>
-            <Box width={8}>
+            <Box width={ID_WIDTH}>
                 <Text>{link(build.url, build.id)}</Text>
             </Box>
-            <Box width={6}>
+            <Box width={BRANCH_WIDTH}>
                 <Text dimColor>{build.branch}</Text>
             </Box>
             <Text dimColor>{build.time}</Text>
@@ -138,13 +157,7 @@ export function BuildPanel({
                     {isStale && <Text color="yellow">⚠ stale</Text>}
                 </Box>
                 {running.map((b) => (
-                    <Box key={buildKey(b)} gap={1}>
-                        <Text>  </Text>
-                        <Text color="yellow"><Spinner type="dots" /></Text>
-                        <Text color="yellow"> {buildDisplayLabel(b)}</Text>
-                        <Text>{link(b.url, b.id)}</Text>
-                        <Text dimColor>{b.time}</Text>
-                    </Box>
+                    <RunningBuildRow key={buildKey(b)} build={b} />
                 ))}
                 {failures.map((b) => (
                     <BuildRow key={buildKey(b)} build={b} />
