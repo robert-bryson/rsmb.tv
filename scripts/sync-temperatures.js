@@ -45,7 +45,8 @@
  */
 
 import { execFileSync } from 'child_process';
-import { writeFileSync, mkdirSync, existsSync, readFileSync } from 'fs';
+import { writeFileSync, mkdirSync, existsSync, readFileSync, unlinkSync } from 'fs';
+import { tmpdir } from 'os';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { createHash } from 'crypto';
@@ -176,18 +177,20 @@ async function dailyExistsOnS3(dateStr) {
  */
 async function readJsonFromS3(key, options = {}) {
     if (!S3_BUCKET) return null;
-    const { maxBuffer = 100 * 1024 * 1024 } = options;
+    const tmpFile = resolve(tmpdir(), `rsmbtv-s3-${process.pid}-${Date.now()}.json`);
     try {
-        const result = execFileSync('aws', [
+        execFileSync('aws', [
             's3api',
             'get-object',
             '--bucket', S3_BUCKET,
             '--key', key,
-            '/dev/stdout',
-        ], { stdio: ['ignore', 'pipe', 'ignore'], maxBuffer });
-        return JSON.parse(result.toString('utf-8'));
+            tmpFile,
+        ], { stdio: 'ignore' });
+        return JSON.parse(readFileSync(tmpFile, 'utf-8'));
     } catch {
         return null;
+    } finally {
+        try { unlinkSync(tmpFile); } catch { /* ignore */ }
     }
 }
 
@@ -345,7 +348,7 @@ function cacheKey(category, params) {
 
 /** Check S3 for a cached ACIS response; returns parsed JSON or null. */
 async function readCacheFromS3(key) {
-    return readJsonFromS3(key, { maxBuffer: 20 * 1024 * 1024 });
+    return readJsonFromS3(key);
 }
 
 /** Write a cached ACIS response to local disk (uploaded to S3 in CI sync step). */
@@ -1346,6 +1349,19 @@ async function main() {
 
     if (!existsSync(OUTPUT_DIR)) {
         mkdirSync(OUTPUT_DIR, { recursive: true });
+    }
+
+    // Verify TEMP_DATA_DIR is accessible before doing any real work
+    try {
+        mkdirSync(TEMP_DATA_DIR, { recursive: true });
+        const { accessSync, constants } = await import('fs');
+        accessSync(TEMP_DATA_DIR, constants.R_OK | constants.W_OK);
+    } catch (err) {
+        console.error(`\n❌ Intermediary dir is not accessible: ${TEMP_DATA_DIR}`);
+        console.error(`   ${err.message}`);
+        console.error(`   Set TEMP_DATA_DIR to a writable path, e.g.:`);
+        console.error(`   TEMP_DATA_DIR=.temp/temperatures npm run sync-temperatures`);
+        process.exit(1);
     }
 
     if (!recentOnly) {
