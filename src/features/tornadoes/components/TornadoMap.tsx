@@ -434,6 +434,7 @@ export function TornadoMap() {
     const [timelineCollapsed, setTimelineCollapsed] = useState(false);
     const [summaryCollapsed, setSummaryCollapsed] = useState(false);
     const [copiedUrl, setCopiedUrl] = useState(false);
+    const copiedUrlTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [webglUnavailable, setWebglUnavailable] = useState(() => {
         try {
             const canvas = document.createElement('canvas');
@@ -464,15 +465,20 @@ export function TornadoMap() {
 
     const handleShare = useCallback(() => {
         const url = window.location.href;
+        const onCopied = () => {
+            if (copiedUrlTimer.current) clearTimeout(copiedUrlTimer.current);
+            setCopiedUrl(true);
+            copiedUrlTimer.current = setTimeout(() => setCopiedUrl(false), 2000);
+        };
         if (navigator.clipboard) {
-            navigator.clipboard.writeText(url).then(() => {
-                setCopiedUrl(true);
-                setTimeout(() => setCopiedUrl(false), 2000);
-            }).catch(() => { window.prompt('Copy this link:', url); });
+            navigator.clipboard.writeText(url).then(onCopied).catch(() => window.prompt('Copy this link:', url));
         } else {
             // Clipboard API unavailable (HTTP context or older browser).
             window.prompt('Copy this link:', url);
         }
+    }, []);
+    useEffect(() => {
+        return () => { if (copiedUrlTimer.current) clearTimeout(copiedUrlTimer.current); };
     }, []);
     const handleSelectState = useCallback((state: string) => {
         setSelectedTrackState(null);
@@ -1016,16 +1022,8 @@ export function TornadoMap() {
                 <Link to="/projects/tornado-tracks" className="rounded-md px-2 py-1.5 font-medium text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100">
                     ← rsmb.tv
                 </Link>
-                <button
-                    type="button"
-                    onClick={handleShare}
-                    className="rounded-md px-2 py-1.5 font-medium text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
-                    title="Copy link to clipboard"
-                >
-                    {copiedUrl ? '✓ Copied' : 'Share'}
-                </button>
                 <div className="h-5 w-px bg-zinc-700" />
-                <div className="grid grid-cols-3 rounded-md bg-zinc-900 p-1">
+                <div className="grid grid-cols-3 rounded-md bg-zinc-900 p-1 md:hidden">
                     {(['tracks', 'density', 'trends'] as const).map((mode) => (
                         <button
                             key={mode}
@@ -1055,6 +1053,7 @@ export function TornadoMap() {
                 mode={filters.mode}
                 selectedState={filters.selectedState}
                 selectedStateName={selectedStateName}
+                shareCopied={copiedUrl}
                 collapsed={summaryCollapsed}
                 onCollapseChange={setSummaryCollapsed}
                 onScaleFilterChange={setScaleFilter}
@@ -1063,6 +1062,7 @@ export function TornadoMap() {
                 onColorModeChange={setColorMode}
                 onModeChange={setMode}
                 onSelectEvent={selectNotableEvent}
+                onShare={handleShare}
                 onCloseSelection={() => setSelectedTrack(null)}
             />
 
@@ -1078,8 +1078,16 @@ export function TornadoMap() {
                 onCollapseChange={setTimelineCollapsed}
             />
 
-            <div className="absolute bottom-[15rem] left-3 z-20 rounded-md border border-zinc-700/80 bg-zinc-950/85 px-2.5 py-1.5 text-xs text-zinc-400 shadow-xl backdrop-blur md:hidden">
-                {stats.count.toLocaleString()} tracks · {stats.ef2Plus.toLocaleString()} EF2+
+            <div className="absolute bottom-[15rem] left-3 z-20 flex items-center gap-2 rounded-md border border-zinc-700/80 bg-zinc-950/85 px-2.5 py-1.5 text-xs text-zinc-400 shadow-xl backdrop-blur md:hidden">
+                <span>{stats.count.toLocaleString()} tracks · {stats.ef2Plus.toLocaleString()} EF2+</span>
+                <button
+                    type="button"
+                    onClick={handleShare}
+                    className="rounded px-1.5 py-0.5 font-medium text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100"
+                    title="Copy current map link"
+                >
+                    {copiedUrl ? 'Copied' : 'Share'}
+                </button>
             </div>
 
             {filteredTracks.features.length > LARGE_TRACK_WARNING_THRESHOLD && !timelinePlaying && (

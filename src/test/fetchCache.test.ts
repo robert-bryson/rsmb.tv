@@ -1,6 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { fetchWithCache, clearCache, invalidateCache } from '../features/flights/utils/fetchCache';
 
+// Minimal Headers-compatible mock for successful JSON responses.
+const jsonHeaders = { get: () => 'application/json' };
+
 describe('fetchCache', () => {
     beforeEach(() => {
         clearCache();
@@ -11,6 +14,7 @@ describe('fetchCache', () => {
         const mockData = { name: 'test' };
         globalThis.fetch = vi.fn().mockResolvedValue({
             ok: true,
+            headers: jsonHeaders,
             json: () => Promise.resolve(mockData),
         });
 
@@ -29,8 +33,8 @@ describe('fetchCache', () => {
         const data2 = { v: 2 };
         globalThis.fetch = vi
             .fn()
-            .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve(data1) })
-            .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve(data2) });
+            .mockResolvedValueOnce({ ok: true, headers: jsonHeaders, json: () => Promise.resolve(data1) })
+            .mockResolvedValueOnce({ ok: true, headers: jsonHeaders, json: () => Promise.resolve(data2) });
 
         await fetchWithCache('/api/x');
         const result = await fetchWithCache('/api/x', { forceRefresh: true });
@@ -42,6 +46,7 @@ describe('fetchCache', () => {
         const mockData = { dup: true };
         globalThis.fetch = vi.fn().mockResolvedValue({
             ok: true,
+            headers: jsonHeaders,
             json: () => Promise.resolve(mockData),
         });
 
@@ -70,6 +75,7 @@ describe('fetchCache', () => {
         const mockData = { id: 1 };
         globalThis.fetch = vi.fn().mockResolvedValue({
             ok: true,
+            headers: jsonHeaders,
             json: () => Promise.resolve(mockData),
         });
 
@@ -86,6 +92,7 @@ describe('fetchCache', () => {
         const mockData = { ttl: true };
         globalThis.fetch = vi.fn().mockResolvedValue({
             ok: true,
+            headers: jsonHeaders,
             json: () => Promise.resolve(mockData),
         });
 
@@ -97,6 +104,7 @@ describe('fetchCache', () => {
     it('propagates JSON parse errors and cleans up pending state', async () => {
         globalThis.fetch = vi.fn().mockResolvedValue({
             ok: true,
+            headers: jsonHeaders,
             json: () => Promise.reject(new SyntaxError('Unexpected token')),
         });
 
@@ -105,6 +113,7 @@ describe('fetchCache', () => {
         // After failure, a fresh request should be made (not stuck on old pending promise)
         globalThis.fetch = vi.fn().mockResolvedValue({
             ok: true,
+            headers: jsonHeaders,
             json: () => Promise.resolve({ recovered: true }),
         });
 
@@ -124,10 +133,26 @@ describe('fetchCache', () => {
         // Retry should make a new request
         globalThis.fetch = vi.fn().mockResolvedValue({
             ok: true,
+            headers: jsonHeaders,
             json: () => Promise.resolve({ success: true }),
         });
 
         const result = await fetchWithCache('/api/server-error');
         expect(result).toEqual({ success: true });
+    });
+
+    it('throws a clear error when the server returns HTML instead of JSON', async () => {
+        const htmlHeaders = { get: () => 'text/html; charset=utf-8' };
+        const jsonSpy = vi.fn();
+        globalThis.fetch = vi.fn().mockResolvedValue({
+            ok: true,
+            headers: htmlHeaders,
+            json: jsonSpy,
+        });
+
+        await expect(fetchWithCache('/api/html-fallback')).rejects.toThrow(
+            'Expected JSON but server returned HTML from /api/html-fallback',
+        );
+        expect(jsonSpy).not.toHaveBeenCalled();
     });
 });

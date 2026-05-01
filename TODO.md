@@ -33,16 +33,12 @@ No open items.
 
 ### Tornado Tracks
 
-- [ ] scrolling seems to reset the tracks/trends/density layer?
-- [ ] better share button somewhere else
-- [ ] Evaluate a vector-tile pipeline for large tornado datasets, similar to Through Routes' Tippecanoe processing
-- [ ] Revisit Tornado Tracks visual styling and capture usable reference notes instead of loose screenshots
+No open items.
 
 ## Next steps
 
 ### Content
 
-- [ ] Add screenshots to remaining project pages (aborg, Anki Artisan)
 - [ ] Publish additional Google-backed blog posts
 
 ### Testing
@@ -93,6 +89,14 @@ No open items.
 
 - [x] Add screenshots to project page
 - [x] Add prominent project page link
+
+#### Tornado Tracks
+
+- [x] scrolling resets the tracks/trends/density layer (URL state race — pendingSearchParams draft fix)
+- [x] better share button placement (moved to summary panel header on desktop, track-count overlay on mobile)
+- [x] evaluate vector-tile pipeline for large tornado datasets (documented in readme)
+- [x] revisit visual styling — capture reference notes instead of loose screenshots (documented in readme)
+- [x] dev-server JSON parse error — DATA_BASE_URL now defaults to CDN; local override via VITE_TORNADO_DATA_BASE_URL
 
 #### Temperature records
 

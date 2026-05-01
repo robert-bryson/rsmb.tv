@@ -39,6 +39,7 @@ interface TornadoSummaryPanelProps {
     mode: TornadoMode;
     selectedState: string | null;
     selectedStateName: string | null;
+    shareCopied: boolean;
     collapsed?: boolean;
     onCollapseChange?: (collapsed: boolean) => void;
     onScaleFilterChange: (value: TornadoScaleFilter) => void;
@@ -47,6 +48,7 @@ interface TornadoSummaryPanelProps {
     onColorModeChange: (value: TornadoColorMode) => void;
     onModeChange: (value: TornadoMode) => void;
     onSelectEvent: (event: NotableTornadoEvent) => void;
+    onShare: () => void;
     onCloseSelection: () => void;
 }
 
@@ -584,6 +586,7 @@ export function TornadoSummaryPanel({
     mode,
     selectedState,
     selectedStateName,
+    shareCopied,
     collapsed = false,
     onCollapseChange,
     onScaleFilterChange,
@@ -592,6 +595,7 @@ export function TornadoSummaryPanel({
     onColorModeChange,
     onModeChange,
     onSelectEvent,
+    onShare,
     onCloseSelection,
 }: TornadoSummaryPanelProps) {
     const selected = selectedTrack?.properties;
@@ -607,6 +611,14 @@ export function TornadoSummaryPanel({
                     )}
                 </div>
                 <div className="flex items-center gap-1">
+                    <button
+                        type="button"
+                        onClick={onShare}
+                        className="rounded-md px-2 py-1 text-xs text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
+                        title="Copy current map link"
+                    >
+                        {shareCopied ? 'Copied' : 'Share'}
+                    </button>
                     {selected && (
                         <button type="button" onClick={onCloseSelection} className="rounded-md px-2 py-1 text-xs text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100">
                             Clear

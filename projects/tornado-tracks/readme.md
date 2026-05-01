@@ -8,8 +8,8 @@ MVP shipped. Core features implemented:
 
 - Full-screen MapLibre map at `/projects/tornado-tracks/map`
 - NOAA/NCEI StormEvents automated sync pipeline (`syncTornadoes.js`)
-- Per-year GeoJSON split under `https://data.rsmb.tv/tornadoes/tracks/{year}.geojson` in production
-- Density (heatmap) mode uses `https://data.rsmb.tv/tornadoes/track-points/{year}.geojson` in production
+- Per-year GeoJSON split under `https://data.rsmb.tv/tornadoes/tracks/{year}.geojson`
+- Density (heatmap) mode uses `https://data.rsmb.tv/tornadoes/track-points/{year}.geojson`
 - Annual summary and notable events JSON pre-baked at build time
 - EF-scale filter, region presets (CONUS / Midwest / Plains / Dixie Alley)
 - Year range timeline with play/pause animation
@@ -26,8 +26,8 @@ Tornado data is stored in S3 (`rsmbtv-temperature-data` bucket, `tornadoes/`
 prefix) and served via the existing `data.rsmb.tv` CloudFront distribution —
 the same infrastructure used for temperature records.
 
-- In production: `https://data.rsmb.tv/tornadoes/…` (CDN-served)
-- In development: `/data/tornadoes/…` (local `public/` directory)
+- By default: `https://data.rsmb.tv/tornadoes/…` (CDN-served)
+- For local generated data: set `VITE_TORNADO_DATA_BASE_URL=/data/tornadoes`
 
 Generated files are **gitignored** (`public/data/tornadoes/`). The CI workflow
 (`sync-tornadoes.yml`) runs the sync script, uploads results to S3, and
@@ -122,6 +122,46 @@ loaded tracks and the pre-baked `annual-summary.json`:
   selected year + scale filter window, toggle between Count, EF2+%, and Deaths.
 - **E · Warnings and watches** — annual storm-based warning counts, selected
   range totals, top WFOs, SPC watches, and approximate report-match rates.
+
+## Interaction notes
+
+- Map viewport changes write `lat`, `lng`, and `zoom` into the URL. Filter
+  updates are composed through a pending URL draft so a scroll or pan `moveend`
+  cannot overwrite a just-selected `tracks` / `density` / `trends` mode.
+- The share action belongs with the analysis controls: desktop keeps it in the
+  right summary panel header, while mobile keeps a compact copy action near the
+  track-count summary above the timeline.
+
+## Vector-tile evaluation
+
+The current per-year GeoJSON split remains the right default for now. It keeps
+the sync pipeline simple, lets the app fetch only the selected year window, and
+supports the existing SVG fallback. A vector-tile path is worth revisiting when
+the app needs multi-decade national views to remain interactive without loading
+all selected features into memory.
+
+Recommended future shape:
+
+- Keep summary JSON and notable-event outputs as-is.
+- Add an optional Tippecanoe/PMTiles artifact for tracks and start/end points,
+  keyed by year, scale, state, and event id.
+- Use MapLibre vector sources for WebGL mode, but keep GeoJSON output available
+  for the SVG fallback and tests.
+- Do not switch the pipeline until hover/click selection can still resolve a
+  complete event record without a second large client-side lookup.
+
+## Visual reference notes
+
+- Preserve the dark basemap and restrained panel chrome; the project reads best
+  as an analysis tool, not a decorative landing page.
+- Keep EF scale color as the default because it explains risk fastest. Year and
+  decade color modes should remain secondary comparison tools.
+- At national zoom, keep low-EF tracks subdued and small so EF2+ events and
+  selected state context stay legible.
+- Density mode should feel like a separate aggregate layer, with the tracks
+  hidden rather than mixed underneath the heatmap.
+- Selected states need a clear outline plus muted out-of-state tracks so the
+  trends panel and map tell the same geographic story.
 
 ## Known limitations
 

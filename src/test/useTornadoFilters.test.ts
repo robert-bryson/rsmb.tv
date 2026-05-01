@@ -341,6 +341,38 @@ describe('useTornadoFilters — setters', () => {
         expect(result.current.filters.mapLng).toBe(INITIAL_CENTER[0]);
         expect(result.current.filters.mapZoom).toBe(INITIAL_ZOOM);
     });
+
+    it('composes same-tick URL updates so map movement preserves mode', () => {
+        const { result } = renderHook(() => useTornadoFilters(), { wrapper });
+
+        act(() => {
+            result.current.setMode('density');
+            result.current.setMapView(35.5, -98.25, 6);
+        });
+
+        expect(result.current.filters.mode).toBe('density');
+        expect(result.current.filters.mapLat).toBe(35.5);
+        expect(result.current.filters.mapLng).toBe(-98.25);
+        expect(result.current.filters.mapZoom).toBe(6);
+    });
+
+    it('composes selectState + setMapView in the same tick without clobbering', () => {
+        // Real-world race: selectState fires (switches mode to trends, sets state)
+        // and a MapLibre moveend fires in the same synchronous event batch.
+        // Without the pending-draft fix the setMapView call clobbers the mode/state.
+        const { result } = renderHook(() => useTornadoFilters(), { wrapper });
+
+        act(() => {
+            result.current.selectState('KS');
+            result.current.setMapView(38.5, -98.0, 7);
+        });
+
+        expect(result.current.filters.selectedState).toBe('KS');
+        expect(result.current.filters.mode).toBe('trends');
+        expect(result.current.filters.mapLat).toBe(38.5);
+        expect(result.current.filters.mapLng).toBe(-98.0);
+        expect(result.current.filters.mapZoom).toBe(7);
+    });
 });
 
 // ---------------------------------------------------------------------------

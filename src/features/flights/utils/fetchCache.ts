@@ -59,6 +59,10 @@ export async function fetchWithCache<T>(
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
+            const contentType = response.headers.get('content-type') ?? '';
+            if (contentType.startsWith('text/html')) {
+                throw new Error(`Expected JSON but server returned HTML from ${url}`);
+            }
 
             const data = await response.json();
 

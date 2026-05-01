@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { DEFAULT_END_YEAR, DEFAULT_START_YEAR, INITIAL_CENTER, INITIAL_ZOOM, MAX_ZOOM, MIN_ZOOM } from '../constants';
 import type { TornadoColorMode, TornadoMode, TornadoRegionPreset, TornadoScaleFilter } from '../types';
@@ -34,6 +34,12 @@ function parseState(value: string | null): string | null {
 
 export function useTornadoFilters() {
     const [searchParams, setSearchParams] = useSearchParams();
+    // React Router's setSearchParams functional-update form does NOT queue updates
+    // like React setState — both calls in a single synchronous event receive the
+    // same committed `prev`, so the second call overwrites the first. This ref
+    // accumulates the in-flight draft so each same-tick call composes on top of
+    // the previous write. Cleared by the useEffect below whenever searchParams commits.
+    const pendingSearchParams = useRef<URLSearchParams | null>(null);
     const startYear = parseYear(searchParams.get('start'), DEFAULT_START_YEAR);
     const endYear = parseYear(searchParams.get('end'), DEFAULT_END_YEAR);
     const scaleFilter = parseSetValue(searchParams.get('scale'), SCALE_FILTERS, 'all');
@@ -45,13 +51,17 @@ export function useTornadoFilters() {
     const mapLat = parseFloatParam(searchParams.get('lat'), INITIAL_CENTER[1], -90, 90);
     const mapZoom = parseFloatParam(searchParams.get('zoom'), INITIAL_ZOOM, MIN_ZOOM, MAX_ZOOM);
 
+    useEffect(() => {
+        pendingSearchParams.current = null;
+    }, [searchParams]);
+
     const updateParams = useCallback((updater: (next: URLSearchParams) => void) => {
-        setSearchParams((prev) => {
-            const next = new URLSearchParams(prev);
-            updater(next);
-            return next;
-        }, { replace: true });
-    }, [setSearchParams]);
+        const base = pendingSearchParams.current ?? searchParams;
+        const next = new URLSearchParams(base);
+        updater(next);
+        pendingSearchParams.current = next;
+        setSearchParams(next, { replace: true });
+    }, [searchParams, setSearchParams]);
 
     const setYearRange = useCallback((start: number, end: number) => {
         const nextStart = Math.min(start, end);
