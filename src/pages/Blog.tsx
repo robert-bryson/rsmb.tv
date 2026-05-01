@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
+import { BlogAllTagsLink, BlogTagLink } from '../components/BlogTagLink';
+import { filterPostsByTag, getAllBlogTags } from '../content/blogTags';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { getAllPosts } from '../content/posts';
@@ -8,7 +10,11 @@ import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
 const description = 'Thoughts on projects, engineering, and things I find interesting.';
 
 export function Blog() {
-    const posts = getAllPosts();
+    const allPosts = getAllPosts();
+    const [searchParams] = useSearchParams();
+    const activeTag = searchParams.get('tag')?.trim() ?? '';
+    const allTags = getAllBlogTags(allPosts);
+    const posts = filterPostsByTag(allPosts, activeTag);
 
     useDocumentHead({
         title: 'Blog | rsmb',
@@ -23,7 +29,7 @@ export function Blog() {
         description,
         url: absoluteUrl('/blog'),
         author: AUTHOR_PERSON,
-        blogPost: posts.map((post) => ({
+        blogPost: allPosts.map((post) => ({
             '@type': 'BlogPosting',
             headline: post.title,
             description: post.description,
@@ -38,12 +44,28 @@ export function Blog() {
     return (
         <div>
             <h1 className="text-3xl font-bold text-zinc-100 mb-2">Blog</h1>
-            <p className="text-zinc-400 mb-8">
+            <p className="text-zinc-400 mb-6">
                 Thoughts on projects, engineering, and things I find interesting.
             </p>
 
+            {allTags.length > 0 && (
+                <nav aria-label="Blog tags" className="flex flex-wrap gap-2 mb-8">
+                    <BlogAllTagsLink active={!activeTag} />
+                    {allTags.map((tag) => (
+                        <BlogTagLink
+                            key={tag}
+                            tag={tag}
+                            active={activeTag === tag}
+                            current={activeTag === tag}
+                        />
+                    ))}
+                </nav>
+            )}
+
             {posts.length === 0 ? (
-                <p className="text-zinc-400">No posts yet. Check back soon.</p>
+                <p className="text-zinc-400">
+                    {activeTag ? `No posts tagged "${activeTag}".` : 'No posts yet. Check back soon.'}
+                </p>
             ) : (
                 <ul className="space-y-6">
                     {posts.map((post) => (
@@ -58,6 +80,17 @@ export function Blog() {
                                 </h2>
                                 <p className="text-zinc-400 text-sm mt-1">{post.description}</p>
                             </Link>
+                            {post.tags.length > 0 && (
+                                <div className="flex flex-wrap gap-2 mt-2">
+                                    {post.tags.map((tag) => (
+                                        <BlogTagLink
+                                            key={tag}
+                                            tag={tag}
+                                            active={activeTag === tag}
+                                        />
+                                    ))}
+                                </div>
+                            )}
                         </li>
                     ))}
                 </ul>

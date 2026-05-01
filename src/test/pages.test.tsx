@@ -24,14 +24,14 @@ describe('Home page', () => {
         expect(screen.getByText(/Hi, I'm Robby/i)).toBeInTheDocument();
     });
 
-    it('renders featured section', () => {
+    it('renders projects section', () => {
         renderWithRouter(<Home />);
-        expect(screen.getByText('Featured')).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 2, name: 'Projects' })).toBeInTheDocument();
     });
 
-    it('renders "View all projects" link', () => {
+    it('renders projects index link', () => {
         renderWithRouter(<Home />);
-        expect(screen.getByText(/View all projects/i)).toBeInTheDocument();
+        expect(screen.getAllByRole('link', { name: /View all/i }).some((link) => link.getAttribute('href') === '/projects')).toBe(true);
     });
 
     it('adds WebSite JSON-LD with shared author', () => {

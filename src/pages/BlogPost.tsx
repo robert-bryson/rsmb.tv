@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
+import { BlogTagLink } from '../components/BlogTagLink';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { getPostBySlug } from '../content/posts';
@@ -66,14 +67,9 @@ export function BlogPost() {
                 <time className="text-sm text-zinc-400">{formatDate(post.date)}</time>
                 <h1 className="text-3xl font-bold text-zinc-100 mt-2">{post.title}</h1>
                 {post.tags.length > 0 && (
-                    <div className="flex gap-2 mt-3">
+                    <div className="flex flex-wrap gap-2 mt-3">
                         {post.tags.map((tag) => (
-                            <span
-                                key={tag}
-                                className="text-xs bg-zinc-800 text-zinc-400 rounded-full px-2.5 py-0.5"
-                            >
-                                {tag}
-                            </span>
+                            <BlogTagLink key={tag} tag={tag} />
                         ))}
                     </div>
                 )}

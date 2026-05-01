@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { fetchWithCache, clearCache } from '../features/flights/utils/fetchCache';
+import { jsonFetchResponse } from './helpers/fetch';
 
 describe('fetchCache timeout', () => {
     beforeEach(() => {
@@ -23,20 +24,14 @@ describe('fetchCache timeout', () => {
 
     it('succeeds when response arrives before timeout', async () => {
         const mockData = { fast: true };
-        globalThis.fetch = vi.fn().mockResolvedValue({
-            ok: true,
-            json: () => Promise.resolve(mockData),
-        });
+        globalThis.fetch = vi.fn().mockResolvedValue(jsonFetchResponse(mockData));
 
         const result = await fetchWithCache('/api/fast', { timeout: 5000 });
         expect(result).toEqual(mockData);
     });
 
     it('passes AbortSignal to fetch', async () => {
-        globalThis.fetch = vi.fn().mockResolvedValue({
-            ok: true,
-            json: () => Promise.resolve({}),
-        });
+        globalThis.fetch = vi.fn().mockResolvedValue(jsonFetchResponse({}));
 
         await fetchWithCache('/api/signal', { timeout: 5000 });
 

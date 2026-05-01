@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { useGeoJsonData } from '../features/flights/hooks/useGeoJsonData';
 import { clearCache } from '../features/flights/utils/fetchCache';
+import { jsonFetchResponse } from './helpers/fetch';
 
 describe('useGeoJsonData', () => {
     beforeEach(() => {
@@ -24,10 +25,7 @@ describe('useGeoJsonData', () => {
 
     it('fetches and returns data', async () => {
         const mockData = { type: 'FeatureCollection', features: [{ id: 1 }] };
-        globalThis.fetch = vi.fn().mockResolvedValue({
-            ok: true,
-            json: () => Promise.resolve(mockData),
-        });
+        globalThis.fetch = vi.fn().mockResolvedValue(jsonFetchResponse(mockData));
 
         const { result } = renderHook(() => useGeoJsonData('airports.geojson'));
 
@@ -54,10 +52,7 @@ describe('useGeoJsonData', () => {
     });
 
     it('constructs URL from BASE_URL and filename', async () => {
-        globalThis.fetch = vi.fn().mockResolvedValue({
-            ok: true,
-            json: () => Promise.resolve({}),
-        });
+        globalThis.fetch = vi.fn().mockResolvedValue(jsonFetchResponse({}));
 
         renderHook(() => useGeoJsonData('flights.geojson'));
 
@@ -73,10 +68,7 @@ describe('useGeoJsonData', () => {
         let resolvePromise: (value: unknown) => void;
         globalThis.fetch = vi.fn().mockReturnValue(
             new Promise(resolve => {
-                resolvePromise = () => resolve({
-                    ok: true,
-                    json: () => Promise.resolve({ type: 'FeatureCollection', features: [] }),
-                });
+                resolvePromise = () => resolve(jsonFetchResponse({ type: 'FeatureCollection', features: [] }));
             })
         );
 

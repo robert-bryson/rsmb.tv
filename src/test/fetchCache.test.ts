@@ -1,8 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { fetchWithCache, clearCache, invalidateCache } from '../features/flights/utils/fetchCache';
-
-// Minimal Headers-compatible mock for successful JSON responses.
-const jsonHeaders = { get: () => 'application/json' };
+import { jsonFetchResponse } from './helpers/fetch';
 
 describe('fetchCache', () => {
     beforeEach(() => {
@@ -12,11 +10,7 @@ describe('fetchCache', () => {
 
     it('fetches and caches data', async () => {
         const mockData = { name: 'test' };
-        globalThis.fetch = vi.fn().mockResolvedValue({
-            ok: true,
-            headers: jsonHeaders,
-            json: () => Promise.resolve(mockData),
-        });
+        globalThis.fetch = vi.fn().mockResolvedValue(jsonFetchResponse(mockData));
 
         const result = await fetchWithCache<typeof mockData>('/api/test');
         expect(result).toEqual(mockData);
@@ -33,8 +27,8 @@ describe('fetchCache', () => {
         const data2 = { v: 2 };
         globalThis.fetch = vi
             .fn()
-            .mockResolvedValueOnce({ ok: true, headers: jsonHeaders, json: () => Promise.resolve(data1) })
-            .mockResolvedValueOnce({ ok: true, headers: jsonHeaders, json: () => Promise.resolve(data2) });
+            .mockResolvedValueOnce(jsonFetchResponse(data1))
+            .mockResolvedValueOnce(jsonFetchResponse(data2));
 
         await fetchWithCache('/api/x');
         const result = await fetchWithCache('/api/x', { forceRefresh: true });
@@ -44,11 +38,7 @@ describe('fetchCache', () => {
 
     it('deduplicates concurrent in-flight requests', async () => {
         const mockData = { dup: true };
-        globalThis.fetch = vi.fn().mockResolvedValue({
-            ok: true,
-            headers: jsonHeaders,
-            json: () => Promise.resolve(mockData),
-        });
+        globalThis.fetch = vi.fn().mockResolvedValue(jsonFetchResponse(mockData));
 
         // Fire two concurrent requests for the same URL
         const [a, b] = await Promise.all([
@@ -73,11 +63,7 @@ describe('fetchCache', () => {
 
     it('invalidateCache removes a specific entry', async () => {
         const mockData = { id: 1 };
-        globalThis.fetch = vi.fn().mockResolvedValue({
-            ok: true,
-            headers: jsonHeaders,
-            json: () => Promise.resolve(mockData),
-        });
+        globalThis.fetch = vi.fn().mockResolvedValue(jsonFetchResponse(mockData));
 
         await fetchWithCache('/api/inv');
         expect(fetch).toHaveBeenCalledTimes(1);
@@ -90,11 +76,7 @@ describe('fetchCache', () => {
 
     it('respects TTL expiration', async () => {
         const mockData = { ttl: true };
-        globalThis.fetch = vi.fn().mockResolvedValue({
-            ok: true,
-            headers: jsonHeaders,
-            json: () => Promise.resolve(mockData),
-        });
+        globalThis.fetch = vi.fn().mockResolvedValue(jsonFetchResponse(mockData));
 
         await fetchWithCache('/api/ttl', { ttl: 0 }); // Expire immediately
         await fetchWithCache('/api/ttl', { ttl: 0 });
@@ -102,20 +84,14 @@ describe('fetchCache', () => {
     });
 
     it('propagates JSON parse errors and cleans up pending state', async () => {
-        globalThis.fetch = vi.fn().mockResolvedValue({
-            ok: true,
-            headers: jsonHeaders,
+        globalThis.fetch = vi.fn().mockResolvedValue(jsonFetchResponse({}, {
             json: () => Promise.reject(new SyntaxError('Unexpected token')),
-        });
+        }));
 
         await expect(fetchWithCache('/api/bad-json')).rejects.toThrow('Unexpected token');
 
         // After failure, a fresh request should be made (not stuck on old pending promise)
-        globalThis.fetch = vi.fn().mockResolvedValue({
-            ok: true,
-            headers: jsonHeaders,
-            json: () => Promise.resolve({ recovered: true }),
-        });
+        globalThis.fetch = vi.fn().mockResolvedValue(jsonFetchResponse({ recovered: true }));
 
         const result = await fetchWithCache('/api/bad-json');
         expect(result).toEqual({ recovered: true });
@@ -131,24 +107,18 @@ describe('fetchCache', () => {
         await expect(fetchWithCache('/api/server-error')).rejects.toThrow('HTTP 500');
 
         // Retry should make a new request
-        globalThis.fetch = vi.fn().mockResolvedValue({
-            ok: true,
-            headers: jsonHeaders,
-            json: () => Promise.resolve({ success: true }),
-        });
+        globalThis.fetch = vi.fn().mockResolvedValue(jsonFetchResponse({ success: true }));
 
         const result = await fetchWithCache('/api/server-error');
         expect(result).toEqual({ success: true });
     });
 
     it('throws a clear error when the server returns HTML instead of JSON', async () => {
-        const htmlHeaders = { get: () => 'text/html; charset=utf-8' };
         const jsonSpy = vi.fn();
-        globalThis.fetch = vi.fn().mockResolvedValue({
-            ok: true,
-            headers: htmlHeaders,
-            json: jsonSpy,
-        });
+        globalThis.fetch = vi.fn().mockResolvedValue(jsonFetchResponse({}, {
+            headers: new Headers({ 'content-type': 'text/html; charset=utf-8' }),
+            json: jsonSpy as Response['json'],
+        }));
 
         await expect(fetchWithCache('/api/html-fallback')).rejects.toThrow(
             'Expected JSON but server returned HTML from /api/html-fallback',

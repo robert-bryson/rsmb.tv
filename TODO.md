@@ -16,8 +16,7 @@ No open items.
 
 ### rsmb.tv
 
-- [ ] Make blog post tags clickable and filterable
-- [ ] Rework the front page so posts and projects have clearer hierarchy
+No open items.
 
 ### Status dashboard
 
@@ -76,6 +75,8 @@ No open items.
 
 #### rsmb.tv
 
+- [x] Make blog post tags clickable and filterable
+- [x] Rework the front page so posts and projects have clearer hierarchy
 - [x] Hovering over projects link on header should allow either:
   - clicking and going to /projects
   - hovering and having a list of direct links to projects pop down

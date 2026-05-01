@@ -9,6 +9,7 @@ A personal website and portfolio showcasing interactive projects, with a focus o
 - **Flights** — An interactive 3D globe visualization built with [react-globe.gl](https://github.com/vasturiano/react-globe.gl) that displays flights I've taken around the world. Includes filtering by year, route frequency analysis, and travel statistics.
 - **Temperature Records** — An interactive map of U.S. temperature records built with MapLibre GL, showing broken records, county/state all-time records, climate trends, and freshness analysis.
 - **Project Portfolio** — Showcases various side projects including web tools and data visualizations.
+- **Blog** — Google-backed MDX posts with RSS, generated Open Graph images, structured data, and shareable tag filters.
 - **About** — Background on my experience in geospatial engineering and software development.
 
 ## Tech Stack
@@ -99,7 +100,7 @@ Build status is source-aware: AWS Amplify deployments are shown separately from 
 
 ## Blog Publishing
 
-Google Sheets/Docs is the source of truth for blog content. The build syncs published rows from the Sheet, exports the referenced Google Docs to MDX, then generates RSS, sitemap, and blog OG images before Vite bundles the app. Generated post files are build artifacts and should not be committed.
+Google Sheets/Docs is the source of truth for blog content. The build syncs published rows from the Sheet, exports the referenced Google Docs to MDX, then generates RSS, sitemap, and blog OG images before Vite bundles the app. Generated post files are build artifacts and should not be committed. The blog index exposes tags as URL filters (`/blog?tag=Maps`), so tag names should stay concise and reader-facing.
 
 Maintain a Google Sheet tab named `Blog Posts` by default, with one row per post:
 
