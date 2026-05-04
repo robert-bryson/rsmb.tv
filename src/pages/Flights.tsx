@@ -9,6 +9,12 @@ const FlightsMap = lazy(() =>
   })),
 );
 
+const FlightsMap = lazy(() =>
+  import('../features/flights/components/FlightsMap').then((m) => ({
+    default: m.FlightsMap,
+  })),
+);
+
 export default function Flights() {
   const description =
     'Interactive 3D globe visualization of flights around the world. Filter by year, see route frequencies, and explore travel statistics.';
