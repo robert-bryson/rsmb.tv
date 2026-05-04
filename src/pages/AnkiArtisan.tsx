@@ -1,6 +1,32 @@
+import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/ProjectScreenshotGallery';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+
+const screenshots: ProjectScreenshot[] = [
+    {
+        src: '/images/anki-artisan/anki-artisan-visual-id.webp',
+        alt: 'Anki card showing six iNaturalist plant photos above the prompt "What order is this?"',
+        caption: 'Visual ID - six iNaturalist photos; identify the order (Rosales)',
+        width: 1079,
+        height: 1896,
+        loading: 'eager',
+    },
+    {
+        src: '/images/anki-artisan/anki-artisan-nomenclature-sci-common.webp',
+        alt: 'Anki card for genus Cercis showing the common name "redbuds" with six iNaturalist reference photos',
+        caption: 'Nomenclature (scientific to common) - genus Cercis = redbuds',
+        width: 1079,
+        height: 1703,
+    },
+    {
+        src: '/images/anki-artisan/anki-artisan-nomenclature-common-sci.webp',
+        alt: 'Anki card for Black-necked Stilt showing the scientific name Himantopus mexicanus with a reference photo',
+        caption: 'Nomenclature (common to scientific) - Black-necked Stilt = Himantopus mexicanus',
+        width: 1079,
+        height: 1671,
+    },
+];
 
 export default function AnkiArtisan() {
     const description =
@@ -9,7 +35,7 @@ export default function AnkiArtisan() {
     useDocumentHead({
         title: 'Anki Artisan',
         description,
-        ogImage: 'https://rsmb.tv/og/anki-artisan.svg',
+        ogImage: absoluteUrl('/og/anki-artisan.svg'),
     });
 
     useJsonLd({
@@ -82,6 +108,8 @@ export default function AnkiArtisan() {
                     — side-by-side comparison of lookalikes
                 </li>
             </ul>
+
+            <ProjectScreenshotGallery screenshots={screenshots} layout="grid" />
 
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Features</h2>
             <ul className="space-y-1.5 text-zinc-400 text-sm mb-6 list-disc list-inside">

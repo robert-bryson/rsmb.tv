@@ -9,23 +9,31 @@ export interface ProjectScreenshot {
 
 interface ProjectScreenshotGalleryProps {
     screenshots: ProjectScreenshot[];
+    layout?: 'stacked' | 'grid';
 }
 
-export function ProjectScreenshotGallery({ screenshots }: ProjectScreenshotGalleryProps) {
+export function ProjectScreenshotGallery({ screenshots, layout = 'stacked' }: ProjectScreenshotGalleryProps) {
+    const wrapperClassName = layout === 'grid'
+        ? 'mb-8 grid gap-4 sm:grid-cols-3'
+        : 'mb-8 space-y-6';
+    const imageClassName = layout === 'grid'
+        ? 'w-full rounded-lg border border-zinc-800'
+        : 'rounded-lg border border-zinc-800';
+
     return (
-        <div className="mb-8 space-y-6">
+        <div className={wrapperClassName}>
             {screenshots.map((screenshot) => (
                 <figure key={screenshot.src}>
                     <img
                         src={screenshot.src}
                         alt={screenshot.alt}
-                        className="rounded-lg border border-zinc-800"
+                        className={imageClassName}
                         width={screenshot.width}
                         height={screenshot.height}
                         loading={screenshot.loading ?? 'lazy'}
                         decoding="async"
                     />
-                    <figcaption className="mt-2 text-center text-xs text-zinc-400">
+                    <figcaption className="mt-2 text-center text-xs leading-snug text-zinc-400">
                         {screenshot.caption}
                     </figcaption>
                 </figure>

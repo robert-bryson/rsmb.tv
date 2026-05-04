@@ -31,10 +31,14 @@ describe('FlightsAbout page', () => {
 });
 
 describe('AnkiArtisan page', () => {
-    it('renders heading and GitHub link', () => {
+    it('renders heading, GitHub link, and screenshots', () => {
         renderWithRouter(<AnkiArtisan />, { route: '/projects/anki-artisan' });
         expect(screen.getByRole('heading', { level: 1, name: /Anki Artisan/i })).toBeInTheDocument();
         expect(screen.getByRole('link', { name: /Source on GitHub/i })).toHaveAttribute('href', 'https://github.com/robert-bryson/anki-artisan');
+        expect(screen.getByRole('img', { name: /six iNaturalist plant photos/i })).toHaveAttribute('src', '/images/anki-artisan/anki-artisan-visual-id.webp');
+        expect(screen.getByRole('img', { name: /genus Cercis/i })).toHaveAttribute('src', '/images/anki-artisan/anki-artisan-nomenclature-sci-common.webp');
+        expect(screen.getByRole('img', { name: /Black-necked Stilt/i })).toHaveAttribute('src', '/images/anki-artisan/anki-artisan-nomenclature-common-sci.webp');
+        expect(screen.getByText(/six iNaturalist photos; identify the order/i)).toBeInTheDocument();
     });
 });
 

@@ -39,6 +39,7 @@ export const projects: Project[] = [
     tech: ['Python', 'Click', 'eBird API', 'iNaturalist API', 'SQLite'],
     featured: true,
     sourceUrl: 'https://github.com/robert-bryson/anki-artisan',
+    previewImage: '/images/anki-artisan/anki-artisan-preview.webp',
     year: 2026,
   },
   {

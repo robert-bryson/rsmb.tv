@@ -98,6 +98,10 @@ Build status is source-aware: AWS Amplify deployments are shown separately from 
 
 `src/content/posts.json`, `src/content/blog/*.mdx`, `public/rss.xml`, `public/sitemap.xml`, and `public/og/blog/*` are generated artifacts. They are ignored by git and rebuilt from Google Sheets/Docs during local dev and production builds.
 
+## Project Image Assets
+
+Project screenshots and preview images live under `public/images/<project-slug>/` and should be committed as optimized WebP files. Do not commit raw JPG/PNG capture files when a compressed WebP derivative is used by the site. Project cards expect landscape previews; when the source material is portrait-oriented, compose a landscape preview image instead of pointing the card at a single phone screenshot.
+
 ## Blog Publishing
 
 Google Sheets/Docs is the source of truth for blog content. The build syncs published rows from the Sheet, exports the referenced Google Docs to MDX, then generates RSS, sitemap, and blog OG images before Vite bundles the app. Generated post files are build artifacts and should not be committed. The blog index exposes tags as URL filters (`/blog?tag=Maps`), so tag names should stay concise and reader-facing.

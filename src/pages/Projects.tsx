@@ -74,7 +74,7 @@ function ProjectContent({ project }: { project: typeof projects[0] }) {
         <img
           src={project.previewImage}
           alt={`${project.title} preview`}
-          className="w-full rounded-md mb-3 border border-zinc-800"
+          className="mb-3 aspect-video w-full rounded-md border border-zinc-800 object-cover"
           loading="lazy"
         />
       )}

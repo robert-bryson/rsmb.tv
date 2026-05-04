@@ -65,4 +65,8 @@ describe('projects data', () => {
             expect(committedWebpImages).toHaveProperty(`/public${p.previewImage}`);
         }
     });
+
+    it('uses a composed Anki Artisan preview instead of a portrait screenshot', () => {
+        expect(projects.find(p => p.slug === 'anki-artisan')?.previewImage).toBe('/images/anki-artisan/anki-artisan-preview.webp');
+    });
 });

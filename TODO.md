@@ -6,9 +6,9 @@
 
 - [ ] Add screenshots to project page
 
-### Anki artisan
+### Anki Artisan
 
-- [ ] Add screenshots to project page
+No open items.
 
 ### Bookend
 
@@ -64,6 +64,10 @@ No open items.
 
 - [x] add project page/links/etc
 
+#### Anki Artisan
+
+- [x] Add screenshots to project page
+
 #### Bookend
 
 - [x] Add screenshots to project page
@@ -91,14 +95,6 @@ No open items.
 - [x] Add screenshots to project page
 - [x] Add prominent project page link
 
-#### Tornado Tracks
-
-- [x] scrolling resets the tracks/trends/density layer (URL state race — pendingSearchParams draft fix)
-- [x] better share button placement (moved to summary panel header on desktop, track-count overlay on mobile)
-- [x] evaluate vector-tile pipeline for large tornado datasets (documented in readme)
-- [x] revisit visual styling — capture reference notes instead of loose screenshots (documented in readme)
-- [x] dev-server JSON parse error — DATA_BASE_URL now defaults to CDN; local override via VITE_TORNADO_DATA_BASE_URL
-
 #### Temperature records
 
 - [x] Clarify record terminology across recent station records, county/state all-time records, record-age views, and trends
@@ -109,6 +105,11 @@ No open items.
 
 #### Tornado Tracks
 
+- [x] scrolling resets the tracks/trends/density layer (URL state race — pendingSearchParams draft fix)
+- [x] better share button placement (moved to summary panel header on desktop, track-count overlay on mobile)
+- [x] evaluate vector-tile pipeline for large tornado datasets (documented in readme)
+- [x] revisit visual styling — capture reference notes instead of loose screenshots (documented in readme)
+- [x] dev-server JSON parse error — DATA_BASE_URL now defaults to CDN; local override via VITE_TORNADO_DATA_BASE_URL
 - [x] Add screenshots to project page
 - [x] refreshing the page moves the map back to the starting zoom/bbox
 - [x] how to keep track data up to date?
