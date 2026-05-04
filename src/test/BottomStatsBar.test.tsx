@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 import type { ComponentProps } from 'react';
 import { BottomStatsBar } from '../features/flights/components/BottomStatsBar';
 
@@ -11,6 +11,10 @@ function renderBar(overrides: Partial<ComponentProps<typeof BottomStatsBar>> = {
         selectedYear: null,
         selectedAirport: null,
         selectedAirline: null,
+        selectedCountry: null,
+        selectedRegion: null,
+        isMetric: true,
+        onToggleUnits: vi.fn(),
         ...overrides,
     };
     return render(<BottomStatsBar {...props} />);
@@ -65,5 +69,34 @@ describe('BottomStatsBar', () => {
     it('does not show airline when none selected', () => {
         renderBar({ selectedAirline: null });
         expect(screen.queryByText('United')).not.toBeInTheDocument();
+    });
+
+    it('shows selected country and region labels when provided', () => {
+        renderBar({ selectedCountry: 'Canada', selectedRegion: 'Washington' });
+        expect(screen.getByText('Canada')).toBeInTheDocument();
+        expect(screen.getByText('Washington')).toBeInTheDocument();
+    });
+
+    it('renders metric distance as a unit-toggle button', () => {
+        renderBar({ totalDistance: 100, isMetric: true });
+        const button = screen.getByRole('button', { name: 'Switch to imperial units' });
+
+        expect(button).toHaveTextContent('100 km');
+        expect(button).not.toHaveClass('hidden');
+    });
+
+    it('renders imperial distance when metric units are disabled', () => {
+        renderBar({ totalDistance: 100, isMetric: false });
+
+        expect(screen.getByRole('button', { name: 'Switch to metric units' })).toHaveTextContent('62 mi');
+    });
+
+    it('calls onToggleUnits when the distance button is clicked', () => {
+        const onToggleUnits = vi.fn();
+        renderBar({ totalDistance: 100, onToggleUnits });
+
+        fireEvent.click(screen.getByRole('button', { name: 'Switch to imperial units' }));
+
+        expect(onToggleUnits).toHaveBeenCalledOnce();
     });
 });

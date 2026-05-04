@@ -44,3 +44,16 @@ export function parseDateString(dateStr: string): Date {
 export function sortDatesDescending(dates: string[]): string[] {
     return [...dates].sort((a, b) => parseDateString(b).getTime() - parseDateString(a).getTime());
 }
+
+/** Format a distance (given in km) using the selected unit system */
+export function formatDistance(km: number, isMetric: boolean): string {
+    if (isMetric) return `${Math.round(km).toLocaleString()} km`;
+    const miles = Math.round(km * 0.621371);
+    return `${miles.toLocaleString()} mi`;
+}
+
+/** Format an elevation using the selected unit system */
+export function formatElevation(elevationFt: number, elevationM: number, isMetric: boolean): string {
+    if (isMetric) return `${elevationM.toLocaleString()} m`;
+    return `${elevationFt.toLocaleString()} ft`;
+}

@@ -19,7 +19,7 @@ import { GlobeErrorBoundary } from './GlobeErrorBoundary';
 import { GlobeLoadingOverlay } from './GlobeLoadingOverlay';
 import { useGlobeTextures } from '../hooks/useGlobeTextures';
 import { SkipLink } from './SkipLink';
-import { escapeHtml } from '../utils';
+import { escapeHtml, formatElevation } from '../utils';
 import { TopNavigationBar } from './TopNavigationBar';
 import { ControlButtons } from './ControlButtons';
 import { BottomStatsBar } from './BottomStatsBar';
@@ -92,6 +92,9 @@ export function FlightsMap() {
   // US States layer state
   const [usStatesVisible, setUSStatesVisible] = usePersistedState('flights-us-states-visible', false);
   const [stateSymbolMode, setStateSymbolMode] = usePersistedState<StateSymbolMode>('flights-state-symbol-mode', 'visited');
+
+  // Units preference (metric = km/m, imperial = mi/ft)
+  const [isMetric, setIsMetric] = usePersistedState('flights-units-metric', true);
 
   // Set initial view centered on USA and disable rotation initially
   useEffect(() => {
@@ -168,6 +171,13 @@ export function FlightsMap() {
   // Create a set of valid airport codes for clickable validation
   const validAirportCodes = useMemo(() => {
     return new Set(pointsData.map(p => p.airport.code));
+  }, [pointsData]);
+
+  // Map of airport code -> name for tooltips in StatsPanel
+  const airportNames = useMemo(() => {
+    const map = new Map<string, string>();
+    pointsData.forEach(p => map.set(p.airport.code, p.airport.name));
+    return map;
   }, [pointsData]);
 
   // All airports layer data
@@ -866,7 +876,7 @@ export function FlightsMap() {
               <div class="text-gray-500 text-xs mt-1">${a.municipality ? escapeHtml(a.municipality) + ', ' : ''}${escapeHtml(a.countryName)}</div>
               <div class="text-gray-500 text-xs">${escapeHtml(a.continentName)}</div>
               <div class="text-gray-600 text-xs mt-2 pt-2 border-t border-gray-700">
-                ${a.elevationFt.toLocaleString()} ft (${a.elevationM.toLocaleString()} m)
+                ${escapeHtml(formatElevation(a.elevationFt, a.elevationM, isMetric))}
               </div>
               <div class="text-gray-600 text-xs mt-1 italic">Not yet visited</div>
             </div>
@@ -880,7 +890,7 @@ export function FlightsMap() {
               <div class="font-bold text-yellow-300">${escapeHtml(visitedAirport.code)}</div>
               <div class="text-gray-300">${escapeHtml(visitedAirport.name)}</div>
               <div class="text-gray-400 text-xs">${escapeHtml(visitedAirport.municipality)}, ${escapeHtml(visitedAirport.countryName)}</div>
-              <div class="text-gray-500 text-xs">${visitedAirport.elevationFt.toLocaleString()} ft (${visitedAirport.elevationM.toLocaleString()} m)</div>
+              <div class="text-gray-500 text-xs">${escapeHtml(formatElevation(visitedAirport.elevationFt, visitedAirport.elevationM, isMetric))}</div>
               <div class="text-gray-500 mt-2 pt-2 border-t border-gray-700">
                 <span class="text-yellow-400">${visitedAirport.visitCount}</span> visits
                 <span class="text-gray-600 mx-1">•</span>
@@ -957,7 +967,6 @@ export function FlightsMap() {
         selectedYear={selectedYear}
         onClearAirport={() => {
           setSelectedAirport(null);
-          setShowStats(false);
         }}
         selectedAirline={selectedAirline}
         onAirlineSelect={setSelectedAirline}
@@ -966,21 +975,20 @@ export function FlightsMap() {
         onCountryClick={handleCountryClick}
         onRegionClick={handleRegionClick}
         validAirportCodes={validAirportCodes}
+        airportNames={airportNames}
         selectedRouteInfo={selectedRouteInfo}
         onClearRoute={() => {
           setSelectedRoute(null);
-          setShowStats(false);
         }}
         selectedCountryInfo={selectedCountryInfo}
         onClearCountry={() => {
           setSelectedCountry(null);
-          setShowStats(false);
         }}
         selectedRegionInfo={selectedRegionInfo}
         onClearRegion={() => {
           setSelectedRegion(null);
-          setShowStats(false);
         }}
+        isMetric={isMetric}
       />
 
       {/* Layers Control (Flight Paths, All Airports, US States, Basemap) */}
@@ -1014,6 +1022,10 @@ export function FlightsMap() {
         selectedYear={selectedYear}
         selectedAirport={selectedAirport}
         selectedAirline={selectedAirline}
+        selectedCountry={selectedCountryInfo?.name ?? selectedCountry}
+        selectedRegion={selectedRegionInfo?.name ?? selectedRegion}
+        isMetric={isMetric}
+        onToggleUnits={() => setIsMetric(prev => !prev)}
       />
 
       {/* Mobile tap info overlay */}

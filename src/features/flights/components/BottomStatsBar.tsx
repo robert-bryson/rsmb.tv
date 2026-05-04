@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { formatDistance } from '../utils';
 
 interface BottomStatsBarProps {
     totalFlights: number;
@@ -7,6 +8,10 @@ interface BottomStatsBarProps {
     selectedYear: number | null;
     selectedAirport: string | null;
     selectedAirline: string | null;
+    selectedCountry: string | null;
+    selectedRegion: string | null;
+    isMetric: boolean;
+    onToggleUnits: () => void;
 }
 
 /**
@@ -19,6 +24,10 @@ export const BottomStatsBar = memo(function BottomStatsBar({
     selectedYear,
     selectedAirport,
     selectedAirline,
+    selectedCountry,
+    selectedRegion,
+    isMetric,
+    onToggleUnits,
 }: BottomStatsBarProps) {
     return (
         <div
@@ -38,11 +47,16 @@ export const BottomStatsBar = memo(function BottomStatsBar({
                     <span className="hidden sm:inline"> airports</span>
                     <span className="sm:hidden">📍</span>
                 </span>
-                <span className="text-gray-600 hidden sm:inline">•</span>
-                <span className="hidden sm:inline">
-                    <span className="text-green-300 font-semibold">{totalDistance.toLocaleString()}</span>
-                    <span> km</span>
-                </span>
+                <span className="text-gray-600">•</span>
+                <button
+                    type="button"
+                    onClick={onToggleUnits}
+                    className="text-green-300 font-semibold hover:text-green-200 transition-colors cursor-pointer whitespace-nowrap rounded px-1 -mx-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-300"
+                    title={isMetric ? 'Switch to imperial (mi/ft)' : 'Switch to metric (km/m)'}
+                    aria-label={isMetric ? 'Switch to imperial units' : 'Switch to metric units'}
+                >
+                    {formatDistance(totalDistance, isMetric)}
+                </button>
                 {selectedYear && (
                     <>
                         <span className="text-gray-600">•</span>
@@ -53,6 +67,18 @@ export const BottomStatsBar = memo(function BottomStatsBar({
                     <>
                         <span className="text-gray-600">•</span>
                         <span className="text-cyan-400 font-semibold">{selectedAirport}</span>
+                    </>
+                )}
+                {selectedCountry && (
+                    <>
+                        <span className="text-gray-600">•</span>
+                        <span className="text-emerald-400 font-semibold">{selectedCountry}</span>
+                    </>
+                )}
+                {selectedRegion && (
+                    <>
+                        <span className="text-gray-600">•</span>
+                        <span className="text-amber-400 font-semibold">{selectedRegion}</span>
                     </>
                 )}
                 {selectedAirline && (

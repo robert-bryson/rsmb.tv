@@ -50,12 +50,14 @@ function renderStatsPanel(overrides: Partial<ComponentProps<typeof StatsPanel>> 
         onCountryClick: vi.fn(),
         onRegionClick: vi.fn(),
         validAirportCodes: new Set(),
+        airportNames: new Map(),
         selectedRouteInfo: null,
         onClearRoute: vi.fn(),
         selectedCountryInfo: null,
         onClearCountry: vi.fn(),
         selectedRegionInfo: null,
         onClearRegion: vi.fn(),
+        isMetric: true,
         ...overrides,
     };
     return render(<StatsPanel {...props} />);
@@ -134,6 +136,88 @@ describe('StatsPanel', () => {
             expect(screen.getByText(/Airline: United/)).toBeInTheDocument();
             fireEvent.click(screen.getByRole('button', { name: '✕' }));
             expect(onAirlineSelect).toHaveBeenCalledWith(null);
+        });
+
+        it('formats overall distance stats with the selected unit system', () => {
+            renderStatsPanel({
+                isOpen: true,
+                isMetric: false,
+                stats: makeStats({ totalDistance: 100, averageDistance: 10 }),
+            });
+
+            expect(screen.getByText('62 mi')).toBeInTheDocument();
+            expect(screen.getByText('6 mi')).toBeInTheDocument();
+        });
+
+        it('adds airport-name tooltips to route airport code links', () => {
+            renderStatsPanel({
+                isOpen: true,
+                validAirportCodes: new Set(['SEA', 'YVR']),
+                airportNames: new Map([
+                    ['SEA', 'Seattle-Tacoma International Airport'],
+                    ['YVR', 'Vancouver International Airport'],
+                ]),
+                stats: makeStats({
+                    busiestRoutes: [{
+                        routeKey: 'SEA-YVR',
+                        origin: 'SEA',
+                        destination: 'YVR',
+                        count: 2,
+                        years: [2024],
+                        dates: ['1/1/2024'],
+                    }],
+                }),
+            });
+
+            expect(screen.getByRole('button', { name: 'SEA' })).toHaveAttribute(
+                'title',
+                'Seattle-Tacoma International Airport',
+            );
+            expect(screen.getByRole('button', { name: 'YVR' })).toHaveAttribute(
+                'title',
+                'Vancouver International Airport',
+            );
+        });
+
+        it('clears airport selection without invoking the panel toggle', () => {
+            const onClearAirport = vi.fn();
+            const onToggle = vi.fn();
+
+            renderStatsPanel({
+                isOpen: true,
+                onClearAirport,
+                onToggle,
+                stats: makeStats({
+                    selectedAirportInfo: {
+                        code: 'SEA',
+                        name: 'Seattle-Tacoma International Airport',
+                        municipality: 'Seattle',
+                        region: 'US-WA',
+                        regionName: 'Washington',
+                        country: 'US',
+                        countryName: 'United States',
+                        continent: 'NA',
+                        continentName: 'North America',
+                        elevationFt: 433,
+                        elevationM: 132,
+                        totalVisits: 5,
+                        arrivals: 2,
+                        departures: 3,
+                        firstVisit: null,
+                        lastVisit: null,
+                        connectedAirports: 2,
+                        connectedCountries: [],
+                        topDestinations: [],
+                        topOrigins: [],
+                        airlines: [],
+                    },
+                }),
+            });
+
+            fireEvent.click(screen.getByRole('button', { name: '✕ Clear' }));
+
+            expect(onClearAirport).toHaveBeenCalledOnce();
+            expect(onToggle).not.toHaveBeenCalled();
         });
     });
 });

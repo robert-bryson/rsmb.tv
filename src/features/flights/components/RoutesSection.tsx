@@ -8,6 +8,8 @@ interface RoutesSectionProps {
   onRouteClick: (origin: string, destination: string) => void;
   isOpen: boolean;
   onToggle: () => void;
+  validAirportCodes?: Set<string>;
+  airportNames?: Map<string, string>;
 }
 
 export function RoutesSection({
@@ -16,6 +18,8 @@ export function RoutesSection({
   onRouteClick,
   isOpen,
   onToggle,
+  validAirportCodes,
+  airportNames,
 }: RoutesSectionProps) {
   const [showAll, setShowAll] = useState(false);
 
@@ -38,6 +42,8 @@ export function RoutesSection({
               destination={route.destination}
               onAirportClick={onAirportClick}
               onRouteClick={onRouteClick}
+              validAirports={validAirportCodes}
+              airportNames={airportNames}
             />
             <span className="text-purple-400">×{route.count}</span>
           </div>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { FlightStats, SelectedRouteInfo, SelectedCountryInfo, SelectedRegionInfo } from '../types';
 import { EARTH_CIRCUMFERENCE_KM } from '../constants';
+import { formatDistance, formatElevation } from '../utils';
 import { StatItem, CollapsibleSection, ClickableAirport, ClickableRoute, ClickableCountry, ClickableRegion, FlightCount } from './shared';
 import { AirlinesSection } from './AirlinesSection';
 import { CountriesSection } from './CountriesSection';
@@ -20,12 +21,14 @@ interface StatsPanelProps {
   onCountryClick: (countryCode: string) => void;
   onRegionClick: (regionCode: string) => void;
   validAirportCodes: Set<string>;
+  airportNames: Map<string, string>;
   selectedRouteInfo: SelectedRouteInfo | null;
   onClearRoute: () => void;
   selectedCountryInfo: SelectedCountryInfo | null;
   onClearCountry: () => void;
   selectedRegionInfo: SelectedRegionInfo | null;
   onClearRegion: () => void;
+  isMetric: boolean;
 }
 
 export function StatsPanel({
@@ -41,12 +44,14 @@ export function StatsPanel({
   onCountryClick,
   onRegionClick,
   validAirportCodes,
+  airportNames,
   selectedRouteInfo,
   onClearRoute,
   selectedCountryInfo,
   onClearCountry,
   selectedRegionInfo,
   onClearRegion,
+  isMetric,
 }: StatsPanelProps) {
   const timesAroundEarth = (stats.totalDistance / EARTH_CIRCUMFERENCE_KM).toFixed(1);
   const domesticFlights = stats.totalFlights - stats.internationalFlights;
@@ -114,6 +119,8 @@ export function StatsPanel({
             getSectionOpen={getSectionOpen}
             toggleSection={toggleSection}
             validAirportCodes={validAirportCodes}
+            airportNames={airportNames}
+            isMetric={isMetric}
           />
         ) : selectedRouteInfo ? (
           <RouteStatsView
@@ -122,6 +129,8 @@ export function StatsPanel({
             onAirportClick={onAirportClick}
             onCountryClick={onCountryClick}
             validAirportCodes={validAirportCodes}
+            airportNames={airportNames}
+            isMetric={isMetric}
             getSectionOpen={getSectionOpen}
             toggleSection={toggleSection}
           />
@@ -133,6 +142,7 @@ export function StatsPanel({
             onCountryClick={onCountryClick}
             onRouteClick={onRouteClick}
             validAirportCodes={validAirportCodes}
+            airportNames={airportNames}
             getSectionOpen={getSectionOpen}
             toggleSection={toggleSection}
           />
@@ -144,6 +154,7 @@ export function StatsPanel({
             onCountryClick={onCountryClick}
             onRouteClick={onRouteClick}
             validAirportCodes={validAirportCodes}
+            airportNames={airportNames}
             getSectionOpen={getSectionOpen}
             toggleSection={toggleSection}
           />
@@ -162,6 +173,8 @@ export function StatsPanel({
             getSectionOpen={getSectionOpen}
             toggleSection={toggleSection}
             validAirportCodes={validAirportCodes}
+            airportNames={airportNames}
+            isMetric={isMetric}
           />
         )}
       </div>
@@ -199,6 +212,8 @@ function AirportStats({
   getSectionOpen,
   toggleSection,
   validAirportCodes,
+  airportNames,
+  isMetric,
 }: {
   airportInfo: NonNullable<FlightStats['selectedAirportInfo']>;
   stats: FlightStats;
@@ -209,6 +224,8 @@ function AirportStats({
   getSectionOpen: (id: string, defaultOpen?: boolean) => boolean;
   toggleSection: (id: string) => void;
   validAirportCodes: Set<string>;
+  airportNames: Map<string, string>;
+  isMetric: boolean;
 }) {
   return (
     <>
@@ -231,7 +248,7 @@ function AirportStats({
         {' • '}{airportInfo.continentName}
       </div>
       <div className="text-gray-600 text-xs mb-3">
-        📍 {airportInfo.elevationFt.toLocaleString()} ft ({airportInfo.elevationM.toLocaleString()} m)
+        📍 {formatElevation(airportInfo.elevationFt, airportInfo.elevationM, isMetric)}
       </div>
 
       {/* Visit Summary */}
@@ -270,6 +287,7 @@ function AirportStats({
                 onClick={onAirportClick}
                 className="text-gray-400"
                 validAirports={validAirportCodes}
+                airportNames={airportNames}
               />
             </span>
           </div>
@@ -287,6 +305,7 @@ function AirportStats({
                 onClick={onAirportClick}
                 className="text-gray-400"
                 validAirports={validAirportCodes}
+                airportNames={airportNames}
               />
             </span>
           </div>
@@ -338,6 +357,7 @@ function AirportStats({
                   onClick={onAirportClick}
                   className="text-gray-300"
                   validAirports={validAirportCodes}
+                  airportNames={airportNames}
                 />
                 <span className="text-blue-400">×{d.count}</span>
               </div>
@@ -362,6 +382,7 @@ function AirportStats({
                   onClick={onAirportClick}
                   className="text-gray-300"
                   validAirports={validAirportCodes}
+                  airportNames={airportNames}
                 />
                 <span className="text-green-400">×{o.count}</span>
               </div>
@@ -399,8 +420,8 @@ function AirportStats({
         onToggle={() => toggleSection('airport-distance')}
       >
         <div className="grid grid-cols-2 gap-3">
-          <StatItem icon="📏" label="Total" value={`${stats.totalDistance.toLocaleString()} km`} />
-          <StatItem icon="📐" label="Average" value={`${stats.averageDistance.toLocaleString()} km`} />
+          <StatItem icon="📏" label="Total" value={formatDistance(stats.totalDistance, isMetric)} />
+          <StatItem icon="📐" label="Average" value={formatDistance(stats.averageDistance, isMetric)} />
         </div>
       </CollapsibleSection>
     </>
@@ -414,6 +435,8 @@ function RouteStatsView({
   onAirportClick,
   onCountryClick,
   validAirportCodes,
+  airportNames,
+  isMetric,
   getSectionOpen,
   toggleSection,
 }: {
@@ -422,6 +445,8 @@ function RouteStatsView({
   onAirportClick: (code: string) => void;
   onCountryClick: (code: string) => void;
   validAirportCodes: Set<string>;
+  airportNames: Map<string, string>;
+  isMetric: boolean;
   getSectionOpen: (id: string, defaultOpen?: boolean) => boolean;
   toggleSection: (id: string) => void;
 }) {
@@ -447,6 +472,7 @@ function RouteStatsView({
             onClick={onAirportClick}
             className="text-cyan-400 font-medium"
             validAirports={validAirportCodes}
+            airportNames={airportNames}
           />{' '}
           {routeInfo.originName}
         </div>
@@ -466,6 +492,7 @@ function RouteStatsView({
             onClick={onAirportClick}
             className="text-cyan-400 font-medium"
             validAirports={validAirportCodes}
+            airportNames={airportNames}
           />{' '}
           {routeInfo.destinationName}
         </div>
@@ -482,8 +509,8 @@ function RouteStatsView({
           <div className="text-gray-500 text-xs">flights</div>
         </div>
         <div className="text-center">
-          <div className="text-purple-400 font-bold text-lg">{routeInfo.distanceKm.toLocaleString()}</div>
-          <div className="text-gray-500 text-xs">km</div>
+          <div className="text-purple-400 font-bold text-base leading-tight">{formatDistance(routeInfo.distanceKm, isMetric)}</div>
+          <div className="text-gray-500 text-xs">distance</div>
         </div>
       </div>
 
@@ -570,6 +597,7 @@ function CountryStatsView({
   onCountryClick,
   onRouteClick,
   validAirportCodes,
+  airportNames,
   getSectionOpen,
   toggleSection,
 }: {
@@ -579,6 +607,7 @@ function CountryStatsView({
   onCountryClick: (code: string) => void;
   onRouteClick: (origin: string, destination: string) => void;
   validAirportCodes: Set<string>;
+  airportNames: Map<string, string>;
   getSectionOpen: (id: string, defaultOpen?: boolean) => boolean;
   toggleSection: (id: string) => void;
 }) {
@@ -630,6 +659,7 @@ function CountryStatsView({
                     onClick={onAirportClick}
                     className="text-gray-300"
                     validAirports={validAirportCodes}
+                    airportNames={airportNames}
                   />{' '}
                   <span className="text-gray-500">{a.name}</span>
                 </span>
@@ -675,6 +705,8 @@ function CountryStatsView({
                   destination={r.destination}
                   onAirportClick={onAirportClick}
                   onRouteClick={onRouteClick}
+                  validAirports={validAirportCodes}
+                  airportNames={airportNames}
                 />
                 <span className="text-yellow-400">×{r.count}</span>
               </div>
@@ -734,6 +766,7 @@ function RegionStatsView({
   onCountryClick,
   onRouteClick,
   validAirportCodes,
+  airportNames,
   getSectionOpen,
   toggleSection,
 }: {
@@ -743,6 +776,7 @@ function RegionStatsView({
   onCountryClick: (code: string) => void;
   onRouteClick: (origin: string, destination: string) => void;
   validAirportCodes: Set<string>;
+  airportNames: Map<string, string>;
   getSectionOpen: (id: string, defaultOpen?: boolean) => boolean;
   toggleSection: (id: string) => void;
 }) {
@@ -795,6 +829,7 @@ function RegionStatsView({
                     onClick={onAirportClick}
                     className="text-gray-300"
                     validAirports={validAirportCodes}
+                    airportNames={airportNames}
                   />{' '}
                   <span className="text-gray-500">{a.name}</span>
                 </span>
@@ -840,6 +875,8 @@ function RegionStatsView({
                   destination={r.destination}
                   onAirportClick={onAirportClick}
                   onRouteClick={onRouteClick}
+                  validAirports={validAirportCodes}
+                  airportNames={airportNames}
                 />
                 <span className="text-yellow-400">×{r.count}</span>
               </div>
@@ -887,6 +924,8 @@ function OverallStats({
   getSectionOpen,
   toggleSection,
   validAirportCodes,
+  airportNames,
+  isMetric,
 }: {
   stats: FlightStats;
   selectedYear: number | null;
@@ -901,6 +940,8 @@ function OverallStats({
   getSectionOpen: (id: string, defaultOpen?: boolean) => boolean;
   toggleSection: (id: string) => void;
   validAirportCodes: Set<string>;
+  airportNames: Map<string, string>;
+  isMetric: boolean;
 }) {
   return (
     <>
@@ -943,12 +984,12 @@ function OverallStats({
         <StatItem
           icon="📏"
           label="Total Distance"
-          value={`${stats.totalDistance.toLocaleString()} km`}
+          value={formatDistance(stats.totalDistance, isMetric)}
           className="mb-2"
         />
         <div className="grid grid-cols-2 gap-3">
           <StatItem icon="🔄" label="Around Earth" value={`${timesAroundEarth}×`} />
-          <StatItem icon="📐" label="Avg Distance" value={`${stats.averageDistance.toLocaleString()} km`} />
+          <StatItem icon="📐" label="Avg Distance" value={formatDistance(stats.averageDistance, isMetric)} />
         </div>
       </CollapsibleSection>
 
@@ -1050,6 +1091,7 @@ function OverallStats({
                   onClick={onAirportClick}
                   className="text-gray-300"
                   validAirports={validAirportCodes}
+                  airportNames={airportNames}
                 />
               </div>
               <div className="text-gray-500 text-xs">
@@ -1075,10 +1117,12 @@ function OverallStats({
                   destination={stats.longestFlight.route.split(' → ')[1]}
                   onAirportClick={onAirportClick}
                   onRouteClick={onRouteClick}
+                  validAirports={validAirportCodes}
+                  airportNames={airportNames}
                 />
               </div>
               <div className="text-gray-500 text-xs">
-                {Math.round(stats.longestFlight.distance).toLocaleString()} km
+                {formatDistance(stats.longestFlight.distance, isMetric)}
               </div>
             </div>
           </div>
@@ -1094,10 +1138,12 @@ function OverallStats({
                   destination={stats.shortestFlight.route.split(' → ')[1]}
                   onAirportClick={onAirportClick}
                   onRouteClick={onRouteClick}
+                  validAirports={validAirportCodes}
+                  airportNames={airportNames}
                 />
               </div>
               <div className="text-gray-500 text-xs">
-                {Math.round(stats.shortestFlight.distance).toLocaleString()} km
+                {formatDistance(stats.shortestFlight.distance, isMetric)}
               </div>
             </div>
           </div>
@@ -1123,14 +1169,14 @@ function OverallStats({
                     onClick={onAirportClick}
                     className="text-gray-300"
                     validAirports={validAirportCodes}
+                    airportNames={airportNames}
                   />
                 </div>
                 <div className="text-gray-500 text-xs truncate max-w-[200px]" title={stats.highestAirport.name}>
                   {stats.highestAirport.name}
                 </div>
                 <div className="text-gray-500 text-xs">
-                  {stats.highestAirport.elevationFt.toLocaleString()} ft (
-                  {stats.highestAirport.elevationM.toLocaleString()} m)
+                  {formatElevation(stats.highestAirport.elevationFt, stats.highestAirport.elevationM, isMetric)}
                 </div>
               </div>
             </div>
@@ -1146,14 +1192,14 @@ function OverallStats({
                     onClick={onAirportClick}
                     className="text-gray-300"
                     validAirports={validAirportCodes}
+                    airportNames={airportNames}
                   />
                 </div>
                 <div className="text-gray-500 text-xs truncate max-w-[200px]" title={stats.lowestAirport.name}>
                   {stats.lowestAirport.name}
                 </div>
                 <div className="text-gray-500 text-xs">
-                  {stats.lowestAirport.elevationFt.toLocaleString()} ft (
-                  {stats.lowestAirport.elevationM.toLocaleString()} m)
+                  {formatElevation(stats.lowestAirport.elevationFt, stats.lowestAirport.elevationM, isMetric)}
                 </div>
               </div>
             </div>
@@ -1169,6 +1215,8 @@ function OverallStats({
           onRouteClick={onRouteClick}
           isOpen={getSectionOpen('overall-routes')}
           onToggle={() => toggleSection('overall-routes')}
+          validAirportCodes={validAirportCodes}
+          airportNames={airportNames}
         />
       )}
     </>

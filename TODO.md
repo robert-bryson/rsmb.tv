@@ -58,6 +58,11 @@ No open items.
 - [x] Fix close-animation bug (always-mount panel content; slide carries visible content)
 - [x] Plug keyboard/screen-reader access to off-screen stats panel via `inert`
 - [x] Add component tests for StatsPanel, TopNavigationBar, BottomStatsBar
+- [x] Keep stats panel open when clearing airport, route, country, or region selections
+- [x] Add selected country/region status to BottomStatsBar
+- [x] Add persisted metric/imperial unit toggle across flight stats UI
+- [x] Add airport-code tooltips in stats panel route and airport links
+- [x] Prevent mixed airport/route/country/region URL selection state
 
 ### General
 
@@ -69,26 +74,26 @@ No open items.
 - [x] does it make sense to have tornado data in the repo or s3? → S3, same pattern as temperatures: serve via data.rsmb.tv/tornadoes, gitignore generated files, workflow uploads instead of commits
 - [x] create script to be run locally to backfill as much data as possible for all projects, having local & s3 storage options
 
-### Projects
+### Completed projects
 
-#### aborg
+#### aborg completed
 
 - [x] add project page/links/etc
 
-#### Anki Artisan
+#### Anki Artisan completed
 
 - [x] Add screenshots to project page
 
-#### Bookend
+#### Bookend completed
 
 - [x] Add screenshots to project page
 - [x] Add prominent project page link
 
-#### Content
+#### Content completed
 
 - [x] Write project page for aborg
 
-#### rsmb.tv
+#### rsmb.tv completed
 
 - [x] Make blog post tags clickable and filterable
 - [x] Rework the front page so posts and projects have clearer hierarchy
@@ -96,17 +101,17 @@ No open items.
   - clicking and going to /projects
   - hovering and having a list of direct links to projects pop down
 
-#### Status dashboard
+#### Status dashboard completed
 
 - [x] Fix forecast cost estimate
 - [x] Align build number links and timestamps in calm-mode running build rows
 
-#### Through Routes
+#### Through Routes completed
 
 - [x] Add screenshots to project page
 - [x] Add prominent project page link
 
-#### Temperature records
+#### Temperature records completed
 
 - [x] Clarify record terminology across recent station records, county/state all-time records, record-age views, and trends
 - [x] Verify screenshots are present on the project page and clean up stale screenshot TODO
@@ -114,7 +119,7 @@ No open items.
 - [x] Consolidate scattered temperature map controls and prevent top-right control overlap
 - [x] Fix and clarify chart math: computed all-time county totals, explicit temperature-delta conversion, sparse-data chart guards
 
-#### Tornado Tracks
+#### Tornado Tracks completed
 
 - [x] scrolling resets the tracks/trends/density layer (URL state race — pendingSearchParams draft fix)
 - [x] better share button placement (moved to summary panel header on desktop, track-count overlay on mobile)
@@ -144,7 +149,7 @@ No open items.
   - [x] warnings over time → annual warning bars in Trends
   - [x] likelihood of watches/warnings producing thunderstorms → approximate StormEvents report-match rates
 
-### Testing
+### Completed testing
 
 - [x] Add test coverage for flights utility functions (parseYear, getRouteKey, hexToRgba, calculateDistance)
 - [x] Add test coverage for useGeoJsonData hook

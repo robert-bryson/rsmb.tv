@@ -79,14 +79,28 @@ describe('useFlightsFilters', () => {
         expect(result.current.selectedYear).toBeNull();
     });
 
-    it('setSelectedAirport clears route param', () => {
+    it('setSelectedAirport clears route, country, and region params', () => {
         const { result } = renderHook(() => useFlightsFilters(), {
-            wrapper: wrapperWithParams('route=JFK-LAX'),
+            wrapper: wrapperWithParams('route=JFK-LAX&country=CA&region=CA-BC'),
         });
 
         act(() => result.current.setSelectedAirport('SFO'));
         expect(result.current.selectedAirport).toBe('SFO');
         expect(result.current.selectedRoute).toBeNull();
+        expect(result.current.selectedCountry).toBeNull();
+        expect(result.current.selectedRegion).toBeNull();
+    });
+
+    it('setSelectedRoute clears airport, country, and region params', () => {
+        const { result } = renderHook(() => useFlightsFilters(), {
+            wrapper: wrapperWithParams('airport=LAX&country=CA&region=CA-BC'),
+        });
+
+        act(() => result.current.setSelectedRoute('SEA-YVR'));
+        expect(result.current.selectedRoute).toBe('SEA-YVR');
+        expect(result.current.selectedAirport).toBeNull();
+        expect(result.current.selectedCountry).toBeNull();
+        expect(result.current.selectedRegion).toBeNull();
     });
 
     it('setSelectedCountry clears airport, route, and region', () => {

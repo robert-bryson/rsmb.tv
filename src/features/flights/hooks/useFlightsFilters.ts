@@ -39,6 +39,8 @@ export function useFlightsFilters() {
                 newParams.set('airport', airport);
             }
             newParams.delete('route');
+            newParams.delete('country');
+            newParams.delete('region');
             return newParams;
         });
     }, [setSearchParams]);
@@ -64,6 +66,8 @@ export function useFlightsFilters() {
                 newParams.set('route', route);
             }
             newParams.delete('airport');
+            newParams.delete('country');
+            newParams.delete('region');
             return newParams;
         });
     }, [setSearchParams]);

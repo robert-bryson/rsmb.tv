@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateDistance, parseYear, getRouteKey, hexToRgba } from '../features/flights/utils';
+import { calculateDistance, formatDistance, formatElevation, parseYear, getRouteKey, hexToRgba } from '../features/flights/utils';
 
 describe('parseYear', () => {
     it('parses M/D/YYYY format', () => {
@@ -79,5 +79,25 @@ describe('calculateDistance', () => {
 
     it('returns NaN when given NaN inputs', () => {
         expect(calculateDistance(NaN, -74, 40, -74)).toBeNaN();
+    });
+});
+
+describe('formatDistance', () => {
+    it('formats kilometers when metric units are enabled', () => {
+        expect(formatDistance(100, true)).toBe('100 km');
+    });
+
+    it('formats miles when metric units are disabled', () => {
+        expect(formatDistance(100, false)).toBe('62 mi');
+    });
+});
+
+describe('formatElevation', () => {
+    it('formats meters when metric units are enabled', () => {
+        expect(formatElevation(433, 132, true)).toBe('132 m');
+    });
+
+    it('formats feet when metric units are disabled', () => {
+        expect(formatElevation(433, 132, false)).toBe('433 ft');
     });
 });
