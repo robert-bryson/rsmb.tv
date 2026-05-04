@@ -56,7 +56,6 @@ export function Blog() {
                             key={tag}
                             tag={tag}
                             active={activeTag === tag}
-                            current={activeTag === tag}
                         />
                     ))}
                 </nav>

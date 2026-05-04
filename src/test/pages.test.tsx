@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { screen } from '@testing-library/react';
 import { Home } from '../pages/Home';
 import { About } from '../pages/About';
 import { Blog } from '../pages/Blog';
@@ -9,14 +8,7 @@ import { NotFound } from '../pages/NotFound';
 import { projects } from '../content/projects';
 import { getAllPosts } from '../content/posts';
 import { getJsonLdByType } from './helpers/jsonLd';
-
-function renderWithRouter(ui: React.ReactElement, { route = '/' } = {}) {
-    return render(
-        <MemoryRouter initialEntries={[route]}>
-            {ui}
-        </MemoryRouter>
-    );
-}
+import { renderWithRouter } from './helpers/router';
 
 describe('Home page', () => {
     it('renders greeting', () => {

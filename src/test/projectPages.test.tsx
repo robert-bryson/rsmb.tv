@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { screen } from '@testing-library/react';
 import ThroughRoutes from '../pages/ThroughRoutes';
 import FlightsAbout from '../pages/FlightsAbout';
 import AnkiArtisan from '../pages/AnkiArtisan';
@@ -8,14 +7,7 @@ import Bookend from '../pages/Bookend';
 import TemperatureRecordsAbout from '../pages/TemperatureRecordsAbout';
 import TornadoTracksAbout from '../pages/TornadoTracksAbout';
 import Route2Gpx from '../pages/Route2Gpx';
-
-function renderWithRouter(ui: React.ReactElement, { route = '/' } = {}) {
-    return render(
-        <MemoryRouter initialEntries={[route]}>
-            {ui}
-        </MemoryRouter>
-    );
-}
+import { renderWithRouter } from './helpers/router';
 
 describe('ThroughRoutes page', () => {
     it('renders heading, links, and screenshots', () => {

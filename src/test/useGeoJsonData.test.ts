@@ -8,12 +8,12 @@ describe('useGeoJsonData', () => {
     beforeEach(() => {
         clearCache();
         vi.restoreAllMocks();
-        vi.spyOn(console, 'error').mockImplementation(() => {});
+        vi.spyOn(console, 'error').mockImplementation(() => { });
     });
 
     it('starts in loading state', () => {
         // Keep request pending so the assertion only checks initial hook state.
-        globalThis.fetch = vi.fn().mockReturnValue(new Promise(() => {}));
+        globalThis.fetch = vi.fn().mockReturnValue(new Promise(() => { }));
 
         const { result, unmount } = renderHook(() => useGeoJsonData('test.geojson'));
         expect(result.current.loading).toBe(true);
