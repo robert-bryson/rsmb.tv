@@ -9,12 +9,6 @@ const TemperatureMap = lazy(() =>
     })),
 );
 
-const TemperatureMap = lazy(() =>
-    import('../features/temperatures/components/TemperatureMap').then((m) => ({
-        default: m.TemperatureMap,
-    })),
-);
-
 export default function TemperatureRecords() {
     const description =
         'Interactive map of all-time record high and low temperatures across US states and counties, with recent extremes summary.';

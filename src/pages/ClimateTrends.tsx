@@ -9,12 +9,6 @@ const ClimateTrends = lazy(() =>
     })),
 );
 
-const ClimateTrends = lazy(() =>
-    import('../features/temperatures/components/ClimateTrends').then((m) => ({
-        default: m.ClimateTrends,
-    })),
-);
-
 export default function ClimateTrendsPage() {
     const description =
         'Are temperature records being broken more frequently? Visualizations of record high vs low frequency, age distribution, and geographic patterns.';
