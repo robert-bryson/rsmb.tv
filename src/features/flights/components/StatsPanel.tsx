@@ -79,18 +79,16 @@ export function StatsPanel({
   };
 
   return (
-    <div className={`absolute top-16 left-4 transition-all duration-300 ${isOpen ? 'w-80' : 'w-auto'} z-20`}>
-      <button
-        onClick={onToggle}
-        className="bg-gray-900/90 backdrop-blur px-3 py-2 rounded-lg border border-gray-700 text-sm text-gray-300 hover:bg-gray-800/90 transition-colors flex items-center gap-2"
+    <div
+      className={`absolute top-16 bottom-[calc(env(safe-area-inset-bottom,0px)+6rem)] left-4 z-20 w-80 max-w-[calc(100vw-4.5rem)] transition-transform duration-300 ease-out pointer-events-none ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+    >
+      {/* Panel content — always mounted so the slide-out transition carries visible content.
+          `inert` makes the off-screen panel unreachable by keyboard/assistive tech. */}
+      <div
+        className="h-full bg-gray-900/90 backdrop-blur rounded-lg border border-gray-700 p-4 text-sm overflow-y-auto pointer-events-auto shadow-xl"
+        aria-hidden={!isOpen || undefined}
+        inert={!isOpen || undefined}
       >
-        <span>📊</span>
-        <span>{isOpen ? 'Hide Stats' : 'Show Stats'}</span>
-        <span className="text-gray-500 text-xs hidden sm:inline">[S]</span>
-      </button>
-
-      {isOpen && (
-        <div className="mt-2 bg-gray-900/90 backdrop-blur rounded-lg border border-gray-700 p-4 text-sm max-h-[calc(100vh-120px)] overflow-y-auto">
           {/* Collapse All / Expand All Button */}
           <div className="flex justify-end mb-2">
             <button
@@ -164,7 +162,25 @@ export function StatsPanel({
             />
           )}
         </div>
-      )}
+
+      <button
+        type="button"
+        onClick={onToggle}
+        className="absolute left-full top-1/2 -translate-x-px -translate-y-1/2 h-24 w-10 bg-slate-900/95 backdrop-blur rounded-r-lg border border-l-0 border-slate-600/80 text-purple-200 hover:bg-slate-800/95 hover:text-white transition-colors pointer-events-auto flex flex-col items-center justify-center gap-2 shadow-xl ring-1 ring-white/10"
+        title={isOpen ? 'Hide stats panel' : 'Show stats panel'}
+        aria-label={isOpen ? 'Hide stats panel' : 'Show stats panel'}
+        aria-expanded={isOpen}
+      >
+        <svg
+          className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
     </div>
   );
 }

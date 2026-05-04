@@ -16,7 +16,7 @@ No open items.
 
 ### rsmb.tv
 
-No open items.
+- [ ] Add screenshots to flights map project page
 
 ### Status dashboard
 
@@ -43,10 +43,21 @@ No open items.
 ### Testing
 
 - [ ] Add test coverage for ScrollToTop component
+- [ ] Add test coverage for FlightsMap integration (keyboard shortcuts + globe state)
 
 ---
 
 ## Completed
+
+### Flights map
+
+- [x] Replace Show/Hide Stats button with side pull-tab slider
+- [x] Rename ← Back nav button to ← rsmb.tv linking to home
+- [x] Fix stats panel height so it never overlaps BottomStatsBar
+- [x] Remove "Press H for help" from BottomStatsBar
+- [x] Fix close-animation bug (always-mount panel content; slide carries visible content)
+- [x] Plug keyboard/screen-reader access to off-screen stats panel via `inert`
+- [x] Add component tests for StatsPanel, TopNavigationBar, BottomStatsBar
 
 ### General
 

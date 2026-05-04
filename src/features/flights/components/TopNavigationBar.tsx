@@ -30,11 +30,11 @@ export function TopNavigationBar({
         <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-4 py-3">
             {/* Left: Back button */}
             <Link
-                to="/projects"
+                to="/"
                 className="bg-gray-900/90 backdrop-blur px-3 py-2 rounded-lg border border-gray-700 text-sm text-gray-300 hover:bg-gray-800/90 hover:text-white transition-colors flex items-center gap-2"
             >
                 <span>←</span>
-                <span className="hidden sm:inline">Back</span>
+                <span>rsmb.tv</span>
             </Link>
 
             {/* Center: Title (hidden on very small screens) */}

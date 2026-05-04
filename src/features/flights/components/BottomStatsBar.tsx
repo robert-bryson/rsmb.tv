@@ -61,9 +61,6 @@ export const BottomStatsBar = memo(function BottomStatsBar({
                         <span className="text-orange-400 font-semibold hidden sm:inline">{selectedAirline}</span>
                     </>
                 )}
-                {/* Help hint */}
-                <span className="text-gray-600 hidden lg:inline">•</span>
-                <span className="text-gray-500 hidden lg:inline text-xs">Press H for help</span>
             </div>
         </div>
     );
