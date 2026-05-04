@@ -56,4 +56,14 @@ describe('BottomStatsBar', () => {
         renderBar();
         expect(screen.queryByText(/Press H for help/i)).not.toBeInTheDocument();
     });
+
+    it('shows selected airline when provided', () => {
+        renderBar({ selectedAirline: 'United' });
+        expect(screen.getByText('United')).toBeInTheDocument();
+    });
+
+    it('does not show airline when none selected', () => {
+        renderBar({ selectedAirline: null });
+        expect(screen.queryByText('United')).not.toBeInTheDocument();
+    });
 });

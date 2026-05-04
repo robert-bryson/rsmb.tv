@@ -62,12 +62,14 @@ export function StatsPanel({
     return allExpanded ? defaultOpen : false;
   };
 
-  // Toggle a specific section
+  // Toggle a specific section.
+  // Derive the current value from `prev` (not from the render-closure `sectionStates`)
+  // so that the functional updater is self-contained and batched updates stay correct.
   const toggleSection = (sectionId: string) => {
-    setSectionStates((prev) => ({
-      ...prev,
-      [sectionId]: !getSectionOpen(sectionId),
-    }));
+    setSectionStates((prev) => {
+      const current = prev[sectionId] !== undefined ? prev[sectionId] : allExpanded;
+      return { ...prev, [sectionId]: !current };
+    });
   };
 
   // Collapse all or expand all
@@ -85,83 +87,84 @@ export function StatsPanel({
       {/* Panel content — always mounted so the slide-out transition carries visible content.
           `inert` makes the off-screen panel unreachable by keyboard/assistive tech. */}
       <div
+        data-testid="stats-panel-content"
         className="h-full bg-gray-900/90 backdrop-blur rounded-lg border border-gray-700 p-4 text-sm overflow-y-auto pointer-events-auto shadow-xl"
         aria-hidden={!isOpen || undefined}
         inert={!isOpen || undefined}
       >
-          {/* Collapse All / Expand All Button */}
-          <div className="flex justify-end mb-2">
-            <button
-              onClick={toggleAll}
-              className="text-gray-500 hover:text-gray-300 text-xs px-2 py-1 rounded hover:bg-gray-800 transition-colors flex items-center gap-1"
-            >
-              {allExpanded ? '▼ Collapse All' : '▶ Expand All'}
-            </button>
-          </div>
-
-          {/* Airport-specific stats when an airport is selected */}
-          {airportInfo ? (
-            <AirportStats
-              airportInfo={airportInfo}
-              stats={stats}
-              onClearAirport={onClearAirport}
-              onAirportClick={onAirportClick}
-              onCountryClick={onCountryClick}
-              onRegionClick={onRegionClick}
-              getSectionOpen={getSectionOpen}
-              toggleSection={toggleSection}
-              validAirportCodes={validAirportCodes}
-            />
-          ) : selectedRouteInfo ? (
-            <RouteStatsView
-              routeInfo={selectedRouteInfo}
-              onClear={onClearRoute}
-              onAirportClick={onAirportClick}
-              onCountryClick={onCountryClick}
-              validAirportCodes={validAirportCodes}
-              getSectionOpen={getSectionOpen}
-              toggleSection={toggleSection}
-            />
-          ) : selectedCountryInfo ? (
-            <CountryStatsView
-              countryInfo={selectedCountryInfo}
-              onClear={onClearCountry}
-              onAirportClick={onAirportClick}
-              onCountryClick={onCountryClick}
-              onRouteClick={onRouteClick}
-              validAirportCodes={validAirportCodes}
-              getSectionOpen={getSectionOpen}
-              toggleSection={toggleSection}
-            />
-          ) : selectedRegionInfo ? (
-            <RegionStatsView
-              regionInfo={selectedRegionInfo}
-              onClear={onClearRegion}
-              onAirportClick={onAirportClick}
-              onCountryClick={onCountryClick}
-              onRouteClick={onRouteClick}
-              validAirportCodes={validAirportCodes}
-              getSectionOpen={getSectionOpen}
-              toggleSection={toggleSection}
-            />
-          ) : (
-            <OverallStats
-              stats={stats}
-              selectedYear={selectedYear}
-              selectedAirline={selectedAirline}
-              onAirlineSelect={onAirlineSelect}
-              onAirportClick={onAirportClick}
-              onRouteClick={onRouteClick}
-              onCountryClick={onCountryClick}
-              onRegionClick={onRegionClick}
-              timesAroundEarth={timesAroundEarth}
-              domesticFlights={domesticFlights}
-              getSectionOpen={getSectionOpen}
-              toggleSection={toggleSection}
-              validAirportCodes={validAirportCodes}
-            />
-          )}
+        {/* Collapse All / Expand All Button */}
+        <div className="flex justify-end mb-2">
+          <button
+            onClick={toggleAll}
+            className="text-gray-500 hover:text-gray-300 text-xs px-2 py-1 rounded hover:bg-gray-800 transition-colors flex items-center gap-1"
+          >
+            {allExpanded ? '▼ Collapse All' : '▶ Expand All'}
+          </button>
         </div>
+
+        {/* Airport-specific stats when an airport is selected */}
+        {airportInfo ? (
+          <AirportStats
+            airportInfo={airportInfo}
+            stats={stats}
+            onClearAirport={onClearAirport}
+            onAirportClick={onAirportClick}
+            onCountryClick={onCountryClick}
+            onRegionClick={onRegionClick}
+            getSectionOpen={getSectionOpen}
+            toggleSection={toggleSection}
+            validAirportCodes={validAirportCodes}
+          />
+        ) : selectedRouteInfo ? (
+          <RouteStatsView
+            routeInfo={selectedRouteInfo}
+            onClear={onClearRoute}
+            onAirportClick={onAirportClick}
+            onCountryClick={onCountryClick}
+            validAirportCodes={validAirportCodes}
+            getSectionOpen={getSectionOpen}
+            toggleSection={toggleSection}
+          />
+        ) : selectedCountryInfo ? (
+          <CountryStatsView
+            countryInfo={selectedCountryInfo}
+            onClear={onClearCountry}
+            onAirportClick={onAirportClick}
+            onCountryClick={onCountryClick}
+            onRouteClick={onRouteClick}
+            validAirportCodes={validAirportCodes}
+            getSectionOpen={getSectionOpen}
+            toggleSection={toggleSection}
+          />
+        ) : selectedRegionInfo ? (
+          <RegionStatsView
+            regionInfo={selectedRegionInfo}
+            onClear={onClearRegion}
+            onAirportClick={onAirportClick}
+            onCountryClick={onCountryClick}
+            onRouteClick={onRouteClick}
+            validAirportCodes={validAirportCodes}
+            getSectionOpen={getSectionOpen}
+            toggleSection={toggleSection}
+          />
+        ) : (
+          <OverallStats
+            stats={stats}
+            selectedYear={selectedYear}
+            selectedAirline={selectedAirline}
+            onAirlineSelect={onAirlineSelect}
+            onAirportClick={onAirportClick}
+            onRouteClick={onRouteClick}
+            onCountryClick={onCountryClick}
+            onRegionClick={onRegionClick}
+            timesAroundEarth={timesAroundEarth}
+            domesticFlights={domesticFlights}
+            getSectionOpen={getSectionOpen}
+            toggleSection={toggleSection}
+            validAirportCodes={validAirportCodes}
+          />
+        )}
+      </div>
 
       <button
         type="button"

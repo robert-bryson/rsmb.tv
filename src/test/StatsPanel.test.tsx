@@ -110,15 +110,13 @@ describe('StatsPanel', () => {
         });
 
         it('marks panel content as aria-hidden when closed', () => {
-            const { container } = renderStatsPanel({ isOpen: false });
-            const panel = container.querySelector('[aria-hidden="true"]');
-            expect(panel).toBeInTheDocument();
+            const { getByTestId } = renderStatsPanel({ isOpen: false });
+            expect(getByTestId('stats-panel-content')).toHaveAttribute('aria-hidden', 'true');
         });
 
         it('does not mark panel content as aria-hidden when open', () => {
-            const { container } = renderStatsPanel({ isOpen: true });
-            const panel = container.querySelector('.overflow-y-auto');
-            expect(panel).not.toHaveAttribute('aria-hidden');
+            const { getByTestId } = renderStatsPanel({ isOpen: true });
+            expect(getByTestId('stats-panel-content')).not.toHaveAttribute('aria-hidden');
         });
 
         it('shows year filter label when selectedYear is set', () => {
