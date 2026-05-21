@@ -10,7 +10,7 @@ export default function FlightsAbout() {
     useDocumentHead({
         title: 'Flights',
         description,
-        ogImage: 'https://rsmb.tv/og/flights.svg',
+        ogImage: absoluteUrl('/og/flights.svg'),
     });
 
     useJsonLd({
@@ -19,7 +19,7 @@ export default function FlightsAbout() {
         name: 'Flights',
         description,
         url: absoluteUrl('/projects/flights'),
-        applicationCategory: 'UtilitiesApplication',
+        applicationCategory: 'TravelApplication',
         operatingSystem: 'Web',
         author: AUTHOR_PERSON,
     });
@@ -48,13 +48,21 @@ export default function FlightsAbout() {
                 (Three.js / WebGL) and GeoJSON flight data.
             </p>
 
-            <div className="mb-8">
+            <div className="mb-8 flex flex-wrap gap-3">
                 <Link
                     to="/projects/flights/map"
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium transition-colors"
                 >
                     Open interactive globe →
                 </Link>
+                <a
+                    href="https://github.com/robert-bryson/rsmb.tv/tree/main/src/features/flights"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-700"
+                >
+                    Source on GitHub →
+                </a>
             </div>
 
             <div className="space-y-6 mb-8">

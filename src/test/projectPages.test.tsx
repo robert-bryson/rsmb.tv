@@ -7,6 +7,8 @@ import Bookend from '../pages/Bookend';
 import TemperatureRecordsAbout from '../pages/TemperatureRecordsAbout';
 import TornadoTracksAbout from '../pages/TornadoTracksAbout';
 import Route2Gpx from '../pages/Route2Gpx';
+import Aborg from '../pages/Aborg';
+import Parc from '../pages/Parc';
 import { renderWithRouter } from './helpers/router';
 
 describe('ThroughRoutes page', () => {
@@ -23,10 +25,11 @@ describe('ThroughRoutes page', () => {
 });
 
 describe('FlightsAbout page', () => {
-    it('renders heading and map link', () => {
+    it('renders heading, map link, and source link', () => {
         renderWithRouter(<FlightsAbout />, { route: '/projects/flights' });
         expect(screen.getByRole('heading', { level: 1, name: /Flights/i })).toBeInTheDocument();
         expect(screen.getByRole('link', { name: /Open interactive globe/i })).toHaveAttribute('href', '/projects/flights/map');
+        expect(screen.getByRole('link', { name: /Source on GitHub/i })).toHaveAttribute('href', 'https://github.com/robert-bryson/rsmb.tv/tree/main/src/features/flights');
     });
 });
 
@@ -56,19 +59,22 @@ describe('Bookend page', () => {
 });
 
 describe('TemperatureRecordsAbout page', () => {
-    it('renders heading and map/trends links', () => {
+    it('renders heading, map/trends links, and source link', () => {
         renderWithRouter(<TemperatureRecordsAbout />, { route: '/projects/temperature-records' });
         expect(screen.getByRole('heading', { level: 1, name: /Record Highs/i })).toBeInTheDocument();
         expect(screen.getByRole('link', { name: /Open interactive map/i })).toHaveAttribute('href', '/projects/temperature-records/map?view=freshness');
         expect(screen.getByRole('link', { name: /View climate trends/i })).toHaveAttribute('href', '/projects/temperature-records/trends');
+        expect(screen.getByRole('link', { name: /Source on GitHub/i })).toHaveAttribute('href', 'https://github.com/robert-bryson/rsmb.tv/tree/main/src/features/temperatures');
     });
 });
 
 describe('TornadoTracksAbout page', () => {
-    it('renders heading, map link, and screenshots', () => {
+    it('renders heading, links, and screenshots', () => {
         renderWithRouter(<TornadoTracksAbout />, { route: '/projects/tornado-tracks' });
         expect(screen.getByRole('heading', { level: 1, name: /Tornado Tracks/i })).toBeInTheDocument();
         expect(screen.getByRole('link', { name: /Open interactive map/i })).toHaveAttribute('href', '/projects/tornado-tracks/map');
+        expect(screen.getByRole('link', { name: /Source on GitHub/i })).toHaveAttribute('href', 'https://github.com/robert-bryson/rsmb.tv/tree/main/src/features/tornadoes');
+        expect(screen.getByRole('link', { name: /NOAA source data/i })).toHaveAttribute('href', 'https://www.ncei.noaa.gov/pub/data/swdi/stormevents/csvfiles/');
         expect(screen.getByRole('img', { name: /Map of 2025 tornado tracks across the continental United States/i })).toBeInTheDocument();
         expect(screen.getByRole('img', { name: /Map focused on St. Louis with a selected EF3 tornado track detail popup/i })).toBeInTheDocument();
         expect(screen.getByRole('img', { name: /Tornado Trends view showing annual counts, fatality rate, decade comparison, and top states/i })).toBeInTheDocument();
@@ -79,7 +85,26 @@ describe('Route2Gpx page', () => {
     it('renders heading and links', () => {
         renderWithRouter(<Route2Gpx />, { route: '/projects/route2gpx' });
         expect(screen.getByRole('heading', { level: 1, name: /route2gpx/i })).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: /Visit route2gpx/i })).toHaveAttribute('href', 'https://route2gpx.rsmb.tv');
+        expect(screen.getByRole('link', { name: /Open route2gpx/i })).toHaveAttribute('href', 'https://route2gpx.rsmb.tv');
         expect(screen.getByRole('link', { name: /Source on GitHub/i })).toHaveAttribute('href', 'https://github.com/robert-bryson/route2gpx');
+    });
+});
+
+describe('Aborg page', () => {
+    it('renders heading, source link, and usage commands', () => {
+        renderWithRouter(<Aborg />, { route: '/projects/aborg' });
+        expect(screen.getByRole('heading', { level: 1, name: /aborg/i })).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: /Source on GitHub/i })).toHaveAttribute('href', 'https://github.com/robert-bryson/aborg');
+        expect(screen.getByText(/aborg fetch --latest 1 --organize/i)).toBeInTheDocument();
+    });
+});
+
+describe('Parc page', () => {
+    it('renders heading, source link, screenshot, and usage commands', () => {
+        renderWithRouter(<Parc />, { route: '/projects/parc' });
+        expect(screen.getByRole('heading', { level: 1, name: /parc/i })).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: /Source on GitHub/i })).toHaveAttribute('href', 'https://github.com/robert-bryson/parc');
+        expect(screen.getByRole('img', { name: /parc update live progress output/i })).toHaveAttribute('src', '/images/parc/update-live-progress.webp');
+        expect(screen.getByText(/parc update/i)).toBeInTheDocument();
     });
 });

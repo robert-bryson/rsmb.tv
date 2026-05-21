@@ -23,6 +23,8 @@ export const DEFAULT_PAGES = [
     { slug: 'through-routes', title: 'Through Routes', subtitle: 'Find scenic, twisty motorcycle loop routes on rural roads' },
     { slug: 'flights', title: 'Flights', subtitle: 'Interactive 3D globe visualization of flights around the world' },
     { slug: 'anki-artisan', title: 'Anki Artisan', subtitle: 'Generate Anki flashcard decks from iNaturalist and eBird data' },
+    { slug: 'aborg', title: 'aborg', subtitle: 'Organize audiobook collections for Audiobookshelf' },
+    { slug: 'parc', title: 'parc', subtitle: 'Archive podcast feeds with resumable downloads and SQLite state' },
     { slug: 'bookend', title: 'Bookend', subtitle: 'A personal book-tracking app with reading stats and enrichment' },
     { slug: 'temperature-records', title: 'Record Highs', subtitle: 'Interactive map of all-time record temperatures across US counties' },
     { slug: 'tornado-tracks', title: 'Tornado Tracks', subtitle: 'Historical tornado track map with timeline playback and EF-scale filters' },

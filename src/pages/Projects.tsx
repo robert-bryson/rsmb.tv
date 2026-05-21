@@ -11,7 +11,7 @@ export function Projects() {
   useDocumentHead({
     title: 'Projects',
     description,
-    ogImage: 'https://rsmb.tv/og/projects.svg',
+    ogImage: absoluteUrl('/og/projects.svg'),
   });
 
   useJsonLd({
@@ -31,7 +31,7 @@ export function Projects() {
           name: project.title,
           description: project.description,
           url: absoluteUrl(`/projects/${project.slug}`),
-          applicationCategory: 'UtilitiesApplication',
+          applicationCategory: project.applicationCategory,
           keywords: project.tech,
         },
       })),

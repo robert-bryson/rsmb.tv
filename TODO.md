@@ -2,7 +2,7 @@
 
 ## Projects
 
-### aborg
+### Aborg
 
 - [ ] Add screenshots to project page
 
@@ -11,6 +11,10 @@
 No open items.
 
 ### Bookend
+
+No open items.
+
+### Parc
 
 No open items.
 
@@ -67,6 +71,8 @@ No open items.
 ### General
 
 - [x] JSON-LD for all pages
+- [x] Add generated Open Graph images for aborg and parc project pages
+- [x] Standardize page Open Graph metadata through shared site metadata helpers
 - [x] Add Google Sheets/Docs blog sync with MDX generation, syntax highlighting, table support, and GitHub Actions automation
 - [x] Validate Google Docs link normalization and unsafe-link stripping in blog sync tests
 - [x] Move Google-authored blog posts to build-time sync so generated posts are not committed to git
@@ -76,9 +82,13 @@ No open items.
 
 ### Completed projects
 
-#### aborg completed
+#### Aborg completed
 
 - [x] add project page/links/etc
+
+#### Parc completed
+
+- [x] Add project page, route, project card metadata, preview image, and Open Graph image
 
 #### Anki Artisan completed
 

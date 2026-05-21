@@ -19,7 +19,7 @@ export function Blog() {
     useDocumentHead({
         title: 'Blog | rsmb',
         description,
-        ogImage: 'https://rsmb.tv/og/blog.svg',
+        ogImage: absoluteUrl('/og/blog.svg'),
     });
 
     useJsonLd({

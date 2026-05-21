@@ -16,7 +16,7 @@ export default function TornadoTracks() {
     useDocumentHead({
         title: 'Tornado Tracks',
         description,
-        ogImage: 'https://rsmb.tv/og/tornado-tracks.svg',
+        ogImage: absoluteUrl('/og/tornado-tracks.svg'),
     });
 
     useJsonLd({

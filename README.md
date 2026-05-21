@@ -45,7 +45,7 @@ npm run dev
 ### Available Scripts
 
 | Command | Description |
-|---------|-------------|
+| ------- | ----------- |
 | `npm run dev` | Sync configured blog posts, build flight data, and start development server |
 | `npm run build` | Sync blog posts, build generated data/artifacts, typecheck, and build for production |
 | `npm run build-blog` | Sync Google-authored posts and rebuild blog RSS/sitemap/OG artifacts |
@@ -98,6 +98,8 @@ Build status is source-aware: AWS Amplify deployments are shown separately from 
 
 `src/content/posts.json`, `src/content/blog/*.mdx`, `public/rss.xml`, `public/sitemap.xml`, and `public/og/blog/*` are generated artifacts. They are ignored by git and rebuilt from Google Sheets/Docs during local dev and production builds.
 
+Static page Open Graph images are generated from `DEFAULT_PAGES` in `scripts/generate-og-images.js` and committed under `public/og/`. When adding a new project route, add the slug to `src/content/projects.ts`, wire the route in `src/App.tsx`, and add a matching `DEFAULT_PAGES` entry so `npm run build-og` keeps social preview assets complete.
+
 ## Project Image Assets
 
 Project screenshots and preview images live under `public/images/<project-slug>/` and should be committed as optimized WebP files. Do not commit raw JPG/PNG capture files when a compressed WebP derivative is used by the site. Project cards expect landscape previews; when the source material is portrait-oriented, compose a landscape preview image instead of pointing the card at a single phone screenshot.
@@ -109,7 +111,7 @@ Google Sheets/Docs is the source of truth for blog content. The build syncs publ
 Maintain a Google Sheet tab named `Blog Posts` by default, with one row per post:
 
 | Column | Required | Notes |
-|--------|----------|-------|
+| ------ | -------- | ----- |
 | `slug` | Optional | URL slug. If empty, the sync derives one from `title`. |
 | `title` | Yes | Used in frontmatter, the blog index, RSS, and OG image generation. |
 | `date` | Yes | Accepts `YYYY-MM-DD` or `M/D/YYYY`; written as `YYYY-MM-DD`. |
@@ -239,7 +241,7 @@ To set up automated sync, add these secrets to your GitHub repository:
 The sync script validates all flight data:
 
 | Check | Type | Description |
-|-------|------|-------------|
+| ----- | ---- | ----------- |
 | Date format | Error | Must be M/D/YYYY |
 | Date range | Error | Must be 1990 – 1 year from now |
 | Airport codes | Error | Must be 3-4 letter IATA/ICAO codes |

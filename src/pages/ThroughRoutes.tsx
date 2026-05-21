@@ -1,7 +1,9 @@
 import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/ProjectScreenshotGallery';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
-import { AUTHOR_PERSON } from '../utils/siteMetadata';
+import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+
+const THROUGH_ROUTES_URL = 'https://through-routes.rsmb.tv/';
 
 const screenshots: ProjectScreenshot[] = [
     {
@@ -35,7 +37,7 @@ export default function ThroughRoutes() {
     useDocumentHead({
         title: 'Through Routes',
         description,
-        ogImage: 'https://rsmb.tv/og/through-routes.svg',
+        ogImage: absoluteUrl('/og/through-routes.svg'),
     });
 
     useJsonLd({
@@ -43,8 +45,8 @@ export default function ThroughRoutes() {
         '@type': 'SoftwareApplication',
         name: 'Through Routes',
         description,
-        url: 'https://through-routes.rsmb.tv/',
-        applicationCategory: 'UtilitiesApplication',
+        url: THROUGH_ROUTES_URL,
+        applicationCategory: 'TravelApplication',
         operatingSystem: 'Web',
         author: AUTHOR_PERSON,
     });
@@ -76,7 +78,7 @@ export default function ThroughRoutes() {
 
             <div className="mb-8 flex flex-wrap gap-3">
                 <a
-                    href="https://through-routes.rsmb.tv/"
+                    href={THROUGH_ROUTES_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-violet-500"

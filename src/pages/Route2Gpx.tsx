@@ -1,6 +1,8 @@
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
-import { AUTHOR_PERSON } from '../utils/siteMetadata';
+import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+
+const ROUTE2GPX_URL = 'https://route2gpx.rsmb.tv';
 
 export default function Route2Gpx() {
     const description =
@@ -9,7 +11,7 @@ export default function Route2Gpx() {
     useDocumentHead({
         title: 'route2gpx',
         description,
-        ogImage: 'https://rsmb.tv/og/route2gpx.svg',
+        ogImage: absoluteUrl('/og/route2gpx.svg'),
     });
 
     useJsonLd({
@@ -17,8 +19,8 @@ export default function Route2Gpx() {
         '@type': 'SoftwareApplication',
         name: 'route2gpx',
         description,
-        url: 'https://route2gpx.rsmb.tv',
-        applicationCategory: 'UtilitiesApplication',
+        url: ROUTE2GPX_URL,
+        applicationCategory: 'TravelApplication',
         operatingSystem: 'Web',
         author: AUTHOR_PERSON,
     });
@@ -46,6 +48,25 @@ export default function Route2Gpx() {
                 privacy-focused web app that runs entirely in your browser —
                 your routes never touch a server.
             </p>
+
+            <div className="mb-8 flex flex-wrap gap-3">
+                <a
+                    href={ROUTE2GPX_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-violet-500"
+                >
+                    Open route2gpx →
+                </a>
+                <a
+                    href="https://github.com/robert-bryson/route2gpx"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-700"
+                >
+                    Source on GitHub →
+                </a>
+            </div>
 
             <div className="space-y-6 mb-8">
                 <figure>
@@ -118,25 +139,6 @@ export default function Route2Gpx() {
                         </span>
                     ),
                 )}
-            </div>
-
-            <div className="flex gap-4 text-sm">
-                <a
-                    href="https://route2gpx.rsmb.tv"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
-                >
-                    Visit route2gpx ↗
-                </a>
-                <a
-                    href="https://github.com/robert-bryson/route2gpx"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-zinc-400 underline decoration-zinc-400/30 hover:decoration-zinc-400"
-                >
-                    Source on GitHub ↗
-                </a>
             </div>
         </div>
     );

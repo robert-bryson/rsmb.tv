@@ -16,7 +16,7 @@ export default function TemperatureRecords() {
     useDocumentHead({
         title: 'Record Highs',
         description,
-        ogImage: 'https://rsmb.tv/og/temperature-records.svg',
+        ogImage: absoluteUrl('/og/temperature-records.svg'),
     });
 
     useJsonLd({

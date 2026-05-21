@@ -16,7 +16,7 @@ export default function ClimateTrendsPage() {
     useDocumentHead({
         title: 'Climate Trends — Record Highs',
         description,
-        ogImage: 'https://rsmb.tv/og/climate-trends.svg',
+        ogImage: absoluteUrl('/og/climate-trends.svg'),
     });
 
     useJsonLd({

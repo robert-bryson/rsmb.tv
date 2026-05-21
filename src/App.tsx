@@ -22,6 +22,7 @@ const TornadoTracksAbout = lazy(() => import('./pages/TornadoTracksAbout'));
 const TornadoTracks = lazy(() => import('./pages/TornadoTracks'));
 const Route2Gpx = lazy(() => import('./pages/Route2Gpx'));
 const Aborg = lazy(() => import('./pages/Aborg'));
+const Parc = lazy(() => import('./pages/Parc'));
 
 const basename = import.meta.env.BASE_URL;
 
@@ -69,6 +70,7 @@ export default function App() {
               <Route path="/projects/tornado-tracks/map" element={<TornadoTracks />} />
               <Route path="/projects/route2gpx" element={<Route2Gpx />} />
               <Route path="/projects/aborg" element={<Aborg />} />
+              <Route path="/projects/parc" element={<Parc />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

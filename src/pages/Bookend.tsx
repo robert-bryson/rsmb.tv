@@ -1,7 +1,9 @@
 import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/ProjectScreenshotGallery';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
-import { AUTHOR_PERSON } from '../utils/siteMetadata';
+import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+
+const BOOKEND_URL = 'https://bookend.rsmb.tv';
 
 const screenshots: ProjectScreenshot[] = [
     {
@@ -35,7 +37,7 @@ export default function Bookend() {
     useDocumentHead({
         title: 'Bookend',
         description,
-        ogImage: 'https://rsmb.tv/og/bookend.svg',
+        ogImage: absoluteUrl('/og/bookend.svg'),
     });
 
     useJsonLd({
@@ -43,8 +45,8 @@ export default function Bookend() {
         '@type': 'SoftwareApplication',
         name: 'Bookend',
         description,
-        url: 'https://bookend.rsmb.tv',
-        applicationCategory: 'UtilitiesApplication',
+        url: BOOKEND_URL,
+        applicationCategory: 'LifestyleApplication',
         operatingSystem: 'Web',
         author: AUTHOR_PERSON,
     });
@@ -90,14 +92,22 @@ export default function Bookend() {
                 for enrichment—covers, descriptions, author links, and more.
             </p>
 
-            <div className="mb-8">
+            <div className="mb-8 flex flex-wrap gap-3">
                 <a
-                    href="https://bookend.rsmb.tv"
+                    href={BOOKEND_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium transition-colors"
                 >
                     Open Bookend →
+                </a>
+                <a
+                    href="https://github.com/robert-bryson/bookend"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-700"
+                >
+                    Source on GitHub →
                 </a>
             </div>
 
@@ -134,17 +144,6 @@ export default function Bookend() {
                         {t}
                     </span>
                 ))}
-            </div>
-
-            <div className="flex gap-4 text-sm">
-                <a
-                    href="https://github.com/robert-bryson/bookend"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-zinc-400 underline decoration-zinc-400/30 hover:decoration-zinc-400"
-                >
-                    Source on GitHub ↗
-                </a>
             </div>
         </div>
     );

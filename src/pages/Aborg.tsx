@@ -9,6 +9,7 @@ export default function Aborg() {
     useDocumentHead({
         title: 'aborg',
         description,
+        ogImage: absoluteUrl('/og/aborg.svg'),
     });
 
     useJsonLd({
@@ -52,6 +53,17 @@ export default function Aborg() {
                 </a>{' '}
                 integration.
             </p>
+
+            <div className="mb-8 flex flex-wrap gap-3">
+                <a
+                    href="https://github.com/robert-bryson/aborg"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-700"
+                >
+                    Source on GitHub →
+                </a>
+            </div>
 
             <h2 className="text-lg font-medium text-zinc-100 mb-3">
                 Directory Structure
@@ -145,17 +157,6 @@ aborg analyze --path /mnt/nas/audiobooks`}</code>
                         {t}
                     </span>
                 ))}
-            </div>
-
-            <div className="flex gap-4 text-sm">
-                <a
-                    href="https://github.com/robert-bryson/aborg"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
-                >
-                    Source on GitHub ↗
-                </a>
             </div>
         </div>
     );

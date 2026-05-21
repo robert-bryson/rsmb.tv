@@ -3,10 +3,12 @@ import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import {
+    DEFAULT_PAGES,
     generateOgImages,
     generateSvg,
     loadBlogPosts,
 } from '../generate-og-images.js';
+import { projects } from '../../src/content/projects';
 
 const tempDirs: string[] = [];
 
@@ -41,6 +43,14 @@ describe('loadBlogPosts', () => {
 });
 
 describe('generateOgImages', () => {
+    it('has a default OG image definition for every project page', () => {
+        const pageSlugs = new Set(DEFAULT_PAGES.map((page) => page.slug));
+
+        for (const project of projects) {
+            expect(pageSlugs).toContain(project.slug);
+        }
+    });
+
     it('clears stale blog images and writes page images when there are no posts', () => {
         const repoRoot = createTempDir();
         const outDir = path.join(repoRoot, 'public/og');

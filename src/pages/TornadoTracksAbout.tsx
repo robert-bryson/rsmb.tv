@@ -10,7 +10,7 @@ export default function TornadoTracksAbout() {
     useDocumentHead({
         title: 'Tornado Tracks',
         description,
-        ogImage: 'https://rsmb.tv/og/tornado-tracks.svg',
+        ogImage: absoluteUrl('/og/tornado-tracks.svg'),
     });
 
     useJsonLd({
@@ -19,7 +19,7 @@ export default function TornadoTracksAbout() {
         name: 'Tornado Tracks',
         description,
         url: absoluteUrl('/projects/tornado-tracks'),
-        applicationCategory: 'UtilitiesApplication',
+        applicationCategory: 'WeatherApplication',
         operatingSystem: 'Web',
         author: AUTHOR_PERSON,
     });
@@ -43,6 +43,14 @@ export default function TornadoTracksAbout() {
                 >
                     Open interactive map →
                 </Link>
+                <a
+                    href="https://github.com/robert-bryson/rsmb.tv/tree/main/src/features/tornadoes"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-700"
+                >
+                    Source on GitHub →
+                </a>
                 <a
                     href="https://www.ncei.noaa.gov/pub/data/swdi/stormevents/csvfiles/"
                     target="_blank"

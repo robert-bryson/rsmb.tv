@@ -4,7 +4,7 @@ import { getAllPosts } from '../content/posts';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { formatDate } from '../utils/formatDate';
-import { AUTHOR_PERSON, SITE_URL } from '../utils/siteMetadata';
+import { AUTHOR_PERSON, SITE_URL, absoluteUrl } from '../utils/siteMetadata';
 
 export function Home() {
   const recentPosts = getAllPosts().slice(0, 3);
@@ -12,7 +12,7 @@ export function Home() {
   useDocumentHead({
     title: 'rsmb',
     description: 'Personal site and portfolio of Robby Bryson — interactive data visualizations, geospatial projects, and web tools.',
-    ogImage: 'https://rsmb.tv/og/home.svg',
+    ogImage: absoluteUrl('/og/home.svg'),
   });
 
   useJsonLd({

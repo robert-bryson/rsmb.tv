@@ -16,7 +16,7 @@ export default function Flights() {
   useDocumentHead({
     title: 'Flights',
     description,
-    ogImage: 'https://rsmb.tv/og/flights.svg',
+    ogImage: absoluteUrl('/og/flights.svg'),
   });
 
   useJsonLd({

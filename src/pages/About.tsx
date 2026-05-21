@@ -9,7 +9,7 @@ export function About() {
   useDocumentHead({
     title: 'About',
     description,
-    ogImage: 'https://rsmb.tv/og/about.svg',
+    ogImage: absoluteUrl('/og/about.svg'),
   });
 
   useJsonLd({

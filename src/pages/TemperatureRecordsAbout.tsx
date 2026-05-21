@@ -10,7 +10,7 @@ export default function TemperatureRecordsAbout() {
     useDocumentHead({
         title: 'Record Highs',
         description,
-        ogImage: 'https://rsmb.tv/og/temperature-records.svg',
+        ogImage: absoluteUrl('/og/temperature-records.svg'),
     });
 
     useJsonLd({
@@ -19,7 +19,7 @@ export default function TemperatureRecordsAbout() {
         name: 'Record Highs',
         description,
         url: absoluteUrl('/projects/temperature-records'),
-        applicationCategory: 'UtilitiesApplication',
+        applicationCategory: 'WeatherApplication',
         operatingSystem: 'Web',
         author: AUTHOR_PERSON,
     });
@@ -58,7 +58,7 @@ export default function TemperatureRecordsAbout() {
                 analysis focused on county all-time records.
             </p>
 
-            <div className="flex gap-3 mb-8">
+            <div className="mb-8 flex flex-wrap gap-3">
                 <Link
                     to="/projects/temperature-records/map?view=freshness"
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium transition-colors"
@@ -71,6 +71,14 @@ export default function TemperatureRecordsAbout() {
                 >
                     View climate trends →
                 </Link>
+                <a
+                    href="https://github.com/robert-bryson/rsmb.tv/tree/main/src/features/temperatures"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-700"
+                >
+                    Source on GitHub →
+                </a>
             </div>
 
             <div className="space-y-6 mb-8">

@@ -20,6 +20,8 @@ describe('projects data', () => {
             expect(typeof p.description).toBe('string');
             expect(Array.isArray(p.tech)).toBe(true);
             expect(p.tech.length).toBeGreaterThan(0);
+            expect(typeof p.applicationCategory).toBe('string');
+            expect(p.applicationCategory).toMatch(/Application$/);
             expect(typeof p.year).toBe('number');
         }
     });
