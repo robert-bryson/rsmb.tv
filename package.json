@@ -42,7 +42,7 @@
     "@aws-sdk/client-amplify": "^3.1053.0",
     "@aws-sdk/client-cloudwatch": "^3.1052.0",
     "@aws-sdk/client-cost-explorer": "^3.1052.0",
-    "@aws-sdk/client-route-53": "^3.1052.0",
+    "@aws-sdk/client-route-53": "^3.1053.0",
     "@aws-sdk/credential-providers": "^3.1052.0",
     "@eslint/js": "^10.0.1",
     "@mdx-js/rollup": "^3.1.1",
