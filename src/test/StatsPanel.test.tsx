@@ -45,6 +45,8 @@ function renderStatsPanel(overrides: Partial<ComponentProps<typeof StatsPanel>> 
         onClearAirport: vi.fn(),
         selectedAirline: null,
         onAirlineSelect: vi.fn(),
+        selectedFlightType: null,
+        onFlightTypeSelect: vi.fn(),
         onAirportClick: vi.fn(),
         onRouteClick: vi.fn(),
         onCountryClick: vi.fn(),
@@ -134,8 +136,46 @@ describe('StatsPanel', () => {
                 onAirlineSelect,
             });
             expect(screen.getByText(/Airline: United/)).toBeInTheDocument();
-            fireEvent.click(screen.getByRole('button', { name: '✕' }));
+            fireEvent.click(screen.getByRole('button', { name: 'Clear airline filter' }));
             expect(onAirlineSelect).toHaveBeenCalledWith(null);
+        });
+
+        it('selects a flight type from the Flight Types section', () => {
+            const onFlightTypeSelect = vi.fn();
+            renderStatsPanel({ isOpen: true, onFlightTypeSelect });
+
+            fireEvent.click(screen.getByRole('button', { name: 'Show intercontinental flights' }));
+
+            expect(onFlightTypeSelect).toHaveBeenCalledWith('intercontinental');
+        });
+
+        it('clears the active flight type when its selected stat is clicked again', () => {
+            const onFlightTypeSelect = vi.fn();
+            renderStatsPanel({
+                isOpen: true,
+                selectedFlightType: 'intercontinental',
+                onFlightTypeSelect,
+            });
+
+            const button = screen.getByRole('button', { name: 'Clear intercontinental flight type filter' });
+            expect(button).toHaveAttribute('aria-pressed', 'true');
+
+            fireEvent.click(button);
+
+            expect(onFlightTypeSelect).toHaveBeenCalledWith(null);
+        });
+
+        it('clears the active flight type from its filter label', () => {
+            const onFlightTypeSelect = vi.fn();
+            renderStatsPanel({
+                isOpen: true,
+                selectedFlightType: 'domestic',
+                onFlightTypeSelect,
+            });
+
+            fireEvent.click(screen.getByRole('button', { name: 'Clear flight type filter' }));
+
+            expect(onFlightTypeSelect).toHaveBeenCalledWith(null);
         });
 
         it('formats overall distance stats with the selected unit system', () => {

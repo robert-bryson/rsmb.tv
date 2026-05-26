@@ -1,5 +1,6 @@
 import { useCallback, type RefObject } from 'react';
 import type { GlobeMethods } from 'react-globe.gl';
+import type { GlobeViewState } from '../types';
 import {
     VIEW_TRANSITION_MS,
     ZOOM_ALTITUDE_MIN,
@@ -58,14 +59,16 @@ function calculateBounds(points: LatLng[]) {
  * Eliminates duplicated bounds-calculation logic across handlers.
  */
 export function useZoomNavigation(
-    globeRef: RefObject<GlobeMethods | undefined>
+    globeRef: RefObject<GlobeMethods | undefined>,
+    onViewChange?: (view: GlobeViewState, options?: { replace?: boolean }) => void
 ) {
     /** Reset the view to the default (centered on USA). */
     const resetView = useCallback(() => {
         if (globeRef.current) {
             globeRef.current.pointOfView(DEFAULT_VIEW, VIEW_TRANSITION_MS);
+            onViewChange?.(DEFAULT_VIEW, { replace: true });
         }
-    }, [globeRef]);
+    }, [globeRef, onViewChange]);
 
     /** Zoom to fit a set of geographic points. */
     const zoomToPoints = useCallback(
@@ -76,10 +79,12 @@ export function useZoomNavigation(
             if (!globeRef.current || points.length === 0) return;
 
             if (points.length === 1) {
+                const view = { lat: points[0].lat, lng: points[0].lng, altitude: 0.5 };
                 globeRef.current.pointOfView(
-                    { lat: points[0].lat, lng: points[0].lng, altitude: 0.5 },
+                    view,
                     options?.transitionMs ?? VIEW_TRANSITION_MS
                 );
+                onViewChange?.(view, { replace: true });
                 return;
             }
 
@@ -88,12 +93,11 @@ export function useZoomNavigation(
                 maxSpan,
                 options?.divisor ?? ZOOM_SPAN_DIVISOR
             );
-            globeRef.current.pointOfView(
-                { lat: centerLat, lng: centerLng, altitude },
-                options?.transitionMs ?? VIEW_TRANSITION_MS
-            );
+            const view = { lat: centerLat, lng: centerLng, altitude };
+            globeRef.current.pointOfView(view, options?.transitionMs ?? VIEW_TRANSITION_MS);
+            onViewChange?.(view, { replace: true });
         },
-        [globeRef]
+        [globeRef, onViewChange]
     );
 
     /** Zoom to the midpoint between two geographic points (e.g., a route). */
@@ -116,24 +120,22 @@ export function useZoomNavigation(
                 Math.max(0.6, maxDiff / (options?.divisor ?? 70))
             );
 
-            globeRef.current.pointOfView(
-                { lat: midLat, lng: midLng, altitude },
-                options?.transitionMs ?? 1000
-            );
+            const view = { lat: midLat, lng: midLng, altitude };
+            globeRef.current.pointOfView(view, options?.transitionMs ?? 1000);
+            onViewChange?.(view, { replace: true });
         },
-        [globeRef]
+        [globeRef, onViewChange]
     );
 
     /** Zoom to a single point at a specific altitude. */
     const zoomToPoint = useCallback(
         (point: LatLng, altitude = 0.5, transitionMs = 1000) => {
             if (!globeRef.current) return;
-            globeRef.current.pointOfView(
-                { lat: point.lat, lng: point.lng, altitude },
-                transitionMs
-            );
+            const view = { lat: point.lat, lng: point.lng, altitude };
+            globeRef.current.pointOfView(view, transitionMs);
+            onViewChange?.(view, { replace: true });
         },
-        [globeRef]
+        [globeRef, onViewChange]
     );
 
     /** Zoom to fit an airport and all its connections. */
@@ -150,12 +152,11 @@ export function useZoomNavigation(
             const { maxSpan } = calculateBounds(allPoints);
             const altitude = Math.min(2.5, Math.max(0.5, maxSpan / 45 + 0.3));
 
-            globeRef.current.pointOfView(
-                { lat: airport.lat, lng: airport.lng, altitude },
-                1000
-            );
+            const view = { lat: airport.lat, lng: airport.lng, altitude };
+            globeRef.current.pointOfView(view, 1000);
+            onViewChange?.(view, { replace: true });
         },
-        [globeRef, zoomToPoint]
+        [globeRef, onViewChange, zoomToPoint]
     );
 
     return {

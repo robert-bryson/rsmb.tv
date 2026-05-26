@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { calculateDistance, formatDistance, formatElevation, parseYear, getRouteKey, hexToRgba } from '../features/flights/utils';
+import { calculateDistance, flightMatchesType, formatDistance, formatElevation, parseYear, getRouteKey, hexToRgba } from '../features/flights/utils';
+import type { FlightProperties } from '../features/flights/types';
 
 describe('parseYear', () => {
     it('parses M/D/YYYY format', () => {
@@ -99,5 +100,37 @@ describe('formatElevation', () => {
 
     it('formats feet when metric units are disabled', () => {
         expect(formatElevation(433, 132, false)).toBe('433 ft');
+    });
+});
+
+describe('flightMatchesType', () => {
+    const baseFlight = {
+        origin_country: 'US',
+        destination_country: 'US',
+        origin_continent: 'NA',
+        destination_continent: 'NA',
+    } as FlightProperties;
+
+    it('matches domestic flights within one country', () => {
+        expect(flightMatchesType(baseFlight, 'domestic')).toBe(true);
+        expect(flightMatchesType(baseFlight, 'international')).toBe(false);
+    });
+
+    it('matches international flights across countries', () => {
+        const flight = { ...baseFlight, destination_country: 'CA' };
+
+        expect(flightMatchesType(flight, 'international')).toBe(true);
+        expect(flightMatchesType(flight, 'intercontinental')).toBe(false);
+    });
+
+    it('matches intercontinental flights across continents', () => {
+        const flight = {
+            ...baseFlight,
+            destination_country: 'GB',
+            destination_continent: 'EU',
+        };
+
+        expect(flightMatchesType(flight, 'intercontinental')).toBe(true);
+        expect(flightMatchesType(flight, 'international')).toBe(true);
     });
 });

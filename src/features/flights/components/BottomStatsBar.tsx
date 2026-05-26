@@ -1,5 +1,6 @@
 import { memo } from 'react';
-import { formatDistance } from '../utils';
+import type { FlightTypeFilter } from '../types';
+import { formatDistance, getFlightTypeLabel } from '../utils';
 
 interface BottomStatsBarProps {
     totalFlights: number;
@@ -10,6 +11,7 @@ interface BottomStatsBarProps {
     selectedAirline: string | null;
     selectedCountry: string | null;
     selectedRegion: string | null;
+    selectedFlightType: FlightTypeFilter | null;
     isMetric: boolean;
     onToggleUnits: () => void;
 }
@@ -26,6 +28,7 @@ export const BottomStatsBar = memo(function BottomStatsBar({
     selectedAirline,
     selectedCountry,
     selectedRegion,
+    selectedFlightType,
     isMetric,
     onToggleUnits,
 }: BottomStatsBarProps) {
@@ -85,6 +88,12 @@ export const BottomStatsBar = memo(function BottomStatsBar({
                     <>
                         <span className="text-gray-600 hidden sm:inline">•</span>
                         <span className="text-orange-400 font-semibold hidden sm:inline">{selectedAirline}</span>
+                    </>
+                )}
+                {selectedFlightType && (
+                    <>
+                        <span className="text-gray-600 hidden sm:inline">•</span>
+                        <span className="text-sky-300 font-semibold hidden sm:inline">{getFlightTypeLabel(selectedFlightType)}</span>
                     </>
                 )}
             </div>

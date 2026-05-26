@@ -1,10 +1,8 @@
 import { useRef, useCallback, useState, useMemo, useEffect, type SyntheticEvent } from 'react';
 import Globe, { type GlobeMethods } from 'react-globe.gl';
-import { usePersistedState } from '../../../hooks/usePersistedState';
 import { useGlobeData, useFlights } from '../hooks/useFlightData';
 import { useAllAirports, useAllAirportsLayer } from '../hooks/useAllAirports';
 import { useUSStates, useUSStateStats, useUSStatesLayer } from '../hooks/useUSStates';
-import { useStatsPanelState } from '../hooks/useStatsPanelState';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import { useYearSwipeNavigation } from '../hooks/useSwipeGesture';
@@ -29,10 +27,9 @@ import { HoverInfo } from './HoverInfo';
 import { LoadingSkeleton } from './LoadingSkeleton';
 import { LayersControl } from './LayersControl';
 import { buildArcLabelHtml, buildPointLabelHtml, buildStatePolygonLabelHtml } from '../utils/tooltipHtml';
+import { flightMatchesType, getFlightTypeColor } from '../utils';
 import {
-  DEFAULT_BASEMAP_ID,
   getBasemap,
-  isValidBasemapId,
   DEFAULT_VIEW,
   AUTO_ROTATION_SPEED,
   VIEW_TRANSITION_MS,
@@ -52,61 +49,114 @@ import {
   DBLCLICK_ZOOM_FACTOR,
   ZOOM_ALTITUDE_MIN,
 } from '../constants';
-import type { GlobeArc, GlobePoint, GlobeStaticArc, ColorMode, AirportSymbolMode, GlobeAllAirportPoint, StateSymbolMode, GlobeStatePolygon, BasemapId } from '../types';
+import type { GlobeArc, GlobePoint, GlobeStaticArc, GlobeAllAirportPoint, GlobeStatePolygon, GlobeViewState } from '../types';
 
 
 export function FlightsMap() {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const controlsRef = useRef<ReturnType<GlobeMethods['controls']> | null>(null);
+  const cameraSyncTimeoutRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
+  const pendingCameraViewRef = useRef<GlobeViewState | null>(null);
+  const suppressCameraSyncRef = useRef(false);
   const prefersReducedMotion = useReducedMotion();
-  const [rawBasemapId, setBasemapId] = usePersistedState<BasemapId>('flights-basemap', DEFAULT_BASEMAP_ID);
-  // Guard against stale/invalid basemap IDs from localStorage
-  const basemapId = isValidBasemapId(rawBasemapId) ? rawBasemapId : DEFAULT_BASEMAP_ID;
-  const basemap = useMemo(() => getBasemap(basemapId), [basemapId]);
-  const textureState = useGlobeTextures(basemap);
-  const { resetView, zoomToPoints, zoomToRoute, zoomToPoint, zoomToAirportWithConnections } = useZoomNavigation(globeRef);
 
-  // URL-driven filter state
+  // URL-driven app state
   const {
     selectedYear, selectedAirport, selectedAirline, selectedRoute,
-    selectedCountry, selectedRegion, selectedRouteAirports,
+    selectedCountry, selectedRegion, selectedFlightType, selectedGlobeView,
+    selectedRouteAirports, showStats, filterOpen, layersOpen, activeLayerSection,
+    showHelp, basemapId, colorMode, animationEnabled, showFlightPaths,
+    globeRotationEnabled, allAirportsVisible, airportSymbolMode, usStatesVisible,
+    stateSymbolMode, isMetric,
     setSelectedYear, setSelectedAirport, setSelectedAirline, setSelectedRoute,
-    setSelectedCountry, setSelectedRegion, clearAllFilters,
+    setSelectedCountry, setSelectedRegion, setSelectedFlightType, setSelectedGlobeView,
+    setShowStats, setFilterOpen, setLayersOpen, setActiveLayerSection, setShowHelp,
+    setBasemapId, setColorMode, setAnimationEnabled, setShowFlightPaths,
+    setGlobeRotationEnabled, setAllAirportsVisible, setAirportSymbolMode,
+    setUSStatesVisible, setStateSymbolMode, setIsMetric, clearAllFilters,
   } = useFlightsFilters();
 
-  const [colorMode, setColorMode] = usePersistedState<ColorMode>('flights-color-mode', 'default');
-  const [animationEnabled, setAnimationEnabled] = usePersistedState('flights-animation-enabled', true);
-  const [showStats, setShowStats] = useStatsPanelState(false);
-  const [filterOpen, setFilterOpen] = useState(false);
+  const basemap = useMemo(() => getBasemap(basemapId), [basemapId]);
+  const textureState = useGlobeTextures(basemap);
+  const { resetView, zoomToPoints, zoomToRoute, zoomToPoint, zoomToAirportWithConnections } = useZoomNavigation(globeRef, setSelectedGlobeView);
+  const urlGlobeLat = selectedGlobeView?.lat ?? DEFAULT_VIEW.lat;
+  const urlGlobeLng = selectedGlobeView?.lng ?? DEFAULT_VIEW.lng;
+  const urlGlobeAltitude = selectedGlobeView?.altitude ?? DEFAULT_VIEW.altitude;
+
   const [hoveredStaticArc, setHoveredStaticArc] = useState<GlobeStaticArc | null>(null);
   const [hoveredPoint, setHoveredPoint] = useState<GlobePoint | null>(null);
-  const [globeRotationEnabled, setGlobeRotationEnabled] = useState(false);
   const [mobileInfoArc, setMobileInfoArc] = useState<GlobeStaticArc | null>(null); // For mobile tap-to-show
   const [copiedUrl, setCopiedUrl] = useState(false);
 
-  // All airports layer state
-  const [allAirportsVisible, setAllAirportsVisible] = usePersistedState('flights-all-airports-visible', false);
-  const [airportSymbolMode, setAirportSymbolMode] = usePersistedState<AirportSymbolMode>('flights-airport-symbol-mode', 'visited');
-  const [showFlightPaths, setShowFlightPaths] = usePersistedState('flights-show-flight-paths', true);
+  const clearScheduledGlobeViewSync = useCallback(() => {
+    if (cameraSyncTimeoutRef.current !== null) {
+      window.clearTimeout(cameraSyncTimeoutRef.current);
+      cameraSyncTimeoutRef.current = null;
+    }
+    pendingCameraViewRef.current = null;
+  }, []);
 
-  // US States layer state
-  const [usStatesVisible, setUSStatesVisible] = usePersistedState('flights-us-states-visible', false);
-  const [stateSymbolMode, setStateSymbolMode] = usePersistedState<StateSymbolMode>('flights-state-symbol-mode', 'visited');
+  const syncGlobeViewToUrl = useCallback((view: GlobeViewState) => {
+    if (!view || !Number.isFinite(view.lat) || !Number.isFinite(view.lng) || !Number.isFinite(view.altitude)) return;
+    setSelectedGlobeView({ lat: view.lat, lng: view.lng, altitude: view.altitude }, { replace: true });
+  }, [setSelectedGlobeView]);
 
-  // Units preference (metric = km/m, imperial = mi/ft)
-  const [isMetric, setIsMetric] = usePersistedState('flights-units-metric', true);
+  const syncCurrentGlobeViewToUrl = useCallback(() => {
+    clearScheduledGlobeViewSync();
+    const view = globeRef.current?.pointOfView();
+    if (!view) return;
+    syncGlobeViewToUrl(view);
+  }, [clearScheduledGlobeViewSync, syncGlobeViewToUrl]);
 
-  // Set initial view centered on USA and disable globe rotation initially
+  const scheduleGlobeViewSync = useCallback((view?: GlobeViewState) => {
+    if (suppressCameraSyncRef.current) return;
+    if (view) {
+      pendingCameraViewRef.current = view;
+    }
+    if (cameraSyncTimeoutRef.current !== null) {
+      window.clearTimeout(cameraSyncTimeoutRef.current);
+    }
+    cameraSyncTimeoutRef.current = window.setTimeout(() => {
+      cameraSyncTimeoutRef.current = null;
+      const pendingView = pendingCameraViewRef.current;
+      pendingCameraViewRef.current = null;
+      if (pendingView) {
+        syncGlobeViewToUrl(pendingView);
+      } else {
+        syncCurrentGlobeViewToUrl();
+      }
+    }, 250);
+  }, [syncCurrentGlobeViewToUrl, syncGlobeViewToUrl]);
+
+  const scheduleCurrentGlobeViewSync = useCallback(() => {
+    scheduleGlobeViewSync();
+  }, [scheduleGlobeViewSync]);
+
+  const applyLinkedGlobeView = useCallback((view: GlobeViewState) => {
+    if (!globeRef.current) return;
+    clearScheduledGlobeViewSync();
+    suppressCameraSyncRef.current = true;
+    globeRef.current.pointOfView(view, 0);
+    window.setTimeout(() => {
+      suppressCameraSyncRef.current = false;
+    }, 0);
+  }, [clearScheduledGlobeViewSync]);
+
+  const handleGlobeZoom = useCallback((view: GlobeViewState) => {
+    scheduleGlobeViewSync(view);
+  }, [scheduleGlobeViewSync]);
+
+  // Set initial/share-linked view and disable globe rotation initially
   useEffect(() => {
     if (globeRef.current) {
-      globeRef.current.pointOfView(DEFAULT_VIEW, 0);
+      applyLinkedGlobeView({ lat: urlGlobeLat, lng: urlGlobeLng, altitude: urlGlobeAltitude });
       // Explicitly disable globe rotation on mount
       const controls = globeRef.current.controls();
       if (controls) {
         controls.autoRotate = false;
       }
     }
-  }, []);
+  }, [applyLinkedGlobeView, urlGlobeAltitude, urlGlobeLat, urlGlobeLng]);
 
   // Handle explicit globe rotation (disabled if user prefers reduced motion)
   useEffect(() => {
@@ -121,7 +171,7 @@ export function FlightsMap() {
 
   const stopGlobeRotation = useCallback(() => {
     setGlobeRotationEnabled(false);
-  }, []);
+  }, [setGlobeRotationEnabled]);
 
   const handleMapInteraction = useCallback((event: SyntheticEvent<HTMLDivElement>) => {
     if (event.target instanceof Element && event.target.closest('[data-globe-rotation-toggle]')) {
@@ -132,7 +182,7 @@ export function FlightsMap() {
 
   const handleToggleGlobeRotation = useCallback(() => {
     setGlobeRotationEnabled((enabled) => !enabled);
-  }, []);
+  }, [setGlobeRotationEnabled]);
 
   const handleResetView = useCallback(() => {
     stopGlobeRotation();
@@ -147,7 +197,7 @@ export function FlightsMap() {
   const handleGlobeReady = useCallback(() => {
     if (!globeRef.current) return;
 
-    globeRef.current.pointOfView(DEFAULT_VIEW, 0);
+    applyLinkedGlobeView({ lat: urlGlobeLat, lng: urlGlobeLng, altitude: urlGlobeAltitude });
     const controls = globeRef.current.controls();
     if (!controls) return;
 
@@ -155,18 +205,27 @@ export function FlightsMap() {
     controls.autoRotateSpeed = AUTO_ROTATION_SPEED;
     if (controlsRef.current && controlsRef.current !== controls) {
       controlsRef.current.removeEventListener('start', stopGlobeRotation);
+      controlsRef.current.removeEventListener('end', syncCurrentGlobeViewToUrl);
+      controlsRef.current.removeEventListener('change', scheduleCurrentGlobeViewSync);
     }
     controls.removeEventListener('start', stopGlobeRotation);
+    controls.removeEventListener('end', syncCurrentGlobeViewToUrl);
+    controls.removeEventListener('change', scheduleCurrentGlobeViewSync);
     controls.addEventListener('start', stopGlobeRotation);
+    controls.addEventListener('end', syncCurrentGlobeViewToUrl);
+    controls.addEventListener('change', scheduleCurrentGlobeViewSync);
     controlsRef.current = controls;
-  }, [globeRotationEnabled, prefersReducedMotion, stopGlobeRotation]);
+  }, [applyLinkedGlobeView, globeRotationEnabled, prefersReducedMotion, scheduleCurrentGlobeViewSync, stopGlobeRotation, syncCurrentGlobeViewToUrl, urlGlobeAltitude, urlGlobeLat, urlGlobeLng]);
 
   useEffect(() => {
     return () => {
       controlsRef.current?.removeEventListener('start', stopGlobeRotation);
+      controlsRef.current?.removeEventListener('end', syncCurrentGlobeViewToUrl);
+      controlsRef.current?.removeEventListener('change', scheduleCurrentGlobeViewSync);
+      clearScheduledGlobeViewSync();
       controlsRef.current = null;
     };
-  }, [stopGlobeRotation]);
+  }, [clearScheduledGlobeViewSync, scheduleCurrentGlobeViewSync, stopGlobeRotation, syncCurrentGlobeViewToUrl]);
 
   // Double-click to zoom in toward clicked point
   useEffect(() => {
@@ -176,15 +235,25 @@ export function FlightsMap() {
     const domEl = globe.renderer().domElement;
     const handler = (e: MouseEvent) => {
       stopGlobeRotation();
-      const coords = globe.toGlobeCoords(e.offsetX, e.offsetY);
-      if (!coords) return;
+      let coords: { lat: number; lng: number } | null;
+      try {
+        coords = globe.toGlobeCoords(e.offsetX, e.offsetY) ?? null;
+      } catch {
+        coords = null;
+      }
       const pov = globe.pointOfView();
       const newAltitude = Math.max(ZOOM_ALTITUDE_MIN, pov.altitude * DBLCLICK_ZOOM_FACTOR);
-      globe.pointOfView({ lat: coords.lat, lng: coords.lng, altitude: newAltitude }, VIEW_TRANSITION_MS);
+      const view = {
+        lat: coords?.lat ?? pov.lat,
+        lng: coords?.lng ?? pov.lng,
+        altitude: newAltitude,
+      };
+      globe.pointOfView(view, VIEW_TRANSITION_MS);
+      setSelectedGlobeView(view, { replace: true });
     };
     domEl.addEventListener('dblclick', handler);
     return () => domEl.removeEventListener('dblclick', handler);
-  }, [stopGlobeRotation]);
+  }, [setSelectedGlobeView, stopGlobeRotation]);
 
   const { arcsData, staticArcsData, pointsData, flightStats, loading, error } = useGlobeData({
     selectedYear,
@@ -192,6 +261,30 @@ export function FlightsMap() {
     selectedAirport,
     selectedAirline,
   });
+
+  const flightTypeSelection = useMemo(() => {
+    if (!selectedFlightType) return null;
+
+    const routeKeys = new Set<string>();
+    const airportCodes = new Set<string>();
+
+    staticArcsData.forEach(arc => {
+      const matchingFlights = arc.flights.filter(flight => flightMatchesType(flight, selectedFlightType));
+      if (matchingFlights.length === 0) return;
+
+      routeKeys.add(arc.routeKey);
+      matchingFlights.forEach(flight => {
+        airportCodes.add(flight.origin_code);
+        airportCodes.add(flight.destination_code);
+      });
+    });
+
+    return {
+      routeKeys,
+      airportCodes,
+      color: getFlightTypeColor(selectedFlightType),
+    };
+  }, [selectedFlightType, staticArcsData]);
 
   // Create a set of valid airport codes for clickable validation
   const validAirportCodes = useMemo(() => {
@@ -267,8 +360,11 @@ export function FlightsMap() {
       }
       return visited;
     }
+    if (flightTypeSelection) {
+      return pointsData.filter(p => flightTypeSelection.airportCodes.has(p.airport.code));
+    }
     return pointsData.filter(p => p.airport.visitCount >= LABEL_MIN_VISITS);
-  }, [pointsData, selectedAirport, selectedCountry, selectedRegion, staticArcsData, allAirportsData]);
+  }, [pointsData, selectedAirport, selectedCountry, selectedRegion, staticArcsData, allAirportsData, flightTypeSelection]);
 
   const combinedPointsData = useMemo(() => {
     const visitedCodes = new Set(pointsData.map(p => p.airport.code));
@@ -357,13 +453,16 @@ export function FlightsMap() {
   }, [stopGlobeRotation]);
 
   // Keyboard shortcuts
-  const { showHelp, setShowHelp } = useKeyboardShortcuts({
+  useKeyboardShortcuts({
     onToggleStats: () => setShowStats(prev => !prev),
     onToggleFilter: () => setFilterOpen(prev => !prev),
     onResetView: handleResetView,
     onClearSelection: () => {
       setSelectedAirport(null);
       setSelectedRoute(null);
+      setSelectedCountry(null);
+      setSelectedRegion(null);
+      setSelectedFlightType(null);
       setShowStats(false);
       setFilterOpen(false);
     },
@@ -375,6 +474,8 @@ export function FlightsMap() {
     onToggleAllAirports: () => setAllAirportsVisible(prev => !prev),
     onToggleUSStates: () => setUSStatesVisible(prev => !prev),
     onShortcut: stopGlobeRotation,
+    showHelp,
+    onHelpChange: setShowHelp,
   });
 
   // Derived selection info for stats panel
@@ -416,16 +517,40 @@ export function FlightsMap() {
       const isStatic = (arc as GlobeArc & { isStatic?: boolean }).isStatic;
       if (!isStatic || !routeKey) return;
 
-      if (!selectedRoute) {
-        styles.set(routeKey, { color: arc.color as string, stroke: arc.stroke });
-      } else if (routeKey === selectedRoute) {
-        styles.set(routeKey, { color: 'rgba(255, 200, 50, 0.95)', stroke: 1.5 });
+      if (selectedRoute) {
+        if (routeKey === selectedRoute) {
+          styles.set(routeKey, { color: 'rgba(255, 200, 50, 0.95)', stroke: 1.5 });
+        } else {
+          styles.set(routeKey, { color: 'rgba(100, 100, 120, 0.3)', stroke: 0.3 });
+        }
+      } else if (flightTypeSelection) {
+        if (flightTypeSelection.routeKeys.has(routeKey)) {
+          styles.set(routeKey, { color: flightTypeSelection.color, stroke: Math.max(arc.stroke * 1.8, 0.8) });
+        } else {
+          styles.set(routeKey, { color: 'rgba(100, 100, 120, 0.16)', stroke: 0.25 });
+        }
       } else {
-        styles.set(routeKey, { color: 'rgba(100, 100, 120, 0.3)', stroke: 0.3 });
+        styles.set(routeKey, { color: arc.color as string, stroke: arc.stroke });
       }
     });
     return styles;
-  }, [combinedArcsData, selectedRoute]);
+  }, [combinedArcsData, selectedRoute, flightTypeSelection]);
+
+  const getAnimatedArcFlightTypeStyle = useCallback((arc: GlobeArc) => {
+    if (!selectedFlightType || !flightTypeSelection) return null;
+
+    if (flightMatchesType(arc.flight, selectedFlightType)) {
+      return {
+        color: flightTypeSelection.color,
+        stroke: Math.max(arc.stroke * 1.35, 0.45),
+      };
+    }
+
+    return {
+      color: 'rgba(100, 100, 120, 0.12)',
+      stroke: Math.max(arc.stroke * 0.35, 0.12),
+    };
+  }, [selectedFlightType, flightTypeSelection]);
 
   // Calculate bounds for zoom-to-fit when year changes
   const zoomToBounds = useCallback((points: typeof pointsData) => {
@@ -677,6 +802,7 @@ export function FlightsMap() {
             atmosphereAltitude={ATMOSPHERE_ALTITUDE}
             lineHoverPrecision={LINE_HOVER_PRECISION}
             onGlobeReady={handleGlobeReady}
+            onZoom={handleGlobeZoom}
             // Combined arcs: static background lines + animated dots
             arcsData={showFlightPaths ? combinedArcsData : []}
             arcStartLat={(d: object) => (d as GlobeArc & { startLat: number }).startLat}
@@ -685,14 +811,18 @@ export function FlightsMap() {
             arcEndLng={(d: object) => (d as GlobeArc & { endLng: number }).endLng}
             arcColor={(d: object) => {
               const arc = d as GlobeArc & { color: string; routeKey?: string; isStatic?: boolean };
-              if (!arc.isStatic) return arc.color; // Animated arcs keep their color
+              if (!arc.isStatic) {
+                return getAnimatedArcFlightTypeStyle(arc)?.color ?? arc.color;
+              }
               const style = arc.routeKey ? arcStyles.get(arc.routeKey) : null;
               return style?.color ?? arc.color;
             }}
             arcAltitudeAutoScale={ARC_ALTITUDE_AUTOSCALE}
             arcStroke={(d: object) => {
               const arc = d as GlobeArc & { stroke: number; routeKey?: string; isStatic?: boolean };
-              if (!arc.isStatic) return arc.stroke; // Animated arcs keep their stroke
+              if (!arc.isStatic) {
+                return getAnimatedArcFlightTypeStyle(arc)?.stroke ?? arc.stroke;
+              }
               const style = arc.routeKey ? arcStyles.get(arc.routeKey) : null;
               return style?.stroke ?? arc.stroke;
             }}
@@ -768,6 +898,10 @@ export function FlightsMap() {
                 if (point.airport.region === selectedRegion) return 'hsl(40, 90%, 60%)';
                 return 'rgba(100, 100, 120, 0.3)';
               }
+              if (flightTypeSelection) {
+                if (flightTypeSelection.airportCodes.has(point.airport.code)) return flightTypeSelection.color;
+                return 'rgba(100, 100, 120, 0.3)';
+              }
               return point.color;
             }}
             pointAltitude={(d: object) => {
@@ -787,6 +921,7 @@ export function FlightsMap() {
               }
               if (selectedCountry && point.airport.country === selectedCountry) return SELECTED_POINT_ALTITUDE;
               if (selectedRegion && point.airport.region === selectedRegion) return SELECTED_POINT_ALTITUDE;
+              if (flightTypeSelection && flightTypeSelection.airportCodes.has(point.airport.code)) return SELECTED_POINT_ALTITUDE;
               return POINT_ALTITUDE;
             }}
             pointRadius={(d: object) => {
@@ -812,6 +947,10 @@ export function FlightsMap() {
               if (selectedRegion) {
                 if (point.airport.region === selectedRegion) return Math.max(point.size * 1.5, 0.3);
                 return point.size * 0.5;
+              }
+              if (flightTypeSelection) {
+                if (flightTypeSelection.airportCodes.has(point.airport.code)) return Math.max(point.size * 1.45, 0.3);
+                return point.size * 0.55;
               }
               return point.size;
             }}
@@ -859,6 +998,7 @@ export function FlightsMap() {
               setSelectedRoute(null);
               setSelectedCountry(null);
               setSelectedRegion(null);
+              setSelectedFlightType(null);
               setShowStats(false);
             }}
           />
@@ -876,6 +1016,11 @@ export function FlightsMap() {
         }}
         selectedAirline={selectedAirline}
         onAirlineSelect={setSelectedAirline}
+        selectedFlightType={selectedFlightType}
+        onFlightTypeSelect={(flightType) => {
+          stopGlobeRotation();
+          setSelectedFlightType(flightType);
+        }}
         onAirportClick={handleAirportCodeClick}
         onRouteClick={handleRouteCodeClick}
         onCountryClick={handleCountryClick}
@@ -918,6 +1063,10 @@ export function FlightsMap() {
         onStateSymbolModeChange={setStateSymbolMode}
         stateStats={usStateStats}
         statesLoading={usStatesLoading}
+        isOpen={layersOpen}
+        onOpenChange={setLayersOpen}
+        activeSection={activeLayerSection}
+        onActiveSectionChange={setActiveLayerSection}
       />
 
       {/* Active filter chips */}
@@ -928,12 +1077,14 @@ export function FlightsMap() {
         selectedRoute={selectedRoute}
         selectedCountry={selectedCountryInfo?.name ?? selectedCountry}
         selectedRegion={selectedRegionInfo?.name ?? selectedRegion}
+        selectedFlightType={selectedFlightType}
         onClearYear={() => setSelectedYear(null)}
         onClearAirport={() => setSelectedAirport(null)}
         onClearAirline={() => setSelectedAirline(null)}
         onClearRoute={() => setSelectedRoute(null)}
         onClearCountry={() => setSelectedCountry(null)}
         onClearRegion={() => setSelectedRegion(null)}
+        onClearFlightType={() => setSelectedFlightType(null)}
       />
 
       {/* Bottom Stats Bar */}
@@ -946,6 +1097,7 @@ export function FlightsMap() {
         selectedAirline={selectedAirline}
         selectedCountry={selectedCountryInfo?.name ?? selectedCountry}
         selectedRegion={selectedRegionInfo?.name ?? selectedRegion}
+        selectedFlightType={selectedFlightType}
         isMetric={isMetric}
         onToggleUnits={() => setIsMetric(prev => !prev)}
       />

@@ -9,6 +9,8 @@ interface UseKeyboardShortcutsOptions {
   onToggleAllAirports?: () => void;
   onToggleUSStates?: () => void;
   onShortcut?: () => void;
+  showHelp?: boolean;
+  onHelpChange?: (showHelp: boolean | ((prev: boolean) => boolean)) => void;
 }
 
 function isEditableTarget(target: EventTarget | null) {
@@ -32,8 +34,12 @@ export function useKeyboardShortcuts({
   onToggleAllAirports,
   onToggleUSStates,
   onShortcut,
+  showHelp: controlledShowHelp,
+  onHelpChange,
 }: UseKeyboardShortcutsOptions) {
-  const [showHelp, setShowHelp] = useState(false);
+  const [internalShowHelp, setInternalShowHelp] = useState(false);
+  const showHelp = controlledShowHelp ?? internalShowHelp;
+  const setShowHelp = onHelpChange ?? setInternalShowHelp;
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -100,7 +106,7 @@ export function useKeyboardShortcuts({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onToggleStats, onToggleFilter, onResetView, onClearSelection, onColorModeChange, onToggleAllAirports, onToggleUSStates, onShortcut]);
+  }, [onToggleStats, onToggleFilter, onResetView, onClearSelection, onColorModeChange, onToggleAllAirports, onToggleUSStates, onShortcut, setShowHelp]);
 
   return { showHelp, setShowHelp };
 }

@@ -10,12 +10,14 @@ function renderChips(overrides = {}) {
         selectedRoute: null,
         selectedCountry: null,
         selectedRegion: null,
+        selectedFlightType: null,
         onClearYear: vi.fn(),
         onClearAirport: vi.fn(),
         onClearAirline: vi.fn(),
         onClearRoute: vi.fn(),
         onClearCountry: vi.fn(),
         onClearRegion: vi.fn(),
+        onClearFlightType: vi.fn(),
         ...overrides,
     };
 
@@ -35,6 +37,17 @@ describe('ActiveFilterChips', () => {
         expect(screen.getByText('2024')).toBeInTheDocument();
         expect(screen.getByText('SEA')).toBeInTheDocument();
         expect(screen.getByText('United')).toBeInTheDocument();
+    });
+
+    it('renders the selected flight type as a removable chip', () => {
+        const onClearFlightType = vi.fn();
+        renderChips({ selectedFlightType: 'intercontinental', onClearFlightType });
+
+        expect(screen.getByText('Intercontinental')).toBeInTheDocument();
+
+        fireEvent.click(screen.getByRole('button', { name: 'Clear type filter' }));
+
+        expect(onClearFlightType).toHaveBeenCalledOnce();
     });
 
     it('calls the matching clear handler', () => {

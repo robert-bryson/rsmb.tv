@@ -2,6 +2,7 @@ export { fetchWithCache, clearCache, invalidateCache, preloadCache } from './fet
 export { escapeHtml } from '../../../utils/escapeHtml';
 
 import { EARTH_RADIUS_KM } from '../constants';
+import type { FlightProperties, FlightTypeFilter } from '../types';
 
 /** Haversine formula: great-circle distance between two lat/lon points in km */
 export function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -56,4 +57,41 @@ export function formatDistance(km: number, isMetric: boolean): string {
 export function formatElevation(elevationFt: number, elevationM: number, isMetric: boolean): string {
     if (isMetric) return `${elevationM.toLocaleString()} m`;
     return `${elevationFt.toLocaleString()} ft`;
+}
+
+export function isValidFlightTypeFilter(value: string | null): value is FlightTypeFilter {
+    return value === 'domestic' || value === 'international' || value === 'intercontinental';
+}
+
+export function getFlightTypeLabel(type: FlightTypeFilter): string {
+    switch (type) {
+        case 'domestic':
+            return 'Domestic';
+        case 'international':
+            return 'International';
+        case 'intercontinental':
+            return 'Intercontinental';
+    }
+}
+
+export function getFlightTypeColor(type: FlightTypeFilter): string {
+    switch (type) {
+        case 'domestic':
+            return 'rgba(34, 211, 238, 0.92)';
+        case 'international':
+            return 'rgba(96, 165, 250, 0.92)';
+        case 'intercontinental':
+            return 'rgba(217, 70, 239, 0.92)';
+    }
+}
+
+export function flightMatchesType(flight: FlightProperties, type: FlightTypeFilter): boolean {
+    switch (type) {
+        case 'domestic':
+            return flight.origin_country === flight.destination_country;
+        case 'international':
+            return flight.origin_country !== flight.destination_country;
+        case 'intercontinental':
+            return flight.origin_continent !== flight.destination_continent;
+    }
 }

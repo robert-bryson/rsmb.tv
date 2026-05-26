@@ -31,6 +31,22 @@ describe('useKeyboardShortcuts', () => {
         expect(result.current.showHelp).toBe(false);
     });
 
+    it('delegates help changes when controlled', () => {
+        const handlers = createHandlers();
+        const onHelpChange = vi.fn();
+        renderHook(() => useKeyboardShortcuts({
+            ...handlers,
+            showHelp: false,
+            onHelpChange,
+        }));
+
+        act(() => pressKey('h'));
+        expect(onHelpChange).toHaveBeenCalledWith(expect.any(Function));
+
+        act(() => pressKey('Escape'));
+        expect(onHelpChange).toHaveBeenCalledWith(false);
+    });
+
     it('calls onToggleStats on S key', () => {
         const handlers = createHandlers();
         renderHook(() => useKeyboardShortcuts(handlers));

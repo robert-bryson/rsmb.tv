@@ -104,6 +104,14 @@ Static page Open Graph images are generated from `DEFAULT_PAGES` in `scripts/gen
 
 Project screenshots and preview images live under `public/images/<project-slug>/` and should be committed as optimized WebP files. Do not commit raw JPG/PNG capture files when a compressed WebP derivative is used by the site. Project cards expect landscape previews; when the source material is portrait-oriented, compose a landscape preview image instead of pointing the card at a single phone screenshot.
 
+## Flights Map URL State
+
+The flights globe stores shareable app state in query parameters so a copied URL can reopen the same map focus, camera, layers, and display settings. Defaults are omitted from the URL; resetting the camera removes `lat`, `lng`, and `alt` instead of serializing the default view.
+
+Selection parameters are `year`, `airport`, `airline`, `route`, `country`, `region`, and `flightType`. Valid flight type values are `domestic`, `international`, and `intercontinental`; these highlight matching flights while preserving compatible year and airline filters. Location-style focus parameters (`airport`, `route`, `country`, `region`, `flightType`) clear one another so shared links do not encode conflicting map selections.
+
+View and UI parameters include `lat`, `lng`, `alt`, `stats`, `filters`, `help`, `layers`, and `layerSection`. Display and layer parameters include `basemap`, `color`, `anim`, `paths`, `rotation`, `allAirports`, `airportMode`, `usStates`, `stateMode`, and `units=imperial`. Add new shareable flights controls through `useFlightsFilters` so multiple state changes in one interaction compose against the same pending URL draft.
+
 ## Blog Publishing
 
 Google Sheets/Docs is the source of truth for blog content. The build syncs published rows from the Sheet, exports the referenced Google Docs to MDX, then generates RSS, sitemap, and blog OG images before Vite bundles the app. Generated post files are build artifacts and should not be committed. The blog index exposes tags as URL filters (`/blog?tag=Maps`), so tag names should stay concise and reader-facing.

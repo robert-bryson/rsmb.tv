@@ -13,6 +13,7 @@ function renderBar(overrides: Partial<ComponentProps<typeof BottomStatsBar>> = {
         selectedAirline: null,
         selectedCountry: null,
         selectedRegion: null,
+        selectedFlightType: null,
         isMetric: true,
         onToggleUnits: vi.fn(),
         ...overrides,
@@ -75,6 +76,11 @@ describe('BottomStatsBar', () => {
         renderBar({ selectedCountry: 'Canada', selectedRegion: 'Washington' });
         expect(screen.getByText('Canada')).toBeInTheDocument();
         expect(screen.getByText('Washington')).toBeInTheDocument();
+    });
+
+    it('shows selected flight type when provided', () => {
+        renderBar({ selectedFlightType: 'intercontinental' });
+        expect(screen.getByText('Intercontinental')).toBeInTheDocument();
     });
 
     it('renders metric distance as a unit-toggle button', () => {

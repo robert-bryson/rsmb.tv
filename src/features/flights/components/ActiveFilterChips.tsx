@@ -1,4 +1,6 @@
 import { memo } from 'react';
+import type { FlightTypeFilter } from '../types';
+import { getFlightTypeLabel } from '../utils';
 
 interface FilterChip {
     key: string;
@@ -15,18 +17,21 @@ interface ActiveFilterChipsProps {
     selectedRoute: string | null;
     selectedCountry: string | null;
     selectedRegion: string | null;
+    selectedFlightType: FlightTypeFilter | null;
     onClearYear: () => void;
     onClearAirport: () => void;
     onClearAirline: () => void;
     onClearRoute: () => void;
     onClearCountry: () => void;
     onClearRegion: () => void;
+    onClearFlightType: () => void;
 }
 
 const colorClasses: Record<string, string> = {
     purple: 'border-purple-500/40 bg-purple-950/60 text-purple-200',
     cyan: 'border-cyan-500/40 bg-cyan-950/60 text-cyan-200',
     orange: 'border-orange-500/40 bg-orange-950/60 text-orange-200',
+    sky: 'border-sky-500/40 bg-sky-950/60 text-sky-200',
     yellow: 'border-yellow-500/40 bg-yellow-950/60 text-yellow-200',
     emerald: 'border-emerald-500/40 bg-emerald-950/60 text-emerald-200',
     amber: 'border-amber-500/40 bg-amber-950/60 text-amber-200',
@@ -39,12 +44,14 @@ export const ActiveFilterChips = memo(function ActiveFilterChips({
     selectedRoute,
     selectedCountry,
     selectedRegion,
+    selectedFlightType,
     onClearYear,
     onClearAirport,
     onClearAirline,
     onClearRoute,
     onClearCountry,
     onClearRegion,
+    onClearFlightType,
 }: ActiveFilterChipsProps) {
     const chips: FilterChip[] = [
         selectedYear !== null && {
@@ -67,6 +74,13 @@ export const ActiveFilterChips = memo(function ActiveFilterChips({
             value: selectedAirline,
             color: 'orange',
             onClear: onClearAirline,
+        },
+        selectedFlightType && {
+            key: 'flightType',
+            label: 'Type',
+            value: getFlightTypeLabel(selectedFlightType),
+            color: 'sky',
+            onClear: onClearFlightType,
         },
         selectedRoute && {
             key: 'route',

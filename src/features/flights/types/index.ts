@@ -89,6 +89,15 @@ export interface FlightProperties {
   destination_lat: number;
 }
 
+export type FlightTypeFilter = 'domestic' | 'international' | 'intercontinental';
+export type LayerPanelSection = 'none' | 'flights' | 'basemap' | 'airports' | 'states';
+
+export interface GlobeViewState {
+  lat: number;
+  lng: number;
+  altitude: number;
+}
+
 // Metadata pre-computed at build time
 export interface FlightsMetadata {
   totalFlights: number;

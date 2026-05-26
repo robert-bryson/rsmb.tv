@@ -14,13 +14,17 @@ No open items.
 
 No open items.
 
+### Flights map
+
+- [ ] Add screenshots to flights map project page
+
 ### Parc
 
 No open items.
 
 ### rsmb.tv
 
-- [ ] Add screenshots to flights map project page
+No open items.
 
 ### Status dashboard
 
@@ -47,7 +51,7 @@ No open items.
 ### Testing
 
 - [ ] Add test coverage for ScrollToTop component
-- [ ] Add test coverage for FlightsMap integration (keyboard shortcuts + globe state)
+- [ ] Add browser-level test coverage for FlightsMap integration (keyboard shortcuts + camera URL sync)
 
 ---
 
@@ -55,6 +59,9 @@ No open items.
 
 ### Flights map
 
+- [x] Move map camera, layers, display controls, help, units, and flight-type highlighting into shareable URL state
+- [x] Fix URL-state batching so multiple same-event flight map updates compose correctly
+- [x] Clear default camera params from share URLs and prevent stale debounced camera writes
 - [x] Make globe rotation explicit opt-in and stop it on map, UI, and keyboard interactions
 - [x] Add active filter chips for shareable flight map URL state
 - [x] Replace Show/Hide Stats button with side pull-tab slider
@@ -163,6 +170,8 @@ No open items.
 
 ### Completed testing
 
+- [x] Add URL-state tests for shareable flights controls, camera params, and functional boolean updates
+- [x] Add clickable StatItem accessibility coverage
 - [x] Add test coverage for flights utility functions (parseYear, getRouteKey, hexToRgba, calculateDistance)
 - [x] Add test coverage for useGeoJsonData hook
 - [x] Add test coverage for useStatsPanelState hook

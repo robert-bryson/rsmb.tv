@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
-import type { AirportSymbolMode, AllAirportsMetadata, BasemapId, ColorMode, StateSymbolMode, USStateStats } from '../types';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import type { AirportSymbolMode, AllAirportsMetadata, BasemapId, ColorMode, LayerPanelSection, StateSymbolMode, USStateStats } from '../types';
 import {
     AIRPORT_SYMBOL_MODE_LABELS,
     BASEMAPS,
@@ -45,9 +45,12 @@ interface LayersControlProps {
     onStateSymbolModeChange: (mode: StateSymbolMode) => void;
     stateStats: Map<string, USStateStats>;
     statesLoading?: boolean;
-}
 
-type ActiveSection = 'none' | 'flights' | 'basemap' | 'airports' | 'states';
+    isOpen?: boolean;
+    onOpenChange?: (isOpen: boolean) => void;
+    activeSection?: LayerPanelSection;
+    onActiveSectionChange?: (section: LayerPanelSection) => void;
+}
 
 /**
  * Unified control panel for map layers (All Airports, US States, Flight Paths).
@@ -72,17 +75,43 @@ export function LayersControl({
     onStateSymbolModeChange,
     stateStats,
     statesLoading = false,
+    isOpen: controlledIsOpen,
+    onOpenChange,
+    activeSection: controlledActiveSection,
+    onActiveSectionChange,
 }: LayersControlProps) {
-    const [isExpanded, setIsExpanded] = useState(false);
-    const [activeSection, setActiveSection] = useState<ActiveSection>('none');
+    const [internalIsExpanded, setInternalIsExpanded] = useState(false);
+    const [internalActiveSection, setInternalActiveSection] = useState<LayerPanelSection>('none');
     const panelRef = useRef<HTMLDivElement>(null);
+    const isExpanded = controlledIsOpen ?? internalIsExpanded;
+    const activeSection = controlledActiveSection ?? internalActiveSection;
+
+    const setPanelSection = useCallback((section: LayerPanelSection) => {
+        onActiveSectionChange?.(section);
+        if (controlledActiveSection === undefined) {
+            setInternalActiveSection(section);
+        }
+    }, [controlledActiveSection, onActiveSectionChange]);
+
+    const setPanelExpanded = useCallback((nextIsExpanded: boolean) => {
+        onOpenChange?.(nextIsExpanded);
+        if (controlledIsOpen === undefined) {
+            setInternalIsExpanded(nextIsExpanded);
+        }
+        if (!nextIsExpanded) {
+            setPanelSection('none');
+        }
+    }, [controlledIsOpen, onOpenChange, setPanelSection]);
+
+    const togglePanelSection = useCallback((section: LayerPanelSection) => {
+        setPanelSection(activeSection === section ? 'none' : section);
+    }, [activeSection, setPanelSection]);
 
     // Close panel when clicking outside
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
-                setIsExpanded(false);
-                setActiveSection('none');
+                setPanelExpanded(false);
             }
         }
 
@@ -90,7 +119,7 @@ export function LayersControl({
             document.addEventListener('mousedown', handleClickOutside);
             return () => document.removeEventListener('mousedown', handleClickOutside);
         }
-    }, [isExpanded]);
+    }, [isExpanded, setPanelExpanded]);
 
     // Calculate stats
     const visitedStatesCount = Array.from(stateStats.values()).filter(s => s.visited).length;
@@ -109,7 +138,7 @@ export function LayersControl({
         >
             {/* Toggle Button */}
             <button
-                onClick={() => setIsExpanded(!isExpanded)}
+                onClick={() => setPanelExpanded(!isExpanded)}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-all ${activeLayers > 0
                     ? 'bg-purple-900/80 border-purple-600/50 text-purple-300'
                     : 'bg-gray-900/80 border-gray-700 text-gray-400 hover:text-gray-200'
@@ -152,7 +181,7 @@ export function LayersControl({
                             onColorModeChange={onColorModeChange}
                             years={years}
                             isExpanded={activeSection === 'flights'}
-                            onToggleExpand={() => setActiveSection(activeSection === 'flights' ? 'none' : 'flights')}
+                            onToggleExpand={() => togglePanelSection('flights')}
                         />
 
                         {/* All Airports Toggle with expandable options */}
@@ -170,7 +199,7 @@ export function LayersControl({
                             loading={airportsLoading}
                             badge={airportsMetadata ? airportsMetadata.totalAirports.toLocaleString() : undefined}
                             isExpanded={activeSection === 'airports'}
-                            onToggleExpand={() => setActiveSection(activeSection === 'airports' ? 'none' : 'airports')}
+                            onToggleExpand={() => togglePanelSection('airports')}
                         >
                             {/* Airport Symbol Modes */}
                             <div className="mt-2 pt-2 border-t border-gray-700/50">
@@ -219,7 +248,7 @@ export function LayersControl({
                             loading={statesLoading}
                             badge={totalStates > 0 ? `${visitedStatesCount}/${totalStates}` : undefined}
                             isExpanded={activeSection === 'states'}
-                            onToggleExpand={() => setActiveSection(activeSection === 'states' ? 'none' : 'states')}
+                            onToggleExpand={() => togglePanelSection('states')}
                         >
                             {/* State Symbol Modes */}
                             <div className="mt-2 pt-2 border-t border-gray-700/50">
@@ -258,7 +287,7 @@ export function LayersControl({
                             basemapId={basemapId}
                             onBasemapChange={onBasemapChange}
                             isExpanded={activeSection === 'basemap'}
-                            onToggleExpand={() => setActiveSection(activeSection === 'basemap' ? 'none' : 'basemap')}
+                            onToggleExpand={() => togglePanelSection('basemap')}
                         />
                     </div>
                 </div>

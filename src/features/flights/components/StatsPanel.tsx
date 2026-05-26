@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import type { FlightStats, SelectedRouteInfo, SelectedCountryInfo, SelectedRegionInfo } from '../types';
+import type { FlightStats, SelectedRouteInfo, SelectedCountryInfo, SelectedRegionInfo, FlightTypeFilter } from '../types';
 import { EARTH_CIRCUMFERENCE_KM } from '../constants';
-import { formatDistance, formatElevation } from '../utils';
+import { formatDistance, formatElevation, getFlightTypeLabel } from '../utils';
 import { StatItem, CollapsibleSection, ClickableAirport, ClickableRoute, ClickableCountry, ClickableRegion, FlightCount } from './shared';
 import { AirlinesSection } from './AirlinesSection';
 import { CountriesSection } from './CountriesSection';
@@ -16,6 +16,8 @@ interface StatsPanelProps {
   onClearAirport: () => void;
   selectedAirline: string | null;
   onAirlineSelect: (airline: string | null) => void;
+  selectedFlightType: FlightTypeFilter | null;
+  onFlightTypeSelect: (flightType: FlightTypeFilter | null) => void;
   onAirportClick: (code: string) => void;
   onRouteClick: (origin: string, destination: string) => void;
   onCountryClick: (countryCode: string) => void;
@@ -39,6 +41,8 @@ export function StatsPanel({
   onClearAirport,
   selectedAirline,
   onAirlineSelect,
+  selectedFlightType,
+  onFlightTypeSelect,
   onAirportClick,
   onRouteClick,
   onCountryClick,
@@ -164,6 +168,8 @@ export function StatsPanel({
             selectedYear={selectedYear}
             selectedAirline={selectedAirline}
             onAirlineSelect={onAirlineSelect}
+            selectedFlightType={selectedFlightType}
+            onFlightTypeSelect={onFlightTypeSelect}
             onAirportClick={onAirportClick}
             onRouteClick={onRouteClick}
             onCountryClick={onCountryClick}
@@ -915,6 +921,8 @@ function OverallStats({
   selectedYear,
   selectedAirline,
   onAirlineSelect,
+  selectedFlightType,
+  onFlightTypeSelect,
   onAirportClick,
   onRouteClick,
   onCountryClick,
@@ -931,6 +939,8 @@ function OverallStats({
   selectedYear: number | null;
   selectedAirline: string | null;
   onAirlineSelect: (airline: string | null) => void;
+  selectedFlightType: FlightTypeFilter | null;
+  onFlightTypeSelect: (flightType: FlightTypeFilter | null) => void;
   onAirportClick: (code: string) => void;
   onRouteClick: (origin: string, destination: string) => void;
   onCountryClick: (countryCode: string) => void;
@@ -951,14 +961,29 @@ function OverallStats({
         <div className="text-orange-400 text-xs mb-3 flex items-center gap-2">
           <span>Airline: {selectedAirline}</span>
           <button
+            type="button"
             onClick={() => onAirlineSelect(null)}
             className="text-gray-500 hover:text-white transition-colors"
+            aria-label="Clear airline filter"
           >
             ✕
           </button>
         </div>
       )}
-      {!selectedYear && !selectedAirline && stats.firstFlight && stats.lastFlight && (
+      {selectedFlightType && (
+        <div className="text-cyan-300 text-xs mb-3 flex items-center gap-2">
+          <span>Flight type: {getFlightTypeLabel(selectedFlightType)}</span>
+          <button
+            type="button"
+            onClick={() => onFlightTypeSelect(null)}
+            className="text-gray-500 hover:text-white transition-colors"
+            aria-label="Clear flight type filter"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+      {!selectedYear && !selectedAirline && !selectedFlightType && stats.firstFlight && stats.lastFlight && (
         <div className="text-gray-500 text-xs mb-3">
           {stats.firstFlight.date} — {stats.lastFlight.date}
         </div>
@@ -1001,9 +1026,33 @@ function OverallStats({
         onToggle={() => toggleSection('overall-flight-types')}
       >
         <div className="grid grid-cols-2 gap-3">
-          <StatItem icon="🏠" label="Domestic" value={domesticFlights.toString()} />
-          <StatItem icon="🌐" label="International" value={stats.internationalFlights.toString()} />
-          <StatItem icon="🌏" label="Intercontinental" value={stats.intercontinentalFlights.toString()} />
+          <StatItem
+            icon="🏠"
+            label="Domestic"
+            value={domesticFlights.toString()}
+            onClick={() => onFlightTypeSelect(selectedFlightType === 'domestic' ? null : 'domestic')}
+            isSelected={selectedFlightType === 'domestic'}
+            ariaLabel={selectedFlightType === 'domestic' ? 'Clear domestic flight type filter' : 'Show domestic flights'}
+            title="Highlight domestic flights"
+          />
+          <StatItem
+            icon="🌐"
+            label="International"
+            value={stats.internationalFlights.toString()}
+            onClick={() => onFlightTypeSelect(selectedFlightType === 'international' ? null : 'international')}
+            isSelected={selectedFlightType === 'international'}
+            ariaLabel={selectedFlightType === 'international' ? 'Clear international flight type filter' : 'Show international flights'}
+            title="Highlight international flights"
+          />
+          <StatItem
+            icon="🌏"
+            label="Intercontinental"
+            value={stats.intercontinentalFlights.toString()}
+            onClick={() => onFlightTypeSelect(selectedFlightType === 'intercontinental' ? null : 'intercontinental')}
+            isSelected={selectedFlightType === 'intercontinental'}
+            ariaLabel={selectedFlightType === 'intercontinental' ? 'Clear intercontinental flight type filter' : 'Show intercontinental flights'}
+            title="Highlight intercontinental flights"
+          />
           {stats.mostVisitedCountry && (
             <StatItem
               icon="🏆"
