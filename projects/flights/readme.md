@@ -48,7 +48,7 @@ These GeoJSON files are then loaded by the globe component in the flights featur
 - Deep-linking via URL parameters for shareable views
 - Keyboard shortcuts and accessibility features
 - Mobile-optimized with swipe gestures for year navigation
-- Auto-rotation with configurable delay
+- Explicit globe rotation toggle that stays paused until requested
 - Customizable flight data via simple CSV files
 - Automated data sync from Google Sheets with QA/QC validation
 

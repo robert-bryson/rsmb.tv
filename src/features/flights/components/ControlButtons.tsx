@@ -4,6 +4,9 @@ interface ControlButtonsProps {
     onResetView: () => void;
     animationEnabled: boolean;
     onToggleAnimation: () => void;
+    globeRotationEnabled: boolean;
+    onToggleGlobeRotation: () => void;
+    globeRotationDisabled?: boolean;
     onShareUrl: () => void;
     copiedUrl: boolean;
 }
@@ -15,6 +18,9 @@ export const ControlButtons = memo(function ControlButtons({
     onResetView,
     animationEnabled,
     onToggleAnimation,
+    globeRotationEnabled,
+    onToggleGlobeRotation,
+    globeRotationDisabled = false,
     onShareUrl,
     copiedUrl,
 }: ControlButtonsProps) {
@@ -30,6 +36,25 @@ export const ControlButtons = memo(function ControlButtons({
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3v5h5" />
+                </svg>
+            </button>
+
+            {/* Globe Rotation Toggle */}
+            <button
+                data-globe-rotation-toggle
+                onClick={onToggleGlobeRotation}
+                disabled={globeRotationDisabled}
+                className={`bg-gray-900/90 backdrop-blur p-2 rounded-lg border transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${globeRotationEnabled && !globeRotationDisabled
+                    ? 'border-cyan-500/50 text-cyan-300 hover:bg-cyan-900/30'
+                    : 'border-gray-700 text-gray-500 hover:text-gray-300 hover:bg-gray-800/90'
+                    }`}
+                title={globeRotationDisabled ? 'Globe rotation disabled by reduced motion preference' : globeRotationEnabled ? 'Stop globe rotation' : 'Rotate globe'}
+                aria-label={globeRotationDisabled ? 'Globe rotation disabled by reduced motion preference' : globeRotationEnabled ? 'Stop globe rotation' : 'Rotate globe'}
+                aria-pressed={globeRotationEnabled && !globeRotationDisabled}
+            >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3a9 9 0 1 0 9 9" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 3v6h-6" />
                 </svg>
             </button>
 

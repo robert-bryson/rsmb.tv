@@ -47,6 +47,7 @@ try {
 }
 
 // Generate features for all airports
+const invalidCoordinateAirports = [];
 const features = airports.map(a => {
     const elevFt = parseFloat(a.elevation_ft) || 0;
     const lat = parseFloat(a.latitude_deg);
@@ -54,6 +55,7 @@ const features = airports.map(a => {
 
     // Skip invalid coordinates
     if (isNaN(lat) || isNaN(lon)) {
+        invalidCoordinateAirports.push(`${a.iata_code || 'unknown'} (${a.name || 'unnamed airport'})`);
         return null;
     }
 
@@ -79,6 +81,12 @@ const features = airports.map(a => {
         },
     };
 }).filter(Boolean);
+
+if (invalidCoordinateAirports.length > 0) {
+    const sample = invalidCoordinateAirports.slice(0, 10).join(', ');
+    const suffix = invalidCoordinateAirports.length > 10 ? `, and ${invalidCoordinateAirports.length - 10} more` : '';
+    console.warn(`⚠️ Skipped ${invalidCoordinateAirports.length} airport(s) with invalid coordinates: ${sample}${suffix}`);
+}
 
 // Create GeoJSON
 const geojson = {

@@ -55,6 +55,8 @@ No open items.
 
 ### Flights map
 
+- [x] Make globe rotation explicit opt-in and stop it on map, UI, and keyboard interactions
+- [x] Add active filter chips for shareable flight map URL state
 - [x] Replace Show/Hide Stats button with side pull-tab slider
 - [x] Rename ← Back nav button to ← rsmb.tv linking to home
 - [x] Fix stats panel height so it never overlaps BottomStatsBar
@@ -181,3 +183,4 @@ No open items.
 - [x] Add test coverage for tornado scale filter bounds (scaleFilterBounds)
 - [x] Add test coverage for useTornadoFilters (URL params, setters, selectedTrackId)
 - [x] Add test coverage for Layout component
+- [x] Add test coverage for active flight filter chips, globe rotation controls, generated airport-coordinate warnings, and tooltip HTML escaping

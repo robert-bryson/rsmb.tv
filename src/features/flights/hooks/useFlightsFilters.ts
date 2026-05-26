@@ -1,6 +1,13 @@
 import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
+function parseSelectedYear(yearParam: string | null) {
+    if (yearParam === null) return null;
+
+    const year = Number(yearParam);
+    return Number.isInteger(year) && year > 0 ? year : null;
+}
+
 /**
  * Manages URL-based filter state for the flights globe.
  * All filter values are derived from search params so they're shareable via URL.
@@ -8,7 +15,7 @@ import { useSearchParams } from 'react-router-dom';
 export function useFlightsFilters() {
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const selectedYear = searchParams.get('year') ? Number(searchParams.get('year')) : null;
+    const selectedYear = parseSelectedYear(searchParams.get('year'));
     const selectedAirport = searchParams.get('airport') || null;
     const selectedAirline = searchParams.get('airline') || null;
     const selectedRoute = searchParams.get('route') || null;
@@ -20,12 +27,11 @@ export function useFlightsFilters() {
     const setSelectedYear = useCallback((year: number | null) => {
         setSearchParams(prev => {
             const newParams = new URLSearchParams(prev);
-            if (year === null) {
+            if (year === null || !Number.isInteger(year) || year <= 0) {
                 newParams.delete('year');
             } else {
                 newParams.set('year', String(year));
             }
-            newParams.delete('airport');
             return newParams;
         });
     }, [setSearchParams]);

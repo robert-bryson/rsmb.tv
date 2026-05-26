@@ -1,4 +1,4 @@
-import { useRef, useCallback, useState, useMemo, useEffect } from 'react';
+import { useRef, useCallback, useState, useMemo, useEffect, type SyntheticEvent } from 'react';
 import Globe, { type GlobeMethods } from 'react-globe.gl';
 import { usePersistedState } from '../../../hooks/usePersistedState';
 import { useGlobeData, useFlights } from '../hooks/useFlightData';
@@ -19,21 +19,21 @@ import { GlobeErrorBoundary } from './GlobeErrorBoundary';
 import { GlobeLoadingOverlay } from './GlobeLoadingOverlay';
 import { useGlobeTextures } from '../hooks/useGlobeTextures';
 import { SkipLink } from './SkipLink';
-import { escapeHtml, formatElevation } from '../utils';
 import { TopNavigationBar } from './TopNavigationBar';
 import { ControlButtons } from './ControlButtons';
 import { BottomStatsBar } from './BottomStatsBar';
+import { ActiveFilterChips } from './ActiveFilterChips';
 import { SelectedRouteIndicator } from './SelectedRouteIndicator';
 import { MobileInfoOverlay } from './MobileInfoOverlay';
 import { HoverInfo } from './HoverInfo';
 import { LoadingSkeleton } from './LoadingSkeleton';
 import { LayersControl } from './LayersControl';
+import { buildArcLabelHtml, buildPointLabelHtml, buildStatePolygonLabelHtml } from '../utils/tooltipHtml';
 import {
   DEFAULT_BASEMAP_ID,
   getBasemap,
   isValidBasemapId,
   DEFAULT_VIEW,
-  AUTO_ROTATION_DELAY_MS,
   AUTO_ROTATION_SPEED,
   VIEW_TRANSITION_MS,
   COPY_FEEDBACK_MS,
@@ -57,6 +57,7 @@ import type { GlobeArc, GlobePoint, GlobeStaticArc, ColorMode, AirportSymbolMode
 
 export function FlightsMap() {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
+  const controlsRef = useRef<ReturnType<GlobeMethods['controls']> | null>(null);
   const prefersReducedMotion = useReducedMotion();
   const [rawBasemapId, setBasemapId] = usePersistedState<BasemapId>('flights-basemap', DEFAULT_BASEMAP_ID);
   // Guard against stale/invalid basemap IDs from localStorage
@@ -68,7 +69,7 @@ export function FlightsMap() {
   // URL-driven filter state
   const {
     selectedYear, selectedAirport, selectedAirline, selectedRoute,
-    selectedCountry, selectedRegion, hasUrlFilters, selectedRouteAirports,
+    selectedCountry, selectedRegion, selectedRouteAirports,
     setSelectedYear, setSelectedAirport, setSelectedAirline, setSelectedRoute,
     setSelectedCountry, setSelectedRegion, clearAllFilters,
   } = useFlightsFilters();
@@ -79,10 +80,9 @@ export function FlightsMap() {
   const [filterOpen, setFilterOpen] = useState(false);
   const [hoveredStaticArc, setHoveredStaticArc] = useState<GlobeStaticArc | null>(null);
   const [hoveredPoint, setHoveredPoint] = useState<GlobePoint | null>(null);
-  const [autoRotate, setAutoRotate] = useState(false); // Start paused
+  const [globeRotationEnabled, setGlobeRotationEnabled] = useState(false);
   const [mobileInfoArc, setMobileInfoArc] = useState<GlobeStaticArc | null>(null); // For mobile tap-to-show
   const [copiedUrl, setCopiedUrl] = useState(false);
-  const hasInteracted = useRef(false);
 
   // All airports layer state
   const [allAirportsVisible, setAllAirportsVisible] = usePersistedState('flights-all-airports-visible', false);
@@ -96,11 +96,11 @@ export function FlightsMap() {
   // Units preference (metric = km/m, imperial = mi/ft)
   const [isMetric, setIsMetric] = usePersistedState('flights-units-metric', true);
 
-  // Set initial view centered on USA and disable rotation initially
+  // Set initial view centered on USA and disable globe rotation initially
   useEffect(() => {
     if (globeRef.current) {
       globeRef.current.pointOfView(DEFAULT_VIEW, 0);
-      // Explicitly disable auto-rotation on mount
+      // Explicitly disable globe rotation on mount
       const controls = globeRef.current.controls();
       if (controls) {
         controls.autoRotate = false;
@@ -108,40 +108,65 @@ export function FlightsMap() {
     }
   }, []);
 
-  // Start auto-rotation after a delay (gives user time to explore first)
-  // Skip if user prefers reduced motion, has interacted, or came via filtered URL
-  useEffect(() => {
-    // Don't start rotation if user came via a filtered URL
-    if (hasUrlFilters || prefersReducedMotion) {
-      return;
-    }
-
-    const timer = setTimeout(() => {
-      if (!hasInteracted.current) {
-        setAutoRotate(true);
-      }
-    }, AUTO_ROTATION_DELAY_MS);
-    return () => clearTimeout(timer);
-  }, [hasUrlFilters, prefersReducedMotion]);
-
-  // Handle auto-rotation (disable if user prefers reduced motion)
+  // Handle explicit globe rotation (disabled if user prefers reduced motion)
   useEffect(() => {
     if (globeRef.current) {
       const controls = globeRef.current.controls();
       if (controls) {
-        controls.autoRotate = autoRotate && !prefersReducedMotion;
+        controls.autoRotate = globeRotationEnabled && !prefersReducedMotion;
         controls.autoRotateSpeed = AUTO_ROTATION_SPEED;
       }
     }
-  }, [autoRotate, prefersReducedMotion]);
+  }, [globeRotationEnabled, prefersReducedMotion]);
 
-  // Stop auto-rotation on any user interaction
-  const stopAutoRotate = useCallback(() => {
-    if (!hasInteracted.current) {
-      hasInteracted.current = true;
-      setAutoRotate(false);
-    }
+  const stopGlobeRotation = useCallback(() => {
+    setGlobeRotationEnabled(false);
   }, []);
+
+  const handleMapInteraction = useCallback((event: SyntheticEvent<HTMLDivElement>) => {
+    if (event.target instanceof Element && event.target.closest('[data-globe-rotation-toggle]')) {
+      return;
+    }
+    stopGlobeRotation();
+  }, [stopGlobeRotation]);
+
+  const handleToggleGlobeRotation = useCallback(() => {
+    setGlobeRotationEnabled((enabled) => !enabled);
+  }, []);
+
+  const handleResetView = useCallback(() => {
+    stopGlobeRotation();
+    resetView();
+  }, [resetView, stopGlobeRotation]);
+
+  const handleToggleAnimation = useCallback(() => {
+    stopGlobeRotation();
+    setAnimationEnabled((enabled) => !enabled);
+  }, [setAnimationEnabled, stopGlobeRotation]);
+
+  const handleGlobeReady = useCallback(() => {
+    if (!globeRef.current) return;
+
+    globeRef.current.pointOfView(DEFAULT_VIEW, 0);
+    const controls = globeRef.current.controls();
+    if (!controls) return;
+
+    controls.autoRotate = globeRotationEnabled && !prefersReducedMotion;
+    controls.autoRotateSpeed = AUTO_ROTATION_SPEED;
+    if (controlsRef.current && controlsRef.current !== controls) {
+      controlsRef.current.removeEventListener('start', stopGlobeRotation);
+    }
+    controls.removeEventListener('start', stopGlobeRotation);
+    controls.addEventListener('start', stopGlobeRotation);
+    controlsRef.current = controls;
+  }, [globeRotationEnabled, prefersReducedMotion, stopGlobeRotation]);
+
+  useEffect(() => {
+    return () => {
+      controlsRef.current?.removeEventListener('start', stopGlobeRotation);
+      controlsRef.current = null;
+    };
+  }, [stopGlobeRotation]);
 
   // Double-click to zoom in toward clicked point
   useEffect(() => {
@@ -150,7 +175,7 @@ export function FlightsMap() {
 
     const domEl = globe.renderer().domElement;
     const handler = (e: MouseEvent) => {
-      stopAutoRotate();
+      stopGlobeRotation();
       const coords = globe.toGlobeCoords(e.offsetX, e.offsetY);
       if (!coords) return;
       const pov = globe.pointOfView();
@@ -159,7 +184,7 @@ export function FlightsMap() {
     };
     domEl.addEventListener('dblclick', handler);
     return () => domEl.removeEventListener('dblclick', handler);
-  }, [stopAutoRotate]);
+  }, [stopGlobeRotation]);
 
   const { arcsData, staticArcsData, pointsData, flightStats, loading, error } = useGlobeData({
     selectedYear,
@@ -304,6 +329,7 @@ export function FlightsMap() {
 
   // Share URL handler
   const handleShareUrl = useCallback(async () => {
+    stopGlobeRotation();
     try {
       await navigator.clipboard.writeText(window.location.href);
       setCopiedUrl(true);
@@ -328,13 +354,13 @@ export function FlightsMap() {
       }
       document.body.removeChild(input);
     }
-  }, []);
+  }, [stopGlobeRotation]);
 
   // Keyboard shortcuts
   const { showHelp, setShowHelp } = useKeyboardShortcuts({
     onToggleStats: () => setShowStats(prev => !prev),
     onToggleFilter: () => setFilterOpen(prev => !prev),
-    onResetView: resetView,
+    onResetView: handleResetView,
     onClearSelection: () => {
       setSelectedAirport(null);
       setSelectedRoute(null);
@@ -348,6 +374,7 @@ export function FlightsMap() {
     },
     onToggleAllAirports: () => setAllAirportsVisible(prev => !prev),
     onToggleUSStates: () => setUSStatesVisible(prev => !prev),
+    onShortcut: stopGlobeRotation,
   });
 
   // Derived selection info for stats panel
@@ -407,9 +434,9 @@ export function FlightsMap() {
 
   // Year change handler with zoom-to-fit
   const handleYearChange = useCallback((year: number | null) => {
-    stopAutoRotate();
+    stopGlobeRotation();
     setSelectedYear(year);
-  }, [stopAutoRotate, setSelectedYear]);
+  }, [stopGlobeRotation, setSelectedYear]);
 
   // US States visibility handler - zoom to US when enabling
   const handleUSStatesVisibilityChange = useCallback((visible: boolean) => {
@@ -417,9 +444,9 @@ export function FlightsMap() {
     if (visible) {
       // Zoom to continental US view
       zoomToPoint({ lat: 39.8283, lng: -98.5795 }, 1.8, VIEW_TRANSITION_MS);
-      stopAutoRotate();
+      stopGlobeRotation();
     }
-  }, [setUSStatesVisible, stopAutoRotate, zoomToPoint]);
+  }, [setUSStatesVisible, stopGlobeRotation, zoomToPoint]);
 
   // Effect to zoom to bounds when year filter changes
   const prevYearRef = useRef<number | null>(null);
@@ -442,7 +469,7 @@ export function FlightsMap() {
 
   // Static arc click - zoom to fit the entire route and select it
   const handleStaticArcClick = useCallback((arc: GlobeStaticArc) => {
-    stopAutoRotate();
+    stopGlobeRotation();
 
     // If clicking the same route, deselect; otherwise select the new route
     const newRoute = selectedRoute === arc.routeKey ? null : arc.routeKey;
@@ -457,11 +484,11 @@ export function FlightsMap() {
     } else {
       setShowStats(false);
     }
-  }, [stopAutoRotate, selectedRoute, setSelectedRoute, zoomToRoute, setShowStats]);
+  }, [stopGlobeRotation, selectedRoute, setSelectedRoute, zoomToRoute, setShowStats]);
 
   // Point click - fly to airport showing all its routes, and toggle selection
   const handlePointClick = useCallback((point: GlobePoint) => {
-    stopAutoRotate();
+    stopGlobeRotation();
 
     const newSelection = selectedAirport === point.airport.code ? null : point.airport.code;
     setSelectedAirport(newSelection);
@@ -488,51 +515,51 @@ export function FlightsMap() {
     } else {
       setShowStats(false);
     }
-  }, [stopAutoRotate, selectedAirport, setSelectedAirport, setShowStats, staticArcsData, zoomToAirportWithConnections]);
+  }, [stopGlobeRotation, selectedAirport, setSelectedAirport, setShowStats, staticArcsData, zoomToAirportWithConnections]);
 
   // Handle clicking on an airport code in the stats panel
   const handleAirportCodeClick = useCallback((code: string) => {
-    stopAutoRotate();
+    stopGlobeRotation();
     const airport = pointsData.find(p => p.airport.code === code);
     if (airport) {
       zoomToPoint(airport, 0.5);
     }
     setSelectedAirport(code);
     setShowStats(true);
-  }, [stopAutoRotate, pointsData, setSelectedAirport, setShowStats, zoomToPoint]);
+  }, [stopGlobeRotation, pointsData, setSelectedAirport, setShowStats, zoomToPoint]);
 
   // Handle clicking on a route in the stats panel
   const handleRouteCodeClick = useCallback((origin: string, destination: string) => {
-    stopAutoRotate();
+    stopGlobeRotation();
     const originAirport = pointsData.find(p => p.airport.code === origin);
     const destAirport = pointsData.find(p => p.airport.code === destination);
 
     if (originAirport && destAirport) {
       zoomToRoute(originAirport, destAirport, { divisor: 60 });
     }
-  }, [stopAutoRotate, pointsData, zoomToRoute]);
+  }, [stopGlobeRotation, pointsData, zoomToRoute]);
 
   // Handle clicking on a country in the stats panel
   const handleCountryClick = useCallback((countryCode: string) => {
-    stopAutoRotate();
+    stopGlobeRotation();
     setSelectedCountry(countryCode);
     const countryAirports = pointsData.filter(p => p.airport.country === countryCode);
     if (countryAirports.length > 0) {
       zoomToPoints(countryAirports);
     }
     setShowStats(true);
-  }, [stopAutoRotate, pointsData, zoomToPoints, setSelectedCountry, setShowStats]);
+  }, [stopGlobeRotation, pointsData, zoomToPoints, setSelectedCountry, setShowStats]);
 
   // Handle clicking on a region in the stats panel
   const handleRegionClick = useCallback((regionCode: string) => {
-    stopAutoRotate();
+    stopGlobeRotation();
     setSelectedRegion(regionCode);
     const regionAirports = pointsData.filter(p => p.airport.region === regionCode);
     if (regionAirports.length > 0) {
       zoomToPoints(regionAirports);
     }
     setShowStats(true);
-  }, [stopAutoRotate, pointsData, zoomToPoints, setSelectedRegion, setShowStats]);
+  }, [stopGlobeRotation, pointsData, zoomToPoints, setSelectedRegion, setShowStats]);
 
   // Swipe navigation for year changes on mobile
   const swipeRef = useYearSwipeNavigation(flightStats.years, selectedYear, handleYearChange);
@@ -570,7 +597,14 @@ export function FlightsMap() {
   const hasNoResults = !loading && flightStats.totalFlights === 0 && (selectedYear !== null || selectedAirline !== null);
 
   return (
-    <div ref={swipeRef} className="relative w-full h-full bg-[#000011] flex flex-col">
+    <div
+      ref={swipeRef}
+      className="relative w-full h-full bg-[#000011] flex flex-col"
+      onPointerDownCapture={handleMapInteraction}
+      onTouchStartCapture={handleMapInteraction}
+      onWheelCapture={handleMapInteraction}
+      onKeyDownCapture={handleMapInteraction}
+    >
       {/* Skip link for keyboard accessibility */}
       <SkipLink />
 
@@ -606,9 +640,12 @@ export function FlightsMap() {
 
       {/* Control buttons - Bottom right */}
       <ControlButtons
-        onResetView={resetView}
+        onResetView={handleResetView}
         animationEnabled={animationEnabled}
-        onToggleAnimation={() => setAnimationEnabled(prev => !prev)}
+        onToggleAnimation={handleToggleAnimation}
+        globeRotationEnabled={globeRotationEnabled}
+        onToggleGlobeRotation={handleToggleGlobeRotation}
+        globeRotationDisabled={prefersReducedMotion}
         onShareUrl={handleShareUrl}
         copiedUrl={copiedUrl}
       />
@@ -639,18 +676,7 @@ export function FlightsMap() {
             atmosphereColor={basemap.atmosphere}
             atmosphereAltitude={ATMOSPHERE_ALTITUDE}
             lineHoverPrecision={LINE_HOVER_PRECISION}
-            onGlobeReady={() => {
-              if (globeRef.current) {
-                globeRef.current.pointOfView({ lat: 39.8283, lng: -98.5795, altitude: 2.0 }, 0);
-                const controls = globeRef.current.controls();
-                if (controls) {
-                  // Start with rotation disabled - it will be enabled after a delay
-                  controls.autoRotate = false;
-                  controls.autoRotateSpeed = -0.2;
-                  controls.addEventListener('start', stopAutoRotate);
-                }
-              }
-            }}
+            onGlobeReady={handleGlobeReady}
             // Combined arcs: static background lines + animated dots
             arcsData={showFlightPaths ? combinedArcsData : []}
             arcStartLat={(d: object) => (d as GlobeArc & { startLat: number }).startLat}
@@ -711,71 +737,7 @@ export function FlightsMap() {
             }}
             arcLabel={(d: object) => {
               const arcData = d as GlobeStaticArc & { isStatic?: boolean };
-              if (!arcData.isStatic || !arcData.flights) return '';
-              const firstFlight = arcData.flights[0];
-              const isSelected = selectedRoute === arcData.routeKey;
-
-              // Basic tooltip for non-selected routes
-              if (!isSelected) {
-                const recentFlights = arcData.flights.slice(0, 5);
-                return `
-              <div class="bg-gray-900/95 px-3 py-2 rounded-lg shadow-xl border border-gray-700 text-sm">
-                <div class="font-bold text-purple-300">${escapeHtml(firstFlight.origin_code)} ↔ ${escapeHtml(firstFlight.destination_code)}</div>
-                <div class="text-gray-300 text-xs">${escapeHtml(firstFlight.origin_name)}</div>
-                <div class="text-gray-400 text-xs">↕</div>
-                <div class="text-gray-300 text-xs">${escapeHtml(firstFlight.destination_name)}</div>
-                <div class="mt-2 pt-2 border-t border-gray-700">
-                  <span class="text-purple-400">${arcData.routeCount} flight${arcData.routeCount > 1 ? 's' : ''}</span>
-                </div>
-                <div class="text-gray-500 text-xs mt-1">
-                  ${escapeHtml(recentFlights.map((f: { date: string }) => f.date).join(', '))}${arcData.flights.length > 5 ? '...' : ''}
-                </div>
-                <div class="text-gray-600 text-xs mt-2 italic">Click for details</div>
-              </div>
-            `;
-              }
-
-              // Expanded tooltip for selected route
-              const airlines = [...new Set(arcData.flights.map((f: { airline: string }) => f.airline))];
-              const years = [...new Set(arcData.flights.map((f: { date: string }) => f.date.split('-')[0]))].sort();
-              const allDates = arcData.flights.map((f: { date: string }) => f.date).sort().reverse();
-
-              return `
-            <div class="bg-gray-900/95 px-4 py-3 rounded-lg shadow-xl border border-yellow-500/50 text-sm min-w-64">
-              <div class="font-bold text-yellow-400 text-base">${escapeHtml(firstFlight.origin_code)} ↔ ${escapeHtml(firstFlight.destination_code)}</div>
-              <div class="text-gray-300 text-xs mt-1">${escapeHtml(firstFlight.origin_name)}</div>
-              <div class="text-gray-400 text-xs">↕</div>
-              <div class="text-gray-300 text-xs">${escapeHtml(firstFlight.destination_name)}</div>
-              
-              <div class="mt-3 pt-3 border-t border-gray-700 grid grid-cols-2 gap-x-4 gap-y-2">
-                <div>
-                  <div class="text-gray-500 text-xs">Total Flights</div>
-                  <div class="text-yellow-400 font-semibold">${arcData.routeCount}</div>
-                </div>
-                <div>
-                  <div class="text-gray-500 text-xs">Years Active</div>
-                  <div class="text-gray-300">${escapeHtml(years.length > 3 ? years[0] + '–' + years[years.length - 1] : years.join(', '))}</div>
-                </div>
-                <div>
-                  <div class="text-gray-500 text-xs">Airlines</div>
-                  <div class="text-orange-400">${escapeHtml(airlines.slice(0, 3).join(', '))}${airlines.length > 3 ? '...' : ''}</div>
-                </div>
-                <div>
-                  <div class="text-gray-500 text-xs">Last Flight</div>
-                  <div class="text-gray-300">${escapeHtml(allDates[0])}</div>
-                </div>
-              </div>
-              
-              <div class="mt-3 pt-3 border-t border-gray-700">
-                <div class="text-gray-500 text-xs mb-1">All Flights</div>
-                <div class="text-gray-400 text-xs max-h-24 overflow-y-auto">
-                  ${escapeHtml(allDates.join(', '))}
-                </div>
-              </div>
-              
-              <div class="text-gray-600 text-xs mt-3 italic">Click to deselect • Esc to clear</div>
-            </div>
-          `;
+              return buildArcLabelHtml(arcData, selectedRoute);
             }}
             // Points (airports - combined visited + all airports when layer is enabled)
             pointsData={combinedPointsData}
@@ -865,40 +827,7 @@ export function FlightsMap() {
             }}
             pointLabel={(d: object) => {
               const point = d as (GlobePoint | GlobeAllAirportPoint) & { isAllAirports?: boolean };
-              const a = point.airport;
-
-              // Different tooltip for all airports vs visited airports
-              if (point.isAllAirports) {
-                return `
-            <div class="bg-gray-900/95 px-3 py-2 rounded-lg shadow-xl border border-gray-600 text-sm">
-              <div class="font-bold text-gray-300">${escapeHtml(a.code)}</div>
-              <div class="text-gray-400">${escapeHtml(a.name)}</div>
-              <div class="text-gray-500 text-xs mt-1">${a.municipality ? escapeHtml(a.municipality) + ', ' : ''}${escapeHtml(a.countryName)}</div>
-              <div class="text-gray-500 text-xs">${escapeHtml(a.continentName)}</div>
-              <div class="text-gray-600 text-xs mt-2 pt-2 border-t border-gray-700">
-                ${escapeHtml(formatElevation(a.elevationFt, a.elevationM, isMetric))}
-              </div>
-              <div class="text-gray-600 text-xs mt-1 italic">Not yet visited</div>
-            </div>
-          `;
-              }
-
-              // Visited airport tooltip (with visit statistics)
-              const visitedAirport = a as GlobePoint['airport'];
-              return `
-            <div class="bg-gray-900/95 px-3 py-2 rounded-lg shadow-xl border border-gray-700 text-sm">
-              <div class="font-bold text-yellow-300">${escapeHtml(visitedAirport.code)}</div>
-              <div class="text-gray-300">${escapeHtml(visitedAirport.name)}</div>
-              <div class="text-gray-400 text-xs">${escapeHtml(visitedAirport.municipality)}, ${escapeHtml(visitedAirport.countryName)}</div>
-              <div class="text-gray-500 text-xs">${escapeHtml(formatElevation(visitedAirport.elevationFt, visitedAirport.elevationM, isMetric))}</div>
-              <div class="text-gray-500 mt-2 pt-2 border-t border-gray-700">
-                <span class="text-yellow-400">${visitedAirport.visitCount}</span> visits
-                <span class="text-gray-600 mx-1">•</span>
-                <span class="text-green-400">${visitedAirport.arrivalCount}</span>↓
-                <span class="text-blue-400">${visitedAirport.departureCount}</span>↑
-              </div>
-            </div>
-          `;
+              return buildPointLabelHtml(point, isMetric);
             }}
             // Labels - HTML overlay for readability on any basemap
             htmlElementsData={labeledAirports}
@@ -921,34 +850,11 @@ export function FlightsMap() {
             polygonAltitude={STATE_POLYGON_ALTITUDE}
             polygonLabel={(d: object) => {
               const poly = d as GlobeStatePolygon;
-              const { stats } = poly;
-              return `
-                <div class="bg-gray-900/95 px-3 py-2 rounded-lg shadow-xl border border-blue-700 text-sm">
-                  <div class="font-bold text-blue-300">${escapeHtml(stats.name)}</div>
-                  <div class="text-gray-400 text-xs">${escapeHtml(stats.abbr)}</div>
-                  ${stats.visited ? `
-                    <div class="mt-2 pt-2 border-t border-gray-700">
-                      <div class="text-xs text-gray-500">Airports Visited</div>
-                      <div class="text-green-400">${stats.airportCount} of ${stats.totalAirports}</div>
-                    </div>
-                    <div class="mt-1">
-                      <div class="text-xs text-gray-500">Flights</div>
-                      <div class="text-orange-400">${stats.flightCount}</div>
-                    </div>
-                    ${stats.firstVisitDate ? `
-                      <div class="mt-1 text-xs text-gray-500">
-                        First: ${escapeHtml(stats.firstVisitDate)}
-                      </div>
-                    ` : ''}
-                  ` : `
-                    <div class="mt-2 text-gray-500 text-xs">Not yet visited</div>
-                  `}
-                </div>
-              `;
+              return buildStatePolygonLabelHtml(poly);
             }}
             // Click on globe background to deselect and close stats
             onGlobeClick={() => {
-              stopAutoRotate();
+              stopGlobeRotation();
               setSelectedAirport(null);
               setSelectedRoute(null);
               setSelectedCountry(null);
@@ -1012,6 +918,22 @@ export function FlightsMap() {
         onStateSymbolModeChange={setStateSymbolMode}
         stateStats={usStateStats}
         statesLoading={usStatesLoading}
+      />
+
+      {/* Active filter chips */}
+      <ActiveFilterChips
+        selectedYear={selectedYear}
+        selectedAirport={selectedAirport}
+        selectedAirline={selectedAirline}
+        selectedRoute={selectedRoute}
+        selectedCountry={selectedCountryInfo?.name ?? selectedCountry}
+        selectedRegion={selectedRegionInfo?.name ?? selectedRegion}
+        onClearYear={() => setSelectedYear(null)}
+        onClearAirport={() => setSelectedAirport(null)}
+        onClearAirline={() => setSelectedAirline(null)}
+        onClearRoute={() => setSelectedRoute(null)}
+        onClearCountry={() => setSelectedCountry(null)}
+        onClearRegion={() => setSelectedRegion(null)}
       />
 
       {/* Bottom Stats Bar */}

@@ -33,6 +33,15 @@ describe('useFlightsFilters', () => {
         expect(result.current.hasUrlFilters).toBe(true);
     });
 
+    it('ignores invalid year params', () => {
+        const { result } = renderHook(() => useFlightsFilters(), {
+            wrapper: wrapperWithParams('year=not-a-year'),
+        });
+
+        expect(result.current.selectedYear).toBeNull();
+        expect(result.current.hasUrlFilters).toBe(false);
+    });
+
     it('reads airport from URL params', () => {
         const { result } = renderHook(() => useFlightsFilters(), {
             wrapper: wrapperWithParams('airport=LAX'),
@@ -60,14 +69,27 @@ describe('useFlightsFilters', () => {
         expect(result.current.selectedRouteAirports).toBeNull();
     });
 
-    it('setSelectedYear updates URL and clears airport', () => {
+    it('setSelectedYear updates URL and preserves airport selection', () => {
         const { result } = renderHook(() => useFlightsFilters(), {
             wrapper: wrapperWithParams('airport=LAX'),
         });
 
         act(() => result.current.setSelectedYear(2024));
         expect(result.current.selectedYear).toBe(2024);
-        expect(result.current.selectedAirport).toBeNull();
+        expect(result.current.selectedAirport).toBe('LAX');
+    });
+
+    it('setSelectedYear preserves route, country, region, and airline filters', () => {
+        const { result } = renderHook(() => useFlightsFilters(), {
+            wrapper: wrapperWithParams('route=JFK-LAX&country=US&region=US-CA&airline=United'),
+        });
+
+        act(() => result.current.setSelectedYear(2024));
+        expect(result.current.selectedYear).toBe(2024);
+        expect(result.current.selectedRoute).toBe('JFK-LAX');
+        expect(result.current.selectedCountry).toBe('US');
+        expect(result.current.selectedRegion).toBe('US-CA');
+        expect(result.current.selectedAirline).toBe('United');
     });
 
     it('setSelectedYear(null) removes year param', () => {
@@ -76,6 +98,15 @@ describe('useFlightsFilters', () => {
         });
 
         act(() => result.current.setSelectedYear(null));
+        expect(result.current.selectedYear).toBeNull();
+    });
+
+    it('setSelectedYear removes the year param for invalid numbers', () => {
+        const { result } = renderHook(() => useFlightsFilters(), {
+            wrapper: wrapperWithParams('year=2024'),
+        });
+
+        act(() => result.current.setSelectedYear(Number.NaN));
         expect(result.current.selectedYear).toBeNull();
     });
 

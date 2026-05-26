@@ -11,6 +11,7 @@ function createHandlers() {
         onColorModeChange: vi.fn(),
         onToggleAllAirports: vi.fn(),
         onToggleUSStates: vi.fn(),
+        onShortcut: vi.fn(),
     };
 }
 
@@ -35,6 +36,7 @@ describe('useKeyboardShortcuts', () => {
         renderHook(() => useKeyboardShortcuts(handlers));
         act(() => pressKey('s'));
         expect(handlers.onToggleStats).toHaveBeenCalledOnce();
+        expect(handlers.onShortcut).toHaveBeenCalledOnce();
     });
 
     it('calls onToggleFilter on F key', () => {
@@ -42,6 +44,19 @@ describe('useKeyboardShortcuts', () => {
         renderHook(() => useKeyboardShortcuts(handlers));
         act(() => pressKey('f'));
         expect(handlers.onToggleFilter).toHaveBeenCalledOnce();
+    });
+
+    it('does not intercept browser or system modified shortcuts', () => {
+        const handlers = createHandlers();
+        renderHook(() => useKeyboardShortcuts(handlers));
+
+        act(() => pressKey('f', { ctrlKey: true }));
+        act(() => pressKey('r', { metaKey: true }));
+        act(() => pressKey('h', { altKey: true }));
+
+        expect(handlers.onToggleFilter).not.toHaveBeenCalled();
+        expect(handlers.onResetView).not.toHaveBeenCalled();
+        expect(handlers.onShortcut).not.toHaveBeenCalled();
     });
 
     it('calls onResetView on R key', () => {
@@ -93,6 +108,14 @@ describe('useKeyboardShortcuts', () => {
         renderHook(() => useKeyboardShortcuts(handlers));
         act(() => pressKey('a'));
         expect(handlers.onToggleAllAirports).not.toHaveBeenCalled();
+        expect(handlers.onShortcut).not.toHaveBeenCalled();
+    });
+
+    it('does not call onShortcut for unsupported keys', () => {
+        const handlers = createHandlers();
+        renderHook(() => useKeyboardShortcuts(handlers));
+        act(() => pressKey('x'));
+        expect(handlers.onShortcut).not.toHaveBeenCalled();
     });
 
     it('calls onToggleUSStates on Shift+U', () => {
@@ -108,12 +131,25 @@ describe('useKeyboardShortcuts', () => {
 
         const input = document.createElement('input');
         document.body.appendChild(input);
-        input.dispatchEvent(new KeyboardEvent('keydown', { key: 's', bubbles: true }));
+        act(() => input.dispatchEvent(new KeyboardEvent('keydown', { key: 's', bubbles: true })));
         document.body.removeChild(input);
 
-        // keydown on the input doesn't bubble to window with the input as target
-        // in this test setup, so onToggleStats should not be called
-        // The important thing is that the hook checks e.target
+        expect(handlers.onToggleStats).not.toHaveBeenCalled();
+        expect(handlers.onShortcut).not.toHaveBeenCalled();
+    });
+
+    it('ignores keys when typing in contenteditable elements', () => {
+        const handlers = createHandlers();
+        renderHook(() => useKeyboardShortcuts(handlers));
+
+        const editor = document.createElement('div');
+        editor.contentEditable = 'true';
+        document.body.appendChild(editor);
+        act(() => editor.dispatchEvent(new KeyboardEvent('keydown', { key: 's', bubbles: true })));
+        document.body.removeChild(editor);
+
+        expect(handlers.onToggleStats).not.toHaveBeenCalled();
+        expect(handlers.onShortcut).not.toHaveBeenCalled();
     });
 
     it('cleans up event listener on unmount', () => {

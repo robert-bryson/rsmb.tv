@@ -6,7 +6,7 @@ A personal website and portfolio showcasing interactive projects, with a focus o
 
 ## Features
 
-- **Flights** — An interactive 3D globe visualization built with [react-globe.gl](https://github.com/vasturiano/react-globe.gl) that displays flights I've taken around the world. Includes filtering by year, route frequency analysis, and travel statistics.
+- **Flights** — An interactive 3D globe visualization built with [react-globe.gl](https://github.com/vasturiano/react-globe.gl) that displays flights I've taken around the world. Includes active filter chips, opt-in globe rotation, route frequency analysis, and travel statistics.
 - **Temperature Records** — An interactive map of U.S. temperature records built with MapLibre GL, showing broken records, county/state all-time records, climate trends, and freshness analysis.
 - **Project Portfolio** — Showcases various side projects including web tools and data visualizations.
 - **Blog** — Google-backed MDX posts with RSS, generated Open Graph images, structured data, and shareable tag filters.

@@ -88,7 +88,6 @@ export const DEFAULT_VIEW = {
 } as const;
 
 // Animation timing
-export const AUTO_ROTATION_DELAY_MS = 12000;
 export const AUTO_ROTATION_SPEED = -0.25;
 export const VIEW_TRANSITION_MS = 1000;
 export const COPY_FEEDBACK_MS = 2000;
