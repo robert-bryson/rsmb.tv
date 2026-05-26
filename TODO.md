@@ -57,7 +57,7 @@ No open items.
 
 ## Completed
 
-### Flights map
+### Completed flights map
 
 - [x] Move map camera, layers, display controls, help, units, and flight-type highlighting into shareable URL state
 - [x] Fix URL-state batching so multiple same-event flight map updates compose correctly
@@ -77,9 +77,10 @@ No open items.
 - [x] Add airport-code tooltips in stats panel route and airport links
 - [x] Prevent mixed airport/route/country/region URL selection state
 
-### General
+### Completed general work
 
 - [x] JSON-LD for all pages
+- [x] Document Amplify's `.nvmrc` runtime install requirement
 - [x] Add generated Open Graph images for aborg and parc project pages
 - [x] Standardize page Open Graph metadata through shared site metadata helpers
 - [x] Add Google Sheets/Docs blog sync with MDX generation, syntax highlighting, table support, and GitHub Actions automation
@@ -170,6 +171,7 @@ No open items.
 
 ### Completed testing
 
+- [x] Add regression coverage for Amplify's Node runtime setup
 - [x] Add URL-state tests for shareable flights controls, camera params, and functional boolean updates
 - [x] Add clickable StatItem accessibility coverage
 - [x] Add test coverage for flights utility functions (parseYear, getRouteKey, hexToRgba, calculateDistance)

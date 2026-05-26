@@ -28,6 +28,8 @@ A personal website and portfolio showcasing interactive projects, with a focus o
 - Node.js (see `.nvmrc` for version)
 - npm
 
+Use `nvm install` from the repository root to install and activate the exact Node.js version before installing dependencies. The current toolchain requires Node 22+.
+
 ### Installation
 
 ```bash
@@ -141,6 +143,8 @@ Optional environment variables:
 - `GOOGLE_BLOG_SYNC_ON_DEV` - Set to `false` to skip the automatic blog sync before `npm run dev`.
 
 `npm run build` runs `npm run build-blog` before typecheck and `vite build`. Amplify Hosting must have `GOOGLE_BLOG_SHEET_ID` configured in its own environment variables; GitHub Actions variables are not visible to Amplify builds.
+
+Amplify builds intentionally run `nvm install` before `npm ci` so CodeBuild installs and activates the exact version pinned in `.nvmrc`, even when the image does not already have it. Do not replace this with `nvm use`; that only works when the requested Node version is preinstalled.
 
 `npm run dev` runs the blog sync first when `GOOGLE_BLOG_SHEET_ID` is available in the shell or local env files. If the sheet is not configured, it skips the sync, rebuilds empty blog artifacts if needed, and starts Vite.
 
