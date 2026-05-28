@@ -49,6 +49,7 @@ describe('posts registry', () => {
         const post = getPostBySlug(firstPost.slug);
         expect(post).toBeDefined();
         expect(post?.title).toBe(firstPost.title);
+        expect(post?.loadComponent).toBeTypeOf('function');
         expect(post?.Component).toBeDefined();
     });
 

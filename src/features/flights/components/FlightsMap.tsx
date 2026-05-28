@@ -298,8 +298,16 @@ export function FlightsMap() {
     return map;
   }, [pointsData]);
 
-  // All airports layer data
-  const { data: allAirportsData, loading: allAirportsLoading } = useAllAirports();
+  // Optional layer data: defer larger payloads until a visible layer or focused
+  // country/region selection actually needs them.
+  const shouldLoadAllAirports = allAirportsVisible
+    || selectedCountry !== null
+    || selectedRegion !== null
+    || usStatesVisible
+    || (layersOpen && activeLayerSection === 'airports');
+  const shouldLoadUSStates = usStatesVisible || (layersOpen && activeLayerSection === 'states');
+
+  const { data: allAirportsData, loading: allAirportsLoading } = useAllAirports({ enabled: shouldLoadAllAirports });
   const allAirportsPoints = useAllAirportsLayer(allAirportsData, {
     visible: allAirportsVisible,
     symbolMode: airportSymbolMode,
@@ -307,7 +315,7 @@ export function FlightsMap() {
   });
 
   // US States layer data
-  const { data: usStatesData, loading: usStatesLoading } = useUSStates();
+  const { data: usStatesData, loading: usStatesLoading } = useUSStates({ enabled: shouldLoadUSStates });
   const { data: flightsData } = useFlights();
   const usStateStats = useUSStateStats(usStatesData, allAirportsData, flightsData);
   const usStatesPolygons = useUSStatesLayer(usStatesData, usStateStats, {

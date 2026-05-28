@@ -289,8 +289,9 @@ export function TemperatureMap() {
         }
     }, []);
 
-    const { stateRecords, countyRecords, recentRecords, loading, error } = useTemperatureData();
-    const { trends, loading: trendsLoading } = useClimateTrends();
+    const shouldLoadAllTimeRecords = viewMode !== 'recent' || showTrends;
+    const { stateRecords, countyRecords, recentRecords, loading, error } = useTemperatureData({ loadAllTimeRecords: shouldLoadAllTimeRecords });
+    const { trends, loading: trendsLoading, error: trendsError } = useClimateTrends({ enabled: showTrends });
     const [activePeriod, setActivePeriod] = useState<TimePeriod>('yesterday');
 
     /** Build GeoJSON from broken records for the map layer */
@@ -1485,7 +1486,14 @@ export function TemperatureMap() {
                         </button>
                     </div>
 
-                    {trendsLoading || !trends ? (
+                    {trendsError ? (
+                        <div className="flex-1 flex items-center justify-center px-4 text-center">
+                            <div>
+                                <p className="text-sm font-medium text-zinc-200">Failed to load trends</p>
+                                <p className="mt-1 text-xs text-zinc-500">{trendsError}</p>
+                            </div>
+                        </div>
+                    ) : trendsLoading || !trends ? (
                         <div className="flex-1 flex items-center justify-center">
                             <div className="flex items-center gap-2.5">
                                 <div className="w-4 h-4 border-2 border-zinc-600 border-t-zinc-300 rounded-full animate-spin" />

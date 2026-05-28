@@ -1,48 +1,13 @@
 # TODO
 
-## Projects
+Open work is grouped by area. Completed work stays below as a lightweight changelog.
 
-### Aborg
+## Open
 
-- [ ] Add screenshots to project page
+### Projects
 
-### Anki Artisan
-
-No open items.
-
-### Bookend
-
-No open items.
-
-### Flights map
-
-- [ ] Add screenshots to flights map project page
-
-### Parc
-
-No open items.
-
-### rsmb.tv
-
-No open items.
-
-### Status dashboard
-
-No open items.
-
-### Temperature records
-
-No open items.
-
-### Through Routes
-
-No open items.
-
-### Tornado Tracks
-
-No open items.
-
-## Next steps
+- [ ] Aborg: add screenshots to project page
+- [ ] Flights map: add screenshots to flights map project page
 
 ### Content
 
@@ -173,6 +138,7 @@ No open items.
 
 ### Completed testing
 
+- [x] Add browser smoke coverage for the home page and deferred flights layer payloads
 - [x] Add regression coverage for Amplify's Node runtime setup
 - [x] Add URL-state tests for shareable flights controls, camera params, and functional boolean updates
 - [x] Add clickable StatItem accessibility coverage

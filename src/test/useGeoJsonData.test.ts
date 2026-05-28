@@ -37,6 +37,44 @@ describe('useGeoJsonData', () => {
         expect(result.current.error).toBeNull();
     });
 
+    it('does not fetch while disabled', () => {
+        globalThis.fetch = vi.fn();
+
+        const { result } = renderHook(() => useGeoJsonData('airports.geojson', { enabled: false }));
+
+        expect(result.current.loading).toBe(false);
+        expect(result.current.data).toBeNull();
+        expect(fetch).not.toHaveBeenCalled();
+    });
+
+    it('re-enters loading state when an enabled request retries after failure', async () => {
+        let resolveRetry!: (value: Response) => void;
+        globalThis.fetch = vi
+            .fn()
+            .mockRejectedValueOnce(new Error('Network error'))
+            .mockReturnValueOnce(new Promise<Response>((resolve) => { resolveRetry = resolve; }));
+
+        const { result, rerender } = renderHook(
+            ({ enabled }) => useGeoJsonData('airports.geojson', { enabled }),
+            { initialProps: { enabled: true } },
+        );
+
+        await waitFor(() => expect(result.current.error?.message).toBe('Network error'));
+
+        rerender({ enabled: false });
+        expect(result.current.loading).toBe(false);
+        expect(result.current.error).toBeNull();
+
+        rerender({ enabled: true });
+        await waitFor(() => expect(result.current.loading).toBe(true));
+        expect(result.current.error).toBeNull();
+
+        resolveRetry(jsonFetchResponse({ type: 'FeatureCollection', features: [] }));
+
+        await waitFor(() => expect(result.current.loading).toBe(false));
+        expect(result.current.data).toEqual({ type: 'FeatureCollection', features: [] });
+    });
+
     it('sets error on fetch failure', async () => {
         globalThis.fetch = vi.fn().mockRejectedValue(new Error('Network error'));
 

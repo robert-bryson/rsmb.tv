@@ -9,16 +9,22 @@ interface ClimateTrendsState {
     error: string | null;
 }
 
-export function useClimateTrends(): ClimateTrendsState {
+export function useClimateTrends({ enabled = true }: { enabled?: boolean } = {}): ClimateTrendsState {
     const [trends, setTrends] = useState<ClimateTrends | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        if (!enabled || trends) {
+            return;
+        }
+
         let cancelled = false;
 
         async function load() {
             try {
+                setLoading(true);
+                setError(null);
                 const data = await fetchWithCache<ClimateTrends>(CLIMATE_TRENDS_URL);
                 if (!cancelled) setTrends(data);
             } catch (err) {
@@ -30,7 +36,7 @@ export function useClimateTrends(): ClimateTrendsState {
 
         load();
         return () => { cancelled = true; };
-    }, []);
+    }, [enabled, trends]);
 
-    return { trends, loading, error };
+    return { trends, loading: enabled && loading && !trends, error: enabled ? error : null };
 }

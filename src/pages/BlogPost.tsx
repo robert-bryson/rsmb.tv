@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { BlogTagLink } from '../components/BlogTagLink';
 import { useDocumentHead } from '../hooks/useDocumentHead';
@@ -75,7 +76,9 @@ export function BlogPost() {
                 )}
             </header>
 
-            <Component components={mdxComponents} />
+            <Suspense fallback={<div className="text-sm text-zinc-400">Loading post...</div>}>
+                <Component components={mdxComponents} />
+            </Suspense>
         </article>
     );
 }

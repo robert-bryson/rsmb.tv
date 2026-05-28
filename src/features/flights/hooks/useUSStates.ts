@@ -16,8 +16,8 @@ import {
 import { parseDateString } from '../utils';
 import { useGeoJsonData } from './useGeoJsonData';
 
-export function useUSStates() {
-    return useGeoJsonData<USStatesCollection>('usStates.geojson');
+export function useUSStates(options: { enabled?: boolean } = {}) {
+    return useGeoJsonData<USStatesCollection>('usStates.geojson', options);
 }
 
 interface USStatesLayerOptions {

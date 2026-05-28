@@ -17,8 +17,8 @@ import { useGeoJsonData } from './useGeoJsonData';
 /**
  * Hook to fetch all airports data.
  */
-export function useAllAirports() {
-    return useGeoJsonData<AllAirportsCollection>('allAirports.geojson');
+export function useAllAirports(options: { enabled?: boolean } = {}) {
+    return useGeoJsonData<AllAirportsCollection>('allAirports.geojson', options);
 }
 
 interface AllAirportsLayerOptions {

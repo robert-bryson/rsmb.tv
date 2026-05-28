@@ -25,43 +25,82 @@ interface TemperatureData {
     stateLows: StateRecordProperties[];
 }
 
-export function useTemperatureData(): TemperatureData {
+interface UseTemperatureDataOptions {
+    loadAllTimeRecords?: boolean;
+}
+
+export function useTemperatureData({ loadAllTimeRecords = true }: UseTemperatureDataOptions = {}): TemperatureData {
     const [stateRecords, setStateRecords] = useState<StateRecordsCollection | null>(null);
     const [countyRecords, setCountyRecords] = useState<CountyRecordsCollection | null>(null);
     const [recentRecords, setRecentRecords] = useState<RecentRecords | null>(null);
     const [summary, setSummary] = useState<TemperatureSummary | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [recentLoading, setRecentLoading] = useState(true);
+    const [allTimeLoading, setAllTimeLoading] = useState(loadAllTimeRecords);
+    const [recentError, setRecentError] = useState<string | null>(null);
+    const [allTimeError, setAllTimeError] = useState<string | null>(null);
 
     useEffect(() => {
         let cancelled = false;
 
         async function load() {
             try {
-                const [stateData, countyData, recentData, summaryData] = await Promise.all([
-                    fetchWithCache<StateRecordsCollection>(STATE_RECORDS_URL),
-                    fetchWithCache<CountyRecordsCollection>(COUNTY_RECORDS_URL),
+                setRecentLoading(true);
+                setRecentError(null);
+                const [recentData, summaryData] = await Promise.all([
                     fetchWithCache<RecentRecords>(RECENT_RECORDS_URL),
                     fetchWithCache<TemperatureSummary>(SUMMARY_URL),
                 ]);
 
                 if (cancelled) return;
 
-                setStateRecords(stateData);
-                setCountyRecords(countyData);
                 setRecentRecords(recentData);
                 setSummary(summaryData);
             } catch (err) {
                 if (cancelled) return;
-                setError(err instanceof Error ? err.message : 'Failed to load temperature data');
+                setRecentError(err instanceof Error ? err.message : 'Failed to load temperature data');
             } finally {
-                if (!cancelled) setLoading(false);
+                if (!cancelled) setRecentLoading(false);
             }
         }
 
         load();
         return () => { cancelled = true; };
     }, []);
+
+    useEffect(() => {
+        if (!loadAllTimeRecords) {
+            return;
+        }
+
+        if (stateRecords && countyRecords) {
+            return;
+        }
+
+        let cancelled = false;
+
+        async function loadAllTime() {
+            try {
+                setAllTimeLoading(true);
+                setAllTimeError(null);
+                const [stateData, countyData] = await Promise.all([
+                    fetchWithCache<StateRecordsCollection>(STATE_RECORDS_URL),
+                    fetchWithCache<CountyRecordsCollection>(COUNTY_RECORDS_URL),
+                ]);
+
+                if (cancelled) return;
+                setStateRecords(stateData);
+                setCountyRecords(countyData);
+            } catch (err) {
+                if (cancelled) return;
+                setAllTimeError(err instanceof Error ? err.message : 'Failed to load all-time temperature data');
+            } finally {
+                if (!cancelled) setAllTimeLoading(false);
+            }
+        }
+
+        loadAllTime();
+        return () => { cancelled = true; };
+    }, [countyRecords, loadAllTimeRecords, stateRecords]);
 
     const stateHighs = useMemo(
         () => stateRecords?.features
@@ -76,6 +115,17 @@ export function useTemperatureData(): TemperatureData {
             .map(f => f.properties) ?? [],
         [stateRecords]
     );
+    const needsAllTimeRecords = loadAllTimeRecords && (!stateRecords || !countyRecords);
+    const error = recentError ?? (loadAllTimeRecords ? allTimeError : null);
 
-    return { stateRecords, countyRecords, recentRecords, summary, loading, error, stateHighs, stateLows };
+    return {
+        stateRecords,
+        countyRecords,
+        recentRecords,
+        summary,
+        loading: recentLoading || (needsAllTimeRecords && allTimeLoading),
+        error,
+        stateHighs,
+        stateLows,
+    };
 }

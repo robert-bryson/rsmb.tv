@@ -18,6 +18,7 @@ A personal website and portfolio showcasing interactive projects, with a focus o
 - **Build:** Vite
 - **3D Globe:** react-globe.gl (Three.js/WebGL)
 - **Routing:** React Router
+- **Testing:** Vitest, Testing Library, Playwright
 - **Infrastructure:** AWS Amplify, Terraform
 - **CI/CD:** AWS Amplify auto-builds on push
 
@@ -58,12 +59,15 @@ npm run dev
 | `npm run test` | Run the full Vitest suite |
 | `npm run test:coverage` | Run tests with V8 coverage report |
 | `npm run watch` | Run terminal operations dashboard (`scripts/aws-watch.tsx`) |
+| `npm run typecheck` | Run all TypeScript project references without emitting files |
 | `npm run build-flights` | Convert flight CSV data to GeoJSON |
 | `npm run sync-blogs` | Sync blog metadata from Google Sheets and post bodies from Google Docs |
 | `npm run sync-blogs:dev` | Sync blogs before local dev when `GOOGLE_BLOG_SHEET_ID` is configured |
 | `npm run sync-flights` | Sync flight data from Google Sheets (requires `GOOGLE_SHEET_ID`) |
 | `npm run sync-temperatures` | Generate temperature record JSON for upload to the S3-backed data CDN |
 | `npm run sync-tornadoes` | Sync NOAA/NCEI tornado tracks and generated public GeoJSON |
+| `npm run test:e2e` | Build flight data, start Vite, and run Playwright browser smoke tests |
+| `npm run audit` | Run `npm audit --audit-level=moderate` |
 
 ### Watch Dashboard Controls
 
@@ -93,8 +97,13 @@ Build status is source-aware: AWS Amplify deployments are shown separately from 
 │   └── sitemap.xml     # Generated sitemap
 ├── infra/              # Terraform infrastructure config
 ├── scripts/            # Build/sync scripts + dashboard utilities
+├── tests/e2e/          # Playwright browser smoke tests
 └── amplify.yml         # AWS Amplify build configuration
 ```
+
+## Testing Notes
+
+`npm run test:e2e` starts Vite directly on `127.0.0.1:4174` with `--strictPort`, then runs Playwright with its internal web server disabled. Set `PLAYWRIGHT_PORT` when that port is already in use. CI installs Chromium before running the browser smoke tests.
 
 ## Generated Metadata
 

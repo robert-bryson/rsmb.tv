@@ -43,7 +43,7 @@ vi.mock('../content/posts', () => ({
             return undefined;
         }
 
-        return { ...post, Component: () => null };
+        return { ...post, loadComponent: async () => ({ default: () => null }), Component: () => null };
     },
 }));
 

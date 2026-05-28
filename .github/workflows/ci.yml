@@ -29,7 +29,16 @@ jobs:
         run: npm run lint
 
       - name: Type check
-        run: npx tsc -b --noEmit
+        run: npm run typecheck
+
+      - name: Audit dependencies
+        run: npm run audit
 
       - name: Test
         run: npm test
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Browser smoke tests
+        run: npm run test:e2e

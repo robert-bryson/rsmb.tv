@@ -6,7 +6,7 @@
  * generation because both registries are discovered dynamically.
  */
 
-import type { ComponentType } from 'react';
+import { lazy, type ComponentType, type LazyExoticComponent } from 'react';
 
 export interface BlogPostMeta {
     slug: string;
@@ -21,8 +21,10 @@ export interface MdxComponentProps {
 }
 
 export interface BlogPost extends BlogPostMeta {
-    /** The eagerly imported MDX component for the post body. */
-    Component: ComponentType<MdxComponentProps>;
+    /** Loads the generated MDX component for the post body on demand. */
+    loadComponent: () => Promise<{ default: ComponentType<MdxComponentProps> }>;
+    /** Lazy wrapper for the generated MDX component. */
+    Component: LazyExoticComponent<ComponentType<MdxComponentProps>>;
 }
 
 // ── Generated post registry ─────────────────────────────────────────
@@ -36,11 +38,9 @@ const postsMetaModules = import.meta.glob<BlogPostMeta[]>('./posts.json', {
 
 const postsMeta = postsMetaModules['./posts.json'] ?? [];
 
-// Auto-discover MDX files — no manual mapping needed.
-// Eager imports avoid the nested "Loading post..." state when a post route opens.
-const mdxModules = import.meta.glob<{ default: ComponentType<MdxComponentProps> }>('./blog/*.mdx', {
-    eager: true,
-});
+// Auto-discover MDX files — no manual mapping needed. Keep these lazy so the
+// initial app shell and blog index only pay for metadata, not every post body.
+const mdxModules = import.meta.glob<{ default: ComponentType<MdxComponentProps> }>('./blog/*.mdx');
 
 function missingMdxComponent(slug: string): ComponentType<MdxComponentProps> {
     return function MissingMdxComponent() {
@@ -48,15 +48,19 @@ function missingMdxComponent(slug: string): ComponentType<MdxComponentProps> {
     };
 }
 
-function postComponent(slug: string): ComponentType<MdxComponentProps> {
+function postComponentLoader(slug: string): BlogPost['loadComponent'] {
     const path = `./blog/${slug}.mdx`;
-    return mdxModules[path]?.default ?? missingMdxComponent(slug);
+    return mdxModules[path] ?? (async () => ({ default: missingMdxComponent(slug) }));
 }
 
-const posts: BlogPost[] = postsMeta.map((meta) => ({
-    ...meta,
-    Component: postComponent(meta.slug),
-}));
+const posts: BlogPost[] = postsMeta.map((meta) => {
+    const loadComponent = postComponentLoader(meta.slug);
+    return {
+        ...meta,
+        loadComponent,
+        Component: lazy(loadComponent),
+    };
+});
 
 // Sort newest-first
 posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());

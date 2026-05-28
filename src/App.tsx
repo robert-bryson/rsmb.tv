@@ -3,13 +3,13 @@ import { Suspense, lazy } from 'react';
 import { Layout } from './components/Layout';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ScrollToTop } from './components/ScrollToTop';
-import { BlogPost } from './pages/BlogPost';
 
 const Home = lazy(() => import('./pages/Home').then(m => ({ default: m.Home })));
 const About = lazy(() => import('./pages/About').then(m => ({ default: m.About })));
 const Projects = lazy(() => import('./pages/Projects').then(m => ({ default: m.Projects })));
 const NotFound = lazy(() => import('./pages/NotFound').then(m => ({ default: m.NotFound })));
 const Blog = lazy(() => import('./pages/Blog').then(m => ({ default: m.Blog })));
+const BlogPost = lazy(() => import('./pages/BlogPost').then(m => ({ default: m.BlogPost })));
 const ThroughRoutes = lazy(() => import('./pages/ThroughRoutes'));
 const FlightsAbout = lazy(() => import('./pages/FlightsAbout'));
 const Flights = lazy(() => import('./pages/Flights'));
