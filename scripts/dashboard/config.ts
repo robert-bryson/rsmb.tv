@@ -9,6 +9,11 @@ export interface WorkflowConfig {
     staleThresholdHours?: number;
 }
 
+export interface GitHubRepoRef {
+    owner: string;
+    repo: string;
+}
+
 export interface ProjectConfig {
     name: string;
     domain: string;
@@ -49,6 +54,49 @@ export interface DashboardConfig {
         external: number;
         github: number;
     };
+}
+
+export function parseGitHubRepo(githubRepo: string): GitHubRepoRef | null {
+    const parts = githubRepo.split('/');
+    if (parts.length !== 2) return null;
+
+    const [owner, repo] = parts.map((part) => part.trim());
+    if (!owner || !repo) return null;
+    if (/\s/.test(owner) || /\s/.test(repo)) return null;
+
+    return { owner, repo };
+}
+
+export function getProjectConfigErrors(project: ProjectConfig): string[] {
+    const errors: string[] = [];
+
+    if (project.githubRepo !== undefined && !parseGitHubRepo(project.githubRepo)) {
+        errors.push(`githubRepo "${project.githubRepo}" must use owner/repo format`);
+    }
+
+    for (const workflow of project.workflows ?? []) {
+        const workflowName = workflow.name.trim();
+        const workflowFile = workflow.file.trim();
+
+        if (!workflowName) {
+            errors.push('workflow name must not be empty');
+        }
+        if (!workflowFile) {
+            errors.push(`workflow "${workflowName || '(unnamed)'}" must include a file`);
+        }
+    }
+
+    return errors;
+}
+
+function validateProjectConfigs(list: ProjectConfig[]): void {
+    const errors = list.flatMap((project) =>
+        getProjectConfigErrors(project).map((error) => `${project.name}: ${error}`),
+    );
+
+    if (errors.length > 0) {
+        throw new Error(`Invalid dashboard project config:\n${errors.join('\n')}`);
+    }
 }
 
 // ─── Projects to monitor ─────────────────────────────────────────────────────
@@ -100,6 +148,15 @@ const projects: ProjectConfig[] = [
         domain: '',
         kind: 'github-only',
         githubRepo: 'robert-bryson/aborg',
+        workflows: [
+            { name: 'CI', file: 'ci.yml' },
+        ],
+    },
+    {
+        name: 'parc',
+        domain: '',
+        kind: 'github-only',
+        githubRepo: 'robert-bryson/parc',
         workflows: [
             { name: 'CI', file: 'ci.yml' },
         ],
@@ -168,15 +225,27 @@ export function parseIdMap(envVar: string | undefined): Map<string, string> {
     return map;
 }
 
+function cloneProjectConfig(project: ProjectConfig): ProjectConfig {
+    return {
+        ...project,
+        workflows: project.workflows?.map((workflow) => ({ ...workflow })),
+    };
+}
+
 function applyEnvOverrides(list: ProjectConfig[]): ProjectConfig[] {
     const amplifyIds = parseIdMap(process.env.AMPLIFY_APP_IDS);
     const healthCheckIds = parseIdMap(process.env.HEALTH_CHECK_IDS);
 
-    for (const p of list) {
-        if (!p.amplifyAppId && amplifyIds.has(p.name)) p.amplifyAppId = amplifyIds.get(p.name);
-        if (!p.healthCheckId && healthCheckIds.has(p.name)) p.healthCheckId = healthCheckIds.get(p.name);
-    }
-    return list;
+    return list.map((project) => {
+        const resolved = cloneProjectConfig(project);
+        const amplifyAppId = amplifyIds.get(project.name);
+        const healthCheckId = healthCheckIds.get(project.name);
+
+        if (!resolved.amplifyAppId && amplifyAppId) resolved.amplifyAppId = amplifyAppId;
+        if (!resolved.healthCheckId && healthCheckId) resolved.healthCheckId = healthCheckId;
+
+        return resolved;
+    });
 }
 
 // ─── Config factory ──────────────────────────────────────────────────────────
@@ -189,6 +258,7 @@ export function createConfig(flags: {
 }): DashboardConfig {
     const baseInterval = flags.interval ?? 60;
     const resolvedProjects = applyEnvOverrides(projects);
+    validateProjectConfigs(resolvedProjects);
 
     const intervals = Object.fromEntries(
         Object.entries(INTERVAL_FLOORS).map(([key, { min, multiplier }]) => [
@@ -203,9 +273,9 @@ export function createConfig(flags: {
         timeZone: flags.timeZone ?? process.env.DASHBOARD_TIMEZONE ?? 'America/Chicago',
         githubToken: process.env.GITHUB_TOKEN,
         projects: resolvedProjects,
-        githubRepos: resolvedProjects
+        githubRepos: [...new Set(resolvedProjects
             .map(p => p.githubRepo)
-            .filter((r): r is string => r !== undefined),
+            .filter((r): r is string => r !== undefined))],
         externalGroups,
         intervals,
     };

@@ -107,4 +107,109 @@ describe('fetchWorkflowRuns', () => {
             staleThresholdHours: 36,
         }]);
     });
+
+    it('returns an error row without calling GitHub when the repo config is malformed', async () => {
+        const listWorkflowRuns = vi.fn();
+        const octokit = { actions: { listWorkflowRuns } } as unknown as Octokit;
+        const project: ProjectConfig = {
+            name: 'parc',
+            domain: '',
+            kind: 'github-only',
+            githubRepo: 'owner/parc/extra',
+            workflows: [{ name: 'CI', file: 'ci.yml' }],
+        };
+
+        const runs = await fetchWorkflowRuns(octokit, project);
+
+        expect(listWorkflowRuns).not.toHaveBeenCalled();
+        expect(runs).toMatchObject([{
+            project: 'parc',
+            label: 'CI',
+            status: 'ERROR',
+            time: 'invalid githubRepo "owner/parc/extra" (expected owner/repo)',
+        }]);
+    });
+
+    it('includes GitHub API error details in workflow error rows', async () => {
+        const error = Object.assign(new Error('Not Found'), {
+            status: 404,
+            response: { data: { message: 'workflow not found' } },
+        });
+        const listWorkflowRuns = vi.fn().mockRejectedValue(error);
+        const octokit = { actions: { listWorkflowRuns } } as unknown as Octokit;
+        const project: ProjectConfig = {
+            name: 'parc',
+            domain: '',
+            kind: 'github-only',
+            githubRepo: 'owner/parc',
+            workflows: [{ name: 'CI', file: 'ci.yml' }],
+        };
+
+        const runs = await fetchWorkflowRuns(octokit, project);
+
+        expect(runs).toMatchObject([{
+            project: 'parc',
+            label: 'CI',
+            status: 'ERROR',
+            time: 'fetch failed: workflow not found (404)',
+            url: 'https://github.com/owner/parc/actions/workflows/ci.yml',
+        }]);
+    });
+
+    it('shows a configured workflow even when it has no runs yet', async () => {
+        const listWorkflowRuns = vi.fn().mockResolvedValue({
+            data: { workflow_runs: [] },
+        });
+        const getWorkflow = vi.fn().mockResolvedValue({ data: { id: 123 } });
+        const octokit = { actions: { getWorkflow, listWorkflowRuns } } as unknown as Octokit;
+        const project: ProjectConfig = {
+            name: 'parc',
+            domain: '',
+            kind: 'github-only',
+            githubRepo: 'owner/parc',
+            workflows: [{ name: 'CI', file: 'ci.yml' }],
+        };
+
+        const runs = await fetchWorkflowRuns(octokit, project);
+
+        expect(getWorkflow).toHaveBeenCalledWith({
+            owner: 'owner',
+            repo: 'parc',
+            workflow_id: 'ci.yml',
+        });
+        expect(runs).toMatchObject([{
+            project: 'parc',
+            label: 'CI',
+            status: 'UNKNOWN',
+            id: '—',
+            time: 'no runs found',
+            url: 'https://github.com/owner/parc/actions/workflows/ci.yml',
+        }]);
+    });
+
+    it('validates an empty workflow result before treating it as no runs', async () => {
+        const error = Object.assign(new Error('Not Found'), { status: 404 });
+        const listWorkflowRuns = vi.fn().mockResolvedValue({
+            data: { workflow_runs: [] },
+        });
+        const getWorkflow = vi.fn().mockRejectedValue(error);
+        const octokit = { actions: { getWorkflow, listWorkflowRuns } } as unknown as Octokit;
+        const project: ProjectConfig = {
+            name: 'parc',
+            domain: '',
+            kind: 'github-only',
+            githubRepo: 'owner/parc',
+            workflows: [{ name: 'CI', file: 'missing.yml' }],
+        };
+
+        const runs = await fetchWorkflowRuns(octokit, project);
+
+        expect(runs).toMatchObject([{
+            project: 'parc',
+            label: 'CI',
+            status: 'ERROR',
+            time: 'workflow unavailable: Not Found (404)',
+            url: 'https://github.com/owner/parc/actions/workflows/missing.yml',
+        }]);
+    });
 });

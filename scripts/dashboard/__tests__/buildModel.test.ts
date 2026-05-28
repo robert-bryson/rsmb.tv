@@ -4,6 +4,9 @@ import {
     buildKey,
     getBuildDisplaySections,
     getBuildProblemLabels,
+    isFailure,
+    isRunning,
+    isWarningStatus,
     selectBuildProjects,
     uniqueBuilds,
     type BuildInfo,
@@ -67,18 +70,53 @@ describe('selectBuildProjects', () => {
 });
 
 describe('getBuildProblemLabels', () => {
-    it('includes project context for workflow failures and dedupes exact repeats', () => {
+    it('includes project context for workflow problems and dedupes exact repeats', () => {
         const labels = getBuildProblemLabels([
             build({ project: 'rsmb.tv', label: 'Sync Temps', status: 'FAILURE' }),
             build({ project: 'rsmb.tv', label: 'Sync Temps', status: 'FAILED' }),
+            build({
+                project: 'rsmb.tv',
+                label: 'Sync Flights',
+                status: 'SUCCESS',
+                createdAt: new Date('2020-01-01T00:00:00Z'),
+                staleThresholdHours: 36,
+            }),
+            build({ project: 'parc', label: 'CI', status: 'UNKNOWN', createdAt: null }),
+            build({ project: 'aborg', label: 'CI', status: 'SKIPPED', createdAt: null }),
             build({ project: 'bookend', label: 'bookend', status: 'ERROR' }),
             build({ project: 'route2gpx', label: 'route2gpx', status: 'SUCCESS' }),
         ]);
 
         expect(labels).toEqual([
             'rsmb.tv Sync Temps build failed',
+            'rsmb.tv Sync Flights build stale',
+            'parc CI build status unknown',
+            'aborg CI build status skipped',
             'bookend build failed',
         ]);
+    });
+});
+
+describe('build status classification', () => {
+    it('treats provider-specific terminal failures as failures', () => {
+        expect(isFailure('failed')).toBe(true);
+        expect(isFailure('timed_out')).toBe(true);
+        expect(isFailure('action_required')).toBe(true);
+        expect(isFailure('startup_failure')).toBe(true);
+    });
+
+    it('treats queued provider statuses as running', () => {
+        expect(isRunning('queued')).toBe(true);
+        expect(isRunning('requested')).toBe(true);
+        expect(isRunning('waiting')).toBe(true);
+    });
+
+    it('treats unclassified terminal statuses as warnings', () => {
+        expect(isWarningStatus('unknown')).toBe(true);
+        expect(isWarningStatus('skipped')).toBe(true);
+        expect(isWarningStatus('success')).toBe(false);
+        expect(isWarningStatus('running')).toBe(false);
+        expect(isWarningStatus('failure')).toBe(false);
     });
 });
 

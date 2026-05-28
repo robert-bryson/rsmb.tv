@@ -125,6 +125,8 @@ No open items.
 
 - [x] Fix forecast cost estimate
 - [x] Align build number links and timestamps in calm-mode running build rows
+- [x] Treat stale and unknown configured workflow rows as build dashboard problems
+- [x] Keep dashboard project config resolution immutable across env-var overrides
 
 #### Through Routes completed
 

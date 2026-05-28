@@ -3,10 +3,82 @@ import {
     ListJobsCommand,
 } from '@aws-sdk/client-amplify';
 import { Octokit } from '@octokit/rest';
-import type { DashboardConfig, ProjectConfig } from './config.js';
-import { awsCredentials } from './config.js';
+import type { DashboardConfig, GitHubRepoRef, ProjectConfig, WorkflowConfig } from './config.js';
+import { awsCredentials, parseGitHubRepo } from './config.js';
 import { relativeTime } from './utils.js';
 import { selectBuildProjects, uniqueBuilds, type BuildInfo } from './buildModel.js';
+
+type ErrorLike = {
+    message?: unknown;
+    status?: unknown;
+    response?: {
+        data?: {
+            message?: unknown;
+        };
+    };
+};
+
+function summarizeError(error: unknown): string {
+    if (typeof error !== 'object' || error === null) {
+        return String(error || 'unknown error');
+    }
+
+    const errorLike = error as ErrorLike;
+    const message =
+        typeof errorLike.response?.data?.message === 'string'
+            ? errorLike.response.data.message
+            : typeof errorLike.message === 'string'
+                ? errorLike.message
+                : 'unknown error';
+    const status = typeof errorLike.status === 'number' ? errorLike.status : undefined;
+
+    return status ? `${message} (${status})` : message;
+}
+
+function githubActionsUrl(repo: GitHubRepoRef, workflowFile?: string): string {
+    const base = `https://github.com/${repo.owner}/${repo.repo}/actions`;
+    return workflowFile ? `${base}/workflows/${encodeURIComponent(workflowFile)}` : base;
+}
+
+function githubConfigErrorBuild(
+    project: ProjectConfig,
+    label: string,
+    message: string,
+    staleThresholdHours: number | undefined,
+): BuildInfo {
+    return {
+        project: project.name,
+        label,
+        source: 'github',
+        status: 'ERROR',
+        id: '—',
+        branch: 'main',
+        time: message,
+        url: 'https://github.com',
+        createdAt: null,
+        staleThresholdHours,
+    };
+}
+
+function githubWorkflowErrorBuild(
+    project: ProjectConfig,
+    repo: GitHubRepoRef,
+    workflow: WorkflowConfig,
+    message: string,
+): BuildInfo {
+    return {
+        project: project.name,
+        label: workflow.name.trim() || workflow.file.trim() || 'workflow',
+        source: 'github',
+        status: 'ERROR',
+        id: '—',
+        branch: 'main',
+        time: message,
+        url: githubActionsUrl(repo, workflow.file.trim() || undefined),
+        createdAt: null,
+        staleThresholdHours: workflow.staleThresholdHours,
+    };
+}
 
 async function fetchAmplifyBuilds(
     client: AmplifyClient,
@@ -39,7 +111,7 @@ async function fetchAmplifyBuilds(
             createdAt: job.startTime ? new Date(job.startTime) : null,
             staleThresholdHours: undefined,
         };
-    } catch {
+    } catch (error) {
         return {
             project: project.name,
             label: project.name,
@@ -47,7 +119,7 @@ async function fetchAmplifyBuilds(
             status: 'ERROR',
             id: '—',
             branch: 'main',
-            time: 'fetch failed',
+            time: `fetch failed: ${summarizeError(error)}`,
             url: `https://${region}.console.aws.amazon.com/amplify/home#/${project.amplifyAppId}`,
             createdAt: null,
             staleThresholdHours: undefined,
@@ -61,11 +133,20 @@ async function fetchGitHubBuilds(
 ): Promise<BuildInfo | null> {
     if (!project.githubRepo) return null;
 
-    const [owner, repo] = project.githubRepo.split('/');
+    const repoRef = parseGitHubRepo(project.githubRepo);
+    if (!repoRef) {
+        return githubConfigErrorBuild(
+            project,
+            project.name,
+            `invalid githubRepo "${project.githubRepo}" (expected owner/repo)`,
+            undefined,
+        );
+    }
+
     try {
         const { data } = await octokit.actions.listWorkflowRunsForRepo({
-            owner,
-            repo,
+            owner: repoRef.owner,
+            repo: repoRef.repo,
             branch: 'main',
             per_page: 1,
         });
@@ -88,7 +169,7 @@ async function fetchGitHubBuilds(
             createdAt: run.created_at ? new Date(run.created_at) : null,
             staleThresholdHours: undefined,
         };
-    } catch {
+    } catch (error) {
         return {
             project: project.name,
             label: project.name,
@@ -96,8 +177,8 @@ async function fetchGitHubBuilds(
             status: 'ERROR',
             id: '—',
             branch: 'main',
-            time: 'fetch failed',
-            url: `https://github.com/${project.githubRepo}/actions`,
+            time: `fetch failed: ${summarizeError(error)}`,
+            url: githubActionsUrl(repoRef),
             createdAt: null,
             staleThresholdHours: undefined,
         };
@@ -110,28 +191,81 @@ export async function fetchWorkflowRuns(
 ): Promise<BuildInfo[]> {
     if (!project.githubRepo || !project.workflows?.length) return [];
 
-    const [owner, repo] = project.githubRepo.split('/');
+    const repoRef = parseGitHubRepo(project.githubRepo);
+    if (!repoRef) {
+        return project.workflows.map((workflow) =>
+            githubConfigErrorBuild(
+                project,
+                workflow.name.trim() || workflow.file.trim() || 'workflow',
+                `invalid githubRepo "${project.githubRepo}" (expected owner/repo)`,
+                workflow.staleThresholdHours,
+            ),
+        );
+    }
+
     const results: BuildInfo[] = [];
 
     for (const wf of project.workflows) {
+        const workflowFile = wf.file.trim();
+        const workflowLabel = wf.name.trim() || workflowFile || 'workflow';
+        if (!workflowFile) {
+            results.push(githubWorkflowErrorBuild(
+                project,
+                repoRef,
+                wf,
+                'invalid workflow file (expected non-empty file name)',
+            ));
+            continue;
+        }
+
         try {
             const { data } = await octokit.actions.listWorkflowRuns({
-                owner,
-                repo,
-                workflow_id: wf.file,
+                owner: repoRef.owner,
+                repo: repoRef.repo,
+                workflow_id: workflowFile,
                 branch: 'main',
                 per_page: 1,
             });
 
             const run = data.workflow_runs[0];
-            if (!run) continue;
+            if (!run) {
+                try {
+                    await octokit.actions.getWorkflow({
+                        owner: repoRef.owner,
+                        repo: repoRef.repo,
+                        workflow_id: workflowFile,
+                    });
+                } catch (error) {
+                    results.push(githubWorkflowErrorBuild(
+                        project,
+                        repoRef,
+                        wf,
+                        `workflow unavailable: ${summarizeError(error)}`,
+                    ));
+                    continue;
+                }
+
+                results.push({
+                    project: project.name,
+                    label: workflowLabel,
+                    source: 'github',
+                    status: 'UNKNOWN',
+                    id: '—',
+                    branch: 'main',
+                    time: 'no runs found',
+                    url: githubActionsUrl(repoRef, workflowFile),
+                    createdAt: null,
+                    staleThresholdHours: wf.staleThresholdHours,
+                });
+                continue;
+            }
 
             const status =
                 run.conclusion?.toUpperCase() ?? run.status?.toUpperCase() ?? 'UNKNOWN';
 
             results.push({
                 project: project.name,
-                label: wf.name,
+                label: workflowLabel,
                 source: 'github',
                 status,
                 id: `#${run.run_number}`,
@@ -141,19 +275,13 @@ export async function fetchWorkflowRuns(
                 createdAt: run.created_at ? new Date(run.created_at) : null,
                 staleThresholdHours: wf.staleThresholdHours,
             });
-        } catch {
-            results.push({
-                project: project.name,
-                label: wf.name,
-                source: 'github',
-                status: 'ERROR',
-                id: '—',
-                branch: 'main',
-                time: 'fetch failed',
-                url: `https://github.com/${project.githubRepo}/actions`,
-                createdAt: null,
-                staleThresholdHours: wf.staleThresholdHours,
-            });
+        } catch (error) {
+            results.push(githubWorkflowErrorBuild(
+                project,
+                repoRef,
+                wf,
+                `fetch failed: ${summarizeError(error)}`,
+            ));
         }
     }
 

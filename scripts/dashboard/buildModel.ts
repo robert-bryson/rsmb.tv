@@ -58,14 +58,27 @@ export function buildDisplayLabel(build: BuildInfo): string {
     return build.label === build.project ? build.label : `${build.project} ${build.label}`;
 }
 
+export function isSuccess(status: string): boolean {
+    const s = status.toUpperCase();
+    return ['SUCCEED', 'SUCCESS', 'COMPLETED'].includes(s);
+}
+
 export function isFailure(status: string): boolean {
     const s = status.toUpperCase();
-    return ['FAILED', 'FAILURE', 'CANCELLED', 'ERROR'].includes(s);
+    return ['FAILED', 'FAILURE', 'CANCELLED', 'ERROR', 'TIMED_OUT', 'ACTION_REQUIRED', 'STARTUP_FAILURE'].includes(s);
 }
 
 export function isRunning(status: string): boolean {
     const s = status.toUpperCase();
-    return ['PENDING', 'RUNNING', 'IN_PROGRESS', 'QUEUED'].includes(s);
+    return ['PENDING', 'RUNNING', 'IN_PROGRESS', 'QUEUED', 'REQUESTED', 'WAITING'].includes(s);
+}
+
+export function isUnknownStatus(status: string): boolean {
+    return status.toUpperCase() === 'UNKNOWN';
+}
+
+export function isWarningStatus(status: string): boolean {
+    return !isSuccess(status) && !isFailure(status) && !isRunning(status);
 }
 
 export function isStaleWorkflow(build: BuildInfo): boolean {
@@ -76,9 +89,15 @@ export function isStaleWorkflow(build: BuildInfo): boolean {
 
 export function getBuildProblemLabels(builds: BuildInfo[]): string[] {
     return uniqueLabels(
-        builds
-            .filter((b) => isFailure(b.status))
-            .map((b) => `${buildDisplayLabel(b)} build failed`),
+        builds.flatMap((build) => {
+            const label = buildDisplayLabel(build);
+
+            if (isFailure(build.status)) return [`${label} build failed`];
+            if (isStaleWorkflow(build)) return [`${label} build stale`];
+            if (isWarningStatus(build.status)) return [`${label} build status ${build.status.toLowerCase()}`];
+
+            return [];
+        }),
     );
 }
 

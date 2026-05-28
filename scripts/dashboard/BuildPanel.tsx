@@ -11,7 +11,10 @@ import {
     getBuildProblemLabels,
     isFailure,
     isRunning,
+    isSuccess,
     isStaleWorkflow,
+    isUnknownStatus,
+    isWarningStatus,
     type BuildInfo,
 } from './buildModel.js';
 import { fetchAllBuilds } from './buildFetchers.js';
@@ -24,19 +27,32 @@ const BRANCH_WIDTH = 6;
 
 function statusColor(status: string): string {
     const s = status.toUpperCase();
-    if (['SUCCEED', 'SUCCESS', 'COMPLETED'].includes(s)) return 'green';
-    if (['FAILED', 'FAILURE', 'CANCELLED'].includes(s)) return 'red';
-    if (['PENDING', 'RUNNING', 'IN_PROGRESS', 'QUEUED'].includes(s))
-        return 'yellow';
+    if (isSuccess(s)) return 'green';
+    if (isFailure(s)) return 'red';
+    if (isRunning(s) || isWarningStatus(s)) return 'yellow';
     return 'gray';
 }
 
 function statusLabel(status: string): string {
     const s = status.toUpperCase();
-    if (['SUCCEED', 'SUCCESS', 'COMPLETED'].includes(s)) return '✓';
-    if (['FAILED', 'FAILURE', 'CANCELLED'].includes(s)) return '✗';
-    if (['PENDING', 'RUNNING', 'IN_PROGRESS', 'QUEUED'].includes(s)) return '…';
+    if (isSuccess(s)) return '✓';
+    if (isFailure(s)) return '✗';
+    if (isRunning(s)) return '…';
     return '?';
+}
+
+function buildIssueSummary(
+    failures: BuildInfo[],
+    staleWorkflows: BuildInfo[],
+    unknownBuilds: BuildInfo[],
+    warningBuilds: BuildInfo[],
+): string {
+    return [
+        failures.length > 0 ? `${failures.length} failed` : undefined,
+        staleWorkflows.length > 0 ? `${staleWorkflows.length} stale` : undefined,
+        unknownBuilds.length > 0 ? `${unknownBuilds.length} unknown` : undefined,
+        warningBuilds.length > 0 ? `${warningBuilds.length} status warning${warningBuilds.length === 1 ? '' : 's'}` : undefined,
+    ].filter((part): part is string => part !== undefined).join(', ');
 }
 
 function BuildRow({ build, indent = 4 }: { build: BuildInfo; indent?: number }) {
@@ -117,12 +133,15 @@ export function BuildPanel({
     const failures = items.filter((b) => isFailure(b.status));
     const running = items.filter((b) => isRunning(b.status));
     const staleWorkflows = items.filter((b) => isStaleWorkflow(b));
-    const hasProblems = failures.length > 0;
+    const unknownBuilds = items.filter((b) => isUnknownStatus(b.status));
+    const warningBuilds = items.filter((b) => isWarningStatus(b.status) && !isUnknownStatus(b.status));
 
     const problemLabels = useMemo(
         () => getBuildProblemLabels(data ?? []),
         [data],
     );
+    const hasProblems = problemLabels.length > 0;
+    const issueSummary = buildIssueSummary(failures, staleWorkflows, unknownBuilds, warningBuilds);
 
     useEffect(() => {
         onProblems(problemLabels);
@@ -147,11 +166,8 @@ export function BuildPanel({
                                     </Text>
                                 ))}
                             </Box>
-                            {hasProblems && <Text color="red">{failures.length} failed</Text>}
+                            {hasProblems && <Text color={failures.length > 0 ? 'red' : 'yellow'}>{issueSummary}</Text>}
                             {!hasProblems && running.length === 0 && staleWorkflows.length === 0 && <Text dimColor>OK</Text>}
-                            {staleWorkflows.length > 0 && !hasProblems && (
-                                <Text color="yellow">{staleWorkflows.map((b) => b.label).join(', ')} stale</Text>
-                            )}
                         </>
                     )}
                     {isStale && <Text color="yellow">⚠ stale</Text>}
@@ -175,18 +191,22 @@ export function BuildPanel({
                 <Text bold> BUILDS</Text>
                 {isLoading && !data ? (
                     <Text color="cyan"><Spinner type="dots" /></Text>
-                ) : !hasProblems ? (
+                ) : !hasProblems && running.length === 0 ? (
                     <>
                         {items.map((b) => (
-                            <Text key={buildKey(b)} color={statusColor(b.status)}>
+                            <Text key={buildKey(b)} color={isStaleWorkflow(b) ? 'yellow' : statusColor(b.status)}>
                                 {statusLabel(b.status)}
                             </Text>
                         ))}
                         <Text dimColor>All passing</Text>
                     </>
+                ) : running.length > 0 && !hasProblems ? (
+                    <Text color="yellow">
+                        {running.length} running
+                    </Text>
                 ) : (
-                    <Text color="red">
-                        {failures.length} failed
+                    <Text color={failures.length > 0 ? 'red' : 'yellow'}>
+                        {issueSummary}
                     </Text>
                 )}
                 {isStale && <Text color="yellow">(stale)</Text>}

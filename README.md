@@ -75,7 +75,7 @@ The watch dashboard supports the following keys:
 - `c` clear resolved incidents
 - `↑/↓` or `j/k` scroll in detail mode
 
-Build status is source-aware: AWS Amplify deployments are shown separately from GitHub Actions, and repositories with configured workflow files use those explicit workflows instead of the generic latest repository run. That keeps scheduled workflows from being counted twice in the attention banner.
+Build status is source-aware: AWS Amplify deployments are shown separately from GitHub Actions, and repositories with configured workflow files use those explicit workflows instead of the generic latest repository run. Configured workflows stay visible even before their first run, and stale or unknown workflow rows are treated as attention-worthy instead of being folded into an OK summary.
 
 ## Project Structure
 

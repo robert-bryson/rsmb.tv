@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { parseIdMap, createConfig } from '../config.js';
+import { createConfig, getProjectConfigErrors, parseGitHubRepo, parseIdMap } from '../config.js';
 
 describe('parseIdMap', () => {
     it('returns empty map for undefined', () => {
@@ -40,6 +40,40 @@ describe('parseIdMap', () => {
     it('handles values containing = (splits on first = only)', () => {
         const map = parseIdMap('key=val=ue');
         expect(map.get('key')).toBe('val=ue');
+    });
+});
+
+describe('parseGitHubRepo', () => {
+    it('parses owner/repo strings', () => {
+        expect(parseGitHubRepo(' robert-bryson/parc ')).toEqual({
+            owner: 'robert-bryson',
+            repo: 'parc',
+        });
+    });
+
+    it('rejects malformed repo strings', () => {
+        expect(parseGitHubRepo('parc')).toBeNull();
+        expect(parseGitHubRepo('robert-bryson/parc/extra')).toBeNull();
+        expect(parseGitHubRepo('robert bryson/parc')).toBeNull();
+        expect(parseGitHubRepo('robert-bryson/')).toBeNull();
+    });
+});
+
+describe('getProjectConfigErrors', () => {
+    it('reports malformed GitHub repo and workflow config', () => {
+        const errors = getProjectConfigErrors({
+            name: 'broken',
+            domain: '',
+            kind: 'github-only',
+            githubRepo: 'broken/repo/extra',
+            workflows: [{ name: '', file: '' }],
+        });
+
+        expect(errors).toEqual([
+            'githubRepo "broken/repo/extra" must use owner/repo format',
+            'workflow name must not be empty',
+            'workflow "(unnamed)" must include a file',
+        ]);
     });
 });
 
@@ -102,6 +136,41 @@ describe('createConfig', () => {
         for (const repo of config.githubRepos) {
             expect(repo).toMatch(/^[^/]+\/[^/]+$/);
         }
+    });
+
+    it('does not leak env-var project overrides between config instances', () => {
+        process.env.AMPLIFY_APP_IDS = 'route2gpx=from-env';
+        const overriddenConfig = createConfig({});
+        const overriddenRoute2gpx = overriddenConfig.projects.find((project) => project.name === 'route2gpx');
+        expect(overriddenRoute2gpx?.amplifyAppId).toBe('from-env');
+
+        delete process.env.AMPLIFY_APP_IDS;
+        const cleanConfig = createConfig({});
+        const cleanRoute2gpx = cleanConfig.projects.find((project) => project.name === 'route2gpx');
+        expect(cleanRoute2gpx?.amplifyAppId).toBeUndefined();
+    });
+
+    it('returns independent project config objects', () => {
+        const firstConfig = createConfig({});
+        const secondConfig = createConfig({});
+        const firstParc = firstConfig.projects.find((project) => project.name === 'parc');
+        const secondParc = secondConfig.projects.find((project) => project.name === 'parc');
+
+        expect(firstParc).not.toBe(secondParc);
+        expect(firstParc?.workflows?.[0]).not.toBe(secondParc?.workflows?.[0]);
+    });
+
+    it('includes the parc CI workflow in GitHub Actions monitoring', () => {
+        const config = createConfig({});
+        const parc = config.projects.find((project) => project.name === 'parc');
+
+        expect(parc).toMatchObject({
+            domain: '',
+            kind: 'github-only',
+            githubRepo: 'robert-bryson/parc',
+            workflows: [{ name: 'CI', file: 'ci.yml' }],
+        });
+        expect(config.githubRepos).toContain('robert-bryson/parc');
     });
 
     it('includes external groups', () => {
