@@ -2,6 +2,12 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { fetchWithCache, clearCache, invalidateCache } from '../features/flights/utils/fetchCache';
 import { jsonFetchResponse } from './helpers/fetch';
 
+function deferredResponse() {
+    let resolve!: (value: Response) => void;
+    const promise = new Promise<Response>((res) => { resolve = res; });
+    return { promise, resolve };
+}
+
 describe('fetchCache', () => {
     beforeEach(() => {
         clearCache();
@@ -49,6 +55,54 @@ describe('fetchCache', () => {
         expect(a).toEqual(mockData);
         expect(b).toEqual(mockData);
         expect(fetch).toHaveBeenCalledTimes(1);
+    });
+
+    it('clearCache drops in-flight requests and keeps stale responses out of the cache', async () => {
+        const staleResponse = deferredResponse();
+        const freshResponse = deferredResponse();
+        globalThis.fetch = vi
+            .fn()
+            .mockReturnValueOnce(staleResponse.promise)
+            .mockReturnValueOnce(freshResponse.promise);
+
+        const staleRequest = fetchWithCache<{ value: string }>('/api/reset');
+
+        clearCache();
+        const freshRequest = fetchWithCache<{ value: string }>('/api/reset');
+
+        await Promise.resolve();
+
+        expect(fetch).toHaveBeenCalledTimes(2);
+
+        freshResponse.resolve(jsonFetchResponse({ value: 'fresh' }));
+        await expect(freshRequest).resolves.toEqual({ value: 'fresh' });
+
+        staleResponse.resolve(jsonFetchResponse({ value: 'stale' }));
+        await expect(staleRequest).resolves.toEqual({ value: 'stale' });
+
+        await expect(fetchWithCache<{ value: string }>('/api/reset')).resolves.toEqual({ value: 'fresh' });
+        expect(fetch).toHaveBeenCalledTimes(2);
+    });
+
+    it('does not let an older in-flight response overwrite a force-refreshed cache entry', async () => {
+        const staleResponse = deferredResponse();
+        const freshResponse = deferredResponse();
+        globalThis.fetch = vi
+            .fn()
+            .mockReturnValueOnce(staleResponse.promise)
+            .mockReturnValueOnce(freshResponse.promise);
+
+        const staleRequest = fetchWithCache<{ value: string }>('/api/refresh-race');
+        const freshRequest = fetchWithCache<{ value: string }>('/api/refresh-race', { forceRefresh: true });
+
+        freshResponse.resolve(jsonFetchResponse({ value: 'fresh' }));
+        await expect(freshRequest).resolves.toEqual({ value: 'fresh' });
+
+        staleResponse.resolve(jsonFetchResponse({ value: 'stale' }));
+        await expect(staleRequest).resolves.toEqual({ value: 'stale' });
+
+        await expect(fetchWithCache<{ value: string }>('/api/refresh-race')).resolves.toEqual({ value: 'fresh' });
+        expect(fetch).toHaveBeenCalledTimes(2);
     });
 
     it('throws on non-ok response', async () => {

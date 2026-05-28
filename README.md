@@ -105,6 +105,8 @@ Build status is source-aware: AWS Amplify deployments are shown separately from 
 
 `npm run test:e2e` starts Vite directly on `127.0.0.1:4174` with `--strictPort`, then runs Playwright with its internal web server disabled. Set `PLAYWRIGHT_PORT` when that port is already in use. CI installs Chromium before running the browser smoke tests.
 
+Unit tests that exercise `fetchWithCache` or hooks built on it should call `clearCache()` in setup. That helper resets cached responses and detached in-flight requests, so stale async work from one test cannot satisfy or overwrite a later test.
+
 ## Generated Metadata
 
 `src/content/posts.json`, `src/content/blog/*.mdx`, `public/rss.xml`, `public/sitemap.xml`, and `public/og/blog/*` are generated artifacts. They are ignored by git and rebuilt from Google Sheets/Docs during local dev and production builds.

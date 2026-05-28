@@ -46,7 +46,7 @@ describe('useClimateTrends', () => {
 
         rerender({ enabled: false });
         expect(result.current.loading).toBe(false);
-    expect(result.current.error).toBeNull();
+        expect(result.current.error).toBeNull();
 
         rerender({ enabled: true });
 

@@ -11,6 +11,7 @@ interface CacheEntry<T> {
 
 const cache = new Map<string, CacheEntry<unknown>>();
 const pendingRequests = new Map<string, Promise<unknown>>();
+const activeRequestTokens = new Map<string, symbol>();
 
 // Default cache TTL: 5 minutes
 const DEFAULT_TTL_MS = 5 * 60 * 1000;
@@ -50,8 +51,10 @@ export async function fetchWithCache<T>(
         return pendingRequests.get(url) as Promise<T>;
     }
 
-    // Create the fetch promise and track it
-    const fetchPromise = (async () => {
+    const requestToken = Symbol(url);
+    activeRequestTokens.set(url, requestToken);
+
+    const fetchPromise = Promise.resolve().then(async () => {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), timeout);
         try {
@@ -66,19 +69,22 @@ export async function fetchWithCache<T>(
 
             const data = await response.json();
 
-            // Store in cache
-            cache.set(url, {
-                data,
-                timestamp: Date.now(),
-            });
+            if (activeRequestTokens.get(url) === requestToken) {
+                cache.set(url, {
+                    data,
+                    timestamp: Date.now(),
+                });
+            }
 
             return data as T;
         } finally {
             clearTimeout(timeoutId);
-            // Remove from pending regardless of success/failure
-            pendingRequests.delete(url);
+            if (activeRequestTokens.get(url) === requestToken) {
+                pendingRequests.delete(url);
+                activeRequestTokens.delete(url);
+            }
         }
-    })();
+    });
 
     pendingRequests.set(url, fetchPromise);
     return fetchPromise;
@@ -89,6 +95,8 @@ export async function fetchWithCache<T>(
  */
 export function clearCache(): void {
     cache.clear();
+    pendingRequests.clear();
+    activeRequestTokens.clear();
 }
 
 /**
@@ -96,6 +104,8 @@ export function clearCache(): void {
  */
 export function invalidateCache(url: string): void {
     cache.delete(url);
+    pendingRequests.delete(url);
+    activeRequestTokens.delete(url);
 }
 
 /**

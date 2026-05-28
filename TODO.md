@@ -4,16 +4,16 @@ Open work is grouped by area. Completed work stays below as a lightweight change
 
 ## Open
 
-### Projects
+### Project media
 
-- [ ] Aborg: add screenshots to project page
-- [ ] Flights map: add screenshots to flights map project page
+- [ ] Aborg project page: add screenshots
+- [ ] Flights map project page: add screenshots
 
-### Content
+### Content publishing
 
 - [ ] Publish additional Google-backed blog posts
 
-### Testing
+### Testing coverage
 
 - [ ] Add test coverage for ScrollToTop component
 - [ ] Add browser-level test coverage for FlightsMap integration (keyboard shortcuts + camera URL sync)
@@ -163,3 +163,4 @@ Open work is grouped by area. Completed work stays below as a lightweight change
 - [x] Add test coverage for useTornadoFilters (URL params, setters, selectedTrackId)
 - [x] Add test coverage for Layout component
 - [x] Add test coverage for active flight filter chips, globe rotation controls, generated airport-coordinate warnings, and tooltip HTML escaping
+- [x] Reset fetch-cache in-flight state between hook tests and cover force-refresh races
