@@ -7,7 +7,6 @@ interface LayoutProps {
 }
 
 const navLinks = [
-  { to: '/', label: 'Home' },
   { to: '/blog', label: 'Blog' },
   { to: '/projects', label: 'Projects' },
   { to: '/about', label: 'About' },

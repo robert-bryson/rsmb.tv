@@ -43,7 +43,7 @@ export function Home() {
             Projects
           </h2>
           <Link to="/projects" className="text-sm text-zinc-500 hover:text-violet-400">
-            View all →
+            View all projects →
           </Link>
         </div>
         <ul className="space-y-4">
@@ -100,7 +100,7 @@ export function Home() {
               Writing
             </h2>
             <Link to="/blog" className="text-sm text-zinc-500 hover:text-violet-400">
-              View all →
+              View all writing →
             </Link>
           </div>
           <ul className="space-y-5">
