@@ -103,7 +103,7 @@ export function App({ config }: { config: DashboardConfig }) {
             {/* Header — always visible */}
             <Box flexShrink={0} justifyContent="space-between">
                 <Text bold color="cyan">
-                    Watch Dashboard{mode === 'detail' ? ' - Detail View' : ''}
+                    Status Dashboard{mode === 'detail' ? ' - Detail View' : ''}
                 </Text>
                 {mode !== 'detail' && hasProblems && <Text bold color="red">ATTENTION</Text>}
                 {mode !== 'detail' && !hasProblems && <Text color="green">All OK</Text>}

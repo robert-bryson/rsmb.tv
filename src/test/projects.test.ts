@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { projects, featuredProjects } from '../content/projects';
+import { projects, featuredProjects, formatProjectDate } from '../content/projects';
+import type { Project } from '../content/projects';
 
 const committedWebpImages = import.meta.glob('/public/images/**/*.webp', {
     eager: true,
@@ -70,5 +71,70 @@ describe('projects data', () => {
 
     it('uses a composed Anki Artisan preview instead of a portrait screenshot', () => {
         expect(projects.find(p => p.slug === 'anki-artisan')?.previewImage).toBe('/images/anki-artisan/anki-artisan-preview.webp');
+    });
+});
+
+function makeProject(overrides: Partial<Project> = {}): Project {
+    return {
+        slug: 'test',
+        title: 'Test',
+        description: 'desc',
+        tech: ['TS'],
+        applicationCategory: 'UtilitiesApplication',
+        year: 2024,
+        ...overrides,
+    };
+}
+
+describe('formatProjectDate', () => {
+    it('formats a full ISO lastUpdated date as "Mon YYYY"', () => {
+        const p = makeProject({ lastUpdated: '2026-05-22' });
+        expect(formatProjectDate(p)).toBe('May 2026');
+    });
+
+    it('formats a year-month lastUpdated date as "Mon YYYY"', () => {
+        const p = makeProject({ lastUpdated: '2026-01' });
+        expect(formatProjectDate(p)).toBe('Jan 2026');
+    });
+
+    it('falls back to year string when lastUpdated is absent', () => {
+        const p = makeProject({ year: 2025 });
+        expect(formatProjectDate(p)).toBe('2025');
+    });
+
+    it('falls back to year string when lastUpdated is year-only', () => {
+        const p = makeProject({ lastUpdated: '2026' });
+        expect(formatProjectDate(p)).toBe('2026');
+    });
+
+    it('each project with lastUpdated produces a non-empty formatted date', () => {
+        for (const p of projects) {
+            if (p.lastUpdated) {
+                expect(formatProjectDate(p).length).toBeGreaterThan(0);
+            }
+        }
+    });
+});
+
+describe('changelog data', () => {
+    it('changelog entries have non-empty date and at least one note', () => {
+        for (const p of projects) {
+            if (!p.changelog) continue;
+            for (const entry of p.changelog) {
+                expect(typeof entry.date).toBe('string');
+                expect(entry.date.length).toBeGreaterThan(0);
+                expect(Array.isArray(entry.notes)).toBe(true);
+                expect(entry.notes.length).toBeGreaterThan(0);
+            }
+        }
+    });
+
+    it('changelog dates are in descending order per project', () => {
+        for (const p of projects) {
+            if (!p.changelog || p.changelog.length < 2) continue;
+            const dates = p.changelog.map(e => e.date);
+            const sorted = [...dates].sort((a, b) => b.localeCompare(a));
+            expect(dates).toEqual(sorted);
+        }
     });
 });

@@ -205,3 +205,7 @@ public/data/tornadoes/track-points/*.geojson
 
 ## Issue screenshots in TODO.md
 Screenshot*.png
+
+## Unoptimized draft screenshots (use WebP for committed assets)
+public/images/**/image.png
+public/images/**/image[0-9]*.png

@@ -6,8 +6,13 @@ import remarkFrontmatter from 'remark-frontmatter'
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
 import tailwindcss from '@tailwindcss/vite'
 
+const buildDate = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
 export default defineConfig({
   base: '/',
+  define: {
+    __BUILD_DATE__: JSON.stringify(buildDate),
+  },
   plugins: [
     mdx({
       remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],

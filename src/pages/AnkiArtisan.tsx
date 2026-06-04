@@ -2,6 +2,8 @@ import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+import { projects, formatProjectDate } from '../content/projects';
+import { ProjectChangelog } from '../components/ProjectChangelog';
 
 const screenshots: ProjectScreenshot[] = [
     {
@@ -49,12 +51,14 @@ export default function AnkiArtisan() {
         author: AUTHOR_PERSON,
     });
 
+    const project = projects.find(p => p.slug === 'anki-artisan')!;
+
     return (
         <div className="max-w-2xl">
             <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
                 Anki Artisan
             </h1>
-            <p className="text-zinc-400 mb-6 text-sm">2026 · Python CLI</p>
+            <p className="text-zinc-400 mb-6 text-sm">{formatProjectDate(project)} · Python CLI</p>
 
             <p className="text-zinc-300 leading-relaxed mb-6">
                 A CLI tool that generates{' '}
@@ -158,6 +162,7 @@ anki-artisan ebird add-region "Missouri"`}</code>
                     ),
                 )}
             </div>
+            <ProjectChangelog entries={project.changelog ?? []} />
         </div>
     );
 }

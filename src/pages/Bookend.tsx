@@ -2,6 +2,8 @@ import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+import { projects, formatProjectDate } from '../content/projects';
+import { ProjectChangelog } from '../components/ProjectChangelog';
 
 const BOOKEND_URL = 'https://bookend.rsmb.tv';
 
@@ -51,13 +53,15 @@ export default function Bookend() {
         author: AUTHOR_PERSON,
     });
 
+    const project = projects.find(p => p.slug === 'bookend')!;
+
     return (
         <div className="max-w-2xl">
             <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
                 Bookend
             </h1>
             <p className="text-zinc-400 mb-6 text-sm">
-                2026 · Next.js + PostgreSQL
+                {formatProjectDate(project)} · Next.js + PostgreSQL
             </p>
 
             <p className="text-zinc-300 leading-relaxed mb-6">
@@ -145,6 +149,7 @@ export default function Bookend() {
                     </span>
                 ))}
             </div>
+            <ProjectChangelog entries={project.changelog ?? []} />
         </div>
     );
 }

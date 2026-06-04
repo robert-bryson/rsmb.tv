@@ -119,7 +119,7 @@ export function Layout({ children }: LayoutProps) {
       {/* Footer */}
       <footer className="border-t border-zinc-800/50">
         <div className="max-w-2xl mx-auto px-6 py-6 flex justify-between items-center text-sm text-zinc-400">
-          <span>© {new Date().getFullYear()}</span>
+          <span>© {new Date().getFullYear()} · {__BUILD_DATE__}</span>
           <div className="flex gap-4">
             <a
               href="https://github.com/robert-bryson"

@@ -1,6 +1,8 @@
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+import { projects, formatProjectDate } from '../content/projects';
+import { ProjectChangelog } from '../components/ProjectChangelog';
 
 const screenshot = {
     src: '/images/parc/update-live-progress.webp',
@@ -33,12 +35,14 @@ export default function Parc() {
         author: AUTHOR_PERSON,
     });
 
+    const project = projects.find(p => p.slug === 'parc')!;
+
     return (
         <div className="max-w-2xl">
             <h1 className="mb-2 text-2xl font-semibold text-zinc-100">
                 parc
             </h1>
-            <p className="mb-6 text-sm text-zinc-400">2026 · Python CLI</p>
+            <p className="mb-6 text-sm text-zinc-400">{formatProjectDate(project)} · Python CLI</p>
 
             <p className="mb-6 leading-relaxed text-zinc-300">
                 A config-driven command line app for building a durable podcast
@@ -129,6 +133,7 @@ parc analyze`}</code>
                     </span>
                 ))}
             </div>
+            <ProjectChangelog entries={project.changelog ?? []} />
         </div>
     );
 }

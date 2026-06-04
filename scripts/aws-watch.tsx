@@ -52,7 +52,7 @@ function parseArgs(args: string[]) {
             flags.interval = args[++i];
         } else if (arg === '--help' || arg === '-h') {
             console.log(`
-rsmb.tv Watch Dashboard — Live terminal monitoring
+rsmb.tv Status Dashboard — Live terminal monitoring
 
 Usage: tsx scripts/aws-watch.tsx [options]
 

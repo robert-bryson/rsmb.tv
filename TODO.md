@@ -54,6 +54,9 @@ Open work is grouped by area. Completed work stays below as a lightweight change
 - [x] Move generated temperature data to S3/CDN canonical storage; keep local JSON ignored, fix sync actions, and clean tracked generated data
 - [x] does it make sense to have tornado data in the repo or s3? → S3, same pattern as temperatures: serve via data.rsmb.tv/tornadoes, gitignore generated files, workflow uploads instead of commits
 - [x] create script to be run locally to backfill as much data as possible for all projects, having local & s3 storage options
+- [x] Add project changelog data and per-page ProjectChangelog component; surface `lastUpdated` dates in project page headers
+- [x] Add Status Dashboard project page with screenshots, usage docs, and OG image
+- [x] Inject `__BUILD_DATE__` at build time and display in footer
 
 ### Completed projects
 
@@ -92,6 +95,8 @@ Open work is grouped by area. Completed work stays below as a lightweight change
 - [x] Align build number links and timestamps in calm-mode running build rows
 - [x] Treat stale and unknown configured workflow rows as build dashboard problems
 - [x] Keep dashboard project config resolution immutable across env-var overrides
+- [x] Harden GitHub build monitoring; surface API errors instead of generic failures
+- [x] Add project page with screenshots and usage docs
 
 #### Through Routes completed
 

@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+import { projects, formatProjectDate } from '../content/projects';
+import { ProjectChangelog } from '../components/ProjectChangelog';
 
 export default function TemperatureRecordsAbout() {
     const description =
@@ -24,13 +26,15 @@ export default function TemperatureRecordsAbout() {
         author: AUTHOR_PERSON,
     });
 
+    const project = projects.find(p => p.slug === 'temperature-records')!;
+
     return (
         <div className="max-w-2xl">
             <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
                 Record Highs
             </h1>
             <p className="text-zinc-400 mb-6 text-sm">
-                2025 · React + MapLibre GL
+                {formatProjectDate(project)} · React + MapLibre GL
             </p>
 
             <p className="text-zinc-300 leading-relaxed mb-6">
@@ -154,6 +158,7 @@ export default function TemperatureRecordsAbout() {
                     ),
                 )}
             </div>
+            <ProjectChangelog entries={project.changelog ?? []} />
         </div>
     );
 }

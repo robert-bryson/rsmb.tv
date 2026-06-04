@@ -9,6 +9,7 @@ import TornadoTracksAbout from '../pages/TornadoTracksAbout';
 import Route2Gpx from '../pages/Route2Gpx';
 import Aborg from '../pages/Aborg';
 import Parc from '../pages/Parc';
+import StatusDashboard from '../pages/StatusDashboard';
 import { renderWithRouter } from './helpers/router';
 
 describe('ThroughRoutes page', () => {
@@ -106,5 +107,38 @@ describe('Parc page', () => {
         expect(screen.getByRole('link', { name: /Source on GitHub/i })).toHaveAttribute('href', 'https://github.com/robert-bryson/parc');
         expect(screen.getByRole('img', { name: /parc update live progress output/i })).toHaveAttribute('src', '/images/parc/update-live-progress.webp');
         expect(screen.getByText(/parc update/i)).toBeInTheDocument();
+    });
+});
+
+describe('StatusDashboard page', () => {
+    it('renders heading, usage pre block, and screenshots', () => {
+        renderWithRouter(<StatusDashboard />, { route: '/projects/status-dashboard' });
+        expect(screen.getByRole('heading', { level: 1, name: /Status Dashboard/i })).toBeInTheDocument();
+        expect(screen.getByText(/tsx scripts\/aws-watch\.tsx/i)).toBeInTheDocument();
+        expect(screen.getByRole('img', { name: /Status Dashboard calm view/i })).toHaveAttribute(
+            'src',
+            '/images/status-dashboard/status-dashboard-calm.webp',
+        );
+        expect(screen.getByRole('img', { name: /Status Dashboard detail view showing build panel/i })).toHaveAttribute(
+            'src',
+            '/images/status-dashboard/status-dashboard-builds.webp',
+        );
+        expect(screen.getByRole('img', { name: /Status Dashboard detail view showing AWS resource panel/i })).toHaveAttribute(
+            'src',
+            '/images/status-dashboard/status-dashboard-resources.webp',
+        );
+    });
+
+    it('renders all panel names', () => {
+        renderWithRouter(<StatusDashboard />, { route: '/projects/status-dashboard' });
+        for (const panel of ['Health', 'Alarms', 'Builds', 'Costs', 'Resources', 'External', 'GitHub', 'Incidents', 'Events']) {
+            expect(screen.getByText(panel)).toBeInTheDocument();
+        }
+    });
+
+    it('renders changelog section', () => {
+        renderWithRouter(<StatusDashboard />, { route: '/projects/status-dashboard' });
+        expect(screen.getByRole('heading', { name: /Changelog/i })).toBeInTheDocument();
+        expect(screen.getByText(/Added project page/i)).toBeInTheDocument();
     });
 });

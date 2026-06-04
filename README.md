@@ -69,9 +69,9 @@ npm run dev
 | `npm run test:e2e` | Build flight data, start Vite, and run Playwright browser smoke tests |
 | `npm run audit` | Run `npm audit --audit-level=moderate` |
 
-### Watch Dashboard Controls
+### Status Dashboard Controls
 
-The watch dashboard supports the following keys:
+The status dashboard supports the following keys:
 
 - `q` quit
 - `h` toggle compact/detail view

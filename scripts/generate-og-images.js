@@ -30,6 +30,7 @@ export const DEFAULT_PAGES = [
     { slug: 'tornado-tracks', title: 'Tornado Tracks', subtitle: 'Historical tornado track map with timeline playback and EF-scale filters' },
     { slug: 'climate-trends', title: 'Climate Trends', subtitle: 'Are temperature records being broken more frequently?' },
     { slug: 'route2gpx', title: 'route2gpx', subtitle: 'Convert Google Routes into GPX files for GPS devices' },
+    { slug: 'status-dashboard', title: 'Status Dashboard', subtitle: 'Live terminal monitoring for AWS infrastructure, GitHub CI, and site health' },
 ];
 
 export function escapeXml(str) {
