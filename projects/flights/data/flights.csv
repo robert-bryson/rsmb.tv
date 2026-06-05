@@ -2,9 +2,11 @@ date,airline,flightNumber,origin,destination,notes
 6/1/2006,,,LAX,LHR,"Family Ireland trip, not sure on detail"
 6/15/2006,,,LHR,DUB,"Family Ireland trip, not sure on detail"
 6/30/2006,,,DUB,LAX,"Family Ireland trip, not sure on detail"
-6/1/2007,,,LAX,CDG,"High school europe trip, not sure on detail"
-6/15/2007,,,VIE,FRA,"High school europe trip, not sure on detail"
-6/15/2007,,,FRA,LAX,"High school europe trip, not sure on detail"
+4/1/2007,United,UA 900,SAN,FRA,High school europe trip
+4/2/2007,Lufthansa,4218,FRA,CDG,High school europe trip
+4/10/2007,Swiss,1585,VIE,ZRH,High school europe trip
+4/10/2007,United,937,ZRH,IAD,High school europe trip
+4/10/2007,United,921,IAD,SAN,High school europe trip
 6/15/2008,Continental Airlines,,IAH,SJO,
 6/15/2008,Continental Airlines,,LAX,IAH,
 7/12/2008,Continental Airlines,,IAH,LAX,
