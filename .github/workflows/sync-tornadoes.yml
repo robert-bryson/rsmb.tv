@@ -34,7 +34,7 @@ jobs:
           cache: 'npm'
 
       - name: Cache NOAA StormEvents CSV downloads
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .cache/tornado-tracks
           # Historical CSV filenames are stable once finalized. Bust cache
