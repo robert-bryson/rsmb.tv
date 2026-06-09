@@ -26,6 +26,9 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
+      - name: Install dependencies
+        run: npm ci
+
       - name: Sync flights from Google Sheets
         id: sync
         env:
@@ -33,11 +36,19 @@ jobs:
           GOOGLE_SHEET_NAME: ${{ secrets.GOOGLE_SHEET_NAME }}
         run: node scripts/sync-flights.js
 
+      - name: Build flight GeoJSON
+        if: steps.sync.outputs.changed == 'true'
+        run: npm run build-flights
+
       - name: Commit and push changes
         if: steps.sync.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add projects/flights/data/flights.csv
+          git add public/data/flights/flights.geojson
+          git add public/data/flights/visitedAirports.geojson
+          git add public/data/flights/allAirports.geojson
+          git add public/data/flights/usStates.geojson
           git commit -m "chore: sync flight data from Google Sheets"
           git push
