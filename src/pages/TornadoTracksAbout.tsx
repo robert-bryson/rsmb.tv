@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
-import { projects, formatProjectDate } from '../content/projects';
+import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
 
 export default function TornadoTracksAbout() {
@@ -31,7 +31,7 @@ export default function TornadoTracksAbout() {
     return (
         <div className="max-w-2xl">
             <h1 className="mb-2 text-2xl font-semibold text-zinc-100">Tornado Tracks</h1>
-            <p className="mb-6 text-sm text-zinc-400">{formatProjectDate(project)} · React + MapLibre GL</p>
+            <p className="mb-6 text-sm text-zinc-400">React + MapLibre GL</p>
 
             <p className="mb-6 leading-relaxed text-zinc-300">
                 A time-first map for exploring historical United States tornado

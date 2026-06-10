@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
-import { projects, formatProjectDate } from '../content/projects';
+import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
 
 export default function FlightsAbout() {
@@ -34,7 +34,7 @@ export default function FlightsAbout() {
                 Flights
             </h1>
             <p className="text-zinc-400 mb-6 text-sm">
-                {formatProjectDate(project)} · React + Three.js
+                React + Three.js
             </p>
 
             <p className="text-zinc-300 leading-relaxed mb-6">

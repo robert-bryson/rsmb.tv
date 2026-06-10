@@ -1,7 +1,7 @@
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
-import { projects, formatProjectDate } from '../content/projects';
+import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
 
 export default function Aborg() {
@@ -32,7 +32,7 @@ export default function Aborg() {
             <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
                 aborg
             </h1>
-            <p className="text-zinc-400 mb-6 text-sm">{formatProjectDate(project)} · Python CLI</p>
+            <p className="text-zinc-400 mb-6 text-sm">Python CLI</p>
 
             <p className="text-zinc-300 leading-relaxed mb-6">
                 A CLI tool to scan, organize, and manage audiobook file

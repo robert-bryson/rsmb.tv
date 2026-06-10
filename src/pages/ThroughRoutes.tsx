@@ -2,7 +2,7 @@ import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
-import { projects, formatProjectDate } from '../content/projects';
+import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
 
 const THROUGH_ROUTES_URL = 'https://through-routes.rsmb.tv/';
@@ -61,7 +61,7 @@ export default function ThroughRoutes() {
                 Through Routes
             </h1>
             <p className="text-zinc-400 mb-6 text-sm">
-                {formatProjectDate(project)} · Python + TypeScript
+                Python + TypeScript
             </p>
 
             <p className="text-zinc-300 leading-relaxed mb-6">

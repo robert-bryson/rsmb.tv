@@ -2,7 +2,7 @@ import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
-import { projects, formatProjectDate } from '../content/projects';
+import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
 
 const screenshots: ProjectScreenshot[] = [
@@ -59,7 +59,7 @@ export default function StatusDashboard() {
                 Status Dashboard
             </h1>
             <p className="mb-6 text-sm text-zinc-400">
-                {formatProjectDate(project)} · TypeScript + Ink
+                TypeScript + Ink
             </p>
 
             <p className="mb-6 leading-relaxed text-zinc-300">

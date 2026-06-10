@@ -1,7 +1,7 @@
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
-import { projects, formatProjectDate } from '../content/projects';
+import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
 
 const screenshot = {
@@ -42,7 +42,7 @@ export default function Parc() {
             <h1 className="mb-2 text-2xl font-semibold text-zinc-100">
                 parc
             </h1>
-            <p className="mb-6 text-sm text-zinc-400">{formatProjectDate(project)} · Python CLI</p>
+            <p className="mb-6 text-sm text-zinc-400">Python CLI</p>
 
             <p className="mb-6 leading-relaxed text-zinc-300">
                 A config-driven command line app for building a durable podcast

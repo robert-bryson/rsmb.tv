@@ -1,7 +1,7 @@
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
-import { projects, formatProjectDate } from '../content/projects';
+import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
 
 const ROUTE2GPX_URL = 'https://route2gpx.rsmb.tv';
@@ -35,7 +35,7 @@ export default function Route2Gpx() {
                 route2gpx
             </h1>
             <p className="text-zinc-400 mb-6 text-sm">
-                {formatProjectDate(project)} · JavaScript + Leaflet
+                JavaScript + Leaflet
             </p>
 
             <p className="text-zinc-300 leading-relaxed mb-6">
