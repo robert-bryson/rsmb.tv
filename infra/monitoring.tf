@@ -119,12 +119,12 @@ resource "aws_cloudwatch_metric_alarm" "cloudfront_5xx" {
 
 resource "aws_route53_health_check" "website" {
   fqdn              = local.www_domain
-  port               = 443
-  type               = "HTTPS"
-  resource_path      = "/"
-  failure_threshold  = 3
-  request_interval   = 30
-  measure_latency    = true
+  port              = 443
+  type              = "HTTPS"
+  resource_path     = "/"
+  failure_threshold = 3
+  request_interval  = 30
+  measure_latency   = true
 
   tags = merge(local.common_tags, {
     Name = "rsmbtv-website-health"

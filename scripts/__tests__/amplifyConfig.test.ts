@@ -42,7 +42,7 @@ describe('amplify.yml', () => {
         const nodeVersion = readRepoFile('.nvmrc').trim();
         const preBuildCommands = getPhaseCommands(readRepoFile('amplify.yml'), 'preBuild');
 
-        expect(nodeVersion).toMatch(/^22\.\d+\.\d+$/);
+        expect(nodeVersion).toMatch(/^24\.\d+\.\d+$/);
         expect(preBuildCommands).toEqual([
             'nvm install',
             'npm ci --cache .npm --prefer-offline',

@@ -338,7 +338,7 @@ resource "aws_cloudwatch_dashboard" "main" {
         width  = 24
         height = 3
         properties = {
-          title  = "Alarm Status"
+          title = "Alarm Status"
           alarms = [
             aws_cloudwatch_metric_alarm.cloudfront_5xx.arn,
             aws_cloudwatch_metric_alarm.website_health.arn

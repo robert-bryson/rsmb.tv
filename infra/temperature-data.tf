@@ -119,8 +119,8 @@ resource "aws_cloudfront_distribution" "temperature_data" {
     }
 
     min_ttl     = 0
-    default_ttl = 3600   # 1 hour
-    max_ttl     = 86400  # 1 day
+    default_ttl = 3600  # 1 hour
+    max_ttl     = 86400 # 1 day
   }
 
   # Daily files are immutable — cache aggressively
