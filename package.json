@@ -44,7 +44,7 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-globe.gl": "^2.38.0",
-    "react-router-dom": "^7.17.0"
+    "react-router-dom": "^7.18.0"
   },
   "devDependencies": {
     "@aws-sdk/client-amplify": "^3.1069.0",
