@@ -25,7 +25,7 @@ jobs:
       TORNADO_DATA_CDN_ID: ${{ secrets.TEMP_DATA_CLOUDFRONT_ID }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
