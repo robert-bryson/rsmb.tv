@@ -25,7 +25,7 @@ jobs:
       TORNADO_DATA_CDN_ID: ${{ secrets.TEMP_DATA_CLOUDFRONT_ID }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -34,7 +34,7 @@ jobs:
           cache: 'npm'
 
       - name: Cache NOAA StormEvents CSV downloads
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: .cache/tornado-tracks
           # Historical CSV filenames are stable once finalized. Bust cache
