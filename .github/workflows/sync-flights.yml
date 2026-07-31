@@ -46,9 +46,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add projects/flights/data/flights.csv
-          git add public/data/flights/flights.geojson
-          git add public/data/flights/visitedAirports.geojson
-          git add public/data/flights/allAirports.geojson
-          git add public/data/flights/usStates.geojson
+          git add -f public/data/flights/flights.geojson
+          git add -f public/data/flights/visitedAirports.geojson
+          git add -f public/data/flights/allAirports.geojson
+          git add -f public/data/flights/usStates.geojson
           git commit -m "chore: sync flight data from Google Sheets"
           git push
