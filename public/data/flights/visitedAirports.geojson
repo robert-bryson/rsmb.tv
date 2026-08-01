@@ -1,0 +1,3775 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "LAX",
+        "municipality": "Los Angeles",
+        "region": "US-CA",
+        "regionName": "California",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Los Angeles International Airport",
+        "elevationFt": 125,
+        "elevationM": 38,
+        "visitDates": [
+          "6/1/2006",
+          "6/30/2006",
+          "6/15/2008",
+          "7/12/2008",
+          "7/19/2009",
+          "6/9/2010",
+          "6/21/2010",
+          "11/26/2010",
+          "7/22/2011",
+          "7/25/2011",
+          "1/29/2017",
+          "5/7/2017",
+          "2/25/2019",
+          "8/20/2020",
+          "8/22/2020",
+          "10/24/2021",
+          "2/18/2022",
+          "2/21/2022"
+        ],
+        "visitCount": 22,
+        "arrivalCount": 11,
+        "departureCount": 11
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -118.407997,
+          33.942501
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "LHR",
+        "municipality": "London",
+        "region": "GB-ENG",
+        "regionName": "England",
+        "country": "GB",
+        "countryName": "United Kingdom",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "London Heathrow Airport",
+        "elevationFt": 83,
+        "elevationM": 25,
+        "visitDates": [
+          "6/1/2006",
+          "6/15/2006",
+          "3/11/2022",
+          "3/12/2022",
+          "12/14/2025",
+          "12/15/2025"
+        ],
+        "visitCount": 6,
+        "arrivalCount": 3,
+        "departureCount": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.461941,
+          51.4706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "DUB",
+        "municipality": "Dublin",
+        "region": "IE-D",
+        "regionName": "Baile Átha Cliath",
+        "country": "IE",
+        "countryName": "Ireland",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Dublin Airport",
+        "elevationFt": 242,
+        "elevationM": 74,
+        "visitDates": [
+          "6/15/2006",
+          "6/30/2006"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.262121,
+          53.428713
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "SAN",
+        "municipality": "San Diego",
+        "region": "US-CA",
+        "regionName": "California",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "San Diego International Airport",
+        "elevationFt": 17,
+        "elevationM": 5,
+        "visitDates": [
+          "4/1/2007",
+          "4/10/2007",
+          "3/20/2009",
+          "3/27/2009",
+          "3/16/2010",
+          "4/15/2010",
+          "4/18/2010",
+          "7/31/2010",
+          "8/25/2010",
+          "6/11/2011",
+          "10/10/2011",
+          "11/22/2011",
+          "11/27/2011",
+          "1/3/2012",
+          "3/27/2012",
+          "9/13/2012",
+          "9/20/2012",
+          "12/18/2012",
+          "12/30/2012",
+          "5/9/2013",
+          "5/12/2013",
+          "4/23/2014",
+          "5/3/2014",
+          "8/25/2015",
+          "1/26/2017",
+          "1/29/2017",
+          "5/4/2017",
+          "5/7/2017",
+          "6/29/2017",
+          "7/4/2017",
+          "12/4/2017",
+          "12/7/2017",
+          "12/10/2017",
+          "1/18/2018",
+          "1/21/2018",
+          "9/28/2018",
+          "9/30/2018",
+          "11/14/2018",
+          "11/22/2018",
+          "11/26/2018",
+          "2/25/2019",
+          "11/28/2019",
+          "12/3/2019",
+          "2/20/2020",
+          "2/25/2020",
+          "4/22/2020",
+          "4/26/2020",
+          "9/3/2021",
+          "9/12/2021",
+          "5/6/2022",
+          "9/27/2022",
+          "10/2/2022",
+          "10/13/2022",
+          "10/17/2022",
+          "2/9/2023",
+          "2/15/2023",
+          "7/8/2023",
+          "7/16/2023",
+          "1/25/2024",
+          "2/14/2024",
+          "7/13/2024",
+          "9/6/2024",
+          "9/8/2024",
+          "10/9/2024",
+          "1/29/2025",
+          "2/4/2025",
+          "5/5/2025",
+          "7/23/2025",
+          "7/29/2025",
+          "12/14/2025"
+        ],
+        "visitCount": 70,
+        "arrivalCount": 33,
+        "departureCount": 37
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -117.1900024,
+          32.73360062
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "FRA",
+        "municipality": "Frankfurt am Main",
+        "region": "DE-HE",
+        "regionName": "Hessen",
+        "country": "DE",
+        "countryName": "Germany",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Frankfurt Airport",
+        "elevationFt": 364,
+        "elevationM": 111,
+        "visitDates": [
+          "4/1/2007",
+          "4/2/2007",
+          "8/20/2018",
+          "3/28/2022"
+        ],
+        "visitCount": 4,
+        "arrivalCount": 2,
+        "departureCount": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.561096,
+          50.030241
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "CDG",
+        "municipality": "Paris (Roissy-en-France, Val-d'Oise)",
+        "region": "FR-IDF",
+        "regionName": "FR-IDF",
+        "country": "FR",
+        "countryName": "France",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Charles de Gaulle International Airport",
+        "elevationFt": 392,
+        "elevationM": 119,
+        "visitDates": [
+          "4/2/2007",
+          "12/1/2015",
+          "10/21/2022",
+          "10/22/2022",
+          "12/3/2022"
+        ],
+        "visitCount": 6,
+        "arrivalCount": 3,
+        "departureCount": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.55,
+          49.012798
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "VIE",
+        "municipality": "Vienna",
+        "region": "AT-9",
+        "regionName": "Wien",
+        "country": "AT",
+        "countryName": "Austria",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Vienna International Airport",
+        "elevationFt": 600,
+        "elevationM": 183,
+        "visitDates": [
+          "4/10/2007"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 0,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.5697,
+          48.110298
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "ZRH",
+        "municipality": "Zurich",
+        "region": "CH-ZH",
+        "regionName": "Zürich",
+        "country": "CH",
+        "countryName": "Switzerland",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Zürich Airport",
+        "elevationFt": 1417,
+        "elevationM": 432,
+        "visitDates": [
+          "4/10/2007",
+          "7/19/2009",
+          "8/3/2009",
+          "8/7/2009"
+        ],
+        "visitCount": 5,
+        "arrivalCount": 3,
+        "departureCount": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.548056,
+          47.458056
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "IAD",
+        "municipality": "Dulles",
+        "region": "US-VA",
+        "regionName": "Virginia",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Washington Dulles International Airport",
+        "elevationFt": 312,
+        "elevationM": 95,
+        "visitDates": [
+          "4/10/2007",
+          "4/25/2023",
+          "4/28/2023"
+        ],
+        "visitCount": 4,
+        "arrivalCount": 2,
+        "departureCount": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.455803,
+          38.9445
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "IAH",
+        "municipality": "Houston",
+        "region": "US-TX",
+        "regionName": "Texas",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "George Bush Intercontinental Houston Airport",
+        "elevationFt": 97,
+        "elevationM": 30,
+        "visitDates": [
+          "6/15/2008",
+          "7/12/2008",
+          "8/19/2017",
+          "10/21/2018"
+        ],
+        "visitCount": 8,
+        "arrivalCount": 4,
+        "departureCount": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -95.34140015,
+          29.9843998
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "SJO",
+        "municipality": "San José (Alajuela)",
+        "region": "CR-A",
+        "regionName": "Alajuela",
+        "country": "CR",
+        "countryName": "Costa Rica",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Juan Santamaría International Airport",
+        "elevationFt": 3021,
+        "elevationM": 921,
+        "visitDates": [
+          "6/15/2008",
+          "7/12/2008"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.208801,
+          9.99386
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "BLI",
+        "municipality": "Bellingham",
+        "region": "US-WA",
+        "regionName": "Washington",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Bellingham International Airport",
+        "elevationFt": 170,
+        "elevationM": 52,
+        "visitDates": [
+          "3/20/2009",
+          "3/27/2009",
+          "3/16/2010",
+          "4/15/2010",
+          "4/18/2010",
+          "6/9/2010",
+          "6/21/2010",
+          "7/31/2010",
+          "11/25/2010",
+          "11/28/2010",
+          "12/9/2010",
+          "6/18/2011",
+          "7/22/2011",
+          "7/25/2011",
+          "10/10/2011",
+          "11/22/2011",
+          "11/27/2011",
+          "1/3/2012",
+          "3/16/2012",
+          "3/27/2012",
+          "9/13/2012",
+          "9/20/2012",
+          "12/14/2012",
+          "12/30/2012",
+          "5/9/2013",
+          "5/12/2013",
+          "11/15/2013",
+          "2/12/2014",
+          "2/15/2014",
+          "10/17/2014",
+          "10/26/2014"
+        ],
+        "visitCount": 31,
+        "arrivalCount": 14,
+        "departureCount": 17
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.538002,
+          48.7928009
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "OAK",
+        "municipality": "Oakland",
+        "region": "US-CA",
+        "regionName": "California",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "San Francisco Bay Oakland International Airport",
+        "elevationFt": 9,
+        "elevationM": 3,
+        "visitDates": [
+          "4/9/2009",
+          "11/26/2010",
+          "12/14/2012",
+          "2/12/2014",
+          "2/15/2014",
+          "6/29/2017"
+        ],
+        "visitCount": 8,
+        "arrivalCount": 4,
+        "departureCount": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.221184,
+          37.720085
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "LGB",
+        "municipality": "Long Beach",
+        "region": "US-CA",
+        "regionName": "California",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Long Beach Airport (Daugherty Field)",
+        "elevationFt": 60,
+        "elevationM": 18,
+        "visitDates": [
+          "4/9/2009",
+          "11/25/2010",
+          "11/28/2010",
+          "12/9/2010",
+          "6/18/2011"
+        ],
+        "visitCount": 5,
+        "arrivalCount": 3,
+        "departureCount": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -118.149891,
+          33.816523
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "TXL",
+        "municipality": "Berlin",
+        "region": "DE-BE",
+        "regionName": "Berlin",
+        "country": "DE",
+        "countryName": "Germany",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Berlin Tegel Airport",
+        "elevationFt": 122,
+        "elevationM": 37,
+        "visitDates": [
+          "8/3/2009",
+          "8/7/2009",
+          "8/13/2018"
+        ],
+        "visitCount": 3,
+        "arrivalCount": 2,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.287778,
+          52.559722
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "SMF",
+        "municipality": "Sacramento",
+        "region": "US-CA",
+        "regionName": "California",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Sacramento International Airport",
+        "elevationFt": 27,
+        "elevationM": 8,
+        "visitDates": [
+          "8/25/2010"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.591003,
+          38.6954
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "SEA",
+        "municipality": "Seattle",
+        "region": "US-WA",
+        "regionName": "Washington",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Seattle–Tacoma International Airport",
+        "elevationFt": 433,
+        "elevationM": 132,
+        "visitDates": [
+          "8/25/2010",
+          "11/26/2010",
+          "3/14/2011",
+          "3/29/2011",
+          "1/3/2012",
+          "3/16/2012",
+          "3/27/2012",
+          "11/15/2013",
+          "11/23/2013",
+          "4/23/2014",
+          "5/3/2014",
+          "10/17/2014",
+          "10/26/2014",
+          "11/21/2014",
+          "1/4/2015",
+          "10/3/2016",
+          "10/4/2016",
+          "10/5/2016",
+          "8/12/2017",
+          "8/19/2017",
+          "10/6/2017",
+          "10/8/2017",
+          "12/4/2017",
+          "12/7/2017",
+          "12/10/2017",
+          "12/17/2017",
+          "1/18/2018",
+          "1/21/2018",
+          "4/19/2018",
+          "4/22/2018",
+          "7/5/2018",
+          "8/1/2018",
+          "8/20/2018",
+          "9/28/2018",
+          "9/30/2018",
+          "10/17/2018",
+          "10/21/2018",
+          "11/14/2018",
+          "11/22/2018",
+          "11/26/2018",
+          "12/31/2018",
+          "1/13/2019",
+          "2/25/2019",
+          "4/5/2019",
+          "4/22/2019",
+          "5/10/2019",
+          "5/12/2019",
+          "5/24/2019",
+          "5/28/2019",
+          "8/15/2019",
+          "8/19/2019",
+          "10/23/2019",
+          "10/27/2019",
+          "11/28/2019",
+          "12/3/2019",
+          "1/30/2020",
+          "2/2/2020",
+          "2/20/2020",
+          "2/25/2020",
+          "4/22/2020",
+          "4/26/2020",
+          "6/24/2020",
+          "8/20/2020",
+          "8/22/2020",
+          "8/10/2021",
+          "8/23/2021",
+          "9/3/2021",
+          "9/12/2021",
+          "10/24/2021",
+          "2/18/2022",
+          "2/21/2022",
+          "3/11/2022",
+          "4/3/2022",
+          "4/7/2022",
+          "5/6/2022",
+          "6/6/2022",
+          "9/23/2022",
+          "10/2/2022",
+          "10/13/2022",
+          "10/17/2022",
+          "10/21/2022",
+          "12/3/2022",
+          "12/20/2022",
+          "2/9/2023",
+          "2/15/2023",
+          "3/27/2023",
+          "4/28/2023",
+          "7/8/2023",
+          "7/16/2023",
+          "8/25/2023",
+          "8/29/2023",
+          "11/27/2023",
+          "12/3/2023",
+          "1/25/2024",
+          "2/14/2024",
+          "2/28/2024",
+          "3/4/2024",
+          "3/15/2024",
+          "3/20/2024",
+          "7/13/2024",
+          "7/21/2024",
+          "8/11/2024",
+          "8/17/2024",
+          "9/30/2024",
+          "7/29/2025",
+          "8/4/2025",
+          "7/2/2026"
+        ],
+        "visitCount": 115,
+        "arrivalCount": 56,
+        "departureCount": 59
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.310276,
+          47.447943
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "SNA",
+        "municipality": "Santa Ana",
+        "region": "US-CA",
+        "regionName": "California",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "John Wayne Orange County International Airport",
+        "elevationFt": 56,
+        "elevationM": 17,
+        "visitDates": [
+          "3/14/2011",
+          "3/29/2011",
+          "3/16/2012",
+          "11/15/2013"
+        ],
+        "visitCount": 4,
+        "arrivalCount": 3,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -117.867996,
+          33.675701
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "SFO",
+        "municipality": "San Francisco",
+        "region": "US-CA",
+        "regionName": "California",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "San Francisco International Airport",
+        "elevationFt": 13,
+        "elevationM": 4,
+        "visitDates": [
+          "6/11/2011",
+          "1/26/2017",
+          "5/4/2017",
+          "12/4/2017",
+          "10/17/2018",
+          "8/15/2019",
+          "11/28/2019",
+          "12/3/2019",
+          "2/18/2022",
+          "4/7/2022"
+        ],
+        "visitCount": 19,
+        "arrivalCount": 9,
+        "departureCount": 10
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.374821,
+          37.619806
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "LAS",
+        "municipality": "Las Vegas",
+        "region": "US-NV",
+        "regionName": "Nevada",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Harry Reid International Airport",
+        "elevationFt": 2181,
+        "elevationM": 665,
+        "visitDates": [
+          "12/18/2012",
+          "12/19/2016",
+          "12/20/2016",
+          "1/6/2017",
+          "2/23/2017",
+          "11/27/2023",
+          "12/3/2023"
+        ],
+        "visitCount": 10,
+        "arrivalCount": 5,
+        "departureCount": 5
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -115.151817,
+          36.083361
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "MSY",
+        "municipality": "New Orleans",
+        "region": "US-LA",
+        "regionName": "Louisiana",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Louis Armstrong New Orleans International Airport",
+        "elevationFt": 4,
+        "elevationM": 1,
+        "visitDates": [
+          "12/18/2012",
+          "4/14/2015",
+          "11/21/2025"
+        ],
+        "visitCount": 4,
+        "arrivalCount": 3,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -90.258003,
+          29.993401
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "ATL",
+        "municipality": "Atlanta",
+        "region": "US-GA",
+        "regionName": "Georgia",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Hartsfield Jackson Atlanta International Airport",
+        "elevationFt": 1026,
+        "elevationM": 313,
+        "visitDates": [
+          "11/23/2013",
+          "12/13/2014",
+          "12/27/2014",
+          "9/25/2015",
+          "5/14/2016",
+          "5/20/2016",
+          "9/23/2024"
+        ],
+        "visitCount": 11,
+        "arrivalCount": 5,
+        "departureCount": 6
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.428101,
+          33.6367
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "ECP",
+        "municipality": "Panama City Beach",
+        "region": "US-FL",
+        "regionName": "Florida",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Northwest Florida Beaches International Airport",
+        "elevationFt": 69,
+        "elevationM": 21,
+        "visitDates": [
+          "11/23/2013"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 0,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -85.795414,
+          30.357106
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "PDX",
+        "municipality": "Portland",
+        "region": "US-OR",
+        "regionName": "Oregon",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Portland International Airport",
+        "elevationFt": 31,
+        "elevationM": 9,
+        "visitDates": [
+          "10/17/2014",
+          "10/4/2016",
+          "12/19/2016"
+        ],
+        "visitCount": 6,
+        "arrivalCount": 3,
+        "departureCount": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.598,
+          45.588699
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "PHX",
+        "municipality": "Phoenix",
+        "region": "US-AZ",
+        "regionName": "Arizona",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Phoenix Sky Harbor International Airport",
+        "elevationFt": 1135,
+        "elevationM": 346,
+        "visitDates": [
+          "10/17/2014",
+          "10/26/2014",
+          "11/21/2014",
+          "12/13/2014",
+          "12/27/2014",
+          "1/4/2015",
+          "4/10/2015",
+          "4/14/2015",
+          "10/9/2024",
+          "1/17/2025"
+        ],
+        "visitCount": 12,
+        "arrivalCount": 6,
+        "departureCount": 6
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -112.005905,
+          33.435302
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "BNA",
+        "municipality": "Nashville",
+        "region": "US-TN",
+        "regionName": "Tennessee",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Nashville International Airport",
+        "elevationFt": 599,
+        "elevationM": 183,
+        "visitDates": [
+          "4/10/2015",
+          "4/14/2015"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -86.6782,
+          36.1245
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "DFW",
+        "municipality": "Dallas-Fort Worth",
+        "region": "US-TX",
+        "regionName": "Texas",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Dallas Fort Worth International Airport",
+        "elevationFt": 607,
+        "elevationM": 185,
+        "visitDates": [
+          "8/25/2015",
+          "5/26/2022",
+          "5/27/2022",
+          "7/23/2025"
+        ],
+        "visitCount": 6,
+        "arrivalCount": 3,
+        "departureCount": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -97.038002,
+          32.896801
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "VPS",
+        "municipality": "Valparaiso",
+        "region": "US-FL",
+        "regionName": "Florida",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Destin-Fort Walton Beach Airport",
+        "elevationFt": 87,
+        "elevationM": 27,
+        "visitDates": [
+          "8/25/2015",
+          "5/14/2016",
+          "5/20/2016"
+        ],
+        "visitCount": 3,
+        "arrivalCount": 2,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -86.525398,
+          30.4832
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "PHL",
+        "municipality": "Philadelphia",
+        "region": "US-PA",
+        "regionName": "Pennsylvania",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Philadelphia International Airport",
+        "elevationFt": 36,
+        "elevationM": 11,
+        "visitDates": [
+          "9/25/2015",
+          "8/12/2017"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 2,
+        "departureCount": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -75.241096,
+          39.871899
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "BOS",
+        "municipality": "Boston",
+        "region": "US-MA",
+        "regionName": "Massachusetts",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Logan International Airport",
+        "elevationFt": 20,
+        "elevationM": 6,
+        "visitDates": [
+          "10/5/2015"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 0,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.0079,
+          42.36197
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "KEF",
+        "municipality": "Reykjavík",
+        "region": "IS-2",
+        "regionName": "Southern Peninsula",
+        "country": "IS",
+        "countryName": "Iceland",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Keflavik International Airport",
+        "elevationFt": 171,
+        "elevationM": 52,
+        "visitDates": [
+          "10/5/2015",
+          "10/6/2015",
+          "7/21/2024",
+          "7/23/2024",
+          "8/11/2024"
+        ],
+        "visitCount": 6,
+        "arrivalCount": 3,
+        "departureCount": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -22.6056,
+          63.985001
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "LGW",
+        "municipality": "London",
+        "region": "GB-ENG",
+        "regionName": "England",
+        "country": "GB",
+        "countryName": "United Kingdom",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "London Gatwick Airport",
+        "elevationFt": 202,
+        "elevationM": 62,
+        "visitDates": [
+          "10/6/2015",
+          "4/5/2019",
+          "4/22/2019"
+        ],
+        "visitCount": 3,
+        "arrivalCount": 2,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.192089,
+          51.148771
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "EDI",
+        "municipality": "Edinburgh",
+        "region": "GB-SCT",
+        "regionName": "Scotland",
+        "country": "GB",
+        "countryName": "United Kingdom",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Edinburgh Airport",
+        "elevationFt": 135,
+        "elevationM": 41,
+        "visitDates": [
+          "10/31/2015",
+          "8/2/2018"
+        ],
+        "visitCount": 3,
+        "arrivalCount": 1,
+        "departureCount": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.372288,
+          55.950145
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "LPA",
+        "municipality": "Gran Canaria Island",
+        "region": "ES-CN",
+        "regionName": "Canarias",
+        "country": "ES",
+        "countryName": "Spain",
+        "continent": "AF",
+        "continentName": "Africa",
+        "name": "Gran Canaria Airport",
+        "elevationFt": 78,
+        "elevationM": 24,
+        "visitDates": [
+          "10/31/2015",
+          "11/6/2015"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -15.3866,
+          27.9319
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "BCN",
+        "municipality": "Barcelona",
+        "region": "ES-CT",
+        "regionName": "Catalunya",
+        "country": "ES",
+        "countryName": "Spain",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Josep Tarradellas Barcelona-El Prat Airport",
+        "elevationFt": 12,
+        "elevationM": 4,
+        "visitDates": [
+          "11/6/2015",
+          "11/12/2015",
+          "12/31/2025",
+          "1/2/2026"
+        ],
+        "visitCount": 4,
+        "arrivalCount": 2,
+        "departureCount": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.07846,
+          41.2971
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "AMS",
+        "municipality": "Amsterdam",
+        "region": "NL-NH",
+        "regionName": "Noord-Holland",
+        "country": "NL",
+        "countryName": "Netherlands",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Amsterdam Airport Schiphol",
+        "elevationFt": -11,
+        "elevationM": -3,
+        "visitDates": [
+          "11/12/2015",
+          "8/1/2018",
+          "8/2/2018",
+          "8/20/2026",
+          "8/21/2026"
+        ],
+        "visitCount": 5,
+        "arrivalCount": 3,
+        "departureCount": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.76389,
+          52.308601
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "PRG",
+        "municipality": "Prague",
+        "region": "CZ-PR",
+        "regionName": "Praha, hlavní mešto",
+        "country": "CZ",
+        "countryName": "Czechia",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Václav Havel Airport Prague",
+        "elevationFt": 1247,
+        "elevationM": 380,
+        "visitDates": [
+          "12/1/2015",
+          "12/21/2016"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 2,
+        "departureCount": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.259911,
+          50.100874
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "GVA",
+        "municipality": "Geneva",
+        "region": "CH-GE",
+        "regionName": "Genève",
+        "country": "CH",
+        "countryName": "Switzerland",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Geneva Cointrin International Airport",
+        "elevationFt": 1411,
+        "elevationM": 430,
+        "visitDates": [
+          "1/6/2016",
+          "8/11/2024"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 0,
+        "departureCount": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.10895,
+          46.238098
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "RAK",
+        "municipality": "Marrakech",
+        "region": "MA-07",
+        "regionName": "Rabat-Salé-Zemmour-Zaer",
+        "country": "MA",
+        "countryName": "Morocco",
+        "continent": "AF",
+        "continentName": "Africa",
+        "name": "Menara Airport",
+        "elevationFt": 1545,
+        "elevationM": 471,
+        "visitDates": [
+          "1/6/2016"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 1,
+        "departureCount": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.0363,
+          31.606899
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "MXP",
+        "municipality": "Ferno (VA)",
+        "region": "IT-25",
+        "regionName": "Lombardia",
+        "country": "IT",
+        "countryName": "Italy",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Milan Malpensa International Airport",
+        "elevationFt": 768,
+        "elevationM": 234,
+        "visitDates": [
+          "2/25/2016",
+          "3/28/2022"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 0,
+        "departureCount": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.72811,
+          45.6306
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "MAN",
+        "municipality": "Manchester, Greater Manchester",
+        "region": "GB-ENG",
+        "regionName": "England",
+        "country": "GB",
+        "countryName": "United Kingdom",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Manchester Airport",
+        "elevationFt": 257,
+        "elevationM": 78,
+        "visitDates": [
+          "2/25/2016"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 1,
+        "departureCount": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.279521,
+          53.349375
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "ORD",
+        "municipality": "Chicago",
+        "region": "US-IL",
+        "regionName": "Illinois",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Chicago O'Hare International Airport",
+        "elevationFt": 680,
+        "elevationM": 207,
+        "visitDates": [
+          "5/14/2016",
+          "5/20/2016",
+          "10/3/2016",
+          "10/5/2016",
+          "5/12/2017",
+          "5/15/2017",
+          "5/28/2019",
+          "8/10/2021",
+          "8/11/2021",
+          "8/23/2021",
+          "8/25/2023",
+          "8/29/2023",
+          "9/30/2024",
+          "12/14/2025",
+          "8/20/2026",
+          "8/30/2026"
+        ],
+        "visitCount": 17,
+        "arrivalCount": 7,
+        "departureCount": 10
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -87.9048,
+          41.9786
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "TIJ",
+        "municipality": "Tijuana",
+        "region": "MX-BCN",
+        "regionName": "Baja California",
+        "country": "MX",
+        "countryName": "Mexico",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "General Abelardo L. Rodriguez International Airport",
+        "elevationFt": 489,
+        "elevationM": 149,
+        "visitDates": [
+          "5/30/2016",
+          "6/13/2016",
+          "7/4/2016",
+          "7/19/2016",
+          "2/18/2019",
+          "5/8/2022",
+          "2/4/2024"
+        ],
+        "visitCount": 7,
+        "arrivalCount": 3,
+        "departureCount": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -116.969976,
+          32.541043
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "MEX",
+        "municipality": "Ciudad de México",
+        "region": "MX-DIF",
+        "regionName": "MX-DIF",
+        "country": "MX",
+        "countryName": "Mexico",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Benito Juárez International Airport",
+        "elevationFt": 7316,
+        "elevationM": 2230,
+        "visitDates": [
+          "5/30/2016",
+          "6/13/2016",
+          "7/4/2016",
+          "7/19/2016",
+          "1/13/2019",
+          "1/15/2019",
+          "2/18/2019",
+          "5/13/2022",
+          "5/14/2022",
+          "2/4/2024"
+        ],
+        "visitCount": 10,
+        "arrivalCount": 5,
+        "departureCount": 5
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.071328,
+          19.435137
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "MTY",
+        "municipality": "Monterrey",
+        "region": "MX-NLE",
+        "regionName": "Nuevo León",
+        "country": "MX",
+        "countryName": "Mexico",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Monterrey International Airport",
+        "elevationFt": 1278,
+        "elevationM": 390,
+        "visitDates": [
+          "7/4/2016"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -100.106989,
+          25.778521
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "GEG",
+        "municipality": "Spokane",
+        "region": "US-WA",
+        "regionName": "Washington",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Spokane International Airport",
+        "elevationFt": 2376,
+        "elevationM": 724,
+        "visitDates": [
+          "10/3/2016"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -117.533997,
+          47.6199
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "BOI",
+        "municipality": "Boise",
+        "region": "US-ID",
+        "regionName": "Idaho",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Boise Air Terminal/Gowen Field",
+        "elevationFt": 2871,
+        "elevationM": 875,
+        "visitDates": [
+          "10/3/2016",
+          "10/4/2016",
+          "12/19/2016",
+          "1/6/2017",
+          "1/26/2017",
+          "1/29/2017",
+          "2/23/2017",
+          "2/26/2017",
+          "5/4/2017",
+          "5/7/2017",
+          "5/12/2017",
+          "5/15/2017",
+          "6/16/2017",
+          "6/20/2017",
+          "6/29/2017",
+          "7/4/2017",
+          "9/23/2024",
+          "9/26/2024"
+        ],
+        "visitCount": 18,
+        "arrivalCount": 9,
+        "departureCount": 9
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -116.223,
+          43.5644
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "CPH",
+        "municipality": "Copenhagen",
+        "region": "DK-84",
+        "regionName": "Hovedstaden",
+        "country": "DK",
+        "countryName": "Denmark",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Copenhagen Kastrup Airport",
+        "elevationFt": 17,
+        "elevationM": 5,
+        "visitDates": [
+          "12/20/2016",
+          "12/21/2016"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.65600014,
+          55.61790085
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "ARN",
+        "municipality": "Stockholm",
+        "region": "SE-AB",
+        "regionName": "Stockholms län",
+        "country": "SE",
+        "countryName": "Sweden",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Stockholm-Arlanda Airport",
+        "elevationFt": 137,
+        "elevationM": 42,
+        "visitDates": [
+          "1/6/2017",
+          "8/2/2018",
+          "8/3/2018"
+        ],
+        "visitCount": 4,
+        "arrivalCount": 2,
+        "departureCount": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.928829,
+          59.64849
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "DUS",
+        "municipality": "Düsseldorf",
+        "region": "DE-NW",
+        "regionName": "Nordrhein-Westfalen",
+        "country": "DE",
+        "countryName": "Germany",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Düsseldorf Airport",
+        "elevationFt": 147,
+        "elevationM": 45,
+        "visitDates": [
+          "1/6/2017"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 0,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.76678,
+          51.289501
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "MKE",
+        "municipality": "Milwaukee",
+        "region": "US-WI",
+        "regionName": "Wisconsin",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "General Mitchell International Airport",
+        "elevationFt": 723,
+        "elevationM": 220,
+        "visitDates": [
+          "2/23/2017",
+          "2/26/2017",
+          "10/6/2017",
+          "10/8/2017",
+          "7/5/2018",
+          "12/31/2018",
+          "12/20/2022"
+        ],
+        "visitCount": 7,
+        "arrivalCount": 4,
+        "departureCount": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -87.896599,
+          42.947201
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "DEN",
+        "municipality": "Denver",
+        "region": "US-CO",
+        "regionName": "Colorado",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Denver International Airport",
+        "elevationFt": 5431,
+        "elevationM": 1655,
+        "visitDates": [
+          "2/26/2017",
+          "8/12/2017",
+          "4/19/2018",
+          "4/22/2018",
+          "5/10/2019",
+          "5/12/2019",
+          "8/19/2019",
+          "8/17/2024"
+        ],
+        "visitCount": 11,
+        "arrivalCount": 6,
+        "departureCount": 5
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -104.6729965,
+          39.86169815
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "MSP",
+        "municipality": "Minneapolis",
+        "region": "US-MN",
+        "regionName": "Minnesota",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Minneapolis–Saint Paul International Airport / Wold–Chamberlain Field",
+        "elevationFt": 841,
+        "elevationM": 256,
+        "visitDates": [
+          "5/12/2017",
+          "5/15/2017",
+          "6/16/2017",
+          "6/19/2017",
+          "6/20/2017",
+          "10/8/2017",
+          "5/24/2019",
+          "12/20/2022",
+          "2/28/2024",
+          "1/29/2025"
+        ],
+        "visitCount": 18,
+        "arrivalCount": 9,
+        "departureCount": 9
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -93.221741,
+          44.880081
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "MDW",
+        "municipality": "Chicago",
+        "region": "US-IL",
+        "regionName": "Illinois",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Chicago Midway International Airport",
+        "elevationFt": 620,
+        "elevationM": 189,
+        "visitDates": [
+          "6/16/2017",
+          "6/19/2017"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -87.752403,
+          41.785999
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "EWR",
+        "municipality": "Newark",
+        "region": "US-NJ",
+        "regionName": "New Jersey",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Newark Liberty International Airport",
+        "elevationFt": 18,
+        "elevationM": 5,
+        "visitDates": [
+          "8/19/2017",
+          "1/30/2020",
+          "1/4/2026"
+        ],
+        "visitCount": 3,
+        "arrivalCount": 1,
+        "departureCount": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.168701,
+          40.692501
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "SLC",
+        "municipality": "Salt Lake City",
+        "region": "US-UT",
+        "regionName": "Utah",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Salt Lake City International Airport",
+        "elevationFt": 4227,
+        "elevationM": 1288,
+        "visitDates": [
+          "12/10/2017",
+          "3/4/2024",
+          "9/26/2024",
+          "2/4/2025",
+          "5/5/2025"
+        ],
+        "visitCount": 10,
+        "arrivalCount": 5,
+        "departureCount": 5
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -111.979866,
+          40.78886
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "YVR",
+        "municipality": "Vancouver",
+        "region": "CA-BC",
+        "regionName": "British Columbia",
+        "country": "CA",
+        "countryName": "Canada",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Vancouver International Airport",
+        "elevationFt": 14,
+        "elevationM": 4,
+        "visitDates": [
+          "12/17/2017",
+          "1/1/2018",
+          "3/15/2024"
+        ],
+        "visitCount": 5,
+        "arrivalCount": 3,
+        "departureCount": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -123.1839981,
+          49.19390106
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "ICN",
+        "municipality": "Seoul",
+        "region": "KR-28",
+        "regionName": "Inch'ǒn-Kwangyǒkshi",
+        "country": "KR",
+        "countryName": "South Korea",
+        "continent": "AS",
+        "continentName": "Asia",
+        "name": "Incheon International Airport",
+        "elevationFt": 23,
+        "elevationM": 7,
+        "visitDates": [
+          "12/17/2017",
+          "12/19/2017"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.450996,
+          37.469101
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "TPE",
+        "municipality": "Taoyuan",
+        "region": "TW-TAO",
+        "regionName": "Taoyuan",
+        "country": "TW",
+        "countryName": "Taiwan",
+        "continent": "AS",
+        "continentName": "Asia",
+        "name": "Taiwan Taoyuan International Airport",
+        "elevationFt": 106,
+        "elevationM": 32,
+        "visitDates": [
+          "12/19/2017",
+          "12/21/2017",
+          "1/1/2018"
+        ],
+        "visitCount": 4,
+        "arrivalCount": 2,
+        "departureCount": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.233002,
+          25.0777
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "SIN",
+        "municipality": "Singapore",
+        "region": "SG-04",
+        "regionName": "South East",
+        "country": "SG",
+        "countryName": "Singapore",
+        "continent": "AS",
+        "continentName": "Asia",
+        "name": "Singapore Changi Airport",
+        "elevationFt": 22,
+        "elevationM": 7,
+        "visitDates": [
+          "12/21/2017"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 1,
+        "departureCount": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.994003,
+          1.35019
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "HKT",
+        "municipality": "Phuket",
+        "region": "TH-83",
+        "regionName": "Phuket",
+        "country": "TH",
+        "countryName": "Thailand",
+        "continent": "AS",
+        "continentName": "Asia",
+        "name": "Phuket International Airport",
+        "elevationFt": 82,
+        "elevationM": 25,
+        "visitDates": [
+          "12/29/2017"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 0,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          98.316902,
+          8.1132
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "DMK",
+        "municipality": "Bangkok",
+        "region": "TH-10",
+        "regionName": "Krung Thep Maha Nakhon",
+        "country": "TH",
+        "countryName": "Thailand",
+        "continent": "AS",
+        "continentName": "Asia",
+        "name": "Don Mueang International Airport",
+        "elevationFt": 9,
+        "elevationM": 3,
+        "visitDates": [
+          "12/29/2017"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 1,
+        "departureCount": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.607002,
+          13.9126
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "BKK",
+        "municipality": "Bangkok",
+        "region": "TH-10",
+        "regionName": "Krung Thep Maha Nakhon",
+        "country": "TH",
+        "countryName": "Thailand",
+        "continent": "AS",
+        "continentName": "Asia",
+        "name": "Suvarnabhumi Airport",
+        "elevationFt": 5,
+        "elevationM": 2,
+        "visitDates": [
+          "12/30/2017"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 0,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.7470016,
+          13.68109989
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "SGN",
+        "municipality": "Ho Chi Minh City",
+        "region": "VN-SE",
+        "regionName": "Ho Chi Minh City",
+        "country": "VN",
+        "countryName": "Vietnam",
+        "continent": "AS",
+        "continentName": "Asia",
+        "name": "Tan Son Nhat International Airport",
+        "elevationFt": 33,
+        "elevationM": 10,
+        "visitDates": [
+          "12/30/2017",
+          "1/1/2018"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.652,
+          10.8188
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "BGO",
+        "municipality": "Bergen",
+        "region": "NO-46",
+        "regionName": "NO-46",
+        "country": "NO",
+        "countryName": "Norway",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Bergen Airport, Flesland",
+        "elevationFt": 170,
+        "elevationM": 52,
+        "visitDates": [
+          "8/3/2018"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 1,
+        "departureCount": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.21814,
+          60.2934
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "OSL",
+        "municipality": "Oslo (Gardermoen)",
+        "region": "NO-32",
+        "regionName": "NO-32",
+        "country": "NO",
+        "countryName": "Norway",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Oslo Airport, Gardermoen",
+        "elevationFt": 681,
+        "elevationM": 208,
+        "visitDates": [
+          "8/7/2018"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 0,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.1004,
+          60.193901
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "SPU",
+        "municipality": "Kaštel Štafilić",
+        "region": "HR-17",
+        "regionName": "Splitsko-dalmatinska županija",
+        "country": "HR",
+        "countryName": "Croatia",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Split Airport",
+        "elevationFt": 79,
+        "elevationM": 24,
+        "visitDates": [
+          "8/7/2018"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 1,
+        "departureCount": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.298,
+          43.538898
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "DBV",
+        "municipality": "Čilipi",
+        "region": "HR-19",
+        "regionName": "Dubrovačko-neretvanska županija",
+        "country": "HR",
+        "countryName": "Croatia",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Dubrovnik Ruđer Bošković Airport",
+        "elevationFt": 527,
+        "elevationM": 161,
+        "visitDates": [
+          "8/12/2018"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 0,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.265543,
+          42.562247
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "CGN",
+        "municipality": "Köln (Cologne)",
+        "region": "DE-NW",
+        "regionName": "Nordrhein-Westfalen",
+        "country": "DE",
+        "countryName": "Germany",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Cologne Bonn Airport",
+        "elevationFt": 302,
+        "elevationM": 92,
+        "visitDates": [
+          "8/12/2018",
+          "8/13/2018"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.14274,
+          50.865898
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "CUN",
+        "municipality": "Cancún",
+        "region": "MX-ROO",
+        "regionName": "Quintana Roo",
+        "country": "MX",
+        "countryName": "Mexico",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Cancún International Airport",
+        "elevationFt": 22,
+        "elevationM": 7,
+        "visitDates": [
+          "10/17/2018",
+          "10/21/2018"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -86.874304,
+          21.039444
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "GUA",
+        "municipality": "Guatemala City",
+        "region": "GT-GU",
+        "regionName": "Guatemala",
+        "country": "GT",
+        "countryName": "Guatemala",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "La Aurora Airport",
+        "elevationFt": 4952,
+        "elevationM": 1509,
+        "visitDates": [
+          "1/15/2019"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 1,
+        "departureCount": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -90.527496,
+          14.5833
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "ORY",
+        "municipality": "Paris (Orly, Val-de-Marne)",
+        "region": "FR-IDF",
+        "regionName": "FR-IDF",
+        "country": "FR",
+        "countryName": "France",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Paris-Orly Airport",
+        "elevationFt": 291,
+        "elevationM": 89,
+        "visitDates": [
+          "4/11/2019"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 0,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.37944,
+          48.72333
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "OPO",
+        "municipality": "Porto",
+        "region": "PT-13",
+        "regionName": "Porto",
+        "country": "PT",
+        "countryName": "Portugal",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Francisco de Sá Carneiro Airport",
+        "elevationFt": 228,
+        "elevationM": 69,
+        "visitDates": [
+          "4/11/2019",
+          "4/13/2019"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.681389809,
+          41.24810028
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "STN",
+        "municipality": "London",
+        "region": "GB-ENG",
+        "regionName": "England",
+        "country": "GB",
+        "countryName": "United Kingdom",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "London Stansted Airport",
+        "elevationFt": 348,
+        "elevationM": 106,
+        "visitDates": [
+          "4/13/2019",
+          "4/21/2019"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 2,
+        "departureCount": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.235,
+          51.884998
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "LTN",
+        "municipality": "Luton, Bedfordshire",
+        "region": "GB-ENG",
+        "regionName": "England",
+        "country": "GB",
+        "countryName": "United Kingdom",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "London Luton Airport",
+        "elevationFt": 526,
+        "elevationM": 160,
+        "visitDates": [
+          "4/14/2019"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 0,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.368333,
+          51.874699
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "BUD",
+        "municipality": "Budapest",
+        "region": "HU-BU",
+        "regionName": "Budapest",
+        "country": "HU",
+        "countryName": "Hungary",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Budapest Liszt Ferenc International Airport",
+        "elevationFt": 495,
+        "elevationM": 151,
+        "visitDates": [
+          "4/14/2019"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 1,
+        "departureCount": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.262393,
+          47.43018
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "LWO",
+        "municipality": "Lviv",
+        "region": "UA-46",
+        "regionName": "Lvivska oblast",
+        "country": "UA",
+        "countryName": "Ukraine",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Lviv International Airport",
+        "elevationFt": 1071,
+        "elevationM": 326,
+        "visitDates": [
+          "4/21/2019"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 0,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.9561,
+          49.8125
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "MSN",
+        "municipality": "Madison",
+        "region": "US-WI",
+        "regionName": "Wisconsin",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Dane County Regional Truax Field",
+        "elevationFt": 887,
+        "elevationM": 270,
+        "visitDates": [
+          "5/24/2019",
+          "8/15/2019",
+          "8/19/2019",
+          "5/27/2022"
+        ],
+        "visitCount": 4,
+        "arrivalCount": 3,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -89.337502,
+          43.1399
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "AUS",
+        "municipality": "Austin",
+        "region": "US-TX",
+        "regionName": "Texas",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Austin Bergstrom International Airport",
+        "elevationFt": 542,
+        "elevationM": 165,
+        "visitDates": [
+          "10/23/2019",
+          "10/27/2019",
+          "6/24/2020",
+          "9/23/2022",
+          "9/27/2022"
+        ],
+        "visitCount": 5,
+        "arrivalCount": 2,
+        "departureCount": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -97.662015,
+          30.197535
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "JFK",
+        "municipality": "New York",
+        "region": "US-NY",
+        "regionName": "New York",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "John F Kennedy International Airport",
+        "elevationFt": 13,
+        "elevationM": 4,
+        "visitDates": [
+          "2/2/2020",
+          "1/3/2026"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.779317,
+          40.639447
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "RHI",
+        "municipality": "Rhinelander",
+        "region": "US-WI",
+        "regionName": "Wisconsin",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Rhinelander Oneida County Airport",
+        "elevationFt": 1624,
+        "elevationM": 495,
+        "visitDates": [
+          "8/11/2021"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 1,
+        "departureCount": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -89.46749878,
+          45.63119888
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "LIN",
+        "municipality": "Segrate (MI)",
+        "region": "IT-25",
+        "regionName": "Lombardia",
+        "country": "IT",
+        "countryName": "Italy",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Milano Linate Airport",
+        "elevationFt": 353,
+        "elevationM": 108,
+        "visitDates": [
+          "3/12/2022"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 1,
+        "departureCount": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.27674,
+          45.445099
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "KOA",
+        "municipality": "Kailua-Kona",
+        "region": "US-HI",
+        "regionName": "Hawaii",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Ellison Onizuka Kona International Airport at Keahole",
+        "elevationFt": 47,
+        "elevationM": 14,
+        "visitDates": [
+          "4/3/2022",
+          "4/7/2022"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -156.045603,
+          19.738783
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "GDL",
+        "municipality": "Guadalajara",
+        "region": "MX-JAL",
+        "regionName": "Jalisco",
+        "country": "MX",
+        "countryName": "Mexico",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Guadalajara International Airport",
+        "elevationFt": 5016,
+        "elevationM": 1529,
+        "visitDates": [
+          "5/8/2022",
+          "5/13/2022"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -103.310108,
+          20.523342
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "BOG",
+        "municipality": "Bogota",
+        "region": "CO-DC",
+        "regionName": "Distrito Capital de Bogotá",
+        "country": "CO",
+        "countryName": "Colombia",
+        "continent": "SA",
+        "continentName": "South America",
+        "name": "El Dorado International Airport",
+        "elevationFt": 8361,
+        "elevationM": 2548,
+        "visitDates": [
+          "5/14/2022",
+          "5/22/2022",
+          "5/26/2022"
+        ],
+        "visitCount": 4,
+        "arrivalCount": 2,
+        "departureCount": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.1469,
+          4.70159
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "UIO",
+        "municipality": "Quito",
+        "region": "EC-P",
+        "regionName": "Pichincha",
+        "country": "EC",
+        "countryName": "Ecuador",
+        "continent": "SA",
+        "continentName": "South America",
+        "name": "Mariscal Sucre International Airport",
+        "elevationFt": 7841,
+        "elevationM": 2390,
+        "visitDates": [
+          "5/14/2022",
+          "5/22/2022"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.354306,
+          -0.125399
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "DTW",
+        "municipality": "Detroit",
+        "region": "US-MI",
+        "regionName": "Michigan",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Detroit Metropolitan Wayne County Airport",
+        "elevationFt": 645,
+        "elevationM": 197,
+        "visitDates": [
+          "5/31/2022",
+          "7/6/2026"
+        ],
+        "visitCount": 4,
+        "arrivalCount": 2,
+        "departureCount": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.353786,
+          42.21377
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "MIA",
+        "municipality": "Miami",
+        "region": "US-FL",
+        "regionName": "Florida",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Miami International Airport",
+        "elevationFt": 8,
+        "elevationM": 2,
+        "visitDates": [
+          "5/31/2022",
+          "6/6/2022",
+          "3/28/2023",
+          "2/23/2026"
+        ],
+        "visitCount": 6,
+        "arrivalCount": 3,
+        "departureCount": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -80.29060364,
+          25.79319954
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "GRB",
+        "municipality": "Green Bay",
+        "region": "US-WI",
+        "regionName": "Wisconsin",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Austin Straubel International Airport",
+        "elevationFt": 695,
+        "elevationM": 212,
+        "visitDates": [
+          "5/31/2022",
+          "7/6/2026"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 0,
+        "departureCount": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.130805,
+          44.483459
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "IST",
+        "municipality": "Arnavutköy, Istanbul",
+        "region": "TR-34",
+        "regionName": "İstanbul",
+        "country": "TR",
+        "countryName": "Türkiye",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "İstanbul Airport",
+        "elevationFt": 325,
+        "elevationM": 99,
+        "visitDates": [
+          "10/22/2022",
+          "11/12/2022",
+          "12/3/2022"
+        ],
+        "visitCount": 3,
+        "arrivalCount": 2,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.741951,
+          41.261297
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "ATH",
+        "municipality": "Spata-Artemida",
+        "region": "GR-I",
+        "regionName": "Attica",
+        "country": "GR",
+        "countryName": "Greece",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Athens Eleftherios Venizelos International Airport",
+        "elevationFt": 308,
+        "elevationM": 94,
+        "visitDates": [
+          "11/12/2022"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 0,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.9445,
+          37.936401
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "SAW",
+        "municipality": "Pendik, Istanbul",
+        "region": "TR-34",
+        "regionName": "İstanbul",
+        "country": "TR",
+        "countryName": "Türkiye",
+        "continent": "AS",
+        "continentName": "Asia",
+        "name": "Istanbul Sabiha Gökçen International Airport",
+        "elevationFt": 312,
+        "elevationM": 95,
+        "visitDates": [
+          "11/26/2022",
+          "12/2/2022"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          29.3092,
+          40.898602
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "TIA",
+        "municipality": "Rinas",
+        "region": "AL-02",
+        "regionName": "Durrës",
+        "country": "AL",
+        "countryName": "Albania",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Tirana International Airport Mother Teresa",
+        "elevationFt": 126,
+        "elevationM": 38,
+        "visitDates": [
+          "11/26/2022",
+          "12/2/2022"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.7206,
+          41.4147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "EZE",
+        "municipality": "Buenos Aires (Ezeiza)",
+        "region": "AR-B",
+        "regionName": "Buenos Aires",
+        "country": "AR",
+        "countryName": "Argentina",
+        "continent": "SA",
+        "continentName": "South America",
+        "name": "Minister Pistarini International Airport",
+        "elevationFt": 67,
+        "elevationM": 20,
+        "visitDates": [
+          "3/14/2023",
+          "4/10/2023"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -58.5358,
+          -34.8222
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "GRU",
+        "municipality": "São Paulo",
+        "region": "BR-SP",
+        "regionName": "São Paulo",
+        "country": "BR",
+        "countryName": "Brazil",
+        "continent": "SA",
+        "continentName": "South America",
+        "name": "Guarulhos - Governador André Franco Montoro International Airport",
+        "elevationFt": 2461,
+        "elevationM": 750,
+        "visitDates": [
+          "3/14/2023"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -46.467778,
+          -23.431944
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "LIM",
+        "municipality": "Lima",
+        "region": "PE-LIM",
+        "regionName": "Lima",
+        "country": "PE",
+        "countryName": "Peru",
+        "continent": "SA",
+        "continentName": "South America",
+        "name": "Jorge Chávez International Airport",
+        "elevationFt": 113,
+        "elevationM": 34,
+        "visitDates": [
+          "3/14/2023",
+          "4/24/2023"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.114305,
+          -12.0219
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "CLT",
+        "municipality": "Charlotte",
+        "region": "US-NC",
+        "regionName": "North Carolina",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Charlotte Douglas International Airport",
+        "elevationFt": 748,
+        "elevationM": 228,
+        "visitDates": [
+          "3/27/2023",
+          "3/28/2023",
+          "2/14/2026"
+        ],
+        "visitCount": 4,
+        "arrivalCount": 2,
+        "departureCount": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -80.94309998,
+          35.2140007
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "SCL",
+        "municipality": "Santiago",
+        "region": "CL-RM",
+        "regionName": "Región Metropolitana de Santiago",
+        "country": "CL",
+        "countryName": "Chile",
+        "continent": "SA",
+        "continentName": "South America",
+        "name": "Comodoro Arturo Merino Benítez International Airport",
+        "elevationFt": 1555,
+        "elevationM": 474,
+        "visitDates": [
+          "3/28/2023",
+          "4/1/2023"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.78579712,
+          -33.39300156
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "PUQ",
+        "municipality": "Punta Arenas",
+        "region": "CL-MA",
+        "regionName": "Magallanes",
+        "country": "CL",
+        "countryName": "Chile",
+        "continent": "SA",
+        "continentName": "South America",
+        "name": "President Carlos Ibañez del Campo International Airport",
+        "elevationFt": 139,
+        "elevationM": 42,
+        "visitDates": [
+          "4/1/2023"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 1,
+        "departureCount": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.854599,
+          -53.002602
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "USH",
+        "municipality": "Ushuaia",
+        "region": "AR-V",
+        "regionName": "Tierra del Fuego",
+        "country": "AR",
+        "countryName": "Argentina",
+        "continent": "SA",
+        "continentName": "South America",
+        "name": "Ushuaia - Malvinas Argentinas International Airport",
+        "elevationFt": 102,
+        "elevationM": 31,
+        "visitDates": [
+          "4/10/2023"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 0,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.2958,
+          -54.8433
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "PTY",
+        "municipality": "Tocumen",
+        "region": "PA-8",
+        "regionName": "Panamá",
+        "country": "PA",
+        "countryName": "Panama",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Tocumen International Airport",
+        "elevationFt": 135,
+        "elevationM": 41,
+        "visitDates": [
+          "4/24/2023",
+          "4/25/2023"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -79.383499,
+          9.07136
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "STL",
+        "municipality": "St Louis",
+        "region": "US-MO",
+        "regionName": "Missouri",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "St. Louis Lambert International Airport",
+        "elevationFt": 618,
+        "elevationM": 188,
+        "visitDates": [
+          "2/28/2024",
+          "3/4/2024",
+          "9/6/2024",
+          "9/8/2024",
+          "9/23/2024",
+          "9/26/2024",
+          "10/9/2024",
+          "11/10/2024",
+          "1/17/2025",
+          "1/29/2025",
+          "2/4/2025",
+          "5/5/2025",
+          "5/28/2025",
+          "6/1/2025",
+          "7/23/2025",
+          "8/4/2025",
+          "11/21/2025",
+          "1/4/2026",
+          "2/14/2026",
+          "2/23/2026",
+          "7/2/2026",
+          "7/6/2026"
+        ],
+        "visitCount": 22,
+        "arrivalCount": 13,
+        "departureCount": 9
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -90.370003,
+          38.748697
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "YYC",
+        "municipality": "Calgary",
+        "region": "CA-AB",
+        "regionName": "Alberta",
+        "country": "CA",
+        "countryName": "Canada",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Calgary International Airport",
+        "elevationFt": 3557,
+        "elevationM": 1084,
+        "visitDates": [
+          "3/15/2024",
+          "3/20/2024"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -114.009933,
+          51.118822
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "BER",
+        "municipality": "Berlin",
+        "region": "DE-BR",
+        "regionName": "DE-BR",
+        "country": "DE",
+        "countryName": "Germany",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Berlin Brandenburg Airport",
+        "elevationFt": 157,
+        "elevationM": 48,
+        "visitDates": [
+          "7/23/2024"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 1,
+        "departureCount": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.500672,
+          52.362247
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "LGA",
+        "municipality": "New York",
+        "region": "US-NY",
+        "regionName": "New York",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "LaGuardia Airport",
+        "elevationFt": 21,
+        "elevationM": 6,
+        "visitDates": [
+          "11/10/2024",
+          "5/28/2025",
+          "6/1/2025"
+        ],
+        "visitCount": 3,
+        "arrivalCount": 1,
+        "departureCount": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.872597,
+          40.777199
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "SGU",
+        "municipality": "St George",
+        "region": "US-UT",
+        "regionName": "Utah",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "St George Regional Airport",
+        "elevationFt": 2941,
+        "elevationM": 896,
+        "visitDates": [
+          "1/17/2025"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 1,
+        "departureCount": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -113.510306,
+          37.036389
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "LCA",
+        "municipality": "Larnaca",
+        "region": "CY-04",
+        "regionName": "Famagusta",
+        "country": "CY",
+        "countryName": "Cyprus",
+        "continent": "AS",
+        "continentName": "Asia",
+        "name": "Larnaca International Airport",
+        "elevationFt": 8,
+        "elevationM": 2,
+        "visitDates": [
+          "12/15/2025",
+          "12/19/2025"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          33.624901,
+          34.875099
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "CAI",
+        "municipality": "Cairo",
+        "region": "EG-C",
+        "regionName": "Cairo",
+        "country": "EG",
+        "countryName": "Egypt",
+        "continent": "AF",
+        "continentName": "Africa",
+        "name": "Cairo International Airport",
+        "elevationFt": 322,
+        "elevationM": 98,
+        "visitDates": [
+          "12/19/2025",
+          "12/30/2025"
+        ],
+        "visitCount": 3,
+        "arrivalCount": 1,
+        "departureCount": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.396694,
+          30.111534
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "SSH",
+        "municipality": "Sharm El Sheikh",
+        "region": "EG-JS",
+        "regionName": "South Sinai",
+        "country": "EG",
+        "countryName": "Egypt",
+        "continent": "AS",
+        "continentName": "Asia",
+        "name": "Sharm El Sheikh International Airport",
+        "elevationFt": 191,
+        "elevationM": 58,
+        "visitDates": [
+          "12/19/2025"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 1,
+        "departureCount": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.394717,
+          27.977272
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "CMN",
+        "municipality": "Casablanca",
+        "region": "MA-06",
+        "regionName": "Meknès-Tafilalet",
+        "country": "MA",
+        "countryName": "Morocco",
+        "continent": "AF",
+        "continentName": "Africa",
+        "name": "Mohammed V International Airport",
+        "elevationFt": 656,
+        "elevationM": 200,
+        "visitDates": [
+          "12/30/2025",
+          "12/31/2025"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.58997,
+          33.3675
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "PDL",
+        "municipality": "Ponta Delgada",
+        "region": "PT-20",
+        "regionName": "Região Autónoma dos Açores",
+        "country": "PT",
+        "countryName": "Portugal",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "João Paulo II Airport",
+        "elevationFt": 259,
+        "elevationM": 79,
+        "visitDates": [
+          "1/2/2026",
+          "1/3/2026"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -25.69790077,
+          37.74119949
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "SJU",
+        "municipality": "San Juan",
+        "region": "PR-U-A",
+        "regionName": "PR-U-A",
+        "country": "PR",
+        "countryName": "Puerto Rico",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Luis Munoz Marin International Airport",
+        "elevationFt": 9,
+        "elevationM": 3,
+        "visitDates": [
+          "2/14/2026",
+          "2/23/2026"
+        ],
+        "visitCount": 2,
+        "arrivalCount": 1,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.001801,
+          18.4394
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "HEL",
+        "municipality": "Helsinki (Vantaa)",
+        "region": "FI-18",
+        "regionName": "Nyland",
+        "country": "FI",
+        "countryName": "Finland",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Helsinki Vantaa Airport",
+        "elevationFt": 179,
+        "elevationM": 55,
+        "visitDates": [
+          "8/21/2026",
+          "8/30/2026"
+        ],
+        "visitCount": 3,
+        "arrivalCount": 2,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.963341,
+          60.318363
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "RIX",
+        "municipality": "Riga",
+        "region": "LV-062",
+        "regionName": "Mārupes novads",
+        "country": "LV",
+        "countryName": "Latvia",
+        "continent": "EU",
+        "continentName": "Europe",
+        "name": "Riga International Airport",
+        "elevationFt": 36,
+        "elevationM": 11,
+        "visitDates": [
+          "8/30/2026"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 0,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.9711,
+          56.923599
+        ]
+      }
+    }
+  ]
+}
