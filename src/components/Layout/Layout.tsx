@@ -129,14 +129,6 @@ export function Layout({ children }: LayoutProps) {
             >
               GitHub
             </a>
-            <a
-              href="https://linkedin.com/in/robert-bryson"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-zinc-300"
-            >
-              LinkedIn
-            </a>
             <a href="/rss.xml" className="hover:text-zinc-300">
               RSS
             </a>

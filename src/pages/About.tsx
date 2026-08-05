@@ -25,7 +25,6 @@ export function About() {
       alumniOf: { '@type': 'Organization', name: 'Microsoft', url: 'https://www.microsoft.com' },
       sameAs: [
         'https://github.com/robert-bryson',
-        'https://linkedin.com/in/robert-bryson',
       ],
     },
   });
@@ -92,16 +91,6 @@ export function About() {
               className="text-zinc-400 hover:text-violet-400"
             >
               GitHub
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://linkedin.com/in/robert-bryson"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-zinc-400 hover:text-violet-400"
-            >
-              LinkedIn
             </a>
           </li>
         </ul>
