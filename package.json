@@ -41,8 +41,8 @@
   "dependencies": {
     "@aws-sdk/client-cloudfront": "^3.1072.0",
     "maplibre-gl": "^5.24.0",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "react-globe.gl": "^2.38.0",
     "react-router-dom": "^7.18.0"
   },
