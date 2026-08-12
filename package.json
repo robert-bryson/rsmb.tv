@@ -79,7 +79,7 @@
     "ink-spinner": "^5.0.0",
     "iso-3166-2": "^1.0.0",
     "jsdom": "^29.1.1",
-    "lint-staged": "^17.0.7",
+    "lint-staged": "^17.3.0",
     "remark-frontmatter": "^5.0.0",
     "remark-mdx-frontmatter": "^5.2.0",
     "tailwindcss": "^4.3.1",
