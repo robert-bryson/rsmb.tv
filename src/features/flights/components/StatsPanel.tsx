@@ -91,7 +91,7 @@ export function StatsPanel({
 
   return (
     <div
-      className={`absolute top-16 bottom-[calc(env(safe-area-inset-bottom,0px)+6rem)] left-4 z-20 w-80 max-w-[calc(100vw-4.5rem)] transition-transform duration-300 ease-out pointer-events-none ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+      className={`absolute top-16 bottom-[calc(env(safe-area-inset-bottom,0px)+6rem)] left-4 z-20 w-80 max-w-[calc(100vw-2rem)] transition-transform duration-300 ease-out pointer-events-none ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
     >
       {/* Panel content — always mounted so the slide-out transition carries visible content.
           `inert` makes the off-screen panel unreachable by keyboard/assistive tech. */}

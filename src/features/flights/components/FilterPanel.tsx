@@ -114,7 +114,7 @@ export function FilterPanel({
       {isOpen && (
         <div
           ref={panelRef}
-          className="absolute top-12 right-0 w-72 bg-gray-900/95 backdrop-blur rounded-lg border border-gray-700 shadow-xl overflow-hidden z-30"
+          className="absolute top-12 right-0 w-72 max-w-[calc(100vw-2rem)] bg-gray-900/95 backdrop-blur rounded-lg border border-gray-700 shadow-xl overflow-hidden z-30"
           role="dialog"
           aria-modal="true"
           aria-labelledby="filter-panel-title"

@@ -20,7 +20,7 @@ export const MobileInfoOverlay = memo(function MobileInfoOverlay({ arc, onClose,
 
     return (
         <div
-            className="sm:hidden fixed inset-x-4 bottom-20 z-30"
+            className="sm:hidden fixed inset-x-4 bottom-[calc(env(safe-area-inset-bottom,0px)+5.5rem)] z-30"
             role="dialog"
             aria-label="Route information"
         >
