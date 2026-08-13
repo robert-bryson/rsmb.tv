@@ -109,7 +109,7 @@ export const ActiveFilterChips = memo(function ActiveFilterChips({
 
     return (
         <div
-            className="absolute bottom-[calc(env(safe-area-inset-bottom,0px)+4.75rem)] left-4 right-16 sm:right-auto z-20 flex max-w-[calc(100vw-5rem)] flex-wrap gap-2"
+            className="absolute bottom-[calc(env(safe-area-inset-bottom,0px)+4.75rem)] left-4 right-16 sm:right-auto z-20 flex max-w-[calc(100vw-5rem)] sm:max-w-none flex-wrap gap-2"
             aria-label="Active flight filters"
         >
             {chips.map((chip) => (

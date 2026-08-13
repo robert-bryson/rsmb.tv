@@ -25,7 +25,7 @@ export const ControlButtons = memo(function ControlButtons({
     copiedUrl,
 }: ControlButtonsProps) {
     return (
-        <div className="absolute bottom-4 right-4 flex flex-col gap-2 z-20">
+        <div className="absolute bottom-[calc(env(safe-area-inset-bottom,0px)+1rem)] right-4 flex flex-col gap-2 z-20">
             {/* Reset View */}
             <button
                 onClick={onResetView}
