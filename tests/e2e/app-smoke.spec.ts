@@ -28,12 +28,21 @@ test('flights stats panel hides its scrollbar when closed', async ({ page }) => 
     await page.goto('/projects/flights/map?stats=1');
 
     const panel = page.getByTestId('stats-panel-content');
+    const resizeHandle = page.locator('[role="separator"][aria-label="Resize stats panel"]');
     await expect(panel).toHaveAttribute('data-state', 'open');
     await expect.poll(() => panel.evaluate((element) => getComputedStyle(element).overflowY)).toBe('auto');
     await expect.poll(() => panel.evaluate((element) => getComputedStyle(element).scrollbarColor)).not.toBe('auto');
+    await expect(resizeHandle).toBeVisible();
+
+    const handlePositionBeforeScroll = await resizeHandle.boundingBox();
+    expect(handlePositionBeforeScroll).not.toBeNull();
+    await panel.evaluate((element) => element.scrollTo({ top: element.scrollHeight }));
+    await expect.poll(() => panel.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+    await expect.poll(async () => (await resizeHandle.boundingBox())?.y).toBe(handlePositionBeforeScroll!.y);
 
     await page.getByRole('button', { name: 'Hide stats panel' }).click();
 
     await expect(panel).toHaveAttribute('data-state', 'closed');
     await expect.poll(() => panel.evaluate((element) => getComputedStyle(element).overflowY)).toBe('hidden');
+    await expect(resizeHandle).toHaveAttribute('tabindex', '-1');
 });

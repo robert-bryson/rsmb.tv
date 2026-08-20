@@ -46,46 +46,43 @@ export function Home() {
             View all projects →
           </Link>
         </div>
-        <ul className="space-y-4">
-          {featuredProjects.map((project) => {
+        <ul className="grid gap-4 sm:grid-cols-2">
+          {featuredProjects.map((project, index) => {
             const linkUrl = `/projects/${project.slug}`;
-            const linkProps = {
-              className: "group block p-4 -mx-4 rounded-lg hover:bg-zinc-900/50 transition-colors"
-            };
-
-            const content = (
-              <>
-                <div className="flex items-baseline justify-between gap-4 mb-2">
-                  <h3 className="text-lg font-medium text-zinc-100 group-hover:text-violet-400">
-                    {project.title}
-                  </h3>
-                  <span className="text-sm text-zinc-500">{project.year}</span>
-                </div>
-                {project.previewImage && (
-                  <img
-                    src={project.previewImage}
-                    alt={`${project.title} preview`}
-                    className="mb-3 aspect-video w-full rounded-md border border-zinc-800 object-cover"
-                    loading="lazy"
-                  />
-                )}
-                <p className="mt-1 text-zinc-400 text-sm">
-                  {project.description}
-                </p>
-                <div className="mt-2 flex gap-2">
-                  {project.tech.slice(0, 3).map((t) => (
-                    <span key={t} className="text-xs text-zinc-500">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </>
-            );
 
             return (
-              <li key={project.slug}>
-                <Link to={linkUrl} {...linkProps}>
-                  {content}
+              <li key={project.slug} className="min-w-0">
+                <Link
+                  to={linkUrl}
+                  className="group flex h-full flex-col overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900/30 hover:border-zinc-700 hover:bg-zinc-900/60"
+                >
+                  {project.previewImage && (
+                    <img
+                      src={project.previewImage}
+                      alt=""
+                      className="aspect-video w-full border-b border-zinc-800 object-cover"
+                      loading={index === 0 ? 'eager' : 'lazy'}
+                      fetchPriority={index === 0 ? 'high' : 'auto'}
+                    />
+                  )}
+                  <div className="flex flex-1 flex-col p-4">
+                    <div className="mb-2 flex items-baseline justify-between gap-4">
+                      <h3 className="text-lg font-medium text-zinc-100 group-hover:text-violet-400">
+                        {project.title}
+                      </h3>
+                      <span className="shrink-0 text-sm text-zinc-500">{project.year}</span>
+                    </div>
+                    <p className="text-sm leading-relaxed text-zinc-400">
+                      {project.summary ?? project.description}
+                    </p>
+                    <ul className="mt-auto flex flex-wrap gap-x-2 gap-y-1 pt-3" aria-label="Technologies">
+                      {project.tech.slice(0, 3).map((technology) => (
+                        <li key={technology} className="text-xs text-zinc-500">
+                          {technology}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </Link>
               </li>
             );

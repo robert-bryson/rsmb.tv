@@ -80,8 +80,7 @@ export default function StatusDashboard() {
                     </>
                 )}
                 actions={[
-                    { label: 'Open project repository →', href: STATUS_DASHBOARD_REPO, variant: 'primary', external: true },
-                    { label: 'Source on GitHub →', href: STATUS_DASHBOARD_REPO, external: true },
+                    { label: 'Source on GitHub →', href: STATUS_DASHBOARD_REPO, variant: 'primary', external: true },
                 ]}
             />
 

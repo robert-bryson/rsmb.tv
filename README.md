@@ -129,7 +129,7 @@ View and UI parameters include `lat`, `lng`, `alt`, `stats`, `filters`, `help`, 
 
 The flights stats panel stays mounted when closed. This keeps the slide animation smooth. The closed panel uses `inert` and `aria-hidden`.
 
-On desktop, drag the right edge to resize the panel. Width is stored in local storage key `flights-stats-panel-width`. The width range is `272` to `520` pixels.
+On a desktop device, drag the right edge to resize the panel. For keyboard control, focus the edge. Use the Left Arrow or Right Arrow key to change the width by `8` pixels. Use the Home key for the minimum width. Use the End key for the maximum width. The application stores the width in the `flights-stats-panel-width` local storage key. The permitted width is `272` to `520` pixels.
 
 Distance values show the active unit. Hover a distance value to see the alternate unit.
 

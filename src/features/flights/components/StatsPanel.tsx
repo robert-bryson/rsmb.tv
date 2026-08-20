@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
+import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent as ReactPointerEvent } from 'react';
 import type { FlightStats, SelectedRouteInfo, SelectedCountryInfo, SelectedRegionInfo, FlightTypeFilter } from '../types';
 import { EARTH_CIRCUMFERENCE_KM } from '../constants';
 import { formatElevation, getFlightTypeLabel } from '../utils';
@@ -13,9 +13,12 @@ const DEFAULT_PANEL_WIDTH = 320;
 const MIN_PANEL_WIDTH = 272;
 const MAX_PANEL_WIDTH = 520;
 
-function clampPanelWidth(width: number): number {
+function clampPanelWidth(width: unknown): number {
+  if (typeof width !== 'number' || !Number.isFinite(width)) return DEFAULT_PANEL_WIDTH;
   return Math.min(MAX_PANEL_WIDTH, Math.max(MIN_PANEL_WIDTH, Math.round(width)));
 }
+
+type SectionMode = 'defaults' | 'expanded' | 'collapsed';
 
 interface StatsPanelProps {
   stats: FlightStats;
@@ -71,18 +74,19 @@ export function StatsPanel({
   const airportInfo = stats.selectedAirportInfo;
 
   // State to track which sections are open (for collapse all/expand all)
-  const [allExpanded, setAllExpanded] = useState(true);
+  const [sectionMode, setSectionMode] = useState<SectionMode>('defaults');
   const [sectionStates, setSectionStates] = useState<Record<string, boolean>>({});
   const [panelWidth, setPanelWidth] = usePersistedState<number>('flights-stats-panel-width', DEFAULT_PANEL_WIDTH);
+  const effectivePanelWidth = clampPanelWidth(panelWidth);
   const [isResizingPanel, setIsResizingPanel] = useState(false);
   const resizeStartXRef = useRef(0);
   const resizeStartWidthRef = useRef(panelWidth);
 
   useEffect(() => {
-    if (panelWidth < MIN_PANEL_WIDTH || panelWidth > MAX_PANEL_WIDTH) {
-      setPanelWidth(clampPanelWidth(panelWidth));
+    if (panelWidth !== effectivePanelWidth) {
+      setPanelWidth(effectivePanelWidth);
     }
-  }, [panelWidth, setPanelWidth]);
+  }, [effectivePanelWidth, panelWidth, setPanelWidth]);
 
   useEffect(() => {
     if (!isResizingPanel) return;
@@ -119,14 +123,35 @@ export function StatsPanel({
     if (event.button !== 0) return;
 
     resizeStartXRef.current = event.clientX;
-    resizeStartWidthRef.current = panelWidth;
+    resizeStartWidthRef.current = effectivePanelWidth;
     setIsResizingPanel(true);
+  };
+
+  const handleResizeKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    const increments: Partial<Record<KeyboardEvent['key'], number>> = {
+      ArrowLeft: -8,
+      ArrowRight: 8,
+    };
+
+    if (event.key === 'Home' || event.key === 'End') {
+      event.preventDefault();
+      setPanelWidth(event.key === 'Home' ? MIN_PANEL_WIDTH : MAX_PANEL_WIDTH);
+      return;
+    }
+
+    const increment = increments[event.key];
+    if (increment === undefined) return;
+
+    event.preventDefault();
+    setPanelWidth((currentWidth) => clampPanelWidth(clampPanelWidth(currentWidth) + increment));
   };
 
   // Get the open state for a section
   const getSectionOpen = (sectionId: string, defaultOpen = true) => {
     if (sectionStates[sectionId] !== undefined) return sectionStates[sectionId];
-    return allExpanded ? defaultOpen : false;
+    if (sectionMode === 'expanded') return true;
+    if (sectionMode === 'collapsed') return false;
+    return defaultOpen;
   };
 
   // Toggle a specific section.
@@ -134,24 +159,42 @@ export function StatsPanel({
   // so that the functional updater is self-contained and batched updates stay correct.
   const toggleSection = (sectionId: string, defaultOpen = true) => {
     setSectionStates((prev) => {
-      const current = prev[sectionId] !== undefined ? prev[sectionId] : (allExpanded ? defaultOpen : false);
+      const current = prev[sectionId] !== undefined
+        ? prev[sectionId]
+        : sectionMode === 'expanded' || (sectionMode === 'defaults' && defaultOpen);
       return { ...prev, [sectionId]: !current };
     });
   };
 
   // Collapse all or expand all
   const toggleAll = () => {
-    const newExpanded = !allExpanded;
-    setAllExpanded(newExpanded);
-    // Clear individual states so they follow the global state
+    setSectionMode((current) => current === 'collapsed' ? 'expanded' : 'collapsed');
     setSectionStates({});
   };
 
   return (
     <div
       className={`absolute top-16 bottom-[calc(env(safe-area-inset-bottom,0px)+6rem)] left-4 z-20 max-w-[calc(100vw-2rem)] transition-transform duration-300 ease-out pointer-events-none ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
-      style={{ width: `${panelWidth}px` }}
+      style={{ width: `${effectivePanelWidth}px` }}
     >
+      <div
+        role="separator"
+        aria-orientation="vertical"
+        aria-label="Resize stats panel"
+        aria-valuemin={MIN_PANEL_WIDTH}
+        aria-valuemax={MAX_PANEL_WIDTH}
+        aria-valuenow={effectivePanelWidth}
+        aria-hidden={!isOpen || undefined}
+        tabIndex={isOpen ? 0 : -1}
+        onPointerDown={startPanelResize}
+        onKeyDown={handleResizeKeyDown}
+        className={`absolute -right-1 top-0 z-10 hidden h-full w-3 cursor-col-resize focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-400 md:block ${isOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}
+      >
+        <div
+          className={`mx-auto h-full w-px transition-colors ${isResizingPanel ? 'bg-violet-400/80' : 'bg-transparent hover:bg-zinc-600/80'}`}
+        />
+      </div>
+
       {/* Panel content — always mounted so the slide-out transition carries visible content.
           `inert` makes the off-screen panel unreachable by keyboard/assistive tech. */}
       <div
@@ -161,25 +204,14 @@ export function StatsPanel({
         aria-hidden={!isOpen || undefined}
         inert={!isOpen || undefined}
       >
-        <div
-          role="separator"
-          aria-orientation="vertical"
-          aria-label="Resize stats panel"
-          onPointerDown={startPanelResize}
-          className="absolute -right-1 top-0 hidden h-full w-3 cursor-col-resize md:block"
-        >
-          <div
-            className={`mx-auto h-full w-px transition-colors ${isResizingPanel ? 'bg-violet-400/80' : 'bg-transparent hover:bg-zinc-600/80'}`}
-          />
-        </div>
-
         {/* Collapse All / Expand All Button */}
         <div className="flex justify-end mb-2">
           <button
+            type="button"
             onClick={toggleAll}
             className="text-gray-500 hover:text-gray-300 text-xs px-2 py-1 rounded hover:bg-gray-800 transition-colors flex items-center gap-1"
           >
-            {allExpanded ? '▼ Collapse All' : '▶ Expand All'}
+            {sectionMode === 'collapsed' ? '▶ Expand All' : '▼ Collapse All'}
           </button>
         </div>
 

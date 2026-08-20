@@ -5,7 +5,7 @@ import { About } from '../pages/About';
 import { Blog } from '../pages/Blog';
 import { Projects } from '../pages/Projects';
 import { NotFound } from '../pages/NotFound';
-import { projects } from '../content/projects';
+import { featuredProjects, projects } from '../content/projects';
 import { getAllPosts } from '../content/posts';
 import { getJsonLdByType } from './helpers/jsonLd';
 import { renderWithRouter } from './helpers/router';
@@ -24,6 +24,17 @@ describe('Home page', () => {
     it('renders projects index link', () => {
         renderWithRouter(<Home />);
         expect(screen.getAllByRole('link', { name: /View all/i }).some((link) => link.getAttribute('href') === '/projects')).toBe(true);
+    });
+
+    it('renders only the curated projects with concise summaries', () => {
+        renderWithRouter(<Home />);
+
+        for (const project of featuredProjects) {
+            expect(screen.getByRole('link', { name: new RegExp(project.title, 'i') })).toBeInTheDocument();
+            expect(project.summary).toBeTruthy();
+            expect(screen.getByText(project.summary ?? project.description)).toBeInTheDocument();
+        }
+        expect(screen.queryByRole('link', { name: /Tornado Tracks/i })).not.toBeInTheDocument();
     });
 
     it('adds WebSite JSON-LD with shared author', () => {

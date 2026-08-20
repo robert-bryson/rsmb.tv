@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ComponentProps } from 'react';
 import { StatsPanel } from '../features/flights/components/StatsPanel';
 import type { FlightStats, SelectedRouteInfo } from '../features/flights/types';
@@ -100,6 +100,12 @@ function makeSelectedRouteInfo(): SelectedRouteInfo {
 }
 
 describe('StatsPanel', () => {
+    beforeEach(() => {
+        localStorage.clear();
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+    });
+
     describe('pull tab toggle button', () => {
         it('renders the pull tab regardless of open state', () => {
             renderStatsPanel({ isOpen: false });
@@ -266,6 +272,20 @@ describe('StatsPanel', () => {
             expect(screen.getByText('First')).toBeInTheDocument();
         });
 
+        it('opens sections with closed defaults when Expand All is selected', () => {
+            renderStatsPanel({
+                isOpen: true,
+                selectedRouteInfo: makeSelectedRouteInfo(),
+                validAirportCodes: new Set(['SEA', 'LAX']),
+            });
+
+            expect(screen.queryByText('Latest')).not.toBeInTheDocument();
+            fireEvent.click(screen.getByRole('button', { name: '▼ Collapse All' }));
+            fireEvent.click(screen.getByRole('button', { name: '▶ Expand All' }));
+
+            expect(screen.getByText('Latest')).toBeInTheDocument();
+        });
+
         it('adds airport-name tooltips to route airport code links', () => {
             renderStatsPanel({
                 isOpen: true,
@@ -356,6 +376,57 @@ describe('StatsPanel', () => {
             await waitFor(() => {
                 expect(document.body.style.cursor).toBe('');
                 expect(document.body.style.userSelect).toBe('');
+            });
+        });
+
+        it('supports keyboard resizing and exposes its current width', () => {
+            const { container } = renderStatsPanel({ isOpen: true });
+            const resizeHandle = screen.getByRole('separator', { name: 'Resize stats panel' });
+
+            expect(resizeHandle).toHaveAttribute('aria-valuemin', '272');
+            expect(resizeHandle).toHaveAttribute('aria-valuemax', '520');
+            expect(resizeHandle).toHaveAttribute('aria-valuenow', '320');
+
+            fireEvent.keyDown(resizeHandle, { key: 'ArrowRight' });
+
+            expect(resizeHandle).toHaveAttribute('aria-valuenow', '328');
+            expect(container.firstElementChild).toHaveStyle({ width: '328px' });
+
+            fireEvent.keyDown(resizeHandle, { key: 'Home' });
+            expect(resizeHandle).toHaveAttribute('aria-valuenow', '272');
+
+            fireEvent.keyDown(resizeHandle, { key: 'ArrowLeft' });
+            expect(resizeHandle).toHaveAttribute('aria-valuenow', '272');
+
+            fireEvent.keyDown(resizeHandle, { key: 'End' });
+            expect(resizeHandle).toHaveAttribute('aria-valuenow', '520');
+
+            fireEvent.keyDown(resizeHandle, { key: 'ArrowRight' });
+            expect(resizeHandle).toHaveAttribute('aria-valuenow', '520');
+            expect(localStorage.getItem('flights-stats-panel-width')).toBe('520');
+        });
+
+        it('removes the resize handle from keyboard navigation when closed', () => {
+            const { container } = renderStatsPanel({ isOpen: false });
+
+            const resizeHandle = container.querySelector('[role="separator"]');
+            expect(resizeHandle).toHaveAttribute('aria-label', 'Resize stats panel');
+            expect(resizeHandle).toHaveAttribute('aria-hidden', 'true');
+            expect(resizeHandle).toHaveAttribute('tabindex', '-1');
+        });
+
+        it.each([
+            ['a nonnumeric value', JSON.stringify('invalid'), '320px', '320'],
+            ['null', 'null', '320px', '320'],
+            ['a value below the minimum', '100', '272px', '272'],
+            ['a value above the maximum', '1000', '520px', '520'],
+        ])('repairs %s in persisted panel width', async (_case, storedValue, expectedWidth, expectedStoredValue) => {
+            localStorage.setItem('flights-stats-panel-width', storedValue);
+            const { container } = renderStatsPanel({ isOpen: true });
+
+            expect(container.firstElementChild).toHaveStyle({ width: expectedWidth });
+            await waitFor(() => {
+                expect(localStorage.getItem('flights-stats-panel-width')).toBe(expectedStoredValue);
             });
         });
     });

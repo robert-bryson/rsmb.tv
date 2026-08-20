@@ -95,6 +95,7 @@ describe('Aborg page', () => {
     it('renders heading, source link, and usage commands', () => {
         renderWithRouter(<Aborg />, { route: '/projects/aborg' });
         expect(screen.getByRole('heading', { level: 1, name: /aborg/i })).toBeInTheDocument();
+        expect(screen.getAllByRole('link', { name: /Source on GitHub/i })).toHaveLength(1);
         expect(screen.getByRole('link', { name: /Source on GitHub/i })).toHaveAttribute('href', 'https://github.com/robert-bryson/aborg');
         expect(screen.getByText(/aborg fetch --latest 1 --organize/i)).toBeInTheDocument();
     });
@@ -104,6 +105,7 @@ describe('Parc page', () => {
     it('renders heading, source link, screenshot, and usage commands', () => {
         renderWithRouter(<Parc />, { route: '/projects/parc' });
         expect(screen.getByRole('heading', { level: 1, name: /parc/i })).toBeInTheDocument();
+        expect(screen.getAllByRole('link', { name: /Source on GitHub/i })).toHaveLength(1);
         expect(screen.getByRole('link', { name: /Source on GitHub/i })).toHaveAttribute('href', 'https://github.com/robert-bryson/parc');
         expect(screen.getByRole('img', { name: /parc update live progress output/i })).toHaveAttribute('src', '/images/parc/update-live-progress.webp');
         expect(screen.getByText(/parc update/i)).toBeInTheDocument();
@@ -113,6 +115,7 @@ describe('Parc page', () => {
 describe('StatusDashboard page', () => {
     it('renders heading, usage pre block, and screenshots', () => {
         renderWithRouter(<StatusDashboard />, { route: '/projects/status-dashboard' });
+        expect(screen.getAllByRole('link', { name: /Source on GitHub/i })).toHaveLength(1);
         expect(screen.getByRole('heading', { level: 1, name: /Status Dashboard/i })).toBeInTheDocument();
         expect(screen.getByText(/tsx scripts\/aws-watch\.tsx/i)).toBeInTheDocument();
         expect(screen.getByRole('img', { name: /Status Dashboard calm view/i })).toHaveAttribute(

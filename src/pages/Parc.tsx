@@ -51,8 +51,7 @@ export default function Parc() {
                 stack="Python CLI"
                 description="A config-driven command line app for building a durable podcast archive over time. It manages feed subscriptions, scans for new episodes, downloads pending audio safely, and audits the local archive against its SQLite state."
                 actions={[
-                    { label: 'Open project repository →', href: PARC_URL, variant: 'primary', external: true },
-                    { label: 'Source on GitHub →', href: PARC_URL, external: true },
+                    { label: 'Source on GitHub →', href: PARC_URL, variant: 'primary', external: true },
                 ]}
             />
 

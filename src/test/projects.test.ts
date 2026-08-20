@@ -50,11 +50,17 @@ describe('projects data', () => {
         }
     });
 
-    it('featuredProjects is a subset of projects', () => {
-        expect(featuredProjects.length).toBeGreaterThan(0);
-        expect(featuredProjects.length).toBeLessThanOrEqual(projects.length);
+    it('curates four flagship projects for the home page', () => {
+        expect(featuredProjects.map(project => project.slug)).toEqual([
+            'through-routes',
+            'flights',
+            'anki-artisan',
+            'bookend',
+        ]);
         for (const fp of featuredProjects) {
             expect(projects).toContain(fp);
+            expect(fp.summary).toBeTruthy();
+            expect(fp.previewImage).toBeTruthy();
         }
     });
 

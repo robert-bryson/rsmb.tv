@@ -7,6 +7,8 @@ export interface Project {
   slug: string;
   title: string;
   description: string;
+  /** Short description used when the project appears in a compact card. */
+  summary?: string;
   tech: string[];
   applicationCategory: string;
   featured?: boolean;
@@ -24,6 +26,7 @@ export const projects: Project[] = [
     slug: 'through-routes',
     title: 'Through Routes',
     description: 'Find scenic, twisty motorcycle loop routes on rural roads. Processes OpenStreetMap data to build a loop-friendly road graph, scores roads by curviness and elevation change, and generates ranked circular routes from any start point.',
+    summary: 'Generate ranked motorcycle loops using road curviness, elevation, and OpenStreetMap data.',
     tech: ['Python', 'NumPy', 'FastAPI', 'TypeScript', 'MapLibre GL', 'Docker'],
     applicationCategory: 'TravelApplication',
     featured: true,
@@ -42,6 +45,7 @@ export const projects: Project[] = [
     slug: 'flights',
     title: 'Flights',
     description: 'An interactive 3D globe visualization of flights I\'ve taken around the world. Filter by year, see route frequencies, and explore travel statistics.',
+    summary: 'Explore my flight history on an interactive 3D globe with filters and travel statistics.',
     tech: ['React', 'Three.js', 'WebGL', 'GeoJSON'],
     applicationCategory: 'TravelApplication',
     featured: true,
@@ -61,6 +65,7 @@ export const projects: Project[] = [
     slug: 'anki-artisan',
     title: 'Anki Artisan',
     description: 'Craft Anki flashcard decks from iNaturalist observations and eBird region data. Automatically fetches species photos, audio, and taxonomy to generate visual ID, nomenclature, sound ID, and confusion species cards.',
+    summary: 'Build media-rich wildlife flashcards from iNaturalist observations and eBird region data.',
     tech: ['Python', 'Click', 'eBird API', 'iNaturalist API', 'SQLite'],
     applicationCategory: 'EducationalApplication',
     featured: true,
@@ -106,6 +111,7 @@ export const projects: Project[] = [
     slug: 'bookend',
     title: 'Bookend',
     description: 'A personal book-tracking app to log reads, organize books into lists, and explore reading stats. Integrates with Google Books, Open Library, and Wikidata for enrichment—covers, descriptions, author links, and more.',
+    summary: 'Track reading, organize book lists, and enrich library data from multiple open APIs.',
     tech: ['Next.js', 'TypeScript', 'Prisma', 'PostgreSQL', 'Tailwind CSS', 'Docker'],
     applicationCategory: 'LifestyleApplication',
     featured: true,
@@ -127,7 +133,6 @@ export const projects: Project[] = [
     description: 'Interactive map of recent station records and all-time high/low temperature records across US states and counties, powered by NOAA and ACIS data.',
     tech: ['React', 'MapLibre GL', 'NOAA ACIS', 'GeoJSON'],
     applicationCategory: 'WeatherApplication',
-    featured: true,
     demoUrl: '/projects/temperature-records/map',
     previewImage: '/images/temperature-records/records-daily.webp',
     year: 2025,
@@ -143,7 +148,6 @@ export const projects: Project[] = [
     description: 'A time-first MapLibre archive of NOAA/NCEI tornado tracks with EF-scale filters, regional presets, density mode, and annual playback.',
     tech: ['React', 'MapLibre GL', 'NOAA/NCEI', 'GeoJSON'],
     applicationCategory: 'WeatherApplication',
-    featured: true,
     demoUrl: '/projects/tornado-tracks/map',
     previewImage: '/images/tornado-tracks/conus-tracks.webp',
     year: 2026,
@@ -176,7 +180,6 @@ export const projects: Project[] = [
     description: 'Convert Google Routes into GPX files for GPS devices and bike computers. A privacy-focused web app that runs entirely in your browser—your routes never touch a server.',
     tech: ['JavaScript', 'Leaflet', 'Google Routes API'],
     applicationCategory: 'TravelApplication',
-    featured: true,
     demoUrl: 'https://route2gpx.rsmb.tv',
     sourceUrl: 'https://github.com/robert-bryson/route2gpx',
     previewImage: '/images/route2gpx/route-planning.webp',

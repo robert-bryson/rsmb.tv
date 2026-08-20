@@ -61,8 +61,7 @@ export default function Aborg() {
                     </>
                 )}
                 actions={[
-                    { label: 'Open project repository →', href: ABORG_URL, variant: 'primary', external: true },
-                    { label: 'Source on GitHub →', href: ABORG_URL, external: true },
+                    { label: 'Source on GitHub →', href: ABORG_URL, variant: 'primary', external: true },
                 ]}
             />
 
