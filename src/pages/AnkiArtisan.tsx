@@ -54,7 +54,7 @@ export default function AnkiArtisan() {
     const project = projects.find(p => p.slug === 'anki-artisan')!;
 
     return (
-        <div className="max-w-2xl">
+        <div className="max-w-[52rem]">
             <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
                 Anki Artisan
             </h1>

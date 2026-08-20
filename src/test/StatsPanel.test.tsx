@@ -1,8 +1,8 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import type { ComponentProps } from 'react';
 import { StatsPanel } from '../features/flights/components/StatsPanel';
-import type { FlightStats } from '../features/flights/types';
+import type { FlightStats, SelectedRouteInfo } from '../features/flights/types';
 
 /** Minimal FlightStats for rendering OverallStats without optional data. */
 function makeStats(overrides: Partial<FlightStats> = {}): FlightStats {
@@ -68,6 +68,35 @@ function createStatsPanelProps(
 
 function renderStatsPanel(overrides: Partial<ComponentProps<typeof StatsPanel>> = {}) {
     return render(<StatsPanel {...createStatsPanelProps(overrides)} />);
+}
+
+function makeSelectedRouteInfo(): SelectedRouteInfo {
+    return {
+        routeKey: 'LAX-SEA',
+        originCode: 'SEA',
+        originName: 'Seattle-Tacoma International Airport',
+        originMunicipality: 'Seattle',
+        originCountry: 'US',
+        originCountryName: 'United States',
+        originRegion: 'US-WA',
+        originRegionName: 'Washington',
+        originContinentName: 'North America',
+        destinationCode: 'LAX',
+        destinationName: 'Los Angeles International Airport',
+        destinationMunicipality: 'Los Angeles',
+        destinationCountry: 'US',
+        destinationCountryName: 'United States',
+        destinationRegion: 'US-CA',
+        destinationRegionName: 'California',
+        destinationContinentName: 'North America',
+        totalFlights: 16,
+        airlines: ['Alaska Airlines'],
+        years: [2023, 2024],
+        dates: Array.from({ length: 16 }, (_, index) => `1/${16 - index}/2024`),
+        distanceKm: 1545,
+        isInternational: false,
+        isIntercontinental: false,
+    };
 }
 
 describe('StatsPanel', () => {
@@ -204,8 +233,37 @@ describe('StatsPanel', () => {
                 stats: makeStats({ totalDistance: 100, averageDistance: 10 }),
             });
 
-            expect(screen.getByText('62 mi')).toBeInTheDocument();
-            expect(screen.getByText('6 mi')).toBeInTheDocument();
+            expect(screen.getByText('62 mi')).toHaveAttribute('title', '100 km');
+            expect(screen.getByText('6 mi')).toHaveAttribute('title', '10 km');
+        });
+
+        it('shows miles on hover for metric distance stats', () => {
+            renderStatsPanel({
+                isOpen: true,
+                stats: makeStats({ totalDistance: 100, averageDistance: 10 }),
+            });
+
+            expect(screen.getByText('100 km')).toHaveAttribute('title', '62 mi');
+            expect(screen.getByText('10 km')).toHaveAttribute('title', '6 mi');
+        });
+
+        it('presents long route histories incrementally as styled flight entries', () => {
+            renderStatsPanel({
+                isOpen: true,
+                selectedRouteInfo: makeSelectedRouteInfo(),
+                validAirportCodes: new Set(['SEA', 'LAX']),
+            });
+
+            fireEvent.click(screen.getByRole('button', { name: /All Flights \(16\)/ }));
+
+            expect(screen.getByText('Latest')).toBeInTheDocument();
+            expect(screen.getByText('8 more')).toBeInTheDocument();
+            expect(screen.queryByText('1/8/2024')).not.toBeInTheDocument();
+
+            fireEvent.click(screen.getByRole('button', { name: 'Show 8 more' }));
+
+            expect(screen.getByText('1/8/2024')).toBeInTheDocument();
+            expect(screen.getByText('First')).toBeInTheDocument();
         });
 
         it('adds airport-name tooltips to route airport code links', () => {
@@ -277,6 +335,28 @@ describe('StatsPanel', () => {
 
             expect(onClearAirport).toHaveBeenCalledOnce();
             expect(onToggle).not.toHaveBeenCalled();
+        });
+
+        it('stops resize mode when pointercancel fires', async () => {
+            renderStatsPanel({ isOpen: true });
+
+            const resizeHandle = screen.getByRole('separator', { name: 'Resize stats panel' });
+            fireEvent.pointerDown(resizeHandle, {
+                pointerType: 'mouse',
+                button: 0,
+                clientX: 320,
+            });
+
+            await waitFor(() => {
+                expect(document.body.style.cursor).toBe('col-resize');
+            });
+
+            fireEvent(window, new PointerEvent('pointercancel'));
+
+            await waitFor(() => {
+                expect(document.body.style.cursor).toBe('');
+                expect(document.body.style.userSelect).toBe('');
+            });
         });
     });
 });

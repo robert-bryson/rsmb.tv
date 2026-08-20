@@ -3,14 +3,21 @@ import { useJsonLd } from '../hooks/useJsonLd';
 import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
 import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
+import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/ProjectScreenshotGallery';
+import { ProjectPageHeader } from '../components/ProjectPageHeader';
 
-const screenshot = {
-    src: '/images/parc/update-live-progress.webp',
-    alt: 'parc update live progress output showing podcast feed progress, episode count, download speed, archived bytes, and ETA in a terminal',
-    caption: 'Live update progress while archiving podcast episodes',
-    width: 1713,
-    height: 592,
-};
+const PARC_URL = 'https://github.com/robert-bryson/parc';
+
+const screenshots: ProjectScreenshot[] = [
+    {
+        src: '/images/parc/update-live-progress.webp',
+        alt: 'parc update live progress output showing podcast feed progress, episode count, download speed, archived bytes, and ETA in a terminal',
+        caption: 'Live update progress while archiving podcast episodes',
+        width: 1713,
+        height: 592,
+        loading: 'eager',
+    },
+];
 
 export default function Parc() {
     const description =
@@ -31,51 +38,25 @@ export default function Parc() {
         applicationCategory: 'MultimediaApplication',
         operatingSystem: 'Cross-platform',
         softwareRequirements: 'Python 3.10+',
-        screenshot: absoluteUrl(screenshot.src),
+        screenshot: absoluteUrl(screenshots[0].src),
         author: AUTHOR_PERSON,
     });
 
     const project = projects.find(p => p.slug === 'parc')!;
 
     return (
-        <div className="max-w-2xl">
-            <h1 className="mb-2 text-2xl font-semibold text-zinc-100">
-                parc
-            </h1>
-            <p className="mb-6 text-sm text-zinc-400">Python CLI</p>
+        <div className="max-w-[52rem]">
+            <ProjectPageHeader
+                title="parc"
+                stack="Python CLI"
+                description="A config-driven command line app for building a durable podcast archive over time. It manages feed subscriptions, scans for new episodes, downloads pending audio safely, and audits the local archive against its SQLite state."
+                actions={[
+                    { label: 'Open project repository →', href: PARC_URL, variant: 'primary', external: true },
+                    { label: 'Source on GitHub →', href: PARC_URL, external: true },
+                ]}
+            />
 
-            <p className="mb-6 leading-relaxed text-zinc-300">
-                A config-driven command line app for building a durable podcast
-                archive over time. It manages feed subscriptions, scans for new
-                episodes, downloads pending audio safely, and audits the local
-                archive against its SQLite state.
-            </p>
-
-            <div className="mb-8 flex flex-wrap gap-3">
-                <a
-                    href="https://github.com/robert-bryson/parc"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-700"
-                >
-                    Source on GitHub →
-                </a>
-            </div>
-
-            <figure className="mb-8">
-                <img
-                    src={screenshot.src}
-                    alt={screenshot.alt}
-                    className="w-full rounded-lg border border-zinc-800"
-                    width={screenshot.width}
-                    height={screenshot.height}
-                    loading="eager"
-                    decoding="async"
-                />
-                <figcaption className="mt-2 text-center text-xs leading-snug text-zinc-400">
-                    {screenshot.caption}
-                </figcaption>
-            </figure>
+            <ProjectScreenshotGallery screenshots={screenshots} />
 
             <h2 className="mb-3 text-lg font-medium text-zinc-100">Workflow</h2>
             <ul className="mb-6 list-inside list-disc space-y-1.5 text-sm text-zinc-400">

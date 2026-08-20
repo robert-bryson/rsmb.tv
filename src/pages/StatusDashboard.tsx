@@ -4,6 +4,9 @@ import { useJsonLd } from '../hooks/useJsonLd';
 import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
 import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
+import { ProjectPageHeader } from '../components/ProjectPageHeader';
+
+const STATUS_DASHBOARD_REPO = 'https://github.com/robert-bryson/rsmb.tv/tree/main/scripts/dashboard';
 
 const screenshots: ProjectScreenshot[] = [
     {
@@ -54,30 +57,33 @@ export default function StatusDashboard() {
     const project = projects.find(p => p.slug === 'status-dashboard')!;
 
     return (
-        <div className="max-w-2xl">
-            <h1 className="mb-2 text-2xl font-semibold text-zinc-100">
-                Status Dashboard
-            </h1>
-            <p className="mb-6 text-sm text-zinc-400">
-                TypeScript + Ink
-            </p>
-
-            <p className="mb-6 leading-relaxed text-zinc-300">
-                A live terminal monitoring dashboard built into this repo for
-                watching over AWS infrastructure, GitHub CI, and site health at a
-                glance. It renders multiple data panels side-by-side in the
-                terminal using{' '}
-                <a
-                    href="https://github.com/vadimdemedes/ink"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
-                >
-                    Ink
-                </a>{' '}
-                — React for the terminal — and polls AWS and GitHub APIs on
-                configurable intervals.
-            </p>
+        <div className="max-w-[52rem]">
+            <ProjectPageHeader
+                title="Status Dashboard"
+                stack="TypeScript + Ink"
+                description={(
+                    <>
+                        A live terminal monitoring dashboard built into this repo for
+                        watching over AWS infrastructure, GitHub CI, and site health at a
+                        glance. It renders multiple data panels side-by-side in the
+                        terminal using{' '}
+                        <a
+                            href="https://github.com/vadimdemedes/ink"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
+                        >
+                            Ink
+                        </a>{' '}
+                        (React for the terminal) and polls AWS and GitHub APIs on
+                        configurable intervals.
+                    </>
+                )}
+                actions={[
+                    { label: 'Open project repository →', href: STATUS_DASHBOARD_REPO, variant: 'primary', external: true },
+                    { label: 'Source on GitHub →', href: STATUS_DASHBOARD_REPO, external: true },
+                ]}
+            />
 
             <ProjectScreenshotGallery screenshots={screenshots} />
 

@@ -29,7 +29,7 @@ export default function TemperatureRecordsAbout() {
     const project = projects.find(p => p.slug === 'temperature-records')!;
 
     return (
-        <div className="max-w-2xl">
+        <div className="max-w-[52rem]">
             <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
                 Record Highs
             </h1>

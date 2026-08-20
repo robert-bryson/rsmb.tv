@@ -1,5 +1,5 @@
 import type { GlobeAllAirportPoint, GlobePoint, GlobeStatePolygon, GlobeStaticArc } from '../types';
-import { escapeHtml, formatElevation } from './index';
+import { escapeHtml, formatElevation, parseYear, sortDatesDescending } from './index';
 
 type TooltipPoint = (GlobePoint | GlobeAllAirportPoint) & { isAllAirports?: boolean };
 
@@ -32,8 +32,8 @@ export function buildArcLabelHtml(
     }
 
     const airlines = [...new Set(arcData.flights.map((flight) => flight.airline))];
-    const years = [...new Set(arcData.flights.map((flight) => flight.date.split('-')[0]))].sort();
-    const allDates = arcData.flights.map((flight) => flight.date).sort().reverse();
+    const years = [...new Set(arcData.flights.map((flight) => parseYear(flight.date)))].sort((a, b) => a - b);
+    const allDates = sortDatesDescending(arcData.flights.map((flight) => flight.date));
 
     return `
             <div class="bg-gray-900/95 px-4 py-3 rounded-lg shadow-xl border border-yellow-500/50 text-sm min-w-64">
@@ -62,9 +62,17 @@ export function buildArcLabelHtml(
               </div>
 
               <div class="mt-3 pt-3 border-t border-gray-700">
-                <div class="text-gray-500 text-xs mb-1">All Flights</div>
-                <div class="text-gray-400 text-xs max-h-24 overflow-y-auto">
-                  ${escapeHtml(allDates.join(', '))}
+                <div class="mb-2 flex items-center justify-between text-xs">
+                  <span class="font-medium text-gray-400">All Flights</span>
+                  <span class="rounded-full bg-purple-500/15 px-2 py-0.5 text-purple-300">${allDates.length}</span>
+                </div>
+                <div class="grid max-h-28 grid-cols-2 gap-1 overflow-y-auto pr-1 text-xs">
+                  ${allDates.map((date, index) => `
+                    <div class="flex items-center gap-1.5 rounded border border-gray-700/70 bg-gray-800/70 px-2 py-1 text-gray-300">
+                      <span class="text-[10px] text-gray-600">${String(index + 1).padStart(2, '0')}</span>
+                      <span>${escapeHtml(date)}</span>
+                    </div>
+                  `).join('')}
                 </div>
               </div>
 

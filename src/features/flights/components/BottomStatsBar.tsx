@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import type { FlightTypeFilter } from '../types';
 import { formatDistance, getFlightTypeLabel } from '../utils';
+import { DistanceValue } from './shared';
 
 interface BottomStatsBarProps {
     totalFlights: number;
@@ -55,10 +56,10 @@ export const BottomStatsBar = memo(function BottomStatsBar({
                     type="button"
                     onClick={onToggleUnits}
                     className="text-green-300 font-semibold hover:text-green-200 transition-colors cursor-pointer whitespace-nowrap rounded px-1 -mx-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-300"
-                    title={isMetric ? 'Switch to imperial (mi/ft)' : 'Switch to metric (km/m)'}
+                    title={`${formatDistance(totalDistance, !isMetric)} • ${isMetric ? 'Click to switch to imperial units' : 'Click to switch to metric units'}`}
                     aria-label={isMetric ? 'Switch to imperial units' : 'Switch to metric units'}
                 >
-                    {formatDistance(totalDistance, isMetric)}
+                    <DistanceValue km={totalDistance} isMetric={isMetric} />
                 </button>
                 {selectedYear && (
                     <>

@@ -16,8 +16,10 @@ export function calculateDistance(lat1: number, lon1: number, lat2: number, lon2
     return EARTH_RADIUS_KM * c;
 }
 
-/** Parse M/D/YYYY date string to year number */
+/** Parse M/D/YYYY or ISO YYYY-MM-DD date string to year number */
 export function parseYear(dateStr: string): number {
+    const isoYear = /^(\d{4})-\d{1,2}-\d{1,2}$/.exec(dateStr);
+    if (isoYear) return parseInt(isoYear[1], 10);
     const parts = dateStr.split('/');
     return parseInt(parts[2], 10);
 }
@@ -35,8 +37,12 @@ export function hexToRgba(hex: string, alpha: number): string {
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-/** Parse M/D/YYYY date string into a Date object */
+/** Parse M/D/YYYY or ISO YYYY-MM-DD date string into a Date object */
 export function parseDateString(dateStr: string): Date {
+    const isoDate = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(dateStr);
+    if (isoDate) {
+        return new Date(parseInt(isoDate[1], 10), parseInt(isoDate[2], 10) - 1, parseInt(isoDate[3], 10));
+    }
     const parts = dateStr.split('/');
     return new Date(parseInt(parts[2], 10), parseInt(parts[0], 10) - 1, parseInt(parts[1], 10));
 }

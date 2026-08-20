@@ -798,7 +798,7 @@ export function FlightsMap() {
         <div
           role="application"
           aria-label={`Interactive 3D globe showing ${flightStats.totalFlights} flights across ${flightStats.totalAirports} airports. Click and drag to rotate, scroll to zoom, click on routes or airports for details.`}
-          className="flex-1"
+          className="flights-globe relative z-0 flex-1"
           data-skip-target="globe"
         >
           <Globe
@@ -984,6 +984,7 @@ export function FlightsMap() {
             htmlElement={(d: object) => {
               const point = d as GlobePoint;
               const el = document.createElement('div');
+              el.className = 'flight-map-label';
               el.textContent = point.label;
               el.style.cssText = 'color: white; font-size: 10px; font-family: ui-monospace, monospace; font-weight: 600; text-shadow: 0 0 4px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,1), 1px 1px 1px rgba(0,0,0,0.8); pointer-events: none; user-select: none; white-space: nowrap;';
               return el;

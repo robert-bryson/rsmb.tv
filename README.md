@@ -125,6 +125,16 @@ Selection parameters are `year`, `airport`, `airline`, `route`, `country`, `regi
 
 View and UI parameters include `lat`, `lng`, `alt`, `stats`, `filters`, `help`, `layers`, and `layerSection`. Display and layer parameters include `basemap`, `color`, `anim`, `paths`, `rotation`, `allAirports`, `airportMode`, `usStates`, `stateMode`, and `units=imperial`. Add new shareable flights controls through `useFlightsFilters` so multiple state changes in one interaction compose against the same pending URL draft.
 
+## Flights Stats Panel
+
+The flights stats panel stays mounted when closed. This keeps the slide animation smooth. The closed panel uses `inert` and `aria-hidden`.
+
+On desktop, drag the right edge to resize the panel. Width is stored in local storage key `flights-stats-panel-width`. The width range is `272` to `520` pixels.
+
+Distance values show the active unit. Hover a distance value to see the alternate unit.
+
+The route "All Flights" list uses incremental rendering. The panel shows an initial subset, then a "Show more" action for the rest.
+
 ## Blog Publishing
 
 Google Sheets/Docs is the source of truth for blog content. The build syncs published rows from the Sheet, exports the referenced Google Docs to MDX, then generates RSS, sitemap, and blog OG images before Vite bundles the app. Generated post files are build artifacts and should not be committed. The blog index exposes tags as URL filters (`/blog?tag=Maps`), so tag names should stay concise and reader-facing.

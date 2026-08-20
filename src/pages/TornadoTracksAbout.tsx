@@ -29,7 +29,7 @@ export default function TornadoTracksAbout() {
     const project = projects.find(p => p.slug === 'tornado-tracks')!;
 
     return (
-        <div className="max-w-2xl">
+        <div className="max-w-[52rem]">
             <h1 className="mb-2 text-2xl font-semibold text-zinc-100">Tornado Tracks</h1>
             <p className="mb-6 text-sm text-zinc-400">React + MapLibre GL</p>
 

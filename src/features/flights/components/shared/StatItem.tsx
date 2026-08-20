@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 interface BaseStatItemProps {
   icon: string;
   label: string;
-  value: string;
+  value: ReactNode;
   subValue?: ReactNode;
   className?: string;
 }

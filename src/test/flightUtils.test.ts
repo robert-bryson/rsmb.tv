@@ -15,6 +15,10 @@ describe('parseYear', () => {
         expect(parseYear('1/1/2020')).toBe(2020);
     });
 
+    it('parses ISO dates', () => {
+        expect(parseYear('2024-01-02')).toBe(2024);
+    });
+
     it('returns NaN for empty string', () => {
         expect(parseYear('')).toBeNaN();
     });

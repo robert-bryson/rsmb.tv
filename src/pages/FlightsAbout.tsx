@@ -29,7 +29,7 @@ export default function FlightsAbout() {
     const project = projects.find(p => p.slug === 'flights')!;
 
     return (
-        <div className="max-w-2xl">
+        <div className="max-w-[52rem]">
             <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
                 Flights
             </h1>

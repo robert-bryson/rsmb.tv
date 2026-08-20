@@ -181,6 +181,20 @@ u {
   background-clip: padding-box;
 }
 
+/* Keep the globe's projected airport labels below its hover popup. Isolating
+   the globe also keeps both layers beneath the surrounding app controls. */
+.flights-globe {
+  isolation: isolate;
+}
+
+.flights-globe .flight-map-label {
+  z-index: 1 !important;
+}
+
+.flights-globe .float-tooltip-kap {
+  z-index: 10;
+}
+
 @media (forced-colors: active) {
   .flights-stats-panel {
     scrollbar-color: auto;

@@ -3,6 +3,9 @@ import { useJsonLd } from '../hooks/useJsonLd';
 import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
 import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
+import { ProjectPageHeader } from '../components/ProjectPageHeader';
+
+const ABORG_URL = 'https://github.com/robert-bryson/aborg';
 
 export default function Aborg() {
     const description =
@@ -28,46 +31,40 @@ export default function Aborg() {
     const project = projects.find(p => p.slug === 'aborg')!;
 
     return (
-        <div className="max-w-2xl">
-            <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
-                aborg
-            </h1>
-            <p className="text-zinc-400 mb-6 text-sm">Python CLI</p>
-
-            <p className="text-zinc-300 leading-relaxed mb-6">
-                A CLI tool to scan, organize, and manage audiobook file
-                collections. Outputs an{' '}
-                <a
-                    href="https://www.audiobookshelf.org/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
-                >
-                    Audiobookshelf
-                </a>
-                -compatible directory structure with smart filename parsing,
-                metadata extraction, and{' '}
-                <a
-                    href="https://www.overdrive.com/apps/libby"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
-                >
-                    Libby/OverDrive
-                </a>{' '}
-                integration.
-            </p>
-
-            <div className="mb-8 flex flex-wrap gap-3">
-                <a
-                    href="https://github.com/robert-bryson/aborg"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-700"
-                >
-                    Source on GitHub →
-                </a>
-            </div>
+        <div className="max-w-[52rem]">
+            <ProjectPageHeader
+                title="aborg"
+                stack="Python CLI"
+                description={(
+                    <>
+                        A CLI tool to scan, organize, and manage audiobook file
+                        collections. Outputs an{' '}
+                        <a
+                            href="https://www.audiobookshelf.org/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
+                        >
+                            Audiobookshelf
+                        </a>
+                        -compatible directory structure with smart filename parsing,
+                        metadata extraction, and{' '}
+                        <a
+                            href="https://www.overdrive.com/apps/libby"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
+                        >
+                            Libby/OverDrive
+                        </a>{' '}
+                        integration.
+                    </>
+                )}
+                actions={[
+                    { label: 'Open project repository →', href: ABORG_URL, variant: 'primary', external: true },
+                    { label: 'Source on GitHub →', href: ABORG_URL, external: true },
+                ]}
+            />
 
             <h2 className="text-lg font-medium text-zinc-100 mb-3">
                 Directory Structure

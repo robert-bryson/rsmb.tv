@@ -88,6 +88,8 @@ describe('BottomStatsBar', () => {
         const button = screen.getByRole('button', { name: 'Switch to imperial units' });
 
         expect(button).toHaveTextContent('100 km');
+        expect(button).toHaveAttribute('title', '62 mi • Click to switch to imperial units');
+        expect(screen.getByText('100 km')).toHaveAttribute('title', '62 mi');
         expect(button).not.toHaveClass('hidden');
     });
 

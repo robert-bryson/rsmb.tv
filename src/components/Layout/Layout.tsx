@@ -53,7 +53,7 @@ export function Layout({ children }: LayoutProps) {
 
       {/* Header */}
       <header className="border-b border-zinc-800/50">
-        <nav className="max-w-2xl mx-auto px-6 py-4 flex justify-between items-center">
+        <nav className="max-w-3xl mx-auto px-6 py-4 flex justify-between items-center">
           <Link
             to="/"
             className="text-lg font-medium text-zinc-100 hover:text-violet-400"
@@ -112,13 +112,13 @@ export function Layout({ children }: LayoutProps) {
       </header>
 
       {/* Main content */}
-      <main id="main-content" className="max-w-2xl mx-auto px-6 py-12 flex-1 w-full">
+      <main id="main-content" className="max-w-3xl mx-auto px-6 py-12 flex-1 w-full">
         {children}
       </main>
 
       {/* Footer */}
       <footer className="border-t border-zinc-800/50">
-        <div className="max-w-2xl mx-auto px-6 py-6 flex justify-between items-center text-sm text-zinc-400">
+        <div className="max-w-3xl mx-auto px-6 py-6 flex justify-between items-center text-sm text-zinc-400">
           <span>© {new Date().getFullYear()} · {__BUILD_DATE__}</span>
           <div className="flex gap-4">
             <a

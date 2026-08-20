@@ -1,12 +1,21 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
 import type { FlightStats, SelectedRouteInfo, SelectedCountryInfo, SelectedRegionInfo, FlightTypeFilter } from '../types';
 import { EARTH_CIRCUMFERENCE_KM } from '../constants';
-import { formatDistance, formatElevation, getFlightTypeLabel } from '../utils';
-import { StatItem, CollapsibleSection, ClickableAirport, ClickableRoute, ClickableCountry, ClickableRegion, FlightCount } from './shared';
+import { formatElevation, getFlightTypeLabel } from '../utils';
+import { StatItem, CollapsibleSection, ClickableAirport, ClickableRoute, ClickableCountry, ClickableRegion, FlightCount, VirtualizedList, DistanceValue } from './shared';
 import { AirlinesSection } from './AirlinesSection';
 import { CountriesSection } from './CountriesSection';
 import { RegionsSection } from './RegionsSection';
 import { RoutesSection } from './RoutesSection';
+import { usePersistedState } from '../../../hooks/usePersistedState';
+
+const DEFAULT_PANEL_WIDTH = 320;
+const MIN_PANEL_WIDTH = 272;
+const MAX_PANEL_WIDTH = 520;
+
+function clampPanelWidth(width: number): number {
+  return Math.min(MAX_PANEL_WIDTH, Math.max(MIN_PANEL_WIDTH, Math.round(width)));
+}
 
 interface StatsPanelProps {
   stats: FlightStats;
@@ -64,6 +73,55 @@ export function StatsPanel({
   // State to track which sections are open (for collapse all/expand all)
   const [allExpanded, setAllExpanded] = useState(true);
   const [sectionStates, setSectionStates] = useState<Record<string, boolean>>({});
+  const [panelWidth, setPanelWidth] = usePersistedState<number>('flights-stats-panel-width', DEFAULT_PANEL_WIDTH);
+  const [isResizingPanel, setIsResizingPanel] = useState(false);
+  const resizeStartXRef = useRef(0);
+  const resizeStartWidthRef = useRef(panelWidth);
+
+  useEffect(() => {
+    if (panelWidth < MIN_PANEL_WIDTH || panelWidth > MAX_PANEL_WIDTH) {
+      setPanelWidth(clampPanelWidth(panelWidth));
+    }
+  }, [panelWidth, setPanelWidth]);
+
+  useEffect(() => {
+    if (!isResizingPanel) return;
+
+    const handlePointerMove = (event: PointerEvent) => {
+      const deltaX = event.clientX - resizeStartXRef.current;
+      setPanelWidth(clampPanelWidth(resizeStartWidthRef.current + deltaX));
+    };
+
+    const handlePointerStop = () => {
+      setIsResizingPanel(false);
+    };
+
+    const originalCursor = document.body.style.cursor;
+    const originalUserSelect = document.body.style.userSelect;
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerup', handlePointerStop);
+    window.addEventListener('pointercancel', handlePointerStop);
+
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerStop);
+      window.removeEventListener('pointercancel', handlePointerStop);
+      document.body.style.cursor = originalCursor;
+      document.body.style.userSelect = originalUserSelect;
+    };
+  }, [isResizingPanel, setPanelWidth]);
+
+  const startPanelResize = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === 'touch') return;
+    if (event.button !== 0) return;
+
+    resizeStartXRef.current = event.clientX;
+    resizeStartWidthRef.current = panelWidth;
+    setIsResizingPanel(true);
+  };
 
   // Get the open state for a section
   const getSectionOpen = (sectionId: string, defaultOpen = true) => {
@@ -74,9 +132,9 @@ export function StatsPanel({
   // Toggle a specific section.
   // Derive the current value from `prev` (not from the render-closure `sectionStates`)
   // so that the functional updater is self-contained and batched updates stay correct.
-  const toggleSection = (sectionId: string) => {
+  const toggleSection = (sectionId: string, defaultOpen = true) => {
     setSectionStates((prev) => {
-      const current = prev[sectionId] !== undefined ? prev[sectionId] : allExpanded;
+      const current = prev[sectionId] !== undefined ? prev[sectionId] : (allExpanded ? defaultOpen : false);
       return { ...prev, [sectionId]: !current };
     });
   };
@@ -91,17 +149,30 @@ export function StatsPanel({
 
   return (
     <div
-      className={`absolute top-16 bottom-[calc(env(safe-area-inset-bottom,0px)+6rem)] left-4 z-20 w-80 max-w-[calc(100vw-2rem)] transition-transform duration-300 ease-out pointer-events-none ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+      className={`absolute top-16 bottom-[calc(env(safe-area-inset-bottom,0px)+6rem)] left-4 z-20 max-w-[calc(100vw-2rem)] transition-transform duration-300 ease-out pointer-events-none ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+      style={{ width: `${panelWidth}px` }}
     >
       {/* Panel content — always mounted so the slide-out transition carries visible content.
           `inert` makes the off-screen panel unreachable by keyboard/assistive tech. */}
       <div
         data-testid="stats-panel-content"
         data-state={isOpen ? 'open' : 'closed'}
-        className="flights-stats-panel h-full bg-gray-900/90 backdrop-blur rounded-lg border border-gray-700 p-4 text-sm pointer-events-auto shadow-xl"
+        className={`flights-stats-panel relative h-full bg-gray-900/90 backdrop-blur rounded-lg border border-gray-700 p-4 text-sm pointer-events-auto shadow-xl ${isResizingPanel ? 'select-none' : ''}`}
         aria-hidden={!isOpen || undefined}
         inert={!isOpen || undefined}
       >
+        <div
+          role="separator"
+          aria-orientation="vertical"
+          aria-label="Resize stats panel"
+          onPointerDown={startPanelResize}
+          className="absolute -right-1 top-0 hidden h-full w-3 cursor-col-resize md:block"
+        >
+          <div
+            className={`mx-auto h-full w-px transition-colors ${isResizingPanel ? 'bg-violet-400/80' : 'bg-transparent hover:bg-zinc-600/80'}`}
+          />
+        </div>
+
         {/* Collapse All / Expand All Button */}
         <div className="flex justify-end mb-2">
           <button
@@ -427,8 +498,8 @@ function AirportStats({
         onToggle={() => toggleSection('airport-distance')}
       >
         <div className="grid grid-cols-2 gap-3">
-          <StatItem icon="📏" label="Total" value={formatDistance(stats.totalDistance, isMetric)} />
-          <StatItem icon="📐" label="Average" value={formatDistance(stats.averageDistance, isMetric)} />
+          <StatItem icon="📏" label="Total" value={<DistanceValue km={stats.totalDistance} isMetric={isMetric} />} />
+          <StatItem icon="📐" label="Average" value={<DistanceValue km={stats.averageDistance} isMetric={isMetric} />} />
         </div>
       </CollapsibleSection>
     </>
@@ -455,7 +526,7 @@ function RouteStatsView({
   airportNames: Map<string, string>;
   isMetric: boolean;
   getSectionOpen: (id: string, defaultOpen?: boolean) => boolean;
-  toggleSection: (id: string) => void;
+  toggleSection: (id: string, defaultOpen?: boolean) => void;
 }) {
   return (
     <>
@@ -516,7 +587,11 @@ function RouteStatsView({
           <div className="text-gray-500 text-xs">flights</div>
         </div>
         <div className="text-center">
-          <div className="text-purple-400 font-bold text-base leading-tight">{formatDistance(routeInfo.distanceKm, isMetric)}</div>
+          <DistanceValue
+            km={routeInfo.distanceKm}
+            isMetric={isMetric}
+            className="text-purple-400 font-bold text-base leading-tight"
+          />
           <div className="text-gray-500 text-xs">distance</div>
         </div>
       </div>
@@ -584,13 +659,33 @@ function RouteStatsView({
         title={`All Flights (${routeInfo.totalFlights})`}
         icon="📋"
         isOpen={getSectionOpen('route-all-flights', false)}
-        onToggle={() => toggleSection('route-all-flights')}
+        onToggle={() => toggleSection('route-all-flights', false)}
       >
-        <div className="space-y-0.5 max-h-48 overflow-y-auto">
-          {routeInfo.dates.map((date, i) => (
-            <div key={`${date}-${i}`} className="text-xs text-gray-400">{date}</div>
-          ))}
-        </div>
+        <VirtualizedList
+          items={routeInfo.dates}
+          initialCount={8}
+          incrementCount={8}
+          keyExtractor={(date, index) => `${date}-${index}`}
+          renderItem={(date, index) => (
+            <div className="flex items-center gap-2 rounded-md border border-gray-700/70 bg-gray-800/60 px-2.5 py-1.5 text-xs">
+              <span className="w-6 shrink-0 text-right font-mono text-[10px] text-gray-600">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-purple-400/80" aria-hidden="true" />
+              <span className="font-medium tabular-nums text-gray-300">{date}</span>
+              {index === 0 && (
+                <span className="ml-auto rounded bg-purple-500/15 px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-purple-300">
+                  Latest
+                </span>
+              )}
+              {index === routeInfo.dates.length - 1 && routeInfo.dates.length > 1 && (
+                <span className="ml-auto rounded bg-gray-700/70 px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-gray-400">
+                  First
+                </span>
+              )}
+            </div>
+          )}
+        />
       </CollapsibleSection>
     </>
   );
@@ -1010,12 +1105,12 @@ function OverallStats({
         <StatItem
           icon="📏"
           label="Total Distance"
-          value={formatDistance(stats.totalDistance, isMetric)}
+          value={<DistanceValue km={stats.totalDistance} isMetric={isMetric} />}
           className="mb-2"
         />
         <div className="grid grid-cols-2 gap-3">
           <StatItem icon="🔄" label="Around Earth" value={`${timesAroundEarth}×`} />
-          <StatItem icon="📐" label="Avg Distance" value={formatDistance(stats.averageDistance, isMetric)} />
+          <StatItem icon="📐" label="Avg Distance" value={<DistanceValue km={stats.averageDistance} isMetric={isMetric} />} />
         </div>
       </CollapsibleSection>
 
@@ -1172,7 +1267,7 @@ function OverallStats({
                 />
               </div>
               <div className="text-gray-500 text-xs">
-                {formatDistance(stats.longestFlight.distance, isMetric)}
+                <DistanceValue km={stats.longestFlight.distance} isMetric={isMetric} />
               </div>
             </div>
           </div>
@@ -1193,7 +1288,7 @@ function OverallStats({
                 />
               </div>
               <div className="text-gray-500 text-xs">
-                {formatDistance(stats.shortestFlight.distance, isMetric)}
+                <DistanceValue km={stats.shortestFlight.distance} isMetric={isMetric} />
               </div>
             </div>
           </div>

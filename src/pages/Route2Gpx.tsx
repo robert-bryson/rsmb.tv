@@ -3,8 +3,35 @@ import { useJsonLd } from '../hooks/useJsonLd';
 import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
 import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
+import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/ProjectScreenshotGallery';
+import { ProjectPageHeader } from '../components/ProjectPageHeader';
 
 const ROUTE2GPX_URL = 'https://route2gpx.rsmb.tv';
+
+const screenshots: ProjectScreenshot[] = [
+    {
+        src: '/images/route2gpx/route-planning.webp',
+        alt: 'Route to GPX interface showing origin and destination inputs, waypoints, and route mode options',
+        caption: 'Route planning interface - enter origin, destination, waypoints, and travel mode',
+        width: 1811,
+        height: 1390,
+        loading: 'eager',
+    },
+    {
+        src: '/images/route2gpx/single-route.webp',
+        alt: 'Single driving route from Mexico City to Teotihuacan displayed on a Leaflet map with Fog of World overlay',
+        caption: 'Single route view - driving route with Fog of World overlay and GPX download',
+        width: 1818,
+        height: 1392,
+    },
+    {
+        src: '/images/route2gpx/multi-route.webp',
+        alt: 'Multiple routes across Mexico shown simultaneously with color-coded paths and a route list panel',
+        caption: 'Multi-route view - multiple routes across Mexico with batch download',
+        width: 1814,
+        height: 1390,
+    },
+];
 
 export default function Route2Gpx() {
     const description =
@@ -30,89 +57,33 @@ export default function Route2Gpx() {
     const project = projects.find(p => p.slug === 'route2gpx')!;
 
     return (
-        <div className="max-w-2xl">
-            <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
-                route2gpx
-            </h1>
-            <p className="text-zinc-400 mb-6 text-sm">
-                JavaScript + Leaflet
-            </p>
+        <div className="max-w-[52rem]">
+            <ProjectPageHeader
+                title="route2gpx"
+                stack="JavaScript + Leaflet"
+                description={(
+                    <>
+                        Convert{' '}
+                        <a
+                            href="https://developers.google.com/maps/documentation/routes"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
+                        >
+                            Google Routes
+                        </a>{' '}
+                        into GPX files for GPS devices and bike computers. A
+                        privacy-focused web app that runs entirely in your browser -
+                        your routes never touch a server.
+                    </>
+                )}
+                actions={[
+                    { label: 'Open route2gpx →', href: ROUTE2GPX_URL, variant: 'primary', external: true },
+                    { label: 'Source on GitHub →', href: 'https://github.com/robert-bryson/route2gpx', external: true },
+                ]}
+            />
 
-            <p className="text-zinc-300 leading-relaxed mb-6">
-                Convert{' '}
-                <a
-                    href="https://developers.google.com/maps/documentation/routes"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
-                >
-                    Google Routes
-                </a>{' '}
-                into GPX files for GPS devices and bike computers. A
-                privacy-focused web app that runs entirely in your browser —
-                your routes never touch a server.
-            </p>
-
-            <div className="mb-8 flex flex-wrap gap-3">
-                <a
-                    href={ROUTE2GPX_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-violet-500"
-                >
-                    Open route2gpx →
-                </a>
-                <a
-                    href="https://github.com/robert-bryson/route2gpx"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-700"
-                >
-                    Source on GitHub →
-                </a>
-            </div>
-
-            <div className="space-y-6 mb-8">
-                <figure>
-                    <img
-                        src="/images/route2gpx/route-planning.webp"
-                        alt="Route to GPX interface showing origin and destination inputs, waypoints, and route mode options"
-                        className="rounded-lg border border-zinc-800"
-                        width={1811}
-                        height={1390}
-                        loading="eager"
-                    />
-                    <figcaption className="mt-2 text-xs text-zinc-400 text-center">
-                        Route planning interface — enter origin, destination, waypoints, and travel mode
-                    </figcaption>
-                </figure>
-                <figure>
-                    <img
-                        src="/images/route2gpx/single-route.webp"
-                        alt="Single driving route from Mexico City to Teotihuacan displayed on a Leaflet map with Fog of World overlay"
-                        className="rounded-lg border border-zinc-800"
-                        width={1818}
-                        height={1392}
-                        loading="lazy"
-                    />
-                    <figcaption className="mt-2 text-xs text-zinc-400 text-center">
-                        Single route view — driving route with Fog of World overlay and GPX download
-                    </figcaption>
-                </figure>
-                <figure>
-                    <img
-                        src="/images/route2gpx/multi-route.webp"
-                        alt="Multiple routes across Mexico shown simultaneously with color-coded paths and a route list panel"
-                        className="rounded-lg border border-zinc-800"
-                        width={1814}
-                        height={1390}
-                        loading="lazy"
-                    />
-                    <figcaption className="mt-2 text-xs text-zinc-400 text-center">
-                        Multi-route view — multiple routes across Mexico with batch download
-                    </figcaption>
-                </figure>
-            </div>
+            <ProjectScreenshotGallery screenshots={screenshots} />
 
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Features</h2>
             <ul className="space-y-1.5 text-zinc-400 text-sm mb-6 list-disc list-inside">
