@@ -117,6 +117,12 @@ Static page Open Graph images are generated from `DEFAULT_PAGES` in `scripts/gen
 
 Project screenshots and preview images live under `public/images/<project-slug>/` and should be committed as optimized WebP files. Do not commit raw JPG/PNG capture files when a compressed WebP derivative is used by the site. Project cards expect landscape previews; when the source material is portrait-oriented, compose a landscape preview image instead of pointing the card at a single phone screenshot.
 
+## Project Changelogs
+
+Project pages read their changelogs from `src/content/projects.ts`. Use the commit history of each project's default branch as the source. Do not include work from an open branch or pull request.
+
+Group changes by month. Put the newest month first. Summarize user-visible changes, reliability work, security fixes, and important maintenance. Set `lastUpdated` to the date of the newest represented commit. The first changelog entry must use the same year and month as `lastUpdated`.
+
 ## Flights Map URL State
 
 The flights globe stores shareable app state in query parameters so a copied URL can reopen the same map focus, camera, layers, and display settings. Defaults are omitted from the URL; resetting the camera removes `lat`, `lng`, and `alt` instead of serializing the default view.

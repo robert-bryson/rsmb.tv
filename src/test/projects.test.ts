@@ -123,14 +123,31 @@ describe('formatProjectDate', () => {
 });
 
 describe('changelog data', () => {
-    it('changelog entries have non-empty date and at least one note', () => {
+    it('provides a changelog and exact last-updated date for every project', () => {
+        for (const p of projects) {
+            expect(p.lastUpdated, `${p.slug} lastUpdated`).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+            expect(p.changelog?.length, `${p.slug} changelog`).toBeGreaterThan(0);
+            expect(p.changelog?.[0]?.date, `${p.slug} latest changelog month`).toBe(
+                p.lastUpdated?.slice(0, 7),
+            );
+        }
+    });
+
+    it('changelog entries use valid dates and unique, non-empty notes', () => {
         for (const p of projects) {
             if (!p.changelog) continue;
+            expect(new Set(p.changelog.map(entry => entry.date)).size, `${p.slug} changelog dates`).toBe(
+                p.changelog.length,
+            );
+
             for (const entry of p.changelog) {
-                expect(typeof entry.date).toBe('string');
-                expect(entry.date.length).toBeGreaterThan(0);
-                expect(Array.isArray(entry.notes)).toBe(true);
+                expect(entry.date, `${p.slug} changelog date`).toMatch(/^\d{4}-\d{2}(?:-\d{2})?$/);
                 expect(entry.notes.length).toBeGreaterThan(0);
+                expect(new Set(entry.notes).size, `${p.slug} ${entry.date} notes`).toBe(entry.notes.length);
+                for (const note of entry.notes) {
+                    expect(note, `${p.slug} ${entry.date} note`).toBe(note.trim());
+                    expect(note.length, `${p.slug} ${entry.date} note`).toBeGreaterThan(0);
+                }
             }
         }
     });
