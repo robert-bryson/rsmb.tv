@@ -937,6 +937,10 @@ function readExistingPosts(postsPath, fsImpl) {
     return JSON.parse(fsImpl.readFileSync(postsPath, 'utf-8'));
 }
 
+function relativePortablePath(rootPath, filePath) {
+    return path.relative(rootPath, filePath).split(path.sep).join('/');
+}
+
 export function writeIfChanged(filePath, content, { fsImpl = fs } = {}) {
     let existing = null;
     try {
@@ -1038,7 +1042,7 @@ export async function syncBlogPosts({
     return {
         changed: changedFiles.length > 0,
         changedFiles,
-        changedFileLabels: changedFiles.map((filePath) => path.relative(repoRoot, filePath)),
+        changedFileLabels: changedFiles.map((filePath) => relativePortablePath(repoRoot, filePath)),
         fetchedRows: records.length,
         publishedRows: entries.map(publishedEntrySummary),
         skippedRows,

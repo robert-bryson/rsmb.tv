@@ -97,7 +97,8 @@ export function StatsPanel({
           `inert` makes the off-screen panel unreachable by keyboard/assistive tech. */}
       <div
         data-testid="stats-panel-content"
-        className="h-full bg-gray-900/90 backdrop-blur rounded-lg border border-gray-700 p-4 text-sm overflow-y-auto pointer-events-auto shadow-xl"
+        data-state={isOpen ? 'open' : 'closed'}
+        className="flights-stats-panel h-full bg-gray-900/90 backdrop-blur rounded-lg border border-gray-700 p-4 text-sm pointer-events-auto shadow-xl"
         aria-hidden={!isOpen || undefined}
         inert={!isOpen || undefined}
       >

@@ -35,6 +35,7 @@ Open work is grouped by area. Completed work stays below as a lightweight change
 - [x] Remove "Press H for help" from BottomStatsBar
 - [x] Fix close-animation bug (always-mount panel content; slide carries visible content)
 - [x] Plug keyboard/screen-reader access to off-screen stats panel via `inert`
+- [x] Hide and theme the stats panel scrollbar when the panel is closed or open
 - [x] Add component tests for StatsPanel, TopNavigationBar, BottomStatsBar
 - [x] Keep stats panel open when clearing airport, route, country, or region selections
 - [x] Add selected country/region status to BottomStatsBar

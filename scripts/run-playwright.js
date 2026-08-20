@@ -90,13 +90,14 @@ async function main() {
 
     const vite = spawn(process.execPath, [viteBin, '--host', '127.0.0.1', '--port', String(port), '--strictPort'], {
         stdio: ['ignore', 'pipe', 'pipe'],
-        shell: isWindows,
+        shell: false,
     });
 
     try {
         await waitForVite(vite);
         const testCode = run(process.execPath, [playwrightBin, 'test', ...extraArgs], {
             env: { ...process.env, PLAYWRIGHT_BASE_URL: baseURL, PLAYWRIGHT_SKIP_WEB_SERVER: '1' },
+            shell: false,
         });
         process.exitCode = testCode;
     } finally {

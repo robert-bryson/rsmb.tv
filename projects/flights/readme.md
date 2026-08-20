@@ -1,8 +1,8 @@
-# ✈️ Flights — 3D Webmap of My Flight History
+# Flights 3D map
 
-This project visualizes flights I've taken using a 3D globe powered by [react-globe.gl](https://github.com/vasturiano/react-globe.gl) (Three.js/WebGL). It converts structured flight data into GeoJSON for display in the portfolio site.
+This project shows flight history on a 3D globe. It uses [react-globe.gl](https://github.com/vasturiano/react-globe.gl), Three.js, and WebGL. Build scripts convert the source CSV data to GeoJSON for the website.
 
-## 📂 Folder Structure
+## Folder structure
 
 ```text
 projects/flights/
@@ -13,36 +13,39 @@ projects/flights/
 ├── scripts/
 │   ├── convertFlights.js   # Build script that generates GeoJSON from the CSV files
 │   ├── generateAllAirports.js  # Generates full airport dataset GeoJSON
+│   ├── generateUSStates.js     # Generates the US states layer
 │   └── generateNameMappings.js # Generates country/region/continent name mappings
 └── readme.md               # This file
 ```
 
-## 🔄 Build Process
+## Build the flight data
 
-Running the following command will regenerate the GeoJSON used by the site:
+Run this command from the repository root:
 
 ```bash
 npm run build-flights
 ```
 
-This script reads the raw CSV files and outputs:
+The command reads the CSV files and writes these files:
 
 ```text
 public/data/flights/flights.geojson
 public/data/flights/visitedAirports.geojson
 public/data/flights/allAirports.geojson
+public/data/flights/usStates.geojson
 ```
 
-These GeoJSON files are then loaded by the globe component in the flights feature module.
+The flights feature loads these files when it needs them.
 
-## ✨ Features
+## Features
 
 - 3D globe visualization with react-globe.gl (Three.js/WebGL)
 - Animated flight arcs with staggered dot animations
 - Filter by year, airport, airline, route, country, or region
 - Color modes: default gradient, by year, by frequency, by airline
 - Interactive airport selection with connection visualization
-- Flight statistics panel with collapsible sections, airport-code tooltips, and persistent unit preference
+- Flight statistics panel with collapsible sections and airport-code tooltips
+- Metric and imperial units with a saved preference
 - All airports layer with continent/country/elevation symbolization
 - US states choropleth layer with visit/flight count modes
 - Deep-linking via URL parameters for shareable views
@@ -52,13 +55,15 @@ These GeoJSON files are then loaded by the globe component in the flights featur
 - Customizable flight data via simple CSV files
 - Automated data sync from Google Sheets with QA/QC validation
 
-## 📏 Units & Stats
+## Units and statistics
 
 Distance values are stored and computed in kilometers, then formatted at render time. The bottom-left distance total toggles the UI between metric (`km`/`m`) and imperial (`mi`/`ft`) units, and the preference is persisted locally.
 
-The stats panel stays open when clearing an airport, route, country, or region selection. Airport-code links expose full airport names in native hover tooltips, including codes rendered inside route rows.
+The stats panel stays open when you clear an airport, route, country, or region. Airport-code links show the full airport name in a native tooltip.
 
-## ⌨️ Keyboard Shortcuts
+Use the pull tab on the left side of the map to open or close the stats panel. The closed panel does not show a scrollbar. The open panel uses the application scrollbar colors in supported browsers. In forced-colors mode, the browser controls the scrollbar colors.
+
+## Keyboard shortcuts
 
 | Key       | Action                                                                  |
 | --------- | ----------------------------------------------------------------------- |
@@ -74,18 +79,18 @@ The stats panel stays open when clearing an airport, route, country, or region s
 | `3`       | Color mode: by flight frequency                                         |
 | `4`       | Color mode: by airline                                                  |
 
-Shortcuts are disabled when focus is inside an `<input>` or `<textarea>`.
+Shortcuts do not run when focus is in an `<input>` or `<textarea>`.
 
-## 📱 Mobile Gestures
+## Mobile gestures
 
-On touch devices, swipe left/right on the globe to navigate between years:
+On a touch device, swipe left or right on the globe to move between years:
 
 | Gesture     | Action                                                                 |
 | ----------- | ---------------------------------------------------------------------- |
 | Swipe left  | Advance to next year (or jump to most recent year if no year selected) |
 | Swipe right | Go back to previous year (or clear year filter if at the first year)   |
 
-## 🗺️ Globe Layers
+## Globe layers
 
 ### Flight Arcs
 
@@ -95,7 +100,7 @@ Animated arcs between origin and destination airports. Arc height is proportiona
 
 Points at airports where I've departed or arrived. Size scales with visit count. Selecting an airport highlights all connected routes.
 
-### All Airports Layer (`Shift+A`)
+### All airports layer (`Shift+A`)
 
 Overlays the full global airport dataset. Symbolization modes:
 
@@ -104,16 +109,16 @@ Overlays the full global airport dataset. Symbolization modes:
 - **Country** — unique color per country (consistent across sessions)
 - **Elevation** — blue (sea level) → red (high altitude)
 
-### US States Choropleth (`Shift+U`)
+### US states choropleth (`Shift+U`)
 
 Polygon layer over US states with two display modes:
 
 - **Visited airports** — shaded by number of airports visited in each state
 - **Flight count** — shaded by total flights through each state
 
-## 🔗 URL Parameters
+## URL parameters
 
-All active filters are reflected in the URL for deep-linking and sharing:
+The application stores active filters and display settings in the URL. You can copy the URL to share the same view.
 
 Airport, route, country, and region selections are mutually exclusive; choosing one clears the others while preserving compatible filters like year and airline.
 
@@ -126,12 +131,14 @@ Airport, route, country, and region selections are mutually exclusive; choosing 
 | `country` | `?country=US`    | Focus flights and airports involving a country                     |
 | `region`  | `?region=US-CA`  | Focus flights and airports involving an ISO region code            |
 
-## 🔄 Data Sync
+The map also stores camera, layer, display, and panel settings in the URL. See the **Flights Map URL State** section in the root README for the complete parameter list.
 
-Flight data can optionally be synced from a Google Sheet:
+## Sync flight data
+
+You can sync flight data from a Google Sheet. Run this command from the repository root:
 
 ```bash
-node scripts/sync-flights.js
+npm run sync-flights
 ```
 
-This fetches the latest data and regenerates GeoJSON. The sync script includes QA/QC validation (unknown airport codes, malformed dates, duplicate flight records).
+The command gets the latest data and regenerates the GeoJSON. It reports unknown airport codes, invalid dates, and duplicate flight records.

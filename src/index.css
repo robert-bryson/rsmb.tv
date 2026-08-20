@@ -149,6 +149,44 @@ u {
   font-weight: 600;
 }
 
+/* Keep the closed flights panel mounted for its exit animation, but do not
+   expose its scrollbar. Use the app theme in Firefox and Chromium/WebKit. */
+.flights-stats-panel {
+  overflow-y: hidden;
+  scrollbar-color: var(--color-gray-500, #6b7280) transparent;
+  scrollbar-width: thin;
+}
+
+.flights-stats-panel[data-state='open'] {
+  overflow-y: auto;
+}
+
+.flights-stats-panel::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.flights-stats-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.flights-stats-panel::-webkit-scrollbar-thumb {
+  background: var(--color-gray-500, #6b7280);
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  background-clip: padding-box;
+}
+
+.flights-stats-panel::-webkit-scrollbar-thumb:hover {
+  background: var(--color-purple-400, #c4b5fd);
+  background-clip: padding-box;
+}
+
+@media (forced-colors: active) {
+  .flights-stats-panel {
+    scrollbar-color: auto;
+  }
+}
+
 /* Dark-themed MapLibre popup for tornado map */
 .tornado-popup .maplibregl-popup-content {
   background: transparent;

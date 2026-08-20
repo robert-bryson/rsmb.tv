@@ -36,8 +36,10 @@ function makeStats(overrides: Partial<FlightStats> = {}): FlightStats {
     };
 }
 
-function renderStatsPanel(overrides: Partial<ComponentProps<typeof StatsPanel>> = {}) {
-    const props: ComponentProps<typeof StatsPanel> = {
+function createStatsPanelProps(
+    overrides: Partial<ComponentProps<typeof StatsPanel>> = {},
+): ComponentProps<typeof StatsPanel> {
+    return {
         stats: makeStats(),
         isOpen: false,
         onToggle: vi.fn(),
@@ -62,7 +64,10 @@ function renderStatsPanel(overrides: Partial<ComponentProps<typeof StatsPanel>> 
         isMetric: true,
         ...overrides,
     };
-    return render(<StatsPanel {...props} />);
+}
+
+function renderStatsPanel(overrides: Partial<ComponentProps<typeof StatsPanel>> = {}) {
+    return render(<StatsPanel {...createStatsPanelProps(overrides)} />);
 }
 
 describe('StatsPanel', () => {
@@ -121,6 +126,20 @@ describe('StatsPanel', () => {
         it('does not mark panel content as aria-hidden when open', () => {
             const { getByTestId } = renderStatsPanel({ isOpen: true });
             expect(getByTestId('stats-panel-content')).not.toHaveAttribute('aria-hidden');
+        });
+
+        it('exposes the closed state used to hide the scrollbar', () => {
+            const { getByTestId } = renderStatsPanel({ isOpen: false });
+            expect(getByTestId('stats-panel-content')).toHaveAttribute('data-state', 'closed');
+        });
+
+        it('updates the scrollbar state when the panel opens', () => {
+            const { getByTestId, rerender } = renderStatsPanel({ isOpen: false });
+
+            rerender(<StatsPanel {...createStatsPanelProps({ isOpen: true })} />);
+
+            expect(getByTestId('stats-panel-content')).toHaveClass('flights-stats-panel');
+            expect(getByTestId('stats-panel-content')).toHaveAttribute('data-state', 'open');
         });
 
         it('shows year filter label when selectedYear is set', () => {
