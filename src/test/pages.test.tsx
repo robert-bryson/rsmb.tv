@@ -24,6 +24,7 @@ describe('Home page', () => {
     it('renders projects index link', () => {
         renderWithRouter(<Home />);
         expect(screen.getAllByRole('link', { name: /View all/i }).some((link) => link.getAttribute('href') === '/projects')).toBe(true);
+        expect(screen.getByRole('link', { name: 'See all projects →' })).toHaveAttribute('href', '/projects');
     });
 
     it('renders only the curated projects with concise summaries', () => {
