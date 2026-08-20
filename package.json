@@ -87,7 +87,7 @@
     "turndown": "^7.2.4",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.66.0",
-    "vite": "^8.0.16",
+    "vite": "^8.2.1",
     "vitest": "^4.1.9"
   },
   "lint-staged": {
