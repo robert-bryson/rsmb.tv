@@ -88,6 +88,14 @@ export function Home() {
             );
           })}
         </ul>
+        <div className="mt-6 text-center">
+          <Link
+            to="/projects"
+            className="inline-flex items-center rounded-md border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-300 hover:border-violet-500/60 hover:bg-zinc-900 hover:text-violet-300"
+          >
+            See all projects →
+          </Link>
+        </div>
       </section>
 
       {recentPosts.length > 0 && (
@@ -118,14 +126,6 @@ export function Home() {
         </section>
       )}
 
-      <div className="border-t border-zinc-800 pt-8 text-center">
-        <Link
-          to="/projects"
-          className="inline-flex items-center rounded-md border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-300 hover:border-violet-500/60 hover:bg-zinc-900 hover:text-violet-300"
-        >
-          See all projects →
-        </Link>
-      </div>
     </div>
   );
 }

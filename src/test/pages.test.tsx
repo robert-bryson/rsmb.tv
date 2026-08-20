@@ -24,7 +24,11 @@ describe('Home page', () => {
     it('renders projects index link', () => {
         renderWithRouter(<Home />);
         expect(screen.getAllByRole('link', { name: /View all/i }).some((link) => link.getAttribute('href') === '/projects')).toBe(true);
-        expect(screen.getByRole('link', { name: 'See all projects →' })).toHaveAttribute('href', '/projects');
+        const projectsLink = screen.getByRole('link', { name: 'See all projects →' });
+        expect(projectsLink).toHaveAttribute('href', '/projects');
+        expect(projectsLink.closest('section')).toContainElement(
+            screen.getByRole('heading', { level: 2, name: 'Projects' }),
+        );
     });
 
     it('renders only the curated projects with concise summaries', () => {
