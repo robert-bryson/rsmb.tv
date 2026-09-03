@@ -36,6 +36,13 @@ export function RecordAgeChart({ data, onHoverPeriod, selectedDecade, onSelectDe
         if (onSelectDecade) onSelectDecade(decade);
         else setLocalSelected(idx);
     };
+    const restoreSelectedRange = () => {
+        setHovered(null);
+        const selectedData = selected === null ? null : filtered[selected];
+        onHoverPeriod?.(selectedData
+            ? { startYear: selectedData.decade, endYear: selectedData.decade + 9 }
+            : null);
+    };
     const maxVal = Math.max(...filtered.flatMap(d => [d.highs, d.lows]), 1);
     const totalRecords = filtered.reduce((sum, d) => sum + d.highs + d.lows, 0);
 
@@ -85,15 +92,7 @@ export function RecordAgeChart({ data, onHoverPeriod, selectedDecade, onSelectDe
                     role="img"
                     aria-label="Record age distribution by decade"
                     onClick={() => { setSelected(null); onHoverPeriod?.(null); }}
-                    onMouseLeave={() => {
-                        setHovered(null);
-                        if (selected !== null) {
-                            const sd = filtered[selected];
-                            onHoverPeriod?.({ startYear: sd.decade, endYear: sd.decade + 9 });
-                        } else {
-                            onHoverPeriod?.(null);
-                        }
-                    }}
+                    onMouseLeave={restoreSelectedRange}
                 >
                     <desc>Mirrored bar chart showing when county all-time temperature records were set, grouped by decade from 1890s to 2020s. Record highs extend upward, record lows extend downward.</desc>
                     {/* Center line */}
@@ -129,27 +128,36 @@ export function RecordAgeChart({ data, onHoverPeriod, selectedDecade, onSelectDe
                         return (
                             <g
                                 key={d.decade}
+                                role="button"
+                                tabIndex={0}
+                                aria-pressed={selected === i}
+                                aria-label={`${d.label}: ${d.highs} standing highs and ${d.lows} standing lows`}
                                 onMouseEnter={() => {
                                     setHovered(i);
                                     onHoverPeriod?.({ startYear: d.decade, endYear: d.decade + 9 });
                                 }}
-                                onMouseLeave={() => {
-                                    setHovered(null);
-                                    if (selected !== null) {
-                                        const sd = filtered[selected];
-                                        onHoverPeriod?.({ startYear: sd.decade, endYear: sd.decade + 9 });
-                                    }
+                                onFocus={() => {
+                                    setHovered(i);
+                                    onHoverPeriod?.({ startYear: d.decade, endYear: d.decade + 9 });
                                 }}
+                                onBlur={restoreSelectedRange}
+                                onKeyDown={(event) => {
+                                    if (event.key !== 'Enter' && event.key !== ' ') return;
+                                    event.preventDefault();
+                                    event.stopPropagation();
+                                    setSelected(selected === i ? null : i);
+                                }}
+                                onMouseLeave={restoreSelectedRange}
                                 onClick={(e) => { e.stopPropagation(); setSelected(selected === i ? null : i); }}
                                 style={{ cursor: 'pointer' }}
                             >
                                 {/* Selected indicator */}
-                                {selected === i && (
+                                {isActive && (
                                     <rect
                                         x={x - 3} y={midY - hH - 3}
                                         width={barWidth + 6} height={hH + hL + 6}
-                                        fill="none" stroke="#a78bfa" strokeWidth={1.5}
-                                        rx={4} strokeDasharray="4 2"
+                                        fill="none" stroke={selected === i ? '#a78bfa' : '#f4f4f5'} strokeWidth={1.5}
+                                        rx={4} strokeDasharray={selected === i ? '4 2' : undefined}
                                     />
                                 )}
 

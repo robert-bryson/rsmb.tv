@@ -46,3 +46,51 @@ test('flights stats panel hides its scrollbar when closed', async ({ page }) => 
     await expect.poll(() => panel.evaluate((element) => getComputedStyle(element).overflowY)).toBe('hidden');
     await expect(resizeHandle).toHaveAttribute('tabindex', '-1');
 });
+
+test('temperature map keeps the mobile map open before showing record details', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.route('**/recentRecords.json', route => route.fulfill({
+        json: {
+            asOf: '2026-09-03',
+            dates: ['2026-09-02'],
+            yesterday: [
+                {
+                    stationName: 'TEST STATION', uid: 1, state: 'TX', stateName: 'Texas', county: '48001',
+                    lat: 31.5, lon: -99.3, elev: 100, type: 'high', tempF: 105, prevRecordF: 101,
+                    prevRecordDate: '2011-09-02', normalF: 91, date: '2026-09-02', recordScope: 'monthly',
+                },
+            ],
+            last7Days: [],
+        },
+    }));
+    await page.route('**/summary.json', route => route.fulfill({
+        json: { lastUpdated: '2026-09-03T00:00:00Z', stateRecordCount: 96, countyRecordCount: 6078, statesProcessed: 48 },
+    }));
+
+    await page.goto('/projects/temperature-records/map');
+
+    await expect(page.getByText('0 daily · 1 monthly')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Show summary panel' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Yesterday' })).toHaveCount(0);
+
+    await page.getByRole('button', { name: 'Show summary panel' }).click();
+    await expect(page.getByRole('button', { name: 'Yesterday' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'vs Avg' })).toBeVisible();
+});
+
+test('temperature history identifies standing records as survivor data', async ({ page }) => {
+    await page.route('**/climateTrends.json', route => route.fulfill({
+        json: {
+            source: 'test', description: 'test', totalHighs: 1, totalLows: 1,
+            byDecade: [{ decade: 2020, label: '2020s', highs: 1, lows: 1, ratio: 1 }],
+            byYear: [{ year: 2020, highs: 1, lows: 1 }],
+            rollingRatio: [],
+        },
+    }));
+
+    await page.goto('/projects/temperature-records/trends');
+
+    await expect(page.getByRole('heading', { name: 'Standing Record History' })).toBeVisible();
+    await expect(page.getByText(/Superseded records are not included/i)).toBeVisible();
+    await expect(page.getByText(/not a count of every historical record-breaking event/i)).toBeVisible();
+});

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fDeltaToCDelta, fToC, formatTemp, formatTempDelta } from '../features/temperatures/utils/temperature';
+import { buildTemperaturePath, fDeltaToCDelta, fToC, formatComparisonPeriod, formatTemp, formatTempDelta } from '../features/temperatures/utils/temperature';
 
 describe('fToC', () => {
     it('converts 32°F to 0°C', () => {
@@ -62,5 +62,24 @@ describe('formatTempDelta', () => {
 
     it('formats Celsius temperature differences without an absolute-temperature offset', () => {
         expect(formatTempDelta(18, true)).toBe('10.0°C');
+    });
+});
+
+describe('formatComparisonPeriod', () => {
+    it('labels the custom average through the prior year', () => {
+        expect(formatComparisonPeriod('2026-09-02')).toBe('1950–2025 avg');
+    });
+
+    it('falls back for malformed dates', () => {
+        expect(formatComparisonPeriod('unknown')).toBe('historical avg');
+        expect(formatComparisonPeriod('2026-not-a-date')).toBe('historical avg');
+    });
+});
+
+describe('buildTemperaturePath', () => {
+    it('starts a new segment after missing observations', () => {
+        const path = buildTemperaturePath([70, null, 72], temperature => temperature, 100);
+
+        expect(path).toBe('M0.0,70.0 M100.0,72.0');
     });
 });

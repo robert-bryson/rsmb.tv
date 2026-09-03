@@ -13,8 +13,8 @@ type Section = 'age' | 'timeseries' | 'ratio' | 'map';
 
 const SECTIONS: { id: Section; label: string }[] = [
     { id: 'age', label: 'Record Age' },
-    { id: 'timeseries', label: 'Records/Year' },
-    { id: 'ratio', label: 'H:L Ratio' },
+    { id: 'timeseries', label: 'Year Set' },
+    { id: 'ratio', label: 'Standing H:L' },
     { id: 'map', label: 'Record Age Map' },
 ];
 
@@ -51,11 +51,11 @@ export function ClimateTrends() {
                     >
                         ← Map
                     </Link>
-                    <h1 className="text-base font-semibold text-zinc-100">Climate Trends</h1>
+                    <h1 className="text-base font-semibold text-zinc-100">Standing Record History</h1>
                 </div>
                 <p className="text-xs text-zinc-400 mb-3">
-                    Are all-time county temperature records being reset more often by heat than cold? Analysis of {trends.totalHighs.toLocaleString()} record highs
-                    and {trends.totalLows.toLocaleString()} record lows across US counties.
+                    When were today&apos;s standing county extremes set? This view groups {trends.totalHighs.toLocaleString()} current highs
+                    and {trends.totalLows.toLocaleString()} current lows by their record date. Superseded records are not included.
                 </p>
 
                 {/* Section tabs */}
@@ -101,7 +101,7 @@ export function ClimateTrends() {
                 {/* Common footer */}
                 <div className="mt-6 pt-4 border-t border-zinc-800 text-[10px] text-zinc-500 space-y-1">
                     <p>Data: NOAA / ACIS · County all-time records from period of record (1890s–present)</p>
-                    <p>Analysis based on {(trends.totalHighs + trends.totalLows).toLocaleString()} county-level all-time records across 48 contiguous states.</p>
+                    <p>Descriptive record-age analysis only; this is not a count of every historical record-breaking event.</p>
                 </div>
             </div>
         </div>

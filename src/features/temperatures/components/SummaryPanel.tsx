@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef } from 'react';
 import type { RecentRecords, TimePeriod, BrokenRecord, CountyRecordsCollection, StateRecordsCollection, ViewMode } from '../types';
 import { TIME_PERIODS, TIME_PERIOD_LABELS, HIGH_TEMP_COLOR, LOW_TEMP_COLOR, yearToColor } from '../constants';
-import { formatTemp } from '../utils/temperature';
+import { formatComparisonPeriod, formatTemp } from '../utils/temperature';
 
 type FreshnessSort = 'hottest' | 'coldest' | 'oldest' | 'newest';
 type TemperatureRecordType = 'high' | 'low';
@@ -78,10 +78,10 @@ type RecordSort = 'temp' | 'margin' | 'departure';
 const RECORD_SORT_LABELS: Record<RecordSort, string> = {
     temp: 'Temp',
     margin: 'Margin',
-    departure: 'vs Normal',
+    departure: 'vs Avg',
 };
 const RECORD_SORT_OPTIONS: RecordSort[] = ['temp', 'margin', 'departure'];
-const PAGE_SIZE = 100;
+const PAGE_SIZE = 25;
 
 function getMargin(r: BrokenRecord): number {
     return r.type === 'high' ? r.tempF - r.prevRecordF : r.prevRecordF - r.tempF;
@@ -107,7 +107,7 @@ function sortRecords(records: BrokenRecord[], sort: RecordSort): BrokenRecord[] 
 }
 
 function RecordsPanel({ recentRecords, useCelsius, onFlyTo, activePeriod, onPeriodChange }: { recentRecords: RecentRecords; useCelsius: boolean; onFlyTo?: (lng: number, lat: number) => void; activePeriod: TimePeriod; onPeriodChange: (period: TimePeriod) => void }) {
-    const [sort, setSort] = useState<RecordSort>('temp');
+    const [sort, setSort] = useState<RecordSort>('departure');
     const [highsVisible, setHighsVisible] = useState(PAGE_SIZE);
     const [lowsVisible, setLowsVisible] = useState(PAGE_SIZE);
     const highsRef = useRef<HTMLDivElement>(null);
@@ -267,7 +267,7 @@ function RecordsPanel({ recentRecords, useCelsius, onFlyTo, activePeriod, onPeri
                 )}
 
                 <p className="text-xs text-zinc-500 pt-2 border-t border-zinc-800">
-                    Daily &amp; monthly station records vs 1950–{new Date().getFullYear() - 1} baseline · Data: NOAA/ACIS · Updated {recentRecords.asOf}
+                    Daily &amp; monthly station records and calendar-date averages begin in 1950 · Data: NOAA/ACIS · Updated {recentRecords.asOf}
                 </p>
             </div>
         </div>
@@ -699,6 +699,7 @@ function RecordRow({ record, rank, sort, useCelsius, onClick }: { record: Broken
     const margin = getMargin(record);
     const departure = getDeparture(record);
     const arrow = record.type === 'high' ? '↑' : '↓';
+    const departureArrow = departure >= 0 ? arrow : record.type === 'high' ? '↓' : '↑';
 
     const formatMargin = (val: number) =>
         useCelsius ? (val * 5 / 9).toFixed(1) : val.toFixed(1);
@@ -721,10 +722,10 @@ function RecordRow({ record, rank, sort, useCelsius, onClick }: { record: Broken
             case 'departure':
                 return record.normalF != null ? (
                     <span style={{ color: color + '99' }}>
-                        {arrow}{formatMargin(departure)}° from normal {formatTemp(record.normalF, useCelsius)}
+                        {departureArrow}{formatMargin(Math.abs(departure))}° from {formatComparisonPeriod(record.date)} {formatTemp(record.normalF, useCelsius)}
                     </span>
                 ) : (
-                    <span className="text-zinc-500">normal unavailable</span>
+                    <span className="text-zinc-500">historical average unavailable</span>
                 );
         }
     })();
@@ -733,7 +734,9 @@ function RecordRow({ record, rank, sort, useCelsius, onClick }: { record: Broken
     const sortBadge = sort === 'margin'
         ? <span className="text-xs tabular-nums" style={{ color: color + 'cc' }}>+{formatMargin(margin)}°</span>
         : sort === 'departure' && record.normalF != null
-            ? <span className="text-xs tabular-nums" style={{ color: color + 'cc' }}>+{formatMargin(departure)}°</span>
+            ? <span className="text-xs tabular-nums" style={{ color: color + 'cc' }}>
+                {departure >= 0 ? '+' : '−'}{formatMargin(Math.abs(departure))}°
+            </span>
             : null;
 
     return (

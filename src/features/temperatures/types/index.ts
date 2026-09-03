@@ -50,6 +50,7 @@ export interface BrokenRecord {
     tempF: number;
     prevRecordF: number;
     prevRecordDate: string;
+    /** Mean for this calendar date from 1950 through the year before `date`. */
     normalF: number | null;
     date: string;
     /** Scope of the record: daily calendar-date, monthly, or promoted to county/state all-time on the client */

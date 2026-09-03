@@ -11,10 +11,10 @@ const ClimateTrends = lazy(() =>
 
 export default function ClimateTrendsPage() {
     const description =
-        'Are temperature records being broken more frequently? Visualizations of record high vs low frequency, age distribution, and geographic patterns.';
+        'Explore when today’s standing county temperature extremes were set, including their age distribution and geographic patterns.';
 
     useDocumentHead({
-        title: 'Climate Trends — Record Highs',
+        title: 'Standing Record History — Record Highs',
         description,
         ogImage: absoluteUrl('/og/climate-trends.svg'),
     });
@@ -22,7 +22,7 @@ export default function ClimateTrendsPage() {
     useJsonLd({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
-        name: 'Climate Trends — Record Highs',
+        name: 'Standing Record History — Record Highs',
         description,
         url: absoluteUrl('/projects/temperature-records/trends'),
         isPartOf: {

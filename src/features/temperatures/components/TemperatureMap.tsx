@@ -21,7 +21,7 @@ import {
     FRESHNESS_COLORS,
     yearToColor,
 } from '../constants';
-import { formatTemp, formatTempDelta } from '../utils/temperature';
+import { formatComparisonPeriod, formatTemp, formatTempDelta } from '../utils/temperature';
 import { escapeHtml } from '../../../utils/escapeHtml';
 
 function useIsMobile() {
@@ -119,7 +119,7 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
                     <span style="color:${color}">${arrow}${formatTempDelta(margin, useCelsius)}</span>
                 </div>${vsNormal != null ? `
                 <div style="display:flex;justify-content:space-between;margin-bottom:2px">
-                    <span style="color:#a1a1aa">vs Normal</span>
+                    <span style="color:#a1a1aa">vs ${formatComparisonPeriod(props.date as string)}</span>
                     <span style="color:${vsNormal > 0 ? HIGH_TEMP_COLOR : LOW_TEMP_COLOR}">${vsNormal > 0 ? '+' : ''}${formatTempDelta(vsNormal, useCelsius)}</span>
                 </div>` : ''}
                 <div style="display:flex;justify-content:space-between">
@@ -218,7 +218,9 @@ export function TemperatureMap() {
     const [searchParams, setSearchParams] = useSearchParams();
     const [mapLoaded, setMapLoaded] = useState(false);
     const [showCounty, setShowCounty] = useState(false);
-    const [panelOpen, setPanelOpen] = useState(true);
+    const [panelOpen, setPanelOpen] = useState(
+        () => typeof window === 'undefined' || !window.matchMedia('(max-width: 768px)').matches,
+    );
     const [showTrends, setShowTrends] = useState(false);
     const [highlightRange, setHighlightRange] = useState<HighlightRange | null>(null);
     const [selectedDecade, setSelectedDecade] = useState<number | null>(null);
@@ -293,6 +295,15 @@ export function TemperatureMap() {
     const { stateRecords, countyRecords, recentRecords, loading, error } = useTemperatureData({ loadAllTimeRecords: shouldLoadAllTimeRecords });
     const { trends, loading: trendsLoading, error: trendsError } = useClimateTrends({ enabled: showTrends });
     const [activePeriod, setActivePeriod] = useState<TimePeriod>('yesterday');
+
+    const recentCounts = useMemo(() => {
+        const records = recentRecords?.[activePeriod] ?? [];
+        return records.reduce((counts, record) => {
+            counts[record.type]++;
+            counts[record.recordScope === 'monthly' ? 'monthly' : 'daily']++;
+            return counts;
+        }, { high: 0, low: 0, daily: 0, monthly: 0 });
+    }, [activePeriod, recentRecords]);
 
     /** Build GeoJSON from broken records for the map layer */
     const brokenRecordsGeoJson = useMemo(() => {
@@ -484,7 +495,7 @@ export function TemperatureMap() {
             filter: ['==', ['get', 'type'], 'high'],
             layout: {
                 'text-field': ['concat', ['to-string', ['get', 'tempF']], '°F'],
-                'text-font': ['Open Sans Bold'],
+                'text-font': ['Open Sans Semibold'],
                 'text-size': ['interpolate', ['linear'], ['zoom'], 3, 11, 6, 14, 9, 18],
                 'text-offset': [0, -0.8],
                 'text-anchor': 'bottom',
@@ -506,7 +517,7 @@ export function TemperatureMap() {
             filter: ['==', ['get', 'type'], 'low'],
             layout: {
                 'text-field': ['concat', ['to-string', ['get', 'tempF']], '°F'],
-                'text-font': ['Open Sans Bold'],
+                'text-font': ['Open Sans Semibold'],
                 'text-size': ['interpolate', ['linear'], ['zoom'], 3, 11, 6, 14, 9, 18],
                 'text-offset': [0, 0.8],
                 'text-anchor': 'top',
@@ -528,7 +539,7 @@ export function TemperatureMap() {
             filter: ['==', ['get', 'type'], 'high'],
             layout: {
                 'text-field': ['get', 'state'],
-                'text-font': ['Open Sans Bold'],
+                'text-font': ['Open Sans Semibold'],
                 'text-size': ['interpolate', ['linear'], ['zoom'], 3, 9, 6, 11, 9, 14],
                 'text-offset': [0, 0],
                 'text-anchor': 'center',
@@ -615,7 +626,7 @@ export function TemperatureMap() {
                         '\n', {},
                         ['concat', ['to-string', ['coalesce', ['get', 'lowTempF'], '']], '°'], { 'text-color': '#93c5fd' },
                     ],
-                    'text-font': ['Open Sans Bold'],
+                    'text-font': ['Open Sans Semibold'],
                     'text-size': ['interpolate', ['linear'], ['zoom'], 7, 9, 10, 12],
                     'text-anchor': 'center',
                     'text-allow-overlap': false,
@@ -701,7 +712,7 @@ export function TemperatureMap() {
             source: sourceId,
             layout: {
                 'text-field': ['concat', ['to-string', ['get', 'tempF']], '°F'],
-                'text-font': ['Open Sans Bold'],
+                'text-font': ['Open Sans Semibold'],
                 'text-size': ['interpolate', ['linear'], ['zoom'], 3, 10, 7, 13],
                 'text-offset': [0, 1.8],
                 'text-anchor': 'top',
@@ -753,7 +764,7 @@ export function TemperatureMap() {
             minzoom: 7,
             layout: {
                 'text-field': ['to-string', ['get', 'year']],
-                'text-font': ['Open Sans Bold'],
+                'text-font': ['Open Sans Semibold'],
                 'text-size': 9,
                 'text-offset': [0, 1.2],
                 'text-anchor': 'top',
@@ -804,7 +815,7 @@ export function TemperatureMap() {
             source: sourceId,
             layout: {
                 'text-field': ['concat', ['to-string', ['get', 'tempF']], '°F · ', ['get', 'stationName']],
-                'text-font': ['Open Sans Bold'],
+                'text-font': ['Open Sans Semibold'],
                 'text-size': 13,
                 'text-offset': [0, 2.2],
                 'text-anchor': 'top',
@@ -1314,9 +1325,10 @@ export function TemperatureMap() {
                 <div className="flex items-center gap-1.5 overflow-x-auto">
                     <Link
                         to="/projects"
-                        className="bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white px-3 py-1.5 rounded-lg text-sm border border-zinc-700/50 hover:border-zinc-600 transition-colors"
+                        aria-label="Back to projects"
+                        className="bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white px-2.5 sm:px-3 py-1.5 rounded-lg text-sm border border-zinc-700/50 hover:border-zinc-600 transition-colors"
                     >
-                        ← Projects
+                        <span aria-hidden="true">←</span><span className="hidden sm:inline"> Projects</span>
                     </Link>
                     <button
                         onClick={toggleTrends}
@@ -1325,7 +1337,7 @@ export function TemperatureMap() {
                             : 'text-violet-400 border-violet-500/30 hover:text-violet-300 hover:border-violet-400/50'
                             }`}
                     >
-                        📊 Trends
+                        <span aria-hidden="true">📊</span><span className="hidden sm:inline"> Trends</span>
                     </button>
                     <button
                         onClick={() => setUseCelsius(c => !c)}
@@ -1342,7 +1354,7 @@ export function TemperatureMap() {
                         aria-label={panelOpen ? 'Hide summary panel' : 'Show summary panel'}
                         aria-expanded={panelOpen}
                     >
-                        {panelOpen ? 'Hide Panel' : 'Show Panel'}
+                        <span aria-hidden="true">{panelOpen ? '▾' : '▴'}</span><span className="hidden sm:inline"> {panelOpen ? 'Hide Panel' : 'Show Panel'}</span>
                     </button>
                 </div>
                 <div className="flex gap-0.5 bg-zinc-900/80 backdrop-blur rounded-lg border border-zinc-700/50 p-0.5 overflow-x-auto">
@@ -1354,7 +1366,7 @@ export function TemperatureMap() {
                             }`}
                         title="Daily/monthly station records broken recently (yesterday or last 7 days)"
                     >
-                        🌡️ Recent
+                        <span className="sm:hidden">Recent</span><span className="hidden sm:inline">🌡️ Recent</span>
                     </button>
                     <button
                         onClick={() => setViewMode('county')}
@@ -1364,7 +1376,7 @@ export function TemperatureMap() {
                             }`}
                         title="All-time high and low temperature records per county"
                     >
-                        📍 County All-Time
+                        <span className="sm:hidden">County</span><span className="hidden sm:inline">📍 County All-Time</span>
                     </button>
                     <button
                         onClick={() => setViewMode('state')}
@@ -1374,7 +1386,7 @@ export function TemperatureMap() {
                             }`}
                         title="All-time high and low temperature records per state"
                     >
-                        🏛️ State All-Time
+                        <span className="sm:hidden">State</span><span className="hidden sm:inline">🏛️ State All-Time</span>
                     </button>
                     <button
                         onClick={() => setViewMode('freshness')}
@@ -1384,17 +1396,18 @@ export function TemperatureMap() {
                             }`}
                         title="All-time county records colored by the decade they were set — shows how old the records are"
                     >
-                        📅 Record Age
+                        <span className="sm:hidden">Age</span><span className="hidden sm:inline">📅 Record Age</span>
                     </button>
                 </div>
                 {/* Context headline — promoted */}
                 <div className="max-w-md" aria-live="polite">
                     {viewMode === 'recent' && recentRecords && (
                         <p className="text-xs text-zinc-200 bg-zinc-900/80 backdrop-blur rounded-lg px-3 py-1.5 border border-zinc-700/50">
-                            <span className="font-semibold" style={{ color: HIGH_TEMP_COLOR }}>{(recentRecords[activePeriod]?.filter((r: BrokenRecord) => r.type === 'high').length || 0).toLocaleString()}</span>
+                            <span className="font-semibold" style={{ color: HIGH_TEMP_COLOR }}>{recentCounts.high.toLocaleString()}</span>
                             {' daily/monthly station record highs and '}
-                            <span className="font-semibold" style={{ color: LOW_TEMP_COLOR }}>{(recentRecords[activePeriod]?.filter((r: BrokenRecord) => r.type === 'low').length || 0).toLocaleString()}</span>
+                            <span className="font-semibold" style={{ color: LOW_TEMP_COLOR }}>{recentCounts.low.toLocaleString()}</span>
                             {activePeriod === 'yesterday' ? ' record lows broken yesterday' : ' record lows broken in the last 7 days'}
+                            <span className="block text-[10px] text-zinc-400 mt-0.5">{recentCounts.daily.toLocaleString()} daily · {recentCounts.monthly.toLocaleString()} monthly</span>
                         </p>
                     )}
                     {viewMode === 'county' && countyRecords && (
@@ -1429,12 +1442,12 @@ export function TemperatureMap() {
                 </div>
             ) : (
                 <div className={`absolute left-4 z-20 bg-zinc-900/80 backdrop-blur rounded-lg px-3 py-2 sm:px-4 sm:py-3 text-xs text-zinc-300 border border-zinc-700/50 transition-all max-w-[calc(100vw-2rem)] ${showTrends ? (isMobile ? 'bottom-[55%]' : 'bottom-[37%]') : 'bottom-6'}`}>
-                    <div className="flex items-center gap-1 mb-1.5 text-zinc-200 font-medium">Decade record was set</div>
-                    <div className="flex gap-0.5 overflow-x-auto">
-                        {FRESHNESS_COLORS.filter((_, i) => isMobile ? i % 2 === 0 : true).map(([year, color]) => (
+                    <div className="flex items-center gap-1 mb-1.5 text-zinc-200 font-medium">Year standing record was set</div>
+                    <div className="flex gap-1.5 overflow-x-auto">
+                        {FRESHNESS_COLORS.map(([year, color, label]) => (
                             <div key={year} className="flex flex-col items-center shrink-0">
-                                <div className="w-4 h-3 sm:w-5 rounded-sm" style={{ backgroundColor: color }} />
-                                <span className="mt-0.5 text-[10px] sm:text-xs text-zinc-400">{year}</span>
+                                <div className="w-8 h-3 rounded-sm" style={{ backgroundColor: color }} />
+                                <span className="mt-0.5 text-[9px] text-zinc-400">{label}</span>
                             </div>
                         ))}
                     </div>

@@ -7,7 +7,7 @@ A personal website and portfolio showcasing interactive projects, with a focus o
 ## Features
 
 - **Flights** — An interactive 3D globe visualization built with [react-globe.gl](https://github.com/vasturiano/react-globe.gl) that displays flights I've taken around the world. Includes active filter chips, opt-in globe rotation, route frequency analysis, and travel statistics.
-- **Temperature Records** — An interactive map of U.S. temperature records built with MapLibre GL, showing broken records, county/state all-time records, climate trends, and freshness analysis.
+- **Temperature Records** — An interactive MapLibre GL map of U.S. temperature records. It shows recent station records, standing county and state extremes, and standing-record history.
 - **Project Portfolio** — Showcases various side projects including web tools and data visualizations.
 - **Blog** — Google-backed MDX posts with RSS, generated Open Graph images, structured data, and shareable tag filters.
 - **About** — Background on my experience in geospatial engineering and software development.
@@ -229,18 +229,18 @@ Project data is handled differently depending on how it is authored and updated:
 
 Local development uses `https://data.rsmb.tv` for temperature data by default. To test freshly generated local temperature JSON instead, set `VITE_TEMPERATURE_DATA_BASE_URL=/data/temperatures` before starting Vite.
 
-Temperature record terminology in the UI is deliberately scoped:
+The user interface uses these temperature record terms:
 
-- **Recent** shows daily and monthly station records broken yesterday or in the last seven days, compared against the 1950–present ACIS baseline.
+- **Recent** shows daily and monthly station records that were broken yesterday or in the last seven days. The comparison average starts in 1950 and ends in the year before each observation.
 - **County All-Time** and **State All-Time** show the highest high and lowest low currently known for each geography.
-- **Record Age** colors county all-time records by the decade when the standing record was set.
-- **Trends** analyze county all-time records only, not the recent daily/monthly station record feed.
+- **Record Age** colors standing county records by broad year ranges.
+- **Standing Record History** groups the current county extremes by the year in which they occurred. It does not count records that were later superseded.
 
 ### Temperature Data Sync
 
 Temperature data is maintained outside Git in the `rsmbtv-temperature-data` S3 bucket and served through `data.rsmb.tv`.
 
-The scheduled GitHub Actions workflow runs daily in recent-only mode and monthly in full mode. Recent-only refreshes `recentRecords.json`, daily observation archives, the station index, and ACIS cache files. Full sync also refreshes state records, county records, climate trends, and summary metadata.
+The scheduled GitHub Actions workflow runs each day in recent-only mode and each month in full mode. Recent-only mode refreshes `recentRecords.json`, the daily observation archives, the station index, and the ACIS cache files. Full mode also refreshes state records, county records, standing-record history, and summary metadata. The history output includes each calendar year from 1890 through the current year. Years with no surviving record have zero counts.
 
 #### Manual Temperature Sync
 

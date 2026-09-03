@@ -12,8 +12,7 @@ interface Props {
 }
 
 /**
- * Area chart overlaying record highs set per year (red) vs record lows set per year (blue).
- * Shows how frequency of record-setting has changed over time.
+ * Area chart grouping today's standing county highs and lows by the year set.
  */
 export function RecordsBrokenTimeSeries({ data, onHoverPeriod, selectedDecade, onSelectDecade, compact }: Props) {
     const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
@@ -75,10 +74,10 @@ export function RecordsBrokenTimeSeries({ data, onHoverPeriod, selectedDecade, o
         <div className={compact ? 'flex flex-col h-full' : ''}>
             {!compact && (
                 <>
-                    <h3 className="text-sm font-semibold text-zinc-200 mb-1">All-Time County Records Set Per Year</h3>
+                    <h3 className="text-sm font-semibold text-zinc-200 mb-1">Standing County Records by Year Set</h3>
                     <p className="text-xs text-zinc-400 mb-4">
-                        How many all-time county high/low temperature records were newly set each year (5-year rolling average).
-                        In a stable climate, both lines should decline equally as records become harder to break.
+                        Current county extremes grouped by the year they occurred, shown as a 5-calendar-year rolling average.
+                        Records that were later superseded are not included.
                     </p>
                 </>
             )}
@@ -88,10 +87,10 @@ export function RecordsBrokenTimeSeries({ data, onHoverPeriod, selectedDecade, o
                     className={compact ? 'w-full h-full' : 'w-full min-w-[500px]'}
                     preserveAspectRatio={compact ? 'xMidYMid meet' : undefined}
                     role="img"
-                    aria-label="Records broken per year time series"
+                    aria-label="Standing county records grouped by year set"
                     onMouseLeave={() => { setHoveredIdx(null); onHoverPeriod?.(null); }}
                 >
-                    <desc>Area chart showing the number of county all-time record highs (red) and lows (blue) set each year from 1900 to present, with 5-year rolling average smoothing.</desc>
+                    <desc>Area chart grouping today's standing county record highs and lows by the year they occurred, with a five-calendar-year rolling average.</desc>
                     {/* Grid lines */}
                     {yTicks.map(v => (
                         <g key={v}>
@@ -186,11 +185,7 @@ export function RecordsBrokenTimeSeries({ data, onHoverPeriod, selectedDecade, o
                     </span>
                 </div>
             )}
-            {!compact && (
-                <p className="text-[10px] text-zinc-500 mt-2">
-                    Since ~1990, new record lows have nearly vanished while record highs continue to be set — a hallmark of warming.
-                </p>
-            )}
+            {!compact && <p className="text-[10px] text-zinc-500 mt-2">This survivor distribution should not be interpreted as the annual frequency of record-breaking events.</p>}
         </div>
     );
 }

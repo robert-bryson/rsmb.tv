@@ -1160,26 +1160,34 @@ export function parseBackfillDays(argv = process.argv) {
  * Generate climate trends data from county records.
  * Produces decade aggregations, yearly counts, and 10-year rolling ratios.
  */
-function generateClimateTrends(countyGeoJson) {
+export function generateClimateTrends(countyGeoJson, endYear = new Date().getUTCFullYear()) {
+    const firstYear = 1890;
+    if (!Number.isSafeInteger(endYear) || endYear < firstYear) {
+        throw new Error(`Climate trend end year must be an integer on or after ${firstYear}`);
+    }
+
     const yearCounts = {}; // year → { highs, lows }
 
     for (const feature of countyGeoJson.features) {
         const { type, date } = feature.properties;
         if (!date || date.length < 4) continue;
         const year = parseInt(date.slice(0, 4), 10);
-        if (isNaN(year) || year < 1890) continue;
+        if (isNaN(year) || year < firstYear || year > endYear) continue;
 
         if (!yearCounts[year]) yearCounts[year] = { highs: 0, lows: 0 };
         if (type === 'high') yearCounts[year].highs++;
         else if (type === 'low') yearCounts[year].lows++;
     }
 
-    // By year (sorted)
-    const years = Object.keys(yearCounts).map(Number).sort((a, b) => a - b);
+    // By calendar year, including years when no current standing record was set.
+    const years = Array.from(
+        { length: endYear - firstYear + 1 },
+        (_, index) => firstYear + index,
+    );
     const byYear = years.map(year => ({
         year,
-        highs: yearCounts[year].highs,
-        lows: yearCounts[year].lows,
+        highs: yearCounts[year]?.highs ?? 0,
+        lows: yearCounts[year]?.lows ?? 0,
     }));
 
     // By decade

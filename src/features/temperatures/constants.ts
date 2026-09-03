@@ -36,22 +36,14 @@ export const TIME_PERIOD_LABELS: Record<TimePeriod, string> = {
 
 export const TIME_PERIODS: TimePeriod[] = ['yesterday', 'last7Days'];
 
-/** Freshness color scale — one color per decade, cool → warm gradient */
-export const FRESHNESS_COLORS: [number, string][] = [
-    [1890, '#1a2744'],  // 1890s — deep navy
-    [1900, '#1e3a5f'],  // 1900s — dark blue
-    [1910, '#1b4f6e'],  // 1910s — steel blue
-    [1920, '#17635e'],  // 1920s — teal
-    [1930, '#1e6f3a'],  // 1930s — forest green
-    [1940, '#3d7a28'],  // 1940s — olive green
-    [1950, '#5f8118'],  // 1950s — yellow-green
-    [1960, '#7a7a14'],  // 1960s — dark yellow
-    [1970, '#8b6914'],  // 1970s — amber
-    [1980, '#9a5210'],  // 1980s — dark orange
-    [1990, '#b13c0c'],  // 1990s — burnt orange
-    [2000, '#c2410c'],  // 2000s — orange-red
-    [2010, '#d42a1a'],  // 2010s — red
-    [2020, '#dc2626'],  // 2020s — bright red
+/** Broad standing-record age bands, ordered oldest to newest. */
+export const FRESHNESS_COLORS: [number, string, string][] = [
+    [0, '#4967b2', 'Before 1940'],
+    [1940, '#2f8793', '1940–1969'],
+    [1970, '#55a868', '1970–1999'],
+    [2000, '#b5ad3b', '2000–2009'],
+    [2010, '#e58b32', '2010–2019'],
+    [2020, '#ef4444', '2020–present'],
 ];
 
 export function yearToColor(year: number): string {

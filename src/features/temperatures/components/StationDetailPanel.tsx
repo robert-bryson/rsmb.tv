@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useStationHistory } from '../hooks/useStationHistory';
 import type { StationDailyObs } from '../hooks/useStationHistory';
-import { fToC } from '../utils/temperature';
+import { buildTemperaturePath, fToC } from '../utils/temperature';
 
 interface StationDetailPanelProps {
     uid: number;
@@ -44,17 +44,6 @@ function TempSparkline({ data, useCelsius }: { data: StationDailyObs[]; useCelsi
             return h - pad - ((t - yMin) / range) * (h - 2 * pad);
         }
 
-        function buildPath(temps: (number | null)[]): string {
-            const pts: string[] = [];
-            for (let i = 0; i < temps.length; i++) {
-                const y = toY(temps[i]);
-                if (y == null) continue;
-                const x = (i / (temps.length - 1)) * w;
-                pts.push(`${pts.length === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`);
-            }
-            return pts.join(' ');
-        }
-
         // Month labels
         const labels: { x: number; label: string }[] = [];
         let lastMonth = -1;
@@ -68,8 +57,8 @@ function TempSparkline({ data, useCelsius }: { data: StationDailyObs[]; useCelsi
         }
 
         return {
-            highPath: buildPath(highs),
-            lowPath: buildPath(lows),
+            highPath: buildTemperaturePath(highs, toY, w),
+            lowPath: buildTemperaturePath(lows, toY, w),
             yMin,
             yMax,
             labels,

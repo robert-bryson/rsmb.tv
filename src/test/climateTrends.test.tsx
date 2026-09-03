@@ -47,10 +47,10 @@ describe('ClimateTrends component', () => {
             error: null,
         });
         renderWithRouter(<ClimateTrends />);
-        expect(screen.getByText('Climate Trends')).toBeInTheDocument();
+        expect(screen.getByText('Standing Record History')).toBeInTheDocument();
         expect(screen.getByText('Record Age')).toBeInTheDocument();
-        expect(screen.getByText('Records/Year')).toBeInTheDocument();
-        expect(screen.getByText('H:L Ratio')).toBeInTheDocument();
+        expect(screen.getByText('Year Set')).toBeInTheDocument();
+        expect(screen.getByText('Standing H:L')).toBeInTheDocument();
         expect(screen.getByText('Record Age Map')).toBeInTheDocument();
     });
 

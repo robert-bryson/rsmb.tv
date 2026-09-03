@@ -73,7 +73,7 @@ export default function TemperatureRecordsAbout() {
                     to="/projects/temperature-records/trends"
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-sm font-medium transition-colors"
                 >
-                    View climate trends →
+                    View record history →
                 </Link>
                 <a
                     href="https://github.com/robert-bryson/rsmb.tv/tree/main/src/features/temperatures"
@@ -133,17 +133,23 @@ export default function TemperatureRecordsAbout() {
                 <li>High/low tabs that keep the side panel and map symbology synchronized</li>
                 <li>Click any state or county to see the record details — temperature, date, and station</li>
                 <li>Summary panel showing recent daily/monthly station records broken across the country</li>
-                <li>Companion trends page analyzing whether county all-time records skew increasingly hot</li>
+                <li>Companion history page showing when today&apos;s standing county extremes were set</li>
             </ul>
 
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Data</h2>
-            <p className="text-zinc-400 text-sm mb-6 leading-relaxed">
-                Temperature records are sourced from NOAA's Applied Climate
-                Information System (ACIS). The data pipeline fetches state and
-                county-level records, processes them into GeoJSON and JSON
-                summaries, and syncs the results to S3 for the frontend to
-                consume.
-            </p>
+            <div className="text-zinc-400 text-sm mb-6 leading-relaxed space-y-3">
+                <p>
+                    State extremes come from NOAA&apos;s State Climate Extremes Committee records. County extremes are computed from ACIS station
+                    period-of-record observations by selecting the highest maximum and lowest minimum reported in each county. County values are
+                    descriptive and are not independently certified state records.
+                </p>
+                <p>
+                    County views cover the 48 contiguous states from 1890 onward. Station histories and data completeness vary. Recent daily and
+                    monthly station records use observations beginning in 1950; displayed comparison averages cover 1950 through the year before
+                    each observation. The standing-record history groups only records that remain county extremes today, not every record-breaking
+                    event that occurred historically.
+                </p>
+            </div>
 
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Tech Stack</h2>
             <div className="flex flex-wrap gap-2 mb-8">

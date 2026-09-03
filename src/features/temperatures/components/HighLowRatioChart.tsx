@@ -15,8 +15,7 @@ interface Props {
 type View = 'decade' | 'rolling';
 
 /**
- * The "Meehl Metric" — ratio of record highs to record lows.
- * In a stable climate this should be ~1:1. Deviation indicates warming or cooling.
+ * Ratio of today's standing county highs to lows grouped by record date.
  */
 export function HighLowRatioChart({ decadeData, rollingData, onHoverPeriod, selectedDecade, onSelectDecade, compact }: Props) {
     const [view, setView] = useState<View>('decade');
@@ -76,6 +75,13 @@ function DecadeRatioView({ data, hovered, setHovered, selectedDecade, onSelectDe
         if (onSelectDecade) onSelectDecade(decade);
         else setLocalSelected(idx);
     };
+    const restoreSelectedRange = () => {
+        setHovered(null);
+        const selectedData = selected === null ? null : filtered[selected];
+        onHoverPeriod?.(selectedData
+            ? { startYear: selectedData.decade, endYear: selectedData.decade + 9 }
+            : null);
+    };
     const activeIndex = hovered ?? selected;
 
     const barWidth = 46;
@@ -106,8 +112,8 @@ function DecadeRatioView({ data, hovered, setHovered, selectedDecade, onSelectDe
                         </button>
                     </div>
                     <p className="text-xs text-zinc-400 mb-4">
-                        Ratio of all-time county record highs to record lows set per decade. A value of 1.0 means equal;
-                        above 1.0 means more highs than lows — a warming signal.
+                        Ratio of today&apos;s standing county highs to lows grouped by the decade they occurred.
+                        A value of 1.0 means equal counts; superseded records are not included.
                     </p>
                 </>
             )}
@@ -119,17 +125,9 @@ function DecadeRatioView({ data, hovered, setHovered, selectedDecade, onSelectDe
                     role="img"
                     aria-label="High to low ratio by decade"
                     onClick={() => { setSelected(null); onHoverPeriod?.(null); }}
-                    onMouseLeave={() => {
-                        setHovered(null);
-                        if (selected !== null) {
-                            const sd = filtered[selected];
-                            onHoverPeriod?.({ startYear: sd.decade, endYear: sd.decade + 9 });
-                        } else {
-                            onHoverPeriod?.(null);
-                        }
-                    }}
+                    onMouseLeave={restoreSelectedRange}
                 >
-                    <desc>Bar chart showing the ratio of record highs to record lows set per decade. A dashed line at 1:1 marks equilibrium. Bars above the line indicate more highs than lows — a warming signal.</desc>
+                    <desc>Bar chart showing the ratio of today's standing county record highs to lows grouped by record decade. A dashed line marks equal counts.</desc>
                     {/* Equilibrium line at 1:1 */}
                     <line
                         x1={padding.left} y1={equilibriumY} x2={width - padding.right} y2={equilibriumY}
@@ -161,27 +159,36 @@ function DecadeRatioView({ data, hovered, setHovered, selectedDecade, onSelectDe
                         return (
                             <g
                                 key={d.decade}
+                                role="button"
+                                tabIndex={0}
+                                aria-pressed={selected === i}
+                                aria-label={`${d.label}: ${ratio.toFixed(2)} standing highs per standing low`}
                                 onMouseEnter={() => {
                                     setHovered(i);
                                     onHoverPeriod?.({ startYear: d.decade, endYear: d.decade + 9 });
                                 }}
-                                onMouseLeave={() => {
-                                    setHovered(null);
-                                    if (selected !== null) {
-                                        const sd = filtered[selected];
-                                        onHoverPeriod?.({ startYear: sd.decade, endYear: sd.decade + 9 });
-                                    }
+                                onFocus={() => {
+                                    setHovered(i);
+                                    onHoverPeriod?.({ startYear: d.decade, endYear: d.decade + 9 });
                                 }}
+                                onBlur={restoreSelectedRange}
+                                onKeyDown={(event) => {
+                                    if (event.key !== 'Enter' && event.key !== ' ') return;
+                                    event.preventDefault();
+                                    event.stopPropagation();
+                                    setSelected(selected === i ? null : i);
+                                }}
+                                onMouseLeave={restoreSelectedRange}
                                 onClick={(e) => { e.stopPropagation(); setSelected(selected === i ? null : i); }}
                                 style={{ cursor: 'pointer' }}
                             >
                                 {/* Selected indicator */}
-                                {selected === i && (
+                                {isActive && (
                                     <rect
                                         x={x - 3} y={padding.top + plotH - barH - 3}
                                         width={barWidth + 6} height={barH + 6}
-                                        fill="none" stroke="#a78bfa" strokeWidth={1.5}
-                                        rx={4} strokeDasharray="4 2"
+                                        fill="none" stroke={selected === i ? '#a78bfa' : '#f4f4f5'} strokeWidth={1.5}
+                                        rx={4} strokeDasharray={selected === i ? '4 2' : undefined}
                                     />
                                 )}
                                 <rect
@@ -271,9 +278,7 @@ function RollingRatioView({ data, hovered, setHovered, onSwitchView, onHoverPeri
                             ← Show decades
                         </button>
                     </div>
-                    <p className="text-xs text-zinc-400 mb-4">
-                        10-year rolling ratio of all-time county record highs to lows. Above 1.0 (dashed) means more highs than lows being set.
-                    </p>
+                    <p className="text-xs text-zinc-400 mb-4">Ten-calendar-year rolling ratio of today&apos;s standing county highs to lows, grouped by record date.</p>
                 </>
             )}
             <div className={compact ? 'flex-1 min-h-0' : 'overflow-x-auto'}>

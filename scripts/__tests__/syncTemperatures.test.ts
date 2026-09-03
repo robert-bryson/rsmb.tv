@@ -4,6 +4,7 @@ import {
     buildRecentRecords,
     coveredRecentRecordDates,
     filterBrokenRecordsForDates,
+    generateClimateTrends,
     mergeStationIndexes,
     parseBackfillDays,
     validateRecentRecords,
@@ -327,5 +328,37 @@ describe('temperature sync CLI parsing', () => {
         expect(() => parseBackfillDays(['node', 'script', '--backfill-days', '--recent-only'])).toThrow(/Invalid --backfill-days/);
         expect(() => parseBackfillDays(['node', 'script', '--backfill-days=0'])).toThrow(/Invalid --backfill-days/);
         expect(() => parseBackfillDays(['node', 'script', '--backfill-days=367'])).toThrow(/Invalid --backfill-days/);
+    });
+});
+
+describe('temperature standing-record trend helpers', () => {
+    it('fills internal and trailing calendar years before calculating ten-year windows', () => {
+        const features = [
+            { properties: { type: 'high', date: '2000-07-01' } },
+            { properties: { type: 'low', date: '2002-01-15' } },
+            { properties: { type: 'high', date: '2010-08-02' } },
+        ];
+
+        const trends = generateClimateTrends({ features }, 2012);
+
+        expect(trends.byYear).toHaveLength(123);
+        expect(trends.byYear.find(({ year }) => year === 2001)).toEqual({ year: 2001, highs: 0, lows: 0 });
+        expect(trends.byYear.at(-1)).toEqual({ year: 2012, highs: 0, lows: 0 });
+        expect(trends.rollingRatio.find(({ year }) => year === 2010)).toEqual({
+            year: 2010,
+            ratio: 1,
+            highs10yr: 1,
+            lows10yr: 1,
+        });
+        expect(trends.rollingRatio.at(-1)).toEqual({
+            year: 2012,
+            ratio: null,
+            highs10yr: 1,
+            lows10yr: 0,
+        });
+    });
+
+    it('rejects an invalid trend end year', () => {
+        expect(() => generateClimateTrends({ features: [] }, 1889)).toThrow(/on or after 1890/);
     });
 });
