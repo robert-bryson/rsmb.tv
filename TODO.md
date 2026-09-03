@@ -18,6 +18,13 @@ Open work is grouped by area. Completed work stays below as a lightweight change
 - [ ] Add test coverage for ScrollToTop component
 - [ ] Add browser-level test coverage for FlightsMap integration (keyboard shortcuts + camera URL sync)
 
+### Ride Ledger discovery
+
+- [ ] Resolve the [Ride Ledger open decisions](projects/ride-ledger/readme.md#open-decisions)
+- [ ] Create at least 20 synthetic, de-identified import fixtures with expected normalized output
+- [ ] Reconcile fixture totals with an independent calculation
+- [ ] Write a threat model for identity, local data, synchronization, attachments, export, and account deletion
+
 ---
 
 ## Completed

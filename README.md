@@ -117,6 +117,12 @@ Static page Open Graph images are generated from `DEFAULT_PAGES` in `scripts/gen
 
 Project screenshots and preview images live under `public/images/<project-slug>/` and should be committed as optimized WebP files. Do not commit raw JPG/PNG capture files when a compressed WebP derivative is used by the site. Project cards expect landscape previews; when the source material is portrait-oriented, compose a landscape preview image instead of pointing the card at a single phone screenshot.
 
+## Private Project Data
+
+Do not commit Ride Ledger source data. The repository ignores `projects/ride-ledger/data/`, `projects/ride-ledger/exports/`, and `projects/ride-ledger/receipts/`. These directories can contain locations, vehicle records, costs, and receipt metadata.
+
+Put only synthetic, de-identified fixtures in a future `projects/ride-ledger/test-data/` directory. Review each fixture before you commit it. Do not copy rows from the source spreadsheet into a fixture.
+
 ## Project Changelogs
 
 Project pages read their changelogs from `src/content/projects.ts`. Use the commit history of each project's default branch as the source. Do not include work from an open branch or pull request.

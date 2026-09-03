@@ -195,6 +195,11 @@ public/data/tornadoes/*.json
 public/data/tornadoes/tracks/*.geojson
 public/data/tornadoes/track-points/*.geojson
 
+# === Project: Ride Ledger ===
+projects/ride-ledger/data/
+projects/ride-ledger/exports/
+projects/ride-ledger/receipts/
+
 # === Blog content generated from Google Sheets/Docs at build time ===
 /src/content/posts.json
 /src/content/blog/*.mdx

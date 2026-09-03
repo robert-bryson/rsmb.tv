@@ -1,24 +1,10 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { usePersistedState } from '../hooks/usePersistedState';
 
-// Mock localStorage since jsdom's implementation is incomplete
-const store: Record<string, string> = {};
-const mockLocalStorage = {
-    getItem: vi.fn((key: string) => store[key] ?? null),
-    setItem: vi.fn((key: string, value: string) => { store[key] = value; }),
-    removeItem: vi.fn((key: string) => { delete store[key]; }),
-    clear: vi.fn(() => { Object.keys(store).forEach(k => delete store[k]); }),
-    get length() { return Object.keys(store).length; },
-    key: vi.fn((i: number) => Object.keys(store)[i] ?? null),
-};
-
-Object.defineProperty(globalThis, 'localStorage', { value: mockLocalStorage, writable: true });
-
 describe('usePersistedState', () => {
     beforeEach(() => {
-        mockLocalStorage.clear();
-        vi.clearAllMocks();
+        localStorage.clear();
     });
 
     it('returns the default value when nothing is stored', () => {
@@ -30,11 +16,11 @@ describe('usePersistedState', () => {
         const { result } = renderHook(() => usePersistedState('color', 'blue'));
         act(() => result.current[1]('red'));
         expect(result.current[0]).toBe('red');
-        expect(JSON.parse(store['color'])).toBe('red');
+        expect(JSON.parse(localStorage.getItem('color') ?? '')).toBe('red');
     });
 
     it('reads previously persisted values', () => {
-        store['saved'] = JSON.stringify('hello');
+        localStorage.setItem('saved', JSON.stringify('hello'));
         const { result } = renderHook(() => usePersistedState('saved', 'default'));
         expect(result.current[0]).toBe('hello');
     });
@@ -56,7 +42,7 @@ describe('usePersistedState', () => {
     });
 
     it('falls back to default on invalid JSON in localStorage', () => {
-        store['bad'] = 'not-json';
+        localStorage.setItem('bad', 'not-json');
         const { result } = renderHook(() => usePersistedState('bad', 'fallback'));
         expect(result.current[0]).toBe('fallback');
     });

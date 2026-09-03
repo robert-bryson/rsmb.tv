@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
-import maplibregl from 'maplibre-gl';
+import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useTemperatureData } from '../hooks/useTemperatureData';
 import { INITIAL_CENTER, MIN_ZOOM, MAX_ZOOM, FRESHNESS_COLORS, yearToColor } from '../constants';
