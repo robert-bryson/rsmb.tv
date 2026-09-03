@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { fetchWithCache } from '../../flights/utils/fetchCache';
 import { CLIMATE_TRENDS_URL } from '../constants';
 import type { ClimateTrends } from '../types';
+import { climateTrendsSchema, parseTemperaturePayload } from '../schemas';
 
 interface ClimateTrendsState {
     trends: ClimateTrends | null;
@@ -25,8 +26,10 @@ export function useClimateTrends({ enabled = true }: { enabled?: boolean } = {})
             try {
                 setLoading(true);
                 setError(null);
-                const data = await fetchWithCache<ClimateTrends>(CLIMATE_TRENDS_URL);
-                if (!cancelled) setTrends(data);
+                const payload = await fetchWithCache<unknown>(CLIMATE_TRENDS_URL);
+                if (!cancelled) {
+                    setTrends(parseTemperaturePayload(climateTrendsSchema, payload, 'climate trends data'));
+                }
             } catch (err) {
                 if (!cancelled) setError(err instanceof Error ? err.message : 'Failed to load climate trends');
             } finally {

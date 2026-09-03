@@ -1,5 +1,5 @@
-import { Suspense, lazy, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useClimateTrends } from '../hooks/useClimateTrends';
 import { RecordAgeChart } from './RecordAgeChart';
 import { RecordsBrokenTimeSeries } from './RecordsBrokenTimeSeries';
@@ -20,7 +20,18 @@ const SECTIONS: { id: Section; label: string }[] = [
 
 export function ClimateTrends() {
     const { trends, loading, error } = useClimateTrends();
-    const [active, setActive] = useState<Section>('age');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const tab = searchParams.get('tab');
+    const active: Section = SECTIONS.some(section => section.id === tab) ? tab as Section : 'age';
+
+    const setActive = (section: Section) => {
+        setSearchParams(previous => {
+            const next = new URLSearchParams(previous);
+            if (section === 'age') next.delete('tab');
+            else next.set('tab', section);
+            return next;
+        }, { replace: true });
+    };
 
     if (error) {
         return (
@@ -54,7 +65,7 @@ export function ClimateTrends() {
                     <h1 className="text-base font-semibold text-zinc-100">Standing Record History</h1>
                 </div>
                 <p className="text-xs text-zinc-400 mb-3">
-                    When were today&apos;s standing county extremes set? This view groups {trends.totalHighs.toLocaleString()} current highs
+                    When were today&apos;s standing contiguous U.S. county extremes set? This view groups {trends.totalHighs.toLocaleString()} current highs
                     and {trends.totalLows.toLocaleString()} current lows by their record date. Superseded records are not included.
                 </p>
 
@@ -100,8 +111,12 @@ export function ClimateTrends() {
 
                 {/* Common footer */}
                 <div className="mt-6 pt-4 border-t border-zinc-800 text-[10px] text-zinc-500 space-y-1">
-                    <p>Data: NOAA / ACIS · County all-time records from period of record (1890s–present)</p>
+                    <p>Data: NOAA / ACIS · Contiguous U.S. county all-time records from period of record (1890s–present)</p>
                     <p>Descriptive record-age analysis only; this is not a count of every historical record-breaking event.</p>
+                    <p className="flex gap-3">
+                        <a className="text-violet-400 hover:text-violet-300" href="/temperature-records-methodology.md" download>Download methodology</a>
+                        <a className="text-violet-400 hover:text-violet-300" href="https://data.rsmb.tv/climateTrends.json" download>Download chart data</a>
+                    </p>
                 </div>
             </div>
         </div>

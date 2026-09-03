@@ -5,10 +5,14 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { useTemperatureData } from '../hooks/useTemperatureData';
 import { useClimateTrends } from '../hooks/useClimateTrends';
 import { SummaryPanel } from './SummaryPanel';
+import type { RecordSort } from './SummaryPanel';
 import { StationDetailPanel } from './StationDetailPanel';
 import { RecordAgeChart } from './RecordAgeChart';
 import { RecordsBrokenTimeSeries } from './RecordsBrokenTimeSeries';
 import { HighLowRatioChart } from './HighLowRatioChart';
+import { RecentRecordFilters } from '../map/RecentRecordFilters';
+import { buildBrokenRecordsGeoJson, buildFreshnessGeoJson } from '../map/temperatureMapLayers';
+import { escapeMapText, styleDarkPopup } from '../map/temperatureMapPopup';
 import type { BrokenRecord, ViewMode, HighlightRange, GeoJsonFeature, CountyRecordProperties, TimePeriod, RecordScope, StateRecordsCollection, CountyRecordsCollection } from '../types';
 import {
     INITIAL_CENTER,
@@ -19,7 +23,6 @@ import {
     HIGH_TEMP_COLOR,
     LOW_TEMP_COLOR,
     FRESHNESS_COLORS,
-    yearToColor,
 } from '../constants';
 import { formatComparisonPeriod, formatTemp, formatTempDelta } from '../utils/temperature';
 import { escapeHtml } from '../../../utils/escapeHtml';
@@ -233,6 +236,23 @@ export function TemperatureMap() {
     const viewMode: ViewMode = (viewParam === 'county' || viewParam === 'state' || viewParam === 'freshness') ? viewParam : 'recent';
     const recordType: 'high' | 'low' = searchParams.get('type') === 'low' ? 'low' : 'high';
     const useCelsius = searchParams.get('unit') === 'C';
+    const activePeriod: TimePeriod = searchParams.get('period') === '7d' ? 'last7Days' : 'yesterday';
+    const stateFilter = /^[A-Z]{2}$/.test(searchParams.get('state') ?? '') ? searchParams.get('state')! : '';
+    const scopeFilter = searchParams.get('scope') === 'monthly' ? 'monthly' : searchParams.get('scope') === 'daily' ? 'daily' : 'all';
+    const parsedMargin = Number(searchParams.get('margin'));
+    const minimumMargin = Number.isFinite(parsedMargin) && parsedMargin > 0 ? Math.min(parsedMargin, 50) : 0;
+    const recentSort: RecordSort = searchParams.get('sort') === 'temp' || searchParams.get('sort') === 'margin'
+        ? searchParams.get('sort') as RecordSort
+        : 'departure';
+
+    const updateSearchParam = useCallback((key: string, value: string, defaultValue = '') => {
+        setSearchParams(previous => {
+            const next = new URLSearchParams(previous);
+            if (value === defaultValue) next.delete(key);
+            else next.set(key, value);
+            return next;
+        }, { replace: true });
+    }, [setSearchParams]);
 
     const setViewMode = useCallback((mode: ViewMode) => {
         setSearchParams(prev => {
@@ -294,65 +314,47 @@ export function TemperatureMap() {
     const shouldLoadAllTimeRecords = viewMode !== 'recent' || showTrends;
     const { stateRecords, countyRecords, recentRecords, loading, error } = useTemperatureData({ loadAllTimeRecords: shouldLoadAllTimeRecords });
     const { trends, loading: trendsLoading, error: trendsError } = useClimateTrends({ enabled: showTrends });
-    const [activePeriod, setActivePeriod] = useState<TimePeriod>('yesterday');
+
+    const filteredRecentRecords = useMemo(() => {
+        if (!recentRecords) return null;
+        const filterRecords = (records: BrokenRecord[]) => records.filter(record => {
+            const scope = record.recordScope === 'monthly' ? 'monthly' : 'daily';
+            const margin = record.type === 'high' ? record.tempF - record.prevRecordF : record.prevRecordF - record.tempF;
+            return (!stateFilter || record.state === stateFilter)
+                && (scopeFilter === 'all' || scope === scopeFilter)
+                && margin >= minimumMargin;
+        });
+        return {
+            ...recentRecords,
+            yesterday: filterRecords(recentRecords.yesterday),
+            last7Days: filterRecords(recentRecords.last7Days),
+        };
+    }, [minimumMargin, recentRecords, scopeFilter, stateFilter]);
+
+    const recentStates = useMemo(() => {
+        if (!recentRecords) return [];
+        return [...new Set(recentRecords.last7Days.map(record => record.state).filter(Boolean))].sort();
+    }, [recentRecords]);
 
     const recentCounts = useMemo(() => {
-        const records = recentRecords?.[activePeriod] ?? [];
+        const records = filteredRecentRecords?.[activePeriod] ?? [];
         return records.reduce((counts, record) => {
             counts[record.type]++;
             counts[record.recordScope === 'monthly' ? 'monthly' : 'daily']++;
             return counts;
         }, { high: 0, low: 0, daily: 0, monthly: 0 });
-    }, [activePeriod, recentRecords]);
+    }, [activePeriod, filteredRecentRecords]);
 
     /** Build GeoJSON from broken records for the map layer */
     const brokenRecordsGeoJson = useMemo(() => {
-        if (!recentRecords) return null;
-        const records = recentRecords[activePeriod] || [];
-        return {
-            type: 'FeatureCollection' as const,
-            features: records
-                .filter((r: BrokenRecord) => r.lat && r.lon)
-                .map((r: BrokenRecord) => ({
-                    type: 'Feature' as const,
-                    geometry: { type: 'Point' as const, coordinates: [r.lon, r.lat] },
-                    properties: {
-                        stationName: r.stationName,
-                        uid: r.uid,
-                        state: r.state,
-                        stateName: r.stateName,
-                        county: r.county,
-                        type: r.type,
-                        tempF: r.tempF,
-                        prevRecordF: r.prevRecordF,
-                        prevRecordDate: r.prevRecordDate,
-                        normalF: r.normalF,
-                        date: r.date,
-                        recordScope: r.recordScope,
-                    },
-                })),
-        };
-    }, [recentRecords, activePeriod]);
+        if (!filteredRecentRecords) return null;
+        return buildBrokenRecordsGeoJson(filteredRecentRecords[activePeriod] || [], activePeriod);
+    }, [filteredRecentRecords, activePeriod]);
 
     /** Build freshness GeoJSON — county records colored by the year they were set */
     const freshnessGeoJson = useMemo(() => {
         if (!countyRecords) return null;
-        const features = countyRecords.features
-            .filter(f => f.properties.type === recordType)
-            .map(f => {
-                const dateStr = f.properties.date || '';
-                const year = dateStr.length >= 4 ? parseInt(dateStr.slice(0, 4), 10) : 1900;
-                const safeYear = isNaN(year) ? 1900 : year;
-                return {
-                    ...f,
-                    properties: {
-                        ...f.properties,
-                        year: safeYear,
-                        color: yearToColor(safeYear),
-                    },
-                };
-            });
-        return { type: 'FeatureCollection' as const, features };
+        return buildFreshnessGeoJson(countyRecords, recordType);
     }, [countyRecords, recordType]);
 
     /** Merged county GeoJSON — one feature per county with both high and low temps for combined labels */
@@ -655,6 +657,36 @@ export function TemperatureMap() {
         map.addSource(sourceId, {
             type: 'geojson',
             data: brokenRecordsGeoJson as GeoJSON.GeoJSON,
+            cluster: true,
+            clusterMaxZoom: 6,
+            clusterRadius: 38,
+        });
+
+        map.addLayer({
+            id: 'broken-clusters',
+            type: 'circle',
+            source: sourceId,
+            filter: ['has', 'point_count'],
+            paint: {
+                'circle-radius': ['step', ['get', 'point_count'], 15, 10, 19, 50, 24],
+                'circle-color': '#3f3f46',
+                'circle-opacity': 0.92,
+                'circle-stroke-width': 2,
+                'circle-stroke-color': '#d4d4d8',
+            },
+        });
+
+        map.addLayer({
+            id: 'broken-cluster-count',
+            type: 'symbol',
+            source: sourceId,
+            filter: ['has', 'point_count'],
+            layout: {
+                'text-field': ['get', 'point_count_abbreviated'],
+                'text-font': ['Open Sans Semibold'],
+                'text-size': 11,
+            },
+            paint: { 'text-color': '#f4f4f5' },
         });
 
         // Outer glow ring
@@ -662,6 +694,7 @@ export function TemperatureMap() {
             id: 'broken-glow',
             type: 'circle',
             source: sourceId,
+            filter: ['!', ['has', 'point_count']],
             paint: {
                 'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 12, 7, 18, 10, 24],
                 'circle-color': [
@@ -678,7 +711,7 @@ export function TemperatureMap() {
             id: 'broken-highs',
             type: 'circle',
             source: sourceId,
-            filter: ['==', ['get', 'type'], 'high'],
+            filter: ['all', ['!', ['has', 'point_count']], ['==', ['get', 'type'], 'high']],
             paint: {
                 'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 5, 7, 8, 10, 11],
                 'circle-color': HIGH_TEMP_COLOR,
@@ -694,7 +727,7 @@ export function TemperatureMap() {
             id: 'broken-lows',
             type: 'circle',
             source: sourceId,
-            filter: ['==', ['get', 'type'], 'low'],
+            filter: ['all', ['!', ['has', 'point_count']], ['==', ['get', 'type'], 'low']],
             paint: {
                 'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 6, 7, 9, 10, 12],
                 'circle-color': 'transparent',
@@ -710,6 +743,7 @@ export function TemperatureMap() {
             id: 'broken-labels',
             type: 'symbol',
             source: sourceId,
+            filter: ['!', ['has', 'point_count']],
             layout: {
                 'text-field': ['concat', ['to-string', ['get', 'tempF']], '°F'],
                 'text-font': ['Open Sans Semibold'],
@@ -934,7 +968,7 @@ export function TemperatureMap() {
         const map = mapRef.current;
         if (!map || !mapLoaded) return;
 
-        const recentLayers = ['broken-glow', 'broken-highs', 'broken-lows', 'broken-labels'];
+        const recentLayers = ['broken-clusters', 'broken-cluster-count', 'broken-glow', 'broken-highs', 'broken-lows', 'broken-labels'];
         const stateLayers = ['state-highs', 'state-lows', 'state-labels'];
         const countyLayers = ['county-highs', 'county-lows', 'county-labels'];
         const freshnessLayers = ['freshness-circles', 'freshness-labels'];
@@ -1021,21 +1055,6 @@ export function TemperatureMap() {
     // State labels are symbol layers now — no circle opacity to manage
     // (state layers only show in state view mode, not in recent)
 
-    // Style a dark popup element
-    const styleDarkPopup = useCallback((popup: maplibregl.Popup) => {
-        const el = popup.getElement();
-        if (!el) return;
-        el.querySelectorAll('.maplibregl-popup-content').forEach(node => {
-            (node as HTMLElement).style.cssText = 'background:transparent;padding:0;box-shadow:none;border:none;';
-        });
-        el.querySelectorAll('.maplibregl-popup-tip').forEach(node => {
-            (node as HTMLElement).style.borderTopColor = '#18181b';
-        });
-        el.querySelectorAll('.maplibregl-popup-close-button').forEach(node => {
-            (node as HTMLElement).style.cssText = 'color:#a1a1aa;font-size:18px;right:6px;top:6px;';
-        });
-    }, []);
-
     // Set up click + hover handlers once — guarded to avoid duplicate listeners
     useEffect(() => {
         const map = mapRef.current;
@@ -1044,6 +1063,16 @@ export function TemperatureMap() {
 
         // Persistent hover tooltip (lightweight preview on mousemove)
         let hoverPopup: maplibregl.Popup | null = null;
+
+        map.on('click', 'broken-clusters', async event => {
+            const feature = event.features?.[0];
+            const clusterId = feature?.properties?.cluster_id;
+            const coordinates = (feature?.geometry as GeoJSON.Point | undefined)?.coordinates;
+            const source = map.getSource('broken-records') as maplibregl.GeoJSONSource | undefined;
+            if (!source || clusterId == null || !coordinates) return;
+            const zoom = await source.getClusterExpansionZoom(clusterId);
+            map.easeTo({ center: coordinates as [number, number], zoom });
+        });
 
         const allClickLayers = ['broken-highs', 'broken-lows', 'broken-glow', 'state-highs', 'state-lows', 'county-highs', 'county-lows', 'county-labels'];
 
@@ -1143,8 +1172,8 @@ export function TemperatureMap() {
                     const fips = props.countyFips as string;
                     const highRec = countyRecordsRef.current.features.find(f => f.properties.countyFips === fips && f.properties.type === 'high');
                     const lowRec = countyRecordsRef.current.features.find(f => f.properties.countyFips === fips && f.properties.type === 'low');
-                    const countyName = props.countyName || '';
-                    const state = props.state || '';
+                    const countyName = escapeMapText(props.countyName);
+                    const state = escapeMapText(props.state);
                     const highF = highRec?.properties.tempF;
                     const lowF = lowRec?.properties.tempF;
                     hoverHTML = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#18181b;color:#e4e4e7;padding:6px 10px;border-radius:6px;font-size:12px;white-space:nowrap;border:1px solid #3f3f46;box-shadow:0 2px 8px rgba(0,0,0,.4)">`
@@ -1156,7 +1185,7 @@ export function TemperatureMap() {
                     const st = props.state as string;
                     const highRec = stateRecordsRef.current.features.find(f => f.properties.state === st && f.properties.type === 'high');
                     const lowRec = stateRecordsRef.current.features.find(f => f.properties.state === st && f.properties.type === 'low');
-                    const stateName = props.stateName || st || '';
+                    const stateName = escapeMapText(props.stateName || st);
                     const highF = highRec?.properties.tempF;
                     const lowF = lowRec?.properties.tempF;
                     hoverHTML = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#18181b;color:#e4e4e7;padding:6px 10px;border-radius:6px;font-size:12px;white-space:nowrap;border:1px solid #3f3f46;box-shadow:0 2px 8px rgba(0,0,0,.4)">`
@@ -1164,7 +1193,7 @@ export function TemperatureMap() {
                         + (lowF != null ? `<div><span style="color:${LOW_TEMP_COLOR};font-weight:700">${lowF}°F</span></div>` : '')
                         + `<div style="color:#a1a1aa;font-size:11px;margin-top:2px">${stateName}</div></div>`;
                 } else {
-                    const name = props.stationName || props.stateName || props.countyName || '';
+                    const name = escapeMapText(props.stationName || props.stateName || props.countyName);
                     const tempF = props.tempF;
                     const type = props.type as string;
                     const color = type === 'high' ? HIGH_TEMP_COLOR : LOW_TEMP_COLOR;
@@ -1198,6 +1227,9 @@ export function TemperatureMap() {
             const p = e.features[0].properties;
             const coords = (e.features[0].geometry as GeoJSON.Point).coordinates.slice() as [number, number];
             const typeLabel = p.type === 'high' ? 'Record High' : 'Record Low';
+            const countyName = escapeMapText(p.countyName);
+            const state = escapeMapText(p.state);
+            const stationName = escapeMapText(p.stationName);
 
             const popup = new maplibregl.Popup({ closeButton: true, maxWidth: '260px', className: 'dark-popup' })
                 .setLngLat(coords)
@@ -1206,9 +1238,9 @@ export function TemperatureMap() {
                     background:#18181b;color:#e4e4e7;padding:10px 12px;border-radius:8px;
                     min-width:180px;line-height:1.5;font-size:12px;
                     border:1px solid #3f3f46;box-shadow:0 4px 20px rgba(0,0,0,.5)">
-                    <div style="font-size:13px;font-weight:600">${p.countyName}, ${p.state}</div>
+                    <div style="font-size:13px;font-weight:600">${countyName}, ${state}</div>
                     <div style="font-size:18px;font-weight:700;color:${p.color};margin:4px 0">${p.tempF}°F</div>
-                    <div style="font-size:11px;color:#a1a1aa">${typeLabel} · ${p.stationName}</div>
+                    <div style="font-size:11px;color:#a1a1aa">${typeLabel} · ${stationName}</div>
                     <div style="font-size:11px;color:#a1a1aa">Set in <strong style="color:#e4e4e7">${p.year}</strong></div>
                 </div>`)
                 .addTo(map);
@@ -1228,7 +1260,7 @@ export function TemperatureMap() {
             if (!e.features?.length) return;
             const p = e.features[0].properties;
             const coords = (e.features[0].geometry as GeoJSON.Point).coordinates.slice() as [number, number];
-            const name = p.countyName || '';
+            const name = escapeMapText(p.countyName);
             const color = p.color || '#a1a1aa';
 
             if (!hoverPopup) {
@@ -1288,7 +1320,7 @@ export function TemperatureMap() {
                 setSelectedState(null);
             }
         });
-    }, [mapLoaded, styleDarkPopup]);
+    }, [mapLoaded]);
 
     if (error) {
         return (
@@ -1399,14 +1431,17 @@ export function TemperatureMap() {
                         <span className="sm:hidden">Age</span><span className="hidden sm:inline">📅 Record Age</span>
                     </button>
                 </div>
+                {viewMode === 'recent' && (
+                    <RecentRecordFilters states={recentStates} state={stateFilter} scope={scopeFilter} minimumMargin={minimumMargin} onChange={updateSearchParam} />
+                )}
                 {/* Context headline — promoted */}
                 <div className="max-w-md" aria-live="polite">
-                    {viewMode === 'recent' && recentRecords && (
+                    {viewMode === 'recent' && filteredRecentRecords && (
                         <p className="text-xs text-zinc-200 bg-zinc-900/80 backdrop-blur rounded-lg px-3 py-1.5 border border-zinc-700/50">
                             <span className="font-semibold" style={{ color: HIGH_TEMP_COLOR }}>{recentCounts.high.toLocaleString()}</span>
                             {' daily/monthly station record highs and '}
                             <span className="font-semibold" style={{ color: LOW_TEMP_COLOR }}>{recentCounts.low.toLocaleString()}</span>
-                            {activePeriod === 'yesterday' ? ' record lows broken yesterday' : ' record lows broken in the last 7 days'}
+                            {activePeriod === 'yesterday' ? ' record lows broken yesterday' : ' record lows broken in the last 7 days'} in the contiguous U.S.
                             <span className="block text-[10px] text-zinc-400 mt-0.5">{recentCounts.daily.toLocaleString()} daily · {recentCounts.monthly.toLocaleString()} monthly</span>
                         </p>
                     )}
@@ -1457,7 +1492,7 @@ export function TemperatureMap() {
             {panelOpen && !showTrends && !selectedStation && (
                 <SummaryPanel
                     viewMode={viewMode}
-                    recentRecords={recentRecords}
+                    recentRecords={filteredRecentRecords}
                     countyRecords={countyRecords}
                     stateRecords={stateRecords}
                     recordType={recordType}
@@ -1466,7 +1501,9 @@ export function TemperatureMap() {
                     onFlyTo={flyToLocation}
                     onSelectState={setSelectedState}
                     activePeriod={activePeriod}
-                    onPeriodChange={setActivePeriod}
+                    onPeriodChange={period => updateSearchParam('period', period === 'last7Days' ? '7d' : '')}
+                    recentSort={recentSort}
+                    onRecentSortChange={sort => updateSearchParam('sort', sort, 'departure')}
                 />
             )}
 

@@ -27,9 +27,11 @@ interface SummaryPanelProps {
     onSelectState?: (state: string) => void;
     activePeriod: TimePeriod;
     onPeriodChange: (period: TimePeriod) => void;
+    recentSort?: RecordSort;
+    onRecentSortChange?: (sort: RecordSort) => void;
 }
 
-export function SummaryPanel({ viewMode, recentRecords, countyRecords, stateRecords, recordType, onRecordTypeChange, useCelsius, onFlyTo, onSelectState, activePeriod, onPeriodChange }: SummaryPanelProps) {
+export function SummaryPanel({ viewMode, recentRecords, countyRecords, stateRecords, recordType, onRecordTypeChange, useCelsius, onFlyTo, onSelectState, activePeriod, onPeriodChange, recentSort, onRecentSortChange }: SummaryPanelProps) {
     if (viewMode === 'freshness') {
         return (
             <FreshnessPanel
@@ -68,12 +70,12 @@ export function SummaryPanel({ viewMode, recentRecords, countyRecords, stateReco
 
     if (!recentRecords) return null;
 
-    return <RecordsPanel recentRecords={recentRecords} useCelsius={useCelsius} onFlyTo={onFlyTo} activePeriod={activePeriod} onPeriodChange={onPeriodChange} />;
+    return <RecordsPanel recentRecords={recentRecords} useCelsius={useCelsius} onFlyTo={onFlyTo} activePeriod={activePeriod} onPeriodChange={onPeriodChange} sort={recentSort} onSortChange={onRecentSortChange} />;
 }
 
 /* ---------- Records mode panel ---------- */
 
-type RecordSort = 'temp' | 'margin' | 'departure';
+export type RecordSort = 'temp' | 'margin' | 'departure';
 
 const RECORD_SORT_LABELS: Record<RecordSort, string> = {
     temp: 'Temp',
@@ -106,8 +108,7 @@ function sortRecords(records: BrokenRecord[], sort: RecordSort): BrokenRecord[] 
     }
 }
 
-function RecordsPanel({ recentRecords, useCelsius, onFlyTo, activePeriod, onPeriodChange }: { recentRecords: RecentRecords; useCelsius: boolean; onFlyTo?: (lng: number, lat: number) => void; activePeriod: TimePeriod; onPeriodChange: (period: TimePeriod) => void }) {
-    const [sort, setSort] = useState<RecordSort>('departure');
+function RecordsPanel({ recentRecords, useCelsius, onFlyTo, activePeriod, onPeriodChange, sort = 'departure', onSortChange }: { recentRecords: RecentRecords; useCelsius: boolean; onFlyTo?: (lng: number, lat: number) => void; activePeriod: TimePeriod; onPeriodChange: (period: TimePeriod) => void; sort?: RecordSort; onSortChange?: (sort: RecordSort) => void }) {
     const [highsVisible, setHighsVisible] = useState(PAGE_SIZE);
     const [lowsVisible, setLowsVisible] = useState(PAGE_SIZE);
     const highsRef = useRef<HTMLDivElement>(null);
@@ -120,7 +121,7 @@ function RecordsPanel({ recentRecords, useCelsius, onFlyTo, activePeriod, onPeri
         setLowsVisible(PAGE_SIZE);
     };
     const handleSortChange = (s: RecordSort) => {
-        setSort(s);
+        onSortChange?.(s);
         setHighsVisible(PAGE_SIZE);
         setLowsVisible(PAGE_SIZE);
     };

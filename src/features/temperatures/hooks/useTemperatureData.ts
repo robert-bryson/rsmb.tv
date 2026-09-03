@@ -13,6 +13,13 @@ import type {
     TemperatureSummary,
     StateRecordProperties,
 } from '../types';
+import {
+    countyRecordsSchema,
+    parseTemperaturePayload,
+    recentRecordsSchema,
+    stateRecordsSchema,
+    temperatureSummarySchema,
+} from '../schemas';
 
 interface TemperatureData {
     stateRecords: StateRecordsCollection | null;
@@ -46,15 +53,15 @@ export function useTemperatureData({ loadAllTimeRecords = true }: UseTemperature
             try {
                 setRecentLoading(true);
                 setRecentError(null);
-                const [recentData, summaryData] = await Promise.all([
-                    fetchWithCache<RecentRecords>(RECENT_RECORDS_URL),
-                    fetchWithCache<TemperatureSummary>(SUMMARY_URL),
+                const [recentPayload, summaryPayload] = await Promise.all([
+                    fetchWithCache<unknown>(RECENT_RECORDS_URL),
+                    fetchWithCache<unknown>(SUMMARY_URL),
                 ]);
 
                 if (cancelled) return;
 
-                setRecentRecords(recentData);
-                setSummary(summaryData);
+                setRecentRecords(parseTemperaturePayload(recentRecordsSchema, recentPayload, 'recent records data'));
+                setSummary(parseTemperaturePayload(temperatureSummarySchema, summaryPayload, 'temperature summary data'));
             } catch (err) {
                 if (cancelled) return;
                 setRecentError(err instanceof Error ? err.message : 'Failed to load temperature data');
@@ -82,14 +89,14 @@ export function useTemperatureData({ loadAllTimeRecords = true }: UseTemperature
             try {
                 setAllTimeLoading(true);
                 setAllTimeError(null);
-                const [stateData, countyData] = await Promise.all([
-                    fetchWithCache<StateRecordsCollection>(STATE_RECORDS_URL),
-                    fetchWithCache<CountyRecordsCollection>(COUNTY_RECORDS_URL),
+                const [statePayload, countyPayload] = await Promise.all([
+                    fetchWithCache<unknown>(STATE_RECORDS_URL),
+                    fetchWithCache<unknown>(COUNTY_RECORDS_URL),
                 ]);
 
                 if (cancelled) return;
-                setStateRecords(stateData);
-                setCountyRecords(countyData);
+                setStateRecords(parseTemperaturePayload(stateRecordsSchema, statePayload, 'state records data'));
+                setCountyRecords(parseTemperaturePayload(countyRecordsSchema, countyPayload, 'county records data'));
             } catch (err) {
                 if (cancelled) return;
                 setAllTimeError(err instanceof Error ? err.message : 'Failed to load all-time temperature data');

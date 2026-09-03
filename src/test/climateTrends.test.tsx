@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { MemoryRouter, useLocation } from 'react-router-dom';
 
 // Mock the useClimateTrends hook before importing the component
 vi.mock('../features/temperatures/hooks/useClimateTrends', () => ({
@@ -24,6 +24,10 @@ const mockTrends = {
 
 function renderWithRouter(ui: React.ReactElement) {
     return render(<MemoryRouter>{ui}</MemoryRouter>);
+}
+
+function SearchState() {
+    return <output data-testid="search-state">{useLocation().search}</output>;
 }
 
 describe('ClimateTrends component', () => {
@@ -62,5 +66,18 @@ describe('ClimateTrends component', () => {
         });
         renderWithRouter(<ClimateTrends />);
         expect(screen.getByText('← Map')).toHaveAttribute('href', '/projects/temperature-records');
+    });
+
+    it('stores the selected trend tab in the URL', () => {
+        mockUseClimateTrends.mockReturnValue({
+            trends: mockTrends as never,
+            loading: false,
+            error: null,
+        });
+        renderWithRouter(<><ClimateTrends /><SearchState /></>);
+
+        fireEvent.click(screen.getByRole('button', { name: 'Year Set' }));
+
+        expect(screen.getByTestId('search-state')).toHaveTextContent('?tab=timeseries');
     });
 });
