@@ -16,14 +16,14 @@ describe('temperature trend charts', () => {
             />,
         );
 
-        expect(screen.getByText(/Distribution of 10 all-time county temperature records/i)).toBeInTheDocument();
+        expect(screen.getByText(/Distribution of 10 standing county temperature records/i)).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /1900s: 1 standing highs and 2 standing lows/i })).toBeInTheDocument();
     });
 
     it('shows an empty state when record age data has no supported decades', () => {
         render(<RecordAgeChart data={[{ decade: 1880, label: '1880s', highs: 1, lows: 1, ratio: 1 }]} />);
 
-        expect(screen.getByText(/No all-time county record age data is available/i)).toBeInTheDocument();
+        expect(screen.getByText(/No standing county record-age data is available/i)).toBeInTheDocument();
     });
 
     it('supports keyboard selection and restores the locked range after focus leaves', () => {
@@ -54,7 +54,7 @@ describe('temperature trend charts', () => {
     it('renders sparse annual data without invalid SVG coordinates', () => {
         const { container } = render(<RecordsBrokenTimeSeries data={[{ year: 2024, highs: 3, lows: 2 }]} />);
 
-        expect(screen.getByText('Standing County Records by Year Set')).toBeInTheDocument();
+        expect(screen.getByText('Surviving County Records by Year Set')).toBeInTheDocument();
         expect(container.innerHTML).not.toContain('NaN');
         expect(container.innerHTML).not.toContain('Infinity');
     });
@@ -69,6 +69,19 @@ describe('temperature trend charts', () => {
 
         expect(screen.getByText(/Ratio of today's standing county highs to lows/i)).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /2020s: 2.50 standing highs per standing low/i })).toBeInTheDocument();
+    });
+
+    it('shows absolute counts alongside an active high-to-low ratio', () => {
+        render(
+            <HighLowRatioChart
+                decadeData={[{ decade: 2020, label: '2020s', highs: 5, lows: 2, ratio: 2.5 }]}
+                rollingData={[]}
+            />,
+        );
+
+        fireEvent.mouseEnter(screen.getByRole('button', { name: /2020s:/i }));
+
+        expect(screen.getByLabelText(/2020s: 5 highs \/ 2 lows = 2.50 : 1/i)).toBeInTheDocument();
     });
 
     it('shows an empty state when ratio data is unavailable', () => {

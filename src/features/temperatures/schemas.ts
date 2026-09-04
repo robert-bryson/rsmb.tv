@@ -102,6 +102,33 @@ export const climateTrendsSchema = z.object({
         highs10yr: z.number().int().nonnegative(),
         lows10yr: z.number().int().nonnegative(),
     })),
+}).superRefine((data, context) => {
+    const annualHighs = data.byYear.reduce((total, year) => total + year.highs, 0);
+    const annualLows = data.byYear.reduce((total, year) => total + year.lows, 0);
+    if (annualHighs !== data.totalHighs) {
+        context.addIssue({
+            code: 'custom',
+            path: ['totalHighs'],
+            message: 'Must equal the sum of byYear high counts',
+        });
+    }
+    if (annualLows !== data.totalLows) {
+        context.addIssue({
+            code: 'custom',
+            path: ['totalLows'],
+            message: 'Must equal the sum of byYear low counts',
+        });
+    }
+    for (let index = 1; index < data.byYear.length; index++) {
+        if (data.byYear[index].year <= data.byYear[index - 1].year) {
+            context.addIssue({
+                code: 'custom',
+                path: ['byYear', index, 'year'],
+                message: 'Years must be unique and in ascending order',
+            });
+            break;
+        }
+    }
 });
 
 export function parseTemperaturePayload<T>(schema: z.ZodType<T>, payload: unknown, label: string): T {

@@ -12,7 +12,7 @@ import { RecordsBrokenTimeSeries } from './RecordsBrokenTimeSeries';
 import { HighLowRatioChart } from './HighLowRatioChart';
 import { RecentRecordFilters } from '../map/RecentRecordFilters';
 import { buildBrokenRecordsGeoJson, buildFreshnessGeoJson } from '../map/temperatureMapLayers';
-import { escapeMapText, styleDarkPopup } from '../map/temperatureMapPopup';
+import { buildRecordAgePopupHtml, escapeMapText, styleDarkPopup } from '../map/temperatureMapPopup';
 import type { BrokenRecord, ViewMode, HighlightRange, GeoJsonFeature, CountyRecordProperties, TimePeriod, RecordScope, StateRecordsCollection, CountyRecordsCollection } from '../types';
 import {
     INITIAL_CENTER,
@@ -24,7 +24,7 @@ import {
     LOW_TEMP_COLOR,
     FRESHNESS_COLORS,
 } from '../constants';
-import { formatComparisonPeriod, formatTemp, formatTempDelta } from '../utils/temperature';
+import { formatComparisonPeriod, formatTemp, formatTempDelta, getRecentObservationDate } from '../utils/temperature';
 import { escapeHtml } from '../../../utils/escapeHtml';
 
 function useIsMobile() {
@@ -178,7 +178,9 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
     }
 
     // Fallback: single record (state records, or county without counterpart)
-    const typeLabel = isHigh ? 'All-Time Record High' : 'All-Time Record Low';
+    const typeLabel = layerType === 'state'
+        ? `Certified State Record ${isHigh ? 'High' : 'Low'}`
+        : `Standing Observed County ${isHigh ? 'High' : 'Low'}`;
     const location = layerType === 'state' ? escapeHtml(props.location as string) : escapeHtml(props.stationName as string);
     const station = layerType === 'state' ? escapeHtml(props.station as string) : '';
     const date = formatDate(props.date as string);
@@ -1226,23 +1228,10 @@ export function TemperatureMap() {
             popupRef.current?.remove();
             const p = e.features[0].properties;
             const coords = (e.features[0].geometry as GeoJSON.Point).coordinates.slice() as [number, number];
-            const typeLabel = p.type === 'high' ? 'Record High' : 'Record Low';
-            const countyName = escapeMapText(p.countyName);
-            const state = escapeMapText(p.state);
-            const stationName = escapeMapText(p.stationName);
 
             const popup = new maplibregl.Popup({ closeButton: true, maxWidth: '260px', className: 'dark-popup' })
                 .setLngLat(coords)
-                .setHTML(`<div style="
-                    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-                    background:#18181b;color:#e4e4e7;padding:10px 12px;border-radius:8px;
-                    min-width:180px;line-height:1.5;font-size:12px;
-                    border:1px solid #3f3f46;box-shadow:0 4px 20px rgba(0,0,0,.5)">
-                    <div style="font-size:13px;font-weight:600">${countyName}, ${state}</div>
-                    <div style="font-size:18px;font-weight:700;color:${p.color};margin:4px 0">${p.tempF}°F</div>
-                    <div style="font-size:11px;color:#a1a1aa">${typeLabel} · ${stationName}</div>
-                    <div style="font-size:11px;color:#a1a1aa">Set in <strong style="color:#e4e4e7">${p.year}</strong></div>
-                </div>`)
+                .setHTML(buildRecordAgePopupHtml(p))
                 .addTo(map);
             popupRef.current = popup;
             popup.on('close', () => { if (popupRef.current === popup) popupRef.current = null; });
@@ -1260,15 +1249,12 @@ export function TemperatureMap() {
             if (!e.features?.length) return;
             const p = e.features[0].properties;
             const coords = (e.features[0].geometry as GeoJSON.Point).coordinates.slice() as [number, number];
-            const name = escapeMapText(p.countyName);
-            const color = p.color || '#a1a1aa';
-
             if (!hoverPopup) {
                 hoverPopup = new maplibregl.Popup({ closeButton: false, closeOnClick: false, className: 'dark-popup hover-tip', offset: 12 });
             }
             hoverPopup
                 .setLngLat(coords)
-                .setHTML(`<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#18181b;color:#e4e4e7;padding:4px 8px;border-radius:6px;font-size:12px;white-space:nowrap;border:1px solid #3f3f46;box-shadow:0 2px 8px rgba(0,0,0,.4)"><span style="color:${color};font-weight:700">${p.tempF}°F</span> <span style="color:#a1a1aa">${name} (${p.year})</span></div>`)
+                .setHTML(buildRecordAgePopupHtml(p, true))
                 .addTo(map);
             const el = hoverPopup.getElement();
             if (el) {
@@ -1369,7 +1355,7 @@ export function TemperatureMap() {
                             : 'text-violet-400 border-violet-500/30 hover:text-violet-300 hover:border-violet-400/50'
                             }`}
                     >
-                        <span aria-hidden="true">📊</span><span className="hidden sm:inline"> Trends</span>
+                        <span aria-hidden="true">📊</span><span className="hidden sm:inline"> Record ages</span>
                     </button>
                     <button
                         onClick={() => setUseCelsius(c => !c)}
@@ -1408,7 +1394,7 @@ export function TemperatureMap() {
                             }`}
                         title="All-time high and low temperature records per county"
                     >
-                        <span className="sm:hidden">County</span><span className="hidden sm:inline">📍 County All-Time</span>
+                        <span className="sm:hidden">County</span><span className="hidden sm:inline">📍 County Extremes</span>
                     </button>
                     <button
                         onClick={() => setViewMode('state')}
@@ -1418,7 +1404,7 @@ export function TemperatureMap() {
                             }`}
                         title="All-time high and low temperature records per state"
                     >
-                        <span className="sm:hidden">State</span><span className="hidden sm:inline">🏛️ State All-Time</span>
+                        <span className="sm:hidden">State</span><span className="hidden sm:inline">🏛️ State Extremes</span>
                     </button>
                     <button
                         onClick={() => setViewMode('freshness')}
@@ -1441,23 +1427,24 @@ export function TemperatureMap() {
                             <span className="font-semibold" style={{ color: HIGH_TEMP_COLOR }}>{recentCounts.high.toLocaleString()}</span>
                             {' daily/monthly station record highs and '}
                             <span className="font-semibold" style={{ color: LOW_TEMP_COLOR }}>{recentCounts.low.toLocaleString()}</span>
-                            {activePeriod === 'yesterday' ? ' record lows broken yesterday' : ' record lows broken in the last 7 days'} in the contiguous U.S.
+                            {activePeriod === 'yesterday' ? ` record lows on ${getRecentObservationDate(filteredRecentRecords)}` : ' record lows in the latest 7-day window'} in the contiguous U.S.
                             <span className="block text-[10px] text-zinc-400 mt-0.5">{recentCounts.daily.toLocaleString()} daily · {recentCounts.monthly.toLocaleString()} monthly</span>
+                            <span className="block text-[10px] text-zinc-500">Raw reporting-station events; not normalized for trend analysis.</span>
                         </p>
                     )}
                     {viewMode === 'county' && countyRecords && (
                         <p className="text-xs text-zinc-200 bg-zinc-900/80 backdrop-blur rounded-lg px-3 py-1.5 border border-zinc-700/50">
-                            <span className="font-semibold text-zinc-100">{countyRecords.features.length.toLocaleString()}</span> all-time county temperature records (highest high and lowest low per county)
+                            <span className="font-semibold text-zinc-100">{countyRecords.features.length.toLocaleString()}</span> standing county extremes observed in available ACIS station histories
                         </p>
                     )}
                     {viewMode === 'state' && stateRecords && (
                         <p className="text-xs text-zinc-200 bg-zinc-900/80 backdrop-blur rounded-lg px-3 py-1.5 border border-zinc-700/50">
-                            <span className="font-semibold text-zinc-100">{stateRecords.features.length.toLocaleString()}</span> all-time state temperature records (highest high and lowest low per state)
+                            <span className="font-semibold text-zinc-100">{stateRecords.features.length.toLocaleString()}</span> certified NOAA state temperature extremes
                         </p>
                     )}
                     {viewMode === 'freshness' && (
                         <p className="text-xs text-zinc-200 bg-zinc-900/80 backdrop-blur rounded-lg px-3 py-1.5 border border-zinc-700/50">
-                            All-time county records colored by the decade they were set — warmer colors = more recently set
+                            Standing county extremes by record date — a survivor view, not a historical event rate
                         </p>
                     )}
                 </div>
@@ -1518,7 +1505,7 @@ export function TemperatureMap() {
                 />
             )}
 
-            {/* Climate Trends drawer — responsive: side-by-side on desktop, tabbed on mobile */}
+            {/* Standing record ages drawer — responsive: side-by-side on desktop, tabbed on mobile */}
             {showTrends && (
                 <div
                     className="absolute bottom-0 left-0 right-0 z-30 bg-zinc-900/95 backdrop-blur-sm border-t border-zinc-700/50 flex flex-col"
@@ -1526,7 +1513,7 @@ export function TemperatureMap() {
                 >
                     {/* Drawer header */}
                     <div className="shrink-0 flex items-center justify-between px-4 py-1.5 border-b border-zinc-800">
-                        <h2 className="text-sm font-semibold text-zinc-200">Climate Trends</h2>
+                        <h2 className="text-sm font-semibold text-zinc-200">Standing Record Ages</h2>
                         <button
                             onClick={closeTrends}
                             className="text-zinc-400 hover:text-zinc-200 w-7 h-7 flex items-center justify-center rounded hover:bg-zinc-800 transition-colors text-sm"
@@ -1567,7 +1554,7 @@ export function TemperatureMap() {
                             </div>
                             <div className="w-px bg-zinc-800 shrink-0" />
                             <div className="flex-1 min-w-0 flex flex-col">
-                                <span className="text-xs text-zinc-400 px-1 mb-0.5 shrink-0">Records Set/Year</span>
+                                <span className="text-xs text-zinc-400 px-1 mb-0.5 shrink-0">Survivors by Year Set</span>
                                 <div className="flex-1 min-h-0">
                                     <RecordsBrokenTimeSeries data={trends.byYear} onHoverPeriod={setHighlightRange} selectedDecade={selectedDecade} onSelectDecade={handleSelectDecade} compact />
                                 </div>
@@ -1599,7 +1586,7 @@ function MobileTrendsDrawer({ trends, setHighlightRange, selectedDecade, handleS
     return (
         <>
             <div className="flex border-b border-zinc-800 shrink-0">
-                {([['age', 'Record Age'], ['freq', 'Records/Year'], ['ratio', 'H:L Ratio']] as const).map(([id, label]) => (
+                {([['age', 'Record Age'], ['freq', 'Survivors/Year'], ['ratio', 'Surviving H:L']] as const).map(([id, label]) => (
                     <button
                         key={id}
                         onClick={() => setActiveTab(id)}

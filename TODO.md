@@ -1,6 +1,6 @@
 # TODO
 
-This file lists incomplete work. Git history contains the completed work.
+This file contains incomplete work. Git history contains the completed work.
 
 ## Project media
 
@@ -16,12 +16,19 @@ This file lists incomplete work. Git history contains the completed work.
 - [ ] Add unit tests for the `ScrollToTop` component.
 - [ ] Add Playwright tests for Flights map keyboard controls and camera URL synchronization.
 
-## Historical temperature analysis
+## Temperature record data
+
+### Data extraction
 
 - [ ] Build a resumable ACIS extraction command. Keep raw responses and request manifests.
 - [ ] Verify ACIS flags and certification fields against current RCC documentation.
+
+### Publication quality
+
 - [ ] Complete the publication checks in [the methodology](projects/temperature-records/methodology.md#validate-before-publication).
 - [ ] Archive an approved, versioned station cohort before publication.
+- [ ] Publish station coverage, failed geography requests, and data quality in a versioned manifest.
+- [ ] Do not publish a historical signal until the extraction, cohort, and validation tasks are complete.
 
 ## Ride Ledger prerequisites
 

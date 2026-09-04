@@ -10,7 +10,7 @@ const trends = {
     totalHighs: 2,
     totalLows: 1,
     byDecade: [],
-    byYear: [],
+    byYear: [{ year: 2024, highs: 2, lows: 1 }],
     rollingRatio: [],
 };
 

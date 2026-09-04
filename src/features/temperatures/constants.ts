@@ -36,13 +36,15 @@ export const TIME_PERIOD_LABELS: Record<TimePeriod, string> = {
 
 export const TIME_PERIODS: TimePeriod[] = ['yesterday', 'last7Days'];
 
-/** Broad standing-record age bands, ordered oldest to newest. */
+/** Twenty-year standing-record date bands, ordered oldest to newest. */
 export const FRESHNESS_COLORS: [number, string, string][] = [
-    [0, '#4967b2', 'Before 1940'],
-    [1940, '#2f8793', '1940–1969'],
-    [1970, '#55a868', '1970–1999'],
-    [2000, '#b5ad3b', '2000–2009'],
-    [2010, '#e58b32', '2010–2019'],
+    [0, '#4967b2', 'Before 1900'],
+    [1900, '#3f779f', '1900–1919'],
+    [1920, '#2f8793', '1920–1939'],
+    [1940, '#3d9a7a', '1940–1959'],
+    [1960, '#55a868', '1960–1979'],
+    [1980, '#8ca64b', '1980–1999'],
+    [2000, '#b5ad3b', '2000–2019'],
     [2020, '#ef4444', '2020–present'],
 ];
 

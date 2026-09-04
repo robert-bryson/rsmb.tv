@@ -28,10 +28,10 @@ export function useClimateTrends({ enabled = true }: { enabled?: boolean } = {})
                 setError(null);
                 const payload = await fetchWithCache<unknown>(CLIMATE_TRENDS_URL);
                 if (!cancelled) {
-                    setTrends(parseTemperaturePayload(climateTrendsSchema, payload, 'climate trends data'));
+                    setTrends(parseTemperaturePayload(climateTrendsSchema, payload, 'standing record-age data'));
                 }
             } catch (err) {
-                if (!cancelled) setError(err instanceof Error ? err.message : 'Failed to load climate trends');
+                if (!cancelled) setError(err instanceof Error ? err.message : 'Failed to load standing record-age data');
             } finally {
                 if (!cancelled) setLoading(false);
             }

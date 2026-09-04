@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildTemperaturePath, fDeltaToCDelta, fToC, formatComparisonPeriod, formatTemp, formatTempDelta } from '../features/temperatures/utils/temperature';
+import { buildTemperaturePath, fDeltaToCDelta, fToC, formatComparisonPeriod, formatTemp, formatTempDelta, getRecentObservationDate, weightedMedianRecordYear } from '../features/temperatures/utils/temperature';
 
 describe('fToC', () => {
     it('converts 32°F to 0°C', () => {
@@ -81,5 +81,34 @@ describe('buildTemperaturePath', () => {
         const path = buildTemperaturePath([70, null, 72], temperature => temperature, 100);
 
         expect(path).toBe('M0.0,70.0 M100.0,72.0');
+    });
+
+    describe('getRecentObservationDate', () => {
+        it('uses a legacy payload record date before the generation date', () => {
+            expect(getRecentObservationDate({
+                asOf: '2026-04-28',
+                yesterday: [{ date: '2026-04-27' }],
+            })).toBe('2026-04-27');
+        });
+
+        it('derives yesterday when a zero-event payload has no date list', () => {
+            expect(getRecentObservationDate({
+                asOf: '2026-04-28',
+                yesterday: [],
+            })).toBe('2026-04-27');
+        });
+    });
+
+    describe('weightedMedianRecordYear', () => {
+        it('averages the two middle record years for an even record count', () => {
+            expect(weightedMedianRecordYear([
+                { year: 1900, highs: 1, lows: 0 },
+                { year: 2024, highs: 0, lows: 1 },
+            ])).toBe(1962);
+        });
+
+        it('returns null when no standing records exist', () => {
+            expect(weightedMedianRecordYear([{ year: 2024, highs: 0, lows: 0 }])).toBeNull();
+        });
     });
 });
