@@ -71,6 +71,19 @@ describe('temperature trend charts', () => {
         expect(screen.getByRole('button', { name: /2020s: 2.50 standing highs per standing low/i })).toBeInTheDocument();
     });
 
+    it('shows absolute counts alongside an active high-to-low ratio', () => {
+        render(
+            <HighLowRatioChart
+                decadeData={[{ decade: 2020, label: '2020s', highs: 5, lows: 2, ratio: 2.5 }]}
+                rollingData={[]}
+            />,
+        );
+
+        fireEvent.mouseEnter(screen.getByRole('button', { name: /2020s:/i }));
+
+        expect(screen.getByLabelText(/2020s: 5 highs \/ 2 lows = 2.50 : 1/i)).toBeInTheDocument();
+    });
+
     it('shows an empty state when ratio data is unavailable', () => {
         render(<HighLowRatioChart decadeData={[]} rollingData={[]} />);
 

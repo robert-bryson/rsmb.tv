@@ -83,6 +83,7 @@ function DecadeRatioView({ data, hovered, setHovered, selectedDecade, onSelectDe
             : null);
     };
     const activeIndex = hovered ?? selected;
+    const activeData = activeIndex === null ? null : filtered[activeIndex];
 
     const barWidth = 46;
     const gap = 8;
@@ -212,6 +213,21 @@ function DecadeRatioView({ data, hovered, setHovered, selectedDecade, onSelectDe
                     })}
                 </svg>
             </div>
+            {activeData && (
+                <p
+                    aria-live="polite"
+                    aria-label={`${activeData.label}: ${activeData.highs} highs / ${activeData.lows} lows = ${activeData.ratio?.toFixed(2)} : 1`}
+                    className={`text-xs text-zinc-400 ${compact ? 'shrink-0 px-1 py-0.5' : 'mt-1'}`}
+                >
+                    <span className="font-medium text-zinc-200">{activeData.label}</span>
+                    {' — '}
+                    <span style={{ color: '#fca5a5' }}>{activeData.highs} highs</span>
+                    {' / '}
+                    <span style={{ color: '#93c5fd' }}>{activeData.lows} lows</span>
+                    {' = '}
+                    <span className="font-medium text-zinc-200">{activeData.ratio?.toFixed(2)} : 1</span>
+                </p>
+            )}
             {!compact && (
                 <p className="text-[10px] text-zinc-500 mt-2">
                     The dashed line marks the expected 1:1 equilibrium. Decades above the line set more record highs than lows.

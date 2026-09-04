@@ -52,10 +52,14 @@ describe('ClimateTrends component', () => {
         });
         renderWithRouter(<ClimateTrends />);
         expect(screen.getByText('Standing Record History')).toBeInTheDocument();
+        expect(screen.getByText('900')).toBeInTheDocument();
+        expect(screen.getByText('1.0%')).toBeInTheDocument();
+        expect(screen.getByText(/set since 2000/i)).toBeInTheDocument();
         expect(screen.getByText('Record Age')).toBeInTheDocument();
-        expect(screen.getByText('Year Set')).toBeInTheDocument();
-        expect(screen.getByText('Standing H:L')).toBeInTheDocument();
+        expect(screen.getByText('Year Set (5yr avg)')).toBeInTheDocument();
+        expect(screen.getByText('High : Low Ratio')).toBeInTheDocument();
         expect(screen.getByText('Record Age Map')).toBeInTheDocument();
+        expect(screen.getByRole('tab', { name: 'Record Age' })).toHaveAttribute('aria-selected', 'true');
     });
 
     it('renders back link to map', () => {
@@ -65,7 +69,7 @@ describe('ClimateTrends component', () => {
             error: null,
         });
         renderWithRouter(<ClimateTrends />);
-        expect(screen.getByText('← Map')).toHaveAttribute('href', '/projects/temperature-records');
+        expect(screen.getByText('← Map')).toHaveAttribute('href', '/projects/temperature-records/map?view=freshness');
     });
 
     it('stores the selected trend tab in the URL', () => {
@@ -76,8 +80,9 @@ describe('ClimateTrends component', () => {
         });
         renderWithRouter(<><ClimateTrends /><SearchState /></>);
 
-        fireEvent.click(screen.getByRole('button', { name: 'Year Set' }));
+        fireEvent.click(screen.getByRole('tab', { name: 'Year Set (5yr avg)' }));
 
         expect(screen.getByTestId('search-state')).toHaveTextContent('?tab=timeseries');
+        expect(screen.getByRole('tab', { name: 'Year Set (5yr avg)' })).toHaveAttribute('aria-selected', 'true');
     });
 });
