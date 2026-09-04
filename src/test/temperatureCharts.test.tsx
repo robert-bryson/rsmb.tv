@@ -54,7 +54,7 @@ describe('temperature trend charts', () => {
     it('renders sparse annual data without invalid SVG coordinates', () => {
         const { container } = render(<RecordsBrokenTimeSeries data={[{ year: 2024, highs: 3, lows: 2 }]} />);
 
-        expect(screen.getByText('Standing County Records by Year Set')).toBeInTheDocument();
+        expect(screen.getByText('Surviving County Records by Year Set')).toBeInTheDocument();
         expect(container.innerHTML).not.toContain('NaN');
         expect(container.innerHTML).not.toContain('Infinity');
     });

@@ -90,7 +90,7 @@ test('temperature history identifies standing records as survivor data', async (
 
     await page.goto('/projects/temperature-records/trends');
 
-    await expect(page.getByRole('heading', { name: 'Standing Record History' })).toBeVisible();
-    await expect(page.getByText(/Superseded records are not included/i)).toBeVisible();
-    await expect(page.getByText(/not a count of every historical record-breaking event/i)).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Standing Record Ages' })).toBeVisible();
+    await expect(page.getByText(/Superseded records are excluded/i)).toBeVisible();
+    await expect(page.getByText(/recent records have had less time to be replaced/i)).toBeVisible();
 });
