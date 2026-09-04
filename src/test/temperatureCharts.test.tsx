@@ -16,14 +16,14 @@ describe('temperature trend charts', () => {
             />,
         );
 
-        expect(screen.getByText(/Distribution of 10 all-time county temperature records/i)).toBeInTheDocument();
+        expect(screen.getByText(/Distribution of 10 standing county temperature records/i)).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /1900s: 1 standing highs and 2 standing lows/i })).toBeInTheDocument();
     });
 
     it('shows an empty state when record age data has no supported decades', () => {
         render(<RecordAgeChart data={[{ decade: 1880, label: '1880s', highs: 1, lows: 1, ratio: 1 }]} />);
 
-        expect(screen.getByText(/No all-time county record age data is available/i)).toBeInTheDocument();
+        expect(screen.getByText(/No standing county record-age data is available/i)).toBeInTheDocument();
     });
 
     it('supports keyboard selection and restores the locked range after focus leaves', () => {

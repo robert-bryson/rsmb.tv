@@ -376,7 +376,7 @@ function CountyRecordsPanel({ countyRecords, recordType, onRecordTypeChange, use
 
             {/* Count */}
             <div className="px-3 py-1.5 text-xs text-zinc-400 shrink-0" aria-live="polite">
-                {sorted.length.toLocaleString()} county all-time {recordType === 'high' ? 'high' : 'low'} records
+                {sorted.length.toLocaleString()} standing county {recordType === 'high' ? 'high' : 'low'} extremes observed in available station histories
             </div>
 
             {/* Content — paginated */}
@@ -516,7 +516,7 @@ function StateRecordsPanel({ stateRecords, recordType, onRecordTypeChange, useCe
 
             {/* Count */}
             <div className="px-3 py-1.5 text-xs text-zinc-400 shrink-0" aria-live="polite">
-                {sorted.length.toLocaleString()} state all-time {recordType === 'high' ? 'high' : 'low'} records
+                {sorted.length.toLocaleString()} certified state {recordType === 'high' ? 'high' : 'low'} extremes
             </div>
 
             {/* Content */}
@@ -544,7 +544,7 @@ function StateRecordsPanel({ stateRecords, recordType, onRecordTypeChange, useCe
                 ))}
 
                 <p className="text-xs text-zinc-500 pt-2 border-t border-zinc-800">
-                    Data: NOAA / ACIS · All-time state records
+                    Data: NOAA State Climate Extremes Committee
                 </p>
             </div>
         </div>

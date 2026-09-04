@@ -167,9 +167,9 @@ export function RecordFreshnessMap() {
         <div>
             <h3 className="text-sm font-semibold text-zinc-200 mb-1">Record Freshness Map</h3>
             <p className="text-xs text-zinc-400 mb-3">
-                Each dot is a county's all-time record, colored by when it was set.
+                Each dot is a county&apos;s standing observed extreme, colored by when it was set.
                 <span style={{ color: '#dc2626' }}> Red = recent</span>, <span style={{ color: '#1e3a5f' }}>blue = oldest</span>.
-                Areas with more recent records indicate where climate extremes are shifting.
+                This survivor view excludes records that were later superseded and should not be interpreted as a climate trend.
             </p>
 
             {/* Record type toggle */}

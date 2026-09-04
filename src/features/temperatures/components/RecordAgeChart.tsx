@@ -13,7 +13,7 @@ interface Props {
 
 /**
  * Mirrored bar chart: record highs go up (red), record lows go down (blue).
- * Shows when all-time county records were set, grouped by decade.
+ * Shows when today's standing county records were set, grouped by decade.
  */
 export function RecordAgeChart({ data, onHoverPeriod, selectedDecade, onSelectDecade, compact }: Props) {
     const [hovered, setHovered] = useState<number | null>(null);
@@ -23,7 +23,7 @@ export function RecordAgeChart({ data, onHoverPeriod, selectedDecade, onSelectDe
     const filtered = data.filter(d => d.decade >= 1890);
 
     if (filtered.length === 0) {
-        return <ChartEmptyState message="No all-time county record age data is available for this selection." />;
+        return <ChartEmptyState message="No standing county record-age data is available for this selection." />;
     }
 
     // Use shared selection if provided, otherwise fall back to local
@@ -60,9 +60,9 @@ export function RecordAgeChart({ data, onHoverPeriod, selectedDecade, onSelectDe
         <div className={compact ? 'flex flex-col h-full' : ''}>
             {!compact && (
                 <>
-                    <h3 className="text-sm font-semibold text-zinc-200 mb-1">When Were All-Time County Records Set?</h3>
+                    <h3 className="text-sm font-semibold text-zinc-200 mb-1">When Were Today&apos;s Standing County Records Set?</h3>
                     <p className="text-xs text-zinc-400 mb-4">
-                        Distribution of {totalRecords.toLocaleString()} all-time county temperature records (highs and lows) by the decade they were set.
+                        Distribution of {totalRecords.toLocaleString()} standing county temperature records (highs and lows) by the decade they were set.
                         Highs go up, lows go down. Color matches the freshness map. Click a decade to lock selection.
                     </p>
                 </>
@@ -192,7 +192,7 @@ export function RecordAgeChart({ data, onHoverPeriod, selectedDecade, onSelectDe
             </div>
             {!compact && (
                 <p className="text-[10px] text-zinc-500 mt-2">
-                    The 1930s Dust Bowl dominates record highs. Recent decades (2000s–2010s) show a resurgence of record highs relative to lows.
+                    Only records that still stand today are counted; records that were later superseded are absent.
                 </p>
             )}
         </div>

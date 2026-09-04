@@ -40,7 +40,7 @@ describe('ClimateTrends component', () => {
     it('shows error message on failure', () => {
         mockUseClimateTrends.mockReturnValue({ trends: null, loading: false, error: 'Network error' });
         renderWithRouter(<ClimateTrends />);
-        expect(screen.getByText('Failed to load climate trend data')).toBeInTheDocument();
+        expect(screen.getByText('Failed to load standing record-age data')).toBeInTheDocument();
         expect(screen.getByText('Network error')).toBeInTheDocument();
     });
 
@@ -51,13 +51,14 @@ describe('ClimateTrends component', () => {
             error: null,
         });
         renderWithRouter(<ClimateTrends />);
-        expect(screen.getByText('Standing Record History')).toBeInTheDocument();
+        expect(screen.getByText('Standing Record Ages')).toBeInTheDocument();
         expect(screen.getByText('900')).toBeInTheDocument();
-        expect(screen.getByText('1.0%')).toBeInTheDocument();
-        expect(screen.getByText(/set since 2000/i)).toBeInTheDocument();
+        expect(screen.getByText('100.0%')).toBeInTheDocument();
+        expect(screen.getByText(/set in last 25 years/i)).toBeInTheDocument();
+        expect(screen.getByText('0 years')).toBeInTheDocument();
         expect(screen.getByText('Record Age')).toBeInTheDocument();
-        expect(screen.getByText('Year Set (5yr avg)')).toBeInTheDocument();
-        expect(screen.getByText('High : Low Ratio')).toBeInTheDocument();
+        expect(screen.getByText('Survivor Distribution')).toBeInTheDocument();
+        expect(screen.getByText('Surviving H:L Ratio')).toBeInTheDocument();
         expect(screen.getByText('Record Age Map')).toBeInTheDocument();
         expect(screen.getByRole('tab', { name: 'Record Age' })).toHaveAttribute('aria-selected', 'true');
     });
@@ -80,9 +81,9 @@ describe('ClimateTrends component', () => {
         });
         renderWithRouter(<><ClimateTrends /><SearchState /></>);
 
-        fireEvent.click(screen.getByRole('tab', { name: 'Year Set (5yr avg)' }));
+        fireEvent.click(screen.getByRole('tab', { name: 'Survivor Distribution' }));
 
         expect(screen.getByTestId('search-state')).toHaveTextContent('?tab=timeseries');
-        expect(screen.getByRole('tab', { name: 'Year Set (5yr avg)' })).toHaveAttribute('aria-selected', 'true');
+        expect(screen.getByRole('tab', { name: 'Survivor Distribution' })).toHaveAttribute('aria-selected', 'true');
     });
 });

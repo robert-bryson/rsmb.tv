@@ -8,7 +8,7 @@ The county and state record data are separate products. The stations do not form
 
 ## Sources and definitions
 
-The data come from NOAA Regional Climate Center ACIS services.
+Recent station events and county extremes come from NOAA Regional Climate Center ACIS services. Certified state extremes come from NOAA's State Climate Extremes Committee.
 
 A recent high occurs when a reported daily maximum is more than the previous station value for the same calendar date. A recent low occurs when a reported daily minimum is less than the previous station value for the same calendar date. These comparisons use observations from 1950 or later.
 

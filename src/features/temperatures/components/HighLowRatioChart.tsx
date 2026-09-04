@@ -230,7 +230,7 @@ function DecadeRatioView({ data, hovered, setHovered, selectedDecade, onSelectDe
             )}
             {!compact && (
                 <p className="text-[10px] text-zinc-500 mt-2">
-                    The dashed line marks the expected 1:1 equilibrium. Decades above the line set more record highs than lows.
+                    The dashed line marks equal surviving high and low counts. Values above it mean more of today&apos;s highs than lows were set in that decade.
                 </p>
             )}
         </div>

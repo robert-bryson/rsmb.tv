@@ -14,7 +14,7 @@ export default function TemperatureRecords() {
         'Interactive map of all-time record high and low temperatures across US states and counties, with recent extremes summary.';
 
     useDocumentHead({
-        title: 'Record Highs',
+        title: 'U.S. Temperature Records',
         description,
         ogImage: absoluteUrl('/og/temperature-records.svg'),
     });
@@ -22,12 +22,12 @@ export default function TemperatureRecords() {
     useJsonLd({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
-        name: 'Record Highs Map',
+        name: 'U.S. Temperature Records Map',
         description,
         url: absoluteUrl('/projects/temperature-records/map'),
         isPartOf: {
             '@type': 'SoftwareApplication',
-            name: 'Record Highs',
+            name: 'U.S. Temperature Records',
             url: absoluteUrl('/projects/temperature-records'),
         },
         author: AUTHOR_PERSON,

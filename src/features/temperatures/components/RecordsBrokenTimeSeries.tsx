@@ -33,7 +33,7 @@ export function RecordsBrokenTimeSeries({ data, onHoverPeriod, selectedDecade, o
 
     const filtered = rolling.filter(d => d.year >= 1900);
     if (filtered.length === 0) {
-        return <ChartEmptyState message="No annual all-time county record data is available for this selection." />;
+        return <ChartEmptyState message="No annual standing county record data is available for this selection." />;
     }
 
     const maxAvg = Math.max(...filtered.flatMap(d => [d.highsAvg, d.lowsAvg]), 1);
@@ -74,7 +74,7 @@ export function RecordsBrokenTimeSeries({ data, onHoverPeriod, selectedDecade, o
         <div className={compact ? 'flex flex-col h-full' : ''}>
             {!compact && (
                 <>
-                    <h3 className="text-sm font-semibold text-zinc-200 mb-1">Standing County Records by Year Set</h3>
+                    <h3 className="text-sm font-semibold text-zinc-200 mb-1">Surviving County Records by Year Set</h3>
                     <p className="text-xs text-zinc-400 mb-4">
                         Current county extremes grouped by the year they occurred, shown as a 5-calendar-year rolling average.
                         Records that were later superseded are not included.
@@ -185,7 +185,7 @@ export function RecordsBrokenTimeSeries({ data, onHoverPeriod, selectedDecade, o
                     </span>
                 </div>
             )}
-            {!compact && <p className="text-[10px] text-zinc-500 mt-2">This survivor distribution should not be interpreted as the annual frequency of record-breaking events.</p>}
+            {!compact && <p className="text-[10px] text-zinc-500 mt-2">This survivor distribution is not an annual event rate: superseded records are missing and recent records have had less time to be replaced.</p>}
         </div>
     );
 }
