@@ -3,6 +3,7 @@ import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useTemperatureData } from '../hooks/useTemperatureData';
 import { INITIAL_CENTER, MIN_ZOOM, MAX_ZOOM, FRESHNESS_COLORS, yearToColor } from '../constants';
+import { buildRecordAgePopupHtml, styleDarkPopup } from '../map/temperatureMapPopup';
 
 type RecordType = 'high' | 'low';
 
@@ -134,28 +135,11 @@ export function RecordFreshnessMap() {
                 if (!e.features?.length) return;
                 const p = e.features[0].properties;
                 const coords = (e.features[0].geometry as GeoJSON.Point).coordinates.slice() as [number, number];
-                const typeLabel = p.type === 'high' ? 'Record High' : 'Record Low';
-
-                new maplibregl.Popup({ closeButton: true, maxWidth: '260px', className: 'dark-popup' })
+                const popup = new maplibregl.Popup({ closeButton: true, maxWidth: '260px', className: 'dark-popup' })
                     .setLngLat(coords)
-                    .setHTML(`<div style="
-                        font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-                        background:#18181b;color:#e4e4e7;padding:10px 12px;border-radius:8px;
-                        min-width:180px;line-height:1.5;font-size:12px;
-                        border:1px solid #3f3f46;box-shadow:0 4px 20px rgba(0,0,0,.5)">
-                        <div style="font-size:13px;font-weight:600">${p.countyName}, ${p.state}</div>
-                        <div style="font-size:18px;font-weight:700;color:${p.color};margin:4px 0">${p.tempF}°F</div>
-                        <div style="font-size:11px;color:#a1a1aa">${typeLabel} · ${p.stationName}</div>
-                        <div style="font-size:11px;color:#a1a1aa">Set in <strong style="color:#e4e4e7">${p.year}</strong></div>
-                    </div>`)
+                    .setHTML(buildRecordAgePopupHtml(p))
                     .addTo(map);
-
-                const el = document.querySelector('.dark-popup .maplibregl-popup-content') as HTMLElement;
-                if (el) el.style.cssText = 'background:transparent;padding:0;box-shadow:none;border:none;';
-                const tip = document.querySelector('.dark-popup .maplibregl-popup-tip') as HTMLElement;
-                if (tip) tip.style.borderTopColor = '#18181b';
-                const close = document.querySelector('.dark-popup .maplibregl-popup-close-button') as HTMLElement;
-                if (close) close.style.cssText = 'color:#a1a1aa;font-size:16px;right:4px;top:4px;';
+                styleDarkPopup(popup);
             });
 
             map.on('mouseenter', 'freshness-circles', () => { map.getCanvas().style.cursor = 'pointer'; });

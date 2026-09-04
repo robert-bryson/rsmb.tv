@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter, useLocation } from 'react-router-dom';
 
 // Mock the useClimateTrends hook before importing the component
@@ -15,8 +15,8 @@ const mockUseClimateTrends = vi.mocked(useClimateTrends);
 const mockTrends = {
     source: 'test',
     description: 'test data',
-    totalHighs: 500,
-    totalLows: 400,
+    totalHighs: 3,
+    totalLows: 2,
     byDecade: [{ decade: 2020, label: '2020s', highs: 5, lows: 4, ratio: 1.25 }],
     byYear: [{ year: 2024, highs: 3, lows: 2 }],
     rollingRatio: [{ year: 2024, ratio: 1.1, highs10yr: 11, lows10yr: 10 }],
@@ -52,7 +52,7 @@ describe('ClimateTrends component', () => {
         });
         renderWithRouter(<ClimateTrends />);
         expect(screen.getByText('Standing Record Ages')).toBeInTheDocument();
-        expect(screen.getByText('900')).toBeInTheDocument();
+        expect(within(screen.getByLabelText('Standing record summary')).getByText('5')).toBeInTheDocument();
         expect(screen.getByText('100.0%')).toBeInTheDocument();
         expect(screen.getByText(/set in last 25 years/i)).toBeInTheDocument();
         expect(screen.getByText('0 years')).toBeInTheDocument();
@@ -85,5 +85,44 @@ describe('ClimateTrends component', () => {
 
         expect(screen.getByTestId('search-state')).toHaveTextContent('?tab=timeseries');
         expect(screen.getByRole('tab', { name: 'Survivor Distribution' })).toHaveAttribute('aria-selected', 'true');
+    });
+
+    it('supports arrow-key navigation between tabs', () => {
+        mockUseClimateTrends.mockReturnValue({
+            trends: mockTrends as never,
+            loading: false,
+            error: null,
+        });
+        renderWithRouter(<><ClimateTrends /><SearchState /></>);
+
+        const ageTab = screen.getByRole('tab', { name: 'Record Age' });
+        ageTab.focus();
+        fireEvent.keyDown(ageTab, { key: 'ArrowRight' });
+
+        expect(screen.getByRole('tab', { name: 'Survivor Distribution' })).toHaveFocus();
+        expect(screen.getByRole('tab', { name: 'Survivor Distribution' })).toHaveAttribute('tabindex', '0');
+        expect(screen.getByTestId('search-state')).toHaveTextContent('?tab=timeseries');
+        expect(screen.getByRole('tabpanel')).toHaveAttribute('aria-labelledby', 'trend-tab-timeseries');
+    });
+
+    it('uses both middle records to calculate an even-sized median age', () => {
+        mockUseClimateTrends.mockReturnValue({
+            trends: {
+                ...mockTrends,
+                totalHighs: 1,
+                totalLows: 1,
+                byYear: [
+                    { year: 1900, highs: 1, lows: 0 },
+                    { year: 2024, highs: 0, lows: 1 },
+                ],
+            } as never,
+            loading: false,
+            error: null,
+        });
+
+        renderWithRouter(<ClimateTrends />);
+
+        expect(screen.getByText('62 years')).toBeInTheDocument();
+        expect(screen.getByText('50.0%')).toBeInTheDocument();
     });
 });

@@ -27,6 +27,38 @@ export function formatComparisonPeriod(date: string): string {
     return Number.isSafeInteger(year) && year > 1950 ? `1950–${year - 1} avg` : 'historical avg';
 }
 
+export function getRecentObservationDate(recentRecords: {
+    asOf: string;
+    dates?: string[];
+    yesterday: { date: string }[];
+}): string {
+    const explicitDate = recentRecords.dates?.[0] ?? recentRecords.yesterday[0]?.date;
+    if (explicitDate) return explicitDate;
+
+    const generatedAt = new Date(`${recentRecords.asOf}T00:00:00Z`);
+    if (Number.isNaN(generatedAt.getTime())) return recentRecords.asOf;
+    generatedAt.setUTCDate(generatedAt.getUTCDate() - 1);
+    return generatedAt.toISOString().slice(0, 10);
+}
+
+export function weightedMedianRecordYear(data: { year: number; highs: number; lows: number }[]): number | null {
+    const total = data.reduce((sum, year) => sum + year.highs + year.lows, 0);
+    if (total === 0) return null;
+
+    const lowerRank = Math.floor((total - 1) / 2);
+    const upperRank = Math.floor(total / 2);
+    let cumulative = 0;
+    let lowerYear: number | null = null;
+
+    for (const year of data) {
+        cumulative += year.highs + year.lows;
+        if (lowerYear === null && cumulative > lowerRank) lowerYear = year.year;
+        if (cumulative > upperRank) return ((lowerYear ?? year.year) + year.year) / 2;
+    }
+
+    return null;
+}
+
 export function buildTemperaturePath(
     temperatures: (number | null)[],
     toY: (temperature: number | null) => number | null,

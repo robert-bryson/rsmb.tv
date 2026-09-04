@@ -12,7 +12,7 @@ import { RecordsBrokenTimeSeries } from './RecordsBrokenTimeSeries';
 import { HighLowRatioChart } from './HighLowRatioChart';
 import { RecentRecordFilters } from '../map/RecentRecordFilters';
 import { buildBrokenRecordsGeoJson, buildFreshnessGeoJson } from '../map/temperatureMapLayers';
-import { escapeMapText, styleDarkPopup } from '../map/temperatureMapPopup';
+import { buildRecordAgePopupHtml, escapeMapText, styleDarkPopup } from '../map/temperatureMapPopup';
 import type { BrokenRecord, ViewMode, HighlightRange, GeoJsonFeature, CountyRecordProperties, TimePeriod, RecordScope, StateRecordsCollection, CountyRecordsCollection } from '../types';
 import {
     INITIAL_CENTER,
@@ -24,7 +24,7 @@ import {
     LOW_TEMP_COLOR,
     FRESHNESS_COLORS,
 } from '../constants';
-import { formatComparisonPeriod, formatTemp, formatTempDelta } from '../utils/temperature';
+import { formatComparisonPeriod, formatTemp, formatTempDelta, getRecentObservationDate } from '../utils/temperature';
 import { escapeHtml } from '../../../utils/escapeHtml';
 
 function useIsMobile() {
@@ -1228,23 +1228,10 @@ export function TemperatureMap() {
             popupRef.current?.remove();
             const p = e.features[0].properties;
             const coords = (e.features[0].geometry as GeoJSON.Point).coordinates.slice() as [number, number];
-            const typeLabel = p.type === 'high' ? 'Record High' : 'Record Low';
-            const countyName = escapeMapText(p.countyName);
-            const state = escapeMapText(p.state);
-            const stationName = escapeMapText(p.stationName);
 
             const popup = new maplibregl.Popup({ closeButton: true, maxWidth: '260px', className: 'dark-popup' })
                 .setLngLat(coords)
-                .setHTML(`<div style="
-                    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-                    background:#18181b;color:#e4e4e7;padding:10px 12px;border-radius:8px;
-                    min-width:180px;line-height:1.5;font-size:12px;
-                    border:1px solid #3f3f46;box-shadow:0 4px 20px rgba(0,0,0,.5)">
-                    <div style="font-size:13px;font-weight:600">${countyName}, ${state}</div>
-                    <div style="font-size:18px;font-weight:700;color:${p.color};margin:4px 0">${p.tempF}°F</div>
-                    <div style="font-size:11px;color:#a1a1aa">${typeLabel} · ${stationName}</div>
-                    <div style="font-size:11px;color:#a1a1aa">Set in <strong style="color:#e4e4e7">${p.year}</strong></div>
-                </div>`)
+                .setHTML(buildRecordAgePopupHtml(p))
                 .addTo(map);
             popupRef.current = popup;
             popup.on('close', () => { if (popupRef.current === popup) popupRef.current = null; });
@@ -1262,15 +1249,12 @@ export function TemperatureMap() {
             if (!e.features?.length) return;
             const p = e.features[0].properties;
             const coords = (e.features[0].geometry as GeoJSON.Point).coordinates.slice() as [number, number];
-            const name = escapeMapText(p.countyName);
-            const color = p.color || '#a1a1aa';
-
             if (!hoverPopup) {
                 hoverPopup = new maplibregl.Popup({ closeButton: false, closeOnClick: false, className: 'dark-popup hover-tip', offset: 12 });
             }
             hoverPopup
                 .setLngLat(coords)
-                .setHTML(`<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#18181b;color:#e4e4e7;padding:4px 8px;border-radius:6px;font-size:12px;white-space:nowrap;border:1px solid #3f3f46;box-shadow:0 2px 8px rgba(0,0,0,.4)"><span style="color:${color};font-weight:700">${p.tempF}°F</span> <span style="color:#a1a1aa">${name} (${p.year})</span></div>`)
+                .setHTML(buildRecordAgePopupHtml(p, true))
                 .addTo(map);
             const el = hoverPopup.getElement();
             if (el) {
@@ -1443,7 +1427,7 @@ export function TemperatureMap() {
                             <span className="font-semibold" style={{ color: HIGH_TEMP_COLOR }}>{recentCounts.high.toLocaleString()}</span>
                             {' daily/monthly station record highs and '}
                             <span className="font-semibold" style={{ color: LOW_TEMP_COLOR }}>{recentCounts.low.toLocaleString()}</span>
-                            {activePeriod === 'yesterday' ? ` record lows on ${filteredRecentRecords.dates?.[0] ?? filteredRecentRecords.asOf}` : ' record lows in the latest 7-day window'} in the contiguous U.S.
+                            {activePeriod === 'yesterday' ? ` record lows on ${getRecentObservationDate(filteredRecentRecords)}` : ' record lows in the latest 7-day window'} in the contiguous U.S.
                             <span className="block text-[10px] text-zinc-400 mt-0.5">{recentCounts.daily.toLocaleString()} daily · {recentCounts.monthly.toLocaleString()} monthly</span>
                             <span className="block text-[10px] text-zinc-500">Raw reporting-station events; not normalized for trend analysis.</span>
                         </p>

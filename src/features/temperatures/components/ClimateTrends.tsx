@@ -4,6 +4,7 @@ import { useClimateTrends } from '../hooks/useClimateTrends';
 import { RecordAgeChart } from './RecordAgeChart';
 import { RecordsBrokenTimeSeries } from './RecordsBrokenTimeSeries';
 import { HighLowRatioChart } from './HighLowRatioChart';
+import { weightedMedianRecordYear } from '../utils/temperature';
 
 const RecordFreshnessMap = lazy(() =>
     import('./RecordFreshnessMap').then((m) => ({ default: m.RecordFreshnessMap })),
@@ -24,26 +25,13 @@ export function ClimateTrends() {
     const tab = searchParams.get('tab');
     const active: Section = SECTIONS.some(section => section.id === tab) ? tab as Section : 'age';
     const totalRecords = trends ? trends.totalHighs + trends.totalLows : 0;
-    const annualTotal = trends?.byYear.reduce(
-        (total, year) => total + year.highs + year.lows,
-        0,
-    ) ?? 0;
     const latestYear = trends?.byYear.at(-1)?.year ?? new Date().getFullYear();
     const recentCutoff = latestYear - 24;
     const recordsInLast25Years = trends?.byYear
         .filter(year => year.year >= recentCutoff)
         .reduce((total, year) => total + year.highs + year.lows, 0) ?? 0;
-    const recentShare = annualTotal > 0 ? (recordsInLast25Years / annualTotal) * 100 : 0;
-    const medianRecordYear = (() => {
-        if (!trends || annualTotal === 0) return null;
-        const midpoint = annualTotal / 2;
-        let cumulative = 0;
-        for (const year of trends.byYear) {
-            cumulative += year.highs + year.lows;
-            if (cumulative >= midpoint) return year.year;
-        }
-        return null;
-    })();
+    const recentShare = totalRecords > 0 ? (recordsInLast25Years / totalRecords) * 100 : 0;
+    const medianRecordYear = trends ? weightedMedianRecordYear(trends.byYear) : null;
     const medianAge = medianRecordYear === null ? null : latestYear - medianRecordYear;
 
     const setActive = (section: Section) => {
@@ -101,7 +89,9 @@ export function ClimateTrends() {
                     </div>
                     <div className="rounded bg-zinc-900 px-2.5 py-2">
                         <dt className="text-[10px] text-zinc-500">Median standing age</dt>
-                        <dd className="text-sm font-semibold text-zinc-200">{medianAge === null ? '—' : `${medianAge} years`}</dd>
+                        <dd className="text-sm font-semibold text-zinc-200">
+                            {medianAge === null ? '—' : `${medianAge.toLocaleString('en-US', { maximumFractionDigits: 1 })} years`}
+                        </dd>
                     </div>
                     <div className="rounded bg-zinc-900 px-2.5 py-2">
                         <dt className="text-[10px] text-zinc-500">Geographic scope</dt>
@@ -114,10 +104,24 @@ export function ClimateTrends() {
                     {SECTIONS.map(s => (
                         <button
                             key={s.id}
+                            id={`trend-tab-${s.id}`}
                             role="tab"
                             aria-selected={active === s.id}
                             aria-controls={`trend-panel-${s.id}`}
+                            tabIndex={active === s.id ? 0 : -1}
                             onClick={() => setActive(s.id)}
+                            onKeyDown={event => {
+                                if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+                                event.preventDefault();
+                                const currentIndex = SECTIONS.findIndex(section => section.id === s.id);
+                                const nextIndex = event.key === 'Home'
+                                    ? 0
+                                    : event.key === 'End'
+                                        ? SECTIONS.length - 1
+                                        : (currentIndex + (event.key === 'ArrowRight' ? 1 : -1) + SECTIONS.length) % SECTIONS.length;
+                                setActive(SECTIONS[nextIndex].id);
+                                document.getElementById(`trend-tab-${SECTIONS[nextIndex].id}`)?.focus();
+                            }}
                             className={`shrink-0 px-3 py-1.5 text-xs rounded-t transition-colors ${active === s.id
                                 ? 'bg-zinc-800 text-violet-400 border-b-2 border-violet-400'
                                 : 'text-zinc-400 hover:text-zinc-300 hover:bg-zinc-800/50'
@@ -133,6 +137,7 @@ export function ClimateTrends() {
             <div
                 id={`trend-panel-${active}`}
                 role="tabpanel"
+                aria-labelledby={`trend-tab-${active}`}
                 className="flex-1 overflow-y-auto p-4"
             >
                 {active === 'age' && (

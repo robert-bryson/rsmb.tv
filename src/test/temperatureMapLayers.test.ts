@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { buildBrokenRecordsGeoJson, buildFreshnessGeoJson } from '../features/temperatures/map/temperatureMapLayers';
-import { escapeMapText } from '../features/temperatures/map/temperatureMapPopup';
+import { buildRecordAgePopupHtml, escapeMapText } from '../features/temperatures/map/temperatureMapPopup';
 import type { BrokenRecord, CountyRecordsCollection } from '../features/temperatures/types';
 
 function brokenRecord(overrides: Partial<BrokenRecord> = {}): BrokenRecord {
@@ -29,6 +29,24 @@ describe('temperature map layers', () => {
         expect(escapeMapText('<img src=x onerror="alert(1)">'))
             .toBe('&lt;img src=x onerror=&quot;alert(1)&quot;&gt;');
         expect(escapeMapText(undefined)).toBe('');
+    });
+
+    it('escapes record-age popup values and rejects unsafe colors', () => {
+        const html = buildRecordAgePopupHtml({
+            countyName: '<img src=x onerror="alert(1)">',
+            state: 'TX',
+            stationName: '<script>alert(2)</script>',
+            type: 'high',
+            tempF: '100</span><script>alert(3)</script>',
+            year: '2026',
+            color: 'red;position:fixed',
+        });
+
+        expect(html).not.toContain('<img');
+        expect(html).not.toContain('<script');
+        expect(html).not.toContain('position:fixed');
+        expect(html).toContain('&lt;img');
+        expect(html).toContain('#a1a1aa');
     });
 
     it('removes only the missing-coordinate sentinel', () => {
