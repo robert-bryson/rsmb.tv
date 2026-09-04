@@ -5,14 +5,10 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { useTemperatureData } from '../hooks/useTemperatureData';
 import { useClimateTrends } from '../hooks/useClimateTrends';
 import { SummaryPanel } from './SummaryPanel';
-import type { RecordSort } from './SummaryPanel';
 import { StationDetailPanel } from './StationDetailPanel';
 import { RecordAgeChart } from './RecordAgeChart';
 import { RecordsBrokenTimeSeries } from './RecordsBrokenTimeSeries';
 import { HighLowRatioChart } from './HighLowRatioChart';
-import { RecentRecordFilters } from '../map/RecentRecordFilters';
-import { buildBrokenRecordsGeoJson, buildFreshnessGeoJson } from '../map/temperatureMapLayers';
-import { escapeMapText, styleDarkPopup } from '../map/temperatureMapPopup';
 import type { BrokenRecord, ViewMode, HighlightRange, GeoJsonFeature, CountyRecordProperties, TimePeriod, RecordScope, StateRecordsCollection, CountyRecordsCollection } from '../types';
 import {
     INITIAL_CENTER,
@@ -23,8 +19,9 @@ import {
     HIGH_TEMP_COLOR,
     LOW_TEMP_COLOR,
     FRESHNESS_COLORS,
+    yearToColor,
 } from '../constants';
-import { formatComparisonPeriod, formatTemp, formatTempDelta } from '../utils/temperature';
+import { formatTemp, formatTempDelta } from '../utils/temperature';
 import { escapeHtml } from '../../../utils/escapeHtml';
 
 function useIsMobile() {
@@ -122,7 +119,7 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
                     <span style="color:${color}">${arrow}${formatTempDelta(margin, useCelsius)}</span>
                 </div>${vsNormal != null ? `
                 <div style="display:flex;justify-content:space-between;margin-bottom:2px">
-                    <span style="color:#a1a1aa">vs ${formatComparisonPeriod(props.date as string)}</span>
+                    <span style="color:#a1a1aa">vs Normal</span>
                     <span style="color:${vsNormal > 0 ? HIGH_TEMP_COLOR : LOW_TEMP_COLOR}">${vsNormal > 0 ? '+' : ''}${formatTempDelta(vsNormal, useCelsius)}</span>
                 </div>` : ''}
                 <div style="display:flex;justify-content:space-between">
@@ -221,9 +218,7 @@ export function TemperatureMap() {
     const [searchParams, setSearchParams] = useSearchParams();
     const [mapLoaded, setMapLoaded] = useState(false);
     const [showCounty, setShowCounty] = useState(false);
-    const [panelOpen, setPanelOpen] = useState(
-        () => typeof window === 'undefined' || !window.matchMedia('(max-width: 768px)').matches,
-    );
+    const [panelOpen, setPanelOpen] = useState(true);
     const [showTrends, setShowTrends] = useState(false);
     const [highlightRange, setHighlightRange] = useState<HighlightRange | null>(null);
     const [selectedDecade, setSelectedDecade] = useState<number | null>(null);
@@ -236,23 +231,6 @@ export function TemperatureMap() {
     const viewMode: ViewMode = (viewParam === 'county' || viewParam === 'state' || viewParam === 'freshness') ? viewParam : 'recent';
     const recordType: 'high' | 'low' = searchParams.get('type') === 'low' ? 'low' : 'high';
     const useCelsius = searchParams.get('unit') === 'C';
-    const activePeriod: TimePeriod = searchParams.get('period') === '7d' ? 'last7Days' : 'yesterday';
-    const stateFilter = /^[A-Z]{2}$/.test(searchParams.get('state') ?? '') ? searchParams.get('state')! : '';
-    const scopeFilter = searchParams.get('scope') === 'monthly' ? 'monthly' : searchParams.get('scope') === 'daily' ? 'daily' : 'all';
-    const parsedMargin = Number(searchParams.get('margin'));
-    const minimumMargin = Number.isFinite(parsedMargin) && parsedMargin > 0 ? Math.min(parsedMargin, 50) : 0;
-    const recentSort: RecordSort = searchParams.get('sort') === 'temp' || searchParams.get('sort') === 'margin'
-        ? searchParams.get('sort') as RecordSort
-        : 'departure';
-
-    const updateSearchParam = useCallback((key: string, value: string, defaultValue = '') => {
-        setSearchParams(previous => {
-            const next = new URLSearchParams(previous);
-            if (value === defaultValue) next.delete(key);
-            else next.set(key, value);
-            return next;
-        }, { replace: true });
-    }, [setSearchParams]);
 
     const setViewMode = useCallback((mode: ViewMode) => {
         setSearchParams(prev => {
@@ -314,47 +292,56 @@ export function TemperatureMap() {
     const shouldLoadAllTimeRecords = viewMode !== 'recent' || showTrends;
     const { stateRecords, countyRecords, recentRecords, loading, error } = useTemperatureData({ loadAllTimeRecords: shouldLoadAllTimeRecords });
     const { trends, loading: trendsLoading, error: trendsError } = useClimateTrends({ enabled: showTrends });
-
-    const filteredRecentRecords = useMemo(() => {
-        if (!recentRecords) return null;
-        const filterRecords = (records: BrokenRecord[]) => records.filter(record => {
-            const scope = record.recordScope === 'monthly' ? 'monthly' : 'daily';
-            const margin = record.type === 'high' ? record.tempF - record.prevRecordF : record.prevRecordF - record.tempF;
-            return (!stateFilter || record.state === stateFilter)
-                && (scopeFilter === 'all' || scope === scopeFilter)
-                && margin >= minimumMargin;
-        });
-        return {
-            ...recentRecords,
-            yesterday: filterRecords(recentRecords.yesterday),
-            last7Days: filterRecords(recentRecords.last7Days),
-        };
-    }, [minimumMargin, recentRecords, scopeFilter, stateFilter]);
-
-    const recentStates = useMemo(() => {
-        if (!recentRecords) return [];
-        return [...new Set(recentRecords.last7Days.map(record => record.state).filter(Boolean))].sort();
-    }, [recentRecords]);
-
-    const recentCounts = useMemo(() => {
-        const records = filteredRecentRecords?.[activePeriod] ?? [];
-        return records.reduce((counts, record) => {
-            counts[record.type]++;
-            counts[record.recordScope === 'monthly' ? 'monthly' : 'daily']++;
-            return counts;
-        }, { high: 0, low: 0, daily: 0, monthly: 0 });
-    }, [activePeriod, filteredRecentRecords]);
+    const [activePeriod, setActivePeriod] = useState<TimePeriod>('yesterday');
 
     /** Build GeoJSON from broken records for the map layer */
     const brokenRecordsGeoJson = useMemo(() => {
-        if (!filteredRecentRecords) return null;
-        return buildBrokenRecordsGeoJson(filteredRecentRecords[activePeriod] || [], activePeriod);
-    }, [filteredRecentRecords, activePeriod]);
+        if (!recentRecords) return null;
+        const records = recentRecords[activePeriod] || [];
+        return {
+            type: 'FeatureCollection' as const,
+            features: records
+                .filter((r: BrokenRecord) => r.lat && r.lon)
+                .map((r: BrokenRecord) => ({
+                    type: 'Feature' as const,
+                    geometry: { type: 'Point' as const, coordinates: [r.lon, r.lat] },
+                    properties: {
+                        stationName: r.stationName,
+                        uid: r.uid,
+                        state: r.state,
+                        stateName: r.stateName,
+                        county: r.county,
+                        type: r.type,
+                        tempF: r.tempF,
+                        prevRecordF: r.prevRecordF,
+                        prevRecordDate: r.prevRecordDate,
+                        normalF: r.normalF,
+                        date: r.date,
+                        recordScope: r.recordScope,
+                    },
+                })),
+        };
+    }, [recentRecords, activePeriod]);
 
     /** Build freshness GeoJSON — county records colored by the year they were set */
     const freshnessGeoJson = useMemo(() => {
         if (!countyRecords) return null;
-        return buildFreshnessGeoJson(countyRecords, recordType);
+        const features = countyRecords.features
+            .filter(f => f.properties.type === recordType)
+            .map(f => {
+                const dateStr = f.properties.date || '';
+                const year = dateStr.length >= 4 ? parseInt(dateStr.slice(0, 4), 10) : 1900;
+                const safeYear = isNaN(year) ? 1900 : year;
+                return {
+                    ...f,
+                    properties: {
+                        ...f.properties,
+                        year: safeYear,
+                        color: yearToColor(safeYear),
+                    },
+                };
+            });
+        return { type: 'FeatureCollection' as const, features };
     }, [countyRecords, recordType]);
 
     /** Merged county GeoJSON — one feature per county with both high and low temps for combined labels */
@@ -497,7 +484,7 @@ export function TemperatureMap() {
             filter: ['==', ['get', 'type'], 'high'],
             layout: {
                 'text-field': ['concat', ['to-string', ['get', 'tempF']], '°F'],
-                'text-font': ['Open Sans Semibold'],
+                'text-font': ['Open Sans Bold'],
                 'text-size': ['interpolate', ['linear'], ['zoom'], 3, 11, 6, 14, 9, 18],
                 'text-offset': [0, -0.8],
                 'text-anchor': 'bottom',
@@ -519,7 +506,7 @@ export function TemperatureMap() {
             filter: ['==', ['get', 'type'], 'low'],
             layout: {
                 'text-field': ['concat', ['to-string', ['get', 'tempF']], '°F'],
-                'text-font': ['Open Sans Semibold'],
+                'text-font': ['Open Sans Bold'],
                 'text-size': ['interpolate', ['linear'], ['zoom'], 3, 11, 6, 14, 9, 18],
                 'text-offset': [0, 0.8],
                 'text-anchor': 'top',
@@ -541,7 +528,7 @@ export function TemperatureMap() {
             filter: ['==', ['get', 'type'], 'high'],
             layout: {
                 'text-field': ['get', 'state'],
-                'text-font': ['Open Sans Semibold'],
+                'text-font': ['Open Sans Bold'],
                 'text-size': ['interpolate', ['linear'], ['zoom'], 3, 9, 6, 11, 9, 14],
                 'text-offset': [0, 0],
                 'text-anchor': 'center',
@@ -628,7 +615,7 @@ export function TemperatureMap() {
                         '\n', {},
                         ['concat', ['to-string', ['coalesce', ['get', 'lowTempF'], '']], '°'], { 'text-color': '#93c5fd' },
                     ],
-                    'text-font': ['Open Sans Semibold'],
+                    'text-font': ['Open Sans Bold'],
                     'text-size': ['interpolate', ['linear'], ['zoom'], 7, 9, 10, 12],
                     'text-anchor': 'center',
                     'text-allow-overlap': false,
@@ -657,36 +644,6 @@ export function TemperatureMap() {
         map.addSource(sourceId, {
             type: 'geojson',
             data: brokenRecordsGeoJson as GeoJSON.GeoJSON,
-            cluster: true,
-            clusterMaxZoom: 6,
-            clusterRadius: 38,
-        });
-
-        map.addLayer({
-            id: 'broken-clusters',
-            type: 'circle',
-            source: sourceId,
-            filter: ['has', 'point_count'],
-            paint: {
-                'circle-radius': ['step', ['get', 'point_count'], 15, 10, 19, 50, 24],
-                'circle-color': '#3f3f46',
-                'circle-opacity': 0.92,
-                'circle-stroke-width': 2,
-                'circle-stroke-color': '#d4d4d8',
-            },
-        });
-
-        map.addLayer({
-            id: 'broken-cluster-count',
-            type: 'symbol',
-            source: sourceId,
-            filter: ['has', 'point_count'],
-            layout: {
-                'text-field': ['get', 'point_count_abbreviated'],
-                'text-font': ['Open Sans Semibold'],
-                'text-size': 11,
-            },
-            paint: { 'text-color': '#f4f4f5' },
         });
 
         // Outer glow ring
@@ -694,7 +651,6 @@ export function TemperatureMap() {
             id: 'broken-glow',
             type: 'circle',
             source: sourceId,
-            filter: ['!', ['has', 'point_count']],
             paint: {
                 'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 12, 7, 18, 10, 24],
                 'circle-color': [
@@ -711,7 +667,7 @@ export function TemperatureMap() {
             id: 'broken-highs',
             type: 'circle',
             source: sourceId,
-            filter: ['all', ['!', ['has', 'point_count']], ['==', ['get', 'type'], 'high']],
+            filter: ['==', ['get', 'type'], 'high'],
             paint: {
                 'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 5, 7, 8, 10, 11],
                 'circle-color': HIGH_TEMP_COLOR,
@@ -727,7 +683,7 @@ export function TemperatureMap() {
             id: 'broken-lows',
             type: 'circle',
             source: sourceId,
-            filter: ['all', ['!', ['has', 'point_count']], ['==', ['get', 'type'], 'low']],
+            filter: ['==', ['get', 'type'], 'low'],
             paint: {
                 'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 6, 7, 9, 10, 12],
                 'circle-color': 'transparent',
@@ -743,10 +699,9 @@ export function TemperatureMap() {
             id: 'broken-labels',
             type: 'symbol',
             source: sourceId,
-            filter: ['!', ['has', 'point_count']],
             layout: {
                 'text-field': ['concat', ['to-string', ['get', 'tempF']], '°F'],
-                'text-font': ['Open Sans Semibold'],
+                'text-font': ['Open Sans Bold'],
                 'text-size': ['interpolate', ['linear'], ['zoom'], 3, 10, 7, 13],
                 'text-offset': [0, 1.8],
                 'text-anchor': 'top',
@@ -798,7 +753,7 @@ export function TemperatureMap() {
             minzoom: 7,
             layout: {
                 'text-field': ['to-string', ['get', 'year']],
-                'text-font': ['Open Sans Semibold'],
+                'text-font': ['Open Sans Bold'],
                 'text-size': 9,
                 'text-offset': [0, 1.2],
                 'text-anchor': 'top',
@@ -849,7 +804,7 @@ export function TemperatureMap() {
             source: sourceId,
             layout: {
                 'text-field': ['concat', ['to-string', ['get', 'tempF']], '°F · ', ['get', 'stationName']],
-                'text-font': ['Open Sans Semibold'],
+                'text-font': ['Open Sans Bold'],
                 'text-size': 13,
                 'text-offset': [0, 2.2],
                 'text-anchor': 'top',
@@ -968,7 +923,7 @@ export function TemperatureMap() {
         const map = mapRef.current;
         if (!map || !mapLoaded) return;
 
-        const recentLayers = ['broken-clusters', 'broken-cluster-count', 'broken-glow', 'broken-highs', 'broken-lows', 'broken-labels'];
+        const recentLayers = ['broken-glow', 'broken-highs', 'broken-lows', 'broken-labels'];
         const stateLayers = ['state-highs', 'state-lows', 'state-labels'];
         const countyLayers = ['county-highs', 'county-lows', 'county-labels'];
         const freshnessLayers = ['freshness-circles', 'freshness-labels'];
@@ -1055,6 +1010,21 @@ export function TemperatureMap() {
     // State labels are symbol layers now — no circle opacity to manage
     // (state layers only show in state view mode, not in recent)
 
+    // Style a dark popup element
+    const styleDarkPopup = useCallback((popup: maplibregl.Popup) => {
+        const el = popup.getElement();
+        if (!el) return;
+        el.querySelectorAll('.maplibregl-popup-content').forEach(node => {
+            (node as HTMLElement).style.cssText = 'background:transparent;padding:0;box-shadow:none;border:none;';
+        });
+        el.querySelectorAll('.maplibregl-popup-tip').forEach(node => {
+            (node as HTMLElement).style.borderTopColor = '#18181b';
+        });
+        el.querySelectorAll('.maplibregl-popup-close-button').forEach(node => {
+            (node as HTMLElement).style.cssText = 'color:#a1a1aa;font-size:18px;right:6px;top:6px;';
+        });
+    }, []);
+
     // Set up click + hover handlers once — guarded to avoid duplicate listeners
     useEffect(() => {
         const map = mapRef.current;
@@ -1063,16 +1033,6 @@ export function TemperatureMap() {
 
         // Persistent hover tooltip (lightweight preview on mousemove)
         let hoverPopup: maplibregl.Popup | null = null;
-
-        map.on('click', 'broken-clusters', async event => {
-            const feature = event.features?.[0];
-            const clusterId = feature?.properties?.cluster_id;
-            const coordinates = (feature?.geometry as GeoJSON.Point | undefined)?.coordinates;
-            const source = map.getSource('broken-records') as maplibregl.GeoJSONSource | undefined;
-            if (!source || clusterId == null || !coordinates) return;
-            const zoom = await source.getClusterExpansionZoom(clusterId);
-            map.easeTo({ center: coordinates as [number, number], zoom });
-        });
 
         const allClickLayers = ['broken-highs', 'broken-lows', 'broken-glow', 'state-highs', 'state-lows', 'county-highs', 'county-lows', 'county-labels'];
 
@@ -1172,8 +1132,8 @@ export function TemperatureMap() {
                     const fips = props.countyFips as string;
                     const highRec = countyRecordsRef.current.features.find(f => f.properties.countyFips === fips && f.properties.type === 'high');
                     const lowRec = countyRecordsRef.current.features.find(f => f.properties.countyFips === fips && f.properties.type === 'low');
-                    const countyName = escapeMapText(props.countyName);
-                    const state = escapeMapText(props.state);
+                    const countyName = props.countyName || '';
+                    const state = props.state || '';
                     const highF = highRec?.properties.tempF;
                     const lowF = lowRec?.properties.tempF;
                     hoverHTML = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#18181b;color:#e4e4e7;padding:6px 10px;border-radius:6px;font-size:12px;white-space:nowrap;border:1px solid #3f3f46;box-shadow:0 2px 8px rgba(0,0,0,.4)">`
@@ -1185,7 +1145,7 @@ export function TemperatureMap() {
                     const st = props.state as string;
                     const highRec = stateRecordsRef.current.features.find(f => f.properties.state === st && f.properties.type === 'high');
                     const lowRec = stateRecordsRef.current.features.find(f => f.properties.state === st && f.properties.type === 'low');
-                    const stateName = escapeMapText(props.stateName || st);
+                    const stateName = props.stateName || st || '';
                     const highF = highRec?.properties.tempF;
                     const lowF = lowRec?.properties.tempF;
                     hoverHTML = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#18181b;color:#e4e4e7;padding:6px 10px;border-radius:6px;font-size:12px;white-space:nowrap;border:1px solid #3f3f46;box-shadow:0 2px 8px rgba(0,0,0,.4)">`
@@ -1193,7 +1153,7 @@ export function TemperatureMap() {
                         + (lowF != null ? `<div><span style="color:${LOW_TEMP_COLOR};font-weight:700">${lowF}°F</span></div>` : '')
                         + `<div style="color:#a1a1aa;font-size:11px;margin-top:2px">${stateName}</div></div>`;
                 } else {
-                    const name = escapeMapText(props.stationName || props.stateName || props.countyName);
+                    const name = props.stationName || props.stateName || props.countyName || '';
                     const tempF = props.tempF;
                     const type = props.type as string;
                     const color = type === 'high' ? HIGH_TEMP_COLOR : LOW_TEMP_COLOR;
@@ -1227,9 +1187,6 @@ export function TemperatureMap() {
             const p = e.features[0].properties;
             const coords = (e.features[0].geometry as GeoJSON.Point).coordinates.slice() as [number, number];
             const typeLabel = p.type === 'high' ? 'Record High' : 'Record Low';
-            const countyName = escapeMapText(p.countyName);
-            const state = escapeMapText(p.state);
-            const stationName = escapeMapText(p.stationName);
 
             const popup = new maplibregl.Popup({ closeButton: true, maxWidth: '260px', className: 'dark-popup' })
                 .setLngLat(coords)
@@ -1238,9 +1195,9 @@ export function TemperatureMap() {
                     background:#18181b;color:#e4e4e7;padding:10px 12px;border-radius:8px;
                     min-width:180px;line-height:1.5;font-size:12px;
                     border:1px solid #3f3f46;box-shadow:0 4px 20px rgba(0,0,0,.5)">
-                    <div style="font-size:13px;font-weight:600">${countyName}, ${state}</div>
+                    <div style="font-size:13px;font-weight:600">${p.countyName}, ${p.state}</div>
                     <div style="font-size:18px;font-weight:700;color:${p.color};margin:4px 0">${p.tempF}°F</div>
-                    <div style="font-size:11px;color:#a1a1aa">${typeLabel} · ${stationName}</div>
+                    <div style="font-size:11px;color:#a1a1aa">${typeLabel} · ${p.stationName}</div>
                     <div style="font-size:11px;color:#a1a1aa">Set in <strong style="color:#e4e4e7">${p.year}</strong></div>
                 </div>`)
                 .addTo(map);
@@ -1260,7 +1217,7 @@ export function TemperatureMap() {
             if (!e.features?.length) return;
             const p = e.features[0].properties;
             const coords = (e.features[0].geometry as GeoJSON.Point).coordinates.slice() as [number, number];
-            const name = escapeMapText(p.countyName);
+            const name = p.countyName || '';
             const color = p.color || '#a1a1aa';
 
             if (!hoverPopup) {
@@ -1320,7 +1277,7 @@ export function TemperatureMap() {
                 setSelectedState(null);
             }
         });
-    }, [mapLoaded]);
+    }, [mapLoaded, styleDarkPopup]);
 
     if (error) {
         return (
@@ -1357,10 +1314,9 @@ export function TemperatureMap() {
                 <div className="flex items-center gap-1.5 overflow-x-auto">
                     <Link
                         to="/projects"
-                        aria-label="Back to projects"
-                        className="bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white px-2.5 sm:px-3 py-1.5 rounded-lg text-sm border border-zinc-700/50 hover:border-zinc-600 transition-colors"
+                        className="bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white px-3 py-1.5 rounded-lg text-sm border border-zinc-700/50 hover:border-zinc-600 transition-colors"
                     >
-                        <span aria-hidden="true">←</span><span className="hidden sm:inline"> Projects</span>
+                        ← Projects
                     </Link>
                     <button
                         onClick={toggleTrends}
@@ -1369,7 +1325,7 @@ export function TemperatureMap() {
                             : 'text-violet-400 border-violet-500/30 hover:text-violet-300 hover:border-violet-400/50'
                             }`}
                     >
-                        <span aria-hidden="true">📊</span><span className="hidden sm:inline"> Trends</span>
+                        📊 Trends
                     </button>
                     <button
                         onClick={() => setUseCelsius(c => !c)}
@@ -1386,7 +1342,7 @@ export function TemperatureMap() {
                         aria-label={panelOpen ? 'Hide summary panel' : 'Show summary panel'}
                         aria-expanded={panelOpen}
                     >
-                        <span aria-hidden="true">{panelOpen ? '▾' : '▴'}</span><span className="hidden sm:inline"> {panelOpen ? 'Hide Panel' : 'Show Panel'}</span>
+                        {panelOpen ? 'Hide Panel' : 'Show Panel'}
                     </button>
                 </div>
                 <div className="flex gap-0.5 bg-zinc-900/80 backdrop-blur rounded-lg border border-zinc-700/50 p-0.5 overflow-x-auto">
@@ -1398,7 +1354,7 @@ export function TemperatureMap() {
                             }`}
                         title="Daily/monthly station records broken recently (yesterday or last 7 days)"
                     >
-                        <span className="sm:hidden">Recent</span><span className="hidden sm:inline">🌡️ Recent</span>
+                        🌡️ Recent
                     </button>
                     <button
                         onClick={() => setViewMode('county')}
@@ -1408,7 +1364,7 @@ export function TemperatureMap() {
                             }`}
                         title="All-time high and low temperature records per county"
                     >
-                        <span className="sm:hidden">County</span><span className="hidden sm:inline">📍 County All-Time</span>
+                        📍 County All-Time
                     </button>
                     <button
                         onClick={() => setViewMode('state')}
@@ -1418,7 +1374,7 @@ export function TemperatureMap() {
                             }`}
                         title="All-time high and low temperature records per state"
                     >
-                        <span className="sm:hidden">State</span><span className="hidden sm:inline">🏛️ State All-Time</span>
+                        🏛️ State All-Time
                     </button>
                     <button
                         onClick={() => setViewMode('freshness')}
@@ -1428,21 +1384,17 @@ export function TemperatureMap() {
                             }`}
                         title="All-time county records colored by the decade they were set — shows how old the records are"
                     >
-                        <span className="sm:hidden">Age</span><span className="hidden sm:inline">📅 Record Age</span>
+                        📅 Record Age
                     </button>
                 </div>
-                {viewMode === 'recent' && (
-                    <RecentRecordFilters states={recentStates} state={stateFilter} scope={scopeFilter} minimumMargin={minimumMargin} onChange={updateSearchParam} />
-                )}
                 {/* Context headline — promoted */}
                 <div className="max-w-md" aria-live="polite">
-                    {viewMode === 'recent' && filteredRecentRecords && (
+                    {viewMode === 'recent' && recentRecords && (
                         <p className="text-xs text-zinc-200 bg-zinc-900/80 backdrop-blur rounded-lg px-3 py-1.5 border border-zinc-700/50">
-                            <span className="font-semibold" style={{ color: HIGH_TEMP_COLOR }}>{recentCounts.high.toLocaleString()}</span>
+                            <span className="font-semibold" style={{ color: HIGH_TEMP_COLOR }}>{(recentRecords[activePeriod]?.filter((r: BrokenRecord) => r.type === 'high').length || 0).toLocaleString()}</span>
                             {' daily/monthly station record highs and '}
-                            <span className="font-semibold" style={{ color: LOW_TEMP_COLOR }}>{recentCounts.low.toLocaleString()}</span>
-                            {activePeriod === 'yesterday' ? ' record lows broken yesterday' : ' record lows broken in the last 7 days'} in the contiguous U.S.
-                            <span className="block text-[10px] text-zinc-400 mt-0.5">{recentCounts.daily.toLocaleString()} daily · {recentCounts.monthly.toLocaleString()} monthly</span>
+                            <span className="font-semibold" style={{ color: LOW_TEMP_COLOR }}>{(recentRecords[activePeriod]?.filter((r: BrokenRecord) => r.type === 'low').length || 0).toLocaleString()}</span>
+                            {activePeriod === 'yesterday' ? ' record lows broken yesterday' : ' record lows broken in the last 7 days'}
                         </p>
                     )}
                     {viewMode === 'county' && countyRecords && (
@@ -1477,12 +1429,12 @@ export function TemperatureMap() {
                 </div>
             ) : (
                 <div className={`absolute left-4 z-20 bg-zinc-900/80 backdrop-blur rounded-lg px-3 py-2 sm:px-4 sm:py-3 text-xs text-zinc-300 border border-zinc-700/50 transition-all max-w-[calc(100vw-2rem)] ${showTrends ? (isMobile ? 'bottom-[55%]' : 'bottom-[37%]') : 'bottom-6'}`}>
-                    <div className="flex items-center gap-1 mb-1.5 text-zinc-200 font-medium">Year standing record was set</div>
-                    <div className="flex gap-1.5 overflow-x-auto">
-                        {FRESHNESS_COLORS.map(([year, color, label]) => (
+                    <div className="flex items-center gap-1 mb-1.5 text-zinc-200 font-medium">Decade record was set</div>
+                    <div className="flex gap-0.5 overflow-x-auto">
+                        {FRESHNESS_COLORS.filter((_, i) => isMobile ? i % 2 === 0 : true).map(([year, color]) => (
                             <div key={year} className="flex flex-col items-center shrink-0">
-                                <div className="w-8 h-3 rounded-sm" style={{ backgroundColor: color }} />
-                                <span className="mt-0.5 text-[9px] text-zinc-400">{label}</span>
+                                <div className="w-4 h-3 sm:w-5 rounded-sm" style={{ backgroundColor: color }} />
+                                <span className="mt-0.5 text-[10px] sm:text-xs text-zinc-400">{year}</span>
                             </div>
                         ))}
                     </div>
@@ -1492,7 +1444,7 @@ export function TemperatureMap() {
             {panelOpen && !showTrends && !selectedStation && (
                 <SummaryPanel
                     viewMode={viewMode}
-                    recentRecords={filteredRecentRecords}
+                    recentRecords={recentRecords}
                     countyRecords={countyRecords}
                     stateRecords={stateRecords}
                     recordType={recordType}
@@ -1501,9 +1453,7 @@ export function TemperatureMap() {
                     onFlyTo={flyToLocation}
                     onSelectState={setSelectedState}
                     activePeriod={activePeriod}
-                    onPeriodChange={period => updateSearchParam('period', period === 'last7Days' ? '7d' : '')}
-                    recentSort={recentSort}
-                    onRecentSortChange={sort => updateSearchParam('sort', sort, 'departure')}
+                    onPeriodChange={setActivePeriod}
                 />
             )}
 

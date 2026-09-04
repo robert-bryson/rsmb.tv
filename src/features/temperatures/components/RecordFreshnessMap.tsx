@@ -116,7 +116,7 @@ export function RecordFreshnessMap() {
                 minzoom: 7,
                 layout: {
                     'text-field': ['to-string', ['get', 'year']],
-                    'text-font': ['Open Sans Semibold'],
+                    'text-font': ['Open Sans Bold'],
                     'text-size': 9,
                     'text-offset': [0, 1.2],
                     'text-anchor': 'top',
@@ -199,12 +199,12 @@ export function RecordFreshnessMap() {
 
                 {/* Color legend */}
                 <div className="absolute bottom-3 left-3 z-10 bg-zinc-900/90 backdrop-blur rounded px-3 py-2 text-[10px] text-zinc-400 border border-zinc-700/50">
-                    <div className="flex items-center gap-1 mb-1 text-zinc-300 font-medium">Year standing record was set</div>
-                    <div className="flex gap-1.5">
-                        {FRESHNESS_COLORS.map(([year, color, label]) => (
+                    <div className="flex items-center gap-1 mb-1 text-zinc-300 font-medium">Year record was set</div>
+                    <div className="flex gap-0.5">
+                        {FRESHNESS_COLORS.map(([year, color]) => (
                             <div key={year} className="flex flex-col items-center">
-                                <div className="w-8 h-3 rounded-sm" style={{ backgroundColor: color }} />
-                                <span className="mt-0.5">{label}</span>
+                                <div className="w-5 h-3 rounded-sm" style={{ backgroundColor: color }} />
+                                <span className="mt-0.5">{year}</span>
                             </div>
                         ))}
                     </div>
