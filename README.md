@@ -56,7 +56,8 @@ npm run dev
 | `npm run build-sitemap` | Generate `public/sitemap.xml` from route and content metadata |
 | `npm run preview` | Preview production build locally |
 | `npm run lint` | Run ESLint |
-| `npm run test` | Run the full Vitest suite |
+| `npm run test` | Run the Vitest suite and the historical temperature pipeline tests |
+| `npm run test:temperature-records` | Run the historical temperature pipeline tests |
 | `npm run test:coverage` | Run tests with V8 coverage report |
 | `npm run watch` | Run terminal operations dashboard (`scripts/aws-watch.tsx`) |
 | `npm run typecheck` | Run all TypeScript project references without emitting files |
@@ -90,7 +91,8 @@ Build status is source-aware: AWS Amplify deployments are shown separately from 
 │   ├── features/       # Feature modules (e.g., flights)
 │   └── pages/          # Route pages
 ├── projects/
-│   └── flights/        # Flight data and conversion scripts
+│   ├── flights/        # Flight data and conversion scripts
+│   └── temperature-records/ # Historical record-rate analysis pipeline
 ├── public/
 │   ├── data/           # Generated/static data files
 │   ├── rss.xml         # Generated RSS feed

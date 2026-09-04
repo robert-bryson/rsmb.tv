@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rsmb.tv/schemas/temperature-records/annual-rates.schema.json",
+  "title": "Historical temperature record rates",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["methodologyVersion", "rateUnit", "confidenceInterval", "rows"],
+  "properties": {
+    "methodologyVersion": { "type": "string" },
+    "rateUnit": { "const": "events per 100,000 valid station-days" },
+    "confidenceInterval": { "type": "string" },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["year", "geography_type", "geography", "kind", "events", "station_days", "station_count", "rate_per_100k_station_days", "ci95_low", "ci95_high"],
+        "properties": {
+          "year": { "type": "integer", "minimum": 1900 },
+          "geography_type": { "enum": ["national", "region", "state"] },
+          "geography": { "type": "string", "minLength": 1 },
+          "kind": { "enum": ["high", "low"] },
+          "events": { "type": "integer", "minimum": 0 },
+          "station_days": { "type": "integer", "minimum": 0 },
+          "station_count": { "type": "integer", "minimum": 0 },
+          "rate_per_100k_station_days": { "type": ["number", "null"], "minimum": 0 },
+          "ci95_low": { "type": ["number", "null"], "minimum": 0 },
+          "ci95_high": { "type": ["number", "null"], "minimum": 0 }
+        }
+      }
+    }
+  }
+}

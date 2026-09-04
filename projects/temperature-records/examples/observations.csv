@@ -1,0 +1,5 @@
+station_id,date,max_f,min_f,max_flag,min_flag,status
+EXAMPLE_A,2000-07-01,90,60,,,certified
+EXAMPLE_A,2001-07-01,95,55,,,certified
+EXAMPLE_B,2000-07-01,88,62,,,certified
+EXAMPLE_B,2001-07-01,88,62,,,certified
