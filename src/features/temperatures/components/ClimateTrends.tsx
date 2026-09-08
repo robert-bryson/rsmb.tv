@@ -102,7 +102,7 @@ export function ClimateTrends() {
                 {/* Section tabs */}
                 <nav className="flex gap-1 overflow-x-auto" role="tablist" aria-label="Standing record views">
                     {SECTIONS.map(s => (
-                        <button
+                        <button type="button"
                             key={s.id}
                             id={`trend-tab-${s.id}`}
                             role="tab"
