@@ -27,11 +27,9 @@ export function formatComparisonPeriod(date: string): string {
     return Number.isSafeInteger(year) && year > 1950 ? `1950–${year - 1} avg` : 'historical avg';
 }
 
-export function getRecentObservationDate(recentRecords: {
-    asOf: string;
-    dates?: string[];
-    yesterday: { date: string }[];
-}): string {
+export function getRecentObservationDate(
+    recentRecords: Pick<import('../types').RecentRecords, 'asOf' | 'dates' | 'yesterday'>,
+): string {
     const explicitDate = recentRecords.dates?.[0] ?? recentRecords.yesterday[0]?.date;
     if (explicitDate) return explicitDate;
 
