@@ -28,7 +28,11 @@ export function formatComparisonPeriod(date: string): string {
 }
 
 export function getRecentObservationDate(
-    recentRecords: Pick<import('../types').RecentRecords, 'asOf' | 'dates' | 'yesterday'>,
+    recentRecords: {
+        asOf: string;
+        dates?: string[];
+        yesterday: Array<{ date: string }>;
+    },
 ): string {
     const explicitDate = recentRecords.dates?.[0] ?? recentRecords.yesterday[0]?.date;
     if (explicitDate) return explicitDate;
