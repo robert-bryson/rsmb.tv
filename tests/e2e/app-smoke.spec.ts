@@ -30,8 +30,8 @@ test('flights stats panel hides its scrollbar when closed', async ({ page }) => 
     const panel = page.getByTestId('stats-panel-content');
     const resizeHandle = page.locator('[role="separator"][aria-label="Resize stats panel"]');
     await expect(panel).toHaveAttribute('data-state', 'open');
-    await expect.poll(() => panel.evaluate((element) => getComputedStyle(element).overflowY)).toBe('auto');
-    await expect.poll(() => panel.evaluate((element) => getComputedStyle(element).scrollbarColor)).not.toBe('auto');
+    await expect(panel).toHaveCSS('overflow-y', 'auto');
+    await expect(panel).not.toHaveCSS('scrollbar-color', 'auto');
     await expect(resizeHandle).toBeVisible();
 
     const handlePositionBeforeScroll = await resizeHandle.boundingBox();
@@ -43,7 +43,7 @@ test('flights stats panel hides its scrollbar when closed', async ({ page }) => 
     await page.getByRole('button', { name: 'Hide stats panel' }).click();
 
     await expect(panel).toHaveAttribute('data-state', 'closed');
-    await expect.poll(() => panel.evaluate((element) => getComputedStyle(element).overflowY)).toBe('hidden');
+    await expect(panel).toHaveCSS('overflow-y', 'hidden');
     await expect(resizeHandle).toHaveAttribute('tabindex', '-1');
 });
 

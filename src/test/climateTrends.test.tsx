@@ -17,9 +17,9 @@ const mockTrends = {
     description: 'test data',
     totalHighs: 3,
     totalLows: 2,
-    byDecade: [{ decade: 2020, label: '2020s', highs: 5, lows: 4, ratio: 1.25 }],
+    byDecade: [{ decade: 2020, label: '2020s', highs: 3, lows: 2, ratio: 1.5 }],
     byYear: [{ year: 2024, highs: 3, lows: 2 }],
-    rollingRatio: [{ year: 2024, ratio: 1.1, highs10yr: 11, lows10yr: 10 }],
+    rollingRatio: [],
 } as const;
 
 function renderWithRouter(ui: React.ReactElement) {

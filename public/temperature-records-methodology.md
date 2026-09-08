@@ -29,7 +29,9 @@ The pipeline excludes missing ACIS values. The current data do not contain these
 
 The recent-event counts do not use a fixed station group. The counts are not normalized by active station-days. The counts do not have confidence intervals. Do not use these counts to identify trends.
 
-The web client validates each generated JSON file before it shows the data. Download these source files from `https://data.rsmb.tv/`:
+The web client validates each generated JSON file before it shows the data. For the record-age charts, the client uses the annual rows as the source. It adds zero-count rows for omitted calendar years. Then, it calculates the totals, decade groups, and 10-year groups.
+
+Download these source files from `https://data.rsmb.tv/`:
 
 - `recentRecords.json`.
 - `countyRecords.json`.

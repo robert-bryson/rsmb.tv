@@ -18,6 +18,8 @@ This file contains incomplete work. Git history contains the completed work.
 
 ## Temperature record data
 
+The historical signal is not ready for publication.
+
 ### Data extraction
 
 - [ ] Build a resumable ACIS extraction command. Keep raw responses and request manifests.
@@ -25,10 +27,10 @@ This file contains incomplete work. Git history contains the completed work.
 
 ### Publication quality
 
+- [ ] Regenerate `climateTrends.json`. Include a zero-count row for each calendar year.
 - [ ] Complete the publication checks in [the methodology](projects/temperature-records/methodology.md#validate-before-publication).
 - [ ] Archive an approved, versioned station cohort before publication.
 - [ ] Publish station coverage, failed geography requests, and data quality in a versioned manifest.
-- [ ] Do not publish a historical signal until the extraction, cohort, and validation tasks are complete.
 
 ## Ride Ledger prerequisites
 

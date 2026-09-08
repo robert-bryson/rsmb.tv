@@ -160,6 +160,7 @@ export function RecordFreshnessMap() {
             <div className="flex gap-2 mb-3">
                 {(['high', 'low'] as const).map(t => (
                     <button
+                        type="button"
                         key={t}
                         onClick={() => setRecordType(t)}
                         className={`px-3 py-1 text-xs rounded border transition-colors ${recordType === t
@@ -182,13 +183,13 @@ export function RecordFreshnessMap() {
                 )}
 
                 {/* Color legend */}
-                <div className="absolute bottom-3 left-3 z-10 bg-zinc-900/90 backdrop-blur rounded px-3 py-2 text-[10px] text-zinc-400 border border-zinc-700/50">
+                <div className="absolute bottom-3 left-3 right-3 z-10 bg-zinc-900/90 backdrop-blur rounded px-3 py-2 text-[10px] text-zinc-400 border border-zinc-700/50 sm:right-auto">
                     <div className="flex items-center gap-1 mb-1 text-zinc-300 font-medium">Year standing record was set</div>
-                    <div className="flex gap-1.5">
+                    <div className="grid grid-cols-2 gap-x-3 gap-y-1 sm:grid-cols-4">
                         {FRESHNESS_COLORS.map(([year, color, label]) => (
-                            <div key={year} className="flex flex-col items-center">
-                                <div className="w-8 h-3 rounded-sm" style={{ backgroundColor: color }} />
-                                <span className="mt-0.5">{label}</span>
+                            <div key={year} className="flex items-center gap-1.5 whitespace-nowrap">
+                                <div className="w-3 h-3 shrink-0 rounded-sm" style={{ backgroundColor: color }} />
+                                <span>{label}</span>
                             </div>
                         ))}
                     </div>

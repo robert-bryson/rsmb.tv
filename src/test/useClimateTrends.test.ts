@@ -9,7 +9,7 @@ const trends = {
     description: 'test trends',
     totalHighs: 2,
     totalLows: 1,
-    byDecade: [],
+    byDecade: [{ decade: 2020, label: '2020s', highs: 2, lows: 1, ratio: 2 }],
     byYear: [{ year: 2024, highs: 2, lows: 1 }],
     rollingRatio: [],
 };

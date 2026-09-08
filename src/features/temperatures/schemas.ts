@@ -83,6 +83,10 @@ const yearDataSchema = z.object({
     lows: z.number().int().nonnegative(),
 });
 
+function roundedRatio(highs: number, lows: number): number | null {
+    return lows > 0 ? Math.round((highs / lows) * 100) / 100 : null;
+}
+
 export const climateTrendsSchema = z.object({
     source: z.string().min(1),
     description: z.string().min(1),
@@ -103,22 +107,6 @@ export const climateTrendsSchema = z.object({
         lows10yr: z.number().int().nonnegative(),
     })),
 }).superRefine((data, context) => {
-    const annualHighs = data.byYear.reduce((total, year) => total + year.highs, 0);
-    const annualLows = data.byYear.reduce((total, year) => total + year.lows, 0);
-    if (annualHighs !== data.totalHighs) {
-        context.addIssue({
-            code: 'custom',
-            path: ['totalHighs'],
-            message: 'Must equal the sum of byYear high counts',
-        });
-    }
-    if (annualLows !== data.totalLows) {
-        context.addIssue({
-            code: 'custom',
-            path: ['totalLows'],
-            message: 'Must equal the sum of byYear low counts',
-        });
-    }
     for (let index = 1; index < data.byYear.length; index++) {
         if (data.byYear[index].year <= data.byYear[index - 1].year) {
             context.addIssue({
@@ -129,6 +117,49 @@ export const climateTrendsSchema = z.object({
             break;
         }
     }
+}).transform(data => {
+    const countsByYear = new Map(data.byYear.map(year => [year.year, year]));
+    const firstYear = data.byYear[0]?.year;
+    const lastYear = data.byYear.at(-1)?.year;
+    const byYear = firstYear === undefined || lastYear === undefined
+        ? []
+        : Array.from({ length: lastYear - firstYear + 1 }, (_, index) => {
+            const year = firstYear + index;
+            return countsByYear.get(year) ?? { year, highs: 0, lows: 0 };
+        });
+    const expectedDecades = new Map<number, { highs: number; lows: number }>();
+    for (const year of byYear) {
+        const decade = Math.floor(year.year / 10) * 10;
+        const counts = expectedDecades.get(decade) ?? { highs: 0, lows: 0 };
+        counts.highs += year.highs;
+        counts.lows += year.lows;
+        expectedDecades.set(decade, counts);
+    }
+    const byDecade = [...expectedDecades].map(([decade, counts]) => ({
+        decade,
+        label: `${decade}s`,
+        ...counts,
+        ratio: roundedRatio(counts.highs, counts.lows),
+    }));
+    const rollingRatio = byYear.slice(9).map((year, index) => {
+        const window = byYear.slice(index, index + 10);
+        const highs10yr = window.reduce((total, item) => total + item.highs, 0);
+        const lows10yr = window.reduce((total, item) => total + item.lows, 0);
+        return {
+            year: year.year,
+            ratio: roundedRatio(highs10yr, lows10yr),
+            highs10yr,
+            lows10yr,
+        };
+    });
+    return {
+        ...data,
+        totalHighs: byYear.reduce((total, year) => total + year.highs, 0),
+        totalLows: byYear.reduce((total, year) => total + year.lows, 0),
+        byDecade,
+        byYear,
+        rollingRatio,
+    };
 });
 
 export function parseTemperaturePayload<T>(schema: z.ZodType<T>, payload: unknown, label: string): T {

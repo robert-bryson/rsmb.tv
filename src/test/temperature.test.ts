@@ -82,33 +82,41 @@ describe('buildTemperaturePath', () => {
 
         expect(path).toBe('M0.0,70.0 M100.0,72.0');
     });
+});
 
-    describe('getRecentObservationDate', () => {
-        it('uses a legacy payload record date before the generation date', () => {
-            expect(getRecentObservationDate({
-                asOf: '2026-04-28',
-                yesterday: [{ date: '2026-04-27' }],
-            })).toBe('2026-04-27');
-        });
-
-        it('derives yesterday when a zero-event payload has no date list', () => {
-            expect(getRecentObservationDate({
-                asOf: '2026-04-28',
-                yesterday: [],
-            })).toBe('2026-04-27');
-        });
+describe('getRecentObservationDate', () => {
+    it('uses the explicit observation date before record and generation dates', () => {
+        expect(getRecentObservationDate({
+            asOf: '2026-04-28',
+            dates: ['2026-04-27', '2026-04-26'],
+            yesterday: [{ date: '2026-04-26' }],
+        })).toBe('2026-04-27');
     });
 
-    describe('weightedMedianRecordYear', () => {
-        it('averages the two middle record years for an even record count', () => {
-            expect(weightedMedianRecordYear([
-                { year: 1900, highs: 1, lows: 0 },
-                { year: 2024, highs: 0, lows: 1 },
-            ])).toBe(1962);
-        });
+    it('uses a legacy payload record date before the generation date', () => {
+        expect(getRecentObservationDate({
+            asOf: '2026-04-28',
+            yesterday: [{ date: '2026-04-27' }],
+        })).toBe('2026-04-27');
+    });
 
-        it('returns null when no standing records exist', () => {
-            expect(weightedMedianRecordYear([{ year: 2024, highs: 0, lows: 0 }])).toBeNull();
-        });
+    it('derives yesterday when a zero-event payload has no date list', () => {
+        expect(getRecentObservationDate({
+            asOf: '2026-04-28',
+            yesterday: [],
+        })).toBe('2026-04-27');
+    });
+});
+
+describe('weightedMedianRecordYear', () => {
+    it('averages the two middle record years for an even record count', () => {
+        expect(weightedMedianRecordYear([
+            { year: 1900, highs: 1, lows: 0 },
+            { year: 2024, highs: 0, lows: 1 },
+        ])).toBe(1962);
+    });
+
+    it('returns null when no standing records exist', () => {
+        expect(weightedMedianRecordYear([{ year: 2024, highs: 0, lows: 0 }])).toBeNull();
     });
 });

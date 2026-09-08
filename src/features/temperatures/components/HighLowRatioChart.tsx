@@ -100,7 +100,7 @@ function DecadeRatioView({ data, hovered, setHovered, selectedDecade, onSelectDe
         <div className={compact ? 'flex flex-col h-full' : ''}>
             {compact ? (
                 <div className="flex items-center justify-end shrink-0 mb-0.5">
-                    <button onClick={onSwitchView} className="text-[10px] text-violet-400 hover:text-violet-300 transition-colors">
+                    <button type="button" onClick={onSwitchView} className="text-[10px] text-violet-400 hover:text-violet-300 transition-colors">
                         Show rolling →
                     </button>
                 </div>
@@ -108,7 +108,7 @@ function DecadeRatioView({ data, hovered, setHovered, selectedDecade, onSelectDe
                 <>
                     <div className="flex items-baseline gap-3 mb-1">
                         <h3 className="text-sm font-semibold text-zinc-200">High:Low Ratio by Decade</h3>
-                        <button onClick={onSwitchView} className="text-[10px] text-violet-400 hover:text-violet-300 transition-colors">
+                        <button type="button" onClick={onSwitchView} className="text-[10px] text-violet-400 hover:text-violet-300 transition-colors">
                             Show rolling →
                         </button>
                     </div>
@@ -282,7 +282,7 @@ function RollingRatioView({ data, hovered, setHovered, onSwitchView, onHoverPeri
         <div className={compact ? 'flex flex-col h-full' : ''}>
             {compact ? (
                 <div className="flex items-center justify-end shrink-0 mb-0.5">
-                    <button onClick={onSwitchView} className="text-[10px] text-violet-400 hover:text-violet-300 transition-colors">
+                    <button type="button" onClick={onSwitchView} className="text-[10px] text-violet-400 hover:text-violet-300 transition-colors">
                         ← Show decades
                     </button>
                 </div>
@@ -290,7 +290,7 @@ function RollingRatioView({ data, hovered, setHovered, onSwitchView, onHoverPeri
                 <>
                     <div className="flex items-baseline gap-3 mb-1">
                         <h3 className="text-sm font-semibold text-zinc-200">Rolling 10-Year H:L Ratio</h3>
-                        <button onClick={onSwitchView} className="text-[10px] text-violet-400 hover:text-violet-300 transition-colors">
+                        <button type="button" onClick={onSwitchView} className="text-[10px] text-violet-400 hover:text-violet-300 transition-colors">
                             ← Show decades
                         </button>
                     </div>
