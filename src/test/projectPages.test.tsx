@@ -62,9 +62,9 @@ describe('Bookend page', () => {
 describe('TemperatureRecordsAbout page', () => {
     it('renders heading, map/trends links, and source link', () => {
         renderWithRouter(<TemperatureRecordsAbout />, { route: '/projects/temperature-records' });
-        expect(screen.getByRole('heading', { level: 1, name: /Record Highs/i })).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: /Open interactive map/i })).toHaveAttribute('href', '/projects/temperature-records/map?view=freshness');
-        expect(screen.getByRole('link', { name: /View record history/i })).toHaveAttribute('href', '/projects/temperature-records/trends');
+        expect(screen.getByRole('heading', { level: 1, name: /U.S. Temperature Records/i })).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: /Open interactive map/i })).toHaveAttribute('href', '/projects/temperature-records/map');
+        expect(screen.getByRole('link', { name: /Explore standing record ages/i })).toHaveAttribute('href', '/projects/temperature-records/trends');
         expect(screen.getByRole('link', { name: /Source on GitHub/i })).toHaveAttribute('href', 'https://github.com/robert-bryson/rsmb.tv/tree/main/src/features/temperatures');
     });
 });

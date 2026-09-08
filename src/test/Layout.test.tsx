@@ -48,7 +48,7 @@ describe('Layout', () => {
         renderLayout('/projects/temperature-records/trends');
 
         expect(screen.getByRole('link', { name: 'Projects' })).toHaveClass('text-violet-400');
-        expect(screen.getByRole('link', { name: 'Record Highs' })).toHaveClass('text-violet-300');
+        expect(screen.getByRole('link', { name: 'U.S. Temperature Records' })).toHaveClass('text-violet-300');
     });
 
     it('omits header and footer chrome for fullscreen map pages', () => {

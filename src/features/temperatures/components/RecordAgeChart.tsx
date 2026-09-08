@@ -13,7 +13,7 @@ interface Props {
 
 /**
  * Mirrored bar chart: record highs go up (red), record lows go down (blue).
- * Shows when all-time county records were set, grouped by decade.
+ * Shows when today's standing county records were set, grouped by decade.
  */
 export function RecordAgeChart({ data, onHoverPeriod, selectedDecade, onSelectDecade, compact }: Props) {
     const [hovered, setHovered] = useState<number | null>(null);
@@ -23,7 +23,7 @@ export function RecordAgeChart({ data, onHoverPeriod, selectedDecade, onSelectDe
     const filtered = data.filter(d => d.decade >= 1890);
 
     if (filtered.length === 0) {
-        return <ChartEmptyState message="No all-time county record age data is available for this selection." />;
+        return <ChartEmptyState message="No standing county record-age data is available for this selection." />;
     }
 
     // Use shared selection if provided, otherwise fall back to local
@@ -46,21 +46,6 @@ export function RecordAgeChart({ data, onHoverPeriod, selectedDecade, onSelectDe
     const maxVal = Math.max(...filtered.flatMap(d => [d.highs, d.lows]), 1);
     const totalRecords = filtered.reduce((sum, d) => sum + d.highs + d.lows, 0);
 
-    // Cumulative records set up to each decade
-    const cumTotal: number[] = [];
-    const cumHighs: number[] = [];
-    const cumLows: number[] = [];
-    let runTotal = 0, runHighs = 0, runLows = 0;
-    for (const d of filtered) {
-        runTotal += d.highs + d.lows;
-        runHighs += d.highs;
-        runLows += d.lows;
-        cumTotal.push(runTotal);
-        cumHighs.push(runHighs);
-        cumLows.push(runLows);
-    }
-    const maxCumulative = cumTotal[cumTotal.length - 1] || 1;
-
     const barWidth = 44;
     const gap = 6;
     const chartWidth = filtered.length * (barWidth + gap) - gap;
@@ -69,17 +54,15 @@ export function RecordAgeChart({ data, onHoverPeriod, selectedDecade, onSelectDe
     const midY = halfHeight + 10;
 
     const scale = (val: number) => (val / maxVal) * halfHeight;
-    const cumulativeY = (val: number) => midY - (val / maxCumulative) * halfHeight * 0.85;
-
     const activeIndex = hovered ?? selected;
 
     return (
         <div className={compact ? 'flex flex-col h-full' : ''}>
             {!compact && (
                 <>
-                    <h3 className="text-sm font-semibold text-zinc-200 mb-1">When Were All-Time County Records Set?</h3>
+                    <h3 className="text-sm font-semibold text-zinc-200 mb-1">When Were Today&apos;s Standing County Records Set?</h3>
                     <p className="text-xs text-zinc-400 mb-4">
-                        Distribution of {totalRecords.toLocaleString()} all-time county temperature records (highs and lows) by the decade they were set.
+                        Distribution of {totalRecords.toLocaleString()} standing county temperature records (highs and lows) by the decade they were set.
                         Highs go up, lows go down. Color matches the freshness map. Click a decade to lock selection.
                     </p>
                 </>
@@ -205,91 +188,11 @@ export function RecordAgeChart({ data, onHoverPeriod, selectedDecade, onSelectDe
                         );
                     })}
 
-                    {/* Cumulative highs line */}
-                    <polyline
-                        points={filtered.map((_, i) => {
-                            const x = 35 + i * (barWidth + gap) + barWidth / 2;
-                            return `${x},${cumulativeY(cumHighs[i])}`;
-                        }).join(' ')}
-                        fill="none" stroke={HIGH_TEMP_COLOR} strokeWidth={1.5}
-                        strokeLinejoin="round" opacity={0.35}
-                        style={{ pointerEvents: 'none' }}
-                    />
-                    {/* Cumulative lows line */}
-                    <polyline
-                        points={filtered.map((_, i) => {
-                            const x = 35 + i * (barWidth + gap) + barWidth / 2;
-                            return `${x},${cumulativeY(cumLows[i])}`;
-                        }).join(' ')}
-                        fill="none" stroke={LOW_TEMP_COLOR} strokeWidth={1.5}
-                        strokeLinejoin="round" opacity={0.35}
-                        style={{ pointerEvents: 'none' }}
-                    />
-                    {/* Cumulative total line */}
-                    <polyline
-                        points={filtered.map((_, i) => {
-                            const x = 35 + i * (barWidth + gap) + barWidth / 2;
-                            return `${x},${cumulativeY(cumTotal[i])}`;
-                        }).join(' ')}
-                        fill="none" stroke="#d4d4d8" strokeWidth={1.5}
-                        strokeLinejoin="round" opacity={0.5}
-                        style={{ pointerEvents: 'none' }}
-                    />
-                    {/* Dots for all three lines */}
-                    {filtered.map((_, i) => {
-                        const x = 35 + i * (barWidth + gap) + barWidth / 2;
-                        const isAct = activeIndex === i;
-                        const r = isAct ? 3.5 : 2;
-                        const opac = isAct ? 1 : 0.35;
-                        return (
-                            <g key={`dots-${i}`} style={{ pointerEvents: 'none' }}>
-                                <circle cx={x} cy={cumulativeY(cumTotal[i])} r={r}
-                                    fill={isAct ? '#ffffff' : '#d4d4d8'} opacity={opac} />
-                                <circle cx={x} cy={cumulativeY(cumHighs[i])} r={r}
-                                    fill={HIGH_TEMP_COLOR} opacity={opac} />
-                                <circle cx={x} cy={cumulativeY(cumLows[i])} r={r}
-                                    fill={LOW_TEMP_COLOR} opacity={opac} />
-                            </g>
-                        );
-                    })}
-                    {/* Tooltip on hover/select */}
-                    {activeIndex !== null && (() => {
-                        const tx = 35 + activeIndex * (barWidth + gap) + barWidth / 2;
-                        const topY = cumulativeY(cumTotal[activeIndex]);
-                        return (
-                            <g style={{ pointerEvents: 'none' }}>
-                                <rect x={tx - 52} y={topY - 48} width={104} height={42}
-                                    fill="#18181b" fillOpacity={0.9} rx={4}
-                                    stroke="#3f3f46" strokeWidth={0.5} />
-                                <text x={tx} y={topY - 34} fill="#e4e4e7" fontSize={10} fontWeight={600} textAnchor="middle">
-                                    {cumTotal[activeIndex].toLocaleString()} total
-                                </text>
-                                <text x={tx} y={topY - 22} fill="#fca5a5" fontSize={9} textAnchor="middle">
-                                    {cumHighs[activeIndex].toLocaleString()} highs
-                                </text>
-                                <text x={tx} y={topY - 11} fill="#93c5fd" fontSize={9} textAnchor="middle">
-                                    {cumLows[activeIndex].toLocaleString()} lows
-                                </text>
-                            </g>
-                        );
-                    })()}
-                    {/* End label when nothing is active */}
-                    {activeIndex === null && (
-                        <text
-                            x={35 + (filtered.length - 1) * (barWidth + gap) + barWidth / 2}
-                            y={cumulativeY(maxCumulative) - 8}
-                            fill="#a1a1aa" fontSize={9} textAnchor="middle"
-                            style={{ pointerEvents: 'none' }}
-                        >
-                            {maxCumulative.toLocaleString()}
-                        </text>
-                    )}
                 </svg>
             </div>
             {!compact && (
                 <p className="text-[10px] text-zinc-500 mt-2">
-                    The 1930s Dust Bowl dominates record highs. Recent decades (2000s–2010s) show a resurgence of record highs relative to lows.
-                    Lines show cumulative standing records over time (total, highs, lows).
+                    Only records that still stand today are counted; records that were later superseded are absent.
                 </p>
             )}
         </div>

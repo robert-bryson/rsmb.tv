@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseTemperaturePayload, recentRecordsSchema, stateRecordsSchema } from '../features/temperatures/schemas';
+import { climateTrendsSchema, parseTemperaturePayload, recentRecordsSchema, stateRecordsSchema } from '../features/temperatures/schemas';
 
 describe('temperature payload schemas', () => {
     it('accepts the missing-coordinate sentinel from the data pipeline', () => {
@@ -28,5 +28,38 @@ describe('temperature payload schemas', () => {
 
         expect(() => parseTemperaturePayload(stateRecordsSchema, payload, 'state records'))
             .toThrow('Invalid state records at features.0.properties.tempF');
+    });
+
+    it('rejects record-age totals that do not match the annual data', () => {
+        const payload = {
+            source: 'test',
+            description: 'test',
+            totalHighs: 2,
+            totalLows: 1,
+            byDecade: [],
+            byYear: [{ year: 2025, highs: 1, lows: 1 }],
+            rollingRatio: [],
+        };
+
+        expect(() => parseTemperaturePayload(climateTrendsSchema, payload, 'record ages'))
+            .toThrow('Invalid record ages at totalHighs: Must equal the sum of byYear high counts');
+    });
+
+    it('rejects duplicate or unsorted record-age years', () => {
+        const payload = {
+            source: 'test',
+            description: 'test',
+            totalHighs: 2,
+            totalLows: 0,
+            byDecade: [],
+            byYear: [
+                { year: 2025, highs: 1, lows: 0 },
+                { year: 2024, highs: 1, lows: 0 },
+            ],
+            rollingRatio: [],
+        };
+
+        expect(() => parseTemperaturePayload(climateTrendsSchema, payload, 'record ages'))
+            .toThrow('Invalid record ages at byYear.1.year: Years must be unique and in ascending order');
     });
 });

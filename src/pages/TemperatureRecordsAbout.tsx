@@ -10,7 +10,7 @@ export default function TemperatureRecordsAbout() {
         'Interactive map of all-time record high and low temperatures across US states and counties, powered by NOAA and ACIS data.';
 
     useDocumentHead({
-        title: 'Record Highs',
+        title: 'U.S. Temperature Records',
         description,
         ogImage: absoluteUrl('/og/temperature-records.svg'),
     });
@@ -18,7 +18,7 @@ export default function TemperatureRecordsAbout() {
     useJsonLd({
         '@context': 'https://schema.org',
         '@type': 'SoftwareApplication',
-        name: 'Record Highs',
+        name: 'U.S. Temperature Records',
         description,
         url: absoluteUrl('/projects/temperature-records'),
         applicationCategory: 'WeatherApplication',
@@ -31,15 +31,16 @@ export default function TemperatureRecordsAbout() {
     return (
         <div className="max-w-[52rem]">
             <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
-                Record Highs
+                U.S. Temperature Records
             </h1>
             <p className="text-zinc-400 mb-6 text-sm">
                 React + MapLibre GL
             </p>
 
             <p className="text-zinc-300 leading-relaxed mb-6">
-                An interactive map of all-time record high and low temperatures
-                across US states and counties, powered by{' '}
+                Explore recent station record events, observed county extremes,
+                certified state extremes, and the ages of today&apos;s standing
+                county records, powered by{' '}
                 <a
                     href="https://www.ncei.noaa.gov/"
                     target="_blank"
@@ -57,14 +58,14 @@ export default function TemperatureRecordsAbout() {
                 >
                     ACIS
                 </a>{' '}
-                data. The map separates recent daily/monthly station records
-                from county and state all-time records, with a companion trends
-                analysis focused on county all-time records.
+                data. Each view answers a different question and states its scope
+                directly; raw recent-event counts and standing-record ages are not
+                presented as climate-trend estimates.
             </p>
 
             <div className="mb-8 flex flex-wrap gap-3">
                 <Link
-                    to="/projects/temperature-records/map?view=freshness"
+                    to="/projects/temperature-records/map"
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium transition-colors"
                 >
                     Open interactive map →
@@ -73,7 +74,7 @@ export default function TemperatureRecordsAbout() {
                     to="/projects/temperature-records/trends"
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-sm font-medium transition-colors"
                 >
-                    View record history →
+                    Explore standing record ages →
                 </Link>
                 <a
                     href="https://github.com/robert-bryson/rsmb.tv/tree/main/src/features/temperatures"
@@ -102,14 +103,14 @@ export default function TemperatureRecordsAbout() {
                 <figure>
                     <img
                         src="/images/temperature-records/state-records.webp"
-                        alt="Map of all-time state temperature records across the US with record highs and lows"
+                        alt="Map of certified state temperature extremes across the US"
                         className="rounded-lg border border-zinc-800"
                         width={1624}
                         height={967}
                         loading="lazy"
                     />
                     <figcaption className="mt-2 text-xs text-zinc-400 text-center">
-                        State All-Time view — highest high and lowest low temperature records for each state
+                        State Extremes view — NOAA-certified highest high and lowest low for each state
                     </figcaption>
                 </figure>
                 <figure>
@@ -133,7 +134,7 @@ export default function TemperatureRecordsAbout() {
                 <li>High/low tabs that keep the side panel and map symbology synchronized</li>
                 <li>Click any state or county to see the record details — temperature, date, and station</li>
                 <li>Summary panel showing recent daily/monthly station records broken across the country</li>
-                <li>Companion history page showing when today&apos;s standing county extremes were set</li>
+                <li>Companion record-age page showing when today&apos;s surviving county extremes were set</li>
             </ul>
 
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Data</h2>
@@ -144,10 +145,11 @@ export default function TemperatureRecordsAbout() {
                     descriptive and are not independently certified state records.
                 </p>
                 <p>
-                    County views cover the 48 contiguous states from 1890 onward. Station histories and data completeness vary. Recent daily and
+                    County views cover the 48 contiguous states from 1890 onward. Station histories and data completeness vary, so “all-time”
+                    means the available ACIS period of record rather than a uniform observation period. Recent daily and
                     monthly station records use observations beginning in 1950; displayed comparison averages cover 1950 through the year before
                     each observation. The standing-record history groups only records that remain county extremes today, not every record-breaking
-                    event that occurred historically.
+                    event that occurred historically. Recent event totals are raw station counts, not normalized trend estimates.
                 </p>
             </div>
 

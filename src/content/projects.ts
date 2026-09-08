@@ -139,8 +139,8 @@ export const projects: Project[] = [
   },
   {
     slug: 'temperature-records',
-    title: 'Record Highs',
-    description: 'Interactive map of recent station records and all-time high/low temperature records across US states and counties, powered by NOAA and ACIS data.',
+    title: 'U.S. Temperature Records',
+    description: 'Explore recent station record events, observed county extremes, certified state extremes, and the ages of standing records.',
     tech: ['React', 'MapLibre GL', 'NOAA ACIS', 'GeoJSON'],
     applicationCategory: 'WeatherApplication',
     demoUrl: '/projects/temperature-records/map',
