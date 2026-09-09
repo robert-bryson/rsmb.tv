@@ -20,6 +20,7 @@ describe('Layout', () => {
 
         expect(screen.getByRole('link', { name: 'rsmb' })).toHaveAttribute('href', '/');
         expect(screen.getByRole('link', { name: 'Blog' })).toHaveAttribute('href', '/blog');
+        expect(screen.getByRole('link', { name: 'Trips' })).toHaveAttribute('href', '/trips');
         expect(screen.getByRole('link', { name: 'Projects' })).toHaveAttribute('href', '/projects');
         expect(screen.getByRole('link', { name: 'About' })).toHaveAttribute('href', '/about');
         expect(screen.queryByRole('link', { name: 'Home' })).not.toBeInTheDocument();

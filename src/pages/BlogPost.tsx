@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, Navigate } from 'react-router-dom';
 import { BlogTagLink } from '../components/BlogTagLink';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
@@ -7,12 +7,23 @@ import { getPostBySlug } from '../content/posts';
 import { mdxComponents } from '../blog/MdxComponents';
 import { formatDate } from '../utils/formatDate';
 import { AUTHOR_PERSON, SITE_URL, absoluteUrl } from '../utils/siteMetadata';
+import { getTripManifest, TripStoryHeader, TripStoryProvider } from '../features/trips';
 
-export function BlogPost() {
+interface BlogPostProps {
+    collection: 'blog' | 'trips';
+}
+
+export function BlogPost({ collection }: BlogPostProps) {
     const { slug } = useParams<{ slug: string }>();
     const post = slug ? getPostBySlug(slug) : undefined;
-    const postUrl = post ? absoluteUrl(`/blog/${post.slug}`) : undefined;
-    const postImage = post ? absoluteUrl(`/og/blog/${post.slug}.svg`) : undefined;
+    const isTrip = post?.format === 'trip';
+    const tripManifest = isTrip ? getTripManifest(post.tripId) : undefined;
+    const collectionPath = isTrip ? '/trips' : '/blog';
+    const collectionName = isTrip ? 'Trips' : 'Blog';
+    const postUrl = post ? absoluteUrl(`${collectionPath}/${post.slug}`) : undefined;
+    const postImage = tripManifest
+        ? absoluteUrl(tripManifest.hero.src)
+        : post ? absoluteUrl(`/og/blog/${post.slug}.svg`) : undefined;
 
     useDocumentHead({
         title: post ? `${post.title} | rsmb` : 'Post Not Found | rsmb',
@@ -37,7 +48,7 @@ export function BlogPost() {
         '@type': 'BreadcrumbList',
         itemListElement: [
             { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
-            { '@type': 'ListItem', position: 2, name: 'Blog', item: absoluteUrl('/blog') },
+            { '@type': 'ListItem', position: 2, name: collectionName, item: absoluteUrl(collectionPath) },
             { '@type': 'ListItem', position: 3, name: post.title, item: postUrl },
         ],
     } : null);
@@ -53,32 +64,56 @@ export function BlogPost() {
         );
     }
 
+    const canonicalCollection = isTrip ? 'trips' : 'blog';
+    if (collection !== canonicalCollection) {
+        return <Navigate to={`/${canonicalCollection}/${post.slug}`} replace />;
+    }
+
+    if (isTrip && !tripManifest) {
+        return (
+            <div>
+                <h1 className="mb-4 text-2xl font-bold text-zinc-100">Trip not configured</h1>
+                <p className="text-zinc-400">This story is missing its trip manifest.</p>
+            </div>
+        );
+    }
+
     const { Component } = post;
 
     return (
-        <article>
+        <article className={isTrip ? 'trip-story' : undefined}>
             <Link
-                to="/blog"
+                to={collectionPath}
                 className="text-sm text-zinc-400 hover:text-violet-400 mb-6 inline-block"
             >
-                ← Back to blog
+                ← Back to {collectionName.toLowerCase()}
             </Link>
 
-            <header className="mb-8">
-                <time className="text-sm text-zinc-400">{formatDate(post.date)}</time>
-                <h1 className="text-3xl font-bold text-zinc-100 mt-2">{post.title}</h1>
-                {post.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mt-3">
-                        {post.tags.map((tag) => (
-                            <BlogTagLink key={tag} tag={tag} />
-                        ))}
-                    </div>
-                )}
-            </header>
-
-            <Suspense fallback={<div className="text-sm text-zinc-400">Loading post...</div>}>
-                <Component components={mdxComponents} />
-            </Suspense>
+            {tripManifest ? (
+                <TripStoryProvider manifest={tripManifest}>
+                    <TripStoryHeader post={post} />
+                    <Suspense fallback={<div className="text-sm text-zinc-400">Loading story...</div>}>
+                        <Component components={mdxComponents} />
+                    </Suspense>
+                </TripStoryProvider>
+            ) : (
+                <>
+                    <header className="mb-8">
+                        <time className="text-sm text-zinc-400">{formatDate(post.date)}</time>
+                        <h1 className="text-3xl font-bold text-zinc-100 mt-2">{post.title}</h1>
+                        {post.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mt-3">
+                                {post.tags.map((tag) => (
+                                    <BlogTagLink key={tag} tag={tag} />
+                                ))}
+                            </div>
+                        )}
+                    </header>
+                    <Suspense fallback={<div className="text-sm text-zinc-400">Loading post...</div>}>
+                        <Component components={mdxComponents} />
+                    </Suspense>
+                </>
+            )}
         </article>
     );
 }

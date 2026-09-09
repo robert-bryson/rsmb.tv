@@ -149,6 +149,25 @@ u {
   font-weight: 600;
 }
 
+.trip-breakout {
+  width: min(72rem, calc(100vw - 2rem));
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+.trip-lightbox-caption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 2rem 1rem 1rem;
+  background: linear-gradient(transparent, rgb(9 9 11 / 90%));
+  color: #e4e4e7;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
 /* Keep the closed flights panel mounted for its exit animation, but do not
    expose its scrollbar. Use the app theme in Firefox and Chromium/WebKit. */
 .flights-stats-panel {

@@ -1,4 +1,7 @@
 import type { ComponentPropsWithoutRef } from 'react';
+import { TripFacts } from '../features/trips/components/TripFacts';
+import { TripPhoto } from '../features/trips/components/TripPhoto';
+import { TripGalleryBlock, TripMapBlock } from './TripMdxBlocks';
 
 function classNames(...classes: Array<string | undefined>) {
     return classes.filter(Boolean).join(' ');
@@ -9,6 +12,10 @@ function classNames(...classes: Array<string | undefined>) {
  * These map standard HTML elements to Tailwind-styled versions.
  */
 export const mdxComponents = {
+    TripFacts,
+    TripGallery: TripGalleryBlock,
+    TripPhoto,
+    TripMap: TripMapBlock,
     h1: (props: ComponentPropsWithoutRef<'h1'>) => (
         <h1 className="text-3xl font-bold text-zinc-100 mt-10 mb-4" {...props} />
     ),

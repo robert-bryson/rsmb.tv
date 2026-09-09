@@ -10,11 +10,14 @@ This file contains incomplete work. Git history contains the completed work.
 ## Content publishing
 
 - [ ] Publish more blog posts from the configured Google documents.
+- [ ] Add a prepublish check that validates trip shortcodes against each trip manifest.
+- [ ] Verify that each manifest asset URL is available before a trip is published.
 
 ## Test coverage
 
 - [ ] Add unit tests for the `ScrollToTop` component.
 - [ ] Add Playwright tests for Flights map keyboard controls and camera URL synchronization.
+- [ ] Add Playwright tests for trip map fallback behavior and gallery keyboard controls.
 
 ## Temperature record data
 

@@ -74,6 +74,16 @@ describe('buildRssXml', () => {
         expect(xml).toContain('&apos;there&apos;');
     });
 
+    it('uses the trips collection URL for trip stories', () => {
+        const xml = buildRssXml(
+            [{ slug: 'coastal-loop', title: 'Coastal Loop', description: 'A trip', date: '2026-04-08', format: 'trip' }],
+            'Wed, 08 Apr 2026 21:55:30 GMT',
+        );
+
+        expect(xml).toContain('<link>https://rsmb.tv/trips/coastal-loop</link>');
+        expect(xml).toContain('<guid>https://rsmb.tv/trips/coastal-loop</guid>');
+    });
+
     it('writes an rss file from repo metadata and returns the output summary', () => {
         const repoRoot = createTempDir();
         const postsPath = path.join(repoRoot, 'src/content/posts.json');
@@ -146,6 +156,15 @@ describe('buildSitemapXml', () => {
         expect(xml).toContain('<lastmod>2026-04-17</lastmod>');
         expect(xml).toContain('<loc>https://rsmb.tv/blog/building-through-routes</loc>');
         expect(xml).toContain('<lastmod>2026-04-08</lastmod>');
+    });
+
+    it('uses the trips collection URL for trip stories', () => {
+        const xml = buildSitemapXml(
+            [{ slug: 'coastal-loop', date: '2026-04-08', format: 'trip' }],
+            { routes: [], resolveRouteDate: vi.fn() },
+        );
+
+        expect(xml).toContain('<loc>https://rsmb.tv/trips/coastal-loop</loc>');
     });
 
     it('writes a sitemap file from route sources and returns the output summary', () => {

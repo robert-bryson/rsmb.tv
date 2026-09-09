@@ -39,6 +39,7 @@ export const DEFAULT_BLOG_SHEET_NAME = 'Blog Posts';
 const REQUIRED_HEADERS = ['title', 'date', 'description', 'tags', 'google_doc_id', 'published'];
 const TRUE_VALUES = new Set(['1', 'true', 'yes', 'y', 'published']);
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const TRIP_FORMAT = 'trip';
 const GOOGLE_DOCS_CODE_BLOCK_START = '\uec03';
 const GOOGLE_DOCS_CODE_BLOCK_END = '\uec02';
 const ESCAPED_CODE_FENCE_PATTERN = /^\\`\\`\\`(.*)$/gm;
@@ -316,6 +317,8 @@ export function normalizeBlogRecords(records, { today = new Date() } = {}) {
         const rawSlug = String(record.values.slug ?? '').trim();
         const slug = rawSlug || slugifyTitle(title);
         const docId = extractGoogleDocId(rawDocId);
+        const format = String(record.values.format ?? '').trim().toLowerCase();
+        const tripId = String(record.values.trip_id ?? '').trim();
         let date = '';
 
         if (rawDate) {
@@ -338,6 +341,14 @@ export function normalizeBlogRecords(records, { today = new Date() } = {}) {
         if (!docId) {
             errors.push(`Row ${record.rowNumber}: google_doc_id must be a Google Doc ID or document URL.`);
         }
+        if (format && format !== TRIP_FORMAT) {
+            errors.push(`Row ${record.rowNumber}: format must be blank or "trip".`);
+        }
+        if (format === TRIP_FORMAT && !tripId) {
+            errors.push(`Row ${record.rowNumber}: trip_id is required for trip posts.`);
+        } else if (tripId && !SLUG_PATTERN.test(tripId)) {
+            errors.push(`Row ${record.rowNumber}: trip_id "${tripId}" must be lowercase letters, numbers, and hyphens.`);
+        }
 
         entries.push({
             post: {
@@ -346,6 +357,7 @@ export function normalizeBlogRecords(records, { today = new Date() } = {}) {
                 date,
                 description,
                 tags: normalizeTags(record.values.tags),
+                ...(format === TRIP_FORMAT ? { format, tripId } : {}),
             },
             docId,
             rowNumber: record.rowNumber,
@@ -906,16 +918,35 @@ export function convertHtmlToMarkdown(html, { turndownService = createTurndownSe
     return markdown;
 }
 
+export function expandTripShortcodes(markdown, post) {
+    if (post.format !== TRIP_FORMAT) return markdown;
+
+    const expanded = markdown
+        .replace(/^\{\{trip-map(?::([a-z0-9]+(?:-[a-z0-9]+)*))?\}\}$/gm, (_match, stopId) => (
+            stopId ? `<TripMap stopId="${stopId}" />` : '<TripMap />'
+        ))
+        .replace(/^\{\{trip-photo:([a-z0-9]+(?:-[a-z0-9]+)*)\}\}$/gm, '<TripPhoto photoId="$1" />')
+        .replace(/^\{\{trip-gallery:([a-z0-9]+(?:-[a-z0-9]+)*)\}\}$/gm, '<TripGallery galleryId="$1" />')
+        .replace(/^\{\{trip-facts\}\}$/gm, '<TripFacts />');
+
+    const unsupported = expanded.match(/^\{\{trip-[^\n]+\}\}$/m);
+    if (unsupported) throw new Error(`Unsupported trip shortcode: ${unsupported[0]}`);
+    return expanded;
+}
+
 export function buildMdx(post, markdown) {
+    const body = expandTripShortcodes(markdown.trim(), post);
     return [
         '---',
         `title: ${JSON.stringify(post.title)}`,
         `date: ${JSON.stringify(post.date)}`,
         `description: ${JSON.stringify(post.description)}`,
         `tags: ${JSON.stringify(post.tags)}`,
+        ...(post.format ? [`format: ${JSON.stringify(post.format)}`] : []),
+        ...(post.tripId ? [`tripId: ${JSON.stringify(post.tripId)}`] : []),
         '---',
         '',
-        markdown.trim(),
+        body,
         '',
     ].join('\n');
 }
@@ -935,6 +966,31 @@ export function mergePostMetadata(existingPosts, syncedPosts, { replaceAll = fal
 function readExistingPosts(postsPath, fsImpl) {
     if (!fsImpl.existsSync(postsPath)) return [];
     return JSON.parse(fsImpl.readFileSync(postsPath, 'utf-8'));
+}
+
+export function validateTripManifestFiles(posts, { repoRoot = REPO_ROOT, fsImpl = fs } = {}) {
+    for (const post of posts) {
+        if (post.format !== TRIP_FORMAT) continue;
+        if (!post.tripId) throw new Error(`Trip post "${post.slug}" is missing trip_id.`);
+
+        const manifestPath = path.join(repoRoot, 'src/content/trips', `${post.tripId}.json`);
+        let manifest;
+        try {
+            manifest = JSON.parse(fsImpl.readFileSync(manifestPath, 'utf-8'));
+        } catch (error) {
+            if (error?.code === 'ENOENT') {
+                throw new Error(`Trip post "${post.slug}" requires manifest src/content/trips/${post.tripId}.json.`);
+            }
+            if (error instanceof SyntaxError) {
+                throw new Error(`Trip manifest "${post.tripId}" is not valid JSON: ${error.message}`);
+            }
+            throw new Error(`Could not read trip manifest "${post.tripId}": ${error.message}`);
+        }
+
+        if (manifest?.id !== post.tripId) {
+            throw new Error(`Trip manifest "${post.tripId}" must contain id "${post.tripId}".`);
+        }
+    }
 }
 
 function relativePortablePath(rootPath, filePath) {
@@ -1010,6 +1066,9 @@ export async function syncBlogPosts({
 
     const csv = await fetchSheetAsCsv(sheetId, sheetName, { fetchImpl });
     const { records, entries, skippedRows } = parseBlogSheetWithSummary(csv, { today });
+    const existingPosts = readExistingPosts(postsPath, fsImpl);
+    const posts = mergePostMetadata(existingPosts, entries.map((entry) => entry.post), { replaceAll });
+    validateTripManifestFiles(posts, { repoRoot, fsImpl });
     const mdxFiles = [];
 
     for (const entry of entries) {
@@ -1021,8 +1080,6 @@ export async function syncBlogPosts({
         });
     }
 
-    const existingPosts = readExistingPosts(postsPath, fsImpl);
-    const posts = mergePostMetadata(existingPosts, entries.map((entry) => entry.post), { replaceAll });
     const postsJson = `${JSON.stringify(posts, null, 4)}\n`;
     const changedFiles = [];
 

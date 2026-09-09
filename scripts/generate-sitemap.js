@@ -35,6 +35,7 @@ const STATIC_ROUTES = [
     { path: '/projects/route2gpx', priority: '0.7', changefreq: 'monthly', sources: ['src/pages/Route2Gpx.tsx'] },
     { path: '/projects/temperature-records/trends', priority: '0.6', changefreq: 'monthly', sources: ['src/pages/ClimateTrends.tsx', 'src/features/temperatures'] },
     { path: '/blog', priority: '0.7', changefreq: 'weekly', sources: ['src/pages/Blog.tsx', 'src/content/posts.json', 'src/content/blog'] },
+    { path: '/trips', priority: '0.7', changefreq: 'monthly', sources: ['src/pages/Trips.tsx', 'src/content/posts.json', 'src/content/trips'] },
 ];
 
 /**
@@ -74,7 +75,7 @@ export function buildSitemapXml(posts, {
 
     const postUrls = posts.map(
         (post) => `  <url>
-    <loc>${SITE_URL}/blog/${post.slug}</loc>
+    <loc>${SITE_URL}/${post.format === 'trip' ? 'trips' : 'blog'}/${post.slug}</loc>
     <lastmod>${post.date}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

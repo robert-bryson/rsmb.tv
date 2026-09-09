@@ -10,6 +10,7 @@ A personal website and portfolio showcasing interactive projects, with a focus o
 - **Temperature Records** — An interactive MapLibre GL map of U.S. temperature records. It shows recent station records, standing county and state extremes, and standing-record history.
 - **Project Portfolio** — Showcases various side projects including web tools and data visualizations.
 - **Blog** — Google-backed MDX posts with RSS, generated Open Graph images, structured data, and shareable tag filters.
+- **Trips** — Motorcycle trip stories with responsive photographs, route maps, and accessible galleries.
 - **About** — Background on my experience in geospatial engineering and software development.
 
 ## Tech Stack
@@ -67,6 +68,8 @@ npm run dev
 | `npm run sync-flights` | Sync flight data from Google Sheets (requires `GOOGLE_SHEET_ID`) |
 | `npm run sync-temperatures` | Generate temperature record JSON for upload to the S3-backed data CDN |
 | `npm run sync-tornadoes` | Sync NOAA/NCEI tornado tracks and generated public GeoJSON |
+| `npm run prepare-trip-assets -- <trip-id> --source <directory>` | Create trip image derivatives and sanitized route data |
+| `npm run publish-trip-assets -- <trip-id> --source <directory>` | Archive trip source files and upload reviewed trip assets |
 | `npm run test:e2e` | Build flight data, start Vite, and run Playwright browser smoke tests |
 | `npm run audit` | Run `npm audit --audit-level=moderate` |
 
@@ -164,6 +167,8 @@ Maintain a Google Sheet tab named `Blog Posts` by default, with one row per post
 | `tags` | Yes | Comma- or pipe-separated list. Empty is allowed. |
 | `google_doc_id` | Yes | Raw Doc ID or a `docs.google.com/document/d/...` URL. |
 | `published` | Yes | Syncs only rows set to `true`, `yes`, `y`, `1`, or `published`. |
+| `format` | No | Set to `trip` for a trip story; leave blank for a regular blog post. |
+| `trip_id` | For trips | Matches a manifest under `src/content/trips/`. |
 
 ### Build-Time Blog Sync
 
@@ -187,6 +192,19 @@ The sync uses public Google export endpoints, matching the existing flight sync 
 
 Google Docs exports are normalized before writing MDX. The sync preserves headings, lists, links, images, fenced code blocks, simple inline emphasis/highlights, and tables. Active or embedded HTML such as scripts, forms, iframes, objects, SVG, audio, and video is stripped, and links/media are limited to safe URL protocols before generated MDX is written.
 
+Trip posts may place these standalone shortcodes in the Google Doc:
+
+- `{{trip-map}}` or `{{trip-map:stop-id}}`
+- `{{trip-photo:photo-id}}`
+- `{{trip-gallery:gallery-id}}`
+- `{{trip-facts}}`
+
+Copy `src/content/trips/_template.json.draft` to `<trip-id>.json`, then populate its route, stops, photo metadata, and gallery groups. Image dimensions are required to prevent layout shift. The trip header already renders the hero and facts, so `{{trip-facts}}` is only needed when those facts should be repeated later in the story.
+
+Trip source media uses the private Drive hierarchy in the [trip authoring guide](docs/trips/TRIP-AUTHORING-README.md). Run `npm run prepare-trip-assets -- <trip-id> --source <local-trip-directory>` to create responsive WebP photographs, sanitized GeoJSON, and a manifest metadata report. Review all output. Then run `npm run publish-trip-assets` to back up originals to private S3 and publish processed derivatives to `data.rsmb.tv/trips/<trip-id>/`. The `build-blog` command does not prepare or upload assets.
+
+The blog sync checks each published trip before it downloads Google Doc content. The manifest file must exist, contain valid JSON, and have an `id` that matches `trip_id`. Vite then applies the complete trip manifest schema during the application build.
+
 ### Amplify Content Publishing
 
 Changing a Google Doc does not deploy the site by itself; it only changes the source that the next build will read. To publish without a code commit:
@@ -208,6 +226,7 @@ Coverage today:
 - `ProfilePage` + `Person` on `/about`
 - `CollectionPage` containing an `ItemList` of `SoftwareApplication` entries on `/projects`
 - `Blog` containing `BlogPosting` entries on `/blog`, plus per-post `BlogPosting` and `BreadcrumbList` on `/blog/:slug`
+- `CollectionPage` containing trip `BlogPosting` entries on `/trips`, plus canonical post metadata on `/trips/:slug`
 - `SoftwareApplication` on each project detail page
 - `WebPage` on full-screen app subroutes referencing the parent `SoftwareApplication` via `isPartOf`
 

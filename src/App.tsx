@@ -10,6 +10,7 @@ const Projects = lazy(() => import('./pages/Projects').then(m => ({ default: m.P
 const NotFound = lazy(() => import('./pages/NotFound').then(m => ({ default: m.NotFound })));
 const Blog = lazy(() => import('./pages/Blog').then(m => ({ default: m.Blog })));
 const BlogPost = lazy(() => import('./pages/BlogPost').then(m => ({ default: m.BlogPost })));
+const Trips = lazy(() => import('./pages/Trips').then(m => ({ default: m.Trips })));
 const ThroughRoutes = lazy(() => import('./pages/ThroughRoutes'));
 const FlightsAbout = lazy(() => import('./pages/FlightsAbout'));
 const Flights = lazy(() => import('./pages/Flights'));
@@ -57,7 +58,9 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/blog/:slug" element={<BlogPost collection="blog" />} />
+              <Route path="/trips" element={<Trips />} />
+              <Route path="/trips/:slug" element={<BlogPost collection="trips" />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/projects/through-routes" element={<ThroughRoutes />} />
               <Route path="/projects/flights" element={<FlightsAbout />} />

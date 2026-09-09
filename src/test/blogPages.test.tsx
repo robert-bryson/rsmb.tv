@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { screen, within } from '@testing-library/react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import { renderWithRouter } from './helpers/router';
 
 const testPosts = vi.hoisted(() => [
@@ -34,10 +34,22 @@ const testPosts = vi.hoisted(() => [
     },
 ]);
 
+const testTrips = vi.hoisted(() => [{
+    slug: 'coastal-loop',
+    title: 'Coastal Loop',
+    date: '2026-01-15',
+    description: 'A motorcycle trip along the coast.',
+    tags: ['Motorcycles', 'Travel'],
+    format: 'trip' as const,
+    tripId: 'coastal-loop',
+}]);
+
 vi.mock('../content/posts', () => ({
-    getAllPosts: () => testPosts,
+    getAllPosts: () => [...testPosts, ...testTrips],
+    getBlogPosts: () => testPosts,
+    getTripPosts: () => testTrips,
     getPostBySlug: (slug: string) => {
-        const post = testPosts.find((candidate) => candidate.slug === slug);
+        const post = [...testPosts, ...testTrips].find((candidate) => candidate.slug === slug);
 
         if (!post) {
             return undefined;
@@ -54,6 +66,11 @@ vi.mock('../blog/MdxComponents', () => ({
 import { Blog } from '../pages/Blog';
 import { BlogPost } from '../pages/BlogPost';
 import { Home } from '../pages/Home';
+import { Trips } from '../pages/Trips';
+
+function LocationProbe() {
+    return <output data-testid="location">{useLocation().pathname}</output>;
+}
 
 describe('Blog page tag navigation', () => {
     it('renders unique tag links in the filter navigation', () => {
@@ -81,11 +98,32 @@ describe('Blog page tag navigation', () => {
     });
 });
 
+describe('Trips page', () => {
+    it('lists trip stories separately from blog posts', () => {
+        renderWithRouter(<Trips />, { route: '/trips' });
+
+        expect(screen.getByRole('heading', { level: 1, name: 'Trips' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 2, name: 'Coastal Loop' })).toBeInTheDocument();
+        expect(screen.queryByRole('heading', { level: 2, name: 'Mapping Boring Data' })).not.toBeInTheDocument();
+        expect(screen.getByRole('link', { name: /Coastal Loop/i })).toHaveAttribute('href', '/trips/coastal-loop');
+    });
+
+    it('uses collection-local tag links', () => {
+        renderWithRouter(<Trips />, { route: '/trips?tag=Motorcycles' });
+
+        const navigation = screen.getByRole('navigation', { name: 'Trip tags' });
+        expect(within(navigation).getByRole('link', { name: 'Motorcycles' })).toHaveAttribute(
+            'href',
+            '/trips?tag=Motorcycles',
+        );
+    });
+});
+
 describe('BlogPost tag navigation', () => {
     it('links post tags back to the filtered blog index', () => {
         renderWithRouter(
             <Routes>
-                <Route path="/blog/:slug" element={<BlogPost />} />
+                <Route path="/blog/:slug" element={<BlogPost collection="blog" />} />
             </Routes>,
             { route: '/blog/mapping-boring-data' },
         );
@@ -93,6 +131,24 @@ describe('BlogPost tag navigation', () => {
         const tagUrl = new URL(screen.getByRole('link', { name: 'Data Viz' }).getAttribute('href')!, 'https://rsmb.tv');
         expect(tagUrl.pathname).toBe('/blog');
         expect(tagUrl.searchParams.get('tag')).toBe('Data Viz');
+    });
+
+    it.each([
+        ['/blog/coastal-loop', '/trips/coastal-loop'],
+        ['/trips/mapping-boring-data', '/blog/mapping-boring-data'],
+    ])('redirects %s to %s', (route, canonicalPath) => {
+        renderWithRouter(
+            <>
+                <LocationProbe />
+                <Routes>
+                    <Route path="/blog/:slug" element={<BlogPost collection="blog" />} />
+                    <Route path="/trips/:slug" element={<BlogPost collection="trips" />} />
+                </Routes>
+            </>,
+            { route },
+        );
+
+        expect(screen.getByTestId('location')).toHaveTextContent(canonicalPath);
     });
 });
 

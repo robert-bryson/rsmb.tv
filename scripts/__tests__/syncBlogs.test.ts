@@ -9,11 +9,13 @@ import {
     buildSheetCsvUrl,
     convertHtmlToMarkdown,
     envFlag,
+    expandTripShortcodes,
     loadLocalEnvFiles,
     mergePostMetadata,
     parseBlogSheet,
     parseBlogSheetWithSummary,
     syncBlogPosts,
+    validateTripManifestFiles,
     writeGithubOutput,
 } from '../sync-blogs.js';
 
@@ -76,6 +78,21 @@ describe('parseBlogSheet', () => {
             description: 'A short, useful summary',
             tags: ['projects', 'google'],
         });
+    });
+
+    it('normalizes optional trip metadata and requires a trip ID', () => {
+        const csv = [
+            'slug,title,date,description,tags,google_doc_id,published,format,trip_id',
+            'coastal-loop,Coastal Loop,2026-04-30,A motorcycle trip,"travel, motorcycles",doc_123,true,trip,coastal-loop',
+        ].join('\n');
+
+        expect(parseBlogSheet(csv, { today })[0].post).toMatchObject({
+            format: 'trip',
+            tripId: 'coastal-loop',
+        });
+
+        expect(() => parseBlogSheet(csv.replace(/,coastal-loop$/, ','), { today }))
+            .toThrow(/trip_id is required/);
     });
 
     it('reports duplicate slugs before any files are written', () => {
@@ -373,6 +390,27 @@ describe('Google export helpers', () => {
         expect(mdx).toContain('tags: ["projects","google"]');
         expect(mdx).toContain('\n# Body\n');
     });
+
+    it('expands the supported trip shortcodes into MDX components', () => {
+        const markdown = [
+            '{{trip-map}}',
+            '{{trip-map:day-two}}',
+            '{{trip-photo:camp-at-dusk}}',
+            '{{trip-gallery:highlights}}',
+        ].join('\n\n');
+
+        expect(expandTripShortcodes(markdown, { format: 'trip' })).toBe([
+            '<TripMap />',
+            '<TripMap stopId="day-two" />',
+            '<TripPhoto photoId="camp-at-dusk" />',
+            '<TripGallery galleryId="highlights" />',
+        ].join('\n\n'));
+    });
+
+    it('rejects unknown trip shortcodes', () => {
+        expect(() => expandTripShortcodes('{{trip-carousel:all}}', { format: 'trip' }))
+            .toThrow(/Unsupported trip shortcode/);
+    });
 });
 
 describe('local env loading', () => {
@@ -432,6 +470,34 @@ describe('envFlag', () => {
 });
 
 describe('syncBlogPosts', () => {
+    it('rejects trip posts without a matching readable manifest', () => {
+        const repoRoot = createTempDir();
+        const post = {
+            slug: 'coastal-loop',
+            format: 'trip',
+            tripId: 'coastal-loop',
+        };
+
+        expect(() => validateTripManifestFiles([post], { repoRoot })).toThrow(/requires manifest/);
+
+        const manifestDir = path.join(repoRoot, 'src/content/trips');
+        fs.mkdirSync(manifestDir, { recursive: true });
+        fs.writeFileSync(path.join(manifestDir, 'coastal-loop.json'), '{bad json');
+        expect(() => validateTripManifestFiles([post], { repoRoot })).toThrow(/not valid JSON/);
+
+        const readError = Object.assign(new Error('permission denied'), { code: 'EACCES' });
+        expect(() => validateTripManifestFiles([post], {
+            repoRoot,
+            fsImpl: { readFileSync: vi.fn(() => { throw readError; }) },
+        })).toThrow(/Could not read trip manifest.*permission denied/);
+
+        fs.writeFileSync(path.join(manifestDir, 'coastal-loop.json'), JSON.stringify({ id: 'wrong-trip' }));
+        expect(() => validateTripManifestFiles([post], { repoRoot })).toThrow(/must contain id "coastal-loop"/);
+
+        fs.writeFileSync(path.join(manifestDir, 'coastal-loop.json'), JSON.stringify({ id: 'coastal-loop' }));
+        expect(() => validateTripManifestFiles([post], { repoRoot })).not.toThrow();
+    });
+
     it('defaults to Sheet-authoritative posts.json and MDX generation', async () => {
         const repoRoot = createTempDir();
         const postsPath = path.join(repoRoot, 'src/content/posts.json');

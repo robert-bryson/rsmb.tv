@@ -8,12 +8,16 @@
 
 import { lazy, type ComponentType, type LazyExoticComponent } from 'react';
 
+export type BlogPostFormat = 'post' | 'trip';
+
 export interface BlogPostMeta {
     slug: string;
     title: string;
     date: string;
     description: string;
     tags: string[];
+    format?: BlogPostFormat;
+    tripId?: string;
 }
 
 export interface MdxComponentProps {
@@ -66,7 +70,23 @@ const posts: BlogPost[] = postsMeta.map((meta) => {
 posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 export function getAllPosts(): BlogPostMeta[] {
-    return posts.map(({ slug, title, date, description, tags }) => ({ slug, title, date, description, tags }));
+    return posts.map(({ slug, title, date, description, tags, format, tripId }) => ({
+        slug,
+        title,
+        date,
+        description,
+        tags,
+        ...(format ? { format } : {}),
+        ...(tripId ? { tripId } : {}),
+    }));
+}
+
+export function getBlogPosts(): BlogPostMeta[] {
+    return getAllPosts().filter((post) => post.format !== 'trip');
+}
+
+export function getTripPosts(): BlogPostMeta[] {
+    return getAllPosts().filter((post) => post.format === 'trip');
 }
 
 export function getPostBySlug(slug: string): BlogPost | undefined {

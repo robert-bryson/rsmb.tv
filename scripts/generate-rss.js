@@ -22,7 +22,11 @@ const OUTPUT_PATH = path.join(REPO_ROOT, 'public/rss.xml');
 const FEED_SOURCES = ['src/content/posts.json', 'src/content/blog'];
 const SITE_URL = 'https://rsmb.tv';
 const SITE_TITLE = 'rsmb';
-const SITE_DESCRIPTION = 'Personal site and blog by Robert Bryson — projects, engineering, and things I find interesting.';
+const SITE_DESCRIPTION = 'Writing and trip stories by Robert Bryson — projects, engineering, maps, and things I find interesting.';
+
+function postUrl(post) {
+    return `${SITE_URL}/${post.format === 'trip' ? 'trips' : 'blog'}/${post.slug}`;
+}
 
 /**
  * Load post metadata from the shared JSON registry.
@@ -62,8 +66,8 @@ export function buildRssXml(posts, buildDate = resolveFeedBuildDate(posts)) {
         .map(
             (post) => `    <item>
       <title>${escapeXml(post.title)}</title>
-      <link>${SITE_URL}/blog/${post.slug}</link>
-      <guid>${SITE_URL}/blog/${post.slug}</guid>
+    <link>${postUrl(post)}</link>
+    <guid>${postUrl(post)}</guid>
       <description>${escapeXml(post.description)}</description>
       <pubDate>${new Date(post.date + 'T00:00:00Z').toUTCString()}</pubDate>
     </item>`

@@ -3,14 +3,14 @@ import { BlogAllTagsLink, BlogTagLink } from '../components/BlogTagLink';
 import { filterPostsByTag, getAllBlogTags } from '../content/blogTags';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
-import { getAllPosts } from '../content/posts';
+import { getBlogPosts } from '../content/posts';
 import { formatDate } from '../utils/formatDate';
 import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
 
 const description = 'Thoughts on projects, engineering, and things I find interesting.';
 
 export function Blog() {
-    const allPosts = getAllPosts();
+    const allPosts = getBlogPosts();
     const [searchParams] = useSearchParams();
     const activeTag = searchParams.get('tag')?.trim() ?? '';
     const allTags = getAllBlogTags(allPosts);

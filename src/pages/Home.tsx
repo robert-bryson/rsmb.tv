@@ -111,7 +111,7 @@ export function Home() {
           <ul className="space-y-5">
             {recentPosts.map((post) => (
               <li key={post.slug}>
-                <Link to={`/blog/${post.slug}`} className="group block">
+                <Link to={`/${post.format === 'trip' ? 'trips' : 'blog'}/${post.slug}`} className="group block">
                   <div className="flex items-baseline gap-3">
                     <time className="text-sm text-zinc-500 shrink-0">{formatDate(post.date)}</time>
                     <span className="min-w-0 break-words text-zinc-100 group-hover:text-violet-400 font-medium leading-snug">

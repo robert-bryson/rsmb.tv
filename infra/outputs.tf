@@ -39,3 +39,7 @@ output "temperature_data_cdn_domain" {
 output "temperature_data_cloudfront_id" {
   value = aws_cloudfront_distribution.temperature_data.id
 }
+
+output "trip_sources_bucket" {
+  value = aws_s3_bucket.trip_sources.bucket
+}

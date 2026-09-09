@@ -10,12 +10,13 @@ interface BlogTagLinkProps {
     tag: string;
     active?: boolean;
     children?: ReactNode;
+    to?: '/blog' | '/trips';
 }
 
-export function BlogTagLink({ tag, active = false, children = tag }: BlogTagLinkProps) {
+export function BlogTagLink({ tag, active = false, children = tag, to = '/blog' }: BlogTagLinkProps) {
     return (
         <Link
-            to={{ pathname: '/blog', search: createBlogTagSearch(tag) }}
+            to={{ pathname: to, search: createBlogTagSearch(tag) }}
             aria-current={active ? 'page' : undefined}
             className={`${baseClasses} ${active ? activeClasses : inactiveClasses}`}
         >
@@ -24,10 +25,10 @@ export function BlogTagLink({ tag, active = false, children = tag }: BlogTagLink
     );
 }
 
-export function BlogAllTagsLink({ active = false }: { active?: boolean }) {
+export function BlogAllTagsLink({ active = false, to = '/blog' }: { active?: boolean; to?: '/blog' | '/trips' }) {
     return (
         <Link
-            to="/blog"
+            to={to}
             aria-current={active ? 'page' : undefined}
             className={`${baseClasses} ${active ? activeClasses : inactiveClasses}`}
         >

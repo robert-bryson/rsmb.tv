@@ -58,3 +58,12 @@ describe('amplify.yml', () => {
         expect(config).toContain('- .npm/**/*');
     });
 });
+
+describe('Amplify response headers', () => {
+    it('allows trip images and route requests from the data CDN', () => {
+        const config = readRepoFile('infra/main.tf');
+
+        expect(config).toContain("img-src 'self' data: blob: https://data.rsmb.tv");
+        expect(config).toContain("connect-src 'self' https://data.rcc-acis.org https://data.rsmb.tv");
+    });
+});

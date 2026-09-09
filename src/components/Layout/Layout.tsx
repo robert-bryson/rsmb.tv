@@ -8,6 +8,7 @@ interface LayoutProps {
 
 const navLinks = [
   { to: '/blog', label: 'Blog' },
+  { to: '/trips', label: 'Trips' },
   { to: '/projects', label: 'Projects' },
   { to: '/about', label: 'About' },
 ];

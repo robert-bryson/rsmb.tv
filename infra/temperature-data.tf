@@ -1,7 +1,6 @@
-# S3 bucket for temperature observation data
-# Stores generated temperature record JSON, daily observation archives,
-# station index, and ACIS response cache entries that are too large or too
-# frequently updated to commit to the repo.
+# S3 bucket for public data and processed media served through data.rsmb.tv.
+# Stores generated temperature/tornado data and publishable trip derivatives
+# that are too large or too frequently updated to commit to the repo.
 #
 # Structure:
 #   recentRecords.json      — recent broken-record summary for the map
@@ -144,6 +143,29 @@ resource "aws_cloudfront_distribution" "temperature_data" {
     min_ttl     = 86400
     default_ttl = 604800   # 7 days
     max_ttl     = 31536000 # 1 year
+  }
+
+  # Processed trip photographs use versioned filenames and are immutable.
+  ordered_cache_behavior {
+    path_pattern           = "trips/*/photos/*"
+    target_origin_id       = "s3-temperature-data"
+    viewer_protocol_policy = "redirect-to-https"
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
+    compress               = true
+
+    forwarded_values {
+      query_string = false
+      headers      = ["Origin"]
+
+      cookies {
+        forward = "none"
+      }
+    }
+
+    min_ttl     = 86400
+    default_ttl = 31536000
+    max_ttl     = 31536000
   }
 
   viewer_certificate {

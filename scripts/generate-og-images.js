@@ -19,6 +19,7 @@ export const DEFAULT_PAGES = [
     { slug: 'home', title: 'rsmb', subtitle: 'Interactive data visualizations, geospatial projects, and web tools' },
     { slug: 'about', title: 'About', subtitle: 'Robby Bryson — software developer and geospatial engineer' },
     { slug: 'blog', title: 'Blog', subtitle: 'Thoughts on projects, engineering, and things I find interesting' },
+    { slug: 'trips', title: 'Trips', subtitle: 'Motorcycle journeys told through photographs, routes, and field notes' },
     { slug: 'projects', title: 'Projects', subtitle: 'Interactive data visualizations, geospatial tools, and more' },
     { slug: 'through-routes', title: 'Through Routes', subtitle: 'Find scenic, twisty motorcycle loop routes on rural roads' },
     { slug: 'flights', title: 'Flights', subtitle: 'Interactive 3D globe visualization of flights around the world' },
