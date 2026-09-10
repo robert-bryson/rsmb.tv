@@ -242,6 +242,12 @@ The site is deployed on AWS Amplify with infrastructure managed via Terraform. T
 
 > **Note:** Terraform state and variable files containing sensitive data are gitignored and not included in this repository.
 
+## Analytics
+
+The production site loads Umami Cloud analytics only on `www.rsmb.tv`. The tracker does not load on local or development hosts. It excludes URL query strings and obeys the browser Do Not Track setting.
+
+The content security policy in `infra/main.tf` permits the Umami script and collection endpoint. Apply the Terraform configuration before you enable or change the tracker. Use `terraform -chdir=infra plan` to review the infrastructure change, then use `terraform -chdir=infra apply` to deploy it.
+
 ## Data
 
 Project data is handled differently depending on how it is authored and updated:
