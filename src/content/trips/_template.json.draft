@@ -10,7 +10,14 @@
     "route": {
         "geoJson": "https://data.rsmb.tv/trips/trip-slug/geo/route.geojson",
         "staticImage": "https://data.rsmb.tv/trips/trip-slug/geo/route-fallback.webp",
-        "alt": "Map of the trip route from the starting point to the destination."
+        "alt": "Map of the trip route from the starting point to the destination.",
+        "tracks": [
+            {
+                "id": "2026-05-19-day-one",
+                "name": "Day one",
+                "date": "2026-05-19"
+            }
+        ]
     },
     "stops": [
         {

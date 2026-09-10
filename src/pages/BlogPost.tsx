@@ -1,13 +1,14 @@
 import { Suspense } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { BlogTagLink } from '../components/BlogTagLink';
+import { DevelopmentContentStatus } from '../components/DevelopmentContentStatus';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { getPostBySlug } from '../content/posts';
 import { mdxComponents } from '../blog/MdxComponents';
 import { formatDate } from '../utils/formatDate';
 import { AUTHOR_PERSON, SITE_URL, absoluteUrl } from '../utils/siteMetadata';
-import { getTripHero, getTripManifest, TripStoryHeader, TripStoryProvider } from '../features/trips';
+import { getTripHero, getTripManifest, getTripManifestIssue, TripStoryHeader, TripStoryProvider } from '../features/trips';
 
 interface BlogPostProps {
     collection: 'blog' | 'trips';
@@ -18,6 +19,7 @@ export function BlogPost({ collection }: BlogPostProps) {
     const post = slug ? getPostBySlug(slug) : undefined;
     const isTrip = post?.format === 'trip';
     const tripManifest = isTrip ? getTripManifest(post.tripId) : undefined;
+    const tripManifestIssue = isTrip ? getTripManifestIssue(post.tripId) : undefined;
     const collectionPath = isTrip ? '/trips' : '/blog';
     const collectionName = isTrip ? 'Trips' : 'Blog';
     const postUrl = post ? absoluteUrl(`${collectionPath}/${post.slug}`) : undefined;
@@ -72,8 +74,14 @@ export function BlogPost({ collection }: BlogPostProps) {
     if (isTrip && !tripManifest) {
         return (
             <div>
+                <Link to="/trips" className="mb-6 inline-block text-sm text-zinc-400 hover:text-violet-400">
+                    ← Back to trips
+                </Link>
+                <DevelopmentContentStatus post={post} />
                 <h1 className="mb-4 text-2xl font-bold text-zinc-100">Trip not configured</h1>
-                <p className="text-zinc-400">This story is missing its trip manifest.</p>
+                <p className="text-zinc-400">
+                    {tripManifestIssue ?? 'This story is missing its trip manifest.'}
+                </p>
             </div>
         );
     }
@@ -89,12 +97,18 @@ export function BlogPost({ collection }: BlogPostProps) {
                 ← Back to {collectionName.toLowerCase()}
             </Link>
 
+            <DevelopmentContentStatus post={post} />
+
             {tripManifest ? (
                 <TripStoryProvider manifest={tripManifest}>
                     <TripStoryHeader post={post} />
-                    <Suspense fallback={<div className="text-sm text-zinc-400">Loading story...</div>}>
-                        <Component components={mdxComponents} />
-                    </Suspense>
+                    {post.development && !post.development.contentAvailable ? (
+                        <p className="text-zinc-400">The draft story body is not available yet.</p>
+                    ) : (
+                        <Suspense fallback={<div className="text-sm text-zinc-400">Loading story...</div>}>
+                            <Component components={mdxComponents} />
+                        </Suspense>
+                    )}
                 </TripStoryProvider>
             ) : (
                 <>
@@ -109,9 +123,13 @@ export function BlogPost({ collection }: BlogPostProps) {
                             </div>
                         )}
                     </header>
-                    <Suspense fallback={<div className="text-sm text-zinc-400">Loading post...</div>}>
-                        <Component components={mdxComponents} />
-                    </Suspense>
+                    {post.development && !post.development.contentAvailable ? (
+                        <p className="text-zinc-400">The draft post body is not available yet.</p>
+                    ) : (
+                        <Suspense fallback={<div className="text-sm text-zinc-400">Loading post...</div>}>
+                            <Component components={mdxComponents} />
+                        </Suspense>
+                    )}
                 </>
             )}
         </article>

@@ -1,5 +1,6 @@
 import { Link, useSearchParams } from 'react-router-dom';
 import { BlogAllTagsLink, BlogTagLink } from '../components/BlogTagLink';
+import { DevelopmentContentStatus } from '../components/DevelopmentContentStatus';
 import { filterPostsByTag, getAllBlogTags } from '../content/blogTags';
 import { getTripPosts } from '../content/posts';
 import { getTripHero, getTripManifest } from '../features/trips';
@@ -8,7 +9,7 @@ import { useJsonLd } from '../hooks/useJsonLd';
 import { formatDate } from '../utils/formatDate';
 import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
 
-const description = 'Motorcycle journeys told through photographs, routes, and field notes.';
+const description = 'Journeys told through photographs, routes, and field notes.';
 
 export function Trips() {
     const allTrips = getTripPosts();
@@ -75,6 +76,7 @@ export function Trips() {
                         const hero = manifest ? getTripHero(manifest) : undefined;
                         return (
                             <li key={trip.slug}>
+                                <DevelopmentContentStatus post={trip} compact />
                                 <Link to={`/trips/${trip.slug}`} className="group block">
                                     {hero && (
                                         <img

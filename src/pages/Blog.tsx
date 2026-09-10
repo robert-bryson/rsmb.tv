@@ -1,5 +1,6 @@
 import { Link, useSearchParams } from 'react-router-dom';
 import { BlogAllTagsLink, BlogTagLink } from '../components/BlogTagLink';
+import { DevelopmentContentStatus } from '../components/DevelopmentContentStatus';
 import { filterPostsByTag, getAllBlogTags } from '../content/blogTags';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
@@ -69,6 +70,7 @@ export function Blog() {
                 <ul className="space-y-6">
                     {posts.map((post) => (
                         <li key={post.slug}>
+                            <DevelopmentContentStatus post={post} compact />
                             <Link
                                 to={`/blog/${post.slug}`}
                                 className="group block"

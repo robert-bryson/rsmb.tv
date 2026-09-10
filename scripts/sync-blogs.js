@@ -302,25 +302,41 @@ function requireField(record, field, errors) {
     return value;
 }
 
-export function normalizeBlogRecords(records, { today = new Date(), previewSlug } = {}) {
+export function normalizeBlogRecords(records, { today = new Date(), previewSlug, includeUnpublished = false } = {}) {
     const entries = [];
     const errors = [];
     const seenSlugs = new Map();
 
     for (const record of records) {
         const recordSlug = String(record.values.slug ?? '').trim() || slugifyTitle(record.values.title);
-        const isPreview = !isPublished(record.values.published) && recordSlug === previewSlug;
-        if (!isPublished(record.values.published) && !isPreview) continue;
+        const published = isPublished(record.values.published);
+        const isPreview = !published && recordSlug === previewSlug;
+        const isDevelopmentDraft = !published && includeUnpublished;
+        if (!published && !isPreview && !isDevelopmentDraft) continue;
 
-        const title = requireField(record, 'title', errors);
-        const description = requireField(record, 'description', errors);
+        const developmentIssues = [];
+        const requireDevelopmentField = (field, fallback) => {
+            const value = String(record.values[field] ?? '').trim();
+            if (value) return value;
+            if (isDevelopmentDraft) {
+                developmentIssues.push(`${field} is missing`);
+                return fallback;
+            }
+            return requireField(record, field, errors);
+        };
+
+        const title = requireDevelopmentField('title', `Untitled draft (row ${record.rowNumber})`);
+        const description = requireDevelopmentField('description', 'Draft description is not available.');
         const rawDate = String(record.values.date ?? '').trim();
-        if (!rawDate && !isPreview) errors.push(`Row ${record.rowNumber}: date is required.`);
-        const rawDocId = requireField(record, 'google_doc_id', errors);
+        if (!rawDate && !isPreview && !isDevelopmentDraft) errors.push(`Row ${record.rowNumber}: date is required.`);
+        if (!rawDate && isDevelopmentDraft) developmentIssues.push('date is missing');
+        const rawDocId = requireDevelopmentField('google_doc_id', '');
         const rawSlug = String(record.values.slug ?? '').trim();
-        const slug = rawSlug || slugifyTitle(title);
+        const slug = rawSlug || slugifyTitle(title) || `draft-row-${record.rowNumber}`;
         const docId = extractGoogleDocId(rawDocId);
-        const format = String(record.values.format ?? '').trim().toLowerCase();
+        const driveFolderUrl = String(record.values.drive_folder_url ?? '').trim();
+        const rawFormat = String(record.values.format ?? '').trim().toLowerCase();
+        const format = rawFormat === 'blog' ? '' : rawFormat;
         const tripId = String(record.values.trip_id ?? '').trim();
         let date = '';
 
@@ -330,7 +346,7 @@ export function normalizeBlogRecords(records, { today = new Date(), previewSlug 
             } catch (error) {
                 errors.push(`Row ${record.rowNumber}: ${error.message}`);
             }
-        } else if (isPreview) {
+        } else if (isPreview || isDevelopmentDraft) {
             date = formatIsoDate(today.getUTCFullYear(), today.getUTCMonth() + 1, today.getUTCDate());
         }
 
@@ -343,14 +359,16 @@ export function normalizeBlogRecords(records, { today = new Date(), previewSlug 
             seenSlugs.set(slug, record.rowNumber);
         }
 
-        if (!docId) {
+        if (!docId && !isDevelopmentDraft) {
             errors.push(`Row ${record.rowNumber}: google_doc_id must be a Google Doc ID or document URL.`);
         }
         if (format && format !== TRIP_FORMAT) {
-            errors.push(`Row ${record.rowNumber}: format must be blank or "trip".`);
+            errors.push(`Row ${record.rowNumber}: format must be blank, "blog", or "trip".`);
         }
-        if (format === TRIP_FORMAT && !tripId) {
+        if (format === TRIP_FORMAT && !tripId && !isDevelopmentDraft) {
             errors.push(`Row ${record.rowNumber}: trip_id is required for trip posts.`);
+        } else if (format === TRIP_FORMAT && !tripId) {
+            developmentIssues.push('trip_id is missing');
         } else if (tripId && !SLUG_PATTERN.test(tripId)) {
             errors.push(`Row ${record.rowNumber}: trip_id "${tripId}" must be lowercase letters, numbers, and hyphens.`);
         }
@@ -363,6 +381,18 @@ export function normalizeBlogRecords(records, { today = new Date(), previewSlug 
                 description,
                 tags: normalizeTags(record.values.tags),
                 ...(format === TRIP_FORMAT ? { format, tripId } : {}),
+                ...(includeUnpublished ? {
+                    development: {
+                        published,
+                        rowNumber: record.rowNumber,
+                        issues: developmentIssues,
+                        contentAvailable: Boolean(docId),
+                        documentUrl: docId ? `https://docs.google.com/document/d/${docId}/edit` : undefined,
+                        driveFolderUrl: /^https:\/\/drive\.google\.com\/(?:drive\/folders|open\?id=)/.test(driveFolderUrl)
+                            ? driveFolderUrl
+                            : undefined,
+                    },
+                } : {}),
             },
             docId,
             rowNumber: record.rowNumber,
@@ -928,6 +958,7 @@ export function expandTripShortcodes(markdown, post, manifest) {
     if (post.format !== TRIP_FORMAT) return markdown;
 
     const stopIds = new Set(manifest?.stops?.map((stop) => stop.id) ?? []);
+    const trackIds = new Set(manifest?.route?.tracks?.map((track) => track.id) ?? []);
     const photoIds = new Set(manifest?.photos?.map((photo) => photo.id) ?? []);
     const galleryIds = new Set(Object.keys(manifest?.galleries ?? {}));
     const assertReference = (kind, id, validIds) => {
@@ -938,6 +969,9 @@ export function expandTripShortcodes(markdown, post, manifest) {
     };
 
     const expanded = markdown
+        .replace(/^\{\{trip-map:track:([a-z0-9]+(?:-[a-z0-9]+)*)\}\}$/gm, (_match, trackId) => (
+            `<TripMap trackId="${assertReference('track', trackId, trackIds)}" />`
+        ))
         .replace(/^\{\{trip-map(?::([a-z0-9]+(?:-[a-z0-9]+)*))?\}\}$/gm, (_match, stopId) => (
             stopId ? `<TripMap stopId="${assertReference('stop', stopId, stopIds)}" />` : '<TripMap />'
         ))
@@ -986,6 +1020,16 @@ export function mergePostMetadata(existingPosts, syncedPosts, { replaceAll = fal
 function readExistingPosts(postsPath, fsImpl) {
     if (!fsImpl.existsSync(postsPath)) return [];
     return JSON.parse(fsImpl.readFileSync(postsPath, 'utf-8'));
+}
+
+function countFiles(directory, extension, fsImpl) {
+    try {
+        return fsImpl.readdirSync(directory, { withFileTypes: true })
+            .filter((entry) => entry.isFile() && entry.name.toLowerCase().endsWith(extension))
+            .length;
+    } catch {
+        return 0;
+    }
 }
 
 export function validateTripManifestFiles(posts, { repoRoot = REPO_ROOT, fsImpl = fs } = {}) {
@@ -1083,6 +1127,7 @@ export async function syncBlogPosts({
     blogDir = path.join(repoRoot, 'src/content/blog'),
     replaceAll = envFlag(process.env.GOOGLE_BLOG_REPLACE_ALL, true),
     previewSlug,
+    includeUnpublished = false,
     today = new Date(),
     fetchImpl = fetch,
     fsImpl = fs,
@@ -1092,35 +1137,78 @@ export async function syncBlogPosts({
     }
 
     const csv = await fetchSheetAsCsv(sheetId, sheetName, { fetchImpl });
-    const { records, entries, skippedRows } = parseBlogSheetWithSummary(csv, { today, previewSlug });
+    const { records, entries, skippedRows } = parseBlogSheetWithSummary(csv, {
+        today,
+        previewSlug,
+        includeUnpublished,
+    });
     const existingPosts = readExistingPosts(postsPath, fsImpl);
-    const posts = mergePostMetadata(existingPosts, entries.map((entry) => entry.post), { replaceAll });
-    const tripManifests = validateTripManifestFiles(posts, { repoRoot, fsImpl });
+    const tripManifests = new Map();
+    if (includeUnpublished) {
+        for (const entry of entries) {
+            if (entry.post.format !== TRIP_FORMAT) continue;
+            try {
+                const manifest = validateTripManifestFiles([entry.post], { repoRoot, fsImpl });
+                tripManifests.set(entry.post.tripId, manifest.get(entry.post.tripId));
+                entry.post.development.manifestAvailable = true;
+            } catch (error) {
+                entry.post.development.manifestAvailable = false;
+                entry.post.development.issues.push(error.message);
+            }
+            const tripAssetsPath = path.join(repoRoot, 'public', 'data', 'trips', entry.post.tripId);
+            entry.post.development.assets = {
+                webpFiles: countFiles(path.join(tripAssetsPath, 'photos'), '.webp', fsImpl),
+                geoJsonFiles: countFiles(path.join(tripAssetsPath, 'geo'), '.geojson', fsImpl),
+            };
+        }
+    } else {
+        for (const [tripId, manifest] of validateTripManifestFiles(
+            entries.map((entry) => entry.post),
+            { repoRoot, fsImpl },
+        )) {
+            tripManifests.set(tripId, manifest);
+        }
+    }
     const mdxFiles = [];
 
     for (const entry of entries) {
-        const html = await fetchGoogleDocHtml(entry.docId, { fetchImpl });
-        const markdown = convertHtmlToMarkdown(html);
-        mdxFiles.push({
-            path: path.join(blogDir, `${entry.post.slug}.mdx`),
-            content: buildMdx(entry.post, markdown, tripManifests.get(entry.post.tripId)),
-        });
+        if (includeUnpublished) {
+            entry.post.development.sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit`;
+        }
+        if (!entry.docId) continue;
+        try {
+            const html = await fetchGoogleDocHtml(entry.docId, { fetchImpl });
+            const markdown = convertHtmlToMarkdown(html);
+            mdxFiles.push({
+                path: path.join(blogDir, `${entry.post.slug}.mdx`),
+                content: buildMdx(entry.post, markdown, tripManifests.get(entry.post.tripId)),
+            });
+            if (includeUnpublished) entry.post.development.contentAvailable = true;
+        } catch (error) {
+            if (!includeUnpublished) throw error;
+            entry.post.development.contentAvailable = false;
+            const message = error.message.replace(`Google Doc ${entry.docId}`, 'Google Doc');
+            entry.post.development.issues.push(`Content unavailable: ${message}`);
+        }
     }
 
+    const posts = mergePostMetadata(existingPosts, entries.map((entry) => entry.post), { replaceAll });
     const postsJson = `${JSON.stringify(posts, null, 4)}\n`;
     const changedFiles = [];
+    const changedMdxFiles = [];
+
+    for (const mdxFile of mdxFiles) {
+        if (writeIfChanged(mdxFile.path, mdxFile.content, { fsImpl })) changedMdxFiles.push(mdxFile.path);
+    }
+    if (writeIfChanged(postsPath, postsJson, { fsImpl })) changedFiles.push(postsPath);
+    changedFiles.push(...changedMdxFiles);
 
     if (replaceAll) {
         changedFiles.push(...removeStaleGeneratedBlogFiles(
             blogDir,
-            entries.map((entry) => entry.post.slug),
-            { fsImpl }
+            mdxFiles.map((mdxFile) => path.basename(mdxFile.path, '.mdx')),
+            { fsImpl },
         ));
-    }
-
-    if (writeIfChanged(postsPath, postsJson, { fsImpl })) changedFiles.push(postsPath);
-    for (const mdxFile of mdxFiles) {
-        if (writeIfChanged(mdxFile.path, mdxFile.content, { fsImpl })) changedFiles.push(mdxFile.path);
     }
 
     return {

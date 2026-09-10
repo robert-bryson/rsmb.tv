@@ -36,6 +36,10 @@ Do not add the final story title as a Heading 1 in the body. The title comes fro
 
 {{trip-map:day-two-stop-id}}
 
+For a map focused on one GPS track/day, use:
+
+{{trip-map:track:YYYY-MM-DD-day-two}}
+
 [Describe why this location or route segment matters. The focused map is useful only when geography helps the reader understand the choice or event.]
 
 [Tell the central scene from this day. Include specific sensory details, dialogue, or observations where they are genuinely remembered.]
@@ -108,6 +112,7 @@ Delete this section before publishing.
 - [ ] Every `trip-photo` ID exists in the manifest.
 - [ ] Every `trip-gallery` ID exists in the manifest.
 - [ ] Every focused `trip-map` stop ID exists in the manifest.
+- [ ] Every focused track map ID exists in `route.tracks` in the manifest.
 - [ ] GeoJSON route exists at the manifest path.
 - [ ] Processed photographs and route files have been uploaded to `data.rsmb.tv`.
 - [ ] Images have intrinsic width and height values.

@@ -22,9 +22,9 @@ if (!process.env.GOOGLE_BLOG_SHEET_ID) {
 }
 
 try {
-    const result = await syncBlogPosts({ previewSlug: process.env.GOOGLE_BLOG_PREVIEW_SLUG });
+    const result = await syncBlogPosts({ includeUnpublished: true });
     const changed = result.changed ? `updated ${result.changedFileLabels.length} file(s)` : 'no file changes';
-    console.log(`Synced ${result.syncedPosts} blog post(s) before dev: ${changed}.`);
+    console.log(`Synced ${result.syncedPosts} published and draft blog post(s) before dev: ${changed}.`);
 } catch (error) {
     console.error(`Blog sync before dev failed: ${error.message}`);
     process.exit(1);

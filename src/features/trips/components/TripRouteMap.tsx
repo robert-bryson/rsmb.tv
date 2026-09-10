@@ -7,6 +7,7 @@ import { useReducedMotion } from '../../flights/hooks/useReducedMotion';
 import { useTripStory } from '../TripStoryContext';
 
 type RouteGeoJson = Feature<LineString | MultiLineString> | FeatureCollection<LineString | MultiLineString>;
+type TripRouteMapProps = { stopId?: string; trackId?: string };
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl);
 
@@ -41,6 +42,50 @@ function routeCoordinates(route: RouteGeoJson) {
         : feature.geometry.coordinates.flat());
 }
 
+function routeFeatures(route: RouteGeoJson) {
+    return route.type === 'FeatureCollection' ? route.features : [route];
+}
+
+function trackRoute(route: RouteGeoJson, trackId: string): RouteGeoJson {
+    return {
+        type: 'FeatureCollection',
+        features: routeFeatures(route).filter((feature) => feature.properties?.trackId === trackId),
+    };
+}
+
+function lineDistanceKilometers(coordinates: number[][]) {
+    const earthRadiusKilometers = 6371.0088;
+    const radians = (degrees: number) => degrees * Math.PI / 180;
+    let distance = 0;
+
+    for (let index = 1; index < coordinates.length; index++) {
+        const [previousLongitude, previousLatitude] = coordinates[index - 1];
+        const [longitude, latitude] = coordinates[index];
+        const latitudeDelta = radians(latitude - previousLatitude);
+        const longitudeDelta = radians(longitude - previousLongitude);
+        const haversine = Math.sin(latitudeDelta / 2) ** 2
+            + Math.cos(radians(previousLatitude)) * Math.cos(radians(latitude))
+            * Math.sin(longitudeDelta / 2) ** 2;
+        distance += earthRadiusKilometers * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
+    }
+
+    return distance;
+}
+
+function featureDistanceKilometers(feature: Feature<LineString | MultiLineString>) {
+    const sourceDistance = feature.properties?.distanceKilometers;
+    if (typeof sourceDistance === 'number' && Number.isFinite(sourceDistance)) return sourceDistance;
+    const lines = feature.geometry.type === 'LineString'
+        ? [feature.geometry.coordinates]
+        : feature.geometry.coordinates;
+    return lines.reduce((total, coordinates) => total + lineDistanceKilometers(coordinates), 0);
+}
+
+function formatDistance(distanceKilometers: number) {
+    const distanceMiles = distanceKilometers * 0.6213711922;
+    return `${Math.round(distanceMiles)} mi / ${distanceKilometers.toFixed(1)} km`;
+}
+
 function isRoutePosition(value: unknown): boolean {
     if (!Array.isArray(value) || value.length < 2) return false;
     const [longitude, latitude] = value;
@@ -69,7 +114,7 @@ function isRouteGeoJson(value: unknown): value is RouteGeoJson {
         && geoJson.features!.every((feature) => hasValidRouteGeometry(feature.geometry));
 }
 
-export function TripRouteMap({ stopId }: { stopId?: string }) {
+export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
     const { manifest } = useTripStory();
     const reducedMotion = useReducedMotion();
     const containerRef = useRef<HTMLDivElement>(null);
@@ -81,7 +126,9 @@ export function TripRouteMap({ stopId }: { stopId?: string }) {
         error: string;
     }>({ url: routeUrl, route: null, error: '' });
     const route = routeState.url === routeUrl ? routeState.route : null;
-    const error = routeState.url === routeUrl ? routeState.error : '';
+    const routeError = routeState.url === routeUrl ? routeState.error : '';
+    const missingTrack = route && trackId && routeCoordinates(trackRoute(route, trackId)).length === 0;
+    const error = routeError || (missingTrack ? `Route does not contain track "${trackId}".` : '');
 
     useEffect(() => {
         const controller = new AbortController();
@@ -108,7 +155,9 @@ export function TripRouteMap({ stopId }: { stopId?: string }) {
     useEffect(() => {
         if (!containerRef.current || !route || mapRef.current) return;
 
-        const coordinates = routeCoordinates(route);
+        const focusedRoute = trackId ? trackRoute(route, trackId) : route;
+        const coordinates = routeCoordinates(focusedRoute);
+        if (coordinates.length === 0) return;
         const bounds = coordinates.reduce(
             (current, coordinate) => current.extend(coordinate as [number, number]),
             new maplibregl.LngLatBounds(coordinates[0] as [number, number], coordinates[0] as [number, number]),
@@ -143,8 +192,32 @@ export function TripRouteMap({ stopId }: { stopId?: string }) {
                         id: 'trip-route-line',
                         type: 'line',
                         source: 'trip-route',
-                        paint: { 'line-color': '#f59e0b', 'line-width': 4 },
+                        paint: { 'line-color': trackId ? '#71717a' : '#f59e0b', 'line-width': trackId ? 3 : 4, 'line-opacity': trackId ? 0.55 : 1 },
                         layout: { 'line-cap': 'round', 'line-join': 'round' },
+                    },
+                    ...(trackId ? [{
+                        id: 'trip-route-selected',
+                        type: 'line' as const,
+                        source: 'trip-route',
+                        filter: ['==', ['get', 'trackId'], trackId] as maplibregl.FilterSpecification,
+                        paint: { 'line-color': '#f59e0b', 'line-width': 5 },
+                        layout: { 'line-cap': 'round' as const, 'line-join': 'round' as const },
+                    }] : []),
+                    {
+                        id: 'trip-route-direction',
+                        type: 'symbol',
+                        source: 'trip-route',
+                        ...(trackId ? { filter: ['==', ['get', 'trackId'], trackId] } : {}),
+                        layout: {
+                            'symbol-placement': 'line',
+                            'symbol-spacing': 75,
+                            'text-field': '›',
+                            'text-size': 30,
+                            'text-rotation-alignment': 'map',
+                            'text-keep-upright': false,
+                            'text-allow-overlap': true,
+                        },
+                        paint: { 'text-color': '#09090b', 'text-opacity': 1.0 },
                     },
                     {
                         id: 'trip-stops',
@@ -180,7 +253,7 @@ export function TripRouteMap({ stopId }: { stopId?: string }) {
             map.remove();
             mapRef.current = null;
         };
-    }, [manifest.stops, route]);
+    }, [manifest.stops, route, routeUrl, trackId]);
 
     useEffect(() => {
         const stop = manifest.stops.find((candidate) => candidate.id === stopId);
@@ -188,7 +261,21 @@ export function TripRouteMap({ stopId }: { stopId?: string }) {
         mapRef.current[reducedMotion ? 'jumpTo' : 'easeTo']({ center: stop.coordinates, zoom: 9 });
     }, [manifest.stops, reducedMotion, stopId]);
 
-    const mapAlt = manifest.route.alt ?? `Map of the route with ${manifest.stops.length} marked stops.`;
+    const selectedTrack = manifest.route.tracks?.find((track) => track.id === trackId);
+    const displayedRoute = route && trackId ? trackRoute(route, trackId) : route;
+    const displayedDistance = displayedRoute
+        ? routeFeatures(displayedRoute).reduce((total, feature) => total + featureDistanceKilometers(feature), 0)
+        : 0;
+    const trackDistances = route && !trackId
+        ? (manifest.route.tracks ?? []).map((track) => ({
+            ...track,
+            distance: routeFeatures(trackRoute(route, track.id))
+                .reduce((total, feature) => total + featureDistanceKilometers(feature), 0),
+        })).filter((track) => track.distance > 0)
+        : [];
+    const mapAlt = selectedTrack
+        ? `Map focused on ${selectedTrack.name}.`
+        : manifest.route.alt ?? `Map of the route with ${manifest.stops.length} marked stops.`;
 
     return (
         <figure className="trip-breakout my-10">
@@ -209,6 +296,18 @@ export function TripRouteMap({ stopId }: { stopId?: string }) {
                 )}
             </div>
             <figcaption className="mt-3">
+                {displayedDistance > 0 && (
+                    <p className="text-sm font-medium text-zinc-300">
+                        {selectedTrack?.name ?? 'Overall route'}: {formatDistance(displayedDistance)}
+                    </p>
+                )}
+                {trackDistances.length > 0 && (
+                    <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-sm text-zinc-400">
+                        {trackDistances.map((track) => (
+                            <li key={track.id}>{track.name}: {formatDistance(track.distance)}</li>
+                        ))}
+                    </ul>
+                )}
                 <ol className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-zinc-400">
                     {manifest.stops.map((stop, index) => (
                         <li key={stop.id} className={stop.id === stopId ? 'text-amber-400' : ''}>

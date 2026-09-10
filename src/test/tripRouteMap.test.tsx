@@ -1,14 +1,25 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import type { MapOptions } from 'maplibre-gl';
 import { TripStoryProvider } from '../features/trips/TripStoryProvider';
 import { TripRouteMap } from '../features/trips/components/TripRouteMap';
 import type { TripManifest } from '../features/trips/types';
 
+const mapMocks = vi.hoisted(() => ({
+    Map: vi.fn(function (options: MapOptions) {
+        void options;
+        return { addControl: vi.fn(), remove: vi.fn() };
+    }),
+    LngLatBounds: vi.fn(function (this: { extend: ReturnType<typeof vi.fn> }) {
+        this.extend = vi.fn().mockReturnValue(this);
+    }),
+}));
+
 vi.mock('maplibre-gl', () => ({
     AttributionControl: vi.fn(),
     FullscreenControl: vi.fn(),
-    LngLatBounds: vi.fn(),
-    Map: vi.fn(),
+    LngLatBounds: mapMocks.LngLatBounds,
+    Map: mapMocks.Map,
     NavigationControl: vi.fn(),
     setWorkerUrl: vi.fn(),
 }));
@@ -28,6 +39,7 @@ const manifest: TripManifest = {
 
 afterEach(() => {
     vi.unstubAllGlobals();
+    vi.clearAllMocks();
 });
 
 describe('TripRouteMap', () => {
@@ -81,5 +93,98 @@ describe('TripRouteMap', () => {
             expect(screen.getByText('Loading route…')).toBeInTheDocument();
         });
         expect(fetchMock).toHaveBeenLastCalledWith('/routes/second.geojson', expect.any(Object));
+    });
+
+    it('fits and highlights one track while retaining muted route context and arrows', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true,
+            json: async () => ({
+                type: 'FeatureCollection',
+                features: [
+                    {
+                        type: 'Feature',
+                        properties: { trackId: 'outbound', trackOrder: 0 },
+                        geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
+                    },
+                    {
+                        type: 'Feature',
+                        properties: { trackId: 'return', trackOrder: 1 },
+                        geometry: { type: 'LineString', coordinates: [[-124, 45], [-125, 44]] },
+                    },
+                ],
+            }),
+        }));
+
+        render(
+            <TripStoryProvider manifest={{
+                ...manifest,
+                route: {
+                    ...manifest.route,
+                    tracks: [
+                        { id: 'outbound', name: 'Outbound' },
+                        { id: 'return', name: 'Return' },
+                    ],
+                },
+            }}>
+                <TripRouteMap trackId="return" />
+            </TripStoryProvider>,
+        );
+
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalled());
+        expect(mapMocks.LngLatBounds).toHaveBeenCalledWith([-124, 45], [-124, 45]);
+
+        const options = mapMocks.Map.mock.calls[0][0] as MapOptions;
+        const layers = options.style && typeof options.style === 'object' ? options.style.layers : [];
+        expect(layers.find((layer) => layer.id === 'trip-route-line')?.paint).toMatchObject({
+            'line-color': '#71717a',
+            'line-opacity': 0.55,
+        });
+        expect((layers.find((layer) => layer.id === 'trip-route-selected') as { filter?: unknown })?.filter)
+            .toEqual(['==', ['get', 'trackId'], 'return']);
+        expect((layers.find((layer) => layer.id === 'trip-route-direction') as { filter?: unknown })?.filter)
+            .toEqual(['==', ['get', 'trackId'], 'return']);
+        expect(layers.find((layer) => layer.id === 'trip-route-direction')?.paint).toMatchObject({
+            'text-color': '#09090b',
+            'text-opacity': 1,
+        });
+        expect(screen.getByText(/^Return:/)).toHaveTextContent(/mi \/ .*km/);
+    });
+
+    it('renders the combined overview as one uniformly styled route', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true,
+            json: async () => ({
+                type: 'FeatureCollection',
+                features: [
+                    {
+                        type: 'Feature',
+                        properties: { trackId: 'outbound', trackOrder: 0 },
+                        geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
+                    },
+                    {
+                        type: 'Feature',
+                        properties: { trackId: 'return', trackOrder: 1 },
+                        geometry: { type: 'LineString', coordinates: [[-124, 45], [-125, 44]] },
+                    },
+                ],
+            }),
+        }));
+
+        render(
+            <TripStoryProvider manifest={manifest}>
+                <TripRouteMap />
+            </TripStoryProvider>,
+        );
+
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalled());
+        const options = mapMocks.Map.mock.calls[0][0] as MapOptions;
+        const layers = options.style && typeof options.style === 'object' ? options.style.layers : [];
+        const routeLayer = layers.find((layer) => layer.id === 'trip-route-line');
+        expect(routeLayer?.paint).toMatchObject({ 'line-color': '#f59e0b', 'line-width': 4 });
+        expect(routeLayer).not.toHaveProperty('filter');
+        expect(layers).not.toEqual(expect.arrayContaining([
+            expect.objectContaining({ id: 'trip-route-even' }),
+            expect.objectContaining({ id: 'trip-route-odd' }),
+        ]));
     });
 });

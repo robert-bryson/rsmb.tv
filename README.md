@@ -50,7 +50,7 @@ npm run dev
 
 | Command | Description |
 | ------- | ----------- |
-| `npm run dev` | Sync configured blog posts, build flight data, and start development server |
+| `npm run dev` | Prepare local trips, sync published posts and drafts, build flight data, and start Vite |
 | `npm run build` | Sync blog posts, build generated data/artifacts, typecheck, and build for production |
 | `npm run build-blog` | Sync Google-authored posts and rebuild blog RSS/sitemap/OG artifacts |
 | `npm run build-rss` | Generate `public/rss.xml` from the blog registry |
@@ -69,6 +69,7 @@ npm run dev
 | `npm run sync-temperatures` | Generate temperature record JSON for upload to the S3-backed data CDN |
 | `npm run sync-tornadoes` | Sync NOAA/NCEI tornado tracks and generated public GeoJSON |
 | `npm run prepare-trip-assets -- <trip-id> --source <directory>` | Create trip image derivatives and sanitized route data |
+| `npm run prepare-trip-assets:dev` | Rebuild local trip assets and report the output totals |
 | `npm run publish-trip-assets -- <trip-id> --source <directory>` | Archive trip source files and upload reviewed trip assets |
 | `npm run test:e2e` | Build flight data, start Vite, and run Playwright browser smoke tests |
 | `npm run audit` | Run `npm audit --audit-level=moderate` |
@@ -169,6 +170,7 @@ Maintain a Google Sheet tab named `Blog Posts` by default, with one row per post
 | `published` | Yes | Syncs only rows set to `true`, `yes`, `y`, `1`, or `published`. |
 | `format` | No | Set to `trip` for a trip story; leave blank for a regular blog post. |
 | `trip_id` | For trips | Matches a manifest under `src/content/trips/`. |
+| `drive_folder_url` | No | Direct Google Drive folder URL shown in development metadata. |
 
 ### Build-Time Blog Sync
 
@@ -186,7 +188,7 @@ Optional environment variables:
 
 Amplify builds intentionally run `nvm install` before `npm ci` so CodeBuild installs and activates the exact version pinned in `.nvmrc`, even when the image does not already have it. Do not replace this with `nvm use`; that only works when the requested Node version is preinstalled.
 
-`npm run dev` runs the blog sync first when `GOOGLE_BLOG_SHEET_ID` is available in the shell or local env files. If the sheet is not configured, it skips the sync, rebuilds empty blog artifacts if needed, and starts Vite.
+`npm run dev` prepares each local trip directory and syncs each Sheet row, including unpublished drafts, when the local sources are configured. An incomplete draft Google Doc, manifest, photo set, or GPS track does not stop the other development content or Vite. The command reports each incomplete item. Development badges and metadata panels show the publication state, Sheet row, Google Doc status, trip manifest status, and known issues. Production builds use strict validation and include only published rows. If the Sheet is not configured, the development command skips blog sync and starts with the existing generated content.
 
 The sync uses public Google export endpoints, matching the existing flight sync model. Share the Sheet and Docs as viewer-accessible to anyone with the link. Private Google Docs would require a separate service-account or OAuth implementation.
 

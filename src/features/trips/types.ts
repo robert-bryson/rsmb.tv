@@ -19,6 +19,12 @@ export interface TripStop {
     description?: string;
 }
 
+export interface TripTrack {
+    id: string;
+    name: string;
+    date?: string;
+}
+
 export interface TripManifest {
     id: string;
     dates: {
@@ -33,6 +39,7 @@ export interface TripManifest {
         geoJson: string;
         staticImage?: string;
         alt?: string;
+        tracks?: TripTrack[];
     };
     stops: TripStop[];
     photos: TripPhotoData[];

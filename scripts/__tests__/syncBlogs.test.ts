@@ -95,6 +95,15 @@ describe('parseBlogSheet', () => {
             .toThrow(/trip_id is required/);
     });
 
+    it('accepts blog as an explicit regular-post format', () => {
+        const csv = [
+            'slug,title,date,description,tags,google_doc_id,published,format,trip_id',
+            'regular-post,Regular Post,2026-04-30,A regular post,meta,doc_123,true,blog,',
+        ].join('\n');
+
+        expect(parseBlogSheet(csv, { today })[0].post).not.toHaveProperty('format');
+    });
+
     it('reports duplicate slugs before any files are written', () => {
         const csv = [
             'slug,title,date,description,tags,google_doc_id,published',
@@ -154,6 +163,30 @@ describe('parseBlogSheet', () => {
         expect(summary.entries.map((entry) => entry.post.slug)).toEqual(['preview-post']);
         expect(summary.entries[0].post.date).toBe('2026-04-30');
         expect(summary.skippedRows.map((row) => row.slug)).toEqual(['other-draft']);
+    });
+
+    it('includes incomplete unpublished rows with development readiness metadata', () => {
+        const csv = [
+            'slug,title,date,description,tags,google_doc_id,published,format,trip_id',
+            'published-post,Published,2026-04-30,Ready,meta,doc_1,true,,',
+            'future-trip,Future Trip,,,,,false,trip,',
+        ].join('\n');
+
+        const entries = parseBlogSheet(csv, { today, includeUnpublished: true });
+
+        expect(entries).toHaveLength(2);
+        expect(entries[1].post).toMatchObject({
+            slug: 'future-trip',
+            title: 'Future Trip',
+            date: '2026-04-30',
+            format: 'trip',
+            development: {
+                published: false,
+                rowNumber: 3,
+                contentAvailable: false,
+                issues: ['description is missing', 'date is missing', 'google_doc_id is missing', 'trip_id is missing'],
+            },
+        });
     });
 });
 
@@ -409,6 +442,7 @@ describe('Google export helpers', () => {
         const markdown = [
             '{{trip-map}}',
             '{{trip-map:day-two}}',
+            '{{trip-map:track:outbound}}',
             '{{trip-photo:camp-at-dusk}}',
             '{{trip-gallery:highlights}}',
         ].join('\n\n');
@@ -416,6 +450,7 @@ describe('Google export helpers', () => {
         expect(expandTripShortcodes(markdown, { format: 'trip' })).toBe([
             '<TripMap />',
             '<TripMap stopId="day-two" />',
+            '<TripMap trackId="outbound" />',
             '<TripPhoto photoId="camp-at-dusk" />',
             '<TripGallery galleryId="highlights" />',
         ].join('\n\n'));
@@ -433,6 +468,7 @@ describe('Google export helpers', () => {
     ])('rejects a shortcode reference that is absent from the manifest', (shortcode, expectedError) => {
         const manifest = {
             id: 'coastal-loop',
+            route: { tracks: [{ id: 'outbound' }] },
             stops: [{ id: 'camp' }],
             photos: [{ id: 'sunset' }],
             galleries: { highlights: ['sunset'] },
@@ -440,6 +476,15 @@ describe('Google export helpers', () => {
 
         expect(() => expandTripShortcodes(shortcode, { format: 'trip', tripId: 'coastal-loop' }, manifest))
             .toThrow(expectedError);
+    });
+
+    it('rejects a track map absent from the manifest', () => {
+        const manifest = { route: { tracks: [{ id: 'outbound' }] }, stops: [], photos: [] };
+        expect(() => expandTripShortcodes(
+            '{{trip-map:track:return}}',
+            { format: 'trip', tripId: 'coastal-loop' },
+            manifest,
+        )).toThrow(/unknown track "return"/);
     });
 });
 
@@ -612,6 +657,53 @@ describe('syncBlogPosts', () => {
             fetchImpl,
         });
         expect(secondRun.changed).toBe(false);
+    });
+
+    it('syncs all development rows while recording missing draft components', async () => {
+        const repoRoot = createTempDir();
+        const blogDir = path.join(repoRoot, 'src/content/blog');
+        fs.mkdirSync(blogDir, { recursive: true });
+        fs.writeFileSync(path.join(blogDir, 'future-trip.mdx'), '# Obsolete draft body\n');
+        const csv = [
+            'slug,title,date,description,tags,google_doc_id,published,format,trip_id,drive_folder_url',
+            'ready-post,Ready Post,2026-04-30,Ready summary,meta,doc_123,true,,,https://drive.google.com/drive/folders/folder_123',
+            'future-trip,Future Trip,,,,,false,trip,future-trip,',
+        ].join('\n');
+        const fetchImpl = createFetch(csv, {
+            doc_123: '<html><body><p>Ready body.</p></body></html>',
+        });
+
+        const result = await syncBlogPosts({
+            sheetId: 'sheet_123',
+            repoRoot,
+            today,
+            fetchImpl,
+            includeUnpublished: true,
+        });
+
+        expect(result.syncedPosts).toBe(2);
+        const posts = JSON.parse(fs.readFileSync(path.join(repoRoot, 'src/content/posts.json'), 'utf-8'));
+        const readyPost = posts.find((post: { slug: string }) => post.slug === 'ready-post');
+        expect(readyPost.development).toMatchObject({
+            sheetUrl: 'https://docs.google.com/spreadsheets/d/sheet_123/edit',
+            documentUrl: 'https://docs.google.com/document/d/doc_123/edit',
+            driveFolderUrl: 'https://drive.google.com/drive/folders/folder_123',
+        });
+        const draft = posts.find((post: { slug: string }) => post.slug === 'future-trip');
+        expect(draft.development).toMatchObject({
+            published: false,
+            contentAvailable: false,
+            manifestAvailable: false,
+            assets: { webpFiles: 0, geoJsonFiles: 0 },
+        });
+        expect(draft.development.issues).toEqual(expect.arrayContaining([
+            'date is missing',
+            'google_doc_id is missing',
+            expect.stringContaining('requires manifest'),
+        ]));
+        expect(fs.existsSync(path.join(blogDir, 'future-trip.mdx'))).toBe(false);
+        expect(fs.readFileSync(path.join(repoRoot, 'src/content/blog/ready-post.mdx'), 'utf-8'))
+            .toContain('Ready body.');
     });
 
     it('can preserve local metadata when replaceAll is disabled', async () => {

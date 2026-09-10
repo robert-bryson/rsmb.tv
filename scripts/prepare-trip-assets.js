@@ -10,6 +10,7 @@ import sharp from 'sharp';
 const TRIP_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const PHOTO_EXTENSIONS = new Set(['.avif', '.heic', '.heif', '.jpeg', '.jpg', '.png', '.tif', '.tiff', '.webp']);
 const WIDTHS = [480, 960, 1600];
+export const WEBP_QUALITY = 95;
 
 export function parseArgs(args) {
     const options = { force: false };
@@ -99,7 +100,7 @@ async function preparePhotos(tripRoot, force) {
                 await sharp(inputPath)
                     .rotate()
                     .resize({ width: outputWidth, withoutEnlargement: true })
-                    .webp({ quality: outputWidth === 1600 ? 84 : 82 })
+                    .webp({ quality: WEBP_QUALITY })
                     .toFile(outputPath);
             }
 
@@ -114,6 +115,17 @@ async function preparePhotos(tripRoot, force) {
         photos.push({ id, source: filename, derivatives });
     }
 
+    const expectedFilenames = new Set(photos.flatMap((photo) => (
+        photo.derivatives.map((derivative) => derivative.filename)
+    )));
+    const processedFilenames = await listFiles(
+        processedPath,
+        (name) => path.extname(name).toLowerCase() === '.webp',
+    );
+    await Promise.all(processedFilenames
+        .filter((filename) => !expectedFilenames.has(filename))
+        .map((filename) => fs.rm(path.join(processedPath, filename))));
+
     return photos;
 }
 
@@ -126,12 +138,60 @@ async function exists(filePath) {
     }
 }
 
-function sanitizeFeature(feature) {
+function sanitizeFeature(feature, properties = {}) {
     return {
         type: 'Feature',
-        properties: {},
+        properties,
         geometry: feature.geometry,
     };
+}
+
+function trackDate(filename) {
+    return path.basename(filename, path.extname(filename)).match(/\d{4}-\d{2}-\d{2}/)?.[0];
+}
+
+function lineDistanceKilometers(coordinates) {
+    const earthRadiusKilometers = 6371.0088;
+    const radians = (degrees) => degrees * Math.PI / 180;
+    let distance = 0;
+
+    for (let index = 1; index < coordinates.length; index++) {
+        const [previousLongitude, previousLatitude] = coordinates[index - 1];
+        const [longitude, latitude] = coordinates[index];
+        const latitudeDelta = radians(latitude - previousLatitude);
+        const longitudeDelta = radians(longitude - previousLongitude);
+        const haversine = Math.sin(latitudeDelta / 2) ** 2
+            + Math.cos(radians(previousLatitude)) * Math.cos(radians(latitude))
+            * Math.sin(longitudeDelta / 2) ** 2;
+        distance += earthRadiusKilometers * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
+    }
+
+    return distance;
+}
+
+function featureDistanceKilometers(feature) {
+    const lines = feature.geometry.type === 'LineString'
+        ? [feature.geometry.coordinates]
+        : feature.geometry.coordinates;
+    return lines.reduce((total, coordinates) => total + lineDistanceKilometers(coordinates), 0);
+}
+
+function distanceSummary(distanceKilometers) {
+    return {
+        distanceKilometers: Math.round(distanceKilometers * 10) / 10,
+        distanceMiles: Math.round(distanceKilometers * 0.6213711922),
+    };
+}
+
+async function removeStaleRouteFiles(processedPath, expectedFilenames) {
+    const filenames = await listFiles(
+        processedPath,
+        (name) => name === 'route.geojson' || (name.startsWith('track-') && name.endsWith('.geojson')),
+    );
+
+    await Promise.all(filenames
+        .filter((filename) => !expectedFilenames.has(filename))
+        .map((filename) => fs.rm(path.join(processedPath, filename))));
 }
 
 async function prepareRoute(tripRoot) {
@@ -139,24 +199,75 @@ async function prepareRoute(tripRoot) {
     const processedPath = path.join(tripRoot, 'gps', 'processed');
     const filenames = await listFiles(originalsPath, (name) => path.extname(name).toLowerCase() === '.gpx');
 
-    if (filenames.length === 0) return undefined;
+    if (filenames.length === 0) {
+        await removeStaleRouteFiles(processedPath, new Set());
+        return undefined;
+    }
 
     const features = [];
-    for (const filename of filenames) {
+    const tracks = [];
+    const trackOutputs = [];
+    const seenTrackIds = new Set();
+    let totalDistanceKilometers = 0;
+    await fs.mkdir(processedPath, { recursive: true });
+
+    for (const [trackOrder, filename] of filenames.entries()) {
+        const trackId = photoId(path.basename(filename, path.extname(filename)));
+        if (seenTrackIds.has(trackId)) throw new Error(`Multiple GPX files resolve to the track ID "${trackId}".`);
+        seenTrackIds.add(trackId);
+
         const xml = await fs.readFile(path.join(originalsPath, filename), 'utf8');
         const document = new DOMParser().parseFromString(xml, 'application/xml');
         const parsed = gpx(document);
-        features.push(...parsed.features
-            .filter((feature) => feature.geometry?.type === 'LineString' || feature.geometry?.type === 'MultiLineString')
-            .map(sanitizeFeature));
+        const date = trackDate(filename);
+        const sourceTrackFeatures = parsed.features
+            .filter((feature) => feature.geometry?.type === 'LineString' || feature.geometry?.type === 'MultiLineString');
+        const trackDistanceKilometers = sourceTrackFeatures.reduce(
+            (total, feature) => total + featureDistanceKilometers(feature),
+            0,
+        );
+        totalDistanceKilometers += trackDistanceKilometers;
+        const trackFeatures = sourceTrackFeatures
+            .map((feature) => sanitizeFeature(feature, {
+                trackId,
+                trackOrder,
+                distanceKilometers: featureDistanceKilometers(feature),
+                ...(date ? { date } : {}),
+            }));
+
+        if (trackFeatures.length === 0) continue;
+        features.push(...trackFeatures);
+        const distance = distanceSummary(trackDistanceKilometers);
+
+        const outputFilename = `track-${trackId}.geojson`;
+        trackOutputs.push({
+            filename: outputFilename,
+            content: `${JSON.stringify({ type: 'FeatureCollection', features: trackFeatures })}\n`,
+        });
+        tracks.push({
+            id: trackId,
+            filename: outputFilename,
+            source: filename,
+            featureCount: trackFeatures.length,
+            ...distance,
+            ...(date ? { date } : {}),
+        });
     }
 
     if (features.length === 0) throw new Error('GPX files did not contain any track or route geometry.');
 
-    await fs.mkdir(processedPath, { recursive: true });
+    await removeStaleRouteFiles(
+        processedPath,
+        new Set(['route.geojson', ...trackOutputs.map((output) => output.filename)]),
+    );
+    await Promise.all(trackOutputs.map((output) => fs.writeFile(
+        path.join(processedPath, output.filename),
+        output.content,
+    )));
     const outputPath = path.join(processedPath, 'route.geojson');
     await fs.writeFile(outputPath, `${JSON.stringify({ type: 'FeatureCollection', features })}\n`);
-    return { filename: 'route.geojson', sources: filenames, featureCount: features.length };
+    const distance = distanceSummary(totalDistanceKilometers);
+    return { filename: 'route.geojson', sources: filenames, featureCount: features.length, ...distance, tracks };
 }
 
 export async function prepareTripAssets({ tripId, source, force = false }) {
@@ -198,6 +309,12 @@ if (isDirectRun) {
         const options = parseArgs(process.argv.slice(2));
         const report = await prepareTripAssets(options);
         console.log(`Prepared ${report.photos.length} photo(s) and ${report.route ? 1 : 0} route for ${options.tripId}.`);
+        if (report.route) {
+            console.log(`Overall route: ${report.route.distanceMiles} mi / ${report.route.distanceKilometers} km`);
+            for (const track of report.route.tracks) {
+                console.log(`  ${track.id}: ${track.distanceMiles} mi / ${track.distanceKilometers} km`);
+            }
+        }
     } catch (error) {
         console.error(error instanceof Error ? error.message : error);
         console.error(`\n${usage()}`);

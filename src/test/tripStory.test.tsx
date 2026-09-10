@@ -97,4 +97,17 @@ describe('trip story primitives', () => {
             photos: [{ ...manifest.photos[0], date: 'May 2, 2024' }],
         })).toThrow(/Invalid ISO date/);
     });
+
+    it('rejects duplicate route track IDs', () => {
+        expect(() => parseTripManifest({
+            ...manifest,
+            route: {
+                ...manifest.route,
+                tracks: [
+                    { id: 'outbound', name: 'Outbound' },
+                    { id: 'outbound', name: 'Return' },
+                ],
+            },
+        })).toThrow(/Duplicate track ID/);
+    });
 });

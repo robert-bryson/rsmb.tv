@@ -73,6 +73,7 @@ Place each shortcode on its own line with no surrounding text.
 | --- | --- |
 | `{{trip-map}}` | Shows the complete route and numbered stops. |
 | `{{trip-map:stop-id}}` | Shows the route map focused on one manifest stop. |
+| `{{trip-map:track:track-id}}` | Zooms to one track, highlights it, and mutes the other tracks. |
 | `{{trip-photo:photo-id}}` | Shows one significant photograph with its caption. |
 | `{{trip-gallery:gallery-id}}` | Shows a lightbox gallery defined in the manifest. |
 | `{{trip-facts}}` | Repeats the trip facts. Usually omit this because facts appear below the hero. |
@@ -101,7 +102,7 @@ Create these sizes when the original is large enough:
 | 960 px | Normal inline display |
 | 1600 px | Hero and lightbox display |
 
-Use WebP at approximately quality 80–84. Preserve the original aspect ratio, correct orientation, and strip metadata. Review GPS metadata before publishing.
+Set WebP quality to 95 to keep photographic detail. Preserve the original aspect ratio. Correct the orientation and remove the metadata. Review the GPS metadata before publication.
 
 Run the preparer after syncing the trip folder locally:
 
@@ -111,9 +112,11 @@ npm run prepare-trip-assets -- \
   --source "/path/to/rsmb.tv/trips/ozarks-2012"
 ```
 
-The command corrects orientation, strips image metadata, preserves aspect ratio, and creates WebP derivatives at 480, 960, and 1600 pixels without enlarging smaller originals. Filenames are derived from the selected filename, so `Camp at Dusk.jpg` becomes `camp-at-dusk-480.webp`. Use stable, descriptive selected filenames; duplicate normalized names fail the command.
+The command corrects the orientation, removes image metadata, and preserves the aspect ratio. It creates WebP files at 480, 960, and 1600 pixels without enlargement. It sets the WebP quality to 95. The selected filename determines the output filename. For example, `Camp at Dusk.jpg` becomes `camp-at-dusk-480.webp`. Use stable, descriptive filenames. The command fails if two filenames produce the same normalized name. It removes generated WebP files that no longer have a selected source file.
 
 Review `asset-metadata.json` at the trip root and record the largest derivative's actual width and height in the manifest. These dimensions prevent the page from shifting while images load. Existing derivatives are reused; pass `--force` to rebuild them.
+
+`npm run dev` prepares each trip directory before it syncs the published and unpublished blog rows. Set `TRIP_ASSETS_ROOT` in `.env.local` to the local `trips/` directory. In WSL, the command automatically detects `/mnt/g/My Drive/projects/rsmb.tv/trips`. The command copies generated WebP and GeoJSON files to the gitignored `public/data/trips/<trip-id>/` preview cache. Vite serves this cache. An incomplete trip does not stop preparation of the other trips. Set `TRIP_ASSETS_ON_DEV=false` to skip this step. Before Vite starts, the command reports totals for trips, selected photos, WebP files, GeoJSON files, and incomplete trips.
 
 ### Alt text and captions
 
@@ -129,14 +132,26 @@ Avoid repeating the caption in the alt text. Decorative collection thumbnails us
 
 ## 4. Prepare the Route
 
-Place untouched GPX exports in `gps/originals/`. The preparation command combines their track and route geometry into `gps/processed/route.geojson`, removes timestamps, names, device details, and all other GPX properties, and preserves only route geometry.
+Place untouched GPX exports in `gps/originals/`, with one file per day or route leg. Use stable filenames such as `2026-05-19-day-one.gpx`; the normalized filename becomes the public track ID.
+
+The preparation command writes two forms of sanitized output:
+
+- `gps/processed/route.geojson` combines every track for overview maps. Its features retain only the public track ID, source order, and an optional `YYYY-MM-DD` date parsed from the filename.
+- `gps/processed/track-<track-id>.geojson` contains each source GPX separately for reuse outside the story map.
+
+The command removes generated route and track GeoJSON files that no longer have a GPX source. It does not remove other files from `gps/processed/`.
+
+The command prints the total distance and each track distance. It shows whole miles and kilometers to one decimal place. It stores the same values in `asset-metadata.json`. The fields are `route.distanceMiles`, `route.distanceKilometers`, and the equivalent fields in each `route.tracks` item. The command calculates distance from the parsed GPX points before it removes route properties. It uses the Haversine formula for the recorded surface geometry. It does not include elevation gain or three-dimensional distance.
+
+Timestamps, embedded names, device details, and all other GPX properties are removed. Because normalized filenames appear in public output, do not put private details in GPX filenames.
 
 After preparing:
 
 1. Inspect `route.geojson` in QGIS or another trusted GIS tool.
 2. Remove private home locations and unrelated track segments.
 3. Optionally simplify a very dense track while preserving road geometry.
-4. Optionally export a static fallback map as `gps/processed/route-fallback.webp`.
+4. Confirm each individual track file contains the intended day or leg.
+5. Optionally export a static fallback map as `gps/processed/route-fallback.webp`.
 
 Property removal does not make the coordinates private. Always inspect the start, end, stops, and overnight locations before publishing.
 
@@ -173,6 +188,17 @@ The `id` must match the Sheet `trip_id` value. Add these required fields:
 - Photograph metadata
 
 You can also add the total distance, motorcycle, broad regions or states, and named gallery groups.
+
+To use focused track maps, copy each track ID from `asset-metadata.json` into `route.tracks` with a reader-facing name and optional date:
+
+```json
+"tracks": [
+  { "id": "2026-05-19-day-one", "name": "Day one: coastbound", "date": "2026-05-19" },
+  { "id": "2026-05-20-day-two", "name": "Day two: return", "date": "2026-05-20" }
+]
+```
+
+Use `{{trip-map:track:2026-05-19-day-one}}` in the story. Overview maps render the combined GeoJSON as one amber route, show travel-direction arrows, and list overall and per-track distances. Focused maps fit the selected track, draw it brightly, leave the remaining route muted for context, and show that track's distance.
 
 Use these manifest rules:
 

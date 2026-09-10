@@ -27,6 +27,11 @@ export const tripManifestSchema = z.object({
         geoJson: z.string().min(1),
         staticImage: z.string().min(1).optional(),
         alt: z.string().min(1).optional(),
+        tracks: z.array(z.object({
+            id: slugSchema,
+            name: z.string().min(1),
+            date: dateSchema.optional(),
+        })).optional(),
     }),
     stops: z.array(z.object({
         id: slugSchema,
@@ -68,6 +73,14 @@ export const tripManifestSchema = z.object({
         stopIds.add(stop.id);
     }
 
+    const trackIds = new Set<string>();
+    for (const track of manifest.route.tracks ?? []) {
+        if (trackIds.has(track.id)) {
+            context.addIssue({ code: 'custom', message: `Duplicate track ID: ${track.id}` });
+        }
+        trackIds.add(track.id);
+    }
+
     for (const [galleryId, galleryPhotoIds] of Object.entries(manifest.galleries ?? {})) {
         for (const photoId of galleryPhotoIds) {
             if (!photoIds.has(photoId)) {
@@ -104,13 +117,26 @@ const manifestModules = import.meta.glob<unknown>('../../content/trips/*.json', 
     import: 'default',
 });
 
-const manifests = new Map(
-    Object.values(manifestModules).map((value) => {
+const manifests = new Map<string, TripManifest>();
+const manifestIssues = new Map<string, string>();
+
+for (const value of Object.values(manifestModules)) {
+    try {
         const manifest = parseTripManifest(value);
-        return [manifest.id, manifest];
-    }),
-);
+        manifests.set(manifest.id, manifest);
+    } catch (error) {
+        if (!import.meta.env.DEV) throw error;
+        const id = value && typeof value === 'object' && 'id' in value && typeof value.id === 'string'
+            ? value.id
+            : 'unknown-manifest';
+        manifestIssues.set(id, error instanceof Error ? error.message : 'Manifest validation failed.');
+    }
+}
 
 export function getTripManifest(id: string | undefined): TripManifest | undefined {
     return id ? manifests.get(id) : undefined;
+}
+
+export function getTripManifestIssue(id: string | undefined): string | undefined {
+    return id ? manifestIssues.get(id) : undefined;
 }

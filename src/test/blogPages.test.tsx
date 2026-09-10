@@ -31,6 +31,15 @@ const testPosts = vi.hoisted(() => [
         date: '2026-01-01',
         description: 'This post should not be on the home page.',
         tags: ['React'],
+        development: {
+            published: false,
+            rowNumber: 5,
+            issues: ['Google Doc is unavailable'],
+            contentAvailable: false,
+            sheetUrl: 'https://docs.google.com/spreadsheets/d/sheet_123/edit',
+            documentUrl: 'https://docs.google.com/document/d/doc_123/edit',
+            driveFolderUrl: 'https://drive.google.com/drive/folders/folder_123',
+        },
     },
 ]);
 
@@ -96,6 +105,12 @@ describe('Blog page tag navigation', () => {
         const tagNavigation = screen.getByRole('navigation', { name: 'Blog tags' });
         expect(within(tagNavigation).getByRole('link', { name: 'Data Viz' })).toHaveAttribute('aria-current', 'page');
     });
+
+    it('labels unpublished incomplete content in development', () => {
+        renderWithRouter(<Blog />, { route: '/blog' });
+
+        expect(screen.getByText('DEV · Draft · Incomplete')).toBeInTheDocument();
+    });
 });
 
 describe('Trips page', () => {
@@ -131,6 +146,28 @@ describe('BlogPost tag navigation', () => {
         const tagUrl = new URL(screen.getByRole('link', { name: 'Data Viz' }).getAttribute('href')!, 'https://rsmb.tv');
         expect(tagUrl.pathname).toBe('/blog');
         expect(tagUrl.searchParams.get('tag')).toBe('Data Viz');
+    });
+
+    it('links development metadata directly to its Google sources', () => {
+        renderWithRouter(
+            <Routes>
+                <Route path="/blog/:slug" element={<BlogPost collection="blog" />} />
+            </Routes>,
+            { route: '/blog/hidden-fourth-post' },
+        );
+
+        expect(screen.getByRole('link', { name: 'Google Sheet' })).toHaveAttribute(
+            'href',
+            'https://docs.google.com/spreadsheets/d/sheet_123/edit',
+        );
+        expect(screen.getByRole('link', { name: 'Open document' })).toHaveAttribute(
+            'href',
+            'https://docs.google.com/document/d/doc_123/edit',
+        );
+        expect(screen.getByRole('link', { name: 'Open folder' })).toHaveAttribute(
+            'href',
+            'https://drive.google.com/drive/folders/folder_123',
+        );
     });
 
     it.each([

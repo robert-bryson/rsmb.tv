@@ -1,7 +1,7 @@
 {
   "name": "rsmbtv",
   "private": true,
-  "version": "0.0.3",
+  "version": "0.1.0",
   "packageManager": "npm@11.17.0",
   "engines": {
     "node": ">=22 <27",
@@ -9,7 +9,7 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "npm run build-blog:dev && npm run build-flights && vite",
+    "dev": "npm run prepare-trip-assets:dev && npm run build-blog:dev && npm run build-flights && vite --port 5173 --strictPort",
     "build": "npm run build-flights && npm run build-blog && npm run typecheck && vite build",
     "build-blog": "npm run sync-blogs && npm run build-blog-artifacts",
     "build-blog:dev": "npm run sync-blogs:dev && npm run build-blog-artifacts",
@@ -26,6 +26,7 @@
     "sync-temperatures": "node scripts/sync-temperatures.js",
     "sync-tornadoes": "node projects/tornado-tracks/scripts/syncTornadoes.js",
     "prepare-trip-assets": "node scripts/prepare-trip-assets.js",
+    "prepare-trip-assets:dev": "node scripts/prepare-trip-assets-dev.js",
     "publish-trip-assets": "node scripts/publish-trip-assets.js",
     "aws-status": "bash scripts/aws-status.sh",
     "watch": "node --env-file-if-exists=.env.local --import tsx/esm scripts/aws-watch.tsx",

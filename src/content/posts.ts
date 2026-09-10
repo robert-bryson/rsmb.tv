@@ -10,6 +10,21 @@ import { lazy, type ComponentType, type LazyExoticComponent } from 'react';
 
 export type BlogPostFormat = 'post' | 'trip';
 
+export interface DevelopmentPostMeta {
+    published: boolean;
+    rowNumber: number;
+    issues: string[];
+    contentAvailable: boolean;
+    manifestAvailable?: boolean;
+    sheetUrl?: string;
+    documentUrl?: string;
+    driveFolderUrl?: string;
+    assets?: {
+        webpFiles: number;
+        geoJsonFiles: number;
+    };
+}
+
 export interface BlogPostMeta {
     slug: string;
     title: string;
@@ -18,6 +33,7 @@ export interface BlogPostMeta {
     tags: string[];
     format?: BlogPostFormat;
     tripId?: string;
+    development?: DevelopmentPostMeta;
 }
 
 export interface MdxComponentProps {
@@ -70,7 +86,7 @@ const posts: BlogPost[] = postsMeta.map((meta) => {
 posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 export function getAllPosts(): BlogPostMeta[] {
-    return posts.map(({ slug, title, date, description, tags, format, tripId }) => ({
+    return posts.map(({ slug, title, date, description, tags, format, tripId, development }) => ({
         slug,
         title,
         date,
@@ -78,6 +94,7 @@ export function getAllPosts(): BlogPostMeta[] {
         tags,
         ...(format ? { format } : {}),
         ...(tripId ? { tripId } : {}),
+        ...(development ? { development } : {}),
     }));
 }
 
