@@ -6,33 +6,24 @@ const baseClasses = 'max-w-full break-words text-xs rounded-full px-2.5 py-0.5 t
 const activeClasses = 'bg-violet-600 text-zinc-100';
 const inactiveClasses = 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200';
 
-interface BlogTagLinkProps {
+interface PostTagLinkProps {
     tag: string;
     active?: boolean;
     children?: ReactNode;
-    to?: '/blog' | '/trips';
+    type: 'writing' | 'trips';
 }
 
-export function BlogTagLink({ tag, active = false, children = tag, to = '/blog' }: BlogTagLinkProps) {
+export function PostTagLink({ tag, active = false, children = tag, type }: PostTagLinkProps) {
+    const search = new URLSearchParams(createBlogTagSearch(tag));
+    search.set('type', type);
+
     return (
         <Link
-            to={{ pathname: to, search: createBlogTagSearch(tag) }}
+            to={{ pathname: '/posts', search: search.toString() }}
             aria-current={active ? 'page' : undefined}
             className={`${baseClasses} ${active ? activeClasses : inactiveClasses}`}
         >
             {children}
-        </Link>
-    );
-}
-
-export function BlogAllTagsLink({ active = false, to = '/blog' }: { active?: boolean; to?: '/blog' | '/trips' }) {
-    return (
-        <Link
-            to={to}
-            aria-current={active ? 'page' : undefined}
-            className={`${baseClasses} ${active ? activeClasses : inactiveClasses}`}
-        >
-            All
         </Link>
     );
 }

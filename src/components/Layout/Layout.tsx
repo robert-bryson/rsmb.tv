@@ -7,8 +7,7 @@ interface LayoutProps {
 }
 
 const navLinks = [
-  { to: '/blog', label: 'Blog' },
-  { to: '/trips', label: 'Trips' },
+  { to: '/posts', label: 'Posts', activePaths: ['/posts', '/blog', '/trips'] },
   { to: '/projects', label: 'Projects' },
   { to: '/about', label: 'About' },
 ];
@@ -108,9 +107,9 @@ export function Layout({ children }: LayoutProps) {
             rsmb
           </Link>
           <ul className="flex gap-6 text-sm">
-            {navLinks.map(({ to, label }) => {
+            {navLinks.map(({ to, label, activePaths }) => {
+              const isActive = (activePaths ?? [to]).some((path) => isNavLinkActive(location.pathname, path));
               if (to === '/projects') {
-                const isActive = isNavLinkActive(location.pathname, to);
                 return (
                   <li
                     key={to}
@@ -147,7 +146,7 @@ export function Layout({ children }: LayoutProps) {
                 <li key={to}>
                   <Link
                     to={to}
-                    className={getNavLinkClassName(isNavLinkActive(location.pathname, to))}
+                    className={getNavLinkClassName(isActive)}
                   >
                     {label}
                   </Link>

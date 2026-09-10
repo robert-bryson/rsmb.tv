@@ -24,8 +24,9 @@ describe('Layout', () => {
         renderLayout();
 
         expect(screen.getByRole('link', { name: 'rsmb' })).toHaveAttribute('href', '/');
-        expect(screen.getByRole('link', { name: 'Blog' })).toHaveAttribute('href', '/blog');
-        expect(screen.getByRole('link', { name: 'Trips' })).toHaveAttribute('href', '/trips');
+        expect(screen.getByRole('link', { name: 'Posts' })).toHaveAttribute('href', '/posts');
+        expect(screen.queryByRole('link', { name: 'Blog' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('link', { name: 'Trips' })).not.toBeInTheDocument();
         expect(screen.getByRole('link', { name: 'Projects' })).toHaveAttribute('href', '/projects');
         expect(screen.getByRole('link', { name: 'About' })).toHaveAttribute('href', '/about');
         expect(screen.queryByRole('link', { name: 'Home' })).not.toBeInTheDocument();
@@ -55,6 +56,12 @@ describe('Layout', () => {
 
         expect(screen.getByRole('link', { name: 'Projects' })).toHaveClass('text-violet-400');
         expect(screen.getByRole('link', { name: 'U.S. Temperature Records' })).toHaveClass('text-violet-300');
+    });
+
+    it.each(['/posts', '/blog/a-post', '/trips/a-trip'])('marks Posts active for %s', (route) => {
+        renderLayout(route);
+
+        expect(screen.getByRole('link', { name: 'Posts' })).toHaveClass('text-violet-400');
     });
 
     it('reveals the header when scrolling up and provides a scroll-to-top control', async () => {

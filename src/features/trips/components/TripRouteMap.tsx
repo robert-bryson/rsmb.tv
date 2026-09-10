@@ -247,13 +247,18 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
         map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
         map.addControl(new maplibregl.FullscreenControl(), 'top-right');
         map.addControl(new maplibregl.AttributionControl({ compact: true }));
+        if (!stopId && !trackId) {
+            map.once('load', () => {
+                map.setZoom(Math.max(map.getMinZoom(), map.getZoom() - 1));
+            });
+        }
 
         mapRef.current = map;
         return () => {
             map.remove();
             mapRef.current = null;
         };
-    }, [manifest.stops, route, routeUrl, trackId]);
+    }, [manifest.stops, route, routeUrl, stopId, trackId]);
 
     useEffect(() => {
         const stop = manifest.stops.find((candidate) => candidate.id === stopId);

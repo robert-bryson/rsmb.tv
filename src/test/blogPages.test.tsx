@@ -54,7 +54,7 @@ const testTrips = vi.hoisted(() => [{
 }]);
 
 vi.mock('../content/posts', () => ({
-    getAllPosts: () => [...testPosts, ...testTrips],
+    getAllPosts: () => [...testPosts.slice(0, 3), ...testTrips, ...testPosts.slice(3)],
     getBlogPosts: () => testPosts,
     getTripPosts: () => testTrips,
     getPostBySlug: (slug: string) => {
@@ -72,22 +72,35 @@ vi.mock('../blog/MdxComponents', () => ({
     mdxComponents: {},
 }));
 
-import { Blog } from '../pages/Blog';
 import { BlogPost } from '../pages/BlogPost';
 import { Home } from '../pages/Home';
-import { Trips } from '../pages/Trips';
+import { Posts } from '../pages/Posts';
 
 function LocationProbe() {
     return <output data-testid="location">{useLocation().pathname}</output>;
 }
 
-describe('Blog page tag navigation', () => {
-    it('renders unique tag links in the filter navigation', () => {
-        renderWithRouter(<Blog />, { route: '/blog' });
+describe('Posts page', () => {
+    it('combines writing and trips in one chronological feed', () => {
+        renderWithRouter(<Posts />, { route: '/posts' });
 
-        const tagNavigation = screen.getByRole('navigation', { name: 'Blog tags' });
+        expect(screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent)).toEqual([
+            'Mapping Boring Data',
+            'Weather Records',
+            'React Routing',
+            'Coastal Loop',
+            'Hidden Fourth Post',
+        ]);
+        expect(screen.getByRole('link', { name: /Coastal Loop/i })).toHaveAttribute('href', '/trips/coastal-loop');
+        expect(screen.getByRole('link', { name: /Mapping Boring Data/i })).toHaveAttribute('href', '/blog/mapping-boring-data');
+    });
+
+    it('renders unique tags for the active type', () => {
+        renderWithRouter(<Posts />, { route: '/posts?type=writing' });
+
+        const tagNavigation = screen.getByRole('navigation', { name: 'Post tags' });
         expect(within(tagNavigation).getAllByRole('link').map((link) => link.textContent)).toEqual([
-            'All',
+            'All tags',
             'Data Viz',
             'Maps',
             'React',
@@ -95,47 +108,31 @@ describe('Blog page tag navigation', () => {
         ]);
     });
 
-    it('filters visible posts from the shareable tag query parameter', () => {
-        renderWithRouter(<Blog />, { route: '/blog?tag=Data+Viz' });
+    it('filters visible posts from shareable type and tag query parameters', () => {
+        renderWithRouter(<Posts />, { route: '/posts?type=writing&tag=Data+Viz' });
 
         expect(screen.getByRole('heading', { level: 2, name: 'Mapping Boring Data' })).toBeInTheDocument();
         expect(screen.getByRole('heading', { level: 2, name: 'Weather Records' })).toBeInTheDocument();
         expect(screen.queryByRole('heading', { level: 2, name: 'React Routing' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('heading', { level: 2, name: 'Coastal Loop' })).not.toBeInTheDocument();
 
-        const tagNavigation = screen.getByRole('navigation', { name: 'Blog tags' });
+        const tagNavigation = screen.getByRole('navigation', { name: 'Post tags' });
         expect(within(tagNavigation).getByRole('link', { name: 'Data Viz' })).toHaveAttribute('aria-current', 'page');
+        expect(within(tagNavigation).getByRole('link', { name: 'Data Viz' })).toHaveAttribute(
+            'href',
+            '/posts?type=writing&tag=Data+Viz',
+        );
     });
 
     it('labels unpublished incomplete content in development', () => {
-        renderWithRouter(<Blog />, { route: '/blog' });
+        renderWithRouter(<Posts />, { route: '/posts' });
 
         expect(screen.getByText('DEV · Draft · Incomplete')).toBeInTheDocument();
     });
 });
 
-describe('Trips page', () => {
-    it('lists trip stories separately from blog posts', () => {
-        renderWithRouter(<Trips />, { route: '/trips' });
-
-        expect(screen.getByRole('heading', { level: 1, name: 'Trips' })).toBeInTheDocument();
-        expect(screen.getByRole('heading', { level: 2, name: 'Coastal Loop' })).toBeInTheDocument();
-        expect(screen.queryByRole('heading', { level: 2, name: 'Mapping Boring Data' })).not.toBeInTheDocument();
-        expect(screen.getByRole('link', { name: /Coastal Loop/i })).toHaveAttribute('href', '/trips/coastal-loop');
-    });
-
-    it('uses collection-local tag links', () => {
-        renderWithRouter(<Trips />, { route: '/trips?tag=Motorcycles' });
-
-        const navigation = screen.getByRole('navigation', { name: 'Trip tags' });
-        expect(within(navigation).getByRole('link', { name: 'Motorcycles' })).toHaveAttribute(
-            'href',
-            '/trips?tag=Motorcycles',
-        );
-    });
-});
-
 describe('BlogPost tag navigation', () => {
-    it('links post tags back to the filtered blog index', () => {
+    it('links post tags back to the filtered posts index', () => {
         renderWithRouter(
             <Routes>
                 <Route path="/blog/:slug" element={<BlogPost collection="blog" />} />
@@ -144,7 +141,8 @@ describe('BlogPost tag navigation', () => {
         );
 
         const tagUrl = new URL(screen.getByRole('link', { name: 'Data Viz' }).getAttribute('href')!, 'https://rsmb.tv');
-        expect(tagUrl.pathname).toBe('/blog');
+        expect(tagUrl.pathname).toBe('/posts');
+        expect(tagUrl.searchParams.get('type')).toBe('writing');
         expect(tagUrl.searchParams.get('tag')).toBe('Data Viz');
     });
 
@@ -190,11 +188,12 @@ describe('BlogPost tag navigation', () => {
 });
 
 describe('Home page writing hierarchy', () => {
-    it('shows recent writing after projects without flooding the front page', () => {
+    it('shows recent posts after projects without flooding the front page', () => {
         renderWithRouter(<Home />);
 
         expect(screen.getByRole('heading', { level: 2, name: 'Projects' })).toBeInTheDocument();
-        expect(screen.getByRole('heading', { level: 2, name: 'Writing' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 2, name: 'Posts' })).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: /View all posts/i })).toHaveAttribute('href', '/posts');
         expect(screen.getByRole('link', { name: /Mapping Boring Data/i })).toBeInTheDocument();
         expect(screen.getByRole('link', { name: /Weather Records/i })).toBeInTheDocument();
         expect(screen.getByRole('link', { name: /React Routing/i })).toBeInTheDocument();

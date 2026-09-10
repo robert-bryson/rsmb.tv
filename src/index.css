@@ -215,6 +215,60 @@ u {
   }
 }
 
+.image-caption-figure {
+  position: relative;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .image-caption-overlay {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    margin: 0;
+    padding: 2.5rem 1rem 0.75rem;
+    color: #e4e4e7;
+    background: linear-gradient(to top, rgb(9 9 11 / 92%), rgb(9 9 11 / 68%) 55%, transparent);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(0.25rem);
+    transition: opacity 160ms ease-out, transform 160ms ease-out;
+    transition-delay: 0ms;
+  }
+
+  .image-caption-figure:hover .image-caption-overlay,
+  .image-caption-figure:focus .image-caption-overlay,
+  .image-caption-figure:focus-within .image-caption-overlay {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 280ms;
+  }
+
+  .image-caption-figure[data-caption-dismissed='true'] .image-caption-overlay {
+    opacity: 0;
+    transform: translateY(0.25rem);
+    transition-delay: 0ms;
+  }
+
+  .image-caption-overlay>span {
+    color: #d4d4d8;
+  }
+
+  .image-caption-figure:focus-visible .image-caption-frame {
+    outline: 2px solid #a78bfa;
+    outline-offset: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image-caption-overlay {
+    transform: none;
+    transition-duration: 0ms;
+    transition-delay: 0ms;
+  }
+}
+
 /* Keep the closed flights panel mounted for its exit animation, but do not
    expose its scrollbar. Use the app theme in Firefox and Chromium/WebKit. */
 .flights-stats-panel {

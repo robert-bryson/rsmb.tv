@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
-import { BlogTagLink } from '../components/BlogTagLink';
+import { PostTagLink } from '../components/PostTagLink';
 import { DevelopmentContentStatus } from '../components/DevelopmentContentStatus';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
@@ -21,7 +21,7 @@ export function BlogPost({ collection }: BlogPostProps) {
     const tripManifest = isTrip ? getTripManifest(post.tripId) : undefined;
     const tripManifestIssue = isTrip ? getTripManifestIssue(post.tripId) : undefined;
     const collectionPath = isTrip ? '/trips' : '/blog';
-    const collectionName = isTrip ? 'Trips' : 'Blog';
+    const collectionName = 'Posts';
     const postUrl = post ? absoluteUrl(`${collectionPath}/${post.slug}`) : undefined;
     const postImage = tripManifest
         ? absoluteUrl(getTripHero(tripManifest).src)
@@ -50,7 +50,7 @@ export function BlogPost({ collection }: BlogPostProps) {
         '@type': 'BreadcrumbList',
         itemListElement: [
             { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
-            { '@type': 'ListItem', position: 2, name: collectionName, item: absoluteUrl(collectionPath) },
+            { '@type': 'ListItem', position: 2, name: collectionName, item: absoluteUrl('/posts') },
             { '@type': 'ListItem', position: 3, name: post.title, item: postUrl },
         ],
     } : null);
@@ -59,8 +59,8 @@ export function BlogPost({ collection }: BlogPostProps) {
         return (
             <div>
                 <h1 className="text-2xl font-bold text-zinc-100 mb-4">Post not found</h1>
-                <Link to="/blog" className="text-violet-400 hover:text-violet-300">
-                    ← Back to blog
+                <Link to="/posts" className="text-violet-400 hover:text-violet-300">
+                    ← Back to posts
                 </Link>
             </div>
         );
@@ -74,8 +74,8 @@ export function BlogPost({ collection }: BlogPostProps) {
     if (isTrip && !tripManifest) {
         return (
             <div>
-                <Link to="/trips" className="mb-6 inline-block text-sm text-zinc-400 hover:text-violet-400">
-                    ← Back to trips
+                <Link to="/posts?type=trips" className="mb-6 inline-block text-sm text-zinc-400 hover:text-violet-400">
+                    ← Back to posts
                 </Link>
                 <DevelopmentContentStatus post={post} />
                 <h1 className="mb-4 text-2xl font-bold text-zinc-100">Trip not configured</h1>
@@ -118,7 +118,7 @@ export function BlogPost({ collection }: BlogPostProps) {
                         {post.tags.length > 0 && (
                             <div className="flex flex-wrap gap-2 mt-3">
                                 {post.tags.map((tag) => (
-                                    <BlogTagLink key={tag} tag={tag} />
+                                    <PostTagLink key={tag} tag={tag} type="writing" />
                                 ))}
                             </div>
                         )}

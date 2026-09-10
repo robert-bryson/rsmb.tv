@@ -7,7 +7,7 @@ This file contains incomplete work. Git history contains the completed work.
 - [ ] Add screenshots to the Aborg project page.
 - [ ] Add screenshots to the Flights project page.
 
-## Blog publishing
+## Post publishing
 
 - [ ] Publish more blog posts from the configured Google documents.
 
@@ -17,7 +17,6 @@ This file contains incomplete work. Git history contains the completed work.
 
 ## Test coverage
 
-- [ ] Add unit tests for the `ScrollToTop` component.
 - [ ] Add Playwright tests for the Flights map keyboard controls and camera URL synchronization.
 - [ ] Add Playwright tests for trip map fallback behavior and gallery keyboard controls.
 

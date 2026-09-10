@@ -2,6 +2,7 @@ import type { ComponentPropsWithoutRef } from 'react';
 import { TripFacts } from '../features/trips/components/TripFacts';
 import { TripPhoto } from '../features/trips/components/TripPhoto';
 import { TripGalleryBlock, TripMapBlock } from './TripMdxBlocks';
+import { MdxImage } from './MdxImage';
 
 function classNames(...classes: Array<string | undefined>) {
     return classes.filter(Boolean).join(' ');
@@ -74,13 +75,7 @@ export const mdxComponents = {
             {...props}
         />
     ),
-    img: (props: ComponentPropsWithoutRef<'img'>) => (
-        <img
-            className="rounded-lg border border-zinc-800 my-4"
-            loading="lazy"
-            {...props}
-        />
-    ),
+    img: MdxImage,
     hr: (props: ComponentPropsWithoutRef<'hr'>) => (
         <hr className="border-zinc-800 my-8" {...props} />
     ),

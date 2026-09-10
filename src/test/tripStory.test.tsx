@@ -1,8 +1,9 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { TripStoryProvider } from '../features/trips/TripStoryProvider';
 import { TripFacts } from '../features/trips/components/TripFacts';
+import { TripGallery } from '../features/trips/components/TripGallery';
 import { TripHeroGallery } from '../features/trips/components/TripHeroGallery';
 import { TripPhoto } from '../features/trips/components/TripPhoto';
 import { parseTripManifest } from '../features/trips/tripManifests';
@@ -58,11 +59,20 @@ describe('trip story primitives', () => {
         renderStory(<TripPhoto photoId="camp" />);
 
         const image = screen.getByRole('img', { name: 'A tent beside the motorcycle at dusk.' });
+        const link = image.closest('a');
+        const figure = image.closest('figure');
         expect(image).toHaveAttribute('width', '1200');
         expect(image).toHaveAttribute('height', '800');
         expect(image).toHaveAttribute('loading', 'lazy');
         expect(screen.getByText('Camp at the end of the first day.')).toBeInTheDocument();
-        expect(image.closest('a')).toHaveAttribute('href', '/images/trips/coastal-loop/camp.webp');
+        expect(link).toHaveAttribute('href', '/images/trips/coastal-loop/camp.webp');
+        expect(link).toHaveAttribute('aria-describedby', screen.getByText('Camp at the end of the first day.').id);
+        expect(figure).toHaveClass('image-caption-figure');
+
+        fireEvent.keyDown(link!, { key: 'Escape' });
+        expect(figure).toHaveAttribute('data-caption-dismissed', 'true');
+        fireEvent.mouseLeave(figure!);
+        expect(figure).not.toHaveAttribute('data-caption-dismissed');
     });
 
     it('makes the hero a lightbox trigger containing every trip photo', () => {
@@ -73,6 +83,17 @@ describe('trip story primitives', () => {
         expect(links[0]).toHaveAttribute('href', '/images/trips/coastal-loop/hero.webp');
         expect(links[1]).toHaveAttribute('href', '/images/trips/coastal-loop/camp.webp');
         expect(screen.getByRole('img', { name: manifest.photos[0].alt }).closest('a')).toBeVisible();
+    });
+
+    it('keeps each gallery caption inside its own figure', () => {
+        const { container } = renderStory(<TripGallery galleryId="highlights" />);
+
+        const figures = container.querySelectorAll('.image-caption-figure');
+        expect(figures).toHaveLength(1);
+        expect(figures[0].querySelectorAll(':scope > .image-caption-overlay')).toHaveLength(1);
+        expect(figures[0].querySelector('.image-caption-overlay')).toHaveTextContent(
+            'Camp at the end of the first day.',
+        );
     });
 
     it('rejects gallery references to unknown photos', () => {

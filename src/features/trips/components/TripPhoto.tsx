@@ -1,3 +1,5 @@
+import { useId } from 'react';
+import { useDismissibleCaption } from '../../../hooks/useDismissibleCaption';
 import type { TripPhotoData } from '../types';
 import { useTripStory } from '../TripStoryContext';
 
@@ -19,6 +21,10 @@ export function TripPhotoFigure({
     linked?: boolean;
     className?: string;
 }) {
+    const captionId = `trip-photo-caption-${useId().replaceAll(':', '')}`;
+    const caption = photo.caption?.trim() || photo.alt;
+    const hasSupplementalCaption = Boolean(photo.caption || photo.location || photo.date);
+    const { dismissed, captionInteractionProps } = useDismissibleCaption();
     const image = (
         <img
             src={photo.src}
@@ -31,12 +37,18 @@ export function TripPhotoFigure({
             fetchPriority={priority ? 'high' : 'auto'}
             decoding="async"
             className="block h-auto w-full"
+            aria-describedby={!linked && hasSupplementalCaption ? captionId : undefined}
         />
     );
 
     return (
-        <figure className={className}>
-            <div className="overflow-hidden rounded-md border border-zinc-800 bg-zinc-950">
+        <figure
+            className={`image-caption-figure ${className}`}
+            data-caption-dismissed={dismissed || undefined}
+            tabIndex={!linked ? 0 : undefined}
+            {...captionInteractionProps}
+        >
+            <div className="image-caption-frame overflow-hidden rounded-md border border-zinc-800 bg-zinc-950">
                 {linked ? (
                     <a
                         href={photo.src}
@@ -45,21 +57,24 @@ export function TripPhotoFigure({
                         data-pswp-srcset={photo.srcSet}
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-describedby={hasSupplementalCaption ? captionId : undefined}
                     >
                         {image}
                     </a>
                 ) : image}
             </div>
-            {(photo.caption || photo.location || photo.date) && (
-                <figcaption className="mt-2 text-sm leading-snug text-zinc-400">
-                    {photo.caption}
-                    {(photo.location || photo.date) && (
-                        <span className="ml-2 text-zinc-500">
-                            {[photo.location, photo.date].filter(Boolean).join(' · ')}
-                        </span>
-                    )}
-                </figcaption>
-            )}
+            <figcaption
+                id={captionId}
+                className="image-caption-overlay mt-2 text-sm leading-snug text-zinc-400"
+                aria-hidden={!hasSupplementalCaption || undefined}
+            >
+                {caption}
+                {(photo.location || photo.date) && (
+                    <span className="ml-2 text-zinc-500">
+                        {[photo.location, photo.date].filter(Boolean).join(' · ')}
+                    </span>
+                )}
+            </figcaption>
         </figure>
     );
 }

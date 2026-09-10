@@ -102,10 +102,10 @@ export function Home() {
         <section>
           <div className="flex items-baseline justify-between mb-4">
             <h2 className="text-sm font-medium text-zinc-400 uppercase tracking-wide">
-              Writing
+              Posts
             </h2>
-            <Link to="/blog" className="text-sm text-zinc-500 hover:text-violet-400">
-              View all writing →
+            <Link to="/posts" className="text-sm text-zinc-500 hover:text-violet-400">
+              View all posts →
             </Link>
           </div>
           <ul className="space-y-5">

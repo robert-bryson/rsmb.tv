@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Navigate, Routes, Route, useSearchParams } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import { Layout } from './components/Layout';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -8,9 +8,8 @@ const Home = lazy(() => import('./pages/Home').then(m => ({ default: m.Home })))
 const About = lazy(() => import('./pages/About').then(m => ({ default: m.About })));
 const Projects = lazy(() => import('./pages/Projects').then(m => ({ default: m.Projects })));
 const NotFound = lazy(() => import('./pages/NotFound').then(m => ({ default: m.NotFound })));
-const Blog = lazy(() => import('./pages/Blog').then(m => ({ default: m.Blog })));
+const Posts = lazy(() => import('./pages/Posts').then(m => ({ default: m.Posts })));
 const BlogPost = lazy(() => import('./pages/BlogPost').then(m => ({ default: m.BlogPost })));
-const Trips = lazy(() => import('./pages/Trips').then(m => ({ default: m.Trips })));
 const ThroughRoutes = lazy(() => import('./pages/ThroughRoutes'));
 const FlightsAbout = lazy(() => import('./pages/FlightsAbout'));
 const Flights = lazy(() => import('./pages/Flights'));
@@ -27,6 +26,14 @@ const Parc = lazy(() => import('./pages/Parc'));
 const StatusDashboard = lazy(() => import('./pages/StatusDashboard'));
 
 const basename = import.meta.env.BASE_URL;
+
+export function LegacyPostsRedirect({ type }: { type: 'writing' | 'trips' }) {
+  const [searchParams] = useSearchParams();
+  const nextSearchParams = new URLSearchParams(searchParams);
+  nextSearchParams.set('type', type);
+
+  return <Navigate to={{ pathname: '/posts', search: nextSearchParams.toString() }} replace />;
+}
 
 function LoadingFallback() {
   return (
@@ -57,9 +64,10 @@ export default function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
-              <Route path="/blog" element={<Blog />} />
+              <Route path="/posts" element={<Posts />} />
+              <Route path="/blog" element={<LegacyPostsRedirect type="writing" />} />
               <Route path="/blog/:slug" element={<BlogPost collection="blog" />} />
-              <Route path="/trips" element={<Trips />} />
+              <Route path="/trips" element={<LegacyPostsRedirect type="trips" />} />
               <Route path="/trips/:slug" element={<BlogPost collection="trips" />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/projects/through-routes" element={<ThroughRoutes />} />

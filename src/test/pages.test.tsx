@@ -2,11 +2,11 @@ import { describe, it, expect } from 'vitest';
 import { screen } from '@testing-library/react';
 import { Home } from '../pages/Home';
 import { About } from '../pages/About';
-import { Blog } from '../pages/Blog';
+import { Posts } from '../pages/Posts';
 import { Projects } from '../pages/Projects';
 import { NotFound } from '../pages/NotFound';
 import { featuredProjects, projects } from '../content/projects';
-import { getBlogPosts } from '../content/posts';
+import { getAllPosts } from '../content/posts';
 import { getJsonLdByType } from './helpers/jsonLd';
 import { renderWithRouter } from './helpers/router';
 
@@ -96,35 +96,31 @@ describe('Projects page', () => {
     });
 });
 
-describe('Blog page', () => {
-    it('renders blog heading', () => {
-        renderWithRouter(<Blog />, { route: '/blog' });
-        expect(screen.getByRole('heading', { level: 1, name: /Blog/i })).toBeInTheDocument();
+describe('Posts page', () => {
+    it('renders the posts heading', () => {
+        renderWithRouter(<Posts />, { route: '/posts' });
+        expect(screen.getByRole('heading', { level: 1, name: 'Posts' })).toBeInTheDocument();
     });
 
-    it('adds Blog JSON-LD with author and image on every post', () => {
-        renderWithRouter(<Blog />, { route: '/blog' });
+    it('adds CollectionPage JSON-LD for every post', () => {
+        renderWithRouter(<Posts />, { route: '/posts' });
         const jsonLd = getJsonLdByType<{
-            blogPost: Array<{
-                headline: string;
-                url: string;
-                image: string;
-                author: { name: string };
-            }>;
-        }>('Blog');
+            mainEntity: { itemListElement: Array<{ position: number; url: string; name: string }> };
+        }>('CollectionPage');
 
         expect(jsonLd).toMatchObject({
-            name: 'rsmb Blog',
-            url: 'https://rsmb.tv/blog',
+            name: 'Posts',
+            url: 'https://rsmb.tv/posts',
         });
 
-        const posts = getBlogPosts();
-        expect(jsonLd!.blogPost).toHaveLength(posts.length);
-        jsonLd!.blogPost.forEach((entry, index) => {
-            expect(entry.headline).toBe(posts[index].title);
-            expect(entry.url).toBe(`https://rsmb.tv/blog/${posts[index].slug}`);
-            expect(entry.image).toBe(`https://rsmb.tv/og/blog/${posts[index].slug}.svg`);
-            expect(entry.author.name).toBe('Robby Bryson');
+        const posts = getAllPosts();
+        expect(jsonLd!.mainEntity.itemListElement).toHaveLength(posts.length);
+        jsonLd!.mainEntity.itemListElement.forEach((entry, index) => {
+            expect(entry.position).toBe(index + 1);
+            expect(entry.name).toBe(posts[index].title);
+            expect(entry.url).toBe(
+                `https://rsmb.tv/${posts[index].format === 'trip' ? 'trips' : 'blog'}/${posts[index].slug}`,
+            );
         });
     });
 });

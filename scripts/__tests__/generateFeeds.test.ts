@@ -13,6 +13,7 @@ import {
     generateSitemap,
     loadPosts as loadSitemapPosts,
     resolveRouteLastModifiedDate,
+    STATIC_ROUTES,
 } from '../generate-sitemap.js';
 
 const tempDirs: string[] = [];
@@ -132,6 +133,14 @@ describe('resolveRouteLastModifiedDate', () => {
 });
 
 describe('buildSitemapXml', () => {
+    it('publishes only the canonical posts index route', () => {
+        const paths = STATIC_ROUTES.map((route) => route.path);
+
+        expect(paths).toContain('/posts');
+        expect(paths).not.toContain('/blog');
+        expect(paths).not.toContain('/trips');
+    });
+
     it('treats a missing generated posts registry as empty', () => {
         expect(loadSitemapPosts(path.join(createTempDir(), 'missing-posts.json'))).toEqual([]);
     });

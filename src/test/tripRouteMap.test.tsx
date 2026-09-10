@@ -6,13 +6,25 @@ import { TripRouteMap } from '../features/trips/components/TripRouteMap';
 import type { TripManifest } from '../features/trips/types';
 
 const mapMocks = vi.hoisted(() => ({
+    easeTo: vi.fn(),
+    getMinZoom: vi.fn(() => 0),
+    getZoom: vi.fn(() => 7),
     Map: vi.fn(function (options: MapOptions) {
         void options;
-        return { addControl: vi.fn(), remove: vi.fn() };
+        return {
+            addControl: vi.fn(),
+            easeTo: mapMocks.easeTo,
+            getMinZoom: mapMocks.getMinZoom,
+            getZoom: mapMocks.getZoom,
+            once: vi.fn((_event: string, listener: () => void) => listener()),
+            remove: vi.fn(),
+            setZoom: mapMocks.setZoom,
+        };
     }),
     LngLatBounds: vi.fn(function (this: { extend: ReturnType<typeof vi.fn> }) {
         this.extend = vi.fn().mockReturnValue(this);
     }),
+    setZoom: vi.fn(),
 }));
 
 vi.mock('maplibre-gl', () => ({
@@ -186,5 +198,29 @@ describe('TripRouteMap', () => {
             expect.objectContaining({ id: 'trip-route-even' }),
             expect.objectContaining({ id: 'trip-route-odd' }),
         ]));
+        expect(mapMocks.setZoom).toHaveBeenCalledWith(6);
+    });
+
+    it('keeps the existing zoom behavior for a stop-focused map', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true,
+            json: async () => ({
+                type: 'Feature',
+                properties: {},
+                geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
+            }),
+        }));
+
+        render(
+            <TripStoryProvider manifest={{
+                ...manifest,
+                stops: [{ id: 'camp', name: 'Camp', coordinates: [-122.5, 46.5] }],
+            }}>
+                <TripRouteMap stopId="camp" />
+            </TripStoryProvider>,
+        );
+
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalled());
+        expect(mapMocks.setZoom).not.toHaveBeenCalled();
     });
 });

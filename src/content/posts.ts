@@ -59,7 +59,7 @@ const postsMetaModules = import.meta.glob<BlogPostMeta[]>('./posts.json', {
 const postsMeta = postsMetaModules['./posts.json'] ?? [];
 
 // Auto-discover MDX files — no manual mapping needed. Keep these lazy so the
-// initial app shell and blog index only pay for metadata, not every post body.
+// The initial app shell and posts index load metadata, not every post body.
 const mdxModules = import.meta.glob<{ default: ComponentType<MdxComponentProps> }>('./blog/*.mdx');
 
 function missingMdxComponent(slug: string): ComponentType<MdxComponentProps> {

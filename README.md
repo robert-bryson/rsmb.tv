@@ -9,8 +9,8 @@ A personal website and portfolio showcasing interactive projects, with a focus o
 - **Flights** — An interactive 3D globe visualization built with [react-globe.gl](https://github.com/vasturiano/react-globe.gl) that displays flights I've taken around the world. Includes active filter chips, opt-in globe rotation, route frequency analysis, and travel statistics.
 - **Temperature Records** — An interactive MapLibre GL map of U.S. temperature records. It shows recent station records, standing county and state extremes, and standing-record history.
 - **Project Portfolio** — Showcases various side projects including web tools and data visualizations.
-- **Blog** — Google-backed MDX posts with RSS, generated Open Graph images, structured data, and shareable tag filters.
-- **Trips** — Motorcycle trip stories with responsive photographs, route maps, and accessible galleries.
+- **Posts** - Google-backed MDX writing and trip reports with RSS, generated Open Graph images, structured data, and shareable filters.
+- **Trips** - Motorcycle trip reports with responsive photographs, route maps, and accessible galleries.
 - **About** — Background on my experience in geospatial engineering and software development.
 
 ## Tech Stack
@@ -155,14 +155,14 @@ The route "All Flights" list uses incremental rendering. The panel shows an init
 
 ## Blog Publishing
 
-Google Sheets/Docs is the source of truth for blog content. The build syncs published rows from the Sheet, exports the referenced Google Docs to MDX, then generates RSS, sitemap, and blog OG images before Vite bundles the app. Generated post files are build artifacts and should not be committed. The blog index exposes tags as URL filters (`/blog?tag=Maps`), so tag names should stay concise and reader-facing.
+Google Sheets and Google Docs are the source for post content. The build syncs published rows from the Sheet and exports the referenced Docs to MDX. It then generates RSS, sitemap, and Open Graph files before Vite builds the app. Generated post files are build artifacts. Do not commit them. The posts index uses the `type` and `tag` URL parameters. For example, `/posts?type=writing&tag=Maps` shows writing with the `Maps` tag. Keep tag names short and clear.
 
 Maintain a Google Sheet tab named `Blog Posts` by default, with one row per post:
 
 | Column | Required | Notes |
 | ------ | -------- | ----- |
 | `slug` | Optional | URL slug. If empty, the sync derives one from `title`. |
-| `title` | Yes | Used in frontmatter, the blog index, RSS, and OG image generation. |
+| `title` | Yes | Used in frontmatter, the posts index, RSS, and OG image generation. |
 | `date` | Yes | Accepts `YYYY-MM-DD` or `M/D/YYYY`; written as `YYYY-MM-DD`. |
 | `description` | Yes | Short summary for previews, RSS, and SEO. |
 | `tags` | Yes | Comma- or pipe-separated list. Empty is allowed. |
@@ -227,8 +227,8 @@ Coverage today:
 - `WebSite` on the home page
 - `ProfilePage` + `Person` on `/about`
 - `CollectionPage` containing an `ItemList` of `SoftwareApplication` entries on `/projects`
-- `Blog` containing `BlogPosting` entries on `/blog`, plus per-post `BlogPosting` and `BreadcrumbList` on `/blog/:slug`
-- `CollectionPage` containing trip `BlogPosting` entries on `/trips`, plus canonical post metadata on `/trips/:slug`
+- `CollectionPage` containing all writing and trip reports on `/posts`
+- `BlogPosting` and `BreadcrumbList` on `/blog/:slug` and `/trips/:slug`
 - `SoftwareApplication` on each project detail page
 - `WebPage` on full-screen app subroutes referencing the parent `SoftwareApplication` via `isPartOf`
 

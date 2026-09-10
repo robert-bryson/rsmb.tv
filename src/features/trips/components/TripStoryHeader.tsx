@@ -1,4 +1,4 @@
-import { BlogTagLink } from '../../../components/BlogTagLink';
+import { PostTagLink } from '../../../components/PostTagLink';
 import { formatDate } from '../../../utils/formatDate';
 import type { BlogPostMeta } from '../../../content/posts';
 import { TripFacts } from './TripFacts';
@@ -13,7 +13,7 @@ export function TripStoryHeader({ post }: { post: BlogPostMeta }) {
                 <p className="mt-4 max-w-2xl text-lg leading-relaxed text-zinc-300">{post.description}</p>
                 {post.tags.length > 0 && (
                     <div className="mt-4 flex flex-wrap gap-2">
-                        {post.tags.map((tag) => <BlogTagLink key={tag} tag={tag} to="/trips" />)}
+                        {post.tags.map((tag) => <PostTagLink key={tag} tag={tag} type="trips" />)}
                     </div>
                 )}
             </div>

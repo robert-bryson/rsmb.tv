@@ -21,7 +21,7 @@ const OUTPUT_PATH = path.join(REPO_ROOT, 'public/sitemap.xml');
 const SITE_URL = 'https://rsmb.tv';
 
 // Static routes with their priorities
-const STATIC_ROUTES = [
+export const STATIC_ROUTES = [
     { path: '/', priority: '1.0', changefreq: 'weekly', sources: ['src/pages/Home.tsx', 'src/content/projects.ts'] },
     { path: '/about', priority: '0.8', changefreq: 'monthly', sources: ['src/pages/About.tsx'] },
     { path: '/projects', priority: '0.8', changefreq: 'monthly', sources: ['src/pages/Projects.tsx', 'src/content/projects.ts'] },
@@ -34,8 +34,7 @@ const STATIC_ROUTES = [
     { path: '/projects/tornado-tracks/map', priority: '0.8', changefreq: 'monthly', sources: ['src/pages/TornadoTracks.tsx', 'src/features/tornadoes', 'public/data/tornadoes'] },
     { path: '/projects/route2gpx', priority: '0.7', changefreq: 'monthly', sources: ['src/pages/Route2Gpx.tsx'] },
     { path: '/projects/temperature-records/trends', priority: '0.6', changefreq: 'monthly', sources: ['src/pages/ClimateTrends.tsx', 'src/features/temperatures'] },
-    { path: '/blog', priority: '0.7', changefreq: 'weekly', sources: ['src/pages/Blog.tsx', 'src/content/posts.json', 'src/content/blog'] },
-    { path: '/trips', priority: '0.7', changefreq: 'monthly', sources: ['src/pages/Trips.tsx', 'src/content/posts.json', 'src/content/trips'] },
+    { path: '/posts', priority: '0.7', changefreq: 'weekly', sources: ['src/pages/Posts.tsx', 'src/content/posts.json', 'src/content/blog', 'src/content/trips'] },
 ];
 
 /**
