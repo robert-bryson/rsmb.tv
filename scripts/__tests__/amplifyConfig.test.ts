@@ -67,6 +67,7 @@ describe('Amplify response headers', () => {
         expect(config).toContain("img-src 'self' data: blob: https://data.rsmb.tv");
         expect(config).toContain("script-src 'self' 'unsafe-eval' https://cloud.umami.is");
         expect(connectSources).toContain('https://cloud.umami.is');
+        expect(connectSources).toContain('https://gateway.umami.is');
         expect(connectSources).toContain('https://data.rcc-acis.org');
         expect(connectSources).toContain('https://data.rsmb.tv');
     });
