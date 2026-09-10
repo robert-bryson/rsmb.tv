@@ -2,7 +2,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { BlogAllTagsLink, BlogTagLink } from '../components/BlogTagLink';
 import { filterPostsByTag, getAllBlogTags } from '../content/blogTags';
 import { getTripPosts } from '../content/posts';
-import { getTripManifest } from '../features/trips';
+import { getTripHero, getTripManifest } from '../features/trips';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { formatDate } from '../utils/formatDate';
@@ -42,7 +42,7 @@ export function Trips() {
                     datePublished: trip.date,
                     url: absoluteUrl(`/trips/${trip.slug}`),
                     image: getTripManifest(trip.tripId)
-                        ? absoluteUrl(getTripManifest(trip.tripId)!.hero.src)
+                        ? absoluteUrl(getTripHero(getTripManifest(trip.tripId)!).src)
                         : undefined,
                     author: AUTHOR_PERSON,
                 },
@@ -72,16 +72,17 @@ export function Trips() {
                 <ul className="space-y-10">
                     {trips.map((trip) => {
                         const manifest = getTripManifest(trip.tripId);
+                        const hero = manifest ? getTripHero(manifest) : undefined;
                         return (
                             <li key={trip.slug}>
                                 <Link to={`/trips/${trip.slug}`} className="group block">
-                                    {manifest && (
+                                    {hero && (
                                         <img
-                                            src={manifest.hero.src}
-                                            srcSet={manifest.hero.srcSet}
+                                            src={hero.src}
+                                            srcSet={hero.srcSet}
                                             sizes="(min-width: 768px) 720px, calc(100vw - 3rem)"
-                                            width={manifest.hero.width}
-                                            height={manifest.hero.height}
+                                            width={hero.width}
+                                            height={hero.height}
                                             alt=""
                                             loading="lazy"
                                             decoding="async"

@@ -21,6 +21,9 @@ export default defineConfig({
     tailwindcss(),
   ],
   assetsInclude: ['**/*.glb'],
+  optimizeDeps: {
+    exclude: ['maplibre-gl'],
+  },
   build: {
     sourcemap: 'hidden',
     chunkSizeWarningLimit: 1400,

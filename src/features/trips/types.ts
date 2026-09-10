@@ -28,7 +28,7 @@ export interface TripManifest {
     distanceMiles?: number;
     motorcycle?: string;
     regions?: string[];
-    hero: TripPhotoData;
+    hero: string;
     route: {
         geoJson: string;
         staticImage?: string;
@@ -37,4 +37,10 @@ export interface TripManifest {
     stops: TripStop[];
     photos: TripPhotoData[];
     galleries?: Record<string, string[]>;
+}
+
+export function getTripHero(manifest: TripManifest): TripPhotoData {
+    const hero = manifest.photos.find((photo) => photo.id === manifest.hero);
+    if (!hero) throw new Error(`Trip manifest "${manifest.id}" references unknown hero photo: ${manifest.hero}`);
+    return hero;
 }

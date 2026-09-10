@@ -7,7 +7,7 @@ import { getPostBySlug } from '../content/posts';
 import { mdxComponents } from '../blog/MdxComponents';
 import { formatDate } from '../utils/formatDate';
 import { AUTHOR_PERSON, SITE_URL, absoluteUrl } from '../utils/siteMetadata';
-import { getTripManifest, TripStoryHeader, TripStoryProvider } from '../features/trips';
+import { getTripHero, getTripManifest, TripStoryHeader, TripStoryProvider } from '../features/trips';
 
 interface BlogPostProps {
     collection: 'blog' | 'trips';
@@ -22,7 +22,7 @@ export function BlogPost({ collection }: BlogPostProps) {
     const collectionName = isTrip ? 'Trips' : 'Blog';
     const postUrl = post ? absoluteUrl(`${collectionPath}/${post.slug}`) : undefined;
     const postImage = tripManifest
-        ? absoluteUrl(tripManifest.hero.src)
+        ? absoluteUrl(getTripHero(tripManifest).src)
         : post ? absoluteUrl(`/og/blog/${post.slug}.svg`) : undefined;
 
     useDocumentHead({

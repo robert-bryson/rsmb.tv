@@ -45,6 +45,7 @@
     "@aws-sdk/client-cloudfront": "^3.1112.0",
     "maplibre-gl": "^6.6.0",
     "photoswipe": "^5.4.4",
+    "photoswipe-dynamic-caption-plugin": "^1.2.7",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-globe.gl": "^2.38.0",

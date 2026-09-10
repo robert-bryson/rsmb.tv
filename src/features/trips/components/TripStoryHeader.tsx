@@ -1,13 +1,10 @@
 import { BlogTagLink } from '../../../components/BlogTagLink';
 import { formatDate } from '../../../utils/formatDate';
 import type { BlogPostMeta } from '../../../content/posts';
-import { useTripStory } from '../TripStoryContext';
 import { TripFacts } from './TripFacts';
-import { TripPhotoFigure } from './TripPhoto';
+import { TripHeroGallery } from './TripHeroGallery';
 
 export function TripStoryHeader({ post }: { post: BlogPostMeta }) {
-    const { manifest } = useTripStory();
-
     return (
         <header className="mb-10">
             <div className="mb-6">
@@ -20,7 +17,7 @@ export function TripStoryHeader({ post }: { post: BlogPostMeta }) {
                     </div>
                 )}
             </div>
-            <TripPhotoFigure photo={manifest.hero} priority linked={false} className="trip-breakout" />
+            <TripHeroGallery />
             <TripFacts />
         </header>
     );

@@ -22,7 +22,7 @@ if (!process.env.GOOGLE_BLOG_SHEET_ID) {
 }
 
 try {
-    const result = await syncBlogPosts();
+    const result = await syncBlogPosts({ previewSlug: process.env.GOOGLE_BLOG_PREVIEW_SLUG });
     const changed = result.changed ? `updated ${result.changedFileLabels.length} file(s)` : 'no file changes';
     console.log(`Synced ${result.syncedPosts} blog post(s) before dev: ${changed}.`);
 } catch (error) {

@@ -22,7 +22,7 @@ export const tripManifestSchema = z.object({
     distanceMiles: z.number().positive().optional(),
     motorcycle: z.string().min(1).optional(),
     regions: z.array(z.string().min(1)).optional(),
-    hero: photoSchema,
+    hero: slugSchema,
     route: z.object({
         geoJson: z.string().min(1),
         staticImage: z.string().min(1).optional(),
@@ -50,11 +50,14 @@ export const tripManifestSchema = z.object({
     }
 
     const photoIds = new Set<string>();
-    for (const photo of [manifest.hero, ...manifest.photos]) {
+    for (const photo of manifest.photos) {
         if (photoIds.has(photo.id)) {
             context.addIssue({ code: 'custom', message: `Duplicate photo ID: ${photo.id}` });
         }
         photoIds.add(photo.id);
+    }
+    if (!photoIds.has(manifest.hero)) {
+        context.addIssue({ code: 'custom', path: ['hero'], message: `Hero references unknown photo: ${manifest.hero}` });
     }
 
     const stopIds = new Set<string>();
@@ -75,7 +78,25 @@ export const tripManifestSchema = z.object({
 });
 
 export function parseTripManifest(value: unknown): TripManifest {
-    return tripManifestSchema.parse(value);
+    const manifest = tripManifestSchema.parse(value);
+    if (!import.meta.env.DEV) return manifest;
+
+    const localUrl = (url: string) => url.replace(/^https:\/\/data\.rsmb\.tv(?=\/trips\/)/, '/data');
+    const localPhoto = (photo: TripManifest['photos'][number]) => ({
+        ...photo,
+        src: localUrl(photo.src),
+        srcSet: photo.srcSet?.replaceAll('https://data.rsmb.tv', '/data'),
+    });
+
+    return {
+        ...manifest,
+        route: {
+            ...manifest.route,
+            geoJson: localUrl(manifest.route.geoJson),
+            staticImage: manifest.route.staticImage ? localUrl(manifest.route.staticImage) : undefined,
+        },
+        photos: manifest.photos.map(localPhoto),
+    };
 }
 
 const manifestModules = import.meta.glob<unknown>('../../content/trips/*.json', {

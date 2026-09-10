@@ -141,6 +141,20 @@ describe('parseBlogSheet', () => {
             },
         ]);
     });
+
+    it('includes only the requested unpublished preview row', () => {
+        const csv = [
+            'slug,title,date,description,tags,google_doc_id,published',
+            'preview-post,Preview Post,,Preview summary,draft,doc_1,false',
+            'other-draft,Other Draft,,,,,false',
+        ].join('\n');
+
+        const summary = parseBlogSheetWithSummary(csv, { today, previewSlug: 'preview-post' });
+
+        expect(summary.entries.map((entry) => entry.post.slug)).toEqual(['preview-post']);
+        expect(summary.entries[0].post.date).toBe('2026-04-30');
+        expect(summary.skippedRows.map((row) => row.slug)).toEqual(['other-draft']);
+    });
 });
 
 describe('Google export helpers', () => {
@@ -411,6 +425,22 @@ describe('Google export helpers', () => {
         expect(() => expandTripShortcodes('{{trip-carousel:all}}', { format: 'trip' }))
             .toThrow(/Unsupported trip shortcode/);
     });
+
+    it.each([
+        ['{{trip-map:missing-stop}}', /unknown stop "missing-stop"/],
+        ['{{trip-photo:missing-photo}}', /unknown photo "missing-photo"/],
+        ['{{trip-gallery:missing-gallery}}', /unknown gallery "missing-gallery"/],
+    ])('rejects a shortcode reference that is absent from the manifest', (shortcode, expectedError) => {
+        const manifest = {
+            id: 'coastal-loop',
+            stops: [{ id: 'camp' }],
+            photos: [{ id: 'sunset' }],
+            galleries: { highlights: ['sunset'] },
+        };
+
+        expect(() => expandTripShortcodes(shortcode, { format: 'trip', tripId: 'coastal-loop' }, manifest))
+            .toThrow(expectedError);
+    });
 });
 
 describe('local env loading', () => {
@@ -496,6 +526,29 @@ describe('syncBlogPosts', () => {
 
         fs.writeFileSync(path.join(manifestDir, 'coastal-loop.json'), JSON.stringify({ id: 'coastal-loop' }));
         expect(() => validateTripManifestFiles([post], { repoRoot })).not.toThrow();
+    });
+
+    it('rejects trip content that references an unknown manifest item', async () => {
+        const repoRoot = createTempDir();
+        const manifestDir = path.join(repoRoot, 'src/content/trips');
+        fs.mkdirSync(manifestDir, { recursive: true });
+        fs.writeFileSync(path.join(manifestDir, 'coastal-loop.json'), JSON.stringify({
+            id: 'coastal-loop',
+            stops: [],
+            photos: [],
+            galleries: {},
+        }));
+        const csv = [
+            'slug,title,date,description,tags,google_doc_id,published,format,trip_id',
+            'coastal-loop,Coastal Loop,2026-04-30,A motorcycle trip,travel,doc_123,true,trip,coastal-loop',
+        ].join('\n');
+        const fetchImpl = createFetch(csv, {
+            doc_123: '<html><body><p>{{trip-photo:missing-photo}}</p></body></html>',
+        });
+
+        await expect(syncBlogPosts({ sheetId: 'sheet_123', repoRoot, today, fetchImpl }))
+            .rejects.toThrow(/unknown photo "missing-photo"/);
+        expect(fs.existsSync(path.join(repoRoot, 'src/content/blog/coastal-loop.mdx'))).toBe(false);
     });
 
     it('defaults to Sheet-authoritative posts.json and MDX generation', async () => {

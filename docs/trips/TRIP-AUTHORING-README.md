@@ -164,16 +164,27 @@ to:
 src/content/trips/<trip-id>.json
 ```
 
-The `id` must match the Sheet's `trip_id`. Populate:
+The `id` must match the Sheet `trip_id` value. Add these required fields:
 
 - Trip start and end dates
-- Total distance and motorcycle
-- Broad regions or states
-- Hero photograph
+- A hero photo ID
 - GeoJSON and optional static map paths
 - Important route stops
 - Photograph metadata
-- Named gallery groups
+
+You can also add the total distance, motorcycle, broad regions or states, and named gallery groups.
+
+Use these manifest rules:
+
+- Use `YYYY-MM-DD` for each date. The end date must not be before the start date.
+- Set `hero` to a photo ID from the `photos` array.
+- Use a unique lowercase ID for each photo and stop.
+- Put longitude before latitude in each stop coordinate pair.
+- Use positive integer values for photo width and height.
+- Reference only photo IDs that exist in the manifest when you define a gallery.
+- Use a positive number for `distanceMiles` when you include that field.
+
+The blog sync checks each trip shortcode against the matching manifest. The application also validates the complete manifest schema during the build. Both checks stop publication when they find invalid data.
 
 Example photograph entry:
 
@@ -191,7 +202,7 @@ Example photograph entry:
 }
 ```
 
-The site validates dates, coordinates, dimensions, duplicate IDs, and gallery references. Invalid manifests fail loudly during development instead of publishing a partial story.
+The site validates dates, coordinates, dimensions, duplicate IDs, hero references, and gallery references. An invalid manifest stops the build.
 
 ## 6. Prepare, Review, and Publish Assets
 

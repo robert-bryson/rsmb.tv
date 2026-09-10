@@ -1,8 +1,7 @@
 import { useEffect, useId, useRef } from 'react';
-import PhotoSwipeLightbox from 'photoswipe/lightbox';
-import 'photoswipe/style.css';
 import { useTripStory } from '../TripStoryContext';
 import { TripPhotoFigure } from './TripPhoto';
+import { createTripPhotoLightbox } from './tripPhotoSwipe';
 
 export function TripGallery({ galleryId }: { galleryId: string }) {
     const { manifest, photos } = useTripStory();
@@ -15,31 +14,7 @@ export function TripGallery({ galleryId }: { galleryId: string }) {
     useEffect(() => {
         if (!galleryRef.current) return;
 
-        const lightbox = new PhotoSwipeLightbox({
-            gallery: galleryRef.current,
-            children: 'a[data-pswp-width]',
-            pswpModule: () => import('photoswipe'),
-        });
-
-        lightbox.on('uiRegister', () => {
-            lightbox.pswp?.ui?.registerElement({
-                name: 'trip-caption',
-                className: 'trip-lightbox-caption',
-                order: 9,
-                appendTo: 'root',
-                onInit: (element, pswp) => {
-                    const updateCaption = () => {
-                        const slideElement = pswp.currSlide?.data.element;
-                        const figure = slideElement instanceof HTMLElement ? slideElement.closest('figure') : null;
-                        element.textContent = figure?.querySelector('figcaption')?.textContent ?? '';
-                    };
-                    pswp.on('change', updateCaption);
-                    updateCaption();
-                },
-            });
-        });
-
-        lightbox.init();
+        const lightbox = createTripPhotoLightbox(galleryRef.current);
         return () => lightbox.destroy();
     }, []);
 

@@ -1,0 +1,151 @@
+{
+    "id": "ocean-shores-2024",
+    "dates": {
+        "start": "2024-02-17",
+        "end": "2024-02-20"
+    },
+    "motorcycle": "Honda CB500X",
+    "regions": [
+        "Washington"
+    ],
+    "hero": "2024-ocean-shores-4-beach",
+    "route": {
+        "geoJson": "https://data.rsmb.tv/trips/ocean-shores-2024/geo/route.geojson",
+        "alt": "Map of the round trip between Seattle and Ocean Shores, Washington."
+    },
+    "stops": [
+        {
+            "id": "seattle-departure",
+            "name": "Seattle",
+            "coordinates": [
+                -122.32373,
+                47.59587
+            ],
+            "date": "2024-02-17"
+        },
+        {
+            "id": "ocean-shores",
+            "name": "Ocean Shores",
+            "coordinates": [
+                -124.16739,
+                47.01277
+            ],
+            "date": "2024-02-17"
+        },
+        {
+            "id": "seattle-return",
+            "name": "Seattle",
+            "coordinates": [
+                -122.33947,
+                47.60292
+            ],
+            "date": "2024-02-20"
+        }
+    ],
+    "photos": [
+        {
+            "id": "2024-ocean-shores-1-cb500x-ferry",
+            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-1600.webp 1600w",
+            "width": 1600,
+            "height": 2133,
+            "alt": "A Honda CB500X secured on the vehicle deck of a Washington ferry."
+        },
+        {
+            "id": "2024-ocean-shores-2-ferry-rainier",
+            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-2-ferry-rainier-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-2-ferry-rainier-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-2-ferry-rainier-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-2-ferry-rainier-1600.webp 1600w",
+            "width": 1600,
+            "height": 1200,
+            "alt": "Mount Rainier seen across the water from a Washington ferry."
+        },
+        {
+            "id": "2024-ocean-shores-3-ferry-baker",
+            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-1600.webp 1600w",
+            "width": 1600,
+            "height": 1200,
+            "alt": "Mount Baker visible beyond Puget Sound from the ferry."
+        },
+        {
+            "id": "2024-ocean-shores-4-beach",
+            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A motorcycle parked on the broad beach at Ocean Shores beneath an overcast sky."
+        },
+        {
+            "id": "2024-ocean-shores-5-bears",
+            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Bear figures beside the road during the ride through western Washington."
+        },
+        {
+            "id": "2024-ocean-shores-6-bear-gun",
+            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-1600.webp 1600w",
+            "width": 1600,
+            "height": 2400,
+            "alt": "A roadside bear figure holding a carved wooden rifle."
+        },
+        {
+            "id": "2024-ocean-shores-7-asparagus",
+            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-1600.webp 1600w",
+            "width": 1600,
+            "height": 2400,
+            "alt": "A large asparagus sculpture beside the road."
+        },
+        {
+            "id": "2024-ocean-shores-8-bog",
+            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-8-bog-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-8-bog-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-8-bog-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-8-bog-1600.webp 1600w",
+            "width": 1600,
+            "height": 1200,
+            "alt": "A wetland bog under gray winter skies near Ocean Shores."
+        },
+        {
+            "id": "2024-ocean-shores-9-maze",
+            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-9-maze-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-9-maze-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-9-maze-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-9-maze-1600.webp 1600w",
+            "width": 1600,
+            "height": 1200,
+            "alt": "A maze attraction encountered along the coastal route."
+        },
+        {
+            "id": "2024-ocean-shores-10-seattle-skyline",
+            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-1600.webp 1600w",
+            "width": 1600,
+            "height": 1200,
+            "alt": "The Seattle skyline viewed across the water on the return trip."
+        }
+    ],
+    "galleries": {
+        "day-one-gallery-id": [
+            "2024-ocean-shores-1-cb500x-ferry",
+            "2024-ocean-shores-2-ferry-rainier",
+            "2024-ocean-shores-3-ferry-baker"
+        ],
+        "day-two-gallery-id": [
+            "2024-ocean-shores-4-beach",
+            "2024-ocean-shores-5-bears",
+            "2024-ocean-shores-6-bear-gun",
+            "2024-ocean-shores-7-asparagus",
+            "2024-ocean-shores-8-bog",
+            "2024-ocean-shores-9-maze"
+        ],
+        "ride-home-gallery-id": [
+            "2024-ocean-shores-4-beach",
+            "2024-ocean-shores-5-bears",
+            "2024-ocean-shores-6-bear-gun",
+            "2024-ocean-shores-7-asparagus",
+            "2024-ocean-shores-8-bog",
+            "2024-ocean-shores-9-maze",
+            "2024-ocean-shores-10-seattle-skyline"
+        ]
+    }
+}

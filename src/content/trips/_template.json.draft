@@ -4,18 +4,9 @@
         "start": "YYYY-MM-DD",
         "end": "YYYY-MM-DD"
     },
-    "distanceMiles": 0,
     "motorcycle": "Motorcycle",
     "regions": ["Region"],
-    "hero": {
-        "id": "hero",
-        "src": "https://data.rsmb.tv/trips/trip-slug/photos/hero-1600.webp",
-        "srcSet": "https://data.rsmb.tv/trips/trip-slug/photos/hero-480.webp 480w, https://data.rsmb.tv/trips/trip-slug/photos/hero-960.webp 960w, https://data.rsmb.tv/trips/trip-slug/photos/hero-1600.webp 1600w",
-        "width": 1600,
-        "height": 1067,
-        "alt": "Describe the meaningful content of the photograph.",
-        "caption": "Optional caption"
-    },
+    "hero": "hero",
     "route": {
         "geoJson": "https://data.rsmb.tv/trips/trip-slug/geo/route.geojson",
         "staticImage": "https://data.rsmb.tv/trips/trip-slug/geo/route-fallback.webp",
@@ -29,7 +20,17 @@
             "date": "YYYY-MM-DD"
         }
     ],
-    "photos": [],
+    "photos": [
+        {
+            "id": "hero",
+            "src": "https://data.rsmb.tv/trips/trip-slug/photos/hero-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/trip-slug/photos/hero-480.webp 480w, https://data.rsmb.tv/trips/trip-slug/photos/hero-960.webp 960w, https://data.rsmb.tv/trips/trip-slug/photos/hero-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Describe the meaningful content of the photograph.",
+            "caption": "Optional caption"
+        }
+    ],
     "galleries": {
         "highlights": []
     }

@@ -302,17 +302,20 @@ function requireField(record, field, errors) {
     return value;
 }
 
-export function normalizeBlogRecords(records, { today = new Date() } = {}) {
+export function normalizeBlogRecords(records, { today = new Date(), previewSlug } = {}) {
     const entries = [];
     const errors = [];
     const seenSlugs = new Map();
 
     for (const record of records) {
-        if (!isPublished(record.values.published)) continue;
+        const recordSlug = String(record.values.slug ?? '').trim() || slugifyTitle(record.values.title);
+        const isPreview = !isPublished(record.values.published) && recordSlug === previewSlug;
+        if (!isPublished(record.values.published) && !isPreview) continue;
 
         const title = requireField(record, 'title', errors);
         const description = requireField(record, 'description', errors);
-        const rawDate = requireField(record, 'date', errors);
+        const rawDate = String(record.values.date ?? '').trim();
+        if (!rawDate && !isPreview) errors.push(`Row ${record.rowNumber}: date is required.`);
         const rawDocId = requireField(record, 'google_doc_id', errors);
         const rawSlug = String(record.values.slug ?? '').trim();
         const slug = rawSlug || slugifyTitle(title);
@@ -327,6 +330,8 @@ export function normalizeBlogRecords(records, { today = new Date() } = {}) {
             } catch (error) {
                 errors.push(`Row ${record.rowNumber}: ${error.message}`);
             }
+        } else if (isPreview) {
+            date = formatIsoDate(today.getUTCFullYear(), today.getUTCMonth() + 1, today.getUTCDate());
         }
 
         if (!slug) errors.push(`Row ${record.rowNumber}: slug could not be derived.`);
@@ -412,8 +417,9 @@ export function parseBlogSheet(csv, options = {}) {
 export function parseBlogSheetWithSummary(csv, options = {}) {
     const records = parseRecords(parseCsv(csv));
     const entries = normalizeBlogRecords(records, options);
+    const includedRows = new Set(entries.map((entry) => entry.rowNumber));
     const skippedRows = records
-        .filter((record) => !isPublished(record.values.published))
+        .filter((record) => !includedRows.has(record.rowNumber))
         .map(skippedRecordSummary);
 
     return {
@@ -918,15 +924,29 @@ export function convertHtmlToMarkdown(html, { turndownService = createTurndownSe
     return markdown;
 }
 
-export function expandTripShortcodes(markdown, post) {
+export function expandTripShortcodes(markdown, post, manifest) {
     if (post.format !== TRIP_FORMAT) return markdown;
+
+    const stopIds = new Set(manifest?.stops?.map((stop) => stop.id) ?? []);
+    const photoIds = new Set(manifest?.photos?.map((photo) => photo.id) ?? []);
+    const galleryIds = new Set(Object.keys(manifest?.galleries ?? {}));
+    const assertReference = (kind, id, validIds) => {
+        if (manifest && !validIds.has(id)) {
+            throw new Error(`Trip "${post.tripId}" shortcode references unknown ${kind} "${id}".`);
+        }
+        return id;
+    };
 
     const expanded = markdown
         .replace(/^\{\{trip-map(?::([a-z0-9]+(?:-[a-z0-9]+)*))?\}\}$/gm, (_match, stopId) => (
-            stopId ? `<TripMap stopId="${stopId}" />` : '<TripMap />'
+            stopId ? `<TripMap stopId="${assertReference('stop', stopId, stopIds)}" />` : '<TripMap />'
         ))
-        .replace(/^\{\{trip-photo:([a-z0-9]+(?:-[a-z0-9]+)*)\}\}$/gm, '<TripPhoto photoId="$1" />')
-        .replace(/^\{\{trip-gallery:([a-z0-9]+(?:-[a-z0-9]+)*)\}\}$/gm, '<TripGallery galleryId="$1" />')
+        .replace(/^\{\{trip-photo:([a-z0-9]+(?:-[a-z0-9]+)*)\}\}$/gm, (_match, photoId) => (
+            `<TripPhoto photoId="${assertReference('photo', photoId, photoIds)}" />`
+        ))
+        .replace(/^\{\{trip-gallery:([a-z0-9]+(?:-[a-z0-9]+)*)\}\}$/gm, (_match, galleryId) => (
+            `<TripGallery galleryId="${assertReference('gallery', galleryId, galleryIds)}" />`
+        ))
         .replace(/^\{\{trip-facts\}\}$/gm, '<TripFacts />');
 
     const unsupported = expanded.match(/^\{\{trip-[^\n]+\}\}$/m);
@@ -934,8 +954,8 @@ export function expandTripShortcodes(markdown, post) {
     return expanded;
 }
 
-export function buildMdx(post, markdown) {
-    const body = expandTripShortcodes(markdown.trim(), post);
+export function buildMdx(post, markdown, manifest) {
+    const body = expandTripShortcodes(markdown.trim(), post, manifest);
     return [
         '---',
         `title: ${JSON.stringify(post.title)}`,
@@ -969,6 +989,8 @@ function readExistingPosts(postsPath, fsImpl) {
 }
 
 export function validateTripManifestFiles(posts, { repoRoot = REPO_ROOT, fsImpl = fs } = {}) {
+    const manifests = new Map();
+
     for (const post of posts) {
         if (post.format !== TRIP_FORMAT) continue;
         if (!post.tripId) throw new Error(`Trip post "${post.slug}" is missing trip_id.`);
@@ -990,7 +1012,11 @@ export function validateTripManifestFiles(posts, { repoRoot = REPO_ROOT, fsImpl 
         if (manifest?.id !== post.tripId) {
             throw new Error(`Trip manifest "${post.tripId}" must contain id "${post.tripId}".`);
         }
+
+        manifests.set(post.tripId, manifest);
     }
+
+    return manifests;
 }
 
 function relativePortablePath(rootPath, filePath) {
@@ -1056,6 +1082,7 @@ export async function syncBlogPosts({
     postsPath = path.join(repoRoot, 'src/content/posts.json'),
     blogDir = path.join(repoRoot, 'src/content/blog'),
     replaceAll = envFlag(process.env.GOOGLE_BLOG_REPLACE_ALL, true),
+    previewSlug,
     today = new Date(),
     fetchImpl = fetch,
     fsImpl = fs,
@@ -1065,10 +1092,10 @@ export async function syncBlogPosts({
     }
 
     const csv = await fetchSheetAsCsv(sheetId, sheetName, { fetchImpl });
-    const { records, entries, skippedRows } = parseBlogSheetWithSummary(csv, { today });
+    const { records, entries, skippedRows } = parseBlogSheetWithSummary(csv, { today, previewSlug });
     const existingPosts = readExistingPosts(postsPath, fsImpl);
     const posts = mergePostMetadata(existingPosts, entries.map((entry) => entry.post), { replaceAll });
-    validateTripManifestFiles(posts, { repoRoot, fsImpl });
+    const tripManifests = validateTripManifestFiles(posts, { repoRoot, fsImpl });
     const mdxFiles = [];
 
     for (const entry of entries) {
@@ -1076,7 +1103,7 @@ export async function syncBlogPosts({
         const markdown = convertHtmlToMarkdown(html);
         mdxFiles.push({
             path: path.join(blogDir, `${entry.post.slug}.mdx`),
-            content: buildMdx(entry.post, markdown),
+            content: buildMdx(entry.post, markdown, tripManifests.get(entry.post.tripId)),
         });
     }
 

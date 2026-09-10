@@ -198,6 +198,9 @@ public/data/tornadoes/*.json
 public/data/tornadoes/tracks/*.geojson
 public/data/tornadoes/track-points/*.geojson
 
+# === Trip preview assets ===
+public/data/trips/
+
 # === Project: Ride Ledger ===
 projects/ride-ledger/data/
 projects/ride-ledger/exports/

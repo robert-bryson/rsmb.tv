@@ -6,7 +6,7 @@ import { Blog } from '../pages/Blog';
 import { Projects } from '../pages/Projects';
 import { NotFound } from '../pages/NotFound';
 import { featuredProjects, projects } from '../content/projects';
-import { getAllPosts } from '../content/posts';
+import { getBlogPosts } from '../content/posts';
 import { getJsonLdByType } from './helpers/jsonLd';
 import { renderWithRouter } from './helpers/router';
 
@@ -118,7 +118,7 @@ describe('Blog page', () => {
             url: 'https://rsmb.tv/blog',
         });
 
-        const posts = getAllPosts();
+        const posts = getBlogPosts();
         expect(jsonLd!.blogPost).toHaveLength(posts.length);
         jsonLd!.blogPost.forEach((entry, index) => {
             expect(entry.headline).toBe(posts[index].title);

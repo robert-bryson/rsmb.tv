@@ -10,7 +10,6 @@ This file contains incomplete work. Git history contains the completed work.
 ## Content publishing
 
 - [ ] Publish more blog posts from the configured Google documents.
-- [ ] Add a prepublish check that validates trip shortcodes against each trip manifest.
 - [ ] Verify that each manifest asset URL is available before a trip is published.
 
 ## Test coverage
