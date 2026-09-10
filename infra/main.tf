@@ -10,10 +10,10 @@ resource "aws_amplify_app" "rsmbtv" {
 
   tags = local.common_tags
 
-  # Keep the token that is configured in AWS.
-  # Remove this block temporarily to rotate the token.
+  # Keep secrets, build settings, and repository-managed headers configured in AWS.
+  # Remove the relevant entry temporarily to manage one with Terraform.
   lifecycle {
-    ignore_changes = [access_token]
+    ignore_changes = [access_token, environment_variables, custom_headers]
   }
 
   # SPA rewrite: serve index.html for all routes that don't match a static file
@@ -23,75 +23,7 @@ resource "aws_amplify_app" "rsmbtv" {
     status = "200"
   }
 
-  # Use JSON because Amplify returns this field as JSON.
-  custom_headers = jsonencode({
-    customHeaders = [
-      {
-        pattern = "/assets/**"
-        headers = [{
-          key   = "Cache-Control"
-          value = "public, max-age=31536000, immutable"
-        }]
-      },
-      {
-        pattern = "*.js"
-        headers = [{
-          key   = "Cache-Control"
-          value = "public, max-age=31536000, immutable"
-        }]
-      },
-      {
-        pattern = "*.css"
-        headers = [{
-          key   = "Cache-Control"
-          value = "public, max-age=31536000, immutable"
-        }]
-      },
-      {
-        pattern = "/basemaps/**"
-        headers = [{
-          key   = "Cache-Control"
-          value = "public, max-age=604800"
-        }]
-      },
-      {
-        pattern = "/data/**"
-        headers = [{
-          key   = "Cache-Control"
-          value = "public, max-age=3600"
-        }]
-      },
-      {
-        pattern = "**"
-        headers = [
-          {
-            key   = "X-Content-Type-Options"
-            value = "nosniff"
-          },
-          {
-            key   = "X-Frame-Options"
-            value = "DENY"
-          },
-          {
-            key   = "Referrer-Policy"
-            value = "strict-origin-when-cross-origin"
-          },
-          {
-            key   = "Strict-Transport-Security"
-            value = "max-age=63072000; includeSubDomains; preload"
-          },
-          {
-            key   = "Permissions-Policy"
-            value = "camera=(), microphone=(), geolocation=()"
-          },
-          {
-            key   = "Content-Security-Policy"
-            value = "default-src 'self'; script-src 'self' 'unsafe-eval' https://cloud.umami.is; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://data.rsmb.tv https://*.cartocdn.com https://*.basemaps.cartocdn.com; connect-src 'self' https://cloud.umami.is https://data.rcc-acis.org https://data.rsmb.tv https://*.cartocdn.com https://*.basemaps.cartocdn.com https://demotiles.maplibre.org; font-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
-          }
-        ]
-      }
-    ]
-  })
+  custom_headers = jsonencode(yamldecode(file("${path.module}/../customHttp.yml")).customHeaders)
 }
 
 # Production branch

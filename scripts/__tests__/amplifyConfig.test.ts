@@ -61,10 +61,12 @@ describe('amplify.yml', () => {
 
 describe('Amplify response headers', () => {
     it('allows trip images and route requests from the data CDN', () => {
-        const config = readRepoFile('infra/main.tf');
+        const config = readRepoFile('customHttp.yml');
         const connectSources = config.match(/connect-src ([^;]+)/)?.[1];
 
         expect(config).toContain("img-src 'self' data: blob: https://data.rsmb.tv");
+        expect(config).toContain("script-src 'self' 'unsafe-eval' https://cloud.umami.is");
+        expect(connectSources).toContain('https://cloud.umami.is');
         expect(connectSources).toContain('https://data.rcc-acis.org');
         expect(connectSources).toContain('https://data.rsmb.tv');
     });
