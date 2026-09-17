@@ -511,6 +511,15 @@ function manifestAssetUrls(manifest) {
     return [...urls].filter(Boolean);
 }
 
+async function fetchTripAssetStatus(assetUrl, { fetchImpl = fetch } = {}) {
+    const headResponse = await fetchImpl(assetUrl, { method: 'HEAD' });
+    if (headResponse.status !== 405 && headResponse.status !== 501) return headResponse;
+
+    const getResponse = await fetchImpl(assetUrl, { method: 'GET' });
+    await getResponse.body?.cancel?.();
+    return getResponse;
+}
+
 export async function validateTripAssetUrls(posts, manifests, { fetchImpl = fetch } = {}) {
     for (const post of posts) {
         if (post.format !== TRIP_FORMAT || !post.tripId) continue;
@@ -529,10 +538,7 @@ export async function validateTripAssetUrls(posts, manifests, { fetchImpl = fetc
             }
 
             try {
-                let response = await fetchImpl(assetUrl, { method: 'HEAD' });
-                if (response.status === 405 || response.status === 501) {
-                    response = await fetchImpl(assetUrl, { method: 'GET' });
-                }
+                const response = await fetchTripAssetStatus(assetUrl, { fetchImpl });
                 if (!response.ok) {
                     throw new Error(
                         `Trip "${post.tripId}" asset URL is not available: ${assetUrl} (${response.status} ${response.statusText})`,

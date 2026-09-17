@@ -630,10 +630,11 @@ describe('syncBlogPosts', () => {
                 }],
             },
         ]]);
+        const cancel = vi.fn(async () => {});
         const fetchImpl = vi.fn(async (_url: string | URL, init?: RequestInit) => (
             init?.method === 'HEAD'
                 ? response('', 405, 'Method Not Allowed')
-                : response('', 200, 'OK')
+                : { ...response('', 200, 'OK'), body: { cancel } }
         ));
 
         await expect(validateTripAssetUrls([post], manifests, { fetchImpl })).resolves.toBeUndefined();
@@ -641,6 +642,7 @@ describe('syncBlogPosts', () => {
             'https://data.rsmb.tv/trips/coastal-loop/geo/route.geojson',
             expect.objectContaining({ method: 'GET' }),
         );
+        expect(cancel).toHaveBeenCalled();
     });
 
     it('rejects trip content that references an unknown manifest item', async () => {
