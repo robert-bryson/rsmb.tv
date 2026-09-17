@@ -671,6 +671,62 @@ describe('syncBlogPosts', () => {
         await expect(validateTripAssetUrls([post], manifests, { fetchImpl })).resolves.toBeUndefined();
     });
 
+    it.each([
+        'http://data.rsmb.tv/trips/coastal-loop/geo/route.geojson',
+        'https://example.com/trips/coastal-loop/geo/route.geojson',
+        'https://data.rsmb.tv/trips/another-trip/geo/route.geojson',
+    ])('rejects trip assets outside the production trip path: %s', async (geoJson) => {
+        const post = {
+            slug: 'coastal-loop',
+            format: 'trip',
+            tripId: 'coastal-loop',
+        };
+        const manifests = new Map([[
+            'coastal-loop',
+            {
+                id: 'coastal-loop',
+                route: { geoJson },
+                photos: [],
+            },
+        ]]);
+        const fetchImpl = vi.fn();
+
+        await expect(validateTripAssetUrls([post], manifests, { fetchImpl }))
+            .rejects.toThrow(/must be hosted under https:\/\/data\.rsmb\.tv\/trips\/coastal-loop\//);
+        expect(fetchImpl).not.toHaveBeenCalled();
+    });
+
+    it('times out stalled trip asset probes', async () => {
+        const post = {
+            slug: 'coastal-loop',
+            format: 'trip',
+            tripId: 'coastal-loop',
+        };
+        const manifests = new Map([[
+            'coastal-loop',
+            {
+                id: 'coastal-loop',
+                route: {
+                    geoJson: 'https://data.rsmb.tv/trips/coastal-loop/geo/route.geojson',
+                },
+                photos: [],
+            },
+        ]]);
+        const fetchImpl = vi.fn((_url: string | URL, init?: RequestInit) => new Promise((_resolve, reject) => {
+            init?.signal?.addEventListener('abort', () => reject(init.signal?.reason), { once: true });
+        }));
+
+        await expect(validateTripAssetUrls([post], manifests, { fetchImpl, timeoutMs: 1 }))
+            .rejects.toThrow(/asset URL could not be checked/);
+        expect(fetchImpl).toHaveBeenCalledWith(
+            'https://data.rsmb.tv/trips/coastal-loop/geo/route.geojson',
+            expect.objectContaining({
+                method: 'HEAD',
+                signal: expect.any(AbortSignal),
+            }),
+        );
+    });
+
     it('rejects trip content that references an unknown manifest item', async () => {
         const repoRoot = createTempDir();
         const manifestDir = path.join(repoRoot, 'src/content/trips');
