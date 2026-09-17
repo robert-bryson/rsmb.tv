@@ -528,17 +528,20 @@ export async function validateTripAssetUrls(posts, manifests, { fetchImpl = fetc
                 throw new Error(`Trip "${post.tripId}" asset URL must use http or https: ${assetUrl}`);
             }
 
-            let response;
             try {
-                response = await fetchImpl(assetUrl, { method: 'HEAD' });
+                let response = await fetchImpl(assetUrl, { method: 'HEAD' });
+                if (response.status === 405 || response.status === 501) {
+                    response = await fetchImpl(assetUrl, { method: 'GET' });
+                }
+                if (!response.ok) {
+                    throw new Error(
+                        `Trip "${post.tripId}" asset URL is not available: ${assetUrl} (${response.status} ${response.statusText})`,
+                    );
+                }
             } catch (error) {
+                if (error instanceof Error && error.message.includes('asset URL is not available')) throw error;
                 throw new Error(
                     `Trip "${post.tripId}" asset URL could not be checked: ${assetUrl} (${error instanceof Error ? error.message : error})`,
-                );
-            }
-            if (!response.ok) {
-                throw new Error(
-                    `Trip "${post.tripId}" asset URL is not available: ${assetUrl} (${response.status} ${response.statusText})`,
                 );
             }
         }

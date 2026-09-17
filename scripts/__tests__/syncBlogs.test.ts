@@ -611,6 +611,38 @@ describe('syncBlogPosts', () => {
         );
     });
 
+    it('falls back to GET when an asset host does not support HEAD', async () => {
+        const post = {
+            slug: 'coastal-loop',
+            format: 'trip',
+            tripId: 'coastal-loop',
+        };
+        const manifests = new Map([[
+            'coastal-loop',
+            {
+                id: 'coastal-loop',
+                route: {
+                    geoJson: 'https://data.rsmb.tv/trips/coastal-loop/geo/route.geojson',
+                },
+                photos: [{
+                    id: 'hero',
+                    src: 'https://data.rsmb.tv/trips/coastal-loop/photos/hero-1600.webp',
+                }],
+            },
+        ]]);
+        const fetchImpl = vi.fn(async (_url: string | URL, init?: RequestInit) => (
+            init?.method === 'HEAD'
+                ? response('', 405, 'Method Not Allowed')
+                : response('', 200, 'OK')
+        ));
+
+        await expect(validateTripAssetUrls([post], manifests, { fetchImpl })).resolves.toBeUndefined();
+        expect(fetchImpl).toHaveBeenCalledWith(
+            'https://data.rsmb.tv/trips/coastal-loop/geo/route.geojson',
+            expect.objectContaining({ method: 'GET' }),
+        );
+    });
+
     it('rejects trip content that references an unknown manifest item', async () => {
         const repoRoot = createTempDir();
         const manifestDir = path.join(repoRoot, 'src/content/trips');
