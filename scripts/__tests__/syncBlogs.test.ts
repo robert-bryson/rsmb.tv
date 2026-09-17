@@ -611,7 +611,7 @@ describe('syncBlogPosts', () => {
         );
     });
 
-    it('falls back to GET when an asset host does not support HEAD', async () => {
+    it('falls back to GET when a host rejects the HEAD probe', async () => {
         const post = {
             slug: 'coastal-loop',
             format: 'trip',
@@ -643,6 +643,31 @@ describe('syncBlogPosts', () => {
             expect.objectContaining({ method: 'GET' }),
         );
         expect(cancel).toHaveBeenCalled();
+    });
+
+    it('accepts assets when HEAD is forbidden but GET succeeds', async () => {
+        const post = {
+            slug: 'coastal-loop',
+            format: 'trip',
+            tripId: 'coastal-loop',
+        };
+        const manifests = new Map([[
+            'coastal-loop',
+            {
+                id: 'coastal-loop',
+                route: {
+                    geoJson: 'https://data.rsmb.tv/trips/coastal-loop/geo/route.geojson',
+                },
+                photos: [],
+            },
+        ]]);
+        const fetchImpl = vi.fn(async (_url: string | URL, init?: RequestInit) => (
+            init?.method === 'HEAD'
+                ? response('', 403, 'Forbidden')
+                : response('', 200, 'OK')
+        ));
+
+        await expect(validateTripAssetUrls([post], manifests, { fetchImpl })).resolves.toBeUndefined();
     });
 
     it('rejects trip content that references an unknown manifest item', async () => {

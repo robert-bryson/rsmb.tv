@@ -513,7 +513,7 @@ function manifestAssetUrls(manifest) {
 
 async function fetchTripAssetStatus(assetUrl, { fetchImpl = fetch } = {}) {
     const headResponse = await fetchImpl(assetUrl, { method: 'HEAD' });
-    if (headResponse.status !== 405 && headResponse.status !== 501) return headResponse;
+    if (headResponse.ok) return headResponse;
 
     const getResponse = await fetchImpl(assetUrl, { method: 'GET' });
     await getResponse.body?.cancel?.();
