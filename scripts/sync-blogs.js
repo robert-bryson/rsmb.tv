@@ -37,6 +37,7 @@ const LOCAL_ENV_FILES = ['.env', '.env.local', '.env.development', '.env.develop
 export const DEFAULT_BLOG_SHEET_NAME = 'Blog Posts';
 
 const REQUIRED_HEADERS = ['title', 'date', 'description', 'tags', 'google_doc_id', 'published'];
+const TRIP_ASSET_REQUEST_TIMEOUT_MS = 10_000;
 const TRUE_VALUES = new Set(['1', 'true', 'yes', 'y', 'published']);
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const TRIP_FORMAT = 'trip';
@@ -511,16 +512,19 @@ function manifestAssetUrls(manifest) {
     return [...urls].filter(Boolean);
 }
 
-async function fetchTripAssetStatus(assetUrl, { fetchImpl = fetch } = {}) {
-    const headResponse = await fetchImpl(assetUrl, { method: 'HEAD' });
+async function fetchTripAssetStatus(assetUrl, { fetchImpl = fetch, signal } = {}) {
+    const headResponse = await fetchImpl(assetUrl, { method: 'HEAD', signal });
     if (headResponse.ok) return headResponse;
 
-    const getResponse = await fetchImpl(assetUrl, { method: 'GET' });
+    const getResponse = await fetchImpl(assetUrl, { method: 'GET', signal });
     await getResponse.body?.cancel?.();
     return getResponse;
 }
 
-export async function validateTripAssetUrls(posts, manifests, { fetchImpl = fetch } = {}) {
+export async function validateTripAssetUrls(posts, manifests, {
+    fetchImpl = fetch,
+    timeoutMs = TRIP_ASSET_REQUEST_TIMEOUT_MS,
+} = {}) {
     for (const post of posts) {
         if (post.format !== TRIP_FORMAT || !post.tripId) continue;
         const manifest = manifests.get(post.tripId);
@@ -538,7 +542,8 @@ export async function validateTripAssetUrls(posts, manifests, { fetchImpl = fetc
             }
 
             try {
-                const response = await fetchTripAssetStatus(assetUrl, { fetchImpl });
+                const signal = AbortSignal.timeout(timeoutMs);
+                const response = await fetchTripAssetStatus(assetUrl, { fetchImpl, signal });
                 if (!response.ok) {
                     throw new Error(
                         `Trip "${post.tripId}" asset URL is not available: ${assetUrl} (${response.status} ${response.statusText})`,

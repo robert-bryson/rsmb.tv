@@ -671,6 +671,33 @@ describe('syncBlogPosts', () => {
         await expect(validateTripAssetUrls([post], manifests, { fetchImpl })).resolves.toBeUndefined();
     });
 
+    it('stops checking an asset when the request exceeds the timeout', async () => {
+        const post = {
+            slug: 'coastal-loop',
+            format: 'trip',
+            tripId: 'coastal-loop',
+        };
+        const assetUrl = 'https://data.rsmb.tv/trips/coastal-loop/geo/route.geojson';
+        const manifests = new Map([[
+            'coastal-loop',
+            {
+                id: 'coastal-loop',
+                route: { geoJson: assetUrl },
+                photos: [],
+            },
+        ]]);
+        const fetchImpl = vi.fn((_url: string | URL, init?: RequestInit) => new Promise<Response>((_resolve, reject) => {
+            init?.signal?.addEventListener('abort', () => reject(init.signal?.reason), { once: true });
+        }));
+
+        await expect(validateTripAssetUrls([post], manifests, { fetchImpl, timeoutMs: 1 }))
+            .rejects.toThrow(/asset URL could not be checked/);
+        expect(fetchImpl).toHaveBeenCalledWith(
+            assetUrl,
+            expect.objectContaining({ method: 'HEAD', signal: expect.any(AbortSignal) }),
+        );
+    });
+
     it('rejects trip content that references an unknown manifest item', async () => {
         const repoRoot = createTempDir();
         const manifestDir = path.join(repoRoot, 'src/content/trips');

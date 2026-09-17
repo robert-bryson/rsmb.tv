@@ -45,6 +45,10 @@ resource "aws_amplify_domain_association" "rsmbtv" {
   app_id      = aws_amplify_app.rsmbtv.id
   domain_name = var.domain_name
 
+  certificate_settings {
+    type = "AMPLIFY_MANAGED"
+  }
+
   # www.rsmb.tv → main branch
   sub_domain {
     branch_name = aws_amplify_branch.main.branch_name

@@ -72,3 +72,16 @@ describe('Amplify response headers', () => {
         expect(connectSources).toContain('https://data.rsmb.tv');
     });
 });
+
+describe('Amplify domain', () => {
+    it('uses an Amplify-managed certificate for the hosted domain', () => {
+        const config = readRepoFile('infra/main.tf');
+        const domainAssociation = config.match(
+            /resource "aws_amplify_domain_association" "rsmbtv" \{([\s\S]*?)\n\}/,
+        )?.[1];
+
+        expect(domainAssociation).toBeDefined();
+        expect(domainAssociation).toMatch(/certificate_settings\s*\{[\s\S]*?type\s*=\s*"AMPLIFY_MANAGED"/);
+        expect(domainAssociation).not.toContain('custom_certificate_arn');
+    });
+});

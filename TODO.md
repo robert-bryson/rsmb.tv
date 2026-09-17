@@ -11,10 +11,6 @@ This file contains incomplete work. Git history contains the completed work.
 
 - [ ] Publish more blog posts from the configured Google documents.
 
-## Trip publishing
-
-- [ ] Verify that each manifest asset URL is available before a trip is published.
-
 ## Browser test coverage
 
 - [ ] Test the Flights map keyboard controls and camera URL synchronization with Playwright.
