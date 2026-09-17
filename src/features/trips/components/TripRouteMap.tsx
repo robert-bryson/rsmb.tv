@@ -11,7 +11,7 @@ type TripRouteMapProps = { stopId?: string; trackId?: string };
 type BasemapId = 'muted' | 'street' | 'terrain';
 type BasemapPaintProperty = 'raster-saturation' | 'raster-brightness-min' | 'raster-brightness-max' | 'raster-contrast';
 
-maplibregl.setWorkerUrl(maplibreWorkerUrl);
+maplibregl.setWorkerUrl(`${maplibreWorkerUrl}?route-worker=1`);
 
 const basemaps: Array<{
     id: BasemapId;

@@ -88,6 +88,16 @@ describe('Amplify response headers', () => {
 });
 
 describe('Amplify domain', () => {
+    it('serves JavaScript module assets without the SPA rewrite', () => {
+        const config = readRepoFile('infra/main.tf');
+        const spaRewrite = config.match(
+            /custom_rule \{[\s\S]*?source\s*=\s*"([^"]+)"[\s\S]*?target\s*=\s*"\/index\.html"/,
+        )?.[1];
+
+        expect(spaRewrite).toBeDefined();
+        expect(spaRewrite?.match(/\(css\|([^)]+)\)/)?.[1].split('|')).toContain('mjs');
+    });
+
     it('uses an Amplify-managed certificate for the hosted domain', () => {
         const config = readRepoFile('infra/main.tf');
         const domainAssociation = config.match(
