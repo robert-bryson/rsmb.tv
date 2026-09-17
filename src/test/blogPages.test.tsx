@@ -46,15 +46,15 @@ const testPosts = vi.hoisted(() => [
 const testTrips = vi.hoisted(() => [{
     slug: 'coastal-loop',
     title: 'Coastal Loop',
-    date: '2026-01-15',
+    date: '2026-04-01',
     description: 'A motorcycle trip along the coast.',
     tags: ['Motorcycles', 'Travel'],
     format: 'trip' as const,
-    tripId: 'coastal-loop',
+    tripId: 'ocean-shores-2024',
 }]);
 
 vi.mock('../content/posts', () => ({
-    getAllPosts: () => [...testPosts.slice(0, 3), ...testTrips, ...testPosts.slice(3)],
+    getAllPosts: () => [testPosts[0], ...testTrips, ...testPosts.slice(1)],
     getBlogPosts: () => testPosts,
     getTripPosts: () => testTrips,
     getPostBySlug: (slug: string) => {
@@ -86,12 +86,14 @@ describe('Posts page', () => {
 
         expect(screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent)).toEqual([
             'Mapping Boring Data',
+            'Coastal Loop',
             'Weather Records',
             'React Routing',
-            'Coastal Loop',
             'Hidden Fourth Post',
         ]);
-        expect(screen.getByRole('link', { name: /Coastal Loop/i })).toHaveAttribute('href', '/trips/coastal-loop');
+        const tripLink = screen.getByRole('link', { name: /Coastal Loop/i });
+        expect(tripLink).toHaveAttribute('href', '/trips/coastal-loop');
+        expect(tripLink.querySelector('img')).toBeInTheDocument();
         expect(screen.getByRole('link', { name: /Mapping Boring Data/i })).toHaveAttribute('href', '/blog/mapping-boring-data');
     });
 
@@ -188,15 +190,19 @@ describe('BlogPost tag navigation', () => {
 });
 
 describe('Home page writing hierarchy', () => {
-    it('shows recent posts after projects without flooding the front page', () => {
+    it('shows the latest writing and trips after selected work without flooding the front page', () => {
         renderWithRouter(<Home />);
 
-        expect(screen.getByRole('heading', { level: 2, name: 'Projects' })).toBeInTheDocument();
-        expect(screen.getByRole('heading', { level: 2, name: 'Posts' })).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: /View all posts/i })).toHaveAttribute('href', '/posts');
+        expect(screen.getByRole('heading', { level: 2, name: 'Selected work' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 2, name: 'Latest' })).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: /All posts/i })).toHaveAttribute('href', '/posts');
         expect(screen.getByRole('link', { name: /Mapping Boring Data/i })).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: /Coastal Loop/i })).toHaveAttribute('href', '/trips/coastal-loop');
         expect(screen.getByRole('link', { name: /Weather Records/i })).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: /React Routing/i })).toBeInTheDocument();
+        expect(screen.queryByRole('link', { name: /React Routing/i })).not.toBeInTheDocument();
+        expect(screen.getAllByText('Writing')).toHaveLength(2);
+        expect(screen.getByText('Trip report')).toBeInTheDocument();
+        expect(screen.getByText('April 1, 2026').closest('time')).toHaveAttribute('datetime', '2026-04-01');
         expect(screen.queryByRole('link', { name: /Hidden Fourth Post/i })).not.toBeInTheDocument();
     });
 });

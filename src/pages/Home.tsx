@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom';
 import { featuredProjects } from '../content/projects';
 import { getAllPosts } from '../content/posts';
+import { getTripHero, getTripManifest } from '../features/trips';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { formatDate } from '../utils/formatDate';
 import { AUTHOR_PERSON, SITE_URL, absoluteUrl } from '../utils/siteMetadata';
+
+const selectedProjects = featuredProjects.slice(0, 3);
 
 export function Home() {
   const recentPosts = getAllPosts().slice(0, 3);
@@ -25,14 +28,13 @@ export function Home() {
 
   return (
     <div className="space-y-14">
-      {/* Intro */}
       <section>
         <h1 className="text-2xl font-semibold text-zinc-100 mb-4">
           Hi, I'm Robby
         </h1>
         <div className="prose">
           <p>
-            I'm a developer who likes building maps and apps and interactive ways to see the world.
+            I build maps, data visualizations, and tools for exploring the world.
           </p>
         </div>
       </section>
@@ -40,27 +42,27 @@ export function Home() {
       <section>
         <div className="flex items-baseline justify-between mb-4">
           <h2 className="text-sm font-medium text-zinc-400 uppercase tracking-wide">
-            Projects
+            Selected work
           </h2>
           <Link to="/projects" className="text-sm text-zinc-500 hover:text-violet-400">
-            View all projects →
+            All projects →
           </Link>
         </div>
         <ul className="grid gap-4 sm:grid-cols-2">
-          {featuredProjects.map((project, index) => {
+          {selectedProjects.map((project, index) => {
             const linkUrl = `/projects/${project.slug}`;
 
             return (
-              <li key={project.slug} className="min-w-0">
+              <li key={project.slug} className={`min-w-0 ${index === 0 ? 'sm:col-span-2' : ''}`}>
                 <Link
                   to={linkUrl}
-                  className="group flex h-full flex-col overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900/30 hover:border-zinc-700 hover:bg-zinc-900/60"
+                  className={`group grid h-full overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900/30 hover:border-zinc-700 hover:bg-zinc-900/60 ${index === 0 ? 'sm:grid-cols-[minmax(0,1.45fr)_minmax(15rem,1fr)]' : ''}`}
                 >
                   {project.previewImage && (
                     <img
                       src={project.previewImage}
                       alt=""
-                      className="aspect-video w-full border-b border-zinc-800 object-cover"
+                      className={`aspect-video h-full w-full object-cover ${index === 0 ? 'border-b border-zinc-800 sm:border-r sm:border-b-0' : 'border-b border-zinc-800'}`}
                       loading={index === 0 ? 'eager' : 'lazy'}
                       fetchPriority={index === 0 ? 'high' : 'auto'}
                     />
@@ -88,40 +90,54 @@ export function Home() {
             );
           })}
         </ul>
-        <div className="mt-6 text-center">
-          <Link
-            to="/projects"
-            className="inline-flex items-center rounded-md border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-300 hover:border-violet-500/60 hover:bg-zinc-900 hover:text-violet-300"
-          >
-            See all projects →
-          </Link>
-        </div>
       </section>
 
       {recentPosts.length > 0 && (
         <section>
           <div className="flex items-baseline justify-between mb-4">
             <h2 className="text-sm font-medium text-zinc-400 uppercase tracking-wide">
-              Posts
+              Latest
             </h2>
             <Link to="/posts" className="text-sm text-zinc-500 hover:text-violet-400">
-              View all posts →
+              All posts →
             </Link>
           </div>
-          <ul className="space-y-5">
-            {recentPosts.map((post) => (
-              <li key={post.slug}>
-                <Link to={`/${post.format === 'trip' ? 'trips' : 'blog'}/${post.slug}`} className="group block">
-                  <div className="flex items-baseline gap-3">
-                    <time className="text-sm text-zinc-500 shrink-0">{formatDate(post.date)}</time>
-                    <span className="min-w-0 break-words text-zinc-100 group-hover:text-violet-400 font-medium leading-snug">
-                      {post.title}
-                    </span>
-                  </div>
-                  <p className="text-zinc-400 text-sm mt-1 ml-0">{post.description}</p>
-                </Link>
-              </li>
-            ))}
+          <ul className="divide-y divide-zinc-800/70">
+            {recentPosts.map((post) => {
+              const isTrip = post.format === 'trip';
+              const manifest = isTrip ? getTripManifest(post.tripId) : undefined;
+              const hero = manifest ? getTripHero(manifest) : undefined;
+
+              return (
+                <li key={post.slug} className="py-5 first:pt-0 last:pb-0">
+                  <Link to={`/${isTrip ? 'trips' : 'blog'}/${post.slug}`} className="group flex items-start gap-5">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-zinc-500">
+                        <time dateTime={post.date}>{formatDate(post.date)}</time>
+                        <span className="text-xs uppercase">{isTrip ? 'Trip report' : 'Writing'}</span>
+                      </div>
+                      <h3 className="mt-1 text-lg font-medium leading-snug text-zinc-100 group-hover:text-violet-400">
+                        {post.title}
+                      </h3>
+                      <p className="mt-1 text-sm leading-relaxed text-zinc-400">{post.description}</p>
+                    </div>
+                    {hero && (
+                      <img
+                        src={hero.src}
+                        srcSet={hero.srcSet}
+                        sizes="128px"
+                        width={hero.width}
+                        height={hero.height}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        className="hidden aspect-[4/3] w-32 shrink-0 rounded-md border border-zinc-800 object-cover sm:block"
+                      />
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </section>
       )}

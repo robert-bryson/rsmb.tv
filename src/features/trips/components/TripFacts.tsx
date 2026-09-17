@@ -1,17 +1,14 @@
-import { formatDate } from '../../../utils/formatDate';
+import { formatDateRange } from '../../../utils/formatDate';
 import { useTripStory } from '../TripStoryContext';
 
 export function TripFacts() {
     const { manifest } = useTripStory();
-    const dateRange = manifest.dates.start === manifest.dates.end
-        ? formatDate(manifest.dates.start)
-        : `${formatDate(manifest.dates.start)} – ${formatDate(manifest.dates.end)}`;
     const facts = [
-        ['Dates', dateRange],
+        ['Dates', formatDateRange(manifest.dates.start, manifest.dates.end)],
         manifest.ridingDays ? ['Riding days', manifest.ridingDays.toLocaleString()] : null,
         manifest.distanceMiles ? ['Total miles', manifest.distanceMiles.toLocaleString()] : null,
         manifest.motorcycle ? ['Motorcycle', manifest.motorcycle] : null,
-        manifest.regions?.length ? ['Route', manifest.regions.join(' · ')] : null,
+        manifest.regions?.length ? ['Region', manifest.regions.join(' · ')] : null,
     ].filter((fact): fact is string[] => Boolean(fact));
 
     return (

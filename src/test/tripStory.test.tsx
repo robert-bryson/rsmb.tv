@@ -39,10 +39,10 @@ const manifest: TripManifest = {
     galleries: { highlights: ['camp'] },
 };
 
-function renderStory(children: React.ReactNode) {
+function renderStory(children: React.ReactNode, tripManifest = manifest) {
     return render(
         <MemoryRouter>
-            <TripStoryProvider manifest={manifest}>{children}</TripStoryProvider>
+            <TripStoryProvider manifest={tripManifest}>{children}</TripStoryProvider>
         </MemoryRouter>,
     );
 }
@@ -51,12 +51,34 @@ describe('trip story primitives', () => {
     it('renders trip facts as readable metadata', () => {
         renderStory(<TripFacts />);
 
+        expect(screen.getByText('Dates')).toBeInTheDocument();
+        expect(screen.getByText('May 1–3, 2024')).toBeInTheDocument();
         expect(screen.getByText('Riding days')).toBeInTheDocument();
         expect(screen.getByText('3')).toBeInTheDocument();
         expect(screen.getByText('Total miles')).toBeInTheDocument();
         expect(screen.getByText('642')).toBeInTheDocument();
         expect(screen.getByText('Honda VFR')).toBeInTheDocument();
+        expect(screen.getByText('Region')).toBeInTheDocument();
+        expect(screen.queryByText('Route')).not.toBeInTheDocument();
         expect(screen.getByText('Oregon · California')).toBeInTheDocument();
+    });
+
+    it('omits optional trip facts when the manifest does not provide them', () => {
+        const minimalManifest: TripManifest = {
+            id: manifest.id,
+            dates: manifest.dates,
+            hero: manifest.hero,
+            route: manifest.route,
+            stops: manifest.stops,
+            photos: manifest.photos,
+        };
+        renderStory(<TripFacts />, minimalManifest);
+
+        expect(screen.getByText('May 1–3, 2024')).toBeInTheDocument();
+        expect(screen.queryByText('Riding days')).not.toBeInTheDocument();
+        expect(screen.queryByText('Total miles')).not.toBeInTheDocument();
+        expect(screen.queryByText('Motorcycle')).not.toBeInTheDocument();
+        expect(screen.queryByText('Region')).not.toBeInTheDocument();
     });
 
     it('renders linked photos with intrinsic dimensions and captions', () => {

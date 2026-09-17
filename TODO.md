@@ -15,12 +15,12 @@ This file contains incomplete work. Git history contains the completed work.
 
 - [ ] Verify that each manifest asset URL is available before a trip is published.
 
-## Test coverage
+## Browser test coverage
 
-- [ ] Add Playwright tests for the Flights map keyboard controls and camera URL synchronization.
-- [ ] Add a Playwright test for trip map fallback behavior.
-- [ ] Add a Playwright test for the trip map basemap control.
-- [ ] Add a Playwright test for trip gallery keyboard controls.
+- [ ] Test the Flights map keyboard controls and camera URL synchronization with Playwright.
+- [ ] Test the trip map fallback behavior with Playwright.
+- [ ] Test the trip map basemap control with Playwright.
+- [ ] Test the trip gallery keyboard controls with Playwright.
 
 ## Temperature record data
 

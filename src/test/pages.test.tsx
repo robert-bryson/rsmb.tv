@@ -18,27 +18,27 @@ describe('Home page', () => {
 
     it('renders projects section', () => {
         renderWithRouter(<Home />);
-        expect(screen.getByRole('heading', { level: 2, name: 'Projects' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 2, name: 'Selected work' })).toBeInTheDocument();
     });
 
     it('renders projects index link', () => {
         renderWithRouter(<Home />);
-        expect(screen.getAllByRole('link', { name: /View all/i }).some((link) => link.getAttribute('href') === '/projects')).toBe(true);
-        const projectsLink = screen.getByRole('link', { name: 'See all projects →' });
+        const projectsLink = screen.getByRole('link', { name: 'All projects →' });
         expect(projectsLink).toHaveAttribute('href', '/projects');
         expect(projectsLink.closest('section')).toContainElement(
-            screen.getByRole('heading', { level: 2, name: 'Projects' }),
+            screen.getByRole('heading', { level: 2, name: 'Selected work' }),
         );
     });
 
     it('renders only the curated projects with concise summaries', () => {
         renderWithRouter(<Home />);
 
-        for (const project of featuredProjects) {
+        for (const project of featuredProjects.slice(0, 3)) {
             expect(screen.getByRole('link', { name: new RegExp(project.title, 'i') })).toBeInTheDocument();
             expect(project.summary).toBeTruthy();
             expect(screen.getByText(project.summary ?? project.description)).toBeInTheDocument();
         }
+        expect(screen.queryByRole('link', { name: /Bookend/i })).not.toBeInTheDocument();
         expect(screen.queryByRole('link', { name: /Tornado Tracks/i })).not.toBeInTheDocument();
     });
 

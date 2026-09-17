@@ -189,6 +189,8 @@ The `id` must match the Sheet `trip_id` value. Add these required fields:
 
 You can also add the number of riding days, total distance, motorcycle, broad regions or states, and named gallery groups. Use `ridingDays` for days when the motorcycle moved. Do not use the number of calendar days when the trip included rest days.
 
+The site shows the start and end dates in the trip facts. Dates in the same month use a compact range, such as `February 17–20, 2024`. The site shows values from `regions` under the `Region` label. List broad geographic areas in travel order.
+
 To use focused track maps, copy each track ID from `asset-metadata.json` into `route.tracks` with a reader-facing name and optional date:
 
 ```json
