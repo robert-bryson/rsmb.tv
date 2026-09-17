@@ -60,16 +60,22 @@ describe('amplify.yml', () => {
 });
 
 describe('Amplify response headers', () => {
-    it('allows trip images and route requests from the data CDN', () => {
+    it('allows the configured analytics, data, and map providers', () => {
         const config = readRepoFile('customHttp.yml');
+        const imageSources = config.match(/img-src ([^;]+)/)?.[1];
         const connectSources = config.match(/connect-src ([^;]+)/)?.[1];
 
-        expect(config).toContain("img-src 'self' data: blob: https://data.rsmb.tv");
         expect(config).toContain("script-src 'self' 'unsafe-eval' https://cloud.umami.is");
+        expect(imageSources).toContain('https://data.rsmb.tv');
+        expect(imageSources).toContain('https://tile.openstreetmap.org');
+        expect(imageSources).toContain('https://tile.opentopomap.org');
         expect(connectSources).toContain('https://cloud.umami.is');
         expect(connectSources).toContain('https://gateway.umami.is');
         expect(connectSources).toContain('https://data.rcc-acis.org');
         expect(connectSources).toContain('https://data.rsmb.tv');
+        expect(connectSources).toContain('https://demotiles.maplibre.org');
+        expect(connectSources).toContain('https://tile.openstreetmap.org');
+        expect(connectSources).toContain('https://tile.opentopomap.org');
     });
 });
 
