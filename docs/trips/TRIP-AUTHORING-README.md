@@ -187,7 +187,7 @@ The `id` must match the Sheet `trip_id` value. Add these required fields:
 - Important route stops
 - Photograph metadata
 
-You can also add the total distance, motorcycle, broad regions or states, and named gallery groups.
+You can also add the number of riding days, total distance, motorcycle, broad regions or states, and named gallery groups. Use `ridingDays` for days when the motorcycle moved. Do not use the number of calendar days when the trip included rest days.
 
 To use focused track maps, copy each track ID from `asset-metadata.json` into `route.tracks` with a reader-facing name and optional date:
 
@@ -208,6 +208,7 @@ Use these manifest rules:
 - Put longitude before latitude in each stop coordinate pair.
 - Use positive integer values for photo width and height.
 - Reference only photo IDs that exist in the manifest when you define a gallery.
+- Use a positive integer for `ridingDays` when you include that field.
 - Use a positive number for `distanceMiles` when you include that field.
 
 The blog sync checks each trip shortcode against the matching manifest. The application also validates the complete manifest schema during the build. Both checks stop publication when they find invalid data.

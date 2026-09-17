@@ -31,6 +31,7 @@ export interface TripManifest {
         start: string;
         end: string;
     };
+    ridingDays?: number;
     distanceMiles?: number;
     motorcycle?: string;
     regions?: string[];

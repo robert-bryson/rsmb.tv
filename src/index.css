@@ -332,3 +332,31 @@ u {
 .tornado-popup .maplibregl-popup-tip {
   display: none;
 }
+
+.trip-basemap-control-icon {
+  position: relative;
+  display: block;
+  width: 16px;
+  height: 14px;
+  margin: 7px;
+  color: #333;
+}
+
+.trip-basemap-control-icon::before,
+.trip-basemap-control-icon::after {
+  position: absolute;
+  left: 2px;
+  width: 12px;
+  height: 7px;
+  content: '';
+  border: 2px solid currentColor;
+  transform: rotate(30deg) skewX(-30deg) scaleY(0.7);
+}
+
+.trip-basemap-control-icon::before {
+  top: 0;
+}
+
+.trip-basemap-control-icon::after {
+  top: 5px;
+}

@@ -18,7 +18,9 @@ This file contains incomplete work. Git history contains the completed work.
 ## Test coverage
 
 - [ ] Add Playwright tests for the Flights map keyboard controls and camera URL synchronization.
-- [ ] Add Playwright tests for trip map fallback behavior and gallery keyboard controls.
+- [ ] Add a Playwright test for trip map fallback behavior.
+- [ ] Add a Playwright test for the trip map basemap control.
+- [ ] Add a Playwright test for trip gallery keyboard controls.
 
 ## Temperature record data
 

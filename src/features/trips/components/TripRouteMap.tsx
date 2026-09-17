@@ -8,32 +8,107 @@ import { useTripStory } from '../TripStoryContext';
 
 type RouteGeoJson = Feature<LineString | MultiLineString> | FeatureCollection<LineString | MultiLineString>;
 type TripRouteMapProps = { stopId?: string; trackId?: string };
+type BasemapId = 'muted' | 'street' | 'terrain';
+type BasemapPaintProperty = 'raster-saturation' | 'raster-brightness-min' | 'raster-brightness-max' | 'raster-contrast';
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl);
 
-const mapStyle: maplibregl.StyleSpecification = {
-    version: 8,
-    glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
-    sources: {
-        openstreetmap: {
-            type: 'raster',
+const basemaps: Array<{
+    id: BasemapId;
+    label: string;
+    tiles: string[];
+    paint: Record<BasemapPaintProperty, number>;
+}> = [
+        {
+            id: 'muted',
+            label: 'Muted',
             tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
-            tileSize: 256,
-            attribution: '&copy; OpenStreetMap contributors',
+            paint: {
+                'raster-saturation': -1,
+                'raster-brightness-min': 0.05,
+                'raster-brightness-max': 0.42,
+                'raster-contrast': 0.15,
+            },
         },
-    },
-    layers: [{
-        id: 'openstreetmap',
-        type: 'raster',
-        source: 'openstreetmap',
-        paint: {
-            'raster-saturation': -1,
-            'raster-brightness-min': 0.05,
-            'raster-brightness-max': 0.42,
-            'raster-contrast': 0.15,
+        {
+            id: 'street',
+            label: 'Street',
+            tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+            paint: {
+                'raster-saturation': 0,
+                'raster-brightness-min': 0,
+                'raster-brightness-max': 1,
+                'raster-contrast': 0,
+            },
         },
-    }],
-};
+        {
+            id: 'terrain',
+            label: 'Terrain',
+            tiles: ['https://tile.opentopomap.org/{z}/{x}/{y}.png'],
+            paint: {
+                'raster-saturation': 0,
+                'raster-brightness-min': 0,
+                'raster-brightness-max': 0.85,
+                'raster-contrast': 0.05,
+            },
+        },
+    ];
+
+function mapStyle(basemapId: BasemapId): maplibregl.StyleSpecification {
+    const basemap = basemaps.find((candidate) => candidate.id === basemapId) ?? basemaps[0];
+    return {
+        version: 8,
+        glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
+        sources: {
+            openstreetmap: {
+                type: 'raster',
+                tiles: basemap.tiles,
+                tileSize: 256,
+                attribution: '&copy; OpenStreetMap contributors &copy; OpenTopoMap',
+            },
+        },
+        layers: [{
+            id: 'openstreetmap',
+            type: 'raster',
+            source: 'openstreetmap',
+            paint: basemap.paint,
+        }],
+    };
+}
+
+class BasemapControl implements maplibregl.IControl {
+    private readonly container: HTMLDivElement;
+    private readonly button: HTMLButtonElement;
+
+    constructor(onCycle: () => void) {
+        this.container = document.createElement('div');
+        this.container.className = 'maplibregl-ctrl maplibregl-ctrl-group';
+        this.button = document.createElement('button');
+        this.button.type = 'button';
+        this.button.addEventListener('click', onCycle);
+
+        const icon = document.createElement('span');
+        icon.className = 'trip-basemap-control-icon';
+        icon.setAttribute('aria-hidden', 'true');
+        this.button.append(icon);
+        this.container.append(this.button);
+        this.setBasemap('muted');
+    }
+
+    onAdd() {
+        return this.container;
+    }
+
+    onRemove() {
+        this.container.remove();
+    }
+
+    setBasemap(id: BasemapId) {
+        const label = basemaps.find((basemap) => basemap.id === id)?.label ?? id;
+        this.button.title = `Change basemap (current: ${label})`;
+        this.button.setAttribute('aria-label', `Change basemap (current: ${label})`);
+    }
+}
 
 function routeCoordinates(route: RouteGeoJson) {
     const features = route.type === 'FeatureCollection' ? route.features : [route];
@@ -74,7 +149,9 @@ function lineDistanceKilometers(coordinates: number[][]) {
 
 function featureDistanceKilometers(feature: Feature<LineString | MultiLineString>) {
     const sourceDistance = feature.properties?.distanceKilometers;
-    if (typeof sourceDistance === 'number' && Number.isFinite(sourceDistance)) return sourceDistance;
+    if (typeof sourceDistance === 'number' && Number.isFinite(sourceDistance) && sourceDistance >= 0) {
+        return sourceDistance;
+    }
     const lines = feature.geometry.type === 'LineString'
         ? [feature.geometry.coordinates]
         : feature.geometry.coordinates;
@@ -105,13 +182,20 @@ function hasValidRouteGeometry(geometry: Geometry | undefined): geometry is Line
     return false;
 }
 
+function isRouteFeature(value: unknown): value is Feature<LineString | MultiLineString> {
+    if (!value || typeof value !== 'object') return false;
+    const feature = value as { type?: string; geometry?: Geometry };
+    return feature.type === 'Feature' && hasValidRouteGeometry(feature.geometry);
+}
+
 function isRouteGeoJson(value: unknown): value is RouteGeoJson {
     if (!value || typeof value !== 'object') return false;
-    const geoJson = value as { type?: string; geometry?: Geometry; features?: Array<{ geometry?: Geometry }> };
-    if (geoJson.type === 'Feature') return hasValidRouteGeometry(geoJson.geometry);
+    const geoJson = value as { type?: string; features?: unknown };
+    if (geoJson.type === 'Feature') return isRouteFeature(geoJson);
     return geoJson.type === 'FeatureCollection'
-        && Boolean(geoJson.features?.length)
-        && geoJson.features!.every((feature) => hasValidRouteGeometry(feature.geometry));
+        && Array.isArray(geoJson.features)
+        && geoJson.features.length > 0
+        && geoJson.features.every(isRouteFeature);
 }
 
 export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
@@ -119,6 +203,10 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
     const reducedMotion = useReducedMotion();
     const containerRef = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibregl.Map | null>(null);
+    const basemapControlRef = useRef<BasemapControl | null>(null);
+    const [basemapId, setBasemapId] = useState<BasemapId>('muted');
+    const basemapIdRef = useRef(basemapId);
+    const [hoveredStopId, setHoveredStopId] = useState<string | null>(null);
     const routeUrl = manifest.route.geoJson;
     const [routeState, setRouteState] = useState<{
         url: string;
@@ -170,17 +258,18 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
                 properties: { id: stop.id, name: stop.name, number: index + 1 } satisfies GeoJsonProperties,
             })),
         };
+        const style = mapStyle(basemapIdRef.current);
         const map = new maplibregl.Map({
             container: containerRef.current,
             style: {
-                ...mapStyle,
+                ...style,
                 sources: {
-                    ...mapStyle.sources,
+                    ...style.sources,
                     'trip-route': { type: 'geojson', data: route },
                     'trip-stops': { type: 'geojson', data: stops },
                 },
                 layers: [
-                    ...mapStyle.layers,
+                    ...style.layers,
                     {
                         id: 'trip-route-halo',
                         type: 'line',
@@ -224,8 +313,8 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
                         type: 'circle',
                         source: 'trip-stops',
                         paint: {
-                            'circle-color': '#fafafa',
-                            'circle-radius': 8,
+                            'circle-color': ['case', ['==', ['get', 'id'], stopId ?? ''], '#f59e0b', '#fafafa'],
+                            'circle-radius': ['case', ['==', ['get', 'id'], stopId ?? ''], 11, 8],
                             'circle-stroke-color': '#18181b',
                             'circle-stroke-width': 2,
                         },
@@ -246,7 +335,24 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
         });
         map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
         map.addControl(new maplibregl.FullscreenControl(), 'top-right');
+        const basemapControl = new BasemapControl(() => {
+            setBasemapId((currentId) => {
+                const currentIndex = basemaps.findIndex((basemap) => basemap.id === currentId);
+                const nextId = basemaps[(currentIndex + 1) % basemaps.length].id;
+                basemapIdRef.current = nextId;
+                return nextId;
+            });
+        });
+        basemapControl.setBasemap(basemapIdRef.current);
+        map.addControl(basemapControl, 'top-right');
         map.addControl(new maplibregl.AttributionControl({ compact: true }));
+        map.on('mouseenter', 'trip-stops', (event) => {
+            const hoveredId = event.features?.[0]?.properties?.id;
+            if (typeof hoveredId === 'string') setHoveredStopId(hoveredId);
+        });
+        map.on('mouseleave', 'trip-stops', () => {
+            setHoveredStopId(null);
+        });
         if (!stopId && !trackId) {
             map.once('load', () => {
                 map.setZoom(Math.max(map.getMinZoom(), map.getZoom() - 1));
@@ -254,11 +360,46 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
         }
 
         mapRef.current = map;
+        basemapControlRef.current = basemapControl;
         return () => {
             map.remove();
             mapRef.current = null;
+            basemapControlRef.current = null;
         };
     }, [manifest.stops, route, routeUrl, stopId, trackId]);
+
+    useEffect(() => {
+        const map = mapRef.current;
+        if (!map) return;
+        const activeStopId = hoveredStopId ?? stopId ?? '';
+        const isActiveStop: maplibregl.ExpressionSpecification = ['==', ['get', 'id'], activeStopId];
+        map.setPaintProperty('trip-stops', 'circle-color', ['case', isActiveStop, '#f59e0b', '#fafafa']);
+        map.setPaintProperty('trip-stops', 'circle-radius', ['case', isActiveStop, 11, 8]);
+    }, [hoveredStopId, stopId]);
+
+    useEffect(() => {
+        const map = mapRef.current;
+        const basemap = basemaps.find((candidate) => candidate.id === basemapId);
+        if (!map || !basemap) return;
+
+        const applyBasemap = () => {
+            if (mapRef.current !== map) return false;
+            const source = map.getSource('openstreetmap') as maplibregl.RasterTileSource | undefined;
+            if (!source) return false;
+            source.setTiles(basemap.tiles);
+            for (const [property, value] of Object.entries(basemap.paint) as Array<[BasemapPaintProperty, number]>) {
+                map.setPaintProperty('openstreetmap', property, value);
+            }
+            basemapControlRef.current?.setBasemap(basemapId);
+            return true;
+        };
+
+        if (applyBasemap()) return;
+        map.once('load', applyBasemap);
+        return () => {
+            map.off('load', applyBasemap);
+        };
+    }, [basemapId]);
 
     useEffect(() => {
         const stop = manifest.stops.find((candidate) => candidate.id === stopId);
@@ -284,7 +425,7 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
 
     return (
         <figure className="trip-breakout my-10">
-            <div className="relative aspect-[16/10] min-h-72 overflow-hidden rounded-md border border-zinc-800 bg-zinc-950">
+            <div className="relative aspect-[16/10] min-h-72 w-full overflow-hidden rounded-md border border-zinc-800 bg-zinc-950">
                 {manifest.route.staticImage && (
                     <img src={manifest.route.staticImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
                 )}
@@ -315,8 +456,16 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
                 )}
                 <ol className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-zinc-400">
                     {manifest.stops.map((stop, index) => (
-                        <li key={stop.id} className={stop.id === stopId ? 'text-amber-400' : ''}>
-                            <span className="mr-1 text-zinc-500">{index + 1}.</span>{stop.name}
+                        <li
+                            key={stop.id}
+                            onMouseEnter={() => setHoveredStopId(stop.id)}
+                            onMouseLeave={() => setHoveredStopId(null)}
+                            className={`rounded px-1.5 py-0.5 transition-colors ${stop.id === (hoveredStopId ?? stopId) ? 'bg-amber-400 text-zinc-950' : 'hover:text-zinc-200'}`}
+                        >
+                            <span className={`mr-1 ${stop.id === (hoveredStopId ?? stopId) ? 'text-zinc-800' : 'text-zinc-500'}`}>
+                                {index + 1}.
+                            </span>
+                            {stop.name}
                         </li>
                     ))}
                 </ol>

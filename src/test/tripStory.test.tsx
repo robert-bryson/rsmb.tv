@@ -12,6 +12,7 @@ import type { TripManifest } from '../features/trips/types';
 const manifest: TripManifest = {
     id: 'coastal-loop',
     dates: { start: '2024-05-01', end: '2024-05-03' },
+    ridingDays: 3,
     distanceMiles: 642,
     motorcycle: 'Honda VFR',
     regions: ['Oregon', 'California'],
@@ -50,7 +51,10 @@ describe('trip story primitives', () => {
     it('renders trip facts as readable metadata', () => {
         renderStory(<TripFacts />);
 
-        expect(screen.getByText('642 miles')).toBeInTheDocument();
+        expect(screen.getByText('Riding days')).toBeInTheDocument();
+        expect(screen.getByText('3')).toBeInTheDocument();
+        expect(screen.getByText('Total miles')).toBeInTheDocument();
+        expect(screen.getByText('642')).toBeInTheDocument();
         expect(screen.getByText('Honda VFR')).toBeInTheDocument();
         expect(screen.getByText('Oregon · California')).toBeInTheDocument();
     });
@@ -130,5 +134,12 @@ describe('trip story primitives', () => {
                 ],
             },
         })).toThrow(/Duplicate track ID/);
+    });
+
+    it('rejects a non-positive riding-day count', () => {
+        expect(() => parseTripManifest({
+            ...manifest,
+            ridingDays: 0,
+        })).toThrow();
     });
 });

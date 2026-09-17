@@ -19,6 +19,7 @@ const photoSchema = z.object({
 export const tripManifestSchema = z.object({
     id: slugSchema,
     dates: z.object({ start: dateSchema, end: dateSchema }),
+    ridingDays: z.number().int().positive().optional(),
     distanceMiles: z.number().positive().optional(),
     motorcycle: z.string().min(1).optional(),
     regions: z.array(z.string().min(1)).optional(),

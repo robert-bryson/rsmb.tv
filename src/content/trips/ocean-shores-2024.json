@@ -4,6 +4,8 @@
         "start": "2024-02-17",
         "end": "2024-02-20"
     },
+    "ridingDays": 2,
+    "distanceMiles": 306,
     "motorcycle": "Honda CB500X",
     "regions": [
         "Washington"
@@ -65,7 +67,7 @@
             "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-1600.webp 1600w",
             "width": 1600,
             "height": 1200,
-            "alt": "Mount Baker visible beyond Puget Sound to the north from the ferry. It looks much sunnier there."
+            "alt": "Mount Baker visible beyond Puget Sound to the north from the ferry. It looks much nicer up there."
         },
         {
             "id": "2024-ocean-shores-4-beach",
@@ -81,7 +83,7 @@
             "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-1600.webp 1600w",
             "width": 1600,
             "height": 1067,
-            "alt": "Bear figures beside the road during the ride through western Washington."
+            "alt": "Chainsaw bear figures beside the road during the ride through western Washington."
         },
         {
             "id": "2024-ocean-shores-6-bear-gun",
@@ -89,7 +91,7 @@
             "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-1600.webp 1600w",
             "width": 1600,
             "height": 2400,
-            "alt": "A roadside bear figure holding a carved wooden rifle."
+            "alt": "Yup. A roadside bear figure holding a carved wooden rifle."
         },
         {
             "id": "2024-ocean-shores-7-asparagus",
