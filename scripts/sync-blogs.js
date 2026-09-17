@@ -63,6 +63,8 @@ const UNSUPPORTED_GOOGLE_DOCS_ELEMENTS = [
 ].join(',');
 const SAFE_LINK_PROTOCOLS = new Set(['http:', 'https:', 'mailto:', 'tel:']);
 const SAFE_MEDIA_PROTOCOLS = new Set(['http:', 'https:']);
+const TRIP_ASSET_ORIGIN = 'https://data.rsmb.tv';
+const TRIP_ASSET_TIMEOUT_MS = 10_000;
 
 const LANGUAGE_ALIASES = new Map([
     ['bash', 'bash'],
@@ -511,34 +513,53 @@ function manifestAssetUrls(manifest) {
     return [...urls].filter(Boolean);
 }
 
-async function fetchTripAssetStatus(assetUrl, { fetchImpl = fetch } = {}) {
-    const headResponse = await fetchImpl(assetUrl, { method: 'HEAD' });
+async function fetchTripAssetStatus(assetUrl, { fetchImpl = fetch, timeoutMs = TRIP_ASSET_TIMEOUT_MS } = {}) {
+    const headResponse = await fetchImpl(assetUrl, {
+        method: 'HEAD',
+        signal: AbortSignal.timeout(timeoutMs),
+    });
     if (headResponse.ok) return headResponse;
 
-    const getResponse = await fetchImpl(assetUrl, { method: 'GET' });
+    const getResponse = await fetchImpl(assetUrl, {
+        method: 'GET',
+        signal: AbortSignal.timeout(timeoutMs),
+    });
     await getResponse.body?.cancel?.();
     return getResponse;
 }
 
-export async function validateTripAssetUrls(posts, manifests, { fetchImpl = fetch } = {}) {
+function validateTripAssetUrl(assetUrl, tripId) {
+    let parsedUrl;
+    try {
+        parsedUrl = new URL(assetUrl);
+    } catch {
+        throw new Error(`Trip "${tripId}" asset URL must be an absolute URL: ${assetUrl}`);
+    }
+
+    const expectedPathPrefix = `/trips/${tripId}/`;
+    if (parsedUrl.origin !== TRIP_ASSET_ORIGIN || !parsedUrl.pathname.startsWith(expectedPathPrefix)) {
+        throw new Error(
+            `Trip "${tripId}" asset URL must be hosted under ${TRIP_ASSET_ORIGIN}${expectedPathPrefix}: ${assetUrl}`,
+        );
+    }
+}
+
+export async function validateTripAssetUrls(
+    posts,
+    manifests,
+    { fetchImpl = fetch, timeoutMs = TRIP_ASSET_TIMEOUT_MS } = {},
+) {
     for (const post of posts) {
         if (post.format !== TRIP_FORMAT || !post.tripId) continue;
         const manifest = manifests.get(post.tripId);
         if (!manifest) continue;
 
         for (const assetUrl of manifestAssetUrls(manifest)) {
-            let parsedUrl;
-            try {
-                parsedUrl = new URL(assetUrl);
-            } catch {
-                throw new Error(`Trip "${post.tripId}" asset URL must be an absolute http(s) URL: ${assetUrl}`);
-            }
-            if (!SAFE_MEDIA_PROTOCOLS.has(parsedUrl.protocol)) {
-                throw new Error(`Trip "${post.tripId}" asset URL must use http or https: ${assetUrl}`);
-            }
+            validateTripAssetUrl(assetUrl, post.tripId);
 
             try {
-                const response = await fetchTripAssetStatus(assetUrl, { fetchImpl });
+                const response = await fetchTripAssetStatus(assetUrl, { fetchImpl, timeoutMs });
+                if (response.url) validateTripAssetUrl(response.url, post.tripId);
                 if (!response.ok) {
                     throw new Error(
                         `Trip "${post.tripId}" asset URL is not available: ${assetUrl} (${response.status} ${response.statusText})`,
