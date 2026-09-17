@@ -15,6 +15,7 @@ import {
     parseBlogSheet,
     parseBlogSheetWithSummary,
     syncBlogPosts,
+    validateTripAssetUrls,
     validateTripManifestFiles,
     writeGithubOutput,
 } from '../sync-blogs.js';
@@ -573,6 +574,103 @@ describe('syncBlogPosts', () => {
         expect(() => validateTripManifestFiles([post], { repoRoot })).not.toThrow();
     });
 
+    it('rejects published trip manifests with unavailable asset URLs', async () => {
+        const post = {
+            slug: 'coastal-loop',
+            format: 'trip',
+            tripId: 'coastal-loop',
+        };
+        const manifests = new Map([[
+            'coastal-loop',
+            {
+                id: 'coastal-loop',
+                route: {
+                    geoJson: 'https://data.rsmb.tv/trips/coastal-loop/geo/route.geojson',
+                    staticImage: 'https://data.rsmb.tv/trips/coastal-loop/geo/route-fallback.webp',
+                },
+                photos: [{
+                    id: 'hero',
+                    src: 'https://data.rsmb.tv/trips/coastal-loop/photos/hero-1600.webp',
+                    srcSet: 'https://data.rsmb.tv/trips/coastal-loop/photos/hero-480.webp 480w, https://data.rsmb.tv/trips/coastal-loop/photos/hero-1600.webp 1600w',
+                }],
+            },
+        ]]);
+        const fetchImpl = vi.fn(async (url: string | URL, init?: RequestInit) => {
+            if (String(url).endsWith('route-fallback.webp')) {
+                return init?.method === 'HEAD'
+                    ? response('', 405, 'Method Not Allowed')
+                    : response('missing', 404, 'Not Found');
+            }
+            return response('', 200, 'OK');
+        });
+
+        await expect(validateTripAssetUrls([post], manifests, { fetchImpl }))
+            .rejects.toThrow(/asset URL is not available/);
+        expect(fetchImpl).toHaveBeenCalledWith(
+            'https://data.rsmb.tv/trips/coastal-loop/geo/route.geojson',
+            expect.objectContaining({ method: 'HEAD' }),
+        );
+    });
+
+    it('falls back to GET when a host rejects the HEAD probe', async () => {
+        const post = {
+            slug: 'coastal-loop',
+            format: 'trip',
+            tripId: 'coastal-loop',
+        };
+        const manifests = new Map([[
+            'coastal-loop',
+            {
+                id: 'coastal-loop',
+                route: {
+                    geoJson: 'https://data.rsmb.tv/trips/coastal-loop/geo/route.geojson',
+                },
+                photos: [{
+                    id: 'hero',
+                    src: 'https://data.rsmb.tv/trips/coastal-loop/photos/hero-1600.webp',
+                }],
+            },
+        ]]);
+        const cancel = vi.fn(async () => {});
+        const fetchImpl = vi.fn(async (_url: string | URL, init?: RequestInit) => (
+            init?.method === 'HEAD'
+                ? response('', 405, 'Method Not Allowed')
+                : { ...response('', 200, 'OK'), body: { cancel } }
+        ));
+
+        await expect(validateTripAssetUrls([post], manifests, { fetchImpl })).resolves.toBeUndefined();
+        expect(fetchImpl).toHaveBeenCalledWith(
+            'https://data.rsmb.tv/trips/coastal-loop/geo/route.geojson',
+            expect.objectContaining({ method: 'GET' }),
+        );
+        expect(cancel).toHaveBeenCalled();
+    });
+
+    it('accepts assets when HEAD is forbidden but GET succeeds', async () => {
+        const post = {
+            slug: 'coastal-loop',
+            format: 'trip',
+            tripId: 'coastal-loop',
+        };
+        const manifests = new Map([[
+            'coastal-loop',
+            {
+                id: 'coastal-loop',
+                route: {
+                    geoJson: 'https://data.rsmb.tv/trips/coastal-loop/geo/route.geojson',
+                },
+                photos: [],
+            },
+        ]]);
+        const fetchImpl = vi.fn(async (_url: string | URL, init?: RequestInit) => (
+            init?.method === 'HEAD'
+                ? response('', 403, 'Forbidden')
+                : response('', 200, 'OK')
+        ));
+
+        await expect(validateTripAssetUrls([post], manifests, { fetchImpl })).resolves.toBeUndefined();
+    });
+
     it('rejects trip content that references an unknown manifest item', async () => {
         const repoRoot = createTempDir();
         const manifestDir = path.join(repoRoot, 'src/content/trips');
@@ -593,6 +691,47 @@ describe('syncBlogPosts', () => {
 
         await expect(syncBlogPosts({ sheetId: 'sheet_123', repoRoot, today, fetchImpl }))
             .rejects.toThrow(/unknown photo "missing-photo"/);
+        expect(fs.existsSync(path.join(repoRoot, 'src/content/blog/coastal-loop.mdx'))).toBe(false);
+    });
+
+    it('rejects published trip posts when manifest asset URLs do not resolve', async () => {
+        const repoRoot = createTempDir();
+        const manifestDir = path.join(repoRoot, 'src/content/trips');
+        fs.mkdirSync(manifestDir, { recursive: true });
+        fs.writeFileSync(path.join(manifestDir, 'coastal-loop.json'), JSON.stringify({
+            id: 'coastal-loop',
+            route: {
+                geoJson: 'https://data.rsmb.tv/trips/coastal-loop/geo/route.geojson',
+            },
+            stops: [],
+            photos: [{
+                id: 'hero',
+                src: 'https://data.rsmb.tv/trips/coastal-loop/photos/hero-1600.webp',
+                width: 1600,
+                height: 1067,
+                alt: 'A coast road.',
+            }],
+            hero: 'hero',
+        }));
+        const csv = [
+            'slug,title,date,description,tags,google_doc_id,published,format,trip_id',
+            'coastal-loop,Coastal Loop,2026-04-30,A motorcycle trip,travel,doc_123,true,trip,coastal-loop',
+        ].join('\n');
+        const fetchImpl = vi.fn(async (url: string | URL, init?: RequestInit) => {
+            const requestUrl = String(url);
+            if (requestUrl.includes('/spreadsheets/')) return response(csv);
+            if (requestUrl === buildGoogleDocHtmlUrl('doc_123')) {
+                return response('<html><body><p>Trip body.</p></body></html>');
+            }
+            if (init?.method === 'HEAD' && requestUrl.endsWith('/hero-1600.webp')) {
+                return response('missing', 404, 'Not Found');
+            }
+            if (init?.method === 'HEAD') return response('', 200, 'OK');
+            return response('Not found', 404, 'Not Found');
+        });
+
+        await expect(syncBlogPosts({ sheetId: 'sheet_123', repoRoot, today, fetchImpl }))
+            .rejects.toThrow(/asset URL is not available/);
         expect(fs.existsSync(path.join(repoRoot, 'src/content/blog/coastal-loop.mdx'))).toBe(false);
     });
 

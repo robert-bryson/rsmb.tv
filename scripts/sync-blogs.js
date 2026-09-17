@@ -490,6 +490,70 @@ export async function fetchGoogleDocHtml(docId, { fetchImpl = fetch } = {}) {
     return html;
 }
 
+function parseSrcSetUrls(srcSet) {
+    return String(srcSet ?? '')
+        .split(',')
+        .map((entry) => entry.trim().split(/\s+/)[0])
+        .filter(Boolean);
+}
+
+function manifestAssetUrls(manifest) {
+    const urls = new Set([manifest?.route?.geoJson]);
+    if (manifest?.route?.staticImage) urls.add(manifest.route.staticImage);
+
+    for (const photo of manifest?.photos ?? []) {
+        urls.add(photo.src);
+        for (const srcSetUrl of parseSrcSetUrls(photo.srcSet)) {
+            urls.add(srcSetUrl);
+        }
+    }
+
+    return [...urls].filter(Boolean);
+}
+
+async function fetchTripAssetStatus(assetUrl, { fetchImpl = fetch } = {}) {
+    const headResponse = await fetchImpl(assetUrl, { method: 'HEAD' });
+    if (headResponse.ok) return headResponse;
+
+    const getResponse = await fetchImpl(assetUrl, { method: 'GET' });
+    await getResponse.body?.cancel?.();
+    return getResponse;
+}
+
+export async function validateTripAssetUrls(posts, manifests, { fetchImpl = fetch } = {}) {
+    for (const post of posts) {
+        if (post.format !== TRIP_FORMAT || !post.tripId) continue;
+        const manifest = manifests.get(post.tripId);
+        if (!manifest) continue;
+
+        for (const assetUrl of manifestAssetUrls(manifest)) {
+            let parsedUrl;
+            try {
+                parsedUrl = new URL(assetUrl);
+            } catch {
+                throw new Error(`Trip "${post.tripId}" asset URL must be an absolute http(s) URL: ${assetUrl}`);
+            }
+            if (!SAFE_MEDIA_PROTOCOLS.has(parsedUrl.protocol)) {
+                throw new Error(`Trip "${post.tripId}" asset URL must use http or https: ${assetUrl}`);
+            }
+
+            try {
+                const response = await fetchTripAssetStatus(assetUrl, { fetchImpl });
+                if (!response.ok) {
+                    throw new Error(
+                        `Trip "${post.tripId}" asset URL is not available: ${assetUrl} (${response.status} ${response.statusText})`,
+                    );
+                }
+            } catch (error) {
+                if (error instanceof Error && error.message.includes('asset URL is not available')) throw error;
+                throw new Error(
+                    `Trip "${post.tripId}" asset URL could not be checked: ${assetUrl} (${error instanceof Error ? error.message : error})`,
+                );
+            }
+        }
+    }
+}
+
 function replaceElementTag(element, tagName) {
     const replacement = element.ownerDocument.createElement(tagName);
     replacement.innerHTML = element.innerHTML;
@@ -1168,6 +1232,11 @@ export async function syncBlogPosts({
         )) {
             tripManifests.set(tripId, manifest);
         }
+        await validateTripAssetUrls(
+            entries.map((entry) => entry.post),
+            tripManifests,
+            { fetchImpl },
+        );
     }
     const mdxFiles = [];
 
