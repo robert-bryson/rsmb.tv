@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { parse } from 'yaml';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 
@@ -61,11 +62,18 @@ describe('amplify.yml', () => {
 
 describe('Amplify response headers', () => {
     it('allows the configured analytics, data, and map providers', () => {
-        const config = readRepoFile('customHttp.yml');
-        const imageSources = config.match(/img-src ([^;]+)/)?.[1];
-        const connectSources = config.match(/connect-src ([^;]+)/)?.[1];
+        const config = parse(readRepoFile('customHttp.yml')) as {
+            customHeaders: Array<{
+                pattern: string;
+                headers: Array<{ key: string; value: string }>;
+            }>;
+        };
+        const wildcardHeaders = config.customHeaders.find(({ pattern }) => pattern === '**')?.headers;
+        const policy = wildcardHeaders?.find(({ key }) => key === 'Content-Security-Policy')?.value;
+        const imageSources = policy?.match(/img-src ([^;]+)/)?.[1];
+        const connectSources = policy?.match(/connect-src ([^;]+)/)?.[1];
 
-        expect(config).toContain("script-src 'self' 'unsafe-eval' https://cloud.umami.is");
+        expect(policy).toContain("script-src 'self' 'unsafe-eval' https://cloud.umami.is");
         expect(imageSources).toContain('https://data.rsmb.tv');
         expect(imageSources).toContain('https://tile.openstreetmap.org');
         expect(imageSources).toContain('https://tile.opentopomap.org');
