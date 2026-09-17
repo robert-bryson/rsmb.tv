@@ -596,9 +596,10 @@ describe('syncBlogPosts', () => {
             },
         ]]);
         const fetchImpl = vi.fn(async (url: string | URL, init?: RequestInit) => {
-            expect(init?.method).toBe('HEAD');
             if (String(url).endsWith('route-fallback.webp')) {
-                return response('missing', 404, 'Not Found');
+                return init?.method === 'HEAD'
+                    ? response('', 405, 'Method Not Allowed')
+                    : response('missing', 404, 'Not Found');
             }
             return response('', 200, 'OK');
         });
