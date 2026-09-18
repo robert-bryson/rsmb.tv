@@ -173,7 +173,13 @@ Copy:
 src/content/trips/_template.json.draft
 ```
 
-to:
+to a draft file:
+
+```text
+src/content/trips/<trip-id>.json.draft
+```
+
+Keep the `.json.draft` suffix while the file contains placeholder text or references assets that are not published. The application loads every `.json` file in this directory during the build. Rename the completed file to:
 
 ```text
 src/content/trips/<trip-id>.json

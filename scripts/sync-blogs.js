@@ -1101,6 +1101,10 @@ function countFiles(directory, extension, fsImpl) {
     }
 }
 
+/**
+ * @param {Array<{ format?: string, tripId?: string }>} posts
+ * @param {{ repoRoot?: string, fsImpl?: Pick<typeof fs, 'readFileSync'> }} options
+ */
 export function validateTripManifestFiles(posts, { repoRoot = REPO_ROOT, fsImpl = fs } = {}) {
     const manifests = new Map();
 

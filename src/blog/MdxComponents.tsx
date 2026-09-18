@@ -3,6 +3,20 @@ import { TripFacts } from '../features/trips/components/TripFacts';
 import { TripPhoto } from '../features/trips/components/TripPhoto';
 import { TripGalleryBlock, TripMapBlock } from './TripMdxBlocks';
 import { MdxImage } from './MdxImage';
+import { SITE_URL } from '../utils/siteMetadata';
+
+const SITE_HOSTNAME = new URL(SITE_URL).hostname;
+
+function isExternalHttpUrl(href: string | undefined) {
+    if (!href || !/^https?:\/\//i.test(href)) return false;
+
+    try {
+        const hostname = new URL(href).hostname.replace(/^www\./i, '');
+        return hostname !== SITE_HOSTNAME.replace(/^www\./i, '');
+    } catch {
+        return false;
+    }
+}
 
 function classNames(...classes: Array<string | undefined>) {
     return classes.filter(Boolean).join(' ');
@@ -30,12 +44,15 @@ export const mdxComponents = {
         <p className="text-zinc-300 leading-relaxed mb-4" {...props} />
     ),
     a: (props: ComponentPropsWithoutRef<'a'>) => {
-        const isExternal = props.href && /^https?:\/\//.test(props.href);
+        const isExternal = isExternalHttpUrl(props.href);
         return (
             <a
-                className="text-violet-400 hover:text-violet-300 underline underline-offset-2"
-                {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 {...props}
+                className={classNames(
+                    'text-violet-400 hover:text-violet-300 underline underline-offset-2',
+                    props.className,
+                )}
+                {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
             />
         );
     },

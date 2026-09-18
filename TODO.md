@@ -9,6 +9,7 @@ This file contains incomplete work. Git history contains the completed work.
 
 ## Post publishing
 
+- [ ] Complete the Boise trip manifest. Add verified photo metadata, route tracks, stops, alt text, and captions. Publish the referenced assets before you rename the file from `.json.draft` to `.json`.
 - [ ] Publish more blog posts from the configured Google documents.
 
 ## Browser test coverage

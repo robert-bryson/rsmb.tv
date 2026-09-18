@@ -1,0 +1,53 @@
+{
+    "id": "boise-2024",
+    "dates": {
+        "start": "2024-05-11",
+        "end": "2024-05-19"
+    },
+    "ridingDays": 5,
+    "distanceMiles": 1516,
+    "motorcycle": "Motorcycle",
+    "regions": [
+        "Washington",
+        "Oregon",
+        "Idaho"
+    ],
+    "hero": "hero",
+    "route": {
+        "geoJson": "https://data.rsmb.tv/trips/boise-2024/geo/route.geojson",
+        "staticImage": "https://data.rsmb.tv/trips/boise-2024/geo/route-fallback.webp",
+        "alt": "Map of the trip route from the starting point to the destination.",
+        "tracks": [
+            {
+                "id": "2024-05-11-day-one",
+                "name": "Day one",
+                "date": "2024-05-11"
+            }
+        ]
+    },
+    "stops": [
+        {
+            "id": "seattle-departure",
+            "name": "Seattle",
+            "coordinates": [
+                -122.32373,
+                47.59587
+            ],
+            "date": "2024-05-11"
+        }
+    ],
+    "photos": [
+        {
+            "id": "hero",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/hero-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/hero-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/hero-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/hero-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Describe the meaningful content of the photograph.",
+            "caption": "Optional caption"
+        }
+    ],
+    "galleries": {
+        "highlights": []
+    }
+}

@@ -4,7 +4,7 @@ test('home page renders the main content shell', async ({ page }) => {
     await page.goto('/');
 
     await expect(page.getByRole('heading', { name: /Hi, I'm Robby/i })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Selected work' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Selected projects' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'All projects →' })).toHaveAttribute('href', '/projects');
 });
 
