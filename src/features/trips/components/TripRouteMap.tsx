@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { Feature, FeatureCollection, GeoJsonProperties, Geometry, LineString, MultiLineString } from 'geojson';
 import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
+import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import { useReducedMotion } from '../../flights/hooks/useReducedMotion';
 import { useTripStory } from '../TripStoryContext';
 
@@ -11,7 +11,7 @@ type TripRouteMapProps = { stopId?: string; trackId?: string };
 type BasemapId = 'muted' | 'street' | 'terrain';
 type BasemapPaintProperty = 'raster-saturation' | 'raster-brightness-min' | 'raster-brightness-max' | 'raster-contrast';
 
-maplibregl.setWorkerUrl(`${maplibreWorkerUrl}?route-worker=1`);
+maplibregl.setWorkerUrl(maplibreWorkerUrl);
 
 const basemaps: Array<{
     id: BasemapId;
