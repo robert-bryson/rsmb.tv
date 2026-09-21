@@ -522,6 +522,7 @@ async function fetchTripAssetStatus(assetUrl, { fetchImpl = fetch, timeoutMs = T
 
     const getResponse = await fetchImpl(assetUrl, {
         method: 'GET',
+        headers: { Range: 'bytes=0-0' },
         signal: AbortSignal.timeout(timeoutMs),
     });
     await getResponse.body?.cancel?.();
