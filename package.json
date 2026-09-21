@@ -43,7 +43,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@aws-sdk/client-cloudfront": "^3.1112.0",
+    "@aws-sdk/client-cloudfront": "^3.1135.0",
     "maplibre-gl": "^6.9.0",
     "photoswipe": "^5.4.4",
     "photoswipe-dynamic-caption-plugin": "^1.2.7",
