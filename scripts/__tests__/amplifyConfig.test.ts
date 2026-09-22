@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { parse } from 'yaml';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 
@@ -60,15 +61,51 @@ describe('amplify.yml', () => {
 });
 
 describe('Amplify response headers', () => {
-    it('allows trip images and route requests from the data CDN', () => {
-        const config = readRepoFile('customHttp.yml');
-        const connectSources = config.match(/connect-src ([^;]+)/)?.[1];
+    it('allows the configured analytics, data, and map providers', () => {
+        const config = parse(readRepoFile('customHttp.yml')) as {
+            customHeaders: Array<{
+                pattern: string;
+                headers: Array<{ key: string; value: string }>;
+            }>;
+        };
+        const wildcardHeaders = config.customHeaders.find(({ pattern }) => pattern === '**')?.headers;
+        const policy = wildcardHeaders?.find(({ key }) => key === 'Content-Security-Policy')?.value;
+        const imageSources = policy?.match(/img-src ([^;]+)/)?.[1];
+        const connectSources = policy?.match(/connect-src ([^;]+)/)?.[1];
 
-        expect(config).toContain("img-src 'self' data: blob: https://data.rsmb.tv");
-        expect(config).toContain("script-src 'self' 'unsafe-eval' https://cloud.umami.is");
+        expect(policy).toContain("script-src 'self' 'unsafe-eval' https://cloud.umami.is");
+        expect(imageSources).toContain('https://data.rsmb.tv');
+        expect(imageSources).toContain('https://tile.openstreetmap.org');
+        expect(imageSources).toContain('https://tile.opentopomap.org');
         expect(connectSources).toContain('https://cloud.umami.is');
         expect(connectSources).toContain('https://gateway.umami.is');
         expect(connectSources).toContain('https://data.rcc-acis.org');
         expect(connectSources).toContain('https://data.rsmb.tv');
+        expect(connectSources).toContain('https://demotiles.maplibre.org');
+        expect(connectSources).toContain('https://tile.openstreetmap.org');
+        expect(connectSources).toContain('https://tile.opentopomap.org');
+    });
+});
+
+describe('Amplify domain', () => {
+    it('serves JavaScript module assets without the SPA rewrite', () => {
+        const config = readRepoFile('infra/main.tf');
+        const spaRewrite = config.match(
+            /custom_rule \{[\s\S]*?source\s*=\s*"([^"]+)"[\s\S]*?target\s*=\s*"\/index\.html"/,
+        )?.[1];
+
+        expect(spaRewrite).toBeDefined();
+        expect(spaRewrite?.match(/\(css\|([^)]+)\)/)?.[1].split('|')).toContain('mjs');
+    });
+
+    it('uses an Amplify-managed certificate for the hosted domain', () => {
+        const config = readRepoFile('infra/main.tf');
+        const domainAssociation = config.match(
+            /resource "aws_amplify_domain_association" "rsmbtv" \{([\s\S]*?)\n\}/,
+        )?.[1];
+
+        expect(domainAssociation).toBeDefined();
+        expect(domainAssociation).toMatch(/certificate_settings\s*\{[\s\S]*?type\s*=\s*"AMPLIFY_MANAGED"/);
+        expect(domainAssociation).not.toContain('custom_certificate_arn');
     });
 });

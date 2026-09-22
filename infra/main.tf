@@ -18,7 +18,7 @@ resource "aws_amplify_app" "rsmbtv" {
 
   # SPA rewrite: serve index.html for all routes that don't match a static file
   custom_rule {
-    source = "</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map|json|webp|xml|gz|br|geojson|glb)$)([^.]+$)/>"
+    source = "</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|mjs|png|txt|svg|woff|woff2|ttf|map|json|webp|xml|gz|br|geojson|glb)$)([^.]+$)/>"
     target = "/index.html"
     status = "200"
   }
@@ -44,6 +44,10 @@ resource "aws_amplify_branch" "dev" {
 resource "aws_amplify_domain_association" "rsmbtv" {
   app_id      = aws_amplify_app.rsmbtv.id
   domain_name = var.domain_name
+
+  certificate_settings {
+    type = "AMPLIFY_MANAGED"
+  }
 
   # www.rsmb.tv → main branch
   sub_domain {

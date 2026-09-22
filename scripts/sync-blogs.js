@@ -37,6 +37,7 @@ const LOCAL_ENV_FILES = ['.env', '.env.local', '.env.development', '.env.develop
 export const DEFAULT_BLOG_SHEET_NAME = 'Blog Posts';
 
 const REQUIRED_HEADERS = ['title', 'date', 'description', 'tags', 'google_doc_id', 'published'];
+const TRIP_ASSET_REQUEST_TIMEOUT_MS = 10_000;
 const TRUE_VALUES = new Set(['1', 'true', 'yes', 'y', 'published']);
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const TRIP_FORMAT = 'trip';
@@ -64,7 +65,6 @@ const UNSUPPORTED_GOOGLE_DOCS_ELEMENTS = [
 const SAFE_LINK_PROTOCOLS = new Set(['http:', 'https:', 'mailto:', 'tel:']);
 const SAFE_MEDIA_PROTOCOLS = new Set(['http:', 'https:']);
 const TRIP_ASSET_ORIGIN = 'https://data.rsmb.tv';
-const TRIP_ASSET_TIMEOUT_MS = 10_000;
 
 const LANGUAGE_ALIASES = new Map([
     ['bash', 'bash'],
@@ -513,7 +513,7 @@ function manifestAssetUrls(manifest) {
     return [...urls].filter(Boolean);
 }
 
-async function fetchTripAssetStatus(assetUrl, { fetchImpl = fetch, timeoutMs = TRIP_ASSET_TIMEOUT_MS } = {}) {
+async function fetchTripAssetStatus(assetUrl, { fetchImpl = fetch, timeoutMs = TRIP_ASSET_REQUEST_TIMEOUT_MS } = {}) {
     const headResponse = await fetchImpl(assetUrl, {
         method: 'HEAD',
         signal: AbortSignal.timeout(timeoutMs),
@@ -548,7 +548,7 @@ function validateTripAssetUrl(assetUrl, tripId) {
 export async function validateTripAssetUrls(
     posts,
     manifests,
-    { fetchImpl = fetch, timeoutMs = TRIP_ASSET_TIMEOUT_MS } = {},
+    { fetchImpl = fetch, timeoutMs = TRIP_ASSET_REQUEST_TIMEOUT_MS } = {},
 ) {
     for (const post of posts) {
         if (post.format !== TRIP_FORMAT || !post.tripId) continue;
@@ -575,7 +575,6 @@ export async function validateTripAssetUrls(
         }
     }
 }
-
 function replaceElementTag(element, tagName) {
     const replacement = element.ownerDocument.createElement(tagName);
     replacement.innerHTML = element.innerHTML;
@@ -1118,6 +1117,10 @@ function countFiles(directory, extension, fsImpl) {
     }
 }
 
+/**
+ * @param {Array<{ format?: string, tripId?: string }>} posts
+ * @param {{ repoRoot?: string, fsImpl?: Pick<typeof fs, 'readFileSync'> }} options
+ */
 export function validateTripManifestFiles(posts, { repoRoot = REPO_ROOT, fsImpl = fs } = {}) {
     const manifests = new Map();
 

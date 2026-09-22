@@ -18,7 +18,7 @@ describe('Home page', () => {
 
     it('renders projects section', () => {
         renderWithRouter(<Home />);
-        expect(screen.getByRole('heading', { level: 2, name: 'Selected work' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 2, name: 'Selected projects' })).toBeInTheDocument();
     });
 
     it('renders projects index link', () => {
@@ -26,7 +26,7 @@ describe('Home page', () => {
         const projectsLink = screen.getByRole('link', { name: 'All projects →' });
         expect(projectsLink).toHaveAttribute('href', '/projects');
         expect(projectsLink.closest('section')).toContainElement(
-            screen.getByRole('heading', { level: 2, name: 'Selected work' }),
+            screen.getByRole('heading', { level: 2, name: 'Selected projects' }),
         );
     });
 

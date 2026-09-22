@@ -8,7 +8,7 @@ import { useJsonLd } from '../hooks/useJsonLd';
 import { formatDate } from '../utils/formatDate';
 import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
 
-const description = 'Writing about projects, engineering, journeys, and other things I find interesting.';
+const description = 'Writing about projects, trips, and other things I find interesting.';
 
 type PostType = 'all' | 'writing' | 'trips';
 
@@ -78,8 +78,8 @@ export function Posts() {
                         to={createPostsUrl(type)}
                         aria-current={activeType === type ? 'page' : undefined}
                         className={`${filterClasses} ${activeType === type
-                                ? 'bg-zinc-700 text-zinc-100'
-                                : 'text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
+                            ? 'bg-zinc-700 text-zinc-100'
+                            : 'text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
                             }`}
                     >
                         {label}
@@ -93,8 +93,8 @@ export function Posts() {
                         to={createPostsUrl(activeType)}
                         aria-current={!activeTag ? 'page' : undefined}
                         className={`max-w-full rounded-full px-2.5 py-0.5 text-xs transition-colors ${!activeTag
-                                ? 'bg-violet-600 text-zinc-100'
-                                : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200'
+                            ? 'bg-violet-600 text-zinc-100'
+                            : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200'
                             }`}
                     >
                         All tags
@@ -105,8 +105,8 @@ export function Posts() {
                             to={createPostsUrl(activeType, tag)}
                             aria-current={activeTag === tag ? 'page' : undefined}
                             className={`max-w-full break-words rounded-full px-2.5 py-0.5 text-xs transition-colors ${activeTag === tag
-                                    ? 'bg-violet-600 text-zinc-100'
-                                    : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200'
+                                ? 'bg-violet-600 text-zinc-100'
+                                : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200'
                                 }`}
                         >
                             {tag}

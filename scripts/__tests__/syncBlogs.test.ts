@@ -22,6 +22,7 @@ import {
 
 const tempDirs: string[] = [];
 const today = new Date('2026-04-30T00:00:00Z');
+type FetchInput = Parameters<typeof fetch>[0];
 
 function createTempDir() {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'rsmbtv-sync-blogs-tests-'));
@@ -30,16 +31,11 @@ function createTempDir() {
 }
 
 function response(body: string, status = 200, statusText = 'OK') {
-    return {
-        ok: status >= 200 && status < 300,
-        status,
-        statusText,
-        text: async () => body,
-    };
+    return new Response(body, { status, statusText });
 }
 
 function createFetch(csv: string, docs: Record<string, string>) {
-    return vi.fn(async (url: string | URL) => {
+    return vi.fn(async (url: FetchInput) => {
         const requestUrl = String(url);
         if (requestUrl.includes('/spreadsheets/')) return response(csv);
 
@@ -163,7 +159,7 @@ describe('parseBlogSheet', () => {
 
         expect(summary.entries.map((entry) => entry.post.slug)).toEqual(['preview-post']);
         expect(summary.entries[0].post.date).toBe('2026-04-30');
-        expect(summary.skippedRows.map((row) => row.slug)).toEqual(['other-draft']);
+        expect(summary.skippedRows.map((row: { slug: string }) => row.slug)).toEqual(['other-draft']);
     });
 
     it('includes incomplete unpublished rows with development readiness metadata', () => {
@@ -595,7 +591,7 @@ describe('syncBlogPosts', () => {
                 }],
             },
         ]]);
-        const fetchImpl = vi.fn(async (url: string | URL, init?: RequestInit) => {
+        const fetchImpl = vi.fn(async (url: FetchInput, init?: RequestInit) => {
             if (String(url).endsWith('route-fallback.webp')) {
                 return init?.method === 'HEAD'
                     ? response('', 405, 'Method Not Allowed')
@@ -631,11 +627,12 @@ describe('syncBlogPosts', () => {
                 }],
             },
         ]]);
-        const cancel = vi.fn(async () => {});
-        const fetchImpl = vi.fn(async (_url: string | URL, init?: RequestInit) => (
+        const fallbackResponse = response('', 200, 'OK');
+        const cancel = vi.spyOn(fallbackResponse.body!, 'cancel');
+        const fetchImpl = vi.fn(async (_url: FetchInput, init?: RequestInit) => (
             init?.method === 'HEAD'
                 ? response('', 405, 'Method Not Allowed')
-                : { ...response('', 200, 'OK'), body: { cancel } }
+            : fallbackResponse
         ));
 
         await expect(validateTripAssetUrls([post], manifests, { fetchImpl })).resolves.toBeUndefined();
@@ -662,7 +659,7 @@ describe('syncBlogPosts', () => {
                 photos: [],
             },
         ]]);
-        const fetchImpl = vi.fn(async (_url: string | URL, init?: RequestInit) => (
+        const fetchImpl = vi.fn(async (_url: FetchInput, init?: RequestInit) => (
             init?.method === 'HEAD'
                 ? response('', 403, 'Forbidden')
                 : response('', 200, 'OK')
@@ -712,7 +709,7 @@ describe('syncBlogPosts', () => {
                 photos: [],
             },
         ]]);
-        const fetchImpl = vi.fn((_url: string | URL, init?: RequestInit) => new Promise((_resolve, reject) => {
+        const fetchImpl = vi.fn((_url: FetchInput, init?: RequestInit) => new Promise((_resolve, reject) => {
             init?.signal?.addEventListener('abort', () => reject(init.signal?.reason), { once: true });
         }));
 
@@ -773,7 +770,7 @@ describe('syncBlogPosts', () => {
             'slug,title,date,description,tags,google_doc_id,published,format,trip_id',
             'coastal-loop,Coastal Loop,2026-04-30,A motorcycle trip,travel,doc_123,true,trip,coastal-loop',
         ].join('\n');
-        const fetchImpl = vi.fn(async (url: string | URL, init?: RequestInit) => {
+        const fetchImpl = vi.fn(async (url: FetchInput, init?: RequestInit) => {
             const requestUrl = String(url);
             if (requestUrl.includes('/spreadsheets/')) return response(csv);
             if (requestUrl === buildGoogleDocHtmlUrl('doc_123')) {

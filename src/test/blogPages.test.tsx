@@ -190,10 +190,10 @@ describe('BlogPost tag navigation', () => {
 });
 
 describe('Home page writing hierarchy', () => {
-    it('shows the latest writing and trips after selected work without flooding the front page', () => {
+    it('shows the latest writing and trips after selected projects without flooding the front page', () => {
         renderWithRouter(<Home />);
 
-        expect(screen.getByRole('heading', { level: 2, name: 'Selected work' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 2, name: 'Selected projects' })).toBeInTheDocument();
         expect(screen.getByRole('heading', { level: 2, name: 'Latest' })).toBeInTheDocument();
         expect(screen.getByRole('link', { name: /All posts/i })).toHaveAttribute('href', '/posts');
         expect(screen.getByRole('link', { name: /Mapping Boring Data/i })).toBeInTheDocument();

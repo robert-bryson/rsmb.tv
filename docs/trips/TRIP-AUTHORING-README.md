@@ -173,7 +173,13 @@ Copy:
 src/content/trips/_template.json.draft
 ```
 
-to:
+to a draft file:
+
+```text
+src/content/trips/<trip-id>.json.draft
+```
+
+Keep the `.json.draft` suffix while the file contains placeholder text or references assets that are not published. The application loads every `.json` file in this directory during the build. Rename the completed file to:
 
 ```text
 src/content/trips/<trip-id>.json
@@ -342,7 +348,9 @@ Review desktop and phone widths. Check:
 
 ## 10. Publish
 
-Publish processed assets first. Then set `published` to `true`. Run the blog build again, and trigger the Amplify production build. The blog sync stops if the trip manifest is missing, is not valid JSON, or has an incorrect `id`. A Google Doc edit does not deploy the site. A new build must fetch and publish the edit.
+Publish the processed assets first. Then set `published` to `true`. Run the blog build again. The blog sync checks each route and image URL in the manifest. The check uses `HEAD` and uses `GET` as a fallback. Each check stops after 10 seconds. An unavailable asset stops the build.
+
+Trigger the AWS Amplify production build after the checks pass. A Google Doc edit does not deploy the site. A new build must fetch and publish the edit.
 
 ## File Checklist
 

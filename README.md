@@ -184,9 +184,9 @@ Optional environment variables:
 - `GOOGLE_BLOG_REPLACE_ALL` - Defaults to `true`. Keep this enabled so the Sheet remains the only blog registry.
 - `GOOGLE_BLOG_SYNC_ON_DEV` - Set to `false` to skip the automatic blog sync before `npm run dev`.
 
-`npm run build` runs `npm run build-blog` before typecheck and `vite build`. Amplify Hosting must have `GOOGLE_BLOG_SHEET_ID` configured in its own environment variables; GitHub Actions variables are not visible to Amplify builds.
+`npm run build` runs `npm run build-blog` before typecheck and `vite build`. Configure `GOOGLE_BLOG_SHEET_ID` in AWS Amplify. GitHub Actions variables are not available to AWS Amplify.
 
-Amplify builds intentionally run `nvm install` before `npm ci` so CodeBuild installs and activates the exact version pinned in `.nvmrc`, even when the image does not already have it. Do not replace this with `nvm use`; that only works when the requested Node version is preinstalled.
+The build runs `nvm install` before `npm ci`. This command installs and activates the Node version in `.nvmrc`. Do not replace it with `nvm use`. That command requires a preinstalled Node version.
 
 `npm run dev` prepares each local trip directory and syncs each Sheet row, including unpublished drafts, when the local sources are configured. An incomplete draft Google Doc, manifest, photo set, or GPS track does not stop the other development content or Vite. The command reports each incomplete item. Development badges and metadata panels show the publication state, Sheet row, Google Doc status, trip manifest status, and known issues. Production builds use strict validation and include only published rows. If the Sheet is not configured, the development command skips blog sync and starts with the existing generated content.
 
@@ -205,7 +205,7 @@ Copy `src/content/trips/_template.json.draft` to `<trip-id>.json`, then populate
 
 Trip source media uses the private Drive hierarchy in the [trip authoring guide](docs/trips/TRIP-AUTHORING-README.md). Run `npm run prepare-trip-assets -- <trip-id> --source <local-trip-directory>` to create responsive WebP photographs, sanitized GeoJSON, and a manifest metadata report. Review all output. Then run `npm run publish-trip-assets` to back up originals to private S3 and publish processed derivatives to `data.rsmb.tv/trips/<trip-id>/`. The `build-blog` command does not prepare or upload assets.
 
-The blog sync checks each published trip before it downloads Google Doc content. The manifest file must exist, contain valid JSON, and have an `id` that matches `trip_id`. Vite then applies the complete trip manifest schema during the application build.
+The blog sync checks each published trip before it downloads Google Doc content. The manifest must exist and contain valid JSON. Its `id` must match `trip_id`. Each route and image URL must use HTTP or HTTPS and return a successful response. Each network check stops after 10 seconds. Vite applies the complete manifest schema during the application build.
 
 ### Amplify Content Publishing
 
@@ -234,13 +234,15 @@ Coverage today:
 
 ## Infrastructure
 
-The site is deployed on AWS Amplify with infrastructure managed via Terraform. The Terraform configuration provisions:
+AWS Amplify deploys the site. Terraform manages the infrastructure. The configuration provisions:
 
 - AWS Amplify app connected to GitHub
 - Auto-build on push to `main` branch
-- Production deployment
+- Production and development domains
+- An AWS Amplify managed TLS certificate for automatic renewal
+- CloudFront distributions for the apex redirect and public data
 
-> **Note:** Terraform state and variable files containing sensitive data are gitignored and not included in this repository.
+> **Note:** Git ignores Terraform state and variable files that can contain sensitive data.
 
 ## Analytics
 

@@ -4,8 +4,8 @@ test('home page renders the main content shell', async ({ page }) => {
     await page.goto('/');
 
     await expect(page.getByRole('heading', { name: /Hi, I'm Robby/i })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Projects' })).toBeVisible();
-    await expect(page.getByRole('link', { name: /View all/i }).first()).toHaveAttribute('href', '/projects');
+    await expect(page.getByRole('heading', { name: 'Selected projects' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'All projects →' })).toHaveAttribute('href', '/projects');
 });
 
 test('flights map defers optional layer payloads on first load', async ({ page }) => {
