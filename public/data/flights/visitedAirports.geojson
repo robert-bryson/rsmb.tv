@@ -1839,10 +1839,11 @@
           "10/8/2017",
           "7/5/2018",
           "12/31/2018",
-          "12/20/2022"
+          "12/20/2022",
+          "9/24/2026"
         ],
-        "visitCount": 7,
-        "arrivalCount": 4,
+        "visitCount": 8,
+        "arrivalCount": 5,
         "departureCount": 3
       },
       "geometry": {
@@ -3400,11 +3401,12 @@
           "2/14/2026",
           "2/23/2026",
           "7/2/2026",
-          "7/6/2026"
+          "7/6/2026",
+          "9/24/2026"
         ],
-        "visitCount": 22,
+        "visitCount": 23,
         "arrivalCount": 13,
-        "departureCount": 9
+        "departureCount": 10
       },
       "geometry": {
         "type": "Point",
@@ -3490,10 +3492,11 @@
         "visitDates": [
           "11/10/2024",
           "5/28/2025",
-          "6/1/2025"
+          "6/1/2025",
+          "10/15/2026"
         ],
-        "visitCount": 3,
-        "arrivalCount": 1,
+        "visitCount": 4,
+        "arrivalCount": 2,
         "departureCount": 2
       },
       "geometry": {
@@ -3768,6 +3771,35 @@
         "coordinates": [
           23.9711,
           56.923599
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "MCI",
+        "municipality": "Kansas City",
+        "region": "US-MO",
+        "regionName": "Missouri",
+        "country": "US",
+        "countryName": "United States",
+        "continent": "NA",
+        "continentName": "North America",
+        "name": "Kansas City International Airport",
+        "elevationFt": 1026,
+        "elevationM": 313,
+        "visitDates": [
+          "10/15/2026"
+        ],
+        "visitCount": 1,
+        "arrivalCount": 0,
+        "departureCount": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -94.713898,
+          39.2976
         ]
       }
     }
