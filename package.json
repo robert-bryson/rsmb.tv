@@ -70,7 +70,7 @@
     "@testing-library/react": "^16.3.3",
     "@tmcw/togeojson": "^7.1.2",
     "@types/geojson": "^7946.0.16",
-    "@types/node": "^26.4.1",
+    "@types/node": "^26.6.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
     "@types/turndown": "^5.0.6",
