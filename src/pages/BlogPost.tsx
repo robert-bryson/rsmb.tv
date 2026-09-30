@@ -1,11 +1,13 @@
-import { Suspense } from 'react';
+import { Suspense, useRef } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { PostTagLink } from '../components/PostTagLink';
 import { DevelopmentContentStatus } from '../components/DevelopmentContentStatus';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { getPostBySlug } from '../content/posts';
+import { PostHeadingProvider } from '../blog/LinkedHeading';
 import { mdxComponents } from '../blog/MdxComponents';
+import { PostTableOfContents } from '../blog/PostTableOfContents';
 import { formatDate } from '../utils/formatDate';
 import { AUTHOR_PERSON, SITE_URL, absoluteUrl } from '../utils/siteMetadata';
 import { getTripHero, getTripManifest, getTripManifestIssue, TripStoryHeader, TripStoryProvider } from '../features/trips';
@@ -15,6 +17,7 @@ interface BlogPostProps {
 }
 
 export function BlogPost({ collection }: BlogPostProps) {
+    const contentRef = useRef<HTMLDivElement>(null);
     const { slug } = useParams<{ slug: string }>();
     const post = slug ? getPostBySlug(slug) : undefined;
     const isTrip = post?.format === 'trip';
@@ -87,6 +90,22 @@ export function BlogPost({ collection }: BlogPostProps) {
     }
 
     const { Component } = post;
+    const postContent = (
+        <PostHeadingProvider>
+            <PostTableOfContents contentRef={contentRef} />
+            <div ref={contentRef}>
+                {post.development && !post.development.contentAvailable ? (
+                    <p className="text-zinc-400">
+                        The draft {isTrip ? 'story' : 'post'} body is not available yet.
+                    </p>
+                ) : (
+                    <Suspense fallback={<div className="text-sm text-zinc-400">Loading {isTrip ? 'story' : 'post'}...</div>}>
+                        <Component components={mdxComponents} />
+                    </Suspense>
+                )}
+            </div>
+        </PostHeadingProvider>
+    );
 
     return (
         <article className={isTrip ? 'trip-story' : undefined}>
@@ -102,13 +121,7 @@ export function BlogPost({ collection }: BlogPostProps) {
             {tripManifest ? (
                 <TripStoryProvider manifest={tripManifest}>
                     <TripStoryHeader post={post} />
-                    {post.development && !post.development.contentAvailable ? (
-                        <p className="text-zinc-400">The draft story body is not available yet.</p>
-                    ) : (
-                        <Suspense fallback={<div className="text-sm text-zinc-400">Loading story...</div>}>
-                            <Component components={mdxComponents} />
-                        </Suspense>
-                    )}
+                    {postContent}
                 </TripStoryProvider>
             ) : (
                 <>
@@ -123,13 +136,7 @@ export function BlogPost({ collection }: BlogPostProps) {
                             </div>
                         )}
                     </header>
-                    {post.development && !post.development.contentAvailable ? (
-                        <p className="text-zinc-400">The draft post body is not available yet.</p>
-                    ) : (
-                        <Suspense fallback={<div className="text-sm text-zinc-400">Loading post...</div>}>
-                            <Component components={mdxComponents} />
-                        </Suspense>
-                    )}
+                    {postContent}
                 </>
             )}
         </article>

@@ -14,6 +14,7 @@ This file contains incomplete work. Git history contains the completed work.
 
 ## Browser test coverage
 
+- [ ] Test post heading links, duplicate heading IDs, and browser history navigation with Playwright.
 - [ ] Test the Flights map keyboard controls and camera URL synchronization with Playwright.
 - [ ] Test the trip map fallback behavior with Playwright.
 - [ ] Test the trip map basemap control with Playwright.

@@ -194,6 +194,8 @@ The sync uses public Google export endpoints, matching the existing flight sync 
 
 Google Docs exports are normalized before writing MDX. The sync preserves headings, lists, links, images, fenced code blocks, simple inline emphasis/highlights, and tables. Active or embedded HTML such as scripts, forms, iframes, objects, SVG, audio, and video is stripped, and links/media are limited to safe URL protocols before generated MDX is written.
 
+Each post and trip page creates an "On this page" list from its headings. Each heading has a `#` link to that heading and an `↑` link back to the list. The page adds the heading ID to the URL. It uses a lowercase form of the heading text and replaces punctuation and spaces with hyphens. For example, `Day 1: Seattle to Boise` becomes `#day-1-seattle-to-boise`. If two headings have the same text, the page adds a number to the later ID, such as `#camp-notes-1`. Use short, unique heading text when possible.
+
 Trip posts may place these standalone shortcodes in the Google Doc:
 
 - `{{trip-map}}` or `{{trip-map:stop-id}}`

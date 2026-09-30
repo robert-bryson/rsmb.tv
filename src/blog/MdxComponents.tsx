@@ -2,6 +2,7 @@ import type { ComponentPropsWithoutRef } from 'react';
 import { TripFacts } from '../features/trips/components/TripFacts';
 import { TripPhoto } from '../features/trips/components/TripPhoto';
 import { TripGalleryBlock, TripMapBlock } from './TripMdxBlocks';
+import { LinkedHeading } from './LinkedHeading';
 import { MdxImage } from './MdxImage';
 import { SITE_URL } from '../utils/siteMetadata';
 
@@ -32,13 +33,22 @@ export const mdxComponents = {
     TripPhoto,
     TripMap: TripMapBlock,
     h1: (props: ComponentPropsWithoutRef<'h1'>) => (
-        <h1 className="text-3xl font-bold text-zinc-100 mt-10 mb-4" {...props} />
+        <LinkedHeading as="h1" className="text-3xl font-bold text-zinc-100 mt-10 mb-4" {...props} />
     ),
     h2: (props: ComponentPropsWithoutRef<'h2'>) => (
-        <h2 className="text-2xl font-semibold text-zinc-100 mt-8 mb-3" {...props} />
+        <LinkedHeading as="h2" className="text-2xl font-semibold text-zinc-100 mt-8 mb-3" {...props} />
     ),
     h3: (props: ComponentPropsWithoutRef<'h3'>) => (
-        <h3 className="text-xl font-semibold text-zinc-200 mt-6 mb-2" {...props} />
+        <LinkedHeading as="h3" className="text-xl font-semibold text-zinc-200 mt-6 mb-2" {...props} />
+    ),
+    h4: (props: ComponentPropsWithoutRef<'h4'>) => (
+        <LinkedHeading as="h4" className="text-lg font-semibold text-zinc-200 mt-5 mb-2" {...props} />
+    ),
+    h5: (props: ComponentPropsWithoutRef<'h5'>) => (
+        <LinkedHeading as="h5" className="text-base font-semibold text-zinc-200 mt-4 mb-2" {...props} />
+    ),
+    h6: (props: ComponentPropsWithoutRef<'h6'>) => (
+        <LinkedHeading as="h6" className="text-sm font-semibold text-zinc-300 mt-4 mb-2" {...props} />
     ),
     p: (props: ComponentPropsWithoutRef<'p'>) => (
         <p className="text-zinc-300 leading-relaxed mb-4" {...props} />
