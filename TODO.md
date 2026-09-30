@@ -1,44 +1,48 @@
-# TODO
+# Open work
 
-This file contains incomplete work. Git history contains the completed work.
+This file contains incomplete work. Use Git history for completed work.
 
-## Project media
+## Publication blockers
 
-- [ ] Add screenshots to the Aborg project page.
-- [ ] Add screenshots to the Flights project page.
+### Boise trip
 
-## Post publishing
+The manifest supports local preview. The public route and a sample photo returned HTTP 403 on 2026-09-30.
 
-- [ ] Complete the Boise trip manifest. Add verified photo metadata, route tracks, stops, alt text, and captions. Publish the referenced assets before you rename the file from `.json.draft` to `.json`.
-- [ ] Publish more blog posts from the configured Google documents.
+- [ ] Publish the processed Boise photos and route files. Confirm that each manifest URL returns HTTP 200.
+- [ ] Verify the recorded track dates. The source filenames do not agree with all dates in the story.
+- [ ] Add the missing return route from Panther Creek to Seattle, if a source track is available.
+- [ ] Replace the unknown distances and repeated day numbers in the Google Doc.
+- [ ] Verify the total distance, riding days, stops, and photo captions before publication.
+- [ ] Keep the Sheet `published` value `false` until the publication checks pass.
 
-## Browser test coverage
-
-- [ ] Test post heading links, duplicate heading IDs, and browser history navigation with Playwright.
-- [ ] Test the Flights map keyboard controls and camera URL synchronization with Playwright.
-- [ ] Test the trip map fallback behavior with Playwright.
-- [ ] Test the trip map basemap control with Playwright.
-- [ ] Test the trip gallery keyboard controls with Playwright.
-
-## Temperature record data
+### Temperature record data
 
 The historical signal is not ready for publication.
 
-### Data extraction
-
-- [ ] Build a resumable ACIS extraction command. Keep raw responses and request manifests.
+- [ ] Build an ACIS extraction command that can continue after an interruption. Retain raw responses and request manifests.
 - [ ] Verify ACIS flags and certification fields against current RCC documentation.
-
-### Publication quality
-
 - [ ] Regenerate `climateTrends.json`. Include a zero-count row for each calendar year.
-- [ ] Complete the publication checks in [the methodology](projects/temperature-records/methodology.md#validate-before-publication).
-- [ ] Archive an approved, versioned station cohort before publication.
-- [ ] Publish station coverage, failed geography requests, and data quality in a versioned manifest.
+- [ ] Complete the [publication checks](projects/temperature-records/methodology.md#validate-before-publication).
+- [ ] Store an approved station cohort with a version number before publication.
+- [ ] Publish station coverage, failed geography requests, and data quality in a manifest with a version number.
+
+## Automated checks
+
+- [ ] Validate the complete trip manifest schema during blog sync. The application currently validates it when the module loads.
+- [ ] Compare manifest track IDs with the published route features during publication checks.
+- [ ] Test Flights map keyboard controls and camera URL synchronization with Playwright.
+- [ ] Test trip map fallback behavior and the basemap control with Playwright.
+- [ ] Test trip gallery keyboard controls with Playwright.
+
+## Project content
+
+- [ ] Add screenshots to the Aborg project page.
+- [ ] Add screenshots to the Flights project page.
+- [ ] Publish more blog posts from the configured Google documents.
 
 ## Ride Ledger prerequisites
 
-- [ ] Resolve the [Ride Ledger open decisions](projects/ride-ledger/readme.md#open-decisions).
-- [ ] Create at least 20 synthetic and de-identified import fixtures. Add the expected normalized output to each fixture.
-- [ ] Compare the fixture totals with an independent calculation.
-- [ ] Write a threat model. Include identity, local data, synchronization, attachments, export, and account deletion.
+- [ ] Resolve the [open decisions](projects/ride-ledger/readme.md#open-decisions).
+- [ ] Create at least 20 synthetic import fixtures with no personal data. Add the expected output to each fixture.
+- [ ] Compare fixture totals with an independent calculation.
+- [ ] Write a threat model for identity, local data, synchronization, attachments, export, and account deletion.

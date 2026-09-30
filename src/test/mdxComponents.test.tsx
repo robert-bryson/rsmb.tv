@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { act, StrictMode, useRef } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { PostHeadingProvider } from '../blog/LinkedHeading';
@@ -26,7 +26,13 @@ function TableOfContentsFixture({
                 {showHeadings && (
                     <>
                         <Heading2>First Stop</Heading2>
-                        {duplicateHeading && <Heading2>First Stop</Heading2>}
+                        <p className="blog-subtitle">(339mi. / 545km.)</p>
+                        {duplicateHeading && (
+                            <>
+                                <Heading2>First Stop</Heading2>
+                                <Heading2>First Stop 1</Heading2>
+                            </>
+                        )}
                         <Heading3>Camp Notes</Heading3>
                     </>
                 )}
@@ -100,6 +106,85 @@ describe('MDX headings', () => {
         expect(screen.getByRole('heading', { name: /Named section/ })).toHaveAttribute('id', 'author-id');
     });
 
+    it('keeps heading IDs stable under Strict Mode and avoids suffix collisions', () => {
+        const { container } = render(
+            <StrictMode>
+                <PostHeadingProvider>
+                    <Heading2>First Stop</Heading2>
+                    <Heading2>First Stop</Heading2>
+                    <Heading2>First Stop 1</Heading2>
+                    <Heading2 id="first-stop">Explicit duplicate</Heading2>
+                    <Heading2>Post Table of Contents</Heading2>
+                </PostHeadingProvider>
+            </StrictMode>,
+        );
+
+        const ids = Array.from(container.querySelectorAll('[data-post-heading]'), heading => heading.id);
+        expect(ids).toEqual([
+            'first-stop', 'first-stop-1', 'first-stop-1-1', 'first-stop-2', 'post-table-of-contents-1',
+        ]);
+        expect(new Set(ids).size).toBe(ids.length);
+    });
+
+    it('does not consume IDs on rerender and releases them when headings unmount', () => {
+        function Fixture({ show }: { show: boolean }) {
+            return (
+                <PostHeadingProvider>
+                    <Heading2>First Stop</Heading2>
+                    {show && <Heading2>First Stop</Heading2>}
+                </PostHeadingProvider>
+            );
+        }
+        const { rerender } = render(<Fixture show />);
+        expect(screen.getAllByRole('heading')[1]).toHaveAttribute('id', 'first-stop-1');
+        rerender(<Fixture show={false} />);
+        rerender(<Fixture show />);
+        expect(screen.getAllByRole('heading')[1]).toHaveAttribute('id', 'first-stop-1');
+        rerender(<Fixture show />);
+        expect(screen.getAllByRole('heading')[1]).toHaveAttribute('id', 'first-stop-1');
+    });
+
+    it('updates TOC labels and targets after text and ID changes', async () => {
+        render(<TableOfContentsFixture />);
+        const heading = screen.getByRole('heading', { name: 'First Stop' });
+        await screen.findByRole('link', { name: 'First Stop' });
+        act(() => {
+            heading.firstChild!.textContent = 'Updated stop';
+            heading.id = 'updated-stop';
+        });
+        await waitFor(() => expect(screen.getByRole('link', { name: 'Updated stop' }))
+            .toHaveAttribute('href', '#updated-stop'));
+    });
+
+    it('resolves an initial hash only after duplicate heading IDs are assigned', async () => {
+        const scrollIntoView = vi.fn(function (this: HTMLElement) { return this.id; });
+        Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
+            configurable: true,
+            value: scrollIntoView,
+        });
+        vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
+            callback(0);
+            return 1;
+        });
+        window.history.replaceState(null, '', '#first-stop-1');
+        render(<StrictMode><TableOfContentsFixture duplicateHeading /></StrictMode>);
+
+        await waitFor(() => expect(scrollIntoView).toHaveBeenCalled());
+        const target = screen.getAllByRole('heading', { name: 'First Stop' })[1];
+        expect(scrollIntoView.mock.contexts.every(node => node === target)).toBe(true);
+    });
+
+    it('ignores malformed URL hashes without throwing', async () => {
+        window.history.replaceState(null, '', '#%E0%A4%A');
+        render(<TableOfContentsFixture />);
+        expect(await screen.findByRole('navigation', { name: 'Table of contents' })).toBeInTheDocument();
+    });
+
+    it('uses a fallback ID for a heading with no slug characters', () => {
+        render(<Heading2>東京</Heading2>);
+        expect(screen.getByRole('heading', { name: '東京' })).toHaveAttribute('id', 'section');
+    });
+
     it('links sixth-level headings', () => {
         render(<Heading6>Small detail</Heading6>);
 
@@ -115,6 +200,9 @@ describe('MDX headings', () => {
         const navigation = await screen.findByRole('navigation', { name: 'Table of contents' });
         expect(navigation).toHaveAttribute('id', 'post-table-of-contents');
         expect(navigation).toHaveTextContent('On this page');
+        expect(navigation).not.toHaveTextContent('(339mi. / 545km.)');
+        expect(screen.getByText('(339mi. / 545km.)').tagName).toBe('P');
+        expect(screen.queryByRole('heading', { name: '(339mi. / 545km.)' })).not.toBeInTheDocument();
         expect(screen.getByRole('link', { name: 'First Stop' })).toHaveAttribute('href', '#first-stop');
         expect(screen.getByRole('link', { name: 'Camp Notes' }).parentElement).toHaveClass('pl-4');
     });

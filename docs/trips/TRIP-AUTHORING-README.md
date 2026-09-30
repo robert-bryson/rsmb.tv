@@ -1,17 +1,17 @@
-# Trip Story Authoring Guide
+# Trip story authoring guide
 
-This guide explains how to publish a motorcycle trip story on rsmb.tv. Each trip combines four pieces:
+A trip story has four source parts:
 
-1. A Google Doc containing the story and layout shortcodes.
+1. A Google Doc with the story and shortcodes.
 2. A row in the `Blog Posts` Google Sheet.
-3. A JSON manifest describing the trip, photographs, route, and stops.
-4. Source assets organized in Google Drive, backed up to private S3, and processed public assets served through `data.rsmb.tv`.
+3. A JSON manifest with trip dates, photos, route tracks, and stops.
+4. Source files in Google Drive and processed files at `data.rsmb.tv`.
 
-The finished story appears at `https://rsmb.tv/trips/<trip-slug>`.
+The public story URL is `https://rsmb.tv/trips/<trip-slug>`.
 
-## Drive Folder Structure
+## Source files
 
-Use one canonical lowercase trip ID everywhere, such as `ozarks-2012`.
+Use one lowercase trip ID, such as `ozarks-2012`, in all source locations.
 
 ```text
 rsmb.tv/
@@ -19,11 +19,8 @@ rsmb.tv/
 │   ├── rsmb.tv blog.gsheet
 │   ├── trip authoring README
 │   └── trip story template
-├── posts/
-│   └── <post-slug>/
-│       └── <post-title>.gdoc
-└── trips/
-  └── <trip-id>/
+├── posts/<post-slug>/<post-title>.gdoc
+└── trips/<trip-id>/
     ├── <trip-title>.gdoc
     ├── trip-metadata.gdoc
     ├── photos/
@@ -31,80 +28,67 @@ rsmb.tv/
     │   ├── selects/
     │   └── processed/
     └── gps/
-      ├── originals/
-      └── processed/
+        ├── originals/
+        └── processed/
 ```
 
-`originals` contains untouched source files. `selects` contains the photographs chosen for the story. `processed` contains reproducible, publishable derivatives only. Never place originals in a processed directory.
+Keep original files unchanged. Put selected photos in `selects`. Put only generated files in `processed`.
 
-Drive is the working editorial archive. Git stores the trip manifest and application code. A private, non-CDN S3 bucket backs up untouched originals; the public S3/CDN bucket stores only processed media and routes.
+Google Drive contains the source archive. Git contains manifests and application code.
+The private S3 bucket contains backup copies of original files.
+The public S3 bucket and CDN contain processed photos and routes.
 
-## 1. Plan the Story
+## 1. Write the story
 
-Organize the trip around meaningful scenes or route legs rather than recording every stop. A strong structure is:
+Copy the [story template](TRIP-STORY-TEMPLATE.md) into a Google Doc.
+Replace each prompt. Delete unused sections and author instructions.
 
-- An opening scene that establishes the trip's mood or central memory.
-- A short explanation of why the trip happened.
-- A route overview.
-- Five to ten chronological chapters.
-- An ending that explains what remains memorable.
+Use a section for each important route segment or event.
+Give the location, action, and result. Add photos and maps where they help explain the event.
 
-For each chapter, include a place, a decision or change, a specific detail, and a transition. Use photographs and maps only when they add information.
+Use these Google Docs styles:
 
-## 2. Create the Google Doc
+| Content | Google Docs style | Site result |
+| --- | --- | --- |
+| Chapter | Heading 2 | Section heading and table-of-contents link |
+| Section in a chapter | Heading 3 | Section heading and table-of-contents link |
+| Distance or other supporting text | Subtitle | Small gray paragraph below the heading |
+| Story text | Normal text | Body paragraph |
+| Shortcode | Normal text on a separate line | Trip map, photo, gallery, or facts |
 
-Copy the companion **Trip Story Template** into a new Google Doc. Replace all bracketed prompts and remove sections that do not fit the trip.
+Place a subtitle directly after its heading. Subtitles have no heading ID or table-of-contents entry.
+The importer retains inline emphasis and links in subtitles.
+Do not use a heading style for distance text such as `(339 mi. / 545 km.)`.
 
-Use normal Google Docs formatting:
+The site creates the story title from the Sheet. Do not repeat that title in the document body.
+The Google Docs Title style becomes a level-one heading if you include it in the body.
 
-- Document title: Title style
-- Major chapters: Heading 2
-- Subsections: Heading 3
-- Body copy: Normal text
-- Shortcodes: A standalone line in Normal text
+The importer treats document text as content. It does not execute text inside braces or text that starts with `import` or `export`.
+Use a code block for code examples. The importer also accepts matching code fences on separate lines.
 
-Do not type the story title as a Heading 1 in the body. The site creates the title, hero photograph, description, tags, and trip facts automatically.
+### Shortcodes
 
-### Available shortcodes
+Put each shortcode on its own line. Use lowercase letters, numbers, and hyphens in IDs.
 
-Place each shortcode on its own line with no surrounding text.
-
-| Shortcode | Purpose |
+| Shortcode | Result |
 | --- | --- |
-| `{{trip-map}}` | Shows the complete route and numbered stops. |
-| `{{trip-map:stop-id}}` | Shows the route map focused on one manifest stop. |
-| `{{trip-map:track:track-id}}` | Zooms to one track, highlights it, and mutes the other tracks. |
-| `{{trip-photo:photo-id}}` | Shows one significant photograph with its caption. |
-| `{{trip-gallery:gallery-id}}` | Shows a lightbox gallery defined in the manifest. |
-| `{{trip-facts}}` | Repeats the trip facts. Usually omit this because facts appear below the hero. |
+| `{{trip-map}}` | Complete available route and numbered stops |
+| `{{trip-map:stop-id}}` | Route map centered on a manifest stop |
+| `{{trip-map:track:track-id}}` | Selected track with the other tracks dimmed |
+| `{{trip-photo:photo-id}}` | One photo and its caption |
+| `{{trip-gallery:gallery-id}}` | Gallery from the manifest |
+| `{{trip-facts}}` | A second copy of the trip facts |
 
-IDs may contain lowercase letters, numbers, and hyphens. Every photo, gallery, and stop ID used in the Doc must exist in the trip manifest.
+The header already contains trip facts. Use `{{trip-facts}}` only if the story needs a second copy.
+Each referenced ID must exist in the manifest.
+Each track ID must also match a `trackId` in the route GeoJSON.
 
-## 3. Prepare the Photographs
+## 2. Prepare photos and routes
 
-Place untouched files in:
+Put original photos in `photos/originals`. Copy the selected photos into `photos/selects`.
+Put original GPX files in `gps/originals`. Use one GPX file for each day or route segment.
 
-```text
-rsmb.tv/trips/<trip-id>/photos/originals/
-```
-
-Copy the photographs chosen for publication into `photos/selects/`. The preparation command writes optimized derivatives into `photos/processed/`; the uploader publishes that directory to:
-
-```text
-https://data.rsmb.tv/trips/<trip-id>/photos/
-```
-
-Create these sizes when the original is large enough:
-
-| Width | Use |
-| --- | --- |
-| 480 px | Phone and gallery thumbnail |
-| 960 px | Normal inline display |
-| 1600 px | Hero and lightbox display |
-
-Set WebP quality to 95 to keep photographic detail. Preserve the original aspect ratio. Correct the orientation and remove the metadata. Review the GPS metadata before publication.
-
-Run the preparer after syncing the trip folder locally:
+Run this command after you copy the trip folder to the local computer:
 
 ```bash
 npm run prepare-trip-assets -- \
@@ -112,116 +96,105 @@ npm run prepare-trip-assets -- \
   --source "/path/to/rsmb.tv/trips/ozarks-2012"
 ```
 
-The command corrects the orientation, removes image metadata, and preserves the aspect ratio. It creates WebP files at 480, 960, and 1600 pixels without enlargement. It sets the WebP quality to 95. The selected filename determines the output filename. For example, `Camp at Dusk.jpg` becomes `camp-at-dusk-480.webp`. Use stable, descriptive filenames. The command fails if two filenames produce the same normalized name. It removes generated WebP files that no longer have a selected source file.
+The command prepares photos and routes. It writes `asset-metadata.json` at the trip root.
+Add `--force` to replace existing generated files.
 
-Review `asset-metadata.json` at the trip root and record the largest derivative's actual width and height in the manifest. These dimensions prevent the page from shifting while images load. Existing derivatives are reused; pass `--force` to rebuild them.
+### Photo output
 
-`npm run dev` prepares each trip directory before it syncs the published and unpublished blog rows. Set `TRIP_ASSETS_ROOT` in `.env.local` to the local `trips/` directory. In WSL, the command automatically detects `/mnt/g/My Drive/projects/rsmb.tv/trips`. The command copies generated WebP and GeoJSON files to the gitignored `public/data/trips/<trip-id>/` preview cache. Vite serves this cache. An incomplete trip does not stop preparation of the other trips. Set `TRIP_ASSETS_ON_DEV=false` to skip this step. Before Vite starts, the command reports totals for trips, selected photos, WebP files, GeoJSON files, and incomplete trips.
+The command corrects orientation, removes metadata, and retains the aspect ratio.
+It creates WebP files at quality 95. It does not enlarge the source image.
 
-### Alt text and captions
+| Width | Use |
+| --- | --- |
+| 480 px | Phone display and gallery thumbnail |
+| 960 px | Inline photo |
+| 1600 px | Header photo and full-screen display |
 
-Alt text describes meaningful visual content for someone who cannot see the image:
+A source named `Camp at Dusk.jpg` produces files such as `camp-at-dusk-480.webp`.
+Use clear, stable filenames. The command stops if two names produce the same output name.
+It removes generated WebP files that no longer have a selected source.
 
-> The motorcycle parked beside wet Highway 19 beneath dark storm clouds.
+Copy the largest output width and height from `asset-metadata.json` into the manifest.
+Do not assume that each source can produce a 1600-pixel image.
 
-A caption adds context that is not obvious from the pixels:
+Add alt text that describes the visible content. Add a caption that supplies other useful information.
+Do not repeat the caption in the alt text.
 
-> Waiting out the heaviest rain south of Salem.
+### Route output
 
-Avoid repeating the caption in the alt text. Decorative collection thumbnails use the same source metadata but are hidden from screen readers where the surrounding title already supplies context.
+The command writes these files in `gps/processed`:
 
-## 4. Prepare the Route
+- `route.geojson`: All available tracks.
+- `track-<track-id>.geojson`: One source GPX file per output file.
 
-Place untouched GPX exports in `gps/originals/`, with one file per day or route leg. Use stable filenames such as `2026-05-19-day-one.gpx`; the normalized filename becomes the public track ID.
+The source filename determines the public track ID.
+A filename that starts with `YYYY-MM-DD` also supplies the track date.
+Do not put private information in source filenames.
 
-The preparation command writes two forms of sanitized output:
+The command removes generated route files that no longer have a GPX source.
+It does not remove other files from `gps/processed`.
 
-- `gps/processed/route.geojson` combines every track for overview maps. Its features retain only the public track ID, source order, and an optional `YYYY-MM-DD` date parsed from the filename.
-- `gps/processed/track-<track-id>.geojson` contains each source GPX separately for reuse outside the story map.
+Each route feature retains its track ID, source order, distance, and optional date.
+The command removes timestamps, embedded names, and device data.
+It does not remove private coordinates.
 
-The command removes generated route and track GeoJSON files that no longer have a GPX source. It does not remove other files from `gps/processed/`.
+The command calculates surface distance from the GPX points with the Haversine formula.
+It does not include elevation gain. It reports whole miles and kilometers to one decimal place.
+The GeoJSON features also contain unrounded distances for later calculations.
 
-The command prints the total distance and each track distance. It shows whole miles and kilometers to one decimal place. It stores the same values in `asset-metadata.json`. The fields are `route.distanceMiles`, `route.distanceKilometers`, and the equivalent fields in each `route.tracks` item. The command calculates distance from the parsed GPX points before it removes route properties. It uses the Haversine formula for the recorded surface geometry. It does not include elevation gain or three-dimensional distance.
+Review the route before publication:
 
-Timestamps, embedded names, device details, and all other GPX properties are removed. Because normalized filenames appear in public output, do not put private details in GPX filenames.
+1. Open `route.geojson` in a GIS tool.
+2. Remove private home coordinates and unrelated track segments from the source.
+3. Run the preparation command again after source changes.
+4. Confirm the start, end, stops, and overnight locations.
+5. Confirm that each track contains the expected route segment.
 
-After preparing:
+You can add a static map at `gps/processed/route-fallback.webp`.
+Add `route.staticImage` to the manifest only when this file exists and is available at its public URL.
 
-1. Inspect `route.geojson` in QGIS or another trusted GIS tool.
-2. Remove private home locations and unrelated track segments.
-3. Optionally simplify a very dense track while preserving road geometry.
-4. Confirm each individual track file contains the intended day or leg.
-5. Optionally export a static fallback map as `gps/processed/route-fallback.webp`.
+## 3. Create the manifest
 
-Property removal does not make the coordinates private. Always inspect the start, end, stops, and overnight locations before publishing.
+Copy `src/content/trips/_template.json.draft` to `src/content/trips/<trip-id>.json.draft`.
+Replace all placeholder values.
 
-The uploader publishes those files to:
+The application loads files with the `.json` suffix.
+Rename a structurally complete manifest to `.json` when you need a local preview.
+The suffix does not confirm publication. Keep the Sheet `published` value `false` until the public assets pass review.
 
-```text
-https://data.rsmb.tv/trips/<trip-id>/geo/
-```
+Set these required fields:
 
-The route must contain `LineString` or `MultiLineString` geometry. GeoJSON coordinates are ordered `[longitude, latitude]`, not `[latitude, longitude]`.
+- `id`: The Sheet `trip_id` value.
+- `dates.start` and `dates.end`: Dates in `YYYY-MM-DD` format.
+- `hero`: An existing photo ID.
+- `route.geoJson`: The public route URL.
+- `stops`: Route stops with unique IDs and `[longitude, latitude]` coordinates.
+- `photos`: Photo IDs, public URLs, dimensions, and alt text.
 
-Important story locations belong in the manifest's `stops` array. Use stable IDs such as `mount-magazine` or `night-one-camp`, then reference them with `{{trip-map:mount-magazine}}`.
+You can also set `ridingDays`, `distanceMiles`, `motorcycle`, `regions`, and `galleries`.
+Use positive integer values for photo dimensions and riding days.
+Use a positive number for total distance. Count only days with motorcycle travel as riding days.
 
-## 5. Create the Trip Manifest
+Keep the full-trip distance separate from a partial recorded route distance.
+Do not invent a missing date or route segment.
+List regions in travel order. List gallery photos in story order.
 
-Copy:
-
-```text
-src/content/trips/_template.json.draft
-```
-
-to a draft file:
-
-```text
-src/content/trips/<trip-id>.json.draft
-```
-
-Keep the `.json.draft` suffix while the file contains placeholder text or references assets that are not published. The application loads every `.json` file in this directory during the build. Rename the completed file to:
-
-```text
-src/content/trips/<trip-id>.json
-```
-
-The `id` must match the Sheet `trip_id` value. Add these required fields:
-
-- Trip start and end dates
-- A hero photo ID
-- GeoJSON and optional static map paths
-- Important route stops
-- Photograph metadata
-
-You can also add the number of riding days, total distance, motorcycle, broad regions or states, and named gallery groups. Use `ridingDays` for days when the motorcycle moved. Do not use the number of calendar days when the trip included rest days.
-
-The site shows the start and end dates in the trip facts. Dates in the same month use a compact range, such as `February 17–20, 2024`. The site shows values from `regions` under the `Region` label. List broad geographic areas in travel order.
-
-To use focused track maps, copy each track ID from `asset-metadata.json` into `route.tracks` with a reader-facing name and optional date:
+For each entry in `route.tracks`, copy the exact ID from `asset-metadata.json`.
+Add a clear name. Add a date only after verification.
+Identify reconstructed tracks in their names.
 
 ```json
-"tracks": [
-  { "id": "2026-05-19-day-one", "name": "Day one: coastbound", "date": "2026-05-19" },
-  { "id": "2026-05-20-day-two", "name": "Day two: return", "date": "2026-05-20" }
-]
+{
+  "id": "2026-05-19-day-one",
+  "name": "Day one: coastbound",
+  "date": "2026-05-19"
+}
 ```
 
-Use `{{trip-map:track:2026-05-19-day-one}}` in the story. Overview maps render the combined GeoJSON as one amber route, show travel-direction arrows, and list overall and per-track distances. Focused maps fit the selected track, draw it brightly, leave the remaining route muted for context, and show that track's distance.
+Use the ID in a focused map shortcode: `{{trip-map:track:2026-05-19-day-one}}`.
+Overview maps show the route and track distances. Focused maps show the selected track distance.
 
-Use these manifest rules:
-
-- Use `YYYY-MM-DD` for each date. The end date must not be before the start date.
-- Set `hero` to a photo ID from the `photos` array.
-- Use a unique lowercase ID for each photo and stop.
-- Put longitude before latitude in each stop coordinate pair.
-- Use positive integer values for photo width and height.
-- Reference only photo IDs that exist in the manifest when you define a gallery.
-- Use a positive integer for `ridingDays` when you include that field.
-- Use a positive number for `distanceMiles` when you include that field.
-
-The blog sync checks each trip shortcode against the matching manifest. The application also validates the complete manifest schema during the build. Both checks stop publication when they find invalid data.
-
-Example photograph entry:
+Example photo entry:
 
 ```json
 {
@@ -230,28 +203,76 @@ Example photograph entry:
   "srcSet": "https://data.rsmb.tv/trips/ozarks-2012/photos/camp-at-dusk-480.webp 480w, https://data.rsmb.tv/trips/ozarks-2012/photos/camp-at-dusk-960.webp 960w, https://data.rsmb.tv/trips/ozarks-2012/photos/camp-at-dusk-1600.webp 1600w",
   "width": 1600,
   "height": 1067,
-  "alt": "A small tent beside the motorcycle under a red evening sky.",
+  "alt": "A tent beside the motorcycle under a red sky.",
   "caption": "The first dry campsite after two days of rain.",
-  "location": "Buffalo National River, Arkansas",
   "date": "2012-05-19"
 }
 ```
 
-The site validates dates, coordinates, dimensions, duplicate IDs, hero references, and gallery references. An invalid manifest stops the build.
+The application validates dates, coordinates, dimensions, duplicate IDs, and photo references when it loads the manifest module.
+Blog sync checks the file, trip ID, asset URLs, and shortcode references.
+It does not compare track IDs with GeoJSON features. Complete that check before publication.
 
-## 6. Prepare, Review, and Publish Assets
+## 4. Add the Sheet row
 
-Media processing and S3 upload are intentionally separate from `build-blog`. A normal text edit should not require the private Drive archive, image/GPS processing dependencies, AWS credentials, or a large upload.
+Add one row to the `Blog Posts` tab:
 
-Prepare the local assets:
+| Field | Example |
+| --- | --- |
+| `slug` | `ozarks-2012` |
+| `title` | `Three Wet Days in the Ozarks` |
+| `date` | `2026-09-09` |
+| `description` | `A motorcycle trip through Missouri and Arkansas.` |
+| `tags` | `Motorcycles, Travel, Missouri, Arkansas` |
+| `google_doc_id` | Google Doc URL or ID |
+| `published` | `false` until publication checks pass |
+| `format` | `trip` |
+| `trip_id` | `ozarks-2012` |
+| `drive_folder_url` | Optional Drive folder URL for the development panel |
+
+Make the Sheet and Doc accessible through their public export URLs.
+Keep asset uploads separate from text changes.
+
+## 5. Preview locally
+
+Set `TRIP_ASSETS_ROOT` in `.env.local` to the local `trips` directory.
+WSL also checks `/mnt/g/My Drive/projects/rsmb.tv/trips`.
 
 ```bash
-npm run prepare-trip-assets -- \
-  ozarks-2012 \
-  --source "/path/to/rsmb.tv/trips/ozarks-2012"
+npm run dev
 ```
 
-Review every generated photograph, `gps/processed/route.geojson`, and `asset-metadata.json` before uploading.
+The command prepares local assets and imports published and unpublished Sheet rows.
+It copies WebP and GeoJSON files to `public/data/trips/<trip-id>` for local preview.
+This cache is ignored by Git. An incomplete trip does not stop preparation of other trips.
+Set `TRIP_ASSETS_ON_DEV=false` to skip preparation.
+
+Open `http://localhost:5173/trips/<trip-slug>`.
+After an importer change, run `npm run sync-blogs:dev` to replace generated MDX.
+Do not edit generated MDX as the content source.
+
+Check desktop and phone widths:
+
+- Confirm that subtitles use small gray text and stay out of the table of contents.
+- Open each heading link.
+- Confirm that photos load with the correct dimensions and captions.
+- Confirm that each map shows the intended track or stop.
+- Open and close galleries with a mouse, keyboard, and touch.
+- Remove repeated titles and repeated facts.
+
+## 6. Publish assets
+
+Review each processed photo, `route.geojson`, and `asset-metadata.json` before upload.
+
+Read the deployment values:
+
+```bash
+terraform -chdir=infra output -raw trip_sources_bucket
+terraform -chdir=infra output -raw temperature_data_bucket
+terraform -chdir=infra output -raw temperature_data_cloudfront_id
+```
+
+Use these values for `TRIP_SOURCE_BUCKET`, `TRIP_ASSET_BUCKET`, and `TRIP_ASSET_CDN_ID`, respectively.
 
 Preview the upload:
 
@@ -264,104 +285,23 @@ npm run publish-trip-assets -- \
   --dry-run
 ```
 
-Terraform provides the bucket names and the CloudFront distribution ID:
+Remove `--dry-run` to upload the files.
+Set `TRIP_ASSET_CDN_ID` if the command must invalidate the CDN cache.
 
-```bash
-terraform -chdir=infra output -raw trip_sources_bucket
-terraform -chdir=infra output -raw temperature_data_bucket
-terraform -chdir=infra output -raw temperature_data_cloudfront_id
-```
+The command backs up original photos and GPX files to private S3.
+It uploads processed photos to `https://data.rsmb.tv/trips/<trip-id>/photos/`.
+It uploads processed routes and static maps to `https://data.rsmb.tv/trips/<trip-id>/geo/`.
+It does not prepare files, upload `selects`, or delete S3 objects.
 
-Use `trip_sources_bucket` for `TRIP_SOURCE_BUCKET`. Use `temperature_data_bucket` for `TRIP_ASSET_BUCKET`. Use `temperature_data_cloudfront_id` for `TRIP_ASSET_CDN_ID`.
+## 7. Publish the story
 
-Then publish and optionally invalidate CloudFront:
+1. Confirm that each public asset URL is available.
+2. Set the Sheet `published` value to `true`.
+3. Run `GOOGLE_BLOG_SHEET_ID=<sheet-id> npm run build-blog`.
+4. Correct each reported error.
+5. Start the production build in AWS Amplify.
 
-```bash
-TRIP_SOURCE_BUCKET=<private-source-bucket> \
-TRIP_ASSET_BUCKET=<public-data-bucket> \
-TRIP_ASSET_CDN_ID=<distribution-id> \
-npm run publish-trip-assets -- \
-  ozarks-2012 \
-  --source "/path/to/rsmb.tv/trips/ozarks-2012"
-```
-
-The publish command does not run preparation. It archives `photos/originals/` and `gps/originals/` in the private source bucket. It uploads only WebP files from `photos/processed/` and GeoJSON or WebP files from `gps/processed/` to the public bucket. It does not upload `selects/`. It does not delete S3 objects.
-
-## 7. Add the Google Sheet Row
-
-Add one row to the `Blog Posts` Sheet:
-
-| Field | Example |
-| --- | --- |
-| `slug` | `ozarks-2012` |
-| `title` | `Three Wet Days in the Ozarks` |
-| `date` | `2026-09-09` |
-| `description` | `Revisiting a rain-soaked motorcycle loop through Missouri and Arkansas.` |
-| `tags` | `Motorcycles, Travel, Missouri, Arkansas` |
-| `google_doc_id` | The Google Doc URL or ID |
-| `published` | `false` while drafting; `true` when ready |
-| `format` | `trip` |
-| `trip_id` | `ozarks-2012` |
-
-The Sheet `date` is the publication date. Dates in the trip manifest describe when the trip occurred.
-
-## 8. Review the Layout
-
-Use one significant photograph after several paragraphs rather than creating a wall of images. A practical rhythm is:
-
-- Hero photograph supplied by the manifest
-- Two to four opening paragraphs
-- Full route map
-- One focused photograph or gallery per chapter
-- Focused maps only where geography clarifies the story
-- A final gallery for worthwhile images that did not fit the narrative
-
-On desktop, photographs and maps break wider than the reading column. On mobile, they fit the viewport. The map uses cooperative gestures so normal page scrolling remains available.
-
-Recommended gallery size is three to nine photographs. Prefer chronological or thematic ordering. Do not place the same photograph both inline and in the immediately adjacent gallery.
-
-## 9. Build and Preview
-
-Run:
-
-```bash
-GOOGLE_BLOG_SHEET_ID=<sheet-id> npm run build-blog
-npm run dev
-```
-
-Open:
-
-```text
-http://localhost:5173/trips/<trip-slug>
-```
-
-Review desktop and phone widths. Check:
-
-- The opening image loads promptly and is framed well.
-- Text remains the primary storytelling surface.
-- Every shortcode resolves.
-- Captions and dates are accurate.
-- Map stops are correctly numbered and located.
-- The route does not expose a private home address or unwanted location.
-- Galleries open, close, and navigate with mouse, keyboard, and touch.
-- There is no repeated title or repeated facts block.
-
-## 10. Publish
-
-Publish the processed assets first. Then set `published` to `true`. Run the blog build again. The blog sync checks each route and image URL in the manifest. The check uses `HEAD` and uses `GET` as a fallback. Each check stops after 10 seconds. An unavailable asset stops the build.
-
-Trigger the AWS Amplify production build after the checks pass. A Google Doc edit does not deploy the site. A new build must fetch and publish the edit.
-
-## File Checklist
-
-```text
-Google Drive/rsmb.tv/trips/<trip-id>/<trip-title>.gdoc
-Google Drive/rsmb.tv/trips/<trip-id>/photos/{originals,selects,processed}/
-Google Drive/rsmb.tv/trips/<trip-id>/gps/{originals,processed}/
-Google Drive/rsmb.tv/publishing/rsmb.tv blog.gsheet
-src/content/trips/<trip-id>.json
-S3/CDN: trips/<trip-id>/photos/*.webp
-S3/CDN: trips/<trip-id>/geo/*.{geojson,webp}
-Private S3: trips/<trip-id>/photos/originals/*
-Private S3: trips/<trip-id>/gps/originals/*
-```
+The asset check tries `HEAD`, then `GET` if necessary. Each request has a 10-second timeout.
+Each URL must use `https://data.rsmb.tv/trips/<trip-id>/`.
+An unavailable asset stops the production blog sync.
+A Google Doc edit does not deploy the site. A new build must import the edit.

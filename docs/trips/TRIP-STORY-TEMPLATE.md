@@ -1,122 +1,134 @@
-# Trip Story Template
+# Trip story template
 
-Use this document as a reference or copy it into a new Google Doc. Replace text inside square brackets, then remove all instructions and unused sections before publishing.
+Copy this template into a Google Doc. Replace each prompt in square brackets.
+Delete instructions and unused sections before publication.
 
-Do not add the final story title as a Heading 1 in the body. The title comes from the Google Sheet and is rendered above the hero photograph automatically.
+The site gets the story title from the Google Sheet. Do not repeat that title in the document body.
+Use Heading 2 for chapters and Heading 3 for sections within a chapter.
+Use Subtitle for a distance line below a heading. A subtitle does not appear in the table of contents.
 
 ---
 
-[Open with a specific scene, image, decision, or problem from the trip. Give the reader a reason to continue before explaining the itinerary. Aim for two to four short paragraphs.]
+[Describe an event, location, or problem from the trip. Use two to four short paragraphs.]
 
-[Briefly establish when the trip happened, who was there, what motorcycle you rode, and why you set out. Do not repeat facts already shown beneath the hero unless they matter to the story.]
+[Explain when the trip occurred and why you took it. Do not repeat the trip facts unless the story needs them.]
 
 {{trip-map}}
 
-## Before Leaving
+## Before leaving
 
-[Explain the origin of the trip. What were you hoping to find, test, escape, revisit, or accomplish? Include only preparation details that affect what happens later.]
+[Explain the reason for the trip. Include preparation details that affected the trip.]
 
-[Optional paragraph about the motorcycle, luggage, weather forecast, route constraints, or historical context.]
+[Describe the motorcycle, luggage, weather, or route restrictions if these details help explain the story.]
 
 {{trip-photo:departure-photo-id}}
 
 ## Day 1: [Origin] to [Destination]
 
-[Begin with movement or a concrete moment. Describe the road, weather, traffic, landscape, or your physical state without turning the section into a list of highways.]
+[Optional distance line. Apply the Google Docs Subtitle style to this paragraph.]
 
-[Introduce the day's meaningful decision, surprise, setback, encounter, or discovery. Explain why it mattered.]
+[Describe the road, weather, landscape, or an event.]
+
+[Explain an important decision or change and its result.]
 
 {{trip-photo:day-one-photo-id}}
 
-[Continue the story after the image. A photograph should not replace the part of the experience that only you can explain. End with a transition or changed expectation.]
+[Continue the story after the photo. Explain what happened next.]
 
 ## Day 2: [Origin] to [Destination]
 
-[Open with what changed overnight or what the next leg demanded.]
+[Optional distance line. Apply the Google Docs Subtitle style to this paragraph.]
+
+[Describe what changed overnight or what the next route segment required.]
 
 {{trip-map:day-two-stop-id}}
 
-For a map focused on one GPS track/day, use:
+[For a track map, replace the preceding shortcode with the following shortcode. Delete this instruction.]
 
 {{trip-map:track:YYYY-MM-DD-day-two}}
 
-[Describe why this location or route segment matters. The focused map is useful only when geography helps the reader understand the choice or event.]
+[Explain why the location or route segment matters.]
 
-[Tell the central scene from this day. Include specific sensory details, dialogue, or observations where they are genuinely remembered.]
+[Describe the main event from this day. Use only details that you recorded or remember.]
 
 {{trip-gallery:day-two-gallery-id}}
 
-[Add a short reflection or transition after the gallery. Avoid describing every image when the captions already provide the necessary context.]
+[Explain what happened after these events. Do not repeat each photo caption.]
 
 ## Day 3: [Origin] to [Destination]
 
-[Repeat the daily structure only if it serves the story. Trips do not need one chapter per calendar day; combine uneventful legs and split complicated days into meaningful scenes.]
+[Add this chapter if the day needs a separate section. Combine route segments when that structure is clearer.]
 
-### [Optional Scene or Place]
+### [Optional event or place]
 
-[Use Heading 3 for a substantial scene within a chapter.]
+[Use Heading 3 for this section.]
 
 {{trip-photo:scene-photo-id}}
 
-## The Turning Point
+## The main event
 
-[Optional thematic chapter for the trip's most important decision, failure, repair, weather event, road, destination, or encounter. Place it where it occurred chronologically.]
+[Describe the most important decision, failure, repair, weather event, road, or destination. Put the event in time order.]
 
 {{trip-map:turning-point-stop-id}}
 
-[Explain the consequence. What changed afterward?]
+[Explain the result and what changed afterward.]
 
-## The Ride Home
+## The ride home
 
-[Do not rush the return unless that is emotionally accurate. Describe what felt different after the trip's central events.]
+[Describe the return trip. Explain what was different.]
 
 {{trip-photo:return-photo-id}}
 
-## Looking Back
+## After the trip
 
-[Write from the present. What has remained vivid? What did you misunderstand at the time? What would you repeat or change? For an old trip, distinguish clearly between what you recorded then and what you remember now.]
+[Explain what you remember and what you would change. Identify details from records separately from details from memory.]
 
-[End on a concrete image, observation, or consequence rather than a generic summary.]
+[End with a specific event, observation, or result.]
 
 {{trip-gallery:final-highlights}}
 
 ---
 
-## Author's Pre-Publish Notes
+## Author checklist
 
-Delete this section before publishing.
+Delete this section before publication. Use the [authoring guide](TRIP-AUTHORING-README.md) for commands and file rules.
 
 ### Google Sheet
 
 - `slug`: `[trip-slug]`
-- `title`: `[Final public title]`
+- `title`: `[Public title]`
 - `date`: `[Publication date]`
-- `description`: `[One compelling sentence for previews and search]`
-- `tags`: `Motorcycles, Travel, [places or themes]`
-- `google_doc_id`: `[This document's URL or ID]`
-- `published`: `false`
+- `description`: `[One sentence for the preview]`
+- `tags`: `Motorcycles, Travel, [places]`
+- `google_doc_id`: `[Document URL or ID]`
+- `published`: `false` until all publication checks pass
 - `format`: `trip`
-- `trip_id`: `[trip-id matching the manifest]`
+- `trip_id`: `[Manifest ID]`
 
-### Required Assets
+### Source and asset checks
 
-- [ ] Drive folder exists at `rsmb.tv/trips/[trip-id]/`.
-- [ ] Originals, selects, and processed photographs are in their respective directories.
-- [ ] Original and processed GPS files are in their respective directories.
-- [ ] `npm run prepare-trip-assets` has completed and `asset-metadata.json` has been reviewed.
-- [ ] Every processed photograph has been visually reviewed.
-- [ ] The processed route has been inspected for private locations.
-- [ ] Untouched originals have been archived in the private S3 source bucket.
-- [ ] Trip manifest exists at `src/content/trips/[trip-id].json`.
-- [ ] Hero photograph exists and is referenced by the manifest.
-- [ ] Every `trip-photo` ID exists in the manifest.
-- [ ] Every `trip-gallery` ID exists in the manifest.
-- [ ] Every focused `trip-map` stop ID exists in the manifest.
-- [ ] Every focused track map ID exists in `route.tracks` in the manifest.
-- [ ] GeoJSON route exists at the manifest path.
-- [ ] Processed photographs and route files have been uploaded to `data.rsmb.tv`.
-- [ ] Images have intrinsic width and height values.
-- [ ] Alt text describes meaningful visual content.
-- [ ] Captions add context instead of repeating alt text.
-- [ ] Private GPS locations and image metadata have been reviewed.
-- [ ] The story has been previewed on desktop and mobile.
+- [ ] Confirm the Drive folder at `rsmb.tv/trips/[trip-id]/`.
+- [ ] Keep original, selected, and processed photos in their specified directories.
+- [ ] Keep original and processed GPS files in their specified directories.
+- [ ] Run `npm run prepare-trip-assets`.
+- [ ] Review `asset-metadata.json` and each processed photo.
+- [ ] Remove private locations from the route source.
+- [ ] Back up original files to the private S3 bucket.
+- [ ] Check the manifest at `src/content/trips/[trip-id].json`.
+- [ ] Check each hero, photo, gallery, stop, and track reference.
+- [ ] Compare manifest track IDs with the route GeoJSON.
+- [ ] Verify photo dimensions and alt text.
+- [ ] Verify captions and dates.
+- [ ] Upload the processed assets.
+- [ ] Confirm that each public asset URL is available.
+
+### Document checks
+
+- [ ] Replace unknown distances and placeholder text.
+- [ ] Verify day numbers and trip facts.
+- [ ] Confirm that subtitles use the Subtitle style.
+- [ ] Confirm that the table of contents contains only section headings.
+- [ ] Open each heading link.
+- [ ] Test the story at desktop and phone widths.
+- [ ] Test gallery controls with a keyboard.
+- [ ] Delete the author checklist and all remaining instructions.

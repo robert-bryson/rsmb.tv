@@ -214,6 +214,24 @@ describe('Google export helpers', () => {
         expect(markdown).toContain('const x = 1;');
     });
 
+    it('preserves subtitles as styled paragraphs instead of headings', () => {
+        const markdown = convertHtmlToMarkdown(`
+            <h2>Day 1: Seattle to Blue Mountains</h2>
+            <p class="subtitle c1"><span>(339mi. / 545km.)</span></p>
+            <p>Body text.</p>
+            <p class="subtitle">Notes &amp; <em>details</em> {optional}
+                <a href="https://example.com" onclick="alert(1)">route</a></p>
+        `);
+
+        expect(markdown).toContain('## Day 1: Seattle to Blue Mountains');
+        expect(markdown).toContain('<p className="blog-subtitle">(339mi. / 545km.)</p>');
+        expect(markdown).toContain('Notes &amp; <em>details</em> &#123;optional&#125;');
+        expect(markdown).toContain('<a href="https://example.com">route</a>');
+        expect(markdown).not.toContain('onclick');
+        expect(markdown.match(/^#+ .+$/gm)).toEqual(['## Day 1: Seattle to Blue Mountains']);
+        expect(markdown).toContain('\n\nBody text.\n\n');
+    });
+
     it('normalizes Google Docs title, code block, typed fences, and table exports', () => {
         const markdown = convertHtmlToMarkdown(`
                         <html>

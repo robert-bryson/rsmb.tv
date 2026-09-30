@@ -585,10 +585,6 @@ function normalizeGoogleDocsTitleParagraphs(document) {
     document.querySelectorAll('p.title').forEach((paragraph) => {
         replaceElementTag(paragraph, 'h1');
     });
-
-    document.querySelectorAll('p.subtitle').forEach((paragraph) => {
-        replaceElementTag(paragraph, 'h2');
-    });
 }
 
 function normalizedTextContent(node) {
@@ -831,12 +827,42 @@ function normalizeGoogleDocsCodeBlocks(document) {
     }
 }
 
+function normalizeTypedCodeParagraphs(document) {
+    for (const paragraph of document.querySelectorAll('p')) {
+        if (!paragraph.isConnected) continue;
+        const opening = normalizedTextContent(paragraph).trim().match(/^(`{3,}|~{3,})([\w+-]*)$/);
+        if (!opening) continue;
+        const lines = [];
+        const blocks = [paragraph];
+        let closing = paragraph.nextElementSibling;
+        while (closing && isCodeLineElement(closing)) {
+            const text = normalizedTextContent(closing);
+            const marker = text.trim();
+            if (marker.length >= opening[1].length && [...marker].every(char => char === opening[1][0])) break;
+            lines.push(text);
+            blocks.push(closing);
+            closing = closing.nextElementSibling;
+        }
+        // Leave an unmatched fence for the existing orphan-marker cleanup.
+        if (!closing || !isCodeLineElement(closing)) continue;
+        const pre = document.createElement('pre');
+        const code = document.createElement('code');
+        const language = normalizeCodeLanguage(opening[2]);
+        if (language) code.className = `language-${language}`;
+        code.textContent = lines.join('\n');
+        pre.append(code);
+        paragraph.before(pre);
+        for (const block of [...blocks, closing]) block.remove();
+    }
+}
+
 function normalizeGoogleDocsHtml(document) {
     normalizeGoogleDocsTitleParagraphs(document);
     normalizeGoogleDocsInlineStyles(document);
     normalizeGoogleDocsLinks(document);
     normalizeGoogleDocsMedia(document);
     normalizeGoogleDocsCodeBlocks(document);
+    normalizeTypedCodeParagraphs(document);
 }
 
 function documentBodyHtml(html) {
@@ -873,7 +899,7 @@ function tableCellBlocks(cell) {
 }
 
 function serializedChildren(node) {
-    return Array.from(node.childNodes).map(serializeTableCellNode).join('');
+    return Array.from(node.childNodes).map(serializeSafeHtmlNode).join('');
 }
 
 function serializeCodeTag(node) {
@@ -896,7 +922,7 @@ function serializeImageTag(node) {
     return `<img ${attributes.join(' ')} />`;
 }
 
-function serializeTableCellNode(node) {
+function serializeSafeHtmlNode(node) {
     if (node.nodeType === node.TEXT_NODE) {
         return escapedHtml(String(node.textContent ?? '').replace(/\u00a0/g, ' '));
     }
@@ -934,7 +960,7 @@ function serializeTableCellNode(node) {
 
 function serializeTableCellBlock(block) {
     return block.tagName.toLowerCase() === 'pre'
-        ? serializeTableCellNode(block).trim()
+        ? serializeSafeHtmlNode(block).trim()
         : serializedChildren(block).trim();
 }
 
@@ -994,6 +1020,15 @@ function createTurndownService() {
         bulletListMarker: '-',
     });
 
+    // Google Docs text is content, not JavaScript. Code nodes bypass this escape hook.
+    const escapeMarkdown = service.escape.bind(service);
+    service.escape = (text) => escapeMarkdown(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/\{\{trip-[a-z0-9:-]+\}\}|[{}]/g, (match) => (
+            match.startsWith('{{trip-') ? match : `\\${match}`
+        ));
+
     service.addRule('lineBreak', {
         filter: 'br',
         replacement: () => '\n',
@@ -1002,6 +1037,14 @@ function createTurndownService() {
     service.addRule('table', {
         filter: 'table',
         replacement: (_content, node) => tableToHtml(node),
+    });
+
+    service.addRule('subtitle', {
+        filter: (node) => node.nodeName === 'P' && node.classList.contains('subtitle'),
+        replacement: (_content, node) => {
+            const html = serializedChildren(node).trim();
+            return html ? `\n\n<p className="blog-subtitle">${html}</p>\n\n` : '';
+        },
     });
 
     service.addRule('mark', {
@@ -1023,6 +1066,22 @@ function createTurndownService() {
     return service;
 }
 
+function escapeMdxModuleStatements(markdown) {
+    let fence = null;
+    return markdown.split('\n').map((line) => {
+        const marker = line.match(/^ {0,3}(`{3,}|~{3,})(.*)$/);
+        if (marker) {
+            if (!fence) fence = marker[1];
+            else if (marker[1][0] === fence[0] && marker[1].length >= fence.length && !marker[2].trim()) fence = null;
+            return line;
+        }
+        if (fence) return line;
+        return line.replace(/^( {0,3})(import|export)(?=\s)/, (_match, indent, keyword) => (
+            `${indent}&#${keyword.charCodeAt(0)};${keyword.slice(1)}`
+        ));
+    }).join('\n');
+}
+
 export function convertHtmlToMarkdown(html, { turndownService = createTurndownService() } = {}) {
     const markdown = normalizeTypedCodeFences(turndownService
         .turndown(documentBodyHtml(html))
@@ -1036,7 +1095,7 @@ export function convertHtmlToMarkdown(html, { turndownService = createTurndownSe
         throw new Error('Converted Google Doc content was empty.');
     }
 
-    return markdown;
+    return escapeMdxModuleStatements(markdown);
 }
 
 export function expandTripShortcodes(markdown, post, manifest) {

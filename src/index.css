@@ -44,6 +44,19 @@ button {
   margin-bottom: 1rem;
 }
 
+.blog-subtitle {
+  color: #a1a1aa;
+  font-size: 0.9375rem;
+  font-weight: 400;
+  line-height: 1.5;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+:is(h1, h2, h3, h4, h5, h6) + .blog-subtitle {
+  margin-top: -0.5rem;
+}
+
 .prose a {
   color: #a78bfa;
   text-decoration: underline;

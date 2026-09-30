@@ -111,6 +111,18 @@ Build status is source-aware: AWS Amplify deployments are shown separately from 
 
 `npm run test:e2e` starts Vite directly on `127.0.0.1:4174` with `--strictPort`, then runs Playwright with its internal web server disabled. Set `PLAYWRIGHT_PORT` when that port is already in use. CI installs Chromium before running the browser smoke tests.
 
+The post browser tests use a fixed Google Docs fixture in `tests/fixtures`.
+A compilation test compares the fixture MDX with the importer output.
+Browser tests check subtitle styles at phone and desktop widths, unique heading IDs, reload, and browser history.
+These tests do not require Google access or published trip assets.
+
+Run the importer and navigation tests with:
+
+```bash
+npx vitest run scripts/__tests__/syncBlogs.test.ts scripts/__tests__/googleDocsMdx.test.tsx src/test/mdxComponents.test.tsx
+npm run test:e2e -- tests/e2e/post-rendering.spec.ts
+```
+
 Unit tests that exercise `fetchWithCache` or hooks built on it should call `clearCache()` in setup. That helper resets cached responses and detached in-flight requests, so stale async work from one test cannot satisfy or overwrite a later test.
 
 ## Generated Metadata
@@ -192,7 +204,14 @@ The build runs `nvm install` before `npm ci`. This command installs and activate
 
 The sync uses public Google export endpoints, matching the existing flight sync model. Share the Sheet and Docs as viewer-accessible to anyone with the link. Private Google Docs would require a separate service-account or OAuth implementation.
 
-Google Docs exports are normalized before writing MDX. The sync preserves headings, lists, links, images, fenced code blocks, simple inline emphasis/highlights, and tables. Active or embedded HTML such as scripts, forms, iframes, objects, SVG, audio, and video is stripped, and links/media are limited to safe URL protocols before generated MDX is written.
+The importer converts Google Docs HTML to MDX. It retains headings, lists, links, images, code blocks, inline emphasis, highlights, and tables.
+Google Docs Subtitle paragraphs use small gray text. They have no heading ID or table-of-contents entry.
+Put a subtitle directly after its section heading. Use Heading 2 or Heading 3 for sections that need navigation links.
+
+The importer removes active HTML and restricts link and image protocols.
+It escapes literal braces, angle brackets, and module statements in document text.
+These characters remain unchanged in code blocks. Trip shortcodes remain available for manifest validation.
+After an importer change, run `npm run sync-blogs:dev` to replace local generated documents.
 
 Each post and trip page creates an "On this page" list from its headings. Each heading has a `#` link to that heading and an `↑` link back to the list. The page adds the heading ID to the URL. It uses a lowercase form of the heading text and replaces punctuation and spaces with hyphens. For example, `Day 1: Seattle to Boise` becomes `#day-1-seattle-to-boise`. If two headings have the same text, the page adds a number to the later ID, such as `#camp-notes-1`. Use short, unique heading text when possible.
 
@@ -207,7 +226,11 @@ Copy `src/content/trips/_template.json.draft` to `<trip-id>.json`, then populate
 
 Trip source media uses the private Drive hierarchy in the [trip authoring guide](docs/trips/TRIP-AUTHORING-README.md). Run `npm run prepare-trip-assets -- <trip-id> --source <local-trip-directory>` to create responsive WebP photographs, sanitized GeoJSON, and a manifest metadata report. Review all output. Then run `npm run publish-trip-assets` to back up originals to private S3 and publish processed derivatives to `data.rsmb.tv/trips/<trip-id>/`. The `build-blog` command does not prepare or upload assets.
 
-The blog sync checks each published trip before it downloads Google Doc content. The manifest must exist and contain valid JSON. Its `id` must match `trip_id`. Each route and image URL must use HTTP or HTTPS and return a successful response. Each network check stops after 10 seconds. Vite applies the complete manifest schema during the application build.
+Blog sync checks each published trip before it downloads the Google Doc.
+The manifest must contain valid JSON. Its `id` must match `trip_id`.
+Each asset URL must use `https://data.rsmb.tv/trips/<trip-id>/` and return a successful response.
+Each request has a 10-second timeout. The application validates the complete manifest schema when the manifest module loads.
+Before publication, compare manifest track IDs with the route GeoJSON. Blog sync does not perform this comparison.
 
 ### Amplify Content Publishing
 

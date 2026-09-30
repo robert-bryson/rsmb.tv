@@ -4,23 +4,30 @@ import {
     isValidElement,
     useCallback,
     useContext,
-    useMemo,
     useRef,
+    useState,
     type HTMLAttributes,
     type ReactNode,
 } from 'react';
 
 type HeadingTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
-const HeadingIdContext = createContext<((baseId: string) => string) | null>(null);
+interface HeadingIdReservation {
+    id: string;
+    release: () => void;
+}
+
+const HeadingIdContext = createContext<((baseId: string) => HeadingIdReservation) | null>(null);
 
 export function PostHeadingProvider({ children }: { children: ReactNode }) {
-    const idCounts = useRef(new Map([['post-table-of-contents', 1]]));
+    const reservedIds = useRef(new Set(['post-table-of-contents']));
 
-    const reserveId = useCallback((baseId: string) => {
-        const duplicateIndex = idCounts.current.get(baseId) ?? 0;
-        idCounts.current.set(baseId, duplicateIndex + 1);
-        return duplicateIndex === 0 ? baseId : `${baseId}-${duplicateIndex}`;
+    const reserveId = useCallback((baseId: string): HeadingIdReservation => {
+        const ids = reservedIds.current;
+        let id = baseId;
+        for (let suffix = 1; ids.has(id); suffix += 1) id = `${baseId}-${suffix}`;
+        ids.add(id);
+        return { id, release: () => { ids.delete(id); } };
     }, []);
 
     return <HeadingIdContext value={reserveId}>{children}</HeadingIdContext>;
@@ -53,19 +60,28 @@ export function LinkedHeading({
     const text = headingText(children);
     const baseId = id ?? headingId(children);
     const reserveId = useContext(HeadingIdContext);
-    const anchorId = useMemo(() => reserveId?.(baseId) ?? baseId, [baseId, reserveId]);
+    const [reservation, setReservation] = useState<{ baseId: string; id: string } | null>(null);
+    // Reserve IDs only when React commits the node. Discarded renders must not consume IDs.
+    const headingRef = useCallback((node: HTMLHeadingElement | null) => {
+        if (!node || !reserveId) return;
+        const reserved = reserveId(baseId);
+        setReservation({ baseId, id: reserved.id });
+        return reserved.release;
+    }, [baseId, reserveId]);
+    const anchorId = reserveId ? (reservation?.baseId === baseId ? reservation.id : undefined) : baseId;
 
     return (
         <Heading
             {...props}
+            ref={headingRef}
             id={anchorId}
             aria-label={text}
-            data-post-heading
+            data-post-heading={anchorId ? true : undefined}
             className={`group scroll-mt-24 ${className ?? ''}`}
         >
             {children}
             <a
-                href={`#${anchorId}`}
+                href={anchorId ? `#${anchorId}` : undefined}
                 aria-label={`Link to ${text}`}
                 data-heading-anchor
                 className="ml-1 inline-flex min-h-6 min-w-6 items-center justify-center text-zinc-500 no-underline opacity-60 transition-opacity hover:text-violet-400 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100 focus:opacity-100"

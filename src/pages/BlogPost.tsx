@@ -91,7 +91,7 @@ export function BlogPost({ collection }: BlogPostProps) {
 
     const { Component } = post;
     const postContent = (
-        <PostHeadingProvider>
+        <PostHeadingProvider key={post.slug}>
             <PostTableOfContents contentRef={contentRef} />
             <div ref={contentRef}>
                 {post.development && !post.development.contentAvailable ? (

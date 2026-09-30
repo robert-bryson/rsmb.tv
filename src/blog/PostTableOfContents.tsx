@@ -69,7 +69,13 @@ export function PostTableOfContents({ contentRef }: PostTableOfContentsProps) {
 
         updateItems();
         const observer = new MutationObserver(updateItems);
-        observer.observe(content, { childList: true, subtree: true });
+        observer.observe(content, {
+            childList: true,
+            subtree: true,
+            characterData: true,
+            attributes: true,
+            attributeFilter: ['id', 'data-post-heading'],
+        });
         window.addEventListener('hashchange', handleHashChange);
         return () => {
             observer.disconnect();
