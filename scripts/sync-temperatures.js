@@ -175,7 +175,7 @@ async function dailyExistsOnS3(dateStr) {
  * Read a JSON object from the S3 data bucket. Returns null when S3 is not
  * configured or the object is unavailable.
  */
-async function readJsonFromS3(key, options = {}) {
+async function readJsonFromS3(key) {
     if (!S3_BUCKET) return null;
     const tmpFile = resolve(tmpdir(), `rsmbtv-s3-${process.pid}-${Date.now()}.json`);
     try {
@@ -338,7 +338,6 @@ async function postJson(url, params, options = {}) {
  *
  * The local disk directory TEMP_DATA_DIR is used as a write-through cache.
  */
-const CACHE_DIR = resolve(TEMP_DATA_DIR, 'cache');
 const ACIS_CACHE_STATS = { hits: 0, misses: 0 };
 
 function cacheKey(category, params) {
@@ -363,10 +362,8 @@ function writeCacheLocal(key, data) {
  * @param {string} url       ACIS endpoint
  * @param {object} params    POST body
  * @param {string} category  Cache prefix category (e.g. 'hist-daily/WY/03-25')
- * @param {object} [options] { maxAgeDays } — if set, skip cache entries older than N days.
- *                           The S3 object's LastModified is checked.
  */
-async function cachedPostJson(url, params, category, options = {}) {
+async function cachedPostJson(url, params, category) {
     const key = cacheKey(category, params);
 
     // Try S3 cache first

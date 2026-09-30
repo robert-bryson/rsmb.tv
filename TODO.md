@@ -28,7 +28,7 @@ The historical signal is not ready for publication.
 
 ## Automated checks
 
-- [ ] Validate the complete trip manifest schema during blog sync. The application currently validates it when the module loads.
+- [ ] Validate the complete trip manifest schema during blog sync. Currently, the application validates the schema when the module loads.
 - [ ] Compare manifest track IDs with the published route features during publication checks.
 - [ ] Test Flights map keyboard controls and camera URL synchronization with Playwright.
 - [ ] Test trip map fallback behavior and the basemap control with Playwright.

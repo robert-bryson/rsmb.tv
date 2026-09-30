@@ -319,7 +319,6 @@ function runQAQC(rows) {
     const row = dataRows[i];
     const rowNum = i + 2; // 1-indexed, plus header
     const cleanRow = [...row];
-    let hasError = false;
 
     // Trim all fields
     for (let j = 0; j < cleanRow.length; j++) {
@@ -331,7 +330,6 @@ function runQAQC(rows) {
       const dateResult = validateDate(cleanRow[dateIdx]);
       if (!dateResult.valid) {
         errors.push(`Row ${rowNum}: ${dateResult.error}`);
-        hasError = true;
       }
     }
 
@@ -361,7 +359,6 @@ function runQAQC(rows) {
       const originResult = validateAirportCode(cleanRow[originIdx]);
       if (!originResult.valid) {
         errors.push(`Row ${rowNum}: Origin - ${originResult.error}`);
-        hasError = true;
       } else {
         cleanRow[originIdx] = originResult.normalized;
       }
@@ -372,7 +369,6 @@ function runQAQC(rows) {
       const destResult = validateAirportCode(cleanRow[destIdx]);
       if (!destResult.valid) {
         errors.push(`Row ${rowNum}: Destination - ${destResult.error}`);
-        hasError = true;
       } else {
         cleanRow[destIdx] = destResult.normalized;
       }
@@ -383,7 +379,6 @@ function runQAQC(rows) {
       if (cleanRow[originIdx] && cleanRow[destIdx] &&
         cleanRow[originIdx] === cleanRow[destIdx]) {
         errors.push(`Row ${rowNum}: Origin and destination are the same (${cleanRow[originIdx]})`);
-        hasError = true;
       }
     }
 
@@ -406,7 +401,7 @@ function runQAQC(rows) {
   }
 
   // Check for inconsistent airline naming
-  for (const [key, variations] of airlineVariations) {
+  for (const variations of airlineVariations.values()) {
     if (variations.size > 1) {
       warnings.push(`Inconsistent airline naming: ${Array.from(variations).join(', ')}`);
     }

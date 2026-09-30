@@ -111,7 +111,8 @@ It creates WebP files at quality 95. It does not enlarge the source image.
 | 1600 px | Header photo and full-screen display |
 
 A source named `Camp at Dusk.jpg` produces files such as `camp-at-dusk-480.webp`.
-Use clear, stable filenames. The command stops if two names produce the same output name.
+Use clear, stable filenames. The command checks all photo IDs before it writes files.
+It stops if two source names produce the same photo ID.
 It removes generated WebP files that no longer have a selected source.
 
 Copy the largest output width and height from `asset-metadata.json` into the manifest.
@@ -141,6 +142,12 @@ It does not remove private coordinates.
 The command calculates surface distance from the GPX points with the Haversine formula.
 It does not include elevation gain. It reports whole miles and kilometers to one decimal place.
 The GeoJSON features also contain unrounded distances for later calculations.
+
+The command rejects invalid coordinates, removes consecutive duplicates and elevation, and rounds output coordinates
+to six decimal places. It simplifies each route segment with a 5-meter tolerance after calculating distance from the
+cleaned full-resolution geometry. Segment endpoints are retained. Use `--route-tolerance <meters>` to change the
+tolerance. Use `--route-tolerance 0` to retain all cleaned coordinates.
+`asset-metadata.json` reports the original and output point counts for the complete route and each track.
 
 Review the route before publication:
 

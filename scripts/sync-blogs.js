@@ -570,6 +570,7 @@ export async function validateTripAssetUrls(
                 if (error instanceof Error && error.message.includes('asset URL is not available')) throw error;
                 throw new Error(
                     `Trip "${post.tripId}" asset URL could not be checked: ${assetUrl} (${error instanceof Error ? error.message : error})`,
+                    { cause: error },
                 );
             }
         }
@@ -1193,12 +1194,12 @@ export function validateTripManifestFiles(posts, { repoRoot = REPO_ROOT, fsImpl 
             manifest = JSON.parse(fsImpl.readFileSync(manifestPath, 'utf-8'));
         } catch (error) {
             if (error?.code === 'ENOENT') {
-                throw new Error(`Trip post "${post.slug}" requires manifest src/content/trips/${post.tripId}.json.`);
+                throw new Error(`Trip post "${post.slug}" requires manifest src/content/trips/${post.tripId}.json.`, { cause: error });
             }
             if (error instanceof SyntaxError) {
-                throw new Error(`Trip manifest "${post.tripId}" is not valid JSON: ${error.message}`);
+                throw new Error(`Trip manifest "${post.tripId}" is not valid JSON: ${error.message}`, { cause: error });
             }
-            throw new Error(`Could not read trip manifest "${post.tripId}": ${error.message}`);
+            throw new Error(`Could not read trip manifest "${post.tripId}": ${error.message}`, { cause: error });
         }
 
         if (manifest?.id !== post.tripId) {
@@ -1216,7 +1217,7 @@ function relativePortablePath(rootPath, filePath) {
 }
 
 export function writeIfChanged(filePath, content, { fsImpl = fs } = {}) {
-    let existing = null;
+    let existing;
     try {
         existing = fsImpl.readFileSync(filePath, 'utf-8');
     } catch {
@@ -1238,7 +1239,7 @@ export function envFlag(value, defaultValue = false) {
 }
 
 function removeStaleGeneratedBlogFiles(blogDir, syncedSlugs, { fsImpl = fs } = {}) {
-    let entries = [];
+    let entries;
     try {
         entries = fsImpl.readdirSync(blogDir, { withFileTypes: true });
     } catch (error) {
