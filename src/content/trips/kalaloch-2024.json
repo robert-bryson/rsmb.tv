@@ -1,0 +1,305 @@
+{
+    "id": "kalaloch-2024",
+    "dates": {
+        "start": "2024-06-21",
+        "end": "2024-06-23"
+    },
+    "ridingDays": 3,
+    "distanceMiles": 450,
+    "motorcycle": "Honda CB500X",
+    "regions": [
+        "Washington"
+    ],
+    "hero": "kalaloch-2024-06-23-beach-overlook",
+    "route": {
+        "geoJson": "https://data.rsmb.tv/trips/kalaloch-2024/geo/route.geojson",
+        "alt": "Map of the available motorcycle tracks from Seattle to Kalaloch, a loop on the Olympic Peninsula, and the return to Seattle.",
+        "tracks": [
+            {
+                "id": "paseo-de-rever-06-22-24-1",
+                "name": "Seattle to Kalaloch"
+            },
+            {
+                "id": "paseo-de-rever-06-22-24",
+                "name": "Olympic Peninsula loop from Kalaloch"
+            },
+            {
+                "id": "paseo-de-rever-06-24-24",
+                "name": "Kalaloch to Seattle"
+            }
+        ]
+    },
+    "stops": [
+        {
+            "id": "seattle-ferry",
+            "name": "Seattle Ferry Terminal",
+            "coordinates": [
+                -122.341461,
+                47.602902
+            ],
+            "date": "2024-06-21"
+        },
+        {
+            "id": "kalaloch",
+            "name": "Kalaloch",
+            "coordinates": [
+                -124.37484,
+                47.61187
+            ]
+        },
+        {
+            "id": "hood-canal",
+            "name": "Hood Canal",
+            "coordinates": [
+                -122.970781,
+                47.378462
+            ],
+            "date": "2024-06-23"
+        },
+        {
+            "id": "southworth-ferry",
+            "name": "Southworth Ferry Terminal",
+            "coordinates": [
+                -122.496256,
+                47.51251
+            ],
+            "date": "2024-06-23"
+        }
+    ],
+    "photos": [
+        {
+            "id": "kalaloch-2024-06-21-ferry-motorcycles",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-ferry-motorcycles-04dd309ba65a-1600.webp",
+            "width": 1600,
+            "height": 1200,
+            "alt": "Rows of motorcycles parked on a ferry deck beneath a blue sky.",
+            "date": "2024-06-21",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-ferry-motorcycles-04dd309ba65a-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-ferry-motorcycles-04dd309ba65a-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-ferry-motorcycles-04dd309ba65a-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-21-seattle-from-ferry",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-seattle-from-ferry-dd8f7e9c6a7d-1600.webp",
+            "width": 1600,
+            "height": 1200,
+            "alt": "The Seattle skyline and Space Needle seen through ferry cabin windows.",
+            "date": "2024-06-21",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-seattle-from-ferry-dd8f7e9c6a7d-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-seattle-from-ferry-dd8f7e9c6a7d-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-seattle-from-ferry-dd8f7e9c6a7d-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-21-forest-road",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-forest-road-3afb5b173229-1600.webp",
+            "width": 1600,
+            "height": 2133,
+            "alt": "A narrow gravel road with a grassy center winding through dense green forest.",
+            "date": "2024-06-21",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-forest-road-3afb5b173229-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-forest-road-3afb5b173229-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-forest-road-3afb5b173229-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-22-forest-trailhead",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-forest-trailhead-93f772244011-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A wooden-railed path descending to a quiet paved road surrounded by forest.",
+            "date": "2024-06-22",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-forest-trailhead-93f772244011-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-forest-trailhead-93f772244011-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-forest-trailhead-93f772244011-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-22-coastal-forest",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-coastal-forest-ea58ddde99dd-1600.webp",
+            "width": 1600,
+            "height": 2133,
+            "alt": "Tall moss-covered trees surrounded by dense ferns and leafy undergrowth.",
+            "date": "2024-06-22",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-coastal-forest-ea58ddde99dd-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-coastal-forest-ea58ddde99dd-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-coastal-forest-ea58ddde99dd-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-22-foggy-beach",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-foggy-beach-f72d4bb8a7af-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Three distant figures on a broad beach beneath thick fog and breaking waves.",
+            "date": "2024-06-22",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-foggy-beach-f72d4bb8a7af-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-foggy-beach-f72d4bb8a7af-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-foggy-beach-f72d4bb8a7af-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-22-forest-boardwalk",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-forest-boardwalk-d31d8d43f6c8-1600.webp",
+            "width": 1600,
+            "height": 2400,
+            "alt": "A wooden boardwalk leading past large trees and ferns in a shaded forest.",
+            "date": "2024-06-22",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-forest-boardwalk-d31d8d43f6c8-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-forest-boardwalk-d31d8d43f6c8-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-forest-boardwalk-d31d8d43f6c8-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-23-misty-coast",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-misty-coast-312059f91b3b-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Driftwood on a wide sandy beach beside a forested bluff fading into coastal mist.",
+            "date": "2024-06-23",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-misty-coast-312059f91b3b-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-misty-coast-312059f91b3b-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-misty-coast-312059f91b3b-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-23-gooseneck-barnacles",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-gooseneck-barnacles-a4a4aec4745f-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A dense cluster of gooseneck barnacles with pale shells and dark stalks.",
+            "date": "2024-06-23",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-gooseneck-barnacles-a4a4aec4745f-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-gooseneck-barnacles-a4a4aec4745f-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-gooseneck-barnacles-a4a4aec4745f-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-23-shoreline-rocks",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-shoreline-rocks-cae9ed32a275-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Seaweed-covered rocks and shallow water along the base of a rocky coastal bluff.",
+            "date": "2024-06-23",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-shoreline-rocks-cae9ed32a275-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-shoreline-rocks-cae9ed32a275-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-shoreline-rocks-cae9ed32a275-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-23-tide-pool",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-tide-pool-78b18efd3032-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A shallow tide pool filled with green sea anemones and dark seaweed between rocks.",
+            "date": "2024-06-23",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-tide-pool-78b18efd3032-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-tide-pool-78b18efd3032-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-tide-pool-78b18efd3032-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-23-sea-anemones",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-sea-anemones-6764094d592c-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Green sea anemones with open tentacles beneath clear tide-pool water.",
+            "date": "2024-06-23",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-sea-anemones-6764094d592c-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-sea-anemones-6764094d592c-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-sea-anemones-6764094d592c-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-23-beach-overlook",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-beach-overlook-e2bdf8e4d9b9-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A broad sandy beach and forested coastal bluff seen between foreground rocks in the mist.",
+            "date": "2024-06-23",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-beach-overlook-e2bdf8e4d9b9-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-beach-overlook-e2bdf8e4d9b9-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-beach-overlook-e2bdf8e4d9b9-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-23-rocky-shore",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-rocky-shore-67bddd677055-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Layered shoreline rocks and tide pools extending toward waves and an offshore sea stack.",
+            "date": "2024-06-23",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-rocky-shore-67bddd677055-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-rocky-shore-67bddd677055-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-rocky-shore-67bddd677055-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-23-beach-boulders",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-beach-boulders-1fbe028abf74-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Large tilted rock formations rising from pale sand beside a forested bluff.",
+            "date": "2024-06-23",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-beach-boulders-1fbe028abf74-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-beach-boulders-1fbe028abf74-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-beach-boulders-1fbe028abf74-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-23-shore-crab",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-shore-crab-ed09cd44be2e-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A small crab on wet sand with coastal rocks softly blurred behind it.",
+            "date": "2024-06-23",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-shore-crab-ed09cd44be2e-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-shore-crab-ed09cd44be2e-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-shore-crab-ed09cd44be2e-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-23-hood-canal-dock",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-hood-canal-dock-10c5506be9b0-1600.webp",
+            "width": 1600,
+            "height": 1200,
+            "alt": "A long wooden dock extending into Hood Canal beside a wooded shoreline beneath blue sky.",
+            "date": "2024-06-23",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-hood-canal-dock-10c5506be9b0-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-hood-canal-dock-10c5506be9b0-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-hood-canal-dock-10c5506be9b0-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-23-hood-canal",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-hood-canal-ee6fe7ad8100-1600.webp",
+            "width": 1600,
+            "height": 1200,
+            "alt": "Calm Hood Canal water and a pebbly beach below distant wooded hills and scattered clouds.",
+            "date": "2024-06-23",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-hood-canal-ee6fe7ad8100-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-hood-canal-ee6fe7ad8100-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-hood-canal-ee6fe7ad8100-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-23-southworth-ferry-queue",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-southworth-ferry-queue-1f2cf5972e61-1600.webp",
+            "width": 1600,
+            "height": 2133,
+            "alt": "A helmeted rider standing beside a motorcycle in the boarding queue at a ferry terminal.",
+            "date": "2024-06-23",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-southworth-ferry-queue-1f2cf5972e61-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-southworth-ferry-queue-1f2cf5972e61-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-southworth-ferry-queue-1f2cf5972e61-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-23-evening-ferry-view",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-evening-ferry-view-e738734bf1bd-1600.webp",
+            "width": 1600,
+            "height": 1200,
+            "alt": "Evening sunlight breaking through clouds over the water outside a ferry cabin window.",
+            "date": "2024-06-23",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-evening-ferry-view-e738734bf1bd-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-evening-ferry-view-e738734bf1bd-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-evening-ferry-view-e738734bf1bd-1600.webp 1600w"
+        }
+    ],
+    "galleries": {
+        "2024-06-21": [
+            "kalaloch-2024-06-21-ferry-motorcycles",
+            "kalaloch-2024-06-21-seattle-from-ferry",
+            "kalaloch-2024-06-21-forest-road"
+        ],
+        "2024-06-22": [
+            "kalaloch-2024-06-22-forest-trailhead",
+            "kalaloch-2024-06-22-coastal-forest",
+            "kalaloch-2024-06-22-foggy-beach",
+            "kalaloch-2024-06-22-forest-boardwalk"
+        ],
+        "2024-06-23-coast": [
+            "kalaloch-2024-06-23-misty-coast",
+            "kalaloch-2024-06-23-gooseneck-barnacles",
+            "kalaloch-2024-06-23-shoreline-rocks",
+            "kalaloch-2024-06-23-tide-pool",
+            "kalaloch-2024-06-23-sea-anemones",
+            "kalaloch-2024-06-23-beach-overlook",
+            "kalaloch-2024-06-23-rocky-shore",
+            "kalaloch-2024-06-23-beach-boulders",
+            "kalaloch-2024-06-23-shore-crab"
+        ],
+        "2024-06-23-hood-canal": [
+            "kalaloch-2024-06-23-hood-canal-dock",
+            "kalaloch-2024-06-23-hood-canal"
+        ],
+        "2024-06-23-ferry": [
+            "kalaloch-2024-06-23-southworth-ferry-queue",
+            "kalaloch-2024-06-23-evening-ferry-view"
+        ],
+        "highlights": [
+            "kalaloch-2024-06-21-ferry-motorcycles",
+            "kalaloch-2024-06-21-seattle-from-ferry",
+            "kalaloch-2024-06-21-forest-road",
+            "kalaloch-2024-06-22-forest-trailhead",
+            "kalaloch-2024-06-22-coastal-forest",
+            "kalaloch-2024-06-22-foggy-beach",
+            "kalaloch-2024-06-22-forest-boardwalk",
+            "kalaloch-2024-06-23-misty-coast",
+            "kalaloch-2024-06-23-gooseneck-barnacles",
+            "kalaloch-2024-06-23-shoreline-rocks",
+            "kalaloch-2024-06-23-tide-pool",
+            "kalaloch-2024-06-23-sea-anemones",
+            "kalaloch-2024-06-23-beach-overlook",
+            "kalaloch-2024-06-23-rocky-shore",
+            "kalaloch-2024-06-23-beach-boulders",
+            "kalaloch-2024-06-23-shore-crab",
+            "kalaloch-2024-06-23-hood-canal-dock",
+            "kalaloch-2024-06-23-hood-canal",
+            "kalaloch-2024-06-23-southworth-ferry-queue",
+            "kalaloch-2024-06-23-evening-ferry-view"
+        ]
+    }
+}

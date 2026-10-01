@@ -369,6 +369,15 @@
             "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-c63da734d955-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-c63da734d955-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-c63da734d955-1600.webp 1600w"
         },
         {
+            "id": "boise-2024-05-12-larch",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-larch-86e72dbd07ab-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-larch-86e72dbd07ab-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-larch-86e72dbd07ab-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-larch-86e72dbd07ab-1600.webp 1600w",
+            "width": 1600,
+            "height": 1200,
+            "alt": "Larches with fresh green needles overlooking forested hills and distant snow-covered mountains.",
+            "date": "2024-05-12"
+        },
+        {
             "id": "boise-2024-05-12-flooded-meadow",
             "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-fe2b65e3ce06-1600.webp",
             "width": 1600,
@@ -865,34 +874,34 @@
             "boise-2024-05-12-blues-road",
             "boise-2024-05-12-prairie-creek"
         ],
-        "2024-05-12": [
-            "boise-2024-05-12-antlers-inn",
+        "2024-05-12-2": [
             "boise-2024-05-12-view-south",
+            "boise-2024-05-12-larch",
             "boise-2024-05-12-flooded-meadow",
             "boise-2024-05-12-map",
             "boise-2024-05-12-snowy-road",
+            "boise-2024-05-12-snowy-mts",
             "boise-2024-05-12-creek",
             "boise-2024-05-12-mailboxes",
-            "boise-2024-05-12-snowy-mts",
             "boise-2024-05-12-wallowa-barn",
-            "boise-2024-05-12-barn-and-mountains",
-            "boise-2024-05-12-motorcycle-and-mountains",
-            "boise-2024-05-12-strawberries-pano",
+            "boise-2024-05-12-barn-and-mountains"
+        ],
+        "2024-05-12-3": [
             "boise-2024-05-12-wagon",
+            "boise-2024-05-12-motorcycle-and-mountains",
+            "boise-2024-05-12-strawberries-pano"
+        ],
+        "2024-05-12-4": [
             "boise-2024-05-12-cattle-and-mountains",
             "boise-2024-05-12-vale-66",
             "boise-2024-05-12-gravel-road-clouds",
             "boise-2024-05-12-gravel-moto",
             "boise-2024-05-12-sunset-market",
-            "boise-2024-05-12-a-street",
-            "boise-2024-05-12-hotel-view"
+            "boise-2024-05-12-a-street"
         ],
         "workdays-in-boise": [
             "boise-2024-05-14-wildfire-center",
             "boise-2024-05-14-saloon",
-            "boise-2024-05-16-river-wave"
-        ],
-        "2024-05-16": [
             "boise-2024-05-16-river-wave"
         ],
         "2024-05-17": [
@@ -900,6 +909,9 @@
             "boise-2024-05-17-wallowa-mountains",
             "boise-2024-05-17-snake-river",
             "boise-2024-05-17-snowy-ridge",
+            "boise-2024-05-17-hells-canyon-inn"
+        ],
+        "hells-canyon": [
             "boise-2024-05-17-hells-canyon-peak",
             "boise-2024-05-17-hells-canyon-reservoir",
             "boise-2024-05-17-canyon-rapids",
@@ -909,7 +921,9 @@
             "boise-2024-05-17-canyon-cliffs",
             "boise-2024-05-17-canyon-road",
             "boise-2024-05-17-canyon-river",
-            "boise-2024-05-17-canyon-river-bend",
+            "boise-2024-05-17-canyon-river-bend"
+        ],
+        "2024-05-17-2": [
             "boise-2024-05-17-hells-canyon-inn"
         ],
         "2024-05-18": [
@@ -962,6 +976,7 @@
             "boise-2024-05-12-prairie-creek",
             "boise-2024-05-12-antlers-inn",
             "boise-2024-05-12-view-south",
+            "boise-2024-05-12-larch",
             "boise-2024-05-12-flooded-meadow",
             "boise-2024-05-12-map",
             "boise-2024-05-12-snowy-road",

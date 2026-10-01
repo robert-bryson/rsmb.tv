@@ -8,9 +8,9 @@ Use the [review index](docs/README.md) for dated findings and test results.
 
 ### Boise trip
 
-The manifest supports local preview. The public route and a sample photo returned HTTP 403 on 2026-09-30.
+The manifest supports local preview. The public route and hero photo returned HTTP 403 on 2026-10-01.
 
-- [ ] Review all 81 Boise photos and captions. Check each new photo against its source and recorded date.
+- [ ] Review all 82 Boise photos and captions. Check each new photo against its source and recorded date.
 - [ ] Publish the processed Boise photos and route files. Check every image size and route URL for HTTP 200.
 - [ ] Verify the recorded track dates. The source filenames do not agree with all dates in the story.
 - [ ] Find the source track from Panther Creek to Seattle. Add its manifest reference only after route preparation includes that track.
@@ -18,6 +18,16 @@ The manifest supports local preview. The public route and a sample photo returne
 - [ ] Verify the reported 1,516 miles, six riding days, stops, and photo captions before publication.
 - [ ] Identify reconstructed tracks in public content before publication. Keep the current manifest names until the content review.
 - [ ] Compare the story references with the renamed `camp-1` and `camp-2` stops.
+- [ ] Keep the Sheet `published` value `false` until the publication checks pass.
+
+### Kalaloch trip
+
+The manifest supports local preview. The public route and hero photo returned HTTP 403 on 2026-10-01.
+
+- [ ] Review all 20 photos against their sources. Verify the alt text, dates, and gallery order.
+- [ ] Publish the processed photos and route files. Check every image size and route URL for HTTP 200.
+- [ ] Verify the track dates against source records. The filenames include dates outside the stated trip period.
+- [ ] Verify the reported 450 miles, three riding days, and stop locations against source records.
 - [ ] Keep the Sheet `published` value `false` until the publication checks pass.
 
 ### Temperature record data

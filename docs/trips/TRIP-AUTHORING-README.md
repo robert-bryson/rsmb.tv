@@ -263,6 +263,8 @@ Each route must contain valid line geometry. Declared track IDs must match route
 Sync checks each unique asset URL with a limited number of concurrent requests.
 Invalid drafts do not stop other development content. Production excludes drafts.
 Production stops if a published post has no MDX file or a trip has no manifest ID.
+Production also stops if the generated post registry is absent.
+Run blog sync before a direct Vite production build.
 Post slugs must be unique. Post slugs and manifest IDs must use lowercase letters, numbers, and hyphens.
 
 For an existing manifest, apply prepared photo URLs and dimensions without changing captions or alt text:
@@ -318,6 +320,11 @@ If restoration fails, the backup remains in a hidden directory under `public/dat
 On Drive-backed mounts, native file copying can fail. The fallback uses a temporary file and ordinary reads and writes.
 Other copy errors still stop preparation.
 Set `TRIP_ASSETS_ON_DEV=false` to skip preparation.
+
+Direct Vite development starts without a generated post registry or trip directory.
+An absent post registry produces an empty post list. An absent trip directory produces an empty trip list.
+This fallback does not import content. Run `npm run sync-blogs:dev` to create the local post registry.
+The development loader watches existing source files only.
 
 Open `http://localhost:5173/trips/<trip-slug>`.
 After an importer change, run `npm run sync-blogs:dev` to replace generated MDX.

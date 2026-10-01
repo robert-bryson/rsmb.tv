@@ -204,6 +204,8 @@ Use the [blog publication guide](docs/blog-publishing.md) to configure the Sheet
 Use the [trip authoring guide](docs/trips/TRIP-AUTHORING-README.md) to prepare photos, routes, manifests, and trip stories.
 
 Production builds import published content before TypeScript checks and Vite compilation.
+Direct Vite production builds require the generated post registry. A missing registry stops the build.
+Direct Vite development can start without generated content. The post list stays empty until blog sync creates the registry.
 Configure `GOOGLE_BLOG_SHEET_ID` in Amplify. GitHub Actions variables do not configure Amplify.
 The Amplify build runs `nvm install` before `npm ci` to activate the version in `.nvmrc`.
 

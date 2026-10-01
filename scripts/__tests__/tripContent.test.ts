@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import type { ResolvedConfig } from 'vite';
+import { createServer, type ResolvedConfig } from 'vite';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { articleHtml, tripContentPlugin } from '../trip-content-plugin';
 import { updateManifestAssets } from '../update-trip-manifest-assets.js';
@@ -15,14 +15,18 @@ afterEach(() => {
     for (const root of temporaryRoots.splice(0)) fs.rmSync(root, { recursive: true, force: true });
 });
 
-function loadPostRegistry(posts: unknown[], command: 'build' | 'serve', watchedFiles: string[] = [], moduleId = 'virtual:post-content', manifests: TripManifest[] = []) {
+function loadPostRegistry(posts: unknown[], command: 'build' | 'serve', watchedFiles: string[] = [], moduleId = 'virtual:post-content', {
+    manifests = [], bodies = [], createTripDirectory = true,
+}: { manifests?: TripManifest[]; bodies?: string[]; createTripDirectory?: boolean } = {}) {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'trip-registry-test-'));
     temporaryRoots.push(root);
     const directory = path.join(root, 'src/content');
     fs.mkdirSync(directory, { recursive: true });
     fs.writeFileSync(path.join(directory, 'posts.json'), JSON.stringify(posts));
-    fs.mkdirSync(path.join(directory, 'trips'));
+    if (createTripDirectory) fs.mkdirSync(path.join(directory, 'trips'));
     for (const trip of manifests) fs.writeFileSync(path.join(directory, 'trips', `${trip.id}.json`), JSON.stringify(trip));
+    if (bodies.length) fs.mkdirSync(path.join(directory, 'blog'));
+    for (const slug of bodies) fs.writeFileSync(path.join(directory, 'blog', `${slug}.mdx`), '# Story');
     const plugin = tripContentPlugin();
     const configure = plugin.configResolved;
     const load = plugin.load;
@@ -32,13 +36,99 @@ function loadPostRegistry(posts: unknown[], command: 'build' | 'serve', watchedF
 }
 
 describe('trip publication contracts', () => {
+    it.each([
+        ['virtual:post-content', false],
+        ['virtual:trip-content', false],
+        ['virtual:trip-content', true],
+    ] as const)('transforms %s without a post registry (trip directory: %s)', async (moduleId, hasTrips) => {
+        const root = fs.mkdtempSync(path.join(os.tmpdir(), 'trip-content-vite-test-'));
+        temporaryRoots.push(root);
+        if (hasTrips) {
+            const directory = path.join(root, 'src/content/trips');
+            fs.mkdirSync(directory, { recursive: true });
+            fs.writeFileSync(path.join(directory, `${manifest.id}.json`), JSON.stringify(manifest));
+        }
+        const server = await createServer({
+            configFile: false,
+            root,
+            plugins: [tripContentPlugin()],
+            server: { middlewareMode: true, hmr: false, ws: false, watch: null },
+            optimizeDeps: { noDiscovery: true, include: [] },
+        });
+        try {
+            // Module runners (including Vitest) create the graph entry before loading.
+            await server.environments.client.moduleGraph.ensureEntryFromUrl(moduleId);
+            const result = await server.transformRequest(moduleId);
+            expect(result?.code).toContain(moduleId === 'virtual:post-content'
+                ? 'export const metadata = []'
+                : hasTrips ? `"${manifest.id}"` : 'export const summaries = {}');
+        } finally {
+            await server.close();
+        }
+    });
+
+    it.each(['virtual:post-content', 'virtual:trip-content'])('rejects a production build of %s without the post registry', moduleId => {
+        const root = fs.mkdtempSync(path.join(os.tmpdir(), 'trip-registry-missing-test-'));
+        temporaryRoots.push(root);
+        const plugin = tripContentPlugin();
+        const configure = plugin.configResolved;
+        const load = plugin.load;
+        if (typeof configure !== 'function' || typeof load !== 'function') throw new Error('Expected function hooks.');
+        configure.call({} as never, { root, mode: 'production', command: 'build' } as ResolvedConfig);
+        expect(() => load.call({ addWatchFile: vi.fn() } as never, `\0${moduleId}`)).toThrow(/Missing post registry/);
+    });
+
+    it('rejects article generation without the post registry', () => {
+        const root = fs.mkdtempSync(path.join(os.tmpdir(), 'trip-bundle-missing-test-'));
+        temporaryRoots.push(root);
+        const plugin = tripContentPlugin();
+        const configure = plugin.configResolved;
+        const generate = plugin.generateBundle;
+        if (typeof configure !== 'function' || !generate || typeof generate === 'function') throw new Error('Expected ordered bundle hook.');
+        configure.call({} as never, { root, mode: 'production', command: 'build' } as ResolvedConfig);
+        expect(() => generate.handler.call({ emitFile: vi.fn() } as never, {} as never, {
+            'index.html': { type: 'asset', source: '<head></head>' },
+        } as never, false)).toThrow(/Missing post registry/);
+    });
+
     it('includes fact tags in summaries without embedding the full manifest', () => {
         const trip = tripManifestSchema.parse({ ...manifest, motorcycle: 'Honda CB500X', regions: ['New Mexico'] });
-        const output = loadPostRegistry([{ slug: 'coast', format: 'trip', tripId: trip.id }], 'build', [], 'virtual:trip-content', [trip]);
+        const output = loadPostRegistry([{ slug: 'coast', format: 'trip', tripId: trip.id }], 'build', [], 'virtual:trip-content', { manifests: [trip] });
         expect(output).toContain('"motorcycle":"Honda CB500X"');
         expect(output).toContain('"regions":["New Mexico"]');
         expect(output).not.toContain('"stops"');
         expect(output).not.toContain('"photos"');
+    });
+
+    it('reports a missing published manifest when the trip directory is absent', () => {
+        expect(() => loadPostRegistry([{ slug: 'coast', format: 'trip', tripId: manifest.id }], 'build', [], 'virtual:trip-content', {
+            createTripDirectory: false,
+        })).toThrow(`Missing published trip manifest: ${manifest.id}`);
+        expect(loadPostRegistry([], 'build', [], 'virtual:trip-content', { createTripDirectory: false })).toContain('export const summaries = {}');
+    });
+
+    it('reports invalid development manifests but rejects invalid published manifests', () => {
+        const invalidTrip = { ...manifest, hero: 'missing-photo' };
+        const posts = [{ slug: 'coast', format: 'trip', tripId: manifest.id }];
+        const output = loadPostRegistry(posts, 'serve', [], 'virtual:trip-content', { manifests: [invalidTrip] });
+        expect(output).toContain('export const summaries = {}');
+        expect(output).toContain('Hero references unknown photo');
+        expect(output).toContain('export const loaders = {}');
+        expect(() => loadPostRegistry(posts, 'build', [], 'virtual:trip-content', { manifests: [invalidTrip] })).toThrow(/Hero references unknown photo/);
+        expect(loadPostRegistry([{ ...posts[0], development: { published: false } }], 'build', [], 'virtual:trip-content', {
+            manifests: [invalidTrip],
+        })).not.toContain(manifest.id);
+    });
+
+    it('removes development metadata from published posts and watches existing bodies', () => {
+        const posts = [{ slug: 'coast', development: { published: true, documentUrl: 'https://example.com/private-source' } }];
+        const watchedFiles: string[] = [];
+        const output = loadPostRegistry(posts, 'build', watchedFiles, 'virtual:post-content', { bodies: ['coast'] });
+        expect(output).not.toContain('development');
+        expect(output).not.toContain('private-source');
+        expect(output).toContain('() => import("/src/content/blog/coast.mdx")');
+        expect(watchedFiles.some(file => file.endsWith('/blog/coast.mdx'))).toBe(true);
+        expect(loadPostRegistry(posts, 'serve', [], 'virtual:post-content', { bodies: ['coast'] })).toContain('private-source');
     });
 
     it('does not treat inherited object properties as published manifests', () => {
@@ -70,6 +160,7 @@ describe('trip publication contracts', () => {
         expect(loadPostRegistry([{ slug: 'missing-draft', development: { published: false } }], 'build')).not.toContain('missing-draft');
         const watchedFiles: string[] = [];
         expect(loadPostRegistry([{ slug: 'missing-draft' }], 'serve', watchedFiles)).toContain('missing-draft');
+        expect(watchedFiles.some(file => file.endsWith('/posts.json'))).toBe(true);
         expect(watchedFiles.some(file => file.endsWith('.mdx'))).toBe(false);
     });
 

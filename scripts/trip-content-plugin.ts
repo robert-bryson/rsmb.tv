@@ -15,10 +15,9 @@ export function tripContentPlugin(): Plugin {
             if (id !== `\0${moduleId}` && id !== '\0virtual:post-content') return;
             const contentDir = config.mode === 'trip-test' ? 'tests/fixtures/trip-content' : 'src/content';
             const postsPath = path.join(config.root, contentDir, 'posts.json');
-            this.addWatchFile(postsPath);
-            const posts: PostMeta[] = fs.existsSync(postsPath)
-                ? JSON.parse(fs.readFileSync(postsPath, 'utf8')) : [];
             const production = config.command === 'build';
+            const posts = readPosts(postsPath, production);
+            if (fs.existsSync(postsPath)) this.addWatchFile(postsPath);
             validatePostReferences(posts.filter(post => !production || post.development?.published !== false), production);
             if (id === '\0virtual:post-content') {
                 const visible = posts.filter(post => !production || post.development?.published !== false);
@@ -44,7 +43,8 @@ export function tripContentPlugin(): Plugin {
             const summaries: Record<string, unknown> = {};
             const issues: Record<string, string> = {};
             const loaders: string[] = [];
-            for (const filename of fs.readdirSync(directory).filter(f => f.endsWith('.json'))) {
+            const filenames = fs.existsSync(directory) ? fs.readdirSync(directory) : [];
+            for (const filename of filenames.filter(filename => filename.endsWith('.json'))) {
                 const tripId = filename.slice(0, -5);
                 if (production && !referenced.has(tripId)) continue;
                 const file = path.join(directory, filename);
@@ -70,7 +70,7 @@ export function tripContentPlugin(): Plugin {
             if (template?.type !== 'asset') return;
             const contentDir = config.mode === 'trip-test' ? 'tests/fixtures/trip-content' : 'src/content';
             const postsPath = path.join(config.root, contentDir, 'posts.json');
-            const posts: PostMeta[] = fs.existsSync(postsPath) ? JSON.parse(fs.readFileSync(postsPath, 'utf8')) : [];
+            const posts = readPosts(postsPath, true);
             const published = posts.filter(post => post.development?.published !== false);
             validatePostReferences(published, true);
             for (const post of published) {
@@ -111,6 +111,11 @@ function summary(manifest: TripManifest, local: boolean) {
 interface PostMeta {
     slug: string; title: string; description: string; date: string; tags: string[];
     format?: string; tripId?: string; development?: { published: boolean };
+}
+function readPosts(postsPath: string, production: boolean): PostMeta[] {
+    if (fs.existsSync(postsPath)) return JSON.parse(fs.readFileSync(postsPath, 'utf8'));
+    if (production) throw new Error('Missing post registry. Run blog sync before the production build.');
+    return [];
 }
 function validatePostReferences(posts: PostMeta[], production: boolean) {
     const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
