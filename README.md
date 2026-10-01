@@ -148,6 +148,9 @@ Flight GeoJSON files use `metadata.generatedAt` to record the last changed outpu
 The generators retain the file and timestamp when only the candidate timestamp changes.
 They write new output when geometry or other metadata changes.
 Repeat-build tests check all three timestamped flight outputs.
+Both airport generators reject incomplete numbers, non-finite values, and coordinates outside geographic bounds.
+The flight converter omits flights that reference rejected airports.
+See the [flight data guide](projects/flights/readme.md) for input checks.
 
 The image generator reads `DEFAULT_PAGES` in `scripts/generate-og-images.js`.
 Commit static page images under `public/og/`.
@@ -207,6 +210,9 @@ The Amplify build runs `nvm install` before `npm ci` to activate the version in 
 Maps first show a route preview. Interactive maps load when their sections enter the viewport.
 The route cache shares active requests and removes unused entries when its size exceeds eight.
 Active readers can temporarily require more entries.
+Story gallery viewers follow the mounted galleries in document order.
+They include collapsed photos and retain each photo's alt text.
+The hero viewer contains every manifest photo. Inline photos use separate viewers.
 
 ## Documentation rules
 

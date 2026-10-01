@@ -66,9 +66,29 @@
       "height": 1000,
       "alt": "Coast photograph 4",
       "caption": "A view from stop 4."
+    },
+    {
+      "id": "photo-5",
+      "src": "/test-trip/photo-5-1600.svg",
+      "width": 1600,
+      "height": 1000,
+      "alt": "Coast photograph 5",
+      "caption": "A view from stop 5."
+    },
+    {
+      "id": "photo-6",
+      "src": "/test-trip/photo-6-1600.svg",
+      "width": 1600,
+      "height": 1000,
+      "alt": "Coast photograph 6",
+      "caption": "A view from stop 6."
     }
   ],
   "galleries": {
+    "camp": [
+      "photo-5",
+      "photo-6"
+    ],
     "coast": [
       "photo-2",
       "photo-3"

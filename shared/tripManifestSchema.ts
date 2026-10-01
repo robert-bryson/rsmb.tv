@@ -50,7 +50,7 @@ export const tripManifestSchema = z.object({
         stopIds: z.array(slugSchema).optional(), galleryId: slugSchema.optional(),
     })).optional(),
     series: z.object({ id: slugSchema, title: z.string().min(1), order: z.number().int().positive() }).optional(),
-    galleries: z.record(z.string(), z.array(slugSchema)).optional(),
+    galleries: z.record(slugSchema, z.array(slugSchema).min(1)).optional(),
 }).superRefine((manifest, context) => {
     if (manifest.dates.end < manifest.dates.start) {
         context.addIssue({
@@ -93,10 +93,15 @@ export const tripManifestSchema = z.object({
         dayIds.add(day.id);
         for (const id of day.trackIds ?? []) if (!trackIds.has(id)) context.addIssue({ code: 'custom', message: `Day ${day.id} references unknown track: ${id}` });
         for (const id of day.stopIds ?? []) if (!stopIds.has(id)) context.addIssue({ code: 'custom', message: `Day ${day.id} references unknown stop: ${id}` });
-        if (day.galleryId && !manifest.galleries?.[day.galleryId]) context.addIssue({ code: 'custom', message: `Day ${day.id} references unknown gallery: ${day.galleryId}` });
+        if (day.galleryId && (!manifest.galleries || !Object.hasOwn(manifest.galleries, day.galleryId))) {
+            context.addIssue({ code: 'custom', message: `Day ${day.id} references unknown gallery: ${day.galleryId}` });
+        }
     }
 
     for (const [galleryId, galleryPhotoIds] of Object.entries(manifest.galleries ?? {})) {
+        if (new Set(galleryPhotoIds).size !== galleryPhotoIds.length) {
+            context.addIssue({ code: 'custom', message: `Gallery "${galleryId}" contains duplicate photo IDs.` });
+        }
         for (const photoId of galleryPhotoIds) {
             if (!photoIds.has(photoId)) {
                 context.addIssue({ code: 'custom', message: `Gallery "${galleryId}" references unknown photo: ${photoId}` });

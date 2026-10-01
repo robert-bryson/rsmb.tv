@@ -4,6 +4,8 @@ import type { TripManifest, TripPhotoData } from './types';
 export interface TripStoryContextValue {
     manifest: TripManifest;
     photos: Map<string, TripPhotoData>;
+    registerGallery: (gallery: HTMLElement) => () => void;
+    getGalleryPhotos: () => HTMLAnchorElement[];
 }
 
 export const TripStoryContext = createContext<TripStoryContextValue | null>(null);

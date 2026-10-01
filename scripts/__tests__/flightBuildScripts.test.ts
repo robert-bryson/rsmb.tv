@@ -23,10 +23,12 @@ function makeWorkspace() {
 }
 
 function runScript(cwd: string, relativeScriptPath: string) {
-    return spawnSync('node', [join(repoRoot, relativeScriptPath)], {
+    const result = spawnSync(process.execPath, [join(repoRoot, relativeScriptPath)], {
         cwd,
         encoding: 'utf8',
     });
+    expect(result.error).toBeUndefined();
+    return result;
 }
 
 function readJson(cwd: string, relativePath: string) {
@@ -40,6 +42,36 @@ afterEach(() => {
 });
 
 describe('flight build scripts', () => {
+    it('excludes malformed coordinates from flight, visited, and complete airport outputs', () => {
+        const cwd = makeWorkspace();
+        writeFileSync(join(cwd, 'projects/flights/data/airports.csv'), [
+            'iata_code,name,municipality,iso_region,iso_country,continent,latitude_deg,longitude_deg,elevation_ft',
+            'SEA,Seattle,Seattle,US-WA,US,NA,47.4502,-122.3088,433',
+            'ZERO,Zero,Nowhere,US-CA,US,NA,0,0,0',
+            'PART,Partial,Nowhere,US-CA,US,NA,47north,-118,0',
+            'INF,Infinite,Nowhere,US-CA,US,NA,Infinity,-118,0',
+            'LAT,Latitude,Nowhere,US-CA,US,NA,91,-118,0',
+            'LON,Longitude,Nowhere,US-CA,US,NA,47,-181,0',
+            'EMPTY,Empty,Nowhere,US-CA,US,NA,,-118,0',
+        ].join('\n'));
+        writeFileSync(join(cwd, 'projects/flights/data/flights.csv'), [
+            'date,airline,origin,destination',
+            '1/1/2024,United,SEA,ZERO',
+            ...['PART', 'INF', 'LAT', 'LON', 'EMPTY', 'constructor'].map(code => `1/2/2024,United,SEA,${code}`),
+        ].join('\n'));
+
+        const flights = runScript(cwd, 'projects/flights/scripts/convertFlights.js');
+        expect(flights.status, flights.stderr).toBe(0);
+        expect(readJson(cwd, 'public/data/flights/flights.geojson').features)
+            .toEqual([expect.objectContaining({ geometry: { type: 'LineString', coordinates: [[-122.3088, 47.4502], [0, 0]] } })]);
+        expect(readJson(cwd, 'public/data/flights/visitedAirports.geojson').features).toHaveLength(2);
+        const airports = runScript(cwd, 'projects/flights/scripts/generateAllAirports.js');
+        expect(airports.status, airports.stderr).toBe(0);
+        expect(airports.stderr).toContain('Skipped 5 airport(s) with invalid coordinates');
+        expect(readJson(cwd, 'public/data/flights/allAirports.geojson').metadata)
+            .toMatchObject({ totalAirports: 2, visitedCount: 2 });
+    });
+
     it('convertFlights warns and skips flights that reference missing airports', () => {
         const cwd = makeWorkspace();
         writeFileSync(join(cwd, 'projects/flights/data/airports.csv'), [
@@ -97,19 +129,24 @@ describe('flight build scripts', () => {
     it('generates identical state output from identical remote boundaries', () => {
         const cwd = makeWorkspace();
         const source = {
-            features: [{ properties: { name: 'Washington' }, geometry: {
-                type: 'Polygon', coordinates: [[[-123, 47], [-122, 47], [-122, 48], [-123, 47]]],
-            } }],
+            features: [{
+                properties: { name: 'Washington' }, geometry: {
+                    type: 'Polygon', coordinates: [[[-123, 47], [-122, 47], [-122, 48], [-123, 47]]],
+                }
+            }],
         };
         const scriptUrl = pathToFileURL(join(repoRoot, 'projects/flights/scripts/generateUSStates.js')).href;
-        const run = () => spawnSync('node', ['--input-type=module', '-e',
+        const run = () => spawnSync(process.execPath, ['--input-type=module', '-e',
             `globalThis.fetch = async () => ({ ok: true, json: async () => (${JSON.stringify(source)}) }); await import(${JSON.stringify(scriptUrl)});`,
         ], { cwd, encoding: 'utf8' });
         const firstRun = run();
+        expect(firstRun.error).toBeUndefined();
         expect(firstRun.status, firstRun.stderr).toBe(0);
         const outputPath = join(cwd, 'public/data/flights/usStates.geojson');
         const firstOutput = readFileSync(outputPath, 'utf8');
-        expect(run().status).toBe(0);
+        const secondRun = run();
+        expect(secondRun.error).toBeUndefined();
+        expect(secondRun.status).toBe(0);
         expect(readFileSync(outputPath, 'utf8')).toBe(firstOutput);
     });
 

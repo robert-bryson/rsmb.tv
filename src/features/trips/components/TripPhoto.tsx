@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
-import { createTripPhotoLightbox, tripPhotoCaption } from './tripPhotoSwipe';
+import { createTripPhotoLightbox } from './tripPhotoSwipe';
+import { TripPhotoLink } from './TripPhotoLink';
 import { useDismissibleCaption } from '../../../hooks/useDismissibleCaption';
 import type { TripPhotoData } from '../types';
 import { useTripStory } from '../TripStoryContext';
@@ -58,18 +59,9 @@ export function TripPhotoFigure({
         >
             <div className="image-caption-frame overflow-hidden rounded-md border border-zinc-800 bg-zinc-950">
                 {linked ? (
-                    <a
-                        href={photo.src}
-                        data-pswp-width={photo.width}
-                        data-pswp-height={photo.height}
-                        data-pswp-srcset={photo.srcSet}
-                        data-trip-caption={tripPhotoCaption(photo)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-describedby={hasSupplementalCaption ? captionId : undefined}
-                    >
+                    <TripPhotoLink photo={photo} describedBy={hasSupplementalCaption ? captionId : undefined}>
                         {image}
-                    </a>
+                    </TripPhotoLink>
                 ) : image}
             </div>
             <figcaption

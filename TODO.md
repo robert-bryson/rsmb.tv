@@ -33,12 +33,16 @@ The historical signal is not ready for publication.
 
 ## Automated checks
 
+Use fixed data for browser checks. Record the browser, viewport, and expected result.
+
 - [ ] Test Flights map keyboard controls and camera URL synchronization with Playwright.
-- [ ] Test interactive trip maps in WebKit on a host with the required browser libraries. Check all three map styles.
+- [ ] Run the trip viewer and interactive map checks in WebKit with the required host libraries. Check all three map styles.
 - [ ] Test list scroll restoration with browser Back and the article return link after delayed content loads.
 - [ ] Extend the fixed-tile browser test. Check route pixels, stop selection, and each map style.
 
 ## Build and maintenance
+
+Preserve passing publication checks when you change build scripts.
 
 - [ ] Reduce the large visualization chunks. Preserve the passing article JavaScript budgets.
 - [ ] Check Tailwind source-map output. Confirm that production error locations match source files.
@@ -46,8 +50,10 @@ The historical signal is not ready for publication.
 
 ## Trip release tasks
 
+Complete these tasks after the affected trip passes its source review.
+
 - [ ] Review and apply the Amplify article rewrite rules. Check delivered article metadata on the production host.
-- [ ] Prepare and review published trip photos. Update manifests to use versioned filenames. Upload the files before site deployment.
+- [ ] For each new trip, review its processed photos and use versioned filenames. Upload the assets before site deployment.
 - [ ] Measure LCP, CLS, and INP under fixed test conditions. Set limits from those measurements.
 - [ ] Remove inactive map instances when their sections are far outside the viewport. Retain the route preview and selected stop.
 

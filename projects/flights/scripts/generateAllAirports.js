@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { parse } from 'csv-parse/sync';
 import { writeFlightGeoJson } from './writeFlightGeoJson.js';
+import { airportCoordinates } from './airportCoordinates.js';
 
 const base = path.resolve('projects', 'flights');
 
@@ -51,11 +52,10 @@ try {
 const invalidCoordinateAirports = [];
 const features = airports.map(a => {
     const elevFt = parseFloat(a.elevation_ft) || 0;
-    const lat = parseFloat(a.latitude_deg);
-    const lon = parseFloat(a.longitude_deg);
+    const coordinates = airportCoordinates(a);
 
     // Skip invalid coordinates
-    if (isNaN(lat) || isNaN(lon)) {
+    if (!coordinates) {
         invalidCoordinateAirports.push(`${a.iata_code || 'unknown'} (${a.name || 'unnamed airport'})`);
         return null;
     }
@@ -64,7 +64,7 @@ const features = airports.map(a => {
         type: 'Feature',
         geometry: {
             type: 'Point',
-            coordinates: [lon, lat],
+            coordinates: [coordinates.lon, coordinates.lat],
         },
         properties: {
             code: a.iata_code,

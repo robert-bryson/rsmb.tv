@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { parse } from 'csv-parse/sync'
 import { writeFlightGeoJson } from './writeFlightGeoJson.js'
+import { airportCoordinates } from './airportCoordinates.js'
 
 const base = path.resolve('projects', 'flights')
 
@@ -55,8 +56,13 @@ if (airports.length > 0) {
   }
 }
 
-const airportMap = {}
+const airportMap = Object.create(null)
 airports.forEach((a) => {
+  const coordinates = airportCoordinates(a)
+  if (!coordinates) {
+    console.warn(`⚠️ Skipping airport with invalid coordinates: ${a.iata_code}`)
+    return
+  }
   const elevFt = parseFloat(a.elevation_ft) || 0
   airportMap[a.iata_code] = {
     name: a.name,
@@ -67,8 +73,7 @@ airports.forEach((a) => {
     countryName: getCountryName(a.iso_country),
     continent: a.continent,
     continentName: getContinentName(a.continent),
-    lat: parseFloat(a.latitude_deg),
-    lon: parseFloat(a.longitude_deg),
+    ...coordinates,
     elevationFt: elevFt,
     elevationM: feetToMeters(elevFt),
   }
@@ -90,7 +95,7 @@ if (flights.length > 0) {
   }
 }
 
-const visitedAirports = {}
+const visitedAirports = Object.create(null)
 const stats = {
   internationalFlights: 0,
   intercontinentalFlights: 0,

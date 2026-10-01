@@ -103,7 +103,7 @@
             "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-79dc5ac47c12-1600.webp",
             "width": 1600,
             "height": 1200,
-            "alt": "The motorcycle parked outside a small roadside shop among cars in Cle Elum.",
+            "alt": "The motorcycle parked outside a small gas station in Cle Elum.",
             "date": "2024-05-11",
             "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-79dc5ac47c12-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-79dc5ac47c12-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-79dc5ac47c12-1600.webp 1600w"
         },
@@ -122,7 +122,7 @@
             "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-d3784c9ddf9e-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-d3784c9ddf9e-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-d3784c9ddf9e-1600.webp 1600w",
             "width": 1600,
             "height": 1067,
-            "alt": "Two white wind turbines rising above a grassy hillside beneath a clear blue sky.",
+            "alt": "Two white wind turbines rising above a grassy hillside near Ellensburg.",
             "date": "2024-05-11"
         },
         {
@@ -139,7 +139,7 @@
             "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-885c6bfad782-1600.webp",
             "width": 1600,
             "height": 2400,
-            "alt": "A red car parked beside a tall, weathered warehouse with faded lettering.",
+            "alt": "An old weathered warehouse with faded lettering.",
             "date": "2024-05-11",
             "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-885c6bfad782-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-885c6bfad782-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-885c6bfad782-1600.webp 1600w"
         },
@@ -166,7 +166,7 @@
             "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-43be06fa8441-1600.webp",
             "width": 1600,
             "height": 1067,
-            "alt": "A metal gate with a No Trespassing sign overlooking rolling open country.",
+            "alt": "A metal gate with a No Trespassing sign overlooking rolling open country, with a tiny bit of Mt. Adams in the distance.",
             "date": "2024-05-11",
             "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-43be06fa8441-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-43be06fa8441-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-43be06fa8441-1600.webp 1600w"
         },
@@ -527,6 +527,7 @@
             "width": 1600,
             "height": 2400,
             "alt": "Daylight through a hotel room window overlooking a parking lot and trees.",
+            "caption": "Not an ideal hotel room view, but it was a good deal...",
             "date": "2024-05-13",
             "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-8ea5fd51e543-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-8ea5fd51e543-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-8ea5fd51e543-1600.webp 1600w"
         },

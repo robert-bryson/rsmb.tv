@@ -75,6 +75,37 @@ afterEach(() => {
 });
 
 describe('TripRouteMap', () => {
+    it('restores the requested stop after a track replacement loads', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true, json: async () => ({
+                type: 'Feature', properties: { trackId: 'return' },
+                geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
+            }),
+        }));
+        const tripManifest: TripManifest = {
+            ...manifest, stops: [{ id: 'camp', name: 'Camp', coordinates: [-122.5, 46.5] }],
+        };
+        const story = (trackId?: string) => <TripStoryProvider manifest={tripManifest}>
+            <TripRouteMap stopId="camp" trackId={trackId} />
+        </TripStoryProvider>;
+        const { rerender } = render(story());
+        await waitFor(() => expect(mapMocks.easeTo).toHaveBeenCalledWith({ center: [-122.5, 46.5], zoom: 9 }));
+        mapMocks.easeTo.mockClear();
+        mapMocks.once.mockClear();
+        mapMocks.once.mockImplementation(() => undefined);
+
+        rerender(story('return'));
+
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledTimes(2));
+        expect(mapMocks.easeTo).not.toHaveBeenCalled();
+        act(() => {
+            for (const [event, listener] of mapMocks.once.mock.calls) if (event === 'load') listener();
+        });
+        expect(mapMocks.easeTo).toHaveBeenCalledOnce();
+        expect(mapMocks.easeTo).toHaveBeenCalledWith({ center: [-122.5, 46.5], zoom: 9 });
+        expect(screen.getByRole('button', { name: /Camp/ })).toHaveAttribute('aria-pressed', 'true');
+    });
+
     it('keeps route downloads available when route loading fails', async () => {
         vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 503 }));
         render(<TripStoryProvider manifest={manifest}><TripRouteMap /></TripStoryProvider>);
@@ -84,10 +115,12 @@ describe('TripRouteMap', () => {
     });
 
     it('does not paint a replacement map before its own load event', async () => {
-        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({
-            type: 'Feature', properties: {},
-            geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
-        }) }));
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true, json: async () => ({
+                type: 'Feature', properties: {},
+                geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
+            })
+        }));
         const stops = [{ id: 'camp', name: 'Camp', coordinates: [-122.5, 46.5] as [number, number] }];
         const { rerender } = render(<TripStoryProvider manifest={{ ...manifest, stops }}><TripRouteMap /></TripStoryProvider>);
         await waitFor(() => expect(mapMocks.setPaintProperty).toHaveBeenCalledWith('trip-stops', 'circle-radius', expect.anything()));
@@ -105,10 +138,12 @@ describe('TripRouteMap', () => {
     });
 
     it('discards map errors when a different route loads', async () => {
-        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({
-            type: 'Feature', properties: {},
-            geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
-        }) }));
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true, json: async () => ({
+                type: 'Feature', properties: {},
+                geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
+            })
+        }));
         const { rerender } = render(<TripStoryProvider manifest={manifest}><TripRouteMap /></TripStoryProvider>);
         await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
         const fail = mapMocks.on.mock.calls.find(([event]) => event === 'error')?.[1];

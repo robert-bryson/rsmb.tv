@@ -207,13 +207,23 @@ Use a positive number for total distance. Count only days with motorcycle travel
 
 Keep the full-trip distance separate from a partial recorded route distance.
 Do not invent a missing date or route segment.
-List regions in travel order. List gallery photos in story order.
+List regions in travel order.
+List gallery photos in story order.
+Use lowercase letters, numbers, and hyphens in gallery IDs.
+Include at least one photo in each gallery.
+Include each photo ID only once within a gallery.
 
-A gallery first shows up to nine photos. The photo viewer includes all gallery photos.
+A gallery first shows up to nine photos.
+Its viewer includes all photos from mounted story galleries, including collapsed photos.
+Next and Previous follow the gallery order in the story.
+The hero viewer contains every manifest photo, with the hero first.
+An inline photo has its own viewer.
+Each viewer slide retains the manifest alt text.
 Expanding or collapsing the gallery does not change viewer captions or photo order.
 Changing the gallery ID starts the new gallery in its collapsed state.
 The map retains its instance when only the requested stop changes.
 The camera, marker highlight, and stop selection follow that stop.
+After a track change, the replacement map restores the requested stop when it loads.
 Loading another route clears the previous user selection.
 
 For each entry in `route.tracks`, copy the exact ID from `asset-metadata.json`.
@@ -332,7 +342,9 @@ Check desktop and phone widths:
 - Press Escape while the photo link has focus. Confirm that its caption closes.
 - Enable reduced motion. Confirm that captions do not animate.
 - Confirm that phone captions remain visible below their photos.
-- For galleries with more than six photos, open the viewer. Check that all photos remain available.
+- For galleries with more than nine photos, open the viewer.
+- Check that collapsed photos retain their alt text in the viewer.
+- Use Next and Previous to move between story galleries.
 - Expand the gallery. Confirm that each viewer caption retains the same text and location.
 - Open each motorcycle and region link. Check that the result includes this trip.
 - Check the previous and next article links. Check that the return link retains the list filter.

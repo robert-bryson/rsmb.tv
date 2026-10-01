@@ -89,14 +89,47 @@ test('inline and gallery photos use the viewer and return keyboard focus', async
         await expect(page.locator('.pswp--open')).toHaveCount(0);
         await expect(trigger).toBeFocused();
     }
-    await page.getByRole('button', { name: 'View all 4 photos' }).click();
+    await page.getByRole('button', { name: 'View all 6 photos' }).click();
     await expect(page.locator('.pswp--open')).toBeFocused();
-    await expect(page.locator('.pswp__counter')).toHaveText('1 / 4');
+    await expect(page.locator('.pswp__counter')).toHaveText('1 / 6');
     await page.keyboard.press('ArrowRight');
-    await expect(page.locator('.pswp__counter')).toHaveText('2 / 4');
+    await expect(page.locator('.pswp__counter')).toHaveText('2 / 6');
     await page.keyboard.press('Escape');
-    await expect(page.getByRole('button', { name: 'View all 4 photos' })).toBeFocused();
+    await expect(page.getByRole('button', { name: 'View all 6 photos' })).toBeFocused();
     expect(page.context().pages()).toHaveLength(1);
+});
+
+test('photo navigation continues between galleries in both directions', async ({ page, isMobile }) => {
+    await page.goto('/trips/coastal-test');
+    const caption = page.locator('.pswp__item[aria-hidden="false"] .pswp__dynamic-caption');
+    const navigate = async (direction: 'Next' | 'Previous') => {
+        // PhotoSwipe hides arrow buttons on touch devices.
+        if (isMobile) await page.keyboard.press(direction === 'Next' ? 'ArrowRight' : 'ArrowLeft');
+        else await page.getByRole('button', { name: direction }).click();
+    };
+    const lastPhoto = page.getByRole('link', { name: 'Coast photograph 3' });
+    await lastPhoto.click();
+    await expect(page.locator('.pswp--open')).toBeFocused();
+    await expect(page.locator('.pswp__counter')).toHaveText('2 / 4');
+    await navigate('Next');
+    await expect(caption).toHaveText('A view from stop 5.');
+    await expect(page.locator('.pswp__counter')).toHaveText('3 / 4');
+    await navigate('Previous');
+    await expect(caption).toHaveText('A view of <harbor> & "coast".');
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.pswp--open')).toHaveCount(0);
+    await expect(lastPhoto).toBeFocused();
+
+    const firstPhoto = page.getByRole('link', { name: 'Coast photograph 5' });
+    await firstPhoto.click();
+    await expect(page.locator('.pswp--open')).toBeFocused();
+    await navigate('Previous');
+    await expect(caption).toHaveText('A view of <harbor> & "coast".');
+    await page.keyboard.press('ArrowRight');
+    await expect(caption).toHaveText('A view from stop 5.');
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.pswp--open')).toHaveCount(0);
+    await expect(firstPhoto).toBeFocused();
 });
 
 test('photo captions render as literal text in the gallery, inline, and hero viewers', async ({ page }) => {
@@ -115,11 +148,13 @@ test('photo captions render as literal text in the gallery, inline, and hero vie
         await page.keyboard.press('Escape');
         await expect(page.locator('.pswp--open')).toHaveCount(0);
     }
-    await page.getByRole('button', { name: 'View all 4 photos' }).click();
+    await page.getByRole('button', { name: 'View all 6 photos' }).click();
     await expect(page.locator('.pswp--open')).toBeFocused();
     await expect(caption).toHaveText('A view from stop 1.');
     await page.keyboard.press('ArrowRight');
     await expect(caption).toHaveText('A view from stop 2.');
+    await expect(page.locator('.pswp__item[aria-hidden="false"] .pswp__img').last())
+        .toHaveAttribute('alt', 'Coast photograph 2');
 });
 
 test('gallery sizes reflect the actual tile instead of the whole phone', async ({ page, isMobile }) => {

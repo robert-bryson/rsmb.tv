@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import PhotoSwipeLightbox from 'photoswipe/lightbox';
 import { TripStoryProvider } from '../features/trips/TripStoryProvider';
 import { TripFacts } from '../features/trips/components/TripFacts';
 import { TripGallery } from '../features/trips/components/TripGallery';
@@ -138,6 +139,28 @@ describe('trip story primitives', () => {
         })).toThrow(/references unknown photo/);
     });
 
+    it.each(['constructor', 'toString', '__proto__'])('rejects an inherited gallery reference: %s', galleryId => {
+        expect(() => parseTripManifest({
+            ...manifest, days: [{ id: 'day-one', title: 'Day one', headingId: 'day-one', galleryId }],
+        })).toThrow();
+        expect(() => renderStory(<TripGallery galleryId={galleryId} />))
+            .toThrow(`Unknown trip gallery: ${galleryId}`);
+    });
+
+    it('accepts a gallery with an own constructor key', () => {
+        const tripManifest = parseTripManifest({ ...manifest, galleries: { constructor: ['camp'] },
+            days: [{ id: 'day-one', title: 'Day one', headingId: 'day-one', galleryId: 'constructor' }],
+        });
+        renderStory(<TripGallery galleryId="constructor" />, tripManifest);
+        expect(screen.getByRole('img', { name: manifest.photos[1].alt })).toBeVisible();
+    });
+
+    it.each([
+        { 'not a slug': ['camp'] }, { highlights: [] }, { highlights: ['camp', 'camp'] },
+    ])('rejects invalid gallery definitions: %j', galleries => {
+        expect(() => parseTripManifest({ ...manifest, galleries })).toThrow();
+    });
+
     it('keeps hidden and expanded gallery captions equal, including locations', () => {
         const photos = Array.from({ length: 11 }, (_, index) => ({
             ...manifest.photos[1], id: `photo-${index}`, src: `/photo-${index}.webp`,
@@ -180,6 +203,50 @@ describe('trip story primitives', () => {
 
         expect(screen.getAllByRole('img')).toHaveLength(9);
         expect(screen.getByRole('button', { name: 'Show all 11 photos' })).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    it('connects mounted galleries in story order, including collapsed photos', () => {
+        const photos = Array.from({ length: 14 }, (_, index) => ({
+            ...manifest.photos[1], id: `photo-${index}`, src: `/photo-${index}.webp`, alt: `Photo ${index}`,
+        }));
+        const tripManifest = {
+            ...manifest, photos, hero: photos[0].id,
+            // Deliberately use a different order than the rendered story.
+            galleries: { second: ['photo-12', 'photo-13'], unused: ['photo-0'], first: photos.slice(1, 12).map(photo => photo.id) },
+        };
+        const opened: { index: number; sources: (string | undefined)[] }[] = [];
+        const open = vi.spyOn(PhotoSwipeLightbox.prototype, 'loadAndOpen').mockImplementation(function (this: PhotoSwipeLightbox, index, dataSource) {
+            this.options.dataSource = dataSource;
+            opened.push({
+                index,
+                sources: Array.from({ length: this.getNumItems() }, (_, index) => this.getItemData(index).src),
+            });
+            return true;
+        });
+        try {
+            const story = (showFirst: boolean) => <TripStoryProvider manifest={tripManifest}>
+                <TripHeroGallery />
+                {showFirst && <TripGallery galleryId="first" />}
+                <TripPhoto photoId="photo-0" />
+                <TripGallery galleryId="second" />
+            </TripStoryProvider>;
+            const { rerender } = render(story(true));
+            fireEvent.click(screen.getByRole('img', { name: 'Photo 12' }));
+            const expectedSources = photos.slice(1).map(photo => new URL(photo.src, window.location.href).href);
+            expect(opened.at(-1)).toEqual({ index: 11, sources: expectedSources });
+            fireEvent.click(screen.getByRole('img', { name: 'Photo 2' }));
+            expect(opened.at(-1)).toEqual({ index: 1, sources: expectedSources });
+
+            fireEvent.click(screen.getByRole('button', { name: 'Show all 11 photos' }));
+            fireEvent.click(screen.getByRole('img', { name: 'Photo 11' }));
+            expect(opened.at(-1)).toEqual({ index: 10, sources: expectedSources });
+
+            rerender(story(false));
+            fireEvent.click(screen.getByRole('img', { name: 'Photo 12' }));
+            expect(opened.at(-1)).toEqual({ index: 0, sources: expectedSources.slice(11) });
+        } finally {
+            open.mockRestore();
+        }
     });
 
     it('shows alt-only captions without repeating them to assistive technology', () => {

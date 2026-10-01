@@ -1,7 +1,8 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { useTripStory } from '../TripStoryContext';
 import { TripPhotoFigure } from './TripPhoto';
-import { createTripPhotoLightbox, tripPhotoCaption } from './tripPhotoSwipe';
+import { createTripPhotoLightbox } from './tripPhotoSwipe';
+import { TripPhotoLink } from './TripPhotoLink';
 
 const COLLAPSED_PHOTO_COUNT = 9;
 
@@ -10,18 +11,23 @@ export function TripGallery({ galleryId }: { galleryId: string }) {
 }
 
 function TripGalleryContent({ galleryId }: { galleryId: string }) {
-    const { manifest, photos } = useTripStory();
+    const { manifest, photos, registerGallery, getGalleryPhotos } = useTripStory();
     const elementId = `trip-gallery-${useId().replaceAll(':', '')}`;
     const galleryRef = useRef<HTMLDivElement>(null);
     const [expanded, setExpanded] = useState(false);
-    const photoIds = manifest.galleries?.[galleryId];
+    const photoIds = manifest.galleries && Object.hasOwn(manifest.galleries, galleryId)
+        ? manifest.galleries[galleryId] : undefined;
     useEffect(() => {
         if (!galleryRef.current) return;
-        const lightbox = createTripPhotoLightbox(galleryRef.current);
-        return () => lightbox.destroy();
-    }, [photoIds, expanded]);
+        const unregister = registerGallery(galleryRef.current);
+        const lightbox = createTripPhotoLightbox(galleryRef.current, getGalleryPhotos);
+        return () => {
+            lightbox.destroy();
+            unregister();
+        };
+    }, [photoIds, expanded, registerGallery, getGalleryPhotos]);
     if (!photoIds) throw new Error(`Unknown trip gallery: ${galleryId}`);
-    const visibleIds = expanded ? photoIds : photoIds.slice(0, COLLAPSED_PHOTO_COUNT);
+    const visibleCount = expanded ? photoIds.length : Math.min(photoIds.length, COLLAPSED_PHOTO_COUNT);
     return (
         <section aria-labelledby={elementId} className="trip-breakout my-10">
             <h2 id={elementId} className="sr-only">Photo gallery</h2>
@@ -29,8 +35,8 @@ function TripGalleryContent({ galleryId }: { galleryId: string }) {
                 {photoIds.map((id, index) => {
                     const photo = photos.get(id);
                     if (!photo) throw new Error(`Unknown trip photo: ${id}`);
-                    if (!visibleIds.includes(id)) return <a key={id} hidden href={photo.src} data-pswp-width={photo.width} data-pswp-height={photo.height} data-pswp-srcset={photo.srcSet} data-trip-caption={tripPhotoCaption(photo)} />;
-                    const lead = index === 0 && visibleIds.length % 2 === 1;
+                    if (index >= visibleCount) return <TripPhotoLink key={id} photo={photo} hidden />;
+                    const lead = index === 0 && visibleCount % 2 === 1;
                     const single = photoIds.length === 1;
                     return <TripPhotoFigure key={id} photo={photo}
                         sizes={single ? '(min-width: 1184px) 1152px, calc(100vw - 2rem)' : `${lead ? '(max-width: 639px) calc(100vw - 2rem), ' : ''}(min-width: 1184px) 376px, (min-width: 640px) calc((100vw - 3.5rem) / 3), calc((100vw - 2.75rem) / 2)`}

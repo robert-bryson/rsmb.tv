@@ -37,6 +37,20 @@ public/data/flights/usStates.geojson
 
 The flights feature loads these files when it needs them.
 
+Both airport generators use the same coordinate checks.
+Each coordinate field must contain a complete, finite number.
+Latitude must be from -90 through 90 degrees.
+Longitude must be from -180 through 180 degrees.
+Zero is valid. Empty fields, numeric suffixes, and infinity are invalid.
+The generators report rejected airports.
+The flight converter omits flights that reference missing or rejected airports.
+It excludes these flights from route geometry and visit totals.
+
+The writer retains existing output when only the candidate generation timestamp changes.
+Changed geometry or metadata receives a new timestamp.
+The generator tests use temporary directories and fixed source data.
+They check subprocess errors before they check the exit status.
+
 ## Features
 
 - 3D globe visualization with react-globe.gl (Three.js/WebGL)
@@ -57,7 +71,11 @@ The flights feature loads these files when it needs them.
 
 ## Units and statistics
 
-Distance values are stored and computed in kilometers, then formatted at render time. The bottom-left distance total toggles the UI between metric (`km`/`m`) and imperial (`mi`/`ft`) units, and the preference is persisted locally.
+The application stores and calculates distances in kilometers.
+It formats distances when it renders the page.
+Select the distance total at the bottom left to change the units.
+Metric units are `km` and `m`. Imperial units are `mi` and `ft`.
+The application stores the selected units locally.
 
 The stats panel stays open when you clear an airport, route, country, or region. Airport-code links show the full airport name in a native tooltip.
 
@@ -120,7 +138,9 @@ Polygon layer over US states with two display modes:
 
 The application stores active filters and display settings in the URL. You can copy the URL to share the same view.
 
-Airport, route, country, and region selections are mutually exclusive; choosing one clears the others while preserving compatible filters like year and airline.
+Only one airport, route, country, or region can control the map focus.
+A new selection clears the other focus selections.
+Compatible year and airline filters remain active.
 
 | Parameter | Example          | Description                                                        |
 | --------- | ---------------- | ------------------------------------------------------------------ |

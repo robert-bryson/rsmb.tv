@@ -398,9 +398,10 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
 
     useEffect(() => {
         const stop = manifest.stops.find((candidate) => candidate.id === stopId);
-        if (!stop || !mapRef.current) return;
-        mapRef.current[reducedMotion ? 'jumpTo' : 'easeTo']({ center: stop.coordinates, zoom: 9 });
-    }, [manifest.stops, reducedMotion, stopId, route]);
+        const map = mapRef.current;
+        if (!stop || !map || loadedMap !== map) return;
+        map[reducedMotion ? 'jumpTo' : 'easeTo']({ center: stop.coordinates, zoom: 9 });
+    }, [manifest.stops, reducedMotion, stopId, loadedMap]);
 
     const selectedTrack = manifest.route.tracks?.find((track) => track.id === trackId);
     const mapAlt = selectedTrack
@@ -436,10 +437,10 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
                             className={`rounded px-1.5 py-0.5 transition-colors ${stop.id === (hoveredStopId ?? selectedStopId ?? stopId) ? 'bg-amber-400 text-zinc-950' : 'hover:text-zinc-200'}`}
                         >
                             <button type="button" aria-pressed={stop.id === (selectedStopId ?? stopId)} onClick={() => focusStop(stop.id)} onFocus={() => setHoveredStopId(stop.id)} onBlur={() => setHoveredStopId(null)} className="min-h-11 text-left">
-                            <span className={`mr-1 ${stop.id === (hoveredStopId ?? selectedStopId ?? stopId) ? 'text-zinc-800' : 'text-zinc-400'}`}>
-                                {index + 1}.
-                            </span>
-                            {stop.name}{index === 0 ? ' · Start' : index === manifest.stops.length - 1 ? ' · Finish' : ''}
+                                <span className={`mr-1 ${stop.id === (hoveredStopId ?? selectedStopId ?? stopId) ? 'text-zinc-800' : 'text-zinc-400'}`}>
+                                    {index + 1}.
+                                </span>
+                                {stop.name}{index === 0 ? ' · Start' : index === manifest.stops.length - 1 ? ' · Finish' : ''}
                             </button>
                             {stop.id === (selectedStopId ?? stopId) && <p className="text-xs">{[stop.date, stop.description].filter(Boolean).join(' · ')}</p>}
                         </li>
