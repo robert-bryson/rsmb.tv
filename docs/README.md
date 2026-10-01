@@ -21,7 +21,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
-| 2026-10-01 | [Trip assets and galleries](reviews/2026-10-01-trip-assets-and-galleries.md) |
+| 2026-10-01 | [Trip assets, galleries, and follow-up review](reviews/2026-10-01-trip-assets-and-galleries.md#follow-up-review) |
 | 2026-10-01 | [Pending changes review](reviews/2026-10-01-pending-changes.md) |
 | 2026-10-01 | [Trip implementation](reviews/2026-10-01-trip-report-implementation.md) |
 | 2026-10-01 | [Initial trip audit](reviews/2026-10-01-trip-report-audit.md) |

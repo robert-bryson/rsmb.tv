@@ -454,6 +454,106 @@ describe('TripRouteMap', () => {
         expect(mapMocks.easeTo).toHaveBeenCalledWith({ center: [-122.5, 46.5], zoom: 9 });
     });
 
+    it('updates stop selection when the requested stop changes without rebuilding the map', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true,
+            json: async () => ({
+                type: 'Feature', properties: {},
+                geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
+            }),
+        }));
+        const tripManifest: TripManifest = {
+            ...manifest,
+            stops: [
+                { id: 'camp', name: 'Camp', coordinates: [-122.5, 46.5] },
+                { id: 'finish', name: 'Finish', coordinates: [-123, 46] },
+            ],
+        };
+        const story = (stopId?: string) => (
+            <TripStoryProvider manifest={tripManifest}><TripRouteMap stopId={stopId} /></TripStoryProvider>
+        );
+        const { rerender } = render(story('camp'));
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        expect(screen.getByRole('button', { name: /Camp/ })).toHaveAttribute('aria-pressed', 'true');
+
+        rerender(story('finish'));
+
+        expect(screen.getByRole('button', { name: /Camp/ })).toHaveAttribute('aria-pressed', 'false');
+        expect(screen.getByRole('button', { name: /Finish/ })).toHaveAttribute('aria-pressed', 'true');
+        expect(mapMocks.easeTo).toHaveBeenLastCalledWith({ center: [-123, 46], zoom: 9 });
+        expect(mapMocks.setPaintProperty).toHaveBeenCalledWith(
+            'trip-stops', 'circle-color', ['case', ['==', ['get', 'id'], 'finish'], '#f59e0b', '#fafafa'],
+        );
+        expect(mapMocks.Map).toHaveBeenCalledOnce();
+
+        rerender(story());
+
+        expect(screen.getByRole('button', { name: /Finish/ })).toHaveAttribute('aria-pressed', 'false');
+    });
+
+    it('clears a selected stop when another route loads', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true,
+            json: async () => ({
+                type: 'Feature', properties: {},
+                geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
+            }),
+        }));
+        const stops: TripManifest['stops'] = [{ id: 'camp', name: 'Camp', coordinates: [-122.5, 46.5] }];
+        const { rerender } = render(
+            <TripStoryProvider manifest={{ ...manifest, stops }}><TripRouteMap /></TripStoryProvider>,
+        );
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        const selectMarker = mapMocks.on.mock.calls.find(([event]) => event === 'click')?.[2];
+        act(() => selectMarker({ features: [{ properties: { id: 'camp' } }] }));
+        expect(screen.getByRole('button', { name: /Camp/ })).toHaveAttribute('aria-pressed', 'true');
+        expect(mapMocks.easeTo).toHaveBeenLastCalledWith({ center: [-122.5, 46.5], zoom: 9 });
+        act(() => selectMarker({ features: [{ properties: { id: 42 } }] }));
+        expect(screen.getByRole('button', { name: /Camp/ })).toHaveAttribute('aria-pressed', 'true');
+
+        rerender(<TripStoryProvider manifest={{ ...manifest, stops, route: { geoJson: '/second.geojson' } }}>
+            <TripRouteMap />
+        </TripStoryProvider>);
+
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledTimes(2));
+        expect(screen.getByRole('button', { name: /Camp/ })).toHaveAttribute('aria-pressed', 'false');
+    });
+
+    it('uses the current stop when a track change creates another map', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true,
+            json: async () => ({
+                type: 'Feature', properties: { trackId: 'return' },
+                geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
+            }),
+        }));
+        const tripManifest: TripManifest = {
+            ...manifest,
+            stops: [
+                { id: 'camp', name: 'Camp', coordinates: [-122.5, 46.5] },
+                { id: 'finish', name: 'Finish', coordinates: [-123, 46] },
+            ],
+        };
+        const { rerender } = render(<TripStoryProvider manifest={tripManifest}>
+            <TripRouteMap stopId="camp" />
+        </TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+
+        rerender(<TripStoryProvider manifest={tripManifest}>
+            <TripRouteMap stopId="finish" trackId="return" />
+        </TripStoryProvider>);
+
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledTimes(2));
+        const options = mapMocks.Map.mock.calls[1][0] as MapOptions;
+        const layers = options.style && typeof options.style === 'object' ? options.style.layers : [];
+        expect(layers.find(layer => layer.id === 'trip-stops')?.paint).toMatchObject({
+            'circle-color': ['case', ['==', ['get', 'id'], 'finish'], '#f59e0b', '#fafafa'],
+        });
+        fireEvent.click(screen.getByRole('button', { name: /Camp/ }));
+        expect(screen.getByRole('button', { name: /Camp/ })).toHaveAttribute('aria-pressed', 'true');
+        expect(mapMocks.easeTo).toHaveBeenLastCalledWith({ center: [-122.5, 46.5], zoom: 9 });
+    });
+
     it('highlights matching markers and descriptions from either hover target', async () => {
         vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
             ok: true,

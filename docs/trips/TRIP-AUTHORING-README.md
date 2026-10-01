@@ -209,6 +209,13 @@ Keep the full-trip distance separate from a partial recorded route distance.
 Do not invent a missing date or route segment.
 List regions in travel order. List gallery photos in story order.
 
+A gallery first shows up to nine photos. The photo viewer includes all gallery photos.
+Expanding or collapsing the gallery does not change viewer captions or photo order.
+Changing the gallery ID starts the new gallery in its collapsed state.
+The map retains its instance when only the requested stop changes.
+The camera, marker highlight, and stop selection follow that stop.
+Loading another route clears the previous user selection.
+
 For each entry in `route.tracks`, copy the exact ID from `asset-metadata.json`.
 Add a clear name. Add a date only after verification.
 Identify reconstructed tracks in their names.

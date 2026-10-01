@@ -10,7 +10,7 @@ Use the [review index](docs/README.md) for dated findings and test results.
 
 The manifest supports local preview. The public route and a sample photo returned HTTP 403 on 2026-09-30.
 
-- [ ] Review all 76 Boise photos and captions. Check each new photo against its source and recorded date.
+- [ ] Review all 81 Boise photos and captions. Check each new photo against its source and recorded date.
 - [ ] Publish the processed Boise photos and route files. Check every image size and route URL for HTTP 200.
 - [ ] Verify the recorded track dates. The source filenames do not agree with all dates in the story.
 - [ ] Find the source track from Panther Creek to Seattle. Add its manifest reference only after route preparation includes that track.
@@ -40,7 +40,6 @@ The historical signal is not ready for publication.
 
 ## Build and maintenance
 
-- [ ] Make generated flight timestamps stable when source data does not change. Test two consecutive builds.
 - [ ] Reduce the large visualization chunks. Preserve the passing article JavaScript budgets.
 - [ ] Check Tailwind source-map output. Confirm that production error locations match source files.
 - [ ] Split document conversion, shortcode handling, and publication checks in `scripts/sync-blogs.js`. Retain the compilation tests.

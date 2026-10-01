@@ -109,3 +109,95 @@ The V8 report covers loaded files. It does not measure every repository file.
 The synthetic build does not import Google content or confirm real public asset URLs.
 WebKit was not run in this review. CI must provide that browser check.
 Existing large-chunk and Tailwind source-map warnings remain open in the TODO file.
+
+## Follow-up review
+
+This review checks the two local commits and the supplied working-tree changes.
+It concentrates on trip state, navigation, asset handling, publication checks, and generated flight output.
+The preceding sections retain their original results. The results below apply after the follow-up fixes.
+This review does not certify the entire repository or compliance with the complete ASD-STE100 dictionary.
+The updated documentation uses short sentences, active voice, and consistent technical terms.
+
+### P2: gallery expansion survived a gallery change
+
+The component stored expansion without a gallery identity.
+After expansion, a different gallery could start with every photo visible.
+The component now keys its state by gallery ID.
+Its lightbox also refreshes when the manifest photo list changes.
+A regression test changes the gallery after expansion and checks the nine-photo limit.
+See [the gallery](../../src/features/trips/components/TripGallery.tsx) and [its tests](../../src/test/tripStory.test.tsx).
+
+### P2: map selection did not follow the requested stop
+
+The camera effect followed a new stop ID. The selected stop state retained the old ID.
+The initial stop reference also retained its first value when a track change created another map.
+The camera, marker paint, and accessible button state could therefore disagree.
+
+Selection now belongs to the requested stop and route URL.
+A prop change resets selection before React commits the update.
+Map creation reads the current stop through an Effect Event.
+The existing map remains active when only the requested stop changes.
+Tests cover stop changes, cleared requests, route replacement, track replacement, and marker selection.
+The marker test also rejects a non-string feature ID.
+See [the map](../../src/features/trips/components/TripRouteMap.tsx) and [its tests](../../src/test/tripRouteMap.test.tsx).
+
+### P2: unchanged flight data produced new timestamps
+
+Three generators inserted the current time on every run.
+Identical source data therefore produced changed tracked output.
+This made reviews noisy and suggested a data change that had not occurred.
+
+A shared writer compares the complete JSON payload with the existing output.
+It ignores only the candidate generation timestamp during that comparison.
+Equal payloads retain their existing bytes and timestamp.
+Changed geometry or metadata receives the new timestamp.
+Invalid existing JSON is replaced. Other filesystem read failures propagate.
+The writer does not change its input object.
+
+Tests run each generator twice with identical inputs.
+The state boundary test uses a fixed remote response and requires no network access.
+Other tests check changed payloads, invalid JSON, invalid timestamps, and read failures.
+See [the writer](../../projects/flights/scripts/writeFlightGeoJson.js) and [generator tests](../../scripts/__tests__/flightBuildScripts.test.ts).
+
+### P3: the open photo review count was stale
+
+The supplied Boise manifest contains 81 photos. The current TODO still specified 76.
+The TODO now specifies 81. The earlier report retains its historical count.
+All 81 highlights entries are unique. Each photo occurs in that gallery.
+The supplied changes add five photos without changing the 76 existing photo entries.
+The manifest passes the shared schema and declares five route tracks.
+These checks do not verify captions, dates, distances, reconstruction, or public asset availability.
+Keep the [publication blockers](../../TODO.md#boise-trip) open until those checks pass.
+
+### Follow-up validation
+
+The follow-up adds nine unit test cases and extends two existing generator cases.
+
+| Check | Result |
+| --- | --- |
+| ESLint | Passed |
+| TypeScript | Passed |
+| Vitest with V8 coverage | 1,122 tests passed in 82 files |
+| Python temperature tests | 17 passed |
+| Production trip browser tests | 24 passed across desktop and phone Chromium |
+| Browser smoke tests | 9 passed |
+| Synthetic production build | Passed |
+| Dependency audit | No reported vulnerabilities |
+| Boise schema and gallery completeness | Passed |
+
+| Coverage metric | Earlier report | Follow-up |
+| --- | --- | --- |
+| Statements | 74.03% | 74.14% |
+| Branches | 66.57% | 66.83% |
+| Functions | 71.38% | 71.47% |
+| Lines | 76.73% | 76.83% |
+
+The shared writer has 100% statement, branch, and function coverage.
+The map has 190 of 206 statements and 106 of 120 branches covered.
+The gallery has 24 of 27 statements and 23 of 26 branches covered.
+The aggregate comparison uses the earlier recorded report, not a separate baseline run with identical loaded files.
+Subprocess tests check generator behavior, but their execution does not contribute to V8 coverage.
+
+WebKit remains unverified in this review. CI enables WebKit on a host with its required system libraries.
+The large visualization chunk and Tailwind source-map warnings remain open.
+No Google source content, cloud assets, or infrastructure was changed.

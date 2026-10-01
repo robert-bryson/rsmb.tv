@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { writeFlightGeoJson } from './writeFlightGeoJson.js';
 
 const outputPath = path.resolve('public', 'data', 'flights', 'usStates.geojson');
 
@@ -113,7 +114,7 @@ async function main() {
     };
 
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-    fs.writeFileSync(outputPath, JSON.stringify(geojson));
+    writeFlightGeoJson(outputPath, geojson);
 
     console.log(`✅ Wrote ${features.length} states to ${outputPath}`);
 }

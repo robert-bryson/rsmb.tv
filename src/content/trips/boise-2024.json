@@ -108,6 +108,24 @@
             "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-79dc5ac47c12-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-79dc5ac47c12-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-79dc5ac47c12-1600.webp 1600w"
         },
         {
+            "id": "boise-2024-05-11-upper-yakima",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-cb060aa2b529-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-cb060aa2b529-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-cb060aa2b529-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-cb060aa2b529-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "The Yakima River and a railway winding through a green valley beneath open hills.",
+            "date": "2024-05-11"
+        },
+        {
+            "id": "boise-2024-05-11-upper-yakima-windmills",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-d3784c9ddf9e-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-d3784c9ddf9e-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-d3784c9ddf9e-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-d3784c9ddf9e-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Two white wind turbines rising above a grassy hillside beneath a clear blue sky.",
+            "date": "2024-05-11"
+        },
+        {
             "id": "boise-2024-05-11-yakima-canyon",
             "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-1600.webp",
             "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-1600.webp 1600w",
@@ -153,6 +171,15 @@
             "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-43be06fa8441-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-43be06fa8441-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-43be06fa8441-1600.webp 1600w"
         },
         {
+            "id": "boise-2024-05-11-velvet-hills",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-b2fb01b87954-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-b2fb01b87954-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-b2fb01b87954-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-b2fb01b87954-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Smooth, treeless hills rolling above a fenced green pasture beneath a blue sky.",
+            "date": "2024-05-11"
+        },
+        {
             "id": "boise-2024-05-11-view",
             "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-489dc270b3fd-1600.webp",
             "width": 1600,
@@ -171,6 +198,15 @@
             "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-e688989595b1-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-e688989595b1-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-e688989595b1-1600.webp 1600w"
         },
         {
+            "id": "boise-2024-05-11-butter-creek-hills",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-6f57cae131b5-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-6f57cae131b5-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-6f57cae131b5-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-6f57cae131b5-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Butter Creek winding below rounded grassy hills with birds flying overhead.",
+            "date": "2024-05-11"
+        },
+        {
             "id": "boise-2024-05-11-yakima-river-hills",
             "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-river-hills-1600.webp",
             "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-river-hills-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-river-hills-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-river-hills-1600.webp 1600w",
@@ -187,6 +223,15 @@
             "alt": "A paved road climbing between green hills beside fences and utility poles.",
             "date": "2024-05-11",
             "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-973f06f36e6f-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-973f06f36e6f-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-973f06f36e6f-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-11-blue-mountains-afternoon",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-afternoon-4285a312e246-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-afternoon-4285a312e246-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-afternoon-4285a312e246-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-afternoon-4285a312e246-1600.webp 1600w",
+            "width": 1600,
+            "height": 1200,
+            "alt": "Afternoon sun over grassy Blue Mountains ridges and wooded ravines beyond a weathered fence.",
+            "date": "2024-05-11"
         },
         {
             "id": "boise-2024-05-11-battle-mt-meadow",
@@ -786,24 +831,25 @@
     "galleries": {
         "2024-05-11-1": [
             "boise-2024-05-11-cle-elum",
-            "boise-2024-05-11-yakima-canyon",
-            "boise-2024-05-11-warehouse",
-            "boise-2024-05-11-farm-road",
-            "boise-2024-05-11-view"
+            "boise-2024-05-11-upper-yakima",
+            "boise-2024-05-11-upper-yakima-windmills",
+            "boise-2024-05-11-yakima-canyon"
         ],
         "2024-05-11-2": [
             "boise-2024-05-11-warehouse",
             "boise-2024-05-11-farm-road",
+            "boise-2024-05-11-velvet-hills",
             "boise-2024-05-11-curve-road",
-            "boise-2024-05-11-no-tresspassing"
+            "boise-2024-05-11-no-tresspassing",
+            "boise-2024-05-11-view"
         ],
         "2024-05-11-3": [
             "boise-2024-05-11-butter-creek",
-            "boise-2024-05-11-yakima-river-hills",
+            "boise-2024-05-11-butter-creek-hills",
             "boise-2024-05-11-butter-creek-y",
+            "boise-2024-05-11-blue-mountains-afternoon",
             "boise-2024-05-11-battle-mt-meadow",
             "boise-2024-05-11-battle-mt-moto",
-            "boise-2024-05-11-blue-mountains-sunset",
             "boise-2024-05-11-forest-road"
         ],
         "2024-05-11-4": [
@@ -886,15 +932,20 @@
         ],
         "highlights": [
             "boise-2024-05-11-cle-elum",
+            "boise-2024-05-11-upper-yakima",
+            "boise-2024-05-11-upper-yakima-windmills",
             "boise-2024-05-11-yakima-canyon",
             "boise-2024-05-11-warehouse",
             "boise-2024-05-11-farm-road",
             "boise-2024-05-11-curve-road",
             "boise-2024-05-11-no-tresspassing",
+            "boise-2024-05-11-velvet-hills",
             "boise-2024-05-11-view",
             "boise-2024-05-11-butter-creek",
+            "boise-2024-05-11-butter-creek-hills",
             "boise-2024-05-11-yakima-river-hills",
             "boise-2024-05-11-butter-creek-y",
+            "boise-2024-05-11-blue-mountains-afternoon",
             "boise-2024-05-11-battle-mt-meadow",
             "boise-2024-05-11-battle-mt-moto",
             "boise-2024-05-11-blue-mountains-sunset",

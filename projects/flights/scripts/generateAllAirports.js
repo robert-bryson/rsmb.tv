@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { parse } from 'csv-parse/sync';
+import { writeFlightGeoJson } from './writeFlightGeoJson.js';
 
 const base = path.resolve('projects', 'flights');
 
@@ -108,7 +109,7 @@ if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
 }
 
-fs.writeFileSync(outputPath, JSON.stringify(geojson));
+writeFlightGeoJson(outputPath, geojson);
 console.log(`✅ Generated ${features.length} airports to ${outputPath}`);
 console.log(`   Visited: ${geojson.metadata.visitedCount}, Unvisited: ${geojson.metadata.unvisitedCount}`);
 console.log(`   Continents: ${geojson.metadata.continents.length}, Countries: ${geojson.metadata.countries.length}`);

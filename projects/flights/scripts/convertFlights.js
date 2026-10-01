@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import { parse } from 'csv-parse/sync'
+import { writeFlightGeoJson } from './writeFlightGeoJson.js'
 
 const base = path.resolve('projects', 'flights')
 
@@ -231,7 +232,7 @@ const flightsGeojson = {
 }
 
 fs.mkdirSync(path.dirname(flightsOutputPath), { recursive: true })
-fs.writeFileSync(flightsOutputPath, JSON.stringify(flightsGeojson, null, 2))
+writeFlightGeoJson(flightsOutputPath, flightsGeojson, 2)
 console.log(`✅ Generated ${flightFeatures.length} flights to ${flightsOutputPath}`)
 console.log(`   Years: ${stats.minYear} - ${stats.maxYear} (${stats.years.size} unique)`)
 

@@ -139,9 +139,9 @@ describe('trip story primitives', () => {
     });
 
     it('keeps hidden and expanded gallery captions equal, including locations', () => {
-        const photos = Array.from({ length: 8 }, (_, index) => ({
+        const photos = Array.from({ length: 11 }, (_, index) => ({
             ...manifest.photos[1], id: `photo-${index}`, src: `/photo-${index}.webp`,
-            caption: index === 7 ? '   ' : ' Camp. ', location: ' Coast ',
+            caption: index === 10 ? '   ' : ' Camp. ', location: ' Coast ',
         }));
         const { container } = renderStory(<TripGallery galleryId="highlights" />, {
             ...manifest, photos, hero: photos[0].id, galleries: { highlights: photos.map(photo => photo.id) },
@@ -149,16 +149,37 @@ describe('trip story primitives', () => {
         const captions = () => Array.from(container.querySelectorAll('a[data-pswp-width]'))
             .map(link => link.getAttribute('data-trip-caption'));
         const collapsed = captions();
-        expect(screen.getAllByRole('img')).toHaveLength(6);
-        expect(collapsed[6]).toBe('Camp. · Coast');
-        expect(collapsed[7]).toBe(`${manifest.photos[1].alt} · Coast`);
-        fireEvent.click(screen.getByRole('button', { name: 'Show all 8 photos' }));
-        expect(screen.getAllByRole('img')).toHaveLength(8);
+        expect(screen.getAllByRole('img')).toHaveLength(9);
+        expect(collapsed[9]).toBe('Camp. · Coast');
+        expect(collapsed[10]).toBe(`${manifest.photos[1].alt} · Coast`);
+        fireEvent.click(screen.getByRole('button', { name: 'Show all 11 photos' }));
+        expect(screen.getAllByRole('img')).toHaveLength(11);
         expect(captions()).toEqual(collapsed);
         expect(screen.getByRole('button', { name: 'Show fewer photos' })).toHaveAttribute('aria-expanded', 'true');
         fireEvent.click(screen.getByRole('button', { name: 'Show fewer photos' }));
-        expect(screen.getAllByRole('img')).toHaveLength(6);
+        expect(screen.getAllByRole('img')).toHaveLength(9);
         expect(captions()).toEqual(collapsed);
+    });
+
+    it('resets expansion when the gallery changes', () => {
+        const photos = Array.from({ length: 11 }, (_, index) => ({
+            ...manifest.photos[1], id: `photo-${index}`, src: `/photo-${index}.webp`,
+        }));
+        const tripManifest = {
+            ...manifest, photos, hero: photos[0].id,
+            galleries: { first: photos.map(photo => photo.id), second: photos.map(photo => photo.id) },
+        };
+        const story = (galleryId: string) => (
+            <TripStoryProvider manifest={tripManifest}><TripGallery galleryId={galleryId} /></TripStoryProvider>
+        );
+        const { rerender } = render(story('first'));
+        fireEvent.click(screen.getByRole('button', { name: 'Show all 11 photos' }));
+        expect(screen.getAllByRole('img')).toHaveLength(11);
+
+        rerender(story('second'));
+
+        expect(screen.getAllByRole('img')).toHaveLength(9);
+        expect(screen.getByRole('button', { name: 'Show all 11 photos' })).toHaveAttribute('aria-expanded', 'false');
     });
 
     it('shows alt-only captions without repeating them to assistive technology', () => {

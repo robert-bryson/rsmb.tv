@@ -2,8 +2,9 @@ import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'fs'
 import { tmpdir } from 'os';
 import { dirname, join, resolve } from 'path';
 import { spawnSync } from 'child_process';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 import { afterEach, describe, expect, it } from 'vitest';
+import { writeFlightGeoJson } from '../../projects/flights/scripts/writeFlightGeoJson.js';
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const tempDirs: string[] = [];
@@ -60,6 +61,10 @@ describe('flight build scripts', () => {
         expect(flights.features).toHaveLength(1);
         expect(flights.features[0].properties.origin_code).toBe('SEA');
         expect(flights.features[0].properties.destination_code).toBe('LAX');
+
+        const firstOutput = readFileSync(join(cwd, 'public/data/flights/flights.geojson'), 'utf8');
+        expect(runScript(cwd, 'projects/flights/scripts/convertFlights.js').status).toBe(0);
+        expect(readFileSync(join(cwd, 'public/data/flights/flights.geojson'), 'utf8')).toBe(firstOutput);
     });
 
     it('generateAllAirports reports invalid airport coordinates', () => {
@@ -83,5 +88,58 @@ describe('flight build scripts', () => {
         expect(airports.features).toHaveLength(1);
         expect(airports.metadata.totalAirports).toBe(1);
         expect(airports.metadata.visitedCount).toBe(1);
+
+        const firstOutput = readFileSync(join(cwd, 'public/data/flights/allAirports.geojson'), 'utf8');
+        expect(runScript(cwd, 'projects/flights/scripts/generateAllAirports.js').status).toBe(0);
+        expect(readFileSync(join(cwd, 'public/data/flights/allAirports.geojson'), 'utf8')).toBe(firstOutput);
+    });
+
+    it('generates identical state output from identical remote boundaries', () => {
+        const cwd = makeWorkspace();
+        const source = {
+            features: [{ properties: { name: 'Washington' }, geometry: {
+                type: 'Polygon', coordinates: [[[-123, 47], [-122, 47], [-122, 48], [-123, 47]]],
+            } }],
+        };
+        const scriptUrl = pathToFileURL(join(repoRoot, 'projects/flights/scripts/generateUSStates.js')).href;
+        const run = () => spawnSync('node', ['--input-type=module', '-e',
+            `globalThis.fetch = async () => ({ ok: true, json: async () => (${JSON.stringify(source)}) }); await import(${JSON.stringify(scriptUrl)});`,
+        ], { cwd, encoding: 'utf8' });
+        const firstRun = run();
+        expect(firstRun.status, firstRun.stderr).toBe(0);
+        const outputPath = join(cwd, 'public/data/flights/usStates.geojson');
+        const firstOutput = readFileSync(outputPath, 'utf8');
+        expect(run().status).toBe(0);
+        expect(readFileSync(outputPath, 'utf8')).toBe(firstOutput);
+    });
+
+    it('keeps the timestamp for equal data and updates it for changed data', () => {
+        const cwd = makeWorkspace();
+        const outputPath = join(cwd, 'public/data/flights/flights.geojson');
+        const original = { type: 'FeatureCollection', features: [], metadata: { totalFlights: 0, generatedAt: '2024-01-01T00:00:00.000Z' } };
+        expect(writeFlightGeoJson(outputPath, original, 2)).toBe(true);
+        const bytes = readFileSync(outputPath, 'utf8');
+        const next = { ...original, metadata: { ...original.metadata, generatedAt: '2024-01-02T00:00:00.000Z' } };
+        expect(writeFlightGeoJson(outputPath, next, 2)).toBe(false);
+        expect(readFileSync(outputPath, 'utf8')).toBe(bytes);
+        expect(next.metadata.generatedAt).toBe('2024-01-02T00:00:00.000Z');
+        const changed = { ...next, features: [{ type: 'Feature', properties: {}, geometry: null }] };
+        expect(writeFlightGeoJson(outputPath, changed, 2)).toBe(true);
+        expect(readJson(cwd, 'public/data/flights/flights.geojson')).toEqual(changed);
+    });
+
+    it.each(['not json', '{"metadata":{"generatedAt":"invalid"}}'])('replaces invalid existing output: %s', existing => {
+        const cwd = makeWorkspace();
+        const outputPath = join(cwd, 'public/data/flights/flights.geojson');
+        writeFileSync(outputPath, existing);
+        const output = { type: 'FeatureCollection', features: [], metadata: { generatedAt: '2024-01-01T00:00:00.000Z' } };
+        expect(writeFlightGeoJson(outputPath, output)).toBe(true);
+        expect(readJson(cwd, 'public/data/flights/flights.geojson')).toEqual(output);
+    });
+
+    it('does not treat filesystem read failures as missing output', () => {
+        const cwd = makeWorkspace();
+        expect(() => writeFlightGeoJson(join(cwd, 'public/data/flights'), { metadata: {} }))
+            .toThrow();
     });
 });

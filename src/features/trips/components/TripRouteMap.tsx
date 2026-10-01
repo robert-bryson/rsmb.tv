@@ -202,13 +202,17 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
     const routeUrl = manifest.route.geoJson;
     const { route, error: routeError, retry } = useTripRoute(routeUrl);
     const [mapError, setMapError] = useState<{ url: string; message: string }>();
-    const [selectedStopId, setSelectedStopId] = useState(stopId);
+    const [stopSelection, setStopSelection] = useState({ routeUrl, requestedId: stopId, selectedId: stopId });
+    if (stopSelection.routeUrl !== routeUrl || stopSelection.requestedId !== stopId) {
+        setStopSelection({ routeUrl, requestedId: stopId, selectedId: stopId });
+    }
+    const selectedStopId = stopSelection.selectedId;
     const [loadedMap, setLoadedMap] = useState<maplibregl.Map | null>(null);
-    const initialStopId = useRef(stopId);
+    const getInitialStopId = useEffectEvent(() => stopId);
     const missingTrack = route && trackId && routeCoordinates(trackRoute(route, trackId)).length === 0;
     const error = routeError || (mapError?.url === routeUrl ? mapError.message : '') || (missingTrack ? `Route does not contain track "${trackId}".` : '');
     const focusStop = (id: string) => {
-        setSelectedStopId(id);
+        setStopSelection(current => ({ ...current, selectedId: id }));
         const stop = manifest.stops.find(candidate => candidate.id === id);
         if (stop && mapRef.current) mapRef.current[reducedMotion ? 'jumpTo' : 'easeTo']({ center: stop.coordinates, zoom: 9 });
     };
@@ -219,10 +223,10 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
         const points = routeCoordinates(route);
         const bounds = points.reduce((bounds, point) => bounds.extend(point as [number, number]), new maplibregl.LngLatBounds());
         mapRef.current.fitBounds(bounds, { padding: 40, maxZoom: 11, bearing: 0, pitch: 0, duration: reducedMotion ? 0 : 300 });
-        setSelectedStopId('');
+        setStopSelection(current => ({ ...current, selectedId: '' }));
     });
     useEffect(() => {
-        const stopId = initialStopId.current;
+        const stopId = getInitialStopId();
         if (!containerRef.current || !route || mapRef.current) return;
 
         const focusedRoute = trackId ? trackRoute(route, trackId) : route;

@@ -3,7 +3,13 @@ import { useTripStory } from '../TripStoryContext';
 import { TripPhotoFigure } from './TripPhoto';
 import { createTripPhotoLightbox, tripPhotoCaption } from './tripPhotoSwipe';
 
+const COLLAPSED_PHOTO_COUNT = 9;
+
 export function TripGallery({ galleryId }: { galleryId: string }) {
+    return <TripGalleryContent key={galleryId} galleryId={galleryId} />;
+}
+
+function TripGalleryContent({ galleryId }: { galleryId: string }) {
     const { manifest, photos } = useTripStory();
     const elementId = `trip-gallery-${useId().replaceAll(':', '')}`;
     const galleryRef = useRef<HTMLDivElement>(null);
@@ -13,9 +19,9 @@ export function TripGallery({ galleryId }: { galleryId: string }) {
         if (!galleryRef.current) return;
         const lightbox = createTripPhotoLightbox(galleryRef.current);
         return () => lightbox.destroy();
-    }, [galleryId, expanded]);
+    }, [photoIds, expanded]);
     if (!photoIds) throw new Error(`Unknown trip gallery: ${galleryId}`);
-    const visibleIds = expanded ? photoIds : photoIds.slice(0, 6);
+    const visibleIds = expanded ? photoIds : photoIds.slice(0, COLLAPSED_PHOTO_COUNT);
     return (
         <section aria-labelledby={elementId} className="trip-breakout my-10">
             <h2 id={elementId} className="sr-only">Photo gallery</h2>
@@ -31,7 +37,7 @@ export function TripGallery({ galleryId }: { galleryId: string }) {
                         className={`trip-gallery-photo ${single ? 'col-span-full' : lead ? 'col-span-2 sm:col-span-1' : ''} ${single ? '' : '[&>div]:aspect-[4/3] [&_img]:h-full [&_img]:object-cover'}`} />;
                 })}
             </div>
-            {photoIds.length > 6 && <button type="button" aria-expanded={expanded} onClick={() => setExpanded(value => !value)}
+            {photoIds.length > COLLAPSED_PHOTO_COUNT && <button type="button" aria-expanded={expanded} onClick={() => setExpanded(value => !value)}
                 className="mt-3 min-h-11 rounded-md border border-zinc-700 px-4 text-sm text-zinc-200 hover:bg-zinc-800">
                 {expanded ? 'Show fewer photos' : `Show all ${photoIds.length} photos`}
             </button>}

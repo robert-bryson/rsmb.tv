@@ -141,8 +141,13 @@ This removes cached responses and detached requests between tests.
 
 ## Generated Metadata
 
-The build generates `src/content/posts.json`, `src/content/blog/*.mdx`, `public/rss.xml`, `public/sitemap.xml`, and `public/og/blog/*`.
-Git ignores these files. Local development and production builds import their source content from Google.
+The build generates post metadata, MDX files, RSS, sitemap, and blog social images.
+Git ignores these generated files. Development and production builds import their source content from Google.
+
+Flight GeoJSON files use `metadata.generatedAt` to record the last changed output.
+The generators retain the file and timestamp when only the candidate timestamp changes.
+They write new output when geometry or other metadata changes.
+Repeat-build tests check all three timestamped flight outputs.
 
 The image generator reads `DEFAULT_PAGES` in `scripts/generate-og-images.js`.
 Commit static page images under `public/og/`.
