@@ -183,6 +183,10 @@ Set these required fields:
 - `photos`: Photo IDs, public URLs, dimensions, and alt text.
 
 You can also set `ridingDays`, `distanceMiles`, `motorcycle`, `regions`, and `galleries`.
+The motorcycle and region facts link to post filters.
+The registry adds these fact tags automatically. It uses lowercase text and replaces spaces with hyphens.
+For example, `Honda CB500X` adds `motorcycle` and `honda-cb500x`. `New Mexico` adds `new-mexico`.
+Explicit Sheet tags keep their original text.
 
 An optional `days` entry requires `id`, `title`, and `headingId`.
 It can also contain `date`, `trackIds`, `stopIds`, and `galleryId`.
@@ -209,7 +213,8 @@ Identify reconstructed tracks in their names.
 ```
 
 Use the ID in a focused map shortcode: `{{trip-map:track:2026-05-19-day-one}}`.
-Overview maps show the route and track distances. Focused maps show the selected track distance.
+Overview maps show all available tracks. Focused maps highlight one track.
+The facts show the authored trip distance in miles and kilometers. Maps do not calculate a displayed trip total.
 
 Example photo entry:
 
@@ -231,7 +236,8 @@ Sync also checks public asset URLs and shortcode references.
 Each route must contain valid line geometry. Declared track IDs must match route features.
 Sync checks each unique asset URL with a limited number of concurrent requests.
 Invalid drafts do not stop other development content. Production excludes drafts.
-Production stops if a published post has no MDX file.
+Production stops if a published post has no MDX file or a trip has no manifest ID.
+Post slugs must be unique. Post slugs and manifest IDs must use lowercase letters, numbers, and hyphens.
 
 For an existing manifest, apply prepared photo URLs and dimensions without changing captions or alt text:
 
@@ -239,7 +245,7 @@ For an existing manifest, apply prepared photo URLs and dimensions without chang
 npm run update-trip-manifest-assets -- ozarks-2012 --source "/path/to/rsmb.tv/trips/ozarks-2012"
 ```
 
-Review the manifest diff and publish those prepared assets before deploying it.
+Review the manifest diff. Publish the prepared assets before you deploy the manifest.
 Each derivative filename must match its photo ID and width.
 Derivative widths must be unique. Width and height must be positive integers.
 The update command stops if these checks fail. Run preparation again instead of editing the report.
@@ -291,9 +297,18 @@ Check desktop and phone widths:
 - Open each heading link.
 - Confirm that photos load with the correct dimensions and captions.
 - Confirm that each route preview shows the intended track.
-- Scroll the map into view or select **Explore interactive map**. Check its initial stop or track focus.
-- Test map styles, stop buttons, and **Show full route**.
-- Open and close inline photos and galleries with a mouse, keyboard, and touch. Verify focus returns to the opening control. Large galleries initially show six images; the full set remains available in the viewer.
+- Scroll the map into view.
+- Check its initial stop or track focus.
+- Test the basemap icon, stop buttons, and download icon.
+- On a focused map, select **Show full route** before you move the map.
+- Pan or zoom the map. Check that **Show full route** appears again.
+- Open the attribution information button. Check that it closes again.
+- Cause a route request to fail. Check that the download link remains available below the map.
+- Open and close photos with a mouse, keyboard, and touch.
+- Check that focus returns to the opening control.
+- For galleries with more than six photos, open the viewer. Check that all photos remain available.
+- Open each motorcycle and region link. Check that the result includes this trip.
+- Check the previous and next article links. Check that the return link retains the list filter.
 - Remove repeated titles and repeated facts.
 
 ## 6. Publish assets

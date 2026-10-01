@@ -27,7 +27,7 @@ export function parseTripManifest(value: unknown): TripManifest {
 
 const pending = new Map<string, Promise<TripManifest | undefined>>();
 export function loadTripManifest(id: string): Promise<TripManifest | undefined> {
-    const loader = loaders[id];
+    const loader = Object.hasOwn(loaders, id) ? loaders[id] : undefined;
     if (!loader) return Promise.resolve(undefined);
     let result = pending.get(id);
     if (!result) {
@@ -40,5 +40,5 @@ export function loadTripManifest(id: string): Promise<TripManifest | undefined> 
     return result;
 }
 export function getTripManifestIssue(id: string | undefined) {
-    return id ? issues[id] : undefined;
+    return id && Object.hasOwn(issues, id) ? issues[id] : undefined;
 }

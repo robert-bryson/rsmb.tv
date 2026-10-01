@@ -34,6 +34,7 @@ export function Layout({ children }: LayoutProps) {
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const [isScrollTopVisible, setIsScrollTopVisible] = useState(false);
   const previousScrollY = useRef(0);
+  const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     previousScrollY.current = window.scrollY;
@@ -51,7 +52,7 @@ export function Layout({ children }: LayoutProps) {
         setIsHeaderVisible(true);
         previousScrollY.current = currentScrollY;
       } else if (Math.abs(scrollDelta) >= 8) {
-        setIsHeaderVisible(scrollDelta < 0);
+        setIsHeaderVisible(scrollDelta < 0 || Boolean(headerRef.current?.contains(document.activeElement)));
         previousScrollY.current = currentScrollY;
       }
 
@@ -98,7 +99,7 @@ export function Layout({ children }: LayoutProps) {
       </a>
 
       {/* Header */}
-      <header className={`site-header sticky top-0 z-40 border-b border-zinc-800/70 bg-[#0a0a0a]/95 backdrop-blur transition-transform duration-200 ease-out motion-reduce:transition-none ${isHeaderVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+      <header ref={headerRef} onFocusCapture={() => setIsHeaderVisible(true)} className={`site-header sticky top-0 z-40 border-b border-zinc-800/70 bg-[#0a0a0a]/95 backdrop-blur transition-transform duration-200 ease-out motion-reduce:transition-none ${isHeaderVisible ? 'translate-y-0' : '-translate-y-full'}`}>
         <nav className="max-w-3xl mx-auto px-6 py-4 flex justify-between items-center">
           <Link
             to="/"

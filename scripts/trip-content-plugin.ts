@@ -19,6 +19,7 @@ export function tripContentPlugin(): Plugin {
             const posts: PostMeta[] = fs.existsSync(postsPath)
                 ? JSON.parse(fs.readFileSync(postsPath, 'utf8')) : [];
             const production = config.command === 'build';
+            validatePostReferences(posts.filter(post => !production || post.development?.published !== false), production);
             if (id === '\0virtual:post-content') {
                 const visible = posts.filter(post => !production || post.development?.published !== false);
                 const metadata = visible.map(post => {
@@ -28,7 +29,6 @@ export function tripContentPlugin(): Plugin {
                     return publicPost;
                 });
                 const loaders = visible.flatMap(post => {
-                    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(post.slug)) throw new Error(`Invalid post slug: ${post.slug}`);
                     const file = path.join(config.root, contentDir, 'blog', `${post.slug}.mdx`);
                     if (!fs.existsSync(file)) {
                         if (production) throw new Error(`Missing published post content: ${post.slug}`);
@@ -61,7 +61,7 @@ export function tripContentPlugin(): Plugin {
                 }
             }
             for (const tripId of referenced) {
-                if (tripId && !summaries[tripId] && production) throw new Error(`Missing published trip manifest: ${tripId}`);
+                if (tripId && !Object.hasOwn(summaries, tripId) && production) throw new Error(`Missing published trip manifest: ${tripId}`);
             }
             return `export const summaries = ${JSON.stringify(summaries)}; export const issues = ${JSON.stringify(issues)}; export const loaders = {${loaders.join(',')}};`;
         },
@@ -71,8 +71,9 @@ export function tripContentPlugin(): Plugin {
             const contentDir = config.mode === 'trip-test' ? 'tests/fixtures/trip-content' : 'src/content';
             const postsPath = path.join(config.root, contentDir, 'posts.json');
             const posts: PostMeta[] = fs.existsSync(postsPath) ? JSON.parse(fs.readFileSync(postsPath, 'utf8')) : [];
-            for (const post of posts.filter(post => post.development?.published !== false)) {
-                if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(post.slug)) throw new Error(`Invalid post slug: ${post.slug}`);
+            const published = posts.filter(post => post.development?.published !== false);
+            validatePostReferences(published, true);
+            for (const post of published) {
                 const manifest = post.tripId ? tripManifestSchema.parse(JSON.parse(fs.readFileSync(path.join(config.root, contentDir, 'trips', `${post.tripId}.json`), 'utf8'))) : undefined;
                 const source = articleHtml(String(template.source), post, manifest?.photos.find(photo => photo.id === manifest.hero)?.src);
                 // Both historic collections still redirect client-side to the canonical collection.
@@ -102,7 +103,7 @@ function summary(manifest: TripManifest, local: boolean) {
     const url = (value: string) => local ? value.replaceAll('https://data.rsmb.tv/trips/', '/data/trips/') : value;
     return {
         id: manifest.id, dates: manifest.dates, ridingDays: manifest.ridingDays,
-        distanceMiles: manifest.distanceMiles, series: manifest.series,
+        distanceMiles: manifest.distanceMiles, series: manifest.series, motorcycle: manifest.motorcycle, regions: manifest.regions,
         hero: { ...hero, src: url(hero.src), srcSet: hero.srcSet && url(hero.srcSet) },
     };
 }
@@ -111,6 +112,24 @@ interface PostMeta {
     slug: string; title: string; description: string; date: string; tags: string[];
     format?: string; tripId?: string; development?: { published: boolean };
 }
+function validatePostReferences(posts: PostMeta[], production: boolean) {
+    const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+    const slugs = new Set<string>();
+    for (const post of posts) {
+        if (typeof post.slug !== 'string' || !slugPattern.test(post.slug)) {
+            throw new Error(`Invalid post slug: ${post.slug}`);
+        }
+        if (slugs.has(post.slug)) throw new Error(`Duplicate post slug: ${post.slug}`);
+        slugs.add(post.slug);
+        if (post.tripId !== undefined && (typeof post.tripId !== 'string' || !slugPattern.test(post.tripId))) {
+            throw new Error(`Invalid trip ID for post ${post.slug}: ${post.tripId}`);
+        }
+        if (production && post.format === 'trip' && !post.tripId) {
+            throw new Error(`Missing trip ID for published post: ${post.slug}`);
+        }
+    }
+}
+
 function escapeHtml(value: string) { return value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;'); }
 export function articleHtml(template: string, post: PostMeta, hero?: string) {
     const url = `https://rsmb.tv/${post.format === 'trip' ? 'trips' : 'blog'}/${post.slug}`;

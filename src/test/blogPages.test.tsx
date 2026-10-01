@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import { screen, within } from '@testing-library/react';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { render, screen, within } from '@testing-library/react';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { renderWithRouter } from './helpers/router';
 
 const testPosts = vi.hoisted(() => [
@@ -134,6 +134,31 @@ describe('Posts page', () => {
 });
 
 describe('BlogPost tag navigation', () => {
+    it('selects immediate older and newer posts within the writing collection', () => {
+        renderWithRouter(<Routes><Route path="/blog/:slug" element={<BlogPost collection="blog" />} /></Routes>, { route: '/blog/weather-records' });
+        const navigation = within(screen.getByRole('navigation', { name: 'Post navigation' }));
+        expect(navigation.getByRole('link', { name: /Previous post React Routing/ })).toHaveAttribute('href', '/blog/react-routing');
+        expect(navigation.getByRole('link', { name: /Next post Mapping Boring Data/ })).toHaveAttribute('href', '/blog/mapping-boring-data');
+        expect(navigation.queryByRole('link', { name: /Coastal Loop/ })).not.toBeInTheDocument();
+    });
+
+    it('preserves fragments, search parameters, and return filters on canonical redirects', () => {
+        function Probe() {
+            const location = useLocation();
+            return <output data-testid="redirect">{JSON.stringify(location)}</output>;
+        }
+        const state = { from: '/posts?type=writing&tag=Maps' };
+        render(<MemoryRouter initialEntries={[{ pathname: '/trips/mapping-boring-data', search: '?source=link', hash: '#section', state }]}>
+            <Probe />
+            <Routes>
+                <Route path="/trips/:slug" element={<BlogPost collection="trips" />} />
+                <Route path="/blog/:slug" element={<BlogPost collection="blog" />} />
+            </Routes>
+        </MemoryRouter>);
+        expect(JSON.parse(screen.getByTestId('redirect').textContent!)).toMatchObject({ pathname: '/blog/mapping-boring-data', search: '?source=link', hash: '#section', state });
+        expect(screen.getByRole('link', { name: 'Back to posts' })).toHaveAttribute('href', state.from);
+    });
+
     it('links post tags back to the filtered posts index', () => {
         renderWithRouter(
             <Routes>

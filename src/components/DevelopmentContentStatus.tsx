@@ -12,37 +12,50 @@ export function DevelopmentContentStatus({ post, compact = false }: DevelopmentC
     const ready = development.contentAvailable
         && (post.format !== 'trip' || development.manifestAvailable)
         && development.issues.length === 0;
+    const panelColors = development.published
+        ? 'border-emerald-800 bg-emerald-950/40'
+        : 'border-amber-800 bg-amber-950/40';
+    const headingColor = development.published ? 'text-emerald-300' : 'text-amber-300';
+    const linkColors = development.published
+        ? 'text-emerald-300 hover:text-emerald-200'
+        : 'text-amber-300 hover:text-amber-200';
 
     if (compact) {
+        const badgeColors = development.published
+            ? 'border-emerald-800 bg-emerald-950 text-emerald-300'
+            : ready
+                ? 'border-amber-800 bg-amber-950 text-amber-300'
+                : 'border-zinc-800 bg-zinc-900/40 text-zinc-400';
+
         return (
-            <span className={`inline-flex border px-2 py-0.5 text-xs font-medium ${development.published ? 'border-emerald-800 bg-emerald-950 text-emerald-300' : 'border-amber-800 bg-amber-950 text-amber-300'}`}>
+            <span className={`inline-flex border px-2 py-0.5 text-xs font-medium ${badgeColors}`}>
                 DEV · {development.published ? 'Published' : 'Draft'} · {ready ? 'Ready' : 'Incomplete'}
             </span>
         );
     }
 
     return (
-        <aside className="mb-8 border border-amber-800 bg-amber-950/40 p-4 text-sm text-zinc-300" aria-label="Development metadata">
-            <h2 className="font-semibold text-amber-300">Development metadata</h2>
+        <aside className={`mb-8 border p-4 text-sm text-zinc-300 ${panelColors}`} aria-label="Development metadata">
+            <h2 className={`font-semibold ${headingColor}`}>Development metadata</h2>
             <dl className="mt-3 grid gap-x-6 gap-y-1 sm:grid-cols-[max-content_1fr]">
                 <dt className="text-zinc-500">Publication</dt>
                 <dd>{development.published ? 'Published' : 'Unpublished draft'}</dd>
                 <dt className="text-zinc-500">Source</dt>
                 <dd>
                     {development.sheetUrl ? (
-                        <a className="text-amber-300 underline hover:text-amber-200" href={development.sheetUrl} target="_blank" rel="noreferrer">Google Sheet</a>
+                        <a className={`underline ${linkColors}`} href={development.sheetUrl} target="_blank" rel="noreferrer">Google Sheet</a>
                     ) : 'Google Sheet unavailable'}
                 </dd>
                 <dt className="text-zinc-500">Google Doc</dt>
                 <dd>
                     {development.documentUrl ? (
-                        <a className="text-amber-300 underline hover:text-amber-200" href={development.documentUrl} target="_blank" rel="noreferrer">Open document</a>
+                        <a className={`underline ${linkColors}`} href={development.documentUrl} target="_blank" rel="noreferrer">Open document</a>
                     ) : 'Missing or unavailable'}
                 </dd>
                 <dt className="text-zinc-500">Drive folder</dt>
                 <dd>
                     {development.driveFolderUrl ? (
-                        <a className="text-amber-300 underline hover:text-amber-200" href={development.driveFolderUrl} target="_blank" rel="noreferrer">Open folder</a>
+                        <a className={`underline ${linkColors}`} href={development.driveFolderUrl} target="_blank" rel="noreferrer">Open folder</a>
                     ) : 'Link not configured'}
                 </dd>
                 {post.format === 'trip' && (

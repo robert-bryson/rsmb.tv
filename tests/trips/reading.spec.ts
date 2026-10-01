@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import sharp from 'sharp';
 
 async function assets(page: Page) {
     await page.route('**/test-trip/**', async route => {
@@ -145,6 +146,7 @@ test('failed route and photo requests retain surrounding content', async ({ page
     await page.goto('/trips/coastal-test');
     await page.locator('[data-trip-map]').first().scrollIntoViewIfNeeded();
     await expect(page.getByRole('button', { name: 'Retry route', exact: true })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Download route (GeoJSON)' })).toBeVisible();
     await page.getByText('An inline photograph closes the story.').scrollIntoViewIfNeeded();
     await expect(page.getByText('Photo unavailable')).toBeVisible();
     await expect(page.getByText('A view from stop 4.')).toBeVisible();
@@ -161,4 +163,36 @@ test('return navigation preserves the list filter and header focus stays visible
     const logo = page.getByRole('link', { name: 'rsmb', exact: true });
     await logo.focus();
     await expect.poll(async () => (await logo.boundingBox())?.y ?? -1).toBeGreaterThanOrEqual(0);
+});
+
+
+test('map actions appear on the map and attribution starts collapsed', async ({ page }) => {
+    const tile = await sharp({ create: { width: 256, height: 256, channels: 3, background: '#999' } }).png().toBuffer();
+    await page.route('https://tile.openstreetmap.org/**', route => route.fulfill({
+        contentType: 'image/png',
+        body: tile,
+    }));
+    await page.route('https://demotiles.maplibre.org/**', route => route.fulfill({ body: '' }));
+    await page.goto('/trips/coastal-test');
+    await page.locator('[data-trip-map]').first().scrollIntoViewIfNeeded();
+    const map = page.locator('.maplibregl-map').first();
+    const download = map.getByRole('link', { name: 'Download route (GeoJSON)' });
+    await expect(download).toBeVisible();
+    await expect(download).toHaveAttribute('href', /route.geojson$/);
+    await expect(page.getByRole('combobox', { name: 'Map style' })).toHaveCount(0);
+    const reset = map.getByRole('button', { name: 'Show full route' });
+    // The fixture starts at a stop, so the full-route action must be available.
+    await expect(reset).toBeVisible();
+    await reset.click();
+    await expect(reset).toBeHidden();
+    const attribution = map.locator('.maplibregl-ctrl-attrib');
+    await expect(attribution).not.toHaveClass(/maplibregl-compact-show/);
+    await map.getByLabel('Toggle attribution').click();
+    await expect(attribution).toHaveClass(/maplibregl-compact-show/);
+    await map.getByLabel('Toggle attribution').click();
+    await expect(attribution).not.toHaveClass(/maplibregl-compact-show/);
+    await map.getByRole('button', { name: 'Zoom in', exact: true }).click();
+    await expect(reset).toBeVisible();
+    await reset.click();
+    await expect(reset).toBeHidden();
 });

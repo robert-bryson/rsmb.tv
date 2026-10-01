@@ -87,6 +87,24 @@ describe('Layout', () => {
         expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'smooth' });
     });
 
+    it('keeps focused header navigation visible during downward scrolling', async () => {
+        renderLayout('/posts');
+        const header = screen.getByRole('banner');
+        act(() => {
+            Object.defineProperty(window, 'scrollY', { configurable: true, value: 600 });
+            fireEvent.scroll(window);
+        });
+        await waitFor(() => expect(header).toHaveClass('-translate-y-full'));
+        act(() => screen.getByRole('link', { name: 'rsmb' }).focus());
+        expect(header).toHaveClass('translate-y-0');
+        act(() => {
+            Object.defineProperty(window, 'scrollY', { configurable: true, value: 700 });
+            fireEvent.scroll(window);
+        });
+        await waitFor(() => expect(screen.getByRole('button', { name: 'Scroll to top' })).toBeInTheDocument());
+        expect(header).toHaveClass('translate-y-0');
+    });
+
     it('omits header and footer chrome for fullscreen map pages', () => {
         renderLayout('/projects/flights/map');
 

@@ -13,9 +13,9 @@ const manifest: TripManifest = {
     id: 'coastal-loop',
     dates: { start: '2024-05-01', end: '2024-05-03' },
     ridingDays: 3,
-    distanceMiles: 642,
-    motorcycle: 'Honda VFR',
-    regions: ['Oregon', 'California'],
+    distanceMiles: 642.6,
+    motorcycle: 'Honda CB500X',
+    regions: ['Oregon', 'Idaho'],
     hero: 'hero',
     route: { geoJson: '/data/trips/coastal-loop.geojson' },
     stops: [],
@@ -55,12 +55,14 @@ describe('trip story primitives', () => {
         expect(screen.getByText('May 1–3, 2024')).toBeInTheDocument();
         expect(screen.getByText('Riding days')).toBeInTheDocument();
         expect(screen.getByText('3')).toBeInTheDocument();
-        expect(screen.getByText('Total miles')).toBeInTheDocument();
-        expect(screen.getByText('642')).toBeInTheDocument();
-        expect(screen.getByText('Honda VFR')).toBeInTheDocument();
+        expect(screen.getByText('Distance')).toBeInTheDocument();
+        expect(screen.getByText('643 mi · 1,034 km')).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: 'Motorcycle' })).toHaveAttribute('href', '/posts?tag=motorcycle');
+        expect(screen.getByRole('link', { name: 'Honda CB500X' })).toHaveAttribute('href', '/posts?tag=honda-cb500x');
         expect(screen.getByText('Region')).toBeInTheDocument();
         expect(screen.queryByText('Route')).not.toBeInTheDocument();
-        expect(screen.getByText('Oregon · California')).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: 'Oregon' })).toHaveAttribute('href', '/posts?tag=oregon');
+        expect(screen.getByRole('link', { name: 'Idaho' })).toHaveAttribute('href', '/posts?tag=idaho');
     });
 
     it('omits optional trip facts when the manifest does not provide them', () => {
@@ -76,7 +78,7 @@ describe('trip story primitives', () => {
 
         expect(screen.getByText('May 1–3, 2024')).toBeInTheDocument();
         expect(screen.queryByText('Riding days')).not.toBeInTheDocument();
-        expect(screen.queryByText('Total miles')).not.toBeInTheDocument();
+        expect(screen.queryByText('Distance')).not.toBeInTheDocument();
         expect(screen.queryByText('Motorcycle')).not.toBeInTheDocument();
         expect(screen.queryByText('Region')).not.toBeInTheDocument();
     });

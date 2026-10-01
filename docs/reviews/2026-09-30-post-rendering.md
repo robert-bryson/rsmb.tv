@@ -1,5 +1,7 @@
 # Post rendering review — 2026-09-30
 
+For later corrections, use the [pending changes review](2026-10-01-pending-changes.md).
+
 This report records the checks on 2026-09-30. Its test counts and validation limits are historical.
 Use the [trip implementation report](2026-10-01-trip-report-implementation.md) for the later schema and route checks.
 

@@ -1,6 +1,8 @@
 # Open work
 
 This file contains incomplete work. Use Git history for completed work.
+Complete publication blockers before you publish the affected content.
+Use the [review index](docs/README.md) for dated findings and test results.
 
 ## Publication blockers
 
@@ -10,9 +12,11 @@ The manifest supports local preview. The public route and a sample photo returne
 
 - [ ] Publish the processed Boise photos and route files. Confirm that each manifest URL returns HTTP 200.
 - [ ] Verify the recorded track dates. The source filenames do not agree with all dates in the story.
-- [ ] Add the missing return route from Panther Creek to Seattle, if a source track is available.
+- [ ] Find the source track from Panther Creek to Seattle. Add its manifest reference only after route preparation includes that track.
 - [ ] Replace the unknown distances and repeated day numbers in the Google Doc.
-- [ ] Verify the total distance, riding days, stops, and photo captions before publication.
+- [ ] Verify the reported 1,516 miles, six riding days, stops, and photo captions before publication.
+- [ ] Identify reconstructed tracks in public content before publication. Keep the current manifest names until the content review.
+- [ ] Compare the story references with the renamed `camp-1` and `camp-2` stops.
 - [ ] Keep the Sheet `published` value `false` until the publication checks pass.
 
 ### Temperature record data
@@ -29,9 +33,15 @@ The historical signal is not ready for publication.
 ## Automated checks
 
 - [ ] Test Flights map keyboard controls and camera URL synchronization with Playwright.
-- [ ] Test successful interactive trip maps and basemap rendering in WebKit on a host with system browser dependencies.
+- [ ] Test interactive trip maps in WebKit on a host with the required browser libraries. Check all three map styles.
 - [ ] Test list scroll restoration with browser Back and the article return link after delayed content loads.
-- [ ] Test successful trip map rendering with fixed tile responses. Check route pixels, stop selection, and each map style.
+- [ ] Extend the fixed-tile browser test. Check route pixels, stop selection, and each map style.
+
+## Build and maintenance
+
+- [ ] Reduce the large visualization chunks. Preserve the passing article JavaScript budgets.
+- [ ] Check Tailwind source-map output. Confirm that production error locations match source files.
+- [ ] Split document conversion, shortcode handling, and publication checks in `scripts/sync-blogs.js`. Retain the compilation tests.
 
 ## Trip release tasks
 

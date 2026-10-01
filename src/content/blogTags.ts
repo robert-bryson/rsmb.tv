@@ -2,6 +2,10 @@ import type { BlogPostMeta } from './posts';
 
 type TaggedPost = Pick<BlogPostMeta, 'tags'>;
 
+export function tripFactTag(value: string): string {
+    return value.trim().toLowerCase().replace(/\s+/g, '-');
+}
+
 export function getAllBlogTags(posts: TaggedPost[]): string[] {
     return Array.from(new Set(posts.flatMap((post) => post.tags))).sort((firstTag, secondTag) =>
         firstTag.localeCompare(secondTag),

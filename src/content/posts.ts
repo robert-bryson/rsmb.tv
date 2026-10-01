@@ -8,6 +8,8 @@
 
 import { metadata, mdxLoaders } from 'virtual:post-content';
 import { lazy, type ComponentType, type LazyExoticComponent } from 'react';
+import { getTripSummary } from '../features/trips/tripSummaries';
+import { tripFactTag } from './blogTags';
 
 export type BlogPostFormat = 'post' | 'trip';
 
@@ -69,8 +71,14 @@ function postComponentLoader(slug: string): BlogPost['loadComponent'] {
 
 const posts: BlogPost[] = postsMeta.map((meta) => {
     const loadComponent = postComponentLoader(meta.slug);
+    const trip = meta.format === 'trip' ? getTripSummary(meta.tripId) : undefined;
+    const factTags = [
+        ...(trip?.motorcycle ? ['motorcycle', trip.motorcycle] : []),
+        ...(trip?.regions ?? []),
+    ].map(tripFactTag).filter(Boolean);
     return {
         ...meta,
+        tags: Array.from(new Set([...meta.tags, ...factTags])),
         loadComponent,
         Component: lazy(loadComponent),
     };

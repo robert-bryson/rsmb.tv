@@ -4,7 +4,7 @@
         "start": "2024-05-11",
         "end": "2024-05-19"
     },
-    "ridingDays": 5,
+    "ridingDays": 6,
     "distanceMiles": 1516,
     "motorcycle": "Honda CB500X",
     "regions": [
@@ -31,12 +31,12 @@
             },
             {
                 "id": "2024-05-17-boise-hells-canyon-campsite-reconstructed",
-                "name": "Boise to Hells Canyon campsite (reconstructed)",
+                "name": "Boise to Wallowa Mountains",
                 "date": "2024-05-17"
             },
             {
                 "id": "2024-05-18-campsite-panther-creek-reconstructed",
-                "name": "Hells Canyon campsite to Panther Creek (reconstructed)",
+                "name": "Wallowas to Panther Creek",
                 "date": "2024-05-18"
             }
         ]
@@ -52,8 +52,8 @@
             "date": "2024-05-11"
         },
         {
-            "id": "campsite-1",
-            "name": "First Campsite",
+            "id": "camp-1",
+            "name": "Bandit Camp 1",
             "coordinates": [
                 -119.0695,
                 45.2092
@@ -70,8 +70,8 @@
             "date": "2024-05-13"
         },
         {
-            "id": "campsite-2",
-            "name": "Second Campsite",
+            "id": "camp-2",
+            "name": "Bandit Camp 2",
             "coordinates": [
                 -116.9923,
                 44.9727

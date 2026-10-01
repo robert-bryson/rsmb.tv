@@ -1,5 +1,26 @@
 import { expect, test } from '@playwright/test';
 
+test('article links and imported text use the site purple on hover', async ({ page }) => {
+    await page.goto('/tests/e2e/fixtures/post.html');
+    const siteLink = page.getByRole('link', { name: 'Site link', exact: true });
+    await siteLink.hover();
+    await expect(siteLink).toHaveCSS('color', 'oklch(0.702 0.183 293.541)');
+    const hoverColor = await siteLink.evaluate(node => getComputedStyle(node).color);
+
+    for (const name of ['Plain article link', 'Imported article link']) {
+        const link = page.getByRole('link', { name, exact: true });
+        const restingColor = await link.evaluate(node => getComputedStyle(node).color);
+        await link.hover();
+        await expect(link).toHaveCSS('color', hoverColor);
+        await expect(link.locator('..')).toHaveCSS('text-decoration-line', 'underline');
+        if (name === 'Imported article link') {
+            await expect(link.locator('span')).toHaveCSS('color', hoverColor);
+        }
+        await siteLink.hover();
+        await expect(link).toHaveCSS('color', restingColor);
+    }
+});
+
 for (const width of [390, 1000]) {
     test(`subtitles keep paragraph semantics and secondary styling at ${width}px`, async ({ page }) => {
         await page.setViewportSize({ width, height: 900 });

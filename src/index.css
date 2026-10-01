@@ -53,7 +53,7 @@ button {
   margin-bottom: 1rem;
 }
 
-:is(h1, h2, h3, h4, h5, h6) + .blog-subtitle {
+:is(h1, h2, h3, h4, h5, h6)+.blog-subtitle {
   margin-top: -0.5rem;
 }
 
@@ -65,6 +65,15 @@ button {
 
 .prose a:hover {
   color: #c4b5fd;
+}
+
+/* Imported HTML links do not use the MDX component classes. */
+#trip-story-body a[href]:not([class]):hover {
+  color: var(--color-violet-400, #a78bfa) !important;
+}
+
+#trip-story-body a[href]:not([class]):hover * {
+  color: inherit !important;
 }
 
 mark {
@@ -168,18 +177,49 @@ u {
   transform: translateX(-50%);
 }
 
-[data-trip-facts-slot]:not(:empty) { display: flow-root; padding-top: 2rem; }
-[data-trip-facts-slot] > dl { margin-block: 0 1.5rem; }
-[data-trip-facts-slot]:not(:empty) + [data-trip-map-viewport] > figure { margin-top: 0; }
-
-.trip-hero-gallery { width: min(88rem, calc(100vw - 2rem)); }
-.trip-hero .image-caption-frame { width: 100%; aspect-ratio: 2 / 1; }
-.trip-hero .image-caption-frame > a { display: block; height: 100%; }
-@media (max-width: 639px) {
-  .trip-hero .image-caption-frame { aspect-ratio: 4 / 3; }
+[data-trip-facts-slot]:not(:empty) {
+  display: flow-root;
+  padding-top: 2rem;
 }
-.trip-hero .image-caption-frame img { height: 100%; object-fit: cover; object-position: center bottom; }
-.site-header:focus-within { translate: 0; transform: translateY(0); }
+
+[data-trip-facts-slot]>dl {
+  margin-block: 0 1.5rem;
+}
+
+[data-trip-facts-slot]:not(:empty)+[data-trip-map-viewport]>figure {
+  margin-top: 0;
+}
+
+.trip-hero-gallery {
+  width: min(88rem, calc(100vw - 2rem));
+}
+
+.trip-hero .image-caption-frame {
+  width: 100%;
+  aspect-ratio: 2 / 1;
+}
+
+.trip-hero .image-caption-frame>a {
+  display: block;
+  height: 100%;
+}
+
+@media (max-width: 639px) {
+  .trip-hero .image-caption-frame {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+.trip-hero .image-caption-frame img {
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+}
+
+.site-header:focus-within {
+  translate: 0;
+  transform: translateY(0);
+}
 
 .image-caption-figure {
   position: relative;
@@ -325,4 +365,53 @@ u {
 
 .trip-basemap-control-icon::after {
   top: 5px;
+}
+
+.trip-route-actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.trip-route-actions button {
+  display: inline-flex;
+  min-height: 44px;
+  min-width: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 4px;
+  padding: 0 12px;
+  background: #fff;
+  color: #333;
+  box-shadow: 0 0 0 2px rgb(0 0 0 / 10%);
+  font: 13px/1.4 sans-serif;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.trip-route-actions button[hidden] {
+  display: none;
+}
+
+.trip-route-download a:hover,
+.trip-route-actions button:hover {
+  background: #f2f2f2;
+}
+
+.trip-route-download a:focus-visible,
+.trip-route-actions button:focus-visible {
+  outline: 2px solid #7c3aed;
+  outline-offset: 2px;
+}
+
+.trip-route-download a {
+  display: flex;
+  width: 29px;
+  height: 29px;
+  align-items: center;
+  justify-content: center;
+  border-radius: inherit;
+  color: #333;
+  text-decoration: none;
 }

@@ -9,6 +9,7 @@ import type { TripManifest } from '../features/trips/types';
 const mapMocks = vi.hoisted(() => ({
     addControl: vi.fn(),
     easeTo: vi.fn(),
+    fitBounds: vi.fn(),
     getSource: vi.fn(),
     getMinZoom: vi.fn(() => 0),
     getZoom: vi.fn(() => 7),
@@ -17,9 +18,12 @@ const mapMocks = vi.hoisted(() => ({
         return {
             addControl: mapMocks.addControl,
             easeTo: mapMocks.easeTo,
+            fitBounds: mapMocks.fitBounds,
             getMinZoom: mapMocks.getMinZoom,
             getSource: mapMocks.getSource,
             getZoom: mapMocks.getZoom,
+            isMoving: () => false,
+            stop: vi.fn(),
             off: mapMocks.off,
             once: mapMocks.once,
             on: mapMocks.on,
@@ -67,9 +71,54 @@ afterEach(() => {
     clearTripRouteCache();
     vi.unstubAllGlobals();
     vi.clearAllMocks();
+    mapMocks.once.mockImplementation((_event: string, listener: () => void) => listener());
 });
 
 describe('TripRouteMap', () => {
+    it('keeps route downloads available when route loading fails', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 503 }));
+        render(<TripStoryProvider manifest={manifest}><TripRouteMap /></TripStoryProvider>);
+        await screen.findByText('Route request failed with 503');
+        expect(screen.getByRole('link', { name: 'Download route (GeoJSON)' })).toHaveAttribute('href', manifest.route.geoJson);
+        expect(mapMocks.Map).not.toHaveBeenCalled();
+    });
+
+    it('does not paint a replacement map before its own load event', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({
+            type: 'Feature', properties: {},
+            geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
+        }) }));
+        const stops = [{ id: 'camp', name: 'Camp', coordinates: [-122.5, 46.5] as [number, number] }];
+        const { rerender } = render(<TripStoryProvider manifest={{ ...manifest, stops }}><TripRouteMap /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.setPaintProperty).toHaveBeenCalledWith('trip-stops', 'circle-radius', expect.anything()));
+        mapMocks.once.mockImplementation(() => undefined);
+        mapMocks.setPaintProperty.mockClear();
+        mapMocks.once.mockClear();
+        rerender(<TripStoryProvider manifest={{ ...manifest, stops, route: { geoJson: '/second.geojson' } }}><TripRouteMap /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledTimes(2));
+        fireEvent.mouseEnter(screen.getByRole('button', { name: /Camp/ }).closest('li')!);
+        expect(mapMocks.setPaintProperty).not.toHaveBeenCalled();
+        act(() => {
+            for (const [event, listener] of mapMocks.once.mock.calls) if (event === 'load') listener();
+        });
+        expect(mapMocks.setPaintProperty).toHaveBeenCalledWith('trip-stops', 'circle-radius', expect.anything());
+    });
+
+    it('discards map errors when a different route loads', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({
+            type: 'Feature', properties: {},
+            geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
+        }) }));
+        const { rerender } = render(<TripStoryProvider manifest={manifest}><TripRouteMap /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        const fail = mapMocks.on.mock.calls.find(([event]) => event === 'error')?.[1];
+        act(() => fail());
+        expect(screen.getByText(/The map could not load/)).toBeInTheDocument();
+        rerender(<TripStoryProvider manifest={{ ...manifest, route: { geoJson: '/second.geojson' } }}><TripRouteMap /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledTimes(2));
+        expect(screen.queryByText(/The map could not load/)).not.toBeInTheDocument();
+    });
+
     it('rejects route geometry without usable coordinates', async () => {
         vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
             ok: true,
@@ -110,25 +159,6 @@ describe('TripRouteMap', () => {
 
         expect(await screen.findByText('Route data must contain valid LineString geometry.'))
             .toBeInTheDocument();
-    });
-
-    it('calculates distance from geometry when source metadata is negative', async () => {
-        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
-            ok: true,
-            json: async () => ({
-                type: 'Feature',
-                properties: { distanceKilometers: -10 },
-                geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
-            }),
-        }));
-
-        render(
-            <TripStoryProvider manifest={manifest}>
-                <TripRouteMap />
-            </TripStoryProvider>,
-        );
-
-        expect(await screen.findByText(/^Available route:/)).toHaveTextContent(/^Available route: \d+ mi \/ \d+\.\d km$/);
     });
 
     it('clears a stale route error when the manifest changes', async () => {
@@ -215,7 +245,6 @@ describe('TripRouteMap', () => {
             'text-color': '#09090b',
             'text-opacity': 1,
         });
-        expect(screen.getByText(/^Return:/)).toHaveTextContent(/mi \/ .*km/);
     });
 
     it('renders the combined overview as one uniformly styled route', async () => {
@@ -255,6 +284,51 @@ describe('TripRouteMap', () => {
             expect.objectContaining({ id: 'trip-route-odd' }),
         ]));
         expect(mapMocks.setZoom).toHaveBeenCalledWith(6);
+    });
+
+    it('shows the on-map reset after movement and hides it after fitting the full route', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true,
+            json: async () => ({
+                type: 'Feature', properties: {},
+                geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
+            }),
+        }));
+        render(<TripStoryProvider manifest={manifest}><TripRouteMap /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        expect(screen.queryByRole('combobox', { name: 'Map style' })).not.toBeInTheDocument();
+
+        const control = mapMocks.addControl.mock.calls
+            .map(([control]) => control)
+            .find(control => control?.constructor.name === 'RouteActionsControl');
+        const map = mapMocks.Map.mock.results[0].value;
+        const element = control.onAdd(map);
+        const reset = element.querySelector('button');
+        const downloadControl = mapMocks.addControl.mock.calls
+            .map(([control]) => control)
+            .find(control => control?.constructor.name === 'DownloadRouteControl');
+        const download = downloadControl.onAdd().querySelector('a');
+        expect(reset.hidden).toBe(true);
+        expect(download).toHaveAccessibleName('Download route (GeoJSON)');
+        expect(download).toHaveAttribute('href', manifest.route.geoJson);
+        expect(download).toHaveAttribute('download');
+        expect(download.querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
+
+        const move = mapMocks.on.mock.calls.find(([event]) => event === 'move')?.[1];
+        act(() => move());
+        expect(reset.hidden).toBe(false);
+        mapMocks.once.mockImplementationOnce(() => undefined);
+        fireEvent.click(reset);
+        expect(mapMocks.fitBounds).toHaveBeenCalledWith(expect.anything(), {
+            padding: 40, maxZoom: 11, bearing: 0, pitch: 0, duration: 300,
+        });
+        const moveEnd = mapMocks.once.mock.calls.find(([event]) => event === 'moveend')?.[1];
+        act(() => moveEnd?.());
+        expect(reset.hidden).toBe(true);
+        act(() => move());
+        expect(reset.hidden).toBe(false);
+        control.onRemove();
+        expect(mapMocks.off).toHaveBeenCalledWith('move', move);
     });
 
     it('switches basemaps without rebuilding the map', async () => {
@@ -373,6 +447,9 @@ describe('TripRouteMap', () => {
         );
 
         await waitFor(() => expect(mapMocks.Map).toHaveBeenCalled());
+        const resetControl = mapMocks.addControl.mock.calls.map(([control]) => control)
+            .find(control => control?.constructor.name === 'RouteActionsControl');
+        expect(resetControl.onAdd(mapMocks.Map.mock.results[0].value).querySelector('button').hidden).toBe(false);
         expect(mapMocks.setZoom).not.toHaveBeenCalled();
         expect(mapMocks.easeTo).toHaveBeenCalledWith({ center: [-122.5, 46.5], zoom: 9 });
     });

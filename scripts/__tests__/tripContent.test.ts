@@ -6,7 +6,7 @@ import type { ResolvedConfig } from 'vite';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { articleHtml, tripContentPlugin } from '../trip-content-plugin';
 import { updateManifestAssets } from '../update-trip-manifest-assets.js';
-import { tripManifestSchema } from '../../shared/tripManifestSchema';
+import { tripManifestSchema, type TripManifest } from '../../shared/tripManifestSchema';
 import { isRouteGeoJson } from '../../shared/routeGeometry';
 import manifest from '../../tests/fixtures/trip-content/trips/coastal-test.json';
 
@@ -15,21 +15,53 @@ afterEach(() => {
     for (const root of temporaryRoots.splice(0)) fs.rmSync(root, { recursive: true, force: true });
 });
 
-function loadPostRegistry(posts: unknown[], command: 'build' | 'serve', watchedFiles: string[] = []) {
+function loadPostRegistry(posts: unknown[], command: 'build' | 'serve', watchedFiles: string[] = [], moduleId = 'virtual:post-content', manifests: TripManifest[] = []) {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'trip-registry-test-'));
     temporaryRoots.push(root);
     const directory = path.join(root, 'src/content');
     fs.mkdirSync(directory, { recursive: true });
     fs.writeFileSync(path.join(directory, 'posts.json'), JSON.stringify(posts));
+    fs.mkdirSync(path.join(directory, 'trips'));
+    for (const trip of manifests) fs.writeFileSync(path.join(directory, 'trips', `${trip.id}.json`), JSON.stringify(trip));
     const plugin = tripContentPlugin();
     const configure = plugin.configResolved;
     const load = plugin.load;
     if (typeof configure !== 'function' || typeof load !== 'function') throw new Error('Expected function hooks.');
     configure.call({} as never, { root, mode: 'production', command } as ResolvedConfig);
-    return load.call({ addWatchFile: vi.fn((file: string) => watchedFiles.push(file)) } as never, '\0virtual:post-content');
+    return load.call({ addWatchFile: vi.fn((file: string) => watchedFiles.push(file)) } as never, `\0${moduleId}`);
 }
 
 describe('trip publication contracts', () => {
+    it('includes fact tags in summaries without embedding the full manifest', () => {
+        const trip = tripManifestSchema.parse({ ...manifest, motorcycle: 'Honda CB500X', regions: ['New Mexico'] });
+        const output = loadPostRegistry([{ slug: 'coast', format: 'trip', tripId: trip.id }], 'build', [], 'virtual:trip-content', [trip]);
+        expect(output).toContain('"motorcycle":"Honda CB500X"');
+        expect(output).toContain('"regions":["New Mexico"]');
+        expect(output).not.toContain('"stops"');
+        expect(output).not.toContain('"photos"');
+    });
+
+    it('does not treat inherited object properties as published manifests', () => {
+        expect(() => loadPostRegistry([{ slug: 'coast', format: 'trip', tripId: 'constructor' }], 'build', [], 'virtual:trip-content')).toThrow(/Missing published trip manifest: constructor/);
+    });
+
+    it.each(['../outside', '/absolute', 'trip/name', '', null, 42])('rejects unsafe trip IDs before registry or file generation: %j', tripId => {
+        expect(() => loadPostRegistry([{ slug: 'trip', format: 'trip', tripId }], 'build')).toThrow(/Invalid trip ID/);
+    });
+
+    it('rejects published trips without a manifest reference', () => {
+        expect(() => loadPostRegistry([{ slug: 'trip', format: 'trip' }], 'build')).toThrow(/Missing trip ID/);
+        expect(loadPostRegistry([{ slug: 'trip', format: 'trip' }], 'serve')).toContain('trip');
+    });
+
+    it('rejects duplicate slugs before creating ambiguous routes', () => {
+        expect(() => loadPostRegistry([{ slug: 'duplicate' }, { slug: 'duplicate' }], 'serve')).toThrow(/Duplicate post slug/);
+    });
+
+    it('excludes invalid unpublished trip references from a production registry', () => {
+        expect(loadPostRegistry([{ slug: 'draft', tripId: '../private', development: { published: false } }], 'build')).not.toContain('private');
+    });
+
     it('fails production when a published post has no MDX body', () => {
         expect(() => loadPostRegistry([{ slug: 'missing-body' }], 'build')).toThrow(/Missing published post content: missing-body/);
     });

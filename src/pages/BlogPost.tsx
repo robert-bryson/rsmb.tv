@@ -8,6 +8,7 @@ import { getAllPosts, getPostBySlug } from '../content/posts';
 import { PostHeadingProvider } from '../blog/LinkedHeading';
 import { mdxComponents } from '../blog/MdxComponents';
 import { PostTableOfContents } from '../blog/PostTableOfContents';
+import { PostNavigation } from '../blog/PostNavigation';
 import { formatDate } from '../utils/formatDate';
 import { AUTHOR_PERSON, SITE_URL, absoluteUrl } from '../utils/siteMetadata';
 import { loadTripManifest, getTripManifestIssue } from '../features/trips/tripManifests';
@@ -44,7 +45,11 @@ export function BlogPost({ collection }: BlogPostProps) {
     const defaultReturn = isTrip ? '/posts?type=trips' : '/posts?type=writing';
     const from = (location.state as { from?: string } | null)?.from;
     const returnTo = typeof from === 'string' && /^\/posts(?:\?|$)/.test(from) ? from : defaultReturn;
-    const related = getAllPosts().filter(candidate => candidate.slug !== post?.slug && (isTrip ? candidate.format === 'trip' : candidate.format !== 'trip'));
+    const collectionPosts = getAllPosts().filter(candidate => isTrip ? candidate.format === 'trip' : candidate.format !== 'trip');
+    const postIndex = collectionPosts.findIndex(candidate => candidate.slug === post?.slug);
+    // Posts are newest first: the previous post is older, and the next is newer.
+    const previousPost = postIndex >= 0 ? collectionPosts[postIndex + 1] : undefined;
+    const nextPost = postIndex > 0 ? collectionPosts[postIndex - 1] : undefined;
     const series = post?.series ?? summary?.series;
     const seriesPosts = series ? getAllPosts().filter(candidate => (candidate.series ?? getTripSummary(candidate.tripId)?.series)?.id === series.id)
         .sort((a, b) => (a.series?.order ?? getTripSummary(a.tripId)?.series?.order ?? 0) - (b.series?.order ?? getTripSummary(b.tripId)?.series?.order ?? 0)) : [];
@@ -100,7 +105,7 @@ export function BlogPost({ collection }: BlogPostProps) {
 
     const canonicalCollection = isTrip ? 'trips' : 'blog';
     if (collection !== canonicalCollection) {
-        return <Navigate to={`/${canonicalCollection}/${post.slug}`} replace />;
+        return <Navigate to={`/${canonicalCollection}/${post.slug}${location.search}${location.hash}`} state={location.state} replace />;
     }
 
     if (isTrip && tripId && loaded?.id !== tripId) {
@@ -136,7 +141,7 @@ export function BlogPost({ collection }: BlogPostProps) {
                     </Suspense>
                 )}
             </div>
-            {isTrip && <TripStoryDetails post={post} contentRef={contentRef} />}
+            {isTrip && <TripStoryDetails contentRef={contentRef} />}
         </PostHeadingProvider>
     );
 
@@ -176,9 +181,8 @@ export function BlogPost({ collection }: BlogPostProps) {
                 </>
             )}
             <footer className="mt-12 space-y-5 border-t border-zinc-800 pt-6 text-sm">
-                <Link to={returnTo} state={{ restoreScroll: true }} className="inline-flex min-h-11 items-center text-violet-300">← Back to posts</Link>
                 {seriesPosts.length > 1 && <nav aria-label={series?.title}><p className="mb-2 font-medium">{series?.title}</p><ol className="space-y-2">{seriesPosts.map(part => <li key={part.slug}><Link aria-current={part.slug === post.slug ? 'page' : undefined} className="text-violet-300 underline" to={`/${part.format === 'trip' ? 'trips' : 'blog'}/${part.slug}`}  state={{ from: returnTo }}>{part.title}</Link></li>)}</ol></nav>}
-                {related.length > 0 && <nav aria-label="More posts"><p className="mb-2 font-medium text-zinc-300">{isTrip ? 'More trip reports' : 'Keep reading'}</p><ul className="space-y-2">{related.slice(0, 2).map(next => <li key={next.slug}><Link className="inline-flex min-h-11 items-center text-violet-300 underline" to={`/${next.format === 'trip' ? 'trips' : 'blog'}/${next.slug}`} state={{ from: returnTo }}>{next.title}</Link></li>)}</ul></nav>}
+                <PostNavigation previous={previousPost} next={nextPost} returnTo={returnTo} />
             </footer>
         </article>
     );

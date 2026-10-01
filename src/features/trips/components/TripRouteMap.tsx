@@ -1,11 +1,11 @@
-import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
+import { useEffect, useEffectEvent, useRef, useState } from 'react';
 import type { Feature, FeatureCollection, GeoJsonProperties } from 'geojson';
 import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useTripRoute } from '../useTripRoute';
-import { routeCoordinates, routeFeatures, trackRoute, featureDistanceKilometers, formatDistance } from '../routeGeometry';
+import { routeCoordinates, trackRoute } from '../routeGeometry';
 import { useTripStory } from '../TripStoryContext';
 
 type TripRouteMapProps = { stopId?: string; trackId?: string };
@@ -111,6 +111,85 @@ class BasemapControl implements maplibregl.IControl {
     }
 }
 
+// Seed compact mode before source metadata arrives so MapLibre does not expand it.
+class CollapsedAttributionControl extends maplibregl.AttributionControl {
+    onAdd(map: maplibregl.Map) {
+        const container = super.onAdd(map);
+        container.classList.add('maplibregl-compact');
+        container.classList.remove('maplibregl-compact-show');
+        container.removeAttribute('open');
+        return container;
+    }
+}
+
+class DownloadRouteControl implements maplibregl.IControl {
+    private readonly container = document.createElement('div');
+
+    constructor(routeUrl: string) {
+        this.container.className = 'maplibregl-ctrl maplibregl-ctrl-group trip-route-download';
+        const download = document.createElement('a');
+        download.href = routeUrl;
+        download.download = '';
+        download.target = '_blank';
+        download.rel = 'noreferrer';
+        download.title = 'Download route (GeoJSON)';
+        download.setAttribute('aria-label', download.title);
+        download.innerHTML = '<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m-5-5 5 5 5-5M5 16v5h14v-5" /></svg>';
+        this.container.append(download);
+    }
+
+    onAdd() {
+        return this.container;
+    }
+
+    onRemove() {
+        this.container.remove();
+    }
+}
+
+class RouteActionsControl implements maplibregl.IControl {
+    private readonly container = document.createElement('div');
+    private readonly reset = document.createElement('button');
+    private map?: maplibregl.Map;
+
+    constructor(onReset: () => void, initiallyFocused: boolean) {
+        this.container.className = 'maplibregl-ctrl trip-route-actions';
+        this.reset.type = 'button';
+        this.reset.textContent = 'Show full route';
+        this.reset.hidden = !initiallyFocused;
+        this.reset.addEventListener('click', () => {
+            this.map?.stop();
+            this.map?.once('moveend', this.hideReset);
+            onReset();
+        });
+
+        this.container.append(this.reset);
+    }
+
+    private showReset = () => { this.reset.hidden = false; };
+    private hideReset = () => { this.reset.hidden = true; };
+    private watchMovement = () => {
+        // Let the initial stop-focus animation finish before watching for changes.
+        if (this.map?.isMoving()) this.map.once('moveend', this.watchMovement);
+        else this.map?.on('move', this.showReset);
+    };
+
+    onAdd(map: maplibregl.Map) {
+        this.map = map;
+        map.once('load', this.watchMovement);
+        return this.container;
+    }
+
+    onRemove() {
+        this.map?.off('load', this.watchMovement);
+        this.map?.off('move', this.showReset);
+        this.map?.off('moveend', this.hideReset);
+        this.map?.off('moveend', this.watchMovement);
+        this.container.remove();
+        this.map = undefined;
+    }
+}
+
 export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
     const { manifest } = useTripStory();
     const reducedMotion = useReducedMotion();
@@ -122,12 +201,12 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
     const [hoveredStopId, setHoveredStopId] = useState<string | null>(null);
     const routeUrl = manifest.route.geoJson;
     const { route, error: routeError, retry } = useTripRoute(routeUrl);
-    const [mapError, setMapError] = useState('');
+    const [mapError, setMapError] = useState<{ url: string; message: string }>();
     const [selectedStopId, setSelectedStopId] = useState(stopId);
-    const [ready, setReady] = useState(0);
+    const [loadedMap, setLoadedMap] = useState<maplibregl.Map | null>(null);
     const initialStopId = useRef(stopId);
     const missingTrack = route && trackId && routeCoordinates(trackRoute(route, trackId)).length === 0;
-    const error = routeError || mapError || (missingTrack ? `Route does not contain track "${trackId}".` : '');
+    const error = routeError || (mapError?.url === routeUrl ? mapError.message : '') || (missingTrack ? `Route does not contain track "${trackId}".` : '');
     const focusStop = (id: string) => {
         setSelectedStopId(id);
         const stop = manifest.stops.find(candidate => candidate.id === id);
@@ -135,6 +214,13 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
     };
 
     const handleMapStop = useEffectEvent(focusStop);
+    const showFullRoute = useEffectEvent(() => {
+        if (!route || !mapRef.current) return;
+        const points = routeCoordinates(route);
+        const bounds = points.reduce((bounds, point) => bounds.extend(point as [number, number]), new maplibregl.LngLatBounds());
+        mapRef.current.fitBounds(bounds, { padding: 40, maxZoom: 11, bearing: 0, pitch: 0, duration: reducedMotion ? 0 : 300 });
+        setSelectedStopId('');
+    });
     useEffect(() => {
         const stopId = initialStopId.current;
         if (!containerRef.current || !route || mapRef.current) return;
@@ -241,7 +327,8 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
         });
         basemapControl.setBasemap(basemapIdRef.current);
         map.addControl(basemapControl, 'top-right');
-        map.addControl(new maplibregl.AttributionControl({ compact: true }));
+        map.addControl(new DownloadRouteControl(routeUrl), 'top-right');
+        map.addControl(new CollapsedAttributionControl({ compact: true }));
         map.on('mouseenter', 'trip-stops', (event) => {
             const hoveredId = event.features?.[0]?.properties?.id;
             if (typeof hoveredId === 'string') setHoveredStopId(hoveredId);
@@ -255,12 +342,14 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
             });
         }
 
-        map.on('error', () => setMapError('The map could not load. You can still read the route and stops below.'));
+        map.addControl(new RouteActionsControl(() => showFullRoute(), Boolean(stopId || trackId)), 'top-left');
+
+        map.on('error', () => setMapError({ url: routeUrl, message: 'The map could not load. You can still read the stops below.' }));
         map.on('click', 'trip-stops', (event) => {
             const id = event.features?.[0]?.properties?.id;
             if (typeof id === 'string') handleMapStop(id);
         });
-        map.once('load', () => setReady(value => value + 1));
+        map.once('load', () => setLoadedMap(map));
         mapRef.current = map;
         basemapControlRef.current = basemapControl;
         return () => {
@@ -272,12 +361,12 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
 
     useEffect(() => {
         const map = mapRef.current;
-        if (!map || !ready) return;
+        if (!map || loadedMap !== map) return;
         const activeStopId = hoveredStopId ?? selectedStopId ?? stopId ?? '';
         const isActiveStop: maplibregl.ExpressionSpecification = ['==', ['get', 'id'], activeStopId];
         map.setPaintProperty('trip-stops', 'circle-color', ['case', isActiveStop, '#f59e0b', '#fafafa']);
         map.setPaintProperty('trip-stops', 'circle-radius', ['case', isActiveStop, 11, 8]);
-    }, [hoveredStopId, selectedStopId, stopId, ready]);
+    }, [hoveredStopId, selectedStopId, stopId, loadedMap]);
 
     useEffect(() => {
         const map = mapRef.current;
@@ -301,7 +390,7 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
         return () => {
             map.off('load', applyBasemap);
         };
-    }, [basemapId, ready]);
+    }, [basemapId, loadedMap]);
 
     useEffect(() => {
         const stop = manifest.stops.find((candidate) => candidate.id === stopId);
@@ -310,17 +399,6 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
     }, [manifest.stops, reducedMotion, stopId, route]);
 
     const selectedTrack = manifest.route.tracks?.find((track) => track.id === trackId);
-    const displayedRoute = useMemo(() => route && trackId ? trackRoute(route, trackId) : route, [route, trackId]);
-    const displayedDistance = useMemo(() => displayedRoute
-        ? routeFeatures(displayedRoute).reduce((total, feature) => total + featureDistanceKilometers(feature), 0)
-        : 0, [displayedRoute]);
-    const trackDistances = useMemo(() => route && !trackId
-        ? (manifest.route.tracks ?? []).map((track) => ({
-            ...track,
-            distance: routeFeatures(trackRoute(route, track.id))
-                .reduce((total, feature) => total + featureDistanceKilometers(feature), 0),
-        })).filter((track) => track.distance > 0)
-        : [], [route, trackId, manifest.route.tracks]);
     const mapAlt = selectedTrack
         ? `Map focused on ${selectedTrack.name}.`
         : manifest.route.alt ?? `Map of the route with ${manifest.stops.length} marked stops.`;
@@ -332,7 +410,7 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
                     <img src={manifest.route.staticImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
                 )}
                 {(
-                    <div className="absolute inset-0">
+                    <div className="absolute inset-0" inert={Boolean(error)} aria-hidden={Boolean(error)}>
                         <div ref={containerRef} role="region" aria-label={mapAlt} className="h-full w-full" />
                     </div>
                 )}
@@ -340,35 +418,11 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
                     <div className="absolute inset-0 grid place-items-center bg-zinc-950/80 text-sm text-zinc-400">Loading route…</div>
                 )}
                 {error && (
-                    <div className="absolute inset-0 grid place-items-center px-6 text-center text-sm text-zinc-300"><div role="status">{error}<button type="button" className="mx-auto mt-3 block min-h-11 rounded border border-zinc-600 px-4" onClick={() => { setMapError(''); retry(); }}>Retry route</button></div></div>
+                    <div className="absolute inset-0 grid place-items-center px-6 text-center text-sm text-zinc-300"><div role="status">{error}<button type="button" className="mx-auto mt-3 block min-h-11 rounded border border-zinc-600 px-4" onClick={() => { setMapError(undefined); retry(); }}>Retry route</button></div></div>
                 )}
             </div>
             <figcaption className="mt-3">
-            <div className="mb-3 flex flex-wrap items-center gap-3 text-sm text-zinc-300">
-                <label>Map style <select aria-label="Map style" value={basemapId} onChange={event => { const id = event.target.value as BasemapId; basemapIdRef.current = id; setBasemapId(id); }} className="ml-2 min-h-11 rounded border border-zinc-700 bg-zinc-900 px-3">
-                    {basemaps.map(basemap => <option key={basemap.id} value={basemap.id}>{basemap.label}</option>)}
-                </select></label>
-                <button type="button" className="min-h-11 rounded border border-zinc-700 px-3" onClick={() => {
-                    if (!route || !mapRef.current) return;
-                    const points = routeCoordinates(route);
-                    const bounds = points.reduce((bounds, point) => bounds.extend(point as [number, number]), new maplibregl.LngLatBounds());
-                    mapRef.current.fitBounds(bounds, { padding: 40, maxZoom: 11, duration: reducedMotion ? 0 : 300 });
-                    setSelectedStopId('');
-                }}>Show full route</button>
-            </div>
-                <a href={routeUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center text-sm text-violet-300 underline">Download route (GeoJSON)</a>
-                {displayedDistance > 0 && (
-                    <p className="text-sm font-medium text-zinc-300">
-                        {selectedTrack?.name ?? 'Available route'}: {formatDistance(displayedDistance)}
-                    </p>
-                )}
-                {trackDistances.length > 0 && (
-                    <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-sm text-zinc-400">
-                        {trackDistances.map((track) => (
-                            <li key={track.id}>{track.name}: {formatDistance(track.distance)}</li>
-                        ))}
-                    </ul>
-                )}
+                {error && <a href={routeUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center text-sm text-violet-300 underline">Download route (GeoJSON)</a>}
                 <ol className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-zinc-400">
                     {manifest.stops.map((stop, index) => (
                         <li

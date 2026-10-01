@@ -1,5 +1,7 @@
 # Trip report audit - 2026-10-01
 
+For later corrections, use the [pending changes review](2026-10-01-pending-changes.md).
+
 This report records the state before implementation. Its findings and measurements are historical.
 Use the [implementation report](2026-10-01-trip-report-implementation.md) for corrections, current checks, and release limits.
 

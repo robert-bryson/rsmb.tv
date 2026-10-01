@@ -1,5 +1,7 @@
 # Trip report implementation and review - 2026-10-01
 
+For later corrections, use the [pending changes review](2026-10-01-pending-changes.md).
+
 This report covers the pending trip changes and the later code review.
 The earlier [audit](2026-10-01-trip-report-audit.md) records the initial findings.
 Infrastructure and CDN assets have not been deployed.
