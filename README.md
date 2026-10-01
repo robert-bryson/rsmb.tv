@@ -1,8 +1,8 @@
 # rsmb.tv
 
-A personal website and portfolio showcasing interactive projects, with a focus on data visualization and geospatial applications.
+A personal website with software projects, data maps, writing, and motorcycle trip reports.
 
-🌐 **Live site:** [rsmb.tv](https://rsmb.tv)
+**Live site:** [rsmb.tv](https://rsmb.tv)
 
 ## Features
 
@@ -69,7 +69,9 @@ npm run dev
 | `npm run sync-temperatures` | Generate temperature record JSON for upload to the S3-backed data CDN |
 | `npm run sync-tornadoes` | Sync NOAA/NCEI tornado tracks and generated public GeoJSON |
 | `npm run prepare-trip-assets -- <trip-id> --source <directory>` | Create trip image derivatives and sanitized route data |
-| `npm run prepare-trip-assets:dev` | Rebuild local trip assets and report the output totals |
+| `npm run prepare-trip-assets:dev` | Incrementally prepare local trip assets and report the output totals |
+| `npm run update-trip-manifest-assets -- <trip-id> --source <directory>` | Apply fingerprinted photo URLs and dimensions to an existing manifest |
+| `npm run test:trips:browser` | Build synthetic production content and test trip UX and JavaScript budgets |
 | `npm run publish-trip-assets -- <trip-id> --source <directory>` | Archive trip source files and upload reviewed trip assets |
 | `npm run test:e2e` | Build flight data, start Vite, and run Playwright browser smoke tests |
 | `npm run audit` | Run `npm audit --audit-level=moderate` |
@@ -84,7 +86,9 @@ The status dashboard supports the following keys:
 - `c` clear resolved incidents
 - `↑/↓` or `j/k` scroll in detail mode
 
-Build status is source-aware: AWS Amplify deployments are shown separately from GitHub Actions, and repositories with configured workflow files use those explicit workflows instead of the generic latest repository run. Configured workflows stay visible even before their first run, and stale or unknown workflow rows are treated as attention-worthy instead of being folded into an OK summary.
+The dashboard shows AWS Amplify deployments and GitHub Actions separately.
+If a repository specifies workflows, the dashboard shows those workflows.
+A workflow stays visible before its first run. Old or unknown results require review.
 
 ## Project Structure
 
@@ -109,12 +113,18 @@ Build status is source-aware: AWS Amplify deployments are shown separately from 
 
 ## Testing Notes
 
-`npm run test:e2e` starts Vite directly on `127.0.0.1:4174` with `--strictPort`, then runs Playwright with its internal web server disabled. Set `PLAYWRIGHT_PORT` when that port is already in use. CI installs Chromium before running the browser smoke tests.
+`npm run test:e2e` starts Vite directly on `127.0.0.1:4174` with `--strictPort`, then runs Playwright with its internal web server disabled. Set `PLAYWRIGHT_PORT` when that port is already in use. CI installs Chromium and WebKit before browser tests.
 
 The post browser tests use a fixed Google Docs fixture in `tests/fixtures`.
 A compilation test compares the fixture MDX with the importer output.
 Browser tests check subtitle styles at phone and desktop widths, unique heading IDs, reload, and browser history.
 These tests do not require Google access or published trip assets.
+
+`npm run test:trips:browser` builds fixed test content for production and starts preview on port 4175.
+It checks desktop and phone layouts, photo viewer focus, failed assets, and unavailable WebGL.
+It also checks image selection, JavaScript size limits, article metadata, return links, and link colors.
+Set `PLAYWRIGHT_WEBKIT=1` to include the iPhone WebKit project. CI enables this project.
+Install the required browser system libraries before running WebKit.
 
 Run the importer and navigation tests with:
 
@@ -183,6 +193,9 @@ Maintain a Google Sheet tab named `Blog Posts` by default, with one row per post
 | `format` | No | Set to `trip` for a trip story; leave blank for a regular blog post. |
 | `trip_id` | For trips | Matches a manifest under `src/content/trips/`. |
 | `drive_folder_url` | No | Direct Google Drive folder URL shown in development metadata. |
+| `series_id` | No | Shared series ID. Use lowercase letters, numbers, and hyphens. |
+| `series_title` | With series ID | Public series title. |
+| `series_order` | With series ID | Positive integer for this post. |
 
 ### Build-Time Blog Sync
 
@@ -215,22 +228,34 @@ After an importer change, run `npm run sync-blogs:dev` to replace local generate
 
 Each post and trip page creates an "On this page" list from its headings. Each heading has a `#` link to that heading and an `↑` link back to the list. The page adds the heading ID to the URL. It uses a lowercase form of the heading text and replaces punctuation and spaces with hyphens. For example, `Day 1: Seattle to Boise` becomes `#day-1-seattle-to-boise`. If two headings have the same text, the page adds a number to the later ID, such as `#camp-notes-1`. Use short, unique heading text when possible.
 
-Trip posts may place these standalone shortcodes in the Google Doc:
+Put each trip shortcode on a separate line in the Google Doc:
 
 - `{{trip-map}}` or `{{trip-map:stop-id}}`
+- `{{trip-map:track:track-id}}`
 - `{{trip-photo:photo-id}}`
 - `{{trip-gallery:gallery-id}}`
 - `{{trip-facts}}`
 
-Copy `src/content/trips/_template.json.draft` to `<trip-id>.json`, then populate its route, stops, photo metadata, and gallery groups. Image dimensions are required to prevent layout shift. The trip header already renders the hero and facts, so `{{trip-facts}}` is only needed when those facts should be repeated later in the story.
+Copy `src/content/trips/_template.json.draft` to `<trip-id>.json`.
+Set its route, stops, photos, and galleries. Set image dimensions to prevent layout changes during loading.
+The header shows the hero photo. Trip facts appear before the first map, after the opening text.
+If there is no map, facts appear after the story body.
+Use `{{trip-facts}}` only when the story needs another copy of the facts.
 
 Trip source media uses the private Drive hierarchy in the [trip authoring guide](docs/trips/TRIP-AUTHORING-README.md). Run `npm run prepare-trip-assets -- <trip-id> --source <local-trip-directory>` to create responsive WebP photographs, sanitized GeoJSON, and a manifest metadata report. Review all output. Then run `npm run publish-trip-assets` to back up originals to private S3 and publish processed derivatives to `data.rsmb.tv/trips/<trip-id>/`. The `build-blog` command does not prepare or upload assets.
 
 Blog sync checks each published trip before it downloads the Google Doc.
-The manifest must contain valid JSON. Its `id` must match `trip_id`.
+The manifest must pass the shared schema and reference checks. Its `id` must match `trip_id`.
 Each asset URL must use `https://data.rsmb.tv/trips/<trip-id>/` and return a successful response.
-Each request has a 10-second timeout. The application validates the complete manifest schema when the manifest module loads.
-Before publication, compare manifest track IDs with the route GeoJSON. Blog sync does not perform this comparison.
+Each request has a 10-second timeout. Each unique URL is checked once with a limited number of concurrent checks.
+Every route must contain valid line geometry, including routes without declared tracks.
+Declared track IDs must match route features.
+The production build excludes draft posts and unreferenced manifests.
+It stops if a published post has no MDX file. Full manifests load when the reader opens a report.
+
+Maps start with a route preview. An interactive map loads when its section enters the viewport or the reader selects it.
+The route cache shares active requests. It retains at most eight unused or active entries unless active readers require more.
+It removes unused entries after those readers release them. A retry cancels an unused pending request.
 
 ### Amplify Content Publishing
 
@@ -242,6 +267,18 @@ Changing a Google Doc does not deploy the site by itself; it only changes the so
 4. Trigger that webhook after publishing content in Google. Options include a small Google Apps Script button/menu in the Sheet, a scheduled Apps Script check, Zapier/Make, or a private admin shortcut.
 
 The webhook should only start an Amplify build. The build itself performs the sync using Amplify environment variables, so generated posts still never pass through Git.
+
+The build writes article titles, descriptions, canonical URLs, and social images into HTML.
+Apply the Amplify rewrite rules in `infra/main.tf` to serve these files in production.
+The files contain metadata. The browser still renders the story body.
+
+## Documentation rules
+
+Use the ASD-STE100 writing rules for technical documentation.
+Use short sentences and direct instructions. Use one term for each concept.
+Retain exact code identifiers, commands, and product names.
+Keep historical measurements in dated review reports. Do not describe them as current test results.
+Keep incomplete tasks in `TODO.md`. Use Git history for completed work.
 
 ## SEO and Structured Data
 

@@ -1,0 +1,77 @@
+{
+  "id": "coastal-test",
+  "dates": {
+    "start": "2024-01-01",
+    "end": "2024-01-02"
+  },
+  "distanceMiles": 240,
+  "ridingDays": 2,
+  "hero": "photo-1",
+  "route": {
+    "geoJson": "/test-trip/route.geojson",
+    "alt": "Coastal test route"
+  },
+  "stops": [
+    {
+      "id": "start",
+      "name": "Harbor",
+      "coordinates": [
+        -122,
+        47
+      ]
+    },
+    {
+      "id": "camp",
+      "name": "Camp",
+      "coordinates": [
+        -123,
+        46
+      ],
+      "description": "A sheltered campsite."
+    }
+  ],
+  "photos": [
+    {
+      "id": "photo-1",
+      "src": "/test-trip/photo-1-1600.svg",
+      "srcSet": "/test-trip/photo-1-480.svg 480w, /test-trip/photo-1-960.svg 960w, /test-trip/photo-1-1600.svg 1600w",
+      "width": 1600,
+      "height": 1000,
+      "alt": "Coast photograph 1",
+      "caption": "A view from stop 1."
+    },
+    {
+      "id": "photo-2",
+      "src": "/test-trip/photo-2-1600.svg",
+      "srcSet": "/test-trip/photo-2-480.svg 480w, /test-trip/photo-2-960.svg 960w, /test-trip/photo-2-1600.svg 1600w",
+      "width": 1600,
+      "height": 1000,
+      "alt": "Coast photograph 2",
+      "caption": "A view from stop 2."
+    },
+    {
+      "id": "photo-3",
+      "src": "/test-trip/photo-3-1600.svg",
+      "srcSet": "/test-trip/photo-3-480.svg 480w, /test-trip/photo-3-960.svg 960w, /test-trip/photo-3-1600.svg 1600w",
+      "width": 1600,
+      "height": 1000,
+      "alt": "Coast photograph 3",
+      "caption": "A view of <harbor> & \"coast\"."
+    },
+    {
+      "id": "photo-4",
+      "src": "/test-trip/photo-4-1600.svg",
+      "srcSet": "/test-trip/photo-4-480.svg 480w, /test-trip/photo-4-960.svg 960w, /test-trip/photo-4-1600.svg 1600w",
+      "width": 1600,
+      "height": 1000,
+      "alt": "Coast photograph 4",
+      "caption": "A view from stop 4."
+    }
+  ],
+  "galleries": {
+    "coast": [
+      "photo-2",
+      "photo-3"
+    ]
+  }
+}

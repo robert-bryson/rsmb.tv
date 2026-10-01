@@ -48,6 +48,12 @@ afterEach(() => {
 });
 
 describe('MDX links', () => {
+    it('keeps emphasized link text on the shared link color', () => {
+        const Strong = mdxComponents.strong;
+        render(<Anchor href="/posts"><Strong>Posts</Strong></Anchor>);
+        expect(screen.getByRole('link', { name: 'Posts' })).toHaveClass('[&_*]:text-inherit', 'hover:text-violet-300');
+    });
+
     it.each([
         'https://rsmb.tv/trips/ocean-shores-2024',
         'https://www.rsmb.tv/blog/example',
@@ -199,7 +205,7 @@ describe('MDX headings', () => {
 
         const navigation = await screen.findByRole('navigation', { name: 'Table of contents' });
         expect(navigation).toHaveAttribute('id', 'post-table-of-contents');
-        expect(navigation).toHaveTextContent('On this page');
+        expect(navigation).toHaveTextContent('Table of contents');
         expect(navigation).not.toHaveTextContent('(339mi. / 545km.)');
         expect(screen.getByText('(339mi. / 545km.)').tagName).toBe('P');
         expect(screen.queryByRole('heading', { name: '(339mi. / 545km.)' })).not.toBeInTheDocument();

@@ -98,7 +98,7 @@ export function Layout({ children }: LayoutProps) {
       </a>
 
       {/* Header */}
-      <header className={`sticky top-0 z-40 border-b border-zinc-800/70 bg-[#0a0a0a]/95 backdrop-blur transition-transform duration-200 ease-out motion-reduce:transition-none ${isHeaderVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+      <header className={`site-header sticky top-0 z-40 border-b border-zinc-800/70 bg-[#0a0a0a]/95 backdrop-blur transition-transform duration-200 ease-out motion-reduce:transition-none ${isHeaderVisible ? 'translate-y-0' : '-translate-y-full'}`}>
         <nav className="max-w-3xl mx-auto px-6 py-4 flex justify-between items-center">
           <Link
             to="/"

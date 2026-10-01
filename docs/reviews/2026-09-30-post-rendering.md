@@ -1,5 +1,8 @@
 # Post rendering review — 2026-09-30
 
+This report records the checks on 2026-09-30. Its test counts and validation limits are historical.
+Use the [trip implementation report](2026-10-01-trip-report-implementation.md) for the later schema and route checks.
+
 ## Scope
 
 This review covers the pending subtitle changes, the Boise manifest, generated flight data, and the related import and navigation code.

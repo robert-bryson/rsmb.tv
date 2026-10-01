@@ -1,8 +1,8 @@
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { DevelopmentContentStatus } from '../components/DevelopmentContentStatus';
 import { filterPostsByTag, getAllBlogTags } from '../content/blogTags';
 import { getAllPosts } from '../content/posts';
-import { getTripHero, getTripManifest } from '../features/trips';
+import { getTripSummary } from '../features/trips/tripSummaries';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { formatDate } from '../utils/formatDate';
@@ -27,6 +27,7 @@ function createPostsUrl(type: PostType, tag = '') {
 const filterClasses = 'rounded-md px-3 py-1.5 text-sm transition-colors';
 
 export function Posts() {
+    const location = useLocation();
     const allPosts = getAllPosts();
     const [searchParams] = useSearchParams();
     const activeType = getPostType(searchParams.get('type'));
@@ -39,7 +40,7 @@ export function Posts() {
     const posts = filterPostsByTag(postsByType, activeTag);
 
     useDocumentHead({
-        title: 'Posts | rsmb',
+        title: 'Posts',
         description,
         ogImage: absoluteUrl('/og/blog.svg'),
     });
@@ -123,20 +124,21 @@ export function Posts() {
                 <ul className="divide-y divide-zinc-800/70">
                     {posts.map((post) => {
                         const isTrip = post.format === 'trip';
-                        const manifest = isTrip ? getTripManifest(post.tripId) : undefined;
-                        const hero = manifest ? getTripHero(manifest) : undefined;
+                        const manifest = isTrip ? getTripSummary(post.tripId) : undefined;
+                        const hero = manifest?.hero;
 
                         return (
                             <li key={post.slug} className="py-6 first:pt-0">
                                 <DevelopmentContentStatus post={post} compact />
                                 <Link
                                     to={`/${isTrip ? 'trips' : 'blog'}/${post.slug}`}
+                                    state={{ from: location.pathname + location.search }}
                                     className="group flex items-start gap-5"
                                 >
                                     <div className="min-w-0 flex-1">
-                                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-zinc-500">
-                                            <time>{formatDate(post.date)}</time>
-                                            <span className="text-xs uppercase text-zinc-500">
+                                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-zinc-400">
+                                            <time dateTime={post.date}>{formatDate(post.date)}</time>
+                                            <span className="text-xs uppercase text-zinc-400">
                                                 {isTrip ? 'Trip report' : 'Writing'}
                                             </span>
                                         </div>
@@ -144,18 +146,19 @@ export function Posts() {
                                             {post.title}
                                         </h2>
                                         <p className="mt-1 text-sm leading-relaxed text-zinc-400">{post.description}</p>
+                                        {manifest && <p className="mt-2 text-xs text-zinc-300">{[manifest.distanceMiles && `${manifest.distanceMiles.toLocaleString()} miles`, manifest.ridingDays && `${manifest.ridingDays} riding days`].filter(Boolean).join(' · ')}</p>}
                                     </div>
                                     {hero && (
                                         <img
                                             src={hero.src}
                                             srcSet={hero.srcSet}
-                                            sizes="144px"
+                                            sizes="(min-width: 640px) 144px, 96px"
                                             width={hero.width}
                                             height={hero.height}
                                             alt=""
                                             loading="lazy"
                                             decoding="async"
-                                            className="hidden aspect-[4/3] w-36 shrink-0 rounded-md border border-zinc-800 object-cover sm:block"
+                                            className="aspect-[4/3] w-24 sm:w-36 shrink-0 rounded-md border border-zinc-800 object-cover"
                                         />
                                     )}
                                 </Link>

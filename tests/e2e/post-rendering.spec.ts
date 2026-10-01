@@ -15,6 +15,10 @@ for (const width of [390, 1000]) {
         await expect(toc).not.toContainText('(339mi. / 545km.)');
         await expect(toc).not.toContainText('A motorcycle trip');
         await expect(toc).not.toContainText('Notes & details');
+        if (width < 640) {
+            await expect(toc.getByRole('button', { name: 'Expand' })).toHaveAttribute('aria-expanded', 'false');
+            await toc.getByRole('button', { name: 'Expand' }).click();
+        }
         await expect(toc.getByRole('link')).toHaveCount(4);
         await expect(page.getByRole('heading', { name: '(339mi. / 545km.)' })).toHaveCount(0);
         expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);

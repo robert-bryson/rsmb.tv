@@ -28,11 +28,17 @@ The historical signal is not ready for publication.
 
 ## Automated checks
 
-- [ ] Validate the complete trip manifest schema during blog sync. Currently, the application validates the schema when the module loads.
-- [ ] Compare manifest track IDs with the published route features during publication checks.
 - [ ] Test Flights map keyboard controls and camera URL synchronization with Playwright.
-- [ ] Test trip map fallback behavior and the basemap control with Playwright.
-- [ ] Test trip gallery keyboard controls with Playwright.
+- [ ] Test successful interactive trip maps and basemap rendering in WebKit on a host with system browser dependencies.
+- [ ] Test list scroll restoration with browser Back and the article return link after delayed content loads.
+- [ ] Test successful trip map rendering with fixed tile responses. Check route pixels, stop selection, and each map style.
+
+## Trip release tasks
+
+- [ ] Review and apply the Amplify article rewrite rules. Check delivered article metadata on the production host.
+- [ ] Prepare and review published trip photos. Update manifests to use versioned filenames. Upload the files before site deployment.
+- [ ] Measure LCP, CLS, and INP under fixed test conditions. Set limits from those measurements.
+- [ ] Remove inactive map instances when their sections are far outside the viewport. Retain the route preview and selected stop.
 
 ## Project content
 

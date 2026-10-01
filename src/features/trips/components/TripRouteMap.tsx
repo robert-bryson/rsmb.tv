@@ -1,12 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
-import type { Feature, FeatureCollection, GeoJsonProperties, Geometry, LineString, MultiLineString } from 'geojson';
+import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
+import type { Feature, FeatureCollection, GeoJsonProperties } from 'geojson';
 import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
-import { useReducedMotion } from '../../flights/hooks/useReducedMotion';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
+import { useTripRoute } from '../useTripRoute';
+import { routeCoordinates, routeFeatures, trackRoute, featureDistanceKilometers, formatDistance } from '../routeGeometry';
 import { useTripStory } from '../TripStoryContext';
 
-type RouteGeoJson = Feature<LineString | MultiLineString> | FeatureCollection<LineString | MultiLineString>;
 type TripRouteMapProps = { stopId?: string; trackId?: string };
 type BasemapId = 'muted' | 'street' | 'terrain';
 type BasemapPaintProperty = 'raster-saturation' | 'raster-brightness-min' | 'raster-brightness-max' | 'raster-contrast';
@@ -26,7 +27,7 @@ const basemaps: Array<{
             paint: {
                 'raster-saturation': -1,
                 'raster-brightness-min': 0.05,
-                'raster-brightness-max': 0.42,
+                'raster-brightness-max': 0.65,
                 'raster-contrast': 0.15,
             },
         },
@@ -110,94 +111,6 @@ class BasemapControl implements maplibregl.IControl {
     }
 }
 
-function routeCoordinates(route: RouteGeoJson) {
-    const features = route.type === 'FeatureCollection' ? route.features : [route];
-    return features.flatMap((feature) => feature.geometry.type === 'LineString'
-        ? feature.geometry.coordinates
-        : feature.geometry.coordinates.flat());
-}
-
-function routeFeatures(route: RouteGeoJson) {
-    return route.type === 'FeatureCollection' ? route.features : [route];
-}
-
-function trackRoute(route: RouteGeoJson, trackId: string): RouteGeoJson {
-    return {
-        type: 'FeatureCollection',
-        features: routeFeatures(route).filter((feature) => feature.properties?.trackId === trackId),
-    };
-}
-
-function lineDistanceKilometers(coordinates: number[][]) {
-    const earthRadiusKilometers = 6371.0088;
-    const radians = (degrees: number) => degrees * Math.PI / 180;
-    let distance = 0;
-
-    for (let index = 1; index < coordinates.length; index++) {
-        const [previousLongitude, previousLatitude] = coordinates[index - 1];
-        const [longitude, latitude] = coordinates[index];
-        const latitudeDelta = radians(latitude - previousLatitude);
-        const longitudeDelta = radians(longitude - previousLongitude);
-        const haversine = Math.sin(latitudeDelta / 2) ** 2
-            + Math.cos(radians(previousLatitude)) * Math.cos(radians(latitude))
-            * Math.sin(longitudeDelta / 2) ** 2;
-        distance += earthRadiusKilometers * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
-    }
-
-    return distance;
-}
-
-function featureDistanceKilometers(feature: Feature<LineString | MultiLineString>) {
-    const sourceDistance = feature.properties?.distanceKilometers;
-    if (typeof sourceDistance === 'number' && Number.isFinite(sourceDistance) && sourceDistance >= 0) {
-        return sourceDistance;
-    }
-    const lines = feature.geometry.type === 'LineString'
-        ? [feature.geometry.coordinates]
-        : feature.geometry.coordinates;
-    return lines.reduce((total, coordinates) => total + lineDistanceKilometers(coordinates), 0);
-}
-
-function formatDistance(distanceKilometers: number) {
-    const distanceMiles = distanceKilometers * 0.6213711922;
-    return `${Math.round(distanceMiles)} mi / ${distanceKilometers.toFixed(1)} km`;
-}
-
-function isRoutePosition(value: unknown): boolean {
-    if (!Array.isArray(value) || value.length < 2) return false;
-    const [longitude, latitude] = value;
-    return Number.isFinite(longitude) && Number.isFinite(latitude)
-        && longitude >= -180 && longitude <= 180
-        && latitude >= -90 && latitude <= 90;
-}
-
-function hasValidRouteGeometry(geometry: Geometry | undefined): geometry is LineString | MultiLineString {
-    if (geometry?.type === 'LineString') {
-        return geometry.coordinates.length >= 2 && geometry.coordinates.every(isRoutePosition);
-    }
-    if (geometry?.type === 'MultiLineString') {
-        return geometry.coordinates.length > 0
-            && geometry.coordinates.every((line) => line.length >= 2 && line.every(isRoutePosition));
-    }
-    return false;
-}
-
-function isRouteFeature(value: unknown): value is Feature<LineString | MultiLineString> {
-    if (!value || typeof value !== 'object') return false;
-    const feature = value as { type?: string; geometry?: Geometry };
-    return feature.type === 'Feature' && hasValidRouteGeometry(feature.geometry);
-}
-
-function isRouteGeoJson(value: unknown): value is RouteGeoJson {
-    if (!value || typeof value !== 'object') return false;
-    const geoJson = value as { type?: string; features?: unknown };
-    if (geoJson.type === 'Feature') return isRouteFeature(geoJson);
-    return geoJson.type === 'FeatureCollection'
-        && Array.isArray(geoJson.features)
-        && geoJson.features.length > 0
-        && geoJson.features.every(isRouteFeature);
-}
-
 export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
     const { manifest } = useTripStory();
     const reducedMotion = useReducedMotion();
@@ -208,39 +121,22 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
     const basemapIdRef = useRef(basemapId);
     const [hoveredStopId, setHoveredStopId] = useState<string | null>(null);
     const routeUrl = manifest.route.geoJson;
-    const [routeState, setRouteState] = useState<{
-        url: string;
-        route: RouteGeoJson | null;
-        error: string;
-    }>({ url: routeUrl, route: null, error: '' });
-    const route = routeState.url === routeUrl ? routeState.route : null;
-    const routeError = routeState.url === routeUrl ? routeState.error : '';
+    const { route, error: routeError, retry } = useTripRoute(routeUrl);
+    const [mapError, setMapError] = useState('');
+    const [selectedStopId, setSelectedStopId] = useState(stopId);
+    const [ready, setReady] = useState(0);
+    const initialStopId = useRef(stopId);
     const missingTrack = route && trackId && routeCoordinates(trackRoute(route, trackId)).length === 0;
-    const error = routeError || (missingTrack ? `Route does not contain track "${trackId}".` : '');
+    const error = routeError || mapError || (missingTrack ? `Route does not contain track "${trackId}".` : '');
+    const focusStop = (id: string) => {
+        setSelectedStopId(id);
+        const stop = manifest.stops.find(candidate => candidate.id === id);
+        if (stop && mapRef.current) mapRef.current[reducedMotion ? 'jumpTo' : 'easeTo']({ center: stop.coordinates, zoom: 9 });
+    };
 
+    const handleMapStop = useEffectEvent(focusStop);
     useEffect(() => {
-        const controller = new AbortController();
-        fetch(routeUrl, { signal: controller.signal })
-            .then((response) => {
-                if (!response.ok) throw new Error(`Route request failed with ${response.status}`);
-                return response.json();
-            })
-            .then((value: unknown) => {
-                if (!isRouteGeoJson(value)) throw new Error('Route data must contain valid LineString geometry.');
-                setRouteState({ url: routeUrl, route: value, error: '' });
-            })
-            .catch((reason: unknown) => {
-                if (reason instanceof DOMException && reason.name === 'AbortError') return;
-                setRouteState({
-                    url: routeUrl,
-                    route: null,
-                    error: reason instanceof Error ? reason.message : 'The route could not be loaded.',
-                });
-            });
-        return () => controller.abort();
-    }, [routeUrl]);
-
-    useEffect(() => {
+        const stopId = initialStopId.current;
         if (!containerRef.current || !route || mapRef.current) return;
 
         const focusedRoute = trackId ? trackRoute(route, trackId) : route;
@@ -353,12 +249,18 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
         map.on('mouseleave', 'trip-stops', () => {
             setHoveredStopId(null);
         });
-        if (!stopId && !trackId) {
+        if (!trackId) {
             map.once('load', () => {
-                map.setZoom(Math.max(map.getMinZoom(), map.getZoom() - 1));
+                if (!stopId) map.setZoom(Math.max(map.getMinZoom(), map.getZoom() - 1));
             });
         }
 
+        map.on('error', () => setMapError('The map could not load. You can still read the route and stops below.'));
+        map.on('click', 'trip-stops', (event) => {
+            const id = event.features?.[0]?.properties?.id;
+            if (typeof id === 'string') handleMapStop(id);
+        });
+        map.once('load', () => setReady(value => value + 1));
         mapRef.current = map;
         basemapControlRef.current = basemapControl;
         return () => {
@@ -366,16 +268,16 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
             mapRef.current = null;
             basemapControlRef.current = null;
         };
-    }, [manifest.stops, route, routeUrl, stopId, trackId]);
+    }, [manifest.stops, route, routeUrl, trackId]);
 
     useEffect(() => {
         const map = mapRef.current;
-        if (!map) return;
-        const activeStopId = hoveredStopId ?? stopId ?? '';
+        if (!map || !ready) return;
+        const activeStopId = hoveredStopId ?? selectedStopId ?? stopId ?? '';
         const isActiveStop: maplibregl.ExpressionSpecification = ['==', ['get', 'id'], activeStopId];
         map.setPaintProperty('trip-stops', 'circle-color', ['case', isActiveStop, '#f59e0b', '#fafafa']);
         map.setPaintProperty('trip-stops', 'circle-radius', ['case', isActiveStop, 11, 8]);
-    }, [hoveredStopId, stopId]);
+    }, [hoveredStopId, selectedStopId, stopId, ready]);
 
     useEffect(() => {
         const map = mapRef.current;
@@ -399,26 +301,26 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
         return () => {
             map.off('load', applyBasemap);
         };
-    }, [basemapId]);
+    }, [basemapId, ready]);
 
     useEffect(() => {
         const stop = manifest.stops.find((candidate) => candidate.id === stopId);
         if (!stop || !mapRef.current) return;
         mapRef.current[reducedMotion ? 'jumpTo' : 'easeTo']({ center: stop.coordinates, zoom: 9 });
-    }, [manifest.stops, reducedMotion, stopId]);
+    }, [manifest.stops, reducedMotion, stopId, route]);
 
     const selectedTrack = manifest.route.tracks?.find((track) => track.id === trackId);
-    const displayedRoute = route && trackId ? trackRoute(route, trackId) : route;
-    const displayedDistance = displayedRoute
+    const displayedRoute = useMemo(() => route && trackId ? trackRoute(route, trackId) : route, [route, trackId]);
+    const displayedDistance = useMemo(() => displayedRoute
         ? routeFeatures(displayedRoute).reduce((total, feature) => total + featureDistanceKilometers(feature), 0)
-        : 0;
-    const trackDistances = route && !trackId
+        : 0, [displayedRoute]);
+    const trackDistances = useMemo(() => route && !trackId
         ? (manifest.route.tracks ?? []).map((track) => ({
             ...track,
             distance: routeFeatures(trackRoute(route, track.id))
                 .reduce((total, feature) => total + featureDistanceKilometers(feature), 0),
         })).filter((track) => track.distance > 0)
-        : [];
+        : [], [route, trackId, manifest.route.tracks]);
     const mapAlt = selectedTrack
         ? `Map focused on ${selectedTrack.name}.`
         : manifest.route.alt ?? `Map of the route with ${manifest.stops.length} marked stops.`;
@@ -429,7 +331,7 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
                 {manifest.route.staticImage && (
                     <img src={manifest.route.staticImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
                 )}
-                {!error && (
+                {(
                     <div className="absolute inset-0">
                         <div ref={containerRef} role="region" aria-label={mapAlt} className="h-full w-full" />
                     </div>
@@ -437,14 +339,27 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
                 {!route && !error && (
                     <div className="absolute inset-0 grid place-items-center bg-zinc-950/80 text-sm text-zinc-400">Loading route…</div>
                 )}
-                {error && !manifest.route.staticImage && (
-                    <div className="absolute inset-0 grid place-items-center px-6 text-center text-sm text-zinc-400">{error}</div>
+                {error && (
+                    <div className="absolute inset-0 grid place-items-center px-6 text-center text-sm text-zinc-300"><div role="status">{error}<button type="button" className="mx-auto mt-3 block min-h-11 rounded border border-zinc-600 px-4" onClick={() => { setMapError(''); retry(); }}>Retry route</button></div></div>
                 )}
             </div>
             <figcaption className="mt-3">
+            <div className="mb-3 flex flex-wrap items-center gap-3 text-sm text-zinc-300">
+                <label>Map style <select aria-label="Map style" value={basemapId} onChange={event => { const id = event.target.value as BasemapId; basemapIdRef.current = id; setBasemapId(id); }} className="ml-2 min-h-11 rounded border border-zinc-700 bg-zinc-900 px-3">
+                    {basemaps.map(basemap => <option key={basemap.id} value={basemap.id}>{basemap.label}</option>)}
+                </select></label>
+                <button type="button" className="min-h-11 rounded border border-zinc-700 px-3" onClick={() => {
+                    if (!route || !mapRef.current) return;
+                    const points = routeCoordinates(route);
+                    const bounds = points.reduce((bounds, point) => bounds.extend(point as [number, number]), new maplibregl.LngLatBounds());
+                    mapRef.current.fitBounds(bounds, { padding: 40, maxZoom: 11, duration: reducedMotion ? 0 : 300 });
+                    setSelectedStopId('');
+                }}>Show full route</button>
+            </div>
+                <a href={routeUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center text-sm text-violet-300 underline">Download route (GeoJSON)</a>
                 {displayedDistance > 0 && (
                     <p className="text-sm font-medium text-zinc-300">
-                        {selectedTrack?.name ?? 'Overall route'}: {formatDistance(displayedDistance)}
+                        {selectedTrack?.name ?? 'Available route'}: {formatDistance(displayedDistance)}
                     </p>
                 )}
                 {trackDistances.length > 0 && (
@@ -460,12 +375,15 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
                             key={stop.id}
                             onMouseEnter={() => setHoveredStopId(stop.id)}
                             onMouseLeave={() => setHoveredStopId(null)}
-                            className={`rounded px-1.5 py-0.5 transition-colors ${stop.id === (hoveredStopId ?? stopId) ? 'bg-amber-400 text-zinc-950' : 'hover:text-zinc-200'}`}
+                            className={`rounded px-1.5 py-0.5 transition-colors ${stop.id === (hoveredStopId ?? selectedStopId ?? stopId) ? 'bg-amber-400 text-zinc-950' : 'hover:text-zinc-200'}`}
                         >
-                            <span className={`mr-1 ${stop.id === (hoveredStopId ?? stopId) ? 'text-zinc-800' : 'text-zinc-500'}`}>
+                            <button type="button" aria-pressed={stop.id === (selectedStopId ?? stopId)} onClick={() => focusStop(stop.id)} onFocus={() => setHoveredStopId(stop.id)} onBlur={() => setHoveredStopId(null)} className="min-h-11 text-left">
+                            <span className={`mr-1 ${stop.id === (hoveredStopId ?? selectedStopId ?? stopId) ? 'text-zinc-800' : 'text-zinc-400'}`}>
                                 {index + 1}.
                             </span>
-                            {stop.name}
+                            {stop.name}{index === 0 ? ' · Start' : index === manifest.stops.length - 1 ? ' · Finish' : ''}
+                            </button>
+                            {stop.id === (selectedStopId ?? stopId) && <p className="text-xs">{[stop.date, stop.description].filter(Boolean).join(' · ')}</p>}
                         </li>
                     ))}
                 </ol>

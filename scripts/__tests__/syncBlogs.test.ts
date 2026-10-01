@@ -559,6 +559,12 @@ describe('envFlag', () => {
     });
 });
 
+const validTripManifest = {
+    id: 'coastal-loop', dates: { start: '2026-04-01', end: '2026-04-02' }, hero: 'hero',
+    route: { geoJson: 'https://data.rsmb.tv/trips/coastal-loop/geo/route.geojson' }, stops: [],
+    photos: [{ id: 'hero', src: 'https://data.rsmb.tv/trips/coastal-loop/photos/hero.webp', width: 1600, height: 1000, alt: 'A coast road.' }],
+};
+
 describe('syncBlogPosts', () => {
     it('rejects trip posts without a matching readable manifest', () => {
         const repoRoot = createTempDir();
@@ -584,7 +590,7 @@ describe('syncBlogPosts', () => {
         fs.writeFileSync(path.join(manifestDir, 'coastal-loop.json'), JSON.stringify({ id: 'wrong-trip' }));
         expect(() => validateTripManifestFiles([post], { repoRoot })).toThrow(/must contain id "coastal-loop"/);
 
-        fs.writeFileSync(path.join(manifestDir, 'coastal-loop.json'), JSON.stringify({ id: 'coastal-loop' }));
+        fs.writeFileSync(path.join(manifestDir, 'coastal-loop.json'), JSON.stringify(validTripManifest));
         expect(() => validateTripManifestFiles([post], { repoRoot })).not.toThrow();
     });
 
@@ -626,6 +632,23 @@ describe('syncBlogPosts', () => {
         );
     });
 
+    it('deduplicates shared trip assets and checks declared tracks against the route', async () => {
+        const post = { slug: 'coastal-loop', format: 'trip', tripId: 'coastal-loop' };
+        const url = 'https://data.rsmb.tv/trips/coastal-loop/geo/route.geojson';
+        const manifests = new Map([['coastal-loop', {
+            id: 'coastal-loop', route: { geoJson: url, tracks: [{ id: 'outbound', name: 'Outbound' }] }, photos: [],
+        }]]);
+        const geometry = { type: 'LineString', coordinates: [[0, 0], [1, 1]] };
+        let trackId = 'outbound';
+        const fetchImpl = vi.fn(async (_url: FetchInput, init?: RequestInit) => response(
+            init?.method === 'HEAD' ? '' : JSON.stringify({ type: 'Feature', geometry, properties: { trackId } }),
+        ));
+        await expect(validateTripAssetUrls([post, { ...post, slug: 'part-two' }], manifests, { fetchImpl })).resolves.toBeUndefined();
+        expect(fetchImpl).toHaveBeenCalledTimes(2);
+        trackId = 'different';
+        await expect(validateTripAssetUrls([post], manifests, { fetchImpl })).rejects.toThrow(/missing track "outbound"/);
+    });
+
     it('falls back to GET when a host rejects the HEAD probe', async () => {
         const post = {
             slug: 'coastal-loop',
@@ -647,11 +670,13 @@ describe('syncBlogPosts', () => {
         ]]);
         const fallbackResponse = response('', 200, 'OK');
         const cancel = vi.spyOn(fallbackResponse.body!, 'cancel');
-        const fetchImpl = vi.fn(async (_url: FetchInput, init?: RequestInit) => (
-            init?.method === 'HEAD'
-                ? response('', 405, 'Method Not Allowed')
-            : fallbackResponse
-        ));
+        const fetchImpl = vi.fn(async (_url: FetchInput, init?: RequestInit) => {
+            if (init?.method === 'HEAD') return response('', 405, 'Method Not Allowed');
+            if (init?.headers) return fallbackResponse;
+            return response(JSON.stringify({ type: 'Feature', properties: {}, geometry: {
+                type: 'LineString', coordinates: [[0, 0], [1, 1]],
+            } }));
+        });
 
         await expect(validateTripAssetUrls([post], manifests, { fetchImpl })).resolves.toBeUndefined();
         expect(fetchImpl).toHaveBeenCalledWith(
@@ -680,10 +705,26 @@ describe('syncBlogPosts', () => {
         const fetchImpl = vi.fn(async (_url: FetchInput, init?: RequestInit) => (
             init?.method === 'HEAD'
                 ? response('', 403, 'Forbidden')
-                : response('', 200, 'OK')
+                : response(JSON.stringify({ type: 'Feature', properties: {}, geometry: {
+                    type: 'LineString', coordinates: [[0, 0], [1, 1]],
+                } }), 200, 'OK')
         ));
 
         await expect(validateTripAssetUrls([post], manifests, { fetchImpl })).resolves.toBeUndefined();
+    });
+
+    it.each([
+        '<html>Not a route</html>',
+        JSON.stringify({ type: 'Feature', properties: {}, geometry: { type: 'LineString' } }),
+    ])('rejects invalid route bodies even without declared tracks: %s', async body => {
+        const post = { slug: 'coastal-loop', format: 'trip', tripId: 'coastal-loop' };
+        const url = 'https://data.rsmb.tv/trips/coastal-loop/geo/route.geojson';
+        const manifests = new Map([['coastal-loop', { id: 'coastal-loop', route: { geoJson: url }, photos: [] }]]);
+        const fetchImpl = vi.fn(async (_url: FetchInput, init?: RequestInit) => response(
+            init?.method === 'HEAD' ? '' : body,
+        ));
+        await expect(validateTripAssetUrls([post], manifests, { fetchImpl })).rejects.toThrow(/could not be checked/);
+        expect(fetchImpl).toHaveBeenCalledTimes(2);
     });
 
     it.each([
@@ -747,18 +788,25 @@ describe('syncBlogPosts', () => {
         const manifestDir = path.join(repoRoot, 'src/content/trips');
         fs.mkdirSync(manifestDir, { recursive: true });
         fs.writeFileSync(path.join(manifestDir, 'coastal-loop.json'), JSON.stringify({
+            ...validTripManifest,
             id: 'coastal-loop',
             stops: [],
-            photos: [],
             galleries: {},
         }));
         const csv = [
             'slug,title,date,description,tags,google_doc_id,published,format,trip_id',
             'coastal-loop,Coastal Loop,2026-04-30,A motorcycle trip,travel,doc_123,true,trip,coastal-loop',
         ].join('\n');
-        const fetchImpl = createFetch(csv, {
+        const contentFetch = createFetch(csv, {
             doc_123: '<html><body><p>{{trip-photo:missing-photo}}</p></body></html>',
         });
+        const fetchImpl = async (url: FetchInput, init?: RequestInit) => {
+            if (init?.method === 'HEAD') return response('', 200, 'OK');
+            if (String(url).endsWith('.geojson')) return response(JSON.stringify({
+                type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: [[0, 0], [1, 1]] },
+            }));
+            return contentFetch(url);
+        };
 
         await expect(syncBlogPosts({ sheetId: 'sheet_123', repoRoot, today, fetchImpl }))
             .rejects.toThrow(/unknown photo "missing-photo"/);
@@ -770,6 +818,7 @@ describe('syncBlogPosts', () => {
         const manifestDir = path.join(repoRoot, 'src/content/trips');
         fs.mkdirSync(manifestDir, { recursive: true });
         fs.writeFileSync(path.join(manifestDir, 'coastal-loop.json'), JSON.stringify({
+            ...validTripManifest,
             id: 'coastal-loop',
             route: {
                 geoJson: 'https://data.rsmb.tv/trips/coastal-loop/geo/route.geojson',
@@ -876,7 +925,7 @@ describe('syncBlogPosts', () => {
         fs.writeFileSync(path.join(blogDir, 'future-trip.mdx'), '# Obsolete draft body\n');
         const csv = [
             'slug,title,date,description,tags,google_doc_id,published,format,trip_id,drive_folder_url',
-            'ready-post,Ready Post,2026-04-30,Ready summary,meta,doc_123,true,,,https://drive.google.com/drive/folders/folder_123',
+            'ready-post,Ready Post,2026-04-30,Ready summary,meta,doc_123,true,,,https://drive.google.com/drive/u/0/folders/folder_123',
             'future-trip,Future Trip,,,,,false,trip,future-trip,',
         ].join('\n');
         const fetchImpl = createFetch(csv, {
@@ -897,7 +946,7 @@ describe('syncBlogPosts', () => {
         expect(readyPost.development).toMatchObject({
             sheetUrl: 'https://docs.google.com/spreadsheets/d/sheet_123/edit',
             documentUrl: 'https://docs.google.com/document/d/doc_123/edit',
-            driveFolderUrl: 'https://drive.google.com/drive/folders/folder_123',
+            driveFolderUrl: 'https://drive.google.com/drive/u/0/folders/folder_123',
         });
         const draft = posts.find((post: { slug: string }) => post.slug === 'future-trip');
         expect(draft.development).toMatchObject({

@@ -77,9 +77,11 @@ Put each shortcode on its own line. Use lowercase letters, numbers, and hyphens 
 | `{{trip-map:track:track-id}}` | Selected track with the other tracks dimmed |
 | `{{trip-photo:photo-id}}` | One photo and its caption |
 | `{{trip-gallery:gallery-id}}` | Gallery from the manifest |
-| `{{trip-facts}}` | A second copy of the trip facts |
+| `{{trip-facts}}` | Another copy of the trip facts |
 
-The header already contains trip facts. Use `{{trip-facts}}` only if the story needs a second copy.
+Trip facts appear before the first map, after the opening text.
+If the story has no map, facts appear after the story body.
+Use `{{trip-facts}}` only if the story needs another copy.
 Each referenced ID must exist in the manifest.
 Each track ID must also match a `trackId` in the route GeoJSON.
 
@@ -97,12 +99,14 @@ npm run prepare-trip-assets -- \
 ```
 
 The command prepares photos and routes. It writes `asset-metadata.json` at the trip root.
-Add `--force` to replace existing generated files.
+It uses existing photo derivatives when the source and processing settings have not changed.
+The source bytes and processing settings determine the filename fingerprint.
+Add `--force` to regenerate an existing version.
 
 ### Photo output
 
 The command corrects orientation, removes metadata, and retains the aspect ratio.
-It creates WebP files at quality 95. It does not enlarge the source image.
+It creates WebP files at quality 84. It does not enlarge the source image.
 
 | Width | Use |
 | --- | --- |
@@ -110,10 +114,10 @@ It creates WebP files at quality 95. It does not enlarge the source image.
 | 960 px | Inline photo |
 | 1600 px | Header photo and full-screen display |
 
-A source named `Camp at Dusk.jpg` produces files such as `camp-at-dusk-480.webp`.
+A source named `Camp at Dusk.jpg` produces files such as `camp-at-dusk-012345abcdef-480.webp` (the fingerprint varies).
 Use clear, stable filenames. The command checks all photo IDs before it writes files.
 It stops if two source names produce the same photo ID.
-It removes generated WebP files that no longer have a selected source.
+It retains versioned files so published URLs remain usable. Compatibility aliases without fingerprints are also written for older manifests; stale aliases are removed. The report records file sizes and flags outputs above 100 KB at 480px, 300 KB at 960px, or 800 KB at larger widths for review.
 
 Copy the largest output width and height from `asset-metadata.json` into the manifest.
 Do not assume that each source can produce a 1600-pixel image.
@@ -179,6 +183,12 @@ Set these required fields:
 - `photos`: Photo IDs, public URLs, dimensions, and alt text.
 
 You can also set `ridingDays`, `distanceMiles`, `motorcycle`, `regions`, and `galleries`.
+
+An optional `days` entry requires `id`, `title`, and `headingId`.
+It can also contain `date`, `trackIds`, `stopIds`, and `galleryId`.
+Set `headingId` to the generated story heading ID. Referenced tracks, stops, and galleries must exist.
+An optional `series` requires `id`, `title`, and a positive integer `order`.
+If posts share a manifest, use the Sheet series columns to set each post's order.
 Use positive integer values for photo dimensions and riding days.
 Use a positive number for total distance. Count only days with motorcycle travel as riding days.
 
@@ -206,8 +216,8 @@ Example photo entry:
 ```json
 {
   "id": "camp-at-dusk",
-  "src": "https://data.rsmb.tv/trips/ozarks-2012/photos/camp-at-dusk-1600.webp",
-  "srcSet": "https://data.rsmb.tv/trips/ozarks-2012/photos/camp-at-dusk-480.webp 480w, https://data.rsmb.tv/trips/ozarks-2012/photos/camp-at-dusk-960.webp 960w, https://data.rsmb.tv/trips/ozarks-2012/photos/camp-at-dusk-1600.webp 1600w",
+  "src": "https://data.rsmb.tv/trips/ozarks-2012/photos/camp-at-dusk-012345abcdef-1600.webp",
+  "srcSet": "https://data.rsmb.tv/trips/ozarks-2012/photos/camp-at-dusk-012345abcdef-480.webp 480w, https://data.rsmb.tv/trips/ozarks-2012/photos/camp-at-dusk-012345abcdef-960.webp 960w, https://data.rsmb.tv/trips/ozarks-2012/photos/camp-at-dusk-012345abcdef-1600.webp 1600w",
   "width": 1600,
   "height": 1067,
   "alt": "A tent beside the motorcycle under a red sky.",
@@ -216,9 +226,23 @@ Example photo entry:
 }
 ```
 
-The application validates dates, coordinates, dimensions, duplicate IDs, and photo references when it loads the manifest module.
-Blog sync checks the file, trip ID, asset URLs, and shortcode references.
-It does not compare track IDs with GeoJSON features. Complete that check before publication.
+Blog sync and the production build use the same checks for dates, coordinates, dimensions, duplicate IDs, and references.
+Sync also checks public asset URLs and shortcode references.
+Each route must contain valid line geometry. Declared track IDs must match route features.
+Sync checks each unique asset URL with a limited number of concurrent requests.
+Invalid drafts do not stop other development content. Production excludes drafts.
+Production stops if a published post has no MDX file.
+
+For an existing manifest, apply prepared photo URLs and dimensions without changing captions or alt text:
+
+```bash
+npm run update-trip-manifest-assets -- ozarks-2012 --source "/path/to/rsmb.tv/trips/ozarks-2012"
+```
+
+Review the manifest diff and publish those prepared assets before deploying it.
+Each derivative filename must match its photo ID and width.
+Derivative widths must be unique. Width and height must be positive integers.
+The update command stops if these checks fail. Run preparation again instead of editing the report.
 
 ## 4. Add the Sheet row
 
@@ -235,6 +259,9 @@ Add one row to the `Blog Posts` tab:
 | `published` | `false` until publication checks pass |
 | `format` | `trip` |
 | `trip_id` | `ozarks-2012` |
+| `series_id` | Optional shared series ID, such as `western-loop` |
+| `series_title` | Required with series ID, such as `Western Loop` |
+| `series_order` | Required with series ID; positive integer for this post |
 | `drive_folder_url` | Optional Drive folder URL for the development panel |
 
 Make the Sheet and Doc accessible through their public export URLs.
@@ -263,8 +290,10 @@ Check desktop and phone widths:
 - Confirm that subtitles use small gray text and stay out of the table of contents.
 - Open each heading link.
 - Confirm that photos load with the correct dimensions and captions.
-- Confirm that each map shows the intended track or stop.
-- Open and close galleries with a mouse, keyboard, and touch.
+- Confirm that each route preview shows the intended track.
+- Scroll the map into view or select **Explore interactive map**. Check its initial stop or track focus.
+- Test map styles, stop buttons, and **Show full route**.
+- Open and close inline photos and galleries with a mouse, keyboard, and touch. Verify focus returns to the opening control. Large galleries initially show six images; the full set remains available in the viewer.
 - Remove repeated titles and repeated facts.
 
 ## 6. Publish assets
@@ -299,6 +328,9 @@ The command backs up original photos and GPX files to private S3.
 It uploads processed photos to `https://data.rsmb.tv/trips/<trip-id>/photos/`.
 It uploads processed routes and static maps to `https://data.rsmb.tv/trips/<trip-id>/geo/`.
 It does not prepare files, upload `selects`, or delete S3 objects.
+Fingerprinted photos use one-year immutable caching. Legacy aliases and routes use one-hour caching.
+A CDN invalidation cannot remove older immutable aliases from browser caches.
+Update manifests to use fingerprinted URLs.
 
 ## 7. Publish the story
 

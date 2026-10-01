@@ -6,6 +6,7 @@
  * generation because both registries are discovered dynamically.
  */
 
+import { metadata, mdxLoaders } from 'virtual:post-content';
 import { lazy, type ComponentType, type LazyExoticComponent } from 'react';
 
 export type BlogPostFormat = 'post' | 'trip';
@@ -33,6 +34,7 @@ export interface BlogPostMeta {
     tags: string[];
     format?: BlogPostFormat;
     tripId?: string;
+    series?: { id: string; title: string; order: number };
     development?: DevelopmentPostMeta;
 }
 
@@ -51,16 +53,8 @@ export interface BlogPost extends BlogPostMeta {
 // `npm run build-blog` writes src/content/posts.json and src/content/blog/*.mdx
 // from Google Sheets/Docs before Vite resolves these globs.
 
-const postsMetaModules = import.meta.glob<BlogPostMeta[]>('./posts.json', {
-    eager: true,
-    import: 'default',
-});
-
-const postsMeta = postsMetaModules['./posts.json'] ?? [];
-
-// Auto-discover MDX files — no manual mapping needed. Keep these lazy so the
-// The initial app shell and posts index load metadata, not every post body.
-const mdxModules = import.meta.glob<{ default: ComponentType<MdxComponentProps> }>('./blog/*.mdx');
+const postsMeta = metadata;
+const mdxModules = mdxLoaders;
 
 function missingMdxComponent(slug: string): ComponentType<MdxComponentProps> {
     return function MissingMdxComponent() {
@@ -86,7 +80,7 @@ const posts: BlogPost[] = postsMeta.map((meta) => {
 posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 export function getAllPosts(): BlogPostMeta[] {
-    return posts.map(({ slug, title, date, description, tags, format, tripId, development }) => ({
+    return posts.map(({ slug, title, date, description, tags, format, tripId, series, development }) => ({
         slug,
         title,
         date,
@@ -94,6 +88,7 @@ export function getAllPosts(): BlogPostMeta[] {
         tags,
         ...(format ? { format } : {}),
         ...(tripId ? { tripId } : {}),
+        ...(series ? { series } : {}),
         ...(development ? { development } : {}),
     }));
 }

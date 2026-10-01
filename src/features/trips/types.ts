@@ -1,51 +1,8 @@
-export interface TripPhotoData {
-    id: string;
-    src: string;
-    width: number;
-    height: number;
-    alt: string;
-    caption?: string;
-    location?: string;
-    date?: string;
-    srcSet?: string;
-    sizes?: string;
-}
-
-export interface TripStop {
-    id: string;
-    name: string;
-    coordinates: [longitude: number, latitude: number];
-    date?: string;
-    description?: string;
-}
-
-export interface TripTrack {
-    id: string;
-    name: string;
-    date?: string;
-}
-
-export interface TripManifest {
-    id: string;
-    dates: {
-        start: string;
-        end: string;
-    };
-    ridingDays?: number;
-    distanceMiles?: number;
-    motorcycle?: string;
-    regions?: string[];
-    hero: string;
-    route: {
-        geoJson: string;
-        staticImage?: string;
-        alt?: string;
-        tracks?: TripTrack[];
-    };
-    stops: TripStop[];
-    photos: TripPhotoData[];
-    galleries?: Record<string, string[]>;
-}
+import type { TripManifest } from '../../../shared/tripManifestSchema';
+export type { TripManifest };
+export type TripPhotoData = TripManifest['photos'][number];
+export type TripStop = TripManifest['stops'][number];
+export type TripTrack = NonNullable<TripManifest['route']['tracks']>[number];
 
 export function getTripHero(manifest: TripManifest): TripPhotoData {
     const hero = manifest.photos.find((photo) => photo.id === manifest.hero);

@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 import fs from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { featureDistanceKilometers } from '../shared/routeGeometry.ts';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DOMParser } from '@xmldom/xmldom';
@@ -11,7 +13,8 @@ import simplify from 'simplify-js';
 const TRIP_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const PHOTO_EXTENSIONS = new Set(['.avif', '.heic', '.heif', '.jpeg', '.jpg', '.png', '.tif', '.tiff', '.webp']);
 const WIDTHS = [480, 960, 1600];
-export const WEBP_QUALITY = 95;
+export const WEBP_QUALITY = 84;
+export const PHOTO_PIPELINE_VERSION = 2;
 export const DEFAULT_ROUTE_SIMPLIFICATION_TOLERANCE_METERS = 5;
 
 export function parseArgs(args) {
@@ -139,6 +142,7 @@ async function preparePhotos(tripRoot, force) {
 
     for (const { filename, id } of selectedPhotos) {
         const inputPath = path.join(selectsPath, filename);
+        const fingerprint = createHash('sha256').update(await fs.readFile(inputPath)).update(JSON.stringify({ version: PHOTO_PIPELINE_VERSION, quality: WEBP_QUALITY, widths: WIDTHS, sharp: sharp.versions.sharp })).digest('hex').slice(0, 12);
         const source = sharp(inputPath, { failOn: 'warning' }).rotate();
         const metadata = await source.metadata();
         const orientedWidth = metadata.autoOrient?.width ?? metadata.width;
@@ -149,7 +153,8 @@ async function preparePhotos(tripRoot, force) {
             const outputWidth = Math.min(width, 1600);
             if (derivatives.some((item) => item.width === outputWidth)) continue;
 
-            const outputName = `${id}-${outputWidth}.webp`;
+            const outputName = `${id}-${fingerprint}-${outputWidth}.webp`;
+            const legacyFilename = `${id}-${outputWidth}.webp`;
             const outputPath = path.join(processedPath, outputName);
             if (force || !(await exists(outputPath))) {
                 await sharp(inputPath)
@@ -159,24 +164,28 @@ async function preparePhotos(tripRoot, force) {
                     .toFile(outputPath);
             }
 
+            // Compatibility alias for existing manifests; versioned names are used by the manifest update command.
+            await fs.copyFile(outputPath, path.join(processedPath, legacyFilename));
             const outputMetadata = await sharp(outputPath).metadata();
             derivatives.push({
                 filename: outputName,
+                legacyFilename,
+                bytes: (await fs.stat(outputPath)).size,
                 width: outputMetadata.width,
                 height: outputMetadata.height,
             });
         }
 
-        photos.push({ id, source: filename, derivatives });
+        photos.push({ id, source: filename, fingerprint, derivatives });
     }
 
     const expectedFilenames = new Set(photos.flatMap((photo) => (
-        photo.derivatives.map((derivative) => derivative.filename)
+        photo.derivatives.flatMap((derivative) => [derivative.filename, derivative.legacyFilename])
     )));
     await removeUnexpectedFiles(
         processedPath,
         expectedFilenames,
-        (name) => path.extname(name).toLowerCase() === '.webp',
+        (name) => path.extname(name).toLowerCase() === '.webp' && !/-[a-f0-9]{12}-\d+\.webp$/.test(name),
     );
 
     return photos;
@@ -281,32 +290,6 @@ function sanitizeFeature(feature, properties = {}, toleranceMeters = DEFAULT_ROU
 
 function trackDate(filename) {
     return path.basename(filename, path.extname(filename)).match(/\d{4}-\d{2}-\d{2}/)?.[0];
-}
-
-function lineDistanceKilometers(coordinates) {
-    const earthRadiusKilometers = 6371.0088;
-    const radians = (degrees) => degrees * Math.PI / 180;
-    let distance = 0;
-
-    for (let index = 1; index < coordinates.length; index++) {
-        const [previousLongitude, previousLatitude] = coordinates[index - 1];
-        const [longitude, latitude] = coordinates[index];
-        const latitudeDelta = radians(latitude - previousLatitude);
-        const longitudeDelta = radians(longitude - previousLongitude);
-        const haversine = Math.min(1, Math.max(0, Math.sin(latitudeDelta / 2) ** 2
-            + Math.cos(radians(previousLatitude)) * Math.cos(radians(latitude))
-            * Math.sin(longitudeDelta / 2) ** 2));
-        distance += earthRadiusKilometers * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
-    }
-
-    return distance;
-}
-
-function featureDistanceKilometers(feature) {
-    const lines = feature.geometry.type === 'LineString'
-        ? [feature.geometry.coordinates]
-        : feature.geometry.coordinates;
-    return lines.reduce((total, coordinates) => total + lineDistanceKilometers(coordinates), 0);
 }
 
 function distanceSummary(distanceKilometers) {
@@ -451,6 +434,9 @@ export async function prepareTripAssets({
     const report = {
         tripId,
         generatedAt: new Date().toISOString(),
+        photoPipelineVersion: PHOTO_PIPELINE_VERSION,
+        webpQuality: WEBP_QUALITY,
+        warnings: photos.flatMap(photo => photo.derivatives.filter(image => image.bytes > (image.width <= 480 ? 100_000 : image.width <= 960 ? 300_000 : 800_000)).map(image => `${image.filename} exceeds the suggested image budget (${image.bytes} bytes).`)),
         photos,
         route,
     };

@@ -69,10 +69,22 @@ export function buildUploadCommands({ tripId, source, sourceBucket, publicBucket
             args: [
                 's3', 'sync', photosPath, `s3://${publicBucket}/trips/${tripId}/photos/`,
                 '--exclude', '*', '--include', '*.webp',
-                '--cache-control', 'public,max-age=31536000,immutable',
+                ...fs.readdirSync(photosPath).filter(name => /-[a-f0-9]{12}-\d+\.webp$/.test(name)).flatMap(name => ['--exclude', name]),
+                '--cache-control', 'public,max-age=3600',
                 ...(dryRun ? ['--dryrun'] : []),
             ],
         });
+    }
+
+
+    // Only content-addressed derivatives may be cached as immutable. Never delete old published versions.
+    if (fs.existsSync(photosPath)) {
+        const versioned = fs.readdirSync(photosPath).filter(name => /-[a-f0-9]{12}-\d+\.webp$/.test(name));
+        if (versioned.length) commands.push({ command: 'aws', args: [
+            's3', 'sync', photosPath, `s3://${publicBucket}/trips/${tripId}/photos/`,
+            '--exclude', '*', ...versioned.flatMap(name => ['--include', name]),
+            '--cache-control', 'public,max-age=31536000,immutable', ...(dryRun ? ['--dryrun'] : []),
+        ] });
     }
 
     if (fs.existsSync(gpsPath)) {

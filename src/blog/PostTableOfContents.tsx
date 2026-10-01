@@ -8,6 +8,7 @@ interface TableOfContentsItem {
 
 interface PostTableOfContentsProps {
     contentRef: RefObject<HTMLElement | null>;
+    collapsible?: boolean;
 }
 
 function itemsMatch(currentItems: TableOfContentsItem[], nextItems: TableOfContentsItem[]) {
@@ -32,7 +33,9 @@ function currentHashId() {
     }
 }
 
-export function PostTableOfContents({ contentRef }: PostTableOfContentsProps) {
+export function PostTableOfContents({ contentRef, collapsible = false }: PostTableOfContentsProps) {
+    const [expanded, setExpanded] = useState(false);
+    const [activeId, setActiveId] = useState('');
     const [items, setItems] = useState<TableOfContentsItem[]>([]);
 
     useEffect(() => {
@@ -42,6 +45,8 @@ export function PostTableOfContents({ contentRef }: PostTableOfContentsProps) {
         let hasScrolledToHash = false;
         let hashScrollFrame: number | undefined;
         const updateItems = () => {
+            const firstMap = content.querySelector<HTMLElement>('[data-trip-map]');
+            if (firstMap && !firstMap.id) firstMap.id = 'trip-route';
             const headings = Array.from(content.querySelectorAll<HTMLElement>('[data-post-heading]'));
             const nextItems = headings.map((heading) => ({
                 id: heading.id,
@@ -84,6 +89,16 @@ export function PostTableOfContents({ contentRef }: PostTableOfContentsProps) {
         };
     }, [contentRef]);
 
+    useEffect(() => {
+        if (!items.length || typeof IntersectionObserver === 'undefined') return;
+        const observer = new IntersectionObserver(entries => {
+            const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+            if (visible) setActiveId(visible.target.id);
+        }, { rootMargin: '-80px 0px -60% 0px' });
+        items.forEach(item => { const heading = document.getElementById(item.id); if (heading) observer.observe(heading); });
+        return () => observer.disconnect();
+    }, [items]);
+
     if (items.length === 0) return null;
 
     return (
@@ -92,11 +107,12 @@ export function PostTableOfContents({ contentRef }: PostTableOfContentsProps) {
             aria-label="Table of contents"
             className="scroll-mt-24 mb-8 border-l border-zinc-700 pl-4"
         >
-            <p className="mb-2 text-sm font-medium text-zinc-300">On this page</p>
-            <ul className="space-y-1 text-sm">
+            <div className="mb-2 flex items-center justify-between gap-3"><p className="text-sm font-medium text-zinc-300">Table of contents</p>
+                <button type="button" aria-expanded={expanded} aria-controls="post-contents-list" className={`min-h-11 px-3 text-sm text-violet-300 ${collapsible ? '' : 'sm:hidden'}`} onClick={() => setExpanded(value => !value)}>{expanded ? 'Collapse' : 'Expand'}</button></div>
+            <ul id="post-contents-list" className={`${expanded ? '' : collapsible ? 'hidden ' : 'hidden sm:block '}space-y-1 text-sm`}>
                 {items.map((item) => (
                     <li key={item.id} className={item.level >= 3 ? 'pl-4' : undefined}>
-                        <a className="text-zinc-400 hover:text-violet-400" href={`#${item.id}`}>
+                        <a aria-current={activeId === item.id ? 'location' : undefined} className="inline-block py-1 text-zinc-300 hover:text-violet-300 aria-[current=location]:text-violet-300" href={`#${item.id}`}>
                             {item.text}
                         </a>
                     </li>

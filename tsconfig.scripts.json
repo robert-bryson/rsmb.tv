@@ -28,6 +28,7 @@
     },
     "include": [
         "playwright.config.ts",
+        "playwright.trip.config.ts",
         "scripts/**/*.ts",
         "scripts/**/*.tsx",
         "tests/**/*.ts"

@@ -82,7 +82,12 @@ describe('trip story primitives', () => {
     });
 
     it('renders linked photos with intrinsic dimensions and captions', () => {
-        renderStory(<TripPhoto photoId="camp" />);
+        renderStory(<TripPhoto photoId="camp" />, {
+            ...manifest,
+            photos: manifest.photos.map((photo) => photo.id === 'camp'
+                ? { ...photo, location: 'Pacific Beach', date: '2024-05-02' }
+                : photo),
+        });
 
         const image = screen.getByRole('img', { name: 'A tent beside the motorcycle at dusk.' });
         const link = image.closest('a');
@@ -91,6 +96,8 @@ describe('trip story primitives', () => {
         expect(image).toHaveAttribute('height', '800');
         expect(image).toHaveAttribute('loading', 'lazy');
         expect(screen.getByText('Camp at the end of the first day.')).toBeInTheDocument();
+        expect(screen.getByText('Pacific Beach')).toBeInTheDocument();
+        expect(screen.queryByText('2024-05-02')).not.toBeInTheDocument();
         expect(link).toHaveAttribute('href', '/images/trips/coastal-loop/camp.webp');
         expect(link).toHaveAttribute('aria-describedby', screen.getByText('Camp at the end of the first day.').id);
         expect(figure).toHaveClass('image-caption-figure');

@@ -3,63 +3,31 @@ import PhotoSwipeDynamicCaption from 'photoswipe-dynamic-caption-plugin';
 import 'photoswipe/style.css';
 import 'photoswipe-dynamic-caption-plugin/photoswipe-dynamic-caption-plugin.css';
 
-export function createTripPhotoLightbox(gallery: HTMLElement, paginationCount = 0) {
+export function createTripPhotoLightbox(gallery: HTMLElement) {
     const lightbox = new PhotoSwipeLightbox({
-        gallery,
-        children: 'a[data-pswp-width]',
-        pswpModule: () => import('photoswipe'),
+        gallery, children: 'a[data-pswp-width]', pswpModule: () => import('photoswipe'),
     });
-
+    let returnTarget: HTMLElement | null = null;
+    const rememberTrigger = (event: Event) => {
+        if (event.target instanceof Element) returnTarget = event.target.closest<HTMLElement>('a[data-pswp-width], button');
+    };
+    gallery.addEventListener('click', rememberTrigger, true);
+    lightbox.on('bindEvents', () => lightbox.pswp?.element?.focus({ preventScroll: true }));
+    lightbox.on('destroy', () => { if (returnTarget?.isConnected) returnTarget.focus({ preventScroll: true }); });
+    const destroy = lightbox.destroy.bind(lightbox);
+    lightbox.destroy = () => { gallery.removeEventListener('click', rememberTrigger, true); destroy(); };
     new PhotoSwipeDynamicCaption(lightbox, {
         type: 'auto',
         captionContent: (slide) => {
-            const figure = slide.data.element?.closest('figure');
-            return figure?.querySelector('figcaption')?.textContent
-                ?? figure?.querySelector('img')?.alt
-                ?? '';
+            const element = slide.data.element;
+            const caption = document.createElement('div');
+            caption.textContent = element?.dataset.tripCaption
+                ?? element?.closest('figure')?.querySelector('figcaption')?.textContent
+                ?? element?.querySelector('img')?.alt ?? '';
+            // The plugin inserts an HTML string; serialize the text node to keep captions escaped.
+            return caption.innerHTML;
         },
     });
-
-    if (paginationCount > 1) {
-        lightbox.on('uiRegister', () => {
-            lightbox.pswp?.ui?.registerElement({
-                name: 'trip-pagination',
-                className: 'trip-lightbox-pagination',
-                order: 8,
-                appendTo: 'root',
-                onInit: (element, pswp) => {
-                    element.setAttribute('role', 'navigation');
-                    element.setAttribute('aria-label', 'Choose gallery image');
-
-                    const buttons = Array.from({ length: paginationCount }, (_, index) => {
-                        const button = document.createElement('button');
-                        button.type = 'button';
-                        button.className = 'trip-lightbox-pagination-dot';
-                        button.setAttribute('aria-label', `View image ${index + 1} of ${paginationCount}`);
-                        button.addEventListener('click', (event) => {
-                            event.stopPropagation();
-                            pswp.goTo(index);
-                        });
-                        element.append(button);
-                        return button;
-                    });
-
-                    const updatePagination = () => {
-                        buttons.forEach((button, index) => {
-                            const isCurrent = index === pswp.currIndex;
-                            button.classList.toggle('trip-lightbox-pagination-dot--current', isCurrent);
-                            if (isCurrent) button.setAttribute('aria-current', 'true');
-                            else button.removeAttribute('aria-current');
-                        });
-                    };
-
-                    pswp.on('change', updatePagination);
-                    updatePagination();
-                },
-            });
-        });
-    }
-
     lightbox.init();
     return lightbox;
 }

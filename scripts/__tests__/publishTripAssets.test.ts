@@ -56,6 +56,19 @@ describe('publish trip assets', () => {
         expect(commands[4].args).toContain('/trips/ozarks-2012/*');
     });
 
+    it('reserves immutable caching for versioned photos and retains previously published versions', () => {
+        const source = createTripDirectory();
+        const versioned = 'camp-012345abcdef-480.webp';
+        fs.writeFileSync(path.join(source, 'photos', 'processed', versioned), 'image');
+        const commands = buildUploadCommands({ tripId: 'test-trip', source, sourceBucket: 'private', publicBucket: 'public' });
+        const immutable = commands.find(command => command.args.includes('public,max-age=31536000,immutable'));
+        const legacy = commands.find(command => command.args.includes('*.webp'));
+        expect(immutable?.args).toContain(versioned);
+        expect(legacy?.args).toContain('public,max-age=3600');
+        expect(legacy?.args.slice(legacy.args.indexOf(versioned) - 1, legacy.args.indexOf(versioned) + 1)).toEqual(['--exclude', versioned]);
+        expect(commands.flatMap(command => command.args)).not.toContain('--delete');
+    });
+
     it('uses AWS argument arrays and skips invalidation for dry runs', () => {
         const source = createTripDirectory();
         const run = vi.fn().mockReturnValue({ status: 0 });

@@ -16,9 +16,21 @@ resource "aws_amplify_app" "rsmbtv" {
     ignore_changes = [access_token, environment_variables, custom_headers]
   }
 
+  # Article HTML includes metadata before JavaScript. Place these before the SPA fallback.
+  custom_rule {
+    source = "/trips/<slug>"
+    target = "/trips/<slug>.html"
+    status = "200"
+  }
+  custom_rule {
+    source = "/blog/<slug>"
+    target = "/blog/<slug>.html"
+    status = "200"
+  }
+
   # SPA rewrite: serve index.html for all routes that don't match a static file
   custom_rule {
-    source = "</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|mjs|png|txt|svg|woff|woff2|ttf|map|json|webp|xml|gz|br|geojson|glb)$)([^.]+$)/>"
+    source = "</^[^.]+$|\\.(?!(css|html|gif|ico|jpg|js|mjs|png|txt|svg|woff|woff2|ttf|map|json|webp|xml|gz|br|geojson|glb)$)([^.]+$)/>"
     target = "/index.html"
     status = "200"
   }

@@ -1,6 +1,7 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { MapOptions } from 'maplibre-gl';
+import { clearTripRouteCache } from '../features/trips/useTripRoute';
 import { TripStoryProvider } from '../features/trips/TripStoryProvider';
 import { TripRouteMap } from '../features/trips/components/TripRouteMap';
 import type { TripManifest } from '../features/trips/types';
@@ -49,7 +50,7 @@ vi.mock('maplibre-gl', () => ({
     setWorkerUrl: vi.fn(),
 }));
 
-vi.mock('../features/flights/hooks/useReducedMotion', () => ({
+vi.mock('../hooks/useReducedMotion', () => ({
     useReducedMotion: () => false,
 }));
 
@@ -63,6 +64,7 @@ const manifest: TripManifest = {
 };
 
 afterEach(() => {
+    clearTripRouteCache();
     vi.unstubAllGlobals();
     vi.clearAllMocks();
 });
@@ -126,7 +128,7 @@ describe('TripRouteMap', () => {
             </TripStoryProvider>,
         );
 
-        expect(await screen.findByText(/^Overall route:/)).toHaveTextContent(/^Overall route: \d+ mi \/ \d+\.\d km$/);
+        expect(await screen.findByText(/^Available route:/)).toHaveTextContent(/^Available route: \d+ mi \/ \d+\.\d km$/);
     });
 
     it('clears a stale route error when the manifest changes', async () => {
@@ -334,7 +336,7 @@ describe('TripRouteMap', () => {
             .find((control) => control?.constructor.name === 'BasemapControl');
         fireEvent.click(basemapControl.onAdd().querySelector('button'));
 
-        await waitFor(() => expect(mapMocks.once).toHaveBeenCalledTimes(2));
+        await waitFor(() => expect(mapMocks.once).toHaveBeenCalledWith('load', expect.any(Function)));
         expect(mapMocks.setTiles).not.toHaveBeenCalled();
 
         const loadListener = mapMocks.once.mock.calls
@@ -372,6 +374,7 @@ describe('TripRouteMap', () => {
 
         await waitFor(() => expect(mapMocks.Map).toHaveBeenCalled());
         expect(mapMocks.setZoom).not.toHaveBeenCalled();
+        expect(mapMocks.easeTo).toHaveBeenCalledWith({ center: [-122.5, 46.5], zoom: 9 });
     });
 
     it('highlights matching markers and descriptions from either hover target', async () => {
@@ -394,7 +397,7 @@ describe('TripRouteMap', () => {
         );
 
         await waitFor(() => expect(mapMocks.Map).toHaveBeenCalled());
-        const description = screen.getByText('Camp').closest('li')!;
+        const description = screen.getByRole('button', { name: /Camp/ }).closest('li')!;
 
         fireEvent.mouseEnter(description);
         expect(description).toHaveClass('bg-amber-400', 'text-zinc-950');

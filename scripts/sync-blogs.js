@@ -25,6 +25,8 @@
  */
 
 import fs from 'node:fs';
+import { tripManifestSchema } from '../shared/tripManifestSchema.ts';
+import { isRouteGeoJson, routeFeatures } from '../shared/routeGeometry.ts';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { JSDOM } from 'jsdom';
@@ -340,6 +342,10 @@ export function normalizeBlogRecords(records, { today = new Date(), previewSlug,
         const rawFormat = String(record.values.format ?? '').trim().toLowerCase();
         const format = rawFormat === 'blog' ? '' : rawFormat;
         const tripId = String(record.values.trip_id ?? '').trim();
+        const seriesId = String(record.values.series_id ?? '').trim();
+        const seriesTitle = String(record.values.series_title ?? '').trim();
+        const seriesOrder = Number(record.values.series_order);
+        if (seriesId && (!SLUG_PATTERN.test(seriesId) || !seriesTitle || !Number.isInteger(seriesOrder) || seriesOrder < 1)) errors.push(`Row ${record.rowNumber}: a series requires a valid series_id, series_title, and positive series_order.`);
         let date = '';
 
         if (rawDate) {
@@ -383,6 +389,7 @@ export function normalizeBlogRecords(records, { today = new Date(), previewSlug,
                 description,
                 tags: normalizeTags(record.values.tags),
                 ...(format === TRIP_FORMAT ? { format, tripId } : {}),
+                ...(seriesId ? { series: { id: seriesId, title: seriesTitle, order: seriesOrder } } : {}),
                 ...(includeUnpublished ? {
                     development: {
                         published,
@@ -390,7 +397,7 @@ export function normalizeBlogRecords(records, { today = new Date(), previewSlug,
                         issues: developmentIssues,
                         contentAvailable: Boolean(docId),
                         documentUrl: docId ? `https://docs.google.com/document/d/${docId}/edit` : undefined,
-                        driveFolderUrl: /^https:\/\/drive\.google\.com\/(?:drive\/folders|open\?id=)/.test(driveFolderUrl)
+                        driveFolderUrl: /^https:\/\/drive\.google\.com\/(?:drive\/(?:u\/\d+\/)?folders|open\?id=)/.test(driveFolderUrl)
                             ? driveFolderUrl
                             : undefined,
                     },
@@ -548,33 +555,47 @@ function validateTripAssetUrl(assetUrl, tripId) {
 export async function validateTripAssetUrls(
     posts,
     manifests,
-    { fetchImpl = fetch, timeoutMs = TRIP_ASSET_REQUEST_TIMEOUT_MS } = {},
+    { fetchImpl = fetch, timeoutMs = TRIP_ASSET_REQUEST_TIMEOUT_MS, concurrency = 6 } = {},
 ) {
-    for (const post of posts) {
-        if (post.format !== TRIP_FORMAT || !post.tripId) continue;
-        const manifest = manifests.get(post.tripId);
+    const jobs = new Map();
+    const tripIds = new Set(posts.filter(post => post.format === TRIP_FORMAT).map(post => post.tripId));
+    for (const tripId of tripIds) {
+        const manifest = manifests.get(tripId);
         if (!manifest) continue;
-
-        for (const assetUrl of manifestAssetUrls(manifest)) {
-            validateTripAssetUrl(assetUrl, post.tripId);
-
-            try {
-                const response = await fetchTripAssetStatus(assetUrl, { fetchImpl, timeoutMs });
-                if (response.url) validateTripAssetUrl(response.url, post.tripId);
-                if (!response.ok) {
-                    throw new Error(
-                        `Trip "${post.tripId}" asset URL is not available: ${assetUrl} (${response.status} ${response.statusText})`,
-                    );
-                }
-            } catch (error) {
-                if (error instanceof Error && error.message.includes('asset URL is not available')) throw error;
-                throw new Error(
-                    `Trip "${post.tripId}" asset URL could not be checked: ${assetUrl} (${error instanceof Error ? error.message : error})`,
-                    { cause: error },
-                );
-            }
+        for (const url of manifestAssetUrls(manifest)) {
+            validateTripAssetUrl(url, tripId);
+            jobs.set(url, { tripId, url, manifest });
         }
     }
+    const queue = [...jobs.values()];
+    const failures = [];
+    let next = 0;
+    const worker = async () => {
+        while (next < queue.length) {
+            const { tripId, url, manifest } = queue[next++];
+            try {
+                const response = await fetchTripAssetStatus(url, { fetchImpl, timeoutMs });
+                if (response.url) validateTripAssetUrl(response.url, tripId);
+                if (!response.ok) throw new Error(`Trip "${tripId}" asset URL is not available: ${url} (${response.status} ${response.statusText})`);
+                if (url === manifest.route?.geoJson) {
+                    const routeResponse = await fetchImpl(url, { signal: AbortSignal.timeout(timeoutMs) });
+                    if (!routeResponse.ok) throw new Error(`Route request failed with ${routeResponse.status}`);
+                    if (routeResponse.url) validateTripAssetUrl(routeResponse.url, tripId);
+                    const route = await routeResponse.json();
+                    if (!isRouteGeoJson(route)) throw new Error('Route must contain valid LineString geometry.');
+                    const features = routeFeatures(route);
+                    const ids = new Set(features.map(feature => feature.properties?.trackId));
+                    for (const track of manifest.route.tracks ?? []) {
+                        if (!ids.has(track.id)) throw new Error(`Trip "${tripId}" route is missing track "${track.id}".`);
+                    }
+                }
+            } catch (error) {
+                failures.push(`Trip "${tripId}" asset URL could not be checked: ${url} (${error.message})`);
+            }
+        }
+    };
+    await Promise.all(Array.from({ length: Math.max(1, Math.min(concurrency, 12, queue.length)) }, worker));
+    if (failures.length) throw new Error(failures.join('\n'));
 }
 function replaceElementTag(element, tagName) {
     const replacement = element.ownerDocument.createElement(tagName);
@@ -1188,6 +1209,7 @@ export function validateTripManifestFiles(posts, { repoRoot = REPO_ROOT, fsImpl 
         if (post.format !== TRIP_FORMAT) continue;
         if (!post.tripId) throw new Error(`Trip post "${post.slug}" is missing trip_id.`);
 
+        if (manifests.has(post.tripId)) continue;
         const manifestPath = path.join(repoRoot, 'src/content/trips', `${post.tripId}.json`);
         let manifest;
         try {
@@ -1206,7 +1228,9 @@ export function validateTripManifestFiles(posts, { repoRoot = REPO_ROOT, fsImpl 
             throw new Error(`Trip manifest "${post.tripId}" must contain id "${post.tripId}".`);
         }
 
-        manifests.set(post.tripId, manifest);
+        const result = tripManifestSchema.safeParse(manifest);
+        if (!result.success) throw new Error(`Trip manifest "${post.tripId}" is invalid: ${result.error.message}`);
+        manifests.set(post.tripId, result.data);
     }
 
     return manifests;

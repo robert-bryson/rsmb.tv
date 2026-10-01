@@ -62,7 +62,7 @@ describe('prepare trip assets', () => {
     it('creates stable URL-safe photo IDs', () => {
         expect(photoId('Camp at Dusk.JPG')).toBe('camp-at-dusk');
         expect(photoId('Café-stop.jpeg')).toBe('cafe-stop');
-        expect(WEBP_QUALITY).toBe(95);
+        expect(WEBP_QUALITY).toBe(84);
         expect(DEFAULT_ROUTE_SIMPLIFICATION_TOLERANCE_METERS).toBe(5);
     });
 
@@ -107,6 +107,28 @@ describe('prepare trip assets', () => {
             date: '2026-01-01',
         }]);
         expect(metadata.route).toMatchObject({ distanceKilometers: 14.4, distanceMiles: 9 });
+    });
+
+    it('reuses unchanged derivatives and versions changed sources without deleting published files', async () => {
+        const root = createTripDirectory();
+        const source = path.join(root, 'photos', 'selects', 'camp.jpg');
+        const writePhoto = (background: string) => sharp({ create: { width: 600, height: 400, channels: 3, background } }).jpeg().toFile(source);
+        await writePhoto('#c84b31');
+        const first = await prepareTripAssets({ tripId: 'test-trip', source: root });
+        const original = first.photos[0].derivatives[0].filename;
+        const originalPath = path.join(root, 'photos', 'processed', original);
+        fs.utimesSync(originalPath, 1000, 1000);
+        const repeated = await prepareTripAssets({ tripId: 'test-trip', source: root });
+        expect(repeated.photos[0].fingerprint).toBe(first.photos[0].fingerprint);
+        expect(fs.statSync(originalPath).mtimeMs).toBe(1_000_000);
+        await writePhoto('#314bc8');
+        const changed = await prepareTripAssets({ tripId: 'test-trip', source: root });
+        expect(changed.photos[0].fingerprint).not.toBe(first.photos[0].fingerprint);
+        expect(fs.existsSync(originalPath)).toBe(true);
+        const derivative = changed.photos[0].derivatives[0];
+        expect(fs.readFileSync(path.join(root, 'photos', 'processed', derivative.legacyFilename)))
+            .toEqual(fs.readFileSync(path.join(root, 'photos', 'processed', derivative.filename)));
+        expect(derivative.bytes).toBeGreaterThan(0);
     });
 
     it('cleans and simplifies route geometry with a five-meter default tolerance', async () => {

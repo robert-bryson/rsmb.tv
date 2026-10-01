@@ -9,6 +9,8 @@ interface DocumentHeadOptions {
     ogDescription?: string;
     ogImage?: string;
     ogUrl?: string;
+    ogType?: 'website' | 'article';
+    publishedTime?: string;
 }
 
 /**
@@ -23,11 +25,14 @@ export function useDocumentHead({
     ogDescription,
     ogImage,
     ogUrl,
+    ogType = 'website',
+    publishedTime,
 }: DocumentHeadOptions) {
     const { pathname } = useLocation();
 
     useEffect(() => {
-        const fullTitle = title === 'rsmb' ? 'rsmb' : `${title} — rsmb`;
+        const cleanTitle = title.replace(/\s*[|—]\s*rsmb$/, '');
+        const fullTitle = title === 'rsmb' ? 'rsmb' : `${cleanTitle} — rsmb`;
         document.title = fullTitle;
 
         const metas: HTMLMetaElement[] = [];
@@ -53,7 +58,8 @@ export function useDocumentHead({
         }
 
         setMetaTag('property', 'og:title', ogTitle || fullTitle);
-        setMetaTag('property', 'og:type', 'website');
+        setMetaTag('property', 'og:type', ogType);
+        if (publishedTime) setMetaTag('property', 'article:published_time', publishedTime);
 
         if (ogDescription || description) {
             setMetaTag('property', 'og:description', ogDescription || description || '');
@@ -90,5 +96,5 @@ export function useDocumentHead({
                 canonicalLink.remove();
             }
         };
-    }, [title, description, ogTitle, ogDescription, ogImage, ogUrl, pathname]);
+    }, [title, description, ogTitle, ogDescription, ogImage, ogUrl, ogType, publishedTime, pathname]);
 }

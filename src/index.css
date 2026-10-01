@@ -168,72 +168,25 @@ u {
   transform: translateX(-50%);
 }
 
-.trip-lightbox-pagination {
-  position: absolute;
-  z-index: 20;
-  bottom: max(1rem, env(safe-area-inset-bottom));
-  left: 50%;
-  display: flex;
-  max-width: calc(100% - 6rem);
-  align-items: center;
-  overflow-x: auto;
-  padding: 0.25rem 0.5rem;
-  transform: translateX(-50%);
-  border-radius: 9999px;
-  background: rgb(9 9 11 / 72%);
-  backdrop-filter: blur(8px);
-  scrollbar-width: none;
-}
+[data-trip-facts-slot]:not(:empty) { display: flow-root; padding-top: 2rem; }
+[data-trip-facts-slot] > dl { margin-block: 0 1.5rem; }
+[data-trip-facts-slot]:not(:empty) + [data-trip-map-viewport] > figure { margin-top: 0; }
 
-.trip-lightbox-pagination::-webkit-scrollbar {
-  display: none;
+.trip-hero-gallery { width: min(88rem, calc(100vw - 2rem)); }
+.trip-hero .image-caption-frame { width: 100%; aspect-ratio: 2 / 1; }
+.trip-hero .image-caption-frame > a { display: block; height: 100%; }
+@media (max-width: 639px) {
+  .trip-hero .image-caption-frame { aspect-ratio: 4 / 3; }
 }
-
-.trip-lightbox-pagination-dot {
-  display: grid;
-  width: 1.25rem;
-  height: 1.5rem;
-  flex: 0 0 auto;
-  cursor: pointer;
-  place-items: center;
-}
-
-.trip-lightbox-pagination-dot::before {
-  width: 0.375rem;
-  height: 0.375rem;
-  border-radius: 9999px;
-  background: rgb(161 161 170 / 75%);
-  content: '';
-}
-
-.trip-lightbox-pagination-dot:hover::before,
-.trip-lightbox-pagination-dot:focus-visible::before {
-  background: #e4e4e7;
-}
-
-.trip-lightbox-pagination-dot:focus-visible {
-  outline: 2px solid #22d3ee;
-  outline-offset: -2px;
-}
-
-.trip-lightbox-pagination-dot--current::before {
-  width: 0.5rem;
-  height: 0.5rem;
-  background: #22d3ee;
-}
-
-@media (max-width: 599px) {
-  .pswp .pswp__dynamic-caption--mobile {
-    padding-bottom: 3.5rem;
-  }
-}
+.trip-hero .image-caption-frame img { height: 100%; object-fit: cover; object-position: center bottom; }
+.site-header:focus-within { translate: 0; transform: translateY(0); }
 
 .image-caption-figure {
   position: relative;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .image-caption-overlay {
+  .image-caption-overlay:not(.sr-only) {
     position: absolute;
     right: 0;
     bottom: 0;

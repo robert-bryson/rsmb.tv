@@ -99,7 +99,7 @@ export async function prepareTripAssetsForDev({
         const source = path.join(sourceRoot, tripId);
         try {
             if (!(await isDirectory(source))) throw new Error(`Source directory not found: ${source}`);
-            const report = await prepare({ tripId, source, force: true });
+            const report = await prepare({ tripId, source });
             const mirrored = await mirrorPreparedTripAssets({ source, tripId, outputRoot });
             totals.trips += 1;
             totals.photos += report.photos.length;

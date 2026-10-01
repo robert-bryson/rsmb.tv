@@ -14,7 +14,7 @@ afterEach(() => {
 });
 
 describe('prepare trip assets before dev', () => {
-    it('force-processes only the preview trip and reports generated asset totals', async () => {
+    it('incrementally processes only the preview trip and reports generated asset totals', async () => {
         const sourceRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'trip-assets-dev-'));
         tempDirs.push(sourceRoot);
         fs.mkdirSync(path.join(sourceRoot, 'coastal-loop'));
@@ -49,7 +49,6 @@ describe('prepare trip assets before dev', () => {
         expect(prepare).toHaveBeenCalledWith({
             tripId: 'coastal-loop',
             source: path.join(sourceRoot, 'coastal-loop'),
-            force: true,
         });
         expect(totals).toEqual({ trips: 1, photos: 2, webpFiles: 5, geoJsonFiles: 3, failures: [] });
         expect(formatAssetTotals(totals)).toBe(

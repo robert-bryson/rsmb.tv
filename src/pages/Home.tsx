@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { featuredProjects } from '../content/projects';
 import { getAllPosts } from '../content/posts';
-import { getTripHero, getTripManifest } from '../features/trips';
+import { getTripSummary } from '../features/trips/tripSummaries';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { formatDate } from '../utils/formatDate';
@@ -44,7 +44,7 @@ export function Home() {
           <h2 className="text-sm font-medium text-zinc-400 uppercase tracking-wide">
             Selected projects
           </h2>
-          <Link to="/projects" className="text-sm text-zinc-500 hover:text-violet-400">
+          <Link to="/projects" className="text-sm text-zinc-400 hover:text-violet-400">
             All projects →
           </Link>
         </div>
@@ -72,14 +72,14 @@ export function Home() {
                       <h3 className="text-lg font-medium text-zinc-100 group-hover:text-violet-400">
                         {project.title}
                       </h3>
-                      <span className="shrink-0 text-sm text-zinc-500">{project.year}</span>
+                      <span className="shrink-0 text-sm text-zinc-400">{project.year}</span>
                     </div>
                     <p className="text-sm leading-relaxed text-zinc-400">
                       {project.summary ?? project.description}
                     </p>
                     <ul className="mt-auto flex flex-wrap gap-x-2 gap-y-1 pt-3" aria-label="Technologies">
                       {project.tech.slice(0, 3).map((technology) => (
-                        <li key={technology} className="text-xs text-zinc-500">
+                        <li key={technology} className="text-xs text-zinc-400">
                           {technology}
                         </li>
                       ))}
@@ -98,21 +98,21 @@ export function Home() {
             <h2 className="text-sm font-medium text-zinc-400 uppercase tracking-wide">
               Latest
             </h2>
-            <Link to="/posts" className="text-sm text-zinc-500 hover:text-violet-400">
+            <Link to="/posts" className="text-sm text-zinc-400 hover:text-violet-400">
               All posts →
             </Link>
           </div>
           <ul className="divide-y divide-zinc-800/70">
             {recentPosts.map((post) => {
               const isTrip = post.format === 'trip';
-              const manifest = isTrip ? getTripManifest(post.tripId) : undefined;
-              const hero = manifest ? getTripHero(manifest) : undefined;
+              const manifest = isTrip ? getTripSummary(post.tripId) : undefined;
+              const hero = manifest?.hero;
 
               return (
                 <li key={post.slug} className="py-5 first:pt-0 last:pb-0">
                   <Link to={`/${isTrip ? 'trips' : 'blog'}/${post.slug}`} className="group flex items-start gap-5">
                     <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-zinc-500">
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-zinc-400">
                         <time dateTime={post.date}>{formatDate(post.date)}</time>
                         <span className="text-xs uppercase">{isTrip ? 'Trip report' : 'Writing'}</span>
                       </div>
@@ -125,13 +125,13 @@ export function Home() {
                       <img
                         src={hero.src}
                         srcSet={hero.srcSet}
-                        sizes="128px"
+                        sizes="(min-width: 640px) 128px, 96px"
                         width={hero.width}
                         height={hero.height}
                         alt=""
                         loading="lazy"
                         decoding="async"
-                        className="hidden aspect-[4/3] w-32 shrink-0 rounded-md border border-zinc-800 object-cover sm:block"
+                        className="aspect-[4/3] w-24 sm:w-32 shrink-0 rounded-md border border-zinc-800 object-cover"
                       />
                     )}
                   </Link>

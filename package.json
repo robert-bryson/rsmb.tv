@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "packageManager": "npm@11.17.0",
   "engines": {
-    "node": ">=22 <27",
+    "node": ">=22.18 <27",
     "npm": ">=11 <12"
   },
   "type": "module",
@@ -40,7 +40,9 @@
     "audit": "npm audit --audit-level=moderate",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test:trips:browser": "node scripts/run-trip-browser-tests.js",
+    "update-trip-manifest-assets": "node scripts/update-trip-manifest-assets.js"
   },
   "dependencies": {
     "@aws-sdk/client-cloudfront": "^3.1136.0",

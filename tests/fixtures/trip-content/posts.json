@@ -1,0 +1,34 @@
+[
+  {
+    "slug": "coastal-test",
+    "title": "Coastal test trip",
+    "date": "2024-01-02",
+    "description": "A synthetic two-day trip.",
+    "tags": [
+      "coast"
+    ],
+    "format": "trip",
+    "tripId": "coastal-test"
+  },
+  {
+    "slug": "reading-test",
+    "title": "Reading test",
+    "date": "2024-01-01",
+    "description": "An ordinary article.",
+    "tags": [
+      "coast"
+    ]
+  },
+  {
+    "slug": "unfinished-draft",
+    "title": "Unfinished draft must stay private",
+    "date": "2024-01-03",
+    "description": "Excluded synthetic draft.",
+    "tags": [],
+    "format": "trip",
+    "tripId": "unfinished-draft",
+    "development": {
+      "published": false
+    }
+  }
+]

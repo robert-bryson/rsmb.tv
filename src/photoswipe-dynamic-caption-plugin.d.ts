@@ -5,7 +5,7 @@ declare module 'photoswipe-dynamic-caption-plugin' {
         type?: 'auto' | 'below' | 'aside';
         captionContent?: string | ((slide: {
             data: { element?: HTMLElement };
-        }) => string | HTMLElement | null | undefined);
+        }) => string | null | undefined);
         mobileLayoutBreakpoint?: number;
         horizontalEdgeThreshold?: number;
         mobileCaptionOverlapRatio?: number;

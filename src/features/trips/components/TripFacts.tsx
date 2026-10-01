@@ -12,10 +12,10 @@ export function TripFacts() {
     ].filter((fact): fact is string[] => Boolean(fact));
 
     return (
-        <dl className="trip-breakout my-8 grid gap-x-8 gap-y-4 border-y border-zinc-800 py-5 sm:grid-cols-2 lg:grid-cols-5">
+        <dl className="trip-breakout my-8 grid grid-cols-2 gap-x-8 gap-y-4 border-y border-zinc-800 py-5 sm:grid-cols-2 lg:grid-cols-5">
             {facts.map(([label, value]) => (
                 <div key={label}>
-                    <dt className="text-xs font-medium uppercase text-zinc-500">{label}</dt>
+                    <dt className="text-xs font-medium uppercase text-zinc-400">{label}</dt>
                     <dd className="mt-1 text-sm text-zinc-200">{value}</dd>
                 </div>
             ))}

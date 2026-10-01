@@ -91,7 +91,7 @@ describe('Amplify domain', () => {
     it('serves JavaScript module assets without the SPA rewrite', () => {
         const config = readRepoFile('infra/main.tf');
         const spaRewrite = config.match(
-            /custom_rule \{[\s\S]*?source\s*=\s*"([^"]+)"[\s\S]*?target\s*=\s*"\/index\.html"/,
+            /custom_rule \{[^}]*?source\s*=\s*"([^"]+)"[^}]*?target\s*=\s*"\/index\.html"/,
         )?.[1];
 
         expect(spaRewrite).toBeDefined();

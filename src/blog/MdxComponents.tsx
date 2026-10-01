@@ -59,7 +59,7 @@ export const mdxComponents = {
             <a
                 {...props}
                 className={classNames(
-                    'text-violet-400 hover:text-violet-300 underline underline-offset-2',
+                    'text-violet-400 hover:text-violet-300 underline underline-offset-2 [&_*]:text-inherit',
                     props.className,
                 )}
                 {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
