@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { useTripStory } from '../TripStoryContext';
 import { TripPhotoFigure } from './TripPhoto';
-import { createTripPhotoLightbox } from './tripPhotoSwipe';
+import { createTripPhotoLightbox, tripPhotoCaption } from './tripPhotoSwipe';
 
 export function TripGallery({ galleryId }: { galleryId: string }) {
     const { manifest, photos } = useTripStory();
@@ -23,12 +23,12 @@ export function TripGallery({ galleryId }: { galleryId: string }) {
                 {photoIds.map((id, index) => {
                     const photo = photos.get(id);
                     if (!photo) throw new Error(`Unknown trip photo: ${id}`);
-                    if (!visibleIds.includes(id)) return <a key={id} hidden href={photo.src} data-pswp-width={photo.width} data-pswp-height={photo.height} data-pswp-srcset={photo.srcSet} data-trip-caption={photo.caption || photo.alt} />;
+                    if (!visibleIds.includes(id)) return <a key={id} hidden href={photo.src} data-pswp-width={photo.width} data-pswp-height={photo.height} data-pswp-srcset={photo.srcSet} data-trip-caption={tripPhotoCaption(photo)} />;
                     const lead = index === 0 && visibleIds.length % 2 === 1;
                     const single = photoIds.length === 1;
                     return <TripPhotoFigure key={id} photo={photo}
                         sizes={single ? '(min-width: 1184px) 1152px, calc(100vw - 2rem)' : `${lead ? '(max-width: 639px) calc(100vw - 2rem), ' : ''}(min-width: 1184px) 376px, (min-width: 640px) calc((100vw - 3.5rem) / 3), calc((100vw - 2.75rem) / 2)`}
-                        className={`${single ? 'col-span-full' : lead ? 'col-span-2 sm:col-span-1' : ''} ${single ? '' : '[&>div]:aspect-[4/3] [&_img]:h-full [&_img]:object-cover'}`} />;
+                        className={`trip-gallery-photo ${single ? 'col-span-full' : lead ? 'col-span-2 sm:col-span-1' : ''} ${single ? '' : '[&>div]:aspect-[4/3] [&_img]:h-full [&_img]:object-cover'}`} />;
                 })}
             </div>
             {photoIds.length > 6 && <button type="button" aria-expanded={expanded} onClick={() => setExpanded(value => !value)}

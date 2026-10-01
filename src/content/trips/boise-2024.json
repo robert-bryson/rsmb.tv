@@ -99,139 +99,427 @@
     ],
     "photos": [
         {
-            "id": "boise-2024-05-19-forest-trail",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
-            "alt": "A narrow trail winding through sword ferns and tall forest trees.",
-            "date": "2024-05-19"
-        },
-        {
-            "id": "boise-2024-05-19-panther-creek-falls",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-1600.webp 1600w",
+            "id": "boise-2024-05-11-cle-elum",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-79dc5ac47c12-1600.webp",
             "width": 1600,
             "height": 1200,
-            "alt": "Panther Creek Falls flowing through a mossy evergreen forest.",
-            "date": "2024-05-19"
+            "alt": "The motorcycle parked outside a small roadside shop among cars in Cle Elum.",
+            "date": "2024-05-11",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-79dc5ac47c12-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-79dc5ac47c12-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-79dc5ac47c12-1600.webp 1600w"
         },
         {
-            "id": "boise-2024-05-19-falcon-for-sale",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-1600.webp 1600w",
+            "id": "boise-2024-05-11-yakima-canyon",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-1600.webp 1600w",
             "width": 1600,
             "height": 1067,
-            "alt": "A weathered Ford Falcon for sale in a grassy yard.",
-            "date": "2024-05-19"
+            "alt": "The Yakima River flowing below red-brown canyon walls.",
+            "date": "2024-05-11"
         },
         {
-            "id": "boise-2024-05-19-mountain-pond",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-1600.webp 1600w",
+            "id": "boise-2024-05-11-warehouse",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-885c6bfad782-1600.webp",
+            "width": 1600,
+            "height": 2400,
+            "alt": "A red car parked beside a tall, weathered warehouse with faded lettering.",
+            "date": "2024-05-11",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-885c6bfad782-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-885c6bfad782-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-885c6bfad782-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-11-farm-road",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-1600.webp 1600w",
             "width": 1600,
             "height": 1067,
-            "alt": "A calm pond reflecting forested hills beneath scattered clouds.",
-            "date": "2024-05-19"
+            "alt": "A straight farm road crossing open rolling country.",
+            "date": "2024-05-11"
         },
         {
-            "id": "boise-2024-05-18-forest-camp",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-1600.webp 1600w",
+            "id": "boise-2024-05-11-curve-road",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-54e97575123b-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A paved road curving downhill through open farmland toward distant ridges.",
+            "date": "2024-05-11",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-54e97575123b-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-54e97575123b-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-54e97575123b-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-11-no-tresspassing",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-43be06fa8441-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A metal gate with a No Trespassing sign overlooking rolling open country.",
+            "date": "2024-05-11",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-43be06fa8441-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-43be06fa8441-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-43be06fa8441-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-11-view",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-489dc270b3fd-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A shaded picnic shelter at an overlook above a broad river valley.",
+            "date": "2024-05-11",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-489dc270b3fd-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-489dc270b3fd-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-489dc270b3fd-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-11-butter-creek",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-e688989595b1-1600.webp",
             "width": 1600,
             "height": 1200,
-            "alt": "A yellow tent and motorcycle in a grassy forest campsite.",
-            "date": "2024-05-18"
+            "alt": "A quiet paved road following a green valley between rounded hills.",
+            "date": "2024-05-11",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-e688989595b1-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-e688989595b1-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-e688989595b1-1600.webp 1600w"
         },
         {
-            "id": "boise-2024-05-18-red-classic-car",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-1600.webp 1600w",
+            "id": "boise-2024-05-11-yakima-river-hills",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-river-hills-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-river-hills-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-river-hills-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-river-hills-1600.webp 1600w",
             "width": 1600,
             "height": 1067,
-            "alt": "A red classic car parked beside weathered farm buildings.",
-            "date": "2024-05-18"
+            "alt": "The Yakima River winding past rounded, treeless hills.",
+            "date": "2024-05-11"
         },
         {
-            "id": "boise-2024-05-18-halfway-sign",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
-            "alt": "A Welcome to Halfway sign with snow-covered mountains behind it.",
-            "date": "2024-05-18"
-        },
-        {
-            "id": "boise-2024-05-18-high-desert-overlook",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
-            "alt": "A broad view across rust-colored high desert hills.",
-            "date": "2024-05-18"
-        },
-        {
-            "id": "boise-2024-05-18-snowy-mountain-road",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
-            "alt": "A gravel road leads toward snow-covered mountains across green ranchland.",
-            "date": "2024-05-18"
-        },
-        {
-            "id": "boise-2024-05-18-clouds-over-river",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-1600.webp 1600w",
+            "id": "boise-2024-05-11-butter-creek-y",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-973f06f36e6f-1600.webp",
             "width": 1600,
             "height": 1200,
-            "alt": "Rippling clouds stretch across a blue sky above a winding river canyon.",
-            "date": "2024-05-18"
+            "alt": "A paved road climbing between green hills beside fences and utility poles.",
+            "date": "2024-05-11",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-973f06f36e6f-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-973f06f36e6f-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-973f06f36e6f-1600.webp 1600w"
         },
         {
-            "id": "boise-2024-05-18-weathered-shed",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-1600.webp 1600w",
+            "id": "boise-2024-05-11-battle-mt-meadow",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-0b07e989cb21-1600.webp",
+            "width": 1600,
+            "height": 2400,
+            "alt": "Evening sunlight falling across a grassy meadow among tall pine trees.",
+            "date": "2024-05-11",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-0b07e989cb21-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-0b07e989cb21-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-0b07e989cb21-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-11-battle-mt-moto",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-6a83cf0b60f6-1600.webp",
             "width": 1600,
             "height": 1067,
-            "alt": "A leaning wooden shed in a field with snowy mountains beyond.",
-            "date": "2024-05-18"
+            "alt": "The loaded motorcycle parked beside a pine forest in evening sunlight.",
+            "date": "2024-05-11",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-6a83cf0b60f6-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-6a83cf0b60f6-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-6a83cf0b60f6-1600.webp 1600w"
         },
         {
-            "id": "boise-2024-05-18-gravel-road",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-1600.webp 1600w",
+            "id": "boise-2024-05-11-blue-mountains-sunset",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-sunset-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-sunset-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-sunset-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-sunset-1600.webp 1600w",
             "width": 1600,
             "height": 1200,
-            "alt": "The motorcycle stopped on a straight gravel road beneath streaked clouds.",
-            "date": "2024-05-18"
+            "alt": "Evening sun over the broad folds of the Blue Mountains.",
+            "date": "2024-05-11"
         },
         {
-            "id": "boise-2024-05-18-old-barn-gate",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-1600.webp 1600w",
+            "id": "boise-2024-05-11-forest-road",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-0cc24875caee-1600.webp",
             "width": 1600,
             "height": 1067,
-            "alt": "An old barn beyond a metal gate in open ranchland.",
-            "date": "2024-05-18"
+            "alt": "A narrow dirt road winding through pine trees in the fading evening light.",
+            "date": "2024-05-11",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-0cc24875caee-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-0cc24875caee-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-0cc24875caee-1600.webp 1600w"
         },
         {
-            "id": "boise-2024-05-18-volcano-compass",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-1600.webp 1600w",
+            "id": "boise-2024-05-11-pond-sunset",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Pine trees silhouetted at sunset and reflected in a still pond.",
+            "date": "2024-05-11"
+        },
+        {
+            "id": "boise-2024-05-11-camp-moto",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-camp-moto-1b63ab12122d-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "The loaded motorcycle beside a dirt track and pine trees at sunset.",
+            "date": "2024-05-11",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-camp-moto-1b63ab12122d-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-camp-moto-1b63ab12122d-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-camp-moto-1b63ab12122d-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-11-moto-sunset",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-1b63ab12122d-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "The motorcycle parked beneath a pine beside a track leading toward the sunset.",
+            "date": "2024-05-11",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-1b63ab12122d-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-1b63ab12122d-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-1b63ab12122d-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-11-stars",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-stars-ed877446c498-1600.webp",
             "width": 1600,
             "height": 1200,
-            "alt": "A compass rose at an overlook points toward distant Cascade volcanoes.",
-            "date": "2024-05-18"
+            "alt": "Stars scattered across the night sky above the silhouettes of pine branches.",
+            "date": "2024-05-11",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-stars-ed877446c498-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-stars-ed877446c498-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-stars-ed877446c498-1600.webp 1600w"
         },
         {
-            "id": "boise-2024-05-18-canyon-overlook",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-1600.webp 1600w",
+            "id": "boise-2024-05-12-meadow-camp",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-1600.webp 1600w",
+            "width": 1600,
+            "height": 1200,
+            "alt": "A yellow tent and motorcycle camped beside a lone pine in a meadow.",
+            "date": "2024-05-12"
+        },
+        {
+            "id": "boise-2024-05-12-blues-meadow",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-0b5f5d2adc2c-1600.webp",
             "width": 1600,
             "height": 1067,
-            "alt": "A river curving between steep, dry canyon walls.",
-            "date": "2024-05-18"
+            "alt": "An open mountain meadow bordered by scattered pines beneath a clear blue sky.",
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-0b5f5d2adc2c-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-0b5f5d2adc2c-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-0b5f5d2adc2c-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-12-aspen-grove",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-1600.webp 1600w",
+            "width": 1600,
+            "height": 1200,
+            "alt": "A sparse grove of white-barked aspens beneath a deep blue sky.",
+            "date": "2024-05-12"
+        },
+        {
+            "id": "boise-2024-05-12-blues-road",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-road-f8886be86aa2-1600.webp",
+            "width": 1600,
+            "height": 1200,
+            "alt": "The motorcycle's windscreen and navigation display facing a quiet road across a meadow.",
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-road-f8886be86aa2-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-road-f8886be86aa2-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-road-f8886be86aa2-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-12-prairie-creek",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A winding creek crossing flat grassland under a clear sky.",
+            "date": "2024-05-12"
+        },
+        {
+            "id": "boise-2024-05-12-antlers-inn",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "The Antlers Inn facade decorated with rows of antlers.",
+            "date": "2024-05-12"
+        },
+        {
+            "id": "boise-2024-05-12-view-south",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-c63da734d955-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A view through scattered pines across forested slopes toward distant hills.",
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-c63da734d955-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-c63da734d955-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-c63da734d955-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-12-flooded-meadow",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-fe2b65e3ce06-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Pools of water in a broad mountain meadow below wooded hills and a rocky summit.",
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-fe2b65e3ce06-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-fe2b65e3ce06-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-fe2b65e3ce06-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-12-map",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-map-0619c5c09fc4-1600.webp",
+            "width": 1600,
+            "height": 1200,
+            "alt": "An outdoor recreation map mounted in a wooden information shelter.",
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-map-0619c5c09fc4-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-map-0619c5c09fc4-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-map-0619c5c09fc4-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-12-snowy-road",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-1600.webp 1600w",
+            "width": 1600,
+            "height": 1200,
+            "alt": "The motorcycle crossing a mountain road still partly covered in snow.",
+            "date": "2024-05-12"
+        },
+        {
+            "id": "boise-2024-05-12-creek",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-creek-8244164d2f77-1600.webp",
+            "width": 1600,
+            "height": 2400,
+            "alt": "A rocky creek flowing through an evergreen forest beneath a blue sky.",
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-creek-8244164d2f77-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-creek-8244164d2f77-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-creek-8244164d2f77-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-12-mailboxes",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A long row of rural mailboxes beneath a roadside shelter.",
+            "date": "2024-05-12"
+        },
+        {
+            "id": "boise-2024-05-12-snowy-mts",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-mts-b50abd9aca50-1600.webp",
+            "width": 1600,
+            "height": 1200,
+            "alt": "A snow-covered mountain range rising beyond densely forested green hills.",
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-mts-b50abd9aca50-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-mts-b50abd9aca50-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-mts-b50abd9aca50-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-12-wallowa-barn",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A dark wooden barn beside the road with the Wallowa Mountains behind it.",
+            "date": "2024-05-12"
+        },
+        {
+            "id": "boise-2024-05-12-barn-and-mountains",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A small barn in a green valley below snow-covered mountains.",
+            "date": "2024-05-12"
+        },
+        {
+            "id": "boise-2024-05-12-motorcycle-and-mountains",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "The loaded motorcycle at an overlook with snow-covered mountains beyond.",
+            "date": "2024-05-12"
+        },
+        {
+            "id": "boise-2024-05-12-strawberries-pano",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-399356f42b50-1600.webp",
+            "width": 1600,
+            "height": 279,
+            "alt": "A wide panorama of open ranchland and distant snow-covered mountains.",
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-399356f42b50-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-399356f42b50-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-399356f42b50-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-12-wagon",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-01da0a4be5a2-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A green covered wagon with red wheels and a white canvas top at a roadside overlook.",
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-01da0a4be5a2-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-01da0a4be5a2-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-01da0a4be5a2-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-12-cattle-and-mountains",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Cattle grazing in a green pasture below snow-covered mountains.",
+            "date": "2024-05-12"
+        },
+        {
+            "id": "boise-2024-05-12-vale-66",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-e008fd6b36bb-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "The motorcycle beside a US 26 junction sign pointing toward Prairie City, John Day, Vale, and Unity.",
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-e008fd6b36bb-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-e008fd6b36bb-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-e008fd6b36bb-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-12-gravel-road-clouds",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A straight gravel road disappearing beneath bright clouds in open country.",
+            "date": "2024-05-12"
+        },
+        {
+            "id": "boise-2024-05-12-gravel-moto",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-0a47ce19de49-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "The loaded motorcycle parked on a straight gravel road through sagebrush country.",
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-0a47ce19de49-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-0a47ce19de49-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-0a47ce19de49-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-12-sunset-market",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "The weathered Sunset Market and Cafe beside an empty rural road.",
+            "date": "2024-05-12"
+        },
+        {
+            "id": "boise-2024-05-12-a-street",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-a-street-d84b4e813457-1600.webp",
+            "width": 1600,
+            "height": 1200,
+            "alt": "A small white roadside service station with yellow and green trim.",
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-a-street-d84b4e813457-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-a-street-d84b4e813457-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-a-street-d84b4e813457-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-12-hotel-view",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-8ea5fd51e543-1600.webp",
+            "width": 1600,
+            "height": 2400,
+            "alt": "Daylight through a hotel room window overlooking a parking lot and trees.",
+            "date": "2024-05-13",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-8ea5fd51e543-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-8ea5fd51e543-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-8ea5fd51e543-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-14-wildfire-center",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "The National Interagency Fire Center building and an airtanker tail in Boise.",
+            "date": "2024-05-14"
+        },
+        {
+            "id": "boise-2024-05-14-saloon",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-saloon-296601f46d71-1600.webp",
+            "width": 1600,
+            "height": 2400,
+            "alt": "A dimly lit saloon interior with hanging lamps and a wooden bar.",
+            "date": "2024-05-14",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-saloon-296601f46d71-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-saloon-296601f46d71-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-saloon-296601f46d71-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-16-river-wave",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-8aa514bf8756-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A standing wave breaking across a river channel bordered by rocks and leafy trees.",
+            "date": "2024-05-16",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-8aa514bf8756-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-8aa514bf8756-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-8aa514bf8756-1600.webp 1600w"
+        },
+        {
+            "id": "boise-2024-05-17-midvale",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-midvale-0d7a9c76fb4f-1600.webp",
+            "width": 1600,
+            "height": 1200,
+            "alt": "A grassy roadside overlook above a broad valley of fields and distant hills.",
+            "date": "2024-05-17",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-midvale-0d7a9c76fb4f-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-midvale-0d7a9c76fb4f-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-midvale-0d7a9c76fb4f-1600.webp 1600w"
         },
         {
             "id": "boise-2024-05-17-wallowa-mountains",
@@ -250,6 +538,15 @@
             "height": 1067,
             "alt": "The broad Snake River winding among smooth, treeless hills.",
             "date": "2024-05-17"
+        },
+        {
+            "id": "boise-2024-05-17-snowy-ridge",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snowy-ridge-f27f39c39f3f-1600.webp",
+            "width": 1600,
+            "height": 1200,
+            "alt": "Blue reservoir water below steep green hills with a snowy ridge in the distance.",
+            "date": "2024-05-17",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snowy-ridge-f27f39c39f3f-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snowy-ridge-f27f39c39f3f-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snowy-ridge-f27f39c39f3f-1600.webp 1600w"
         },
         {
             "id": "boise-2024-05-17-hells-canyon-peak",
@@ -351,174 +648,222 @@
             "date": "2024-05-17"
         },
         {
-            "id": "boise-2024-05-14-wildfire-center",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
-            "alt": "The National Interagency Fire Center building and an airtanker tail in Boise.",
-            "date": "2024-05-14"
-        },
-        {
-            "id": "boise-2024-05-12-meadow-camp",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-1600.webp 1600w",
+            "id": "boise-2024-05-18-forest-camp",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-1600.webp 1600w",
             "width": 1600,
             "height": 1200,
-            "alt": "A yellow tent and motorcycle camped beside a lone pine in a meadow.",
-            "date": "2024-05-12"
+            "alt": "A yellow tent and motorcycle in a grassy forest campsite.",
+            "date": "2024-05-18"
         },
         {
-            "id": "boise-2024-05-12-aspen-grove",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-1600.webp 1600w",
+            "id": "boise-2024-05-18-red-classic-car",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A red classic car parked beside weathered farm buildings.",
+            "date": "2024-05-18"
+        },
+        {
+            "id": "boise-2024-05-18-halfway-sign",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A Welcome to Halfway sign with snow-covered mountains behind it.",
+            "date": "2024-05-18"
+        },
+        {
+            "id": "boise-2024-05-18-high-desert-overlook",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A broad view across rust-colored high desert hills.",
+            "date": "2024-05-18"
+        },
+        {
+            "id": "boise-2024-05-18-snowy-mountain-road",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A gravel road leads toward snow-covered mountains across green ranchland.",
+            "date": "2024-05-18"
+        },
+        {
+            "id": "boise-2024-05-18-clouds-over-river",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-1600.webp 1600w",
             "width": 1600,
             "height": 1200,
-            "alt": "A sparse grove of white-barked aspens beneath a deep blue sky.",
-            "date": "2024-05-12"
+            "alt": "Rippling clouds stretch across a blue sky above a winding river canyon.",
+            "date": "2024-05-18"
         },
         {
-            "id": "boise-2024-05-12-prairie-creek",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-1600.webp 1600w",
+            "id": "boise-2024-05-18-weathered-shed",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-1600.webp 1600w",
             "width": 1600,
             "height": 1067,
-            "alt": "A winding creek crossing flat grassland under a clear sky.",
-            "date": "2024-05-12"
+            "alt": "A leaning wooden shed in a field with snowy mountains beyond.",
+            "date": "2024-05-18"
         },
         {
-            "id": "boise-2024-05-12-antlers-inn",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
-            "alt": "The Antlers Inn facade decorated with rows of antlers.",
-            "date": "2024-05-12"
-        },
-        {
-            "id": "boise-2024-05-12-snowy-road",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-1600.webp 1600w",
+            "id": "boise-2024-05-18-gravel-road",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-1600.webp 1600w",
             "width": 1600,
             "height": 1200,
-            "alt": "The motorcycle crossing a mountain road still partly covered in snow.",
-            "date": "2024-05-12"
+            "alt": "The motorcycle stopped on a straight gravel road beneath streaked clouds.",
+            "date": "2024-05-18"
         },
         {
-            "id": "boise-2024-05-12-mailboxes",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-1600.webp 1600w",
+            "id": "boise-2024-05-18-old-barn-gate",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-1600.webp 1600w",
             "width": 1600,
             "height": 1067,
-            "alt": "A long row of rural mailboxes beneath a roadside shelter.",
-            "date": "2024-05-12"
+            "alt": "An old barn beyond a metal gate in open ranchland.",
+            "date": "2024-05-18"
         },
         {
-            "id": "boise-2024-05-12-wallowa-barn",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
-            "alt": "A dark wooden barn beside the road with the Wallowa Mountains behind it.",
-            "date": "2024-05-12"
-        },
-        {
-            "id": "boise-2024-05-12-barn-and-mountains",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
-            "alt": "A small barn in a green valley below snow-covered mountains.",
-            "date": "2024-05-12"
-        },
-        {
-            "id": "boise-2024-05-12-motorcycle-and-mountains",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
-            "alt": "The loaded motorcycle at an overlook with snow-covered mountains beyond.",
-            "date": "2024-05-12"
-        },
-        {
-            "id": "boise-2024-05-12-cattle-and-mountains",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
-            "alt": "Cattle grazing in a green pasture below snow-covered mountains.",
-            "date": "2024-05-12"
-        },
-        {
-            "id": "boise-2024-05-12-gravel-road-clouds",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
-            "alt": "A straight gravel road disappearing beneath bright clouds in open country.",
-            "date": "2024-05-12"
-        },
-        {
-            "id": "boise-2024-05-12-sunset-market",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
-            "alt": "The weathered Sunset Market and Cafe beside an empty rural road.",
-            "date": "2024-05-12"
-        },
-        {
-            "id": "boise-2024-05-11-yakima-canyon",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
-            "alt": "The Yakima River flowing below red-brown canyon walls.",
-            "date": "2024-05-11"
-        },
-        {
-            "id": "boise-2024-05-11-farm-road",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
-            "alt": "A straight farm road crossing open rolling country.",
-            "date": "2024-05-11"
-        },
-        {
-            "id": "boise-2024-05-11-yakima-river-hills",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-river-hills-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-river-hills-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-river-hills-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-river-hills-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
-            "alt": "The Yakima River winding past rounded, treeless hills.",
-            "date": "2024-05-11"
-        },
-        {
-            "id": "boise-2024-05-11-blue-mountains-sunset",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-sunset-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-sunset-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-sunset-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-sunset-1600.webp 1600w",
+            "id": "boise-2024-05-18-volcano-compass",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-1600.webp 1600w",
             "width": 1600,
             "height": 1200,
-            "alt": "Evening sun over the broad folds of the Blue Mountains.",
-            "date": "2024-05-11"
+            "alt": "A compass rose at an overlook points toward distant Cascade volcanoes.",
+            "date": "2024-05-18"
         },
         {
-            "id": "boise-2024-05-11-pond-sunset",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-1600.webp 1600w",
+            "id": "boise-2024-05-18-canyon-overlook",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-1600.webp 1600w",
             "width": 1600,
             "height": 1067,
-            "alt": "Pine trees silhouetted at sunset and reflected in a still pond.",
-            "date": "2024-05-11"
+            "alt": "A river curving between steep, dry canyon walls.",
+            "date": "2024-05-18"
+        },
+        {
+            "id": "boise-2024-05-19-forest-trail",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A narrow trail winding through sword ferns and tall forest trees.",
+            "date": "2024-05-19"
+        },
+        {
+            "id": "boise-2024-05-19-panther-creek-falls",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-1600.webp 1600w",
+            "width": 1600,
+            "height": 1200,
+            "alt": "Panther Creek Falls flowing through a mossy evergreen forest.",
+            "date": "2024-05-19"
+        },
+        {
+            "id": "boise-2024-05-19-falcon-for-sale",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A weathered Ford Falcon for sale in a grassy yard.",
+            "date": "2024-05-19"
+        },
+        {
+            "id": "boise-2024-05-19-mountain-pond",
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-1600.webp",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-1600.webp 1600w",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A calm pond reflecting forested hills beneath scattered clouds.",
+            "date": "2024-05-19"
         }
     ],
     "galleries": {
-        "2024-05-19": [
-            "boise-2024-05-19-forest-trail",
-            "boise-2024-05-19-panther-creek-falls",
-            "boise-2024-05-19-falcon-for-sale",
-            "boise-2024-05-19-mountain-pond"
+        "2024-05-11-1": [
+            "boise-2024-05-11-cle-elum",
+            "boise-2024-05-11-yakima-canyon",
+            "boise-2024-05-11-warehouse",
+            "boise-2024-05-11-farm-road",
+            "boise-2024-05-11-view"
+        ],
+        "2024-05-11-2": [
+            "boise-2024-05-11-warehouse",
+            "boise-2024-05-11-farm-road",
+            "boise-2024-05-11-curve-road",
+            "boise-2024-05-11-no-tresspassing"
+        ],
+        "2024-05-11-3": [
+            "boise-2024-05-11-butter-creek",
+            "boise-2024-05-11-yakima-river-hills",
+            "boise-2024-05-11-butter-creek-y",
+            "boise-2024-05-11-battle-mt-meadow",
+            "boise-2024-05-11-battle-mt-moto",
+            "boise-2024-05-11-blue-mountains-sunset",
+            "boise-2024-05-11-forest-road"
+        ],
+        "2024-05-11-4": [
+            "boise-2024-05-11-moto-sunset",
+            "boise-2024-05-11-pond-sunset",
+            "boise-2024-05-11-stars"
+        ],
+        "2024-05-12-1": [
+            "boise-2024-05-12-meadow-camp",
+            "boise-2024-05-12-blues-meadow",
+            "boise-2024-05-12-aspen-grove",
+            "boise-2024-05-12-blues-road",
+            "boise-2024-05-12-prairie-creek"
+        ],
+        "2024-05-12": [
+            "boise-2024-05-12-antlers-inn",
+            "boise-2024-05-12-view-south",
+            "boise-2024-05-12-flooded-meadow",
+            "boise-2024-05-12-map",
+            "boise-2024-05-12-snowy-road",
+            "boise-2024-05-12-creek",
+            "boise-2024-05-12-mailboxes",
+            "boise-2024-05-12-snowy-mts",
+            "boise-2024-05-12-wallowa-barn",
+            "boise-2024-05-12-barn-and-mountains",
+            "boise-2024-05-12-motorcycle-and-mountains",
+            "boise-2024-05-12-strawberries-pano",
+            "boise-2024-05-12-wagon",
+            "boise-2024-05-12-cattle-and-mountains",
+            "boise-2024-05-12-vale-66",
+            "boise-2024-05-12-gravel-road-clouds",
+            "boise-2024-05-12-gravel-moto",
+            "boise-2024-05-12-sunset-market",
+            "boise-2024-05-12-a-street",
+            "boise-2024-05-12-hotel-view"
+        ],
+        "workdays-in-boise": [
+            "boise-2024-05-14-wildfire-center",
+            "boise-2024-05-14-saloon",
+            "boise-2024-05-16-river-wave"
+        ],
+        "2024-05-16": [
+            "boise-2024-05-16-river-wave"
+        ],
+        "2024-05-17": [
+            "boise-2024-05-17-midvale",
+            "boise-2024-05-17-wallowa-mountains",
+            "boise-2024-05-17-snake-river",
+            "boise-2024-05-17-snowy-ridge",
+            "boise-2024-05-17-hells-canyon-peak",
+            "boise-2024-05-17-hells-canyon-reservoir",
+            "boise-2024-05-17-canyon-rapids",
+            "boise-2024-05-17-canyon-bridge",
+            "boise-2024-05-17-motorcycle-by-river",
+            "boise-2024-05-17-canyon-at-dusk",
+            "boise-2024-05-17-canyon-cliffs",
+            "boise-2024-05-17-canyon-road",
+            "boise-2024-05-17-canyon-river",
+            "boise-2024-05-17-canyon-river-bend",
+            "boise-2024-05-17-hells-canyon-inn"
         ],
         "2024-05-18": [
             "boise-2024-05-18-forest-camp",
@@ -533,63 +878,63 @@
             "boise-2024-05-18-volcano-compass",
             "boise-2024-05-18-canyon-overlook"
         ],
-        "2024-05-17": [
-            "boise-2024-05-17-wallowa-mountains",
-            "boise-2024-05-17-snake-river",
-            "boise-2024-05-17-hells-canyon-peak",
-            "boise-2024-05-17-hells-canyon-reservoir",
-            "boise-2024-05-17-canyon-rapids",
-            "boise-2024-05-17-canyon-bridge",
-            "boise-2024-05-17-motorcycle-by-river",
-            "boise-2024-05-17-canyon-at-dusk",
-            "boise-2024-05-17-canyon-cliffs",
-            "boise-2024-05-17-canyon-road",
-            "boise-2024-05-17-canyon-river",
-            "boise-2024-05-17-canyon-river-bend",
-            "boise-2024-05-17-hells-canyon-inn"
-        ],
-        "2024-05-14": [
-            "boise-2024-05-14-wildfire-center"
-        ],
-        "2024-05-12": [
-            "boise-2024-05-12-meadow-camp",
-            "boise-2024-05-12-aspen-grove",
-            "boise-2024-05-12-prairie-creek",
-            "boise-2024-05-12-antlers-inn",
-            "boise-2024-05-12-snowy-road",
-            "boise-2024-05-12-mailboxes",
-            "boise-2024-05-12-wallowa-barn",
-            "boise-2024-05-12-barn-and-mountains",
-            "boise-2024-05-12-motorcycle-and-mountains",
-            "boise-2024-05-12-cattle-and-mountains",
-            "boise-2024-05-12-gravel-road-clouds",
-            "boise-2024-05-12-sunset-market"
-        ],
-        "2024-05-11": [
-            "boise-2024-05-11-yakima-canyon",
-            "boise-2024-05-11-farm-road",
-            "boise-2024-05-11-yakima-river-hills",
-            "boise-2024-05-11-blue-mountains-sunset",
-            "boise-2024-05-11-pond-sunset"
-        ],
-        "highlights": [
+        "2024-05-19": [
             "boise-2024-05-19-forest-trail",
             "boise-2024-05-19-panther-creek-falls",
             "boise-2024-05-19-falcon-for-sale",
-            "boise-2024-05-19-mountain-pond",
-            "boise-2024-05-18-forest-camp",
-            "boise-2024-05-18-red-classic-car",
-            "boise-2024-05-18-halfway-sign",
-            "boise-2024-05-18-high-desert-overlook",
-            "boise-2024-05-18-snowy-mountain-road",
-            "boise-2024-05-18-clouds-over-river",
-            "boise-2024-05-18-weathered-shed",
-            "boise-2024-05-18-gravel-road",
-            "boise-2024-05-18-old-barn-gate",
-            "boise-2024-05-18-volcano-compass",
-            "boise-2024-05-18-canyon-overlook",
+            "boise-2024-05-19-mountain-pond"
+        ],
+        "highlights": [
+            "boise-2024-05-11-cle-elum",
+            "boise-2024-05-11-yakima-canyon",
+            "boise-2024-05-11-warehouse",
+            "boise-2024-05-11-farm-road",
+            "boise-2024-05-11-curve-road",
+            "boise-2024-05-11-no-tresspassing",
+            "boise-2024-05-11-view",
+            "boise-2024-05-11-butter-creek",
+            "boise-2024-05-11-yakima-river-hills",
+            "boise-2024-05-11-butter-creek-y",
+            "boise-2024-05-11-battle-mt-meadow",
+            "boise-2024-05-11-battle-mt-moto",
+            "boise-2024-05-11-blue-mountains-sunset",
+            "boise-2024-05-11-forest-road",
+            "boise-2024-05-11-pond-sunset",
+            "boise-2024-05-11-camp-moto",
+            "boise-2024-05-11-moto-sunset",
+            "boise-2024-05-11-stars",
+            "boise-2024-05-12-meadow-camp",
+            "boise-2024-05-12-blues-meadow",
+            "boise-2024-05-12-aspen-grove",
+            "boise-2024-05-12-blues-road",
+            "boise-2024-05-12-prairie-creek",
+            "boise-2024-05-12-antlers-inn",
+            "boise-2024-05-12-view-south",
+            "boise-2024-05-12-flooded-meadow",
+            "boise-2024-05-12-map",
+            "boise-2024-05-12-snowy-road",
+            "boise-2024-05-12-creek",
+            "boise-2024-05-12-mailboxes",
+            "boise-2024-05-12-snowy-mts",
+            "boise-2024-05-12-wallowa-barn",
+            "boise-2024-05-12-barn-and-mountains",
+            "boise-2024-05-12-motorcycle-and-mountains",
+            "boise-2024-05-12-strawberries-pano",
+            "boise-2024-05-12-wagon",
+            "boise-2024-05-12-cattle-and-mountains",
+            "boise-2024-05-12-vale-66",
+            "boise-2024-05-12-gravel-road-clouds",
+            "boise-2024-05-12-gravel-moto",
+            "boise-2024-05-12-sunset-market",
+            "boise-2024-05-12-a-street",
+            "boise-2024-05-12-hotel-view",
+            "boise-2024-05-14-wildfire-center",
+            "boise-2024-05-14-saloon",
+            "boise-2024-05-16-river-wave",
+            "boise-2024-05-17-midvale",
             "boise-2024-05-17-wallowa-mountains",
             "boise-2024-05-17-snake-river",
+            "boise-2024-05-17-snowy-ridge",
             "boise-2024-05-17-hells-canyon-peak",
             "boise-2024-05-17-hells-canyon-reservoir",
             "boise-2024-05-17-canyon-rapids",
@@ -601,24 +946,21 @@
             "boise-2024-05-17-canyon-river",
             "boise-2024-05-17-canyon-river-bend",
             "boise-2024-05-17-hells-canyon-inn",
-            "boise-2024-05-14-wildfire-center",
-            "boise-2024-05-12-meadow-camp",
-            "boise-2024-05-12-aspen-grove",
-            "boise-2024-05-12-prairie-creek",
-            "boise-2024-05-12-antlers-inn",
-            "boise-2024-05-12-snowy-road",
-            "boise-2024-05-12-mailboxes",
-            "boise-2024-05-12-wallowa-barn",
-            "boise-2024-05-12-barn-and-mountains",
-            "boise-2024-05-12-motorcycle-and-mountains",
-            "boise-2024-05-12-cattle-and-mountains",
-            "boise-2024-05-12-gravel-road-clouds",
-            "boise-2024-05-12-sunset-market",
-            "boise-2024-05-11-yakima-canyon",
-            "boise-2024-05-11-farm-road",
-            "boise-2024-05-11-yakima-river-hills",
-            "boise-2024-05-11-blue-mountains-sunset",
-            "boise-2024-05-11-pond-sunset"
+            "boise-2024-05-18-forest-camp",
+            "boise-2024-05-18-red-classic-car",
+            "boise-2024-05-18-halfway-sign",
+            "boise-2024-05-18-high-desert-overlook",
+            "boise-2024-05-18-snowy-mountain-road",
+            "boise-2024-05-18-clouds-over-river",
+            "boise-2024-05-18-weathered-shed",
+            "boise-2024-05-18-gravel-road",
+            "boise-2024-05-18-old-barn-gate",
+            "boise-2024-05-18-volcano-compass",
+            "boise-2024-05-18-canyon-overlook",
+            "boise-2024-05-19-forest-trail",
+            "boise-2024-05-19-panther-creek-falls",
+            "boise-2024-05-19-falcon-for-sale",
+            "boise-2024-05-19-mountain-pond"
         ]
     }
 }

@@ -54,7 +54,7 @@ Use these Google Docs styles:
 | Section in a chapter | Heading 3 | Section heading and table-of-contents link |
 | Distance or other supporting text | Subtitle | Small gray paragraph below the heading |
 | Story text | Normal text | Body paragraph |
-| Shortcode | Normal text on a separate line | Trip map, photo, gallery, or facts |
+| Shortcode | Normal text in a separate paragraph | Trip map, photo, gallery, or facts |
 
 Place a subtitle directly after its heading. Subtitles have no heading ID or table-of-contents entry.
 The importer retains inline emphasis and links in subtitles.
@@ -68,7 +68,8 @@ Use a code block for code examples. The importer also accepts matching code fenc
 
 ### Shortcodes
 
-Put each shortcode on its own line. Use lowercase letters, numbers, and hyphens in IDs.
+Put each shortcode in its own paragraph. Highlighting, bold, and italic formatting are allowed.
+Use lowercase letters, numbers, and hyphens in IDs. Shortcodes inside code examples remain literal.
 
 | Shortcode | Result |
 | --- | --- |
@@ -117,7 +118,13 @@ It creates WebP files at quality 84. It does not enlarge the source image.
 A source named `Camp at Dusk.jpg` produces files such as `camp-at-dusk-012345abcdef-480.webp` (the fingerprint varies).
 Use clear, stable filenames. The command checks all photo IDs before it writes files.
 It stops if two source names produce the same photo ID.
-It retains versioned files so published URLs remain usable. Compatibility aliases without fingerprints are also written for older manifests; stale aliases are removed. The report records file sizes and flags outputs above 100 KB at 480px, 300 KB at 960px, or 800 KB at larger widths for review.
+It retains versioned files so published URLs remain usable.
+It also writes compatibility aliases without fingerprints for older manifests. It removes stale aliases.
+The report records each file size. Review files above these limits:
+
+- 100 KB at 480 pixels.
+- 300 KB at 960 pixels.
+- 800 KB at larger widths.
 
 Copy the largest output width and height from `asset-metadata.json` into the manifest.
 Do not assume that each source can produce a 1600-pixel image.
@@ -147,10 +154,12 @@ The command calculates surface distance from the GPX points with the Haversine f
 It does not include elevation gain. It reports whole miles and kilometers to one decimal place.
 The GeoJSON features also contain unrounded distances for later calculations.
 
-The command rejects invalid coordinates, removes consecutive duplicates and elevation, and rounds output coordinates
-to six decimal places. It simplifies each route segment with a 5-meter tolerance after calculating distance from the
-cleaned full-resolution geometry. Segment endpoints are retained. Use `--route-tolerance <meters>` to change the
-tolerance. Use `--route-tolerance 0` to retain all cleaned coordinates.
+The command rejects invalid coordinates. It removes consecutive duplicates and elevation.
+It rounds output coordinates to six decimal places.
+It calculates distance from the cleaned full-resolution geometry before simplification.
+It simplifies each route segment with a 5-meter tolerance. It retains segment endpoints.
+Use `--route-tolerance <meters>` to change the tolerance.
+Use `--route-tolerance 0` to retain all cleaned coordinates.
 `asset-metadata.json` reports the original and output point counts for the complete route and each track.
 
 Review the route before publication:
@@ -285,6 +294,12 @@ npm run dev
 The command prepares local assets and imports published and unpublished Sheet rows.
 It copies WebP and GeoJSON files to `public/data/trips/<trip-id>` for local preview.
 This cache is ignored by Git. An incomplete trip does not stop preparation of other trips.
+Trips with no selected photos or original GPX files are skipped without changing existing outputs.
+The command stages both preview directories before replacement. A failed copy retains the previous preview.
+It restores the previous preview if installation fails.
+If restoration fails, the backup remains in a hidden directory under `public/data/trips`.
+On Drive-backed mounts, native file copying can fail. The fallback uses a temporary file and ordinary reads and writes.
+Other copy errors still stop preparation.
 Set `TRIP_ASSETS_ON_DEV=false` to skip preparation.
 
 Open `http://localhost:5173/trips/<trip-slug>`.
@@ -306,7 +321,12 @@ Check desktop and phone widths:
 - Cause a route request to fail. Check that the download link remains available below the map.
 - Open and close photos with a mouse, keyboard, and touch.
 - Check that focus returns to the opening control.
+- Check hover captions and keyboard focus on desktop devices.
+- Press Escape while the photo link has focus. Confirm that its caption closes.
+- Enable reduced motion. Confirm that captions do not animate.
+- Confirm that phone captions remain visible below their photos.
 - For galleries with more than six photos, open the viewer. Check that all photos remain available.
+- Expand the gallery. Confirm that each viewer caption retains the same text and location.
 - Open each motorcycle and region link. Check that the result includes this trip.
 - Check the previous and next article links. Check that the return link retains the list filter.
 - Remove repeated titles and repeated facts.

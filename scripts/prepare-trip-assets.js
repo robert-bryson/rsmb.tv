@@ -9,6 +9,7 @@ import { DOMParser } from '@xmldom/xmldom';
 import { gpx } from '@tmcw/togeojson';
 import sharp from 'sharp';
 import simplify from 'simplify-js';
+import { copyTripAsset } from './copy-trip-asset.js';
 
 const TRIP_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const PHOTO_EXTENSIONS = new Set(['.avif', '.heic', '.heif', '.jpeg', '.jpg', '.png', '.tif', '.tiff', '.webp']);
@@ -123,10 +124,9 @@ async function removeUnexpectedFiles(directory, expectedFilenames, predicate) {
         .map((filename) => fs.rm(path.join(directory, filename))));
 }
 
-async function preparePhotos(tripRoot, force) {
+async function preparePhotos(tripRoot, force, filenames) {
     const selectsPath = path.join(tripRoot, 'photos', 'selects');
     const processedPath = path.join(tripRoot, 'photos', 'processed');
-    const filenames = await listFiles(selectsPath, (name) => PHOTO_EXTENSIONS.has(path.extname(name).toLowerCase()));
     const seenIds = new Set();
     const selectedPhotos = [];
     const photos = [];
@@ -165,7 +165,7 @@ async function preparePhotos(tripRoot, force) {
             }
 
             // Compatibility alias for existing manifests; versioned names are used by the manifest update command.
-            await fs.copyFile(outputPath, path.join(processedPath, legacyFilename));
+            await copyTripAsset(outputPath, path.join(processedPath, legacyFilename));
             const outputMetadata = await sharp(outputPath).metadata();
             derivatives.push({
                 filename: outputName,
@@ -424,12 +424,14 @@ export async function prepareTripAssets({
     // Validate all routes before photos can change. Do not leave a concurrent
     // writer running after this function has rejected.
     const { route, outputs } = await buildRoute(tripRoot, routeToleranceMeters);
-    const photos = await preparePhotos(tripRoot, force);
-    await writeRoute(tripRoot, outputs);
-
-    if (photos.length === 0 && !route) {
-        throw new Error(`No selected photos or original GPX files found under ${tripRoot}.`);
+    const filenames = await listFiles(path.join(tripRoot, 'photos', 'selects'), (name) => PHOTO_EXTENSIONS.has(path.extname(name).toLowerCase()));
+    if (filenames.length === 0 && !route) {
+        const error = new Error(`No selected photos or original GPX files found under ${tripRoot}.`);
+        error.code = 'NO_TRIP_ASSETS';
+        throw error;
     }
+    const photos = await preparePhotos(tripRoot, force, filenames);
+    await writeRoute(tripRoot, outputs);
 
     const report = {
         tripId,

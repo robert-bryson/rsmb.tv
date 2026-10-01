@@ -1,7 +1,12 @@
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
 import PhotoSwipeDynamicCaption from 'photoswipe-dynamic-caption-plugin';
+import type { TripPhotoData } from '../types';
 import 'photoswipe/style.css';
 import 'photoswipe-dynamic-caption-plugin/photoswipe-dynamic-caption-plugin.css';
+
+export function tripPhotoCaption(photo: TripPhotoData) {
+    return [photo.caption?.trim() || photo.alt, photo.location?.trim()].filter(Boolean).join(' · ');
+}
 
 export function createTripPhotoLightbox(gallery: HTMLElement) {
     const lightbox = new PhotoSwipeLightbox({

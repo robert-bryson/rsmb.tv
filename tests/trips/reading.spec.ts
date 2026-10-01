@@ -130,6 +130,37 @@ test('gallery sizes reflect the actual tile instead of the whole phone', async (
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(await page.evaluate(() => innerWidth));
 });
 
+test('gallery captions support hover, keyboard focus, touch, and reduced motion', async ({ page, isMobile }) => {
+    await page.goto('/trips/coastal-test');
+    const figure = page.locator('.trip-gallery-photo').filter({ has: page.getByRole('img', { name: 'Coast photograph 2' }) });
+    const caption = figure.locator('figcaption');
+    const image = figure.locator('img');
+    const trigger = figure.locator('a');
+    await figure.scrollIntoViewIfNeeded();
+    if (isMobile) {
+        await expect(caption).toHaveCSS('position', 'static');
+        await expect(caption).toBeVisible();
+    } else {
+        await page.mouse.move(0, 0);
+        await expect(caption).toHaveCSS('opacity', '0');
+        await trigger.hover();
+        await expect(caption).toHaveCSS('opacity', '1');
+        await expect(image).toHaveCSS('scale', '1.025');
+        await trigger.focus();
+        await page.keyboard.press('Escape');
+        await expect(caption).toHaveCSS('opacity', '0');
+        await page.mouse.move(0, 0);
+        await trigger.blur();
+        await trigger.focus();
+        await expect(caption).toHaveCSS('opacity', '1');
+        await expect(figure.locator('.image-caption-frame')).toHaveCSS('outline-style', 'solid');
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await expect(image).toHaveCSS('scale', 'none');
+        await expect(caption).toHaveCSS('transition-duration', '0s');
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(await page.evaluate(() => innerWidth));
+});
+
 test('unavailable WebGL leaves the story and static route usable', async ({ page }) => {
     await page.addInitScript(() => { HTMLCanvasElement.prototype.getContext = (() => null) as typeof HTMLCanvasElement.prototype.getContext; });
     await page.goto('/trips/coastal-test');

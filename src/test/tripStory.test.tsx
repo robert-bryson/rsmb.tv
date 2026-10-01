@@ -138,6 +138,48 @@ describe('trip story primitives', () => {
         })).toThrow(/references unknown photo/);
     });
 
+    it('keeps hidden and expanded gallery captions equal, including locations', () => {
+        const photos = Array.from({ length: 8 }, (_, index) => ({
+            ...manifest.photos[1], id: `photo-${index}`, src: `/photo-${index}.webp`,
+            caption: index === 7 ? '   ' : ' Camp. ', location: ' Coast ',
+        }));
+        const { container } = renderStory(<TripGallery galleryId="highlights" />, {
+            ...manifest, photos, hero: photos[0].id, galleries: { highlights: photos.map(photo => photo.id) },
+        });
+        const captions = () => Array.from(container.querySelectorAll('a[data-pswp-width]'))
+            .map(link => link.getAttribute('data-trip-caption'));
+        const collapsed = captions();
+        expect(screen.getAllByRole('img')).toHaveLength(6);
+        expect(collapsed[6]).toBe('Camp. · Coast');
+        expect(collapsed[7]).toBe(`${manifest.photos[1].alt} · Coast`);
+        fireEvent.click(screen.getByRole('button', { name: 'Show all 8 photos' }));
+        expect(screen.getAllByRole('img')).toHaveLength(8);
+        expect(captions()).toEqual(collapsed);
+        expect(screen.getByRole('button', { name: 'Show fewer photos' })).toHaveAttribute('aria-expanded', 'true');
+        fireEvent.click(screen.getByRole('button', { name: 'Show fewer photos' }));
+        expect(screen.getAllByRole('img')).toHaveLength(6);
+        expect(captions()).toEqual(collapsed);
+    });
+
+    it('shows alt-only captions without repeating them to assistive technology', () => {
+        renderStory(<TripPhoto photoId="hero" />);
+        const image = screen.getByRole('img', { name: manifest.photos[0].alt });
+        const caption = image.closest('figure')!.querySelector('figcaption')!;
+        expect(caption).toHaveTextContent(manifest.photos[0].alt);
+        expect(caption).not.toHaveClass('sr-only');
+        expect(caption).toHaveAttribute('aria-hidden', 'true');
+        expect(image.closest('a')).not.toHaveAttribute('aria-describedby');
+    });
+
+    it('uses alt text for blank captions in the hero viewer', () => {
+        const { container } = renderStory(<TripHeroGallery />, {
+            ...manifest, photos: manifest.photos.map(photo => ({ ...photo, caption: '  ', location: ' Coast ' })),
+        });
+        const captions = Array.from(container.querySelectorAll('a[data-pswp-width]'))
+            .map(link => link.getAttribute('data-trip-caption'));
+        expect(captions).toEqual(manifest.photos.map(photo => `${photo.alt} · Coast`));
+    });
+
     it('rejects a hero reference to an unknown photo', () => {
         expect(() => parseTripManifest({ ...manifest, hero: 'missing-photo' }))
             .toThrow(/Hero references unknown photo/);

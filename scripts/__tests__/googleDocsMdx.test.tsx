@@ -90,6 +90,25 @@ describe('Google Docs to rendered MDX', () => {
         expect(await renderDocument('<p>&amp;lt; &amp;#123;</p>')).toBe('<p>&amp;lt; &amp;#123;</p>');
     });
 
+    it('escapes module statements after an invalid backtick fence', async () => {
+        const markdown = convertHtmlToMarkdown('<p>```js`</p><p>export const malformedFence = 1</p><p>```</p>');
+        expect(markdown).toContain('&#101;xport const malformedFence = 1');
+        const compiled = await evaluate(markdown, runtime);
+        expect(compiled).not.toHaveProperty('malformedFence');
+        expect(renderToStaticMarkup(<compiled.default />)).toContain('export const malformedFence = 1');
+    });
+
+    it('validates shortcodes after an invalid backtick fence', () => {
+        expect(() => expandTripShortcodes('```js`\n\n{{trip-gallery:missing}}', { format: 'trip' }, { galleries: {} }))
+            .toThrow('unknown gallery "missing"');
+    });
+
+    it.each(['~~~text', '````text'])('keeps shorter and mismatched fences inside %s examples', opening => {
+        const markdown = `${opening}\n\n{{trip-gallery:missing}}\n\n\`\`\`\n\n{{trip-unknown}}\n\n${opening.slice(0, opening.indexOf('text'))}\n\n{{trip-facts}}`;
+        expect(expandTripShortcodes(markdown, { format: 'trip' }, { galleries: {} }))
+            .toBe(markdown.replace(/\{\{trip-facts\}\}$/, '<TripFacts />'));
+    });
+
     it('removes active content and unsafe attributes from subtitles', async () => {
         const html = await renderDocument(`
             <p class="subtitle" id="post-table-of-contents" onclick="alert(1)">
@@ -111,4 +130,47 @@ describe('Google Docs to rendered MDX', () => {
         expect(expandTripShortcodes(markdown, { format: 'trip', tripId: 'example' }))
             .toBe('<TripMap />\n\n<TripFacts />');
     });
+
+    it.each([
+        '<span style="background-color: #ffff00">{{trip-gallery:2024-05-11-1}}</span>',
+        '<strong><em><u>{{trip-gallery:2024-05-11-1}}</u></em></strong>',
+        '<span>{</span><mark>{trip-gallery:</mark><b>2024-05-11-1}</b><span>}</span>',
+    ])('renders a formatted standalone gallery tag as a component: %s', async content => {
+        const markdown = convertHtmlToMarkdown(`<p>Before.</p><p> &nbsp;${content}&nbsp; </p><p>After.</p>`);
+        const expanded = expandTripShortcodes(markdown, { format: 'trip', tripId: 'boise-2024' }, {
+            galleries: { '2024-05-11-1': ['camp'] },
+        });
+        const { default: Content } = await evaluate(expanded, runtime);
+        const html = renderToStaticMarkup(<Content components={{
+            TripGallery: ({ galleryId }: { galleryId: string }) => <section data-gallery={galleryId}>Photos</section>,
+        }} />);
+        expect(html).toBe('<p>Before.</p>\n<section data-gallery="2024-05-11-1">Photos</section>\n<p>After.</p>');
+    });
+
+    it('validates highlighted gallery references against the manifest', () => {
+        const markdown = convertHtmlToMarkdown('<p><mark>{{trip-gallery:missing}}</mark></p>');
+        expect(() => expandTripShortcodes(markdown, { format: 'trip', tripId: 'boise-2024' }, { galleries: {} }))
+            .toThrow('unknown gallery "missing"');
+    });
+
+    it('preserves highlighted prose and inline tags as literal text', async () => {
+        const markdown = convertHtmlToMarkdown('<p><mark>Remember {{trip-gallery:highlights}}</mark></p>');
+        const expanded = expandTripShortcodes(markdown, { format: 'trip' });
+        const { default: Content } = await evaluate(expanded, runtime);
+        expect(renderToStaticMarkup(<Content />))
+            .toBe('<mark>Remember {{trip-gallery:highlights}}</mark>');
+    });
+
+    it.each([
+        '<p><code>{{trip-gallery:missing}}</code></p>',
+        '<pre><code>{{trip-gallery:missing}}\n{{trip-unknown}}</code></pre>',
+        '<p>```text</p><p><mark>{{trip-gallery:missing}}</mark></p><p>{{trip-unknown}}</p><p>```</p>',
+    ])('keeps shortcode examples literal in code: %s', async source => {
+        const markdown = convertHtmlToMarkdown(source);
+        const expanded = expandTripShortcodes(markdown, { format: 'trip' }, { galleries: {} });
+        expect(expanded).toBe(markdown);
+        const { default: Content } = await evaluate(expanded, runtime);
+        expect(renderToStaticMarkup(<Content />)).toContain('{{trip-gallery:missing}}');
+    });
+
 });

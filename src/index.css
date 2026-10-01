@@ -199,11 +199,6 @@ u {
   aspect-ratio: 2 / 1;
 }
 
-.trip-hero .image-caption-frame>a {
-  display: block;
-  height: 100%;
-}
-
 @media (max-width: 639px) {
   .trip-hero .image-caption-frame {
     aspect-ratio: 4 / 3;
@@ -225,7 +220,38 @@ u {
   position: relative;
 }
 
+.image-caption-frame>a {
+  display: block;
+  height: 100%;
+  cursor: zoom-in;
+}
+
+.image-caption-frame:has(>a:focus-visible) {
+  outline: 2px solid #a78bfa;
+  outline-offset: 3px;
+}
+
 @media (hover: hover) and (pointer: fine) {
+  .trip-gallery-photo .image-caption-frame {
+    transition: border-color 160ms ease-out;
+  }
+
+  .trip-gallery-photo:hover .image-caption-frame,
+  .trip-gallery-photo:focus-within .image-caption-frame {
+    border-color: #71717a;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .trip-gallery-photo .image-caption-frame img {
+      transition: scale 180ms ease-out;
+    }
+
+    .trip-gallery-photo:hover .image-caption-frame img,
+    .trip-gallery-photo:focus-within .image-caption-frame img {
+      scale: 1.025;
+    }
+  }
+
   .image-caption-overlay:not(.sr-only) {
     position: absolute;
     right: 0;
@@ -268,7 +294,8 @@ u {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .image-caption-overlay {
+  .image-caption-figure .image-caption-overlay,
+  .image-caption-figure[data-caption-dismissed='true'] .image-caption-overlay {
     transform: none;
     transition-duration: 0ms;
     transition-delay: 0ms;

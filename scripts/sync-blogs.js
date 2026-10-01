@@ -1085,23 +1085,38 @@ function createTurndownService() {
         },
     });
 
+    service.addRule('tripShortcodeParagraph', {
+        filter: (node) => node.nodeName === 'P'
+            && !node.closest('pre, code')
+            && !node.querySelector('code, img, br')
+            && /^\{\{trip-[a-z0-9:-]+\}\}$/.test(normalizedTextContent(node).trim()),
+        // Read the entire paragraph so highlighting, emphasis, and split Docs
+        // spans cannot escape or interrupt a standalone shortcode.
+        replacement: (_content, node) => `\n\n${normalizedTextContent(node).trim()}\n\n`,
+    });
+
     return service;
 }
 
-function escapeMdxModuleStatements(markdown) {
+function mapMarkdownProseLines(markdown, transform) {
     let fence = null;
     return markdown.split('\n').map((line) => {
         const marker = line.match(/^ {0,3}(`{3,}|~{3,})(.*)$/);
-        if (marker) {
+        if (marker && (fence || marker[1][0] !== '`' || !marker[2].includes('`'))) {
             if (!fence) fence = marker[1];
             else if (marker[1][0] === fence[0] && marker[1].length >= fence.length && !marker[2].trim()) fence = null;
             return line;
         }
         if (fence) return line;
-        return line.replace(/^( {0,3})(import|export)(?=\s)/, (_match, indent, keyword) => (
-            `${indent}&#${keyword.charCodeAt(0)};${keyword.slice(1)}`
-        ));
+        return transform(line);
     }).join('\n');
+}
+
+function escapeMdxModuleStatements(markdown) {
+    return mapMarkdownProseLines(markdown, line => line.replace(
+        /^( {0,3})(import|export)(?=\s)/,
+        (_match, indent, keyword) => `${indent}&#${keyword.charCodeAt(0)};${keyword.slice(1)}`,
+    ));
 }
 
 export function convertHtmlToMarkdown(html, { turndownService = createTurndownService() } = {}) {
@@ -1134,24 +1149,26 @@ export function expandTripShortcodes(markdown, post, manifest) {
         return id;
     };
 
-    const expanded = markdown
-        .replace(/^\{\{trip-map:track:([a-z0-9]+(?:-[a-z0-9]+)*)\}\}$/gm, (_match, trackId) => (
-            `<TripMap trackId="${assertReference('track', trackId, trackIds)}" />`
-        ))
-        .replace(/^\{\{trip-map(?::([a-z0-9]+(?:-[a-z0-9]+)*))?\}\}$/gm, (_match, stopId) => (
-            stopId ? `<TripMap stopId="${assertReference('stop', stopId, stopIds)}" />` : '<TripMap />'
-        ))
-        .replace(/^\{\{trip-photo:([a-z0-9]+(?:-[a-z0-9]+)*)\}\}$/gm, (_match, photoId) => (
-            `<TripPhoto photoId="${assertReference('photo', photoId, photoIds)}" />`
-        ))
-        .replace(/^\{\{trip-gallery:([a-z0-9]+(?:-[a-z0-9]+)*)\}\}$/gm, (_match, galleryId) => (
-            `<TripGallery galleryId="${assertReference('gallery', galleryId, galleryIds)}" />`
-        ))
-        .replace(/^\{\{trip-facts\}\}$/gm, '<TripFacts />');
+    return mapMarkdownProseLines(markdown, line => {
+        const expanded = line
+            .replace(/^\{\{trip-map:track:([a-z0-9]+(?:-[a-z0-9]+)*)\}\}$/gm, (_match, trackId) => (
+                `<TripMap trackId="${assertReference('track', trackId, trackIds)}" />`
+            ))
+            .replace(/^\{\{trip-map(?::([a-z0-9]+(?:-[a-z0-9]+)*))?\}\}$/gm, (_match, stopId) => (
+                stopId ? `<TripMap stopId="${assertReference('stop', stopId, stopIds)}" />` : '<TripMap />'
+            ))
+            .replace(/^\{\{trip-photo:([a-z0-9]+(?:-[a-z0-9]+)*)\}\}$/gm, (_match, photoId) => (
+                `<TripPhoto photoId="${assertReference('photo', photoId, photoIds)}" />`
+            ))
+            .replace(/^\{\{trip-gallery:([a-z0-9]+(?:-[a-z0-9]+)*)\}\}$/gm, (_match, galleryId) => (
+                `<TripGallery galleryId="${assertReference('gallery', galleryId, galleryIds)}" />`
+            ))
+            .replace(/^\{\{trip-facts\}\}$/gm, '<TripFacts />');
 
-    const unsupported = expanded.match(/^\{\{trip-[^\n]+\}\}$/m);
-    if (unsupported) throw new Error(`Unsupported trip shortcode: ${unsupported[0]}`);
-    return expanded;
+        const unsupported = expanded.match(/^\{\{trip-[^\n]+\}\}$/m);
+        if (unsupported) throw new Error(`Unsupported trip shortcode: ${unsupported[0]}`);
+        return expanded;
+    });
 }
 
 export function buildMdx(post, markdown, manifest) {

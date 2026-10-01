@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react';
-import { createTripPhotoLightbox } from './tripPhotoSwipe';
+import { createTripPhotoLightbox, tripPhotoCaption } from './tripPhotoSwipe';
 import { useDismissibleCaption } from '../../../hooks/useDismissibleCaption';
 import type { TripPhotoData } from '../types';
 import { useTripStory } from '../TripStoryContext';
@@ -28,7 +28,7 @@ export function TripPhotoFigure({
     const failed = failedSrc === photo.src;
     const captionId = `trip-photo-caption-${useId().replaceAll(':', '')}`;
     const caption = photo.caption?.trim() || photo.alt;
-    const hasSupplementalCaption = Boolean(photo.caption || photo.location);
+    const hasSupplementalCaption = Boolean(photo.caption?.trim() || photo.location?.trim());
     const { dismissed, captionInteractionProps } = useDismissibleCaption();
     const image = failed ? (
         <div role="img" aria-label={photo.alt} className="grid min-h-40 place-items-center p-6 text-center text-sm text-zinc-400" style={{ aspectRatio: `${photo.width} / ${photo.height}` }}>Photo unavailable</div>
@@ -63,7 +63,7 @@ export function TripPhotoFigure({
                         data-pswp-width={photo.width}
                         data-pswp-height={photo.height}
                         data-pswp-srcset={photo.srcSet}
-                        data-trip-caption={[caption, photo.location].filter(Boolean).join(" · ")}
+                        data-trip-caption={tripPhotoCaption(photo)}
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-describedby={hasSupplementalCaption ? captionId : undefined}
@@ -74,7 +74,7 @@ export function TripPhotoFigure({
             </div>
             <figcaption
                 id={captionId}
-                className={`${hasSupplementalCaption ? "" : "sr-only "}image-caption-overlay mt-2 text-sm leading-snug text-zinc-400`}
+                className="image-caption-overlay mt-2 text-sm leading-snug text-zinc-400"
                 aria-hidden={!hasSupplementalCaption || undefined}
             >
                 {caption}

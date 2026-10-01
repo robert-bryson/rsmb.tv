@@ -5,6 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { prepareTripAssets } from './prepare-trip-assets.js';
 import { loadLocalEnvFiles } from './sync-blogs.js';
+import { copyTripAsset } from './copy-trip-asset.js';
 
 const TRIP_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const DEFAULT_TRIP_ASSETS_ROOTS = [
@@ -31,7 +32,8 @@ function countLabel(count, singular, plural = `${singular}s`) {
 
 export function formatAssetTotals(totals) {
     const failures = totals.failures.length > 0 ? ` ${countLabel(totals.failures.length, 'trip')} incomplete.` : '';
-    return `Processed ${countLabel(totals.trips, 'trip')} with ${countLabel(totals.photos, 'photo')} and ${countLabel(totals.geoJsonFiles, 'GeoJSON file')} before dev (${countLabel(totals.webpFiles, 'WebP derivative')}).${failures}`;
+    const skipped = totals.skipped.length > 0 ? ` Skipped ${countLabel(totals.skipped.length, 'empty trip')}.` : '';
+    return `Processed ${countLabel(totals.trips, 'trip')} with ${countLabel(totals.photos, 'photo')} and ${countLabel(totals.geoJsonFiles, 'GeoJSON file')} before dev (${countLabel(totals.webpFiles, 'WebP derivative')}).${skipped}${failures}`;
 }
 
 export async function findTripAssetsRoot(configuredRoot = process.env.TRIP_ASSETS_ROOT) {
@@ -59,22 +61,52 @@ async function mirrorFiles(source, destination, extension) {
         if (error?.code !== 'ENOENT') throw error;
     }
 
-    await fs.rm(destination, { recursive: true, force: true });
     await fs.mkdir(destination, { recursive: true });
-    await Promise.all(filenames.map((filename) => fs.copyFile(
+    const results = await Promise.allSettled(filenames.map((filename) => copyTripAsset(
         path.join(source, filename),
         path.join(destination, filename),
     )));
+    const failure = results.find(result => result.status === 'rejected');
+    if (failure) throw failure.reason;
     return filenames.length;
 }
 
 export async function mirrorPreparedTripAssets({ source, tripId, outputRoot }) {
+    if (!TRIP_ID_PATTERN.test(tripId)) throw new Error(`Invalid trip ID: ${tripId}`);
+    await fs.mkdir(outputRoot, { recursive: true });
     const tripOutput = path.join(outputRoot, tripId);
-    const [webpFiles, geoJsonFiles] = await Promise.all([
-        mirrorFiles(path.join(source, 'photos', 'processed'), path.join(tripOutput, 'photos'), '.webp'),
-        mirrorFiles(path.join(source, 'gps', 'processed'), path.join(tripOutput, 'geo'), '.geojson'),
-    ]);
-    return { webpFiles, geoJsonFiles };
+    const temporary = await fs.mkdtemp(path.join(outputRoot, `.${tripId}-`));
+    const staged = path.join(temporary, 'staged');
+    const previous = path.join(temporary, 'previous');
+    let retainBackup = false;
+    try {
+        const webpFiles = await mirrorFiles(path.join(source, 'photos', 'processed'), path.join(staged, 'photos'), '.webp');
+        const geoJsonFiles = await mirrorFiles(path.join(source, 'gps', 'processed'), path.join(staged, 'geo'), '.geojson');
+        let hadPrevious = false;
+        try {
+            await fs.rename(tripOutput, previous);
+            hadPrevious = true;
+        } catch (error) {
+            if (error?.code !== 'ENOENT') throw error;
+        }
+        try {
+            await fs.rename(staged, tripOutput);
+        } catch (error) {
+            if (hadPrevious) {
+                retainBackup = true;
+                try {
+                    await fs.rename(previous, tripOutput);
+                } catch (restoreError) {
+                    throw new AggregateError([error, restoreError], `Preview installation and restoration failed. Previous preview retained at ${previous}.`, { cause: restoreError });
+                }
+                retainBackup = false;
+            }
+            throw error;
+        }
+        return { webpFiles, geoJsonFiles };
+    } finally {
+        if (!retainBackup) await fs.rm(temporary, { recursive: true, force: true });
+    }
 }
 
 export async function prepareTripAssetsForDev({
@@ -84,6 +116,7 @@ export async function prepareTripAssetsForDev({
     prepare = prepareTripAssets,
 } = {}) {
     if (!sourceRoot) return undefined;
+    if (previewSlug && !TRIP_ID_PATTERN.test(previewSlug)) throw new Error(`Invalid trip ID: ${previewSlug}`);
 
     const tripIds = previewSlug
         ? [previewSlug]
@@ -94,7 +127,7 @@ export async function prepareTripAssetsForDev({
 
     if (tripIds.length === 0) throw new Error(`No trip directories found under ${sourceRoot}.`);
 
-    const totals = { trips: 0, photos: 0, webpFiles: 0, geoJsonFiles: 0, failures: [] };
+    const totals = { trips: 0, photos: 0, webpFiles: 0, geoJsonFiles: 0, failures: [], skipped: [] };
     for (const tripId of tripIds) {
         const source = path.join(sourceRoot, tripId);
         try {
@@ -106,7 +139,8 @@ export async function prepareTripAssetsForDev({
             totals.webpFiles += mirrored.webpFiles;
             totals.geoJsonFiles += mirrored.geoJsonFiles;
         } catch (error) {
-            totals.failures.push({ tripId, reason: error.message });
+            const entries = error?.code === 'NO_TRIP_ASSETS' ? totals.skipped : totals.failures;
+            entries.push({ tripId, reason: error.message });
         }
     }
 
@@ -129,6 +163,9 @@ export async function runDevTripAssetPreparation() {
                 sourceRoot,
             });
             console.log(formatAssetTotals(totals));
+            for (const skipped of totals.skipped) {
+                console.log(`  Skipped ${skipped.tripId}: ${skipped.reason}`);
+            }
             for (const failure of totals.failures) {
                 console.warn(`  Incomplete ${failure.tripId}: ${failure.reason}`);
             }
