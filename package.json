@@ -45,7 +45,7 @@
     "update-trip-manifest-assets": "node scripts/update-trip-manifest-assets.js"
   },
   "dependencies": {
-    "@aws-sdk/client-cloudfront": "^3.1136.0",
+    "@aws-sdk/client-cloudfront": "^3.1146.0",
     "maplibre-gl": "^6.11.2",
     "photoswipe": "^5.4.4",
     "photoswipe-dynamic-caption-plugin": "^1.2.7",
