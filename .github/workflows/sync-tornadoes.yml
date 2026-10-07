@@ -43,6 +43,9 @@ jobs:
           restore-keys: |
             tornado-csv-
 
+      - name: Install configured npm version
+        run: npm install --global "$(node -p "require('./package.json').packageManager")"
+
       - name: Install dependencies
         run: npm ci --cache .npm --prefer-offline
 

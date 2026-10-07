@@ -28,10 +28,13 @@ A personal website with software projects, data maps, writing, and motorcycle tr
 ### Prerequisites
 
 - Node.js (see `.nvmrc` for version)
-- npm
+- npm 12.2 or a later npm 12 release
 
 Run `nvm install` from the repository root. This installs and activates the Node.js version in `.nvmrc`.
-Use npm 11. See `package.json` for the supported version ranges.
+The supported Node.js lines are 22, 24, and 26.
+Use Node.js 22.22.2 or later in line 22. Use Node.js 24.15.0 or later in line 24.
+See `package.json` for the exact version ranges.
+CI and Amplify install the npm version from `packageManager` before they install dependencies.
 
 ### Installation
 
@@ -41,6 +44,8 @@ git clone https://github.com/robert-bryson/rsmb.tv.git
 cd rsmb.tv
 
 # Install dependencies
+nvm install
+npm install --global "$(node -p "require('./package.json').packageManager")"
 npm ci
 
 # Start development server
@@ -85,11 +90,45 @@ The status dashboard supports the following keys:
 - `h` toggle compact/detail view
 - `e` clear event log
 - `c` clear resolved incidents
-- `↑/↓` or `j/k` scroll in detail mode
+- `↑/↓` or `j/k` scroll the dashboard
 
 The dashboard shows AWS Amplify deployments and GitHub Actions separately.
 If a repository specifies workflows, the dashboard shows those workflows.
 A workflow stays visible before its first run. Old or unknown results require review.
+
+Ink supplies the terminal dimensions and handles resize events.
+If the output stream has no dimensions, Ink detects the host terminal size.
+If detection fails, Ink uses 80 columns and 24 rows.
+The tests use a synthetic stream. They do not contact AWS, GitHub, or external status pages.
+
+## Dependency Maintenance
+
+Use the configured Node.js and npm versions before you update dependencies.
+Keep React and React DOM on the same version.
+Keep Vitest and its coverage package on the same version.
+Do not override the major version of a dependency declared by React Router DOM.
+
+The ESLint adapter requires TypeScript below 6.1.
+The `typescript` package uses the `@typescript/typescript6` alias to meet that requirement.
+The separate `@typescript/native` alias supplies TypeScript 7. The lint and typecheck commands do not use it.
+Do not replace the lint compiler with TypeScript 7 until the adapter supports it.
+
+After an update, run these checks:
+
+```bash
+npm ci
+npm run lint
+npm run typecheck
+npm run audit
+npm outdated
+npm run test:coverage
+npm run test:temperature-records
+npm run test:e2e
+PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser
+```
+
+An empty `npm outdated` result does not prove that every transitive dependency uses its newest release.
+Check the audit result and dependency contracts. Do not force incompatible major versions into the dependency tree.
 
 ## Project Structure
 
@@ -129,6 +168,17 @@ It also checks image selection, JavaScript size limits, article metadata, return
 Set `PLAYWRIGHT_WEBKIT=1` to include the iPhone WebKit project. CI enables this project.
 Install the required browser system libraries before running WebKit.
 
+The dashboard tests check terminal height, resize events, keyboard controls, problem reports, recovery, and listener removal.
+Run the focused suite with:
+
+```bash
+npx vitest run scripts/dashboard/__tests__/App.test.tsx
+```
+
+Coverage reports measure loaded source files. They do not measure every repository file.
+For a test-coverage comparison, keep the source, compiler, and coverage provider unchanged.
+State which tests each measurement includes.
+
 Run the importer and navigation tests with:
 
 ```bash
@@ -166,7 +216,9 @@ Use landscape images for project cards. If the source is portrait, prepare a lan
 
 ## Private Project Data
 
-Do not commit Ride Ledger source data. The repository ignores `projects/ride-ledger/data/`, `projects/ride-ledger/exports/`, and `projects/ride-ledger/receipts/`. These directories can contain locations, vehicle records, costs, and receipt metadata.
+Do not commit Ride Ledger source data.
+Git ignores `projects/ride-ledger/data/`, `projects/ride-ledger/exports/`, and `projects/ride-ledger/receipts/`.
+These directories can contain locations, vehicle records, costs, and receipt metadata.
 
 Put only synthetic, de-identified fixtures in a future `projects/ride-ledger/test-data/` directory. Review each fixture before you commit it. Do not copy rows from the source spreadsheet into a fixture.
 
@@ -208,6 +260,7 @@ Direct Vite production builds require the generated post registry. A missing reg
 Direct Vite development can start without generated content. The post list stays empty until blog sync creates the registry.
 Configure `GOOGLE_BLOG_SHEET_ID` in Amplify. GitHub Actions variables do not configure Amplify.
 The Amplify build runs `nvm install` before `npm ci` to activate the version in `.nvmrc`.
+It then installs the npm version from `packageManager` before dependency installation.
 
 Maps first show a route preview. Interactive maps load when their sections enter the viewport.
 The route cache shares active requests and removes unused entries when its size exceeds eight.
@@ -260,8 +313,8 @@ The content security policy in `infra/main.tf` permits the Umami script and coll
 Each project has a separate data source:
 
 - Flights: `projects/flights/data/flights.csv` supplies flight records. Build scripts write GeoJSON under `public/data/flights/`. A separate airport database supplies coordinates.
-- Temperature record JSON is generated by `scripts/sync-temperatures.js` and served from the S3-backed CloudFront distribution at `https://data.rsmb.tv`. Generated `public/data/temperatures/*.json` files are local sync artifacts and are not stored in Git.
-- Tornado track data is generated from NOAA/NCEI StormEvents and published to the S3/CDN-backed `https://data.rsmb.tv/tornadoes` dataset. The same sync also writes warning/watch analytics from IEM VTEC/SPC archives to `warning-summary.json`. Local `public/data/tornadoes/` files are development/backfill artifacts and are not committed.
+- `scripts/sync-temperatures.js` generates temperature record JSON. CloudFront serves the data at `https://data.rsmb.tv`. Git ignores local `public/data/temperatures/*.json` files.
+- NOAA/NCEI StormEvents supplies tornado track data. CloudFront serves the data at `https://data.rsmb.tv/tornadoes`. IEM VTEC/SPC archives supply warning and watch statistics in `warning-summary.json`. Git ignores local `public/data/tornadoes/` files.
 
 Local development uses `https://data.rsmb.tv` for temperature data by default. To test freshly generated local temperature JSON instead, set `VITE_TEMPERATURE_DATA_BASE_URL=/data/temperatures` before starting Vite.
 
@@ -296,7 +349,8 @@ The recent window and station catalog do not require a data snapshot in Git.
 
 ### Flight Data Sync
 
-Flight data is maintained in a Google Sheet and synced to the repository using an automated script. This allows for easy updates when new flights are added.
+A Google Sheet contains the flight data.
+An automated script imports the data into the repository.
 
 #### Manual Sync
 

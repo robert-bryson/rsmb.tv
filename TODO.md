@@ -3,6 +3,8 @@
 This file contains incomplete work. Use Git history for completed work.
 Complete publication blockers before you publish the affected content.
 Use the [review index](docs/README.md) for dated findings and test results.
+Work through publication blockers first. Then complete automated checks, maintenance, and content tasks.
+Keep completed work in Git history. Do not add completed tasks to this file.
 
 ## Publication blockers
 
@@ -41,7 +43,7 @@ The historical signal is not ready for publication.
 - [ ] Store an approved station cohort with a version number before publication.
 - [ ] Publish station coverage, failed geography requests, and data quality in a manifest with a version number.
 
-## Automated checks
+## Browser checks
 
 Use fixed data for browser checks. Record the browser, viewport, and expected result.
 
@@ -50,6 +52,14 @@ Use fixed data for browser checks. Record the browser, viewport, and expected re
 - [ ] Test list scroll restoration with browser Back and the article return link after delayed content loads.
 - [ ] Extend the fixed-tile browser test. Check route pixels, stop selection, and each map style.
 
+## Dashboard checks
+
+Use fixed provider responses. Do not contact production services from unit tests.
+
+- [ ] Test build fetchers with throttled, failed, empty, and malformed provider responses. Verify the displayed status and error.
+- [ ] Test cost cache reads and writes, provider failures, and month-end forecasts. Use fixed UTC dates.
+- [ ] Test event log rendering, its size limit, and log removal. Verify that unmounted subscribers receive no updates.
+
 ## Build and maintenance
 
 Preserve passing publication checks when you change build scripts.
@@ -57,6 +67,7 @@ Preserve passing publication checks when you change build scripts.
 - [ ] Reduce the large visualization chunks. Preserve the passing article JavaScript budgets.
 - [ ] Check Tailwind source-map output. Confirm that production error locations match source files.
 - [ ] Split document conversion, shortcode handling, and publication checks in `scripts/sync-blogs.js`. Retain the compilation tests.
+- [ ] Replace the TypeScript 6 lint compiler only after `typescript-eslint` supports TypeScript 7. Run lint and typecheck first.
 
 ## Trip release tasks
 

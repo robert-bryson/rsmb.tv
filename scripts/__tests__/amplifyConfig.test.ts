@@ -5,37 +5,17 @@ import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const npmInstallCommand = `npm install --global "$(node -p "require('./package.json').packageManager")"`;
 
 function readRepoFile(relativePath: string) {
     return fs.readFileSync(path.join(repoRoot, relativePath), 'utf-8');
 }
 
 function getPhaseCommands(config: string, phaseName: string) {
-    const lines = config.split(/\r?\n/);
-    const phaseIndex = lines.findIndex((line) => line.trim() === `${phaseName}:`);
-
-    expect(phaseIndex).toBeGreaterThanOrEqual(0);
-
-    const commandsIndex = lines.findIndex(
-        (line, index) => index > phaseIndex && line.trim() === 'commands:'
-    );
-
-    expect(commandsIndex).toBeGreaterThan(phaseIndex);
-
-    const commandsIndent = lines[commandsIndex].match(/^\s*/)?.[0].length ?? 0;
-    const commands: string[] = [];
-
-    for (const line of lines.slice(commandsIndex + 1)) {
-        if (!line.trim()) continue;
-
-        const indent = line.match(/^\s*/)?.[0].length ?? 0;
-        if (indent <= commandsIndent) break;
-
-        const command = line.trim().match(/^-\s+(.+)$/)?.[1];
-        if (command) commands.push(command);
-    }
-
-    return commands;
+    const parsed = parse(config) as {
+        frontend: { phases: Record<string, { commands: string[] }> };
+    };
+    return parsed.frontend.phases[phaseName].commands;
 }
 
 describe('amplify.yml', () => {
@@ -46,6 +26,7 @@ describe('amplify.yml', () => {
         expect(nodeVersion).toMatch(/^24\.\d+\.\d+$/);
         expect(preBuildCommands).toEqual([
             'nvm install',
+            npmInstallCommand,
             'npm ci --cache .npm --prefer-offline',
         ]);
         expect(preBuildCommands).not.toContain('nvm use');
@@ -57,6 +38,44 @@ describe('amplify.yml', () => {
         expect(config).toContain('baseDirectory: dist');
         expect(config).toContain('- npm run build');
         expect(config).toContain('- .npm/**/*');
+    });
+});
+
+describe('dependency installation contracts', () => {
+    it('uses the configured npm version before npm ci in every workflow job', () => {
+        const workflowFiles = fs.readdirSync(path.join(repoRoot, '.github/workflows'))
+            .filter((filename) => /\.ya?ml$/.test(filename));
+        let checkedJobs = 0;
+        for (const filename of workflowFiles) {
+            const workflow = parse(readRepoFile(`.github/workflows/${filename}`)) as {
+                jobs: Record<string, { steps?: Array<{ run?: string }> }>;
+            };
+            for (const [jobName, job] of Object.entries(workflow.jobs)) {
+                const commands = (job.steps ?? []).flatMap((step) => step.run ? [step.run] : []);
+                const dependencyIndex = commands.findIndex((command) => /\bnpm ci\b/.test(command));
+                if (dependencyIndex < 0) continue;
+                const npmIndex = commands.indexOf(npmInstallCommand);
+                expect(npmIndex, `${filename}: ${jobName}`).toBeGreaterThanOrEqual(0);
+                expect(npmIndex, `${filename}: ${jobName}`).toBeLessThan(dependencyIndex);
+                checkedJobs += 1;
+            }
+        }
+        expect(checkedJobs).toBeGreaterThan(0);
+    });
+
+    it('keeps paired dependencies aligned and does not override the router major', () => {
+        const manifest = JSON.parse(readRepoFile('package.json'));
+        expect(manifest.dependencies.react).toBe(manifest.dependencies['react-dom']);
+        expect(manifest.devDependencies.vitest).toBe(manifest.devDependencies['@vitest/coverage-v8']);
+        expect(manifest.overrides).not.toHaveProperty('react-router');
+        expect(manifest.devDependencies.typescript).toMatch(/^npm:@typescript\/typescript6@/);
+    });
+
+    it('declares the supported Node lines and the npm major used by automated builds', () => {
+        const manifest = JSON.parse(readRepoFile('package.json'));
+        expect(manifest.packageManager).toMatch(/^npm@12\.\d+\.\d+$/);
+        expect(manifest.engines.npm).toBe('>=12.2 <13');
+        expect(manifest.engines.node).toBe('^22.22.2 || ^24.15.0 || ^26.0.0');
     });
 });
 

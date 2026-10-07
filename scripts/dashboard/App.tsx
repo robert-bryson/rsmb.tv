@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Box, Text, useInput, useApp, useStdout } from 'ink';
+import { Box, Text, useInput, useApp, useWindowSize } from 'ink';
 import { HealthPanel } from './HealthPanel.js';
 import { AlarmPanel } from './AlarmPanel.js';
 import { BuildPanel } from './BuildPanel.js';
@@ -37,13 +37,12 @@ function Clock({ timeZone }: { timeZone: string }) {
 
 export function App({ config }: { config: DashboardConfig }) {
     const { exit } = useApp();
-    const { stdout } = useStdout();
+    const { rows: termHeight } = useWindowSize();
     const [forceDetail, setForceDetail] = useState(false);
     const [healthProblems, setHealthProblems] = useState<string[]>([]);
     const [alarmProblems, setAlarmProblems] = useState<string[]>([]);
     const [buildProblems, setBuildProblems] = useState<string[]>([]);
     const [externalProblems, setExternalProblems] = useState<Record<string, string[]>>({});
-    const [termHeight, setTermHeight] = useState(stdout.rows ?? 24);
     const [scrollOffset, setScrollOffset] = useState(0);
     const [pollIterations, setPollIterations] = useState(0);
 
@@ -67,12 +66,6 @@ export function App({ config }: { config: DashboardConfig }) {
         }
         return map;
     }, [config.externalGroups]);
-
-    useEffect(() => {
-        const onResize = () => setTermHeight(stdout.rows ?? 24);
-        stdout.on('resize', onResize);
-        return () => { stdout.off('resize', onResize); };
-    }, [stdout]);
 
     // Track poll iterations for display
     useEffect(() => {
