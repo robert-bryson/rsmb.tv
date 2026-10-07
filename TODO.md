@@ -48,7 +48,7 @@ The historical signal is not ready for publication.
 Use fixed data for browser checks. Record the browser, viewport, and expected result.
 
 - [ ] Test Flights map keyboard controls and camera URL synchronization with Playwright.
-- [ ] Run the trip viewer and interactive map checks in WebKit with the required host libraries. Check all three map styles.
+- [ ] Install the required WebKit host libraries. Run the trip budget, photo viewer, and interactive map checks. Retain the current budgets. Check all three map styles.
 - [ ] Test list scroll restoration with browser Back and the article return link after delayed content loads.
 - [ ] Extend the fixed-tile browser test. Check route pixels, stop selection, and each map style.
 

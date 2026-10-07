@@ -1,11 +1,14 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page, type Request } from '@playwright/test';
 import sharp from 'sharp';
+import { measureJavaScriptGzip } from '../../scripts/trip-browser-budget';
 
 async function assets(page: Page) {
     await page.route('**/test-trip/**', async route => {
-        if (route.request().url().endsWith('.geojson')) return route.fulfill({ json: {
-            type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: [[-122, 47], [-122.5, 46.7], [-123, 46]] },
-        } });
+        if (route.request().url().endsWith('.geojson')) return route.fulfill({
+            json: {
+                type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: [[-122, 47], [-122.5, 46.7], [-123, 46]] },
+            }
+        });
         const width = Number(route.request().url().match(/-(\d+)\.svg/)?.[1] ?? 1600);
         await route.fulfill({ contentType: 'image/svg+xml', body: `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${width * .625}"><rect width="100%" height="100%" fill="#405b6b"/><path d="M0 ${width / 2} L${width} ${width / 4}" stroke="#d1d5db" stroke-width="20"/></svg>` });
     });
@@ -31,21 +34,31 @@ test('emphasis and code inherit the article link color', async ({ page, isMobile
     }
 });
 
-test('reading routes exclude visualization code and stay within the JavaScript budget', async ({ page }) => {
-    for (const path of ['/', '/posts', '/blog/reading-test', '/trips/coastal-test']) {
-        const requests: string[] = [];
-        const collect = (request: { url(): string }) => requests.push(request.url());
+for (const [path, budget] of [
+    ['/', 125_000],
+    ['/posts', 125_000],
+    ['/blog/reading-test', 185_000],
+    ['/trips/coastal-test', 190_000],
+] as const) {
+    test(`reading routes exclude visualization code and stay within the JavaScript budget: ${path}`, async ({ page }) => {
+        const requests: Request[] = [];
+        const collect = (request: Request) => requests.push(request);
         page.on('request', collect);
-        await page.goto(path);
-        await expect(page.locator('h1')).toBeVisible();
-        await expect(page.getByRole('link', { name: 'Unfinished draft must stay private' })).toHaveCount(0);
-        if (path.includes('coastal-test')) await expect(page.getByText('Opening story paragraph.')).toBeVisible();
-        expect(requests.filter(url => /maplibre|FlightsMap|three-globe|three-/.test(url))).toEqual([]);
-        const bytes = await page.evaluate(() => performance.getEntriesByType('resource').filter(entry => entry.name.endsWith('.js')).reduce((sum, entry) => sum + (entry as PerformanceResourceTiming).encodedBodySize, 0));
-        expect(bytes).toBeLessThan(path.includes('/trips/') ? 190_000 : path.includes('/blog/') ? 185_000 : 125_000);
-        page.off('request', collect);
-    }
-});
+        try {
+            await page.goto(path);
+            await expect(page.locator('h1')).toBeVisible();
+            await expect(page.getByRole('link', { name: 'Unfinished draft must stay private' })).toHaveCount(0);
+            if (path === '/blog/reading-test') await expect(page.getByRole('link', { name: 'bold, emphasized, and code link text' })).toBeVisible();
+            if (path === '/trips/coastal-test') await expect(page.getByText('Opening story paragraph.')).toBeVisible();
+        } finally {
+            page.off('request', collect);
+        }
+        expect(requests.map(request => request.url()).filter(url => /maplibre|FlightsMap|three-globe|three-/.test(url))).toEqual([]);
+        const resources = await measureJavaScriptGzip(requests);
+        const bytes = resources.reduce((sum, entry) => sum + entry.bytes, 0);
+        expect(bytes, `${path} gzip bytes: ${JSON.stringify(resources)}`).toBeLessThan(budget);
+    });
+}
 
 test('the opening flows from the hero into prose, facts, map, and collapsed contents', async ({ page }) => {
     await page.goto('/trips/coastal-test');

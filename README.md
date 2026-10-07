@@ -168,6 +168,28 @@ It also checks image selection, JavaScript size limits, article metadata, return
 Set `PLAYWRIGHT_WEBKIT=1` to include the iPhone WebKit project. CI enables this project.
 Install the required browser system libraries before running WebKit.
 
+Each JavaScript budget test uses a separate browser context.
+The test captures script requests until the initial route content is visible.
+It reads the captured responses. It does not request each script again.
+It counts each complete script URL once, including its query string.
+It includes extensionless script requests and `.js` or `.mjs` preload requests.
+It compresses each response body with gzip level 6, then adds the compressed sizes.
+This value measures unique bundle size, not actual network transfer or cache savings.
+Missing responses, failed responses, and an empty script set fail the test.
+
+| Route | Gzip size must be less than |
+| --- | --- |
+| `/` and `/posts` | 125,000 bytes |
+| `/blog/reading-test` | 185,000 bytes |
+| `/trips/coastal-test` | 190,000 bytes |
+
+Run the budget unit tests and browser checks with:
+
+```bash
+npx vitest run scripts/__tests__/tripBrowserBudget.test.ts --coverage --coverage.include=scripts/trip-browser-budget.ts
+PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- --grep 'reading routes exclude' --workers=2
+```
+
 The dashboard tests check terminal height, resize events, keyboard controls, problem reports, recovery, and listener removal.
 Run the focused suite with:
 
