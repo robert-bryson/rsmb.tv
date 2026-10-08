@@ -223,7 +223,9 @@ Expanding or collapsing the gallery does not change viewer captions or photo ord
 Changing the gallery ID starts the new gallery in its collapsed state.
 The map retains its instance when only the requested stop changes.
 The camera, marker highlight, and stop selection follow that stop.
-After a track change, the replacement map restores the requested stop when it loads.
+After a track change, the replacement map restores the selected stop when it loads.
+The selected stop can differ from the requested stop after user input.
+The full-route action clears the selected stop. A later map load does not restore that stop.
 Loading another route clears the previous user selection.
 
 For each entry in `route.tracks`, copy the exact ID from `asset-metadata.json`.

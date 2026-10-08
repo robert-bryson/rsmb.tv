@@ -10,6 +10,8 @@ const mapMocks = vi.hoisted(() => ({
     addControl: vi.fn(),
     easeTo: vi.fn(),
     fitBounds: vi.fn(),
+    jumpTo: vi.fn(),
+    reducedMotion: false,
     getSource: vi.fn(),
     getMinZoom: vi.fn(() => 0),
     getZoom: vi.fn(() => 7),
@@ -19,6 +21,7 @@ const mapMocks = vi.hoisted(() => ({
             addControl: mapMocks.addControl,
             easeTo: mapMocks.easeTo,
             fitBounds: mapMocks.fitBounds,
+            jumpTo: mapMocks.jumpTo,
             getMinZoom: mapMocks.getMinZoom,
             getSource: mapMocks.getSource,
             getZoom: mapMocks.getZoom,
@@ -55,7 +58,7 @@ vi.mock('maplibre-gl', () => ({
 }));
 
 vi.mock('../hooks/useReducedMotion', () => ({
-    useReducedMotion: () => false,
+    useReducedMotion: () => mapMocks.reducedMotion,
 }));
 
 const manifest: TripManifest = {
@@ -71,10 +74,92 @@ afterEach(() => {
     clearTripRouteCache();
     vi.unstubAllGlobals();
     vi.clearAllMocks();
+    mapMocks.reducedMotion = false;
     mapMocks.once.mockImplementation((_event: string, listener: () => void) => listener());
 });
 
 describe('TripRouteMap', () => {
+    it.each([false, true])('does not restore the initial stop after an early reset (reduced motion: %s)', async (reducedMotion) => {
+        mapMocks.reducedMotion = reducedMotion;
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true, json: async () => ({
+                type: 'Feature', properties: {},
+                geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
+            }),
+        }));
+        mapMocks.once.mockImplementation(() => undefined);
+        render(<TripStoryProvider manifest={{
+            ...manifest, stops: [{ id: 'camp', name: 'Camp', coordinates: [-122.5, 46.5] }],
+        }}><TripRouteMap stopId="camp" /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        const control = mapMocks.addControl.mock.calls
+            .map(([control]) => control)
+            .find(control => control?.constructor.name === 'RouteActionsControl');
+        const map = mapMocks.Map.mock.results[0].value;
+        const reset = control.onAdd(map).querySelector('button');
+        expect(reset.hidden).toBe(false);
+        fireEvent.click(reset);
+        expect(mapMocks.fitBounds).toHaveBeenCalledExactlyOnceWith(expect.anything(), {
+            padding: 40, maxZoom: 11, bearing: 0, pitch: 0, duration: reducedMotion ? 0 : 300,
+        });
+        const moveEnd = mapMocks.once.mock.calls.find(([event]) => event === 'moveend')?.[1];
+        expect(moveEnd).toEqual(expect.any(Function));
+        act(() => moveEnd!());
+        expect(reset.hidden).toBe(true);
+        act(() => {
+            for (const [event, listener] of mapMocks.once.mock.calls) if (event === 'load') listener();
+        });
+        expect(mapMocks.easeTo).not.toHaveBeenCalled();
+        expect(mapMocks.jumpTo).not.toHaveBeenCalled();
+        expect(reset.hidden).toBe(true);
+        expect(screen.getByRole('button', { name: /Camp/ })).toHaveAttribute('aria-pressed', 'false');
+        const move = mapMocks.on.mock.calls.find(([event]) => event === 'move')?.[1];
+        expect(move).toEqual(expect.any(Function));
+        act(() => move!());
+        expect(reset.hidden).toBe(false);
+        control.onRemove();
+        expect(mapMocks.off).toHaveBeenCalledWith('load', expect.any(Function));
+        expect(mapMocks.off).toHaveBeenCalledWith('move', move);
+        expect(mapMocks.off).toHaveBeenCalledWith('moveend', moveEnd);
+    });
+
+    it.each([false, true])('retains a user-selected stop after track replacement (reduced motion: %s)', async (reducedMotion) => {
+        mapMocks.reducedMotion = reducedMotion;
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true, json: async () => ({
+                type: 'Feature', properties: { trackId: 'return' },
+                geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
+            }),
+        }));
+        const tripManifest: TripManifest = {
+            ...manifest, stops: [
+                { id: 'camp', name: 'Camp', coordinates: [-122.5, 46.5] },
+                { id: 'finish', name: 'Finish', coordinates: [-123, 46] },
+            ],
+        };
+        const story = (trackId?: string) => <TripStoryProvider manifest={tripManifest}>
+            <TripRouteMap stopId="camp" trackId={trackId} />
+        </TripStoryProvider>;
+        const { rerender } = render(story());
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        fireEvent.click(screen.getByRole('button', { name: /Finish/ }));
+        mapMocks.easeTo.mockClear();
+        mapMocks.jumpTo.mockClear();
+        mapMocks.once.mockClear();
+        mapMocks.once.mockImplementation(() => undefined);
+        rerender(story('return'));
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledTimes(2));
+        expect(mapMocks.easeTo).not.toHaveBeenCalled();
+        expect(mapMocks.jumpTo).not.toHaveBeenCalled();
+        act(() => {
+            for (const [event, listener] of mapMocks.once.mock.calls) if (event === 'load') listener();
+        });
+        const camera = reducedMotion ? mapMocks.jumpTo : mapMocks.easeTo;
+        expect(camera).toHaveBeenCalledExactlyOnceWith({ center: [-123, 46], zoom: 9 });
+        expect(screen.getByRole('button', { name: /Finish/ })).toHaveAttribute('aria-pressed', 'true');
+        expect(screen.getByRole('button', { name: /Camp/ })).toHaveAttribute('aria-pressed', 'false');
+    });
+
     it('restores the requested stop after a track replacement loads', async () => {
         vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
             ok: true, json: async () => ({

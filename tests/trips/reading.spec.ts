@@ -247,10 +247,15 @@ test('return navigation preserves the list filter and header focus stays visible
 
 test('map actions appear on the map and attribution starts collapsed', async ({ page }) => {
     const tile = await sharp({ create: { width: 256, height: 256, channels: 3, background: '#999' } }).png().toBuffer();
-    await page.route('https://tile.openstreetmap.org/**', route => route.fulfill({
-        contentType: 'image/png',
-        body: tile,
-    }));
+    let releaseTiles!: () => void;
+    let requestedTiles = 0;
+    const tilesReady = new Promise<void>(resolve => { releaseTiles = resolve; });
+    page.once('close', releaseTiles);
+    await page.route('https://tile.openstreetmap.org/**', async route => {
+        requestedTiles += 1;
+        await tilesReady;
+        await route.fulfill({ contentType: 'image/png', body: tile });
+    });
     await page.route('https://demotiles.maplibre.org/**', route => route.fulfill({ body: '' }));
     await page.goto('/trips/coastal-test');
     await page.locator('[data-trip-map]').first().scrollIntoViewIfNeeded();
@@ -262,7 +267,9 @@ test('map actions appear on the map and attribution starts collapsed', async ({ 
     const reset = map.getByRole('button', { name: 'Show full route' });
     // The fixture starts at a stop, so the full-route action must be available.
     await expect(reset).toBeVisible();
+    await expect.poll(() => requestedTiles).toBeGreaterThan(0);
     await reset.click();
+    releaseTiles();
     await expect(reset).toBeHidden();
     const attribution = map.locator('.maplibregl-ctrl-attrib');
     await expect(attribution).not.toHaveClass(/maplibregl-compact-show/);

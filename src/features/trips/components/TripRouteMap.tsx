@@ -207,6 +207,7 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
         setStopSelection({ routeUrl, requestedId: stopId, selectedId: stopId });
     }
     const selectedStopId = stopSelection.selectedId;
+    const getSelectedStopId = useEffectEvent(() => selectedStopId);
     const [loadedMap, setLoadedMap] = useState<maplibregl.Map | null>(null);
     const getInitialStopId = useEffectEvent(() => stopId);
     const missingTrack = route && trackId && routeCoordinates(trackRoute(route, trackId)).length === 0;
@@ -397,7 +398,7 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
     }, [basemapId, loadedMap]);
 
     useEffect(() => {
-        const stop = manifest.stops.find((candidate) => candidate.id === stopId);
+        const stop = manifest.stops.find((candidate) => candidate.id === getSelectedStopId());
         const map = mapRef.current;
         if (!stop || !map || loadedMap !== map) return;
         map[reducedMotion ? 'jumpTo' : 'easeTo']({ center: stop.coordinates, zoom: 9 });

@@ -166,7 +166,22 @@ These tests do not require Google access or published trip assets.
 It checks desktop and phone layouts, photo viewer focus, failed assets, and unavailable WebGL.
 It also checks image selection, JavaScript size limits, article metadata, return links, and link colors.
 Set `PLAYWRIGHT_WEBKIT=1` to include the iPhone WebKit project. CI enables this project.
-Install the required browser system libraries before running WebKit.
+Install the browser files and host libraries before you run WebKit:
+
+```bash
+npx playwright install --with-deps chromium webkit
+PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser
+```
+
+Host library installation can require administrator permission. Run that command in your terminal.
+A missing host library is a setup failure. It does not verify application behavior.
+The map control test delays tile responses until after the first full-route action.
+This delay checks that a later map load does not restore the initial stop.
+To repeat only this check, run:
+
+```bash
+PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- tests/trips/reading.spec.ts --grep 'map actions appear' --repeat-each=3 --workers=2
+```
 
 Each JavaScript budget test uses a separate browser context.
 The test captures script requests until the initial route content is visible.

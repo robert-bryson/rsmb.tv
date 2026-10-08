@@ -21,6 +21,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-10-08 | [Trip map selection review](reviews/2026-10-08-trip-map-selection.md) |
 | 2026-10-07 | [Trip browser budget review](reviews/2026-10-07-trip-browser-budget.md) |
 | 2026-10-07 | [Dashboard and dependency review](reviews/2026-10-07-dashboard-and-dependencies.md) |
 | 2026-10-01 | [Trip registry and manifest review](reviews/2026-10-01-trip-registry-and-manifests.md) |
