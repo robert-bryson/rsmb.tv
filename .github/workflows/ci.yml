@@ -10,6 +10,25 @@ permissions:
   contents: read
 
 jobs:
+  mail-dns:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.16.6
+
+      - name: Validate mail DNS without AWS access
+        working-directory: infra
+        run: |
+          terraform init -backend=false -input=false -lockfile=readonly
+          terraform fmt -check mail.tf tests/mail.tftest.hcl
+          terraform validate -no-color
+          terraform test -no-color -filter=tests/mail.tftest.hcl
+
   ci:
     runs-on: ubuntu-latest
     steps:

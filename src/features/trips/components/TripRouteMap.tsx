@@ -166,7 +166,7 @@ class RouteActionsControl implements maplibregl.IControl {
         this.container.append(this.reset);
     }
 
-    private showReset = () => { this.reset.hidden = false; };
+    showReset = () => { this.reset.hidden = false; };
     private hideReset = () => { this.reset.hidden = true; };
     private watchMovement = () => {
         // Let the initial stop-focus animation finish before watching for changes.
@@ -196,12 +196,19 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibregl.Map | null>(null);
     const basemapControlRef = useRef<BasemapControl | null>(null);
+    const routeActionsControlRef = useRef<RouteActionsControl | null>(null);
     const [basemapId, setBasemapId] = useState<BasemapId>('muted');
     const basemapIdRef = useRef(basemapId);
     const [hoveredStopId, setHoveredStopId] = useState<string | null>(null);
     const routeUrl = manifest.route.geoJson;
     const { route, error: routeError, retry } = useTripRoute(routeUrl);
-    const [mapError, setMapError] = useState<{ url: string; message: string }>();
+    const [mapError, setMapError] = useState<{
+        url: string;
+        route: typeof route;
+        stops: typeof manifest.stops;
+        trackId?: string;
+        message: string;
+    }>();
     const [stopSelection, setStopSelection] = useState({ routeUrl, requestedId: stopId, selectedId: stopId });
     if (stopSelection.routeUrl !== routeUrl || stopSelection.requestedId !== stopId) {
         setStopSelection({ routeUrl, requestedId: stopId, selectedId: stopId });
@@ -211,11 +218,16 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
     const [loadedMap, setLoadedMap] = useState<maplibregl.Map | null>(null);
     const getInitialStopId = useEffectEvent(() => stopId);
     const missingTrack = route && trackId && routeCoordinates(trackRoute(route, trackId)).length === 0;
-    const error = routeError || (mapError?.url === routeUrl ? mapError.message : '') || (missingTrack ? `Route does not contain track "${trackId}".` : '');
+    const currentMapError = mapError?.url === routeUrl && mapError.route === route &&
+        mapError.stops === manifest.stops && mapError.trackId === trackId ? mapError.message : '';
+    const error = routeError || currentMapError || (missingTrack ? `Route does not contain track "${trackId}".` : '');
     const focusStop = (id: string) => {
         setStopSelection(current => ({ ...current, selectedId: id }));
         const stop = manifest.stops.find(candidate => candidate.id === id);
-        if (stop && mapRef.current) mapRef.current[reducedMotion ? 'jumpTo' : 'easeTo']({ center: stop.coordinates, zoom: 9 });
+        if (stop && mapRef.current) {
+            routeActionsControlRef.current?.showReset();
+            mapRef.current[reducedMotion ? 'jumpTo' : 'easeTo']({ center: stop.coordinates, zoom: 9 });
+        }
     };
 
     const handleMapStop = useEffectEvent(focusStop);
@@ -343,13 +355,18 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
         });
         if (!trackId) {
             map.once('load', () => {
-                if (!stopId) map.setZoom(Math.max(map.getMinZoom(), map.getZoom() - 1));
+                // An empty string marks an explicit reset; only undefined is the initial overview.
+                if (getSelectedStopId() === undefined) map.setZoom(Math.max(map.getMinZoom(), map.getZoom() - 1));
             });
         }
 
-        map.addControl(new RouteActionsControl(() => showFullRoute(), Boolean(stopId || trackId)), 'top-left');
+        const routeActionsControl = new RouteActionsControl(() => showFullRoute(), Boolean(getSelectedStopId() || trackId));
+        map.addControl(routeActionsControl, 'top-left');
 
-        map.on('error', () => setMapError({ url: routeUrl, message: 'The map could not load. You can still read the stops below.' }));
+        map.on('error', () => setMapError({
+            url: routeUrl, route, stops: manifest.stops, trackId,
+            message: 'The map could not load. You can still read the stops below.',
+        }));
         map.on('click', 'trip-stops', (event) => {
             const id = event.features?.[0]?.properties?.id;
             if (typeof id === 'string') handleMapStop(id);
@@ -357,10 +374,12 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
         map.once('load', () => setLoadedMap(map));
         mapRef.current = map;
         basemapControlRef.current = basemapControl;
+        routeActionsControlRef.current = routeActionsControl;
         return () => {
             map.remove();
             mapRef.current = null;
             basemapControlRef.current = null;
+            routeActionsControlRef.current = null;
         };
     }, [manifest.stops, route, routeUrl, trackId]);
 

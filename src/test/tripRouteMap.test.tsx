@@ -49,7 +49,14 @@ const mapMocks = vi.hoisted(() => ({
 mapMocks.getSource.mockReturnValue({ setTiles: mapMocks.setTiles });
 
 vi.mock('maplibre-gl', () => ({
-    AttributionControl: vi.fn(),
+    AttributionControl: class {
+        onAdd() {
+            const container = document.createElement('details');
+            container.className = 'maplibregl-ctrl-attrib maplibregl-compact-show';
+            container.setAttribute('open', '');
+            return container;
+        }
+    },
     FullscreenControl: vi.fn(),
     LngLatBounds: mapMocks.LngLatBounds,
     Map: mapMocks.Map,
@@ -79,6 +86,41 @@ afterEach(() => {
 });
 
 describe('TripRouteMap', () => {
+    it.each([false, true])('allows a stop selection to be reset before map load (reduced motion: %s)', async (reducedMotion) => {
+        mapMocks.reducedMotion = reducedMotion;
+        mapMocks.once.mockImplementation(() => undefined);
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true, json: async () => ({
+                type: 'Feature', properties: {},
+                geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
+            }),
+        }));
+        render(<TripStoryProvider manifest={{
+            ...manifest, stops: [{ id: 'camp', name: 'Camp', coordinates: [-122.5, 46.5] }],
+        }}><TripRouteMap /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        const control = mapMocks.addControl.mock.calls.map(([control]) => control)
+            .find(control => control?.constructor.name === 'RouteActionsControl');
+        const reset = control.onAdd(mapMocks.Map.mock.results[0].value).querySelector('button');
+        expect(reset.hidden).toBe(true);
+        fireEvent.click(screen.getByRole('button', { name: /Camp/ }));
+        expect(reset.hidden).toBe(false);
+        fireEvent.click(reset);
+        const moveEnd = mapMocks.once.mock.calls.find(([event]) => event === 'moveend')?.[1];
+        act(() => moveEnd!());
+        expect(reset.hidden).toBe(true);
+        mapMocks.easeTo.mockClear();
+        mapMocks.jumpTo.mockClear();
+        act(() => {
+            for (const [event, listener] of mapMocks.once.mock.calls) if (event === 'load') listener();
+        });
+        expect(mapMocks.setZoom).not.toHaveBeenCalled();
+        expect(mapMocks.easeTo).not.toHaveBeenCalled();
+        expect(mapMocks.jumpTo).not.toHaveBeenCalled();
+        expect(reset.hidden).toBe(true);
+        expect(screen.getByRole('button', { name: /Camp/ })).toHaveAttribute('aria-pressed', 'false');
+    });
+
     it.each([false, true])('does not restore the initial stop after an early reset (reduced motion: %s)', async (reducedMotion) => {
         mapMocks.reducedMotion = reducedMotion;
         vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
@@ -237,6 +279,80 @@ describe('TripRouteMap', () => {
         rerender(<TripStoryProvider manifest={{ ...manifest, route: { geoJson: '/second.geojson' } }}><TripRouteMap /></TripStoryProvider>);
         await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledTimes(2));
         expect(screen.queryByText(/The map could not load/)).not.toBeInTheDocument();
+    });
+
+    it.each(['track', 'stops'] as const)('discards an old map error when %s replacement uses the same route URL', async (replacement) => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true, json: async () => ({
+                type: 'Feature', properties: { trackId: 'return' },
+                geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
+            }),
+        }));
+        const { rerender } = render(<TripStoryProvider manifest={manifest}><TripRouteMap /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        const fail = mapMocks.on.mock.calls.find(([event]) => event === 'error')?.[1];
+        act(() => fail());
+        expect(screen.getByText(/The map could not load/)).toBeInTheDocument();
+        rerender(<TripStoryProvider manifest={replacement === 'stops' ? {
+            ...manifest, stops: [{ id: 'camp', name: 'Camp', coordinates: [-122.5, 46.5] }],
+        } : manifest}><TripRouteMap trackId={replacement === 'track' ? 'return' : undefined} /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledTimes(2));
+        expect(screen.queryByText(/The map could not load/)).not.toBeInTheDocument();
+        expect(screen.getByRole('region')).toBeInTheDocument();
+        const nextFail = mapMocks.on.mock.calls.filter(([event]) => event === 'error').at(-1)?.[1];
+        act(() => nextFail());
+        expect(screen.getByText(/The map could not load/)).toBeInTheDocument();
+    });
+
+    it('retries a failed map with a fresh route and removes the previous instance', async () => {
+        const fetchRoute = vi.fn().mockResolvedValue({
+            ok: true, json: async () => ({
+                type: 'Feature', properties: {},
+                geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
+            }),
+        });
+        vi.stubGlobal('fetch', fetchRoute);
+        render(<TripStoryProvider manifest={manifest}><TripRouteMap /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        const previousMap = mapMocks.Map.mock.results[0].value;
+        const fail = mapMocks.on.mock.calls.find(([event]) => event === 'error')?.[1];
+        act(() => fail());
+        fireEvent.click(screen.getByRole('button', { name: 'Retry route' }));
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledTimes(2));
+        expect(previousMap.remove).toHaveBeenCalledOnce();
+        expect(fetchRoute).toHaveBeenCalledTimes(2);
+        expect(screen.queryByText(/The map could not load/)).not.toBeInTheDocument();
+        expect(screen.getByRole('region')).toBeInTheDocument();
+    });
+
+    it('reports a missing track without creating an unusable map', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true, json: async () => ({
+                type: 'Feature', properties: { trackId: 'outbound' },
+                geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
+            }),
+        }));
+        render(<TripStoryProvider manifest={manifest}><TripRouteMap trackId="missing" /></TripStoryProvider>);
+        expect(await screen.findByText('Route does not contain track "missing".')).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: 'Download route (GeoJSON)' })).toHaveAttribute('href', manifest.route.geoJson);
+        expect(mapMocks.Map).not.toHaveBeenCalled();
+    });
+
+    it('starts attribution collapsed even when the base control opens it', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true, json: async () => ({
+                type: 'Feature', properties: {},
+                geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
+            }),
+        }));
+        render(<TripStoryProvider manifest={manifest}><TripRouteMap /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        const control = mapMocks.addControl.mock.calls.map(([control]) => control)
+            .find(control => control?.constructor.name === 'CollapsedAttributionControl');
+        const attribution = control.onAdd(mapMocks.Map.mock.results[0].value);
+        expect(attribution).toHaveClass('maplibregl-compact');
+        expect(attribution).not.toHaveClass('maplibregl-compact-show');
+        expect(attribution).not.toHaveAttribute('open');
     });
 
     it('rejects route geometry without usable coordinates', async () => {
@@ -433,6 +549,10 @@ describe('TripRouteMap', () => {
         expect(download).toHaveAttribute('href', manifest.route.geoJson);
         expect(download).toHaveAttribute('download');
         expect(download.querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
+        const host = document.createElement('div');
+        host.append(downloadControl.onAdd());
+        downloadControl.onRemove();
+        expect(host).toBeEmptyDOMElement();
 
         const move = mapMocks.on.mock.calls.find(([event]) => event === 'move')?.[1];
         act(() => move());
@@ -705,8 +825,11 @@ describe('TripRouteMap', () => {
         );
 
         const markerEnter = mapMocks.on.mock.calls.find(([event]) => event === 'mouseenter')?.[2];
+        const markerLeave = mapMocks.on.mock.calls.find(([event]) => event === 'mouseleave')?.[2];
         fireEvent.mouseLeave(description);
         act(() => markerEnter({ features: [{ properties: { id: 'camp' } }] }));
         expect(description).toHaveClass('bg-amber-400', 'text-zinc-950');
+        act(() => markerLeave());
+        expect(description).not.toHaveClass('bg-amber-400');
     });
 });

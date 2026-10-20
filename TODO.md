@@ -48,12 +48,16 @@ The historical signal is not ready for publication.
 Use fixed data for browser checks. Record the browser, viewport, and expected result.
 
 - [ ] Test Flights map keyboard controls and camera URL synchronization with Playwright.
-- [ ] Install WebKit host libraries. Run the trip browser suite with WebKit enabled.
 - [ ] Test list scroll restoration with browser Back and the article return link after delayed content loads.
 - [ ] Extend the fixed-tile browser test. Check route pixels, stop selection, and all three map styles.
 
-For the WebKit check, include JavaScript budgets, photo viewers, and delayed map loading. Keep the current budgets.
-See the [map selection review](docs/reviews/2026-10-08-trip-map-selection.md) for the delayed-load test and local setup limit.
+Run trip browser checks with WebKit enabled. Include JavaScript budgets, photo viewers, and delayed map loading.
+Keep the current budgets. See the [repository guide](README.md#testing-notes) for browser setup.
+
+## Mail deployment checks
+
+- [ ] Confirm [mail record ownership](docs/email-dns.md#adopt-existing-records) in remote Terraform state before applying DNS changes.
+- [ ] Verify [Gmail signing and external delivery](docs/email-dns.md#enable-and-verify-signing) with the configured Google Admin account.
 
 ## Dashboard checks
 

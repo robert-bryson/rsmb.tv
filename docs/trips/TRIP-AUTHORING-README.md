@@ -226,6 +226,9 @@ The camera, marker highlight, and stop selection follow that stop.
 After a track change, the replacement map restores the selected stop when it loads.
 The selected stop can differ from the requested stop after user input.
 The full-route action clears the selected stop. A later map load does not restore that stop.
+Selecting a stop makes the full-route action available before map load.
+An early full-route action also cancels the initial overview zoom adjustment.
+An error belongs to one map configuration. Replacing its route, track, or stops discards that error.
 Loading another route clears the previous user selection.
 
 For each entry in `route.tracks`, copy the exact ID from `asset-metadata.json`.

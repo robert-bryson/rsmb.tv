@@ -177,6 +177,7 @@ Host library installation can require administrator permission. Run that command
 A missing host library is a setup failure. It does not verify application behavior.
 The map control test delays tile responses until after the first full-route action.
 This delay checks that a later map load does not restore the initial stop.
+Unit tests also cover stop selection before map load and errors from replaced maps.
 To repeat only this check, run:
 
 ```bash
@@ -338,6 +339,16 @@ AWS Amplify deploys the site. Terraform manages the infrastructure. The configur
 - CloudFront distributions for the apex redirect and public data
 
 > **Note:** Git ignores Terraform state and variable files that can contain sensitive data.
+
+### Email DNS
+
+Google Workspace sends and receives mail for `@rsmb.tv`.
+Route 53 hosts the DNS zone.
+Terraform defines SPF, DKIM, and monitoring-only DMARC records in [infra/mail.tf](infra/mail.tf).
+The existing MX record remains outside Terraform.
+
+Use the [email DNS guide](docs/email-dns.md) for record adoption, offline tests, signing checks, and key rotation.
+Check Terraform state before you apply these records. Existing DNS records must not be recreated or overwritten without review.
 
 ## Analytics
 

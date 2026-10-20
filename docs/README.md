@@ -9,6 +9,7 @@ Use [TODO.md](../TODO.md) for incomplete work.
 | --- | --- |
 | [Repository guide](../README.md) | Install, develop, test, and build the site |
 | [Blog publication](blog-publishing.md) | Configure the Sheet and import documents |
+| [Email DNS](email-dns.md) | Adopt and test mail records, enable signing, and verify delivery |
 | [Trip authoring](trips/TRIP-AUTHORING-README.md) | Prepare, check, and publish trip content |
 | [Trip template](trips/TRIP-STORY-TEMPLATE.md) | Start a trip document |
 | [Temperature methodology](../projects/temperature-records/methodology.md) | Check the historical temperature data |
@@ -21,6 +22,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-10-20 | [Recent changes and mail DNS review](reviews/2026-10-20-recent-changes-and-mail-dns.md) |
 | 2026-10-08 | [Trip map selection review](reviews/2026-10-08-trip-map-selection.md) |
 | 2026-10-07 | [Trip browser budget review](reviews/2026-10-07-trip-browser-budget.md) |
 | 2026-10-07 | [Dashboard and dependency review](reviews/2026-10-07-dashboard-and-dependencies.md) |
