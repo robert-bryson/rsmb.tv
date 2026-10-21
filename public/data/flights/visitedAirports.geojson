@@ -195,10 +195,11 @@
           "5/5/2025",
           "7/23/2025",
           "7/29/2025",
-          "12/14/2025"
+          "12/14/2025",
+          "10/13/2026"
         ],
-        "visitCount": 70,
-        "arrivalCount": 33,
+        "visitCount": 71,
+        "arrivalCount": 34,
         "departureCount": 37
       },
       "geometry": {
@@ -1004,11 +1005,12 @@
           "4/10/2015",
           "4/14/2015",
           "10/9/2024",
-          "1/17/2025"
+          "1/17/2025",
+          "10/13/2026"
         ],
-        "visitCount": 12,
-        "arrivalCount": 6,
-        "departureCount": 6
+        "visitCount": 14,
+        "arrivalCount": 7,
+        "departureCount": 7
       },
       "geometry": {
         "type": "Point",
@@ -3402,11 +3404,12 @@
           "2/23/2026",
           "7/2/2026",
           "7/6/2026",
-          "9/24/2026"
+          "9/24/2026",
+          "10/13/2026"
         ],
-        "visitCount": 23,
+        "visitCount": 24,
         "arrivalCount": 13,
-        "departureCount": 10
+        "departureCount": 11
       },
       "geometry": {
         "type": "Point",
@@ -3492,11 +3495,10 @@
         "visitDates": [
           "11/10/2024",
           "5/28/2025",
-          "6/1/2025",
-          "10/15/2026"
+          "6/1/2025"
         ],
-        "visitCount": 4,
-        "arrivalCount": 2,
+        "visitCount": 3,
+        "arrivalCount": 1,
         "departureCount": 2
       },
       "geometry": {
@@ -3771,35 +3773,6 @@
         "coordinates": [
           23.9711,
           56.923599
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "code": "MCI",
-        "municipality": "Kansas City",
-        "region": "US-MO",
-        "regionName": "Missouri",
-        "country": "US",
-        "countryName": "United States",
-        "continent": "NA",
-        "continentName": "North America",
-        "name": "Kansas City International Airport",
-        "elevationFt": 1026,
-        "elevationM": 313,
-        "visitDates": [
-          "10/15/2026"
-        ],
-        "visitCount": 1,
-        "arrivalCount": 0,
-        "departureCount": 1
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -94.713898,
-          39.2976
         ]
       }
     }

@@ -14195,48 +14195,91 @@
       "type": "Feature",
       "properties": {
         "id": 331,
-        "date": "10/15/2026",
-        "airline": "Southwest",
-        "origin_code": "MCI",
-        "origin_name": "Kansas City International Airport",
-        "origin_municipality": "Kansas City",
+        "date": "10/13/2026",
+        "airline": "American",
+        "origin_code": "STL",
+        "origin_name": "St. Louis Lambert International Airport",
+        "origin_municipality": "St Louis",
         "origin_region": "US-MO",
         "origin_regionName": "Missouri",
         "origin_country": "US",
         "origin_countryName": "United States",
         "origin_continent": "NA",
         "origin_continentName": "North America",
-        "origin_lon": -94.713898,
-        "origin_lat": 39.2976,
-        "destination_code": "LGA",
-        "destination_name": "LaGuardia Airport",
-        "destination_municipality": "New York",
-        "destination_region": "US-NY",
-        "destination_regionName": "New York",
+        "origin_lon": -90.370003,
+        "origin_lat": 38.748697,
+        "destination_code": "PHX",
+        "destination_name": "Phoenix Sky Harbor International Airport",
+        "destination_municipality": "Phoenix",
+        "destination_region": "US-AZ",
+        "destination_regionName": "Arizona",
         "destination_country": "US",
         "destination_countryName": "United States",
         "destination_continent": "NA",
         "destination_continentName": "North America",
-        "destination_lon": -73.872597,
-        "destination_lat": 40.777199
+        "destination_lon": -112.005905,
+        "destination_lat": 33.435302
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
           [
-            -94.713898,
-            39.2976
+            -90.370003,
+            38.748697
           ],
           [
-            -73.872597,
-            40.777199
+            -112.005905,
+            33.435302
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 332,
+        "date": "10/13/2026",
+        "airline": "American",
+        "origin_code": "PHX",
+        "origin_name": "Phoenix Sky Harbor International Airport",
+        "origin_municipality": "Phoenix",
+        "origin_region": "US-AZ",
+        "origin_regionName": "Arizona",
+        "origin_country": "US",
+        "origin_countryName": "United States",
+        "origin_continent": "NA",
+        "origin_continentName": "North America",
+        "origin_lon": -112.005905,
+        "origin_lat": 33.435302,
+        "destination_code": "SAN",
+        "destination_name": "San Diego International Airport",
+        "destination_municipality": "San Diego",
+        "destination_region": "US-CA",
+        "destination_regionName": "California",
+        "destination_country": "US",
+        "destination_countryName": "United States",
+        "destination_continent": "NA",
+        "destination_continentName": "North America",
+        "destination_lon": -117.1900024,
+        "destination_lat": 32.73360062
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -112.005905,
+            33.435302
+          ],
+          [
+            -117.1900024,
+            32.73360062
           ]
         ]
       }
     }
   ],
   "metadata": {
-    "totalFlights": 331,
+    "totalFlights": 332,
     "years": [
       2006,
       2007,
@@ -14264,7 +14307,7 @@
     "maxYear": 2026,
     "internationalFlights": 85,
     "intercontinentalFlights": 36,
-    "domesticFlights": 246,
-    "generatedAt": "2026-10-01T21:27:14.722Z"
+    "domesticFlights": 247,
+    "generatedAt": "2026-10-21T06:11:40.314Z"
   }
 }

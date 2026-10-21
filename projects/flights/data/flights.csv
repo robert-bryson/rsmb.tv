@@ -329,4 +329,5 @@ date,airline,flightNumber,origin,destination,notes
 8/30/2026,British Airways,BA 6025,RIX,HEL,
 8/30/2026,British Airways,BA 6089,HEL,ORD,
 9/24/2026,Southwest,WN 4500,STL,MKE,
-10/15/2026,Southwest,WN 2076,MCI,LGA,
+10/13/2026,American,AA 2547,STL,PHX,
+10/13/2026,American,AA 1851,PHX,SAN,
