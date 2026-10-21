@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatDate, formatDateRange } from '../utils/formatDate';
+import { formatDate, formatDateRange, formatMonthYear } from '../utils/formatDate';
 
 describe('formatDate', () => {
     it('formats a standard ISO date', () => {
@@ -8,6 +8,11 @@ describe('formatDate', () => {
 
     it('formats another valid date', () => {
         expect(formatDate('1999-12-31')).toBe('December 31, 1999');
+    });
+
+    it('supports short month names without changing the date', () => {
+        expect(formatDate('2026-05-15', 'short')).toBe('May 15, 2026');
+        expect(formatDate('2026-02-30', 'short')).toBe('2026-02-30');
     });
 
     it('accepts four-digit years below 100', () => {
@@ -30,6 +35,25 @@ describe('formatDate', () => {
     it('handles date at year boundary', () => {
         expect(formatDate('2024-12-31')).toBe('December 31, 2024');
         expect(formatDate('2024-01-01')).toBe('January 1, 2024');
+    });
+});
+
+describe('formatMonthYear', () => {
+    it.each([
+        ['2026-01', 'Jan 2026'],
+        ['2026-12-31', 'Dec 2026'],
+        ['2024-02-29', 'Feb 2024'],
+        ['0099-01', 'Jan 99'],
+        ['0099-12-31', 'Dec 99'],
+    ])('formats %s as %s', (input, expected) => {
+        expect(formatMonthYear(input)).toBe(expected);
+    });
+
+    it.each([
+        '', '2026', 'not-a-date', '2026-00', '2026-13', '2026-5',
+        '2026-05junk', '2026-05-22-extra', '2026-02-30', '2025-02-29',
+    ])('preserves %j instead of inventing a valid month', (input) => {
+        expect(formatMonthYear(input)).toBe(input);
     });
 });
 

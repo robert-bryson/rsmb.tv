@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { projects } from '../content/projects';
+import { projects, formatProjectDate, type Project } from '../content/projects';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
@@ -61,14 +61,18 @@ export function Projects() {
   );
 }
 
-function ProjectContent({ project }: { project: typeof projects[0] }) {
+function ProjectContent({ project }: { project: Project }) {
   return (
     <>
       <div className="flex items-baseline justify-between gap-4 mb-2">
         <h2 className="text-lg font-medium text-zinc-100 group-hover:text-violet-400">
           {project.title}
         </h2>
-        <span className="text-sm text-zinc-500">{project.year}</span>
+        <span className="text-sm text-zinc-500 whitespace-nowrap">
+          {project.lastUpdated ? (
+            <>Updated <time dateTime={project.lastUpdated}>{formatProjectDate(project)}</time></>
+          ) : project.year}
+        </span>
       </div>
       {project.previewImage && (
         <img

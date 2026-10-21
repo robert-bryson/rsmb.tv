@@ -22,6 +22,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-10-20 | [Project changelog review](reviews/2026-10-20-project-changelogs.md) |
 | 2026-10-20 | [Recent changes and mail DNS review](reviews/2026-10-20-recent-changes-and-mail-dns.md) |
 | 2026-10-08 | [Trip map selection review](reviews/2026-10-08-trip-map-selection.md) |
 | 2026-10-07 | [Trip browser budget review](reviews/2026-10-07-trip-browser-budget.md) |

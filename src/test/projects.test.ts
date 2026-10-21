@@ -113,6 +113,20 @@ describe('formatProjectDate', () => {
         expect(formatProjectDate(p)).toBe('2026');
     });
 
+    it('does not convert years below 100 to the twentieth century', () => {
+        expect(formatProjectDate(makeProject({ lastUpdated: '0099-05-22' }))).toBe('May 99');
+    });
+
+    it.each(['2026-00', '2026-13', '2026-02-30', '2025-02-29', '2026-05junk', '2026-05-22-extra'])(
+        'preserves invalid date %s instead of displaying a different date', (lastUpdated) => {
+            expect(formatProjectDate(makeProject({ lastUpdated }))).toBe(lastUpdated);
+        },
+    );
+
+    it('uses the launch year for an empty update date', () => {
+        expect(formatProjectDate(makeProject({ lastUpdated: '' }))).toBe('2024');
+    });
+
     it('each project with lastUpdated produces a non-empty formatted date', () => {
         for (const p of projects) {
             if (p.lastUpdated) {
@@ -126,6 +140,7 @@ describe('changelog data', () => {
     it('provides a changelog and exact last-updated date for every project', () => {
         for (const p of projects) {
             expect(p.lastUpdated, `${p.slug} lastUpdated`).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+            expect(new Date(`${p.lastUpdated}T00:00:00Z`).toISOString().slice(0, 10), `${p.slug} calendar date`).toBe(p.lastUpdated);
             expect(p.changelog?.length, `${p.slug} changelog`).toBeGreaterThan(0);
             expect(p.changelog?.[0]?.date, `${p.slug} latest changelog month`).toBe(
                 p.lastUpdated?.slice(0, 7),
@@ -141,7 +156,7 @@ describe('changelog data', () => {
             );
 
             for (const entry of p.changelog) {
-                expect(entry.date, `${p.slug} changelog date`).toMatch(/^\d{4}-\d{2}(?:-\d{2})?$/);
+                expect(entry.date, `${p.slug} changelog month`).toMatch(/^\d{4}-(?:0[1-9]|1[0-2])$/);
                 expect(entry.notes.length).toBeGreaterThan(0);
                 expect(new Set(entry.notes).size, `${p.slug} ${entry.date} notes`).toBe(entry.notes.length);
                 for (const note of entry.notes) {

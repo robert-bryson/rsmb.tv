@@ -262,9 +262,34 @@ Put only synthetic, de-identified fixtures in a future `projects/ride-ledger/tes
 
 ## Project Changelogs
 
-Project pages read their changelogs from `src/content/projects.ts`. Use the commit history of each project's default branch as the source. Do not include work from an open branch or pull request.
+Project pages read changelogs from `src/content/projects.ts`.
+Use commits from each project's default branch as the source.
+Exclude work from open branches and pull requests.
 
-Group changes by month. Put the newest month first. Summarize user-visible changes, reliability work, security fixes, and important maintenance. Set `lastUpdated` to the date of the newest represented commit. The first changelog entry must use the same year and month as `lastUpdated`.
+Include only new or expanded capabilities. Describe what users can do with each feature.
+Exclude dependency updates, tests, CI, refactoring, security hardening, standalone bug fixes, telemetry, data refreshes, documentation, and portfolio changes.
+
+Use this procedure to update a changelog:
+
+1. Find the commit that introduced each capability.
+2. Review the commit diff. A later refactor does not change the feature's release month.
+3. Group notes by the source commit month. Use `YYYY-MM` and put the newest month first.
+4. Omit months without feature updates.
+5. Set `lastUpdated` to the newest represented feature commit date. Use a valid `YYYY-MM-DD` calendar date.
+6. Check that the first changelog month matches `lastUpdated`.
+7. Put each note on a separate source line in its `notes` array.
+
+The project list shows the feature update month. Projects without `lastUpdated` show their launch year.
+Each changelog note has a bullet, including months with one note. Wrapped text aligns with the note text.
+Dates use UTC calendar values. Invalid date text remains visible for correction; formatters do not normalize it.
+The content tests reject invalid calendar dates and changelog months.
+
+Run the date and project checks after an edit:
+
+```bash
+npx vitest run src/test/formatDate.test.ts src/test/projects.test.ts src/test/Projects.test.tsx src/test/ProjectChangelog.test.tsx src/test/pages.test.tsx src/test/projectPages.test.tsx
+npm run test:e2e -- tests/e2e/projects.spec.ts
+```
 
 ## Flights Map URL State
 

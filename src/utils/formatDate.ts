@@ -5,6 +5,17 @@ const fullDateFormatter = new Intl.DateTimeFormat('en-US', {
     day: 'numeric',
     timeZone: 'UTC',
 });
+const shortDateFormatter = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+});
+const monthYearFormatter = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+});
 const monthFormatter = new Intl.DateTimeFormat('en-US', {
     month: 'long',
     timeZone: 'UTC',
@@ -31,10 +42,17 @@ function parseIsoDate(dateStr: string): Date | undefined {
     return date;
 }
 
-export function formatDate(dateStr: string): string {
+export function formatDate(dateStr: string, month: 'long' | 'short' = 'long'): string {
     if (!dateStr) return dateStr;
     const date = parseIsoDate(dateStr);
-    return date ? fullDateFormatter.format(date) : dateStr;
+    const formatter = month === 'short' ? shortDateFormatter : fullDateFormatter;
+    return date ? formatter.format(date) : dateStr;
+}
+
+/** Format an ISO date or month in UTC. Preserve invalid input for correction. */
+export function formatMonthYear(dateStr: string): string {
+    const date = parseIsoDate(/^\d{4}-\d{2}$/.test(dateStr) ? `${dateStr}-01` : dateStr);
+    return date ? monthYearFormatter.format(date) : dateStr;
 }
 
 export function formatDateRange(startDateStr: string, endDateStr: string): string {

@@ -142,6 +142,6 @@ describe('StatusDashboard page', () => {
     it('renders changelog section', () => {
         renderWithRouter(<StatusDashboard />, { route: '/projects/status-dashboard' });
         expect(screen.getByRole('heading', { name: /Changelog/i })).toBeInTheDocument();
-        expect(screen.getByText(/Added project page/i)).toBeInTheDocument();
+        expect(screen.getByText(/Added 24-hour incident history/i)).toBeInTheDocument();
     });
 });

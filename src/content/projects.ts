@@ -1,4 +1,7 @@
+import { formatMonthYear } from '../utils/formatDate';
+
 export interface ChangelogEntry {
+  /** Feature month (YYYY-MM), in descending order within each project. */
   date: string;
   notes: string[];
 }
@@ -16,7 +19,7 @@ export interface Project {
   sourceUrl?: string;
   previewImage?: string;
   year: number;
-  /** ISO date string (YYYY-MM-DD) of the last meaningful update to this project */
+  /** ISO date (YYYY-MM-DD) of the newest feature update represented in the changelog. */
   lastUpdated?: string;
   changelog?: ChangelogEntry[];
 }
@@ -34,13 +37,29 @@ export const projects: Project[] = [
     sourceUrl: 'https://github.com/robert-bryson/through-routes',
     previewImage: '/images/through-routes/through-routes-curviness-map.webp',
     year: 2026,
-    lastUpdated: '2026-08-07',
+    lastUpdated: '2026-10-02',
     changelog: [
-      { date: '2026-08', notes: ['Updated frontend dependencies'] },
-      { date: '2026-06', notes: ['Updated backend and frontend dependencies'] },
-      { date: '2026-05', notes: ['Added county views pipeline', 'Hardened through-route segmentation', 'Refreshed dependencies'] },
-      { date: '2026-04', notes: ['Added route builder connectivity validation', 'Added shareable state and route builder preview', 'Expanded save and restore flows', 'Tightened routegraph security', 'Comprehensive quality, security, and UX improvements', 'Added CSRF protection, type safety improvements, Vitest', 'Added project screenshots'] },
-      { date: '2026-03', notes: ['Added to portfolio'] },
+      {
+        date: '2026-10',
+        notes: [
+          'Added theme controls and a dark vector basemap',
+        ],
+      },
+      {
+        date: '2026-05',
+        notes: [
+          'Added county road views',
+        ],
+      },
+      {
+        date: '2026-04',
+        notes: [
+          'Added shareable map state and route builder previews',
+          'Expanded route saving and restoration',
+          'Added route builder connectivity checks',
+          'Added native Windows support for road-data processing',
+        ],
+      },
     ],
   },
   {
@@ -56,13 +75,38 @@ export const projects: Project[] = [
     year: 2025,
     lastUpdated: '2026-08-20',
     changelog: [
-      { date: '2026-08', notes: ['Refreshed flight history data', 'Fixed mobile safe-area layout', 'Added persistent pointer and keyboard resizing to the stats panel', 'Fixed stats panel scrolling, scrollbar styling, and section controls'] },
-      { date: '2026-06', notes: ['Refreshed flight history data'] },
-      { date: '2026-05', notes: ['Hardened fetch cache request invalidation', 'Improved deferred data loading and verification', 'Hardened URL sharing state', 'Improved map controls and interactions', 'Reworked stats panel UI', 'Performance — lazy-loaded globe component', 'Fixed stale closure in section toggling'] },
-      { date: '2026-04', notes: ['Hardened data loading and flight filtering', 'Renamed from \'Flight Tracker\' to \'Flights\'', 'Added preview screenshots'] },
-      { date: '2026-02', notes: ['Added all-airports layer and US states overlay'] },
-      { date: '2025-12', notes: ['Major refactor — animated arcs, country/region mappings, performance improvements'] },
-      { date: '2025-07', notes: ['Initial launch'] },
+      {
+        date: '2026-08',
+        notes: [
+          'Added pointer and keyboard resizing to the stats panel, with saved sizing preferences',
+        ],
+      },
+      {
+        date: '2026-05',
+        notes: [
+          'Added active filter chips',
+          'Added a globe rotation toggle',
+          'Added a pull-tab control for opening and closing the stats panel',
+        ],
+      },
+      {
+        date: '2026-02',
+        notes: [
+          'Added all-airports layer and US states overlay',
+        ],
+      },
+      {
+        date: '2025-12',
+        notes: [
+          'Added animated flight arcs and country and region labels',
+        ],
+      },
+      {
+        date: '2025-07',
+        notes: [
+          'Initial launch',
+        ],
+      },
     ],
   },
   {
@@ -76,11 +120,26 @@ export const projects: Project[] = [
     sourceUrl: 'https://github.com/robert-bryson/anki-artisan',
     previewImage: '/images/anki-artisan/anki-artisan-preview.webp',
     year: 2026,
-    lastUpdated: '2026-05-22',
+    lastUpdated: '2026-04-30',
     changelog: [
-      { date: '2026-05', notes: ['Refreshed dependencies'] },
-      { date: '2026-04', notes: ['Wired CSV/Wikipedia sources into build pipeline', 'Added dry-run and multi-deck packaging', 'Improved incremental deck updates and metadata tracking', 'Added CSV/Wikipedia extractors', 'Refactored card models and CSS into modules', 'Added taxonomy hierarchy cards and confusion card styling', 'Added CI pipeline'] },
-      { date: '2026-03', notes: ['Added project page with screenshots', 'Added to portfolio'] },
+      {
+        date: '2026-04',
+        notes: [
+          'Added flashcard generation from CSV files and Wikipedia tables',
+          'Added dry-run previews without media downloads or deck output',
+          'Added multi-source builds with separate subdecks',
+          'Added incremental builds that export only new or changed cards',
+          'Added seasonal and difficulty tags for targeted study',
+        ],
+      },
+      {
+        date: '2026-03',
+        notes: [
+          'Added wildlife flashcard generation from iNaturalist and eBird',
+          'Added interactive eBird region lookup',
+          'Added taxonomy hierarchy cards',
+        ],
+      },
     ],
   },
   {
@@ -91,12 +150,17 @@ export const projects: Project[] = [
     applicationCategory: 'UtilitiesApplication',
     sourceUrl: 'https://github.com/robert-bryson/aborg',
     year: 2026,
-    lastUpdated: '2026-08-19',
+    lastUpdated: '2026-04-16',
     changelog: [
-      { date: '2026-08', notes: ['Fixed malformed Libby data handling and rename error handling', 'Expanded CLI, fetcher, and scanner coverage above 80%', 'Rewrote user documentation in ASD-STE100 style', 'Added Python 3.14 CI coverage and updated dependencies'] },
-      { date: '2026-06', notes: ['Hardened scanning, organization, and undo behavior', 'Improved audiobook metadata inference', 'Improved handling of ambiguous contributors'] },
-      { date: '2026-05', notes: ['Updated dependencies'] },
-      { date: '2026-04', notes: ['Security hardening — zip-slip, corrupt zip, symlink safety', 'Undo batching and crash fixes', 'Expanded test coverage to 71%+', 'Added about/tldr commands', 'Fixed undo crash; hardened organizer safety', 'Improved code quality and test coverage', 'Lint fixes, DRY refactor, variable shadowing fix, coverage improvements', 'Added to portfolio'] },
+      {
+        date: '2026-04',
+        notes: [
+          'Added about and tldr commands for version details and command reference',
+          'Added audiobook discovery from metadata.json sidecars in directories and ZIP archives',
+          'Added configurable author-name formatting with automatic folder renaming',
+          'Added optional source-file and empty-directory cleanup after organizing',
+        ],
+      },
     ],
   },
   {
@@ -108,12 +172,28 @@ export const projects: Project[] = [
     sourceUrl: 'https://github.com/robert-bryson/parc',
     previewImage: '/images/parc/update-live-progress.webp',
     year: 2026,
-    lastUpdated: '2026-08-19',
+    lastUpdated: '2026-09-29',
     changelog: [
-      { date: '2026-08', notes: ['Improved update summaries and duplicate feed identification', 'Hardened episode error-state cleanup', 'Hardened container builds and runtime images'] },
-      { date: '2026-07', notes: ['Fixed status JSON output and improved archive-store performance', 'Expanded test coverage above 92% branch coverage'] },
-      { date: '2026-06', notes: ['Added durable container deployment and operations documentation'] },
-      { date: '2026-05', notes: ['Added resilient podcast archiving', 'Added archive backup, restore, integrity, status, and recovery tools', 'Added historical feed backfill and multi-source feed discovery', 'Added concurrent, fair, bandwidth-limited update scheduling', 'Hardened archive integrity and update reliability', 'Improved feed discovery, scan state, and archive analysis', 'Added to portfolio'] },
+      {
+        date: '2026-09',
+        notes: [
+          'Added episode-source provenance and feed snapshot management',
+          'Added quick, changed-file, and full-checksum archive analysis modes',
+          'Added archive-health reporting with parc doctor',
+          'Added scheduled Synology updates and a fail-on-error option for schedulers',
+        ],
+      },
+      {
+        date: '2026-05',
+        notes: [
+          'Added podcast subscriptions, episode scanning, and resumable downloads',
+          'Added archive backup, restore, integrity, status, and recovery commands',
+          'Added historical feed backfill and multi-source feed discovery',
+          'Added OPML subscription import',
+          'Added concurrent downloads with fair scheduling and bandwidth limits',
+          'Added stale-episode reporting and per-podcast archive analysis',
+        ],
+      },
     ],
   },
   {
@@ -128,13 +208,17 @@ export const projects: Project[] = [
     sourceUrl: 'https://github.com/robert-bryson/bookend',
     previewImage: '/images/bookend/bookend-home.webp',
     year: 2026,
-    lastUpdated: '2026-08-20',
+    lastUpdated: '2026-05-08',
     changelog: [
-      { date: '2026-08', notes: ['Improved responsive and accessible controls', 'Prevented duplicate read mutations and added rollback on failure', 'Patched Next.js and Sharp security vulnerabilities', 'Refreshed dependencies'] },
-      { date: '2026-06', notes: ['Updated deprecated AWS region references', 'Refreshed dependencies and tooling'] },
-      { date: '2026-05', notes: ['Fixed preview array diff bug', 'Added regression tests', 'Added award list data and author award workflow', 'Hardened enrichment action auth', 'Improved read import preview and commit reporting', 'Hardened user state caching', 'Dashboard rhythm/pace improvements'] },
-      { date: '2026-04', notes: ['Added project screenshots'] },
-      { date: '2026-03', notes: ['Added to portfolio'] },
+      {
+        date: '2026-05',
+        notes: [
+          'Added award-list data and author award workflows',
+          'Added a Reading Home dashboard with current books, reading goals, and activity history',
+          'Added weekly reading pace, monthly charts, and reading insights',
+          'Added list-progress tracking for award winners, finalists, and nominees',
+        ],
+      },
     ],
   },
   {
@@ -146,11 +230,24 @@ export const projects: Project[] = [
     demoUrl: '/projects/temperature-records/map',
     previewImage: '/images/temperature-records/records-daily.webp',
     year: 2025,
-    lastUpdated: '2026-05-28',
+    lastUpdated: '2026-09-08',
     changelog: [
-      { date: '2026-05', notes: ['Improved deferred data loading, retries, and error handling', 'Added loading-state and browser regression coverage'] },
-      { date: '2026-04', notes: ['Fixed temperature data sync; improved data freshness checks', 'Improved map clarity and chart design', 'Fixed HTML sanitization in map popups'] },
-      { date: '2026-03', notes: ['Renamed to \'Record Highs\'', 'S3-backed data cache', 'State drill-down', 'Mobile layout improvements', 'Fixed °C/°F unit switching', 'Served data from S3/CloudFront CDN', 'Parallelized ACIS data fetches', 'Overhauled map UX — split views, station detail panel, county labels', 'Initial launch — temperature records map with climate trend charts'] },
+      {
+        date: '2026-09',
+        notes: [
+          'Added standing-record summaries with median age and the share set in the last 25 years',
+          'Added historical record analysis with station cohorts and quality checks',
+        ],
+      },
+      {
+        date: '2026-03',
+        notes: [
+          'Added state drill-down and monthly record scope',
+          'Added separate map views for recent records, county extremes, state extremes, and record ages',
+          'Added station detail panels and county labels',
+          'Launched the temperature records map with record-history charts',
+        ],
+      },
     ],
   },
   {
@@ -162,10 +259,16 @@ export const projects: Project[] = [
     demoUrl: '/projects/tornado-tracks/map',
     previewImage: '/images/tornado-tracks/conus-tracks.webp',
     year: 2026,
-    lastUpdated: '2026-05-01',
+    lastUpdated: '2026-04-29',
     changelog: [
-      { date: '2026-05', notes: ['Fixed URL state race condition', 'Fixed CDN default and share button', 'Fixed timer memory leak'] },
-      { date: '2026-04', notes: ['Initial launch — EF-scale filters, regional presets, density mode, annual playback'] },
+      {
+        date: '2026-04',
+        notes: [
+          'Launched tornado-track exploration with EF-scale filters, regional presets, density mode, and annual playback',
+          'Added tornado trends, fatality comparisons, and warning and watch summaries',
+          'Added an interactive fallback map for devices without WebGL',
+        ],
+      },
     ],
   },
   {
@@ -175,14 +278,20 @@ export const projects: Project[] = [
     tech: ['TypeScript', 'React (Ink)', 'AWS SDK v3', 'CloudWatch', 'Route53', 'GitHub API'],
     applicationCategory: 'DeveloperApplication',
     year: 2025,
-    lastUpdated: '2026-06-04',
+    lastUpdated: '2026-04-21',
     previewImage: '/images/status-dashboard/status-dashboard-calm.webp',
     changelog: [
-      { date: '2026-06', notes: ['Added project page'] },
-      { date: '2026-05', notes: ['Hardened GitHub build monitoring; workflow rows surface API errors instead of collapsing to generic failures', 'Explicit workflow configs with no runs render UNKNOWN rows instead of disappearing silently'] },
-      { date: '2026-03', notes: ['Added AWS cost forecasting and cost cache versioning', 'Added time-series sparklines and latency tracking to health panel'] },
-      { date: '2025-12', notes: ['Added external site health groups and incident log', 'Added GitHub panel for PRs and open issues'] },
-      { date: '2025-09', notes: ['Initial launch — health, alarms, builds, and cost panels'] },
+      {
+        date: '2026-04',
+        notes: [
+          'Added compact and detail views for health, alarms, builds, and AWS cost forecasts',
+          'Added external uptime monitoring and GitHub pull request and issue panels',
+          'Added AWS resource monitoring with CloudFront and Lambda discovery',
+          'Added health-check latency sparklines',
+          'Added 24-hour incident history and a command to clear resolved incidents',
+          'Added event logging and automatic problem details in compact mode',
+        ],
+      },
     ],
   },
   {
@@ -195,14 +304,18 @@ export const projects: Project[] = [
     sourceUrl: 'https://github.com/robert-bryson/route2gpx',
     previewImage: '/images/route2gpx/route-planning.webp',
     year: 2024,
-    lastUpdated: '2026-08-20',
+    lastUpdated: '2026-04-07',
     changelog: [
-      { date: '2026-08', notes: ['Updated browser build dependencies'] },
-      { date: '2026-07', notes: ['Updated test tooling and CI actions'] },
-      { date: '2026-06', notes: ['Updated test, build, Python, and infrastructure dependencies'] },
-      { date: '2026-05', notes: ['Hardened browser build and import handling', 'Hardened route planner interactions', 'Hardened route export and UI updates', 'Improved test coverage'] },
-      { date: '2026-04', notes: ['Refreshed dependencies', 'Production build pipeline — content hashing, SRI, minification', 'Added FIT, TCX, GeoJSON import support', 'Added screenshot gallery', 'Security hardening — CSP refactor, XSS fixes, filename sanitization', 'Added CI pipeline, JS tests, Terraform S3 backend'] },
-      { date: '2026-03', notes: ['Added to portfolio'] },
+      {
+        date: '2026-04',
+        notes: [
+          'Added GPX, KML, FIT, TCX, and GeoJSON imports, including compressed files',
+          'Added drag-and-drop file import and multi-file selection',
+          'Added Fog of World export visualization',
+          'Added route elevation data and download filename previews',
+          'Added ZIP downloads for multiple routes',
+        ],
+      },
     ],
   },
 ];
@@ -214,13 +327,5 @@ export const featuredProjects = projects.filter(p => p.featured);
  * or falls back to the `year` field as a string.
  */
 export function formatProjectDate(project: Project): string {
-  if (project.lastUpdated) {
-    const parts = project.lastUpdated.split('-');
-    if (parts.length >= 2) {
-      const date = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1);
-      return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-    }
-    return parts[0];
-  }
-  return String(project.year);
+  return formatMonthYear(project.lastUpdated || String(project.year));
 }
