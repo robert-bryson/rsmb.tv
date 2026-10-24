@@ -104,6 +104,7 @@ The tests use a synthetic stream. They do not contact AWS, GitHub, or external s
 ## Dependency Maintenance
 
 Use the configured Node.js and npm versions before you update dependencies.
+Use normal npm peer dependency checks. The MDX build plugin requires the declared Rollup development dependency.
 Keep React and React DOM on the same version.
 Keep Vitest and its coverage package on the same version.
 Do not override the major version of a dependency declared by React Router DOM.
@@ -129,6 +130,9 @@ PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser
 
 An empty `npm outdated` result does not prove that every transitive dependency uses its newest release.
 Check the audit result and dependency contracts. Do not force incompatible major versions into the dependency tree.
+
+GitHub Actions use complete commit hashes. Keep each release comment with its verified hash when you update an action.
+Infrastructure CI validates all Terraform files. It tests mail, storage, and workflow roles with mocked AWS responses.
 
 ## Project Structure
 
@@ -251,6 +255,38 @@ Run `npm run build-og`.
 Store project screenshots under `public/images/<project-slug>/`.
 Commit compressed WebP files. Omit unused source JPG and PNG files.
 Use landscape images for project cards. If the source is portrait, prepare a landscape composition.
+
+After you change a project's `previewImage`, run `npm run prepare-project-previews`.
+Commit the generated manifest and fingerprinted files in `public/images/previews/`.
+Home and Projects select responsive variants from that manifest. The original images remain available on project detail pages.
+The generator accepts source files inside `public/images/`. It rejects paths and symlinks that leave this directory.
+Do not use generated previews as source images. The generator rejects files inside its own output directory.
+It publishes complete image files and the manifest with atomic renames. It removes obsolete generated images after the manifest is published.
+
+## Performance checks
+
+Run controlled browser measurements with:
+
+```bash
+npm run measure:performance -- --base-url https://www.rsmb.tv --samples 3 --out /tmp/rsmb-performance.json
+```
+
+Use `--paths /,/projects/flights/map` to limit the routes.
+The command uses Pixel 7 emulation and fourfold CPU slowdown.
+It sets 150 ms latency and 1.6 Mbps downloads. It disables the browser cache.
+It records load metrics before interaction. It then measures one named interaction, or keyboard focus when no control is available.
+It waits for visible images and fonts before the observation period starts.
+Use `--settle-ms` to change the observation period. Use `--timeout-ms` to change readiness and navigation deadlines.
+HTTP failures, application crashes, failed visible images, and missing metrics fail the sample. The command returns a nonzero status for failed samples.
+The JSON report retains failed samples and their causes. Report files use atomic replacement.
+Browser cleanup failures remain in the report and fail the sample.
+These are laboratory samples. They do not establish real-device or population performance.
+
+The build uses WebGL rendering and the globe library's existing CPU heatmap fallback.
+The guarded build adapter removes unused WebGPU imports. It checks complete source hashes for the two modified dependencies.
+Review their upstream diffs before updating an approved hash. Run the adapter tests, production-build test, and browser checks after the update.
+The production-build test checks JavaScript size, renderer selection, build warnings, and an original TypeScript error location.
+The source-map regression also injects a real Vite diagnostic. The test checks its diagnostic code and message.
 
 ## Private Project Data
 

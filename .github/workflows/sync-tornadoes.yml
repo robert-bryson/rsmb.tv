@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 concurrency:
   group: sync-tornadoes
@@ -25,16 +26,16 @@ jobs:
       TORNADO_DATA_CDN_ID: ${{ secrets.TEMP_DATA_CLOUDFRONT_ID }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: '.nvmrc'
           cache: 'npm'
 
       - name: Cache NOAA StormEvents CSV downloads
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .cache/tornado-tracks
           # Historical CSV filenames are stable once finalized. Bust cache
@@ -56,10 +57,23 @@ jobs:
         # files that actually changed will differ from the S3 copy.
         run: node projects/tornado-tracks/scripts/syncTornadoes.js
 
+      - name: Configure AWS with OIDC
+        if: vars.AWS_TORNADO_SYNC_ROLE_ARN != ''
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.AWS_TORNADO_SYNC_ROLE_ARN }}
+          aws-region: us-east-1
+          role-duration-seconds: 3600
+
+      - name: Configure AWS with existing keys during migration
+        if: vars.AWS_TORNADO_SYNC_ROLE_ARN == ''
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
       - name: Upload tornado data to S3
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           set -euo pipefail
           # JSON summary files (annual-summary, state-summary, notable-events)
@@ -78,9 +92,6 @@ jobs:
 
       - name: Invalidate CloudFront cache
         if: env.TORNADO_DATA_CDN_ID != ''
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           set -euo pipefail
           aws cloudfront create-invalidation \

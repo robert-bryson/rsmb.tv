@@ -15,6 +15,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 concurrency:
   group: sync-temperatures
@@ -32,10 +33,10 @@ jobs:
       TEMP_DATA_DIR: .temp/temperatures
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: '.nvmrc'
 
@@ -54,17 +55,27 @@ jobs:
             echo "label=recent-only" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Configure AWS with OIDC
+        if: vars.AWS_TEMPERATURE_SYNC_ROLE_ARN != ''
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.AWS_TEMPERATURE_SYNC_ROLE_ARN }}
+          aws-region: us-east-1
+          role-duration-seconds: 3600
+
+      - name: Configure AWS with existing keys during migration
+        if: vars.AWS_TEMPERATURE_SYNC_ROLE_ARN == ''
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
       - name: Sync temperature records
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: node scripts/sync-temperatures.js ${{ steps.mode.outputs.args }}
 
       - name: Upload record files to S3
         if: env.TEMPERATURE_DATA_BUCKET != ''
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           set -euo pipefail
           aws s3 sync public/data/temperatures/ "s3://${TEMPERATURE_DATA_BUCKET}/" \
@@ -76,9 +87,6 @@ jobs:
 
       - name: Upload daily observations and cache to S3
         if: env.TEMPERATURE_DATA_BUCKET != ''
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           set -euo pipefail
           if [[ -d "${TEMP_DATA_DIR}" ]]; then
@@ -92,9 +100,6 @@ jobs:
 
       - name: Invalidate CloudFront cache
         if: env.TEMPERATURE_DATA_CDN_ID != '' && env.TEMPERATURE_DATA_BUCKET != ''
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           set -euo pipefail
           if [[ "${{ steps.mode.outputs.label }}" == "full" ]]; then

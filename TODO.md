@@ -71,8 +71,10 @@ Use fixed provider responses. Do not contact production services from unit tests
 
 Preserve passing publication checks when you change build scripts.
 
-- [ ] Reduce the large visualization chunks. Preserve the passing article JavaScript budgets.
-- [ ] Check Tailwind source-map output. Confirm that production error locations match source files.
+- [ ] Deploy the [prepared OIDC roles](docs/github-actions-oidc.md). Set the role variables and verify both workflows before removing legacy credentials.
+- [ ] Extract rendering, interaction, and loading modules from the large map components. Preserve browser behavior and URL contracts.
+- [ ] Reduce MapLibre loading and worker costs. Preserve the passing article JavaScript budgets.
+- [ ] Profile Flights pause/play latency under mobile throttling. Add a representative interaction budget.
 - [ ] Split document conversion, shortcode handling, and publication checks in `scripts/sync-blogs.js`. Retain the compilation tests.
 - [ ] Replace the TypeScript 6 lint compiler only after `typescript-eslint` supports TypeScript 7. Run lint and typecheck first.
 
@@ -82,7 +84,7 @@ Complete these tasks after the affected trip passes its source review.
 
 - [ ] Review and apply the Amplify article rewrite rules. Check delivered article metadata on the production host.
 - [ ] For each new trip, review its processed photos and use versioned filenames. Upload the assets before site deployment.
-- [ ] Measure LCP, CLS, and INP under fixed test conditions. Set limits from those measurements.
+- [ ] Collect real-device LCP, CLS, and INP measurements. Use the [laboratory report](docs/reviews/2026-10-24-performance-follow-up.md) as a baseline.
 - [ ] Remove inactive map instances when their sections are far outside the viewport. Retain the route preview and selected stop.
 
 ## Project content

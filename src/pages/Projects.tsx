@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ProjectPreview } from '../components/ProjectPreview';
 import { projects, formatProjectDate, type Project } from '../content/projects';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
@@ -46,13 +47,13 @@ export function Projects() {
       </p>
 
       <ul className="space-y-6">
-        {projects.map((project) => (
+        {projects.map((project, index) => (
           <li key={project.slug}>
             <Link
               to={`/projects/${project.slug}`}
               className="group block p-4 -mx-4 rounded-lg hover:bg-zinc-900/50 transition-colors"
             >
-              <ProjectContent project={project} />
+              <ProjectContent project={project} priority={index === 0} />
             </Link>
           </li>
         ))}
@@ -61,7 +62,7 @@ export function Projects() {
   );
 }
 
-function ProjectContent({ project }: { project: Project }) {
+function ProjectContent({ project, priority }: { project: Project; priority: boolean }) {
   return (
     <>
       <div className="flex items-baseline justify-between gap-4 mb-2">
@@ -75,11 +76,12 @@ function ProjectContent({ project }: { project: Project }) {
         </span>
       </div>
       {project.previewImage && (
-        <img
+        <ProjectPreview
           src={project.previewImage}
           alt={`${project.title} preview`}
           className="mb-3 aspect-video w-full rounded-md border border-zinc-800 object-cover"
-          loading="lazy"
+          priority={priority}
+          sizes="(min-width: 768px) 720px, calc(100vw - 3rem)"
         />
       )}
       <p className="mt-1 text-zinc-400 text-sm leading-relaxed">

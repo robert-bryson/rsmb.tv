@@ -10,6 +10,7 @@ Use [TODO.md](../TODO.md) for incomplete work.
 | [Repository guide](../README.md) | Install, develop, test, and build the site |
 | [Blog publication](blog-publishing.md) | Configure the Sheet and import documents |
 | [Email DNS](email-dns.md) | Adopt and test mail records, enable signing, and verify delivery |
+| [GitHub Actions OIDC](github-actions-oidc.md) | Deploy workflow roles and retire long-lived AWS credentials |
 | [Trip authoring](trips/TRIP-AUTHORING-README.md) | Prepare, check, and publish trip content |
 | [Trip template](trips/TRIP-STORY-TEMPLATE.md) | Start a trip document |
 | [Temperature methodology](../projects/temperature-records/methodology.md) | Check the historical temperature data |
@@ -22,6 +23,9 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-10-24 | [Critical review and regression fixes](reviews/2026-10-24-critical-review.md) |
+| 2026-10-24 | [Live performance and build follow-up](reviews/2026-10-24-performance-follow-up.md) |
+| 2026-10-24 | [Repository quality, performance, and security audit](reviews/2026-10-24-repository-audit.md) |
 | 2026-10-20 | [Project changelog review](reviews/2026-10-20-project-changelogs.md) |
 | 2026-10-20 | [Recent changes and mail DNS review](reviews/2026-10-20-recent-changes-and-mail-dns.md) |
 | 2026-10-08 | [Trip map selection review](reviews/2026-10-08-trip-map-selection.md) |

@@ -836,7 +836,7 @@ export function buildTornadoOutputs(features, warningContext = {}) {
         }))
         .sort((a, b) => b.score - a.score)
         .slice(0, 24)
-        .map(({ score, ...event }) => event);
+        .map(({ score: _score, ...event }) => event);
 
     return {
         tracks: {

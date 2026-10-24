@@ -288,11 +288,11 @@ async function loadDailyObservationArchive(dateStr) {
     return archive;
 }
 
-async function fetchJson(url, options = {}) {
-    const { retries = 3, delay = 1000 } = options;
+export async function fetchJson(url, options = {}) {
+    const { retries = 3, delay = 1000, timeoutMs = 60_000 } = options;
     for (let attempt = 1; attempt <= retries; attempt++) {
         try {
-            const res = await fetch(url);
+            const res = await fetch(url, { signal: AbortSignal.timeout(timeoutMs) });
             if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
             return await res.json();
         } catch (err) {
@@ -303,11 +303,12 @@ async function fetchJson(url, options = {}) {
     }
 }
 
-async function postJson(url, params, options = {}) {
-    const { retries = 3, delay = 1000 } = options;
+export async function postJson(url, params, options = {}) {
+    const { retries = 3, delay = 1000, timeoutMs = 60_000 } = options;
     for (let attempt = 1; attempt <= retries; attempt++) {
         try {
             const res = await fetch(url, {
+                signal: AbortSignal.timeout(timeoutMs),
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(params),

@@ -1,6 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 
 const ACIS_URL = 'https://data.rcc-acis.org/StnData';
+const REQUEST_TIMEOUT_MS = 30_000;
+
+function observationValue(value: unknown): number | null {
+    if (typeof value !== 'number' && (typeof value !== 'string' || !value.trim())) return null;
+    const number = Number(value);
+    return Number.isFinite(number) ? number : null;
+}
 
 export interface StationDailyObs {
     date: string;
@@ -47,6 +54,7 @@ export function useStationHistory(): UseStationHistoryState {
 
     const clear = useCallback(() => {
         setHistory(null);
+        setLoading(false);
         setError(null);
         setRequest(null);
     }, []);
@@ -55,19 +63,27 @@ export function useStationHistory(): UseStationHistoryState {
         if (!request) return;
 
         let cancelled = false;
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(new Error('Station history request timed out. Please try again.')), REQUEST_TIMEOUT_MS);
         const { uid, years } = request;
 
         async function load() {
             setLoading(true);
             setError(null);
+            setHistory(null);
 
             try {
                 const now = new Date();
-                const edate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-                const sdate = `${now.getFullYear() - years}-${edate.slice(5)}`;
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const startYear = now.getFullYear() - years;
+                const lastDay = new Date(startYear, now.getMonth() + 1, 0).getDate();
+                const startDay = Math.min(now.getDate(), lastDay);
+                const edate = `${now.getFullYear()}-${month}-${String(now.getDate()).padStart(2, '0')}`;
+                const sdate = `${startYear}-${month}-${String(startDay).padStart(2, '0')}`;
 
                 const res = await fetch(ACIS_URL, {
                     method: 'POST',
+                    signal: controller.signal,
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         uid,
@@ -95,9 +111,9 @@ export function useStationHistory(): UseStationHistoryState {
                 const data: StationDailyObs[] = (json.data ?? []).map(
                     (row: [string, string, string, string]) => ({
                         date: row[0],
-                        maxt: row[1] !== 'M' && row[1] !== 'T' ? parseFloat(row[1]) : null,
-                        mint: row[2] !== 'M' && row[2] !== 'T' ? parseFloat(row[2]) : null,
-                        pcpn: row[3] !== 'M' && row[3] !== 'T' ? parseFloat(row[3]) : null,
+                        maxt: observationValue(row[1]),
+                        mint: observationValue(row[2]),
+                        pcpn: observationValue(row[3]),
                     })
                 );
 
@@ -107,12 +123,17 @@ export function useStationHistory(): UseStationHistoryState {
                     setError(err instanceof Error ? err.message : 'Failed to load station history');
                 }
             } finally {
+                clearTimeout(timeoutId);
                 if (!cancelled) setLoading(false);
             }
         }
 
         load();
-        return () => { cancelled = true; };
+        return () => {
+            cancelled = true;
+            clearTimeout(timeoutId);
+            controller.abort();
+        };
     }, [request]);
 
     return { history, loading, error, fetch: fetchStation, clear };

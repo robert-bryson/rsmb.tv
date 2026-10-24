@@ -26,9 +26,8 @@ interface TornadoDataState {
     notableEvents: NotableTornadoEvent[];
     warningSummary: WarningSummary | null;
     loading: boolean;
-    /** Non-null when any fetch has failed. Metadata errors survive independent
-     *  of track/point load outcomes; data errors clear on the next successful
-     *  load for the same year range. */
+    /** Reports required metadata failures and active layer failures for the
+     *  selected range. Independent requests cannot clear each other's errors. */
     error: string | null;
     minYear: number;
     maxYear: number;
@@ -71,11 +70,11 @@ export function useTornadoData({ startYear = DEFAULT_START_YEAR, endYear = DEFAU
     const [metadataLoading, setMetadataLoading] = useState(true);
     const [loadedTracksKey, setLoadedTracksKey] = useState('');
     const [loadedPointsKey, setLoadedPointsKey] = useState('');
-    // Two separate error buckets so that a successful track/point load never
-    // silently clears a prior metadata fetch failure (missing annual summary
-    // or notable events would leave the trends panel empty with no explanation).
+    // Each independent request owns its error. Only errors for the selected
+    // range and active layers are exposed to the map.
     const [metadataError, setMetadataError] = useState<string | null>(null);
-    const [dataError, setDataError] = useState<string | null>(null);
+    const [trackError, setTrackError] = useState<{ key: string; message: string } | null>(null);
+    const [pointError, setPointError] = useState<{ key: string; message: string } | null>(null);
 
     const selectedYearsKey = useMemo(() => yearsInRange(startYear, endYear).join(','), [startYear, endYear]);
 
@@ -117,11 +116,12 @@ export function useTornadoData({ startYear = DEFAULT_START_YEAR, endYear = DEFAU
                 if (!cancelled) {
                     setTracks(mergeCollections(collections));
                     setLoadedTracksKey(selectedYearsKey);
-                    setDataError(null);
+                    setTrackError(null);
                 }
             } catch (err) {
                 if (!cancelled) {
-                    setDataError(err instanceof Error ? err.message : 'Failed to load tornado track data');
+                    setTracks(null);
+                    setTrackError({ key: selectedYearsKey, message: err instanceof Error ? err.message : 'Failed to load tornado track data' });
                     setLoadedTracksKey(selectedYearsKey);
                 }
             }
@@ -144,11 +144,12 @@ export function useTornadoData({ startYear = DEFAULT_START_YEAR, endYear = DEFAU
                 if (!cancelled) {
                     setPoints(mergeCollections(collections));
                     setLoadedPointsKey(selectedYearsKey);
-                    setDataError(null);
+                    setPointError(null);
                 }
             } catch (err) {
                 if (!cancelled) {
-                    setDataError(err instanceof Error ? err.message : 'Failed to load tornado point data');
+                    setPoints(null);
+                    setPointError({ key: selectedYearsKey, message: err instanceof Error ? err.message : 'Failed to load tornado point data' });
                     setLoadedPointsKey(selectedYearsKey);
                 }
             }
@@ -165,6 +166,9 @@ export function useTornadoData({ startYear = DEFAULT_START_YEAR, endYear = DEFAU
     }, [annualSummary]);
 
     const loading = metadataLoading || loadedTracksKey !== selectedYearsKey || (loadPoints && loadedPointsKey !== selectedYearsKey);
+    const error = metadataError
+        ?? (trackError?.key === selectedYearsKey ? trackError.message : null)
+        ?? (loadPoints && pointError?.key === selectedYearsKey ? pointError.message : null);
 
-    return { tracks, points, annualSummary, notableEvents, warningSummary, loading, error: metadataError ?? dataError, minYear, maxYear };
+    return { tracks, points, annualSummary, notableEvents, warningSummary, loading, error, minYear, maxYear };
 }

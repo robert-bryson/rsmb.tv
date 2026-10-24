@@ -91,14 +91,13 @@ def aggregate_annual_rates(
         for geography_type, geography in (("national", "CONUS"), ("region", event.region), ("state", event.state)):
             contributions[(event.observed_on.year, geography_type, geography, event.kind, event.station_id)][0] += 1
 
-    strata = sorted({key[:4] for key in contributions})
+    strata: dict[tuple[int, str, str, RecordKind], list[tuple[int, int]]] = defaultdict(list)
+    for key, values in contributions.items():
+        strata[key[:4]].append((values[0], values[1]))
+
     random = Random(random_seed)
     output = []
-    for year, geography_type, geography, kind in strata:
-        station_contributions = [
-            (values[0], values[1]) for (row_year, row_type, row_geography, row_kind, _), values in contributions.items()
-            if (row_year, row_type, row_geography, row_kind) == (year, geography_type, geography, kind)
-        ]
+    for (year, geography_type, geography, kind), station_contributions in sorted(strata.items()):
         event_count = sum(item[0] for item in station_contributions)
         station_days = sum(item[1] for item in station_contributions)
         rate = event_count / station_days * RATE_SCALE if station_days else None

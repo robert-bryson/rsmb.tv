@@ -5,6 +5,7 @@ import rehypeShiki from '@shikijs/rehype'
 import remarkFrontmatter from 'remark-frontmatter'
 import tailwindcss from '@tailwindcss/vite'
 import { tripContentPlugin } from './scripts/trip-content-plugin.ts'
+import { globeWebglPlugin } from './scripts/globe-webgl-plugin.ts'
 
 const buildDate = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
@@ -19,12 +20,17 @@ export default defineConfig(({ mode }) => ({
       rehypePlugins: [[rehypeShiki, { theme: 'github-dark-default' }]],
     }),
     react(),
+    globeWebglPlugin(),
     tripContentPlugin(),
     tailwindcss(),
   ],
   assetsInclude: ['**/*.glb'],
   optimizeDeps: {
     exclude: ['maplibre-gl'],
+  },
+  css: {
+    devSourcemap: true,
+    transformer: 'lightningcss',
   },
   build: {
     copyPublicDir: mode !== 'trip-test',

@@ -1,0 +1,56 @@
+{
+  "/images/through-routes/through-routes-curviness-map.webp": {
+    "src": "/images/previews/through-routes-960-44d713527a68.webp",
+    "srcSet": "/images/previews/through-routes-480-2978b8117f3a.webp 480w, /images/previews/through-routes-960-44d713527a68.webp 960w, /images/previews/through-routes-1440-915682ba9b14.webp 1440w",
+    "width": 1856,
+    "height": 1394
+  },
+  "/images/flights/flight-globe.webp": {
+    "src": "/images/previews/flights-960-5a941149461f.webp",
+    "srcSet": "/images/previews/flights-480-28bb1e23b70e.webp 480w, /images/previews/flights-960-5a941149461f.webp 960w, /images/previews/flights-1440-7c0992046569.webp 1440w",
+    "width": 1852,
+    "height": 1385
+  },
+  "/images/anki-artisan/anki-artisan-preview.webp": {
+    "src": "/images/previews/anki-artisan-960-b635fd7b2e46.webp",
+    "srcSet": "/images/previews/anki-artisan-480-2a5729453df6.webp 480w, /images/previews/anki-artisan-960-b635fd7b2e46.webp 960w, /images/previews/anki-artisan-1440-77e2c5a0543a.webp 1440w",
+    "width": 1600,
+    "height": 900
+  },
+  "/images/parc/update-live-progress.webp": {
+    "src": "/images/previews/parc-960-6807afb825fb.webp",
+    "srcSet": "/images/previews/parc-480-33e779e93fe2.webp 480w, /images/previews/parc-960-6807afb825fb.webp 960w, /images/previews/parc-1440-d30841dd21ae.webp 1440w",
+    "width": 1713,
+    "height": 592
+  },
+  "/images/bookend/bookend-home.webp": {
+    "src": "/images/previews/bookend-960-3e550397c3cc.webp",
+    "srcSet": "/images/previews/bookend-480-2ebc59f91393.webp 480w, /images/previews/bookend-960-3e550397c3cc.webp 960w, /images/previews/bookend-1440-2d59e9e96d1a.webp 1440w",
+    "width": 1656,
+    "height": 1618
+  },
+  "/images/temperature-records/records-daily.webp": {
+    "src": "/images/previews/temperature-records-960-4d062a8af900.webp",
+    "srcSet": "/images/previews/temperature-records-480-c4bdb221de86.webp 480w, /images/previews/temperature-records-960-4d062a8af900.webp 960w, /images/previews/temperature-records-1440-ee732c2dc64c.webp 1440w",
+    "width": 1633,
+    "height": 973
+  },
+  "/images/tornado-tracks/conus-tracks.webp": {
+    "src": "/images/previews/tornado-tracks-960-4e748f01dfed.webp",
+    "srcSet": "/images/previews/tornado-tracks-480-b20291a9071c.webp 480w, /images/previews/tornado-tracks-960-4e748f01dfed.webp 960w, /images/previews/tornado-tracks-1440-2992cf64cf67.webp 1440w",
+    "width": 1440,
+    "height": 1082
+  },
+  "/images/status-dashboard/status-dashboard-calm.webp": {
+    "src": "/images/previews/status-dashboard-872-843d73045d3c.webp",
+    "srcSet": "/images/previews/status-dashboard-480-a31554190f64.webp 480w, /images/previews/status-dashboard-872-843d73045d3c.webp 872w",
+    "width": 872,
+    "height": 610
+  },
+  "/images/route2gpx/route-planning.webp": {
+    "src": "/images/previews/route2gpx-960-5da916fa432e.webp",
+    "srcSet": "/images/previews/route2gpx-480-76bb87a8b0ab.webp 480w, /images/previews/route2gpx-960-5da916fa432e.webp 960w, /images/previews/route2gpx-1440-99001e4f181d.webp 1440w",
+    "width": 1811,
+    "height": 1390
+  }
+}

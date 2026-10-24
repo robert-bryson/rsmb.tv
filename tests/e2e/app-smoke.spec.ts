@@ -6,6 +6,17 @@ test('home page renders the main content shell', async ({ page }) => {
     await expect(page.getByRole('heading', { name: /Hi, I'm Robby/i })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Selected projects' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'All projects →' })).toHaveAttribute('href', '/projects');
+    const preview = page.locator('img[fetchpriority="high"]').first();
+    await expect(preview).toHaveAttribute('src', /\/images\/previews\/through-routes-/);
+    await expect(preview).toHaveAttribute('srcset', /480w.*960w.*1440w/);
+    await expect(preview).toHaveAttribute('width', /^[1-9]\d*$/);
+    await expect(preview).toHaveAttribute('height', /^[1-9]\d*$/);
+    await expect.poll(() => preview.evaluate(image => (image as HTMLImageElement).complete && (image as HTMLImageElement).naturalWidth > 0)).toBe(true);
+    const ratioError = await preview.evaluate(element => {
+        const image = element as HTMLImageElement;
+        return Math.abs(Number(image.getAttribute('width')) / Number(image.getAttribute('height')) - image.naturalWidth / image.naturalHeight);
+    });
+    expect(ratioError).toBeLessThan(0.01);
 });
 
 test('flights map defers optional layer payloads on first load', async ({ page }) => {

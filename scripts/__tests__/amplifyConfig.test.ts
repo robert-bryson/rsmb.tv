@@ -42,6 +42,25 @@ describe('amplify.yml', () => {
 });
 
 describe('dependency installation contracts', () => {
+    it.each([
+        ['sync-temperatures.yml', 'AWS_TEMPERATURE_SYNC_ROLE_ARN'],
+        ['sync-tornadoes.yml', 'AWS_TORNADO_SYNC_ROLE_ARN'],
+    ])('switches %s to OIDC only after its role is configured', (filename, variable) => {
+        const workflow = parse(readRepoFile(`.github/workflows/${filename}`));
+        expect(workflow.permissions['id-token']).toBe('write');
+        const steps = workflow.jobs.sync.steps;
+        const oidc = steps.find((step: { name: string }) => step.name === 'Configure AWS with OIDC');
+        const legacy = steps.find((step: { name: string }) => step.name === 'Configure AWS with existing keys during migration');
+        expect(oidc.if).toBe(`vars.${variable} != ''`);
+        expect(legacy.if).toBe(`vars.${variable} == ''`);
+        expect(oidc.uses).toMatch(/^aws-actions\/configure-aws-credentials@[a-f0-9]{40}$/);
+        expect(oidc.with['role-to-assume']).toBe(`\${{ vars.${variable} }}`);
+        expect(oidc.with['role-duration-seconds']).toBe(3600);
+        expect(oidc.with).not.toHaveProperty('aws-secret-access-key');
+        expect(legacy.with['aws-secret-access-key']).toBe('${{ secrets.AWS_SECRET_ACCESS_KEY }}');
+        for (const step of steps) expect(step.env ?? {}).not.toHaveProperty('AWS_SECRET_ACCESS_KEY');
+    });
+
     it('uses the configured npm version before npm ci in every workflow job', () => {
         const workflowFiles = fs.readdirSync(path.join(repoRoot, '.github/workflows'))
             .filter((filename) => /\.ya?ml$/.test(filename));

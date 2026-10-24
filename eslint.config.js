@@ -8,7 +8,7 @@ import { globalIgnores } from 'eslint/config'
 export default tseslint.config([
   globalIgnores(['dist', 'coverage']),
   {
-    files: ['scripts/**/*.js', 'projects/flights/scripts/**/*.js'],
+    files: ['**/*.js'],
     ...js.configs.recommended,
     languageOptions: {
       globals: globals.node,

@@ -14,29 +14,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
         with:
-          terraform_version: 1.16.6
+          terraform_version: 1.17.0
 
-      - name: Validate mail DNS without AWS access
+      - name: Validate infrastructure without AWS access
         working-directory: infra
         run: |
           terraform init -backend=false -input=false -lockfile=readonly
-          terraform fmt -check mail.tf tests/mail.tftest.hcl
+          terraform fmt -check -recursive
           terraform validate -no-color
-          terraform test -no-color -filter=tests/mail.tftest.hcl
+          terraform test -no-color
 
   ci:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: '.nvmrc'
           cache: 'npm'

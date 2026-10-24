@@ -20,10 +20,11 @@ resource "aws_s3_bucket" "temperature_data" {
 resource "aws_s3_bucket_public_access_block" "temperature_data" {
   bucket = aws_s3_bucket.temperature_data.id
 
+  # The distribution-scoped CloudFront OAC policy is not a public policy.
   block_public_acls       = true
   ignore_public_acls      = true
-  block_public_policy     = false # Allow bucket policy for CloudFront OAC
-  restrict_public_buckets = false
+  block_public_policy     = true
+  restrict_public_buckets = true
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "temperature_data" {

@@ -91,7 +91,10 @@ resource "aws_cloudfront_function" "apex_redirect" {
       var keys = Object.keys(qs);
       if (keys.length > 0) {
         queryString = '?' + keys.map(function(k) {
-          return k + '=' + qs[k].value;
+          var values = qs[k].multiValue || [{ value: qs[k].value }];
+          return values.map(function(item) {
+            return k + '=' + item.value;
+          }).join('&');
         }).join('&');
       }
       return {

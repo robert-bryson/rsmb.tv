@@ -468,8 +468,8 @@ export function parseBlogSheetWithSummary(csv, options = {}) {
     };
 }
 
-export async function fetchSheetAsCsv(sheetId, sheetName = DEFAULT_BLOG_SHEET_NAME, { fetchImpl = fetch } = {}) {
-    const response = await fetchImpl(buildSheetCsvUrl(sheetId, sheetName));
+export async function fetchSheetAsCsv(sheetId, sheetName = DEFAULT_BLOG_SHEET_NAME, { fetchImpl = fetch, timeoutMs = 30_000 } = {}) {
+    const response = await fetchImpl(buildSheetCsvUrl(sheetId, sheetName), { signal: AbortSignal.timeout(timeoutMs) });
     if (!response.ok) {
         throw new Error(`Failed to fetch blog sheet: ${response.status} ${response.statusText}`);
     }
@@ -482,8 +482,8 @@ export async function fetchSheetAsCsv(sheetId, sheetName = DEFAULT_BLOG_SHEET_NA
     return csv;
 }
 
-export async function fetchGoogleDocHtml(docId, { fetchImpl = fetch } = {}) {
-    const response = await fetchImpl(buildGoogleDocHtmlUrl(docId));
+export async function fetchGoogleDocHtml(docId, { fetchImpl = fetch, timeoutMs = 30_000 } = {}) {
+    const response = await fetchImpl(buildGoogleDocHtmlUrl(docId), { signal: AbortSignal.timeout(timeoutMs) });
     if (!response.ok) {
         throw new Error(`Failed to fetch Google Doc ${docId}: ${response.status} ${response.statusText}`);
     }

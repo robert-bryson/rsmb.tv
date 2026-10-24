@@ -1,0 +1,226 @@
+{
+  "measuredAt": "2026-10-24T17:46:45.201Z",
+  "baseURL": "http://127.0.0.1:4176",
+  "conditions": {
+    "browser": "156.0.8078.4",
+    "device": "Pixel 7 emulation",
+    "cpuSlowdown": 4,
+    "latencyMs": 150,
+    "downloadMbps": 1.6,
+    "uploadMbps": 0.75,
+    "samples": 3,
+    "browserCache": "disabled"
+  },
+  "results": [
+    {
+      "route": "/",
+      "sample": 1,
+      "status": 200,
+      "metrics": {
+        "TTFB": {
+          "value": 5.4000000059604645,
+          "rating": "good",
+          "target": null
+        },
+        "FCP": {
+          "value": 1004,
+          "rating": "good",
+          "target": null
+        },
+        "LCP": {
+          "value": 3404,
+          "rating": "needs-improvement",
+          "target": "img.aspect-video.border-b.border-zinc-800.object-cover.sm:border-b-0.sm:border-r.sm:h-full.w-full"
+        },
+        "CLS": {
+          "value": 0.08224076281287247,
+          "rating": "good",
+          "target": "#root>div.bg-[#0a0a0a].flex.flex-col.min-h-screen.text-zinc-100>footer.border-t.border-zinc-800/50"
+        }
+      },
+      "scriptBytes": 94981,
+      "interaction": "All projects",
+      "sampledINP": {
+        "value": 192,
+        "rating": "good",
+        "target": null
+      },
+      "errors": []
+    },
+    {
+      "route": "/",
+      "sample": 2,
+      "status": 200,
+      "metrics": {
+        "TTFB": {
+          "value": 4.200000002980232,
+          "rating": "good",
+          "target": null
+        },
+        "FCP": {
+          "value": 1004,
+          "rating": "good",
+          "target": null
+        },
+        "LCP": {
+          "value": 3408,
+          "rating": "needs-improvement",
+          "target": "img.aspect-video.border-b.border-zinc-800.object-cover.sm:border-b-0.sm:border-r.sm:h-full.w-full"
+        },
+        "CLS": {
+          "value": 0.08224076281287247,
+          "rating": "good",
+          "target": "#root>div.bg-[#0a0a0a].flex.flex-col.min-h-screen.text-zinc-100>footer.border-t.border-zinc-800/50"
+        }
+      },
+      "scriptBytes": 94981,
+      "interaction": "All projects",
+      "sampledINP": {
+        "value": 224,
+        "rating": "needs-improvement",
+        "target": null
+      },
+      "errors": []
+    },
+    {
+      "route": "/",
+      "sample": 3,
+      "status": 200,
+      "metrics": {
+        "TTFB": {
+          "value": 1.2000000029802322,
+          "rating": "good",
+          "target": null
+        },
+        "FCP": {
+          "value": 996,
+          "rating": "good",
+          "target": null
+        },
+        "LCP": {
+          "value": 3404,
+          "rating": "needs-improvement",
+          "target": "img.aspect-video.border-b.border-zinc-800.object-cover.sm:border-b-0.sm:border-r.sm:h-full.w-full"
+        },
+        "CLS": {
+          "value": 0.08224076281287247,
+          "rating": "good",
+          "target": "#root>div.bg-[#0a0a0a].flex.flex-col.min-h-screen.text-zinc-100>footer.border-t.border-zinc-800/50"
+        }
+      },
+      "scriptBytes": 94981,
+      "interaction": "All projects",
+      "sampledINP": {
+        "value": 192,
+        "rating": "good",
+        "target": null
+      },
+      "errors": []
+    },
+    {
+      "route": "/projects/flights/map",
+      "sample": 1,
+      "status": 200,
+      "metrics": {
+        "TTFB": {
+          "value": 1.2000000029802322,
+          "rating": "good",
+          "target": null
+        },
+        "FCP": {
+          "value": 1256,
+          "rating": "good",
+          "target": null
+        },
+        "LCP": {
+          "value": 1256,
+          "rating": "good",
+          "target": "div.grid.h-full.place-items-center.text-sm.text-zinc-300.w-full"
+        },
+        "CLS": {
+          "value": 0.000036929066800206214,
+          "rating": "good",
+          "target": "div.text-center>div.mt-2.text-gray-500.text-xs>TEXT"
+        }
+      },
+      "scriptBytes": 469875,
+      "interaction": "Pause flight animations",
+      "sampledINP": {
+        "value": 344,
+        "rating": "needs-improvement",
+        "target": null
+      },
+      "errors": []
+    },
+    {
+      "route": "/projects/flights/map",
+      "sample": 2,
+      "status": 200,
+      "metrics": {
+        "TTFB": {
+          "value": 1.2999999970197678,
+          "rating": "good",
+          "target": null
+        },
+        "FCP": {
+          "value": 1276,
+          "rating": "good",
+          "target": null
+        },
+        "LCP": {
+          "value": 1276,
+          "rating": "good",
+          "target": "div.grid.h-full.place-items-center.text-sm.text-zinc-300.w-full"
+        },
+        "CLS": {
+          "value": 0.000036929066800206214,
+          "rating": "good",
+          "target": "div.text-center>div.mt-2.text-gray-500.text-xs>TEXT"
+        }
+      },
+      "scriptBytes": 469875,
+      "interaction": "Pause flight animations",
+      "sampledINP": {
+        "value": 336,
+        "rating": "needs-improvement",
+        "target": null
+      },
+      "errors": []
+    },
+    {
+      "route": "/projects/flights/map",
+      "sample": 3,
+      "status": 200,
+      "metrics": {
+        "TTFB": {
+          "value": 1.3999999910593033,
+          "rating": "good",
+          "target": null
+        },
+        "FCP": {
+          "value": 1272,
+          "rating": "good",
+          "target": null
+        },
+        "LCP": {
+          "value": 1272,
+          "rating": "good",
+          "target": "div.grid.h-full.place-items-center.text-sm.text-zinc-300.w-full"
+        },
+        "CLS": {
+          "value": 0.000036929066800206214,
+          "rating": "good",
+          "target": "div.text-center>div.mt-2.text-gray-500.text-xs>TEXT"
+        }
+      },
+      "scriptBytes": 469875,
+      "interaction": "Pause flight animations",
+      "sampledINP": {
+        "value": 376,
+        "rating": "needs-improvement",
+        "target": null
+      },
+      "errors": []
+    }
+  ]
+}

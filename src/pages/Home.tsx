@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ProjectPreview } from '../components/ProjectPreview';
 import { featuredProjects } from '../content/projects';
 import { getAllPosts } from '../content/posts';
 import { getTripSummary } from '../features/trips/tripSummaries';
@@ -59,12 +60,12 @@ export function Home() {
                   className={`group grid h-full overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900/30 hover:border-zinc-700 hover:bg-zinc-900/60 ${index === 0 ? 'sm:grid-cols-[minmax(0,1.45fr)_minmax(15rem,1fr)]' : ''}`}
                 >
                   {project.previewImage && (
-                    <img
+                    <ProjectPreview
                       src={project.previewImage}
                       alt=""
-                      className={`aspect-video h-full w-full object-cover ${index === 0 ? 'border-b border-zinc-800 sm:border-r sm:border-b-0' : 'border-b border-zinc-800'}`}
-                      loading={index === 0 ? 'eager' : 'lazy'}
-                      fetchPriority={index === 0 ? 'high' : 'auto'}
+                      className={`aspect-video w-full object-cover ${index === 0 ? 'sm:h-full border-b border-zinc-800 sm:border-r sm:border-b-0' : 'border-b border-zinc-800'}`}
+                      priority={index === 0}
+                      sizes={index === 0 ? '(min-width: 768px) 427px, (min-width: 640px) calc(59.2vw - 1.776rem), calc(100vw - 3rem)' : '(min-width: 768px) 352px, (min-width: 640px) calc(50vw - 2rem), calc(100vw - 3rem)'}
                     />
                   )}
                   <div className="flex flex-1 flex-col p-4">
