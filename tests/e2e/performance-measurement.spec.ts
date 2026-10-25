@@ -5,6 +5,7 @@ import { promisify } from 'node:util';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import { gzipSync } from 'node:zlib';
 import { measurePerformance, parsePerformanceOptions } from '../../scripts/measure-performance.js';
 
 let server: Server;
@@ -12,10 +13,19 @@ let origin: string;
 let outputRoot: string;
 let imageSent = false;
 const image = '<svg xmlns="http://www.w3.org/2000/svg" width="320" height="180"><rect width="320" height="180" fill="#336699"/><circle cx="160" cy="90" r="60" fill="#eeaa33"/></svg>';
+const preloadedScript = gzipSync(`window.measurementModuleLoaded = true;/*${'compressed module fixture '.repeat(100)}*/`);
 
 test.beforeAll(async () => {
     outputRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'rsmb-metrics-browser-'));
     server = createServer((request, response) => {
+        if (request.url === '/preloaded.js') {
+            response.writeHead(200, { 'Content-Type': 'application/javascript', 'Content-Encoding': 'gzip', 'Content-Length': preloadedScript.length }).end(preloadedScript);
+            return;
+        }
+        if (request.url === '/fixture.css') {
+            response.writeHead(200, { 'Content-Type': 'text/css' }).end('h1 { color: #336699; }');
+            return;
+        }
         if (request.url === '/delayed.svg') {
             setTimeout(() => {
                 imageSent = true;
@@ -26,8 +36,9 @@ test.beforeAll(async () => {
         if (request.url === '/missing.svg') { response.writeHead(404).end(); return; }
         const status = request.url === '/unavailable' ? 503 : 200;
         const crash = request.url === '/crash' ? '<script>throw new Error("Synthetic application crash")</script>' : '';
-        const picture = request.url === '/slow-image' ? '<img src="/delayed.svg" width="320" height="180" alt="Synthetic preview">' : request.url === '/broken-image' ? '<img src="/missing.svg" width="320" height="180" alt="Broken preview">' : '';
-        response.writeHead(status, { 'Content-Type': 'text/html' }).end(`<!doctype html><html><head><meta name="viewport" content="width=device-width"></head><body><h1>Synthetic page</h1>${picture}<button>Filter</button>${crash}</body></html>`);
+        const picture = request.url === '/slow-image' || request.url === '/modulepreload' ? '<img src="/delayed.svg" width="320" height="180" alt="Synthetic preview">' : request.url === '/broken-image' ? '<img src="/missing.svg" width="320" height="180" alt="Broken preview">' : '';
+        const preload = request.url === '/modulepreload' ? '<link rel="modulepreload" href="/preloaded.js"><link rel="stylesheet" href="/fixture.css"><script type="module" src="/preloaded.js"></script>' : '';
+        response.writeHead(status, { 'Content-Type': 'text/html' }).end(`<!doctype html><html><head><meta name="viewport" content="width=device-width">${preload}</head><body><h1>Synthetic page</h1>${picture}<button>Filter</button>${crash}</body></html>`);
     });
     await new Promise<void>(resolve => server.listen(0, '127.0.0.1', resolve));
     const address = server.address();
@@ -68,4 +79,10 @@ test('measurement waits for an above-fold image before taking the load snapshot'
 test('measurement fails when an above-fold image cannot load', async ({ browser }) => {
     const report = await measurePerformance(options('/broken-image'), { browser, onSample() {} });
     expect(report).toMatchObject({ failedSamples: 1, results: [{ error: expect.stringContaining('above-fold image failed') }] });
+});
+
+test('measurement counts compressed modulepreloads without counting styles or images', async ({ browser }) => {
+    const report = await measurePerformance(options('/modulepreload'), { browser, onSample() {} });
+    expect(report.failedSamples).toBe(0);
+    expect(report.results[0].scriptBytes).toBe(preloadedScript.length);
 });

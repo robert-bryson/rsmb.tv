@@ -51,7 +51,7 @@ function TempSparkline({ data, useCelsius }: { data: StationDailyObs[]; useCelsi
         for (let i = 0; i < recent.length; i++) {
             const m = parseInt(recent[i].date.slice(5, 7), 10) - 1;
             if (m !== lastMonth) {
-                labels.push({ x: (i / (recent.length - 1)) * w, label: months[m] });
+                labels.push({ x: (i / Math.max(recent.length - 1, 1)) * w, label: months[m] });
                 lastMonth = m;
             }
         }

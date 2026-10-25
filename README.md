@@ -111,6 +111,7 @@ Do not override the major version of a dependency declared by React Router DOM.
 
 The ESLint adapter requires TypeScript below 6.1.
 The `typescript` package uses the `@typescript/typescript6` alias to meet that requirement.
+`npm run typecheck` invokes that package's `tsc6` executable.
 The separate `@typescript/native` alias supplies TypeScript 7. The lint and typecheck commands do not use it.
 Do not replace the lint compiler with TypeScript 7 until the adapter supports it.
 
@@ -259,9 +260,12 @@ Use landscape images for project cards. If the source is portrait, prepare a lan
 After you change a project's `previewImage`, run `npm run prepare-project-previews`.
 Commit the generated manifest and fingerprinted files in `public/images/previews/`.
 Home and Projects select responsive variants from that manifest. The original images remain available on project detail pages.
-The generator accepts source files inside `public/images/`. It rejects paths and symlinks that leave this directory.
-Do not use generated previews as source images. The generator rejects files inside its own output directory.
-It publishes complete image files and the manifest with atomic renames. It removes obsolete generated images after the manifest is published.
+The generator resolves source paths before it reads files.
+It rejects sources outside `public/images/` and sources inside its output directory.
+Do not use generated previews as source images.
+Keep `public/images/previews/` as a regular directory. The generator rejects an output directory that is a symbolic link.
+It publishes complete images and the manifest through atomic renames.
+It removes obsolete generated images after it publishes the manifest.
 
 ## Performance checks
 
@@ -277,9 +281,14 @@ It sets 150 ms latency and 1.6 Mbps downloads. It disables the browser cache.
 It records load metrics before interaction. It then measures one named interaction, or keyboard focus when no control is available.
 It waits for visible images and fonts before the observation period starts.
 Use `--settle-ms` to change the observation period. Use `--timeout-ms` to change readiness and navigation deadlines.
-HTTP failures, application crashes, failed visible images, and missing metrics fail the sample. The command returns a nonzero status for failed samples.
-The JSON report retains failed samples and their causes. Report files use atomic replacement.
-Browser cleanup failures remain in the report and fail the sample.
+HTTP failures, application crashes, failed visible images, and missing metrics fail the sample.
+The JSON report retains failed samples and their causes.
+Report files use atomic replacement.
+`scriptBytes` counts encoded JavaScript response bodies received before interaction.
+It includes module preloads and repeated network transfers. It excludes response headers, stylesheets, and images.
+An encoded body retains the server's compression.
+`failedSamples` counts failed sample rows. `errors` records failures that affect the complete run, including browser cleanup failures.
+The command returns a nonzero status when either field reports a failure.
 These are laboratory samples. They do not establish real-device or population performance.
 
 The build uses WebGL rendering and the globe library's existing CPU heatmap fallback.

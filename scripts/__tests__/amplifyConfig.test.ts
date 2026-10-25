@@ -1,7 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import ts from 'typescript';
 import { parse } from 'yaml';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
@@ -42,6 +44,11 @@ describe('amplify.yml', () => {
 });
 
 describe('dependency installation contracts', () => {
+    it('runs type checking with the compiler required by the lint adapter', () => {
+        const help = execFileSync('npm', ['run', 'typecheck', '--', '--help'], { cwd: repoRoot, encoding: 'utf8' });
+        expect(help).toContain(`Version ${ts.version}`);
+    });
+
     it.each([
         ['sync-temperatures.yml', 'AWS_TEMPERATURE_SYNC_ROLE_ARN'],
         ['sync-tornadoes.yml', 'AWS_TORNADO_SYNC_ROLE_ARN'],

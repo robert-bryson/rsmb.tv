@@ -6,6 +6,9 @@ This review covers the complete uncommitted changes against `6e87d40`, including
 The user's requests in this conversation supply the spec. `README.md` and `docs/README.md` supply the maintenance and documentation rules.
 Two independent reviews checked standards and requested behavior. The implementation was then tested through failure cases.
 
+The [2026-10-25 review](2026-10-25-ci-and-failure-paths.md) found more defects in output symlinks, station payloads, performance accounting, and CI checksums.
+That report records the additional corrections. Results below describe the 2026-10-24 snapshot.
+
 The core application has useful safeguards: strict TypeScript, runtime temperature validation, route splitting, and substantial browser coverage.
 The maintenance tools needed more scrutiny. Passing happy-path checks concealed file corruption, misleading performance reports, and an ineffective warning regression.
 

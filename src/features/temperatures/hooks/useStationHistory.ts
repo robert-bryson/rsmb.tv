@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { parseTemperaturePayload, stationHistorySchema } from '../schemas';
 
 const ACIS_URL = 'https://data.rcc-acis.org/StnData';
 const REQUEST_TIMEOUT_MS = 30_000;
@@ -95,9 +96,10 @@ export function useStationHistory(): UseStationHistoryState {
                 });
 
                 if (!res.ok) throw new Error(`ACIS returned ${res.status}`);
-                const json = await res.json();
-                if (json.error) throw new Error(json.error);
+                const payload: unknown = await res.json();
                 if (cancelled) return;
+                const json = parseTemperaturePayload(stationHistorySchema, payload, 'station history data');
+                if (json.error) throw new Error(json.error);
 
                 const meta: StationMeta = {
                     uid: json.meta?.uid ?? uid,
@@ -109,7 +111,7 @@ export function useStationHistory(): UseStationHistoryState {
                 };
 
                 const data: StationDailyObs[] = (json.data ?? []).map(
-                    (row: [string, string, string, string]) => ({
+                    (row) => ({
                         date: row[0],
                         maxt: observationValue(row[1]),
                         mint: observationValue(row[2]),
@@ -120,7 +122,8 @@ export function useStationHistory(): UseStationHistoryState {
                 setHistory({ meta, data });
             } catch (err) {
                 if (!cancelled) {
-                    setError(err instanceof Error ? err.message : 'Failed to load station history');
+                    const failure = controller.signal.aborted ? controller.signal.reason : err;
+                    setError(failure instanceof Error ? failure.message : 'Failed to load station history');
                 }
             } finally {
                 clearTimeout(timeoutId);

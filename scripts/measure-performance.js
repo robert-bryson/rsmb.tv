@@ -66,8 +66,12 @@ export async function measurePerformance(options, { browser, onSample = row => c
     const report = {
         measuredAt: new Date().toISOString(), baseURL,
         conditions: { browser: activeBrowser.version(), device: 'Pixel 7 emulation', cpuSlowdown: 4, latencyMs: 150, downloadMbps: 1.6, uploadMbps: 0.75, samples, browserCache: 'disabled', settleMs, timeoutMs },
-        failedSamples: 0, results: [],
+        failedSamples: 0, errors: [], results: [],
     };
+    async function persistReport() {
+        await fs.mkdir(path.dirname(outputPath), { recursive: true });
+        await writeAtomically(outputPath, `${JSON.stringify(report, null, 2)}\n`);
+    }
     try {
         const instrumentation = `${await fs.readFile(bundle, 'utf8')}
 window.__metrics = {};
@@ -77,13 +81,24 @@ for (const name of ['LCP', 'CLS', 'INP', 'FCP', 'TTFB']) {
     }, { reportAllChanges: true });
 }`;
         for (const route of paths) for (let sample = 1; sample <= samples; sample++) {
-            const context = await activeBrowser.newContext({ ...devices['Pixel 7'], serviceWorkers: 'block' });
             const row = { route, sample, status: null, metrics: null, scriptBytes: null, interaction: null, sampledINP: null, errors: [] };
+            let context;
             try {
+                context = await activeBrowser.newContext({ ...devices['Pixel 7'], serviceWorkers: 'block' });
                 const page = await context.newPage();
                 page.setDefaultTimeout(5000);
                 page.on('pageerror', error => row.errors.push(error.message));
                 const session = await context.newCDPSession(page);
+                const scriptRequests = new Set();
+                let scriptBytes = 0;
+                session.on('Network.responseReceived', ({ requestId, type, response }) => {
+                    if (type === 'Script' || /^(?:application|text)\/(?:x-)?(?:java|ecma)script(?:;|$)/i.test(response.mimeType)) {
+                        scriptRequests.add(requestId);
+                    }
+                });
+                session.on('Network.dataReceived', ({ requestId, encodedDataLength }) => {
+                    if (scriptRequests.has(requestId)) scriptBytes += encodedDataLength;
+                });
                 await session.send('Network.enable');
                 await session.send('Network.setCacheDisabled', { cacheDisabled: true });
                 await session.send('Network.emulateNetworkConditions', { offline: false, latency: 150, downloadThroughput: 1_600_000 / 8, uploadThroughput: 750_000 / 8 });
@@ -103,11 +118,10 @@ for (const name of ['LCP', 'CLS', 'INP', 'FCP', 'TTFB']) {
                     return images.every(image => image.complete && image.naturalWidth > 0) && document.fonts.status === 'loaded';
                 }, undefined, { timeout: timeoutMs });
                 await page.waitForTimeout(settleMs);
-                const loaded = await page.evaluate(() => ({
-                    metrics: window.__metrics,
-                    scriptBytes: performance.getEntriesByType('resource').filter(entry => entry.initiatorType === 'script').reduce((sum, entry) => sum + entry.encodedBodySize, 0),
-                }));
-                Object.assign(row, loaded);
+                row.metrics = await page.evaluate(() => window.__metrics);
+                // CDP reports compressed body bytes, including modulepreloads and repeated transfers.
+                // Freeze this total before interaction; exclude headers and non-JavaScript responses.
+                row.scriptBytes = scriptBytes;
                 validatePerformanceSample(row);
                 row.interaction = 'Tab focus';
                 const pause = page.getByRole('button', { name: 'Pause flight animations', exact: true });
@@ -129,27 +143,33 @@ for (const name of ['LCP', 'CLS', 'INP', 'FCP', 'TTFB']) {
                 report.failedSamples += 1;
             } finally {
                 try {
-                    await context.close();
+                    await context?.close();
                 } catch (error) {
                     if (!row.error) report.failedSamples += 1;
                     row.error = [row.error, `Browser context cleanup failed: ${errorMessage(error)}`].filter(Boolean).join('; ');
                 }
                 report.results.push(row);
                 onSample(row);
-                await fs.mkdir(path.dirname(outputPath), { recursive: true });
-                await writeAtomically(outputPath, `${JSON.stringify(report, null, 2)}\n`);
+                await persistReport();
             }
         }
         return report;
     } finally {
-        if (!browser) await activeBrowser.close();
+        if (!browser) {
+            try {
+                await activeBrowser.close();
+            } catch (error) {
+                report.errors.push(`Browser cleanup failed: ${errorMessage(error)}`);
+                await persistReport();
+            }
+        }
     }
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
     try {
         const report = await measurePerformance(parsePerformanceOptions(process.argv.slice(2)));
-        process.exitCode = report.failedSamples ? 1 : 0;
+        process.exitCode = report.failedSamples || report.errors.length ? 1 : 0;
     } catch (error) {
         console.error(errorMessage(error));
         process.exitCode = 1;

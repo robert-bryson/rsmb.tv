@@ -77,6 +77,23 @@ export const temperatureSummarySchema = z.object({
     statesProcessed: z.number().int().nonnegative(),
 });
 
+export const stationHistorySchema = z.object({
+    error: z.string().nullish(),
+    meta: z.object({
+        uid: finiteNumber.int().nonnegative().nullish(),
+        name: z.string().nullish(),
+        ll: z.tuple([
+            finiteNumber.min(-180).max(180),
+            finiteNumber.min(-90).max(90),
+        ]).nullish(),
+        state: z.string().nullish(),
+        elev: finiteNumber.nullish(),
+        sids: z.array(z.string()).nullish(),
+    }).nullish(),
+    // ACIS missing-value markers and absent observations remain valid input.
+    data: z.array(z.tuple([z.iso.date()]).rest(z.unknown())).nullish(),
+});
+
 const yearDataSchema = z.object({
     year: z.number().int(),
     highs: z.number().int().nonnegative(),

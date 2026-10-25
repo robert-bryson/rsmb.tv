@@ -23,6 +23,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-10-25 | [CI and failure-path review](reviews/2026-10-25-ci-and-failure-paths.md) |
 | 2026-10-24 | [Critical review and regression fixes](reviews/2026-10-24-critical-review.md) |
 | 2026-10-24 | [Live performance and build follow-up](reviews/2026-10-24-performance-follow-up.md) |
 | 2026-10-24 | [Repository quality, performance, and security audit](reviews/2026-10-24-repository-audit.md) |

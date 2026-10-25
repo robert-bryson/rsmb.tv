@@ -29,6 +29,26 @@ afterEach(async () => {
 });
 
 describe('project preview publication', () => {
+    it.each(['inside', 'outside'])('rejects an output symlink %s public/images before writing or pruning files', async location => {
+        const { repoRoot, output, manifest } = await fixture();
+        const target = path.join(repoRoot, location === 'inside' ? 'public/images/originals' : 'private-previews');
+        await fs.rename(output, target);
+        await fs.symlink(target, output);
+        const source = path.join(repoRoot, 'public/images/sample.webp');
+        const original = path.join(target, 'original-32-000000000000.webp');
+        await fs.copyFile(source, original);
+        const previousManifest = await fs.readFile(manifest, 'utf8');
+        const previousFiles = await fs.readdir(target);
+        const previewImage = location === 'inside' ? '/images/originals/original-32-000000000000.webp' : '/images/sample.webp';
+
+        await expect(generateProjectPreviews({ repoRoot, projectList: [{ slug: 'sample', previewImage }] }))
+            .rejects.toThrow('output directory must not be a symbolic link');
+
+        expect(await fs.readFile(original)).toEqual(await fs.readFile(source));
+        expect(await fs.readFile(manifest, 'utf8')).toBe(previousManifest);
+        expect(await fs.readdir(target)).toEqual(previousFiles);
+    });
+
     it('rejects generated previews as sources so pruning cannot delete an original', async () => {
         const { repoRoot, previous } = await fixture();
         await fs.copyFile(path.join(repoRoot, 'public/images/sample.webp'), previous);
@@ -110,6 +130,26 @@ describe('project preview publication', () => {
         await expect(generateProjectPreviews({ repoRoot, projectList })).rejects.toMatchObject({ code: 'ENOSPC' });
         expect(await fs.readFile(manifest, 'utf8')).toBe(original);
         expect(await fs.readFile(previous, 'utf8')).toBe('previous preview');
+    });
+
+    it('writes matching responsive widths and selects a 960-pixel default for a wide source', async () => {
+        const { repoRoot, manifest } = await fixture();
+        const source = path.join(repoRoot, 'public/images/sample.webp');
+        await sharp({ create: { width: 1800, height: 900, channels: 3, background: '#336699' } }).webp().toFile(source);
+
+        expect(await generateProjectPreviews({ repoRoot, projectList })).toEqual({ files: 3, projects: 1 });
+
+        const entry = JSON.parse(await fs.readFile(manifest, 'utf8'))['/images/sample.webp'];
+        expect(entry).toMatchObject({ width: 1800, height: 900 });
+        const variants: string[] = entry.srcSet.split(', ');
+        expect(variants.map(variant => variant.split(' ')[1])).toEqual(['480w', '960w', '1440w']);
+        expect(entry.src).toBe(variants[1].split(' ')[0]);
+        for (const [index, variant] of variants.entries()) {
+            const width = [480, 960, 1440][index];
+            const metadata = await sharp(path.join(repoRoot, 'public', variant.split(' ')[0])).metadata();
+            expect(metadata).toMatchObject({ format: 'webp', width, height: width / 2 });
+        }
+        expect(await sharp(source).metadata()).toMatchObject({ width: 1800, height: 900 });
     });
 
     it('writes decodable previews without enlargement and removes obsolete generated files', async () => {

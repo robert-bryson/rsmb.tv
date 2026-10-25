@@ -26,7 +26,8 @@ Verify every legitimate sender before you enable enforcement.
 ## Run offline checks
 
 Use Terraform within the version range in [providers.tf](../infra/providers.tf).
-CI uses Terraform 1.16.6 and the locked AWS provider.
+The [CI workflow](../.github/workflows/ci.yml) specifies the Terraform version.
+It uses the locked AWS provider.
 
 ```bash
 terraform -chdir=infra init -backend=false -input=false -lockfile=readonly
@@ -46,6 +47,23 @@ They also check the DKIM value format and TXT string lengths.
 The Vitest checks parse the public key and verify its RSA type and 2048-bit modulus.
 They require the repository's Node dependencies.
 They do not confirm Terraform ownership, Google signing, or mail delivery.
+
+## Refresh provider checksums
+
+After you update the locked AWS provider, record checksums for both platforms.
+Use Apple Silicon macOS for development and Linux x86-64 for CI:
+
+```bash
+terraform -chdir=infra providers lock -platform=darwin_arm64 -platform=linux_amd64
+```
+
+Review and commit [`.terraform.lock.hcl`](../infra/.terraform.lock.hcl) with the provider update.
+The command verifies packages against the publisher's signed checksums.
+It records an unpacked-package (`h1`) hash for each platform.
+CI uses `-lockfile=readonly`.
+Without a Linux `h1` hash, installation can pass through a ZIP (`zh`) checksum.
+Validation can then reject the unpacked provider cache.
+See [Terraform's provider lock command](https://developer.hashicorp.com/terraform/cli/commands/providers/lock).
 
 ## Adopt existing records
 

@@ -32,7 +32,7 @@
     "aws-status": "bash scripts/aws-status.sh",
     "watch": "node --env-file-if-exists=.env.local --import tsx/esm scripts/aws-watch.tsx",
     "lint": "eslint . --max-warnings=0",
-    "typecheck": "tsc -b --noEmit",
+    "typecheck": "tsc6 -b --noEmit",
     "bundle-report": "node scripts/bundle-report.js",
     "measure:performance": "node scripts/measure-performance.js",
     "preview": "vite preview",

@@ -13,6 +13,9 @@ export async function generateProjectPreviews({ repoRoot = root, projectList = p
     const directory = path.join(imageRoot, 'previews');
     const manifest = path.join(repoRoot, 'src/content/project-previews.json');
     await fs.mkdir(directory, { recursive: true });
+    if ((await fs.lstat(directory)).isSymbolicLink()) {
+        throw new Error('Project preview output directory must not be a symbolic link.');
+    }
     const previews = {};
     const generated = new Set();
     for (const project of projectList.filter(project => project.previewImage)) {

@@ -75,10 +75,32 @@ describe('performance result integrity', () => {
     });
 });
 
-async function browserFixture({ status = 200, applicationError = '', control = 'none' } = {}) {
+interface NetworkTransfer {
+    requestId: string;
+    type: string;
+    mimeType: string;
+    bytes: number;
+    url?: string;
+}
+
+async function browserFixture({ status = 200, applicationError = '', control = 'none', transfers = [
+    { requestId: 'script', type: 'Script', mimeType: 'application/javascript', bytes: 100 },
+] as NetworkTransfer[] } = {}) {
     const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'rsmb-metrics-test-'));
     roots.push(directory);
     let onError: (error: Error) => void = () => {};
+    const listeners = new Map<string, (event: unknown) => void>();
+    const session = {
+        send: vi.fn(async () => {}),
+        on: vi.fn((event: string, listener: (event: unknown) => void) => { listeners.set(event, listener); }),
+    };
+    function receiveBody(requestId: string, encodedDataLength: number) {
+        listeners.get('Network.dataReceived')?.({ requestId, encodedDataLength });
+    }
+    function receive(transfer: NetworkTransfer) {
+        listeners.get('Network.responseReceived')?.({ requestId: transfer.requestId, type: transfer.type, response: { mimeType: transfer.mimeType, url: transfer.url } });
+        receiveBody(transfer.requestId, transfer.bytes);
+    }
     const locator = (name: string) => ({
         count: vi.fn(async () => Number(control === name)),
         click: vi.fn(async () => {}),
@@ -91,26 +113,29 @@ async function browserFixture({ status = 200, applicationError = '', control = '
         setDefaultTimeout: vi.fn(),
         on: vi.fn((_event: string, listener: (error: Error) => void) => { onError = listener; }),
         addInitScript: vi.fn(async () => {}),
-        goto: vi.fn(async () => ({ status: () => status, ok: () => status >= 200 && status < 300 })),
+        goto: vi.fn(async () => {
+            transfers.forEach(receive);
+            return { status: () => status, ok: () => status >= 200 && status < 300 };
+        }),
         waitForFunction: vi.fn<(predicate: () => unknown, argument?: unknown, options?: unknown) => Promise<void>>().mockResolvedValue(undefined),
         waitForTimeout: vi.fn(async () => {}),
         evaluate: vi.fn<(evaluate: () => unknown) => Promise<unknown>>()
             .mockImplementationOnce(async () => {
                 if (applicationError) onError(new Error(applicationError));
-                return { metrics: sample().metrics, scriptBytes: 100 };
+                return sample().metrics;
             })
             .mockResolvedValueOnce(null),
         getByRole: vi.fn((role: string, options?: { name?: string }) => role === 'link' ? controls.projects : options?.name ? controls.pause : controls.button),
         keyboard: { press: vi.fn(async () => {}) },
     };
-    const context = { newPage: vi.fn(async () => page), newCDPSession: vi.fn(async () => ({ send: vi.fn(async () => {}) })), close: vi.fn(async () => {}) };
+    const context = { newPage: vi.fn(async () => page), newCDPSession: vi.fn(async () => session), close: vi.fn(async () => {}) };
     const browser = { newContext: vi.fn(async () => context), version: () => 'test Chromium', close: vi.fn(async () => {}) };
     const options = parsePerformanceOptions(['--samples', '1', '--paths', '/', '--out', path.join(directory, 'report.json'), '--settle-ms', '0']);
-    return { browser: browser as unknown as Browser, context, page, controls, options };
+    return { browser: browser as unknown as Browser, context, page, controls, options, receive, receiveBody };
 }
 
 describe('measurement lifecycle', () => {
-    it('checks actual readiness callbacks and counts script bodies without treating offscreen failures as load failures', async () => {
+    it('checks actual readiness callbacks without treating offscreen failures as load failures', async () => {
         const fixture = await browserFixture();
         const image = (top: number, naturalWidth: number) => ({
             complete: true, naturalWidth,
@@ -118,16 +143,31 @@ describe('measurement lifecycle', () => {
         });
         vi.stubGlobal('window', { innerHeight: 844, innerWidth: 390, __metrics: sample().metrics });
         vi.stubGlobal('document', { querySelector: () => ({}), images: [image(0, 100), image(1000, 0)], fonts: { status: 'loaded' } });
-        const entries = performance.getEntriesByType.bind(performance);
-        vi.spyOn(performance, 'getEntriesByType').mockImplementation(type => type === 'resource' ? [
-            { initiatorType: 'script', encodedBodySize: 100 },
-            { initiatorType: 'link', encodedBodySize: 900 },
-        ] as unknown as ReturnType<typeof performance.getEntriesByType> : entries(type));
         fixture.page.waitForFunction.mockImplementation(async (predicate: () => unknown) => { if (!predicate()) throw new Error('Assets not ready'); });
         fixture.page.evaluate.mockReset().mockImplementation(async (evaluate: () => unknown) => evaluate());
         const report = await measurePerformance(fixture.options, { browser: fixture.browser, onSample: vi.fn() });
         expect(report.failedSamples).toBe(0);
         expect(report.results[0]).toMatchObject({ scriptBytes: 100, sampledINP: null });
+    });
+
+    it('counts JavaScript chunks and repeated URL transfers before interaction, excluding non-script bytes', async () => {
+        const fixture = await browserFixture({ control: 'pause', transfers: [
+            { requestId: 'script-1', type: 'Script', mimeType: 'application/javascript', bytes: 100, url: 'https://example.test/shared.js' },
+            { requestId: 'script-2', type: 'Other', mimeType: 'text/javascript', bytes: 150, url: 'https://example.test/shared.js' },
+            { requestId: 'style', type: 'Stylesheet', mimeType: 'text/css', bytes: 900 },
+            { requestId: 'image', type: 'Image', mimeType: 'image/svg+xml', bytes: 700 },
+        ] });
+        fixture.page.evaluate.mockReset().mockImplementationOnce(async () => {
+            fixture.receiveBody('script-1', 25);
+            fixture.receiveBody('style', 50);
+            return sample().metrics;
+        }).mockResolvedValueOnce(null);
+        fixture.controls.pause.click.mockImplementation(async () => {
+            fixture.receive({ requestId: 'interactive-script', type: 'Script', mimeType: 'application/javascript', bytes: 400 });
+        });
+        const report = await measurePerformance(fixture.options, { browser: fixture.browser, onSample: vi.fn() });
+        expect(report.failedSamples).toBe(0);
+        expect(report.results[0].scriptBytes).toBe(275);
     });
 
     it.each([200, 503])('persists cleanup failures without counting the HTTP %s sample twice', async status => {
@@ -180,5 +220,29 @@ describe('measurement lifecycle', () => {
         vi.spyOn(fs, 'writeFile').mockRejectedValue(new Error('Disk full'));
         await expect(measurePerformance(fixture.options, { browser: fixture.browser, onSample: vi.fn() })).rejects.toThrow('Disk full');
         expect(fixture.context.close).toHaveBeenCalledOnce();
+    });
+
+    it('records context creation failures and continues with the remaining samples', async () => {
+        const fixture = await browserFixture();
+        vi.mocked(fixture.browser.newContext).mockRejectedValueOnce(new Error('Context creation failed'));
+        fixture.options.paths = ['/first', '/second'];
+        const report = await measurePerformance(fixture.options, { browser: fixture.browser, onSample: vi.fn() });
+        expect(report.failedSamples).toBe(1);
+        expect(report.results).toMatchObject([
+            { route: '/first', status: null, error: 'Context creation failed' },
+            { route: '/second', status: 200 },
+        ]);
+        expect(fixture.context.close).toHaveBeenCalledOnce();
+        expect(JSON.parse(await fs.readFile(fixture.options.outputPath, 'utf8'))).toEqual(report);
+    });
+
+    it('persists owned-browser cleanup failures separately from sample failures', async () => {
+        const fixture = await browserFixture();
+        vi.spyOn(chromium, 'launch').mockResolvedValue(fixture.browser);
+        vi.mocked(fixture.browser.close).mockRejectedValue(new Error('Browser close failed'));
+        const report = await measurePerformance(fixture.options, { onSample: vi.fn() });
+        expect(report).toMatchObject({ failedSamples: 0, errors: ['Browser cleanup failed: Browser close failed'] });
+        expect(report.results).toHaveLength(1);
+        expect(JSON.parse(await fs.readFile(fixture.options.outputPath, 'utf8'))).toEqual(report);
     });
 });

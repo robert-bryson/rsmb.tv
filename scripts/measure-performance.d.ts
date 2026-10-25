@@ -32,6 +32,7 @@ export interface PerformanceReport {
     baseURL: string;
     conditions: Record<string, string | number>;
     failedSamples: number;
+    errors: string[];
     results: PerformanceSample[];
 }
 

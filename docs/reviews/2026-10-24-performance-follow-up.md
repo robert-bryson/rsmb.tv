@@ -35,6 +35,9 @@ The live target was `https://www.rsmb.tv`. The comparison target was the local p
 
 The raw results are in [live measurements](../performance/2026-10-24-live-mobile.json) and [local measurements](../performance/2026-10-24-local-mobile.json).
 These files retain the original tool's results. The [critical review](2026-10-24-critical-review.md) documents later measurement validation and failure checks.
+The [2026-10-25 review](2026-10-25-ci-and-failure-paths.md) found that these script-byte counts exclude module preloads.
+The recorded byte counts are incomplete. The current tool uses a corrected network counter.
+Repeat measurements before you compare script-byte totals across tool versions.
 Load metrics are captured before interaction. This prevents a later SPA navigation from replacing the initial-page measurement.
 
 These results are laboratory measurements, not real-device or population percentiles.
