@@ -8,20 +8,6 @@ Keep completed work in Git history. Do not add completed tasks to this file.
 
 ## Publication blockers
 
-### Boise trip
-
-The manifest supports local preview. The public route and hero photo returned HTTP 403 on 2026-10-01.
-
-- [ ] Review all 82 Boise photos and captions. Check each new photo against its source and recorded date.
-- [ ] Publish the processed Boise photos and route files. Check every image size and route URL for HTTP 200.
-- [ ] Verify the recorded track dates. The source filenames do not agree with all dates in the story.
-- [ ] Find the source track from Panther Creek to Seattle. Add its manifest reference only after route preparation includes that track.
-- [ ] Replace the unknown distances and repeated day numbers in the Google Doc.
-- [ ] Verify the reported 1,516 miles, six riding days, stops, and photo captions before publication.
-- [ ] Identify reconstructed tracks in public content before publication. Keep the current manifest names until the content review.
-- [ ] Compare the story references with the renamed `camp-1` and `camp-2` stops.
-- [ ] Keep the Sheet `published` value `false` until the publication checks pass.
-
 ### Kalaloch trip
 
 The manifest supports local preview. The public route and hero photo returned HTTP 403 on 2026-10-01.
