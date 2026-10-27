@@ -68,7 +68,6 @@ Preserve passing publication checks when you change build scripts.
 
 Complete these tasks after the affected trip passes its source review.
 
-- [ ] Review and apply the Amplify article rewrite rules. Check delivered article metadata on the production host.
 - [ ] For each new trip, review its processed photos and use versioned filenames. Upload the assets before site deployment.
 - [ ] Collect real-device LCP, CLS, and INP measurements. Use the [laboratory report](docs/reviews/2026-10-24-performance-follow-up.md) as a baseline.
 - [ ] Remove inactive map instances when their sections are far outside the viewport. Retain the route preview and selected stop.
