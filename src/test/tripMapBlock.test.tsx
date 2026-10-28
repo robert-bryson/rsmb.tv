@@ -1,6 +1,8 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { TripMapBlock } from '../blog/TripMdxBlocks';
+import { TripStoryProvider } from '../features/trips/TripStoryProvider';
+import { dayMapManifest } from './fixtures/tripDayMap';
 
 vi.mock('../features/trips/components/TripRoutePreview', () => ({
     TripRoutePreview: ({ onExplore, onDaySelect }: { onExplore?: () => void; onDaySelect?: (id: string) => void }) => <div>
@@ -15,6 +17,10 @@ vi.mock('../features/trips/components/TripRouteMap', () => ({
 }));
 
 const fullscreenDescriptor = Object.getOwnPropertyDescriptor(document, 'fullscreenElement');
+function renderMapBlock() {
+    return render(<TripStoryProvider manifest={dayMapManifest}><TripMapBlock /></TripStoryProvider>);
+}
+
 afterEach(() => {
     vi.unstubAllGlobals();
     if (fullscreenDescriptor) Object.defineProperty(document, 'fullscreenElement', fullscreenDescriptor);
@@ -24,7 +30,7 @@ afterEach(() => {
 describe('trip map lifecycle', () => {
     it('hands a preview day selection to the interactive map', async () => {
         const { notify } = observe();
-        render(<TripMapBlock />);
+        renderMapBlock();
         fireEvent.click(screen.getByRole('button', { name: 'Choose Coastbound' }));
         notify(0, true);
         await screen.findByText('Active map');
@@ -48,7 +54,7 @@ describe('trip map lifecycle', () => {
 
     it('activates on visibility, suspends far away, and reactivates on return', async () => {
         const { observers, notify } = observe();
-        const { unmount } = render(<TripMapBlock />);
+        const { unmount } = renderMapBlock();
         expect(screen.getByText('Route preview')).toBeInTheDocument();
         expect(observers[1].options?.rootMargin).toBe('1200px');
         notify(1, true);
@@ -67,7 +73,7 @@ describe('trip map lifecycle', () => {
 
     it('keeps a focused map until focus leaves it', async () => {
         const { notify } = observe();
-        render(<TripMapBlock />);
+        renderMapBlock();
         notify(0, true);
         const control = await screen.findByRole('button', { name: 'Map control' });
         control.focus();
@@ -80,14 +86,14 @@ describe('trip map lifecycle', () => {
 
     it('allows explicit activation before the visibility observer fires', async () => {
         observe();
-        render(<TripMapBlock />);
+        renderMapBlock();
         fireEvent.click(screen.getByRole('button', { name: 'Explore interactive map' }));
         expect(await screen.findByText('Active map')).toBeVisible();
     });
 
     it.each(['map', 'ancestor'])('retains a fullscreen %s until fullscreen exits', async target => {
         const { notify } = observe();
-        const { container } = render(<TripMapBlock />);
+        const { container } = renderMapBlock();
         notify(0, true);
         await screen.findByText('Active map');
         let fullscreenElement: Element | null = target === 'map' ? container.querySelector('button')!.parentElement : container;
@@ -101,7 +107,7 @@ describe('trip map lifecycle', () => {
 
     it('ignores a deferred focus-out callback after the block unmounts', async () => {
         const { notify } = observe();
-        const { unmount } = render(<TripMapBlock />);
+        const { unmount } = renderMapBlock();
         notify(0, true);
         const control = await screen.findByRole('button', { name: 'Map control' });
         control.focus();

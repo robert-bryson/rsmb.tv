@@ -328,6 +328,21 @@ describe('trip story primitives', () => {
             .toThrow(/Hero references unknown photo/);
     });
 
+    it.each(['', '   ', '\t\n'])('rejects a trip photo with an empty alt description: %j', alt => {
+        expect(() => parseTripManifest({
+            ...manifest, photos: [{ ...manifest.photos[0], alt }, manifest.photos[1]],
+        })).toThrow();
+    });
+
+    it('trims the alt description used to name the photo viewer link', () => {
+        const parsed = parseTripManifest({
+            ...manifest, photos: [{ ...manifest.photos[0], alt: '  A motorcycle above the coast.  ' }, manifest.photos[1]],
+        });
+        renderStory(<TripPhoto photoId="hero" />, parsed);
+        expect(screen.getByRole('link', { name: 'A motorcycle above the coast.' }).querySelector('img'))
+            .toHaveAttribute('alt', 'A motorcycle above the coast.');
+    });
+
     it('rejects invalid and reversed dates', () => {
         expect(() => parseTripManifest({
             ...manifest,

@@ -123,6 +123,42 @@ afterEach(() => {
 });
 
 describe('TripRouteMap', () => {
+    it.each(['pointer', 'keyboard'] as const)('clears stop %s feedback when the route changes', async input => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
+        const story = (geoJson: string) => <TripStoryProvider manifest={{
+            ...dayMapManifest, route: { ...dayMapManifest.route, geoJson },
+        }}><TripRouteMap trackId="morning" /></TripStoryProvider>;
+        const { rerender } = render(story('/first.geojson'));
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        const camp = screen.getByRole('button', { name: /Shared camp/ });
+        if (input === 'pointer') fireEvent.mouseEnter(camp.closest('li')!);
+        else fireEvent.focus(camp);
+        expect(camp.closest('li')).toHaveClass('bg-amber-400');
+
+        rerender(story('/second.geojson'));
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledTimes(2));
+        expect(camp.closest('li')).not.toHaveClass('bg-amber-400');
+        expect(mapMocks.setPaintProperty.mock.calls.filter(([layer, property]) =>
+            layer === 'trip-stops' && property === 'circle-color').at(-1)?.[2])
+            .toEqual(['case', ['==', ['get', 'id'], ''], '#f59e0b', '#fafafa']);
+    });
+
+    it('restores stop keyboard feedback when the pointer leaves another stop', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
+        render(<TripStoryProvider manifest={dayMapManifest}><TripRouteMap dayId="coastbound" /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        const camp = screen.getByRole('button', { name: /Shared camp/ });
+        const harbor = screen.getByRole('button', { name: /Harbor/ });
+        fireEvent.focus(camp);
+        fireEvent.mouseEnter(harbor.closest('li')!);
+        expect(harbor.closest('li')).toHaveClass('bg-amber-400');
+        expect(camp.closest('li')).not.toHaveClass('bg-amber-400');
+        fireEvent.mouseLeave(harbor.closest('li')!);
+        expect(camp.closest('li')).toHaveClass('bg-amber-400');
+        fireEvent.blur(camp);
+        expect(camp.closest('li')).not.toHaveClass('bg-amber-400');
+    });
+
     it('keeps Escape scoped to the stable viewport during the preview-to-map handoff', async () => {
         vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
         const story = (active: boolean) => <div data-trip-map-viewport>

@@ -202,6 +202,20 @@ describe('Google Docs to rendered MDX', () => {
     });
 
     it.each([
+        '<p>Remember {{trip-gallery:highlights}} for later.</p>',
+        '<p>{{trip-photo-pano:scene}} is a literal example here.</p>',
+        '<h2>About {{trip-map}}</h2>',
+        '<ul><li>{{trip-gallery:highlights}}</li></ul>',
+        '<ul><li><p>{{trip-gallery:highlights}}</p></li></ul>',
+        '<blockquote><p>{{trip-photo-pano:scene}}</p></blockquote>',
+    ])('renders shortcode text literally outside supported standalone paragraphs: %s', async source => {
+        const markdown = convertHtmlToMarkdown(source);
+        const expanded = expandTripShortcodes(markdown, { format: 'trip' }, {});
+        const { default: Content } = await evaluate(expanded, runtime);
+        expect(renderToStaticMarkup(<Content />)).toContain(source.match(/\{\{.*?\}\}/)![0]);
+    });
+
+    it.each([
         '<p><code>{{trip-gallery:missing}}</code></p>',
         '<p><code>{{trip-photo-pano:missing}}</code></p>',
         '<pre><code>{{trip-gallery:missing}}\n{{trip-unknown}}</code></pre>',

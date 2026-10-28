@@ -68,7 +68,8 @@ Use a code block for code examples. The importer also accepts matching code fenc
 
 ### Shortcodes
 
-Put each shortcode in its own paragraph. Highlighting, bold, and italic formatting are allowed.
+Put each shortcode in its own Normal text paragraph. Highlighting, bold, and italic formatting are allowed.
+Shortcodes in headings, lists, blockquotes, tables, and ordinary sentences remain literal text.
 Use lowercase letters, numbers, and hyphens in IDs. Shortcodes inside code examples remain literal.
 The import rejects malformed standalone shortcodes, including IDs with underscores, spaces, or uppercase letters.
 
@@ -173,6 +174,7 @@ Publish the prepared assets before you deploy the updated manifest.
 See section 3 for the update command.
 
 Add alt text that describes the visible content. Add a caption that supplies other useful information.
+Each photo needs a nonempty alt description. The manifest parser removes spaces before and after the description.
 Do not repeat the caption in the alt text.
 
 ### Route output
@@ -314,12 +316,14 @@ Day maps retain their selection when an offscreen interactive map is released.
 The static preview uses the same day membership and colors.
 Overview previews retain the other tracks in black when you select a day.
 Their day controls use the same pointer, focus, and Escape behavior.
+Day buttons retain keyboard focus when the preview becomes interactive or an error restores the preview.
 If the interactive map fails, the route preview, day controls, and download remain available.
 Select `Retry route` to load the route again and create a new interactive map.
 Retry keeps the selected day and stop visibility setting.
 An error remains visible when you change the day.
 A day change does not retry a failed map.
 Loading another route clears the previous selection, hover, and focus feedback.
+Changing an overview block to a focused map also clears its preview day selection.
 
 ### Other manifest fields
 
@@ -346,6 +350,7 @@ An inline photo has its own viewer.
 Each viewer slide retains the manifest alt text.
 Expanding or collapsing the gallery does not change viewer captions or photo order.
 Changing the gallery ID starts the new gallery in its collapsed state.
+It also clears an error from the previous gallery.
 
 ### Stop and track maps
 
@@ -357,6 +362,8 @@ The full-route action clears the selected stop. A later map load does not restor
 Selecting a stop makes the full-route action available before map load.
 An early full-route action also cancels the initial overview zoom adjustment.
 An error belongs to one map configuration. Replacing its route, track, or stops discards that error.
+Changing its day configuration also discards the error.
+Stop labels retain keyboard feedback after the pointer leaves another stop or marker.
 
 For each entry in `route.tracks`, copy the exact ID from `asset-metadata.json`.
 Add a clear name. Add a date only after verification.

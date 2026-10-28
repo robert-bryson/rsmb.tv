@@ -7,7 +7,7 @@ const photoSchema = z.object({
     src: z.string().min(1),
     width: z.number().int().positive(),
     height: z.number().int().positive(),
-    alt: z.string(),
+    alt: z.string().trim().min(1),
     caption: z.string().optional(),
     location: z.string().optional(),
     date: dateSchema.optional(),

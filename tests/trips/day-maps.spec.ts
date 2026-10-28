@@ -232,6 +232,44 @@ test('Escape clears a day selection while keeping the map and day controls', asy
     await expect.poll(async () => (await routePixels(overview)).blue).toBeGreaterThan(10);
 });
 
+for (const timing of ['before', 'after'] as const) {
+    test(`Escape resets the selected day ${timing} its focused preview becomes interactive`, async ({ page }) => {
+        let releaseMap!: () => void;
+        const mapModule = new Promise<void>(resolve => { releaseMap = resolve; });
+        await page.route(/\/assets\/TripRouteMap-[^/]+\.js$/, async route => {
+            await mapModule;
+            await route.continue();
+        });
+        try {
+            await page.emulateMedia({ reducedMotion: 'reduce' });
+            await page.goto('/trips/daily-test');
+            const overview = page.locator('[data-trip-map]').first();
+            const day = overview.getByRole('button', { name: '2. Homebound' });
+            await day.click();
+            await expect(day).toHaveAttribute('aria-pressed', 'true');
+            await day.focus();
+            await expect(day).toBeFocused();
+            if (timing === 'before') {
+                await page.keyboard.press('Escape');
+                await expect(day).toHaveAttribute('aria-pressed', 'false');
+                await expect(day).not.toHaveAttribute('data-highlighted', 'true');
+            }
+            releaseMap();
+            await expect(overview.locator('canvas')).toBeVisible();
+            // Use the actual keyboard target; locator.press would refocus a replacement button.
+            if (timing === 'after') await page.keyboard.press('Escape');
+            await expect(day).toHaveAttribute('aria-pressed', 'false');
+            await expect(day).toBeFocused();
+            await expect(day).not.toHaveAttribute('data-highlighted', 'true');
+            await expect(overview.getByRole('tooltip')).toHaveCount(0);
+            await expect.poll(async () => (await routePixels(overview)).amber).toBeGreaterThan(10);
+            await expect.poll(async () => (await routePixels(overview)).blue).toBeGreaterThan(10);
+        } finally {
+            releaseMap();
+        }
+    });
+}
+
 test('inline maps retain the full black route while fitting and resetting to their own day', async ({ page }) => {
     await page.goto('/trips/daily-test');
     const day = page.locator('[data-trip-map]').nth(2);

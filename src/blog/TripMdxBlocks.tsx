@@ -1,21 +1,46 @@
-import { Component, Suspense, lazy, useEffect, useRef, useState, type ReactNode } from 'react';
+import { Component, Suspense, lazy, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { TripRoutePreview } from '../features/trips/components/TripRoutePreview';
+import { useTripStory } from '../features/trips/TripStoryContext';
 import type { TripMapFocus } from '../features/trips/tripMapView';
+
 const Gallery = lazy(() => import('../features/trips/components/TripGallery').then(module => ({ default: module.TripGallery })));
 const Map = lazy(() => import('../features/trips/components/TripRouteMap').then(module => ({ default: module.TripRouteMap })));
 
-class TripBlockBoundary extends Component<{ children: ReactNode; fallback: ReactNode }, { failed: boolean }> {
-    state = { failed: false };
+type TripBlockBoundaryProps = { children: ReactNode; fallback: ReactNode; resetKey: unknown };
+type TripBlockBoundaryState = { failed: boolean; resetKey: unknown };
+
+class TripBlockBoundary extends Component<TripBlockBoundaryProps, TripBlockBoundaryState> {
+    state = { failed: false, resetKey: this.props.resetKey };
+    static getDerivedStateFromProps(props: TripBlockBoundaryProps, state: TripBlockBoundaryState) {
+        return Object.is(props.resetKey, state.resetKey) ? null : { failed: false, resetKey: props.resetKey };
+    }
     static getDerivedStateFromError() { return { failed: true }; }
     render() { return this.state.failed ? this.props.fallback : this.props.children; }
 }
+
 export function TripGalleryBlock(props: { galleryId: string }) {
-    return <TripBlockBoundary fallback={<p role="status">These photos could not load. Reload the page to try again.</p>}>
-        <Suspense fallback={<p role="status" className="py-8 text-zinc-400">Loading photos…</p>}><Gallery {...props} /></Suspense>
-    </TripBlockBoundary>;
+    return (
+        <TripBlockBoundary resetKey={props.galleryId}
+            fallback={<p role="status">These photos could not load. Reload the page to try again.</p>}>
+            <Suspense fallback={<p role="status" className="py-8 text-zinc-400">Loading photos…</p>}>
+                <Gallery {...props} />
+            </Suspense>
+        </TripBlockBoundary>
+    );
 }
+
 export function TripMapBlock(props: TripMapFocus) {
-    const [previewDayId, setPreviewDayId] = useState<string>();
+    const { manifest } = useTripStory();
+    const routeUrl = manifest.route.geoJson;
+    const previewScope = JSON.stringify([routeUrl, props.dayId, props.trackId, props.stopId]);
+    const [previewSelection, setPreviewSelection] = useState<{ scope: string; dayId?: string }>({ scope: previewScope });
+    if (previewSelection.scope !== previewScope) setPreviewSelection({ scope: previewScope });
+    const previewDayId = previewSelection.dayId;
+    // Reset failures without remounting a healthy map when only its requested stop changes.
+    const resetKey = useMemo(
+        () => ({ routeUrl, stops: manifest.stops, days: manifest.days, trackId: props.trackId, dayId: props.dayId }),
+        [routeUrl, manifest.stops, manifest.days, props.trackId, props.dayId],
+    );
     const [attempt, setAttempt] = useState(() => typeof IntersectionObserver === 'undefined' ? 1 : 0);
     const [active, setActive] = useState(() => typeof IntersectionObserver === 'undefined');
     const [retainedHeight, setRetainedHeight] = useState<number>();
@@ -37,7 +62,8 @@ export function TripMapBlock(props: TripMapFocus) {
         let nearby = true;
         let disposed = false;
         const suspend = () => {
-            if (disposed || nearby || container.contains(document.activeElement) || document.fullscreenElement?.contains(container) || container.contains(document.fullscreenElement)) return;
+            if (disposed || nearby || container.contains(document.activeElement)
+                || document.fullscreenElement?.contains(container) || container.contains(document.fullscreenElement)) return;
             setRetainedHeight(container.getBoundingClientRect().height);
             setActive(false);
         };
@@ -57,19 +83,37 @@ export function TripMapBlock(props: TripMapFocus) {
             document.removeEventListener('fullscreenchange', suspend);
         };
     }, []);
+    const explore = () => {
+        setActive(true);
+        setAttempt(value => value + 1);
+    };
     const previewProps = {
         ...props,
         dayId: props.dayId ?? previewDayId,
         allowDaySelection: !props.dayId && !props.trackId && !props.stopId,
-        onDaySelect: setPreviewDayId,
+        onDaySelect: (dayId?: string) => setPreviewSelection({ scope: previewScope, dayId }),
     };
-    const fallback = <div><p role="status" className="text-sm text-zinc-300">Interactive map unavailable. The route and story are still available.</p><TripRoutePreview {...previewProps} onExplore={() => { setActive(true); setAttempt(value => value + 1); }} /></div>;
-    return <div className="scroll-mt-24" data-trip-map>
-        <div data-trip-facts-slot />
-        <div ref={containerRef} data-trip-map-viewport style={!active && retainedHeight ? { minHeight: retainedHeight } : undefined}>
-        {attempt ? <TripBlockBoundary key={attempt} fallback={fallback}><Suspense fallback={<TripRoutePreview {...previewProps} />}><Map {...props} initialDayId={previewDayId} active={active} onExplore={() => setActive(true)} /></Suspense></TripBlockBoundary>
-            : <TripRoutePreview {...previewProps} onExplore={() => { setAttempt(1); setActive(true); }} />}
-        </div>
-        <div data-trip-navigation-slot />
+    const preview = <TripRoutePreview {...previewProps} onExplore={explore} />;
+    const fallback = <div>
+        <p role="status" className="text-sm text-zinc-300">
+            Interactive map unavailable. The route and story are still available.
+        </p>
+        {preview}
     </div>;
+    return (
+        <div className="scroll-mt-24" data-trip-map>
+            <div data-trip-facts-slot />
+            <div ref={containerRef} data-trip-map-viewport
+                style={!active && retainedHeight ? { minHeight: retainedHeight } : undefined}>
+                {attempt ? (
+                    <TripBlockBoundary key={attempt} resetKey={resetKey} fallback={fallback}>
+                        <Suspense fallback={<TripRoutePreview {...previewProps} />}>
+                            <Map {...props} initialDayId={previewDayId} active={active} onExplore={() => setActive(true)} />
+                        </Suspense>
+                    </TripBlockBoundary>
+                ) : preview}
+            </div>
+            <div data-trip-navigation-slot />
+        </div>
+    );
 }

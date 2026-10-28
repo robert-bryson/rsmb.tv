@@ -5,7 +5,7 @@ import { routeFeatures } from '../routeGeometry';
 import { dayColor, routeBackgroundStyle, routeContextColor, trackColor, tripMapCoordinates, tripMapDayForTrack, tripMapDays, tripMapView, type TripMapFocus } from '../tripMapView';
 import { TripMapDayControls } from './TripMapDayControls';
 import { useTripMapDismiss } from '../useTripMapDismiss';
-import { useTripDayHighlight } from '../useTripDayHighlight';
+import { useTripMapHighlight } from '../useTripMapHighlight';
 
 type TripRoutePreviewProps = TripMapFocus & {
     showStops?: boolean;
@@ -29,9 +29,9 @@ export function TripRoutePreview({
     const [selection, setSelection] = useState<{ routeUrl: string; id?: string }>({ routeUrl });
     if (selection.routeUrl !== routeUrl) setSelection({ routeUrl });
     const selectedDayId = onDaySelect ? dayId : dayId ?? selection.id;
-    const highlight = useTripDayHighlight(routeUrl);
+    const highlight = useTripMapHighlight(routeUrl);
     const tooltipId = useId();
-    const emphasizedDayId = highlight.dayId ?? selectedDayId;
+    const emphasizedDayId = highlight.id ?? selectedDayId;
     const isBaseMap = allowDaySelection || (!dayId && !trackId && !stopId);
     const isOverview = isBaseMap && tripMapDays(manifest).length > 0;
     const stopsVisible = !isBaseMap && showStops;
@@ -40,7 +40,7 @@ export function TripRoutePreview({
         else setSelection({ routeUrl, id });
     };
     // A parent owns selection dismissal, but this renderer always owns its tooltip.
-    useTripMapDismiss(ref, isOverview && Boolean(highlight.dayId || !figureRef && selectedDayId), ({ resetSelection }) => {
+    useTripMapDismiss(ref, isOverview && Boolean(highlight.id || !figureRef && selectedDayId), ({ resetSelection }) => {
         highlight.dismiss();
         if (resetSelection && selectedDayId && !figureRef) selectDay();
     });
@@ -78,7 +78,7 @@ export function TripRoutePreview({
             width: context ? contextStyle.width : inlineDay || isOverview && emphasizedDayId ? 6 : 3 }));
     }).sort((left, right) => Number(right.context) - Number(left.context)) : [];
     const status = mapError || view.error || error;
-    const popupDay = isOverview && coordinates.length ? manifest.days?.find(day => day.id === highlight.dayId) : undefined;
+    const popupDay = isOverview && coordinates.length ? manifest.days?.find(day => day.id === highlight.id) : undefined;
     let graphic;
     if (coordinates.length) {
         graphic = <svg viewBox="0 0 800 360" role="img" aria-label={view.alt} className="absolute inset-0 h-full w-full p-4"
@@ -126,7 +126,7 @@ export function TripRoutePreview({
         </div>
         </div>
         <figcaption className="mt-3">
-            {isBaseMap ? <TripMapDayControls manifest={manifest} dayId={selectedDayId} highlightedDayId={highlight.dayId} tooltipId={popupDay ? tooltipId : undefined} onSelect={selectDay} onHighlight={highlight.onHover} onFocusDay={highlight.onFocus} />
+            {isBaseMap ? <TripMapDayControls manifest={manifest} dayId={selectedDayId} highlightedDayId={highlight.id} tooltipId={popupDay ? tooltipId : undefined} onSelect={selectDay} onHighlight={highlight.onHover} onFocusDay={highlight.onFocus} />
                 : <>
                     {view.stops.length > 0 && <p className="mb-2 inline-flex min-h-11 items-center text-sm text-zinc-300">{showStops ? 'Stops' : 'Stops hidden'}</p>}
                     <ol hidden={!showStops} className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-zinc-400">{view.stops.map(stop => <li key={stop.id} className="rounded px-1.5 py-0.5"><span className="inline-flex min-h-11 items-center">{manifest.stops.indexOf(stop) + 1}. {stop.name}{!view.day && (stop === view.stops[0] ? ' · Start' : stop === view.stops.at(-1) ? ' · Finish' : '')}</span></li>)}</ol>

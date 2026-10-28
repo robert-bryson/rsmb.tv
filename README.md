@@ -204,12 +204,18 @@ Escape closes day popups before selection.
 With focus inside the map, Escape also clears the selected day.
 Recovery checks verify saved camera restoration after dismissal during map suspension or failure.
 Route replacement clears the previous hover and focus feedback.
+Stop checks cover pointer and keyboard feedback together, including route replacement with shared stop IDs.
+Block checks cover recovery after map configuration changes and gallery replacement.
+Changing an overview block to a focused map clears its preview day selection.
+Delayed-module browser checks verify keyboard focus and Escape across the preview replacement.
 Fullscreen and keyboard focus keep a map active until the interaction ends.
 The preview uses the parent map's route response after suspension or failure. It does not retry failed requests automatically.
 Run the focused unit tests with:
 
 ```bash
-npx vitest run src/test/tripMapView.test.tsx src/test/tripRouteMap.test.tsx src/test/tripMapBlock.test.tsx
+npx vitest run src/test/tripMapView.test.tsx src/test/tripRouteMap.test.tsx \
+  src/test/tripMapBlock.test.tsx src/test/tripMapBlockSelection.test.tsx \
+  src/test/tripBlockRecovery.test.tsx src/test/tripMapDayFocus.test.tsx
 ```
 
 Each JavaScript budget test uses a separate browser context.

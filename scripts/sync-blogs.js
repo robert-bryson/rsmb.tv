@@ -1044,13 +1044,10 @@ function createTurndownService(tripShortcodes = true) {
 
     // Google Docs text is content, not JavaScript. Code nodes bypass this escape hook.
     const escapeMarkdown = service.escape.bind(service);
-    const bracePattern = tripShortcodes ? /\{\{trip-[a-z0-9:-]+\}\}|[{}]/g : /[{}]/g;
     service.escape = (text) => escapeMarkdown(text)
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
-        .replace(bracePattern, (match) => (
-            match.startsWith('{{trip-') ? match : `\\${match}`
-        ));
+        .replace(/[{}]/g, (match) => `\\${match}`);
 
     service.addRule('lineBreak', {
         filter: 'br',
@@ -1088,7 +1085,7 @@ function createTurndownService(tripShortcodes = true) {
 
     service.addRule('tripShortcodeParagraph', {
         filter: (node) => tripShortcodes && node.nodeName === 'P'
-            && !node.closest('pre, code')
+            && !node.closest('pre, code, li, blockquote, table')
             && !node.querySelector('code, img, br')
             && /^\{\{trip-[^{}\r\n]+\}\}$/.test(normalizedTextContent(node).trim()),
         // Read the entire paragraph so highlighting, emphasis, and split Docs

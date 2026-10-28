@@ -10,58 +10,17 @@ import { useTripStory } from '../TripStoryContext';
 import { dayColor, routeBackgroundStyle, routeContextColor, routeLineColor, tripMapCoordinates, tripMapDayForTrack, tripMapDays, tripMapView, type TripMapFocus } from '../tripMapView';
 import { useTripMapDismiss } from '../useTripMapDismiss';
 import { useTripDayHover } from '../useTripDayHover';
-import { useTripDayHighlight } from '../useTripDayHighlight';
+import { useTripMapHighlight } from '../useTripMapHighlight';
+import { basemaps, mapStyle, type BasemapId, type BasemapPaintProperty } from '../tripMapBasemaps';
+import { BasemapControl, CollapsedAttributionControl, DownloadRouteControl, RouteActionsControl } from '../tripMapControls';
 import { TripMapDayControls } from './TripMapDayControls';
 import { TripRoutePreview } from './TripRoutePreview';
 import type { TripManifest } from '../types';
 
 type TripRouteMapProps = TripMapFocus & { active?: boolean; onExplore?: () => void; initialDayId?: string };
 type DaySelection = { routeUrl: string; requestedId?: string; selectedId?: string };
-type BasemapId = 'muted' | 'street' | 'terrain';
-type BasemapPaintProperty = 'raster-saturation' | 'raster-brightness-min' | 'raster-brightness-max' | 'raster-contrast';
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl);
-
-const basemaps: Array<{
-    id: BasemapId;
-    label: string;
-    tiles: string[];
-    paint: Record<BasemapPaintProperty, number>;
-}> = [
-        {
-            id: 'muted',
-            label: 'Muted',
-            tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
-            paint: {
-                'raster-saturation': -1,
-                'raster-brightness-min': 0.05,
-                'raster-brightness-max': 0.65,
-                'raster-contrast': 0.15,
-            },
-        },
-        {
-            id: 'street',
-            label: 'Street',
-            tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
-            paint: {
-                'raster-saturation': 0,
-                'raster-brightness-min': 0,
-                'raster-brightness-max': 1,
-                'raster-contrast': 0,
-            },
-        },
-        {
-            id: 'terrain',
-            label: 'Terrain',
-            tiles: ['https://tile.opentopomap.org/{z}/{x}/{y}.png'],
-            paint: {
-                'raster-saturation': 0,
-                'raster-brightness-min': 0,
-                'raster-brightness-max': 0.85,
-                'raster-contrast': 0.05,
-            },
-        },
-    ];
 
 function mapBounds(coordinates: number[][]) {
     return coordinates.reduce((bounds, point) => bounds.extend(point as [number, number]),
@@ -83,141 +42,6 @@ function trackFilter(trackIds: string[]): maplibregl.ExpressionSpecification {
     return ['in', ['get', 'trackId'], ['literal', trackIds]];
 }
 
-function mapStyle(basemapId: BasemapId): maplibregl.StyleSpecification {
-    const basemap = basemaps.find((candidate) => candidate.id === basemapId) ?? basemaps[0];
-    return {
-        version: 8,
-        glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
-        sources: {
-            openstreetmap: {
-                type: 'raster',
-                tiles: basemap.tiles,
-                tileSize: 256,
-                attribution: '&copy; OpenStreetMap contributors &copy; OpenTopoMap',
-            },
-        },
-        layers: [{
-            id: 'openstreetmap',
-            type: 'raster',
-            source: 'openstreetmap',
-            paint: basemap.paint,
-        }],
-    };
-}
-
-class BasemapControl implements maplibregl.IControl {
-    private readonly container: HTMLDivElement;
-    private readonly button: HTMLButtonElement;
-
-    constructor(onCycle: () => void) {
-        this.container = document.createElement('div');
-        this.container.className = 'maplibregl-ctrl maplibregl-ctrl-group';
-        this.button = document.createElement('button');
-        this.button.type = 'button';
-        this.button.addEventListener('click', onCycle);
-
-        const icon = document.createElement('span');
-        icon.className = 'trip-basemap-control-icon';
-        icon.setAttribute('aria-hidden', 'true');
-        this.button.append(icon);
-        this.container.append(this.button);
-        this.setBasemap('muted');
-    }
-
-    onAdd() {
-        return this.container;
-    }
-
-    onRemove() {
-        this.container.remove();
-    }
-
-    setBasemap(id: BasemapId) {
-        const label = basemaps.find((basemap) => basemap.id === id)?.label ?? id;
-        this.button.title = `Change basemap (current: ${label})`;
-        this.button.setAttribute('aria-label', `Change basemap (current: ${label})`);
-    }
-}
-
-// Seed compact mode before source metadata arrives so MapLibre does not expand it.
-class CollapsedAttributionControl extends maplibregl.AttributionControl {
-    onAdd(map: maplibregl.Map) {
-        const container = super.onAdd(map);
-        container.classList.add('maplibregl-compact');
-        container.classList.remove('maplibregl-compact-show');
-        container.removeAttribute('open');
-        return container;
-    }
-}
-
-class DownloadRouteControl implements maplibregl.IControl {
-    private readonly container = document.createElement('div');
-
-    constructor(routeUrl: string) {
-        this.container.className = 'maplibregl-ctrl maplibregl-ctrl-group trip-route-download';
-        const download = document.createElement('a');
-        download.href = routeUrl;
-        download.download = '';
-        download.target = '_blank';
-        download.rel = 'noreferrer';
-        download.title = 'Download route (GeoJSON)';
-        download.setAttribute('aria-label', download.title);
-        download.innerHTML = '<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m-5-5 5 5 5-5M5 16v5h14v-5" /></svg>';
-        this.container.append(download);
-    }
-
-    onAdd() {
-        return this.container;
-    }
-
-    onRemove() {
-        this.container.remove();
-    }
-}
-
-class RouteActionsControl implements maplibregl.IControl {
-    private readonly container = document.createElement('div');
-    private readonly reset = document.createElement('button');
-    private map?: maplibregl.Map;
-
-    constructor(onReset: () => void, initiallyFocused: boolean, label = 'Show full route') {
-        this.container.className = 'maplibregl-ctrl trip-route-actions';
-        this.reset.type = 'button';
-        this.reset.textContent = label;
-        this.reset.hidden = !initiallyFocused;
-        this.reset.addEventListener('click', () => {
-            this.map?.stop();
-            this.map?.once('moveend', this.hideReset);
-            onReset();
-        });
-
-        this.container.append(this.reset);
-    }
-
-    showReset = () => { this.reset.hidden = false; };
-    private hideReset = () => { this.reset.hidden = true; };
-    private watchMovement = () => {
-        // Let the initial stop-focus animation finish before watching for changes.
-        if (this.map?.isMoving()) this.map.once('moveend', this.watchMovement);
-        else this.map?.on('move', this.showReset);
-    };
-
-    onAdd(map: maplibregl.Map) {
-        this.map = map;
-        map.once('load', this.watchMovement);
-        return this.container;
-    }
-
-    onRemove() {
-        this.map?.off('load', this.watchMovement);
-        this.map?.off('move', this.showReset);
-        this.map?.off('moveend', this.hideReset);
-        this.map?.off('moveend', this.watchMovement);
-        this.container.remove();
-        this.map = undefined;
-    }
-}
-
 export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore, initialDayId }: TripRouteMapProps) {
     const { manifest } = useTripStory();
     const getManifest = useEffectEvent(() => manifest);
@@ -231,8 +55,10 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
     const originalCameraRef = useRef<{ routeUrl: string; camera: maplibregl.JumpToOptions }>(null);
     const [basemapId, setBasemapId] = useState<BasemapId>('muted');
     const basemapIdRef = useRef(basemapId);
-    const [hoveredStopId, setHoveredStopId] = useState<string | null>(null);
     const routeUrl = manifest.route.geoJson;
+    const stopHighlight = useTripMapHighlight(routeUrl);
+    const hoveredStopId = stopHighlight.id;
+    const hoverStop = useEffectEvent((id?: string) => stopHighlight.onHover(id));
     useEffect(() => { originalCameraRef.current = null; }, [routeUrl]);
     const { route, error: routeError, retry } = useTripRoute(routeUrl);
     const requestedDayId = dayId ?? initialDayId;
@@ -245,8 +71,8 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
     const getIsBaseMap = useEffectEvent(() => isBaseMap);
     const isOverview = isBaseMap && tripMapDays(manifest).length > 0;
     const getIsOverview = useEffectEvent(() => isOverview);
-    const highlight = useTripDayHighlight(routeUrl);
-    const emphasizedDayId = highlight.dayId ?? selectedDayId;
+    const highlight = useTripMapHighlight(routeUrl);
+    const emphasizedDayId = highlight.id ?? selectedDayId;
     const getDaySelection = useEffectEvent(() => daySelection);
     const [showStops, setShowStops] = useState(true);
     const stopsVisible = !isBaseMap && showStops;
@@ -296,7 +122,7 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
         }
         setDaySelection(current => ({ ...current, selectedId: id }));
         setStopSelection(current => ({ ...current, selectedId: '' }));
-        setHoveredStopId(null);
+        stopHighlight.dismiss();
         routeActionsControlRef.current?.showReset();
     };
     const showFullRoute = () => {
@@ -311,7 +137,7 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
         // A suspended or failed map must restore this camera when it is created again.
         if (map) originalCameraRef.current = null;
         highlight.dismiss();
-        setHoveredStopId(null);
+        stopHighlight.dismiss();
         setStopSelection(current => ({ ...current, selectedId: '' }));
         if (!dayId) {
             // This reset already fitted the camera. A newer selection still needs its own fit.
@@ -321,7 +147,7 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
         }
     };
     const resetRoute = useEffectEvent(showFullRoute);
-    useTripMapDismiss(figureRef, isOverview && Boolean(selectedDayId || highlight.dayId), ({ resetSelection }) => {
+    useTripMapDismiss(figureRef, isOverview && Boolean(selectedDayId || highlight.id), ({ resetSelection }) => {
         highlight.dismiss();
         if (resetSelection && selectedDayId) showFullRoute();
     });
@@ -330,7 +156,7 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
     });
     const selectMapDay = useEffectEvent((id: string) => selectDay(selectedDayId === id ? undefined : id));
     const dayTooltipId = useTripDayHover({ map: loadedMap, mapRef, enabled: Boolean(enabled && isOverview),
-        manifest, route, dayId: highlight.dayId, onHighlight: highlight.onHover });
+        manifest, route, dayId: highlight.id, onHighlight: highlight.onHover });
     useEffect(() => {
         const manifest = getManifest();
         const stopId = getSelectedStopId();
@@ -460,11 +286,11 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
         map.on('mouseenter', 'trip-stops', (event) => {
             if (disposed) return;
             const hoveredId = event.features?.[0]?.properties?.id;
-            if (typeof hoveredId === 'string') setHoveredStopId(hoveredId);
+            if (typeof hoveredId === 'string') hoverStop(hoveredId);
         });
         map.on('mouseleave', 'trip-stops', () => {
             if (disposed) return;
-            setHoveredStopId(null);
+            hoverStop();
         });
         if (!trackId && !initialView.day && !restoredCamera) {
             map.once('load', () => {
@@ -612,16 +438,16 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
                 {!isBaseMap && view.stops.length > 0 && <label className="mb-2 inline-flex min-h-11 cursor-pointer items-center gap-2 text-sm text-zinc-300">
                     <input type="checkbox" checked={showStops} onChange={event => setShowStops(event.target.checked)} />Show stops
                 </label>}
-                {isBaseMap ? <TripMapDayControls manifest={manifest} dayId={selectedDayId} highlightedDayId={highlight.dayId} tooltipId={highlight.dayId ? dayTooltipId : undefined} onSelect={selectDay} onHighlight={highlight.onHover} onFocusDay={highlight.onFocus} />
+                {isBaseMap ? <TripMapDayControls manifest={manifest} dayId={selectedDayId} highlightedDayId={highlight.id} tooltipId={highlight.id ? dayTooltipId : undefined} onSelect={selectDay} onHighlight={highlight.onHover} onFocusDay={highlight.onFocus} />
                     : <ol hidden={!showStops} className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-zinc-400">
                     {view.stops.map((stop) => (
                         <li
                             key={stop.id}
-                            onMouseEnter={() => setHoveredStopId(stop.id)}
-                            onMouseLeave={() => setHoveredStopId(null)}
+                            onMouseEnter={() => stopHighlight.onHover(stop.id)}
+                            onMouseLeave={() => stopHighlight.onHover()}
                             className={`rounded px-1.5 py-0.5 transition-colors ${stop.id === (hoveredStopId ?? selectedStopId ?? stopId) ? 'bg-amber-400 text-zinc-950' : 'hover:text-zinc-200'}`}
                         >
-                            <button type="button" aria-pressed={stop.id === (selectedStopId ?? stopId)} onClick={() => focusStop(stop.id)} onFocus={() => setHoveredStopId(stop.id)} onBlur={() => setHoveredStopId(null)} className="min-h-11 text-left">
+                            <button type="button" aria-pressed={stop.id === (selectedStopId ?? stopId)} onClick={() => focusStop(stop.id)} onFocus={() => stopHighlight.onFocus(stop.id)} onBlur={() => stopHighlight.onFocus()} className="min-h-11 text-left">
                                 <span className={`mr-1 ${stop.id === (hoveredStopId ?? selectedStopId ?? stopId) ? 'text-zinc-800' : 'text-zinc-400'}`}>
                                     {manifest.stops.indexOf(stop) + 1}.
                                 </span>

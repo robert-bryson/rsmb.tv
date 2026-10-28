@@ -23,6 +23,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-10-28 | [Trip state ownership and recovery review](reviews/2026-10-28-trip-state-and-recovery.md) |
 | 2026-10-27 | [Panorama review and photo failure fixes](reviews/2026-10-27-trip-photo-review.md) |
 | 2026-10-27 | [Trip photo panorama research](reviews/2026-10-27-trip-photo-panorama-research.md) |
 | 2026-10-27 | [Trip map interaction review](reviews/2026-10-27-trip-map-interaction-review.md) |

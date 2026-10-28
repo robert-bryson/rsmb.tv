@@ -70,6 +70,10 @@ It removes active HTML and restricts URL protocols.
 It treats braces, angle brackets, and module statements in ordinary text as literal content.
 Code blocks retain their original characters.
 
+Trip shortcodes expand only in separate Normal text paragraphs.
+Shortcodes in sentences, headings, lists, blockquotes, tables, and code examples remain literal text.
+Use the [trip shortcode table](trips/TRIP-AUTHORING-README.md#shortcodes) for supported forms.
+
 Use short, unique headings.
 The site derives heading IDs from the heading text.
 For example, `Day 1: Seattle to Boise` becomes `#day-1-seattle-to-boise`.

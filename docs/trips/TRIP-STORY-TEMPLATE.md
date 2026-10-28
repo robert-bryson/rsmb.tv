@@ -6,6 +6,8 @@ Delete instructions and unused sections before publication.
 The site gets the story title from the Google Sheet. Do not repeat that title in the document body.
 Use Heading 2 for chapters and Heading 3 for sections within a chapter.
 Use Subtitle for a distance line below a heading. A subtitle does not appear in the table of contents.
+Put each shortcode in a separate Normal text paragraph.
+Keep shortcodes outside headings, lists, blockquotes, and tables.
 
 ---
 
@@ -67,7 +69,7 @@ Use Subtitle for a distance line below a heading. A subtitle does not appear in 
 
 {{trip-photo:scene-photo-id}}
 
-For a panorama that reaches both page edges, replace the previous shortcode with:
+[For a panorama across the page, replace the previous shortcode with the following one. Delete the unused shortcode.]
 
 {{trip-photo-pano:panorama-photo-id}}
 
@@ -123,7 +125,9 @@ Delete this section before publication. Use the [authoring guide](TRIP-AUTHORING
 - [ ] Check the manifest at `src/content/trips/[trip-id].json`.
 - [ ] Check each hero, photo, gallery, stop, and track reference.
 - [ ] Compare manifest track IDs with the route GeoJSON.
-- [ ] Verify photo dimensions and alt text.
+- [ ] Verify photo dimensions.
+- [ ] Write a nonempty alt description for each photo.
+- [ ] Use captions for information outside the visible content.
 - [ ] Verify captions and dates.
 - [ ] Upload the processed assets.
 - [ ] Confirm that each public asset URL is available.
