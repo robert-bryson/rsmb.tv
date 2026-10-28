@@ -116,8 +116,8 @@ A fourth test retains malformed tags in code examples.
 Ordinary post imports disable trip expansion and escape shortcode text for literal display.
 Two compilation regressions and a complete sync test check that boundary.
 
-The final strict import now stops on this source typo.
-The source Google Doc must use `{{trip-gallery:2024-05-18-2}}` before publication.
+The initial strict import stopped on this source typo.
+The source Google Doc needed `{{trip-gallery:2024-05-18-2}}` before publication.
 The manifest already uses that valid ID and was not rewritten by this review.
 
 ### P3: Page coverage depended on locally generated content
@@ -174,7 +174,8 @@ The development-status component now has 100% branch coverage from fixed scenari
 | Dependency audit | Zero reported vulnerabilities |
 | All three checked-in trip manifest schemas | Passed |
 | Production build before malformed-tag enforcement | Passed with fresh Google content |
-| Final production build | Correctly rejected the malformed Google Doc tag |
+| Production build at initial review close | Correctly rejected the malformed Google Doc tag |
+| Production build after source correction | Passed |
 
 Five new photo unit cases failed before their fixes.
 The placeholder browser regression failed in Chromium and WebKit before its correction.
@@ -184,6 +185,13 @@ Three malformed-tag regressions also failed before the importer correction.
 The complete browser run uses a production fixture build and synthetic content.
 It passed after the photo corrections.
 The later importer correction passed its conversion and compilation tests; it does not change fixture rendering.
+
+### Source correction follow-up
+
+The author corrected the source shortcode to `{{trip-gallery:2024-05-18-2}}`.
+A fresh Google export imported successfully and updated the Boise MDX file.
+The complete `npm run build` command then passed, including normal content sync and TypeScript checks.
+The resolved Boise publication tasks were removed from `TODO.md`.
 
 ## Browser run limits
 
@@ -210,7 +218,7 @@ The user's Boise gallery edits were preserved.
 The user corrected an invalid gallery ID during the review.
 A fresh Google import and complete production build then passed, before the later malformed-tag check was added.
 The imported story includes the panorama shortcode and the revised May 12 gallery references.
-The remaining source shortcode correction is recorded in `TODO.md`.
+The source shortcode correction passed the follow-up checks recorded above.
 
 No direct security defect was found in the reviewed changes.
 The importer retains manifest-reference checks and literal code examples.

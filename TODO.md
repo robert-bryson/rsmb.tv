@@ -6,11 +6,6 @@ Use the [review index](docs/README.md) for dated findings and test results.
 
 ## Publication blockers
 
-### Boise trip
-
-- [ ] Change the source Google Doc tag to `{{trip-gallery:2024-05-18-2}}`. Replace its underscore with a hyphen.
-- [ ] Run `npm run build` after that correction. The importer now rejects the malformed source tag.
-
 ### Kalaloch trip
 
 The manifest supports local preview. The public route and hero photo returned HTTP 403 on 2026-10-01.
