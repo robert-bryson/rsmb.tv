@@ -7,9 +7,44 @@ import { useTripStory } from '../TripStoryContext';
 
 interface TripPhotoProps {
     photoId: string;
+    layout?: 'default' | 'pano';
     priority?: boolean;
     linked?: boolean;
     className?: string;
+}
+
+function TripPhotoImage({ photo, sizes, priority, describedBy }: {
+    photo: TripPhotoData;
+    sizes: string;
+    priority: boolean;
+    describedBy?: string;
+}) {
+    const [failed, setFailed] = useState(false);
+    if (failed) {
+        return (
+            <div role="img" aria-label={photo.alt} aria-describedby={describedBy}
+                className="relative text-center text-sm text-zinc-400"
+                style={{ aspectRatio: `${photo.width} / ${photo.height}` }}>
+                <span className="absolute inset-0 grid place-items-center p-2">Photo unavailable</span>
+            </div>
+        );
+    }
+    return (
+        <img
+            src={photo.src}
+            onError={() => setFailed(true)}
+            srcSet={photo.srcSet}
+            sizes={sizes}
+            width={photo.width}
+            height={photo.height}
+            alt={photo.alt}
+            loading={priority ? 'eager' : 'lazy'}
+            fetchPriority={priority ? 'high' : 'auto'}
+            decoding="async"
+            className="block h-auto w-full"
+            aria-describedby={describedBy}
+        />
+    );
 }
 
 export function TripPhotoFigure({
@@ -25,28 +60,18 @@ export function TripPhotoFigure({
     linked?: boolean;
     className?: string;
 }) {
-    const [failedSrc, setFailedSrc] = useState<string>();
-    const failed = failedSrc === photo.src;
     const captionId = `trip-photo-caption-${useId().replaceAll(':', '')}`;
     const caption = photo.caption?.trim() || photo.alt;
     const hasSupplementalCaption = Boolean(photo.caption?.trim() || photo.location?.trim());
     const { dismissed, captionInteractionProps } = useDismissibleCaption();
-    const image = failed ? (
-        <div role="img" aria-label={photo.alt} className="grid min-h-40 place-items-center p-6 text-center text-sm text-zinc-400" style={{ aspectRatio: `${photo.width} / ${photo.height}` }}>Photo unavailable</div>
-    ) : (
-        <img
-            src={photo.src}
-            onError={() => setFailedSrc(photo.src)}
-            srcSet={photo.srcSet}
+    const image = (
+        <TripPhotoImage
+            // A new responsive source selection must get a fresh load attempt, even after an earlier failure.
+            key={JSON.stringify([photo.src, photo.srcSet, sizes])}
+            photo={photo}
             sizes={sizes}
-            width={photo.width}
-            height={photo.height}
-            alt={photo.alt}
-            loading={priority ? 'eager' : 'lazy'}
-            fetchPriority={priority ? 'high' : 'auto'}
-            decoding="async"
-            className="block h-auto w-full"
-            aria-describedby={!linked && hasSupplementalCaption ? captionId : undefined}
+            priority={priority}
+            describedBy={!linked && hasSupplementalCaption ? captionId : undefined}
         />
     );
 
@@ -78,7 +103,7 @@ export function TripPhotoFigure({
     );
 }
 
-export function TripPhoto({ photoId, className = '', ...props }: TripPhotoProps) {
+export function TripPhoto({ photoId, layout = 'default', className = '', ...props }: TripPhotoProps) {
     const galleryRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         if (!galleryRef.current || props.linked === false) return;
@@ -88,5 +113,11 @@ export function TripPhoto({ photoId, className = '', ...props }: TripPhotoProps)
     const { photos } = useTripStory();
     const photo = photos.get(photoId);
     if (!photo) throw new Error(`Unknown trip photo: ${photoId}`);
-    return <div ref={galleryRef}><TripPhotoFigure photo={photo} {...props} className={`trip-breakout my-8 ${className}`} /></div>;
+    return (
+        <div ref={galleryRef}>
+            <TripPhotoFigure photo={photo} {...props}
+                sizes={layout === 'pano' ? '100vw' : undefined}
+                className={`${layout === 'pano' ? 'trip-photo-pano' : 'trip-breakout'} my-8 ${className}`} />
+        </div>
+    );
 }

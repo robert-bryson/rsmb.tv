@@ -166,12 +166,18 @@ The post browser tests use a fixed Google Docs fixture in `tests/fixtures`.
 A compilation test compares the fixture MDX with the importer output.
 Browser tests check subtitle styles at phone and desktop widths, unique heading IDs, reload, and browser history.
 These tests do not require Google access or published trip assets.
+Page unit tests use fixed post metadata and trip summaries.
+Development-status tests use fixed publication, source, and asset states.
+These cases must not depend on a previous Google content import.
 ESLint and the development watcher exclude generated coverage and browser reports.
 Report writes must not trigger application reloads during browser checks.
 
 `npm run test:trips:browser` builds fixed test content for production and starts preview on port 4175.
 It checks desktop and phone layouts, photo viewer focus, failed assets, and unavailable WebGL.
 It also checks image selection, JavaScript size limits, article metadata, return links, and link colors.
+Panorama checks measure page edges, image proportions, and horizontal overflow at phone, desktop, and wide desktop widths.
+They also check reserved image height after failure and keyboard focus for linked and unlinked photos.
+Unit tests check failed-image recovery after changes to responsive sources or image slot width.
 Set `PLAYWRIGHT_WEBKIT=1` to include the iPhone WebKit project. CI enables this project.
 Install the browser files and host libraries before you run WebKit:
 

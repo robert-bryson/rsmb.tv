@@ -6,7 +6,7 @@ import { TripStoryProvider } from '../features/trips/TripStoryProvider';
 import { TripFacts } from '../features/trips/components/TripFacts';
 import { TripGallery } from '../features/trips/components/TripGallery';
 import { TripHeroGallery } from '../features/trips/components/TripHeroGallery';
-import { TripPhoto } from '../features/trips/components/TripPhoto';
+import { TripPhoto, TripPhotoFigure } from '../features/trips/components/TripPhoto';
 import { parseTripManifest } from '../features/trips/tripManifests';
 import type { TripManifest } from '../features/trips/types';
 
@@ -109,6 +109,61 @@ describe('trip story primitives', () => {
         expect(figure).toHaveAttribute('data-caption-dismissed', 'true');
         fireEvent.mouseLeave(figure!);
         expect(figure).not.toHaveAttribute('data-caption-dismissed');
+    });
+
+    it('preserves panorama dimensions, responsive sources, and captions in the viewer trigger and failure state', () => {
+        const photo = { ...manifest.photos[1], width: 3200, height: 560,
+            srcSet: '/camp-960.webp 960w, /camp-3200.webp 3200w' };
+        renderStory(<TripPhoto photoId="camp" layout="pano" />, {
+            ...manifest, photos: [manifest.photos[0], photo],
+        });
+        const image = screen.getByRole('img', { name: photo.alt });
+        expect(image).toHaveAttribute('width', '3200');
+        expect(image).toHaveAttribute('height', '560');
+        expect(image).toHaveAttribute('sizes', '100vw');
+        expect(image).toHaveAttribute('srcset', photo.srcSet);
+        expect(image).toHaveAttribute('loading', 'lazy');
+        expect(image.closest('a')).toHaveAttribute('data-pswp-width', '3200');
+        expect(image.closest('a')).toHaveAccessibleDescription(photo.caption);
+        fireEvent.error(image);
+        expect(screen.getByRole('img', { name: photo.alt })).toHaveStyle({ aspectRatio: '3200 / 560' });
+        expect(screen.getByText('Photo unavailable')).toBeVisible();
+    });
+
+    it.each([
+        { name: 'fallback URL', source: { src: '/repaired.webp' }, sizes: '50vw' },
+        { name: 'responsive sources', source: { srcSet: '/repaired-3200.webp 3200w' }, sizes: '50vw' },
+        { name: 'image slot', source: {}, sizes: '100vw' },
+    ])('retries failed images when the $name changes, including a return to the original sources', ({ source, sizes }) => {
+        const photo = { ...manifest.photos[1], srcSet: '/camp-960.webp 960w' };
+        const figure = (updatedPhoto = photo, updatedSizes = '50vw') => (
+            <TripPhotoFigure photo={updatedPhoto} sizes={updatedSizes} />
+        );
+        const { rerender } = render(figure());
+        fireEvent.error(screen.getByRole('img', { name: photo.alt }));
+        rerender(figure());
+        expect(screen.getByText('Photo unavailable')).toBeVisible();
+
+        rerender(figure({ ...photo, ...source }, sizes));
+        expect(screen.queryByText('Photo unavailable')).not.toBeInTheDocument();
+        expect(screen.getByRole('img', { name: photo.alt })).toHaveAttribute('srcset', source.srcSet ?? photo.srcSet);
+        rerender(figure());
+        expect(screen.queryByText('Photo unavailable')).not.toBeInTheDocument();
+        expect(screen.getByRole('img', { name: photo.alt })).toHaveAttribute('src', photo.src);
+    });
+
+    it.each(['default', 'pano'] as const)('retains the accessible caption when an unlinked %s photo fails', layout => {
+        renderStory(<TripPhoto photoId="camp" layout={layout} linked={false} priority />);
+        const image = screen.getByRole('img', { name: manifest.photos[1].alt });
+        expect(image).toHaveAccessibleDescription(manifest.photos[1].caption);
+        expect(image).toHaveAttribute('loading', 'eager');
+        expect(image).toHaveAttribute('fetchpriority', 'high');
+        expect(image.closest('figure')).toHaveAttribute('tabindex', '0');
+        expect(image.closest('a')).toBeNull();
+
+        fireEvent.error(image);
+        expect(screen.getByRole('img', { name: manifest.photos[1].alt }))
+            .toHaveAccessibleDescription(manifest.photos[1].caption);
     });
 
     it('makes the hero a lightbox trigger containing every trip photo', () => {

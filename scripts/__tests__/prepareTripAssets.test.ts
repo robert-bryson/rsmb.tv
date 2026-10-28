@@ -1,5 +1,6 @@
 // @vitest-environment node
 import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -107,6 +108,54 @@ describe('prepare trip assets', () => {
             date: '2026-01-01',
         }]);
         expect(metadata.route).toMatchObject({ distanceKilometers: 14.4, distanceMiles: 9 });
+    });
+
+    it.each([
+        { width: 4000, height: 800, expected: [480, 960, 1600, 2400, 3200] },
+        { width: 2700, height: 900, expected: [480, 960, 1600, 2400, 2700] },
+        { width: 900, height: 300, expected: [480, 900] },
+        { width: 4000, height: 1600, expected: [480, 960, 1600, 2400, 3200] },
+        { width: 4000, height: 1601, expected: [480, 960, 1600] },
+    ])('prepares suitable widths without enlarging a $width × $height source', async ({ width, height, expected }) => {
+        const root = createTripDirectory();
+        await sharp({ create: { width, height, channels: 3, background: '#405b6b' } })
+            .jpeg().toFile(path.join(root, 'photos', 'selects', 'landscape.jpg'));
+        const report = await prepareTripAssets({ tripId: 'test-trip', source: root });
+        expect(report.photos[0].derivatives.map(image => image.width)).toEqual(expected);
+        for (const derivative of report.photos[0].derivatives) {
+            const image = await sharp(path.join(root, 'photos', 'processed', derivative.filename)).metadata();
+            expect(image.width).toBe(derivative.width);
+            expect(image.height).toBe(Math.round(derivative.width * height / width));
+            expect(image.width).toBeLessThanOrEqual(width);
+        }
+    });
+
+    it('uses oriented dimensions when identifying a panorama', async () => {
+        const root = createTripDirectory();
+        await sharp({ create: { width: 800, height: 4000, channels: 3, background: '#405b6b' } })
+            .withMetadata({ orientation: 6 }).jpeg().toFile(path.join(root, 'photos', 'selects', 'rotated.jpg'));
+        const report = await prepareTripAssets({ tripId: 'test-trip', source: root });
+        const largest = report.photos[0].derivatives.at(-1)!;
+        expect(largest).toMatchObject({ width: 3200, height: 640 });
+        expect((await sharp(path.join(root, 'photos', 'processed', largest.filename)).metadata()).orientation)
+            .toBeUndefined();
+    });
+
+    it('keeps ordinary photo fingerprints compatible with the original pipeline settings', async () => {
+        const root = createTripDirectory();
+        const input = await sharp({ create: { width: 1800, height: 1200, channels: 3, background: '#405b6b' } })
+            .jpeg().toBuffer();
+        fs.writeFileSync(path.join(root, 'photos', 'selects', 'camp.jpg'), input);
+        // This is the pre-panorama cache contract. Changing it invalidates published ordinary-photo URLs.
+        const previousFingerprint = createHash('sha256').update(input).update(JSON.stringify({
+            version: 2, quality: 84, widths: [480, 960, 1600], sharp: sharp.versions.sharp,
+        })).digest('hex').slice(0, 12);
+
+        const report = await prepareTripAssets({ tripId: 'test-trip', source: root });
+        expect(report.photos[0].fingerprint).toBe(previousFingerprint);
+        expect(report.photos[0].derivatives.map(image => image.filename)).toEqual(
+            [480, 960, 1600].map(width => `camp-${previousFingerprint}-${width}.webp`),
+        );
     });
 
     it('reuses unchanged derivatives and versions changed sources without deleting published files', async () => {

@@ -460,6 +460,7 @@ describe('Google export helpers', () => {
             '{{trip-map:track:outbound}}',
             '{{trip-map:day:coastbound}}',
             '{{trip-photo:camp-at-dusk}}',
+            '{{trip-photo-pano:mountain-view}}',
             '{{trip-gallery:highlights}}',
         ].join('\n\n');
 
@@ -469,6 +470,7 @@ describe('Google export helpers', () => {
             '<TripMap trackId="outbound" />',
             '<TripMap dayId="coastbound" />',
             '<TripPhoto photoId="camp-at-dusk" />',
+            '<TripPhoto photoId="mountain-view" layout="pano" />',
             '<TripGallery galleryId="highlights" />',
         ].join('\n\n'));
     });
@@ -482,6 +484,7 @@ describe('Google export helpers', () => {
         ['{{trip-map:missing-stop}}', /unknown stop "missing-stop"/],
         ['{{trip-map:day:missing-day}}', /unknown day "missing-day"/],
         ['{{trip-photo:missing-photo}}', /unknown photo "missing-photo"/],
+        ['{{trip-photo-pano:missing-photo}}', /unknown photo "missing-photo"/],
         ['{{trip-gallery:missing-gallery}}', /unknown gallery "missing-gallery"/],
     ])('rejects a shortcode reference that is absent from the manifest', (shortcode, expectedError) => {
         const manifest = {
@@ -578,6 +581,21 @@ const validTripManifest = {
 };
 
 describe('syncBlogPosts', () => {
+    it('imports ordinary posts with literal shortcode text as compilable MDX', async () => {
+        const repoRoot = createTempDir();
+        const csv = [
+            'slug,title,date,description,tags,google_doc_id,published',
+            'syntax-notes,Syntax notes,2026-04-30,Shortcode examples,maps,doc_123,true',
+        ].join('\n');
+        await syncBlogPosts({ repoRoot, sheetId: 'test_sheet', today, fetchImpl: createFetch(csv, {
+            doc_123: '<p>{{trip-gallery:2024-05-18_2}}</p><p>{{trip-photo-pano:scene}}</p>',
+        }) });
+        const mdx = fs.readFileSync(path.join(repoRoot, 'src/content/blog/syntax-notes.mdx'), 'utf8');
+        const { compile } = await import('@mdx-js/mdx');
+        await expect(compile(mdx)).resolves.toHaveProperty('value');
+        expect(mdx).not.toContain('<TripPhoto');
+    });
+
     it('rejects trip posts without a matching readable manifest', () => {
         const repoRoot = createTempDir();
         const post = {

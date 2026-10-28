@@ -159,8 +159,10 @@ export function Layout({ children }: LayoutProps) {
       </header>
 
       {/* Main content */}
-      <main id="main-content" className="max-w-3xl mx-auto px-6 py-12 flex-1 w-full">
-        {children}
+      <main id="main-content" className="site-content flex-1 w-full">
+        <div className="max-w-3xl mx-auto px-6 py-12 w-full">
+          {children}
+        </div>
       </main>
 
       <button

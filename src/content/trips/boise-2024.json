@@ -911,13 +911,12 @@
             "boise-2024-05-11-butter-creek-y",
             "boise-2024-05-11-blue-mountains-afternoon",
             "boise-2024-05-11-battle-mt-meadow",
-            "boise-2024-05-11-battle-mt-moto",
-            "boise-2024-05-11-forest-road"
+            "boise-2024-05-11-battle-mt-moto"
         ],
         "2024-05-11-4": [
+            "boise-2024-05-11-forest-road",
             "boise-2024-05-11-moto-sunset",
-            "boise-2024-05-11-pond-sunset",
-            "boise-2024-05-11-stars"
+            "boise-2024-05-11-pond-sunset"
         ],
         "2024-05-12-1": [
             "boise-2024-05-12-meadow-camp",
@@ -930,20 +929,21 @@
             "boise-2024-05-12-view-south",
             "boise-2024-05-12-larch",
             "boise-2024-05-12-flooded-meadow",
-            "boise-2024-05-12-map",
+            "boise-2024-05-12-map"
+        ],
+        "2024-05-12-3": [
             "boise-2024-05-12-snowy-road",
             "boise-2024-05-12-snowy-mts",
             "boise-2024-05-12-creek",
-            "boise-2024-05-12-mailboxes",
-            "boise-2024-05-12-wallowa-barn",
-            "boise-2024-05-12-barn-and-mountains"
-        ],
-        "2024-05-12-3": [
-            "boise-2024-05-12-wagon",
-            "boise-2024-05-12-motorcycle-and-mountains",
-            "boise-2024-05-12-strawberries-pano"
+            "boise-2024-05-12-mailboxes"
         ],
         "2024-05-12-4": [
+            "boise-2024-05-12-wallowa-barn",
+            "boise-2024-05-12-barn-and-mountains",
+            "boise-2024-05-12-wagon",
+            "boise-2024-05-12-motorcycle-and-mountains"
+        ],
+        "2024-05-12-5": [
             "boise-2024-05-12-cattle-and-mountains",
             "boise-2024-05-12-vale-66",
             "boise-2024-05-12-gravel-road-clouds",
@@ -980,7 +980,9 @@
         "2024-05-18": [
             "boise-2024-05-18-forest-camp",
             "boise-2024-05-18-red-classic-car",
-            "boise-2024-05-18-halfway-sign",
+            "boise-2024-05-18-halfway-sign"
+        ],
+        "2024-05-18-2": [
             "boise-2024-05-18-high-desert-overlook",
             "boise-2024-05-18-snowy-mountain-road",
             "boise-2024-05-18-clouds-over-river",

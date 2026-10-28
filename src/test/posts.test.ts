@@ -1,15 +1,19 @@
 import { describe, it, expect, vi } from 'vitest';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { getAllPosts, getPostBySlug } from '../content/posts';
 import { filterPostsByTag, getAllBlogTags } from '../content/blogTags';
 
 vi.mock('virtual:post-content', () => ({
     metadata: [
-        { slug: 'boise', title: 'Boise', date: '2024-05-19', description: 'Trip', tags: ['motorcycle'], format: 'trip', tripId: 'boise-2024' },
+        { slug: 'boise', title: 'Boise', date: '2024-05-19', description: 'Trip', tags: ['motorcycle'], format: 'trip', tripId: 'boise-2024',
+            series: { id: 'rides', title: 'Rides', order: 1 },
+            development: { published: false, rowNumber: 2, issues: ['Missing content'], contentAvailable: false } },
         { slug: 'already-tagged', title: 'Tagged', date: '2024-05-18', description: 'Trip', tags: ['honda-cb500x'], format: 'trip', tripId: 'boise-2024' },
         { slug: 'no-motorcycle', title: 'Other trip', date: '2024-05-17', description: 'Trip', tags: [], format: 'trip', tripId: 'other' },
         { slug: 'writing', title: 'Writing', date: '2024-05-16', description: 'Post', tags: [], tripId: 'boise-2024' },
     ],
-    mdxLoaders: {},
+    mdxLoaders: { './blog/writing.mdx': async () => ({ default: () => 'Writing body' }) },
 }));
 
 vi.mock('virtual:trip-content', () => ({
@@ -65,6 +69,24 @@ describe('generated post registry schema', () => {
 });
 
 describe('posts registry', () => {
+    it('retains series and development metadata for navigation and publication status', () => {
+        expect(getAllPosts().find(post => post.slug === 'boise')).toMatchObject({
+            series: { id: 'rides', title: 'Rides', order: 1 },
+            development: { published: false, rowNumber: 2, issues: ['Missing content'], contentAvailable: false },
+        });
+    });
+
+    it('loads the generated article body', async () => {
+        const content = await getPostBySlug('writing')!.loadComponent();
+        expect(renderToStaticMarkup(createElement(content.default))).toBe('Writing body');
+    });
+
+    it('reports the affected slug when generated content is absent', async () => {
+        const content = await getPostBySlug('boise')!.loadComponent();
+        expect(() => renderToStaticMarkup(createElement(content.default)))
+            .toThrow('No MDX file found for slug: boise');
+    });
+
     it('getAllPosts returns metadata without Component', () => {
         const all = getAllPosts();
         expect(Array.isArray(all)).toBe(true);

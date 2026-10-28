@@ -60,10 +60,10 @@
     },
     {
       "id": "photo-4",
-      "src": "/test-trip/photo-4-1600.svg",
-      "srcSet": "/test-trip/photo-4-480.svg 480w, /test-trip/photo-4-960.svg 960w, /test-trip/photo-4-1600.svg 1600w",
-      "width": 1600,
-      "height": 1000,
+      "src": "/test-trip/photo-4-3200.svg",
+      "srcSet": "/test-trip/photo-4-480.svg 480w, /test-trip/photo-4-960.svg 960w, /test-trip/photo-4-1600.svg 1600w, /test-trip/photo-4-2400.svg 2400w, /test-trip/photo-4-3200.svg 3200w",
+      "width": 3200,
+      "height": 560,
       "alt": "Coast photograph 4",
       "caption": "A view from stop 4."
     },

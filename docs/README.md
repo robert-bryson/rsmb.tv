@@ -23,6 +23,8 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-10-27 | [Panorama review and photo failure fixes](reviews/2026-10-27-trip-photo-review.md) |
+| 2026-10-27 | [Trip photo panorama research](reviews/2026-10-27-trip-photo-panorama-research.md) |
 | 2026-10-27 | [Trip map interaction review](reviews/2026-10-27-trip-map-interaction-review.md) |
 | 2026-10-27 | [Trip map review and regression fixes](reviews/2026-10-27-trip-map-review.md) |
 | 2026-10-27 | [Trip day map research](reviews/2026-10-27-trip-day-map-research.md) |

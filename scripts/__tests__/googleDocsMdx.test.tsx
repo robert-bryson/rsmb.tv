@@ -153,6 +153,46 @@ describe('Google Docs to rendered MDX', () => {
             .toThrow('unknown gallery "missing"');
     });
 
+    it.each([
+        '{{trip-gallery:2024-05-18_2}}',
+        '{{trip-photo-pano:Uppercase}}',
+        '{{trip-photo:has space}}',
+    ])('rejects malformed standalone shortcodes after Google formatting: %s', shortcode => {
+        const markdown = convertHtmlToMarkdown(`<p><strong><mark>${shortcode}</mark></strong></p>`);
+        expect(() => expandTripShortcodes(markdown, { format: 'trip', tripId: 'example' }, {}))
+            .toThrow(`Unsupported trip shortcode: ${shortcode}`);
+    });
+
+    it('keeps malformed shortcode examples literal in code', async () => {
+        const shortcode = '{{trip-gallery:2024-05-18_2}}';
+        const markdown = convertHtmlToMarkdown(`<p><code>${shortcode}</code></p><pre><code>${shortcode}</code></pre>`);
+        const expanded = expandTripShortcodes(markdown, { format: 'trip' }, {});
+        expect(expanded).toBe(markdown);
+        const { default: Content } = await evaluate(expanded, runtime);
+        expect(renderToStaticMarkup(<Content />)).toContain(`<code>${shortcode}</code>`);
+    });
+
+    it.each([
+        '{{trip-gallery:2024-05-18_2}}',
+        '{{trip-photo-pano:scene}}',
+    ])('renders standalone shortcode text literally in ordinary posts: %s', async shortcode => {
+        const markdown = convertHtmlToMarkdown(`<p>${shortcode}</p>`, { tripShortcodes: false });
+        const expanded = expandTripShortcodes(markdown, { format: 'post' });
+        const { default: Content } = await evaluate(expanded, runtime);
+        expect(renderToStaticMarkup(<Content />)).toBe(`<p>${shortcode}</p>`);
+    });
+
+    it('renders a formatted panorama shortcode with its photo reference and layout', async () => {
+        const markdown = convertHtmlToMarkdown('<p><strong><mark>{{trip-photo-pano:mountains}}</mark></strong></p>');
+        const expanded = expandTripShortcodes(markdown, { format: 'trip', tripId: 'coast' }, {
+            photos: [{ id: 'mountains' }],
+        });
+        const { default: Content } = await evaluate(expanded, runtime);
+        expect(renderToStaticMarkup(<Content components={{
+            TripPhoto: ({ photoId, layout }: { photoId: string; layout: string }) => <figure data-photo={photoId} data-layout={layout} />,
+        }} />)).toBe('<figure data-photo="mountains" data-layout="pano"></figure>');
+    });
+
     it('preserves highlighted prose and inline tags as literal text', async () => {
         const markdown = convertHtmlToMarkdown('<p><mark>Remember {{trip-gallery:highlights}}</mark></p>');
         const expanded = expandTripShortcodes(markdown, { format: 'trip' });
@@ -163,6 +203,7 @@ describe('Google Docs to rendered MDX', () => {
 
     it.each([
         '<p><code>{{trip-gallery:missing}}</code></p>',
+        '<p><code>{{trip-photo-pano:missing}}</code></p>',
         '<pre><code>{{trip-gallery:missing}}\n{{trip-unknown}}</code></pre>',
         '<p>```text</p><p><mark>{{trip-gallery:missing}}</mark></p><p>{{trip-unknown}}</p><p>```</p>',
     ])('keeps shortcode examples literal in code: %s', async source => {
@@ -170,7 +211,7 @@ describe('Google Docs to rendered MDX', () => {
         const expanded = expandTripShortcodes(markdown, { format: 'trip' }, { galleries: {} });
         expect(expanded).toBe(markdown);
         const { default: Content } = await evaluate(expanded, runtime);
-        expect(renderToStaticMarkup(<Content />)).toContain('{{trip-gallery:missing}}');
+        expect(renderToStaticMarkup(<Content />)).toMatch(/\{\{trip-(?:gallery|photo-pano):missing\}\}/);
     });
 
 });

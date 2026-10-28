@@ -14,6 +14,7 @@ import { copyTripAsset } from './copy-trip-asset.js';
 const TRIP_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const PHOTO_EXTENSIONS = new Set(['.avif', '.heic', '.heif', '.jpeg', '.jpg', '.png', '.tif', '.tiff', '.webp']);
 const WIDTHS = [480, 960, 1600];
+const PANORAMA_WIDTHS = [...WIDTHS, 2400, 3200];
 export const WEBP_QUALITY = 84;
 export const PHOTO_PIPELINE_VERSION = 2;
 export const DEFAULT_ROUTE_SIMPLIFICATION_TOLERANCE_METERS = 5;
@@ -142,15 +143,19 @@ async function preparePhotos(tripRoot, force, filenames) {
 
     for (const { filename, id } of selectedPhotos) {
         const inputPath = path.join(selectsPath, filename);
-        const fingerprint = createHash('sha256').update(await fs.readFile(inputPath)).update(JSON.stringify({ version: PHOTO_PIPELINE_VERSION, quality: WEBP_QUALITY, widths: WIDTHS, sharp: sharp.versions.sharp })).digest('hex').slice(0, 12);
         const source = sharp(inputPath, { failOn: 'warning' }).rotate();
         const metadata = await source.metadata();
         const orientedWidth = metadata.autoOrient?.width ?? metadata.width;
-        if (!orientedWidth) throw new Error(`Could not read dimensions for ${filename}.`);
+        const orientedHeight = metadata.autoOrient?.height ?? metadata.height;
+        if (!orientedWidth || !orientedHeight) throw new Error(`Could not read dimensions for ${filename}.`);
+        // Wide sources need enough resolution for a full-page panorama. Keep
+        // ordinary photo settings (and their existing fingerprints) unchanged.
+        const widths = orientedWidth / orientedHeight >= 2.5 ? PANORAMA_WIDTHS : WIDTHS;
+        const fingerprint = createHash('sha256').update(await fs.readFile(inputPath)).update(JSON.stringify({ version: PHOTO_PIPELINE_VERSION, quality: WEBP_QUALITY, widths, sharp: sharp.versions.sharp })).digest('hex').slice(0, 12);
 
         const derivatives = [];
-        for (const width of WIDTHS.filter((candidate) => candidate < orientedWidth).concat(orientedWidth)) {
-            const outputWidth = Math.min(width, 1600);
+        for (const width of widths.filter((candidate) => candidate < orientedWidth).concat(orientedWidth)) {
+            const outputWidth = Math.min(width, widths.at(-1));
             if (derivatives.some((item) => item.width === outputWidth)) continue;
 
             const outputName = `${id}-${fingerprint}-${outputWidth}.webp`;

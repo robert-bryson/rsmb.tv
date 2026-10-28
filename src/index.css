@@ -177,6 +177,33 @@ u {
   transform: translateX(-50%);
 }
 
+/* Measure the available page width, excluding a classic scrollbar. Keep the
+   header and fixed page controls outside this query container. */
+.site-content {
+  container-type: inline-size;
+}
+
+.trip-photo-pano {
+  --photo-focus-outline-offset: -3px;
+  width: 100%;
+}
+
+@supports (container-type: inline-size) and (width: 1cqw) {
+  .site-content .trip-photo-pano {
+    width: 100cqw;
+    margin-inline: calc(50% - 50cqw);
+  }
+}
+
+.trip-photo-pano .image-caption-frame {
+  border-inline-width: 0;
+  border-radius: 0;
+}
+
+.trip-photo-pano > .image-caption-overlay:not(.sr-only) {
+  padding-inline: 1.5rem;
+}
+
 .trip-day-button {
   display: inline-flex;
   min-height: 44px;
@@ -276,9 +303,10 @@ u {
   cursor: zoom-in;
 }
 
-.image-caption-frame:has(>a:focus-visible) {
+.image-caption-frame:has(>a:focus-visible),
+.image-caption-figure:focus-visible .image-caption-frame {
   outline: 2px solid #a78bfa;
-  outline-offset: 3px;
+  outline-offset: var(--photo-focus-outline-offset, 3px);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -335,11 +363,6 @@ u {
 
   .image-caption-overlay>span {
     color: #d4d4d8;
-  }
-
-  .image-caption-figure:focus-visible .image-caption-frame {
-    outline: 2px solid #a78bfa;
-    outline-offset: 3px;
   }
 }
 

@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { screen } from '@testing-library/react';
 import { Home } from '../pages/Home';
 import { About } from '../pages/About';
@@ -9,6 +9,23 @@ import { featuredProjects, projects } from '../content/projects';
 import { getAllPosts } from '../content/posts';
 import { getJsonLdByType } from './helpers/jsonLd';
 import { renderWithRouter } from './helpers/router';
+
+vi.mock('virtual:post-content', () => ({
+    metadata: [
+        { slug: 'test-trip', title: 'Test trip', date: '2024-01-02', description: 'Synthetic trip.', tags: ['coast'], format: 'trip', tripId: 'test-trip' },
+        { slug: 'test-post', title: 'Test post', date: '2024-01-01', description: 'Synthetic writing.', tags: ['maps'] },
+    ],
+    mdxLoaders: {},
+}));
+
+vi.mock('virtual:trip-content', () => ({
+    summaries: {
+        'test-trip': {
+            distanceMiles: 100, ridingDays: 2,
+            hero: { src: '/test-hero.webp', width: 1600, height: 1000, alt: 'Synthetic coast.' },
+        },
+    },
+}));
 
 describe('Home page', () => {
     it('renders greeting', () => {

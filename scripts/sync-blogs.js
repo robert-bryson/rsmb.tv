@@ -1035,7 +1035,7 @@ function trimCodeFencePadding(markdown) {
     });
 }
 
-function createTurndownService() {
+function createTurndownService(tripShortcodes = true) {
     const service = new TurndownService({
         headingStyle: 'atx',
         codeBlockStyle: 'fenced',
@@ -1044,10 +1044,11 @@ function createTurndownService() {
 
     // Google Docs text is content, not JavaScript. Code nodes bypass this escape hook.
     const escapeMarkdown = service.escape.bind(service);
+    const bracePattern = tripShortcodes ? /\{\{trip-[a-z0-9:-]+\}\}|[{}]/g : /[{}]/g;
     service.escape = (text) => escapeMarkdown(text)
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
-        .replace(/\{\{trip-[a-z0-9:-]+\}\}|[{}]/g, (match) => (
+        .replace(bracePattern, (match) => (
             match.startsWith('{{trip-') ? match : `\\${match}`
         ));
 
@@ -1086,12 +1087,13 @@ function createTurndownService() {
     });
 
     service.addRule('tripShortcodeParagraph', {
-        filter: (node) => node.nodeName === 'P'
+        filter: (node) => tripShortcodes && node.nodeName === 'P'
             && !node.closest('pre, code')
             && !node.querySelector('code, img, br')
-            && /^\{\{trip-[a-z0-9:-]+\}\}$/.test(normalizedTextContent(node).trim()),
+            && /^\{\{trip-[^{}\r\n]+\}\}$/.test(normalizedTextContent(node).trim()),
         // Read the entire paragraph so highlighting, emphasis, and split Docs
-        // spans cannot escape or interrupt a standalone shortcode.
+        // spans cannot escape or interrupt a standalone shortcode. Keep malformed
+        // IDs intact so expansion rejects them instead of publishing literal tags.
         replacement: (_content, node) => `\n\n${normalizedTextContent(node).trim()}\n\n`,
     });
 
@@ -1119,7 +1121,7 @@ function escapeMdxModuleStatements(markdown) {
     ));
 }
 
-export function convertHtmlToMarkdown(html, { turndownService = createTurndownService() } = {}) {
+export function convertHtmlToMarkdown(html, { tripShortcodes = true, turndownService = createTurndownService(tripShortcodes) } = {}) {
     const markdown = normalizeTypedCodeFences(turndownService
         .turndown(documentBodyHtml(html))
         .replace(/\u00a0/g, ' ')
@@ -1165,8 +1167,8 @@ export function expandTripShortcodes(markdown, post, manifest) {
             .replace(/^\{\{trip-map(?::([a-z0-9]+(?:-[a-z0-9]+)*))?\}\}$/gm, (_match, stopId) => (
                 stopId ? `<TripMap stopId="${assertReference('stop', stopId, stopIds)}" />` : '<TripMap />'
             ))
-            .replace(/^\{\{trip-photo:([a-z0-9]+(?:-[a-z0-9]+)*)\}\}$/gm, (_match, photoId) => (
-                `<TripPhoto photoId="${assertReference('photo', photoId, photoIds)}" />`
+            .replace(/^\{\{trip-photo(-pano)?:([a-z0-9]+(?:-[a-z0-9]+)*)\}\}$/gm, (_match, panorama, photoId) => (
+                `<TripPhoto photoId="${assertReference('photo', photoId, photoIds)}"${panorama ? ' layout="pano"' : ''} />`
             ))
             .replace(/^\{\{trip-gallery:([a-z0-9]+(?:-[a-z0-9]+)*)\}\}$/gm, (_match, galleryId) => (
                 `<TripGallery galleryId="${assertReference('gallery', galleryId, galleryIds)}" />`
@@ -1381,7 +1383,7 @@ export async function syncBlogPosts({
         if (!entry.docId) continue;
         try {
             const html = await fetchGoogleDocHtml(entry.docId, { fetchImpl });
-            const markdown = convertHtmlToMarkdown(html);
+            const markdown = convertHtmlToMarkdown(html, { tripShortcodes: entry.post.format === TRIP_FORMAT });
             mdxFiles.push({
                 path: path.join(blogDir, `${entry.post.slug}.mdx`),
                 content: buildMdx(entry.post, markdown, tripManifests.get(entry.post.tripId)),

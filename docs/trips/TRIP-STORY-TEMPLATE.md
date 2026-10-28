@@ -67,6 +67,10 @@ Use Subtitle for a distance line below a heading. A subtitle does not appear in 
 
 {{trip-photo:scene-photo-id}}
 
+For a panorama that reaches both page edges, replace the previous shortcode with:
+
+{{trip-photo-pano:panorama-photo-id}}
+
 ## The main event
 
 [Describe the most important decision, failure, repair, weather event, road, or destination. Put the event in time order.]

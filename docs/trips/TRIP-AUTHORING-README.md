@@ -70,6 +70,7 @@ Use a code block for code examples. The importer also accepts matching code fenc
 
 Put each shortcode in its own paragraph. Highlighting, bold, and italic formatting are allowed.
 Use lowercase letters, numbers, and hyphens in IDs. Shortcodes inside code examples remain literal.
+The import rejects malformed standalone shortcodes, including IDs with underscores, spaces, or uppercase letters.
 
 | Shortcode | Result |
 | --- | --- |
@@ -78,6 +79,7 @@ Use lowercase letters, numbers, and hyphens in IDs. Shortcodes inside code examp
 | `{{trip-map:track:track-id}}` | Selected track with the other tracks dimmed |
 | `{{trip-map:day:day-id}}` | One day's colored tracks and stops, with the full route in black behind them |
 | `{{trip-photo:photo-id}}` | One photo and its caption |
+| `{{trip-photo-pano:photo-id}}` | Panorama across the full page width, with its caption and zoom viewer |
 | `{{trip-gallery:gallery-id}}` | Gallery from the manifest |
 | `{{trip-facts}}` | Another copy of the trip facts |
 
@@ -88,6 +90,30 @@ Each referenced ID must exist in the manifest.
 Each track ID must also match a `trackId` in the route GeoJSON.
 Place day map shortcodes where they support the story.
 Day definitions do not insert maps automatically.
+
+### Panoramas
+
+Put a panorama shortcode in its own paragraph between story paragraphs.
+Use the photo ID from the trip manifest. For example:
+
+```text
+{{trip-photo-pano:boise-2024-05-12-strawberries-pano}}
+```
+
+The image reaches both page edges on phones and desktops.
+It retains its original proportions without cropping or distortion.
+Select the image to open the existing zoom viewer.
+Captions use the same controls as other trip photos.
+The panorama choice applies to this placement.
+The same photo can still appear in a normal gallery.
+Do not add a panorama field to the JSON manifest.
+
+Direct MDX uses `<TripPhoto photoId="photo-id" layout="pano" />`.
+Edit the source Google Doc for imported stories.
+Blog sync replaces generated files under `src/content/blog/`.
+Keep panorama components outside lists, blockquotes, and other narrow containers.
+Browsers without CSS container units show the photo inside the text column.
+Failed photos retain their reserved dimensions and accessible caption descriptions.
 
 ## 2. Prepare photos and routes
 
@@ -117,6 +143,14 @@ It creates WebP files at quality 84. It does not enlarge the source image.
 | 480 px | Phone display and gallery thumbnail |
 | 960 px | Inline photo |
 | 1600 px | Header photo and full-screen display |
+| 2400 px | Panorama on a large display |
+| 3200 px | Panorama on a large display or a display with higher pixel density |
+
+Only sources at least 2.5 times as wide as tall receive outputs above 1600 pixels.
+The command checks this ratio after orientation correction.
+Smaller sources receive smaller outputs without enlargement.
+This rule controls prepared image sizes.
+The panorama shortcode controls page placement.
 
 A source named `Camp at Dusk.jpg` produces files such as `camp-at-dusk-012345abcdef-480.webp` (the fingerprint varies).
 Use clear, stable filenames. The command checks all photo IDs before it writes files.
@@ -131,6 +165,12 @@ The report records each file size. Review files above these limits:
 
 Copy the largest output width and height from `asset-metadata.json` into the manifest.
 Do not assume that each source can produce a 1600-pixel image.
+
+Existing 1600-pixel photos work with the panorama shortcode, but can appear soft on large displays.
+Prepare the original again to create larger panorama outputs.
+Apply the outputs with `update-trip-manifest-assets`.
+Publish the prepared assets before you deploy the updated manifest.
+See section 3 for the update command.
 
 Add alt text that describes the visible content. Add a caption that supplies other useful information.
 Do not repeat the caption in the alt text.

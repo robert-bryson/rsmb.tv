@@ -10,7 +10,8 @@ async function assets(page: Page) {
             }
         });
         const width = Number(route.request().url().match(/-(\d+)\.svg/)?.[1] ?? 1600);
-        await route.fulfill({ contentType: 'image/svg+xml', body: `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${width * .625}"><rect width="100%" height="100%" fill="#405b6b"/><path d="M0 ${width / 2} L${width} ${width / 4}" stroke="#d1d5db" stroke-width="20"/></svg>` });
+        const height = width * (route.request().url().includes('/photo-4-') ? .175 : .625);
+        await route.fulfill({ contentType: 'image/svg+xml', body: `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><rect width="100%" height="100%" fill="#405b6b"/><path d="M0 ${height * .8} L${width} ${height * .4}" stroke="#d1d5db" stroke-width="20"/></svg>` });
     });
 }
 test.beforeEach(async ({ page }) => assets(page));
@@ -110,6 +111,77 @@ test('inline and gallery photos use the viewer and return keyboard focus', async
     await page.keyboard.press('Escape');
     await expect(page.getByRole('button', { name: 'View all 6 photos' })).toBeFocused();
     expect(page.context().pages()).toHaveLength(1);
+});
+
+test('panoramas fill the usable page width without cropping or horizontal scrolling', async ({ page }) => {
+    await page.goto('/trips/coastal-test');
+    // Reserve a scrollbar gutter even on hosts that normally use overlay scrollbars.
+    await page.addStyleTag({ content: 'html { overflow-y: scroll; scrollbar-gutter: stable; }' });
+    const photo = page.getByRole('img', { name: 'Coast photograph 4' });
+    for (const width of [375, 768, 1440, 2560]) {
+        await page.setViewportSize({ width, height: 900 });
+        await photo.scrollIntoViewIfNeeded();
+        await expect.poll(() => photo.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+        const layout = await photo.evaluate(image => {
+            const rect = image.getBoundingClientRect();
+            return {
+                left: rect.left, right: rect.right, width: rect.width, height: rect.height,
+                pageWidth: document.documentElement.clientWidth,
+                scrollWidth: document.documentElement.scrollWidth,
+            };
+        });
+        expect(Math.abs(layout.left)).toBeLessThan(1);
+        expect(Math.abs(layout.right - layout.pageWidth)).toBeLessThan(1);
+        expect(layout.width / layout.height).toBeCloseTo(3200 / 560, 1);
+        expect(layout.scrollWidth).toBe(layout.pageWidth);
+        await expect(photo).toHaveAttribute('sizes', '100vw');
+        await expect(photo.locator('..')).toHaveAttribute('data-pswp-width', '3200');
+    }
+    // Browsers can retain a loaded candidate after resize. Check source
+    // selection on a fresh wide-page load, where the inline hint undersizes it.
+    await page.reload();
+    await photo.scrollIntoViewIfNeeded();
+    await expect.poll(() => photo.evaluate((image: HTMLImageElement) => image.currentSrc)).toContain('-3200.svg');
+    const trigger = photo.locator('..');
+    await trigger.focus();
+    await expect(photo.locator('../..')).toHaveCSS('outline-offset', '-3px');
+    await page.keyboard.press('Enter');
+    await expect(page.locator('.pswp--open')).toBeFocused();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.pswp--open')).toHaveCount(0);
+    await expect(trigger).toBeFocused();
+});
+
+test('failed panoramas preserve the reserved image height', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 900 });
+    await page.goto('/trips/coastal-test');
+    const photo = page.getByRole('img', { name: 'Coast photograph 4' });
+    await photo.scrollIntoViewIfNeeded();
+    await expect.poll(() => photo.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+    const frame = page.locator('.trip-photo-pano .image-caption-frame');
+    const before = (await frame.boundingBox())!;
+
+    await photo.dispatchEvent('error');
+    await expect(page.getByText('Photo unavailable')).toBeVisible();
+    const after = (await frame.boundingBox())!;
+    expect(Math.abs(after.height - before.height)).toBeLessThan(1);
+    expect(Math.abs(after.width - before.width)).toBeLessThan(1);
+    await expect(page.getByRole('link', { name: 'Coast photograph 4' }))
+        .toHaveAccessibleDescription('A view from stop 4.');
+});
+
+test('unlinked panoramas keep keyboard focus inside the page and ordinary photos keep their width', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/trips/daily-test');
+    const ordinary = page.locator('figure.image-caption-figure.trip-breakout');
+    const panorama = page.locator('figure.trip-photo-pano');
+    expect((await ordinary.boundingBox())!.width).toBeCloseTo(1152, 0);
+    expect((await panorama.boundingBox())!.width).toBe(await page.evaluate(() => document.documentElement.clientWidth));
+
+    await panorama.focus();
+    await expect(panorama).toBeFocused();
+    await expect(panorama.locator('.image-caption-frame')).toHaveCSS('outline-offset', '-3px');
+    await expect(panorama.locator('a')).toHaveCount(0);
 });
 
 test('photo navigation continues between galleries in both directions', async ({ page, isMobile }) => {

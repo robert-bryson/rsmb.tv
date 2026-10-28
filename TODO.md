@@ -6,6 +6,11 @@ Use the [review index](docs/README.md) for dated findings and test results.
 
 ## Publication blockers
 
+### Boise trip
+
+- [ ] Change the source Google Doc tag to `{{trip-gallery:2024-05-18-2}}`. Replace its underscore with a hyphen.
+- [ ] Run `npm run build` after that correction. The importer now rejects the malformed source tag.
+
 ### Kalaloch trip
 
 The manifest supports local preview. The public route and hero photo returned HTTP 403 on 2026-10-01.
@@ -34,6 +39,7 @@ Use fixed data for browser checks. Record the browser, viewport, and expected re
 - [ ] Test Flights map keyboard controls and camera URL synchronization with Playwright.
 - [ ] Test list scroll restoration with browser Back and the article return link after delayed content loads.
 - [ ] Extend fixed-tile browser checks to verify stop marker selection and all three map styles.
+- [ ] Reproduce the [concurrent WebKit map failures](docs/reviews/2026-10-27-trip-photo-review.md#browser-run-limits) with graphics and map-activation diagnostics.
 
 Run trip browser checks with WebKit enabled. Include JavaScript budgets, photo viewers, and delayed map loading.
 Keep the current budgets. See the [repository guide](README.md#testing-notes) for browser setup.
