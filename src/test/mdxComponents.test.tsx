@@ -259,8 +259,10 @@ describe('MDX headings', () => {
         render(<TableOfContentsFixture />);
         await screen.findByRole('navigation', { name: 'Table of contents' });
 
-        window.history.replaceState(null, '', '#camp-notes');
-        window.dispatchEvent(new HashChangeEvent('hashchange'));
+        act(() => {
+            window.history.replaceState(null, '', '#camp-notes');
+            window.dispatchEvent(new HashChangeEvent('hashchange'));
+        });
 
         await waitFor(() => expect(scrollIntoView).toHaveBeenCalledOnce());
     });

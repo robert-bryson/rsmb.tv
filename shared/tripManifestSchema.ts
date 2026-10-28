@@ -88,10 +88,18 @@ export const tripManifestSchema = z.object({
     }
 
     const dayIds = new Set<string>();
+    const assignedTracks = new Set<string>();
     for (const day of manifest.days ?? []) {
         if (dayIds.has(day.id)) context.addIssue({ code: 'custom', message: `Duplicate day ID: ${day.id}` });
         dayIds.add(day.id);
         for (const id of day.trackIds ?? []) if (!trackIds.has(id)) context.addIssue({ code: 'custom', message: `Day ${day.id} references unknown track: ${id}` });
+        for (const id of day.trackIds ?? []) {
+            if (assignedTracks.has(id)) context.addIssue({ code: 'custom', message: `Track ${id} is assigned to more than one day or repeated within a day.` });
+            assignedTracks.add(id);
+        }
+        if (new Set(day.stopIds).size !== (day.stopIds?.length ?? 0)) {
+            context.addIssue({ code: 'custom', message: `Day ${day.id} contains duplicate stop IDs.` });
+        }
         for (const id of day.stopIds ?? []) if (!stopIds.has(id)) context.addIssue({ code: 'custom', message: `Day ${day.id} references unknown stop: ${id}` });
         if (day.galleryId && (!manifest.galleries || !Object.hasOwn(manifest.galleries, day.galleryId))) {
             context.addIssue({ code: 'custom', message: `Day ${day.id} references unknown gallery: ${day.galleryId}` });

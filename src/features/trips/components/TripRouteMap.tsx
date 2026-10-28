@@ -1,14 +1,19 @@
-import { useEffect, useEffectEvent, useRef, useState } from 'react';
-import type { Feature, FeatureCollection, GeoJsonProperties } from 'geojson';
+import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
+import type { FeatureCollection, Point } from 'geojson';
 import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useTripRoute } from '../useTripRoute';
-import { routeCoordinates, trackRoute } from '../routeGeometry';
+import { routeCoordinates } from '../routeGeometry';
 import { useTripStory } from '../TripStoryContext';
+import { dayColor, routeLineColor, tripMapCoordinates, tripMapView, type TripMapFocus } from '../tripMapView';
+import { TripMapDayControls } from './TripMapDayControls';
+import { TripRoutePreview } from './TripRoutePreview';
+import type { TripManifest } from '../types';
 
-type TripRouteMapProps = { stopId?: string; trackId?: string };
+type TripRouteMapProps = TripMapFocus & { active?: boolean; onExplore?: () => void };
+type DaySelection = { routeUrl: string; requestedId?: string; selectedId?: string };
 type BasemapId = 'muted' | 'street' | 'terrain';
 type BasemapPaintProperty = 'raster-saturation' | 'raster-brightness-min' | 'raster-brightness-max' | 'raster-contrast';
 
@@ -54,6 +59,26 @@ const basemaps: Array<{
             },
         },
     ];
+
+function mapBounds(coordinates: number[][]) {
+    return coordinates.reduce((bounds, point) => bounds.extend(point as [number, number]),
+        new maplibregl.LngLatBounds(coordinates[0] as [number, number], coordinates[0] as [number, number]));
+}
+
+function stopFeatures(manifest: TripManifest, stops: TripManifest['stops']): FeatureCollection<Point> {
+    return {
+        type: 'FeatureCollection',
+        features: stops.map(stop => ({
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: stop.coordinates },
+            properties: { id: stop.id, name: stop.name, number: manifest.stops.indexOf(stop) + 1 },
+        })),
+    };
+}
+
+function trackFilter(trackIds: string[]): maplibregl.ExpressionSpecification {
+    return ['in', ['get', 'trackId'], ['literal', trackIds]];
+}
 
 function mapStyle(basemapId: BasemapId): maplibregl.StyleSpecification {
     const basemap = basemaps.find((candidate) => candidate.id === basemapId) ?? basemaps[0];
@@ -152,10 +177,10 @@ class RouteActionsControl implements maplibregl.IControl {
     private readonly reset = document.createElement('button');
     private map?: maplibregl.Map;
 
-    constructor(onReset: () => void, initiallyFocused: boolean) {
+    constructor(onReset: () => void, initiallyFocused: boolean, label = 'Show full route') {
         this.container.className = 'maplibregl-ctrl trip-route-actions';
         this.reset.type = 'button';
-        this.reset.textContent = 'Show full route';
+        this.reset.textContent = label;
         this.reset.hidden = !initiallyFocused;
         this.reset.addEventListener('click', () => {
             this.map?.stop();
@@ -190,23 +215,36 @@ class RouteActionsControl implements maplibregl.IControl {
     }
 }
 
-export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
+export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore }: TripRouteMapProps) {
     const { manifest } = useTripStory();
+    const getManifest = useEffectEvent(() => manifest);
     const reducedMotion = useReducedMotion();
     const containerRef = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibregl.Map | null>(null);
     const basemapControlRef = useRef<BasemapControl | null>(null);
     const routeActionsControlRef = useRef<RouteActionsControl | null>(null);
+    const appliedDayRef = useRef<{ map: maplibregl.Map; selection: DaySelection }>(null);
     const [basemapId, setBasemapId] = useState<BasemapId>('muted');
     const basemapIdRef = useRef(basemapId);
     const [hoveredStopId, setHoveredStopId] = useState<string | null>(null);
     const routeUrl = manifest.route.geoJson;
     const { route, error: routeError, retry } = useTripRoute(routeUrl);
+    const [daySelection, setDaySelection] = useState<DaySelection>({ routeUrl, requestedId: dayId, selectedId: dayId });
+    if (daySelection.routeUrl !== routeUrl || daySelection.requestedId !== dayId) {
+        setDaySelection({ routeUrl, requestedId: dayId, selectedId: dayId });
+    }
+    const selectedDayId = daySelection.selectedId;
+    const getDaySelection = useEffectEvent(() => daySelection);
+    const [showStops, setShowStops] = useState(true);
+    const view = useMemo(() => tripMapView(manifest, route, { dayId: selectedDayId, trackId }), [manifest, route, selectedDayId, trackId]);
+    const getView = useEffectEvent(() => view);
+    const getShowStops = useEffectEvent(() => showStops);
     const [mapError, setMapError] = useState<{
         url: string;
         route: typeof route;
         stops: typeof manifest.stops;
         trackId?: string;
+        dayId?: string;
         message: string;
     }>();
     const [stopSelection, setStopSelection] = useState({ routeUrl, requestedId: stopId, selectedId: stopId });
@@ -216,14 +254,13 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
     const selectedStopId = stopSelection.selectedId;
     const getSelectedStopId = useEffectEvent(() => selectedStopId);
     const [loadedMap, setLoadedMap] = useState<maplibregl.Map | null>(null);
-    const getInitialStopId = useEffectEvent(() => stopId);
-    const missingTrack = route && trackId && routeCoordinates(trackRoute(route, trackId)).length === 0;
     const currentMapError = mapError?.url === routeUrl && mapError.route === route &&
-        mapError.stops === manifest.stops && mapError.trackId === trackId ? mapError.message : '';
-    const error = routeError || currentMapError || (missingTrack ? `Route does not contain track "${trackId}".` : '');
+        mapError.stops === manifest.stops && mapError.trackId === trackId && mapError.dayId === dayId ? mapError.message : '';
+    const error = routeError || currentMapError || view.error;
+    const enabled = active && !error;
     const focusStop = (id: string) => {
         setStopSelection(current => ({ ...current, selectedId: id }));
-        const stop = manifest.stops.find(candidate => candidate.id === id);
+        const stop = view.stops.find(candidate => candidate.id === id);
         if (stop && mapRef.current) {
             routeActionsControlRef.current?.showReset();
             mapRef.current[reducedMotion ? 'jumpTo' : 'easeTo']({ center: stop.coordinates, zoom: 9 });
@@ -231,33 +268,38 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
     };
 
     const handleMapStop = useEffectEvent(focusStop);
+    const selectDay = (id?: string) => {
+        setDaySelection(current => ({ ...current, selectedId: id }));
+        setStopSelection(current => ({ ...current, selectedId: '' }));
+        setHoveredStopId(null);
+        if (id) routeActionsControlRef.current?.showReset();
+    };
     const showFullRoute = useEffectEvent(() => {
         if (!route || !mapRef.current) return;
-        const points = routeCoordinates(route);
-        const bounds = points.reduce((bounds, point) => bounds.extend(point as [number, number]), new maplibregl.LngLatBounds());
-        mapRef.current.fitBounds(bounds, { padding: 40, maxZoom: 11, bearing: 0, pitch: 0, duration: reducedMotion ? 0 : 300 });
+        const points = dayId ? tripMapCoordinates(view, showStops) : routeCoordinates(route);
+        if (!points.length) return;
+        mapRef.current.fitBounds(mapBounds(points), { padding: 40, maxZoom: 11, bearing: 0, pitch: 0, duration: reducedMotion ? 0 : 300 });
         setStopSelection(current => ({ ...current, selectedId: '' }));
+        if (!dayId) {
+            // This reset already fitted the camera. A newer selection still needs its own fit.
+            const selection = { ...daySelection, selectedId: undefined };
+            appliedDayRef.current = { map: mapRef.current, selection };
+            setDaySelection(selection);
+        }
     });
     useEffect(() => {
-        const stopId = getInitialStopId();
-        if (!containerRef.current || !route || mapRef.current) return;
+        const manifest = getManifest();
+        const stopId = getSelectedStopId();
+        const initialView = getView();
+        if (!enabled || !containerRef.current || !route || mapRef.current) return;
 
-        const focusedRoute = trackId ? trackRoute(route, trackId) : route;
-        const coordinates = routeCoordinates(focusedRoute);
+        const coordinates = tripMapCoordinates(initialView, getShowStops());
         if (coordinates.length === 0) return;
-        const bounds = coordinates.reduce(
-            (current, coordinate) => current.extend(coordinate as [number, number]),
-            new maplibregl.LngLatBounds(coordinates[0] as [number, number], coordinates[0] as [number, number]),
-        );
-        const stops: FeatureCollection = {
-            type: 'FeatureCollection',
-            features: manifest.stops.map((stop, index): Feature => ({
-                type: 'Feature',
-                geometry: { type: 'Point', coordinates: stop.coordinates },
-                properties: { id: stop.id, name: stop.name, number: index + 1 } satisfies GeoJsonProperties,
-            })),
-        };
+        const bounds = mapBounds(coordinates);
+        const stops = stopFeatures(manifest, initialView.stops);
+        const inlineFilter = dayId ? { filter: trackFilter(initialView.trackIds ?? []) } : {};
         const style = mapStyle(basemapIdRef.current);
+        let disposed = false;
         const map = new maplibregl.Map({
             container: containerRef.current,
             style: {
@@ -273,6 +315,7 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
                         id: 'trip-route-halo',
                         type: 'line',
                         source: 'trip-route',
+                        ...inlineFilter,
                         paint: { 'line-color': '#09090b', 'line-width': 7, 'line-opacity': 0.85 },
                         layout: { 'line-cap': 'round', 'line-join': 'round' },
                     },
@@ -280,7 +323,8 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
                         id: 'trip-route-line',
                         type: 'line',
                         source: 'trip-route',
-                        paint: { 'line-color': trackId ? '#71717a' : '#f59e0b', 'line-width': trackId ? 3 : 4, 'line-opacity': trackId ? 0.55 : 1 },
+                        paint: { 'line-color': trackId ? '#71717a' : routeLineColor(manifest), 'line-width': trackId ? 3 : 4, 'line-opacity': trackId ? 0.55 : 1 },
+                        ...inlineFilter,
                         layout: { 'line-cap': 'round', 'line-join': 'round' },
                     },
                     ...(trackId ? [{
@@ -296,6 +340,7 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
                         type: 'symbol',
                         source: 'trip-route',
                         ...(trackId ? { filter: ['==', ['get', 'trackId'], trackId] } : {}),
+                        ...inlineFilter,
                         layout: {
                             'symbol-placement': 'line',
                             'symbol-spacing': 75,
@@ -311,6 +356,7 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
                         id: 'trip-stops',
                         type: 'circle',
                         source: 'trip-stops',
+                        layout: { visibility: getShowStops() ? 'visible' : 'none' },
                         paint: {
                             'circle-color': ['case', ['==', ['get', 'id'], stopId ?? ''], '#f59e0b', '#fafafa'],
                             'circle-radius': ['case', ['==', ['get', 'id'], stopId ?? ''], 11, 8],
@@ -322,7 +368,7 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
                         id: 'trip-stop-numbers',
                         type: 'symbol',
                         source: 'trip-stops',
-                        layout: { 'text-field': ['to-string', ['get', 'number']], 'text-size': 10 },
+                        layout: { 'text-field': ['to-string', ['get', 'number']], 'text-size': 10, visibility: getShowStops() ? 'visible' : 'none' },
                         paint: { 'text-color': '#18181b' },
                     },
                 ],
@@ -347,41 +393,82 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
         map.addControl(new DownloadRouteControl(routeUrl), 'top-right');
         map.addControl(new CollapsedAttributionControl({ compact: true }));
         map.on('mouseenter', 'trip-stops', (event) => {
+            if (disposed) return;
             const hoveredId = event.features?.[0]?.properties?.id;
             if (typeof hoveredId === 'string') setHoveredStopId(hoveredId);
         });
         map.on('mouseleave', 'trip-stops', () => {
+            if (disposed) return;
             setHoveredStopId(null);
         });
-        if (!trackId) {
+        if (!trackId && !initialView.day) {
             map.once('load', () => {
                 // An empty string marks an explicit reset; only undefined is the initial overview.
-                if (getSelectedStopId() === undefined) map.setZoom(Math.max(map.getMinZoom(), map.getZoom() - 1));
+                if (!disposed && !getView().day && getSelectedStopId() === undefined) map.setZoom(Math.max(map.getMinZoom(), map.getZoom() - 1));
             });
         }
 
-        const routeActionsControl = new RouteActionsControl(() => showFullRoute(), Boolean(getSelectedStopId() || trackId));
+        const routeActionsControl = new RouteActionsControl(() => showFullRoute(), Boolean(getSelectedStopId() || trackId || initialView.day), dayId ? 'Show whole day' : 'Show full route');
         map.addControl(routeActionsControl, 'top-left');
 
-        map.on('error', () => setMapError({
-            url: routeUrl, route, stops: manifest.stops, trackId,
+        map.on('error', () => { if (!disposed) setMapError({
+            url: routeUrl, route, stops: manifest.stops, trackId, dayId,
             message: 'The map could not load. You can still read the stops below.',
-        }));
+        }); });
         map.on('click', 'trip-stops', (event) => {
+            if (disposed) return;
             const id = event.features?.[0]?.properties?.id;
             if (typeof id === 'string') handleMapStop(id);
         });
-        map.once('load', () => setLoadedMap(map));
+        map.once('load', () => { if (!disposed) setLoadedMap(map); });
         mapRef.current = map;
+        appliedDayRef.current = { map, selection: getDaySelection() };
         basemapControlRef.current = basemapControl;
         routeActionsControlRef.current = routeActionsControl;
         return () => {
+            disposed = true;
             map.remove();
             mapRef.current = null;
             basemapControlRef.current = null;
             routeActionsControlRef.current = null;
         };
-    }, [manifest.stops, route, routeUrl, trackId]);
+    }, [manifest.stops, manifest.days, route, routeUrl, trackId, dayId, enabled]);
+
+    useEffect(() => {
+        const map = mapRef.current;
+        if (!map || loadedMap !== map || !manifest.days?.length || view.error || !view.focusedRoute) return;
+        // Each button press is a new camera request, including a press on the current day.
+        const dayChanged = appliedDayRef.current?.map === map && appliedDayRef.current.selection !== daySelection;
+        appliedDayRef.current = { map, selection: daySelection };
+        const filter = view.trackIds
+            ? trackFilter(view.trackIds) : null;
+        const focused: maplibregl.ExpressionSpecification = filter ?? ['literal', true];
+        map.setFilter('trip-route-line', dayId ? filter : null);
+        map.setFilter('trip-route-halo', dayId ? filter : null);
+        map.setFilter('trip-route-direction', filter);
+        if (!trackId) {
+            map.setPaintProperty('trip-route-line', 'line-color', selectedDayId && !dayId
+                ? ['case', focused, dayColor(manifest, selectedDayId), '#71717a'] : routeLineColor(manifest));
+            map.setPaintProperty('trip-route-line', 'line-opacity', selectedDayId && !dayId ? ['case', focused, 1, 0.25] : 1);
+            map.setPaintProperty('trip-route-line', 'line-width', selectedDayId ? ['case', focused, 5, 2] : 4);
+        }
+        (map.getSource('trip-stops') as maplibregl.GeoJSONSource).setData(stopFeatures(manifest, view.stops));
+        // A stop focus takes precedence when a suspended map is restored.
+        if (dayChanged && !getSelectedStopId()) {
+            const coordinates = tripMapCoordinates(view, getShowStops());
+            if (coordinates.length) {
+                map.fitBounds(mapBounds(coordinates), { padding: 40, maxZoom: 11, duration: reducedMotion ? 0 : 300 });
+                if (selectedDayId) routeActionsControlRef.current?.showReset();
+            }
+        }
+    }, [view, daySelection, selectedDayId, dayId, manifest, trackId, loadedMap, reducedMotion]);
+
+    useEffect(() => {
+        const map = mapRef.current;
+        if (!map || loadedMap !== map) return;
+        map.setLayoutProperty('trip-stops', 'visibility', showStops ? 'visible' : 'none');
+        map.setLayoutProperty('trip-stop-numbers', 'visibility', showStops ? 'visible' : 'none');
+    }, [showStops, loadedMap]);
 
     useEffect(() => {
         const map = mapRef.current;
@@ -417,39 +504,39 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
     }, [basemapId, loadedMap]);
 
     useEffect(() => {
-        const stop = manifest.stops.find((candidate) => candidate.id === getSelectedStopId());
+        const stop = getView().stops.find((candidate) => candidate.id === getSelectedStopId());
         const map = mapRef.current;
         if (!stop || !map || loadedMap !== map) return;
         map[reducedMotion ? 'jumpTo' : 'easeTo']({ center: stop.coordinates, zoom: 9 });
     }, [manifest.stops, reducedMotion, stopId, loadedMap]);
 
-    const selectedTrack = manifest.route.tracks?.find((track) => track.id === trackId);
-    const mapAlt = selectedTrack
-        ? `Map focused on ${selectedTrack.name}.`
-        : manifest.route.alt ?? `Map of the route with ${manifest.stops.length} marked stops.`;
+    if (!enabled) return <TripRoutePreview dayId={selectedDayId} trackId={trackId} stopId={selectedStopId}
+        showStops={showStops} onExplore={error ? undefined : onExplore} allowDaySelection={!dayId && !trackId} onDaySelect={selectDay}
+        routeState={{ route, error: routeError, retry }}
+        mapError={error} onRetry={error ? () => { setMapError(undefined); retry(); } : undefined} />;
 
     return (
         <figure className="trip-breakout my-10">
+            {!dayId && !trackId && <TripMapDayControls manifest={manifest} dayId={selectedDayId} onSelect={selectDay} />}
+            {(dayId || selectedDayId) && <p className="mb-3 text-sm font-medium text-zinc-200" aria-live="polite">{view.title}</p>}
             <div className="relative aspect-[16/10] min-h-72 w-full overflow-hidden rounded-md border border-zinc-800 bg-zinc-950">
                 {manifest.route.staticImage && (
                     <img src={manifest.route.staticImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
                 )}
-                {(
-                    <div className="absolute inset-0" inert={Boolean(error)} aria-hidden={Boolean(error)}>
-                        <div ref={containerRef} role="region" aria-label={mapAlt} className="h-full w-full" />
-                    </div>
-                )}
-                {!route && !error && (
+                <div className="absolute inset-0">
+                    <div ref={containerRef} role="region" aria-label={view.alt} className="h-full w-full" />
+                </div>
+                {!route && (
                     <div className="absolute inset-0 grid place-items-center bg-zinc-950/80 text-sm text-zinc-400">Loading route…</div>
-                )}
-                {error && (
-                    <div className="absolute inset-0 grid place-items-center px-6 text-center text-sm text-zinc-300"><div role="status">{error}<button type="button" className="mx-auto mt-3 block min-h-11 rounded border border-zinc-600 px-4" onClick={() => { setMapError(undefined); retry(); }}>Retry route</button></div></div>
                 )}
             </div>
             <figcaption className="mt-3">
-                {error && <a href={routeUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center text-sm text-violet-300 underline">Download route (GeoJSON)</a>}
-                <ol className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-zinc-400">
-                    {manifest.stops.map((stop, index) => (
+                {view.stops.length > 0 && <label className="mb-2 inline-flex min-h-11 cursor-pointer items-center gap-2 text-sm text-zinc-300">
+                    <input type="checkbox" checked={showStops} onChange={event => setShowStops(event.target.checked)} />Show stops
+                </label>}
+                {!dayId && view.day && <a href={`#${view.day.headingId}`} className="ml-4 inline-flex min-h-11 items-center text-sm text-violet-300 underline">Read this day</a>}
+                <ol hidden={!showStops} className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-zinc-400">
+                    {view.stops.map((stop) => (
                         <li
                             key={stop.id}
                             onMouseEnter={() => setHoveredStopId(stop.id)}
@@ -458,9 +545,9 @@ export function TripRouteMap({ stopId, trackId }: TripRouteMapProps) {
                         >
                             <button type="button" aria-pressed={stop.id === (selectedStopId ?? stopId)} onClick={() => focusStop(stop.id)} onFocus={() => setHoveredStopId(stop.id)} onBlur={() => setHoveredStopId(null)} className="min-h-11 text-left">
                                 <span className={`mr-1 ${stop.id === (hoveredStopId ?? selectedStopId ?? stopId) ? 'text-zinc-800' : 'text-zinc-400'}`}>
-                                    {index + 1}.
+                                    {manifest.stops.indexOf(stop) + 1}.
                                 </span>
-                                {stop.name}{index === 0 ? ' · Start' : index === manifest.stops.length - 1 ? ' · Finish' : ''}
+                                {stop.name}{!view.day && (stop === view.stops[0] ? ' · Start' : stop === view.stops.at(-1) ? ' · Finish' : '')}
                             </button>
                             {stop.id === (selectedStopId ?? stopId) && <p className="text-xs">{[stop.date, stop.description].filter(Boolean).join(' · ')}</p>}
                         </li>

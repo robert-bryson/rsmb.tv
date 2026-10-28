@@ -1,10 +1,8 @@
 # Open work
 
-This file contains incomplete work. Use Git history for completed work.
+This file lists incomplete work. Keep completed tasks in Git history.
 Complete publication blockers before you publish the affected content.
 Use the [review index](docs/README.md) for dated findings and test results.
-Work through publication blockers first. Then complete automated checks, maintenance, and content tasks.
-Keep completed work in Git history. Do not add completed tasks to this file.
 
 ## Publication blockers
 
@@ -35,7 +33,7 @@ Use fixed data for browser checks. Record the browser, viewport, and expected re
 
 - [ ] Test Flights map keyboard controls and camera URL synchronization with Playwright.
 - [ ] Test list scroll restoration with browser Back and the article return link after delayed content loads.
-- [ ] Extend the fixed-tile browser test. Check route pixels, stop selection, and all three map styles.
+- [ ] Extend fixed-tile browser checks to verify stop marker selection and all three map styles.
 
 Run trip browser checks with WebKit enabled. Include JavaScript budgets, photo viewers, and delayed map loading.
 Keep the current budgets. See the [repository guide](README.md#testing-notes) for browser setup.
@@ -70,7 +68,6 @@ Complete these tasks after the affected trip passes its source review.
 
 - [ ] For each new trip, review its processed photos and use versioned filenames. Upload the assets before site deployment.
 - [ ] Collect real-device LCP, CLS, and INP measurements. Use the [laboratory report](docs/reviews/2026-10-24-performance-follow-up.md) as a baseline.
-- [ ] Remove inactive map instances when their sections are far outside the viewport. Retain the route preview and selected stop.
 
 ## Project content
 

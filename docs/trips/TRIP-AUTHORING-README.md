@@ -76,6 +76,7 @@ Use lowercase letters, numbers, and hyphens in IDs. Shortcodes inside code examp
 | `{{trip-map}}` | Complete available route and numbered stops |
 | `{{trip-map:stop-id}}` | Route map centered on a manifest stop |
 | `{{trip-map:track:track-id}}` | Selected track with the other tracks dimmed |
+| `{{trip-map:day:day-id}}` | One day's tracks and assigned stops, fitted to that day |
 | `{{trip-photo:photo-id}}` | One photo and its caption |
 | `{{trip-gallery:gallery-id}}` | Gallery from the manifest |
 | `{{trip-facts}}` | Another copy of the trip facts |
@@ -85,6 +86,8 @@ If the story has no map, facts appear after the story body.
 Use `{{trip-facts}}` only if the story needs another copy.
 Each referenced ID must exist in the manifest.
 Each track ID must also match a `trackId` in the route GeoJSON.
+Place day map shortcodes where they support the story.
+Day definitions do not insert maps automatically.
 
 ## 2. Prepare photos and routes
 
@@ -200,6 +203,48 @@ Explicit Sheet tags keep their original text.
 An optional `days` entry requires `id`, `title`, and `headingId`.
 It can also contain `date`, `trackIds`, `stopIds`, and `galleryId`.
 Set `headingId` to the generated story heading ID. Referenced tracks, stops, and galleries must exist.
+Use `days` array order for travel order. GPX filename order can differ from travel order.
+Assign each track to one day. Split a multi-day GPX into daily source files before preparation.
+One day can contain several tracks. Separate tracks remain separate lines.
+An overnight stop can belong to both adjacent days.
+Order `stopIds` in that day's travel order.
+Set `stopIds` explicitly. A day without assigned stops shows its tracks alone.
+Dates remain optional. Do not infer riding dates from export filenames.
+
+```json
+{
+  "id": "boise-to-wallowas",
+  "title": "Boise to Wallowas (reconstructed)",
+  "date": "2024-05-17",
+  "headingId": "boise-hells-canyon-wallowas",
+  "trackIds": ["2024-05-17-boise-hells-canyon-campsite-reconstructed"],
+  "stopIds": ["boise", "camp-2"]
+}
+```
+
+Use this day in the source Google Doc:
+
+```text
+{{trip-map:day:boise-to-wallowas}}
+```
+
+Overview maps show labeled day buttons with matching route colors.
+Selecting a day fits its tracks and assigned stops. Other tracks remain dimmed for context.
+Select `All days` to restore the complete route.
+Tracks without day assignments remain visible in the overview.
+Colors repeat after eight days. Use the numbered labels and selection controls to distinguish days.
+Inline day maps show only that day's tracks and assigned stops.
+Their `Show whole day` action restores the day's extent.
+The `Show stops` checkbox controls map markers and the stop list together.
+Stop numbers stay consistent between overview maps and day maps.
+Day maps retain their selection when an offscreen interactive map is released.
+The static preview uses the same day membership and colors.
+Overview previews retain the other tracks in gray when you select a day.
+If the interactive map fails, the route preview, day controls, and download remain available.
+Select `Retry route` to load the route again and create a new interactive map.
+Retry keeps the selected day and stop visibility setting.
+An error remains visible when you change the day. A day change does not retry a failed map.
+
 An optional `series` requires `id`, `title`, and a positive integer `order`.
 If posts share a manifest, use the Sheet series columns to set each post's order.
 Use positive integer values for photo dimensions and riding days.
@@ -244,7 +289,8 @@ Identify reconstructed tracks in their names.
 ```
 
 Use the ID in a focused map shortcode: `{{trip-map:track:2026-05-19-day-one}}`.
-Overview maps show all available tracks. Focused maps highlight one track.
+Overview maps show all available tracks. Track shortcodes highlight one track.
+Use a day shortcode when several track segments belong to the same day.
 The facts show the authored trip distance in miles and kilometers. Maps do not calculate a displayed trip total.
 
 Example photo entry:

@@ -19,6 +19,15 @@
             }
         ]
     },
+    "days": [
+        {
+            "id": "day-one",
+            "title": "Day one",
+            "headingId": "day-1-origin-to-destination",
+            "trackIds": ["2026-05-19-day-one"],
+            "stopIds": ["start"]
+        }
+    ],
     "stops": [
         {
             "id": "start",

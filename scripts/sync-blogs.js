@@ -1140,6 +1140,7 @@ export function expandTripShortcodes(markdown, post, manifest) {
 
     const stopIds = new Set(manifest?.stops?.map((stop) => stop.id) ?? []);
     const trackIds = new Set(manifest?.route?.tracks?.map((track) => track.id) ?? []);
+    const days = new Map(manifest?.days?.map(day => [day.id, day]) ?? []);
     const photoIds = new Set(manifest?.photos?.map((photo) => photo.id) ?? []);
     const galleryIds = new Set(Object.keys(manifest?.galleries ?? {}));
     const assertReference = (kind, id, validIds) => {
@@ -1151,6 +1152,13 @@ export function expandTripShortcodes(markdown, post, manifest) {
 
     return mapMarkdownProseLines(markdown, line => {
         const expanded = line
+            .replace(/^\{\{trip-map:day:([a-z0-9]+(?:-[a-z0-9]+)*)\}\}$/gm, (_match, dayId) => {
+                assertReference('day', dayId, days);
+                if (manifest && !days.get(dayId)?.trackIds?.length) {
+                    throw new Error(`Trip "${post.tripId}" day "${dayId}" has no route tracks.`);
+                }
+                return `<TripMap dayId="${dayId}" />`;
+            })
             .replace(/^\{\{trip-map:track:([a-z0-9]+(?:-[a-z0-9]+)*)\}\}$/gm, (_match, trackId) => (
                 `<TripMap trackId="${assertReference('track', trackId, trackIds)}" />`
             ))

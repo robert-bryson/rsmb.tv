@@ -1,0 +1,25 @@
+{
+  "id": "daily-test",
+  "dates": { "start": "2024-01-01", "end": "2024-01-02" },
+  "hero": "photo-1",
+  "route": {
+    "geoJson": "/test-trip/daily-route.geojson",
+    "tracks": [
+      { "id": "morning", "name": "Morning ride" },
+      { "id": "afternoon", "name": "Afternoon ride" },
+      { "id": "return", "name": "Return ride (reconstructed)" }
+    ]
+  },
+  "days": [
+    { "id": "outbound", "title": "Coastbound", "headingId": "first-day", "trackIds": ["morning", "afternoon"], "stopIds": ["start", "camp"] },
+    { "id": "homebound", "title": "Homebound (reconstructed)", "headingId": "second-day", "trackIds": ["return"], "stopIds": ["camp", "home"] }
+  ],
+  "stops": [
+    { "id": "start", "name": "Harbor", "coordinates": [-122, 47] },
+    { "id": "camp", "name": "Shared camp", "coordinates": [-124, 45] },
+    { "id": "home", "name": "Home", "coordinates": [-122, 47] }
+  ],
+  "photos": [
+    { "id": "photo-1", "src": "/test-trip/photo-1-1600.svg", "width": 1600, "height": 1000, "alt": "Coast photograph 1" }
+  ]
+}

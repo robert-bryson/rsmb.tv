@@ -27,6 +27,10 @@ Use Subtitle for a distance line below a heading. A subtitle does not appear in 
 
 [Optional distance line. Apply the Google Docs Subtitle style to this paragraph.]
 
+{{trip-map:day:day-one}}
+
+[Define day-one in the trip manifest. Assign its tracks and stops. Delete this instruction.]
+
 [Describe the road, weather, landscape, or an event.]
 
 [Explain an important decision or change and its result.]
@@ -41,11 +45,9 @@ Use Subtitle for a distance line below a heading. A subtitle does not appear in 
 
 [Describe what changed overnight or what the next route segment required.]
 
-{{trip-map:day-two-stop-id}}
+{{trip-map:day:day-two}}
 
-[For a track map, replace the preceding shortcode with the following shortcode. Delete this instruction.]
-
-{{trip-map:track:YYYY-MM-DD-day-two}}
+[Define day-two in the manifest. Use a track or stop shortcode instead when that better supports the story.]
 
 [Explain why the location or route segment matters.]
 

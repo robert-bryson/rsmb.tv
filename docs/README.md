@@ -23,6 +23,8 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-10-27 | [Trip map review and regression fixes](reviews/2026-10-27-trip-map-review.md) |
+| 2026-10-27 | [Trip day map research](reviews/2026-10-27-trip-day-map-research.md) |
 | 2026-10-25 | [CI and failure-path review](reviews/2026-10-25-ci-and-failure-paths.md) |
 | 2026-10-24 | [Critical review and regression fixes](reviews/2026-10-24-critical-review.md) |
 | 2026-10-24 | [Live performance and build follow-up](reviews/2026-10-24-performance-follow-up.md) |

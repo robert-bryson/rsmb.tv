@@ -189,6 +189,16 @@ To repeat only this check, run:
 PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- tests/trips/reading.spec.ts --grep 'map actions appear' --repeat-each=3 --workers=2
 ```
 
+Trip day tests use explicit track and stop assignments.
+They check selection during delayed loading, resets, previews, failed maps, and resource cleanup.
+Fullscreen and keyboard focus keep a map active until the interaction ends.
+The preview uses the parent map's route response after suspension or failure. It does not retry failed requests automatically.
+Run the focused unit tests with:
+
+```bash
+npx vitest run src/test/tripMapView.test.tsx src/test/tripRouteMap.test.tsx src/test/tripMapBlock.test.tsx
+```
+
 Each JavaScript budget test uses a separate browser context.
 The test captures script requests until the initial route content is visible.
 It reads the captured responses. It does not request each script again.

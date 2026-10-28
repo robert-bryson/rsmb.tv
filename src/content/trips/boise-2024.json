@@ -46,6 +46,53 @@
             }
         ]
     },
+    "days": [
+        {
+            "id": "seattle-to-blue-mountains",
+            "title": "Seattle to Blue Mountains",
+            "headingId": "seattle-to-blue-mountains",
+            "trackIds": ["paseo-de-rever-05-12-24"],
+            "stopIds": ["seattle-departure", "camp-1"]
+        },
+        {
+            "id": "blue-mountains-to-nampa",
+            "title": "Blue Mountains to Nampa",
+            "headingId": "blue-mountains-to-nampa",
+            "trackIds": ["paseo-de-rever-05-13-24"],
+            "stopIds": ["camp-1"]
+        },
+        {
+            "id": "nampa-to-boise",
+            "title": "Nampa to Boise",
+            "headingId": "workdays-in-boise",
+            "trackIds": ["almost-to-boise"],
+            "stopIds": ["boise"]
+        },
+        {
+            "id": "boise-to-wallowas",
+            "title": "Boise to Wallowas (reconstructed)",
+            "date": "2024-05-17",
+            "headingId": "boise-hells-canyon-wallowas",
+            "trackIds": ["2024-05-17-boise-hells-canyon-campsite-reconstructed"],
+            "stopIds": ["boise", "camp-2"]
+        },
+        {
+            "id": "wallowas-to-panther-creek",
+            "title": "Wallowas to Panther Creek (reconstructed)",
+            "date": "2024-05-18",
+            "headingId": "wallowas-to-panther-creek",
+            "trackIds": ["2024-05-18-campsite-panther-creek-reconstructed"],
+            "stopIds": ["camp-2", "panther-creek-campground"]
+        },
+        {
+            "id": "panther-creek-to-seattle",
+            "title": "Panther Creek to Seattle (reconstructed)",
+            "date": "2024-05-19",
+            "headingId": "the-ride-home",
+            "trackIds": ["2024-05-19-panther-creek-seattle-reconstructed"],
+            "stopIds": ["panther-creek-campground", "seattle-return"]
+        }
+    ],
     "stops": [
         {
             "id": "seattle-departure",

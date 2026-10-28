@@ -458,6 +458,7 @@ describe('Google export helpers', () => {
             '{{trip-map}}',
             '{{trip-map:day-two}}',
             '{{trip-map:track:outbound}}',
+            '{{trip-map:day:coastbound}}',
             '{{trip-photo:camp-at-dusk}}',
             '{{trip-gallery:highlights}}',
         ].join('\n\n');
@@ -466,6 +467,7 @@ describe('Google export helpers', () => {
             '<TripMap />',
             '<TripMap stopId="day-two" />',
             '<TripMap trackId="outbound" />',
+            '<TripMap dayId="coastbound" />',
             '<TripPhoto photoId="camp-at-dusk" />',
             '<TripGallery galleryId="highlights" />',
         ].join('\n\n'));
@@ -478,6 +480,7 @@ describe('Google export helpers', () => {
 
     it.each([
         ['{{trip-map:missing-stop}}', /unknown stop "missing-stop"/],
+        ['{{trip-map:day:missing-day}}', /unknown day "missing-day"/],
         ['{{trip-photo:missing-photo}}', /unknown photo "missing-photo"/],
         ['{{trip-gallery:missing-gallery}}', /unknown gallery "missing-gallery"/],
     ])('rejects a shortcode reference that is absent from the manifest', (shortcode, expectedError) => {
@@ -500,6 +503,15 @@ describe('Google export helpers', () => {
             { format: 'trip', tripId: 'coastal-loop' },
             manifest,
         )).toThrow(/unknown track "return"/);
+    });
+
+    it('validates day map membership and rejects a day with no route', () => {
+        const manifest = { route: { tracks: [{ id: 'outbound' }] }, days: [
+            { id: 'coastbound', trackIds: ['outbound'] }, { id: 'rest-day' },
+        ] };
+        const post = { format: 'trip', tripId: 'coastal-loop' };
+        expect(expandTripShortcodes('{{trip-map:day:coastbound}}', post, manifest)).toBe('<TripMap dayId="coastbound" />');
+        expect(() => expandTripShortcodes('{{trip-map:day:rest-day}}', post, manifest)).toThrow(/has no route tracks/);
     });
 });
 

@@ -1,5 +1,14 @@
 [
   {
+    "slug": "daily-test",
+    "title": "Daily map test trip",
+    "date": "2024-01-02",
+    "description": "Synthetic daily route maps.",
+    "tags": ["daily-maps"],
+    "format": "trip",
+    "tripId": "daily-test"
+  },
+  {
     "slug": "coastal-test",
     "title": "Coastal test trip",
     "date": "2024-01-02",

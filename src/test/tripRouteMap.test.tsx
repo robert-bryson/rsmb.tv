@@ -1,10 +1,11 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import type { MapOptions } from 'maplibre-gl';
+import type { MapOptions, StyleSpecification } from 'maplibre-gl';
 import { clearTripRouteCache } from '../features/trips/useTripRoute';
 import { TripStoryProvider } from '../features/trips/TripStoryProvider';
 import { TripRouteMap } from '../features/trips/components/TripRouteMap';
 import type { TripManifest } from '../features/trips/types';
+import { dayMapManifest, dayMapRoute } from './fixtures/tripDayMap';
 
 const mapMocks = vi.hoisted(() => ({
     addControl: vi.fn(),
@@ -32,6 +33,8 @@ const mapMocks = vi.hoisted(() => ({
             on: mapMocks.on,
             remove: vi.fn(),
             setPaintProperty: mapMocks.setPaintProperty,
+            setFilter: mapMocks.setFilter,
+            setLayoutProperty: mapMocks.setLayoutProperty,
             setZoom: mapMocks.setZoom,
         };
     }),
@@ -42,11 +45,14 @@ const mapMocks = vi.hoisted(() => ({
     once: vi.fn((_event: string, listener: () => void) => listener()),
     on: vi.fn(),
     setPaintProperty: vi.fn(),
+    setFilter: vi.fn(),
+    setLayoutProperty: vi.fn(),
+    setData: vi.fn(),
     setTiles: vi.fn(),
     setZoom: vi.fn(),
 }));
 
-mapMocks.getSource.mockReturnValue({ setTiles: mapMocks.setTiles });
+mapMocks.getSource.mockReturnValue({ setTiles: mapMocks.setTiles, setData: mapMocks.setData });
 
 vi.mock('maplibre-gl', () => ({
     AttributionControl: class {
@@ -86,6 +92,164 @@ afterEach(() => {
 });
 
 describe('TripRouteMap', () => {
+    it.each(['All days', '1. Coastbound'])('refits %s when its selected button is pressed after focusing a stop', async name => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
+        render(<TripStoryProvider manifest={dayMapManifest}><TripRouteMap /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        fireEvent.click(screen.getByRole('button', { name }));
+        fireEvent.click(screen.getByRole('button', { name: /Shared camp/ }));
+        mapMocks.fitBounds.mockClear();
+        fireEvent.click(screen.getByRole('button', { name }));
+        expect(mapMocks.fitBounds).toHaveBeenCalledOnce();
+        expect(screen.getByRole('button', { name: /Shared camp/ })).toHaveAttribute('aria-pressed', 'false');
+    });
+
+    it.each([false, true])('fits the latest day after a reset during loading (reduced motion: %s)', async reducedMotion => {
+        mapMocks.reducedMotion = reducedMotion;
+        mapMocks.once.mockImplementation(() => undefined);
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
+        render(<TripStoryProvider manifest={dayMapManifest}><TripRouteMap /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        const control = mapMocks.addControl.mock.calls.map(([control]) => control)
+            .find(control => control?.constructor.name === 'RouteActionsControl');
+        const reset = control.onAdd(mapMocks.Map.mock.results[0].value).querySelector('button');
+        fireEvent.click(screen.getByRole('button', { name: '1. Coastbound' }));
+        fireEvent.click(reset);
+        fireEvent.click(screen.getByRole('button', { name: '2. Homebound (reconstructed)' }));
+        mapMocks.fitBounds.mockClear();
+        act(() => { for (const [event, listener] of [...mapMocks.once.mock.calls]) if (event === 'load') listener(); });
+        expect(mapMocks.fitBounds).toHaveBeenCalledWith(expect.anything(), { padding: 40, maxZoom: 11, duration: reducedMotion ? 0 : 300 });
+        expect(mapMocks.LngLatBounds.mock.results.at(-1)?.value.extend).toHaveBeenCalledWith([-124.5, 45]);
+        expect(mapMocks.LngLatBounds.mock.results.at(-1)?.value.extend).not.toHaveBeenCalledWith([-124.1, 45]);
+    });
+
+    it('scopes every inline route layer before the map load event', async () => {
+        mapMocks.once.mockImplementation(() => undefined);
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
+        render(<TripStoryProvider manifest={dayMapManifest}><TripRouteMap dayId="coastbound" /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        const style = mapMocks.Map.mock.calls[0][0].style as StyleSpecification;
+        for (const id of ['trip-route-halo', 'trip-route-line', 'trip-route-direction']) {
+            expect(style.layers.find(layer => layer.id === id)).toHaveProperty('filter',
+                ['in', ['get', 'trackId'], ['literal', ['morning', 'afternoon']]]);
+        }
+    });
+
+    it('retains a usable route preview and error when a failed map changes days', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
+        const { container } = render(<TripStoryProvider manifest={dayMapManifest}><TripRouteMap /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        const map = mapMocks.Map.mock.results[0].value;
+        const fail = mapMocks.on.mock.calls.find(([event]) => event === 'error')?.[1];
+        act(() => fail());
+        expect(screen.getByRole('status')).toHaveTextContent('The map could not load');
+        await waitFor(() => expect(container.querySelectorAll('polyline').length).toBeGreaterThan(0));
+        expect(map.remove).toHaveBeenCalledOnce();
+        fireEvent.click(screen.getByRole('button', { name: '1. Coastbound' }));
+        expect(screen.getByRole('status')).toHaveTextContent('The map could not load');
+        expect(screen.getByRole('button', { name: 'Retry route' })).toBeVisible();
+        fireEvent.click(screen.getByRole('button', { name: 'Retry route' }));
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledTimes(2));
+        expect(screen.queryByRole('status')).not.toBeInTheDocument();
+        expect(screen.getByRole('button', { name: '1. Coastbound' })).toHaveAttribute('aria-pressed', 'true');
+    });
+
+    it('switches days and scopes POIs without replacing the map or fetching again', async () => {
+        const fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute });
+        vi.stubGlobal('fetch', fetch);
+        render(<TripStoryProvider manifest={dayMapManifest}><TripRouteMap /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        fireEvent.click(screen.getByRole('button', { name: '1. Coastbound' }));
+        expect(screen.getByRole('button', { name: '1. Coastbound' })).toHaveAttribute('aria-pressed', 'true');
+        expect(screen.getByRole('link', { name: 'Read this day' })).toHaveAttribute('href', '#first-day');
+        expect(screen.queryByRole('button', { name: /^3\. Home/ })).not.toBeInTheDocument();
+        expect(mapMocks.setFilter).toHaveBeenLastCalledWith('trip-route-direction', ['in', ['get', 'trackId'], ['literal', ['morning', 'afternoon']]]);
+        expect(mapMocks.setData.mock.lastCall?.[0].features).toHaveLength(2);
+        expect(mapMocks.Map).toHaveBeenCalledOnce();
+        expect(fetch).toHaveBeenCalledOnce();
+        fireEvent.click(screen.getByRole('checkbox', { name: 'Show stops' }));
+        expect(mapMocks.setLayoutProperty).toHaveBeenCalledWith('trip-stops', 'visibility', 'none');
+        expect(screen.queryByRole('button', { name: /Shared camp/ })).not.toBeInTheDocument();
+        fireEvent.click(screen.getByRole('button', { name: 'All days' }));
+        expect(screen.getByRole('button', { name: 'All days' })).toHaveAttribute('aria-pressed', 'true');
+        expect(mapMocks.setData.mock.lastCall?.[0].features).toHaveLength(3);
+    });
+
+    it('limits inline maps and their reset to the whole selected day', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
+        render(<TripStoryProvider manifest={dayMapManifest}><TripRouteMap dayId="coastbound" /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        expect(screen.getByRole('region')).toHaveAccessibleName('Map of Coastbound.');
+        expect(screen.queryByRole('group', { name: 'Map days' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: /^3\. Home/ })).not.toBeInTheDocument();
+        expect(mapMocks.setFilter).toHaveBeenCalledWith('trip-route-line', ['in', ['get', 'trackId'], ['literal', ['morning', 'afternoon']]]);
+        const control = mapMocks.addControl.mock.calls.map(([control]) => control).find(control => control?.constructor.name === 'RouteActionsControl');
+        const reset = control.onAdd(mapMocks.Map.mock.results[0].value).querySelector('button');
+        expect(reset).toHaveTextContent('Show whole day');
+        fireEvent.click(screen.getByRole('button', { name: /Shared camp/ }));
+        fireEvent.click(reset);
+        expect(screen.getByRole('region')).toHaveAccessibleName('Map of Coastbound.');
+        const bounds = mapMocks.LngLatBounds.mock.results.at(-1)?.value;
+        expect(bounds.extend).toHaveBeenCalledWith([-124.5, 45]);
+        expect(bounds.extend).not.toHaveBeenCalledWith([-120, 44]);
+    });
+
+    it.each([false, true])('applies the latest day after delayed loading (reduced motion: %s)', async (reducedMotion) => {
+        mapMocks.reducedMotion = reducedMotion;
+        mapMocks.once.mockImplementation(() => undefined);
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
+        render(<TripStoryProvider manifest={dayMapManifest}><TripRouteMap /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        fireEvent.click(screen.getByRole('button', { name: '1. Coastbound' }));
+        fireEvent.click(screen.getByRole('button', { name: '2. Homebound (reconstructed)' }));
+        expect(mapMocks.setFilter).not.toHaveBeenCalled();
+        act(() => { for (const [event, listener] of mapMocks.once.mock.calls) if (event === 'load') listener(); });
+        expect(mapMocks.setFilter).toHaveBeenCalledWith('trip-route-direction', ['in', ['get', 'trackId'], ['literal', ['return']]]);
+        expect(mapMocks.fitBounds).toHaveBeenLastCalledWith(expect.anything(), { padding: 40, maxZoom: 11, duration: reducedMotion ? 0 : 300 });
+        expect(mapMocks.setZoom).not.toHaveBeenCalled();
+        expect(mapMocks.Map).toHaveBeenCalledOnce();
+    });
+
+    it('keeps an early day reset after the map loads', async () => {
+        mapMocks.once.mockImplementation(() => undefined);
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
+        render(<TripStoryProvider manifest={dayMapManifest}><TripRouteMap dayId="coastbound" stopId="camp" /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        const control = mapMocks.addControl.mock.calls.map(([control]) => control).find(control => control?.constructor.name === 'RouteActionsControl');
+        const reset = control.onAdd(mapMocks.Map.mock.results[0].value).querySelector('button');
+        fireEvent.click(reset);
+        act(() => { for (const [event, listener] of [...mapMocks.once.mock.calls]) if (event === 'load' || event === 'moveend') listener(); });
+        expect(mapMocks.easeTo).not.toHaveBeenCalled();
+        expect(reset.hidden).toBe(true);
+        expect(screen.getByRole('region')).toHaveAccessibleName('Map of Coastbound.');
+    });
+
+    it('releases offscreen maps and restores the selected day, stop, and POI preference', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
+        const story = (active: boolean) => <TripStoryProvider manifest={dayMapManifest}><TripRouteMap active={active} /></TripStoryProvider>;
+        const { rerender } = render(story(true));
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        fireEvent.click(screen.getByRole('button', { name: '2. Homebound (reconstructed)' }));
+        fireEvent.click(screen.getByRole('button', { name: /Shared camp/ }));
+        fireEvent.click(screen.getByRole('checkbox', { name: 'Show stops' }));
+        const oldMap = mapMocks.Map.mock.results[0].value;
+        const oldLoad = mapMocks.once.mock.calls.find(([event]) => event === 'load')?.[1];
+        rerender(story(false));
+        expect(oldMap.remove).toHaveBeenCalledOnce();
+        expect(screen.getByRole('button', { name: '2. Homebound (reconstructed)' })).toHaveAttribute('aria-pressed', 'true');
+        act(() => oldLoad?.());
+        mapMocks.easeTo.mockClear();
+        rerender(story(true));
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledTimes(2));
+        expect(mapMocks.easeTo).toHaveBeenCalledWith({ center: [-124.5, 45], zoom: 9 });
+        const style = mapMocks.Map.mock.calls[1][0].style as StyleSpecification;
+        expect(style.layers.find(layer => layer.id === 'trip-stops')?.paint).toMatchObject({
+            'circle-color': ['case', ['==', ['get', 'id'], 'camp'], '#f59e0b', '#fafafa'],
+        });
+        expect(screen.getByRole('checkbox', { name: 'Show stops' })).not.toBeChecked();
+        expect(screen.getByRole('button', { name: '2. Homebound (reconstructed)' })).toHaveAttribute('aria-pressed', 'true');
+    });
+
     it.each([false, true])('allows a stop selection to be reset before map load (reduced motion: %s)', async (reducedMotion) => {
         mapMocks.reducedMotion = reducedMotion;
         mapMocks.once.mockImplementation(() => undefined);
@@ -234,11 +398,13 @@ describe('TripRouteMap', () => {
     });
 
     it('keeps route downloads available when route loading fails', async () => {
-        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 503 }));
+        const fetch = vi.fn().mockResolvedValue({ ok: false, status: 503 });
+        vi.stubGlobal('fetch', fetch);
         render(<TripStoryProvider manifest={manifest}><TripRouteMap /></TripStoryProvider>);
         await screen.findByText('Route request failed with 503');
         expect(screen.getByRole('link', { name: 'Download route (GeoJSON)' })).toHaveAttribute('href', manifest.route.geoJson);
         expect(mapMocks.Map).not.toHaveBeenCalled();
+        expect(fetch).toHaveBeenCalledOnce();
     });
 
     it('does not paint a replacement map before its own load event', async () => {
