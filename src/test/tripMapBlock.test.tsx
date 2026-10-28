@@ -3,12 +3,15 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { TripMapBlock } from '../blog/TripMdxBlocks';
 
 vi.mock('../features/trips/components/TripRoutePreview', () => ({
-    TripRoutePreview: ({ onExplore }: { onExplore?: () => void }) => <div>
+    TripRoutePreview: ({ onExplore, onDaySelect }: { onExplore?: () => void; onDaySelect?: (id: string) => void }) => <div>
         <p>Route preview</p><button onClick={onExplore}>Explore interactive map</button>
+        <button onClick={() => onDaySelect?.('coastbound')}>Choose Coastbound</button>
     </div>,
 }));
 vi.mock('../features/trips/components/TripRouteMap', () => ({
-    TripRouteMap: ({ active }: { active: boolean }) => <div><p>{active ? 'Active map' : 'Suspended map'}</p><button>Map control</button></div>,
+    TripRouteMap: ({ active, initialDayId }: { active: boolean; initialDayId?: string }) => <div>
+        <p>{active ? 'Active map' : 'Suspended map'}</p><p>Requested day: {initialDayId}</p><button>Map control</button>
+    </div>,
 }));
 
 const fullscreenDescriptor = Object.getOwnPropertyDescriptor(document, 'fullscreenElement');
@@ -19,6 +22,15 @@ afterEach(() => {
 });
 
 describe('trip map lifecycle', () => {
+    it('hands a preview day selection to the interactive map', async () => {
+        const { notify } = observe();
+        render(<TripMapBlock />);
+        fireEvent.click(screen.getByRole('button', { name: 'Choose Coastbound' }));
+        notify(0, true);
+        await screen.findByText('Active map');
+        expect(screen.getByText('Requested day: coastbound')).toBeInTheDocument();
+    });
+
     function observe() {
         const observers: { callback: IntersectionObserverCallback; options?: IntersectionObserverInit; disconnect: ReturnType<typeof vi.fn> }[] = [];
         vi.stubGlobal('IntersectionObserver', class {

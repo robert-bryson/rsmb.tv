@@ -73,10 +73,10 @@ Use lowercase letters, numbers, and hyphens in IDs. Shortcodes inside code examp
 
 | Shortcode | Result |
 | --- | --- |
-| `{{trip-map}}` | Complete available route and numbered stops |
+| `{{trip-map}}` | Complete available route, with day controls when defined, and no stops |
 | `{{trip-map:stop-id}}` | Route map centered on a manifest stop |
 | `{{trip-map:track:track-id}}` | Selected track with the other tracks dimmed |
-| `{{trip-map:day:day-id}}` | One day's tracks and assigned stops, fitted to that day |
+| `{{trip-map:day:day-id}}` | One day's colored tracks and stops, with the full route in black behind them |
 | `{{trip-photo:photo-id}}` | One photo and its caption |
 | `{{trip-gallery:gallery-id}}` | Gallery from the manifest |
 | `{{trip-facts}}` | Another copy of the trip facts |
@@ -200,8 +200,12 @@ The registry adds these fact tags automatically. It uses lowercase text and repl
 For example, `Honda CB500X` adds `motorcycle` and `honda-cb500x`. `New Mexico` adds `new-mexico`.
 Explicit Sheet tags keep their original text.
 
+### Day assignments
+
 An optional `days` entry requires `id`, `title`, and `headingId`.
 It can also contain `date`, `trackIds`, `stopIds`, and `galleryId`.
+Day controls and route colors require explicit `days[].trackIds` assignments.
+The `ridingDays` fact does not create these assignments. Without them, the map uses one route color.
 Set `headingId` to the generated story heading ID. Referenced tracks, stops, and galleries must exist.
 Use `days` array order for travel order. GPX filename order can differ from travel order.
 Assign each track to one day. Split a multi-day GPX into daily source files before preparation.
@@ -214,7 +218,7 @@ Dates remain optional. Do not infer riding dates from export filenames.
 ```json
 {
   "id": "boise-to-wallowas",
-  "title": "Boise to Wallowas (reconstructed)",
+  "title": "Boise to Wallowas",
   "date": "2024-05-17",
   "headingId": "boise-hells-canyon-wallowas",
   "trackIds": ["2024-05-17-boise-hells-canyon-campsite-reconstructed"],
@@ -228,22 +232,56 @@ Use this day in the source Google Doc:
 {{trip-map:day:boise-to-wallowas}}
 ```
 
-Overview maps show labeled day buttons with matching route colors.
-Selecting a day fits its tracks and assigned stops. Other tracks remain dimmed for context.
-Select `All days` to restore the complete route.
+### Overview controls
+
+Overview maps show day buttons below the map.
+They omit stop markers, stop lists, and the `Show stops` checkbox.
+Each button has an underline that matches its route color.
+Hover over a day button to emphasize its tracks without moving the camera.
+Keyboard focus supplies the same feedback.
+Hover over a route to highlight its day button.
+A popup shows the day name for either action.
+Pointer feedback has priority while the pointer stays over a button or route.
+When the pointer leaves, feedback returns to the focused button.
+Reduced motion disables route paint transitions and camera animation.
+Press Escape to close the popup.
+The button background uses the route color while hovered, focused, or selected.
+Click a day's track or its button to select that day.
+Both actions fit the day's tracks and dim the other tracks for context.
+Click outside the map or on empty map space to restore the view from before day selection.
+With focus inside the map, press Escape for the same reset.
+Selecting the same day again also restores the saved view.
+The saved view remains available after map suspension or failure.
+If a reset occurs without an interactive map, the next map instance restores that view.
 Tracks without day assignments remain visible in the overview.
-Colors repeat after eight days. Use the numbered labels and selection controls to distinguish days.
-Inline day maps show only that day's tracks and assigned stops.
+Colors repeat after eight days.
+Use the numbered labels and selection controls to distinguish days.
+
+### Inline day maps
+
+Inline day maps show the day's colored tracks and assigned stops.
+The rest of the route uses the same black background style as a highlighted overview map.
+Day maps do not repeat the day title above the map.
+The initial view fits the day.
+Panning can reveal more of the full route.
 Their `Show whole day` action restores the day's extent.
-The `Show stops` checkbox controls map markers and the stop list together.
-Stop numbers stay consistent between overview maps and day maps.
+On inline maps, the checkbox controls map markers and the stop list together.
+Stop numbers follow manifest order in inline maps and previews.
 Day maps retain their selection when an offscreen interactive map is released.
+
+### Previews and recovery
+
 The static preview uses the same day membership and colors.
-Overview previews retain the other tracks in gray when you select a day.
+Overview previews retain the other tracks in black when you select a day.
+Their day controls use the same pointer, focus, and Escape behavior.
 If the interactive map fails, the route preview, day controls, and download remain available.
 Select `Retry route` to load the route again and create a new interactive map.
 Retry keeps the selected day and stop visibility setting.
-An error remains visible when you change the day. A day change does not retry a failed map.
+An error remains visible when you change the day.
+A day change does not retry a failed map.
+Loading another route clears the previous selection, hover, and focus feedback.
+
+### Other manifest fields
 
 An optional `series` requires `id`, `title`, and a positive integer `order`.
 If posts share a manifest, use the Sheet series columns to set each post's order.
@@ -258,6 +296,8 @@ Use lowercase letters, numbers, and hyphens in gallery IDs.
 Include at least one photo in each gallery.
 Include each photo ID only once within a gallery.
 
+### Galleries
+
 A gallery first shows up to nine photos.
 Its viewer includes all photos from mounted story galleries, including collapsed photos.
 Next and Previous follow the gallery order in the story.
@@ -266,6 +306,9 @@ An inline photo has its own viewer.
 Each viewer slide retains the manifest alt text.
 Expanding or collapsing the gallery does not change viewer captions or photo order.
 Changing the gallery ID starts the new gallery in its collapsed state.
+
+### Stop and track maps
+
 The map retains its instance when only the requested stop changes.
 The camera, marker highlight, and stop selection follow that stop.
 After a track change, the replacement map restores the selected stop when it loads.
@@ -274,11 +317,10 @@ The full-route action clears the selected stop. A later map load does not restor
 Selecting a stop makes the full-route action available before map load.
 An early full-route action also cancels the initial overview zoom adjustment.
 An error belongs to one map configuration. Replacing its route, track, or stops discards that error.
-Loading another route clears the previous user selection.
 
 For each entry in `route.tracks`, copy the exact ID from `asset-metadata.json`.
 Add a clear name. Add a date only after verification.
-Identify reconstructed tracks in their names.
+Use place names for route track labels.
 
 ```json
 {

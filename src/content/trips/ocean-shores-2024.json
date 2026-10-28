@@ -13,8 +13,38 @@
     "hero": "2024-ocean-shores-4-beach",
     "route": {
         "geoJson": "https://data.rsmb.tv/trips/ocean-shores-2024/geo/route.geojson",
-        "alt": "Map of the round trip between Seattle and Ocean Shores, Washington."
+        "alt": "Map of the round trip between Seattle and Ocean Shores, Washington.",
+        "tracks": [
+            {
+                "id": "paseo-de-rever-02-17-24",
+                "name": "Seattle to Ocean Shores",
+                "date": "2024-02-17"
+            },
+            {
+                "id": "paseo-de-rever-02-20-24",
+                "name": "Ocean Shores to Seattle",
+                "date": "2024-02-20"
+            }
+        ]
     },
+    "days": [
+        {
+            "id": "seattle-to-ocean-shores",
+            "title": "Seattle to Ocean Shores",
+            "date": "2024-02-17",
+            "headingId": "day-1-seattle-to-ocean-shores",
+            "trackIds": ["paseo-de-rever-02-17-24"],
+            "stopIds": ["seattle-departure", "ocean-shores"]
+        },
+        {
+            "id": "ocean-shores-to-seattle",
+            "title": "Ocean Shores to Seattle",
+            "date": "2024-02-20",
+            "headingId": "the-ride-home-ocean-shores-back-to-seattle",
+            "trackIds": ["paseo-de-rever-02-20-24"],
+            "stopIds": ["ocean-shores", "seattle-return"]
+        }
+    ],
     "stops": [
         {
             "id": "seattle-departure",

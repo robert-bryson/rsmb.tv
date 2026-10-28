@@ -32,6 +32,11 @@ export default defineConfig(({ mode }) => ({
     devSourcemap: true,
     transformer: 'lightningcss',
   },
+  server: {
+    watch: {
+      ignored: ['**/coverage/**', '**/test-results/**', '**/test-results-trips/**', '**/playwright-report/**'],
+    },
+  },
   build: {
     copyPublicDir: mode !== 'trip-test',
     sourcemap: 'hidden',

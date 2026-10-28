@@ -7,12 +7,12 @@
     "tracks": [
       { "id": "morning", "name": "Morning ride" },
       { "id": "afternoon", "name": "Afternoon ride" },
-      { "id": "return", "name": "Return ride (reconstructed)" }
+      { "id": "return", "name": "Return ride" }
     ]
   },
   "days": [
     { "id": "outbound", "title": "Coastbound", "headingId": "first-day", "trackIds": ["morning", "afternoon"], "stopIds": ["start", "camp"] },
-    { "id": "homebound", "title": "Homebound (reconstructed)", "headingId": "second-day", "trackIds": ["return"], "stopIds": ["camp", "home"] }
+    { "id": "homebound", "title": "Homebound", "headingId": "second-day", "trackIds": ["return"], "stopIds": ["camp", "home"] }
   ],
   "stops": [
     { "id": "start", "name": "Harbor", "coordinates": [-122, 47] },

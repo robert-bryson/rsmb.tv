@@ -4,6 +4,8 @@ import type { TripManifest } from './types';
 
 export type TripMapFocus = { stopId?: string; trackId?: string; dayId?: string };
 export const routeColor = '#f59e0b';
+export const routeContextColor = '#71717a';
+export const routeBackgroundStyle = { color: '#09090b', width: 7, opacity: 0.85 };
 // Labels and selected states accompany these colors in both map renderers.
 const dayColors = ['#fbbf24', '#38bdf8', '#e879f9', '#34d399', '#fb7185', '#a78bfa', '#fb923c', '#a3e635'];
 
@@ -17,8 +19,19 @@ export function dayColor(manifest: TripManifest, dayId: string) {
 }
 
 export function trackColor(manifest: TripManifest, trackId?: string) {
-    const day = tripMapDays(manifest).find(day => day.trackIds?.includes(trackId ?? ''));
+    const day = tripMapDayForTrack(manifest, trackId);
     return day ? dayColor(manifest, day.id) : routeColor;
+}
+
+export function tripMapDayForTrack(manifest: TripManifest, trackId: unknown) {
+    return typeof trackId === 'string'
+        ? tripMapDays(manifest).find(day => day.trackIds?.includes(trackId)) : undefined;
+}
+
+export function tripMapDayAnchor(manifest: TripManifest, route: RouteGeoJson, dayId: string): [number, number] | undefined {
+    const coordinates = tripMapCoordinates(tripMapView(manifest, route, { dayId }), false);
+    const point = coordinates[Math.floor(coordinates.length / 2)];
+    return point ? [point[0], point[1]] : undefined;
 }
 
 export function routeLineColor(manifest: TripManifest): string | ExpressionSpecification {
@@ -54,7 +67,7 @@ export function tripMapView(manifest: TripManifest, route: RouteGeoJson | null, 
         day, trackIds, focusedRoute, stops, error,
         title: day?.title ?? track?.name ?? 'Route overview',
         alt: day ? `Map of ${day.title}.` : track ? `Map focused on ${track.name}.`
-            : manifest.route.alt ?? `Map of the route with ${manifest.stops.length} marked stops.`,
+            : manifest.route.alt ?? 'Map of the trip route.',
     };
 }
 

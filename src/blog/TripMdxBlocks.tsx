@@ -15,6 +15,7 @@ export function TripGalleryBlock(props: { galleryId: string }) {
     </TripBlockBoundary>;
 }
 export function TripMapBlock(props: TripMapFocus) {
+    const [previewDayId, setPreviewDayId] = useState<string>();
     const [attempt, setAttempt] = useState(() => typeof IntersectionObserver === 'undefined' ? 1 : 0);
     const [active, setActive] = useState(() => typeof IntersectionObserver === 'undefined');
     const [retainedHeight, setRetainedHeight] = useState<number>();
@@ -56,12 +57,18 @@ export function TripMapBlock(props: TripMapFocus) {
             document.removeEventListener('fullscreenchange', suspend);
         };
     }, []);
-    const fallback = <div><p role="status" className="text-sm text-zinc-300">Interactive map unavailable. The route and story are still available.</p><TripRoutePreview {...props} onExplore={() => { setActive(true); setAttempt(value => value + 1); }} /></div>;
+    const previewProps = {
+        ...props,
+        dayId: props.dayId ?? previewDayId,
+        allowDaySelection: !props.dayId && !props.trackId && !props.stopId,
+        onDaySelect: setPreviewDayId,
+    };
+    const fallback = <div><p role="status" className="text-sm text-zinc-300">Interactive map unavailable. The route and story are still available.</p><TripRoutePreview {...previewProps} onExplore={() => { setActive(true); setAttempt(value => value + 1); }} /></div>;
     return <div className="scroll-mt-24" data-trip-map>
         <div data-trip-facts-slot />
         <div ref={containerRef} data-trip-map-viewport style={!active && retainedHeight ? { minHeight: retainedHeight } : undefined}>
-        {attempt ? <TripBlockBoundary key={attempt} fallback={fallback}><Suspense fallback={<TripRoutePreview {...props} />}><Map {...props} active={active} onExplore={() => setActive(true)} /></Suspense></TripBlockBoundary>
-            : <TripRoutePreview {...props} onExplore={() => { setAttempt(1); setActive(true); }} />}
+        {attempt ? <TripBlockBoundary key={attempt} fallback={fallback}><Suspense fallback={<TripRoutePreview {...previewProps} />}><Map {...props} initialDayId={previewDayId} active={active} onExplore={() => setActive(true)} /></Suspense></TripBlockBoundary>
+            : <TripRoutePreview {...previewProps} onExplore={() => { setAttempt(1); setActive(true); }} />}
         </div>
         <div data-trip-navigation-slot />
     </div>;

@@ -15,7 +15,7 @@
     "hero": "boise-2024-05-18-gravel-road",
     "route": {
         "geoJson": "https://data.rsmb.tv/trips/boise-2024/geo/route.geojson",
-        "alt": "Map of the recorded and reconstructed motorcycle route from Seattle to Boise and back via Hells Canyon and Panther Creek.",
+        "alt": "Map of the motorcycle route from Seattle to Boise and back via Hells Canyon and Panther Creek.",
         "tracks": [
             {
                 "id": "paseo-de-rever-05-12-24",
@@ -31,17 +31,17 @@
             },
             {
                 "id": "2024-05-17-boise-hells-canyon-campsite-reconstructed",
-                "name": "Boise to Wallowa Mountains (reconstructed)",
+                "name": "Boise to Wallowa Mountains",
                 "date": "2024-05-17"
             },
             {
                 "id": "2024-05-18-campsite-panther-creek-reconstructed",
-                "name": "Wallowas to Panther Creek (reconstructed)",
+                "name": "Wallowas to Panther Creek",
                 "date": "2024-05-18"
             },
             {
                 "id": "2024-05-19-panther-creek-seattle-reconstructed",
-                "name": "Panther Creek to Seattle (reconstructed)",
+                "name": "Panther Creek to Seattle",
                 "date": "2024-05-19"
             }
         ]
@@ -70,7 +70,7 @@
         },
         {
             "id": "boise-to-wallowas",
-            "title": "Boise to Wallowas (reconstructed)",
+            "title": "Boise to Wallowas",
             "date": "2024-05-17",
             "headingId": "boise-hells-canyon-wallowas",
             "trackIds": ["2024-05-17-boise-hells-canyon-campsite-reconstructed"],
@@ -78,7 +78,7 @@
         },
         {
             "id": "wallowas-to-panther-creek",
-            "title": "Wallowas to Panther Creek (reconstructed)",
+            "title": "Wallowas to Panther Creek",
             "date": "2024-05-18",
             "headingId": "wallowas-to-panther-creek",
             "trackIds": ["2024-05-18-campsite-panther-creek-reconstructed"],
@@ -86,7 +86,7 @@
         },
         {
             "id": "panther-creek-to-seattle",
-            "title": "Panther Creek to Seattle (reconstructed)",
+            "title": "Panther Creek to Seattle",
             "date": "2024-05-19",
             "headingId": "the-ride-home",
             "trackIds": ["2024-05-19-panther-creek-seattle-reconstructed"],
@@ -960,8 +960,7 @@
             "boise-2024-05-17-midvale",
             "boise-2024-05-17-wallowa-mountains",
             "boise-2024-05-17-snake-river",
-            "boise-2024-05-17-snowy-ridge",
-            "boise-2024-05-17-hells-canyon-inn"
+            "boise-2024-05-17-snowy-ridge"
         ],
         "hells-canyon": [
             "boise-2024-05-17-hells-canyon-peak",

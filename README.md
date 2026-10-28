@@ -166,6 +166,8 @@ The post browser tests use a fixed Google Docs fixture in `tests/fixtures`.
 A compilation test compares the fixture MDX with the importer output.
 Browser tests check subtitle styles at phone and desktop widths, unique heading IDs, reload, and browser history.
 These tests do not require Google access or published trip assets.
+ESLint and the development watcher exclude generated coverage and browser reports.
+Report writes must not trigger application reloads during browser checks.
 
 `npm run test:trips:browser` builds fixed test content for production and starts preview on port 4175.
 It checks desktop and phone layouts, photo viewer focus, failed assets, and unavailable WebGL.
@@ -191,6 +193,11 @@ PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- tests/trips/reading.spec.ts --
 
 Trip day tests use explicit track and stop assignments.
 They check selection during delayed loading, resets, previews, failed maps, and resource cleanup.
+Mixed pointer and keyboard checks verify that pointer exit preserves focus feedback.
+Escape closes day popups before selection.
+With focus inside the map, Escape also clears the selected day.
+Recovery checks verify saved camera restoration after dismissal during map suspension or failure.
+Route replacement clears the previous hover and focus feedback.
 Fullscreen and keyboard focus keep a map active until the interaction ends.
 The preview uses the parent map's route response after suspension or failure. It does not retry failed requests automatically.
 Run the focused unit tests with:

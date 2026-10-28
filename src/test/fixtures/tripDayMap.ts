@@ -14,7 +14,7 @@ export const dayMapManifest: TripManifest = {
     id: 'daily-trip', dates: { start: '2024-05-01', end: '2024-05-03' }, hero: 'hero',
     route: { geoJson: '/daily-route.geojson', tracks: [
         { id: 'morning', name: 'Morning ride' }, { id: 'afternoon', name: 'Afternoon ride' },
-        { id: 'return', name: 'Return ride (reconstructed)' },
+        { id: 'return', name: 'Return ride' },
     ] },
     photos: [{ id: 'hero', src: '/hero.webp', width: 1600, height: 1000, alt: 'A coast' }],
     stops: [
@@ -24,7 +24,7 @@ export const dayMapManifest: TripManifest = {
     ],
     days: [
         { id: 'coastbound', title: 'Coastbound', headingId: 'first-day', trackIds: ['morning', 'afternoon'], stopIds: ['start', 'camp'] },
-        { id: 'homebound', title: 'Homebound (reconstructed)', headingId: 'second-day', trackIds: ['return'], stopIds: ['camp', 'finish'] },
+        { id: 'homebound', title: 'Homebound', headingId: 'second-day', trackIds: ['return'], stopIds: ['camp', 'finish'] },
         { id: 'rest', title: 'Rest day', headingId: 'rest-day' },
     ],
 };
