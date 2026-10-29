@@ -154,7 +154,7 @@ The modest aggregate increase understates the value of tests that expose incorre
 | Final day-map browser checks | 27 passed across the same projects after the selection-scope correction |
 | Firefox trip checks | All 29 failed before test execution because the browser could not open its temporary profile |
 | Production fixture build and JavaScript budgets | Passed |
-| Dependency advisory audit | Incomplete; automatic approval review rejected the external metadata request |
+| Dependency advisory audit | Passed after user approval; zero reported vulnerabilities across 727 dependencies |
 
 The host used Node.js 26.12.0 and npm 11.20.0 with the existing dependency installation.
 The repository requires npm 12.2.1. A clean installation under that npm version was not tested.
@@ -181,12 +181,13 @@ Existing publication, rendering, navigation, and budget tests cover those change
 The remaining map decomposition and browser extension tasks stay in [TODO.md](../../TODO.md).
 This review does not replace the existing content publication checks.
 
-## Security limit
+## Security checks
 
 Source inspection found no direct security defect in this diff.
-This does not establish that the complete dependency tree has no known vulnerabilities.
-Automatic approval review rejected `npm audit` because it sends dependency metadata to npm's external advisory service.
-The advisory check requires approval for that disclosure before it can be completed.
+The user approved sending dependency metadata to npm's advisory service after the initial request was rejected.
+The follow-up `npm audit --audit-level=moderate` completed successfully on 2026-10-28.
+It reported zero vulnerabilities across 727 dependencies, including development dependencies.
+No dependency changes were required.
 
 Standards: four findings. Spec: four findings. Two additional lifecycle defects were fixed.
 Several findings describe the same defect from different review axes.
