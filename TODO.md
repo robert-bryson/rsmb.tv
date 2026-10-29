@@ -34,7 +34,7 @@ Use fixed data for browser checks. Record the browser, viewport, and expected re
 - [ ] Test Flights map keyboard controls and camera URL synchronization with Playwright.
 - [ ] Test list scroll restoration with browser Back and the article return link after delayed content loads.
 - [ ] Extend fixed-tile browser checks to verify stop marker selection and all three map styles.
-- [ ] Reproduce the [concurrent WebKit map failures](docs/reviews/2026-10-27-trip-photo-review.md#browser-run-limits) with graphics and map-activation diagnostics.
+- [ ] Reproduce the [WebKit map failures](docs/reviews/2026-10-27-trip-photo-review.md#browser-run-limits), including missing stop markers after clicks with normal motion. Use retained CI traces and graphics diagnostics.
 
 Run trip browser checks with WebKit enabled. Include JavaScript budgets, photo viewers, and delayed map loading.
 Keep the current budgets. See the [repository guide](README.md#testing-notes) for browser setup.

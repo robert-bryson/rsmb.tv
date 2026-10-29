@@ -1,6 +1,7 @@
-import { expect, test, type Page, type Request } from '@playwright/test';
+import { expect, test, type Locator, type Page, type Request } from '@playwright/test';
 import sharp from 'sharp';
 import { measureJavaScriptGzip } from '../../scripts/trip-browser-budget';
+import { scrollbarTest } from './scrollbars';
 
 async function assets(page: Page) {
     await page.route('**/test-trip/**', async route => {
@@ -126,43 +127,66 @@ test('inline and gallery photos use the viewer and return keyboard focus', async
     expect(page.context().pages()).toHaveLength(1);
 });
 
-test('panoramas fill the usable page width without cropping or horizontal scrolling', async ({ page }) => {
-    await page.goto('/trips/coastal-test');
-    // Reserve a scrollbar gutter even on hosts that normally use overlay scrollbars.
-    await page.addStyleTag({ content: 'html { overflow-y: scroll; scrollbar-gutter: stable; }' });
-    const photo = page.getByRole('img', { name: 'Coast photograph 4' });
-    for (const width of [375, 768, 1440, 2560]) {
-        await page.setViewportSize({ width, height: 900 });
+async function panoramaLayout(photo: Locator) {
+    return photo.evaluate(image => {
+        const rect = image.getBoundingClientRect();
+        return {
+            left: rect.left, right: rect.right, width: rect.width, height: rect.height,
+            // Unlike root clientWidth, this box excludes an empty reserved gutter.
+            // It also remains independent of body and article width constraints.
+            pageWidth: document.documentElement.getBoundingClientRect().width,
+            viewportWidth: document.documentElement.clientWidth,
+            scrollWidth: document.documentElement.scrollWidth,
+        };
+    });
+}
+
+for (const [scrollbars, panoramaTest] of [['default', test], ['classic', scrollbarTest]] as const) {
+    panoramaTest(`panoramas fill the usable page width without cropping or horizontal scrolling (${scrollbars} scrollbars)`, async ({ page, browserName, isMobile }) => {
+        await page.goto('/trips/coastal-test');
+        await page.addStyleTag({ content: 'html { overflow-y: scroll; scrollbar-gutter: stable; }'
+            + (scrollbars === 'classic' ? ' ::-webkit-scrollbar { width: 15px; }' : '') });
+        const photo = page.getByRole('img', { name: 'Coast photograph 4' });
+        for (const width of [375, 768, 1440, 2560]) {
+            await page.setViewportSize({ width, height: 900 });
+            await photo.scrollIntoViewIfNeeded();
+            await expect.poll(() => photo.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+            const layout = await panoramaLayout(photo);
+            expect(Math.abs(layout.left)).toBeLessThan(1);
+            expect(Math.abs(layout.right - layout.pageWidth)).toBeLessThan(1);
+            expect(layout.width / layout.height).toBeCloseTo(3200 / 560, 1);
+            expect(layout.scrollWidth).toBe(layout.viewportWidth);
+            if (scrollbars === 'classic' && browserName === 'chromium' && !isMobile) {
+                expect(width - layout.pageWidth).toBe(15);
+            }
+            await expect(photo).toHaveAttribute('sizes', '100vw');
+            await expect(photo.locator('..')).toHaveAttribute('data-pswp-width', '3200');
+        }
+        // Browsers can retain a loaded candidate after resize. Check source
+        // selection on a fresh wide-page load, where the inline hint undersizes it.
+        await page.reload();
         await photo.scrollIntoViewIfNeeded();
-        await expect.poll(() => photo.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
-        const layout = await photo.evaluate(image => {
-            const rect = image.getBoundingClientRect();
-            return {
-                left: rect.left, right: rect.right, width: rect.width, height: rect.height,
-                pageWidth: document.documentElement.clientWidth,
-                scrollWidth: document.documentElement.scrollWidth,
-            };
-        });
-        expect(Math.abs(layout.left)).toBeLessThan(1);
-        expect(Math.abs(layout.right - layout.pageWidth)).toBeLessThan(1);
-        expect(layout.width / layout.height).toBeCloseTo(3200 / 560, 1);
-        expect(layout.scrollWidth).toBe(layout.pageWidth);
-        await expect(photo).toHaveAttribute('sizes', '100vw');
-        await expect(photo.locator('..')).toHaveAttribute('data-pswp-width', '3200');
-    }
-    // Browsers can retain a loaded candidate after resize. Check source
-    // selection on a fresh wide-page load, where the inline hint undersizes it.
-    await page.reload();
+        await expect.poll(() => photo.evaluate((image: HTMLImageElement) => image.currentSrc)).toContain('-3200.svg');
+        const trigger = photo.locator('..');
+        await trigger.focus();
+        await expect(photo.locator('../..')).toHaveCSS('outline-offset', '-3px');
+        await page.keyboard.press('Enter');
+        await expect(page.locator('.pswp--open')).toBeFocused();
+        await page.keyboard.press('Escape');
+        await expect(page.locator('.pswp--open')).toHaveCount(0);
+        await expect(trigger).toBeFocused();
+    });
+}
+
+test('panorama measurements detect a narrowed page body on phones', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 900 });
+    await page.goto('/trips/coastal-test');
+    await page.addStyleTag({ content: 'body { max-width: 320px; }' });
+    const photo = page.getByRole('img', { name: 'Coast photograph 4' });
     await photo.scrollIntoViewIfNeeded();
-    await expect.poll(() => photo.evaluate((image: HTMLImageElement) => image.currentSrc)).toContain('-3200.svg');
-    const trigger = photo.locator('..');
-    await trigger.focus();
-    await expect(photo.locator('../..')).toHaveCSS('outline-offset', '-3px');
-    await page.keyboard.press('Enter');
-    await expect(page.locator('.pswp--open')).toBeFocused();
-    await page.keyboard.press('Escape');
-    await expect(page.locator('.pswp--open')).toHaveCount(0);
-    await expect(trigger).toBeFocused();
+    const layout = await panoramaLayout(photo);
+    expect(layout.right).toBeCloseTo(320, 0);
+    expect(layout.right).toBeLessThan(layout.pageWidth - 30);
 });
 
 test('failed panoramas preserve the reserved image height', async ({ page }) => {

@@ -304,42 +304,53 @@ for (const timing of ['before', 'after'] as const) {
     });
 }
 
-test('inline maps retain the full black route while fitting and resetting to their own day', async ({ page }) => {
-    await page.goto('/trips/daily-test');
-    const day = page.locator('[data-trip-map]').nth(2);
-    await expect(day).toBeVisible();
-    await page.keyboard.press('ArrowDown');
-    await day.scrollIntoViewIfNeeded();
-    await expect(day.getByRole('region', { name: 'Map of Homebound.' })).toBeVisible();
-    await expect(day.getByText('Homebound', { exact: true })).toHaveCount(0);
-    await expect(day.getByRole('button', { name: /Harbor/ })).toHaveCount(0);
-    await expect(day.getByRole('button', { name: /Shared camp/ })).toBeVisible();
-    const stops = day.getByRole('region').getByRole('button', { name: 'Stops', exact: true });
-    await expect(stops).toHaveAttribute('aria-pressed', 'true');
-    await expect.poll(async () => (await routePixels(day)).stopPixels).toBeGreaterThan(10);
-    await expect.poll(async () => (await routePixels(day)).blue).toBeGreaterThan(10);
-    await expect.poll(async () => (await routePixels(day)).amber).toBe(0);
-    await expect.poll(async () => (await routePixels(day)).blackRoute).toBeGreaterThan(100);
-    const originalBounds = (await settledRoutePixels(day)).bounds;
-    await expect(day.getByRole('button', { name: 'Show whole day' })).toBeHidden();
-    await stops.click();
-    await expect(stops).toHaveAttribute('aria-pressed', 'false');
-    await expect.poll(async () => (await routePixels(day)).stopPixels).toBe(0);
-    await expect(day.getByRole('button', { name: /Shared camp/ })).toHaveCount(0);
-    await expect(day.getByRole('button', { name: 'Show whole day' })).toBeHidden();
-    await stops.click();
-    await expect(stops).toHaveAttribute('aria-pressed', 'true');
-    await expect.poll(async () => (await routePixels(day)).stopPixels).toBeGreaterThan(10);
-    await expect.poll(async () => (await routePixels(day)).bounds).toEqual(originalBounds);
-    await day.getByRole('button', { name: 'Zoom in', exact: true }).click();
-    await expect(day.getByRole('button', { name: 'Show whole day' })).toBeVisible();
-    await day.getByRole('button', { name: 'Show whole day' }).click();
-    await expect(day.getByRole('region', { name: 'Map of Homebound.', exact: true })).toBeVisible();
-    await expect.poll(async () => (await routePixels(day)).amber).toBe(0);
-    await expect.poll(async () => (await routePixels(day)).blackRoute).toBeGreaterThan(100);
-    await expect.poll(async () => (await routePixels(day)).bounds).toEqual(originalBounds);
-    await expect(day.getByRole('button', { name: 'Show whole day' })).toBeHidden();
-});
+for (const input of ['click', 'keyboard', 'touch'] as const) {
+    for (const motion of ['no-preference', 'reduce'] as const) {
+        test(`inline maps retain the full black route while fitting and resetting to their own day (${input}, ${motion})`, async ({ page, isMobile }) => {
+            test.skip(input === 'touch' && !isMobile, 'Touch input requires a phone project.');
+            await page.emulateMedia({ reducedMotion: motion });
+            await page.goto('/trips/daily-test');
+            const day = page.locator('[data-trip-map]').nth(2);
+            await expect(day).toBeVisible();
+            await page.keyboard.press('ArrowDown');
+            await day.scrollIntoViewIfNeeded();
+            await expect(day.getByRole('region', { name: 'Map of Homebound.' })).toBeVisible();
+            await expect(day.getByText('Homebound', { exact: true })).toHaveCount(0);
+            await expect(day.getByRole('button', { name: /Harbor/ })).toHaveCount(0);
+            await expect(day.getByRole('button', { name: /Shared camp/ })).toBeVisible();
+            const stops = day.getByRole('region').getByRole('button', { name: 'Stops', exact: true });
+            const toggleStops = async () => {
+                if (input === 'keyboard') await stops.press('Enter');
+                else if (input === 'touch') await stops.tap();
+                else await stops.click();
+            };
+            await expect(stops).toHaveAttribute('aria-pressed', 'true');
+            await expect.poll(async () => (await routePixels(day)).stopPixels).toBeGreaterThan(10);
+            await expect.poll(async () => (await routePixels(day)).blue).toBeGreaterThan(10);
+            await expect.poll(async () => (await routePixels(day)).amber).toBe(0);
+            await expect.poll(async () => (await routePixels(day)).blackRoute).toBeGreaterThan(100);
+            const originalBounds = (await settledRoutePixels(day)).bounds;
+            await expect(day.getByRole('button', { name: 'Show whole day' })).toBeHidden();
+            await toggleStops();
+            await expect(stops).toHaveAttribute('aria-pressed', 'false');
+            await expect.poll(async () => (await routePixels(day)).stopPixels).toBe(0);
+            await expect(day.getByRole('button', { name: /Shared camp/ })).toHaveCount(0);
+            await expect(day.getByRole('button', { name: 'Show whole day' })).toBeHidden();
+            await toggleStops();
+            await expect(stops).toHaveAttribute('aria-pressed', 'true');
+            await expect.poll(async () => (await routePixels(day)).stopPixels).toBeGreaterThan(10);
+            await expect.poll(async () => (await routePixels(day)).bounds).toEqual(originalBounds);
+            await day.getByRole('button', { name: 'Zoom in', exact: true }).click();
+            await expect(day.getByRole('button', { name: 'Show whole day' })).toBeVisible();
+            await day.getByRole('button', { name: 'Show whole day' }).click();
+            await expect(day.getByRole('region', { name: 'Map of Homebound.', exact: true })).toBeVisible();
+            await expect.poll(async () => (await routePixels(day)).amber).toBe(0);
+            await expect.poll(async () => (await routePixels(day)).blackRoute).toBeGreaterThan(100);
+            await expect.poll(async () => (await routePixels(day)).bounds).toEqual(originalBounds);
+            await expect(day.getByRole('button', { name: 'Show whole day' })).toBeHidden();
+        });
+    }
+}
 
 test('distant overview maps release their canvas and restore the selected day without stops', async ({ page }) => {
     await page.goto('/trips/daily-test');

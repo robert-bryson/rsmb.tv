@@ -37,6 +37,19 @@ PLAYWRIGHT_FIREFOX=1 npm run test:trips:browser -- \
   --project firefox --headed --grep 'horizontal scrolling' --workers=1
 ```
 
+## Failure evidence
+
+CI uploads `browser-test-failures` after a browser check fails.
+The available files remain downloadable for seven days.
+Both browser suites capture traces and screenshots for failed tests. A retry is not required.
+Browser setup failures can lack screenshots.
+The artifact also includes available error contexts.
+Download and extract the artifact. Open a trace with:
+
+```bash
+npx playwright show-trace path/to/trace.zip
+```
+
 ## Regression coverage
 
 | Area | Required behavior |
@@ -50,6 +63,31 @@ PLAYWRIGHT_FIREFOX=1 npm run test:trips:browser -- \
 | Layout | Prevent horizontal scrolling after maps paint. Preserve panorama proportions and reserved image height. |
 | Photos | Select suitable responsive sources. Support mouse, touch, and keyboard controls. Restore focus after closing. |
 | Content | Retain literal captions, article metadata, return filters, country tags, and region tags. |
+
+Panorama checks run with default scrollbars and visible classic scrollbars.
+Desktop Chromium must reserve 15 CSS pixels in the classic-scrollbar case.
+The scrollbar fixture preserves configured executables, arguments, and other launch options.
+It does not change Firefox or WebKit launch options.
+
+Photo edges use the root element's layout box, independently of body and article widths.
+Root `clientWidth` can include an empty scrollbar gutter ([Chromium implementation note](https://issues.chromium.org/issues/40087305)).
+A phone regression narrows the body and verifies that the measurement still uses the page boundary.
+
+Inline day maps use clicks, keyboard activation, and touch in separate cases.
+Each input runs with normal motion and reduced motion. Touch cases require a phone project.
+The cases check painted markers, stop lists, route colors, and camera bounds.
+Repeat the layout and input checks with:
+
+```bash
+PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- \
+  --grep 'panoramas fill|panorama measurements|inline maps retain' --repeat-each=3 --workers=2
+```
+
+Check launch-option inheritance and failure evidence without starting browsers:
+
+```bash
+npx vitest run scripts/__tests__/tripBrowserFixtures.test.ts scripts/__tests__/browserFailureEvidence.test.ts
+```
 
 The map action test delays tile responses until after a full-route reset.
 This checks that a later load does not restore the initial stop.

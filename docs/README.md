@@ -24,6 +24,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-10-28 | [Trip CI fixes and regression review](reviews/2026-10-28-trip-ci-review.md) |
 | 2026-10-28 | [Trip controls, geography, and regression review](reviews/2026-10-28-trip-controls-and-geography.md) |
 | 2026-10-28 | [Trip state ownership and recovery review](reviews/2026-10-28-trip-state-and-recovery.md) |
 | 2026-10-27 | [Panorama review and photo failure fixes](reviews/2026-10-27-trip-photo-review.md) |
