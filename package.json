@@ -98,7 +98,7 @@
     "lint-staged": "^17.6.0",
     "magic-string": "^1.4.3",
     "remark-frontmatter": "^5.0.0",
-    "rollup": "^4.65.0",
+    "rollup": "^4.65.1",
     "sharp": "^0.35.5",
     "simplify-js": "^1.2.4",
     "tailwindcss": "^4.3.3",
