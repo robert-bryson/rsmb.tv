@@ -19,6 +19,30 @@ const photoSchema = z.object({
     sizes: z.string().optional(),
 });
 
+function mediaUrlSchema(extension: 'mp4' | 'webp') {
+    const bundledPath = new RegExp(`^/media/trips/[a-z0-9]+(?:-[a-z0-9]+)*/[a-z0-9]+(?:-[a-z0-9]+)*-[a-f0-9]{12}\\.${extension}$`);
+    return z.string().refine(value => {
+        if (value.startsWith('/')) return bundledPath.test(value);
+        try {
+            const url = new URL(value);
+            return url.origin === 'https://data.rsmb.tv' && !url.username && !url.password
+                && url.pathname.endsWith(`.${extension}`) && !url.search && !url.hash;
+        } catch {
+            return false;
+        }
+    }, `Use a fingerprinted bundled asset or a data.rsmb.tv HTTPS URL ending in .${extension}.`);
+}
+const animationSchema = z.object({
+    id: slugSchema,
+    src: mediaUrlSchema('mp4'),
+    poster: mediaUrlSchema('webp'),
+    width: z.number().int().positive(),
+    height: z.number().int().positive(),
+    alt: z.string().trim().min(1),
+    caption: z.string().optional(),
+    attribution: z.object({ label: z.string().trim().min(1), url: z.url({ protocol: /^https$/ }) }).optional(),
+});
+
 export const tripManifestSchema = z.object({
     id: slugSchema,
     dates: z.object({ start: dateSchema, end: dateSchema }),
@@ -53,6 +77,8 @@ export const tripManifestSchema = z.object({
         description: z.string().optional(),
     })),
     photos: z.array(photoSchema),
+    animations: z.array(animationSchema).optional(),
+    introAnimation: slugSchema.optional(),
     days: z.array(z.object({
         id: slugSchema, title: z.string().min(1), date: dateSchema.optional(),
         headingId: slugSchema, trackIds: z.array(slugSchema).optional(),
@@ -78,6 +104,26 @@ export const tripManifestSchema = z.object({
     }
     if (!photoIds.has(manifest.hero)) {
         context.addIssue({ code: 'custom', path: ['hero'], message: `Hero references unknown photo: ${manifest.hero}` });
+    }
+
+    const animationIds = new Set<string>();
+    for (const animation of manifest.animations ?? []) {
+        if (animationIds.has(animation.id)) {
+            context.addIssue({ code: 'custom', message: `Duplicate animation ID: ${animation.id}` });
+        }
+        animationIds.add(animation.id);
+        for (const url of [animation.src, animation.poster]) {
+            let pathname: string;
+            try { pathname = new URL(url, 'https://rsmb.tv').pathname; }
+            catch { continue; } // The field schema reports malformed URLs.
+            const prefix = url.startsWith('/') ? `/media/trips/${manifest.id}/` : `/trips/${manifest.id}/`;
+            if (!pathname.startsWith(prefix)) {
+                context.addIssue({ code: 'custom', message: `Animation ${animation.id} must use this trip's media directory.` });
+            }
+        }
+    }
+    if (manifest.introAnimation && !animationIds.has(manifest.introAnimation)) {
+        context.addIssue({ code: 'custom', path: ['introAnimation'], message: `Intro references unknown animation: ${manifest.introAnimation}` });
     }
 
     const stopIds = new Set<string>();

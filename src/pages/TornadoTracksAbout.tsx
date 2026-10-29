@@ -126,6 +126,20 @@ export default function TornadoTracksAbout() {
                 Local files under <span className="text-zinc-300">public/data/tornadoes</span> are only a development/backfill artifact.
             </p>
 
+            <h2 className="mb-3 text-lg font-medium text-zinc-100">Reading the data</h2>
+            <p className="mb-4 text-sm leading-relaxed text-zinc-400">
+                Counts represent recorded county segments with usable coordinates. A tornado crossing a county or state boundary can produce multiple records,
+                so these totals are not counts of unique tornadoes. Lines connect reported start and end coordinates;
+                they do not trace surveyed damage paths. The U.S. archive includes records outside the initial CONUS viewport. See the{' '}
+                <a href="https://www.ncdc.noaa.gov/stormevents/faq.jsp" className="text-sky-400 underline hover:text-sky-300">NOAA StormEvents FAQ</a>.
+            </p>
+            <p className="mb-6 text-sm leading-relaxed text-zinc-400">
+                NOAA reports can arrive several months after an event. Comparisons exclude the current calendar year,
+                and changes in observation and reporting affect long-term counts. Warning and watch summaries provide
+                national context independent of the map's state and intensity filters; their approximate report matches
+                are not formal warning verification.
+            </p>
+
             <h2 className="mb-3 text-lg font-medium text-zinc-100">Next Layers</h2>
             <p className="mb-6 text-sm leading-relaxed text-zinc-400">
                 Warning and watch summaries are available in the Trends view; full

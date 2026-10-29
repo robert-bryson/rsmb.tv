@@ -15,6 +15,7 @@ Use [TODO.md](../TODO.md) for incomplete work.
 | [Trip template](trips/TRIP-STORY-TEMPLATE.md) | Start a trip document |
 | [Trip tests](trips/TESTING.md) | Install browsers and check maps, photos, and JavaScript budgets |
 | [Temperature methodology](../projects/temperature-records/methodology.md) | Check the historical temperature data |
+| [Tornado Tracks](../projects/tornado-tracks/readme.md) | Sync tornado data and check map behavior |
 | [Ride Ledger design](../projects/ride-ledger/readme.md) | Review the proposed application and open decisions |
 
 ## Reviews
@@ -24,6 +25,8 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-10-29 | [Pending-change quality review](reviews/2026-10-29-pending-changes-quality-review.md) |
+| 2026-10-29 | [Tornado Tracks implementation review](reviews/2026-10-29-tornado-tracks-quality-review.md) |
 | 2026-10-28 | [Trip CI fixes and regression review](reviews/2026-10-28-trip-ci-review.md) |
 | 2026-10-28 | [Trip controls, geography, and regression review](reviews/2026-10-28-trip-controls-and-geography.md) |
 | 2026-10-28 | [Trip state ownership and recovery review](reviews/2026-10-28-trip-state-and-recovery.md) |

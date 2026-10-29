@@ -30,7 +30,7 @@ resource "aws_amplify_app" "rsmbtv" {
 
   # SPA rewrite: serve index.html for all routes that don't match a static file
   custom_rule {
-    source = "</^[^.]+$|\\.(?!(css|html|gif|ico|jpg|js|mjs|png|txt|svg|woff|woff2|ttf|map|json|webp|xml|gz|br|geojson|glb)$)([^.]+$)/>"
+    source = "</^[^.]+$|\\.(?!(css|html|gif|ico|jpg|js|mjs|mp4|png|txt|svg|woff|woff2|ttf|map|json|webp|xml|gz|br|geojson|glb)$)([^.]+$)/>"
     target = "/index.html"
     status = "200"
   }

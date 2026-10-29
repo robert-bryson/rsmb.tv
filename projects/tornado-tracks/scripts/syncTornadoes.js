@@ -226,6 +226,14 @@ export function normalizeTornadoScale(rawScale, year = DEFAULT_END_YEAR) {
     return { scale, scaleLabel: `${prefix}${scale}` };
 }
 
+function validNoaaDateTime(year, month, day, hour, minute, second = 0) {
+    if (![year, month, day, hour, minute, second].every(Number.isInteger)) return false;
+    if (hour < 0 || hour > 24 || minute < 0 || minute > 59 || second < 0 || second > 59) return false;
+    if (hour === 24 && (minute !== 0 || second !== 0)) return false;
+    const date = new Date(Date.UTC(year, month - 1, day));
+    return date.getUTCFullYear() === year && date.getUTCMonth() + 1 === month && date.getUTCDate() === day;
+}
+
 export function parseNoaaDateTime(dateTime, fallback = {}) {
     const raw = cleanText(dateTime).toUpperCase();
     const direct = raw.match(/^(\d{1,2})-([A-Z]{3})-(\d{2})\s+(\d{1,2}):(\d{2}):(\d{2})$/);
@@ -239,7 +247,7 @@ export function parseNoaaDateTime(dateTime, fallback = {}) {
         const minute = Number(direct[5]);
         const second = Number(direct[6]);
 
-        if (month && day >= 1 && day <= 31) {
+        if (validNoaaDateTime(year, month, day, hour, minute, second)) {
             const date = `${year}-${pad(month)}-${pad(day)}`;
             return {
                 year,
@@ -248,6 +256,7 @@ export function parseNoaaDateTime(dateTime, fallback = {}) {
                 dateTime: `${date}T${pad(hour)}:${pad(minute)}:${pad(second)}`,
             };
         }
+        return null;
     }
 
     const fallbackYear = Number(fallback.year);
@@ -258,6 +267,7 @@ export function parseNoaaDateTime(dateTime, fallback = {}) {
     if (Number.isFinite(fallbackYear) && Number.isFinite(fallbackMonth) && Number.isFinite(fallbackDay)) {
         const hour = Number(fallbackTime.slice(0, -2) || 0);
         const minute = Number(fallbackTime.slice(-2) || 0);
+        if (!validNoaaDateTime(fallbackYear, fallbackMonth, fallbackDay, hour, minute)) return null;
         const date = `${fallbackYear}-${pad(fallbackMonth)}-${pad(fallbackDay)}`;
         return {
             year: fallbackYear,
@@ -900,15 +910,49 @@ function writeYearCollections(outputDir, name, collection) {
 }
 
 export function writeTornadoOutputs(outputs, outputDir = DEFAULT_OUTPUT_DIR) {
-    fs.mkdirSync(outputDir, { recursive: true });
-    fs.rmSync(path.join(outputDir, 'tracks.geojson'), { force: true });
-    fs.rmSync(path.join(outputDir, 'track-points.geojson'), { force: true });
-    writeYearCollections(outputDir, 'tracks', outputs.tracks);
-    writeYearCollections(outputDir, 'track-points', outputs.trackPoints);
-    writeJson(path.join(outputDir, 'annual-summary.json'), outputs.annualSummary, true);
-    writeJson(path.join(outputDir, 'state-summary.json'), outputs.stateSummary, true);
-    writeJson(path.join(outputDir, 'notable-events.json'), outputs.notableEvents, true);
-    writeJson(path.join(outputDir, 'warning-summary.json'), outputs.warningSummary, true);
+    outputDir = path.resolve(outputDir);
+    fs.mkdirSync(path.dirname(outputDir), { recursive: true });
+    // Keep staging on the same filesystem so promotion uses directory renames.
+    const staged = fs.mkdtempSync(path.join(path.dirname(outputDir), `.${path.basename(outputDir)}-staged-`));
+    const previous = `${staged}.previous`;
+    const summaries = {
+        'annual-summary.json': outputs.annualSummary,
+        'state-summary.json': outputs.stateSummary,
+        'notable-events.json': outputs.notableEvents,
+        'warning-summary.json': outputs.warningSummary,
+    };
+    const managed = new Set(['tracks', 'track-points', 'tracks.geojson', 'track-points.geojson', ...Object.keys(summaries)]);
+    let backedUp = false;
+    try {
+        // Retain files owned by other consumers. Replace all managed files,
+        // including obsolete year files and legacy combined collections.
+        if (fs.existsSync(outputDir)) {
+            for (const name of fs.readdirSync(outputDir)) {
+                if (!managed.has(name)) fs.cpSync(path.join(outputDir, name), path.join(staged, name), { recursive: true, verbatimSymlinks: true });
+            }
+        }
+        writeYearCollections(staged, 'tracks', outputs.tracks);
+        writeYearCollections(staged, 'track-points', outputs.trackPoints);
+        for (const [filename, data] of Object.entries(summaries)) writeJson(path.join(staged, filename), data, true);
+        if (fs.existsSync(outputDir)) {
+            fs.renameSync(outputDir, previous);
+            backedUp = true;
+        }
+        try {
+            fs.renameSync(staged, outputDir);
+        } catch (promotionError) {
+            if (backedUp) {
+                try { fs.renameSync(previous, outputDir); }
+                catch (restoreError) {
+                    throw new AggregateError([promotionError, restoreError], `Could not restore tornado output; previous archive retained at ${previous}`, { cause: restoreError });
+                }
+            }
+            throw promotionError;
+        }
+        if (backedUp) fs.rmSync(previous, { recursive: true, force: true });
+    } finally {
+        fs.rmSync(staged, { recursive: true, force: true });
+    }
 }
 
 function range(start, end) {
@@ -977,7 +1021,10 @@ async function fetchGzipCsv(url, { filename, cacheDir = DEFAULT_CACHE_DIR, log }
 async function fetchCachedText(url, { filename, cacheDir = DEFAULT_CACHE_DIR, log } = {}) {
     const cachePath = cacheDir && filename ? path.join(cacheDir, filename) : null;
 
-    if (cachePath && fs.existsSync(cachePath)) {
+    // IEM URLs and filenames are stable even while their contents change.
+    // A restored CI cache must not freeze warnings/watches indefinitely.
+    const maxAgeMs = 6 * 24 * 60 * 60 * 1000;
+    if (cachePath && fs.existsSync(cachePath) && Date.now() - fs.statSync(cachePath).mtimeMs < maxAgeMs) {
         return fs.readFileSync(cachePath, 'utf-8');
     }
 
@@ -1009,7 +1056,14 @@ export async function syncTornadoes({
     let severeReports = [];
     let warnings = [];
     let watches = [];
-    let selectedYears = years?.length ? years : range(startYear, endYear);
+    if (!years?.length && (!Number.isInteger(startYear) || !Number.isInteger(endYear)
+        || startYear < DEFAULT_START_YEAR || endYear > DEFAULT_END_YEAR || startYear > endYear)) {
+        throw new Error(`Requested years must be between ${DEFAULT_START_YEAR} and ${DEFAULT_END_YEAR}`);
+    }
+    const selectedYears = years?.length ? years : range(startYear, endYear);
+    if (selectedYears.length === 0 || selectedYears.some(year => !Number.isInteger(year) || year < DEFAULT_START_YEAR || year > DEFAULT_END_YEAR)) {
+        throw new Error(`Requested years must be between ${DEFAULT_START_YEAR} and ${DEFAULT_END_YEAR}`);
+    }
 
     if (fixturePath) {
         const csvText = fs.readFileSync(fixturePath, 'utf-8');
@@ -1021,6 +1075,7 @@ export async function syncTornadoes({
         for (const year of selectedYears) {
             const file = files.get(year);
             if (!file) {
+                if (year < DEFAULT_END_YEAR) throw new Error(`Missing StormEvents details file for ${year}; preserving existing output`);
                 log(`Skipping ${year}: no StormEvents details file found`);
                 continue;
             }
@@ -1028,6 +1083,9 @@ export async function syncTornadoes({
             log(`Downloading ${file.filename}`);
             const csvText = await fetchGzipCsv(file.url, { filename: file.filename, cacheDir, log });
             const { features: yearFeatures, severeReports: yearReports } = parseStormEventsCsv(csvText, { includeNarratives });
+            if (yearFeatures.length === 0 || yearFeatures.some(feature => feature.properties.year !== year)) {
+                throw new Error(`Invalid StormEvents tracks for ${year}; preserving existing output`);
+            }
             features.push(...yearFeatures);
             severeReports.push(...yearReports);
             log(`  ${yearFeatures.length} tornado tracks`);
@@ -1054,6 +1112,7 @@ export async function syncTornadoes({
         }
     }
 
+    if (features.length === 0) throw new Error('No valid tornado tracks found; preserving existing output');
     const outputs = buildTornadoOutputs(features, { warnings, watches, severeReports });
     writeTornadoOutputs(outputs, outputDir);
     return {

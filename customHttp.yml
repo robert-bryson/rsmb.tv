@@ -1,4 +1,8 @@
 customHeaders:
+  - pattern: /media/trips/**
+    headers:
+      - key: Cache-Control
+        value: public, max-age=31536000, immutable
   - pattern: /images/previews/**
     headers:
       - key: Cache-Control
@@ -36,4 +40,4 @@ customHeaders:
       - key: Permissions-Policy
         value: camera=(), microphone=(), geolocation=()
       - key: Content-Security-Policy
-        value: "default-src 'self'; script-src 'self' 'unsafe-eval' https://cloud.umami.is; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://data.rsmb.tv https://*.cartocdn.com https://*.basemaps.cartocdn.com https://tile.openstreetmap.org https://tile.opentopomap.org; connect-src 'self' https://cloud.umami.is https://gateway.umami.is https://data.rcc-acis.org https://data.rsmb.tv https://*.cartocdn.com https://*.basemaps.cartocdn.com https://demotiles.maplibre.org https://tile.openstreetmap.org https://tile.opentopomap.org; font-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+        value: "default-src 'self'; script-src 'self' 'unsafe-eval' https://cloud.umami.is; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://data.rsmb.tv https://*.cartocdn.com https://*.basemaps.cartocdn.com https://tile.openstreetmap.org https://tile.opentopomap.org https://tiles.openfreemap.org; connect-src 'self' https://cloud.umami.is https://gateway.umami.is https://data.rcc-acis.org https://data.rsmb.tv https://*.cartocdn.com https://*.basemaps.cartocdn.com https://demotiles.maplibre.org https://tile.openstreetmap.org https://tile.opentopomap.org https://tiles.openfreemap.org; media-src 'self' https://data.rsmb.tv; font-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"

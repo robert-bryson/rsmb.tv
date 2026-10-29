@@ -36,7 +36,8 @@ test('flights map defers optional layer payloads on first load', async ({ page }
 });
 
 test('flights stats panel hides its scrollbar when closed', async ({ page }) => {
-    await page.goto('/projects/flights/map?stats=1');
+    // Keep flight-path rendering from consuming this panel test's time budget.
+    await page.goto('/projects/flights/map?stats=1&paths=0');
 
     const panel = page.getByTestId('stats-panel-content');
     const resizeHandle = page.locator('[role="separator"][aria-label="Resize stats panel"]');

@@ -1,6 +1,7 @@
 import type { ComponentPropsWithoutRef } from 'react';
 import { TripFacts } from '../features/trips/components/TripFacts';
 import { TripPhoto } from '../features/trips/components/TripPhoto';
+import { TripAnimation } from '../features/trips/components/TripAnimation';
 import { TripGalleryBlock, TripMapBlock } from './TripMdxBlocks';
 import { LinkedHeading } from './LinkedHeading';
 import { MdxImage } from './MdxImage';
@@ -31,6 +32,7 @@ export const mdxComponents = {
     TripFacts,
     TripGallery: TripGalleryBlock,
     TripPhoto,
+    TripAnimation,
     TripMap: TripMapBlock,
     h1: (props: ComponentPropsWithoutRef<'h1'>) => (
         <LinkedHeading as="h1" className="text-3xl sm:text-[2rem] leading-tight font-bold text-zinc-100 mt-16 sm:mt-20 mb-4" {...props} />

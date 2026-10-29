@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
     COLOR_MODE_LABELS,
     DECADE_COLORS,
@@ -31,6 +31,11 @@ interface TornadoSummaryPanelProps {
     notableEvents: NotableTornadoEvent[];
     annualSummary: AnnualTornadoSummary[];
     warningSummary: WarningSummary | null;
+    warningLoading: boolean;
+    warningError: string | null;
+    densityAvailable: boolean;
+    mobileOpen: boolean;
+    onMobileClose: () => void;
     startYear: number;
     endYear: number;
     scaleFilter: TornadoScaleFilter;
@@ -58,6 +63,33 @@ function Stat({ label, value }: { label: string; value: string }) {
             <div className="text-[10px] uppercase tracking-wide text-zinc-500">{label}</div>
             <div className="mt-1 text-sm font-semibold text-zinc-100">{value}</div>
         </div>
+    );
+}
+
+function SelectedTrackDetails({ track }: { track: TornadoTrackFeature }) {
+    const selected = track.properties;
+    return (
+        <section className="mb-4 rounded-md border border-zinc-700 bg-zinc-900/60 p-3" aria-label="Selected track">
+            <div className="mb-2 flex items-center gap-2">
+                <span className="rounded px-2 py-0.5 text-xs font-semibold text-zinc-950" style={{ backgroundColor: SCALE_COLORS[selected.scale] ?? SCALE_COLORS[-1] }}>
+                    {selected.scaleLabel}
+                </span>
+                <h3 className="font-semibold text-zinc-100">{selected.county}, {selected.state}</h3>
+            </div>
+            <dl className="grid grid-cols-2 gap-x-3 gap-y-2 text-xs">
+                <dt className="text-zinc-500">Local time</dt><dd>{formatDateTime(selected.beginTime)} {selected.timezone}</dd>
+                <dt className="text-zinc-500">WFO</dt><dd>{selected.wfo || 'Unknown'}</dd>
+                <dt className="text-zinc-500">Length</dt><dd>{selected.lengthMiles.toLocaleString()} mi</dd>
+                <dt className="text-zinc-500">Width</dt><dd>{selected.widthYards.toLocaleString()} yd</dd>
+                <dt className="text-zinc-500">Deaths</dt><dd>{selected.deaths.toLocaleString()}</dd>
+                <dt className="text-zinc-500">Injuries</dt><dd>{selected.injuries.toLocaleString()}</dd>
+                <dt className="text-zinc-500">Property</dt><dd>{formatDamage(selected.propertyDamage)}</dd>
+                <dt className="text-zinc-500">Source</dt><dd>{selected.source || selected.dataSource}</dd>
+            </dl>
+            {(selected.narrative || selected.episodeNarrative) && (
+                <p className="mt-3 text-xs leading-relaxed text-zinc-400">{selected.narrative || selected.episodeNarrative}</p>
+            )}
+        </section>
     );
 }
 
@@ -96,7 +128,7 @@ function TrendSparkline({ allYears, startYear, endYear }: {
     return (
         <div>
             <div className="mb-1 flex items-center justify-between text-[10px] text-zinc-500">
-                <span>Annual tornado count, {minYear}–{maxYear}</span>
+                <span>Annual track segments, {minYear}–{maxYear}</span>
                 <span className="text-orange-400/80">— {slopeLabel}</span>
             </div>
             <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={H} aria-hidden="true">
@@ -146,8 +178,7 @@ function TrendSparkline({ allYears, startYear, endYear }: {
 
 // ---------------------------------------------------------------------------
 // Option B — Dual-metric: bar chart of annual count overlaid with a line
-// showing deaths per 100 tornadoes. The key story: counts tripled while
-// lethality dropped 7×. Selected range bars are highlighted.
+// showing deaths per 100 recorded county segments. Selected bars are highlighted.
 // ---------------------------------------------------------------------------
 
 function TrendDualMetric({ allYears, startYear, endYear }: {
@@ -180,7 +211,7 @@ function TrendDualMetric({ allYears, startYear, endYear }: {
             <div className="mb-1 flex gap-3 text-[10px] text-zinc-500">
                 <span className="flex items-center gap-1.5">
                     <span className="inline-block h-2.5 w-3 rounded-sm bg-emerald-600/70" />
-                    Tornadoes/yr
+                    Track segments/yr
                 </span>
                 <span className="flex items-center gap-1.5">
                     <span className="inline-block h-0.5 w-3 bg-rose-400" />
@@ -422,9 +453,10 @@ function TrendWarnings({ warningSummary, startYear, endYear }: { warningSummary:
 
     const topWfos = useMemo(() => {
         if (!warningSummary) return [];
+        const currentYear = new Date().getFullYear();
         const byWfo = new Map<string, WfoWarningYearSummary>();
         for (const row of warningSummary.wfoYear) {
-            if (row.year < startYear || row.year > endYear) continue;
+            if (row.year < startYear || row.year > endYear || row.year >= currentYear) continue;
             const existing = byWfo.get(row.wfo) ?? { ...row, year: 0, warnings: 0, tornadoWarnings: 0, severeThunderstormWarnings: 0, emergencyWarnings: 0, matchedWarnings: 0, tornadoMatchedWarnings: 0, severeThunderstormMatchedWarnings: 0, warningAreaKm2: 0 };
             existing.warnings += row.warnings;
             existing.tornadoWarnings += row.tornadoWarnings;
@@ -457,7 +489,7 @@ function TrendWarnings({ warningSummary, startYear, endYear }: { warningSummary:
                     <div className="font-semibold text-zinc-100">{selectedTotals.warnings.toLocaleString()}</div>
                 </div>
                 <div className="rounded bg-zinc-900 p-1.5">
-                    <div className="text-[10px] text-zinc-500">Warn %</div>
+                    <div className="text-[10px] text-zinc-500">Report match</div>
                     <div className="font-semibold text-zinc-100">{percent(selectedTotals.matchedWarnings, selectedTotals.warnings)}%</div>
                 </div>
                 <div className="rounded bg-zinc-900 p-1.5">
@@ -465,7 +497,7 @@ function TrendWarnings({ warningSummary, startYear, endYear }: { warningSummary:
                     <div className="font-semibold text-zinc-100">{selectedTotals.watches.toLocaleString()}</div>
                 </div>
                 <div className="rounded bg-zinc-900 p-1.5">
-                    <div className="text-[10px] text-zinc-500">Watch %</div>
+                    <div className="text-[10px] text-zinc-500">Report match</div>
                     <div className="font-semibold text-zinc-100">{percent(selectedTotals.matchedWatches, selectedTotals.watches)}%</div>
                 </div>
             </div>
@@ -543,12 +575,13 @@ function TrendSnapshot({ annualSummary, warningSummary, startYear, endYear, stat
 
     return (
         <section className="space-y-5 border-t border-zinc-800 pt-4">
+            <p className="text-xs leading-relaxed text-zinc-400">Comparisons exclude the current, incomplete calendar year. Rates use recorded track segments; changes in reporting affect long-term counts.</p>
             <div>
                 <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">A · Annual count vs selection</div>
                 <TrendSparkline allYears={fullHistory} startYear={startYear} endYear={endYear} />
             </div>
             <div>
-                <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">B · Frequency vs fatality rate</div>
+                <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">B · Frequency vs deaths per 100 segments</div>
                 <TrendDualMetric allYears={fullHistory} startYear={startYear} endYear={endYear} />
             </div>
             <div>
@@ -563,7 +596,8 @@ function TrendSnapshot({ annualSummary, warningSummary, startYear, endYear, stat
             )}
             {warningSummary && (
                 <div>
-                    <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">E · Warnings and watches</div>
+                    <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">E · National warnings and watches</div>
+                    <p className="mb-2 text-xs leading-relaxed text-zinc-400">National totals are independent of state and EF filters. Report matching is approximate and is not formal warning verification.</p>
                     <TrendWarnings warningSummary={warningSummary} startYear={startYear} endYear={endYear} />
                 </div>
             )}
@@ -578,6 +612,11 @@ export function TornadoSummaryPanel({
     notableEvents,
     annualSummary,
     warningSummary,
+    warningLoading,
+    warningError,
+    densityAvailable,
+    mobileOpen,
+    onMobileClose,
     startYear,
     endYear,
     scaleFilter,
@@ -599,10 +638,21 @@ export function TornadoSummaryPanel({
     onCloseSelection,
 }: TornadoSummaryPanelProps) {
     const selected = selectedTrack?.properties;
+    const panelRef = useRef<HTMLElement>(null);
+    useEffect(() => {
+        if (mobileOpen && window.matchMedia('(max-width: 767px)').matches) panelRef.current?.focus();
+    }, [mobileOpen]);
 
     return (
-        <aside className="absolute right-3 top-20 z-20 hidden max-h-[calc(100dvh-220px)] w-80 overflow-y-auto rounded-lg border border-zinc-700/80 bg-zinc-950/90 text-sm text-zinc-300 shadow-2xl backdrop-blur-md md:block">
-            <div className="flex items-start justify-between gap-3 p-4">
+        <aside
+            ref={panelRef}
+            id="tornado-summary-panel"
+            aria-label="Tornado controls and details"
+            tabIndex={-1}
+            onKeyDown={event => { if (event.key === 'Escape') onMobileClose(); }}
+            className={`absolute inset-x-3 bottom-8 top-28 z-40 overflow-y-auto overscroll-contain rounded-lg border border-zinc-700/80 bg-zinc-950/95 text-sm text-zinc-300 shadow-2xl backdrop-blur-md md:bottom-auto md:left-auto md:top-20 md:z-20 md:max-h-[calc(100dvh-220px)] md:w-80 ${mobileOpen ? 'block' : 'hidden md:block'}`}
+        >
+            <div className="sticky top-0 z-10 flex items-start justify-between gap-3 bg-zinc-950/95 p-4">
                 <div>
                     <div className="text-xs uppercase tracking-wide text-zinc-500">Tornado Tracks</div>
                     <h2 className="text-lg font-semibold text-zinc-100">{stats.count.toLocaleString()} tracks</h2>
@@ -624,11 +674,13 @@ export function TornadoSummaryPanel({
                             Clear
                         </button>
                     )}
+                    <button type="button" onClick={onMobileClose} aria-label="Close controls" className="min-h-10 rounded px-2 text-zinc-300 hover:bg-zinc-800 md:hidden">Close</button>
                     {onCollapseChange && (
                         <button
                             type="button"
                             onClick={() => onCollapseChange(!collapsed)}
-                            className="rounded-md p-1 text-xs text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
+                            className="hidden rounded-md p-1 text-xs text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100 md:block"
+                            aria-expanded={!collapsed}
                             aria-label={collapsed ? 'Expand panel' : 'Collapse panel'}
                         >
                             {collapsed ? '▼' : '▲'}
@@ -639,6 +691,7 @@ export function TornadoSummaryPanel({
 
             {!collapsed && (
                 <div className="px-4 pb-4">
+                    {selectedTrack && <SelectedTrackDetails track={selectedTrack} />}
                     <div className="mb-4 grid grid-cols-2 gap-2">
                         <Stat label="EF2+" value={stats.ef2Plus.toLocaleString()} />
                         <Stat label="Deaths" value={stats.deaths.toLocaleString()} />
@@ -647,6 +700,7 @@ export function TornadoSummaryPanel({
                     </div>
 
                     <div className="mb-4 space-y-3">
+                        {!densityAvailable && <p role="status" className="text-xs leading-relaxed text-amber-300">WebGL is unavailable. Showing a track overview; density rendering requires WebGL.</p>}
                         <div>
                             <div className="mb-1.5 text-xs uppercase tracking-wide text-zinc-500">Mode</div>
                             <div className="grid grid-cols-3 rounded-md bg-zinc-900 p-1 text-xs">
@@ -655,7 +709,9 @@ export function TornadoSummaryPanel({
                                         key={value}
                                         type="button"
                                         onClick={() => onModeChange(value)}
-                                        className={`rounded px-2 py-1.5 capitalize ${mode === value ? 'bg-sky-500 text-zinc-950' : 'text-zinc-400 hover:text-zinc-100'}`}
+                                        aria-pressed={mode === value}
+                                        disabled={value === 'density' && !densityAvailable}
+                                        className={`rounded px-2 py-1.5 capitalize disabled:cursor-not-allowed disabled:opacity-50 ${mode === value ? 'bg-sky-500 text-zinc-950' : 'text-zinc-400 hover:text-zinc-100'}`}
                                     >
                                         {value}
                                     </button>
@@ -671,6 +727,7 @@ export function TornadoSummaryPanel({
                                         key={value}
                                         type="button"
                                         onClick={() => onScaleFilterChange(value)}
+                                        aria-pressed={scaleFilter === value}
                                         className={`rounded-md px-2 py-1.5 ${scaleFilter === value ? 'bg-sky-500 text-zinc-950' : 'bg-zinc-900 text-zinc-300 hover:bg-zinc-800'}`}
                                     >
                                         {SCALE_FILTER_LABELS[value]}
@@ -683,6 +740,7 @@ export function TornadoSummaryPanel({
                                         key={value}
                                         type="button"
                                         onClick={() => onScaleFilterChange(value)}
+                                        aria-pressed={scaleFilter === value}
                                         className={`rounded-md px-1 py-1.5 ${scaleFilter === value ? 'bg-sky-500 text-zinc-950' : 'bg-zinc-900 text-zinc-300 hover:bg-zinc-800'}`}
                                     >
                                         {SCALE_FILTER_LABELS[value]}
@@ -725,6 +783,7 @@ export function TornadoSummaryPanel({
                                         key={value}
                                         type="button"
                                         onClick={() => onColorModeChange(value)}
+                                        aria-pressed={colorMode === value}
                                         className={`rounded-md px-2 py-1.5 ${colorMode === value ? 'bg-sky-500 text-zinc-950' : 'bg-zinc-900 text-zinc-300 hover:bg-zinc-800'}`}
                                     >
                                         {COLOR_MODE_LABELS[value]}
@@ -768,31 +827,7 @@ export function TornadoSummaryPanel({
                         )}
                     </div>
 
-                    {selected ? (
-                        <section className="border-t border-zinc-800 pt-4">
-                            <div className="mb-2 flex items-center gap-2">
-                                <span className="rounded px-2 py-0.5 text-xs font-semibold text-zinc-950" style={{ backgroundColor: SCALE_COLORS[selected.scale] ?? SCALE_COLORS[-1] }}>
-                                    {selected.scaleLabel}
-                                </span>
-                                <h3 className="font-semibold text-zinc-100">{selected.county}, {selected.state}</h3>
-                            </div>
-                            <dl className="grid grid-cols-2 gap-x-3 gap-y-2 text-xs">
-                                <dt className="text-zinc-500">Time</dt><dd className="text-zinc-200">{formatDateTime(selected.beginTime)}</dd>
-                                <dt className="text-zinc-500">WFO</dt><dd className="text-zinc-200">{selected.wfo || 'Unknown'}</dd>
-                                <dt className="text-zinc-500">Length</dt><dd className="text-zinc-200">{selected.lengthMiles.toLocaleString()} mi</dd>
-                                <dt className="text-zinc-500">Width</dt><dd className="text-zinc-200">{selected.widthYards.toLocaleString()} yd</dd>
-                                <dt className="text-zinc-500">Deaths</dt><dd className="text-zinc-200">{selected.deaths.toLocaleString()}</dd>
-                                <dt className="text-zinc-500">Injuries</dt><dd className="text-zinc-200">{selected.injuries.toLocaleString()}</dd>
-                                <dt className="text-zinc-500">Property</dt><dd className="text-zinc-200">{formatDamage(selected.propertyDamage)}</dd>
-                                <dt className="text-zinc-500">Source</dt><dd className="text-zinc-200">{selected.source || selected.dataSource}</dd>
-                            </dl>
-                            {(selected.narrative || selected.episodeNarrative) && (
-                                <p className="mt-3 text-xs leading-relaxed text-zinc-400">
-                                    {selected.narrative || selected.episodeNarrative}
-                                </p>
-                            )}
-                        </section>
-                    ) : mode === 'trends' ? (
+                    {!selected && (mode === 'trends' ? (
                         <TrendSnapshot annualSummary={annualSummary} warningSummary={warningSummary} startYear={startYear} endYear={endYear} stateBreakdown={stateBreakdown} />
                     ) : (
                         <section className="border-t border-zinc-800 pt-4">
@@ -814,7 +849,12 @@ export function TornadoSummaryPanel({
                                 ))}
                             </div>
                         </section>
-                    )}
+                    ))}
+                    {mode === 'trends' && warningLoading && <p role="status" className="mt-3 text-xs text-zinc-400">Loading national warning summaries…</p>}
+                    {mode === 'trends' && warningError && <p className="mt-3 text-xs text-amber-300">National warning summaries are unavailable. Track data is still available.</p>}
+                    <p className="mt-4 border-t border-zinc-800 pt-3 text-xs leading-relaxed text-zinc-400">
+                        Counts represent county segments with usable coordinates, not unique tornadoes. Lines connect reported start and end points. Recent NOAA reports can lag by several months; reporting practices also changed over time.
+                    </p>
                 </div>
             )}
         </aside>

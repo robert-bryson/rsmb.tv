@@ -1,8 +1,9 @@
 // @vitest-environment node
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { gzipSync } from 'node:zlib';
 import {
     buildTornadoOutputs,
     buildWarningSummary,
@@ -18,6 +19,7 @@ import {
     warningCsvUrl,
     watchCsvUrl,
     writeTornadoOutputs,
+    syncTornadoes,
 } from '../../projects/tornado-tracks/scripts/syncTornadoes.js';
 
 const sampleCsv = `BEGIN_YEARMONTH,BEGIN_DAY,BEGIN_TIME,END_DAY,END_TIME,EPISODE_ID,EVENT_ID,STATE,YEAR,MONTH_NAME,EVENT_TYPE,CZ_FIPS,CZ_NAME,WFO,BEGIN_DATE_TIME,CZ_TIMEZONE,END_DATE_TIME,INJURIES_DIRECT,INJURIES_INDIRECT,DEATHS_DIRECT,DEATHS_INDIRECT,DAMAGE_PROPERTY,DAMAGE_CROPS,SOURCE,TOR_F_SCALE,TOR_LENGTH,TOR_WIDTH,BEGIN_LAT,BEGIN_LON,END_LAT,END_LON,EPISODE_NARRATIVE,EVENT_NARRATIVE,DATA_SOURCE
@@ -66,6 +68,11 @@ describe('normalizeTornadoScale', () => {
 });
 
 describe('parseNoaaDateTime', () => {
+    it.each(['31-FEB-24 12:00:00', '21-MAY-24 25:00:00', '21-MAY-24 12:60:00'])(
+        'rejects impossible date or clock values: %s', value => {
+            expect(parseNoaaDateTime(value)).toBeNull();
+        },
+    );
     it('parses StormEvents local date-time strings', () => {
         expect(parseNoaaDateTime('21-MAY-24 15:20:00')).toEqual({
             year: 2024,
@@ -73,6 +80,44 @@ describe('parseNoaaDateTime', () => {
             date: '2024-05-21',
             dateTime: '2024-05-21T15:20:00',
         });
+    });
+});
+
+describe('syncTornadoes publication safeguards and cache freshness', () => {
+    afterEach(() => vi.unstubAllGlobals());
+
+    it('refreshes stale warning and watch cache entries instead of reusing them forever', async () => {
+        const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'tornado-cache-test-'));
+        const cacheDir = path.join(directory, 'cache');
+        const filename = 'StormEvents_details-ftp_v1.0_d2024_c20261001.csv.gz';
+        const fetchMock = vi.fn(async (input: string | URL) => {
+            const url = String(input);
+            if (url.includes('watchwarn.py')) return new Response(warningCsv);
+            if (url.includes('spc_watch.py')) return new Response(watchCsv);
+            if (url.endsWith('.gz')) return new Response(gzipSync(sampleCsv));
+            return new Response(`<a href="${filename}">data</a>`);
+        });
+        vi.stubGlobal('fetch', fetchMock);
+        const options = { years: [2024], cacheDir, outputDir: path.join(directory, 'output'), log: () => {} };
+        try {
+            await syncTornadoes(options);
+            const stale = new Date(Date.now() - 100 * 24 * 60 * 60 * 1000);
+            for (const kind of ['warnings', 'watches']) fs.utimesSync(path.join(cacheDir, kind, '2024.csv'), stale, stale);
+            await syncTornadoes(options);
+            expect(fetchMock.mock.calls.filter(([url]) => String(url).includes('watchwarn.py'))).toHaveLength(2);
+            expect(fetchMock.mock.calls.filter(([url]) => String(url).includes('spc_watch.py'))).toHaveLength(2);
+            expect(fetchMock.mock.calls.filter(([url]) => String(url).endsWith('.gz'))).toHaveLength(1);
+        } finally { fs.rmSync(directory, { recursive: true, force: true }); }
+    });
+
+    it('preserves existing output if a historical year is missing from the upstream listing', async () => {
+        const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'tornado-output-test-'));
+        fs.writeFileSync(path.join(directory, 'annual-summary.json'), '[{"year":2024,"count":123}]');
+        vi.stubGlobal('fetch', vi.fn(async () => new Response('<html>Service temporarily unavailable</html>')));
+        try {
+            await expect(syncTornadoes({ years: [2024], outputDir: directory, cacheDir: null, log: () => {} })).rejects.toThrow(/2024/);
+            expect(fs.readFileSync(path.join(directory, 'annual-summary.json'), 'utf8')).toContain('123');
+        } finally { fs.rmSync(directory, { recursive: true, force: true }); }
     });
 });
 
@@ -92,6 +137,94 @@ describe('parseTornadoCsv', () => {
             cropDamage: 1500000,
             narrative: 'Event text',
         });
+    });
+});
+
+describe('review regressions: complete tornado archives', () => {
+    afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
+
+    it.each(['write', 'promotion'])('retains the previous archive after a %s failure', failure => {
+        const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'tornado-transaction-'));
+        const outputDir = path.join(directory, 'output');
+        const outputs = buildTornadoOutputs(parseTornadoCsv(sampleCsv));
+        writeTornadoOutputs(outputs, outputDir);
+        const previous = fs.readFileSync(path.join(outputDir, 'tracks/2024.geojson'), 'utf8');
+        const replacement = { ...outputs, tracks: { ...outputs.tracks, features: [] } };
+        if (failure === 'write') {
+            vi.spyOn(fs, 'writeFileSync').mockImplementationOnce(() => { throw new Error('Disk full'); });
+        } else {
+            const rename = fs.renameSync;
+            vi.spyOn(fs, 'renameSync').mockImplementationOnce(rename)
+                .mockImplementationOnce(() => { throw new Error('Promotion failed'); });
+        }
+        try {
+            expect(() => writeTornadoOutputs(replacement, outputDir)).toThrow();
+            expect(fs.readFileSync(path.join(outputDir, 'tracks/2024.geojson'), 'utf8')).toBe(previous);
+            expect(fs.readdirSync(directory)).toEqual(['output']);
+        } finally { fs.rmSync(directory, { recursive: true, force: true }); }
+    });
+
+    it('keeps the backup and reports both failures when rollback fails', () => {
+        const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'tornado-rollback-'));
+        const outputDir = path.join(directory, 'output');
+        const outputs = buildTornadoOutputs(parseTornadoCsv(sampleCsv));
+        writeTornadoOutputs(outputs, outputDir);
+        const rename = fs.renameSync;
+        const promotionError = new Error('Promotion failed');
+        const restoreError = new Error('Rollback failed');
+        vi.spyOn(fs, 'renameSync').mockImplementationOnce(rename)
+            .mockImplementationOnce(() => { throw promotionError; })
+            .mockImplementationOnce(() => { throw restoreError; });
+        try {
+            expect(() => writeTornadoOutputs(outputs, outputDir)).toThrow(expect.objectContaining({
+                errors: [promotionError, restoreError],
+            }));
+            const backups = fs.readdirSync(directory);
+            expect(backups).toHaveLength(1);
+            expect(backups[0]).toMatch(/\.previous$/);
+            expect(JSON.parse(fs.readFileSync(path.join(directory, backups[0], 'tracks/2024.geojson'), 'utf8')).features).toHaveLength(1);
+        } finally { fs.rmSync(directory, { recursive: true, force: true }); }
+    });
+
+    it('retains unrelated output files and removes obsolete years after a successful replacement', () => {
+        const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'tornado-replacement-'));
+        const outputDir = path.join(directory, 'output');
+        const outputs = buildTornadoOutputs(parseTornadoCsv(sampleCsv));
+        writeTornadoOutputs(outputs, outputDir);
+        fs.writeFileSync(path.join(outputDir, 'consumer.txt'), 'keep');
+        fs.writeFileSync(path.join(outputDir, 'tracks/2023.geojson'), 'obsolete');
+        fs.writeFileSync(path.join(outputDir, 'tracks.geojson'), 'legacy');
+        try {
+            writeTornadoOutputs(outputs, outputDir);
+            expect(fs.readFileSync(path.join(outputDir, 'consumer.txt'), 'utf8')).toBe('keep');
+            expect(fs.existsSync(path.join(outputDir, 'tracks/2023.geojson'))).toBe(false);
+            expect(fs.existsSync(path.join(outputDir, 'tracks.geojson'))).toBe(false);
+            expect(fs.readdirSync(directory)).toEqual(['output']);
+        } finally { fs.rmSync(directory, { recursive: true, force: true }); }
+    });
+
+    it.each(['empty', 'wrong-year'])('preserves all output if one source year is %s', async failure => {
+        const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'tornado-incomplete-'));
+        const sentinel = '[{"year":2023,"count":123}]';
+        fs.mkdirSync(path.join(directory, 'tracks'));
+        fs.writeFileSync(path.join(directory, 'tracks/2023.geojson'), 'existing tracks');
+        fs.writeFileSync(path.join(directory, 'annual-summary.json'), sentinel);
+        vi.stubGlobal('fetch', vi.fn(async (input: string | URL) => {
+            const url = String(input);
+            if (!url.endsWith('.gz')) return new Response([2023, 2024].map(year =>
+                `<a href="StormEvents_details-ftp_v1.0_d${year}_c20261001.csv.gz">${year}</a>`,
+            ).join(''));
+            const csv = url.includes('d2023_')
+                ? failure === 'empty' ? sampleCsv.split('\n')[0] : sampleCsv
+                : sampleCsv;
+            return new Response(gzipSync(csv));
+        }));
+        try {
+            await expect(syncTornadoes({ years: [2023, 2024], outputDir: directory,
+                cacheDir: null, includeWarnings: false, log: () => {} })).rejects.toThrow(/2023/);
+            expect(fs.readFileSync(path.join(directory, 'annual-summary.json'), 'utf8')).toBe(sentinel);
+            expect(fs.readFileSync(path.join(directory, 'tracks/2023.geojson'), 'utf8')).toBe('existing tracks');
+        } finally { fs.rmSync(directory, { recursive: true, force: true }); }
     });
 });
 

@@ -31,6 +31,7 @@ export function TornadoTimeline({
         () => Math.max(1, ...annualSummary.map((summary) => summary.count)),
         [annualSummary],
     );
+    const focusYear = annualSummary.find(summary => summary.year >= startYear)?.year ?? annualSummary[0]?.year;
 
     const togglePlaying = useCallback(() => {
         const next = !playing;
@@ -105,6 +106,7 @@ export function TornadoTimeline({
                     onClick={() => onCollapseChange(!collapsed)}
                     className="flex w-full items-center justify-center gap-1.5 rounded-t-lg pt-2 pb-1 text-zinc-500 transition-colors hover:bg-zinc-800/60 hover:text-zinc-300"
                     aria-label={collapsed ? 'Expand timeline' : 'Collapse timeline'}
+                    aria-expanded={!collapsed}
                 >
                     <div className="h-1 w-8 rounded-full bg-zinc-600" />
                     <span className="text-[10px] leading-none">{collapsed ? '▲' : '▼'}</span>
@@ -130,6 +132,7 @@ export function TornadoTimeline({
                         <button
                             type="button"
                             onClick={togglePlaying}
+                            aria-pressed={playing}
                             className="h-8 min-w-16 rounded-md bg-sky-500 px-3 font-medium text-zinc-950 hover:bg-sky-400"
                         >
                             {playing ? 'Pause' : 'Play'}
@@ -146,6 +149,7 @@ export function TornadoTimeline({
                             <button
                                 type="button"
                                 onClick={() => setStride(1)}
+                                aria-pressed={stride === 1}
                                 className={`px-2 ${stride === 1 ? 'bg-zinc-500 text-zinc-950 font-semibold' : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200'}`}
                             >
                                 1yr
@@ -153,6 +157,7 @@ export function TornadoTimeline({
                             <button
                                 type="button"
                                 onClick={() => setStride(10)}
+                                aria-pressed={stride === 10}
                                 className={`px-2 ${stride === 10 ? 'bg-zinc-500 text-zinc-950 font-semibold' : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200'}`}
                             >
                                 10yr
@@ -163,7 +168,7 @@ export function TornadoTimeline({
 
                 {!collapsed && (
                     <>
-                        <div className="grid h-20 grid-cols-[repeat(auto-fit,minmax(3px,1fr))] items-end gap-px rounded bg-zinc-900/80 p-2" aria-hidden="true">
+                        <div className="grid h-20 grid-cols-[repeat(auto-fit,minmax(3px,1fr))] items-end gap-px rounded bg-zinc-900/80 p-2" role="group" aria-label="Annual track counts">
                             {annualSummary.map((summary) => {
                                 const active = summary.year >= startYear && summary.year <= endYear;
                                 const barDecade = Math.floor(summary.year / 10) * 10;
@@ -172,8 +177,20 @@ export function TornadoTimeline({
                                     <button
                                         key={summary.year}
                                         type="button"
-                                        title={`${summary.year}: ${summary.count.toLocaleString()} tornadoes`}
+                                        title={`${summary.year}: ${summary.count.toLocaleString()} track segments`}
+                                        aria-label={`${summary.year}: ${summary.count.toLocaleString()} track segments`}
+                                        aria-pressed={active}
+                                        tabIndex={summary.year === focusYear ? 0 : -1}
                                         onClick={() => onYearRangeChange(summary.year, summary.year)}
+                                        onKeyDown={event => {
+                                            const target = event.key === 'ArrowRight' ? event.currentTarget.nextElementSibling
+                                                : event.key === 'ArrowLeft' ? event.currentTarget.previousElementSibling : null;
+                                            if (target instanceof HTMLButtonElement) {
+                                                event.preventDefault();
+                                                target.click();
+                                                target.focus();
+                                            }
+                                        }}
                                         className="min-h-1 rounded-sm"
                                         style={{
                                             height: `${Math.max(4, (summary.count / maxCount) * 100)}%`,
@@ -216,6 +233,7 @@ export function TornadoTimeline({
                             <button
                                 type="button"
                                 onClick={() => onYearRangeChange(minYear, maxYear)}
+                                aria-pressed={startYear === minYear && endYear === maxYear}
                                 className={`rounded-md px-2 py-1 ${startYear === minYear && endYear === maxYear
                                     ? 'bg-zinc-400 text-zinc-950'
                                     : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
@@ -232,6 +250,7 @@ export function TornadoTimeline({
                                 return (
                                     <button
                                         key={decade}
+                                        aria-pressed={isActive}
                                         type="button"
                                         onClick={() => {
                                             setStride(10);

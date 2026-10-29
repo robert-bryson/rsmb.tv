@@ -56,7 +56,7 @@ export const DECADE_COLORS: Record<number, string> = {
 };
 
 export const REGION_LABELS: Record<TornadoRegionPreset, string> = {
-    conus: 'CONUS',
+    conus: 'U.S. archive',
     midwest: 'Midwest',
     plains: 'Plains',
     dixie: 'Dixie Alley',

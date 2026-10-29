@@ -82,6 +82,7 @@ The import rejects malformed standalone shortcodes, including IDs with underscor
 | `{{trip-photo:photo-id}}` | One photo and its caption |
 | `{{trip-photo-pano:photo-id}}` | Panorama across the full page width, with its caption and zoom viewer |
 | `{{trip-gallery:gallery-id}}` | Gallery from the manifest |
+| `{{trip-animation:animation-id}}` | Silent looping video with a poster, play/pause control, and source credit |
 | `{{trip-facts}}` | Another copy of the trip facts |
 
 Trip facts appear before the first map, after the opening text.
@@ -91,6 +92,35 @@ Each referenced ID must exist in the manifest.
 Each track ID must also match a `trackId` in the route GeoJSON.
 Place day map shortcodes where they support the story.
 Day definitions do not insert maps automatically.
+
+### Animations
+
+Use an MP4 and a still WebP poster for short animations. Keep them outside the still-photo processor.
+Add an `animations` entry with `id`, `src`, `poster`, `width`, `height`, and descriptive `alt` text.
+Optional `caption` and `attribution: { "label": "via GIPHY", "url": "https://giphy.com/..." }` supply context and source credit.
+Use the video's actual dimensions; an embed player's dimensions can differ.
+
+For a small clip bundled with the site, store both files in `public/media/trips/<trip-id>/`.
+Include the first 12 hexadecimal characters of each file's SHA-256 in its filename:
+`endor-speeders-ab1ba266c971.mp4` and `endor-speeders-52304610cc6c.webp`, for example.
+Manifest URLs start with `/media/trips/<trip-id>/`; builds check that both files exist and match their fingerprints.
+These filenames receive immutable caching. Create a new fingerprint when a file changes.
+Larger asset collections can use HTTPS URLs under the trip's existing `data.rsmb.tv` prefix.
+Use `.mp4` for `src` and `.webp` for `poster`.
+Remote URLs must start with `https://data.rsmb.tv/trips/<trip-id>/`.
+Use URLs without credentials, query strings, or fragments.
+Development retains these CDN URLs because the still-photo processor does not prepare animations.
+Keep an animation out of `photos`, `hero`, and photo galleries.
+
+Set `introAnimation` to an animation ID to show it after the introduction, immediately before the trip facts and first map.
+This placement is stored in the manifest and survives Google Docs re-imports.
+For another position, remove `introAnimation` and put `{{trip-animation:animation-id}}` in its own paragraph in the source Google Doc.
+Do not use both placements for the same clip.
+
+The player loads video only after it enters view. It pauses offscreen and in hidden tabs.
+With reduced motion enabled, the poster remains still until the reader presses Play.
+Playback failures retain the poster and source link. There is no third-party iframe.
+The hosting rewrite must exempt `.mp4` files from the application's HTML fallback; see `infra/main.tf`.
 
 ### Panoramas
 

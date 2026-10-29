@@ -2,12 +2,15 @@ import { useEffect, useState, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
 import { PostTableOfContents } from '../../../blog/PostTableOfContents';
 import { TripFacts } from './TripFacts';
+import { TripAnimation } from './TripAnimation';
+import { useTripStory } from '../TripStoryContext';
 
 // The story loads as MDX. Its first map supplies stable slots so the opening
 // paragraphs remain uninterrupted, including when the map itself loads lazily.
 export function TripStoryDetails({ contentRef }: {
     contentRef: RefObject<HTMLDivElement | null>;
 }) {
+    const { manifest } = useTripStory();
     const [slots, setSlots] = useState<{ facts: HTMLElement | null; navigation: HTMLElement | null }>({ facts: null, navigation: null });
     useEffect(() => {
         const content = contentRef.current;
@@ -26,8 +29,12 @@ export function TripStoryDetails({ contentRef }: {
     const navigation = <div className="my-8">
         <PostTableOfContents contentRef={contentRef} collapsible />
     </div>;
+    const facts = <>
+        {manifest.introAnimation && <TripAnimation animationId={manifest.introAnimation} />}
+        <TripFacts />
+    </>;
     return <>
-        {slots.facts ? createPortal(<TripFacts />, slots.facts) : <TripFacts />}
+        {slots.facts ? createPortal(facts, slots.facts) : facts}
         {slots.navigation ? createPortal(navigation, slots.navigation) : navigation}
     </>;
 }

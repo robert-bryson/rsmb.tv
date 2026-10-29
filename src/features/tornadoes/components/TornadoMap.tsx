@@ -6,7 +6,6 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { escapeHtml } from '../../../utils/escapeHtml';
 import {
     DECADE_COLORS,
-    DEFAULT_END_YEAR,
     MAX_ZOOM,
     MIN_DATA_YEAR,
     MIN_ZOOM,
@@ -22,6 +21,7 @@ import type {
     NotableTornadoEvent,
     TornadoPointCollection,
     TornadoRegionPreset,
+    TornadoColorMode,
     TornadoTrackProperties,
     TornadoTrackCollection,
     TornadoTrackFeature,
@@ -38,6 +38,7 @@ import {
     projectFallbackPoint,
     summarize,
     toTrackPoints,
+    trackColor,
     zoomFallbackViewBox,
 } from '../utils';
 import { TornadoSummaryPanel } from './TornadoSummaryPanel';
@@ -182,6 +183,13 @@ function statePath(feature: StateBoundaryFeature, bounds: ReturnType<typeof fall
 }
 
 function clientToFallbackPoint(svg: SVGSVGElement, viewBox: FallbackViewBox, clientX: number, clientY: number) {
+    const matrix = svg.getScreenCTM();
+    if (matrix) {
+        const point = svg.createSVGPoint();
+        point.x = clientX;
+        point.y = clientY;
+        return point.matrixTransform(matrix.inverse());
+    }
     const rect = svg.getBoundingClientRect();
     return {
         x: viewBox.x + ((clientX - rect.left) / rect.width) * viewBox.width,
@@ -193,6 +201,7 @@ function StaticTornadoFallback({
     tracks,
     bgTracks,
     region,
+    colorMode,
     states,
     selectedTrackId,
     selectedState,
@@ -202,13 +211,15 @@ function StaticTornadoFallback({
     tracks: TornadoTrackCollection;
     bgTracks?: TornadoTrackCollection;
     region: TornadoRegionPreset;
+    colorMode: TornadoColorMode;
     states: StateBoundaryCollection | null;
     selectedTrackId?: string;
     selectedState: string | null;
     onSelectTrack: (track: TornadoTrackFeature) => void;
     onSelectState: (state: string) => void;
 }) {
-    const bounds = fallbackBounds(region);
+    const bounds = useMemo(() => fallbackBounds(region), [region]);
+    const statePaths = useMemo(() => states?.features.map(feature => ({ feature, path: statePath(feature, bounds) })) ?? [], [states, bounds]);
     const longitudeTicks = Array.from({ length: 7 }, (_, index) => bounds.west + ((bounds.east - bounds.west) / 6) * index);
     const latitudeTicks = Array.from({ length: 5 }, (_, index) => bounds.south + ((bounds.north - bounds.south) / 4) * index);
     const svgRef = useRef<SVGSVGElement>(null);
@@ -241,7 +252,8 @@ function StaticTornadoFallback({
 
     const handlePointerDown = useCallback((event: React.PointerEvent<SVGSVGElement>) => {
         if (event.button !== 0) return;
-        event.currentTarget.setPointerCapture(event.pointerId);
+        // Capture only after a drag starts; capturing the initial press retargets
+        // the click to the SVG and prevents tracks/states from being selected.
         dragState.current = {
             pointerId: event.pointerId,
             clientX: event.clientX,
@@ -259,9 +271,15 @@ function StaticTornadoFallback({
         const rect = svg.getBoundingClientRect();
         if (!rect.width || !rect.height) return;
 
-        const dx = ((event.clientX - drag.clientX) / rect.width) * drag.viewBox.width;
-        const dy = ((event.clientY - drag.clientY) / rect.height) * drag.viewBox.height;
-        if (Math.abs(event.clientX - drag.clientX) > 3 || Math.abs(event.clientY - drag.clientY) > 3) drag.moved = true;
+        const origin = clientToFallbackPoint(svg, drag.viewBox, drag.clientX, drag.clientY);
+        const current = clientToFallbackPoint(svg, drag.viewBox, event.clientX, event.clientY);
+        const dx = current.x - origin.x;
+        const dy = current.y - origin.y;
+        if (Math.abs(event.clientX - drag.clientX) > 3 || Math.abs(event.clientY - drag.clientY) > 3) {
+            drag.moved = true;
+            if (!svg.hasPointerCapture(event.pointerId)) svg.setPointerCapture(event.pointerId);
+        }
+        if (!drag.moved) return;
 
         setViewBox(clampViewBox({
             ...drag.viewBox,
@@ -307,6 +325,7 @@ function StaticTornadoFallback({
         <div className="absolute inset-0 z-10 overflow-hidden bg-[#020617]">
             <svg
                 ref={svgRef}
+                aria-label="Tornado track overview"
                 viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`}
                 preserveAspectRatio="xMidYMid slice"
                 className="h-full w-full cursor-grab touch-none active:cursor-grabbing"
@@ -325,10 +344,10 @@ function StaticTornadoFallback({
                 </defs>
                 <rect width={SVG_CANVAS_WIDTH} height={SVG_CANVAS_HEIGHT} fill="url(#tornadoFallbackGlow)" />
                 <g opacity="0.95">
-                    {states?.features.map((feature) => (
+                    {statePaths.map(({ feature, path }) => (
                         <path
                             key={feature.properties.code}
-                            d={statePath(feature, bounds)}
+                            d={path}
                             fill={feature.properties.abbr === selectedState ? '#0ea5e9' : '#0f172a'}
                             fillOpacity={feature.properties.abbr === selectedState ? 0.26 : 0.45}
                             stroke={feature.properties.abbr === selectedState ? '#e0f2fe' : '#64748b'}
@@ -381,7 +400,7 @@ function StaticTornadoFallback({
                     const [start, end] = feature.geometry.coordinates as [[number, number], [number, number]];
                     const [x1, y1] = projectFallbackPoint(start, bounds);
                     const [x2, y2] = projectFallbackPoint(end, bounds);
-                    const color = SCALE_COLORS[feature.properties.scale] ?? SCALE_COLORS[-1];
+                    const color = trackColor(feature.properties.scale, feature.properties.year, colorMode);
                     const samePoint = Math.abs(x1 - x2) < 0.5 && Math.abs(y1 - y2) < 0.5;
                     const selected = feature.properties.id === selectedTrackId;
 
@@ -427,18 +446,21 @@ export function TornadoMap() {
     const trackLookup = useRef(new Map<string, TornadoTrackFeature>());
     const pendingFlyTo = useRef<[number, number] | null>(null);
     const selectStateRef = useRef<(state: string) => void>(() => { });
+    const selectTrackRef = useRef<(track: TornadoTrackFeature) => void>(() => { });
     const setMapViewRef = useRef<(lat: number, lng: number, zoom: number) => void>(() => { });
     const [mapLoaded, setMapLoaded] = useState(false);
     const [selectedTrack, setSelectedTrackState] = useState<TornadoTrackFeature | null>(null);
     const [timelinePlaying, setTimelinePlaying] = useState(false);
-    const [timelineCollapsed, setTimelineCollapsed] = useState(false);
+    const [timelineCollapsed, setTimelineCollapsed] = useState(() => window.matchMedia?.('(max-width: 767px)').matches ?? false);
     const [summaryCollapsed, setSummaryCollapsed] = useState(false);
+    const [mobileControlsOpen, setMobileControlsOpen] = useState(false);
+    const controlsButton = useRef<HTMLButtonElement>(null);
     const [copiedUrl, setCopiedUrl] = useState(false);
     const copiedUrlTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [webglUnavailable, setWebglUnavailable] = useState(() => {
         try {
             const canvas = document.createElement('canvas');
-            return !(canvas.getContext('webgl2') || canvas.getContext('webgl'));
+            return !canvas.getContext('webgl2');
         } catch {
             return true;
         }
@@ -461,7 +483,21 @@ export function TornadoMap() {
     const setSelectedTrack = useCallback((track: TornadoTrackFeature | null) => {
         setSelectedTrackState(track);
         setSelectedTrackId(track?.properties.id ?? null);
+        if (track) {
+            setSummaryCollapsed(false);
+            setMobileControlsOpen(true);
+        }
     }, [setSelectedTrackId]);
+
+    const closeMobileControls = useCallback(() => {
+        setMobileControlsOpen(false);
+        controlsButton.current?.focus();
+    }, []);
+
+    const handleModeChange = useCallback((mode: Parameters<typeof setMode>[0]) => {
+        setSelectedTrack(null);
+        setMode(mode);
+    }, [setMode, setSelectedTrack]);
 
     const handleShare = useCallback(() => {
         const url = window.location.href;
@@ -482,6 +518,8 @@ export function TornadoMap() {
     }, []);
     const handleSelectState = useCallback((state: string) => {
         setSelectedTrackState(null);
+        setSummaryCollapsed(false);
+        setMobileControlsOpen(true);
         selectState(state);
     }, [selectState]);
 
@@ -490,17 +528,25 @@ export function TornadoMap() {
     }, [handleSelectState]);
 
     useEffect(() => {
+        selectTrackRef.current = setSelectedTrack;
+    }, [setSelectedTrack]);
+
+    useEffect(() => {
         setMapViewRef.current = setMapView;
     }, [setMapView]);
 
     // useTornadoFilters.setYearRange always stores start <= end in URL params,
     // so no additional normalization is needed before passing to useTornadoData.
-    const dataStartYear = filters.mode === 'trends' ? MIN_DATA_YEAR : filters.startYear;
-    const dataEndYear = filters.mode === 'trends' ? DEFAULT_END_YEAR : filters.endYear;
-    const { tracks, points, annualSummary, notableEvents, warningSummary, loading, error, minYear, maxYear } = useTornadoData({
+    // National, unfiltered trends already exist in the small annual summary.
+    // Only filtered comparisons need historical track geometry.
+    const needsHistoryTracks = filters.mode === 'trends'
+        && (filters.scaleFilter !== 'all' || filters.region !== 'conus' || !!filters.selectedState);
+    const dataStartYear = needsHistoryTracks ? MIN_DATA_YEAR : filters.startYear;
+    const dataEndYear = needsHistoryTracks ? new Date().getFullYear() : filters.endYear;
+    const { tracks, annualSummary, notableEvents, warningSummary, warningLoading, warningError, loading, error, minYear, maxYear, retry } = useTornadoData({
         startYear: dataStartYear,
         endYear: dataEndYear,
-        loadPoints: filters.mode === 'density',
+        loadWarnings: filters.mode === 'trends',
     });
 
     const normalizedRange = useMemo(() => ({
@@ -542,22 +588,6 @@ export function TornadoMap() {
         };
     }, [tracks, timelineFeatures, normalizedRange.startYear, normalizedRange.endYear]);
 
-    const filteredPoints = useMemo<TornadoPointCollection>(() => {
-        if (!points) return EMPTY_POINTS;
-        return {
-            type: 'FeatureCollection',
-            metadata: points.metadata,
-            features: points.features.filter((feature) => {
-                const { year, scale, state } = feature.properties;
-                return year >= normalizedRange.startYear
-                    && year <= normalizedRange.endYear
-                    && scale >= minScale
-                    && scale <= maxScale
-                    && trackMatchesGeography(state);
-            }),
-        };
-    }, [points, normalizedRange.startYear, normalizedRange.endYear, minScale, maxScale, trackMatchesGeography]);
-
     // When a state is selected, the map source needs ALL year+scale tracks so the grey
     // out-of-state layer can render them. When no state is selected, reuse filteredTracks.
     const mapAllTracks = useMemo<TornadoTrackCollection>(() => {
@@ -576,6 +606,10 @@ export function TornadoMap() {
     }, [tracks, filters.selectedState, filteredTracks, normalizedRange.startYear, normalizedRange.endYear, minScale, maxScale]);
 
     const mapAllTrackPoints = useMemo(() => toTrackPoints(mapAllTracks), [mapAllTracks]);
+    // Density uses the same start points as the generated track-points files.
+    // Reuse loaded geometry instead of downloading it a second time.
+    const filteredPoints = useMemo(() => filters.selectedState ? toTrackPoints(filteredTracks) : mapAllTrackPoints,
+        [filters.selectedState, filteredTracks, mapAllTrackPoints]);
 
     // Out-of-state tracks passed to the SVG fallback for grey rendering.
     const bgTracks = useMemo<TornadoTrackCollection>(() => {
@@ -589,8 +623,8 @@ export function TornadoMap() {
 
     const stats = useMemo(() => summarize(filteredTracks.features), [filteredTracks]);
     const filteredAnnualSummary = useMemo(
-        () => computeAnnualSummaryFromTracks(timelineFeatures, annualSummary.map((summary) => summary.year)),
-        [timelineFeatures, annualSummary],
+        () => needsHistoryTracks ? computeAnnualSummaryFromTracks(timelineFeatures, annualSummary.map((summary) => summary.year)) : annualSummary,
+        [needsHistoryTracks, timelineFeatures, annualSummary],
     );
     const panelAnnualSummary = filters.mode === 'trends' ? filteredAnnualSummary : annualSummary;
     // Only compute the per-state breakdown when the trends panel is active —
@@ -630,6 +664,8 @@ export function TornadoMap() {
         const feature = trackLookup.current.get(id);
         if (feature) {
             setSelectedTrackState(feature);
+            setMobileControlsOpen(true);
+            setSummaryCollapsed(false);
             const target = pendingFlyTo.current;
             if (target) {
                 pendingFlyTo.current = null;
@@ -643,30 +679,23 @@ export function TornadoMap() {
     useEffect(() => {
         if (!mapContainer.current || mapRef.current || webglUnavailable) return;
 
-        const map = new maplibregl.Map({
-            container: mapContainer.current,
-            style: {
-                version: 8,
-                glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
-                sources: {
-                    'carto-dark': {
-                        type: 'raster',
-                        tiles: [
-                            'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-                            'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-                            'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-                        ],
-                        tileSize: 256,
-                        attribution: '&copy; OpenStreetMap &copy; CARTO',
-                    },
-                },
-                layers: [{ id: 'carto-dark-layer', type: 'raster', source: 'carto-dark', minzoom: 0, maxzoom: 20 }],
-            },
-            center: [filters.mapLng, filters.mapLat],
-            zoom: filters.mapZoom,
-            minZoom: MIN_ZOOM,
-            maxZoom: MAX_ZOOM,
-        });
+        let map: maplibregl.Map;
+        try {
+            map = new maplibregl.Map({
+                container: mapContainer.current,
+                // CARTO's raster tiles now require an API key and return watermark
+                // images with HTTP 200 without one. This dark style needs no key.
+                style: 'https://tiles.openfreemap.org/styles/dark',
+                center: [filters.mapLng, filters.mapLat],
+                zoom: filters.mapZoom,
+                minZoom: MIN_ZOOM,
+                maxZoom: MAX_ZOOM,
+            });
+        } catch {
+            // eslint-disable-next-line react-hooks/set-state-in-effect -- External renderer initialization can fail despite the capability check.
+            setWebglUnavailable(true);
+            return;
+        }
 
         map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
         popupRef.current = new maplibregl.Popup({ closeButton: false, closeOnClick: false, maxWidth: '260px', className: 'tornado-popup' });
@@ -855,7 +884,7 @@ export function TornadoMap() {
                     if (feature) {
                         trackClickConsumed = true;
                         window.setTimeout(() => { trackClickConsumed = false; }, 0);
-                        setSelectedTrack(feature);
+                        selectTrackRef.current(feature);
                     }
                 });
             }
@@ -928,6 +957,7 @@ export function TornadoMap() {
         map.setLayoutProperty('tornado-track-halo', 'visibility', trackVisible ? 'visible' : 'none');
         map.setLayoutProperty('tornado-track-line', 'visibility', trackVisible ? 'visible' : 'none');
         map.setLayoutProperty('tornado-track-point', 'visibility', trackVisible ? 'visible' : 'none');
+        map.setLayoutProperty('selected-tornado-track-line', 'visibility', trackVisible ? 'visible' : 'none');
         map.setLayoutProperty('tornado-tracks-bg-halo', 'visibility', bgVisible ? 'visible' : 'none');
         map.setLayoutProperty('tornado-tracks-bg-line', 'visibility', bgVisible ? 'visible' : 'none');
         map.setLayoutProperty('tornado-tracks-bg-point', 'visibility', bgVisible ? 'visible' : 'none');
@@ -980,24 +1010,14 @@ export function TornadoMap() {
     }, [mapLoaded, selectedTrack]);
 
     const selectNotableEvent = useCallback((event: NotableTornadoEvent) => {
-        // trackLookup is a Map<id, feature> kept in sync with filteredTracks —
-        // use it instead of a linear scan over tracks?.features.
-        const match = trackLookup.current.get(event.id) ?? null;
-        if (match) {
-            setSelectedTrack(match);
-            const map = mapRef.current;
-            const first = match.geometry.coordinates[0] as [number, number] | undefined;
-            if (map && first) map.flyTo({ center: first, zoom: 7, duration: 900 });
-        } else {
-            // The event is not in the current year filter — navigate to its year so the
-            // data loads, then auto-select via the URL selectedTrackId param.
-            // Store the first coordinate so the restore effect can fly to the track.
-            const firstCoord = event.coordinates[0] as [number, number] | undefined;
-            pendingFlyTo.current = firstCoord ?? null;
-            setYearRange(event.year, event.year);
-            setSelectedTrackId(event.id);
-        }
-    }, [setSelectedTrack, setYearRange, setSelectedTrackId]);
+        pendingFlyTo.current = event.coordinates[0] as [number, number] | undefined ?? null;
+        setYearRange(event.year, event.year);
+        setScaleFilter('all');
+        setRegion('conus');
+        setSelectedState(null);
+        setMode('tracks');
+        setSelectedTrackId(event.id);
+    }, [setYearRange, setScaleFilter, setRegion, setSelectedState, setMode, setSelectedTrackId]);
 
     const filterSummary = `${normalizedRange.startYear === normalizedRange.endYear ? normalizedRange.startYear : `${normalizedRange.startYear}-${normalizedRange.endYear}`} · ${REGION_LABELS[filters.region]}`;
     const showStaticFallback = webglUnavailable;
@@ -1007,9 +1027,11 @@ export function TornadoMap() {
             <div ref={mapContainer} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
             {showStaticFallback && (
                 <StaticTornadoFallback
+                    key={filters.region}
                     tracks={filteredTracks}
                     bgTracks={bgTracks}
                     region={filters.region}
+                    colorMode={filters.colorMode}
                     states={stateBoundaries}
                     selectedTrackId={selectedTrack?.properties.id}
                     selectedState={filters.selectedState}
@@ -1023,18 +1045,10 @@ export function TornadoMap() {
                     ← rsmb.tv
                 </Link>
                 <div className="h-5 w-px bg-zinc-700" />
-                <div className="grid grid-cols-3 rounded-md bg-zinc-900 p-1 md:hidden">
-                    {(['tracks', 'density', 'trends'] as const).map((mode) => (
-                        <button
-                            key={mode}
-                            type="button"
-                            onClick={() => setMode(mode)}
-                            className={`rounded px-2 py-1 capitalize ${filters.mode === mode ? 'bg-sky-500 text-zinc-950' : 'text-zinc-400 hover:text-zinc-100'}`}
-                        >
-                            {mode}
-                        </button>
-                    ))}
-                </div>
+                <button ref={controlsButton} type="button" aria-controls="tornado-summary-panel" aria-expanded={mobileControlsOpen}
+                    onClick={() => { setSummaryCollapsed(false); setMobileControlsOpen(open => !open); }}
+                    className="min-h-10 rounded-md bg-zinc-800 px-2 text-zinc-100 md:hidden">Filters & details</button>
+                <div className="basis-full px-2 text-zinc-400 md:hidden">{stats.count.toLocaleString()} tracks · {stats.ef2Plus.toLocaleString()} EF2+</div>
                 <div className="hidden text-zinc-400 sm:block">{filters.selectedState ? `${selectedStateName} · ${filterSummary}` : filterSummary}</div>
             </div>
 
@@ -1045,6 +1059,11 @@ export function TornadoMap() {
                 notableEvents={notableEvents}
                 annualSummary={panelAnnualSummary}
                 warningSummary={warningSummary}
+                warningLoading={warningLoading}
+                warningError={warningError}
+                densityAvailable={!webglUnavailable}
+                mobileOpen={mobileControlsOpen}
+                onMobileClose={closeMobileControls}
                 startYear={normalizedRange.startYear}
                 endYear={normalizedRange.endYear}
                 scaleFilter={filters.scaleFilter}
@@ -1060,7 +1079,7 @@ export function TornadoMap() {
                 onRegionChange={setRegion}
                 onSelectedStateChange={setSelectedState}
                 onColorModeChange={setColorMode}
-                onModeChange={setMode}
+                onModeChange={handleModeChange}
                 onSelectEvent={selectNotableEvent}
                 onShare={handleShare}
                 onCloseSelection={() => setSelectedTrack(null)}
@@ -1078,28 +1097,16 @@ export function TornadoMap() {
                 onCollapseChange={setTimelineCollapsed}
             />
 
-            <div className="absolute bottom-[15rem] left-3 z-20 flex items-center gap-2 rounded-md border border-zinc-700/80 bg-zinc-950/85 px-2.5 py-1.5 text-xs text-zinc-400 shadow-xl backdrop-blur md:hidden">
-                <span>{stats.count.toLocaleString()} tracks · {stats.ef2Plus.toLocaleString()} EF2+</span>
-                <button
-                    type="button"
-                    onClick={handleShare}
-                    className="rounded px-1.5 py-0.5 font-medium text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100"
-                    title="Copy current map link"
-                >
-                    {copiedUrl ? 'Copied' : 'Share'}
-                </button>
-            </div>
-
             {filteredTracks.features.length > LARGE_TRACK_WARNING_THRESHOLD && !timelinePlaying && (
                 <div className="absolute left-3 top-[4.5rem] z-20 rounded-md border border-amber-700/60 bg-amber-950/90 px-3 py-2 text-xs text-amber-300 shadow-xl backdrop-blur md:left-6">
                     {filteredTracks.features.length.toLocaleString()} tracks — map may be slow. Try narrowing the year range or scale filter.
                 </div>
             )}
 
-            {(loading || error) && !timelinePlaying && (
-                <div className="absolute inset-0 z-30 grid place-items-center bg-zinc-950/60 backdrop-blur-sm">
-                    <div className="rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-zinc-300 shadow-2xl">
-                        {error ? `Unable to load tornado data: ${error}` : 'Loading tornado tracks...'}
+            {(loading || error || (!mapLoaded && !showStaticFallback)) && !timelinePlaying && (
+                <div className={`pointer-events-none absolute inset-x-3 top-32 flex justify-center md:top-24 ${error ? 'z-50' : 'z-30'}`}>
+                    <div role={error ? 'alert' : 'status'} className="pointer-events-auto rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-zinc-300 shadow-2xl">
+                        {error ? <>Unable to load tornado data: {error}<button type="button" onClick={retry} className="ml-3 rounded bg-sky-500 px-3 py-2 font-medium text-zinc-950">Retry</button></> : loading ? 'Loading tornado tracks...' : 'Loading map background...'}
                     </div>
                 </div>
             )}

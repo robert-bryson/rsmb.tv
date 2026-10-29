@@ -120,8 +120,10 @@ describe('Amplify response headers', () => {
 
         expect(policy).toContain("script-src 'self' 'unsafe-eval' https://cloud.umami.is");
         expect(imageSources).toContain('https://data.rsmb.tv');
+        expect(policy).toContain("media-src 'self' https://data.rsmb.tv");
         expect(imageSources).toContain('https://tile.openstreetmap.org');
         expect(imageSources).toContain('https://tile.opentopomap.org');
+        expect(imageSources).toContain('https://tiles.openfreemap.org');
         expect(connectSources).toContain('https://cloud.umami.is');
         expect(connectSources).toContain('https://gateway.umami.is');
         expect(connectSources).toContain('https://data.rcc-acis.org');
@@ -129,6 +131,7 @@ describe('Amplify response headers', () => {
         expect(connectSources).toContain('https://demotiles.maplibre.org');
         expect(connectSources).toContain('https://tile.openstreetmap.org');
         expect(connectSources).toContain('https://tile.opentopomap.org');
+        expect(connectSources).toContain('https://tiles.openfreemap.org');
     });
 });
 
@@ -141,6 +144,7 @@ describe('Amplify domain', () => {
 
         expect(spaRewrite).toBeDefined();
         expect(spaRewrite?.match(/\(css\|([^)]+)\)/)?.[1].split('|')).toContain('mjs');
+        expect(spaRewrite?.match(/\(css\|([^)]+)\)/)?.[1].split('|')).toContain('mp4');
     });
 
     it('uses an Amplify-managed certificate for the hosted domain', () => {

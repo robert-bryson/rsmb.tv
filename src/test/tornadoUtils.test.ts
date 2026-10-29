@@ -525,6 +525,15 @@ describe('computeSparklinePills', () => {
 // ---------------------------------------------------------------------------
 
 describe('computeDecades', () => {
+    it('weights rates by track count instead of averaging annual percentages', () => {
+        const years = [
+            makeYear(2020, { count: 1, deaths: 1, ef2Plus: 1 }),
+            makeYear(2021, { count: 99, deaths: 0, ef2Plus: 0 }),
+        ];
+        expect(computeDecades(years)[0]).toMatchObject({ ef2Pct: 1, dPer100: 1 });
+        const ef2 = computeSparklinePills(years, 2020, 2021).find(pill => pill.label === 'EF2%');
+        expect(ef2).toMatchObject({ selValue: 1, histValue: 1 });
+    });
     it('returns an empty array for empty input', () => {
         expect(computeDecades([])).toEqual([]);
     });

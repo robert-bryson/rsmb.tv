@@ -31,6 +31,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { JSDOM } from 'jsdom';
 import TurndownService from 'turndown';
+import { validateBundledTripMedia } from './trip-media-assets.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.join(__dirname, '..');
@@ -514,6 +515,12 @@ function manifestAssetUrls(manifest) {
         urls.add(photo.src);
         for (const srcSetUrl of parseSrcSetUrls(photo.srcSet)) {
             urls.add(srcSetUrl);
+        }
+    }
+
+    for (const animation of manifest?.animations ?? []) {
+        for (const url of [animation.src, animation.poster]) {
+            if (!url.startsWith('/')) urls.add(url);
         }
     }
 
@@ -1141,6 +1148,7 @@ export function expandTripShortcodes(markdown, post, manifest) {
     const trackIds = new Set(manifest?.route?.tracks?.map((track) => track.id) ?? []);
     const days = new Map(manifest?.days?.map(day => [day.id, day]) ?? []);
     const photoIds = new Set(manifest?.photos?.map((photo) => photo.id) ?? []);
+    const animationIds = new Set(manifest?.animations?.map(animation => animation.id) ?? []);
     const galleryIds = new Set(Object.keys(manifest?.galleries ?? {}));
     const assertReference = (kind, id, validIds) => {
         if (manifest && !validIds.has(id)) {
@@ -1169,6 +1177,9 @@ export function expandTripShortcodes(markdown, post, manifest) {
             ))
             .replace(/^\{\{trip-gallery:([a-z0-9]+(?:-[a-z0-9]+)*)\}\}$/gm, (_match, galleryId) => (
                 `<TripGallery galleryId="${assertReference('gallery', galleryId, galleryIds)}" />`
+            ))
+            .replace(/^\{\{trip-animation:([a-z0-9]+(?:-[a-z0-9]+)*)\}\}$/gm, (_match, animationId) => (
+                `<TripAnimation animationId="${assertReference('animation', animationId, animationIds)}" />`
             ))
             .replace(/^\{\{trip-facts\}\}$/gm, '<TripFacts />');
 
@@ -1254,6 +1265,7 @@ export function validateTripManifestFiles(posts, { repoRoot = REPO_ROOT, fsImpl 
 
         const result = tripManifestSchema.safeParse(manifest);
         if (!result.success) throw new Error(`Trip manifest "${post.tripId}" is invalid: ${result.error.message}`);
+        validateBundledTripMedia(result.data, { repoRoot, fsImpl });
         manifests.set(post.tripId, result.data);
     }
 

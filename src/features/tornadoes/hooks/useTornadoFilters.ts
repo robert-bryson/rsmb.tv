@@ -40,8 +40,10 @@ export function useTornadoFilters() {
     // accumulates the in-flight draft so each same-tick call composes on top of
     // the previous write. Cleared by the useEffect below whenever searchParams commits.
     const pendingSearchParams = useRef<URLSearchParams | null>(null);
-    const startYear = parseYear(searchParams.get('start'), DEFAULT_START_YEAR);
-    const endYear = parseYear(searchParams.get('end'), DEFAULT_END_YEAR);
+    const requestedStart = parseYear(searchParams.get('start'), DEFAULT_START_YEAR);
+    const requestedEnd = parseYear(searchParams.get('end'), DEFAULT_END_YEAR);
+    const startYear = Math.min(requestedStart, requestedEnd);
+    const endYear = Math.max(requestedStart, requestedEnd);
     const scaleFilter = parseSetValue(searchParams.get('scale'), SCALE_FILTERS, 'all');
     const mode = parseSetValue(searchParams.get('mode'), MODES, 'tracks');
     const colorMode = parseSetValue(searchParams.get('color'), COLOR_MODES, 'scale');

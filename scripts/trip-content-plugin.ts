@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { Plugin, ResolvedConfig } from 'vite';
 import { tripManifestSchema, type TripManifest } from '../shared/tripManifestSchema.ts';
+import { validateBundledTripMedia } from './trip-media-assets.ts';
 
 /** Generate a small card registry, with full manifests behind async imports. */
 export function tripContentPlugin(): Plugin {
@@ -52,6 +53,7 @@ export function tripContentPlugin(): Plugin {
                 try {
                     const manifest = tripManifestSchema.parse(JSON.parse(fs.readFileSync(file, 'utf8')));
                     if (manifest.id !== tripId) throw new Error(`Manifest id must match filename: ${tripId}`);
+                    for (const asset of validateBundledTripMedia(manifest, { repoRoot: config.root })) this.addWatchFile(asset);
                     summaries[tripId] = summary(manifest, !production);
                     loaders.push(`${JSON.stringify(tripId)}: () => import(${JSON.stringify(`/${contentDir}/trips/${filename}`)})`);
                 } catch (error) {

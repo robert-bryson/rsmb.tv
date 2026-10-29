@@ -39,6 +39,14 @@ Use fixed data for browser checks. Record the browser, viewport, and expected re
 Run trip browser checks with WebKit enabled. Include JavaScript budgets, photo viewers, and delayed map loading.
 Keep the current budgets. See the [repository guide](README.md#testing-notes) for browser setup.
 
+## Tornado Tracks
+
+- [ ] Generate yearly state and scale aggregates. Filtered Trends must work without downloading the complete historical geometry.
+- [ ] Publish source coverage dates and omitted-coordinate counts separately from upload timestamps.
+- [ ] Add recovery for failed basemap requests. Check the degraded view and Retry with fixed browser responses.
+- [ ] Add keyboard-accessible state selection, chart data tables, and a clear zero-results action.
+- [ ] Separate renderer lifecycle and trend presentation after preserving interaction coverage.
+
 ## Mail deployment checks
 
 - [ ] Confirm [mail record ownership](docs/email-dns.md#adopt-existing-records) in remote Terraform state before applying DNS changes.

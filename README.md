@@ -8,9 +8,10 @@ A personal website with software projects, data maps, writing, and motorcycle tr
 
 - **Flights** — A globe with flight routes, filters, camera controls, and travel statistics.
 - **Temperature Records** — An interactive MapLibre GL map of U.S. temperature records. It shows recent station records, standing county and state extremes, and standing-record history.
+- **Tornado Tracks** — Recorded tornado county segments, density maps, annual trends, and warning context. See the [project guide](projects/tornado-tracks/readme.md).
 - **Projects** — Software tools, data maps, and project descriptions.
 - **Posts** — Writing and trip reports imported from Google documents. Includes RSS, social images, and list filters.
-- **Trips** - Motorcycle trip reports with responsive photographs, route maps, and accessible galleries.
+- **Trips** — Motorcycle trip reports with responsive photographs, route maps, accessible galleries, and short animations with playback controls.
 - **About** — Background on my experience in geospatial engineering and software development.
 
 ## Tech Stack
@@ -161,6 +162,10 @@ Infrastructure CI validates all Terraform files. It tests mail, storage, and wor
 `npm run test:e2e` starts Vite on `127.0.0.1:4174` with a fixed port.
 Set `PLAYWRIGHT_PORT` if another process uses that port.
 CI installs Chromium and WebKit before browser tests.
+
+Tornado browser tests use fixed tracks and map tiles.
+They check phone WebGL, desktop WebGL, and the SVG fallback.
+They also check recovery after a failed historical request while phone controls remain open.
 
 The post browser tests use a fixed Google Docs fixture in `tests/fixtures`.
 A compilation test compares the fixture MDX with the importer output.

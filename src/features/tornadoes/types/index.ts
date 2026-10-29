@@ -51,14 +51,14 @@ export type TornadoTrackFeature = Feature<LineString, TornadoTrackProperties>;
 export type TornadoTrackCollection = FeatureCollection<LineString, TornadoTrackProperties> & {
     metadata?: {
         source: string;
-        generatedAt: string;
+        generatedAt?: string;
         count: number;
     };
 };
 export type TornadoPointCollection = FeatureCollection<Point, TornadoPointProperties> & {
     metadata?: {
         source: string;
-        generatedAt: string;
+        generatedAt?: string;
         count: number;
     };
 };

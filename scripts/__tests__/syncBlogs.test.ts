@@ -461,6 +461,7 @@ describe('Google export helpers', () => {
             '{{trip-map:day:coastbound}}',
             '{{trip-photo:camp-at-dusk}}',
             '{{trip-photo-pano:mountain-view}}',
+            '{{trip-animation:speeders}}',
             '{{trip-gallery:highlights}}',
         ].join('\n\n');
 
@@ -471,6 +472,7 @@ describe('Google export helpers', () => {
             '<TripMap dayId="coastbound" />',
             '<TripPhoto photoId="camp-at-dusk" />',
             '<TripPhoto photoId="mountain-view" layout="pano" />',
+            '<TripAnimation animationId="speeders" />',
             '<TripGallery galleryId="highlights" />',
         ].join('\n\n'));
     });
@@ -485,6 +487,7 @@ describe('Google export helpers', () => {
         ['{{trip-map:day:missing-day}}', /unknown day "missing-day"/],
         ['{{trip-photo:missing-photo}}', /unknown photo "missing-photo"/],
         ['{{trip-photo-pano:missing-photo}}', /unknown photo "missing-photo"/],
+        ['{{trip-animation:missing-animation}}', /unknown animation "missing-animation"/],
         ['{{trip-gallery:missing-gallery}}', /unknown gallery "missing-gallery"/],
     ])('rejects a shortcode reference that is absent from the manifest', (shortcode, expectedError) => {
         const manifest = {
@@ -677,6 +680,21 @@ describe('syncBlogPosts', () => {
         expect(fetchImpl).toHaveBeenCalledTimes(2);
         trackId = 'different';
         await expect(validateTripAssetUrls([post], manifests, { fetchImpl })).rejects.toThrow(/missing track "outbound"/);
+    });
+
+    it('checks CDN animation files and leaves bundled media to filesystem validation', async () => {
+        const post = { slug: 'coastal-loop', format: 'trip', tripId: 'coastal-loop' };
+        const src = 'https://data.rsmb.tv/trips/coastal-loop/animations/speeders.mp4';
+        const poster = 'https://data.rsmb.tv/trips/coastal-loop/animations/speeders.webp';
+        const manifests = new Map([['coastal-loop', {
+            animations: [{ src, poster }, {
+                src: '/media/trips/coastal-loop/speeders-012345abcdef.mp4',
+                poster: '/media/trips/coastal-loop/speeders-012345abcdef.webp',
+            }],
+        }]]);
+        const fetchImpl = vi.fn(async () => response('', 200, 'OK'));
+        await expect(validateTripAssetUrls([post], manifests, { fetchImpl })).resolves.toBeUndefined();
+        expect(fetchImpl.mock.calls.map(call => call[0])).toEqual([src, poster]);
     });
 
     it('falls back to GET when a host rejects the HEAD probe', async () => {

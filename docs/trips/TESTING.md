@@ -62,6 +62,7 @@ npx playwright show-trace path/to/trace.zip
 | Resources | Release distant maps. Keep maps active during keyboard interaction and fullscreen use. |
 | Layout | Prevent horizontal scrolling after maps paint. Preserve panorama proportions and reserved image height. |
 | Photos | Select suitable responsive sources. Support mouse, touch, and keyboard controls. Restore focus after closing. |
+| Animations | Defer video loading, retain posters and attribution after failure, honor reduced motion, and preserve user pause choices across visibility changes. |
 | Content | Retain literal captions, article metadata, return filters, country tags, and region tags. |
 
 Panorama checks run with default scrollbars and visible classic scrollbars.
@@ -110,6 +111,17 @@ Photo unit tests also check recovery after changes to responsive sources or imag
 Page tests use fixed post metadata and trip summaries.
 Development-status tests use fixed publication, source, and asset states.
 Tests must not depend on a previous content import.
+
+Run animation validation and playback tests with:
+
+```bash
+npx vitest run scripts/__tests__/tripAnimations.test.ts src/test/tripAnimation.test.tsx \
+  src/test/tripRegistries.test.ts
+```
+
+These tests check media origins, trip directories, file types, fingerprints, playback, and reduced motion.
+They also check browsers without `IntersectionObserver` and CDN URLs during development.
+Playback tests mock the media API. They do not prove that a browser can decode a specific MP4 file.
 
 ## JavaScript budgets
 

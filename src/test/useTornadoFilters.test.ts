@@ -68,6 +68,13 @@ describe('useTornadoFilters — defaults', () => {
 // ---------------------------------------------------------------------------
 
 describe('useTornadoFilters — URL param parsing', () => {
+    it('normalizes a reversed year range supplied in a shared URL', () => {
+        const { result } = renderHook(() => useTornadoFilters(), {
+            wrapper: wrapperWithParams('start=2025&end=2000'),
+        });
+        expect(result.current.filters.startYear).toBe(2000);
+        expect(result.current.filters.endYear).toBe(2025);
+    });
     it('reads year range from ?start= and ?end=', () => {
         const { result } = renderHook(() => useTornadoFilters(), {
             wrapper: wrapperWithParams('start=1990&end=2000'),

@@ -1,4 +1,5 @@
 import type { FeatureCollection, Point, Position } from 'geojson';
+import { DECADE_COLORS, SCALE_COLORS, YEAR_COLOR_STOPS } from './constants';
 import type {
     AnnualTornadoSummary,
     FilteredTornadoStats,
@@ -7,6 +8,7 @@ import type {
     TornadoTrackCollection,
     TornadoTrackFeature,
     TornadoTrackProperties,
+    TornadoColorMode,
 } from './types';
 
 // SVG canvas coordinate-space dimensions used by the WebGL fallback renderer.
@@ -151,6 +153,26 @@ export function toTrackPoints(collection: TornadoTrackCollection): FeatureCollec
     };
 }
 
+/** SVG equivalent of the MapLibre scale/decade/year color expressions. */
+export function trackColor(scale: number, year: number, mode: TornadoColorMode): string {
+    if (mode === 'scale') return SCALE_COLORS[scale] ?? SCALE_COLORS[-1];
+    if (mode === 'decade') return DECADE_COLORS[Math.floor(year / 10) * 10] ?? DECADE_COLORS[2020];
+    const lower = YEAR_COLOR_STOPS[0];
+    if (year <= lower.year) return lower.color;
+    for (let i = 1; i < YEAR_COLOR_STOPS.length; i += 1) {
+        const end = YEAR_COLOR_STOPS[i];
+        if (year > end.year) continue;
+        const start = YEAR_COLOR_STOPS[i - 1];
+        const fraction = (year - start.year) / (end.year - start.year);
+        return '#' + [1, 3, 5].map(offset => {
+            const a = parseInt(start.color.slice(offset, offset + 2), 16);
+            const b = parseInt(end.color.slice(offset, offset + 2), 16);
+            return Math.round(a + (b - a) * fraction).toString(16).padStart(2, '0');
+        }).join('');
+    }
+    return YEAR_COLOR_STOPS[YEAR_COLOR_STOPS.length - 1].color;
+}
+
 /** Returns the geographic bounds for a given region preset (degrees). */
 export function fallbackBounds(region: TornadoRegionPreset): { west: number; east: number; south: number; north: number } {
     if (region === 'midwest') return { west: -105, east: -78, south: 35, north: 50 };
@@ -265,12 +287,15 @@ export function computeSparklinePills(
     const selData = allYears.filter(d => d.year >= startYear && d.year <= endYear);
 
     const avg = (arr: number[]) => arr.length > 0 ? arr.reduce((s, v) => s + v, 0) / arr.length : 0;
-    const ef2Pct = (row: AnnualTornadoSummary) => (row.count > 0 ? (row.ef2Plus / row.count) * 100 : 0);
+    const ef2Pct = (rows: AnnualTornadoSummary[]) => {
+        const count = rows.reduce((sum, row) => sum + row.count, 0);
+        return count > 0 ? rows.reduce((sum, row) => sum + row.ef2Plus, 0) / count * 100 : 0;
+    };
 
     return [
         { label: 'Avg/yr', selValue: avg(selData.map(d => d.count)), histValue: avg(allYears.map(d => d.count)), higherIsBad: false },
         { label: 'Deaths/yr', selValue: avg(selData.map(d => d.deaths)), histValue: avg(allYears.map(d => d.deaths)), higherIsBad: true },
-        { label: 'EF2%', selValue: avg(selData.map(ef2Pct)), histValue: avg(allYears.map(ef2Pct)), higherIsBad: true },
+        { label: 'EF2%', selValue: ef2Pct(selData), histValue: ef2Pct(allYears), higherIsBad: true },
     ];
 }
 
@@ -351,6 +376,7 @@ export function computeDecades(allYears: AnnualTornadoSummary[]): DecadeRow[] {
         const slice = allYears.filter(y => y.year >= start && y.year < start + 10);
         if (!slice.length) continue;
         const len = slice.length;
+        const count = slice.reduce((sum, year) => sum + year.count, 0);
         const isPartial = slice[slice.length - 1].year < start + 9;
         const label = isPartial
             ? `${start}–${String(slice[slice.length - 1].year).slice(2)}`
@@ -360,8 +386,8 @@ export function computeDecades(allYears: AnnualTornadoSummary[]): DecadeRow[] {
             decadeStart: start,
             avgCount: slice.reduce((s, y) => s + y.count, 0) / len,
             avgDeaths: slice.reduce((s, y) => s + y.deaths, 0) / len,
-            ef2Pct: slice.reduce((s, y) => s + (y.count > 0 ? y.ef2Plus / y.count * 100 : 0), 0) / len,
-            dPer100: slice.reduce((s, y) => s + (y.count > 0 ? y.deaths / y.count * 100 : 0), 0) / len,
+            ef2Pct: count > 0 ? slice.reduce((s, y) => s + y.ef2Plus, 0) / count * 100 : 0,
+            dPer100: count > 0 ? slice.reduce((s, y) => s + y.deaths, 0) / count * 100 : 0,
         });
     }
     return rows;

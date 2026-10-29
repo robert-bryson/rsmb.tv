@@ -14,6 +14,15 @@ async function renderDocument(html: string) {
 }
 
 describe('Google Docs to rendered MDX', () => {
+    it('compiles animation shortcodes with inline formatting into a trip component', async () => {
+        const markdown = convertHtmlToMarkdown('<p><strong>{{trip-animation:speeders}}</strong></p>');
+        const expanded = expandTripShortcodes(markdown, { format: 'trip', tripId: 'coast' }, { animations: [{ id: 'speeders' }] });
+        const { default: Content } = await evaluate(expanded, runtime);
+        expect(renderToStaticMarkup(<Content components={{
+            TripAnimation: ({ animationId }: { animationId: string }) => <figure data-animation={animationId} />,
+        }} />)).toBe('<figure data-animation="speeders"></figure>');
+    });
+
     it('keeps the browser fixture equal to the importer output', async () => {
         const html = fs.readFileSync(new URL('../../tests/fixtures/google-doc.html', import.meta.url), 'utf8');
         const fixture = fs.readFileSync(new URL('../../tests/fixtures/google-doc.mdx', import.meta.url), 'utf8');
