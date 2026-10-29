@@ -93,6 +93,19 @@ test('delivered HTML identifies the article without JavaScript', async ({ reques
     expect(html).toContain('property="og:type" content="article"');
 });
 
+test('trip country facts link to country filters and preserve regional filters', async ({ page }) => {
+    await page.goto('/trips/coastal-test');
+    const facts = page.locator('[data-trip-facts-slot] dl');
+    await expect(facts.getByRole('link', { name: 'US', exact: true })).toHaveAttribute('href', '/posts?tag=us');
+    await expect(facts.getByRole('link', { name: 'British Columbia', exact: true }))
+        .toHaveAttribute('href', '/posts?tag=british-columbia');
+    await facts.getByRole('link', { name: 'CA', exact: true }).click();
+    await expect(page).toHaveURL(/\/posts\?tag=ca$/);
+    await expect(page.getByRole('link', { name: 'ca', exact: true })).toHaveAttribute('aria-current', 'page');
+    await expect(page.getByRole('heading', { name: 'Coastal test trip', exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Daily map test trip', exact: true })).toHaveCount(0);
+});
+
 test('inline and gallery photos use the viewer and return keyboard focus', async ({ page }) => {
     await page.goto('/trips/coastal-test');
     for (const alt of ['Coast photograph 2', 'Coast photograph 4']) {

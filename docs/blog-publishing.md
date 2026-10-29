@@ -79,6 +79,8 @@ The site derives heading IDs from the heading text.
 For example, `Day 1: Seattle to Boise` becomes `#day-1-seattle-to-boise`.
 Repeated headings receive numeric suffixes.
 Each heading links to itself and back to the table of contents.
+Click heading text to open its section link.
+If a heading contains an authored link, that link keeps its destination. Use the adjacent `#` for the section link.
 
 After an importer change, regenerate local documents:
 
@@ -93,7 +95,8 @@ Do not edit generated MDX as the content source.
 The post list supports `type` and `tag` query parameters.
 For example, `/posts?type=writing&tag=Maps` selects writing with the exact `Maps` tag.
 Explicit tags keep their original case.
-Trip facts add normalized motorcycle and region tags to the registry.
+Trip facts add normalized motorcycle, country-code, and region tags to the registry.
+For example, `US` adds `us`, and `British Columbia` adds `british-columbia`.
 
 Previous and next links select adjacent articles within the same collection.
 Previous selects the older article. Next selects the newer article.

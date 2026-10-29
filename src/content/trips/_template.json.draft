@@ -5,7 +5,7 @@
         "end": "YYYY-MM-DD"
     },
     "motorcycle": "Motorcycle",
-    "regions": ["Region"],
+    "countries": [{ "code": "US", "regions": ["Region"] }],
     "hero": "hero",
     "route": {
         "geoJson": "https://data.rsmb.tv/trips/trip-slug/geo/route.geojson",

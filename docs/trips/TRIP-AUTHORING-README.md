@@ -236,11 +236,30 @@ Set these required fields:
 - `stops`: Route stops with unique IDs and `[longitude, latitude]` coordinates.
 - `photos`: Photo IDs, public URLs, dimensions, and alt text.
 
-You can also set `ridingDays`, `distanceMiles`, `motorcycle`, `regions`, and `galleries`.
-The motorcycle and region facts link to post filters.
+You can also set `ridingDays`, `distanceMiles`, `motorcycle`, `countries`, and `galleries`.
+The motorcycle, country, and region facts link to post filters.
 The registry adds these fact tags automatically. It uses lowercase text and replaces spaces with hyphens.
 For example, `Honda CB500X` adds `motorcycle` and `honda-cb500x`. `New Mexico` adds `new-mexico`.
 Explicit Sheet tags keep their original text.
+
+Group regions under their country using two-letter uppercase country codes.
+Each country appears on its own line above its regions in the trip details panel.
+For a cross-border trip, add a group for each country, for example:
+
+```json
+"countries": [
+  { "code": "US", "regions": ["Washington", "Oregon", "Idaho"] },
+  { "code": "CA", "regions": ["British Columbia", "Alberta"] }
+]
+```
+
+Country codes also become filter tags (`us`, `ca`). Regions are optional for country-only entries.
+Older manifests with a flat `regions` array remain supported; use `countries` for new entries.
+Country codes must be unique. Region names must be nonempty and unique within each list.
+The validator removes spaces from the start and end of region names before checking duplicates.
+If both geography fields exist, the details panel shows country groups first.
+It then shows flat regions that do not appear in a country group.
+All displayed countries and regions add filter tags.
 
 ### Day assignments
 
@@ -277,7 +296,7 @@ Use this day in the source Google Doc:
 ### Overview controls
 
 Overview maps show day buttons below the map.
-They omit stop markers, stop lists, and the `Show stops` checkbox.
+They omit stop markers, stop lists, and the `Stops` button.
 Each button has an underline that matches its route color.
 Hover over a day button to emphasize its tracks without moving the camera.
 Keyboard focus supplies the same feedback.
@@ -307,7 +326,11 @@ Day maps do not repeat the day title above the map.
 The initial view fits the day.
 Panning can reveal more of the full route.
 Their `Show whole day` action restores the day's extent.
-On inline maps, the checkbox controls map markers and the stop list together.
+This action appears after a camera change or stop selection.
+The `Stops` button controls map markers and the stop list together.
+Its pressed state means that stops are visible.
+The button reports changes immediately, including while the map loads.
+It also remains available in suspended and failed map previews.
 Stop numbers follow manifest order in inline maps and previews.
 Day maps retain their selection when an offscreen interactive map is released.
 
@@ -320,6 +343,7 @@ Day buttons retain keyboard focus when the preview becomes interactive or an err
 If the interactive map fails, the route preview, day controls, and download remain available.
 Select `Retry route` to load the route again and create a new interactive map.
 Retry keeps the selected day and stop visibility setting.
+Resetting a stop-focused map clears its selection. Its preview retains the stop list and visibility control.
 An error remains visible when you change the day.
 A day change does not retry a failed map.
 Loading another route clears the previous selection, hover, and focus feedback.
@@ -479,8 +503,10 @@ Check desktop and phone widths:
 - Scroll the map into view.
 - Check its initial stop or track focus.
 - Test the basemap icon, stop buttons, and download icon.
-- On a focused map, select **Show full route** before you move the map.
-- Pan or zoom the map. Check that **Show full route** appears again.
+- On a stop or track map, select **Show full route** to clear the initial focus.
+- On a day map, pan or select a stop. Select **Show whole day** to restore the day's extent.
+- Toggle **Stops**. Check that map markers and the stop list change together.
+- Pan or zoom the map. Check that its reset action appears again.
 - Open the attribution information button. Check that it closes again.
 - Cause a route request to fail. Check that the download link remains available below the map.
 - Open and close photos with a mouse, keyboard, and touch.
@@ -493,9 +519,11 @@ Check desktop and phone widths:
 - Check that collapsed photos retain their alt text in the viewer.
 - Use Next and Previous to move between story galleries.
 - Expand the gallery. Confirm that each viewer caption retains the same text and location.
-- Open each motorcycle and region link. Check that the result includes this trip.
+- Open each motorcycle, country, and region link. Check that the result includes this trip.
 - Check the previous and next article links. Check that the return link retains the list filter.
 - Remove repeated titles and repeated facts.
+
+Use the [trip testing guide](TESTING.md) for automated regression checks and browser setup.
 
 ## 6. Publish assets
 

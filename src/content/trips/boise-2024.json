@@ -7,10 +7,11 @@
     "ridingDays": 6,
     "distanceMiles": 1626,
     "motorcycle": "Honda CB500X",
-    "regions": [
-        "Washington",
-        "Oregon",
-        "Idaho"
+    "countries": [
+        {
+            "code": "US",
+            "regions": ["Washington", "Oregon", "Idaho"]
+        }
     ],
     "hero": "boise-2024-05-18-gravel-road",
     "route": {

@@ -50,6 +50,13 @@ function headingId(children: ReactNode): string {
         .replace(/^-+|-+$/g, '') || 'section';
 }
 
+function containsLink(children: ReactNode): boolean {
+    return Children.toArray(children).some((child) => {
+        if (!isValidElement<{ children?: ReactNode; href?: string }>(child)) return false;
+        return child.type === 'a' || child.props.href !== undefined || containsLink(child.props.children);
+    });
+}
+
 export function LinkedHeading({
     as: Heading,
     children,
@@ -69,6 +76,13 @@ export function LinkedHeading({
         return reserved.release;
     }, [baseId, reserveId]);
     const anchorId = reserveId ? (reservation?.baseId === baseId ? reservation.id : undefined) : baseId;
+    const hasContentLink = containsLink(children);
+    const isMajorHeading = Heading === 'h1' || Heading === 'h2';
+    const title = (
+        <span className={`[&_*]:text-inherit ${isMajorHeading ? 'box-decoration-clone border-b-2 border-violet-400 pb-1' : ''}`}>
+            {children}
+        </span>
+    );
 
     return (
         <Heading
@@ -79,14 +93,21 @@ export function LinkedHeading({
             data-post-heading={anchorId ? true : undefined}
             className={`group scroll-mt-24 ${className ?? ''}`}
         >
-            {children}
+            {hasContentLink && title}
             <a
                 href={anchorId ? `#${anchorId}` : undefined}
                 aria-label={`Link to ${text}`}
-                data-heading-anchor
-                className="ml-1 inline-flex min-h-6 min-w-6 items-center justify-center text-zinc-500 no-underline opacity-60 transition-opacity hover:text-violet-400 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100 focus:opacity-100"
+                data-heading-anchor={hasContentLink ? true : undefined}
+                className="rounded-sm text-inherit no-underline hover:text-violet-400 focus-visible:text-violet-400 motion-reduce:transition-none"
             >
-                #
+                {!hasContentLink && title}
+                <span
+                    aria-hidden="true"
+                    data-heading-anchor
+                    className="ml-1 inline-flex min-h-6 min-w-6 items-center justify-center text-zinc-500 opacity-60 transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100 motion-reduce:transition-none"
+                >
+                    #
+                </span>
             </a>
             <a
                 href="#post-table-of-contents"

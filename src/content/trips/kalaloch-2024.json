@@ -7,8 +7,11 @@
     "ridingDays": 3,
     "distanceMiles": 450,
     "motorcycle": "Honda CB500X",
-    "regions": [
-        "Washington"
+    "countries": [
+        {
+            "code": "US",
+            "regions": ["Washington"]
+        }
     ],
     "hero": "kalaloch-2024-06-23-beach-overlook",
     "route": {

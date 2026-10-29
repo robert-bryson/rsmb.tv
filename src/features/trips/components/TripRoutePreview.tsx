@@ -9,6 +9,7 @@ import { useTripMapHighlight } from '../useTripMapHighlight';
 
 type TripRoutePreviewProps = TripMapFocus & {
     showStops?: boolean;
+    onToggleStops?: () => void;
     onExplore?: () => void;
     onDaySelect?: (id?: string) => void;
     allowDaySelection?: boolean;
@@ -19,8 +20,8 @@ type TripRoutePreviewProps = TripMapFocus & {
 };
 
 export function TripRoutePreview({
-    stopId, trackId, dayId, showStops = true, onExplore, onDaySelect,
-    allowDaySelection = false, mapError, onRetry, routeState, figureRef,
+    stopId, trackId, dayId, showStops = true, onToggleStops, onExplore, onDaySelect,
+    allowDaySelection = !dayId && !trackId && !stopId, mapError, onRetry, routeState, figureRef,
 }: TripRoutePreviewProps) {
     const { manifest } = useTripStory();
     const ownRef = useRef<HTMLElement>(null);
@@ -32,7 +33,8 @@ export function TripRoutePreview({
     const highlight = useTripMapHighlight(routeUrl);
     const tooltipId = useId();
     const emphasizedDayId = highlight.id ?? selectedDayId;
-    const isBaseMap = allowDaySelection || (!dayId && !trackId && !stopId);
+    // Explicit mode survives a cleared stop selection in a suspended or failed map.
+    const isBaseMap = allowDaySelection;
     const isOverview = isBaseMap && tripMapDays(manifest).length > 0;
     const stopsVisible = !isBaseMap && showStops;
     const selectDay = (id?: string) => {
@@ -116,6 +118,9 @@ export function TripRoutePreview({
         {status && <p role="status" className="mb-3 text-sm text-zinc-300">{status}</p>}
         <div className="relative aspect-[16/10] min-h-72 w-full overflow-hidden rounded-md border border-zinc-800 bg-zinc-950">
         {graphic}
+        {!isBaseMap && view.stops.length > 0 && onToggleStops && <div className="trip-route-actions absolute left-3 top-3">
+            <button type="button" aria-pressed={showStops} title={showStops ? 'Hide stops' : 'Show stops'} onClick={onToggleStops}>Stops</button>
+        </div>}
         {popupDay && <div id={tooltipId} role="tooltip" className="trip-day-preview-popup absolute left-1/2 top-4 z-10 max-w-[calc(100%-2rem)] -translate-x-1/2"
             style={{ '--trip-day-color': dayColor(manifest, popupDay.id) } as CSSProperties}>{popupDay.title}</div>}
         <div className="absolute inset-x-0 bottom-0 flex flex-wrap items-center gap-x-4 gap-y-1 bg-zinc-950/90 p-3 text-sm">
@@ -128,7 +133,7 @@ export function TripRoutePreview({
         <figcaption className="mt-3">
             {isBaseMap ? <TripMapDayControls manifest={manifest} dayId={selectedDayId} highlightedDayId={highlight.id} tooltipId={popupDay ? tooltipId : undefined} onSelect={selectDay} onHighlight={highlight.onHover} onFocusDay={highlight.onFocus} />
                 : <>
-                    {view.stops.length > 0 && <p className="mb-2 inline-flex min-h-11 items-center text-sm text-zinc-300">{showStops ? 'Stops' : 'Stops hidden'}</p>}
+                    {view.stops.length > 0 && !onToggleStops && <p className="mb-2 inline-flex min-h-11 items-center text-sm text-zinc-300">{showStops ? 'Stops' : 'Stops hidden'}</p>}
                     <ol hidden={!showStops} className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-zinc-400">{view.stops.map(stop => <li key={stop.id} className="rounded px-1.5 py-0.5"><span className="inline-flex min-h-11 items-center">{manifest.stops.indexOf(stop) + 1}. {stop.name}{!view.day && (stop === view.stops[0] ? ' · Start' : stop === view.stops.at(-1) ? ' · Finish' : '')}</span></li>)}</ol>
                 </>}
         </figcaption>

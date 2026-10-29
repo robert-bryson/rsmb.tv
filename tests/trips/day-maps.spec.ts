@@ -66,6 +66,40 @@ async function routePixels(map: Locator) {
 
 test.beforeEach(async ({ page }) => fixedAssets(page));
 
+test('loading and suspending day maps does not add horizontal scrolling', async ({ page, isMobile }) => {
+    if (!isMobile) await page.setViewportSize({ width: 1748, height: 1000 });
+    await page.goto('/trips/daily-test');
+    const maps = page.locator('[data-trip-map]');
+    await expect(maps).toHaveCount(3);
+    // User input ends navigation's scroll restoration before programmatic scrolling.
+    await page.keyboard.press('ArrowDown');
+
+    // Paint each interactive map, then revisit maps that have been suspended.
+    // Firefox can retain the pre-transform bounds only after a map is painted.
+    for (const index of [0, 1, 2, 0, 2]) {
+        const map = maps.nth(index);
+        await map.scrollIntoViewIfNeeded();
+        await expect(map.locator('canvas')).toBeVisible();
+        await expect.poll(async () => {
+            const pixels = await routePixels(map);
+            return pixels.amber + pixels.blue;
+        }).toBeGreaterThan(10);
+
+        const layout = await page.evaluate(() => {
+            window.scrollTo(10000, window.scrollY);
+            const scrollX = window.scrollX;
+            window.scrollTo(0, window.scrollY);
+            return {
+                pageWidth: document.documentElement.clientWidth,
+                scrollWidth: document.documentElement.scrollWidth,
+                scrollX,
+            };
+        });
+        expect(layout.scrollWidth, `after painting map ${index + 1}`).toBe(layout.pageWidth);
+        expect(layout.scrollX).toBe(0);
+    }
+});
+
 async function settledRoutePixels(map: Locator) {
     let previous = '';
     let pixels: Awaited<ReturnType<typeof routePixels>>;
@@ -207,7 +241,7 @@ test('bottom day controls match track colors, emphasize on hover, and restore th
     await expect(overview.getByRole('button', { name: /^3\. Home/ })).toHaveCount(0);
     await expect.poll(async () => (await routePixels(overview)).blue).toBe(0);
     await expect.poll(async () => (await routePixels(overview)).amber).toBeGreaterThan(10);
-    await expect(overview.getByRole('checkbox', { name: 'Show stops' })).toHaveCount(0);
+    await expect(overview.getByRole('button', { name: 'Stops', exact: true })).toHaveCount(0);
     await expect(overview.getByRole('button', { name: /Shared camp/ })).toHaveCount(0);
     await expect(coastbound).toBeVisible();
     await page.getByRole('heading', { name: 'First day', exact: true }).click();
@@ -273,23 +307,38 @@ for (const timing of ['before', 'after'] as const) {
 test('inline maps retain the full black route while fitting and resetting to their own day', async ({ page }) => {
     await page.goto('/trips/daily-test');
     const day = page.locator('[data-trip-map]').nth(2);
+    await expect(day).toBeVisible();
+    await page.keyboard.press('ArrowDown');
     await day.scrollIntoViewIfNeeded();
     await expect(day.getByRole('region', { name: 'Map of Homebound.' })).toBeVisible();
     await expect(day.getByText('Homebound', { exact: true })).toHaveCount(0);
     await expect(day.getByRole('button', { name: /Harbor/ })).toHaveCount(0);
     await expect(day.getByRole('button', { name: /Shared camp/ })).toBeVisible();
-    await expect(day.getByRole('checkbox', { name: 'Show stops' })).toBeChecked();
+    const stops = day.getByRole('region').getByRole('button', { name: 'Stops', exact: true });
+    await expect(stops).toHaveAttribute('aria-pressed', 'true');
     await expect.poll(async () => (await routePixels(day)).stopPixels).toBeGreaterThan(10);
     await expect.poll(async () => (await routePixels(day)).blue).toBeGreaterThan(10);
     await expect.poll(async () => (await routePixels(day)).amber).toBe(0);
     await expect.poll(async () => (await routePixels(day)).blackRoute).toBeGreaterThan(100);
     const originalBounds = (await settledRoutePixels(day)).bounds;
+    await expect(day.getByRole('button', { name: 'Show whole day' })).toBeHidden();
+    await stops.click();
+    await expect(stops).toHaveAttribute('aria-pressed', 'false');
+    await expect.poll(async () => (await routePixels(day)).stopPixels).toBe(0);
+    await expect(day.getByRole('button', { name: /Shared camp/ })).toHaveCount(0);
+    await expect(day.getByRole('button', { name: 'Show whole day' })).toBeHidden();
+    await stops.click();
+    await expect(stops).toHaveAttribute('aria-pressed', 'true');
+    await expect.poll(async () => (await routePixels(day)).stopPixels).toBeGreaterThan(10);
+    await expect.poll(async () => (await routePixels(day)).bounds).toEqual(originalBounds);
     await day.getByRole('button', { name: 'Zoom in', exact: true }).click();
+    await expect(day.getByRole('button', { name: 'Show whole day' })).toBeVisible();
     await day.getByRole('button', { name: 'Show whole day' }).click();
     await expect(day.getByRole('region', { name: 'Map of Homebound.', exact: true })).toBeVisible();
     await expect.poll(async () => (await routePixels(day)).amber).toBe(0);
     await expect.poll(async () => (await routePixels(day)).blackRoute).toBeGreaterThan(100);
     await expect.poll(async () => (await routePixels(day)).bounds).toEqual(originalBounds);
+    await expect(day.getByRole('button', { name: 'Show whole day' })).toBeHidden();
 });
 
 test('distant overview maps release their canvas and restore the selected day without stops', async ({ page }) => {
@@ -305,6 +354,6 @@ test('distant overview maps release their canvas and restore the selected day wi
     await overview.scrollIntoViewIfNeeded();
     await expect(overview.locator('canvas')).toHaveCount(1);
     await expect(overview.getByRole('button', { name: '2. Homebound' })).toHaveAttribute('aria-pressed', 'true');
-    await expect(overview.getByRole('checkbox', { name: 'Show stops' })).toHaveCount(0);
+    await expect(overview.getByRole('button', { name: 'Stops', exact: true })).toHaveCount(0);
     expect((await routePixels(overview)).stopPixels).toBe(0);
 });

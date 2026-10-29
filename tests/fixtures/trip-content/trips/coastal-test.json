@@ -6,6 +6,10 @@
   },
   "distanceMiles": 240,
   "ridingDays": 2,
+  "countries": [
+    { "code": "US", "regions": ["Washington", "Oregon"] },
+    { "code": "CA", "regions": ["British Columbia"] }
+  ],
   "hero": "photo-1",
   "route": {
     "geoJson": "/test-trip/route.geojson",

@@ -70,3 +70,31 @@ test('heading links use unique IDs and support reload and browser history', asyn
     const ids = await page.locator('[data-post-heading]').evaluateAll(nodes => nodes.map(node => node.id));
     expect(new Set(ids).size).toBe(ids.length);
 });
+
+test('heading titles are permalinks with pointer and keyboard feedback', async ({ page }) => {
+    await page.goto('/tests/e2e/fixtures/post.html');
+    const heading = page.getByRole('heading', { name: 'First Stop', exact: true }).first();
+    const permalink = heading.getByRole('link', { name: 'Link to First Stop', exact: true });
+    const title = permalink.getByText('First Stop', { exact: true });
+    const initialColor = await permalink.evaluate(node => getComputedStyle(node).color);
+
+    await title.hover();
+    await expect(permalink).toHaveCSS('color', 'oklch(0.702 0.183 293.541)');
+    await title.click();
+    await expect(page).toHaveURL(/#first-stop$/);
+
+    await page.getByRole('link', { name: 'First Stop 1', exact: true }).click();
+    await expect(page).toHaveURL(/#first-stop-1-1$/);
+    await page.mouse.move(0, 0);
+    await heading.getByRole('link', { name: 'Back to table of contents' }).focus();
+    await page.keyboard.press('Shift+Tab');
+    await expect(permalink).toBeFocused();
+    await expect(permalink).toHaveCSS('outline-style', 'solid');
+    await expect(permalink).toHaveCSS('color', 'oklch(0.702 0.183 293.541)');
+    await page.keyboard.press('Tab');
+    await expect(heading.getByRole('link', { name: 'Back to table of contents' })).toBeFocused();
+    await expect(permalink).toHaveCSS('color', initialColor);
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/#first-stop$/);
+});

@@ -104,6 +104,7 @@ function summary(manifest: TripManifest, local: boolean) {
     return {
         id: manifest.id, dates: manifest.dates, ridingDays: manifest.ridingDays,
         distanceMiles: manifest.distanceMiles, series: manifest.series, motorcycle: manifest.motorcycle, regions: manifest.regions,
+        countries: manifest.countries,
         hero: { ...hero, src: url(hero.src), srcSet: hero.srcSet && url(hero.srcSet) },
     };
 }

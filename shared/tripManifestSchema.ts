@@ -2,6 +2,10 @@ import { z } from 'zod';
 
 const slugSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 const dateSchema = z.iso.date();
+const regionsSchema = z.array(z.string().trim().min(1)).refine(
+    regions => new Set(regions).size === regions.length,
+    'Region names must be unique within each list.',
+);
 const photoSchema = z.object({
     id: slugSchema,
     src: z.string().min(1),
@@ -21,7 +25,12 @@ export const tripManifestSchema = z.object({
     ridingDays: z.number().int().positive().optional(),
     distanceMiles: z.number().positive().optional(),
     motorcycle: z.string().min(1).optional(),
-    regions: z.array(z.string().min(1)).optional(),
+    countries: z.array(z.object({
+        code: z.string().regex(/^[A-Z]{2}$/, 'Use a two-letter uppercase country code.'),
+        regions: regionsSchema.optional(),
+    })).refine(countries => new Set(countries.map(country => country.code)).size === countries.length,
+        'Country codes must be unique.').optional(),
+    regions: regionsSchema.optional(),
     hero: slugSchema,
     route: z.object({
         geoJson: z.string().min(1),

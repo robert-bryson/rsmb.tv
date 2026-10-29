@@ -12,13 +12,13 @@ import { useTripMapDismiss } from '../useTripMapDismiss';
 import { useTripDayHover } from '../useTripDayHover';
 import { useTripMapHighlight } from '../useTripMapHighlight';
 import { basemaps, mapStyle, type BasemapId, type BasemapPaintProperty } from '../tripMapBasemaps';
-import { BasemapControl, CollapsedAttributionControl, DownloadRouteControl, RouteActionsControl } from '../tripMapControls';
+import { BasemapControl, CollapsedAttributionControl, DownloadRouteControl, RouteActionsControl, StopsControl } from '../tripMapControls';
 import { TripMapDayControls } from './TripMapDayControls';
 import { TripRoutePreview } from './TripRoutePreview';
 import type { TripManifest } from '../types';
 
 type TripRouteMapProps = TripMapFocus & { active?: boolean; onExplore?: () => void; initialDayId?: string };
-type DaySelection = { routeUrl: string; requestedId?: string; selectedId?: string };
+type DaySelection = { scope: string; selectedId?: string };
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl);
 
@@ -51,6 +51,7 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
     const mapRef = useRef<maplibregl.Map | null>(null);
     const basemapControlRef = useRef<BasemapControl | null>(null);
     const routeActionsControlRef = useRef<RouteActionsControl | null>(null);
+    const stopsControlRef = useRef<StopsControl | null>(null);
     const appliedDayRef = useRef<{ map: maplibregl.Map; selection: DaySelection }>(null);
     const originalCameraRef = useRef<{ routeUrl: string; camera: maplibregl.JumpToOptions }>(null);
     const [basemapId, setBasemapId] = useState<BasemapId>('muted');
@@ -59,12 +60,13 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
     const stopHighlight = useTripMapHighlight(routeUrl);
     const hoveredStopId = stopHighlight.id;
     const hoverStop = useEffectEvent((id?: string) => stopHighlight.onHover(id));
-    useEffect(() => { originalCameraRef.current = null; }, [routeUrl]);
     const { route, error: routeError, retry } = useTripRoute(routeUrl);
     const requestedDayId = dayId ?? initialDayId;
-    const [daySelection, setDaySelection] = useState<DaySelection>({ routeUrl, requestedId: requestedDayId, selectedId: requestedDayId });
-    if (daySelection.routeUrl !== routeUrl || daySelection.requestedId !== requestedDayId) {
-        setDaySelection({ routeUrl, requestedId: requestedDayId, selectedId: requestedDayId });
+    const dayScope = JSON.stringify([routeUrl, requestedDayId, trackId, stopId]);
+    useEffect(() => { originalCameraRef.current = null; }, [dayScope]);
+    const [daySelection, setDaySelection] = useState<DaySelection>({ scope: dayScope, selectedId: requestedDayId });
+    if (daySelection.scope !== dayScope) {
+        setDaySelection({ scope: dayScope, selectedId: requestedDayId });
     }
     const selectedDayId = daySelection.selectedId;
     const isBaseMap = !dayId && !trackId && !stopId;
@@ -75,6 +77,7 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
     const emphasizedDayId = highlight.id ?? selectedDayId;
     const getDaySelection = useEffectEvent(() => daySelection);
     const [showStops, setShowStops] = useState(true);
+    const toggleStops = useEffectEvent(() => setShowStops(visible => !visible));
     const stopsVisible = !isBaseMap && showStops;
     const view = useMemo(() => tripMapView(manifest, route, { dayId: selectedDayId, trackId }), [manifest, route, selectedDayId, trackId]);
     const getView = useEffectEvent(() => view);
@@ -299,7 +302,13 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
             });
         }
 
-        const routeActionsControl = new RouteActionsControl(() => resetRoute(), Boolean(getSelectedStopId() || trackId || initialView.day), dayId ? 'Show whole day' : 'Show full route');
+        if (!getIsBaseMap() && initialView.stops.length > 0) {
+            const stopsControl = new StopsControl(() => toggleStops(), getShowStops());
+            map.addControl(stopsControl, 'top-left');
+            stopsControlRef.current = stopsControl;
+        }
+        const routeActionsControl = new RouteActionsControl(() => resetRoute(),
+            Boolean(getSelectedStopId() || trackId || (!dayId && initialView.day)), dayId ? 'Show whole day' : 'Show full route');
         map.addControl(routeActionsControl, 'top-left');
 
         map.on('error', () => { if (!disposed) setMapError({
@@ -329,8 +338,9 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
             mapRef.current = null;
             basemapControlRef.current = null;
             routeActionsControlRef.current = null;
+            stopsControlRef.current = null;
         };
-    }, [manifest.stops, manifest.days, route, routeUrl, trackId, dayId, enabled]);
+    }, [manifest.stops, manifest.days, route, routeUrl, trackId, dayId, isBaseMap, enabled]);
 
     useEffect(() => {
         const map = mapRef.current;
@@ -370,6 +380,7 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
     }, [manifest, emphasizedDayId, isOverview, trackId, loadedMap, reducedMotion]);
 
     useEffect(() => {
+        stopsControlRef.current?.setVisible(stopsVisible);
         const map = mapRef.current;
         if (!map || loadedMap !== map) return;
         map.setLayoutProperty('trip-stops', 'visibility', stopsVisible ? 'visible' : 'none');
@@ -418,6 +429,7 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
 
     if (!enabled) return <TripRoutePreview dayId={selectedDayId} trackId={trackId} stopId={selectedStopId}
         figureRef={figureRef} showStops={stopsVisible} onExplore={error ? undefined : onExplore} allowDaySelection={isBaseMap} onDaySelect={selectDay}
+        onToggleStops={() => setShowStops(visible => !visible)}
         routeState={{ route, error: routeError, retry }}
         mapError={error} onRetry={error ? () => { setMapError(undefined); retry(); } : undefined} />;
 
@@ -435,9 +447,6 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
                 )}
             </div>
             <figcaption className="mt-3">
-                {!isBaseMap && view.stops.length > 0 && <label className="mb-2 inline-flex min-h-11 cursor-pointer items-center gap-2 text-sm text-zinc-300">
-                    <input type="checkbox" checked={showStops} onChange={event => setShowStops(event.target.checked)} />Show stops
-                </label>}
                 {isBaseMap ? <TripMapDayControls manifest={manifest} dayId={selectedDayId} highlightedDayId={highlight.id} tooltipId={highlight.id ? dayTooltipId : undefined} onSelect={selectDay} onHighlight={highlight.onHover} onFocusDay={highlight.onFocus} />
                     : <ol hidden={!showStops} className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-zinc-400">
                     {view.stops.map((stop) => (

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
@@ -82,6 +82,43 @@ describe('trip story primitives', () => {
         expect(screen.queryByText('Distance')).not.toBeInTheDocument();
         expect(screen.queryByText('Motorcycle')).not.toBeInTheDocument();
         expect(screen.queryByText('Region')).not.toBeInTheDocument();
+    });
+
+    it('groups cross-border regions beneath their clickable countries', () => {
+        renderStory(<TripFacts />, {
+            ...manifest,
+            regions: undefined,
+            countries: [
+                { code: 'US', regions: ['Oregon', 'Idaho'] },
+                { code: 'CA', regions: ['British Columbia'] },
+                { code: 'JP' },
+            ],
+        });
+
+        const us = screen.getByRole('link', { name: 'US' });
+        const ca = screen.getByRole('link', { name: 'CA' });
+        expect(us).toHaveAttribute('href', '/posts?tag=us');
+        expect(ca).toHaveAttribute('href', '/posts?tag=ca');
+        expect(screen.getByRole('link', { name: 'JP' })).toHaveAttribute('href', '/posts?tag=jp');
+        const usRegions = within(us.parentElement!);
+        expect(usRegions.getByRole('link', { name: 'Oregon' })).toHaveAttribute('href', '/posts?tag=oregon');
+        expect(usRegions.getByRole('link', { name: 'Idaho' })).toHaveAttribute('href', '/posts?tag=idaho');
+        expect(usRegions.queryByText('British Columbia')).not.toBeInTheDocument();
+        expect(within(ca.parentElement!).getByRole('link', { name: 'British Columbia' }))
+            .toHaveAttribute('href', '/posts?tag=british-columbia');
+    });
+
+    it('keeps legacy-only regions visible beside country groups without repeating shared names', () => {
+        renderStory(<TripFacts />, { ...manifest, countries: [{ code: 'US', regions: ['Oregon'] }, { code: 'CA' }] });
+        expect(screen.getAllByRole('link', { name: 'Oregon' })).toHaveLength(1);
+        expect(screen.getByRole('link', { name: 'Idaho' })).toHaveAttribute('href', '/posts?tag=idaho');
+        expect(screen.getByRole('link', { name: 'CA' })).toHaveAttribute('href', '/posts?tag=ca');
+    });
+
+    it('keeps legacy regions when the country list is empty', () => {
+        renderStory(<TripFacts />, { ...manifest, countries: [] });
+        expect(screen.getByRole('link', { name: 'Oregon' })).toHaveAttribute('href', '/posts?tag=oregon');
+        expect(screen.getByRole('link', { name: 'Idaho' })).toHaveAttribute('href', '/posts?tag=idaho');
     });
 
     it('renders linked photos with intrinsic dimensions and captions', () => {

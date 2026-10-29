@@ -172,73 +172,10 @@ These cases must not depend on a previous Google content import.
 ESLint and the development watcher exclude generated coverage and browser reports.
 Report writes must not trigger application reloads during browser checks.
 
-`npm run test:trips:browser` builds fixed test content for production and starts preview on port 4175.
-It checks desktop and phone layouts, photo viewer focus, failed assets, and unavailable WebGL.
-It also checks image selection, JavaScript size limits, article metadata, return links, and link colors.
-Panorama checks measure page edges, image proportions, and horizontal overflow at phone, desktop, and wide desktop widths.
-They also check reserved image height after failure and keyboard focus for linked and unlinked photos.
-Unit tests check failed-image recovery after changes to responsive sources or image slot width.
-Set `PLAYWRIGHT_WEBKIT=1` to include the iPhone WebKit project. CI enables this project.
-Install the browser files and host libraries before you run WebKit:
-
-```bash
-npx playwright install --with-deps chromium webkit
-PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser
-```
-
-Host library installation can require administrator permission. Run that command in your terminal.
-A missing host library is a setup failure. It does not verify application behavior.
-The map control test delays tile responses until after the first full-route action.
-This delay checks that a later map load does not restore the initial stop.
-Unit tests also cover stop selection before map load and errors from replaced maps.
-To repeat only this check, run:
-
-```bash
-PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- tests/trips/reading.spec.ts --grep 'map actions appear' --repeat-each=3 --workers=2
-```
-
-Trip day tests use explicit track and stop assignments.
-They check selection during delayed loading, resets, previews, failed maps, and resource cleanup.
-Mixed pointer and keyboard checks verify that pointer exit preserves focus feedback.
-Escape closes day popups before selection.
-With focus inside the map, Escape also clears the selected day.
-Recovery checks verify saved camera restoration after dismissal during map suspension or failure.
-Route replacement clears the previous hover and focus feedback.
-Stop checks cover pointer and keyboard feedback together, including route replacement with shared stop IDs.
-Block checks cover recovery after map configuration changes and gallery replacement.
-Changing an overview block to a focused map clears its preview day selection.
-Delayed-module browser checks verify keyboard focus and Escape across the preview replacement.
-Fullscreen and keyboard focus keep a map active until the interaction ends.
-The preview uses the parent map's route response after suspension or failure. It does not retry failed requests automatically.
-Run the focused unit tests with:
-
-```bash
-npx vitest run src/test/tripMapView.test.tsx src/test/tripRouteMap.test.tsx \
-  src/test/tripMapBlock.test.tsx src/test/tripMapBlockSelection.test.tsx \
-  src/test/tripBlockRecovery.test.tsx src/test/tripMapDayFocus.test.tsx
-```
-
-Each JavaScript budget test uses a separate browser context.
-The test captures script requests until the initial route content is visible.
-It reads the captured responses. It does not request each script again.
-It counts each complete script URL once, including its query string.
-It includes extensionless script requests and `.js` or `.mjs` preload requests.
-It compresses each response body with gzip level 6, then adds the compressed sizes.
-This value measures unique bundle size, not actual network transfer or cache savings.
-Missing responses, failed responses, and an empty script set fail the test.
-
-| Route | Gzip size must be less than |
-| --- | --- |
-| `/` and `/posts` | 125,000 bytes |
-| `/blog/reading-test` | 185,000 bytes |
-| `/trips/coastal-test` | 190,000 bytes |
-
-Run the budget unit tests and browser checks with:
-
-```bash
-npx vitest run scripts/__tests__/tripBrowserBudget.test.ts --coverage --coverage.include=scripts/trip-browser-budget.ts
-PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- --grep 'reading routes exclude' --workers=2
-```
+`npm run test:trips:browser` builds fixed content for production and checks desktop and phone layouts.
+The suite covers maps, photo viewers, accessibility, article metadata, and JavaScript size limits.
+Use the [trip testing guide](docs/trips/TESTING.md) for browser setup, focused commands, and budget definitions.
+CI includes Chromium and iPhone WebKit. Local runs can also include Firefox.
 
 The dashboard tests check terminal height, resize events, keyboard controls, problem reports, recovery, and listener removal.
 Run the focused suite with:

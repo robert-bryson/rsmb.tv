@@ -71,6 +71,33 @@ export class DownloadRouteControl implements maplibregl.IControl {
     }
 }
 
+export class StopsControl implements maplibregl.IControl {
+    private readonly container = document.createElement('div');
+    private readonly button = document.createElement('button');
+
+    constructor(onToggle: () => void, visible: boolean) {
+        this.container.className = 'maplibregl-ctrl trip-route-actions';
+        this.button.type = 'button';
+        this.button.textContent = 'Stops';
+        this.button.addEventListener('click', onToggle);
+        this.container.append(this.button);
+        this.setVisible(visible);
+    }
+
+    setVisible(visible: boolean) {
+        this.button.setAttribute('aria-pressed', String(visible));
+        this.button.title = visible ? 'Hide stops' : 'Show stops';
+    }
+
+    onAdd() {
+        return this.container;
+    }
+
+    onRemove() {
+        this.container.remove();
+    }
+}
+
 export class RouteActionsControl implements maplibregl.IControl {
     private readonly container = document.createElement('div');
     private readonly reset = document.createElement('button');

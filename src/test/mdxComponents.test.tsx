@@ -105,11 +105,25 @@ describe('MDX headings', () => {
         expect(generatedHeading).toHaveAttribute('id', 'resume-road-day-1');
         expect(screen.getByRole('link', { name: 'Link to Résumé & Road / Day 1' }))
             .toHaveAttribute('href', '#resume-road-day-1');
+        expect(screen.getByRole('link', { name: 'Link to Résumé & Road / Day 1' }))
+            .toHaveTextContent('Résumé & Road / Day 1');
         expect(screen.getByRole('link', { name: 'Back to table of contents' }))
             .toHaveAttribute('href', '#post-table-of-contents');
 
         rerender(<Heading2 id="author-id">Named section</Heading2>);
         expect(screen.getByRole('heading', { name: /Named section/ })).toHaveAttribute('id', 'author-id');
+    });
+
+    it('preserves links inside headings without nesting anchors', () => {
+        const { container } = render(
+            <Heading2>Notes from <em><Anchor href="https://example.com">Boise</Anchor></em></Heading2>,
+        );
+
+        expect(screen.getByRole('heading', { name: 'Notes from Boise' })).toHaveAttribute('id', 'notes-from-boise');
+        expect(screen.getByRole('link', { name: 'Boise' })).toHaveAttribute('href', 'https://example.com');
+        expect(screen.getByRole('link', { name: 'Link to Notes from Boise' }))
+            .toHaveAttribute('href', '#notes-from-boise');
+        expect(container.querySelector('a a')).toBeNull();
     });
 
     it('keeps heading IDs stable under Strict Mode and avoids suffix collisions', () => {

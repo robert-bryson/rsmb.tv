@@ -416,7 +416,7 @@ describe('TripRouteMap', () => {
         for (const id of ['trip-stops', 'trip-stop-numbers']) {
             expect(style.layers.find(layer => layer.id === id)?.layout).toMatchObject({ visibility: 'none' });
         }
-        expect(screen.queryByRole('checkbox', { name: 'Show stops' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: 'Stops' })).not.toBeInTheDocument();
         expect(screen.queryByRole('button', { name: /Shared camp/ })).not.toBeInTheDocument();
         rerender(story(false));
         expect(container.querySelectorAll('circle')).toHaveLength(0);
@@ -562,7 +562,7 @@ describe('TripRouteMap', () => {
         expect(mapMocks.setData.mock.lastCall?.[0].features).toHaveLength(0);
         expect(mapMocks.Map).toHaveBeenCalledOnce();
         expect(fetch).toHaveBeenCalledOnce();
-        expect(screen.queryByRole('checkbox', { name: 'Show stops' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: 'Stops' })).not.toBeInTheDocument();
         expect(mapMocks.setLayoutProperty).toHaveBeenCalledWith('trip-stops', 'visibility', 'none');
         expect(screen.queryByRole('button', { name: /Shared camp/ })).not.toBeInTheDocument();
         fireEvent.click(screen.getByRole('button', { name: '1. Coastbound' }));
@@ -582,12 +582,144 @@ describe('TripRouteMap', () => {
         const control = mapMocks.addControl.mock.calls.map(([control]) => control).find(control => control?.constructor.name === 'RouteActionsControl');
         const reset = control.onAdd(mapMocks.Map.mock.results[0].value).querySelector('button');
         expect(reset).toHaveTextContent('Show whole day');
+        expect(reset.hidden).toBe(true);
         fireEvent.click(screen.getByRole('button', { name: /Shared camp/ }));
+        expect(reset.hidden).toBe(false);
         fireEvent.click(reset);
         expect(screen.getByRole('region')).toHaveAccessibleName('Map of Coastbound.');
         const bounds = mapMocks.LngLatBounds.mock.results.at(-1)?.value;
         expect(bounds.extend).toHaveBeenCalledWith([-124.5, 45]);
         expect(bounds.extend).not.toHaveBeenCalledWith([-120, 44]);
+    });
+
+    it('updates the stops toggle before the map finishes loading', async () => {
+        mapMocks.once.mockImplementation(() => undefined);
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
+        render(<TripStoryProvider manifest={dayMapManifest}><TripRouteMap dayId="coastbound" /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        const control = mapMocks.addControl.mock.calls.map(([control]) => control)
+            .find(control => control?.constructor.name === 'StopsControl');
+        screen.getByRole('region').append(control.onAdd());
+        const toggle = screen.getByRole('button', { name: 'Stops' });
+
+        for (const visible of [false, true, false]) {
+            fireEvent.click(toggle);
+            expect(toggle).toHaveAttribute('aria-pressed', String(visible));
+            expect(toggle).toHaveAttribute('title', visible ? 'Hide stops' : 'Show stops');
+            expect(screen.queryByRole('button', { name: /Shared camp/ }) !== null).toBe(visible);
+        }
+        expect(mapMocks.setLayoutProperty).not.toHaveBeenCalled();
+        act(() => { for (const [event, listener] of [...mapMocks.once.mock.calls]) if (event === 'load') listener(); });
+        expect(mapMocks.setLayoutProperty).toHaveBeenCalledWith('trip-stops', 'visibility', 'none');
+        expect(mapMocks.setLayoutProperty).toHaveBeenCalledWith('trip-stop-numbers', 'visibility', 'none');
+        expect(toggle).toHaveAttribute('aria-pressed', 'false');
+        expect(mapMocks.fitBounds).not.toHaveBeenCalled();
+    });
+
+    it.each(['suspension', 'failure'] as const)('retains stop controls after a full-route reset and map %s', async boundary => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
+        const story = (active: boolean) => <TripStoryProvider manifest={dayMapManifest}>
+            <TripRouteMap stopId="camp" active={active} />
+        </TripStoryProvider>;
+        const { container, rerender } = render(story(true));
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        const reset = mapMocks.addControl.mock.calls.map(([control]) => control)
+            .find(control => control?.constructor.name === 'RouteActionsControl');
+        fireEvent.click(reset.onAdd(mapMocks.Map.mock.results[0].value).querySelector('button'));
+        if (boundary === 'suspension') rerender(story(false));
+        else act(() => mapMocks.on.mock.calls.find(([event]) => event === 'error')?.[1]());
+
+        const toggle = screen.getByRole('button', { name: 'Stops' });
+        expect(toggle).toHaveAttribute('aria-pressed', 'true');
+        expect(screen.getByText('3. Home · Finish')).toBeVisible();
+        expect(container.querySelectorAll('circle').length).toBeGreaterThan(0);
+        expect(screen.queryByRole('button', { name: '1. Coastbound' })).not.toBeInTheDocument();
+        fireEvent.click(toggle);
+        expect(toggle).toHaveAttribute('aria-pressed', 'false');
+        expect(container.querySelectorAll('circle')).toHaveLength(0);
+        expect(screen.queryByRole('list')).not.toBeInTheDocument();
+
+        if (boundary === 'suspension') rerender(story(true));
+        else fireEvent.click(screen.getByRole('button', { name: 'Retry route' }));
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledTimes(2));
+        const style = mapMocks.Map.mock.calls[1][0].style as StyleSpecification;
+        expect(style.layers.find(layer => layer.id === 'trip-stops')?.layout).toMatchObject({ visibility: 'none' });
+        const restoredControl = mapMocks.addControl.mock.calls.map(([control]) => control)
+            .filter(control => control?.constructor.name === 'StopsControl').at(-1);
+        screen.getByRole('region').append(restoredControl.onAdd());
+        const restoredToggle = screen.getByRole('button', { name: 'Stops' });
+        expect(restoredToggle).toHaveAttribute('aria-pressed', 'false');
+        fireEvent.click(restoredToggle);
+        expect(screen.getByRole('button', { name: /Shared camp/ })).toHaveAttribute('aria-pressed', 'false');
+    });
+
+    it.each(['stop', 'track'] as const)('clears an overview day selection when changing to %s focus', async focus => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
+        const story = (focused: boolean) => <TripStoryProvider manifest={dayMapManifest}>
+            <TripRouteMap stopId={focused && focus === 'stop' ? 'finish' : undefined}
+                trackId={focused && focus === 'track' ? 'return' : undefined} />
+        </TripStoryProvider>;
+        const { rerender } = render(story(false));
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        fireEvent.click(screen.getByRole('button', { name: '1. Coastbound' }));
+        rerender(story(true));
+        const region = screen.getByRole('region');
+        expect(region).toHaveAccessibleName(focus === 'track' ? 'Map focused on Return ride.' : 'Map of the trip route.');
+        expect(screen.getByRole('button', { name: /Home/ })).toBeVisible();
+        rerender(story(false));
+        expect(screen.getByRole('button', { name: '1. Coastbound' })).toHaveAttribute('aria-pressed', 'false');
+        expect(screen.getByRole('region')).toHaveAccessibleName('Map of the trip route.');
+        expect(mapMocks.Map.mock.calls.at(-1)?.[0]).toHaveProperty('bounds');
+    });
+
+    it('adds and removes stop controls when the map changes focus mode', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
+        const story = (stopId?: string) => <TripStoryProvider manifest={dayMapManifest}>
+            <TripRouteMap stopId={stopId} />
+        </TripStoryProvider>;
+        const { rerender } = render(story());
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        expect(mapMocks.addControl.mock.calls.some(([control]) => control?.constructor.name === 'StopsControl')).toBe(false);
+        const overview = mapMocks.Map.mock.results[0].value;
+        rerender(story('camp'));
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledTimes(2));
+        expect(overview.remove).toHaveBeenCalledOnce();
+        expect(mapMocks.addControl.mock.calls.some(([control]) => control?.constructor.name === 'StopsControl')).toBe(true);
+        const focused = mapMocks.Map.mock.results[1].value;
+        mapMocks.addControl.mockClear();
+        rerender(story());
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledTimes(3));
+        expect(focused.remove).toHaveBeenCalledOnce();
+        expect(mapMocks.addControl.mock.calls.some(([control]) => control?.constructor.name === 'StopsControl')).toBe(false);
+    });
+
+    it('puts the stops toggle inside the map and updates markers without moving the camera', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
+        render(<TripStoryProvider manifest={dayMapManifest}><TripRouteMap dayId="coastbound" /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        const control = mapMocks.addControl.mock.calls.map(([control]) => control)
+            .find(control => control?.constructor.name === 'StopsControl');
+        expect(control).toBeDefined();
+        const region = screen.getByRole('region');
+        region.append(control.onAdd());
+        const toggle = screen.getByRole('button', { name: 'Stops' });
+        expect(region).toContainElement(toggle);
+        expect(toggle).toHaveAttribute('aria-pressed', 'true');
+        mapMocks.fitBounds.mockClear();
+        mapMocks.easeTo.mockClear();
+
+        fireEvent.click(toggle);
+        expect(toggle).toHaveAttribute('aria-pressed', 'false');
+        expect(mapMocks.setLayoutProperty).toHaveBeenCalledWith('trip-stops', 'visibility', 'none');
+        expect(mapMocks.setLayoutProperty).toHaveBeenCalledWith('trip-stop-numbers', 'visibility', 'none');
+        expect(screen.queryByRole('button', { name: /Shared camp/ })).not.toBeInTheDocument();
+
+        fireEvent.click(toggle);
+        expect(toggle).toHaveAttribute('aria-pressed', 'true');
+        expect(mapMocks.setLayoutProperty).toHaveBeenCalledWith('trip-stops', 'visibility', 'visible');
+        expect(screen.getByRole('button', { name: /Shared camp/ })).toBeVisible();
+        expect(mapMocks.fitBounds).not.toHaveBeenCalled();
+        expect(mapMocks.easeTo).not.toHaveBeenCalled();
     });
 
     it.each([false, true])('applies the latest day after delayed loading (reduced motion: %s)', async (reducedMotion) => {
@@ -627,7 +759,10 @@ describe('TripRouteMap', () => {
         await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
         const selectMarker = mapMocks.on.mock.calls.find(([event]) => event === 'click')?.[2];
         act(() => selectMarker({ features: [{ properties: { id: 'camp' } }] }));
-        fireEvent.click(screen.getByRole('checkbox', { name: 'Show stops' }));
+        const stopsControl = mapMocks.addControl.mock.calls.map(([control]) => control)
+            .find(control => control?.constructor.name === 'StopsControl');
+        screen.getByRole('region').append(stopsControl.onAdd());
+        fireEvent.click(screen.getByRole('button', { name: 'Stops' }));
         const oldMap = mapMocks.Map.mock.results[0].value;
         const oldLoad = mapMocks.once.mock.calls.find(([event]) => event === 'load')?.[1];
         rerender(story(false));
@@ -642,7 +777,10 @@ describe('TripRouteMap', () => {
         expect(style.layers.find(layer => layer.id === 'trip-stops')?.paint).toMatchObject({
             'circle-color': ['case', ['==', ['get', 'id'], 'camp'], '#f59e0b', '#fafafa'],
         });
-        expect(screen.getByRole('checkbox', { name: 'Show stops' })).not.toBeChecked();
+        const restoredStopsControl = mapMocks.addControl.mock.calls.map(([control]) => control)
+            .filter(control => control?.constructor.name === 'StopsControl').at(-1);
+        screen.getByRole('region').append(restoredStopsControl.onAdd());
+        expect(screen.getByRole('button', { name: 'Stops' })).toHaveAttribute('aria-pressed', 'false');
         expect(screen.getByRole('region')).toHaveAccessibleName('Map of Homebound.');
     });
 

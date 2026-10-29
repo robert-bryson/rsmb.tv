@@ -172,9 +172,11 @@ u {
 }
 
 .trip-breakout {
-  width: min(72rem, calc(100vw - 2rem));
-  margin-left: 50%;
-  transform: translateX(-50%);
+  --trip-width-limit: 72rem;
+  --trip-width: min(var(--trip-width-limit), calc(100vw - 2rem));
+  width: var(--trip-width);
+  /* Firefox can retain pre-transform overflow after an interactive map paints. */
+  margin-inline: calc((100% - var(--trip-width)) / 2);
 }
 
 /* Measure the available page width, excluding a classic scrollbar. Keep the
@@ -189,6 +191,10 @@ u {
 }
 
 @supports (container-type: inline-size) and (width: 1cqw) {
+  .site-content .trip-breakout {
+    --trip-width: min(var(--trip-width-limit), calc(100cqw - 2rem));
+  }
+
   .site-content .trip-photo-pano {
     width: 100cqw;
     margin-inline: calc(50% - 50cqw);
@@ -268,7 +274,7 @@ u {
 }
 
 .trip-hero-gallery {
-  width: min(88rem, calc(100vw - 2rem));
+  --trip-width-limit: 88rem;
 }
 
 .trip-hero .image-caption-frame {
@@ -497,6 +503,15 @@ u {
 .trip-route-download a:hover,
 .trip-route-actions button:hover {
   background: #f2f2f2;
+}
+
+.trip-route-actions button[aria-pressed="true"] {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+
+.trip-route-actions button[aria-pressed="true"]:hover {
+  background: #ddd6fe;
 }
 
 .trip-route-download a:focus-visible,

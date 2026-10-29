@@ -7,8 +7,11 @@
     "ridingDays": 2,
     "distanceMiles": 306,
     "motorcycle": "Honda CB500X",
-    "regions": [
-        "Washington"
+    "countries": [
+        {
+            "code": "US",
+            "regions": ["Washington"]
+        }
     ],
     "hero": "2024-ocean-shores-4-beach",
     "route": {

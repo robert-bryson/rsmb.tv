@@ -75,6 +75,7 @@ const posts: BlogPost[] = postsMeta.map((meta) => {
     const factTags = [
         ...(trip?.motorcycle ? ['motorcycle', trip.motorcycle] : []),
         ...(trip?.regions ?? []),
+        ...(trip?.countries?.flatMap(country => [country.code, ...(country.regions ?? [])]) ?? []),
     ].map(tripFactTag).filter(Boolean);
     return {
         ...meta,

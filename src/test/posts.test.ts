@@ -17,12 +17,15 @@ vi.mock('virtual:post-content', () => ({
 }));
 
 vi.mock('virtual:trip-content', () => ({
-    summaries: { 'boise-2024': { motorcycle: '  Honda  CB500X  ', regions: [' New  Mexico ', 'Oregon', 'Oregon'] }, other: {} },
+    summaries: { 'boise-2024': {
+        motorcycle: '  Honda  CB500X  ', regions: [' New  Mexico ', 'Oregon', 'Oregon'],
+        countries: [{ code: 'US', regions: ['New Mexico', 'Oregon'] }, { code: 'CA', regions: ['British Columbia'] }],
+    }, other: {} },
 }));
 
 describe('trip fact tags', () => {
     it('includes each trip in the filters linked from its facts', () => {
-        for (const tag of ['motorcycle', 'new-mexico', 'oregon']) {
+        for (const tag of ['motorcycle', 'new-mexico', 'oregon', 'us', 'ca', 'british-columbia']) {
             expect(filterPostsByTag(getAllPosts(), tag).map(post => post.slug)).toEqual(['boise', 'already-tagged']);
         }
     });
@@ -30,11 +33,11 @@ describe('trip fact tags', () => {
         const posts = getAllPosts();
         expect(getAllBlogTags(posts)).toContain('honda-cb500x');
         expect(filterPostsByTag(posts, 'honda-cb500x').map(post => post.slug)).toEqual(['boise', 'already-tagged']);
-        expect(getPostBySlug('boise')?.tags).toEqual(['motorcycle', 'honda-cb500x', 'new-mexico', 'oregon']);
+        expect(getPostBySlug('boise')?.tags).toEqual(['motorcycle', 'honda-cb500x', 'new-mexico', 'oregon', 'us', 'ca', 'british-columbia']);
     });
 
     it('preserves explicit tags without duplicates and leaves other posts unchanged', () => {
-        expect(getPostBySlug('already-tagged')?.tags).toEqual(['honda-cb500x', 'motorcycle', 'new-mexico', 'oregon']);
+        expect(getPostBySlug('already-tagged')?.tags).toEqual(['honda-cb500x', 'motorcycle', 'new-mexico', 'oregon', 'us', 'ca', 'british-columbia']);
         expect(getPostBySlug('no-motorcycle')?.tags).toEqual([]);
         expect(getPostBySlug('writing')?.tags).toEqual([]);
     });

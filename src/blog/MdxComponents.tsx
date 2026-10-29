@@ -33,22 +33,22 @@ export const mdxComponents = {
     TripPhoto,
     TripMap: TripMapBlock,
     h1: (props: ComponentPropsWithoutRef<'h1'>) => (
-        <LinkedHeading as="h1" className="text-3xl font-bold text-zinc-100 mt-10 mb-4" {...props} />
+        <LinkedHeading as="h1" className="text-3xl sm:text-[2rem] leading-tight font-bold text-zinc-100 mt-16 sm:mt-20 mb-4" {...props} />
     ),
     h2: (props: ComponentPropsWithoutRef<'h2'>) => (
-        <LinkedHeading as="h2" className="text-2xl font-semibold text-zinc-100 mt-8 mb-3" {...props} />
+        <LinkedHeading as="h2" className="text-2xl sm:text-[1.625rem] leading-snug font-bold text-zinc-100 mt-12 sm:mt-16 mb-4" {...props} />
     ),
     h3: (props: ComponentPropsWithoutRef<'h3'>) => (
-        <LinkedHeading as="h3" className="text-xl font-semibold text-zinc-200 mt-6 mb-2" {...props} />
+        <LinkedHeading as="h3" className="text-xl sm:text-[1.375rem] leading-snug font-semibold text-zinc-200 mt-8 sm:mt-12 mb-3" {...props} />
     ),
     h4: (props: ComponentPropsWithoutRef<'h4'>) => (
-        <LinkedHeading as="h4" className="text-lg font-semibold text-zinc-200 mt-5 mb-2" {...props} />
+        <LinkedHeading as="h4" className="text-lg sm:text-xl font-semibold text-zinc-200 mt-8 sm:mt-10 mb-2" {...props} />
     ),
     h5: (props: ComponentPropsWithoutRef<'h5'>) => (
-        <LinkedHeading as="h5" className="text-base font-semibold text-zinc-200 mt-4 mb-2" {...props} />
+        <LinkedHeading as="h5" className="text-base sm:text-lg font-semibold text-zinc-200 mt-6 sm:mt-8 mb-2" {...props} />
     ),
     h6: (props: ComponentPropsWithoutRef<'h6'>) => (
-        <LinkedHeading as="h6" className="text-sm font-semibold text-zinc-300 mt-4 mb-2" {...props} />
+        <LinkedHeading as="h6" className="text-sm sm:text-base font-semibold text-zinc-300 mt-6 sm:mt-8 mb-2" {...props} />
     ),
     p: (props: ComponentPropsWithoutRef<'p'>) => (
         <p className="text-zinc-300 leading-relaxed mb-4" {...props} />

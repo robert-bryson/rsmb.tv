@@ -37,6 +37,29 @@ function loadPostRegistry(posts: unknown[], command: 'build' | 'serve', watchedF
 
 describe('trip publication contracts', () => {
     it.each([
+        { countries: [{ code: 'us' }] },
+        { countries: [{ code: 'USA' }] },
+        { countries: [{ code: 'US' }, { code: 'US', regions: ['Oregon'] }] },
+        { countries: [{ code: 'US', regions: ['Oregon', ' Oregon '] }] },
+        { countries: [{ code: 'US', regions: [' '] }] },
+        { regions: ['Oregon', ' Oregon '] },
+        { regions: [' '] },
+    ])('rejects invalid or duplicate trip geography: %j', geography => {
+        expect(tripManifestSchema.safeParse({ ...manifest, ...geography }).success).toBe(false);
+    });
+
+    it('accepts unique country groups and trims region names', () => {
+        const countries = [{ code: 'US', regions: [' Oregon '] }, { code: 'CA' }];
+        expect(tripManifestSchema.parse({ ...manifest, regions: undefined, countries }).countries)
+            .toEqual([{ code: 'US', regions: ['Oregon'] }, { code: 'CA' }]);
+        expect(tripManifestSchema.parse({ ...manifest, countries: [], regions: [' Oregon '] }).regions)
+            .toEqual(['Oregon']);
+        expect(tripManifestSchema.parse({ ...manifest, countries: [
+            { code: 'US', regions: ['Shared name'] }, { code: 'CA', regions: ['Shared name'] },
+        ] }).countries).toHaveLength(2);
+    });
+
+    it.each([
         ['virtual:post-content', false],
         ['virtual:trip-content', false],
         ['virtual:trip-content', true],
@@ -92,10 +115,14 @@ describe('trip publication contracts', () => {
     });
 
     it('includes fact tags in summaries without embedding the full manifest', () => {
-        const trip = tripManifestSchema.parse({ ...manifest, motorcycle: 'Honda CB500X', regions: ['New Mexico'] });
+        const trip = tripManifestSchema.parse({
+            ...manifest, motorcycle: 'Honda CB500X', regions: ['New Mexico'],
+            countries: [{ code: 'US', regions: ['New Mexico'] }, { code: 'CA' }],
+        });
         const output = loadPostRegistry([{ slug: 'coast', format: 'trip', tripId: trip.id }], 'build', [], 'virtual:trip-content', { manifests: [trip] });
         expect(output).toContain('"motorcycle":"Honda CB500X"');
         expect(output).toContain('"regions":["New Mexico"]');
+        expect(output).toContain('"countries":[{"code":"US","regions":["New Mexico"]},{"code":"CA"}]');
         expect(output).not.toContain('"stops"');
         expect(output).not.toContain('"photos"');
     });

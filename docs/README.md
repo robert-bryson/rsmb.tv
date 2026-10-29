@@ -13,6 +13,7 @@ Use [TODO.md](../TODO.md) for incomplete work.
 | [GitHub Actions OIDC](github-actions-oidc.md) | Deploy workflow roles and retire long-lived AWS credentials |
 | [Trip authoring](trips/TRIP-AUTHORING-README.md) | Prepare, check, and publish trip content |
 | [Trip template](trips/TRIP-STORY-TEMPLATE.md) | Start a trip document |
+| [Trip tests](trips/TESTING.md) | Install browsers and check maps, photos, and JavaScript budgets |
 | [Temperature methodology](../projects/temperature-records/methodology.md) | Check the historical temperature data |
 | [Ride Ledger design](../projects/ride-ledger/readme.md) | Review the proposed application and open decisions |
 
@@ -23,6 +24,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-10-28 | [Trip controls, geography, and regression review](reviews/2026-10-28-trip-controls-and-geography.md) |
 | 2026-10-28 | [Trip state ownership and recovery review](reviews/2026-10-28-trip-state-and-recovery.md) |
 | 2026-10-27 | [Panorama review and photo failure fixes](reviews/2026-10-27-trip-photo-review.md) |
 | 2026-10-27 | [Trip photo panorama research](reviews/2026-10-27-trip-photo-panorama-research.md) |

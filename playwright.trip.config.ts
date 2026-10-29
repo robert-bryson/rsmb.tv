@@ -6,6 +6,16 @@ export default defineConfig({
     projects: [
         { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
         { name: 'mobile-chromium', use: { ...devices['iPhone 13'], defaultBrowserType: 'chromium' } },
+        ...(process.env.PLAYWRIGHT_FIREFOX === '1' ? [{
+            name: 'firefox',
+            use: {
+                ...devices['Desktop Firefox'],
+                deviceScaleFactor: 2,
+                launchOptions: process.env.PLAYWRIGHT_FIREFOX_EXECUTABLE
+                    ? { executablePath: process.env.PLAYWRIGHT_FIREFOX_EXECUTABLE }
+                    : undefined,
+            },
+        }] : []),
         ...(process.env.PLAYWRIGHT_WEBKIT === '1' ? [{ name: 'webkit', use: { ...devices['iPhone 13'] } }] : []),
     ],
 });
