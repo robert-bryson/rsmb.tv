@@ -106,7 +106,7 @@
     "tsx": "^4.23.15",
     "turndown": "^7.2.4",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
-    "typescript-eslint": "^8.72.0",
+    "typescript-eslint": "^8.72.1",
     "vite": "^8.3.5",
     "vitest": "^5.0.5",
     "web-vitals": "^6.2.3",
