@@ -67,26 +67,28 @@ function AnimationPlayer({ animation }: { animation: Animation }) {
         }
     };
 
-    return <figure ref={figureRef} className="my-8 w-full" style={{ maxWidth: animation.width }} data-trip-animation>
-        {failed ? <img src={animation.poster} width={animation.width} height={animation.height}
-            alt={animation.alt} className="block h-auto w-full rounded-md" /> : <video
-            ref={videoRef} id={videoId} src={loaded ? animation.src : undefined} poster={animation.poster}
-            width={animation.width} height={animation.height} aria-label={animation.alt}
-            muted loop playsInline preload="none" disablePictureInPicture
-            className="block h-auto w-full rounded-md border border-zinc-800"
-            onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onError={() => setFailed(true)}
-        />}
+    return <figure ref={figureRef} className="my-8 w-full" data-trip-animation>
+        <div className="trip-animation-frame relative">
+            {failed ? <img src={animation.poster} width={animation.width} height={animation.height}
+                alt={animation.alt} className="block h-auto w-full rounded-md" /> : <video
+                ref={videoRef} id={videoId} src={loaded ? animation.src : undefined} poster={animation.poster}
+                width={animation.width} height={animation.height} aria-label={animation.alt}
+                muted loop playsInline preload="none" disablePictureInPicture
+                className="block h-auto w-full rounded-md border border-zinc-800"
+                onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onError={() => setFailed(true)}
+            />}
+            {!failed && <button type="button" aria-controls={videoId} onClick={togglePlayback}
+                className="trip-animation-control absolute bottom-3 right-3 min-h-11 cursor-pointer rounded border border-zinc-600 bg-zinc-950/85 px-3 py-2 text-sm text-zinc-100 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-violet-400">
+                {playing ? 'Pause animation' : 'Play animation'}
+            </button>}
+        </div>
         <figcaption className="mt-2 text-sm text-zinc-400">
             {animation.caption && <p className="mb-2">{animation.caption}</p>}
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                {!failed && <button type="button" aria-controls={videoId} onClick={togglePlayback}
-                    className="rounded border border-zinc-700 px-3 py-1 text-zinc-200 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-violet-400">
-                    {playing ? 'Pause animation' : 'Play animation'}
-                </button>}
+            {(failed || animation.attribution) && <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
                 {failed && <span role="status">Animation unavailable.</span>}
                 {animation.attribution && <a href={animation.attribution.url} target="_blank" rel="noopener noreferrer"
                     className="text-violet-400 underline underline-offset-2">{animation.attribution.label}</a>}
-            </div>
+            </div>}
         </figcaption>
     </figure>;
 }

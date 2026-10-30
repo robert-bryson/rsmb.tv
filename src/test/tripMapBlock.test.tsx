@@ -18,16 +18,32 @@ vi.mock('../features/trips/components/TripRouteMap', () => ({
 
 const fullscreenDescriptor = Object.getOwnPropertyDescriptor(document, 'fullscreenElement');
 function renderMapBlock() {
-    return render(<TripStoryProvider manifest={dayMapManifest}><TripMapBlock /></TripStoryProvider>);
+    const result = render(<TripStoryProvider manifest={dayMapManifest}><TripMapBlock /></TripStoryProvider>);
+    vi.spyOn(result.container.querySelector<HTMLElement>('[data-trip-map-viewport]')!, 'getBoundingClientRect')
+        .mockReturnValue({ top: 0, bottom: 400, height: 400 } as DOMRect);
+    return result;
 }
 
 afterEach(() => {
     vi.unstubAllGlobals();
+    vi.restoreAllMocks();
     if (fullscreenDescriptor) Object.defineProperty(document, 'fullscreenElement', fullscreenDescriptor);
     else Reflect.deleteProperty(document, 'fullscreenElement');
 });
 
 describe('trip map lifecycle', () => {
+    it('ignores a stale visibility entry when trip facts have pushed the map below the viewport', async () => {
+        const { notify } = observe();
+        const { container } = renderMapBlock();
+        vi.mocked(container.querySelector<HTMLElement>('[data-trip-map-viewport]')!.getBoundingClientRect)
+            .mockReturnValueOnce({ top: 1000, bottom: 1400, height: 400 } as DOMRect);
+        notify(0, true);
+        expect(screen.queryByText('Active map')).not.toBeInTheDocument();
+        expect(screen.getByText('Route preview')).toBeInTheDocument();
+        notify(0, true);
+        expect(await screen.findByText('Active map')).toBeVisible();
+    });
+
     it('hands a preview day selection to the interactive map', async () => {
         const { notify } = observe();
         renderMapBlock();

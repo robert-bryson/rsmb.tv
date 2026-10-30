@@ -25,6 +25,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-10-29 | [Post filters and trip presentation review](reviews/2026-10-29-post-filters-and-trip-presentation.md) |
 | 2026-10-29 | [Pending-change quality review](reviews/2026-10-29-pending-changes-quality-review.md) |
 | 2026-10-29 | [Tornado Tracks implementation review](reviews/2026-10-29-tornado-tracks-quality-review.md) |
 | 2026-10-28 | [Trip CI fixes and regression review](reviews/2026-10-28-trip-ci-review.md) |

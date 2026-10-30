@@ -63,7 +63,7 @@ npx playwright show-trace path/to/trace.zip
 | Layout | Prevent horizontal scrolling after maps paint. Preserve panorama proportions and reserved image height. |
 | Photos | Select suitable responsive sources. Support mouse, touch, and keyboard controls. Restore focus after closing. |
 | Animations | Defer video loading, retain posters and attribution after failure, honor reduced motion, and preserve user pause choices across visibility changes. |
-| Content | Retain literal captions, article metadata, return filters, country tags, and region tags. |
+| Content | Retain literal captions, article metadata, return filters, country and region filters, and existing geographic tag links. |
 
 Panorama checks run with default scrollbars and visible classic scrollbars.
 Desktop Chromium must reserve 15 CSS pixels in the classic-scrollbar case.
@@ -111,6 +111,23 @@ Photo unit tests also check recovery after changes to responsive sources or imag
 Page tests use fixed post metadata and trip summaries.
 Development-status tests use fixed publication, source, and asset states.
 Tests must not depend on a previous content import.
+
+The hero tests check photo selection, wraparound, viewer order, focus return, and image failure recovery.
+They also check title placement, reserved height, responsive image sizes, and reduced motion.
+Country fact links must retain their country. Region fact links must retain both their country and region.
+
+Post filter tests use a separate browser fixture with the application styles.
+Its container must have an explicit full width, as the application layout does.
+A container that shrinks to its visible links can cause repeated measurement changes.
+The browser cases check resizing, independent expansion, selected regions, and long labels at 320 pixels.
+Unit tests check observer cleanup, missing browser APIs, topic precedence, and ambiguous geographic names.
+
+Run the post filter checks with:
+
+```bash
+npx vitest run src/test/blogRegions.test.ts src/test/PostRegionFilters.test.tsx src/test/blogPages.test.tsx
+npm run test:e2e -- tests/e2e/post-regions.spec.ts
+```
 
 Run animation validation and playback tests with:
 

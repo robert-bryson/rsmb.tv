@@ -92,11 +92,25 @@ Do not edit generated MDX as the content source.
 
 ## Check article navigation
 
-The post list supports `type` and `tag` query parameters.
+The post list supports `type`, `tag`, `country`, and `region` query parameters.
 For example, `/posts?type=writing&tag=Maps` selects writing with the exact `Maps` tag.
-Explicit tags keep their original case.
-Trip facts add normalized motorcycle, country-code, and region tags to the registry.
-For example, `US` adds `us`, and `British Columbia` adds `british-columbia`.
+Topical tags keep their original case. Motorcycle facts add normalized tags, such as `honda-cb500x`.
+The registry separates countries and regions from topical tags.
+It recognizes US state and Canadian province names in Sheet tags, including posts without manifests.
+Trip manifests supply country groups for other regions.
+For example, `/posts?country=CA&region=british-columbia` selects posts about British Columbia.
+Combine a `tag` with geographic filters to narrow the results.
+The Regions filter groups places by country and shows matching post counts for the selected post type.
+Each country initially shows as many regions as fit on its row, starting with the most-used regions.
+Select **See all** to expand the remaining regions.
+Existing geographic tag links, such as `/posts?tag=us`, remain supported.
+An exact topical tag takes priority over a geographic alias.
+For example, a `Japan` topic remains selectable when another post has JP geography.
+For ambiguous geographic aliases, country codes take priority, followed by region names, then country names.
+This order does not depend on publication dates.
+Use `country` and `region` for new geographic links.
+Country codes accept lowercase input. Region names accept spaces and mixed case.
+Generated links use uppercase country codes and lowercase region names with hyphens.
 
 Previous and next links select adjacent articles within the same collection.
 Previous selects the older article. Next selects the newer article.

@@ -185,6 +185,10 @@ u {
   container-type: inline-size;
 }
 
+.site-content-inner:has(> .trip-story) {
+  padding-top: 0;
+}
+
 .trip-photo-pano {
   --photo-focus-outline-offset: -3px;
   width: 100%;
@@ -195,7 +199,7 @@ u {
     --trip-width: min(var(--trip-width-limit), calc(100cqw - 2rem));
   }
 
-  .site-content .trip-photo-pano {
+  .site-content :is(.trip-photo-pano, .trip-hero-gallery) {
     width: 100cqw;
     margin-inline: calc(50% - 50cqw);
   }
@@ -274,24 +278,146 @@ u {
 }
 
 .trip-hero-gallery {
-  --trip-width-limit: 88rem;
+  --photo-focus-outline-offset: -3px;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  min-height: clamp(28rem, 75svh, 50rem);
+  background: #18181b;
+}
+
+.trip-hero-gallery > .trip-hero {
+  position: absolute;
+  inset: 0;
 }
 
 .trip-hero .image-caption-frame {
   width: 100%;
-  aspect-ratio: 2 / 1;
+  height: 100%;
+  border: 0;
+  border-radius: 0;
 }
 
-@media (max-width: 639px) {
-  .trip-hero .image-caption-frame {
-    aspect-ratio: 4 / 3;
-  }
-}
-
-.trip-hero .image-caption-frame img {
+.trip-hero .image-caption-frame :is(img, [role='img']) {
   height: 100%;
   object-fit: cover;
   object-position: center bottom;
+}
+
+.trip-hero-control {
+  position: absolute;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.375rem;
+  color: white;
+  background: rgb(9 9 11 / 20%);
+  cursor: pointer;
+  transition: none;
+}
+
+.trip-hero-control:hover,
+.trip-hero-control:focus-visible {
+  background: rgb(9 9 11 / 60%);
+}
+
+.trip-hero-control:focus-visible {
+  outline-color: white;
+}
+
+.trip-hero-control > svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  filter: drop-shadow(0 1px 3px rgb(0 0 0 / 60%));
+}
+
+.trip-hero-previous,
+.trip-hero-next {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.trip-hero-previous { left: 1rem; }
+.trip-hero-next { right: 1rem; }
+.trip-hero-expand { top: 5rem; right: 1.5rem; }
+
+@media (max-width: 639px) {
+  .trip-hero-previous,
+  .trip-hero-next {
+    top: auto;
+    bottom: 1.5rem;
+    transform: none;
+  }
+
+  .trip-hero-previous { left: 1.5rem; }
+  .trip-hero-next { left: 5rem; right: auto; }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .trip-hero-control {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .trip-hero-gallery:is(:hover, :focus-within) .trip-hero-control {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .trip-hero-control {
+      transition: opacity 160ms ease, background-color 160ms ease;
+    }
+  }
+}
+
+/* The scrim keeps the HTML title readable across bright and dark photographs. */
+.trip-hero-gallery::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgb(9 9 11 / 60%), rgb(9 9 11 / 32%) 15%, transparent 38%, rgb(9 9 11 / 30%) 62%, rgb(9 9 11 / 76%));
+}
+
+.trip-hero-content {
+  position: relative;
+  z-index: 2;
+  align-self: end;
+  width: 100%;
+  max-width: 48rem;
+  margin-inline: auto;
+  padding: 8rem 1.5rem 1.5rem;
+  pointer-events: none;
+  text-shadow: 0 2px 12px rgb(0 0 0 / 35%);
+}
+
+.trip-hero-content > * {
+  pointer-events: auto;
+}
+
+@media (max-width: 639px) {
+  .trip-hero-content {
+    padding-bottom: 6.5rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .trip-hero-content > p {
+    /* Use the article width, reserving space for the photo button when needed. */
+    max-width: calc(100cqw - max(0px, (100cqw - 48rem) / 2) - 15rem);
+  }
+}
+
+.trip-hero-title {
+  font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
 }
 
 .site-header:focus-within {
@@ -313,6 +439,26 @@ u {
 .image-caption-figure:focus-visible .image-caption-frame {
   outline: 2px solid #a78bfa;
   outline-offset: var(--photo-focus-outline-offset, 3px);
+}
+
+/* Touch controls stay visible; pointer and keyboard users reveal them in place. */
+@media (hover: hover) and (pointer: fine) {
+  .trip-animation-control {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .trip-animation-frame:hover .trip-animation-control,
+  .trip-animation-frame:focus-within .trip-animation-control {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .trip-animation-control {
+      transition: opacity 150ms ease, background-color 150ms ease;
+    }
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {

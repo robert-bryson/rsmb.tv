@@ -114,7 +114,7 @@ export function BlogPost({ collection }: BlogPostProps) {
     if (isTrip && !tripManifest) {
         return (
             <div>
-                <Link to="/posts?type=trips" className="mb-6 inline-block text-sm text-zinc-400 hover:text-violet-400">
+                <Link to={returnTo} state={{ restoreScroll: true }} className="mb-6 inline-block text-sm text-zinc-400 hover:text-violet-400">
                     ← Back to posts
                 </Link>
                 <DevelopmentContentStatus post={post} />
@@ -146,26 +146,25 @@ export function BlogPost({ collection }: BlogPostProps) {
     );
 
     return (
-        <article className={isTrip ? 'trip-story -mt-3' : undefined}>
-            <div className={`flex items-baseline justify-between gap-4 text-sm text-zinc-400 ${isTrip ? 'mb-9' : 'mb-6'}`}>
+        <article className={isTrip ? 'trip-story' : undefined}>
+            {!isTrip && <div className="mb-6 flex items-baseline justify-between gap-4 text-sm text-zinc-400">
                 <Link
                     to={returnTo} state={{ restoreScroll: true }}
                     className="shrink-0 hover:text-violet-400"
                 >
                     ← Back to {collectionName.toLowerCase()}
                 </Link>
-                {isTrip && <time dateTime={post.date} className="text-right">Published {formatDate(post.date)}</time>}
-            </div>
-
-            <DevelopmentContentStatus post={post} />
+            </div>}
 
             {tripManifest ? (
                 <TripStoryProvider manifest={tripManifest}>
-                    <TripStoryHeader post={post} />
+                    <TripStoryHeader post={post} returnTo={returnTo} />
+                    <DevelopmentContentStatus post={post} />
                     {postContent}
                 </TripStoryProvider>
             ) : (
                 <>
+                    <DevelopmentContentStatus post={post} />
                     <header className="mb-8">
                         <time dateTime={post.date} className="text-sm text-zinc-400">{formatDate(post.date)}</time>
                         <h1 className="text-3xl font-bold text-zinc-100 mt-2">{post.title}</h1>

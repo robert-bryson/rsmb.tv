@@ -170,6 +170,8 @@ They also check recovery after a failed historical request while phone controls 
 The post browser tests use a fixed Google Docs fixture in `tests/fixtures`.
 A compilation test compares the fixture MDX with the importer output.
 Browser tests check subtitle styles at phone and desktop widths, unique heading IDs, reload, and browser history.
+Post filter tests check country and region links, responsive rows, and long labels at phone widths.
+They also check that geographic aliases cannot replace a visible topical tag.
 These tests do not require Google access or published trip assets.
 Page unit tests use fixed post metadata and trip summaries.
 Development-status tests use fixed publication, source, and asset states.

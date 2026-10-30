@@ -49,6 +49,16 @@ function renderStory(children: React.ReactNode, tripManifest = manifest) {
 }
 
 describe('trip story primitives', () => {
+    it('filter review regressions: scopes identically named regions to their own countries', () => {
+        renderStory(<TripFacts />, {
+            ...manifest, regions: undefined,
+            countries: [{ code: 'US', regions: ['Georgia'] }, { code: 'GE', regions: ['Georgia'] }],
+        });
+        expect(screen.getByRole('link', { name: 'GE' })).toHaveAttribute('href', '/posts?country=GE');
+        expect(screen.getAllByRole('link', { name: 'Georgia' }).map(link => link.getAttribute('href')))
+            .toEqual(['/posts?country=US&region=georgia', '/posts?country=GE&region=georgia']);
+    });
+
     it('renders trip facts as readable metadata', () => {
         renderStory(<TripFacts />);
 
@@ -62,8 +72,8 @@ describe('trip story primitives', () => {
         expect(screen.getByRole('link', { name: 'Honda CB500X' })).toHaveAttribute('href', '/posts?tag=honda-cb500x');
         expect(screen.getByText('Region')).toBeInTheDocument();
         expect(screen.queryByText('Route')).not.toBeInTheDocument();
-        expect(screen.getByRole('link', { name: 'Oregon' })).toHaveAttribute('href', '/posts?tag=oregon');
-        expect(screen.getByRole('link', { name: 'Idaho' })).toHaveAttribute('href', '/posts?tag=idaho');
+        expect(screen.getByRole('link', { name: 'Oregon' })).toHaveAttribute('href', '/posts?region=oregon');
+        expect(screen.getByRole('link', { name: 'Idaho' })).toHaveAttribute('href', '/posts?region=idaho');
     });
 
     it('omits optional trip facts when the manifest does not provide them', () => {
@@ -84,7 +94,7 @@ describe('trip story primitives', () => {
         expect(screen.queryByText('Region')).not.toBeInTheDocument();
     });
 
-    it('groups cross-border regions beneath their clickable countries', () => {
+    it('groups cross-border regions inline with their clickable countries', () => {
         renderStory(<TripFacts />, {
             ...manifest,
             regions: undefined,
@@ -97,28 +107,30 @@ describe('trip story primitives', () => {
 
         const us = screen.getByRole('link', { name: 'US' });
         const ca = screen.getByRole('link', { name: 'CA' });
-        expect(us).toHaveAttribute('href', '/posts?tag=us');
-        expect(ca).toHaveAttribute('href', '/posts?tag=ca');
-        expect(screen.getByRole('link', { name: 'JP' })).toHaveAttribute('href', '/posts?tag=jp');
+        expect(us).toHaveAttribute('href', '/posts?country=US');
+        expect(ca).toHaveAttribute('href', '/posts?country=CA');
+        expect(screen.getByRole('link', { name: 'JP' })).toHaveAttribute('href', '/posts?country=JP');
         const usRegions = within(us.parentElement!);
-        expect(usRegions.getByRole('link', { name: 'Oregon' })).toHaveAttribute('href', '/posts?tag=oregon');
-        expect(usRegions.getByRole('link', { name: 'Idaho' })).toHaveAttribute('href', '/posts?tag=idaho');
+        expect(us.parentElement).toHaveTextContent('US · Oregon, Idaho');
+        expect(ca.parentElement).toHaveTextContent('CA · British Columbia');
+        expect(usRegions.getByRole('link', { name: 'Oregon' })).toHaveAttribute('href', '/posts?country=US&region=oregon');
+        expect(usRegions.getByRole('link', { name: 'Idaho' })).toHaveAttribute('href', '/posts?country=US&region=idaho');
         expect(usRegions.queryByText('British Columbia')).not.toBeInTheDocument();
         expect(within(ca.parentElement!).getByRole('link', { name: 'British Columbia' }))
-            .toHaveAttribute('href', '/posts?tag=british-columbia');
+            .toHaveAttribute('href', '/posts?country=CA&region=british-columbia');
     });
 
     it('keeps legacy-only regions visible beside country groups without repeating shared names', () => {
         renderStory(<TripFacts />, { ...manifest, countries: [{ code: 'US', regions: ['Oregon'] }, { code: 'CA' }] });
         expect(screen.getAllByRole('link', { name: 'Oregon' })).toHaveLength(1);
-        expect(screen.getByRole('link', { name: 'Idaho' })).toHaveAttribute('href', '/posts?tag=idaho');
-        expect(screen.getByRole('link', { name: 'CA' })).toHaveAttribute('href', '/posts?tag=ca');
+        expect(screen.getByRole('link', { name: 'Idaho' })).toHaveAttribute('href', '/posts?region=idaho');
+        expect(screen.getByRole('link', { name: 'CA' })).toHaveAttribute('href', '/posts?country=CA');
     });
 
     it('keeps legacy regions when the country list is empty', () => {
         renderStory(<TripFacts />, { ...manifest, countries: [] });
-        expect(screen.getByRole('link', { name: 'Oregon' })).toHaveAttribute('href', '/posts?tag=oregon');
-        expect(screen.getByRole('link', { name: 'Idaho' })).toHaveAttribute('href', '/posts?tag=idaho');
+        expect(screen.getByRole('link', { name: 'Oregon' })).toHaveAttribute('href', '/posts?region=oregon');
+        expect(screen.getByRole('link', { name: 'Idaho' })).toHaveAttribute('href', '/posts?region=idaho');
     });
 
     it('renders linked photos with intrinsic dimensions and captions', () => {
@@ -211,6 +223,14 @@ describe('trip story primitives', () => {
         expect(links[0]).toHaveAttribute('href', '/images/trips/coastal-loop/hero.webp');
         expect(links[1]).toHaveAttribute('href', '/images/trips/coastal-loop/camp.webp');
         expect(screen.getByRole('img', { name: manifest.photos[0].alt }).closest('a')).toBeVisible();
+    });
+
+    it('omits hero navigation when the trip has only one photo', () => {
+        renderStory(<TripHeroGallery />, { ...manifest, photos: [manifest.photos[0]], galleries: undefined });
+        expect(screen.queryByRole('button', { name: 'Previous photo' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: 'Next photo' })).not.toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Expand photo' })).toBeInTheDocument();
+        expect(screen.getByRole('status')).toHaveTextContent('Photo 1 of 1');
     });
 
     it('keeps each gallery caption inside its own figure', () => {

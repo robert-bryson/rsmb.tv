@@ -65,16 +65,16 @@ for (const [path, budget] of [
 test('the opening flows from the hero into prose, facts, map, and collapsed contents', async ({ page }) => {
     await page.goto('/trips/coastal-test');
     const intro = page.getByText('Opening story paragraph.');
-    const hero = page.locator('.trip-hero');
+    const header = page.locator('.trip-story > header');
     const facts = page.locator('[data-trip-facts-slot] dl');
     const contents = page.getByRole('navigation', { name: 'Table of contents' });
     await expect(facts).toHaveCount(1);
     await expect(contents).toHaveCount(1);
-    const heroBox = (await hero.boundingBox())!;
+    const headerBox = (await header.boundingBox())!;
     const introBox = (await intro.boundingBox())!;
     const factsBox = (await facts.boundingBox())!;
-    expect(introBox.y - (heroBox.y + heroBox.height)).toBeGreaterThanOrEqual(0);
-    expect(introBox.y - (heroBox.y + heroBox.height)).toBeLessThan(50);
+    expect(introBox.y - (headerBox.y + headerBox.height)).toBeGreaterThanOrEqual(0);
+    expect(introBox.y - (headerBox.y + headerBox.height)).toBeLessThan(50);
     expect(factsBox.y).toBeGreaterThan(introBox.y + introBox.height);
     const mapBox = (await page.locator('[data-trip-map-viewport]').first().boundingBox())!;
     expect(mapBox.y).toBeGreaterThanOrEqual(factsBox.y + factsBox.height);
@@ -83,6 +83,56 @@ test('the opening flows from the hero into prose, facts, map, and collapsed cont
     await contents.getByRole('button', { name: 'Expand' }).click();
     await expect(contents.getByRole('link', { name: 'First day', exact: true })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(await page.evaluate(() => innerWidth));
+});
+
+scrollbarTest('the trip hero spans the page below the nav and contains its title and subtitle', async ({ page }) => {
+    await page.goto('/trips/coastal-test');
+    const hero = page.locator('.trip-hero-gallery');
+    const title = hero.getByRole('heading', { level: 1, name: 'Coastal test trip' });
+    const subtitle = hero.getByText('A synthetic two-day trip.');
+    await expect(title).toBeVisible();
+    const heroBox = (await hero.boundingBox())!;
+    const navBox = (await page.locator('.site-header').boundingBox())!;
+    expect(heroBox.x).toBeCloseTo(0, 0);
+    expect(heroBox.width).toBe(await page.evaluate(() => document.documentElement.clientWidth));
+    expect(heroBox.y).toBeCloseTo(navBox.y + navBox.height, 0);
+    await expect(hero.locator('time')).toHaveText('January 2024');
+    await expect(hero.locator('time')).toHaveAttribute('datetime', '2024-01-02');
+    const backBox = (await hero.getByRole('link', { name: '← Back to posts' }).boundingBox())!;
+    const dateBox = (await hero.locator('time').boundingBox())!;
+    const photosBox = (await hero.getByRole('button', { name: 'View all 6 photos' }).boundingBox())!;
+    expect(backBox.x - heroBox.x).toBeCloseTo(24, 0);
+    expect(backBox.y - heroBox.y).toBeCloseTo(16, 0);
+    expect(heroBox.x + heroBox.width - dateBox.x - dateBox.width).toBeCloseTo(24, 0);
+    expect(dateBox.y).toBeCloseTo(backBox.y, 0);
+    expect(heroBox.y + heroBox.height - photosBox.y - photosBox.height).toBeCloseTo(24, 0);
+    for (const text of [title, subtitle]) {
+        const box = (await text.boundingBox())!;
+        expect(box.y).toBeGreaterThan(heroBox.y);
+        expect(box.y + box.height).toBeLessThan(heroBox.y + heroBox.height);
+        expect(box.x).toBeGreaterThan(heroBox.x);
+        expect(box.x + box.width).toBeLessThan(heroBox.x + heroBox.width);
+        expect(box.x + box.width <= photosBox.x || box.y + box.height <= photosBox.y).toBe(true);
+    }
+    if (page.viewportSize()!.width >= 640) {
+        const subtitleBox = (await subtitle.boundingBox())!;
+        expect(subtitleBox.y + subtitleBox.height).toBeCloseTo(photosBox.y + photosBox.height, 0);
+        if (page.viewportSize()!.width >= 1152) {
+            const bodyBox = (await page.locator('#trip-story-body').boundingBox())!;
+            expect(subtitleBox.x).toBeCloseTo(bodyBox.x, 0);
+            expect(subtitleBox.width).toBeCloseTo(bodyBox.width, 0);
+        }
+    }
+    await expect(hero.locator('img')).toHaveAttribute('sizes', '100vw');
+    await expect(hero.locator('img')).toHaveAttribute('fetchpriority', 'high');
+    await expect(hero.locator('figcaption')).toHaveClass('sr-only');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(await page.evaluate(() => document.documentElement.clientWidth));
+    await hero.locator('.trip-hero a').focus();
+    await expect(hero.locator('.image-caption-frame')).toHaveCSS('outline-offset', '-3px');
+    await page.keyboard.press('Enter');
+    await expect(page.locator('.pswp--open')).toBeFocused();
+    await page.keyboard.press('Escape');
+    await expect(hero.locator('.trip-hero a')).toBeFocused();
 });
 
 test('delivered HTML identifies the article without JavaScript', async ({ request }) => {
@@ -94,15 +144,95 @@ test('delivered HTML identifies the article without JavaScript', async ({ reques
     expect(html).toContain('property="og:type" content="article"');
 });
 
+test('hero controls reveal on hover or focus, wrap photos, and expand the selected image', async ({ page, isMobile }) => {
+    await page.goto('/trips/coastal-test');
+    const hero = page.getByRole('region', { name: 'Trip photos' });
+    const previous = hero.getByRole('button', { name: 'Previous photo', exact: true });
+    const next = hero.getByRole('button', { name: 'Next photo', exact: true });
+    const expand = hero.getByRole('button', { name: 'Expand photo', exact: true });
+    if (!isMobile) {
+        await page.mouse.move(0, 0);
+        await expect(previous).toHaveCSS('opacity', '0');
+        await previous.focus();
+        await expect(previous).toHaveCSS('opacity', '1');
+        await previous.blur();
+        await expect(previous).toHaveCSS('opacity', '0');
+        await hero.hover();
+    }
+    for (const control of [previous, next, expand]) {
+        await expect(control).toHaveCSS('opacity', '1');
+        const box = (await control.boundingBox())!;
+        expect(box.width).toBeGreaterThanOrEqual(44);
+        expect(box.height).toBeGreaterThanOrEqual(44);
+    }
+
+    const originalHeight = (await hero.boundingBox())!.height;
+    await previous.click();
+    await expect(hero.getByRole('img', { name: 'Coast photograph 6', exact: true })).toBeVisible();
+    await expect(hero.getByRole('status')).toHaveText('Photo 6 of 6: Coast photograph 6');
+    await next.click();
+    await expect(hero.getByRole('img', { name: 'Coast photograph 1', exact: true })).toBeVisible();
+    await next.click();
+    await expect(hero.getByRole('img', { name: 'Coast photograph 2', exact: true })).toBeVisible();
+    expect((await hero.boundingBox())!.height).toBe(originalHeight);
+    await expect(hero.locator('a[data-pswp-width]')).toHaveCount(6);
+    await expect(hero.getByRole('heading', { name: 'Coastal test trip' })).toBeVisible();
+
+    await expand.click();
+    await expect(page.locator('.pswp--open')).toBeFocused();
+    await expect(page.locator('.pswp__counter')).toHaveText('2 / 6');
+    await expect(page.locator('.pswp__item[aria-hidden="false"] .pswp__dynamic-caption')).toHaveText('A view from stop 2.');
+    await page.keyboard.press('Escape');
+    await expect(expand).toBeFocused();
+
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await next.focus();
+    await expect(next).toHaveCSS('transition-duration', '0s');
+    await page.keyboard.press('Enter');
+    await expect(hero.getByRole('img', { name: 'Coast photograph 3', exact: true })).toBeVisible();
+    const allPhotos = hero.getByRole('button', { name: 'View all 6 photos' });
+    await allPhotos.click();
+    await expect(page.locator('.pswp__counter')).toHaveText('3 / 6');
+    await page.keyboard.press('Escape');
+    await expect(allPhotos).toBeFocused();
+});
+
+test('hero navigation recovers from a failed image without shifting the page', async ({ page, isMobile }) => {
+    await page.route('**/test-trip/photo-2-*', route => route.fulfill({ status: 404 }));
+    await page.goto('/trips/coastal-test');
+    const hero = page.getByRole('region', { name: 'Trip photos' });
+    const originalBox = (await hero.boundingBox())!;
+    if (!isMobile) await hero.hover();
+    const next = hero.getByRole('button', { name: 'Next photo', exact: true });
+    await next.click();
+    await expect(hero.getByText('Photo unavailable', { exact: true })).toBeVisible();
+    await expect(hero.getByRole('img', { name: 'Coast photograph 2', exact: true })).toBeVisible();
+    expect((await hero.boundingBox())!.height).toBe(originalBox.height);
+    await next.click();
+    await expect.poll(() => hero.locator('img').evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+    await expect(hero.getByRole('img', { name: 'Coast photograph 3', exact: true })).toBeVisible();
+    await expect(hero.getByText('Photo unavailable', { exact: true })).toHaveCount(0);
+});
+
 test('trip country facts link to country filters and preserve regional filters', async ({ page }) => {
     await page.goto('/trips/coastal-test');
     const facts = page.locator('[data-trip-facts-slot] dl');
-    await expect(facts.getByRole('link', { name: 'US', exact: true })).toHaveAttribute('href', '/posts?tag=us');
+    await expect(facts.getByRole('link', { name: 'US', exact: true })).toHaveAttribute('href', '/posts?country=US');
     await expect(facts.getByRole('link', { name: 'British Columbia', exact: true }))
-        .toHaveAttribute('href', '/posts?tag=british-columbia');
+        .toHaveAttribute('href', '/posts?country=CA&region=british-columbia');
+    const us = (await facts.getByRole('link', { name: 'US', exact: true }).locator('..').boundingBox())!;
+    const ca = (await facts.getByRole('link', { name: 'CA', exact: true }).locator('..').boundingBox())!;
+    expect(ca.x).toBeCloseTo(us.x, 0);
+    expect(ca.y).toBeGreaterThanOrEqual(us.y + us.height);
+    if (page.viewportSize()!.width >= 1024) {
+        const region = (await facts.getByText('Region', { exact: true }).locator('..').boundingBox())!;
+        const dates = (await facts.getByText('Dates', { exact: true }).locator('..').boundingBox())!;
+        expect(region.y).toBeCloseTo(dates.y, 0);
+        expect(region.x).toBeGreaterThan(dates.x + dates.width);
+    }
     await facts.getByRole('link', { name: 'CA', exact: true }).click();
-    await expect(page).toHaveURL(/\/posts\?tag=ca$/);
-    await expect(page.getByRole('link', { name: 'ca', exact: true })).toHaveAttribute('aria-current', 'page');
+    await expect(page).toHaveURL(/\/posts\?country=CA$/);
+    await expect(page.getByRole('link', { name: 'Canada', exact: true })).toHaveAttribute('aria-current', 'page');
     await expect(page.getByRole('heading', { name: 'Coastal test trip', exact: true })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Daily map test trip', exact: true })).toHaveCount(0);
 });
@@ -227,7 +357,7 @@ test('photo navigation continues between galleries in both directions', async ({
     const navigate = async (direction: 'Next' | 'Previous') => {
         // PhotoSwipe hides arrow buttons on touch devices.
         if (isMobile) await page.keyboard.press(direction === 'Next' ? 'ArrowRight' : 'ArrowLeft');
-        else await page.getByRole('button', { name: direction }).click();
+        else await page.locator('.pswp--open').getByRole('button', { name: direction, exact: true }).click();
     };
     const lastPhoto = page.getByRole('link', { name: 'Coast photograph 3' });
     await lastPhoto.click();

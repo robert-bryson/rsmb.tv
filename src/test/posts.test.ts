@@ -3,15 +3,16 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { getAllPosts, getPostBySlug } from '../content/posts';
 import { filterPostsByTag, getAllBlogTags } from '../content/blogTags';
+import { filterPostsByRegion } from '../content/blogRegions';
 
 vi.mock('virtual:post-content', () => ({
     metadata: [
         { slug: 'boise', title: 'Boise', date: '2024-05-19', description: 'Trip', tags: ['motorcycle'], format: 'trip', tripId: 'boise-2024',
             series: { id: 'rides', title: 'Rides', order: 1 },
             development: { published: false, rowNumber: 2, issues: ['Missing content'], contentAvailable: false } },
-        { slug: 'already-tagged', title: 'Tagged', date: '2024-05-18', description: 'Trip', tags: ['honda-cb500x'], format: 'trip', tripId: 'boise-2024' },
+        { slug: 'already-tagged', title: 'Tagged', date: '2024-05-18', description: 'Trip', tags: ['honda-cb500x', 'oregon', 'ca'], format: 'trip', tripId: 'boise-2024' },
         { slug: 'no-motorcycle', title: 'Other trip', date: '2024-05-17', description: 'Trip', tags: [], format: 'trip', tripId: 'other' },
-        { slug: 'writing', title: 'Writing', date: '2024-05-16', description: 'Post', tags: [], tripId: 'boise-2024' },
+        { slug: 'writing', title: 'Writing', date: '2024-05-16', description: 'Post', tags: ['california', 'bicycle'], tripId: 'boise-2024' },
     ],
     mdxLoaders: { './blog/writing.mdx': async () => ({ default: () => 'Writing body' }) },
 }));
@@ -24,22 +25,28 @@ vi.mock('virtual:trip-content', () => ({
 }));
 
 describe('trip fact tags', () => {
-    it('includes each trip in the filters linked from its facts', () => {
-        for (const tag of ['motorcycle', 'new-mexico', 'oregon', 'us', 'ca', 'british-columbia']) {
-            expect(filterPostsByTag(getAllPosts(), tag).map(post => post.slug)).toEqual(['boise', 'already-tagged']);
+    it('separates country and region facts from topical tags', () => {
+        for (const [country, region] of [['US', 'new-mexico'], ['US', 'oregon'], ['CA', 'british-columbia'], ['CA', '']]) {
+            expect(filterPostsByRegion(getAllPosts(), country, region).map(post => post.slug)).toEqual(['boise', 'already-tagged']);
         }
+        expect(getPostBySlug('boise')?.countries).toEqual([
+            { code: 'US', regions: ['New Mexico', 'Oregon'] },
+            { code: 'CA', regions: ['British Columbia'] },
+        ]);
+        expect(getAllBlogTags(getAllPosts())).not.toContain('oregon');
     });
     it('lists and filters trip reports by their normalized motorcycle model', () => {
         const posts = getAllPosts();
         expect(getAllBlogTags(posts)).toContain('honda-cb500x');
         expect(filterPostsByTag(posts, 'honda-cb500x').map(post => post.slug)).toEqual(['boise', 'already-tagged']);
-        expect(getPostBySlug('boise')?.tags).toEqual(['motorcycle', 'honda-cb500x', 'new-mexico', 'oregon', 'us', 'ca', 'british-columbia']);
+        expect(getPostBySlug('boise')?.tags).toEqual(['motorcycle', 'honda-cb500x']);
     });
 
     it('preserves explicit tags without duplicates and leaves other posts unchanged', () => {
-        expect(getPostBySlug('already-tagged')?.tags).toEqual(['honda-cb500x', 'motorcycle', 'new-mexico', 'oregon', 'us', 'ca', 'british-columbia']);
+        expect(getPostBySlug('already-tagged')?.tags).toEqual(['honda-cb500x', 'motorcycle']);
         expect(getPostBySlug('no-motorcycle')?.tags).toEqual([]);
-        expect(getPostBySlug('writing')?.tags).toEqual([]);
+        expect(getPostBySlug('writing')?.tags).toEqual(['bicycle']);
+        expect(getPostBySlug('writing')?.countries).toEqual([{ code: 'US', regions: ['California'] }]);
     });
 });
 

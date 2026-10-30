@@ -14,7 +14,6 @@
         }
     ],
     "hero": "kalaloch-2024-06-23-beach-overlook",
-    "introAnimation": "endor-speeders",
     "animations": [
         {
             "id": "endor-speeders",
@@ -23,11 +22,7 @@
             "width": 480,
             "height": 208,
             "alt": "A rider on a speeder bike races between tall trees on Endor.",
-            "caption": "The Endor speeder-bike chase from Return of the Jedi.",
-            "attribution": {
-                "label": "via GIPHY",
-                "url": "https://giphy.com/gifs/starwars-star-wars-return-of-the-jedi-l3fZChmGfUOtLlJtu"
-            }
+            "caption": "The Endor speeder-bike chase from Return of the Jedi."
         }
     ],
     "route": {

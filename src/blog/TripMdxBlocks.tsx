@@ -49,6 +49,11 @@ export function TripMapBlock(props: TripMapFocus) {
         if (!containerRef.current || typeof IntersectionObserver === 'undefined') return;
         const observer = new IntersectionObserver(entries => {
             if (entries.some(entry => entry.isIntersecting && entry.intersectionRatio >= 0.1)) {
+                // Portalled trip facts may move the map after this entry was captured.
+                const bounds = containerRef.current?.getBoundingClientRect();
+                if (!bounds || bounds.height <= 0) return;
+                const visibleHeight = Math.min(bounds.bottom, window.innerHeight) - Math.max(bounds.top, 0);
+                if (visibleHeight / bounds.height < 0.1) return;
                 setAttempt(value => value || 1);
                 setActive(true);
             }

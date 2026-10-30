@@ -10,6 +10,7 @@ import { metadata, mdxLoaders } from 'virtual:post-content';
 import { lazy, type ComponentType, type LazyExoticComponent } from 'react';
 import { getTripSummary } from '../features/trips/tripSummaries';
 import { tripFactTag } from './blogTags';
+import { separatePostGeography, type PostCountry } from './blogRegions';
 
 export type BlogPostFormat = 'post' | 'trip';
 
@@ -34,6 +35,7 @@ export interface BlogPostMeta {
     date: string;
     description: string;
     tags: string[];
+    countries?: PostCountry[];
     format?: BlogPostFormat;
     tripId?: string;
     series?: { id: string; title: string; order: number };
@@ -74,12 +76,12 @@ const posts: BlogPost[] = postsMeta.map((meta) => {
     const trip = meta.format === 'trip' ? getTripSummary(meta.tripId) : undefined;
     const factTags = [
         ...(trip?.motorcycle ? ['motorcycle', trip.motorcycle] : []),
-        ...(trip?.regions ?? []),
-        ...(trip?.countries?.flatMap(country => [country.code, ...(country.regions ?? [])]) ?? []),
     ].map(tripFactTag).filter(Boolean);
+    const geography = separatePostGeography(meta.tags, [...(meta.countries ?? []), ...(trip?.countries ?? [])], trip?.regions);
     return {
         ...meta,
-        tags: Array.from(new Set([...meta.tags, ...factTags])),
+        tags: Array.from(new Set([...geography.tags, ...factTags])),
+        countries: geography.countries,
         loadComponent,
         Component: lazy(loadComponent),
     };
@@ -89,12 +91,13 @@ const posts: BlogPost[] = postsMeta.map((meta) => {
 posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 export function getAllPosts(): BlogPostMeta[] {
-    return posts.map(({ slug, title, date, description, tags, format, tripId, series, development }) => ({
+    return posts.map(({ slug, title, date, description, tags, countries, format, tripId, series, development }) => ({
         slug,
         title,
         date,
         description,
         tags,
+        countries,
         ...(format ? { format } : {}),
         ...(tripId ? { tripId } : {}),
         ...(series ? { series } : {}),

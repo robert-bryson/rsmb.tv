@@ -1,6 +1,8 @@
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { DevelopmentContentStatus } from '../components/DevelopmentContentStatus';
-import { filterPostsByTag, getAllBlogTags } from '../content/blogTags';
+import { PostRegionFilters } from '../components/PostRegionFilters';
+import { filterPostsByTag, getAllBlogTags, tripFactTag } from '../content/blogTags';
+import { filterPostsByRegion, findGeographicTag, getAllBlogRegions } from '../content/blogRegions';
 import { getAllPosts } from '../content/posts';
 import { getTripSummary } from '../features/trips/tripSummaries';
 import { useDocumentHead } from '../hooks/useDocumentHead';
@@ -16,10 +18,12 @@ function getPostType(value: string | null): PostType {
     return value === 'writing' || value === 'trips' ? value : 'all';
 }
 
-function createPostsUrl(type: PostType, tag = '') {
+function createPostsUrl(type: PostType, tag = '', country = '', region = '') {
     const params = new URLSearchParams();
     if (type !== 'all') params.set('type', type);
     if (tag) params.set('tag', tag);
+    if (country) params.set('country', country);
+    if (region) params.set('region', region);
     const search = params.toString();
     return `/posts${search ? `?${search}` : ''}`;
 }
@@ -31,13 +35,18 @@ export function Posts() {
     const allPosts = getAllPosts();
     const [searchParams] = useSearchParams();
     const activeType = getPostType(searchParams.get('type'));
-    const activeTag = searchParams.get('tag')?.trim() ?? '';
+    const tag = searchParams.get('tag')?.trim() ?? '';
+    const geographicTag = findGeographicTag(allPosts, tag);
+    const activeTag = geographicTag ? '' : tag;
+    const activeCountry = searchParams.get('country')?.trim().toUpperCase() ?? geographicTag?.country ?? '';
+    const activeRegion = tripFactTag(searchParams.get('region') ?? geographicTag?.region ?? '');
     const postsByType = allPosts.filter((post) => (
         activeType === 'all'
         || (activeType === 'trips' ? post.format === 'trip' : post.format !== 'trip')
     ));
     const allTags = getAllBlogTags(postsByType);
-    const posts = filterPostsByTag(postsByType, activeTag);
+    const countries = getAllBlogRegions(postsByType);
+    const posts = filterPostsByRegion(filterPostsByTag(postsByType, activeTag), activeCountry, activeRegion);
 
     useDocumentHead({
         title: 'Posts',
@@ -88,10 +97,11 @@ export function Posts() {
                 ))}
             </nav>
 
-            {allTags.length > 0 && (
-                <nav aria-label="Post tags" className="mb-8 flex flex-wrap gap-2">
+            <div className="mb-8 space-y-5">
+                {allTags.length > 0 && <nav aria-label="Post tags" className="flex flex-wrap items-baseline gap-2">
+                    <p className="mr-1 text-xs font-semibold uppercase tracking-wider text-zinc-500">Tags</p>
                     <Link
-                        to={createPostsUrl(activeType)}
+                        to={createPostsUrl(activeType, '', activeCountry, activeRegion)}
                         aria-current={!activeTag ? 'page' : undefined}
                         className={`max-w-full rounded-full px-2.5 py-0.5 text-xs transition-colors ${!activeTag
                             ? 'bg-violet-600 text-zinc-100'
@@ -103,7 +113,7 @@ export function Posts() {
                     {allTags.map((tag) => (
                         <Link
                             key={tag}
-                            to={createPostsUrl(activeType, tag)}
+                            to={createPostsUrl(activeType, tag, activeCountry, activeRegion)}
                             aria-current={activeTag === tag ? 'page' : undefined}
                             className={`max-w-full break-words rounded-full px-2.5 py-0.5 text-xs transition-colors ${activeTag === tag
                                 ? 'bg-violet-600 text-zinc-100'
@@ -113,12 +123,19 @@ export function Posts() {
                             {tag}
                         </Link>
                     ))}
-                </nav>
-            )}
+                </nav>}
+                {countries.length > 0 && <PostRegionFilters
+                    key={activeType}
+                    countries={countries}
+                    activeCountry={activeCountry}
+                    activeRegion={activeRegion}
+                    createUrl={(country = '', region = '') => createPostsUrl(activeType, activeTag, country, region)}
+                />}
+            </div>
 
             {posts.length === 0 ? (
                 <p className="text-zinc-400">
-                    {activeTag ? `No posts tagged "${activeTag}" in this view.` : 'No posts yet.'}
+                    {activeTag || activeCountry || activeRegion ? 'No posts match these filters.' : 'No posts yet.'}
                 </p>
             ) : (
                 <ul className="divide-y divide-zinc-800/70">

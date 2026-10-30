@@ -82,7 +82,7 @@ The import rejects malformed standalone shortcodes, including IDs with underscor
 | `{{trip-photo:photo-id}}` | One photo and its caption |
 | `{{trip-photo-pano:photo-id}}` | Panorama across the full page width, with its caption and zoom viewer |
 | `{{trip-gallery:gallery-id}}` | Gallery from the manifest |
-| `{{trip-animation:animation-id}}` | Silent looping video with a poster, play/pause control, and source credit |
+| `{{trip-animation:animation-id}}` | Silent looping video with a poster, play/pause control, and optional source credit |
 | `{{trip-facts}}` | Another copy of the trip facts |
 
 Trip facts appear before the first map, after the opening text.
@@ -112,10 +112,16 @@ Use URLs without credentials, query strings, or fragments.
 Development retains these CDN URLs because the still-photo processor does not prepare animations.
 Keep an animation out of `photos`, `hero`, and photo galleries.
 
-Set `introAnimation` to an animation ID to show it after the introduction, immediately before the trip facts and first map.
-This placement is stored in the manifest and survives Google Docs re-imports.
-For another position, remove `introAnimation` and put `{{trip-animation:animation-id}}` in its own paragraph in the source Google Doc.
-Do not use both placements for the same clip.
+Put `{{trip-animation:animation-id}}` in its own Normal text paragraph at the desired position in the source Google Doc.
+For the Kalaloch speeder clip, use:
+
+```text
+{{trip-animation:endor-speeders}}
+```
+
+Move that paragraph to move the clip within the story.
+The manifest defines available animations. It does not insert them automatically.
+Google Docs re-imports preserve the position from the source document.
 
 The player loads video only after it enters view. It pauses offscreen and in hidden tabs.
 With reduced motion enabled, the poster remains still until the reader presses Play.
@@ -268,12 +274,12 @@ Set these required fields:
 
 You can also set `ridingDays`, `distanceMiles`, `motorcycle`, `countries`, and `galleries`.
 The motorcycle, country, and region facts link to post filters.
-The registry adds these fact tags automatically. It uses lowercase text and replaces spaces with hyphens.
-For example, `Honda CB500X` adds `motorcycle` and `honda-cb500x`. `New Mexico` adds `new-mexico`.
-Explicit Sheet tags keep their original text.
+The registry adds motorcycle tags automatically. It uses lowercase text and replaces spaces with hyphens.
+For example, `Honda CB500X` adds `motorcycle` and `honda-cb500x`.
+Countries and regions appear under **Regions** on the post list. Other Sheet tags keep their original text.
 
 Group regions under their country using two-letter uppercase country codes.
-Each country appears on its own line above its regions in the trip details panel.
+Each country appears on its own line with its regions in the trip details panel.
 For a cross-border trip, add a group for each country, for example:
 
 ```json
@@ -283,13 +289,17 @@ For a cross-border trip, add a group for each country, for example:
 ]
 ```
 
-Country codes also become filter tags (`us`, `ca`). Regions are optional for country-only entries.
+Country links filter all posts for that country. Regions are optional for country-only entries.
+Region links retain their country. Identically named regions in different countries have separate links.
 Older manifests with a flat `regions` array remain supported; use `countries` for new entries.
 Country codes must be unique. Region names must be nonempty and unique within each list.
 The validator removes spaces from the start and end of region names before checking duplicates.
 If both geography fields exist, the details panel shows country groups first.
 It then shows flat regions that do not appear in a country group.
-All displayed countries and regions add filter tags.
+The post list groups regions by country and sorts them by matching post count.
+Each country initially shows as many regions as fit on its row.
+Select **See all** to expand the remaining regions.
+Existing geographic tag links remain supported.
 
 ### Day assignments
 

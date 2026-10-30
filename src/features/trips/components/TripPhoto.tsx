@@ -51,6 +51,7 @@ export function TripPhotoFigure({
     photo,
     priority = false,
     linked = true,
+    showCaption = true,
     className = '',
     sizes = '(min-width: 1184px) 1152px, calc(100vw - 2rem)',
 }: {
@@ -58,6 +59,7 @@ export function TripPhotoFigure({
     sizes?: string;
     priority?: boolean;
     linked?: boolean;
+    showCaption?: boolean;
     className?: string;
 }) {
     const captionId = `trip-photo-caption-${useId().replaceAll(':', '')}`;
@@ -91,7 +93,7 @@ export function TripPhotoFigure({
             </div>
             <figcaption
                 id={captionId}
-                className="image-caption-overlay mt-2 text-sm leading-snug text-zinc-400"
+                className={showCaption ? 'image-caption-overlay mt-2 text-sm leading-snug text-zinc-400' : 'sr-only'}
                 aria-hidden={!hasSupplementalCaption || undefined}
             >
                 {caption}

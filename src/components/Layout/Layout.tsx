@@ -160,7 +160,7 @@ export function Layout({ children }: LayoutProps) {
 
       {/* Main content */}
       <main id="main-content" className="site-content flex-1 w-full">
-        <div className="max-w-3xl mx-auto px-6 py-12 w-full">
+        <div className="site-content-inner max-w-3xl mx-auto px-6 py-12 w-full">
           {children}
         </div>
       </main>

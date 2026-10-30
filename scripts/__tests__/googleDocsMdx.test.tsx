@@ -14,13 +14,13 @@ async function renderDocument(html: string) {
 }
 
 describe('Google Docs to rendered MDX', () => {
-    it('compiles animation shortcodes with inline formatting into a trip component', async () => {
-        const markdown = convertHtmlToMarkdown('<p><strong>{{trip-animation:speeders}}</strong></p>');
+    it('places an animation between the surrounding Google Doc paragraphs, including inline formatting', async () => {
+        const markdown = convertHtmlToMarkdown('<p>Before the forest.</p><p><strong>{{trip-animation:speeders}}</strong></p><p>After the forest.</p>');
         const expanded = expandTripShortcodes(markdown, { format: 'trip', tripId: 'coast' }, { animations: [{ id: 'speeders' }] });
         const { default: Content } = await evaluate(expanded, runtime);
         expect(renderToStaticMarkup(<Content components={{
             TripAnimation: ({ animationId }: { animationId: string }) => <figure data-animation={animationId} />,
-        }} />)).toBe('<figure data-animation="speeders"></figure>');
+        }} />)).toBe('<p>Before the forest.</p>\n<figure data-animation="speeders"></figure>\n<p>After the forest.</p>');
     });
 
     it('keeps the browser fixture equal to the importer output', async () => {

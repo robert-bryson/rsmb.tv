@@ -47,7 +47,9 @@ export function About() {
           <a href="https://xentity.com" target="_blank" rel="noopener noreferrer">Xentity</a>,
           where I work on federal projects including{' '}
           <a href="https://data.gov" target="_blank" rel="noopener noreferrer">Data.gov</a>{' '}
-          and USFS Enterprise Geospatial Platform applications.
+          and{' '}
+          <a href="https://egp.wildfire.gov/egp/" target="_blank" rel="noopener noreferrer">USFS Enterprise Geospatial Platform</a>{' '}
+          applications.
         </p>
 
       </div>

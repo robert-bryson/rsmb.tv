@@ -10,6 +10,7 @@ const testPosts = vi.hoisted(() => [
         date: '2026-04-20',
         description: 'A post about putting dull data on maps.',
         tags: ['Maps', 'Data Viz'],
+        countries: [{ code: 'US', regions: ['Washington'] }],
     },
     {
         slug: 'weather-records',
@@ -17,6 +18,7 @@ const testPosts = vi.hoisted(() => [
         date: '2026-03-15',
         description: 'A post about records and climate normals.',
         tags: ['Weather', 'Data Viz'],
+        countries: [{ code: 'CA', regions: ['Ontario'] }],
     },
     {
         slug: 'react-routing',
@@ -24,6 +26,7 @@ const testPosts = vi.hoisted(() => [
         date: '2026-02-10',
         description: 'A post about client-side routing state.',
         tags: ['React'],
+        countries: [{ code: 'US', regions: ['Washington', 'Oregon'] }],
     },
     {
         slug: 'hidden-fourth-post',
@@ -31,6 +34,7 @@ const testPosts = vi.hoisted(() => [
         date: '2026-01-01',
         description: 'This post should not be on the home page.',
         tags: ['React'],
+        countries: [{ code: 'US', regions: ['Idaho'] }, { code: 'JP', regions: [] }],
         development: {
             published: false,
             rowNumber: 5,
@@ -49,6 +53,10 @@ const testTrips = vi.hoisted(() => [{
     date: '2026-04-01',
     description: 'A motorcycle trip along the coast.',
     tags: ['Motorcycles', 'Travel'],
+    countries: [
+        { code: 'US', regions: ['Washington', 'Oregon', 'Idaho', 'California'] },
+        { code: 'CA', regions: ['British Columbia', 'Alberta', 'Quebec', 'Ontario'] },
+    ],
     format: 'trip' as const,
     tripId: 'ocean-shores-2024',
 }]);
@@ -75,12 +83,35 @@ vi.mock('../blog/MdxComponents', () => ({
 import { BlogPost } from '../pages/BlogPost';
 import { Home } from '../pages/Home';
 import { Posts } from '../pages/Posts';
+import * as postRegistry from '../content/posts';
+import * as tripManifests from '../features/trips/tripManifests';
 
 function LocationProbe() {
     return <output data-testid="location">{useLocation().pathname}</output>;
 }
 
 describe('Posts page', () => {
+    it('filter review regressions: keeps a visible topic selectable when it matches a country name', () => {
+        const topicPost = { ...testPosts[0], tags: ['Japan'], countries: [] };
+        const posts = vi.spyOn(postRegistry, 'getAllPosts');
+        posts.mockReturnValue([topicPost, testPosts[3]]);
+        try {
+            renderWithRouter(<Posts />, { route: '/posts?type=writing&tag=Japan' });
+            expect(screen.getAllByRole('heading', { level: 2 }).map(heading => heading.textContent)).toEqual(['Mapping Boring Data']);
+            expect(within(screen.getByRole('navigation', { name: 'Post tags' })).getByRole('link', { name: 'Japan' }))
+                .toHaveAttribute('aria-current', 'page');
+        } finally {
+            posts.mockRestore();
+        }
+    });
+
+    it('filter review regressions: accepts region names and lowercase country codes from shared URLs', () => {
+        renderWithRouter(<Posts />, { route: '/posts?country=ca&region=British+Columbia' });
+        expect(screen.getAllByRole('heading', { level: 2 }).map(heading => heading.textContent)).toEqual(['Coastal Loop']);
+        expect(within(screen.getByRole('group', { name: 'Canada' })).getByRole('link', { name: /British Columbia/ }))
+            .toHaveAttribute('aria-current', 'page');
+    });
+
     it('combines writing and trips in one chronological feed', () => {
         renderWithRouter(<Posts />, { route: '/posts' });
 
@@ -131,9 +162,65 @@ describe('Posts page', () => {
 
         expect(screen.getByText('DEV · Draft · Incomplete')).toBeInTheDocument();
     });
+
+    it('groups regions by country and sorts them by matching post count', () => {
+        renderWithRouter(<Posts />, { route: '/posts' });
+        const regions = within(screen.getByRole('navigation', { name: 'Post regions' }));
+        const us = within(regions.getByRole('group', { name: 'United States' }));
+        expect(us.getAllByRole('link').map(link => link.textContent)).toEqual(['United States', 'Washington3', 'Idaho2', 'Oregon2', 'California1']);
+        expect(us.getByLabelText('3 posts')).toBeInTheDocument();
+        expect(regions.getByRole('group', { name: 'Canada' })).toBeInTheDocument();
+        expect(regions.getByRole('group', { name: 'Japan' })).toHaveTextContent('1 post');
+    });
+
+    it('combines topical and regional filters and preserves the other category when clearing one', () => {
+        renderWithRouter(<Posts />, { route: '/posts?tag=Data+Viz&country=US&region=washington' });
+        expect(screen.getAllByRole('heading', { level: 2 }).map(heading => heading.textContent)).toEqual(['Mapping Boring Data']);
+        const tags = within(screen.getByRole('navigation', { name: 'Post tags' }));
+        const regions = within(screen.getByRole('navigation', { name: 'Post regions' }));
+        expect(tags.getByRole('link', { name: 'All tags' })).toHaveAttribute('href', '/posts?country=US&region=washington');
+        expect(regions.getByRole('link', { name: 'All regions' })).toHaveAttribute('href', '/posts?tag=Data+Viz');
+        expect(regions.getByRole('link', { name: /Washington/ })).toHaveAttribute('aria-current', 'page');
+    });
+
+    it('marks a selected region from a shared URL', () => {
+        renderWithRouter(<Posts />, { route: '/posts?type=trips&country=US&region=california' });
+        const regions = within(screen.getByRole('navigation', { name: 'Post regions' }));
+        expect(regions.getByRole('link', { name: /California/ })).toHaveAttribute('aria-current', 'page');
+        expect(screen.getAllByRole('heading', { level: 2 }).map(heading => heading.textContent)).toEqual(['Coastal Loop']);
+    });
+
+    it.each([
+        ['us', ['Mapping Boring Data', 'Coastal Loop', 'React Routing', 'Hidden Fourth Post']],
+        ['british-columbia', ['Coastal Loop']],
+        ['canada', ['Coastal Loop', 'Weather Records']],
+    ])('keeps historic geographic tag links working for %s', (tag, titles) => {
+        renderWithRouter(<Posts />, { route: `/posts?tag=${tag}` });
+        expect(screen.getAllByRole('heading', { level: 2 }).map(heading => heading.textContent)).toEqual(titles);
+        expect(screen.getByRole('navigation', { name: 'Post regions' })).toBeInTheDocument();
+    });
+
+    it('shows an empty state for incompatible filters', () => {
+        renderWithRouter(<Posts />, { route: '/posts?tag=Maps&country=CA' });
+        expect(screen.getByText('No posts match these filters.')).toBeInTheDocument();
+    });
 });
 
 describe('BlogPost tag navigation', () => {
+    it('filter review regressions: preserves return filters after a manifest fails to load', async () => {
+        const load = vi.spyOn(tripManifests, 'loadTripManifest').mockRejectedValueOnce(new Error('Manifest unavailable'));
+        const from = '/posts?type=trips&country=US&region=washington';
+        try {
+            render(<MemoryRouter initialEntries={[{ pathname: '/trips/coastal-loop', state: { from } }]}>
+                <Routes><Route path="/trips/:slug" element={<BlogPost collection="trips" />} /></Routes>
+            </MemoryRouter>);
+            expect(await screen.findByRole('heading', { name: 'Trip not configured' })).toBeInTheDocument();
+            expect(screen.getByRole('link', { name: /Back to posts/ })).toHaveAttribute('href', from);
+        } finally {
+            load.mockRestore();
+        }
+    });
+
     it('selects immediate older and newer posts within the writing collection', () => {
         renderWithRouter(<Routes><Route path="/blog/:slug" element={<BlogPost collection="blog" />} /></Routes>, { route: '/blog/weather-records' });
         const navigation = within(screen.getByRole('navigation', { name: 'Post navigation' }));

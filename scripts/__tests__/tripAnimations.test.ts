@@ -13,15 +13,13 @@ const animation = {
     poster: '/media/trips/coastal-test/speeders-012345abcdef.webp',
     width: 480, height: 208, alt: 'A rider races through a forest.',
 };
-const trip = tripManifestSchema.parse({ ...coastal, introAnimation: animation.id, animations: [animation] });
+const trip = tripManifestSchema.parse({ ...coastal, animations: [animation] });
 const directories: string[] = [];
 afterEach(() => { for (const directory of directories.splice(0)) fs.rmSync(directory, { recursive: true, force: true }); });
 
 describe('animation publication contracts', () => {
-    it('rejects duplicate animation IDs and missing intro references', () => {
+    it('rejects duplicate animation IDs', () => {
         expect(() => tripManifestSchema.parse({ ...trip, animations: [animation, animation] })).toThrow(/Duplicate animation ID/);
-        expect(() => tripManifestSchema.parse({ ...trip, introAnimation: 'absent' })).toThrow(/unknown animation/);
-        expect(tripManifestSchema.parse(trip).introAnimation).toBe('speeders');
     });
 
     it.each(['javascript:alert(1)', '//example.com/movie.mp4', '/media/trips/coastal-test/../movie.mp4',

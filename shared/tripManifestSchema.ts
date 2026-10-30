@@ -78,7 +78,6 @@ export const tripManifestSchema = z.object({
     })),
     photos: z.array(photoSchema),
     animations: z.array(animationSchema).optional(),
-    introAnimation: slugSchema.optional(),
     days: z.array(z.object({
         id: slugSchema, title: z.string().min(1), date: dateSchema.optional(),
         headingId: slugSchema, trackIds: z.array(slugSchema).optional(),
@@ -122,10 +121,6 @@ export const tripManifestSchema = z.object({
             }
         }
     }
-    if (manifest.introAnimation && !animationIds.has(manifest.introAnimation)) {
-        context.addIssue({ code: 'custom', path: ['introAnimation'], message: `Intro references unknown animation: ${manifest.introAnimation}` });
-    }
-
     const stopIds = new Set<string>();
     for (const stop of manifest.stops) {
         if (stopIds.has(stop.id)) {
