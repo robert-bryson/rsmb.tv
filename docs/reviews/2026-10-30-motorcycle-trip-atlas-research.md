@@ -102,6 +102,9 @@ The local atlas showed five configured trips, including two labeled drafts. The 
 The linked-interaction follow-up passed 25 focused unit tests and 47 browser checks.
 Four hover or overlapping-route pointer cases were skipped on phone projects. Card taps and direct route selection passed on both phone engines.
 
+The shared-hover follow-up passed 92 focused unit tests and 53 browser checks.
+That browser run included atlas and story-map hover behavior, keyboard dismissal, recovery, and reading-page JavaScript budgets.
+
 ## Fit within rsmb.tv
 
 Use **Motorcycle Trips** as a working project title.
@@ -367,6 +370,9 @@ Keep an explicit Show all trips control.
 Treat hover as an optional preview.
 Hover should not move the camera, scroll cards, replace persistent selection, or open a report.
 The hovered route and report card share temporary visual emphasis.
+Show the trip title in the story map's dark tooltip, with an edge matching the route color.
+Reuse the shared tooltip factory, route casing, and motion-aware transitions. Dim other routes during temporary emphasis.
+Escape dismisses tooltip feedback without clearing the selected trip.
 Keyboard focus should remain visible without forcing a route selection.
 Opening the report should require its own normal link.
 This separates browsing from navigation.

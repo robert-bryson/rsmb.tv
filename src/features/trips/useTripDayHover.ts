@@ -1,8 +1,9 @@
 import { useEffect, useEffectEvent, useId, useRef, type RefObject } from 'react';
-import { Popup, type Map, type MapLayerMouseEvent } from 'maplibre-gl';
+import type { Map, MapLayerMouseEvent } from 'maplibre-gl';
 import type { RouteGeoJson } from './routeGeometry';
 import { dayColor, tripMapDayAnchor, tripMapDayForTrack } from './tripMapView';
 import type { TripManifest } from './types';
+import { createTripMapTooltip } from './tripMapTooltip';
 
 /** Link route hover, day labels, and a non-interactive map tooltip without changing the camera. */
 export function useTripDayHover({ map, mapRef, enabled, manifest, route, dayId, onHighlight }: {
@@ -16,28 +17,18 @@ export function useTripDayHover({ map, mapRef, enabled, manifest, route, dayId, 
 }) {
     const tooltipId = useId();
     const isCurrentMap = useEffectEvent(() => mapRef.current === map);
-    const popupRef = useRef<{ popup: Popup; dayId: string }>(null);
+    const popupRef = useRef<ReturnType<typeof createTripMapTooltip> | null>(null);
     const routeHoverRef = useRef<{ id: string; coordinates: [number, number] }>(null);
     const clearPopup = () => {
-        popupRef.current?.popup.remove();
+        popupRef.current?.remove();
         popupRef.current = null;
     };
     const showPopup = useEffectEvent((id: string, coordinates: [number, number]) => {
         if (!map || !enabled || !isCurrentMap()) return;
         const day = manifest.days?.find(day => day.id === id);
         if (!day) return;
-        if (!popupRef.current) {
-            const popup = new Popup({ closeButton: false, closeOnClick: false, focusAfterOpen: false, offset: 12, className: 'trip-day-popup' })
-                .setLngLat(coordinates).setText(day.title).addTo(map);
-            popup.getElement().setAttribute('role', 'tooltip');
-            popup.getElement().id = tooltipId;
-            popupRef.current = { popup, dayId: id };
-        } else {
-            if (popupRef.current.dayId !== id) popupRef.current.popup.setText(day.title);
-            popupRef.current.dayId = id;
-            popupRef.current.popup.setLngLat(coordinates);
-        }
-        popupRef.current.popup.getElement().style.setProperty('--trip-day-color', dayColor(manifest, id));
+        popupRef.current ??= createTripMapTooltip(map, tooltipId);
+        popupRef.current.show({ label: day.title, color: dayColor(manifest, id), coordinates });
     });
     const hoverRoute = useEffectEvent((event: MapLayerMouseEvent) => {
         const day = event.features?.map(feature => tripMapDayForTrack(manifest, feature.properties?.trackId)).find(Boolean);

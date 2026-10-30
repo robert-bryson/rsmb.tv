@@ -25,7 +25,7 @@ async function openList(page: Page) {
 
 async function paintedRoute(page: Page, id?: string, tolerance = 12, aim: 'center' | 'north' = 'center') {
     const canvas = page.locator('[data-testid="trip-atlas-map"] canvas');
-    const screenshot = await canvas.screenshot({ style: 'header, aside, .maplibregl-control-container { opacity: 0 !important; }' });
+    const screenshot = await canvas.screenshot({ style: 'header, aside, .maplibregl-control-container, .maplibregl-popup { opacity: 0 !important; }' });
     const { data, info } = await sharp(screenshot).removeAlpha().raw().toBuffer({ resolveWithObject: true });
     const hex = id ? tripAtlasColor(id).slice(1) : '';
     const color = id ? [0, 2, 4].map(offset => parseInt(hex.slice(offset, offset + 2), 16)) : undefined;
@@ -155,6 +155,7 @@ test('card hover previews its route above a shared selected route without changi
     await map.locator('canvas').hover({ position: before.point });
     await card.getByRole('heading').hover();
     await expect(map).toHaveAttribute('data-highlighted-trip', 'coastal-test');
+    await expect(page.getByRole('tooltip')).toHaveText('Coastal test trip');
     await expect(card).toHaveAttribute('data-highlighted', 'true');
     await expect(page).toHaveURL(/\?trip=daily-test$/);
     await expect(card.getByRole('button', { name: /^Show route:/ })).toHaveAttribute('aria-pressed', 'false');
@@ -163,6 +164,7 @@ test('card hover previews its route above a shared selected route without changi
     await page.mouse.move(page.viewportSize()!.width - 24, 240);
     await expect(card).not.toHaveAttribute('data-highlighted');
     await expect(map).toHaveAttribute('data-highlighted-trip', '');
+    await expect(page.getByRole('tooltip')).toHaveCount(0);
     await expect(page).toHaveURL(/\?trip=daily-test$/);
 });
 
@@ -182,6 +184,13 @@ test('route hover highlights its card without scrolling and route clicks reveal 
         const scroll = await page.locator('#atlas-trip-list').evaluate(element => element.scrollTop);
         await map.locator('canvas').hover({ position: point });
         await expect(map).toHaveAttribute('data-highlighted-trip', 'daily-test');
+        const popup = page.getByRole('tooltip');
+        await expect(popup).toHaveText('Daily map test trip');
+        const hex = tripAtlasColor('daily-test').slice(1);
+        const color = `rgb(${[0, 2, 4].map(offset => parseInt(hex.slice(offset, offset + 2), 16)).join(', ')})`;
+        await expect(popup.locator('.maplibregl-popup-content')).toHaveCSS('border-left-color', color);
+        await expect(popup.locator('.maplibregl-popup-content')).toHaveCSS('background-color', 'rgb(24, 24, 27)');
+        await expect(popup).toHaveCSS('pointer-events', 'none');
         await expect(card).toHaveAttribute('data-highlighted', 'true');
         await expect(card.getByRole('heading')).not.toBeInViewport();
         expect(await page.locator('#atlas-trip-list').evaluate(element => element.scrollTop)).toBe(scroll);
@@ -193,6 +202,18 @@ test('route hover highlights its card without scrolling and route clicks reveal 
     await expect(page.locator('#atlas-panel-toggle')).toHaveAttribute('aria-expanded', 'true');
     await expect(card.getByRole('heading')).toBeInViewport();
     await expect(card.getByRole('button', { name: /^Show route:/ })).toHaveAttribute('aria-pressed', 'true');
+});
+
+test('keyboard feedback uses the story-map tooltip and Escape dismisses it without clearing selection', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(`${atlas}?trip=daily-test`);
+    const button = page.getByRole('button', { name: 'Show route: Daily map test trip' });
+    await button.focus();
+    await expect(page.getByRole('tooltip')).toHaveText('Daily map test trip');
+    await button.press('Escape');
+    await expect(page.getByRole('tooltip')).toHaveCount(0);
+    await expect(page).toHaveURL(/\?trip=daily-test$/);
+    await expect(button).toHaveAttribute('aria-pressed', 'true');
 });
 
 test('overlapping routes offer a choice instead of selecting only the top line', async ({ page, isMobile }) => {

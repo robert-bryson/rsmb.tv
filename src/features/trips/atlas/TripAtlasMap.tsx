@@ -1,4 +1,4 @@
-import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
+import { useEffect, useEffectEvent, useId, useMemo, useRef, useState } from 'react';
 import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './tripAtlasMap.css';
@@ -6,8 +6,10 @@ import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&ur
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { routeCoordinates } from '../routeGeometry';
 import { mapStyle } from '../tripMapBasemaps';
+import { routeBackgroundStyle, routeContextColor, setTripRouteTransitions } from '../tripMapView';
+import { createTripMapTooltip } from '../tripMapTooltip';
 import type { TripAtlasEntry } from './tripAtlasEntries';
-import { combineAtlasRoutes, type AtlasCamera, type AtlasRouteState } from './tripAtlasView';
+import { combineAtlasRoutes, tripAtlasColor, type AtlasCamera, type AtlasRouteState } from './tripAtlasView';
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl);
 
@@ -30,11 +32,11 @@ function filterFor(id?: string): maplibregl.FilterSpecification {
 
 function layers(): maplibregl.LayerSpecification[] {
     return [
-        { id: 'atlas-route-casing', type: 'line', source: 'atlas-routes', paint: { 'line-color': '#09090b', 'line-width': 6, 'line-opacity': 0.8 } },
+        { id: 'atlas-route-casing', type: 'line', source: 'atlas-routes', paint: { 'line-color': routeBackgroundStyle.color, 'line-width': routeBackgroundStyle.width, 'line-opacity': routeBackgroundStyle.opacity } },
         { id: 'atlas-routes', type: 'line', source: 'atlas-routes', paint: { 'line-color': ['get', 'color'], 'line-width': 3.5, 'line-opacity': 0.85 } },
-        { id: 'atlas-selected-casing', type: 'line', source: 'atlas-routes', filter: filterFor(), paint: { 'line-color': '#fafafa', 'line-width': 9, 'line-opacity': 0.9 } },
+        { id: 'atlas-selected-casing', type: 'line', source: 'atlas-routes', filter: filterFor(), paint: { 'line-color': routeBackgroundStyle.color, 'line-width': 8, 'line-opacity': routeBackgroundStyle.opacity } },
         { id: 'atlas-selected', type: 'line', source: 'atlas-routes', filter: filterFor(), paint: { 'line-color': ['get', 'color'], 'line-width': 5.5 } },
-        { id: 'atlas-hover-casing', type: 'line', source: 'atlas-routes', filter: filterFor(), paint: { 'line-color': '#fafafa', 'line-width': 10, 'line-opacity': 0.85 } },
+        { id: 'atlas-hover-casing', type: 'line', source: 'atlas-routes', filter: filterFor(), paint: { 'line-color': routeBackgroundStyle.color, 'line-width': 9, 'line-opacity': routeBackgroundStyle.opacity } },
         { id: 'atlas-hover', type: 'line', source: 'atlas-routes', filter: filterFor(), paint: { 'line-color': ['get', 'color'], 'line-width': 6.5 } },
     ].map(layer => ({ ...layer, layout: { 'line-cap': 'round', 'line-join': 'round' } })) as maplibregl.LayerSpecification[];
 }
@@ -60,11 +62,28 @@ export default function TripAtlasMap(props: Props) {
     const userMoved = useRef(false);
     const lastFit = useRef<{ map: maplibregl.Map; key: string } | undefined>(undefined);
     const reducedMotion = useReducedMotion();
+    const tooltipId = useId();
+    const tooltip = useRef<{ map: maplibregl.Map; label: ReturnType<typeof createTripMapTooltip> } | null>(null);
+    const routeHover = useRef<{ id: string; coordinates: [number, number] } | null>(null);
     const data = useMemo(() => combineAtlasRoutes(routes), [routes]);
     const getCurrent = useEffectEvent(() => props);
     const select = useEffectEvent((id?: string) => props.onSelect(id));
     const hover = useEffectEvent((id?: string) => props.onHover(id));
     const rememberCamera = useEffectEvent((value: AtlasCamera) => props.onCameraChange(value));
+    const clearTooltip = () => {
+        tooltip.current?.label.remove();
+        tooltip.current = null;
+    };
+    const showTooltip = useEffectEvent((id: string, coordinates: [number, number]) => {
+        const instance = mapRef.current;
+        const entry = props.entries.find(entry => entry.id === id);
+        if (!instance || !entry || failure) return;
+        if (tooltip.current?.map !== instance) {
+            clearTooltip();
+            tooltip.current = { map: instance, label: createTripMapTooltip(instance, tooltipId) };
+        }
+        tooltip.current.label.show({ label: entry.title, color: tripAtlasColor(id), coordinates });
+    });
 
     useEffect(() => {
         if (!container.current) return;
@@ -137,6 +156,8 @@ export default function TripAtlasMap(props: Props) {
             });
             else {
                 setChoices(undefined);
+                routeHover.current = null;
+                clearTooltip();
                 // Dismiss the selection without treating this as an overview-fit request.
                 lastFit.current = { map: instance, key: `all:${getCurrent().fitVersion}` };
                 select(undefined);
@@ -147,7 +168,16 @@ export default function TripAtlasMap(props: Props) {
             const ids = candidates(event.point, 4);
             instance.getCanvas().style.cursor = ids.length ? 'pointer' : '';
             const selected = getCurrent().selectedId;
-            hover(selected && ids.includes(selected) ? selected : ids[0]);
+            const id = selected && ids.includes(selected) ? selected : ids[0];
+            if (id) {
+                const coordinates: [number, number] = [event.lngLat.lng, event.lngLat.lat];
+                routeHover.current = { id, coordinates };
+                hover(id);
+                showTooltip(id, coordinates);
+            } else {
+                routeHover.current = null;
+                hover(undefined);
+            }
         });
         // Raster tiles must not hold up route paints on Linux WebKit.
         let repaintPending = false;
@@ -163,6 +193,8 @@ export default function TripAtlasMap(props: Props) {
         return () => {
             saveCamera();
             disposed = true;
+            routeHover.current = null;
+            if (tooltip.current?.map === instance) clearTooltip();
             instance.off('render', repaint);
             instance.remove();
             if (mapRef.current === instance) mapRef.current = null;
@@ -176,10 +208,32 @@ export default function TripAtlasMap(props: Props) {
 
     useEffect(() => {
         if (!map || mapRef.current !== map || !map.getLayer('atlas-selected')) return;
-        for (const id of ['atlas-selected', 'atlas-selected-casing']) map.setFilter(id, filterFor(selectedId));
+        for (const id of ['atlas-selected', 'atlas-selected-casing']) map.setFilter(id, filterFor(highlightedId ? undefined : selectedId));
         for (const id of ['atlas-hover', 'atlas-hover-casing']) map.setFilter(id, filterFor(highlightedId));
-        map.setPaintProperty('atlas-routes', 'line-opacity', selectedId ? 0.55 : 0.85);
-    }, [map, selectedId, highlightedId]);
+        const emphasizedId = highlightedId ?? selectedId;
+        const emphasized: maplibregl.ExpressionSpecification = ['==', ['get', 'tripId'], emphasizedId ?? ''];
+        setTripRouteTransitions(map, 'atlas-routes', reducedMotion);
+        map.setPaintProperty('atlas-routes', 'line-color', emphasizedId ? ['case', emphasized, ['get', 'color'], routeContextColor] : ['get', 'color']);
+        map.setPaintProperty('atlas-routes', 'line-opacity', emphasizedId ? ['case', emphasized, 1, 0.25] : 0.85);
+        map.setPaintProperty('atlas-routes', 'line-width', emphasizedId ? ['case', emphasized, 3.5, 2] : 3.5);
+    }, [map, selectedId, highlightedId, reducedMotion]);
+
+    useEffect(() => {
+        if (!map || mapRef.current !== map || !highlightedId || failure) {
+            clearTooltip();
+            if (!highlightedId) routeHover.current = null;
+            return;
+        }
+        const route = routes[highlightedId]?.route;
+        if (!route) { clearTooltip(); return; }
+        const points = routeCoordinates(route);
+        const middle = points[Math.floor(points.length / 2)];
+        const anchor: [number, number] | undefined = routeHover.current?.id === highlightedId
+            ? routeHover.current.coordinates : middle ? [middle[0], middle[1]] : undefined;
+        if (!anchor) { clearTooltip(); return; }
+        const center = map.getCenter();
+        showTooltip(highlightedId, map.getBounds().contains(anchor) ? anchor : [center.lng, center.lat]);
+    }, [map, highlightedId, entries, routes, failure]);
 
     useEffect(() => {
         if (!map || mapRef.current !== map || !container.current) return;
@@ -201,7 +255,8 @@ export default function TripAtlasMap(props: Props) {
     return (
         <div className="absolute inset-0" onKeyDown={event => { if (event.key === 'Escape') setChoices(undefined); }}>
             <div ref={container} data-testid="trip-atlas-map" data-selected-trip={selectedId ?? ''} data-highlighted-trip={highlightedId ?? ''}
-                onPointerLeave={() => props.onHover(undefined)}
+                onPointerLeave={() => { routeHover.current = null; props.onHover(undefined); }}
+                onPointerOver={event => { if (event.target !== mapRef.current?.getCanvas()) { routeHover.current = null; props.onHover(undefined); } }}
                 role="region" aria-label="Motorcycle trip routes. Choose a trip in the list to explore its route."
                 className="trip-atlas-map h-full w-full" />
             {(failure || tileFailure) && <div role="status" className="absolute left-3 right-14 top-32 z-10 max-h-[calc(45dvh-10rem)] overflow-y-auto rounded-lg border border-zinc-600 bg-zinc-900/95 p-3 text-sm text-zinc-200 md:left-auto md:right-3 md:top-64 md:max-h-none md:max-w-64">

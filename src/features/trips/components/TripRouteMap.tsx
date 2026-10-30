@@ -7,7 +7,7 @@ import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useTripRoute } from '../useTripRoute';
 import { routeCoordinates } from '../routeGeometry';
 import { useTripStory } from '../TripStoryContext';
-import { dayColor, routeBackgroundStyle, routeContextColor, routeLineColor, tripMapCoordinates, tripMapDayForTrack, tripMapDays, tripMapView, type TripMapFocus } from '../tripMapView';
+import { dayColor, routeBackgroundStyle, routeContextColor, routeLineColor, setTripRouteTransitions, tripMapCoordinates, tripMapDayForTrack, tripMapDays, tripMapView, type TripMapFocus } from '../tripMapView';
 import { useTripMapDismiss } from '../useTripMapDismiss';
 import { useTripDayHover } from '../useTripDayHover';
 import { useTripMapHighlight } from '../useTripMapHighlight';
@@ -397,9 +397,7 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
         if (!map || loadedMap !== map || trackId) return;
         const tracks = manifest.days?.find(day => day.id === emphasizedDayId)?.trackIds;
         const focused: maplibregl.ExpressionSpecification = tracks ? trackFilter(tracks) : ['literal', true];
-        for (const property of ['line-color-transition', 'line-opacity-transition', 'line-width-transition'] as const) {
-            map.setPaintProperty('trip-route-line', property, { duration: reducedMotion ? 0 : 300, delay: 0 });
-        }
+        setTripRouteTransitions(map, 'trip-route-line', reducedMotion);
         map.setPaintProperty('trip-route-line', 'line-color', isOverview && emphasizedDayId
             ? ['case', focused, dayColor(manifest, emphasizedDayId), routeContextColor] : routeLineColor(manifest));
         map.setPaintProperty('trip-route-line', 'line-opacity', isOverview && emphasizedDayId ? ['case', focused, 1, 0.25] : 1);

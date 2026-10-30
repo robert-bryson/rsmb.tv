@@ -1,4 +1,4 @@
-import type { ExpressionSpecification } from 'maplibre-gl';
+import type { ExpressionSpecification, Map } from 'maplibre-gl';
 import { routeCoordinates, routeFeatures, type RouteGeoJson } from './routeGeometry';
 import type { TripManifest } from './types';
 
@@ -6,6 +6,12 @@ export type TripMapFocus = { stopId?: string; trackId?: string; dayId?: string }
 export const routeColor = '#f59e0b';
 export const routeContextColor = '#71717a';
 export const routeBackgroundStyle = { color: '#09090b', width: 7, opacity: 0.85 };
+
+export function setTripRouteTransitions(map: Map, layer: string, reducedMotion: boolean) {
+    for (const property of ['line-color-transition', 'line-opacity-transition', 'line-width-transition'] as const) {
+        map.setPaintProperty(layer, property, { duration: reducedMotion ? 0 : 300, delay: 0 });
+    }
+}
 // Labels and selected states accompany these colors in both map renderers.
 const dayColors = ['#fbbf24', '#38bdf8', '#e879f9', '#34d399', '#fb7185', '#a78bfa', '#fb923c', '#a3e635'];
 

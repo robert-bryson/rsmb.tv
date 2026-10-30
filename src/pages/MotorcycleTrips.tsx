@@ -97,6 +97,13 @@ export default function MotorcycleTrips() {
     };
 
     useEffect(() => () => saveAtlasSession(location.key, url, session.current), [location.key, url]);
+    useEffect(() => {
+        const dismiss = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') { setHoveredId(undefined); setFocusedId(undefined); }
+        };
+        document.addEventListener('keydown', dismiss);
+        return () => document.removeEventListener('keydown', dismiss);
+    }, []);
     useLayoutEffect(() => {
         if (panelOpen && listRef.current) listRef.current.scrollTop = session.current.scrollTop;
     }, [panelOpen]);
