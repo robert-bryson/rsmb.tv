@@ -60,8 +60,8 @@ npx playwright show-trace path/to/trace.zip
 | Dismissal | Close day popups with Escape. Clear day selection only when dismissal applies to that map. |
 | Recovery | Restore the saved camera. Ignore callbacks from replaced maps. Retain usable previews and downloads. |
 | Resources | Release distant maps. Keep maps active during keyboard interaction and fullscreen use. |
-| Layout | Prevent horizontal scrolling after maps paint. Preserve panorama proportions and reserved image height. |
-| Photos | Select suitable responsive sources. Support mouse, touch, and keyboard controls. Restore focus after closing. |
+| Layout | Prevent horizontal scrolling after maps paint. Keep single portraits within the text column. Preserve panorama proportions and reserved image height. |
+| Photos | Select suitable responsive sources. Wrap long captions within each photo. Support mouse, touch, and keyboard controls. Restore focus after closing. |
 | Animations | Defer video loading, retain posters and attribution after failure, honor reduced motion, and preserve user pause choices across visibility changes. |
 | Content | Retain literal captions, article metadata, return filters, country and region filters, and existing geographic tag links. |
 
@@ -151,6 +151,10 @@ Tests must not depend on a previous content import.
 
 The hero tests check photo selection, wraparound, viewer order, focus return, and image failure recovery.
 They also check title placement, reserved height, responsive image sizes, and reduced motion.
+Single-photo checks measure portrait, landscape, and explicit panorama widths from 320 to 1440 pixels.
+They check reserved image height after failure and responsive sources on high-density displays.
+Caption checks use long words with pointer and touch input in Chromium and WebKit.
+The unit tests also check viewer cleanup when the photo or link setting changes.
 Country fact links must retain their country. Region fact links must retain both their country and region.
 
 Post filter tests use a separate browser fixture with the application styles.

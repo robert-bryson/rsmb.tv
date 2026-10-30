@@ -16,6 +16,16 @@ The manifest supports local preview. The public route and hero photo returned HT
 - [ ] Verify the reported 450 miles, three riding days, and stop locations against source records.
 - [ ] Keep the Sheet `published` value `false` until the publication checks pass.
 
+### Trip story sources
+
+Use the [editorial review](docs/reviews/2026-10-29-trip-editorial-review.md) for exact passages and source ownership.
+The duplicate photos, unused galleries, and stale heading IDs are corrected locally.
+
+- [ ] Correct the definite copy errors in the three source Google Docs. Qualify the ferry boarding claims.
+- [ ] Explain the reconstructed Boise route sections and their approximate distances in the source story.
+- [ ] Reconcile Boise's Panther Creek overnight route boundary with the campground stop. Confirm the Nampa stop location.
+- [ ] Confirm the mountain range in Boise's barn photo before changing its identification.
+
 ### Temperature record data
 
 The historical signal is not ready for publication.

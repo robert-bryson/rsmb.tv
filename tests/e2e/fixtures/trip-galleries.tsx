@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { TripGallery } from '../../../src/features/trips/components/TripGallery';
+import { TripPhoto } from '../../../src/features/trips/components/TripPhoto';
 import { TripStoryProvider } from '../../../src/features/trips/TripStoryProvider';
 import type { TripManifest } from '../../../src/features/trips/types';
 import '../../../src/index.css';
@@ -23,7 +24,7 @@ const photos = Object.entries(groups).flatMap(([group, ratios]) => ratios.map((r
     srcSet: [480, 960, 1600].map(width => `/gallery-fixture/${Math.round(ratio * 1000)}x1000/${width}.svg ${width}w`).join(', '),
     width: Math.round(ratio * 1000), height: 1000,
     alt: `${group} photo ${index + 1}`,
-    caption: group === 'captions' && index === 0
+    caption: (group === 'captions' || group === 'portrait') && index === 0
         ? `A long caption must wrap within its own photograph without covering the next row. ${'unbroken'.repeat(20)}`
         : `Caption for ${group} photo ${index + 1}.`,
 })));
@@ -39,6 +40,9 @@ export function TripGalleriesFixture() {
             <h1>Adaptive galleries</h1>
             <p data-text-body>The text body sets the width of a single portrait photo.</p>
             <TripStoryProvider manifest={manifest}>
+                <div data-photo-example="portrait"><TripPhoto photoId="portrait-0" /></div>
+                <div data-photo-example="landscape"><TripPhoto photoId="landscape-0" /></div>
+                <div data-photo-example="panorama"><TripPhoto photoId="portrait-0" layout="pano" /></div>
                 {Object.keys(groups).map(group => <div key={group} data-gallery-example={group}>
                     <h2>{group}</h2><TripGallery galleryId={group} />
                 </div>)}

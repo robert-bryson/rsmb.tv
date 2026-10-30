@@ -35,7 +35,7 @@
             "id": "seattle-to-ocean-shores",
             "title": "Seattle to Ocean Shores",
             "date": "2024-02-17",
-            "headingId": "day-1-seattle-to-ocean-shores",
+            "headingId": "seattle-to-ocean-shores",
             "trackIds": ["paseo-de-rever-02-17-24"],
             "stopIds": ["seattle-departure", "ocean-shores"]
         },
@@ -172,15 +172,6 @@
             "2024-ocean-shores-7-asparagus",
             "2024-ocean-shores-8-bog",
             "2024-ocean-shores-9-maze"
-        ],
-        "ride-home-gallery-id": [
-            "2024-ocean-shores-4-beach",
-            "2024-ocean-shores-5-bears",
-            "2024-ocean-shores-6-bear-gun",
-            "2024-ocean-shores-7-asparagus",
-            "2024-ocean-shores-8-bog",
-            "2024-ocean-shores-9-maze",
-            "2024-ocean-shores-10-seattle-skyline"
         ]
     }
 }

@@ -25,6 +25,8 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-10-29 | [Trip editorial cleanup and photo quality review](reviews/2026-10-29-trip-editorial-quality-review.md) |
+| 2026-10-29 | [Trip editorial findings and source corrections](reviews/2026-10-29-trip-editorial-review.md) |
 | 2026-10-29 | [Adaptive gallery quality review and regression fixes](reviews/2026-10-29-adaptive-gallery-quality-review.md) |
 | 2026-10-29 | [Adaptive trip gallery research](reviews/2026-10-29-adaptive-trip-galleries-research.md) |
 | 2026-10-29 | [Post filters and trip presentation review](reviews/2026-10-29-post-filters-and-trip-presentation.md) |

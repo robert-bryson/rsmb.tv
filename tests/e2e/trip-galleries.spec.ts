@@ -167,6 +167,59 @@ test('single portraits follow the text column and panoramas retain full-width fr
     }
 });
 
+test('standalone photos follow their layout and retain their image height after failure', async ({ page }) => {
+    for (const width of [320, 768, 1184, 1440]) {
+        await page.setViewportSize({ width, height: 1000 });
+        const body = (await page.locator('[data-text-body]').boundingBox())!;
+        const pageWidth = await page.evaluate(() => document.documentElement.getBoundingClientRect().width);
+        for (const group of ['portrait', 'landscape', 'panorama']) {
+            const example = page.locator(`[data-photo-example="${group}"]`);
+            const figure = example.locator('figure');
+            const box = (await figure.boundingBox())!;
+            const expectedWidth = group === 'portrait' ? body.width : group === 'panorama'
+                ? pageWidth : Math.min(1152, pageWidth - 32);
+            expect(box.width).toBeCloseTo(expectedWidth, 0);
+            expect(box.x).toBeCloseTo((pageWidth - expectedWidth) / 2, 0);
+            const photo = example.getByRole('img');
+            const before = (await photo.boundingBox())!;
+            await photo.dispatchEvent('error');
+            await expect(example.getByText('Photo unavailable')).toBeVisible();
+            const after = (await example.getByRole('img').boundingBox())!;
+            expect(after.width).toBeCloseTo(before.width, 0);
+            expect(after.height).toBeCloseTo(before.height, 0);
+        }
+        // Load the images again so each viewport exercises both states.
+        await page.reload();
+    }
+});
+
+test('long standalone captions fit the photo on pointer and touch screens', async ({ browser }) => {
+    for (const hasTouch of [false, true]) {
+        const context = await browser.newContext({ viewport: { width: 320, height: 1000 }, hasTouch });
+        try {
+            const page = await context.newPage();
+            await galleryAssets(page);
+            await page.goto('/tests/e2e/fixtures/trip-galleries.html');
+            for (const width of [320, 390, 800, 1440]) {
+                await page.setViewportSize({ width, height: 1000 });
+                for (const group of ['portrait', 'panorama']) {
+                    const figure = page.locator(`[data-photo-example="${group}"] figure`);
+                    await figure.locator('a').focus();
+                    const caption = figure.locator('figcaption');
+                    await expect(caption).toBeVisible();
+                    const bounds = await caption.evaluate(element => ({
+                        width: element.clientWidth, scrollWidth: element.scrollWidth,
+                    }));
+                    expect(bounds.scrollWidth).toBeLessThanOrEqual(bounds.width);
+                }
+                expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+            }
+        } finally {
+            await context.close();
+        }
+    }
+});
+
 test('expanded galleries retain hidden viewer links and a failed image retains its planned frame', async ({ page }) => {
     const example = page.locator('[data-gallery-example="expanded"]');
     const links = example.locator('a[data-pswp-width]');
@@ -246,6 +299,9 @@ for (const fallback of [false, true]) {
                 for (const group of ['mixed', 'collage', 'portrait', 'panorama']) {
                     const photos = page.locator(`[data-gallery-example="${group}"] img`);
                     for (const photo of await photos.all()) await expectSuitableImageSource(photo);
+                }
+                for (const group of ['portrait', 'landscape', 'panorama']) {
+                    await expectSuitableImageSource(page.locator(`[data-photo-example="${group}"] img`));
                 }
             } finally {
                 await context.close();

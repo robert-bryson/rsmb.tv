@@ -213,6 +213,12 @@ See section 3 for the update command.
 Add alt text that describes the visible content. Add a caption that supplies other useful information.
 Each photo needs a nonempty alt description. The manifest parser removes spaces before and after the description.
 Do not repeat the caption in the alt text.
+Long words and URLs wrap inside the caption for both single photos and galleries.
+
+A single portrait photo stays within the text column.
+A single landscape or square photo uses the wider media area.
+The panorama shortcode uses the full page width for any photo orientation.
+All three layouts retain the photo's proportions and reserve its height after an image failure.
 
 ### Route output
 
@@ -404,6 +410,9 @@ List gallery photos in story order.
 Use lowercase letters, numbers, and hyphens in gallery IDs.
 Include at least one photo in each gallery.
 Include each photo ID only once within a gallery.
+Keep one manifest entry for each selected photograph. Different IDs can still refer to duplicate images.
+Remove duplicate entries and update their gallery references before publication.
+Remove gallery definitions that the story and day records no longer use.
 
 ### Galleries
 

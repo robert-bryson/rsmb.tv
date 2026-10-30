@@ -160,6 +160,56 @@ describe('trip story primitives', () => {
         expect(figure).not.toHaveAttribute('data-caption-dismissed');
     });
 
+    it.each([
+        { width: 800, height: 1200, layout: 'default' as const, breakout: false },
+        { width: 1200, height: 800, layout: 'default' as const, breakout: true },
+        { width: 800, height: 800, layout: 'default' as const, breakout: true },
+        { width: 800, height: 1200, layout: 'pano' as const, breakout: false },
+    ])('sizes a standalone $width x $height photo in $layout layout', ({ width, height, layout, breakout }) => {
+        const photo = { ...manifest.photos[0], width, height };
+        renderStory(<TripPhoto photoId={photo.id} layout={layout} />, {
+            ...manifest, photos: [photo], galleries: undefined,
+        });
+        const image = screen.getByRole('img', { name: photo.alt });
+        const figure = image.closest('figure')!;
+        expect(figure.classList.contains('trip-breakout')).toBe(breakout);
+        expect(figure.classList.contains('trip-photo-pano')).toBe(layout === 'pano');
+        expect(image).toHaveAttribute('sizes', layout === 'pano' ? '100vw' : breakout
+            ? '(min-width: 1184px) 1152px, calc(100vw - 2rem)'
+            : '(min-width: 768px) 720px, calc(100vw - 3rem)');
+    });
+
+    it('reports an unknown standalone photo instead of rendering an empty block', () => {
+        expect(() => renderStory(<TripPhoto photoId="missing-photo" />))
+            .toThrow('Unknown trip photo: missing-photo');
+    });
+
+    it('creates and releases the standalone viewer as links and photo selections change', () => {
+        const init = vi.spyOn(PhotoSwipeLightbox.prototype, 'init');
+        const destroy = vi.spyOn(PhotoSwipeLightbox.prototype, 'destroy');
+        try {
+            const story = (photoId: string, linked: boolean) => (
+                <TripStoryProvider manifest={manifest}><TripPhoto photoId={photoId} linked={linked} /></TripStoryProvider>
+            );
+            const { rerender, unmount } = render(story('hero', false));
+            expect(init).not.toHaveBeenCalled();
+            rerender(story('hero', true));
+            expect(init).toHaveBeenCalledTimes(1);
+            rerender(story('camp', true));
+            expect(destroy).toHaveBeenCalledTimes(1);
+            expect(init).toHaveBeenCalledTimes(2);
+            expect(screen.getByRole('link')).toHaveAttribute('href', manifest.photos[1].src);
+            rerender(story('camp', false));
+            expect(destroy).toHaveBeenCalledTimes(2);
+            expect(screen.queryByRole('link')).not.toBeInTheDocument();
+            unmount();
+            expect(destroy).toHaveBeenCalledTimes(2);
+        } finally {
+            init.mockRestore();
+            destroy.mockRestore();
+        }
+    });
+
     it('preserves panorama dimensions, responsive sources, and captions in the viewer trigger and failure state', () => {
         const photo = { ...manifest.photos[1], width: 3200, height: 560,
             srcSet: '/camp-960.webp 960w, /camp-3200.webp 3200w' };

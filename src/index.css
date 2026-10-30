@@ -243,10 +243,6 @@ u {
   object-fit: contain;
 }
 
-.trip-gallery-photo figcaption {
-  overflow-wrap: anywhere;
-}
-
 /* Flowing touch captions need independent rows. Desktop overlays also permit
    a portrait to span two landscape rows without stretching the image. */
 @media (min-width: 640px) and (hover: hover) and (pointer: fine) {
@@ -470,6 +466,10 @@ u {
 
 .image-caption-figure {
   position: relative;
+}
+
+.image-caption-overlay {
+  overflow-wrap: anywhere;
 }
 
 .image-caption-frame>a {

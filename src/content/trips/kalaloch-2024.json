@@ -47,21 +47,21 @@
         {
             "id": "seattle-to-kalaloch",
             "title": "Seattle to Kalaloch",
-            "headingId": "day-1-up-and-over-the-peninsula",
+            "headingId": "up-and-over-the-peninsula",
             "trackIds": ["paseo-de-rever-06-22-24-1"],
             "stopIds": ["seattle-ferry", "kalaloch"]
         },
         {
             "id": "kalaloch-and-the-rainforest",
             "title": "Kalaloch and the rainforest",
-            "headingId": "day-2-kalaloch-and-the-rainforest",
+            "headingId": "kalaloch-and-the-rainforest",
             "trackIds": ["paseo-de-rever-06-22-24"],
             "stopIds": ["kalaloch"]
         },
         {
             "id": "kalaloch-to-seattle",
             "title": "Kalaloch to Seattle",
-            "headingId": "day-3-back-and-under-to-seattle",
+            "headingId": "back-and-under-to-seattle",
             "trackIds": ["paseo-de-rever-06-24-24"],
             "stopIds": ["kalaloch", "hood-canal", "southworth-ferry"]
         }
@@ -363,33 +363,6 @@
             "kalaloch-2024-06-23-hood-canal"
         ],
         "2024-06-23-ferry": [
-            "kalaloch-2024-06-23-southworth-ferry-queue",
-            "kalaloch-2024-06-23-evening-ferry-view"
-        ],
-        "highlights": [
-            "kalaloch-2024-06-21-ferry-motorcycles",
-            "kalaloch-2024-06-21-seattle-from-ferry",
-            "kalaloch-2024-06-21-forest-road",
-            "kalaloch-2024-06-21-camp-at-night",
-            "kalaloch-2024-06-22-morning-in-tent",
-            "kalaloch-2024-06-22-motorcycle-at-camp",
-            "kalaloch-2024-06-22-forest-trailhead",
-            "kalaloch-2024-06-22-rider-on-bridge",
-            "kalaloch-2024-06-22-timber-bridge",
-            "kalaloch-2024-06-22-coastal-forest",
-            "kalaloch-2024-06-22-foggy-beach",
-            "kalaloch-2024-06-22-forest-boardwalk",
-            "kalaloch-2024-06-23-misty-coast",
-            "kalaloch-2024-06-23-gooseneck-barnacles",
-            "kalaloch-2024-06-23-shoreline-rocks",
-            "kalaloch-2024-06-23-tide-pool",
-            "kalaloch-2024-06-23-sea-anemones",
-            "kalaloch-2024-06-23-beach-overlook",
-            "kalaloch-2024-06-23-rocky-shore",
-            "kalaloch-2024-06-23-beach-boulders",
-            "kalaloch-2024-06-23-shore-crab",
-            "kalaloch-2024-06-23-hood-canal-dock",
-            "kalaloch-2024-06-23-hood-canal",
             "kalaloch-2024-06-23-southworth-ferry-queue",
             "kalaloch-2024-06-23-evening-ferry-view"
         ]
