@@ -143,17 +143,17 @@ export default function MotorcycleTrips() {
                 </Suspense>
             </TripAtlasMapBoundary>
 
-            <header className="pointer-events-none absolute inset-x-3 top-3 z-20 flex items-start justify-between gap-2 md:inset-x-4 md:top-4">
+            <header className="pointer-events-none absolute inset-x-3 top-3 z-20 grid grid-cols-1 items-start justify-items-start gap-2 md:inset-x-4 md:top-4 md:grid-cols-[minmax(360px,1fr)_auto_minmax(0,1fr)]">
                 <div className="pointer-events-auto min-w-0 rounded-xl border border-zinc-700/80 bg-zinc-950/95 px-4 py-3 shadow-xl backdrop-blur md:w-[360px]">
                     <Link to="/projects" className="inline-flex min-h-6 items-center text-xs text-zinc-400 hover:text-violet-300">← Projects</Link>
                     <h1 className="truncate text-lg font-semibold tracking-tight md:text-xl">Motorcycle Trips</h1>
                     <p className="mt-0.5 text-xs text-zinc-400">{onlySelected ? `1 of ${entries.length}` : entries.length} trips · Routes, photographs &amp; stories</p>
                 </div>
+                {(selectedId || onlySelected || cameraChanged) && <button type="button" onClick={zoomToAllTrips} data-testid="atlas-overview-control"
+                    className="pointer-events-auto min-h-11 justify-self-center whitespace-nowrap rounded-xl border border-zinc-600 bg-zinc-950/95 px-3 text-sm text-zinc-100 shadow-lg hover:border-violet-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-400 md:col-start-2 md:row-start-1">
+                    Zoom to all trips
+                </button>}
             </header>
-            {(selectedId || onlySelected || cameraChanged) && <button type="button" onClick={zoomToAllTrips} data-testid="atlas-overview-control"
-                className="absolute left-1/2 top-28 z-20 min-h-11 -translate-x-1/2 whitespace-nowrap rounded-xl border border-zinc-600 bg-zinc-950/95 px-3 text-sm text-zinc-100 shadow-lg hover:border-violet-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-400 lg:top-4">
-                Zoom to all trips
-            </button>}
 
             <aside aria-label="Trip reports" className={`absolute inset-x-3 bottom-8 z-20 flex max-h-[55dvh] flex-col overflow-hidden rounded-xl border border-zinc-700/80 bg-zinc-950/95 shadow-2xl backdrop-blur md:inset-x-auto md:left-4 md:top-32 md:w-[360px] md:max-h-none ${panelOpen ? 'md:bottom-4' : 'md:bottom-auto'}`}>
                 <button id="atlas-panel-toggle" type="button" aria-expanded={panelOpen} aria-controls="atlas-trip-list"

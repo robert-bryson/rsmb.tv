@@ -246,7 +246,8 @@ PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- \
 
 Atlas checks cover route selection, overlapping roads, shared URLs, report returns, scroll restoration, and delayed geometry.
 The **Show only selected trip** toggle filters both cards and rendered geometry, retains colors and camera position, survives report returns through `view=selected`, and resets on deselection or **Zoom to all trips**.
-The overview control appears at the top center only when selection, filtering, or the camera differs from the overview. On narrow screens it sits below the title.
+The overview control appears at the top center only when selection, filtering, or the camera differs from the overview. At sidebar widths it shares the title's header row and yields enough horizontal space to avoid overlap; on phones it sits below the title.
+Responsive checks cover 320, 767, 768, 858, 1023, 1024, and 1754 pixels with the trip panel open and collapsed, including pointer hit testing of the overview button.
 Checks cover zoom controls, keyboard panning, camera restoration, hidden initial/reset states, and deselection that retains a zoomed view.
 Card clicks select routes with camera padding. Map clicks reveal the matching card.
 Hover checks verify matching map and card feedback without selection changes or automatic scrolling.

@@ -53,7 +53,7 @@ async function paintedRoute(page: Page, id?: string, tolerance = 12, aim: 'cente
         cssBounds: bounds.map((value, index) => value * (index % 2 ? scaleY : scaleX)) };
 }
 
-test('overview control appears centered after zoom or pan and hides when all trips are framed again', async ({ page }) => {
+test('overview control avoids panels across responsive widths and hides when all trips are framed again', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(atlas);
     await expect(page.getByText('2/2 routes', { exact: false })).toBeVisible();
@@ -63,11 +63,35 @@ test('overview control appears centered after zoom or pan and hides when all tri
     const before = await paintedRoute(page);
     await page.getByRole('button', { name: 'Zoom in', exact: true }).click();
     await expect(reset).toBeVisible();
-    const buttonBox = (await reset.boundingBox())!;
-    const titleBox = (await page.getByRole('heading', { name: 'Motorcycle Trips', exact: true }).locator('..').boundingBox())!;
-    expect(buttonBox.x + buttonBox.width / 2).toBeCloseTo(page.viewportSize()!.width / 2, 0);
-    if (page.viewportSize()!.width < 1024) expect(buttonBox.y).toBeGreaterThanOrEqual(titleBox.y + titleBox.height);
-    else expect(buttonBox.y).toBeLessThan(24);
+    const initialViewport = page.viewportSize()!;
+    const panelToggle = page.locator('#atlas-panel-toggle');
+    const initiallyOpen = await panelToggle.getAttribute('aria-expanded') === 'true';
+    for (const width of [...new Set([858, 768, initialViewport.width, 320, 767, 1023, 1024, 1754])]) {
+        await page.setViewportSize({ width, height: initialViewport.height });
+        for (const open of [true, false]) {
+            if (await panelToggle.getAttribute('aria-expanded') !== String(open)) await panelToggle.click();
+            const buttonBox = (await reset.boundingBox())!;
+            const titleBox = (await page.getByRole('heading', { name: 'Motorcycle Trips', exact: true }).locator('..').boundingBox())!;
+            const panelBox = (await page.getByRole('complementary', { name: 'Trip reports' }).boundingBox())!;
+            if (width < 768) {
+                expect(buttonBox.x + buttonBox.width / 2).toBeCloseTo(width / 2, 0);
+                expect(buttonBox.y).toBeGreaterThanOrEqual(titleBox.y + titleBox.height);
+            } else {
+                expect(buttonBox.y).toBeCloseTo(titleBox.y, 0);
+                expect(buttonBox.x).toBeGreaterThanOrEqual(titleBox.x + titleBox.width + 4);
+                if (width >= 1024) expect(buttonBox.x + buttonBox.width / 2).toBeCloseTo(width / 2, 0);
+            }
+            const intersectionWidth = Math.max(0, Math.min(buttonBox.x + buttonBox.width, panelBox.x + panelBox.width) - Math.max(buttonBox.x, panelBox.x));
+            const intersectionHeight = Math.max(0, Math.min(buttonBox.y + buttonBox.height, panelBox.y + panelBox.height) - Math.max(buttonBox.y, panelBox.y));
+            expect(intersectionWidth * intersectionHeight).toBe(0);
+            expect(await reset.evaluate(element => {
+                const box = element.getBoundingClientRect();
+                return element.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2));
+            })).toBe(true);
+        }
+    }
+    await page.setViewportSize(initialViewport);
+    if (await panelToggle.getAttribute('aria-expanded') !== String(initiallyOpen)) await panelToggle.click();
     await reset.click();
     await expect(reset).toHaveCount(0);
     const zoomReset = await paintedRoute(page);

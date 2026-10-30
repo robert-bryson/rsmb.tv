@@ -121,6 +121,9 @@ The centered overview-control follow-up passed nine focused unit tests, TypeScri
 Two hover-only phone cases were skipped.
 Local manual review verified desktop and 320-pixel centering, restoration of an unselected zoomed view after reading a report, and no reset-control flashes during the initial overview animation.
 
+The split-screen header correction reproduced the overlap at 858 and 768 pixels before replacing the independent button breakpoint with a shared header grid.
+The original reproduction then showed zero title/panel overlap at 1754, 858, and 768 pixels. Twelve responsive browser checks, TypeScript, and changed-file ESLint passed.
+
 ## Fit within rsmb.tv
 
 Use **Motorcycle Trips** as a working project title.
@@ -233,7 +236,9 @@ Card focus can provide the same temporary emphasis.
 Keep the collection browsable when one trip is selected.
 Use restrained transitions and respect reduced motion.
 **Zoom to all trips** clears selection, filtering, and temporary highlights, and restores the overview.
-Place it at the top center, below the collection heading on narrow screens. Show it only while a trip is selected, a filter is active, or the camera differs from the all-trips extent.
+Place it at the top center in a shared header grid. Keep it in the title's top row whenever the sidebar layout applies (768 pixels and wider), reserving the title's width so the button yields just enough horizontal space on split-screen windows.
+On phones, let it flow into a centered row below the title. Avoid independent position breakpoints that can place it behind the sidebar.
+Show it only while a trip is selected, a filter is active, or the camera differs from the all-trips extent.
 Compare the camera against the same route bounds and panel-aware padding used for the overview fit, allowing a one-pixel center tolerance and small zoom/bearing/pitch tolerances.
 Keep the initial overview animation from exposing its own reset control. Hover alone does not expose it, and deselecting without moving the camera leaves it available when the view still differs.
 The native **Show only selected trip** toggle filters the map geometry and card list while retaining the camera and selected trip.
