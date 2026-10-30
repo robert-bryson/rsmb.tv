@@ -10,7 +10,7 @@ import {
     readAtlasSession, saveAtlasSession, TRIP_ATLAS_PATH, tripAtlasColor,
     type AtlasCamera, type AtlasRouteState, type AtlasSession,
 } from '../features/trips/atlas/tripAtlasView';
-import { formatDate } from '../utils/formatDate';
+import { formatDateRange } from '../utils/formatDate';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { absoluteUrl, AUTHOR_PERSON } from '../utils/siteMetadata';
@@ -169,7 +169,7 @@ export default function MotorcycleTrips() {
                                 <div className="p-3">
                                     <div className="mb-2 flex items-center gap-2 text-xs text-zinc-400">
                                         <span aria-hidden="true" className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: color }} />
-                                        <span>{formatDate(entry.summary.dates.start)} – {formatDate(entry.summary.dates.end)}</span>
+                                        <span>{formatDateRange(entry.summary.dates.start, entry.summary.dates.end)}</span>
                                         {active && <span className="ml-auto text-zinc-100">Selected</span>}
                                     </div>
                                     <h2 className="text-base font-semibold leading-snug">{entry.title}</h2>
