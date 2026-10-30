@@ -400,6 +400,7 @@ Treat hover as an optional preview.
 Hover should not move the camera, scroll cards, replace persistent selection, or open a report.
 The hovered route and report card share temporary visual emphasis.
 Show the trip title in the story map's dark tooltip, with an edge matching the route color.
+Add the trip's start month and year beneath the title in smaller muted text, using the shared UTC month/year formatter (for example, May 2025).
 Reuse the shared tooltip factory, route casing, and motion-aware transitions. Dim other routes during temporary emphasis using the same 50%-opacity colors without halos.
 Escape dismisses tooltip feedback without clearing the selected trip.
 Keyboard focus should remain visible without forcing a route selection.

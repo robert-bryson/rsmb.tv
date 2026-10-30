@@ -4,6 +4,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import './tripAtlasMap.css';
 import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
+import { formatMonthYear } from '../../../utils/formatDate';
 import { routeCoordinates } from '../routeGeometry';
 import { mapStyle } from '../tripMapBasemaps';
 import { routeBackgroundStyle, setTripRouteTransitions } from '../tripMapView';
@@ -109,7 +110,7 @@ export default function TripAtlasMap(props: Props) {
             clearTooltip();
             tooltip.current = { map: instance, label: createTripMapTooltip(instance, tooltipId) };
         }
-        tooltip.current.label.show({ label: entry.title, color: tripAtlasColor(id), coordinates });
+        tooltip.current.label.show({ label: entry.title, subtitle: formatMonthYear(entry.summary.dates.start, 'long'), color: tripAtlasColor(id), coordinates });
     });
 
     useEffect(() => {

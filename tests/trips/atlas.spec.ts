@@ -238,7 +238,8 @@ test('card hover previews its route above a shared selected route without changi
     await map.locator('canvas').hover({ position: before.point });
     await card.getByRole('heading').hover();
     await expect(map).toHaveAttribute('data-highlighted-trip', 'coastal-test');
-    await expect(page.getByRole('tooltip')).toHaveText('Coastal test trip');
+    await expect(page.getByRole('tooltip')).toContainText('Coastal test trip');
+    await expect(page.getByRole('tooltip').locator('.trip-map-tooltip-subtitle')).toHaveText('January 2024');
     await expect(card).toHaveAttribute('data-highlighted', 'true');
     await expect(page).toHaveURL(/\?trip=daily-test$/);
     await expect(card.getByRole('button', { name: /^Show route:/ })).toHaveAttribute('aria-pressed', 'false');
@@ -268,7 +269,11 @@ test('route hover highlights its card without scrolling and route clicks reveal 
         await map.locator('canvas').hover({ position: point });
         await expect(map).toHaveAttribute('data-highlighted-trip', 'daily-test');
         const popup = page.getByRole('tooltip');
-        await expect(popup).toHaveText('Daily map test trip');
+        await expect(popup).toContainText('Daily map test trip');
+        const date = popup.locator('.trip-map-tooltip-subtitle');
+        await expect(date).toHaveText('January 2024');
+        await expect(date).toHaveCSS('font-size', '12px');
+        await expect(date).toHaveCSS('color', 'rgb(161, 161, 170)');
         const hex = tripAtlasColor('daily-test').slice(1);
         const color = `rgb(${[0, 2, 4].map(offset => parseInt(hex.slice(offset, offset + 2), 16)).join(', ')})`;
         await expect(popup.locator('.maplibregl-popup-content')).toHaveCSS('border-left-color', color);
@@ -292,7 +297,8 @@ test('keyboard feedback uses the story-map tooltip and Escape dismisses it witho
     await page.goto(`${atlas}?trip=daily-test`);
     const button = page.getByRole('button', { name: 'Show route: Daily map test trip' });
     await button.focus();
-    await expect(page.getByRole('tooltip')).toHaveText('Daily map test trip');
+    await expect(page.getByRole('tooltip')).toContainText('Daily map test trip');
+    await expect(page.getByRole('tooltip').locator('.trip-map-tooltip-subtitle')).toHaveText('January 2024');
     await button.press('Escape');
     await expect(page.getByRole('tooltip')).toHaveCount(0);
     await expect(page).toHaveURL(/\?trip=daily-test$/);

@@ -303,6 +303,13 @@ u {
 .trip-day-popup.maplibregl-popup-anchor-left .maplibregl-popup-tip { border-right-color: #18181b; }
 .trip-day-popup.maplibregl-popup-anchor-right .maplibregl-popup-tip { border-left-color: #18181b; }
 
+.trip-map-tooltip-subtitle {
+  margin-top: 0.125rem;
+  color: #a1a1aa;
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+}
+
 [data-trip-facts-slot]:not(:empty) {
   display: flow-root;
   padding-top: 2rem;

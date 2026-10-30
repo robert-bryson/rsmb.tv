@@ -21,6 +21,7 @@ vi.mock('maplibre-gl', () => ({
         constructor(options: unknown) { fake.popupOptions.push(options); }
         setLngLat() { return this; }
         setText(text: string) { this.element.textContent = text; return this; }
+        setDOMContent(content: Node) { this.element.replaceChildren(content); return this; }
         addTo() { document.body.append(this.element); return this; }
         getElement() { return this.element; }
         remove() { this.element.remove(); return this; }
@@ -80,12 +81,16 @@ describe('atlas renderer lifecycle', () => {
         act(() => { fake.instances[0].events.get('styledata')?.forEach(listener => listener()); });
         const popup = await screen.findByRole('tooltip');
         expect(popup).toHaveTextContent(unsafeTitle);
+        expect(popup.querySelector('.trip-map-tooltip-subtitle')).toHaveTextContent('January 2024');
         expect(popup.querySelector('img')).toBeNull();
         expect(popup.style.getPropertyValue('--trip-day-color')).toBe(tripAtlasColor('coast'));
         expect(fake.popupOptions[0]).toMatchObject({ closeButton: false, closeOnClick: false, focusAfterOpen: false, offset: 12 });
         rerender(<TripAtlasMap {...props} entries={[{ ...entry, title: 'Updated journey' }]} highlightedId="coast" />);
         expect(screen.getByRole('tooltip')).toBe(popup);
         expect(popup).toHaveTextContent('Updated journey');
+        rerender(<TripAtlasMap {...props} entries={[{ ...entry, title: 'Updated journey', summary: { ...entry.summary, dates: { start: '2025-05-11', end: '2025-05-19' } } }]} highlightedId="coast" />);
+        expect(screen.getByRole('tooltip')).toBe(popup);
+        expect(popup.querySelector('.trip-map-tooltip-subtitle')).toHaveTextContent('May 2025');
         expect(fake.popupOptions).toHaveLength(1);
         rerender(<TripAtlasMap {...props} selectedId="coast" />);
         expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
