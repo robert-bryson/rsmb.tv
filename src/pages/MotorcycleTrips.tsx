@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { getTripPosts } from '../content/posts';
 import { getCountryName } from '../content/blogRegions';
@@ -187,7 +187,7 @@ export default function MotorcycleTrips() {
                                 onPointerEnter={event => { if (event.pointerType !== 'touch') setHoveredId(entry.id); }} onPointerLeave={() => setHoveredId(undefined)}
                                 onFocusCapture={() => setFocusedId(entry.id)} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setFocusedId(undefined); }}
                                 className={`cursor-pointer overflow-hidden rounded-lg border-2 ${active || highlighted ? 'bg-zinc-900' : 'bg-zinc-950'}`}
-                                style={{ borderColor: active || highlighted ? color : '#27272a', boxShadow: highlighted ? `inset 0 0 0 1px ${color}` : undefined }}>
+                                style={{ '--trip-atlas-color': color, borderColor: active || highlighted ? color : '#27272a', boxShadow: highlighted ? `inset 0 0 0 1px ${color}` : undefined } as CSSProperties}>
                                 <CardPhoto entry={entry} />
                                 <div className="p-3">
                                     <div className="mb-2 flex items-center gap-2 text-xs text-zinc-400">
@@ -206,13 +206,18 @@ export default function MotorcycleTrips() {
                                         {entry.summary.motorcycle && <span>{entry.summary.motorcycle}</span>}
                                     </p>
                                     {geography.length ? <p className="mt-1 text-xs text-zinc-400">{geography.join(' · ')}</p> : null}
-                                    <button type="button" aria-pressed={active} aria-label={`Show route: ${entry.title}`} onClick={() => selectTrip(entry.id)}
-                                        className="mt-3 min-h-11 rounded-md border border-zinc-600 px-3 text-sm text-zinc-100 hover:border-violet-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-400">Show route</button>
-                                    <div className="mt-1 flex flex-col">
-                                        {entry.reports.map(report => <Link key={report.slug} to={report.href} state={{ from: url }}
-                                            className="inline-flex min-h-11 flex-wrap items-center gap-2 text-sm text-violet-300 hover:text-violet-200 hover:underline">{entry.reports.length === 1 ? 'Read trip report →' : `${report.title} →`}
-                                            {import.meta.env.DEV && report.draft && entry.reports.length > 1 && <span className="rounded border border-amber-800/70 bg-amber-950/40 px-1.5 py-0.5 text-[11px] text-amber-300">Draft</span>}
-                                        </Link>)}
+                                    <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-start gap-2">
+                                        <button type="button" aria-pressed={active} aria-label={`Show route: ${entry.title}`} onClick={() => selectTrip(entry.id)}
+                                            className="min-h-11 rounded-md border border-zinc-600 px-3 py-2 text-sm text-zinc-100 transition-colors hover:border-[color:var(--trip-atlas-color)] hover:text-[color:var(--trip-atlas-color)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--trip-atlas-color)]">Show route</button>
+                                        <div className="flex min-w-0 flex-col gap-2">
+                                            {entry.reports.map(report => <Link key={report.slug} to={report.href} state={{ from: url }}
+                                                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-transparent bg-[color:var(--trip-atlas-color)] px-3 py-2 text-center text-sm font-semibold leading-snug text-zinc-950 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--trip-atlas-color)]">
+                                                <span className="min-w-0 break-words">{entry.reports.length === 1 ? 'Read trip report' : report.title}
+                                                    {import.meta.env.DEV && report.draft && entry.reports.length > 1 && <span className="ml-1 inline-block rounded border border-amber-800 bg-amber-950 px-1.5 py-0.5 text-[11px] font-medium text-amber-300">Draft</span>}
+                                                </span>
+                                                <span aria-hidden="true" className="shrink-0">→</span>
+                                            </Link>)}
+                                        </div>
                                     </div>
                                     {state?.error ? <p role="status" className="mt-2 text-xs text-amber-300">Route unavailable. <button type="button" onClick={state.retry} className="min-h-11 underline">Retry route</button></p>
                                         : !state?.route && <p role="status" className="mt-2 text-xs text-zinc-500">Loading route…</p>}

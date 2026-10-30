@@ -250,6 +250,7 @@ The overview control appears at the top center only when selection, filtering, o
 Responsive checks cover 320, 767, 768, 858, 1023, 1024, and 1754 pixels with the trip panel open and collapsed, including pointer hit testing of the overview button.
 Checks cover zoom controls, keyboard panning, camera restoration, hidden initial/reset states, and deselection that retains a zoomed view.
 Card clicks select routes with camera padding. Map clicks reveal the matching card.
+Card actions keep **Show route** on the left and the filled **Read trip report** link-button on the right. Check each trip's accent color, hover/focus feedback, wrapping at 320 pixels, and normal report navigation and returns.
 Hover checks verify matching map and card feedback without selection changes or automatic scrolling.
 Overlap choices verify route-colored text, pointer and keyboard previews, close-icon placement, Escape dismissal, and preserved selection and camera position.
 Atlas and story maps share the text-only tooltip factory. Checks verify its colored edge, safe text, reuse, cleanup, and Escape dismissal.

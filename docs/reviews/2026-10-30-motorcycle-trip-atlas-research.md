@@ -124,6 +124,9 @@ Local manual review verified desktop and 320-pixel centering, restoration of an 
 The split-screen header correction reproduced the overlap at 858 and 768 pixels before replacing the independent button breakpoint with a shared header grid.
 The original reproduction then showed zero title/panel overlap at 1754, 858, and 768 pixels. Twelve responsive browser checks, TypeScript, and changed-file ESLint passed.
 
+The card-action follow-up passed seven page tests, twelve browser checks across desktop Chromium, phone Chromium, and iPhone WebKit, TypeScript, and changed-file ESLint.
+Local checks verified the visible trips' matching button colors, readable filled-action text, a side-by-side layout at 320 pixels, and normal report navigation and returns.
+
 ## Fit within rsmb.tv
 
 Use **Motorcycle Trips** as a working project title.
@@ -219,6 +222,9 @@ Order cards by trip start date, newest first.
 Reuse one hero photograph, the report title and description, travel dates, available distance, and riding days.
 Show the motorcycle and regions as secondary information when useful.
 Keep **Show route** and **Read trip report** as separate actions.
+Place them side by side, with the secondary **Show route** button on the left and a filled, semibold **Read trip report** link-button on the right.
+Use the trip's registered color for the reading action and for the route button's hover border/text and focus ring. Keep dark text on the filled action.
+Allow reading labels to wrap at narrow widths while retaining 44-pixel minimum targets. Multipart report buttons stack in the right-hand column and retain their draft badges.
 Use a stable route color and matching card mark.
 Keep explicit trip ID → palette-token assignments in [the atlas color registry](../../src/features/trips/atlas/tripAtlasColors.ts).
 PCH retains yellow, Route 66 uses mint green, and Ocean Shores, Boise, and Kalaloch retain violet, sky blue, and rose respectively.
