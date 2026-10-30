@@ -80,6 +80,16 @@ export default function MotorcycleTrips() {
             setReveal(current => ({ id, version: (current?.version ?? 0) + 1 }));
         }
     };
+    const deselectTrip = () => {
+        if (params.has('trip')) {
+            const next = new URLSearchParams(params);
+            next.delete('trip');
+            setParams(next, { replace: true });
+        }
+        setHoveredId(undefined);
+        setFocusedId(undefined);
+        setReveal(undefined);
+    };
 
     useEffect(() => () => saveAtlasSession(location.key, url, session.current), [location.key, url]);
     useLayoutEffect(() => {
@@ -98,7 +108,7 @@ export default function MotorcycleTrips() {
                 <Suspense fallback={<p role="status" className="absolute inset-0 grid place-items-center text-sm text-zinc-400">Loading trip map…</p>}>
                     <TripAtlasMap entries={entries} routes={routes} selectedId={selectedId} highlightedId={hoveredId ?? focusedId}
                         fitVersion={fitVersion} panelOpen={panelOpen} initialCamera={initialSession?.camera}
-                        onSelect={id => selectTrip(id, true)} onHover={setHoveredId} onCameraChange={onCameraChange} />
+                        onSelect={id => id ? selectTrip(id, true) : deselectTrip()} onHover={setHoveredId} onCameraChange={onCameraChange} />
                 </Suspense>
             </TripAtlasMapBoundary>
 

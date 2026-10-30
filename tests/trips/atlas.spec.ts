@@ -23,18 +23,20 @@ async function openList(page: Page) {
     if (await toggle.getAttribute('aria-expanded') !== 'true') await toggle.click();
 }
 
-async function paintedRoute(page: Page, id: string) {
+async function paintedRoute(page: Page, id?: string) {
     const canvas = page.locator('[data-testid="trip-atlas-map"] canvas');
     const screenshot = await canvas.screenshot({ style: 'header, aside, .maplibregl-control-container { visibility: hidden !important; }' });
     const { data, info } = await sharp(screenshot).removeAlpha().raw().toBuffer({ resolveWithObject: true });
-    const hex = tripAtlasColor(id).slice(1);
-    const color = [0, 2, 4].map(offset => parseInt(hex.slice(offset, offset + 2), 16));
+    const hex = id ? tripAtlasColor(id).slice(1) : '';
+    const color = id ? [0, 2, 4].map(offset => parseInt(hex.slice(offset, offset + 2), 16)) : undefined;
     let count = 0;
     let point = { x: 0, y: 0 };
     let nearest = Infinity;
     const bounds = [info.width, info.height, 0, 0];
     for (let index = 0; index < data.length; index += info.channels) {
-        if (!color.every((channel, offset) => Math.abs(data[index + offset] - channel) < 12)) continue;
+        const matches = color ? color.every((channel, offset) => Math.abs(data[index + offset] - channel) < 12)
+            : Math.max(data[index], data[index + 1], data[index + 2]) - Math.min(data[index], data[index + 1], data[index + 2]) > 60;
+        if (!matches) continue;
         const pixel = index / info.channels;
         const x = pixel % info.width;
         const y = Math.floor(pixel / info.width);
@@ -90,6 +92,24 @@ test('shared selection and report returns restore the card scroll and camera', a
     await page.getByRole('link', { name: /Back to map/ }).first().click();
     await expect(page).toHaveURL(/\?trip=coastal-test$/);
     await expect(page.locator('[data-trip-id="coastal-test"]').getByRole('button', { name: /^Show route:/ })).toHaveAttribute('aria-pressed', 'true');
+});
+
+test('clicking empty map space deselects the route without moving the camera', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.route('**/test-trip/route.geojson', route => route.fulfill({ json: {
+        type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: [[-110, 40], [-111, 41]] },
+    } }));
+    await page.goto(`${atlas}?trip=daily-test`);
+    await expect(page.getByText('2/2 routes', { exact: false })).toBeVisible();
+    await expect.poll(async () => (await paintedRoute(page, 'daily-test')).count).toBeGreaterThan(30);
+    const before = await paintedRoute(page);
+    const canvas = page.locator('[data-testid="trip-atlas-map"] canvas');
+    await canvas.click({ position: { x: page.viewportSize()!.width - 24, y: 240 } });
+    await expect(page).toHaveURL(new RegExp(`${atlas}$`));
+    await expect(page.getByRole('button', { name: /^Show route:/, pressed: true })).toHaveCount(0);
+    await expect(page.locator('[data-testid="trip-atlas-map"]')).toHaveAttribute('data-selected-trip', '');
+    const after = await paintedRoute(page);
+    after.bounds.forEach((value, index) => expect(Math.abs(value - before.bounds[index])).toBeLessThan(6));
 });
 
 test('overlapping routes offer a choice instead of selecting only the top line', async ({ page, isMobile }) => {

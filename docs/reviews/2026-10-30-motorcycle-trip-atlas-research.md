@@ -204,6 +204,7 @@ Card focus can provide the same temporary emphasis.
 Keep the collection browsable when one trip is selected.
 Use restrained transitions and respect reduced motion.
 **Show all trips** clears selection and restores the overview.
+Clicking empty map space clears selection and temporary highlights while preserving the current camera.
 Do not filter the card list merely because the reader pans the map.
 
 ### Content and state rules

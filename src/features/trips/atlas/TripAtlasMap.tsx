@@ -19,7 +19,7 @@ interface Props {
     fitVersion: number;
     panelOpen: boolean;
     initialCamera?: AtlasCamera;
-    onSelect: (id: string) => void;
+    onSelect: (id: string | undefined) => void;
     onHover: (id?: string) => void;
     onCameraChange: (camera: AtlasCamera) => void;
 }
@@ -60,7 +60,7 @@ export default function TripAtlasMap(props: Props) {
     const reducedMotion = useReducedMotion();
     const data = useMemo(() => combineAtlasRoutes(routes), [routes]);
     const getCurrent = useEffectEvent(() => props);
-    const select = useEffectEvent((id: string) => props.onSelect(id));
+    const select = useEffectEvent((id?: string) => props.onSelect(id));
     const hover = useEffectEvent((id?: string) => props.onHover(id));
     const rememberCamera = useEffectEvent((value: AtlasCamera) => props.onCameraChange(value));
 
@@ -133,7 +133,12 @@ export default function TripAtlasMap(props: Props) {
                 x: Math.max(12, Math.min(event.point.x, instance.getContainer().clientWidth - 268)),
                 y: Math.max(120, Math.min(event.point.y, instance.getContainer().clientHeight - 240)),
             });
-            else setChoices(undefined);
+            else {
+                setChoices(undefined);
+                // Dismiss the selection without treating this as an overview-fit request.
+                lastFit.current = { map: instance, key: `all:${getCurrent().fitVersion}` };
+                select(undefined);
+            }
         });
         instance.on('mousemove', event => {
             if (disposed) return;
