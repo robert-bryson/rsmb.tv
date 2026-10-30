@@ -60,14 +60,14 @@ vi.mock('../hooks/useReducedMotion', () => ({ useReducedMotion: () => true }));
 
 afterEach(() => { fake.instances.length = 0; fake.popupOptions.length = 0; });
 
-const entry: TripAtlasEntry = {
+const entry = {
     id: 'coast', title: 'Coast', description: 'A coastal journey.', reports: [],
     summary: {
         id: 'coast', dates: { start: '2024-01-01', end: '2024-01-02' },
         hero: { id: 'hero', src: '/hero.webp', alt: 'Coast', width: 800, height: 600 },
         route: { geoJson: '/route.geojson' },
     },
-};
+} satisfies TripAtlasEntry;
 const route: RouteGeoJson = { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: [[-122, 47], [-124, 45]] } };
 
 describe('atlas renderer lifecycle', () => {

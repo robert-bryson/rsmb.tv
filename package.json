@@ -11,6 +11,7 @@
   "scripts": {
     "dev": "npm run prepare-trip-assets:dev && npm run build-blog:dev && npm run build-flights && vite --port 5173 --strictPort",
     "build": "npm run build-flights && npm run build-blog && npm run typecheck && vite build",
+    "build:dev": "npm run build-flights && npm run build-blog:dev && npm run typecheck && vite build --mode development",
     "build-blog": "npm run sync-blogs && npm run build-blog-artifacts",
     "build-blog:dev": "npm run sync-blogs:dev && npm run build-blog-artifacts",
     "build-blog-artifacts": "npm run build-og && npm run build-rss && npm run build-sitemap",

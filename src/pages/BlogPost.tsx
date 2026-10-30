@@ -10,6 +10,7 @@ import { mdxComponents } from '../blog/MdxComponents';
 import { PostTableOfContents } from '../blog/PostTableOfContents';
 import { PostNavigation } from '../blog/PostNavigation';
 import { formatDate } from '../utils/formatDate';
+import { isDevelopmentContent } from '../utils/developmentContent';
 import { AUTHOR_PERSON, SITE_URL, absoluteUrl } from '../utils/siteMetadata';
 import { loadTripManifest, getTripManifestIssue } from '../features/trips/tripManifests';
 import { getTripSummary } from '../features/trips/tripSummaries';
@@ -120,9 +121,13 @@ export function BlogPost({ collection }: BlogPostProps) {
                     ← {returnLabel}
                 </Link>
                 <DevelopmentContentStatus post={post} />
-                <h1 className="mb-4 text-2xl font-bold text-zinc-100">Trip not configured</h1>
+                {isDevelopmentContent() ? <>
+                    <h1 className="mb-2 text-2xl font-bold text-zinc-100">{post.title}</h1>
+                    <p className="mb-6 text-zinc-400">{post.description}</p>
+                    <h2 className="mb-4 text-2xl font-bold text-zinc-100">Trip not configured</h2>
+                </> : <h1 className="mb-4 text-2xl font-bold text-zinc-100">Trip not configured</h1>}
                 <p className="text-zinc-400">
-                    {import.meta.env.DEV ? tripManifestIssue ?? loaded?.error ?? 'This story is missing its trip manifest.' : 'This trip is temporarily unavailable. Please reload to try again.'}
+                    {isDevelopmentContent() ? tripManifestIssue ?? loaded?.error ?? 'This story is missing its trip manifest.' : 'This trip is temporarily unavailable. Please reload to try again.'}
                 </p>
             </div>
         );

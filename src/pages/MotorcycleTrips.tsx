@@ -11,21 +11,23 @@ import {
     type AtlasCamera, type AtlasRouteState, type AtlasSession,
 } from '../features/trips/atlas/tripAtlasView';
 import { formatDateRange } from '../utils/formatDate';
+import { isDevelopmentContent } from '../utils/developmentContent';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { absoluteUrl, AUTHOR_PERSON } from '../utils/siteMetadata';
 
 const TripAtlasMap = lazy(() => import('../features/trips/atlas/TripAtlasMap'));
 
-function RouteReader({ entry, onChange }: { entry: TripAtlasEntry; onChange: (id: string, state: AtlasRouteState) => void }) {
-    const { route, error, retry } = useTripRoute(entry.summary.route.geoJson);
-    useEffect(() => { onChange(entry.id, { route, error, retry }); }, [entry.id, route, error, retry, onChange]);
+function RouteReader({ id, url, onChange }: { id: string; url: string; onChange: (id: string, state: AtlasRouteState) => void }) {
+    const { route, error, retry } = useTripRoute(url);
+    useEffect(() => { onChange(id, { route, error, retry }); }, [id, route, error, retry, onChange]);
     return null;
 }
 
 function CardPhoto({ entry }: { entry: TripAtlasEntry }) {
     const [failed, setFailed] = useState(false);
-    const photo = entry.summary.hero;
+    const photo = entry.summary?.hero;
+    if (!photo) return <div role="img" aria-label="Trip photo not available yet" className="grid aspect-[16/9] place-items-center bg-zinc-900 text-sm text-zinc-400">Photos not available yet</div>;
     return failed ? <div role="img" aria-label={photo.alt} className="grid aspect-[16/9] place-items-center bg-zinc-800 text-sm text-zinc-400">Photo unavailable</div> : (
         <img src={photo.src} srcSet={photo.srcSet} sizes="(min-width: 768px) 326px, calc(100vw - 3.5rem)"
             width={photo.width} height={photo.height} alt={photo.alt} loading="lazy" decoding="async"
@@ -38,7 +40,8 @@ function isCardControl(target: EventTarget | null) {
 }
 
 export default function MotorcycleTrips() {
-    const entries = useMemo(() => buildTripAtlasEntries(getTripPosts(), getTripSummary, { includeDrafts: import.meta.env.DEV }), []);
+    const development = isDevelopmentContent();
+    const entries = useMemo(() => buildTripAtlasEntries(getTripPosts(), getTripSummary, { includeDrafts: development, includeIncomplete: development }), [development]);
     const location = useLocation();
     const [params, setParams] = useSearchParams();
     const requestedId = params.get('trip');
@@ -58,7 +61,9 @@ export default function MotorcycleTrips() {
     const [reveal, setReveal] = useState(() => !initialSession && selectedId ? { id: selectedId, version: 0 } : undefined);
     const listRef = useRef<HTMLDivElement>(null);
     const visibleEntries = useMemo(() => onlySelected ? entries.filter(entry => entry.id === selectedId) : entries, [entries, onlySelected, selectedId]);
-    const visibleRoutes = useMemo(() => onlySelected ? Object.fromEntries(Object.entries(routes).filter(([id]) => id === selectedId)) : routes, [routes, onlySelected, selectedId]);
+    const mapEntries = useMemo(() => visibleEntries.filter(entry => entry.summary), [visibleEntries]);
+    const mapSelectedId = mapEntries.find(entry => entry.id === selectedId)?.id;
+    const visibleRoutes = useMemo(() => Object.fromEntries(Object.entries(routes).filter(([id]) => mapEntries.some(entry => entry.id === id))), [routes, mapEntries]);
 
     const description = 'Explore motorcycle journeys on a map, browse photographs and trip facts, and read the reports.';
     useDocumentHead({ title: 'Motorcycle Trips', description, ogImage: absoluteUrl('/og/motorcycle-trips.svg') });
@@ -134,10 +139,10 @@ export default function MotorcycleTrips() {
     return (
         <main className="relative h-full w-full overflow-hidden bg-zinc-950 text-zinc-100">
             <a href="#atlas-panel-toggle" className="sr-only z-50 rounded bg-violet-600 p-3 focus:not-sr-only focus:absolute focus:left-3 focus:top-3">Skip to trip list</a>
-            {entries.map(entry => <RouteReader key={entry.id} entry={entry} onChange={onRouteChange} />)}
+            {entries.map(entry => entry.summary && <RouteReader key={entry.id} id={entry.id} url={entry.summary.route.geoJson} onChange={onRouteChange} />)}
             <TripAtlasMapBoundary>
                 <Suspense fallback={<p role="status" className="absolute inset-0 grid place-items-center text-sm text-zinc-400">Loading trip map…</p>}>
-                    <TripAtlasMap entries={visibleEntries} routes={visibleRoutes} selectedId={selectedId} highlightedId={highlightedId}
+                    <TripAtlasMap entries={mapEntries} routes={visibleRoutes} selectedId={mapSelectedId} highlightedId={highlightedId}
                         fitVersion={fitVersion} panelOpen={panelOpen} initialCamera={initialSession?.camera}
                         onSelect={id => id ? selectTrip(id, true) : deselectTrip()} onHover={setHoveredId} onCameraChange={onCameraChange} onViewChange={setCameraChanged} />
                 </Suspense>
@@ -160,7 +165,7 @@ export default function MotorcycleTrips() {
                     onClick={() => changePanel(!panelOpen)}
                     className="flex min-h-12 w-full shrink-0 items-center justify-between gap-3 px-4 py-3 text-left text-sm font-medium hover:bg-zinc-800 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-violet-400">
                     <span>{panelOpen ? 'Hide trips' : 'Browse trips'} <span className="ml-1 text-zinc-400">({visibleEntries.length})</span></span>
-                    <span className="text-xs text-zinc-400">{loadedCount}/{visibleEntries.length} routes <span aria-hidden="true">{panelOpen ? '▾' : '▴'}</span></span>
+                    <span className="text-xs text-zinc-400">{loadedCount}/{mapEntries.length} routes <span aria-hidden="true">{panelOpen ? '▾' : '▴'}</span></span>
                 </button>
                 {panelOpen && <button type="button" aria-pressed={onlySelected} disabled={!selectedId} onClick={() => changeFilter(!onlySelected)}
                     className={`flex min-h-11 w-full items-center justify-between gap-2 border-t border-zinc-800 px-4 text-left text-xs text-zinc-300 enabled:hover:bg-zinc-800 disabled:text-zinc-500 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-violet-400 ${onlySelected ? 'bg-violet-950/40' : ''}`}>
@@ -173,53 +178,55 @@ export default function MotorcycleTrips() {
                     {entries.length === 0 && <p className="p-3 text-sm text-zinc-400">No trip reports are available yet.</p>}
                     <ol className="space-y-3">
                         {visibleEntries.map(entry => {
+                            const summary = entry.summary;
                             const active = selectedId === entry.id;
                             const highlighted = highlightedId === entry.id;
                             const color = tripAtlasColor(entry.id);
                             const state = routes[entry.id];
                             const draftCount = entry.reports.filter(report => report.draft).length;
                             const geography = [...new Set([
-                                ...(entry.summary.countries ?? []).flatMap(country => country.regions?.length ? country.regions : [getCountryName(country.code)]),
-                                ...(entry.summary.regions ?? []),
+                                ...(summary?.countries ?? entry.countries ?? []).flatMap(country => country.regions?.length ? country.regions : [getCountryName(country.code)]),
+                                ...(summary?.regions ?? []),
                             ])];
                             return <li key={entry.id} id={`atlas-card-${entry.id}`} data-trip-id={entry.id} data-highlighted={highlighted || undefined}
-                                onClick={event => { if (!event.defaultPrevented && !isCardControl(event.target)) selectTrip(entry.id); }}
-                                onPointerEnter={event => { if (event.pointerType !== 'touch') setHoveredId(entry.id); }} onPointerLeave={() => setHoveredId(undefined)}
-                                onFocusCapture={() => setFocusedId(entry.id)} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setFocusedId(undefined); }}
-                                className={`cursor-pointer overflow-hidden rounded-lg border-2 ${active || highlighted ? 'bg-zinc-900' : 'bg-zinc-950'}`}
+                                onClick={event => { if (summary && !event.defaultPrevented && !isCardControl(event.target)) selectTrip(entry.id); }}
+                                onPointerEnter={event => { if (event.pointerType !== 'touch') setHoveredId(summary ? entry.id : undefined); }} onPointerLeave={() => setHoveredId(undefined)}
+                                onFocusCapture={() => setFocusedId(summary ? entry.id : undefined)} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setFocusedId(undefined); }}
+                                className={`overflow-hidden rounded-lg border-2 ${summary ? 'cursor-pointer' : ''} ${active || highlighted ? 'bg-zinc-900' : 'bg-zinc-950'}`}
                                 style={{ '--trip-atlas-color': color, borderColor: active || highlighted ? color : '#27272a', boxShadow: highlighted ? `inset 0 0 0 1px ${color}` : undefined } as CSSProperties}>
                                 <CardPhoto entry={entry} />
                                 <div className="p-3">
                                     <div className="mb-2 flex items-center gap-2 text-xs text-zinc-400">
                                         <span aria-hidden="true" className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: color }} />
-                                        <span>{formatDateRange(entry.summary.dates.start, entry.summary.dates.end)}</span>
+                                        <span>{summary ? formatDateRange(summary.dates.start, summary.dates.end) : 'Trip dates not set'}</span>
                                         {active && <span className="ml-auto text-zinc-100">Selected</span>}
                                     </div>
                                     <h2 className="text-base font-semibold leading-snug">{entry.title}</h2>
-                                    {import.meta.env.DEV && draftCount > 0 && <p className="mt-2"><span className="inline-flex rounded border border-amber-800/70 bg-amber-950/40 px-2 py-0.5 text-[11px] font-medium text-amber-300">
+                                    {development && draftCount > 0 && <p className="mt-2"><span className="inline-flex rounded border border-amber-800/70 bg-amber-950/40 px-2 py-0.5 text-[11px] font-medium text-amber-300">
                                         DEV · {draftCount === entry.reports.length ? 'Unpublished draft' : 'Includes drafts'}
                                     </span></p>}
+                                    {development && (!summary || entry.reports.some(report => !report.contentAvailable)) && <p className="mt-2 text-xs text-amber-300/90">DEV · Incomplete preview</p>}
                                     <p className="mt-2 text-sm leading-relaxed text-zinc-400">{entry.description}</p>
                                     <p className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-zinc-300">
-                                        {entry.summary.distanceMiles && <span>{entry.summary.distanceMiles.toLocaleString()} mi</span>}
-                                        {entry.summary.ridingDays && <span>{entry.summary.ridingDays} riding days</span>}
-                                        {entry.summary.motorcycle && <span>{entry.summary.motorcycle}</span>}
+                                        {summary?.distanceMiles && <span>{summary.distanceMiles.toLocaleString()} mi</span>}
+                                        {summary?.ridingDays && <span>{summary.ridingDays} riding days</span>}
+                                        {summary?.motorcycle && <span>{summary.motorcycle}</span>}
                                     </p>
                                     {geography.length ? <p className="mt-1 text-xs text-zinc-400">{geography.join(' · ')}</p> : null}
                                     <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-start gap-2">
-                                        <button type="button" aria-pressed={active} aria-label={`Show route: ${entry.title}`} onClick={() => selectTrip(entry.id)}
-                                            className="min-h-11 rounded-md border border-zinc-600 px-3 py-2 text-sm text-zinc-100 transition-colors hover:border-[color:var(--trip-atlas-color)] hover:text-[color:var(--trip-atlas-color)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--trip-atlas-color)]">Show route</button>
+                                        <button type="button" aria-pressed={active} disabled={!summary} aria-label={`Show route: ${entry.title}`} onClick={() => selectTrip(entry.id)}
+                                            className="min-h-11 rounded-md border border-zinc-600 px-3 py-2 text-sm text-zinc-100 transition-colors enabled:hover:border-[color:var(--trip-atlas-color)] enabled:hover:text-[color:var(--trip-atlas-color)] disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--trip-atlas-color)]">Show route</button>
                                         <div className="flex min-w-0 flex-col gap-2">
                                             {entry.reports.map(report => <Link key={report.slug} to={report.href} state={{ from: url }}
                                                 className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-transparent bg-[color:var(--trip-atlas-color)] px-3 py-2 text-center text-sm font-semibold leading-snug text-zinc-950 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--trip-atlas-color)]">
-                                                <span className="min-w-0 break-words">{entry.reports.length === 1 ? 'Read trip report' : report.title}
-                                                    {import.meta.env.DEV && report.draft && entry.reports.length > 1 && <span className="ml-1 inline-block rounded border border-amber-800 bg-amber-950 px-1.5 py-0.5 text-[11px] font-medium text-amber-300">Draft</span>}
+                                                <span className="min-w-0 break-words">{entry.reports.length === 1 ? summary && report.contentAvailable ? 'Read trip report' : 'Preview report' : report.title}
+                                                    {development && report.draft && entry.reports.length > 1 && <span className="ml-1 inline-block rounded border border-amber-800 bg-amber-950 px-1.5 py-0.5 text-[11px] font-medium text-amber-300">Draft</span>}
                                                 </span>
                                                 <span aria-hidden="true" className="shrink-0">→</span>
                                             </Link>)}
                                         </div>
                                     </div>
-                                    {state?.error ? <p role="status" className="mt-2 text-xs text-amber-300">Route unavailable. <button type="button" onClick={state.retry} className="min-h-11 underline">Retry route</button></p>
+                                    {!summary ? <p className="mt-2 text-xs text-zinc-400">Route data not available yet.</p> : state?.error ? <p role="status" className="mt-2 text-xs text-amber-300">Route unavailable. <button type="button" onClick={state.retry} className="min-h-11 underline">Retry route</button></p>
                                         : !state?.route && <p role="status" className="mt-2 text-xs text-zinc-500">Loading route…</p>}
                                 </div>
                             </li>;

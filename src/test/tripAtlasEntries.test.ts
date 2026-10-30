@@ -37,7 +37,7 @@ describe('trip atlas content adapter', () => {
         const entries = buildTripAtlasEntries(posts, getSummary);
         expect(entries.map(entry => entry.id)).toEqual(['coast']);
         expect(entries[0].reports).toEqual([{
-            slug: 'coastal-story', title: 'coastal-story', date: '2024-05-10', href: '/trips/coastal-story', draft: false,
+            slug: 'coastal-story', title: 'coastal-story', date: '2024-05-10', href: '/trips/coastal-story', draft: false, contentAvailable: true,
         }]);
         expect(getSummary).toHaveBeenCalledTimes(1);
         expect(getSummary).toHaveBeenCalledWith('coast');
@@ -55,6 +55,40 @@ describe('trip atlas content adapter', () => {
         expect(entries.map(entry => entry.id)).toEqual(['coast', 'draft']);
         expect(entries[1].reports[0].draft).toBe(true);
         expect(JSON.stringify(entries)).not.toContain('private-editorial-source');
+    });
+
+    it('can retain incomplete development reports without inventing trip dates, photos, or geometry', () => {
+        const getSummary = vi.fn(id => id === 'coast' ? trip('coast') : undefined);
+        const entries = buildTripAtlasEntries([
+            report('coastal-story'),
+            report('body-pending', 'coast', { development: { ...draft, contentAvailable: false } }),
+            report('missing-manifest', 'missing', { countries: [{ code: 'CA', regions: ['Ontario'] }], development: { ...draft, contentAvailable: false } }),
+            report('missing-id', 'coast', { tripId: undefined, development: draft }),
+            report('published-incomplete', 'incomplete'),
+        ], getSummary, { includeDrafts: true, includeIncomplete: true });
+        expect(entries).toHaveLength(4);
+        expect(entries.find(entry => entry.id === 'coast')?.reports.find(report => report.slug === 'body-pending')?.contentAvailable).toBe(false);
+        const missing = entries.find(entry => entry.id === 'missing')!;
+        expect(missing.summary).toBeUndefined();
+        expect(missing.countries).toEqual([{ code: 'CA', regions: ['Ontario'] }]);
+        expect(missing.reports[0]).toMatchObject({ href: '/trips/missing-manifest', draft: true, contentAvailable: false });
+        const noId = entries.find(entry => entry.id === 'report:missing-id')!;
+        expect(noId.summary).toBeUndefined();
+        expect(noId.reports[0].href).toBe('/trips/missing-id');
+        expect(getSummary).not.toHaveBeenCalledWith('report:missing-id');
+        expect(entries.find(entry => entry.id === 'incomplete')?.summary).toBeUndefined();
+        expect(JSON.stringify(entries)).not.toContain('private-editorial-source');
+    });
+
+    it('keeps incomplete multipart reports grouped and ordered without requiring a manifest', () => {
+        const entries = buildTripAtlasEntries([
+            report('later-part', 'missing', { date: '2025-06-01', development: draft }),
+            report('earlier-part', 'missing', { date: '2025-05-01', development: draft }),
+        ], () => undefined, { includeDrafts: true, includeIncomplete: true });
+        expect(entries).toHaveLength(1);
+        expect(entries[0].reports.map(report => report.slug)).toEqual(['earlier-part', 'later-part']);
+        expect(entries[0].summary).toBeUndefined();
+        expect(buildTripAtlasEntries([report('published-missing')], () => undefined)).toEqual([]);
     });
 
     it('groups a multipart trip once and prioritizes explicit series order over publication dates', () => {
@@ -115,10 +149,10 @@ describe('trip atlas content adapter', () => {
         const [entry] = buildTripAtlasEntries([report('coastal-story')], () => summary);
         expect(entry.summary).toBe(summary);
         expect(entry.summary).toMatchObject({ distanceMiles: 1600, ridingDays: 5, motorcycle: 'Honda CB500X' });
-        expect(entry.summary.route.geoJson).toBe('/routes/coast.geojson');
+        expect(entry.summary!.route.geoJson).toBe('/routes/coast.geojson');
         const [withoutFacts] = buildTripAtlasEntries([report('coastal-story')], () => trip('coast'));
-        expect(withoutFacts.summary.distanceMiles).toBeUndefined();
-        expect(withoutFacts.summary.ridingDays).toBeUndefined();
+        expect(withoutFacts.summary!.distanceMiles).toBeUndefined();
+        expect(withoutFacts.summary!.ridingDays).toBeUndefined();
     });
 
     it('leaves inputs unchanged and does not access story loaders', () => {

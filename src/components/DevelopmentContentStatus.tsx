@@ -1,4 +1,5 @@
 import type { BlogPostMeta } from '../content/posts';
+import { isDevelopmentContent } from '../utils/developmentContent';
 
 interface DevelopmentContentStatusProps {
     post: BlogPostMeta;
@@ -6,7 +7,7 @@ interface DevelopmentContentStatusProps {
 }
 
 export function DevelopmentContentStatus({ post, compact = false }: DevelopmentContentStatusProps) {
-    if (!import.meta.env.DEV || !post.development) return null;
+    if (!isDevelopmentContent() || !post.development) return null;
 
     const { development } = post;
     const ready = development.contentAvailable

@@ -59,6 +59,7 @@ npm run dev
 | ------- | ----------- |
 | `npm run dev` | Prepare local trips, sync published posts and drafts, build flight data, and start Vite |
 | `npm run build` | Sync blog posts, build generated data/artifacts, typecheck, and build for production |
+| `npm run build:dev` | Sync published posts and drafts and build development previews, including incomplete reports |
 | `npm run build-blog` | Sync Google-authored posts and rebuild blog RSS/sitemap/OG artifacts |
 | `npm run build-rss` | Generate `public/rss.xml` from the blog registry |
 | `npm run build-sitemap` | Generate `public/sitemap.xml` from route and content metadata |
@@ -82,6 +83,12 @@ npm run dev
 | `npm run publish-trip-assets -- <trip-id> --source <directory>` | Archive trip source files and upload reviewed trip assets |
 | `npm run test:e2e` | Build flight data, start Vite, and run Playwright browser smoke tests |
 | `npm run audit` | Run `npm audit --audit-level=moderate` |
+
+The Amplify `dev` branch uses `build:dev`; other branches retain the published-only production build.
+This uses Amplify's documented [branch-specific build commands](https://docs.aws.amazon.com/amplify/latest/userguide/edit-build-settings.html#setting-branch-specific-build-settings-with-scripting).
+Development builds include editorial preview metadata and mark HTML pages `noindex, nofollow`.
+Hosted previews keep CDN asset URLs; local Vite uses prepared assets under `public/data/trips/`.
+Missing manifests, photos, or story bodies remain visible as incomplete atlas cards, with route controls enabled only for validated map data.
 
 ### Status Dashboard Controls
 

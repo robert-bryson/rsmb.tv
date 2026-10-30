@@ -133,9 +133,25 @@ describe('atlas publication labels', () => {
         const mixed = screen.getByRole('heading', { name: 'Published part' }).closest('li')!;
         expect(within(mixed).getByText('DEV · Includes drafts')).toBeInTheDocument();
         expect(within(mixed).getByRole('link', { name: /Unpublished part.*Draft/ })).toHaveAttribute('href', '/trips/part-two');
-        expect(screen.queryByRole('heading', { name: 'Unconfigured journey' })).not.toBeInTheDocument();
+        const incomplete = screen.getByRole('heading', { name: 'Unconfigured journey' }).closest('li')!;
+        expect(within(incomplete).getByRole('button', { name: /^Show route:/ })).toBeDisabled();
+        expect(within(incomplete).getByRole('link', { name: /Preview report/ })).toHaveAttribute('href', '/trips/unconfigured');
+        expect(within(incomplete).getByText('Trip dates not set')).toBeInTheDocument();
+        expect(within(incomplete).getByText('Route data not available yet.')).toBeInTheDocument();
+        expect(within(incomplete).queryByText('Loading route…')).not.toBeInTheDocument();
         const published = screen.getByRole('heading', { name: 'Published journey' }).closest('li')!;
         expect(within(published).queryByText(/DEV ·/)).not.toBeInTheDocument();
+    });
+
+    it('includes incomplete reports in a built development preview even with the production React runtime', async () => {
+        vi.stubEnv('DEV', false);
+        vi.stubEnv('MODE', 'development');
+        renderWithRouter(<MotorcycleTrips />, { route: '/projects/motorcycle-trips/map' });
+        expect(screen.getByRole('heading', { name: 'Draft journey' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: 'Unconfigured journey' })).toBeInTheDocument();
+        const renderer = await screen.findByTestId('atlas-renderer');
+        expect(renderer.getAttribute('data-trips')).not.toContain('missing');
+        expect(renderer.getAttribute('data-routes')).not.toContain('missing');
     });
 
     it('excludes drafts and development badges from production, including unpublished parts of a published trip', () => {

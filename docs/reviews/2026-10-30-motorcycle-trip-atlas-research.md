@@ -58,25 +58,28 @@ Track remaining implementation work in [TODO.md](../../TODO.md#motorcycle-trip-a
    Run the documented project-preview generator and commit its outputs.
 
 7. **Development visibility, before card work:** Should the development atlas show published trips only, or also show clearly labeled drafts?
-   Updated answer: include unpublished reports with valid manifests in development. Use subtle amber labels to identify drafts.
+   Updated answer: include every available trip report in development, including unpublished and incomplete entries. Use subtle amber labels to identify drafts and incomplete previews.
    Production must continue to use the content plugin's publication filtering.
 
 8. **Incomplete development content, before card work:** Should a trip without a valid manifest have a report-only card, or be omitted?
-   Suggested default: omit it until its summary is available.
+   Confirmed answer: retain a report-only development card when the manifest or trip ID is missing, with missing dates/photos clearly identified and route controls disabled.
    A missing published manifest must still fail the production build. Runtime route-download failures must retain eligible cards.
 
 ## Implementation progress
 
 The first implementation slice adds route URLs and descriptions to the shared summary type.
-Development summaries rewrite route URLs to local assets. Production summaries retain their CDN URLs.
+Local Vite summaries rewrite route URLs to local assets. Built development and production summaries retain their CDN URLs.
 The summaries exclude track definitions, galleries, daily maps, and the remaining photo collection.
 
 The content adapter groups eligible reports by trip ID and orders cards by travel start date.
 It uses explicit series order before the confirmed publication-date fallback.
 It reads report metadata and summaries without loading story bodies or complete manifests.
-The development explorer includes drafts with valid summaries. Amber badges identify unpublished cards and draft links within multipart trips.
+The development explorer includes all report records, including drafts and entries without valid summaries. Amber badges identify unpublished cards, incomplete previews, and draft links within multipart trips.
 Production includes published reports only. Draft report pages link back to their atlas route during development.
-Incomplete development entries without summaries are omitted. The existing production checks still reject missing published manifests.
+Incomplete development entries retain report links or preview links without inventing travel dates, photographs, or geometry. Missing trip IDs use report-specific keys; multipart reports with a trip ID remain grouped.
+The map and its loading/fit calculations receive only entries with valid summaries. Missing-data cards do not fetch routes or stall the working map. The existing production checks still reject missing published manifests.
+The hosted `dev` branch uses `npm run build:dev` and Vite's explicit `development` mode, which enables the same preview UI with the production React runtime.
+Preview builds emit HTML route shells for every report so Amplify's article rewrites work for incomplete records. Their HTML is marked `noindex, nofollow`; public production builds retain publication filtering and strict validation.
 
 The playable explorer now runs at `/projects/motorcycle-trips/map`.
 The Projects entry opens it directly. The explorer includes published routes, report cards, shared selection URLs, and a collapsible trip panel.

@@ -269,6 +269,9 @@ npx vitest run src/test/tripAtlasEntries.test.ts src/test/tripAtlasView.test.ts 
 
 The lifecycle check verifies that Strict Mode does not retain an uninitialized renderer's default camera.
 Page checks use fixed metadata to verify development draft labels, mixed multipart reports, and production draft exclusion.
+Development cards also cover missing manifests, missing trip IDs, unavailable story bodies, and grouped incomplete multipart reports. Missing-data cards retain preview links and never participate in map requests or loading/fit calculations.
+Publication contracts check that explicitly built development previews retain incomplete metadata and CDN URLs while production builds strip drafts and reject missing published manifests.
+Use `npm run build:dev` followed by `npm run preview` to check the hosted-development mode locally. Each known article receives an HTML shell (including incomplete previews), with `noindex, nofollow` metadata.
 Color checks verify stable assignments across subsets and geometry arrival order. Authoring checks require each manifest ID in [the registry](../../src/features/trips/atlas/tripAtlasColors.ts) and reject duplicate color assignments.
 
 For manual palette review, use the local atlas with its muted basemap and Chrome DevTools' Rendering → Emulate vision deficiencies controls.

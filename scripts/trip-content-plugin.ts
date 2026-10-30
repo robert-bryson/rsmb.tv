@@ -16,7 +16,7 @@ export function tripContentPlugin(): Plugin {
             if (id !== `\0${moduleId}` && id !== '\0virtual:post-content') return;
             const contentDir = config.mode === 'trip-test' ? 'tests/fixtures/trip-content' : 'src/content';
             const postsPath = path.join(config.root, contentDir, 'posts.json');
-            const production = config.command === 'build';
+            const production = config.command === 'build' && config.mode !== 'development';
             const posts = readPosts(postsPath, production);
             if (fs.existsSync(postsPath)) this.addWatchFile(postsPath);
             validatePostReferences(posts.filter(post => !production || post.development?.published !== false), production);
@@ -54,7 +54,7 @@ export function tripContentPlugin(): Plugin {
                     const manifest = tripManifestSchema.parse(JSON.parse(fs.readFileSync(file, 'utf8')));
                     if (manifest.id !== tripId) throw new Error(`Manifest id must match filename: ${tripId}`);
                     for (const asset of validateBundledTripMedia(manifest, { repoRoot: config.root })) this.addWatchFile(asset);
-                    summaries[tripId] = summary(manifest, !production);
+                    summaries[tripId] = summary(manifest, config.command === 'serve');
                     loaders.push(`${JSON.stringify(tripId)}: () => import(${JSON.stringify(`/${contentDir}/trips/${filename}`)})`);
                 } catch (error) {
                     const message = `Trip ${tripId}: ${error instanceof Error ? error.message : String(error)}`;
@@ -72,16 +72,28 @@ export function tripContentPlugin(): Plugin {
             if (template?.type !== 'asset') return;
             const contentDir = config.mode === 'trip-test' ? 'tests/fixtures/trip-content' : 'src/content';
             const postsPath = path.join(config.root, contentDir, 'posts.json');
-            const posts = readPosts(postsPath, true);
-            const published = posts.filter(post => post.development?.published !== false);
-            validatePostReferences(published, true);
-            for (const post of published) {
-                const manifest = post.tripId ? tripManifestSchema.parse(JSON.parse(fs.readFileSync(path.join(config.root, contentDir, 'trips', `${post.tripId}.json`), 'utf8'))) : undefined;
+            const development = config.mode === 'development';
+            const posts = readPosts(postsPath, !development);
+            const visible = posts.filter(post => development || post.development?.published !== false);
+            validatePostReferences(visible, !development);
+            for (const post of visible) {
+                let manifest: TripManifest | undefined;
+                if (post.tripId) {
+                    try {
+                        manifest = tripManifestSchema.parse(JSON.parse(fs.readFileSync(path.join(config.root, contentDir, 'trips', `${post.tripId}.json`), 'utf8')));
+                    } catch (error) {
+                        if (!development) throw error;
+                    }
+                }
                 const source = articleHtml(String(template.source), post, manifest?.photos.find(photo => photo.id === manifest.hero)?.src);
                 // Both historic collections still redirect client-side to the canonical collection.
                 for (const collection of ['blog', 'trips']) this.emitFile({ type: 'asset', fileName: `${collection}/${post.slug}.html`, source });
             }
         } },
+        transformIndexHtml() {
+            if (config.mode !== 'development') return;
+            return [{ tag: 'meta', attrs: { name: 'robots', content: 'noindex, nofollow' }, injectTo: 'head' }];
+        },
         configurePreviewServer(server) {
             server.middlewares.use((request, _response, next) => {
                 const url = new URL(request.url ?? '/', 'http://localhost');

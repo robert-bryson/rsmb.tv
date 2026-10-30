@@ -105,7 +105,7 @@ export default function TripAtlasMap(props: Props) {
     const showTooltip = useEffectEvent((id: string, coordinates: [number, number]) => {
         const instance = mapRef.current;
         const entry = props.entries.find(entry => entry.id === id);
-        if (!instance || !entry || failure) return;
+        if (!instance || !entry?.summary || failure) return;
         if (tooltip.current?.map !== instance) {
             clearTooltip();
             tooltip.current = { map: instance, label: createTripMapTooltip(instance, tooltipId) };

@@ -16,8 +16,8 @@ afterEach(() => {
 });
 
 function loadPostRegistry(posts: unknown[], command: 'build' | 'serve', watchedFiles: string[] = [], moduleId = 'virtual:post-content', {
-    manifests = [], bodies = [], createTripDirectory = true,
-}: { manifests?: TripManifest[]; bodies?: string[]; createTripDirectory?: boolean } = {}) {
+    manifests = [], bodies = [], createTripDirectory = true, mode = 'production',
+}: { manifests?: TripManifest[]; bodies?: string[]; createTripDirectory?: boolean; mode?: string } = {}) {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'trip-registry-test-'));
     temporaryRoots.push(root);
     const directory = path.join(root, 'src/content');
@@ -31,11 +31,41 @@ function loadPostRegistry(posts: unknown[], command: 'build' | 'serve', watchedF
     const configure = plugin.configResolved;
     const load = plugin.load;
     if (typeof configure !== 'function' || typeof load !== 'function') throw new Error('Expected function hooks.');
-    configure.call({} as never, { root, mode: 'production', command } as ResolvedConfig);
+    configure.call({} as never, { root, mode, command } as ResolvedConfig);
     return load.call({ addWatchFile: vi.fn((file: string) => watchedFiles.push(file)) } as never, `\0${moduleId}`);
 }
 
 describe('trip publication contracts', () => {
+    it('includes incomplete unpublished metadata only in explicitly built development previews', () => {
+        const posts = [
+            { slug: 'draft-without-manifest', title: 'Unfinished journey', format: 'trip', tripId: 'missing', development: { published: false, contentAvailable: false } },
+            { slug: 'draft-without-id', title: 'Unconfigured journey', format: 'trip', development: { published: false, contentAvailable: false } },
+        ];
+        const preview = loadPostRegistry(posts, 'build', [], 'virtual:post-content', { mode: 'development' });
+        expect(preview).toContain('draft-without-manifest');
+        expect(preview).toContain('draft-without-id');
+        expect(preview).toContain('"contentAvailable":false');
+        const production = loadPostRegistry(posts, 'build');
+        expect(production).toContain('export const metadata = []');
+        expect(production).not.toContain('Unfinished journey');
+        expect(production).not.toContain('draft-without-id');
+    });
+
+    it('keeps only valid preview summaries and preserves CDN asset URLs in hosted development builds', () => {
+        const remote = `https://data.rsmb.tv/trips/${manifest.id}/geo/route.geojson`;
+        const valid = { ...manifest, route: { ...manifest.route, geoJson: remote } };
+        const invalid = { ...manifest, id: 'broken-draft', hero: 'missing-photo' };
+        const output = loadPostRegistry([
+            { slug: 'coast', format: 'trip', tripId: manifest.id },
+            { slug: 'broken', format: 'trip', tripId: invalid.id, development: { published: false } },
+        ], 'build', [], 'virtual:trip-content', { mode: 'development', manifests: [valid, invalid] });
+        const summaries = JSON.parse(String(output).match(/^export const summaries = (.*?); export const issues/)![1]);
+        expect(Object.keys(summaries)).toEqual([manifest.id]);
+        expect(summaries[manifest.id].route.geoJson).toBe(remote);
+        expect(output).toContain('Hero references unknown photo');
+        expect(output).not.toContain('import("/src/content/trips/broken-draft.json")');
+    });
+
     it.each([
         { countries: [{ code: 'us' }] },
         { countries: [{ code: 'USA' }] },

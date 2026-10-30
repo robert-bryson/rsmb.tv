@@ -274,6 +274,10 @@ The application loads files with the `.json` suffix.
 Rename a structurally complete manifest to `.json` when you need a local preview.
 The suffix does not confirm publication. Keep the Sheet `published` value `false` until the public assets pass review.
 
+The development atlas lists report records before their manifests, photos, or story bodies are complete.
+Incomplete cards retain preview links and mark missing data; their route controls stay disabled until a validated summary is available.
+The hosted `dev` build uses the same preview behavior. Its photos and maps use CDN URLs, while local Vite uses prepared local assets.
+
 Assign the trip ID an unused color token in [the atlas color registry](../../src/features/trips/atlas/tripAtlasColors.ts).
 Keep existing assignments unchanged when publishing drafts or adding trips. Map lines, card markers, tooltips, and overlap choices share this registry.
 Run `npx vitest run scripts/__tests__/tripManifestAuthoring.test.ts` to catch missing assignments and duplicate colors.
