@@ -11,8 +11,13 @@ for (const width of [320, 1280]) {
                 has: page.getByRole('heading', { name: project.title, exact: true }),
             });
             await expect(card).toHaveAttribute('href', `/projects/${project.slug}`);
-            await expect(card.getByRole('time')).toHaveAttribute('datetime', project.lastUpdated!);
-            await expect(card).toContainText('Updated');
+            if (project.lastUpdated) {
+                await expect(card.getByRole('time')).toHaveAttribute('datetime', project.lastUpdated);
+                await expect(card).toContainText('Updated');
+            } else {
+                await expect(card.getByRole('time')).toHaveCount(0);
+                await expect(card).toContainText(String(project.year));
+            }
         }
         expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
 

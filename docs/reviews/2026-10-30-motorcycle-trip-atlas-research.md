@@ -79,6 +79,11 @@ Incomplete development entries without summaries are omitted. The existing produ
 
 The map, cards, navigation, and release metadata remain planned work.
 
+Projects now lists **Motorcycle Trips** as a project in development.
+Its project route temporarily opens the existing trip-report list until the explorer is available.
+The navigation dropdown uses the same project registry.
+The entry has a registered social image and no feature-release date or changelog yet.
+
 Validation on 2026-10-30: 99 focused unit tests and eight Chromium browser budget checks passed.
 TypeScript checks and changed-file ESLint checks passed.
 Browser checks used fixed production content at desktop and phone sizes.

@@ -70,6 +70,7 @@ export default function App() {
               <Route path="/trips" element={<LegacyPostsRedirect type="trips" />} />
               <Route path="/trips/:slug" element={<BlogPost collection="trips" />} />
               <Route path="/projects" element={<Projects />} />
+              <Route path="/projects/motorcycle-trips" element={<LegacyPostsRedirect type="trips" />} />
               <Route path="/projects/through-routes" element={<ThroughRoutes />} />
               <Route path="/projects/flights" element={<FlightsAbout />} />
               <Route path="/projects/flights/map" element={<Flights />} />

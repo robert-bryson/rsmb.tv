@@ -137,8 +137,12 @@ describe('formatProjectDate', () => {
 });
 
 describe('changelog data', () => {
-    it('provides a changelog and exact last-updated date for every project', () => {
+    it('pairs feature changelogs with exact last-updated dates when supplied', () => {
         for (const p of projects) {
+            if (!p.lastUpdated) {
+                expect(p.changelog ?? [], `${p.slug} has no dated feature releases`).toHaveLength(0);
+                continue;
+            }
             expect(p.lastUpdated, `${p.slug} lastUpdated`).toMatch(/^\d{4}-\d{2}-\d{2}$/);
             expect(new Date(`${p.lastUpdated}T00:00:00Z`).toISOString().slice(0, 10), `${p.slug} calendar date`).toBe(p.lastUpdated);
             expect(p.changelog?.length, `${p.slug} changelog`).toBeGreaterThan(0);

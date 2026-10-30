@@ -26,6 +26,15 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    slug: 'motorcycle-trips',
+    title: 'Motorcycle Trips',
+    description: 'In development: a map-first collection of motorcycle journeys, bringing together trip reports, route maps, and photographs.',
+    summary: 'Discover motorcycle journeys through route maps, photographs, and trip reports.',
+    tech: ['React', 'TypeScript', 'MapLibre GL', 'GeoJSON'],
+    applicationCategory: 'TravelApplication',
+    year: 2026,
+  },
+  {
     slug: 'through-routes',
     title: 'Through Routes',
     description: 'Find scenic, twisty motorcycle loop routes on rural roads. Processes OpenStreetMap data to build a loop-friendly road graph, scores roads by curviness and elevation change, and generates ranked circular routes from any start point.',
