@@ -105,6 +105,9 @@ Four hover or overlapping-route pointer cases were skipped on phone projects. Ca
 The shared-hover follow-up passed 92 focused unit tests and 53 browser checks.
 That browser run included atlas and story-map hover behavior, keyboard dismissal, recovery, and reading-page JavaScript budgets.
 
+The overlap-popup follow-up passed TypeScript, changed-file ESLint, and three browser checks across desktop Chromium, phone Chromium, and iPhone WebKit.
+Choices match route colors. Pointer and keyboard previews reuse the map/card emphasis, and the top-right close icon clears previews while preserving selection and camera position.
+
 ## Fit within rsmb.tv
 
 Use **Motorcycle Trips** as a working project title.
@@ -388,6 +391,8 @@ Keep stable trip IDs on route features.
 For map clicks, query a small screen-space area around the pointer.
 Deduplicate the resulting features by trip ID.
 If several trips match, show a short labeled choice list.
+Color each choice to match its route. Hovering or focusing it previews the route and report card without changing selection.
+Use an accessible close icon in the popup's top-right corner. Closing it or pressing Escape clears the preview.
 Do not silently select whichever route happens to render last.
 This ambiguity control can remain small when most routes do not overlap.
 

@@ -216,17 +216,67 @@ test('keyboard feedback uses the story-map tooltip and Escape dismisses it witho
     await expect(button).toHaveAttribute('aria-pressed', 'true');
 });
 
-test('overlapping routes offer a choice instead of selecting only the top line', async ({ page, isMobile }) => {
-    test.skip(isMobile, 'Pointer hit testing uses the desktop canvas; phones have equivalent card buttons.');
+test('overlapping routes offer colored previews and a dismissible choice instead of selecting only the top line', async ({ page, isMobile }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.route('**/test-trip/route.geojson', route => route.fulfill({ json: {
+        ...geometry,
+        features: [...geometry.features, { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: [[-123, 46], [-121.9, 46], [-121.9, 45.8]] } }],
+    } }));
     await page.goto(`${atlas}?trip=daily-test`);
+    await expect(page.getByText('2/2 routes', { exact: false })).toBeVisible();
     await expect.poll(async () => (await paintedRoute(page, 'daily-test')).count).toBeGreaterThan(30);
     await page.locator('#atlas-panel-toggle').click();
-    const { point } = await paintedRoute(page, 'daily-test');
-    await page.locator('[data-testid="trip-atlas-map"] canvas').click({ position: point });
+    const map = page.locator('[data-testid="trip-atlas-map"]');
+    const before = await paintedRoute(page, 'daily-test');
+    await map.locator('canvas').click({ position: before.point });
     const choices = page.getByRole('group', { name: 'Trips sharing this road' });
     await expect(choices).toBeVisible();
+    for (const [id, title] of [['daily-test', 'Daily map test trip'], ['coastal-test', 'Coastal test trip']]) {
+        const channels = tripAtlasColor(id).slice(1).match(/../g)!.map(channel => parseInt(channel, 16));
+        await expect(choices.getByRole('button', { name: title })).toHaveCSS('color', `rgb(${channels.join(', ')})`);
+    }
+    const close = choices.getByRole('button', { name: 'Close route choices' });
+    await expect(close).toHaveText('');
+    const popupBox = (await choices.boundingBox())!;
+    const closeBox = (await close.boundingBox())!;
+    expect(closeBox.x + closeBox.width).toBeGreaterThan(popupBox.x + popupBox.width - 12);
+    expect(closeBox.y).toBeLessThan(popupBox.y + 12);
+    expect(closeBox.width).toBeGreaterThanOrEqual(44);
+    expect(closeBox.height).toBeGreaterThanOrEqual(44);
+    const scroll = await page.locator('#atlas-trip-list').evaluate(element => element.scrollTop);
+    if (!isMobile) {
+        await choices.getByRole('button', { name: 'Coastal test trip' }).hover();
+        await expect(map).toHaveAttribute('data-highlighted-trip', 'coastal-test');
+        await expect(page.locator('[data-trip-id="coastal-test"]')).toHaveAttribute('data-highlighted', 'true');
+        await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(before.count + 30);
+        await expect(page).toHaveURL(/\?trip=daily-test$/);
+        expect(await page.locator('#atlas-trip-list').evaluate(element => element.scrollTop)).toBe(scroll);
+        await choices.getByRole('button', { name: 'Daily map test trip' }).hover();
+        await expect(map).toHaveAttribute('data-highlighted-trip', 'daily-test');
+    }
+    await close.click();
+    await expect(choices).toHaveCount(0);
+    await expect(map).toHaveAttribute('data-highlighted-trip', '');
+    await expect(page.getByRole('tooltip')).toHaveCount(0);
+    await expect(page).toHaveURL(/\?trip=daily-test$/);
+    const after = await paintedRoute(page, 'daily-test');
+    after.bounds.forEach((value, index) => expect(Math.abs(value - before.bounds[index])).toBeLessThan(5));
+    await map.locator('canvas').click({ position: before.point });
+    await expect(choices).toBeVisible();
+    if (!isMobile) {
+        const choice = choices.getByRole('button', { name: 'Coastal test trip' });
+        await choice.focus();
+        await expect(map).toHaveAttribute('data-highlighted-trip', 'coastal-test');
+        await choice.press('Escape');
+        await expect(choices).toHaveCount(0);
+        await expect(map).toHaveAttribute('data-highlighted-trip', '');
+        await expect(page).toHaveURL(/\?trip=daily-test$/);
+        await map.locator('canvas').click({ position: before.point });
+        await expect(choices).toBeVisible();
+    }
     await choices.getByRole('button', { name: 'Coastal test trip' }).click();
     await expect(page).toHaveURL(/\?trip=coastal-test$/);
+    await expect(choices).toHaveCount(0);
     await expect(page.locator('[data-trip-id="coastal-test"]').getByText('Selected', { exact: true })).toBeVisible();
     await expect(page.locator('[data-trip-id="coastal-test"]').getByRole('heading')).toBeInViewport();
 });

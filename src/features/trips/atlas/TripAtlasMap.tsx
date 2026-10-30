@@ -65,6 +65,7 @@ export default function TripAtlasMap(props: Props) {
     const tooltipId = useId();
     const tooltip = useRef<{ map: maplibregl.Map; label: ReturnType<typeof createTripMapTooltip> } | null>(null);
     const routeHover = useRef<{ id: string; coordinates: [number, number] } | null>(null);
+    const choicePreview = useRef<{ hoveredId?: string; focusedId?: string }>({});
     const data = useMemo(() => combineAtlasRoutes(routes), [routes]);
     const getCurrent = useEffectEvent(() => props);
     const select = useEffectEvent((id?: string) => props.onSelect(id));
@@ -251,9 +252,20 @@ export default function TripAtlasMap(props: Props) {
         map.fitBounds(bounds, { padding: padding(container.current, panelOpen, Boolean(selectedId)), maxZoom: 10, duration: reducedMotion ? 0 : 500 });
     }, [map, routes, selectedId, fitVersion, panelOpen, entries, reducedMotion]);
 
+    const previewChoice = (kind: 'hoveredId' | 'focusedId', id?: string) => {
+        choicePreview.current[kind] = id;
+        routeHover.current = null;
+        props.onHover(choicePreview.current.hoveredId ?? choicePreview.current.focusedId);
+    };
+    const closeChoices = () => {
+        choicePreview.current = {};
+        routeHover.current = null;
+        props.onHover(undefined);
+        setChoices(undefined);
+    };
     const retry = () => { setFailure(false); setTileFailure(false); setAttempt(value => value + 1); };
     return (
-        <div className="absolute inset-0" onKeyDown={event => { if (event.key === 'Escape') setChoices(undefined); }}>
+        <div className="absolute inset-0" onKeyDown={event => { if (event.key === 'Escape' && choices) closeChoices(); }}>
             <div ref={container} data-testid="trip-atlas-map" data-selected-trip={selectedId ?? ''} data-highlighted-trip={highlightedId ?? ''}
                 onPointerLeave={() => { routeHover.current = null; props.onHover(undefined); }}
                 onPointerOver={event => { if (event.target !== mapRef.current?.getCanvas()) { routeHover.current = null; props.onHover(undefined); } }}
@@ -265,10 +277,17 @@ export default function TripAtlasMap(props: Props) {
             </div>}
             {choices && <div role="group" aria-label="Trips sharing this road" className="absolute z-30 w-64 rounded-xl border border-zinc-600 bg-zinc-950 p-3 shadow-xl"
                 style={{ left: choices.x, top: choices.y }}>
-                <p className="mb-2 text-sm font-medium">Trips sharing this road</p>
-                {choices.ids.map(id => <button key={id} type="button" onClick={() => { props.onSelect(id); setChoices(undefined); }}
-                    className="block min-h-11 w-full rounded px-2 text-left text-sm text-violet-300 hover:bg-zinc-800">{entries.find(entry => entry.id === id)?.title ?? id}</button>)}
-                <button type="button" onClick={() => setChoices(undefined)} className="mt-1 min-h-11 text-xs text-zinc-400 underline">Close</button>
+                <p className="mb-2 flex min-h-8 items-center pr-8 text-sm font-medium">Trips sharing this road</p>
+                <button type="button" onClick={closeChoices} aria-label="Close route choices"
+                    className="absolute right-1 top-1 grid size-11 place-items-center rounded text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100 focus-visible:outline-2 focus-visible:outline-violet-400">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true" className="size-4"><path d="m6 6 12 12M18 6 6 18" /></svg>
+                </button>
+                {choices.ids.map(id => <button key={id} type="button" onClick={() => { closeChoices(); props.onSelect(id); }}
+                    onPointerEnter={event => { if (event.pointerType !== 'touch') previewChoice('hoveredId', id); }}
+                    onPointerLeave={() => previewChoice('hoveredId')}
+                    onFocus={() => previewChoice('focusedId', id)} onBlur={() => previewChoice('focusedId')}
+                    style={{ color: tripAtlasColor(id) }}
+                    className="block min-h-11 w-full rounded px-2 text-left text-sm hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-violet-400">{entries.find(entry => entry.id === id)?.title ?? id}</button>)}
             </div>}
         </div>
     );

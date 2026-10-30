@@ -247,11 +247,12 @@ PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- \
 Atlas checks cover route selection, overlapping roads, shared URLs, report returns, scroll restoration, and delayed geometry.
 Card clicks select routes with camera padding. Map clicks reveal the matching card.
 Hover checks verify matching map and card feedback without selection changes or automatic scrolling.
+Overlap choices verify route-colored text, pointer and keyboard previews, close-icon placement, Escape dismissal, and preserved selection and camera position.
 Atlas and story maps share the text-only tooltip factory. Checks verify its colored edge, safe text, reuse, cleanup, and Escape dismissal.
 Screenshot helpers hide overlays through opacity so pixel measurements preserve pointer targets.
 Failure checks cover independent route retries, failed renderer downloads, unavailable WebGL, and context loss.
 Phone checks verify panel controls, attribution, and a 320-pixel layout.
-Hover previews and overlapping-route pointer choices run on desktop. Phone projects exercise card taps and direct route selection.
+Hover previews run on desktop. Phone projects exercise card taps, direct route selection, and overlapping-route choices and dismissal.
 
 Run the geometry and development-lifecycle checks with:
 
