@@ -531,12 +531,13 @@ describe('TripRouteMap', () => {
         }
     });
 
-    it('retains a usable route preview and error when a failed map changes days', async () => {
+    it.each(['error', 'webglcontextlost'])('retains a usable route preview and retry after %s', async event => {
         vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
         const { container } = render(<TripStoryProvider manifest={dayMapManifest}><TripRouteMap /></TripStoryProvider>);
         await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
         const map = mapMocks.Map.mock.results[0].value;
-        const fail = mapMocks.on.mock.calls.find(([event]) => event === 'error')?.[1];
+        const fail = mapMocks.on.mock.calls.find(([name]) => name === event)?.[1];
+        expect(fail).toBeTypeOf('function');
         act(() => fail());
         expect(screen.getByRole('status')).toHaveTextContent('The map could not load');
         await waitFor(() => expect(container.querySelectorAll('polyline').length).toBeGreaterThan(0));
@@ -548,6 +549,9 @@ describe('TripRouteMap', () => {
         await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledTimes(2));
         expect(screen.queryByRole('status')).not.toBeInTheDocument();
         expect(screen.getByRole('button', { name: '1. Coastbound' })).toHaveAttribute('aria-pressed', 'true');
+        // A late event from the removed map must not replace its healthy successor.
+        act(() => fail());
+        expect(screen.queryByRole('status')).not.toBeInTheDocument();
     });
 
     it('keeps the base map free of stops when switching days without replacing or fetching it again', async () => {
@@ -1002,6 +1006,26 @@ describe('TripRouteMap', () => {
         const nextFail = mapMocks.on.mock.calls.filter(([event]) => event === 'error').at(-1)?.[1];
         act(() => nextFail());
         expect(screen.getByText(/The map could not load/)).toBeInTheDocument();
+    });
+
+    it.each(['error', 'webglcontextlost'])('review: recovers after %s when day definitions change', async event => {
+        const fetchRoute = vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute });
+        vi.stubGlobal('fetch', fetchRoute);
+        const { rerender } = render(<TripStoryProvider manifest={dayMapManifest}><TripRouteMap /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        fireEvent.click(screen.getByRole('button', { name: '1. Coastbound' }));
+        const fail = mapMocks.on.mock.calls.find(([name]) => name === event)?.[1];
+        act(() => fail());
+        expect(screen.getByRole('status')).toHaveTextContent('The map could not load');
+
+        const updated = { ...dayMapManifest, days: dayMapManifest.days!.map(day => ({ ...day, title: `${day.title} updated` })) };
+        rerender(<TripStoryProvider manifest={updated}><TripRouteMap /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledTimes(2));
+        expect(screen.queryByRole('status')).not.toBeInTheDocument();
+        expect(screen.getByRole('button', { name: '1. Coastbound updated' })).toHaveAttribute('aria-pressed', 'true');
+        expect(fetchRoute).toHaveBeenCalledOnce();
+        act(() => fail());
+        expect(screen.queryByRole('status')).not.toBeInTheDocument();
     });
 
     it('retries a failed map with a fresh route and removes the previous instance', async () => {

@@ -103,7 +103,7 @@ Use the video's actual dimensions; an embed player's dimensions can differ.
 
 For a small clip bundled with the site, store both files in `public/media/trips/<trip-id>/`.
 Include the first 12 hexadecimal characters of each file's SHA-256 in its filename:
-`endor-speeders-ab1ba266c971.mp4` and `endor-speeders-52304610cc6c.webp`, for example.
+`endor-speeder-chase-ab1ba266c971.mp4` and `endor-speeders-52304610cc6c.webp`, for example.
 Manifest URLs start with `/media/trips/<trip-id>/`; builds check that both files exist and match their fingerprints.
 These filenames receive immutable caching. Create a new fingerprint when a file changes.
 Larger asset collections can use HTTPS URLs under the trip's existing `data.rsmb.tv` prefix.
@@ -128,6 +128,10 @@ The player loads video only after it enters view. It pauses offscreen and in hid
 With reduced motion enabled, the poster remains still until the reader presses Play.
 Playback failures retain the poster and source link. There is no third-party iframe.
 The hosting rewrite must exempt `.mp4` files from the application's HTML fallback; see `infra/main.tf`.
+Apply hosting rule changes in Amplify as well as Git. Application deployments do not update Terraform-managed rewrite rules.
+Verify the deployed video returns `Content-Type: video/mp4`.
+If HTML was cached at a video URL, use a new filename while retaining the file's fingerprint.
+Remove the unused local copy after you update every manifest reference.
 
 ### Panoramas
 
@@ -393,6 +397,8 @@ Retry keeps the selected day and stop visibility setting.
 Resetting a stop-focused map clears its selection. Its preview retains the stop list and visibility control.
 An error remains visible when you change the day.
 A day change does not retry a failed map.
+Replacing day definitions clears a previous renderer failure. The selected day remains active if its ID still exists.
+WebGL context loss shows the route preview and a Retry route button.
 Loading another route clears the previous selection, hover, and focus feedback.
 Changing an overview block to a focused map also clears its preview day selection.
 
@@ -413,6 +419,9 @@ Include each photo ID only once within a gallery.
 Keep one manifest entry for each selected photograph. Different IDs can still refer to duplicate images.
 Remove duplicate entries and update their gallery references before publication.
 Remove gallery definitions that the story and day records no longer use.
+Import the latest source document before you check unused galleries.
+When you split a gallery, update its source shortcodes in the same publication.
+Verify that each new gallery appears at its intended story position.
 
 ### Galleries
 

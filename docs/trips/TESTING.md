@@ -107,6 +107,12 @@ npx vitest run src/test/tripMapView.test.tsx src/test/tripRouteMap.test.tsx \
   src/test/tripBlockRecovery.test.tsx src/test/tripMapDayFocus.test.tsx
 ```
 
+Renderer failure tests cover map errors and WebGL context loss.
+They retain the selected day after retry and reject late events from a removed map.
+Replacing day definitions must clear a previous renderer failure without another route request.
+Selecting a different day must retain the error until the reader retries.
+The browser test loses a real WebGL context. It checks route pixels after retry.
+
 Photo unit tests also check recovery after changes to responsive sources or image slot width.
 Adaptive gallery tests check proportional pairs, balanced rows, portrait spans, panorama rows, and exact gutter geometry.
 Browser checks measure both image frames and image content.
@@ -125,6 +131,7 @@ PLAYWRIGHT_WEBKIT=1 npm run test:e2e -- tests/e2e/trip-galleries.spec.ts tests/e
 
 `PLAYWRIGHT_WEBKIT=1` adds desktop WebKit to the fixture suite.
 The production trip suite uses iPhone WebKit with the same setting.
+Performance measurement tests require Chromium's DevTools Protocol. The fixture suite skips those tests in WebKit.
 Color checks resolve the expected CSS token in each browser.
 This avoids failures caused by different decimal precision in computed color values.
 On macOS, Safari uses Option+Tab to include links in keyboard traversal.
@@ -180,6 +187,27 @@ npx vitest run scripts/__tests__/tripAnimations.test.ts src/test/tripAnimation.t
 These tests check media origins, trip directories, file types, fingerprints, playback, and reduced motion.
 They also check browsers without `IntersectionObserver` and CDN URLs during development.
 Playback tests mock the media API. They do not prove that a browser can decode a specific MP4 file.
+
+Check the application player and bundled Kalaloch animation in Chromium and WebKit:
+
+```bash
+PLAYWRIGHT_WEBKIT=1 npm run test:e2e -- tests/e2e/trip-animation.spec.ts tests/e2e/trip-media.spec.ts
+```
+
+Player checks use the real React component, application styles, and bundled video.
+They cover deferred requests, pointer pause, keyboard playback, touch controls, reduced motion, and HTML responses at video URLs.
+Move the pointer over the frame to reveal desktop controls. Keyboard focus also reveals them.
+These fixtures require the local development server.
+Use the separate asset test to check deployed files after publication:
+
+```bash
+PLAYWRIGHT_BASE_URL=https://www.rsmb.tv PLAYWRIGHT_SKIP_WEB_SERVER=1 \
+  npx playwright test tests/e2e/trip-media.spec.ts
+```
+
+These checks reject HTML responses, including successful HTML rewrites at video URLs.
+The asset test checks HTTP types, MP4 file bytes, poster delivery, and browser decoding.
+It does not test the deployed article or prove that hosting rewrite rules match Terraform.
 
 ## JavaScript budgets
 

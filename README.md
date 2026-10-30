@@ -162,6 +162,8 @@ Infrastructure CI validates all Terraform files. It tests mail, storage, and wor
 `npm run test:e2e` starts Vite on `127.0.0.1:4174` with a fixed port.
 Set `PLAYWRIGHT_PORT` if another process uses that port.
 CI installs Chromium and WebKit before browser tests.
+Set `PLAYWRIGHT_WEBKIT=1` to include WebKit in the local fixture suite.
+Performance measurement tests run only in Chromium because they require its DevTools Protocol.
 
 Tornado browser tests use fixed tracks and map tiles.
 They check phone WebGL, desktop WebGL, and the SVG fallback.

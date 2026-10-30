@@ -18,6 +18,24 @@ async function fixedAssets(page: Page) {
         : route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000"><rect width="100%" height="100%" fill="#405b6b"/></svg>' }));
 }
 
+test('a lost WebGL context shows a route preview and allows retry', async ({ page }) => {
+    await page.goto('/trips/daily-test');
+    const map = page.locator('[data-trip-map]').first();
+    await map.scrollIntoViewIfNeeded();
+    await expect.poll(async () => (await routePixels(map)).blue).toBeGreaterThan(10);
+    await map.locator('canvas').evaluate((canvas: HTMLCanvasElement) => {
+        const extension = canvas.getContext('webgl2')?.getExtension('WEBGL_lose_context');
+        if (!extension) throw new Error('WebGL context loss simulation is unavailable.');
+        extension.loseContext();
+    });
+    await expect(map.getByRole('status')).toContainText('The map could not load');
+    await expect(map.locator('polyline').first()).toBeVisible();
+    await expect(map.locator('canvas')).toHaveCount(0);
+    await map.getByRole('button', { name: 'Retry route' }).click();
+    await expect.poll(async () => (await routePixels(map)).blue).toBeGreaterThan(10);
+    await expect(map.getByRole('status')).toHaveCount(0);
+});
+
 async function routePixels(map: Locator) {
     const screenshot = await map.locator('canvas').screenshot({
         style: '.site-header, .maplibregl-control-container, .maplibregl-popup { visibility: hidden !important; }',

@@ -162,3 +162,67 @@ describe('trip animations', () => {
         expect(screen.getByRole('button', { name: 'Pause animation' })).toBeVisible();
     });
 });
+
+describe('review: animation recovery and optional content', () => {
+    it.each([false, true])('supports clips without captions or attribution, including failure=%s', failed => {
+        const optional = { ...animation, caption: undefined, attribution: undefined };
+        const { container } = render(<TripStoryProvider manifest={{ ...manifest, animations: [optional] }}>
+            <TripAnimation animationId={optional.id} />
+        </TripStoryProvider>);
+        expect(screen.queryByRole('link')).not.toBeInTheDocument();
+        expect(screen.queryByText(animation.caption)).not.toBeInTheDocument();
+        if (failed) {
+            fireEvent.error(container.querySelector('video')!);
+            expect(screen.getByRole('status')).toHaveTextContent('Animation unavailable.');
+            expect(screen.getByRole('img', { name: animation.alt })).toHaveAttribute('src', animation.poster);
+        } else {
+            act(() => intersect(true));
+            expect(screen.getByRole('button', { name: 'Pause animation' })).toBeVisible();
+            expect(screen.queryByRole('status')).not.toBeInTheDocument();
+        }
+    });
+
+    it('recovers a failed clip when its source changes and waits for visibility', () => {
+        const { video, rerender } = renderAnimation();
+        fireEvent.error(video);
+        const replacement = { ...animation, src: '/media/trips/coastal-test/replacement-012345abcdef.mp4' };
+        rerender(<TripStoryProvider manifest={{ ...manifest, animations: [replacement] }}>
+            <TripAnimation animationId={replacement.id} />
+        </TripStoryProvider>);
+        const next = screen.getByLabelText(animation.alt);
+        expect(next).not.toHaveAttribute('src');
+        expect(screen.queryByRole('status')).not.toBeInTheDocument();
+        act(() => intersect(true));
+        expect(next).toHaveAttribute('src', replacement.src);
+        expect(screen.getByRole('button', { name: 'Pause animation' })).toBeVisible();
+    });
+
+    it('does not autoplay while the tab is initially hidden', () => {
+        vi.spyOn(document, 'hidden', 'get').mockReturnValue(true);
+        renderAnimation();
+        act(() => intersect(true));
+        expect(play).not.toHaveBeenCalled();
+        vi.spyOn(document, 'hidden', 'get').mockReturnValue(false);
+        fireEvent(document, new Event('visibilitychange'));
+        expect(screen.getByRole('button', { name: 'Pause animation' })).toBeVisible();
+    });
+
+    it('retains a user pause across tab visibility changes', () => {
+        renderAnimation();
+        act(() => intersect(true));
+        fireEvent.click(screen.getByRole('button', { name: 'Pause animation' }));
+        play.mockClear();
+        vi.spyOn(document, 'hidden', 'get').mockReturnValue(true);
+        fireEvent(document, new Event('visibilitychange'));
+        vi.spyOn(document, 'hidden', 'get').mockReturnValue(false);
+        fireEvent(document, new Event('visibilitychange'));
+        expect(play).not.toHaveBeenCalled();
+        expect(screen.getByRole('button', { name: 'Play animation' })).toBeVisible();
+    });
+
+    it('reports an unknown animation ID', () => {
+        expect(() => render(<TripStoryProvider manifest={manifest}>
+            <TripAnimation animationId="missing" />
+        </TripStoryProvider>)).toThrow('Unknown trip animation: missing');
+    });
+});

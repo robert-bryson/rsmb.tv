@@ -86,6 +86,7 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
         url: string;
         route: typeof route;
         stops: typeof manifest.stops;
+        days: typeof manifest.days;
         trackId?: string;
         dayId?: string;
         message: string;
@@ -98,7 +99,8 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
     const getSelectedStopId = useEffectEvent(() => selectedStopId);
     const [loadedMap, setLoadedMap] = useState<maplibregl.Map | null>(null);
     const currentMapError = mapError?.url === routeUrl && mapError.route === route &&
-        mapError.stops === manifest.stops && mapError.trackId === trackId && mapError.dayId === dayId ? mapError.message : '';
+        mapError.stops === manifest.stops && mapError.days === manifest.days &&
+        mapError.trackId === trackId && mapError.dayId === dayId ? mapError.message : '';
     const error = routeError || currentMapError || view.error;
     const enabled = active && !error;
     const focusStop = (id: string) => {
@@ -311,10 +313,15 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
             Boolean(getSelectedStopId() || trackId || (!dayId && initialView.day)), dayId ? 'Show whole day' : 'Show full route');
         map.addControl(routeActionsControl, 'top-left');
 
-        map.on('error', () => { if (!disposed) setMapError({
-            url: routeUrl, route, stops: manifest.stops, trackId, dayId,
-            message: 'The map could not load. You can still view the route preview.',
-        }); });
+        const handleMapFailure = () => {
+            if (disposed) return;
+            setMapError({
+                url: routeUrl, route, stops: manifest.stops, days: manifest.days, trackId, dayId,
+                message: 'The map could not load. You can still view the route preview.',
+            });
+        };
+        map.on('error', handleMapFailure);
+        map.on('webglcontextlost', handleMapFailure);
         map.on('click', 'trip-stops', (event) => {
             if (disposed) return;
             const id = event.features?.[0]?.properties?.id;

@@ -17,7 +17,7 @@
     "animations": [
         {
             "id": "endor-speeders",
-            "src": "/media/trips/kalaloch-2024/endor-speeders-ab1ba266c971.mp4",
+            "src": "/media/trips/kalaloch-2024/endor-speeder-chase-ab1ba266c971.mp4",
             "poster": "/media/trips/kalaloch-2024/endor-speeders-52304610cc6c.webp",
             "width": 480,
             "height": 208,
@@ -339,11 +339,15 @@
         ],
         "2024-06-22": [
             "kalaloch-2024-06-22-morning-in-tent",
-            "kalaloch-2024-06-22-motorcycle-at-camp",
+            "kalaloch-2024-06-22-motorcycle-at-camp"
+        ],
+        "2024-06-22-2": [
             "kalaloch-2024-06-22-forest-trailhead",
             "kalaloch-2024-06-22-rider-on-bridge",
             "kalaloch-2024-06-22-timber-bridge",
-            "kalaloch-2024-06-22-coastal-forest",
+            "kalaloch-2024-06-22-coastal-forest"
+        ],
+        "2024-06-22-3": [
             "kalaloch-2024-06-22-foggy-beach",
             "kalaloch-2024-06-22-forest-boardwalk"
         ],

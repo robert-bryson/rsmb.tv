@@ -1,0 +1,91 @@
+{
+    "id": "pch-2024",
+    "dates": {
+        "start": "2024-10-03",
+        "end": "2024-10-07"
+    },
+    "ridingDays": 5,
+    "countries": [
+        {
+            "code": "US",
+            "regions": ["Washington", "Oregon", "California"]
+        }
+    ],
+    "hero": "todo-select-hero",
+    "route": {
+        "geoJson": "https://data.rsmb.tv/trips/pch-2024/geo/route.geojson",
+        "alt": "Map of the Down the West Coast motorcycle trip route.",
+        "tracks": [
+            {
+                "id": "oct-3-2024-14-10-48",
+                "name": "Seattle to Centralia",
+                "date": "2024-10-03"
+            },
+            {
+                "id": "oct-4-2024-09-09-11",
+                "name": "Centralia to Reedsport",
+                "date": "2024-10-04"
+            },
+            {
+                "id": "oct-5-2024-08-02-47",
+                "name": "Reedsport to Fort Bragg",
+                "date": "2024-10-05"
+            },
+            {
+                "id": "oct-6-2024-07-53-56",
+                "name": "Fort Bragg to Bridgeport",
+                "date": "2024-10-06"
+            },
+            {
+                "id": "oct-7-2024-08-55-55",
+                "name": "Bridgeport to northern San Diego County",
+                "date": "2024-10-07"
+            }
+        ]
+    },
+    "days": [
+        {
+            "id": "day-one",
+            "title": "October 3",
+            "date": "2024-10-03",
+            "headingId": "october-3",
+            "trackIds": ["oct-3-2024-14-10-48"],
+            "stopIds": []
+        },
+        {
+            "id": "day-two",
+            "title": "October 4",
+            "date": "2024-10-04",
+            "headingId": "october-4",
+            "trackIds": ["oct-4-2024-09-09-11"],
+            "stopIds": []
+        },
+        {
+            "id": "day-three",
+            "title": "October 5",
+            "date": "2024-10-05",
+            "headingId": "october-5",
+            "trackIds": ["oct-5-2024-08-02-47"],
+            "stopIds": []
+        },
+        {
+            "id": "day-four",
+            "title": "October 6",
+            "date": "2024-10-06",
+            "headingId": "october-6",
+            "trackIds": ["oct-6-2024-07-53-56"],
+            "stopIds": []
+        },
+        {
+            "id": "day-five",
+            "title": "October 7",
+            "date": "2024-10-07",
+            "headingId": "october-7",
+            "trackIds": ["oct-7-2024-08-55-55"],
+            "stopIds": []
+        }
+    ],
+    "stops": [],
+    "photos": [],
+    "galleries": {}
+}

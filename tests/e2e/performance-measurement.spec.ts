@@ -8,6 +8,9 @@ import path from 'node:path';
 import { gzipSync } from 'node:zlib';
 import { measurePerformance, parsePerformanceOptions } from '../../scripts/measure-performance.js';
 
+test.skip(({ browserName }) => browserName !== 'chromium',
+    'Performance measurement uses Chromium CDP for network and CPU emulation.');
+
 let server: Server;
 let origin: string;
 let outputRoot: string;
@@ -47,9 +50,15 @@ test.beforeAll(async () => {
 });
 
 test.afterAll(async () => {
-    server.closeAllConnections();
-    await new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
-    await fs.rm(outputRoot, { recursive: true, force: true });
+    // A project-level skip can bypass beforeAll. Setup failures can also leave only some resources.
+    try {
+        if (server) {
+            server.closeAllConnections();
+            await new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
+        }
+    } finally {
+        if (outputRoot) await fs.rm(outputRoot, { recursive: true, force: true });
+    }
 });
 
 function options(route: string) {
