@@ -51,6 +51,7 @@ export default function MotorcycleTrips() {
     const session = useRef<AtlasSession>({ ...(initialSession ?? { panelOpen, scrollTop: 0 }) });
     const [routes, setRoutes] = useState<Record<string, AtlasRouteState>>({});
     const [fitVersion, setFitVersion] = useState(0);
+    const [cameraChanged, setCameraChanged] = useState(false);
     const [hoveredId, setHoveredId] = useState<string>();
     const [focusedId, setFocusedId] = useState<string>();
     const highlightedId = hoveredId ?? focusedId;
@@ -107,6 +108,12 @@ export default function MotorcycleTrips() {
         setHoveredId(undefined);
         setFocusedId(undefined);
     };
+    const zoomToAllTrips = () => {
+        setHoveredId(undefined);
+        setFocusedId(undefined);
+        setReveal(undefined);
+        selectTrip(undefined);
+    };
 
     useEffect(() => () => saveAtlasSession(location.key, url, session.current), [location.key, url]);
     useEffect(() => {
@@ -132,7 +139,7 @@ export default function MotorcycleTrips() {
                 <Suspense fallback={<p role="status" className="absolute inset-0 grid place-items-center text-sm text-zinc-400">Loading trip map…</p>}>
                     <TripAtlasMap entries={visibleEntries} routes={visibleRoutes} selectedId={selectedId} highlightedId={highlightedId}
                         fitVersion={fitVersion} panelOpen={panelOpen} initialCamera={initialSession?.camera}
-                        onSelect={id => id ? selectTrip(id, true) : deselectTrip()} onHover={setHoveredId} onCameraChange={onCameraChange} />
+                        onSelect={id => id ? selectTrip(id, true) : deselectTrip()} onHover={setHoveredId} onCameraChange={onCameraChange} onViewChange={setCameraChanged} />
                 </Suspense>
             </TripAtlasMapBoundary>
 
@@ -142,11 +149,11 @@ export default function MotorcycleTrips() {
                     <h1 className="truncate text-lg font-semibold tracking-tight md:text-xl">Motorcycle Trips</h1>
                     <p className="mt-0.5 text-xs text-zinc-400">{onlySelected ? `1 of ${entries.length}` : entries.length} trips · Routes, photographs &amp; stories</p>
                 </div>
-                <button type="button" onClick={() => selectTrip(undefined)} aria-label="Show all trips"
-                    className="pointer-events-auto min-h-11 shrink-0 rounded-xl border border-zinc-600 bg-zinc-950/95 px-3 text-sm text-zinc-100 shadow-lg hover:border-violet-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-400">
-                    Show all<span className="hidden sm:inline"> trips</span>
-                </button>
             </header>
+            {(selectedId || onlySelected || cameraChanged) && <button type="button" onClick={zoomToAllTrips} data-testid="atlas-overview-control"
+                className="absolute left-1/2 top-28 z-20 min-h-11 -translate-x-1/2 whitespace-nowrap rounded-xl border border-zinc-600 bg-zinc-950/95 px-3 text-sm text-zinc-100 shadow-lg hover:border-violet-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-400 lg:top-4">
+                Zoom to all trips
+            </button>}
 
             <aside aria-label="Trip reports" className={`absolute inset-x-3 bottom-8 z-20 flex max-h-[55dvh] flex-col overflow-hidden rounded-xl border border-zinc-700/80 bg-zinc-950/95 shadow-2xl backdrop-blur md:inset-x-auto md:left-4 md:top-32 md:w-[360px] md:max-h-none ${panelOpen ? 'md:bottom-4' : 'md:bottom-auto'}`}>
                 <button id="atlas-panel-toggle" type="button" aria-expanded={panelOpen} aria-controls="atlas-trip-list"

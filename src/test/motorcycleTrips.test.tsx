@@ -67,12 +67,12 @@ describe('atlas card interactions', () => {
         expect(renderer).toHaveAttribute('data-fit-version', fitVersion);
     });
 
-    it('opens a shared filtered view and Show all trips clears both the filter and selection', async () => {
+    it('opens a shared filtered view and Zoom to all trips clears both the filter and selection', async () => {
         renderWithRouter(<MotorcycleTrips />, { route: '/projects/motorcycle-trips/map?trip=published&view=selected' });
         const renderer = await screen.findByTestId('atlas-renderer');
         expect(screen.getByRole('button', { name: 'Show only selected trip' })).toHaveAttribute('aria-pressed', 'true');
         expect(renderer).toHaveAttribute('data-trips', 'published');
-        fireEvent.click(screen.getByRole('button', { name: 'Show all trips' }));
+        fireEvent.click(screen.getByRole('button', { name: 'Zoom to all trips' }));
         expect(screen.getByRole('button', { name: 'Show only selected trip' })).toHaveAttribute('aria-pressed', 'false');
         expect(renderer.getAttribute('data-trips')?.split(',')).toHaveLength(3);
         expect(renderer).toHaveAttribute('data-selected', '');
@@ -82,8 +82,10 @@ describe('atlas card interactions', () => {
         renderWithRouter(<MotorcycleTrips />, { route: '/projects/motorcycle-trips/map' });
         const renderer = await screen.findByTestId('atlas-renderer');
         const card = screen.getByRole('heading', { name: 'Published journey' }).closest('li')!;
+        expect(screen.queryByRole('button', { name: 'Zoom to all trips' })).not.toBeInTheDocument();
         fireEvent.click(within(card).getByRole('img'));
         expect(renderer).toHaveAttribute('data-selected', 'published');
+        expect(screen.getByRole('button', { name: 'Zoom to all trips' })).toBeInTheDocument();
         expect(renderer).toHaveAttribute('data-fit-version', '1');
         fireEvent.click(within(card).getByText('A synthetic motorcycle journey.'));
         expect(renderer).toHaveAttribute('data-fit-version', '2');
@@ -110,6 +112,7 @@ describe('atlas card interactions', () => {
         expect(renderer).toHaveAttribute('data-selected', '');
         expect(renderer).toHaveAttribute('data-fit-version', '0');
         fireEvent.pointerLeave(card);
+        expect(screen.queryByRole('button', { name: 'Zoom to all trips' })).not.toBeInTheDocument();
         expect(card).not.toHaveAttribute('data-highlighted');
         expect(renderer).toHaveAttribute('data-highlighted', '');
     });

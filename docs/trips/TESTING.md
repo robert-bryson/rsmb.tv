@@ -245,7 +245,9 @@ PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- \
 ```
 
 Atlas checks cover route selection, overlapping roads, shared URLs, report returns, scroll restoration, and delayed geometry.
-The **Show only selected trip** toggle filters both cards and rendered geometry, retains colors and camera position, survives report returns through `view=selected`, and resets on deselection or **Show all trips**.
+The **Show only selected trip** toggle filters both cards and rendered geometry, retains colors and camera position, survives report returns through `view=selected`, and resets on deselection or **Zoom to all trips**.
+The overview control appears at the top center only when selection, filtering, or the camera differs from the overview. On narrow screens it sits below the title.
+Checks cover zoom controls, keyboard panning, camera restoration, hidden initial/reset states, and deselection that retains a zoomed view.
 Card clicks select routes with camera padding. Map clicks reveal the matching card.
 Hover checks verify matching map and card feedback without selection changes or automatic scrolling.
 Overlap choices verify route-colored text, pointer and keyboard previews, close-icon placement, Escape dismissal, and preserved selection and camera position.

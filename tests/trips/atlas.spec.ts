@@ -25,7 +25,7 @@ async function openList(page: Page) {
 
 async function paintedRoute(page: Page, id?: string, tolerance = 12, aim: 'center' | 'north' = 'center') {
     const canvas = page.locator('[data-testid="trip-atlas-map"] canvas');
-    const screenshot = await canvas.screenshot({ style: 'header, aside, .maplibregl-control-container, .maplibregl-popup { opacity: 0 !important; }' });
+    const screenshot = await canvas.screenshot({ style: 'header, aside, [data-testid="atlas-overview-control"], .maplibregl-control-container, .maplibregl-popup { opacity: 0 !important; }' });
     const { data, info } = await sharp(screenshot).removeAlpha().raw().toBuffer({ resolveWithObject: true });
     const hex = id ? tripAtlasColor(id).slice(1) : '';
     const color = id ? [0, 2, 4].map(offset => parseInt(hex.slice(offset, offset + 2), 16)) : undefined;
@@ -53,6 +53,36 @@ async function paintedRoute(page: Page, id?: string, tolerance = 12, aim: 'cente
         cssBounds: bounds.map((value, index) => value * (index % 2 ? scaleY : scaleX)) };
 }
 
+test('overview control appears centered after zoom or pan and hides when all trips are framed again', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(atlas);
+    await expect(page.getByText('2/2 routes', { exact: false })).toBeVisible();
+    await expect.poll(async () => (await paintedRoute(page)).count).toBeGreaterThan(30);
+    const reset = page.getByRole('button', { name: 'Zoom to all trips' });
+    await expect(reset).toHaveCount(0);
+    const before = await paintedRoute(page);
+    await page.getByRole('button', { name: 'Zoom in', exact: true }).click();
+    await expect(reset).toBeVisible();
+    const buttonBox = (await reset.boundingBox())!;
+    const titleBox = (await page.getByRole('heading', { name: 'Motorcycle Trips', exact: true }).locator('..').boundingBox())!;
+    expect(buttonBox.x + buttonBox.width / 2).toBeCloseTo(page.viewportSize()!.width / 2, 0);
+    if (page.viewportSize()!.width < 1024) expect(buttonBox.y).toBeGreaterThanOrEqual(titleBox.y + titleBox.height);
+    else expect(buttonBox.y).toBeLessThan(24);
+    await reset.click();
+    await expect(reset).toHaveCount(0);
+    const zoomReset = await paintedRoute(page);
+    zoomReset.bounds.forEach((value, index) => expect(Math.abs(value - before.bounds[index])).toBeLessThan(5));
+    const canvas = page.getByTestId('trip-atlas-map').locator('canvas');
+    await canvas.focus();
+    await canvas.press('ArrowRight');
+    await expect(reset).toBeVisible();
+    await reset.click();
+    await expect(reset).toHaveCount(0);
+    const panReset = await paintedRoute(page);
+    panReset.bounds.forEach((value, index) => expect(Math.abs(value - before.bounds[index])).toBeLessThan(5));
+    await expect(page).toHaveURL(new RegExp(`${atlas}$`));
+});
+
 test('project entry opens a playable map with published routes and accessible card selection', async ({ page }) => {
     await page.goto('/projects/motorcycle-trips');
     await expect(page).toHaveURL(new RegExp(`${atlas}$`));
@@ -68,7 +98,7 @@ test('project entry opens a playable map with published routes and accessible ca
     await expect(button).toHaveAttribute('aria-pressed', 'true');
     await expect(page).toHaveURL(/\?trip=daily-test$/);
     await expect.poll(async () => (await paintedRoute(page, 'daily-test')).count).toBeGreaterThan(30);
-    await page.getByRole('button', { name: 'Show all trips' }).click();
+    await page.getByRole('button', { name: 'Zoom to all trips' }).click();
     await expect(page).toHaveURL(new RegExp(`${atlas}$`));
     await expect(page.getByRole('button', { name: /^Show route:/, pressed: true })).toHaveCount(0);
 });
@@ -163,6 +193,10 @@ test('clicking empty map space deselects the route without moving the camera', a
     await expect(page.locator('[data-testid="trip-atlas-map"]')).toHaveAttribute('data-selected-trip', '');
     const after = await paintedRoute(page);
     after.bounds.forEach((value, index) => expect(Math.abs(value - before.bounds[index])).toBeLessThan(6));
+    const reset = page.getByRole('button', { name: 'Zoom to all trips' });
+    await expect(reset).toBeVisible();
+    await reset.click();
+    await expect(reset).toHaveCount(0);
 });
 
 test('card photos and text select and frame routes while report links navigate normally', async ({ page, isMobile }) => {
@@ -343,7 +377,7 @@ test('one failed route keeps report links and retries without reloading successf
     await page.getByRole('button', { name: 'Retry route', exact: true }).click();
     await expect(page.getByText('2/2 routes', { exact: false })).toBeVisible();
     await page.getByRole('button', { name: 'Show route: Daily map test trip' }).click();
-    await page.getByRole('button', { name: 'Show all trips' }).click();
+    await page.getByRole('button', { name: 'Zoom to all trips' }).click();
     expect(attempts).toBe(2);
     expect(successfulRequests).toBe(1);
 });

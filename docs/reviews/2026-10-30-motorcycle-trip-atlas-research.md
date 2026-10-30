@@ -117,6 +117,10 @@ Local review confirmed Route 66's mint route and card marker, PCH's retained yel
 The registry and filter follow-up passed 48 focused unit tests, TypeScript, changed-file ESLint, and 55 browser checks across desktop Chromium, phone Chromium, and iPhone WebKit, including reading-page JavaScript budgets.
 Two hover-only phone cases were skipped.
 
+The centered overview-control follow-up passed nine focused unit tests, TypeScript, changed-file ESLint, and 58 browser checks, including pan/zoom reset visibility and reading-page budgets.
+Two hover-only phone cases were skipped.
+Local manual review verified desktop and 320-pixel centering, restoration of an unselected zoomed view after reading a report, and no reset-control flashes during the initial overview animation.
+
 ## Fit within rsmb.tv
 
 Use **Motorcycle Trips** as a working project title.
@@ -228,10 +232,13 @@ Hover emphasizes the matching route and card temporarily, without moving the cam
 Card focus can provide the same temporary emphasis.
 Keep the collection browsable when one trip is selected.
 Use restrained transitions and respect reduced motion.
-**Show all trips** clears selection and restores the overview.
+**Zoom to all trips** clears selection, filtering, and temporary highlights, and restores the overview.
+Place it at the top center, below the collection heading on narrow screens. Show it only while a trip is selected, a filter is active, or the camera differs from the all-trips extent.
+Compare the camera against the same route bounds and panel-aware padding used for the overview fit, allowing a one-pixel center tolerance and small zoom/bearing/pitch tolerances.
+Keep the initial overview animation from exposing its own reset control. Hover alone does not expose it, and deselecting without moving the camera leaves it available when the view still differs.
 The native **Show only selected trip** toggle filters the map geometry and card list while retaining the camera and selected trip.
 It is available in the open panel and disabled until a trip is selected. Its `view=selected` URL state survives report navigation and same-session returns.
-Changing the filter or opening the panel dismisses obsolete overlapping-route choices, keeping phone controls reachable. Deselecting a trip or choosing **Show all trips** clears the filter.
+Changing the filter or opening the panel dismisses obsolete overlapping-route choices, keeping phone controls reachable. Deselecting a trip or choosing **Zoom to all trips** clears the filter.
 This provides isolation as the collection grows; add year filtering when browsing many trips calls for it.
 Clicking empty map space clears selection and temporary highlights while preserving the current camera.
 Do not filter the card list merely because the reader pans the map.
@@ -272,7 +279,7 @@ They are not changes completed by this research task.
 | Phase | Work | Completion condition |
 | --- | --- | --- |
 | 1. Content adapter | Extend small summaries with route URLs. Join published report metadata to summaries. Group by `tripId` and sort by travel date. | Cards need no full manifest or loaded MDX. Drafts stay out of production. Several report parts produce one entry. |
-| 2. Map and cards | Add an atlas module under `src/features/trips/atlas/`. Render a full-viewport map, collapsible card panel, shared selection, overlap choices, and Show all trips. | Map and card selection agree. Cards remain browsable. The phone panel supports touch and keyboard access. |
+| 2. Map and cards | Add an atlas module under `src/features/trips/atlas/`. Render a full-viewport map, collapsible card panel, shared selection, overlap choices, and Zoom to all trips. | Map and card selection agree. Cards remain browsable. The phone panel supports touch and keyboard access. |
 | 3. Navigation | Add the explorer and project-entry redirect, project metadata, post-list and report links, selected-trip URLs, and return behavior. | The Projects entry opens the collection directly. Reports and shared URLs retain selection. Returning restores card position. |
 | 4. Recovery and release checks | Verify route, photo, tile, and renderer failures. Add metadata, sitemap entries, a real project preview, and focused browser coverage. | Reports remain reachable after failures. Existing article loading budgets pass. Keyboard and phone checks pass. |
 
@@ -387,7 +394,7 @@ Non-interactive card content also selects the route. Map selection scrolls the m
 Highlight the selected route and card.
 Retain the other trips as subdued geographic context.
 Keep their original route colors at 50% opacity and their normal line width, with no halo while another trip is selected or previewed.
-Keep an explicit Show all trips control.
+Offer the explicit Zoom to all trips control when selection, filtering, or camera changes make it useful.
 
 Treat hover as an optional preview.
 Hover should not move the camera, scroll cards, replace persistent selection, or open a report.
@@ -432,7 +439,7 @@ Fit the selected trip after an explicit selection.
 Use padding and a maximum zoom to preserve context for small routes.
 Do not continually refit while readers pan or zoom.
 Do not refit after unrelated card updates.
-Give Show all trips a predictable overview extent.
+Give Zoom to all trips a predictable overview extent.
 
 Calculate trip bounds from the complete stored geometry.
 Do not calculate them from rendered query results, which can contain clipped segments.

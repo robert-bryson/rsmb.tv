@@ -47,6 +47,9 @@ vi.mock('maplibre-gl', () => ({
         getZoom() { return 5.5; }
         getBearing() { return 0; }
         getPitch() { return 0; }
+        isMoving() { return false; }
+        cameraForBounds() { return { center: [-121.5, 46.5], zoom: 5.5 }; }
+        project() { return { x: 0, y: 0 }; }
         setFilter() {}
         setPaintProperty() {}
         remove() {}

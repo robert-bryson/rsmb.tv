@@ -24,6 +24,7 @@ interface Props {
     onSelect: (id: string | undefined) => void;
     onHover: (id?: string) => void;
     onCameraChange: (camera: AtlasCamera) => void;
+    onViewChange?: (changed: boolean) => void;
 }
 
 function filterFor(id?: string): maplibregl.FilterSpecification {
@@ -49,6 +50,15 @@ function padding(container: HTMLElement, panelOpen: boolean, selected: boolean) 
     return { top: base.top + breathingRoom, right: base.right + breathingRoom, bottom: base.bottom + breathingRoom, left: base.left + breathingRoom };
 }
 
+function routeBounds(routes: Record<string, AtlasRouteState>, selectedId?: string) {
+    const states = selectedId ? [routes[selectedId]] : Object.values(routes);
+    const points = states.flatMap(state => state?.route ? routeCoordinates(state.route) : []);
+    if (!points.length) return;
+    const bounds = new maplibregl.LngLatBounds(points[0] as [number, number], points[0] as [number, number]);
+    for (const point of points) bounds.extend(point as [number, number]);
+    return bounds;
+}
+
 export default function TripAtlasMap(props: Props) {
     const { routes, selectedId, highlightedId, fitVersion, panelOpen, entries } = props;
     const container = useRef<HTMLDivElement>(null);
@@ -71,6 +81,22 @@ export default function TripAtlasMap(props: Props) {
     const select = useEffectEvent((id?: string) => props.onSelect(id));
     const hover = useEffectEvent((id?: string) => props.onHover(id));
     const rememberCamera = useEffectEvent((value: AtlasCamera) => props.onCameraChange(value));
+    const compareOverview = useEffectEvent(() => {
+        const instance = mapRef.current;
+        if (!instance || !container.current || props.selectedId || lastFit.current?.map !== instance) return;
+        if (!props.entries.every(entry => props.routes[entry.id]?.route || props.routes[entry.id]?.error)) return;
+        // The initial overview animation should not expose its own reset control.
+        if (!userMoved.current && props.fitVersion === 0 && instance.isMoving()) return;
+        const bounds = routeBounds(props.routes);
+        if (!bounds) return;
+        const target = instance.cameraForBounds(bounds, { padding: padding(container.current, props.panelOpen, false), maxZoom: 10, bearing: 0 });
+        if (!target?.center || target.zoom === undefined) return;
+        const expected = instance.project(target.center);
+        const actual = instance.project(instance.getCenter());
+        const bearing = Math.abs(((instance.getBearing() + 540) % 360) - 180);
+        props.onViewChange?.(Math.hypot(actual.x - expected.x, actual.y - expected.y) > 1
+            || Math.abs(instance.getZoom() - target.zoom) > 0.01 || bearing > 0.1 || Math.abs(instance.getPitch()) > 0.1);
+    });
     const clearTooltip = () => {
         tooltip.current?.label.remove();
         tooltip.current = null;
@@ -131,8 +157,10 @@ export default function TripAtlasMap(props: Props) {
             const center = instance.getCenter();
             camera.current = { center: [center.lng, center.lat], zoom: instance.getZoom(), bearing: instance.getBearing(), pitch: instance.getPitch() };
             rememberCamera(camera.current);
+            compareOverview();
         };
         instance.on('moveend', saveCamera);
+        instance.on('resize', compareOverview);
         instance.on('movestart', event => { if (!disposed && event.originalEvent) userMoved.current = true; });
         instance.on('error', event => {
             if (disposed) return;
@@ -250,13 +278,13 @@ export default function TripAtlasMap(props: Props) {
         const selected = selectedId ? routes[selectedId]?.route : null;
         if (selectedId && !selected) return;
         if (!selectedId && !entries.every(entry => routes[entry.id]?.route || routes[entry.id]?.error)) return;
-        const points = selected ? routeCoordinates(selected) : Object.values(routes).flatMap(state => state.route ? routeCoordinates(state.route) : []);
-        if (!points.length) return;
-        const bounds = new maplibregl.LngLatBounds(points[0] as [number, number], points[0] as [number, number]);
-        for (const point of points) bounds.extend(point as [number, number]);
+        const bounds = routeBounds(routes, selectedId);
+        if (!bounds) return;
         lastFit.current = { map, key };
-        map.fitBounds(bounds, { padding: padding(container.current, panelOpen, Boolean(selectedId)), maxZoom: 10, duration: reducedMotion ? 0 : 500 });
+        map.fitBounds(bounds, { padding: padding(container.current, panelOpen, Boolean(selectedId)), maxZoom: 10, bearing: 0, pitch: 0, duration: reducedMotion ? 0 : 500 });
     }, [map, routes, selectedId, fitVersion, panelOpen, entries, reducedMotion]);
+
+    useEffect(() => { compareOverview(); }, [map, routes, selectedId, fitVersion, panelOpen, entries]);
 
     const previewChoice = (kind: 'hoveredId' | 'focusedId', id?: string) => {
         choicePreview.current[kind] = id;
