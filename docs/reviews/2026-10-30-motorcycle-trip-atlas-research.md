@@ -26,7 +26,7 @@ No applicable `AGENTS.md` was found in the repository or its ancestors.
 ## Questions to ask during implementation
 
 These questions follow the architecture review of this plan.
-Ask them when the relevant phase starts.
+Ask unanswered questions when the relevant phase starts.
 Suggested defaults remain provisional until the user answers.
 Track remaining implementation work in [TODO.md](../../TODO.md#motorcycle-trip-atlas).
 
@@ -44,7 +44,7 @@ Track remaining implementation work in [TODO.md](../../TODO.md#motorcycle-trip-a
    `PostNavigation` also hardcodes **Back to posts** and needs the same return context.
 
 4. **Multipart ordering, before card work:** Without explicit series order, should report links follow publication date, oldest first?
-   Suggested default: use explicit series order first. Use publication date and then slug when order is absent.
+   Confirmed answer: oldest publication first when explicit series order is absent. Use slug to resolve equal publication dates.
    Use the first ordered report for fallback card copy. Post series metadata takes precedence over manifest series metadata.
 
 5. **Route loading, before map work:** Should opening the atlas load all eligible routes, including routes for cards outside the visible panel?
@@ -64,6 +64,24 @@ Track remaining implementation work in [TODO.md](../../TODO.md#motorcycle-trip-a
 8. **Incomplete development content, before card work:** Should a trip without a valid manifest have a report-only card, or be omitted?
    Suggested default: omit it until its summary is available.
    A missing published manifest must still fail the production build. Runtime route-download failures must retain eligible cards.
+
+## Implementation progress
+
+The first implementation slice adds route URLs and descriptions to the shared summary type.
+Development summaries rewrite route URLs to local assets. Production summaries retain their CDN URLs.
+The summaries exclude track definitions, galleries, daily maps, and the remaining photo collection.
+
+The content adapter groups eligible reports by trip ID and orders cards by travel start date.
+It uses explicit series order before the confirmed publication-date fallback.
+It reads report metadata and summaries without loading story bodies or complete manifests.
+Draft inclusion is an explicit option. The default includes published reports only, pending the development-visibility answer.
+Incomplete development entries without summaries are omitted. The existing production checks still reject missing published manifests.
+
+The map, cards, navigation, and release metadata remain planned work.
+
+Validation on 2026-10-30: 99 focused unit tests and eight Chromium browser budget checks passed.
+TypeScript checks and changed-file ESLint checks passed.
+Browser checks used fixed production content at desktop and phone sizes.
 
 ## Fit within rsmb.tv
 

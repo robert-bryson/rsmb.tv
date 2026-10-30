@@ -1,5 +1,5 @@
 import type { TripManifest } from '../../../shared/tripManifestSchema';
-export type { TripManifest };
+export type { TripManifest, TripSummary } from '../../../shared/tripManifestSchema';
 export type TripPhotoData = TripManifest['photos'][number];
 export type TripStop = TripManifest['stops'][number];
 export type TripTrack = NonNullable<TripManifest['route']['tracks']>[number];

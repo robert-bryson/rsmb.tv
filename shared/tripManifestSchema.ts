@@ -170,3 +170,11 @@ export const tripManifestSchema = z.object({
 
 
 export type TripManifest = z.infer<typeof tripManifestSchema>;
+
+/** Lightweight trip facts for lists and the atlas, without galleries or track definitions. */
+export type TripSummary = Pick<TripManifest,
+    'id' | 'dates' | 'ridingDays' | 'distanceMiles' | 'series' | 'motorcycle' | 'regions' | 'countries'
+> & {
+    hero: TripManifest['photos'][number];
+    route: Pick<TripManifest['route'], 'geoJson' | 'alt'>;
+};

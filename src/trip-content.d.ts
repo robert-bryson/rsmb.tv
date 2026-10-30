@@ -1,6 +1,5 @@
 declare module 'virtual:trip-content' {
-    type Manifest = import('./features/trips/types').TripManifest;
-    export const summaries: Record<string, Pick<Manifest, 'id' | 'dates' | 'ridingDays' | 'distanceMiles' | 'series' | 'motorcycle' | 'regions' | 'countries'> & { hero: Manifest['photos'][number] }>;
+    export const summaries: Record<string, import('./features/trips/types').TripSummary>;
     export const loaders: Record<string, () => Promise<{ default: unknown }>>;
     export const issues: Record<string, string>;
 }

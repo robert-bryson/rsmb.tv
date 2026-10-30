@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import type { Plugin, ResolvedConfig } from 'vite';
-import { tripManifestSchema, type TripManifest } from '../shared/tripManifestSchema.ts';
+import { tripManifestSchema, type TripManifest, type TripSummary } from '../shared/tripManifestSchema.ts';
 import { validateBundledTripMedia } from './trip-media-assets.ts';
 
 /** Generate a small card registry, with full manifests behind async imports. */
@@ -41,7 +41,7 @@ export function tripContentPlugin(): Plugin {
             }
             const referenced = new Set(posts.filter(p => !production || p.development?.published !== false).map(p => p.tripId));
             const directory = path.join(config.root, contentDir, 'trips');
-            const summaries: Record<string, unknown> = {};
+            const summaries: Record<string, TripSummary> = {};
             const issues: Record<string, string> = {};
             const loaders: string[] = [];
             const filenames = fs.existsSync(directory) ? fs.readdirSync(directory) : [];
@@ -100,7 +100,7 @@ export function tripContentPlugin(): Plugin {
         },
     };
 }
-function summary(manifest: TripManifest, local: boolean) {
+function summary(manifest: TripManifest, local: boolean): TripSummary {
     const hero = manifest.photos.find(photo => photo.id === manifest.hero)!;
     const url = (value: string) => local ? value.replaceAll('https://data.rsmb.tv/trips/', '/data/trips/') : value;
     return {
@@ -108,6 +108,7 @@ function summary(manifest: TripManifest, local: boolean) {
         distanceMiles: manifest.distanceMiles, series: manifest.series, motorcycle: manifest.motorcycle, regions: manifest.regions,
         countries: manifest.countries,
         hero: { ...hero, src: url(hero.src), srcSet: hero.srcSet && url(hero.srcSet) },
+        route: { geoJson: url(manifest.route.geoJson), ...(manifest.route.alt ? { alt: manifest.route.alt } : {}) },
     };
 }
 

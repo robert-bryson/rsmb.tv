@@ -127,6 +127,38 @@ describe('trip publication contracts', () => {
         expect(output).not.toContain('"photos"');
     });
 
+    it.each(['build', 'serve'] as const)('includes lightweight route metadata with the correct %s URLs', command => {
+        const trip = tripManifestSchema.parse({
+            ...manifest,
+            route: {
+                geoJson: 'https://data.rsmb.tv/trips/coastal-test/geo/route.geojson',
+                alt: 'The complete available coastal route.',
+                staticImage: 'https://data.rsmb.tv/trips/coastal-test/geo/preview.webp',
+                tracks: [{ id: 'day-one', name: 'First day' }],
+            },
+        });
+        const output = loadPostRegistry([{ slug: 'coast', format: 'trip', tripId: trip.id }], command, [], 'virtual:trip-content', { manifests: [trip] });
+        if (typeof output !== 'string') throw new Error('Expected generated summary source.');
+        const json = output.slice('export const summaries = '.length, output.indexOf('; export const issues'));
+        const summaries = JSON.parse(json);
+        expect(summaries[trip.id].route).toEqual({
+            geoJson: command === 'serve'
+                ? '/data/trips/coastal-test/geo/route.geojson'
+                : 'https://data.rsmb.tv/trips/coastal-test/geo/route.geojson',
+            alt: 'The complete available coastal route.',
+        });
+        expect(summaries[trip.id]).not.toHaveProperty('photos');
+        expect(summaries[trip.id]).not.toHaveProperty('days');
+        expect(summaries[trip.id]).not.toHaveProperty('galleries');
+        expect(summaries[trip.id]).not.toHaveProperty('stops');
+    });
+
+    it('does not include unpublished route URLs in production summaries', () => {
+        const output = loadPostRegistry([{ slug: 'coast', format: 'trip', tripId: manifest.id, development: { published: false } }], 'build', [], 'virtual:trip-content', { manifests: [manifest] });
+        expect(output).toContain('export const summaries = {}');
+        expect(output).not.toContain(manifest.route.geoJson);
+    });
+
     it('reports a missing published manifest when the trip directory is absent', () => {
         expect(() => loadPostRegistry([{ slug: 'coast', format: 'trip', tripId: manifest.id }], 'build', [], 'virtual:trip-content', {
             createTripDirectory: false,
