@@ -32,17 +32,19 @@ function layers(): maplibregl.LayerSpecification[] {
     return [
         { id: 'atlas-route-casing', type: 'line', source: 'atlas-routes', paint: { 'line-color': '#09090b', 'line-width': 6, 'line-opacity': 0.8 } },
         { id: 'atlas-routes', type: 'line', source: 'atlas-routes', paint: { 'line-color': ['get', 'color'], 'line-width': 3.5, 'line-opacity': 0.85 } },
-        { id: 'atlas-hover-casing', type: 'line', source: 'atlas-routes', filter: filterFor(), paint: { 'line-color': '#fafafa', 'line-width': 8, 'line-opacity': 0.65 } },
-        { id: 'atlas-hover', type: 'line', source: 'atlas-routes', filter: filterFor(), paint: { 'line-color': ['get', 'color'], 'line-width': 5 } },
         { id: 'atlas-selected-casing', type: 'line', source: 'atlas-routes', filter: filterFor(), paint: { 'line-color': '#fafafa', 'line-width': 9, 'line-opacity': 0.9 } },
         { id: 'atlas-selected', type: 'line', source: 'atlas-routes', filter: filterFor(), paint: { 'line-color': ['get', 'color'], 'line-width': 5.5 } },
+        { id: 'atlas-hover-casing', type: 'line', source: 'atlas-routes', filter: filterFor(), paint: { 'line-color': '#fafafa', 'line-width': 10, 'line-opacity': 0.85 } },
+        { id: 'atlas-hover', type: 'line', source: 'atlas-routes', filter: filterFor(), paint: { 'line-color': ['get', 'color'], 'line-width': 6.5 } },
     ].map(layer => ({ ...layer, layout: { 'line-cap': 'round', 'line-join': 'round' } })) as maplibregl.LayerSpecification[];
 }
 
-function padding(container: HTMLElement, panelOpen: boolean) {
-    return container.clientWidth >= 768
+function padding(container: HTMLElement, panelOpen: boolean, selected: boolean) {
+    const base = container.clientWidth >= 768
         ? { top: 140, right: 72, bottom: 40, left: panelOpen ? 410 : 40 }
         : { top: 132, right: 48, left: 24, bottom: panelOpen ? Math.min(container.clientHeight * 0.55 + 44, container.clientHeight - 200) : 110 };
+    const breathingRoom = selected ? 16 : 0;
+    return { top: base.top + breathingRoom, right: base.right + breathingRoom, bottom: base.bottom + breathingRoom, left: base.left + breathingRoom };
 }
 
 export default function TripAtlasMap(props: Props) {
@@ -144,11 +146,9 @@ export default function TripAtlasMap(props: Props) {
             if (disposed) return;
             const ids = candidates(event.point, 4);
             instance.getCanvas().style.cursor = ids.length ? 'pointer' : '';
-            hover(ids.length === 1 ? ids[0] : undefined);
+            const selected = getCurrent().selectedId;
+            hover(selected && ids.includes(selected) ? selected : ids[0]);
         });
-        const clearHover = () => hover(undefined);
-        instance.getCanvas().addEventListener('mouseleave', clearHover);
-
         // Raster tiles must not hold up route paints on Linux WebKit.
         let repaintPending = false;
         const repaint = () => { repaintPending = false; if (!disposed) instance.triggerRepaint(); };
@@ -164,7 +164,6 @@ export default function TripAtlasMap(props: Props) {
             saveCamera();
             disposed = true;
             instance.off('render', repaint);
-            instance.getCanvas().removeEventListener('mouseleave', clearHover);
             instance.remove();
             if (mapRef.current === instance) mapRef.current = null;
         };
@@ -195,13 +194,14 @@ export default function TripAtlasMap(props: Props) {
         const bounds = new maplibregl.LngLatBounds(points[0] as [number, number], points[0] as [number, number]);
         for (const point of points) bounds.extend(point as [number, number]);
         lastFit.current = { map, key };
-        map.fitBounds(bounds, { padding: padding(container.current, panelOpen), maxZoom: 10, duration: reducedMotion ? 0 : 500 });
+        map.fitBounds(bounds, { padding: padding(container.current, panelOpen, Boolean(selectedId)), maxZoom: 10, duration: reducedMotion ? 0 : 500 });
     }, [map, routes, selectedId, fitVersion, panelOpen, entries, reducedMotion]);
 
     const retry = () => { setFailure(false); setTileFailure(false); setAttempt(value => value + 1); };
     return (
         <div className="absolute inset-0" onKeyDown={event => { if (event.key === 'Escape') setChoices(undefined); }}>
-            <div ref={container} data-testid="trip-atlas-map" data-selected-trip={selectedId ?? ''}
+            <div ref={container} data-testid="trip-atlas-map" data-selected-trip={selectedId ?? ''} data-highlighted-trip={highlightedId ?? ''}
+                onPointerLeave={() => props.onHover(undefined)}
                 role="region" aria-label="Motorcycle trip routes. Choose a trip in the list to explore its route."
                 className="trip-atlas-map h-full w-full" />
             {(failure || tileFailure) && <div role="status" className="absolute left-3 right-14 top-32 z-10 max-h-[calc(45dvh-10rem)] overflow-y-auto rounded-lg border border-zinc-600 bg-zinc-900/95 p-3 text-sm text-zinc-200 md:left-auto md:right-3 md:top-64 md:max-h-none md:max-w-64">

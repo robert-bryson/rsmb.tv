@@ -33,6 +33,10 @@ function CardPhoto({ entry }: { entry: TripAtlasEntry }) {
     );
 }
 
+function isCardControl(target: EventTarget | null) {
+    return target instanceof Element && Boolean(target.closest('a, button, input, select, textarea, [role="button"], [contenteditable]'));
+}
+
 export default function MotorcycleTrips() {
     const entries = useMemo(() => buildTripAtlasEntries(getTripPosts(), getTripSummary, { includeDrafts: import.meta.env.DEV }), []);
     const location = useLocation();
@@ -48,6 +52,7 @@ export default function MotorcycleTrips() {
     const [fitVersion, setFitVersion] = useState(0);
     const [hoveredId, setHoveredId] = useState<string>();
     const [focusedId, setFocusedId] = useState<string>();
+    const highlightedId = hoveredId ?? focusedId;
     const [reveal, setReveal] = useState(() => !initialSession && selectedId ? { id: selectedId, version: 0 } : undefined);
     const listRef = useRef<HTMLDivElement>(null);
 
@@ -96,7 +101,7 @@ export default function MotorcycleTrips() {
         if (panelOpen && listRef.current) listRef.current.scrollTop = session.current.scrollTop;
     }, [panelOpen]);
     useEffect(() => {
-        if (reveal && panelOpen) document.getElementById(`atlas-card-${reveal.id}`)?.scrollIntoView({ block: 'nearest', behavior: 'instant' });
+        if (reveal && panelOpen) document.getElementById(`atlas-card-${reveal.id}`)?.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'instant' });
     }, [reveal, panelOpen]);
 
     const loadedCount = entries.filter(entry => routes[entry.id]?.route).length;
@@ -106,7 +111,7 @@ export default function MotorcycleTrips() {
             {entries.map(entry => <RouteReader key={entry.id} entry={entry} onChange={onRouteChange} />)}
             <TripAtlasMapBoundary>
                 <Suspense fallback={<p role="status" className="absolute inset-0 grid place-items-center text-sm text-zinc-400">Loading trip map…</p>}>
-                    <TripAtlasMap entries={entries} routes={routes} selectedId={selectedId} highlightedId={hoveredId ?? focusedId}
+                    <TripAtlasMap entries={entries} routes={routes} selectedId={selectedId} highlightedId={highlightedId}
                         fitVersion={fitVersion} panelOpen={panelOpen} initialCamera={initialSession?.camera}
                         onSelect={id => id ? selectTrip(id, true) : deselectTrip()} onHover={setHoveredId} onCameraChange={onCameraChange} />
                 </Suspense>
@@ -139,6 +144,7 @@ export default function MotorcycleTrips() {
                     <ol className="space-y-3">
                         {entries.map(entry => {
                             const active = selectedId === entry.id;
+                            const highlighted = highlightedId === entry.id;
                             const color = tripAtlasColor(entry.id);
                             const state = routes[entry.id];
                             const draftCount = entry.reports.filter(report => report.draft).length;
@@ -146,11 +152,12 @@ export default function MotorcycleTrips() {
                                 ...(entry.summary.countries ?? []).flatMap(country => country.regions?.length ? country.regions : [getCountryName(country.code)]),
                                 ...(entry.summary.regions ?? []),
                             ])];
-                            return <li key={entry.id} id={`atlas-card-${entry.id}`} data-trip-id={entry.id}
+                            return <li key={entry.id} id={`atlas-card-${entry.id}`} data-trip-id={entry.id} data-highlighted={highlighted || undefined}
+                                onClick={event => { if (!event.defaultPrevented && !isCardControl(event.target)) selectTrip(entry.id); }}
                                 onPointerEnter={event => { if (event.pointerType !== 'touch') setHoveredId(entry.id); }} onPointerLeave={() => setHoveredId(undefined)}
                                 onFocusCapture={() => setFocusedId(entry.id)} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setFocusedId(undefined); }}
-                                className={`overflow-hidden rounded-lg border-2 ${active ? 'bg-zinc-900' : 'bg-zinc-950'}`}
-                                style={{ borderColor: active ? color : '#27272a' }}>
+                                className={`cursor-pointer overflow-hidden rounded-lg border-2 ${active || highlighted ? 'bg-zinc-900' : 'bg-zinc-950'}`}
+                                style={{ borderColor: active || highlighted ? color : '#27272a', boxShadow: highlighted ? `inset 0 0 0 1px ${color}` : undefined }}>
                                 <CardPhoto entry={entry} />
                                 <div className="p-3">
                                     <div className="mb-2 flex items-center gap-2 text-xs text-zinc-400">

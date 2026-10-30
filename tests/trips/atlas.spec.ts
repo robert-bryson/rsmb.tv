@@ -23,9 +23,9 @@ async function openList(page: Page) {
     if (await toggle.getAttribute('aria-expanded') !== 'true') await toggle.click();
 }
 
-async function paintedRoute(page: Page, id?: string) {
+async function paintedRoute(page: Page, id?: string, tolerance = 12, aim: 'center' | 'north' = 'center') {
     const canvas = page.locator('[data-testid="trip-atlas-map"] canvas');
-    const screenshot = await canvas.screenshot({ style: 'header, aside, .maplibregl-control-container { visibility: hidden !important; }' });
+    const screenshot = await canvas.screenshot({ style: 'header, aside, .maplibregl-control-container { opacity: 0 !important; }' });
     const { data, info } = await sharp(screenshot).removeAlpha().raw().toBuffer({ resolveWithObject: true });
     const hex = id ? tripAtlasColor(id).slice(1) : '';
     const color = id ? [0, 2, 4].map(offset => parseInt(hex.slice(offset, offset + 2), 16)) : undefined;
@@ -34,7 +34,7 @@ async function paintedRoute(page: Page, id?: string) {
     let nearest = Infinity;
     const bounds = [info.width, info.height, 0, 0];
     for (let index = 0; index < data.length; index += info.channels) {
-        const matches = color ? color.every((channel, offset) => Math.abs(data[index + offset] - channel) < 12)
+        const matches = color ? color.every((channel, offset) => Math.abs(data[index + offset] - channel) < tolerance)
             : Math.max(data[index], data[index + 1], data[index + 2]) - Math.min(data[index], data[index + 1], data[index + 2]) > 60;
         if (!matches) continue;
         const pixel = index / info.channels;
@@ -43,10 +43,14 @@ async function paintedRoute(page: Page, id?: string) {
         count++;
         bounds[0] = Math.min(bounds[0], x); bounds[1] = Math.min(bounds[1], y);
         bounds[2] = Math.max(bounds[2], x); bounds[3] = Math.max(bounds[3], y);
-        const distance = (x - info.width / 2) ** 2 + (y - info.height / 2) ** 2;
+        const distance = aim === 'north' ? y * info.width + Math.abs(x - info.width / 2) : (x - info.width / 2) ** 2 + (y - info.height / 2) ** 2;
         if (distance < nearest) { nearest = distance; point = { x, y }; }
     }
-    return { count, point, bounds };
+    const box = await canvas.boundingBox();
+    const scaleX = box!.width / info.width;
+    const scaleY = box!.height / info.height;
+    return { count, point: { x: point.x * scaleX, y: point.y * scaleY }, bounds,
+        cssBounds: bounds.map((value, index) => value * (index % 2 ? scaleY : scaleX)) };
 }
 
 test('project entry opens a playable map with published routes and accessible card selection', async ({ page }) => {
@@ -112,6 +116,85 @@ test('clicking empty map space deselects the route without moving the camera', a
     after.bounds.forEach((value, index) => expect(Math.abs(value - before.bounds[index])).toBeLessThan(6));
 });
 
+test('card photos and text select and frame routes while report links navigate normally', async ({ page, isMobile }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(atlas);
+    await openList(page);
+    const card = page.locator('[data-trip-id="coastal-test"]');
+    if (isMobile) await card.getByRole('img').tap(); else await card.getByRole('img').click();
+    await expect(page).toHaveURL(/\?trip=coastal-test$/);
+    await expect(card.getByRole('button', { name: /^Show route:/ })).toHaveAttribute('aria-pressed', 'true');
+    await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
+    const { cssBounds } = await paintedRoute(page, 'coastal-test');
+    const panel = await page.getByRole('complementary', { name: 'Trip reports' }).boundingBox();
+    expect(cssBounds[1]).toBeGreaterThan(140);
+    expect(cssBounds[2]).toBeLessThan(page.viewportSize()!.width - 40);
+    expect(cssBounds[3]).toBeLessThan((isMobile ? panel!.y : page.viewportSize()!.height) - 12);
+    const otherCard = page.locator('[data-trip-id="daily-test"]');
+    await otherCard.getByRole('heading', { name: 'Daily map test trip' }).click();
+    await expect(page).toHaveURL(/\?trip=daily-test$/);
+    await otherCard.getByRole('link', { name: /Read trip report/ }).click();
+    await expect(page).toHaveURL(/\/trips\/daily-test$/);
+});
+
+test('card hover previews its route above a shared selected route without changing selection or scrolling', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'Hover is a pointer-only interaction; phone projects exercise card taps.');
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.route('**/test-trip/route.geojson', route => route.fulfill({ json: {
+        ...geometry,
+        features: [...geometry.features, { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: [[-123, 46], [-121.9, 46], [-121.9, 45.8]] } }],
+    } }));
+    await page.goto(`${atlas}?trip=daily-test`);
+    await expect(page.getByText('2/2 routes', { exact: false })).toBeVisible();
+    await expect.poll(async () => (await paintedRoute(page, 'daily-test')).count).toBeGreaterThan(30);
+    const card = page.locator('[data-trip-id="coastal-test"]');
+    await card.getByRole('heading').scrollIntoViewIfNeeded();
+    const scroll = await page.locator('#atlas-trip-list').evaluate(element => element.scrollTop);
+    const map = page.locator('[data-testid="trip-atlas-map"]');
+    const before = await paintedRoute(page, 'daily-test');
+    await map.locator('canvas').hover({ position: before.point });
+    await card.getByRole('heading').hover();
+    await expect(map).toHaveAttribute('data-highlighted-trip', 'coastal-test');
+    await expect(card).toHaveAttribute('data-highlighted', 'true');
+    await expect(page).toHaveURL(/\?trip=daily-test$/);
+    await expect(card.getByRole('button', { name: /^Show route:/ })).toHaveAttribute('aria-pressed', 'false');
+    await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(before.count + 30);
+    expect(await page.locator('#atlas-trip-list').evaluate(element => element.scrollTop)).toBe(scroll);
+    await page.mouse.move(page.viewportSize()!.width - 24, 240);
+    await expect(card).not.toHaveAttribute('data-highlighted');
+    await expect(map).toHaveAttribute('data-highlighted-trip', '');
+    await expect(page).toHaveURL(/\?trip=daily-test$/);
+});
+
+test('route hover highlights its card without scrolling and route clicks reveal the report card', async ({ page, isMobile }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.route('**/test-trip/route.geojson', route => route.fulfill({ json: {
+        type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: [[-121, 43], [-122, 42], [-122.5, 41.5]] },
+    } }));
+    await page.goto(atlas);
+    await expect(page.getByText('2/2 routes', { exact: false })).toBeVisible();
+    if (!isMobile) await openList(page);
+    const card = page.locator('[data-trip-id="daily-test"]');
+    const map = page.locator('[data-testid="trip-atlas-map"]');
+    await expect.poll(async () => (await paintedRoute(page, 'daily-test', 42, 'north')).count).toBeGreaterThan(30);
+    const { point } = await paintedRoute(page, 'daily-test', 42, 'north');
+    if (!isMobile) {
+        const scroll = await page.locator('#atlas-trip-list').evaluate(element => element.scrollTop);
+        await map.locator('canvas').hover({ position: point });
+        await expect(map).toHaveAttribute('data-highlighted-trip', 'daily-test');
+        await expect(card).toHaveAttribute('data-highlighted', 'true');
+        await expect(card.getByRole('heading')).not.toBeInViewport();
+        expect(await page.locator('#atlas-trip-list').evaluate(element => element.scrollTop)).toBe(scroll);
+        await expect(page).toHaveURL(new RegExp(`${atlas}$`));
+        await expect(card.getByRole('button', { name: /^Show route:/ })).toHaveAttribute('aria-pressed', 'false');
+    }
+    if (isMobile) await map.locator('canvas').tap({ position: point }); else await map.locator('canvas').click({ position: point });
+    await expect(page).toHaveURL(/\?trip=daily-test$/);
+    await expect(page.locator('#atlas-panel-toggle')).toHaveAttribute('aria-expanded', 'true');
+    await expect(card.getByRole('heading')).toBeInViewport();
+    await expect(card.getByRole('button', { name: /^Show route:/ })).toHaveAttribute('aria-pressed', 'true');
+});
+
 test('overlapping routes offer a choice instead of selecting only the top line', async ({ page, isMobile }) => {
     test.skip(isMobile, 'Pointer hit testing uses the desktop canvas; phones have equivalent card buttons.');
     await page.goto(`${atlas}?trip=daily-test`);
@@ -124,6 +207,7 @@ test('overlapping routes offer a choice instead of selecting only the top line',
     await choices.getByRole('button', { name: 'Coastal test trip' }).click();
     await expect(page).toHaveURL(/\?trip=coastal-test$/);
     await expect(page.locator('[data-trip-id="coastal-test"]').getByText('Selected', { exact: true })).toBeVisible();
+    await expect(page.locator('[data-trip-id="coastal-test"]').getByRole('heading')).toBeInViewport();
 });
 
 test('one failed route keeps report links and retries without reloading successful geometry', async ({ page }) => {

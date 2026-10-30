@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react';
+import { fireEvent, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { BlogPostMeta } from '../content/posts';
 import type { TripSummary } from '../features/trips/types';
@@ -31,10 +31,52 @@ const fixtures = vi.hoisted(() => {
 vi.mock('../content/posts', () => ({ getTripPosts: () => fixtures.posts }));
 vi.mock('../features/trips/tripSummaries', () => ({ getTripSummary: (id: string) => fixtures.summaries[id] }));
 vi.mock('../features/trips/useTripRoute', () => ({ useTripRoute: () => ({ route: null, error: '', retry: fixtures.retry }) }));
-vi.mock('../features/trips/atlas/TripAtlasMap', () => ({ default: () => null }));
+vi.mock('../features/trips/atlas/TripAtlasMap', () => ({
+    default: ({ selectedId, highlightedId, fitVersion }: { selectedId?: string; highlightedId?: string; fitVersion: number }) => (
+        <output data-testid="atlas-renderer" data-selected={selectedId ?? ''} data-highlighted={highlightedId ?? ''} data-fit-version={fitVersion} />
+    ),
+}));
 
 beforeEach(() => {
     vi.stubGlobal('matchMedia', vi.fn(() => ({ matches: true })));
+});
+
+describe('atlas card interactions', () => {
+    it('selects a route from card content and fits it once per click, including the native route button', async () => {
+        renderWithRouter(<MotorcycleTrips />, { route: '/projects/motorcycle-trips/map' });
+        const renderer = await screen.findByTestId('atlas-renderer');
+        const card = screen.getByRole('heading', { name: 'Published journey' }).closest('li')!;
+        fireEvent.click(within(card).getByRole('img'));
+        expect(renderer).toHaveAttribute('data-selected', 'published');
+        expect(renderer).toHaveAttribute('data-fit-version', '1');
+        fireEvent.click(within(card).getByText('A synthetic motorcycle journey.'));
+        expect(renderer).toHaveAttribute('data-fit-version', '2');
+        fireEvent.click(within(card).getByRole('button', { name: /^Show route:/ }));
+        expect(renderer).toHaveAttribute('data-fit-version', '3');
+    });
+
+    it('keeps report links independent of route selection and camera fitting', async () => {
+        renderWithRouter(<MotorcycleTrips />, { route: '/projects/motorcycle-trips/map' });
+        const renderer = await screen.findByTestId('atlas-renderer');
+        const card = screen.getByRole('heading', { name: 'Published journey' }).closest('li')!;
+        fireEvent.click(within(card).getByRole('link', { name: /Read trip report/ }));
+        expect(renderer).toHaveAttribute('data-selected', '');
+        expect(renderer).toHaveAttribute('data-fit-version', '0');
+    });
+
+    it('previews the card and map together without selecting or fitting the route', async () => {
+        renderWithRouter(<MotorcycleTrips />, { route: '/projects/motorcycle-trips/map' });
+        const renderer = await screen.findByTestId('atlas-renderer');
+        const card = screen.getByRole('heading', { name: 'Published journey' }).closest('li')!;
+        fireEvent.pointerEnter(card);
+        expect(card).toHaveAttribute('data-highlighted', 'true');
+        expect(renderer).toHaveAttribute('data-highlighted', 'published');
+        expect(renderer).toHaveAttribute('data-selected', '');
+        expect(renderer).toHaveAttribute('data-fit-version', '0');
+        fireEvent.pointerLeave(card);
+        expect(card).not.toHaveAttribute('data-highlighted');
+        expect(renderer).toHaveAttribute('data-highlighted', '');
+    });
 });
 afterEach(() => {
     vi.unstubAllGlobals();

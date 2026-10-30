@@ -99,6 +99,9 @@ Two pointer hit tests were skipped on phone projects. The equivalent card contro
 The draft-visibility follow-up passed 134 focused unit tests and ten Chromium browser checks.
 The local atlas showed five configured trips, including two labeled drafts. The 320-pixel layout and draft-report return link passed manual browser checks.
 
+The linked-interaction follow-up passed 25 focused unit tests and 47 browser checks.
+Four hover or overlapping-route pointer cases were skipped on phone projects. Card taps and direct route selection passed on both phone engines.
+
 ## Fit within rsmb.tv
 
 Use **Motorcycle Trips** as a working project title.
@@ -199,7 +202,9 @@ Emphasize selection with line width, casing, and a visible card border as well a
 
 Selecting a route reveals its card and fits its complete geometry.
 Selecting a card's button fits the same route without moving keyboard focus.
-Hover can emphasize a route temporarily, without moving the camera.
+Clicking a card's photo, title, or body also selects and frames its route, with space around the line.
+Report links and other controls retain their normal actions.
+Hover emphasizes the matching route and card temporarily, without moving the camera or scrolling the list.
 Card focus can provide the same temporary emphasis.
 Keep the collection browsable when one trip is selected.
 Use restrained transitions and respect reduced motion.
@@ -354,12 +359,14 @@ These examples support the card content recommendation above.
 
 Use one persistent selected trip.
 Selecting a map route or its Show route button should produce the same result.
+Non-interactive card content also selects the route. Map selection scrolls the matching report card into view.
 Highlight the selected route and card.
 Retain the other trips as subdued geographic context.
 Keep an explicit Show all trips control.
 
 Treat hover as an optional preview.
-Hover should not move the camera, replace persistent selection, or open a report.
+Hover should not move the camera, scroll cards, replace persistent selection, or open a report.
+The hovered route and report card share temporary visual emphasis.
 Keyboard focus should remain visible without forcing a route selection.
 Opening the report should require its own normal link.
 This separates browsing from navigation.
@@ -367,7 +374,8 @@ Ride with GPS documents a similar separation between collection selection and op
 
 Several trips can follow the same road near home.
 Distinct colors alone cannot make every shared segment selectable.
-Draw the selected trip above the other routes, with a wider line and contrasting casing.
+Draw the selected trip above the context routes, with a wider line and contrasting casing.
+Draw hover feedback above selection so shared roads retain visible preview feedback.
 Always permit selection through the cards.
 Keep stable trip IDs on route features.
 
