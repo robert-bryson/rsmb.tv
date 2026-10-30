@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { createServer, type ResolvedConfig } from 'vite';
+import { build, createServer, type ResolvedConfig } from 'vite';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { articleHtml, tripContentPlugin } from '../trip-content-plugin';
 import { updateManifestAssets } from '../update-trip-manifest-assets.js';
@@ -15,9 +15,14 @@ afterEach(() => {
     for (const root of temporaryRoots.splice(0)) fs.rmSync(root, { recursive: true, force: true });
 });
 
-function loadPostRegistry(posts: unknown[], command: 'build' | 'serve', watchedFiles: string[] = [], moduleId = 'virtual:post-content', {
-    manifests = [], bodies = [], createTripDirectory = true, mode = 'production',
-}: { manifests?: TripManifest[]; bodies?: string[]; createTripDirectory?: boolean; mode?: string } = {}) {
+interface ContentFixtureOptions {
+    manifests?: TripManifest[];
+    bodies?: string[];
+    createTripDirectory?: boolean;
+    mode?: string;
+}
+
+function createContentFixture(posts: unknown[], { manifests = [], bodies = [], createTripDirectory = true }: ContentFixtureOptions = {}) {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'trip-registry-test-'));
     temporaryRoots.push(root);
     const directory = path.join(root, 'src/content');
@@ -27,15 +32,55 @@ function loadPostRegistry(posts: unknown[], command: 'build' | 'serve', watchedF
     for (const trip of manifests) fs.writeFileSync(path.join(directory, 'trips', `${trip.id}.json`), JSON.stringify(trip));
     if (bodies.length) fs.mkdirSync(path.join(directory, 'blog'));
     for (const slug of bodies) fs.writeFileSync(path.join(directory, 'blog', `${slug}.mdx`), '# Story');
+    return root;
+}
+
+function loadPostRegistry(posts: unknown[], command: 'build' | 'serve', watchedFiles: string[] = [], moduleId = 'virtual:post-content', options: ContentFixtureOptions = {}) {
+    const root = createContentFixture(posts, options);
     const plugin = tripContentPlugin();
     const configure = plugin.configResolved;
     const load = plugin.load;
     if (typeof configure !== 'function' || typeof load !== 'function') throw new Error('Expected function hooks.');
-    configure.call({} as never, { root, mode, command } as ResolvedConfig);
+    configure.call({} as never, { root, mode: options.mode ?? 'production', command } as ResolvedConfig);
     return load.call({ addWatchFile: vi.fn((file: string) => watchedFiles.push(file)) } as never, `\0${moduleId}`);
 }
 
 describe('trip publication contracts', () => {
+    it.each(['production', 'development'])('builds article HTML with the correct publication and crawler metadata in %s mode', async mode => {
+        const published = {
+            slug: 'coast', title: 'Coast & mountains', description: 'A coastal trip.', date: '2026-04-08',
+            tags: [], format: 'trip', tripId: manifest.id,
+        };
+        const draft = {
+            ...published, slug: 'unfinished', title: 'Unfinished journey', tripId: 'missing',
+            development: { published: false, contentAvailable: false },
+        };
+        const root = createContentFixture([published, draft], { manifests: [manifest] });
+        fs.writeFileSync(path.join(root, 'index.html'), `<html><head><title>Site</title>
+            <meta name="description" content="Site" /><meta property="og:image" content="https://rsmb.tv/og/home.svg" />
+            <link rel="canonical" href="https://rsmb.tv/" /></head><body><script type="module">
+            import { summaries } from 'virtual:trip-content'; globalThis.trips = summaries;
+            </script></body></html>`);
+        const result = await build({ configFile: false, root, mode, plugins: [tripContentPlugin()], logLevel: 'silent', build: { write: false } });
+        if (Array.isArray(result) || !('output' in result)) throw new Error('Expected one content bundle.');
+        const assets = Object.fromEntries(result.output.filter(item => item.type === 'asset').map(item => [item.fileName, String(item.source)]));
+        expect(assets['trips/coast.html']).toBe(assets['blog/coast.html']);
+        expect(assets['trips/coast.html']).toContain('<title>Coast &amp; mountains — rsmb</title>');
+        expect(assets['trips/coast.html']).toContain('href="https://rsmb.tv/trips/coast"');
+        expect(assets['trips/coast.html']).toContain(`content="${manifest.photos.find(photo => photo.id === manifest.hero)!.src}"`);
+        if (mode === 'development') {
+            for (const [, html] of Object.entries(assets).filter(([filename]) => filename.endsWith('.html'))) {
+                expect(html).toMatch(/name="robots" content="noindex, nofollow"/);
+            }
+            expect(assets['trips/unfinished.html']).toBe(assets['blog/unfinished.html']);
+            expect(assets['trips/unfinished.html']).toContain('content="https://rsmb.tv/og/blog/unfinished.svg"');
+        } else {
+            expect(assets['index.html']).not.toContain('noindex');
+            expect(assets).not.toHaveProperty('trips/unfinished.html');
+            expect(JSON.stringify(result.output)).not.toContain('Unfinished journey');
+        }
+    });
+
     it('includes incomplete unpublished metadata only in explicitly built development previews', () => {
         const posts = [
             { slug: 'draft-without-manifest', title: 'Unfinished journey', format: 'trip', tripId: 'missing', development: { published: false, contentAvailable: false } },

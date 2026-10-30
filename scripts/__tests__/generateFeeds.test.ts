@@ -30,6 +30,42 @@ afterEach(() => {
     }
 });
 
+describe('public discovery artifacts', () => {
+    const posts = [
+        { slug: 'legacy-post', title: 'Legacy post', description: 'Published before preview metadata.', date: '2026-04-08' },
+        { slug: 'published-trip', title: 'Published trip', description: 'A public journey.', date: '2026-04-09', format: 'trip', development: { published: true } },
+        { slug: 'private-draft', title: 'Unpublished journey', description: 'Unreviewed source notes.', date: '2026-04-10', format: 'trip', development: { published: false } },
+    ];
+
+    it('excludes unpublished records from RSS and sitemap builders without mutating the preview registry', () => {
+        const before = structuredClone(posts);
+        const outputs = [buildRssXml(posts, 'Thu, 09 Apr 2026 00:00:00 GMT'), buildSitemapXml(posts, { routes: [] })];
+        for (const xml of outputs) {
+            expect(xml).toContain('https://rsmb.tv/blog/legacy-post');
+            expect(xml).toContain('https://rsmb.tv/trips/published-trip');
+            expect(xml).not.toContain('private-draft');
+            expect(xml).not.toContain('Unpublished journey');
+            expect(xml).not.toContain('Unreviewed source notes');
+        }
+        expect(posts).toEqual(before);
+    });
+
+    it('reports published counts when generating artifacts from a mixed development registry', () => {
+        const repoRoot = createTempDir();
+        const postsPath = path.join(repoRoot, 'posts.json');
+        const rssPath = path.join(repoRoot, 'rss.xml');
+        const sitemapPath = path.join(repoRoot, 'sitemap.xml');
+        fs.writeFileSync(postsPath, JSON.stringify(posts));
+        expect(loadRssPosts(postsPath).map(post => post.slug)).toEqual(['published-trip', 'legacy-post']);
+        expect(loadSitemapPosts(postsPath).map(post => post.slug)).toEqual(['legacy-post', 'published-trip']);
+        expect(generateRss({ repoRoot, postsPath, outputPath: rssPath })).toEqual({ outPath: rssPath, count: 2 });
+        expect(generateSitemap({ repoRoot, postsPath, outputPath: sitemapPath, routes: [] })).toEqual({ outPath: sitemapPath, count: 2 });
+        for (const outputPath of [rssPath, sitemapPath]) {
+            expect(fs.readFileSync(outputPath, 'utf8')).not.toContain('private-draft');
+        }
+    });
+});
+
 describe('resolveFeedBuildDate', () => {
     it('uses the latest resolved source timestamp when available', () => {
         const resolveLatestTimestampImpl = vi.fn().mockReturnValue(Date.UTC(2026, 3, 20, 14, 30, 0));

@@ -1,0 +1,989 @@
+{
+  "id": "route-66ish-2025",
+  "dates": {
+    "start": "2025-05-09",
+    "end": "2025-05-19"
+  },
+  "ridingDays": 8,
+  "distanceMiles": 2619,
+  "motorcycle": "Honda CB500X",
+  "countries": [
+    {
+      "code": "US",
+      "regions": [
+        "California",
+        "Arizona",
+        "New Mexico",
+        "Texas",
+        "Oklahoma",
+        "Arkansas",
+        "Missouri"
+      ]
+    }
+  ],
+  "hero": "r004114",
+  "route": {
+    "geoJson": "https://data.rsmb.tv/trips/route-66ish-2025/geo/route.geojson",
+    "alt": "Recorded motorcycle route from Valley Center through the Southwest and Ozarks to St. Louis, with a short Tucumcari loop.",
+    "tracks": [
+      {
+        "id": "may-9-2025-07-30-34",
+        "name": "Valley Center to Prescott",
+        "date": "2025-05-09"
+      },
+      {
+        "id": "may-10-2025-09-20-32",
+        "name": "Prescott to Springerville",
+        "date": "2025-05-10"
+      },
+      {
+        "id": "may-11-2025-07-44-17",
+        "name": "Springerville to Tucumcari",
+        "date": "2025-05-11"
+      },
+      {
+        "id": "may-12-2025-19-12-08",
+        "name": "Tucumcari evening loop",
+        "date": "2025-05-12"
+      },
+      {
+        "id": "may-13-2025-07-42-34",
+        "name": "Tucumcari to Shamrock",
+        "date": "2025-05-13"
+      },
+      {
+        "id": "may-14-2025-09-39-40",
+        "name": "Shamrock to McAlester",
+        "date": "2025-05-14"
+      },
+      {
+        "id": "may-16-2025-08-52-06",
+        "name": "McAlester to Harrison",
+        "date": "2025-05-16"
+      },
+      {
+        "id": "may-17-2025-08-13-04",
+        "name": "Harrison to St. Louis",
+        "date": "2025-05-17"
+      }
+    ]
+  },
+  "stops": [
+    {
+      "id": "lake-overlook",
+      "name": "Lake overlook east of Valley Center",
+      "coordinates": [
+        -116.75275,
+        33.22356
+      ],
+      "date": "2025-05-09",
+      "description": "Photographed stop. Coordinates from _R003940.JPG EXIF; confirm the exact stop name before publication."
+    },
+    {
+      "id": "imperial-dunes",
+      "name": "Imperial Valley dunes",
+      "coordinates": [
+        -115.132939,
+        32.983202
+      ],
+      "date": "2025-05-09",
+      "description": "Photographed stop. Coordinates from _R003947.JPG EXIF; confirm the exact stop name before publication."
+    },
+    {
+      "id": "jerome",
+      "name": "Jerome",
+      "coordinates": [
+        -112.1065,
+        34.750322
+      ],
+      "date": "2025-05-10",
+      "description": "Photographed stop. Coordinates from _R003979.JPG EXIF; confirm the exact stop name before publication."
+    },
+    {
+      "id": "mogollon-rim-overlook",
+      "name": "Mogollon Rim overlook",
+      "coordinates": [
+        -111.294004,
+        34.436613
+      ],
+      "date": "2025-05-10",
+      "description": "Photographed stop. Coordinates from _R003996.JPG EXIF; confirm the exact stop name before publication."
+    },
+    {
+      "id": "blue-vista-overlook",
+      "name": "Blue Vista overlook",
+      "coordinates": [
+        -109.35392,
+        33.565056
+      ],
+      "date": "2025-05-11",
+      "description": "Photographed stop. Coordinates from 20250511_090759.jpg EXIF; confirm the exact stop name before publication."
+    },
+    {
+      "id": "texas-canyon-overlook",
+      "name": "Texas canyon overlook",
+      "coordinates": [
+        -101.690865,
+        34.98039
+      ],
+      "date": "2025-05-13",
+      "description": "Photographed stop. Coordinates from _R004180.JPG EXIF; confirm the exact stop name before publication."
+    },
+    {
+      "id": "texas-picnic-overlook",
+      "name": "Texas canyon picnic overlook",
+      "coordinates": [
+        -101.116705,
+        34.468329
+      ],
+      "date": "2025-05-13",
+      "description": "Photographed stop. Coordinates from _R004200.JPG EXIF; confirm the exact stop name before publication."
+    },
+    {
+      "id": "mount-magazine-overlook",
+      "name": "Mount Magazine overlook",
+      "coordinates": [
+        -93.600816,
+        35.161561
+      ],
+      "date": "2025-05-16",
+      "description": "Photographed stop. Coordinates from 20250516_142741.jpg EXIF; confirm the exact stop name before publication."
+    },
+    {
+      "id": "bull-shoals-ferry",
+      "name": "Bull Shoals Lake ferry crossing",
+      "coordinates": [
+        -92.780353,
+        36.494574
+      ],
+      "date": "2025-05-17",
+      "description": "Photographed stop. Coordinates from 20250517_104532.jpg EXIF; confirm the exact stop name before publication."
+    }
+  ],
+  "photos": [
+    {
+      "id": "r003940",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-9004256f00ae-1600.webp",
+      "width": 1600,
+      "height": 753,
+      "alt": "A lake bordered by green marshes beneath a low range of mountains.",
+      "date": "2025-05-09",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-9004256f00ae-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-9004256f00ae-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-9004256f00ae-1600.webp 1600w"
+    },
+    {
+      "id": "20250509-084110",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-084110-5cb111395c91-1600.webp",
+      "width": 1600,
+      "height": 1200,
+      "alt": "A dirt track crossing an open grassy valley toward rugged mountains.",
+      "date": "2025-05-09",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-084110-5cb111395c91-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-084110-5cb111395c91-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-084110-5cb111395c91-1600.webp 1600w"
+    },
+    {
+      "id": "r003946",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-bdf84bda1137-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "A creosote bush growing in flat sandy desert beneath a clear blue sky.",
+      "date": "2025-05-09",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-bdf84bda1137-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-bdf84bda1137-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-bdf84bda1137-1600.webp 1600w"
+    },
+    {
+      "id": "r003947",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-bc3085a37fb3-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "A loaded touring motorcycle parked beside a broad golden sand dune.",
+      "date": "2025-05-09",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-bc3085a37fb3-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-bc3085a37fb3-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-bc3085a37fb3-1600.webp 1600w",
+      "caption": "The motorcycle beside the dunes, May 9."
+    },
+    {
+      "id": "20250509-103323",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-103323-40abf5136e62-1600.webp",
+      "width": 1600,
+      "height": 1200,
+      "alt": "Pale sand dunes and scattered desert shrubs stretching toward distant mountains.",
+      "date": "2025-05-09",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-103323-40abf5136e62-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-103323-40abf5136e62-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-103323-40abf5136e62-1600.webp 1600w"
+    },
+    {
+      "id": "20250509-130232-2",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-130232-2-f55880bdb3f6-1600.webp",
+      "width": 1600,
+      "height": 860,
+      "alt": "A two-lane road curving across the desert beside utility poles and distant mountains.",
+      "date": "2025-05-09",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-130232-2-f55880bdb3f6-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-130232-2-f55880bdb3f6-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-130232-2-f55880bdb3f6-1600.webp 1600w"
+    },
+    {
+      "id": "r003972",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-8342e6c36ba7-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "An expansive valley seen between pine branches from a wooded mountain overlook.",
+      "date": "2025-05-10",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-8342e6c36ba7-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-8342e6c36ba7-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-8342e6c36ba7-1600.webp 1600w"
+    },
+    {
+      "id": "r003979",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-c12c4fe09366-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "Red exterior stairs climbing the side of an old brick building on a hillside.",
+      "date": "2025-05-10",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-c12c4fe09366-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-c12c4fe09366-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-c12c4fe09366-1600.webp 1600w",
+      "caption": "Jerome, Arizona."
+    },
+    {
+      "id": "r003981",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-b544cb354645-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "An old mining cart above a hillside town surrounded by dry green slopes.",
+      "date": "2025-05-10",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-b544cb354645-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-b544cb354645-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-b544cb354645-1600.webp 1600w"
+    },
+    {
+      "id": "r003994",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-b680de795bff-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "A rocky ledge and pine trees overlooking a broad forested basin.",
+      "date": "2025-05-10",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-b680de795bff-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-b680de795bff-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-b680de795bff-1600.webp 1600w"
+    },
+    {
+      "id": "r003996",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-be4a6ac793c1-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "Layered cliffs and pine trees dropping into a deep forested canyon.",
+      "date": "2025-05-10",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-be4a6ac793c1-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-be4a6ac793c1-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-be4a6ac793c1-1600.webp 1600w"
+    },
+    {
+      "id": "20250510-134320",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-134320-d562d0fcbd3e-1600.webp",
+      "width": 1600,
+      "height": 1200,
+      "alt": "A rocky cliff above a forested valley beneath scattered white clouds.",
+      "date": "2025-05-10",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-134320-d562d0fcbd3e-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-134320-d562d0fcbd3e-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-134320-d562d0fcbd3e-1600.webp 1600w"
+    },
+    {
+      "id": "20250510-144308",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-144308-af2da2ac0072-1600.webp",
+      "width": 1600,
+      "height": 1200,
+      "alt": "A long straight road visible far below a rocky overlook and pine-covered plateau.",
+      "date": "2025-05-10",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-144308-af2da2ac0072-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-144308-af2da2ac0072-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-144308-af2da2ac0072-1600.webp 1600w"
+    },
+    {
+      "id": "r004006",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-33b46510c189-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "A loaded motorcycle parked outside a red-and-yellow roadside lodge with picnic tables.",
+      "date": "2025-05-10",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-33b46510c189-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-33b46510c189-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-33b46510c189-1600.webp 1600w"
+    },
+    {
+      "id": "r004010",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-c410b9ea2597-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "Evenly spaced pine trunks rising from an open grassy forest floor.",
+      "date": "2025-05-10",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-c410b9ea2597-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-c410b9ea2597-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-c410b9ea2597-1600.webp 1600w"
+    },
+    {
+      "id": "r004041",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-481ab94519f4-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "Grazing cattle in a golden meadow beneath a low hill and a pastel evening sky.",
+      "date": "2025-05-10",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-481ab94519f4-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-481ab94519f4-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-481ab94519f4-1600.webp 1600w"
+    },
+    {
+      "id": "r004047",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-5631e3bb649c-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "A motorcycle parked between utility trucks outside a Howard Johnson motel.",
+      "date": "2025-05-10",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-5631e3bb649c-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-5631e3bb649c-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-5631e3bb649c-1600.webp 1600w"
+    },
+    {
+      "id": "20250511-090759",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-090759-66941bc10d8d-1600.webp",
+      "width": 1600,
+      "height": 1200,
+      "alt": "Forested mountain ridges extending into the distance beneath wispy clouds.",
+      "date": "2025-05-11",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-090759-66941bc10d8d-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-090759-66941bc10d8d-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-090759-66941bc10d8d-1600.webp 1600w"
+    },
+    {
+      "id": "r004060",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-d5e7bcd47daa-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "Stone picnic tables beside a wooden fence at a high forest overlook.",
+      "date": "2025-05-11",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-d5e7bcd47daa-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-d5e7bcd47daa-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-d5e7bcd47daa-1600.webp 1600w"
+    },
+    {
+      "id": "20250511-132505",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-132505-d1b922aacc38-1600.webp",
+      "width": 1600,
+      "height": 1200,
+      "alt": "A broad desert plain with scattered shrubs and pale buildings beneath distant mountains.",
+      "date": "2025-05-11",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-132505-d1b922aacc38-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-132505-d1b922aacc38-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-132505-d1b922aacc38-1600.webp 1600w"
+    },
+    {
+      "id": "r004092",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-a17fdb33fc35-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "An abandoned building beyond a rusted gate and a broken road on an open plain.",
+      "date": "2025-05-11",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-a17fdb33fc35-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-a17fdb33fc35-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-a17fdb33fc35-1600.webp 1600w"
+    },
+    {
+      "id": "r004097",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-268a87457771-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "A large orange restaurant sign topped by four brightly colored globes.",
+      "date": "2025-05-11",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-268a87457771-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-268a87457771-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-268a87457771-1600.webp 1600w"
+    },
+    {
+      "id": "r004103",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-dd39e7b46024-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "The weathered Rio Pecos Ranch Truck Terminal sign above an abandoned roadside building.",
+      "date": "2025-05-11",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-dd39e7b46024-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-dd39e7b46024-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-dd39e7b46024-1600.webp 1600w",
+      "caption": "Rio Pecos Ranch Truck Terminal."
+    },
+    {
+      "id": "r004108",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-19f00119b1d0-1600.webp",
+      "width": 1600,
+      "height": 2400,
+      "alt": "Purple bell-shaped wildflowers growing in warm evening light.",
+      "date": "2025-05-11",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-19f00119b1d0-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-19f00119b1d0-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-19f00119b1d0-1600.webp 1600w"
+    },
+    {
+      "id": "r004114",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-db169fa33c6d-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "A motorcycle on a narrow paved road ending at a stop sign beside open grassland.",
+      "date": "2025-05-11",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-db169fa33c6d-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-db169fa33c6d-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-db169fa33c6d-1600.webp 1600w"
+    },
+    {
+      "id": "r004132",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-142542cb82a2-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "An abandoned wooden house with a sagging roof surrounded by tall grass.",
+      "date": "2025-05-11",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-142542cb82a2-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-142542cb82a2-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-142542cb82a2-1600.webp 1600w"
+    },
+    {
+      "id": "r004139",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-79ef8d9eb026-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "The illuminated Motel Safari sign with its camel figure above a low motel building.",
+      "date": "2025-05-11",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-79ef8d9eb026-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-79ef8d9eb026-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-79ef8d9eb026-1600.webp 1600w",
+      "caption": "Motel Safari, Tucumcari."
+    },
+    {
+      "id": "r004155",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-6984516e4b11-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "A weathered roadside storefront with a parked car and a tree beside its porch.",
+      "date": "2025-05-12",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-6984516e4b11-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-6984516e4b11-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-6984516e4b11-1600.webp 1600w"
+    },
+    {
+      "id": "r004156",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-c1647b100d05-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "The neon Tee Pee Curios sign and its teepee-shaped entrance at dusk.",
+      "date": "2025-05-12",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-c1647b100d05-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-c1647b100d05-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-c1647b100d05-1600.webp 1600w",
+      "caption": "Tee Pee Curios, Tucumcari."
+    },
+    {
+      "id": "r004165",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-195943e53ea0-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "A flat grassy plain dotted with low shrubs beneath an enormous pale blue sky.",
+      "date": "2025-05-13",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-195943e53ea0-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-195943e53ea0-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-195943e53ea0-1600.webp 1600w"
+    },
+    {
+      "id": "r004168",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-361cd91035c0-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "Bright orange wildflowers among green roadside stems and leaves.",
+      "date": "2025-05-13",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-361cd91035c0-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-361cd91035c0-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-361cd91035c0-1600.webp 1600w"
+    },
+    {
+      "id": "r004180",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-04d8d96b6092-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "A broad canyon with layers of red and pale rock above a wooded floor.",
+      "date": "2025-05-13",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-04d8d96b6092-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-04d8d96b6092-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-04d8d96b6092-1600.webp 1600w"
+    },
+    {
+      "id": "r004184",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1846d1eda420-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "Red canyon walls and green trees beneath a flat, distant rim.",
+      "date": "2025-05-13",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1846d1eda420-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1846d1eda420-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1846d1eda420-1600.webp 1600w"
+    },
+    {
+      "id": "r004200",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-39065a9338ad-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "A shaded brick picnic shelter framing a view across a red-rock canyon.",
+      "date": "2025-05-13",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-39065a9338ad-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-39065a9338ad-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-39065a9338ad-1600.webp 1600w"
+    },
+    {
+      "id": "r004204",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-a9617ddb2d2b-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "Birds flying above shallow water on a rust-red salt flat.",
+      "date": "2025-05-13",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-a9617ddb2d2b-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-a9617ddb2d2b-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-a9617ddb2d2b-1600.webp 1600w"
+    },
+    {
+      "id": "r004223",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-badfdabde073-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "A colorful Shamrock, Texas mural painted on the side of a red-brick building.",
+      "date": "2025-05-13",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-badfdabde073-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-badfdabde073-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-badfdabde073-1600.webp 1600w",
+      "caption": "Shamrock, Texas."
+    },
+    {
+      "id": "r004226",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004226-1c95cbb5af8b-1600.webp",
+      "width": 1600,
+      "height": 2400,
+      "alt": "A blue door with a large white star set into a red, white, and blue wall.",
+      "date": "2025-05-13",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004226-1c95cbb5af8b-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004226-1c95cbb5af8b-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004226-1c95cbb5af8b-1600.webp 1600w"
+    },
+    {
+      "id": "r004231",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004231-fd52c408e1f1-1600.webp",
+      "width": 1600,
+      "height": 2400,
+      "alt": "The cream-colored Art Deco Conoco tower above the U-Drop Inn entrance.",
+      "date": "2025-05-13",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004231-fd52c408e1f1-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004231-fd52c408e1f1-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004231-fd52c408e1f1-1600.webp 1600w",
+      "caption": "The Conoco tower at the U-Drop Inn, Shamrock."
+    },
+    {
+      "id": "r004237",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-bb4f6b20ed68-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "A collapsing wooden farmhouse behind a wire fence on an open grassy plain.",
+      "date": "2025-05-14",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-bb4f6b20ed68-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-bb4f6b20ed68-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-bb4f6b20ed68-1600.webp 1600w"
+    },
+    {
+      "id": "r004244",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-13bb46bd7e92-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "A lake below rounded rocky hills beneath a softly clouded sky.",
+      "date": "2025-05-14",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-13bb46bd7e92-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-13bb46bd7e92-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-13bb46bd7e92-1600.webp 1600w"
+    },
+    {
+      "id": "r004251",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-f4416e58b66e-3200.webp",
+      "width": 3200,
+      "height": 1249,
+      "alt": "A straight rural road and utility poles crossing flat green fields toward a distant horizon.",
+      "date": "2025-05-14",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-f4416e58b66e-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-f4416e58b66e-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-f4416e58b66e-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-f4416e58b66e-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-f4416e58b66e-3200.webp 3200w"
+    },
+    {
+      "id": "r004258",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-e4b0ad2fd6ea-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "Cattle grazing in a green meadow beneath low, rounded granite hills.",
+      "date": "2025-05-14",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-e4b0ad2fd6ea-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-e4b0ad2fd6ea-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-e4b0ad2fd6ea-1600.webp 1600w"
+    },
+    {
+      "id": "r004265",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-6ea2d51cfc01-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "A rocky mountaintop overlooking wooded hills, open plains, and a distant lake.",
+      "date": "2025-05-14",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-6ea2d51cfc01-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-6ea2d51cfc01-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-6ea2d51cfc01-1600.webp 1600w"
+    },
+    {
+      "id": "r004267",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-9821fec1e694-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "A mountain road curving downhill beside large rounded granite boulders.",
+      "date": "2025-05-14",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-9821fec1e694-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-9821fec1e694-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-9821fec1e694-1600.webp 1600w"
+    },
+    {
+      "id": "r004274",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-a3dc4225eb62-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "An ivy-covered two-story brick storefront beside a quiet small-town road.",
+      "date": "2025-05-14",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-a3dc4225eb62-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-a3dc4225eb62-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-a3dc4225eb62-1600.webp 1600w"
+    },
+    {
+      "id": "r004280",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-9aa9eae9369a-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "Trees reflected in a pond bordered by reeds and green grass at dusk.",
+      "date": "2025-05-14",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-9aa9eae9369a-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-9aa9eae9369a-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-9aa9eae9369a-1600.webp 1600w"
+    },
+    {
+      "id": "r004283",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-1de45fab5d30-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "A quiet downtown street lined with brick buildings beneath an evening sky.",
+      "date": "2025-05-14",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-1de45fab5d30-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-1de45fab5d30-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-1de45fab5d30-1600.webp 1600w"
+    },
+    {
+      "id": "r004296",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-170266b3a18b-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "Misty forested mountain ridges beneath low gray clouds.",
+      "date": "2025-05-16",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-170266b3a18b-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-170266b3a18b-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-170266b3a18b-1600.webp 1600w"
+    },
+    {
+      "id": "r004299",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-edf6515d666f-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "A still brown-green river enclosed by steep, densely wooded banks.",
+      "date": "2025-05-16",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-edf6515d666f-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-edf6515d666f-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-edf6515d666f-1600.webp 1600w"
+    },
+    {
+      "id": "r004311",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-f82f66acf6d4-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "A small red-brick roadside building with an American flag and an old gas pump.",
+      "date": "2025-05-16",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-f82f66acf6d4-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-f82f66acf6d4-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-f82f66acf6d4-1600.webp 1600w"
+    },
+    {
+      "id": "20250516-142741",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250516-142741-db27cfe64cc8-1600.webp",
+      "width": 1600,
+      "height": 1200,
+      "alt": "A stone-paved overlook and wooden fence above a broad green valley.",
+      "date": "2025-05-16",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250516-142741-db27cfe64cc8-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250516-142741-db27cfe64cc8-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250516-142741-db27cfe64cc8-1600.webp 1600w"
+    },
+    {
+      "id": "r004338",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-512a58132004-1600.webp",
+      "width": 1600,
+      "height": 1067,
+      "alt": "A sunlit grassy field bordered by trees beneath distant wooded ridges.",
+      "date": "2025-05-16",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-512a58132004-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-512a58132004-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-512a58132004-1600.webp 1600w"
+    },
+    {
+      "id": "r004344",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004344-7ca125fd522b-1600.webp",
+      "width": 1600,
+      "height": 2400,
+      "alt": "Colorful decorative tiles surrounding a large window in a historic brick storefront.",
+      "date": "2025-05-16",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004344-7ca125fd522b-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004344-7ca125fd522b-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004344-7ca125fd522b-1600.webp 1600w"
+    },
+    {
+      "id": "r004346",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004346-65d0c2d4be38-1600.webp",
+      "width": 1600,
+      "height": 2400,
+      "alt": "An ornate brick building with arched windows, striped columns, and a small tower.",
+      "date": "2025-05-16",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004346-65d0c2d4be38-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004346-65d0c2d4be38-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004346-65d0c2d4be38-1600.webp 1600w"
+    },
+    {
+      "id": "20250517-104532",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-104532-d26cb7248f88-1600.webp",
+      "width": 1600,
+      "height": 1200,
+      "alt": "The open deck and loading ramp of a small vehicle ferry crossing a blue lake.",
+      "date": "2025-05-17",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-104532-d26cb7248f88-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-104532-d26cb7248f88-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-104532-d26cb7248f88-1600.webp 1600w"
+    },
+    {
+      "id": "r004357",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004357-7ae056c913a4-1600.webp",
+      "width": 1600,
+      "height": 2400,
+      "alt": "A wooden picnic table beneath the spreading branches of large leafy trees.",
+      "date": "2025-05-17",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004357-7ae056c913a4-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004357-7ae056c913a4-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004357-7ae056c913a4-1600.webp 1600w"
+    },
+    {
+      "id": "20250517-151118",
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-c07949656e43-1600.webp",
+      "width": 1600,
+      "height": 1200,
+      "alt": "A shallow clear river flowing between dense green trees beneath a blue sky.",
+      "date": "2025-05-17",
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-c07949656e43-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-c07949656e43-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-c07949656e43-1600.webp 1600w"
+    }
+  ],
+  "days": [
+    {
+      "id": "may-09",
+      "title": "Valley Center to Prescott",
+      "date": "2025-05-09",
+      "headingId": "may-9",
+      "trackIds": [
+        "may-9-2025-07-30-34"
+      ],
+      "stopIds": [
+        "lake-overlook",
+        "imperial-dunes"
+      ],
+      "galleryId": "may-09"
+    },
+    {
+      "id": "may-10",
+      "title": "Prescott to Springerville",
+      "date": "2025-05-10",
+      "headingId": "may-10",
+      "trackIds": [
+        "may-10-2025-09-20-32"
+      ],
+      "stopIds": [
+        "jerome",
+        "mogollon-rim-overlook"
+      ],
+      "galleryId": "may-10"
+    },
+    {
+      "id": "may-11",
+      "title": "Springerville to Tucumcari",
+      "date": "2025-05-11",
+      "headingId": "may-11",
+      "trackIds": [
+        "may-11-2025-07-44-17"
+      ],
+      "stopIds": [
+        "blue-vista-overlook"
+      ],
+      "galleryId": "may-11"
+    },
+    {
+      "id": "may-12",
+      "title": "Tucumcari evening loop",
+      "date": "2025-05-12",
+      "headingId": "may-12",
+      "trackIds": [
+        "may-12-2025-19-12-08"
+      ],
+      "stopIds": [],
+      "galleryId": "may-12"
+    },
+    {
+      "id": "may-13",
+      "title": "Tucumcari to Shamrock",
+      "date": "2025-05-13",
+      "headingId": "may-13",
+      "trackIds": [
+        "may-13-2025-07-42-34"
+      ],
+      "stopIds": [
+        "texas-canyon-overlook",
+        "texas-picnic-overlook"
+      ],
+      "galleryId": "may-13"
+    },
+    {
+      "id": "may-14",
+      "title": "Shamrock to McAlester",
+      "date": "2025-05-14",
+      "headingId": "may-14",
+      "trackIds": [
+        "may-14-2025-09-39-40"
+      ],
+      "stopIds": [],
+      "galleryId": "may-14"
+    },
+    {
+      "id": "may-15",
+      "title": "McAlester \u2014 confirm the layover",
+      "date": "2025-05-15",
+      "headingId": "may-15",
+      "trackIds": [],
+      "stopIds": []
+    },
+    {
+      "id": "may-16",
+      "title": "McAlester to Harrison",
+      "date": "2025-05-16",
+      "headingId": "may-16",
+      "trackIds": [
+        "may-16-2025-08-52-06"
+      ],
+      "stopIds": [
+        "mount-magazine-overlook"
+      ],
+      "galleryId": "may-16"
+    },
+    {
+      "id": "may-17",
+      "title": "Harrison to St. Louis",
+      "date": "2025-05-17",
+      "headingId": "may-17",
+      "trackIds": [
+        "may-17-2025-08-13-04"
+      ],
+      "stopIds": [
+        "bull-shoals-ferry"
+      ],
+      "galleryId": "may-17"
+    },
+    {
+      "id": "may-18",
+      "title": "St. Louis \u2014 confirm the trip timeline",
+      "date": "2025-05-18",
+      "headingId": "may-18",
+      "trackIds": [],
+      "stopIds": []
+    },
+    {
+      "id": "may-19",
+      "title": "St. Louis \u2014 confirm the trip end",
+      "date": "2025-05-19",
+      "headingId": "may-19",
+      "trackIds": [],
+      "stopIds": []
+    }
+  ],
+  "galleries": {
+    "may-09": [
+      "r003940",
+      "20250509-084110",
+      "r003946",
+      "r003947",
+      "20250509-103323",
+      "20250509-130232-2"
+    ],
+    "may-10": [
+      "r003972",
+      "r003979",
+      "r003981",
+      "r003994",
+      "r003996",
+      "20250510-134320",
+      "20250510-144308",
+      "r004006",
+      "r004010",
+      "r004041",
+      "r004047"
+    ],
+    "may-11": [
+      "20250511-090759",
+      "r004060",
+      "20250511-132505",
+      "r004092",
+      "r004097",
+      "r004103",
+      "r004108",
+      "r004114",
+      "r004132",
+      "r004139"
+    ],
+    "may-12": [
+      "r004155",
+      "r004156"
+    ],
+    "may-13": [
+      "r004165",
+      "r004168",
+      "r004180",
+      "r004184",
+      "r004200",
+      "r004204",
+      "r004223",
+      "r004226",
+      "r004231"
+    ],
+    "may-14": [
+      "r004237",
+      "r004244",
+      "r004251",
+      "r004258",
+      "r004265",
+      "r004267",
+      "r004274",
+      "r004280",
+      "r004283"
+    ],
+    "may-16": [
+      "r004296",
+      "r004299",
+      "r004311",
+      "20250516-142741",
+      "r004338",
+      "r004344",
+      "r004346"
+    ],
+    "may-17": [
+      "20250517-104532",
+      "r004357",
+      "20250517-151118"
+    ],
+    "california-desert": [
+      "r003940",
+      "20250509-084110",
+      "r003946"
+    ],
+    "dunes-to-arizona": [
+      "r003947",
+      "20250509-103323",
+      "20250509-130232-2"
+    ],
+    "jerome-and-mountain-overlook": [
+      "r003972",
+      "r003979",
+      "r003981"
+    ],
+    "mogollon-rim": [
+      "r003994",
+      "r003996",
+      "20250510-134320",
+      "20250510-144308"
+    ],
+    "arizona-evening": [
+      "r004006",
+      "r004010",
+      "r004041",
+      "r004047"
+    ],
+    "arizona-to-new-mexico": [
+      "20250511-090759",
+      "r004060",
+      "20250511-132505",
+      "r004092"
+    ],
+    "tucumcari-evening": [
+      "r004097",
+      "r004103",
+      "r004108",
+      "r004114",
+      "r004132",
+      "r004139"
+    ],
+    "tucumcari-layover": [
+      "r004155",
+      "r004156"
+    ],
+    "texas-plains-and-wildflowers": [
+      "r004165",
+      "r004168"
+    ],
+    "texas-canyons": [
+      "r004180",
+      "r004184",
+      "r004200",
+      "r004204"
+    ],
+    "shamrock-evening": [
+      "r004223",
+      "r004226",
+      "r004231"
+    ],
+    "oklahoma-backroads": [
+      "r004237",
+      "r004244"
+    ],
+    "wichita-mountains": [
+      "r004258",
+      "r004265",
+      "r004267"
+    ],
+    "oklahoma-evening": [
+      "r004274",
+      "r004280",
+      "r004283"
+    ],
+    "arkansas-mountains-and-river": [
+      "r004296",
+      "r004299",
+      "r004311"
+    ],
+    "ozarks-evening": [
+      "r004338",
+      "r004344",
+      "r004346"
+    ],
+    "ozarks-rivers": [
+      "20250517-104532",
+      "r004357",
+      "20250517-151118"
+    ],
+    "highlights": [
+      "r003947",
+      "r003981",
+      "20250510-134320",
+      "r004139",
+      "r004231",
+      "r004251",
+      "r004267",
+      "20250516-142741",
+      "20250517-104532"
+    ]
+  }
+}

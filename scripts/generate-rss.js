@@ -2,13 +2,14 @@
  * Generates an RSS 2.0 feed from the blog post registry.
  *
  * Run during build (`npm run build-rss`) or as part of the main build.
- * Outputs public/rss.xml so it's available at /rsmb.tv/rss.xml.
+ * Outputs public/rss.xml so it's available at /rss.xml.
  */
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
+    filterPublishedPosts,
     formatRssDate,
     loadJsonFile,
     resolveLatestTimestamp,
@@ -32,7 +33,7 @@ function postUrl(post) {
  * Load post metadata from the shared JSON registry.
  */
 export function loadPosts(postsPath = POSTS_PATH) {
-    return sortByDateDescending(loadJsonFile(postsPath, { defaultValue: [] }));
+    return sortByDateDescending(filterPublishedPosts(loadJsonFile(postsPath, { defaultValue: [] })));
 }
 
 function escapeXml(str) {
@@ -62,7 +63,7 @@ export function resolveFeedBuildDate(posts, {
 }
 
 export function buildRssXml(posts, buildDate = resolveFeedBuildDate(posts)) {
-    const items = posts
+    const items = filterPublishedPosts(posts)
         .map(
             (post) => `    <item>
       <title>${escapeXml(post.title)}</title>

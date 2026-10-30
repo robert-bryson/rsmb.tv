@@ -9,6 +9,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
+    filterPublishedPosts,
     formatIsoDate,
     loadJsonFile,
     resolveLatestTimestamp,
@@ -42,7 +43,7 @@ export const STATIC_ROUTES = [
  * Load post metadata from the shared JSON registry.
  */
 export function loadPosts(postsPath = POSTS_PATH) {
-    return loadJsonFile(postsPath, { defaultValue: [] });
+    return filterPublishedPosts(loadJsonFile(postsPath, { defaultValue: [] }));
 }
 
 export function resolveRouteLastModifiedDate(sources, {
@@ -73,7 +74,7 @@ export function buildSitemapXml(posts, {
   </url>`
     ).join('\n');
 
-    const postUrls = posts.map(
+    const postUrls = filterPublishedPosts(posts).map(
         (post) => `  <url>
     <loc>${SITE_URL}/${post.format === 'trip' ? 'trips' : 'blog'}/${post.slug}</loc>
     <lastmod>${post.date}</lastmod>

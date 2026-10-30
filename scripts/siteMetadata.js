@@ -41,6 +41,11 @@ export function sortByDateDescending(items) {
     );
 }
 
+/** Keep public discovery files independent of development preview content. */
+export function filterPublishedPosts(posts) {
+    return posts.filter(post => post.development?.published !== false);
+}
+
 export function resolveLatestTimestamp(paths, {
     repoRoot = process.cwd(),
     fsImpl = fs,

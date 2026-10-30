@@ -35,11 +35,25 @@ describe('amplify.yml', () => {
     });
 
     it('builds the committed Vite output directory and caches only npm artifacts', () => {
-        const config = readRepoFile('amplify.yml');
+        const { frontend } = parse(readRepoFile('amplify.yml'));
 
-        expect(config).toContain('baseDirectory: dist');
-        expect(config).toContain('- npm run build');
-        expect(config).toContain('- .npm/**/*');
+        expect(frontend.artifacts).toEqual({ baseDirectory: 'dist', files: ['**/*'] });
+        expect(frontend.cache.paths).toEqual(['.npm/**/*']);
+    });
+
+    it.each([
+        ['dev', 'run build:dev'],
+        ['main', 'run build'],
+        ['feature/dev', 'run build'],
+        ['', 'run build'],
+    ])('runs the correct build for branch %j', (branch, expectedCommand) => {
+        const commands = getPhaseCommands(readRepoFile('amplify.yml'), 'build');
+        // Replace npm so the actual branch condition runs without imports or deployment.
+        const script = ['npm() { printf \'%s\\n\' "$*"; }', ...commands].join('\n');
+        const result = execFileSync('bash', ['-e', '-c', script], {
+            env: { ...process.env, AWS_BRANCH: branch }, encoding: 'utf8',
+        });
+        expect(result.trim()).toBe(expectedCommand);
     });
 });
 

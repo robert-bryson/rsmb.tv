@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { tripManifestSchema, type TripManifest } from '../../shared/tripManifestSchema';
 import fixture from '../../tests/fixtures/trip-content/trips/coastal-test.json';
 import pch from '../../src/content/trips/pch-2024.json';
+import route66 from '../../src/content/trips/route-66ish-2025.json';
 import { tripAtlasColorAssignments, tripAtlasPalette } from '../../src/features/trips/atlas/tripAtlasColors';
 import { expandTripShortcodes } from '../sync-blogs.js';
 
@@ -50,7 +51,7 @@ describe('trip authoring references', () => {
     });
 });
 
-describe('PCH trip content', () => {
+describe('tracked trip content', () => {
     it('accepts each committed trip manifest through the production schema', () => {
         const directory = new URL('../../src/content/trips/', import.meta.url);
         const filenames = fs.readdirSync(directory).filter(filename => filename.endsWith('.json'));
@@ -80,8 +81,8 @@ describe('PCH trip content', () => {
         expect(manifest.galleries!['day-two'].at(-1)).toBe('20241004-183101');
     });
 
-    it('uses matching fingerprints and widths for every responsive photo', () => {
-        for (const photo of pch.photos) {
+    it.each([pch, route66])('uses matching fingerprints and widths for every responsive photo in $id', trip => {
+        for (const photo of trip.photos) {
             const candidates = photo.srcSet.split(', ').map(candidate => {
                 const [src, descriptor] = candidate.split(' ');
                 expect(descriptor, photo.id).toMatch(/^[1-9]\d*w$/);
@@ -90,7 +91,8 @@ describe('PCH trip content', () => {
                 expect(url.origin, photo.id).toBe('https://data.rsmb.tv');
                 expect(url.username + url.password, photo.id).toBe('');
                 expect(url.search + url.hash, photo.id).toBe('');
-                const match = url.pathname.match(/^\/trips\/pch-2024\/photos\/(.+)-([a-f0-9]{12})-(\d+)\.webp$/);
+                expect(url.pathname.startsWith(`/trips/${trip.id}/photos/`), photo.id).toBe(true);
+                const match = url.pathname.match(/\/photos\/(.+)-([a-f0-9]{12})-(\d+)\.webp$/);
                 expect(match, photo.id).not.toBeNull();
                 expect(match![1]).toBe(photo.id);
                 expect(Number(match![3])).toBe(width);
@@ -105,19 +107,24 @@ describe('PCH trip content', () => {
         }
     });
 
-    it('keeps the gallery reference table complete and consistent with the importer', () => {
-        const guide = fs.readFileSync(new URL('../../docs/trips/pch-2024-galleries.md', import.meta.url), 'utf8');
+    it.each([pch, route66])('keeps the $id gallery reference table consistent with the importer', trip => {
+        const guide = fs.readFileSync(new URL(`../../docs/trips/${trip.id}-galleries.md`, import.meta.url), 'utf8');
         const rows = [...guide.matchAll(/^\| `\{\{trip-gallery:([a-z0-9-]+)\}\}` \| (\d+) \|/gm)];
-        expect(new Set(rows.map(row => row[1]))).toEqual(new Set(Object.keys(pch.galleries)));
-        const manifest = tripManifestSchema.parse(pch);
+        expect(new Set(rows.map(row => row[1]))).toEqual(new Set(Object.keys(trip.galleries)));
+        const manifest = tripManifestSchema.parse(trip);
         const post = { format: 'trip', tripId: manifest.id };
         for (const [, id, count] of rows) {
             expect(manifest.galleries![id].length, id).toBe(Number(count));
             expect(expandTripShortcodes(`{{trip-gallery:${id}}}`, post, manifest)).toBe(`<TripGallery galleryId="${id}" />`);
         }
-        for (const day of manifest.days!) {
+        for (const day of manifest.days!.filter(day => day.trackIds?.length)) {
             expect(expandTripShortcodes(`{{trip-map:day:${day.id}}}`, post, manifest)).toBe(`<TripMap dayId="${day.id}" />`);
         }
+    });
+
+    it('keeps PCH panoramas separate from scene galleries', () => {
+        const manifest = tripManifestSchema.parse(pch);
+        const post = { format: 'trip', tripId: manifest.id };
         for (const id of manifest.galleries!.panoramas) {
             expect(expandTripShortcodes(`{{trip-photo-pano:${id}}}`, post, manifest)).toBe(`<TripPhoto photoId="${id}" layout="pano" />`);
         }
@@ -125,5 +132,35 @@ describe('PCH trip content', () => {
         for (const galleryId of ['port-orford', 'sierra-crossing', 'eastern-sierra-valleys']) {
             for (const id of manifest.galleries![galleryId]) expect(separatePanoramas.has(id), id).toBe(false);
         }
+    });
+
+    it('assigns Route 66 recordings and photos to their capture days and uses every selected photo once in the outline', () => {
+        const manifest = tripManifestSchema.parse(route66);
+        const tracks = new Map(manifest.route.tracks!.map(track => [track.id, track]));
+        const photos = new Map(manifest.photos.map(photo => [photo.id, photo]));
+        const assignedTracks: string[] = [];
+        const assignedPhotos: string[] = [];
+        for (const day of manifest.days!) {
+            for (const id of day.trackIds ?? []) {
+                expect(tracks.get(id)?.date, id).toBe(day.date);
+                assignedTracks.push(id);
+            }
+            for (const id of day.galleryId ? manifest.galleries![day.galleryId] : []) {
+                expect(photos.get(id)?.date, id).toBe(day.date);
+                assignedPhotos.push(id);
+            }
+        }
+        expect(assignedTracks).toHaveLength(tracks.size);
+        expect(new Set(assignedTracks)).toEqual(new Set(tracks.keys()));
+        expect(assignedPhotos).toHaveLength(photos.size);
+        expect(new Set(assignedPhotos)).toEqual(new Set(photos.keys()));
+
+        const outline = fs.readFileSync(new URL('../../docs/trips/route-66ish-2025-outline.md', import.meta.url), 'utf8');
+        const placements = [...outline.matchAll(/^\{\{trip-(gallery|photo|photo-pano):([a-z0-9-]+)\}\}$/gm)];
+        const placedPhotos = placements.flatMap(([, type, id]) => type === 'gallery' ? manifest.galleries![id] : [id]);
+        expect(placedPhotos).toHaveLength(photos.size);
+        expect(new Set(placedPhotos)).toEqual(new Set(photos.keys()));
+        const post = { format: 'trip', tripId: manifest.id };
+        expect(() => expandTripShortcodes(outline, post, manifest)).not.toThrow();
     });
 });

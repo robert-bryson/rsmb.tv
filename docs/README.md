@@ -15,6 +15,8 @@ Use [TODO.md](../TODO.md) for incomplete work.
 | [Trip template](trips/TRIP-STORY-TEMPLATE.md) | Start a trip document |
 | [Trip tests](trips/TESTING.md) | Install browsers and check maps, photos, and JavaScript budgets |
 | [PCH galleries](trips/pch-2024-galleries.md) | Use the PCH outline, gallery IDs, and panorama shortcodes |
+| [Route 66ish media](trips/route-66ish-2025-galleries.md) | Review source files, route dates, gallery IDs, and publication checks |
+| [Route 66ish outline](trips/route-66ish-2025-outline.md) | Write the draft with dated chapters and media placements |
 | [Temperature methodology](../projects/temperature-records/methodology.md) | Check the historical temperature data |
 | [Tornado Tracks](../projects/tornado-tracks/readme.md) | Sync tornado data and check map behavior |
 | [Ride Ledger design](../projects/ride-ledger/readme.md) | Review the proposed application and open decisions |
@@ -26,6 +28,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-10-30 | [ADV Atlas quality review, camera recovery, and publication fixes](reviews/2026-10-30-adv-atlas-quality-review.md) |
 | 2026-10-30 | [ADV Atlas research and implementation plan](reviews/2026-10-30-adv-atlas-research.md) |
 | 2026-10-30 | [Trip CI quality review and delayed-raster recovery](reviews/2026-10-30-trip-ci-quality-review.md) |
 | 2026-10-29 | [PCH content review and regression coverage](reviews/2026-10-29-pch-content-review.md) |

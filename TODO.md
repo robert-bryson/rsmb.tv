@@ -10,6 +10,11 @@ Use the [review index](docs/README.md) for dated findings and test results.
 
 - [ ] Complete the [PCH publication checks](docs/trips/pch-2024-galleries.md#publication-checks) before publishing the story.
 
+### Route 66ish 2025 trip
+
+- [ ] Write the report using the [starter outline](docs/trips/route-66ish-2025-outline.md). Confirm the May 9–19 window against the May 17 recorded arrival.
+- [ ] Complete the [Route 66ish publication checks](docs/trips/route-66ish-2025-galleries.md#publication-checks) before publishing the story.
+
 ### Kalaloch trip
 
 The manifest supports local preview. The public route and hero photo returned HTTP 403 on 2026-10-01.

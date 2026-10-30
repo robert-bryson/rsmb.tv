@@ -1,4 +1,4 @@
-import { useEffect, useEffectEvent, useId, useMemo, useRef, useState } from 'react';
+import { useEffect, useEffectEvent, useId, useMemo, useRef, useState, type RefObject } from 'react';
 import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './tripAtlasMap.css';
@@ -22,6 +22,7 @@ interface Props {
     fitVersion: number;
     panelOpen: boolean;
     initialCamera?: AtlasCamera;
+    fullscreenContainer?: RefObject<HTMLElement | null>;
     onSelect: (id: string | undefined) => void;
     onHover: (id?: string) => void;
     onCameraChange: (camera: AtlasCamera) => void;
@@ -64,6 +65,7 @@ export default function TripAtlasMap(props: Props) {
     const { routes, selectedId, highlightedId, fitVersion, panelOpen, entries } = props;
     const container = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibregl.Map | null>(null);
+    const fullscreenControl = useRef<maplibregl.FullscreenControl | null>(null);
     const [map, setMap] = useState<maplibregl.Map | null>(null);
     const [attempt, setAttempt] = useState(0);
     const [failure, setFailure] = useState(false);
@@ -139,7 +141,9 @@ export default function TripAtlasMap(props: Props) {
         userMoved.current = Boolean(camera.current);
         lastFit.current = camera.current ? { map: instance, key: `${current.selectedId ?? 'all'}:${current.fitVersion}` } : undefined;
         instance.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
-        instance.addControl(new maplibregl.FullscreenControl(), 'top-right');
+        // The atlas container outlives renderer retries. Retain its fullscreen state too.
+        fullscreenControl.current ??= new maplibregl.FullscreenControl({ container: current.fullscreenContainer?.current ?? container.current.parentElement ?? undefined });
+        instance.addControl(fullscreenControl.current, 'top-right');
         instance.addControl(new maplibregl.AttributionControl({ compact: false }), 'bottom-right');
         let initialized = false;
         const ready = () => {
@@ -162,7 +166,14 @@ export default function TripAtlasMap(props: Props) {
         };
         instance.on('moveend', saveCamera);
         instance.on('resize', compareOverview);
-        instance.on('movestart', event => { if (!disposed && event.originalEvent) userMoved.current = true; });
+        instance.on('movestart', event => {
+            if (disposed || !event.originalEvent) return;
+            userMoved.current = true;
+            const current = getCurrent();
+            // Manual movement handles this fit request, even while its route is loading.
+            // A later explicit selection or overview request receives a new key.
+            lastFit.current = { map: instance, key: `${current.selectedId ?? 'all'}:${current.fitVersion}` };
+        });
         instance.on('error', event => {
             if (disposed) return;
             if (/webgl|context|worker/i.test(event.error?.message ?? '') || ('sourceId' in event && event.sourceId === 'atlas-routes')) setFailure(true);
@@ -275,7 +286,6 @@ export default function TripAtlasMap(props: Props) {
         if (!map || mapRef.current !== map || !container.current) return;
         const key = `${selectedId ?? 'all'}:${fitVersion}`;
         if (lastFit.current?.map === map && lastFit.current.key === key) return;
-        if (userMoved.current && fitVersion === 0) return;
         const selected = selectedId ? routes[selectedId]?.route : null;
         if (selectedId && !selected) return;
         if (!selectedId && !entries.every(entry => routes[entry.id]?.route || routes[entry.id]?.error)) return;

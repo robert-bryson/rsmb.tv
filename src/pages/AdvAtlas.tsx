@@ -60,6 +60,7 @@ export default function AdvAtlas() {
     const highlightedId = hoveredId ?? focusedId;
     const [reveal, setReveal] = useState(() => !initialSession && selectedId ? { id: selectedId, version: 0 } : undefined);
     const listRef = useRef<HTMLDivElement>(null);
+    const fullscreenContainer = useRef<HTMLElement>(null);
     const visibleEntries = useMemo(() => onlySelected ? entries.filter(entry => entry.id === selectedId) : entries, [entries, onlySelected, selectedId]);
     const mapEntries = useMemo(() => visibleEntries.filter(entry => entry.summary), [visibleEntries]);
     const mapSelectedId = mapEntries.find(entry => entry.id === selectedId)?.id;
@@ -137,13 +138,13 @@ export default function AdvAtlas() {
 
     const loadedCount = visibleEntries.filter(entry => routes[entry.id]?.route).length;
     return (
-        <main className="relative h-full w-full overflow-hidden bg-zinc-950 text-zinc-100">
+        <main ref={fullscreenContainer} className="relative h-full w-full overflow-hidden bg-zinc-950 text-zinc-100">
             <a href="#atlas-panel-toggle" className="sr-only z-50 rounded bg-violet-600 p-3 focus:not-sr-only focus:absolute focus:left-3 focus:top-3">Skip to trip list</a>
             {entries.map(entry => entry.summary && <RouteReader key={entry.id} id={entry.id} url={entry.summary.route.geoJson} onChange={onRouteChange} />)}
             <TripAtlasMapBoundary>
                 <Suspense fallback={<p role="status" className="absolute inset-0 grid place-items-center text-sm text-zinc-400">Loading trip map…</p>}>
                     <TripAtlasMap entries={mapEntries} routes={visibleRoutes} selectedId={mapSelectedId} highlightedId={highlightedId}
-                        fitVersion={fitVersion} panelOpen={panelOpen} initialCamera={initialSession?.camera}
+                        fitVersion={fitVersion} panelOpen={panelOpen} initialCamera={initialSession?.camera} fullscreenContainer={fullscreenContainer}
                         onSelect={id => id ? selectTrip(id, true) : deselectTrip()} onHover={setHoveredId} onCameraChange={onCameraChange} onViewChange={setCameraChanged} />
                 </Suspense>
             </TripAtlasMapBoundary>

@@ -88,6 +88,7 @@ npm run dev
 The Amplify `dev` branch uses `build:dev`; other branches retain the published-only production build.
 This uses Amplify's documented [branch-specific build commands](https://docs.aws.amazon.com/amplify/latest/userguide/edit-build-settings.html#setting-branch-specific-build-settings-with-scripting).
 Development builds include editorial preview metadata and mark HTML pages `noindex, nofollow`.
+RSS and sitemap files include published posts only, including during development builds.
 Hosted previews keep CDN asset URLs; local Vite uses prepared assets under `public/data/trips/`.
 Missing manifests, photos, or story bodies remain visible as incomplete atlas cards, with route controls enabled only for validated map data.
 

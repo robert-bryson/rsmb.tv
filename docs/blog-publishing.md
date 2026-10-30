@@ -49,6 +49,9 @@ GOOGLE_BLOG_SHEET_ID=your-sheet-id npm run build-blog
 Incomplete drafts do not stop other development content.
 The development panel shows the publication state, source links, and known errors.
 Without Sheet configuration, development uses existing generated files.
+Hosted development builds also include these previews. Their HTML pages use `noindex, nofollow`.
+RSS and sitemap files exclude unpublished rows in every build mode.
+These files use production URLs. A preview must not advertise an unpublished production article.
 
 Production includes only published rows.
 Post slugs must be unique. Trip posts must contain a manifest ID.

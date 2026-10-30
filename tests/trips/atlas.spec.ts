@@ -446,6 +446,72 @@ test('a late route response does not replace a newer trip selection', async ({ p
     } finally { release(); }
 });
 
+for (const selected of [false, true]) {
+    test(`manual movement cancels a delayed ${selected ? 'selected-route' : 'overview'} fit and permits an explicit reset`, async ({ page, isMobile }) => {
+        test.skip(isMobile, 'Keyboard panning requires a desktop map.');
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        let release!: () => void;
+        const held = new Promise<void>(resolve => { release = resolve; });
+        await page.route('**/test-trip/daily-route.geojson', async route => { await held; await route.fulfill({ json: geometry }); });
+        try {
+            await page.goto(atlas);
+            await expect(page.getByText('1/2 routes', { exact: false })).toBeVisible();
+            await openList(page);
+            if (selected) await page.getByRole('button', { name: 'Show route: Daily map test trip' }).click();
+            const canvas = page.getByTestId('trip-atlas-map').locator('canvas');
+            await expect(canvas).toBeVisible();
+            await expect.poll(async () => (await paintedRoute(page, 'coastal-test', 100)).count).toBeGreaterThan(30);
+            await canvas.focus();
+            await canvas.press('ArrowRight');
+            // Include the half-opacity context route while excluding gray tiles.
+            const before = await paintedRoute(page, 'coastal-test', 100);
+            expect(before.count).toBeGreaterThan(30);
+            release();
+            await expect(page.getByText('2/2 routes', { exact: false })).toBeVisible();
+            const after = await paintedRoute(page, 'coastal-test', 100);
+            after.bounds.forEach((value, index) => expect(Math.abs(value - before.bounds[index])).toBeLessThan(5));
+            const reset = page.getByRole('button', { name: 'Zoom to all trips' });
+            await expect(reset).toBeVisible();
+            await reset.click();
+            await expect(reset).toHaveCount(0);
+            await expect(page).toHaveURL(new RegExp(`${atlas}$`));
+        } finally { release(); }
+    });
+}
+
+test('fullscreen retains trip controls, overlapping-route choices, and map recovery', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(`${atlas}?trip=daily-test`);
+    await expect(page.getByText('2/2 routes', { exact: false })).toBeVisible();
+    await page.getByRole('button', { name: 'Enter fullscreen', exact: true }).click();
+    await expect.poll(() => page.evaluate(() => {
+        const target = document.fullscreenElement ?? document.querySelector('.maplibregl-pseudo-fullscreen');
+        return target?.tagName;
+    })).toBe('MAIN');
+    await openList(page);
+    await expect(page.getByRole('link', { name: /Read trip report/ })).toHaveCount(2);
+    await page.locator('#atlas-panel-toggle').click();
+    await expect.poll(async () => (await paintedRoute(page, 'daily-test')).count).toBeGreaterThan(30);
+    const position = (await paintedRoute(page, 'daily-test')).point;
+    const canvas = page.getByTestId('trip-atlas-map').locator('canvas');
+    await canvas.click({ position });
+    const choices = page.getByRole('group', { name: 'Trips sharing this road' });
+    await expect(choices).toBeVisible();
+    await choices.getByRole('button', { name: 'Coastal test trip' }).click();
+    await expect(page).toHaveURL(/\?trip=coastal-test$/);
+    await expect(page.getByRole('button', { name: 'Zoom to all trips' })).toBeVisible();
+    await canvas.evaluate((element: HTMLCanvasElement) => {
+        const extension = element.getContext('webgl2')?.getExtension('WEBGL_lose_context');
+        if (!extension) throw new Error('WebGL context loss simulation is unavailable.');
+        extension.loseContext();
+    });
+    await expect(page.getByText('The interactive map is unavailable.', { exact: false })).toBeVisible();
+    await page.getByRole('button', { name: 'Retry map' }).click();
+    await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
+    await page.getByRole('button', { name: 'Exit fullscreen', exact: true }).click();
+    await expect.poll(() => page.evaluate(() => Boolean(document.fullscreenElement ?? document.querySelector('.maplibregl-pseudo-fullscreen')))).toBe(false);
+});
+
 test('renderer initialization failure retains usable cards and report navigation', async ({ page }) => {
     await page.addInitScript(() => {
         const original = HTMLCanvasElement.prototype.getContext;

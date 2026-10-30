@@ -237,48 +237,81 @@ It does not test the deployed article or prove that hosting rewrite rules match 
 
 ## ADV Atlas
 
-The explorer lives at `/projects/adv-atlas/map`. Former `/projects/motorcycle-trips` links redirect and preserve selections, filters, and return navigation.
+The explorer is at `/projects/adv-atlas/map`.
+Former `/projects/motorcycle-trips` links redirect to this route.
+Redirects preserve selection, filters, and return navigation.
 
-Run the atlas interactions and existing reading-page budgets with fixed production content:
+Run atlas interactions and article budgets with fixed production content:
 
 ```bash
 PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- \
   --grep 'atlas.spec|reading routes exclude' --workers=2
 ```
 
-Atlas checks cover route selection, overlapping roads, shared URLs, report returns, scroll restoration, and delayed geometry.
-The **Show only selected trip** toggle filters both cards and rendered geometry, retains colors and camera position, survives report returns through `view=selected`, and resets on deselection or **Zoom to all trips**.
-The overview control appears at the top center only when selection, filtering, or the camera differs from the overview. At sidebar widths it shares the title's header row and yields enough horizontal space to avoid overlap; on phones it sits below the title.
-Responsive checks cover 320, 767, 768, 858, 1023, 1024, and 1754 pixels with the trip panel open and collapsed, including pointer hit testing of the overview button.
-Checks cover zoom controls, keyboard panning, camera restoration, hidden initial/reset states, and deselection that retains a zoomed view.
-Card clicks select routes with camera padding. Map clicks reveal the matching card.
-Card actions keep **Show route** on the left and the filled **Read trip report** link-button on the right. Check each trip's accent color, hover/focus feedback, wrapping at 320 pixels, and normal report navigation and returns.
-Hover checks verify matching map and card feedback without selection changes or automatic scrolling.
-Overlap choices verify route-colored text, pointer and keyboard previews, close-icon placement, Escape dismissal, and preserved selection and camera position.
-Atlas and story maps share the text-only tooltip factory. Checks verify its colored edge, safe text, reuse, cleanup, and Escape dismissal.
-Atlas tooltips add a smaller muted start-month/year subtitle; checks cover date-only updates without recreating the popup and retain story-map day labels.
-The title stays first, with the date below on the same starting edge and a 4-pixel gap. Visually check short and wrapped titles; [the hierarchy research](../reviews/2026-10-30-adv-atlas-tooltip-hierarchy.md) records the source guidance and project-specific decision.
-Screenshot helpers hide overlays through opacity so pixel measurements preserve pointer targets.
-Failure checks cover independent route retries, failed renderer downloads, unavailable WebGL, and context loss.
-Phone checks verify panel controls, attribution, and a 320-pixel layout.
-Hover previews run on desktop. Phone projects exercise card taps, direct route selection, and overlapping-route choices and dismissal.
+The browser checks cover these behaviors:
 
-Run the geometry and development-lifecycle checks with:
+- Card and map selections agree. Map clicks reveal the selected card.
+- **Show only selected trip** filters cards and geometry. It retains the camera and route colors.
+- The `view=selected` filter survives report navigation. Deselecting or selecting **Zoom to all trips** removes it.
+- Reports retain their map return link. Returning restores card scroll and camera position.
+- Shared roads show route choices. Pointer and keyboard previews retain selection and camera position.
+- Escape dismisses previews and choices. Dismissing a preview does not clear the selected trip.
+- A delayed route does not override a newer selection or manual camera movement.
+- Moving before routes load still permits **Zoom to all trips** after loading finishes.
+- Fullscreen includes the list, overview button, route choices, and recovery controls.
+- Renderer retries retain fullscreen and the selected trip.
+- Failed routes retry independently. Renderer failures leave report links available.
+
+The overview button appears when selection, filtering, or camera position differs from the overview.
+It shares the title row at sidebar widths. It sits below the title on phones.
+Layout checks use widths of 320, 767, 768, 858, 1023, 1024, and 1754 pixels.
+They test open and collapsed panels, control overlap, and pointer targets.
+
+Cards place **Show route** before the filled **Read trip report** button.
+Checks cover accent colors, focus, hover, wrapping, and report navigation.
+Hover previews do not select routes or scroll the list.
+Phone checks use card taps, route selection, and shared-road choices.
+Keyboard panning checks use desktop Chromium.
+
+Atlas and story maps use the same text-only tooltip factory.
+Checks cover safe text, the colored edge, popup reuse, cleanup, and Escape dismissal.
+Atlas tooltips add the start month and year below the title.
+Both lines share a starting edge, with a 4-pixel gap.
+Date-only changes update the existing popup.
+See the [tooltip review](../reviews/2026-10-30-adv-atlas-tooltip-hierarchy.md) for the visual decision.
+Screenshot helpers hide overlays through opacity. Pointer targets remain in place during measurements.
+
+Run the content, geometry, lifecycle, and publication checks:
 
 ```bash
-npx vitest run src/test/tripAtlasEntries.test.ts src/test/tripAtlasView.test.ts src/test/tripAtlasMap.test.tsx src/test/advAtlas.test.tsx
+npx vitest run src/test/tripAtlasEntries.test.ts src/test/tripAtlasView.test.ts \
+  src/test/tripAtlasMap.test.tsx src/test/advAtlas.test.tsx \
+  scripts/__tests__/tripContent.test.ts scripts/__tests__/tripManifestAuthoring.test.ts \
+  scripts/__tests__/generateFeeds.test.ts scripts/__tests__/amplifyConfig.test.ts
 ```
 
-The lifecycle check verifies that Strict Mode does not retain an uninitialized renderer's default camera.
-Page checks use fixed metadata to verify development draft labels, mixed multipart reports, and production draft exclusion.
-Development cards also cover missing manifests, missing trip IDs, unavailable story bodies, and grouped incomplete multipart reports. Missing-data cards retain preview links and never participate in map requests or loading/fit calculations.
-Publication contracts check that explicitly built development previews retain incomplete metadata and CDN URLs while production builds strip drafts and reject missing published manifests.
-Use `npm run build:dev` followed by `npm run preview` to check the hosted-development mode locally. Each known article receives an HTML shell (including incomplete previews), with `noindex, nofollow` metadata.
-Color checks verify stable assignments across subsets and geometry arrival order. Authoring checks require each manifest ID in [the registry](../../src/features/trips/atlas/tripAtlasColors.ts) and reject duplicate color assignments.
+Strict Mode must not retain a replaced renderer's default camera.
+Manual movement cancels the pending fit for the current selection.
+A later explicit fit request must still work.
+Programmatic movement must not cancel a pending route fit.
 
-For manual palette review, use the local atlas with its muted basemap and Chrome DevTools' Rendering → Emulate vision deficiencies controls.
-Check protanopia, deuteranopia, and tritanopia with overview, selection, and the selected-trip filter.
-Hue distinctions can converge in these simulations; verify named tooltips, card feedback, overlap choices, and isolation remain usable.
+Page checks use fixed metadata. They cover drafts, incomplete reports, multipart reports, and production exclusion.
+Cards without valid manifests retain preview links. They do not request routes or affect loading counts and camera bounds.
+Real Vite builds check article HTML in production and development modes.
+Development shells include incomplete reports and `noindex, nofollow` metadata.
+Production shells exclude drafts.
+RSS and sitemap checks exclude unpublished records in every mode.
+Amplify checks execute the branch condition with a substitute `npm` function.
+Only the `dev` branch can select `build:dev`.
+
+Use `npm run build:dev`, then `npm run preview`, to check hosted development behavior locally.
+Hosted previews retain CDN URLs. Local Vite uses prepared local assets.
+
+Color checks retain assignments across filtering and route arrival order.
+Each manifest needs a unique assignment in [the color registry](../../src/features/trips/atlas/tripAtlasColors.ts).
+For manual palette review, use Chrome DevTools' vision-deficiency controls.
+Check protanopia, deuteranopia, and tritanopia with overview, selection, and filtering.
+Named tooltips, card feedback, route choices, and filtering must remain usable when colors converge.
 
 ## JavaScript budgets
 
