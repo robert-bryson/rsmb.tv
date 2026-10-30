@@ -24,6 +24,7 @@ const Route2Gpx = lazy(() => import('./pages/Route2Gpx'));
 const Aborg = lazy(() => import('./pages/Aborg'));
 const Parc = lazy(() => import('./pages/Parc'));
 const StatusDashboard = lazy(() => import('./pages/StatusDashboard'));
+const MotorcycleTrips = lazy(() => import('./pages/MotorcycleTrips'));
 
 const basename = import.meta.env.BASE_URL;
 
@@ -33,6 +34,11 @@ export function LegacyPostsRedirect({ type }: { type: 'writing' | 'trips' }) {
   nextSearchParams.set('type', type);
 
   return <Navigate to={{ pathname: '/posts', search: nextSearchParams.toString() }} replace />;
+}
+
+function MotorcycleTripsRedirect() {
+  const [params] = useSearchParams();
+  return <Navigate to={{ pathname: '/projects/motorcycle-trips/map', search: params.toString() }} replace />;
 }
 
 function LoadingFallback() {
@@ -70,7 +76,8 @@ export default function App() {
               <Route path="/trips" element={<LegacyPostsRedirect type="trips" />} />
               <Route path="/trips/:slug" element={<BlogPost collection="trips" />} />
               <Route path="/projects" element={<Projects />} />
-              <Route path="/projects/motorcycle-trips" element={<LegacyPostsRedirect type="trips" />} />
+              <Route path="/projects/motorcycle-trips" element={<MotorcycleTripsRedirect />} />
+              <Route path="/projects/motorcycle-trips/map" element={<MotorcycleTrips />} />
               <Route path="/projects/through-routes" element={<ThroughRoutes />} />
               <Route path="/projects/flights" element={<FlightsAbout />} />
               <Route path="/projects/flights/map" element={<Flights />} />

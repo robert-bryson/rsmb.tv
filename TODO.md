@@ -43,7 +43,7 @@ The historical signal is not ready for publication.
 
 ## Motorcycle trip atlas
 
-- [ ] Build the remaining atlas phases. Resolve the [implementation questions](docs/reviews/2026-10-30-motorcycle-trip-atlas-research.md#questions-to-ask-during-implementation) as each phase starts.
+- [ ] Check the atlas on a real phone. Measure cold-cache transfer and initialization. Review the [remaining preferences](docs/reviews/2026-10-30-motorcycle-trip-atlas-research.md#questions-to-ask-during-implementation) after trying the explorer.
 
 ## Browser checks
 

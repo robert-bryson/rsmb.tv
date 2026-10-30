@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { isRouteGeoJson, type RouteGeoJson } from './routeGeometry';
 const cache = new Map<string, { promise: Promise<RouteGeoJson>; controller: AbortController; users: number; settled: boolean }>();
 export function clearTripRouteCache() { for (const entry of cache.values()) entry.controller.abort(); cache.clear(); }
@@ -53,9 +53,14 @@ export function useTripRoute(url: string, enabled = true) {
             });
         };
     }, [url, enabled, attempt]);
+    const retry = useCallback(() => {
+        cache.delete(url);
+        setState({ url, error: '' });
+        setAttempt(value => value + 1);
+    }, [url]);
     return {
         route: state.url === url ? state.route ?? null : null,
         error: state.url === url ? state.error : '',
-        retry: () => { cache.delete(url); setState({ url, error: '' }); setAttempt(value => value + 1); },
+        retry,
     };
 }

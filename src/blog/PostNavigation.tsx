@@ -50,10 +50,11 @@ function NeighborLink({ post, direction, returnTo }: {
     );
 }
 
-export function PostNavigation({ previous, next, returnTo }: {
+export function PostNavigation({ previous, next, returnTo, returnLabel = 'Back to posts' }: {
     previous?: BlogPostMeta;
     next?: BlogPostMeta;
     returnTo: string;
+    returnLabel?: string;
 }) {
     return (
         <nav aria-label="Post navigation" className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-start gap-3 sm:gap-6">
@@ -65,7 +66,7 @@ export function PostNavigation({ previous, next, returnTo }: {
                 state={{ restoreScroll: true }}
                 className="inline-flex min-h-11 items-center justify-center rounded-sm text-center text-violet-300 hover:text-violet-200 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-400"
             >
-                Back to posts
+                {returnLabel}
             </Link>
             <div className="min-w-0">
                 {next && <NeighborLink post={next} direction="next" returnTo={returnTo} />}

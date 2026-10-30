@@ -1,4 +1,10 @@
 {
+  "/images/motorcycle-trips/trip-atlas.webp": {
+    "src": "/images/previews/motorcycle-trips-960-bb53f0fd11ff.webp",
+    "srcSet": "/images/previews/motorcycle-trips-480-7d7b975fe580.webp 480w, /images/previews/motorcycle-trips-960-bb53f0fd11ff.webp 960w, /images/previews/motorcycle-trips-1440-bcbaa10872b6.webp 1440w",
+    "width": 1600,
+    "height": 900
+  },
   "/images/through-routes/through-routes-curviness-map.webp": {
     "src": "/images/previews/through-routes-960-44d713527a68.webp",
     "srcSet": "/images/previews/through-routes-480-2978b8117f3a.webp 480w, /images/previews/through-routes-960-44d713527a68.webp 960w, /images/previews/through-routes-1440-915682ba9b14.webp 1440w",

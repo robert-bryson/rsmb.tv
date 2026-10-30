@@ -97,6 +97,8 @@ export function Posts() {
                 ))}
             </nav>
 
+            {activeType === 'trips' && <Link to="/projects/motorcycle-trips/map" className="mb-5 inline-flex min-h-11 items-center text-sm text-violet-300 hover:underline">Explore trips on a map →</Link>}
+
             <div className="mb-8 space-y-5">
                 {allTags.length > 0 && <nav aria-label="Post tags" className="flex flex-wrap items-baseline gap-2">
                     <p className="mr-1 text-xs font-semibold uppercase tracking-wider text-zinc-500">Tags</p>

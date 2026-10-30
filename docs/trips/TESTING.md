@@ -235,6 +235,28 @@ These checks reject HTML responses, including successful HTML rewrites at video 
 The asset test checks HTTP types, MP4 file bytes, poster delivery, and browser decoding.
 It does not test the deployed article or prove that hosting rewrite rules match Terraform.
 
+## Motorcycle trip atlas
+
+Run the atlas interactions and existing reading-page budgets with fixed production content:
+
+```bash
+PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- \
+  --grep 'atlas.spec|reading routes exclude' --workers=2
+```
+
+Atlas checks cover route selection, overlapping roads, shared URLs, report returns, scroll restoration, and delayed geometry.
+Failure checks cover independent route retries, failed renderer downloads, unavailable WebGL, and context loss.
+Phone checks verify panel controls, attribution, and a 320-pixel layout.
+Pointer hit testing runs on desktop. Phone projects exercise the equivalent card controls.
+
+Run the geometry and development-lifecycle checks with:
+
+```bash
+npx vitest run src/test/tripAtlasEntries.test.ts src/test/tripAtlasView.test.ts src/test/tripAtlasMap.test.tsx
+```
+
+The lifecycle check verifies that Strict Mode does not retain an uninitialized renderer's default camera.
+
 ## JavaScript budgets
 
 Each budget test uses a separate browser context.

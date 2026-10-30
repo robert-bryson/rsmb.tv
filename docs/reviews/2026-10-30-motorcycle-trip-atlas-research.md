@@ -27,7 +27,7 @@ No applicable `AGENTS.md` was found in the repository or its ancestors.
 
 These questions follow the architecture review of this plan.
 Ask unanswered questions when the relevant phase starts.
-Suggested defaults remain provisional until the user answers.
+Unanswered preferences use the suggested defaults in the first playable version.
 Track remaining implementation work in [TODO.md](../../TODO.md#motorcycle-trip-atlas).
 
 1. **Return state, before navigation work:** Should returning from a report restore the previous camera, panel state, and card position?
@@ -53,12 +53,12 @@ Track remaining implementation work in [TODO.md](../../TODO.md#motorcycle-trip-a
    Collapsing the panel must not cancel active route readers.
 
 6. **Project identity, before release metadata:** Should the project entry continue directly to the explorer, without a separate introduction page?
-   Suggested default: retain the proposed redirect and identify the application on the explorer page.
+   Confirmed direction: open the explorer directly. The user requested a playable map through the project entry.
    Define its canonical URL and structured data. Add the explorer to the sitemap and register its social image.
    Run the documented project-preview generator and commit its outputs.
 
 7. **Development visibility, before card work:** Should the development atlas show published trips only, or also show clearly labeled drafts?
-   Suggested default: show published trips only. Keep draft inclusion available as an explicit development option.
+   Confirmed answer: show published reports only in the local atlas.
    Production must continue to use the content plugin's publication filtering.
 
 8. **Incomplete development content, before card work:** Should a trip without a valid manifest have a report-only card, or be omitted?
@@ -74,19 +74,26 @@ The summaries exclude track definitions, galleries, daily maps, and the remainin
 The content adapter groups eligible reports by trip ID and orders cards by travel start date.
 It uses explicit series order before the confirmed publication-date fallback.
 It reads report metadata and summaries without loading story bodies or complete manifests.
-Draft inclusion is an explicit option. The default includes published reports only, pending the development-visibility answer.
+Draft inclusion remains an adapter option. The explorer uses the confirmed published-only behavior.
 Incomplete development entries without summaries are omitted. The existing production checks still reject missing published manifests.
 
-The map, cards, navigation, and release metadata remain planned work.
+The playable explorer now runs at `/projects/motorcycle-trips/map`.
+The Projects entry opens it directly. The explorer includes published routes, report cards, shared selection URLs, and a collapsible trip panel.
+Route selection fits the complete geometry. Shared roads offer a trip choice.
+Cards retain authored facts and normal report links. Route failures provide independent retry controls.
+Renderer failures retain the trip list. Context-loss recovery preserves selection.
 
-Projects now lists **Motorcycle Trips** as a project in development.
-Its project route temporarily opens the existing trip-report list until the explorer is available.
-The navigation dropdown uses the same project registry.
-The entry has a registered social image and no feature-release date or changelog yet.
+Report headers and footers use **Back to map** after entry from the atlas.
+Same-session returns restore the camera, card scroll position, and panel state.
+Trip reports also link directly to their selected route. The filtered post list links to the collection map.
 
-Validation on 2026-10-30: 99 focused unit tests and eight Chromium browser budget checks passed.
+The project has a real map screenshot, generated responsive previews, a registered social image, and a canonical sitemap entry.
+Its feature-release date and changelog await publication on the default branch.
+
+Validation on 2026-10-30: 289 focused unit tests and 37 browser checks passed.
 TypeScript checks and changed-file ESLint checks passed.
-Browser checks used fixed production content at desktop and phone sizes.
+Browser checks used fixed production content in desktop Chromium, phone Chromium, and iPhone WebKit.
+Two pointer hit tests were skipped on phone projects. The equivalent card controls passed on both phone engines.
 
 ## Fit within rsmb.tv
 

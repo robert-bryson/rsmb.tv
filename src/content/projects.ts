@@ -28,10 +28,12 @@ export const projects: Project[] = [
   {
     slug: 'motorcycle-trips',
     title: 'Motorcycle Trips',
-    description: 'In development: a map-first collection of motorcycle journeys, bringing together trip reports, route maps, and photographs.',
+    description: 'Explore motorcycle journeys on an interactive map. Browse route maps, photographs, and trip facts, then open the full ride reports.',
     summary: 'Discover motorcycle journeys through route maps, photographs, and trip reports.',
     tech: ['React', 'TypeScript', 'MapLibre GL', 'GeoJSON'],
     applicationCategory: 'TravelApplication',
+    demoUrl: '/projects/motorcycle-trips/map',
+    previewImage: '/images/motorcycle-trips/trip-atlas.webp',
     year: 2026,
   },
   {

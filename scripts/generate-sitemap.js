@@ -25,6 +25,7 @@ export const STATIC_ROUTES = [
     { path: '/', priority: '1.0', changefreq: 'weekly', sources: ['src/pages/Home.tsx', 'src/content/projects.ts'] },
     { path: '/about', priority: '0.8', changefreq: 'monthly', sources: ['src/pages/About.tsx'] },
     { path: '/projects', priority: '0.8', changefreq: 'monthly', sources: ['src/pages/Projects.tsx', 'src/content/projects.ts'] },
+    { path: '/projects/motorcycle-trips/map', priority: '0.8', changefreq: 'monthly', sources: ['src/pages/MotorcycleTrips.tsx', 'src/features/trips/atlas', 'src/content/posts.json', 'src/content/trips'] },
     { path: '/projects/through-routes', priority: '0.7', changefreq: 'monthly', sources: ['src/pages/ThroughRoutes.tsx'] },
     { path: '/projects/flights', priority: '0.9', changefreq: 'weekly', sources: ['src/pages/Flights.tsx', 'src/features/flights'] },
     { path: '/projects/anki-artisan', priority: '0.7', changefreq: 'monthly', sources: ['src/pages/AnkiArtisan.tsx'] },

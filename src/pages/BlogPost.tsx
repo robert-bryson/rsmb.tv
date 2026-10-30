@@ -17,6 +17,7 @@ import { TripStoryHeader } from '../features/trips/components/TripStoryHeader';
 import { TripStoryDetails } from '../features/trips/components/TripStoryDetails';
 import { TripStoryProvider } from '../features/trips/TripStoryProvider';
 import type { TripManifest } from '../features/trips/types';
+import { isTripAtlasLocation } from '../features/trips/atlas/tripAtlasView';
 
 interface BlogPostProps {
     collection: 'blog' | 'trips';
@@ -44,7 +45,8 @@ export function BlogPost({ collection }: BlogPostProps) {
     const summary = getTripSummary(tripId);
     const defaultReturn = isTrip ? '/posts?type=trips' : '/posts?type=writing';
     const from = (location.state as { from?: string } | null)?.from;
-    const returnTo = typeof from === 'string' && /^\/posts(?:\?|$)/.test(from) ? from : defaultReturn;
+    const returnTo = typeof from === 'string' && (/^\/posts(?:\?|$)/.test(from) || isTripAtlasLocation(from)) ? from : defaultReturn;
+    const returnLabel = isTripAtlasLocation(returnTo) ? 'Back to map' : 'Back to posts';
     const collectionPosts = getAllPosts().filter(candidate => isTrip ? candidate.format === 'trip' : candidate.format !== 'trip');
     const postIndex = collectionPosts.findIndex(candidate => candidate.slug === post?.slug);
     // Posts are newest first: the previous post is older, and the next is newer.
@@ -115,7 +117,7 @@ export function BlogPost({ collection }: BlogPostProps) {
         return (
             <div>
                 <Link to={returnTo} state={{ restoreScroll: true }} className="mb-6 inline-block text-sm text-zinc-400 hover:text-violet-400">
-                    ← Back to posts
+                    ← {returnLabel}
                 </Link>
                 <DevelopmentContentStatus post={post} />
                 <h1 className="mb-4 text-2xl font-bold text-zinc-100">Trip not configured</h1>
@@ -152,13 +154,13 @@ export function BlogPost({ collection }: BlogPostProps) {
                     to={returnTo} state={{ restoreScroll: true }}
                     className="shrink-0 hover:text-violet-400"
                 >
-                    ← Back to {collectionName.toLowerCase()}
+                    ← {returnLabel}
                 </Link>
             </div>}
 
             {tripManifest ? (
                 <TripStoryProvider manifest={tripManifest}>
-                    <TripStoryHeader post={post} returnTo={returnTo} />
+                    <TripStoryHeader post={post} returnTo={returnTo} returnLabel={returnLabel} />
                     <DevelopmentContentStatus post={post} />
                     {postContent}
                 </TripStoryProvider>
@@ -181,7 +183,7 @@ export function BlogPost({ collection }: BlogPostProps) {
             )}
             <footer className="mt-12 space-y-5 border-t border-zinc-800 pt-6 text-sm">
                 {seriesPosts.length > 1 && <nav aria-label={series?.title}><p className="mb-2 font-medium">{series?.title}</p><ol className="space-y-2">{seriesPosts.map(part => <li key={part.slug}><Link aria-current={part.slug === post.slug ? 'page' : undefined} className="text-violet-300 underline" to={`/${part.format === 'trip' ? 'trips' : 'blog'}/${part.slug}`}  state={{ from: returnTo }}>{part.title}</Link></li>)}</ol></nav>}
-                <PostNavigation previous={previousPost} next={nextPost} returnTo={returnTo} />
+                <PostNavigation previous={previousPost} next={nextPost} returnTo={returnTo} returnLabel={returnLabel} />
             </footer>
         </article>
     );
