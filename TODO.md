@@ -41,6 +41,10 @@ The historical signal is not ready for publication.
 - [ ] Store an approved station cohort with a version number before publication.
 - [ ] Publish station coverage, failed geography requests, and data quality in a manifest with a version number.
 
+## Motorcycle trip atlas
+
+- [ ] Build the remaining atlas phases. Resolve the [implementation questions](docs/reviews/2026-10-30-motorcycle-trip-atlas-research.md#questions-to-ask-during-implementation) as each phase starts.
+
 ## Browser checks
 
 Use fixed data for browser checks. Record the browser, viewport, and expected result.
