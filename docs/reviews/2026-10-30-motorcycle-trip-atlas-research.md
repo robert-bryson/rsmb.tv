@@ -108,6 +108,9 @@ That browser run included atlas and story-map hover behavior, keyboard dismissal
 The overlap-popup follow-up passed TypeScript, changed-file ESLint, and three browser checks across desktop Chromium, phone Chromium, and iPhone WebKit.
 Choices match route colors. Pointer and keyboard previews reuse the map/card emphasis, and the top-right close icon clears previews while preserving selection and camera position.
 
+The route-context styling follow-up passed seven focused unit tests, TypeScript, changed-file ESLint, and 40 browser checks across desktop Chromium, phone Chromium, and iPhone WebKit.
+Two hover-only phone cases were skipped. Local visual inspection confirmed that background routes retain their own colors at 50% opacity without halos.
+
 ## Fit within rsmb.tv
 
 Use **Motorcycle Trips** as a working project title.
@@ -368,13 +371,14 @@ Selecting a map route or its Show route button should produce the same result.
 Non-interactive card content also selects the route. Map selection scrolls the matching report card into view.
 Highlight the selected route and card.
 Retain the other trips as subdued geographic context.
+Keep their original route colors at 50% opacity and their normal line width, with no halo while another trip is selected or previewed.
 Keep an explicit Show all trips control.
 
 Treat hover as an optional preview.
 Hover should not move the camera, scroll cards, replace persistent selection, or open a report.
 The hovered route and report card share temporary visual emphasis.
 Show the trip title in the story map's dark tooltip, with an edge matching the route color.
-Reuse the shared tooltip factory, route casing, and motion-aware transitions. Dim other routes during temporary emphasis.
+Reuse the shared tooltip factory, route casing, and motion-aware transitions. Dim other routes during temporary emphasis using the same 50%-opacity colors without halos.
 Escape dismisses tooltip feedback without clearing the selected trip.
 Keyboard focus should remain visible without forcing a route selection.
 Opening the report should require its own normal link.

@@ -6,7 +6,7 @@ import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&ur
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { routeCoordinates } from '../routeGeometry';
 import { mapStyle } from '../tripMapBasemaps';
-import { routeBackgroundStyle, routeContextColor, setTripRouteTransitions } from '../tripMapView';
+import { routeBackgroundStyle, setTripRouteTransitions } from '../tripMapView';
 import { createTripMapTooltip } from '../tripMapTooltip';
 import type { TripAtlasEntry } from './tripAtlasEntries';
 import { combineAtlasRoutes, tripAtlasColor, type AtlasCamera, type AtlasRouteState } from './tripAtlasView';
@@ -213,10 +213,9 @@ export default function TripAtlasMap(props: Props) {
         for (const id of ['atlas-hover', 'atlas-hover-casing']) map.setFilter(id, filterFor(highlightedId));
         const emphasizedId = highlightedId ?? selectedId;
         const emphasized: maplibregl.ExpressionSpecification = ['==', ['get', 'tripId'], emphasizedId ?? ''];
+        map.setFilter('atlas-route-casing', emphasizedId ? filterFor(emphasizedId) : null);
         setTripRouteTransitions(map, 'atlas-routes', reducedMotion);
-        map.setPaintProperty('atlas-routes', 'line-color', emphasizedId ? ['case', emphasized, ['get', 'color'], routeContextColor] : ['get', 'color']);
-        map.setPaintProperty('atlas-routes', 'line-opacity', emphasizedId ? ['case', emphasized, 1, 0.25] : 0.85);
-        map.setPaintProperty('atlas-routes', 'line-width', emphasizedId ? ['case', emphasized, 3.5, 2] : 3.5);
+        map.setPaintProperty('atlas-routes', 'line-opacity', emphasizedId ? ['case', emphasized, 1, 0.5] : 0.85);
     }, [map, selectedId, highlightedId, reducedMotion]);
 
     useEffect(() => {
