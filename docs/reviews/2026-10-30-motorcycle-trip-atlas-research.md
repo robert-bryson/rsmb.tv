@@ -406,6 +406,7 @@ Hover should not move the camera, scroll cards, replace persistent selection, or
 The hovered route and report card share temporary visual emphasis.
 Show the trip title in the story map's dark tooltip, with an edge matching the route color.
 Add the trip's start month and year beneath the title in smaller muted text, using the shared UTC month/year formatter (for example, May 2025).
+Use a shared start-aligned edge and a 4-pixel title/date gap for short and wrapping titles. [Tooltip hierarchy research](2026-10-30-trip-atlas-tooltip-hierarchy.md) documents why the route-identification task favors this order over a date-first or right-aligned treatment.
 Reuse the shared tooltip factory, route casing, and motion-aware transitions. Dim other routes during temporary emphasis using the same 50%-opacity colors without halos.
 Escape dismisses tooltip feedback without clearing the selected trip.
 Keyboard focus should remain visible without forcing a route selection.

@@ -254,6 +254,7 @@ Hover checks verify matching map and card feedback without selection changes or 
 Overlap choices verify route-colored text, pointer and keyboard previews, close-icon placement, Escape dismissal, and preserved selection and camera position.
 Atlas and story maps share the text-only tooltip factory. Checks verify its colored edge, safe text, reuse, cleanup, and Escape dismissal.
 Atlas tooltips add a smaller muted start-month/year subtitle; checks cover date-only updates without recreating the popup and retain story-map day labels.
+The title stays first, with the date below on the same starting edge and a 4-pixel gap. Visually check short and wrapped titles; [the hierarchy research](../reviews/2026-10-30-trip-atlas-tooltip-hierarchy.md) records the source guidance and project-specific decision.
 Screenshot helpers hide overlays through opacity so pixel measurements preserve pointer targets.
 Failure checks cover independent route retries, failed renderer downloads, unavailable WebGL, and context loss.
 Phone checks verify panel controls, attribution, and a 320-pixel layout.

@@ -3,6 +3,7 @@ import { Popup, type Map } from 'maplibre-gl';
 function setTooltipText(popup: Popup, label: string, subtitle?: string) {
     if (!subtitle) return popup.setText(label);
     const content = document.createElement('div');
+    content.className = 'trip-map-tooltip-content';
     const title = document.createElement('div');
     title.textContent = label;
     const detail = document.createElement('div');
