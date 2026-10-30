@@ -14,6 +14,7 @@ Use [TODO.md](../TODO.md) for incomplete work.
 | [Trip authoring](trips/TRIP-AUTHORING-README.md) | Prepare, check, and publish trip content |
 | [Trip template](trips/TRIP-STORY-TEMPLATE.md) | Start a trip document |
 | [Trip tests](trips/TESTING.md) | Install browsers and check maps, photos, and JavaScript budgets |
+| [PCH galleries](trips/pch-2024-galleries.md) | Use the PCH outline, gallery IDs, and panorama shortcodes |
 | [Temperature methodology](../projects/temperature-records/methodology.md) | Check the historical temperature data |
 | [Tornado Tracks](../projects/tornado-tracks/readme.md) | Sync tornado data and check map behavior |
 | [Ride Ledger design](../projects/ride-ledger/readme.md) | Review the proposed application and open decisions |
@@ -25,6 +26,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-10-29 | [PCH content review and regression coverage](reviews/2026-10-29-pch-content-review.md) |
 | 2026-10-29 | [Trip media, browser validation, and map recovery review](reviews/2026-10-29-trip-media-and-recovery.md) |
 | 2026-10-29 | [Trip editorial cleanup and photo quality review](reviews/2026-10-29-trip-editorial-quality-review.md) |
 | 2026-10-29 | [Trip editorial findings and source corrections](reviews/2026-10-29-trip-editorial-review.md) |

@@ -52,6 +52,17 @@ npx playwright show-trace path/to/trace.zip
 
 ## Regression coverage
 
+Run the trip authoring checks without Drive, Google access, or public assets:
+
+```bash
+npx vitest run scripts/__tests__/tripContent.test.ts scripts/__tests__/tripManifestAuthoring.test.ts
+```
+
+These checks validate tracked manifests, daily photo assignments, responsive filenames, gallery counts, and shortcode references.
+Invalid-reference cases check duplicate IDs, shared tracks, missing galleries, and inherited object properties.
+The Drive outline remains an authoring source outside Git.
+Validate its shortcodes against the manifest after you change media placements.
+
 | Area | Required behavior |
 | --- | --- |
 | Day maps | Use explicit track and stop assignments. Preserve selection during loading, reset, suspension, and failure. |

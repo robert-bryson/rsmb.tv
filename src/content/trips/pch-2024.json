@@ -1,0 +1,1283 @@
+{
+    "id": "pch-2024",
+    "dates": {
+        "start": "2024-10-03",
+        "end": "2024-10-07"
+    },
+    "ridingDays": 5,
+    "countries": [
+        {
+            "code": "US",
+            "regions": [
+                "Washington",
+                "Oregon",
+                "California"
+            ]
+        }
+    ],
+    "hero": "dscf9177",
+    "route": {
+        "geoJson": "https://data.rsmb.tv/trips/pch-2024/geo/route.geojson",
+        "alt": "Map of the Down the West Coast motorcycle trip route.",
+        "tracks": [
+            {
+                "id": "oct-3-2024-14-10-48",
+                "name": "Seattle to Centralia",
+                "date": "2024-10-03"
+            },
+            {
+                "id": "oct-4-2024-09-09-11",
+                "name": "Centralia to Reedsport",
+                "date": "2024-10-04"
+            },
+            {
+                "id": "oct-5-2024-08-02-47",
+                "name": "Reedsport to Fort Bragg",
+                "date": "2024-10-05"
+            },
+            {
+                "id": "oct-6-2024-07-53-56",
+                "name": "Fort Bragg to Bridgeport",
+                "date": "2024-10-06"
+            },
+            {
+                "id": "oct-7-2024-08-55-55",
+                "name": "Bridgeport to northern San Diego County",
+                "date": "2024-10-07"
+            }
+        ]
+    },
+    "stops": [],
+    "photos": [
+        {
+            "id": "20241003-150610",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/20241003-150610-34c3b4f24ccc-1600.webp",
+            "width": 1600,
+            "height": 2142,
+            "alt": "A motorcyclist wearing a white helmet with a gold visor and a fluorescent yellow riding jacket.",
+            "date": "2024-10-03",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/20241003-150610-34c3b4f24ccc-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/20241003-150610-34c3b4f24ccc-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/20241003-150610-34c3b4f24ccc-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9091",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9091-8c002855d180-1600.webp",
+            "width": 1600,
+            "height": 2400,
+            "alt": "The Olympic Club theater marquee projecting over a brick-lined downtown sidewalk.",
+            "caption": "Olympic Club, Centralia.",
+            "date": "2024-10-03",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9091-8c002855d180-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9091-8c002855d180-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9091-8c002855d180-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9094",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9094-5119c987b68c-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A loaded motorcycle parked on a quiet downtown street beneath streetlights at night.",
+            "caption": "Centralia after dark.",
+            "date": "2024-10-03",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9094-5119c987b68c-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9094-5119c987b68c-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9094-5119c987b68c-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9097",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9097-0c770fba9b8d-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A warmly lit bar with wooden beams, stained-glass lamps, and bottles behind the counter.",
+            "caption": "Inside the Olympic Club.",
+            "date": "2024-10-03",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9097-0c770fba9b8d-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9097-0c770fba9b8d-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9097-0c770fba9b8d-1600.webp 1600w"
+        },
+        {
+            "id": "r003200",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/r003200-6bd3142092c9-1600.webp",
+            "width": 1600,
+            "height": 2400,
+            "alt": "Tall evergreen trees reflected in a still river beneath an overcast sky.",
+            "date": "2024-10-04",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/r003200-6bd3142092c9-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/r003200-6bd3142092c9-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/r003200-6bd3142092c9-1600.webp 1600w"
+        },
+        {
+            "id": "r003202",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/r003202-b70f51380b70-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A red-and-cream roadside restaurant beneath a gray sky.",
+            "date": "2024-10-04",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/r003202-b70f51380b70-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/r003202-b70f51380b70-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/r003202-b70f51380b70-1600.webp 1600w"
+        },
+        {
+            "id": "20241004-183101",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/20241004-183101-2f1e50481816-1600.webp",
+            "width": 1600,
+            "height": 1200,
+            "alt": "A touring motorcycle with luggage parked outside a yellow-and-red motel.",
+            "caption": "The overnight stop in Reedsport.",
+            "date": "2024-10-04",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/20241004-183101-2f1e50481816-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/20241004-183101-2f1e50481816-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/20241004-183101-2f1e50481816-1600.webp 1600w"
+        },
+        {
+            "id": "r003205",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/r003205-ecfc76938136-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Waves rolling onto a sandy beach beside a rocky, forested headland.",
+            "date": "2024-10-04",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/r003205-ecfc76938136-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/r003205-ecfc76938136-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/r003205-ecfc76938136-1600.webp 1600w"
+        },
+        {
+            "id": "r003207",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/r003207-2451f788a1b1-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Tall grasses above a rocky shoreline beneath a steep evergreen-covered bluff.",
+            "date": "2024-10-04",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/r003207-2451f788a1b1-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/r003207-2451f788a1b1-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/r003207-2451f788a1b1-1600.webp 1600w"
+        },
+        {
+            "id": "r003211",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/r003211-31b560291785-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A shaded picnic table among tall trees overlooking a forested headland and the ocean.",
+            "date": "2024-10-04",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/r003211-31b560291785-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/r003211-31b560291785-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/r003211-31b560291785-1600.webp 1600w"
+        },
+        {
+            "id": "r003212",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/r003212-85a7bdb732e6-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Sunlight on an ocean overlook framed by evergreen trees and a wooden fence.",
+            "date": "2024-10-04",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/r003212-85a7bdb732e6-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/r003212-85a7bdb732e6-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/r003212-85a7bdb732e6-1600.webp 1600w"
+        },
+        {
+            "id": "r003214",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/r003214-07c800bb68f6-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A forested coastal bluff dropping to rocks and breaking waves.",
+            "date": "2024-10-04",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/r003214-07c800bb68f6-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/r003214-07c800bb68f6-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/r003214-07c800bb68f6-1600.webp 1600w"
+        },
+        {
+            "id": "r003220",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/r003220-f52e63b9b854-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A long sandy beach curving below evergreen-covered coastal cliffs.",
+            "date": "2024-10-04",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/r003220-f52e63b9b854-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/r003220-f52e63b9b854-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/r003220-f52e63b9b854-1600.webp 1600w"
+        },
+        {
+            "id": "r003225",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/r003225-d643bb52c75b-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A wooden dock beside a still lake reflecting a sunlit forest.",
+            "date": "2024-10-04",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/r003225-d643bb52c75b-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/r003225-d643bb52c75b-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/r003225-d643bb52c75b-1600.webp 1600w"
+        },
+        {
+            "id": "r003228",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/r003228-f6f558f38d55-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A narrow wooden pier extending toward a forest reflected in calm lake water.",
+            "date": "2024-10-04",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/r003228-f6f558f38d55-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/r003228-f6f558f38d55-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/r003228-f6f558f38d55-1600.webp 1600w"
+        },
+        {
+            "id": "r003232",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/r003232-9ebdeb801b86-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A forested shoreline mirrored in a lake with patches of floating vegetation.",
+            "date": "2024-10-04",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/r003232-9ebdeb801b86-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/r003232-9ebdeb801b86-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/r003232-9ebdeb801b86-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9104",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9104-94fdf6d08fa1-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Morning light above wooded hills and a quiet river beneath power lines.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9104-94fdf6d08fa1-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9104-94fdf6d08fa1-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9104-94fdf6d08fa1-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9110",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9110-e89cfe1584f0-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Bare branches emerging from a still river with houses and a bridge on the opposite bank.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9110-e89cfe1584f0-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9110-e89cfe1584f0-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9110-e89cfe1584f0-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9114",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9114-db44e8092105-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A small lighthouse across a sheltered blue inlet with boulders in the foreground.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9114-db44e8092105-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9114-db44e8092105-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9114-db44e8092105-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9122",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9122-3d2da312a2b9-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Sea stacks and pale cliffs beyond a grassy bluff and a long sandy beach.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9122-3d2da312a2b9-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9122-3d2da312a2b9-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9122-3d2da312a2b9-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9126",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9126-d3058a333f4d-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "An empty bench overlooking a misty beach and offshore rocks.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9126-d3058a333f4d-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9126-d3058a333f4d-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9126-d3058a333f4d-1600.webp 1600w"
+        },
+        {
+            "id": "20241005-100257",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/20241005-100257-f676653f5e03-1600.webp",
+            "width": 1600,
+            "height": 1200,
+            "alt": "A loaded motorcycle parked beneath a roadside sign advertising the famous dog.",
+            "caption": "A lunch stop in Langlois.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/20241005-100257-f676653f5e03-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/20241005-100257-f676653f5e03-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/20241005-100257-f676653f5e03-1600.webp 1600w"
+        },
+        {
+            "id": "20241005-102036",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/20241005-102036-3cf76930b485-1600.webp",
+            "width": 1600,
+            "height": 2133,
+            "alt": "Hot dogs, fried potato wedges, condiments, and a drink on a wooden picnic table.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/20241005-102036-3cf76930b485-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/20241005-102036-3cf76930b485-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/20241005-102036-3cf76930b485-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9130-pano",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9130-pano-062aaf9dc37b-3200.webp",
+            "width": 3200,
+            "height": 845,
+            "alt": "A wide panorama of a blue bay, offshore rocks, a distant headland, and a harbor pier.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9130-pano-062aaf9dc37b-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9130-pano-062aaf9dc37b-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9130-pano-062aaf9dc37b-1600.webp 1600w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9130-pano-062aaf9dc37b-2400.webp 2400w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9130-pano-062aaf9dc37b-3200.webp 3200w"
+        },
+        {
+            "id": "dscf9130",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9130-47119a9b72c0-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A solitary sea stack in a blue bay with a rounded headland beyond.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9130-47119a9b72c0-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9130-47119a9b72c0-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9130-47119a9b72c0-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9134",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9134-3ccc7da4c046-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A working pier extending into a calm bay beside a beach and rocky hillside.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9134-3ccc7da4c046-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9134-3ccc7da4c046-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9134-3ccc7da4c046-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9135",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9135-51bf27ca331f-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A motorcycle silhouetted at a seaside overlook above a blue bay.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9135-51bf27ca331f-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9135-51bf27ca331f-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9135-51bf27ca331f-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9136",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9136-b701c4689b66-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A rocky sea arch beneath steep coastal cliffs and a clear blue sky.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9136-b701c4689b66-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9136-b701c4689b66-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9136-b701c4689b66-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9139",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9139-24c4cbbe94f0-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A long beach and surf disappearing into mist beneath wooded coastal cliffs.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9139-24c4cbbe94f0-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9139-24c4cbbe94f0-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9139-24c4cbbe94f0-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9144",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9144-6f24fb6a0fbf-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Two people on a sandy beach among large sea stacks and scattered boulders.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9144-6f24fb6a0fbf-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9144-6f24fb6a0fbf-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9144-6f24fb6a0fbf-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9145",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9145-a2f96c20f193-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Lines of surf crossing a sandy cove beneath offshore rocks and wooded hills.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9145-a2f96c20f193-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9145-a2f96c20f193-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9145-a2f96c20f193-1600.webp 1600w"
+        },
+        {
+            "id": "20241005-121820",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/20241005-121820-9621db32a28d-1600.webp",
+            "width": 1600,
+            "height": 2133,
+            "alt": "A motorcyclist and motorcycle beside a blue Welcome to California sign.",
+            "caption": "Crossing into California.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/20241005-121820-9621db32a28d-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/20241005-121820-9621db32a28d-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/20241005-121820-9621db32a28d-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9147",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9147-f19b9c402c5b-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A broad coastal view with forested headlands, offshore rocks, and white surf.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9147-f19b9c402c5b-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9147-f19b9c402c5b-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9147-f19b9c402c5b-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9149",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9149-bf459b65a059-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "An ornate gray Victorian house with towers, decorative trim, and a front staircase.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9149-bf459b65a059-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9149-bf459b65a059-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9149-bf459b65a059-1600.webp 1600w"
+        },
+        {
+            "id": "20241005-154727",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/20241005-154727-ba5152543df9-1600.webp",
+            "width": 1600,
+            "height": 2133,
+            "alt": "Sunlight filtering through a canopy of towering redwood trees viewed from below.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/20241005-154727-ba5152543df9-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/20241005-154727-ba5152543df9-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/20241005-154727-ba5152543df9-1600.webp 1600w"
+        },
+        {
+            "id": "20241005-154800",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/20241005-154800-603fd8f2e754-1600.webp",
+            "width": 1600,
+            "height": 2133,
+            "alt": "A narrow paved road curving between enormous redwood trunks.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/20241005-154800-603fd8f2e754-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/20241005-154800-603fd8f2e754-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/20241005-154800-603fd8f2e754-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9155",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9155-f5ff4021fa12-1600.webp",
+            "width": 1600,
+            "height": 2400,
+            "alt": "A motorcycle dwarfed by a massive redwood trunk in a shaded forest grove.",
+            "caption": "A stop among the redwoods.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9155-f5ff4021fa12-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9155-f5ff4021fa12-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9155-f5ff4021fa12-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9160",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9160-57e7c2cb45fa-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Double yellow lines following a quiet road through tall redwoods.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9160-57e7c2cb45fa-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9160-57e7c2cb45fa-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9160-57e7c2cb45fa-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9165",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9165-959ea9ead642-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Warm evening light over a rocky shoreline beneath coastal bluffs.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9165-959ea9ead642-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9165-959ea9ead642-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9165-959ea9ead642-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9167",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9167-ed22273151a4-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A narrow coastal road curving beside a guardrail, tall grasses, and the ocean.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9167-ed22273151a4-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9167-ed22273151a4-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9167-ed22273151a4-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9170",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9170-db57afb1d55a-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A coastal road and pale bluffs curving above blue water and offshore rocks.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9170-db57afb1d55a-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9170-db57afb1d55a-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9170-db57afb1d55a-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9171",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9171-b5c60385da2b-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A dark sea arch silhouetted against sunlight reflected on the ocean.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9171-b5c60385da2b-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9171-b5c60385da2b-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9171-b5c60385da2b-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9172",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9172-578fd6460922-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A winding coastal road descending between a steep hillside and the ocean.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9172-578fd6460922-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9172-578fd6460922-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9172-578fd6460922-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9177",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9177-15eac981d6cc-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A loaded motorcycle parked at the edge of a coastal road above a blue bay.",
+            "caption": "The Mendocino coast on the way to Fort Bragg.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9177-15eac981d6cc-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9177-15eac981d6cc-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9177-15eac981d6cc-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9186",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9186-66e329d5082f-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Low surf crossing a broad beach beneath softly lit coastal bluffs.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9186-66e329d5082f-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9186-66e329d5082f-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9186-66e329d5082f-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9187",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9187-9b77f0fa4c0b-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A guardrail and tall grasses above sea stacks in warm evening light.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9187-9b77f0fa4c0b-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9187-9b77f0fa4c0b-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9187-9b77f0fa4c0b-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9193",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9193-d8a272baf2d0-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Large offshore rocks in a small cove surrounded by dry grasses and coastal scrub.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9193-d8a272baf2d0-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9193-d8a272baf2d0-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9193-d8a272baf2d0-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9197",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9197-7a154a7c12cb-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A two-lane road passing through an archway of tall trees lit by the setting sun.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9197-7a154a7c12cb-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9197-7a154a7c12cb-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9197-7a154a7c12cb-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9205",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9205-c0559f3fddb2-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A low bridge crossing still water near the ocean at dusk.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9205-c0559f3fddb2-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9205-c0559f3fddb2-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9205-c0559f3fddb2-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9211",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9211-26e26fb7fffa-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A car passing an illuminated gas station beneath a pink-and-purple evening sky.",
+            "date": "2024-10-05",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9211-26e26fb7fffa-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9211-26e26fb7fffa-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9211-26e26fb7fffa-1600.webp 1600w"
+        },
+        {
+            "id": "20241006-085052",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/20241006-085052-ce8bdd6bec6d-1600.webp",
+            "width": 1600,
+            "height": 1200,
+            "alt": "A view over a motorcycle fuel tank, handlebars, mirrors, and navigation screen on a wooded road.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/20241006-085052-ce8bdd6bec6d-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/20241006-085052-ce8bdd6bec6d-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/20241006-085052-ce8bdd6bec6d-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9214",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9214-f7b269155c4e-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Calm blue lake water below low mountains with dry grasses along the shore.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9214-f7b269155c4e-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9214-f7b269155c4e-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9214-f7b269155c4e-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9215",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9215-484243a7b4bc-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A broad lake with gentle ripples and distant low hills beneath a clear sky.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9215-484243a7b4bc-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9215-484243a7b4bc-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9215-484243a7b4bc-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9220",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9220-345a282b090b-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A dry grassy valley and wooded foothills under a blue sky.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9220-345a282b090b-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9220-345a282b090b-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9220-345a282b090b-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9222",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9222-a3a3ee5aef7d-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A rocky stream winding through dry foothills dotted with trees.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9222-a3a3ee5aef7d-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9222-a3a3ee5aef7d-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9222-a3a3ee5aef7d-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9224",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9224-cfa807af7036-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A closed metal gate opening onto golden fields and scattered oak trees.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9224-cfa807af7036-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9224-cfa807af7036-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9224-cfa807af7036-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9227",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9227-4fa3e2c2f0b1-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Rolling golden ranchland divided by wire fences and dotted with dark trees.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9227-4fa3e2c2f0b1-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9227-4fa3e2c2f0b1-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9227-4fa3e2c2f0b1-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9229",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9229-08e5dc7bd531-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Distant mountain ridges viewed between conifers from a rocky roadside overlook.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9229-08e5dc7bd531-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9229-08e5dc7bd531-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9229-08e5dc7bd531-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9231",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9231-8e2f9c5609b4-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "White clouds over pale granite ridges and a dense evergreen forest.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9231-8e2f9c5609b4-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9231-8e2f9c5609b4-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9231-8e2f9c5609b4-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9235",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9235-17a8340ad63c-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A mountain lake below bare granite slopes and a forested ridge.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9235-17a8340ad63c-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9235-17a8340ad63c-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9235-17a8340ad63c-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9240-pano",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9240-pano-8afebe3fd477-3200.webp",
+            "width": 3200,
+            "height": 660,
+            "alt": "A wide mountain panorama with granite ridges, forested valleys, and a winding roadside guardrail.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9240-pano-8afebe3fd477-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9240-pano-8afebe3fd477-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9240-pano-8afebe3fd477-1600.webp 1600w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9240-pano-8afebe3fd477-2400.webp 2400w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9240-pano-8afebe3fd477-3200.webp 3200w"
+        },
+        {
+            "id": "dscf9240",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9240-507f4ff1cdd0-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A roadside Carson Spur elevation sign above a guardrail and a mountain valley.",
+            "caption": "Carson Spur, 7,990 feet.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9240-507f4ff1cdd0-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9240-507f4ff1cdd0-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9240-507f4ff1cdd0-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9244",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9244-2ee1e0fe88e3-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A blue mountain lake bordered by granite boulders, conifers, and rugged peaks.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9244-2ee1e0fe88e3-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9244-2ee1e0fe88e3-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9244-2ee1e0fe88e3-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9249",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9249-14fd29140754-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Golden autumn leaves among slender pale tree trunks and green conifers.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9249-14fd29140754-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9249-14fd29140754-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9249-14fd29140754-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9250",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9250-a45730d9f18d-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A dry mountain meadow dotted with evergreen trees beneath distant ridges.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9250-a45730d9f18d-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9250-a45730d9f18d-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9250-a45730d9f18d-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9251",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9251-db9f44aec7c0-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Dark clouds gathering above a rocky mountain ridge and scattered conifers.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9251-db9f44aec7c0-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9251-db9f44aec7c0-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9251-db9f44aec7c0-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9253",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9253-3609318bffc8-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A paved road winding into dry mountain country among scattered evergreen trees.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9253-3609318bffc8-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9253-3609318bffc8-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9253-3609318bffc8-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9254",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9254-2e63e1766913-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Bare-branched shrubs and golden grasses in a mountain meadow.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9254-2e63e1766913-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9254-2e63e1766913-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9254-2e63e1766913-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9255",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9255-28fe5d7c59a8-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "An empty road curving toward a rounded bare hillside beneath gray clouds.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9255-28fe5d7c59a8-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9255-28fe5d7c59a8-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9255-28fe5d7c59a8-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9259",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9259-d5a200f37b26-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A steep rocky mountainside rising above a small roadside settlement.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9259-d5a200f37b26-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9259-d5a200f37b26-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9259-d5a200f37b26-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9260",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9260-9c5e4a094456-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A weathered wooden shed, parked vehicles, and livestock trailers beside tall trees.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9260-9c5e4a094456-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9260-9c5e4a094456-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9260-9c5e4a094456-1600.webp 1600w"
+        },
+        {
+            "id": "20241006-163841",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/20241006-163841-937340ec2d5f-1600.webp",
+            "width": 1600,
+            "height": 1200,
+            "alt": "A touring motorcycle parked beside a mountain stream beneath autumn trees and rocky slopes.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/20241006-163841-937340ec2d5f-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/20241006-163841-937340ec2d5f-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/20241006-163841-937340ec2d5f-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9265",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9265-26bc89129589-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A clear rocky river bordered by yellowing trees beneath a steep mountain slope.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9265-26bc89129589-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9265-26bc89129589-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9265-26bc89129589-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9268",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9268-5a3980490851-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A broad dry valley with autumn shrubs and layered mountains beneath a cloudy sky.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9268-5a3980490851-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9268-5a3980490851-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9268-5a3980490851-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9272",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9272-617d58104da7-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A mountain road crossing a dry valley beneath rugged ridgelines.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9272-617d58104da7-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9272-617d58104da7-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9272-617d58104da7-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9273",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9273-d1986d1a6356-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Clouds and patches of blue sky above a wide valley and dark mountain peaks.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9273-d1986d1a6356-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9273-d1986d1a6356-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9273-d1986d1a6356-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9276",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9276-6666b3422d12-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A pale track running through dry grasses toward layered mountain ridges.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9276-6666b3422d12-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9276-6666b3422d12-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9276-6666b3422d12-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9279-pano",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9279-pano-579f12a256e1-3200.webp",
+            "width": 3200,
+            "height": 697,
+            "alt": "A wide panorama of grazing cattle in an open valley beneath cloud-covered mountains.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9279-pano-579f12a256e1-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9279-pano-579f12a256e1-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9279-pano-579f12a256e1-1600.webp 1600w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9279-pano-579f12a256e1-2400.webp 2400w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9279-pano-579f12a256e1-3200.webp 3200w"
+        },
+        {
+            "id": "20241006-173636",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/20241006-173636-34327fd0df2a-1600.webp",
+            "width": 1600,
+            "height": 1200,
+            "alt": "The Walker River Lodge sign beside a motel driveway with mountains beyond.",
+            "caption": "Arriving in Bridgeport.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/20241006-173636-34327fd0df2a-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/20241006-173636-34327fd0df2a-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/20241006-173636-34327fd0df2a-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9291",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9291-4bbb49aa14ff-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Mountains and a grassy yard seen through a motel room sliding glass door.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9291-4bbb49aa14ff-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9291-4bbb49aa14ff-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9291-4bbb49aa14ff-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9292",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9292-df4e2cd615ab-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "The Walker River Lodge sign above a quiet street and buildings at dusk.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9292-df4e2cd615ab-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9292-df4e2cd615ab-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9292-df4e2cd615ab-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9294",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9294-96a2e5cb6d45-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Warm sunset light and a tree shadow on an old brick wall with faded painted lettering.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9294-96a2e5cb6d45-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9294-96a2e5cb6d45-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9294-96a2e5cb6d45-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9297",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9297-6a280d1d2228-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "The Bridgeport United States Post Office beneath an overcast evening sky.",
+            "caption": "Bridgeport Post Office.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9297-6a280d1d2228-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9297-6a280d1d2228-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9297-6a280d1d2228-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9299",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9299-b52a988c405e-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A brightly painted seesaw beside an empty paved court with mountains in the distance.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9299-b52a988c405e-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9299-b52a988c405e-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9299-b52a988c405e-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9302",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9302-6792d7537f79-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A sunset-lit mountain skyline framed by roadside utility poles and overhead wires.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9302-6792d7537f79-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9302-6792d7537f79-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9302-6792d7537f79-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9307",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9307-69f3dad2553d-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A quiet two-lane town street running toward mountains beneath a pink evening sky.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9307-69f3dad2553d-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9307-69f3dad2553d-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9307-69f3dad2553d-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9312",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9312-8fca5559fa38-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Open pasture and wooden fences below a dark mountain ridge at sunset.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9312-8fca5559fa38-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9312-8fca5559fa38-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9312-8fca5559fa38-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9317",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9317-2ee007536c4c-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A longhorn cow sculpture painted with colorful flowers outside a shop.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9317-2ee007536c4c-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9317-2ee007536c4c-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9317-2ee007536c4c-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9327",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9327-402765b640f8-1600.webp",
+            "width": 1600,
+            "height": 2400,
+            "alt": "A small white church with a steep pointed steeple beneath a pink evening sky.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9327-402765b640f8-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9327-402765b640f8-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9327-402765b640f8-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9340",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9340-990b5736f979-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A stream curving through open grassland beneath silhouetted mountains and pink clouds.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9340-990b5736f979-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9340-990b5736f979-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9340-990b5736f979-1600.webp 1600w"
+        },
+        {
+            "id": "20241006-185625",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/20241006-185625-a4e59be6521d-1600.webp",
+            "width": 1600,
+            "height": 1200,
+            "alt": "A wood-paneled bar filled with bottles, signs, and glowing television screens.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/20241006-185625-a4e59be6521d-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/20241006-185625-a4e59be6521d-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/20241006-185625-a4e59be6521d-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9346",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9346-8e31a279402d-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "The Bridgeport Inn and a red neon motel sign across a dark street at night.",
+            "caption": "Bridgeport Inn after dark.",
+            "date": "2024-10-06",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9346-8e31a279402d-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9346-8e31a279402d-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9346-8e31a279402d-1600.webp 1600w"
+        },
+        {
+            "id": "r003242-pano",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/r003242-pano-0ad329e7f971-3200.webp",
+            "width": 3200,
+            "height": 817,
+            "alt": "A wide panorama of golden autumn trees, open sagebrush, and rounded mountain peaks.",
+            "date": "2024-10-07",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/r003242-pano-0ad329e7f971-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/r003242-pano-0ad329e7f971-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/r003242-pano-0ad329e7f971-1600.webp 1600w, https://data.rsmb.tv/trips/pch-2024/photos/r003242-pano-0ad329e7f971-2400.webp 2400w, https://data.rsmb.tv/trips/pch-2024/photos/r003242-pano-0ad329e7f971-3200.webp 3200w"
+        },
+        {
+            "id": "r003242",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/r003242-2b1714c535a3-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Golden aspens bordering a dry meadow beneath a pale mountain range.",
+            "date": "2024-10-07",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/r003242-2b1714c535a3-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/r003242-2b1714c535a3-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/r003242-2b1714c535a3-1600.webp 1600w"
+        },
+        {
+            "id": "r003247-pano",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/r003247-pano-8f79368fa788-1600.webp",
+            "width": 1600,
+            "height": 875,
+            "alt": "A broad valley descending toward a blue lake with a mountain wall along one side.",
+            "date": "2024-10-07",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/r003247-pano-8f79368fa788-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/r003247-pano-8f79368fa788-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/r003247-pano-8f79368fa788-1600.webp 1600w"
+        },
+        {
+            "id": "r003254-pano",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/r003254-pano-852c5bdf1291-3200.webp",
+            "width": 3200,
+            "height": 849,
+            "alt": "A wide panorama of a pale granite mountain above a dry valley and scattered trees.",
+            "date": "2024-10-07",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/r003254-pano-852c5bdf1291-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/r003254-pano-852c5bdf1291-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/r003254-pano-852c5bdf1291-1600.webp 1600w, https://data.rsmb.tv/trips/pch-2024/photos/r003254-pano-852c5bdf1291-2400.webp 2400w, https://data.rsmb.tv/trips/pch-2024/photos/r003254-pano-852c5bdf1291-3200.webp 3200w"
+        },
+        {
+            "id": "r003259",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/r003259-22b200646d31-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A green roadside park with mature shade trees, picnic tables, and a small monument.",
+            "date": "2024-10-07",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/r003259-22b200646d31-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/r003259-22b200646d31-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/r003259-22b200646d31-1600.webp 1600w"
+        },
+        {
+            "id": "r003261",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/r003261-eeb7f10712ac-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A lone pale boulder in a flat desert basin beneath dark clouds and distant mountains.",
+            "date": "2024-10-07",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/r003261-eeb7f10712ac-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/r003261-eeb7f10712ac-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/r003261-eeb7f10712ac-1600.webp 1600w"
+        },
+        {
+            "id": "r003267",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/r003267-0f2fd45cf06d-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "An open desert plain and distant ridges beneath a sky filled with sunlit clouds.",
+            "date": "2024-10-07",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/r003267-0f2fd45cf06d-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/r003267-0f2fd45cf06d-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/r003267-0f2fd45cf06d-1600.webp 1600w"
+        }
+    ],
+    "days": [
+        {
+            "id": "day-one",
+            "title": "October 3",
+            "date": "2024-10-03",
+            "headingId": "october-3",
+            "trackIds": [
+                "oct-3-2024-14-10-48"
+            ],
+            "stopIds": [],
+            "galleryId": "day-one"
+        },
+        {
+            "id": "day-two",
+            "title": "October 4",
+            "date": "2024-10-04",
+            "headingId": "october-4",
+            "trackIds": [
+                "oct-4-2024-09-09-11"
+            ],
+            "stopIds": [],
+            "galleryId": "day-two"
+        },
+        {
+            "id": "day-three",
+            "title": "October 5",
+            "date": "2024-10-05",
+            "headingId": "october-5",
+            "trackIds": [
+                "oct-5-2024-08-02-47"
+            ],
+            "stopIds": [],
+            "galleryId": "day-three"
+        },
+        {
+            "id": "day-four",
+            "title": "October 6",
+            "date": "2024-10-06",
+            "headingId": "october-6",
+            "trackIds": [
+                "oct-6-2024-07-53-56"
+            ],
+            "stopIds": [],
+            "galleryId": "day-four"
+        },
+        {
+            "id": "day-five",
+            "title": "October 7",
+            "date": "2024-10-07",
+            "headingId": "october-7",
+            "trackIds": [
+                "oct-7-2024-08-55-55"
+            ],
+            "stopIds": [],
+            "galleryId": "day-five"
+        }
+    ],
+    "galleries": {
+        "day-one": [
+            "20241003-150610",
+            "dscf9091",
+            "dscf9094",
+            "dscf9097"
+        ],
+        "day-two": [
+            "r003200",
+            "r003202",
+            "r003205",
+            "r003207",
+            "r003211",
+            "r003212",
+            "r003214",
+            "r003220",
+            "r003225",
+            "r003228",
+            "r003232",
+            "20241004-183101"
+        ],
+        "day-three": [
+            "dscf9104",
+            "dscf9110",
+            "dscf9114",
+            "dscf9122",
+            "dscf9126",
+            "20241005-100257",
+            "20241005-102036",
+            "dscf9130-pano",
+            "dscf9130",
+            "dscf9134",
+            "dscf9135",
+            "dscf9136",
+            "dscf9139",
+            "dscf9144",
+            "dscf9145",
+            "20241005-121820",
+            "dscf9147",
+            "dscf9149",
+            "20241005-154727",
+            "20241005-154800",
+            "dscf9155",
+            "dscf9160",
+            "dscf9165",
+            "dscf9167",
+            "dscf9170",
+            "dscf9171",
+            "dscf9172",
+            "dscf9177",
+            "dscf9186",
+            "dscf9187",
+            "dscf9193",
+            "dscf9197",
+            "dscf9205",
+            "dscf9211"
+        ],
+        "day-four": [
+            "20241006-085052",
+            "dscf9214",
+            "dscf9215",
+            "dscf9220",
+            "dscf9222",
+            "dscf9224",
+            "dscf9227",
+            "dscf9229",
+            "dscf9231",
+            "dscf9235",
+            "dscf9240-pano",
+            "dscf9240",
+            "dscf9244",
+            "dscf9249",
+            "dscf9250",
+            "dscf9251",
+            "dscf9253",
+            "dscf9254",
+            "dscf9255",
+            "dscf9259",
+            "dscf9260",
+            "20241006-163841",
+            "dscf9265",
+            "dscf9268",
+            "dscf9272",
+            "dscf9273",
+            "dscf9276",
+            "dscf9279-pano",
+            "20241006-173636",
+            "dscf9291",
+            "dscf9292",
+            "dscf9294",
+            "dscf9297",
+            "dscf9299",
+            "dscf9302",
+            "dscf9307",
+            "dscf9312",
+            "dscf9317",
+            "dscf9327",
+            "dscf9340",
+            "20241006-185625",
+            "dscf9346"
+        ],
+        "day-five": [
+            "r003242-pano",
+            "r003242",
+            "r003247-pano",
+            "r003254-pano",
+            "r003259",
+            "r003261",
+            "r003267"
+        ],
+        "oregon-coast-overlooks": [
+            "r003205",
+            "r003207",
+            "r003211",
+            "r003212",
+            "r003214",
+            "r003220"
+        ],
+        "lakeside-reflections": [
+            "r003225",
+            "r003228",
+            "r003232"
+        ],
+        "oregon-coast-morning": [
+            "dscf9104",
+            "dscf9110",
+            "dscf9114",
+            "dscf9122",
+            "dscf9126"
+        ],
+        "southern-oregon-coast": [
+            "20241005-100257",
+            "20241005-102036",
+            "dscf9130-pano",
+            "dscf9130",
+            "dscf9134",
+            "dscf9135",
+            "dscf9136",
+            "dscf9139",
+            "dscf9144",
+            "dscf9145"
+        ],
+        "california-and-redwoods": [
+            "20241005-121820",
+            "dscf9147",
+            "dscf9149",
+            "20241005-154727",
+            "20241005-154800",
+            "dscf9155",
+            "dscf9160"
+        ],
+        "mendocino-coast-evening": [
+            "dscf9165",
+            "dscf9167",
+            "dscf9170",
+            "dscf9171",
+            "dscf9172",
+            "dscf9177",
+            "dscf9186",
+            "dscf9187",
+            "dscf9193",
+            "dscf9197",
+            "dscf9205",
+            "dscf9211"
+        ],
+        "inland-california": [
+            "20241006-085052",
+            "dscf9214",
+            "dscf9215",
+            "dscf9220",
+            "dscf9222",
+            "dscf9224",
+            "dscf9227"
+        ],
+        "sierra-crossing": [
+            "dscf9229",
+            "dscf9231",
+            "dscf9235",
+            "dscf9240",
+            "dscf9244",
+            "dscf9249",
+            "dscf9250",
+            "dscf9251",
+            "dscf9253",
+            "dscf9254",
+            "dscf9255",
+            "dscf9259",
+            "dscf9260"
+        ],
+        "eastern-sierra-valleys": [
+            "20241006-163841",
+            "dscf9265",
+            "dscf9268",
+            "dscf9272",
+            "dscf9273",
+            "dscf9276"
+        ],
+        "bridgeport-evening": [
+            "20241006-173636",
+            "dscf9291",
+            "dscf9292",
+            "dscf9294",
+            "dscf9297",
+            "dscf9299",
+            "dscf9302",
+            "dscf9307",
+            "dscf9312",
+            "dscf9317",
+            "dscf9327",
+            "dscf9340",
+            "20241006-185625",
+            "dscf9346"
+        ],
+        "eastern-sierra-morning": [
+            "r003242-pano",
+            "r003242",
+            "r003247-pano",
+            "r003254-pano"
+        ],
+        "desert-homeward": [
+            "r003259",
+            "r003261",
+            "r003267"
+        ],
+        "highlights": [
+            "dscf9091",
+            "r003214",
+            "dscf9130-pano",
+            "dscf9155",
+            "dscf9177",
+            "dscf9240-pano",
+            "dscf9265",
+            "dscf9327",
+            "r003254-pano"
+        ],
+        "motorcycle-stops": [
+            "20241003-150610",
+            "dscf9094",
+            "20241004-183101",
+            "20241005-100257",
+            "dscf9135",
+            "20241005-121820",
+            "dscf9155",
+            "dscf9177",
+            "20241006-085052",
+            "20241006-163841"
+        ],
+        "panoramas": [
+            "dscf9130-pano",
+            "dscf9240-pano",
+            "dscf9279-pano",
+            "r003242-pano",
+            "r003247-pano",
+            "r003254-pano"
+        ],
+        "langlois-lunch": [
+            "20241005-100257",
+            "20241005-102036"
+        ],
+        "port-orford": [
+            "dscf9134",
+            "dscf9135"
+        ],
+        "southern-oregon-beaches": [
+            "dscf9136",
+            "dscf9139",
+            "dscf9144",
+            "dscf9145"
+        ]
+    }
+}

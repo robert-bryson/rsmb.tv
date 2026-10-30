@@ -6,6 +6,10 @@ Use the [review index](docs/README.md) for dated findings and test results.
 
 ## Publication blockers
 
+### PCH 2024 trip
+
+- [ ] Complete the [PCH publication checks](docs/trips/pch-2024-galleries.md#publication-checks) before publishing the story.
+
 ### Kalaloch trip
 
 The manifest supports local preview. The public route and hero photo returned HTTP 403 on 2026-10-01.
