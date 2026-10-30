@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { combineAtlasRoutes, isTripAtlasLocation, readAtlasSession, saveAtlasSession, tripAtlasColor, tripAtlasUrl } from '../features/trips/atlas/tripAtlasView';
+import { combineAtlasRoutes, isTripAtlasLocation, tripAtlasColor, tripAtlasUrl } from '../features/trips/atlas/tripAtlasView';
 import type { RouteGeoJson } from '../features/trips/routeGeometry';
 
 const route: RouteGeoJson = {
@@ -58,14 +58,5 @@ describe('trip atlas view data', () => {
         const url = new URL(tripAtlasUrl('coast & hills'), 'https://rsmb.tv');
         expect(url.pathname).toBe('/projects/adv-atlas/map');
         expect(url.searchParams.get('trip')).toBe('coast & hills');
-    });
-
-    it('restores history entries and explicit return URLs without restoring unrelated fresh visits', () => {
-        const saved = { panelOpen: true, scrollTop: 320, camera: { center: [-122, 47] as [number, number], zoom: 8, bearing: 0, pitch: 0 } };
-        saveAtlasSession('history-key', '/atlas-session-test?trip=first', saved);
-        saved.scrollTop = 0;
-        expect(readAtlasSession('history-key')?.scrollTop).toBe(320);
-        expect(readAtlasSession('new-key', '/atlas-session-test?trip=first')?.camera?.zoom).toBe(8);
-        expect(readAtlasSession('unrelated-key')).toBeUndefined();
     });
 });

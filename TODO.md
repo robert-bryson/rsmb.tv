@@ -48,7 +48,7 @@ The historical signal is not ready for publication.
 
 ## ADV Atlas
 
-- [ ] Check the atlas on a real phone. Measure cold-cache transfer and initialization. Review the [remaining preferences](docs/reviews/2026-10-30-adv-atlas-research.md#questions-to-ask-during-implementation) after trying the explorer.
+- [ ] Check the atlas on a real phone. Measure cold-cache transfer and initialization. Verify the [current navigation and recovery behavior](docs/trips/ADV-ATLAS.md).
 
 ## Browser checks
 

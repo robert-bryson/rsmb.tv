@@ -10,7 +10,8 @@ import { mapStyle } from '../tripMapBasemaps';
 import { routeBackgroundStyle, setTripRouteTransitions } from '../tripMapView';
 import { createTripMapTooltip } from '../tripMapTooltip';
 import type { TripAtlasEntry } from './tripAtlasEntries';
-import { combineAtlasRoutes, tripAtlasColor, type AtlasCamera, type AtlasRouteState } from './tripAtlasView';
+import { combineAtlasRoutes, tripAtlasColor, type AtlasRouteState } from './tripAtlasView';
+import type { AtlasCamera } from './tripAtlasSession';
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl);
 

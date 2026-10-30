@@ -14,6 +14,7 @@ Use [TODO.md](../TODO.md) for incomplete work.
 | [Trip authoring](trips/TRIP-AUTHORING-README.md) | Prepare, check, and publish trip content |
 | [Trip template](trips/TRIP-STORY-TEMPLATE.md) | Start a trip document |
 | [Trip tests](trips/TESTING.md) | Install browsers and check maps, photos, and JavaScript budgets |
+| [ADV Atlas](trips/ADV-ATLAS.md) | Use atlas URLs, restore tab state, and find code ownership |
 | [PCH galleries](trips/pch-2024-galleries.md) | Use the PCH outline, gallery IDs, and panorama shortcodes |
 | [Route 66ish media](trips/route-66ish-2025-galleries.md) | Review source files, route dates, gallery IDs, and publication checks |
 | [Route 66ish outline](trips/route-66ish-2025-outline.md) | Write the draft with dated chapters and media placements |
@@ -28,6 +29,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-10-30 | [ADV Atlas session restoration and regression review](reviews/2026-10-30-adv-atlas-session-review.md) |
 | 2026-10-30 | [ADV Atlas quality review, camera recovery, and publication fixes](reviews/2026-10-30-adv-atlas-quality-review.md) |
 | 2026-10-30 | [ADV Atlas research and implementation plan](reviews/2026-10-30-adv-atlas-research.md) |
 | 2026-10-30 | [Trip CI quality review and delayed-raster recovery](reviews/2026-10-30-trip-ci-quality-review.md) |

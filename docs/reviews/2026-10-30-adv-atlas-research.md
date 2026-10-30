@@ -1,5 +1,8 @@
 # ADV Atlas research: 2026-10-30
 
+Use the [atlas guide](../trips/ADV-ATLAS.md) for current behavior and code ownership.
+This report retains the dated research and implementation history.
+
 ## Recommendation
 
 Build a map-first collection of the existing motorcycle trip reports.

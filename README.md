@@ -6,7 +6,7 @@ A personal website with software projects, data maps, writing, and motorcycle tr
 
 ## Features
 
-- **ADV Atlas** — Explore motorcycle journeys on a map, browse trip photographs, and open the full reports.
+- **[ADV Atlas](docs/trips/ADV-ATLAS.md)** — Explore motorcycle journeys on a map, browse trip photographs, and open the full reports.
 - **Flights** — A globe with flight routes, filters, camera controls, and travel statistics.
 - **Temperature Records** — An interactive MapLibre GL map of U.S. temperature records. It shows recent station records, standing county and state extremes, and standing-record history.
 - **Tornado Tracks** — Recorded tornado county segments, density maps, annual trends, and warning context. See the [project guide](projects/tornado-tracks/readme.md).
@@ -330,13 +330,27 @@ Selection parameters are `year`, `airport`, `airline`, `route`, `country`, `regi
 Flight types are `domestic`, `international`, and `intercontinental`. These retain compatible year and airline filters.
 Only one of `airport`, `route`, `country`, `region`, or `flightType` can control the focus.
 
-View parameters include `lat`, `lng`, `alt`, `stats`, `filters`, `help`, `layers`, and `layerSection`. Display and layer parameters include `basemap`, `color`, `anim`, `paths`, `rotation`, `allAirports`, `airportMode`, `usStates`, `stateMode`, and `units=imperial`. Add URL controls through `useFlightsFilters`. This combines changes from one interaction before the URL updates.
+| Parameter group | Values |
+| --- | --- |
+| View | `lat`, `lng`, `alt`, `stats`, `filters`, `help`, `layers`, `layerSection` |
+| Display and layers | `basemap`, `color`, `anim`, `paths`, `rotation`, `allAirports`, `airportMode`, `usStates`, `stateMode`, `units=imperial` |
+
+Add URL controls through `useFlightsFilters`.
+This combines changes from one interaction before the URL updates.
 
 ## Flights Stats Panel
 
-The flights stats panel stays mounted when closed. This keeps the slide animation smooth. The closed panel uses `inert` and `aria-hidden`.
+The flights stats panel stays mounted when closed.
+This keeps the slide animation smooth.
+The closed panel uses `inert` and `aria-hidden`.
 
-On a desktop device, drag the right edge to resize the panel. For keyboard control, focus the edge. Use the Left Arrow or Right Arrow key to change the width by `8` pixels. Use the Home key for the minimum width. Use the End key for the maximum width. The application stores the width in the `flights-stats-panel-width` local storage key. The permitted width is `272` to `520` pixels.
+On a desktop device, drag the right edge to resize the panel.
+For keyboard control, focus the edge.
+Use the Left Arrow or Right Arrow key to change the width by `8` pixels.
+Use the Home key for the minimum width.
+Use the End key for the maximum width.
+The application stores the width in the `flights-stats-panel-width` local storage key.
+The permitted width is `272` to `520` pixels.
 
 Distance values show the active unit. Hover a distance value to see the alternate unit.
 

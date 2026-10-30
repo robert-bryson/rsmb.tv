@@ -4,6 +4,7 @@ import type { BlogPostMeta } from '../content/posts';
 import type { TripSummary } from '../features/trips/types';
 import type { TripAtlasEntry } from '../features/trips/atlas/tripAtlasEntries';
 import type { AtlasRouteState } from '../features/trips/atlas/tripAtlasView';
+import { readAtlasSession } from '../features/trips/atlas/tripAtlasSession';
 import AdvAtlas from '../pages/AdvAtlas';
 import { renderWithRouter } from './helpers/router';
 
@@ -45,6 +46,23 @@ beforeEach(() => {
 });
 
 describe('atlas card interactions', () => {
+    it('saves the current panel and card position before page unload and removes the listener after navigation', () => {
+        const add = vi.spyOn(window, 'addEventListener');
+        const remove = vi.spyOn(window, 'removeEventListener');
+        const { unmount } = renderWithRouter(<AdvAtlas />, { route: '/projects/adv-atlas/map?test=pagehide' });
+        const list = document.getElementById('atlas-trip-list')!;
+        fireEvent.scroll(list, { target: { scrollTop: 180 } });
+        fireEvent.click(screen.getByRole('button', { name: /Hide trips/ }));
+        window.dispatchEvent(new Event('pagehide'));
+        expect(readAtlasSession('new-key', '/projects/adv-atlas/map?test=pagehide')).toMatchObject({ panelOpen: false, scrollTop: 180 });
+        const listener = add.mock.calls.find(([type]) => type === 'pagehide')![1];
+        fireEvent.click(screen.getByRole('button', { name: /Browse trips/ }));
+        unmount();
+        expect(remove).toHaveBeenCalledWith('pagehide', listener);
+        add.mockRestore();
+        remove.mockRestore();
+    });
+
     it('filters map and cards to the selected trip without refitting, and restores all trips when turned off', async () => {
         renderWithRouter(<AdvAtlas />, { route: '/projects/adv-atlas/map' });
         const renderer = await screen.findByTestId('atlas-renderer');

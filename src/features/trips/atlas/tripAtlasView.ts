@@ -30,27 +30,3 @@ export function combineAtlasRoutes(routes: Readonly<Record<string, AtlasRouteSta
         })) : []),
     };
 }
-
-export interface AtlasCamera {
-    center: [number, number];
-    zoom: number;
-    bearing: number;
-    pitch: number;
-}
-
-export interface AtlasSession {
-    camera?: AtlasCamera;
-    panelOpen: boolean;
-    scrollTop: number;
-}
-
-const sessions = new Map<string, AtlasSession>();
-export function saveAtlasSession(key: string, url: string, session: AtlasSession) {
-    sessions.set(key, { ...session });
-    sessions.set(url, { ...session });
-    while (sessions.size > 40) sessions.delete(sessions.keys().next().value!);
-}
-
-export function readAtlasSession(key: string, returnUrl?: string) {
-    return sessions.get(key) ?? (returnUrl ? sessions.get(returnUrl) : undefined);
-}

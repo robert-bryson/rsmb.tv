@@ -6,10 +6,8 @@ import { getTripSummary } from '../features/trips/tripSummaries';
 import { useTripRoute } from '../features/trips/useTripRoute';
 import { buildTripAtlasEntries, type TripAtlasEntry } from '../features/trips/atlas/tripAtlasEntries';
 import { TripAtlasMapBoundary } from '../features/trips/atlas/TripAtlasMapBoundary';
-import {
-    readAtlasSession, saveAtlasSession, TRIP_ATLAS_PATH, tripAtlasColor,
-    type AtlasCamera, type AtlasRouteState, type AtlasSession,
-} from '../features/trips/atlas/tripAtlasView';
+import { TRIP_ATLAS_PATH, tripAtlasColor, type AtlasRouteState } from '../features/trips/atlas/tripAtlasView';
+import { readAtlasSession, saveAtlasSession, type AtlasCamera, type AtlasSession } from '../features/trips/atlas/tripAtlasSession';
 import { formatDateRange } from '../utils/formatDate';
 import { isDevelopmentContent } from '../utils/developmentContent';
 import { useDocumentHead } from '../hooks/useDocumentHead';
@@ -121,7 +119,14 @@ export default function AdvAtlas() {
         selectTrip(undefined);
     };
 
-    useEffect(() => () => saveAtlasSession(location.key, url, session.current), [location.key, url]);
+    useEffect(() => {
+        const remember = () => saveAtlasSession(location.key, url, session.current);
+        window.addEventListener('pagehide', remember);
+        return () => {
+            remember();
+            window.removeEventListener('pagehide', remember);
+        };
+    }, [location.key, url]);
     useEffect(() => {
         const dismiss = (event: KeyboardEvent) => {
             if (event.key === 'Escape') { setHoveredId(undefined); setFocusedId(undefined); }

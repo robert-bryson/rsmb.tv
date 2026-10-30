@@ -237,9 +237,7 @@ It does not test the deployed article or prove that hosting rewrite rules match 
 
 ## ADV Atlas
 
-The explorer is at `/projects/adv-atlas/map`.
-Former `/projects/motorcycle-trips` links redirect to this route.
-Redirects preserve selection, filters, and return navigation.
+Use the [atlas guide](ADV-ATLAS.md) for URLs, navigation behavior, content rules, and code ownership.
 
 Run atlas interactions and article budgets with fixed production content:
 
@@ -253,7 +251,8 @@ The browser checks cover these behaviors:
 - Card and map selections agree. Map clicks reveal the selected card.
 - **Show only selected trip** filters cards and geometry. It retains the camera and route colors.
 - The `view=selected` filter survives report navigation. Deselecting or selecting **Zoom to all trips** removes it.
-- Reports retain their map return link. Returning restores card scroll and camera position.
+- Reports retain their map return link. Returning restores card scroll and camera position, including after a report reload.
+- Reloading the atlas retains its camera and collapsed panel within the same tab.
 - Shared roads show route choices. Pointer and keyboard previews retain selection and camera position.
 - Escape dismisses previews and choices. Dismissing a preview does not clear the selected trip.
 - A delayed route does not override a newer selection or manual camera movement.
@@ -262,8 +261,6 @@ The browser checks cover these behaviors:
 - Renderer retries retain fullscreen and the selected trip.
 - Failed routes retry independently. Renderer failures leave report links available.
 
-The overview button appears when selection, filtering, or camera position differs from the overview.
-It shares the title row at sidebar widths. It sits below the title on phones.
 Layout checks use widths of 320, 767, 768, 858, 1023, 1024, and 1754 pixels.
 They test open and collapsed panels, control overlap, and pointer targets.
 
@@ -284,7 +281,7 @@ Screenshot helpers hide overlays through opacity. Pointer targets remain in plac
 Run the content, geometry, lifecycle, and publication checks:
 
 ```bash
-npx vitest run src/test/tripAtlasEntries.test.ts src/test/tripAtlasView.test.ts \
+npx vitest run src/test/tripAtlasEntries.test.ts src/test/tripAtlasView.test.ts src/test/tripAtlasSession.test.ts \
   src/test/tripAtlasMap.test.tsx src/test/advAtlas.test.tsx \
   scripts/__tests__/tripContent.test.ts scripts/__tests__/tripManifestAuthoring.test.ts \
   scripts/__tests__/generateFeeds.test.ts scripts/__tests__/amplifyConfig.test.ts
@@ -294,6 +291,9 @@ Strict Mode must not retain a replaced renderer's default camera.
 Manual movement cancels the pending fit for the current selection.
 A later explicit fit request must still work.
 Programmatic movement must not cancel a pending route fit.
+Session checks reload the JavaScript module before reading saved state.
+They cover malformed storage, blocked access, full storage, independent snapshots, and bounded history.
+Page checks verify `pagehide` saves and listener removal.
 
 Page checks use fixed metadata. They cover drafts, incomplete reports, multipart reports, and production exclusion.
 Cards without valid manifests retain preview links. They do not request routes or affect loading counts and camera bounds.

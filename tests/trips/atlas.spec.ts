@@ -142,7 +142,7 @@ test('legacy atlas links preserve the selected trip and filter through report re
     await expect(page.locator('[data-trip-id]')).toHaveCount(1);
 });
 
-test('shared selection and report returns restore the card scroll and camera', async ({ page }) => {
+test('shared selection and report returns restore the card scroll and camera after a report reload', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(`${atlas}?trip=coastal-test`);
     const card = page.locator('[data-trip-id="coastal-test"]');
@@ -150,6 +150,10 @@ test('shared selection and report returns restore the card scroll and camera', a
     await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
     const reportLink = card.getByRole('link', { name: /Read trip report/ });
     await reportLink.scrollIntoViewIfNeeded();
+    const initial = await paintedRoute(page, 'coastal-test');
+    await page.getByTestId('trip-atlas-map').locator('canvas').focus();
+    await page.keyboard.press('ArrowRight');
+    await expect.poll(async () => Math.abs((await paintedRoute(page, 'coastal-test')).bounds[0] - initial.bounds[0])).toBeGreaterThan(10);
     const before = await paintedRoute(page, 'coastal-test');
     const scroll = await page.locator('#atlas-trip-list').evaluate(element => element.scrollTop);
     await reportLink.click();
@@ -162,9 +166,34 @@ test('shared selection and report returns restore the card scroll and camera', a
     const after = await paintedRoute(page, 'coastal-test');
     after.bounds.forEach((value, index) => expect(Math.abs(value - before.bounds[index])).toBeLessThan(5));
     await page.locator('[data-trip-id="coastal-test"]').getByRole('link', { name: /Read trip report/ }).click();
+    await page.reload();
     await page.getByRole('link', { name: /Back to map/ }).first().click();
     await expect(page).toHaveURL(/\?trip=coastal-test$/);
     await expect(page.locator('[data-trip-id="coastal-test"]').getByRole('button', { name: /^Show route:/ })).toHaveAttribute('aria-pressed', 'true');
+    await expect.poll(() => page.locator('#atlas-trip-list').evaluate(element => element.scrollTop)).toBeCloseTo(scroll, 0);
+    await expect.poll(async () => {
+        const reloaded = await paintedRoute(page, 'coastal-test');
+        return Math.max(...reloaded.bounds.map((value, index) => Math.abs(value - before.bounds[index])));
+    }).toBeLessThan(5);
+});
+
+test('reloading the atlas restores its camera and collapsed panel within the same tab', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(`${atlas}?trip=coastal-test`);
+    await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
+    await page.getByRole('button', { name: /Hide trips/ }).click();
+    const initial = await paintedRoute(page, 'coastal-test');
+    await page.getByTestId('trip-atlas-map').locator('canvas').focus();
+    await page.keyboard.press('ArrowRight');
+    await expect.poll(async () => Math.abs((await paintedRoute(page, 'coastal-test')).bounds[0] - initial.bounds[0])).toBeGreaterThan(10);
+    const before = await paintedRoute(page, 'coastal-test');
+    await page.reload();
+    await expect(page.locator('#atlas-panel-toggle')).toHaveAttribute('aria-expanded', 'false');
+    await expect(page.getByTestId('trip-atlas-map')).toHaveAttribute('data-selected-trip', 'coastal-test');
+    await expect.poll(async () => {
+        const after = await paintedRoute(page, 'coastal-test');
+        return Math.max(...after.bounds.map((value, index) => Math.abs(value - before.bounds[index])));
+    }).toBeLessThan(5);
 });
 
 test('selected-trip filtering hides other geometry and cards, survives report returns, and resets on deselection', async ({ page }) => {
