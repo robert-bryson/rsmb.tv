@@ -263,6 +263,23 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
             cooperativeGestures: true,
             attributionControl: false,
         });
+        // Linux WebKit can leave layer/source updates one frame behind. Follow
+        // their renders without waiting for unrelated raster tiles to finish.
+        let repaintPending = false;
+        const repaintUpdatedLayers = () => {
+            repaintPending = false;
+            if (!disposed) map.triggerRepaint();
+        };
+        const queueRepaint = () => {
+            if (disposed || repaintPending) return;
+            repaintPending = true;
+            map.once('render', repaintUpdatedLayers);
+        };
+        const queueRouteSourceRepaint = ({ sourceId }: maplibregl.MapSourceDataEvent) => {
+            if (sourceId === 'trip-route' || sourceId === 'trip-stops') queueRepaint();
+        };
+        map.on('styledata', queueRepaint);
+        map.on('sourcedata', queueRouteSourceRepaint);
         if (restoredCamera) {
             map.jumpTo({ padding: restoredCamera.padding });
             originalCameraRef.current = null;
@@ -341,6 +358,9 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
         routeActionsControlRef.current = routeActionsControl;
         return () => {
             disposed = true;
+            map.off('styledata', queueRepaint);
+            map.off('sourcedata', queueRouteSourceRepaint);
+            map.off('render', repaintUpdatedLayers);
             map.remove();
             mapRef.current = null;
             basemapControlRef.current = null;

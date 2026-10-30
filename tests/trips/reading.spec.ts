@@ -272,9 +272,30 @@ async function panoramaLayout(photo: Locator) {
             pageWidth: document.documentElement.getBoundingClientRect().width,
             viewportWidth: document.documentElement.clientWidth,
             scrollWidth: document.documentElement.scrollWidth,
+            contentScrollWidth: document.body.scrollWidth,
         };
     });
 }
+
+type PageWidths = {
+    pageWidth: number;
+    viewportWidth: number;
+    scrollWidth: number;
+    contentScrollWidth: number;
+};
+
+function hasHorizontalOverflow(layout: PageWidths) {
+    // Root clientWidth can include a reserved gutter. Content can overflow the
+    // usable page while the root scroll extent still fits inside that gutter.
+    return layout.scrollWidth > layout.viewportWidth
+        || layout.contentScrollWidth > layout.pageWidth;
+}
+
+test('panorama overflow guard detects content inside a reserved gutter', () => {
+    expect(hasHorizontalOverflow({
+        pageWidth: 360, viewportWidth: 375, scrollWidth: 365, contentScrollWidth: 365,
+    })).toBe(true);
+});
 
 for (const [scrollbars, panoramaTest] of [['default', test], ['classic', scrollbarTest]] as const) {
     panoramaTest(`panoramas fill the usable page width without cropping or horizontal scrolling (${scrollbars} scrollbars)`, async ({ page, browserName, isMobile }) => {
@@ -290,7 +311,7 @@ for (const [scrollbars, panoramaTest] of [['default', test], ['classic', scrollb
             expect(Math.abs(layout.left)).toBeLessThan(1);
             expect(Math.abs(layout.right - layout.pageWidth)).toBeLessThan(1);
             expect(layout.width / layout.height).toBeCloseTo(3200 / 560, 1);
-            expect(layout.scrollWidth).toBe(layout.viewportWidth);
+            expect(hasHorizontalOverflow(layout), `Page dimensions: ${JSON.stringify(layout)}`).toBe(false);
             if (scrollbars === 'classic' && browserName === 'chromium' && !isMobile) {
                 expect(width - layout.pageWidth).toBe(15);
             }
@@ -322,6 +343,16 @@ test('panorama measurements detect a narrowed page body on phones', async ({ pag
     const layout = await panoramaLayout(photo);
     expect(layout.right).toBeCloseTo(320, 0);
     expect(layout.right).toBeLessThan(layout.pageWidth - 30);
+});
+
+test('panorama measurements detect horizontal overflow', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 900 });
+    await page.goto('/trips/coastal-test');
+    await page.addStyleTag({ content: 'body { min-width: 500px; }' });
+    const layout = await panoramaLayout(page.getByRole('img', { name: 'Coast photograph 4' }));
+    expect(layout.scrollWidth).toBeGreaterThan(layout.viewportWidth);
+    expect(layout.contentScrollWidth).toBeGreaterThan(layout.pageWidth);
+    expect(hasHorizontalOverflow(layout)).toBe(true);
 });
 
 test('failed panoramas preserve the reserved image height', async ({ page }) => {

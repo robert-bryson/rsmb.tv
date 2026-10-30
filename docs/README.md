@@ -26,6 +26,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-10-30 | [Trip CI quality review and delayed-raster recovery](reviews/2026-10-30-trip-ci-quality-review.md) |
 | 2026-10-29 | [PCH content review and regression coverage](reviews/2026-10-29-pch-content-review.md) |
 | 2026-10-29 | [Trip media, browser validation, and map recovery review](reviews/2026-10-29-trip-media-and-recovery.md) |
 | 2026-10-29 | [Trip editorial cleanup and photo quality review](reviews/2026-10-29-trip-editorial-quality-review.md) |

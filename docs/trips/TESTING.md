@@ -15,6 +15,7 @@ PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- --workers=2
 The command builds the production application with fixed content. It starts preview on `127.0.0.1:4175`.
 It removes the temporary build directory when the tests finish.
 The default projects use desktop and phone Chromium. CI also enables iPhone WebKit.
+Verify renderer fixes on Linux as well as macOS. WebKit can paint differently on each platform.
 Host library installation can require administrator permission.
 A missing library is a setup failure, not a passing behavior check.
 
@@ -84,15 +85,22 @@ It does not change Firefox or WebKit launch options.
 Photo edges use the root element's layout box, independently of body and article widths.
 Root `clientWidth` can include an empty scrollbar gutter ([Chromium implementation note](https://issues.chromium.org/issues/40087305)).
 A phone regression narrows the body and verifies that the measurement still uses the page boundary.
+Overflow checks allow the root scroll width to exclude that gutter.
+They also compare the body scroll width with the independent page boundary.
+An oversized body verifies the DOM measurements.
+A separate case places five pixels of content overflow inside a 15-pixel gutter.
+Both cases use the same overflow guard as the panorama layout checks.
 
 Inline day maps use clicks, keyboard activation, and touch in separate cases.
 Each input runs with normal motion and reduced motion. Touch cases require a phone project.
 The cases check painted markers, stop lists, route colors, and camera bounds.
+Recovery, reset, and camera restoration checks move the pointer outside the map before comparing pixels.
+This excludes intentional hover styling from those comparisons.
 Repeat the layout and input checks with:
 
 ```bash
 PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- \
-  --grep 'panoramas fill|panorama measurements|inline maps retain' --repeat-each=3 --workers=2
+  --grep 'panoramas fill|panorama measurements|panorama overflow|inline maps retain|stops repaint while' --repeat-each=3 --workers=2
 ```
 
 Check launch-option inheritance and failure evidence without starting browsers:
@@ -123,6 +131,13 @@ They retain the selected day after retry and reject late events from a removed m
 Replacing day definitions must clear a previous renderer failure without another route request.
 Selecting a different day must retain the error until the reader retries.
 The browser test loses a real WebGL context. It checks route pixels after retry.
+Maps request one additional frame after style changes or trip geometry updates render.
+Pending raster requests do not block this frame.
+This prevents Linux WebKit from retaining stale marker pixels after visibility updates.
+The delayed-basemap case holds Terrain tile responses while checking stop markers.
+It releases those responses after the checks finish, including after a failure.
+Unit tests use MapLibre's event dispatcher to check coalescing, repeated render events, and listener removal.
+They also reject stop callbacks from replaced renderers.
 
 Photo unit tests also check recovery after changes to responsive sources or image slot width.
 Adaptive gallery tests check proportional pairs, balanced rows, portrait spans, panorama rows, and exact gutter geometry.

@@ -32,6 +32,9 @@ test('a lost WebGL context shows a route preview and allows retry', async ({ pag
     await expect(map.locator('polyline').first()).toBeVisible();
     await expect(map.locator('canvas')).toHaveCount(0);
     await map.getByRole('button', { name: 'Retry route' }).click();
+    // The replacement canvas can appear beneath the retry click and highlight
+    // a route. Check recovery with the pointer outside the map.
+    await page.mouse.move(0, 0);
     await expect.poll(async () => (await routePixels(map)).blue).toBeGreaterThan(10);
     await expect(map.getByRole('status')).toHaveCount(0);
 });
@@ -263,6 +266,9 @@ test('bottom day controls match track colors, emphasize on hover, and restore th
     await expect(overview.getByRole('button', { name: /Shared camp/ })).toHaveCount(0);
     await expect(coastbound).toBeVisible();
     await page.getByRole('heading', { name: 'First day', exact: true }).click();
+    // Scrolling to the heading can leave WebKit's mouse over a route. Compare
+    // the restored camera without the intentional hover stroke enlargement.
+    await page.mouse.move(0, 0);
     await expect(coastbound).toHaveAttribute('aria-pressed', 'false');
     await expect.poll(async () => (await routePixels(overview)).blue).toBeGreaterThan(10);
     await expect.poll(async () => (await routePixels(overview)).bounds).toEqual(originalBounds);
@@ -277,6 +283,7 @@ test('Escape clears a day selection while keeping the map and day controls', asy
     const day = overview.getByRole('button', { name: '2. Homebound' });
     await day.click();
     await expect(day).toHaveAttribute('aria-pressed', 'true');
+    await page.mouse.move(0, 0);
     await day.press('Escape');
     await expect(day).toHaveAttribute('aria-pressed', 'false');
     await expect(overview.locator('canvas')).toBeVisible();
@@ -369,6 +376,39 @@ for (const input of ['click', 'keyboard', 'touch'] as const) {
         });
     }
 }
+
+test('stops repaint while replacement basemap tiles are still loading', async ({ page }) => {
+    let releaseTiles!: () => void;
+    const tilesReady = new Promise<void>(resolve => { releaseTiles = resolve; });
+    let requestedTiles = 0;
+    await page.route('https://tile.opentopomap.org/**', async route => {
+        requestedTiles += 1;
+        await tilesReady;
+        await route.fallback();
+    });
+    try {
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await page.goto('/trips/daily-test');
+        const day = page.locator('[data-trip-map]').nth(2);
+        await page.keyboard.press('ArrowDown');
+        await day.scrollIntoViewIfNeeded();
+        await expect.poll(async () => (await routePixels(day)).stopPixels).toBeGreaterThan(10);
+        await day.getByRole('button', { name: 'Change basemap (current: Muted)' }).click();
+        await day.getByRole('button', { name: 'Change basemap (current: Street)' }).click();
+        await expect.poll(() => requestedTiles).toBeGreaterThan(0);
+        const stops = day.getByRole('region').getByRole('button', { name: 'Stops', exact: true });
+        for (let cycle = 0; cycle < 2; cycle++) {
+            await stops.click();
+            await expect(stops).toHaveAttribute('aria-pressed', 'false');
+            await expect.poll(async () => (await routePixels(day)).stopPixels).toBe(0);
+            await stops.click();
+            await expect(stops).toHaveAttribute('aria-pressed', 'true');
+            await expect.poll(async () => (await routePixels(day)).stopPixels).toBeGreaterThan(10);
+        }
+    } finally {
+        releaseTiles();
+    }
+});
 
 test('distant overview maps release their canvas and restore the selected day without stops', async ({ page }) => {
     await page.goto('/trips/daily-test');

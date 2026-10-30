@@ -13,6 +13,7 @@ const mapMocks = vi.hoisted(() => ({
     easeTo: vi.fn(),
     fitBounds: vi.fn(),
     jumpTo: vi.fn(),
+    triggerRepaint: vi.fn(),
     reducedMotion: false,
     getSource: vi.fn(),
     getMinZoom: vi.fn(() => 0),
@@ -35,6 +36,7 @@ const mapMocks = vi.hoisted(() => ({
             easeTo: mapMocks.easeTo,
             fitBounds: mapMocks.fitBounds,
             jumpTo: mapMocks.jumpTo,
+            triggerRepaint: mapMocks.triggerRepaint,
             getMinZoom: mapMocks.getMinZoom,
             getSource: mapMocks.getSource,
             getZoom: mapMocks.getZoom,
@@ -118,11 +120,112 @@ afterEach(() => {
     vi.clearAllMocks();
     mapMocks.getSource.mockReturnValue({ setTiles: mapMocks.setTiles, setData: mapMocks.setData });
     mapMocks.reducedMotion = false;
+    mapMocks.on.mockReset();
+    mapMocks.off.mockReset();
     mapMocks.once.mockImplementation((_event: string, listener: () => void) => listener());
     mapMocks.queryRenderedFeatures.mockReset().mockReturnValue([]);
 });
 
 describe('TripRouteMap', () => {
+    it('paints an updated style once and cancels pending work when removed', async () => {
+        mapMocks.once.mockImplementation(() => undefined);
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
+        const { unmount } = render(<TripStoryProvider manifest={dayMapManifest}><TripRouteMap dayId="coastbound" /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        const styleChanged = mapMocks.on.mock.calls.find(([event]) => event === 'styledata')?.[1];
+        expect(styleChanged).toBeTypeOf('function');
+        const renderCallbacks = () => mapMocks.once.mock.calls.filter(([event]) => event === 'render');
+
+        act(() => { styleChanged(); styleChanged(); });
+        expect(renderCallbacks()).toHaveLength(1);
+        expect(mapMocks.triggerRepaint).not.toHaveBeenCalled();
+        const repaint = renderCallbacks()[0][1];
+        act(() => repaint());
+        expect(mapMocks.triggerRepaint).toHaveBeenCalledOnce();
+        expect(renderCallbacks()).toHaveLength(1);
+
+        act(() => styleChanged());
+        expect(renderCallbacks()).toHaveLength(2);
+        unmount();
+        expect(mapMocks.off).toHaveBeenCalledWith('styledata', styleChanged);
+        expect(mapMocks.off).toHaveBeenCalledWith('render', repaint);
+        act(() => { styleChanged(); repaint(); });
+        expect(mapMocks.triggerRepaint).toHaveBeenCalledOnce();
+        expect(renderCallbacks()).toHaveLength(2);
+    });
+
+    it('uses one-time render events without needing idle or retaining removed listeners', async () => {
+        const { Evented } = await vi.importActual<typeof import('maplibre-gl')>('maplibre-gl');
+        const events = new class extends Evented {}();
+        mapMocks.on.mockImplementation((type, listenerOrLayer, layerListener) =>
+            events.on(type, typeof listenerOrLayer === 'function' ? listenerOrLayer : layerListener));
+        mapMocks.once.mockImplementation((type, listener) => events.once(type, listener));
+        mapMocks.off.mockImplementation((type, listener) => events.off(type, listener));
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
+        const { unmount } = render(<TripStoryProvider manifest={dayMapManifest}><TripRouteMap dayId="coastbound" /></TripStoryProvider>);
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+
+        act(() => events.fire('sourcedata', { sourceId: 'openstreetmap' }));
+        expect(events.listens('render')).toBe(false);
+        act(() => {
+            events.fire('styledata');
+            events.fire('styledata');
+            events.fire('sourcedata', { sourceId: 'trip-stops' });
+        });
+        expect(events.listens('render')).toBe(true);
+        expect(events.listens('idle')).toBe(false);
+        expect(mapMocks.triggerRepaint).not.toHaveBeenCalled();
+        act(() => { events.fire('render'); events.fire('render'); });
+        expect(mapMocks.triggerRepaint).toHaveBeenCalledOnce();
+        expect(events.listens('render')).toBe(false);
+
+        act(() => events.fire('sourcedata', { sourceId: 'trip-route' }));
+        expect(events.listens('render')).toBe(true);
+        act(() => events.fire('render'));
+        expect(mapMocks.triggerRepaint).toHaveBeenCalledTimes(2);
+        act(() => events.fire('styledata'));
+        expect(events.listens('render')).toBe(true);
+        unmount();
+        expect(events.listens('styledata')).toBe(false);
+        expect(events.listens('sourcedata')).toBe(false);
+        expect(events.listens('render')).toBe(false);
+        act(() => {
+            events.fire('styledata');
+            events.fire('sourcedata', { sourceId: 'trip-stops' });
+            events.fire('render');
+        });
+        expect(mapMocks.triggerRepaint).toHaveBeenCalledTimes(2);
+    });
+
+    it('ignores stop events from a replaced renderer', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
+        const story = (geoJson: string) => <TripStoryProvider manifest={{
+            ...dayMapManifest, route: { ...dayMapManifest.route, geoJson },
+        }}><TripRouteMap dayId="coastbound" /></TripStoryProvider>;
+        const { rerender } = render(story('/first.geojson'));
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        const enter = mapMocks.on.mock.calls.find(([event, layer]) => event === 'mouseenter' && layer === 'trip-stops')?.[2];
+        const leave = mapMocks.on.mock.calls.find(([event, layer]) => event === 'mouseleave' && layer === 'trip-stops')?.[2];
+        const click = mapMocks.on.mock.calls.find(([event, layer]) => event === 'click' && layer === 'trip-stops')?.[2];
+        act(() => enter({ features: [{ properties: { id: 42 } }] }));
+        expect(screen.getByRole('button', { name: /Harbor/ }).closest('li')).not.toHaveClass('bg-amber-400');
+
+        rerender(story('/replacement.geojson'));
+        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledTimes(2));
+        const camp = screen.getByRole('button', { name: /Shared camp/ });
+        const harbor = screen.getByRole('button', { name: /Harbor/ });
+        fireEvent.mouseEnter(camp.closest('li')!);
+        act(() => leave());
+        expect(camp.closest('li')).toHaveClass('bg-amber-400');
+        fireEvent.mouseLeave(camp.closest('li')!);
+        act(() => enter({ features: [{ properties: { id: 'harbor' } }] }));
+        expect(harbor.closest('li')).not.toHaveClass('bg-amber-400');
+        mapMocks.easeTo.mockClear();
+        act(() => click({ features: [{ properties: { id: 'camp' } }] }));
+        expect(camp).toHaveAttribute('aria-pressed', 'false');
+        expect(mapMocks.easeTo).not.toHaveBeenCalled();
+    });
+
     it.each(['pointer', 'keyboard'] as const)('clears stop %s feedback when the route changes', async input => {
         vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
         const story = (geoJson: string) => <TripStoryProvider manifest={{
