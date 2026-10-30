@@ -29,6 +29,10 @@ export default defineConfig({
             name: 'chromium',
             use: { ...devices['Desktop Chrome'] },
         },
+        ...(process.env.PLAYWRIGHT_WEBKIT === '1' ? [{
+            name: 'webkit',
+            use: { ...devices['Desktop Safari'] },
+        }] : []),
     ],
     webServer: skipWebServer ? undefined : {
         command: `npm run build-flights && npx vite --host 127.0.0.1 --port ${port} --strictPort`,

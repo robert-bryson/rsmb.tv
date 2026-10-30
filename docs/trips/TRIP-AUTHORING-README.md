@@ -59,6 +59,7 @@ Use these Google Docs styles:
 Place a subtitle directly after its heading. Subtitles have no heading ID or table-of-contents entry.
 The importer retains inline emphasis and links in subtitles.
 Do not use a heading style for distance text such as `(339 mi. / 545 km.)`.
+The table of contents starts expanded. Readers can select **Collapse** to hide its links.
 
 The site creates the story title from the Sheet. Do not repeat that title in the document body.
 The Google Docs Title style becomes a level-one heading if you include it in the body.
@@ -406,6 +407,20 @@ Include each photo ID only once within a gallery.
 
 ### Galleries
 
+A gallery uses photo dimensions to fill each row without a fixed thumbnail crop.
+Two photos share the complete gallery width.
+Their widths follow their aspect ratios. Their image heights match.
+Larger groups use balanced rows.
+A leading portrait can span two rows beside landscapes when the proportions fit.
+These spanning patterns require a precise pointer and a screen width of at least 640 pixels.
+Touch captions remain below their photos in separate rows.
+Panoramas with an aspect ratio of at least `2.5:1` receive a complete row.
+A gallery with one portrait stays within the text body.
+A single landscape retains the wider media width.
+The layout preserves the manifest order.
+Hover and keyboard focus reveal captions without enlarging or cropping photos.
+The frame edge does not reduce the image area.
+
 A gallery first shows up to nine photos.
 Its viewer includes all photos from mounted story galleries, including collapsed photos.
 Next and Previous follow the gallery order in the story.
@@ -552,6 +567,8 @@ Check desktop and phone widths:
 - Open and close photos with a mouse, keyboard, and touch.
 - Check that focus returns to the opening control.
 - Check hover captions and keyboard focus on desktop devices.
+- Confirm that hover and keyboard focus preserve the complete photo.
+- Check mixed portrait and landscape galleries with visible scrollbars.
 - Press Escape while the photo link has focus. Confirm that its caption closes.
 - Enable reduced motion. Confirm that captions do not animate.
 - Confirm that phone captions remain visible below their photos.

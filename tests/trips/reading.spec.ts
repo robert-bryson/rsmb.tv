@@ -2,6 +2,7 @@ import { expect, test, type Locator, type Page, type Request } from '@playwright
 import sharp from 'sharp';
 import { measureJavaScriptGzip } from '../../scripts/trip-browser-budget';
 import { scrollbarTest } from './scrollbars';
+import { expectSuitableImageSource } from '../responsive-images';
 
 async function assets(page: Page) {
     await page.route('**/test-trip/**', async route => {
@@ -62,7 +63,7 @@ for (const [path, budget] of [
     });
 }
 
-test('the opening flows from the hero into prose, facts, map, and collapsed contents', async ({ page }) => {
+test('the opening flows from the hero into prose, facts, map, and expanded contents', async ({ page }) => {
     await page.goto('/trips/coastal-test');
     const intro = page.getByText('Opening story paragraph.');
     const header = page.locator('.trip-story > header');
@@ -79,6 +80,10 @@ test('the opening flows from the hero into prose, facts, map, and collapsed cont
     const mapBox = (await page.locator('[data-trip-map-viewport]').first().boundingBox())!;
     expect(mapBox.y).toBeGreaterThanOrEqual(factsBox.y + factsBox.height);
     expect((await contents.boundingBox())!.y).toBeGreaterThanOrEqual(mapBox.y + mapBox.height);
+    await expect(contents.getByRole('button', { name: 'Collapse' })).toHaveAttribute('aria-expanded', 'true');
+    await expect(contents.getByRole('link', { name: 'First day', exact: true })).toBeVisible();
+    await contents.getByRole('button', { name: 'Collapse' }).click();
+    await expect(contents.getByRole('link', { name: 'First day', exact: true })).toBeHidden();
     await expect(contents.getByRole('button', { name: 'Expand' })).toHaveAttribute('aria-expanded', 'false');
     await contents.getByRole('button', { name: 'Expand' }).click();
     await expect(contents.getByRole('link', { name: 'First day', exact: true })).toBeVisible();
@@ -409,11 +414,11 @@ test('photo captions render as literal text in the gallery, inline, and hero vie
         .toHaveAttribute('alt', 'Coast photograph 2');
 });
 
-test('gallery sizes reflect the actual tile instead of the whole phone', async ({ page, isMobile }) => {
+test('gallery sizes reflect the actual tile instead of the whole phone', async ({ page }) => {
     await page.goto('/trips/coastal-test');
     const photo = page.getByRole('img', { name: 'Coast photograph 2' });
     await photo.scrollIntoViewIfNeeded();
-    await expect.poll(() => photo.evaluate((image: HTMLImageElement) => image.currentSrc)).toContain(isMobile ? '-960.svg' : '-480.svg');
+    await expectSuitableImageSource(photo);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(await page.evaluate(() => innerWidth));
 });
 
@@ -432,7 +437,7 @@ test('gallery captions support hover, keyboard focus, touch, and reduced motion'
         await expect(caption).toHaveCSS('opacity', '0');
         await trigger.hover();
         await expect(caption).toHaveCSS('opacity', '1');
-        await expect(image).toHaveCSS('scale', '1.025');
+        await expect(image).toHaveCSS('scale', 'none');
         await trigger.focus();
         await page.keyboard.press('Escape');
         await expect(caption).toHaveCSS('opacity', '0');

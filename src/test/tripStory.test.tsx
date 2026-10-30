@@ -296,6 +296,32 @@ describe('trip story primitives', () => {
         expect(captions()).toEqual(collapsed);
     });
 
+    it.each([
+        { width: 800, height: 1200, breakout: false },
+        { width: 1200, height: 800, breakout: true },
+        { width: 800, height: 800, breakout: true },
+    ])('uses the correct article width for a single $width × $height photo', ({ width, height, breakout }) => {
+        const photo = { ...manifest.photos[0], width, height };
+        renderStory(<TripGallery galleryId="single" />, {
+            ...manifest, photos: [photo], galleries: { single: [photo.id] },
+        });
+        const image = screen.getByRole('img', { name: photo.alt });
+        const gallery = image.closest('section')!;
+        expect(gallery.classList.contains('trip-breakout')).toBe(breakout);
+        expect(screen.queryByRole('button', { name: /Show all/ })).not.toBeInTheDocument();
+        if (!breakout) {
+            // A lone portrait uses the 45rem article body, including on browsers without auto sizes.
+            expect(image.getAttribute('sizes')).toContain('720px');
+            expect(image.getAttribute('sizes')).toContain('calc(100vw - 3rem)');
+        }
+    });
+
+    it('reports a missing gallery photo instead of silently dropping it', () => {
+        expect(() => renderStory(<TripGallery galleryId="missing" />, {
+            ...manifest, galleries: { missing: ['unknown-photo'] },
+        })).toThrow('Unknown trip photo: unknown-photo');
+    });
+
     it('resets expansion when the gallery changes', () => {
         const photos = Array.from({ length: 11 }, (_, index) => ({
             ...manifest.photos[1], id: `photo-${index}`, src: `/photo-${index}.webp`,
@@ -378,6 +404,40 @@ describe('trip story primitives', () => {
         const captions = Array.from(container.querySelectorAll('a[data-pswp-width]'))
             .map(link => link.getAttribute('data-trip-caption'));
         expect(captions).toEqual(manifest.photos.map(photo => `${photo.alt} · Coast`));
+    });
+
+    it('wraps hero navigation, opens the selected photo, and resets selection for a new manifest', () => {
+        const open = vi.spyOn(PhotoSwipeLightbox.prototype, 'loadAndOpen').mockReturnValue(true);
+        try {
+            const story = (tripManifest: TripManifest) => (
+                <TripStoryProvider manifest={tripManifest}><TripHeroGallery /></TripStoryProvider>
+            );
+            const { container, rerender } = render(story(manifest));
+            const sources = () => Array.from(container.querySelectorAll('a[data-pswp-width]')).map(link => link.getAttribute('href'));
+            const originalSources = sources();
+            fireEvent.click(screen.getByRole('button', { name: 'Previous photo' }));
+            expect(screen.getByRole('status')).toHaveTextContent('Photo 2 of 2');
+            expect(screen.getByRole('img', { name: manifest.photos[1].alt })).toBeInTheDocument();
+            expect(sources()).toEqual(originalSources);
+            fireEvent.click(screen.getByRole('button', { name: 'Expand photo' }));
+            expect(open).toHaveBeenLastCalledWith(1);
+            fireEvent.click(screen.getByRole('button', { name: 'View all 2 photos' }));
+            expect(open).toHaveBeenLastCalledWith(1);
+            fireEvent.click(screen.getByRole('button', { name: 'Next photo' }));
+            expect(screen.getByRole('status')).toHaveTextContent('Photo 1 of 2');
+            fireEvent.click(screen.getByRole('button', { name: 'Next photo' }));
+            expect(screen.getByRole('status')).toHaveTextContent('Photo 2 of 2');
+
+            const replacement = { ...manifest, hero: 'camp', photos: [manifest.photos[1]] };
+            rerender(story(replacement));
+            expect(screen.getByRole('status')).toHaveTextContent('Photo 1 of 1');
+            expect(screen.queryByRole('button', { name: 'Next photo' })).not.toBeInTheDocument();
+            expect(screen.queryByRole('button', { name: 'Previous photo' })).not.toBeInTheDocument();
+            fireEvent.click(screen.getByRole('button', { name: 'Expand photo' }));
+            expect(open).toHaveBeenLastCalledWith(0);
+        } finally {
+            open.mockRestore();
+        }
     });
 
     it('rejects a hero reference to an unknown photo', () => {

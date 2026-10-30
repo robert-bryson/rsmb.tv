@@ -132,6 +132,33 @@
             "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-forest-road-850ee07925d3-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-forest-road-850ee07925d3-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-forest-road-850ee07925d3-1600.webp 1600w"
         },
         {
+            "id": "kalaloch-2024-06-21-camp-at-night",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-camp-at-night-9efabda50cfd-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Two campers wearing headlamps among tall trees at night, one wrapped in a blue blanket patterned with bananas.",
+            "date": "2024-06-21",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-camp-at-night-9efabda50cfd-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-camp-at-night-9efabda50cfd-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-camp-at-night-9efabda50cfd-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-22-morning-in-tent",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-morning-in-tent-5a8a5a9d70ce-1600.webp",
+            "width": 1600,
+            "height": 2133,
+            "alt": "A view through a tent doorway toward campers and a picnic table beneath tall forest trees.",
+            "date": "2024-06-22",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-morning-in-tent-5a8a5a9d70ce-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-morning-in-tent-5a8a5a9d70ce-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-morning-in-tent-5a8a5a9d70ce-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-22-motorcycle-at-camp",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-motorcycle-at-camp-9c562747bba9-1600.webp",
+            "width": 1600,
+            "height": 2133,
+            "alt": "A person in a gray hoodie leaning over a motorcycle beside tents, a picnic table, and a pickup truck at a forest campsite.",
+            "date": "2024-06-22",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-motorcycle-at-camp-9c562747bba9-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-motorcycle-at-camp-9c562747bba9-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-motorcycle-at-camp-9c562747bba9-1600.webp 1600w"
+        },
+        {
             "id": "kalaloch-2024-06-22-forest-trailhead",
             "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-forest-trailhead-01fa729b3594-1600.webp",
             "width": 1600,
@@ -139,6 +166,24 @@
             "alt": "A wooden-railed path descending to a quiet paved road surrounded by forest.",
             "date": "2024-06-22",
             "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-forest-trailhead-01fa729b3594-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-forest-trailhead-01fa729b3594-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-forest-trailhead-01fa729b3594-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-22-rider-on-bridge",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-rider-on-bridge-9b73f107cc5e-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A helmeted rider standing on an old bridge, with two motorcycles parked by the forest road behind.",
+            "date": "2024-06-22",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-rider-on-bridge-9b73f107cc5e-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-rider-on-bridge-9b73f107cc5e-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-rider-on-bridge-9b73f107cc5e-1600.webp 1600w"
+        },
+        {
+            "id": "kalaloch-2024-06-22-timber-bridge",
+            "src": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-timber-bridge-2c8b4fb6a29a-1600.webp",
+            "width": 1600,
+            "height": 2400,
+            "alt": "Heavy weathered wooden beams and diagonal braces supporting a bridge above ferns and leafy undergrowth.",
+            "date": "2024-06-22",
+            "srcSet": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-timber-bridge-2c8b4fb6a29a-480.webp 480w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-timber-bridge-2c8b4fb6a29a-960.webp 960w, https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-22-timber-bridge-2c8b4fb6a29a-1600.webp 1600w"
         },
         {
             "id": "kalaloch-2024-06-22-coastal-forest",
@@ -289,10 +334,15 @@
         "2024-06-21": [
             "kalaloch-2024-06-21-ferry-motorcycles",
             "kalaloch-2024-06-21-seattle-from-ferry",
-            "kalaloch-2024-06-21-forest-road"
+            "kalaloch-2024-06-21-forest-road",
+            "kalaloch-2024-06-21-camp-at-night"
         ],
         "2024-06-22": [
+            "kalaloch-2024-06-22-morning-in-tent",
+            "kalaloch-2024-06-22-motorcycle-at-camp",
             "kalaloch-2024-06-22-forest-trailhead",
+            "kalaloch-2024-06-22-rider-on-bridge",
+            "kalaloch-2024-06-22-timber-bridge",
             "kalaloch-2024-06-22-coastal-forest",
             "kalaloch-2024-06-22-foggy-beach",
             "kalaloch-2024-06-22-forest-boardwalk"
@@ -320,7 +370,12 @@
             "kalaloch-2024-06-21-ferry-motorcycles",
             "kalaloch-2024-06-21-seattle-from-ferry",
             "kalaloch-2024-06-21-forest-road",
+            "kalaloch-2024-06-21-camp-at-night",
+            "kalaloch-2024-06-22-morning-in-tent",
+            "kalaloch-2024-06-22-motorcycle-at-camp",
             "kalaloch-2024-06-22-forest-trailhead",
+            "kalaloch-2024-06-22-rider-on-bridge",
+            "kalaloch-2024-06-22-timber-bridge",
             "kalaloch-2024-06-22-coastal-forest",
             "kalaloch-2024-06-22-foggy-beach",
             "kalaloch-2024-06-22-forest-boardwalk",

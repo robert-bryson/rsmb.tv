@@ -214,6 +214,49 @@ u {
   padding-inline: 1.5rem;
 }
 
+/* Keep one ordered set of figures across breakpoints and gallery expansion.
+   Each row shares a grid track; calculated widths include the exact gutters. */
+.trip-gallery-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.trip-gallery-photo {
+  grid-column: 1;
+  grid-row: var(--gallery-row) / span var(--gallery-span);
+  align-self: start;
+  min-width: 0;
+  width: var(--gallery-width);
+  margin-inline-start: var(--gallery-offset);
+}
+
+.trip-gallery-photo .image-caption-frame {
+  aspect-ratio: var(--trip-photo-ratio);
+  /* A border changes the image's inner ratio. Paint the edge outside it. */
+  border: 0;
+  box-shadow: 0 0 0 1px #27272a;
+}
+
+.trip-gallery-photo .image-caption-frame :is(img, [role="img"]) {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.trip-gallery-photo figcaption {
+  overflow-wrap: anywhere;
+}
+
+/* Flowing touch captions need independent rows. Desktop overlays also permit
+   a portrait to span two landscape rows without stretching the image. */
+@media (min-width: 640px) and (hover: hover) and (pointer: fine) {
+  .trip-gallery-photo {
+    grid-row: var(--gallery-wide-row) / span var(--gallery-wide-span);
+    width: var(--gallery-wide-width);
+    margin-inline-start: var(--gallery-wide-offset);
+  }
+}
+
 .trip-day-button {
   display: inline-flex;
   min-height: 44px;
@@ -463,23 +506,12 @@ u {
 
 @media (hover: hover) and (pointer: fine) {
   .trip-gallery-photo .image-caption-frame {
-    transition: border-color 160ms ease-out;
+    transition: box-shadow 160ms ease-out;
   }
 
   .trip-gallery-photo:hover .image-caption-frame,
   .trip-gallery-photo:focus-within .image-caption-frame {
-    border-color: #71717a;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .trip-gallery-photo .image-caption-frame img {
-      transition: scale 180ms ease-out;
-    }
-
-    .trip-gallery-photo:hover .image-caption-frame img,
-    .trip-gallery-photo:focus-within .image-caption-frame img {
-      scale: 1.025;
-    }
+    box-shadow: 0 0 0 1px #71717a;
   }
 
   .image-caption-overlay:not(.sr-only) {

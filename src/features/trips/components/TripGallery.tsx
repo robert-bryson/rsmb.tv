@@ -1,8 +1,9 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState, type CSSProperties } from 'react';
 import { useTripStory } from '../TripStoryContext';
 import { TripPhotoFigure } from './TripPhoto';
 import { createTripPhotoLightbox } from './tripPhotoSwipe';
 import { TripPhotoLink } from './TripPhotoLink';
+import { galleryLength, layoutTripGallery, tripGallerySizes, TRIP_GALLERY_GAP } from '../tripGalleryLayout';
 
 const COLLAPSED_PHOTO_COUNT = 9;
 
@@ -28,19 +29,35 @@ function TripGalleryContent({ galleryId }: { galleryId: string }) {
     }, [photoIds, expanded, registerGallery, getGalleryPhotos]);
     if (!photoIds) throw new Error(`Unknown trip gallery: ${galleryId}`);
     const visibleCount = expanded ? photoIds.length : Math.min(photoIds.length, COLLAPSED_PHOTO_COUNT);
+    const galleryPhotos = photoIds.map(id => {
+        const photo = photos.get(id);
+        if (!photo) throw new Error(`Unknown trip photo: ${id}`);
+        return photo;
+    });
+    const visiblePhotos = galleryPhotos.slice(0, visibleCount);
+    const narrow = layoutTripGallery(visiblePhotos, false);
+    const wide = layoutTripGallery(visiblePhotos, true);
+    const portraitOnly = galleryPhotos.length === 1 && galleryPhotos[0].height > galleryPhotos[0].width;
     return (
-        <section aria-labelledby={elementId} className="trip-breakout my-10">
+        <section aria-labelledby={elementId} className={`${portraitOnly ? '' : 'trip-breakout'} my-10`}>
             <h2 id={elementId} className="sr-only">Photo gallery</h2>
-            <div ref={galleryRef} className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                {photoIds.map((id, index) => {
-                    const photo = photos.get(id);
-                    if (!photo) throw new Error(`Unknown trip photo: ${id}`);
-                    if (index >= visibleCount) return <TripPhotoLink key={id} photo={photo} hidden />;
-                    const lead = index === 0 && visibleCount % 2 === 1;
-                    const single = photoIds.length === 1;
-                    return <TripPhotoFigure key={id} photo={photo}
-                        sizes={single ? '(min-width: 1184px) 1152px, calc(100vw - 2rem)' : `${lead ? '(max-width: 639px) calc(100vw - 2rem), ' : ''}(min-width: 1184px) 376px, (min-width: 640px) calc((100vw - 3.5rem) / 3), calc((100vw - 2.75rem) / 2)`}
-                        className={`trip-gallery-photo ${single ? 'col-span-full' : lead ? 'col-span-2 sm:col-span-1' : ''} ${single ? '' : '[&>div]:aspect-[4/3] [&_img]:h-full [&_img]:object-cover'}`} />;
+            <div ref={galleryRef} className="trip-gallery-grid" style={{ gap: TRIP_GALLERY_GAP }}>
+                {galleryPhotos.map((photo, index) => {
+                    if (index >= visibleCount) return <TripPhotoLink key={photo.id} photo={photo} hidden />;
+                    return <TripPhotoFigure key={photo.id} photo={photo}
+                        sizes={tripGallerySizes(narrow[index], wide[index], portraitOnly)}
+                        className="trip-gallery-photo"
+                        style={{
+                            '--trip-photo-ratio': `${photo.width} / ${photo.height}`,
+                            '--gallery-row': narrow[index].row,
+                            '--gallery-span': narrow[index].rowSpan,
+                            '--gallery-width': galleryLength(narrow[index].width),
+                            '--gallery-offset': galleryLength(narrow[index].offset),
+                            '--gallery-wide-row': wide[index].row,
+                            '--gallery-wide-span': wide[index].rowSpan,
+                            '--gallery-wide-width': galleryLength(wide[index].width),
+                            '--gallery-wide-offset': galleryLength(wide[index].offset),
+                        } as CSSProperties} />;
                 })}
             </div>
             {photoIds.length > COLLAPSED_PHOTO_COUNT && <button type="button" aria-expanded={expanded} onClick={() => setExpanded(value => !value)}

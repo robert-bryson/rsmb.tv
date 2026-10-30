@@ -108,6 +108,43 @@ npx vitest run src/test/tripMapView.test.tsx src/test/tripRouteMap.test.tsx \
 ```
 
 Photo unit tests also check recovery after changes to responsive sources or image slot width.
+Adaptive gallery tests check proportional pairs, balanced rows, portrait spans, panorama rows, and exact gutter geometry.
+Browser checks measure both image frames and image content.
+They check hover, keyboard focus, visible scrollbars, image failure, expansion, and focus during viewport changes.
+Touch cases include long captions and unbroken text at phone and tablet widths.
+Source checks use fresh contexts with device pixel ratios of 1, 2, and 3.
+They compare the selected resolution with the rendered width and available sources.
+Separate cases remove `auto` before source selection to exercise the explicit `sizes` fallbacks.
+Run these checks with:
+
+```bash
+npx vitest run src/test/tripGalleryLayout.test.ts src/test/tripStory.test.tsx
+npm run test:e2e -- tests/e2e/trip-galleries.spec.ts
+PLAYWRIGHT_WEBKIT=1 npm run test:e2e -- tests/e2e/trip-galleries.spec.ts tests/e2e/post-rendering.spec.ts
+```
+
+`PLAYWRIGHT_WEBKIT=1` adds desktop WebKit to the fixture suite.
+The production trip suite uses iPhone WebKit with the same setting.
+Color checks resolve the expected CSS token in each browser.
+This avoids failures caused by different decimal precision in computed color values.
+On macOS, Safari uses Option+Tab to include links in keyboard traversal.
+
+The standard fixture command builds flight data and can download state boundaries.
+For gallery checks without that download, start Vite in a separate terminal:
+
+```bash
+npx vite --host 127.0.0.1 --port 4184 --strictPort
+```
+
+Then run the fixture tests against that server:
+
+```bash
+PLAYWRIGHT_BASE_URL=http://127.0.0.1:4184 PLAYWRIGHT_SKIP_WEB_SERVER=1 PLAYWRIGHT_WEBKIT=1 \
+  npx playwright test tests/e2e/trip-galleries.spec.ts tests/e2e/post-rendering.spec.ts --workers=2
+```
+
+Stop Vite after the tests finish.
+
 Page tests use fixed post metadata and trip summaries.
 Development-status tests use fixed publication, source, and asset states.
 Tests must not depend on a previous content import.

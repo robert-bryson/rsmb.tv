@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState, type CSSProperties } from 'react';
 import { createTripPhotoLightbox } from './tripPhotoSwipe';
 import { TripPhotoLink } from './TripPhotoLink';
 import { useDismissibleCaption } from '../../../hooks/useDismissibleCaption';
@@ -53,6 +53,7 @@ export function TripPhotoFigure({
     linked = true,
     showCaption = true,
     className = '',
+    style,
     sizes = '(min-width: 1184px) 1152px, calc(100vw - 2rem)',
 }: {
     photo: TripPhotoData;
@@ -61,6 +62,7 @@ export function TripPhotoFigure({
     linked?: boolean;
     showCaption?: boolean;
     className?: string;
+    style?: CSSProperties;
 }) {
     const captionId = `trip-photo-caption-${useId().replaceAll(':', '')}`;
     const caption = photo.caption?.trim() || photo.alt;
@@ -80,6 +82,7 @@ export function TripPhotoFigure({
     return (
         <figure
             className={`image-caption-figure ${className}`}
+            style={style}
             data-caption-dismissed={dismissed || undefined}
             tabIndex={!linked ? 0 : undefined}
             {...captionInteractionProps}

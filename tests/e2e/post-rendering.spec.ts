@@ -1,11 +1,23 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
+
+async function siteHoverColor(page: Page) {
+    return page.evaluate(() => {
+        // Let each engine normalize the token rather than assume decimal precision.
+        const sample = document.createElement('span');
+        sample.style.color = 'var(--color-violet-400)';
+        document.body.append(sample);
+        const color = getComputedStyle(sample).color;
+        sample.remove();
+        return color;
+    });
+}
 
 test('article links and imported text use the site purple on hover', async ({ page }) => {
     await page.goto('/tests/e2e/fixtures/post.html');
     const siteLink = page.getByRole('link', { name: 'Site link', exact: true });
     await siteLink.hover();
-    await expect(siteLink).toHaveCSS('color', 'oklch(0.702 0.183 293.541)');
-    const hoverColor = await siteLink.evaluate(node => getComputedStyle(node).color);
+    const hoverColor = await siteHoverColor(page);
+    await expect(siteLink).toHaveCSS('color', hoverColor);
 
     for (const name of ['Plain article link', 'Imported article link']) {
         const link = page.getByRole('link', { name, exact: true });
@@ -37,10 +49,14 @@ for (const width of [390, 1000]) {
         await expect(toc).not.toContainText('A motorcycle trip');
         await expect(toc).not.toContainText('Notes & details');
         if (width < 640) {
-            await expect(toc.getByRole('button', { name: 'Expand' })).toHaveAttribute('aria-expanded', 'false');
+            await expect(toc.getByRole('button', { name: 'Collapse' })).toHaveAttribute('aria-expanded', 'true');
+            await expect(toc.getByRole('link').first()).toBeVisible();
+            await toc.getByRole('button', { name: 'Collapse' }).click();
+            await expect(toc.getByRole('link').first()).toBeHidden();
             await toc.getByRole('button', { name: 'Expand' }).click();
         }
         await expect(toc.getByRole('link')).toHaveCount(4);
+        await expect(toc.getByRole('link').first()).toBeVisible();
         await expect(page.getByRole('heading', { name: '(339mi. / 545km.)' })).toHaveCount(0);
         expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
     });
@@ -71,15 +87,18 @@ test('heading links use unique IDs and support reload and browser history', asyn
     expect(new Set(ids).size).toBe(ids.length);
 });
 
-test('heading titles are permalinks with pointer and keyboard feedback', async ({ page }) => {
+test('heading titles are permalinks with pointer and keyboard feedback', async ({ page, browserName }) => {
     await page.goto('/tests/e2e/fixtures/post.html');
     const heading = page.getByRole('heading', { name: 'First Stop', exact: true }).first();
     const permalink = heading.getByRole('link', { name: 'Link to First Stop', exact: true });
     const title = permalink.getByText('First Stop', { exact: true });
     const initialColor = await permalink.evaluate(node => getComputedStyle(node).color);
+    const hoverColor = await siteHoverColor(page);
+    // Safari on macOS includes links in traversal when Option is held.
+    const tab = browserName === 'webkit' && process.platform === 'darwin' ? 'Alt+Tab' : 'Tab';
 
     await title.hover();
-    await expect(permalink).toHaveCSS('color', 'oklch(0.702 0.183 293.541)');
+    await expect(permalink).toHaveCSS('color', hoverColor);
     await title.click();
     await expect(page).toHaveURL(/#first-stop$/);
 
@@ -87,14 +106,14 @@ test('heading titles are permalinks with pointer and keyboard feedback', async (
     await expect(page).toHaveURL(/#first-stop-1-1$/);
     await page.mouse.move(0, 0);
     await heading.getByRole('link', { name: 'Back to table of contents' }).focus();
-    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press(`Shift+${tab}`);
     await expect(permalink).toBeFocused();
     await expect(permalink).toHaveCSS('outline-style', 'solid');
-    await expect(permalink).toHaveCSS('color', 'oklch(0.702 0.183 293.541)');
-    await page.keyboard.press('Tab');
+    await expect(permalink).toHaveCSS('color', hoverColor);
+    await page.keyboard.press(tab);
     await expect(heading.getByRole('link', { name: 'Back to table of contents' })).toBeFocused();
     await expect(permalink).toHaveCSS('color', initialColor);
-    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press(`Shift+${tab}`);
     await page.keyboard.press('Enter');
     await expect(page).toHaveURL(/#first-stop$/);
 });

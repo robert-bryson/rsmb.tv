@@ -34,7 +34,7 @@ function currentHashId() {
 }
 
 export function PostTableOfContents({ contentRef, collapsible = false }: PostTableOfContentsProps) {
-    const [expanded, setExpanded] = useState(false);
+    const [expanded, setExpanded] = useState(true);
     const [activeId, setActiveId] = useState('');
     const [items, setItems] = useState<TableOfContentsItem[]>([]);
 

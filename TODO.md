@@ -10,7 +10,7 @@ Use the [review index](docs/README.md) for dated findings and test results.
 
 The manifest supports local preview. The public route and hero photo returned HTTP 403 on 2026-10-01.
 
-- [ ] Review all 20 photos against their sources. Verify the alt text, dates, and gallery order.
+- [ ] Review each photo against its source. Verify the alt text, dates, and gallery order.
 - [ ] Publish the processed photos and route files. Check every image size and route URL for HTTP 200.
 - [ ] Verify the track dates against source records. The filenames include dates outside the stated trip period.
 - [ ] Verify the reported 450 miles, three riding days, and stop locations against source records.
