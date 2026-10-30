@@ -34,7 +34,7 @@ function CardPhoto({ entry }: { entry: TripAtlasEntry }) {
 }
 
 export default function MotorcycleTrips() {
-    const entries = useMemo(() => buildTripAtlasEntries(getTripPosts(), getTripSummary), []);
+    const entries = useMemo(() => buildTripAtlasEntries(getTripPosts(), getTripSummary, { includeDrafts: import.meta.env.DEV }), []);
     const location = useLocation();
     const [params, setParams] = useSearchParams();
     const requestedId = params.get('trip');
@@ -124,13 +124,14 @@ export default function MotorcycleTrips() {
                 <div id="atlas-trip-list" ref={listRef} hidden={!panelOpen} inert={!panelOpen}
                     onScroll={event => { if (panelOpen) session.current.scrollTop = event.currentTarget.scrollTop; }}
                     className="min-h-0 overflow-y-auto overscroll-contain border-t border-zinc-800 p-3 [scrollbar-gutter:stable]">
-                    {invalidSelection && <p role="status" className="mb-3 rounded-lg bg-zinc-800 p-3 text-sm">That trip is not available in this collection. Browse the published trips below.</p>}
-                    {entries.length === 0 && <p className="p-3 text-sm text-zinc-400">No published trip reports are available yet.</p>}
+                    {invalidSelection && <p role="status" className="mb-3 rounded-lg bg-zinc-800 p-3 text-sm">That trip is not available in this collection. Browse the available trips below.</p>}
+                    {entries.length === 0 && <p className="p-3 text-sm text-zinc-400">No trip reports are available yet.</p>}
                     <ol className="space-y-3">
                         {entries.map(entry => {
                             const active = selectedId === entry.id;
                             const color = tripAtlasColor(entry.id);
                             const state = routes[entry.id];
+                            const draftCount = entry.reports.filter(report => report.draft).length;
                             const geography = [...new Set([
                                 ...(entry.summary.countries ?? []).flatMap(country => country.regions?.length ? country.regions : [getCountryName(country.code)]),
                                 ...(entry.summary.regions ?? []),
@@ -148,6 +149,9 @@ export default function MotorcycleTrips() {
                                         {active && <span className="ml-auto text-zinc-100">Selected</span>}
                                     </div>
                                     <h2 className="text-base font-semibold leading-snug">{entry.title}</h2>
+                                    {import.meta.env.DEV && draftCount > 0 && <p className="mt-2"><span className="inline-flex rounded border border-amber-800/70 bg-amber-950/40 px-2 py-0.5 text-[11px] font-medium text-amber-300">
+                                        DEV · {draftCount === entry.reports.length ? 'Unpublished draft' : 'Includes drafts'}
+                                    </span></p>}
                                     <p className="mt-2 text-sm leading-relaxed text-zinc-400">{entry.description}</p>
                                     <p className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-zinc-300">
                                         {entry.summary.distanceMiles && <span>{entry.summary.distanceMiles.toLocaleString()} mi</span>}
@@ -159,7 +163,9 @@ export default function MotorcycleTrips() {
                                         className="mt-3 min-h-11 rounded-md border border-zinc-600 px-3 text-sm text-zinc-100 hover:border-violet-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-400">Show route</button>
                                     <div className="mt-1 flex flex-col">
                                         {entry.reports.map(report => <Link key={report.slug} to={report.href} state={{ from: url }}
-                                            className="inline-flex min-h-11 items-center text-sm text-violet-300 hover:text-violet-200 hover:underline">{entry.reports.length === 1 ? 'Read trip report →' : `${report.title} →`}</Link>)}
+                                            className="inline-flex min-h-11 flex-wrap items-center gap-2 text-sm text-violet-300 hover:text-violet-200 hover:underline">{entry.reports.length === 1 ? 'Read trip report →' : `${report.title} →`}
+                                            {import.meta.env.DEV && report.draft && entry.reports.length > 1 && <span className="rounded border border-amber-800/70 bg-amber-950/40 px-1.5 py-0.5 text-[11px] text-amber-300">Draft</span>}
+                                        </Link>)}
                                     </div>
                                     {state?.error ? <p role="status" className="mt-2 text-xs text-amber-300">Route unavailable. <button type="button" onClick={state.retry} className="min-h-11 underline">Retry route</button></p>
                                         : !state?.route && <p role="status" className="mt-2 text-xs text-zinc-500">Loading route…</p>}

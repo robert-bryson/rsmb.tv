@@ -58,7 +58,7 @@ Track remaining implementation work in [TODO.md](../../TODO.md#motorcycle-trip-a
    Run the documented project-preview generator and commit its outputs.
 
 7. **Development visibility, before card work:** Should the development atlas show published trips only, or also show clearly labeled drafts?
-   Confirmed answer: show published reports only in the local atlas.
+   Updated answer: include unpublished reports with valid manifests in development. Use subtle amber labels to identify drafts.
    Production must continue to use the content plugin's publication filtering.
 
 8. **Incomplete development content, before card work:** Should a trip without a valid manifest have a report-only card, or be omitted?
@@ -74,7 +74,8 @@ The summaries exclude track definitions, galleries, daily maps, and the remainin
 The content adapter groups eligible reports by trip ID and orders cards by travel start date.
 It uses explicit series order before the confirmed publication-date fallback.
 It reads report metadata and summaries without loading story bodies or complete manifests.
-Draft inclusion remains an adapter option. The explorer uses the confirmed published-only behavior.
+The development explorer includes drafts with valid summaries. Amber badges identify unpublished cards and draft links within multipart trips.
+Production includes published reports only. Draft report pages link back to their atlas route during development.
 Incomplete development entries without summaries are omitted. The existing production checks still reject missing published manifests.
 
 The playable explorer now runs at `/projects/motorcycle-trips/map`.
@@ -94,6 +95,9 @@ Validation on 2026-10-30: 289 focused unit tests and 37 browser checks passed.
 TypeScript checks and changed-file ESLint checks passed.
 Browser checks used fixed production content in desktop Chromium, phone Chromium, and iPhone WebKit.
 Two pointer hit tests were skipped on phone projects. The equivalent card controls passed on both phone engines.
+
+The draft-visibility follow-up passed 134 focused unit tests and ten Chromium browser checks.
+The local atlas showed five configured trips, including two labeled drafts. The 320-pixel layout and draft-report return link passed manual browser checks.
 
 ## Fit within rsmb.tv
 

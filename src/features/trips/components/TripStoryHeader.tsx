@@ -19,7 +19,7 @@ export function TripStoryHeader({ post, returnTo, returnLabel = 'Back to posts' 
                     <p className="mt-4 text-lg leading-relaxed text-zinc-100">{post.description}</p>
                 </div>
             </TripHeroGallery>
-            {post.tripId && post.development?.published !== false && <Link to={tripAtlasUrl(post.tripId)} className="mt-3 inline-flex min-h-11 items-center text-sm text-violet-300 hover:underline">View this trip on the map →</Link>}
+            {post.tripId && (import.meta.env.DEV || post.development?.published !== false) && <Link to={tripAtlasUrl(post.tripId)} className="mt-3 inline-flex min-h-11 items-center text-sm text-violet-300 hover:underline">View this trip on the map →</Link>}
         </header>
     );
 }

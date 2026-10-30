@@ -252,10 +252,11 @@ Pointer hit testing runs on desktop. Phone projects exercise the equivalent card
 Run the geometry and development-lifecycle checks with:
 
 ```bash
-npx vitest run src/test/tripAtlasEntries.test.ts src/test/tripAtlasView.test.ts src/test/tripAtlasMap.test.tsx
+npx vitest run src/test/tripAtlasEntries.test.ts src/test/tripAtlasView.test.ts src/test/tripAtlasMap.test.tsx src/test/motorcycleTrips.test.tsx
 ```
 
 The lifecycle check verifies that Strict Mode does not retain an uninitialized renderer's default camera.
+Page checks use fixed metadata to verify development draft labels, mixed multipart reports, and production draft exclusion.
 
 ## JavaScript budgets
 
