@@ -43,6 +43,7 @@ export default function MotorcycleTrips() {
     const [params, setParams] = useSearchParams();
     const requestedId = params.get('trip');
     const selectedId = entries.find(entry => entry.id === requestedId)?.id;
+    const onlySelected = Boolean(selectedId) && params.get('view') === 'selected';
     const invalidSelection = Boolean(requestedId && !selectedId);
     const url = location.pathname + location.search;
     const [initialSession] = useState(() => readAtlasSession(location.key, (location.state as { restoreScroll?: boolean } | null)?.restoreScroll ? url : undefined));
@@ -55,6 +56,8 @@ export default function MotorcycleTrips() {
     const highlightedId = hoveredId ?? focusedId;
     const [reveal, setReveal] = useState(() => !initialSession && selectedId ? { id: selectedId, version: 0 } : undefined);
     const listRef = useRef<HTMLDivElement>(null);
+    const visibleEntries = useMemo(() => onlySelected ? entries.filter(entry => entry.id === selectedId) : entries, [entries, onlySelected, selectedId]);
+    const visibleRoutes = useMemo(() => onlySelected ? Object.fromEntries(Object.entries(routes).filter(([id]) => id === selectedId)) : routes, [routes, onlySelected, selectedId]);
 
     const description = 'Explore motorcycle journeys on a map, browse photographs and trip facts, and read the reports.';
     useDocumentHead({ title: 'Motorcycle Trips', description, ogImage: absoluteUrl('/og/motorcycle-trips.svg') });
@@ -77,7 +80,8 @@ export default function MotorcycleTrips() {
     };
     const selectTrip = (id: string | undefined, reveal = false) => {
         const next = new URLSearchParams(params);
-        if (id) next.set('trip', id); else next.delete('trip');
+        if (id) next.set('trip', id);
+        else { next.delete('trip'); next.delete('view'); }
         setParams(next, { replace: true });
         setFitVersion(version => version + 1);
         if (reveal && id) {
@@ -89,11 +93,19 @@ export default function MotorcycleTrips() {
         if (params.has('trip')) {
             const next = new URLSearchParams(params);
             next.delete('trip');
+            next.delete('view');
             setParams(next, { replace: true });
         }
         setHoveredId(undefined);
         setFocusedId(undefined);
         setReveal(undefined);
+    };
+    const changeFilter = (checked: boolean) => {
+        const next = new URLSearchParams(params);
+        if (checked && selectedId) next.set('view', 'selected'); else next.delete('view');
+        setParams(next, { replace: true });
+        setHoveredId(undefined);
+        setFocusedId(undefined);
     };
 
     useEffect(() => () => saveAtlasSession(location.key, url, session.current), [location.key, url]);
@@ -111,14 +123,14 @@ export default function MotorcycleTrips() {
         if (reveal && panelOpen) document.getElementById(`atlas-card-${reveal.id}`)?.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'instant' });
     }, [reveal, panelOpen]);
 
-    const loadedCount = entries.filter(entry => routes[entry.id]?.route).length;
+    const loadedCount = visibleEntries.filter(entry => routes[entry.id]?.route).length;
     return (
         <main className="relative h-full w-full overflow-hidden bg-zinc-950 text-zinc-100">
             <a href="#atlas-panel-toggle" className="sr-only z-50 rounded bg-violet-600 p-3 focus:not-sr-only focus:absolute focus:left-3 focus:top-3">Skip to trip list</a>
             {entries.map(entry => <RouteReader key={entry.id} entry={entry} onChange={onRouteChange} />)}
             <TripAtlasMapBoundary>
                 <Suspense fallback={<p role="status" className="absolute inset-0 grid place-items-center text-sm text-zinc-400">Loading trip map…</p>}>
-                    <TripAtlasMap entries={entries} routes={routes} selectedId={selectedId} highlightedId={highlightedId}
+                    <TripAtlasMap entries={visibleEntries} routes={visibleRoutes} selectedId={selectedId} highlightedId={highlightedId}
                         fitVersion={fitVersion} panelOpen={panelOpen} initialCamera={initialSession?.camera}
                         onSelect={id => id ? selectTrip(id, true) : deselectTrip()} onHover={setHoveredId} onCameraChange={onCameraChange} />
                 </Suspense>
@@ -128,7 +140,7 @@ export default function MotorcycleTrips() {
                 <div className="pointer-events-auto min-w-0 rounded-xl border border-zinc-700/80 bg-zinc-950/95 px-4 py-3 shadow-xl backdrop-blur md:w-[360px]">
                     <Link to="/projects" className="inline-flex min-h-6 items-center text-xs text-zinc-400 hover:text-violet-300">← Projects</Link>
                     <h1 className="truncate text-lg font-semibold tracking-tight md:text-xl">Motorcycle Trips</h1>
-                    <p className="mt-0.5 text-xs text-zinc-400">{entries.length} trips · Routes, photographs &amp; stories</p>
+                    <p className="mt-0.5 text-xs text-zinc-400">{onlySelected ? `1 of ${entries.length}` : entries.length} trips · Routes, photographs &amp; stories</p>
                 </div>
                 <button type="button" onClick={() => selectTrip(undefined)} aria-label="Show all trips"
                     className="pointer-events-auto min-h-11 shrink-0 rounded-xl border border-zinc-600 bg-zinc-950/95 px-3 text-sm text-zinc-100 shadow-lg hover:border-violet-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-400">
@@ -140,16 +152,20 @@ export default function MotorcycleTrips() {
                 <button id="atlas-panel-toggle" type="button" aria-expanded={panelOpen} aria-controls="atlas-trip-list"
                     onClick={() => changePanel(!panelOpen)}
                     className="flex min-h-12 w-full shrink-0 items-center justify-between gap-3 px-4 py-3 text-left text-sm font-medium hover:bg-zinc-800 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-violet-400">
-                    <span>{panelOpen ? 'Hide trips' : 'Browse trips'} <span className="ml-1 text-zinc-400">({entries.length})</span></span>
-                    <span className="text-xs text-zinc-400">{loadedCount}/{entries.length} routes <span aria-hidden="true">{panelOpen ? '▾' : '▴'}</span></span>
+                    <span>{panelOpen ? 'Hide trips' : 'Browse trips'} <span className="ml-1 text-zinc-400">({visibleEntries.length})</span></span>
+                    <span className="text-xs text-zinc-400">{loadedCount}/{visibleEntries.length} routes <span aria-hidden="true">{panelOpen ? '▾' : '▴'}</span></span>
                 </button>
+                {panelOpen && <button type="button" aria-pressed={onlySelected} disabled={!selectedId} onClick={() => changeFilter(!onlySelected)}
+                    className={`flex min-h-11 w-full items-center justify-between gap-2 border-t border-zinc-800 px-4 text-left text-xs text-zinc-300 enabled:hover:bg-zinc-800 disabled:text-zinc-500 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-violet-400 ${onlySelected ? 'bg-violet-950/40' : ''}`}>
+                    <span>Show only selected trip</span><span aria-hidden="true" className={onlySelected ? 'text-violet-300' : 'text-zinc-500'}>{onlySelected ? 'On' : 'Off'}</span>
+                </button>}
                 <div id="atlas-trip-list" ref={listRef} hidden={!panelOpen} inert={!panelOpen}
                     onScroll={event => { if (panelOpen) session.current.scrollTop = event.currentTarget.scrollTop; }}
                     className="min-h-0 overflow-y-auto overscroll-contain border-t border-zinc-800 p-3 [scrollbar-gutter:stable]">
                     {invalidSelection && <p role="status" className="mb-3 rounded-lg bg-zinc-800 p-3 text-sm">That trip is not available in this collection. Browse the available trips below.</p>}
                     {entries.length === 0 && <p className="p-3 text-sm text-zinc-400">No trip reports are available yet.</p>}
                     <ol className="space-y-3">
-                        {entries.map(entry => {
+                        {visibleEntries.map(entry => {
                             const active = selectedId === entry.id;
                             const highlighted = highlightedId === entry.id;
                             const color = tripAtlasColor(entry.id);

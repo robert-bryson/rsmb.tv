@@ -1,5 +1,8 @@
 import type { FeatureCollection, LineString, MultiLineString } from 'geojson';
 import { routeFeatures, type RouteGeoJson } from '../routeGeometry';
+import { tripAtlasColor } from './tripAtlasColors';
+
+export { tripAtlasColor };
 
 export const TRIP_ATLAS_PATH = '/projects/motorcycle-trips/map';
 
@@ -9,13 +12,6 @@ export function isTripAtlasLocation(value: unknown): value is string {
 
 export function tripAtlasUrl(id: string) {
     return `${TRIP_ATLAS_PATH}?${new URLSearchParams({ trip: id })}`;
-}
-
-const colors = ['#a78bfa', '#38bdf8', '#fbbf24', '#34d399', '#fb7185', '#fb923c'];
-export function tripAtlasColor(id: string) {
-    let hash = 0;
-    for (const character of id) hash = (Math.imul(hash, 31) + character.charCodeAt(0)) >>> 0;
-    return colors[hash % colors.length];
 }
 
 export interface AtlasRouteState {

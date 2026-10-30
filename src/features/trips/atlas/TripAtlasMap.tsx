@@ -208,6 +208,13 @@ export default function TripAtlasMap(props: Props) {
     }, [map, data]);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- Filtering and panel layout changes invalidate the previous map choices.
+        setChoices(undefined);
+        choicePreview.current = {};
+        routeHover.current = null;
+    }, [entries, panelOpen]);
+
+    useEffect(() => {
         if (!map || mapRef.current !== map || !map.getLayer('atlas-selected')) return;
         for (const id of ['atlas-selected', 'atlas-selected-casing']) map.setFilter(id, filterFor(highlightedId ? undefined : selectedId));
         for (const id of ['atlas-hover', 'atlas-hover-casing']) map.setFilter(id, filterFor(highlightedId));

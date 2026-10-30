@@ -111,6 +111,12 @@ Choices match route colors. Pointer and keyboard previews reuse the map/card emp
 The route-context styling follow-up passed seven focused unit tests, TypeScript, changed-file ESLint, and 40 browser checks across desktop Chromium, phone Chromium, and iPhone WebKit.
 Two hover-only phone cases were skipped. Local visual inspection confirmed that background routes retain their own colors at 50% opacity without halos.
 
+Palette review used Chrome's protanopia, deuteranopia, and tritanopia simulations against the actual muted basemap.
+Some hues converge under these simulations, so named hover feedback, overlapping-route choices, and the selected-trip filter remain essential identification tools.
+Local review confirmed Route 66's mint route and card marker, PCH's retained yellow, and filter access at a 320-pixel viewport.
+The registry and filter follow-up passed 48 focused unit tests, TypeScript, changed-file ESLint, and 55 browser checks across desktop Chromium, phone Chromium, and iPhone WebKit, including reading-page JavaScript budgets.
+Two hover-only phone cases were skipped.
+
 ## Fit within rsmb.tv
 
 Use **Motorcycle Trips** as a working project title.
@@ -207,6 +213,11 @@ Reuse one hero photograph, the report title and description, travel dates, avail
 Show the motorcycle and regions as secondary information when useful.
 Keep **Show route** and **Read trip report** as separate actions.
 Use a stable route color and matching card mark.
+Keep explicit trip ID → palette-token assignments in [the atlas color registry](../../src/features/trips/atlas/tripAtlasColors.ts).
+PCH retains yellow, Route 66 uses mint green, and Ocean Shores, Boise, and Kalaloch retain violet, sky blue, and rose respectively.
+Assignments cover published and draft trips together; loading order, publication, and filtering do not change them.
+Authoring checks require each manifest's assignment and reject duplicate assigned colors. Unconfigured local IDs retain a stable violet fallback until authored.
+The small qualitative palette represents trip identities rather than ordered values. [ColorBrewer scheme guidance](https://colorbrewer2.org/learnmore/schemes.html)
 Emphasize selection with line width, casing, and a visible card border as well as color.
 
 Selecting a route reveals its card and fits its complete geometry.
@@ -218,6 +229,10 @@ Card focus can provide the same temporary emphasis.
 Keep the collection browsable when one trip is selected.
 Use restrained transitions and respect reduced motion.
 **Show all trips** clears selection and restores the overview.
+The native **Show only selected trip** toggle filters the map geometry and card list while retaining the camera and selected trip.
+It is available in the open panel and disabled until a trip is selected. Its `view=selected` URL state survives report navigation and same-session returns.
+Changing the filter or opening the panel dismisses obsolete overlapping-route choices, keeping phone controls reachable. Deselecting a trip or choosing **Show all trips** clears the filter.
+This provides isolation as the collection grows; add year filtering when browsing many trips calls for it.
 Clicking empty map space clears selection and temporary highlights while preserving the current camera.
 Do not filter the card list merely because the reader pans the map.
 

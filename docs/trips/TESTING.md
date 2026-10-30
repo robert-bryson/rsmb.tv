@@ -245,6 +245,7 @@ PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- \
 ```
 
 Atlas checks cover route selection, overlapping roads, shared URLs, report returns, scroll restoration, and delayed geometry.
+The **Show only selected trip** toggle filters both cards and rendered geometry, retains colors and camera position, survives report returns through `view=selected`, and resets on deselection or **Show all trips**.
 Card clicks select routes with camera padding. Map clicks reveal the matching card.
 Hover checks verify matching map and card feedback without selection changes or automatic scrolling.
 Overlap choices verify route-colored text, pointer and keyboard previews, close-icon placement, Escape dismissal, and preserved selection and camera position.
@@ -262,6 +263,11 @@ npx vitest run src/test/tripAtlasEntries.test.ts src/test/tripAtlasView.test.ts 
 
 The lifecycle check verifies that Strict Mode does not retain an uninitialized renderer's default camera.
 Page checks use fixed metadata to verify development draft labels, mixed multipart reports, and production draft exclusion.
+Color checks verify stable assignments across subsets and geometry arrival order. Authoring checks require each manifest ID in [the registry](../../src/features/trips/atlas/tripAtlasColors.ts) and reject duplicate color assignments.
+
+For manual palette review, use the local atlas with its muted basemap and Chrome DevTools' Rendering → Emulate vision deficiencies controls.
+Check protanopia, deuteranopia, and tritanopia with overview, selection, and the selected-trip filter.
+Hue distinctions can converge in these simulations; verify named tooltips, card feedback, overlap choices, and isolation remain usable.
 
 ## JavaScript budgets
 

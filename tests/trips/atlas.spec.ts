@@ -98,6 +98,55 @@ test('shared selection and report returns restore the card scroll and camera', a
     await expect(page.locator('[data-trip-id="coastal-test"]').getByRole('button', { name: /^Show route:/ })).toHaveAttribute('aria-pressed', 'true');
 });
 
+test('selected-trip filtering hides other geometry and cards, survives report returns, and resets on deselection', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.route('**/test-trip/route.geojson', route => route.fulfill({ json: {
+        ...geometry,
+        features: [...geometry.features, { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: [[-123, 46], [-121.9, 46], [-121.9, 45.8]] } }],
+    } }));
+    await page.goto(`${atlas}?trip=daily-test`);
+    await expect(page.getByText('2/2 routes', { exact: false })).toBeVisible();
+    await expect.poll(async () => (await paintedRoute(page, 'daily-test')).count).toBeGreaterThan(30);
+    const before = await paintedRoute(page, 'daily-test');
+    // Include the half-opacity context route while excluding the gray basemap.
+    const context = await paintedRoute(page, 'daily-test', 110);
+    const filter = page.getByRole('button', { name: 'Show only selected trip' });
+    await filter.click();
+    await expect(filter).toHaveAttribute('aria-pressed', 'true');
+    await expect(page).toHaveURL(/\?trip=daily-test&view=selected$/);
+    await expect(page.getByRole('heading', { level: 2 })).toHaveCount(1);
+    await expect(page.getByText('1/1 routes', { exact: false })).toBeVisible();
+    await expect.poll(async () => (await paintedRoute(page, 'daily-test', 110)).count).toBeLessThan(context.count - 30);
+    const filtered = await paintedRoute(page, 'daily-test');
+    filtered.bounds.forEach((value, index) => expect(Math.abs(value - before.bounds[index])).toBeLessThan(5));
+    await page.getByRole('link', { name: /Read trip report/ }).click();
+    await page.getByRole('link', { name: /Back to map/ }).first().click();
+    await expect(page).toHaveURL(/\?trip=daily-test&view=selected$/);
+    await expect(filter).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByRole('heading', { level: 2 })).toHaveCount(1);
+    await filter.click();
+    await expect(filter).toHaveAttribute('aria-pressed', 'false');
+    await expect(page).toHaveURL(/\?trip=daily-test$/);
+    await expect(page.getByRole('heading', { level: 2 })).toHaveCount(2);
+    await expect.poll(async () => (await paintedRoute(page, 'daily-test', 110)).count).toBeGreaterThan(context.count - 30);
+
+    await page.locator('#atlas-panel-toggle').click();
+    const map = page.getByTestId('trip-atlas-map');
+    const { point } = await paintedRoute(page, 'daily-test');
+    await map.locator('canvas').click({ position: point });
+    const choices = page.getByRole('group', { name: 'Trips sharing this road' });
+    await expect(choices).toBeVisible();
+    await page.locator('#atlas-panel-toggle').click();
+    await filter.click();
+    await expect(filter).toHaveAttribute('aria-pressed', 'true');
+    await expect(choices).toHaveCount(0);
+    await map.locator('canvas').click({ position: { x: page.viewportSize()!.width - 24, y: 240 } });
+    await expect(page).toHaveURL(new RegExp(`${atlas}$`));
+    await expect(filter).toHaveAttribute('aria-pressed', 'false');
+    await expect(filter).toBeDisabled();
+    await expect(page.getByRole('heading', { level: 2 })).toHaveCount(2);
+});
+
 test('clicking empty map space deselects the route without moving the camera', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.route('**/test-trip/route.geojson', route => route.fulfill({ json: {

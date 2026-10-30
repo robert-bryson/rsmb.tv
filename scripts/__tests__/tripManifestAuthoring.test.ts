@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { tripManifestSchema, type TripManifest } from '../../shared/tripManifestSchema';
 import fixture from '../../tests/fixtures/trip-content/trips/coastal-test.json';
 import pch from '../../src/content/trips/pch-2024.json';
+import { tripAtlasColorAssignments, tripAtlasPalette } from '../../src/features/trips/atlas/tripAtlasColors';
 import { expandTripShortcodes } from '../sync-blogs.js';
 
 const tripWithDays = tripManifestSchema.parse({
@@ -57,7 +58,10 @@ describe('PCH trip content', () => {
         for (const filename of filenames) {
             const manifest = tripManifestSchema.parse(JSON.parse(fs.readFileSync(new URL(filename, directory), 'utf8')));
             expect(manifest.id, filename).toBe(filename.slice(0, -5));
+            expect(Object.hasOwn(tripAtlasColorAssignments, manifest.id), `Assign an atlas color for ${manifest.id} in tripAtlasColors.ts`).toBe(true);
         }
+        const colors = Object.values(tripAtlasColorAssignments).map(token => tripAtlasPalette[token]);
+        expect(new Set(colors).size, 'Atlas trips must have distinct explicit colors').toBe(colors.length);
     });
 
     it('assigns every selected photo to its capture day exactly once', () => {

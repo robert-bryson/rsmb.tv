@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { combineAtlasRoutes, isTripAtlasLocation, readAtlasSession, saveAtlasSession, tripAtlasUrl } from '../features/trips/atlas/tripAtlasView';
+import { combineAtlasRoutes, isTripAtlasLocation, readAtlasSession, saveAtlasSession, tripAtlasColor, tripAtlasUrl } from '../features/trips/atlas/tripAtlasView';
 import type { RouteGeoJson } from '../features/trips/routeGeometry';
 
 const route: RouteGeoJson = {
@@ -10,6 +10,21 @@ const route: RouteGeoJson = {
 };
 
 describe('trip atlas view data', () => {
+    it('preserves identity colors across geometry arrival order and filtered subsets', () => {
+        const state = { route, error: '', retry: () => {} };
+        const first = combineAtlasRoutes({ 'pch-2024': state, 'route-66ish-2025': state });
+        const reordered = combineAtlasRoutes({ 'route-66ish-2025': state, 'pch-2024': state });
+        const subset = combineAtlasRoutes({ 'route-66ish-2025': state });
+        const colors = (features: typeof first.features) => Object.fromEntries(features.map(feature => [feature.properties!.tripId, feature.properties!.color]));
+        expect(colors(first.features)).toEqual({ 'pch-2024': '#fbbf24', 'route-66ish-2025': '#34d399' });
+        expect(colors(reordered.features)).toEqual(colors(first.features));
+        expect(colors(subset.features)).toEqual({ 'route-66ish-2025': '#34d399' });
+        expect(tripAtlasColor('ocean-shores-2024')).toBe('#a78bfa');
+        expect(tripAtlasColor('boise-2024')).toBe('#38bdf8');
+        expect(tripAtlasColor('kalaloch-2024')).toBe('#fb7185');
+        expect(tripAtlasColor('constructor')).toBe(tripAtlasColor('unconfigured-trip'));
+    });
+
     it('preserves disconnected segments and cached geometry while namespacing identical source IDs', () => {
         const before = JSON.stringify(route);
         const combined = combineAtlasRoutes({

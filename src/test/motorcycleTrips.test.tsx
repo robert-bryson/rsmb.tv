@@ -2,6 +2,8 @@ import { fireEvent, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { BlogPostMeta } from '../content/posts';
 import type { TripSummary } from '../features/trips/types';
+import type { TripAtlasEntry } from '../features/trips/atlas/tripAtlasEntries';
+import type { AtlasRouteState } from '../features/trips/atlas/tripAtlasView';
 import MotorcycleTrips from '../pages/MotorcycleTrips';
 import { renderWithRouter } from './helpers/router';
 
@@ -32,8 +34,9 @@ vi.mock('../content/posts', () => ({ getTripPosts: () => fixtures.posts }));
 vi.mock('../features/trips/tripSummaries', () => ({ getTripSummary: (id: string) => fixtures.summaries[id] }));
 vi.mock('../features/trips/useTripRoute', () => ({ useTripRoute: () => ({ route: null, error: '', retry: fixtures.retry }) }));
 vi.mock('../features/trips/atlas/TripAtlasMap', () => ({
-    default: ({ selectedId, highlightedId, fitVersion }: { selectedId?: string; highlightedId?: string; fitVersion: number }) => (
-        <output data-testid="atlas-renderer" data-selected={selectedId ?? ''} data-highlighted={highlightedId ?? ''} data-fit-version={fitVersion} />
+    default: ({ selectedId, highlightedId, fitVersion, entries, routes }: { selectedId?: string; highlightedId?: string; fitVersion: number; entries: TripAtlasEntry[]; routes: Record<string, AtlasRouteState> }) => (
+        <output data-testid="atlas-renderer" data-selected={selectedId ?? ''} data-highlighted={highlightedId ?? ''} data-fit-version={fitVersion}
+            data-trips={entries.map(entry => entry.id).join(',')} data-routes={Object.keys(routes).join(',')} />
     ),
 }));
 
@@ -42,6 +45,39 @@ beforeEach(() => {
 });
 
 describe('atlas card interactions', () => {
+    it('filters map and cards to the selected trip without refitting, and restores all trips when turned off', async () => {
+        renderWithRouter(<MotorcycleTrips />, { route: '/projects/motorcycle-trips/map' });
+        const renderer = await screen.findByTestId('atlas-renderer');
+        const filter = screen.getByRole('button', { name: 'Show only selected trip' });
+        expect(filter).toBeDisabled();
+        fireEvent.click(screen.getByRole('button', { name: 'Show route: Published journey' }));
+        expect(filter).toBeEnabled();
+        const fitVersion = renderer.getAttribute('data-fit-version');
+        fireEvent.click(filter);
+        expect(filter).toHaveAttribute('aria-pressed', 'true');
+        expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(1);
+        expect(renderer).toHaveAttribute('data-trips', 'published');
+        expect(renderer).toHaveAttribute('data-routes', 'published');
+        expect(renderer).toHaveAttribute('data-selected', 'published');
+        expect(renderer).toHaveAttribute('data-fit-version', fitVersion);
+        fireEvent.click(filter);
+        expect(renderer.getAttribute('data-trips')?.split(',')).toHaveLength(3);
+        expect(renderer.getAttribute('data-routes')?.split(',')).toHaveLength(3);
+        expect(renderer).toHaveAttribute('data-selected', 'published');
+        expect(renderer).toHaveAttribute('data-fit-version', fitVersion);
+    });
+
+    it('opens a shared filtered view and Show all trips clears both the filter and selection', async () => {
+        renderWithRouter(<MotorcycleTrips />, { route: '/projects/motorcycle-trips/map?trip=published&view=selected' });
+        const renderer = await screen.findByTestId('atlas-renderer');
+        expect(screen.getByRole('button', { name: 'Show only selected trip' })).toHaveAttribute('aria-pressed', 'true');
+        expect(renderer).toHaveAttribute('data-trips', 'published');
+        fireEvent.click(screen.getByRole('button', { name: 'Show all trips' }));
+        expect(screen.getByRole('button', { name: 'Show only selected trip' })).toHaveAttribute('aria-pressed', 'false');
+        expect(renderer.getAttribute('data-trips')?.split(',')).toHaveLength(3);
+        expect(renderer).toHaveAttribute('data-selected', '');
+    });
+
     it('selects a route from card content and fits it once per click, including the native route button', async () => {
         renderWithRouter(<MotorcycleTrips />, { route: '/projects/motorcycle-trips/map' });
         const renderer = await screen.findByTestId('atlas-renderer');
