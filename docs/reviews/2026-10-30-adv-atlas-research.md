@@ -1,4 +1,4 @@
-# Motorcycle trip atlas research: 2026-10-30
+# ADV Atlas research: 2026-10-30
 
 ## Recommendation
 
@@ -28,7 +28,7 @@ No applicable `AGENTS.md` was found in the repository or its ancestors.
 These questions follow the architecture review of this plan.
 Ask unanswered questions when the relevant phase starts.
 Unanswered preferences use the suggested defaults in the first playable version.
-Track remaining implementation work in [TODO.md](../../TODO.md#motorcycle-trip-atlas).
+Track remaining implementation work in [TODO.md](../../TODO.md#adv-atlas).
 
 1. **Return state, before navigation work:** Should returning from a report restore the previous camera, panel state, and card position?
    Suggested default: restore the previous view during the same session. Fit the selected route for a fresh shared URL.
@@ -81,7 +81,7 @@ The map and its loading/fit calculations receive only entries with valid summari
 The hosted `dev` branch uses `npm run build:dev` and Vite's explicit `development` mode, which enables the same preview UI with the production React runtime.
 Preview builds emit HTML route shells for every report so Amplify's article rewrites work for incomplete records. Their HTML is marked `noindex, nofollow`; public production builds retain publication filtering and strict validation.
 
-The playable explorer now runs at `/projects/motorcycle-trips/map`.
+The playable explorer now runs at `/projects/adv-atlas/map`.
 The Projects entry opens it directly. The explorer includes published routes, report cards, shared selection URLs, and a collapsible trip panel.
 Route selection fits the complete geometry. Shared roads offer a trip choice.
 Cards retain authored facts and normal report links. Route failures provide independent retry controls.
@@ -132,23 +132,25 @@ Local checks verified the visible trips' matching button colors, readable filled
 
 ## Fit within rsmb.tv
 
-Use **Motorcycle Trips** as a working project title.
+The project is named **ADV Atlas**.
 The project provides a central collection and geographic entrance to the existing trip reports.
 Through Routes already provides motorcycle route planning.
 Flights establishes the site's personal travel-map convention.
 
 Use the existing full-viewport map convention, with direct access from the project entry:
 
-- `/projects/motorcycle-trips`: redirects to the explorer, so the Projects entry opens the collection directly.
-- `/projects/motorcycle-trips/map`: the route explorer.
-- `/projects/motorcycle-trips/map?trip=boise-2024`: a selected trip that readers can share.
+- `/projects/adv-atlas`: redirects to the explorer, so the Projects entry opens the collection directly.
+- `/projects/adv-atlas/map`: the route explorer.
+- `/projects/adv-atlas/map?trip=boise-2024`: a selected trip that readers can share.
+
+The former `/projects/motorcycle-trips` URLs redirect to ADV Atlas and preserve trip selections, filters, fragments, and return state.
 
 Put a short collection introduction inside the explorer's header or card panel.
 A separate project introduction page is unnecessary for the first version.
 
 Keep `/trips/<post-slug>` as the report destination.
 The existing `/trips` collection redirects to `/posts?type=trips`.
-Add an **Explore trips on a map** link to that filtered post view.
+Add an **Explore ADV Atlas** link to that filtered post view.
 Add a **View this trip on the map** link to trip reports.
 Register the project in the existing Projects list and navigation.
 
@@ -415,7 +417,7 @@ Hover should not move the camera, scroll cards, replace persistent selection, or
 The hovered route and report card share temporary visual emphasis.
 Show the trip title in the story map's dark tooltip, with an edge matching the route color.
 Add the trip's start month and year beneath the title in smaller muted text, using the shared UTC month/year formatter (for example, May 2025).
-Use a shared start-aligned edge and a 4-pixel title/date gap for short and wrapping titles. [Tooltip hierarchy research](2026-10-30-trip-atlas-tooltip-hierarchy.md) documents why the route-identification task favors this order over a date-first or right-aligned treatment.
+Use a shared start-aligned edge and a 4-pixel title/date gap for short and wrapping titles. [Tooltip hierarchy research](2026-10-30-adv-atlas-tooltip-hierarchy.md) documents why the route-identification task favors this order over a date-first or right-aligned treatment.
 Reuse the shared tooltip factory, route casing, and motion-aware transitions. Dim other routes during temporary emphasis using the same 50%-opacity colors without halos.
 Escape dismisses tooltip feedback without clearing the selected trip.
 Keyboard focus should remain visible without forcing a route selection.

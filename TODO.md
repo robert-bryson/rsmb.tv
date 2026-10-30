@@ -41,9 +41,9 @@ The historical signal is not ready for publication.
 - [ ] Store an approved station cohort with a version number before publication.
 - [ ] Publish station coverage, failed geography requests, and data quality in a manifest with a version number.
 
-## Motorcycle trip atlas
+## ADV Atlas
 
-- [ ] Check the atlas on a real phone. Measure cold-cache transfer and initialization. Review the [remaining preferences](docs/reviews/2026-10-30-motorcycle-trip-atlas-research.md#questions-to-ask-during-implementation) after trying the explorer.
+- [ ] Check the atlas on a real phone. Measure cold-cache transfer and initialization. Review the [remaining preferences](docs/reviews/2026-10-30-adv-atlas-research.md#questions-to-ask-during-implementation) after trying the explorer.
 
 ## Browser checks
 

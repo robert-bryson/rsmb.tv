@@ -4,7 +4,7 @@ import type { BlogPostMeta } from '../content/posts';
 import type { TripSummary } from '../features/trips/types';
 import type { TripAtlasEntry } from '../features/trips/atlas/tripAtlasEntries';
 import type { AtlasRouteState } from '../features/trips/atlas/tripAtlasView';
-import MotorcycleTrips from '../pages/MotorcycleTrips';
+import AdvAtlas from '../pages/AdvAtlas';
 import { renderWithRouter } from './helpers/router';
 
 const fixtures = vi.hoisted(() => {
@@ -46,7 +46,7 @@ beforeEach(() => {
 
 describe('atlas card interactions', () => {
     it('filters map and cards to the selected trip without refitting, and restores all trips when turned off', async () => {
-        renderWithRouter(<MotorcycleTrips />, { route: '/projects/motorcycle-trips/map' });
+        renderWithRouter(<AdvAtlas />, { route: '/projects/adv-atlas/map' });
         const renderer = await screen.findByTestId('atlas-renderer');
         const filter = screen.getByRole('button', { name: 'Show only selected trip' });
         expect(filter).toBeDisabled();
@@ -68,7 +68,7 @@ describe('atlas card interactions', () => {
     });
 
     it('opens a shared filtered view and Zoom to all trips clears both the filter and selection', async () => {
-        renderWithRouter(<MotorcycleTrips />, { route: '/projects/motorcycle-trips/map?trip=published&view=selected' });
+        renderWithRouter(<AdvAtlas />, { route: '/projects/adv-atlas/map?trip=published&view=selected' });
         const renderer = await screen.findByTestId('atlas-renderer');
         expect(screen.getByRole('button', { name: 'Show only selected trip' })).toHaveAttribute('aria-pressed', 'true');
         expect(renderer).toHaveAttribute('data-trips', 'published');
@@ -79,7 +79,7 @@ describe('atlas card interactions', () => {
     });
 
     it('selects a route from card content and fits it once per click, including the native route button', async () => {
-        renderWithRouter(<MotorcycleTrips />, { route: '/projects/motorcycle-trips/map' });
+        renderWithRouter(<AdvAtlas />, { route: '/projects/adv-atlas/map' });
         const renderer = await screen.findByTestId('atlas-renderer');
         const card = screen.getByRole('heading', { name: 'Published journey' }).closest('li')!;
         expect(screen.queryByRole('button', { name: 'Zoom to all trips' })).not.toBeInTheDocument();
@@ -94,7 +94,7 @@ describe('atlas card interactions', () => {
     });
 
     it('keeps report links independent of route selection and camera fitting', async () => {
-        renderWithRouter(<MotorcycleTrips />, { route: '/projects/motorcycle-trips/map' });
+        renderWithRouter(<AdvAtlas />, { route: '/projects/adv-atlas/map' });
         const renderer = await screen.findByTestId('atlas-renderer');
         const card = screen.getByRole('heading', { name: 'Published journey' }).closest('li')!;
         fireEvent.click(within(card).getByRole('link', { name: /Read trip report/ }));
@@ -103,7 +103,7 @@ describe('atlas card interactions', () => {
     });
 
     it('previews the card and map together without selecting or fitting the route', async () => {
-        renderWithRouter(<MotorcycleTrips />, { route: '/projects/motorcycle-trips/map' });
+        renderWithRouter(<AdvAtlas />, { route: '/projects/adv-atlas/map' });
         const renderer = await screen.findByTestId('atlas-renderer');
         const card = screen.getByRole('heading', { name: 'Published journey' }).closest('li')!;
         fireEvent.pointerEnter(card);
@@ -125,7 +125,7 @@ afterEach(() => {
 describe('atlas publication labels', () => {
     it('includes configured development drafts with subtle amber labels and identifies mixed multipart reports', () => {
         vi.stubEnv('DEV', true);
-        renderWithRouter(<MotorcycleTrips />, { route: '/projects/motorcycle-trips/map' });
+        renderWithRouter(<AdvAtlas />, { route: '/projects/adv-atlas/map' });
         const draft = screen.getByRole('heading', { name: 'Draft journey' }).closest('li')!;
         const badge = within(draft).getByText('DEV · Unpublished draft');
         expect(badge).toHaveClass('text-amber-300', 'bg-amber-950/40');
@@ -146,7 +146,7 @@ describe('atlas publication labels', () => {
     it('includes incomplete reports in a built development preview even with the production React runtime', async () => {
         vi.stubEnv('DEV', false);
         vi.stubEnv('MODE', 'development');
-        renderWithRouter(<MotorcycleTrips />, { route: '/projects/motorcycle-trips/map' });
+        renderWithRouter(<AdvAtlas />, { route: '/projects/adv-atlas/map' });
         expect(screen.getByRole('heading', { name: 'Draft journey' })).toBeInTheDocument();
         expect(screen.getByRole('heading', { name: 'Unconfigured journey' })).toBeInTheDocument();
         const renderer = await screen.findByTestId('atlas-renderer');
@@ -156,7 +156,7 @@ describe('atlas publication labels', () => {
 
     it('excludes drafts and development badges from production, including unpublished parts of a published trip', () => {
         vi.stubEnv('DEV', false);
-        renderWithRouter(<MotorcycleTrips />, { route: '/projects/motorcycle-trips/map' });
+        renderWithRouter(<AdvAtlas />, { route: '/projects/adv-atlas/map' });
         expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(2);
         expect(screen.queryByRole('heading', { name: 'Draft journey' })).not.toBeInTheDocument();
         expect(screen.queryByRole('link', { name: /Unpublished part/ })).not.toBeInTheDocument();

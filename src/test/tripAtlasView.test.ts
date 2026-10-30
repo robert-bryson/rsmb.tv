@@ -39,19 +39,25 @@ describe('trip atlas view data', () => {
     });
 
     it.each([
+        ['/projects/adv-atlas/map', true],
+        ['/projects/adv-atlas/map?trip=coast', true],
         ['/projects/motorcycle-trips/map', true],
         ['/projects/motorcycle-trips/map?trip=coast', true],
+        ['/projects/adv-atlas/map/elsewhere', false],
+        ['/projects/adv-atlas/map-elsewhere', false],
+        ['https://example.com/projects/adv-atlas/map', false],
+        ['//example.com/projects/adv-atlas/map', false],
         ['/projects/motorcycle-trips/map/elsewhere', false],
-        ['/projects/motorcycle-trips/map-elsewhere', false],
         ['https://example.com/projects/motorcycle-trips/map', false],
-        ['//example.com/projects/motorcycle-trips/map', false],
         [undefined, false],
     ])('accepts only exact local atlas return locations: %s', (url, valid) => {
         expect(isTripAtlasLocation(url)).toBe(valid);
     });
 
     it('encodes selected trip IDs in report-to-map links', () => {
-        expect(new URL(tripAtlasUrl('coast & hills'), 'https://rsmb.tv').searchParams.get('trip')).toBe('coast & hills');
+        const url = new URL(tripAtlasUrl('coast & hills'), 'https://rsmb.tv');
+        expect(url.pathname).toBe('/projects/adv-atlas/map');
+        expect(url.searchParams.get('trip')).toBe('coast & hills');
     });
 
     it('restores history entries and explicit return URLs without restoring unrelated fresh visits', () => {

@@ -235,7 +235,9 @@ These checks reject HTML responses, including successful HTML rewrites at video 
 The asset test checks HTTP types, MP4 file bytes, poster delivery, and browser decoding.
 It does not test the deployed article or prove that hosting rewrite rules match Terraform.
 
-## Motorcycle trip atlas
+## ADV Atlas
+
+The explorer lives at `/projects/adv-atlas/map`. Former `/projects/motorcycle-trips` links redirect and preserve selections, filters, and return navigation.
 
 Run the atlas interactions and existing reading-page budgets with fixed production content:
 
@@ -255,7 +257,7 @@ Hover checks verify matching map and card feedback without selection changes or 
 Overlap choices verify route-colored text, pointer and keyboard previews, close-icon placement, Escape dismissal, and preserved selection and camera position.
 Atlas and story maps share the text-only tooltip factory. Checks verify its colored edge, safe text, reuse, cleanup, and Escape dismissal.
 Atlas tooltips add a smaller muted start-month/year subtitle; checks cover date-only updates without recreating the popup and retain story-map day labels.
-The title stays first, with the date below on the same starting edge and a 4-pixel gap. Visually check short and wrapped titles; [the hierarchy research](../reviews/2026-10-30-trip-atlas-tooltip-hierarchy.md) records the source guidance and project-specific decision.
+The title stays first, with the date below on the same starting edge and a 4-pixel gap. Visually check short and wrapped titles; [the hierarchy research](../reviews/2026-10-30-adv-atlas-tooltip-hierarchy.md) records the source guidance and project-specific decision.
 Screenshot helpers hide overlays through opacity so pixel measurements preserve pointer targets.
 Failure checks cover independent route retries, failed renderer downloads, unavailable WebGL, and context loss.
 Phone checks verify panel controls, attribution, and a 320-pixel layout.
@@ -264,7 +266,7 @@ Hover previews run on desktop. Phone projects exercise card taps, direct route s
 Run the geometry and development-lifecycle checks with:
 
 ```bash
-npx vitest run src/test/tripAtlasEntries.test.ts src/test/tripAtlasView.test.ts src/test/tripAtlasMap.test.tsx src/test/motorcycleTrips.test.tsx
+npx vitest run src/test/tripAtlasEntries.test.ts src/test/tripAtlasView.test.ts src/test/tripAtlasMap.test.tsx src/test/advAtlas.test.tsx
 ```
 
 The lifecycle check verifies that Strict Mode does not retain an uninitialized renderer's default camera.

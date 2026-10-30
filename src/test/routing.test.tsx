@@ -1,12 +1,12 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
-import { LegacyPostsRedirect } from '../App';
+import { AdvAtlasRedirect, LegacyPostsRedirect } from '../App';
 import { ScrollToTop } from '../components/ScrollToTop';
 
 function LocationProbe() {
     const location = useLocation();
-    return <output data-testid="location">{location.pathname}{location.search}</output>;
+    return <output data-testid="location" data-state={JSON.stringify(location.state)}>{location.pathname}{location.search}{location.hash}</output>;
 }
 
 function NavigationControls() {
@@ -36,6 +36,26 @@ describe('legacy post index routes', () => {
         );
 
         expect(screen.getByTestId('location')).toHaveTextContent(expectedLocation);
+    });
+});
+
+describe('ADV Atlas redirects', () => {
+    it.each([
+        '/projects/adv-atlas',
+        '/projects/motorcycle-trips',
+        '/projects/motorcycle-trips/map',
+    ])('preserves selected trips, filters, fragments, and return state from %s', pathname => {
+        render(
+            <MemoryRouter initialEntries={[{ pathname, search: '?trip=coast&view=selected', hash: '#atlas-panel-toggle', state: { restoreScroll: true } }]}>
+                <LocationProbe />
+                <Routes>
+                    <Route path={pathname} element={<AdvAtlasRedirect />} />
+                    <Route path="/projects/adv-atlas/map" element={null} />
+                </Routes>
+            </MemoryRouter>,
+        );
+        expect(screen.getByTestId('location')).toHaveTextContent('/projects/adv-atlas/map?trip=coast&view=selected#atlas-panel-toggle');
+        expect(screen.getByTestId('location')).toHaveAttribute('data-state', '{"restoreScroll":true}');
     });
 });
 

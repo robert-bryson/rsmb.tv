@@ -4,10 +4,10 @@ import { tripAtlasColor } from './tripAtlasColors';
 
 export { tripAtlasColor };
 
-export const TRIP_ATLAS_PATH = '/projects/motorcycle-trips/map';
+export const TRIP_ATLAS_PATH = '/projects/adv-atlas/map';
 
 export function isTripAtlasLocation(value: unknown): value is string {
-    return typeof value === 'string' && /^\/projects\/motorcycle-trips\/map(?:\?|$)/.test(value);
+    return typeof value === 'string' && /^\/projects\/(?:adv-atlas|motorcycle-trips)\/map(?:\?|$)/.test(value);
 }
 
 export function tripAtlasUrl(id: string) {

@@ -1,7 +1,7 @@
 {
-  "/images/motorcycle-trips/trip-atlas.webp": {
-    "src": "/images/previews/motorcycle-trips-960-bb53f0fd11ff.webp",
-    "srcSet": "/images/previews/motorcycle-trips-480-7d7b975fe580.webp 480w, /images/previews/motorcycle-trips-960-bb53f0fd11ff.webp 960w, /images/previews/motorcycle-trips-1440-bcbaa10872b6.webp 1440w",
+  "/images/adv-atlas/adv-atlas.webp": {
+    "src": "/images/previews/adv-atlas-960-fe288b96512f.webp",
+    "srcSet": "/images/previews/adv-atlas-480-c7dd4f588225.webp 480w, /images/previews/adv-atlas-960-fe288b96512f.webp 960w, /images/previews/adv-atlas-1440-335ab450071c.webp 1440w",
     "width": 1600,
     "height": 900
   },

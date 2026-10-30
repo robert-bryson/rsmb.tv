@@ -39,7 +39,7 @@ function isCardControl(target: EventTarget | null) {
     return target instanceof Element && Boolean(target.closest('a, button, input, select, textarea, [role="button"], [contenteditable]'));
 }
 
-export default function MotorcycleTrips() {
+export default function AdvAtlas() {
     const development = isDevelopmentContent();
     const entries = useMemo(() => buildTripAtlasEntries(getTripPosts(), getTripSummary, { includeDrafts: development, includeIncomplete: development }), [development]);
     const location = useLocation();
@@ -66,13 +66,13 @@ export default function MotorcycleTrips() {
     const visibleRoutes = useMemo(() => Object.fromEntries(Object.entries(routes).filter(([id]) => mapEntries.some(entry => entry.id === id))), [routes, mapEntries]);
 
     const description = 'Explore motorcycle journeys on a map, browse photographs and trip facts, and read the reports.';
-    useDocumentHead({ title: 'Motorcycle Trips', description, ogImage: absoluteUrl('/og/motorcycle-trips.svg') });
+    useDocumentHead({ title: 'ADV Atlas', description, ogImage: absoluteUrl('/og/adv-atlas.svg') });
     useJsonLd({
-        '@context': 'https://schema.org', '@type': 'WebPage', name: 'Motorcycle Trips Map', description,
+        '@context': 'https://schema.org', '@type': 'WebPage', name: 'ADV Atlas Map', description,
         url: absoluteUrl(TRIP_ATLAS_PATH), author: AUTHOR_PERSON,
         mainEntity: {
-            '@type': 'SoftwareApplication', '@id': absoluteUrl('/projects/motorcycle-trips#application'),
-            name: 'Motorcycle Trips', url: absoluteUrl(TRIP_ATLAS_PATH), applicationCategory: 'TravelApplication', operatingSystem: 'Web',
+            '@type': 'SoftwareApplication', '@id': absoluteUrl('/projects/adv-atlas#application'),
+            name: 'ADV Atlas', url: absoluteUrl(TRIP_ATLAS_PATH), applicationCategory: 'TravelApplication', operatingSystem: 'Web',
         },
     });
 
@@ -151,7 +151,7 @@ export default function MotorcycleTrips() {
             <header className="pointer-events-none absolute inset-x-3 top-3 z-20 grid grid-cols-1 items-start justify-items-start gap-2 md:inset-x-4 md:top-4 md:grid-cols-[minmax(360px,1fr)_auto_minmax(0,1fr)]">
                 <div className="pointer-events-auto min-w-0 rounded-xl border border-zinc-700/80 bg-zinc-950/95 px-4 py-3 shadow-xl backdrop-blur md:w-[360px]">
                     <Link to="/projects" className="inline-flex min-h-6 items-center text-xs text-zinc-400 hover:text-violet-300">← Projects</Link>
-                    <h1 className="truncate text-lg font-semibold tracking-tight md:text-xl">Motorcycle Trips</h1>
+                    <h1 className="truncate text-lg font-semibold tracking-tight md:text-xl">ADV Atlas</h1>
                     <p className="mt-0.5 text-xs text-zinc-400">{onlySelected ? `1 of ${entries.length}` : entries.length} trips · Routes, photographs &amp; stories</p>
                 </div>
                 {(selectedId || onlySelected || cameraChanged) && <button type="button" onClick={zoomToAllTrips} data-testid="atlas-overview-control"

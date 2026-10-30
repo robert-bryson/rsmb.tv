@@ -1,4 +1,4 @@
-# Trip atlas tooltip hierarchy: 2026-10-30
+# ADV Atlas tooltip hierarchy: 2026-10-30
 
 ## Recommendation
 

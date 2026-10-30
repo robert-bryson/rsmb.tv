@@ -21,7 +21,7 @@ export const DEFAULT_PAGES = [
     { slug: 'blog', title: 'Blog', subtitle: 'Thoughts on projects, engineering, and things I find interesting' },
     { slug: 'trips', title: 'Trips', subtitle: 'Motorcycle journeys told through photographs, routes, and field notes' },
     { slug: 'projects', title: 'Projects', subtitle: 'Interactive data visualizations, geospatial tools, and more' },
-    { slug: 'motorcycle-trips', title: 'Motorcycle Trips', subtitle: 'Motorcycle journeys through route maps, photographs, and trip reports' },
+    { slug: 'adv-atlas', title: 'ADV Atlas', subtitle: 'Motorcycle journeys through route maps, photographs, and trip reports' },
     { slug: 'through-routes', title: 'Through Routes', subtitle: 'Find scenic, twisty motorcycle loop routes on rural roads' },
     { slug: 'flights', title: 'Flights', subtitle: 'Interactive 3D globe visualization of flights around the world' },
     { slug: 'anki-artisan', title: 'Anki Artisan', subtitle: 'Generate Anki flashcard decks from iNaturalist and eBird data' },

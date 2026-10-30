@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import sharp from 'sharp';
 import { tripAtlasColor } from '../../src/features/trips/atlas/tripAtlasView';
 
-const atlas = '/projects/motorcycle-trips/map';
+const atlas = '/projects/adv-atlas/map';
 const geometry = {
     type: 'FeatureCollection', features: [{
         type: 'Feature', id: 0, properties: { trackId: 'morning' },
@@ -71,7 +71,7 @@ test('overview control avoids panels across responsive widths and hides when all
         for (const open of [true, false]) {
             if (await panelToggle.getAttribute('aria-expanded') !== String(open)) await panelToggle.click();
             const buttonBox = (await reset.boundingBox())!;
-            const titleBox = (await page.getByRole('heading', { name: 'Motorcycle Trips', exact: true }).locator('..').boundingBox())!;
+            const titleBox = (await page.getByRole('heading', { name: 'ADV Atlas', exact: true }).locator('..').boundingBox())!;
             const panelBox = (await page.getByRole('complementary', { name: 'Trip reports' }).boundingBox())!;
             if (width < 768) {
                 expect(buttonBox.x + buttonBox.width / 2).toBeCloseTo(width / 2, 0);
@@ -108,8 +108,10 @@ test('overview control avoids panels across responsive widths and hides when all
 });
 
 test('project entry opens a playable map with published routes and accessible card selection', async ({ page }) => {
-    await page.goto('/projects/motorcycle-trips');
+    await page.goto('/projects/adv-atlas');
     await expect(page).toHaveURL(new RegExp(`${atlas}$`));
+    await expect(page.getByRole('heading', { level: 1, name: 'ADV Atlas', exact: true })).toBeVisible();
+    await expect(page).toHaveTitle('ADV Atlas — rsmb');
     await expect(page.locator('.maplibregl-canvas')).toBeVisible();
     await expect(page.getByText('2/2 routes', { exact: false })).toBeVisible();
     await openList(page);
@@ -125,6 +127,19 @@ test('project entry opens a playable map with published routes and accessible ca
     await page.getByRole('button', { name: 'Zoom to all trips' }).click();
     await expect(page).toHaveURL(new RegExp(`${atlas}$`));
     await expect(page.getByRole('button', { name: /^Show route:/, pressed: true })).toHaveCount(0);
+});
+
+test('legacy atlas links preserve the selected trip and filter through report returns', async ({ page }) => {
+    await page.goto('/projects/motorcycle-trips/map?trip=coastal-test&view=selected');
+    await expect(page).toHaveURL(`${atlas}?trip=coastal-test&view=selected`);
+    await expect(page.getByRole('heading', { level: 1, name: 'ADV Atlas', exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Show only selected trip' })).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('[data-trip-id]')).toHaveCount(1);
+    await expect(page.getByTestId('trip-atlas-map')).toHaveAttribute('data-selected-trip', 'coastal-test');
+    await page.getByRole('link', { name: /Read trip report/ }).click();
+    await page.getByRole('link', { name: /Back to map/ }).first().click();
+    await expect(page).toHaveURL(`${atlas}?trip=coastal-test&view=selected`);
+    await expect(page.locator('[data-trip-id]')).toHaveCount(1);
 });
 
 test('shared selection and report returns restore the card scroll and camera', async ({ page }) => {

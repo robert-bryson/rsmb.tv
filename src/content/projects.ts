@@ -26,14 +26,14 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    slug: 'motorcycle-trips',
-    title: 'Motorcycle Trips',
+    slug: 'adv-atlas',
+    title: 'ADV Atlas',
     description: 'Explore motorcycle journeys on an interactive map. Browse route maps, photographs, and trip facts, then open the full ride reports.',
     summary: 'Discover motorcycle journeys through route maps, photographs, and trip reports.',
     tech: ['React', 'TypeScript', 'MapLibre GL', 'GeoJSON'],
     applicationCategory: 'TravelApplication',
-    demoUrl: '/projects/motorcycle-trips/map',
-    previewImage: '/images/motorcycle-trips/trip-atlas.webp',
+    demoUrl: '/projects/adv-atlas/map',
+    previewImage: '/images/adv-atlas/adv-atlas.webp',
     year: 2026,
   },
   {

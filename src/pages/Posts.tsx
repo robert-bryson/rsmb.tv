@@ -5,6 +5,7 @@ import { filterPostsByTag, getAllBlogTags, tripFactTag } from '../content/blogTa
 import { filterPostsByRegion, findGeographicTag, getAllBlogRegions } from '../content/blogRegions';
 import { getAllPosts } from '../content/posts';
 import { getTripSummary } from '../features/trips/tripSummaries';
+import { TRIP_ATLAS_PATH } from '../features/trips/atlas/tripAtlasView';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { formatDate } from '../utils/formatDate';
@@ -97,7 +98,7 @@ export function Posts() {
                 ))}
             </nav>
 
-            {activeType === 'trips' && <Link to="/projects/motorcycle-trips/map" className="mb-5 inline-flex min-h-11 items-center text-sm text-violet-300 hover:underline">Explore trips on a map →</Link>}
+            {activeType === 'trips' && <Link to={TRIP_ATLAS_PATH} className="mb-5 inline-flex min-h-11 items-center text-sm text-violet-300 hover:underline">Explore ADV Atlas →</Link>}
 
             <div className="mb-8 space-y-5">
                 {allTags.length > 0 && <nav aria-label="Post tags" className="flex flex-wrap items-baseline gap-2">

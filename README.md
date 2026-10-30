@@ -6,6 +6,7 @@ A personal website with software projects, data maps, writing, and motorcycle tr
 
 ## Features
 
+- **ADV Atlas** — Explore motorcycle journeys on a map, browse trip photographs, and open the full reports.
 - **Flights** — A globe with flight routes, filters, camera controls, and travel statistics.
 - **Temperature Records** — An interactive MapLibre GL map of U.S. temperature records. It shows recent station records, standing county and state extremes, and standing-record history.
 - **Tornado Tracks** — Recorded tornado county segments, density maps, annual trends, and warning context. See the [project guide](projects/tornado-tracks/readme.md).
