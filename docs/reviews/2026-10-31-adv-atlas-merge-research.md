@@ -3,7 +3,8 @@
 Review date: October 31, 2026.
 
 Follow-up: the [merge fixes and dependency update](2026-10-31-adv-atlas-merge-fixes.md) correct both interaction defects and reconcile the stale instructions below.
-The full dependency audit remains unresolved. This report preserves the findings at its original reviewed head.
+The later [minimatch security fix](2026-10-31-minimatch-security-fix.md) resolves the dependency audit failure.
+This report preserves the findings at its original reviewed head.
 
 The branch has two confirmed interaction defects and a failing dependency audit.
 Production filtering and published trip assets pass the checks described below.

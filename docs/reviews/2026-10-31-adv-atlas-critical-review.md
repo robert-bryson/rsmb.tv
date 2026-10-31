@@ -2,6 +2,9 @@
 
 Date: October 31, 2026.
 
+Follow-up: the [minimatch security fix](2026-10-31-minimatch-security-fix.md) resolves the audit blocker through tested, scoped overrides.
+The results below describe the earlier review.
+
 The existing test count concealed two untested state transitions.
 Renderer recovery could discard a pending camera fit.
 Keyboard route selection could remove the focused control without providing another focus target.

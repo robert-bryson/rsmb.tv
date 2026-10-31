@@ -2,6 +2,8 @@
 
 Date: October 31, 2026.
 
+Follow-up: the [minimatch security fix](2026-10-31-minimatch-security-fix.md) resolves the audit failure described below.
+
 Both interaction defects from the [pre-merge review](2026-10-31-adv-atlas-merge-research.md) are corrected.
 Dependencies are updated to current compatible releases, and a clean installation passes.
 The full dependency audit still fails on the existing minimatch advisory. Production dependencies have no reported vulnerabilities.

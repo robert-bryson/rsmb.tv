@@ -58,11 +58,7 @@ The historical signal is not ready for publication.
 
 ## Dependency security
 
-- [ ] Resolve [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249) when the ESLint toolchain supports a patched minimatch version.
-
-Compatible dependencies were updated on October 31.
-The full audit still fails on 12 moderate development findings.
-See the [current review](docs/reviews/2026-10-31-adv-atlas-critical-review.md#dependency-security) for verification and upgrade constraints.
+- [ ] Remove the scoped minimatch overrides when all three upstream consumers declare a patched compatible range. Run the [compatibility checks](README.md#lint-security-override).
 
 ## Browser checks
 
