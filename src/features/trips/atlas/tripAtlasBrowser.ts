@@ -18,6 +18,7 @@ export type AtlasSort = typeof atlasSortOptions[number]['value'];
 export type AtlasPanelState = 'collapsed' | 'compact' | 'expanded';
 export type AtlasResultsView = 'cards' | 'table';
 export const atlasRangeKeys = ['from', 'to', 'daysMin', 'daysMax', 'milesMin', 'milesMax'] as const;
+const atlasBrowseKeys = [...atlasRangeKeys, 'country', 'region', 'sort'] as const;
 export interface AtlasFilters {
     from: string;
     to: string;
@@ -34,6 +35,13 @@ export function emptyAtlasFilters(): AtlasFilters {
     return { from: '', to: '', daysMin: '', daysMax: '', milesMin: '', milesMax: '', countries: [], regions: [] };
 }
 
+/** Camera and panel updates must not replace the map's result and geometry objects. */
+export function atlasBrowseQuery(params: URLSearchParams): string {
+    const query = new URLSearchParams();
+    for (const key of atlasBrowseKeys) for (const value of params.getAll(key)) query.append(key, value);
+    return query.toString();
+}
+
 export function readAtlasBrowse(params: URLSearchParams): { filters: AtlasFilters; sort: AtlasSort } {
     const filters = emptyAtlasFilters();
     for (const key of atlasRangeKeys) filters[key] = (params.get(key) ?? '').trim();
@@ -48,7 +56,7 @@ export function readAtlasBrowse(params: URLSearchParams): { filters: AtlasFilter
 
 export function writeAtlasBrowse(params: URLSearchParams, filters: AtlasFilters, sort: AtlasSort): URLSearchParams {
     const next = new URLSearchParams(params);
-    for (const key of [...atlasRangeKeys, 'country', 'region', 'sort']) next.delete(key);
+    for (const key of atlasBrowseKeys) next.delete(key);
     for (const key of atlasRangeKeys) if (filters[key].trim()) next.set(key, filters[key].trim());
     for (const code of [...new Set(filters.countries)].sort()) next.append('country', code);
     for (const key of [...new Set(filters.regions)].filter(key => !filters.countries.includes(key.split('/')[0])).sort()) next.append('region', key);

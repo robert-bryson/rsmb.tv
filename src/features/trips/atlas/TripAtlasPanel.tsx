@@ -85,9 +85,9 @@ export function TripAtlasPanel({ listRef, ...props }: Props) {
                     <h1 className="text-xl font-semibold tracking-tight">ADV Atlas</h1>
                     <div role="group" aria-label="Trip panel size" className="inline-flex rounded-lg border border-zinc-700 p-0.5">
                         <button type="button" aria-label="Use compact trip panel" aria-pressed={props.state === 'compact'} onClick={() => changeState('compact')}
-                            className={`min-h-11 rounded-md px-2 text-xs ${props.state === 'compact' ? 'bg-zinc-700 text-zinc-100' : 'text-zinc-400 hover:text-zinc-100'}`}>Compact</button>
+                            className="atlas-control px-2 text-xs">Compact</button>
                         <button type="button" aria-label="Expand trip panel" aria-pressed={props.state === 'expanded'} onClick={() => changeState('expanded')}
-                            className={`min-h-11 rounded-md px-2 text-xs ${props.state === 'expanded' ? 'bg-zinc-700 text-zinc-100' : 'text-zinc-400 hover:text-zinc-100'}`}>Expand</button>
+                            className="atlas-control px-2 text-xs">Expand</button>
                     </div>
                 </div>
                 <p className="mt-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs text-zinc-400">
@@ -102,12 +102,12 @@ export function TripAtlasPanel({ listRef, ...props }: Props) {
                     <label className="min-w-0 flex-1 text-xs text-zinc-400">
                         <span className="mb-1 block">Sort trips</span>
                         <select value={props.sort} onChange={event => props.onSort(event.target.value as AtlasSort)}
-                            className="min-h-11 w-full min-w-0 rounded-lg border border-zinc-600 bg-zinc-900 px-2 text-sm text-zinc-200">
+                            className="atlas-input w-full">
                             {atlasSortOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
                         </select>
                     </label>
                     <button ref={filterButton} id="atlas-filters-toggle" type="button" aria-expanded={filtersOpen} aria-controls="atlas-filter-form"
-                        onClick={() => setFiltersOpen(value => !value)} className={`min-h-11 rounded-lg border px-3 text-sm ${activeFilters ? 'border-violet-600 bg-violet-950/40 text-violet-200' : 'border-zinc-600 text-zinc-200'}`}>
+                        onClick={() => setFiltersOpen(value => !value)} className="atlas-control px-3">
                         Filters{activeFilters ? ` (${activeFilters})` : ''}
                     </button>
                 </div>
@@ -122,7 +122,7 @@ export function TripAtlasPanel({ listRef, ...props }: Props) {
                 {filtersOpen && <div id="atlas-filter-form"><TripAtlasFilters key={JSON.stringify(props.filters)} filters={props.filters} countries={props.countries}
                     onApply={filters => { props.onFilters(filters); closeFilters(); }} onCancel={closeFilters} /></div>}
                 {props.selectedId && <button type="button" aria-pressed={props.onlySelected} onClick={props.onOnlySelected}
-                    className={`mb-3 flex min-h-11 w-full items-center justify-between gap-2 rounded-lg border px-3 text-left text-xs ${props.onlySelected ? 'border-violet-700 bg-violet-950/40 text-violet-200' : 'border-zinc-700 text-zinc-300'}`}>
+                    className="atlas-control mb-3 flex w-full items-center justify-between gap-2 px-3 text-left text-xs">
                     <span>Show only selected trip</span><span aria-hidden="true">{props.onlySelected ? 'On' : 'Off'}</span>
                 </button>}
                 <AtlasAppliedFilters filters={props.filters} countries={props.countries} onlySelected={props.onlySelected}

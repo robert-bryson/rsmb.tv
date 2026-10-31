@@ -2,6 +2,7 @@
 
 Date: 2026-10-31.
 Reviewed baseline: `7bdb48b`.
+Follow-up: camera values, panel size, and result presentation are now shareable. See the [current URL contract](../trips/ADV-ATLAS.md#shared-urls).
 The current-constraint observations describe that baseline.
 The implemented behavior is documented in the [atlas guide](../trips/ADV-ATLAS.md).
 Scope: drawer states, result views, sorting, filters, map agreement, and browser state.

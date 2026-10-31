@@ -1,8 +1,16 @@
-import type { Locator, Page } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
 import sharp from 'sharp';
 import { tripAtlasColor } from '../../src/features/trips/atlas/tripAtlasView';
 
 export const atlas = '/projects/adv-atlas/map';
+
+/** Compare browse state exactly while allowing the new shareable viewport fields. */
+export async function expectAtlasUrl(page: Page, query: Record<string, string> = {}) {
+    await expect.poll(() => {
+        const url = new URL(page.url());
+        return { path: url.pathname, query: Object.fromEntries([...url.searchParams].filter(([key]) => !['camera', 'panel', 'results'].includes(key))) };
+    }).toEqual({ path: atlas, query });
+}
 export const geometry = {
     type: 'FeatureCollection', features: [{
         type: 'Feature', id: 0, properties: { trackId: 'morning' },
@@ -52,8 +60,7 @@ export async function atlasCamera(page: Page) {
 }
 
 export async function paintedRoute(page: Page, id?: string, tolerance = 12, aim: 'center' | 'north' = 'center') {
-    const canvas = page.locator('[data-testid="trip-atlas-map"] canvas');
-    const screenshot = await canvas.screenshot({ style: 'header, aside, [data-testid="atlas-overview-control"], .maplibregl-control-container, .maplibregl-popup { opacity: 0 !important; }' });
+    const { screenshot, box } = await captureAtlasCanvas(page);
     const { data, info } = await sharp(screenshot).removeAlpha().raw().toBuffer({ resolveWithObject: true });
     const hex = id ? tripAtlasColor(id).slice(1) : '';
     const color = id ? [0, 2, 4].map(offset => parseInt(hex.slice(offset, offset + 2), 16)) : undefined;
@@ -74,9 +81,28 @@ export async function paintedRoute(page: Page, id?: string, tolerance = 12, aim:
         const distance = aim === 'north' ? y * info.width + Math.abs(x - info.width / 2) : (x - info.width / 2) ** 2 + (y - info.height / 2) ** 2;
         if (distance < nearest) { nearest = distance; point = { x, y }; }
     }
-    const box = await canvas.boundingBox();
-    const scaleX = box!.width / info.width;
-    const scaleY = box!.height / info.height;
+    const scaleX = box.width / info.width;
+    const scaleY = box.height / info.height;
     return { count, point: { x: point.x * scaleX, y: point.y * scaleY }, bounds,
         cssBounds: bounds.map((value, index) => value * (index % 2 ? scaleY : scaleX)) };
+}
+
+/** A panel transition can resize the canvas between a screenshot and its DOM measurement. */
+async function captureAtlasCanvas(page: Page) {
+    const canvas = page.locator('[data-testid="trip-atlas-map"] canvas');
+    let capture: { screenshot: Buffer; box: { x: number; y: number; width: number; height: number } } | undefined;
+    await expect.poll(async () => {
+        const before = await canvas.boundingBox();
+        if (!before || !await canvas.evaluate(element => {
+            const parent = element.closest<HTMLElement>('[data-testid="trip-atlas-map"]');
+            const rect = element.getBoundingClientRect();
+            return parent && Math.abs(rect.width - parent.clientWidth) < 1 && Math.abs(rect.height - parent.clientHeight) < 1;
+        })) return false;
+        const screenshot = await canvas.screenshot({ style: 'header, aside, [data-testid="atlas-overview-control"], .maplibregl-control-container, .maplibregl-popup { opacity: 0 !important; }' });
+        const after = await canvas.boundingBox();
+        if (!after || before.x !== after.x || before.y !== after.y || before.width !== after.width || before.height !== after.height) return false;
+        capture = { screenshot, box: after };
+        return true;
+    }).toBe(true);
+    return capture!;
 }

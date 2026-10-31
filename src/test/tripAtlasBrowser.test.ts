@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { TripAtlasEntry } from '../features/trips/atlas/tripAtlasEntries';
 import {
-    atlasLocations, atlasRegionKey, emptyAtlasFilters, filterAtlasEntries, readAtlasBrowse, sortAtlasEntries,
+    atlasBrowseQuery, atlasLocations, atlasRegionKey, emptyAtlasFilters, filterAtlasEntries, readAtlasBrowse, sortAtlasEntries,
     validateAtlasFilters, writeAtlasBrowse, type AtlasFilters, type AtlasSort,
 } from '../features/trips/atlas/tripAtlasBrowser';
 
@@ -25,6 +25,19 @@ const ids = (values: TripAtlasEntry[]) => values.map(value => value.id);
 const filter = (patch: Partial<AtlasFilters>) => filterAtlasEntries(entries, { ...emptyAtlasFilters(), ...patch });
 
 describe('atlas browsing data', () => {
+    it('keeps browse identity stable through camera, panel, and selection changes without discarding repeated filters', () => {
+        const params = new URLSearchParams('country=US&country=CA&region=GE%2Fgeorgia&sort=miles-asc&milesMin=600');
+        const before = atlasBrowseQuery(params);
+        params.set('camera', '-123,48,7,0,0');
+        params.set('panel', 'collapsed');
+        params.set('results', 'table');
+        params.set('trip', 'coast');
+        expect(atlasBrowseQuery(params)).toBe(before);
+        expect(new URLSearchParams(before).getAll('country')).toEqual(['US', 'CA']);
+        params.set('milesMin', '700');
+        expect(atlasBrowseQuery(params)).not.toBe(before);
+    });
+
     it('round-trips committed filters while preserving selection and unrelated query parameters', () => {
         const initial = new URLSearchParams('trip=coast&view=selected&other=keep&country=CA&country=CA&sort=invalid');
         const { filters, sort } = readAtlasBrowse(initial);

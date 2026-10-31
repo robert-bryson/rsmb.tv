@@ -1,11 +1,11 @@
-import { createRef, StrictMode, useEffect, useRef } from 'react';
+import { createRef, StrictMode, useEffect, useLayoutEffect, useRef } from 'react';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { TripAtlasEntry } from '../features/trips/atlas/tripAtlasEntries';
 import type { RouteGeoJson } from '../features/trips/routeGeometry';
 import TripAtlasMap from '../features/trips/atlas/TripAtlasMap';
 import { tripAtlasColor } from '../features/trips/atlas/tripAtlasView';
-import { readAtlasSession, saveAtlasSession, type AtlasSession } from '../features/trips/atlas/tripAtlasSession';
+import { readAtlasSession, saveAtlasSession, type AtlasCamera, type AtlasSession } from '../features/trips/atlas/tripAtlasSession';
 
 type RendererListener = (event?: { originalEvent?: Event; error?: Error; sourceId?: string }) => void;
 type InitialCamera = { center: [number, number]; zoom: number };
@@ -15,6 +15,8 @@ const fake = vi.hoisted(() => ({
     instances: [] as Array<{
         events: Map<string, RendererListener[]>;
         fitBounds: ReturnType<typeof vi.fn>;
+        jumpTo: ReturnType<typeof vi.fn>;
+        isMoving: () => boolean;
         center: { lng: number; lat: number };
         options: InitialCamera;
     }>,
@@ -44,6 +46,7 @@ vi.mock('maplibre-gl', () => ({
     Map: class {
         events = new Map<string, RendererListener[]>();
         fitBounds = vi.fn();
+        jumpTo = vi.fn((camera: AtlasCamera) => { this.center = { lng: camera.center[0], lat: camera.center[1] }; });
         center = { lng: -121.5, lat: 46.5 };
         canvas = document.createElement('canvas');
         options: InitialCamera;
@@ -63,6 +66,7 @@ vi.mock('maplibre-gl', () => ({
         addControl() {}
         getCanvas() { return this.canvas; }
         resize() { return this; }
+        stop() { this.events.get('moveend')?.forEach(listener => listener()); return this; }
         getLayer() { return {}; }
         getSource() { return { setData: vi.fn() }; }
         getCenter() { return this.center; }
@@ -95,6 +99,74 @@ const entry = {
 const route: RouteGeoJson = { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: [[-122, 47], [-124, 45]] } };
 
 describe('atlas renderer lifecycle', () => {
+    it('applies an external camera before layout-driven movement can publish the old view', () => {
+        const idle = vi.fn();
+        const target: AtlasCamera = { center: [-100, 40], zoom: 5.5, bearing: 0, pitch: 0 };
+        function Layout({ camera }: { camera?: AtlasCamera }) {
+            useLayoutEffect(() => {
+                if (camera) fake.instances.at(-1)?.events.get('moveend')?.forEach(listener => listener());
+            }, [camera]);
+            return <TripAtlasMap entries={[entry]} routes={{ coast: { route, error: '', retry: vi.fn() } }} fitVersion={0} panelOpen
+                initialCamera={{ center: [-121.5, 46.5], zoom: 5.5, bearing: 0, pitch: 0 }} cameraTarget={camera}
+                onSelect={vi.fn()} onHover={vi.fn()} onCameraChange={vi.fn()} onCameraIdle={idle} />;
+        }
+        const { rerender } = render(<Layout />);
+        act(() => { fake.instances[0].events.get('styledata')?.forEach(listener => listener()); });
+        idle.mockClear();
+        rerender(<Layout camera={target} />);
+        expect(idle).toHaveBeenCalledExactlyOnceWith(target);
+    });
+
+    it('reapplies the same camera on a new history revision when a movement URL was never committed', () => {
+        const camera: AtlasCamera = { center: [-121.5, 46.5], zoom: 5.5, bearing: 0, pitch: 0 };
+        const props = { entries: [entry], routes: {}, fitVersion: 0, panelOpen: true, initialCamera: camera, cameraTarget: camera,
+            onSelect: vi.fn(), onHover: vi.fn(), onCameraChange: vi.fn() };
+        const { rerender } = render(<TripAtlasMap {...props} cameraRevision="initial-visit" />);
+        const instance = fake.instances[0];
+        act(() => { instance.events.get('styledata')?.forEach(listener => listener()); });
+        instance.center = { lng: -100, lat: 40 };
+        rerender(<TripAtlasMap {...props} cameraRevision="returned-visit" />);
+        expect(instance.jumpTo).toHaveBeenCalledExactlyOnceWith(camera);
+    });
+
+    it('restores an external URL camera without refitting and does not round its own movement back into the map', () => {
+        const props = { entries: [entry], routes: { coast: { route, error: '', retry: vi.fn() } }, fitVersion: 0, panelOpen: true,
+            onSelect: vi.fn(), onHover: vi.fn(), onCameraChange: vi.fn(), initialCamera: { center: [-121.5, 46.5] as [number, number], zoom: 5.5, bearing: 0, pitch: 0 } };
+        const { rerender } = render(<TripAtlasMap {...props} />);
+        const instance = fake.instances[0];
+        act(() => { instance.events.get('styledata')?.forEach(listener => listener()); });
+        const target = { center: [-100, 40] as [number, number], zoom: 5.5, bearing: 0, pitch: 0 };
+        rerender(<TripAtlasMap {...props} cameraTarget={target} />);
+        expect(instance.jumpTo).toHaveBeenCalledExactlyOnceWith(target);
+        expect(instance.fitBounds).not.toHaveBeenCalled();
+        instance.center = { lng: -99.99999999, lat: 40.00000001 };
+        rerender(<TripAtlasMap {...props} cameraTarget={{ ...target }} />);
+        expect(instance.jumpTo).toHaveBeenCalledOnce();
+    });
+
+    it('publishes the camera only at movement end and rejects old animations and removed renderers', () => {
+        const idle = vi.fn();
+        const props = { entries: [entry], routes: { coast: { route, error: '', retry: vi.fn() } }, selectedId: 'coast', fitVersion: 0, panelOpen: true,
+            onSelect: vi.fn(), onHover: vi.fn(), onCameraChange: vi.fn(), onCameraIdle: idle };
+        const { rerender, unmount } = render(<TripAtlasMap {...props} />);
+        const instance = fake.instances[0];
+        act(() => { instance.events.get('styledata')?.forEach(listener => listener()); });
+        act(() => { instance.events.get('move')?.forEach(listener => listener()); });
+        expect(idle).not.toHaveBeenCalled();
+        const moving = vi.spyOn(instance, 'isMoving').mockReturnValue(true);
+        act(() => { instance.events.get('moveend')?.forEach(listener => listener()); });
+        expect(idle).not.toHaveBeenCalled();
+        moving.mockReturnValue(false);
+        act(() => { instance.events.get('moveend')?.forEach(listener => listener()); });
+        expect(idle).toHaveBeenCalledOnce();
+        rerender(<TripAtlasMap {...props} selectedId="delayed" fitVersion={1} />);
+        act(() => { instance.events.get('moveend')?.forEach(listener => listener()); });
+        expect(idle).toHaveBeenCalledOnce();
+        unmount();
+        act(() => { instance.events.get('moveend')?.forEach(listener => listener()); });
+        expect(idle).toHaveBeenCalledOnce();
+    });
+
     it.each([true, false])('keeps fit padding stable while attribution loads (phone: %s)', phone => {
         vi.stubGlobal('matchMedia', vi.fn(() => ({ matches: phone })));
         const props = { entries: [entry], routes: { coast: { route, error: '', retry: vi.fn() } }, selectedId: 'coast',

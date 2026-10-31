@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { atlas, atlasCamera as camera, mockAtlasAssets, openList, paintedRoute } from './atlasTestHelpers';
+import { atlas, atlasCamera as camera, expectAtlasUrl, mockAtlasAssets, openList, paintedRoute } from './atlasTestHelpers';
 
 test.beforeEach(async ({ page }) => { await page.emulateMedia({ reducedMotion: 'reduce' }); await mockAtlasAssets(page); });
 
@@ -60,7 +60,7 @@ test('filter drafts and invalid ranges leave applied results intact, while valid
     await expect(page.locator('[data-trip-id]')).toHaveCount(2);
     await page.getByRole('button', { name: 'Apply filters' }).click();
     await expect(page.getByRole('alert')).toContainText('maximum must be at least the minimum');
-    await expect(page).toHaveURL(atlas);
+    await expectAtlasUrl(page);
     await page.getByLabel('Minimum days').fill('2');
     await page.getByLabel('Minimum miles').fill('240');
     await page.getByLabel('Maximum miles').fill('240');
@@ -78,7 +78,8 @@ test('filter drafts and invalid ranges leave applied results intact, while valid
 test('table sorting shares card order, retains unknown facts, and survives compact mode and report reloads', async ({ page }) => {
     await page.goto(atlas);
     await page.getByRole('button', { name: 'Expand trip panel' }).click();
-    await page.getByRole('radio', { name: 'Table', exact: true }).check();
+    await page.getByRole('radio', { name: 'Table', exact: true }).click();
+    await expect(page.getByRole('radio', { name: 'Table', exact: true })).toBeChecked();
     const table = page.getByRole('table');
     await expect(table).toBeVisible();
     await expect(table.locator('caption')).toBeInViewport();
@@ -148,7 +149,8 @@ test('phone filters reflow and table scrolling remains inside the drawer', async
     await page.getByRole('button', { name: /^Filters/ }).click();
     await page.getByLabel('Maximum miles').fill('1000');
     await page.getByRole('button', { name: 'Apply filters' }).click();
-    await page.getByRole('radio', { name: 'Table', exact: true }).check();
+    await page.getByRole('radio', { name: 'Table', exact: true }).click();
+    await expect(page.getByRole('radio', { name: 'Table', exact: true })).toBeChecked();
     const region = page.getByRole('region', { name: 'Trip comparison table' });
     await expect(region).toBeVisible();
     expect(await region.evaluate(element => element.scrollWidth > element.clientWidth)).toBe(true);

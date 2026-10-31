@@ -1,5 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigationType } from 'react-router-dom';
 import { getTripPosts } from '../content/posts';
 import { getTripSummary } from '../features/trips/tripSummaries';
 import { useTripRoute } from '../features/trips/useTripRoute';
@@ -7,9 +7,12 @@ import { buildTripAtlasEntries } from '../features/trips/atlas/tripAtlasEntries'
 import { TripAtlasMapBoundary } from '../features/trips/atlas/TripAtlasMapBoundary';
 import { TripAtlasPanel } from '../features/trips/atlas/TripAtlasPanel';
 import { TripAtlasResults } from '../features/trips/atlas/TripAtlasResults';
+import { TripAtlasShare } from '../features/trips/atlas/TripAtlasShare';
+import { useAtlasUrlState } from '../features/trips/atlas/useAtlasUrlState';
+import { encodeAtlasCamera, readAtlasCamera, readAtlasPresentation } from '../features/trips/atlas/tripAtlasUrlState';
 import { TRIP_ATLAS_PATH, type AtlasRouteState } from '../features/trips/atlas/tripAtlasView';
 import {
-    atlasFilterCount, atlasLocationCatalog, emptyAtlasFilters, filterAtlasEntries, readAtlasBrowse, sortAtlasEntries,
+    atlasBrowseQuery, atlasFilterCount, atlasLocationCatalog, emptyAtlasFilters, filterAtlasEntries, readAtlasBrowse, sortAtlasEntries,
     validateAtlasFilters, writeAtlasBrowse, type AtlasFilters, type AtlasPanelState, type AtlasResultsView, type AtlasSort,
 } from '../features/trips/atlas/tripAtlasBrowser';
 import { readAtlasSession, saveAtlasSession, type AtlasCamera, type AtlasSession } from '../features/trips/atlas/tripAtlasSession';
@@ -31,14 +34,16 @@ export default function AdvAtlas() {
     const development = isDevelopmentContent();
     const entries = useMemo(() => buildTripAtlasEntries(getTripPosts(), getTripSummary, { includeDrafts: development, includeIncomplete: development }), [development]);
     const location = useLocation();
-    const [params, setParams] = useSearchParams();
+    const navigationType = useNavigationType();
+    const { params, getParams, updateParams } = useAtlasUrlState();
     const requestedId = params.get('trip');
     const selectedEntry = entries.find(entry => entry.id === requestedId);
     const selectedId = selectedEntry?.id;
     const onlySelected = Boolean(selectedId) && params.get('view') === 'selected';
     const invalidSelection = Boolean(requestedId && !selectedId);
     const url = location.pathname + location.search;
-    const { filters, sort } = useMemo(() => readAtlasBrowse(params), [params]);
+    const browseQuery = atlasBrowseQuery(params);
+    const { filters, sort } = useMemo(() => readAtlasBrowse(new URLSearchParams(browseQuery)), [browseQuery]);
     const filterIssues = useMemo(() => validateAtlasFilters(filters), [filters]);
     const activeFilters = atlasFilterCount(filters) + Number(onlySelected);
     const countries = useMemo(() => atlasLocationCatalog(entries), [entries]);
@@ -51,11 +56,20 @@ export default function AdvAtlas() {
         return readAtlasSession(location.key, state?.restoreScroll ? url : undefined,
             state?.restoreScroll && typeof state.returnKey === 'string' ? state.returnKey : undefined);
     });
-    const [panelState, setPanelState] = useState<AtlasPanelState>(() => initialSession?.panelState
-        ?? (initialSession ? initialSession.panelOpen ? 'compact' : 'collapsed' : 'compact'));
-    const [resultsView, setResultsView] = useState<AtlasResultsView>(initialSession?.resultsView ?? 'cards');
+    const presentation = readAtlasPresentation(params);
+    const panelState = presentation.panel ?? initialSession?.panelState
+        ?? (initialSession ? initialSession.panelOpen ? 'compact' : 'collapsed' : 'compact');
+    const resultsView = presentation.results ?? initialSession?.resultsView ?? 'cards';
+    const cameraValue = params.get('camera');
+    const sharedCamera = useMemo(() => readAtlasCamera(cameraValue), [cameraValue]);
+    const [initialCamera] = useState(() => {
+        if (!sharedCamera) return initialSession?.camera;
+        const saved = initialSession?.camera;
+        // Keep full precision on report returns when the shared link describes that same view.
+        return saved && encodeAtlasCamera(saved) === encodeAtlasCamera(sharedCamera) ? saved : sharedCamera;
+    });
     const panelOpen = panelState !== 'collapsed';
-    const session = useRef<AtlasSession>({ ...(initialSession ?? { scrollTop: 0 }), panelOpen, panelState, resultsView });
+    const session = useRef<AtlasSession>({ ...(initialSession ?? { scrollTop: 0 }), ...(initialCamera ? { camera: initialCamera } : {}), panelOpen, panelState, resultsView });
     const [routes, setRoutes] = useState<Record<string, AtlasRouteState>>({});
     const [fitRequest, setFitRequest] = useState<{ tripId?: string; version: number; cancelled?: boolean }>(() => ({
         tripId: mapEntries.some(entry => entry.id === selectedId) ? selectedId : undefined, version: 0,
@@ -68,6 +82,8 @@ export default function AdvAtlas() {
     const focusedReveal = useRef(reveal);
     const listRef = useRef<HTMLDivElement>(null);
     const fullscreenContainer = useRef<HTMLElement>(null);
+    const cameraUrlSuspended = useRef(false);
+    const committedHistoryKey = useRef(location.key);
     const visibleRoutes = useMemo(() => Object.fromEntries(Object.entries(routes).filter(([id]) => mapEntries.some(entry => entry.id === id))), [routes, mapEntries]);
     const selectedOutsideFilters = Boolean(selectedId && !visibleEntries.some(entry => entry.id === selectedId));
 
@@ -84,6 +100,18 @@ export default function AdvAtlas() {
 
     const onRouteChange = useCallback((id: string, state: AtlasRouteState) => setRoutes(current => ({ ...current, [id]: state })), []);
     const onCameraChange = useCallback((camera: AtlasCamera) => { session.current.camera = camera; }, []);
+    const onCameraIdle = useCallback((camera: AtlasCamera) => {
+        const browserKey: unknown = window.history.state?.key;
+        if (cameraUrlSuspended.current || (typeof browserKey === 'string' && browserKey !== committedHistoryKey.current)) return;
+        const value = encodeAtlasCamera(camera);
+        if (value) updateParams(next => {
+            next.set('camera', value);
+            // A completed fit can precede the router's panel or presentation commit.
+            const pending = readAtlasPresentation(next);
+            if (!pending.panel) next.set('panel', panelState);
+            if (!pending.results) next.set('results', resultsView);
+        });
+    }, [updateParams, panelState, resultsView]);
     const onListScroll = useCallback((scrollTop: number) => { session.current.scrollTop = scrollTop; }, []);
     const clearPreviews = () => { setHoveredId(undefined); setFocusedId(undefined); };
     const resetScroll = () => {
@@ -95,18 +123,16 @@ export default function AdvAtlas() {
     const changePanel = (state: AtlasPanelState) => {
         session.current.panelState = state;
         session.current.panelOpen = state !== 'collapsed';
-        setPanelState(state);
+        updateParams(next => { next.set('panel', state); });
         clearPreviews();
     };
     const changeView = (view: AtlasResultsView) => {
         session.current.resultsView = view;
-        setResultsView(view);
+        updateParams(next => { next.set('results', view); });
         resetScroll();
     };
     const selectTrip = (id: string, options: { reveal?: boolean; focusCard?: boolean } = {}) => {
-        const next = new URLSearchParams(params);
-        next.set('trip', id);
-        setParams(next, { replace: true });
+        updateParams(next => { next.set('trip', id); next.delete('camera'); });
         setFitRequest(current => ({ tripId: id, version: current.version + 1 }));
         if (options.reveal) {
             if (!panelOpen) changePanel('compact');
@@ -114,40 +140,58 @@ export default function AdvAtlas() {
         }
     };
     const deselectTrip = () => {
-        const next = new URLSearchParams(params);
-        next.delete('trip'); next.delete('view');
-        setParams(next, { replace: true });
+        updateParams(next => { next.delete('trip'); next.delete('view'); });
         setFitRequest(current => ({ ...current, cancelled: true }));
         setReveal(undefined);
         clearPreviews();
     };
     const changeOnlySelected = () => {
-        const next = new URLSearchParams(params);
-        if (!onlySelected && selectedId) next.set('view', 'selected'); else next.delete('view');
-        setParams(next, { replace: true });
+        updateParams(next => {
+            if (!onlySelected && selectedId) next.set('view', 'selected'); else next.delete('view');
+        });
         resetScroll();
     };
     const changeFilters = (next: AtlasFilters) => {
-        setParams(writeAtlasBrowse(params, next, sort));
+        updateParams(current => writeAtlasBrowse(current, next, sort), false);
         setFitRequest(current => ({ ...current, cancelled: true }));
         resetScroll();
     };
     const clearFilters = () => {
-        const next = writeAtlasBrowse(params, emptyAtlasFilters(), sort);
-        next.delete('view');
-        setParams(next);
+        updateParams(current => {
+            const next = writeAtlasBrowse(current, emptyAtlasFilters(), sort);
+            next.delete('view');
+            return next;
+        }, false);
         setFitRequest(current => ({ ...current, cancelled: true }));
         resetScroll();
     };
-    const changeSort = (next: AtlasSort) => { setParams(writeAtlasBrowse(params, filters, next), { replace: true }); resetScroll(); };
+    const changeSort = (next: AtlasSort) => { updateParams(current => writeAtlasBrowse(current, filters, next)); resetScroll(); };
     const fitResults = () => {
-        const next = new URLSearchParams(params);
-        next.delete('trip'); next.delete('view');
-        setParams(next, { replace: true });
+        updateParams(next => { next.delete('trip'); next.delete('view'); next.delete('camera'); });
         setFitRequest(current => ({ version: current.version + 1 }));
         setReveal(undefined);
         clearPreviews();
     };
+    const getShareUrl = () => {
+        const next = getParams();
+        const pending = readAtlasPresentation(next);
+        next.set('panel', pending.panel ?? panelState);
+        next.set('results', pending.results ?? resultsView);
+        const camera = session.current.camera && encodeAtlasCamera(session.current.camera);
+        if (camera) next.set('camera', camera);
+        updateParams(() => next);
+        return new URL(`${location.pathname}?${next}${location.hash}`, window.location.origin).href;
+    };
+
+    useLayoutEffect(() => {
+        session.current.panelOpen = panelOpen;
+        session.current.panelState = panelState;
+        session.current.resultsView = resultsView;
+    }, [panelOpen, panelState, resultsView]);
+    useLayoutEffect(() => {
+        committedHistoryKey.current = location.key;
+        cameraUrlSuspended.current = location.pathname !== TRIP_ATLAS_PATH;
+    }, [location.key, location.pathname]);
 
     useEffect(() => {
         const remember = () => {
@@ -178,21 +222,32 @@ export default function AdvAtlas() {
 
     const loadedCount = mapEntries.filter(entry => routes[entry.id]?.route).length;
     return <main ref={fullscreenContainer} data-panel-state={panelState} data-results-view={resultsView}
-        className="atlas-explorer relative h-full w-full overflow-hidden bg-zinc-950 text-zinc-100">
+        className="atlas-explorer relative h-full w-full overflow-hidden bg-zinc-950 text-zinc-100"
+        onClickCapture={event => {
+            if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || !(event.target instanceof Element)) return;
+            const link = event.target.closest<HTMLAnchorElement>('a[href]');
+            if (link && (!link.target || link.target === '_self') && !link.hasAttribute('download')
+                && new URL(link.href).pathname !== location.pathname) cameraUrlSuspended.current = true;
+        }}>
         <a href="#atlas-panel-toggle" className="sr-only z-50 rounded bg-violet-600 p-3 focus:not-sr-only focus:absolute focus:left-3 focus:top-3">Skip to trip list</a>
         {entries.map(entry => entry.summary && <RouteReader key={entry.id} id={entry.id} url={entry.summary.route.geoJson} onChange={onRouteChange} />)}
         <section className="atlas-map-viewport" aria-label="Trip map" data-testid="atlas-map-viewport">
             <TripAtlasMapBoundary><Suspense fallback={<p role="status" className="absolute inset-0 grid place-items-center text-sm text-zinc-400">Loading trip map…</p>}>
                 <TripAtlasMap entries={mapEntries} routes={visibleRoutes} selectedId={mapSelectedId}
                     highlightedId={highlightedId} fitVersion={fitRequest.version} fitRequest={fitRequest} panelOpen={panelOpen}
-                    initialCamera={initialSession?.camera} fullscreenContainer={fullscreenContainer}
+                    initialCamera={initialCamera} cameraTarget={sharedCamera} urlKey={location.key}
+                    cameraRevision={navigationType === 'POP' ? location.key : undefined} fullscreenContainer={fullscreenContainer}
                     onSelect={(id, options) => id ? selectTrip(id, { reveal: true, ...options }) : deselectTrip()}
-                    onHover={setHoveredId} onCameraChange={onCameraChange} onViewChange={setCameraChanged} />
+                    onHover={setHoveredId} onCameraChange={onCameraChange} onCameraIdle={onCameraIdle} onViewChange={setCameraChanged} />
             </Suspense></TripAtlasMapBoundary>
+            <TripAtlasShare getUrl={getShareUrl} />
             {(selectedId || cameraChanged || activeFilters > 0 || fitRequest.cancelled) && <button type="button" onClick={fitResults}
                 data-testid="atlas-overview-control" disabled={loadedCount === 0}
-                className="absolute left-1/2 top-3 z-10 min-h-11 max-w-[calc(100%-8rem)] -translate-x-1/2 rounded-xl border border-zinc-600 bg-zinc-950/95 px-3 text-center text-sm text-zinc-100 shadow-lg enabled:hover:border-violet-400 disabled:opacity-50">
-                {atlasFilterCount(filters) ? 'Fit results' : 'Zoom to all trips'}
+                aria-label={atlasFilterCount(filters) ? 'Fit results' : 'Zoom to all trips'} title={atlasFilterCount(filters) ? 'Fit results' : 'Zoom to all trips'}
+                className="atlas-control atlas-icon-control atlas-overview-control">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M3 10a9 9 0 1 1 2 8M3 4v6h6" />
+                </svg>
             </button>}
             {!panelOpen && activeFilters > 0 && <p className="pointer-events-none absolute bottom-8 right-3 z-10 rounded-lg bg-zinc-950/90 px-3 py-2 text-xs text-zinc-300">{visibleEntries.length} of {entries.length} trips · {activeFilters} filters</p>}
         </section>

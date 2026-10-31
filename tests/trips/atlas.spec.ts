@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { tripAtlasColor } from '../../src/features/trips/atlas/tripAtlasView';
-import { atlas, atlasCamera, followReport, geometry, mockAtlasAssets, openList, paintedRoute } from './atlasTestHelpers';
+import { atlas, atlasCamera, expectAtlasUrl, followReport, geometry, mockAtlasAssets, openList, paintedRoute } from './atlasTestHelpers';
 
 test.beforeEach(async ({ page }) => mockAtlasAssets(page));
 
@@ -21,10 +21,11 @@ test('overview control avoids panels across responsive widths and hides when all
         await page.setViewportSize({ width, height: initialViewport.height });
         for (const open of [true, false]) {
             if (await panelToggle.getAttribute('aria-expanded') !== String(open)) await panelToggle.click();
+            await expect(panelToggle).toHaveAttribute('aria-expanded', String(open));
             const buttonBox = (await reset.boundingBox())!;
             const panelBox = (await page.locator('#atlas-trip-panel').boundingBox())!;
             const mapBox = (await page.getByTestId('atlas-map-viewport').boundingBox())!;
-            expect(buttonBox.x + buttonBox.width / 2).toBeCloseTo(mapBox.x + mapBox.width / 2, 0);
+            expect(buttonBox.x).toBeCloseTo(mapBox.x + 12, 0);
             expect(buttonBox.y).toBeGreaterThanOrEqual(mapBox.y);
             const intersectionWidth = Math.max(0, Math.min(buttonBox.x + buttonBox.width, panelBox.x + panelBox.width) - Math.max(buttonBox.x, panelBox.x));
             const intersectionHeight = Math.max(0, Math.min(buttonBox.y + buttonBox.height, panelBox.y + panelBox.height) - Math.max(buttonBox.y, panelBox.y));
@@ -49,12 +50,12 @@ test('overview control avoids panels across responsive widths and hides when all
     await expect(reset).toHaveCount(0);
     const panReset = await paintedRoute(page);
     panReset.bounds.forEach((value, index) => expect(Math.abs(value - before.bounds[index])).toBeLessThan(5));
-    await expect(page).toHaveURL(new RegExp(`${atlas}$`));
+    await expectAtlasUrl(page);
 });
 
 test('project entry opens a playable map with published routes and accessible card selection', async ({ page }) => {
     await page.goto('/projects/adv-atlas');
-    await expect(page).toHaveURL(new RegExp(`${atlas}$`));
+    await expectAtlasUrl(page);
     await expect(page.getByRole('heading', { level: 1, name: 'ADV Atlas', exact: true })).toBeVisible();
     await expect(page).toHaveTitle('ADV Atlas — rsmb');
     await expect(page.locator('.maplibregl-canvas')).toBeVisible();
@@ -67,23 +68,23 @@ test('project entry opens a playable map with published routes and accessible ca
     await page.keyboard.press('Enter');
     await expect(button).toBeFocused();
     await expect(button).toHaveAttribute('aria-pressed', 'true');
-    await expect(page).toHaveURL(/\?trip=daily-test$/);
+    await expectAtlasUrl(page, { trip: 'daily-test' });
     await expect.poll(async () => (await paintedRoute(page, 'daily-test')).count).toBeGreaterThan(30);
     await page.getByRole('button', { name: 'Zoom to all trips' }).click();
-    await expect(page).toHaveURL(new RegExp(`${atlas}$`));
+    await expectAtlasUrl(page);
     await expect(page.getByRole('button', { name: /^Show route:/, pressed: true })).toHaveCount(0);
 });
 
 test('legacy atlas links preserve the selected trip and filter through report returns', async ({ page }) => {
     await page.goto('/projects/motorcycle-trips/map?trip=coastal-test&view=selected');
-    await expect(page).toHaveURL(`${atlas}?trip=coastal-test&view=selected`);
+    await expectAtlasUrl(page, { trip: 'coastal-test', view: 'selected' });
     await expect(page.getByRole('heading', { level: 1, name: 'ADV Atlas', exact: true })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Show only selected trip' })).toHaveAttribute('aria-pressed', 'true');
     await expect(page.locator('[data-trip-id]')).toHaveCount(1);
     await expect(page.getByTestId('trip-atlas-map')).toHaveAttribute('data-selected-trip', 'coastal-test');
     await page.getByRole('link', { name: /Read trip report/ }).click();
     await page.getByRole('link', { name: /Back to map/ }).first().click();
-    await expect(page).toHaveURL(`${atlas}?trip=coastal-test&view=selected`);
+    await expectAtlasUrl(page, { trip: 'coastal-test', view: 'selected' });
     await expect(page.locator('[data-trip-id]')).toHaveCount(1);
 });
 
@@ -104,7 +105,7 @@ test('shared selection and report returns restore the card scroll and camera aft
     await expect(page).toHaveURL(/\/trips\/coastal-test$/);
     await expect(page.getByRole('link', { name: /Back to map/ })).toHaveCount(2);
     await page.goBack();
-    await expect(page).toHaveURL(/\?trip=coastal-test$/);
+    await expectAtlasUrl(page, { trip: 'coastal-test' });
     await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
     await expect.poll(() => page.locator('#atlas-trip-list').evaluate(element => element.scrollTop)).toBeCloseTo(scroll, 0);
     const after = await paintedRoute(page, 'coastal-test');
@@ -112,7 +113,7 @@ test('shared selection and report returns restore the card scroll and camera aft
     scroll = await followReport(page, page.locator('[data-trip-id="coastal-test"]').getByRole('link', { name: /Read trip report/ }));
     await page.reload();
     await page.getByRole('link', { name: /Back to map/ }).first().click();
-    await expect(page).toHaveURL(/\?trip=coastal-test$/);
+    await expectAtlasUrl(page, { trip: 'coastal-test' });
     await expect(page.locator('[data-trip-id="coastal-test"]').getByRole('button', { name: /^Show route:/ })).toHaveAttribute('aria-pressed', 'true');
     await expect.poll(() => page.locator('#atlas-trip-list').evaluate(element => element.scrollTop)).toBeCloseTo(scroll, 0);
     await expect.poll(async () => {
@@ -143,7 +144,7 @@ for (const returnLink of ['header', 'footer after another report'] as const) {
         }
         const back = page.getByRole('link', { name: /Back to map/ });
         await (returnLink === 'header' ? back.first() : back.last()).click();
-        await expect(page).toHaveURL(`${atlas}?trip=coastal-test`);
+        await expectAtlasUrl(page, { trip: 'coastal-test' });
         await expect(page.locator('#atlas-panel-toggle')).toHaveAttribute('aria-expanded', 'true');
         await expect.poll(() => page.locator('#atlas-trip-list').evaluate(element => element.scrollTop)).toBeCloseTo(scroll, 0);
         await expect.poll(async () => {
@@ -216,7 +217,7 @@ test('selected-trip filtering hides other geometry and cards, survives report re
     const filter = page.getByRole('button', { name: 'Show only selected trip' });
     await filter.click();
     await expect(filter).toHaveAttribute('aria-pressed', 'true');
-    await expect(page).toHaveURL(/\?trip=daily-test&view=selected$/);
+    await expectAtlasUrl(page, { trip: 'daily-test', view: 'selected' });
     await expect(page.getByRole('heading', { level: 2 })).toHaveCount(1);
     await expect(page.getByText('1/1 routes', { exact: false })).toBeVisible();
     await expect.poll(async () => (await paintedRoute(page, 'daily-test', 110)).count).toBeLessThan(context.count - 30);
@@ -224,12 +225,12 @@ test('selected-trip filtering hides other geometry and cards, survives report re
     filtered.bounds.forEach((value, index) => expect(Math.abs(value - before.bounds[index])).toBeLessThan(5));
     await page.getByRole('link', { name: /Read trip report/ }).click();
     await page.getByRole('link', { name: /Back to map/ }).first().click();
-    await expect(page).toHaveURL(/\?trip=daily-test&view=selected$/);
+    await expectAtlasUrl(page, { trip: 'daily-test', view: 'selected' });
     await expect(filter).toHaveAttribute('aria-pressed', 'true');
     await expect(page.getByRole('heading', { level: 2 })).toHaveCount(1);
     await filter.click();
     await expect(filter).toHaveAttribute('aria-pressed', 'false');
-    await expect(page).toHaveURL(/\?trip=daily-test$/);
+    await expectAtlasUrl(page, { trip: 'daily-test' });
     await expect(page.getByRole('heading', { level: 2 })).toHaveCount(2);
     await expect.poll(async () => (await paintedRoute(page, 'daily-test', 110)).count).toBeGreaterThan(context.count - 30);
 
@@ -244,7 +245,7 @@ test('selected-trip filtering hides other geometry and cards, survives report re
     await expect(filter).toHaveAttribute('aria-pressed', 'true');
     await expect(choices).toHaveCount(0);
     await map.locator('canvas').click({ position: { x: (await map.boundingBox())!.width - 24, y: 180 } });
-    await expect(page).toHaveURL(new RegExp(`${atlas}$`));
+    await expectAtlasUrl(page);
     await expect(filter).toHaveCount(0);
     await expect(page.getByRole('heading', { level: 2 })).toHaveCount(2);
 });
@@ -260,7 +261,7 @@ test('clicking empty map space deselects the route without moving the camera', a
     const before = await paintedRoute(page);
     const canvas = page.locator('[data-testid="trip-atlas-map"] canvas');
     await canvas.click({ position: { x: (await canvas.boundingBox())!.width - 24, y: 180 } });
-    await expect(page).toHaveURL(new RegExp(`${atlas}$`));
+    await expectAtlasUrl(page);
     await expect(page.getByRole('button', { name: /^Show route:/, pressed: true })).toHaveCount(0);
     await expect(page.locator('[data-testid="trip-atlas-map"]')).toHaveAttribute('data-selected-trip', '');
     const after = await paintedRoute(page);
@@ -277,7 +278,7 @@ test('card photos and text select and frame routes while report links navigate n
     await openList(page);
     const card = page.locator('[data-trip-id="coastal-test"]');
     if (isMobile) await card.getByRole('img').tap(); else await card.getByRole('img').click();
-    await expect(page).toHaveURL(/\?trip=coastal-test$/);
+    await expectAtlasUrl(page, { trip: 'coastal-test' });
     await expect(card.getByRole('button', { name: /^Show route:/ })).toHaveAttribute('aria-pressed', 'true');
     await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
     const { cssBounds } = await paintedRoute(page, 'coastal-test');
@@ -287,7 +288,7 @@ test('card photos and text select and frame routes while report links navigate n
     expect(cssBounds[3]).toBeLessThan(mapBox.height - 12);
     const otherCard = page.locator('[data-trip-id="daily-test"]');
     await otherCard.getByRole('heading', { name: 'Daily map test trip' }).click();
-    await expect(page).toHaveURL(/\?trip=daily-test$/);
+    await expectAtlasUrl(page, { trip: 'daily-test' });
     await otherCard.getByRole('link', { name: /Read trip report/ }).click();
     await expect(page).toHaveURL(/\/trips\/daily-test$/);
 });
@@ -314,7 +315,7 @@ test('card hover previews its route above a shared selected route without changi
     await expect(page.getByRole('tooltip')).toContainText('Coastal test trip');
     await expect(page.getByRole('tooltip').locator('.trip-map-tooltip-subtitle')).toHaveText('January 2024');
     await expect(card).toHaveAttribute('data-highlighted', 'true');
-    await expect(page).toHaveURL(/\?trip=daily-test$/);
+    await expectAtlasUrl(page, { trip: 'daily-test' });
     await expect(card.getByRole('button', { name: /^Show route:/ })).toHaveAttribute('aria-pressed', 'false');
     await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(before.count + 30);
     expect(await page.locator('#atlas-trip-list').evaluate(element => element.scrollTop)).toBe(scroll);
@@ -322,7 +323,7 @@ test('card hover previews its route above a shared selected route without changi
     await expect(card).not.toHaveAttribute('data-highlighted');
     await expect(map).toHaveAttribute('data-highlighted-trip', '');
     await expect(page.getByRole('tooltip')).toHaveCount(0);
-    await expect(page).toHaveURL(/\?trip=daily-test$/);
+    await expectAtlasUrl(page, { trip: 'daily-test' });
 });
 
 test('route hover highlights its card without scrolling and route clicks reveal the report card', async ({ page, isMobile }) => {
@@ -355,11 +356,11 @@ test('route hover highlights its card without scrolling and route clicks reveal 
         await expect(card).toHaveAttribute('data-highlighted', 'true');
         await expect(card.getByRole('heading')).not.toBeInViewport();
         expect(await page.locator('#atlas-trip-list').evaluate(element => element.scrollTop)).toBe(scroll);
-        await expect(page).toHaveURL(new RegExp(`${atlas}$`));
+        await expectAtlasUrl(page);
         await expect(card.getByRole('button', { name: /^Show route:/ })).toHaveAttribute('aria-pressed', 'false');
     }
     if (isMobile) await map.locator('canvas').tap({ position: point }); else await map.locator('canvas').click({ position: point });
-    await expect(page).toHaveURL(/\?trip=daily-test$/);
+    await expectAtlasUrl(page, { trip: 'daily-test' });
     await expect(page.locator('#atlas-panel-toggle')).toHaveAttribute('aria-expanded', 'true');
     await expect(card.getByRole('heading')).toBeInViewport();
     await expect(card.getByRole('button', { name: /^Show route:/ })).toHaveAttribute('aria-pressed', 'true');
@@ -374,7 +375,7 @@ test('keyboard feedback uses the story-map tooltip and Escape dismisses it witho
     await expect(page.getByRole('tooltip').locator('.trip-map-tooltip-subtitle')).toHaveText('January 2024');
     await button.press('Escape');
     await expect(page.getByRole('tooltip')).toHaveCount(0);
-    await expect(page).toHaveURL(/\?trip=daily-test$/);
+    await expectAtlasUrl(page, { trip: 'daily-test' });
     await expect(button).toHaveAttribute('aria-pressed', 'true');
 });
 
@@ -390,6 +391,7 @@ test('overlapping routes offer colored previews and a dismissible choice instead
     await page.locator('#atlas-panel-toggle').click();
     const map = page.locator('[data-testid="trip-atlas-map"]');
     const before = await paintedRoute(page, 'daily-test');
+    await expect(page.locator('#atlas-panel-toggle')).toHaveAttribute('aria-expanded', 'false');
     await map.locator('canvas').click({ position: before.point });
     const choices = page.getByRole('group', { name: 'Trips sharing this road' });
     await expect(choices).toBeVisible();
@@ -411,7 +413,7 @@ test('overlapping routes offer colored previews and a dismissible choice instead
         await expect(map).toHaveAttribute('data-highlighted-trip', 'coastal-test');
         await expect(page.locator('[data-trip-id="coastal-test"]')).toHaveAttribute('data-highlighted', 'true');
         await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(before.count + 30);
-        await expect(page).toHaveURL(/\?trip=daily-test$/);
+        await expectAtlasUrl(page, { trip: 'daily-test' });
         expect(await page.locator('#atlas-trip-list').evaluate(element => element.scrollTop)).toBe(scroll);
         await choices.getByRole('button', { name: 'Daily map test trip' }).hover();
         await expect(map).toHaveAttribute('data-highlighted-trip', 'daily-test');
@@ -420,7 +422,7 @@ test('overlapping routes offer colored previews and a dismissible choice instead
     await expect(choices).toHaveCount(0);
     await expect(map).toHaveAttribute('data-highlighted-trip', '');
     await expect(page.getByRole('tooltip')).toHaveCount(0);
-    await expect(page).toHaveURL(/\?trip=daily-test$/);
+    await expectAtlasUrl(page, { trip: 'daily-test' });
     const after = await paintedRoute(page, 'daily-test');
     after.bounds.forEach((value, index) => expect(Math.abs(value - before.bounds[index])).toBeLessThan(5));
     await map.locator('canvas').click({ position: before.point });
@@ -432,12 +434,12 @@ test('overlapping routes offer colored previews and a dismissible choice instead
         await choice.press('Escape');
         await expect(choices).toHaveCount(0);
         await expect(map).toHaveAttribute('data-highlighted-trip', '');
-        await expect(page).toHaveURL(/\?trip=daily-test$/);
+        await expectAtlasUrl(page, { trip: 'daily-test' });
         await map.locator('canvas').click({ position: before.point });
         await expect(choices).toBeVisible();
     }
     await choices.getByRole('button', { name: 'Coastal test trip' }).click();
-    await expect(page).toHaveURL(/\?trip=coastal-test$/);
+    await expectAtlasUrl(page, { trip: 'coastal-test' });
     await expect(choices).toHaveCount(0);
     await expect(page.locator('[data-trip-id="coastal-test"]').getByText('Selected', { exact: true })).toBeVisible();
     await expect(page.locator('[data-trip-id="coastal-test"]').getByRole('heading')).toBeInViewport();
@@ -458,7 +460,7 @@ test('Escape dismisses shared-road choices after focus moves to the trip panel',
     await panel.press('Escape');
     await expect(choices).toHaveCount(0);
     await expect(panel).toBeFocused();
-    await expect(page).toHaveURL(`${atlas}?trip=daily-test`);
+    await expectAtlasUrl(page, { trip: 'daily-test' });
     await expect(page.getByTestId('trip-atlas-map')).toHaveAttribute('data-highlighted-trip', '');
 });
 
@@ -476,7 +478,7 @@ test('keyboard route choice moves focus to the selected card after the chooser c
     await choice.focus();
     await choice.press('Enter');
     await expect(choices).toHaveCount(0);
-    await expect(page).toHaveURL(/\?trip=coastal-test$/);
+    await expectAtlasUrl(page, { trip: 'coastal-test' });
     const selected = page.locator('[data-trip-id="coastal-test"]');
     await expect(selected.getByRole('button', { name: 'Show route: Coastal test trip' })).toBeFocused();
     // Safari uses Option+Tab to include links in sequential keyboard navigation.
@@ -519,7 +521,7 @@ test('a late route response does not replace a newer trip selection', async ({ p
         const before = await paintedRoute(page, 'coastal-test');
         release();
         await expect(page.getByText('2/2 routes', { exact: false })).toBeVisible();
-        await expect(page).toHaveURL(/\?trip=coastal-test$/);
+        await expectAtlasUrl(page, { trip: 'coastal-test' });
         const after = await paintedRoute(page, 'coastal-test');
         after.bounds.forEach((value, index) => expect(Math.abs(value - before.bounds[index])).toBeLessThan(5));
     } finally { release(); }
@@ -553,7 +555,7 @@ for (const selected of [false, true]) {
             await expect(reset).toBeVisible();
             await reset.click();
             await expect(reset).toHaveCount(0);
-            await expect(page).toHaveURL(new RegExp(`${atlas}$`));
+            await expectAtlasUrl(page);
         } finally { release(); }
     });
 }
@@ -577,7 +579,7 @@ test('fullscreen retains trip controls, overlapping-route choices, and map recov
     const choices = page.getByRole('group', { name: 'Trips sharing this road' });
     await expect(choices).toBeVisible();
     await choices.getByRole('button', { name: 'Coastal test trip' }).click();
-    await expect(page).toHaveURL(/\?trip=coastal-test$/);
+    await expectAtlasUrl(page, { trip: 'coastal-test' });
     await expect(page.getByRole('button', { name: 'Zoom to all trips' })).toBeVisible();
     await canvas.evaluate((element: HTMLCanvasElement) => {
         const extension = element.getContext('webgl2')?.getExtension('WEBGL_lose_context');
@@ -656,7 +658,7 @@ test('native fullscreen exit during a failed retry restores the next enter actio
     await expect.poll(() => page.evaluate(() => document.fullscreenElement?.tagName)).toBe('MAIN');
     await page.getByRole('button', { name: 'Exit fullscreen', exact: true }).click();
     await expect.poll(() => page.evaluate(() => document.fullscreenElement)).toBeNull();
-    await expect(page).toHaveURL(/\?trip=coastal-test$/);
+    await expectAtlasUrl(page, { trip: 'coastal-test' });
 });
 
 test('a lost WebGL context retries without losing the selected trip or report links', async ({ page }) => {
@@ -673,7 +675,7 @@ test('a lost WebGL context retries without losing the selected trip or report li
     await page.getByRole('button', { name: 'Retry map' }).click();
     await expect(page.getByRole('button', { name: 'Retry map' })).toHaveCount(0);
     await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
-    await expect(page).toHaveURL(/\?trip=coastal-test$/);
+    await expectAtlasUrl(page, { trip: 'coastal-test' });
 });
 
 test('a failed renderer module leaves the trip list outside its error fallback', async ({ page }) => {

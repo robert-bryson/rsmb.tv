@@ -1,4 +1,4 @@
-import { useEffect, useEffectEvent, useId, useMemo, useRef, useState, type RefObject } from 'react';
+import { useEffect, useEffectEvent, useId, useLayoutEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './tripAtlasMap.css';
@@ -12,6 +12,7 @@ import { createTripMapTooltip } from '../tripMapTooltip';
 import type { TripAtlasEntry } from './tripAtlasEntries';
 import { combineAtlasRoutes, tripAtlasColor, type AtlasRouteState } from './tripAtlasView';
 import type { AtlasCamera } from './tripAtlasSession';
+import { encodeAtlasCamera } from './tripAtlasUrlState';
 import { restoreAtlasFullscreenControl, type AtlasFullscreenControl } from './AtlasFullscreenControl';
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl);
@@ -25,10 +26,14 @@ interface Props {
     fitRequest?: { tripId?: string; cancelled?: boolean };
     panelOpen: boolean;
     initialCamera?: AtlasCamera;
+    cameraTarget?: AtlasCamera;
+    cameraRevision?: string;
+    urlKey?: string;
     fullscreenContainer?: RefObject<HTMLElement | null>;
     onSelect: (id: string | undefined, options?: { focusCard: boolean }) => void;
     onHover: (id?: string) => void;
     onCameraChange: (camera: AtlasCamera) => void;
+    onCameraIdle?: (camera: AtlasCamera) => void;
     onViewChange?: (changed: boolean) => void;
 }
 
@@ -78,6 +83,7 @@ export default function TripAtlasMap(props: Props) {
     const camera = useRef(props.initialCamera);
     const initialFitKey = useRef(`${fitId ?? 'all'}:${fitVersion}`);
     const userMoved = useRef(false);
+    const suppressCameraPublish = useRef(false);
     const lastFit = useRef<{ map: maplibregl.Map; key: string } | undefined>(undefined);
     const reducedMotion = useReducedMotion();
     const tooltipId = useId();
@@ -101,6 +107,7 @@ export default function TripAtlasMap(props: Props) {
     const select = useEffectEvent((id?: string) => props.onSelect(id));
     const hover = useEffectEvent((id?: string) => props.onHover(id));
     const rememberCamera = useEffectEvent((value: AtlasCamera) => props.onCameraChange(value));
+    const publishCamera = useEffectEvent((value: AtlasCamera) => props.onCameraIdle?.(value));
     const compareOverview = useEffectEvent(() => {
         const instance = mapRef.current;
         if (!instance || !container.current || props.selectedId || lastFit.current?.map !== instance) return;
@@ -185,11 +192,20 @@ export default function TripAtlasMap(props: Props) {
             const center = instance.getCenter();
             camera.current = { center: [center.lng, center.lat], zoom: instance.getZoom(), bearing: instance.getBearing(), pitch: instance.getPitch() };
             rememberCamera(camera.current);
+            return camera.current;
         };
         // Parent navigation cleanup can persist before this renderer is removed.
         // Keep its session current during animation and gestures, before moveend.
         instance.on('move', saveCamera);
-        instance.on('moveend', () => { saveCamera(); compareOverview(); });
+        instance.on('moveend', () => {
+            const value = saveCamera();
+            const current = getCurrent();
+            const target = current.fitRequest ? current.fitRequest.tripId : current.selectedId;
+            // An earlier animation must not publish a camera for a newer pending selection.
+            if (value && !suppressCameraPublish.current && !instance.isMoving()
+                && lastFit.current?.key === `${target ?? 'all'}:${current.fitVersion}`) publishCamera(value);
+            compareOverview();
+        });
         instance.on('resize', () => {
             if (disposed) return;
             setChoices(undefined);
@@ -315,6 +331,23 @@ export default function TripAtlasMap(props: Props) {
         showTooltip(highlightedId, map.getBounds().contains(anchor) ? anchor : [center.lng, center.lat]);
     }, [map, highlightedId, entries, routes, failure]);
 
+    useLayoutEffect(() => {
+        const target = props.cameraTarget;
+        if (!map || mapRef.current !== map || !target) return;
+        const current: AtlasCamera = { center: [map.getCenter().lng, map.getCenter().lat], zoom: map.getZoom(), bearing: map.getBearing(), pitch: map.getPitch() };
+        // URL writes from this map must not interrupt movement or introduce rounding drift.
+        if (encodeAtlasCamera(current) === encodeAtlasCamera(target)) return;
+        // stop() can end an older animation synchronously. Its camera is not this URL's target.
+        suppressCameraPublish.current = true;
+        map.stop();
+        suppressCameraPublish.current = false;
+        userMoved.current = true;
+        const currentProps = getCurrent();
+        const targetId = currentProps.fitRequest ? currentProps.fitRequest.tripId : currentProps.selectedId;
+        lastFit.current = { map, key: `${targetId ?? 'all'}:${currentProps.fitVersion}` };
+        map.jumpTo(target);
+    }, [map, props.cameraTarget, props.cameraRevision]);
+
     useEffect(() => {
         if (!map || mapRef.current !== map || !container.current || props.fitRequest?.cancelled) return;
         const key = `${fitId ?? 'all'}:${fitVersion}`;
@@ -324,10 +357,22 @@ export default function TripAtlasMap(props: Props) {
         if (!fitId && !entries.every(entry => routes[entry.id]?.route || routes[entry.id]?.error)) return;
         const bounds = routeBounds(routes, fitId);
         if (!bounds) return;
+        suppressCameraPublish.current = true;
+        map.stop();
         map.resize();
+        suppressCameraPublish.current = false;
         lastFit.current = { map, key };
         map.fitBounds(bounds, { padding: padding(container.current, Boolean(fitId)), maxZoom: 10, bearing: 0, pitch: 0, duration: reducedMotion ? 0 : 500 });
     }, [map, routes, fitId, fitVersion, props.fitRequest?.cancelled, entries, reducedMotion]);
+
+    useEffect(() => {
+        // An instantaneous fit can finish before the router commits its selection URL.
+        // Publish it again after that commit, without completing a still-pending fit.
+        const current = getCurrent();
+        const target = current.fitRequest ? current.fitRequest.tripId : current.selectedId;
+        if (map && mapRef.current === map && camera.current && !map.isMoving()
+            && lastFit.current?.map === map && lastFit.current.key === `${target ?? 'all'}:${current.fitVersion}`) publishCamera(camera.current);
+    }, [map, props.urlKey]);
 
     useEffect(() => { compareOverview(); }, [map, routes, selectedId, fitVersion, panelOpen, entries]);
 

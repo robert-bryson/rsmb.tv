@@ -56,7 +56,7 @@ function ResultActions({ entry, props }: { entry: TripAtlasEntry; props: Props }
         <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-start gap-2">
             <button id={`atlas-route-${entry.id}`} type="button" aria-pressed={active} disabled={!entry.summary}
                 aria-label={`Show route: ${entry.title}`} onClick={() => props.onSelect(entry.id)}
-                className="min-h-11 rounded-md border border-zinc-600 px-3 py-2 text-sm text-zinc-100 transition-colors enabled:hover:border-[color:var(--trip-atlas-color)] enabled:hover:text-[color:var(--trip-atlas-color)] disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--trip-atlas-color)]">
+                className="atlas-control px-3 py-2 transition-colors enabled:hover:text-[color:var(--trip-atlas-color)]">
                 Show route
             </button>
             <div className="flex min-w-0 flex-col gap-2">

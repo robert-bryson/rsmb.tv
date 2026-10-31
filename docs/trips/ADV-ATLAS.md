@@ -66,10 +66,13 @@ Clearing filters also clears selected-only. It retains selection, sort, presenta
 If a selected trip falls outside the filters, its warning remains visible.
 The excluded route does not enter the map. Use **Clear selection** or change the filters.
 
-### Browse URLs
+### Shared URLs
 
-Committed filters and sorting are shareable.
+Selection, committed filters, sorting, panel size, result presentation, and camera values are shareable.
 Applying filters creates one history entry. Browser Back restores the previous committed results.
+Other changes replace the current entry. Panning and zooming update the URL when movement ends.
+Dragging does not write an entry for each animation frame.
+Presentation changes and camera updates retain the existing filters.
 
 | Parameter | Meaning | Example |
 | --- | --- | --- |
@@ -79,10 +82,31 @@ Applying filters creates one history entry. Browser Back restores the previous c
 | `country` | Country-wide choice; can repeat | `country=US&country=CA` |
 | `region` | Country-qualified region; can repeat | `region=CA%2Fbritish-columbia` |
 | `sort` | Sort key; default `newest` is omitted | `sort=miles-asc` |
+| `panel` | Panel size | `panel=collapsed`, `compact`, or `expanded` |
+| `results` | Preferred expanded presentation | `results=cards` or `table` |
+| `camera` | Longitude, latitude, zoom, bearing, and pitch | `camera=-123.1%2C48.2%2C7.5%2C0%2C0` |
 
 Other sort keys are `oldest`, `days-asc`, `days-desc`, `miles-desc`, `location-asc`, `location-desc`, `title-asc`, and `title-desc`.
 Invalid sort keys use the default order.
 Invalid filter values show an error and no results. Clear or correct them to continue.
+Invalid camera or presentation values use the normal initial view.
+Camera links round coordinates to six decimal places, zoom to four, and bearing and pitch to two.
+Longitude and bearing use the interval from −180 degrees to less than 180 degrees.
+
+### Share control
+
+Select **Share map** in the map toolbar to share the current view.
+The control captures the current camera, including movement that has not ended.
+It uses the device's [native sharing interface](https://www.w3.org/TR/web-share/) when available.
+Cancelling native sharing ends the action.
+If native sharing is unavailable or fails, the control tries the [Clipboard API](https://www.w3.org/TR/clipboard-apis/).
+Successful copying shows **Link copied**.
+If clipboard access is unavailable or denied, a selected text field provides the link for manual copying.
+Select **Close** or press Escape to close that field and return focus to the share control.
+
+Map controls and panel controls use the same dark surfaces, borders, corner radius, and violet focus indicators.
+Zoom, fullscreen, share, and overview controls have 44-pixel targets.
+The overview control uses a circular-arrow icon. Its accessible name and tooltip identify **Fit results** or **Zoom to all trips**.
 
 ## Selection and navigation
 
@@ -115,7 +139,10 @@ Reloading the report or atlas retains this state.
 Report, series, and neighboring-article links retain the originating atlas history key.
 Opening another map at the same URL does not replace that report's return destination.
 If the originating snapshot has expired, the return frames the selected trip instead of restoring another visit's view.
-A fresh visit through a copied URL frames the selected trip.
+A copied URL with a camera restores that view, including bearing and pitch.
+Without a camera, a fresh visit frames the selected trip or collection.
+Explicit URL presentation and camera values take priority over different saved preferences.
+Matching saved cameras retain full precision for report returns.
 Each browser history entry receives a unique key before the router starts.
 Reloads retain that key. Separate direct visits receive different keys, even when their URLs match.
 Camera movement updates the saved view in memory before navigation can persist it.
@@ -152,6 +179,9 @@ If fullscreen ends during a failed retry, the next renderer creates a fresh full
 | `scripts/trip-content-plugin.ts` | Validate publication data and emit small trip summaries |
 | `src/features/trips/atlas/tripAtlasEntries.ts` | Group reports and order trip cards |
 | `src/features/trips/atlas/tripAtlasBrowser.ts` | Validate browse URLs, filter summaries, normalize locations, and sort results |
+| `src/features/trips/atlas/tripAtlasUrlState.ts` | Validate shared cameras and presentation values |
+| `src/features/trips/atlas/useAtlasUrlState.ts` | Compose URL changes and preserve history state and fragments |
+| `src/features/trips/atlas/TripAtlasShare.tsx` | Share the current view and provide copy fallbacks |
 | `src/features/trips/atlas/TripAtlasPanel.tsx` | Manage the drawer controls, filter disclosure, and result-position anchors |
 | `src/features/trips/atlas/TripAtlasFilters.tsx` | Edit filter drafts and show applied filters |
 | `src/features/trips/atlas/TripAtlasResults.tsx` | Present matching trips as cards or a native sortable table |

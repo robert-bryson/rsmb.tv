@@ -4,7 +4,7 @@ import {
     atlasRangeKeys, atlasRegionKey, validateAtlasFilters, type AtlasFilters, type AtlasFilterIssue,
 } from './tripAtlasBrowser';
 
-const inputClass = 'min-h-11 w-full min-w-0 rounded-lg border border-zinc-600 bg-zinc-900 px-2 text-sm text-zinc-100 focus-visible:outline-2 focus-visible:outline-violet-400';
+const inputClass = 'atlas-input w-full';
 
 function CountryChoices({ country, filters, onChange }: {
     country: BlogCountry; filters: AtlasFilters; onChange: (filters: AtlasFilters) => void;
@@ -91,7 +91,7 @@ export function TripAtlasFilters({ filters, countries, onApply, onCancel }: {
         </ul>}
         <div className="flex flex-wrap gap-2">
             <button type="submit" className="min-h-11 rounded-lg bg-violet-400 px-4 text-sm font-semibold text-zinc-950 hover:bg-violet-300">Apply filters</button>
-            <button type="button" onClick={onCancel} className="min-h-11 rounded-lg border border-zinc-600 px-3 text-sm text-zinc-200">Cancel</button>
+            <button type="button" onClick={onCancel} className="atlas-control px-3">Cancel</button>
         </div>
     </form>;
 }

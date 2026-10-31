@@ -1,11 +1,11 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
-import { MemoryRouter, parsePath } from 'react-router-dom';
+import { MemoryRouter, parsePath, useLocation } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { BlogPostMeta } from '../content/posts';
 import type { TripSummary } from '../features/trips/types';
 import type { TripAtlasEntry } from '../features/trips/atlas/tripAtlasEntries';
 import type { AtlasRouteState } from '../features/trips/atlas/tripAtlasView';
-import { readAtlasSession, saveAtlasSession } from '../features/trips/atlas/tripAtlasSession';
+import { readAtlasSession, saveAtlasSession, type AtlasCamera } from '../features/trips/atlas/tripAtlasSession';
 import AdvAtlas from '../pages/AdvAtlas';
 
 let visit = 0;
@@ -13,6 +13,7 @@ function renderWithRouter(ui: React.ReactElement, { route = '/', state = null as
     return render(<MemoryRouter initialEntries={[{ ...parsePath(route), key: `atlas-unit-${++visit}`, state }]}>{ui}</MemoryRouter>);
 }
 const originalScroll = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'scrollIntoView');
+function UrlProbe() { const location = useLocation(); return <output data-testid="atlas-url" data-history-key={location.key}>{location.pathname + location.search}</output>; }
 
 const fixtures = vi.hoisted(() => {
     const summary = (id: string): TripSummary => ({
@@ -46,15 +47,19 @@ vi.mock('../features/trips/useTripRoute', () => ({ useTripRoute: () => ({
     error: '', retry: fixtures.retry,
 }) }));
 vi.mock('../features/trips/atlas/TripAtlasMap', () => ({
-    default: ({ selectedId, highlightedId, fitVersion, entries, routes, onSelect }: {
+    default: ({ selectedId, highlightedId, fitVersion, entries, routes, initialCamera, onSelect, onCameraChange, onCameraIdle }: {
         selectedId?: string; highlightedId?: string; fitVersion: number; entries: TripAtlasEntry[]; routes: Record<string, AtlasRouteState>;
+        initialCamera?: AtlasCamera; onCameraChange: (camera: AtlasCamera) => void; onCameraIdle: (camera: AtlasCamera) => void;
         onSelect: (id: string, options?: { focusCard: boolean }) => void;
     }) => (
         <>
             <output data-testid="atlas-renderer" data-selected={selectedId ?? ''} data-highlighted={highlightedId ?? ''} data-fit-version={fitVersion}
-                data-trips={entries.map(entry => entry.id).join(',')} data-routes={Object.keys(routes).join(',')} />
+                data-trips={entries.map(entry => entry.id).join(',')} data-routes={Object.keys(routes).join(',')} data-initial-camera={JSON.stringify(initialCamera)} />
             <button onClick={() => onSelect('published', { focusCard: true })}>Keyboard route choice</button>
             <button onClick={() => onSelect('published', { focusCard: false })}>Pointer route choice</button>
+            <button onClick={() => onCameraChange({ center: [-110, 42], zoom: 6.456789, bearing: -12, pitch: 20 })}>Move map gesture</button>
+            <button onClick={() => onCameraIdle({ center: [-110, 42], zoom: 6.456789, bearing: -12, pitch: 20 })}>End map gesture</button>
+            <button onClick={() => { onSelect('published', { focusCard: false }); onCameraIdle({ center: [-110, 42], zoom: 6, bearing: 0, pitch: 0 }); }}>Select and finish fit</button>
         </>
     ),
 }));
@@ -182,6 +187,71 @@ afterEach(() => {
 });
 
 describe('atlas browsing controls', () => {
+    it('suspends camera URL writes during a browser history transition and resumes after the location commits', async () => {
+        const before = window.location.href;
+        const beforeState: unknown = window.history.state;
+        window.history.replaceState(null, '', '/projects/adv-atlas/map');
+        try {
+            renderWithRouter(<><AdvAtlas /><UrlProbe /></>, { route: '/projects/adv-atlas/map' });
+            await screen.findByTestId('atlas-renderer');
+            window.history.replaceState({ key: 'uncommitted-destination' }, '', '/projects/adv-atlas/map');
+            fireEvent.click(screen.getByRole('button', { name: 'End map gesture' }));
+            expect(screen.getByTestId('atlas-url').textContent).toBe('/projects/adv-atlas/map');
+            fireEvent.click(screen.getByRole('button', { name: 'Expand trip panel' }));
+            window.history.replaceState({ key: screen.getByTestId('atlas-url').getAttribute('data-history-key') }, '', '/projects/adv-atlas/map');
+            fireEvent.click(screen.getByRole('button', { name: 'End map gesture' }));
+            expect(screen.getByTestId('atlas-url')).toHaveTextContent('camera=-110%2C42%2C6.4568%2C-12%2C20');
+        } finally { window.history.replaceState(beforeState, '', before); }
+    });
+
+    it('does not let a late camera event interrupt report navigation', async () => {
+        renderWithRouter(<><AdvAtlas /><UrlProbe /></>, { route: '/projects/adv-atlas/map' });
+        await screen.findByTestId('atlas-renderer');
+        const card = screen.getByRole('heading', { name: 'Published journey' }).closest('li')!;
+        fireEvent.click(within(card).getByRole('link', { name: 'Read trip report' }));
+        expect(screen.getByTestId('atlas-url')).toHaveTextContent('/trips/published');
+        fireEvent.click(screen.getByRole('button', { name: 'End map gesture' }));
+        expect(screen.getByTestId('atlas-url').textContent).toBe('/trips/published');
+    });
+
+    it('retains a requested panel opening if a fit ends before the URL transition commits', async () => {
+        renderWithRouter(<><AdvAtlas /><UrlProbe /></>, { route: '/projects/adv-atlas/map?panel=collapsed&results=table' });
+        await screen.findByTestId('atlas-renderer');
+        fireEvent.click(screen.getByRole('button', { name: 'Select and finish fit' }));
+        const url = new URL(screen.getByTestId('atlas-url').textContent!, 'https://rsmb.tv');
+        expect(url.searchParams.get('panel')).toBe('compact');
+        expect(url.searchParams.get('results')).toBe('table');
+        expect(url.searchParams.get('trip')).toBe('published');
+    });
+
+    it('composes trip selection, panel opening, and camera URLs without losing browse filters', async () => {
+        renderWithRouter(<><AdvAtlas /><UrlProbe /></>, { route: '/projects/adv-atlas/map?country=US&sort=days-desc' });
+        await screen.findByTestId('atlas-renderer');
+        fireEvent.click(screen.getByRole('button', { name: 'Collapse trip panel' }));
+        expect(screen.getByTestId('atlas-url')).toHaveTextContent('panel=collapsed');
+        fireEvent.click(screen.getByRole('button', { name: 'Keyboard route choice' }));
+        const url = () => new URL(screen.getByTestId('atlas-url').textContent!, 'https://rsmb.tv');
+        expect(url().searchParams.get('trip')).toBe('published');
+        expect(url().searchParams.get('panel')).toBe('compact');
+        fireEvent.click(screen.getByRole('button', { name: 'Move map gesture' }));
+        expect(url().searchParams.has('camera')).toBe(false);
+        fireEvent.click(screen.getByRole('button', { name: 'End map gesture' }));
+        expect(url().searchParams.get('camera')).toBe('-110,42,6.4568,-12,20');
+        expect(url().searchParams.get('country')).toBe('US');
+        expect(url().searchParams.get('sort')).toBe('days-desc');
+    });
+
+    it('gives an explicit shared presentation and camera priority over a different saved view', async () => {
+        const url = '/projects/adv-atlas/map?panel=expanded&results=table&camera=-100,40,5,22,30';
+        saveAtlasSession('url-priority', url, { panelOpen: false, panelState: 'collapsed', resultsView: 'cards', scrollTop: 0,
+            camera: { center: [-120, 48], zoom: 8, bearing: 0, pitch: 0 } });
+        renderWithRouter(<AdvAtlas />, { route: url, state: { restoreScroll: true, returnKey: 'url-priority' } });
+        const map = await screen.findByTestId('atlas-renderer');
+        expect(screen.getByRole('main')).toHaveAttribute('data-panel-state', 'expanded');
+        expect(screen.getByRole('radio', { name: 'Table' })).toBeChecked();
+        expect(JSON.parse(map.getAttribute('data-initial-camera')!)).toEqual({ center: [-100, 40], zoom: 5, bearing: 22, pitch: 30 });
+    });
+
     it('reaches all drawer states, removes collapsed controls from tab order, and preserves the expanded table preference', async () => {
         renderWithRouter(<AdvAtlas />, { route: '/projects/adv-atlas/map' });
         await screen.findByTestId('atlas-renderer');

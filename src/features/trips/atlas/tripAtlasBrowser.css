@@ -1,10 +1,39 @@
 .atlas-explorer {
+    --atlas-surface: rgb(9 9 11 / 97%);
+    --atlas-raised: #18181b;
+    --atlas-border: #52525b;
+    --atlas-text: #e4e4e7;
+    --atlas-accent: #a78bfa;
+    --atlas-radius: 8px;
+    --atlas-shadow: 0 4px 16px rgb(0 0 0 / 20%);
     --atlas-drawer-width: min(360px, 45vw);
     --atlas-map-offset: var(--atlas-drawer-width);
     --atlas-sheet-height: 42%;
     --atlas-sheet-offset: var(--atlas-sheet-height);
     --atlas-tools-height: 84px;
 }
+
+.atlas-surface, .atlas-control, .atlas-input {
+    border: 1px solid var(--atlas-border);
+    border-radius: var(--atlas-radius);
+    background: var(--atlas-surface);
+    color: var(--atlas-text);
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.atlas-control, .atlas-input { min-height: 44px; }
+.atlas-input { min-width: 0; padding: 0 8px; background: var(--atlas-raised); }
+.atlas-control:not(:disabled):not([aria-disabled="true"]):hover { border-color: var(--atlas-accent); background: var(--atlas-raised); }
+.atlas-control:disabled, .atlas-control[aria-disabled="true"] { opacity: 0.5; cursor: default; }
+.atlas-control:focus-visible, .atlas-input:focus-visible { outline: 2px solid var(--atlas-accent); outline-offset: 2px; }
+.atlas-control:is([aria-pressed="true"], [aria-expanded="true"]) { border-color: var(--atlas-accent); background: #2e2350; color: #ddd6fe; }
+.atlas-icon-control { display: grid; width: 44px; height: 44px; padding: 11px; place-items: center; box-shadow: var(--atlas-shadow); }
+.atlas-icon-control svg { width: 20px; height: 20px; }
+.atlas-share-control { position: absolute; z-index: 10; top: 12px; right: 12px; }
+.atlas-overview-control { position: absolute; z-index: 10; top: 12px; left: 12px; }
+.atlas-share-feedback { position: absolute; z-index: 30; top: 68px; right: 12px; max-width: calc(100% - 24px); padding: 12px; box-shadow: var(--atlas-shadow); }
+section.atlas-share-feedback { width: 320px; }
 
 .atlas-explorer[data-panel-state="expanded"] {
     --atlas-drawer-width: 50%;
@@ -41,7 +70,7 @@
     flex-direction: column;
     overflow: hidden;
     border-right: 1px solid #3f3f46;
-    background: rgb(9 9 11 / 97%);
+    background: var(--atlas-surface);
     box-shadow: 4px 0 24px rgb(0 0 0 / 20%);
 }
 
@@ -53,11 +82,11 @@
     width: 44px;
     height: 64px;
     place-items: center;
-    border: 1px solid #52525b;
+    border: 1px solid var(--atlas-border);
     border-left: 0;
     border-radius: 0 12px 12px 0;
-    background: rgb(9 9 11 / 97%);
-    color: #d4d4d8;
+    background: var(--atlas-surface);
+    color: var(--atlas-text);
     box-shadow: 4px 0 16px rgb(0 0 0 / 15%);
 }
 

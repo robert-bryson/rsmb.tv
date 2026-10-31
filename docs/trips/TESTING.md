@@ -249,7 +249,7 @@ Run atlas interactions and article budgets with fixed production content:
 
 ```bash
 PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- \
-  --grep 'atlas.spec|browsing.spec|reading routes exclude' --workers=2
+  --grep 'atlas.spec|browsing.spec|sharing.spec|reading routes exclude' --workers=2
 ```
 
 The browser checks cover these behaviors:
@@ -283,6 +283,14 @@ The browser checks cover these behaviors:
 - Country and region choices combine with OR. Regions retain their country; country-wide choices include records without regions.
 - Copied URLs and browser Back restore committed filters. Excluded selections remain named without adding hidden routes.
 - Late route responses cannot restore excluded geometry or shared-road choices.
+- Selection, panel size, result presentation, panning, and zooming update the URL without adding history entries.
+- Camera values change after movement ends. Viewport-only URL changes retain geometry objects and map hit targets.
+- Copied links restore the camera, selection, presentation, and filters in a new tab without saved session state.
+- Browser Back restores the earlier camera and panel after applying a filter.
+- History restoration also works when React skips an intermediate movement URL. Later zoom changes must still update the URL.
+- Late camera events cannot overwrite pending panel changes or interrupt report navigation.
+- Native sharing supports cancellation. Copying confirms success; unavailable clipboard access exposes a selected manual link.
+- Map and panel controls share surface and focus styles. Map targets remain separate and at least 44 pixels wide at 320 pixels.
 
 Layout checks use widths of 320, 767, 768, 858, 1023, 1024, and 1754 pixels.
 They test panel states, reserved map space, control overlap, and pointer targets.
@@ -307,6 +315,10 @@ Both lines share a starting edge, with a 4-pixel gap.
 Date-only changes update the existing popup.
 See the [tooltip review](../reviews/2026-10-30-adv-atlas-tooltip-hierarchy.md) for the visual decision.
 Screenshot helpers hide overlays through opacity. Pointer targets remain in place during measurements.
+Route screenshots and canvas bounds must describe one stable layout.
+The helper waits for container sizing and rejects captures whose bounds change during the screenshot.
+This prevents a panel transition from supplying old pixels with new pointer coordinates.
+Camera-restoration tests compare the documented URL precision, without relaxing zoom or selection checks.
 
 Run the content, geometry, lifecycle, and publication checks:
 
@@ -314,6 +326,7 @@ Run the content, geometry, lifecycle, and publication checks:
 npx vitest run src/test/tripAtlasEntries.test.ts src/test/tripAtlasView.test.ts src/test/tripAtlasSession.test.ts \
   src/test/tripAtlasBrowser.test.ts \
   src/test/tripAtlasFilters.test.tsx \
+  src/test/tripAtlasUrlState.test.ts src/test/useAtlasUrlState.test.tsx src/test/tripAtlasShare.test.tsx \
   src/test/tripAtlasMap.test.tsx src/test/advAtlas.test.tsx \
   src/test/postReturnDestination.test.ts src/test/postNavigation.test.tsx src/test/blogPages.test.tsx \
   src/test/browserHistory.test.ts src/test/AtlasFullscreenControl.test.ts \
