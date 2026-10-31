@@ -49,6 +49,7 @@ Map failures leave report cards available.
 Renderer retries retain the selected trip and saved camera.
 Fullscreen includes the cards, route choices, and recovery controls.
 Renderer retries retain the fullscreen button's action, label, and icon.
+If fullscreen ends during a failed retry, the next renderer creates a fresh fullscreen control.
 
 ## Code ownership
 

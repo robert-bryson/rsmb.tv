@@ -592,6 +592,51 @@ test('renderer initialization failure retains usable cards and report navigation
     await expect(page).toHaveURL(/\/trips\//);
 });
 
+test('native fullscreen exit during a failed retry restores the next enter action', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'This sequence requires desktop native fullscreen; phone projects check pseudo fullscreen recovery separately.');
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(`${atlas}?trip=coastal-test`);
+    await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
+    await page.getByRole('button', { name: 'Enter fullscreen', exact: true }).click();
+    await expect.poll(() => page.evaluate(() => document.fullscreenElement?.tagName)).toBe('MAIN');
+    await page.getByTestId('trip-atlas-map').locator('canvas').evaluate((canvas: HTMLCanvasElement) => {
+        const extension = canvas.getContext('webgl2')?.getExtension('WEBGL_lose_context');
+        if (!extension) throw new Error('WebGL context loss simulation is unavailable.');
+        extension.loseContext();
+    });
+    await expect(page.getByRole('button', { name: 'Retry map' })).toBeVisible();
+    await page.evaluate(() => {
+        const original = HTMLCanvasElement.prototype.getContext;
+        document.documentElement.setAttribute('data-block-webgl', '');
+        HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, ...args: Parameters<typeof original>) {
+            if (document.documentElement.hasAttribute('data-block-webgl') && String(args[0]).includes('webgl')) {
+                document.documentElement.setAttribute('data-webgl-blocked', '');
+                return null;
+            }
+            return original.apply(this, args);
+        } as typeof original;
+    });
+    await page.getByRole('button', { name: 'Retry map' }).click();
+    await expect(page.locator('html')).toHaveAttribute('data-webgl-blocked', '');
+    await expect(page.getByText('The interactive map is unavailable.', { exact: false })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Exit fullscreen', exact: true })).toHaveCount(0);
+    await page.evaluate(async () => {
+        await document.exitFullscreen();
+        document.documentElement.removeAttribute('data-block-webgl');
+    });
+    await expect.poll(() => page.evaluate(() => document.fullscreenElement)).toBeNull();
+    await page.getByRole('button', { name: 'Retry map' }).click();
+    await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
+    const enter = page.getByRole('button', { name: 'Enter fullscreen', exact: true });
+    await expect(enter).toHaveClass(/maplibregl-ctrl-fullscreen/);
+    await expect(enter).not.toHaveClass(/maplibregl-ctrl-shrink/);
+    await enter.click();
+    await expect.poll(() => page.evaluate(() => document.fullscreenElement?.tagName)).toBe('MAIN');
+    await page.getByRole('button', { name: 'Exit fullscreen', exact: true }).click();
+    await expect.poll(() => page.evaluate(() => document.fullscreenElement)).toBeNull();
+    await expect(page).toHaveURL(/\?trip=coastal-test$/);
+});
+
 test('a lost WebGL context retries without losing the selected trip or report links', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(`${atlas}?trip=coastal-test`);

@@ -63,7 +63,9 @@ These checks validate tracked manifests, daily photo assignments, responsive fil
 Recovered-trip checks compare the source inventory with tracked manifests.
 They check the Mississippi–Wisconsin photo dates, responsive images, gallery placements, and map headings.
 They also check all 37 calendar days and recorded-track assignments across the three 2026 outlines.
-The photo-free `.json.draft` must remain outside the production schema until a real hero is selected.
+The 2026 manifest now has a July 17 hero and uses the `.json` suffix.
+Its three outlines must expand without unresolved shortcodes and place each selected photo once across the series.
+Schema validation permits local previews. The Sheet publication flag still controls production inclusion.
 Invalid-reference cases check duplicate IDs, shared tracks, missing galleries, and inherited object properties.
 The Drive outline remains an authoring source outside Git.
 Validate its shortcodes against the manifest after you change media placements.
@@ -304,6 +306,10 @@ Movement checks capture the camera before `moveend` and before parent navigation
 Late movement callbacks from removed renderers must not change the saved view.
 Fullscreen control checks use the installed MapLibre control without a WebGL renderer.
 They check its icon, label, and action after replacement and exit.
+Native exit during a failed retry must discard the detached control's stale state.
+Tests cover standard and WebKit fullscreen properties, plus pseudo fullscreen during renderer replacement.
+Failure checks distinguish missing background tiles from route-source and renderer failures.
+Retry must preserve the selected trip and camera. Removed renderers must not report later errors or camera changes.
 
 Page checks use fixed metadata. They cover drafts, incomplete reports, multipart reports, and production exclusion.
 Cards without valid manifests retain preview links. They do not request routes or affect loading counts and camera bounds.

@@ -18,8 +18,8 @@ Use the [review index](docs/README.md) for dated findings and test results.
 ### Mississippi–Wisconsin 2025 and ON–QC–New England 2026
 
 - [ ] Continue the [starter outlines](docs/trips/TRIP-SOURCE-INVENTORY.md). Confirm working dates, motorcycle, stops, and report boundaries while writing.
-- [ ] Create the four source Google Docs. Complete their Sheet descriptions and the 2026 series columns.
-- [ ] Confirm Mississippi–Wisconsin photo membership. Add 2026 photos and a real hero before promoting its draft manifest.
+- [ ] Link the Mississippi–Wisconsin source Doc in Sheet row 7. Complete the source descriptions and 2026 series columns.
+- [ ] Confirm Mississippi–Wisconsin photo membership. Expand the 2026 photo collection beyond its temporary July 17 hero.
 - [ ] Confirm provisional GPS mileage and riding-day estimates against route gaps, alternate exports, and travel modes.
 
 ### Kalaloch trip

@@ -6,6 +6,7 @@ import fixture from '../../tests/fixtures/trip-content/trips/coastal-test.json';
 import pch from '../../src/content/trips/pch-2024.json';
 import route66 from '../../src/content/trips/route-66ish-2025.json';
 import river from '../../src/content/trips/river-wisco-2025.json';
+import summer from '../../src/content/trips/on-qc-new-england-2026.json';
 import inventory from '../../docs/trips/trip-source-inventory.json';
 import { tripAtlasColorAssignments, tripAtlasPalette } from '../../src/features/trips/atlas/tripAtlasColors';
 import { expandTripShortcodes } from '../sync-blogs.js';
@@ -83,7 +84,7 @@ describe('tracked trip content', () => {
         expect(manifest.galleries!['day-two'].at(-1)).toBe('20241004-183101');
     });
 
-    it.each([pch, route66, river])('uses matching fingerprints and widths for every responsive photo in $id', trip => {
+    it.each([pch, route66, river, summer])('uses matching fingerprints and widths for every responsive photo in $id', trip => {
         for (const photo of trip.photos) {
             const candidates = photo.srcSet.split(', ').map(candidate => {
                 const [src, descriptor] = candidate.split(' ');
@@ -168,18 +169,30 @@ describe('tracked trip content', () => {
 });
 
 describe('review regressions: recovered trip authoring', () => {
-    const draft = JSON.parse(fs.readFileSync(new URL('../../src/content/trips/on-qc-new-england-2026.json.draft', import.meta.url), 'utf8')) as Omit<TripManifest, 'hero'> & { hero: null };
-
-    it('keeps the photo-free 2026 draft outside the production schema', () => {
-        const result = tripManifestSchema.safeParse(draft);
-        expect(result.success).toBe(false);
-        if (result.success) throw new Error('An unfinished manifest must not be publishable.');
-        expect(result.error.issues.map(issue => issue.path)).toEqual([['hero']]);
-        expect(draft.hero).toBeNull();
-        expect(draft.photos).toEqual([]);
+    it('expands all three 2026 reports and places each selected photo once across the series', () => {
+        const manifest = tripManifestSchema.parse(summer);
+        const post = { format: 'trip', tripId: manifest.id };
+        const placedPhotos: string[] = [];
+        for (const part of [1, 2, 3]) {
+            const outline = fs.readFileSync(new URL(`../../docs/trips/on-qc-new-england-2026-part-${part}-outline.md`, import.meta.url), 'utf8');
+            const expanded = expandTripShortcodes(outline, post, manifest);
+            expect(expanded).not.toMatch(/\{\{trip-/);
+            const placements = [...outline.matchAll(/^\{\{trip-(gallery|photo|photo-pano):([a-z0-9-]+)\}\}$/gm)];
+            placedPhotos.push(...placements.flatMap(([, type, id]) => type === 'gallery' ? manifest.galleries![id] : [id]));
+            if (part === 2) expect(expanded).toContain('<TripGallery galleryId="jul-17" />');
+        }
+        expect(placedPhotos).toHaveLength(manifest.photos.length);
+        expect(new Set(placedPhotos)).toEqual(new Set(manifest.photos.map(photo => photo.id)));
     });
 
-    it.each([river, draft])('assigns every recovered track and photo once on its capture date in $id', trip => {
+    it('loads the 2026 manifest with its author-selected July 17 hero', () => {
+        const manifest = tripManifestSchema.parse(summer);
+        expect(manifest.photos.find(photo => photo.id === manifest.hero)).toMatchObject({
+            id: '20260717-135454', date: '2026-07-17', width: 1600, height: 1200,
+        });
+    });
+
+    it.each([river, summer])('assigns every recovered track and photo once on its capture date in $id', trip => {
         const tracks = new Map(trip.route.tracks!.map(track => [track.id, track]));
         const photos = new Map(trip.photos.map(photo => [photo.id, photo]));
         const assignedTracks: string[] = [];
@@ -204,14 +217,14 @@ describe('review regressions: recovered trip authoring', () => {
     it('covers every 2026 calendar day in exactly one chapter with matching map anchors', () => {
         const outlines = [1, 2, 3].map(part => fs.readFileSync(new URL(`../../docs/trips/on-qc-new-england-2026-part-${part}-outline.md`, import.meta.url), 'utf8'));
         const placements = outlines.flatMap(outline => [...outline.matchAll(/^\{\{trip-map:day:([a-z0-9-]+)\}\}$/gm)].map(match => match[1]));
-        const recordedDays = draft.days!.filter(day => day.trackIds?.length);
+        const recordedDays = summer.days!.filter(day => day.trackIds?.length);
         expect(placements).toHaveLength(recordedDays.length);
         expect(new Set(placements)).toEqual(new Set(recordedDays.map(day => day.id)));
         const headings = outlines.flatMap(outline => [...outline.matchAll(/^## ((?:July|August) \d+)$/gm)].map(match => match[1].toLowerCase().replace(' ', '-')));
-        expect(headings).toEqual(draft.days!.map(day => day.headingId));
-        const dates = draft.days!.map(day => day.date!);
+        expect(headings).toEqual(summer.days!.map(day => day.headingId));
+        const dates = summer.days!.map(day => day.date!);
         const expectedDates: string[] = [];
-        for (let date = Date.parse(draft.dates.start); date <= Date.parse(draft.dates.end); date += 86_400_000) {
+        for (let date = Date.parse(summer.dates.start); date <= Date.parse(summer.dates.end); date += 86_400_000) {
             expectedDates.push(new Date(date).toISOString().slice(0, 10));
         }
         expect(dates).toEqual(expectedDates);

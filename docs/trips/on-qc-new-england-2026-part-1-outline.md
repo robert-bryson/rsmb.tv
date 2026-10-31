@@ -2,7 +2,7 @@
 
 [AUTHOR NOTE: Part 1 of the 2026 loop. All three reports share trip_id on-qc-new-england-2026. The chapter boundaries remain provisional.]
 
-[The manifest is .json.draft because no hero photo is available. These shortcodes become usable after that manifest is completed.]
+[The shared manifest is ready for local preview. Its temporary hero is the July 17 Arctic Watershed photograph.]
 
 [Recordings include local activity and may combine travel modes. Distances describe available geometry, not motorcycle odometer totals.]
 

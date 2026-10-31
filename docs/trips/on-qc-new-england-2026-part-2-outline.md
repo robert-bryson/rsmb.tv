@@ -2,7 +2,7 @@
 
 [AUTHOR NOTE: Part 2 of the 2026 loop. All three reports share trip_id on-qc-new-england-2026. The chapter boundaries remain provisional.]
 
-[The manifest is .json.draft because no hero photo is available. These shortcodes become usable after that manifest is completed.]
+[The shared manifest is ready for local preview. Its temporary hero is the July 17 Arctic Watershed photograph.]
 
 [Recordings include local activity and may combine travel modes. Distances describe available geometry, not motorcycle odometer totals.]
 
@@ -17,6 +17,8 @@ _Missing recording between the border and Ontario_
 [No GPX recording found for this date. Was this a rest day, or is a recording missing? Add your recollection.]
 
 [The previous recording ends near Sault Ste. Marie. July 18 begins farther east in Ontario. Fill this gap from memory.]
+
+{{trip-gallery:jul-17}}
 
 ## July 18
 

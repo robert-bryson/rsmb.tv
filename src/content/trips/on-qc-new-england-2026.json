@@ -36,7 +36,7 @@
       ]
     }
   ],
-  "hero": null,
+  "hero": "20260717-135454",
   "route": {
     "geoJson": "https://data.rsmb.tv/trips/on-qc-new-england-2026/geo/route.geojson",
     "alt": "Available recorded route from St. Louis through the Upper Peninsula, Ontario, Quebec, Maine, New England, and the Appalachians.",
@@ -218,6 +218,18 @@
       }
     ]
   },
+  "stops": [],
+  "photos": [
+    {
+      "id": "20260717-135454",
+      "src": "https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-6cd75655d565-1600.webp",
+      "width": 1600,
+      "height": 1200,
+      "alt": "A loaded green motorcycle parked beside an Arctic Watershed sign at the edge of a dense forest.",
+      "date": "2026-07-17",
+      "srcSet": "https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-6cd75655d565-480.webp 480w, https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-6cd75655d565-960.webp 960w, https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-6cd75655d565-1600.webp 1600w"
+    }
+  ],
   "days": [
     {
       "id": "jul-10",
@@ -293,7 +305,8 @@
       "date": "2026-07-17",
       "headingId": "july-17",
       "trackIds": [],
-      "stopIds": []
+      "stopIds": [],
+      "galleryId": "jul-17"
     },
     {
       "id": "jul-18",
@@ -584,6 +597,9 @@
       "stopIds": []
     }
   ],
-  "stops": [],
-  "photos": []
+  "galleries": {
+    "jul-17": [
+      "20260717-135454"
+    ]
+  }
 }

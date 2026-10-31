@@ -12,7 +12,7 @@ import { createTripMapTooltip } from '../tripMapTooltip';
 import type { TripAtlasEntry } from './tripAtlasEntries';
 import { combineAtlasRoutes, tripAtlasColor, type AtlasRouteState } from './tripAtlasView';
 import type { AtlasCamera } from './tripAtlasSession';
-import { AtlasFullscreenControl } from './AtlasFullscreenControl';
+import { restoreAtlasFullscreenControl, type AtlasFullscreenControl } from './AtlasFullscreenControl';
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl);
 
@@ -67,7 +67,7 @@ export default function TripAtlasMap(props: Props) {
     const { routes, selectedId, highlightedId, fitVersion, panelOpen, entries } = props;
     const container = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibregl.Map | null>(null);
-    const fullscreenControl = useRef<maplibregl.FullscreenControl | null>(null);
+    const fullscreenControl = useRef<AtlasFullscreenControl | null>(null);
     const [map, setMap] = useState<maplibregl.Map | null>(null);
     const [attempt, setAttempt] = useState(0);
     const [failure, setFailure] = useState(false);
@@ -144,7 +144,10 @@ export default function TripAtlasMap(props: Props) {
         lastFit.current = camera.current ? { map: instance, key: `${current.selectedId ?? 'all'}:${current.fitVersion}` } : undefined;
         instance.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
         // The atlas container outlives renderer retries. Retain its fullscreen state too.
-        fullscreenControl.current ??= new AtlasFullscreenControl({ container: current.fullscreenContainer?.current ?? container.current.parentElement ?? undefined });
+        fullscreenControl.current = restoreAtlasFullscreenControl(
+            current.fullscreenContainer?.current ?? container.current.parentElement ?? container.current,
+            fullscreenControl.current,
+        );
         instance.addControl(fullscreenControl.current, 'top-right');
         instance.addControl(new maplibregl.AttributionControl({ compact: false }), 'bottom-right');
         let initialized = false;

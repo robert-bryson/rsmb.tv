@@ -7,11 +7,16 @@ import TripAtlasMap from '../features/trips/atlas/TripAtlasMap';
 import { tripAtlasColor } from '../features/trips/atlas/tripAtlasView';
 import { readAtlasSession, saveAtlasSession, type AtlasSession } from '../features/trips/atlas/tripAtlasSession';
 
+type RendererListener = (event?: { originalEvent?: Event; error?: Error; sourceId?: string }) => void;
+type InitialCamera = { center: [number, number]; zoom: number };
+
 const fake = vi.hoisted(() => ({
+    failInitialization: false,
     instances: [] as Array<{
-        events: Map<string, Array<(event?: { originalEvent?: Event }) => void>>;
+        events: Map<string, RendererListener[]>;
         fitBounds: ReturnType<typeof vi.fn>;
         center: { lng: number; lat: number };
+        options: InitialCamera;
     }>,
     popupOptions: [] as unknown[],
     fullscreenOptions: [] as Array<{ container?: HTMLElement } | undefined>,
@@ -37,12 +42,18 @@ vi.mock('maplibre-gl', () => ({
     },
     LngLatBounds: class { extend() { return this; } },
     Map: class {
-        events = new Map<string, Array<(event?: { originalEvent?: Event }) => void>>();
+        events = new Map<string, RendererListener[]>();
         fitBounds = vi.fn();
         center = { lng: -121.5, lat: 46.5 };
         canvas = document.createElement('canvas');
-        constructor() { fake.instances.push(this); }
-        on(event: string, listener: (event?: { originalEvent?: Event }) => void) {
+        options: InitialCamera;
+        constructor(options: InitialCamera) {
+            if (fake.failInitialization) throw new Error('WebGL initialization failed');
+            this.options = options;
+            this.center = { lng: options.center[0], lat: options.center[1] };
+            fake.instances.push(this);
+        }
+        on(event: string, listener: RendererListener) {
             const listeners = this.events.get(event) ?? [];
             listeners.push(listener);
             this.events.set(event, listeners);
@@ -70,7 +81,7 @@ vi.mock('maplibre-gl', () => ({
 }));
 vi.mock('../hooks/useReducedMotion', () => ({ useReducedMotion: () => true }));
 
-afterEach(() => { fake.instances.length = 0; fake.popupOptions.length = 0; fake.fullscreenOptions.length = 0; });
+afterEach(() => { fake.failInitialization = false; fake.instances.length = 0; fake.popupOptions.length = 0; fake.fullscreenOptions.length = 0; });
 
 const entry = {
     id: 'coast', title: 'Coast', description: 'A coastal journey.', reports: [],
@@ -83,6 +94,56 @@ const entry = {
 const route: RouteGeoJson = { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: [[-122, 47], [-124, 45]] } };
 
 describe('atlas renderer lifecycle', () => {
+    it('recovers from initialization failure and still fits the selected route', () => {
+        fake.failInitialization = true;
+        render(<TripAtlasMap entries={[entry]} routes={{ coast: { route, error: '', retry: vi.fn() } }}
+            selectedId="coast" fitVersion={1} panelOpen onSelect={vi.fn()} onHover={vi.fn()} onCameraChange={vi.fn()} />);
+        expect(screen.getByRole('status')).toHaveTextContent('The interactive map is unavailable.');
+        expect(fake.instances).toHaveLength(0);
+        fake.failInitialization = false;
+        fireEvent.click(screen.getByRole('button', { name: 'Retry map' }));
+        expect(screen.queryByRole('status')).not.toBeInTheDocument();
+        const recovered = fake.instances[0];
+        act(() => { recovered.events.get('styledata')?.forEach(listener => listener()); });
+        expect(recovered.fitBounds).toHaveBeenCalledOnce();
+        expect(screen.getByTestId('trip-atlas-map')).toHaveAttribute('data-selected-trip', 'coast');
+    });
+
+    it.each([
+        ['background tiles', { error: new Error('Tile request failed'), sourceId: 'basemap' }, false],
+        ['route source', { error: new Error('Invalid GeoJSON'), sourceId: 'atlas-routes' }, true],
+        ['worker', { error: new Error('Worker initialization failed') }, true],
+        ['WebGL context', { error: new Error('WebGL context lost') }, true],
+    ] as const)('recovers from %s failure without changing the selected trip or saved camera', (_name, error, fatal) => {
+        const remember = vi.fn();
+        render(<TripAtlasMap entries={[entry]} routes={{ coast: { route, error: '', retry: vi.fn() } }}
+            selectedId="coast" fitVersion={1} panelOpen onSelect={vi.fn()} onHover={vi.fn()} onCameraChange={remember} />);
+        const original = fake.instances[0];
+        act(() => {
+            original.events.get('styledata')?.forEach(listener => listener());
+            original.events.get('movestart')?.forEach(listener => listener({ originalEvent: new Event('mousedown') }));
+            original.center = { lng: -123, lat: 46 };
+            original.events.get('move')?.forEach(listener => listener());
+            original.events.get('error')?.forEach(listener => listener(error));
+        });
+        expect(screen.getByRole('status')).toHaveTextContent(fatal ? 'The interactive map is unavailable.' : 'Some background tiles could not load.');
+        fireEvent.click(screen.getByRole('button', { name: 'Retry map' }));
+        expect(screen.queryByRole('status')).not.toBeInTheDocument();
+        const recovered = fake.instances[1];
+        expect(recovered.options).toMatchObject({ center: [-123, 46], zoom: 5.5 });
+        act(() => { recovered.events.get('styledata')?.forEach(listener => listener()); });
+        expect(recovered.fitBounds).not.toHaveBeenCalled();
+        expect(screen.getByTestId('trip-atlas-map')).toHaveAttribute('data-selected-trip', 'coast');
+        remember.mockClear();
+        act(() => {
+            original.events.get('error')?.forEach(listener => listener(error));
+            original.events.get('webglcontextlost')?.forEach(listener => listener());
+            original.events.get('move')?.forEach(listener => listener());
+        });
+        expect(screen.queryByRole('status')).not.toBeInTheDocument();
+        expect(remember).not.toHaveBeenCalled();
+    });
+
     it('includes the supplied atlas controls in the fullscreen target', () => {
         const fullscreenContainer = createRef<HTMLElement>();
         render(<main ref={fullscreenContainer}>
@@ -94,6 +155,7 @@ describe('atlas renderer lifecycle', () => {
         expect(target).toBe(fullscreenContainer.current);
         expect(target).toContainElement(screen.getByRole('complementary'));
         expect(target).toContainElement(screen.getByTestId('trip-atlas-map'));
+        target!.classList.add('maplibregl-pseudo-fullscreen');
         act(() => { fake.instances[0].events.get('webglcontextlost')?.forEach(listener => listener()); });
         fireEvent.click(screen.getByRole('button', { name: 'Retry map' }));
         expect(fake.instances).toHaveLength(2);

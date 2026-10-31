@@ -30,6 +30,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-10-31 | [Trip content, native fullscreen recovery, and regression review](reviews/2026-10-31-trip-content-and-recovery-review.md) |
 | 2026-10-30 | [Trip content, atlas navigation, fullscreen recovery, and dependency review](reviews/2026-10-30-trip-content-and-atlas-review.md) |
 | 2026-10-30 | [ADV Atlas session restoration and regression review](reviews/2026-10-30-adv-atlas-session-review.md) |
 | 2026-10-30 | [ADV Atlas quality review, camera recovery, and publication fixes](reviews/2026-10-30-adv-atlas-quality-review.md) |

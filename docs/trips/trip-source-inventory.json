@@ -11,7 +11,8 @@
     "tripArchive": "Google Drive (robby@rsmb.tv)/My Drive/projects/rsmb.tv/trips",
     "recoveredGps": "Google Drive (rsmbryson@gmail.com)/My Drive/Fog of World/Import/Archive",
     "recoveredPhotos": "Pictures/2025/YYYY-MM-DD",
-    "previewAssets": "public/data/trips/<trip-id> (Git ignored)"
+    "previewAssets": "public/data/trips/<trip-id> (Git ignored)",
+    "heroPhoto": "Downloads/20260717_135454.jpg"
   },
   "notes": [
     "Sheet dates are report dates. Recorded coverage and manifest dates are listed separately.",
@@ -30,7 +31,7 @@
           "rowNumber": 2,
           "reportDate": "2024-02-20",
           "published": true,
-          "googleDoc": "https://docs.google.com/document/d/1dEW6z_Z1HfylRlHNbRjcFFJdAA5AeVcEpVTXtx4XPT0/edit?tab=t.0",
+          "googleDoc": "https://docs.google.com/document/d/1dEW6z_Z1HfylRlHNbRjcFFJdAA5AeVcEpVTXtx4XPT0/edit",
           "description": "A winter motorcycle ride to Ocean Shores"
         }
       ],
@@ -121,7 +122,7 @@
           "rowNumber": 3,
           "reportDate": "2024-05-20",
           "published": true,
-          "googleDoc": "https://docs.google.com/document/d/1InEIRnzsj9ed-ERYBGWnIKMTPrmSC9Ave0zYOKsBmjc/edit?tab=t.0",
+          "googleDoc": "https://docs.google.com/document/d/1InEIRnzsj9ed-ERYBGWnIKMTPrmSC9Ave0zYOKsBmjc/edit",
           "description": "Making a more interesting trip for work via the Blue Mountains and Hells Canyon on the CB500X"
         }
       ],
@@ -415,7 +416,7 @@
           "rowNumber": 4,
           "reportDate": "2024-06-25",
           "published": true,
-          "googleDoc": "https://docs.google.com/document/d/1Dex7bs4H8H2V7bLzA2V0h7x4zPTUe2F4O-0ZXSpCurQ/edit?tab=t.0#heading=h.wykt1q5n8kd",
+          "googleDoc": "https://docs.google.com/document/d/1Dex7bs4H8H2V7bLzA2V0h7x4zPTUe2F4O-0ZXSpCurQ/edit",
           "description": "A motorcycle loop of the Olympic Peninsula and beach camping in the rain"
         }
       ],
@@ -557,7 +558,7 @@
           "rowNumber": 5,
           "reportDate": "2024-10-08",
           "published": false,
-          "googleDoc": "https://docs.google.com/document/d/1HWbFn91A_9LcpJsMlpPZh6qw5KyrKng7ZZvJTcMQNzY/edit?usp=sharing",
+          "googleDoc": "https://docs.google.com/document/d/1HWbFn91A_9LcpJsMlpPZh6qw5KyrKng7ZZvJTcMQNzY/edit",
           "description": "The Coast, the Redwoods, the Sierras, and the Mohave"
         }
       ],
@@ -866,7 +867,7 @@
           "rowNumber": 6,
           "reportDate": "2025-05-20",
           "published": false,
-          "googleDoc": "https://docs.google.com/document/d/1yo3BePHl1BhP0kVHu8-6Ql5N0o17v5w3-d4okUCSqMY/edit?tab=t.0",
+          "googleDoc": "https://docs.google.com/document/d/1yo3BePHl1BhP0kVHu8-6Ql5N0o17v5w3-d4okUCSqMY/edit",
           "description": null
         }
       ],
@@ -1295,8 +1296,8 @@
       "processingWarnings": [],
       "missingRecordingDates": [],
       "followUp": [
-        "Confirm October 7\u201313 dates, motorcycle, and provisional photo membership.",
-        "Create the source Google Doc and add its ID plus a description to Sheet row 7.",
+        "Confirm October 7–13 dates, motorcycle, and provisional photo membership.",
+        "Add a source Google Doc ID and description to Sheet row 7.",
         "Name stops from memory; no guessed stop coordinates were added.",
         "Review travel modes and endpoints before publishing route geometry."
       ],
@@ -1315,7 +1316,7 @@
         ],
         "excludedLocalActivityDates": [],
         "missingRecordingDates": [],
-        "ridingDaysMethod": "Count distinct recorded dates with at least 5 miles and 10 minutes at 25\u2013160 km/h, using consecutive fixes at most 5 minutes apart. This infers likely riding but cannot identify the vehicle.",
+        "ridingDaysMethod": "Count distinct recorded dates with at least 5 miles and 10 minutes at 25–160 km/h, using consecutive fixes at most 5 minutes apart. This infers likely riding but cannot identify the vehicle.",
         "distanceMethod": "Use the combined full-resolution recorded route distance, rounded once to whole miles. Include local activity; exclude duplicate and overlapping alternate exports. Do not estimate missing segments.",
         "limitations": [
           "Vehicle and travel modes need author confirmation.",
@@ -1333,7 +1334,7 @@
           "rowNumber": 9,
           "reportDate": "2026-07-15",
           "published": false,
-          "googleDoc": null,
+          "googleDoc": "https://docs.google.com/document/d/1rpK1o4qMFcN-TIT65YM-gQiaq_Rj8ucyQ-raw3ANUJk/edit",
           "description": "Part 1 of"
         },
         {
@@ -1342,7 +1343,7 @@
           "rowNumber": 10,
           "reportDate": "2026-08-09",
           "published": false,
-          "googleDoc": null,
+          "googleDoc": "https://docs.google.com/document/d/1NVI2WkD7HJhENOt-0b5_k2fXinksYNqHil-ha83BzmU/edit",
           "description": "Part 2 of"
         },
         {
@@ -1351,30 +1352,39 @@
           "rowNumber": 11,
           "reportDate": "2026-08-16",
           "published": false,
-          "googleDoc": null,
+          "googleDoc": "https://docs.google.com/document/d/1xT4f8XL60og2ACJlifuCh0owCzK64v5X9kOmnxgo0W8/edit",
           "description": "Part 3 of"
         }
       ],
       "driveFolderUrl": "https://drive.google.com/drive/u/0/folders/1NtwW30pAQlzjzcNmV8wjRE8D59fG0F9z",
       "manifest": {
-        "path": "src/content/trips/on-qc-new-england-2026.json.draft",
-        "status": "awaiting-photos",
+        "path": "src/content/trips/on-qc-new-england-2026.json",
+        "status": "schema-valid",
         "dates": {
           "start": "2026-07-10",
           "end": "2026-08-15"
         },
-        "hero": null,
+        "hero": "20260717-135454",
         "ridingDays": 26,
         "distanceMiles": 5138
       },
       "photos": {
-        "originals": [],
-        "selects": [],
+        "originals": [
+          "20260717_135454.jpg"
+        ],
+        "selects": [
+          "20260717_135454.jpg"
+        ],
         "otherSourceFolders": [],
-        "manifestCount": 0,
-        "preparedCount": 0,
-        "preparedDerivativeCount": 0,
-        "preparedButNotInManifest": []
+        "manifestCount": 1,
+        "preparedCount": 1,
+        "preparedDerivativeCount": 3,
+        "preparedButNotInManifest": [],
+        "heroSource": {
+          "source": "Downloads/20260717_135454.jpg",
+          "sha256": "32736b826cdeeb7722b00a133bc88bc63ba858c2a2c90ee93363b5e76666f1c1",
+          "captureDate": "2026-07-17"
+        }
       },
       "gps": {
         "originals": [
@@ -1711,10 +1721,10 @@
         "2026-08-13"
       ],
       "followUp": [
-        "Add photos and select a hero before promoting .json.draft.",
-        "Confirm July 10\u2013August 15 dates, motorcycle, and provisional report boundaries.",
-        "Create three source Google Docs and complete descriptions and series columns in rows 9\u201311.",
-        "Review July 14\u201315 discontinuity, July 17 gap, and July 21 alternate export.",
+        "Expand the photo collection when more images are available; the author-selected July 17 photo is the temporary hero.",
+        "Confirm July 10–August 15 dates, motorcycle, and provisional report boundaries.",
+        "Complete descriptions and series columns in rows 9–11; all three source Google Docs are linked.",
+        "Review July 14–15 discontinuity, July 17 gap, and July 21 alternate export.",
         "Confirm provisional ridingDays and distanceMiles against travel modes and missing recordings.",
         "Review Sheet geography tags against the route; Michigan is missing and Vermont is unconfirmed."
       ],
@@ -1765,7 +1775,7 @@
           "2026-08-10",
           "2026-08-13"
         ],
-        "ridingDaysMethod": "Count distinct recorded dates with at least 5 miles and 10 minutes at 25\u2013160 km/h, using consecutive fixes at most 5 minutes apart. This infers likely riding but cannot identify the vehicle.",
+        "ridingDaysMethod": "Count distinct recorded dates with at least 5 miles and 10 minutes at 25–160 km/h, using consecutive fixes at most 5 minutes apart. This infers likely riding but cannot identify the vehicle.",
         "distanceMethod": "Use the combined full-resolution recorded route distance, rounded once to whole miles. Include local activity; exclude duplicate and overlapping alternate exports. Do not estimate missing segments.",
         "limitations": [
           "Vehicle and travel modes need author confirmation.",
