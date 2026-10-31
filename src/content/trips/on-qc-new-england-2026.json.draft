@@ -1,0 +1,589 @@
+{
+  "id": "on-qc-new-england-2026",
+  "dates": {
+    "start": "2026-07-10",
+    "end": "2026-08-15"
+  },
+  "ridingDays": 26,
+  "distanceMiles": 5138,
+  "countries": [
+    {
+      "code": "US",
+      "regions": [
+        "Missouri",
+        "Illinois",
+        "Wisconsin",
+        "Michigan",
+        "Maine",
+        "Massachusetts",
+        "Rhode Island",
+        "Connecticut",
+        "New York",
+        "New Jersey",
+        "Pennsylvania",
+        "Maryland",
+        "West Virginia",
+        "Kentucky",
+        "Indiana"
+      ]
+    },
+    {
+      "code": "CA",
+      "regions": [
+        "Ontario",
+        "Quebec",
+        "New Brunswick"
+      ]
+    }
+  ],
+  "hero": null,
+  "route": {
+    "geoJson": "https://data.rsmb.tv/trips/on-qc-new-england-2026/geo/route.geojson",
+    "alt": "Available recorded route from St. Louis through the Upper Peninsula, Ontario, Quebec, Maine, New England, and the Appalachians.",
+    "tracks": [
+      {
+        "id": "jul-10-2026-07-44-39",
+        "name": "St. Louis to the western Chicago suburbs",
+        "date": "2026-07-10"
+      },
+      {
+        "id": "jul-11-2026-07-21-15",
+        "name": "Illinois to the Wisconsin Northwoods",
+        "date": "2026-07-11"
+      },
+      {
+        "id": "jul-13-2026-14-00-03",
+        "name": "Northwoods to the Keweenaw Peninsula",
+        "date": "2026-07-13"
+      },
+      {
+        "id": "jul-14-2026-10-12-50",
+        "name": "Along the Upper Peninsula",
+        "date": "2026-07-14"
+      },
+      {
+        "id": "jul-15-2026-10-24-11",
+        "name": "Upper Peninsula to Sault Ste. Marie",
+        "date": "2026-07-15"
+      },
+      {
+        "id": "jul-16-2026-11-47-28",
+        "name": "Sault Ste. Marie local activity",
+        "date": "2026-07-16"
+      },
+      {
+        "id": "jul-18-2026-08-06-38",
+        "name": "Ontario to northern Quebec",
+        "date": "2026-07-18"
+      },
+      {
+        "id": "jul-19-2026-08-09-39",
+        "name": "Northern Quebec toward the Saguenay",
+        "date": "2026-07-19"
+      },
+      {
+        "id": "jul-20-2026-08-07-50",
+        "name": "Toward the St. Lawrence",
+        "date": "2026-07-20"
+      },
+      {
+        "id": "jul-21-2026-09-00-59",
+        "name": "St. Lawrence to northern Maine",
+        "date": "2026-07-21"
+      },
+      {
+        "id": "jul-22-2026-17-40-36",
+        "name": "Northern Maine local activity",
+        "date": "2026-07-22"
+      },
+      {
+        "id": "jul-23-2026-14-29-44",
+        "name": "Northern Maine local activity",
+        "date": "2026-07-23"
+      },
+      {
+        "id": "jul-24-2026-10-21-23",
+        "name": "Northern Maine toward the New Brunswick coast",
+        "date": "2026-07-24"
+      },
+      {
+        "id": "jul-25-2026-09-32-58",
+        "name": "Coastal local activity",
+        "date": "2026-07-25"
+      },
+      {
+        "id": "jul-26-2026-10-37-16",
+        "name": "Coastal local activity",
+        "date": "2026-07-26"
+      },
+      {
+        "id": "jul-27-2026-09-38-35",
+        "name": "Toward Mount Desert Island",
+        "date": "2026-07-27"
+      },
+      {
+        "id": "jul-28-2026-18-09-18",
+        "name": "Mount Desert Island local activity",
+        "date": "2026-07-28"
+      },
+      {
+        "id": "jul-29-2026-10-02-26",
+        "name": "Coastal Maine to Portland",
+        "date": "2026-07-29"
+      },
+      {
+        "id": "jul-30-2026-08-52-09",
+        "name": "Portland local activity",
+        "date": "2026-07-30"
+      },
+      {
+        "id": "jul-30-2026-18-13-34",
+        "name": "Portland local activity",
+        "date": "2026-07-30"
+      },
+      {
+        "id": "jul-31-2026-09-28-33",
+        "name": "Portland to the Boston area",
+        "date": "2026-07-31"
+      },
+      {
+        "id": "aug-1-2026-11-13-26",
+        "name": "Boston area local activity",
+        "date": "2026-08-01"
+      },
+      {
+        "id": "aug-2-2026-12-21-11",
+        "name": "Boston area local activity",
+        "date": "2026-08-02"
+      },
+      {
+        "id": "aug-3-2026-12-23-04",
+        "name": "Boston area to Providence",
+        "date": "2026-08-03"
+      },
+      {
+        "id": "aug-4-2026-11-09-42",
+        "name": "Providence local activity",
+        "date": "2026-08-04"
+      },
+      {
+        "id": "aug-5-2026-09-36-27",
+        "name": "Providence toward northern New Jersey",
+        "date": "2026-08-05"
+      },
+      {
+        "id": "aug-6-2026-09-41-47",
+        "name": "Into New York City",
+        "date": "2026-08-06"
+      },
+      {
+        "id": "aug-7-2026-13-32-12",
+        "name": "New York City local activity",
+        "date": "2026-08-07"
+      },
+      {
+        "id": "aug-8-2026-10-46-19",
+        "name": "New York City local activity",
+        "date": "2026-08-08"
+      },
+      {
+        "id": "aug-9-2026-08-45-23",
+        "name": "New York City to central Pennsylvania",
+        "date": "2026-08-09"
+      },
+      {
+        "id": "aug-11-2026-09-26-08",
+        "name": "Pennsylvania into West Virginia",
+        "date": "2026-08-11"
+      },
+      {
+        "id": "aug-11-2026-19-58-07",
+        "name": "West Virginia evening activity",
+        "date": "2026-08-11"
+      },
+      {
+        "id": "aug-12-2026-12-04-54",
+        "name": "Through West Virginia",
+        "date": "2026-08-12"
+      },
+      {
+        "id": "aug-14-2026-08-35-34",
+        "name": "West Virginia to Indiana",
+        "date": "2026-08-14"
+      },
+      {
+        "id": "aug-15-2026-10-51-30",
+        "name": "Indiana to St. Louis",
+        "date": "2026-08-15"
+      }
+    ]
+  },
+  "days": [
+    {
+      "id": "jul-10",
+      "title": "St. Louis to the western Chicago suburbs",
+      "date": "2026-07-10",
+      "headingId": "july-10",
+      "trackIds": [
+        "jul-10-2026-07-44-39"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "jul-11",
+      "title": "Illinois to the Wisconsin Northwoods",
+      "date": "2026-07-11",
+      "headingId": "july-11",
+      "trackIds": [
+        "jul-11-2026-07-21-15"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "jul-12",
+      "title": "Unrecorded day in the Northwoods",
+      "date": "2026-07-12",
+      "headingId": "july-12",
+      "trackIds": [],
+      "stopIds": []
+    },
+    {
+      "id": "jul-13",
+      "title": "Northwoods to the Keweenaw Peninsula",
+      "date": "2026-07-13",
+      "headingId": "july-13",
+      "trackIds": [
+        "jul-13-2026-14-00-03"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "jul-14",
+      "title": "Along the Upper Peninsula",
+      "date": "2026-07-14",
+      "headingId": "july-14",
+      "trackIds": [
+        "jul-14-2026-10-12-50"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "jul-15",
+      "title": "Upper Peninsula to Sault Ste. Marie",
+      "date": "2026-07-15",
+      "headingId": "july-15",
+      "trackIds": [
+        "jul-15-2026-10-24-11"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "jul-16",
+      "title": "Sault Ste. Marie local activity",
+      "date": "2026-07-16",
+      "headingId": "july-16",
+      "trackIds": [
+        "jul-16-2026-11-47-28"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "jul-17",
+      "title": "Missing recording between the border and Ontario",
+      "date": "2026-07-17",
+      "headingId": "july-17",
+      "trackIds": [],
+      "stopIds": []
+    },
+    {
+      "id": "jul-18",
+      "title": "Ontario to northern Quebec",
+      "date": "2026-07-18",
+      "headingId": "july-18",
+      "trackIds": [
+        "jul-18-2026-08-06-38"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "jul-19",
+      "title": "Northern Quebec toward the Saguenay",
+      "date": "2026-07-19",
+      "headingId": "july-19",
+      "trackIds": [
+        "jul-19-2026-08-09-39"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "jul-20",
+      "title": "Toward the St. Lawrence",
+      "date": "2026-07-20",
+      "headingId": "july-20",
+      "trackIds": [
+        "jul-20-2026-08-07-50"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "jul-21",
+      "title": "St. Lawrence to northern Maine",
+      "date": "2026-07-21",
+      "headingId": "july-21",
+      "trackIds": [
+        "jul-21-2026-09-00-59"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "jul-22",
+      "title": "Northern Maine local activity",
+      "date": "2026-07-22",
+      "headingId": "july-22",
+      "trackIds": [
+        "jul-22-2026-17-40-36"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "jul-23",
+      "title": "Northern Maine local activity",
+      "date": "2026-07-23",
+      "headingId": "july-23",
+      "trackIds": [
+        "jul-23-2026-14-29-44"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "jul-24",
+      "title": "Northern Maine toward the New Brunswick coast",
+      "date": "2026-07-24",
+      "headingId": "july-24",
+      "trackIds": [
+        "jul-24-2026-10-21-23"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "jul-25",
+      "title": "Coastal local activity",
+      "date": "2026-07-25",
+      "headingId": "july-25",
+      "trackIds": [
+        "jul-25-2026-09-32-58"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "jul-26",
+      "title": "Coastal local activity",
+      "date": "2026-07-26",
+      "headingId": "july-26",
+      "trackIds": [
+        "jul-26-2026-10-37-16"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "jul-27",
+      "title": "Toward Mount Desert Island",
+      "date": "2026-07-27",
+      "headingId": "july-27",
+      "trackIds": [
+        "jul-27-2026-09-38-35"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "jul-28",
+      "title": "Mount Desert Island local activity",
+      "date": "2026-07-28",
+      "headingId": "july-28",
+      "trackIds": [
+        "jul-28-2026-18-09-18"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "jul-29",
+      "title": "Coastal Maine to Portland",
+      "date": "2026-07-29",
+      "headingId": "july-29",
+      "trackIds": [
+        "jul-29-2026-10-02-26"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "jul-30",
+      "title": "Portland local activity",
+      "date": "2026-07-30",
+      "headingId": "july-30",
+      "trackIds": [
+        "jul-30-2026-08-52-09",
+        "jul-30-2026-18-13-34"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "jul-31",
+      "title": "Portland to the Boston area",
+      "date": "2026-07-31",
+      "headingId": "july-31",
+      "trackIds": [
+        "jul-31-2026-09-28-33"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "aug-01",
+      "title": "Boston area local activity",
+      "date": "2026-08-01",
+      "headingId": "august-1",
+      "trackIds": [
+        "aug-1-2026-11-13-26"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "aug-02",
+      "title": "Boston area local activity",
+      "date": "2026-08-02",
+      "headingId": "august-2",
+      "trackIds": [
+        "aug-2-2026-12-21-11"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "aug-03",
+      "title": "Boston area to Providence",
+      "date": "2026-08-03",
+      "headingId": "august-3",
+      "trackIds": [
+        "aug-3-2026-12-23-04"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "aug-04",
+      "title": "Providence local activity",
+      "date": "2026-08-04",
+      "headingId": "august-4",
+      "trackIds": [
+        "aug-4-2026-11-09-42"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "aug-05",
+      "title": "Providence toward northern New Jersey",
+      "date": "2026-08-05",
+      "headingId": "august-5",
+      "trackIds": [
+        "aug-5-2026-09-36-27"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "aug-06",
+      "title": "Into New York City",
+      "date": "2026-08-06",
+      "headingId": "august-6",
+      "trackIds": [
+        "aug-6-2026-09-41-47"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "aug-07",
+      "title": "New York City local activity",
+      "date": "2026-08-07",
+      "headingId": "august-7",
+      "trackIds": [
+        "aug-7-2026-13-32-12"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "aug-08",
+      "title": "New York City local activity",
+      "date": "2026-08-08",
+      "headingId": "august-8",
+      "trackIds": [
+        "aug-8-2026-10-46-19"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "aug-09",
+      "title": "New York City to central Pennsylvania",
+      "date": "2026-08-09",
+      "headingId": "august-9",
+      "trackIds": [
+        "aug-9-2026-08-45-23"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "aug-10",
+      "title": "Unrecorded day in Pennsylvania",
+      "date": "2026-08-10",
+      "headingId": "august-10",
+      "trackIds": [],
+      "stopIds": []
+    },
+    {
+      "id": "aug-11",
+      "title": "Pennsylvania into West Virginia",
+      "date": "2026-08-11",
+      "headingId": "august-11",
+      "trackIds": [
+        "aug-11-2026-09-26-08",
+        "aug-11-2026-19-58-07"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "aug-12",
+      "title": "Through West Virginia",
+      "date": "2026-08-12",
+      "headingId": "august-12",
+      "trackIds": [
+        "aug-12-2026-12-04-54"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "aug-13",
+      "title": "Unrecorded day in West Virginia",
+      "date": "2026-08-13",
+      "headingId": "august-13",
+      "trackIds": [],
+      "stopIds": []
+    },
+    {
+      "id": "aug-14",
+      "title": "West Virginia to Indiana",
+      "date": "2026-08-14",
+      "headingId": "august-14",
+      "trackIds": [
+        "aug-14-2026-08-35-34"
+      ],
+      "stopIds": []
+    },
+    {
+      "id": "aug-15",
+      "title": "Indiana to St. Louis",
+      "date": "2026-08-15",
+      "headingId": "august-15",
+      "trackIds": [
+        "aug-15-2026-10-51-30"
+      ],
+      "stopIds": []
+    }
+  ],
+  "stops": [],
+  "photos": []
+}

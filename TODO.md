@@ -15,6 +15,13 @@ Use the [review index](docs/README.md) for dated findings and test results.
 - [ ] Write the report using the [starter outline](docs/trips/route-66ish-2025-outline.md). Confirm the May 9–19 window against the May 17 recorded arrival.
 - [ ] Complete the [Route 66ish publication checks](docs/trips/route-66ish-2025-galleries.md#publication-checks) before publishing the story.
 
+### Mississippi–Wisconsin 2025 and ON–QC–New England 2026
+
+- [ ] Continue the [starter outlines](docs/trips/TRIP-SOURCE-INVENTORY.md). Confirm working dates, motorcycle, stops, and report boundaries while writing.
+- [ ] Create the four source Google Docs. Complete their Sheet descriptions and the 2026 series columns.
+- [ ] Confirm Mississippi–Wisconsin photo membership. Add 2026 photos and a real hero before promoting its draft manifest.
+- [ ] Confirm provisional GPS mileage and riding-day estimates against route gaps, alternate exports, and travel modes.
+
 ### Kalaloch trip
 
 The manifest supports local preview. The public route and hero photo returned HTTP 403 on 2026-10-01.
@@ -49,6 +56,10 @@ The historical signal is not ready for publication.
 ## ADV Atlas
 
 - [ ] Check the atlas on a real phone. Measure cold-cache transfer and initialization. Verify the [current navigation and recovery behavior](docs/trips/ADV-ATLAS.md).
+
+## Dependency security
+
+- [ ] Resolve [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249) when the ESLint toolchain supports a patched minimatch version. See the [review](docs/reviews/2026-10-30-trip-content-and-atlas-review.md#dependency-security) for affected versions and upgrade constraints.
 
 ## Browser checks
 

@@ -5,6 +5,8 @@ import { tripManifestSchema, type TripManifest } from '../../shared/tripManifest
 import fixture from '../../tests/fixtures/trip-content/trips/coastal-test.json';
 import pch from '../../src/content/trips/pch-2024.json';
 import route66 from '../../src/content/trips/route-66ish-2025.json';
+import river from '../../src/content/trips/river-wisco-2025.json';
+import inventory from '../../docs/trips/trip-source-inventory.json';
 import { tripAtlasColorAssignments, tripAtlasPalette } from '../../src/features/trips/atlas/tripAtlasColors';
 import { expandTripShortcodes } from '../sync-blogs.js';
 
@@ -81,7 +83,7 @@ describe('tracked trip content', () => {
         expect(manifest.galleries!['day-two'].at(-1)).toBe('20241004-183101');
     });
 
-    it.each([pch, route66])('uses matching fingerprints and widths for every responsive photo in $id', trip => {
+    it.each([pch, route66, river])('uses matching fingerprints and widths for every responsive photo in $id', trip => {
         for (const photo of trip.photos) {
             const candidates = photo.srcSet.split(', ').map(candidate => {
                 const [src, descriptor] = candidate.split(' ');
@@ -162,5 +164,87 @@ describe('tracked trip content', () => {
         expect(new Set(placedPhotos)).toEqual(new Set(photos.keys()));
         const post = { format: 'trip', tripId: manifest.id };
         expect(() => expandTripShortcodes(outline, post, manifest)).not.toThrow();
+    });
+});
+
+describe('review regressions: recovered trip authoring', () => {
+    const draft = JSON.parse(fs.readFileSync(new URL('../../src/content/trips/on-qc-new-england-2026.json.draft', import.meta.url), 'utf8')) as Omit<TripManifest, 'hero'> & { hero: null };
+
+    it('keeps the photo-free 2026 draft outside the production schema', () => {
+        const result = tripManifestSchema.safeParse(draft);
+        expect(result.success).toBe(false);
+        if (result.success) throw new Error('An unfinished manifest must not be publishable.');
+        expect(result.error.issues.map(issue => issue.path)).toEqual([['hero']]);
+        expect(draft.hero).toBeNull();
+        expect(draft.photos).toEqual([]);
+    });
+
+    it.each([river, draft])('assigns every recovered track and photo once on its capture date in $id', trip => {
+        const tracks = new Map(trip.route.tracks!.map(track => [track.id, track]));
+        const photos = new Map(trip.photos.map(photo => [photo.id, photo]));
+        const assignedTracks: string[] = [];
+        const assignedPhotos: string[] = [];
+        for (const day of trip.days!) {
+            expect(day.date! >= trip.dates.start && day.date! <= trip.dates.end, day.id).toBe(true);
+            for (const id of day.trackIds ?? []) {
+                expect(tracks.get(id)?.date, id).toBe(day.date);
+                assignedTracks.push(id);
+            }
+            for (const id of day.galleryId ? trip.galleries![day.galleryId] : []) {
+                expect(photos.get(id)?.date, id).toBe(day.date);
+                assignedPhotos.push(id);
+            }
+        }
+        expect(assignedTracks).toHaveLength(tracks.size);
+        expect(new Set(assignedTracks)).toEqual(new Set(tracks.keys()));
+        expect(assignedPhotos).toHaveLength(photos.size);
+        expect(new Set(assignedPhotos)).toEqual(new Set(photos.keys()));
+    });
+
+    it('covers every 2026 calendar day in exactly one chapter with matching map anchors', () => {
+        const outlines = [1, 2, 3].map(part => fs.readFileSync(new URL(`../../docs/trips/on-qc-new-england-2026-part-${part}-outline.md`, import.meta.url), 'utf8'));
+        const placements = outlines.flatMap(outline => [...outline.matchAll(/^\{\{trip-map:day:([a-z0-9-]+)\}\}$/gm)].map(match => match[1]));
+        const recordedDays = draft.days!.filter(day => day.trackIds?.length);
+        expect(placements).toHaveLength(recordedDays.length);
+        expect(new Set(placements)).toEqual(new Set(recordedDays.map(day => day.id)));
+        const headings = outlines.flatMap(outline => [...outline.matchAll(/^## ((?:July|August) \d+)$/gm)].map(match => match[1].toLowerCase().replace(' ', '-')));
+        expect(headings).toEqual(draft.days!.map(day => day.headingId));
+        const dates = draft.days!.map(day => day.date!);
+        const expectedDates: string[] = [];
+        for (let date = Date.parse(draft.dates.start); date <= Date.parse(draft.dates.end); date += 86_400_000) {
+            expectedDates.push(new Date(date).toISOString().slice(0, 10));
+        }
+        expect(dates).toEqual(expectedDates);
+    });
+
+    it('expands the Mississippi–Wisconsin outline and places every selected photo once', () => {
+        const trip = tripManifestSchema.parse(river);
+        const outline = fs.readFileSync(new URL('../../docs/trips/river-wisco-2025-outline.md', import.meta.url), 'utf8');
+        expect(() => expandTripShortcodes(outline, { format: 'trip', tripId: trip.id }, trip)).not.toThrow();
+        const placedPhotos = [...outline.matchAll(/^\{\{trip-gallery:([a-z0-9-]+)\}\}$/gm)].flatMap(([, id]) => trip.galleries![id]);
+        expect(placedPhotos).toHaveLength(trip.photos.length);
+        expect(new Set(placedPhotos)).toEqual(new Set(trip.photos.map(photo => photo.id)));
+        const headings = [...outline.matchAll(/^## (October \d+)$/gm)].map(match => match[1].toLowerCase().replace(' ', '-'));
+        expect(headings).toEqual(trip.days!.map(day => day.headingId));
+    });
+
+    it('keeps inventory totals, facts, and route references consistent with tracked manifests', () => {
+        expect(inventory.sheet.distinctTrips).toBe(inventory.trips.length);
+        expect(inventory.sheet.tripRows).toBe(inventory.trips.flatMap(trip => trip.reports).length);
+        for (const entry of inventory.trips) {
+            const trip = JSON.parse(fs.readFileSync(new URL(`../../${entry.manifest.path}`, import.meta.url), 'utf8')) as Omit<TripManifest, 'hero'> & { hero: string | null };
+            expect(trip.id).toBe(entry.id);
+            expect(trip.dates, entry.id).toEqual(entry.manifest.dates);
+            expect(trip.hero, entry.id).toBe(entry.manifest.hero);
+            expect(trip.photos, entry.id).toHaveLength(entry.photos.manifestCount);
+            expect(new Set(trip.route.tracks?.map(track => track.id)), entry.id).toEqual(new Set(entry.gps.tracks.map(track => track.id)));
+            if (entry.estimatedFacts) {
+                expect(trip.ridingDays).toBe(entry.estimatedFacts.ridingDates.length);
+                expect(trip.ridingDays).toBe(entry.estimatedFacts.ridingDays);
+                expect(trip.distanceMiles).toBe(entry.estimatedFacts.distanceMiles);
+                expect(trip.distanceMiles).toBe(entry.gps.recordedDistanceMiles);
+                expect(trip.days!.filter(day => !day.trackIds?.length).map(day => day.date)).toEqual(entry.missingRecordingDates);
+            }
+        }
     });
 });

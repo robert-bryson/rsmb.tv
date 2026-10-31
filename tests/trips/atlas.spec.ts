@@ -196,6 +196,34 @@ test('reloading the atlas restores its camera and collapsed panel within the sam
     }).toBeLessThan(5);
 });
 
+test('fresh direct atlas visits have independent history keys and frame the requested trip', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    const url = `${atlas}?trip=coastal-test`;
+    await page.goto(url);
+    await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
+    const initial = await paintedRoute(page, 'coastal-test');
+    const key = await page.evaluate(() => window.history.state.key as string);
+    expect(key).toBeTruthy();
+    expect(key).not.toBe('default');
+    await page.locator('#atlas-panel-toggle').click();
+    await expect(page.locator('#atlas-panel-toggle')).toHaveAttribute('aria-expanded', 'false');
+    await page.getByTestId('trip-atlas-map').locator('canvas').focus();
+    await page.keyboard.press('ArrowRight');
+    await expect.poll(async () => Math.abs((await paintedRoute(page, 'coastal-test')).bounds[0] - initial.bounds[0])).toBeGreaterThan(10);
+    await page.goto('/posts');
+    await page.goto(url);
+    await expect(page.locator('#atlas-panel-toggle')).toHaveAttribute('aria-expanded', 'true');
+    expect(await page.evaluate(() => window.history.state.key)).not.toBe(key);
+    await expect.poll(async () => {
+        const fresh = await paintedRoute(page, 'coastal-test');
+        return Math.max(...fresh.bounds.map((value, index) => Math.abs(value - initial.bounds[index])));
+    }).toBeLessThan(5);
+    await page.goto(`${atlas}?trip=daily-test`);
+    await expect(page.getByTestId('trip-atlas-map')).toHaveAttribute('data-selected-trip', 'daily-test');
+    await expect(page.locator('#atlas-panel-toggle')).toHaveAttribute('aria-expanded', 'true');
+    expect(await page.evaluate(() => window.history.state.key)).not.toBe(key);
+});
+
 test('selected-trip filtering hides other geometry and cards, survives report returns, and resets on deselection', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.route('**/test-trip/route.geojson', route => route.fulfill({ json: {
@@ -537,8 +565,14 @@ test('fullscreen retains trip controls, overlapping-route choices, and map recov
     await expect(page.getByText('The interactive map is unavailable.', { exact: false })).toBeVisible();
     await page.getByRole('button', { name: 'Retry map' }).click();
     await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
-    await page.getByRole('button', { name: 'Exit fullscreen', exact: true }).click();
+    const exit = page.getByRole('button', { name: 'Exit fullscreen', exact: true });
+    await expect(exit).toHaveClass(/maplibregl-ctrl-shrink/);
+    await expect(exit).not.toHaveClass(/maplibregl-ctrl-fullscreen/);
+    await exit.click();
     await expect.poll(() => page.evaluate(() => Boolean(document.fullscreenElement ?? document.querySelector('.maplibregl-pseudo-fullscreen')))).toBe(false);
+    const enter = page.getByRole('button', { name: 'Enter fullscreen', exact: true });
+    await expect(enter).toHaveClass(/maplibregl-ctrl-fullscreen/);
+    await expect(enter).not.toHaveClass(/maplibregl-ctrl-shrink/);
 });
 
 test('renderer initialization failure retains usable cards and report navigation', async ({ page }) => {

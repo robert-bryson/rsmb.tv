@@ -13,6 +13,7 @@ Use [TODO.md](../TODO.md) for incomplete work.
 | [GitHub Actions OIDC](github-actions-oidc.md) | Deploy workflow roles and retire long-lived AWS credentials |
 | [Trip authoring](trips/TRIP-AUTHORING-README.md) | Prepare, check, and publish trip content |
 | [Trip template](trips/TRIP-STORY-TEMPLATE.md) | Start a trip document |
+| [Trip source inventory](trips/TRIP-SOURCE-INVENTORY.md) | Find source files and starter outlines for every trip in the Sheet |
 | [Trip tests](trips/TESTING.md) | Install browsers and check maps, photos, and JavaScript budgets |
 | [ADV Atlas](trips/ADV-ATLAS.md) | Use atlas URLs, restore tab state, and find code ownership |
 | [PCH galleries](trips/pch-2024-galleries.md) | Use the PCH outline, gallery IDs, and panorama shortcodes |
@@ -29,6 +30,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-10-30 | [Trip content, atlas navigation, fullscreen recovery, and dependency review](reviews/2026-10-30-trip-content-and-atlas-review.md) |
 | 2026-10-30 | [ADV Atlas session restoration and regression review](reviews/2026-10-30-adv-atlas-session-review.md) |
 | 2026-10-30 | [ADV Atlas quality review, camera recovery, and publication fixes](reviews/2026-10-30-adv-atlas-quality-review.md) |
 | 2026-10-30 | [ADV Atlas research and implementation plan](reviews/2026-10-30-adv-atlas-research.md) |

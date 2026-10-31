@@ -12,6 +12,7 @@ import { createTripMapTooltip } from '../tripMapTooltip';
 import type { TripAtlasEntry } from './tripAtlasEntries';
 import { combineAtlasRoutes, tripAtlasColor, type AtlasRouteState } from './tripAtlasView';
 import type { AtlasCamera } from './tripAtlasSession';
+import { AtlasFullscreenControl } from './AtlasFullscreenControl';
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl);
 
@@ -143,7 +144,7 @@ export default function TripAtlasMap(props: Props) {
         lastFit.current = camera.current ? { map: instance, key: `${current.selectedId ?? 'all'}:${current.fitVersion}` } : undefined;
         instance.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
         // The atlas container outlives renderer retries. Retain its fullscreen state too.
-        fullscreenControl.current ??= new maplibregl.FullscreenControl({ container: current.fullscreenContainer?.current ?? container.current.parentElement ?? undefined });
+        fullscreenControl.current ??= new AtlasFullscreenControl({ container: current.fullscreenContainer?.current ?? container.current.parentElement ?? undefined });
         instance.addControl(fullscreenControl.current, 'top-right');
         instance.addControl(new maplibregl.AttributionControl({ compact: false }), 'bottom-right');
         let initialized = false;
@@ -163,9 +164,11 @@ export default function TripAtlasMap(props: Props) {
             const center = instance.getCenter();
             camera.current = { center: [center.lng, center.lat], zoom: instance.getZoom(), bearing: instance.getBearing(), pitch: instance.getPitch() };
             rememberCamera(camera.current);
-            compareOverview();
         };
-        instance.on('moveend', saveCamera);
+        // Parent navigation cleanup can persist before this renderer is removed.
+        // Keep its session current during animation and gestures, before moveend.
+        instance.on('move', saveCamera);
+        instance.on('moveend', () => { saveCamera(); compareOverview(); });
         instance.on('resize', compareOverview);
         instance.on('movestart', event => {
             if (disposed || !event.originalEvent) return;

@@ -60,6 +60,10 @@ npx vitest run scripts/__tests__/tripContent.test.ts scripts/__tests__/tripManif
 ```
 
 These checks validate tracked manifests, daily photo assignments, responsive filenames, gallery counts, and shortcode references.
+Recovered-trip checks compare the source inventory with tracked manifests.
+They check the Mississippi–Wisconsin photo dates, responsive images, gallery placements, and map headings.
+They also check all 37 calendar days and recorded-track assignments across the three 2026 outlines.
+The photo-free `.json.draft` must remain outside the production schema until a real hero is selected.
 Invalid-reference cases check duplicate IDs, shared tracks, missing galleries, and inherited object properties.
 The Drive outline remains an authoring source outside Git.
 Validate its shortcodes against the manifest after you change media placements.
@@ -253,12 +257,13 @@ The browser checks cover these behaviors:
 - The `view=selected` filter survives report navigation. Deselecting or selecting **Zoom to all trips** removes it.
 - Reports retain their map return link. Returning restores card scroll and camera position, including after a report reload.
 - Reloading the atlas retains its camera and collapsed panel within the same tab.
+- Separate direct visits receive different history keys. A fresh visit frames its requested trip and starts with the normal panel state.
 - Shared roads show route choices. Pointer and keyboard previews retain selection and camera position.
 - Escape dismisses previews and choices. Dismissing a preview does not clear the selected trip.
 - A delayed route does not override a newer selection or manual camera movement.
 - Moving before routes load still permits **Zoom to all trips** after loading finishes.
 - Fullscreen includes the list, overview button, route choices, and recovery controls.
-- Renderer retries retain fullscreen and the selected trip.
+- Renderer retries retain fullscreen, the selected trip, and the fullscreen button's icon.
 - Failed routes retry independently. Renderer failures leave report links available.
 
 Layout checks use widths of 320, 767, 768, 858, 1023, 1024, and 1754 pixels.
@@ -283,6 +288,7 @@ Run the content, geometry, lifecycle, and publication checks:
 ```bash
 npx vitest run src/test/tripAtlasEntries.test.ts src/test/tripAtlasView.test.ts src/test/tripAtlasSession.test.ts \
   src/test/tripAtlasMap.test.tsx src/test/advAtlas.test.tsx \
+  src/test/browserHistory.test.ts src/test/AtlasFullscreenControl.test.ts \
   scripts/__tests__/tripContent.test.ts scripts/__tests__/tripManifestAuthoring.test.ts \
   scripts/__tests__/generateFeeds.test.ts scripts/__tests__/amplifyConfig.test.ts
 ```
@@ -294,6 +300,10 @@ Programmatic movement must not cancel a pending route fit.
 Session checks reload the JavaScript module before reading saved state.
 They cover malformed storage, blocked access, full storage, independent snapshots, and bounded history.
 Page checks verify `pagehide` saves and listener removal.
+Movement checks capture the camera before `moveend` and before parent navigation cleanup.
+Late movement callbacks from removed renderers must not change the saved view.
+Fullscreen control checks use the installed MapLibre control without a WebGL renderer.
+They check its icon, label, and action after replacement and exit.
 
 Page checks use fixed metadata. They cover drafts, incomplete reports, multipart reports, and production exclusion.
 Cards without valid manifests retain preview links. They do not request routes or affect loading counts and camera bounds.

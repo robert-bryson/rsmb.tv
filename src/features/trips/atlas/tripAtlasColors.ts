@@ -5,6 +5,8 @@ export const tripAtlasPalette = {
     yellow: '#fbbf24',
     mint: '#34d399',
     rose: '#fb7185',
+    orange: '#fb923c',
+    fuchsia: '#e879f9',
 } as const;
 
 /** Assign a color here when adding a trip; authoring checks reject missing or reused colors. */
@@ -14,6 +16,8 @@ export const tripAtlasColorAssignments: Readonly<Record<string, keyof typeof tri
     'kalaloch-2024': 'rose',
     'pch-2024': 'yellow',
     'route-66ish-2025': 'mint',
+    'river-wisco-2025': 'orange',
+    'on-qc-new-england-2026': 'fuchsia',
 };
 
 export function tripAtlasColor(id: string) {

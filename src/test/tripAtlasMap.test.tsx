@@ -1,10 +1,11 @@
-import { createRef, StrictMode } from 'react';
+import { createRef, StrictMode, useEffect, useRef } from 'react';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { TripAtlasEntry } from '../features/trips/atlas/tripAtlasEntries';
 import type { RouteGeoJson } from '../features/trips/routeGeometry';
 import TripAtlasMap from '../features/trips/atlas/TripAtlasMap';
 import { tripAtlasColor } from '../features/trips/atlas/tripAtlasView';
+import { readAtlasSession, saveAtlasSession, type AtlasSession } from '../features/trips/atlas/tripAtlasSession';
 
 const fake = vi.hoisted(() => ({
     instances: [] as Array<{
@@ -21,6 +22,7 @@ vi.mock('maplibre-gl', () => ({
     NavigationControl: class {},
     FullscreenControl: class {
         constructor(options?: { container?: HTMLElement }) { fake.fullscreenOptions.push(options); }
+        on() { return this; }
     },
     AttributionControl: class {},
     Popup: class {
@@ -177,5 +179,61 @@ describe('atlas renderer lifecycle', () => {
         expect(fake.instances[0].fitBounds).not.toHaveBeenCalled();
         act(() => { current.events.get('moveend')?.forEach(listener => listener()); });
         expect(remember).toHaveBeenCalledOnce();
+    });
+});
+
+describe('review regressions: camera persistence during movement', () => {
+    it('persists the moving camera before parent navigation cleanup takes its snapshot', () => {
+        const key = 'navigation-during-gesture';
+        function Owner() {
+            const session = useRef<AtlasSession>({ panelOpen: true, scrollTop: 40 });
+            useEffect(() => () => saveAtlasSession(key, '/atlas-regression', session.current), []);
+            return <TripAtlasMap entries={[entry]} routes={{}} fitVersion={0} panelOpen
+                onSelect={vi.fn()} onHover={vi.fn()} onCameraChange={camera => { session.current.camera = camera; }} />;
+        }
+        const { unmount } = render(<Owner />);
+        const instance = fake.instances[0];
+        act(() => {
+            instance.events.get('movestart')?.forEach(listener => listener({ originalEvent: new Event('mousedown') }));
+            instance.center = { lng: -100, lat: 40 };
+            instance.events.get('move')?.forEach(listener => listener());
+        });
+        unmount();
+        expect(readAtlasSession(key)?.camera?.center).toEqual([-100, 40]);
+    });
+
+    it('captures an in-progress gesture before moveend without comparing the overview each frame', () => {
+        const remember = vi.fn();
+        const compare = vi.fn();
+        const { unmount } = render(<TripAtlasMap entries={[entry]} routes={{}}
+            fitVersion={0} panelOpen onSelect={vi.fn()} onHover={vi.fn()} onCameraChange={remember} onViewChange={compare} />);
+        const instance = fake.instances[0];
+        act(() => {
+            instance.events.get('movestart')?.forEach(listener => listener({ originalEvent: new Event('mousedown') }));
+            instance.center = { lng: -100, lat: 40 };
+            instance.events.get('move')?.forEach(listener => listener());
+        });
+        expect(remember).toHaveBeenLastCalledWith({ center: [-100, 40], zoom: 5.5, bearing: 0, pitch: 0 });
+        expect(compare).not.toHaveBeenCalled();
+        unmount();
+        remember.mockClear();
+        act(() => { instance.events.get('move')?.forEach(listener => listener()); });
+        expect(remember).not.toHaveBeenCalled();
+    });
+
+    it('captures a fit in progress but ignores the uninitialized default camera', () => {
+        const remember = vi.fn();
+        render(<TripAtlasMap entries={[entry]} routes={{ coast: { route, error: '', retry: vi.fn() } }}
+            fitVersion={0} panelOpen onSelect={vi.fn()} onHover={vi.fn()} onCameraChange={remember} />);
+        const instance = fake.instances[0];
+        act(() => { instance.events.get('move')?.forEach(listener => listener()); });
+        expect(remember).not.toHaveBeenCalled();
+        act(() => { instance.events.get('styledata')?.forEach(listener => listener()); });
+        expect(instance.fitBounds).toHaveBeenCalledOnce();
+        act(() => {
+            instance.center = { lng: -123, lat: 46 };
+            instance.events.get('move')?.forEach(listener => listener());
+        });
+        expect(remember).toHaveBeenLastCalledWith({ center: [-123, 46], zoom: 5.5, bearing: 0, pitch: 0 });
     });
 });

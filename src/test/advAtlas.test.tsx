@@ -46,10 +46,11 @@ beforeEach(() => {
 });
 
 describe('atlas card interactions', () => {
-    it('saves the current panel and card position before page unload and removes the listener after navigation', () => {
+    it('saves the current panel and card position before page unload and removes the listener after navigation', async () => {
         const add = vi.spyOn(window, 'addEventListener');
         const remove = vi.spyOn(window, 'removeEventListener');
         const { unmount } = renderWithRouter(<AdvAtlas />, { route: '/projects/adv-atlas/map?test=pagehide' });
+        await screen.findByTestId('atlas-renderer');
         const list = document.getElementById('atlas-trip-list')!;
         fireEvent.scroll(list, { target: { scrollTop: 180 } });
         fireEvent.click(screen.getByRole('button', { name: /Hide trips/ }));
