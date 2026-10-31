@@ -313,6 +313,13 @@ Checks cover safe text, the colored edge, popup reuse, cleanup, and Escape dismi
 Atlas tooltips add the start month and year below the title.
 Both lines share a starting edge, with a 4-pixel gap.
 Date-only changes update the existing popup.
+Placement measures the native label body and accounts for its pointer.
+Browser checks use actual toolbar bounds to reject collisions.
+Pixel checks hide the popup and count highlighted route pixels beneath its body. A loop fixture must leave that count at zero.
+Dynamic UI checks add, resize, and remove an overlay while a card retains focus.
+They verify that the label moves, hides when no position is available, and returns without a camera change.
+Obstacle checks exclude hidden UI, retain transparent screenshot targets, and verify observer cleanup.
+Layout checks cover alternate anchors, pointer gaps, nearby track points, stable sides, attribution, and small viewports.
 Off-screen route checks cover all four edges and four corners in Chromium and WebKit.
 They verify the directional pointer, complete popup bounds, and unchanged camera.
 Visible-track checks reject a viewport-center fallback when the route midpoint is outside the view.

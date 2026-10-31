@@ -242,14 +242,14 @@ export default function AdvAtlas() {
             </Suspense></TripAtlasMapBoundary>
             <TripAtlasShare getUrl={getShareUrl} />
             {(selectedId || cameraChanged || activeFilters > 0 || fitRequest.cancelled) && <button type="button" onClick={fitResults}
-                data-testid="atlas-overview-control" disabled={loadedCount === 0}
+                data-atlas-map-obstacle data-testid="atlas-overview-control" disabled={loadedCount === 0}
                 aria-label={atlasFilterCount(filters) ? 'Fit results' : 'Zoom to all trips'} title={atlasFilterCount(filters) ? 'Fit results' : 'Zoom to all trips'}
                 className="atlas-control atlas-icon-control atlas-overview-control">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <path d="M3 10a9 9 0 1 1 2 8M3 4v6h6" />
                 </svg>
             </button>}
-            {!panelOpen && activeFilters > 0 && <p className="pointer-events-none absolute bottom-8 right-3 z-10 rounded-lg bg-zinc-950/90 px-3 py-2 text-xs text-zinc-300">{visibleEntries.length} of {entries.length} trips · {activeFilters} filters</p>}
+            {!panelOpen && activeFilters > 0 && <p data-atlas-map-obstacle className="pointer-events-none absolute bottom-8 right-3 z-10 rounded-lg bg-zinc-950/90 px-3 py-2 text-xs text-zinc-300">{visibleEntries.length} of {entries.length} trips · {activeFilters} filters</p>}
         </section>
         <TripAtlasPanel state={panelState} view={resultsView} sort={sort} filters={filters} countries={countries}
             selectedId={selectedId} onlySelected={onlySelected} count={visibleEntries.length} total={entries.length}

@@ -14,6 +14,8 @@ import { combineAtlasRoutes, tripAtlasColor, type AtlasRouteState } from './trip
 import type { AtlasCamera } from './tripAtlasSession';
 import { encodeAtlasCamera } from './tripAtlasUrlState';
 import { atlasTooltipPlacement } from './atlasTooltipPlacement';
+import { atlasTooltipObstacles, observeAtlasTooltipObstacles } from './atlasTooltipObstacles';
+import type { AtlasTooltipPlacement } from './atlasTooltipLayout';
 import { restoreAtlasFullscreenControl, type AtlasFullscreenControl } from './AtlasFullscreenControl';
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl);
@@ -89,6 +91,7 @@ export default function TripAtlasMap(props: Props) {
     const reducedMotion = useReducedMotion();
     const tooltipId = useId();
     const tooltip = useRef<{ map: maplibregl.Map; label: ReturnType<typeof createTripMapTooltip> } | null>(null);
+    const previousTooltip = useRef<{ id: string; coordinates: [number, number]; anchor: AtlasTooltipPlacement['anchor']; offset?: number } | undefined>(undefined);
     const routeHover = useRef<{ id: string; coordinates: [number, number] } | null>(null);
     const choicePreview = useRef<{ hoveredId?: string; focusedId?: string }>({});
     const closeChoices = () => {
@@ -128,33 +131,35 @@ export default function TripAtlasMap(props: Props) {
     const clearTooltip = () => {
         tooltip.current?.label.remove();
         tooltip.current = null;
+        previousTooltip.current = undefined;
     };
-    const showTooltip = useEffectEvent((id: string, coordinates: [number, number], anchor?: maplibregl.PositionAnchor) => {
+    const refreshTooltip = useEffectEvent((overrideId?: string) => {
         const instance = mapRef.current;
+        const id = overrideId ?? props.highlightedId;
+        const route = id && props.routes[id]?.route;
         const entry = props.entries.find(entry => entry.id === id);
-        if (!instance || !entry?.summary || failure) return;
+        if (!instance || instance !== map || !id || !route || !entry?.summary || failure) { clearTooltip(); return; }
         if (tooltip.current?.map !== instance) {
             clearTooltip();
             tooltip.current = { map: instance, label: createTripMapTooltip(instance, tooltipId) };
         }
-        tooltip.current.label.show({ label: entry.title, subtitle: formatMonthYear(entry.summary.dates.start, 'long'), color: tripAtlasColor(id), coordinates, anchor });
-    });
-    const refreshTooltip = useEffectEvent(() => {
-        const instance = mapRef.current;
-        const id = props.highlightedId;
-        const route = id && props.routes[id]?.route;
-        if (!instance || instance !== map || !id || !route || failure) { clearTooltip(); return; }
-        const { clientWidth: width, clientHeight: height } = instance.getContainer();
+        const text = { label: entry.title, subtitle: formatMonthYear(entry.summary.dates.start, 'long'), color: tripAtlasColor(id) };
+        const size = tooltip.current.label.measure(text);
+        const element = instance.getContainer();
+        const { clientWidth: width, clientHeight: height } = element;
         const hovered = routeHover.current?.id === id ? routeHover.current.coordinates : undefined;
-        if (hovered) {
-            const point = instance.project(hovered);
-            if (point.x >= 0 && point.x <= width && point.y >= 0 && point.y <= height) { showTooltip(id, hovered); return; }
-        }
+        const point = hovered ? instance.project(hovered) : undefined;
+        const preferred = point && point.x >= 0 && point.x <= width && point.y >= 0 && point.y <= height ? point : undefined;
+        const previous = previousTooltip.current?.id === id ? previousTooltip.current : undefined;
         const placement = atlasTooltipPlacement(route, { width, height, project: coordinates => instance.project(coordinates),
-            centerLongitude: instance.getRenderWorldCopies() ? instance.getCenter().lng : undefined });
+            centerLongitude: instance.getRenderWorldCopies() ? instance.getCenter().lng : undefined,
+            popup: { size, obstacles: atlasTooltipObstacles(element), preferred,
+                previous: previous ? { ...previous, point: instance.project(previous.coordinates) } : undefined } });
         if (!placement) { clearTooltip(); return; }
-        const coordinates = instance.unproject([placement.point.x, placement.point.y]);
-        showTooltip(id, [coordinates.lng, coordinates.lat], placement.anchor);
+        const target = instance.unproject([placement.point.x, placement.point.y]);
+        const coordinates: [number, number] = [target.lng, target.lat];
+        tooltip.current.label.show({ ...text, coordinates, anchor: placement.anchor, offset: placement.offset });
+        previousTooltip.current = { id, coordinates, anchor: placement.anchor, offset: placement.offset };
     });
 
     useEffect(() => {
@@ -198,6 +203,7 @@ export default function TripAtlasMap(props: Props) {
         );
         instance.addControl(fullscreenControl.current, 'top-right');
         instance.addControl(new maplibregl.AttributionControl({ compact: false }), 'bottom-right');
+        const stopObservingObstacles = observeAtlasTooltipObstacles(instance.getContainer(), queueTooltip);
         let initialized = false;
         const ready = () => {
             if (!disposed && !initialized && instance.getLayer('atlas-selected')) {
@@ -287,7 +293,7 @@ export default function TripAtlasMap(props: Props) {
                 const coordinates: [number, number] = [event.lngLat.lng, event.lngLat.lat];
                 routeHover.current = { id, coordinates };
                 hover(id);
-                showTooltip(id, coordinates);
+                refreshTooltip(id);
             } else {
                 routeHover.current = null;
                 hover(undefined);
@@ -307,6 +313,7 @@ export default function TripAtlasMap(props: Props) {
         return () => {
             saveCamera();
             disposed = true;
+            stopObservingObstacles();
             cancelAnimationFrame(tooltipFrame);
             routeHover.current = null;
             if (tooltip.current?.map === instance) clearTooltip();
@@ -402,11 +409,11 @@ export default function TripAtlasMap(props: Props) {
                 onPointerOver={event => { if (event.target !== mapRef.current?.getCanvas()) { routeHover.current = null; props.onHover(undefined); } }}
                 role="region" aria-label="Motorcycle trip routes. Choose a trip in the list to explore its route."
                 className="trip-atlas-map h-full w-full" />
-            {(failure || tileFailure) && <div role="status" className="absolute left-3 right-14 top-20 z-10 max-h-[calc(100%-7rem)] overflow-y-auto rounded-lg border border-zinc-600 bg-zinc-900/95 p-3 text-sm text-zinc-200 md:left-auto md:max-w-64">
+            {(failure || tileFailure) && <div data-atlas-map-obstacle role="status" className="absolute left-3 right-14 top-20 z-10 max-h-[calc(100%-7rem)] overflow-y-auto rounded-lg border border-zinc-600 bg-zinc-900/95 p-3 text-sm text-zinc-200 md:left-auto md:max-w-64">
                 <p>{failure ? 'The interactive map is unavailable. Trip reports are still available in the list.' : 'Some background tiles could not load. You can still explore the trip routes.'}</p>
                 <button type="button" onClick={retry} className="min-h-11 text-violet-300 underline">Retry map</button>
             </div>}
-            {choices && <div role="group" aria-label="Trips sharing this road" className="absolute z-30 w-64 rounded-xl border border-zinc-600 bg-zinc-950 p-3 shadow-xl"
+            {choices && <div data-atlas-map-obstacle role="group" aria-label="Trips sharing this road" className="absolute z-30 w-64 rounded-xl border border-zinc-600 bg-zinc-950 p-3 shadow-xl"
                 style={{ left: choices.x, top: choices.y }}>
                 <p className="mb-2 flex min-h-8 items-center pr-8 text-sm font-medium">Trips sharing this road</p>
                 <button type="button" onClick={closeChoices} aria-label="Close route choices"

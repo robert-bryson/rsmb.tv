@@ -126,7 +126,12 @@ Their popups attach to visible track segments.
 If the entire route is off screen, the popup stays near the closest map edge and points toward the track.
 Placement uses projected geometry, so map rotation changes the indicated direction.
 It retains gaps between disconnected tracks and includes segments that cross the view with both endpoints outside it.
-Popups follow camera movement and remain inside the map, with space for controls where possible.
+Popups follow camera movement and changes to the map UI.
+Placement measures the label and pointer, then excludes the trip panel, panel handle, map controls, attribution, and open map overlays.
+It compares positions on each side of the track and at other visible points.
+It keeps the highlighted track clear where space permits. When all clear positions cover some track, it chooses the position that covers the least track.
+Off-screen labels retain their direction when they move around UI.
+If the UI leaves no space for the complete popup, the label stays hidden until space is available. The route highlight remains visible.
 Keyboard selection closes the choices and focuses the selected card's **Show route** button.
 Pointer selection reveals the card without moving keyboard focus.
 Reopening the trip panel does not repeat the focus move.
@@ -197,6 +202,9 @@ If fullscreen ends during a failed retry, the next renderer creates a fresh full
 | `src/pages/AdvAtlas.tsx` | Coordinate cards, route readers, URL state, and page lifecycle |
 | `src/features/trips/atlas/TripAtlasMap.tsx` | Manage MapLibre rendering, camera fitting, and map input |
 | `src/features/trips/atlas/atlasTooltipPlacement.ts` | Find visible track anchors and directional anchors for off-screen routes |
+| `src/features/trips/atlas/atlasTooltipGeometry.ts` | Clip projected segments and compare screen geometry |
+| `src/features/trips/atlas/atlasTooltipLayout.ts` | Choose measured popup bounds that clear UI and minimize route coverage |
+| `src/features/trips/atlas/atlasTooltipObstacles.ts` | Measure map UI and observe layout changes |
 | `src/features/trips/atlas/AtlasFullscreenControl.ts` | Keep the fullscreen icon correct after renderer replacement |
 
 Use the [trip testing guide](TESTING.md#adv-atlas) for regression commands and required behavior.

@@ -38,6 +38,7 @@ vi.mock('maplibre-gl', () => ({
         constructor(options: unknown) { fake.popupOptions.push(options); }
         setLngLat() { return this; }
         setMaxWidth() { return this; }
+        setOffset() { return this; }
         setText(text: string) { this.element.textContent = text; return this; }
         setDOMContent(content: Node) { this.element.replaceChildren(content); return this; }
         addTo() { document.body.append(this.element); return this; }

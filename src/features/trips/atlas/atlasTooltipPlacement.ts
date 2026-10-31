@@ -1,47 +1,27 @@
 import type { PositionAnchor } from 'maplibre-gl';
 import { routeFeatures, type RouteGeoJson } from '../routeGeometry';
+import { clamp, clipSegment, distanceSquared, nearestOnSegment, type TooltipPoint as Point, type TooltipSegment } from './atlasTooltipGeometry';
+import { layoutAtlasTooltip, type AtlasTooltipLayout, type AtlasTooltipPlacement } from './atlasTooltipLayout';
 
-interface Point { x: number; y: number }
 interface Viewport {
     width: number;
     height: number;
     project: (coordinates: [number, number]) => Point;
     /** Omit when repeated world copies are disabled. */
     centerLongitude?: number;
+    popup?: AtlasTooltipLayout;
 }
-export interface AtlasTooltipPlacement { point: Point; anchor?: PositionAnchor }
+export type { AtlasTooltipPlacement } from './atlasTooltipLayout';
 
-const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
-const distanceSquared = (a: Point, b: Point) => (a.x - b.x) ** 2 + (a.y - b.y) ** 2;
-const interpolate = (a: Point, b: Point, t: number): Point => ({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t });
 const finite = (point: Point) => Number.isFinite(point.x) && Number.isFinite(point.y);
-
-function nearestOnSegment(point: Point, a: Point, b: Point): Point {
-    const length = distanceSquared(a, b);
-    return interpolate(a, b, length ? clamp(((point.x - a.x) * (b.x - a.x) + (point.y - a.y) * (b.y - a.y)) / length, 0, 1) : 0);
-}
-
-function clipSegment(a: Point, b: Point, width: number, height: number): [Point, Point] | undefined {
-    let from = 0;
-    let to = 1;
-    for (const [origin, delta, max] of [[a.x, b.x - a.x, width], [a.y, b.y - a.y, height]]) {
-        if (!delta) { if (origin < 0 || origin > max) return; }
-        else {
-            const first = -origin / delta;
-            const last = (max - origin) / delta;
-            from = Math.max(from, Math.min(first, last));
-            to = Math.min(to, Math.max(first, last));
-            if (from > to) return;
-        }
-    }
-    return [interpolate(a, b, from), interpolate(a, b, to)];
-}
 
 /** Work in projected pixels so bearing, pitch, and disconnected tracks retain their actual screen direction. */
 export function atlasTooltipPlacement(route: RouteGeoJson, viewport: Viewport): AtlasTooltipPlacement | undefined {
     const { width, height, project, centerLongitude } = viewport;
     if (!(width > 0 && height > 0 && Number.isFinite(width) && Number.isFinite(height))) return;
     const center = { x: width / 2, y: height / 2 };
+    const bounds = { left: 0, top: 0, right: width, bottom: height };
+    const segments: TooltipSegment[] = [];
     const corners = [{ x: 0, y: 0 }, { x: width, y: 0 }, { x: 0, y: height }, { x: width, y: height }];
     let visible: { point: Point; distance: number } | undefined;
     let nearest: { track: Point; edge: Point; distance: number; centerDistance: number } | undefined;
@@ -59,8 +39,9 @@ export function atlasTooltipPlacement(route: RouteGeoJson, viewport: Viewport): 
                 for (let index = 1; index < line.length; index++) {
                     const b = project([line[index][0] + copy, line[index][1]]);
                     if (finite(a) && finite(b)) {
-                        const clipped = clipSegment(a, b, width, height);
+                        const clipped = clipSegment(a, b, bounds);
                         if (clipped) {
+                            if (viewport.popup) segments.push(clipped);
                             const point = nearestOnSegment(center, ...clipped);
                             const distance = distanceSquared(point, center);
                             if (!visible || distance < visible.distance) visible = { point, distance };
@@ -87,11 +68,15 @@ export function atlasTooltipPlacement(route: RouteGeoJson, viewport: Viewport): 
             }
         }
     }
-    if (visible) return { point: visible.point };
+    if (visible) {
+        const base = { point: visible.point };
+        return viewport.popup ? layoutAtlasTooltip(base, segments, width, height, viewport.popup) : base;
+    }
     if (!nearest) return;
     const horizontal = nearest.track.x < 0 ? 'left' : nearest.track.x > width ? 'right' : '';
     const vertical = nearest.track.y < 0 ? 'top' : nearest.track.y > height ? 'bottom' : '';
     const anchor = [vertical, horizontal].filter(Boolean).join('-') as PositionAnchor;
     const margin = Math.min(12, width / 4, height / 4);
-    return { point: { x: clamp(nearest.edge.x, margin, width - margin), y: clamp(nearest.edge.y, margin, height - margin) }, anchor };
+    const base = { point: { x: clamp(nearest.edge.x, margin, width - margin), y: clamp(nearest.edge.y, margin, height - margin) }, anchor };
+    return viewport.popup ? layoutAtlasTooltip(base, segments, width, height, viewport.popup) : base;
 }
