@@ -97,13 +97,17 @@ Confirm exact place names from the route, visible landmarks, and your own record
 
 Use [TODO.md](../../TODO.md#pch-2024-trip) to track completion.
 
-1. Replace the outline prompts. Remove author notes and unused media placements.
-2. Verify place names, photo dates, captions, and gallery order.
-3. Review size warnings in `asset-metadata.json`.
-4. Create the source Google Doc. Set its ID in the Sheet's `google_doc_id` column.
-5. Apply the Google Docs styles from the [authoring guide](TRIP-AUTHORING-README.md#1-write-the-story).
-6. Publish the processed assets. Verify each public photo and route URL.
-7. Import the source document. Check the story at phone and desktop widths.
-8. Keep the Sheet's `published` value `false` until the checks pass.
+1. Replace the outline prompts.
+2. Remove author notes and unused media placements.
+3. Verify place names, photo dates, captions, and gallery order.
+4. Review size warnings in `asset-metadata.json`.
+5. Continue the source Google Doc already linked in the Sheet's `google_doc_id` column.
+6. Confirm that it includes the current outline.
+7. Apply the Google Docs styles from the [authoring guide](TRIP-AUTHORING-README.md#1-write-the-story).
+8. Publish the processed assets.
+9. Verify each public photo and route URL.
+10. Import the source document.
+11. Check the story at phone and desktop widths.
+12. Keep the Sheet's `published` value `false` until the checks pass.
 
 Use the [import review](../reviews/2026-10-29-pch-content-review.md) for completed processing checks and their limits.

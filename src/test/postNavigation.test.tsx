@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter, useLocation } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
 import { PostNavigation } from '../blog/PostNavigation';
+import { getPostReturnDestination } from '../blog/postReturnDestination';
 import type { BlogPostMeta } from '../content/posts';
 
 vi.mock('../features/trips/tripSummaries', () => ({
@@ -17,6 +18,7 @@ const previous: BlogPostMeta = {
 };
 const next: BlogPostMeta = { slug: 'newer-post', title: 'Newer post', description: 'Writing', date: '2025-01-01', tags: [] };
 const returnTo = '/posts?type=trips&tag=coast';
+const returnDestination = getPostReturnDestination({ from: returnTo }, 'trips');
 
 function LocationProbe() {
     const location = useLocation();
@@ -29,7 +31,7 @@ function renderNavigation(props: React.ComponentProps<typeof PostNavigation>) {
 
 describe('PostNavigation', () => {
     it('uses canonical collections, descriptive names, and the smallest available thumbnail', () => {
-        renderNavigation({ previous, next, returnTo });
+        renderNavigation({ previous, next, returnDestination });
         const older = screen.getByRole('link', { name: 'Previous post Older trip' });
         expect(older).toHaveAttribute('href', '/trips/older-trip');
         expect(older).toHaveAttribute('rel', 'prev');
@@ -45,14 +47,23 @@ describe('PostNavigation', () => {
     });
 
     it('retains the source image when no srcset is available', () => {
-        renderNavigation({ next: { ...previous, tripId: 'mountains' }, returnTo });
+        renderNavigation({ next: { ...previous, tripId: 'mountains' }, returnDestination });
         expect(screen.getByRole('link', { name: 'Next post Older trip' }).querySelector('img')).toHaveAttribute('src', '/mountains.webp');
     });
 
     it('keeps a return link for single-post collections and requests scroll restoration', () => {
-        renderNavigation({ returnTo });
+        renderNavigation({ returnDestination });
         expect(screen.getAllByRole('link')).toHaveLength(1);
         fireEvent.click(screen.getByRole('link', { name: 'Back to posts' }));
         expect(JSON.parse(screen.getByTestId('location').textContent!)).toEqual({ url: returnTo, state: { restoreScroll: true } });
+    });
+
+    it.each(['previous', 'next', 'return'] as const)('preserves atlas identity through the %s link', direction => {
+        const from = '/projects/adv-atlas/map?trip=coast';
+        renderNavigation({ previous, next, returnDestination: getPostReturnDestination({ from, returnKey: 'origin' }, 'trips') });
+        const label = direction === 'previous' ? 'Previous post Older trip' : direction === 'next' ? 'Next post Newer post' : 'Back to map';
+        fireEvent.click(screen.getByRole('link', { name: label }));
+        expect(JSON.parse(screen.getByTestId('location').textContent!).state).toEqual(direction === 'return'
+            ? { restoreScroll: true, returnKey: 'origin' } : { from, returnKey: 'origin' });
     });
 });

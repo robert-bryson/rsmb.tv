@@ -47,7 +47,11 @@ export default function AdvAtlas() {
     const onlySelected = Boolean(selectedId) && params.get('view') === 'selected';
     const invalidSelection = Boolean(requestedId && !selectedId);
     const url = location.pathname + location.search;
-    const [initialSession] = useState(() => readAtlasSession(location.key, (location.state as { restoreScroll?: boolean } | null)?.restoreScroll ? url : undefined));
+    const [initialSession] = useState(() => {
+        const state = location.state as { restoreScroll?: boolean; returnKey?: unknown } | null;
+        return readAtlasSession(location.key, state?.restoreScroll ? url : undefined,
+            state?.restoreScroll && typeof state.returnKey === 'string' ? state.returnKey : undefined);
+    });
     const [panelOpen, setPanelOpen] = useState(() => initialSession?.panelOpen ?? (Boolean(requestedId) || window.matchMedia('(min-width: 768px)').matches));
     const session = useRef<AtlasSession>({ ...(initialSession ?? { panelOpen, scrollTop: 0 }) });
     const [routes, setRoutes] = useState<Record<string, AtlasRouteState>>({});
@@ -56,7 +60,8 @@ export default function AdvAtlas() {
     const [hoveredId, setHoveredId] = useState<string>();
     const [focusedId, setFocusedId] = useState<string>();
     const highlightedId = hoveredId ?? focusedId;
-    const [reveal, setReveal] = useState(() => !initialSession && selectedId ? { id: selectedId, version: 0 } : undefined);
+    const [reveal, setReveal] = useState(() => !initialSession && selectedId ? { id: selectedId, version: 0, focusCard: false } : undefined);
+    const focusedReveal = useRef(reveal);
     const listRef = useRef<HTMLDivElement>(null);
     const fullscreenContainer = useRef<HTMLElement>(null);
     const visibleEntries = useMemo(() => onlySelected ? entries.filter(entry => entry.id === selectedId) : entries, [entries, onlySelected, selectedId]);
@@ -83,15 +88,15 @@ export default function AdvAtlas() {
         session.current.panelOpen = open;
         setPanelOpen(open);
     };
-    const selectTrip = (id: string | undefined, reveal = false) => {
+    const selectTrip = (id: string | undefined, options: { reveal?: boolean; focusCard?: boolean } = {}) => {
         const next = new URLSearchParams(params);
         if (id) next.set('trip', id);
         else { next.delete('trip'); next.delete('view'); }
         setParams(next, { replace: true });
         setFitVersion(version => version + 1);
-        if (reveal && id) {
+        if (options.reveal && id) {
             changePanel(true);
-            setReveal(current => ({ id, version: (current?.version ?? 0) + 1 }));
+            setReveal(current => ({ id, version: (current?.version ?? 0) + 1, focusCard: Boolean(options.focusCard) }));
         }
     };
     const deselectTrip = () => {
@@ -138,7 +143,12 @@ export default function AdvAtlas() {
         if (panelOpen && listRef.current) listRef.current.scrollTop = session.current.scrollTop;
     }, [panelOpen]);
     useEffect(() => {
-        if (reveal && panelOpen) document.getElementById(`atlas-card-${reveal.id}`)?.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'instant' });
+        if (!reveal || !panelOpen) return;
+        document.getElementById(`atlas-card-${reveal.id}`)?.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'instant' });
+        if (reveal.focusCard && focusedReveal.current !== reveal) {
+            focusedReveal.current = reveal;
+            document.getElementById(`atlas-route-${reveal.id}`)?.focus({ preventScroll: true });
+        }
     }, [reveal, panelOpen]);
 
     const loadedCount = visibleEntries.filter(entry => routes[entry.id]?.route).length;
@@ -150,7 +160,7 @@ export default function AdvAtlas() {
                 <Suspense fallback={<p role="status" className="absolute inset-0 grid place-items-center text-sm text-zinc-400">Loading trip map…</p>}>
                     <TripAtlasMap entries={mapEntries} routes={visibleRoutes} selectedId={mapSelectedId} highlightedId={highlightedId}
                         fitVersion={fitVersion} panelOpen={panelOpen} initialCamera={initialSession?.camera} fullscreenContainer={fullscreenContainer}
-                        onSelect={id => id ? selectTrip(id, true) : deselectTrip()} onHover={setHoveredId} onCameraChange={onCameraChange} onViewChange={setCameraChanged} />
+                        onSelect={(id, options) => id ? selectTrip(id, { reveal: true, ...options }) : deselectTrip()} onHover={setHoveredId} onCameraChange={onCameraChange} onViewChange={setCameraChanged} />
                 </Suspense>
             </TripAtlasMapBoundary>
 
@@ -220,10 +230,10 @@ export default function AdvAtlas() {
                                     </p>
                                     {geography.length ? <p className="mt-1 text-xs text-zinc-400">{geography.join(' · ')}</p> : null}
                                     <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-start gap-2">
-                                        <button type="button" aria-pressed={active} disabled={!summary} aria-label={`Show route: ${entry.title}`} onClick={() => selectTrip(entry.id)}
+                                        <button id={`atlas-route-${entry.id}`} type="button" aria-pressed={active} disabled={!summary} aria-label={`Show route: ${entry.title}`} onClick={() => selectTrip(entry.id)}
                                             className="min-h-11 rounded-md border border-zinc-600 px-3 py-2 text-sm text-zinc-100 transition-colors enabled:hover:border-[color:var(--trip-atlas-color)] enabled:hover:text-[color:var(--trip-atlas-color)] disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--trip-atlas-color)]">Show route</button>
                                         <div className="flex min-w-0 flex-col gap-2">
-                                            {entry.reports.map(report => <Link key={report.slug} to={report.href} state={{ from: url }}
+                                            {entry.reports.map(report => <Link key={report.slug} to={report.href} state={{ from: url, returnKey: location.key }}
                                                 className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-transparent bg-[color:var(--trip-atlas-color)] px-3 py-2 text-center text-sm font-semibold leading-snug text-zinc-950 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--trip-atlas-color)]">
                                                 <span className="min-w-0 break-words">{entry.reports.length === 1 ? summary && report.contentAvailable ? 'Read trip report' : 'Preview report' : report.title}
                                                     {development && report.draft && entry.reports.length > 1 && <span className="ml-1 inline-block rounded border border-amber-800 bg-amber-950 px-1.5 py-0.5 text-[11px] font-medium text-amber-300">Draft</span>}

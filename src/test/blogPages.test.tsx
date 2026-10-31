@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import { render, screen, within } from '@testing-library/react';
+import { lazy } from 'react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { renderWithRouter } from './helpers/router';
 
@@ -207,6 +208,39 @@ describe('Posts page', () => {
 });
 
 describe('BlogPost tag navigation', () => {
+    it('preserves the originating atlas visit through series links and the article return', () => {
+        const parts = testPosts.slice(0, 2).map((post, index) => ({
+            ...post, series: { id: 'journey', title: 'Journey reports', order: index + 1 },
+        }));
+        const allPosts = vi.spyOn(postRegistry, 'getAllPosts').mockReturnValue(parts);
+        const loadComponent = async () => ({ default: () => null });
+        const Component = lazy(loadComponent);
+        const getPost = vi.spyOn(postRegistry, 'getPostBySlug').mockImplementation(slug => {
+            const post = parts.find(part => part.slug === slug);
+            return post && { ...post, loadComponent, Component };
+        });
+        function ReturnProbe() {
+            return <output data-testid="return-state">{JSON.stringify(useLocation().state)}</output>;
+        }
+        try {
+            render(<MemoryRouter initialEntries={[{
+                pathname: '/blog/mapping-boring-data',
+                state: { from: '/projects/adv-atlas/map?trip=coast', returnKey: 'original-visit' },
+            }]}>
+                <Routes>
+                    <Route path="/blog/:slug" element={<BlogPost collection="blog" />} />
+                    <Route path="/projects/adv-atlas/map" element={<ReturnProbe />} />
+                </Routes>
+            </MemoryRouter>);
+            fireEvent.click(within(screen.getByRole('navigation', { name: 'Journey reports' })).getByRole('link', { name: 'Weather Records' }));
+            fireEvent.click(screen.getAllByRole('link', { name: /Back to map/ })[0]);
+            expect(JSON.parse(screen.getByTestId('return-state').textContent!)).toEqual({ restoreScroll: true, returnKey: 'original-visit' });
+        } finally {
+            allPosts.mockRestore();
+            getPost.mockRestore();
+        }
+    });
+
     it('filter review regressions: preserves return filters after a manifest fails to load', async () => {
         const load = vi.spyOn(tripManifests, 'loadTripManifest').mockRejectedValueOnce(new Error('Manifest unavailable'));
         const from = '/posts?type=trips&country=US&region=washington';

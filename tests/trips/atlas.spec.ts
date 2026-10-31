@@ -177,6 +177,39 @@ test('shared selection and report returns restore the card scroll and camera aft
     }).toBeLessThan(5);
 });
 
+for (const returnLink of ['header', 'footer after another report'] as const) {
+    test(`report returns restore their original atlas visit after another same-URL visit (${returnLink})`, async ({ page }) => {
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await page.goto(`${atlas}?trip=coastal-test`);
+        await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
+        const report = page.locator('[data-trip-id="coastal-test"]').getByRole('link', { name: /Read trip report/ });
+        await report.scrollIntoViewIfNeeded();
+        const before = await paintedRoute(page, 'coastal-test');
+        const scroll = await page.locator('#atlas-trip-list').evaluate(element => element.scrollTop);
+        await report.click();
+        await page.getByRole('link', { name: /View this trip on the map/ }).click();
+        await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
+        await page.locator('#atlas-panel-toggle').click();
+        await expect(page.locator('#atlas-panel-toggle')).toHaveAttribute('aria-expanded', 'false');
+        await page.getByRole('button', { name: 'Zoom in', exact: true }).click();
+        await page.goBack();
+        await page.reload();
+        if (returnLink === 'footer after another report') {
+            await page.getByRole('link', { name: /^Previous post|^Next post/ }).click();
+            await page.reload();
+        }
+        const back = page.getByRole('link', { name: /Back to map/ });
+        await (returnLink === 'header' ? back.first() : back.last()).click();
+        await expect(page).toHaveURL(`${atlas}?trip=coastal-test`);
+        await expect(page.locator('#atlas-panel-toggle')).toHaveAttribute('aria-expanded', 'true');
+        await expect.poll(() => page.locator('#atlas-trip-list').evaluate(element => element.scrollTop)).toBeCloseTo(scroll, 0);
+        await expect.poll(async () => {
+            const restored = await paintedRoute(page, 'coastal-test');
+            return Math.max(...restored.bounds.map((value, index) => Math.abs(value - before.bounds[index])));
+        }).toBeLessThan(5);
+    });
+}
+
 test('reloading the atlas restores its camera and collapsed panel within the same tab', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(`${atlas}?trip=coastal-test`);
@@ -464,6 +497,51 @@ test('overlapping routes offer colored previews and a dismissible choice instead
     await expect(choices).toHaveCount(0);
     await expect(page.locator('[data-trip-id="coastal-test"]').getByText('Selected', { exact: true })).toBeVisible();
     await expect(page.locator('[data-trip-id="coastal-test"]').getByRole('heading')).toBeInViewport();
+});
+
+test('Escape dismisses shared-road choices after focus moves to the trip panel', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(`${atlas}?trip=daily-test`);
+    await expect(page.getByText('2/2 routes', { exact: false })).toBeVisible();
+    await page.locator('#atlas-panel-toggle').click();
+    await expect.poll(async () => (await paintedRoute(page, 'daily-test')).count).toBeGreaterThan(30);
+    const before = await paintedRoute(page, 'daily-test');
+    await page.getByTestId('trip-atlas-map').locator('canvas').click({ position: before.point });
+    const choices = page.getByRole('group', { name: 'Trips sharing this road' });
+    await expect(choices).toBeVisible();
+    const panel = page.locator('#atlas-panel-toggle');
+    await panel.focus();
+    await panel.press('Escape');
+    await expect(choices).toHaveCount(0);
+    await expect(panel).toBeFocused();
+    await expect(page).toHaveURL(`${atlas}?trip=daily-test`);
+    await expect(page.getByTestId('trip-atlas-map')).toHaveAttribute('data-highlighted-trip', '');
+});
+
+test('keyboard route choice moves focus to the selected card after the chooser closes', async ({ page, browserName }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(`${atlas}?trip=daily-test`);
+    await expect(page.getByText('2/2 routes', { exact: false })).toBeVisible();
+    const panel = page.locator('#atlas-panel-toggle');
+    if (await panel.getAttribute('aria-expanded') === 'true') await panel.click();
+    await expect.poll(async () => (await paintedRoute(page, 'daily-test')).count).toBeGreaterThan(30);
+    const before = await paintedRoute(page, 'daily-test');
+    await page.getByTestId('trip-atlas-map').locator('canvas').click({ position: before.point });
+    const choices = page.getByRole('group', { name: 'Trips sharing this road' });
+    const choice = choices.getByRole('button', { name: 'Coastal test trip' });
+    await choice.focus();
+    await choice.press('Enter');
+    await expect(choices).toHaveCount(0);
+    await expect(page).toHaveURL(/\?trip=coastal-test$/);
+    const selected = page.locator('[data-trip-id="coastal-test"]');
+    await expect(selected.getByRole('button', { name: 'Show route: Coastal test trip' })).toBeFocused();
+    // Safari uses Option+Tab to include links in sequential keyboard navigation.
+    await page.keyboard.press(browserName === 'webkit' ? 'Alt+Tab' : 'Tab');
+    await expect(selected.getByRole('link', { name: /Read trip report/ })).toBeFocused();
+    await panel.focus();
+    await panel.press('Enter');
+    await panel.press('Enter');
+    await expect(panel).toBeFocused();
 });
 
 test('one failed route keeps report links and retries without reloading successful geometry', async ({ page }) => {

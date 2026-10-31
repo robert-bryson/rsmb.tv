@@ -35,9 +35,16 @@ vi.mock('../content/posts', () => ({ getTripPosts: () => fixtures.posts }));
 vi.mock('../features/trips/tripSummaries', () => ({ getTripSummary: (id: string) => fixtures.summaries[id] }));
 vi.mock('../features/trips/useTripRoute', () => ({ useTripRoute: () => ({ route: null, error: '', retry: fixtures.retry }) }));
 vi.mock('../features/trips/atlas/TripAtlasMap', () => ({
-    default: ({ selectedId, highlightedId, fitVersion, entries, routes }: { selectedId?: string; highlightedId?: string; fitVersion: number; entries: TripAtlasEntry[]; routes: Record<string, AtlasRouteState> }) => (
-        <output data-testid="atlas-renderer" data-selected={selectedId ?? ''} data-highlighted={highlightedId ?? ''} data-fit-version={fitVersion}
-            data-trips={entries.map(entry => entry.id).join(',')} data-routes={Object.keys(routes).join(',')} />
+    default: ({ selectedId, highlightedId, fitVersion, entries, routes, onSelect }: {
+        selectedId?: string; highlightedId?: string; fitVersion: number; entries: TripAtlasEntry[]; routes: Record<string, AtlasRouteState>;
+        onSelect: (id: string, options?: { focusCard: boolean }) => void;
+    }) => (
+        <>
+            <output data-testid="atlas-renderer" data-selected={selectedId ?? ''} data-highlighted={highlightedId ?? ''} data-fit-version={fitVersion}
+                data-trips={entries.map(entry => entry.id).join(',')} data-routes={Object.keys(routes).join(',')} />
+            <button onClick={() => onSelect('published', { focusCard: true })}>Keyboard route choice</button>
+            <button onClick={() => onSelect('published', { focusCard: false })}>Pointer route choice</button>
+        </>
     ),
 }));
 
@@ -46,6 +53,25 @@ beforeEach(() => {
 });
 
 describe('atlas card interactions', () => {
+    it.each(['Keyboard', 'Pointer'])('reveals a %s route choice and moves focus only for keyboard input', async input => {
+        renderWithRouter(<AdvAtlas />, { route: '/projects/adv-atlas/map' });
+        const choice = await screen.findByRole('button', { name: `${input} route choice` });
+        const toggle = screen.getByRole('button', { name: /Hide trips/ });
+        const card = screen.getByRole('heading', { name: 'Published journey' }).closest('li')!;
+        card.scrollIntoView = vi.fn();
+        fireEvent.click(toggle);
+        choice.focus();
+        fireEvent.click(choice);
+        const routeControl = screen.getByRole('button', { name: 'Show route: Published journey' });
+        expect(card.scrollIntoView).toHaveBeenCalled();
+        expect(toggle).toHaveAttribute('aria-expanded', 'true');
+        expect(input === 'Keyboard' ? routeControl : choice).toHaveFocus();
+        fireEvent.click(toggle);
+        toggle.focus();
+        fireEvent.click(toggle);
+        expect(toggle).toHaveFocus();
+    });
+
     it('saves the current panel and card position before page unload and removes the listener after navigation', async () => {
         const add = vi.spyOn(window, 'addEventListener');
         const remove = vi.spyOn(window, 'removeEventListener');

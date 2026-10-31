@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import type { BlogPostMeta } from '../content/posts';
 import { getTripSummary } from '../features/trips/tripSummaries';
 import type { TripPhotoData } from '../features/trips/types';
+import type { PostReturnDestination } from './postReturnDestination';
 
 function smallestHeroSource(hero: TripPhotoData) {
     const sources = [{ src: hero.src, width: hero.width }];
@@ -12,10 +13,10 @@ function smallestHeroSource(hero: TripPhotoData) {
     return sources.reduce((smallest, source) => source.width < smallest.width ? source : smallest).src;
 }
 
-function NeighborLink({ post, direction, returnTo }: {
+function NeighborLink({ post, direction, returnDestination }: {
     post: BlogPostMeta;
     direction: 'previous' | 'next';
-    returnTo: string;
+    returnDestination: PostReturnDestination;
 }) {
     const hero = getTripSummary(post.tripId)?.hero;
     const previous = direction === 'previous';
@@ -23,7 +24,7 @@ function NeighborLink({ post, direction, returnTo }: {
     return (
         <Link
             to={`/${post.format === 'trip' ? 'trips' : 'blog'}/${post.slug}`}
-            state={{ from: returnTo }}
+            state={returnDestination.onwardState}
             rel={previous ? 'prev' : 'next'}
             aria-label={`${previous ? 'Previous post' : 'Next post'} ${post.title}`}
             title={post.description}
@@ -50,26 +51,25 @@ function NeighborLink({ post, direction, returnTo }: {
     );
 }
 
-export function PostNavigation({ previous, next, returnTo, returnLabel = 'Back to posts' }: {
+export function PostNavigation({ previous, next, returnDestination }: {
     previous?: BlogPostMeta;
     next?: BlogPostMeta;
-    returnTo: string;
-    returnLabel?: string;
+    returnDestination: PostReturnDestination;
 }) {
     return (
         <nav aria-label="Post navigation" className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-start gap-3 sm:gap-6">
             <div className="min-w-0">
-                {previous && <NeighborLink post={previous} direction="previous" returnTo={returnTo} />}
+                {previous && <NeighborLink post={previous} direction="previous" returnDestination={returnDestination} />}
             </div>
             <Link
-                to={returnTo}
-                state={{ restoreScroll: true }}
+                to={returnDestination.to}
+                state={returnDestination.returnState}
                 className="inline-flex min-h-11 items-center justify-center rounded-sm text-center text-violet-300 hover:text-violet-200 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-400"
             >
-                {returnLabel}
+                {returnDestination.label}
             </Link>
             <div className="min-w-0">
-                {next && <NeighborLink post={next} direction="next" returnTo={returnTo} />}
+                {next && <NeighborLink post={next} direction="next" returnDestination={returnDestination} />}
             </div>
         </nav>
     );

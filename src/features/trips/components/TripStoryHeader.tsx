@@ -4,14 +4,15 @@ import { formatMonthYear } from '../../../utils/formatDate';
 import { TripHeroGallery } from './TripHeroGallery';
 import { tripAtlasUrl } from '../atlas/tripAtlasView';
 import { isDevelopmentContent } from '../../../utils/developmentContent';
+import type { PostReturnDestination } from '../../../blog/postReturnDestination';
 
-export function TripStoryHeader({ post, returnTo, returnLabel = 'Back to posts' }: { post: BlogPostMeta; returnTo: string; returnLabel?: string }) {
+export function TripStoryHeader({ post, returnDestination }: { post: BlogPostMeta; returnDestination: PostReturnDestination }) {
     return (
         <header className="mb-6">
             <TripHeroGallery>
                 <div className="absolute inset-x-6 top-4 z-2 flex items-start justify-between gap-4 text-sm text-zinc-100">
-                    <Link to={returnTo} state={{ restoreScroll: true }} className="inline-flex min-h-11 shrink-0 items-center hover:text-violet-300">
-                        ← {returnLabel}
+                    <Link to={returnDestination.to} state={returnDestination.returnState} className="inline-flex min-h-11 shrink-0 items-center hover:text-violet-300">
+                        ← {returnDestination.label}
                     </Link>
                     <time dateTime={post.date} className="py-3 text-right">{formatMonthYear(post.date, 'long')}</time>
                 </div>

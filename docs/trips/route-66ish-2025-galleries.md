@@ -163,16 +163,28 @@ Review those images when making the final selection. Existing processing setting
 
 Track remaining work in [TODO.md](../../TODO.md#route-66ish-2025-trip).
 
-1. Confirm the trip end date, May 15 activities, May 18–19 membership, motorcycle, and the distance used in the final story.
-2. Replace the outline prompts with your account. Confirm named places, mixed-camera order, stop coordinates, and captions.
-3. Review route endpoints for private coordinates and remove unrelated movement before regenerating public route files.
-4. Review the five photo-size advisories and choose final galleries, the hero, and any video edits.
-5. Create the source Google Doc and add its ID and a real description to the existing unpublished Sheet row. A suggested description is: “A motorcycle ride from Valley Center to St. Louis by way of desert roads, Route 66 towns, canyon country, and the Ozarks.”
-6. Import the document, verify heading links and media placements, and check the story at phone and desktop widths.
-7. Upload processed assets and verify every public URL before changing the Sheet's `published` value from `false`.
+1. Confirm the trip end date, May 15 activities, and May 18–19 membership.
+2. Confirm the motorcycle and distance used in the final story.
+3. Replace the outline prompts with your account.
+4. Confirm named places, mixed-camera order, stop coordinates, and captions.
+5. Review route endpoints for private coordinates.
+6. Remove unrelated movement before regenerating public route files.
+7. Review the five photo-size advisories.
+8. Choose final galleries, the hero, and any video edits.
+9. Continue the source Google Doc already linked in the unpublished Sheet row.
+10. Add a final description to that row.
+11. Import the document.
+12. Verify heading links and media placements.
+13. Check the story at phone and desktop widths.
+14. Upload processed assets.
+15. Verify every public URL before changing the Sheet's `published` value from `false`.
 
-The Markdown outline is the writing source for this groundwork.
-An ignored MDX copy and unpublished local registry entry are prepared for preview.
-Use `GOOGLE_BLOG_SYNC_ON_DEV=0 TRIP_ASSETS_ON_DEV=0 npm run dev`, then open `/trips/route-66ish-2025`.
-Google Docs sync owns the generated blog files and can replace or remove this local copy until a source document is connected.
-The local description is a suggestion; the source Sheet still needs its description and Google Doc ID.
+Suggested description: “A motorcycle ride from Valley Center to St. Louis through desert roads, Route 66 towns, canyon country, and the Ozarks.”
+
+The Markdown outline provides starter structure. Continue the story in the source Google Doc linked in the Sheet.
+The importer generates the ignored MDX copy and unpublished local registry entry for preview.
+Run `GOOGLE_BLOG_SYNC_ON_DEV=0 TRIP_ASSETS_ON_DEV=0 npm run dev`.
+Open `/trips/route-66ish-2025`.
+Google Docs sync owns the generated blog files and can replace local edits.
+Make story changes in the linked source document.
+The local description is a suggestion; the source Sheet still needs its final description.

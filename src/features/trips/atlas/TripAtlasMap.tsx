@@ -25,7 +25,7 @@ interface Props {
     panelOpen: boolean;
     initialCamera?: AtlasCamera;
     fullscreenContainer?: RefObject<HTMLElement | null>;
-    onSelect: (id: string | undefined) => void;
+    onSelect: (id: string | undefined, options?: { focusCard: boolean }) => void;
     onHover: (id?: string) => void;
     onCameraChange: (camera: AtlasCamera) => void;
     onViewChange?: (changed: boolean) => void;
@@ -74,6 +74,7 @@ export default function TripAtlasMap(props: Props) {
     const [tileFailure, setTileFailure] = useState(false);
     const [choices, setChoices] = useState<{ ids: string[]; x: number; y: number }>();
     const camera = useRef(props.initialCamera);
+    const initialFitKey = useRef(`${selectedId ?? 'all'}:${fitVersion}`);
     const userMoved = useRef(false);
     const lastFit = useRef<{ map: maplibregl.Map; key: string } | undefined>(undefined);
     const reducedMotion = useReducedMotion();
@@ -81,6 +82,18 @@ export default function TripAtlasMap(props: Props) {
     const tooltip = useRef<{ map: maplibregl.Map; label: ReturnType<typeof createTripMapTooltip> } | null>(null);
     const routeHover = useRef<{ id: string; coordinates: [number, number] } | null>(null);
     const choicePreview = useRef<{ hoveredId?: string; focusedId?: string }>({});
+    const closeChoices = () => {
+        choicePreview.current = {};
+        routeHover.current = null;
+        props.onHover(undefined);
+        setChoices(undefined);
+    };
+    const dismissChoices = useEffectEvent(() => { if (choices) closeChoices(); });
+    useEffect(() => {
+        const dismiss = (event: KeyboardEvent) => { if (event.key === 'Escape') dismissChoices(); };
+        document.addEventListener('keydown', dismiss);
+        return () => document.removeEventListener('keydown', dismiss);
+    }, []);
     const data = useMemo(() => combineAtlasRoutes(routes), [routes]);
     const getCurrent = useEffectEvent(() => props);
     const select = useEffectEvent((id?: string) => props.onSelect(id));
@@ -141,7 +154,10 @@ export default function TripAtlasMap(props: Props) {
         }
         mapRef.current = instance;
         userMoved.current = Boolean(camera.current);
-        lastFit.current = camera.current ? { map: instance, key: `${current.selectedId ?? 'all'}:${current.fitVersion}` } : undefined;
+        // A retry restores the camera, but must not fulfill an outstanding fit request.
+        lastFit.current = camera.current
+            ? { map: instance, key: lastFit.current?.key ?? initialFitKey.current }
+            : undefined;
         instance.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
         // The atlas container outlives renderer retries. Retain its fullscreen state too.
         fullscreenControl.current = restoreAtlasFullscreenControl(
@@ -309,15 +325,9 @@ export default function TripAtlasMap(props: Props) {
         routeHover.current = null;
         props.onHover(choicePreview.current.hoveredId ?? choicePreview.current.focusedId);
     };
-    const closeChoices = () => {
-        choicePreview.current = {};
-        routeHover.current = null;
-        props.onHover(undefined);
-        setChoices(undefined);
-    };
     const retry = () => { setFailure(false); setTileFailure(false); setAttempt(value => value + 1); };
     return (
-        <div className="absolute inset-0" onKeyDown={event => { if (event.key === 'Escape' && choices) closeChoices(); }}>
+        <div className="absolute inset-0">
             <div ref={container} data-testid="trip-atlas-map" data-selected-trip={selectedId ?? ''} data-highlighted-trip={highlightedId ?? ''}
                 onPointerLeave={() => { routeHover.current = null; props.onHover(undefined); }}
                 onPointerOver={event => { if (event.target !== mapRef.current?.getCanvas()) { routeHover.current = null; props.onHover(undefined); } }}
@@ -334,7 +344,7 @@ export default function TripAtlasMap(props: Props) {
                     className="absolute right-1 top-1 grid size-11 place-items-center rounded text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100 focus-visible:outline-2 focus-visible:outline-violet-400">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true" className="size-4"><path d="m6 6 12 12M18 6 6 18" /></svg>
                 </button>
-                {choices.ids.map(id => <button key={id} type="button" onClick={() => { closeChoices(); props.onSelect(id); }}
+                {choices.ids.map(id => <button key={id} type="button" onClick={event => { closeChoices(); props.onSelect(id, { focusCard: event.detail === 0 }); }}
                     onPointerEnter={event => { if (event.pointerType !== 'touch') previewChoice('hoveredId', id); }}
                     onPointerLeave={() => previewChoice('hoveredId')}
                     onFocus={() => previewChoice('focusedId', id)} onBlur={() => previewChoice('focusedId')}

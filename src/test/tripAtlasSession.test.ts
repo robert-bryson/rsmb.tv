@@ -32,6 +32,21 @@ describe('atlas tab sessions', () => {
         expect(readAtlasSession('new-key', url)).toEqual(saved);
     });
 
+    it('restores the originating visit when another visit has overwritten the same URL', async () => {
+        const { saveAtlasSession, readAtlasSession } = await import('../features/trips/atlas/tripAtlasSession');
+        saveAtlasSession('original-visit', url, saved);
+        saveAtlasSession('later-visit', url, { panelOpen: true, scrollTop: 0 });
+        expect(readAtlasSession('return-visit', url, 'original-visit')).toEqual(saved);
+        saveAtlasSession('return-visit', url, { panelOpen: false, scrollTop: 80 });
+        expect(readAtlasSession('return-visit', url, 'original-visit')).toEqual({ panelOpen: false, scrollTop: 80 });
+    });
+
+    it('does not substitute another visit when an explicit return snapshot is unavailable', async () => {
+        const { saveAtlasSession, readAtlasSession } = await import('../features/trips/atlas/tripAtlasSession');
+        saveAtlasSession('later-visit', url, saved);
+        expect(readAtlasSession('return-visit', url, 'expired-visit')).toBeUndefined();
+    });
+
     it.each(['read', 'write'])('retains in-memory navigation when storage %s fails', async failure => {
         if (failure === 'read') vi.spyOn(window, 'sessionStorage', 'get').mockImplementation(() => { throw new Error('Storage blocked'); });
         else vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('Quota exceeded'); });

@@ -79,8 +79,9 @@ export function saveAtlasSession(key: string, url: string, session: AtlasSession
     }
 }
 
-export function readAtlasSession(key: string, returnUrl?: string) {
+export function readAtlasSession(key: string, returnUrl?: string, returnKey?: string) {
     const current = getSessions();
-    const saved = current.get(key) ?? (returnUrl ? current.get(returnUrl) : undefined);
+    // An explicit source visit must never fall back to another visit at the same URL.
+    const saved = current.get(key) ?? (returnKey ? current.get(returnKey) : returnUrl ? current.get(returnUrl) : undefined);
     return saved ? snapshot(saved) : undefined;
 }

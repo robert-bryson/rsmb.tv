@@ -110,6 +110,30 @@ describe('atlas renderer lifecycle', () => {
     });
 
     it.each([
+        { name: 'unchanged selection', selectedId: 'coast', fitVersion: 1, shouldFit: false },
+        { name: 'new selection', selectedId: 'inland', fitVersion: 2, shouldFit: true },
+        { name: 'overview request', selectedId: undefined, fitVersion: 2, shouldFit: true },
+    ])('preserves saved-camera identity through constructor failure ($name)', ({ selectedId, fitVersion, shouldFit }) => {
+        fake.failInitialization = true;
+        const props = {
+            entries: [entry, { ...entry, id: 'inland', title: 'Inland' }],
+            routes: { coast: { route, error: '', retry: vi.fn() }, inland: { route, error: '', retry: vi.fn() } },
+            selectedId: 'coast', fitVersion: 1, panelOpen: true,
+            initialCamera: { center: [-100, 40] as [number, number], zoom: 6, bearing: 0, pitch: 0 },
+            onSelect: vi.fn(), onHover: vi.fn(), onCameraChange: vi.fn(),
+        };
+        const { rerender } = render(<TripAtlasMap {...props} />);
+        expect(fake.instances).toHaveLength(0);
+        rerender(<TripAtlasMap {...props} selectedId={selectedId} fitVersion={fitVersion} />);
+        fake.failInitialization = false;
+        fireEvent.click(screen.getByRole('button', { name: 'Retry map' }));
+        const recovered = fake.instances[0];
+        expect(recovered.options.center).toEqual([-100, 40]);
+        act(() => { recovered.events.get('styledata')?.forEach(listener => listener()); });
+        expect(recovered.fitBounds).toHaveBeenCalledTimes(shouldFit ? 1 : 0);
+    });
+
+    it.each([
         ['background tiles', { error: new Error('Tile request failed'), sourceId: 'basemap' }, false],
         ['route source', { error: new Error('Invalid GeoJSON'), sourceId: 'atlas-routes' }, true],
         ['worker', { error: new Error('Worker initialization failed') }, true],
@@ -163,6 +187,39 @@ describe('atlas renderer lifecycle', () => {
         expect(fake.fullscreenOptions[0]?.container).toBe(target);
     });
 
+    it.each(['inland', undefined])('retains a pending fit through renderer recovery (destination: %s)', selectedId => {
+        const inland = { ...entry, id: 'inland', title: 'Inland' };
+        const entries = [entry, inland];
+        const routes = {
+            coast: { route, error: '', retry: vi.fn() },
+            inland: { route: null as RouteGeoJson | null, error: '', retry: vi.fn() },
+        };
+        const props = {
+            entries, routes, selectedId: 'coast', fitVersion: 1, panelOpen: true,
+            onSelect: vi.fn(), onHover: vi.fn(), onCameraChange: vi.fn(),
+        };
+        const { rerender } = render(<TripAtlasMap {...props} />);
+        const original = fake.instances[0];
+        act(() => { original.events.get('styledata')?.forEach(listener => listener()); });
+        act(() => { original.events.get('moveend')?.forEach(listener => listener()); });
+        expect(original.fitBounds).toHaveBeenCalledOnce();
+        expect(props.onCameraChange).toHaveBeenCalled();
+        rerender(<TripAtlasMap {...props} selectedId={selectedId} fitVersion={2} />);
+        expect(original.fitBounds).toHaveBeenCalledOnce();
+        act(() => { original.events.get('webglcontextlost')?.forEach(listener => listener()); });
+        fireEvent.click(screen.getByRole('button', { name: 'Retry map' }));
+        const recovered = fake.instances[1];
+        expect(recovered.options.center).toEqual([-121.5, 46.5]);
+        act(() => { recovered.events.get('styledata')?.forEach(listener => listener()); });
+        expect(recovered.fitBounds).not.toHaveBeenCalled();
+        rerender(<TripAtlasMap {...props} selectedId={selectedId} fitVersion={2}
+            routes={{ ...routes, inland: { ...routes.inland, route } }} />);
+        expect(recovered.fitBounds).toHaveBeenCalledOnce();
+        rerender(<TripAtlasMap {...props} selectedId={selectedId} fitVersion={2}
+            routes={{ ...routes, inland: { ...routes.inland, route } }} />);
+        expect(recovered.fitBounds).toHaveBeenCalledOnce();
+    });
+
     it.each([undefined, 'coast'])('cancels a pending fit after manual movement (selected: %s) and permits a new fit request', selectedId => {
         const props = {
             entries: [entry], routes: { coast: { route: null, error: '', retry: vi.fn() } }, selectedId,
@@ -183,6 +240,30 @@ describe('atlas renderer lifecycle', () => {
         if (!selectedId) expect(props.onViewChange).toHaveBeenLastCalledWith(true);
         rerender(<TripAtlasMap {...props} fitVersion={props.fitVersion + 1} routes={{ coast: { route, error: '', retry: vi.fn() } }} />);
         expect(instance.fitBounds).toHaveBeenCalledOnce();
+    });
+
+    it('keeps a manually cancelled fit cancelled after renderer recovery', () => {
+        const props = {
+            entries: [entry], routes: { coast: { route: null, error: '', retry: vi.fn() } },
+            selectedId: 'coast', fitVersion: 1, panelOpen: true,
+            onSelect: vi.fn(), onHover: vi.fn(), onCameraChange: vi.fn(),
+        };
+        const { rerender } = render(<TripAtlasMap {...props} />);
+        const original = fake.instances[0];
+        act(() => {
+            original.events.get('movestart')?.forEach(listener => listener({ originalEvent: new Event('mousedown') }));
+            original.center = { lng: -100, lat: 40 };
+            original.events.get('moveend')?.forEach(listener => listener());
+            original.events.get('webglcontextlost')?.forEach(listener => listener());
+        });
+        fireEvent.click(screen.getByRole('button', { name: 'Retry map' }));
+        const recovered = fake.instances[1];
+        act(() => { recovered.events.get('styledata')?.forEach(listener => listener()); });
+        rerender(<TripAtlasMap {...props} routes={{ coast: { ...props.routes.coast, route } }} />);
+        expect(recovered.options.center).toEqual([-100, 40]);
+        expect(recovered.fitBounds).not.toHaveBeenCalled();
+        rerender(<TripAtlasMap {...props} fitVersion={2} routes={{ coast: { ...props.routes.coast, route } }} />);
+        expect(recovered.fitBounds).toHaveBeenCalledOnce();
     });
 
     it('does not cancel a pending route fit for programmatic camera movement', () => {

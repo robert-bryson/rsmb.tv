@@ -24,13 +24,12 @@ Use the [review index](docs/README.md) for dated findings and test results.
 
 ### Kalaloch trip
 
-The manifest supports local preview. The public route and hero photo returned HTTP 403 on 2026-10-01.
+Kalaloch is published. All 76 external asset URLs in its manifest returned HTTP 200 on October 31, 2026.
+The following source checks remain open.
 
 - [ ] Review each photo against its source. Verify the alt text, dates, and gallery order.
-- [ ] Publish the processed photos and route files. Check every image size and route URL for HTTP 200.
 - [ ] Verify the track dates against source records. The filenames include dates outside the stated trip period.
 - [ ] Verify the reported 450 miles, three riding days, and stop locations against source records.
-- [ ] Keep the Sheet `published` value `false` until the publication checks pass.
 
 ### Trip story sources
 
@@ -59,7 +58,11 @@ The historical signal is not ready for publication.
 
 ## Dependency security
 
-- [ ] Resolve [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249) when the ESLint toolchain supports a patched minimatch version. See the [review](docs/reviews/2026-10-30-trip-content-and-atlas-review.md#dependency-security) for affected versions and upgrade constraints.
+- [ ] Resolve [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249) when the ESLint toolchain supports a patched minimatch version.
+
+Compatible dependencies were updated on October 31.
+The full audit still fails on 12 moderate development findings.
+See the [current review](docs/reviews/2026-10-31-adv-atlas-critical-review.md#dependency-security) for verification and upgrade constraints.
 
 ## Browser checks
 

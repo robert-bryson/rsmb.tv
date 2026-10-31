@@ -18,7 +18,7 @@ import { TripStoryHeader } from '../features/trips/components/TripStoryHeader';
 import { TripStoryDetails } from '../features/trips/components/TripStoryDetails';
 import { TripStoryProvider } from '../features/trips/TripStoryProvider';
 import type { TripManifest } from '../features/trips/types';
-import { isTripAtlasLocation } from '../features/trips/atlas/tripAtlasView';
+import { getPostReturnDestination } from '../blog/postReturnDestination';
 
 interface BlogPostProps {
     collection: 'blog' | 'trips';
@@ -44,10 +44,7 @@ export function BlogPost({ collection }: BlogPostProps) {
     }, [tripId]);
     const tripManifest = loaded?.id === tripId ? loaded?.manifest : undefined;
     const summary = getTripSummary(tripId);
-    const defaultReturn = isTrip ? '/posts?type=trips' : '/posts?type=writing';
-    const from = (location.state as { from?: string } | null)?.from;
-    const returnTo = typeof from === 'string' && (/^\/posts(?:\?|$)/.test(from) || isTripAtlasLocation(from)) ? from : defaultReturn;
-    const returnLabel = isTripAtlasLocation(returnTo) ? 'Back to map' : 'Back to posts';
+    const returnDestination = getPostReturnDestination(location.state, isTrip ? 'trips' : 'blog');
     const collectionPosts = getAllPosts().filter(candidate => isTrip ? candidate.format === 'trip' : candidate.format !== 'trip');
     const postIndex = collectionPosts.findIndex(candidate => candidate.slug === post?.slug);
     // Posts are newest first: the previous post is older, and the next is newer.
@@ -117,8 +114,8 @@ export function BlogPost({ collection }: BlogPostProps) {
     if (isTrip && !tripManifest) {
         return (
             <div>
-                <Link to={returnTo} state={{ restoreScroll: true }} className="mb-6 inline-block text-sm text-zinc-400 hover:text-violet-400">
-                    ← {returnLabel}
+                <Link to={returnDestination.to} state={returnDestination.returnState} className="mb-6 inline-block text-sm text-zinc-400 hover:text-violet-400">
+                    ← {returnDestination.label}
                 </Link>
                 <DevelopmentContentStatus post={post} />
                 {isDevelopmentContent() ? <>
@@ -156,16 +153,16 @@ export function BlogPost({ collection }: BlogPostProps) {
         <article className={isTrip ? 'trip-story' : undefined}>
             {!isTrip && <div className="mb-6 flex items-baseline justify-between gap-4 text-sm text-zinc-400">
                 <Link
-                    to={returnTo} state={{ restoreScroll: true }}
+                    to={returnDestination.to} state={returnDestination.returnState}
                     className="shrink-0 hover:text-violet-400"
                 >
-                    ← {returnLabel}
+                    ← {returnDestination.label}
                 </Link>
             </div>}
 
             {tripManifest ? (
                 <TripStoryProvider manifest={tripManifest}>
-                    <TripStoryHeader post={post} returnTo={returnTo} returnLabel={returnLabel} />
+                    <TripStoryHeader post={post} returnDestination={returnDestination} />
                     <DevelopmentContentStatus post={post} />
                     {postContent}
                 </TripStoryProvider>
@@ -187,8 +184,16 @@ export function BlogPost({ collection }: BlogPostProps) {
                 </>
             )}
             <footer className="mt-12 space-y-5 border-t border-zinc-800 pt-6 text-sm">
-                {seriesPosts.length > 1 && <nav aria-label={series?.title}><p className="mb-2 font-medium">{series?.title}</p><ol className="space-y-2">{seriesPosts.map(part => <li key={part.slug}><Link aria-current={part.slug === post.slug ? 'page' : undefined} className="text-violet-300 underline" to={`/${part.format === 'trip' ? 'trips' : 'blog'}/${part.slug}`}  state={{ from: returnTo }}>{part.title}</Link></li>)}</ol></nav>}
-                <PostNavigation previous={previousPost} next={nextPost} returnTo={returnTo} returnLabel={returnLabel} />
+                {seriesPosts.length > 1 && <nav aria-label={series?.title}>
+                    <p className="mb-2 font-medium">{series?.title}</p>
+                    <ol className="space-y-2">{seriesPosts.map(part => <li key={part.slug}>
+                        <Link aria-current={part.slug === post.slug ? 'page' : undefined} className="text-violet-300 underline"
+                            to={`/${part.format === 'trip' ? 'trips' : 'blog'}/${part.slug}`} state={returnDestination.onwardState}>
+                            {part.title}
+                        </Link>
+                    </li>)}</ol>
+                </nav>}
+                <PostNavigation previous={previousPost} next={nextPost} returnDestination={returnDestination} />
             </footer>
         </article>
     );

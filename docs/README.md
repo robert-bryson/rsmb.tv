@@ -30,7 +30,11 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-10-31 | [ADV Atlas critical review, pending fits, and keyboard focus](reviews/2026-10-31-adv-atlas-critical-review.md) |
+| 2026-10-31 | [ADV Atlas merge fixes and dependency update](reviews/2026-10-31-adv-atlas-merge-fixes.md) |
+| 2026-10-31 | [ADV Atlas pre-merge review and research](reviews/2026-10-31-adv-atlas-merge-research.md) |
 | 2026-10-31 | [Trip content, native fullscreen recovery, and regression review](reviews/2026-10-31-trip-content-and-recovery-review.md) |
+| 2026-10-31 | [ADV Atlas multipart trip identity and chapter navigation research](reviews/2026-10-31-adv-atlas-multipart-trips-research.md) |
 | 2026-10-30 | [Trip content, atlas navigation, fullscreen recovery, and dependency review](reviews/2026-10-30-trip-content-and-atlas-review.md) |
 | 2026-10-30 | [ADV Atlas session restoration and regression review](reviews/2026-10-30-adv-atlas-session-review.md) |
 | 2026-10-30 | [ADV Atlas quality review, camera recovery, and publication fixes](reviews/2026-10-30-adv-atlas-quality-review.md) |

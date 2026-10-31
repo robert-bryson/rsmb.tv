@@ -258,14 +258,19 @@ The browser checks cover these behaviors:
 - **Show only selected trip** filters cards and geometry. It retains the camera and route colors.
 - The `view=selected` filter survives report navigation. Deselecting or selecting **Zoom to all trips** removes it.
 - Reports retain their map return link. Returning restores card scroll and camera position, including after a report reload.
+- A second visit to the same atlas URL does not replace the first report's return view. Header, footer, neighboring-article, and series links retain that view.
 - Reloading the atlas retains its camera and collapsed panel within the same tab.
 - Separate direct visits receive different history keys. A fresh visit frames its requested trip and starts with the normal panel state.
 - Shared roads show route choices. Pointer and keyboard previews retain selection and camera position.
+- Keyboard choice selection focuses the selected card's **Show route** button. Tab navigation continues from that card.
+- Pointer choice selection does not move keyboard focus. Reopening the panel does not repeat an earlier focus move.
 - Escape dismisses previews and choices. Dismissing a preview does not clear the selected trip.
+- Escape also closes shared-road choices after focus moves to the trip panel or another control outside the map.
 - A delayed route does not override a newer selection or manual camera movement.
 - Moving before routes load still permits **Zoom to all trips** after loading finishes.
 - Fullscreen includes the list, overview button, route choices, and recovery controls.
 - Renderer retries retain fullscreen, the selected trip, and the fullscreen button's icon.
+- Renderer retries retain pending selection and overview fits until delayed routes load. Manual movement still cancels a pending fit.
 - Failed routes retry independently. Renderer failures leave report links available.
 
 Layout checks use widths of 320, 767, 768, 858, 1023, 1024, and 1754 pixels.
@@ -290,6 +295,7 @@ Run the content, geometry, lifecycle, and publication checks:
 ```bash
 npx vitest run src/test/tripAtlasEntries.test.ts src/test/tripAtlasView.test.ts src/test/tripAtlasSession.test.ts \
   src/test/tripAtlasMap.test.tsx src/test/advAtlas.test.tsx \
+  src/test/postReturnDestination.test.ts src/test/postNavigation.test.tsx src/test/blogPages.test.tsx \
   src/test/browserHistory.test.ts src/test/AtlasFullscreenControl.test.ts \
   scripts/__tests__/tripContent.test.ts scripts/__tests__/tripManifestAuthoring.test.ts \
   scripts/__tests__/generateFeeds.test.ts scripts/__tests__/amplifyConfig.test.ts
@@ -299,6 +305,7 @@ Strict Mode must not retain a replaced renderer's default camera.
 Manual movement cancels the pending fit for the current selection.
 A later explicit fit request must still work.
 Programmatic movement must not cancel a pending route fit.
+Renderer recovery must retain completed and cancelled requests without completing an outstanding request.
 Session checks reload the JavaScript module before reading saved state.
 They cover malformed storage, blocked access, full storage, independent snapshots, and bounded history.
 Page checks verify `pagehide` saves and listener removal.
