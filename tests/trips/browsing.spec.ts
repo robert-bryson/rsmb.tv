@@ -53,6 +53,7 @@ test('selected-only is absent until selection and disappears when selection clea
 test('filter drafts and invalid ranges leave applied results intact, while valid inclusive ranges update cards and routes together', async ({ page }) => {
     await page.goto(atlas);
     await expect(page.getByText('2/2 routes')).toBeVisible();
+    await expect.poll(() => camera(page)).toBeDefined();
     const before = (await camera(page))!;
     await page.getByRole('button', { name: /^Filters/ }).click();
     await page.getByLabel('Minimum days').fill('3');

@@ -122,6 +122,11 @@ Redirects retain query parameters, fragments, and return state.
 Select **Show route** or a route line to select a trip.
 Shared roads show named route choices.
 Pointer and keyboard previews highlight routes without changing the selection or camera.
+Their popups attach to visible track segments.
+If the entire route is off screen, the popup stays near the closest map edge and points toward the track.
+Placement uses projected geometry, so map rotation changes the indicated direction.
+It retains gaps between disconnected tracks and includes segments that cross the view with both endpoints outside it.
+Popups follow camera movement and remain inside the map, with space for controls where possible.
 Keyboard selection closes the choices and focuses the selected card's **Show route** button.
 Pointer selection reveals the card without moving keyboard focus.
 Reopening the trip panel does not repeat the focus move.
@@ -191,6 +196,7 @@ If fullscreen ends during a failed retry, the next renderer creates a fresh full
 | `src/utils/browserHistory.ts` | Give direct browser visits unique keys that survive reloads |
 | `src/pages/AdvAtlas.tsx` | Coordinate cards, route readers, URL state, and page lifecycle |
 | `src/features/trips/atlas/TripAtlasMap.tsx` | Manage MapLibre rendering, camera fitting, and map input |
+| `src/features/trips/atlas/atlasTooltipPlacement.ts` | Find visible track anchors and directional anchors for off-screen routes |
 | `src/features/trips/atlas/AtlasFullscreenControl.ts` | Keep the fullscreen icon correct after renderer replacement |
 
 Use the [trip testing guide](TESTING.md#adv-atlas) for regression commands and required behavior.

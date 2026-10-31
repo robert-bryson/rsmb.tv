@@ -249,7 +249,7 @@ Run atlas interactions and article budgets with fixed production content:
 
 ```bash
 PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- \
-  --grep 'atlas.spec|browsing.spec|sharing.spec|reading routes exclude' --workers=2
+  --grep 'atlas.spec|browsing.spec|sharing.spec|tooltip-placement.spec|reading routes exclude' --workers=2
 ```
 
 The browser checks cover these behaviors:
@@ -313,6 +313,13 @@ Checks cover safe text, the colored edge, popup reuse, cleanup, and Escape dismi
 Atlas tooltips add the start month and year below the title.
 Both lines share a starting edge, with a 4-pixel gap.
 Date-only changes update the existing popup.
+Off-screen route checks cover all four edges and four corners in Chromium and WebKit.
+They verify the directional pointer, complete popup bounds, and unchanged camera.
+Visible-track checks reject a viewport-center fallback when the route midpoint is outside the view.
+Geometry checks retain disconnected tracks, crossing segments, and repeated worlds.
+Movement checks update the popup direction and reject events from removed renderers.
+Desktop wheel checks retain card focus while the route changes from off screen to visible.
+Phone projects omit mouse-wheel input; they check all directions, visible segments, and rotation.
 See the [tooltip review](../reviews/2026-10-30-adv-atlas-tooltip-hierarchy.md) for the visual decision.
 Screenshot helpers hide overlays through opacity. Pointer targets remain in place during measurements.
 Route screenshots and canvas bounds must describe one stable layout.
@@ -327,6 +334,7 @@ npx vitest run src/test/tripAtlasEntries.test.ts src/test/tripAtlasView.test.ts 
   src/test/tripAtlasBrowser.test.ts \
   src/test/tripAtlasFilters.test.tsx \
   src/test/tripAtlasUrlState.test.ts src/test/useAtlasUrlState.test.tsx src/test/tripAtlasShare.test.tsx \
+  src/test/atlasTooltipPlacement.test.ts \
   src/test/tripAtlasMap.test.tsx src/test/advAtlas.test.tsx \
   src/test/postReturnDestination.test.ts src/test/postNavigation.test.tsx src/test/blogPages.test.tsx \
   src/test/browserHistory.test.ts src/test/AtlasFullscreenControl.test.ts \

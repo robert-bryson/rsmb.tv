@@ -17,6 +17,7 @@ const fake = vi.hoisted(() => ({
         fitBounds: ReturnType<typeof vi.fn>;
         jumpTo: ReturnType<typeof vi.fn>;
         isMoving: () => boolean;
+        project: (point: [number, number] | { lng: number; lat: number }) => { x: number; y: number };
         center: { lng: number; lat: number };
         options: InitialCamera;
     }>,
@@ -36,6 +37,7 @@ vi.mock('maplibre-gl', () => ({
         element = document.createElement('div');
         constructor(options: unknown) { fake.popupOptions.push(options); }
         setLngLat() { return this; }
+        setMaxWidth() { return this; }
         setText(text: string) { this.element.textContent = text; return this; }
         setDOMContent(content: Node) { this.element.replaceChildren(content); return this; }
         addTo() { document.body.append(this.element); return this; }
@@ -49,10 +51,13 @@ vi.mock('maplibre-gl', () => ({
         jumpTo = vi.fn((camera: AtlasCamera) => { this.center = { lng: camera.center[0], lat: camera.center[1] }; });
         center = { lng: -121.5, lat: 46.5 };
         canvas = document.createElement('canvas');
+        container: HTMLElement;
         options: InitialCamera;
-        constructor(options: InitialCamera) {
+        constructor(options: InitialCamera & { container: HTMLElement }) {
             if (fake.failInitialization) throw new Error('WebGL initialization failed');
             this.options = options;
+            this.container = options.container;
+            Object.defineProperties(this.container, { clientWidth: { configurable: true, value: 800 }, clientHeight: { configurable: true, value: 600 } });
             this.center = { lng: options.center[0], lat: options.center[1] };
             fake.instances.push(this);
         }
@@ -65,6 +70,8 @@ vi.mock('maplibre-gl', () => ({
         off() {}
         addControl() {}
         getCanvas() { return this.canvas; }
+        getContainer() { return this.container; }
+        getRenderWorldCopies() { return false; }
         resize() { return this; }
         stop() { this.events.get('moveend')?.forEach(listener => listener()); return this; }
         getLayer() { return {}; }
@@ -77,8 +84,10 @@ vi.mock('maplibre-gl', () => ({
         isMoving() { return false; }
         cameraForBounds() { return { center: [-121.5, 46.5], zoom: 5.5 }; }
         project(point: [number, number] | { lng: number; lat: number }) {
-            return Array.isArray(point) ? { x: point[0], y: point[1] } : { x: point.lng, y: point.lat };
+            return Array.isArray(point) ? { x: (point[0] + 125) * 100, y: (50 - point[1]) * 100 }
+                : { x: (point.lng + 125) * 100, y: (50 - point.lat) * 100 };
         }
+        unproject([x, y]: [number, number]) { return { lng: x / 100 - 125, lat: 50 - y / 100 }; }
         setFilter() {}
         setPaintProperty() {}
         remove() {}
@@ -432,6 +441,26 @@ describe('atlas renderer lifecycle', () => {
         rerender(<TripAtlasMap {...props} highlightedId="coast" />);
         expect(screen.getByRole('tooltip')).toBeInTheDocument();
         unmount();
+        expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+    });
+
+    it('updates directional card feedback after camera movement and ignores removed renderers', async () => {
+        const east: RouteGeoJson = { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: [[-100, 47], [-99, 46]] } };
+        const { unmount } = render(<TripAtlasMap entries={[entry]} routes={{ coast: { route: east, error: '', retry: vi.fn() } }}
+            fitVersion={0} panelOpen highlightedId="coast" onSelect={vi.fn()} onHover={vi.fn()} onCameraChange={vi.fn()} />);
+        const instance = fake.instances[0];
+        act(() => { instance.events.get('styledata')?.forEach(listener => listener()); });
+        expect(fake.popupOptions.at(-1)).toMatchObject({ anchor: 'right' });
+        vi.spyOn(instance, 'project').mockImplementation(point => {
+            const lng = Array.isArray(point) ? point[0] : point.lng;
+            return { x: (lng + 125) * 100 - 4000, y: 300 };
+        });
+        act(() => { instance.events.get('move')?.forEach(listener => listener()); });
+        await waitFor(() => expect(fake.popupOptions.at(-1)).toMatchObject({ anchor: 'left' }));
+        unmount();
+        const count = fake.popupOptions.length;
+        act(() => { instance.events.get('move')?.forEach(listener => listener()); });
+        expect(fake.popupOptions).toHaveLength(count);
         expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     });
 

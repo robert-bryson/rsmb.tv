@@ -13,6 +13,7 @@ import type { TripAtlasEntry } from './tripAtlasEntries';
 import { combineAtlasRoutes, tripAtlasColor, type AtlasRouteState } from './tripAtlasView';
 import type { AtlasCamera } from './tripAtlasSession';
 import { encodeAtlasCamera } from './tripAtlasUrlState';
+import { atlasTooltipPlacement } from './atlasTooltipPlacement';
 import { restoreAtlasFullscreenControl, type AtlasFullscreenControl } from './AtlasFullscreenControl';
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl);
@@ -128,7 +129,7 @@ export default function TripAtlasMap(props: Props) {
         tooltip.current?.label.remove();
         tooltip.current = null;
     };
-    const showTooltip = useEffectEvent((id: string, coordinates: [number, number]) => {
+    const showTooltip = useEffectEvent((id: string, coordinates: [number, number], anchor?: maplibregl.PositionAnchor) => {
         const instance = mapRef.current;
         const entry = props.entries.find(entry => entry.id === id);
         if (!instance || !entry?.summary || failure) return;
@@ -136,12 +137,34 @@ export default function TripAtlasMap(props: Props) {
             clearTooltip();
             tooltip.current = { map: instance, label: createTripMapTooltip(instance, tooltipId) };
         }
-        tooltip.current.label.show({ label: entry.title, subtitle: formatMonthYear(entry.summary.dates.start, 'long'), color: tripAtlasColor(id), coordinates });
+        tooltip.current.label.show({ label: entry.title, subtitle: formatMonthYear(entry.summary.dates.start, 'long'), color: tripAtlasColor(id), coordinates, anchor });
+    });
+    const refreshTooltip = useEffectEvent(() => {
+        const instance = mapRef.current;
+        const id = props.highlightedId;
+        const route = id && props.routes[id]?.route;
+        if (!instance || instance !== map || !id || !route || failure) { clearTooltip(); return; }
+        const { clientWidth: width, clientHeight: height } = instance.getContainer();
+        const hovered = routeHover.current?.id === id ? routeHover.current.coordinates : undefined;
+        if (hovered) {
+            const point = instance.project(hovered);
+            if (point.x >= 0 && point.x <= width && point.y >= 0 && point.y <= height) { showTooltip(id, hovered); return; }
+        }
+        const placement = atlasTooltipPlacement(route, { width, height, project: coordinates => instance.project(coordinates),
+            centerLongitude: instance.getRenderWorldCopies() ? instance.getCenter().lng : undefined });
+        if (!placement) { clearTooltip(); return; }
+        const coordinates = instance.unproject([placement.point.x, placement.point.y]);
+        showTooltip(id, [coordinates.lng, coordinates.lat], placement.anchor);
     });
 
     useEffect(() => {
         if (!container.current) return;
         let disposed = false;
+        let tooltipFrame = 0;
+        const queueTooltip = () => {
+            if (disposed || tooltipFrame) return;
+            tooltipFrame = requestAnimationFrame(() => { tooltipFrame = 0; if (!disposed) refreshTooltip(); });
+        };
         const current = getCurrent();
         const baseStyle = mapStyle('muted');
         let instance: maplibregl.Map;
@@ -196,7 +219,7 @@ export default function TripAtlasMap(props: Props) {
         };
         // Parent navigation cleanup can persist before this renderer is removed.
         // Keep its session current during animation and gestures, before moveend.
-        instance.on('move', saveCamera);
+        instance.on('move', () => { saveCamera(); queueTooltip(); });
         instance.on('moveend', () => {
             const value = saveCamera();
             const current = getCurrent();
@@ -205,6 +228,7 @@ export default function TripAtlasMap(props: Props) {
             if (value && !suppressCameraPublish.current && !instance.isMoving()
                 && lastFit.current?.key === `${target ?? 'all'}:${current.fitVersion}`) publishCamera(value);
             compareOverview();
+            queueTooltip();
         });
         instance.on('resize', () => {
             if (disposed) return;
@@ -283,6 +307,7 @@ export default function TripAtlasMap(props: Props) {
         return () => {
             saveCamera();
             disposed = true;
+            cancelAnimationFrame(tooltipFrame);
             routeHover.current = null;
             if (tooltip.current?.map === instance) clearTooltip();
             instance.off('render', repaint);
@@ -315,20 +340,8 @@ export default function TripAtlasMap(props: Props) {
     }, [map, selectedId, highlightedId, reducedMotion]);
 
     useEffect(() => {
-        if (!map || mapRef.current !== map || !highlightedId || failure) {
-            clearTooltip();
-            if (!highlightedId) routeHover.current = null;
-            return;
-        }
-        const route = routes[highlightedId]?.route;
-        if (!route) { clearTooltip(); return; }
-        const points = routeCoordinates(route);
-        const middle = points[Math.floor(points.length / 2)];
-        const anchor: [number, number] | undefined = routeHover.current?.id === highlightedId
-            ? routeHover.current.coordinates : middle ? [middle[0], middle[1]] : undefined;
-        if (!anchor) { clearTooltip(); return; }
-        const center = map.getCenter();
-        showTooltip(highlightedId, map.getBounds().contains(anchor) ? anchor : [center.lng, center.lat]);
+        if (!highlightedId) routeHover.current = null;
+        refreshTooltip();
     }, [map, highlightedId, entries, routes, failure]);
 
     useLayoutEffect(() => {
