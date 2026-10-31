@@ -1,57 +1,8 @@
-import { expect, test, type Page } from '@playwright/test';
-import sharp from 'sharp';
+import { expect, test } from '@playwright/test';
 import { tripAtlasColor } from '../../src/features/trips/atlas/tripAtlasView';
+import { atlas, atlasCamera, followReport, geometry, mockAtlasAssets, openList, paintedRoute } from './atlasTestHelpers';
 
-const atlas = '/projects/adv-atlas/map';
-const geometry = {
-    type: 'FeatureCollection', features: [{
-        type: 'Feature', id: 0, properties: { trackId: 'morning' },
-        geometry: { type: 'MultiLineString', coordinates: [[[-122, 47], [-123, 46], [-124, 45]], [[-124.2, 45.1], [-124.3, 45.3]]] },
-    }],
-};
-
-test.beforeEach(async ({ page }) => {
-    const tile = await sharp({ create: { width: 256, height: 256, channels: 3, background: '#777' } }).png().toBuffer();
-    await page.route('https://tile.openstreetmap.org/**', route => route.fulfill({ contentType: 'image/png', body: tile }));
-    await page.route('**/test-trip/**', route => route.request().url().endsWith('.geojson')
-        ? route.fulfill({ json: geometry })
-        : route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000"><rect width="100%" height="100%" fill="#405b6b"/></svg>' }));
-});
-
-async function openList(page: Page) {
-    const toggle = page.locator('#atlas-panel-toggle');
-    if (await toggle.getAttribute('aria-expanded') !== 'true') await toggle.click();
-}
-
-async function paintedRoute(page: Page, id?: string, tolerance = 12, aim: 'center' | 'north' = 'center') {
-    const canvas = page.locator('[data-testid="trip-atlas-map"] canvas');
-    const screenshot = await canvas.screenshot({ style: 'header, aside, [data-testid="atlas-overview-control"], .maplibregl-control-container, .maplibregl-popup { opacity: 0 !important; }' });
-    const { data, info } = await sharp(screenshot).removeAlpha().raw().toBuffer({ resolveWithObject: true });
-    const hex = id ? tripAtlasColor(id).slice(1) : '';
-    const color = id ? [0, 2, 4].map(offset => parseInt(hex.slice(offset, offset + 2), 16)) : undefined;
-    let count = 0;
-    let point = { x: 0, y: 0 };
-    let nearest = Infinity;
-    const bounds = [info.width, info.height, 0, 0];
-    for (let index = 0; index < data.length; index += info.channels) {
-        const matches = color ? color.every((channel, offset) => Math.abs(data[index + offset] - channel) < tolerance)
-            : Math.max(data[index], data[index + 1], data[index + 2]) - Math.min(data[index], data[index + 1], data[index + 2]) > 60;
-        if (!matches) continue;
-        const pixel = index / info.channels;
-        const x = pixel % info.width;
-        const y = Math.floor(pixel / info.width);
-        count++;
-        bounds[0] = Math.min(bounds[0], x); bounds[1] = Math.min(bounds[1], y);
-        bounds[2] = Math.max(bounds[2], x); bounds[3] = Math.max(bounds[3], y);
-        const distance = aim === 'north' ? y * info.width + Math.abs(x - info.width / 2) : (x - info.width / 2) ** 2 + (y - info.height / 2) ** 2;
-        if (distance < nearest) { nearest = distance; point = { x, y }; }
-    }
-    const box = await canvas.boundingBox();
-    const scaleX = box!.width / info.width;
-    const scaleY = box!.height / info.height;
-    return { count, point: { x: point.x * scaleX, y: point.y * scaleY }, bounds,
-        cssBounds: bounds.map((value, index) => value * (index % 2 ? scaleY : scaleX)) };
-}
+test.beforeEach(async ({ page }) => mockAtlasAssets(page));
 
 test('overview control avoids panels across responsive widths and hides when all trips are framed again', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -71,16 +22,10 @@ test('overview control avoids panels across responsive widths and hides when all
         for (const open of [true, false]) {
             if (await panelToggle.getAttribute('aria-expanded') !== String(open)) await panelToggle.click();
             const buttonBox = (await reset.boundingBox())!;
-            const titleBox = (await page.getByRole('heading', { name: 'ADV Atlas', exact: true }).locator('..').boundingBox())!;
-            const panelBox = (await page.getByRole('complementary', { name: 'Trip reports' }).boundingBox())!;
-            if (width < 768) {
-                expect(buttonBox.x + buttonBox.width / 2).toBeCloseTo(width / 2, 0);
-                expect(buttonBox.y).toBeGreaterThanOrEqual(titleBox.y + titleBox.height);
-            } else {
-                expect(buttonBox.y).toBeCloseTo(titleBox.y, 0);
-                expect(buttonBox.x).toBeGreaterThanOrEqual(titleBox.x + titleBox.width + 4);
-                if (width >= 1024) expect(buttonBox.x + buttonBox.width / 2).toBeCloseTo(width / 2, 0);
-            }
+            const panelBox = (await page.locator('#atlas-trip-panel').boundingBox())!;
+            const mapBox = (await page.getByTestId('atlas-map-viewport').boundingBox())!;
+            expect(buttonBox.x + buttonBox.width / 2).toBeCloseTo(mapBox.x + mapBox.width / 2, 0);
+            expect(buttonBox.y).toBeGreaterThanOrEqual(mapBox.y);
             const intersectionWidth = Math.max(0, Math.min(buttonBox.x + buttonBox.width, panelBox.x + panelBox.width) - Math.max(buttonBox.x, panelBox.x));
             const intersectionHeight = Math.max(0, Math.min(buttonBox.y + buttonBox.height, panelBox.y + panelBox.height) - Math.max(buttonBox.y, panelBox.y));
             expect(intersectionWidth * intersectionHeight).toBe(0);
@@ -149,14 +94,13 @@ test('shared selection and report returns restore the card scroll and camera aft
     await expect(card.getByRole('button', { name: /^Show route:/ })).toHaveAttribute('aria-pressed', 'true');
     await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
     const reportLink = card.getByRole('link', { name: /Read trip report/ });
-    await reportLink.scrollIntoViewIfNeeded();
+    await reportLink.evaluate(element => element.scrollIntoView({ block: 'end' }));
     const initial = await paintedRoute(page, 'coastal-test');
     await page.getByTestId('trip-atlas-map').locator('canvas').focus();
     await page.keyboard.press('ArrowRight');
     await expect.poll(async () => Math.abs((await paintedRoute(page, 'coastal-test')).bounds[0] - initial.bounds[0])).toBeGreaterThan(10);
     const before = await paintedRoute(page, 'coastal-test');
-    const scroll = await page.locator('#atlas-trip-list').evaluate(element => element.scrollTop);
-    await reportLink.click();
+    let scroll = await followReport(page, reportLink);
     await expect(page).toHaveURL(/\/trips\/coastal-test$/);
     await expect(page.getByRole('link', { name: /Back to map/ })).toHaveCount(2);
     await page.goBack();
@@ -165,7 +109,7 @@ test('shared selection and report returns restore the card scroll and camera aft
     await expect.poll(() => page.locator('#atlas-trip-list').evaluate(element => element.scrollTop)).toBeCloseTo(scroll, 0);
     const after = await paintedRoute(page, 'coastal-test');
     after.bounds.forEach((value, index) => expect(Math.abs(value - before.bounds[index])).toBeLessThan(5));
-    await page.locator('[data-trip-id="coastal-test"]').getByRole('link', { name: /Read trip report/ }).click();
+    scroll = await followReport(page, page.locator('[data-trip-id="coastal-test"]').getByRole('link', { name: /Read trip report/ }));
     await page.reload();
     await page.getByRole('link', { name: /Back to map/ }).first().click();
     await expect(page).toHaveURL(/\?trip=coastal-test$/);
@@ -183,10 +127,9 @@ for (const returnLink of ['header', 'footer after another report'] as const) {
         await page.goto(`${atlas}?trip=coastal-test`);
         await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
         const report = page.locator('[data-trip-id="coastal-test"]').getByRole('link', { name: /Read trip report/ });
-        await report.scrollIntoViewIfNeeded();
+        await report.evaluate(element => element.scrollIntoView({ block: 'end' }));
         const before = await paintedRoute(page, 'coastal-test');
-        const scroll = await page.locator('#atlas-trip-list').evaluate(element => element.scrollTop);
-        await report.click();
+        const scroll = await followReport(page, report);
         await page.getByRole('link', { name: /Explore this trip and all others in ADV Atlas/ }).click();
         await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
         await page.locator('#atlas-panel-toggle').click();
@@ -214,7 +157,7 @@ test('reloading the atlas restores its camera and collapsed panel within the sam
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(`${atlas}?trip=coastal-test`);
     await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
-    await page.getByRole('button', { name: /Hide trips/ }).click();
+    await page.getByRole('button', { name: 'Collapse trip panel' }).click();
     const initial = await paintedRoute(page, 'coastal-test');
     await page.getByTestId('trip-atlas-map').locator('canvas').focus();
     await page.keyboard.press('ArrowRight');
@@ -234,6 +177,7 @@ test('fresh direct atlas visits have independent history keys and frame the requ
     const url = `${atlas}?trip=coastal-test`;
     await page.goto(url);
     await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
+    await expect.poll(() => atlasCamera(page)).toBeDefined();
     const initial = await paintedRoute(page, 'coastal-test');
     const key = await page.evaluate(() => window.history.state.key as string);
     expect(key).toBeTruthy();
@@ -299,10 +243,9 @@ test('selected-trip filtering hides other geometry and cards, survives report re
     await filter.click();
     await expect(filter).toHaveAttribute('aria-pressed', 'true');
     await expect(choices).toHaveCount(0);
-    await map.locator('canvas').click({ position: { x: page.viewportSize()!.width - 24, y: 240 } });
+    await map.locator('canvas').click({ position: { x: (await map.boundingBox())!.width - 24, y: 180 } });
     await expect(page).toHaveURL(new RegExp(`${atlas}$`));
-    await expect(filter).toHaveAttribute('aria-pressed', 'false');
-    await expect(filter).toBeDisabled();
+    await expect(filter).toHaveCount(0);
     await expect(page.getByRole('heading', { level: 2 })).toHaveCount(2);
 });
 
@@ -316,7 +259,7 @@ test('clicking empty map space deselects the route without moving the camera', a
     await expect.poll(async () => (await paintedRoute(page, 'daily-test')).count).toBeGreaterThan(30);
     const before = await paintedRoute(page);
     const canvas = page.locator('[data-testid="trip-atlas-map"] canvas');
-    await canvas.click({ position: { x: page.viewportSize()!.width - 24, y: 240 } });
+    await canvas.click({ position: { x: (await canvas.boundingBox())!.width - 24, y: 180 } });
     await expect(page).toHaveURL(new RegExp(`${atlas}$`));
     await expect(page.getByRole('button', { name: /^Show route:/, pressed: true })).toHaveCount(0);
     await expect(page.locator('[data-testid="trip-atlas-map"]')).toHaveAttribute('data-selected-trip', '');
@@ -338,10 +281,10 @@ test('card photos and text select and frame routes while report links navigate n
     await expect(card.getByRole('button', { name: /^Show route:/ })).toHaveAttribute('aria-pressed', 'true');
     await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
     const { cssBounds } = await paintedRoute(page, 'coastal-test');
-    const panel = await page.getByRole('complementary', { name: 'Trip reports' }).boundingBox();
-    expect(cssBounds[1]).toBeGreaterThan(140);
-    expect(cssBounds[2]).toBeLessThan(page.viewportSize()!.width - 40);
-    expect(cssBounds[3]).toBeLessThan((isMobile ? panel!.y : page.viewportSize()!.height) - 12);
+    const mapBox = (await page.getByTestId('atlas-map-viewport').boundingBox())!;
+    expect(cssBounds[1]).toBeGreaterThan(55);
+    expect(cssBounds[2]).toBeLessThan(mapBox.width - 40);
+    expect(cssBounds[3]).toBeLessThan(mapBox.height - 12);
     const otherCard = page.locator('[data-trip-id="daily-test"]');
     await otherCard.getByRole('heading', { name: 'Daily map test trip' }).click();
     await expect(page).toHaveURL(/\?trip=daily-test$/);
@@ -359,8 +302,9 @@ test('card hover previews its route above a shared selected route without changi
     await page.goto(`${atlas}?trip=daily-test`);
     await expect(page.getByText('2/2 routes', { exact: false })).toBeVisible();
     await expect.poll(async () => (await paintedRoute(page, 'daily-test')).count).toBeGreaterThan(30);
+    await page.getByRole('button', { name: 'Use compact trip panel' }).click();
     const card = page.locator('[data-trip-id="coastal-test"]');
-    await card.getByRole('heading').scrollIntoViewIfNeeded();
+    await card.getByRole('heading').evaluate(element => element.scrollIntoView({ block: 'center' }));
     const scroll = await page.locator('#atlas-trip-list').evaluate(element => element.scrollTop);
     const map = page.locator('[data-testid="trip-atlas-map"]');
     const before = await paintedRoute(page, 'daily-test');
@@ -748,7 +692,7 @@ test('narrow screens keep panel controls, attribution, and invalid-selection fee
     await expect(page.locator('.maplibregl-ctrl-attrib')).toBeVisible();
     const attribution = await page.locator('.maplibregl-ctrl-attrib').boundingBox();
     const panel = await page.getByRole('complementary', { name: 'Trip reports' }).boundingBox();
-    expect(attribution!.y).toBeGreaterThanOrEqual(panel!.y + panel!.height);
+    expect(attribution!.y + attribution!.height).toBeLessThanOrEqual(panel!.y + 1);
     await page.locator('#atlas-panel-toggle').click();
     await expect(page.getByRole('button', { name: /^Show route:/ })).toHaveCount(0);
     await page.locator('#atlas-panel-toggle').focus();

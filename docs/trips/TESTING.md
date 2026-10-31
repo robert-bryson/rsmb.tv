@@ -249,17 +249,17 @@ Run atlas interactions and article budgets with fixed production content:
 
 ```bash
 PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- \
-  --grep 'atlas.spec|reading routes exclude' --workers=2
+  --grep 'atlas.spec|browsing.spec|reading routes exclude' --workers=2
 ```
 
 The browser checks cover these behaviors:
 
 - Card and map selections agree. Map clicks reveal the selected card.
-- **Show only selected trip** filters cards and geometry. It retains the camera and route colors.
+- **Show only selected trip** appears only after a valid selection. It filters cards and geometry without changing camera values or route colors.
 - The `view=selected` filter survives report navigation. Deselecting or selecting **Zoom to all trips** removes it.
 - Reports retain their map return link. Returning restores card scroll and camera position, including after a report reload.
 - A second visit to the same atlas URL does not replace the first report's return view. Header, footer, neighboring-article, and series links retain that view.
-- Reloading the atlas retains its camera and collapsed panel within the same tab.
+- Reloading the atlas retains its camera, panel size, and result view within the same tab.
 - Separate direct visits receive different history keys. A fresh visit frames its requested trip and starts with the normal panel state.
 - Shared roads show route choices. Pointer and keyboard previews retain selection and camera position.
 - Keyboard choice selection focuses the selected card's **Show route** button. Tab navigation continues from that card.
@@ -272,15 +272,33 @@ The browser checks cover these behaviors:
 - Renderer retries retain fullscreen, the selected trip, and the fullscreen button's icon.
 - Renderer retries retain pending selection and overview fits until delayed routes load. Manual movement still cancels a pending fit.
 - Failed routes retry independently. Renderer failures leave report links available.
+- Collapsed, compact, and expanded panels remain keyboard accessible. Collapsed content leaves the tab order.
+- Desktop expansion gives the panel half the screen. Phone expansion uses a bottom sheet and retains map space above it.
+- Panel size, result view, sorting, and filters retain camera values. **Fit results** frames matching routes explicitly.
+- Cards and table rows use the same IDs, order, counts, selection, and map results.
+- Switching between cards and table exposes the table caption and headings below the sticky toolbar.
+- Native table headers expose the active sort direction. Missing facts sort last in either direction.
+- Filter drafts leave results unchanged until **Apply filters**. Invalid ranges retain the previous URL and results.
+- Date filters include overlapping trips and both endpoints. Numeric filters compare exact source values.
+- Country and region choices combine with OR. Regions retain their country; country-wide choices include records without regions.
+- Copied URLs and browser Back restore committed filters. Excluded selections remain named without adding hidden routes.
+- Late route responses cannot restore excluded geometry or shared-road choices.
 
 Layout checks use widths of 320, 767, 768, 858, 1023, 1024, and 1754 pixels.
-They test open and collapsed panels, control overlap, and pointer targets.
+They test panel states, reserved map space, control overlap, and pointer targets.
+At 320 pixels, forms reflow and table scrolling stays inside its wrapper.
+Size changes between card views preserve the first visible result. Presentation changes return to the top.
+Sticky tools must not obscure focused controls.
 
 Cards place **Show route** before the filled **Read trip report** button.
 Checks cover accent colors, focus, hover, wrapping, and report navigation.
 Hover previews do not select routes or scroll the list.
 Phone checks use card taps, route selection, and shared-road choices.
 Keyboard panning checks use desktop Chromium.
+Report-return checks capture list scroll at link activation, after any browser scrolling needed to expose the link.
+They compare the restored position exactly. Measuring before activation can capture a different position.
+Fresh-visit checks wait for the initial fit before measuring painted routes.
+Fit padding reserves fixed control space. Delayed tiles and attribution must not change the framing.
 
 Atlas and story maps use the same text-only tooltip factory.
 Checks cover safe text, the colored edge, popup reuse, cleanup, and Escape dismissal.
@@ -294,6 +312,8 @@ Run the content, geometry, lifecycle, and publication checks:
 
 ```bash
 npx vitest run src/test/tripAtlasEntries.test.ts src/test/tripAtlasView.test.ts src/test/tripAtlasSession.test.ts \
+  src/test/tripAtlasBrowser.test.ts \
+  src/test/tripAtlasFilters.test.tsx \
   src/test/tripAtlasMap.test.tsx src/test/advAtlas.test.tsx \
   src/test/postReturnDestination.test.ts src/test/postNavigation.test.tsx src/test/blogPages.test.tsx \
   src/test/browserHistory.test.ts src/test/AtlasFullscreenControl.test.ts \

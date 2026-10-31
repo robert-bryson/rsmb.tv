@@ -22,6 +22,7 @@ interface Props {
     selectedId?: string;
     highlightedId?: string;
     fitVersion: number;
+    fitRequest?: { tripId?: string; cancelled?: boolean };
     panelOpen: boolean;
     initialCamera?: AtlasCamera;
     fullscreenContainer?: RefObject<HTMLElement | null>;
@@ -46,10 +47,10 @@ function layers(): maplibregl.LayerSpecification[] {
     ].map(layer => ({ ...layer, layout: { 'line-cap': 'round', 'line-join': 'round' } })) as maplibregl.LayerSpecification[];
 }
 
-function padding(container: HTMLElement, panelOpen: boolean, selected: boolean) {
-    const base = container.clientWidth >= 768
-        ? { top: 140, right: 72, bottom: 40, left: panelOpen ? 410 : 40 }
-        : { top: 132, right: 48, left: 24, bottom: panelOpen ? Math.min(container.clientHeight * 0.55 + 44, container.clientHeight - 200) : 110 };
+function padding(container: HTMLElement, selected: boolean) {
+    // Fixed control space keeps fitting independent of attribution and tile timing.
+    const phone = container.ownerDocument.defaultView?.matchMedia?.('(max-width: 767px)').matches;
+    const base = { top: Math.min(72, container.clientHeight * 0.2), right: 56, bottom: phone ? 84 : 36, left: 48 };
     const breathingRoom = selected ? 16 : 0;
     return { top: base.top + breathingRoom, right: base.right + breathingRoom, bottom: base.bottom + breathingRoom, left: base.left + breathingRoom };
 }
@@ -65,6 +66,7 @@ function routeBounds(routes: Record<string, AtlasRouteState>, selectedId?: strin
 
 export default function TripAtlasMap(props: Props) {
     const { routes, selectedId, highlightedId, fitVersion, panelOpen, entries } = props;
+    const fitId = props.fitRequest ? props.fitRequest.tripId : selectedId;
     const container = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibregl.Map | null>(null);
     const fullscreenControl = useRef<AtlasFullscreenControl | null>(null);
@@ -74,7 +76,7 @@ export default function TripAtlasMap(props: Props) {
     const [tileFailure, setTileFailure] = useState(false);
     const [choices, setChoices] = useState<{ ids: string[]; x: number; y: number }>();
     const camera = useRef(props.initialCamera);
-    const initialFitKey = useRef(`${selectedId ?? 'all'}:${fitVersion}`);
+    const initialFitKey = useRef(`${fitId ?? 'all'}:${fitVersion}`);
     const userMoved = useRef(false);
     const lastFit = useRef<{ map: maplibregl.Map; key: string } | undefined>(undefined);
     const reducedMotion = useReducedMotion();
@@ -107,7 +109,7 @@ export default function TripAtlasMap(props: Props) {
         if (!userMoved.current && props.fitVersion === 0 && instance.isMoving()) return;
         const bounds = routeBounds(props.routes);
         if (!bounds) return;
-        const target = instance.cameraForBounds(bounds, { padding: padding(container.current, props.panelOpen, false), maxZoom: 10, bearing: 0 });
+        const target = instance.cameraForBounds(bounds, { padding: padding(container.current, false), maxZoom: 10, bearing: 0 });
         if (!target?.center || target.zoom === undefined) return;
         const expected = instance.project(target.center);
         const actual = instance.project(instance.getCenter());
@@ -188,14 +190,22 @@ export default function TripAtlasMap(props: Props) {
         // Keep its session current during animation and gestures, before moveend.
         instance.on('move', saveCamera);
         instance.on('moveend', () => { saveCamera(); compareOverview(); });
-        instance.on('resize', compareOverview);
+        instance.on('resize', () => {
+            if (disposed) return;
+            setChoices(undefined);
+            choicePreview.current = {};
+            routeHover.current = null;
+            hover(undefined);
+            compareOverview();
+        });
         instance.on('movestart', event => {
             if (disposed || !event.originalEvent) return;
             userMoved.current = true;
             const current = getCurrent();
             // Manual movement handles this fit request, even while its route is loading.
             // A later explicit selection or overview request receives a new key.
-            lastFit.current = { map: instance, key: `${current.selectedId ?? 'all'}:${current.fitVersion}` };
+            const target = current.fitRequest ? current.fitRequest.tripId : current.selectedId;
+            lastFit.current = { map: instance, key: `${target ?? 'all'}:${current.fitVersion}` };
         });
         instance.on('error', event => {
             if (disposed) return;
@@ -306,17 +316,18 @@ export default function TripAtlasMap(props: Props) {
     }, [map, highlightedId, entries, routes, failure]);
 
     useEffect(() => {
-        if (!map || mapRef.current !== map || !container.current) return;
-        const key = `${selectedId ?? 'all'}:${fitVersion}`;
+        if (!map || mapRef.current !== map || !container.current || props.fitRequest?.cancelled) return;
+        const key = `${fitId ?? 'all'}:${fitVersion}`;
         if (lastFit.current?.map === map && lastFit.current.key === key) return;
-        const selected = selectedId ? routes[selectedId]?.route : null;
-        if (selectedId && !selected) return;
-        if (!selectedId && !entries.every(entry => routes[entry.id]?.route || routes[entry.id]?.error)) return;
-        const bounds = routeBounds(routes, selectedId);
+        const selected = fitId ? routes[fitId]?.route : null;
+        if (fitId && !selected) return;
+        if (!fitId && !entries.every(entry => routes[entry.id]?.route || routes[entry.id]?.error)) return;
+        const bounds = routeBounds(routes, fitId);
         if (!bounds) return;
+        map.resize();
         lastFit.current = { map, key };
-        map.fitBounds(bounds, { padding: padding(container.current, panelOpen, Boolean(selectedId)), maxZoom: 10, bearing: 0, pitch: 0, duration: reducedMotion ? 0 : 500 });
-    }, [map, routes, selectedId, fitVersion, panelOpen, entries, reducedMotion]);
+        map.fitBounds(bounds, { padding: padding(container.current, Boolean(fitId)), maxZoom: 10, bearing: 0, pitch: 0, duration: reducedMotion ? 0 : 500 });
+    }, [map, routes, fitId, fitVersion, props.fitRequest?.cancelled, entries, reducedMotion]);
 
     useEffect(() => { compareOverview(); }, [map, routes, selectedId, fitVersion, panelOpen, entries]);
 
@@ -333,7 +344,7 @@ export default function TripAtlasMap(props: Props) {
                 onPointerOver={event => { if (event.target !== mapRef.current?.getCanvas()) { routeHover.current = null; props.onHover(undefined); } }}
                 role="region" aria-label="Motorcycle trip routes. Choose a trip in the list to explore its route."
                 className="trip-atlas-map h-full w-full" />
-            {(failure || tileFailure) && <div role="status" className="absolute left-3 right-14 top-32 z-10 max-h-[calc(45dvh-10rem)] overflow-y-auto rounded-lg border border-zinc-600 bg-zinc-900/95 p-3 text-sm text-zinc-200 md:left-auto md:right-3 md:top-64 md:max-h-none md:max-w-64">
+            {(failure || tileFailure) && <div role="status" className="absolute left-3 right-14 top-20 z-10 max-h-[calc(100%-7rem)] overflow-y-auto rounded-lg border border-zinc-600 bg-zinc-900/95 p-3 text-sm text-zinc-200 md:left-auto md:max-w-64">
                 <p>{failure ? 'The interactive map is unavailable. Trip reports are still available in the list.' : 'Some background tiles could not load. You can still explore the trip routes.'}</p>
                 <button type="button" onClick={retry} className="min-h-11 text-violet-300 underline">Retry map</button>
             </div>}

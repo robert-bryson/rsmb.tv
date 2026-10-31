@@ -1,5 +1,5 @@
 .trip-atlas-map .maplibregl-ctrl-top-right {
-    top: 112px;
+    top: 8px;
     right: 4px;
 }
 
@@ -11,4 +11,8 @@
 
 .trip-atlas-map .maplibregl-ctrl-attrib a {
     color: #d4d4d8;
+}
+
+@media (width < 768px) {
+    .trip-atlas-map .maplibregl-ctrl-bottom-right { bottom: 48px; }
 }

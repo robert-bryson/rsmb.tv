@@ -1,18 +1,23 @@
-import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
-import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { getTripPosts } from '../content/posts';
-import { getCountryName } from '../content/blogRegions';
 import { getTripSummary } from '../features/trips/tripSummaries';
 import { useTripRoute } from '../features/trips/useTripRoute';
-import { buildTripAtlasEntries, type TripAtlasEntry } from '../features/trips/atlas/tripAtlasEntries';
+import { buildTripAtlasEntries } from '../features/trips/atlas/tripAtlasEntries';
 import { TripAtlasMapBoundary } from '../features/trips/atlas/TripAtlasMapBoundary';
-import { TRIP_ATLAS_PATH, tripAtlasColor, type AtlasRouteState } from '../features/trips/atlas/tripAtlasView';
+import { TripAtlasPanel } from '../features/trips/atlas/TripAtlasPanel';
+import { TripAtlasResults } from '../features/trips/atlas/TripAtlasResults';
+import { TRIP_ATLAS_PATH, type AtlasRouteState } from '../features/trips/atlas/tripAtlasView';
+import {
+    atlasFilterCount, atlasLocationCatalog, emptyAtlasFilters, filterAtlasEntries, readAtlasBrowse, sortAtlasEntries,
+    validateAtlasFilters, writeAtlasBrowse, type AtlasFilters, type AtlasPanelState, type AtlasResultsView, type AtlasSort,
+} from '../features/trips/atlas/tripAtlasBrowser';
 import { readAtlasSession, saveAtlasSession, type AtlasCamera, type AtlasSession } from '../features/trips/atlas/tripAtlasSession';
-import { formatDateRange } from '../utils/formatDate';
 import { isDevelopmentContent } from '../utils/developmentContent';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useJsonLd } from '../hooks/useJsonLd';
 import { absoluteUrl, AUTHOR_PERSON } from '../utils/siteMetadata';
+import '../features/trips/atlas/tripAtlasBrowser.css';
 
 const TripAtlasMap = lazy(() => import('../features/trips/atlas/TripAtlasMap'));
 
@@ -22,40 +27,39 @@ function RouteReader({ id, url, onChange }: { id: string; url: string; onChange:
     return null;
 }
 
-function CardPhoto({ entry }: { entry: TripAtlasEntry }) {
-    const [failed, setFailed] = useState(false);
-    const photo = entry.summary?.hero;
-    if (!photo) return <div role="img" aria-label="Trip photo not available yet" className="grid aspect-[16/9] place-items-center bg-zinc-900 text-sm text-zinc-400">Photos not available yet</div>;
-    return failed ? <div role="img" aria-label={photo.alt} className="grid aspect-[16/9] place-items-center bg-zinc-800 text-sm text-zinc-400">Photo unavailable</div> : (
-        <img src={photo.src} srcSet={photo.srcSet} sizes="(min-width: 768px) 326px, calc(100vw - 3.5rem)"
-            width={photo.width} height={photo.height} alt={photo.alt} loading="lazy" decoding="async"
-            onError={() => setFailed(true)} className="aspect-[16/9] w-full object-cover" />
-    );
-}
-
-function isCardControl(target: EventTarget | null) {
-    return target instanceof Element && Boolean(target.closest('a, button, input, select, textarea, [role="button"], [contenteditable]'));
-}
-
 export default function AdvAtlas() {
     const development = isDevelopmentContent();
     const entries = useMemo(() => buildTripAtlasEntries(getTripPosts(), getTripSummary, { includeDrafts: development, includeIncomplete: development }), [development]);
     const location = useLocation();
     const [params, setParams] = useSearchParams();
     const requestedId = params.get('trip');
-    const selectedId = entries.find(entry => entry.id === requestedId)?.id;
+    const selectedEntry = entries.find(entry => entry.id === requestedId);
+    const selectedId = selectedEntry?.id;
     const onlySelected = Boolean(selectedId) && params.get('view') === 'selected';
     const invalidSelection = Boolean(requestedId && !selectedId);
     const url = location.pathname + location.search;
+    const { filters, sort } = useMemo(() => readAtlasBrowse(params), [params]);
+    const filterIssues = useMemo(() => validateAtlasFilters(filters), [filters]);
+    const activeFilters = atlasFilterCount(filters) + Number(onlySelected);
+    const countries = useMemo(() => atlasLocationCatalog(entries), [entries]);
+    const matchingEntries = useMemo(() => sortAtlasEntries(filterAtlasEntries(entries, filters), sort), [entries, filters, sort]);
+    const visibleEntries = useMemo(() => onlySelected ? matchingEntries.filter(entry => entry.id === selectedId) : matchingEntries, [matchingEntries, onlySelected, selectedId]);
+    const mapEntries = useMemo(() => visibleEntries.filter(entry => entry.summary), [visibleEntries]);
+    const mapSelectedId = mapEntries.find(entry => entry.id === selectedId)?.id;
     const [initialSession] = useState(() => {
         const state = location.state as { restoreScroll?: boolean; returnKey?: unknown } | null;
         return readAtlasSession(location.key, state?.restoreScroll ? url : undefined,
             state?.restoreScroll && typeof state.returnKey === 'string' ? state.returnKey : undefined);
     });
-    const [panelOpen, setPanelOpen] = useState(() => initialSession?.panelOpen ?? (Boolean(requestedId) || window.matchMedia('(min-width: 768px)').matches));
-    const session = useRef<AtlasSession>({ ...(initialSession ?? { panelOpen, scrollTop: 0 }) });
+    const [panelState, setPanelState] = useState<AtlasPanelState>(() => initialSession?.panelState
+        ?? (initialSession ? initialSession.panelOpen ? 'compact' : 'collapsed' : 'compact'));
+    const [resultsView, setResultsView] = useState<AtlasResultsView>(initialSession?.resultsView ?? 'cards');
+    const panelOpen = panelState !== 'collapsed';
+    const session = useRef<AtlasSession>({ ...(initialSession ?? { scrollTop: 0 }), panelOpen, panelState, resultsView });
     const [routes, setRoutes] = useState<Record<string, AtlasRouteState>>({});
-    const [fitVersion, setFitVersion] = useState(0);
+    const [fitRequest, setFitRequest] = useState<{ tripId?: string; version: number; cancelled?: boolean }>(() => ({
+        tripId: mapEntries.some(entry => entry.id === selectedId) ? selectedId : undefined, version: 0,
+    }));
     const [cameraChanged, setCameraChanged] = useState(false);
     const [hoveredId, setHoveredId] = useState<string>();
     const [focusedId, setFocusedId] = useState<string>();
@@ -64,12 +68,10 @@ export default function AdvAtlas() {
     const focusedReveal = useRef(reveal);
     const listRef = useRef<HTMLDivElement>(null);
     const fullscreenContainer = useRef<HTMLElement>(null);
-    const visibleEntries = useMemo(() => onlySelected ? entries.filter(entry => entry.id === selectedId) : entries, [entries, onlySelected, selectedId]);
-    const mapEntries = useMemo(() => visibleEntries.filter(entry => entry.summary), [visibleEntries]);
-    const mapSelectedId = mapEntries.find(entry => entry.id === selectedId)?.id;
     const visibleRoutes = useMemo(() => Object.fromEntries(Object.entries(routes).filter(([id]) => mapEntries.some(entry => entry.id === id))), [routes, mapEntries]);
+    const selectedOutsideFilters = Boolean(selectedId && !visibleEntries.some(entry => entry.id === selectedId));
 
-    const description = 'Explore motorcycle journeys on a map, browse photographs and trip facts, and read the reports.';
+    const description = 'Explore motorcycle journeys on a map, compare trip facts, and read the reports.';
     useDocumentHead({ title: 'ADV Atlas', description, ogImage: absoluteUrl('/og/adv-atlas.svg') });
     useJsonLd({
         '@context': 'https://schema.org', '@type': 'WebPage', name: 'ADV Atlas Map', description,
@@ -80,62 +82,83 @@ export default function AdvAtlas() {
         },
     });
 
-    const onRouteChange = useCallback((id: string, state: AtlasRouteState) => {
-        setRoutes(current => ({ ...current, [id]: state }));
-    }, []);
+    const onRouteChange = useCallback((id: string, state: AtlasRouteState) => setRoutes(current => ({ ...current, [id]: state })), []);
     const onCameraChange = useCallback((camera: AtlasCamera) => { session.current.camera = camera; }, []);
-    const changePanel = (open: boolean) => {
-        session.current.panelOpen = open;
-        setPanelOpen(open);
+    const onListScroll = useCallback((scrollTop: number) => { session.current.scrollTop = scrollTop; }, []);
+    const clearPreviews = () => { setHoveredId(undefined); setFocusedId(undefined); };
+    const resetScroll = () => {
+        session.current.scrollTop = 0;
+        if (listRef.current) listRef.current.scrollTop = 0;
+        setReveal(undefined);
+        clearPreviews();
     };
-    const selectTrip = (id: string | undefined, options: { reveal?: boolean; focusCard?: boolean } = {}) => {
+    const changePanel = (state: AtlasPanelState) => {
+        session.current.panelState = state;
+        session.current.panelOpen = state !== 'collapsed';
+        setPanelState(state);
+        clearPreviews();
+    };
+    const changeView = (view: AtlasResultsView) => {
+        session.current.resultsView = view;
+        setResultsView(view);
+        resetScroll();
+    };
+    const selectTrip = (id: string, options: { reveal?: boolean; focusCard?: boolean } = {}) => {
         const next = new URLSearchParams(params);
-        if (id) next.set('trip', id);
-        else { next.delete('trip'); next.delete('view'); }
+        next.set('trip', id);
         setParams(next, { replace: true });
-        setFitVersion(version => version + 1);
-        if (options.reveal && id) {
-            changePanel(true);
+        setFitRequest(current => ({ tripId: id, version: current.version + 1 }));
+        if (options.reveal) {
+            if (!panelOpen) changePanel('compact');
             setReveal(current => ({ id, version: (current?.version ?? 0) + 1, focusCard: Boolean(options.focusCard) }));
         }
     };
     const deselectTrip = () => {
-        if (params.has('trip')) {
-            const next = new URLSearchParams(params);
-            next.delete('trip');
-            next.delete('view');
-            setParams(next, { replace: true });
-        }
-        setHoveredId(undefined);
-        setFocusedId(undefined);
-        setReveal(undefined);
-    };
-    const changeFilter = (checked: boolean) => {
         const next = new URLSearchParams(params);
-        if (checked && selectedId) next.set('view', 'selected'); else next.delete('view');
+        next.delete('trip'); next.delete('view');
         setParams(next, { replace: true });
-        setHoveredId(undefined);
-        setFocusedId(undefined);
-    };
-    const zoomToAllTrips = () => {
-        setHoveredId(undefined);
-        setFocusedId(undefined);
+        setFitRequest(current => ({ ...current, cancelled: true }));
         setReveal(undefined);
-        selectTrip(undefined);
+        clearPreviews();
+    };
+    const changeOnlySelected = () => {
+        const next = new URLSearchParams(params);
+        if (!onlySelected && selectedId) next.set('view', 'selected'); else next.delete('view');
+        setParams(next, { replace: true });
+        resetScroll();
+    };
+    const changeFilters = (next: AtlasFilters) => {
+        setParams(writeAtlasBrowse(params, next, sort));
+        setFitRequest(current => ({ ...current, cancelled: true }));
+        resetScroll();
+    };
+    const clearFilters = () => {
+        const next = writeAtlasBrowse(params, emptyAtlasFilters(), sort);
+        next.delete('view');
+        setParams(next);
+        setFitRequest(current => ({ ...current, cancelled: true }));
+        resetScroll();
+    };
+    const changeSort = (next: AtlasSort) => { setParams(writeAtlasBrowse(params, filters, next), { replace: true }); resetScroll(); };
+    const fitResults = () => {
+        const next = new URLSearchParams(params);
+        next.delete('trip'); next.delete('view');
+        setParams(next, { replace: true });
+        setFitRequest(current => ({ version: current.version + 1 }));
+        setReveal(undefined);
+        clearPreviews();
     };
 
     useEffect(() => {
-        const remember = () => saveAtlasSession(location.key, url, session.current);
-        window.addEventListener('pagehide', remember);
-        return () => {
-            remember();
-            window.removeEventListener('pagehide', remember);
+        const remember = () => {
+            if (listRef.current && session.current.panelOpen) session.current.scrollTop = listRef.current.scrollTop;
+            saveAtlasSession(location.key, url, session.current);
         };
+        window.addEventListener('pagehide', remember);
+        return () => { remember(); window.removeEventListener('pagehide', remember); };
     }, [location.key, url]);
     useEffect(() => {
-        const dismiss = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') { setHoveredId(undefined); setFocusedId(undefined); }
-        };
+        const dismiss = (event: KeyboardEvent) => { if (event.key === 'Escape') { setHoveredId(undefined); setFocusedId(undefined); } };
         document.addEventListener('keydown', dismiss);
         return () => document.removeEventListener('keydown', dismiss);
     }, []);
@@ -143,113 +166,51 @@ export default function AdvAtlas() {
         if (panelOpen && listRef.current) listRef.current.scrollTop = session.current.scrollTop;
     }, [panelOpen]);
     useEffect(() => {
-        if (!reveal || !panelOpen) return;
+        if (!reveal || !panelOpen || reveal.id !== selectedId) return;
         document.getElementById(`atlas-card-${reveal.id}`)?.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'instant' });
         if (reveal.focusCard && focusedReveal.current !== reveal) {
             focusedReveal.current = reveal;
-            document.getElementById(`atlas-route-${reveal.id}`)?.focus({ preventScroll: true });
+            const control = document.getElementById(`atlas-route-${reveal.id}`);
+            control?.scrollIntoView({ block: 'end', inline: 'nearest', behavior: 'instant' });
+            control?.focus({ preventScroll: true });
         }
-    }, [reveal, panelOpen]);
+    }, [reveal, panelOpen, selectedId]);
 
-    const loadedCount = visibleEntries.filter(entry => routes[entry.id]?.route).length;
-    return (
-        <main ref={fullscreenContainer} className="relative h-full w-full overflow-hidden bg-zinc-950 text-zinc-100">
-            <a href="#atlas-panel-toggle" className="sr-only z-50 rounded bg-violet-600 p-3 focus:not-sr-only focus:absolute focus:left-3 focus:top-3">Skip to trip list</a>
-            {entries.map(entry => entry.summary && <RouteReader key={entry.id} id={entry.id} url={entry.summary.route.geoJson} onChange={onRouteChange} />)}
-            <TripAtlasMapBoundary>
-                <Suspense fallback={<p role="status" className="absolute inset-0 grid place-items-center text-sm text-zinc-400">Loading trip map…</p>}>
-                    <TripAtlasMap entries={mapEntries} routes={visibleRoutes} selectedId={mapSelectedId} highlightedId={highlightedId}
-                        fitVersion={fitVersion} panelOpen={panelOpen} initialCamera={initialSession?.camera} fullscreenContainer={fullscreenContainer}
-                        onSelect={(id, options) => id ? selectTrip(id, { reveal: true, ...options }) : deselectTrip()} onHover={setHoveredId} onCameraChange={onCameraChange} onViewChange={setCameraChanged} />
-                </Suspense>
-            </TripAtlasMapBoundary>
-
-            <header className="pointer-events-none absolute inset-x-3 top-3 z-20 grid grid-cols-1 items-start justify-items-start gap-2 md:inset-x-4 md:top-4 md:grid-cols-[minmax(360px,1fr)_auto_minmax(0,1fr)]">
-                <div className="pointer-events-auto min-w-0 rounded-xl border border-zinc-700/80 bg-zinc-950/95 px-4 py-3 shadow-xl backdrop-blur md:w-[360px]">
-                    <Link to="/projects" className="inline-flex min-h-6 items-center text-xs text-zinc-400 hover:text-violet-300">← Projects</Link>
-                    <h1 className="truncate text-lg font-semibold tracking-tight md:text-xl">ADV Atlas</h1>
-                    <p className="mt-0.5 text-xs text-zinc-400">{onlySelected ? `1 of ${entries.length}` : entries.length} trips · Routes, photographs &amp; stories</p>
-                </div>
-                {(selectedId || onlySelected || cameraChanged) && <button type="button" onClick={zoomToAllTrips} data-testid="atlas-overview-control"
-                    className="pointer-events-auto min-h-11 justify-self-center whitespace-nowrap rounded-xl border border-zinc-600 bg-zinc-950/95 px-3 text-sm text-zinc-100 shadow-lg hover:border-violet-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-400 md:col-start-2 md:row-start-1">
-                    Zoom to all trips
-                </button>}
-            </header>
-
-            <aside aria-label="Trip reports" className={`absolute inset-x-3 bottom-8 z-20 flex max-h-[55dvh] flex-col overflow-hidden rounded-xl border border-zinc-700/80 bg-zinc-950/95 shadow-2xl backdrop-blur md:inset-x-auto md:left-4 md:top-32 md:w-[360px] md:max-h-none ${panelOpen ? 'md:bottom-4' : 'md:bottom-auto'}`}>
-                <button id="atlas-panel-toggle" type="button" aria-expanded={panelOpen} aria-controls="atlas-trip-list"
-                    onClick={() => changePanel(!panelOpen)}
-                    className="flex min-h-12 w-full shrink-0 items-center justify-between gap-3 px-4 py-3 text-left text-sm font-medium hover:bg-zinc-800 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-violet-400">
-                    <span>{panelOpen ? 'Hide trips' : 'Browse trips'} <span className="ml-1 text-zinc-400">({visibleEntries.length})</span></span>
-                    <span className="text-xs text-zinc-400">{loadedCount}/{mapEntries.length} routes <span aria-hidden="true">{panelOpen ? '▾' : '▴'}</span></span>
-                </button>
-                {panelOpen && <button type="button" aria-pressed={onlySelected} disabled={!selectedId} onClick={() => changeFilter(!onlySelected)}
-                    className={`flex min-h-11 w-full items-center justify-between gap-2 border-t border-zinc-800 px-4 text-left text-xs text-zinc-300 enabled:hover:bg-zinc-800 disabled:text-zinc-500 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-violet-400 ${onlySelected ? 'bg-violet-950/40' : ''}`}>
-                    <span>Show only selected trip</span><span aria-hidden="true" className={onlySelected ? 'text-violet-300' : 'text-zinc-500'}>{onlySelected ? 'On' : 'Off'}</span>
-                </button>}
-                <div id="atlas-trip-list" ref={listRef} hidden={!panelOpen} inert={!panelOpen}
-                    onScroll={event => { if (panelOpen) session.current.scrollTop = event.currentTarget.scrollTop; }}
-                    className="min-h-0 overflow-y-auto overscroll-contain border-t border-zinc-800 p-3 [scrollbar-gutter:stable]">
-                    {invalidSelection && <p role="status" className="mb-3 rounded-lg bg-zinc-800 p-3 text-sm">That trip is not available in this collection. Browse the available trips below.</p>}
-                    {entries.length === 0 && <p className="p-3 text-sm text-zinc-400">No trip reports are available yet.</p>}
-                    <ol className="space-y-3">
-                        {visibleEntries.map(entry => {
-                            const summary = entry.summary;
-                            const active = selectedId === entry.id;
-                            const highlighted = highlightedId === entry.id;
-                            const color = tripAtlasColor(entry.id);
-                            const state = routes[entry.id];
-                            const draftCount = entry.reports.filter(report => report.draft).length;
-                            const geography = [...new Set([
-                                ...(summary?.countries ?? entry.countries ?? []).flatMap(country => country.regions?.length ? country.regions : [getCountryName(country.code)]),
-                                ...(summary?.regions ?? []),
-                            ])];
-                            return <li key={entry.id} id={`atlas-card-${entry.id}`} data-trip-id={entry.id} data-highlighted={highlighted || undefined}
-                                onClick={event => { if (summary && !event.defaultPrevented && !isCardControl(event.target)) selectTrip(entry.id); }}
-                                onPointerEnter={event => { if (event.pointerType !== 'touch') setHoveredId(summary ? entry.id : undefined); }} onPointerLeave={() => setHoveredId(undefined)}
-                                onFocusCapture={() => setFocusedId(summary ? entry.id : undefined)} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setFocusedId(undefined); }}
-                                className={`overflow-hidden rounded-lg border-2 ${summary ? 'cursor-pointer' : ''} ${active || highlighted ? 'bg-zinc-900' : 'bg-zinc-950'}`}
-                                style={{ '--trip-atlas-color': color, borderColor: active || highlighted ? color : '#27272a', boxShadow: highlighted ? `inset 0 0 0 1px ${color}` : undefined } as CSSProperties}>
-                                <CardPhoto entry={entry} />
-                                <div className="p-3">
-                                    <div className="mb-2 flex items-center gap-2 text-xs text-zinc-400">
-                                        <span aria-hidden="true" className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: color }} />
-                                        <span>{summary ? formatDateRange(summary.dates.start, summary.dates.end) : 'Trip dates not set'}</span>
-                                        {active && <span className="ml-auto text-zinc-100">Selected</span>}
-                                    </div>
-                                    <h2 className="text-base font-semibold leading-snug">{entry.title}</h2>
-                                    {development && draftCount > 0 && <p className="mt-2"><span className="inline-flex rounded border border-amber-800/70 bg-amber-950/40 px-2 py-0.5 text-[11px] font-medium text-amber-300">
-                                        DEV · {draftCount === entry.reports.length ? 'Unpublished draft' : 'Includes drafts'}
-                                    </span></p>}
-                                    {development && (!summary || entry.reports.some(report => !report.contentAvailable)) && <p className="mt-2 text-xs text-amber-300/90">DEV · Incomplete preview</p>}
-                                    <p className="mt-2 text-sm leading-relaxed text-zinc-400">{entry.description}</p>
-                                    <p className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-zinc-300">
-                                        {summary?.distanceMiles && <span>{summary.distanceMiles.toLocaleString()} mi</span>}
-                                        {summary?.ridingDays && <span>{summary.ridingDays} riding days</span>}
-                                        {summary?.motorcycle && <span>{summary.motorcycle}</span>}
-                                    </p>
-                                    {geography.length ? <p className="mt-1 text-xs text-zinc-400">{geography.join(' · ')}</p> : null}
-                                    <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-start gap-2">
-                                        <button id={`atlas-route-${entry.id}`} type="button" aria-pressed={active} disabled={!summary} aria-label={`Show route: ${entry.title}`} onClick={() => selectTrip(entry.id)}
-                                            className="min-h-11 rounded-md border border-zinc-600 px-3 py-2 text-sm text-zinc-100 transition-colors enabled:hover:border-[color:var(--trip-atlas-color)] enabled:hover:text-[color:var(--trip-atlas-color)] disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--trip-atlas-color)]">Show route</button>
-                                        <div className="flex min-w-0 flex-col gap-2">
-                                            {entry.reports.map(report => <Link key={report.slug} to={report.href} state={{ from: url, returnKey: location.key }}
-                                                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-transparent bg-[color:var(--trip-atlas-color)] px-3 py-2 text-center text-sm font-semibold leading-snug text-zinc-950 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--trip-atlas-color)]">
-                                                <span className="min-w-0 break-words">{entry.reports.length === 1 ? summary && report.contentAvailable ? 'Read trip report' : 'Preview report' : report.title}
-                                                    {development && report.draft && entry.reports.length > 1 && <span className="ml-1 inline-block rounded border border-amber-800 bg-amber-950 px-1.5 py-0.5 text-[11px] font-medium text-amber-300">Draft</span>}
-                                                </span>
-                                                <span aria-hidden="true" className="shrink-0">→</span>
-                                            </Link>)}
-                                        </div>
-                                    </div>
-                                    {!summary ? <p className="mt-2 text-xs text-zinc-400">Route data not available yet.</p> : state?.error ? <p role="status" className="mt-2 text-xs text-amber-300">Route unavailable. <button type="button" onClick={state.retry} className="min-h-11 underline">Retry route</button></p>
-                                        : !state?.route && <p role="status" className="mt-2 text-xs text-zinc-500">Loading route…</p>}
-                                </div>
-                            </li>;
-                        })}
-                    </ol>
-                </div>
-            </aside>
-        </main>
-    );
+    const loadedCount = mapEntries.filter(entry => routes[entry.id]?.route).length;
+    return <main ref={fullscreenContainer} data-panel-state={panelState} data-results-view={resultsView}
+        className="atlas-explorer relative h-full w-full overflow-hidden bg-zinc-950 text-zinc-100">
+        <a href="#atlas-panel-toggle" className="sr-only z-50 rounded bg-violet-600 p-3 focus:not-sr-only focus:absolute focus:left-3 focus:top-3">Skip to trip list</a>
+        {entries.map(entry => entry.summary && <RouteReader key={entry.id} id={entry.id} url={entry.summary.route.geoJson} onChange={onRouteChange} />)}
+        <section className="atlas-map-viewport" aria-label="Trip map" data-testid="atlas-map-viewport">
+            <TripAtlasMapBoundary><Suspense fallback={<p role="status" className="absolute inset-0 grid place-items-center text-sm text-zinc-400">Loading trip map…</p>}>
+                <TripAtlasMap entries={mapEntries} routes={visibleRoutes} selectedId={mapSelectedId}
+                    highlightedId={highlightedId} fitVersion={fitRequest.version} fitRequest={fitRequest} panelOpen={panelOpen}
+                    initialCamera={initialSession?.camera} fullscreenContainer={fullscreenContainer}
+                    onSelect={(id, options) => id ? selectTrip(id, { reveal: true, ...options }) : deselectTrip()}
+                    onHover={setHoveredId} onCameraChange={onCameraChange} onViewChange={setCameraChanged} />
+            </Suspense></TripAtlasMapBoundary>
+            {(selectedId || cameraChanged || activeFilters > 0 || fitRequest.cancelled) && <button type="button" onClick={fitResults}
+                data-testid="atlas-overview-control" disabled={loadedCount === 0}
+                className="absolute left-1/2 top-3 z-10 min-h-11 max-w-[calc(100%-8rem)] -translate-x-1/2 rounded-xl border border-zinc-600 bg-zinc-950/95 px-3 text-center text-sm text-zinc-100 shadow-lg enabled:hover:border-violet-400 disabled:opacity-50">
+                {atlasFilterCount(filters) ? 'Fit results' : 'Zoom to all trips'}
+            </button>}
+            {!panelOpen && activeFilters > 0 && <p className="pointer-events-none absolute bottom-8 right-3 z-10 rounded-lg bg-zinc-950/90 px-3 py-2 text-xs text-zinc-300">{visibleEntries.length} of {entries.length} trips · {activeFilters} filters</p>}
+        </section>
+        <TripAtlasPanel state={panelState} view={resultsView} sort={sort} filters={filters} countries={countries}
+            selectedId={selectedId} onlySelected={onlySelected} count={visibleEntries.length} total={entries.length}
+            loadedRoutes={loadedCount} routeCount={mapEntries.length} listRef={listRef}
+            onState={changePanel} onView={changeView} onSort={changeSort} onFilters={changeFilters}
+            onOnlySelected={changeOnlySelected} onClearFilters={clearFilters} onScroll={onListScroll}>
+            {invalidSelection && <p role="status" className="mb-3 rounded-lg bg-zinc-800 p-3 text-sm">That trip is not available in this collection. Browse the available trips below.</p>}
+            {filterIssues.length > 0 && <p role="alert" className="mb-3 rounded-lg border border-amber-800 bg-amber-950/30 p-3 text-sm text-amber-200">Some filters are invalid. Edit or clear them to see results. {filterIssues[0].message}</p>}
+            {selectedOutsideFilters && <div className="mb-3 rounded-lg border border-violet-900 bg-violet-950/30 p-3 text-sm text-violet-200">
+                <p>Selected trip is outside these filters.</p>
+                <button type="button" onClick={() => { deselectTrip(); document.getElementById('atlas-filters-toggle')?.focus({ preventScroll: true }); }} className="min-h-11 underline">Clear selection</button>
+            </div>}
+            {visibleEntries.length === 0 && <p className="rounded-lg bg-zinc-900 p-4 text-sm text-zinc-400">{entries.length ? 'No trips match these filters. Clear a filter or choose a wider range.' : 'No trip reports are available yet.'}</p>}
+            <TripAtlasResults entries={visibleEntries} routes={routes} selectedId={selectedId} highlightedId={highlightedId}
+                expanded={panelState === 'expanded'} view={resultsView} sort={sort} development={development}
+                returnUrl={url} returnKey={location.key} onSort={changeSort} onSelect={selectTrip} onHover={setHoveredId} onFocus={setFocusedId} />
+        </TripAtlasPanel>
+    </main>;
 }

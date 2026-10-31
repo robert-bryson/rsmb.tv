@@ -1,3 +1,5 @@
+import type { AtlasPanelState, AtlasResultsView } from './tripAtlasBrowser';
+
 export interface AtlasCamera {
     center: [number, number];
     zoom: number;
@@ -8,6 +10,8 @@ export interface AtlasCamera {
 export interface AtlasSession {
     camera?: AtlasCamera;
     panelOpen: boolean;
+    panelState?: AtlasPanelState;
+    resultsView?: AtlasResultsView;
     scrollTop: number;
 }
 
@@ -27,6 +31,9 @@ function isFiniteNumber(value: unknown): value is number {
 function isAtlasSession(value: unknown): value is AtlasSession {
     if (!isRecord(value) || typeof value.panelOpen !== 'boolean'
         || !isFiniteNumber(value.scrollTop) || value.scrollTop < 0) return false;
+    if (value.panelState !== undefined && (typeof value.panelState !== 'string' || !['collapsed', 'compact', 'expanded'].includes(value.panelState)
+        || value.panelOpen !== (value.panelState !== 'collapsed'))) return false;
+    if (value.resultsView !== undefined && (typeof value.resultsView !== 'string' || !['cards', 'table'].includes(value.resultsView))) return false;
     const camera = value.camera;
     if (camera === undefined) return true;
     return isRecord(camera) && Array.isArray(camera.center) && camera.center.length === 2
@@ -39,6 +46,8 @@ function isAtlasSession(value: unknown): value is AtlasSession {
 function snapshot(session: AtlasSession): AtlasSession {
     return {
         panelOpen: session.panelOpen, scrollTop: session.scrollTop,
+        ...(session.panelState ? { panelState: session.panelState } : {}),
+        ...(session.resultsView ? { resultsView: session.resultsView } : {}),
         ...(session.camera ? { camera: {
             center: [...session.camera.center], zoom: session.camera.zoom,
             bearing: session.camera.bearing, pitch: session.camera.pitch,

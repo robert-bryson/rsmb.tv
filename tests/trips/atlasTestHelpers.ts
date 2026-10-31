@@ -1,0 +1,82 @@
+import type { Locator, Page } from '@playwright/test';
+import sharp from 'sharp';
+import { tripAtlasColor } from '../../src/features/trips/atlas/tripAtlasView';
+
+export const atlas = '/projects/adv-atlas/map';
+export const geometry = {
+    type: 'FeatureCollection', features: [{
+        type: 'Feature', id: 0, properties: { trackId: 'morning' },
+        geometry: { type: 'MultiLineString', coordinates: [[[-122, 47], [-123, 46], [-124, 45]], [[-124.2, 45.1], [-124.3, 45.3]]] },
+    }],
+};
+
+export async function mockAtlasAssets(page: Page) {
+    const tile = await sharp({ create: { width: 256, height: 256, channels: 3, background: '#777' } }).png().toBuffer();
+    await page.route('https://tile.openstreetmap.org/**', route => route.fulfill({ contentType: 'image/png', body: tile }));
+    await page.route('**/test-trip/**', route => route.request().url().endsWith('.geojson')
+        ? route.fulfill({ json: geometry })
+        : route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000"><rect width="100%" height="100%" fill="#405b6b"/></svg>' }));
+}
+
+export async function openList(page: Page) {
+    const toggle = page.locator('#atlas-panel-toggle');
+    if (await toggle.getAttribute('aria-expanded') !== 'true') await toggle.click();
+}
+
+/** Capture the departure position after the browser makes the link's click target visible. */
+export async function followReport(page: Page, report: Locator) {
+    await page.evaluate(() => {
+        document.addEventListener('click', () => {
+            (window as unknown as { atlasDepartureScroll?: number }).atlasDepartureScroll = document.getElementById('atlas-trip-list')?.scrollTop;
+        }, { capture: true, once: true });
+    });
+    await report.click();
+    const scroll = await page.evaluate(() => {
+        const state = window as unknown as { atlasDepartureScroll?: number };
+        const value = state.atlasDepartureScroll;
+        delete state.atlasDepartureScroll;
+        return value;
+    });
+    if (scroll === undefined) throw new Error('The report click did not capture its atlas departure position.');
+    return scroll;
+}
+
+export async function atlasCamera(page: Page) {
+    return page.evaluate(() => {
+        window.dispatchEvent(new Event('pagehide'));
+        const sessions = JSON.parse(sessionStorage.getItem('rsmb:adv-atlas:sessions:v1') ?? '[]') as [string, {
+            camera?: { center: number[]; zoom: number; bearing: number; pitch: number };
+        }][];
+        return sessions.find(([key]) => key === window.history.state.key)?.[1].camera;
+    });
+}
+
+export async function paintedRoute(page: Page, id?: string, tolerance = 12, aim: 'center' | 'north' = 'center') {
+    const canvas = page.locator('[data-testid="trip-atlas-map"] canvas');
+    const screenshot = await canvas.screenshot({ style: 'header, aside, [data-testid="atlas-overview-control"], .maplibregl-control-container, .maplibregl-popup { opacity: 0 !important; }' });
+    const { data, info } = await sharp(screenshot).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+    const hex = id ? tripAtlasColor(id).slice(1) : '';
+    const color = id ? [0, 2, 4].map(offset => parseInt(hex.slice(offset, offset + 2), 16)) : undefined;
+    let count = 0;
+    let point = { x: 0, y: 0 };
+    let nearest = Infinity;
+    const bounds = [info.width, info.height, 0, 0];
+    for (let index = 0; index < data.length; index += info.channels) {
+        const matches = color ? color.every((channel, offset) => Math.abs(data[index + offset] - channel) < tolerance)
+            : Math.max(data[index], data[index + 1], data[index + 2]) - Math.min(data[index], data[index + 1], data[index + 2]) > 60;
+        if (!matches) continue;
+        const pixel = index / info.channels;
+        const x = pixel % info.width;
+        const y = Math.floor(pixel / info.width);
+        count++;
+        bounds[0] = Math.min(bounds[0], x); bounds[1] = Math.min(bounds[1], y);
+        bounds[2] = Math.max(bounds[2], x); bounds[3] = Math.max(bounds[3], y);
+        const distance = aim === 'north' ? y * info.width + Math.abs(x - info.width / 2) : (x - info.width / 2) ** 2 + (y - info.height / 2) ** 2;
+        if (distance < nearest) { nearest = distance; point = { x, y }; }
+    }
+    const box = await canvas.boundingBox();
+    const scaleX = box!.width / info.width;
+    const scaleY = box!.height / info.height;
+    return { count, point: { x: point.x * scaleX, y: point.y * scaleY }, bounds,
+        cssBounds: bounds.map((value, index) => value * (index % 2 ? scaleY : scaleX)) };
+}

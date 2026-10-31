@@ -11,6 +11,14 @@ beforeEach(() => { vi.resetModules(); sessionStorage.clear(); });
 afterEach(() => { vi.restoreAllMocks(); sessionStorage.clear(); });
 
 describe('atlas tab sessions', () => {
+    it('copies and restores drawer size and expanded presentation across module reloads', async () => {
+        const { saveAtlasSession } = await import('../features/trips/atlas/tripAtlasSession');
+        const expanded = { ...saved, panelOpen: true, panelState: 'expanded' as const, resultsView: 'table' as const };
+        saveAtlasSession('expanded', url, expanded);
+        vi.resetModules();
+        const { readAtlasSession } = await import('../features/trips/atlas/tripAtlasSession');
+        expect(readAtlasSession('expanded')).toEqual(expanded);
+    });
     it('restores history and explicit report returns after the JavaScript module reloads', async () => {
         const { saveAtlasSession } = await import('../features/trips/atlas/tripAtlasSession');
         saveAtlasSession('history-key', url, saved);
@@ -61,6 +69,10 @@ describe('atlas tab sessions', () => {
         JSON.stringify([['bad', { panelOpen: 'false', scrollTop: 0 }]]),
         JSON.stringify([['bad', { panelOpen: true, scrollTop: -1 }]]),
         JSON.stringify([['bad', { panelOpen: true, scrollTop: null }]]),
+        JSON.stringify([['bad', { panelOpen: true, panelState: 'unknown', scrollTop: 0 }]]),
+        JSON.stringify([['bad', { panelOpen: true, panelState: 'collapsed', scrollTop: 0 }]]),
+        JSON.stringify([['bad', { panelOpen: true, resultsView: 'unknown', scrollTop: 0 }]]),
+        JSON.stringify([['bad', { panelOpen: true, resultsView: { toString: {} }, scrollTop: 0 }]]),
         JSON.stringify([['bad', { ...saved, camera: { ...saved.camera, center: [0] } }]]),
         JSON.stringify([['bad', { ...saved, camera: { ...saved.camera, center: [0, 100] } }]]),
         JSON.stringify([['bad', { ...saved, camera: { ...saved.camera, zoom: '8' } }]]),

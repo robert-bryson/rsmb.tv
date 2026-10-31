@@ -62,6 +62,7 @@ vi.mock('maplibre-gl', () => ({
         off() {}
         addControl() {}
         getCanvas() { return this.canvas; }
+        resize() { return this; }
         getLayer() { return {}; }
         getSource() { return { setData: vi.fn() }; }
         getCenter() { return this.center; }
@@ -81,7 +82,7 @@ vi.mock('maplibre-gl', () => ({
 }));
 vi.mock('../hooks/useReducedMotion', () => ({ useReducedMotion: () => true }));
 
-afterEach(() => { fake.failInitialization = false; fake.instances.length = 0; fake.popupOptions.length = 0; fake.fullscreenOptions.length = 0; });
+afterEach(() => { vi.unstubAllGlobals(); fake.failInitialization = false; fake.instances.length = 0; fake.popupOptions.length = 0; fake.fullscreenOptions.length = 0; });
 
 const entry = {
     id: 'coast', title: 'Coast', description: 'A coastal journey.', reports: [],
@@ -94,6 +95,58 @@ const entry = {
 const route: RouteGeoJson = { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: [[-122, 47], [-124, 45]] } };
 
 describe('atlas renderer lifecycle', () => {
+    it.each([true, false])('keeps fit padding stable while attribution loads (phone: %s)', phone => {
+        vi.stubGlobal('matchMedia', vi.fn(() => ({ matches: phone })));
+        const props = { entries: [entry], routes: { coast: { route, error: '', retry: vi.fn() } }, selectedId: 'coast',
+            fitVersion: 1, panelOpen: true, onSelect: vi.fn(), onHover: vi.fn(), onCameraChange: vi.fn() };
+        const { rerender } = render(<TripAtlasMap {...props} />);
+        const container = screen.getByTestId('trip-atlas-map');
+        Object.defineProperty(container, 'clientHeight', { value: 600 });
+        container.getBoundingClientRect = () => new DOMRect(0, 0, 800, 600);
+        const instance = fake.instances[0];
+        act(() => { instance.events.get('styledata')?.forEach(listener => listener()); });
+        const before = instance.fitBounds.mock.calls[0][1].padding;
+        const attribution = document.createElement('div');
+        attribution.className = 'maplibregl-ctrl-bottom-right';
+        attribution.getBoundingClientRect = () => new DOMRect(0, 300, 800, 20);
+        container.append(attribution);
+        rerender(<TripAtlasMap {...props} fitVersion={2} />);
+        expect(instance.fitBounds.mock.calls[1][1].padding).toEqual(before);
+        expect(before.bottom).toBe(phone ? 100 : 52);
+    });
+
+    it('keeps logical selection separate from filtered geometry and an explicit results fit', () => {
+        const props = {
+            entries: [entry], routes: { coast: { route, error: '', retry: vi.fn() } },
+            selectedId: 'excluded-trip', fitVersion: 0, fitRequest: {}, panelOpen: true,
+            onSelect: vi.fn(), onHover: vi.fn(), onCameraChange: vi.fn(),
+        };
+        const { rerender } = render(<TripAtlasMap {...props} />);
+        const instance = fake.instances[0];
+        act(() => { instance.events.get('styledata')?.forEach(listener => listener()); });
+        expect(instance.fitBounds).toHaveBeenCalledOnce();
+        rerender(<TripAtlasMap {...props} fitRequest={{ cancelled: true }} panelOpen={false} />);
+        act(() => { instance.events.get('resize')?.forEach(listener => listener()); });
+        expect(instance.fitBounds).toHaveBeenCalledOnce();
+        rerender(<TripAtlasMap {...props} fitVersion={1} />);
+        expect(instance.fitBounds).toHaveBeenCalledTimes(2);
+    });
+
+    it('does not complete a cancelled fit when delayed geometry arrives, and accepts the next explicit request', () => {
+        const props = {
+            entries: [entry], routes: { coast: { route: null, error: '', retry: vi.fn() } },
+            selectedId: 'coast', fitVersion: 1, fitRequest: { tripId: 'coast', cancelled: true }, panelOpen: true,
+            onSelect: vi.fn(), onHover: vi.fn(), onCameraChange: vi.fn(),
+        };
+        const { rerender } = render(<TripAtlasMap {...props} />);
+        const instance = fake.instances[0];
+        act(() => { instance.events.get('styledata')?.forEach(listener => listener()); });
+        rerender(<TripAtlasMap {...props} routes={{ coast: { ...props.routes.coast, route } }} />);
+        expect(instance.fitBounds).not.toHaveBeenCalled();
+        rerender(<TripAtlasMap {...props} routes={{ coast: { ...props.routes.coast, route } }} fitVersion={2} fitRequest={{ tripId: 'coast', cancelled: false }} />);
+        expect(instance.fitBounds).toHaveBeenCalledOnce();
+    });
+
     it('recovers from initialization failure and still fits the selected route', () => {
         fake.failInitialization = true;
         render(<TripAtlasMap entries={[entry]} routes={{ coast: { route, error: '', retry: vi.fn() } }}
