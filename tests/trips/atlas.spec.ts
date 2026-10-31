@@ -187,7 +187,7 @@ for (const returnLink of ['header', 'footer after another report'] as const) {
         const before = await paintedRoute(page, 'coastal-test');
         const scroll = await page.locator('#atlas-trip-list').evaluate(element => element.scrollTop);
         await report.click();
-        await page.getByRole('link', { name: /View this trip on the map/ }).click();
+        await page.getByRole('link', { name: /Explore this trip and all others in ADV Atlas/ }).click();
         await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
         await page.locator('#atlas-panel-toggle').click();
         await expect(page.locator('#atlas-panel-toggle')).toHaveAttribute('aria-expanded', 'false');
