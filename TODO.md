@@ -6,6 +6,10 @@ Use the [review index](docs/README.md) for dated findings and test results.
 
 ## Publication blockers
 
+### Ocean Shores trip
+
+- [ ] Confirm the travel dates against the [photo and GPS evidence](docs/reviews/2026-10-31-blog-and-trip-asset-refresh.md#source-date-conflict). Photo EXIF spans February 16–19; the manifest uses February 17–20.
+
 ### PCH 2024 trip
 
 - [ ] Complete the [PCH publication checks](docs/trips/pch-2024-galleries.md#publication-checks) before publishing the story.
@@ -18,9 +22,14 @@ Use the [review index](docs/README.md) for dated findings and test results.
 ### Mississippi–Wisconsin 2025 and ON–QC–New England 2026
 
 - [ ] Continue the [starter outlines](docs/trips/TRIP-SOURCE-INVENTORY.md). Confirm working dates, motorcycle, stops, and report boundaries while writing.
-- [ ] Link the Mississippi–Wisconsin source Doc in Sheet row 7. Complete the source descriptions and 2026 series columns.
+- [ ] Complete the Mississippi–Wisconsin source description and 2026 descriptions and series columns. Sheet row 7 now links its source Doc.
 - [ ] Confirm Mississippi–Wisconsin photo membership. Expand the 2026 photo collection beyond its temporary July 17 hero.
+- [ ] Apply the current 2026 outlines to the source Docs. Replace stale `.json.draft` notes and add the recovered July 17 map and gallery.
 - [ ] Confirm provisional GPS mileage and riding-day estimates against route gaps, alternate exports, and travel modes.
+
+### Cycling a Third of St. Louis
+
+- [ ] Complete the date and description in Sheet row 12. Make its source Doc accessible through its export URL; import returns HTTP 401.
 
 ### Kalaloch trip
 

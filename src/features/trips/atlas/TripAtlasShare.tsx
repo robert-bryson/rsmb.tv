@@ -35,7 +35,8 @@ export function TripAtlasShare({ getUrl }: { getUrl: () => string }) {
         } finally { pending.current = false; }
     };
     return <>
-        <button data-atlas-map-obstacle ref={button} type="button" aria-label="Share map" title="Share map" aria-expanded={status === 'manual'}
+        <button data-atlas-map-obstacle ref={button} type="button" aria-label="Share map" aria-expanded={status === 'manual'}
+            data-atlas-tooltip={status === 'manual' ? 'Close the map-link panel.' : status === 'sharing' ? 'Sharing the current map view…' : 'Copy or share this map with its selected trip, filters, and view.'}
             aria-controls={status === 'manual' ? 'atlas-share-link' : undefined} aria-disabled={status === 'sharing' || undefined}
             onClick={() => { if (status === 'manual') close(); else void share(); }} className="atlas-control atlas-icon-control atlas-share-control">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -49,7 +50,7 @@ export function TripAtlasShare({ getUrl }: { getUrl: () => string }) {
                 <input ref={input} readOnly value={url} onFocus={event => event.currentTarget.select()} className="atlas-input mt-2 w-full" />
             </label>
             <p className="mt-2 text-xs text-zinc-400">Select and copy the link to share this view.</p>
-            <button type="button" onClick={close} className="atlas-control mt-3 px-3">Close</button>
+            <button type="button" data-atlas-tooltip="Close the map-link panel." onClick={close} className="atlas-control mt-3 px-3">Close</button>
         </section>}
     </>;
 }

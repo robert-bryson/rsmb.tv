@@ -98,7 +98,13 @@ async function captureAtlasCanvas(page: Page) {
             const rect = element.getBoundingClientRect();
             return parent && Math.abs(rect.width - parent.clientWidth) < 1 && Math.abs(rect.height - parent.clientHeight) < 1;
         })) return false;
-        const screenshot = await canvas.screenshot({ style: 'header, aside, [data-testid="atlas-overview-control"], .maplibregl-control-container, .maplibregl-popup { opacity: 0 !important; }' });
+        const screenshot = await canvas.screenshot({ style: `
+            header, aside, .atlas-panel-handle, [data-atlas-map-obstacle], .atlas-trip-endpoint,
+            .maplibregl-control-container, .maplibregl-popup {
+                transition: none !important;
+                opacity: 0 !important;
+            }
+        ` });
         const after = await canvas.boundingBox();
         if (!after || before.x !== after.x || before.y !== after.y || before.width !== after.width || before.height !== after.height) return false;
         capture = { screenshot, box: after };

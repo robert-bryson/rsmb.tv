@@ -20,7 +20,7 @@ const fixtures = vi.hoisted(() => {
         id, dates: { start: '2024-05-01', end: '2024-05-02' },
         hero: { id: 'hero', src: '/hero.webp', width: 800, height: 600, alt: 'A mountain road.' },
         route: { geoJson: `/routes/${id}.geojson` },
-        ...(id === 'published' ? { ridingDays: 3, distanceMiles: 600.1, countries: [{ code: 'US', regions: ['Washington'] }] } : {}),
+        ...(id === 'published' ? { ridingDays: 3, distanceMiles: 600.1, motorcycle: 'Honda CB500X', countries: [{ code: 'US', regions: ['Washington'] }] } : {}),
     });
     const post = (slug: string, title: string, tripId: string, draft = false): BlogPostMeta => ({
         slug, title, tripId, format: 'trip', description: 'A synthetic motorcycle journey.', date: '2024-05-03', tags: [],
@@ -164,6 +164,26 @@ describe('atlas card interactions', () => {
         expect(renderer).toHaveAttribute('data-fit-version', '0');
     });
 
+    it('selects table row content once while keeping route buttons, region details, and report links independent', async () => {
+        renderWithRouter(<AdvAtlas />, { route: '/projects/adv-atlas/map?panel=expanded&results=table' });
+        const renderer = await screen.findByTestId('atlas-renderer');
+        const row = screen.getByRole('heading', { name: 'Published journey' }).closest('tr')!;
+        expect(screen.getByRole('columnheader', { name: 'Motorcycle' })).toBeInTheDocument();
+        expect(within(row).getByRole('cell', { name: 'Honda CB500X' })).toBeInTheDocument();
+        expect(screen.queryByText(/Compare matching trips/)).not.toBeInTheDocument();
+        fireEvent.click(within(row).getByRole('heading'));
+        expect(renderer).toHaveAttribute('data-selected', 'published');
+        expect(renderer).toHaveAttribute('data-fit-version', '1');
+        fireEvent.click(within(row).getByRole('cell', { name: 'Honda CB500X' }));
+        expect(renderer).toHaveAttribute('data-fit-version', '2');
+        fireEvent.click(within(row).getByRole('button', { name: /^Show route:/ }));
+        expect(renderer).toHaveAttribute('data-fit-version', '3');
+        fireEvent.click(row.querySelector('summary')!);
+        expect(renderer).toHaveAttribute('data-fit-version', '3');
+        fireEvent.click(within(row).getByRole('link', { name: /Read trip report/ }));
+        expect(renderer).toHaveAttribute('data-fit-version', '3');
+    });
+
     it('previews the card and map together without selecting or fitting the route', async () => {
         renderWithRouter(<AdvAtlas />, { route: '/projects/adv-atlas/map' });
         const renderer = await screen.findByTestId('atlas-renderer');
@@ -187,6 +207,23 @@ afterEach(() => {
 });
 
 describe('atlas browsing controls', () => {
+    it('resets every applied filter from the header while keeping the selected trip and table view', async () => {
+        renderWithRouter(<><AdvAtlas /><UrlProbe /></>, { route: '/projects/adv-atlas/map?trip=published&view=selected&milesMin=600&panel=expanded&results=table' });
+        const renderer = await screen.findByTestId('atlas-renderer');
+        const controls = screen.getByRole('group', { name: 'Trip browsing controls' });
+        expect(within(controls).getByRole('button', { name: 'Show only selected trip' })).toHaveAttribute('aria-pressed', 'true');
+        fireEvent.click(within(controls).getByRole('button', { name: 'Reset filters' }));
+        expect(renderer.getAttribute('data-trips')?.split(',')).toHaveLength(3);
+        expect(renderer).toHaveAttribute('data-selected', 'published');
+        expect(within(controls).getByRole('button', { name: 'Show only selected trip' })).toHaveAttribute('aria-pressed', 'false');
+        expect(within(controls).queryByRole('button', { name: 'Reset filters' })).not.toBeInTheDocument();
+        expect(within(controls).getByRole('button', { name: 'Filters' })).toHaveFocus();
+        expect(screen.getByRole('radio', { name: 'Table' })).toBeChecked();
+        const params = new URL(screen.getByTestId('atlas-url').textContent!, 'https://rsmb.tv').searchParams;
+        expect(params.has('view')).toBe(false);
+        expect(params.has('milesMin')).toBe(false);
+    });
+
     it('suspends camera URL writes during a browser history transition and resumes after the location commits', async () => {
         const before = window.location.href;
         const beforeState: unknown = window.history.state;
@@ -277,7 +314,7 @@ describe('atlas browsing controls', () => {
         fireEvent.click(screen.getByRole('button', { name: 'Collapse trip panel' }));
         expect(root).toHaveAttribute('data-panel-state', 'collapsed');
         expect(screen.queryByRole('button', { name: 'Show route: Published journey' })).not.toBeInTheDocument();
-        expect(screen.getByRole('button', { name: 'Show trips' })).toHaveFocus();
+        expect(screen.getByRole('button', { name: 'Expand trip panel' })).toHaveFocus();
     });
 
     it('keeps draft filters separate, rejects reversed ranges, and synchronizes applied cards and map IDs', async () => {

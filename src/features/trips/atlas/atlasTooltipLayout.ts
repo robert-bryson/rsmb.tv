@@ -10,7 +10,8 @@ export interface AtlasTooltipLayout {
 }
 
 const anchors: PositionAnchor[] = ['bottom', 'top', 'left', 'right', 'bottom-left', 'bottom-right', 'top-left', 'top-right'];
-const offsets = [12, 28, 44];
+// The last offset clears a 44px control stack when the track runs behind a corner button.
+const offsets = [12, 28, 44, 64];
 // Native popup positions are rounded to device pixels. Reserve a small rounding allowance.
 const margin = 10;
 

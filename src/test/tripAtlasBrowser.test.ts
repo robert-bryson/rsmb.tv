@@ -114,6 +114,17 @@ describe('atlas browsing data', () => {
         expect(ids(sortAtlasEntries(entries, 'location-asc'))).toEqual(['country-only', 'coast', 'georgia-country', 'mountain', 'incomplete']);
     });
 
+    it('compares the complete country list before regions, regardless of authored location order', () => {
+        const trips = [
+            entry('cross-border', { countries: [{ code: 'US', regions: ['Washington'] }, { code: 'CA', regions: ['Ontario'] }] }),
+            entry('quebec', { countries: [{ code: 'CA', regions: ['Quebec'] }] }),
+            entry('ontario', { countries: [{ code: 'CA', regions: ['Ontario'] }] }),
+            entry('missing'),
+        ];
+        expect(ids(sortAtlasEntries(trips, 'location-asc'))).toEqual(['ontario', 'quebec', 'cross-border', 'missing']);
+        expect(ids(sortAtlasEntries(trips, 'location-desc'))).toEqual(['cross-border', 'quebec', 'ontario', 'missing']);
+    });
+
     it.each([
         { from: '2024-02-30' }, { to: '2024-1-1' }, { from: '2025-01-01', to: '2024-01-01' },
         { daysMin: '-1' }, { daysMax: '1.5' }, { daysMin: '9007199254740992' }, { milesMin: 'Infinity' },

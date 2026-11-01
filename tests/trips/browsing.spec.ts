@@ -3,7 +3,7 @@ import { atlas, atlasCamera as camera, expectAtlasUrl, mockAtlasAssets, openList
 
 test.beforeEach(async ({ page }) => { await page.emulateMedia({ reducedMotion: 'reduce' }); await mockAtlasAssets(page); });
 
-test('three drawer states reserve map space, retain the camera, and leave only an accessible arrow when collapsed', async ({ page }) => {
+test('three drawer states reserve map space, retain the camera, and leave accessible arrows when collapsed', async ({ page }) => {
     await page.goto(`${atlas}?trip=coastal-test`);
     await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
     const before = (await camera(page))!;
@@ -15,9 +15,9 @@ test('three drawer states reserve map space, retain the camera, and leave only a
     const map = (await page.getByTestId('atlas-map-viewport').boundingBox())!;
     const root = (await main.boundingBox())!;
     if (root.width >= 768) {
-        expect(panel.width).toBeCloseTo(root.width / 2, 0);
+        expect(panel.width).toBeCloseTo(root.width * 2 / 3, 0);
         expect(map.x).toBeCloseTo(panel.x + panel.width, 0);
-        expect(map.width).toBeCloseTo(root.width / 2, 0);
+        expect(map.width).toBeCloseTo(root.width / 3, 0);
     } else {
         expect(map.y + map.height).toBeCloseTo(panel.y, 0);
         expect(map.height).toBeGreaterThan(root.height * 0.3);
@@ -27,8 +27,10 @@ test('three drawer states reserve map space, retain the camera, and leave only a
         return Math.max(...after.center.map((value, index) => Math.abs(value - before.center[index])), Math.abs(after.zoom - before.zoom));
     }).toBeLessThan(0.000001);
     await page.getByRole('button', { name: 'Use compact trip panel' }).click();
+    await expect(main).toHaveAttribute('data-panel-state', 'compact');
     await page.getByRole('button', { name: 'Show route: Coastal test trip' }).focus();
     await page.getByRole('button', { name: 'Collapse trip panel' }).click();
+    await expect(main).toHaveAttribute('data-panel-state', 'collapsed');
     const handle = page.getByRole('button', { name: 'Show trips' });
     await expect(page.locator('#atlas-panel-toggle')).toBeFocused();
     await expect(page.getByRole('button', { name: /^Show route:/ })).toHaveCount(0);
@@ -83,10 +85,10 @@ test('table sorting shares card order, retains unknown facts, and survives compa
     await expect(page.getByRole('radio', { name: 'Table', exact: true })).toBeChecked();
     const table = page.getByRole('table');
     await expect(table).toBeVisible();
-    await expect(table.locator('caption')).toBeInViewport();
-    const caption = (await table.locator('caption').boundingBox())!;
+    await expect(table.locator('thead')).toBeInViewport();
+    const heading = (await table.locator('thead').boundingBox())!;
     const tools = (await page.locator('.atlas-browser-tools').boundingBox())!;
-    expect(caption.y).toBeGreaterThanOrEqual(tools.y + tools.height);
+    expect(heading.y).toBeGreaterThanOrEqual(tools.y + tools.height);
     await table.getByRole('button', { name: 'Miles', exact: true }).click();
     await expect(table.getByRole('columnheader', { name: 'Miles' })).toHaveAttribute('aria-sort', 'ascending');
     await expect(table.locator('[data-trip-id]').first()).toHaveAttribute('data-trip-id', 'coastal-test');
@@ -99,14 +101,14 @@ test('table sorting shares card order, retains unknown facts, and survives compa
     await expect(page.locator('[data-trip-id]').first()).toHaveAttribute('data-trip-id', 'coastal-test');
     await page.getByRole('button', { name: 'Expand trip panel' }).click();
     await expect(page.getByRole('radio', { name: 'Table', exact: true })).toBeChecked();
-    await expect(table.locator('caption')).toBeInViewport();
-    expect((await table.locator('caption').boundingBox())!.y).toBeGreaterThanOrEqual((await page.locator('.atlas-browser-tools').boundingBox())!.y + tools.height);
+    await expect(table.locator('thead')).toBeInViewport();
+    expect((await table.locator('thead').boundingBox())!.y).toBeGreaterThanOrEqual((await page.locator('.atlas-browser-tools').boundingBox())!.y + tools.height);
     await table.locator('[data-trip-id="coastal-test"]').getByRole('link', { name: /Read trip report/ }).click();
     await page.reload();
     await page.getByRole('link', { name: /Back to map/ }).first().click();
     await expect(page.locator('main.atlas-explorer')).toHaveAttribute('data-panel-state', 'expanded');
     await expect(page.getByRole('radio', { name: 'Table', exact: true })).toBeChecked();
-    await expect(page.getByRole('combobox', { name: 'Sort trips' })).toHaveValue('miles-desc');
+    await expect(page.getByRole('button', { name: 'Sort trips', exact: true })).toHaveAttribute('data-atlas-tooltip', /Current order: Miles · longest first/);
 });
 
 test('country and region choices apply as alternatives and replace redundant country-wide choices', async ({ page }) => {
@@ -139,7 +141,7 @@ test('shared browse URLs and Back restore results, while a selection excluded by
     await expect(page.getByRole('button', { name: 'Show only selected trip' })).toHaveAttribute('aria-pressed', 'false');
     await page.goBack();
     await expect(page.locator('[data-trip-id]')).toHaveCount(0);
-    await expect(page.getByRole('combobox', { name: 'Sort trips' })).toHaveValue('miles-asc');
+    await expect(page.getByRole('button', { name: 'Sort trips', exact: true })).toHaveAttribute('data-atlas-tooltip', /Current order: Miles · shortest first/);
 });
 
 test('phone filters reflow and table scrolling remains inside the drawer', async ({ page }) => {

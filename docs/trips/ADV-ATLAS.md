@@ -4,19 +4,35 @@ ADV Atlas connects motorcycle trip reports through a shared route map.
 Open `/projects/adv-atlas/map` to browse the collection.
 The project entry opens this explorer directly.
 
+Select a trip to show route-colored dots with a broad black halo at recorded day breaks.
+Each dot marks the end of an authored day's final track.
+The final day with recorded tracks uses the end pin instead.
+Multiple recordings or disconnected parts within one day do not add extra dots.
+The dots have no labels or additional controls; day details remain in the trip report.
+Day metadata loads on selection. Missing metadata leaves the route usable without dots.
+Black square pins mark the selected route's recorded start and end.
+The start uses a play symbol. The end uses a stop square. Both symbols use the trip color.
+The pins share the selected route's crisp black halo color and opacity.
+Pins sit directly above their endpoints.
+When they overlap, their bodies move apart. Their pointers retain the actual coordinates.
+Markers have no visible labels. They do not intercept map clicks or gestures.
+
 ## Trip panel
 
 The panel has three states.
 
 | State | Desktop | Phone |
 | --- | --- | --- |
-| Collapsed | Only the side arrow remains | Only the bottom arrow remains |
+| Collapsed | Only the two side arrows remain | Only the two bottom arrows remain |
 | Compact | A panel up to 360 pixels wide | A short bottom sheet |
-| Expanded | Half the screen, beside the map | A taller bottom sheet, with the map above |
+| Expanded | Two-thirds of the screen, beside the map | Half the available height, with the map above |
 
 The initial view is compact.
-Use the arrow to collapse the panel or reopen its compact view.
-Use **Compact** and **Expand** to switch between visible sizes.
+Use the single arrow to open the compact panel, collapse it, or reduce an expanded panel.
+Use the double arrow to open the expanded panel or collapse it.
+Drag either arrow to resize the panel. Release it to select the nearest panel size.
+Press Escape during a drag to restore its starting size.
+Resizing the window or leaving the window also cancels a drag.
 These actions retain the camera. Size changes between card views also retain the visible result position.
 Closing the panel moves focus to its surviving arrow control.
 Reduced-motion settings disable the slide animation.
@@ -24,10 +40,23 @@ Reduced-motion settings disable the slide animation.
 Expanded view offers **Cards** and **Table**.
 Cards include descriptions, dates, exact mileage, riding days, motorcycles, locations, and report links.
 The table supports column sorting and separate route and report actions.
+Select **Customize table columns** to show, hide, or reorder columns.
+Trip names remain visible and first. They stay pinned during horizontal scrolling.
+Drag a column handle to change its order.
+With a keyboard, press Space or Enter to pick up the handle.
+Use Up, Down, Home, or End to move it. Press Space or Enter to finish.
+Press Escape to restore the previous order. Press Escape again to close the settings.
+Select **Reset columns** to restore the default order and visibility.
+Column choices remain in this browser's local storage. Shared URLs do not contain them.
 Expand a region count to see its location details.
 Horizontal table scrolling stays inside the panel.
 Compact mode uses cards and retains the preferred expanded presentation.
 Changing between cards and table starts at the top so the table headings remain visible.
+
+Icon controls show explanatory tooltips on keyboard focus and after a short pointer pause.
+Keyboard focus takes priority when scrolling moves another control under the pointer.
+Tooltips update when browser history changes the control's action or state.
+Press Escape to dismiss a tooltip. Touch input and dragging dismiss it automatically.
 
 ## Sort and filter
 
@@ -193,8 +222,16 @@ If fullscreen ends during a failed retry, the next renderer creates a fresh full
 | `src/features/trips/atlas/useAtlasUrlState.ts` | Compose URL changes and preserve history state and fragments |
 | `src/features/trips/atlas/TripAtlasShare.tsx` | Share the current view and provide copy fallbacks |
 | `src/features/trips/atlas/TripAtlasPanel.tsx` | Manage the drawer controls, filter disclosure, and result-position anchors |
+| `src/features/trips/atlas/useAtlasPanelDrag.ts` | Resize the panel and cancel interrupted pointer gestures |
 | `src/features/trips/atlas/TripAtlasFilters.tsx` | Edit filter drafts and show applied filters |
 | `src/features/trips/atlas/TripAtlasResults.tsx` | Present matching trips as cards or a native sortable table |
+| `src/features/trips/atlas/tripAtlasTableColumns.ts` | Define columns and validate saved order and visibility |
+| `src/features/trips/atlas/TripAtlasColumnSettings.tsx` | Open column settings and retain usable panel space |
+| `src/features/trips/atlas/TripAtlasColumnChoices.tsx` | Reorder columns with pointer or keyboard input |
+| `src/features/trips/atlas/TripAtlasSort.tsx` | Present sort choices and restore trigger focus |
+| `src/features/trips/atlas/TripAtlasViewToggle.tsx` | Select the expanded result presentation |
+| `src/features/trips/atlas/AtlasControlTooltips.tsx` | Explain controls and synchronize visible and accessible hints |
+| `src/features/trips/atlas/tripAtlasMarkers.ts` | Resolve day breaks and endpoints from authored recording order |
 | `src/features/trips/atlas/tripAtlasView.ts` | Build atlas URLs and combine route features |
 | `src/features/trips/atlas/tripAtlasSession.ts` | Validate, copy, bound, and persist tab state |
 | `src/blog/postReturnDestination.ts` | Validate article return destinations and retain source visit identity |

@@ -12,11 +12,15 @@
 
 ## July 17
 
-_Missing recording between the border and Ontario_
+_Sault Ste. Marie through northeastern Ontario_
 
-[No GPX recording found for this date. Was this a rest day, or is a recording missing? Add your recollection.]
+_Approximately 440 recorded mi._
 
-[The previous recording ends near Sault Ste. Marie. July 18 begins farther east in Ontario. Fill this gap from memory.]
+{{trip-map:day:jul-17}}
+
+[The recovered recording connects the Sault Ste. Marie area with northeastern Ontario. Describe the border crossing, route choices, and overnight stop.]
+
+[Use the Arctic Watershed photograph as a memory cue. What changed as you headed north and east?]
 
 {{trip-gallery:jul-17}}
 

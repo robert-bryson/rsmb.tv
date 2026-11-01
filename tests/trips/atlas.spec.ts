@@ -244,7 +244,7 @@ test('selected-trip filtering hides other geometry and cards, survives report re
     await filter.click();
     await expect(filter).toHaveAttribute('aria-pressed', 'true');
     await expect(choices).toHaveCount(0);
-    await map.locator('canvas').click({ position: { x: (await map.boundingBox())!.width - 24, y: 180 } });
+    await map.locator('canvas').click({ position: { x: (await map.boundingBox())!.width - 24, y: 230 } });
     await expectAtlasUrl(page);
     await expect(filter).toHaveCount(0);
     await expect(page.getByRole('heading', { level: 2 })).toHaveCount(2);
@@ -259,17 +259,43 @@ test('clicking empty map space deselects the route without moving the camera', a
     await expect(page.getByText('2/2 routes', { exact: false })).toBeVisible();
     await expect.poll(async () => (await paintedRoute(page, 'daily-test')).count).toBeGreaterThan(30);
     const before = await paintedRoute(page);
+    const beforeCamera = await atlasCamera(page);
     const canvas = page.locator('[data-testid="trip-atlas-map"] canvas');
-    await canvas.click({ position: { x: (await canvas.boundingBox())!.width - 24, y: 180 } });
+    await canvas.click({ position: { x: (await canvas.boundingBox())!.width - 24, y: 230 } });
     await expectAtlasUrl(page);
     await expect(page.getByRole('button', { name: /^Show route:/, pressed: true })).toHaveCount(0);
     await expect(page.locator('[data-testid="trip-atlas-map"]')).toHaveAttribute('data-selected-trip', '');
     const after = await paintedRoute(page);
+    expect(await atlasCamera(page)).toEqual(beforeCamera);
     after.bounds.forEach((value, index) => expect(Math.abs(value - before.bounds[index])).toBeLessThan(6));
     const reset = page.getByRole('button', { name: 'Zoom to all trips' });
     await expect(reset).toBeVisible();
     await reset.click();
     await expect(reset).toHaveCount(0);
+});
+
+test('route pixel measurements exclude colored UI while retaining its pointer targets', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(`${atlas}?trip=daily-test&panel=collapsed&camera=-123,46,6,0,0`);
+    await expect.poll(async () => (await paintedRoute(page, 'daily-test')).count).toBeGreaterThan(30);
+    const before = await paintedRoute(page, 'daily-test');
+    await page.getByTestId('atlas-map-viewport').evaluate((viewport, color) => {
+        const obstacle = document.createElement('button');
+        obstacle.dataset.atlasMapObstacle = '';
+        obstacle.dataset.testid = 'route-pixel-obstacle';
+        obstacle.textContent = 'Map control';
+        Object.assign(obstacle.style, { position: 'absolute', inset: '0 auto auto 0', width: '100px', height: '100px', zIndex: '100', background: color, transition: 'opacity 200ms' });
+        viewport.append(obstacle);
+    }, tripAtlasColor('daily-test'));
+    const obstacle = page.getByTestId('route-pixel-obstacle');
+    await expect(obstacle).toBeVisible();
+    const after = await paintedRoute(page, 'daily-test');
+    after.bounds.forEach((value, index) => expect(Math.abs(value - before.bounds[index])).toBeLessThan(5));
+    await expect(obstacle).toBeVisible();
+    expect(await obstacle.evaluate(element => {
+        const box = element.getBoundingClientRect();
+        return document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2) === element;
+    })).toBe(true);
 });
 
 test('card photos and text select and frame routes while report links navigate normally', async ({ page, isMobile }) => {
@@ -303,7 +329,6 @@ test('card hover previews its route above a shared selected route without changi
     await page.goto(`${atlas}?trip=daily-test`);
     await expect(page.getByText('2/2 routes', { exact: false })).toBeVisible();
     await expect.poll(async () => (await paintedRoute(page, 'daily-test')).count).toBeGreaterThan(30);
-    await page.getByRole('button', { name: 'Use compact trip panel' }).click();
     const card = page.locator('[data-trip-id="coastal-test"]');
     await card.getByRole('heading').evaluate(element => element.scrollIntoView({ block: 'center' }));
     const scroll = await page.locator('#atlas-trip-list').evaluate(element => element.scrollTop);
@@ -392,6 +417,7 @@ test('overlapping routes offer colored previews and a dismissible choice instead
     const map = page.locator('[data-testid="trip-atlas-map"]');
     const before = await paintedRoute(page, 'daily-test');
     await expect(page.locator('#atlas-panel-toggle')).toHaveAttribute('aria-expanded', 'false');
+    const beforeCamera = await atlasCamera(page);
     await map.locator('canvas').click({ position: before.point });
     const choices = page.getByRole('group', { name: 'Trips sharing this road' });
     await expect(choices).toBeVisible();
@@ -424,6 +450,7 @@ test('overlapping routes offer colored previews and a dismissible choice instead
     await expect(page.getByRole('tooltip')).toHaveCount(0);
     await expectAtlasUrl(page, { trip: 'daily-test' });
     const after = await paintedRoute(page, 'daily-test');
+    expect(await atlasCamera(page)).toEqual(beforeCamera);
     after.bounds.forEach((value, index) => expect(Math.abs(value - before.bounds[index])).toBeLessThan(5));
     await map.locator('canvas').click({ position: before.point });
     await expect(choices).toBeVisible();

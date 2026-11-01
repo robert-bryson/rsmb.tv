@@ -3,18 +3,26 @@ import { FullscreenControl, type FullscreenControlOptions, type Map } from 'mapl
 /** MapLibre rebuilds the button on reattachment but retains its fullscreen state. */
 export class AtlasFullscreenControl extends FullscreenControl {
     private active = false;
+    private button: HTMLButtonElement | null = null;
+
+    private updateTooltip() {
+        this.button?.setAttribute('data-atlas-tooltip', this.active ? 'Exit fullscreen and return to the page layout.' : 'Expand the map and trip browser to fill the screen.');
+        this.button?.removeAttribute('title');
+    }
 
     constructor(options: FullscreenControlOptions) {
         super(options);
-        this.on('fullscreenstart', () => { this.active = true; });
-        this.on('fullscreenend', () => { this.active = false; });
+        this.on('fullscreenstart', () => { this.active = true; this.updateTooltip(); });
+        this.on('fullscreenend', () => { this.active = false; this.updateTooltip(); });
     }
 
     override onAdd(map: Map) {
         const container = super.onAdd(map);
         const button = container.querySelector('button');
+        this.button = button;
         button?.classList.toggle('maplibregl-ctrl-shrink', this.active);
         button?.classList.toggle('maplibregl-ctrl-fullscreen', !this.active);
+        this.updateTooltip();
         return container;
     }
 }

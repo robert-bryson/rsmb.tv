@@ -4,8 +4,9 @@
     "start": "2026-07-10",
     "end": "2026-08-15"
   },
-  "ridingDays": 26,
-  "distanceMiles": 5138,
+  "ridingDays": 27,
+  "distanceMiles": 5578,
+  "motorcycle": "Honda CB500X",
   "countries": [
     {
       "code": "US",
@@ -70,6 +71,11 @@
         "id": "jul-16-2026-11-47-28",
         "name": "Sault Ste. Marie local activity",
         "date": "2026-07-16"
+      },
+      {
+        "id": "jul-17-2026-07-41-40",
+        "name": "Sault Ste. Marie through northeastern Ontario",
+        "date": "2026-07-17"
       },
       {
         "id": "jul-18-2026-08-06-38",
@@ -301,10 +307,12 @@
     },
     {
       "id": "jul-17",
-      "title": "Missing recording between the border and Ontario",
+      "title": "Sault Ste. Marie through northeastern Ontario",
       "date": "2026-07-17",
       "headingId": "july-17",
-      "trackIds": [],
+      "trackIds": [
+        "jul-17-2026-07-41-40"
+      ],
       "stopIds": [],
       "galleryId": "jul-17"
     },

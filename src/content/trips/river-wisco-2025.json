@@ -6,6 +6,7 @@
   },
   "ridingDays": 7,
   "distanceMiles": 1344,
+  "motorcycle": "Honda CB500X",
   "countries": [
     {
       "code": "US",

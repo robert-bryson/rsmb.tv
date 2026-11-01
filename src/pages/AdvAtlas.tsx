@@ -8,6 +8,7 @@ import { TripAtlasMapBoundary } from '../features/trips/atlas/TripAtlasMapBounda
 import { TripAtlasPanel } from '../features/trips/atlas/TripAtlasPanel';
 import { TripAtlasResults } from '../features/trips/atlas/TripAtlasResults';
 import { TripAtlasShare } from '../features/trips/atlas/TripAtlasShare';
+import { AtlasControlTooltips } from '../features/trips/atlas/AtlasControlTooltips';
 import { useAtlasUrlState } from '../features/trips/atlas/useAtlasUrlState';
 import { encodeAtlasCamera, readAtlasCamera, readAtlasPresentation } from '../features/trips/atlas/tripAtlasUrlState';
 import { TRIP_ATLAS_PATH, type AtlasRouteState } from '../features/trips/atlas/tripAtlasView';
@@ -243,7 +244,8 @@ export default function AdvAtlas() {
             <TripAtlasShare getUrl={getShareUrl} />
             {(selectedId || cameraChanged || activeFilters > 0 || fitRequest.cancelled) && <button type="button" onClick={fitResults}
                 data-atlas-map-obstacle data-testid="atlas-overview-control" disabled={loadedCount === 0}
-                aria-label={atlasFilterCount(filters) ? 'Fit results' : 'Zoom to all trips'} title={atlasFilterCount(filters) ? 'Fit results' : 'Zoom to all trips'}
+                aria-label={atlasFilterCount(filters) ? 'Fit results' : 'Zoom to all trips'}
+                data-atlas-tooltip={atlasFilterCount(filters) ? 'Zoom to all trips matching your filters and clear the selected-trip-only view.' : 'Zoom to all trips and clear the current trip selection.'}
                 className="atlas-control atlas-icon-control atlas-overview-control">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <path d="M3 10a9 9 0 1 1 2 8M3 4v6h6" />
@@ -260,12 +262,13 @@ export default function AdvAtlas() {
             {filterIssues.length > 0 && <p role="alert" className="mb-3 rounded-lg border border-amber-800 bg-amber-950/30 p-3 text-sm text-amber-200">Some filters are invalid. Edit or clear them to see results. {filterIssues[0].message}</p>}
             {selectedOutsideFilters && <div className="mb-3 rounded-lg border border-violet-900 bg-violet-950/30 p-3 text-sm text-violet-200">
                 <p>Selected trip is outside these filters.</p>
-                <button type="button" onClick={() => { deselectTrip(); document.getElementById('atlas-filters-toggle')?.focus({ preventScroll: true }); }} className="min-h-11 underline">Clear selection</button>
+                <button type="button" data-atlas-tooltip="Deselect this trip while keeping your filters." onClick={() => { deselectTrip(); document.getElementById('atlas-filters-toggle')?.focus({ preventScroll: true }); }} className="min-h-11 underline">Clear selection</button>
             </div>}
             {visibleEntries.length === 0 && <p className="rounded-lg bg-zinc-900 p-4 text-sm text-zinc-400">{entries.length ? 'No trips match these filters. Clear a filter or choose a wider range.' : 'No trip reports are available yet.'}</p>}
             <TripAtlasResults entries={visibleEntries} routes={routes} selectedId={selectedId} highlightedId={highlightedId}
                 expanded={panelState === 'expanded'} view={resultsView} sort={sort} development={development}
                 returnUrl={url} returnKey={location.key} onSort={changeSort} onSelect={selectTrip} onHover={setHoveredId} onFocus={setFocusedId} />
         </TripAtlasPanel>
+        <AtlasControlTooltips container={fullscreenContainer} />
     </main>;
 }

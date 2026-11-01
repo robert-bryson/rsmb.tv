@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "checkedOn": "2026-10-30",
+  "checkedOn": "2026-10-31",
   "sheet": {
     "url": "https://docs.google.com/spreadsheets/d/1veNLJMfE21Px0JEVUoV9ClLJaDATy1DkpoWFruCPjMI/edit",
     "tab": "Blog Posts",
@@ -110,7 +110,7 @@
       ],
       "missingRecordingDates": [],
       "followUp": [
-        "Continue existing source story and publication checklist."
+        "See TODO.md for the Ocean Shores photo/GPX chronology conflict; existing manifest dates remain pending author confirmation."
       ]
     },
     {
@@ -1109,7 +1109,7 @@
           "rowNumber": 7,
           "reportDate": "2025-10-14",
           "published": false,
-          "googleDoc": null,
+          "googleDoc": "https://docs.google.com/document/d/1CpQvTcjOlFhHeRt76LZpdhm5IyQHmyrr2yJmiro7MsE/edit",
           "description": null
         }
       ],
@@ -1297,7 +1297,7 @@
       "missingRecordingDates": [],
       "followUp": [
         "Confirm October 7–13 dates, motorcycle, and provisional photo membership.",
-        "Add a source Google Doc ID and description to Sheet row 7.",
+        "Complete the description in Sheet row 7; its linked source Google Doc now imports.",
         "Name stops from memory; no guessed stop coordinates were added.",
         "Review travel modes and endpoints before publishing route geometry."
       ],
@@ -1365,8 +1365,8 @@
           "end": "2026-08-15"
         },
         "hero": "20260717-135454",
-        "ridingDays": 26,
-        "distanceMiles": 5138
+        "ridingDays": 27,
+        "distanceMiles": 5578
       },
       "photos": {
         "originals": [
@@ -1408,6 +1408,7 @@
           "Jul_14,_2026_10_12_50.gpx",
           "Jul_15,_2026_10_24_11.gpx",
           "Jul_16,_2026_11_47_28.gpx",
+          "Jul_17,_2026_07_41_40.gpx",
           "Jul_18,_2026_08_06_38.gpx",
           "Jul_19,_2026_08_09_39.gpx",
           "Jul_20,_2026_08_07_50.gpx",
@@ -1427,9 +1428,9 @@
         "alternates": [
           "Jul 21, 2026 9_09.gpx"
         ],
-        "processedGeoJsonCount": 36,
-        "recordedDistanceMiles": 5138,
-        "recordedDistanceKilometers": 8268.6,
+        "processedGeoJsonCount": 37,
+        "recordedDistanceMiles": 5578,
+        "recordedDistanceKilometers": 8976.2,
         "tracks": [
           {
             "id": "aug-1-2026-11-13-26",
@@ -1592,6 +1593,14 @@
             "outputPointCount": 178
           },
           {
+            "id": "jul-17-2026-07-41-40",
+            "source": "Jul_17,_2026_07_41_40.gpx",
+            "date": "2026-07-17",
+            "distanceMiles": 440,
+            "originalPointCount": 26607,
+            "outputPointCount": 1953
+          },
+          {
             "id": "jul-18-2026-08-06-38",
             "source": "Jul_18,_2026_08_06_38.gpx",
             "date": "2026-07-18",
@@ -1716,7 +1725,6 @@
       "processingWarnings": [],
       "missingRecordingDates": [
         "2026-07-12",
-        "2026-07-17",
         "2026-08-10",
         "2026-08-13"
       ],
@@ -1724,14 +1732,15 @@
         "Expand the photo collection when more images are available; the author-selected July 17 photo is the temporary hero.",
         "Confirm July 10–August 15 dates, motorcycle, and provisional report boundaries.",
         "Complete descriptions and series columns in rows 9–11; all three source Google Docs are linked.",
-        "Review July 14–15 discontinuity, July 17 gap, and July 21 alternate export.",
+        "Apply current outlines to source Docs; replace stale draft-manifest notes and add the recovered July 17 map and gallery.",
+        "Review July 14–15 discontinuity and July 21 alternate export; July 17 is now recorded.",
         "Confirm provisional ridingDays and distanceMiles against travel modes and missing recordings.",
         "Review Sheet geography tags against the route; Michigan is missing and Vermont is unconfirmed."
       ],
       "estimatedFacts": {
         "status": "provisional-gps-estimate",
-        "ridingDays": 26,
-        "distanceMiles": 5138,
+        "ridingDays": 27,
+        "distanceMiles": 5578,
         "ridingDates": [
           "2026-07-10",
           "2026-07-11",
@@ -1739,6 +1748,7 @@
           "2026-07-14",
           "2026-07-15",
           "2026-07-16",
+          "2026-07-17",
           "2026-07-18",
           "2026-07-19",
           "2026-07-20",
@@ -1771,7 +1781,6 @@
         ],
         "missingRecordingDates": [
           "2026-07-12",
-          "2026-07-17",
           "2026-08-10",
           "2026-08-13"
         ],

@@ -60,6 +60,8 @@ npx vitest run scripts/__tests__/tripContent.test.ts scripts/__tests__/tripManif
 ```
 
 These checks validate tracked manifests, daily photo assignments, responsive filenames, gallery counts, and shortcode references.
+The PCH checks include the separate `{{trip-photo:20241003-150610}}` placement.
+That photo remains outside the October 3 gallery to prevent duplication.
 Recovered-trip checks compare the source inventory with tracked manifests.
 They check the Mississippi–Wisconsin photo dates, responsive images, gallery placements, and map headings.
 They also check all 37 calendar days and recorded-track assignments across the three 2026 outlines.
@@ -273,11 +275,16 @@ The browser checks cover these behaviors:
 - Renderer retries retain pending selection and overview fits until delayed routes load. Manual movement still cancels a pending fit.
 - Failed routes retry independently. Renderer failures leave report links available.
 - Collapsed, compact, and expanded panels remain keyboard accessible. Collapsed content leaves the tab order.
-- Desktop expansion gives the panel half the screen. Phone expansion uses a bottom sheet and retains map space above it.
+- Desktop expansion gives the panel two-thirds of the screen. Phone expansion uses half the available height.
+- Both panel arrows support dragging and clicks. Escape, window resizing, and lost window focus cancel active drags.
+- Safari must cancel a pointer drag with Escape even when the pressed button lacks keyboard focus.
 - Panel size, result view, sorting, and filters retain camera values. **Fit results** frames matching routes explicitly.
 - Cards and table rows use the same IDs, order, counts, selection, and map results.
 - Switching between cards and table exposes the table caption and headings below the sticky toolbar.
 - Native table headers expose the active sort direction. Missing facts sort last in either direction.
+- Location sorting compares the complete country list before any region names, including trips across borders.
+- Column settings retain the Trip heading, validate stored preferences, and restore default visibility and order.
+- Column reordering supports keyboard, pointer, touch, cancellation, and scrolling near the list edge.
 - Filter drafts leave results unchanged until **Apply filters**. Invalid ranges retain the previous URL and results.
 - Date filters include overlapping trips and both endpoints. Numeric filters compare exact source values.
 - Country and region choices combine with OR. Regions retain their country; country-wide choices include records without regions.
@@ -291,12 +298,16 @@ The browser checks cover these behaviors:
 - Late camera events cannot overwrite pending panel changes or interrupt report navigation.
 - Native sharing supports cancellation. Copying confirms success; unavailable clipboard access exposes a selected manual link.
 - Map and panel controls share surface and focus styles. Map targets remain separate and at least 44 pixels wide at 320 pixels.
+- Control hints retain keyboard focus priority during scrolling and update after browser history changes.
 
 Layout checks use widths of 320, 767, 768, 858, 1023, 1024, and 1754 pixels.
 They test panel states, reserved map space, control overlap, and pointer targets.
 At 320 pixels, forms reflow and table scrolling stays inside its wrapper.
 Size changes between card views preserve the first visible result. Presentation changes return to the top.
 Sticky tools must not obscure focused controls.
+WebKit rounds injected pointer positions to integer CSS pixels. Drag measurements allow one pixel for this rounding.
+On macOS, use Option+Tab in WebKit checks that traverse buttons or links.
+Canvas clicks must avoid the Share button and other map controls.
 
 Cards place **Show route** before the filled **Read trip report** button.
 Checks cover accent colors, focus, hover, wrapping, and report navigation.
@@ -329,6 +340,9 @@ Desktop wheel checks retain card focus while the route changes from off screen t
 Phone projects omit mouse-wheel input; they check all directions, visible segments, and rotation.
 See the [tooltip review](../reviews/2026-10-30-adv-atlas-tooltip-hierarchy.md) for the visual decision.
 Screenshot helpers hide overlays through opacity. Pointer targets remain in place during measurements.
+Route pixel checks also hide endpoint pins, control hints, and share controls.
+The screenshot styles disable transitions so MapLibre's marker fade cannot leave partly visible pins.
+A colored overlay with an opacity transition verifies stable route measurements and retained pointer targets.
 Route screenshots and canvas bounds must describe one stable layout.
 The helper waits for container sizing and rejects captures whose bounds change during the screenshot.
 This prevents a panel transition from supplying old pixels with new pointer coordinates.
@@ -340,6 +354,8 @@ Run the content, geometry, lifecycle, and publication checks:
 npx vitest run src/test/tripAtlasEntries.test.ts src/test/tripAtlasView.test.ts src/test/tripAtlasSession.test.ts \
   src/test/tripAtlasBrowser.test.ts \
   src/test/tripAtlasFilters.test.tsx \
+  src/test/tripAtlasTableColumns.test.ts src/test/tripAtlasMarkers.test.ts \
+  src/test/useAtlasPanelDrag.test.tsx src/test/AtlasControlTooltips.test.tsx \
   src/test/tripAtlasUrlState.test.ts src/test/useAtlasUrlState.test.tsx src/test/tripAtlasShare.test.tsx \
   src/test/atlasTooltipPlacement.test.ts \
   src/test/tripAtlasMap.test.tsx src/test/advAtlas.test.tsx \
@@ -347,6 +363,14 @@ npx vitest run src/test/tripAtlasEntries.test.ts src/test/tripAtlasView.test.ts 
   src/test/browserHistory.test.ts src/test/AtlasFullscreenControl.test.ts \
   scripts/__tests__/tripContent.test.ts scripts/__tests__/tripManifestAuthoring.test.ts \
   scripts/__tests__/generateFeeds.test.ts scripts/__tests__/amplifyConfig.test.ts
+```
+
+Run focused browser checks for the panel, column editor, and control hints:
+
+```bash
+PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- \
+  tests/trips/panel-drag.spec.ts tests/trips/panel-tools.spec.ts \
+  tests/trips/columns.spec.ts tests/trips/control-tooltips.spec.ts --workers=2
 ```
 
 Strict Mode must not retain a replaced renderer's default camera.

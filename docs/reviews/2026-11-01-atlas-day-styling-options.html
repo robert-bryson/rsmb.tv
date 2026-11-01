@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADV Atlas — same-color day styling comparison</title>
+<style>
+  :root { color-scheme: dark; font: 15px/1.5 system-ui, sans-serif; background: #09090b; color: #e4e4e7; --trip: #38bdf8; }
+  * { box-sizing: border-box; }
+  body { max-width: 1320px; margin: auto; padding: 28px; }
+  h1 { font-size: clamp(24px, 4vw, 36px); margin: 0 0 8px; letter-spacing: -.03em; }
+  h2, legend { font-size: 16px; font-weight: 650; margin: 0 0 10px; }
+  p { margin: 0 0 16px; }
+  .muted { color: #a1a1aa; font-size: 13px; }
+  .layout { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 20px; }
+  .panel { border: 1px solid #3f3f46; border-radius: 12px; background: #111114; padding: 16px; }
+  fieldset { border: 0; padding: 0; margin: 0 0 22px; }
+  .choice { display: flex; gap: 10px; align-items: center; min-height: 44px; padding: 8px; border-radius: 6px; cursor: pointer; }
+  .choice:has(input:checked) { background: #2e2350; }
+  input { accent-color: #a78bfa; }
+  input[type=range] { width: 100%; }
+  button, select { font: inherit; color: inherit; border: 1px solid #52525b; background: #18181b; border-radius: 7px; min-height: 44px; padding: 8px 12px; cursor: pointer; }
+  button:hover { background: #27272a; }
+  :focus-visible { outline: 2px solid #c4b5fd; outline-offset: 3px; }
+  select { width: 100%; margin: 6px 0 20px; }
+  .map { overflow: hidden; background: #676767; border: 1px solid #52525b; border-radius: 8px; }
+  .map svg { display: block; width: 100%; height: auto; }
+  .stage-title { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .stage-title h2 { margin: 0; }
+  #description { min-height: 66px; margin-top: 12px; }
+  #days { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .day { text-align: left; display: flex; align-items: center; gap: 10px; font-size: 13px; }
+  .day[aria-pressed=true] { background: #2e2350; border-color: #c4b5fd; }
+  .day svg { flex: none; width: 42px; height: 18px; }
+  .day span { overflow-wrap: anywhere; }
+  .tag { font-size: 12px; padding: 4px 8px; border: 1px solid #52525b; border-radius: 99px; white-space: nowrap; }
+  footer { border-top: 1px solid #3f3f46; margin-top: 24px; padding-top: 16px; }
+  a { color: #c4b5fd; }
+  @media (width < 820px) { body { padding: 16px; } .layout { grid-template-columns: 1fr; } fieldset { margin-bottom: 16px; } .choice { display: inline-flex; } #days { grid-template-columns: 1fr; } }
+</style>
+<h1>One trip color. Several ways to show days.</h1>
+<p class="muted">Research companion · Boise’s actual route geometry, grouped by authored day · Concept illustration, not a MapLibre rendering test</p>
+<div class="layout">
+  <aside class="panel" aria-label="Comparison settings">
+    <fieldset id="styles"><legend>Day styling</legend>
+      <label class="choice"><input type="radio" name="style" value="boundaries" checked> Solid + numbered starts</label>
+      <label class="choice"><input type="radio" name="style" value="alternating"> Alternate solid / dash</label>
+      <label class="choice"><input type="radio" name="style" value="texture"> Alternate neutral texture</label>
+      <label class="choice"><input type="radio" name="style" value="width"> Alternate line width</label>
+      <label class="choice"><input type="radio" name="style" value="opacity"> Alternate opacity</label>
+    </fieldset>
+    <label for="color">Trip color</label>
+    <select id="color">
+      <option value="#38bdf8">Boise blue</option><option value="#a78bfa">Violet</option>
+      <option value="#fbbf24">Yellow</option><option value="#34d399">Mint</option>
+      <option value="#fb7185">Rose</option><option value="#fb923c">Orange</option><option value="#e879f9">Fuchsia</option>
+    </select>
+    <label class="choice"><input id="markers" type="checkbox" checked> Numbered day starts</label>
+    <label class="choice"><input id="terrain" type="checkbox" checked> Busy background</label>
+    <label for="zoom">View scale <output id="scale">1×</output></label>
+    <input id="zoom" type="range" min="0.7" max="1.6" value="1" step="0.1">
+    <p class="muted">Line widths stay constant on screen. Change scale to see when patterns and labels become hard to follow.</p>
+    <p class="muted">Patterns repeat every two days. Turn numbering off to see why line style alone cannot identify Day 3 versus Day 5.</p>
+  </aside>
+  <section class="panel" aria-label="Route comparison">
+    <div class="stage-title"><h2 id="style-title">Solid + numbered starts</h2><span class="tag" id="selection">All six days</span></div>
+    <div class="map"><svg id="map" viewBox="0 0 960 620" role="img" aria-labelledby="map-title map-description">
+      <title id="map-title">Boise trip divided into six authored days</title>
+      <desc id="map-description">A schematic view of the real route from Seattle to Boise and back. The day list provides each segment’s identity. Some day starts are close together at this scale.</desc>
+      <defs><pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse"><path d="M80 0H0V80" stroke="#ffffff" stroke-opacity=".09" fill="none"/></pattern>
+        <pattern id="terrain-pattern" width="170" height="130" patternUnits="userSpaceOnUse"><path d="M-20 20Q45-20 80 35T190 55M-10 45Q50 0 90 60T190 80M-10 80Q40 20 100 85T190 110" stroke="#262626" stroke-opacity=".23" fill="none" stroke-width="4"/></pattern>
+      </defs>
+      <rect width="960" height="620" fill="#676767"/><rect width="960" height="620" fill="url(#grid)"/>
+      <rect id="terrain-fill" width="960" height="620" fill="url(#terrain-pattern)"/>
+      <g id="routes"></g><g id="starts"></g>
+      <text x="20" y="596" fill="#ffffff" font-size="13">Concept view · neutral outlines · original trip color</text>
+    </svg></div>
+    <p id="description"></p>
+    <div class="stage-title"><h2>Explore a day</h2><button id="show-all" type="button">Show all days</button></div>
+    <p class="muted">Hover or focus a day to preview it; select it to keep it emphasized. The route’s color stays the same.</p>
+    <div id="days"></div>
+    <p class="muted" style="margin-top:12px">Numbered circles mark recorded starts, not certified overnight locations. Missing dates remain unlabeled. This illustration simplifies geometry for display and does not test collision handling, shared-road picking, dash scaling, or rendering performance in MapLibre.</p>
+    <p id="live" role="status" aria-live="polite" class="muted"></p>
+  </section>
+</div>
+<footer class="muted">Companion to <a href="2026-11-01-atlas-day-styling-research.md">the research and recommendations</a>. No site behavior is changed by this file. No external network requests are needed.</footer>
+<script>
+const days = [{"number":1,"title":"Seattle to Blue Mountains","date":null,"paths":["M222.47,41.62L224.77,42.51L231.7,42.49L241.54,48.85L243.27,48.23L249.11,48.9L253.29,52.45L259.36,51.35L264.56,56.9L268.3,57.03L271.36,58.43L272.87,60.94L275.82,61.24L278.24,62.96L281.68,63.73L286.37,67.46L293.74,68.14L295.56,67.54L297.35,63.69L298.45,63.23L299.89,66.9L302.14,68.97L303.66,75.11L310.64,81.29L312.4,84.93L316.06,85.16L319.35,87.17L323.68,91.89L332.81,95.48L334.02,97.18L338.22,96.79L341.78,95.31L345.39,95.81L355.31,99.64L358.03,104.1L363.25,105.09L371.06,114.44L379.91,122.33L386.01,139.43L384.93,139.16L386.43,140.5L386.16,142.08L387.92,142.41L388.77,144.58L388.32,146.53L390.07,148.57L389.64,149.51L387.99,149.69L389.12,151.22L388.37,156.73L389.38,157.51L389.12,160.06L387.01,162.72L386.44,165.61L382.82,167.25L381.63,170.37L383.37,173.24L384.79,178.88L387.64,179.08L396.21,183.86L399.74,183.86L411.61,187.89L413.74,189.76L418.57,190.42L430.22,187.88L434.19,187.9L439.65,185.62L442.48,185.97L442.83,189.23L437.73,194.12L435.9,204.58L433.25,208.88L433.31,216.01L439.22,223.01L448.36,226.29L453.32,230.75L456.73,230.09L457.78,231.36L458.76,230.44L465.58,233.04L468.39,233.09L468.61,240.57L490.28,240.87L490.12,251.13L492.1,258.39L492.01,265.69L493.44,265.65L494.75,269.2L493.51,269.24L497.03,273.41L497.73,279.55L495.8,279.73L494.76,287.11L493.54,288.8L491.53,296.68L488.57,303.16L484.08,309.74L485.67,311.41L486.02,316.08L487.43,318.2L492.08,319.7L497.16,318.9L500.04,319.6L505.72,323.18L509.75,324.32L519.94,331.66L522.73,329.81L526.76,330.61L525.06,332.62L525.77,336.87L524.18,347.01L524.31,352.01L526.91,352.32L528.14,353.48L527.56,354.22L528.23,353.82L526.01,352.02L528.22,353.86L526.73,357.31L528.13,361.43L528.0,365.13L529.59,367.67L528.91,373.53L526.63,372.01L523.76,372.64L519.44,369.38L516.74,369.21L516.44,365.32L518.41,364.08"],"start":[222.47,41.62]},{"number":2,"title":"Blue Mountains to Nampa","date":null,"paths":["M518.39,364.07L516.44,365.33L516.73,369.22L513.67,369.11L519.3,369.33L523.79,372.66L526.58,372.0L528.56,373.49L531.45,373.97L530.88,376.29L529.36,376.83L530.67,380.76L534.5,381.02L538.19,383.04L542.7,383.76L550.05,387.49L550.81,388.65L553.36,388.38L555.43,389.58L559.05,389.0L559.65,390.43L565.86,391.56L569.16,393.85L575.61,393.45L576.16,397.41L578.05,400.07L580.13,401.02L581.44,400.31L580.66,402.65L581.46,403.67L583.34,395.34L580.66,402.94L581.6,404.01L580.45,409.12L581.84,411.08L579.62,414.01L578.9,417.12L582.13,419.65L585.31,420.47L587.09,422.65L590.14,423.28L591.19,424.94L591.89,424.02L593.55,424.07L592.91,423.07L593.67,422.22L597.17,423.43L599.64,425.13L599.72,426.56L601.98,428.74L605.25,429.68L584.03,434.94L582.05,438.01L579.69,437.59L577.18,438.59L571.31,445.72L571.83,447.56L571.05,449.16L569.35,449.82L568.68,451.77L565.19,453.43L561.24,453.28L556.1,462.57L552.13,462.57L552.19,463.3L552.93,463.49L552.09,462.6L552.21,463.31L555.0,463.82L555.4,464.89L563.26,469.78L564.21,471.4L567.39,471.29L570.26,474.2L575.29,475.15L570.29,474.21L567.47,471.31L564.24,471.4L560.07,467.41L552.11,462.61L556.14,462.53L561.27,453.27L565.19,453.44L568.31,452.12L571.42,448.11L578.63,446.95L583.36,448.51L584.24,450.81L587.84,452.27L588.95,454.05L595.67,458.08L597.86,461.82L599.36,462.51L600.45,465.97L603.2,465.96L607.91,468.11L607.86,475.59L610.31,478.24L610.72,480.32L616.71,481.2L623.41,480.71L646.85,486.99L651.49,486.91L652.0,488.32L654.77,489.96L658.09,489.1L662.73,489.93L667.8,496.62L670.89,498.98L675.52,506.21L684.95,514.3L689.71,523.13L690.95,528.82L693.91,531.17L697.7,538.53L701.35,541.86L701.6,546.86L703.19,546.95L703.21,549.67L706.93,549.72L705.16,557.74L707.83,558.66L707.88,562.79L720.36,563.24L720.41,566.08L738.97,565.95L738.99,570.63L745.35,570.59L749.28,574.24L753.94,574.34L754.11,576.69L755.93,576.58L756.98,575.15"],"start":[518.39,364.07]},{"number":3,"title":"Nampa to Boise","date":null,"paths":["M756.98,575.21L757.7,578.27L759.51,578.1L759.5,579.98L765.15,580.0L765.15,576.92L765.92,576.25L778.44,575.35L779.85,574.34L785.74,574.87L786.48,572.83"],"start":[756.98,575.21]},{"number":4,"title":"Boise to Wallowas","date":"2024-05-17","paths":["M786.81,573.01L779.2,565.74L775.78,564.01L775.81,559.41L778.65,555.34L780.87,553.96L780.71,547.4L786.03,539.54L787.17,539.07L786.09,537.14L788.18,531.95L787.36,530.44L788.12,527.73L787.58,525.55L788.96,522.32L793.14,519.34L794.41,512.5L796.91,509.68L795.24,507.62L794.43,501.03L796.1,491.24L799.47,488.66L797.57,482.87L799.97,481.44L800.53,479.55L802.88,478.95L805.77,470.02L805.77,460.05L801.43,454.96L803.29,451.79L801.22,444.63L800.91,431.64L798.42,427.37L798.43,415.27L796.72,405.34L793.93,405.18L793.89,403.25L790.35,400.88L788.84,396.18L783.97,397.67L773.62,392.75L771.65,393.16L769.57,397.09L769.93,402.08L768.94,404.75L770.32,411.92L768.51,413.02L767.25,417.61L765.23,419.46L765.25,427.67L764.16,429.03L763.03,437.82L764.67,441.3L763.82,444.15L759.54,445.34L753.36,448.85L743.49,449.33L741.94,447.91L736.83,446.54L734.4,442.24L728.38,437.14L726.02,428.54L727.36,426.82L725.02,426.83L723.16,423.99L721.18,423.53L719.57,418.12L721.98,413.16L721.55,411.04L724.62,408.83L727.63,400.97L725.81,396.96L726.4,396.03L725.38,395.34L726.74,391.76L726.57,388.81L731.25,384.05L733.27,377.99L735.18,376.91L737.66,373.07L740.46,358.15L737.69,373.0L735.18,376.91L733.27,377.99L731.25,384.05L726.98,387.94L726.74,391.78L723.46,399.36L716.71,403.71L715.38,400.36L715.73,397.42L713.21,398.08L712.87,395.43"],"start":[786.81,573.01]},{"number":5,"title":"Wallowas to Panther Creek","date":"2024-05-18","paths":["M712.87,395.43L713.21,398.08L715.73,397.42L715.38,400.36L716.78,403.42L715.59,406.59L712.61,408.04L710.23,407.27L709.64,408.44L701.68,407.82L703.39,410.29L701.94,412.81L702.19,414.57L700.4,413.75L700.48,420.26L699.48,419.44L698.59,421.98L695.75,422.35L695.31,423.26L692.79,422.78L690.42,420.06L687.49,421.2L683.49,421.06L684.11,419.97L682.57,417.51L680.6,416.5L678.36,416.96L676.61,415.98L672.84,415.87L671.57,414.06L667.55,415.81L663.94,414.31L656.85,413.44L654.6,415.76L649.87,416.52L653.74,410.12L655.39,410.04L656.91,408.4L655.43,406.72L653.54,399.89L652.61,398.53L651.37,398.52L648.96,404.45L646.22,404.37L642.13,410.19L635.84,410.12L635.22,402.57L628.53,393.78L624.48,385.78L621.18,371.94L621.72,369.47L616.11,363.73L617.41,361.32L615.3,352.99L606.88,345.88L603.11,346.0L600.91,344.7L596.34,346.43L596.47,347.81L592.83,349.92L592.14,351.73L587.47,352.77L586.04,354.35L586.44,355.46L584.35,356.39L584.06,355.82L577.96,360.68L576.57,361.0L575.97,360.21L572.9,363.88L570.22,365.25L569.64,367.0L566.38,368.6L560.43,368.31L558.42,370.08L556.94,370.12L552.98,368.77L548.78,368.91L547.02,366.67L543.55,370.65L535.85,371.46L531.53,374.04L528.5,373.47L526.64,372.01L523.78,372.65L519.34,369.34L512.16,369.5L509.13,368.5L503.66,368.92L502.39,370.87L499.63,369.83L496.64,372.34L495.67,371.98L493.44,369.78L494.41,369.15L494.81,366.56L492.97,363.86L493.38,361.34L490.91,358.37L491.8,355.21L491.23,353.15L488.58,349.26L481.06,345.12L476.3,346.69L472.63,346.31L472.32,348.13L467.43,354.39L460.1,356.85L458.31,358.47L444.17,358.2L441.87,357.46L440.47,354.98L433.73,353.61L432.59,355.56L429.07,354.26L428.36,356.35L429.63,357.18L428.39,359.65L426.43,361.57L424.5,361.28L422.3,362.85L420.66,361.29L407.63,360.55L405.17,358.53L405.61,356.67L403.93,354.61L403.83,352.53L401.49,349.4L399.64,343.98L392.95,341.35L389.11,337.09L387.96,334.04L388.34,329.91L387.64,328.6L380.96,325.09L377.45,324.56L369.36,315.78L365.98,313.06L364.47,313.08L361.19,308.46L354.99,305.24L352.91,301.29L354.4,300.58L353.13,300.9L354.96,298.86L344.67,303.87L343.11,303.03L335.15,303.17L330.03,304.13L327.89,305.47L320.94,305.48L317.74,302.18L311.86,300.2L311.09,298.78L311.11,299.48L308.98,297.89L305.29,297.1L302.38,297.37L300.6,298.85L297.97,298.65L292.44,295.53L288.32,294.62L268.73,298.74L263.49,296.4L262.81,295.06L260.97,295.21L260.56,292.2L256.39,287.36L256.6,285.42L255.23,282.58L256.13,280.36L260.2,276.2"],"start":[712.87,395.43]},{"number":6,"title":"Panther Creek to Seattle","date":"2024-05-19","paths":["M260.2,276.2L256.13,280.36L255.27,282.52L252.73,282.1L252.54,282.73L246.3,275.42L247.57,271.74L248.73,270.87L249.71,264.8L251.12,263.57L250.9,259.51L252.24,259.57L253.69,255.91L251.68,252.77L247.23,250.67L252.3,247.73L251.87,246.57L253.17,242.63L252.47,240.72L255.03,237.09L252.47,240.72L253.17,242.63L251.87,246.57L252.3,247.73L246.77,251.05L244.69,250.02L242.55,250.89L241.96,249.31L240.77,250.73L238.5,251.21L234.83,249.5L232.73,249.92L230.58,248.54L229.6,249.16L228.7,247.91L225.04,246.53L224.56,248.03L224.26,243.64L224.23,247.52L225.38,249.26L221.48,250.69L218.89,249.62L216.19,250.79L213.55,255.9L210.57,258.42L205.73,258.88L204.39,260.53L200.86,258.88L195.69,258.81L193.36,259.9L193.33,261.52L191.53,263.8L184.58,266.37L178.92,265.91L176.63,267.2L176.13,268.97L174.08,269.63L165.18,258.18L162.66,246.22L159.94,240.71L159.4,235.09L161.36,224.08L158.42,215.26L160.73,201.62L154.17,203.72L160.75,202.13L162.14,184.13L169.12,184.6L174.19,186.18L186.6,186.07L190.11,188.76L191.68,188.06L192.93,185.67L197.86,186.08L201.76,184.73L207.98,186.1L215.54,183.27L218.21,183.49L225.29,169.87L225.4,162.75L223.54,159.84L225.48,157.41L226.09,154.69L218.29,149.66L220.88,143.98L220.54,143.06L218.73,142.78L220.59,141.15L218.44,139.15L215.73,138.93L217.8,130.51L216.24,128.6L216.29,97.97L217.52,97.13L217.97,94.63L220.95,93.64L219.56,85.74L221.14,78.78L221.32,70.17L218.93,70.47L216.86,67.94L216.98,64.8L218.74,62.68L219.35,59.74L218.63,56.03L219.33,54.64L214.05,45.26L213.76,40.0"],"start":[260.2,276.2]}];
+const ns = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('map');
+const paths = document.getElementById('routes');
+const starts = document.getElementById('starts');
+let selected = null, preview = null;
+const options = {
+  boundaries: ['Solid + numbered starts', 'The clearest foundation: a continuous trip-colored route plus numbered day starts. It identifies boundaries without making some days look less certain. Use day focus when neighboring starts overlap.'],
+  alternating: ['Alternate solid / dash', 'An immediate day-to-day change while preserving the exact trip color. Dashes repeat every other day, so numbered starts and day names still provide identity. A dash can also suggest an uncertain or unpaved route unless the legend explains it.'],
+  texture: ['Alternate neutral texture', 'The colored route stays continuous; a narrow neutral dash overlay textures every second day. This avoids broken-looking geometry, but adds visual noise and is harder to distinguish when zoomed out.'],
+  width: ['Alternate line width', 'Both days retain the same color, but wide sections can look more important or imply quantity. Width also competes with the selection cue; this example adds a light outline to keep the focused day distinguishable.'],
+  opacity: ['Alternate opacity — trade-off', 'The CSS color is unchanged, but transparency blends it with the map and changes the displayed color. Contrast depends on the background. This does not meet a strict same-visible-color requirement.']
+};
+function node(tag, attributes, parent, text) {
+  const element = document.createElementNS(ns, tag);
+  for (const [key, value] of Object.entries(attributes)) element.setAttribute(key, value);
+  if (text !== undefined) element.textContent = text;
+  parent.append(element); return element;
+}
+function render() {
+  const mode = document.querySelector('input[name=style]:checked').value;
+  const color = document.getElementById('color').value;
+  const scale = Number(document.getElementById('zoom').value);
+  const focus = preview ?? selected;
+  const [title, description] = options[mode];
+  document.getElementById('style-title').textContent = title;
+  document.getElementById('description').textContent = description;
+  document.getElementById('selection').textContent = focus === null ? 'All six days' : `Day ${focus + 1}`;
+  document.getElementById('scale').textContent = `${scale}×`;
+  document.getElementById('terrain-fill').style.display = document.getElementById('terrain').checked ? '' : 'none';
+  const width = 960 / scale, height = 620 / scale;
+  svg.setAttribute('viewBox', `${480 - width / 2} ${310 - height / 2} ${width} ${height}`);
+  paths.replaceChildren(); starts.replaceChildren();
+  const ordered = days.filter((_, i) => i !== focus).concat(focus === null ? [] : [days[focus]]);
+  for (const day of ordered) {
+    const i = day.number - 1, emphasized = i === focus, alternate = i % 2 === 1;
+    const lineWidth = emphasized ? 8 : mode === 'width' && alternate ? 6.5 : 4.5;
+    for (const d of day.paths) {
+      const common = {d, fill:'none', 'stroke-linecap':'round', 'stroke-linejoin':'round', 'vector-effect':'non-scaling-stroke'};
+      if (emphasized) node('path', {...common, stroke:'#fafafa', 'stroke-width':lineWidth + 5}, paths);
+      node('path', {...common, stroke:'#09090b', 'stroke-width':lineWidth + 2.5}, paths);
+      node('path', {...common, stroke:color, 'stroke-width':lineWidth,
+        'stroke-opacity':mode === 'opacity' && alternate ? .45 : 1,
+        ...(mode === 'alternating' && alternate ? {'stroke-dasharray':'12 10'} : {})}, paths);
+      if (mode === 'texture' && alternate) node('path', {...common, stroke:'#f4f4f5', 'stroke-width':1.8, 'stroke-dasharray':'3 11', 'stroke-linecap':'butt'}, paths);
+    }
+    if (document.getElementById('markers').checked) {
+      const [x,y] = day.start;
+      const marker = node('g', {transform:`translate(${x} ${y}) scale(${1 / scale})`}, starts);
+      node('circle', {r:emphasized ? 14 : 11, fill:'#09090b', stroke:color, 'stroke-width':2.5}, marker);
+      node('text', {'text-anchor':'middle','dominant-baseline':'central',fill:'#fafafa','font-size':12,'font-weight':700}, marker, day.number);
+    }
+  }
+  for (const [i, button] of [...document.querySelectorAll('.day')].entries()) {
+    button.setAttribute('aria-pressed', String(i === selected));
+    const sample = button.querySelector('svg'); sample.replaceChildren();
+    node('path', {d:'M2 9H40', stroke:'#09090b','stroke-width':8}, sample);
+    node('path', {d:'M2 9H40',stroke:color,'stroke-width':mode === 'width' && i % 2 ? 6.5 : 4.5,
+      'stroke-opacity':mode === 'opacity' && i % 2 ? .45 : 1,
+      ...(mode === 'alternating' && i % 2 ? {'stroke-dasharray':'12 10'} : {})}, sample);
+    if (mode === 'texture' && i % 2) node('path',{d:'M2 9H40',stroke:'#f4f4f5','stroke-width':1.8,'stroke-dasharray':'3 11'},sample);
+  }
+}
+days.forEach((day, index) => {
+  const button = document.createElement('button'); button.type = 'button'; button.className = 'day';
+  const sample = node('svg', {viewBox:'0 0 42 18','aria-hidden':'true'}, button);
+  sample.setAttribute('focusable','false');
+  const text = document.createElement('span'); text.textContent = `${day.number}. ${day.title}${day.date ? ' · ' + day.date : ''}`; button.append(text);
+  button.addEventListener('mouseenter', () => { preview = index; render(); });
+  button.addEventListener('mouseleave', () => { preview = null; render(); });
+  button.addEventListener('focus', () => { preview = index; render(); });
+  button.addEventListener('blur', () => { preview = null; render(); });
+  button.addEventListener('click', () => { selected = selected === index ? null : index; preview = selected; document.getElementById('live').textContent = selected === null ? 'Showing all six days.' : `Selected day ${day.number}: ${day.title}.`; render(); });
+  document.getElementById('days').append(button);
+});
+document.querySelectorAll('input,select').forEach(control => control.addEventListener('input', render));
+document.getElementById('show-all').addEventListener('click', () => { selected = null; preview = null; document.getElementById('live').textContent = 'Showing all six days.'; render(); });
+document.addEventListener('keydown', event => { if (event.key === 'Escape') { selected = null; preview = null; render(); } });
+render();
+</script>
+</html>

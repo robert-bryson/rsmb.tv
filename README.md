@@ -216,6 +216,7 @@ Report writes must not trigger application reloads during browser checks.
 
 `npm run test:trips:browser` builds fixed content for production and checks desktop and phone layouts.
 The suite covers maps, photo viewers, accessibility, article metadata, and JavaScript size limits.
+Atlas checks include interrupted panel drags, saved table columns, keyboard focus, and control hints after browser history changes.
 Use the [trip testing guide](docs/trips/TESTING.md) for browser setup, focused commands, and budget definitions.
 CI includes Chromium and iPhone WebKit. Local runs can also include Firefox.
 

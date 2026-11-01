@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom';
-import { useState, type CSSProperties, type FocusEvent, type PointerEvent } from 'react';
+import { useMemo, useState, type CSSProperties, type FocusEvent, type MouseEvent, type PointerEvent } from 'react';
 import { formatDateRange } from '../../../utils/formatDate';
 import type { TripAtlasEntry } from './tripAtlasEntries';
 import { tripAtlasColor, type AtlasRouteState } from './tripAtlasView';
-import { atlasLocationLabel, atlasLocations, type AtlasResultsView, type AtlasSort } from './tripAtlasBrowser';
+import { atlasLocationLabel, atlasLocations, atlasSortOptions, type AtlasResultsView, type AtlasSort } from './tripAtlasBrowser';
 import { getCountryName } from '../../../content/blogRegions';
+import { usePersistedState } from '../../../hooks/usePersistedState';
+import { TripAtlasColumnSettings } from './TripAtlasColumnSettings';
+import { atlasTableColumns, atlasTableColumnsStorageKey, defaultAtlasTableColumns, readAtlasTableColumns, type AtlasTableColumnId } from './tripAtlasTableColumns';
 
 interface Props {
     entries: TripAtlasEntry[];
@@ -75,14 +78,6 @@ function ResultActions({ entry, props }: { entry: TripAtlasEntry; props: Props }
     </>;
 }
 
-const columns = [
-    { name: 'Trip', ascending: 'title-asc', descending: 'title-desc' },
-    { name: 'Trip dates', ascending: 'oldest', descending: 'newest' },
-    { name: 'Riding days', ascending: 'days-asc', descending: 'days-desc' },
-    { name: 'Miles', ascending: 'miles-asc', descending: 'miles-desc' },
-    { name: 'Location', ascending: 'location-asc', descending: 'location-desc' },
-] as const;
-
 function TableLocation({ entry }: { entry: TripAtlasEntry }) {
     const locations = atlasLocations(entry);
     if (!locations.length) return <>Not recorded</>;
@@ -97,6 +92,20 @@ function TableLocation({ entry }: { entry: TripAtlasEntry }) {
 }
 
 export function TripAtlasResults(props: Props) {
+    const [storedColumns, setStoredColumns] = usePersistedState<unknown>(atlasTableColumnsStorageKey, defaultAtlasTableColumns());
+    const columnSettings = useMemo(() => readAtlasTableColumns(storedColumns), [storedColumns]);
+    const columns = columnSettings.filter(setting => setting.visible).map(setting => atlasTableColumns.find(column => column.id === setting.id)!);
+    const actionsVisible = columns.some(column => column.id === 'actions');
+    const cellContent = (entry: TripAtlasEntry, column: Exclude<AtlasTableColumnId, 'trip'>) => {
+        switch (column) {
+            case 'motorcycle': return entry.summary?.motorcycle ?? 'Not recorded';
+            case 'dates': return entry.summary ? formatDateRange(entry.summary.dates.start, entry.summary.dates.end) : 'Not recorded';
+            case 'days': return entry.summary?.ridingDays ?? 'Not recorded';
+            case 'miles': return formatAtlasMiles(entry.summary?.distanceMiles);
+            case 'location': return <TableLocation entry={entry} />;
+            case 'actions': return <ResultActions entry={entry} props={props} />;
+        }
+    };
     const attributes = (entry: TripAtlasEntry) => {
         const active = props.selectedId === entry.id;
         const highlighted = props.highlightedId === entry.id;
@@ -104,53 +113,57 @@ export function TripAtlasResults(props: Props) {
         return {
             id: `atlas-card-${entry.id}`,
             'data-trip-id': entry.id,
+            'data-selected': active || undefined,
             'data-highlighted': highlighted || undefined,
+            onClick: (event: MouseEvent<HTMLElement>) => {
+                if (entry.summary && !event.defaultPrevented && event.target instanceof Element
+                    && !event.target.closest('a, button, input, select, textarea, summary, details, [role="button"], [contenteditable]')) props.onSelect(entry.id);
+            },
             onPointerEnter: (event: PointerEvent<HTMLElement>) => { if (event.pointerType !== 'touch') props.onHover(entry.summary ? entry.id : undefined); },
             onPointerLeave: () => props.onHover(undefined),
             onFocusCapture: () => props.onFocus(entry.summary ? entry.id : undefined),
             onBlurCapture: (event: FocusEvent<HTMLElement>) => { if (!event.currentTarget.contains(event.relatedTarget)) props.onFocus(undefined); },
-            style: { '--trip-atlas-color': color, borderColor: active || highlighted ? color : '#27272a',
-                boxShadow: highlighted ? `inset 0 0 0 1px ${color}` : undefined } as CSSProperties,
+            style: { '--trip-atlas-color': color, borderColor: active || highlighted ? color : '#27272a' } as CSSProperties,
         };
     };
-    if (props.expanded && props.view === 'table') return <div role="region" aria-label="Trip comparison table" tabIndex={0}
-        className="overflow-x-auto rounded-xl border border-zinc-700 focus-visible:outline-2 focus-visible:outline-violet-400">
-        <table className="w-full min-w-[58rem] border-collapse text-left text-sm">
-            <caption className="p-3 text-left text-xs text-zinc-400">Compare matching trips. Select a column heading to sort. Scroll sideways for more columns.</caption>
+    if (props.expanded && props.view === 'table') return <div className="atlas-table-shell">
+        <TripAtlasColumnSettings columns={columnSettings} onChange={setStoredColumns} />
+        <div role="region" aria-label="Trip comparison table" tabIndex={0}
+            className="overflow-x-auto rounded-xl border border-zinc-700 focus-visible:outline-2 focus-visible:outline-violet-400">
+        <table aria-label="Trip comparison" className="w-full border-separate border-spacing-0 text-left text-sm"
+            style={{ minWidth: columns.reduce((width, column) => width + column.minWidth, 0) }}>
             <thead className="bg-zinc-900 text-xs text-zinc-200"><tr>
-                {columns.map(column => <th key={column.name} scope="col" className={`px-3 ${column.name === 'Trip' ? 'sticky left-0 z-2 bg-zinc-900' : ''}`}
-                    aria-sort={props.sort === column.ascending ? 'ascending' : props.sort === column.descending ? 'descending' : undefined}>
-                    <button type="button" className="flex min-h-11 items-center gap-2 whitespace-nowrap text-left"
+                {columns.map(column => <th key={column.id} scope="col" style={{ minWidth: column.minWidth }} className={`px-3 ${column.id === 'trip' ? 'sticky left-0 z-2 bg-zinc-900' : ''}`}
+                    aria-sort={'ascending' in column ? props.sort === column.ascending ? 'ascending' : props.sort === column.descending ? 'descending' : undefined : undefined}>
+                    {'ascending' in column ? <button type="button" className="flex min-h-11 items-center gap-2 whitespace-nowrap text-left"
+                        data-atlas-tooltip={`Sort by ${atlasSortOptions.find(option => option.value === (props.sort === column.ascending ? column.descending : column.ascending))?.label.toLowerCase()}.`}
                         onClick={() => props.onSort(props.sort === column.ascending ? column.descending : column.ascending)}>
                         {column.name}<span aria-hidden="true">{props.sort === column.ascending ? '↑' : props.sort === column.descending ? '↓' : '↕'}</span>
-                    </button>
+                    </button> : column.name}
                 </th>)}
-                <th scope="col" className="px-3">Route and reports</th>
             </tr></thead>
-            <tbody>{props.entries.map(entry => <tr key={entry.id} {...attributes(entry)} className="border-t border-zinc-700 align-top">
-                <th scope="row" className="sticky left-0 z-1 min-w-48 bg-zinc-950 p-3 font-normal">
-                    <h2 className="font-semibold text-zinc-100">{entry.title}</h2>
+            <tbody>{props.entries.map(entry => <tr key={entry.id} {...attributes(entry)} className={`atlas-table-row align-top ${entry.summary ? 'cursor-pointer' : ''}`}>
+                {columns.map(column => column.id === 'trip' ? <th key={column.id} scope="row" style={{ minWidth: column.minWidth }}
+                    className="sticky left-0 z-1 bg-zinc-950 p-3 font-normal">
+                    <h2 className="font-semibold text-zinc-100"><button type="button" id={actionsVisible ? `atlas-title-${entry.id}` : `atlas-route-${entry.id}`}
+                        disabled={!entry.summary} aria-pressed={entry.id === props.selectedId} onClick={() => props.onSelect(entry.id)}
+                        className="min-h-11 text-left enabled:hover:text-violet-300 focus-visible:outline-2 focus-visible:outline-violet-400">
+                        {entry.title}
+                    </button></h2>
                     {entry.id === props.selectedId && <span className="text-xs text-violet-300">Selected</span>}
-                    <p className="mt-1 text-xs text-zinc-400">{entry.summary?.motorcycle ?? 'Motorcycle not recorded'}</p>
                     <ResultBadges entry={entry} development={props.development} />
-                </th>
-                <td className="min-w-32 p-3 text-zinc-300">{entry.summary ? formatDateRange(entry.summary.dates.start, entry.summary.dates.end) : 'Not recorded'}</td>
-                <td className="p-3 tabular-nums text-zinc-300">{entry.summary?.ridingDays ?? 'Not recorded'}</td>
-                <td className="p-3 tabular-nums text-zinc-300">{formatAtlasMiles(entry.summary?.distanceMiles)}</td>
-                <td className="min-w-44 p-3 text-zinc-400"><TableLocation entry={entry} /></td>
-                <td className="min-w-72 p-3"><ResultActions entry={entry} props={props} /></td>
+                </th> : <td key={column.id} style={{ minWidth: column.minWidth }} className="p-3 tabular-nums text-zinc-300">
+                    {cellContent(entry, column.id)}
+                </td>)}
             </tr>)}</tbody>
         </table>
+        </div>
     </div>;
 
     return <ol className="space-y-3">{props.entries.map(entry => {
         const summary = entry.summary;
         const geography = atlasLocationLabel(entry);
         return <li key={entry.id} {...attributes(entry)} data-detailed={props.expanded || undefined}
-            onClick={event => {
-                if (summary && !event.defaultPrevented && event.target instanceof Element
-                    && !event.target.closest('a, button, input, select, textarea, [role="button"], [contenteditable]')) props.onSelect(entry.id);
-            }}
             className={`atlas-trip-card overflow-hidden rounded-xl border-2 ${summary ? 'cursor-pointer' : ''} ${props.selectedId === entry.id || props.highlightedId === entry.id ? 'bg-zinc-900' : 'bg-zinc-950'}`}>
             <CardPhoto entry={entry} expanded={props.expanded} />
             <div className="atlas-trip-content min-w-0 p-3">

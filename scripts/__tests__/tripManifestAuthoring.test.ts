@@ -68,7 +68,7 @@ describe('tracked trip content', () => {
         expect(new Set(colors).size, 'Atlas trips must have distinct explicit colors').toBe(colors.length);
     });
 
-    it('assigns every selected photo to its capture day exactly once', () => {
+    it('places each PCH photo once in a matching day gallery or an explicit inline placement', () => {
         const manifest = tripManifestSchema.parse(pch);
         expect(manifest.days!.map(day => day.date)).toEqual([
             '2024-10-03', '2024-10-04', '2024-10-05', '2024-10-06', '2024-10-07',
@@ -79,8 +79,14 @@ describe('tracked trip content', () => {
             for (const id of ids) expect(photos.get(id)?.date, id).toBe(day.date);
             return ids;
         });
-        expect(assigned.length).toBe(photos.size);
-        expect(new Set(assigned)).toEqual(new Set(photos.keys()));
+        const inlinePhotoId = '20241003-150610';
+        expect(photos.get(inlinePhotoId)?.date).toBe(manifest.days![0].date);
+        expect(assigned).not.toContain(inlinePhotoId);
+        const post = { format: 'trip', tripId: manifest.id };
+        expect(expandTripShortcodes(`{{trip-photo:${inlinePhotoId}}}`, post, manifest)).toBe(`<TripPhoto photoId="${inlinePhotoId}" />`);
+        const placements = [...assigned, inlinePhotoId];
+        expect(placements.length).toBe(photos.size);
+        expect(new Set(placements)).toEqual(new Set(photos.keys()));
         expect(manifest.galleries!['day-two'].at(-1)).toBe('20241004-183101');
     });
 

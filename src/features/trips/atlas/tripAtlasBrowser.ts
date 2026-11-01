@@ -135,20 +135,29 @@ const collator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' })
 
 export function sortAtlasEntries(entries: readonly TripAtlasEntry[], sort: AtlasSort): TripAtlasEntry[] {
     const descending = sort === 'newest' || sort.endsWith('-desc');
-    const value = (entry: TripAtlasEntry): number | string | undefined => {
+    const value = (entry: TripAtlasEntry): number | string | [string, string] | undefined => {
         if (sort === 'newest' || sort === 'oldest') return entry.summary?.dates.start;
         if (sort.startsWith('days-')) return entry.summary?.ridingDays;
         if (sort.startsWith('miles-')) return entry.summary?.distanceMiles;
-        if (sort.startsWith('location-')) return atlasLocationLabel(entry) || undefined;
+        if (sort.startsWith('location-')) {
+            const locations = atlasLocations(entry);
+            if (!locations.length) return;
+            return [
+                locations.map(country => getCountryName(country.code)).sort(collator.compare).join('; '),
+                locations.flatMap(country => country.regions).sort(collator.compare).join('; '),
+            ];
+        }
         return entry.title;
     };
-    return [...entries].sort((a, b) => {
-        const first = value(a);
-        const second = value(b);
+    return entries.map(entry => ({ entry, value: value(entry) })).sort((a, b) => {
+        const first = a.value;
+        const second = b.value;
         if (first === undefined && second !== undefined) return 1;
         if (second === undefined && first !== undefined) return -1;
-        const order = typeof first === 'number' && typeof second === 'number' ? first - second
+        const order = Array.isArray(first) && Array.isArray(second)
+            ? collator.compare(first[0], second[0]) || collator.compare(first[1], second[1])
+            : typeof first === 'number' && typeof second === 'number' ? first - second
             : first !== undefined && second !== undefined ? collator.compare(String(first), String(second)) : 0;
-        return (descending ? -order : order) || collator.compare(a.title, b.title) || a.id.localeCompare(b.id);
-    });
+        return (descending ? -order : order) || collator.compare(a.entry.title, b.entry.title) || a.entry.id.localeCompare(b.entry.id);
+    }).map(({ entry }) => entry);
 }

@@ -25,6 +25,8 @@ export function About() {
       alumniOf: { '@type': 'Organization', name: 'Microsoft', url: 'https://www.microsoft.com' },
       sameAs: [
         'https://github.com/robert-bryson',
+        'https://peakbagger.com/climber/Climber.aspx?cid=2884',
+        'https://www.mountainproject.com/user/107186573/rsmb',
       ],
     },
   });
@@ -93,6 +95,26 @@ export function About() {
               className="text-zinc-400 hover:text-violet-400"
             >
               GitHub
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://peakbagger.com/climber/Climber.aspx?cid=2884"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-zinc-400 hover:text-violet-400"
+            >
+              Peakbagger
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://www.mountainproject.com/user/107186573/rsmb"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-zinc-400 hover:text-violet-400"
+            >
+              Mountain Project
             </a>
           </li>
         </ul>

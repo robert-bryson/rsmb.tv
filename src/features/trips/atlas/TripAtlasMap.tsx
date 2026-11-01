@@ -17,8 +17,24 @@ import { atlasTooltipPlacement } from './atlasTooltipPlacement';
 import { atlasTooltipObstacles, observeAtlasTooltipObstacles } from './atlasTooltipObstacles';
 import type { AtlasTooltipPlacement } from './atlasTooltipLayout';
 import { restoreAtlasFullscreenControl, type AtlasFullscreenControl } from './AtlasFullscreenControl';
+import { useAtlasRouteMarkers } from './tripAtlasMarkers';
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl);
+
+function endpointIcon(kind: 'start' | 'end', side: 'left' | 'right' | 'center') {
+    const x = side === 'left' ? 3 : side === 'right' ? 43 : 23;
+    const center = x + 17;
+    // When pins overlap, move their bodies apart while keeping both tips at the actual coordinates.
+    const shoulder = Math.max(x + 10, Math.min(40, x + 24));
+    const glyph = kind === 'start'
+        ? `<path d="M${center - 6} 9 ${center + 11} 19 ${center - 6} 29Z" />`
+        : `<rect x="${center - 6.5}" y="12.5" width="13" height="13" rx="1.25" />`;
+    return `<svg viewBox="0 0 80 42" aria-hidden="true" focusable="false">
+        <path d="M${x + 5} 2h24a5 5 0 0 1 5 5v24a5 5 0 0 1-5 5H${shoulder + 5}L40 42 ${shoulder - 5} 36H${x + 5}a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Z"
+            fill="#000" stroke="${routeBackgroundStyle.color}" stroke-opacity="${routeBackgroundStyle.opacity}" stroke-width="2.5" stroke-linejoin="round" paint-order="stroke fill" vector-effect="non-scaling-stroke" />
+        <g class="atlas-endpoint-glyph" fill="currentColor">${glyph}</g>
+    </svg>`;
+}
 
 interface Props {
     entries: TripAtlasEntry[];
@@ -45,7 +61,7 @@ function filterFor(id?: string): maplibregl.FilterSpecification {
 }
 
 function layers(): maplibregl.LayerSpecification[] {
-    return [
+    const routes = [
         { id: 'atlas-route-casing', type: 'line', source: 'atlas-routes', paint: { 'line-color': routeBackgroundStyle.color, 'line-width': routeBackgroundStyle.width, 'line-opacity': routeBackgroundStyle.opacity } },
         { id: 'atlas-routes', type: 'line', source: 'atlas-routes', paint: { 'line-color': ['get', 'color'], 'line-width': 3.5, 'line-opacity': 0.85 } },
         { id: 'atlas-selected-casing', type: 'line', source: 'atlas-routes', filter: filterFor(), paint: { 'line-color': routeBackgroundStyle.color, 'line-width': 8, 'line-opacity': routeBackgroundStyle.opacity } },
@@ -53,6 +69,10 @@ function layers(): maplibregl.LayerSpecification[] {
         { id: 'atlas-hover-casing', type: 'line', source: 'atlas-routes', filter: filterFor(), paint: { 'line-color': routeBackgroundStyle.color, 'line-width': 9, 'line-opacity': routeBackgroundStyle.opacity } },
         { id: 'atlas-hover', type: 'line', source: 'atlas-routes', filter: filterFor(), paint: { 'line-color': ['get', 'color'], 'line-width': 6.5 } },
     ].map(layer => ({ ...layer, layout: { 'line-cap': 'round', 'line-join': 'round' } })) as maplibregl.LayerSpecification[];
+    return [...routes, {
+        id: 'atlas-day-breaks', type: 'circle', source: 'atlas-day-breaks', filter: filterFor(),
+        paint: { 'circle-radius': 3.25, 'circle-color': ['get', 'color'], 'circle-stroke-width': 2.75, 'circle-stroke-color': routeBackgroundStyle.color },
+    }];
 }
 
 function padding(container: HTMLElement, selected: boolean) {
@@ -107,6 +127,7 @@ export default function TripAtlasMap(props: Props) {
         return () => document.removeEventListener('keydown', dismiss);
     }, []);
     const data = useMemo(() => combineAtlasRoutes(routes), [routes]);
+    const { dayBreaks, endpoints } = useAtlasRouteMarkers(selectedId, selectedId ? routes[selectedId]?.route : undefined);
     const getCurrent = useEffectEvent(() => props);
     const select = useEffectEvent((id?: string) => props.onSelect(id));
     const hover = useEffectEvent((id?: string) => props.onHover(id));
@@ -178,7 +199,11 @@ export default function TripAtlasMap(props: Props) {
                 container: container.current,
                 style: {
                     ...baseStyle,
-                    sources: { ...baseStyle.sources, 'atlas-routes': { type: 'geojson', data: combineAtlasRoutes(current.routes) } },
+                    sources: {
+                        ...baseStyle.sources,
+                        'atlas-routes': { type: 'geojson', data: combineAtlasRoutes(current.routes) },
+                        'atlas-day-breaks': { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
+                    },
                     layers: [...baseStyle.layers, ...layers()],
                 },
                 ...(camera.current ?? { center: [-121.5, 46.5] as [number, number], zoom: 5.5 }),
@@ -196,6 +221,11 @@ export default function TripAtlasMap(props: Props) {
             ? { map: instance, key: lastFit.current?.key ?? initialFitKey.current }
             : undefined;
         instance.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
+        for (const [selector, help] of [['.maplibregl-ctrl-zoom-in', 'Zoom in on the map.'], ['.maplibregl-ctrl-zoom-out', 'Zoom out to see a wider area.']]) {
+            const button = instance.getContainer().querySelector(selector);
+            button?.setAttribute('data-atlas-tooltip', help);
+            button?.removeAttribute('title');
+        }
         // The atlas container outlives renderer retries. Retain its fullscreen state too.
         fullscreenControl.current = restoreAtlasFullscreenControl(
             current.fullscreenContainer?.current ?? container.current.parentElement ?? container.current,
@@ -308,7 +338,7 @@ export default function TripAtlasMap(props: Props) {
             instance.once('render', repaint);
         };
         instance.on('styledata', queueRepaint);
-        instance.on('sourcedata', event => { if (event.sourceId === 'atlas-routes') queueRepaint(); });
+        instance.on('sourcedata', event => { if (event.sourceId === 'atlas-routes' || event.sourceId === 'atlas-day-breaks') queueRepaint(); });
 
         return () => {
             saveCamera();
@@ -329,6 +359,49 @@ export default function TripAtlasMap(props: Props) {
     }, [map, data]);
 
     useEffect(() => {
+        if (!map || mapRef.current !== map) return;
+        (map.getSource('atlas-day-breaks') as maplibregl.GeoJSONSource | undefined)?.setData(dayBreaks);
+    }, [map, dayBreaks]);
+
+    useEffect(() => {
+        if (!map || mapRef.current !== map || (highlightedId && highlightedId !== selectedId)) return;
+        const markers = endpoints.map(endpoint => {
+            const element = document.createElement('span');
+            element.className = 'atlas-trip-endpoint';
+            element.dataset.endpoint = endpoint.kind;
+            element.setAttribute('role', 'img');
+            element.setAttribute('aria-label', endpoint.kind === 'start' ? 'Trip start' : 'Trip end');
+            element.style.setProperty('--atlas-endpoint-color', endpoint.color);
+            const marker = new maplibregl.Marker({ element, anchor: 'bottom', subpixelPositioning: true })
+                .setLngLat(endpoint.coordinates).addTo(map);
+            return { marker, element, kind: endpoint.kind };
+        });
+        if (!markers.length) return;
+        const updateIcons = () => {
+            const start = endpoints.find(endpoint => endpoint.kind === 'start');
+            const end = endpoints.find(endpoint => endpoint.kind === 'end');
+            const a = start && map.project(start.coordinates);
+            const b = end && map.project(end.coordinates);
+            const overlap = a && b && Math.abs(a.x - b.x) < 31.5 && Math.abs(a.y - b.y) < 31.5;
+            const left = a && b && a.x > b.x ? 'end' : 'start';
+            for (const { element, kind } of markers) {
+                const side = overlap ? kind === left ? 'left' : 'right' : 'center';
+                if (element.dataset.side === side) continue;
+                element.dataset.side = side;
+                element.innerHTML = endpointIcon(kind, side);
+            }
+        };
+        updateIcons();
+        map.on('move', updateIcons);
+        map.on('resize', updateIcons);
+        return () => {
+            map.off('move', updateIcons);
+            map.off('resize', updateIcons);
+            markers.forEach(({ marker }) => marker.remove());
+        };
+    }, [map, endpoints, selectedId, highlightedId]);
+
+    useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect -- Filtering and panel layout changes invalidate the previous map choices.
         setChoices(undefined);
         choicePreview.current = {};
@@ -339,6 +412,7 @@ export default function TripAtlasMap(props: Props) {
         if (!map || mapRef.current !== map || !map.getLayer('atlas-selected')) return;
         for (const id of ['atlas-selected', 'atlas-selected-casing']) map.setFilter(id, filterFor(highlightedId ? undefined : selectedId));
         for (const id of ['atlas-hover', 'atlas-hover-casing']) map.setFilter(id, filterFor(highlightedId));
+        map.setFilter('atlas-day-breaks', filterFor(!highlightedId || highlightedId === selectedId ? selectedId : undefined));
         const emphasizedId = highlightedId ?? selectedId;
         const emphasized: maplibregl.ExpressionSpecification = ['==', ['get', 'tripId'], emphasizedId ?? ''];
         map.setFilter('atlas-route-casing', emphasizedId ? filterFor(emphasizedId) : null);
@@ -407,7 +481,7 @@ export default function TripAtlasMap(props: Props) {
             <div ref={container} data-testid="trip-atlas-map" data-selected-trip={selectedId ?? ''} data-highlighted-trip={highlightedId ?? ''}
                 onPointerLeave={() => { routeHover.current = null; props.onHover(undefined); }}
                 onPointerOver={event => { if (event.target !== mapRef.current?.getCanvas()) { routeHover.current = null; props.onHover(undefined); } }}
-                role="region" aria-label="Motorcycle trip routes. Choose a trip in the list to explore its route."
+                role="region" aria-label="Motorcycle trip routes. Dots mark day breaks; pins with a play symbol and stop square mark the selected trip's start and end. Choose a trip in the list to explore its route."
                 className="trip-atlas-map h-full w-full" />
             {(failure || tileFailure) && <div data-atlas-map-obstacle role="status" className="absolute left-3 right-14 top-20 z-10 max-h-[calc(100%-7rem)] overflow-y-auto rounded-lg border border-zinc-600 bg-zinc-900/95 p-3 text-sm text-zinc-200 md:left-auto md:max-w-64">
                 <p>{failure ? 'The interactive map is unavailable. Trip reports are still available in the list.' : 'Some background tiles could not load. You can still explore the trip routes.'}</p>
@@ -416,7 +490,7 @@ export default function TripAtlasMap(props: Props) {
             {choices && <div data-atlas-map-obstacle role="group" aria-label="Trips sharing this road" className="absolute z-30 w-64 rounded-xl border border-zinc-600 bg-zinc-950 p-3 shadow-xl"
                 style={{ left: choices.x, top: choices.y }}>
                 <p className="mb-2 flex min-h-8 items-center pr-8 text-sm font-medium">Trips sharing this road</p>
-                <button type="button" onClick={closeChoices} aria-label="Close route choices"
+                <button type="button" onClick={closeChoices} aria-label="Close route choices" data-atlas-tooltip="Close the shared-road choices without changing the selected trip."
                     className="absolute right-1 top-1 grid size-11 place-items-center rounded text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100 focus-visible:outline-2 focus-visible:outline-violet-400">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true" className="size-4"><path d="m6 6 12 12M18 6 6 18" /></svg>
                 </button>

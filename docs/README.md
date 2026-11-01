@@ -30,7 +30,10 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-01 | [Atlas controls, sorting, content, and regression review](reviews/2026-11-01-atlas-controls-quality-review.md) |
+| 2026-11-01 | [Atlas day styling research and visual comparison](reviews/2026-11-01-atlas-day-styling-research.md) |
 | 2026-10-31 | [ADV Atlas drawer, filter, sort, and comparison research](reviews/2026-10-31-adv-atlas-browsing-research.md) |
+| 2026-10-31 | [Blog refresh, trip photo audit, and recovered July 17 route](reviews/2026-10-31-blog-and-trip-asset-refresh.md) |
 | 2026-10-31 | [Minimatch security fix and lint compatibility](reviews/2026-10-31-minimatch-security-fix.md) |
 | 2026-10-31 | [ADV Atlas critical review, pending fits, and keyboard focus](reviews/2026-10-31-adv-atlas-critical-review.md) |
 | 2026-10-31 | [ADV Atlas merge fixes and dependency update](reviews/2026-10-31-adv-atlas-merge-fixes.md) |

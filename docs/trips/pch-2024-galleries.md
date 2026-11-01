@@ -33,7 +33,7 @@ Day assignments do not insert galleries automatically.
 
 | Shortcode | Photos | Suggested placement |
 | --- | ---: | --- |
-| `{{trip-gallery:day-one}}` | 4 | October 3 — Seattle to Centralia |
+| `{{trip-gallery:day-one}}` | 3 | October 3 — Seattle to Centralia |
 | `{{trip-gallery:day-two}}` | 12 | October 4 — Centralia to Reedsport |
 | `{{trip-gallery:day-three}}` | 34 | October 5 — Reedsport to Fort Bragg |
 | `{{trip-gallery:day-four}}` | 42 | October 6 — Fort Bragg to Bridgeport |
@@ -60,6 +60,10 @@ Day assignments do not insert galleries automatically.
 The `highlights`, `motorcycle-stops`, and `panoramas` galleries are optional selections.
 They overlap the daily galleries.
 Remove unused definitions after you finish the story's media placements.
+
+The report places `{{trip-photo:20241003-150610}}` separately in the October 3 text.
+Keep this photo in the manifest. Exclude it from `day-one` to prevent a repeated photo.
+The full-day galleries contain 98 photos. The inline placement supplies the remaining selected photo.
 
 The outline uses the lunch, harbor, and beach galleries in place of `southern-oregon-coast`.
 It places all six panorama exports separately.

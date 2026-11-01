@@ -23,6 +23,7 @@ function CountryChoices({ country, filters, onChange }: {
         </label>}
         {country.regions.length > 0 && <>
             <button type="button" aria-expanded={open} aria-controls={`atlas-regions-${country.code || 'other'}`}
+                data-atlas-tooltip={`${open ? 'Hide' : 'Show'} the states and provinces available in ${country.name}.`}
                 onClick={() => setOpen(value => !value)} className="flex min-h-11 w-full items-center justify-between text-left text-sm text-violet-300">
                 States and provinces <span aria-hidden="true">{open ? '−' : '+'}</span>
             </button>
@@ -91,7 +92,7 @@ export function TripAtlasFilters({ filters, countries, onApply, onCancel }: {
         </ul>}
         <div className="flex flex-wrap gap-2">
             <button type="submit" className="min-h-11 rounded-lg bg-violet-400 px-4 text-sm font-semibold text-zinc-950 hover:bg-violet-300">Apply filters</button>
-            <button type="button" onClick={onCancel} className="atlas-control px-3">Cancel</button>
+            <button type="button" data-atlas-tooltip="Discard unapplied changes and return to the trips." onClick={onCancel} className="atlas-control px-3">Cancel</button>
         </div>
     </form>;
 }
@@ -115,10 +116,10 @@ export function AtlasAppliedFilters({ filters, countries, onlySelected, onChange
     ];
     if (!chips.length) return null;
     return <div className="mb-3 flex flex-wrap items-center gap-1.5" aria-label="Applied trip filters">
-        {chips.map(chip => <button key={chip.id} type="button" aria-label={`Remove filter: ${chip.label}`} onClick={chip.remove}
+        {chips.map(chip => <button key={chip.id} type="button" aria-label={`Remove filter: ${chip.label}`} data-atlas-tooltip={`Remove only this filter: ${chip.label}.`} onClick={chip.remove}
             className="inline-flex min-h-11 max-w-full items-center gap-2 rounded-lg border border-violet-800 bg-violet-950/50 px-2 text-left text-xs text-violet-200">
             <span className="min-w-0 break-words">{chip.label}</span><span aria-hidden="true">×</span>
         </button>)}
-        <button type="button" onClick={onClear} className="min-h-11 px-2 text-xs text-zinc-300 underline">Clear filters</button>
+        <button type="button" data-atlas-tooltip="Remove every applied filter, including selected-trip-only mode." onClick={onClear} className="min-h-11 px-2 text-xs text-zinc-300 underline">Clear filters</button>
     </div>;
 }

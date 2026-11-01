@@ -1,6 +1,6 @@
 # Trip source inventory and starter structure
 
-Inventory snapshot: October 30, 2026.
+Inventory snapshot: October 31, 2026.
 The source review used the live `Blog Posts` Sheet and the locally synced source folders.
 This file records that snapshot. It does not update when source files or Sheet rows change.
 The Sheet contains nine trip report rows covering seven distinct trips.
@@ -34,6 +34,10 @@ The inventory identifies that folder without adding its contents to the story.
 PCH and Route 66ish retain their existing detailed outlines and gallery references.
 The published stories retain their current prose, galleries, and route assignments.
 
+Ocean Shores has a date conflict: photo EXIF spans February 16–19, while its manifest uses February 17–20.
+The GPX exports contain no per-point timestamps. The existing dates remain pending author confirmation.
+The [refresh review](../reviews/2026-10-31-blog-and-trip-asset-refresh.md#source-date-conflict) records the evidence.
+
 ## Mississippi–Wisconsin 2025
 
 The [manifest](../../src/content/trips/river-wisco-2025.json) is structurally complete for local development.
@@ -54,7 +58,7 @@ Photo membership remains provisional until the report is written.
 
 The provisional hero is `dsc01078`, a loaded motorcycle beside a wooded road.
 Alt descriptions state visible content without assigning uncertain locations.
-The manifest has no guessed stop coordinates or motorcycle model.
+The manifest records Honda CB500X. Stop coordinates remain unset.
 
 | Day | Working chapter | Gallery |
 | --- | --- | --- |
@@ -66,15 +70,15 @@ The manifest has no guessed stop coordinates or motorcycle model.
 | October 12 | Madison to the western Chicago suburbs | No photos selected |
 | October 13 | Return to St. Louis | `oct-13`, 2 photos |
 
-Sheet row 7 has no source Google Doc ID or description.
-A read-only Sheet check confirmed both fields were empty on October 31, 2026.
+Sheet row 7 now links a source Google Doc. Its starter outline imports successfully.
+The description remains empty after the October 31, 2026 refresh.
 The Sheet remains unpublished.
 
 ## ON–QC–New England 2026
 
-The [manifest](../../src/content/trips/on-qc-new-england-2026.json) contains 35 tracks and 37 calendar-day entries.
+The [manifest](../../src/content/trips/on-qc-new-england-2026.json) contains 36 tracks and 37 calendar-day entries.
 Day assignments follow timestamps and route continuity.
-Thirty-three dates have recordings. Four dates have no source file in the searched archive.
+Thirty-four dates have recordings. Three dates have no source file in the searched archive.
 
 The report has three parts. Its chapter boundaries remain provisional.
 
@@ -84,18 +88,20 @@ The report has three parts. Its chapter boundaries remain provisional.
 | Part 2: Canadian Shield, Boreal forest, St. Lawrence | July 17–27 | [Part 2 outline](on-qc-new-england-2026-part-2-outline.md) |
 | Part 3: New England, Mid Atlantic, Appalachians | July 28–August 15 | [Part 3 outline](on-qc-new-england-2026-part-3-outline.md) |
 
-The existing trip folder had seven GPX files. Recovery added 28 primary recordings.
+The initial recovery added 28 primary recordings to the seven existing files.
+The October 31 refresh found and processed `Jul_17,_2026_07_41_40.gpx`, which fills the border-to-Ontario gap.
+Its bytes match the GPS archive. Its endpoints are approximately 18 meters and five meters from the neighboring recordings.
 Four duplicate exports were excluded after comparing track geometry.
 A second July 21 export overlaps the primary recording and reports a different distance.
 It is retained under `gps/alternates`, outside the processing input.
 The October 11 alternate-style export belongs to Mississippi–Wisconsin and supplies a separate, successive segment.
 
-The combined 2026 route measures approximately 5,138 recorded miles.
+The combined 2026 route measures approximately 5,578 recorded miles.
 That figure includes local activity and does not establish motorcycle mileage.
-The manifest uses provisional values of `distanceMiles: 5138` and `ridingDays: 26`.
+The manifest uses provisional values of `distanceMiles: 5578` and `ridingDays: 27`.
 The riding-day estimate includes likely local rides on July 16, 22, 25, 26, and 28.
-It excludes seven dates containing only short local activity and four dates without recordings.
-July 17 probably adds another riding day, but it remains excluded because its recording is missing.
+It excludes seven dates containing only short local activity and three dates without recordings.
+July 17 now contributes one riding day and approximately 440 recorded miles.
 
 ### Estimate method
 
@@ -113,11 +119,12 @@ The [machine inventory](trip-source-inventory.json) records included and exclude
 | --- | --- |
 | July 12 | Chapter prompt; no map or invented route |
 | July 14–15 | Recorded endpoints have a discontinuity; retained without joining them |
-| July 17 | Missing border-to-Ontario recording; chapter prompt identifies the gap |
+| July 17 | Recording recovered; day map and outline now cover Sault Ste. Marie through northeastern Ontario |
 | July 21 | Primary recording only; overlapping export retained separately |
 | August 10 and 13 | Chapter prompts; no assumption that these were rest days |
 | Photos | One author-selected July 17 hero; the remaining collection is still needed |
-| Motorcycle and stops | Unset until supplied while writing |
+| Motorcycle | The manifest records Honda CB500X |
+| Stops | Unset until supplied while writing |
 
 The temporary hero is `20260717-135454`, a loaded motorcycle beside the Arctic Watershed sign.
 The original is `Downloads/20260717_135454.jpg`; its EXIF timestamp is July 17, 2026, at 13:54:54.
@@ -125,7 +132,7 @@ The unchanged JPG is archived under both `photos/originals` and `photos/selects`
 Processing creates WebP images at 480 × 360, 960 × 720, and 1600 × 1200 pixels.
 The manifest supplies responsive URLs and visible-content alt text.
 The photograph belongs to the `jul-17` gallery and its matching day entry.
-It confirms a photographed stop that day without filling the missing GPS geometry.
+It confirms a photographed stop during the recovered July 17 route.
 
 The manifest now uses the `.json` suffix and supports local atlas and story previews.
 The route is available locally at `/data/trips/on-qc-new-england-2026/geo/route.geojson`.
@@ -134,6 +141,10 @@ Sheet rows 9–11 have linked source Google Docs and still need complete descrip
 Use the same `trip_id` for all three reports.
 The existing [series columns](TRIP-AUTHORING-README.md#other-manifest-fields) can supply a shared title and orders 1, 2, and 3.
 Michigan is absent from the current Sheet tags. Vermont's inclusion needs comparison with the recorded route or recollection.
+
+The imported source Docs retain old `.json.draft` notes. Part 2 still describes July 17 as missing.
+The repository and Drive Markdown outlines contain the current hero, gallery, and day-map references.
+Apply those changes to the source Docs before publication. Generated MDX remains an import of the source Docs.
 
 ## File organization
 
@@ -144,7 +155,7 @@ Existing filenames and source bytes were preserved.
 | Trip-relative path | Contents |
 | --- | --- |
 | `source-inventory.json` | Original locations, hashes, timestamps, recovery decisions, and exclusions |
-| `gps/originals/` | Eight Mississippi–Wisconsin or 35 Canada/New England primary GPX files |
+| `gps/originals/` | Eight Mississippi–Wisconsin or 36 Canada/New England primary GPX files |
 | `gps/alternates/` | Overlapping July 21 export, excluded from processing |
 | `gps/processed/` | Combined route plus one GeoJSON per primary source |
 | `photos/originals/` | 49 Mississippi–Wisconsin JPGs and one 2026 hero JPG |
