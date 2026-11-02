@@ -1,6 +1,5 @@
-import { useDocumentHead } from '../hooks/useDocumentHead';
-import { useJsonLd } from '../hooks/useJsonLd';
-import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+import { usePageMetadata } from '../hooks/usePageMetadata';
+import { staticPageMetadata } from '../utils/pageMetadata';
 import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
 import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/ProjectScreenshotGallery';
@@ -20,27 +19,7 @@ const screenshots: ProjectScreenshot[] = [
 ];
 
 export default function Parc() {
-    const description =
-        'A Python CLI for building a long-running archive of podcast feeds and episodes with resumable downloads, SQLite state, and local archive audits.';
-
-    useDocumentHead({
-        title: 'parc',
-        description,
-        ogImage: absoluteUrl('/og/parc.svg'),
-    });
-
-    useJsonLd({
-        '@context': 'https://schema.org',
-        '@type': 'SoftwareApplication',
-        name: 'parc',
-        description,
-        url: absoluteUrl('/projects/parc'),
-        applicationCategory: 'MultimediaApplication',
-        operatingSystem: 'Cross-platform',
-        softwareRequirements: 'Python 3.10+',
-        screenshot: absoluteUrl(screenshots[0].src),
-        author: AUTHOR_PERSON,
-    });
+    usePageMetadata(staticPageMetadata('/projects/parc'));
 
     const project = projects.find(p => p.slug === 'parc')!;
 

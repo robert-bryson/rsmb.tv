@@ -3,6 +3,9 @@ import path from 'node:path';
 import type { Plugin, ResolvedConfig } from 'vite';
 import { tripManifestSchema, type TripManifest, type TripSummary } from '../shared/tripManifestSchema.ts';
 import { validateBundledTripMedia } from './trip-media-assets.ts';
+import { articleMetadata, staticPageMetadata, STATIC_PAGE_PATHS } from '../src/utils/pageMetadata.ts';
+import { pageMetadataHtml } from './pageMetadataHtml.ts';
+import siteAliases from '../src/content/siteAliases.json' with { type: 'json' };
 
 /** Generate a small card registry, with full manifests behind async imports. */
 export function tripContentPlugin(): Plugin {
@@ -76,6 +79,15 @@ export function tripContentPlugin(): Plugin {
             const posts = readPosts(postsPath, !development);
             const visible = posts.filter(post => development || post.development?.published !== false);
             validatePostReferences(visible, !development);
+            const originalTemplate = String(template.source);
+            for (const pathname of STATIC_PAGE_PATHS) {
+                const source = pageMetadataHtml(originalTemplate, staticPageMetadata(pathname, visible));
+                if (pathname === '/') template.source = source;
+                else this.emitFile({ type: 'asset', fileName: `${pathname.slice(1)}.html`, source });
+            }
+            for (const [alias, pathname] of Object.entries(siteAliases)) {
+                this.emitFile({ type: 'asset', fileName: `${alias.slice(1)}.html`, source: pageMetadataHtml(originalTemplate, staticPageMetadata(pathname, visible)) });
+            }
             for (const post of visible) {
                 let manifest: TripManifest | undefined;
                 if (post.tripId) {
@@ -85,7 +97,8 @@ export function tripContentPlugin(): Plugin {
                         if (!development) throw error;
                     }
                 }
-                const source = articleHtml(String(template.source), post, manifest?.photos.find(photo => photo.id === manifest.hero)?.src);
+                const hero = manifest?.photos.find(photo => photo.id === manifest.hero);
+                const source = pageMetadataHtml(originalTemplate, articleMetadata(post, hero));
                 // Both historic collections still redirect client-side to the canonical collection.
                 for (const collection of ['blog', 'trips']) this.emitFile({ type: 'asset', fileName: `${collection}/${post.slug}.html`, source });
             }
@@ -97,8 +110,9 @@ export function tripContentPlugin(): Plugin {
         configurePreviewServer(server) {
             server.middlewares.use((request, _response, next) => {
                 const url = new URL(request.url ?? '/', 'http://localhost');
-                if (/^\/(blog|trips)\/[a-z0-9-]+\/?$/.test(url.pathname)) {
-                    const htmlPath = `${url.pathname.replace(/\/$/, '')}.html`;
+                const pathname = url.pathname.replace(/\/$/, '');
+                if (STATIC_PAGE_PATHS.includes(pathname) || Object.hasOwn(siteAliases, pathname) || /^\/(blog|trips)\/[a-z0-9-]+$/.test(pathname)) {
+                    const htmlPath = `${pathname}.html`;
                     if (fs.existsSync(path.resolve(config.root, config.build.outDir, `.${htmlPath}`))) request.url = htmlPath + url.search;
                 }
                 next();
@@ -151,16 +165,6 @@ function validatePostReferences(posts: PostMeta[], production: boolean) {
     }
 }
 
-function escapeHtml(value: string) { return value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;'); }
 export function articleHtml(template: string, post: PostMeta, hero?: string) {
-    const url = `https://rsmb.tv/${post.format === 'trip' ? 'trips' : 'blog'}/${post.slug}`;
-    const title = `${post.title} — rsmb`;
-    const image = hero ?? `https://rsmb.tv/og/blog/${post.slug}.svg`;
-    const values: Record<string, string> = { description: post.description, 'og:title': title, 'og:description': post.description, 'og:image': image,
-        'og:type': 'article', 'og:url': url, 'twitter:title': title, 'twitter:description': post.description, 'twitter:image': image };
-    let html = template.replace(/<title>.*?<\/title>/s, () => `<title>${escapeHtml(title)}</title>`);
-    html = html.replace(/<meta\s+(?:name|property)="([^"]+)"[^>]*>/g, (tag, key: string) => values[key] === undefined ? tag : `<meta ${key.startsWith('og:') ? 'property' : 'name'}="${key}" content="${escapeHtml(values[key])}" />`);
-    html = html.replace(/<link rel="canonical"[^>]*>/, () => `<link rel="canonical" href="${url}" />`);
-    const schema = JSON.stringify({ '@context': 'https://schema.org', '@type': 'BlogPosting', headline: post.title, description: post.description, datePublished: post.date, url, image, author: { '@type': 'Person', name: 'Robby Bryson' } }).replaceAll('<', '\\u003c');
-    return html.replace('</head>', () => `<meta property="article:published_time" content="${escapeHtml(post.date)}" data-prerendered /><script type="application/ld+json" data-prerendered>${schema}</script></head>`);
+    return pageMetadataHtml(template, articleMetadata(post, hero ? { src: hero } : undefined));
 }

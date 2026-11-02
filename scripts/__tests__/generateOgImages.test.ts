@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import sharp from 'sharp';
 import { afterEach, describe, expect, it } from 'vitest';
 import {
     DEFAULT_PAGES,
@@ -51,14 +52,14 @@ describe('generateOgImages', () => {
         }
     });
 
-    it('clears stale blog images and writes page images when there are no posts', () => {
+    it('clears stale blog images and writes page images when there are no posts', async () => {
         const repoRoot = createTempDir();
         const outDir = path.join(repoRoot, 'public/og');
         const staleImage = path.join(outDir, 'blog/stale.svg');
         fs.mkdirSync(path.dirname(staleImage), { recursive: true });
         fs.writeFileSync(staleImage, '<svg></svg>');
 
-        const result = generateOgImages({
+        const result = await generateOgImages({
             outDir,
             postsPath: path.join(repoRoot, 'src/content/posts.json'),
             pages: [{ slug: 'home', title: 'Home', subtitle: 'Static page' }],
@@ -66,10 +67,11 @@ describe('generateOgImages', () => {
 
         expect(result).toEqual({ outDir, pageCount: 1, blogPostCount: 0 });
         expect(fs.existsSync(path.join(outDir, 'home.svg'))).toBe(true);
+        expect(await sharp(path.join(outDir, 'home.png')).metadata()).toMatchObject({ format: 'png', width: 1200, height: 630 });
         expect(fs.existsSync(staleImage)).toBe(false);
     });
 
-    it('generates one blog image per generated post', () => {
+    it('generates one blog image per generated post', async () => {
         const repoRoot = createTempDir();
         const outDir = path.join(repoRoot, 'public/og');
         const postsPath = path.join(repoRoot, 'src/content/posts.json');
@@ -84,9 +86,10 @@ describe('generateOgImages', () => {
             },
         ]));
 
-        const result = generateOgImages({ outDir, postsPath, pages: [] });
+        const result = await generateOgImages({ outDir, postsPath, pages: [] });
 
         expect(result.blogPostCount).toBe(1);
+        expect(await sharp(path.join(outDir, 'blog/synced-post.png')).metadata()).toMatchObject({ format: 'png', width: 1200, height: 630 });
         expect(fs.readFileSync(path.join(outDir, 'blog/synced-post.svg'), 'utf-8'))
             .toContain('Synced Post');
     });

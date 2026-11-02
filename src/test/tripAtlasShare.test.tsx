@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { TripAtlasShare } from '../features/trips/atlas/TripAtlasShare';
 
@@ -18,20 +18,22 @@ describe('atlas share control', () => {
         const getUrl = vi.fn(() => url);
         render(<TripAtlasShare getUrl={getUrl} />);
         const button = screen.getByRole('button', { name: 'Share map' });
-        fireEvent.click(button);
-        fireEvent.click(button);
+        await act(async () => {
+            fireEvent.click(button);
+            fireEvent.click(button);
+        });
         expect(native).toHaveBeenCalledExactlyOnceWith({ title: 'ADV Atlas', url });
         expect(getUrl).toHaveBeenCalledOnce();
-        finish();
-        await waitFor(() => expect(button).not.toHaveAttribute('aria-disabled'));
+        await act(async () => { finish(); });
+        expect(button).not.toHaveAttribute('aria-disabled');
     });
 
     it('treats native cancellation as cancellation without copying or opening a fallback', async () => {
         const copy = vi.fn();
         navigatorApis(vi.fn().mockRejectedValue(new DOMException('Cancelled', 'AbortError')), copy);
         render(<TripAtlasShare getUrl={() => url} />);
-        fireEvent.click(screen.getByRole('button', { name: 'Share map' }));
-        await waitFor(() => expect(screen.getByRole('button', { name: 'Share map' })).not.toHaveAttribute('aria-disabled'));
+        await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Share map' })); });
+        expect(screen.getByRole('button', { name: 'Share map' })).not.toHaveAttribute('aria-disabled');
         expect(copy).not.toHaveBeenCalled();
         expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
     });
@@ -40,19 +42,21 @@ describe('atlas share control', () => {
         const copy = vi.fn().mockResolvedValue(undefined);
         navigatorApis(failed ? vi.fn().mockRejectedValue(new Error('Unavailable')) : undefined, copy);
         render(<TripAtlasShare getUrl={() => url} />);
-        fireEvent.click(screen.getByRole('button', { name: 'Share map' }));
-        await waitFor(() => expect(copy).toHaveBeenCalledExactlyOnceWith(url));
-        expect(await screen.findByRole('status')).toHaveTextContent('Link copied');
+        await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Share map' })); });
+        expect(copy).toHaveBeenCalledExactlyOnceWith(url);
+        expect(screen.getByRole('status')).toHaveTextContent('Link copied');
     });
 
     it.each([false, true])('offers a selected manual link if clipboard access is absent or rejected (rejected: %s)', async rejected => {
         navigatorApis(undefined, rejected ? vi.fn().mockRejectedValue(new DOMException('Denied', 'NotAllowedError')) : undefined);
         render(<TripAtlasShare getUrl={() => url} />);
         const button = screen.getByRole('button', { name: 'Share map' });
-        fireEvent.click(button);
-        const field = await screen.findByRole('textbox', { name: 'Copy this map link' });
+        // Flush the clipboard promise and focus effect before checking the fallback.
+        await act(async () => { fireEvent.click(button); });
+        const field = screen.getByRole('textbox', { name: 'Copy this map link' });
         expect(field).toHaveValue(url);
         expect(field).toHaveFocus();
+        expect((field as HTMLInputElement).selectionStart).toBe(0);
         expect((field as HTMLInputElement).selectionEnd).toBe(url.length);
         expect(button).toHaveAttribute('aria-expanded', 'true');
         fireEvent.keyDown(field, { key: 'Escape' });

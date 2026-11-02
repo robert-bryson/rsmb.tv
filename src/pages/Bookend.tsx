@@ -1,7 +1,6 @@
 import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/ProjectScreenshotGallery';
-import { useDocumentHead } from '../hooks/useDocumentHead';
-import { useJsonLd } from '../hooks/useJsonLd';
-import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+import { usePageMetadata } from '../hooks/usePageMetadata';
+import { staticPageMetadata } from '../utils/pageMetadata';
 import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
 
@@ -33,25 +32,7 @@ const screenshots: ProjectScreenshot[] = [
 ];
 
 export default function Bookend() {
-    const description =
-        'A personal book-tracking app to log reads, organize books into lists, and explore reading stats.';
-
-    useDocumentHead({
-        title: 'Bookend',
-        description,
-        ogImage: absoluteUrl('/og/bookend.svg'),
-    });
-
-    useJsonLd({
-        '@context': 'https://schema.org',
-        '@type': 'SoftwareApplication',
-        name: 'Bookend',
-        description,
-        url: BOOKEND_URL,
-        applicationCategory: 'LifestyleApplication',
-        operatingSystem: 'Web',
-        author: AUTHOR_PERSON,
-    });
+    usePageMetadata(staticPageMetadata('/projects/bookend'));
 
     const project = projects.find(p => p.slug === 'bookend')!;
 

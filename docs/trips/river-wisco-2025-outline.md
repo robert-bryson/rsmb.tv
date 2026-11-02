@@ -58,6 +58,10 @@ _Milwaukee area to Madison — approximately 87 recorded mi_
 
 [Describe the ride to Madison. The second recording covers local activity after arrival.]
 
+[The October 11 garage photo shows two people beside a Yamaha motorcycle. Add the visit and motorcycle context from memory.]
+
+{{trip-gallery:oct-11}}
+
 ## October 12
 
 _Madison to the western Chicago suburbs — approximately 128 recorded mi_

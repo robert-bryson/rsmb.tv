@@ -1,43 +1,11 @@
 import { Link } from 'react-router-dom';
 import { ProjectPreview } from '../components/ProjectPreview';
 import { projects, formatProjectDate, type Project } from '../content/projects';
-import { useDocumentHead } from '../hooks/useDocumentHead';
-import { useJsonLd } from '../hooks/useJsonLd';
-import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
-
-const description =
-  'Interactive projects and data visualizations by Robby Bryson — flights, route converter, and more.';
+import { usePageMetadata } from '../hooks/usePageMetadata';
+import { staticPageMetadata } from '../utils/pageMetadata';
 
 export function Projects() {
-  useDocumentHead({
-    title: 'Projects',
-    description,
-    ogImage: absoluteUrl('/og/projects.svg'),
-  });
-
-  useJsonLd({
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    name: 'Projects',
-    description,
-    url: absoluteUrl('/projects'),
-    author: AUTHOR_PERSON,
-    mainEntity: {
-      '@type': 'ItemList',
-      itemListElement: projects.map((project, index) => ({
-        '@type': 'ListItem',
-        position: index + 1,
-        item: {
-          '@type': 'SoftwareApplication',
-          name: project.title,
-          description: project.description,
-          url: absoluteUrl(`/projects/${project.slug}`),
-          applicationCategory: project.applicationCategory,
-          keywords: project.tech,
-        },
-      })),
-    },
-  });
+  usePageMetadata(staticPageMetadata('/projects'));
 
   return (
     <div>

@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from 'vitest';
-import { renderHook } from '@testing-library/react';
+import { cleanup, renderHook } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import { useDocumentHead } from '../hooks/useDocumentHead';
@@ -9,8 +9,9 @@ const wrapper = ({ children }: { children: ReactNode }) =>
 
 describe('useDocumentHead', () => {
     afterEach(() => {
+        cleanup();
         document.title = '';
-        document.querySelectorAll('meta[property], meta[name="description"], meta[name^="twitter"], link[rel="canonical"]').forEach(el => el.remove());
+        document.querySelectorAll('meta[property], meta[name="description"], meta[name="robots"], meta[name^="twitter"], link[rel="canonical"]').forEach(el => el.remove());
     });
 
     it('sets the document title with suffix', () => {
@@ -103,5 +104,51 @@ describe('useDocumentHead', () => {
         renderHook(() => useDocumentHead({ title: 'Test', ogUrl: 'https://rsmb.tv/custom' }), { wrapper });
         const ogUrl = document.querySelector('meta[property="og:url"]');
         expect(ogUrl?.getAttribute('content')).toBe('https://rsmb.tv/custom');
+    });
+
+    it('clears article-only metadata on a page change and restores a pre-existing canonical on cleanup', () => {
+        const link = document.createElement('link');
+        link.rel = 'canonical';
+        link.href = 'https://rsmb.tv/trips/coast';
+        const published = document.createElement('meta');
+        published.setAttribute('property', 'article:published_time');
+        published.content = '2026-01-01';
+        document.head.append(link, published);
+        const { unmount } = renderHook(() => useDocumentHead({ title: 'About' }), { wrapper });
+        expect(link.href).toBe('https://rsmb.tv/about');
+        expect(document.querySelector('meta[property="article:published_time"]')).toBeNull();
+        unmount();
+        expect(link.href).toBe('https://rsmb.tv/trips/coast');
+        expect(published.isConnected).toBe(true);
+    });
+
+    it('removes noindex when a missing page is replaced with a valid page', () => {
+        const { rerender } = renderHook(({ missing }) => useDocumentHead({ title: missing ? 'Not Found' : 'About', noIndex: missing }), { wrapper, initialProps: { missing: true } });
+        expect(document.querySelector('meta[name="robots"]')?.getAttribute('content')).toBe('noindex, follow');
+        rerender({ missing: false });
+        expect(document.querySelector('meta[name="robots"]')).toBeNull();
+    });
+
+    it.each([
+        ['noindex, nofollow', 'noindex, nofollow'],
+        ['INDEX, NOFOLLOW, noarchive', 'noindex, NOFOLLOW, noarchive'],
+        ['none', 'none'],
+    ])('preserves site crawler restrictions: %s', (original, expected) => {
+        const robots = document.createElement('meta');
+        robots.name = 'robots';
+        robots.content = original;
+        document.head.appendChild(robots);
+
+        const { rerender, unmount } = renderHook(({ missing }) => useDocumentHead({
+            title: missing ? 'Not Found' : 'About', noIndex: missing,
+        }), { wrapper, initialProps: { missing: true } });
+
+        expect(robots.content).toBe(expected);
+        expect(document.querySelectorAll('meta[name="robots"]')).toHaveLength(1);
+        rerender({ missing: false });
+        expect(robots.content).toBe(original);
+        unmount();
+        expect(robots.content).toBe(original);
+        expect(robots.isConnected).toBe(true);
     });
 });

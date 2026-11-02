@@ -1,4 +1,4 @@
-import { formatMonthYear } from '../utils/formatDate';
+import { formatMonthYear } from '../utils/formatDate.ts';
 
 export interface ChangelogEntry {
   /** Feature month (YYYY-MM), in descending order within each project. */

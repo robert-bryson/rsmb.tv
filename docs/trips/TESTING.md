@@ -190,6 +190,9 @@ Page tests use fixed post metadata and trip summaries.
 Development-status tests use fixed publication, source, and asset states.
 Tests must not depend on a previous content import.
 
+The [metadata guide](../site-metadata.md) covers crawler HTML, canonical paths, redirects, and navigation cleanup.
+Its browser suite checks both JavaScript-disabled requests and React navigation with the same production fixtures.
+
 The hero tests check photo selection, wraparound, viewer order, focus return, and image failure recovery.
 They also check title placement, reserved height, responsive image sizes, and reduced motion.
 Single-photo checks measure portrait, landscape, and explicit panorama widths from 320 to 1440 pixels.

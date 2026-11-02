@@ -9,6 +9,8 @@ import { updateManifestAssets } from '../update-trip-manifest-assets.js';
 import { tripManifestSchema, type TripManifest } from '../../shared/tripManifestSchema';
 import { isRouteGeoJson } from '../../shared/routeGeometry';
 import manifest from '../../tests/fixtures/trip-content/trips/coastal-test.json';
+import { STATIC_PAGE_PATHS, staticPageMetadata } from '../../src/utils/pageMetadata';
+import siteAliases from '../../src/content/siteAliases.json';
 
 const temporaryRoots: string[] = [];
 afterEach(() => {
@@ -64,16 +66,29 @@ describe('trip publication contracts', () => {
         const result = await build({ configFile: false, root, mode, plugins: [tripContentPlugin()], logLevel: 'silent', build: { write: false } });
         if (Array.isArray(result) || !('output' in result)) throw new Error('Expected one content bundle.');
         const assets = Object.fromEntries(result.output.filter(item => item.type === 'asset').map(item => [item.fileName, String(item.source)]));
+        for (const pathname of STATIC_PAGE_PATHS) {
+            const html = assets[pathname === '/' ? 'index.html' : `${pathname.slice(1)}.html`];
+            const metadata = staticPageMetadata(pathname, [published]);
+            expect(html).toContain(`href="${metadata.ogUrl}"`);
+            expect(html).toContain(`content="${metadata.ogImage}"`);
+            expect(html.match(/rel="canonical"/g)).toHaveLength(1);
+            expect(html.match(/type="application\/ld\+json"/g)).toHaveLength(1);
+            const graph = JSON.parse(html.match(/data-prerendered>(.*?)<\/script>/s)![1]);
+            expect(graph['@graph']?.[0] ?? graph).toEqual(metadata.jsonLd);
+        }
+        for (const [alias, pathname] of Object.entries(siteAliases)) {
+            expect(assets[`${alias.slice(1)}.html`]).toContain(`href="https://rsmb.tv${pathname}"`);
+        }
         expect(assets['trips/coast.html']).toBe(assets['blog/coast.html']);
         expect(assets['trips/coast.html']).toContain('<title>Coast &amp; mountains — rsmb</title>');
         expect(assets['trips/coast.html']).toContain('href="https://rsmb.tv/trips/coast"');
-        expect(assets['trips/coast.html']).toContain(`content="${manifest.photos.find(photo => photo.id === manifest.hero)!.src}"`);
+        expect(assets['trips/coast.html']).toContain(`content="https://rsmb.tv${manifest.photos.find(photo => photo.id === manifest.hero)!.src}"`);
         if (mode === 'development') {
             for (const [, html] of Object.entries(assets).filter(([filename]) => filename.endsWith('.html'))) {
                 expect(html).toMatch(/name="robots" content="noindex, nofollow"/);
             }
             expect(assets['trips/unfinished.html']).toBe(assets['blog/unfinished.html']);
-            expect(assets['trips/unfinished.html']).toContain('content="https://rsmb.tv/og/blog/unfinished.svg"');
+            expect(assets['trips/unfinished.html']).toContain('content="https://rsmb.tv/og/blog/unfinished.png"');
         } else {
             expect(assets['index.html']).not.toContain('noindex');
             expect(assets).not.toHaveProperty('trips/unfinished.html');
@@ -335,7 +350,7 @@ describe('trip publication contracts', () => {
         expect(html).toContain('href="https://rsmb.tv/trips/coastal-test"');
         expect(html.match(/<script/g)).toHaveLength(1);
         const schema = html.match(/data-prerendered>(.*?)<\/script>/s)?.[1];
-        expect(JSON.parse(schema!)).toMatchObject({ headline: title, '@type': 'BlogPosting' });
+        expect(JSON.parse(schema!)['@graph']).toEqual(expect.arrayContaining([expect.objectContaining({ headline: title, '@type': 'BlogPosting' })]));
     });
 
     it('updates photo URLs and dimensions while preserving authored captions and alt text', () => {

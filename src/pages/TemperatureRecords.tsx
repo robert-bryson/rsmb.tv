@@ -1,7 +1,6 @@
 import { Suspense, lazy } from 'react';
-import { useDocumentHead } from '../hooks/useDocumentHead';
-import { useJsonLd } from '../hooks/useJsonLd';
-import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+import { usePageMetadata } from '../hooks/usePageMetadata';
+import { staticPageMetadata } from '../utils/pageMetadata';
 
 const TemperatureMap = lazy(() =>
     import('../features/temperatures/components/TemperatureMap').then((m) => ({
@@ -10,28 +9,7 @@ const TemperatureMap = lazy(() =>
 );
 
 export default function TemperatureRecords() {
-    const description =
-        'Interactive map of all-time record high and low temperatures across US states and counties, with recent extremes summary.';
-
-    useDocumentHead({
-        title: 'U.S. Temperature Records',
-        description,
-        ogImage: absoluteUrl('/og/temperature-records.svg'),
-    });
-
-    useJsonLd({
-        '@context': 'https://schema.org',
-        '@type': 'WebPage',
-        name: 'U.S. Temperature Records Map',
-        description,
-        url: absoluteUrl('/projects/temperature-records/map'),
-        isPartOf: {
-            '@type': 'SoftwareApplication',
-            name: 'U.S. Temperature Records',
-            url: absoluteUrl('/projects/temperature-records'),
-        },
-        author: AUTHOR_PERSON,
-    });
+    usePageMetadata(staticPageMetadata('/projects/temperature-records/map'));
 
     return (
         <section className="h-full w-full overflow-hidden">

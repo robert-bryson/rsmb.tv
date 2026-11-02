@@ -1,30 +1,11 @@
 import { Link } from 'react-router-dom';
-import { useDocumentHead } from '../hooks/useDocumentHead';
-import { useJsonLd } from '../hooks/useJsonLd';
-import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+import { usePageMetadata } from '../hooks/usePageMetadata';
+import { staticPageMetadata } from '../utils/pageMetadata';
 import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
 
 export default function TemperatureRecordsAbout() {
-    const description =
-        'Interactive map of all-time record high and low temperatures across US states and counties, powered by NOAA and ACIS data.';
-
-    useDocumentHead({
-        title: 'U.S. Temperature Records',
-        description,
-        ogImage: absoluteUrl('/og/temperature-records.svg'),
-    });
-
-    useJsonLd({
-        '@context': 'https://schema.org',
-        '@type': 'SoftwareApplication',
-        name: 'U.S. Temperature Records',
-        description,
-        url: absoluteUrl('/projects/temperature-records'),
-        applicationCategory: 'WeatherApplication',
-        operatingSystem: 'Web',
-        author: AUTHOR_PERSON,
-    });
+    usePageMetadata(staticPageMetadata('/projects/temperature-records'));
 
     const project = projects.find(p => p.slug === 'temperature-records')!;
 

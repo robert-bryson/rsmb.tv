@@ -1,7 +1,9 @@
 # Trip source inventory and starter structure
 
 Inventory snapshot: October 31, 2026.
-PCH photo additions were checked on November 1, 2026. Other source entries retain the October 31 review.
+PCH photo additions were checked on November 1, 2026.
+Mississippi–Wisconsin album additions were checked on November 2, 2026.
+Other source entries retain the October 31 review.
 The source review used the live `Blog Posts` Sheet and the locally synced source folders.
 This file records that snapshot. It does not update when source files or Sheet rows change.
 The Sheet contains nine trip report rows covering seven distinct trips.
@@ -23,7 +25,7 @@ The dates below come from existing manifests or recovered recordings. Sheet date
 | [Kalaloch](../../src/content/trips/kalaloch-2024.json) | June 21–23, 2024 | 3 | 25 | Existing story: ferry and forest roads, beach camp, peninsula loop |
 | [PCH](../../src/content/trips/pch-2024.json) | October 3–7, 2024 | 5 | 107 | Pre-trip Seattle gallery and five riding days: coast, redwoods, Sierra crossing, desert |
 | [Route 66ish](route-66ish-2025-outline.md) | May 9–19, 2025; GPS through May 17 | 8 | 57 | Existing dated outline: California and Arizona, New Mexico, plains, Ozarks, St. Louis |
-| [Mississippi–Wisconsin](river-wisco-2025-outline.md) | October 7–13, 2025, inferred | 8 | 26 | New seven-day outline: river towns, camp, Wisconsin visits, Madison, Illinois return |
+| [Mississippi–Wisconsin](river-wisco-2025-outline.md) | October 7–13, 2025, inferred | 8 | 40 | Seven-day outline: river towns, camp, Wisconsin visits, Madison, Illinois return |
 | [ON–QC–New England](on-qc-new-england-2026-part-1-outline.md) | July 10–August 15, 2026, inferred | 35 | 1 | Three-part outline: Upper Peninsula, Canada, New England and return |
 
 The first five manifests already cover their selected source media.
@@ -42,7 +44,7 @@ The [refresh review](../reviews/2026-10-31-blog-and-trip-asset-refresh.md#source
 ## Mississippi–Wisconsin 2025
 
 The [manifest](../../src/content/trips/river-wisco-2025.json) is structurally complete for local development.
-The [outline](river-wisco-2025-outline.md) contains dated chapters, day maps, four galleries, and writing prompts.
+The [outline](river-wisco-2025-outline.md) contains dated chapters, day maps, five galleries, and writing prompts.
 
 Eight recovered recordings trace an October 7 departure from St. Louis and an October 13 return.
 October 11 has two successive recordings. Both belong to the same day.
@@ -53,9 +55,17 @@ These values remain estimates until the recordings are checked against recollect
 
 The photo search found JPG and ARW pairs under `Pictures/2025/YYYY-MM-DD`.
 Camera timestamps match October 7–9 and 13.
-The starter collection preserves 49 unchanged JPGs and selects 26 for processing.
+The starter collection preserves 49 unchanged camera JPGs and originally selected 26 for processing.
 Two family portraits were excluded. Raw ARW files remain in their original folders.
 Photo membership remains provisional until the report is written.
+
+The November 2 album import adds 29 reviewed still images: 14 additional photo IDs and edited exports for 15 existing selections.
+Eleven earlier selections remain, giving 40 manifest photos and 122 fingerprinted WebP derivatives.
+All imported bytes are preserved under `photos/originals/album-export-2026-11-02/`, including the HEIC's matching MP4.
+The HEIC uses a lossless PNG processing copy because the local Sharp installation cannot decode HEVC.
+The [photo review](river-wisco-2025-photo-review.md) records each image, capture time, dimensions, gallery, and description.
+The Markdown outlines now include `{{trip-gallery:oct-11}}`; add that shortcode to the source Google Doc before re-importing it.
+Processed assets are prepared in Drive and the local preview cache; this import does not upload public CDN assets.
 
 The provisional hero is `dsc01078`, a loaded motorcycle beside a wooded road.
 Alt descriptions state visible content without assigning uncertain locations.
@@ -63,11 +73,11 @@ The manifest records Honda CB500X. Stop coordinates remain unset.
 
 | Day | Working chapter | Gallery |
 | --- | --- | --- |
-| October 7 | St. Louis, river towns, wooded roads, camp | `oct-07`, 12 photos |
-| October 8 | Morning light, fog, small towns, eastern Wisconsin | `oct-08`, 9 photos |
-| October 9 | Local activity in eastern Wisconsin | `oct-09`, 3 photos |
+| October 7 | St. Louis, river towns, wooded roads, camp | `oct-07`, 17 photos |
+| October 8 | Morning light, fog, small towns, eastern Wisconsin | `oct-08`, 15 photos |
+| October 9 | Local activity in eastern Wisconsin | `oct-09`, 5 photos |
 | October 10 | Toward the Milwaukee area | No photos selected |
-| October 11 | Milwaukee area to Madison, then local activity | No photos selected |
+| October 11 | Milwaukee area to Madison, then local activity | `oct-11`, 1 photo |
 | October 12 | Madison to the western Chicago suburbs | No photos selected |
 | October 13 | Return to St. Louis | `oct-13`, 2 photos |
 
@@ -159,8 +169,8 @@ Existing filenames and source bytes were preserved.
 | `gps/originals/` | Eight Mississippi–Wisconsin or 36 Canada/New England primary GPX files |
 | `gps/alternates/` | Overlapping July 21 export, excluded from processing |
 | `gps/processed/` | Combined route plus one GeoJSON per primary source |
-| `photos/originals/` | 49 Mississippi–Wisconsin JPGs and one 2026 hero JPG |
-| `photos/selects/` | 26 Mississippi–Wisconsin starter selections and one 2026 hero |
+| `photos/originals/` | 49 Mississippi–Wisconsin camera JPGs, 29 album stills and one companion MP4 in its import subfolder, and one 2026 hero JPG |
+| `photos/selects/` | 40 Mississippi–Wisconsin selections and one 2026 hero |
 | `photos/processed/` | Fingerprinted WebP derivatives and compatibility aliases |
 | `asset-metadata.json` | Processing dimensions, file sizes, distances, and warnings |
 | `trip-manifest.json` | Snapshot of the repository manifest |

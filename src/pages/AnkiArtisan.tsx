@@ -1,7 +1,6 @@
 import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/ProjectScreenshotGallery';
-import { useDocumentHead } from '../hooks/useDocumentHead';
-import { useJsonLd } from '../hooks/useJsonLd';
-import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+import { usePageMetadata } from '../hooks/usePageMetadata';
+import { staticPageMetadata } from '../utils/pageMetadata';
 import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
 
@@ -31,25 +30,7 @@ const screenshots: ProjectScreenshot[] = [
 ];
 
 export default function AnkiArtisan() {
-    const description =
-        'A CLI tool that generates Anki flashcard decks from iNaturalist observations and eBird region data.';
-
-    useDocumentHead({
-        title: 'Anki Artisan',
-        description,
-        ogImage: absoluteUrl('/og/anki-artisan.svg'),
-    });
-
-    useJsonLd({
-        '@context': 'https://schema.org',
-        '@type': 'SoftwareApplication',
-        name: 'Anki Artisan',
-        description,
-        url: absoluteUrl('/projects/anki-artisan'),
-        applicationCategory: 'EducationalApplication',
-        operatingSystem: 'Cross-platform',
-        author: AUTHOR_PERSON,
-    });
+    usePageMetadata(staticPageMetadata('/projects/anki-artisan'));
 
     const project = projects.find(p => p.slug === 'anki-artisan')!;
 

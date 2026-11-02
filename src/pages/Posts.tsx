@@ -6,12 +6,9 @@ import { filterPostsByRegion, findGeographicTag, getAllBlogRegions } from '../co
 import { getAllPosts } from '../content/posts';
 import { getTripSummary } from '../features/trips/tripSummaries';
 import { TRIP_ATLAS_PATH } from '../features/trips/atlas/tripAtlasView';
-import { useDocumentHead } from '../hooks/useDocumentHead';
-import { useJsonLd } from '../hooks/useJsonLd';
+import { usePageMetadata } from '../hooks/usePageMetadata';
+import { staticPageMetadata } from '../utils/pageMetadata';
 import { formatDate } from '../utils/formatDate';
-import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
-
-const description = 'Writing about projects, trips, and other things I find interesting.';
 
 type PostType = 'all' | 'writing' | 'trips';
 
@@ -49,34 +46,13 @@ export function Posts() {
     const countries = getAllBlogRegions(postsByType);
     const posts = filterPostsByRegion(filterPostsByTag(postsByType, activeTag), activeCountry, activeRegion);
 
-    useDocumentHead({
-        title: 'Posts',
-        description,
-        ogImage: absoluteUrl('/og/blog.svg'),
-    });
-
-    useJsonLd({
-        '@context': 'https://schema.org',
-        '@type': 'CollectionPage',
-        name: 'Posts',
-        description,
-        url: absoluteUrl('/posts'),
-        author: AUTHOR_PERSON,
-        mainEntity: {
-            '@type': 'ItemList',
-            itemListElement: allPosts.map((post, index) => ({
-                '@type': 'ListItem',
-                position: index + 1,
-                url: absoluteUrl(`/${post.format === 'trip' ? 'trips' : 'blog'}/${post.slug}`),
-                name: post.title,
-            })),
-        },
-    });
+    const metadata = staticPageMetadata('/posts', allPosts);
+    usePageMetadata(metadata);
 
     return (
         <div>
             <h1 className="mb-2 text-3xl font-bold text-zinc-100">Posts</h1>
-            <p className="mb-6 max-w-2xl text-zinc-400">{description}</p>
+            <p className="mb-6 max-w-2xl text-zinc-400">{metadata.description}</p>
 
             <nav aria-label="Post type" className="mb-5 flex w-fit gap-1 rounded-lg bg-zinc-900 p-1">
                 {([

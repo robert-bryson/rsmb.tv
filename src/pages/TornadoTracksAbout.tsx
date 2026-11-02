@@ -1,30 +1,11 @@
 import { Link } from 'react-router-dom';
-import { useDocumentHead } from '../hooks/useDocumentHead';
-import { useJsonLd } from '../hooks/useJsonLd';
-import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+import { usePageMetadata } from '../hooks/usePageMetadata';
+import { staticPageMetadata } from '../utils/pageMetadata';
 import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
 
 export default function TornadoTracksAbout() {
-    const description =
-        'A full-screen historical tornado track map powered by NOAA/NCEI StormEvents data and MapLibre GL.';
-
-    useDocumentHead({
-        title: 'Tornado Tracks',
-        description,
-        ogImage: absoluteUrl('/og/tornado-tracks.svg'),
-    });
-
-    useJsonLd({
-        '@context': 'https://schema.org',
-        '@type': 'SoftwareApplication',
-        name: 'Tornado Tracks',
-        description,
-        url: absoluteUrl('/projects/tornado-tracks'),
-        applicationCategory: 'WeatherApplication',
-        operatingSystem: 'Web',
-        author: AUTHOR_PERSON,
-    });
+    usePageMetadata(staticPageMetadata('/projects/tornado-tracks'));
 
     const project = projects.find(p => p.slug === 'tornado-tracks')!;
 

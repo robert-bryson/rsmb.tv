@@ -1,7 +1,6 @@
 import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/ProjectScreenshotGallery';
-import { useDocumentHead } from '../hooks/useDocumentHead';
-import { useJsonLd } from '../hooks/useJsonLd';
-import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+import { usePageMetadata } from '../hooks/usePageMetadata';
+import { staticPageMetadata } from '../utils/pageMetadata';
 import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
 import { ProjectPageHeader } from '../components/ProjectPageHeader';
@@ -34,25 +33,7 @@ const screenshots: ProjectScreenshot[] = [
 ];
 
 export default function StatusDashboard() {
-    const description =
-        'A live terminal monitoring dashboard for AWS infrastructure, GitHub CI builds, and site health — rendered with Ink.';
-
-    useDocumentHead({
-        title: 'Status Dashboard',
-        description,
-        ogImage: absoluteUrl('/og/status-dashboard.svg'),
-    });
-
-    useJsonLd({
-        '@context': 'https://schema.org',
-        '@type': 'SoftwareApplication',
-        name: 'Status Dashboard',
-        description,
-        url: absoluteUrl('/projects/status-dashboard'),
-        applicationCategory: 'DeveloperApplication',
-        operatingSystem: 'Cross-platform',
-        author: AUTHOR_PERSON,
-    });
+    usePageMetadata(staticPageMetadata('/projects/status-dashboard'));
 
     const project = projects.find(p => p.slug === 'status-dashboard')!;
 

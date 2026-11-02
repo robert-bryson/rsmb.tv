@@ -1,0 +1,108 @@
+{
+  "/": {
+    "title": "rsmb",
+    "description": "Personal site and portfolio of Robby Bryson — interactive data visualizations, geospatial projects, and web tools.",
+    "image": "/og/home.png"
+  },
+  "/about": {
+    "title": "About",
+    "description": "Robby Bryson — software developer and geospatial engineer based in St. Louis. Background in Azure Maps, federal GIS, and startups.",
+    "image": "/og/about.png"
+  },
+  "/projects": {
+    "title": "Projects",
+    "description": "Interactive projects and data visualizations by Robby Bryson — flights, route converter, and more.",
+    "image": "/og/projects.png"
+  },
+  "/posts": {
+    "title": "Posts",
+    "description": "Writing about projects, trips, and other things I find interesting.",
+    "image": "/og/blog.png"
+  },
+  "/projects/adv-atlas/map": {
+    "title": "ADV Atlas",
+    "description": "Explore motorcycle journeys on a map, compare trip facts, and read the reports.",
+    "image": "/og/adv-atlas.png",
+    "operatingSystem": "Web"
+  },
+  "/projects/through-routes": {
+    "title": "Through Routes",
+    "description": "Find scenic, twisty motorcycle loop routes on rural roads using OpenStreetMap data.",
+    "image": "/og/through-routes.png",
+    "operatingSystem": "Web"
+  },
+  "/projects/flights": {
+    "title": "Flights",
+    "description": "An interactive 3D globe visualization of flights around the world — filter by year, see route frequencies, and explore travel statistics.",
+    "image": "/og/flights.png",
+    "operatingSystem": "Web"
+  },
+  "/projects/flights/map": {
+    "title": "Flights",
+    "description": "Interactive 3D globe visualization of flights around the world. Filter by year, see route frequencies, and explore travel statistics.",
+    "image": "/og/flights.png"
+  },
+  "/projects/anki-artisan": {
+    "title": "Anki Artisan",
+    "description": "A CLI tool that generates Anki flashcard decks from iNaturalist observations and eBird region data.",
+    "image": "/og/anki-artisan.png",
+    "operatingSystem": "Cross-platform"
+  },
+  "/projects/bookend": {
+    "title": "Bookend",
+    "description": "A personal book-tracking app to log reads, organize books into lists, and explore reading stats.",
+    "image": "/og/bookend.png",
+    "operatingSystem": "Web"
+  },
+  "/projects/temperature-records": {
+    "title": "U.S. Temperature Records",
+    "description": "Interactive map of all-time record high and low temperatures across US states and counties, powered by NOAA and ACIS data.",
+    "image": "/og/temperature-records.png",
+    "operatingSystem": "Web"
+  },
+  "/projects/temperature-records/map": {
+    "title": "U.S. Temperature Records",
+    "description": "Interactive map of all-time record high and low temperatures across US states and counties, with recent extremes summary.",
+    "image": "/og/temperature-records.png"
+  },
+  "/projects/temperature-records/trends": {
+    "title": "Standing Record Ages — U.S. Temperature Records",
+    "description": "Explore when today’s standing county temperature extremes were set, including their age distribution and geographic patterns.",
+    "image": "/og/climate-trends.png"
+  },
+  "/projects/tornado-tracks": {
+    "title": "Tornado Tracks",
+    "description": "A full-screen historical tornado track map powered by NOAA/NCEI StormEvents data and MapLibre GL.",
+    "image": "/og/tornado-tracks.png",
+    "operatingSystem": "Web"
+  },
+  "/projects/tornado-tracks/map": {
+    "title": "Tornado Tracks",
+    "description": "Interactive MapLibre archive of NOAA/NCEI tornado tracks with timeline, EF-scale filters, regional presets, and density mode.",
+    "image": "/og/tornado-tracks.png"
+  },
+  "/projects/route2gpx": {
+    "title": "route2gpx",
+    "description": "Convert Google Routes into GPX files for GPS devices and bike computers — a privacy-focused web app that runs entirely in your browser.",
+    "image": "/og/route2gpx.png",
+    "operatingSystem": "Web"
+  },
+  "/projects/aborg": {
+    "title": "aborg",
+    "description": "A CLI tool to scan, organize, and manage audiobook file collections into an Audiobookshelf-compatible directory structure.",
+    "image": "/og/aborg.png",
+    "operatingSystem": "Cross-platform"
+  },
+  "/projects/parc": {
+    "title": "parc",
+    "description": "A Python CLI for building a long-running archive of podcast feeds and episodes with resumable downloads, SQLite state, and local archive audits.",
+    "image": "/og/parc.png",
+    "operatingSystem": "Cross-platform"
+  },
+  "/projects/status-dashboard": {
+    "title": "Status Dashboard",
+    "description": "A live terminal monitoring dashboard for AWS infrastructure, GitHub CI builds, and site health — rendered with Ink.",
+    "image": "/og/status-dashboard.png",
+    "operatingSystem": "Cross-platform"
+  }
+}

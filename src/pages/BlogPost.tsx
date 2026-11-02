@@ -11,7 +11,7 @@ import { PostTableOfContents } from '../blog/PostTableOfContents';
 import { PostNavigation } from '../blog/PostNavigation';
 import { formatDate } from '../utils/formatDate';
 import { isDevelopmentContent } from '../utils/developmentContent';
-import { AUTHOR_PERSON, SITE_URL, absoluteUrl } from '../utils/siteMetadata';
+import { articleMetadata } from '../utils/pageMetadata';
 import { loadTripManifest, getTripManifestIssue } from '../features/trips/tripManifests';
 import { getTripSummary } from '../features/trips/tripSummaries';
 import { TripStoryHeader } from '../features/trips/components/TripStoryHeader';
@@ -55,42 +55,16 @@ export function BlogPost({ collection }: BlogPostProps) {
         .sort((a, b) => (a.series?.order ?? getTripSummary(a.tripId)?.series?.order ?? 0) - (b.series?.order ?? getTripSummary(b.tripId)?.series?.order ?? 0)) : [];
 
     const tripManifestIssue = isTrip ? getTripManifestIssue(post.tripId) : undefined;
-    const collectionPath = isTrip ? '/trips' : '/blog';
-    const collectionName = 'Posts';
-    const postUrl = post ? absoluteUrl(`${collectionPath}/${post.slug}`) : undefined;
-    const postImage = summary
-        ? absoluteUrl(summary.hero.src)
-        : post ? absoluteUrl(`/og/blog/${post.slug}.svg`) : undefined;
+    const metadata = post ? articleMetadata(post, summary?.hero) : undefined;
 
     useDocumentHead({
-        title: post ? post.title : 'Post Not Found',
+        ...metadata,
+        title: post?.title ?? 'Post Not Found',
         description: post?.description ?? 'Blog post not found.',
-        ogImage: postImage,
-        ogType: 'article',
-        publishedTime: post?.date,
+        noIndex: !post || post.development?.published === false,
     });
-
-    useJsonLd(post ? {
-        '@context': 'https://schema.org',
-        '@type': 'BlogPosting',
-        headline: post.title,
-        description: post.description,
-        datePublished: post.date,
-        author: AUTHOR_PERSON,
-        url: postUrl,
-        image: postImage,
-        keywords: post.tags,
-    } : null);
-
-    useJsonLd(post ? {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
-            { '@type': 'ListItem', position: 2, name: collectionName, item: absoluteUrl('/posts') },
-            { '@type': 'ListItem', position: 3, name: post.title, item: postUrl },
-        ],
-    } : null);
+    useJsonLd(metadata?.jsonLd ?? null);
+    useJsonLd(metadata?.breadcrumb ?? null);
 
     if (!post) {
         return (

@@ -20,6 +20,7 @@ const REPO_ROOT = path.join(__dirname, '..');
 const POSTS_PATH = path.join(REPO_ROOT, 'src/content/posts.json');
 const OUTPUT_PATH = path.join(REPO_ROOT, 'public/sitemap.xml');
 const SITE_URL = 'https://rsmb.tv';
+const PAGE_METADATA_SOURCES = ['src/content/sitePages.json', 'src/content/projects.ts'];
 
 // Static routes with their priorities
 export const STATIC_ROUTES = [
@@ -29,9 +30,14 @@ export const STATIC_ROUTES = [
     { path: '/projects/adv-atlas/map', priority: '0.8', changefreq: 'monthly', sources: ['src/pages/AdvAtlas.tsx', 'src/features/trips/atlas', 'src/content/posts.json', 'src/content/trips'] },
     { path: '/projects/through-routes', priority: '0.7', changefreq: 'monthly', sources: ['src/pages/ThroughRoutes.tsx'] },
     { path: '/projects/flights', priority: '0.9', changefreq: 'weekly', sources: ['src/pages/Flights.tsx', 'src/features/flights'] },
+    { path: '/projects/flights/map', priority: '0.8', changefreq: 'weekly', sources: ['src/pages/Flights.tsx', 'src/features/flights'] },
     { path: '/projects/anki-artisan', priority: '0.7', changefreq: 'monthly', sources: ['src/pages/AnkiArtisan.tsx'] },
     { path: '/projects/bookend', priority: '0.7', changefreq: 'monthly', sources: ['src/pages/Bookend.tsx'] },
+    { path: '/projects/aborg', priority: '0.7', changefreq: 'monthly', sources: ['src/pages/Aborg.tsx', 'src/content/projects.ts'] },
+    { path: '/projects/parc', priority: '0.7', changefreq: 'monthly', sources: ['src/pages/Parc.tsx', 'src/content/projects.ts'] },
+    { path: '/projects/status-dashboard', priority: '0.7', changefreq: 'monthly', sources: ['src/pages/StatusDashboard.tsx', 'src/content/projects.ts'] },
     { path: '/projects/temperature-records', priority: '0.7', changefreq: 'monthly', sources: ['src/pages/TemperatureRecords.tsx', 'src/features/temperatures'] },
+    { path: '/projects/temperature-records/map', priority: '0.8', changefreq: 'monthly', sources: ['src/pages/TemperatureRecords.tsx', 'src/features/temperatures'] },
     { path: '/projects/tornado-tracks', priority: '0.7', changefreq: 'monthly', sources: ['src/pages/TornadoTracksAbout.tsx', 'projects/tornado-tracks/readme.md'] },
     { path: '/projects/tornado-tracks/map', priority: '0.8', changefreq: 'monthly', sources: ['src/pages/TornadoTracks.tsx', 'src/features/tornadoes', 'public/data/tornadoes'] },
     { path: '/projects/route2gpx', priority: '0.7', changefreq: 'monthly', sources: ['src/pages/Route2Gpx.tsx'] },
@@ -101,7 +107,7 @@ export function generateSitemap({
     const posts = loadPosts(postsPath);
     const sitemap = buildSitemapXml(posts, {
         routes,
-        resolveRouteDate: (sources) => resolveRouteLastModifiedDate(sources, { repoRoot }),
+        resolveRouteDate: (sources) => resolveRouteLastModifiedDate([...sources, ...PAGE_METADATA_SOURCES], { repoRoot }),
     });
 
     fsImpl.writeFileSync(outputPath, sitemap, 'utf-8');

@@ -1,7 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { SITE_URL, DEFAULT_OG_IMAGE, AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+import { SITE_URL, DEFAULT_OG_IMAGE, AUTHOR_PERSON, absoluteUrl, canonicalUrl } from '../utils/siteMetadata';
 
 describe('siteMetadata', () => {
+    it.each(['/', '/index.html', '/index.html/?source=share#top'])('uses the home canonical for %s', pathname => {
+        expect(canonicalUrl(pathname)).toBe('https://rsmb.tv/');
+    });
+
     it('exposes the canonical site origin without trailing slash', () => {
         expect(SITE_URL).toBe('https://rsmb.tv');
     });
@@ -13,6 +17,7 @@ describe('siteMetadata', () => {
     it('exposes a frozen-shape Person reference for the author', () => {
         expect(AUTHOR_PERSON).toEqual({
             '@type': 'Person',
+            '@id': 'https://rsmb.tv/#person',
             name: 'Robby Bryson',
             url: 'https://rsmb.tv',
         });

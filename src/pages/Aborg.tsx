@@ -1,6 +1,5 @@
-import { useDocumentHead } from '../hooks/useDocumentHead';
-import { useJsonLd } from '../hooks/useJsonLd';
-import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+import { usePageMetadata } from '../hooks/usePageMetadata';
+import { staticPageMetadata } from '../utils/pageMetadata';
 import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
 import { ProjectPageHeader } from '../components/ProjectPageHeader';
@@ -8,25 +7,7 @@ import { ProjectPageHeader } from '../components/ProjectPageHeader';
 const ABORG_URL = 'https://github.com/robert-bryson/aborg';
 
 export default function Aborg() {
-    const description =
-        'A CLI tool to scan, organize, and manage audiobook file collections into an Audiobookshelf-compatible directory structure.';
-
-    useDocumentHead({
-        title: 'aborg',
-        description,
-        ogImage: absoluteUrl('/og/aborg.svg'),
-    });
-
-    useJsonLd({
-        '@context': 'https://schema.org',
-        '@type': 'SoftwareApplication',
-        name: 'aborg',
-        description,
-        url: absoluteUrl('/projects/aborg'),
-        applicationCategory: 'UtilitiesApplication',
-        operatingSystem: 'Cross-platform',
-        author: AUTHOR_PERSON,
-    });
+    usePageMetadata(staticPageMetadata('/projects/aborg'));
 
     const project = projects.find(p => p.slug === 'aborg')!;
 

@@ -1,7 +1,6 @@
 import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/ProjectScreenshotGallery';
-import { useDocumentHead } from '../hooks/useDocumentHead';
-import { useJsonLd } from '../hooks/useJsonLd';
-import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+import { usePageMetadata } from '../hooks/usePageMetadata';
+import { staticPageMetadata } from '../utils/pageMetadata';
 import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
 
@@ -33,25 +32,7 @@ const screenshots: ProjectScreenshot[] = [
 ];
 
 export default function ThroughRoutes() {
-    const description =
-        'Find scenic, twisty motorcycle loop routes on rural roads using OpenStreetMap data.';
-
-    useDocumentHead({
-        title: 'Through Routes',
-        description,
-        ogImage: absoluteUrl('/og/through-routes.svg'),
-    });
-
-    useJsonLd({
-        '@context': 'https://schema.org',
-        '@type': 'SoftwareApplication',
-        name: 'Through Routes',
-        description,
-        url: THROUGH_ROUTES_URL,
-        applicationCategory: 'TravelApplication',
-        operatingSystem: 'Web',
-        author: AUTHOR_PERSON,
-    });
+    usePageMetadata(staticPageMetadata('/projects/through-routes'));
 
     const project = projects.find(p => p.slug === 'through-routes')!;
 

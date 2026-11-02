@@ -3,6 +3,7 @@ import { Suspense, lazy } from 'react';
 import { Layout } from './components/Layout';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ScrollToTop } from './components/ScrollToTop';
+import { canonicalPathname } from './utils/siteMetadata';
 
 const Home = lazy(() => import('./pages/Home').then(m => ({ default: m.Home })));
 const About = lazy(() => import('./pages/About').then(m => ({ default: m.About })));
@@ -30,10 +31,11 @@ const basename = import.meta.env.BASE_URL;
 
 export function LegacyPostsRedirect({ type }: { type: 'writing' | 'trips' }) {
   const [searchParams] = useSearchParams();
+  const { hash, state } = useLocation();
   const nextSearchParams = new URLSearchParams(searchParams);
   nextSearchParams.set('type', type);
 
-  return <Navigate to={{ pathname: '/posts', search: nextSearchParams.toString() }} replace />;
+  return <Navigate to={{ pathname: '/posts', search: nextSearchParams.toString(), hash }} state={state} replace />;
 }
 
 export function AdvAtlasRedirect() {
@@ -60,6 +62,46 @@ function LoadingFallback() {
   );
 }
 
+function AppRoutes() {
+  const location = useLocation();
+  const pathname = canonicalPathname(location.pathname);
+  if (pathname !== location.pathname) {
+    return <Navigate to={{ pathname, search: location.search, hash: location.hash }} state={location.state} replace />;
+  }
+
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/posts" element={<Posts />} />
+      <Route path="/blog" element={<LegacyPostsRedirect type="writing" />} />
+      <Route path="/blog/:slug" element={<BlogPost collection="blog" />} />
+      <Route path="/trips" element={<LegacyPostsRedirect type="trips" />} />
+      <Route path="/trips/:slug" element={<BlogPost collection="trips" />} />
+      <Route path="/projects" element={<Projects />} />
+      <Route path="/projects/adv-atlas" element={<AdvAtlasRedirect />} />
+      <Route path="/projects/adv-atlas/map" element={<AdvAtlas />} />
+      <Route path="/projects/motorcycle-trips" element={<AdvAtlasRedirect />} />
+      <Route path="/projects/motorcycle-trips/map" element={<AdvAtlasRedirect />} />
+      <Route path="/projects/through-routes" element={<ThroughRoutes />} />
+      <Route path="/projects/flights" element={<FlightsAbout />} />
+      <Route path="/projects/flights/map" element={<Flights />} />
+      <Route path="/projects/anki-artisan" element={<AnkiArtisan />} />
+      <Route path="/projects/bookend" element={<Bookend />} />
+      <Route path="/projects/temperature-records" element={<TemperatureRecordsAbout />} />
+      <Route path="/projects/temperature-records/map" element={<TemperatureRecords />} />
+      <Route path="/projects/temperature-records/trends" element={<ClimateTrendsPage />} />
+      <Route path="/projects/tornado-tracks" element={<TornadoTracksAbout />} />
+      <Route path="/projects/tornado-tracks/map" element={<TornadoTracks />} />
+      <Route path="/projects/route2gpx" element={<Route2Gpx />} />
+      <Route path="/projects/aborg" element={<Aborg />} />
+      <Route path="/projects/parc" element={<Parc />} />
+      <Route path="/projects/status-dashboard" element={<StatusDashboard />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+}
+
 export default function App() {
   return (
     <Router basename={basename}>
@@ -67,35 +109,7 @@ export default function App() {
       <ErrorBoundary>
         <Layout>
           <Suspense fallback={<LoadingFallback />}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/posts" element={<Posts />} />
-              <Route path="/blog" element={<LegacyPostsRedirect type="writing" />} />
-              <Route path="/blog/:slug" element={<BlogPost collection="blog" />} />
-              <Route path="/trips" element={<LegacyPostsRedirect type="trips" />} />
-              <Route path="/trips/:slug" element={<BlogPost collection="trips" />} />
-              <Route path="/projects" element={<Projects />} />
-              <Route path="/projects/adv-atlas" element={<AdvAtlasRedirect />} />
-              <Route path="/projects/adv-atlas/map" element={<AdvAtlas />} />
-              <Route path="/projects/motorcycle-trips" element={<AdvAtlasRedirect />} />
-              <Route path="/projects/motorcycle-trips/map" element={<AdvAtlasRedirect />} />
-              <Route path="/projects/through-routes" element={<ThroughRoutes />} />
-              <Route path="/projects/flights" element={<FlightsAbout />} />
-              <Route path="/projects/flights/map" element={<Flights />} />
-              <Route path="/projects/anki-artisan" element={<AnkiArtisan />} />
-              <Route path="/projects/bookend" element={<Bookend />} />
-              <Route path="/projects/temperature-records" element={<TemperatureRecordsAbout />} />
-              <Route path="/projects/temperature-records/map" element={<TemperatureRecords />} />
-              <Route path="/projects/temperature-records/trends" element={<ClimateTrendsPage />} />
-              <Route path="/projects/tornado-tracks" element={<TornadoTracksAbout />} />
-              <Route path="/projects/tornado-tracks/map" element={<TornadoTracks />} />
-              <Route path="/projects/route2gpx" element={<Route2Gpx />} />
-              <Route path="/projects/aborg" element={<Aborg />} />
-              <Route path="/projects/parc" element={<Parc />} />
-              <Route path="/projects/status-dashboard" element={<StatusDashboard />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <AppRoutes />
           </Suspense>
         </Layout>
       </ErrorBoundary>

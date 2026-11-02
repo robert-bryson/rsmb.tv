@@ -1,6 +1,5 @@
-import { useDocumentHead } from '../hooks/useDocumentHead';
-import { useJsonLd } from '../hooks/useJsonLd';
-import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+import { usePageMetadata } from '../hooks/usePageMetadata';
+import { staticPageMetadata } from '../utils/pageMetadata';
 import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
 import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/ProjectScreenshotGallery';
@@ -34,25 +33,7 @@ const screenshots: ProjectScreenshot[] = [
 ];
 
 export default function Route2Gpx() {
-    const description =
-        'Convert Google Routes into GPX files for GPS devices and bike computers — a privacy-focused web app that runs entirely in your browser.';
-
-    useDocumentHead({
-        title: 'route2gpx',
-        description,
-        ogImage: absoluteUrl('/og/route2gpx.svg'),
-    });
-
-    useJsonLd({
-        '@context': 'https://schema.org',
-        '@type': 'SoftwareApplication',
-        name: 'route2gpx',
-        description,
-        url: ROUTE2GPX_URL,
-        applicationCategory: 'TravelApplication',
-        operatingSystem: 'Web',
-        author: AUTHOR_PERSON,
-    });
+    usePageMetadata(staticPageMetadata('/projects/route2gpx'));
 
     const project = projects.find(p => p.slug === 'route2gpx')!;
 

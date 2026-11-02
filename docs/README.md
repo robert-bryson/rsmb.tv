@@ -9,6 +9,7 @@ Use [TODO.md](../TODO.md) for incomplete work.
 | --- | --- |
 | [Repository guide](../README.md) | Install, develop, test, and build the site |
 | [Blog publication](blog-publishing.md) | Configure the Sheet and import documents |
+| [Site metadata](site-metadata.md) | Maintain crawler metadata, social cards, canonical paths, and hosting rules |
 | [Email DNS](email-dns.md) | Adopt and test mail records, enable signing, and verify delivery |
 | [GitHub Actions OIDC](github-actions-oidc.md) | Deploy workflow roles and retire long-lived AWS credentials |
 | [Trip authoring](trips/TRIP-AUTHORING-README.md) | Prepare, check, and publish trip content |
@@ -30,6 +31,8 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-02 | [Pending changes: HTML routes, crawler directives, hosting rewrites, and trip content](reviews/2026-11-02-pending-changes-quality-review.md) |
+| 2026-11-02 | [Site JSON-LD, crawler metadata, social cards, and discovery coverage](reviews/2026-11-02-site-metadata.md) |
 | 2026-11-02 | [Atlas overview timeouts, control targets, and regression coverage](reviews/2026-11-02-atlas-overview-quality-review.md) |
 | 2026-11-01 | [Pending changes, route hit tests, photo fingerprints, and coverage review](reviews/2026-11-01-pending-changes-quality-review.md) |
 | 2026-11-01 | [ADV Atlas main merge review and final regression checks](reviews/2026-11-01-atlas-main-merge-review.md) |

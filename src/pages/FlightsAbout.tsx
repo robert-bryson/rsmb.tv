@@ -1,30 +1,11 @@
 import { Link } from 'react-router-dom';
-import { useDocumentHead } from '../hooks/useDocumentHead';
-import { useJsonLd } from '../hooks/useJsonLd';
-import { AUTHOR_PERSON, absoluteUrl } from '../utils/siteMetadata';
+import { usePageMetadata } from '../hooks/usePageMetadata';
+import { staticPageMetadata } from '../utils/pageMetadata';
 import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
 
 export default function FlightsAbout() {
-    const description =
-        'An interactive 3D globe visualization of flights around the world — filter by year, see route frequencies, and explore travel statistics.';
-
-    useDocumentHead({
-        title: 'Flights',
-        description,
-        ogImage: absoluteUrl('/og/flights.svg'),
-    });
-
-    useJsonLd({
-        '@context': 'https://schema.org',
-        '@type': 'SoftwareApplication',
-        name: 'Flights',
-        description,
-        url: absoluteUrl('/projects/flights'),
-        applicationCategory: 'TravelApplication',
-        operatingSystem: 'Web',
-        author: AUTHOR_PERSON,
-    });
+    usePageMetadata(staticPageMetadata('/projects/flights'));
 
     const project = projects.find(p => p.slug === 'flights')!;
 

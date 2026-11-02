@@ -407,19 +407,14 @@ Keep incomplete work in [TODO.md](TODO.md). Use Git history for completed work.
 
 ## SEO and Structured Data
 
-`useDocumentHead` sets the title, description, canonical URL, and social tags.
-`useJsonLd` inserts [JSON-LD](https://schema.org) into the page.
-`src/utils/siteMetadata.ts` supplies the shared site origin, author identity, and URL helper.
+Public pages include titles, descriptions, canonical URLs, social tags, and JSON-LD before JavaScript runs.
+React uses the same metadata definitions during navigation. The browser renders page bodies.
+Social cards use PNG files. Trip reports use their hero photo.
 
-The pages include these schemas:
-
-- `WebSite` on the home page
-- `ProfilePage` + `Person` on `/about`
-- `CollectionPage` containing an `ItemList` of `SoftwareApplication` entries on `/projects`
-- `CollectionPage` containing all writing and trip reports on `/posts`
-- `BlogPosting` and `BreadcrumbList` on `/blog/:slug` and `/trips/:slug`
-- `SoftwareApplication` on each project detail page
-- `WebPage` on full-screen app subroutes referencing the parent `SoftwareApplication` via `isPartOf`
+The [metadata guide](docs/site-metadata.md) describes source files, schemas, route handling, and required checks.
+It also explains development indexing rules and hosting requirements.
+Deploy generated HTML with the rewrite rules in `infra/main.tf`.
+The [review index](docs/README.md) links dated findings and validation results.
 
 ## Infrastructure
 

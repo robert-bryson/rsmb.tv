@@ -20,9 +20,8 @@ import {
 } from '../features/trips/atlas/tripAtlasBrowser';
 import { readAtlasSession, saveAtlasSession, type AtlasCamera, type AtlasSession } from '../features/trips/atlas/tripAtlasSession';
 import { isDevelopmentContent } from '../utils/developmentContent';
-import { useDocumentHead } from '../hooks/useDocumentHead';
-import { useJsonLd } from '../hooks/useJsonLd';
-import { absoluteUrl, AUTHOR_PERSON } from '../utils/siteMetadata';
+import { usePageMetadata } from '../hooks/usePageMetadata';
+import { staticPageMetadata } from '../utils/pageMetadata';
 import '../features/trips/atlas/tripAtlasBrowser.css';
 
 const TripAtlasMap = lazy(() => import('../features/trips/atlas/TripAtlasMap'));
@@ -91,16 +90,7 @@ export default function AdvAtlas() {
     const visibleRoutes = useMemo(() => Object.fromEntries(Object.entries(routes).filter(([id]) => mapEntries.some(entry => entry.id === id))), [routes, mapEntries]);
     const selectedOutsideFilters = Boolean(selectedId && !visibleEntries.some(entry => entry.id === selectedId));
 
-    const description = 'Explore motorcycle journeys on a map, compare trip facts, and read the reports.';
-    useDocumentHead({ title: 'ADV Atlas', description, ogImage: absoluteUrl('/og/adv-atlas.svg') });
-    useJsonLd({
-        '@context': 'https://schema.org', '@type': 'WebPage', name: 'ADV Atlas Map', description,
-        url: absoluteUrl(TRIP_ATLAS_PATH), author: AUTHOR_PERSON,
-        mainEntity: {
-            '@type': 'SoftwareApplication', '@id': absoluteUrl('/projects/adv-atlas#application'),
-            name: 'ADV Atlas', url: absoluteUrl(TRIP_ATLAS_PATH), applicationCategory: 'TravelApplication', operatingSystem: 'Web',
-        },
-    });
+    usePageMetadata(staticPageMetadata('/projects/adv-atlas/map'));
 
     const onRouteChange = useCallback((id: string, state: AtlasRouteState) => setRoutes(current => ({ ...current, [id]: state })), []);
     const onCameraChange = useCallback((camera: AtlasCamera) => { session.current.camera = camera; }, []);

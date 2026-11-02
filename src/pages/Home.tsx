@@ -3,29 +3,16 @@ import { ProjectPreview } from '../components/ProjectPreview';
 import { featuredProjects } from '../content/projects';
 import { getAllPosts } from '../content/posts';
 import { getTripSummary } from '../features/trips/tripSummaries';
-import { useDocumentHead } from '../hooks/useDocumentHead';
-import { useJsonLd } from '../hooks/useJsonLd';
+import { usePageMetadata } from '../hooks/usePageMetadata';
+import { staticPageMetadata } from '../utils/pageMetadata';
 import { formatDate } from '../utils/formatDate';
-import { AUTHOR_PERSON, SITE_URL, absoluteUrl } from '../utils/siteMetadata';
 
 const selectedProjects = featuredProjects.slice(0, 3);
 
 export function Home() {
   const recentPosts = getAllPosts().slice(0, 3);
 
-  useDocumentHead({
-    title: 'rsmb',
-    description: 'Personal site and portfolio of Robby Bryson — interactive data visualizations, geospatial projects, and web tools.',
-    ogImage: absoluteUrl('/og/home.svg'),
-  });
-
-  useJsonLd({
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: 'rsmb',
-    url: SITE_URL,
-    author: AUTHOR_PERSON,
-  });
+  usePageMetadata(staticPageMetadata('/'));
 
   return (
     <div className="space-y-14">

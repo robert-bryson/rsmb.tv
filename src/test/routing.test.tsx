@@ -1,8 +1,36 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
-import { AdvAtlasRedirect, LegacyPostsRedirect } from '../App';
+import App, { AdvAtlasRedirect, LegacyPostsRedirect } from '../App';
 import { ScrollToTop } from '../components/ScrollToTop';
+
+vi.mock('../pages/Home', () => ({ Home: () => <h1>Home page</h1> }));
+vi.mock('../pages/About', () => ({ About: () => <h1>About page</h1> }));
+vi.mock('../pages/Parc', () => ({ default: () => <h1>Parc page</h1> }));
+
+describe('generated HTML routes', () => {
+    it.each([
+        ['/index.html', '/', 'Home page'],
+        ['/about.html', '/about', 'About page'],
+        ['/about/', '/about', 'About page'],
+        ['/projects/parc.html/', '/projects/parc', 'Parc page'],
+    ])('renders %s without losing navigation state or adding a history entry', async (pathname, canonical, heading) => {
+        vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined);
+        const returnState = { restoreScroll: true };
+        window.history.replaceState({ usr: returnState, key: 'html-route', idx: 0 }, '', `${pathname}?source=share#heading`);
+        const historyLength = window.history.length;
+
+        const { unmount } = render(<App />);
+        expect(await screen.findByRole('heading', { name: heading })).toBeVisible();
+        expect(window.location.pathname).toBe(canonical);
+        expect(window.location.search).toBe('?source=share');
+        expect(window.location.hash).toBe('#heading');
+        expect(window.history.length).toBe(historyLength);
+        expect(window.history.state.usr).toEqual(returnState);
+        unmount();
+        window.history.replaceState(null, '', '/');
+    });
+});
 
 function LocationProbe() {
     const location = useLocation();
@@ -24,8 +52,9 @@ describe('legacy post index routes', () => {
         ['/blog?tag=Maps', 'writing', '/posts?tag=Maps&type=writing'],
         ['/trips?tag=Travel', 'trips', '/posts?tag=Travel&type=trips'],
     ] as const)('redirects %s and preserves its tag filter', (route, type, expectedLocation) => {
+        const url = new URL(route, 'https://rsmb.tv');
         render(
-            <MemoryRouter initialEntries={[route]}>
+            <MemoryRouter initialEntries={[{ pathname: url.pathname, search: url.search, hash: '#heading', state: { restoreScroll: true } }]}>
                 <LocationProbe />
                 <Routes>
                     <Route path="/blog" element={<LegacyPostsRedirect type={type} />} />
@@ -35,7 +64,8 @@ describe('legacy post index routes', () => {
             </MemoryRouter>,
         );
 
-        expect(screen.getByTestId('location')).toHaveTextContent(expectedLocation);
+        expect(screen.getByTestId('location')).toHaveTextContent(`${expectedLocation}#heading`);
+        expect(screen.getByTestId('location')).toHaveAttribute('data-state', '{"restoreScroll":true}');
     });
 });
 

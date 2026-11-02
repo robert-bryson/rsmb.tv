@@ -20,10 +20,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.join(__dirname, '..');
 const POSTS_PATH = path.join(REPO_ROOT, 'src/content/posts.json');
 const OUTPUT_PATH = path.join(REPO_ROOT, 'public/rss.xml');
-const FEED_SOURCES = ['src/content/posts.json', 'src/content/blog'];
+const FEED_SOURCES = ['src/content/posts.json', 'src/content/blog', 'src/content/trips'];
 const SITE_URL = 'https://rsmb.tv';
 const SITE_TITLE = 'rsmb';
-const SITE_DESCRIPTION = 'Writing and trip stories by Robert Bryson — projects, engineering, maps, and things I find interesting.';
+const SITE_DESCRIPTION = 'Writing and trip stories by Robby Bryson — projects, engineering, maps, and things I find interesting.';
 
 function postUrl(post) {
     return `${SITE_URL}/${post.format === 'trip' ? 'trips' : 'blog'}/${post.slug}`;

@@ -67,6 +67,18 @@ describe('public discovery artifacts', () => {
 });
 
 describe('resolveFeedBuildDate', () => {
+    it('updates the feed timestamp when a trip manifest changes without a story edit', () => {
+        const repoRoot = createTempDir();
+        const manifestPath = path.join(repoRoot, 'src/content/trips/coast.json');
+        fs.mkdirSync(path.dirname(manifestPath), { recursive: true });
+        fs.writeFileSync(manifestPath, '{}');
+        const revisedAt = new Date('2026-11-02T12:00:00Z');
+        fs.utimesSync(manifestPath, revisedAt, revisedAt);
+
+        expect(resolveFeedBuildDate([{ date: '2025-10-13' }], { repoRoot }))
+            .toBe('Mon, 02 Nov 2026 12:00:00 GMT');
+    });
+
     it('uses the latest resolved source timestamp when available', () => {
         const resolveLatestTimestampImpl = vi.fn().mockReturnValue(Date.UTC(2026, 3, 20, 14, 30, 0));
 

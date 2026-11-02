@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { SITE_URL, DEFAULT_OG_IMAGE } from '../utils/siteMetadata';
+import { canonicalUrl, absoluteUrl, DEFAULT_OG_IMAGE } from '../utils/siteMetadata';
 
 interface DocumentHeadOptions {
     title: string;
@@ -11,6 +11,10 @@ interface DocumentHeadOptions {
     ogUrl?: string;
     ogType?: 'website' | 'article';
     publishedTime?: string;
+    imageAlt?: string;
+    imageWidth?: number;
+    imageHeight?: number;
+    noIndex?: boolean;
 }
 
 /**
@@ -27,6 +31,10 @@ export function useDocumentHead({
     ogUrl,
     ogType = 'website',
     publishedTime,
+    imageAlt,
+    imageWidth,
+    imageHeight,
+    noIndex,
 }: DocumentHeadOptions) {
     const { pathname } = useLocation();
 
@@ -39,9 +47,17 @@ export function useDocumentHead({
         const originalValues = new Map<HTMLMetaElement, string>();
         let canonicalLink: HTMLLinkElement | null = null;
         let createdCanonical = false;
+        let originalCanonical: string | null = null;
 
-        function setMetaTag(attr: 'property' | 'name', key: string, content: string) {
+        function setMetaTag(attr: 'property' | 'name', key: string, content?: string) {
             let el = document.querySelector(`meta[${attr}="${key}"]`) as HTMLMetaElement | null;
+            if (content === undefined) {
+                if (el) {
+                    originalValues.set(el, el.content);
+                    el.remove();
+                }
+                return;
+            }
             if (!el) {
                 el = document.createElement('meta');
                 el.setAttribute(attr, key);
@@ -59,16 +75,28 @@ export function useDocumentHead({
 
         setMetaTag('property', 'og:title', ogTitle || fullTitle);
         setMetaTag('property', 'og:type', ogType);
-        if (publishedTime) setMetaTag('property', 'article:published_time', publishedTime);
+        setMetaTag('property', 'article:published_time', publishedTime);
+        setMetaTag('property', 'og:site_name', 'rsmb');
+        setMetaTag('property', 'og:locale', 'en_US');
+        if (noIndex) {
+            const robots = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
+            const rules = (robots?.content ?? 'follow').split(',').map(rule => rule.trim())
+                .filter(rule => rule && !/^(index|all)$/i.test(rule));
+            if (!rules.some(rule => /^(noindex|none)$/i.test(rule))) rules.unshift('noindex');
+            setMetaTag('name', 'robots', rules.join(', '));
+        }
 
         if (ogDescription || description) {
             setMetaTag('property', 'og:description', ogDescription || description || '');
         }
 
-        const image = ogImage || DEFAULT_OG_IMAGE;
+        const image = absoluteUrl(ogImage || DEFAULT_OG_IMAGE);
         setMetaTag('property', 'og:image', image);
+        setMetaTag('property', 'og:image:alt', imageAlt || cleanTitle);
+        setMetaTag('property', 'og:image:width', imageWidth?.toString());
+        setMetaTag('property', 'og:image:height', imageHeight?.toString());
 
-        const url = ogUrl || `${SITE_URL}${pathname}`;
+        const url = ogUrl || canonicalUrl(pathname);
         setMetaTag('property', 'og:url', url);
 
         // Set canonical link
@@ -78,6 +106,8 @@ export function useDocumentHead({
             canonicalLink.setAttribute('rel', 'canonical');
             document.head.appendChild(canonicalLink);
             createdCanonical = true;
+        } else {
+            originalCanonical = canonicalLink.getAttribute('href');
         }
         canonicalLink.setAttribute('href', url);
 
@@ -88,13 +118,20 @@ export function useDocumentHead({
             setMetaTag('name', 'twitter:description', ogDescription || description || '');
         }
         setMetaTag('name', 'twitter:image', image);
+        setMetaTag('name', 'twitter:image:alt', imageAlt || cleanTitle);
 
         return () => {
             metas.forEach(el => el.remove());
-            originalValues.forEach((value, el) => { el.content = value; });
+            originalValues.forEach((value, el) => {
+                el.content = value;
+                if (!el.isConnected) document.head.appendChild(el);
+            });
             if (createdCanonical && canonicalLink) {
                 canonicalLink.remove();
+            } else if (canonicalLink) {
+                if (originalCanonical === null) canonicalLink.removeAttribute('href');
+                else canonicalLink.setAttribute('href', originalCanonical);
             }
         };
-    }, [title, description, ogTitle, ogDescription, ogImage, ogUrl, ogType, publishedTime, pathname]);
+    }, [title, description, ogTitle, ogDescription, ogImage, ogUrl, ogType, publishedTime, imageAlt, imageWidth, imageHeight, noIndex, pathname]);
 }

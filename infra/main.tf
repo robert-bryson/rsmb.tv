@@ -16,16 +16,42 @@ resource "aws_amplify_app" "rsmbtv" {
     ignore_changes = [access_token, environment_variables, custom_headers]
   }
 
-  # Article HTML includes metadata before JavaScript. Place these before the SPA fallback.
-  custom_rule {
-    source = "/trips/<slug>"
-    target = "/trips/<slug>.html"
-    status = "200"
+  # Serve each public page's metadata before JavaScript, ahead of the SPA fallback.
+  dynamic "custom_rule" {
+    for_each = flatten([for route in sort(concat(
+      [for route in keys(jsondecode(file("${path.module}/../src/content/sitePages.json"))) : route if route != "/"],
+      keys(jsondecode(file("${path.module}/../src/content/siteAliases.json")))
+    )) : [route, "${route}/"]])
+    content {
+      source = custom_rule.value
+      target = "${trimsuffix(custom_rule.value, "/")}.html"
+      status = "200"
+    }
   }
-  custom_rule {
-    source = "/blog/<slug>"
-    target = "/blog/<slug>.html"
-    status = "200"
+
+  # Protect HTML file paths from receiving a second extension in article rewrites.
+  dynamic "custom_rule" {
+    for_each = flatten([for collection in ["blog", "trips"] : [
+      for suffix in ["", "/"] : {
+        source = "/${collection}/<slug>.html${suffix}"
+        target = "/${collection}/<slug>"
+      }
+    ]])
+    content {
+      source = custom_rule.value.source
+      target = custom_rule.value.target
+      status = "301"
+    }
+  }
+
+  # Article aliases retain the same canonical metadata as the current collection.
+  dynamic "custom_rule" {
+    for_each = ["/blog/<slug>", "/blog/<slug>/", "/trips/<slug>", "/trips/<slug>/"]
+    content {
+      source = custom_rule.value
+      target = "${trimsuffix(custom_rule.value, "/")}.html"
+      status = "200"
+    }
   }
 
   # SPA rewrite: serve index.html for all routes that don't match a static file
