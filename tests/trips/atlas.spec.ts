@@ -4,55 +4,6 @@ import { atlas, atlasCamera, expectAtlasUrl, followReport, geometry, mockAtlasAs
 
 test.beforeEach(async ({ page }) => mockAtlasAssets(page));
 
-test('overview control avoids panels across responsive widths and hides when all trips are framed again', async ({ page }) => {
-    await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto(atlas);
-    await expect(page.getByText('2/2 routes', { exact: false })).toBeVisible();
-    await expect.poll(async () => (await paintedRoute(page)).count).toBeGreaterThan(30);
-    const reset = page.getByRole('button', { name: 'Zoom to all trips' });
-    await expect(reset).toHaveCount(0);
-    const before = await paintedRoute(page);
-    await page.getByRole('button', { name: 'Zoom in', exact: true }).click();
-    await expect(reset).toBeVisible();
-    const initialViewport = page.viewportSize()!;
-    const panelToggle = page.locator('#atlas-panel-toggle');
-    const initiallyOpen = await panelToggle.getAttribute('aria-expanded') === 'true';
-    for (const width of [...new Set([858, 768, initialViewport.width, 320, 767, 1023, 1024, 1754])]) {
-        await page.setViewportSize({ width, height: initialViewport.height });
-        for (const open of [true, false]) {
-            if (await panelToggle.getAttribute('aria-expanded') !== String(open)) await panelToggle.click();
-            await expect(panelToggle).toHaveAttribute('aria-expanded', String(open));
-            const buttonBox = (await reset.boundingBox())!;
-            const panelBox = (await page.locator('#atlas-trip-panel').boundingBox())!;
-            const mapBox = (await page.getByTestId('atlas-map-viewport').boundingBox())!;
-            expect(buttonBox.x).toBeCloseTo(mapBox.x + 12, 0);
-            expect(buttonBox.y).toBeGreaterThanOrEqual(mapBox.y);
-            const intersectionWidth = Math.max(0, Math.min(buttonBox.x + buttonBox.width, panelBox.x + panelBox.width) - Math.max(buttonBox.x, panelBox.x));
-            const intersectionHeight = Math.max(0, Math.min(buttonBox.y + buttonBox.height, panelBox.y + panelBox.height) - Math.max(buttonBox.y, panelBox.y));
-            expect(intersectionWidth * intersectionHeight).toBe(0);
-            expect(await reset.evaluate(element => {
-                const box = element.getBoundingClientRect();
-                return element.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2));
-            })).toBe(true);
-        }
-    }
-    await page.setViewportSize(initialViewport);
-    if (await panelToggle.getAttribute('aria-expanded') !== String(initiallyOpen)) await panelToggle.click();
-    await reset.click();
-    await expect(reset).toHaveCount(0);
-    const zoomReset = await paintedRoute(page);
-    zoomReset.bounds.forEach((value, index) => expect(Math.abs(value - before.bounds[index])).toBeLessThan(5));
-    const canvas = page.getByTestId('trip-atlas-map').locator('canvas');
-    await canvas.focus();
-    await canvas.press('ArrowRight');
-    await expect(reset).toBeVisible();
-    await reset.click();
-    await expect(reset).toHaveCount(0);
-    const panReset = await paintedRoute(page);
-    panReset.bounds.forEach((value, index) => expect(Math.abs(value - before.bounds[index])).toBeLessThan(5));
-    await expectAtlasUrl(page);
-});
-
 test('project entry opens a playable map with published routes and accessible card selection', async ({ page }) => {
     await page.goto('/projects/adv-atlas');
     await expectAtlasUrl(page);

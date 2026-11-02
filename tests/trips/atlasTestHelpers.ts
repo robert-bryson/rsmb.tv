@@ -33,6 +33,35 @@ export async function openList(page: Page) {
     if (await toggle.getAttribute('aria-expanded') !== 'true') await toggle.click();
 }
 
+/** Measure each target and its obstacles in the same browser task. */
+export async function expectAtlasMapControls(page: Page) {
+    for (const name of ['Zoom to all trips', 'Zoom in', 'Zoom out', 'Enter fullscreen', 'Share map']) {
+        const control = page.getByRole('button', { name, exact: true });
+        const layout = await control.evaluate(element => {
+            const viewport = element.closest('[data-testid="atlas-map-viewport"]');
+            const panel = document.getElementById('atlas-trip-panel');
+            if (!viewport || !panel) throw new Error('Atlas controls require a map viewport and trip panel.');
+            const box = element.getBoundingClientRect();
+            const map = viewport.getBoundingClientRect();
+            const drawer = panel.getBoundingClientRect();
+            const intersectionWidth = Math.max(0, Math.min(box.right, drawer.right) - Math.max(box.left, drawer.left));
+            const intersectionHeight = Math.max(0, Math.min(box.bottom, drawer.bottom) - Math.max(box.top, drawer.top));
+            return {
+                width: box.width, height: box.height,
+                insets: [box.left - map.left, box.top - map.top, map.right - box.right, map.bottom - box.bottom],
+                panelOverlap: intersectionWidth * intersectionHeight,
+                uncovered: [0.1, 0.5, 0.9].every(x => [0.1, 0.5, 0.9].every(y =>
+                    element.contains(document.elementFromPoint(box.x + box.width * x, box.y + box.height * y)))),
+            };
+        });
+        expect(layout.width, `${name} target width`).toBeGreaterThanOrEqual(44);
+        expect(layout.height, `${name} target height`).toBeGreaterThanOrEqual(44);
+        for (const inset of layout.insets) expect(inset, `${name} must stay inside the map`).toBeGreaterThanOrEqual(0);
+        expect(layout.panelOverlap, `${name} must clear the trip panel`).toBe(0);
+        expect(layout.uncovered, `${name} must remain clickable across its target`).toBe(true);
+    }
+}
+
 /** Capture the departure position after the browser makes the link's click target visible. */
 export async function followReport(page: Page, report: Locator) {
     await page.evaluate(() => {

@@ -25,6 +25,10 @@ const fake = vi.hoisted(() => ({
         queryRenderedFeatures: ReturnType<typeof vi.fn>;
         canvas: HTMLCanvasElement;
         isMoving: () => boolean;
+        getZoom: () => number;
+        getBearing: () => number;
+        getPitch: () => number;
+        cameraForBounds: () => { center?: [number, number]; zoom?: number } | undefined;
         project: (point: [number, number] | { lng: number; lat: number }) => { x: number; y: number };
         center: { lng: number; lat: number };
         options: InitialCamera;
@@ -97,7 +101,7 @@ vi.mock('maplibre-gl', () => ({
         getBearing() { return 0; }
         getPitch() { return 0; }
         isMoving() { return false; }
-        cameraForBounds() { return { center: [-121.5, 46.5], zoom: 5.5 }; }
+        cameraForBounds() { return { center: [-121.5, 46.5] as [number, number], zoom: 5.5 }; }
         project(point: [number, number] | { lng: number; lat: number }) {
             return Array.isArray(point) ? { x: (point[0] + 125) * 100, y: (50 - point[1]) * 100 }
                 : { x: (point.lng + 125) * 100, y: (50 - point.lat) * 100 };
@@ -195,6 +199,109 @@ describe('atlas route hit testing', () => {
         expect(onHover).toHaveBeenLastCalledWith(undefined);
         expect(screen.queryByRole('group', { name: 'Trips sharing this road' })).not.toBeInTheDocument();
     });
+});
+
+describe('atlas overview visibility', () => {
+    const overview: AtlasCamera = { center: [-121.5, 46.5], zoom: 5.5, bearing: 0, pitch: 0 };
+    const props = {
+        entries: [entry], routes: { coast: { route, error: '', retry: vi.fn() } }, fitVersion: 0, panelOpen: true,
+        onSelect: vi.fn(), onHover: vi.fn(), onCameraChange: vi.fn(),
+    };
+
+    it.each([
+        { name: 'panning', camera: { ...overview, center: [-121.48, 46.5] }, changed: true },
+        { name: 'zooming', camera: { ...overview, zoom: 5.52 }, changed: true },
+        { name: 'rotation', camera: { ...overview, bearing: -0.2 }, changed: true },
+        { name: 'pitch', camera: { ...overview, pitch: 0.2 }, changed: true },
+        { name: 'subpixel panning', camera: { ...overview, center: [-121.495, 46.5] }, changed: false },
+        { name: 'zoom rounding', camera: { ...overview, zoom: 5.505 }, changed: false },
+        { name: 'rotation rounding', camera: { ...overview, bearing: 359.95 }, changed: false },
+        { name: 'pitch rounding', camera: { ...overview, pitch: 0.05 }, changed: false },
+        { name: 'a full clockwise turn', camera: { ...overview, bearing: 360 }, changed: false },
+        { name: 'a full counterclockwise turn', camera: { ...overview, bearing: -360 }, changed: false },
+    ])('compares $name and clears the difference when the overview returns', ({ camera, changed }) => {
+        const onViewChange = vi.fn();
+        render(<TripAtlasMap {...props} onViewChange={onViewChange} />);
+        const instance = fake.instances[0];
+        act(() => { instance.events.get('styledata')?.forEach(listener => listener()); });
+        expect(onViewChange).toHaveBeenLastCalledWith(false);
+        const fits = instance.fitBounds.mock.calls.length;
+        instance.center = { lng: camera.center[0], lat: camera.center[1] };
+        const zoom = vi.spyOn(instance, 'getZoom').mockReturnValue(camera.zoom);
+        const bearing = vi.spyOn(instance, 'getBearing').mockReturnValue(camera.bearing);
+        const pitch = vi.spyOn(instance, 'getPitch').mockReturnValue(camera.pitch);
+        onViewChange.mockClear();
+        act(() => { instance.events.get('moveend')?.forEach(listener => listener()); });
+        expect(onViewChange).toHaveBeenCalledExactlyOnceWith(changed);
+        instance.center = { lng: overview.center[0], lat: overview.center[1] };
+        zoom.mockRestore(); bearing.mockRestore(); pitch.mockRestore();
+        act(() => { instance.events.get('moveend')?.forEach(listener => listener()); });
+        expect(onViewChange).toHaveBeenLastCalledWith(false);
+        expect(instance.fitBounds).toHaveBeenCalledTimes(fits);
+    });
+
+    it('recomputes the overview with current container padding after resize without fitting again', () => {
+        const onViewChange = vi.fn();
+        render(<TripAtlasMap {...props} onViewChange={onViewChange} />);
+        const instance = fake.instances[0];
+        act(() => { instance.events.get('styledata')?.forEach(listener => listener()); });
+        const target = vi.spyOn(instance, 'cameraForBounds').mockReturnValue({ center: [-122, 47], zoom: 6 });
+        const fits = instance.fitBounds.mock.calls.length;
+        Object.defineProperties(screen.getByTestId('trip-atlas-map'), { clientWidth: { value: 120 }, clientHeight: { value: 80 } });
+        onViewChange.mockClear();
+        act(() => { instance.events.get('resize')?.forEach(listener => listener()); });
+        expect(onViewChange).toHaveBeenCalledExactlyOnceWith(true);
+        expect(target).toHaveBeenLastCalledWith(expect.anything(), {
+            padding: { top: 16, right: 36, bottom: 24, left: 36 }, maxZoom: 10, bearing: 0,
+        });
+        target.mockReturnValue({ center: overview.center, zoom: overview.zoom });
+        act(() => { instance.events.get('resize')?.forEach(listener => listener()); });
+        expect(onViewChange).toHaveBeenLastCalledWith(false);
+        expect(instance.fitBounds).toHaveBeenCalledTimes(fits);
+    });
+
+    it('keeps the overview hidden during its initial animation and compares after movement ends', () => {
+        const onViewChange = vi.fn();
+        render(<TripAtlasMap {...props} onViewChange={onViewChange} />);
+        const instance = fake.instances[0];
+        const moving = vi.spyOn(instance, 'isMoving').mockReturnValue(true);
+        act(() => { instance.events.get('styledata')?.forEach(listener => listener()); });
+        expect(onViewChange).not.toHaveBeenCalled();
+        moving.mockReturnValue(false);
+        act(() => { instance.events.get('moveend')?.forEach(listener => listener()); });
+        expect(onViewChange).toHaveBeenCalledExactlyOnceWith(false);
+    });
+
+    it('waits for pending routes and accepts a failed route without refitting after a manual move', () => {
+        const onViewChange = vi.fn();
+        const pending = { ...props, entries: [entry, { ...entry, id: 'pending' }],
+            routes: { ...props.routes, pending: { route: null, error: '', retry: vi.fn() } } };
+        const { rerender } = render(<TripAtlasMap {...pending} onViewChange={onViewChange} />);
+        const instance = fake.instances[0];
+        act(() => {
+            instance.events.get('styledata')?.forEach(listener => listener());
+            instance.events.get('movestart')?.forEach(listener => listener({ originalEvent: new Event('mousedown') }));
+            instance.events.get('moveend')?.forEach(listener => listener());
+        });
+        expect(onViewChange).not.toHaveBeenCalled();
+        rerender(<TripAtlasMap {...pending} onViewChange={onViewChange}
+            routes={{ ...pending.routes, pending: { ...pending.routes.pending, error: 'Route unavailable' } }} />);
+        expect(onViewChange).toHaveBeenCalledExactlyOnceWith(false);
+        expect(instance.fitBounds).not.toHaveBeenCalled();
+    });
+
+    it.each([undefined, {}, { center: overview.center }, { zoom: overview.zoom }])(
+        'ignores an unavailable or incomplete fitted camera (%j)', target => {
+            const onViewChange = vi.fn();
+            render(<TripAtlasMap {...props} onViewChange={onViewChange} />);
+            const instance = fake.instances[0];
+            act(() => { instance.events.get('styledata')?.forEach(listener => listener()); });
+            vi.spyOn(instance, 'cameraForBounds').mockReturnValue(target);
+            onViewChange.mockClear();
+            act(() => { instance.events.get('resize')?.forEach(listener => listener()); });
+            expect(onViewChange).not.toHaveBeenCalled();
+        },
+    );
 });
 
 describe('atlas renderer lifecycle', () => {

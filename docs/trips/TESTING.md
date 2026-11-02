@@ -320,8 +320,26 @@ The browser checks cover these behaviors:
 - Map and panel controls share surface and focus styles. Map targets remain separate and at least 44 pixels wide at 320 pixels.
 - Control hints retain keyboard focus priority during scrolling and update after browser history changes.
 
+### Control layout and camera checks
+
 Layout checks use widths of 320, 767, 768, 858, 1023, 1024, and 1754 pixels.
-They test panel states, reserved map space, control overlap, and pointer targets.
+The overview suite also checks the browser project's default width.
+Each width runs independently to keep the work within the normal test timeout.
+Each case checks compact, expanded, and collapsed panels.
+It then fits the routes at that width and checks their painted bounds.
+
+The overview and short-screen suites use the same control check.
+It measures each control, map viewport, and trip panel in one browser task.
+Controls must have 44-pixel targets, stay inside the map, and clear the panel.
+Nine sample points must accept pointer input.
+A separate case covers a control corner while leaving its center usable.
+The check must reject that obstruction.
+
+The reset case combines panel changes with the full width sequence.
+It restores the initial layout and compares painted route bounds after zoom and pan resets.
+Component tests check overview visibility, camera rounding, initial animation, pending routes, and resize events.
+Resize events must update the comparison without requesting another camera fit.
+
 Short-screen checks use 667 × 375, 320 × 568, 568 × 320, and 568 × 280 viewports.
 Direct selected links must frame routes and save cameras with expanded panels in Chromium and WebKit.
 All map controls must retain complete 44-pixel targets after expansion or rotation.
@@ -332,6 +350,19 @@ Sticky tools must not obscure focused controls.
 WebKit rounds injected pointer positions to integer CSS pixels. Drag measurements allow one pixel for this rounding.
 On macOS, use Option+Tab in WebKit checks that traverse buttons or links.
 Canvas clicks must avoid the Share button and other map controls.
+
+Run these checks with:
+
+```bash
+npx vitest run src/test/tripAtlasMap.test.tsx
+PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- \
+  tests/trips/overview-controls.spec.ts tests/trips/short-viewports.spec.ts --workers=2
+```
+
+Add `--repeat-each=3` to repeat the browser checks under load.
+Keep the normal timeout. Do not add retries to hide a failure.
+
+### Trip cards and map interactions
 
 Cards use their titles for keyboard route selection and retain filled **Read trip report** links.
 The separate **Show route** action is absent from cards and tables.
@@ -356,6 +387,8 @@ Shared-road checks verify unique choices, hover priority, and keyboard or pointe
 Table border checks sample border centers at integer and half-pixel layout positions.
 Lazy-map checks end navigation scroll restoration before automated scrolling.
 Route-reset checks move the pointer away before comparing painted bounds. Hover changes the route's stroke width.
+
+### Tooltips and route measurements
 
 Atlas and story maps use the same text-only tooltip factory.
 Checks cover safe text, the colored edge, popup reuse, cleanup, and Escape dismissal.
@@ -386,6 +419,8 @@ The helper waits for container sizing and rejects captures whose bounds change d
 This prevents a panel transition from supplying old pixels with new pointer coordinates.
 Camera-restoration tests compare the documented URL precision, without relaxing zoom or selection checks.
 
+### Additional regression commands
+
 Run the content, geometry, lifecycle, and publication checks:
 
 ```bash
@@ -410,6 +445,8 @@ PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- \
   tests/trips/panel-drag.spec.ts tests/trips/panel-tools.spec.ts \
   tests/trips/columns.spec.ts tests/trips/control-tooltips.spec.ts --workers=2
 ```
+
+### Renderer recovery and publication
 
 Strict Mode must not retain a replaced renderer's default camera.
 Manual movement cancels the pending fit for the current selection.
@@ -439,6 +476,8 @@ Only the `dev` branch can select `build:dev`.
 
 Use `npm run build:dev`, then `npm run preview`, to check hosted development behavior locally.
 Hosted previews retain CDN URLs. Local Vite uses prepared local assets.
+
+### Route colors and accessibility
 
 Color checks retain assignments across filtering and route arrival order.
 Each manifest needs a unique assignment in [the color registry](../../src/features/trips/atlas/tripAtlasColors.ts).

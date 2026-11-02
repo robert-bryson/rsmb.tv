@@ -30,6 +30,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-02 | [Atlas overview timeouts, control targets, and regression coverage](reviews/2026-11-02-atlas-overview-quality-review.md) |
 | 2026-11-01 | [Pending changes, route hit tests, photo fingerprints, and coverage review](reviews/2026-11-01-pending-changes-quality-review.md) |
 | 2026-11-01 | [ADV Atlas main merge review and final regression checks](reviews/2026-11-01-atlas-main-merge-review.md) |
 | 2026-11-01 | [Atlas geography, keyboard focus, and shared-date review](reviews/2026-11-01-atlas-geography-quality-review.md) |

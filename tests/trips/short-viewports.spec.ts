@@ -1,5 +1,5 @@
-import { expect, test, type Page } from '@playwright/test';
-import { atlas, atlasCamera, mockAtlasAssets, paintedRoute } from './atlasTestHelpers';
+import { expect, test } from '@playwright/test';
+import { atlas, atlasCamera, expectAtlasMapControls, mockAtlasAssets, paintedRoute } from './atlasTestHelpers';
 
 test.beforeEach(async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -9,25 +9,6 @@ test.beforeEach(async ({ page }) => {
         Object.defineProperty(navigator, 'clipboard', { configurable: true, value: undefined });
     });
 });
-
-async function expectMapControls(page: Page) {
-    const map = (await page.getByTestId('atlas-map-viewport').boundingBox())!;
-    for (const name of ['Zoom to all trips', 'Zoom in', 'Zoom out', 'Enter fullscreen', 'Share map']) {
-        const control = page.getByRole('button', { name, exact: true });
-        const box = (await control.boundingBox())!;
-        expect(box.width, name).toBeGreaterThanOrEqual(44);
-        expect(box.height, name).toBeGreaterThanOrEqual(44);
-        expect(box.x, name).toBeGreaterThanOrEqual(map.x);
-        expect(box.y, name).toBeGreaterThanOrEqual(map.y);
-        expect(box.x + box.width, name).toBeLessThanOrEqual(map.x + map.width);
-        expect(box.y + box.height, name).toBeLessThanOrEqual(map.y + map.height);
-        expect(await control.evaluate(element => {
-            const rect = element.getBoundingClientRect();
-            return [0.1, 0.5, 0.9].every(x => [0.1, 0.5, 0.9].every(y =>
-                element.contains(document.elementFromPoint(rect.x + rect.width * x, rect.y + rect.height * y))));
-        }), `${name} must remain clickable across its target`).toBe(true);
-    }
-}
 
 for (const viewport of [
     { width: 667, height: 375 }, { width: 320, height: 568 },
@@ -48,7 +29,7 @@ for (const viewport of [
         expect(route.cssBounds[2]).toBeLessThan(map.width);
         expect(route.cssBounds[3]).toBeLessThan(map.height);
         expect(fitWarnings).toEqual([]);
-        await expectMapControls(page);
+        await expectAtlasMapControls(page);
         await page.getByRole('button', { name: 'Share map', exact: true }).click();
         await expect(page.getByRole('textbox', { name: 'Copy this map link' })).toHaveValue(page.url());
         await page.getByRole('button', { name: 'Close', exact: true }).click();
@@ -64,7 +45,7 @@ test('expanding and rotating a short phone keeps its camera and map controls usa
     await page.getByRole('button', { name: 'Expand trip panel' }).click();
     await expect(page.locator('main.atlas-explorer')).toHaveAttribute('data-panel-state', 'expanded');
     await page.setViewportSize({ width: 667, height: 375 });
-    await expectMapControls(page);
+    await expectAtlasMapControls(page);
     const after = (await atlasCamera(page))!;
     expect(after).toEqual(before);
     await page.getByRole('button', { name: 'Zoom to all trips', exact: true }).click();
@@ -103,7 +84,7 @@ test('tabbing past the column editor closes it before focus reaches map controls
     await editor.getByRole('button', { name: 'Reset columns', exact: true }).focus();
     await page.keyboard.press(browserName === 'webkit' ? 'Alt+Tab' : 'Tab');
     await expect(editor).toHaveCount(0);
-    await expectMapControls(page);
+    await expectAtlasMapControls(page);
 });
 
 test('resizing a focused column editor returns focus to its trigger', async ({ page }) => {
