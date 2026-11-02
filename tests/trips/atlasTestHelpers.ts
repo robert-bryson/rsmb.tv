@@ -2,6 +2,8 @@ import { expect, type Locator, type Page } from '@playwright/test';
 import sharp from 'sharp';
 import { tripAtlasColor } from '../../src/features/trips/atlas/tripAtlasView';
 
+type CameraSnapshot = { center: number[]; zoom: number; bearing: number; pitch: number };
+
 export const atlas = '/projects/adv-atlas/map';
 
 /** Compare browse state exactly while allowing the new shareable viewport fields. */
@@ -50,13 +52,17 @@ export async function followReport(page: Page, report: Locator) {
 }
 
 export async function atlasCamera(page: Page) {
-    return page.evaluate(() => {
-        window.dispatchEvent(new Event('pagehide'));
-        const sessions = JSON.parse(sessionStorage.getItem('rsmb:adv-atlas:sessions:v1') ?? '[]') as [string, {
-            camera?: { center: number[]; zoom: number; bearing: number; pitch: number };
-        }][];
-        return sessions.find(([key]) => key === window.history.state.key)?.[1].camera;
-    });
+    // History replacement can precede React's session listener committing the new key.
+    let camera: CameraSnapshot | undefined;
+    await expect.poll(async () => {
+        camera = await page.evaluate(() => {
+            window.dispatchEvent(new Event('pagehide'));
+            const sessions = JSON.parse(sessionStorage.getItem('rsmb:adv-atlas:sessions:v1') ?? '[]') as [string, { camera?: CameraSnapshot }][];
+            return sessions.find(([key]) => key === window.history.state.key)?.[1].camera;
+        });
+        return camera;
+    }, { message: 'The current atlas history entry has a camera snapshot' }).toBeDefined();
+    return camera!;
 }
 
 export async function paintedRoute(page: Page, id?: string, tolerance = 12, aim: 'center' | 'north' = 'center') {

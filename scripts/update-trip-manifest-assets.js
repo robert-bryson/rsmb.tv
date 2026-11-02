@@ -11,15 +11,19 @@ export function updateManifestAssets(manifest, report) {
         if (!prepared?.derivatives?.length) throw new Error(`Missing prepared photo: ${photo.id}`);
         const derivatives = [...prepared.derivatives].sort((a, b) => a.width - b.width);
         const widths = new Set();
+        let fingerprint;
         for (const image of derivatives) {
+            const match = typeof image.filename === 'string'
+                ? image.filename.match(new RegExp(`^${photo.id}-([a-f0-9]{12})-${image.width}\\.webp$`))
+                : null;
             if (!Number.isInteger(image.width) || image.width <= 0
                 || !Number.isInteger(image.height) || image.height <= 0
                 || widths.has(image.width)
-                || typeof image.filename !== 'string'
-                || !new RegExp(`^${photo.id}-[a-f0-9]{12}-${image.width}\\.webp$`).test(image.filename)) {
+                || !match || (fingerprint !== undefined && match[1] !== fingerprint)) {
                 throw new Error(`Invalid prepared derivative for photo: ${photo.id}. Prepare assets with the current pipeline before updating the manifest.`);
             }
             widths.add(image.width);
+            fingerprint = match[1];
         }
         const base = `https://data.rsmb.tv/trips/${manifest.id}/photos/`;
         const largest = derivatives.at(-1);

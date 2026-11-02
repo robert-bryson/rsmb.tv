@@ -533,6 +533,8 @@ test('map actions appear on the map and attribution starts collapsed', async ({ 
     });
     await page.route('https://demotiles.maplibre.org/**', route => route.fulfill({ body: '' }));
     await page.goto('/trips/coastal-test');
+    // End navigation restoration before automated scrolling approaches the lazy map.
+    await page.keyboard.press('ArrowDown');
     await page.locator('[data-trip-map]').first().scrollIntoViewIfNeeded();
     const map = page.locator('.maplibregl-map').first();
     const download = map.getByRole('link', { name: 'Download route (GeoJSON)' });

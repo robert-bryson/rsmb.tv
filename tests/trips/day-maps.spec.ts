@@ -188,6 +188,7 @@ test('route clicks use the same day extent as bottom buttons and toggle back to 
     if (!isMobile) await page.setViewportSize({ width: 1280, height: 1100 });
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/trips/daily-test');
+    await page.keyboard.press('ArrowDown');
     const overview = page.locator('[data-trip-map]').first();
     await overview.scrollIntoViewIfNeeded();
     const canvas = overview.locator('canvas');
@@ -213,7 +214,10 @@ test('route clicks use the same day extent as bottom buttons and toggle back to 
     const trackBounds = (await settledRoutePixels(overview)).bounds;
     expect(trackBounds).not.toEqual(originalBounds);
     await page.getByRole('heading', { name: 'First day', exact: true }).click();
+    // Heading navigation can move the route beneath the pointer while the camera resets.
+    await page.mouse.move(0, 0);
     await expect(homebound).toHaveAttribute('aria-pressed', 'false');
+    await expect(homebound).not.toHaveAttribute('data-highlighted', 'true');
     await expect.poll(async () => (await routePixels(overview)).bounds).toEqual(originalBounds);
     await homebound.click();
     await page.mouse.move(0, 0);

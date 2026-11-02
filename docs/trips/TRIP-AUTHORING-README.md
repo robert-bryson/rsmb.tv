@@ -521,6 +521,7 @@ npm run update-trip-manifest-assets -- ozarks-2012 --source "/path/to/rsmb.tv/tr
 
 Review the manifest diff. Publish the prepared assets before you deploy the manifest.
 Each derivative filename must match its photo ID and width.
+All derivatives for one photo must use the same fingerprint.
 Derivative widths must be unique. Width and height must be positive integers.
 The update command stops if these checks fail. Run preparation again instead of editing the report.
 

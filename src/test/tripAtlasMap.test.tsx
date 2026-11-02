@@ -7,7 +7,10 @@ import TripAtlasMap from '../features/trips/atlas/TripAtlasMap';
 import { tripAtlasColor } from '../features/trips/atlas/tripAtlasView';
 import { readAtlasSession, saveAtlasSession, type AtlasCamera, type AtlasSession } from '../features/trips/atlas/tripAtlasSession';
 
-type RendererListener = (event?: { originalEvent?: Event; error?: Error; sourceId?: string }) => void;
+type RendererListener = (event?: {
+    originalEvent?: Event; error?: Error; sourceId?: string;
+    point?: { x: number; y: number }; lngLat?: { lng: number; lat: number };
+}) => void;
 type InitialCamera = { center: [number, number]; zoom: number };
 
 const fake = vi.hoisted(() => ({
@@ -16,6 +19,11 @@ const fake = vi.hoisted(() => ({
         events: Map<string, RendererListener[]>;
         fitBounds: ReturnType<typeof vi.fn>;
         jumpTo: ReturnType<typeof vi.fn>;
+        once: ReturnType<typeof vi.fn>;
+        off: ReturnType<typeof vi.fn>;
+        triggerRepaint: ReturnType<typeof vi.fn>;
+        queryRenderedFeatures: ReturnType<typeof vi.fn>;
+        canvas: HTMLCanvasElement;
         isMoving: () => boolean;
         project: (point: [number, number] | { lng: number; lat: number }) => { x: number; y: number };
         center: { lng: number; lat: number };
@@ -52,6 +60,8 @@ vi.mock('maplibre-gl', () => ({
     },
     Map: class {
         events = new Map<string, RendererListener[]>();
+        triggerRepaint = vi.fn();
+        queryRenderedFeatures = vi.fn(() => []);
         fitBounds = vi.fn();
         jumpTo = vi.fn((camera: AtlasCamera) => { this.center = { lng: camera.center[0], lat: camera.center[1] }; });
         center = { lng: -121.5, lat: 46.5 };
@@ -71,8 +81,8 @@ vi.mock('maplibre-gl', () => ({
             listeners.push(listener);
             this.events.set(event, listeners);
         }
-        once() {}
-        off() {}
+        once = vi.fn();
+        off = vi.fn();
         addControl() {}
         getCanvas() { return this.canvas; }
         getContainer() { return this.container; }
@@ -112,7 +122,115 @@ const entry = {
 } satisfies TripAtlasEntry;
 const route: RouteGeoJson = { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: [[-122, 47], [-124, 45]] } };
 
+describe('atlas route hit testing', () => {
+    const pointer = { point: { x: 100, y: 100 }, lngLat: { lng: -122, lat: 47 } };
+
+    it('ignores removed routes while the renderer still returns their old features', () => {
+        const onSelect = vi.fn();
+        const onHover = vi.fn();
+        const props = { entries: [entry], routes: { coast: { route, error: '', retry: vi.fn() } },
+            fitVersion: 0, panelOpen: true, onSelect, onHover, onCameraChange: vi.fn() };
+        const { rerender } = render(<TripAtlasMap {...props} />);
+        const instance = fake.instances[0];
+        instance.queryRenderedFeatures.mockReturnValue([{ properties: { tripId: 'coast' } }]);
+        act(() => { instance.events.get('click')?.forEach(listener => listener(pointer)); });
+        expect(onSelect).toHaveBeenCalledWith('coast');
+
+        rerender(<TripAtlasMap {...props} entries={[]} routes={{}} />);
+        onSelect.mockClear();
+        onHover.mockClear();
+        act(() => {
+            instance.events.get('mousemove')?.forEach(listener => listener(pointer));
+            instance.events.get('click')?.forEach(listener => listener(pointer));
+        });
+        expect(onSelect).toHaveBeenCalledExactlyOnceWith(undefined);
+        expect(onHover).toHaveBeenCalledWith(undefined);
+        expect(instance.canvas.style.cursor).toBe('');
+        expect(screen.queryByRole('group', { name: 'Trips sharing this road' })).not.toBeInTheDocument();
+    });
+
+    it('deduplicates current routes and rejects unknown, malformed, and unavailable rendered features', () => {
+        const onSelect = vi.fn();
+        render(<TripAtlasMap entries={[entry, { ...entry, id: 'loading' }]}
+            routes={{ coast: { route, error: '', retry: vi.fn() }, loading: { route: null, error: '', retry: vi.fn() } }}
+            fitVersion={0} panelOpen onSelect={onSelect} onHover={vi.fn()} onCameraChange={vi.fn()} />);
+        const instance = fake.instances[0];
+        instance.queryRenderedFeatures.mockReturnValue([
+            { properties: { tripId: 'excluded' } }, { properties: { tripId: 'loading' } },
+            { properties: { tripId: 42 } }, { properties: null },
+            { properties: { tripId: 'coast' } }, { properties: { tripId: 'coast' } },
+        ]);
+        act(() => { instance.events.get('click')?.forEach(listener => listener(pointer)); });
+        expect(onSelect).toHaveBeenCalledExactlyOnceWith('coast');
+        expect(screen.queryByRole('group', { name: 'Trips sharing this road' })).not.toBeInTheDocument();
+    });
+
+    it.each([
+        ['keyboard', 0, true], ['pointer', 1, false],
+    ] as const)('previews current shared routes and preserves %s selection intent', (_name, detail, focusCard) => {
+        const onSelect = vi.fn();
+        const onHover = vi.fn();
+        render(<TripAtlasMap entries={[entry, { ...entry, id: 'inland', title: 'Inland' }]}
+            routes={{ coast: { route, error: '', retry: vi.fn() }, inland: { route, error: '', retry: vi.fn() } }}
+            selectedId="inland" fitVersion={0} panelOpen onSelect={onSelect} onHover={onHover} onCameraChange={vi.fn()} />);
+        const instance = fake.instances[0];
+        instance.queryRenderedFeatures.mockReturnValue(['coast', 'inland', 'coast', 'excluded'].map(tripId => ({ properties: { tripId } })));
+        act(() => {
+            instance.events.get('mousemove')?.forEach(listener => listener(pointer));
+            instance.events.get('click')?.forEach(listener => listener(pointer));
+        });
+        expect(onHover).toHaveBeenLastCalledWith('inland');
+        expect(instance.canvas.style.cursor).toBe('pointer');
+        expect(screen.getByRole('group', { name: 'Trips sharing this road' })).toBeVisible();
+        expect(screen.queryByRole('button', { name: 'excluded' })).not.toBeInTheDocument();
+        const inland = screen.getByRole('button', { name: 'Inland' });
+        const coast = screen.getByRole('button', { name: 'Coast' });
+        fireEvent.focus(inland);
+        fireEvent.pointerEnter(coast, { pointerType: 'mouse' });
+        expect(onHover).toHaveBeenLastCalledWith('coast');
+        fireEvent.pointerLeave(coast);
+        expect(onHover).toHaveBeenLastCalledWith('inland');
+        fireEvent.click(inland, { detail });
+        expect(onSelect).toHaveBeenCalledExactlyOnceWith('inland', { focusCard });
+        expect(onHover).toHaveBeenLastCalledWith(undefined);
+        expect(screen.queryByRole('group', { name: 'Trips sharing this road' })).not.toBeInTheDocument();
+    });
+});
+
 describe('atlas renderer lifecycle', () => {
+    it.each([
+        ['camera movement', 'moveend', undefined],
+        ['style changes', 'styledata', undefined],
+        ['route updates', 'sourcedata', 'atlas-routes'],
+        ['day-break updates', 'sourcedata', 'atlas-day-breaks'],
+    ] as const)('coalesces final paints after %s and cancels them on removal', async (_name, type, sourceId) => {
+        const { Evented } = await vi.importActual<typeof import('maplibre-gl')>('maplibre-gl');
+        const events = new class extends Evented {}();
+        const { unmount } = render(<TripAtlasMap entries={[entry]} routes={{}} fitVersion={0} panelOpen
+            onSelect={vi.fn()} onHover={vi.fn()} onCameraChange={vi.fn()} />);
+        const instance = fake.instances[0];
+        for (const [eventType, listeners] of instance.events) {
+            for (const listener of listeners) events.on(eventType, event => listener({
+                sourceId: 'sourceId' in event && typeof event.sourceId === 'string' ? event.sourceId : undefined,
+            }));
+        }
+        instance.once.mockImplementation((type, listener) => events.once(type, listener));
+        instance.off.mockImplementation((type, listener) => events.off(type, listener));
+        act(() => { events.fire('sourcedata', { sourceId: 'basemap' }); events.fire('render'); });
+        expect(instance.triggerRepaint).not.toHaveBeenCalled();
+        act(() => { events.fire(type, { sourceId }); events.fire(type, { sourceId }); });
+        expect(instance.triggerRepaint).not.toHaveBeenCalled();
+        act(() => { events.fire('render'); });
+        expect(instance.triggerRepaint).toHaveBeenCalledOnce();
+        act(() => { events.fire('render'); });
+        expect(instance.triggerRepaint).toHaveBeenCalledOnce();
+        act(() => { events.fire(type, { sourceId }); });
+        unmount();
+        expect(instance.off).toHaveBeenCalledWith('render', expect.any(Function));
+        act(() => { events.fire('render'); events.fire(type, { sourceId }); events.fire('render'); });
+        expect(instance.triggerRepaint).toHaveBeenCalledOnce();
+    });
+
     it('fits a requested geographic region without waiting for routes or fitting again when they arrive', () => {
         const props = { entries: [entry], routes: {}, fitVersion: 1, fitRequest: { bounds: [-125, 45, -116, 49] as [number, number, number, number] },
             panelOpen: true, onSelect: vi.fn(), onHover: vi.fn(), onCameraChange: vi.fn() };

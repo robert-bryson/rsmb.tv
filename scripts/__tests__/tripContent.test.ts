@@ -379,4 +379,14 @@ describe('trip publication contracts', () => {
             { id: photo.id, derivatives: [derivative, derivative] },
         ] })).toThrow(/Invalid prepared derivative/);
     });
+
+    it('rejects derivatives from different source revisions before creating a srcset', () => {
+        const report = { tripId: manifest.id, photos: manifest.photos.map(photo => (
+            { id: photo.id, derivatives: [
+                { filename: `${photo.id}-012345abcdef-480.webp`, width: 480, height: 300 },
+                { filename: `${photo.id}-abcdef012345-1600.webp`, width: 1600, height: 1000 },
+            ] }
+        )) };
+        expect(() => updateManifestAssets(manifest, report)).toThrow(/Invalid prepared derivative/);
+    });
 });

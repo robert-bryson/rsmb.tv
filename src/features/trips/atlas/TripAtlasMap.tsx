@@ -302,8 +302,12 @@ export default function TripAtlasMap(props: Props) {
         const candidates = (point: maplibregl.Point, radius: number) => {
             if (!instance.getLayer('atlas-routes')) return [];
             const bounds: [maplibregl.PointLike, maplibregl.PointLike] = [[point.x - radius, point.y - radius], [point.x + radius, point.y + radius]];
+            const current = getCurrent();
+            const available = new Set(current.entries.filter(entry => current.routes[entry.id]?.route).map(entry => entry.id));
+            // Worker source updates are asynchronous. Old rendered features must not bypass active filters.
             return [...new Set(instance.queryRenderedFeatures(bounds, { layers: ['atlas-routes'] })
-                .map(feature => feature.properties?.tripId as string | undefined).filter((id): id is string => Boolean(id)))];
+                .map(feature => feature.properties?.tripId)
+                .filter((id): id is string => typeof id === 'string' && available.has(id)))];
         };
         instance.on('click', event => {
             if (disposed) return;
@@ -338,7 +342,7 @@ export default function TripAtlasMap(props: Props) {
                 hover(undefined);
             }
         });
-        // Raster tiles must not hold up route paints on Linux WebKit.
+        // Linux WebKit can retain stale pixels after layer changes or an instant camera move.
         let repaintPending = false;
         const repaint = () => { repaintPending = false; if (!disposed) instance.triggerRepaint(); };
         const queueRepaint = () => {
@@ -348,6 +352,7 @@ export default function TripAtlasMap(props: Props) {
         };
         instance.on('styledata', queueRepaint);
         instance.on('sourcedata', event => { if (event.sourceId === 'atlas-routes' || event.sourceId === 'atlas-day-breaks') queueRepaint(); });
+        instance.on('moveend', queueRepaint);
 
         return () => {
             saveCamera();

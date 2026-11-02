@@ -347,6 +347,15 @@ Report-return checks capture list scroll at link activation, after any browser s
 They compare the restored position exactly. Measuring before activation can capture a different position.
 Fresh-visit checks wait for the initial fit before measuring painted routes.
 Fit padding reserves fixed control space. Delayed tiles and attribution must not change the framing.
+Camera snapshot checks wait for the saved session to match the current history key after URL replacement.
+Atlas maps request one final frame after camera movement to refresh instant pans in Linux WebKit.
+The repaint unit check uses MapLibre's event dispatcher to verify coalescing and cleanup.
+It covers camera movement, style changes, route updates, and day-break updates. Basemap updates must not request this extra paint.
+Hit-testing checks reject excluded or unavailable routes while the renderer still returns their old features.
+Shared-road checks verify unique choices, hover priority, and keyboard or pointer selection.
+Table border checks sample border centers at integer and half-pixel layout positions.
+Lazy-map checks end navigation scroll restoration before automated scrolling.
+Route-reset checks move the pointer away before comparing painted bounds. Hover changes the route's stroke width.
 
 Atlas and story maps use the same text-only tooltip factory.
 Checks cover safe text, the colored edge, popup reuse, cleanup, and Escape dismissal.

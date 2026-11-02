@@ -68,12 +68,18 @@ describe('tracked trip content', () => {
         expect(new Set(colors).size, 'Atlas trips must have distinct explicit colors').toBe(colors.length);
     });
 
-    it('places each PCH photo once in a matching day gallery or an explicit inline placement', () => {
+    it('places each PCH photo once in a pre-trip gallery, matching day gallery, or explicit inline placement', () => {
         const manifest = tripManifestSchema.parse(pch);
         expect(manifest.days!.map(day => day.date)).toEqual([
             '2024-10-03', '2024-10-04', '2024-10-05', '2024-10-06', '2024-10-07',
         ]);
         const photos = new Map(manifest.photos.map(photo => [photo.id, photo]));
+        const preTrip = manifest.galleries!['pre-trip'];
+        expect(preTrip.length).toBeGreaterThan(0);
+        for (const id of preTrip) {
+            expect(photos.get(id)?.date, id).toBeDefined();
+            expect(photos.get(id)!.date! < manifest.dates.start, id).toBe(true);
+        }
         const assigned = manifest.days!.flatMap(day => {
             const ids = manifest.galleries![day.galleryId!];
             for (const id of ids) expect(photos.get(id)?.date, id).toBe(day.date);
@@ -84,10 +90,27 @@ describe('tracked trip content', () => {
         expect(assigned).not.toContain(inlinePhotoId);
         const post = { format: 'trip', tripId: manifest.id };
         expect(expandTripShortcodes(`{{trip-photo:${inlinePhotoId}}}`, post, manifest)).toBe(`<TripPhoto photoId="${inlinePhotoId}" />`);
-        const placements = [...assigned, inlinePhotoId];
+        const placements = [...preTrip, ...assigned, inlinePhotoId];
         expect(placements.length).toBe(photos.size);
         expect(new Set(placements)).toEqual(new Set(photos.keys()));
         expect(manifest.galleries!['day-two'].at(-1)).toBe('20241004-183101');
+    });
+
+    it('connects the latest PCH import evidence to the selected files and authored capture dates', () => {
+        const source = inventory.trips.find(trip => trip.id === pch.id)!;
+        const latest = source.photos.latestImport!;
+        expect(latest.photos).not.toHaveLength(0);
+        expect(new Set(latest.photos.map(photo => photo.id)).size).toBe(latest.photos.length);
+        for (const photo of latest.photos) {
+            expect(source.photos.originals, photo.id).toContain(photo.filename);
+            expect(source.photos.selects, photo.id).toContain(photo.filename);
+            expect(photo.sha256, photo.id).toMatch(/^[a-f0-9]{64}$/);
+            expect(photo.dateTimeOriginal, photo.id).toMatch(/^\d{4}:\d{2}:\d{2} \d{2}:\d{2}:\d{2}$/);
+            expect(pch.photos.find(candidate => candidate.id === photo.id)?.date, photo.id)
+                .toBe(photo.dateTimeOriginal.slice(0, 10).replaceAll(':', '-'));
+            const placements = latest.galleries.flatMap(id => pch.galleries[id as keyof typeof pch.galleries]);
+            expect(placements.filter(id => id === photo.id), photo.id).toHaveLength(1);
+        }
     });
 
     it.each([pch, route66, river, summer])('uses matching fingerprints and widths for every responsive photo in $id', trip => {

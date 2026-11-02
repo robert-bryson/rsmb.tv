@@ -1,6 +1,7 @@
 # Trip source inventory and starter structure
 
 Inventory snapshot: October 31, 2026.
+PCH photo additions were checked on November 1, 2026. Other source entries retain the October 31 review.
 The source review used the live `Blog Posts` Sheet and the locally synced source folders.
 This file records that snapshot. It does not update when source files or Sheet rows change.
 The Sheet contains nine trip report rows covering seven distinct trips.
@@ -20,7 +21,7 @@ The dates below come from existing manifests or recovered recordings. Sheet date
 | [Ocean Shores](../../src/content/trips/ocean-shores-2024.json) | February 17–20, 2024 | 2 | 10 | Existing story: ferry departure, beach stay, rainy return |
 | [Boise](../../src/content/trips/boise-2024.json) | May 11–19, 2024 | 6 | 79 | Existing story: Blue Mountains, work in Boise, Hells Canyon, return through the Cascades |
 | [Kalaloch](../../src/content/trips/kalaloch-2024.json) | June 21–23, 2024 | 3 | 25 | Existing story: ferry and forest roads, beach camp, peninsula loop |
-| [PCH](../../src/content/trips/pch-2024.json) | October 3–7, 2024 | 5 | 99 | Existing five-day outline: coast, redwoods, Sierra crossing, desert |
+| [PCH](../../src/content/trips/pch-2024.json) | October 3–7, 2024 | 5 | 107 | Pre-trip Seattle gallery and five riding days: coast, redwoods, Sierra crossing, desert |
 | [Route 66ish](route-66ish-2025-outline.md) | May 9–19, 2025; GPS through May 17 | 8 | 57 | Existing dated outline: California and Arizona, New Mexico, plains, Ozarks, St. Louis |
 | [Mississippi–Wisconsin](river-wisco-2025-outline.md) | October 7–13, 2025, inferred | 8 | 26 | New seven-day outline: river towns, camp, Wisconsin visits, Madison, Illinois return |
 | [ON–QC–New England](on-qc-new-england-2026-part-1-outline.md) | July 10–August 15, 2026, inferred | 35 | 1 | Three-part outline: Upper Peninsula, Canada, New England and return |

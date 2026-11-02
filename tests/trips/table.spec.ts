@@ -19,13 +19,15 @@ test('clicking table row content selects and fits that trip', async ({ page }) =
     await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
 });
 
-test('row highlighting includes the sticky first cell and the far edge after scrolling', async ({ page }) => {
+for (const offset of [0, 0.5]) test(`row highlighting includes the sticky first cell and the far edge after scrolling (offset ${offset}px)`, async ({ page }) => {
     await page.goto(`${atlas}?panel=expanded&results=table`);
     await expect(page.getByText('2/2 routes')).toBeVisible();
     const region = page.getByRole('region', { name: 'Trip comparison table' });
     const row = region.locator('[data-trip-id="coastal-test"]');
     await row.getByRole('button', { name: 'Coastal test trip' }).evaluate(element => (element as HTMLElement).focus({ preventScroll: true }));
     await expect(row).toHaveAttribute('data-highlighted', 'true');
+    // Fractional layout positions must sample inside the two-pixel borders.
+    await region.evaluate((element, offset) => { element.style.transform = `translateY(${offset}px)`; }, offset);
     const expected = tripAtlasColor('coastal-test').slice(1).match(/../g)!.map(hex => parseInt(hex, 16));
     const edges = async (last = false) => {
         const viewport = (await region.boundingBox())!;
@@ -33,7 +35,7 @@ test('row highlighting includes the sticky first cell and the far edge after scr
         const { data, info } = await sharp(await region.screenshot({ scale: 'css' })).removeAlpha().raw().toBuffer({ resolveWithObject: true });
         const points = last ? [[cell.x + cell.width - 1, cell.y + cell.height / 2]] : [
             [cell.x + cell.width / 2, cell.y + 1],
-            [cell.x + cell.width / 2, cell.y + cell.height - 2],
+            [cell.x + cell.width / 2, cell.y + cell.height - 1],
             [cell.x + 1, cell.y + cell.height / 2],
         ];
         for (const [x, y] of points) {

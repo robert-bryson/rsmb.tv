@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "checkedOn": "2026-10-31",
+  "checkedOn": "2026-11-01",
   "sheet": {
     "url": "https://docs.google.com/spreadsheets/d/1veNLJMfE21Px0JEVUoV9ClLJaDATy1DkpoWFruCPjMI/edit",
     "tab": "Blog Posts",
@@ -19,7 +19,8 @@
     "Recorded distances include all retained track geometry. They do not establish complete motorcycle mileage or riding-day counts.",
     "Original archives are preserved. Full recovery provenance and source SHA-256 hashes are stored in each recovered trip source-inventory.json.",
     "Prepared CDN paths are intended destinations. No new public upload or Sheet publication changes were made.",
-    "Boise has three intentionally excluded duplicate photo IDs. Do not re-add them from selects."
+    "Boise has three intentionally excluded duplicate photo IDs. Do not re-add them from selects.",
+    "The November 1 update checked PCH photo additions only. Other trip source entries retain the October 31 review."
   ],
   "trips": [
     {
@@ -575,6 +576,7 @@
       "photos": {
         "originals": [
           "20241003_150610.jpg",
+          "20241003_215851.jpg",
           "20241004_183101.jpg",
           "20241005_100257.jpg",
           "20241005_102036.jpg",
@@ -585,9 +587,15 @@
           "20241006_163841.jpg",
           "20241006_173636.jpg",
           "20241006_185625.jpg",
+          "DSCF9076.JPG",
+          "DSCF9080.JPG",
+          "DSCF9083.JPG",
+          "DSCF9086.JPG",
           "DSCF9091.JPG",
           "DSCF9094.JPG",
+          "DSCF9095.JPG",
           "DSCF9097.JPG",
+          "DSCF9099.JPG",
           "DSCF9104.JPG",
           "DSCF9110.JPG",
           "DSCF9114.JPG",
@@ -657,6 +665,7 @@
           "DSCF9346.JPG",
           "_R003200.JPG",
           "_R003202.JPG",
+          "_R003203.JPG",
           "_R003205.JPG",
           "_R003207.JPG",
           "_R003211.JPG",
@@ -676,6 +685,7 @@
         ],
         "selects": [
           "20241003_150610.jpg",
+          "20241003_215851.jpg",
           "20241004_183101.jpg",
           "20241005_100257.jpg",
           "20241005_102036.jpg",
@@ -686,9 +696,15 @@
           "20241006_163841.jpg",
           "20241006_173636.jpg",
           "20241006_185625.jpg",
+          "DSCF9076.JPG",
+          "DSCF9080.JPG",
+          "DSCF9083.JPG",
+          "DSCF9086.JPG",
           "DSCF9091.JPG",
           "DSCF9094.JPG",
+          "DSCF9095.JPG",
           "DSCF9097.JPG",
+          "DSCF9099.JPG",
           "DSCF9104.JPG",
           "DSCF9110.JPG",
           "DSCF9114.JPG",
@@ -758,6 +774,7 @@
           "DSCF9346.JPG",
           "_R003200.JPG",
           "_R003202.JPG",
+          "_R003203.JPG",
           "_R003205.JPG",
           "_R003207.JPG",
           "_R003211.JPG",
@@ -776,10 +793,77 @@
           "_R003267.JPG"
         ],
         "otherSourceFolders": [],
-        "manifestCount": 99,
-        "preparedCount": 99,
-        "preparedDerivativeCount": 307,
-        "preparedButNotInManifest": []
+        "manifestCount": 107,
+        "preparedCount": 107,
+        "preparedDerivativeCount": 331,
+        "preparedButNotInManifest": [],
+        "latestImport": {
+          "importedOn": "2026-11-01",
+          "source": "Downloads",
+          "photos": [
+            {
+              "filename": "DSCF9076.JPG",
+              "id": "dscf9076",
+              "sha256": "3a6a098b0852e3bf3c5b551a341e735b8823817b0694c303ccb17146c287b528",
+              "dateTimeOriginal": "2024:10:01 15:14:01",
+              "offsetTimeOriginal": "-07:00"
+            },
+            {
+              "filename": "DSCF9080.JPG",
+              "id": "dscf9080",
+              "sha256": "29876ec0b43a05a29dd3136fb34b27ac109b834c314d602dae99e6cbb14ab0b3",
+              "dateTimeOriginal": "2024:10:01 15:22:12",
+              "offsetTimeOriginal": "-07:00"
+            },
+            {
+              "filename": "DSCF9083.JPG",
+              "id": "dscf9083",
+              "sha256": "b1d8a836d8146a9746c02ba3861bf9b1f12eec76a3cd4f3000b9d6e507427ee9",
+              "dateTimeOriginal": "2024:10:01 17:25:12",
+              "offsetTimeOriginal": "-07:00"
+            },
+            {
+              "filename": "DSCF9086.JPG",
+              "id": "dscf9086",
+              "sha256": "0970a4648920944187e8315470a3b1a85978c54c67a3b986b399eee6186999df",
+              "dateTimeOriginal": "2024:10:01 20:20:31",
+              "offsetTimeOriginal": "-07:00"
+            },
+            {
+              "filename": "DSCF9095.JPG",
+              "id": "dscf9095",
+              "sha256": "3adfa2ec7ef9ec031c817a87e72682f90887a78fe2465150519ebf8e620e7ad2",
+              "dateTimeOriginal": "2024:10:03 21:35:03",
+              "offsetTimeOriginal": "-07:00"
+            },
+            {
+              "filename": "DSCF9099.JPG",
+              "id": "dscf9099",
+              "sha256": "b7c23e9d1d40ef12c68ac8f99c79a30680034570f2b959bceb0e2bf5362f0864",
+              "dateTimeOriginal": "2024:10:03 22:33:35",
+              "offsetTimeOriginal": "-07:00"
+            },
+            {
+              "filename": "20241003_215851.jpg",
+              "id": "20241003-215851",
+              "sha256": "df4659520267938ae6dff84f4bef4e49fef46cf0e6c438331ce04d8f87d735df",
+              "dateTimeOriginal": "2024:10:03 21:58:51",
+              "offsetTimeOriginal": "-07:00"
+            },
+            {
+              "filename": "_R003203.JPG",
+              "id": "r003203",
+              "sha256": "3204d6e7f59b4bc0d1d417e459b26817cdba1e6d9b47f80433725d7aad67e782",
+              "dateTimeOriginal": "2024:10:04 17:24:13",
+              "offsetTimeOriginal": null
+            }
+          ],
+          "galleries": [
+            "pre-trip",
+            "day-one",
+            "day-two"
+          ]
+        }
       },
       "gps": {
         "originals": [

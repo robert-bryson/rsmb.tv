@@ -104,6 +104,7 @@ Cards, table rows, map geometry, tooltips, and shared-road choices use the same 
 Counts refer to trips, including journeys with several reports.
 Route failures remain results with report links and independent retries.
 A late route response cannot add an excluded trip to the map.
+Route hit tests also reject excluded or unavailable routes while the renderer processes a source update.
 
 Applied filters have removal buttons and a **Clear filters** action.
 Clearing filters also clears selected-only. It retains selection, sort, presentation, and camera.

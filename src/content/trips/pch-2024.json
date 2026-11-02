@@ -52,6 +52,44 @@
     "stops": [],
     "photos": [
         {
+            "id": "dscf9076",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9076-7ade5d30cd5e-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A lake framed by evergreen trees, with a distant skyline and mountains beneath an overcast sky.",
+            "date": "2024-10-01",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9076-7ade5d30cd5e-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9076-7ade5d30cd5e-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9076-7ade5d30cd5e-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9080",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9080-ce451537ce0e-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Red autumn leaves on trees beside a parking area, with fallen leaves covering the ground.",
+            "date": "2024-10-01",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9080-ce451537ce0e-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9080-ce451537ce0e-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9080-ce451537ce0e-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9083",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9083-2c94735a1876-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A red pavilion and hanging lanterns above a brick plaza with tables, game boards, and trees.",
+            "caption": "Seattle before departure.",
+            "date": "2024-10-01",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9083-2c94735a1876-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9083-2c94735a1876-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9083-2c94735a1876-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9086",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9086-464fc30fe508-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A restaurant beneath a red awning, with colorful window murals and a streetlit tree at night.",
+            "caption": "Jade Garden, Seattle.",
+            "date": "2024-10-01",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9086-464fc30fe508-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9086-464fc30fe508-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9086-464fc30fe508-1600.webp 1600w"
+        },
+        {
             "id": "20241003-150610",
             "src": "https://data.rsmb.tv/trips/pch-2024/photos/20241003-150610-34c3b4f24ccc-1600.webp",
             "width": 1600,
@@ -81,6 +119,26 @@
             "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9094-5119c987b68c-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9094-5119c987b68c-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9094-5119c987b68c-1600.webp 1600w"
         },
         {
+            "id": "dscf9095",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9095-27f6871ed9be-1600.webp",
+            "width": 1600,
+            "height": 2400,
+            "alt": "Glowing hotel and theater signs above a brick building and parked cars along a dark sidewalk.",
+            "caption": "The Olympic Club, Centralia.",
+            "date": "2024-10-03",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9095-27f6871ed9be-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9095-27f6871ed9be-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9095-27f6871ed9be-1600.webp 1600w"
+        },
+        {
+            "id": "20241003-215851",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/20241003-215851-3e06cf0b81b1-1600.webp",
+            "width": 1600,
+            "height": 2133,
+            "alt": "Stained-glass lamps above a wooden bar, with bottles and rows of glasses behind the counter.",
+            "caption": "At the Olympic Club bar.",
+            "date": "2024-10-03",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/20241003-215851-3e06cf0b81b1-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/20241003-215851-3e06cf0b81b1-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/20241003-215851-3e06cf0b81b1-1600.webp 1600w"
+        },
+        {
             "id": "dscf9097",
             "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9097-0c770fba9b8d-1600.webp",
             "width": 1600,
@@ -89,6 +147,16 @@
             "caption": "Inside the Olympic Club.",
             "date": "2024-10-03",
             "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9097-0c770fba9b8d-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9097-0c770fba9b8d-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9097-0c770fba9b8d-1600.webp 1600w"
+        },
+        {
+            "id": "dscf9099",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9099-a9a50c1eca3c-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A streetlight with a Centralia banner above a sidewalk lined with trees, illuminated storefronts, and parked vehicles.",
+            "caption": "A nighttime walk through downtown Centralia.",
+            "date": "2024-10-03",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9099-a9a50c1eca3c-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9099-a9a50c1eca3c-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/dscf9099-a9a50c1eca3c-1600.webp 1600w"
         },
         {
             "id": "r003200",
@@ -107,6 +175,15 @@
             "alt": "A red-and-cream roadside restaurant beneath a gray sky.",
             "date": "2024-10-04",
             "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/r003202-b70f51380b70-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/r003202-b70f51380b70-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/r003202-b70f51380b70-1600.webp 1600w"
+        },
+        {
+            "id": "r003203",
+            "src": "https://data.rsmb.tv/trips/pch-2024/photos/r003203-610dbacd1aef-1600.webp",
+            "width": 1600,
+            "height": 1067,
+            "alt": "Cars traveling along a two-lane road bordered by tall evergreen trees and a paved sidewalk.",
+            "date": "2024-10-04",
+            "srcSet": "https://data.rsmb.tv/trips/pch-2024/photos/r003203-610dbacd1aef-480.webp 480w, https://data.rsmb.tv/trips/pch-2024/photos/r003203-610dbacd1aef-960.webp 960w, https://data.rsmb.tv/trips/pch-2024/photos/r003203-610dbacd1aef-1600.webp 1600w"
         },
         {
             "id": "20241004-183101",
@@ -1013,14 +1090,24 @@
         }
     ],
     "galleries": {
+        "pre-trip": [
+            "dscf9076",
+            "dscf9080",
+            "dscf9083",
+            "dscf9086"
+        ],
         "day-one": [
             "dscf9091",
             "dscf9094",
-            "dscf9097"
+            "dscf9095",
+            "20241003-215851",
+            "dscf9097",
+            "dscf9099"
         ],
         "day-two": [
             "r003200",
             "r003202",
+            "r003203",
             "r003205",
             "r003207",
             "r003211",

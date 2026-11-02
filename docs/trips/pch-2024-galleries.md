@@ -1,6 +1,6 @@
 # PCH 2024 starter galleries
 
-The [manifest](../../src/content/trips/pch-2024.json) contains 99 photos and 23 galleries.
+The [manifest](../../src/content/trips/pch-2024.json) contains 107 photos and 24 galleries.
 The hero is `dscf9177`: the motorcycle above the Mendocino coast.
 Each day uses its matching full-day gallery through `days[].galleryId`.
 
@@ -33,8 +33,9 @@ Day assignments do not insert galleries automatically.
 
 | Shortcode | Photos | Suggested placement |
 | --- | ---: | --- |
-| `{{trip-gallery:day-one}}` | 3 | October 3 — Seattle to Centralia |
-| `{{trip-gallery:day-two}}` | 12 | October 4 — Centralia to Reedsport |
+| `{{trip-gallery:pre-trip}}` | 4 | October 1 — Seattle before departure |
+| `{{trip-gallery:day-one}}` | 6 | October 3 — Seattle to Centralia |
+| `{{trip-gallery:day-two}}` | 13 | October 4 — Centralia to Reedsport |
 | `{{trip-gallery:day-three}}` | 34 | October 5 — Reedsport to Fort Bragg |
 | `{{trip-gallery:day-four}}` | 42 | October 6 — Fort Bragg to Bridgeport |
 | `{{trip-gallery:day-five}}` | 7 | October 7 — Bridgeport to northern San Diego County |
@@ -63,7 +64,11 @@ Remove unused definitions after you finish the story's media placements.
 
 The report places `{{trip-photo:20241003-150610}}` separately in the October 3 text.
 Keep this photo in the manifest. Exclude it from `day-one` to prevent a repeated photo.
-The full-day galleries contain 98 photos. The inline placement supplies the remaining selected photo.
+The full-day galleries contain 102 photos. The inline placement supplies the remaining trip-day photo.
+The separate `pre-trip` gallery contains four October 1 photos.
+Place `{{trip-gallery:pre-trip}}` in the preparation section, before the October 3 chapter.
+For an inline forest-road photo, place `{{trip-photo:r003203}}` between the restaurant and coastal overlooks.
+If you use this placement, omit that photo from other galleries in the same story.
 
 The outline uses the lunch, harbor, and beach galleries in place of `southern-oregon-coast`.
 It places all six panorama exports separately.
@@ -84,7 +89,9 @@ Use these photo shortcodes for panoramas across the full page width:
 
 ## Dates and order
 
-Photo dates cover October 3–7, 2024.
+Photo dates cover October 1–7, 2024.
+The four October 1 photos belong only to `pre-trip`.
+The riding dates remain October 3–7, 2024.
 The photo inventory follows recorded camera times.
 The October 4 gallery puts the coast and lake stops before the motel arrival.
 This order follows the GPS route.
