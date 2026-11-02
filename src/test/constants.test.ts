@@ -101,10 +101,11 @@ describe('BASEMAPS', () => {
         expect(new Set(ids).size).toBe(ids.length);
     });
 
-    it('uses only local image paths (no external URLs)', () => {
+    it('keeps texture images local and declares tiled basemap styles', () => {
         for (const basemap of BASEMAPS) {
             expect(basemap.image).not.toMatch(/^https?:\/\//);
-            expect(basemap.image).toContain('basemaps/');
+            if (!basemap.tiles) expect(basemap.image).toContain('basemaps/');
+            else expect(basemap.image).toBe('');
             if (basemap.bump) {
                 expect(basemap.bump).not.toMatch(/^https?:\/\//);
                 expect(basemap.bump).toContain('basemaps/');
@@ -122,7 +123,7 @@ describe('BASEMAPS', () => {
         for (const basemap of BASEMAPS) {
             expect(basemap.id).toBeTruthy();
             expect(basemap.label).toBeTruthy();
-            expect(basemap.image).toBeTruthy();
+            expect(basemap.image || basemap.tiles).toBeTruthy();
             expect(typeof basemap.atmosphere).toBe('string');
             expect(typeof basemap.bg).toBe('string');
         }

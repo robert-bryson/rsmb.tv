@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { summarizeFlightDurations } from '../utils/flightDuration';
 import type {
     USStatesCollection,
     USStateStats,
@@ -6,6 +7,7 @@ import type {
     StateSymbolMode,
     AllAirportsCollection,
     FlightsCollection,
+    FlightProperties,
 } from '../types';
 import {
     STATE_VISITED_COLOR,
@@ -69,81 +71,47 @@ export function useUSStateStats(
         // Process flights to compute visited airports and flight counts
         if (flightsData) {
             const visitedAirportsByState = new Map<string, Set<string>>();
-            const flightDatesByState = new Map<string, Date[]>();
-            const airlinesByState = new Map<string, Set<string>>();
+            const flightsByState = new Map<string, FlightProperties[]>();
 
-            flightsData.features.forEach((flight) => {
-                const props = flight.properties;
-                const flightDate = parseDateString(props.date);
-
-                // Process origin
-                const originState = props.origin_region; // e.g., "US-CA"
-                if (stats.has(originState)) {
-                    const state = stats.get(originState)!;
-                    state.flightCount++;
-
-                    if (!visitedAirportsByState.has(originState)) {
-                        visitedAirportsByState.set(originState, new Set());
-                    }
-                    visitedAirportsByState.get(originState)!.add(props.origin_code);
-
-                    if (!flightDatesByState.has(originState)) {
-                        flightDatesByState.set(originState, []);
-                    }
-                    flightDatesByState.get(originState)!.push(flightDate);
-
-                    if (!airlinesByState.has(originState)) {
-                        airlinesByState.set(originState, new Set());
-                    }
-                    if (props.airline) {
-                        airlinesByState.get(originState)!.add(props.airline);
-                    }
+            for (const { properties: flight } of flightsData.features) {
+                const endpoints = [
+                    [flight.origin_region, flight.origin_code],
+                    [flight.destination_region, flight.destination_code],
+                ] as const;
+                for (const [stateCode, airportCode] of endpoints) {
+                    if (!stats.has(stateCode)) continue;
+                    const visited = visitedAirportsByState.get(stateCode) ?? new Set<string>();
+                    visited.add(airportCode);
+                    visitedAirportsByState.set(stateCode, visited);
                 }
-
-                // Process destination
-                const destState = props.destination_region;
-                if (stats.has(destState)) {
-                    const state = stats.get(destState)!;
-                    state.flightCount++;
-
-                    if (!visitedAirportsByState.has(destState)) {
-                        visitedAirportsByState.set(destState, new Set());
-                    }
-                    visitedAirportsByState.get(destState)!.add(props.destination_code);
-
-                    if (!flightDatesByState.has(destState)) {
-                        flightDatesByState.set(destState, []);
-                    }
-                    flightDatesByState.get(destState)!.push(flightDate);
-
-                    if (!airlinesByState.has(destState)) {
-                        airlinesByState.set(destState, new Set());
-                    }
-                    if (props.airline) {
-                        airlinesByState.get(destState)!.add(props.airline);
-                    }
+                // A same-state leg contributes one duration and date, but both airports.
+                for (const stateCode of new Set(endpoints.map(([code]) => code))) {
+                    if (!stats.has(stateCode)) continue;
+                    const legs = flightsByState.get(stateCode) ?? [];
+                    legs.push(flight);
+                    flightsByState.set(stateCode, legs);
                 }
-            });
+            }
 
             // Update stats with computed values
             stats.forEach((state, stateCode) => {
+                const legs = flightsByState.get(stateCode) ?? [];
+                state.flightCount = legs.length;
+                state.duration = summarizeFlightDurations(legs);
                 const visitedAirports = visitedAirportsByState.get(stateCode);
                 if (visitedAirports && visitedAirports.size > 0) {
                     state.visited = true;
                     state.airportCount = visitedAirports.size;
                 }
 
-                const dates = flightDatesByState.get(stateCode);
+                const dates = legs.map(flight => parseDateString(flight.date));
                 if (dates && dates.length > 0) {
                     dates.sort((a, b) => a.getTime() - b.getTime());
                     state.firstVisitDate = dates[0].toLocaleDateString();
                     state.lastVisitDate = dates[dates.length - 1].toLocaleDateString();
                 }
 
-                const airlines = airlinesByState.get(stateCode);
-                if (airlines) {
-                    state.airlines = Array.from(airlines);
-                }
+                state.airlines = [...new Set(legs.map(flight => flight.airline).filter(Boolean))];
             });
         }
 

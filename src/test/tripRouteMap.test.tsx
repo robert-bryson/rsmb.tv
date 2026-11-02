@@ -1,3 +1,4 @@
+import { cartoRasterUrl } from '../maps/cartoBasemaps';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { flushSync } from 'react-dom';
@@ -1165,21 +1166,13 @@ describe('TripRouteMap', () => {
         expect(mapMocks.Map).not.toHaveBeenCalled();
     });
 
-    it('starts attribution collapsed even when the base control opens it', async () => {
-        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
-            ok: true, json: async () => ({
-                type: 'Feature', properties: {},
-                geometry: { type: 'LineString', coordinates: [[-122, 47], [-123, 46]] },
-            }),
-        }));
+    it('keeps basemap attribution visible', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
         render(<TripStoryProvider manifest={manifest}><TripRouteMap /></TripStoryProvider>);
         await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
         const control = mapMocks.addControl.mock.calls.map(([control]) => control)
-            .find(control => control?.constructor.name === 'CollapsedAttributionControl');
-        const attribution = control.onAdd(mapMocks.Map.mock.results[0].value);
-        expect(attribution).toHaveClass('maplibregl-compact');
-        expect(attribution).not.toHaveClass('maplibregl-compact-show');
-        expect(attribution).not.toHaveAttribute('open');
+            .find(control => control?.constructor.name === 'AttributionControl');
+        expect(control).toBeDefined();
     });
 
     it('rejects route geometry without usable coordinates', async () => {
@@ -1425,9 +1418,9 @@ describe('TripRouteMap', () => {
         fireEvent.click(button);
         fireEvent.click(button);
 
-        expect(mapMocks.setTiles).toHaveBeenCalledWith(['https://tile.opentopomap.org/{z}/{x}/{y}.png']);
+        expect(mapMocks.setTiles).toHaveBeenCalledWith([cartoRasterUrl('positron-nolabels')]);
         expect(mapMocks.setPaintProperty).toHaveBeenCalledWith('openstreetmap', 'raster-brightness-max', 0.85);
-        expect(button).toHaveAccessibleName('Change basemap (current: Terrain)');
+        expect(button).toHaveAccessibleName('Change basemap (current: Light)');
         expect(mapMocks.Map).toHaveBeenCalledOnce();
 
         rerender(
@@ -1444,14 +1437,14 @@ describe('TripRouteMap', () => {
         const nextOptions = mapMocks.Map.mock.calls[1][0] as MapOptions;
         const nextStyle = nextOptions.style && typeof nextOptions.style === 'object' ? nextOptions.style : undefined;
         expect(nextStyle?.sources.openstreetmap).toMatchObject({
-            tiles: ['https://tile.opentopomap.org/{z}/{x}/{y}.png'],
+            tiles: [cartoRasterUrl('positron-nolabels')],
         });
         const nextBasemapControl = mapMocks.addControl.mock.calls
             .map(([control]) => control)
             .filter((control) => control?.constructor.name === 'BasemapControl')
             .at(-1);
         expect(nextBasemapControl.onAdd().querySelector('button'))
-            .toHaveAccessibleName('Change basemap (current: Terrain)');
+            .toHaveAccessibleName('Change basemap (current: Light)');
     });
 
     it('applies the selected basemap after the map source loads', async () => {
@@ -1488,7 +1481,7 @@ describe('TripRouteMap', () => {
         act(() => loadListener());
 
         expect(mapMocks.setTiles).toHaveBeenCalledWith([
-            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            cartoRasterUrl('voyager'),
         ]);
         expect(mapMocks.setPaintProperty).toHaveBeenCalledWith('openstreetmap', 'raster-brightness-max', 1);
         expect(mapMocks.once).toHaveBeenCalledWith('load', expect.any(Function));

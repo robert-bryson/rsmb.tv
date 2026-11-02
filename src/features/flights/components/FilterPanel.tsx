@@ -85,7 +85,7 @@ export function FilterPanel({
   }, []);
 
   return (
-    <div className="relative">
+    <div>
       {/* Filter Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}

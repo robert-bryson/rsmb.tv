@@ -69,6 +69,36 @@ for (const [fips, { name }] of Object.entries(STATE_LOOKUP)) {
     NAME_TO_FIPS[name] = fips;
 }
 
+function hasArea(ring) {
+    if (ring.length < 4) return false;
+    // Translate to the first vertex before computing area to avoid cancellation.
+    const [originX, originY] = ring[0];
+    let area = 0;
+    for (let i = 1; i < ring.length; i++) {
+        const [x1, y1] = ring[i - 1];
+        const [x2, y2] = ring[i];
+        area += (x1 - originX) * (y2 - originY) - (x2 - originX) * (y1 - originY);
+    }
+    return Math.abs(area) > 1e-12;
+}
+
+function cleanGeometry(geometry) {
+    const polygons = geometry.type === 'Polygon' ? [geometry.coordinates] : geometry.coordinates;
+    // The source's shared VA/MD island collapses to one latitude. Spherical
+    // triangulation can interpret that ring as the entire globe. Drop collapsed
+    // exteriors and holes; retain every usable island and its original winding.
+    const coordinates = polygons
+        .filter(rings => hasArea(rings[0]))
+        .map(rings => rings.filter(hasArea));
+    if (coordinates.length === 0) {
+        throw new Error('State boundary has no usable polygons');
+    }
+    return {
+        type: geometry.type,
+        coordinates: geometry.type === 'Polygon' ? coordinates[0] : coordinates,
+    };
+}
+
 async function main() {
     console.log('📥 Fetching US state boundaries…');
     const res = await fetch(SOURCE_URL);
@@ -97,7 +127,7 @@ async function main() {
                 name,
                 abbr,
             },
-            geometry: feature.geometry,
+            geometry: cleanGeometry(feature.geometry),
         });
     }
 

@@ -70,7 +70,10 @@
 
 import { writeFileSync, readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
+import { parse } from 'csv-parse/sync';
+import { parseFlightDuration } from '../src/features/flights/utils/durationInput.ts';
+import { parseFlightDate } from '../src/features/flights/utils/flightDateInput.ts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -123,47 +126,18 @@ async function fetchSheetAsCSV(sheetId, sheetName) {
 /**
  * Parse CSV handling quoted fields properly
  */
-function parseCSV(csv) {
-  const lines = csv.split('\n').filter(line => line.trim());
-  const rows = [];
-
-  for (const line of lines) {
-    const row = [];
-    let current = '';
-    let inQuotes = false;
-
-    for (let i = 0; i < line.length; i++) {
-      const char = line[i];
-
-      if (char === '"') {
-        if (inQuotes && line[i + 1] === '"') {
-          current += '"';
-          i++; // Skip next quote
-        } else {
-          inQuotes = !inQuotes;
-        }
-      } else if (char === ',' && !inQuotes) {
-        row.push(current);
-        current = '';
-      } else {
-        current += char;
-      }
-    }
-    row.push(current);
-    rows.push(row);
-  }
-
-  return rows;
+export function parseCSV(csv) {
+  return parse(csv, { bom: true, skip_empty_lines: true });
 }
 
 /**
  * Convert rows back to CSV
  */
-function toCSV(rows) {
+export function toCSV(rows) {
   return rows.map(row =>
     row.map(cell => {
       // Quote cells that contain commas, quotes, or newlines
-      if (cell.includes(',') || cell.includes('"') || cell.includes('\n')) {
+      if (/[",\r\n]/.test(cell)) {
         return `"${cell.replace(/"/g, '""')}"`;
       }
       return cell;
@@ -200,51 +174,16 @@ function trimEmptyColumns(rows) {
  * Returns { valid: boolean, date?: Date, error?: string }
  */
 function validateDate(dateStr) {
-  if (!dateStr || !dateStr.trim()) {
-    return { valid: false, error: 'Empty date' };
+  try {
+    const parsed = parseFlightDate(dateStr);
+    if (parsed.year < 1990) return { valid: false, error: `Year too old (${parsed.year})` };
+    const now = new Date();
+    const limit = new Date(Date.UTC(now.getUTCFullYear() + 1, now.getUTCMonth(), now.getUTCDate()));
+    if (parsed.date > limit) return { valid: false, error: 'Date is more than one year in the future' };
+    return { valid: true, canonical: parsed.canonical };
+  } catch (error) {
+    return { valid: false, error: error.message };
   }
-
-  const trimmed = dateStr.trim();
-  const parts = trimmed.split('/');
-
-  if (parts.length !== 3) {
-    return { valid: false, error: `Invalid format: "${trimmed}" (expected M/D/YYYY)` };
-  }
-
-  const [month, day, year] = parts.map(Number);
-
-  if (isNaN(month) || isNaN(day) || isNaN(year)) {
-    return { valid: false, error: `Non-numeric values: "${trimmed}"` };
-  }
-
-  if (month < 1 || month > 12) {
-    return { valid: false, error: `Invalid month ${month}: "${trimmed}"` };
-  }
-
-  if (day < 1 || day > 31) {
-    return { valid: false, error: `Invalid day ${day}: "${trimmed}"` };
-  }
-
-  if (year < 1990) {
-    return { valid: false, error: `Year too old (${year}): "${trimmed}"` };
-  }
-
-  const date = new Date(year, month - 1, day);
-  const now = new Date();
-
-  // Check if date is valid (e.g., Feb 30 would fail)
-  if (date.getMonth() !== month - 1 || date.getDate() !== day) {
-    return { valid: false, error: `Invalid date: "${trimmed}"` };
-  }
-
-  // Allow flights up to 1 year in the future (for booked flights)
-  const oneYearFromNow = new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
-
-  if (date > oneYearFromNow) {
-    return { valid: false, error: `Date too far in future (${year}): "${trimmed}" - likely a typo` };
-  }
-
-  return { valid: true, date };
 }
 
 /**
@@ -295,11 +234,27 @@ function normalizeAirline(airline) {
 /**
  * Run QA/QC checks on the data
  */
-function runQAQC(rows) {
-  if (rows.length <= 1) return { rows, errors: [], warnings: [] };
+export function runQAQC(rows) {
+  if (rows.length === 0) return { rows, errors: ['Missing CSV header'], warnings: [] };
 
-  const header = rows[0].map(h => h.trim().toLowerCase());
+  const names = ['date', 'airline', 'flightNumber', 'origin', 'destination', 'notes', 'durationMinutes', 'durationKind', 'durationSource', 'durationNote'];
+  const columns = rows[0].map(value => {
+    const trimmed = value.trim();
+    const normalized = trimmed.toLowerCase().replace(/[ _]/g, '');
+    return names.find(name => name.toLowerCase() === normalized) ?? trimmed;
+  });
+  const header = columns.map(h => h.toLowerCase());
   const dataRows = rows.slice(1);
+  const required = ['date', 'airline', 'origin', 'destination'];
+  const missing = required.filter(name => !header.includes(name));
+  const duplicates = header.filter((name, index) => name && header.indexOf(name) !== index);
+  if (missing.length || duplicates.length || dataRows.length === 0) {
+    return { rows, errors: [
+      ...(missing.length ? [`Missing required columns: ${missing.join(', ')}`] : []),
+      ...(duplicates.length ? [`Duplicate columns: ${duplicates.join(', ')}`] : []),
+      ...(dataRows.length === 0 ? ['No flight records found'] : []),
+    ], warnings: [] };
+  }
 
   // Find column indices
   const dateIdx = header.findIndex(h => h === 'date');
@@ -313,7 +268,7 @@ function runQAQC(rows) {
   const seenFlights = new Map(); // For duplicate detection
   const airlineVariations = new Map(); // Track airline name variations
 
-  const cleanedRows = [rows[0].map(h => h.trim())]; // Clean header
+  const cleanedRows = [columns]; // Clean header
 
   for (let i = 0; i < dataRows.length; i++) {
     const row = dataRows[i];
@@ -325,11 +280,21 @@ function runQAQC(rows) {
       cleanRow[j] = (cleanRow[j] || '').trim();
     }
 
+    if (cleanRow.length !== header.length) errors.push(`Row ${rowNum}: Incorrect number of columns`);
+    try {
+      const duration = parseFlightDuration(Object.fromEntries(columns.map((name, index) => [name, cleanRow[index]])));
+      if (duration.durationMinutes > 1440) warnings.push(`Row ${rowNum}: Duration exceeds 24 hours; verify the source`);
+    } catch (error) {
+      errors.push(`Row ${rowNum}: ${error.message}`);
+    }
+
     // Validate date
     if (dateIdx !== -1) {
       const dateResult = validateDate(cleanRow[dateIdx]);
       if (!dateResult.valid) {
         errors.push(`Row ${rowNum}: ${dateResult.error}`);
+      } else {
+        cleanRow[dateIdx] = dateResult.canonical;
       }
     }
 
@@ -527,4 +492,4 @@ async function main() {
   }
 }
 
-main();
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) main();

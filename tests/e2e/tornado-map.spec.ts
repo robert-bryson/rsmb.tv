@@ -43,23 +43,23 @@ for (const [width, renderer] of [[390, 'webgl'], [1280, 'webgl'], [1280, 'svg']]
         page.on('request', request => { if (request.url().includes('/tornadoes/tracks/')) trackRequests.push(request.url()); });
         page.on('request', request => { if (request.url().endsWith('warning-summary.json')) warningRequests.push(request.url()); });
 
-        // Isolate browser rendering from provider availability. Only the keyless
-        // basemap is served; requests to the old authenticated provider fail.
+        // Isolate rendering from provider availability; use a fake basemap key.
         await page.route('https://**/*', route => route.abort());
         const tile = await sharp({ create: { width: 256, height: 256, channels: 3, background: '#18232f' } }).png().toBuffer();
         const exerciseRetry = width === 1280 && renderer === 'webgl';
         let failedTrackRequest = false;
         let styleRequests = 0;
         let tileRequests = 0;
-        await page.route('https://tiles.openfreemap.org/**', route => {
-            if (new URL(route.request().url()).pathname === '/styles/dark') {
+        await page.route('https://basemaps.cartocdn.com/**', route => {
+            expect(new URL(route.request().url()).searchParams.get('key')).toBe('browser-test-key');
+            if (new URL(route.request().url()).pathname === '/gl/dark-matter-gl-style/style.json') {
                 styleRequests += 1;
                 return route.fulfill({ json: {
                     version: 8,
                     sources: { basemap: {
                         type: 'raster', tileSize: 256,
-                        tiles: ['https://tiles.openfreemap.org/test/{z}/{x}/{y}.png'],
-                        attribution: '<a href="https://openfreemap.org/">OpenFreeMap</a> · OpenStreetMap',
+                        tiles: ['https://basemaps.cartocdn.com/test/{z}/{x}/{y}.png?key=browser-test-key'],
+                        attribution: '<a href="https://carto.com/attribution/">CARTO</a> · OpenStreetMap',
                     } },
                     layers: [{ id: 'basemap', type: 'raster', source: 'basemap', paint: { 'raster-fade-duration': 0 } }],
                 } });
@@ -114,7 +114,7 @@ for (const [width, renderer] of [[390, 'webgl'], [1280, 'webgl'], [1280, 'svg']]
             }
             return basemapPixels;
         }).toBeGreaterThan(10_000);
-        if (renderer === 'webgl') await expect(page.getByRole('link', { name: 'OpenFreeMap', exact: true })).toBeVisible();
+        if (renderer === 'webgl') await expect(page.getByRole('link', { name: 'CARTO', exact: true })).toBeVisible();
         else await expect(page.getByLabel('Tornado track overview')).toBeVisible();
         expect(warningRequests).toEqual([]);
         if (width < 768) await page.getByRole('button', { name: 'Filters & details', exact: true }).click();

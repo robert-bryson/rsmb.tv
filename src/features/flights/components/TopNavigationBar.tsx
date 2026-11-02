@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import type { ReactNode } from 'react';
 import { FilterPanel } from './FilterPanel';
 import type { GlobePoint } from '../types';
 
@@ -11,10 +12,11 @@ interface TopNavigationBarProps {
     onFilterOpenChange?: (isOpen: boolean) => void;
     airports: GlobePoint[];
     onAirportSelect: (code: string) => void;
+    layerControls?: ReactNode;
 }
 
 /**
- * Top navigation bar with back button, title, and filter panel.
+ * Top navigation bar with home link, title, and map controls.
  */
 export function TopNavigationBar({
     years,
@@ -25,9 +27,10 @@ export function TopNavigationBar({
     onFilterOpenChange,
     airports,
     onAirportSelect,
+    layerControls,
 }: TopNavigationBarProps) {
     return (
-        <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-4 py-3">
+        <div className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between gap-2 px-4 py-3">
             {/* Left: Back button */}
             <Link
                 to="/"
@@ -42,21 +45,22 @@ export function TopNavigationBar({
                 Flight History
             </h1>
 
-            {/* Right: Filter */}
-            {years.length > 0 ? (
-                <FilterPanel
-                    years={years}
-                    selectedYear={selectedYear}
-                    onYearChange={onYearChange}
-                    flightCount={flightCount}
-                    isOpen={filterOpen}
-                    onOpenChange={onFilterOpenChange}
-                    airports={airports}
-                    onAirportSelect={onAirportSelect}
-                />
-            ) : (
-                <div />
-            )}
+            {/* Both popovers anchor to this toolbar, below its buttons. */}
+            <div className="relative flex items-center gap-2">
+                {layerControls}
+                {years.length > 0 && (
+                    <FilterPanel
+                        years={years}
+                        selectedYear={selectedYear}
+                        onYearChange={onYearChange}
+                        flightCount={flightCount}
+                        isOpen={filterOpen}
+                        onOpenChange={onFilterOpenChange}
+                        airports={airports}
+                        onAirportSelect={onAirportSelect}
+                    />
+                )}
+            </div>
         </div>
     );
 }

@@ -104,6 +104,11 @@ export default function FlightsAbout() {
 
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Data Pipeline</h2>
             <p className="text-zinc-400 text-sm mb-6 leading-relaxed">
+                Flight time measures gate-to-gate travel. Recorded durations take precedence over distance estimates.
+                Statistics show how many flights use actual, scheduled, or estimated time. Individual route entries
+                show hours and minutes with their timing basis and source.
+            </p>
+            <p className="text-zinc-400 text-sm mb-6 leading-relaxed">
                 Raw flight and airport data lives in CSV files, processed by
                 Node.js build scripts into GeoJSON for the globe. The pipeline
                 generates airport points, flight arcs, US state boundaries, and

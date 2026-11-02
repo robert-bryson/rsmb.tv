@@ -32,7 +32,7 @@ describe('useFlightsFilters', () => {
         expect(result.current.selectedFlightType).toBeNull();
         expect(result.current.hasUrlFilters).toBe(false);
         expect(result.current.selectedGlobeView).toBeNull();
-        expect(result.current.showStats).toBe(false);
+        expect(result.current.showStats).toBe(true);
         expect(result.current.filterOpen).toBe(false);
         expect(result.current.layersOpen).toBe(false);
         expect(result.current.activeLayerSection).toBe('none');
@@ -56,7 +56,7 @@ describe('useFlightsFilters', () => {
 
         expect(result.current.selectedGlobeView).toEqual({ lat: 47.6062, lng: -122.3321, altitude: 1.234 });
         expect(result.current.showStats).toBe(true);
-        expect(result.current.filterOpen).toBe(true);
+        expect(result.current.filterOpen).toBe(false);
         expect(result.current.layersOpen).toBe(true);
         expect(result.current.activeLayerSection).toBe('basemap');
         expect(result.current.showHelp).toBe(true);
@@ -303,9 +303,12 @@ describe('useFlightsFilters', () => {
     it('updates URL-backed panel and help state', () => {
         const { result } = renderHook(() => useFlightsFiltersWithLocation(), { wrapper });
 
+        act(() => result.current.setShowStats(false));
+        expect(result.current.showStats).toBe(false);
+        expect(result.current.search).toContain('stats=0');
         act(() => result.current.setShowStats(true));
         expect(result.current.showStats).toBe(true);
-        expect(result.current.search).toContain('stats=1');
+        expect(result.current.search).not.toContain('stats=');
 
         act(() => result.current.setFilterOpen((open) => !open));
         expect(result.current.filterOpen).toBe(true);
@@ -314,6 +317,8 @@ describe('useFlightsFilters', () => {
         act(() => result.current.setActiveLayerSection('states'));
         expect(result.current.layersOpen).toBe(true);
         expect(result.current.activeLayerSection).toBe('states');
+        expect(result.current.filterOpen).toBe(false);
+        expect(result.current.search).not.toContain('filters=');
         expect(result.current.search).toContain('layers=1');
         expect(result.current.search).toContain('layerSection=states');
 
@@ -348,9 +353,46 @@ describe('useFlightsFilters', () => {
         expect(result.current.selectedGlobeView).toEqual({ lat: 47.45, lng: -122.31, altitude: 0.75 });
         expect(result.current.search).not.toContain('layers=');
         expect(result.current.search).not.toContain('layerSection=');
-        expect(result.current.search).toContain('stats=1');
+        expect(result.current.search).not.toContain('stats=');
         expect(result.current.search).toContain('airport=SEA');
         expect(result.current.search).toContain('lat=47.45');
+    });
+
+    it('closes layers and their section when filters open, including after batched updates', () => {
+        const { result } = renderHook(() => useFlightsFiltersWithLocation(), { wrapper });
+        act(() => {
+            result.current.setActiveLayerSection('states');
+            result.current.setFilterOpen(true);
+        });
+        expect(result.current.filterOpen).toBe(true);
+        expect(result.current.layersOpen).toBe(false);
+        expect(result.current.activeLayerSection).toBe('none');
+        expect(result.current.search).not.toContain('layers=');
+        expect(result.current.search).not.toContain('layerSection=');
+
+        act(() => result.current.setLayersOpen(true));
+        expect(result.current.layersOpen).toBe(true);
+        expect(result.current.filterOpen).toBe(false);
+        expect(result.current.search).not.toContain('filters=');
+    });
+
+    it.each(['0', 'false'])('honors an explicitly closed statistics panel: stats=%s', value => {
+        const { result } = renderHook(() => useFlightsFilters(), {
+            wrapper: wrapperWithParams(`stats=${value}`),
+        });
+        expect(result.current.showStats).toBe(false);
+    });
+
+    it('closes a legacy URL requesting both panels without revealing a hidden filter panel', () => {
+        const { result } = renderHook(() => useFlightsFiltersWithLocation(), {
+            wrapper: wrapperWithParams('filters=1&layers=1&layerSection=states'),
+        });
+        expect(result.current.layersOpen).toBe(true);
+        expect(result.current.filterOpen).toBe(false);
+        act(() => result.current.setLayersOpen(false));
+        expect(result.current.layersOpen).toBe(false);
+        expect(result.current.filterOpen).toBe(false);
+        expect(result.current.search).not.toContain('filters=');
     });
 
     it('composes repeated functional boolean updates in the same event', () => {
@@ -367,7 +409,7 @@ describe('useFlightsFilters', () => {
             result.current.setIsMetric((metric) => !metric);
         });
 
-        expect(result.current.showStats).toBe(false);
+        expect(result.current.showStats).toBe(true);
         expect(result.current.filterOpen).toBe(false);
         expect(result.current.layersOpen).toBe(false);
         expect(result.current.isMetric).toBe(true);

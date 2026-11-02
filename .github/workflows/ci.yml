@@ -53,6 +53,12 @@ jobs:
       - name: Type check
         run: npm run typecheck
 
+      - name: Validate authenticated production bundle
+        if: github.event_name == 'push'
+        env:
+          CARTO_API_KEY: ${{ secrets.CARTO_API_KEY }}
+        run: npx vite build
+
       - name: Audit dependencies
         run: npm run audit
 

@@ -3,6 +3,8 @@ import path from 'path'
 import { parse } from 'csv-parse/sync'
 import { writeFlightGeoJson } from './writeFlightGeoJson.js'
 import { airportCoordinates } from './airportCoordinates.js'
+import { parseFlightDuration } from '../../../src/features/flights/utils/durationInput.ts'
+import { parseFlightDate } from '../../../src/features/flights/utils/flightDateInput.ts'
 
 const base = path.resolve('projects', 'flights')
 
@@ -80,22 +82,29 @@ airports.forEach((a) => {
 })
 
 const flights = parse(flightsRaw, {
-  columns: true,
+  columns: (header) => {
+    const columns = header.map(name => name.trim())
+    const missing = ['date', 'airline', 'origin', 'destination'].filter(name => !columns.includes(name))
+    if (missing.length) throw new Error(`flights.csv is missing required columns: ${missing.join(', ')}`)
+    if (new Set(columns).size !== columns.length) throw new Error('flights.csv has duplicate columns')
+    return columns
+  },
+  bom: true,
+  trim: true,
   skip_empty_lines: true,
 })
-
-// Validate flight CSV columns
-const requiredFlightCols = ['date', 'airline', 'origin', 'destination']
-if (flights.length > 0) {
-  const cols = Object.keys(flights[0])
-  const missingFlightCols = requiredFlightCols.filter(c => !cols.includes(c))
-  if (missingFlightCols.length > 0) {
-    console.error(`❌ flights.csv is missing required columns: ${missingFlightCols.join(', ')}`)
-    process.exit(1)
-  }
-}
+if (flights.length === 0) throw new Error('flights.csv contains no flight records')
+const dates = flights.map((row, index) => {
+  try { return parseFlightDate(row.date) }
+  catch (error) { throw new Error(`Flight CSV row ${index + 2}: ${error.message}`, { cause: error }) }
+})
 
 const visitedAirports = Object.create(null)
+// Validate every supplied value before writing either output, including skipped routes.
+const durations = flights.map((row, index) => {
+  try { return parseFlightDuration(row) }
+  catch (error) { throw new Error(`Flight CSV row ${index + 2}: ${error.message}`, { cause: error }) }
+})
 const stats = {
   internationalFlights: 0,
   intercontinentalFlights: 0,
@@ -115,8 +124,7 @@ const flightFeatures = flights.map((row, index) => {
   }
 
   // Parse year from date
-  const dateParts = row.date.split('/')
-  const year = parseInt(dateParts[2], 10)
+  const year = dates[index].year
   stats.years.add(year)
   stats.minYear = Math.min(stats.minYear, year)
   stats.maxYear = Math.max(stats.maxYear, year)
@@ -188,6 +196,8 @@ const flightFeatures = flights.map((row, index) => {
       id: index + 1,
       date: row.date,
       airline: row.airline,
+      flightNumber: (row.flightNumber || '').trim(),
+      ...durations[index],
       origin_code: row.origin,
       origin_name: origin.name,
       origin_municipality: origin.municipality,

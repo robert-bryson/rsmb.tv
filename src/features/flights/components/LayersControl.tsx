@@ -132,10 +132,7 @@ export function LayersControl({
     const stateSymbolModes: StateSymbolMode[] = ['visited', 'visitCount', 'flightCount'];
 
     return (
-        <div
-            ref={panelRef}
-            className="absolute top-16 right-4 z-30"
-        >
+        <div ref={panelRef}>
             {/* Toggle Button */}
             <button
                 onClick={() => setPanelExpanded(!isExpanded)}
@@ -145,6 +142,7 @@ export function LayersControl({
                     } backdrop-blur`}
                 aria-expanded={isExpanded}
                 aria-label="Toggle layer options"
+                aria-controls={isExpanded ? 'flights-layer-options' : undefined}
             >
                 {/* Layers icon */}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -170,7 +168,12 @@ export function LayersControl({
 
             {/* Expanded Panel */}
             {isExpanded && (
-                <div className="absolute right-0 mt-2 w-80 bg-gray-900/95 backdrop-blur border border-gray-700 rounded-lg shadow-xl overflow-hidden">
+                <div
+                    id="flights-layer-options"
+                    role="region"
+                    aria-label="Map layers"
+                    className="absolute top-12 right-0 w-80 max-w-[calc(100vw-2rem)] max-h-[calc(100dvh-7rem)] overflow-y-auto bg-gray-900/95 backdrop-blur border border-gray-700 rounded-lg shadow-xl"
+                >
                     {/* Layer Toggles */}
                     <div className="p-3 space-y-2">
                         {/* Flight Paths with color mode config */}

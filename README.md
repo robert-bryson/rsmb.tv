@@ -56,6 +56,10 @@ npm run dev
 
 ### Available Scripts
 
+Set a localhost CARTO Basemaps key as `CARTO_API_KEY` in `.env.local` for local maps and release builds.
+Amplify and GitHub Actions use their separately configured `CARTO_API_KEY` values.
+See the [basemap configuration guide](docs/carto-basemaps.md) for styles, attribution, and test behavior.
+
 | Command | Description |
 | ------- | ----------- |
 | `npm run dev` | Prepare local trips, sync published posts and drafts, build flight data, and start Vite |
@@ -194,6 +198,8 @@ See the [security fix report](docs/reviews/2026-10-31-minimatch-security-fix.md)
 
 `npm run test:e2e` starts Vite on `127.0.0.1:4174` with a fixed port.
 Set `PLAYWRIGHT_PORT` if another process uses that port.
+The runner must start its own server. An occupied port fails startup before tests run.
+Flight-data generation requires network access to download the public U.S. state boundaries.
 CI installs Chromium and WebKit before browser tests.
 Set `PLAYWRIGHT_WEBKIT=1` to include WebKit in the local fixture suite.
 Performance measurement tests run only in Chromium because they require its DevTools Protocol.
@@ -201,6 +207,11 @@ Performance measurement tests run only in Chromium because they require its DevT
 Tornado browser tests use fixed tracks and map tiles.
 They check phone WebGL, desktop WebGL, and the SVG fallback.
 They also check recovery after a failed historical request while phone controls remain open.
+
+Flight tests check duration input, coverage, filtering, route counts, and current phone details.
+See the [flight guide](projects/flights/readme.md#flight-duration) for focused checks.
+Basemap tests use a fixture browser key and fixed provider responses.
+See the [basemap guide](docs/carto-basemaps.md#validation) for the configuration checks and their limits.
 
 The post browser tests use a fixed Google Docs fixture in `tests/fixtures`.
 A compilation test compares the fixture MDX with the importer output.
@@ -365,6 +376,7 @@ This combines changes from one interaction before the URL updates.
 
 ## Flights Stats Panel
 
+The statistics panel opens by default. Use `stats=0` to share a closed-panel view.
 The flights stats panel stays mounted when closed.
 This keeps the slide animation smooth.
 The closed panel uses `inert` and `aria-hidden`.

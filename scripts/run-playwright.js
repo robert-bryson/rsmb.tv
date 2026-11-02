@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { spawn, spawnSync } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { stripVTControlCharacters } from 'node:util';
 
 const isWindows = process.platform === 'win32';
 const extraArgs = process.argv.slice(2);
@@ -33,31 +34,33 @@ function run(command, args, options = {}) {
     return result.status ?? 1;
 }
 
-function waitForVite(vite) {
+export function waitForVite(vite) {
     return new Promise((resolve, reject) => {
+        let output = '';
+        const finish = (error) => {
+            clearTimeout(timeout);
+            vite.stdout.off('data', handleOutput);
+            vite.off('error', handleError);
+            vite.off('exit', handleExit);
+            if (error) reject(error);
+            else resolve();
+        };
         const timeout = setTimeout(() => {
-            reject(new Error('Timed out waiting for Vite to start'));
+            finish(new Error('Timed out waiting for Vite to start'));
         }, 120_000);
 
         const handleOutput = (chunk) => {
-            const text = chunk.toString();
-            process.stdout.write(chunk);
-            if (text.includes('Local:') || text.includes('ready in')) {
-                clearTimeout(timeout);
-                resolve();
-            }
+            output = (output + stripVTControlCharacters(chunk.toString())).slice(-8192);
+            // "already in use" contains "ready in". Only Vite's listening URL
+            // establishes readiness; never attach tests to an existing server.
+            if (/\bLocal:\s+https?:\/\/\S+/.test(output)) finish();
         };
+        const handleError = (error) => finish(error);
+        const handleExit = (code) => finish(new Error(`Vite exited before becoming ready with code ${code ?? 1}`));
 
         vite.stdout.on('data', handleOutput);
-        vite.stderr.on('data', handleOutput);
-        vite.on('error', (error) => {
-            clearTimeout(timeout);
-            reject(error);
-        });
-        vite.on('exit', (code) => {
-            clearTimeout(timeout);
-            reject(new Error(`Vite exited before becoming ready with code ${code ?? 1}`));
-        });
+        vite.once('error', handleError);
+        vite.once('exit', handleExit);
     });
 }
 
@@ -90,8 +93,11 @@ async function main() {
 
     const vite = spawn(process.execPath, [viteBin, '--host', '127.0.0.1', '--port', String(port), '--strictPort'], {
         stdio: ['ignore', 'pipe', 'pipe'],
+        env: { ...process.env, VITE_CARTO_API_KEY: 'browser-test-key', CARTO_API_KEY: '' },
         shell: false,
     });
+    vite.stdout.pipe(process.stdout);
+    vite.stderr.pipe(process.stderr);
 
     try {
         await waitForVite(vite);
@@ -105,7 +111,9 @@ async function main() {
     }
 }
 
-main().catch((error) => {
-    console.error(error);
-    process.exitCode = 1;
-});
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+    main().catch((error) => {
+        console.error(error);
+        process.exitCode = 1;
+    });
+}

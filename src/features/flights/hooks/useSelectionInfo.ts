@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
-import type { GlobeStaticArc, GlobePoint, SelectedRouteInfo, SelectedCountryInfo, SelectedRegionInfo } from '../types';
-import { calculateDistance, parseYear, getRouteKey, sortDatesDescending } from '../utils';
+import { summarizeFlightDurations } from '../utils/flightDuration';
+import { flightMatchesFilters } from '../utils/flightFilters';
+import type { GlobeStaticArc, GlobePoint, SelectedRouteInfo, SelectedCountryInfo, SelectedRegionInfo, FlightTypeFilter } from '../types';
+import { calculateDistance, parseYear, getRouteKey, sortDatesDescending, parseDateString } from '../utils';
 
 /**
  * Computes derived selection info (route, country, region) for the stats panel.
@@ -10,15 +12,25 @@ export function useSelectionInfo({
     selectedRoute,
     selectedCountry,
     selectedRegion,
-    staticArcsData,
+    staticArcsData: allStaticArcsData,
     pointsData,
+    selectedAirport = null,
+    selectedFlightType = null,
 }: {
     selectedRoute: string | null;
     selectedCountry: string | null;
     selectedRegion: string | null;
+    selectedAirport?: string | null;
+    selectedFlightType?: FlightTypeFilter | null;
     staticArcsData: GlobeStaticArc[];
     pointsData: GlobePoint[];
 }) {
+    const staticArcsData = useMemo(() => allStaticArcsData.map(arc => {
+        const flights = arc.flights.filter(flight => flightMatchesFilters(flight, {
+            selectedRoute, selectedCountry, selectedRegion, selectedAirport, selectedFlightType,
+        }));
+        return { ...arc, flights, routeCount: flights.length };
+    }).filter(arc => arc.flights.length), [allStaticArcsData, selectedRoute, selectedCountry, selectedRegion, selectedAirport, selectedFlightType]);
     const selectedRouteInfo = useMemo<SelectedRouteInfo | null>(() => {
         if (!selectedRoute) return null;
         const arc = staticArcsData.find(a => a.routeKey === selectedRoute);
@@ -47,6 +59,8 @@ export function useSelectionInfo({
             destinationRegionName: first.destination_regionName,
             destinationContinentName: first.destination_continentName,
             totalFlights: arc.routeCount,
+            duration: summarizeFlightDurations(arc.flights),
+            flights: [...arc.flights].sort((a, b) => parseDateString(b.date).getTime() - parseDateString(a.date).getTime()),
             airlines,
             years,
             dates,
@@ -93,6 +107,7 @@ export function useSelectionInfo({
             continent: first.continent,
             continentName: first.continentName,
             totalFlights: countryFlights.length,
+            duration: summarizeFlightDurations(countryFlights),
             departures,
             arrivals,
             airports: countryPoints.map(p => ({ code: p.airport.code, name: p.airport.name, visitCount: p.airport.visitCount }))
@@ -131,6 +146,7 @@ export function useSelectionInfo({
             country: first.country,
             countryName: first.countryName,
             totalFlights: regionFlights.length,
+            duration: summarizeFlightDurations(regionFlights),
             departures,
             arrivals,
             airports: regionPoints.map(p => ({ code: p.airport.code, name: p.airport.name, visitCount: p.airport.visitCount }))

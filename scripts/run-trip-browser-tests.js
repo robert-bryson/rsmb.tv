@@ -4,6 +4,9 @@ import os from 'node:os';
 import path from 'node:path';
 import { build, preview } from 'vite';
 const outDir = await fs.mkdtemp(path.join(os.tmpdir(), 'rsmb-trip-browser-'));
+// Browser tests intercept tile requests. Never use production credentials here.
+process.env.VITE_CARTO_API_KEY = 'browser-test-key';
+delete process.env.CARTO_API_KEY;
 let server;
 try {
     await build({ mode: 'trip-test', build: { outDir } });

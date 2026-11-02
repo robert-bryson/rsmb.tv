@@ -1,3 +1,4 @@
+import { cartoRasterStyle } from '../../../maps/cartoBasemaps';
 import { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import * as maplibregl from 'maplibre-gl';
@@ -420,31 +421,8 @@ export function TemperatureMap() {
 
         const map = new maplibregl.Map({
             container: mapContainer.current,
-            style: {
-                version: 8,
-                glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
-                sources: {
-                    'carto-dark': {
-                        type: 'raster',
-                        tiles: [
-                            'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-                            'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-                            'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-                        ],
-                        tileSize: 256,
-                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
-                    },
-                },
-                layers: [
-                    {
-                        id: 'carto-dark-layer',
-                        type: 'raster',
-                        source: 'carto-dark',
-                        minzoom: 0,
-                        maxzoom: 20,
-                    },
-                ],
-            },
+            style: cartoRasterStyle('dark'),
+            attributionControl: { compact: false },
             center: INITIAL_CENTER,
             zoom: INITIAL_ZOOM,
             minZoom: MIN_ZOOM,

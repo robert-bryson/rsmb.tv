@@ -35,17 +35,6 @@ export class BasemapControl implements maplibregl.IControl {
     }
 }
 
-// Seed compact mode before source metadata arrives so MapLibre does not expand it.
-export class CollapsedAttributionControl extends maplibregl.AttributionControl {
-    onAdd(map: maplibregl.Map) {
-        const container = super.onAdd(map);
-        container.classList.add('maplibregl-compact');
-        container.classList.remove('maplibregl-compact-show');
-        container.removeAttribute('open');
-        return container;
-    }
-}
-
 export class DownloadRouteControl implements maplibregl.IControl {
     private readonly container = document.createElement('div');
 

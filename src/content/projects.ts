@@ -84,8 +84,15 @@ export const projects: Project[] = [
     demoUrl: '/projects/flights/map',
     previewImage: '/images/flights/flight-globe.webp',
     year: 2025,
-    lastUpdated: '2026-08-20',
+    lastUpdated: '2026-11-02',
     changelog: [
+      {
+        date: '2026-11',
+        notes: [
+          'Added recorded flight durations, hour totals, and actual, scheduled, and estimated coverage',
+          'Added authenticated CARTO globe tiles and repaired the US states overlay',
+        ],
+      },
       {
         date: '2026-08',
         notes: [

@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitest/config'
+import { loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import mdx from '@mdx-js/rollup'
 import rehypeShiki from '@shikijs/rehype'
@@ -9,10 +10,17 @@ import { globeWebglPlugin } from './scripts/globe-webgl-plugin.ts'
 
 const buildDate = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig(({ mode, command }) => {
+  const localEnv = loadEnv(mode, process.cwd(), '');
+  const cartoKey = (process.env.VITE_CARTO_API_KEY || process.env.CARTO_API_KEY || localEnv.VITE_CARTO_API_KEY || localEnv.CARTO_API_KEY || '').trim();
+  if (command === 'build' && mode !== 'trip-test' && mode !== 'test' && !cartoKey) {
+    throw new Error('Set CARTO_API_KEY (a browser-restricted CARTO Basemaps key) before building the site.');
+  }
+  return ({
   base: '/',
   define: {
     __BUILD_DATE__: JSON.stringify(buildDate),
+    'import.meta.env.VITE_CARTO_API_KEY': JSON.stringify(cartoKey),
   },
   plugins: [
     mdx({
@@ -49,4 +57,5 @@ export default defineConfig(({ mode }) => ({
     setupFiles: ['./src/test/setup.ts'],
     include: ['src/**/*.test.{ts,tsx}', 'scripts/**/*.test.{ts,tsx}'],
   },
-}))
+  });
+})

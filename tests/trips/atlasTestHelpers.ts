@@ -22,7 +22,7 @@ export const geometry = {
 
 export async function mockAtlasAssets(page: Page) {
     const tile = await sharp({ create: { width: 256, height: 256, channels: 3, background: '#777' } }).png().toBuffer();
-    await page.route('https://tile.openstreetmap.org/**', route => route.fulfill({ contentType: 'image/png', body: tile }));
+    await page.route('https://basemaps.cartocdn.com/**', route => route.fulfill({ contentType: 'image/png', body: tile }));
     await page.route('**/test-trip/**', route => route.request().url().endsWith('.geojson')
         ? route.fulfill({ json: geometry })
         : route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000"><rect width="100%" height="100%" fill="#405b6b"/></svg>' }));

@@ -142,7 +142,7 @@ The browser test loses a real WebGL context. It checks route pixels after retry.
 Maps request one additional frame after style changes or trip geometry updates render.
 Pending raster requests do not block this frame.
 This prevents Linux WebKit from retaining stale marker pixels after visibility updates.
-The delayed-basemap case holds Terrain tile responses while checking stop markers.
+The delayed-basemap case holds Light tile responses while checking stop markers.
 It releases those responses after the checks finish, including after a failure.
 Unit tests use MapLibre's event dispatcher to check coalescing, repeated render events, and listener removal.
 They also reject stop callbacks from replaced renderers.

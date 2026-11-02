@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import type { GlobeStaticArc, GlobePoint } from '../types';
+import { flightDurationLabel, formatFlightHours, summarizeFlightDurations } from '../utils/flightDuration';
 
 interface HoverInfoProps {
     hoveredArc: GlobeStaticArc | null;
@@ -12,6 +13,7 @@ interface HoverInfoProps {
  */
 export const HoverInfo = memo(function HoverInfo({ hoveredArc, hoveredPoint }: HoverInfoProps) {
     if (!hoveredArc && !hoveredPoint) return null;
+    const duration = hoveredArc ? summarizeFlightDurations(hoveredArc.flights) : null;
 
     return (
         <div
@@ -26,6 +28,7 @@ export const HoverInfo = memo(function HoverInfo({ hoveredArc, hoveredPoint }: H
                     {hoveredArc.routeCount > 1 && (
                         <span className="text-gray-500 ml-2">({hoveredArc.routeCount} flights)</span>
                     )}
+                    {duration && <div className="text-xs text-gray-400">{flightDurationLabel(duration)}: {formatFlightHours(duration)}</div>}
                 </div>
             )}
             {hoveredPoint && (

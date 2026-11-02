@@ -112,7 +112,8 @@ describe('tooltipHtml', () => {
         expect(html).toContain('Los Angeles &quot;International&quot;');
         expect(html).toContain('Air &amp; &lt;Script&gt;');
         expect(html).toContain('grid max-h-28 grid-cols-2');
-        expect(html).toContain('<span>2024-01-02</span>');
+        expect(html).toContain('<span>2024-01-02<br/>');
+        expect(html).toContain('Est. flight time:');
         expect(html).not.toContain('<Script>');
     });
 

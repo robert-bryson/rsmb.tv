@@ -2,11 +2,13 @@ import { memo } from 'react';
 import type { FlightTypeFilter } from '../types';
 import { formatDistance, getFlightTypeLabel } from '../utils';
 import { DistanceValue } from './shared';
+import { flightDurationCoverage, flightDurationLabel, formatFlightHours, type FlightDurationSummary } from '../utils/flightDuration';
 
 interface BottomStatsBarProps {
     totalFlights: number;
     totalAirports: number;
     totalDistance: number;
+    duration?: FlightDurationSummary;
     selectedYear: number | null;
     selectedAirport: string | null;
     selectedAirline: string | null;
@@ -24,6 +26,7 @@ export const BottomStatsBar = memo(function BottomStatsBar({
     totalFlights,
     totalAirports,
     totalDistance,
+    duration,
     selectedYear,
     selectedAirport,
     selectedAirline,
@@ -61,6 +64,14 @@ export const BottomStatsBar = memo(function BottomStatsBar({
                 >
                     <DistanceValue km={totalDistance} isMetric={isMetric} />
                 </button>
+                {duration && (
+                    <span className="text-purple-300" title={flightDurationCoverage(duration)}>
+                        <span aria-hidden="true" className="mr-2 text-gray-600">•</span>
+                        <span className="hidden sm:inline">{flightDurationLabel(duration)}: </span>
+                        <span className="sm:hidden">{duration.estimatedCount || duration.scheduledCount ? 'Est. ' : ''}</span>
+                        {formatFlightHours(duration)}
+                    </span>
+                )}
                 {selectedYear && (
                     <>
                         <span className="text-gray-600">•</span>

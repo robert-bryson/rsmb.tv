@@ -12,7 +12,9 @@ export function calculateDistance(lat1: number, lon1: number, lat2: number, lon2
         Math.sin(dLat / 2) * Math.sin(dLat / 2) +
         Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
         Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    // Rounding can put antipodal points just above 1 and make the distance NaN.
+    const bounded = Math.min(1, Math.max(0, a));
+    const c = 2 * Math.atan2(Math.sqrt(bounded), Math.sqrt(1 - bounded));
     return EARTH_RADIUS_KM * c;
 }
 

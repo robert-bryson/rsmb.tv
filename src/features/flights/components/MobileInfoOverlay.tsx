@@ -1,5 +1,7 @@
 import { memo } from 'react';
 import type { GlobeStaticArc } from '../types';
+import { DurationSummary } from './DurationSummary';
+import { summarizeFlightDurations } from '../utils/flightDuration';
 
 interface MobileInfoOverlayProps {
     arc: GlobeStaticArc | null;
@@ -51,6 +53,7 @@ export const MobileInfoOverlay = memo(function MobileInfoOverlay({ arc, onClose,
                     Dates: {arc.flights.slice(0, 3).map(f => f.date).join(', ')}
                     {arc.flights.length > 3 && '...'}
                 </div>
+                <DurationSummary summary={summarizeFlightDurations(arc.flights)} />
                 <button
                     onClick={() => onSelect(arc)}
                     className="mt-3 w-full bg-purple-600/30 hover:bg-purple-600/50 text-purple-300 py-2 rounded-lg text-sm transition-colors"

@@ -12,7 +12,7 @@ import { useTripMapDismiss } from '../useTripMapDismiss';
 import { useTripDayHover } from '../useTripDayHover';
 import { useTripMapHighlight } from '../useTripMapHighlight';
 import { basemaps, mapStyle, type BasemapId, type BasemapPaintProperty } from '../tripMapBasemaps';
-import { BasemapControl, CollapsedAttributionControl, DownloadRouteControl, RouteActionsControl, StopsControl } from '../tripMapControls';
+import { BasemapControl, DownloadRouteControl, RouteActionsControl, StopsControl } from '../tripMapControls';
 import { TripMapDayControls } from './TripMapDayControls';
 import { TripRoutePreview } from './TripRoutePreview';
 import type { TripManifest } from '../types';
@@ -304,7 +304,7 @@ export function TripRouteMap({ stopId, trackId, dayId, active = true, onExplore,
         basemapControl.setBasemap(basemapIdRef.current);
         map.addControl(basemapControl, 'top-right');
         map.addControl(new DownloadRouteControl(routeUrl), 'top-right');
-        map.addControl(new CollapsedAttributionControl({ compact: true }));
+        map.addControl(new maplibregl.AttributionControl({ compact: false }));
         map.on('mouseenter', 'trip-stops', (event) => {
             if (disposed) return;
             const hoveredId = event.features?.[0]?.properties?.id;

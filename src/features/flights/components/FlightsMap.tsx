@@ -1,5 +1,6 @@
 import { useRef, useCallback, useState, useMemo, useEffect, type SyntheticEvent } from 'react';
 import Globe, { type GlobeMethods } from 'react-globe.gl';
+import { CARTO_API_KEY, cartoRasterUrl } from '../../../maps/cartoBasemaps';
 import { useGlobeData, useFlights } from '../hooks/useFlightData';
 import { useAllAirports, useAllAirportsLayer } from '../hooks/useAllAirports';
 import { useUSStates, useUSStateStats, useUSStatesLayer } from '../hooks/useUSStates';
@@ -77,15 +78,28 @@ export function FlightsMap() {
   } = useFlightsFilters();
 
   const basemap = useMemo(() => getBasemap(basemapId), [basemapId]);
+  const tileUrl = useMemo(() => {
+    if (!basemap.tiles) return null;
+    const template = cartoRasterUrl(basemap.tiles);
+    return (x: number, y: number, level: number) => template.replace('{z}', String(level)).replace('{x}', String(x)).replace('{y}', String(y));
+  }, [basemap]);
+  useEffect(() => {
+    const globe = globeRef.current;
+    if (!globe) return;
+    globe.globeTileEngineClearCache();
+    // Clearing tiles does not refresh the library's current view. Reporting the
+    // same camera explicitly loads the new style without waiting for a drag.
+    if (tileUrl) globe.pointOfView(globe.pointOfView(), 0);
+  }, [tileUrl]);
   const textureState = useGlobeTextures(basemap);
   const { resetView, zoomToPoints, zoomToRoute, zoomToPoint, zoomToAirportWithConnections } = useZoomNavigation(globeRef, setSelectedGlobeView);
   const urlGlobeLat = selectedGlobeView?.lat ?? DEFAULT_VIEW.lat;
   const urlGlobeLng = selectedGlobeView?.lng ?? DEFAULT_VIEW.lng;
   const urlGlobeAltitude = selectedGlobeView?.altitude ?? DEFAULT_VIEW.altitude;
 
-  const [hoveredStaticArc, setHoveredStaticArc] = useState<GlobeStaticArc | null>(null);
+  const [hoveredRouteKey, setHoveredRouteKey] = useState<string | null>(null);
   const [hoveredPoint, setHoveredPoint] = useState<GlobePoint | null>(null);
-  const [mobileInfoArc, setMobileInfoArc] = useState<GlobeStaticArc | null>(null); // For mobile tap-to-show
+  const [mobileInfoRouteKey, setMobileInfoRouteKey] = useState<string | null>(null);
   const [copiedUrl, setCopiedUrl] = useState(false);
 
   const clearScheduledGlobeViewSync = useCallback(() => {
@@ -255,12 +269,20 @@ export function FlightsMap() {
     return () => domEl.removeEventListener('dblclick', handler);
   }, [setSelectedGlobeView, stopGlobeRotation]);
 
-  const { arcsData, staticArcsData, pointsData, flightStats, loading, error } = useGlobeData({
+  const { arcsData, staticArcsData, pointsData, flightStats, matchingFlights, loading, error } = useGlobeData({
     selectedYear,
     colorMode,
     selectedAirport,
     selectedAirline,
+    selectedRoute,
+    selectedCountry,
+    selectedRegion,
+    selectedFlightType,
   });
+
+  // Resolve previews from current data so filters cannot retain stale counts or time.
+  const hoveredStaticArc = staticArcsData.find(arc => arc.routeKey === hoveredRouteKey) ?? null;
+  const mobileInfoArc = staticArcsData.find(arc => arc.routeKey === mobileInfoRouteKey) ?? null;
 
   const flightTypeSelection = useMemo(() => {
     if (!selectedFlightType) return null;
@@ -317,7 +339,8 @@ export function FlightsMap() {
   // US States layer data
   const { data: usStatesData, loading: usStatesLoading } = useUSStates({ enabled: shouldLoadUSStates });
   const { data: flightsData } = useFlights();
-  const usStateStats = useUSStateStats(usStatesData, allAirportsData, flightsData);
+  const stateFlightsData = useMemo(() => flightsData ? { ...flightsData, features: matchingFlights } : null, [flightsData, matchingFlights]);
+  const usStateStats = useUSStateStats(usStatesData, allAirportsData, stateFlightsData);
   const usStatesPolygons = useUSStatesLayer(usStatesData, usStateStats, {
     visible: usStatesVisible,
     symbolMode: stateSymbolMode,
@@ -493,6 +516,8 @@ export function FlightsMap() {
     selectedRegion,
     staticArcsData,
     pointsData,
+    selectedAirport,
+    selectedFlightType,
   });
 
   // Combine static arcs and animated arcs (keep stable - don't depend on selection state)
@@ -592,7 +617,7 @@ export function FlightsMap() {
 
   // Static arc hover handler
   const handleStaticArcHover = useCallback((arc: GlobeStaticArc | null) => {
-    setHoveredStaticArc(arc);
+    setHoveredRouteKey(arc?.routeKey ?? null);
   }, []);
 
   // Point hover handler
@@ -750,15 +775,48 @@ export function FlightsMap() {
       )}
 
       {/* Top Navigation Bar */}
+      {basemap.tiles && (
+        <div className="absolute bottom-0 left-4 z-10 bg-gray-900/90 px-2 text-[10px] text-gray-300">
+          © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/attribution/">CARTO</a>
+          {!CARTO_API_KEY && ' · Basemap unavailable'}
+        </div>
+      )}
       <TopNavigationBar
         years={flightStats.years}
         selectedYear={selectedYear}
         onYearChange={handleYearChange}
-        flightCount={flightStats.totalFlights}
+        flightCount={flightsData?.features.length ?? 0}
         filterOpen={filterOpen}
         onFilterOpenChange={setFilterOpen}
         airports={pointsData}
         onAirportSelect={handleAirportCodeClick}
+        layerControls={
+          <LayersControl
+            basemapId={basemapId}
+            onBasemapChange={setBasemapId}
+            allAirportsVisible={allAirportsVisible}
+            onAllAirportsVisibilityChange={setAllAirportsVisible}
+            airportSymbolMode={airportSymbolMode}
+            onAirportSymbolModeChange={setAirportSymbolMode}
+            airportsMetadata={allAirportsData?.metadata}
+            airportsLoading={allAirportsLoading}
+            showFlightPaths={showFlightPaths}
+            onShowFlightPathsChange={setShowFlightPaths}
+            colorMode={colorMode}
+            onColorModeChange={setColorMode}
+            years={flightStats.years}
+            usStatesVisible={usStatesVisible}
+            onUSStatesVisibilityChange={handleUSStatesVisibilityChange}
+            stateSymbolMode={stateSymbolMode}
+            onStateSymbolModeChange={setStateSymbolMode}
+            stateStats={usStateStats}
+            statesLoading={usStatesLoading}
+            isOpen={layersOpen}
+            onOpenChange={setLayersOpen}
+            activeSection={activeLayerSection}
+            onActiveSectionChange={setActiveLayerSection}
+          />
+        }
       />
 
       {/* Selected Route Indicator */}
@@ -804,6 +862,7 @@ export function FlightsMap() {
           <Globe
             ref={globeRef}
             globeImageUrl={basemap.image}
+            globeTileEngineUrl={tileUrl}
             bumpImageUrl={basemap.bump ?? ''}
             backgroundColor={basemap.bg}
             atmosphereColor={basemap.atmosphere}
@@ -856,7 +915,7 @@ export function FlightsMap() {
               if (arcData?.isStatic) {
                 const isMobile = window.matchMedia('(max-width: 640px)').matches;
                 if (isMobile && !selectedRoute) {
-                  setMobileInfoArc(arcData as GlobeStaticArc);
+                  setMobileInfoRouteKey(arcData.routeKey);
                 } else {
                   handleStaticArcClick(arcData as GlobeStaticArc);
                 }
@@ -866,7 +925,7 @@ export function FlightsMap() {
                 if (matchingStatic) {
                   const isMobile = window.matchMedia('(max-width: 640px)').matches;
                   if (isMobile && !selectedRoute) {
-                    setMobileInfoArc(matchingStatic);
+                    setMobileInfoRouteKey(matchingStatic.routeKey);
                   } else {
                     handleStaticArcClick(matchingStatic);
                   }
@@ -1051,32 +1110,7 @@ export function FlightsMap() {
         isMetric={isMetric}
       />
 
-      {/* Layers Control (Flight Paths, All Airports, US States, Basemap) */}
-      <LayersControl
-        basemapId={basemapId}
-        onBasemapChange={setBasemapId}
-        allAirportsVisible={allAirportsVisible}
-        onAllAirportsVisibilityChange={setAllAirportsVisible}
-        airportSymbolMode={airportSymbolMode}
-        onAirportSymbolModeChange={setAirportSymbolMode}
-        airportsMetadata={allAirportsData?.metadata}
-        airportsLoading={allAirportsLoading}
-        showFlightPaths={showFlightPaths}
-        onShowFlightPathsChange={setShowFlightPaths}
-        colorMode={colorMode}
-        onColorModeChange={setColorMode}
-        years={flightStats.years}
-        usStatesVisible={usStatesVisible}
-        onUSStatesVisibilityChange={handleUSStatesVisibilityChange}
-        stateSymbolMode={stateSymbolMode}
-        onStateSymbolModeChange={setStateSymbolMode}
-        stateStats={usStateStats}
-        statesLoading={usStatesLoading}
-        isOpen={layersOpen}
-        onOpenChange={setLayersOpen}
-        activeSection={activeLayerSection}
-        onActiveSectionChange={setActiveLayerSection}
-      />
+
 
       {/* Active filter chips */}
       <ActiveFilterChips
@@ -1101,6 +1135,7 @@ export function FlightsMap() {
         totalFlights={flightStats.totalFlights}
         totalAirports={flightStats.totalAirports}
         totalDistance={flightStats.totalDistance}
+        duration={flightStats.duration}
         selectedYear={selectedYear}
         selectedAirport={selectedAirport}
         selectedAirline={selectedAirline}
@@ -1114,10 +1149,10 @@ export function FlightsMap() {
       {/* Mobile tap info overlay */}
       <MobileInfoOverlay
         arc={mobileInfoArc}
-        onClose={() => setMobileInfoArc(null)}
+        onClose={() => setMobileInfoRouteKey(null)}
         onSelect={(arc) => {
           handleStaticArcClick(arc);
-          setMobileInfoArc(null);
+          setMobileInfoRouteKey(null);
         }}
       />
 

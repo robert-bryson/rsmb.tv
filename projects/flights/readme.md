@@ -36,6 +36,7 @@ public/data/flights/usStates.geojson
 ```
 
 The flights feature loads these files when it needs them.
+The state generator downloads public boundaries from GitHub. This step requires network access.
 
 Both airport generators use the same coordinate checks.
 Each coordinate field must contain a complete, finite number.
@@ -70,6 +71,65 @@ They check subprocess errors before they check the exit status.
 - Automated data sync from Google Sheets with QA/QC validation
 
 ## Units and statistics
+
+### Flight duration
+
+Add these optional columns to the source Google Sheet or CSV:
+
+```csv
+durationMinutes,durationKind,durationSource,durationNote
+165,actual-block,manual,optional source reference
+```
+
+Store elapsed whole minutes. `165` means 2 hours 45 minutes.
+Do not enter `2.45`, `02:45`, or spreadsheet clock values in `durationMinutes`.
+Keep all three duration fields blank when the duration is unknown.
+A supplied duration requires both a timing basis and a source.
+
+| Kind | Meaning |
+| --- | --- |
+| `actual-block` | Actual gate departure to gate arrival |
+| `scheduled-block` | Scheduled gate departure to gate arrival |
+| `estimated-block` | An explicitly supplied gate-to-gate estimate |
+| `unclassified` | Reported duration with an unknown timing basis |
+
+Use a short source label, such as `manual`, `itinerary`, or `bts`.
+`durationNote` remains in the source; it is omitted from public GeoJSON.
+The committed CSV and public Sheet remain public sources. Do not enter booking references or passenger details there.
+Flight numbers and normalized duration fields reach route details.
+Unclassified values appear as reported durations and do not replace the block-time estimate.
+
+Missing values use great-circle distance divided by 800 km/h, plus 60 minutes per leg.
+The resolver rounds each estimated leg to whole minutes before aggregation.
+The interface displays totals in hours and each flight in hours and minutes.
+Screen readers receive full unit names, such as "2 hours 45 minutes."
+Distance-unit changes do not change flight-time units.
+
+Totals show actual, scheduled, estimated, and unavailable coverage.
+Any scheduled or estimated contribution makes the total **Est. flight time**.
+When all durations are missing, the interface shows **Flight time unavailable**.
+The average excludes flights without usable duration data.
+Filters apply consistently to totals and selected airport, route, country, and region details.
+Route counts and time coverage use the same legs for the selected year and airline.
+Open phone and hover details use current route data after a filter change.
+A flight within one state contributes its duration once to that state's total.
+Dates retain their departure-calendar meaning; no local-clock subtraction is needed.
+
+Validation rejects malformed duration input before updating CSV or generated files.
+Older CSV files without duration columns remain supported.
+No historical durations are invented or automatically assigned as actual.
+See the [duration research](../../docs/reviews/2026-11-02-flight-duration-research.md) for evidence sources and historical matching constraints.
+
+Run the duration and ingestion checks:
+
+```bash
+npx vitest run src/test/flightDuration.test.ts src/test/flightSummaries.test.tsx \
+  src/test/DurationSummary.test.tsx src/test/FlightsMap.test.tsx \
+  scripts/__tests__/syncFlights.test.ts scripts/__tests__/flightBuildScripts.test.ts
+PLAYWRIGHT_WEBKIT=1 npm run test:e2e -- tests/e2e/flight-duration.spec.ts
+```
+
+### Distance
 
 The application stores and calculates distances in kilometers.
 It formats distances when it renders the page.
@@ -161,4 +221,11 @@ You can sync flight data from a Google Sheet. Run this command from the reposito
 npm run sync-flights
 ```
 
-The command gets the latest data and regenerates the GeoJSON. It reports unknown airport codes, invalid dates, and duplicate flight records.
+The command validates the Sheet and updates `projects/flights/data/flights.csv`.
+It reports invalid dates, airport-code syntax, duration fields, and possible duplicates.
+Run `npm run build-flights` afterward to regenerate GeoJSON and resolve airport references.
+
+## Basemaps
+
+CARTO globe choices load authenticated tiles directly.
+See the shared [basemap configuration guide](../../docs/carto-basemaps.md).

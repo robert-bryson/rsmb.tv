@@ -11,7 +11,7 @@ const routeData = {
 
 async function fixedAssets(page: Page) {
     const tile = await sharp({ create: { width: 256, height: 256, channels: 3, background: '#999' } }).png().toBuffer();
-    await page.route(/https:\/\/tile\.(openstreetmap|opentopomap)\.org\//, route => route.fulfill({ contentType: 'image/png', body: tile }));
+    await page.route(/https:\/\/basemaps\.cartocdn\.com\//, route => route.fulfill({ contentType: 'image/png', body: tile }));
     await page.route('https://demotiles.maplibre.org/**', route => route.fulfill({ body: '' }));
     await page.route('**/test-trip/**', route => route.request().url().endsWith('.geojson')
         ? route.fulfill({ json: routeData })
@@ -385,7 +385,7 @@ test('stops repaint while replacement basemap tiles are still loading', async ({
     let releaseTiles!: () => void;
     const tilesReady = new Promise<void>(resolve => { releaseTiles = resolve; });
     let requestedTiles = 0;
-    await page.route('https://tile.opentopomap.org/**', async route => {
+    await page.route('https://basemaps.cartocdn.com/light_nolabels/**', async route => {
         requestedTiles += 1;
         await tilesReady;
         await route.fallback();

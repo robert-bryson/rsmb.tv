@@ -1,11 +1,13 @@
 // Shared constants for the flights feature
 import type { BasemapId } from './types';
+import type { CartoRasterStyle } from '../../maps/cartoBasemaps';
 
 // Basemap definitions
 export interface BasemapConfig {
     id: BasemapId;
     label: string;
     image: string;
+    tiles?: CartoRasterStyle;
     bump: string | null;
     atmosphere: string;
     bg: string;
@@ -49,7 +51,8 @@ export const BASEMAPS: BasemapConfig[] = [
     {
         id: 'positron',
         label: 'Light',
-        image: `${base}basemaps/basemap-positron.webp`,
+        image: '',
+        tiles: 'positron-nolabels',
         bump: null,
         atmosphere: 'rgb(180,200,220)',
         bg: 'rgba(220,220,220,1)',
@@ -57,7 +60,8 @@ export const BASEMAPS: BasemapConfig[] = [
     {
         id: 'voyager',
         label: 'Voyager',
-        image: `${base}basemaps/basemap-voyager.webp`,
+        image: '',
+        tiles: 'voyager-nolabels',
         bump: null,
         atmosphere: 'rgb(150,180,210)',
         bg: 'rgba(200,210,220,1)',

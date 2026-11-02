@@ -35,9 +35,10 @@ export default defineConfig({
         }] : []),
     ],
     webServer: skipWebServer ? undefined : {
+        env: { VITE_CARTO_API_KEY: 'browser-test-key', CARTO_API_KEY: '' },
         command: `npm run build-flights && npx vite --host 127.0.0.1 --port ${port} --strictPort`,
         url: baseURL,
-        reuseExistingServer: !process.env.CI,
+        reuseExistingServer: false,
         timeout: 120_000,
     },
 });

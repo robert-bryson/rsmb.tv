@@ -5,14 +5,13 @@ import type {
   GlobeArc,
   GlobePoint,
   GlobeLabel,
+  FlightProperties,
   RouteStats,
   FlightStats,
   ColorMode,
 } from '../types';
 import { calculateDistance, parseYear, getRouteKey, hexToRgba, parseDateString } from '../utils';
 import {
-  AVERAGE_FLIGHT_SPEED_KMH,
-  FLIGHT_OVERHEAD_HOURS,
   MIN_VALID_FLIGHT_DISTANCE_KM,
   MIN_ARC_STROKE,
   MAX_ARC_STROKE,
@@ -27,6 +26,9 @@ import {
   getFrequencyColor,
 } from '../constants';
 import { useGeoJsonData } from './useGeoJsonData';
+import { summarizeFlightDurations } from '../utils/flightDuration';
+import { flightMatchesFilters } from '../utils/flightFilters';
+import type { FlightTypeFilter } from '../types';
 
 export function useAirports() {
   return useGeoJsonData<AirportsCollection>('visitedAirports.geojson');
@@ -41,18 +43,20 @@ interface UseGlobeDataOptions {
   colorMode?: ColorMode;
   selectedAirport?: string | null;
   selectedAirline?: string | null;
-}
-
-// Estimate flight time based on distance
-function estimateFlightTime(distanceKm: number): number {
-  return distanceKm / AVERAGE_FLIGHT_SPEED_KMH + FLIGHT_OVERHEAD_HOURS;
+  selectedRoute?: string | null;
+  selectedCountry?: string | null;
+  selectedRegion?: string | null;
+  selectedFlightType?: FlightTypeFilter | null;
 }
 
 // Transform GeoJSON data to react-globe.gl format with filtering and stats
 export function useGlobeData(options: UseGlobeDataOptions = {}) {
-  const { selectedYear = null, colorMode = 'default', selectedAirport = null, selectedAirline = null } = options;
+  const { selectedYear = null, colorMode = 'default', selectedAirport = null, selectedAirline = null, selectedRoute = null, selectedCountry = null, selectedRegion = null, selectedFlightType = null } = options;
   const { data: airports, loading: airportsLoading, error: airportsError } = useAirports();
   const { data: flights, loading: flightsLoading, error: flightsError } = useFlights();
+  const matchingFlights = useMemo(() => flights?.features.filter(f => flightMatchesFilters(f.properties, {
+    selectedYear, selectedAirport, selectedAirline, selectedRoute, selectedCountry, selectedRegion, selectedFlightType,
+  })) ?? [], [flights, selectedYear, selectedAirport, selectedAirline, selectedRoute, selectedCountry, selectedRegion, selectedFlightType]);
 
   // Compute route statistics (for all flights, used for coloring)
   const routeStats = useMemo<Map<string, RouteStats>>(() => {
@@ -87,7 +91,7 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
     return stats;
   }, [flights]);
 
-  // Compute overall statistics - NOW FILTERED BY SELECTED YEAR, SELECTED AIRPORT, AND SELECTED AIRLINE
+  // Summaries use every active filter. Map arcs retain context for dimmed routes.
   const flightStats = useMemo<FlightStats>(() => {
     if (!flights || !airports) {
       return {
@@ -106,6 +110,7 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
         continentCounts: {},
         averageDistance: 0,
         totalFlightTime: 0,
+        duration: summarizeFlightDurations([]),
         uniqueRoutes: 0,
         mostVisitedCountry: null,
         firstFlight: null,
@@ -131,15 +136,7 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
       .map(([airline, count]) => ({ airline, count }))
       .sort((a, b) => b.count - a.count);
 
-    // Filter flights by year, airport, and airline in a single pass
-    const filteredFlights = flights.features.filter(f => {
-      if (selectedYear !== null && parseYear(f.properties.date) !== selectedYear) return false;
-      if (selectedAirport &&
-        f.properties.origin_code !== selectedAirport &&
-        f.properties.destination_code !== selectedAirport) return false;
-      if (selectedAirline && f.properties.airline !== selectedAirline) return false;
-      return true;
-    });
+    const filteredFlights = matchingFlights;
 
     const years = new Set<number>();
     const countries = new Set<string>();
@@ -158,7 +155,7 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
     const airportArrivalCounts: Record<string, number> = {};
 
     let totalDistance = 0;
-    let totalFlightTime = 0;
+    const duration = summarizeFlightDurations(filteredFlights.map(f => f.properties));
     let internationalFlights = 0;
     let intercontinentalFlights = 0;
     let longestFlight: { route: string; distance: number } | null = null;
@@ -172,7 +169,7 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
       years.add(year);
       countries.add(props.origin_country);
       countries.add(props.destination_country);
-      airlines.add(props.airline);
+      if (props.airline) airlines.add(props.airline);
       uniqueRouteKeys.add(getRouteKey(props.origin_code, props.destination_code));
 
       // Count continent visits (use full names for display)
@@ -221,7 +218,6 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
       if (!isFinite(distance)) return;
 
       totalDistance += distance;
-      totalFlightTime += estimateFlightTime(distance);
 
       // Track longest flight
       if (!longestFlight || distance > longestFlight.distance) {
@@ -419,6 +415,7 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
           elevationFt: ap.elevationFt,
           elevationM: ap.elevationM,
           totalVisits: filteredFlights.length,
+          duration,
           arrivals: arrivals.length,
           departures: departures.length,
           firstVisit,
@@ -495,7 +492,8 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
       intercontinentalFlights,
       continentCounts,
       averageDistance: filteredFlights.length > 0 ? Math.round(totalDistance / filteredFlights.length) : 0,
-      totalFlightTime: Math.round(totalFlightTime),
+      totalFlightTime: duration.totalMinutes / 60,
+      duration,
       uniqueRoutes: uniqueRouteKeys.size,
       mostVisitedCountry,
       firstFlight: firstFlight as { route: string; date: string } | null,
@@ -507,7 +505,7 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
       highestAirport,
       lowestAirport,
     };
-  }, [flights, airports, selectedYear, selectedAirport, selectedAirline]);
+  }, [flights, airports, matchingFlights, selectedAirport]);
 
   // Max route count for frequency coloring
   const maxRouteCount = useMemo(() => {
@@ -639,6 +637,18 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
     return codes;
   }, [arcsData, selectedYear]);
 
+  const airportDurations = useMemo(() => {
+    const groups = new Map<string, FlightProperties[]>();
+    for (const { properties: flight } of matchingFlights) {
+      for (const code of new Set([flight.origin_code, flight.destination_code])) {
+        const group = groups.get(code) ?? [];
+        group.push(flight);
+        groups.set(code, group);
+      }
+    }
+    return new Map([...groups].map(([code, legs]) => [code, summarizeFlightDurations(legs)]));
+  }, [matchingFlights]);
+
   const pointsData = useMemo<GlobePoint[]>(() => {
     if (!airports) return [];
 
@@ -702,10 +712,13 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
           size,
           color,
           label: props.code,
-          airport: props,
+          airport: {
+            ...props,
+            duration: airportDurations.get(props.code) ?? summarizeFlightDurations([]),
+          },
         };
       });
-  }, [airports, selectedYear, filteredAirportCodes, selectedAirport, arcsData]);
+  }, [airports, selectedYear, filteredAirportCodes, selectedAirport, arcsData, airportDurations]);
 
   const labelsData = useMemo<GlobeLabel[]>(() => {
     if (!airports) return [];
@@ -749,11 +762,12 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
           endLat: arc.endLat,
           endLng: arc.endLng,
           stroke: arc.stroke * 0.8, // Slightly thinner than animated arcs
-          routeCount: arc.routeCount,
+          routeCount: 0,
           flights: [],
         });
       }
       routeArcs.get(arc.routeKey)!.flights.push(arc.flight);
+      routeArcs.get(arc.routeKey)!.routeCount++;
     });
 
     return Array.from(routeArcs.entries()).map(([routeKey, route]) => {
@@ -824,6 +838,7 @@ export function useGlobeData(options: UseGlobeDataOptions = {}) {
     pointsData,
     labelsData,
     flightStats,
+    matchingFlights,
     routeStats,
     loading: airportsLoading || flightsLoading,
     error: airportsError || flightsError,

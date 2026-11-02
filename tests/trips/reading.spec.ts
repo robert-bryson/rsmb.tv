@@ -520,13 +520,13 @@ test('return navigation preserves the list filter and header focus stays visible
 });
 
 
-test('map actions appear on the map and attribution starts collapsed', async ({ page }) => {
+test('map actions appear on the map and CARTO attribution stays visible', async ({ page }) => {
     const tile = await sharp({ create: { width: 256, height: 256, channels: 3, background: '#999' } }).png().toBuffer();
     let releaseTiles!: () => void;
     let requestedTiles = 0;
     const tilesReady = new Promise<void>(resolve => { releaseTiles = resolve; });
     page.once('close', releaseTiles);
-    await page.route('https://tile.openstreetmap.org/**', async route => {
+    await page.route('https://basemaps.cartocdn.com/**', async route => {
         requestedTiles += 1;
         await tilesReady;
         await route.fulfill({ contentType: 'image/png', body: tile });
@@ -549,11 +549,8 @@ test('map actions appear on the map and attribution starts collapsed', async ({ 
     releaseTiles();
     await expect(reset).toBeHidden();
     const attribution = map.locator('.maplibregl-ctrl-attrib');
-    await expect(attribution).not.toHaveClass(/maplibregl-compact-show/);
-    await map.getByLabel('Toggle attribution').click();
-    await expect(attribution).toHaveClass(/maplibregl-compact-show/);
-    await map.getByLabel('Toggle attribution').click();
-    await expect(attribution).not.toHaveClass(/maplibregl-compact-show/);
+    await expect(attribution.getByRole('link', { name: 'CARTO', exact: true })).toBeVisible();
+    await expect(attribution).not.toHaveClass(/maplibregl-compact/);
     await map.getByRole('button', { name: 'Zoom in', exact: true }).click();
     await expect(reset).toBeVisible();
     await reset.click();

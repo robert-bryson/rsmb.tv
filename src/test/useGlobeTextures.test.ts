@@ -84,9 +84,9 @@ describe('useGlobeTextures', () => {
         }
     });
 
-    it('returns loading state when no basemap provided', () => {
+    it('does not wait for an image when no texture is required', () => {
         const { result } = renderHook(() => useGlobeTextures(undefined));
-        expect(result.current.isLoading).toBe(true);
+        expect(result.current.isLoading).toBe(false);
     });
 
     it('resets loading state when basemap changes', async () => {

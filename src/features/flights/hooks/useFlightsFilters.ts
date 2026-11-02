@@ -152,9 +152,10 @@ export function useFlightsFilters() {
     const selectedFlightType = isValidFlightTypeFilter(flightTypeParam) ? flightTypeParam : null;
 
     const selectedGlobeView = useMemo(() => parseGlobeView(searchParams), [searchParams]);
-    const showStats = parseBoolean(searchParams.get('stats'), false);
-    const filterOpen = parseBoolean(searchParams.get('filters'), false);
+    const showStats = parseBoolean(searchParams.get('stats'), true);
     const layersOpen = parseBoolean(searchParams.get('layers'), false);
+    // Older/shared URLs can request both panels. Layers takes precedence.
+    const filterOpen = !layersOpen && parseBoolean(searchParams.get('filters'), false);
     const activeLayerSection = layersOpen
         ? parseEnum(searchParams.get('layerSection'), LAYER_PANEL_SECTIONS, 'none')
         : 'none';
@@ -269,17 +270,27 @@ export function useFlightsFilters() {
     }, [updateParams]);
 
     const setShowStats = useCallback((next: BooleanUpdate) => {
-        updateParams(params => setBooleanParamUpdate(params, 'stats', next, false));
+        updateParams(params => setBooleanParamUpdate(params, 'stats', next, true));
     }, [updateParams]);
 
     const setFilterOpen = useCallback((next: BooleanUpdate) => {
-        updateParams(params => setBooleanParamUpdate(params, 'filters', next, false));
+        updateParams(params => {
+            const currentValue = !parseBoolean(params.get('layers'), false) && parseBoolean(params.get('filters'), false);
+            const nextValue = resolveBooleanUpdate(next, currentValue);
+            setBooleanParam(params, 'filters', nextValue, false);
+            if (nextValue) {
+                params.delete('layers');
+                params.delete('layerSection');
+            }
+        });
     }, [updateParams]);
 
     const setLayersOpen = useCallback((next: BooleanUpdate) => {
         updateParams(params => {
-            const nextValue = resolveBooleanUpdate(next, parseBoolean(params.get('layers'), false));
+            const currentValue = parseBoolean(params.get('layers'), false);
+            const nextValue = resolveBooleanUpdate(next, currentValue);
             setBooleanParam(params, 'layers', nextValue, false);
+            if (currentValue || nextValue) params.delete('filters');
             if (!nextValue) params.delete('layerSection');
         });
     }, [updateParams]);
@@ -290,6 +301,7 @@ export function useFlightsFilters() {
                 params.delete('layerSection');
             } else {
                 params.set('layers', '1');
+                params.delete('filters');
                 params.set('layerSection', section);
             }
         });

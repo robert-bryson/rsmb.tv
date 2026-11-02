@@ -42,6 +42,34 @@ afterEach(() => {
 });
 
 describe('flight build scripts', () => {
+    it('preserves recorded minutes and flight numbers, and rejects malformed durations before writing', () => {
+        const cwd = makeWorkspace();
+        writeFileSync(join(cwd, 'projects/flights/data/airports.csv'), [
+            'iata_code,name,municipality,iso_region,iso_country,continent,latitude_deg,longitude_deg,elevation_ft',
+            'SEA,Seattle,Seattle,US-WA,US,NA,47.4502,-122.3088,433',
+            'LAX,Los Angeles,Los Angeles,US-CA,US,NA,33.9416,-118.4085,128',
+        ].join('\n'));
+        const csv = (minutes: string) => [
+            'date,airline,flightNumber,origin,destination,durationMinutes,durationKind,durationSource,durationNote',
+            `1/1/2024,United,UA123,SEA,LAX,${minutes},actual-block,manual,private evidence`,
+        ].join('\n');
+        const csvPath = join(cwd, 'projects/flights/data/flights.csv');
+        writeFileSync(csvPath, csv('165'));
+        const valid = runScript(cwd, 'projects/flights/scripts/convertFlights.js');
+        expect(valid.status, valid.stderr).toBe(0);
+        expect(readJson(cwd, 'public/data/flights/flights.geojson').features[0].properties)
+            .toMatchObject({ flightNumber: 'UA123', durationMinutes: 165, durationKind: 'actual-block', durationSource: 'manual' });
+        const original = readFileSync(join(cwd, 'public/data/flights/flights.geojson'), 'utf8');
+        expect(original).not.toContain('private evidence');
+        const airports = readFileSync(join(cwd, 'public/data/flights/visitedAirports.geojson'), 'utf8');
+        writeFileSync(csvPath, csv('2.45'));
+        const invalid = runScript(cwd, 'projects/flights/scripts/convertFlights.js');
+        expect(invalid.status).not.toBe(0);
+        expect(invalid.stderr).toContain('row 2');
+        expect(readFileSync(join(cwd, 'public/data/flights/flights.geojson'), 'utf8')).toBe(original);
+        expect(readFileSync(join(cwd, 'public/data/flights/visitedAirports.geojson'), 'utf8')).toBe(airports);
+    });
+
     it('excludes malformed coordinates from flight, visited, and complete airport outputs', () => {
         const cwd = makeWorkspace();
         writeFileSync(join(cwd, 'projects/flights/data/airports.csv'), [
@@ -148,6 +176,32 @@ describe('flight build scripts', () => {
         expect(secondRun.error).toBeUndefined();
         expect(secondRun.status).toBe(0);
         expect(readFileSync(outputPath, 'utf8')).toBe(firstOutput);
+    });
+
+    it('omits collapsed state islands and holes that otherwise fill the globe', () => {
+        const cwd = makeWorkspace();
+        // Actual zero-area ring from the boundary source, duplicated in Virginia and Maryland.
+        // D3 interprets Virginia's orientation as covering almost the entire sphere.
+        const collapsedIsland = [[-76.016553, 37.95325], [-75.994645, 37.95325], [-76.043938, 37.95325], [-76.016553, 37.95325]];
+        const mainland = [[-80, 37], [-80, 39], [-77, 39], [-80, 37]];
+        const island = [[-76, 37], [-76, 38], [-75, 38], [-76, 37]];
+        const source = {
+            features: [
+                { properties: { name: 'Virginia' }, geometry: { type: 'MultiPolygon', coordinates: [[mainland], [collapsedIsland], [island]] } },
+                { properties: { name: 'Maryland' }, geometry: { type: 'Polygon', coordinates: [mainland, collapsedIsland.toReversed()] } },
+            ],
+        };
+        const scriptUrl = pathToFileURL(join(repoRoot, 'projects/flights/scripts/generateUSStates.js')).href;
+        const result = spawnSync(process.execPath, ['--input-type=module', '-e',
+            `globalThis.fetch = async () => ({ ok: true, json: async () => (${JSON.stringify(source)}) }); await import(${JSON.stringify(scriptUrl)});`,
+        ], { cwd, encoding: 'utf8' });
+        expect(result.error).toBeUndefined();
+        expect(result.status, result.stderr).toBe(0);
+        const states = readJson(cwd, 'public/data/flights/usStates.geojson');
+        expect(states.features.find((state: { properties: { abbr: string } }) => state.properties.abbr === 'VA').geometry)
+            .toEqual({ type: 'MultiPolygon', coordinates: [[mainland], [island]] });
+        expect(states.features.find((state: { properties: { abbr: string } }) => state.properties.abbr === 'MD').geometry)
+            .toEqual({ type: 'Polygon', coordinates: [mainland] });
     });
 
     it('keeps the timestamp for equal data and updates it for changed data', () => {

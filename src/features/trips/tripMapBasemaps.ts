@@ -1,3 +1,4 @@
+import { BASEMAP_ATTRIBUTION, cartoRasterUrl } from '../../maps/cartoBasemaps';
 import type { StyleSpecification } from 'maplibre-gl';
 
 export type BasemapId = 'muted' | 'street' | 'terrain';
@@ -12,7 +13,7 @@ export const basemaps: Array<{
         {
             id: 'muted',
             label: 'Muted',
-            tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+            tiles: [cartoRasterUrl('positron')],
             paint: {
                 'raster-saturation': -1,
                 'raster-brightness-min': 0.05,
@@ -23,7 +24,7 @@ export const basemaps: Array<{
         {
             id: 'street',
             label: 'Street',
-            tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+            tiles: [cartoRasterUrl('voyager')],
             paint: {
                 'raster-saturation': 0,
                 'raster-brightness-min': 0,
@@ -33,8 +34,8 @@ export const basemaps: Array<{
         },
         {
             id: 'terrain',
-            label: 'Terrain',
-            tiles: ['https://tile.opentopomap.org/{z}/{x}/{y}.png'],
+            label: 'Light',
+            tiles: [cartoRasterUrl('positron-nolabels')],
             paint: {
                 'raster-saturation': 0,
                 'raster-brightness-min': 0,
@@ -54,10 +55,10 @@ export function mapStyle(basemapId: BasemapId): StyleSpecification {
                 type: 'raster',
                 tiles: basemap.tiles,
                 tileSize: 256,
-                attribution: '&copy; OpenStreetMap contributors &copy; OpenTopoMap',
+                attribution: BASEMAP_ATTRIBUTION,
             },
         },
-        layers: [{
+        layers: [{ id: 'basemap-background', type: 'background', paint: { 'background-color': '#171b24' } }, {
             id: 'openstreetmap',
             type: 'raster',
             source: 'openstreetmap',

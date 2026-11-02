@@ -7,6 +7,8 @@ frontend:
         - npm install --global "$(node -p "require('./package.json').packageManager")"
         - npm ci --cache .npm --prefer-offline
     build:
+      # Set CARTO_API_KEY in Amplify's build environment. Vite exposes only this
+      # designated browser basemap key and rejects release builds without it.
       commands:
         - if [ "$AWS_BRANCH" = "dev" ]; then npm run build:dev; else npm run build; fi
   artifacts:

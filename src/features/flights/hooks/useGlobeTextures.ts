@@ -76,6 +76,8 @@ export function useGlobeTextures(basemap?: BasemapConfig): TextureLoadingState {
         };
     }, [imageUrl, bumpUrl, loadKey]);
 
+    if (!imageUrl) return { isLoading: false, progress: 100, error: null };
+
     if (state.loadKey !== loadKey) {
         return {
             isLoading: true,

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent as ReactPointerEvent } from 'react';
-import type { FlightStats, SelectedRouteInfo, SelectedCountryInfo, SelectedRegionInfo, FlightTypeFilter } from '../types';
+import type { FlightProperties, FlightStats, SelectedRouteInfo, SelectedCountryInfo, SelectedRegionInfo, FlightTypeFilter } from '../types';
 import { EARTH_CIRCUMFERENCE_KM } from '../constants';
 import { formatElevation, getFlightTypeLabel } from '../utils';
 import { StatItem, CollapsibleSection, ClickableAirport, ClickableRoute, ClickableCountry, ClickableRegion, FlightCount, VirtualizedList, DistanceValue } from './shared';
@@ -8,6 +8,7 @@ import { CountriesSection } from './CountriesSection';
 import { RegionsSection } from './RegionsSection';
 import { RoutesSection } from './RoutesSection';
 import { usePersistedState } from '../../../hooks/usePersistedState';
+import { DurationSummary, FlightDurationDetail } from './DurationSummary';
 
 const DEFAULT_PANEL_WIDTH = 320;
 const MIN_PANEL_WIDTH = 272;
@@ -174,7 +175,7 @@ export function StatsPanel({
 
   return (
     <div
-      className={`absolute top-16 bottom-[calc(env(safe-area-inset-bottom,0px)+6rem)] left-4 z-20 max-w-[calc(100vw-2rem)] transition-transform duration-300 ease-out pointer-events-none ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+      className={`absolute top-16 bottom-[calc(env(safe-area-inset-bottom,0px)+6rem)] left-4 z-20 max-w-[calc(100vw-4.5rem)] transition-transform duration-300 ease-out pointer-events-none ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
       style={{ width: `${effectivePanelWidth}px` }}
     >
       <div
@@ -214,6 +215,10 @@ export function StatsPanel({
             {sectionMode === 'collapsed' ? '▶ Expand All' : '▼ Collapse All'}
           </button>
         </div>
+
+        {(selectedRouteInfo?.duration ?? selectedCountryInfo?.duration ?? selectedRegionInfo?.duration ?? stats.duration) && (
+          <DurationSummary summary={(selectedRouteInfo?.duration ?? selectedCountryInfo?.duration ?? selectedRegionInfo?.duration ?? stats.duration)!} />
+        )}
 
         {/* Airport-specific stats when an airport is selected */}
         {airportInfo ? (
@@ -693,18 +698,24 @@ function RouteStatsView({
         isOpen={getSectionOpen('route-all-flights', false)}
         onToggle={() => toggleSection('route-all-flights', false)}
       >
-        <VirtualizedList
-          items={routeInfo.dates}
+        <VirtualizedList<FlightProperties | string>
+          items={routeInfo.flights ?? routeInfo.dates}
           initialCount={8}
           incrementCount={8}
-          keyExtractor={(date, index) => `${date}-${index}`}
-          renderItem={(date, index) => (
-            <div className="flex items-center gap-2 rounded-md border border-gray-700/70 bg-gray-800/60 px-2.5 py-1.5 text-xs">
+          keyExtractor={(flight, index) => typeof flight === 'string' ? `${flight}-${index}` : String(flight.id)}
+          renderItem={(flight, index) => (
+            <div className="flex flex-wrap items-center gap-2 rounded-md border border-gray-700/70 bg-gray-800/60 px-2.5 py-1.5 text-xs">
               <span className="w-6 shrink-0 text-right font-mono text-[10px] text-gray-600">
                 {String(index + 1).padStart(2, '0')}
               </span>
               <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-purple-400/80" aria-hidden="true" />
-              <span className="font-medium tabular-nums text-gray-300">{date}</span>
+              <span className="font-medium tabular-nums text-gray-300">{typeof flight === 'string' ? flight : flight.date}</span>
+              {typeof flight !== 'string' && (
+                <div className="w-full pl-8 text-gray-400">
+                  <div>{flight.origin_code} → {flight.destination_code} · {flight.airline} {flight.flightNumber}</div>
+                  <FlightDurationDetail flight={flight} />
+                </div>
+              )}
               {index === 0 && (
                 <span className="ml-auto rounded bg-purple-500/15 px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-purple-300">
                   Latest
@@ -1124,7 +1135,6 @@ function OverallStats({
         <StatItem icon="🌍" label="Countries" value={stats.totalCountries.toString()} />
         <StatItem icon="🏢" label="Airlines" value={stats.totalAirlines.toString()} />
         <StatItem icon="🔀" label="Unique Routes" value={stats.uniqueRoutes.toString()} />
-        <StatItem icon="⏱️" label="Est. Flight Time" value={`${stats.totalFlightTime.toLocaleString()}h`} />
       </div>
 
       {/* Distance Stats */}

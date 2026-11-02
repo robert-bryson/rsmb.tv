@@ -1,3 +1,4 @@
+import { cartoVectorStyle } from '../../../maps/cartoBasemaps';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as maplibregl from 'maplibre-gl';
@@ -683,9 +684,8 @@ export function TornadoMap() {
         try {
             map = new maplibregl.Map({
                 container: mapContainer.current,
-                // CARTO's raster tiles now require an API key and return watermark
-                // images with HTTP 200 without one. This dark style needs no key.
-                style: 'https://tiles.openfreemap.org/styles/dark',
+                style: cartoVectorStyle('dark-matter'),
+                attributionControl: { compact: false },
                 center: [filters.mapLng, filters.mapLat],
                 zoom: filters.mapZoom,
                 minZoom: MIN_ZOOM,

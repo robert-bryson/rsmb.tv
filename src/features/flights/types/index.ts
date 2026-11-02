@@ -1,4 +1,6 @@
 import type { FeatureCollection, Feature, Point, LineString, Polygon, MultiPolygon } from 'geojson';
+import type { FlightDurationInput } from '../utils/durationInput';
+import type { FlightDurationSummary } from '../utils/flightDuration';
 
 // All airports (full dataset) properties
 export interface AllAirportProperties {
@@ -44,6 +46,7 @@ export interface AllAirportsLayerConfig {
 
 // Visited airports properties (with visit statistics)
 export interface AirportProperties {
+  duration?: FlightDurationSummary;
   code: string;
   name: string;
   municipality: string;
@@ -61,10 +64,11 @@ export interface AirportProperties {
   visitDates: string[];
 }
 
-export interface FlightProperties {
+export interface FlightProperties extends Partial<FlightDurationInput> {
   id: number;
   date: string;
   airline: string;
+  flightNumber?: string;
   origin_code: string;
   origin_name: string;
   origin_municipality: string;
@@ -129,6 +133,7 @@ export interface RouteStats {
 
 // Selected airport info for filtered stats
 export interface SelectedAirportInfo {
+  duration?: FlightDurationSummary;
   code: string;
   name: string;
   municipality: string;
@@ -154,6 +159,8 @@ export interface SelectedAirportInfo {
 
 // Selected route info for stats panel
 export interface SelectedRouteInfo {
+  duration?: FlightDurationSummary;
+  flights?: FlightProperties[];
   routeKey: string;
   originCode: string;
   originName: string;
@@ -182,6 +189,7 @@ export interface SelectedRouteInfo {
 
 // Selected country info for stats panel
 export interface SelectedCountryInfo {
+  duration?: FlightDurationSummary;
   code: string;
   name: string;
   continent: string;
@@ -198,6 +206,7 @@ export interface SelectedCountryInfo {
 
 // Selected region info for stats panel
 export interface SelectedRegionInfo {
+  duration?: FlightDurationSummary;
   code: string;
   name: string;
   country: string;
@@ -213,6 +222,7 @@ export interface SelectedRegionInfo {
 
 // Overall flight statistics
 export interface FlightStats {
+  duration?: FlightDurationSummary;
   totalFlights: number;
   totalAirports: number;
   totalCountries: number;
@@ -227,7 +237,7 @@ export interface FlightStats {
   intercontinentalFlights: number;
   continentCounts: Record<string, number>;
   averageDistance: number;
-  totalFlightTime: number; // estimated hours
+  totalFlightTime: number; // best available hours; duration carries timing basis and coverage
   uniqueRoutes: number;
   mostVisitedCountry: { country: string; count: number; departures: number; arrivals: number } | null;
   firstFlight: { route: string; date: string } | null;
@@ -315,6 +325,7 @@ export interface USStateProperties {
 
 // Computed state statistics (derived from flight data)
 export interface USStateStats {
+  duration?: FlightDurationSummary;
   code: string;
   name: string;
   abbr: string;
