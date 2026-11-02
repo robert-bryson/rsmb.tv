@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { useGlobeTextures } from '../features/flights/hooks/useGlobeTextures';
 import type { BasemapConfig } from '../features/flights/constants';
 
@@ -24,6 +24,7 @@ const altBasemap: BasemapConfig = {
 describe('useGlobeTextures', () => {
     afterEach(() => {
         vi.restoreAllMocks();
+        vi.unstubAllGlobals();
     });
 
     it('starts in loading state', () => {
@@ -31,6 +32,54 @@ describe('useGlobeTextures', () => {
         expect(result.current.isLoading).toBe(true);
         expect(result.current.progress).toBe(0);
         expect(result.current.error).toBeNull();
+    });
+
+    it.each(['load', 'error'] as const)('starts a new batch when returning to a basemap after %s', outcome => {
+        const images: { src: string; onload: (() => void) | null; onerror: (() => void) | null }[] = [];
+        vi.stubGlobal('Image', class {
+            src = '';
+            onload = null;
+            onerror = null;
+            constructor() { images.push(this); }
+        });
+        const { result, rerender } = renderHook(({ basemap }) => useGlobeTextures(basemap), {
+            initialProps: { basemap: mockBasemap },
+        });
+        act(() => {
+            if (outcome === 'error') images[0].onerror?.();
+            else { images[0].onload?.(); images[1].onload?.(); }
+        });
+        rerender({ basemap: altBasemap });
+        const abandonedLoad = images[2].onload;
+        rerender({ basemap: mockBasemap });
+        expect(result.current).toMatchObject({ isLoading: true, progress: 0, error: null });
+        act(() => abandonedLoad?.());
+        expect(result.current).toMatchObject({ isLoading: true, progress: 0, error: null });
+        act(() => { images[3].onload?.(); images[4].onload?.(); });
+        expect(result.current).toMatchObject({ isLoading: false, progress: 100, error: null });
+    });
+
+    it('keeps an error after another texture succeeds, and retries with fresh image loads', async () => {
+        const images: { src: string; onload: (() => void) | null; onerror: (() => void) | null }[] = [];
+        vi.stubGlobal('Image', class {
+            src = '';
+            onload = null;
+            onerror = null;
+            constructor() { images.push(this); }
+        });
+        const { result, unmount } = renderHook(() => useGlobeTextures(mockBasemap));
+        await act(async () => { images[0].onerror?.(); });
+        await act(async () => { images[1].onload?.(); });
+        expect(result.current.isLoading).toBe(false);
+        expect(result.current.error).toBeInstanceOf(Error);
+        act(() => result.current.retry());
+        expect(result.current.isLoading).toBe(true);
+        expect(result.current.error).toBeNull();
+        expect(images).toHaveLength(4);
+        await act(async () => { images[2].onload?.(); images[3].onload?.(); });
+        expect(result.current).toMatchObject({ isLoading: false, error: null, progress: 100 });
+        unmount();
+        expect(images.every(image => image.onload === null && image.onerror === null)).toBe(true);
     });
 
     it('completes loading when textures load successfully', async () => {

@@ -1,0 +1,38 @@
+{
+  "browser": "156.0.8078.4",
+  "device": "Pixel 7",
+  "cpuSlowdown": 4,
+  "latencyMs": 150,
+  "downloadMbps": 1.6,
+  "uploadMbps": 0.75,
+  "flightCount": 332,
+  "samples": [
+    {
+      "action": "Pause flight animations",
+      "durationMs": 440.2000000476837
+    },
+    {
+      "action": "Play flight animations",
+      "durationMs": 333.30000001192093
+    },
+    {
+      "action": "Pause flight animations",
+      "durationMs": 372.80000001192093
+    },
+    {
+      "action": "Play flight animations",
+      "durationMs": 368.39999997615814
+    },
+    {
+      "action": "Pause flight animations",
+      "durationMs": 369.5999999642372
+    },
+    {
+      "action": "Play flight animations",
+      "durationMs": 371.69999998807907
+    }
+  ],
+  "budgetMs": 600,
+  "renderScale": 2,
+  "maxDurationMs": 440.2000000476837
+}

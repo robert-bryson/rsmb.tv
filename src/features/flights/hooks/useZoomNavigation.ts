@@ -1,4 +1,4 @@
-import { useCallback, type RefObject } from 'react';
+import { useCallback, useRef, type RefObject } from 'react';
 import type { GlobeMethods } from 'react-globe.gl';
 import type { GlobeViewState } from '../types';
 import {
@@ -33,25 +33,33 @@ function calculateZoomAltitude(
  */
 function calculateBounds(points: LatLng[]) {
     let minLat = 90,
-        maxLat = -90,
-        minLng = 180,
-        maxLng = -180;
+        maxLat = -90;
 
     points.forEach((point) => {
         minLat = Math.min(minLat, point.lat);
         maxLat = Math.max(maxLat, point.lat);
-        minLng = Math.min(minLng, point.lng);
-        maxLng = Math.max(maxLng, point.lng);
     });
 
+    // The complement of the largest empty gap is the smallest interval that
+    // contains every airport. This also works for distributions wider than 180°.
+    const longitudes = points.map(point => ((point.lng % 360) + 360) % 360).sort((a, b) => a - b);
+    let largestGap = -1;
+    let intervalStart = longitudes[0];
+    longitudes.forEach((longitude, index) => {
+        const next = longitudes[(index + 1) % longitudes.length];
+        const gap = (index === longitudes.length - 1 ? next + 360 : next) - longitude;
+        if (gap > largestGap) {
+            largestGap = gap;
+            intervalStart = next;
+        }
+    });
+    const longitudeSpan = 360 - largestGap;
     const centerLat = (minLat + maxLat) / 2;
-    const centerLng = (minLng + maxLng) / 2;
+    const centerLng = ((intervalStart + longitudeSpan / 2 + 180) % 360) - 180;
     const latSpan = maxLat - minLat;
-    const lngSpan = maxLng - minLng;
-    const adjustedLngSpan = lngSpan > 180 ? 360 - lngSpan : lngSpan;
-    const maxSpan = Math.max(latSpan, adjustedLngSpan);
+    const maxSpan = Math.max(latSpan, longitudeSpan);
 
-    return { centerLat, centerLng, latSpan, adjustedLngSpan, maxSpan };
+    return { centerLat, centerLng, maxSpan };
 }
 
 /**
@@ -62,13 +70,20 @@ export function useZoomNavigation(
     globeRef: RefObject<GlobeMethods | undefined>,
     onViewChange?: (view: GlobeViewState, options?: { replace?: boolean }) => void
 ) {
+    // The camera restoration effect must recognize URL writes from our own
+    // transitions. Applying them again with zero duration ends the active tween.
+    const navigationViewRef = useRef<GlobeViewState | null>(null);
+    const moveToView = useCallback((view: GlobeViewState, transitionMs: number) => {
+        if (!globeRef.current) return;
+        navigationViewRef.current = view;
+        globeRef.current.pointOfView(view, transitionMs);
+        onViewChange?.(view, { replace: true });
+    }, [globeRef, onViewChange]);
+
     /** Reset the view to the default (centered on USA). */
     const resetView = useCallback(() => {
-        if (globeRef.current) {
-            globeRef.current.pointOfView(DEFAULT_VIEW, VIEW_TRANSITION_MS);
-            onViewChange?.(DEFAULT_VIEW, { replace: true });
-        }
-    }, [globeRef, onViewChange]);
+        moveToView(DEFAULT_VIEW, VIEW_TRANSITION_MS);
+    }, [moveToView]);
 
     /** Zoom to fit a set of geographic points. */
     const zoomToPoints = useCallback(
@@ -80,11 +95,7 @@ export function useZoomNavigation(
 
             if (points.length === 1) {
                 const view = { lat: points[0].lat, lng: points[0].lng, altitude: 0.5 };
-                globeRef.current.pointOfView(
-                    view,
-                    options?.transitionMs ?? VIEW_TRANSITION_MS
-                );
-                onViewChange?.(view, { replace: true });
+                moveToView(view, options?.transitionMs ?? VIEW_TRANSITION_MS);
                 return;
             }
 
@@ -94,10 +105,9 @@ export function useZoomNavigation(
                 options?.divisor ?? ZOOM_SPAN_DIVISOR
             );
             const view = { lat: centerLat, lng: centerLng, altitude };
-            globeRef.current.pointOfView(view, options?.transitionMs ?? VIEW_TRANSITION_MS);
-            onViewChange?.(view, { replace: true });
+            moveToView(view, options?.transitionMs ?? VIEW_TRANSITION_MS);
         },
-        [globeRef, onViewChange]
+        [globeRef, moveToView]
     );
 
     /** Zoom to the midpoint between two geographic points (e.g., a route). */
@@ -109,33 +119,25 @@ export function useZoomNavigation(
         ) => {
             if (!globeRef.current) return;
 
-            const midLat = (start.lat + end.lat) / 2;
-            const midLng = (start.lng + end.lng) / 2;
-            const latDiff = Math.abs(start.lat - end.lat);
-            const lngDiff = Math.abs(start.lng - end.lng);
-            const adjustedLngDiff = lngDiff > 180 ? 360 - lngDiff : lngDiff;
-            const maxDiff = Math.max(latDiff, adjustedLngDiff);
+            const { centerLat, centerLng, maxSpan } = calculateBounds([start, end]);
             const altitude = Math.min(
                 2.5,
-                Math.max(0.6, maxDiff / (options?.divisor ?? 70))
+                Math.max(0.6, maxSpan / (options?.divisor ?? 70))
             );
 
-            const view = { lat: midLat, lng: midLng, altitude };
-            globeRef.current.pointOfView(view, options?.transitionMs ?? 1000);
-            onViewChange?.(view, { replace: true });
+            const view = { lat: centerLat, lng: centerLng, altitude };
+            moveToView(view, options?.transitionMs ?? VIEW_TRANSITION_MS);
         },
-        [globeRef, onViewChange]
+        [globeRef, moveToView]
     );
 
     /** Zoom to a single point at a specific altitude. */
     const zoomToPoint = useCallback(
-        (point: LatLng, altitude = 0.5, transitionMs = 1000) => {
-            if (!globeRef.current) return;
+        (point: LatLng, altitude = 0.5, transitionMs = VIEW_TRANSITION_MS) => {
             const view = { lat: point.lat, lng: point.lng, altitude };
-            globeRef.current.pointOfView(view, transitionMs);
-            onViewChange?.(view, { replace: true });
+            moveToView(view, transitionMs);
         },
-        [globeRef, onViewChange]
+        [moveToView]
     );
 
     /** Zoom to fit an airport and all its connections. */
@@ -153,10 +155,9 @@ export function useZoomNavigation(
             const altitude = Math.min(2.5, Math.max(0.5, maxSpan / 45 + 0.3));
 
             const view = { lat: airport.lat, lng: airport.lng, altitude };
-            globeRef.current.pointOfView(view, 1000);
-            onViewChange?.(view, { replace: true });
+            moveToView(view, VIEW_TRANSITION_MS);
         },
-        [globeRef, onViewChange, zoomToPoint]
+        [globeRef, moveToView, zoomToPoint]
     );
 
     return {
@@ -165,5 +166,6 @@ export function useZoomNavigation(
         zoomToRoute,
         zoomToPoint,
         zoomToAirportWithConnections,
+        navigationViewRef,
     };
 }

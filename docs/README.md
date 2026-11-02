@@ -11,7 +11,7 @@ Use [TODO.md](../TODO.md) for incomplete work.
 | [Blog publication](blog-publishing.md) | Configure the Sheet and import documents |
 | [Site metadata](site-metadata.md) | Maintain crawler metadata, social cards, canonical paths, and hosting rules |
 | [CARTO basemaps](carto-basemaps.md) | Configure authenticated maps and visible attribution across projects |
-| [Flights](../projects/flights/readme.md) | Build flight data, enter durations, and check filtered statistics |
+| [Flights](../projects/flights/readme.md) | Build flight data, enter durations, and check maps, recovery, and filtered statistics |
 | [Email DNS](email-dns.md) | Adopt and test mail records, enable signing, and verify delivery |
 | [GitHub Actions OIDC](github-actions-oidc.md) | Deploy workflow roles and retire long-lived AWS credentials |
 | [Trip authoring](trips/TRIP-AUTHORING-README.md) | Prepare, check, and publish trip content |
@@ -33,6 +33,8 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-02 | [Flight map review: camera races, texture recovery, coverage, and animation performance](reviews/2026-11-02-flight-map-recovery-and-performance.md) |
+| 2026-11-02 | [Flight map structure, camera lifecycle, and renderer regression checks](reviews/2026-11-02-flights-map-refactor.md) |
 | 2026-11-02 | [Flight durations, basemaps, server ownership, and regression coverage](reviews/2026-11-02-flights-and-basemaps-quality-review.md) |
 | 2026-11-02 | [Flight duration sources, data audit, and application integration proposal](reviews/2026-11-02-flight-duration-research.md) |
 | 2026-11-02 | [Pending changes: HTML routes, crawler directives, hosting rewrites, and trip content](reviews/2026-11-02-pending-changes-quality-review.md) |

@@ -38,6 +38,92 @@ public/data/flights/usStates.geojson
 The flights feature loads these files when it needs them.
 The state generator downloads public boundaries from GitHub. This step requires network access.
 
+## Map code
+
+The map separates page controls from renderer behavior:
+
+| File in `src/features/flights/` | Responsibility |
+| --- | --- |
+| `components/FlightsMap.tsx` | URL filters, selection, statistics, and page controls |
+| `components/FlightsGlobe.tsx` | Globe layers, styling, labels, and hit handling |
+| `hooks/useFlightMapLayers.ts` | Optional geography loading, airport labels, and filtered state layers |
+| `hooks/useGlobeCamera.ts` | Renderer readiness, camera restoration, rotation, and listener cleanup |
+| `hooks/useGlobeTextures.ts` | Texture progress, failure state, and fresh loading attempts |
+| `hooks/useZoomNavigation.ts` | Camera targets, route bounds, and transition requests |
+| `utils/globeView.ts` | Camera comparisons at the URL's stored precision |
+
+Camera listeners remain active after filter and camera URL changes.
+A shared camera takes precedence over the initial year fit.
+Later year changes fit their airports after data loads.
+An empty year does not prevent a later year from fitting its airports.
+Camera navigation, reset, and unmount cancel pending year fits.
+A direct camera gesture also cancels a pending fit before the gesture ends.
+External year navigation retains a supplied camera, including unchanged coordinates.
+Selecting a year in the map controls requests a new fit.
+Unmount and superseding navigation cancel pending camera synchronization.
+Changing the linked view retains explicit rotation. Direct interaction pauses it.
+The camera ignores URL updates from its own transitions and gestures.
+This prevents URL synchronization from stopping a transition or moving the camera again.
+Camera fitting uses the smallest longitude interval that contains the selected airports.
+Pacific routes can cross the date line without moving the camera to Greenwich.
+
+Texture failures show an error and a **Try Again** button.
+Retry loads a fresh texture batch and creates a fresh globe renderer.
+It retains the URL filters and camera.
+Changing basemaps also clears errors from the previous texture batch.
+Returning to an earlier basemap starts a new batch, even if another batch is still loading.
+
+The share control reports success only after a clipboard operation succeeds.
+If both clipboard methods fail, it opens a prompt for manual copying.
+
+`src/test/FlightsMap.test.tsx` exercises these modules together.
+It keeps filtering, navigation, layer derivation, and page controls real.
+It replaces WebGL and asset loading with fixed adapters.
+The browser checks use the actual globe renderer:
+
+```bash
+npx vitest run src/test/FlightsMap.test.tsx src/test/useGlobeTextures.test.ts src/test/useZoomNavigation.test.ts
+PLAYWRIGHT_WEBKIT=1 npm run test:e2e -- tests/e2e/flights-controls.spec.ts tests/e2e/flight-duration.spec.ts tests/e2e/carto-basemaps.spec.ts
+```
+
+### Animation performance
+
+Pause and play reuse existing arc objects.
+The renderer changes their animation timing without resetting their dash positions.
+Thin route meshes use 24 curve segments and four tube sides.
+The canvas retains the library's display resolution.
+
+The optional performance check uses Pixel 7 emulation, 4× CPU slowdown, and a throttled network.
+It measures six trusted pause/play taps with the committed flight data.
+Each measurement ends after two animation frames following the click.
+The maximum must be 600 ms or less.
+This laboratory check is separate from field INP measurements.
+
+Prepare the flight data first with `npm run build-flights` if it is missing or outdated.
+Build and start a production preview in one terminal:
+
+```bash
+VITE_CARTO_API_KEY=browser-test-key CARTO_API_KEY='' npx vite build
+npx vite preview --host 127.0.0.1 --port 4176 --strictPort
+```
+
+Use an unused port. If you change the port, also change `PLAYWRIGHT_BASE_URL` below.
+
+Run the check in another terminal:
+
+```bash
+FLIGHTS_PERFORMANCE=1 PLAYWRIGHT_BASE_URL=http://127.0.0.1:4176 PLAYWRIGHT_SKIP_WEB_SERVER=1 \
+  npx playwright test tests/e2e/flights-performance.spec.ts --project=chromium --workers=1
+```
+
+Use one worker without concurrent browser or build work.
+The check attaches its samples as JSON.
+Set `FLIGHTS_PERFORMANCE_REPORT` to save another copy of the report.
+Ordinary browser runs skip this production-only check.
+Use the [review record](../../docs/reviews/2026-11-02-flight-map-recovery-and-performance.md) for measured results and test limits.
+
+## Airport validation
+
 Both airport generators use the same coordinate checks.
 Each coordinate field must contain a complete, finite number.
 Latitude must be from -90 through 90 degrees.

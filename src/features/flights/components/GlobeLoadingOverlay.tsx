@@ -10,7 +10,7 @@ interface GlobeLoadingOverlayProps {
 export function GlobeLoadingOverlay({ progress, error, onRetry }: GlobeLoadingOverlayProps) {
     if (error) {
         return (
-            <div className="absolute inset-0 flex items-center justify-center z-20 bg-[#000011]">
+            <div role="alert" className="absolute inset-0 flex items-center justify-center z-20 bg-[#000011]">
                 <div className="text-center">
                     <div className="text-4xl mb-4">⚠️</div>
                     <div className="text-white/70 text-sm mb-2">Failed to load globe textures</div>

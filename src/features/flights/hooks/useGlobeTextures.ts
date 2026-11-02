@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import type { BasemapConfig } from '../constants';
 
 interface TextureLoadingState {
@@ -7,88 +7,60 @@ interface TextureLoadingState {
     error: Error | null;
 }
 
-interface InternalTextureLoadingState extends TextureLoadingState {
-    loadKey: string;
-}
-
-/**
- * Hook to preload globe textures and track loading progress.
- */
-export function useGlobeTextures(basemap?: BasemapConfig): TextureLoadingState {
+/** Preloads a texture batch. Retry starts a fresh batch and renderer instance. */
+export function useGlobeTextures(basemap?: BasemapConfig) {
     const imageUrl = basemap?.image;
     const bumpUrl = basemap?.bump;
-    const loadKey = `${imageUrl ?? ''}|${bumpUrl ?? ''}`;
-
-    const [state, setState] = useState<InternalTextureLoadingState>({
-        isLoading: true,
-        progress: 0,
-        error: null,
-        loadKey,
+    const [attempt, setAttempt] = useState(0);
+    const retry = useCallback(() => setAttempt(value => value + 1), []);
+    // Each visit needs its own identity, including A -> B -> A before B loads.
+    const batch = useMemo(() => ({ imageUrl, bumpUrl, attempt }), [imageUrl, bumpUrl, attempt]);
+    const [state, setState] = useState<TextureLoadingState & { batch: typeof batch }>({
+        isLoading: true, progress: 0, error: null, batch,
     });
 
     useEffect(() => {
         if (!imageUrl) return;
-
         const textures = [imageUrl, ...(bumpUrl ? [bumpUrl] : [])];
+        const images: HTMLImageElement[] = [];
         let loadedCount = 0;
+        let failed = false;
         let cancelled = false;
 
-        const loadTexture = (url: string): Promise<void> => {
-            return new Promise((resolve, reject) => {
-                const img = new Image();
-
-                img.onload = () => {
-                    if (cancelled) return;
-                    loadedCount++;
-                    setState(prev => ({
-                        ...prev,
-                        loadKey,
-                        isLoading: loadedCount < textures.length,
-                        progress: (loadedCount / textures.length) * 100,
-                        error: null,
-                    }));
-                    resolve();
-                };
-
-                img.onerror = () => {
-                    if (cancelled) return;
-                    reject(new Error(`Failed to load texture: ${url}`));
-                };
-
-                img.src = url;
-            });
-        };
-
-        Promise.all(textures.map(loadTexture))
-            .then(() => {
-                if (!cancelled) {
-                    setState({ isLoading: false, progress: 100, error: null, loadKey });
-                }
-            })
-            .catch((error) => {
-                if (!cancelled) {
-                    setState({ isLoading: false, progress: 0, error, loadKey });
-                }
-            });
-
+        for (const url of textures) {
+            const image = new Image();
+            images.push(image);
+            image.onload = () => {
+                if (cancelled || failed) return;
+                image.onload = null;
+                image.onerror = null;
+                loadedCount++;
+                setState({
+                    batch, error: null,
+                    isLoading: loadedCount < textures.length,
+                    progress: loadedCount / textures.length * 100,
+                });
+            };
+            image.onerror = () => {
+                if (cancelled || failed) return;
+                failed = true;
+                setState({ isLoading: false, progress: 0, error: new Error(`Failed to load texture: ${url}`), batch });
+            };
+            image.src = url;
+        }
         return () => {
             cancelled = true;
+            for (const image of images) {
+                image.onload = null;
+                image.onerror = null;
+            }
         };
-    }, [imageUrl, bumpUrl, loadKey]);
+    }, [imageUrl, bumpUrl, batch]);
 
-    if (!imageUrl) return { isLoading: false, progress: 100, error: null };
-
-    if (state.loadKey !== loadKey) {
-        return {
-            isLoading: true,
-            progress: 0,
-            error: null,
-        };
-    }
-
-    return {
-        isLoading: state.isLoading,
-        progress: state.progress,
-        error: state.error,
-    };
+    const current: TextureLoadingState = !imageUrl
+        ? { isLoading: false, progress: 100, error: null }
+        : state.batch !== batch
+            ? { isLoading: true, progress: 0, error: null }
+            : state;
+    return { isLoading: current.isLoading, progress: current.progress, error: current.error, retry, attempt };
 }

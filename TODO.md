@@ -73,7 +73,6 @@ The historical signal is not ready for publication.
 
 Use fixed data for browser checks. Record the browser, viewport, and expected result.
 
-- [ ] Test Flights map keyboard controls and camera URL synchronization with Playwright.
 - [ ] Test list scroll restoration with browser Back and the article return link after delayed content loads.
 - [ ] Extend fixed-tile browser checks to verify stop marker selection and all three map styles.
 
@@ -108,7 +107,6 @@ Preserve passing publication checks when you change build scripts.
 - [ ] Deploy the [prepared OIDC roles](docs/github-actions-oidc.md). Set the role variables and verify both workflows before removing legacy credentials.
 - [ ] Extract the remaining map rendering, interaction, and loading code. Preserve browser behavior and URL contracts.
 - [ ] Reduce MapLibre loading and worker costs. Preserve the passing article JavaScript budgets.
-- [ ] Profile Flights pause/play latency under mobile throttling. Add a representative interaction budget.
 - [ ] Split document conversion, shortcode handling, and publication checks in `scripts/sync-blogs.js`. Retain the compilation tests.
 - [ ] Replace the TypeScript 6 lint compiler only after `typescript-eslint` supports TypeScript 7. Run lint and typecheck first.
 

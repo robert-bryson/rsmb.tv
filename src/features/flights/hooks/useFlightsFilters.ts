@@ -17,6 +17,7 @@ import type {
     StateSymbolMode,
 } from '../types';
 import { isValidFlightTypeFilter } from '../utils';
+import { globeViewsEqual } from '../utils/globeView';
 
 type SearchUpdateOptions = { replace?: boolean };
 type BooleanUpdate = boolean | ((prev: boolean) => boolean);
@@ -94,9 +95,7 @@ function formatViewNumber(value: number, precision: number) {
 }
 
 function isDefaultGlobeView(view: GlobeViewState) {
-    return formatViewNumber(view.lat, 4) === formatViewNumber(DEFAULT_VIEW.lat, 4)
-        && formatViewNumber(view.lng, 4) === formatViewNumber(DEFAULT_VIEW.lng, 4)
-        && formatViewNumber(view.altitude, 3) === formatViewNumber(DEFAULT_VIEW.altitude, 3);
+    return globeViewsEqual(view, DEFAULT_VIEW);
 }
 
 function setGlobeViewParams(params: URLSearchParams, view: GlobeViewState | null) {
