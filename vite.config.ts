@@ -12,7 +12,8 @@ const buildDate = new Date().toLocaleDateString('en-US', { month: 'long', day: '
 
 export default defineConfig(({ mode, command }) => {
   const localEnv = loadEnv(mode, process.cwd(), '');
-  const cartoKey = (process.env.VITE_CARTO_API_KEY || process.env.CARTO_API_KEY || localEnv.VITE_CARTO_API_KEY || localEnv.CARTO_API_KEY || '').trim();
+  const cartoKey = [process.env.VITE_CARTO_API_KEY, process.env.CARTO_API_KEY, localEnv.VITE_CARTO_API_KEY, localEnv.CARTO_API_KEY]
+    .map(value => value?.trim()).find(Boolean) ?? '';
   if (command === 'build' && mode !== 'trip-test' && mode !== 'test' && !cartoKey) {
     throw new Error('Set CARTO_API_KEY (a browser-restricted CARTO Basemaps key) before building the site.');
   }

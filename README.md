@@ -57,7 +57,7 @@ npm run dev
 ### Available Scripts
 
 Set a localhost CARTO Basemaps key as `CARTO_API_KEY` in `.env.local` for local maps and release builds.
-Amplify and GitHub Actions use their separately configured `CARTO_API_KEY` values.
+Amplify uses its configured `CARTO_API_KEY`. CI uses content fixtures and requires no production credentials.
 See the [basemap configuration guide](docs/carto-basemaps.md) for styles, attribution, and test behavior.
 
 | Command | Description |
@@ -402,6 +402,7 @@ Use the [trip authoring guide](docs/trips/TRIP-AUTHORING-README.md) to prepare p
 Production builds import published content before TypeScript checks and Vite compilation.
 Direct Vite production builds require the generated post registry. A missing registry stops the build.
 Direct Vite development can start without generated content. The post list stays empty until blog sync creates the registry.
+CI uses `npx vite build --mode trip-test` with tracked content fixtures. This check requires no Google access or CARTO credentials.
 Configure `GOOGLE_BLOG_SHEET_ID` in Amplify. GitHub Actions variables do not configure Amplify.
 The Amplify build runs `nvm install` before `npm ci` to activate the version in `.nvmrc`.
 It then installs the npm version from `packageManager` before dependency installation.

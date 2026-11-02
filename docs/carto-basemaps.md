@@ -6,14 +6,19 @@ The flights globe also retains its local NASA imagery choices.
 
 ## Key configuration
 
-Set `CARTO_API_KEY` in the GitHub repository secrets and Amplify build environment.
-The production CI bundle step reads the GitHub secret.
-Amplify runs its own build and reads its independently configured value.
-Configure each environment separately. A local key does not configure either service.
+Set `CARTO_API_KEY` in the Amplify build environment.
+Amplify runs its own build and reads this configured value.
+A local key does not configure Amplify.
+CI builds tracked content fixtures with `--mode trip-test` and requires no production credentials.
 
 Vite accepts `CARTO_API_KEY` or the explicit client alias `VITE_CARTO_API_KEY`.
+It checks process variables before local files.
+Within each source, `VITE_CARTO_API_KEY` takes priority over `CARTO_API_KEY`.
+It trims each candidate and skips empty values.
+Vite process variables override file values with the same name, including blank values.
+Unset a blank process variable to use its file value.
 It exposes only this designated basemap key to the application.
-Release builds fail when both values are missing.
+Release builds fail if no candidate contains a key.
 Other environment secrets remain private.
 
 Use a CARTO **Basemaps browser key** with website restrictions.
@@ -59,6 +64,7 @@ CARTO's current [basemap terms](https://carto.com/legal/basemap-terms/index.html
 Unit tests check URL encoding, tile placeholders, and behavior without a key.
 Browser tests use fixed tiles and verify authenticated requests, style changes, and visible attribution.
 Configuration tests check key selection and rejection of release builds without a key.
+They check whitespace handling, fallback values, and priority between process variables and local files.
 They also check that unrelated environment values do not enter the build definitions.
 These tests do not verify a production account or its allowed websites.
 Live production authorization depends on the configured key and its allowed website origins.

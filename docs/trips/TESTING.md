@@ -3,6 +3,27 @@
 Use fixed content for automated checks. Do not require Google access or published trip assets.
 The fixtures are in `tests/fixtures/trip-content/`.
 
+## CI bundle check
+
+CI runs this command for pushes and pull requests to `main`:
+
+```bash
+npx vite build --mode trip-test
+```
+
+This mode selects tracked content fixtures and retains production publication rules.
+Missing registries, published story bodies, and published manifests stop the build.
+Draft metadata, story bodies, manifests, and HTML pages remain excluded.
+The command requires no Google access or CARTO credentials.
+
+The CI regression runs the workflow command in a temporary copy without generated blog content or local environment files.
+It checks article metadata, crawler directives, compiled stories, and draft exclusion.
+It also checks workflow triggers and the absence of secret references in the build environment.
+
+This check validates application compilation and generated article HTML.
+Live Google content, public assets, and deployed key authorization require separate checks.
+Amplify imports published content through `npm run build` and requires its configured `CARTO_API_KEY`.
+
 ## Browser setup
 
 Install the browser files before the first run:

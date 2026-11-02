@@ -24,10 +24,10 @@ interface ContentFixtureOptions {
     mode?: string;
 }
 
-function createContentFixture(posts: unknown[], { manifests = [], bodies = [], createTripDirectory = true }: ContentFixtureOptions = {}) {
+function createContentFixture(posts: unknown[], { manifests = [], bodies = [], createTripDirectory = true, mode }: ContentFixtureOptions = {}) {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'trip-registry-test-'));
     temporaryRoots.push(root);
-    const directory = path.join(root, 'src/content');
+    const directory = path.join(root, mode === 'trip-test' ? 'tests/fixtures/trip-content' : 'src/content');
     fs.mkdirSync(directory, { recursive: true });
     fs.writeFileSync(path.join(directory, 'posts.json'), JSON.stringify(posts));
     if (createTripDirectory) fs.mkdirSync(path.join(directory, 'trips'));
@@ -48,7 +48,7 @@ function loadPostRegistry(posts: unknown[], command: 'build' | 'serve', watchedF
 }
 
 describe('trip publication contracts', () => {
-    it.each(['production', 'development'])('builds article HTML with the correct publication and crawler metadata in %s mode', async mode => {
+    it.each(['production', 'development', 'trip-test'])('builds article HTML with the correct publication and crawler metadata in %s mode', async mode => {
         const published = {
             slug: 'coast', title: 'Coast & mountains', description: 'A coastal trip.', date: '2026-04-08',
             tags: [], format: 'trip', tripId: manifest.id,
@@ -57,7 +57,7 @@ describe('trip publication contracts', () => {
             ...published, slug: 'unfinished', title: 'Unfinished journey', tripId: 'missing',
             development: { published: false, contentAvailable: false },
         };
-        const root = createContentFixture([published, draft], { manifests: [manifest] });
+        const root = createContentFixture([published, draft], { manifests: [manifest], mode });
         fs.writeFileSync(path.join(root, 'index.html'), `<html><head><title>Site</title>
             <meta name="description" content="Site" /><meta property="og:image" content="https://rsmb.tv/og/home.svg" />
             <link rel="canonical" href="https://rsmb.tv/" /></head><body><script type="module">
@@ -180,25 +180,27 @@ describe('trip publication contracts', () => {
         }
     });
 
-    it.each(['virtual:post-content', 'virtual:trip-content'])('rejects a production build of %s without the post registry', moduleId => {
+    it.each(['production', 'trip-test'].flatMap(mode =>
+        ['virtual:post-content', 'virtual:trip-content'].map(moduleId => ({ mode, moduleId })),
+    ))('rejects a $mode build of $moduleId without the post registry', ({ mode, moduleId }) => {
         const root = fs.mkdtempSync(path.join(os.tmpdir(), 'trip-registry-missing-test-'));
         temporaryRoots.push(root);
         const plugin = tripContentPlugin();
         const configure = plugin.configResolved;
         const load = plugin.load;
         if (typeof configure !== 'function' || typeof load !== 'function') throw new Error('Expected function hooks.');
-        configure.call({} as never, { root, mode: 'production', command: 'build' } as ResolvedConfig);
+        configure.call({} as never, { root, mode, command: 'build' } as ResolvedConfig);
         expect(() => load.call({ addWatchFile: vi.fn() } as never, `\0${moduleId}`)).toThrow(/Missing post registry/);
     });
 
-    it('rejects article generation without the post registry', () => {
+    it.each(['production', 'trip-test'])('rejects %s article generation without the post registry', mode => {
         const root = fs.mkdtempSync(path.join(os.tmpdir(), 'trip-bundle-missing-test-'));
         temporaryRoots.push(root);
         const plugin = tripContentPlugin();
         const configure = plugin.configResolved;
         const generate = plugin.generateBundle;
         if (typeof configure !== 'function' || !generate || typeof generate === 'function') throw new Error('Expected ordered bundle hook.');
-        configure.call({} as never, { root, mode: 'production', command: 'build' } as ResolvedConfig);
+        configure.call({} as never, { root, mode, command: 'build' } as ResolvedConfig);
         expect(() => generate.handler.call({ emitFile: vi.fn() } as never, {} as never, {
             'index.html': { type: 'asset', source: '<head></head>' },
         } as never, false)).toThrow(/Missing post registry/);
@@ -249,11 +251,11 @@ describe('trip publication contracts', () => {
         expect(output).not.toContain(manifest.route.geoJson);
     });
 
-    it('reports a missing published manifest when the trip directory is absent', () => {
+    it.each(['production', 'trip-test'])('reports a missing published manifest in %s when the trip directory is absent', mode => {
         expect(() => loadPostRegistry([{ slug: 'coast', format: 'trip', tripId: manifest.id }], 'build', [], 'virtual:trip-content', {
-            createTripDirectory: false,
+            createTripDirectory: false, mode,
         })).toThrow(`Missing published trip manifest: ${manifest.id}`);
-        expect(loadPostRegistry([], 'build', [], 'virtual:trip-content', { createTripDirectory: false })).toContain('export const summaries = {}');
+        expect(loadPostRegistry([], 'build', [], 'virtual:trip-content', { createTripDirectory: false, mode })).toContain('export const summaries = {}');
     });
 
     it('reports invalid development manifests but rejects invalid published manifests', () => {
@@ -301,8 +303,8 @@ describe('trip publication contracts', () => {
         expect(loadPostRegistry([{ slug: 'draft', tripId: '../private', development: { published: false } }], 'build')).not.toContain('private');
     });
 
-    it('fails production when a published post has no MDX body', () => {
-        expect(() => loadPostRegistry([{ slug: 'missing-body' }], 'build')).toThrow(/Missing published post content: missing-body/);
+    it.each(['production', 'trip-test'])('fails %s when a published post has no MDX body', mode => {
+        expect(() => loadPostRegistry([{ slug: 'missing-body' }], 'build', [], 'virtual:post-content', { mode })).toThrow(/Missing published post content: missing-body/);
     });
 
     it('isolates unavailable drafts from production and permits development placeholders', () => {

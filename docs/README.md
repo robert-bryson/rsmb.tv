@@ -33,6 +33,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-02 | [CI content fixtures, browser-key fallback, and publication regression coverage](reviews/2026-11-02-ci-build-quality-review.md) |
 | 2026-11-02 | [Flight statistics: filtered visits, URL ordering, accessible time, and ingestion checks](reviews/2026-11-02-flight-statistics-quality-review.md) |
 | 2026-11-02 | [Flight map review: camera races, texture recovery, coverage, and animation performance](reviews/2026-11-02-flight-map-recovery-and-performance.md) |
 | 2026-11-02 | [Flight map structure, camera lifecycle, and renderer regression checks](reviews/2026-11-02-flights-map-refactor.md) |
