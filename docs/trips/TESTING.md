@@ -308,6 +308,7 @@ The browser checks cover these behaviors:
 - Each year or numeric range has one filter count and one removal button that clears both bounds.
 - Country and region choices combine with OR. Regions retain their country; country-wide choices include records without regions.
 - Copied URLs and browser Back restore committed filters. Excluded selections remain named without adding hidden routes.
+- Shared-road choices stay within short and narrow maps. Every choice remains reachable by scrolling.
 - Late route responses cannot restore excluded geometry or shared-road choices.
 - Selection, panel size, result presentation, panning, and zooming update the URL without adding history entries.
 - Camera values change after movement ends. Viewport-only URL changes retain geometry objects and map hit targets.

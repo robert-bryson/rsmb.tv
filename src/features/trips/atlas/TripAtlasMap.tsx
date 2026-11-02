@@ -311,7 +311,7 @@ export default function TripAtlasMap(props: Props) {
             if (ids.length === 1) { setChoices(undefined); select(ids[0]); }
             else if (ids.length > 1) setChoices({ ids,
                 x: Math.max(12, Math.min(event.point.x, instance.getContainer().clientWidth - 268)),
-                y: Math.max(120, Math.min(event.point.y, instance.getContainer().clientHeight - 240)),
+                y: Math.max(12, Math.min(event.point.y, instance.getContainer().clientHeight - 240)),
             });
             else {
                 setChoices(undefined);
@@ -497,8 +497,8 @@ export default function TripAtlasMap(props: Props) {
                 <p>{failure ? 'The interactive map is unavailable. Trip reports are still available in the list.' : 'Some background tiles could not load. You can still explore the trip routes.'}</p>
                 <button type="button" onClick={retry} className="min-h-11 text-violet-300 underline">Retry map</button>
             </div>}
-            {choices && <div data-atlas-map-obstacle role="group" aria-label="Trips sharing this road" className="absolute z-30 w-64 rounded-xl border border-zinc-600 bg-zinc-950 p-3 shadow-xl"
-                style={{ left: choices.x, top: choices.y }}>
+            {choices && <div data-atlas-map-obstacle role="group" aria-label="Trips sharing this road" className="absolute z-30 w-64 max-w-[calc(100%-24px)] overflow-y-auto overscroll-contain rounded-xl border border-zinc-600 bg-zinc-950 p-3 shadow-xl"
+                style={{ left: choices.x, top: choices.y, maxHeight: `calc(100% - ${choices.y + 12}px)` }}>
                 <p className="mb-2 flex min-h-8 items-center pr-8 text-sm font-medium">Trips sharing this road</p>
                 <button type="button" onClick={closeChoices} aria-label="Close route choices" data-atlas-tooltip="Close the shared-road choices without changing the selected trip."
                     className="absolute right-1 top-1 grid size-11 place-items-center rounded text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100 focus-visible:outline-2 focus-visible:outline-violet-400">

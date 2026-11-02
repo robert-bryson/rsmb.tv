@@ -353,7 +353,7 @@ describe('atlas browsing controls', () => {
     it('retains a selection excluded by filters without drawing its route, and shows selected-only only for that valid selection', async () => {
         renderWithRouter(<AdvAtlas />, { route: '/projects/adv-atlas/map?trip=mixed&milesMin=600' });
         const renderer = await screen.findByTestId('atlas-renderer');
-        expect(screen.getByText('Selected trip is outside these filters.')).toBeInTheDocument();
+        expect(screen.getByText('Selected trip “Published part” is outside these filters.')).toBeInTheDocument();
         expect(renderer).toHaveAttribute('data-trips', 'published');
         expect(renderer).toHaveAttribute('data-routes', 'published');
         expect(screen.getByRole('button', { name: 'Show only selected trip' })).toBeInTheDocument();

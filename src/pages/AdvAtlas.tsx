@@ -274,7 +274,7 @@ export default function AdvAtlas() {
             {invalidSelection && <p role="status" className="mb-3 rounded-lg bg-zinc-800 p-3 text-sm">That trip is not available in this collection. Browse the available trips below.</p>}
             {filterIssues.length > 0 && <p role="alert" className="mb-3 rounded-lg border border-amber-800 bg-amber-950/30 p-3 text-sm text-amber-200">Some filters are invalid. Edit or clear them to see results. {filterIssues[0].message}</p>}
             {selectedOutsideFilters && <div className="mb-3 rounded-lg border border-violet-900 bg-violet-950/30 p-3 text-sm text-violet-200">
-                <p>Selected trip is outside these filters.</p>
+                <p>Selected trip “{selectedEntry?.title}” is outside these filters.</p>
                 <button type="button" data-atlas-tooltip="Deselect this trip while keeping your filters." onClick={() => { deselectTrip(); document.getElementById('atlas-filters-toggle')?.focus({ preventScroll: true }); }} className="min-h-11 underline">Clear selection</button>
             </div>}
             {visibleEntries.length === 0 && <p className="rounded-lg bg-zinc-900 p-4 text-sm text-zinc-400">{entries.length ? 'No trips match these filters. Clear a filter or choose a wider range.' : 'No trip reports are available yet.'}</p>}

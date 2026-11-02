@@ -144,7 +144,7 @@ test('country and region choices apply as alternatives and replace redundant cou
 
 test('shared browse URLs and Back restore results, while a selection excluded by filters stays explicit', async ({ page }) => {
     await page.goto(`${atlas}?trip=daily-test&country=CA&sort=miles-asc`);
-    await expect(page.getByText('Selected trip is outside these filters.')).toBeVisible();
+    await expect(page.getByText('Selected trip “Daily map test trip” is outside these filters.')).toBeVisible();
     await expect(page.locator('[data-trip-id]')).toHaveCount(1);
     await page.getByRole('button', { name: 'Show only selected trip' }).click();
     await expect(page.locator('[data-trip-id]')).toHaveCount(0);

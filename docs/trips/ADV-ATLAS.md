@@ -167,6 +167,7 @@ Redirects retain query parameters, fragments, and return state.
 
 Select a trip title, card background, or route line to select a trip.
 Shared roads show named route choices.
+The choices stay within the map. Scroll the choices when their content exceeds the available space.
 Pointer and keyboard previews highlight routes without changing the selection or camera.
 Their popups attach to visible track segments.
 If the entire route is off screen, the popup stays near the closest map edge and points toward the track.

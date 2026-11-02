@@ -30,6 +30,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-01 | [ADV Atlas main merge review and final regression checks](reviews/2026-11-01-atlas-main-merge-review.md) |
 | 2026-11-01 | [Atlas geography, keyboard focus, and shared-date review](reviews/2026-11-01-atlas-geography-quality-review.md) |
 | 2026-11-01 | [Atlas controls, sorting, content, and regression review](reviews/2026-11-01-atlas-controls-quality-review.md) |
 | 2026-11-01 | [Atlas day styling research and visual comparison](reviews/2026-11-01-atlas-day-styling-research.md) |
