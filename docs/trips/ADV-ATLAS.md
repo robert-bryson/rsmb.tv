@@ -39,8 +39,9 @@ Reduced-motion settings disable the slide animation.
 
 Expanded view offers **Cards** and **Table**.
 Cards include descriptions, dates, exact mileage, riding days, motorcycles, locations, and report links.
-The table supports column sorting and separate route and report actions.
+The table supports column sorting, trip selection through titles, and report links.
 Select **Customize table columns** to show, hide, or reorder columns.
+On short screens, column settings float over the panel or map to retain usable space.
 Trip names remain visible and first. They stay pinned during horizontal scrolling.
 Drag a column handle to change its order.
 With a keyboard, press Space or Enter to pick up the handle.
@@ -48,7 +49,14 @@ Use Up, Down, Home, or End to move it. Press Space or Enter to finish.
 Press Escape to restore the previous order. Press Escape again to close the settings.
 Select **Reset columns** to restore the default order and visibility.
 Column choices remain in this browser's local storage. Shared URLs do not contain them.
-Expand a region count to see its location details.
+Leaving column settings with Tab closes the editor, including when focus leaves the document.
+Leaving the browser window also closes the editor.
+Resizing the window closes the editor and returns focus to **Customize table columns**.
+Locations show up to two lines. Select **See all** to expand them, or **See less** to collapse them.
+Country names use bold text. Country and region names highlight on hover and keyboard focus.
+Select a name to filter matching trips and frame that place on the map.
+This replaces the previous location filter and clears trip selection and selected-only mode.
+It retains year, riding-day, distance, sorting, and presentation choices.
 Horizontal table scrolling stays inside the panel.
 Compact mode uses cards and retains the preferred expanded presentation.
 Changing between cards and table starts at the top so the table headings remain visible.
@@ -66,18 +74,25 @@ Table headers and the sort menu use the same order.
 Location order compares country names, then region names.
 Missing facts sort last in both directions. Report publication dates do not replace missing trip dates.
 
-Select **Filters** to edit the ranges and locations.
+Select **Filters** to choose a trip year, riding-day range, distance range, or location.
 Select **Apply filters** to commit the form.
 Unapplied changes do not affect the map or results.
 Invalid ranges leave the applied filters unchanged and identify the affected input.
 Sorting and the selected-trip toggle apply immediately.
 
-Date filters include trips that overlap either endpoint.
-For example, a trip ending on the **From date** still matches.
+The year picker lists only years with recorded trips, newest first.
+A trip spanning two years appears in both years.
+Riding-day and distance choices use familiar ranges. Ranges without trips are omitted.
+Choices use the complete available collection, so applying another filter does not remove options.
 Riding-day and mileage endpoints are also inclusive.
 Riding days must be whole numbers. Mileage comparisons use the recorded number before display formatting.
-Blank endpoints have no limit.
+Choose **Any year**, **Any number of days**, or **Any distance** to remove that limit.
 Unknown facts remain visible until an active filter needs that fact.
+Each chosen range counts as one filter and has one removal button.
+Existing shared links retain precise dates and numeric bounds, including values outside the suggested ranges.
+The form shows both dates for a custom date range.
+An open date endpoint shows **Any**.
+These values remain unchanged until you choose another option.
 
 Location choices match any selected country or region.
 **Any region in Canada** includes Canadian trips without a recorded province.
@@ -135,6 +150,8 @@ Select **Close** or press Escape to close that field and return focus to the sha
 
 Map controls and panel controls use the same dark surfaces, borders, corner radius, and violet focus indicators.
 Zoom, fullscreen, share, and overview controls have 44-pixel targets.
+Short maps place zoom controls side by side, with fullscreen beside them and Share below.
+Camera fitting limits padding to retain visible route space in short or narrow maps.
 The overview control uses a circular-arrow icon. Its accessible name and tooltip identify **Fit results** or **Zoom to all trips**.
 
 ## Selection and navigation
@@ -148,7 +165,7 @@ The overview control uses a circular-arrow icon. Its accessible name and tooltip
 The former `/projects/motorcycle-trips` routes redirect to the explorer.
 Redirects retain query parameters, fragments, and return state.
 
-Select **Show route** or a route line to select a trip.
+Select a trip title, card background, or route line to select a trip.
 Shared roads show named route choices.
 Pointer and keyboard previews highlight routes without changing the selection or camera.
 Their popups attach to visible track segments.
@@ -161,7 +178,7 @@ It compares positions on each side of the track and at other visible points.
 It keeps the highlighted track clear where space permits. When all clear positions cover some track, it chooses the position that covers the least track.
 Off-screen labels retain their direction when they move around UI.
 If the UI leaves no space for the complete popup, the label stays hidden until space is available. The route highlight remains visible.
-Keyboard selection closes the choices and focuses the selected card's **Show route** button.
+Keyboard selection closes the choices and focuses the selected card's trip title.
 Pointer selection reveals the card without moving keyboard focus.
 Reopening the trip panel does not repeat the focus move.
 The selected-trip toggle appears only when a valid trip is selected.
@@ -211,6 +228,26 @@ Fullscreen includes the cards, route choices, and recovery controls.
 Renderer retries retain the fullscreen button's action, label, and icon.
 If fullscreen ends during a failed retry, the next renderer creates a fresh fullscreen control.
 
+### Geographic bounds
+
+Geographic zoom bounds come from [Natural Earth v5.1.2](https://github.com/nvkelso/natural-earth-vector/tree/v5.1.2/geojson).
+The lookup includes country bounds and all United States and Canadian first-level regions.
+It uses the shortest longitude interval for places crossing the date line.
+Natural Earth publishes these datasets in the [public domain](https://www.naturalearthdata.com/about/terms-of-use/).
+Unknown region names retain filtering and frame matching routes instead.
+
+Run this command from the repository root to regenerate the lookup:
+
+```bash
+node scripts/generate-atlas-geography-bounds.js
+```
+
+The command requires network access. Each source request has a 30-second deadline, including its response body.
+Source failures leave the existing lookup unchanged.
+Generation and map lookup use the same name normalization.
+Normalization removes accents from lookup keys. Filter keys retain the authored region name.
+Review the generated diff before you commit it.
+
 ## Code ownership
 
 | Module | Responsibility |
@@ -224,7 +261,12 @@ If fullscreen ends during a failed retry, the next renderer creates a fresh full
 | `src/features/trips/atlas/TripAtlasPanel.tsx` | Manage the drawer controls, filter disclosure, and result-position anchors |
 | `src/features/trips/atlas/useAtlasPanelDrag.ts` | Resize the panel and cancel interrupted pointer gestures |
 | `src/features/trips/atlas/TripAtlasFilters.tsx` | Edit filter drafts and show applied filters |
+| `src/features/trips/atlas/tripAtlasFilterOptions.ts` | Build populated presets and label exact shared ranges |
 | `src/features/trips/atlas/TripAtlasResults.tsx` | Present matching trips as cards or a native sortable table |
+| `src/features/trips/atlas/TripAtlasLocations.tsx` | Limit visible locations, expand them, and expose place actions |
+| `src/features/trips/atlas/tripAtlasGeography.ts` | Apply qualified location filters and resolve geographic bounds |
+| `shared/atlasGeography.ts` | Normalize geographic lookup names for generation and runtime use |
+| `scripts/generate-atlas-geography-bounds.js` | Download pinned source data and generate geographic bounds |
 | `src/features/trips/atlas/tripAtlasTableColumns.ts` | Define columns and validate saved order and visibility |
 | `src/features/trips/atlas/TripAtlasColumnSettings.tsx` | Open column settings and retain usable panel space |
 | `src/features/trips/atlas/TripAtlasColumnChoices.tsx` | Reorder columns with pointer or keyboard input |

@@ -18,6 +18,7 @@ import { atlasTooltipObstacles, observeAtlasTooltipObstacles } from './atlasTool
 import type { AtlasTooltipPlacement } from './atlasTooltipLayout';
 import { restoreAtlasFullscreenControl, type AtlasFullscreenControl } from './AtlasFullscreenControl';
 import { useAtlasRouteMarkers } from './tripAtlasMarkers';
+import type { AtlasBounds } from './tripAtlasGeography';
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl);
 
@@ -42,7 +43,7 @@ interface Props {
     selectedId?: string;
     highlightedId?: string;
     fitVersion: number;
-    fitRequest?: { tripId?: string; cancelled?: boolean };
+    fitRequest?: { tripId?: string; cancelled?: boolean; bounds?: AtlasBounds };
     panelOpen: boolean;
     initialCamera?: AtlasCamera;
     cameraTarget?: AtlasCamera;
@@ -80,7 +81,15 @@ function padding(container: HTMLElement, selected: boolean) {
     const phone = container.ownerDocument.defaultView?.matchMedia?.('(max-width: 767px)').matches;
     const base = { top: Math.min(72, container.clientHeight * 0.2), right: 56, bottom: phone ? 84 : 36, left: 48 };
     const breathingRoom = selected ? 16 : 0;
-    return { top: base.top + breathingRoom, right: base.right + breathingRoom, bottom: base.bottom + breathingRoom, left: base.left + breathingRoom };
+    // Preserve room for route geometry even in a short sheet or narrow desktop map.
+    const verticalLimit = container.clientHeight * 0.3;
+    const horizontalLimit = container.clientWidth * 0.3;
+    return {
+        top: Math.min(base.top + breathingRoom, verticalLimit),
+        right: Math.min(base.right + breathingRoom, horizontalLimit),
+        bottom: Math.min(base.bottom + breathingRoom, verticalLimit),
+        left: Math.min(base.left + breathingRoom, horizontalLimit),
+    };
 }
 
 function routeBounds(routes: Record<string, AtlasRouteState>, selectedId?: string) {
@@ -447,9 +456,10 @@ export default function TripAtlasMap(props: Props) {
         const key = `${fitId ?? 'all'}:${fitVersion}`;
         if (lastFit.current?.map === map && lastFit.current.key === key) return;
         const selected = fitId ? routes[fitId]?.route : null;
-        if (fitId && !selected) return;
-        if (!fitId && !entries.every(entry => routes[entry.id]?.route || routes[entry.id]?.error)) return;
-        const bounds = routeBounds(routes, fitId);
+        const area = props.fitRequest?.bounds;
+        if (!area && fitId && !selected) return;
+        if (!area && !fitId && !entries.every(entry => routes[entry.id]?.route || routes[entry.id]?.error)) return;
+        const bounds = area ? new maplibregl.LngLatBounds([area[0], area[1]], [area[2], area[3]]) : routeBounds(routes, fitId);
         if (!bounds) return;
         suppressCameraPublish.current = true;
         map.stop();
@@ -457,7 +467,7 @@ export default function TripAtlasMap(props: Props) {
         suppressCameraPublish.current = false;
         lastFit.current = { map, key };
         map.fitBounds(bounds, { padding: padding(container.current, Boolean(fitId)), maxZoom: 10, bearing: 0, pitch: 0, duration: reducedMotion ? 0 : 500 });
-    }, [map, routes, fitId, fitVersion, props.fitRequest?.cancelled, entries, reducedMotion]);
+    }, [map, routes, fitId, fitVersion, props.fitRequest?.cancelled, props.fitRequest?.bounds, entries, reducedMotion]);
 
     useEffect(() => {
         // An instantaneous fit can finish before the router commits its selection URL.

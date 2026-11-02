@@ -47,14 +47,16 @@ vi.mock('../features/trips/useTripRoute', () => ({ useTripRoute: () => ({
     error: '', retry: fixtures.retry,
 }) }));
 vi.mock('../features/trips/atlas/TripAtlasMap', () => ({
-    default: ({ selectedId, highlightedId, fitVersion, entries, routes, initialCamera, onSelect, onCameraChange, onCameraIdle }: {
+    default: ({ selectedId, highlightedId, fitVersion, fitRequest, entries, routes, initialCamera, onSelect, onCameraChange, onCameraIdle }: {
         selectedId?: string; highlightedId?: string; fitVersion: number; entries: TripAtlasEntry[]; routes: Record<string, AtlasRouteState>;
         initialCamera?: AtlasCamera; onCameraChange: (camera: AtlasCamera) => void; onCameraIdle: (camera: AtlasCamera) => void;
+        fitRequest?: { bounds?: number[] };
         onSelect: (id: string, options?: { focusCard: boolean }) => void;
     }) => (
         <>
             <output data-testid="atlas-renderer" data-selected={selectedId ?? ''} data-highlighted={highlightedId ?? ''} data-fit-version={fitVersion}
-                data-trips={entries.map(entry => entry.id).join(',')} data-routes={Object.keys(routes).join(',')} data-initial-camera={JSON.stringify(initialCamera)} />
+                data-trips={entries.map(entry => entry.id).join(',')} data-routes={Object.keys(routes).join(',')} data-initial-camera={JSON.stringify(initialCamera)}
+                data-fit-bounds={JSON.stringify(fitRequest?.bounds)} />
             <button onClick={() => onSelect('published', { focusCard: true })}>Keyboard route choice</button>
             <button onClick={() => onSelect('published', { focusCard: false })}>Pointer route choice</button>
             <button onClick={() => onCameraChange({ center: [-110, 42], zoom: 6.456789, bearing: -12, pitch: 20 })}>Move map gesture</button>
@@ -79,7 +81,7 @@ describe('atlas card interactions', () => {
         fireEvent.click(toggle);
         choice.focus();
         fireEvent.click(choice);
-        const routeControl = screen.getByRole('button', { name: 'Show route: Published journey' });
+        const routeControl = screen.getByRole('button', { name: 'Published journey' });
         expect(card.scrollIntoView).toHaveBeenCalled();
         expect(toggle).toHaveAttribute('aria-expanded', 'true');
         expect(input === 'Keyboard' ? routeControl : choice).toHaveFocus();
@@ -111,7 +113,7 @@ describe('atlas card interactions', () => {
         renderWithRouter(<AdvAtlas />, { route: '/projects/adv-atlas/map' });
         const renderer = await screen.findByTestId('atlas-renderer');
         expect(screen.queryByRole('button', { name: 'Show only selected trip' })).not.toBeInTheDocument();
-        fireEvent.click(screen.getByRole('button', { name: 'Show route: Published journey' }));
+        fireEvent.click(screen.getByRole('button', { name: 'Published journey' }));
         const filter = screen.getByRole('button', { name: 'Show only selected trip' });
         expect(filter).toBeEnabled();
         const fitVersion = renderer.getAttribute('data-fit-version');
@@ -140,10 +142,11 @@ describe('atlas card interactions', () => {
         expect(renderer).toHaveAttribute('data-selected', '');
     });
 
-    it('selects a route from card content and fits it once per click, including the native route button', async () => {
+    it('selects a route from card content and fits it once per click, including the trip title', async () => {
         renderWithRouter(<AdvAtlas />, { route: '/projects/adv-atlas/map' });
         const renderer = await screen.findByTestId('atlas-renderer');
         const card = screen.getByRole('heading', { name: 'Published journey' }).closest('li')!;
+        expect(screen.queryByRole('button', { name: /Show route/i })).not.toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Zoom to all trips' })).not.toBeInTheDocument();
         fireEvent.click(within(card).getByRole('img'));
         expect(renderer).toHaveAttribute('data-selected', 'published');
@@ -151,8 +154,25 @@ describe('atlas card interactions', () => {
         expect(renderer).toHaveAttribute('data-fit-version', '1');
         fireEvent.click(within(card).getByText('A synthetic motorcycle journey.'));
         expect(renderer).toHaveAttribute('data-fit-version', '2');
-        fireEvent.click(within(card).getByRole('button', { name: /^Show route:/ }));
+        fireEvent.click(within(card).getByRole('button', { name: /^(?:Published journey|Unconfigured journey)$/ }));
         expect(renderer).toHaveAttribute('data-fit-version', '3');
+    });
+
+    it('explores a card region with its geographic bounds, replacing location and selected-only filters', async () => {
+        renderWithRouter(<><AdvAtlas /><UrlProbe /></>, { route: '/projects/adv-atlas/map?trip=published&view=selected&sort=miles-asc&from=2024-01-01&to=2024-12-31' });
+        const renderer = await screen.findByTestId('atlas-renderer');
+        fireEvent.click(screen.getByRole('button', { name: 'Explore Washington, United States' }));
+        const params = new URLSearchParams(screen.getByTestId('atlas-url').textContent!.split('?')[1]);
+        expect(params.get('region')).toBe('US/washington');
+        expect(params.has('country')).toBe(false);
+        expect(params.has('trip')).toBe(false);
+        expect(params.has('view')).toBe(false);
+        expect(params.get('from')).toBe('2024-01-01');
+        expect(params.get('sort')).toBe('miles-asc');
+        expect(renderer).toHaveAttribute('data-fit-bounds', '[-124.71,45.5911,-116.8965,48.9931]');
+        expect(renderer).toHaveAttribute('data-trips', 'published');
+        expect(renderer).toHaveAttribute('data-fit-version', '1');
+        expect(screen.getByRole('button', { name: /^Filters/ })).toHaveFocus();
     });
 
     it('keeps report links independent of route selection and camera fitting', async () => {
@@ -176,9 +196,7 @@ describe('atlas card interactions', () => {
         expect(renderer).toHaveAttribute('data-fit-version', '1');
         fireEvent.click(within(row).getByRole('cell', { name: 'Honda CB500X' }));
         expect(renderer).toHaveAttribute('data-fit-version', '2');
-        fireEvent.click(within(row).getByRole('button', { name: /^Show route:/ }));
-        expect(renderer).toHaveAttribute('data-fit-version', '3');
-        fireEvent.click(row.querySelector('summary')!);
+        fireEvent.click(within(row).getByRole('button', { name: /^(?:Published journey|Unconfigured journey)$/ }));
         expect(renderer).toHaveAttribute('data-fit-version', '3');
         fireEvent.click(within(row).getByRole('link', { name: /Read trip report/ }));
         expect(renderer).toHaveAttribute('data-fit-version', '3');
@@ -309,25 +327,20 @@ describe('atlas browsing controls', () => {
         fireEvent.click(screen.getByRole('button', { name: 'Expand trip panel' }));
         expect(screen.getByRole('radio', { name: 'Table' })).toBeChecked();
         expect(list.scrollTop).toBe(0);
-        const route = screen.getByRole('button', { name: 'Show route: Published journey' });
+        const route = screen.getByRole('button', { name: 'Published journey' });
         route.focus();
         fireEvent.click(screen.getByRole('button', { name: 'Collapse trip panel' }));
         expect(root).toHaveAttribute('data-panel-state', 'collapsed');
-        expect(screen.queryByRole('button', { name: 'Show route: Published journey' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: 'Published journey' })).not.toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Expand trip panel' })).toHaveFocus();
     });
 
-    it('keeps draft filters separate, rejects reversed ranges, and synchronizes applied cards and map IDs', async () => {
+    it('keeps preset drafts separate and synchronizes applied cards and map IDs', async () => {
         renderWithRouter(<AdvAtlas />, { route: '/projects/adv-atlas/map' });
         const renderer = await screen.findByTestId('atlas-renderer');
         fireEvent.click(screen.getByRole('button', { name: /^Filters/ }));
-        fireEvent.change(screen.getByLabelText('Minimum miles'), { target: { value: '600' } });
-        fireEvent.change(screen.getByLabelText('Maximum miles'), { target: { value: '599' } });
+        fireEvent.change(screen.getByLabelText('Distance'), { target: { value: '500/1500' } });
         expect(renderer.getAttribute('data-trips')?.split(',')).toHaveLength(3);
-        fireEvent.submit(screen.getByRole('form', { name: 'Filter trips' }));
-        expect(screen.getByRole('alert')).toHaveTextContent('maximum must be at least the minimum');
-        expect(renderer.getAttribute('data-trips')?.split(',')).toHaveLength(3);
-        fireEvent.change(screen.getByLabelText('Maximum miles'), { target: { value: '601' } });
         fireEvent.submit(screen.getByRole('form', { name: 'Filter trips' }));
         expect(renderer).toHaveAttribute('data-trips', 'published');
         expect(renderer).toHaveAttribute('data-routes', 'published');
@@ -379,7 +392,7 @@ describe('atlas publication labels', () => {
         expect(within(mixed).getByText('DEV · Includes drafts')).toBeInTheDocument();
         expect(within(mixed).getByRole('link', { name: /Unpublished part.*Draft/ })).toHaveAttribute('href', '/trips/part-two');
         const incomplete = screen.getByRole('heading', { name: 'Unconfigured journey' }).closest('li')!;
-        expect(within(incomplete).getByRole('button', { name: /^Show route:/ })).toBeDisabled();
+        expect(within(incomplete).getByRole('button', { name: /^(?:Published journey|Unconfigured journey)$/ })).toBeDisabled();
         expect(within(incomplete).getByRole('link', { name: /Preview report/ })).toHaveAttribute('href', '/trips/unconfigured');
         expect(within(incomplete).getByText('Trip dates not set')).toBeInTheDocument();
         expect(within(incomplete).getByText('Route data not available yet.')).toBeInTheDocument();

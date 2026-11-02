@@ -41,7 +41,7 @@ test('a visible route popup avoids the actual map toolbar', async ({ page }) => 
     await routeAtPixels(page, (width) => [[width - 20, 20], [width - 20, 40]]);
     await page.goto(`${atlas}?camera=-123,46,7,0,0&panel=compact`);
     await expect(page.getByText('2/2 routes')).toBeVisible();
-    await page.getByRole('button', { name: 'Show route: Coastal test trip' }).focus();
+    await page.getByRole('button', { name: 'Coastal test trip' }).focus();
     const popup = page.getByRole('tooltip');
     await expect(popup).toBeVisible();
     const label = (await popup.boundingBox())!;
@@ -58,7 +58,7 @@ test('a visible route popup chooses a side that leaves the highlighted track unc
         [width / 2 + 40, height / 2 - 100], [width / 2 - 40, height / 2 - 100], [width / 2 - 40, height / 2]]);
     await page.goto(`${atlas}?camera=-123,46,7,0,0&panel=compact`);
     await expect(page.getByText('2/2 routes')).toBeVisible();
-    await page.getByRole('button', { name: 'Show route: Coastal test trip' }).focus();
+    await page.getByRole('button', { name: 'Coastal test trip' }).focus();
     await expect(page.getByRole('tooltip')).toBeVisible();
     await expect.poll(async () => (await paintedRoute(page, 'coastal-test')).count).toBeGreaterThan(30);
     expect(await highlightedPixelsUnderLabel(page)).toBe(0);
@@ -68,7 +68,7 @@ test('route feedback moves when UI appears or grows, and returns after a full ob
     await routeAtPixels(page, (width, height) => [[20, height / 2], [width - 20, height / 2]]);
     await page.goto(`${atlas}?camera=-123,46,7,0,0&panel=compact`);
     await expect(page.getByText('2/2 routes')).toBeVisible();
-    const button = page.getByRole('button', { name: 'Show route: Coastal test trip' });
+    const button = page.getByRole('button', { name: 'Coastal test trip' });
     await button.focus();
     await expect(page.getByRole('tooltip')).toBeVisible();
     const before = await atlasCamera(page);
@@ -157,7 +157,7 @@ test('card feedback follows zooming from an off-screen direction onto visible ro
     test.skip(isMobile, 'Mouse-wheel feedback requires a desktop pointer; phone projects check all edges and map rotation.');
     await page.goto(`${atlas}?camera=-140,46,6,0,0&panel=compact`);
     await expect(page.getByText('2/2 routes')).toBeVisible();
-    const button = page.getByRole('button', { name: 'Show route: Coastal test trip' });
+    const button = page.getByRole('button', { name: 'Coastal test trip' });
     await button.focus();
     await expect(page.getByRole('tooltip')).toHaveClass(/maplibregl-popup-anchor-right(?:\s|$)/);
     const map = (await page.getByTestId('atlas-map-viewport').boundingBox())!;
@@ -177,6 +177,6 @@ test('card feedback follows zooming from an off-screen direction onto visible ro
 test('an eastern track points upward when the map bearing places east at the top', async ({ page }) => {
     await page.goto(`${atlas}?camera=-140,46,6,90,0&panel=compact`);
     await expect(page.getByText('2/2 routes')).toBeVisible();
-    await page.getByRole('button', { name: 'Show route: Coastal test trip' }).focus();
+    await page.getByRole('button', { name: 'Coastal test trip' }).focus();
     await expect(page.getByRole('tooltip')).toHaveClass(/maplibregl-popup-anchor-top(?:\s|$)/);
 });

@@ -6,7 +6,7 @@ test.beforeEach(async ({ page }) => {
     await mockAtlasAssets(page);
 });
 
-const defaults = ['Trip', 'Motorcycle', 'Trip dates', 'Riding days', 'Miles', 'Location', 'Route and reports'];
+const defaults = ['Trip', 'Motorcycle', 'Trip dates', 'Riding days', 'Miles', 'Location', 'Reports'];
 const headerOrder = async (page: Page) => (await page.getByRole('table').locator('thead th').allTextContents()).map(text => text.replace(/[↑↓↕]/g, '').trim());
 
 test('column settings hide and reorder columns, persist after reload, and restore defaults', async ({ page }) => {
@@ -25,16 +25,16 @@ test('column settings hide and reorder columns, persist after reload, and restor
     await page.mouse.down();
     await page.mouse.move(grip.x + grip.width / 2, target.y - 2, { steps: 10 });
     await expect(miles).toHaveAttribute('aria-pressed', 'true');
-    await expect.poll(() => headerOrder(page)).toEqual(['Trip', 'Miles', 'Trip dates', 'Riding days', 'Location', 'Route and reports']);
+    await expect.poll(() => headerOrder(page)).toEqual(['Trip', 'Miles', 'Trip dates', 'Riding days', 'Location', 'Reports']);
     await page.mouse.up();
     await expect(miles).toHaveAttribute('aria-pressed', 'false');
     await page.keyboard.press('Escape');
     await expect(customize).toBeFocused();
-    await expect.poll(() => headerOrder(page)).toEqual(['Trip', 'Miles', 'Trip dates', 'Riding days', 'Location', 'Route and reports']);
+    await expect.poll(() => headerOrder(page)).toEqual(['Trip', 'Miles', 'Trip dates', 'Riding days', 'Location', 'Reports']);
     await page.getByRole('columnheader', { name: 'Miles', exact: false }).getByRole('button').click();
     await expect.poll(() => new URL(page.url()).searchParams.get('sort')).toBe('miles-asc');
     await page.reload();
-    await expect.poll(() => headerOrder(page)).toEqual(['Trip', 'Miles', 'Trip dates', 'Riding days', 'Location', 'Route and reports']);
+    await expect.poll(() => headerOrder(page)).toEqual(['Trip', 'Miles', 'Trip dates', 'Riding days', 'Location', 'Reports']);
     await customize.click();
     await editor.getByRole('button', { name: 'Reset columns', exact: true }).click();
     await expect.poll(() => headerOrder(page)).toEqual(defaults);
@@ -86,17 +86,19 @@ test('column editor fits a narrow panel, reaches its final options, and closes o
     expect(box.x + box.width).toBeLessThanOrEqual(list.x + list.width);
     expect(box.y + box.height).toBeLessThanOrEqual(list.y + list.height);
     await expect(editor.getByRole('button', { name: 'Reset columns', exact: true })).toBeInViewport();
-    const reports = editor.getByRole('button', { name: 'Reorder Route and reports column', exact: true });
+    const reports = editor.getByRole('button', { name: 'Reorder Reports column', exact: true });
     await reports.focus();
     await reports.press('Space');
     await reports.press('ArrowUp');
     await reports.press('Space');
     await expect(reports).toBeFocused();
-    await editor.getByRole('checkbox', { name: 'Show Route and reports column', exact: true }).uncheck();
+    await editor.getByRole('checkbox', { name: 'Show Reports column', exact: true }).uncheck();
     await editor.getByRole('button', { name: 'Reset columns', exact: true }).click();
     await expect.poll(() => headerOrder(page)).toEqual(defaults);
-    await page.getByRole('button', { name: 'Sort trips', exact: true }).click();
+    // The short-sheet overlay can cover the toolbar; use an exposed map target outside it.
+    await page.getByTestId('trip-atlas-map').locator('canvas').click({ position: { x: 20, y: 100 } });
     await expect(editor).toHaveCount(0);
+    await page.getByRole('button', { name: 'Sort trips', exact: true }).click();
     await expect(page.getByRole('group', { name: 'Sort trips', exact: true })).toBeVisible();
     await page.keyboard.press('Escape');
     expect(new URL(page.url()).searchParams.has('trip')).toBe(false);
@@ -112,7 +114,7 @@ test('keyboard dragging keeps Trip first, announces moves, and can cancel withou
     await miles.press('Space');
     await miles.press('Home');
     await miles.press('ArrowUp');
-    await expect.poll(() => headerOrder(page)).toEqual(['Trip', 'Miles', 'Motorcycle', 'Trip dates', 'Riding days', 'Location', 'Route and reports']);
+    await expect.poll(() => headerOrder(page)).toEqual(['Trip', 'Miles', 'Motorcycle', 'Trip dates', 'Riding days', 'Location', 'Reports']);
     await expect(editor.getByRole('status')).toHaveText('Miles, column 2 of 7.');
     await expect(miles).toBeFocused();
     await miles.press('Escape');

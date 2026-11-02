@@ -26,7 +26,7 @@ test('Atlas icons explain their actions on focus, including current state and fu
     const iconHints: [string, RegExp][] = [
         ['Share map', /selected trip, filters, and view/],
         ['Sort trips', /Current order:/],
-        ['Filters (2 active)', /dates, riding days, distance, or location.*2 active filters/],
+        ['Filters (2 active)', /year, riding days, distance, or location.*2 active filters/],
         ['Show only selected trip', /Show all matching trips again/],
         ['Reset filters', /Keep the selected trip and sort order/],
         ['Customize table columns', /change their order, or restore defaults/],
@@ -73,7 +73,7 @@ test('sorting and column drag handles explain their next action without blocking
 test('browser Back updates the visible and accessible hint on a focused sort control', async ({ page }) => {
     await page.goto(`${atlas}?panel=expanded&results=table`);
     await page.getByRole('button', { name: 'Filters', exact: true }).click();
-    await page.getByLabel('From date').fill('2020-01-01');
+    await page.getByLabel('Trip year').selectOption({ label: '2024' });
     await page.getByRole('button', { name: 'Apply filters' }).click();
     const sort = page.getByRole('button', { name: 'Sort trips', exact: true });
     await sort.click();

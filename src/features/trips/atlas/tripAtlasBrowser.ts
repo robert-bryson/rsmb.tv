@@ -17,7 +17,8 @@ export const atlasSortOptions = [
 export type AtlasSort = typeof atlasSortOptions[number]['value'];
 export type AtlasPanelState = 'collapsed' | 'compact' | 'expanded';
 export type AtlasResultsView = 'cards' | 'table';
-export const atlasRangeKeys = ['from', 'to', 'daysMin', 'daysMax', 'milesMin', 'milesMax'] as const;
+export const atlasFilterFields = { year: ['from', 'to'], days: ['daysMin', 'daysMax'], miles: ['milesMin', 'milesMax'] } as const;
+export const atlasRangeKeys = Object.values(atlasFilterFields).flat();
 const atlasBrowseKeys = [...atlasRangeKeys, 'country', 'region', 'sort'] as const;
 export interface AtlasFilters {
     from: string;
@@ -109,7 +110,7 @@ export function atlasLocationLabel(entry: TripAtlasEntry) {
 }
 
 export function atlasFilterCount(filters: AtlasFilters) {
-    return atlasRangeKeys.filter(key => filters[key]).length + filters.countries.length + filters.regions.length;
+    return Object.values(atlasFilterFields).filter(([min, max]) => filters[min] || filters[max]).length + filters.countries.length + filters.regions.length;
 }
 
 export function filterAtlasEntries(entries: readonly TripAtlasEntry[], filters: AtlasFilters): TripAtlasEntry[] {

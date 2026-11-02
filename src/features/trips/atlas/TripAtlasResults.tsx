@@ -3,8 +3,9 @@ import { useMemo, useState, type CSSProperties, type FocusEvent, type MouseEvent
 import { formatDateRange } from '../../../utils/formatDate';
 import type { TripAtlasEntry } from './tripAtlasEntries';
 import { tripAtlasColor, type AtlasRouteState } from './tripAtlasView';
-import { atlasLocationLabel, atlasLocations, atlasSortOptions, type AtlasResultsView, type AtlasSort } from './tripAtlasBrowser';
-import { getCountryName } from '../../../content/blogRegions';
+import { atlasSortOptions, type AtlasResultsView, type AtlasSort } from './tripAtlasBrowser';
+import { TripAtlasLocations } from './TripAtlasLocations';
+import type { AtlasLocation } from './tripAtlasGeography';
 import { usePersistedState } from '../../../hooks/usePersistedState';
 import { TripAtlasColumnSettings } from './TripAtlasColumnSettings';
 import { atlasTableColumns, atlasTableColumnsStorageKey, defaultAtlasTableColumns, readAtlasTableColumns, type AtlasTableColumnId } from './tripAtlasTableColumns';
@@ -22,6 +23,7 @@ interface Props {
     returnKey: string;
     onSort: (sort: AtlasSort) => void;
     onSelect: (id: string) => void;
+    onExploreLocation: (location: AtlasLocation) => void;
     onHover: (id?: string) => void;
     onFocus: (id?: string) => void;
 }
@@ -53,16 +55,9 @@ function ResultBadges({ entry, development }: { entry: TripAtlasEntry; developme
 }
 
 function ResultActions({ entry, props }: { entry: TripAtlasEntry; props: Props }) {
-    const active = entry.id === props.selectedId;
     const state = props.routes[entry.id];
     return <>
-        <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-start gap-2">
-            <button id={`atlas-route-${entry.id}`} type="button" aria-pressed={active} disabled={!entry.summary}
-                aria-label={`Show route: ${entry.title}`} onClick={() => props.onSelect(entry.id)}
-                className="atlas-control px-3 py-2 transition-colors enabled:hover:text-[color:var(--trip-atlas-color)]">
-                Show route
-            </button>
-            <div className="flex min-w-0 flex-col gap-2">
+        <div className="mt-3 flex min-w-0 flex-col gap-2">
                 {entry.reports.map(report => <Link key={report.slug} to={report.href} state={{ from: props.returnUrl, returnKey: props.returnKey }}
                     className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-[color:var(--trip-atlas-color)] px-3 py-2 text-center text-sm font-semibold leading-snug text-zinc-950 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--trip-atlas-color)]">
                     <span className="min-w-0 break-words">
@@ -70,7 +65,6 @@ function ResultActions({ entry, props }: { entry: TripAtlasEntry; props: Props }
                         {props.development && report.draft && entry.reports.length > 1 && <span className="ml-1 inline-block rounded border border-amber-800 bg-amber-950 px-1.5 py-0.5 text-[11px] font-medium text-amber-300">Draft</span>}
                     </span><span aria-hidden="true" className="shrink-0">→</span>
                 </Link>)}
-            </div>
         </div>
         {!entry.summary ? <p className="mt-2 text-xs text-zinc-400">Route data not available yet.</p>
             : state?.error ? <p role="status" className="mt-2 text-xs text-amber-300">Route unavailable. <button type="button" onClick={state.retry} className="min-h-11 underline">Retry route</button></p>
@@ -78,31 +72,17 @@ function ResultActions({ entry, props }: { entry: TripAtlasEntry; props: Props }
     </>;
 }
 
-function TableLocation({ entry }: { entry: TripAtlasEntry }) {
-    const locations = atlasLocations(entry);
-    if (!locations.length) return <>Not recorded</>;
-    const regions = locations.reduce((total, location) => total + location.regions.length, 0);
-    return <>
-        <p>{locations.map(location => getCountryName(location.code)).sort().join(' · ')}</p>
-        {regions > 0 && <details className="mt-1 text-xs">
-            <summary className="min-h-11 cursor-pointer py-3 text-violet-300">{regions} {regions === 1 ? 'region' : 'regions'}</summary>
-            <p className="pb-2 leading-relaxed">{atlasLocationLabel(entry)}</p>
-        </details>}
-    </>;
-}
-
 export function TripAtlasResults(props: Props) {
     const [storedColumns, setStoredColumns] = usePersistedState<unknown>(atlasTableColumnsStorageKey, defaultAtlasTableColumns());
     const columnSettings = useMemo(() => readAtlasTableColumns(storedColumns), [storedColumns]);
     const columns = columnSettings.filter(setting => setting.visible).map(setting => atlasTableColumns.find(column => column.id === setting.id)!);
-    const actionsVisible = columns.some(column => column.id === 'actions');
     const cellContent = (entry: TripAtlasEntry, column: Exclude<AtlasTableColumnId, 'trip'>) => {
         switch (column) {
             case 'motorcycle': return entry.summary?.motorcycle ?? 'Not recorded';
             case 'dates': return entry.summary ? formatDateRange(entry.summary.dates.start, entry.summary.dates.end) : 'Not recorded';
             case 'days': return entry.summary?.ridingDays ?? 'Not recorded';
             case 'miles': return formatAtlasMiles(entry.summary?.distanceMiles);
-            case 'location': return <TableLocation entry={entry} />;
+            case 'location': return <TripAtlasLocations entry={entry} onExplore={props.onExploreLocation} />;
             case 'actions': return <ResultActions entry={entry} props={props} />;
         }
     };
@@ -145,7 +125,7 @@ export function TripAtlasResults(props: Props) {
             <tbody>{props.entries.map(entry => <tr key={entry.id} {...attributes(entry)} className={`atlas-table-row align-top ${entry.summary ? 'cursor-pointer' : ''}`}>
                 {columns.map(column => column.id === 'trip' ? <th key={column.id} scope="row" style={{ minWidth: column.minWidth }}
                     className="sticky left-0 z-1 bg-zinc-950 p-3 font-normal">
-                    <h2 className="font-semibold text-zinc-100"><button type="button" id={actionsVisible ? `atlas-title-${entry.id}` : `atlas-route-${entry.id}`}
+                    <h2 className="font-semibold text-zinc-100"><button type="button" id={`atlas-select-${entry.id}`}
                         disabled={!entry.summary} aria-pressed={entry.id === props.selectedId} onClick={() => props.onSelect(entry.id)}
                         className="min-h-11 text-left enabled:hover:text-violet-300 focus-visible:outline-2 focus-visible:outline-violet-400">
                         {entry.title}
@@ -162,7 +142,6 @@ export function TripAtlasResults(props: Props) {
 
     return <ol className="space-y-3">{props.entries.map(entry => {
         const summary = entry.summary;
-        const geography = atlasLocationLabel(entry);
         return <li key={entry.id} {...attributes(entry)} data-detailed={props.expanded || undefined}
             className={`atlas-trip-card overflow-hidden rounded-xl border-2 ${summary ? 'cursor-pointer' : ''} ${props.selectedId === entry.id || props.highlightedId === entry.id ? 'bg-zinc-900' : 'bg-zinc-950'}`}>
             <CardPhoto entry={entry} expanded={props.expanded} />
@@ -173,7 +152,9 @@ export function TripAtlasResults(props: Props) {
                     <span>{summary ? formatDateRange(summary.dates.start, summary.dates.end) : 'Trip dates not set'}</span>
                     {props.selectedId === entry.id && <span className="ml-auto text-zinc-100">Selected</span>}
                 </div>
-                <h2 className="text-base font-semibold leading-snug">{entry.title}</h2>
+                <h2 className="text-base font-semibold leading-snug"><button type="button" id={`atlas-select-${entry.id}`}
+                    disabled={!summary} aria-pressed={entry.id === props.selectedId} onClick={() => props.onSelect(entry.id)}
+                    className="text-left enabled:hover:text-violet-300 focus-visible:outline-2 focus-visible:outline-violet-400">{entry.title}</button></h2>
                 <ResultBadges entry={entry} development={props.development} />
                 </div>
                 <p className="atlas-trip-description mt-2 text-sm leading-relaxed text-zinc-400">{entry.description}</p>
@@ -186,7 +167,7 @@ export function TripAtlasResults(props: Props) {
                     {summary?.ridingDays !== undefined && <span>{summary.ridingDays} riding days</span>}
                     {summary?.motorcycle && <span>{summary.motorcycle}</span>}
                 </p>}
-                {(geography || props.expanded) && <p className="mt-2 text-xs leading-relaxed text-zinc-400">{geography || 'Location not recorded'}</p>}
+                <TripAtlasLocations entry={entry} onExplore={props.onExploreLocation} />
                 <ResultActions entry={entry} props={props} />
             </div>
         </li>;

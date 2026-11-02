@@ -13,7 +13,7 @@ test('selection, panel, presentation, pan, and zoom produce a shareable view in 
     await page.goto(`${atlas}?country=CA&sort=miles-desc`);
     await expect.poll(() => new URL(page.url()).searchParams.get('camera')).toBeTruthy();
     const historyLength = await page.evaluate(() => history.length);
-    await page.getByRole('button', { name: 'Show route: Coastal test trip' }).click();
+    await page.getByRole('button', { name: 'Coastal test trip' }).click();
     await expect.poll(() => new URL(page.url()).searchParams.get('trip')).toBe('coastal-test');
     await expect.poll(() => new URL(page.url()).searchParams.get('camera')).toBeTruthy();
     await page.getByRole('button', { name: 'Expand trip panel' }).click();
@@ -66,15 +66,15 @@ test('browser Back restores the camera and panel from before an applied filter',
     await page.goto(`${atlas}?panel=expanded&camera=-122,46,5.5,22,30`);
     await expect(page.getByText('2/2 routes')).toBeVisible();
     await page.getByRole('button', { name: /^Filters/ }).click();
-    await page.getByLabel('Minimum miles').fill('240');
+    await page.getByLabel('Distance', { exact: true }).selectOption({ label: 'Up to 500 miles' });
     await page.getByRole('button', { name: 'Apply filters' }).click();
-    await expect.poll(() => new URL(page.url()).searchParams.get('milesMin')).toBe('240');
+    await expect.poll(() => new URL(page.url()).searchParams.get('milesMax')).toBe('500');
     await page.getByRole('button', { name: 'Collapse trip panel' }).click();
     await page.getByRole('button', { name: 'Zoom in', exact: true }).click();
     await expect.poll(() => new URL(page.url()).searchParams.get('camera')).not.toBe('-122,46,5.5,22,30');
     await page.goBack();
     await expect(page.locator('main.atlas-explorer')).toHaveAttribute('data-panel-state', 'expanded');
-    await expect.poll(() => new URL(page.url()).searchParams.has('milesMin')).toBe(false);
+    await expect.poll(() => new URL(page.url()).searchParams.has('milesMax')).toBe(false);
     await expect.poll(async () => {
         const camera = await atlasCamera(page);
         return camera && { center: camera.center.map(value => Number(value.toFixed(6))), zoom: Number(camera.zoom.toFixed(4)),

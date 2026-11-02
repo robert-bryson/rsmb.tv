@@ -5,7 +5,7 @@ export const atlasTableColumns = [
     { id: 'days', name: 'Riding days', minWidth: 112, ascending: 'days-asc', descending: 'days-desc' },
     { id: 'miles', name: 'Miles', minWidth: 96, ascending: 'miles-asc', descending: 'miles-desc' },
     { id: 'location', name: 'Location', minWidth: 176, ascending: 'location-asc', descending: 'location-desc' },
-    { id: 'actions', name: 'Route and reports', minWidth: 288 },
+    { id: 'actions', name: 'Reports', minWidth: 200 },
 ] as const;
 
 export type AtlasTableColumnId = typeof atlasTableColumns[number]['id'];

@@ -19,8 +19,9 @@ test('three drawer states reserve map space, retain the camera, and leave access
         expect(map.x).toBeCloseTo(panel.x + panel.width, 0);
         expect(map.width).toBeCloseTo(root.width / 3, 0);
     } else {
+        expect(panel.height).toBeCloseTo(root.height / 2, 0);
         expect(map.y + map.height).toBeCloseTo(panel.y, 0);
-        expect(map.height).toBeGreaterThan(root.height * 0.3);
+        expect(map.height).toBeCloseTo(root.height / 2, 0);
     }
     await expect.poll(async () => {
         const after = (await camera(page))!;
@@ -28,12 +29,12 @@ test('three drawer states reserve map space, retain the camera, and leave access
     }).toBeLessThan(0.000001);
     await page.getByRole('button', { name: 'Use compact trip panel' }).click();
     await expect(main).toHaveAttribute('data-panel-state', 'compact');
-    await page.getByRole('button', { name: 'Show route: Coastal test trip' }).focus();
+    await page.getByRole('button', { name: 'Coastal test trip' }).focus();
     await page.getByRole('button', { name: 'Collapse trip panel' }).click();
     await expect(main).toHaveAttribute('data-panel-state', 'collapsed');
     const handle = page.getByRole('button', { name: 'Show trips' });
     await expect(page.locator('#atlas-panel-toggle')).toBeFocused();
-    await expect(page.getByRole('button', { name: /^Show route:/ })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: /^(?:Coastal test trip|Daily map test trip)$/ })).toHaveCount(0);
     const handleBox = (await handle.boundingBox())!;
     expect(handleBox.width).toBeGreaterThanOrEqual(44);
     expect(handleBox.height).toBeGreaterThanOrEqual(44);
@@ -46,27 +47,26 @@ test('three drawer states reserve map space, retain the camera, and leave access
 test('selected-only is absent until selection and disappears when selection clears', async ({ page }) => {
     await page.goto(atlas);
     await expect(page.getByRole('button', { name: 'Show only selected trip' })).toHaveCount(0);
-    await page.getByRole('button', { name: 'Show route: Coastal test trip' }).click();
+    await page.getByRole('button', { name: 'Coastal test trip' }).click();
     await expect(page.getByRole('button', { name: 'Show only selected trip' })).toBeVisible();
     await page.getByRole('button', { name: 'Zoom to all trips' }).click();
     await expect(page.getByRole('button', { name: 'Show only selected trip' })).toHaveCount(0);
 });
 
-test('filter drafts and invalid ranges leave applied results intact, while valid inclusive ranges update cards and routes together', async ({ page }) => {
+test('year and populated range presets stay in draft until cards and routes update together', async ({ page }) => {
     await page.goto(atlas);
     await expect(page.getByText('2/2 routes')).toBeVisible();
     await expect.poll(() => camera(page)).toBeDefined();
     const before = (await camera(page))!;
     await page.getByRole('button', { name: /^Filters/ }).click();
-    await page.getByLabel('Minimum days').fill('3');
-    await page.getByLabel('Maximum days').fill('2');
+    await expect(page.getByLabel('Trip year').locator('option')).toHaveText(['Any year', '2024']);
+    await expect(page.getByLabel('Riding days').locator('option')).toHaveText(['Any number of days', '1–3 days']);
+    await expect(page.getByLabel('Distance', { exact: true }).locator('option')).toHaveText(['Any distance', 'Up to 500 miles']);
+    await page.getByLabel('Trip year').selectOption({ label: '2024' });
+    await page.getByLabel('Riding days').selectOption({ label: '1–3 days' });
+    await page.getByLabel('Distance', { exact: true }).selectOption({ label: 'Up to 500 miles' });
     await expect(page.locator('[data-trip-id]')).toHaveCount(2);
-    await page.getByRole('button', { name: 'Apply filters' }).click();
-    await expect(page.getByRole('alert')).toContainText('maximum must be at least the minimum');
     await expectAtlasUrl(page);
-    await page.getByLabel('Minimum days').fill('2');
-    await page.getByLabel('Minimum miles').fill('240');
-    await page.getByLabel('Maximum miles').fill('240');
     await page.getByRole('button', { name: 'Apply filters' }).click();
     await expect(page.locator('[data-trip-id]')).toHaveCount(1);
     await expect(page.locator('[data-trip-id="coastal-test"]')).toBeVisible();
@@ -76,6 +76,19 @@ test('filter drafts and invalid ranges leave applied results intact, while valid
     await page.getByRole('button', { name: 'Clear filters', exact: true }).click();
     await expect(page.locator('[data-trip-id]')).toHaveCount(2);
     await expect(page.getByText('2/2 routes')).toBeVisible();
+});
+
+test('precise shared date bounds remain visible in the form and survive applying another preset', async ({ page }) => {
+    await page.goto(`${atlas}?from=2024-01-01&to=2024-01-02`);
+    await page.getByRole('button', { name: /^Filters/ }).click();
+    await expect(page.getByLabel('Trip year')).toHaveValue('2024-01-01/2024-01-02');
+    await expect(page.getByLabel('Trip year')).toHaveText(/2024-01-01 – 2024-01-02/);
+    await page.getByLabel('Distance', { exact: true }).selectOption({ label: 'Up to 500 miles' });
+    await page.getByRole('button', { name: 'Apply filters' }).click();
+    const params = new URL(page.url()).searchParams;
+    expect(params.get('from')).toBe('2024-01-01');
+    expect(params.get('to')).toBe('2024-01-02');
+    await expect(page.getByRole('button', { name: 'Remove filter: Dates: 2024-01-01 – 2024-01-02' })).toBeVisible();
 });
 
 test('table sorting shares card order, retains unknown facts, and survives compact mode and report reloads', async ({ page }) => {
@@ -150,7 +163,7 @@ test('phone filters reflow and table scrolling remains inside the drawer', async
     await openList(page);
     await page.getByRole('button', { name: 'Expand trip panel' }).click();
     await page.getByRole('button', { name: /^Filters/ }).click();
-    await page.getByLabel('Maximum miles').fill('1000');
+    await page.getByLabel('Distance', { exact: true }).selectOption({ label: 'Up to 500 miles' });
     await page.getByRole('button', { name: 'Apply filters' }).click();
     await page.getByRole('radio', { name: 'Table', exact: true }).click();
     await expect(page.getByRole('radio', { name: 'Table', exact: true })).toBeChecked();
@@ -174,7 +187,7 @@ test('a late excluded route cannot return to filtered results or shared-road cho
     try {
         await page.goto(atlas);
         await page.getByRole('button', { name: /^Filters/ }).click();
-        await page.getByLabel('Minimum miles').fill('240');
+        await page.getByLabel('Distance', { exact: true }).selectOption({ label: 'Up to 500 miles' });
         await page.getByRole('button', { name: 'Apply filters' }).click();
         await expect(page.getByText('1/1 routes')).toBeVisible();
         release();

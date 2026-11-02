@@ -24,7 +24,7 @@ test('row highlighting includes the sticky first cell and the far edge after scr
     await expect(page.getByText('2/2 routes')).toBeVisible();
     const region = page.getByRole('region', { name: 'Trip comparison table' });
     const row = region.locator('[data-trip-id="coastal-test"]');
-    await row.getByRole('button', { name: 'Show route: Coastal test trip' }).evaluate(element => (element as HTMLElement).focus({ preventScroll: true }));
+    await row.getByRole('button', { name: 'Coastal test trip' }).evaluate(element => (element as HTMLElement).focus({ preventScroll: true }));
     await expect(row).toHaveAttribute('data-highlighted', 'true');
     const expected = tripAtlasColor('coastal-test').slice(1).match(/../g)!.map(hex => parseInt(hex, 16));
     const edges = async (last = false) => {
@@ -44,7 +44,7 @@ test('row highlighting includes the sticky first cell and the far edge after scr
     await edges();
     await region.evaluate(element => { element.scrollLeft = element.scrollWidth; });
     await edges(true);
-    await row.getByRole('button', { name: 'Show route: Coastal test trip' }).click();
+    await row.getByRole('button', { name: 'Coastal test trip' }).click();
     await page.mouse.move(0, 0);
     await page.getByRole('button', { name: /^Filters/ }).focus();
     await page.keyboard.press('Escape');

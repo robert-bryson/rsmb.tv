@@ -40,8 +40,7 @@
 .atlas-table-shell [role="region"] { scroll-padding-inline: 192px 56px; }
 .atlas-column-settings { position: absolute; z-index: 5; top: 1px; right: 1px; padding-left: 8px; border-radius: 0 11px 0 0; background: #18181b; }
 .atlas-table-shell thead th:last-child { padding-right: 64px; }
-.atlas-column-options { position: absolute; z-index: 20; top: calc(100% + 4px); right: 0; display: flex; flex-direction: column; width: min(320px, 100cqw); overflow: hidden; padding: 12px; background: #09090b; box-shadow: var(--atlas-shadow); }
-.atlas-column-options[data-above="true"] { top: auto; bottom: calc(100% + 4px); }
+.atlas-column-options { position: fixed; z-index: 30; display: flex; flex-direction: column; overflow: hidden; padding: 12px; background: #09090b; box-shadow: var(--atlas-shadow); }
 .atlas-column-choices { position: relative; isolation: isolate; padding: 3px; }
 .atlas-column-choice { position: relative; border-radius: 6px; }
 .atlas-column-choice[data-reordering="true"] { z-index: 1; transform: translateY(var(--atlas-column-drag-offset, 0px)); background: #272135; outline: 2px solid #a78bfa; box-shadow: 0 6px 16px #0008; }
@@ -61,6 +60,8 @@
 .atlas-view-option svg { width: 20px; height: 20px; pointer-events: none; }
 .atlas-control-tooltip { position: fixed; z-index: 1000; visibility: hidden; width: max-content; padding: 8px 12px; border: 1px solid var(--atlas-border); border-radius: var(--atlas-radius); background: var(--atlas-raised); color: var(--atlas-text); font-size: 12px; line-height: 1.5; box-shadow: var(--atlas-shadow); pointer-events: none; }
 .atlas-trip-card[data-highlighted="true"] { box-shadow: inset 0 0 0 1px var(--trip-atlas-color); }
+.atlas-locations { line-height: 24px; }
+.atlas-location-link { display: inline-block; min-height: 24px; padding-inline: 2px; vertical-align: top; line-height: 24px; white-space: nowrap; }
 /* Paint borders on each cell so the sticky title cannot cover the row outline. */
 .atlas-table-row > :is(th, td) { border-top: 2px solid transparent; border-bottom: 2px solid #27272a; }
 .atlas-table-row > :first-child { border-left: 2px solid transparent; }
@@ -86,6 +87,7 @@ section.atlas-share-feedback { width: 320px; }
 }
 
 .atlas-map-viewport {
+    container: atlas-map / size;
     position: absolute;
     inset: 0 0 0 var(--atlas-map-offset);
 }
@@ -162,7 +164,6 @@ section.atlas-share-feedback { width: 320px; }
 }
 
 @media (width < 768px) {
-    .atlas-explorer { --atlas-expanded-height: 65%; }
     .atlas-map-viewport { inset: 0 0 var(--atlas-sheet-offset); }
     .atlas-drawer { inset: auto 0 0; width: 100%; height: var(--atlas-sheet-height); }
     .atlas-explorer[data-panel-state="collapsed"] .atlas-drawer { transform: translateY(100%); }
@@ -184,6 +185,19 @@ section.atlas-share-feedback { width: 320px; }
     .atlas-trip-heading { grid-column: 2; grid-row: 1; }
     .atlas-trip-content > :not(.atlas-trip-heading) { grid-column: 1 / -1; }
     .atlas-trip-card:not([data-detailed]) .atlas-trip-description { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+}
+
+@media (width < 768px) and (height < 500px) {
+    .atlas-browser-tools { display: grid; grid-template-columns: 1fr auto; column-gap: 8px; padding: 8px 12px; }
+    .atlas-browser-tools > a { grid-area: 1 / 2; }
+    .atlas-browser-tools > h1 { grid-area: 1 / 1; margin-top: 0; font-size: 16px; line-height: 24px; }
+    .atlas-browser-tools > div { grid-column: 1 / -1; }
+    .atlas-panel #atlas-trip-list { padding-block: 4px; }
+}
+
+/* A short map cannot fit the vertical toolbar and its following Share button. */
+@container atlas-map (height < 240px) {
+    .atlas-share-control { top: 76px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

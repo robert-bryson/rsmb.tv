@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react';
 import { getCountryName, type BlogCountry } from '../../../content/blogRegions';
 import {
-    atlasRangeKeys, atlasRegionKey, validateAtlasFilters, type AtlasFilters, type AtlasFilterIssue,
+    atlasFilterFields, atlasRegionKey, validateAtlasFilters, type AtlasFilters, type AtlasFilterIssue,
 } from './tripAtlasBrowser';
+import { atlasFilterChoiceValue, atlasFilterGroups, atlasRangeChoice, atlasRangeLabel, type AtlasFilterOptions } from './tripAtlasFilterOptions';
 
 const inputClass = 'atlas-input w-full';
 
@@ -44,44 +45,42 @@ function CountryChoices({ country, filters, onChange }: {
     </fieldset>;
 }
 
-export function TripAtlasFilters({ filters, countries, onApply, onCancel }: {
-    filters: AtlasFilters; countries: BlogCountry[]; onApply: (filters: AtlasFilters) => void; onCancel: () => void;
+export function TripAtlasFilters({ filters, countries, options, onApply, onCancel }: {
+    filters: AtlasFilters; countries: BlogCountry[]; options: AtlasFilterOptions; onApply: (filters: AtlasFilters) => void; onCancel: () => void;
 }) {
     const [draft, setDraft] = useState(() => ({ ...filters, countries: [...filters.countries], regions: [...filters.regions] }));
     const [issues, setIssues] = useState<AtlasFilterIssue[]>([]);
     const form = useRef<HTMLFormElement>(null);
-    const ranges = [
-        { legend: 'Trip dates', help: 'Trips that overlap these dates, including both endpoints.', type: 'date', fields: ['from', 'to'], labels: ['From date', 'To date'] },
-        { legend: 'Riding days', help: 'Whole riding days. Leave an endpoint blank for no limit.', type: 'number', fields: ['daysMin', 'daysMax'], labels: ['Minimum days', 'Maximum days'] },
-        { legend: 'Distance in miles', help: 'Exact trip mileage, including both endpoints.', type: 'number', fields: ['milesMin', 'milesMax'], labels: ['Minimum miles', 'Maximum miles'] },
-    ] as const;
     return <form ref={form} noValidate aria-label="Filter trips" className="mb-4 space-y-4 rounded-xl border border-zinc-700 bg-zinc-950 p-3"
         onSubmit={event => {
             event.preventDefault();
             const errors = validateAtlasFilters(draft);
-            for (const input of form.current?.querySelectorAll<HTMLInputElement>('input') ?? []) {
-                if (input.validity.badInput && atlasRangeKeys.some(key => key === input.name)) {
-                    errors.push({ field: input.name as typeof atlasRangeKeys[number], message: 'Complete this date or number before applying filters.' });
-                }
-            }
             setIssues(errors);
-            if (errors.length) form.current?.querySelector<HTMLInputElement>(`[name="${errors[0].field}"]`)?.focus();
+            if (errors.length) {
+                const group = atlasFilterGroups.find(group => atlasFilterFields[group.id].some(field => field === errors[0].field));
+                form.current?.querySelector<HTMLSelectElement>(`[name="${group?.id ?? errors[0].field}"]`)?.focus();
+            }
             else onApply(draft);
         }}>
-        {ranges.map(range => <fieldset key={range.legend}>
-            <legend className="text-sm font-semibold text-zinc-200">{range.legend}</legend>
-            <p className="mb-2 mt-1 text-xs leading-relaxed text-zinc-400">{range.help}</p>
-            <div className="grid grid-cols-2 gap-2">
-                {range.fields.map((field, index) => <label key={field} className="min-w-0 text-xs text-zinc-300">
-                    <span className="mb-1 block">{range.labels[index]}</span>
-                    <input name={field} type={range.type} value={draft[field]} min={range.type === 'number' ? 0 : undefined}
-                        step={field.startsWith('miles') ? 'any' : range.type === 'number' ? 1 : undefined}
-                        className={inputClass} aria-invalid={issues.some(issue => issue.field === field) || undefined}
-                        aria-describedby={issues.some(issue => issue.field === field) ? 'atlas-filter-errors' : undefined}
-                        onChange={event => setDraft(current => ({ ...current, [field]: event.target.value }))} />
-                </label>)}
-            </div>
-        </fieldset>)}
+        {atlasFilterGroups.map(group => {
+            const [min, max] = atlasFilterFields[group.id];
+            const value = atlasRangeChoice(group.id, draft);
+            const choices = options[group.id];
+            const custom = !choices.some(choice => atlasFilterChoiceValue(choice.min, choice.max) === value);
+            const invalid = issues.some(issue => issue.field === min || issue.field === max);
+            return <div key={group.id} className="text-sm font-semibold text-zinc-200">
+                <label htmlFor={`atlas-filter-${group.id}`} className="mb-2 block">{group.label}</label>
+                <select id={`atlas-filter-${group.id}`} name={group.id} value={value} className={inputClass} aria-invalid={invalid || undefined}
+                    aria-describedby={invalid ? 'atlas-filter-errors' : undefined}
+                    onChange={event => {
+                        const choice = choices.find(choice => atlasFilterChoiceValue(choice.min, choice.max) === event.target.value);
+                        if (choice) setDraft(current => ({ ...current, [min]: choice.min, [max]: choice.max }));
+                    }}>
+                    {choices.map(choice => <option key={atlasFilterChoiceValue(choice.min, choice.max)} value={atlasFilterChoiceValue(choice.min, choice.max)}>{choice.label}</option>)}
+                    {custom && <option value={value}>{atlasRangeLabel(group.id, draft[min], draft[max])}</option>}
+                </select>
+            </div>;
+        })}
         {countries.length > 0 && <fieldset className="space-y-2">
             <legend className="text-sm font-semibold text-zinc-200">Locations</legend>
             <p className="text-xs leading-relaxed text-zinc-400">Match any selected country or region. Choose a region to narrow its country.</p>
@@ -101,9 +100,14 @@ export function AtlasAppliedFilters({ filters, countries, onlySelected, onChange
     filters: AtlasFilters; countries: BlogCountry[]; onlySelected: boolean;
     onChange: (filters: AtlasFilters) => void; onClearSelected: () => void; onClear: () => void;
 }) {
-    const names = { from: 'From', to: 'To', daysMin: 'Days ≥', daysMax: 'Days ≤', milesMin: 'Miles ≥', milesMax: 'Miles ≤' };
     const chips = [
-        ...atlasRangeKeys.filter(key => filters[key]).map(key => ({ id: key, label: `${names[key]} ${filters[key]}`, remove: () => onChange({ ...filters, [key]: '' }) })),
+        ...atlasFilterGroups.flatMap(group => {
+            const [min, max] = atlasFilterFields[group.id];
+            if (!filters[min] && !filters[max]) return [];
+            const range = atlasRangeLabel(group.id, filters[min], filters[max]);
+            const label = group.id === 'year' ? `${/^\d{4}$/.test(range) ? 'Year' : 'Dates'}: ${range}` : range;
+            return [{ id: group.id, label, remove: () => onChange({ ...filters, [min]: '', [max]: '' }) }];
+        }),
         ...filters.countries.map(code => ({ id: `country:${code}`, label: /^[A-Z]{2}$/.test(code) ? getCountryName(code) : code,
             remove: () => onChange({ ...filters, countries: filters.countries.filter(value => value !== code) }) })),
         ...filters.regions.map(key => {

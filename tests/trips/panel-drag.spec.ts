@@ -35,7 +35,7 @@ test('single and double arrows reach each panel size with pointer and keyboard c
     await double.press('Enter');
     await expect(main).toHaveAttribute('data-panel-state', 'collapsed');
     await expect(double).toBeFocused();
-    await expect(page.getByRole('button', { name: /^Show route:/ })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: /^(?:Coastal test trip|Daily map test trip)$/ })).toHaveCount(0);
     await double.press('Space');
     await expect(main).toHaveAttribute('data-panel-state', 'expanded');
 });

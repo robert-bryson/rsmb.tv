@@ -45,7 +45,11 @@ vi.mock('maplibre-gl', () => ({
         getElement() { return this.element; }
         remove() { this.element.remove(); return this; }
     },
-    LngLatBounds: class { extend() { return this; } },
+    LngLatBounds: class {
+        bounds: unknown[];
+        constructor(...bounds: unknown[]) { this.bounds = bounds; }
+        extend() { return this; }
+    },
     Map: class {
         events = new Map<string, RendererListener[]>();
         fitBounds = vi.fn();
@@ -109,6 +113,18 @@ const entry = {
 const route: RouteGeoJson = { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: [[-122, 47], [-124, 45]] } };
 
 describe('atlas renderer lifecycle', () => {
+    it('fits a requested geographic region without waiting for routes or fitting again when they arrive', () => {
+        const props = { entries: [entry], routes: {}, fitVersion: 1, fitRequest: { bounds: [-125, 45, -116, 49] as [number, number, number, number] },
+            panelOpen: true, onSelect: vi.fn(), onHover: vi.fn(), onCameraChange: vi.fn() };
+        const { rerender } = render(<TripAtlasMap {...props} />);
+        const instance = fake.instances[0];
+        act(() => { instance.events.get('styledata')?.forEach(listener => listener()); });
+        expect(instance.fitBounds).toHaveBeenCalledOnce();
+        expect(instance.fitBounds.mock.calls[0][0].bounds).toEqual([[-125, 45], [-116, 49]]);
+        rerender(<TripAtlasMap {...props} routes={{ coast: { route, error: '', retry: vi.fn() } }} />);
+        expect(instance.fitBounds).toHaveBeenCalledOnce();
+    });
+
     it('applies an external camera before layout-driven movement can publish the old view', () => {
         const idle = vi.fn();
         const target: AtlasCamera = { center: [-100, 40], zoom: 5.5, bearing: 0, pitch: 0 };

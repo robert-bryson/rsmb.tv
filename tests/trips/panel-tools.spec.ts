@@ -43,8 +43,8 @@ test('header icons sort trips and reveal filters from a scrolled list', async ({
     await page.locator('#atlas-trip-list').evaluate(element => { element.scrollTop = element.scrollHeight; });
     await filters.click();
     await expect(filters).toHaveAttribute('aria-expanded', 'true');
-    await expect(page.getByLabel('From date')).toBeInViewport();
-    await page.getByLabel('Minimum miles').fill('240');
+    await expect(page.getByLabel('Trip year')).toBeInViewport();
+    await page.getByLabel('Distance', { exact: true }).selectOption({ label: 'Up to 500 miles' });
     await page.getByRole('button', { name: 'Apply filters' }).click();
     const active = controls.getByRole('button', { name: 'Filters (1 active)', exact: true });
     await expect(active).toHaveAttribute('aria-expanded', 'false');

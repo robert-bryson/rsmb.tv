@@ -4,6 +4,8 @@ import { getTripPosts } from '../content/posts';
 import { getTripSummary } from '../features/trips/tripSummaries';
 import { useTripRoute } from '../features/trips/useTripRoute';
 import { buildTripAtlasEntries } from '../features/trips/atlas/tripAtlasEntries';
+import { buildAtlasFilterOptions } from '../features/trips/atlas/tripAtlasFilterOptions';
+import { atlasLocationBounds, atlasLocationFilters, type AtlasBounds, type AtlasLocation } from '../features/trips/atlas/tripAtlasGeography';
 import { TripAtlasMapBoundary } from '../features/trips/atlas/TripAtlasMapBoundary';
 import { TripAtlasPanel } from '../features/trips/atlas/TripAtlasPanel';
 import { TripAtlasResults } from '../features/trips/atlas/TripAtlasResults';
@@ -48,6 +50,7 @@ export default function AdvAtlas() {
     const filterIssues = useMemo(() => validateAtlasFilters(filters), [filters]);
     const activeFilters = atlasFilterCount(filters) + Number(onlySelected);
     const countries = useMemo(() => atlasLocationCatalog(entries), [entries]);
+    const filterOptions = useMemo(() => buildAtlasFilterOptions(entries), [entries]);
     const matchingEntries = useMemo(() => sortAtlasEntries(filterAtlasEntries(entries, filters), sort), [entries, filters, sort]);
     const visibleEntries = useMemo(() => onlySelected ? matchingEntries.filter(entry => entry.id === selectedId) : matchingEntries, [matchingEntries, onlySelected, selectedId]);
     const mapEntries = useMemo(() => visibleEntries.filter(entry => entry.summary), [visibleEntries]);
@@ -72,7 +75,7 @@ export default function AdvAtlas() {
     const panelOpen = panelState !== 'collapsed';
     const session = useRef<AtlasSession>({ ...(initialSession ?? { scrollTop: 0 }), ...(initialCamera ? { camera: initialCamera } : {}), panelOpen, panelState, resultsView });
     const [routes, setRoutes] = useState<Record<string, AtlasRouteState>>({});
-    const [fitRequest, setFitRequest] = useState<{ tripId?: string; version: number; cancelled?: boolean }>(() => ({
+    const [fitRequest, setFitRequest] = useState<{ tripId?: string; version: number; cancelled?: boolean; bounds?: AtlasBounds }>(() => ({
         tripId: mapEntries.some(entry => entry.id === selectedId) ? selectedId : undefined, version: 0,
     }));
     const [cameraChanged, setCameraChanged] = useState(false);
@@ -157,6 +160,16 @@ export default function AdvAtlas() {
         setFitRequest(current => ({ ...current, cancelled: true }));
         resetScroll();
     };
+    const exploreLocation = (location: AtlasLocation) => {
+        updateParams(current => {
+            const next = writeAtlasBrowse(current, atlasLocationFilters(filters, location), sort);
+            next.delete('trip'); next.delete('view'); next.delete('camera');
+            return next;
+        }, false);
+        setFitRequest(current => ({ version: current.version + 1, bounds: atlasLocationBounds(location) }));
+        resetScroll();
+        document.getElementById('atlas-filters-toggle')?.focus({ preventScroll: true });
+    };
     const clearFilters = () => {
         updateParams(current => {
             const next = writeAtlasBrowse(current, emptyAtlasFilters(), sort);
@@ -215,7 +228,7 @@ export default function AdvAtlas() {
         document.getElementById(`atlas-card-${reveal.id}`)?.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'instant' });
         if (reveal.focusCard && focusedReveal.current !== reveal) {
             focusedReveal.current = reveal;
-            const control = document.getElementById(`atlas-route-${reveal.id}`);
+            const control = document.getElementById(`atlas-select-${reveal.id}`);
             control?.scrollIntoView({ block: 'end', inline: 'nearest', behavior: 'instant' });
             control?.focus({ preventScroll: true });
         }
@@ -253,7 +266,7 @@ export default function AdvAtlas() {
             </button>}
             {!panelOpen && activeFilters > 0 && <p data-atlas-map-obstacle className="pointer-events-none absolute bottom-8 right-3 z-10 rounded-lg bg-zinc-950/90 px-3 py-2 text-xs text-zinc-300">{visibleEntries.length} of {entries.length} trips · {activeFilters} filters</p>}
         </section>
-        <TripAtlasPanel state={panelState} view={resultsView} sort={sort} filters={filters} countries={countries}
+        <TripAtlasPanel state={panelState} view={resultsView} sort={sort} filters={filters} countries={countries} filterOptions={filterOptions}
             selectedId={selectedId} onlySelected={onlySelected} count={visibleEntries.length} total={entries.length}
             loadedRoutes={loadedCount} routeCount={mapEntries.length} listRef={listRef}
             onState={changePanel} onView={changeView} onSort={changeSort} onFilters={changeFilters}
@@ -267,7 +280,8 @@ export default function AdvAtlas() {
             {visibleEntries.length === 0 && <p className="rounded-lg bg-zinc-900 p-4 text-sm text-zinc-400">{entries.length ? 'No trips match these filters. Clear a filter or choose a wider range.' : 'No trip reports are available yet.'}</p>}
             <TripAtlasResults entries={visibleEntries} routes={routes} selectedId={selectedId} highlightedId={highlightedId}
                 expanded={panelState === 'expanded'} view={resultsView} sort={sort} development={development}
-                returnUrl={url} returnKey={location.key} onSort={changeSort} onSelect={selectTrip} onHover={setHoveredId} onFocus={setFocusedId} />
+                returnUrl={url} returnKey={location.key} onSort={changeSort} onSelect={selectTrip}
+                onExploreLocation={exploreLocation} onHover={setHoveredId} onFocus={setFocusedId} />
         </TripAtlasPanel>
         <AtlasControlTooltips container={fullscreenContainer} />
     </main>;

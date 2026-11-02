@@ -5,6 +5,7 @@ import { atlasFilterCount, type AtlasFilters, type AtlasPanelState, type AtlasRe
 import { AtlasAppliedFilters, TripAtlasFilters } from './TripAtlasFilters';
 import { TripAtlasSort } from './TripAtlasSort';
 import { TripAtlasViewToggle } from './TripAtlasViewToggle';
+import type { AtlasFilterOptions } from './tripAtlasFilterOptions';
 import { useAtlasPanelDrag } from './useAtlasPanelDrag';
 
 interface Props {
@@ -13,6 +14,7 @@ interface Props {
     sort: AtlasSort;
     filters: AtlasFilters;
     countries: BlogCountry[];
+    filterOptions: AtlasFilterOptions;
     selectedId?: string;
     onlySelected: boolean;
     count: number;
@@ -126,7 +128,7 @@ export function TripAtlasPanel({ listRef, ...props }: Props) {
                         <TripAtlasSort value={props.sort} onChange={props.onSort} />
                         <button ref={filterButton} id="atlas-filters-toggle" type="button" aria-expanded={filtersOpen} aria-controls="atlas-filter-form"
                             aria-label={`Filters${activeFilters ? ` (${activeFilters} active)` : ''}`}
-                            data-atlas-tooltip={`${filtersOpen ? 'Close filters without applying changes' : 'Filter trips by dates, riding days, distance, or location'}.${activeFilters ? ` ${activeFilters} active ${activeFilters === 1 ? 'filter' : 'filters'}.` : ''}`}
+                            data-atlas-tooltip={`${filtersOpen ? 'Close filters without applying changes' : 'Filter trips by year, riding days, distance, or location'}.${activeFilters ? ` ${activeFilters} active ${activeFilters === 1 ? 'filter' : 'filters'}.` : ''}`}
                             onClick={toggleFilters} className="atlas-control atlas-icon-control relative">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                                 <path d="M4 5h16l-6 7v6l-4 2v-8Z" />
@@ -140,7 +142,7 @@ export function TripAtlasPanel({ listRef, ...props }: Props) {
             <div id="atlas-trip-list" ref={listRef} className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-3 [scrollbar-gutter:stable]"
                 onClickCapture={event => { if (open) onScroll(event.currentTarget.scrollTop); }}
                 onScroll={event => { if (open) props.onScroll(event.currentTarget.scrollTop); }}>
-                {filtersOpen && <div id="atlas-filter-form"><TripAtlasFilters key={JSON.stringify(props.filters)} filters={props.filters} countries={props.countries}
+                {filtersOpen && <div id="atlas-filter-form"><TripAtlasFilters key={JSON.stringify(props.filters)} filters={props.filters} countries={props.countries} options={props.filterOptions}
                     onApply={filters => { props.onFilters(filters); closeFilters(); }} onCancel={closeFilters} /></div>}
                 <AtlasAppliedFilters filters={props.filters} countries={props.countries} onlySelected={props.onlySelected}
                     onChange={filters => { props.onFilters(filters); filterButton.current?.focus({ preventScroll: true }); }}

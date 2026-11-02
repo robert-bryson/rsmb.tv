@@ -7,7 +7,7 @@
   "distanceMiles": 240,
   "ridingDays": 2,
   "countries": [
-    { "code": "US", "regions": ["Washington", "Oregon"] },
+    { "code": "US", "regions": ["Washington", "Oregon", "California", "Idaho", "Montana", "Wyoming", "Colorado", "Utah", "Nevada", "Arizona", "New Mexico", "Texas"] },
     { "code": "CA", "regions": ["British Columbia"] }
   ],
   "hero": "photo-1",

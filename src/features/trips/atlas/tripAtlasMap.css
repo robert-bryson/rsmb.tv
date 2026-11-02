@@ -22,6 +22,12 @@
 .trip-atlas-map .maplibregl-ctrl-group button:focus-visible { outline: 2px solid var(--atlas-accent); outline-offset: -3px; box-shadow: none; }
 .trip-atlas-map .maplibregl-ctrl-group button .maplibregl-ctrl-icon { filter: invert(0.85); }
 
+@container atlas-map (height < 240px) {
+    .trip-atlas-map .maplibregl-ctrl-top-right,
+    .trip-atlas-map .maplibregl-ctrl-group { flex-direction: row; }
+    .trip-atlas-map .maplibregl-ctrl-group button + button { border-top: 0; border-left: 1px solid var(--atlas-border); }
+}
+
 .trip-atlas-map .maplibregl-ctrl-attrib {
     background: rgb(9 9 11 / 90%);
     color: #d4d4d8;

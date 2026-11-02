@@ -251,8 +251,21 @@ Run atlas interactions and article budgets with fixed production content:
 
 ```bash
 PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- \
-  --grep 'atlas.spec|browsing.spec|sharing.spec|tooltip-placement.spec|reading routes exclude' --workers=2
+  --workers=2
 ```
+
+This command runs the complete trip browser suite, including atlas layouts, location actions, column settings, and article budgets.
+
+Run the focused atlas unit checks without network access:
+
+```bash
+npx vitest run src/test/tripAtlas*.test.ts* src/test/advAtlas.test.tsx \
+  scripts/__tests__/atlasGeographyBounds.test.ts
+```
+
+Generator tests use synthetic source data and temporary output files.
+They check country-qualified aliases, date-line bounds, large coastlines, invalid geometry, HTTP failures, and request deadlines.
+Failed source requests must preserve the previous output file.
 
 The browser checks cover these behaviors:
 
@@ -264,7 +277,7 @@ The browser checks cover these behaviors:
 - Reloading the atlas retains its camera, panel size, and result view within the same tab.
 - Separate direct visits receive different history keys. A fresh visit frames its requested trip and starts with the normal panel state.
 - Shared roads show route choices. Pointer and keyboard previews retain selection and camera position.
-- Keyboard choice selection focuses the selected card's **Show route** button. Tab navigation continues from that card.
+- Keyboard choice selection focuses the selected card's trip title. Tab navigation continues from that card.
 - Pointer choice selection does not move keyboard focus. Reopening the panel does not repeat an earlier focus move.
 - Escape dismisses previews and choices. Dismissing a preview does not clear the selected trip.
 - Escape also closes shared-road choices after focus moves to the trip panel or another control outside the map.
@@ -285,8 +298,14 @@ The browser checks cover these behaviors:
 - Location sorting compares the complete country list before any region names, including trips across borders.
 - Column settings retain the Trip heading, validate stored preferences, and restore default visibility and order.
 - Column reordering supports keyboard, pointer, touch, cancellation, and scrolling near the list edge.
-- Filter drafts leave results unchanged until **Apply filters**. Invalid ranges retain the previous URL and results.
-- Date filters include overlapping trips and both endpoints. Numeric filters compare exact source values.
+- Leaving the column editor with Tab closes it, including when focus leaves the document.
+- Internal pointer clicks retain the editor, including Safari clicks that leave focus on the document body.
+- Window resizing closes a focused column editor and returns focus to its trigger.
+- Year and range drafts leave results unchanged until **Apply filters**. Invalid shared ranges remain errors until corrected.
+- Year choices come from trip dates, including crossed years. Numeric presets omit ranges without matching trips.
+- Presets compare exact source values and include both endpoints. Precise shared bounds remain unchanged when the form opens.
+- Custom date choices show both endpoints. An open endpoint shows **Any**.
+- Each year or numeric range has one filter count and one removal button that clears both bounds.
 - Country and region choices combine with OR. Regions retain their country; country-wide choices include records without regions.
 - Copied URLs and browser Back restore committed filters. Excluded selections remain named without adding hidden routes.
 - Late route responses cannot restore excluded geometry or shared-road choices.
@@ -302,6 +321,10 @@ The browser checks cover these behaviors:
 
 Layout checks use widths of 320, 767, 768, 858, 1023, 1024, and 1754 pixels.
 They test panel states, reserved map space, control overlap, and pointer targets.
+Short-screen checks use 667 × 375, 320 × 568, 568 × 320, and 568 × 280 viewports.
+Direct selected links must frame routes and save cameras with expanded panels in Chromium and WebKit.
+All map controls must retain complete 44-pixel targets after expansion or rotation.
+Column settings must retain usable rows in short sheets and remain inside the atlas during fullscreen.
 At 320 pixels, forms reflow and table scrolling stays inside its wrapper.
 Size changes between card views preserve the first visible result. Presentation changes return to the top.
 Sticky tools must not obscure focused controls.
@@ -309,7 +332,12 @@ WebKit rounds injected pointer positions to integer CSS pixels. Drag measurement
 On macOS, use Option+Tab in WebKit checks that traverse buttons or links.
 Canvas clicks must avoid the Share button and other map controls.
 
-Cards place **Show route** before the filled **Read trip report** button.
+Cards use their titles for keyboard route selection and retain filled **Read trip report** links.
+The separate **Show route** action is absent from cards and tables.
+Long location lists show two lines until **See all**. Hidden names must leave the tab order.
+Country names use bold text. Hover and focus highlight individual place actions.
+Place actions replace geographic filters and frame geographic bounds instead of complete journeys.
+They retain other filters, clear selected-only mode, and work with keyboard input in both result views.
 Checks cover accent colors, focus, hover, wrapping, and report navigation.
 Hover previews do not select routes or scroll the list.
 Phone checks use card taps, route selection, and shared-road choices.
