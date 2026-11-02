@@ -216,10 +216,6 @@ export function StatsPanel({
           </button>
         </div>
 
-        {(selectedRouteInfo?.duration ?? selectedCountryInfo?.duration ?? selectedRegionInfo?.duration ?? stats.duration) && (
-          <DurationSummary summary={(selectedRouteInfo?.duration ?? selectedCountryInfo?.duration ?? selectedRegionInfo?.duration ?? stats.duration)!} />
-        )}
-
         {/* Airport-specific stats when an airport is selected */}
         {airportInfo ? (
           <AirportStats
@@ -539,6 +535,13 @@ function AirportStats({
           <StatItem icon="📐" label="Average" value={<DistanceValue km={stats.averageDistance} isMetric={isMetric} />} />
         </div>
       </CollapsibleSection>
+      {stats.duration && (
+        <DurationSummary
+          summary={stats.duration}
+          isOpen={getSectionOpen('airport-time')}
+          onToggle={() => toggleSection('airport-time')}
+        />
+      )}
     </>
   );
 }
@@ -645,6 +648,14 @@ function RouteStatsView({
           <span className="bg-gray-800 text-gray-400 px-2 py-0.5 rounded text-xs">Domestic</span>
         )}
       </div>
+
+      {routeInfo.duration && (
+        <DurationSummary
+          summary={routeInfo.duration}
+          isOpen={getSectionOpen('route-time')}
+          onToggle={() => toggleSection('route-time')}
+        />
+      )}
 
       {/* Timeline */}
       <CollapsibleSection
@@ -786,6 +797,14 @@ function CountryStatsView({
           <div className="text-gray-500 text-xs">departures</div>
         </div>
       </div>
+
+      {countryInfo.duration && (
+        <DurationSummary
+          summary={countryInfo.duration}
+          isOpen={getSectionOpen('country-time')}
+          onToggle={() => toggleSection('country-time')}
+        />
+      )}
 
       {/* Airports */}
       {countryInfo.airports.length > 0 && (
@@ -956,6 +975,14 @@ function RegionStatsView({
           <div className="text-gray-500 text-xs">departures</div>
         </div>
       </div>
+
+      {regionInfo.duration && (
+        <DurationSummary
+          summary={regionInfo.duration}
+          isOpen={getSectionOpen('region-time')}
+          onToggle={() => toggleSection('region-time')}
+        />
+      )}
 
       {/* Airports */}
       {regionInfo.airports.length > 0 && (
@@ -1155,6 +1182,14 @@ function OverallStats({
           <StatItem icon="📐" label="Avg Distance" value={<DistanceValue km={stats.averageDistance} isMetric={isMetric} />} />
         </div>
       </CollapsibleSection>
+
+      {stats.duration && (
+        <DurationSummary
+          summary={stats.duration}
+          isOpen={getSectionOpen('overall-time')}
+          onToggle={() => toggleSection('overall-time')}
+        />
+      )}
 
       {/* Flight Types */}
       <CollapsibleSection

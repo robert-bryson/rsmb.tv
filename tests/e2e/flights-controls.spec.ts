@@ -1,6 +1,17 @@
 import { expect, test } from '@playwright/test';
 import fs from 'node:fs';
 
+test('globe readiness does not update camera state before mount', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', message => {
+        if (message.type() === 'error' && message.text().includes("hasn't mounted yet")) errors.push(message.text());
+    });
+    await page.goto('/projects/flights/map?paths=0&stats=0');
+    await expect(page.locator('.flights-globe canvas')).toBeVisible();
+    await expect(page.getByText('Loading globe...', { exact: true })).toHaveCount(0);
+    expect(errors).toEqual([]);
+});
+
 test('a Pacific route focuses the camera across the date line', async ({ page }) => {
     const flights = JSON.parse(fs.readFileSync('public/data/flights/flights.geojson', 'utf8'));
     const features = flights.features.filter(({ properties }: { properties: { origin_code: string; destination_code: string } }) =>

@@ -53,17 +53,17 @@ The map separates page controls from renderer behavior:
 | `utils/globeView.ts` | Camera comparisons at the URL's stored precision |
 
 Camera listeners remain active after filter and camera URL changes.
-A shared camera takes precedence over the initial year fit.
-Later year changes fit their airports after data loads.
-An empty year does not prevent a later year from fitting its airports.
-Camera navigation, reset, and unmount cancel pending year fits.
-A direct camera gesture also cancels a pending fit before the gesture ends.
-External year navigation retains a supplied camera, including unchanged coordinates.
-Selecting a year in the map controls requests a new fit.
-Unmount and superseding navigation cancel pending camera synchronization.
-Changing the linked view retains explicit rotation. Direct interaction pauses it.
-The camera ignores URL updates from its own transitions and gestures.
-This prevents URL synchronization from stopping a transition or moving the camera again.
+The camera applies renderer readiness after it commits. Discarded renders cannot update camera state.
+A linked camera takes precedence over a year fit, including during browser history navigation.
+Selecting a year in the map controls fits its airports after data loads.
+An empty year does not prevent the next selection from fitting its airports.
+Navigation, reset, direct camera gestures, and unmount cancel pending year fits.
+Unmount and superseding navigation also cancel pending camera synchronization.
+Linked views retain explicit rotation. Direct interaction pauses it.
+The camera ignores URL updates from its own transitions and gestures, so synchronization cannot interrupt them.
+URL setters use the latest committed query and preserve newer pending writes through intermediate navigation commits.
+Browser history navigation clears pending writes.
+Writing an unchanged setting does not add a history entry.
 Camera fitting uses the smallest longitude interval that contains the selected airports.
 Pacific routes can cross the date line without moving the camera to Greenwich.
 
@@ -82,7 +82,8 @@ It replaces WebGL and asset loading with fixed adapters.
 The browser checks use the actual globe renderer:
 
 ```bash
-npx vitest run src/test/FlightsMap.test.tsx src/test/useGlobeTextures.test.ts src/test/useZoomNavigation.test.ts
+npx vitest run src/test/FlightsMap.test.tsx src/test/useGlobeCameraLifecycle.test.tsx \
+  src/test/useGlobeTextures.test.ts src/test/useZoomNavigation.test.ts
 PLAYWRIGHT_WEBKIT=1 npm run test:e2e -- tests/e2e/flights-controls.spec.ts tests/e2e/flight-duration.spec.ts tests/e2e/carto-basemaps.spec.ts
 ```
 
@@ -191,11 +192,23 @@ The interface displays totals in hours and each flight in hours and minutes.
 Screen readers receive full unit names, such as "2 hours 45 minutes."
 Distance-unit changes do not change flight-time units.
 
-Totals show actual, scheduled, estimated, and unavailable coverage.
+Each statistics view has a **Flight Time** section.
+Use its button to show or hide the total, average, and timing coverage.
+**Collapse All** and **Expand All** also control this section.
+Section buttons expose their expanded state to assistive technology.
+
+Coverage shows actual, scheduled, estimated, and unavailable flight counts.
+It remains visible when the section is open, including on touch devices.
+The compact total also supplies precise time and coverage as text for assistive technology.
+Hover over a total to see the same details.
+Totals and averages have an **Est.** label when they include scheduled or estimated time.
 Any scheduled or estimated contribution makes the total **Est. flight time**.
 When all durations are missing, the interface shows **Flight time unavailable**.
 The average excludes flights without usable duration data.
 Filters apply consistently to totals and selected airport, route, country, and region details.
+Country and region airport lists use only matching flights.
+Their visit counts include each matching arrival or departure within the selected area.
+An internal flight contributes two airport visits and one duration to the area's total.
 Route counts and time coverage use the same legs for the selected year and airline.
 Open phone and hover details use current route data after a filter change.
 A flight within one state contributes its duration once to that state's total.
@@ -210,8 +223,11 @@ Run the duration and ingestion checks:
 
 ```bash
 npx vitest run src/test/flightDuration.test.ts src/test/flightSummaries.test.tsx \
-  src/test/DurationSummary.test.tsx src/test/FlightsMap.test.tsx \
-  scripts/__tests__/syncFlights.test.ts scripts/__tests__/flightBuildScripts.test.ts
+  src/test/DurationSummary.test.tsx src/test/flightStatsAccessibility.test.tsx \
+  src/test/flightSelectionAirports.test.ts src/test/FlightsMap.test.tsx \
+  src/test/flightFilterTransitions.test.tsx src/test/flightFilterCommitOrder.test.ts \
+  scripts/__tests__/syncFlights.test.ts scripts/__tests__/flightDataIntegrity.test.ts \
+  scripts/__tests__/flightBuildScripts.test.ts
 PLAYWRIGHT_WEBKIT=1 npm run test:e2e -- tests/e2e/flight-duration.spec.ts
 ```
 
@@ -309,7 +325,21 @@ npm run sync-flights
 
 The command validates the Sheet and updates `projects/flights/data/flights.csv`.
 It reports invalid dates, airport-code syntax, duration fields, and possible duplicates.
+It accepts `M/D/YYYY` and `YYYY-MM-DD` dates and writes `M/D/YYYY` dates.
+Known airline aliases use their configured names.
+Other names remain text, including names that match JavaScript object properties.
 Run `npm run build-flights` afterward to regenerate GeoJSON and resolve airport references.
+
+Set `GOOGLE_SHEET_ID` to the document ID. Set `GOOGLE_SHEET_NAME` to select a tab; the default is `Flights`.
+Give the Sheet public read access before you run the sync command.
+The Sheet must contain `date`, `airline`, `origin`, and `destination` columns.
+The `flightNumber` column is optional.
+Dates must be from 1990 through one year after the current UTC date.
+Airport codes must contain three or four letters. The sync command converts them to uppercase.
+Origin and destination must differ.
+Invalid dates, airport codes, or duration fields stop the sync before it writes CSV data.
+Warnings identify empty airline names, corrected names, possible duplicates, and durations longer than 24 hours.
+Review each warning against its source record.
 
 ## Basemaps
 

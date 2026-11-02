@@ -19,8 +19,10 @@ for (const selection of ['route=LAX-SEA', 'airport=LAX', 'country=US', 'region=U
         const panel = page.getByTestId('stats-panel-content');
         const time = panel.getByRole('region', { name: 'Flight time', exact: true });
         await expect(time).toContainText('5.8 h');
-        await expect(time).toContainText('1 actual · 1 scheduled · 0 estimated');
-        await expect(time).toContainText('Average: 2h 53m');
+        await expect(time.getByText('1 actual · 1 scheduled · 0 estimated', { exact: true })).toBeVisible();
+        await expect(time).toContainText('Est. Total Time');
+        await expect(time).toContainText('Est. Avg Time');
+        await expect(time.getByText('2h 53m', { exact: true })).toBeVisible();
         await expect(page.getByRole('status')).toContainText('5.8 h');
         if (selection.startsWith('route=')) {
             await panel.getByRole('button', { name: /All Flights \(2\)/ }).click();
@@ -35,7 +37,21 @@ for (const selection of ['route=LAX-SEA', 'airport=LAX', 'country=US', 'region=U
 test('flight time remains accessible and the stats tab fits a narrow phone', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 720 });
     await page.goto('/projects/flights/map?paths=0&year=2024');
-    await expect(page.getByRole('region', { name: 'Flight time', exact: true })).toContainText('5.8 h');
+    const time = page.getByRole('region', { name: 'Flight time', exact: true });
+    await expect(time).toContainText('5.8 h');
+    const timeToggle = time.getByRole('button', { name: 'Flight Time', exact: true });
+    await expect(timeToggle).toHaveAttribute('aria-expanded', 'true');
+    await timeToggle.focus();
+    await page.keyboard.press('Space');
+    await expect(timeToggle).toHaveAttribute('aria-expanded', 'false');
+    await expect(time.getByText('5.8 h', { exact: true })).not.toBeVisible();
+    await page.keyboard.press('Enter');
+    await expect(timeToggle).toHaveAttribute('aria-expanded', 'true');
+    await expect(time.getByText('5.8 h', { exact: true })).toBeVisible();
+    await page.getByRole('button', { name: '▼ Collapse All' }).click();
+    await expect(time.getByText('5.8 h', { exact: true })).not.toBeVisible();
+    await page.getByRole('button', { name: '▶ Expand All' }).click();
+    await expect(time.getByText('5.8 h', { exact: true })).toBeVisible();
     const toggle = page.getByRole('button', { name: 'Hide stats panel' });
     const bounds = (await toggle.boundingBox())!;
     expect(bounds.x + bounds.width).toBeLessThanOrEqual(320);

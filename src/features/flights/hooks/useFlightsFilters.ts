@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useCallback, useId, useLayoutEffect, useMemo, useRef } from 'react';
+import { useLocation, useNavigationType, useSearchParams } from 'react-router-dom';
 import {
     COLOR_MODES,
     DEFAULT_BASEMAP_ID,
@@ -20,6 +20,7 @@ import { isValidFlightTypeFilter } from '../utils';
 import { globeViewsEqual } from '../utils/globeView';
 
 type SearchUpdateOptions = { replace?: boolean };
+const QUERY_WRITE_STATE_KEY = '__rsmbFlightQueryWrite';
 type BooleanUpdate = boolean | ((prev: boolean) => boolean);
 
 const AIRPORT_SYMBOL_MODES: AirportSymbolMode[] = ['visited', 'continent', 'country', 'elevation'];
@@ -127,19 +128,50 @@ function deleteSelectionParams(params: URLSearchParams) {
  */
 export function useFlightsFilters() {
     const [searchParams, setSearchParams] = useSearchParams();
-    const pendingSearchParams = useRef<URLSearchParams | null>(null);
+    const location = useLocation();
+    const navigationType = useNavigationType();
+    const ownerId = useId();
+    const writeSequence = useRef(0);
+    const committed = useRef({ searchParams, setSearchParams, state: location.state as unknown });
+    const pendingWrite = useRef<{ params: URLSearchParams; id: string } | null>(null);
+    const issuedWrites = useRef(new Set<string>());
 
-    useEffect(() => {
-        pendingSearchParams.current = null;
-    }, [searchParams]);
+    useLayoutEffect(() => {
+        committed.current = { searchParams, setSearchParams, state: location.state as unknown };
+        const state: unknown = location.state;
+        const writeId = state !== null && typeof state === 'object'
+            ? (state as Record<string, unknown>)[QUERY_WRITE_STATE_KEY] : null;
+        // Concurrent navigation can commit an earlier write after a newer one
+        // has reached history. Track write identities because query text can
+        // recur or arrive through an unrelated navigation.
+        const intermediateCommit = navigationType !== 'POP'
+            && typeof writeId === 'string' && issuedWrites.current.has(writeId)
+            && pendingWrite.current !== null && pendingWrite.current.id !== writeId;
+        if (!intermediateCommit) {
+            pendingWrite.current = null;
+            issuedWrites.current.clear();
+        }
+    }, [searchParams, setSearchParams, navigationType, location.key, location.state]);
 
+    // Native listeners can retain a setter from an earlier render. Compose its
+    // writes with pending updates or the latest committed URL, never its closure.
     const updateParams = useCallback((mutate: (params: URLSearchParams) => void, options?: SearchUpdateOptions) => {
-        const base = pendingSearchParams.current ?? searchParams;
+        const base = pendingWrite.current?.params ?? committed.current.searchParams;
         const newParams = new URLSearchParams(base);
         mutate(newParams);
-        pendingSearchParams.current = newParams;
-        setSearchParams(newParams, options);
-    }, [searchParams, setSearchParams]);
+        if (newParams.toString() === base.toString()) return;
+        const id = `${ownerId}:${++writeSequence.current}`;
+        pendingWrite.current = { params: newParams, id };
+        issuedWrites.current.add(id);
+        const currentState = committed.current.state;
+        committed.current.setSearchParams(newParams, {
+            ...options,
+            state: {
+                ...(currentState !== null && typeof currentState === 'object' ? currentState : {}),
+                [QUERY_WRITE_STATE_KEY]: id,
+            },
+        });
+    }, [ownerId]);
 
     const selectedYear = parseSelectedYear(searchParams.get('year'));
     const selectedAirport = searchParams.get('airport') || null;

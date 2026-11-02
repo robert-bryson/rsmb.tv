@@ -1,13 +1,25 @@
 import { useMemo } from 'react';
 import { summarizeFlightDurations } from '../utils/flightDuration';
 import { flightMatchesFilters } from '../utils/flightFilters';
-import type { GlobeStaticArc, GlobePoint, SelectedRouteInfo, SelectedCountryInfo, SelectedRegionInfo, FlightTypeFilter } from '../types';
+import type { FlightProperties, GlobeStaticArc, GlobePoint, SelectedRouteInfo, SelectedCountryInfo, SelectedRegionInfo, FlightTypeFilter } from '../types';
 import { calculateDistance, parseYear, getRouteKey, sortDatesDescending, parseDateString } from '../utils';
 
-/**
- * Computes derived selection info (route, country, region) for the stats panel.
- * Extracts ~170 lines of useMemo logic from FlightsMap.
- */
+/** Each matching endpoint is a visit; both endpoints can belong to the selected geography. */
+function getGeographyAirports(flights: readonly FlightProperties[], geography: 'country' | 'region', selectedCode: string): SelectedCountryInfo['airports'] {
+    const airports = new Map<string, SelectedCountryInfo['airports'][number]>();
+    for (const flight of flights) {
+        for (const endpoint of ['origin', 'destination'] as const) {
+            if (flight[`${endpoint}_${geography}`] !== selectedCode) continue;
+            const code = flight[`${endpoint}_code`];
+            const existing = airports.get(code);
+            if (existing) existing.visitCount++;
+            else airports.set(code, { code, name: flight[`${endpoint}_name`], visitCount: 1 });
+        }
+    }
+    return [...airports.values()].sort((a, b) => b.visitCount - a.visitCount);
+}
+
+/** Computes route, country, and region details from the matching flight legs. */
 export function useSelectionInfo({
     selectedRoute,
     selectedCountry,
@@ -110,8 +122,7 @@ export function useSelectionInfo({
             duration: summarizeFlightDurations(countryFlights),
             departures,
             arrivals,
-            airports: countryPoints.map(p => ({ code: p.airport.code, name: p.airport.name, visitCount: p.airport.visitCount }))
-                .sort((a, b) => b.visitCount - a.visitCount),
+            airports: getGeographyAirports(countryFlights, 'country', selectedCountry),
             airlines,
             years,
             topRoutes,
@@ -149,8 +160,7 @@ export function useSelectionInfo({
             duration: summarizeFlightDurations(regionFlights),
             departures,
             arrivals,
-            airports: regionPoints.map(p => ({ code: p.airport.code, name: p.airport.name, visitCount: p.airport.visitCount }))
-                .sort((a, b) => b.visitCount - a.visitCount),
+            airports: getGeographyAirports(regionFlights, 'region', selectedRegion),
             airlines,
             years,
             topRoutes,

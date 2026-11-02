@@ -90,7 +90,7 @@ export const projects: Project[] = [
         date: '2026-11',
         notes: [
           'Added recorded flight durations, hour totals, and actual, scheduled, and estimated coverage',
-          'Added authenticated CARTO globe tiles and repaired the US states overlay',
+          'Added authenticated CARTO globe tiles',
         ],
       },
       {

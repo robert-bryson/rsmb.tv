@@ -7,3 +7,4 @@ export { ClickableRegion } from './ClickableRegion';
 export { FlightCount } from './FlightCount';
 export { VirtualizedList } from './VirtualizedList';
 export { DistanceValue } from './DistanceValue';
+export { FlightHoursValue } from './FlightHoursValue';

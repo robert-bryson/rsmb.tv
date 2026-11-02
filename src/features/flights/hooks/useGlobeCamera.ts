@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type RefObject } from 'react';
 import type { GlobeMethods } from 'react-globe.gl';
 import type { GlobeViewState } from '../types';
 import { globeViewsEqual } from '../utils/globeView';
@@ -20,11 +20,19 @@ export function useGlobeCamera({
     globeRef, navigationViewRef, selectedView, rotationEnabled, reducedMotion, tileUrl, onStopRotation, onViewChange,
 }: GlobeCameraOptions) {
     const [ready, setReady] = useState(false);
+    const mounted = useRef(false);
+    const readyRequested = useRef(false);
     const pendingSync = useRef<ReturnType<typeof setTimeout> | null>(null);
     const suppressSync = useRef(false);
     const initialized = useRef(false);
     const syncedView = useRef<GlobeViewState | null>(null);
     const { lat, lng, altitude } = selectedView ?? DEFAULT_VIEW;
+
+    useLayoutEffect(() => {
+        mounted.current = true;
+        if (readyRequested.current) setReady(true);
+        return () => { mounted.current = false; };
+    }, []);
 
     const cancelSync = useCallback(() => {
         if (pendingSync.current !== null) clearTimeout(pendingSync.current);
@@ -129,9 +137,10 @@ export function useGlobeCamera({
     }, [globeRef, navigationViewRef, ready, onStopRotation, onViewChange, scheduleSync, syncView, cancelSync]);
 
     const onGlobeReady = useCallback(() => {
-        // A tile-only globe can call this during layout, before its ref is set.
-        // Effects read the ref after the commit has assigned it.
-        setReady(true);
+        // The renderer can report readiness before its parent commits, including
+        // from work that React later discards. Apply it only to a mounted camera.
+        readyRequested.current = true;
+        if (mounted.current) setReady(true);
     }, []);
 
     return { onGlobeReady, onZoom: scheduleSync };

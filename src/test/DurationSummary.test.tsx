@@ -10,15 +10,18 @@ describe('flight duration presentation', () => {
             makeFlight({ durationMinutes: 165 }),
             makeFlight({ durationMinutes: null, durationKind: null, durationSource: null, origin_lat: NaN }),
         ])} />);
-        expect(screen.getByRole('region', { name: 'Flight time' })).toHaveTextContent('1 actual · 0 scheduled · 0 estimated · 1 unavailable');
+        const value = screen.getByText('2.8 h').closest('[title]');
+        expect(value).toHaveAttribute('title', expect.stringContaining('1 actual · 0 scheduled · 0 estimated · 1 unavailable'));
+        expect(screen.getByRole('region', { name: 'Flight time' })).toHaveTextContent('1 of 2 flights');
         expect(screen.getByText('2 hours 45 minutes')).toHaveClass('sr-only');
-        expect(screen.getByLabelText('2.8 hours')).toHaveTextContent('2.8 h');
+        expect(value).toHaveTextContent('2.8 h');
     });
 
     it.each([{ legs: [] }, { legs: [makeFlight({ durationMinutes: null, durationKind: null, durationSource: null, origin_lon: Infinity })] }])('does not present missing values as zero or recorded time', ({ legs }) => {
         render(<DurationSummary summary={summarizeFlightDurations(legs)} />);
-        expect(screen.getByText('Flight time unavailable')).toBeVisible();
-        expect(screen.queryByText(/Average:/)).not.toBeInTheDocument();
+        expect(screen.getByText('Unavailable')).toBeVisible();
+        expect(screen.getByText(/^Flight time unavailable\./)).toHaveClass('sr-only');
+        expect(screen.queryByText('Avg Time')).not.toBeInTheDocument();
         expect(screen.queryByText('0 h')).not.toBeInTheDocument();
     });
 

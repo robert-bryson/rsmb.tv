@@ -485,7 +485,7 @@ describe('route previews after filtering', () => {
         fireEvent.click(screen.getByRole('button', { name: 'Use 2025' }));
         const dialog = screen.getByRole('dialog', { name: 'Route information' });
         expect(within(dialog).getByText('4 h')).toBeVisible();
-        expect(dialog).toHaveTextContent('0 actual · 1 scheduled · 0 estimated');
+        expect(within(dialog).getByText('4 h').closest('[title]')).toHaveAttribute('title', expect.stringContaining('0 actual · 1 scheduled · 0 estimated'));
         expect(dialog).not.toHaveTextContent('2.8 h');
         fireEvent.click(screen.getByRole('button', { name: 'Use 2026' }));
         expect(screen.queryByRole('dialog', { name: 'Route information' })).not.toBeInTheDocument();

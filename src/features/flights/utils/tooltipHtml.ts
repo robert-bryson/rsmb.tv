@@ -13,8 +13,8 @@ export function buildArcLabelHtml(
     const firstFlight = arcData.flights[0];
     if (!firstFlight) return '';
     const duration = summarizeFlightDurations(arcData.flights);
-    const durationHtml = `<div class="mt-2 text-purple-300">${flightDurationLabel(duration)}: ${formatFlightHours(duration)}</div>
-        <div class="text-xs text-gray-400">${flightDurationCoverage(duration)}</div>`;
+    const durationHtml = `<div class="mt-2 text-xs text-gray-400">${flightDurationLabel(duration)}: <span class="font-medium text-gray-300">${formatFlightHours(duration)}</span></div>
+        <div class="text-xs text-gray-500">${flightDurationCoverage(duration)}</div>`;
     const isSelected = selectedRoute === arcData.routeKey;
 
     if (!isSelected) {
@@ -120,7 +120,7 @@ export function buildPointLabelHtml(point: TooltipPoint, isMetric: boolean) {
               <div class="text-gray-300">${escapeHtml(visitedAirport.name)}</div>
               <div class="text-gray-400 text-xs">${escapeHtml(visitedAirport.municipality)}, ${escapeHtml(visitedAirport.countryName)}</div>
               <div class="text-gray-500 text-xs">${escapeHtml(formatElevation(visitedAirport.elevationFt, visitedAirport.elevationM, isMetric))}</div>
-              ${visitedAirport.duration ? `<div class="mt-2 text-purple-300">Matching ${flightDurationLabel(visitedAirport.duration).toLowerCase()}: ${formatFlightHours(visitedAirport.duration)}</div><div class="text-xs text-gray-400">${flightDurationCoverage(visitedAirport.duration)}</div>` : ''}
+              ${visitedAirport.duration ? `<div class="mt-2 text-xs text-gray-400">Matching ${flightDurationLabel(visitedAirport.duration).toLowerCase()}: <span class="font-medium text-gray-300">${formatFlightHours(visitedAirport.duration)}</span></div><div class="text-xs text-gray-500">${flightDurationCoverage(visitedAirport.duration)}</div>` : ''}
               <div class="text-gray-500 mt-2 pt-2 border-t border-gray-700">
                 <span class="text-yellow-400">${visitedAirport.visitCount}</span> visits
                 <span class="text-gray-600 mx-1">•</span>
@@ -137,7 +137,7 @@ export function buildStatePolygonLabelHtml(poly: GlobeStatePolygon) {
                 <div class="bg-gray-900/95 px-3 py-2 rounded-lg shadow-xl border border-blue-700 text-sm">
                   <div class="font-bold text-blue-300">${escapeHtml(stats.name)}</div>
                   <div class="text-gray-400 text-xs">${escapeHtml(stats.abbr)}</div>
-                  ${stats.duration ? `<div class="mt-2 text-purple-300">${flightDurationLabel(stats.duration)}: ${formatFlightHours(stats.duration)}</div><div class="text-xs text-gray-400">${flightDurationCoverage(stats.duration)}</div>` : ''}
+                  ${stats.duration ? `<div class="mt-2 text-xs text-gray-400">${flightDurationLabel(stats.duration)}: <span class="font-medium text-gray-300">${formatFlightHours(stats.duration)}</span></div><div class="text-xs text-gray-500">${flightDurationCoverage(stats.duration)}</div>` : ''}
                   ${stats.visited ? `
                     <div class="mt-2 pt-2 border-t border-gray-700">
                       <div class="text-xs text-gray-500">Airports Visited</div>

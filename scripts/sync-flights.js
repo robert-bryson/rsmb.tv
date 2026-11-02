@@ -1,71 +1,11 @@
 #!/usr/bin/env node
 
 /**
- * sync-flights.js
- * ===============
- * Syncs flight data from a Google Sheet to the local CSV file used by the
- * flights visualization. Includes comprehensive QA/QC validation.
- * 
- * USAGE
- * -----
- *   GOOGLE_SHEET_ID=<your-sheet-id> node scripts/sync-flights.js
- *   
- *   Or via npm:
- *   GOOGLE_SHEET_ID=<your-sheet-id> npm run sync-flights
- * 
- * ENVIRONMENT VARIABLES
- * ---------------------
- *   GOOGLE_SHEET_ID   - (required) The ID from your Google Sheet URL
- *                       Found in: https://docs.google.com/spreadsheets/d/{SHEET_ID}/edit
- *   GOOGLE_SHEET_NAME - (optional) The sheet tab name, defaults to 'Flights'
- * 
- * REQUIREMENTS
- * ------------
- *   The Google Sheet must be publicly accessible:
- *   - Share → Anyone with the link → Viewer
- * 
- * EXPECTED CSV FORMAT
- * -------------------
- *   date,airline,flightNumber,origin,destination
- *   6/15/2008,Continental Airlines,,LAX,IAH
- *   
- *   - date: M/D/YYYY format
- *   - airline: Airline name (will be normalized)
- *   - flightNumber: Optional flight number
- *   - origin: 3-4 letter IATA/ICAO airport code
- *   - destination: 3-4 letter IATA/ICAO airport code
- * 
- * QA/QC CHECKS
- * ------------
- *   The script performs the following validations:
- * 
- *   ERRORS (will abort sync):
- *   - Empty or invalid date format
- *   - Dates before 1990 (likely typo)
- *   - Dates more than 1 year in future (likely typo)
- *   - Invalid dates (e.g., Feb 30)
- *   - Empty or invalid airport codes
- *   - Same origin and destination
- * 
- *   WARNINGS (informational, won't abort):
- *   - Empty airline name
- *   - Airline name corrections applied
- *   - Possible duplicate flights (same date + route)
- *   - Inconsistent airline naming across rows
- * 
- * DATA TRANSFORMATIONS
- * --------------------
- *   - Trims whitespace from all fields
- *   - Removes empty columns
- *   - Normalizes airline names (see AIRLINE_CORRECTIONS)
- *   - Uppercases airport codes
- *   - Uppercases flight numbers
- *   - Sorts flights by date (ascending)
- * 
- * GITHUB ACTIONS
- * --------------
- *   When run in GitHub Actions, outputs 'changed=true' or 'changed=false'
- *   to $GITHUB_OUTPUT for conditional workflow steps.
+ * Sync the public flight Sheet to CSV after validation.
+ * Run GOOGLE_SHEET_ID=<sheet-id> npm run sync-flights.
+ * Set GOOGLE_SHEET_NAME to select a tab; the default is Flights.
+ * See projects/flights/readme.md for columns, duration rules, and build steps.
+ * GitHub Actions receives changed=true or changed=false through GITHUB_OUTPUT.
  */
 
 import { writeFileSync, readFileSync } from 'fs';
@@ -215,7 +155,7 @@ function normalizeAirline(airline) {
 
   // Check for corrections
   const lowerKey = trimmed.toLowerCase();
-  if (AIRLINE_CORRECTIONS[lowerKey]) {
+  if (Object.hasOwn(AIRLINE_CORRECTIONS, lowerKey)) {
     const corrected = AIRLINE_CORRECTIONS[lowerKey];
     // Only report as corrected if it actually changed
     if (corrected !== trimmed) {
