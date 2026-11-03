@@ -179,8 +179,10 @@ for (const delayedAsset of ['none', 'flights', 'textures'] as const) {
             // The renderer projects labels before it updates the camera tween.
             await page.clock.runFor(32);
         };
-        await finishCameraAnimation();
+        // Labels attach after the renderer starts its initial globe animation.
+        // Texture preloading and the camera URL can finish before that point.
         await expect(labels).toHaveCount(2);
+        await finishCameraAnimation();
         const fittedLabels = await labelPositions();
         const reset = page.getByRole('button', { name: 'Reset globe view to default position' });
         await reset.click();
@@ -200,8 +202,8 @@ for (const delayedAsset of ['none', 'flights', 'textures'] as const) {
         await finishCameraAnimation();
         await selectYear(2024);
         await expect.poll(camera).toEqual(fitted);
-        await finishCameraAnimation();
         await expect(labels).toHaveCount(2);
+        await finishCameraAnimation();
         await expect.poll(labelPositions).toEqual(fittedLabels);
     });
 }

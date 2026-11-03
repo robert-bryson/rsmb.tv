@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { cartoRasterUrl, cartoVectorStyle } from '../maps/cartoBasemaps';
+import { cartoRasterStyle, cartoRasterUrl, cartoVectorStyle } from '../maps/cartoBasemaps';
 
 describe('CARTO authentication', () => {
     it('encodes only the key and preserves tile placeholders', () => {
@@ -11,5 +11,30 @@ describe('CARTO authentication', () => {
         expect(cartoVectorStyle('dark-matter', 'fixture')).toBe('https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json?key=fixture');
         expect(cartoRasterUrl('dark', '')).toMatch(/^data:image\/png;base64,/);
         expect(cartoVectorStyle('dark-matter', '')).toMatchObject({ version: 8 });
+    });
+
+    it('builds the default raster style with an authenticated source and both provider links', () => {
+        const style = cartoRasterStyle(undefined, ' fixture key/+& ');
+        const source = style.sources['carto-basemap'];
+        expect(source).toMatchObject({
+            type: 'raster',
+            tiles: ['https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png?key=fixture%20key%2F%2B%26'],
+        });
+        if (source.type !== 'raster') throw new Error('Expected a CARTO raster source');
+        const attribution = document.createElement('div');
+        attribution.innerHTML = source.attribution ?? '';
+        expect(attribution.querySelector('a[href="https://carto.com/attribution/"]')).toHaveTextContent('CARTO');
+        expect(attribution.querySelector('a[href="https://www.openstreetmap.org/copyright"]')).toHaveTextContent('OpenStreetMap');
+        expect(attribution).not.toHaveTextContent('Basemap unavailable');
+    });
+
+    it.each(['', ' \t '])('uses neutral raster and vector styles when the browser key is %j', key => {
+        const raster = cartoRasterStyle('dark', key);
+        expect(raster.sources['carto-basemap']).toMatchObject({
+            tiles: [expect.stringMatching(/^data:image\/png;base64,/)],
+            attribution: expect.stringContaining('Basemap unavailable'),
+        });
+        expect(JSON.stringify(raster)).not.toContain('https://basemaps.cartocdn.com');
+        expect(cartoVectorStyle('dark-matter', key)).toEqual(raster);
     });
 });

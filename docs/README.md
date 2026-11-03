@@ -33,6 +33,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-03 | [Basemap timeouts, camera startup, attribution, and regression coverage](reviews/2026-11-03-basemap-ci-quality-review.md) |
 | 2026-11-03 | [Flight camera CI review, renderer assertions, and callback cleanup](reviews/2026-11-03-flight-camera-ci-review.md) |
 | 2026-11-02 | [Flight time display: touch coverage, time-record provenance, and regression tests](reviews/2026-11-02-flight-time-display-quality-review.md) |
 | 2026-11-02 | [CI content fixtures, browser-key fallback, and publication regression coverage](reviews/2026-11-02-ci-build-quality-review.md) |

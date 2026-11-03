@@ -62,12 +62,28 @@ CARTO's current [basemap terms](https://carto.com/legal/basemap-terms/index.html
 ## Validation
 
 Unit tests check URL encoding, tile placeholders, and behavior without a key.
-Browser tests use fixed tiles and verify authenticated requests, style changes, and visible attribution.
+They check authenticated raster sources and both provider attribution links.
+Blank and whitespace-only keys must produce neutral raster and vector styles.
+
 Configuration tests check key selection and rejection of release builds without a key.
 They check whitespace handling, fallback values, and priority between process variables and local files.
 They also check that unrelated environment values do not enter the build definitions.
+
+Browser tests verify authenticated requests and visible CARTO and OpenStreetMap links.
+They check both link destinations.
+The tile fixtures accept only expected CARTO paths. Unknown paths fail the test.
+
+Flight transitions run as separate cases: **Light** to **Voyager**, then **Voyager** to **Night**.
+Each case starts with a fresh page and retains the real globe renderer.
+The cases use an 800 × 600 viewport, reduced motion, empty flight data, and fixed image responses.
+These settings reduce software WebGL work under each default test timeout.
+Light tiles are red. Voyager tiles are green. The Night texture is magenta.
+The checks require the selected color and reject the previous color.
+Blank globes and incorrect styles must fail.
+
 These tests do not verify a production account or its allowed websites.
 Live production authorization depends on the configured key and its allowed website origins.
+Fixed Night textures verify style selection. They do not verify the NASA image content.
 
 Run the focused checks:
 
@@ -75,3 +91,6 @@ Run the focused checks:
 npx vitest run src/test/cartoBasemaps.test.ts scripts/__tests__/cartoBuildConfig.test.ts
 npm run test:e2e -- tests/e2e/carto-basemaps.spec.ts tests/e2e/tornado-map.spec.ts
 ```
+
+Set `PLAYWRIGHT_WEBKIT=1` to include WebKit in the browser checks.
+See [browser setup](../README.md#testing-notes) for ports, browsers, and data generation.
