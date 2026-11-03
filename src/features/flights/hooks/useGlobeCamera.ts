@@ -40,7 +40,7 @@ export function useGlobeCamera({
     }, []);
 
     const syncView = useCallback((view?: GlobeViewState) => {
-        if (!ready || suppressSync.current) return;
+        if (!mounted.current || !ready || suppressSync.current) return;
         const current = view ?? globeRef.current?.pointOfView();
         if (!current || !Number.isFinite(current.lat) || !Number.isFinite(current.lng) || !Number.isFinite(current.altitude)) return;
         syncedView.current = current;
@@ -48,7 +48,7 @@ export function useGlobeCamera({
     }, [globeRef, ready, onViewChange]);
 
     const scheduleSync = useCallback((view?: GlobeViewState) => {
-        if (!ready || suppressSync.current) return;
+        if (!mounted.current || !ready || suppressSync.current) return;
         cancelSync();
         pendingSync.current = setTimeout(() => {
             pendingSync.current = null;

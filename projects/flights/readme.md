@@ -53,12 +53,14 @@ The map separates page controls from renderer behavior:
 | `utils/globeView.ts` | Camera comparisons at the URL's stored precision |
 
 Camera listeners remain active after filter and camera URL changes.
-The camera applies renderer readiness after it commits. Discarded renders cannot update camera state.
+The camera hook applies renderer readiness after its component commits.
+Discarded renders cannot update camera state.
 A linked camera takes precedence over a year fit, including during browser history navigation.
 Selecting a year in the map controls fits its airports after data loads.
 An empty year does not prevent the next selection from fitting its airports.
 Navigation, reset, direct camera gestures, and unmount cancel pending year fits.
 Unmount and superseding navigation also cancel pending camera synchronization.
+Late renderer callbacks cannot schedule or publish camera updates after unmount.
 Linked views retain explicit rotation. Direct interaction pauses it.
 The camera ignores URL updates from its own transitions and gestures, so synchronization cannot interrupt them.
 URL setters use the latest committed query and preserve newer pending writes through intermediate navigation commits.
@@ -86,6 +88,14 @@ npx vitest run src/test/FlightsMap.test.tsx src/test/useGlobeCameraLifecycle.tes
   src/test/useGlobeTextures.test.ts src/test/useZoomNavigation.test.ts
 PLAYWRIGHT_WEBKIT=1 npm run test:e2e -- tests/e2e/flights-controls.spec.ts tests/e2e/flight-duration.spec.ts tests/e2e/carto-basemaps.spec.ts
 ```
+
+The camera recovery cases use fixed flight and airport data.
+They cover normal startup, delayed flights, and delayed textures.
+Each case waits for the canvas, filtered data, and texture loading before checking the camera target.
+The URL stores that target before the camera animation ends.
+The checks advance the browser clock, then compare airport label positions from the renderer.
+Reset must move those labels. Returning from an empty year must restore their fitted positions.
+These checks use clock control and request gates. They do not use fixed wall-clock waits.
 
 ### Animation performance
 

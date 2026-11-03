@@ -195,6 +195,18 @@ describe('globe lifecycle', () => {
         expect(renderer.pointOfView).toHaveBeenCalledWith({ lat: 0, lng: 0, altitude: 0.3 }, 1000);
     });
 
+    it('retains the initial year fit when flight data arrives before renderer readiness', () => {
+        vi.useFakeTimers();
+        renderMap('?year=2024');
+        act(() => vi.advanceTimersByTime(100));
+        expect(screen.getByTestId('location')).toHaveTextContent('lat=0&lng=0&alt=0.3');
+        renderer.pointOfView.mockClear();
+
+        act(() => renderer.props.onGlobeReady?.());
+        expect(renderer.pointOfView).toHaveBeenCalledWith({ lat: 0, lng: 0, altitude: 0.3 }, 0);
+        expect(screen.getByTestId('location')).toHaveTextContent('lat=0&lng=0&alt=0.3');
+    });
+
     it('retains a camera navigation while a year fit is waiting for flight data', () => {
         vi.useFakeTimers();
         renderer.assetState = 'loading';

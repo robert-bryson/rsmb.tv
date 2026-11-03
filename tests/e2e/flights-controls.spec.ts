@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import fs from 'node:fs';
+import { makeAirport, makeFlight } from '../../src/test/helpers/flights';
 
 test('globe readiness does not update camera state before mount', async ({ page }) => {
     const errors: string[] = [];
@@ -120,37 +121,90 @@ test('camera URL synchronization survives filter changes and keyboard reset', as
     await expect.poll(() => new URL(page.url()).searchParams.has('alt')).toBe(false);
 });
 
-test('returning from an empty filtered year fits its airports again', async ({ page }) => {
-    const source = JSON.parse(fs.readFileSync('public/data/flights/flights.geojson', 'utf8'));
-    const sample = source.features.find(({ properties }: { properties: { origin_code: string; destination_code: string } }) =>
-        properties.origin_code === 'SEA' && properties.destination_code === 'LAX');
-    expect(sample).toBeDefined();
-    const features = [
-        { ...sample, properties: { ...sample.properties, id: 1, date: '1/1/2024', airline: 'Test' } },
-        { ...sample, properties: { ...sample.properties, id: 2, date: '1/1/2025', airline: 'Other' } },
-    ];
-    await page.route('**/data/flights/flights.geojson', route => route.fulfill({ json: { type: 'FeatureCollection', features } }));
-    await page.goto('/projects/flights/map?paths=0&stats=0&year=2024&airline=Test');
-    const camera = () => {
-        const params = new URL(page.url()).searchParams;
-        return ['lat', 'lng', 'alt'].map(key => params.get(key));
-    };
-    await expect.poll(() => camera().every(value => value !== null)).toBe(true);
-    // The URL first receives the target, then the renderer completes its tween.
-    await expect(page.getByRole('application')).toHaveAttribute('aria-label', /showing 1 flights/);
-    const fitted = camera();
-    const selectYear = async (year: number) => {
-        await page.getByRole('button', { name: 'Toggle filters' }).click();
-        await page.getByRole('dialog', { name: 'Filters' }).getByRole('button', { name: String(year), exact: true }).click();
-        await page.getByRole('button', { name: 'Toggle filters' }).click();
-    };
-    await selectYear(2025);
-    await expect(page.getByRole('application')).toHaveAttribute('aria-label', /showing 0 flights/);
-    await page.getByRole('button', { name: 'Reset globe view to default position' }).click();
-    await expect.poll(() => camera()).toEqual([null, null, null]);
-    await selectYear(2024);
-    await expect.poll(() => camera()).toEqual(fitted);
-});
+for (const delayedAsset of ['none', 'flights', 'textures'] as const) {
+    test(`returning from an empty filtered year fits its airports again (delayed: ${delayedAsset})`, async ({ page }) => {
+        const flight = makeFlight();
+        const features = [flight, makeFlight({ id: 2, date: '1/1/2025', airline: 'Other' })]
+            .map(properties => ({ type: 'Feature', properties, geometry: { type: 'LineString', coordinates: [] } }));
+        const airports = [
+            { properties: makeAirport('SEA'), coordinates: [flight.origin_lon, flight.origin_lat] },
+            { properties: makeAirport('LAX', { region: 'US-CA', regionName: 'California' }), coordinates: [flight.destination_lon, flight.destination_lat] },
+        ].map(({ properties, coordinates }) => ({ type: 'Feature', properties, geometry: { type: 'Point', coordinates } }));
+        let releaseInitialAsset!: () => void;
+        const initialAsset = new Promise<void>(resolve => { releaseInitialAsset = resolve; });
+        await page.route('**/data/flights/flights.geojson', async route => {
+            if (delayedAsset === 'flights') await initialAsset;
+            await route.fulfill({ json: { type: 'FeatureCollection', features } });
+        });
+        await page.route('**/data/flights/visitedAirports.geojson', route => route.fulfill({ json: { type: 'FeatureCollection', features: airports } }));
+        if (delayedAsset === 'textures') {
+            await page.route('**/basemaps/*.webp', async route => {
+                await initialAsset;
+                await route.continue();
+            });
+        }
+        await page.clock.install();
+        try {
+            await page.goto('/projects/flights/map?paths=0&stats=0&year=2024&airline=Test', { waitUntil: 'domcontentloaded' });
+            // Navigation can finish before the lazy page and its assets load.
+            await expect(page.locator('.flights-globe canvas')).toBeVisible();
+            if (delayedAsset === 'flights') {
+                await expect(page.getByText('Loading globe...', { exact: true })).toHaveCount(0);
+                await expect(page.getByText('Loading flights...', { exact: true })).toBeVisible();
+            } else if (delayedAsset === 'textures') {
+                await expect(page.getByRole('application')).toHaveAttribute('aria-label', /showing 1 flights/);
+                await expect(page.getByText('Loading globe...', { exact: true })).toBeVisible();
+                // Allow the year fit to run before the renderer reports readiness.
+                await page.clock.runFor(100);
+            }
+        } finally {
+            releaseInitialAsset();
+        }
+        const camera = () => {
+            const params = new URL(page.url()).searchParams;
+            return ['lat', 'lng', 'alt'].map(key => params.get(key));
+        };
+        await expect(page.getByRole('application')).toHaveAttribute('aria-label', /showing 1 flights/);
+        await expect(page.getByText('Loading globe...', { exact: true })).toHaveCount(0);
+        const fitted = ['40.695', '-120.36', '0.57'];
+        await expect.poll(camera).toEqual(fitted);
+        const labels = page.locator('.flights-globe .flight-map-label');
+        const labelPositions = () => labels.evaluateAll(elements => Object.fromEntries(elements.map(element => {
+            const { x, y } = element.getBoundingClientRect();
+            return [element.textContent, [Math.round(x), Math.round(y)]];
+        })));
+        // Two seconds covers the camera tween and the initial globe animation.
+        const finishCameraAnimation = async () => {
+            await page.clock.fastForward(2000);
+            // The renderer projects labels before it updates the camera tween.
+            await page.clock.runFor(32);
+        };
+        await finishCameraAnimation();
+        await expect(labels).toHaveCount(2);
+        const fittedLabels = await labelPositions();
+        const reset = page.getByRole('button', { name: 'Reset globe view to default position' });
+        await reset.click();
+        await expect.poll(camera).toEqual([null, null, null]);
+        await finishCameraAnimation();
+        await expect.poll(labelPositions).not.toEqual(fittedLabels);
+        const selectYear = async (year: number) => {
+            await page.getByRole('button', { name: 'Toggle filters' }).click();
+            await page.getByRole('dialog', { name: 'Filters' }).getByRole('button', { name: String(year), exact: true }).click();
+            await page.getByRole('button', { name: 'Toggle filters' }).click();
+        };
+        await selectYear(2025);
+        await expect(page.getByRole('application')).toHaveAttribute('aria-label', /showing 0 flights/);
+        await expect(labels).toHaveCount(0);
+        await reset.click();
+        await expect.poll(camera).toEqual([null, null, null]);
+        await finishCameraAnimation();
+        await selectYear(2024);
+        await expect.poll(camera).toEqual(fitted);
+        await finishCameraAnimation();
+        await expect(labels).toHaveCount(2);
+        await expect.poll(labelPositions).toEqual(fittedLabels);
+    });
+}
 
 test('flight statistics opens by default and an explicit closed link stays closed', async ({ page }) => {
     await page.goto('/projects/flights/map?paths=0');
