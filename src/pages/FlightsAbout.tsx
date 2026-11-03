@@ -1,8 +1,37 @@
-import { Link } from 'react-router-dom';
+import { ProjectPageHeader } from '../components/ProjectPageHeader';
+import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/ProjectScreenshotGallery';
+import { TechBadges } from '../components/TechBadges';
 import { usePageMetadata } from '../hooks/usePageMetadata';
 import { staticPageMetadata } from '../utils/pageMetadata';
 import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
+
+const screenshots: ProjectScreenshot[] = [
+    {
+        src: '/images/flights/flight-globe.webp',
+        alt: '3D globe showing all flight routes with stats panel',
+        caption: 'Overview of all flights on the interactive 3D globe with aggregate statistics, airline breakdown, and country-level data',
+        width: 1852,
+        height: 1385,
+        loading: 'eager',
+    },
+    {
+        src: '/images/flights/flight-routes.webp',
+        alt: 'Globe filtered to show routes from Seattle-Tacoma International Airport',
+        caption: 'Filtering by airport — all routes from Seattle-Tacoma (SEA) with visit timeline, top destinations, and connected airports',
+        width: 1853,
+        height: 1389,
+        loading: 'lazy',
+    },
+    {
+        src: '/images/flights/flight-stats.webp',
+        alt: 'Globe zoomed into the United Kingdom showing airport markers and flight routes',
+        caption: 'Country view — flights to and from the United Kingdom with airport markers, top routes, and airline details',
+        width: 1860,
+        height: 1390,
+        loading: 'lazy',
+    },
+];
 
 export default function FlightsAbout() {
     usePageMetadata(staticPageMetadata('/projects/flights'));
@@ -11,86 +40,32 @@ export default function FlightsAbout() {
 
     return (
         <div className="max-w-[52rem]">
-            <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
-                Flights
-            </h1>
-            <p className="text-zinc-400 mb-6 text-sm">
-                React + Three.js
-            </p>
+            <ProjectPageHeader
+                title="Flights"
+                stack="React + Three.js"
+                description={(
+                    <>
+                        An interactive 3D globe visualization of flights I've taken
+                        around the world. Animated arcs trace each route across the
+                        globe, with filtering by year, airport, and airline. Built with{' '}
+                        <a
+                            href="https://github.com/vasturiano/react-globe.gl"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
+                        >
+                            react-globe.gl
+                        </a>{' '}
+                        (Three.js / WebGL) and GeoJSON flight data.
+                    </>
+                )}
+                actions={[
+                    { label: 'Open interactive globe →', href: '/projects/flights/map', variant: 'primary' },
+                    { label: 'Source on GitHub →', href: 'https://github.com/robert-bryson/rsmb.tv/tree/main/src/features/flights', external: true },
+                ]}
+            />
 
-            <p className="text-zinc-300 leading-relaxed mb-6">
-                An interactive 3D globe visualization of flights I've taken
-                around the world. Animated arcs trace each route across the
-                globe, with filtering by year, airport, and airline. Built with{' '}
-                <a
-                    href="https://github.com/vasturiano/react-globe.gl"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
-                >
-                    react-globe.gl
-                </a>{' '}
-                (Three.js / WebGL) and GeoJSON flight data.
-            </p>
-
-            <div className="mb-8 flex flex-wrap gap-3">
-                <Link
-                    to="/projects/flights/map"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium transition-colors"
-                >
-                    Open interactive globe →
-                </Link>
-                <a
-                    href="https://github.com/robert-bryson/rsmb.tv/tree/main/src/features/flights"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-700"
-                >
-                    Source on GitHub →
-                </a>
-            </div>
-
-            <div className="space-y-6 mb-8">
-                <figure>
-                    <img
-                        src="/images/flights/flight-globe.webp"
-                        alt="3D globe showing all flight routes with stats panel"
-                        className="rounded-lg border border-zinc-800"
-                        width={1852}
-                        height={1385}
-                        loading="eager"
-                    />
-                    <figcaption className="mt-2 text-xs text-zinc-400 text-center">
-                        Overview of all flights on the interactive 3D globe with aggregate statistics, airline breakdown, and country-level data
-                    </figcaption>
-                </figure>
-                <figure>
-                    <img
-                        src="/images/flights/flight-routes.webp"
-                        alt="Globe filtered to show routes from Seattle-Tacoma International Airport"
-                        className="rounded-lg border border-zinc-800"
-                        width={1853}
-                        height={1389}
-                        loading="lazy"
-                    />
-                    <figcaption className="mt-2 text-xs text-zinc-400 text-center">
-                        Filtering by airport — all routes from Seattle-Tacoma (SEA) with visit timeline, top destinations, and connected airports
-                    </figcaption>
-                </figure>
-                <figure>
-                    <img
-                        src="/images/flights/flight-stats.webp"
-                        alt="Globe zoomed into the United Kingdom showing airport markers and flight routes"
-                        className="rounded-lg border border-zinc-800"
-                        width={1860}
-                        height={1390}
-                        loading="lazy"
-                    />
-                    <figcaption className="mt-2 text-xs text-zinc-400 text-center">
-                        Country view — flights to and from the United Kingdom with airport markers, top routes, and airline details
-                    </figcaption>
-                </figure>
-            </div>
+            <ProjectScreenshotGallery screenshots={screenshots} />
 
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Features</h2>
             <ul className="space-y-1.5 text-zinc-400 text-sm mb-6 list-disc list-inside">
@@ -116,18 +91,7 @@ export default function FlightsAbout() {
             </p>
 
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Tech Stack</h2>
-            <div className="flex flex-wrap gap-2 mb-8">
-                {['React', 'Three.js', 'WebGL', 'react-globe.gl', 'GeoJSON', 'Node.js'].map(
-                    (t) => (
-                        <span
-                            key={t}
-                            className="px-2 py-0.5 text-xs rounded-full bg-zinc-800 text-zinc-400"
-                        >
-                            {t}
-                        </span>
-                    ),
-                )}
-            </div>
+            <TechBadges tech={['React', 'Three.js', 'WebGL', 'react-globe.gl', 'GeoJSON', 'Node.js']} className="mb-8" />
             <ProjectChangelog entries={project.changelog ?? []} />
         </div>
     );

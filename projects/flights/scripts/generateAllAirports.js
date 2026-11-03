@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { parse } from 'csv-parse/sync';
 import { writeFlightGeoJson } from './writeFlightGeoJson.js';
-import { airportCoordinates } from './airportCoordinates.js';
+import { loadAirportMappings, normalizeAirport } from './airportData.js';
 
 const base = path.resolve('projects', 'flights');
 
@@ -12,25 +12,7 @@ const visitedPath = path.resolve('public', 'data', 'flights', 'visitedAirports.g
 
 // Load pre-generated name mappings
 const mappingsDir = path.resolve(base, 'data', 'mappings');
-const COUNTRY_NAMES = JSON.parse(fs.readFileSync(path.join(mappingsDir, 'countryNames.json'), 'utf8'));
-const REGION_NAMES = JSON.parse(fs.readFileSync(path.join(mappingsDir, 'regionNames.json'), 'utf8'));
-const CONTINENT_NAMES = JSON.parse(fs.readFileSync(path.join(mappingsDir, 'continentNames.json'), 'utf8'));
-
-function getCountryName(isoCode) {
-    return COUNTRY_NAMES[isoCode] || isoCode;
-}
-
-function getContinentName(code) {
-    return CONTINENT_NAMES[code] || code;
-}
-
-function getRegionName(isoRegion) {
-    return REGION_NAMES[isoRegion] || isoRegion;
-}
-
-function feetToMeters(ft) {
-    return Math.round(ft * 0.3048);
-}
+const mappings = loadAirportMappings(mappingsDir);
 
 // Load airports CSV
 const airportsRaw = fs.readFileSync(airportsPath, 'utf-8');
@@ -51,33 +33,25 @@ try {
 // Generate features for all airports
 const invalidCoordinateAirports = [];
 const features = airports.map(a => {
-    const elevFt = parseFloat(a.elevation_ft) || 0;
-    const coordinates = airportCoordinates(a);
+    const airport = normalizeAirport(a, mappings);
 
     // Skip invalid coordinates
-    if (!coordinates) {
+    if (!airport) {
         invalidCoordinateAirports.push(`${a.iata_code || 'unknown'} (${a.name || 'unnamed airport'})`);
         return null;
     }
+    const { lat, lon, ...properties } = airport;
 
     return {
         type: 'Feature',
         geometry: {
             type: 'Point',
-            coordinates: [coordinates.lon, coordinates.lat],
+            coordinates: [lon, lat],
         },
         properties: {
             code: a.iata_code,
-            name: a.name,
-            municipality: a.municipality || '',
-            region: a.iso_region,
-            regionName: getRegionName(a.iso_region),
-            country: a.iso_country,
-            countryName: getCountryName(a.iso_country),
-            continent: a.continent,
-            continentName: getContinentName(a.continent),
-            elevationFt: elevFt,
-            elevationM: feetToMeters(elevFt),
+            ...properties,
+            municipality: properties.municipality || '',
             visited: visitedCodes.has(a.iata_code),
         },
     };

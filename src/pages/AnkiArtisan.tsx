@@ -1,3 +1,5 @@
+import { ProjectPageHeader } from '../components/ProjectPageHeader';
+import { TechBadges } from '../components/TechBadges';
 import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/ProjectScreenshotGallery';
 import { usePageMetadata } from '../hooks/usePageMetadata';
 import { staticPageMetadata } from '../utils/pageMetadata';
@@ -36,54 +38,47 @@ export default function AnkiArtisan() {
 
     return (
         <div className="max-w-[52rem]">
-            <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
-                Anki Artisan
-            </h1>
-            <p className="text-zinc-400 mb-6 text-sm">Python CLI</p>
-
-            <p className="text-zinc-300 leading-relaxed mb-6">
-                A CLI tool that generates{' '}
-                <a
-                    href="https://apps.ankiweb.net/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
-                >
-                    Anki
-                </a>{' '}
-                flashcard decks from{' '}
-                <a
-                    href="https://www.inaturalist.org/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
-                >
-                    iNaturalist
-                </a>{' '}
-                observations and{' '}
-                <a
-                    href="https://ebird.org/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
-                >
-                    eBird
-                </a>{' '}
-                region data. It fetches species photos, audio, and taxonomy to
-                automatically build study-ready decks for learning birds, plants, and
-                other wildlife.
-            </p>
-
-            <div className="mb-8 flex flex-wrap gap-3">
-                <a
-                    href="https://github.com/robert-bryson/anki-artisan"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-700"
-                >
-                    Source on GitHub →
-                </a>
-            </div>
+            <ProjectPageHeader
+                title="Anki Artisan"
+                stack="Python CLI"
+                description={(
+                    <>
+                        A CLI tool that generates{' '}
+                        <a
+                            href="https://apps.ankiweb.net/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
+                        >
+                            Anki
+                        </a>{' '}
+                        flashcard decks from{' '}
+                        <a
+                            href="https://www.inaturalist.org/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
+                        >
+                            iNaturalist
+                        </a>{' '}
+                        observations and{' '}
+                        <a
+                            href="https://ebird.org/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
+                        >
+                            eBird
+                        </a>{' '}
+                        region data. It fetches species photos, audio, and taxonomy to
+                        automatically build study-ready decks for learning birds, plants, and
+                        other wildlife.
+                    </>
+                )}
+                actions={[
+                    { label: 'Source on GitHub →', href: 'https://github.com/robert-bryson/anki-artisan', external: true },
+                ]}
+            />
 
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Card Types</h2>
             <ul className="space-y-2 text-zinc-400 text-sm mb-6">
@@ -131,18 +126,7 @@ anki-artisan ebird add-region "Missouri"`}</code>
             </pre>
 
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Tech Stack</h2>
-            <div className="flex flex-wrap gap-2 mb-8">
-                {['Python', 'Click', 'genanki', 'pyinaturalist', 'eBird API', 'SQLite'].map(
-                    (t) => (
-                        <span
-                            key={t}
-                            className="px-2 py-0.5 text-xs rounded-full bg-zinc-800 text-zinc-400"
-                        >
-                            {t}
-                        </span>
-                    ),
-                )}
-            </div>
+            <TechBadges tech={['Python', 'Click', 'genanki', 'pyinaturalist', 'eBird API', 'SQLite']} className="mb-8" />
             <ProjectChangelog entries={project.changelog ?? []} />
         </div>
     );

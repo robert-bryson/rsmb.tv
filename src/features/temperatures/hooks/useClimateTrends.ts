@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fetchWithCache } from '../../flights/utils/fetchCache';
+import { fetchWithCache } from '../../../data/fetchCache';
 import { CLIMATE_TRENDS_URL } from '../constants';
 import type { ClimateTrends } from '../types';
 import { climateTrendsSchema, parseTemperaturePayload } from '../schemas';

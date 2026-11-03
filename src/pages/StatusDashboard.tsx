@@ -1,3 +1,4 @@
+import { TechBadges } from '../components/TechBadges';
 import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/ProjectScreenshotGallery';
 import { usePageMetadata } from '../hooks/usePageMetadata';
 import { staticPageMetadata } from '../utils/pageMetadata';
@@ -136,16 +137,7 @@ Environment variables:
             </ul>
 
             <h2 className="mb-3 text-lg font-medium text-zinc-100">Tech Stack</h2>
-            <div className="mb-8 flex flex-wrap gap-2">
-                {['TypeScript', 'React (Ink)', 'AWS SDK v3', 'CloudWatch', 'Route53', 'GitHub API'].map((t) => (
-                    <span
-                        key={t}
-                        className="rounded-full bg-zinc-800 px-2 py-0.5 text-xs text-zinc-400"
-                    >
-                        {t}
-                    </span>
-                ))}
-            </div>
+            <TechBadges tech={project.tech} className="mb-8" />
 
             <ProjectChangelog entries={project.changelog ?? []} />
         </div>

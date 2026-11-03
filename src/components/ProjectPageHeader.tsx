@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 
 interface ProjectHeaderAction {
   label: string;
@@ -44,9 +45,9 @@ export function ProjectPageHeader({ title, stack, description, actions }: Projec
           }
 
           return (
-            <a key={`${action.label}-${action.href}`} href={action.href} className={baseClassName}>
+            <Link key={`${action.label}-${action.href}`} to={action.href} className={baseClassName}>
               {action.label}
-            </a>
+            </Link>
           );
         })}
       </div>

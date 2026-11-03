@@ -1,4 +1,4 @@
-export { fetchWithCache, clearCache, invalidateCache, preloadCache } from './fetchCache';
+export { fetchWithCache, clearCache, invalidateCache, preloadCache } from '../../../data/fetchCache';
 export { escapeHtml } from '../../../utils/escapeHtml';
 
 import { EARTH_RADIUS_KM } from '../constants';

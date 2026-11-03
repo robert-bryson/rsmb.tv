@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { fetchWithCache, clearCache, invalidateCache } from '../features/flights/utils/fetchCache';
+import { fetchWithCache, clearCache, invalidateCache, preloadCache } from '../data/fetchCache';
+import * as legacyCache from '../features/flights/utils/fetchCache';
 import { jsonFetchResponse } from './helpers/fetch';
 
 function deferredResponse() {
@@ -26,6 +27,33 @@ describe('fetchCache', () => {
         const cached = await fetchWithCache<typeof mockData>('/api/test');
         expect(cached).toEqual(mockData);
         expect(fetch).toHaveBeenCalledTimes(1);
+    });
+
+    it('shares cached responses and invalidation with the legacy Flights import', async () => {
+        globalThis.fetch = vi.fn().mockResolvedValue(jsonFetchResponse({ shared: true }));
+
+        await legacyCache.fetchWithCache('/api/shared');
+        await expect(fetchWithCache('/api/shared')).resolves.toEqual({ shared: true });
+        expect(fetch).toHaveBeenCalledTimes(1);
+
+        legacyCache.invalidateCache('/api/shared');
+        await fetchWithCache('/api/shared');
+        expect(fetch).toHaveBeenCalledTimes(2);
+    });
+
+    it('preloads successful responses and permits failed URLs to retry', async () => {
+        const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+        globalThis.fetch = vi.fn()
+            .mockResolvedValueOnce(jsonFetchResponse({ preloaded: true }))
+            .mockRejectedValueOnce(new Error('Offline'))
+            .mockResolvedValueOnce(jsonFetchResponse({ recovered: true }));
+
+        await expect(preloadCache(['/api/preloaded', '/api/offline'])).resolves.toBeUndefined();
+        expect(warn).toHaveBeenCalledWith('Failed to preload /api/offline:', expect.any(Error));
+        await expect(fetchWithCache('/api/preloaded')).resolves.toEqual({ preloaded: true });
+        expect(fetch).toHaveBeenCalledTimes(2);
+        await expect(fetchWithCache('/api/offline')).resolves.toEqual({ recovered: true });
+        expect(fetch).toHaveBeenCalledTimes(3);
     });
 
     it('bypasses cache with forceRefresh', async () => {
@@ -105,6 +133,47 @@ describe('fetchCache', () => {
         expect(fetch).toHaveBeenCalledTimes(2);
     });
 
+    it('keeps a replacement request deduplicated when an invalidated request finishes first', async () => {
+        const staleResponse = deferredResponse();
+        const freshResponse = deferredResponse();
+        globalThis.fetch = vi.fn()
+            .mockReturnValueOnce(staleResponse.promise)
+            .mockReturnValueOnce(freshResponse.promise);
+
+        const staleRequest = fetchWithCache('/api/invalidated');
+        invalidateCache('/api/invalidated');
+        const freshRequest = fetchWithCache('/api/invalidated');
+        staleResponse.resolve(jsonFetchResponse({ value: 'stale' }));
+        await staleRequest;
+
+        const deduplicatedRequest = fetchWithCache('/api/invalidated');
+        freshResponse.resolve(jsonFetchResponse({ value: 'fresh' }));
+        const expected = { value: 'fresh' };
+        await expect(freshRequest).resolves.toEqual(expected);
+        await expect(deduplicatedRequest).resolves.toEqual(expected);
+        await expect(fetchWithCache('/api/invalidated')).resolves.toEqual(expected);
+        expect(fetch).toHaveBeenCalledTimes(2);
+    });
+
+    it('does not let an older failure remove a forced refresh that is still pending', async () => {
+        const staleResponse = deferredResponse();
+        const freshResponse = deferredResponse();
+        globalThis.fetch = vi.fn()
+            .mockReturnValueOnce(staleResponse.promise)
+            .mockReturnValueOnce(freshResponse.promise);
+
+        const staleRequest = fetchWithCache('/api/failure-race');
+        const freshRequest = fetchWithCache('/api/failure-race', { forceRefresh: true });
+        staleResponse.resolve(jsonFetchResponse({}, { ok: false, status: 503 }));
+        await expect(staleRequest).rejects.toThrow('HTTP 503');
+
+        const deduplicatedRequest = fetchWithCache('/api/failure-race');
+        freshResponse.resolve(jsonFetchResponse({ recovered: true }));
+        await expect(freshRequest).resolves.toEqual({ recovered: true });
+        await expect(deduplicatedRequest).resolves.toEqual({ recovered: true });
+        expect(fetch).toHaveBeenCalledTimes(2);
+    });
+
     it('throws on non-ok response', async () => {
         globalThis.fetch = vi.fn().mockResolvedValue({
             ok: false,
@@ -178,5 +247,10 @@ describe('fetchCache', () => {
             'Expected JSON but server returned HTML from /api/html-fallback',
         );
         expect(jsonSpy).not.toHaveBeenCalled();
+    });
+
+    it('accepts valid JSON when the server omits the content type', async () => {
+        globalThis.fetch = vi.fn().mockResolvedValue(jsonFetchResponse({ valid: true }, { headers: new Headers() }));
+        await expect(fetchWithCache('/api/untyped-json')).resolves.toEqual({ valid: true });
     });
 });

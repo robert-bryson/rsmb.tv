@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { fetchWithCache } from '../../flights/utils/fetchCache';
+import { fetchWithCache } from '../../../data/fetchCache';
 import {
     STATE_RECORDS_URL,
     COUNTY_RECORDS_URL,

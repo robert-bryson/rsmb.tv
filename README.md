@@ -179,8 +179,11 @@ See the [security fix report](docs/reviews/2026-10-31-minimatch-security-fix.md)
 ├── src/
 │   ├── components/     # Shared UI components
 │   ├── content/        # Static content (projects list)
+│   ├── data/           # Shared JSON request cache
 │   ├── features/       # Feature modules (e.g., flights)
+│   ├── maps/           # Shared map configuration
 │   └── pages/          # Route pages
+├── shared/             # Pure modules used by browser code and generators
 ├── projects/
 │   ├── flights/        # Flight data and conversion scripts
 │   └── temperature-records/ # Historical record-rate analysis pipeline
@@ -193,6 +196,8 @@ See the [security fix report](docs/reviews/2026-10-31-minimatch-security-fix.md)
 ├── tests/e2e/          # Playwright browser smoke tests
 └── amplify.yml         # AWS Amplify build configuration
 ```
+
+See the [shared module guide](docs/shared-modules.md) before adding reusable data processing or project presentation code.
 
 ## Testing Notes
 
@@ -253,7 +258,9 @@ npm run test:e2e -- tests/e2e/post-rendering.spec.ts
 ```
 
 Call `clearCache()` in tests that use `fetchWithCache` or its hooks.
-This removes cached responses and detached requests between tests.
+This clears stored responses and detaches pending requests between tests.
+It does not abort network requests.
+See the [shared module guide](docs/shared-modules.md#validation) for focused cache, generator, and project-page checks.
 
 ## Generated Metadata
 
@@ -266,6 +273,8 @@ They write new output when geometry or other metadata changes.
 Repeat-build tests check all three timestamped flight outputs.
 Both airport generators reject incomplete numbers, non-finite values, and coordinates outside geographic bounds.
 The flight converter omits flights that reference rejected airports.
+Missing or invalid elevations use zero feet and zero meters.
+Name mappings use their own nonempty string entries. Unmapped codes remain visible.
 See the [flight data guide](projects/flights/readme.md) for input checks.
 
 The image generator reads `DEFAULT_PAGES` in `scripts/generate-og-images.js`.

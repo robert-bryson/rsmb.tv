@@ -122,6 +122,20 @@ describe('syncTornadoes publication safeguards and cache freshness', () => {
 });
 
 describe('parseTornadoCsv', () => {
+    it.each([
+        [' district of columbia ', 'DC', 38.9, -77],
+        ['Puerto Rico', 'PR', 18.2, -66.5],
+        ['new york', 'NY', 42.5, -75],
+    ])('normalizes the shared jurisdiction name %s', (stateName, state, lat, lon) => {
+        const csv = [
+            'EVENT_ID,STATE,YEAR,MONTH_NAME,EVENT_TYPE,BEGIN_DATE_TIME,TOR_F_SCALE,BEGIN_LAT,BEGIN_LON',
+            `1001,${stateName},2024,May,Tornado,21-MAY-24 15:20:00,EF1,${lat},${lon}`,
+        ].join('\n');
+        expect(parseTornadoCsv(csv)).toEqual([
+            expect.objectContaining({ properties: expect.objectContaining({ state }) }),
+        ]);
+    });
+
     it('filters tornadoes and drops rows without valid coordinates', () => {
         const features = parseTornadoCsv(sampleCsv, { includeNarratives: true });
 

@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
+import { Route, Routes } from 'react-router-dom';
 import ThroughRoutes from '../pages/ThroughRoutes';
 import FlightsAbout from '../pages/FlightsAbout';
 import AnkiArtisan from '../pages/AnkiArtisan';
@@ -11,6 +12,28 @@ import Aborg from '../pages/Aborg';
 import Parc from '../pages/Parc';
 import StatusDashboard from '../pages/StatusDashboard';
 import { renderWithRouter } from './helpers/router';
+
+describe('shared project galleries', () => {
+    it.each([
+        { Page: FlightsAbout, path: '/projects/flights', dimensions: [[1852, 1385], [1853, 1389], [1860, 1390]] },
+        { Page: TemperatureRecordsAbout, path: '/projects/temperature-records', dimensions: [[1633, 973], [1624, 967], [1628, 968]] },
+        { Page: TornadoTracksAbout, path: '/projects/tornado-tracks', dimensions: [[1440, 1082], [1440, 1080], [1440, 1079]] },
+    ])('preserves screenshot sizing, loading, and captions on $path', ({ Page, path, dimensions }) => {
+        renderWithRouter(<Page />, { route: path });
+        const images = screen.getAllByRole('img');
+        expect(images).toHaveLength(3);
+        for (const [index, image] of images.entries()) {
+            expect(image).toHaveAttribute('width', String(dimensions[index][0]));
+            expect(image).toHaveAttribute('height', String(dimensions[index][1]));
+            expect(image).toHaveAttribute('loading', index === 0 ? 'eager' : 'lazy');
+            expect(image).toHaveAttribute('decoding', 'async');
+            expect(image.getAttribute('alt')?.trim()).toBeTruthy();
+            const caption = image.closest('figure')?.querySelector('figcaption');
+            expect(caption?.textContent?.trim()).toBeTruthy();
+            expect(caption?.textContent).not.toBe(image.getAttribute('alt'));
+        }
+    });
+});
 
 describe('ThroughRoutes page', () => {
     it('renders heading, links, and screenshots', () => {
@@ -60,6 +83,19 @@ describe('Bookend page', () => {
 });
 
 describe('TemperatureRecordsAbout page', () => {
+    it('opens the standing record view through client-side navigation', () => {
+        renderWithRouter(
+            <Routes>
+                <Route path="/projects/temperature-records" element={<TemperatureRecordsAbout />} />
+                <Route path="/projects/temperature-records/trends" element={<h1>Standing record view</h1>} />
+            </Routes>,
+            { route: '/projects/temperature-records' },
+        );
+
+        fireEvent.click(screen.getByRole('link', { name: /Explore standing record ages/i }));
+        expect(screen.getByRole('heading', { level: 1, name: 'Standing record view' })).toBeInTheDocument();
+    });
+
     it('renders heading, map/trends links, and source link', () => {
         renderWithRouter(<TemperatureRecordsAbout />, { route: '/projects/temperature-records' });
         expect(screen.getByRole('heading', { level: 1, name: /U.S. Temperature Records/i })).toBeInTheDocument();

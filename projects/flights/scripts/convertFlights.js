@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { parse } from 'csv-parse/sync'
 import { writeFlightGeoJson } from './writeFlightGeoJson.js'
-import { airportCoordinates } from './airportCoordinates.js'
+import { loadAirportMappings, normalizeAirport } from './airportData.js'
 import { parseFlightDuration } from '../../../src/features/flights/utils/durationInput.ts'
 import { parseFlightDate } from '../../../src/features/flights/utils/flightDateInput.ts'
 
@@ -15,29 +15,7 @@ const visitedAirportsOutputPath = path.resolve('public', 'data', 'flights', 'vis
 
 // Load pre-generated name mappings (run generateNameMappings.js to update these)
 const mappingsDir = path.resolve(base, 'data', 'mappings')
-const COUNTRY_NAMES = JSON.parse(fs.readFileSync(path.join(mappingsDir, 'countryNames.json'), 'utf8'))
-const REGION_NAMES = JSON.parse(fs.readFileSync(path.join(mappingsDir, 'regionNames.json'), 'utf8'))
-const CONTINENT_NAMES = JSON.parse(fs.readFileSync(path.join(mappingsDir, 'continentNames.json'), 'utf8'))
-
-// Helper to get normalized country name
-function getCountryName(isoCode) {
-  return COUNTRY_NAMES[isoCode] || isoCode
-}
-
-// Helper to get normalized continent name
-function getContinentName(code) {
-  return CONTINENT_NAMES[code] || code
-}
-
-// Helper to get normalized region name
-function getRegionName(isoRegion) {
-  return REGION_NAMES[isoRegion] || isoRegion
-}
-
-// Convert feet to meters
-function feetToMeters(ft) {
-  return Math.round(ft * 0.3048)
-}
+const mappings = loadAirportMappings(mappingsDir)
 
 const airportsRaw = fs.readFileSync(airportsPath, 'utf-8')
 const flightsRaw = fs.readFileSync(flightsPath, 'utf-8')
@@ -60,25 +38,12 @@ if (airports.length > 0) {
 
 const airportMap = Object.create(null)
 airports.forEach((a) => {
-  const coordinates = airportCoordinates(a)
-  if (!coordinates) {
+  const airport = normalizeAirport(a, mappings)
+  if (!airport) {
     console.warn(`⚠️ Skipping airport with invalid coordinates: ${a.iata_code}`)
     return
   }
-  const elevFt = parseFloat(a.elevation_ft) || 0
-  airportMap[a.iata_code] = {
-    name: a.name,
-    municipality: a.municipality,
-    region: a.iso_region,
-    regionName: getRegionName(a.iso_region),
-    country: a.iso_country,
-    countryName: getCountryName(a.iso_country),
-    continent: a.continent,
-    continentName: getContinentName(a.continent),
-    ...coordinates,
-    elevationFt: elevFt,
-    elevationM: feetToMeters(elevFt),
-  }
+  airportMap[a.iata_code] = airport
 })
 
 const flights = parse(flightsRaw, {

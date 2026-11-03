@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { useTemperatureData } from '../features/temperatures/hooks/useTemperatureData';
-import { clearCache } from '../features/flights/utils/fetchCache';
+import { clearCache } from '../data/fetchCache';
 import { jsonFetchResponse } from './helpers/fetch';
 
 function deferredResponse() {

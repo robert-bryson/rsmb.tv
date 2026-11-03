@@ -1,3 +1,4 @@
+import { TechBadges } from '../components/TechBadges';
 import { usePageMetadata } from '../hooks/usePageMetadata';
 import { staticPageMetadata } from '../utils/pageMetadata';
 import { projects } from '../content/projects';
@@ -107,13 +108,7 @@ export default function Route2Gpx() {
             </p>
 
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Tech Stack</h2>
-            <div className="flex flex-wrap gap-2 mb-8">
-                {['JavaScript', 'Leaflet', 'Google Routes API', 'Python', 'GPX', 'KML', 'GeoJSON', 'TCX', 'CSV'].map(t => (
-                    <span key={t} className="px-2 py-0.5 text-xs rounded-full bg-zinc-800 text-zinc-400">
-                        {t}
-                    </span>
-                ))}
-            </div>
+            <TechBadges tech={['JavaScript', 'Leaflet', 'Google Routes API', 'Python', 'GPX', 'KML', 'GeoJSON', 'TCX', 'CSV']} className="mb-8" />
             <ProjectChangelog entries={project.changelog ?? []} />
         </div>
     );

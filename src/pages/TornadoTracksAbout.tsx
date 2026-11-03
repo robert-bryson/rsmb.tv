@@ -1,8 +1,37 @@
-import { Link } from 'react-router-dom';
+import { ProjectPageHeader } from '../components/ProjectPageHeader';
+import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/ProjectScreenshotGallery';
+import { TechBadges } from '../components/TechBadges';
 import { usePageMetadata } from '../hooks/usePageMetadata';
 import { staticPageMetadata } from '../utils/pageMetadata';
 import { projects } from '../content/projects';
 import { ProjectChangelog } from '../components/ProjectChangelog';
+
+const screenshots: ProjectScreenshot[] = [
+    {
+        src: '/images/tornado-tracks/conus-tracks.webp',
+        alt: 'Map of 2025 tornado tracks across the continental United States with EF-scale filters and timeline controls',
+        caption: 'CONUS overview — 2025 tornado tracks colored by EF scale with timeline brushing, scale filters, and notable-event context',
+        width: 1440,
+        height: 1082,
+        loading: 'eager',
+    },
+    {
+        src: '/images/tornado-tracks/st-louis-detail.webp',
+        alt: 'Map focused on St. Louis with a selected EF3 tornado track detail popup and decade range selected',
+        caption: 'Track detail — selected St. Louis EF3 event with path length, width, casualty totals, and the 2010s range highlighted',
+        width: 1440,
+        height: 1080,
+        loading: 'lazy',
+    },
+    {
+        src: '/images/tornado-tracks/trends-dashboard.webp',
+        alt: 'Tornado Trends view showing annual counts, fatality rate, decade comparison, and top states alongside mapped tracks',
+        caption: 'Trends view — annual counts, fatality rate, decade comparison, and top-state summaries next to the active map',
+        width: 1440,
+        height: 1079,
+        loading: 'lazy',
+    },
+];
 
 export default function TornadoTracksAbout() {
     usePageMetadata(staticPageMetadata('/projects/tornado-tracks'));
@@ -11,82 +40,25 @@ export default function TornadoTracksAbout() {
 
     return (
         <div className="max-w-[52rem]">
-            <h1 className="mb-2 text-2xl font-semibold text-zinc-100">Tornado Tracks</h1>
-            <p className="mb-6 text-sm text-zinc-400">React + MapLibre GL</p>
+            <ProjectPageHeader
+                title="Tornado Tracks"
+                stack="React + MapLibre GL"
+                description={(
+                    <>
+                        A time-first map for exploring historical United States tornado
+                        tracks from NOAA/NCEI StormEvents. The first slice focuses on
+                        track geometry, EF-scale filtering, Midwest and regional presets,
+                        density mode, annual playback, and track-level details.
+                    </>
+                )}
+                actions={[
+                    { label: 'Open interactive map →', href: '/projects/tornado-tracks/map', variant: 'primary' },
+                    { label: 'Source on GitHub →', href: 'https://github.com/robert-bryson/rsmb.tv/tree/main/src/features/tornadoes', external: true },
+                    { label: 'NOAA source data →', href: 'https://www.ncei.noaa.gov/pub/data/swdi/stormevents/csvfiles/', external: true },
+                ]}
+            />
 
-            <p className="mb-6 leading-relaxed text-zinc-300">
-                A time-first map for exploring historical United States tornado
-                tracks from NOAA/NCEI StormEvents. The first slice focuses on
-                track geometry, EF-scale filtering, Midwest and regional presets,
-                density mode, annual playback, and track-level details.
-            </p>
-
-            <div className="mb-8 flex flex-wrap gap-3">
-                <Link
-                    to="/projects/tornado-tracks/map"
-                    className="inline-flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-violet-500"
-                >
-                    Open interactive map →
-                </Link>
-                <a
-                    href="https://github.com/robert-bryson/rsmb.tv/tree/main/src/features/tornadoes"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-700"
-                >
-                    Source on GitHub →
-                </a>
-                <a
-                    href="https://www.ncei.noaa.gov/pub/data/swdi/stormevents/csvfiles/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-700"
-                >
-                    NOAA source data →
-                </a>
-            </div>
-
-            <div className="mb-8 space-y-6">
-                <figure>
-                    <img
-                        src="/images/tornado-tracks/conus-tracks.webp"
-                        alt="Map of 2025 tornado tracks across the continental United States with EF-scale filters and timeline controls"
-                        className="rounded-lg border border-zinc-800"
-                        width={1440}
-                        height={1082}
-                        loading="eager"
-                    />
-                    <figcaption className="mt-2 text-center text-xs text-zinc-400">
-                        CONUS overview — 2025 tornado tracks colored by EF scale with timeline brushing, scale filters, and notable-event context
-                    </figcaption>
-                </figure>
-                <figure>
-                    <img
-                        src="/images/tornado-tracks/st-louis-detail.webp"
-                        alt="Map focused on St. Louis with a selected EF3 tornado track detail popup and decade range selected"
-                        className="rounded-lg border border-zinc-800"
-                        width={1440}
-                        height={1080}
-                        loading="lazy"
-                    />
-                    <figcaption className="mt-2 text-center text-xs text-zinc-400">
-                        Track detail — selected St. Louis EF3 event with path length, width, casualty totals, and the 2010s range highlighted
-                    </figcaption>
-                </figure>
-                <figure>
-                    <img
-                        src="/images/tornado-tracks/trends-dashboard.webp"
-                        alt="Tornado Trends view showing annual counts, fatality rate, decade comparison, and top states alongside mapped tracks"
-                        className="rounded-lg border border-zinc-800"
-                        width={1440}
-                        height={1079}
-                        loading="lazy"
-                    />
-                    <figcaption className="mt-2 text-center text-xs text-zinc-400">
-                        Trends view — annual counts, fatality rate, decade comparison, and top-state summaries next to the active map
-                    </figcaption>
-                </figure>
-            </div>
+            <ProjectScreenshotGallery screenshots={screenshots} />
 
             <h2 className="mb-3 text-lg font-medium text-zinc-100">Features</h2>
             <ul className="mb-6 list-inside list-disc space-y-1.5 text-sm text-zinc-400">
@@ -129,13 +101,7 @@ export default function TornadoTracksAbout() {
             </p>
 
             <h2 className="mb-3 text-lg font-medium text-zinc-100">Tech Stack</h2>
-            <div className="mb-8 flex flex-wrap gap-2">
-                {['React', 'MapLibre GL', 'NOAA/NCEI', 'StormEvents', 'GeoJSON', 'Node.js'].map((tech) => (
-                    <span key={tech} className="rounded-full bg-zinc-800 px-2 py-0.5 text-xs text-zinc-400">
-                        {tech}
-                    </span>
-                ))}
-            </div>
+            <TechBadges tech={['React', 'MapLibre GL', 'NOAA/NCEI', 'StormEvents', 'GeoJSON', 'Node.js']} className="mb-8" />
             <ProjectChangelog entries={project.changelog ?? []} />
         </div>
     );

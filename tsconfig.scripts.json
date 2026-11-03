@@ -32,6 +32,7 @@
         "playwright.trip.config.ts",
         "scripts/**/*.ts",
         "scripts/**/*.tsx",
+        "shared/**/*.ts",
         "tests/**/*.ts"
     ],
     "exclude": [

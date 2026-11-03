@@ -1,3 +1,5 @@
+import { ProjectPageHeader } from '../components/ProjectPageHeader';
+import { TechBadges } from '../components/TechBadges';
 import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/ProjectScreenshotGallery';
 import { usePageMetadata } from '../hooks/usePageMetadata';
 import { staticPageMetadata } from '../utils/pageMetadata';
@@ -38,63 +40,47 @@ export default function Bookend() {
 
     return (
         <div className="max-w-[52rem]">
-            <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
-                Bookend
-            </h1>
-            <p className="text-zinc-400 mb-6 text-sm">
-                Next.js + PostgreSQL
-            </p>
-
-            <p className="text-zinc-300 leading-relaxed mb-6">
-                A personal book-tracking app to log reads, organize books into
-                lists, and explore reading stats. Integrates with{' '}
-                <a
-                    href="https://developers.google.com/books"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
-                >
-                    Google Books
-                </a>
-                ,{' '}
-                <a
-                    href="https://openlibrary.org/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
-                >
-                    Open Library
-                </a>
-                , and{' '}
-                <a
-                    href="https://www.wikidata.org/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
-                >
-                    Wikidata
-                </a>{' '}
-                for enrichment—covers, descriptions, author links, and more.
-            </p>
-
-            <div className="mb-8 flex flex-wrap gap-3">
-                <a
-                    href={BOOKEND_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium transition-colors"
-                >
-                    Open Bookend →
-                </a>
-                <a
-                    href="https://github.com/robert-bryson/bookend"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-700"
-                >
-                    Source on GitHub →
-                </a>
-            </div>
+            <ProjectPageHeader
+                title="Bookend"
+                stack="Next.js + PostgreSQL"
+                description={(
+                    <>
+                        A personal book-tracking app to log reads, organize books into
+                        lists, and explore reading stats. Integrates with{' '}
+                        <a
+                            href="https://developers.google.com/books"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
+                        >
+                            Google Books
+                        </a>
+                        ,{' '}
+                        <a
+                            href="https://openlibrary.org/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
+                        >
+                            Open Library
+                        </a>
+                        , and{' '}
+                        <a
+                            href="https://www.wikidata.org/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
+                        >
+                            Wikidata
+                        </a>{' '}
+                        for enrichment—covers, descriptions, author links, and more.
+                    </>
+                )}
+                actions={[
+                    { label: 'Open Bookend →', href: BOOKEND_URL, variant: 'primary', external: true },
+                    { label: 'Source on GitHub →', href: 'https://github.com/robert-bryson/bookend', external: true },
+                ]}
+            />
 
             <ProjectScreenshotGallery screenshots={screenshots} />
 
@@ -113,23 +99,7 @@ export default function Bookend() {
             </ul>
 
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Tech Stack</h2>
-            <div className="flex flex-wrap gap-2 mb-8">
-                {[
-                    'Next.js',
-                    'TypeScript',
-                    'Prisma',
-                    'PostgreSQL',
-                    'Tailwind CSS',
-                    'Docker',
-                ].map((t) => (
-                    <span
-                        key={t}
-                        className="px-2 py-0.5 text-xs rounded-full bg-zinc-800 text-zinc-400"
-                    >
-                        {t}
-                    </span>
-                ))}
-            </div>
+            <TechBadges tech={project.tech} className="mb-8" />
             <ProjectChangelog entries={project.changelog ?? []} />
         </div>
     );

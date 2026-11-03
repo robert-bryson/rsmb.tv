@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { useGeoJsonData } from '../features/flights/hooks/useGeoJsonData';
-import { clearCache } from '../features/flights/utils/fetchCache';
+import { clearCache } from '../data/fetchCache';
 import { jsonFetchResponse } from './helpers/fetch';
 
 describe('useGeoJsonData', () => {

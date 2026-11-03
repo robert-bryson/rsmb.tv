@@ -1,3 +1,5 @@
+import { ProjectPageHeader } from '../components/ProjectPageHeader';
+import { TechBadges } from '../components/TechBadges';
 import { ProjectScreenshotGallery, type ProjectScreenshot } from '../components/ProjectScreenshotGallery';
 import { usePageMetadata } from '../hooks/usePageMetadata';
 import { staticPageMetadata } from '../utils/pageMetadata';
@@ -38,47 +40,31 @@ export default function ThroughRoutes() {
 
     return (
         <div className="max-w-[52rem]">
-            <h1 className="text-2xl font-semibold text-zinc-100 mb-2">
-                Through Routes
-            </h1>
-            <p className="text-zinc-400 mb-6 text-sm">
-                Python + TypeScript
-            </p>
-
-            <p className="text-zinc-300 leading-relaxed mb-6">
-                Find scenic, twisty motorcycle loop routes on rural roads.
-                Through Routes processes{' '}
-                <a
-                    href="https://www.openstreetmap.org/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
-                >
-                    OpenStreetMap
-                </a>{' '}
-                data to build a loop-friendly road graph, scores roads by
-                curviness and elevation change, and generates ranked circular
-                routes from any start point.
-            </p>
-
-            <div className="mb-8 flex flex-wrap gap-3">
-                <a
-                    href={THROUGH_ROUTES_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-violet-500"
-                >
-                    Open Through Routes →
-                </a>
-                <a
-                    href="https://github.com/robert-bryson/through-routes"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-700"
-                >
-                    Source on GitHub →
-                </a>
-            </div>
+            <ProjectPageHeader
+                title="Through Routes"
+                stack="Python + TypeScript"
+                description={(
+                    <>
+                        Find scenic, twisty motorcycle loop routes on rural roads.
+                        Through Routes processes{' '}
+                        <a
+                            href="https://www.openstreetmap.org/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-violet-400 underline decoration-violet-400/30 hover:decoration-violet-400"
+                        >
+                            OpenStreetMap
+                        </a>{' '}
+                        data to build a loop-friendly road graph, scores roads by
+                        curviness and elevation change, and generates ranked circular
+                        routes from any start point.
+                    </>
+                )}
+                actions={[
+                    { label: 'Open Through Routes →', href: THROUGH_ROUTES_URL, variant: 'primary', external: true },
+                    { label: 'Source on GitHub →', href: 'https://github.com/robert-bryson/through-routes', external: true },
+                ]}
+            />
 
             <ProjectScreenshotGallery screenshots={screenshots} />
 
@@ -101,18 +87,7 @@ export default function ThroughRoutes() {
             </ul>
 
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Tech Stack</h2>
-            <div className="flex flex-wrap gap-2 mb-8">
-                {['Python', 'NumPy', 'FastAPI', 'TypeScript', 'MapLibre GL', 'Docker'].map(
-                    (t) => (
-                        <span
-                            key={t}
-                            className="px-2 py-0.5 text-xs rounded-full bg-zinc-800 text-zinc-400"
-                        >
-                            {t}
-                        </span>
-                    ),
-                )}
-            </div>
+            <TechBadges tech={project.tech} className="mb-8" />
             <ProjectChangelog entries={project.changelog ?? []} />
         </div>
     );

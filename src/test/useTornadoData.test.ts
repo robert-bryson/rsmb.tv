@@ -1,6 +1,6 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { clearCache } from '../features/flights/utils/fetchCache';
+import { clearCache } from '../data/fetchCache';
 import { useTornadoData } from '../features/tornadoes/hooks/useTornadoData';
 import { jsonFetchResponse } from './helpers/fetch';
 import type { AnnualTornadoSummary } from '../features/tornadoes/types';

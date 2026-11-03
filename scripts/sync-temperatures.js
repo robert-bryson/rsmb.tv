@@ -50,87 +50,74 @@ import { tmpdir } from 'os';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { createHash } from 'crypto';
+import { usStates } from '../shared/geography/usStates.ts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUTPUT_DIR = resolve(__dirname, '../public/data/temperatures');
 const TEMP_DATA_DIR = process.env.TEMP_DATA_DIR || '/mnt/nas/record-highs';
 const DAILY_DIR = resolve(TEMP_DATA_DIR, 'daily');
 
-// US state codes and approximate centroids for mapping
-const US_STATES = {
-    AL: { name: 'Alabama', lat: 32.806671, lon: -86.79113 },
-    AK: { name: 'Alaska', lat: 63.588753, lon: -154.493062 },
-    AZ: { name: 'Arizona', lat: 34.048928, lon: -111.093731 },
-    AR: { name: 'Arkansas', lat: 35.20105, lon: -91.831833 },
-    CA: { name: 'California', lat: 36.778261, lon: -119.417932 },
-    CO: { name: 'Colorado', lat: 39.550051, lon: -105.782067 },
-    CT: { name: 'Connecticut', lat: 41.603221, lon: -73.087749 },
-    DE: { name: 'Delaware', lat: 38.910832, lon: -75.52767 },
-    FL: { name: 'Florida', lat: 27.664827, lon: -81.515754 },
-    GA: { name: 'Georgia', lat: 32.157435, lon: -82.907123 },
-    HI: { name: 'Hawaii', lat: 19.898682, lon: -155.665857 },
-    ID: { name: 'Idaho', lat: 44.068202, lon: -114.742041 },
-    IL: { name: 'Illinois', lat: 40.633125, lon: -89.398528 },
-    IN: { name: 'Indiana', lat: 40.551217, lon: -85.602364 },
-    IA: { name: 'Iowa', lat: 41.878003, lon: -93.097702 },
-    KS: { name: 'Kansas', lat: 39.011902, lon: -98.484246 },
-    KY: { name: 'Kentucky', lat: 37.839333, lon: -84.270018 },
-    LA: { name: 'Louisiana', lat: 31.244823, lon: -92.145024 },
-    ME: { name: 'Maine', lat: 45.253783, lon: -69.445469 },
-    MD: { name: 'Maryland', lat: 39.045755, lon: -76.641271 },
-    MA: { name: 'Massachusetts', lat: 42.407211, lon: -71.382437 },
-    MI: { name: 'Michigan', lat: 44.314844, lon: -85.602364 },
-    MN: { name: 'Minnesota', lat: 46.729553, lon: -94.6859 },
-    MS: { name: 'Mississippi', lat: 32.354668, lon: -89.398528 },
-    MO: { name: 'Missouri', lat: 37.964253, lon: -91.831833 },
-    MT: { name: 'Montana', lat: 46.879682, lon: -110.362566 },
-    NE: { name: 'Nebraska', lat: 41.492537, lon: -99.901813 },
-    NV: { name: 'Nevada', lat: 38.80261, lon: -116.419389 },
-    NH: { name: 'New Hampshire', lat: 43.193852, lon: -71.572395 },
-    NJ: { name: 'New Jersey', lat: 40.058324, lon: -74.405661 },
-    NM: { name: 'New Mexico', lat: 34.51994, lon: -105.87009 },
-    NY: { name: 'New York', lat: 43.299428, lon: -74.217933 },
-    NC: { name: 'North Carolina', lat: 35.759573, lon: -79.0193 },
-    ND: { name: 'North Dakota', lat: 47.551493, lon: -101.002012 },
-    OH: { name: 'Ohio', lat: 40.417287, lon: -82.907123 },
-    OK: { name: 'Oklahoma', lat: 35.007752, lon: -97.092877 },
-    OR: { name: 'Oregon', lat: 43.804133, lon: -120.554201 },
-    PA: { name: 'Pennsylvania', lat: 41.203322, lon: -77.194525 },
-    RI: { name: 'Rhode Island', lat: 41.580095, lon: -71.477429 },
-    SC: { name: 'South Carolina', lat: 33.836081, lon: -81.163725 },
-    SD: { name: 'South Dakota', lat: 43.969515, lon: -99.901813 },
-    TN: { name: 'Tennessee', lat: 35.517491, lon: -86.580447 },
-    TX: { name: 'Texas', lat: 31.968599, lon: -99.901813 },
-    UT: { name: 'Utah', lat: 39.32098, lon: -111.093731 },
-    VT: { name: 'Vermont', lat: 44.558803, lon: -72.577841 },
-    VA: { name: 'Virginia', lat: 37.431573, lon: -78.656894 },
-    WA: { name: 'Washington', lat: 47.751074, lon: -120.740139 },
-    WV: { name: 'West Virginia', lat: 38.597626, lon: -80.454903 },
-    WI: { name: 'Wisconsin', lat: 43.78444, lon: -88.787868 },
-    WY: { name: 'Wyoming', lat: 43.075968, lon: -107.290284 },
+// Approximate display centroids are specific to the temperature map.
+const STATE_CENTROIDS = {
+    AL: { lat: 32.806671, lon: -86.79113 },
+    AK: { lat: 63.588753, lon: -154.493062 },
+    AZ: { lat: 34.048928, lon: -111.093731 },
+    AR: { lat: 35.20105, lon: -91.831833 },
+    CA: { lat: 36.778261, lon: -119.417932 },
+    CO: { lat: 39.550051, lon: -105.782067 },
+    CT: { lat: 41.603221, lon: -73.087749 },
+    DE: { lat: 38.910832, lon: -75.52767 },
+    FL: { lat: 27.664827, lon: -81.515754 },
+    GA: { lat: 32.157435, lon: -82.907123 },
+    HI: { lat: 19.898682, lon: -155.665857 },
+    ID: { lat: 44.068202, lon: -114.742041 },
+    IL: { lat: 40.633125, lon: -89.398528 },
+    IN: { lat: 40.551217, lon: -85.602364 },
+    IA: { lat: 41.878003, lon: -93.097702 },
+    KS: { lat: 39.011902, lon: -98.484246 },
+    KY: { lat: 37.839333, lon: -84.270018 },
+    LA: { lat: 31.244823, lon: -92.145024 },
+    ME: { lat: 45.253783, lon: -69.445469 },
+    MD: { lat: 39.045755, lon: -76.641271 },
+    MA: { lat: 42.407211, lon: -71.382437 },
+    MI: { lat: 44.314844, lon: -85.602364 },
+    MN: { lat: 46.729553, lon: -94.6859 },
+    MS: { lat: 32.354668, lon: -89.398528 },
+    MO: { lat: 37.964253, lon: -91.831833 },
+    MT: { lat: 46.879682, lon: -110.362566 },
+    NE: { lat: 41.492537, lon: -99.901813 },
+    NV: { lat: 38.80261, lon: -116.419389 },
+    NH: { lat: 43.193852, lon: -71.572395 },
+    NJ: { lat: 40.058324, lon: -74.405661 },
+    NM: { lat: 34.51994, lon: -105.87009 },
+    NY: { lat: 43.299428, lon: -74.217933 },
+    NC: { lat: 35.759573, lon: -79.0193 },
+    ND: { lat: 47.551493, lon: -101.002012 },
+    OH: { lat: 40.417287, lon: -82.907123 },
+    OK: { lat: 35.007752, lon: -97.092877 },
+    OR: { lat: 43.804133, lon: -120.554201 },
+    PA: { lat: 41.203322, lon: -77.194525 },
+    RI: { lat: 41.580095, lon: -71.477429 },
+    SC: { lat: 33.836081, lon: -81.163725 },
+    SD: { lat: 43.969515, lon: -99.901813 },
+    TN: { lat: 35.517491, lon: -86.580447 },
+    TX: { lat: 31.968599, lon: -99.901813 },
+    UT: { lat: 39.32098, lon: -111.093731 },
+    VT: { lat: 44.558803, lon: -72.577841 },
+    VA: { lat: 37.431573, lon: -78.656894 },
+    WA: { lat: 47.751074, lon: -120.740139 },
+    WV: { lat: 38.597626, lon: -80.454903 },
+    WI: { lat: 43.78444, lon: -88.787868 },
+    WY: { lat: 43.075968, lon: -107.290284 },
 };
-
-// Map full state names to abbreviations
-const STATE_NAME_TO_ABBR = Object.fromEntries(
-    Object.entries(US_STATES).map(([abbr, { name }]) => [name, abbr])
+const US_STATES = Object.fromEntries(
+    usStates.map(({ abbr, name }) => [abbr, { name, ...STATE_CENTROIDS[abbr] }])
 );
-
-// FIPS state codes to abbreviations
-const FIPS_TO_ABBR = {
-    '01': 'AL', '02': 'AK', '04': 'AZ', '05': 'AR', '06': 'CA',
-    '08': 'CO', '09': 'CT', '10': 'DE', '12': 'FL', '13': 'GA',
-    '15': 'HI', '16': 'ID', '17': 'IL', '18': 'IN', '19': 'IA',
-    '20': 'KS', '21': 'KY', '22': 'LA', '23': 'ME', '24': 'MD',
-    '25': 'MA', '26': 'MI', '27': 'MN', '28': 'MS', '29': 'MO',
-    '30': 'MT', '31': 'NE', '32': 'NV', '33': 'NH', '34': 'NJ',
-    '35': 'NM', '36': 'NY', '37': 'NC', '38': 'ND', '39': 'OH',
-    '40': 'OK', '41': 'OR', '42': 'PA', '44': 'RI', '45': 'SC',
-    '46': 'SD', '47': 'TN', '48': 'TX', '49': 'UT', '50': 'VT',
-    '51': 'VA', '53': 'WA', '54': 'WV', '55': 'WI', '56': 'WY',
-};
-
+const STATE_NAME_TO_ABBR = Object.fromEntries(
+    usStates.map(({ name, abbr }) => [name, abbr])
+);
 const ABBR_TO_FIPS = Object.fromEntries(
-    Object.entries(FIPS_TO_ABBR).map(([fips, abbr]) => [abbr, fips])
+    usStates.map(({ abbr, fips }) => [abbr, fips])
 );
 
 // ─── Helpers ─────────────────────────────────────────────────────────

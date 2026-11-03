@@ -42,6 +42,38 @@ afterEach(() => {
 });
 
 describe('flight build scripts', () => {
+    it('keeps airport names, unit conversions, and fallback values consistent across outputs', () => {
+        const cwd = makeWorkspace();
+        writeFileSync(join(cwd, 'projects/flights/data/airports.csv'), [
+            'iata_code,name,municipality,iso_region,iso_country,continent,latitude_deg,longitude_deg,elevation_ft',
+            'SEA,Seattle,,US-WA,US,NA,47.4502,-122.3088,433',
+            'ZZZ,Unknown,,ZZ-XX,ZZ,XX,0,0,-10',
+            'BAD,Bad elevation,,constructor,constructor,constructor,1,1,Infinity',
+        ].join('\n'));
+        writeFileSync(join(cwd, 'projects/flights/data/flights.csv'), [
+            'date,airline,origin,destination',
+            '1/1/2024,United,SEA,ZZZ',
+            '1/2/2024,United,SEA,BAD',
+        ].join('\n'));
+
+        for (const script of ['convertFlights.js', 'generateAllAirports.js']) {
+            const result = runScript(cwd, `projects/flights/scripts/${script}`);
+            expect(result.status, result.stderr).toBe(0);
+        }
+
+        const visited = readJson(cwd, 'public/data/flights/visitedAirports.geojson').features;
+        const complete = readJson(cwd, 'public/data/flights/allAirports.geojson').features;
+        const expected = [
+            { code: 'SEA', municipality: '', regionName: 'Washington', countryName: 'United States', continentName: 'North America', elevationFt: 433, elevationM: 132 },
+            { code: 'ZZZ', municipality: '', regionName: 'ZZ-XX', countryName: 'ZZ', continentName: 'XX', elevationFt: -10, elevationM: -3 },
+            { code: 'BAD', municipality: '', regionName: 'constructor', countryName: 'constructor', continentName: 'constructor', elevationFt: 0, elevationM: 0 },
+        ];
+        for (const properties of expected) {
+            expect(visited).toContainEqual(expect.objectContaining({ properties: expect.objectContaining(properties) }));
+            expect(complete).toContainEqual(expect.objectContaining({ properties: expect.objectContaining({ ...properties, visited: true }) }));
+        }
+    });
+
     it('preserves recorded minutes and flight numbers, and rejects malformed durations before writing', () => {
         const cwd = makeWorkspace();
         writeFileSync(join(cwd, 'projects/flights/data/airports.csv'), [
@@ -157,11 +189,23 @@ describe('flight build scripts', () => {
     it('generates identical state output from identical remote boundaries', () => {
         const cwd = makeWorkspace();
         const source = {
-            features: [{
-                properties: { name: 'Washington' }, geometry: {
-                    type: 'Polygon', coordinates: [[[-123, 47], [-122, 47], [-122, 48], [-123, 47]]],
-                }
-            }],
+            features: [
+                {
+                    properties: { name: 'Washington' }, geometry: {
+                        type: 'Polygon', coordinates: [[[-123, 47], [-122, 47], [-122, 48], [-123, 47]]],
+                    },
+                },
+                {
+                    properties: { name: 'District of Columbia' }, geometry: {
+                        type: 'Polygon', coordinates: [[[-77.1, 38.8], [-77, 38.8], [-77, 38.9], [-77.1, 38.8]]],
+                    },
+                },
+                {
+                    properties: { name: 'Puerto Rico' }, geometry: {
+                        type: 'Polygon', coordinates: [[[-67, 18], [-66, 18], [-66, 19], [-67, 18]]],
+                    },
+                },
+            ],
         };
         const scriptUrl = pathToFileURL(join(repoRoot, 'projects/flights/scripts/generateUSStates.js')).href;
         const run = () => spawnSync(process.execPath, ['--input-type=module', '-e',
@@ -172,6 +216,13 @@ describe('flight build scripts', () => {
         expect(firstRun.status, firstRun.stderr).toBe(0);
         const outputPath = join(cwd, 'public/data/flights/usStates.geojson');
         const firstOutput = readFileSync(outputPath, 'utf8');
+        expect(JSON.parse(firstOutput)).toMatchObject({
+            metadata: { totalStates: 2 },
+            features: [
+                { properties: { code: 'US-DC', name: 'District of Columbia', abbr: 'DC' } },
+                { properties: { code: 'US-WA', name: 'Washington', abbr: 'WA' } },
+            ],
+        });
         const secondRun = run();
         expect(secondRun.error).toBeUndefined();
         expect(secondRun.status).toBe(0);

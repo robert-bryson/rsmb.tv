@@ -8,6 +8,7 @@ Use [TODO.md](../TODO.md) for incomplete work.
 | Document | Use |
 | --- | --- |
 | [Repository guide](../README.md) | Install, develop, test, and build the site |
+| [Shared modules](shared-modules.md) | Reuse request caching, state identities, airport normalization, and project presentation |
 | [Blog publication](blog-publishing.md) | Configure the Sheet and import documents |
 | [Site metadata](site-metadata.md) | Maintain crawler metadata, social cards, canonical paths, and hosting rules |
 | [CARTO basemaps](carto-basemaps.md) | Configure authenticated maps and visible attribution across projects |
@@ -33,6 +34,8 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-03 | [Shared module review: airport input fixes, contract tests, and coverage](reviews/2026-11-03-shared-library-quality-review.md) |
+| 2026-11-03 | [Shared library consolidation: duplication, extraction candidates, and starting points](reviews/2026-11-03-shared-library-analysis.md) |
 | 2026-11-03 | [Basemap timeouts, camera startup, attribution, and regression coverage](reviews/2026-11-03-basemap-ci-quality-review.md) |
 | 2026-11-03 | [Flight camera CI review, renderer assertions, and callback cleanup](reviews/2026-11-03-flight-camera-ci-review.md) |
 | 2026-11-02 | [Flight time display: touch coverage, time-record provenance, and regression tests](reviews/2026-11-02-flight-time-display-quality-review.md) |

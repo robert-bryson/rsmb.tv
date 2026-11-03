@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchWithCache } from '../utils/fetchCache';
+import { fetchWithCache } from '../../../data/fetchCache';
 
 interface UseGeoJsonDataResult<T> {
     data: T | null;

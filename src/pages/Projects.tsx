@@ -1,3 +1,4 @@
+import { TechBadges } from '../components/TechBadges';
 import { Link } from 'react-router-dom';
 import { ProjectPreview } from '../components/ProjectPreview';
 import { projects, formatProjectDate, type Project } from '../content/projects';
@@ -55,16 +56,7 @@ function ProjectContent({ project, priority }: { project: Project; priority: boo
       <p className="mt-1 text-zinc-400 text-sm leading-relaxed">
         {project.description}
       </p>
-      <div className="mt-3 flex flex-wrap gap-2">
-        {project.tech.map((t) => (
-          <span
-            key={t}
-            className="px-2 py-0.5 text-xs rounded-full bg-zinc-800 text-zinc-400"
-          >
-            {t}
-          </span>
-        ))}
-      </div>
+      <TechBadges tech={project.tech} className="mt-3" />
       <div className="mt-3 flex gap-4 text-xs">
         {project.demoUrl && (
           <span className="text-violet-400">Live demo</span>

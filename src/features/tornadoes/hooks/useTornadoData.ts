@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { FeatureCollection } from 'geojson';
-import { fetchWithCache, invalidateCache } from '../../flights/utils/fetchCache';
+import { fetchWithCache, invalidateCache } from '../../../data/fetchCache';
 import {
     DEFAULT_END_YEAR,
     DEFAULT_START_YEAR,

@@ -2,6 +2,37 @@ import { expect, test } from '@playwright/test';
 import { projects } from '../../src/content/projects';
 
 for (const width of [320, 1280]) {
+    for (const slug of ['flights', 'temperature-records', 'tornado-tracks']) {
+        test(`${slug} shared gallery loads without overflow at ${width}px`, async ({ page }) => {
+            await page.setViewportSize({ width, height: 900 });
+            await page.goto(`/projects/${slug}`);
+
+            const images = page.locator('figure img');
+            await expect(images).toHaveCount(3);
+            for (const [index, image] of (await images.all()).entries()) {
+                await expect(image).toHaveAttribute('loading', index === 0 ? 'eager' : 'lazy');
+                await image.scrollIntoViewIfNeeded();
+                await expect.poll(() => image.evaluate(element => (element as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+                const dimensions = await image.evaluate(element => {
+                    const image = element as HTMLImageElement;
+                    return {
+                        declared: [Number(image.getAttribute('width')), Number(image.getAttribute('height'))],
+                        actual: [image.naturalWidth, image.naturalHeight],
+                    };
+                });
+                expect(dimensions.declared).toEqual(dimensions.actual);
+            }
+
+            const source = page.getByRole('link', { name: 'Source on GitHub →', exact: true });
+            await expect(source).toHaveAttribute('target', '_blank');
+            await expect(source).toHaveAttribute('rel', /\bnoopener\b/);
+            await expect(source).toHaveAttribute('rel', /\bnoreferrer\b/);
+            expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+        });
+    }
+}
+
+for (const width of [320, 1280]) {
     test(`project dates and changelogs remain readable at ${width}px`, async ({ page }) => {
         await page.setViewportSize({ width, height: 900 });
         await page.goto('/projects');
