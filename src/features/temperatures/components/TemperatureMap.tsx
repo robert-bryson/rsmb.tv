@@ -1,21 +1,21 @@
 import { cartoRasterStyle } from '../../../maps/cartoBasemaps';
-import { useRef, useEffect, useState, useCallback, useMemo } from 'react';
+import { useRef, useEffect, useState, useCallback, useMemo, Suspense, lazy } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import * as maplibregl from 'maplibre-gl';
+import * as maplibregl from '../../../maps/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useTemperatureData } from '../hooks/useTemperatureData';
-import { useClimateTrends } from '../hooks/useClimateTrends';
+import { TemperatureDataStatus } from './TemperatureDataStatus';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { SummaryPanel } from './SummaryPanel';
 import type { RecordSort } from './SummaryPanel';
 import { StationDetailPanel } from './StationDetailPanel';
-import { RecordAgeChart } from './RecordAgeChart';
-import { RecordsBrokenTimeSeries } from './RecordsBrokenTimeSeries';
-import { HighLowRatioChart } from './HighLowRatioChart';
 import { RecentRecordFilters } from '../map/RecentRecordFilters';
 import { buildBrokenRecordsGeoJson, buildFreshnessGeoJson } from '../map/temperatureMapLayers';
 import { buildRecordAgePopupHtml, escapeMapText, styleDarkPopup } from '../map/temperatureMapPopup';
 import type { BrokenRecord, ViewMode, HighlightRange, GeoJsonFeature, CountyRecordProperties, TimePeriod, RecordScope, StateRecordsCollection, CountyRecordsCollection } from '../types';
 import {
+    CONUS_BOUNDS,
+    STATE_CENTERS,
     INITIAL_CENTER,
     INITIAL_ZOOM,
     MIN_ZOOM,
@@ -28,8 +28,10 @@ import {
 import { formatComparisonPeriod, formatTemp, formatTempDelta, getRecentObservationDate } from '../utils/temperature';
 import { escapeHtml } from '../../../utils/escapeHtml';
 
+const TemperatureTrendsDrawer = lazy(() => import('./TemperatureTrendsDrawer'));
+
 function useIsMobile() {
-    const mq = typeof window !== 'undefined' ? window.matchMedia('(max-width: 768px)') : null;
+    const [mq] = useState(() => typeof window !== 'undefined' ? window.matchMedia('(max-width: 767px)') : null);
     const [isMobile, setIsMobile] = useState(() => mq?.matches ?? false);
     useEffect(() => {
         if (!mq) return;
@@ -216,6 +218,12 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
 }
 
 export function TemperatureMap() {
+    const toolbarRef = useRef<HTMLDivElement>(null);
+    const reduceMotion = useReducedMotion();
+    const lastCameraKey = useRef('');
+    const returnFocusKey = useRef<string | null>(null);
+    const [mapFailure, setMapFailure] = useState(false);
+    const [renderedView, setRenderedView] = useState('');
     const mapContainer = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibregl.Map | null>(null);
     const popupRef = useRef<maplibregl.Popup | null>(null);
@@ -225,7 +233,7 @@ export function TemperatureMap() {
     const [mapLoaded, setMapLoaded] = useState(false);
     const [showCounty, setShowCounty] = useState(false);
     const [panelOpen, setPanelOpen] = useState(
-        () => typeof window === 'undefined' || !window.matchMedia('(max-width: 768px)').matches,
+        () => typeof window === 'undefined' || !window.matchMedia('(max-width: 767px)').matches,
     );
     const [showTrends, setShowTrends] = useState(false);
     const [highlightRange, setHighlightRange] = useState<HighlightRange | null>(null);
@@ -257,6 +265,10 @@ export function TemperatureMap() {
     }
 
     const updateSearchParam = useCallback((key: string, value: string, defaultValue = '') => {
+        if (['state', 'scope', 'margin', 'period'].includes(key)) {
+            setSelectedStation(null);
+            popupRef.current?.remove();
+        }
         setSearchParams(previous => {
             const next = new URLSearchParams(previous);
             if (value === defaultValue) next.delete(key);
@@ -322,9 +334,21 @@ export function TemperatureMap() {
         }
     }, []);
 
-    const shouldLoadAllTimeRecords = viewMode !== 'recent' || showTrends;
-    const { stateRecords, countyRecords, recentRecords, loading, error } = useTemperatureData({ loadAllTimeRecords: shouldLoadAllTimeRecords });
-    const { trends, loading: trendsLoading, error: trendsError } = useClimateTrends({ enabled: showTrends });
+    const { stateRecords, countyRecords, recentRecords, summary, loading, error } = useTemperatureData({
+        loadRecentRecords: viewMode === 'recent',
+        loadStateRecords: viewMode === 'state',
+        loadCountyRecords: viewMode === 'county' || viewMode === 'freshness' || (viewMode === 'state' && selectedState !== null),
+    });
+    const filtersActive = Boolean(stateFilter || scopeFilter !== 'all' || minimumMargin);
+    const clearFilters = useCallback(() => {
+        setSelectedStation(null);
+        popupRef.current?.remove();
+        setSearchParams(previous => {
+            const next = new URLSearchParams(previous);
+            for (const key of ['state', 'scope', 'margin']) next.delete(key);
+            return next;
+        }, { replace: true });
+    }, [setSearchParams]);
 
     const filteredRecentRecords = useMemo(() => {
         if (!recentRecords) return null;
@@ -418,10 +442,62 @@ export function TemperatureMap() {
     const useCelsiusRef = useRef(useCelsius);
     useEffect(() => { useCelsiusRef.current = useCelsius; }, [useCelsius]);
 
+    const cameraPadding = useCallback(() => {
+        const height = mapContainer.current?.clientHeight || window.innerHeight;
+        return {
+            top: Math.min((toolbarRef.current?.offsetHeight || 160) + 24, height * 0.45),
+            bottom: showTrends ? height * (isMobile ? 0.5 : 0.35) + 20 : isMobile && (panelOpen || selectedStation !== null) ? Math.min(height * 0.4 + 20, height * 0.45) : 80,
+            left: 24,
+            right: isMobile ? 24 : !showTrends && (panelOpen || selectedStation !== null) ? 352 : 48,
+        };
+    }, [isMobile, panelOpen, selectedStation, showTrends]);
+
+    useEffect(() => {
+        const map = mapRef.current;
+        const key = `${viewMode}:${stateFilter}`;
+        if (!map || !mapLoaded || loading || lastCameraKey.current === key) return;
+        lastCameraKey.current = key;
+        if (viewMode === 'recent' && stateFilter && STATE_CENTERS[stateFilter]) {
+            const points = recentRecords?.last7Days.filter(record => record.state === stateFilter && record.lat && record.lon) ?? [];
+            if (points.length > 1) {
+                map.fitBounds([[Math.min(...points.map(record => record.lon)), Math.min(...points.map(record => record.lat))],
+                    [Math.max(...points.map(record => record.lon)), Math.max(...points.map(record => record.lat))]],
+                { padding: cameraPadding(), absolutePadding: true, maxZoom: 7, duration: reduceMotion ? 0 : 500 });
+            } else if (points.length === 1) {
+                map.flyTo({ center: [points[0].lon, points[0].lat], zoom: 7, padding: cameraPadding(), duration: reduceMotion ? 0 : 500 });
+            } else {
+                map.flyTo({ center: STATE_CENTERS[stateFilter], zoom: 5, padding: cameraPadding(), duration: reduceMotion ? 0 : 500 });
+            }
+        } else {
+            map.fitBounds(CONUS_BOUNDS, { padding: cameraPadding(), absolutePadding: true, duration: 0 });
+        }
+    }, [cameraPadding, loading, mapLoaded, recentRecords, reduceMotion, stateFilter, viewMode]);
+
+    // Reposition the current camera when panels change without resetting the zoom.
+    useEffect(() => {
+        if (mapLoaded) mapRef.current?.easeTo({ padding: cameraPadding(), duration: 0 });
+    }, [cameraPadding, mapLoaded]);
+
     /** Fly to a specific location (station or state) */
     const flyToLocation = useCallback((lng: number, lat: number) => {
-        mapRef.current?.flyTo({ center: [lng, lat], zoom: 8, duration: 1200 });
-    }, []);
+        if (Number.isFinite(lng) && Number.isFinite(lat) && (lng !== 0 || lat !== 0)) {
+            mapRef.current?.flyTo({ center: [lng, lat], zoom: 8, padding: cameraPadding(), duration: reduceMotion ? 0 : 600 });
+        }
+    }, [cameraPadding, reduceMotion]);
+
+    const selectRecord = useCallback((record: BrokenRecord) => {
+        popupRef.current?.remove();
+        returnFocusKey.current = `${record.uid}-${record.date}-${record.type}`;
+        setSelectedStation({ uid: record.uid, name: record.stationName, state: record.stateName });
+        flyToLocation(record.lon, record.lat);
+    }, [flyToLocation]);
+
+    const closeStation = () => {
+        setSelectedStation(null);
+        requestAnimationFrame(() => {
+            if (returnFocusKey.current) document.querySelector<HTMLElement>(`[data-record-key="${returnFocusKey.current}"]`)?.focus();
+        });
+    };
 
     // Initialize map
     useEffect(() => {
@@ -441,6 +517,7 @@ export function TemperatureMap() {
 
         map.on('error', (e) => {
             console.error('MapLibre error:', e.error?.message || e);
+            if (/worker|webgl|context/i.test(e.error?.message || '')) setMapFailure(true);
         });
 
         map.on('load', () => {
@@ -1077,6 +1154,7 @@ export function TemperatureMap() {
 
             // Open station detail for broken records (which have uid)
             if (layerType === 'broken' && props.uid) {
+                returnFocusKey.current = null;
                 setSelectedStation({
                     uid: typeof props.uid === 'string' ? parseInt(props.uid, 10) : props.uid as number,
                     name: (props.stationName as string) || 'Unknown',
@@ -1239,26 +1317,45 @@ export function TemperatureMap() {
         });
     }, [mapLoaded]);
 
-    if (error) {
-        return (
-            <div className="flex items-center justify-center h-full bg-[#0a0a0a] text-zinc-400">
-                <div className="text-center p-8">
-                    <p className="text-lg mb-2">Failed to load temperature data</p>
-                    <p className="text-sm text-zinc-400 mb-4">{error}</p>
-                    <button
-                        onClick={() => window.location.reload()}
-                        className="px-4 py-2 text-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg border border-zinc-700 transition-colors"
-                    >
-                        Retry
-                    </button>
-                </div>
-            </div>
-        );
-    }
+    const renderKey = `${viewMode}:${recordType}:${activePeriod}:${stateFilter}:${scopeFilter}:${minimumMargin}`;
+    useEffect(() => {
+        const map = mapRef.current;
+        if (!map || !mapLoaded) return;
+        const sourceId = viewMode === 'recent' ? 'broken-records' : viewMode === 'state' ? 'state-records'
+            : viewMode === 'county' ? 'county-records' : 'freshness-records';
+        let cancelled = false;
+        const checkSource = () => {
+            if (!cancelled) setRenderedView(!loading && map.getSource(sourceId) && map.isSourceLoaded(sourceId) ? renderKey : '');
+        };
+        map.on('sourcedataloading', checkSource);
+        map.on('sourcedata', checkSource);
+        map.on('render', checkSource);
+        return () => {
+            cancelled = true;
+            map.off('sourcedataloading', checkSource);
+            map.off('sourcedata', checkSource);
+            map.off('render', checkSource);
+        };
+    }, [loading, mapLoaded, renderKey, viewMode]);
 
     return (
-        <div className="relative h-full w-full">
+        <div data-testid="temperature-map" data-map-state={error || mapFailure ? 'error' : mapLoaded && !loading && renderedView === renderKey ? 'ready' : 'loading'} className="relative h-full w-full [&_.maplibregl-ctrl-group_button]:h-11 [&_.maplibregl-ctrl-group_button]:w-11">
             <div ref={mapContainer} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+
+            {(error || mapFailure) && (
+                <div role="alert" className="absolute inset-0 z-10 flex items-center justify-center bg-[#0a0a0a] text-zinc-400">
+                    <div className="text-center p-8">
+                        <p className="text-lg mb-2">{mapFailure ? 'The temperature map could not start' : 'Failed to load temperature data'}</p>
+                        <p className="text-sm text-zinc-400 mb-4">{mapFailure ? 'Reload to try the map again.' : error}</p>
+                        <button
+                            onClick={() => window.location.reload()}
+                            className="px-4 py-2 text-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg border border-zinc-700 transition-colors"
+                        >
+                            Retry
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {loading && (
                 <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
@@ -1270,18 +1367,20 @@ export function TemperatureMap() {
             )}
 
             {/* Unified toolbar */}
-            <div className="absolute top-3 left-3 z-20 flex flex-col gap-1.5 max-w-[calc(100vw-7rem)]">
+            <div ref={toolbarRef} className="absolute top-3 left-3 z-20 flex flex-col gap-1.5 max-w-[calc(100vw-4.5rem)] sm:max-w-md">
                 <div className="flex items-center gap-1.5 overflow-x-auto">
                     <Link
                         to="/projects"
                         aria-label="Back to projects"
-                        className="bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white px-2.5 sm:px-3 py-1.5 rounded-lg text-sm border border-zinc-700/50 hover:border-zinc-600 transition-colors"
+                        className="bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white px-2.5 sm:px-3 py-1.5 min-h-11 min-w-11 rounded-lg text-sm border border-zinc-700/50 hover:border-zinc-600 transition-colors"
                     >
                         <span aria-hidden="true">←</span><span className="hidden sm:inline"> Projects</span>
                     </Link>
                     <button
                         onClick={toggleTrends}
-                        className={`bg-zinc-900/80 backdrop-blur px-3 py-1.5 rounded-lg text-sm border transition-colors ${showTrends
+                        aria-label="Record ages"
+                        aria-expanded={showTrends}
+                        className={`bg-zinc-900/80 backdrop-blur px-3 py-1.5 min-h-11 min-w-11 rounded-lg text-sm border transition-colors ${showTrends
                             ? 'text-violet-300 border-violet-400/50 bg-violet-900/30'
                             : 'text-violet-400 border-violet-500/30 hover:text-violet-300 hover:border-violet-400/50'
                             }`}
@@ -1290,7 +1389,7 @@ export function TemperatureMap() {
                     </button>
                     <button
                         onClick={() => setUseCelsius(c => !c)}
-                        className="bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white px-2.5 py-1.5 rounded-lg text-sm font-semibold border border-zinc-700/50 hover:border-zinc-600 transition-colors"
+                        className="bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white px-2.5 py-1.5 min-h-11 min-w-11 rounded-lg text-sm font-semibold border border-zinc-700/50 hover:border-zinc-600 transition-colors"
                         title={useCelsius ? 'Switch to °F' : 'Switch to °C'}
                         aria-label={useCelsius ? 'Switch to Fahrenheit' : 'Switch to Celsius'}
                     >
@@ -1298,7 +1397,7 @@ export function TemperatureMap() {
                     </button>
                     <button
                         onClick={() => setPanelOpen(p => !p)}
-                        className="bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white px-2.5 py-1.5 rounded-lg text-sm border border-zinc-700/50 hover:border-zinc-600 transition-colors"
+                        className="bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white px-2.5 py-1.5 min-h-11 min-w-11 rounded-lg text-sm border border-zinc-700/50 hover:border-zinc-600 transition-colors"
                         title={panelOpen ? 'Hide summary' : 'Show summary'}
                         aria-label={panelOpen ? 'Hide summary panel' : 'Show summary panel'}
                         aria-expanded={panelOpen}
@@ -1308,8 +1407,8 @@ export function TemperatureMap() {
                 </div>
                 <div className="flex gap-0.5 bg-zinc-900/80 backdrop-blur rounded-lg border border-zinc-700/50 p-0.5 overflow-x-auto">
                     <button
-                        onClick={() => setViewMode('recent')}
-                        className={`px-2.5 py-1.5 text-xs rounded transition-colors ${viewMode === 'recent'
+                        aria-pressed={viewMode === 'recent'} onClick={() => setViewMode('recent')}
+                        className={`px-2.5 py-1.5 min-h-11 text-xs rounded transition-colors ${viewMode === 'recent'
                             ? 'bg-zinc-700 text-white'
                             : 'text-zinc-400 hover:text-zinc-200'
                             }`}
@@ -1318,8 +1417,8 @@ export function TemperatureMap() {
                         <span className="sm:hidden">Recent</span><span className="hidden sm:inline">🌡️ Recent</span>
                     </button>
                     <button
-                        onClick={() => setViewMode('county')}
-                        className={`px-2.5 py-1.5 text-xs rounded transition-colors ${viewMode === 'county'
+                        aria-pressed={viewMode === 'county'} onClick={() => setViewMode('county')}
+                        className={`px-2.5 py-1.5 min-h-11 text-xs rounded transition-colors ${viewMode === 'county'
                             ? 'bg-zinc-700 text-white'
                             : 'text-zinc-400 hover:text-zinc-200'
                             }`}
@@ -1328,8 +1427,8 @@ export function TemperatureMap() {
                         <span className="sm:hidden">County</span><span className="hidden sm:inline">📍 County Extremes</span>
                     </button>
                     <button
-                        onClick={() => setViewMode('state')}
-                        className={`px-2.5 py-1.5 text-xs rounded transition-colors ${viewMode === 'state'
+                        aria-pressed={viewMode === 'state'} onClick={() => setViewMode('state')}
+                        className={`px-2.5 py-1.5 min-h-11 text-xs rounded transition-colors ${viewMode === 'state'
                             ? 'bg-zinc-700 text-white'
                             : 'text-zinc-400 hover:text-zinc-200'
                             }`}
@@ -1338,8 +1437,8 @@ export function TemperatureMap() {
                         <span className="sm:hidden">State</span><span className="hidden sm:inline">🏛️ State Extremes</span>
                     </button>
                     <button
-                        onClick={() => setViewMode('freshness')}
-                        className={`px-2.5 py-1.5 text-xs rounded transition-colors ${viewMode === 'freshness'
+                        aria-pressed={viewMode === 'freshness'} onClick={() => setViewMode('freshness')}
+                        className={`px-2.5 py-1.5 min-h-11 text-xs rounded transition-colors ${viewMode === 'freshness'
                             ? 'bg-zinc-700 text-white'
                             : 'text-zinc-400 hover:text-zinc-200'
                             }`}
@@ -1349,18 +1448,20 @@ export function TemperatureMap() {
                     </button>
                 </div>
                 {viewMode === 'recent' && (
-                    <RecentRecordFilters states={recentStates} state={stateFilter} scope={scopeFilter} minimumMargin={minimumMargin} onChange={updateSearchParam} />
+                    <RecentRecordFilters states={recentStates} state={stateFilter} scope={scopeFilter} minimumMargin={minimumMargin} onChange={updateSearchParam}
+                        activePeriod={activePeriod} onPeriodChange={period => updateSearchParam('period', period === 'last7Days' ? '7d' : '')} onClear={clearFilters} />
                 )}
                 {/* Context headline — promoted */}
                 <div className="max-w-md" aria-live="polite">
                     {viewMode === 'recent' && filteredRecentRecords && (
                         <p className="text-xs text-zinc-200 bg-zinc-900/80 backdrop-blur rounded-lg px-3 py-1.5 border border-zinc-700/50">
                             <span className="font-semibold" style={{ color: HIGH_TEMP_COLOR }}>{recentCounts.high.toLocaleString()}</span>
-                            {' daily/monthly station record highs and '}
+                            {' record highs · '}
                             <span className="font-semibold" style={{ color: LOW_TEMP_COLOR }}>{recentCounts.low.toLocaleString()}</span>
-                            {activePeriod === 'yesterday' ? ` record lows on ${getRecentObservationDate(filteredRecentRecords)}` : ' record lows in the latest 7-day window'} in the contiguous U.S.
-                            <span className="block text-[10px] text-zinc-400 mt-0.5">{recentCounts.daily.toLocaleString()} daily · {recentCounts.monthly.toLocaleString()} monthly</span>
-                            <span className="block text-[10px] text-zinc-500">Raw reporting-station events; not normalized for trend analysis.</span>
+                            {' record lows'}
+                            <span className="block text-zinc-300">{activePeriod === 'yesterday' ? getRecentObservationDate(filteredRecentRecords) : 'Latest 7-day window'} · Contiguous U.S.</span>
+                            <span className="block text-xs text-zinc-300 mt-0.5">{recentCounts.daily.toLocaleString()} daily · {recentCounts.monthly.toLocaleString()} monthly</span>
+                            <span className="hidden sm:block text-xs text-zinc-400">Raw reporting-station events; not normalized for trend analysis.</span>
                         </p>
                     )}
                     {viewMode === 'county' && countyRecords && (
@@ -1378,6 +1479,9 @@ export function TemperatureMap() {
                             Standing county extremes by record date — a survivor view, not a historical event rate
                         </p>
                     )}
+                </div>
+                <div className="bg-zinc-900/90 rounded-lg px-3 py-1.5 border border-zinc-700/50">
+                    <TemperatureDataStatus viewMode={viewMode} recentRecords={recentRecords} countyRecords={countyRecords} stateRecords={stateRecords} summary={summary} activePeriod={activePeriod} />
                 </div>
             </div>
 
@@ -1407,22 +1511,27 @@ export function TemperatureMap() {
                 </div>
             )}
             {/* Summary panel */}
-            {panelOpen && !showTrends && !selectedStation && (
-                <SummaryPanel
-                    viewMode={viewMode}
-                    recentRecords={filteredRecentRecords}
-                    countyRecords={countyRecords}
-                    stateRecords={stateRecords}
-                    recordType={recordType}
-                    onRecordTypeChange={setRecordType}
-                    useCelsius={useCelsius}
-                    onFlyTo={flyToLocation}
-                    onSelectState={setSelectedState}
-                    activePeriod={activePeriod}
-                    onPeriodChange={period => updateSearchParam('period', period === 'last7Days' ? '7d' : '')}
-                    recentSort={recentSort}
-                    onRecentSortChange={sort => updateSearchParam('sort', sort, 'departure')}
-                />
+            {panelOpen && !showTrends && (
+                <div hidden={selectedStation !== null}>
+                    <SummaryPanel
+                        key={viewMode === 'recent' ? `${activePeriod}:${stateFilter}:${scopeFilter}:${minimumMargin}` : viewMode}
+                        viewMode={viewMode}
+                        recentRecords={filteredRecentRecords}
+                        countyRecords={countyRecords}
+                        stateRecords={stateRecords}
+                        recordType={recordType}
+                        onRecordTypeChange={setRecordType}
+                        useCelsius={useCelsius}
+                        onFlyTo={flyToLocation}
+                        onSelectRecord={selectRecord}
+                        filtersActive={filtersActive}
+                        onSelectState={setSelectedState}
+                        activePeriod={activePeriod}
+                        onPeriodChange={period => updateSearchParam('period', period === 'last7Days' ? '7d' : '')}
+                        recentSort={recentSort}
+                        onRecentSortChange={sort => updateSearchParam('sort', sort, 'departure')}
+                    />
+                </div>
             )}
 
             {/* Station detail panel — shown when a broken record station is clicked */}
@@ -1432,115 +1541,16 @@ export function TemperatureMap() {
                     stationName={selectedStation.name}
                     state={selectedStation.state}
                     useCelsius={useCelsius}
-                    onClose={() => setSelectedStation(null)}
+                    onClose={closeStation}
                 />
             )}
 
-            {/* Standing record ages drawer — responsive: side-by-side on desktop, tabbed on mobile */}
             {showTrends && (
-                <div
-                    className="absolute bottom-0 left-0 right-0 z-30 bg-zinc-900/95 backdrop-blur-sm border-t border-zinc-700/50 flex flex-col"
-                    style={{ height: isMobile ? '50%' : '35%', minHeight: 220 }}
-                >
-                    {/* Drawer header */}
-                    <div className="shrink-0 flex items-center justify-between px-4 py-1.5 border-b border-zinc-800">
-                        <h2 className="text-sm font-semibold text-zinc-200">Standing Record Ages</h2>
-                        <button
-                            onClick={closeTrends}
-                            className="text-zinc-400 hover:text-zinc-200 w-7 h-7 flex items-center justify-center rounded hover:bg-zinc-800 transition-colors text-sm"
-                            aria-label="Close trends panel"
-                        >
-                            ✕
-                        </button>
-                    </div>
-
-                    {trendsError ? (
-                        <div className="flex-1 flex items-center justify-center px-4 text-center">
-                            <div>
-                                <p className="text-sm font-medium text-zinc-200">Failed to load trends</p>
-                                <p className="mt-1 text-xs text-zinc-500">{trendsError}</p>
-                            </div>
-                        </div>
-                    ) : trendsLoading || !trends ? (
-                        <div className="flex-1 flex items-center justify-center">
-                            <div className="flex items-center gap-2.5">
-                                <div className="w-4 h-4 border-2 border-zinc-600 border-t-zinc-300 rounded-full animate-spin" />
-                                <span className="text-zinc-400 text-sm">Loading trends…</span>
-                            </div>
-                        </div>
-                    ) : isMobile ? (
-                        <MobileTrendsDrawer
-                            trends={trends}
-                            setHighlightRange={setHighlightRange}
-                            selectedDecade={selectedDecade}
-                            handleSelectDecade={handleSelectDecade}
-                        />
-                    ) : (
-                        <div className="flex-1 min-h-0 flex gap-1 px-2 py-1.5">
-                            <div className="flex-1 min-w-0 flex flex-col">
-                                <span className="text-xs text-zinc-400 px-1 mb-0.5 shrink-0">Record Age</span>
-                                <div className="flex-1 min-h-0">
-                                    <RecordAgeChart data={trends.byDecade} onHoverPeriod={setHighlightRange} selectedDecade={selectedDecade} onSelectDecade={handleSelectDecade} compact />
-                                </div>
-                            </div>
-                            <div className="w-px bg-zinc-800 shrink-0" />
-                            <div className="flex-1 min-w-0 flex flex-col">
-                                <span className="text-xs text-zinc-400 px-1 mb-0.5 shrink-0">Survivors by Year Set</span>
-                                <div className="flex-1 min-h-0">
-                                    <RecordsBrokenTimeSeries data={trends.byYear} onHoverPeriod={setHighlightRange} selectedDecade={selectedDecade} onSelectDecade={handleSelectDecade} compact />
-                                </div>
-                            </div>
-                            <div className="w-px bg-zinc-800 shrink-0" />
-                            <div className="flex-1 min-w-0 flex flex-col">
-                                <span className="text-xs text-zinc-400 px-1 mb-0.5 shrink-0">H:L Ratio</span>
-                                <div className="flex-1 min-h-0">
-                                    <HighLowRatioChart decadeData={trends.byDecade} rollingData={trends.rollingRatio} onHoverPeriod={setHighlightRange} selectedDecade={selectedDecade} onSelectDecade={handleSelectDecade} compact />
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
+                <Suspense fallback={<div role="status" className="absolute bottom-0 inset-x-0 z-30 bg-zinc-900 p-4 text-zinc-200">Loading record ages…</div>}>
+                    <TemperatureTrendsDrawer isMobile={isMobile} closeTrends={closeTrends} setHighlightRange={setHighlightRange}
+                        selectedDecade={selectedDecade} handleSelectDecade={handleSelectDecade} />
+                </Suspense>
             )}
         </div>
-    );
-}
-
-/** Mobile trends drawer — swipeable tabs instead of side-by-side charts */
-function MobileTrendsDrawer({ trends, setHighlightRange, selectedDecade, handleSelectDecade }: {
-    trends: { byDecade: import('../types').DecadeData[]; byYear: import('../types').YearData[]; rollingRatio: import('../types').RollingRatioData[] };
-    setHighlightRange: (range: HighlightRange | null) => void;
-    selectedDecade: number | null;
-    handleSelectDecade: (decade: number | null) => void;
-}) {
-    const [activeTab, setActiveTab] = useState<'age' | 'freq' | 'ratio'>('age');
-
-    return (
-        <>
-            <div className="flex border-b border-zinc-800 shrink-0">
-                {([['age', 'Record Age'], ['freq', 'Survivors/Year'], ['ratio', 'Surviving H:L']] as const).map(([id, label]) => (
-                    <button
-                        key={id}
-                        onClick={() => setActiveTab(id)}
-                        className={`flex-1 px-2 py-1.5 text-[11px] transition-colors ${activeTab === id
-                            ? 'text-violet-400 border-b-2 border-violet-400'
-                            : 'text-zinc-400 hover:text-zinc-300'
-                            }`}
-                    >
-                        {label}
-                    </button>
-                ))}
-            </div>
-            <div className="flex-1 min-h-0 px-2 py-1.5">
-                {activeTab === 'age' && (
-                    <RecordAgeChart data={trends.byDecade} onHoverPeriod={setHighlightRange} selectedDecade={selectedDecade} onSelectDecade={handleSelectDecade} compact />
-                )}
-                {activeTab === 'freq' && (
-                    <RecordsBrokenTimeSeries data={trends.byYear} onHoverPeriod={setHighlightRange} selectedDecade={selectedDecade} onSelectDecade={handleSelectDecade} compact />
-                )}
-                {activeTab === 'ratio' && (
-                    <HighLowRatioChart decadeData={trends.byDecade} rollingData={trends.rollingRatio} onHoverPeriod={setHighlightRange} selectedDecade={selectedDecade} onSelectDecade={handleSelectDecade} compact />
-                )}
-            </div>
-        </>
     );
 }

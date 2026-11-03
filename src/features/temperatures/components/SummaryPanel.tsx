@@ -1,6 +1,6 @@
 import { useState, useMemo, useRef } from 'react';
 import type { RecentRecords, TimePeriod, BrokenRecord, CountyRecordsCollection, StateRecordsCollection, ViewMode } from '../types';
-import { TIME_PERIODS, TIME_PERIOD_LABELS, HIGH_TEMP_COLOR, LOW_TEMP_COLOR, yearToColor } from '../constants';
+import { HIGH_TEMP_COLOR, LOW_TEMP_COLOR, yearToColor } from '../constants';
 import { formatComparisonPeriod, formatTemp } from '../utils/temperature';
 
 type FreshnessSort = 'hottest' | 'coldest' | 'oldest' | 'newest';
@@ -24,6 +24,8 @@ interface SummaryPanelProps {
     onRecordTypeChange: (type: TemperatureRecordType) => void;
     useCelsius: boolean;
     onFlyTo?: (lng: number, lat: number) => void;
+    onSelectRecord?: (record: BrokenRecord) => void;
+    filtersActive?: boolean;
     onSelectState?: (state: string) => void;
     activePeriod: TimePeriod;
     onPeriodChange: (period: TimePeriod) => void;
@@ -31,7 +33,7 @@ interface SummaryPanelProps {
     onRecentSortChange?: (sort: RecordSort) => void;
 }
 
-export function SummaryPanel({ viewMode, recentRecords, countyRecords, stateRecords, recordType, onRecordTypeChange, useCelsius, onFlyTo, onSelectState, activePeriod, onPeriodChange, recentSort, onRecentSortChange }: SummaryPanelProps) {
+export function SummaryPanel({ viewMode, recentRecords, countyRecords, stateRecords, recordType, onRecordTypeChange, useCelsius, onFlyTo, onSelectState, activePeriod, onPeriodChange, recentSort, onRecentSortChange, onSelectRecord, filtersActive }: SummaryPanelProps) {
     if (viewMode === 'freshness') {
         return (
             <FreshnessPanel
@@ -70,7 +72,7 @@ export function SummaryPanel({ viewMode, recentRecords, countyRecords, stateReco
 
     if (!recentRecords) return null;
 
-    return <RecordsPanel recentRecords={recentRecords} useCelsius={useCelsius} onFlyTo={onFlyTo} activePeriod={activePeriod} onPeriodChange={onPeriodChange} sort={recentSort} onSortChange={onRecentSortChange} />;
+    return <RecordsPanel recentRecords={recentRecords} useCelsius={useCelsius} onFlyTo={onFlyTo} activePeriod={activePeriod} onPeriodChange={onPeriodChange} sort={recentSort} onSortChange={onRecentSortChange} onSelectRecord={onSelectRecord} filtersActive={filtersActive} />;
 }
 
 /* ---------- Records mode panel ---------- */
@@ -108,7 +110,7 @@ function sortRecords(records: BrokenRecord[], sort: RecordSort): BrokenRecord[] 
     }
 }
 
-function RecordsPanel({ recentRecords, useCelsius, onFlyTo, activePeriod, onPeriodChange, sort = 'departure', onSortChange }: { recentRecords: RecentRecords; useCelsius: boolean; onFlyTo?: (lng: number, lat: number) => void; activePeriod: TimePeriod; onPeriodChange: (period: TimePeriod) => void; sort?: RecordSort; onSortChange?: (sort: RecordSort) => void }) {
+function RecordsPanel({ recentRecords, useCelsius, onFlyTo, activePeriod, onPeriodChange, sort = 'departure', onSortChange, onSelectRecord, filtersActive }: { recentRecords: RecentRecords; useCelsius: boolean; onFlyTo?: (lng: number, lat: number) => void; activePeriod: TimePeriod; onPeriodChange: (period: TimePeriod) => void; sort?: RecordSort; onSortChange?: (sort: RecordSort) => void; onSelectRecord?: (record: BrokenRecord) => void; filtersActive?: boolean }) {
     const [highsVisible, setHighsVisible] = useState(PAGE_SIZE);
     const [lowsVisible, setLowsVisible] = useState(PAGE_SIZE);
     const highsRef = useRef<HTMLDivElement>(null);
@@ -140,38 +142,12 @@ function RecordsPanel({ recentRecords, useCelsius, onFlyTo, activePeriod, onPeri
     );
 
     const handleRowClick = (record: BrokenRecord) => {
-        if (onFlyTo) onFlyTo(record.lon, record.lat);
+        if (onSelectRecord) onSelectRecord(record);
+        else onFlyTo?.(record.lon, record.lat);
     };
 
     return (
-        <div className="absolute bottom-0 left-0 right-0 z-20 max-h-[40dvh] md:bottom-auto md:top-14 md:right-4 md:left-auto md:w-80 md:max-h-[calc(100dvh-6rem)] overflow-hidden flex flex-col bg-zinc-900/90 backdrop-blur md:rounded-lg border-t md:border border-zinc-700/50 text-zinc-200">
-            {/* Tabs */}
-            <div className="flex border-b border-zinc-700/50 shrink-0">
-                {TIME_PERIODS.map(period => (
-                    <button
-                        key={period}
-                        onClick={() => handlePeriodChange(period)}
-                        className={`flex-1 min-w-0 px-3 py-2 text-xs whitespace-nowrap transition-colors ${activePeriod === period
-                            ? 'text-violet-400 border-b-2 border-violet-400'
-                            : 'text-zinc-400 hover:text-zinc-200'
-                            }`}
-                        title={recentRecords.asOf
-                            ? period === 'yesterday'
-                                ? recentRecords.asOf
-                                : (() => {
-                                    const end = new Date(recentRecords.asOf + 'T00:00:00');
-                                    const start = new Date(end);
-                                    start.setDate(start.getDate() - 6);
-                                    const fmt = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-                                    return `${fmt(start)} – ${fmt(end)}`;
-                                })()
-                            : undefined}
-                    >
-                        {TIME_PERIOD_LABELS[period]}
-                    </button>
-                ))}
-            </div>
-
+        <div data-temperature-panel className="absolute bottom-0 left-0 right-0 z-20 max-h-[40dvh] md:bottom-auto md:top-14 md:right-4 md:left-auto md:w-80 md:max-h-[calc(100dvh-6rem)] overflow-hidden flex flex-col bg-zinc-900/90 backdrop-blur md:rounded-lg border-t md:border border-zinc-700/50 text-zinc-200">
             {/* Summary bar — clickable to scroll to section */}
             <div className="px-3 py-2 border-b border-zinc-800 flex gap-4 text-xs shrink-0" aria-live="polite">
                 <button
@@ -211,7 +187,7 @@ function RecordsPanel({ recentRecords, useCelsius, onFlyTo, activePeriod, onPeri
             <div className="overflow-y-auto flex-1 p-3 space-y-4">
                 {records.length === 0 ? (
                     <div className="text-center py-6 space-y-2">
-                        <p className="text-zinc-400 text-sm">No records broken {activePeriod === 'yesterday' ? 'yesterday' : 'in the last 7 days'}</p>
+                        <p className="text-zinc-400 text-sm">{filtersActive ? 'No records match these filters' : `No records broken ${activePeriod === 'yesterday' ? 'yesterday' : 'in the last 7 days'}`}</p>
                         {activePeriod === 'yesterday' && (
                             <button
                                 onClick={() => handlePeriodChange('last7Days')}
@@ -340,7 +316,7 @@ function CountyRecordsPanel({ countyRecords, recordType, onRecordTypeChange, use
     }, [rows, sort]);
 
     return (
-        <div className="absolute bottom-0 left-0 right-0 z-20 max-h-[40dvh] md:bottom-auto md:top-14 md:right-4 md:left-auto md:w-80 md:max-h-[calc(100dvh-6rem)] overflow-hidden flex flex-col bg-zinc-900/90 backdrop-blur md:rounded-lg border-t md:border border-zinc-700/50 text-zinc-200">
+        <div data-temperature-panel className="absolute bottom-0 left-0 right-0 z-20 max-h-[40dvh] md:bottom-auto md:top-14 md:right-4 md:left-auto md:w-80 md:max-h-[calc(100dvh-6rem)] overflow-hidden flex flex-col bg-zinc-900/90 backdrop-blur md:rounded-lg border-t md:border border-zinc-700/50 text-zinc-200">
             {/* High / Low toggle */}
             <div className="flex border-b border-zinc-700/50 shrink-0">
                 {(['high', 'low'] as const).map(t => (
@@ -385,7 +361,7 @@ function CountyRecordsPanel({ countyRecords, recordType, onRecordTypeChange, use
                     <button
                         key={`${r.state}-${r.countyName}-${i}`}
                         onClick={() => onFlyTo?.(r.lng, r.lat)}
-                        className="w-full text-left rounded px-1.5 py-1 -mx-1 hover:bg-zinc-800/80 transition-colors cursor-pointer group"
+                        className="w-full min-h-11 text-left rounded px-1.5 py-1.5 -mx-1 hover:bg-zinc-800/80 transition-colors cursor-pointer group"
                         title={`${r.countyName}, ${r.state} — click to fly to location`}
                     >
                         <div className="flex items-baseline gap-2 text-xs">
@@ -480,7 +456,7 @@ function StateRecordsPanel({ stateRecords, recordType, onRecordTypeChange, useCe
     }, [rows, sort]);
 
     return (
-        <div className="absolute bottom-0 left-0 right-0 z-20 max-h-[40dvh] md:bottom-auto md:top-14 md:right-4 md:left-auto md:w-80 md:max-h-[calc(100dvh-6rem)] overflow-hidden flex flex-col bg-zinc-900/90 backdrop-blur md:rounded-lg border-t md:border border-zinc-700/50 text-zinc-200">
+        <div data-temperature-panel className="absolute bottom-0 left-0 right-0 z-20 max-h-[40dvh] md:bottom-auto md:top-14 md:right-4 md:left-auto md:w-80 md:max-h-[calc(100dvh-6rem)] overflow-hidden flex flex-col bg-zinc-900/90 backdrop-blur md:rounded-lg border-t md:border border-zinc-700/50 text-zinc-200">
             {/* High / Low toggle */}
             <div className="flex border-b border-zinc-700/50 shrink-0">
                 {(['high', 'low'] as const).map(t => (
@@ -527,7 +503,7 @@ function StateRecordsPanel({ stateRecords, recordType, onRecordTypeChange, useCe
                         onClick={() => {
                             onSelectState?.(r.state);
                         }}
-                        className="w-full text-left rounded px-1.5 py-1 -mx-1 hover:bg-zinc-800/80 transition-colors cursor-pointer group"
+                        className="w-full min-h-11 text-left rounded px-1.5 py-1.5 -mx-1 hover:bg-zinc-800/80 transition-colors cursor-pointer group"
                         title={`${r.stateName} — click to fly to location`}
                     >
                         <div className="flex items-baseline gap-2 text-xs">
@@ -615,7 +591,7 @@ function FreshnessPanel({ countyRecords, recordType, onRecordTypeChange, useCels
     }, [rows, sort]);
 
     return (
-        <div className="absolute bottom-0 left-0 right-0 z-20 max-h-[40dvh] md:bottom-auto md:top-14 md:right-4 md:left-auto md:w-80 md:max-h-[calc(100dvh-6rem)] overflow-hidden flex flex-col bg-zinc-900/90 backdrop-blur md:rounded-lg border-t md:border border-zinc-700/50 text-zinc-200">
+        <div data-temperature-panel className="absolute bottom-0 left-0 right-0 z-20 max-h-[40dvh] md:bottom-auto md:top-14 md:right-4 md:left-auto md:w-80 md:max-h-[calc(100dvh-6rem)] overflow-hidden flex flex-col bg-zinc-900/90 backdrop-blur md:rounded-lg border-t md:border border-zinc-700/50 text-zinc-200">
             {/* High / Low toggle */}
             <div className="flex border-b border-zinc-700/50 shrink-0">
                 {(['high', 'low'] as const).map(t => (
@@ -676,7 +652,7 @@ function FreshnessRowItem({ row, rank, useCelsius, onFlyTo }: { row: FreshnessRo
     return (
         <button
             onClick={() => onFlyTo?.(row.lng, row.lat)}
-            className="w-full text-left rounded px-1.5 py-1 -mx-1 hover:bg-zinc-800/80 transition-colors cursor-pointer group"
+            className="w-full min-h-11 text-left rounded px-1.5 py-1.5 -mx-1 hover:bg-zinc-800/80 transition-colors cursor-pointer group"
             title={`${row.countyName}, ${row.state} — click to fly to location`}
         >
             <div className="flex items-baseline gap-2 text-xs">
@@ -710,19 +686,19 @@ function RecordRow({ record, rank, sort, useCelsius, onClick }: { record: Broken
         switch (sort) {
             case 'temp':
                 return (
-                    <span style={{ color: color + '99' }}>
+                    <span className="text-zinc-300">
                         {arrow}{formatMargin(margin)}° vs prev {formatTemp(record.prevRecordF, useCelsius)} ({record.prevRecordDate.slice(0, 4)})
                     </span>
                 );
             case 'margin':
                 return (
-                    <span style={{ color: color + '99' }}>
+                    <span className="text-zinc-300">
                         {arrow}{formatMargin(margin)}° — prev {formatTemp(record.prevRecordF, useCelsius)} ({record.prevRecordDate.slice(0, 4)})
                     </span>
                 );
             case 'departure':
                 return record.normalF != null ? (
-                    <span style={{ color: color + '99' }}>
+                    <span className="text-zinc-300">
                         {departureArrow}{formatMargin(Math.abs(departure))}° from {formatComparisonPeriod(record.date)} {formatTemp(record.normalF, useCelsius)}
                     </span>
                 ) : (
@@ -733,9 +709,9 @@ function RecordRow({ record, rank, sort, useCelsius, onClick }: { record: Broken
 
     // Bold metric shown next to temp when sort != 'temp'
     const sortBadge = sort === 'margin'
-        ? <span className="text-xs tabular-nums" style={{ color: color + 'cc' }}>+{formatMargin(margin)}°</span>
+        ? <span className="text-xs tabular-nums text-zinc-200">+{formatMargin(margin)}°</span>
         : sort === 'departure' && record.normalF != null
-            ? <span className="text-xs tabular-nums" style={{ color: color + 'cc' }}>
+            ? <span className="text-xs tabular-nums text-zinc-200">
                 {departure >= 0 ? '+' : '−'}{formatMargin(Math.abs(departure))}°
             </span>
             : null;
@@ -744,8 +720,9 @@ function RecordRow({ record, rank, sort, useCelsius, onClick }: { record: Broken
         <li>
             <button
                 onClick={() => onClick(record)}
-                className="w-full text-left rounded px-1.5 py-1 -mx-1 hover:bg-zinc-800/80 transition-colors cursor-pointer group"
-                title={`${record.stationName}, ${record.stateName} — click to fly to location`}
+                className="w-full min-h-11 text-left rounded px-1.5 py-1.5 -mx-1 hover:bg-zinc-800/80 transition-colors cursor-pointer group"
+                title={`${record.stationName}, ${record.stateName} — open station details`}
+                data-record-key={`${record.uid}-${record.date}-${record.type}`}
             >
                 <div className="flex items-baseline gap-2 text-xs">
                     <span className="text-zinc-500 w-4 text-right shrink-0">{rank}.</span>

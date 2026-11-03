@@ -52,6 +52,8 @@ The duplicate photos, unused galleries, and stale heading IDs are corrected loca
 
 ### Temperature record data
 
+- [ ] Run a full temperature sync after deployment. Verify California and all per-date state coverage. See [the map guide](docs/temperature-map.md#freshness-and-coverage).
+
 The historical signal is not ready for publication.
 
 - [ ] Build an ACIS extraction command that can continue after an interruption. Retain raw responses and request manifests.

@@ -83,7 +83,7 @@ test('temperature map keeps the mobile map open before showing record details', 
 
     await expect(page.getByText('0 daily · 1 monthly')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Show summary panel' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Yesterday' })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Yesterday' })).toBeVisible();
 
     await page.getByRole('button', { name: 'Show summary panel' }).click();
     await expect(page.getByRole('button', { name: 'Yesterday' })).toBeVisible();

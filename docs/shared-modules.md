@@ -32,6 +32,14 @@ The generic type parameter does not validate a response.
 Keep trip route loading in its existing module.
 Its reader tracking and cancellation rules differ from this cache.
 
+## MapLibre maps
+
+Import MapLibre runtime values from [`src/maps/maplibre.ts`](../src/maps/maplibre.ts).
+This entry point sets the bundled worker URL before a map starts.
+Use it for full-page maps and embedded trip maps.
+Type-only imports can use `maplibre-gl` directly.
+Keep styles and attribution in [`cartoBasemaps.ts`](../src/maps/cartoBasemaps.ts).
+
 ## U.S. geography
 
 Import state identity data from [`shared/geography/usStates.ts`](../shared/geography/usStates.ts).

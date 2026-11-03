@@ -50,6 +50,7 @@ import { tmpdir } from 'os';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { createHash } from 'crypto';
+import { writeAtomically } from './atomic-write.js';
 import { usStates } from '../shared/geography/usStates.ts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -356,7 +357,7 @@ async function cachedPostJson(url, params, category) {
 
     // Try S3 cache first
     const cached = await readCacheFromS3(key);
-    if (cached) {
+    if (cached && !cached.error && Array.isArray(cached.data) && cached.data.length > 0) {
         ACIS_CACHE_STATS.hits++;
         return cached;
     }
@@ -365,7 +366,10 @@ async function cachedPostJson(url, params, category) {
     ACIS_CACHE_STATS.misses++;
     const data = await postJson(url, params);
 
-    // Write through to local disk for later S3 upload
+    // Failed or empty responses must be retried, rather than cached as valid data.
+    if (data.error || !Array.isArray(data.data) || data.data.length === 0) {
+        throw new Error(data.error || 'ACIS returned no station data');
+    }
     writeCacheLocal(key, data);
     return data;
 }
@@ -455,7 +459,7 @@ function isPlausible(type, tempF, state, date) {
     return true;
 }
 
-async function fetchCountyRecordsForState(stateAbbr) {
+export async function fetchCountyRecordsForState(stateAbbr) {
     const fips = ABBR_TO_FIPS[stateAbbr];
     if (!fips) return [];
 
@@ -492,13 +496,13 @@ async function fetchCountyRecordsForState(stateAbbr) {
             `county-alltime/${stateAbbr}`
         );
         if (data.error) {
-            console.warn(`  ACIS error for ${stateAbbr}: ${data.error}`);
-            return [];
+            throw new Error(data.error);
         }
 
+        if (!Array.isArray(data.data) || data.data.length === 0) throw new Error('No station records returned');
         const stationRecords = [];
 
-        for (const station of data.data || []) {
+        for (const station of data.data) {
             const meta = station.meta;
             if (!meta?.ll || !meta.county) continue;
 
@@ -547,8 +551,7 @@ async function fetchCountyRecordsForState(stateAbbr) {
 
         return stationRecords;
     } catch (err) {
-        console.warn(`  Failed to fetch station data for ${stateAbbr}: ${err.message}`);
-        return [];
+        throw new Error(`County records for ${stateAbbr}: ${err.message}`, { cause: err });
     }
 }
 
@@ -592,7 +595,10 @@ async function fetchCountyMeta() {
             const data = await fetchJson(
                 `https://data.rcc-acis.org/General/county?state=${stateAbbr}&meta=id,name,bbox,state`
             );
-            for (const county of data.meta || []) {
+            if (data.error || !Array.isArray(data.meta) || data.meta.length === 0) {
+                throw new Error(data.error || 'No county metadata returned');
+            }
+            for (const county of data.meta) {
                 if (county.bbox) {
                     const [west, south, east, north] = county.bbox;
                     allCounties.set(county.id, {
@@ -604,8 +610,8 @@ async function fetchCountyMeta() {
                     });
                 }
             }
-        } catch {
-            // continue on failure
+        } catch (error) {
+            throw new Error(`County metadata for ${stateAbbr}: ${error.message}`, { cause: error });
         }
         await sleep(100);
     }
@@ -622,7 +628,7 @@ const STATE_CONCURRENCY = 8; // Number of states to fetch in parallel
  * Fetch observations and historical records for a single state on a single date.
  * Returns { broken, observations, stations } for merging into the main result.
  */
-async function fetchStateForDate(abbr, dateStr, mmdd, year) {
+export async function fetchStateForDate(abbr, dateStr, mmdd, year) {
     const broken = [];
     const observations = [];
     const stations = new Map();
@@ -636,7 +642,9 @@ async function fetchStateForDate(abbr, dateStr, mmdd, year) {
             elems: ['maxt', 'mint'],
         });
 
-        if (obs.error) return { broken, observations, stations };
+        if (obs.error || !Array.isArray(obs.data) || obs.data.length === 0) {
+            throw new Error(obs.error || 'No station observations returned');
+        }
         await sleep(200);
 
         // Query 2: historical records + normals for this calendar date (all prior years)
@@ -657,7 +665,9 @@ async function fetchStateForDate(abbr, dateStr, mmdd, year) {
             `hist-daily/${abbr}/${mmdd}`
         );
 
-        if (hist.error) return { broken, observations, stations };
+        if (hist.error || !Array.isArray(hist.data) || hist.data.length === 0) {
+            throw new Error(hist.error || 'No historical station records returned');
+        }
 
         // Build uid → historical record map
         const histMap = {};
@@ -666,19 +676,21 @@ async function fetchStateForDate(abbr, dateStr, mmdd, year) {
             const smry = stn.smry;
             if (!uid || !smry || smry.length < 2) continue;
             if (smry[0][0] === 'M' && smry[1][0] === 'M') continue;
+            const normalHigh = numberOrNull(smry[2]);
+            const normalLow = numberOrNull(smry[3]);
             histMap[uid] = {
-                recordHigh: smry[0][0] !== 'M' ? parseFloat(smry[0][0]) : null,
+                recordHigh: numberOrNull(smry[0][0]),
                 recordHighDate: smry[0][1] || '',
-                recordLow: smry[1][0] !== 'M' ? parseFloat(smry[1][0]) : null,
+                recordLow: numberOrNull(smry[1][0]),
                 recordLowDate: smry[1][1] || '',
-                normalHigh: smry.length > 2 && smry[2] !== 'M' ? Math.round(parseFloat(smry[2])) : null,
-                normalLow: smry.length > 3 && smry[3] !== 'M' ? Math.round(parseFloat(smry[3])) : null,
+                normalHigh: normalHigh === null ? null : Math.round(normalHigh),
+                normalLow: normalLow === null ? null : Math.round(normalLow),
             };
         }
 
         // Query 3: monthly extremes — all-time high/low for this calendar month
         const mm = mmdd.slice(0, 2); // "03"
-        const lastDayOfMonth = new Date(year, parseInt(mm, 10), 0).getDate();
+        const lastDayOfMonth = new Date(Date.UTC(year - 1, parseInt(mm, 10), 0)).getUTCDate();
         const monthlyParams = {
             state: abbr,
             sdate: `1950-${mm}-01`,
@@ -693,17 +705,18 @@ async function fetchStateForDate(abbr, dateStr, mmdd, year) {
             'https://data.rcc-acis.org/MultiStnData', monthlyParams,
             `monthly-extremes/${abbr}/${mm}`
         );
+        if (monthly.error || !Array.isArray(monthly.data) || monthly.data.length === 0) {
+            throw new Error(monthly.error || 'No monthly station records returned');
+        }
         const monthlyMap = {};
-        if (!monthly.error) {
-            for (const stn of monthly.data || []) {
-                const uid = stn.meta?.uid;
-                const smry = stn.smry;
-                if (!uid || !smry || smry.length < 2) continue;
-                monthlyMap[uid] = {
-                    monthlyHigh: smry[0] !== 'M' ? parseFloat(smry[0]) : null,
-                    monthlyLow: smry[1] !== 'M' ? parseFloat(smry[1]) : null,
-                };
-            }
+        for (const stn of monthly.data) {
+            const uid = stn.meta?.uid;
+            const smry = stn.smry;
+            if (!uid || !smry || smry.length < 2) continue;
+            monthlyMap[uid] = {
+                monthlyHigh: numberOrNull(smry[0]),
+                monthlyLow: numberOrNull(smry[1]),
+            };
         }
 
         // Compare observations against historical records
@@ -731,8 +744,8 @@ async function fetchStateForDate(abbr, dateStr, mmdd, year) {
             }
 
             // Archive ALL valid observations
-            const maxt = maxtStr !== 'M' && maxtStr !== 'T' ? parseFloat(maxtStr) : null;
-            const mint = mintStr !== 'M' && mintStr !== 'T' ? parseFloat(mintStr) : null;
+            const maxt = numberOrNull(maxtStr);
+            const mint = numberOrNull(mintStr);
             if (maxt != null || mint != null) {
                 const obsEntry = { uid, maxt, mint };
                 if (rec) {
@@ -800,15 +813,17 @@ async function fetchStateForDate(abbr, dateStr, mmdd, year) {
                 }
             }
         }
-    } catch {
-        // continue on failure
+        if (observations.length === 0) throw new Error('No usable station observations returned');
+    } catch (error) {
+        throw new Error(`Recent records for ${abbr} on ${dateStr}: ${error.message}`, { cause: error });
     }
 
     return { broken, observations, stations };
 }
 
 function numberOrNull(value) {
-    if (value == null || value === '' || value === 'M' || value === 'T') return null;
+    if (typeof value !== 'number' && typeof value !== 'string') return null;
+    if (typeof value === 'string' && value.trim() === '') return null;
     const numericValue = Number(value);
     return Number.isFinite(numericValue) ? numericValue : null;
 }
@@ -951,6 +966,7 @@ async function fetchRecentRecords(numDays = 7) {
     // cover that date, rebuild its rows from the daily archive before falling
     // back to slow ACIS fetches.
     const skippedDates = [];
+    const coverageByDate = {};
     const datesToFetch = [];
     const rebuiltBroken = [];
     let previousStationIndex = null;
@@ -962,13 +978,15 @@ async function fetchRecentRecords(numDays = 7) {
 
     for (const dateStr of allDates) {
         if (await dailyExistsOnS3(dateStr)) {
-            if (previousDateSet.has(dateStr)) {
+            if (previousDateSet.has(dateStr) && completeStateCoverage(previousRecentRecords?.coverageByDate?.[dateStr], stateAbbrs)) {
+                coverageByDate[dateStr] = previousRecentRecords.coverageByDate[dateStr];
                 console.log(`  ✅ ${dateStr} — already on S3 and present in summary, skipping ACIS fetch`);
                 skippedDates.push(dateStr);
             } else {
                 const archive = await loadDailyObservationArchive(dateStr);
                 const archivedStationIndex = await getPreviousStationIndex();
-                if (archive && archivedStationIndex.size > 0) {
+                if (archive && archivedStationIndex.size > 0 && completeStateCoverage(archive.coverage, stateAbbrs)) {
+                    coverageByDate[dateStr] = archive.coverage;
                     const restoredBroken = buildBrokenRecordsFromDailyArchive(dateStr, archive, archivedStationIndex);
                     console.log(`  ♻️ ${dateStr} — rebuilt ${restoredBroken.length} broken records from daily archive`);
                     rebuiltBroken.push(...restoredBroken);
@@ -991,7 +1009,7 @@ async function fetchRecentRecords(numDays = 7) {
 
     if (datesToFetch.length === 0) {
         console.log('\n  All dates already archived on S3, nothing to fetch.');
-        const recentRecords = buildRecentRecords(todayStr, yesterdayStr, allBroken, allDates);
+        const recentRecords = { ...buildRecentRecords(todayStr, yesterdayStr, allBroken, allDates), generatedAt: new Date().toISOString(), coverageByDate };
         validateRecentRecords(recentRecords, allDates);
         return {
             recentRecords,
@@ -1037,13 +1055,14 @@ async function fetchRecentRecords(numDays = 7) {
             await sleep(200); // Brief pause between batches
         }
 
+        coverageByDate[dateStr] = { expectedStates: stateAbbrs, completedStates: [...stateAbbrs] };
         const dayHighs = allBroken.filter(r => r.date === dateStr && r.type === 'high').length;
         const dayLows = allBroken.filter(r => r.date === dateStr && r.type === 'low').length;
         const dayBroken = dayHighs + dayLows;
         console.log(`  ${dateStr}: 🔥 ${dayHighs} highs, ❄️ ${dayLows} lows (${dayBroken} total)`);
     }
 
-    const recentRecords = buildRecentRecords(todayStr, yesterdayStr, allBroken, allDates);
+    const recentRecords = { ...buildRecentRecords(todayStr, yesterdayStr, allBroken, allDates), generatedAt: new Date().toISOString(), coverageByDate };
     validateRecentRecords(recentRecords, allDates);
 
     const yHighs = recentRecords.yesterday.filter(r => r.type === 'high').length;
@@ -1249,13 +1268,13 @@ export function mergeStationIndexes(previousStationIndex, stationIndex) {
     return merged;
 }
 
-function writeDailyObservations(dailyObservations, stationIndex, previousStationIndex = new Map()) {
+function writeDailyObservations(dailyObservations, stationIndex, previousStationIndex = new Map(), coverageByDate = {}) {
     for (const [dateStr, observations] of dailyObservations) {
         if (observations.length === 0) continue;
         const subpath = dailySubpath(dateStr);
         const filePath = resolve(DAILY_DIR, subpath);
         mkdirSync(dirname(filePath), { recursive: true });
-        writeFileSync(filePath, JSON.stringify({ date: dateStr, count: observations.length, observations }));
+        writeFileSync(filePath, JSON.stringify({ date: dateStr, count: observations.length, observations, coverage: coverageByDate[dateStr] }));
         console.log(`  📁 daily/${subpath} — ${observations.length} observations`);
     }
 
@@ -1329,6 +1348,20 @@ function buildCountyGeoJson(records, countyMeta) {
     };
 }
 
+/** Reject incomplete snapshots before any public record files are replaced. */
+export function assertStateCoverage(features, expectedStates, label) {
+    const present = new Set(features.map(feature => feature.properties.state));
+    const completedStates = expectedStates.filter(state => present.has(state));
+    const missing = expectedStates.filter(state => !present.has(state));
+    if (missing.length) throw new Error(`Incomplete ${label}: missing ${missing.join(', ')}`);
+    return { expectedStates: [...expectedStates], completedStates };
+}
+
+function completeStateCoverage(coverage, expectedStates) {
+    return Array.isArray(coverage?.expectedStates) && Array.isArray(coverage?.completedStates)
+        && expectedStates.every(state => coverage.expectedStates.includes(state) && coverage.completedStates.includes(state));
+}
+
 // ─── Main ────────────────────────────────────────────────────────────
 
 async function main() {
@@ -1357,16 +1390,15 @@ async function main() {
         process.exit(1);
     }
 
+    const outputs = new Map();
     if (!recentOnly) {
         // 1. State records from SCEC
         const stateRecords = await fetchStateRecords();
         const stateGeoJson = buildStateGeoJson(stateRecords);
 
-        writeFileSync(
-            resolve(OUTPUT_DIR, 'stateRecords.json'),
-            JSON.stringify(stateGeoJson, null, 2)
-        );
-        console.log(`\n✅ Wrote stateRecords.json (${stateRecords.length} features)`);
+        assertStateCoverage(stateGeoJson.features, Object.keys(US_STATES), 'state records');
+        outputs.set('stateRecords.json', stateGeoJson);
+        console.log(`\nPrepared stateRecords.json (${stateRecords.length} features)`);
 
         // 2. County records from ACIS (process states in batches)
         console.log('\n📊 Fetching county-level records from ACIS...');
@@ -1391,48 +1423,41 @@ async function main() {
         const countyMeta = await fetchCountyMeta();
         const countyGeoJson = buildCountyGeoJson(countyRecords, countyMeta);
 
-        writeFileSync(
-            resolve(OUTPUT_DIR, 'countyRecords.json'),
-            JSON.stringify(countyGeoJson)  // No pretty print — this file can be large
-        );
-        console.log(`✅ Wrote countyRecords.json (${countyGeoJson.features.length} features)`);
+        const countyCoverage = assertStateCoverage(countyGeoJson.features, stateAbbrs, 'county records');
+        outputs.set('countyRecords.json', countyGeoJson);
+        console.log(`Prepared countyRecords.json (${countyGeoJson.features.length} features)`);
 
         // Climate trends (derived from county records)
         const climateTrends = generateClimateTrends(countyGeoJson);
-        writeFileSync(
-            resolve(OUTPUT_DIR, 'climateTrends.json'),
-            JSON.stringify(climateTrends, null, 2)
-        );
-        console.log(`✅ Wrote climateTrends.json (${climateTrends.byYear.length} years, ${climateTrends.byDecade.length} decades)`);
+        outputs.set('climateTrends.json', climateTrends);
+        console.log(`Prepared climateTrends.json (${climateTrends.byYear.length} years, ${climateTrends.byDecade.length} decades)`);
 
         // 5. Summary metadata
         const summary = {
             lastUpdated: new Date().toISOString(),
             stateRecordCount: stateRecords.length,
             countyRecordCount: countyGeoJson.features.length,
-            statesProcessed: stateAbbrs.length,
+            statesProcessed: countyCoverage.completedStates.length,
+            countyCoverage,
         };
 
-        writeFileSync(
-            resolve(OUTPUT_DIR, 'summary.json'),
-            JSON.stringify(summary, null, 2)
-        );
-        console.log(`✅ Wrote summary.json`);
+        outputs.set('summary.json', summary);
+        console.log(`Prepared summary.json`);
     }
 
     // 4. Recent records summary + daily observations
     const { recentRecords, dailyObservations, stationIndex } = await fetchRecentRecords(backfillDays);
 
-    writeFileSync(
-        resolve(OUTPUT_DIR, 'recentRecords.json'),
-        JSON.stringify(recentRecords, null, 2)
-    );
-    console.log(`✅ Wrote recentRecords.json`);
+    outputs.set('recentRecords.json', recentRecords);
+    console.log(`Prepared recentRecords.json`);
 
     // 6. Write daily observation archives for S3 upload
     console.log('\n📦 Writing daily observation archives...');
     const previousStationIndex = stationIndex.size > 0 ? await loadPreviousStationIndex() : new Map();
-    writeDailyObservations(dailyObservations, stationIndex, previousStationIndex);
+    writeDailyObservations(dailyObservations, stationIndex, previousStationIndex, recentRecords.coverageByDate);
+    for (const [filename, payload] of outputs) {
+        await writeAtomically(resolve(OUTPUT_DIR, filename), JSON.stringify(payload));
+    }
 
     if (ACIS_CACHE_STATS.hits + ACIS_CACHE_STATS.misses > 0) {
         console.log(`\n📊 ACIS cache: ${ACIS_CACHE_STATS.hits} hits, ${ACIS_CACHE_STATS.misses} misses (${Math.round(100 * ACIS_CACHE_STATS.hits / (ACIS_CACHE_STATS.hits + ACIS_CACHE_STATS.misses))}% hit rate)`);

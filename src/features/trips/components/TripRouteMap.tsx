@@ -1,8 +1,7 @@
 import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
 import type { FeatureCollection, Point } from 'geojson';
-import * as maplibregl from 'maplibre-gl';
+import * as maplibregl from '../../../maps/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useTripRoute } from '../useTripRoute';
 import { routeCoordinates } from '../routeGeometry';
@@ -20,7 +19,6 @@ import type { TripManifest } from '../types';
 type TripRouteMapProps = TripMapFocus & { active?: boolean; onExplore?: () => void; initialDayId?: string };
 type DaySelection = { scope: string; selectedId?: string };
 
-maplibregl.setWorkerUrl(maplibreWorkerUrl);
 
 function mapBounds(coordinates: number[][]) {
     return coordinates.reduce((bounds, point) => bounds.extend(point as [number, number]),

@@ -1,8 +1,12 @@
 import { z } from 'zod';
 
 const finiteNumber = z.number().finite();
-const dateString = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Expected YYYY-MM-DD');
+const dateString = z.iso.date();
 const recordType = z.enum(['high', 'low']);
+const stateCoverageSchema = z.object({
+    expectedStates: z.array(z.string().regex(/^[A-Z]{2}$/)),
+    completedStates: z.array(z.string().regex(/^[A-Z]{2}$/)),
+});
 
 const pointGeometry = z.object({
     type: z.literal('Point'),
@@ -65,6 +69,8 @@ const brokenRecordSchema = z.object({
 
 export const recentRecordsSchema = z.object({
     asOf: dateString,
+    generatedAt: z.iso.datetime().optional(),
+    coverageByDate: z.record(dateString, stateCoverageSchema).optional(),
     dates: z.array(dateString).optional(),
     yesterday: z.array(brokenRecordSchema),
     last7Days: z.array(brokenRecordSchema),
@@ -75,6 +81,7 @@ export const temperatureSummarySchema = z.object({
     stateRecordCount: z.number().int().nonnegative(),
     countyRecordCount: z.number().int().nonnegative(),
     statesProcessed: z.number().int().nonnegative(),
+    countyCoverage: stateCoverageSchema.optional(),
 });
 
 export const stationHistorySchema = z.object({

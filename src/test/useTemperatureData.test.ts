@@ -44,6 +44,31 @@ describe('useTemperatureData', () => {
         vi.restoreAllMocks();
     });
 
+    it('loads only county data for the record-age map, even when other feeds fail', async () => {
+        globalThis.fetch = vi.fn((input: RequestInfo | URL) => {
+            const url = String(input);
+            if (url.endsWith('/countyRecords.json')) return Promise.resolve(jsonFetchResponse(countyRecords));
+            return Promise.reject(new Error(`Unavailable unrelated feed: ${url}`));
+        });
+        const { result } = renderHook(() => useTemperatureData({
+            loadRecentRecords: false, loadStateRecords: false, loadCountyRecords: true, loadSummary: false,
+        }));
+        await waitFor(() => expect(result.current.countyRecords).toEqual(countyRecords));
+        expect(result.current.error).toBeNull();
+        expect(result.current.loading).toBe(false);
+        expect(fetch).toHaveBeenCalledTimes(1);
+    });
+
+    it('shows recent records even if optional update metadata is unavailable', async () => {
+        globalThis.fetch = vi.fn((input: RequestInfo | URL) => String(input).endsWith('/recentRecords.json')
+            ? Promise.resolve(jsonFetchResponse(recentRecords))
+            : Promise.reject(new Error('Metadata unavailable')));
+        const { result } = renderHook(() => useTemperatureData({ loadAllTimeRecords: false }));
+        await waitFor(() => expect(result.current.loading).toBe(false));
+        expect(result.current.recentRecords).toEqual(recentRecords);
+        expect(result.current.error).toBeNull();
+    });
+
     it('loads recent records without fetching all-time data while disabled', async () => {
         globalThis.fetch = vi.fn((input: RequestInfo | URL) => {
             const url = String(input);

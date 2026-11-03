@@ -1,4 +1,15 @@
-import { describe, expect, it } from 'vitest';
+import { afterAll, describe, expect, it, vi } from 'vitest';
+import { rmSync } from 'node:fs';
+
+const temporaryCache = await vi.hoisted(async () => {
+    const { mkdtempSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { join } = await import('node:path');
+    const directory = mkdtempSync(join(tmpdir(), 'temperature-state-requests-'));
+    vi.stubEnv('TEMP_DATA_DIR', directory);
+    vi.stubEnv('TEMPERATURE_DATA_BUCKET', '');
+    return directory;
+});
 import {
     buildBrokenRecordsFromDailyArchive,
     buildRecentRecords,
@@ -8,7 +19,85 @@ import {
     mergeStationIndexes,
     parseBackfillDays,
     validateRecentRecords,
+    assertStateCoverage,
+    fetchStateForDate,
 } from '../sync-temperatures.js';
+
+afterAll(() => { rmSync(temporaryCache, { recursive: true, force: true }); vi.unstubAllEnvs(); });
+
+function mockStateResponses(high: unknown, low: unknown) {
+    return vi.spyOn(globalThis, 'fetch').mockImplementation(async (_url, options) => {
+        const params = JSON.parse(String(options?.body));
+        const station = params.date ? { data: [high, low] }
+            : params.elems[0].interval === 'mly' ? { smry: ['100', '0'] }
+                : { smry: [['100', '2000-07-01'], ['0', '2000-01-01'], '70', '40'] };
+        return new Response(JSON.stringify({ data: [{ meta: { uid: 1 }, ...station }] }));
+    });
+}
+
+describe('temperature publication coverage', () => {
+    it.each([['M', 'M'], ['invalid', 'Infinity'], ['90junk', ''], [' ', false]])('rejects a state with no usable observations (%s, %s)', async (high, low) => {
+        const fetchMock = mockStateResponses(high, low);
+        try {
+            await expect(fetchStateForDate('CA', '2026-11-02', '11-02', 2026)).rejects.toThrow(/CA.*No usable station observations/);
+        } finally { fetchMock.mockRestore(); }
+    });
+
+    it('accepts usable observations when no station breaks a record', async () => {
+        const fetchMock = mockStateResponses('90', '10');
+        try {
+            const result = await fetchStateForDate('CA', '2026-11-02', '11-02', 2026);
+            expect(result.broken).toEqual([]);
+            expect(result.observations).toEqual([expect.objectContaining({ uid: 1, maxt: 90, mint: 10 })]);
+        } finally { fetchMock.mockRestore(); }
+    });
+
+    it('retains zero temperatures and a missing companion observation', async () => {
+        const fetchMock = mockStateResponses('M', 0);
+        try {
+            const result = await fetchStateForDate('CA', '2026-11-02', '11-02', 2026);
+            expect(result.broken).toEqual([]);
+            expect(result.observations).toEqual([expect.objectContaining({ uid: 1, maxt: null, mint: 0 })]);
+        } finally { fetchMock.mockRestore(); }
+    });
+
+    it.each([
+        [2024, '2023-02-28'],
+        [2025, '2024-02-29'],
+    ])('uses the historical year to end the February monthly request for %i', async (year, expectedEnd) => {
+        const requests: Array<{ edate?: string }> = [];
+        const fetchMock = vi.spyOn(globalThis, 'fetch').mockImplementation(async (_url, options) => {
+            requests.push(JSON.parse(String(options?.body)));
+            return new Response(JSON.stringify({ data: [{ meta: { uid: 1 }, data: ['90', '10'], smry: [['M'], ['M']] }] }));
+        });
+        try {
+            await fetchStateForDate('CA', `${year}-02-15`, '02-15', year);
+            expect(requests.at(-1)?.edate).toBe(expectedEnd);
+        } finally { fetchMock.mockRestore(); }
+    });
+
+    it('rejects a county snapshot that omits California', () => {
+        expect(() => assertStateCoverage([
+            { properties: { state: 'OR' } },
+            { properties: { state: 'WA' } },
+        ], ['CA', 'OR', 'WA'], 'county records')).toThrow(/county records.*CA/);
+    });
+
+    it('reports completed states from the actual records, including duplicate station rows', () => {
+        expect(assertStateCoverage([
+            { properties: { state: 'CA' } }, { properties: { state: 'CA' } },
+            { properties: { state: 'OR' } },
+        ], ['CA', 'OR'], 'county records')).toEqual({ expectedStates: ['CA', 'OR'], completedStates: ['CA', 'OR'] });
+    });
+
+    it('rejects an ACIS error instead of treating the state as a day with no records', async () => {
+        const originalFetch = globalThis.fetch;
+        globalThis.fetch = async () => new Response(JSON.stringify({ error: 'State request failed' }), { status: 200 });
+        try {
+            await expect(fetchStateForDate('CA', '2026-11-02', '11-02', 2026)).rejects.toThrow(/CA.*2026-11-02.*State request failed/);
+        } finally { globalThis.fetch = originalFetch; }
+    });
+});
 
 function record(date: string, type: 'high' | 'low', tempF: number) {
     return { date, type, tempF };

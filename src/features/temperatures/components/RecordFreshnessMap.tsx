@@ -1,9 +1,10 @@
 import { cartoRasterStyle } from '../../../maps/cartoBasemaps';
 import { useRef, useEffect, useState } from 'react';
-import * as maplibregl from 'maplibre-gl';
+import * as maplibregl from '../../../maps/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useTemperatureData } from '../hooks/useTemperatureData';
-import { INITIAL_CENTER, MIN_ZOOM, MAX_ZOOM, FRESHNESS_COLORS, yearToColor } from '../constants';
+import { TemperatureDataStatus } from './TemperatureDataStatus';
+import { CONUS_BOUNDS, INITIAL_CENTER, MIN_ZOOM, MAX_ZOOM, FRESHNESS_COLORS, yearToColor } from '../constants';
 import { buildRecordAgePopupHtml, styleDarkPopup } from '../map/temperatureMapPopup';
 
 type RecordType = 'high' | 'low';
@@ -18,7 +19,7 @@ export function RecordFreshnessMap() {
     const [mapLoaded, setMapLoaded] = useState(false);
     const [recordType, setRecordType] = useState<RecordType>('high');
 
-    const { countyRecords, loading } = useTemperatureData();
+    const { countyRecords, summary, loading, error } = useTemperatureData({ loadRecentRecords: false, loadStateRecords: false, loadCountyRecords: true });
 
     // Initialize map
     useEffect(() => {
@@ -38,6 +39,7 @@ export function RecordFreshnessMap() {
 
         map.on('load', () => {
             map.resize();
+            map.fitBounds(CONUS_BOUNDS, { padding: 32, duration: 0 });
             setMapLoaded(true);
         });
 
@@ -136,12 +138,15 @@ export function RecordFreshnessMap() {
                 This survivor view excludes records that were later superseded and should not be interpreted as a climate trend.
             </p>
 
+            <div className="mb-3"><TemperatureDataStatus viewMode="freshness" countyRecords={countyRecords} stateRecords={null} recentRecords={null} summary={summary} /></div>
+            {error && <p role="alert" className="mb-3 text-sm text-amber-300">County records could not load. Reload to try again.</p>}
             {/* Record type toggle */}
             <div className="flex gap-2 mb-3">
                 {(['high', 'low'] as const).map(t => (
                     <button
                         type="button"
                         key={t}
+                        aria-pressed={recordType === t}
                         onClick={() => setRecordType(t)}
                         className={`px-3 py-1 text-xs rounded border transition-colors ${recordType === t
                             ? 'bg-zinc-700 border-zinc-500 text-zinc-100'

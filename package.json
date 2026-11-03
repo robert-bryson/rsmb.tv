@@ -45,7 +45,8 @@
     "test:watch": "vitest",
     "prepare": "husky",
     "test:trips:browser": "node scripts/run-trip-browser-tests.js",
-    "update-trip-manifest-assets": "node scripts/update-trip-manifest-assets.js"
+    "update-trip-manifest-assets": "node scripts/update-trip-manifest-assets.js",
+    "test:temperatures:browser": "playwright test --config playwright.temperature.config.ts"
   },
   "dependencies": {
     "@aws-sdk/client-cloudfront": "^3.1161.0",

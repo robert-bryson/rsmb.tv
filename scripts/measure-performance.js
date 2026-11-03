@@ -88,6 +88,12 @@ for (const name of ['LCP', 'CLS', 'INP', 'FCP', 'TTFB']) {
                 const page = await context.newPage();
                 page.setDefaultTimeout(5000);
                 page.on('pageerror', error => row.errors.push(error.message));
+                page.on('console', message => {
+                    if (message.type() === 'error' && message.text().includes('MapLibre error:')) row.errors.push(message.text());
+                });
+                page.on('response', response => {
+                    if (/maplibre.*worker/.test(response.url()) && !response.ok()) row.errors.push(`Map worker HTTP ${response.status()}`);
+                });
                 const session = await context.newCDPSession(page);
                 const scriptRequests = new Set();
                 let scriptBytes = 0;
@@ -117,6 +123,9 @@ for (const name of ['LCP', 'CLS', 'INP', 'FCP', 'TTFB']) {
                     if (images.some(image => image.complete && !image.naturalWidth)) throw new Error('An above-fold image failed to load.');
                     return images.every(image => image.complete && image.naturalWidth > 0) && document.fonts.status === 'loaded';
                 }, undefined, { timeout: timeoutMs });
+                if (route.startsWith('/projects/temperature-records/map')) {
+                    await page.waitForFunction(() => document.querySelector('[data-testid="temperature-map"]')?.getAttribute('data-map-state') === 'ready', undefined, { timeout: timeoutMs });
+                }
                 await page.waitForTimeout(settleMs);
                 row.metrics = await page.evaluate(() => window.__metrics);
                 // CDP reports compressed body bytes, including modulepreloads and repeated transfers.

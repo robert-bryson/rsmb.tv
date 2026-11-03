@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useStationHistory } from '../hooks/useStationHistory';
 import type { StationDailyObs } from '../hooks/useStationHistory';
 import { buildTemperaturePath, fToC } from '../utils/temperature';
@@ -89,6 +89,8 @@ function TempSparkline({ data, useCelsius }: { data: StationDailyObs[]; useCelsi
 
 export function StationDetailPanel({ uid, stationName, state, useCelsius, onClose }: StationDetailPanelProps) {
     const { history, loading, error, fetch, clear } = useStationHistory();
+    const headingRef = useRef<HTMLHeadingElement>(null);
+    useEffect(() => { headingRef.current?.focus(); }, [uid]);
 
     useEffect(() => {
         fetch(uid, 2);
@@ -113,26 +115,26 @@ export function StationDetailPanel({ uid, stationName, state, useCelsius, onClos
     const meta = history?.meta;
 
     return (
-        <div className="absolute right-0 bottom-0 md:bottom-auto md:top-14 md:right-4 z-20 w-full md:w-80 max-h-[40dvh] md:max-h-[calc(100vh-6rem)] bg-zinc-900/95 backdrop-blur-sm border-t md:border border-zinc-700/50 md:rounded-lg overflow-y-auto">
+        <div data-temperature-panel className="absolute right-0 bottom-0 md:bottom-auto md:top-14 md:right-4 z-20 w-full md:w-80 max-h-[40dvh] md:max-h-[calc(100vh-6rem)] bg-zinc-900/95 backdrop-blur-sm border-t md:border border-zinc-700/50 md:rounded-lg overflow-y-auto">
             {/* Header */}
             <div className="sticky top-0 bg-zinc-900/95 backdrop-blur-sm border-b border-zinc-800 px-3 py-2 z-10">
                 <div className="flex items-center justify-between mb-1">
                     <button
                         onClick={onClose}
-                        className="text-xs text-zinc-400 hover:text-zinc-300 transition-colors"
+                        className="min-h-11 text-xs text-zinc-300 hover:text-white transition-colors"
                     >
                         ← Back to records
                     </button>
                     <button
                         onClick={onClose}
-                        className="text-zinc-400 hover:text-zinc-200 w-7 h-7 flex items-center justify-center rounded hover:bg-zinc-800 transition-colors text-sm shrink-0"
+                        className="text-zinc-400 hover:text-zinc-200 w-11 h-11 flex items-center justify-center rounded hover:bg-zinc-800 transition-colors text-sm shrink-0"
                         aria-label="Close station detail"
                     >
                         ✕
                     </button>
                 </div>
                 <div className="min-w-0">
-                    <h2 className="text-sm font-semibold text-zinc-200 truncate">{meta?.name ?? stationName}</h2>
+                    <h2 ref={headingRef} tabIndex={-1} className="text-sm font-semibold text-zinc-200 truncate">{meta?.name ?? stationName}</h2>
                     <p className="text-xs text-zinc-400">
                         {state}
                         {meta?.elev != null && ` · ${meta.elev} ft`}

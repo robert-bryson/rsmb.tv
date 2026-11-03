@@ -1,4 +1,8 @@
 import type { TimePeriod } from './types';
+import { usStates } from '../../../shared/geography/usStates';
+
+export const CONUS_STATES: string[] = usStates.map(state => state.abbr).filter(state => state !== 'AK' && state !== 'HI');
+export const CONUS_BOUNDS: [[number, number], [number, number]] = [[-125, 24], [-66, 50]];
 
 /** Serve generated temperature data from the S3-backed CDN by default. */
 export const DATA_BASE_URL = (import.meta.env.VITE_TEMPERATURE_DATA_BASE_URL || 'https://data.rsmb.tv').replace(/\/+$/, '');
@@ -15,7 +19,7 @@ export const COUNTY_ZOOM_THRESHOLD = 5.5;
 /** Map initial view — centered on CONUS */
 export const INITIAL_CENTER: [number, number] = [-98.5, 39.8];
 export const INITIAL_ZOOM = 3.5;
-export const MIN_ZOOM = 2;
+export const MIN_ZOOM = 1;
 export const MAX_ZOOM = 12;
 
 /** Temperature color scale — warm to cool */

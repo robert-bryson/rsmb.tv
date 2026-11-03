@@ -59,6 +59,8 @@ export interface BrokenRecord {
 
 export interface RecentRecords {
     asOf: string;
+    generatedAt?: string;
+    coverageByDate?: Record<string, StateCoverage>;
     dates?: string[];
     yesterday: BrokenRecord[];
     last7Days: BrokenRecord[];
@@ -69,6 +71,12 @@ export interface TemperatureSummary {
     stateRecordCount: number;
     countyRecordCount: number;
     statesProcessed: number;
+    countyCoverage?: StateCoverage;
+}
+
+export interface StateCoverage {
+    expectedStates: string[];
+    completedStates: string[];
 }
 
 export type TimePeriod = 'yesterday' | 'last7Days';

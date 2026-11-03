@@ -1,6 +1,8 @@
 import { Suspense, lazy } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useClimateTrends } from '../hooks/useClimateTrends';
+import { useTemperatureData } from '../hooks/useTemperatureData';
+import { TemperatureDataStatus } from './TemperatureDataStatus';
 import { RecordAgeChart } from './RecordAgeChart';
 import { RecordsBrokenTimeSeries } from './RecordsBrokenTimeSeries';
 import { HighLowRatioChart } from './HighLowRatioChart';
@@ -21,6 +23,7 @@ const SECTIONS: { id: Section; label: string }[] = [
 
 export function ClimateTrends() {
     const { trends, loading, error } = useClimateTrends();
+    const { summary } = useTemperatureData({ loadRecentRecords: false, loadStateRecords: false, loadCountyRecords: false });
     const [searchParams, setSearchParams] = useSearchParams();
     const tab = searchParams.get('tab');
     const active: Section = SECTIONS.some(section => section.id === tab) ? tab as Section : 'age';
@@ -98,6 +101,9 @@ export function ClimateTrends() {
                         <dd className="text-sm font-semibold text-zinc-200">Contiguous U.S.</dd>
                     </div>
                 </dl>
+                <div className="mb-3">
+                    <TemperatureDataStatus viewMode="freshness" recentRecords={null} countyRecords={null} stateRecords={null} summary={summary} />
+                </div>
 
                 {/* Section tabs */}
                 <nav className="flex gap-1 overflow-x-auto" role="tablist" aria-label="Standing record views">

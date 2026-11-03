@@ -1,4 +1,4 @@
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { LayerSpecification, SourceSpecification } from 'maplibre-gl';
@@ -24,6 +24,7 @@ const mapMocks = vi.hoisted(() => {
         addControl = vi.fn();
         fitBounds = vi.fn();
         flyTo = vi.fn();
+        easeTo = vi.fn();
         zoom = 3.5;
         constructor() { TestMap.instances.push(this); }
         on(type: string, layersOrListener: string | string[] | Listener, listener?: Listener) {
@@ -39,6 +40,8 @@ const mapMocks = vi.hoisted(() => {
             }
         }
         getSource(id: string) { return this.sources.get(id); }
+        isSourceLoaded = vi.fn((id: string) => this.sources.has(id));
+        off(type: string, callback: Listener) { this.listeners = this.listeners.filter(listener => listener.type !== type || listener.callback !== callback); }
         addSource(id: string, source: SourceSpecification) { this.sources.set(id, { ...source, setData: vi.fn() }); }
         getLayer(id: string) { return this.layers.get(id); }
         addLayer(layer: LayerSpecification) { this.layers.set(layer.id, structuredClone(layer)); }
@@ -64,7 +67,7 @@ const mapMocks = vi.hoisted(() => {
         on() { return this; }
         getElement() { return this.element; }
     }
-    return { Map: TestMap, Popup: TestPopup, NavigationControl: class {} };
+    return { Map: TestMap, Popup: TestPopup, NavigationControl: class {}, setWorkerUrl: vi.fn() };
 });
 
 vi.mock('maplibre-gl', () => mapMocks);
@@ -73,7 +76,9 @@ vi.mock('../features/temperatures/hooks/useClimateTrends', () => ({
     useClimateTrends: () => ({ trends: null, loading: false, error: null }),
 }));
 vi.mock('../features/temperatures/components/StationDetailPanel', () => ({
-    StationDetailPanel: ({ stationName }: { stationName: string }) => <div data-testid="selected-station">{stationName}</div>,
+    StationDetailPanel: ({ stationName, onClose }: { stationName: string; onClose: () => void }) => <div data-testid="selected-station">
+        {stationName}<button onClick={onClose}>Close station detail</button>
+    </div>,
 }));
 
 import { TemperatureMap } from '../features/temperatures/components/TemperatureMap';
@@ -132,6 +137,58 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
 describe('temperature map record rendering', () => {
+    it('fits the viewport with absolute padding so repeated fits cannot add it twice', () => {
+        vi.mocked(useTemperatureData).mockReturnValue(data({ recentRecords: recent() }));
+        const { map } = mount();
+        expect(map.fitBounds).toHaveBeenCalledWith([[-125, 24], [-66, 50]], expect.objectContaining({ absolutePadding: true }));
+    });
+
+    it('keeps the live map and view controls mounted across a record-feed failure', () => {
+        vi.mocked(useTemperatureData).mockReturnValue(data({ recentRecords: recent() }));
+        const { refresh } = mount();
+        const mapContainer = screen.getByTestId('temperature-map').firstElementChild;
+        vi.mocked(useTemperatureData).mockReturnValue(data({ error: 'County records unavailable' }));
+        refresh();
+        expect(screen.getByRole('alert')).toHaveTextContent('County records unavailable');
+        expect(screen.getByRole('button', { name: /County Extremes/ })).toBeVisible();
+        expect(mapContainer).toBeInTheDocument();
+        expect(screen.getByTestId('temperature-map')).toHaveAttribute('data-map-state', 'error');
+        vi.mocked(useTemperatureData).mockReturnValue(data({ recentRecords: recent() }));
+        refresh();
+        expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+        expect(screen.getByTestId('temperature-map').firstElementChild).toBe(mapContainer);
+        expect(mapMocks.Map.instances).toHaveLength(1);
+    });
+
+    it('frames a lone station when a state filter is active', () => {
+        vi.mocked(useTemperatureData).mockReturnValue(data({ recentRecords: recent([record({ state: 'TX', lat: 31.76, lon: -106.49 })]) }));
+        const { map } = mount('/projects/temperature-records/map?state=TX');
+        expect(map.flyTo).toHaveBeenCalledWith(expect.objectContaining({ center: [-106.49, 31.76] }));
+    });
+
+    it('preserves expanded rows and returns focus after closing station history', async () => {
+        const records = Array.from({ length: 26 }, (_, index) => record({ uid: index + 1, stationName: `Station ${index + 1}` }));
+        vi.mocked(useTemperatureData).mockReturnValue(data({ recentRecords: recent(records) }));
+        mount();
+        fireEvent.click(screen.getByRole('button', { name: /Show more/ }));
+        const row = screen.getByRole('button', { name: /Station 26/ });
+        row.focus();
+        fireEvent.click(row);
+        expect(screen.queryByRole('button', { name: /Station 26/ })).not.toBeInTheDocument();
+        fireEvent.click(screen.getByRole('button', { name: 'Close station detail' }));
+        await waitFor(() => expect(screen.getByRole('button', { name: /Station 26/ })).toHaveFocus());
+    });
+
+    it('does not declare the map ready until the record worker finishes loading its source', () => {
+        vi.mocked(useTemperatureData).mockReturnValue(data({ recentRecords: recent() }));
+        const { map } = mount();
+        map.isSourceLoaded.mockReturnValue(false);
+        act(() => map.fire('sourcedataloading'));
+        expect(screen.getByTestId('temperature-map')).toHaveAttribute('data-map-state', 'loading');
+        map.isSourceLoaded.mockReturnValue(true);
+        act(() => map.fire('sourcedata'));
+        expect(screen.getByTestId('temperature-map')).toHaveAttribute('data-map-state', 'ready');
+    });
     it('keeps nearby high and low records unclustered and limits collisions to text', () => {
         const records = [record(), record({ uid: 2, type: 'low', tempF: 20, lon: -100.01 })];
         vi.mocked(useTemperatureData).mockReturnValue(data({ recentRecords: recent(records) }));
@@ -225,6 +282,7 @@ describe('temperature map record rendering', () => {
         const records = allTimeData();
         vi.mocked(useTemperatureData).mockReturnValue(data(records));
         const { map } = mount('/projects/temperature-records/map?view=state');
+        map.fitBounds.mockClear();
         const state = records.stateRecords.features[0];
         act(() => map.fire('click', [{ layer: { id: 'state-highs' }, geometry: state.geometry, properties: { ...state.properties } }]));
         expect(map.getLayer('state-detail-circle')?.layout?.visibility).toBe('visible');

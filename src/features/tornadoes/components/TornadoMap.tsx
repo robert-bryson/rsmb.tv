@@ -1,7 +1,7 @@
 import { cartoVectorStyle } from '../../../maps/cartoBasemaps';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import * as maplibregl from 'maplibre-gl';
+import * as maplibregl from '../../../maps/maplibre';
 import type { Feature, FeatureCollection, MultiPolygon, Point, Polygon, Position } from 'geojson';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { escapeHtml } from '../../../utils/escapeHtml';

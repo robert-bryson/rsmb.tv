@@ -2,6 +2,19 @@ import { describe, expect, it } from 'vitest';
 import { climateTrendsSchema, parseTemperaturePayload, recentRecordsSchema, stateRecordsSchema } from '../features/temperatures/schemas';
 
 describe('temperature payload schemas', () => {
+    it.each(['2026-13-01', '2026-02-29', '2026-04-31'])('rejects the invalid snapshot date %s', asOf => {
+        expect(recentRecordsSchema.safeParse({ asOf, yesterday: [], last7Days: [] }).success).toBe(false);
+    });
+
+    it('rejects invalid observation dates and coverage keys before the status renders', () => {
+        const payload = { asOf: '2026-11-03', yesterday: [], last7Days: [] };
+        expect(recentRecordsSchema.safeParse({ ...payload, dates: ['2026-99-99'] }).success).toBe(false);
+        expect(recentRecordsSchema.safeParse({ ...payload, coverageByDate: {
+            '2026-02-30': { expectedStates: ['CA'], completedStates: ['CA'] },
+        } }).success).toBe(false);
+        expect(recentRecordsSchema.safeParse({ ...payload, asOf: '2024-02-29' }).success).toBe(true);
+    });
+
     it('accepts the missing-coordinate sentinel from the data pipeline', () => {
         const payload = {
             asOf: '2026-09-03',

@@ -1,138 +1,61 @@
 import { useState, useEffect, useMemo } from 'react';
+import type { z } from 'zod';
 import { fetchWithCache } from '../../../data/fetchCache';
-import {
-    STATE_RECORDS_URL,
-    COUNTY_RECORDS_URL,
-    RECENT_RECORDS_URL,
-    SUMMARY_URL,
-} from '../constants';
-import type {
-    StateRecordsCollection,
-    CountyRecordsCollection,
-    RecentRecords,
-    TemperatureSummary,
-    StateRecordProperties,
-} from '../types';
-import {
-    countyRecordsSchema,
-    parseTemperaturePayload,
-    recentRecordsSchema,
-    stateRecordsSchema,
-    temperatureSummarySchema,
-} from '../schemas';
+import { STATE_RECORDS_URL, COUNTY_RECORDS_URL, RECENT_RECORDS_URL, SUMMARY_URL } from '../constants';
+import { countyRecordsSchema, parseTemperaturePayload, recentRecordsSchema, stateRecordsSchema, temperatureSummarySchema } from '../schemas';
 
-interface TemperatureData {
-    stateRecords: StateRecordsCollection | null;
-    countyRecords: CountyRecordsCollection | null;
-    recentRecords: RecentRecords | null;
-    summary: TemperatureSummary | null;
-    loading: boolean;
-    error: string | null;
-    stateHighs: StateRecordProperties[];
-    stateLows: StateRecordProperties[];
+function useTemperatureResource<T>(url: string, schema: z.ZodType<T>, label: string, enabled: boolean) {
+    const [state, setState] = useState<{ data: T | null; loading: boolean; error: string | null }>({
+        data: null, loading: true, error: null,
+    });
+    useEffect(() => {
+        if (!enabled || state.data) return;
+        let cancelled = false;
+        async function load() {
+            setState(previous => ({ ...previous, loading: true, error: null }));
+            try {
+                const payload = await fetchWithCache<unknown>(url);
+                const data = parseTemperaturePayload(schema, payload, label);
+                if (!cancelled) setState({ data, loading: false, error: null });
+            } catch (error) {
+                if (!cancelled) setState({ data: null, loading: false, error: error instanceof Error ? error.message : `Failed to load ${label}` });
+            }
+        }
+        void load();
+        return () => { cancelled = true; };
+    }, [enabled, label, schema, state.data, url]);
+    return { ...state, loading: enabled && state.loading, error: enabled ? state.error : null };
 }
 
 interface UseTemperatureDataOptions {
     loadAllTimeRecords?: boolean;
+    loadRecentRecords?: boolean;
+    loadStateRecords?: boolean;
+    loadCountyRecords?: boolean;
+    loadSummary?: boolean;
 }
 
-export function useTemperatureData({ loadAllTimeRecords = true }: UseTemperatureDataOptions = {}): TemperatureData {
-    const [stateRecords, setStateRecords] = useState<StateRecordsCollection | null>(null);
-    const [countyRecords, setCountyRecords] = useState<CountyRecordsCollection | null>(null);
-    const [recentRecords, setRecentRecords] = useState<RecentRecords | null>(null);
-    const [summary, setSummary] = useState<TemperatureSummary | null>(null);
-    const [recentLoading, setRecentLoading] = useState(true);
-    const [allTimeLoading, setAllTimeLoading] = useState(loadAllTimeRecords);
-    const [recentError, setRecentError] = useState<string | null>(null);
-    const [allTimeError, setAllTimeError] = useState<string | null>(null);
-
-    useEffect(() => {
-        let cancelled = false;
-
-        async function load() {
-            try {
-                setRecentLoading(true);
-                setRecentError(null);
-                const [recentPayload, summaryPayload] = await Promise.all([
-                    fetchWithCache<unknown>(RECENT_RECORDS_URL),
-                    fetchWithCache<unknown>(SUMMARY_URL),
-                ]);
-
-                if (cancelled) return;
-
-                setRecentRecords(parseTemperaturePayload(recentRecordsSchema, recentPayload, 'recent records data'));
-                setSummary(parseTemperaturePayload(temperatureSummarySchema, summaryPayload, 'temperature summary data'));
-            } catch (err) {
-                if (cancelled) return;
-                setRecentError(err instanceof Error ? err.message : 'Failed to load temperature data');
-            } finally {
-                if (!cancelled) setRecentLoading(false);
-            }
-        }
-
-        load();
-        return () => { cancelled = true; };
-    }, []);
-
-    useEffect(() => {
-        if (!loadAllTimeRecords) {
-            return;
-        }
-
-        if (stateRecords && countyRecords) {
-            return;
-        }
-
-        let cancelled = false;
-
-        async function loadAllTime() {
-            try {
-                setAllTimeLoading(true);
-                setAllTimeError(null);
-                const [statePayload, countyPayload] = await Promise.all([
-                    fetchWithCache<unknown>(STATE_RECORDS_URL),
-                    fetchWithCache<unknown>(COUNTY_RECORDS_URL),
-                ]);
-
-                if (cancelled) return;
-                setStateRecords(parseTemperaturePayload(stateRecordsSchema, statePayload, 'state records data'));
-                setCountyRecords(parseTemperaturePayload(countyRecordsSchema, countyPayload, 'county records data'));
-            } catch (err) {
-                if (cancelled) return;
-                setAllTimeError(err instanceof Error ? err.message : 'Failed to load all-time temperature data');
-            } finally {
-                if (!cancelled) setAllTimeLoading(false);
-            }
-        }
-
-        loadAllTime();
-        return () => { cancelled = true; };
-    }, [countyRecords, loadAllTimeRecords, stateRecords]);
-
-    const stateHighs = useMemo(
-        () => stateRecords?.features
-            .filter(f => f.properties.type === 'high')
-            .map(f => f.properties) ?? [],
-        [stateRecords]
-    );
-
-    const stateLows = useMemo(
-        () => stateRecords?.features
-            .filter(f => f.properties.type === 'low')
-            .map(f => f.properties) ?? [],
-        [stateRecords]
-    );
-    const needsAllTimeRecords = loadAllTimeRecords && (!stateRecords || !countyRecords);
-    const error = recentError ?? (loadAllTimeRecords ? allTimeError : null);
-
+/** Each view waits only for its own data. Update metadata is optional. */
+export function useTemperatureData({
+    loadAllTimeRecords = true,
+    loadRecentRecords = true,
+    loadStateRecords = loadAllTimeRecords,
+    loadCountyRecords = loadAllTimeRecords,
+    loadSummary = true,
+}: UseTemperatureDataOptions = {}) {
+    const recent = useTemperatureResource(RECENT_RECORDS_URL, recentRecordsSchema, 'recent records data', loadRecentRecords);
+    const states = useTemperatureResource(STATE_RECORDS_URL, stateRecordsSchema, 'state records data', loadStateRecords);
+    const counties = useTemperatureResource(COUNTY_RECORDS_URL, countyRecordsSchema, 'county records data', loadCountyRecords);
+    const summary = useTemperatureResource(SUMMARY_URL, temperatureSummarySchema, 'temperature summary data', loadSummary);
+    const stateHighs = useMemo(() => states.data?.features.filter(f => f.properties.type === 'high').map(f => f.properties) ?? [], [states.data]);
+    const stateLows = useMemo(() => states.data?.features.filter(f => f.properties.type === 'low').map(f => f.properties) ?? [], [states.data]);
     return {
-        stateRecords,
-        countyRecords,
-        recentRecords,
-        summary,
-        loading: recentLoading || (needsAllTimeRecords && allTimeLoading),
-        error,
-        stateHighs,
-        stateLows,
+        stateRecords: states.data,
+        countyRecords: counties.data,
+        recentRecords: recent.data,
+        summary: summary.data,
+        loading: recent.loading || states.loading || counties.loading,
+        error: recent.error ?? states.error ?? counties.error,
+        stateHighs, stateLows,
     };
 }

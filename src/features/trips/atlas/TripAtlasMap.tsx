@@ -1,8 +1,7 @@
 import { useEffect, useEffectEvent, useId, useLayoutEffect, useMemo, useRef, useState, type RefObject } from 'react';
-import * as maplibregl from 'maplibre-gl';
+import * as maplibregl from '../../../maps/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './tripAtlasMap.css';
-import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { formatMonthYear } from '../../../utils/formatDate';
 import { routeCoordinates } from '../routeGeometry';
@@ -20,7 +19,6 @@ import { restoreAtlasFullscreenControl, type AtlasFullscreenControl } from './At
 import { useAtlasRouteMarkers } from './tripAtlasMarkers';
 import type { AtlasBounds } from './tripAtlasGeography';
 
-maplibregl.setWorkerUrl(maplibreWorkerUrl);
 
 function endpointIcon(kind: 'start' | 'end', side: 'left' | 'right' | 'center') {
     const x = side === 'left' ? 3 : side === 'right' ? 43 : 23;

@@ -89,6 +89,7 @@ async function browserFixture({ status = 200, applicationError = '', control = '
     const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'rsmb-metrics-test-'));
     roots.push(directory);
     let onError: (error: Error) => void = () => {};
+    const pageEvents = new Map<string, (payload: unknown) => void>();
     const listeners = new Map<string, (event: unknown) => void>();
     const session = {
         send: vi.fn(async () => {}),
@@ -111,7 +112,10 @@ async function browserFixture({ status = 200, applicationError = '', control = '
     const controls = { pause: locator('pause'), projects: locator('projects'), button: locator('button') };
     const page = {
         setDefaultTimeout: vi.fn(),
-        on: vi.fn((_event: string, listener: (error: Error) => void) => { onError = listener; }),
+        on: vi.fn((event: string, listener: (payload: unknown) => void) => {
+            pageEvents.set(event, listener);
+            if (event === 'pageerror') onError = listener;
+        }),
         addInitScript: vi.fn(async () => {}),
         goto: vi.fn(async () => {
             transfers.forEach(receive);
@@ -131,7 +135,8 @@ async function browserFixture({ status = 200, applicationError = '', control = '
     const context = { newPage: vi.fn(async () => page), newCDPSession: vi.fn(async () => session), close: vi.fn(async () => {}) };
     const browser = { newContext: vi.fn(async () => context), version: () => 'test Chromium', close: vi.fn(async () => {}) };
     const options = parsePerformanceOptions(['--samples', '1', '--paths', '/', '--out', path.join(directory, 'report.json'), '--settle-ms', '0']);
-    return { browser: browser as unknown as Browser, context, page, controls, options, receive, receiveBody };
+    return { browser: browser as unknown as Browser, context, page, controls, options, receive, receiveBody,
+        emit: (event: string, payload: unknown) => pageEvents.get(event)?.(payload) };
 }
 
 describe('measurement lifecycle', () => {
@@ -194,6 +199,25 @@ describe('measurement lifecycle', () => {
         const report = await measurePerformance(fixture.options, { browser: fixture.browser, onSample: vi.fn() });
         expect(report).toMatchObject({ failedSamples: 1, results: [{ errors: ['Application crashed'], error: expect.stringContaining('Application crashed') }] });
         expect(fixture.page.keyboard.press).not.toHaveBeenCalled();
+    });
+
+    it('rejects a basemap-only sample when the map worker returns 404', async () => {
+        const fixture = await browserFixture();
+        fixture.page.waitForTimeout.mockImplementationOnce(async () => {
+            fixture.emit('response', { url: () => 'https://example.test/assets/maplibre-gl-worker.mjs', ok: () => false, status: () => 404 });
+        });
+        const report = await measurePerformance(fixture.options, { browser: fixture.browser, onSample: vi.fn() });
+        expect(report).toMatchObject({ failedSamples: 1, results: [{ errors: ['Map worker HTTP 404'] }] });
+        expect(fixture.page.keyboard.press).not.toHaveBeenCalled();
+    });
+
+    it('rejects map initialization errors reported through the console', async () => {
+        const fixture = await browserFixture();
+        fixture.page.waitForTimeout.mockImplementationOnce(async () => {
+            fixture.emit('console', { type: () => 'error', text: () => 'MapLibre error: Worker failed to load' });
+        });
+        const report = await measurePerformance(fixture.options, { browser: fixture.browser, onSample: vi.fn() });
+        expect(report.failedSamples).toBe(1);
     });
 
     it.each(['pause', 'projects', 'button', 'none'])('records a successful %s interaction without inventing INP', async control => {

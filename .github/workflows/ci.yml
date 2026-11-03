@@ -68,6 +68,9 @@ jobs:
       - name: Browser smoke tests
         run: npm run test:e2e
 
+      - name: Production temperature browser tests
+        run: PLAYWRIGHT_WEBKIT=1 npm run test:temperatures:browser
+
       - name: Production trip browser tests
         run: PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser
 

@@ -72,6 +72,7 @@ See the [basemap configuration guide](docs/carto-basemaps.md) for styles, attrib
 | `npm run lint` | Run ESLint |
 | `npm run test` | Run the Vitest suite and the historical temperature pipeline tests |
 | `npm run test:temperature-records` | Run the historical temperature pipeline tests |
+| `npm run test:temperatures:browser` | Build and test the temperature map with production assets |
 | `npm run test:coverage` | Run tests with V8 coverage report |
 | `npm run watch` | Run terminal operations dashboard (`scripts/aws-watch.tsx`) |
 | `npm run typecheck` | Run all TypeScript project references without emitting files |
