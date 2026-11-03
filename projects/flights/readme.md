@@ -188,23 +188,33 @@ Unclassified values appear as reported durations and do not replace the block-ti
 
 Missing values use great-circle distance divided by 800 km/h, plus 60 minutes per leg.
 The resolver rounds each estimated leg to whole minutes before aggregation.
-The interface displays totals in hours and each flight in hours and minutes.
+The compact total shows minutes below one hour.
+At one hour or more, it rounds to the nearest hour and shows days and remaining hours.
+A day means 24 elapsed hours. For example, 1,410 minutes displays as `1d 0h`.
+This rounding changes the display only. Calculations retain whole minutes.
+Hover over the total to see decimal hours, such as `2.8 h` for 165 minutes.
+Each flight, average, and time record shows hours and minutes.
 Screen readers receive full unit names, such as "2 hours 45 minutes."
 Distance-unit changes do not change flight-time units.
 
 Each statistics view has a **Flight Time** section.
-Use its button to show or hide the total, average, and timing coverage.
+Use its button to show or hide the total, average, longest time, shortest time, and timing coverage.
 **Collapse All** and **Expand All** also control this section.
 Section buttons expose their expanded state to assistive technology.
 
 Coverage shows actual, scheduled, estimated, and unavailable flight counts.
 It remains visible when the section is open, including on touch devices.
 The compact total also supplies precise time and coverage as text for assistive technology.
-Hover over a total to see the same details.
+Hover text also includes the coverage and estimate method.
 Totals and averages have an **Est.** label when they include scheduled or estimated time.
 Any scheduled or estimated contribution makes the total **Est. flight time**.
 When all durations are missing, the interface shows **Flight time unavailable**.
-The average excludes flights without usable duration data.
+The average and time records exclude flights without usable duration data.
+Each time record retains its own timing basis: **Actual**, **Scheduled**, or **Estimated**.
+A scheduled or estimated record has an **Est.** label.
+Other flights do not change that record's label.
+For equal times, prefer actual data, then scheduled data, then estimated data.
+This rule gives the same result when the input order changes.
 Filters apply consistently to totals and selected airport, route, country, and region details.
 Country and region airport lists use only matching flights.
 Their visit counts include each matching arrival or departure within the selected area.
@@ -224,6 +234,7 @@ Run the duration and ingestion checks:
 ```bash
 npx vitest run src/test/flightDuration.test.ts src/test/flightSummaries.test.tsx \
   src/test/DurationSummary.test.tsx src/test/flightStatsAccessibility.test.tsx \
+  src/test/flightTimeRegressions.test.tsx \
   src/test/flightSelectionAirports.test.ts src/test/FlightsMap.test.tsx \
   src/test/flightFilterTransitions.test.tsx src/test/flightFilterCommitOrder.test.ts \
   scripts/__tests__/syncFlights.test.ts scripts/__tests__/flightDataIntegrity.test.ts \

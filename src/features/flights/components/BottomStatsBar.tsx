@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import type { FlightTypeFilter } from '../types';
 import { formatDistance, getFlightTypeLabel } from '../utils';
-import { DistanceValue, FlightHoursValue } from './shared';
+import { DistanceValue, FlightTimeValue } from './shared';
 import type { FlightDurationSummary } from '../utils/flightDuration';
 
 interface BottomStatsBarProps {
@@ -69,7 +69,7 @@ export const BottomStatsBar = memo(function BottomStatsBar({
                         <span className="text-gray-600">•</span>
                         <span className="text-sky-300 font-semibold whitespace-nowrap">
                             {duration.estimatedCount || duration.scheduledCount ? 'Est. ' : ''}
-                            <FlightHoursValue summary={duration} />
+                            <FlightTimeValue summary={duration} />
                         </span>
                     </>
                 )}

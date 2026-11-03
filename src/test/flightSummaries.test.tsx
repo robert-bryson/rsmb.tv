@@ -61,7 +61,12 @@ describe('flight summary membership', () => {
         const value = result.current;
         expect(value.matchingFlights.map(f => f.properties.id)).toEqual(ids);
         expect(value.flightStats.totalFlights).toBe(ids.length);
-        expect(value.flightStats.duration).toMatchObject({ flightCount: ids.length, totalMinutes: minutes });
+        const matchingMinutes = legs.filter(leg => ids.includes(leg.id)).map(leg => leg.durationMinutes!);
+        expect(value.flightStats.duration).toMatchObject({
+            flightCount: ids.length, totalMinutes: minutes,
+            longest: ids.length ? { minutes: Math.max(...matchingMinutes) } : null,
+            shortest: ids.length ? { minutes: Math.min(...matchingMinutes) } : null,
+        });
         for (const summary of [value.selectedRouteInfo, value.selectedCountryInfo, value.selectedRegionInfo]) {
             if (summary) {
                 expect(summary.totalFlights).toBe(ids.length);

@@ -1,6 +1,6 @@
 import type { FlightProperties } from '../types';
-import { flightDurationCoverage, flightDurationKindLabel, flightDurationSourceLabel, formatFlightDuration, formatFlightDurationAccessible, resolveFlightDuration, type FlightDurationSummary } from '../utils/flightDuration';
-import { CollapsibleSection, FlightHoursValue, StatItem } from './shared';
+import { FLIGHT_DURATION_METHOD, flightDurationCoverage, flightDurationKindLabel, flightDurationSourceLabel, formatFlightDuration, formatFlightDurationAccessible, resolveFlightDuration, type FlightDurationRecord, type FlightDurationSummary } from '../utils/flightDuration';
+import { CollapsibleSection, FlightTimeValue, StatItem } from './shared';
 
 function DurationValue({ minutes }: { minutes: number | null }) {
     return <>
@@ -24,6 +24,16 @@ interface DurationSummaryProps {
     onToggle?: () => void;
 }
 
+function DurationExtreme({ record, longest }: { record: FlightDurationRecord; longest: boolean }) {
+    const prefix = record.kind === 'actual-block' ? '' : 'Est. ';
+    return <StatItem
+        icon={longest ? '🛫' : '🛬'}
+        label={`${prefix}${longest ? 'Longest' : 'Shortest'} Flight Time`}
+        value={<DurationValue minutes={record.minutes} />}
+        subValue={flightDurationKindLabel(record.kind)}
+    />;
+}
+
 export function DurationSummary({ summary, isOpen, onToggle }: DurationSummaryProps) {
     const count = summary.flightCount - summary.unavailableCount;
     const estimated = summary.estimatedCount > 0 || summary.scheduledCount > 0;
@@ -34,7 +44,7 @@ export function DurationSummary({ summary, isOpen, onToggle }: DurationSummaryPr
                     <StatItem
                         icon="🕒"
                         label={estimated ? 'Est. Total Time' : 'Total Time'}
-                        value={<FlightHoursValue summary={summary} />}
+                        value={<FlightTimeValue summary={summary} />}
                         subValue={summary.unavailableCount > 0 ? `${count} of ${summary.flightCount} flights` : undefined}
                     />
                     {count > 0 && <StatItem
@@ -42,9 +52,11 @@ export function DurationSummary({ summary, isOpen, onToggle }: DurationSummaryPr
                         label={estimated ? 'Est. Avg Time' : 'Avg Time'}
                         value={<DurationValue minutes={summary.totalMinutes / count} />}
                     />}
+                    {summary.longest && <DurationExtreme record={summary.longest} longest />}
+                    {summary.shortest && <DurationExtreme record={summary.shortest} longest={false} />}
                 </div>
                 <p className="mt-2 text-xs text-gray-400">{flightDurationCoverage(summary)}</p>
-                <p className="mt-1 text-xs text-gray-400">Gate-to-gate. Estimates use distance and a fixed allowance.</p>
+                <p className="mt-1 text-xs text-gray-400">{FLIGHT_DURATION_METHOD}</p>
             </CollapsibleSection>
         </section>
     );

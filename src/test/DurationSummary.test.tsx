@@ -10,11 +10,23 @@ describe('flight duration presentation', () => {
             makeFlight({ durationMinutes: 165 }),
             makeFlight({ durationMinutes: null, durationKind: null, durationSource: null, origin_lat: NaN }),
         ])} />);
-        const value = screen.getByText('2.8 h').closest('[title]');
+        const value = screen.getByText('3h').closest('[title]');
         expect(value).toHaveAttribute('title', expect.stringContaining('1 actual · 0 scheduled · 0 estimated · 1 unavailable'));
+        expect(value).toHaveAttribute('title', expect.stringContaining('Flight time: 2.8 h'));
         expect(screen.getByRole('region', { name: 'Flight time' })).toHaveTextContent('1 of 2 flights');
-        expect(screen.getByText('2 hours 45 minutes')).toHaveClass('sr-only');
-        expect(value).toHaveTextContent('2.8 h');
+        expect(screen.getAllByText('2 hours 45 minutes')).toHaveLength(3);
+        expect(screen.getAllByText('2 hours 45 minutes').every(element => element.classList.contains('sr-only'))).toBe(true);
+        expect(value).toHaveTextContent('3h');
+    });
+
+    it('shows the longest and shortest resolved flight times in hours and minutes', () => {
+        render(<DurationSummary summary={summarizeFlightDurations([
+            makeFlight({ durationMinutes: 165 }),
+            makeFlight({ durationMinutes: 45 }),
+            makeFlight({ durationMinutes: null, durationKind: null, durationSource: null, origin_lat: NaN }),
+        ])} />);
+        expect(screen.getByText('Longest Flight Time').parentElement).toHaveTextContent('2h 45m');
+        expect(screen.getByText('Shortest Flight Time').parentElement).toHaveTextContent('45m');
     });
 
     it.each([{ legs: [] }, { legs: [makeFlight({ durationMinutes: null, durationKind: null, durationSource: null, origin_lon: Infinity })] }])('does not present missing values as zero or recorded time', ({ legs }) => {
@@ -22,6 +34,8 @@ describe('flight duration presentation', () => {
         expect(screen.getByText('Unavailable')).toBeVisible();
         expect(screen.getByText(/^Flight time unavailable\./)).toHaveClass('sr-only');
         expect(screen.queryByText('Avg Time')).not.toBeInTheDocument();
+        expect(screen.queryByText(/Longest Flight Time/)).not.toBeInTheDocument();
+        expect(screen.queryByText(/Shortest Flight Time/)).not.toBeInTheDocument();
         expect(screen.queryByText('0 h')).not.toBeInTheDocument();
     });
 

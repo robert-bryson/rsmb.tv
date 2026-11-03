@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { FlightProperties } from '../features/flights/types';
 import { parseFlightDuration } from '../features/flights/utils/durationInput';
-import { flightDurationCoverage, flightDurationLabel, formatFlightDuration, formatFlightDurationAccessible, formatFlightHours, resolveFlightDuration, summarizeFlightDurations } from '../features/flights/utils/flightDuration';
+import { flightDurationCoverage, flightDurationLabel, formatFlightDays, formatFlightDuration, formatFlightDurationAccessible, formatFlightHours, resolveFlightDuration, summarizeFlightDurations } from '../features/flights/utils/flightDuration';
 import { flightMatchesFilters } from '../features/flights/utils/flightFilters';
 import { parseFlightDate } from '../features/flights/utils/flightDateInput';
 import { renderHook } from '@testing-library/react';
@@ -65,9 +65,23 @@ describe('duration resolution and aggregation', () => {
         ]);
         expect(summary).toMatchObject({ flightCount: 4, actualMinutes: 65, actualCount: 1, scheduledMinutes: 80, scheduledCount: 1, estimatedCount: 1, unavailableCount: 1 });
         expect(summary.totalMinutes).toBe(145 + resolveFlightDuration(leg()).minutes!);
+        expect(summary.shortest).toEqual({ minutes: 65, kind: 'actual-block' });
+        expect(summary.longest).toEqual({ minutes: resolveFlightDuration(leg()).minutes, kind: 'estimated-block' });
         expect(flightDurationCoverage(summary)).toBe('1 actual · 1 scheduled · 1 estimated · 1 unavailable');
         expect(flightDurationLabel(summary)).toBe('Est. flight time');
         expect(formatFlightHours(summarizeFlightDurations([]))).toBe('Unavailable');
+        expect(formatFlightDays(summarizeFlightDurations([]))).toBe('Unavailable');
+        expect(summarizeFlightDurations([])).toMatchObject({ longest: null, shortest: null });
+        expect(summarizeFlightDurations([leg({ origin_lon: Infinity })])).toMatchObject({ longest: null, shortest: null });
+    });
+    it.each([
+        [70044, '48d 15h'], [1440, '1d 0h'], [1439, '1d 0h'],
+        [165, '3h'], [45, '45m'],
+    ] as const)('formats %s total minutes as %s while retaining precise hours', (minutes, expected) => {
+        const summary = summarizeFlightDurations([leg({ durationMinutes: minutes, durationKind: 'actual-block', durationSource: 'manual' })]);
+        expect(formatFlightDays(summary)).toBe(expected);
+        expect(summary.totalMinutes).toBe(minutes);
+        if (minutes === 70044) expect(formatFlightHours(summary)).toBe('1,167.4 h');
     });
     it('formats individual durations and aggregate hours without changing canonical minutes', () => {
         expect(formatFlightDuration(45)).toBe('45m');

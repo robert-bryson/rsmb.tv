@@ -18,18 +18,25 @@ for (const selection of ['route=LAX-SEA', 'airport=LAX', 'country=US', 'region=U
         await page.goto(`/projects/flights/map?paths=0&year=2024&airline=Test&${selection}`);
         const panel = page.getByTestId('stats-panel-content');
         const time = panel.getByRole('region', { name: 'Flight time', exact: true });
-        await expect(time).toContainText('5.8 h');
+        await expect(time.getByText('6h', { exact: true })).toBeVisible();
+        await expect(time.getByTitle(/^Est\. flight time: 5\.8 h\./)).toBeVisible();
         await expect(time.getByText('1 actual · 1 scheduled · 0 estimated', { exact: true })).toBeVisible();
+        await expect(time.getByText('Gate-to-gate. Estimates use distance and a fixed allowance.', { exact: true })).toBeVisible();
         await expect(time).toContainText('Est. Total Time');
         await expect(time).toContainText('Est. Avg Time');
         await expect(time.getByText('2h 53m', { exact: true })).toBeVisible();
-        await expect(page.getByRole('status')).toContainText('5.8 h');
+        await expect(time.getByText('Est. Longest Flight Time').locator('..')).toContainText('3h');
+        await expect(time.getByText('Est. Longest Flight Time').locator('..')).toContainText('Scheduled');
+        await expect(time.getByText('Shortest Flight Time', { exact: true }).locator('..')).toContainText('2h 45m');
+        await expect(time.getByText('Shortest Flight Time', { exact: true }).locator('..')).toContainText('Actual');
+        await expect(page.getByRole('status')).toContainText('6h');
         if (selection.startsWith('route=')) {
             await panel.getByRole('button', { name: /All Flights \(2\)/ }).click();
             await expect(panel).toContainText('T101');
-            await expect(panel.getByText('2h 45m', { exact: true }).locator('..')).toContainText('· Actual');
-            await expect(panel.getByText('3h', { exact: true }).locator('..')).toContainText('· Scheduled');
-            await expect(panel.getByText('2 hours 45 minutes', { exact: true })).toHaveClass('sr-only');
+            const actual = panel.getByText('2h 45m', { exact: true }).locator('..').filter({ hasText: '· Actual' });
+            await expect(actual).toBeVisible();
+            await expect(panel.getByText('3h', { exact: true }).locator('..').filter({ hasText: '· Scheduled' })).toBeVisible();
+            await expect(actual.getByText('2 hours 45 minutes', { exact: true })).toHaveClass('sr-only');
         }
     });
 }
@@ -38,20 +45,22 @@ test('flight time remains accessible and the stats tab fits a narrow phone', asy
     await page.setViewportSize({ width: 320, height: 720 });
     await page.goto('/projects/flights/map?paths=0&year=2024');
     const time = page.getByRole('region', { name: 'Flight time', exact: true });
-    await expect(time).toContainText('5.8 h');
+    await expect(time.getByText('6h', { exact: true })).toBeVisible();
+    await expect(time.getByText('1 actual · 1 scheduled · 0 estimated', { exact: true })).toBeVisible();
+    await expect(time.getByText('Gate-to-gate. Estimates use distance and a fixed allowance.', { exact: true })).toBeVisible();
     const timeToggle = time.getByRole('button', { name: 'Flight Time', exact: true });
     await expect(timeToggle).toHaveAttribute('aria-expanded', 'true');
     await timeToggle.focus();
     await page.keyboard.press('Space');
     await expect(timeToggle).toHaveAttribute('aria-expanded', 'false');
-    await expect(time.getByText('5.8 h', { exact: true })).not.toBeVisible();
+    await expect(time.getByText('6h', { exact: true })).not.toBeVisible();
     await page.keyboard.press('Enter');
     await expect(timeToggle).toHaveAttribute('aria-expanded', 'true');
-    await expect(time.getByText('5.8 h', { exact: true })).toBeVisible();
+    await expect(time.getByText('6h', { exact: true })).toBeVisible();
     await page.getByRole('button', { name: '▼ Collapse All' }).click();
-    await expect(time.getByText('5.8 h', { exact: true })).not.toBeVisible();
+    await expect(time.getByText('6h', { exact: true })).not.toBeVisible();
     await page.getByRole('button', { name: '▶ Expand All' }).click();
-    await expect(time.getByText('5.8 h', { exact: true })).toBeVisible();
+    await expect(time.getByText('6h', { exact: true })).toBeVisible();
     const toggle = page.getByRole('button', { name: 'Hide stats panel' });
     const bounds = (await toggle.boundingBox())!;
     expect(bounds.x + bounds.width).toBeLessThanOrEqual(320);

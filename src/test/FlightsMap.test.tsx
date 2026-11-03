@@ -481,12 +481,13 @@ describe('route previews after filtering', () => {
     it('refreshes an open touch preview and removes it when its route is excluded', () => {
         render(<MemoryRouter initialEntries={['/projects/flights/map?year=2024']}><FlightsMap /><YearLinks /></MemoryRouter>);
         fireEvent.click(screen.getByRole('button', { name: 'Tap route' }));
-        expect(within(screen.getByRole('dialog', { name: 'Route information' })).getByText('2.8 h')).toBeVisible();
+        expect(within(screen.getByRole('dialog', { name: 'Route information' })).getByText('3h')).toBeVisible();
         fireEvent.click(screen.getByRole('button', { name: 'Use 2025' }));
         const dialog = screen.getByRole('dialog', { name: 'Route information' });
-        expect(within(dialog).getByText('4 h')).toBeVisible();
-        expect(within(dialog).getByText('4 h').closest('[title]')).toHaveAttribute('title', expect.stringContaining('0 actual · 1 scheduled · 0 estimated'));
-        expect(dialog).not.toHaveTextContent('2.8 h');
+        const totalTime = within(dialog).getByTitle(/^Est\. flight time: 4 h\./);
+        expect(totalTime).toBeVisible();
+        expect(totalTime).toHaveAttribute('title', expect.stringContaining('0 actual · 1 scheduled · 0 estimated'));
+        expect(dialog).not.toHaveTextContent('Flight time: 2 hours 45 minutes');
         fireEvent.click(screen.getByRole('button', { name: 'Use 2026' }));
         expect(screen.queryByRole('dialog', { name: 'Route information' })).not.toBeInTheDocument();
     });
@@ -568,7 +569,7 @@ describe('renderer layers and selection', () => {
     it('uses current route data for a phone tap on an animated arc', () => {
         renderMap('?year=2024');
         clickArc(renderedArcs().find(arc => !arc.isStatic)!);
-        expect(screen.getByRole('dialog', { name: 'Route information' })).toHaveTextContent('2.8 h');
+        expect(within(screen.getByRole('dialog', { name: 'Route information' })).getByTitle(/^Flight time: 2\.8 h\./)).toHaveTextContent('3h');
         expect(screen.getByTestId('location')).not.toHaveTextContent('route=');
     });
 

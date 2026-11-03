@@ -210,6 +210,7 @@ They also check recovery after a failed historical request while phone controls 
 
 Flight tests check duration input, timing coverage, filtering, route counts, and current phone details.
 They also check filtered airport visits, readable time totals, and keyboard control of statistics sections.
+Time checks cover hour and day rounding, visible timing coverage on phones, and the timing basis of each longest or shortest value.
 See the [flight guide](projects/flights/readme.md#flight-duration) for focused checks.
 Basemap tests use a fixture browser key and fixed provider responses.
 See the [basemap guide](docs/carto-basemaps.md#validation) for the configuration checks and their limits.

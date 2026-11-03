@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { CollapsibleSection } from '../features/flights/components/shared/CollapsibleSection';
-import { FlightHoursValue } from '../features/flights/components/shared/FlightHoursValue';
+import { FlightTimeValue } from '../features/flights/components/shared/FlightTimeValue';
 import { DurationSummary } from '../features/flights/components/DurationSummary';
 import { BottomStatsBar } from '../features/flights/components/BottomStatsBar';
 import { summarizeFlightDurations } from '../features/flights/utils/flightDuration';
@@ -56,6 +56,10 @@ describe('flight statistics accessibility', () => {
         const region = screen.getByRole('region', { name: 'Flight time' });
         expect(within(region).getByText('1 actual · 1 scheduled · 1 estimated · 1 unavailable · 1 reported, timing basis unknown')).toBeVisible();
         expect(within(region).getByText('Gate-to-gate. Estimates use distance and a fixed allowance.')).toBeVisible();
+        const details = within(region).getByText(/^Est\. flight time:/);
+        expect(details).toHaveClass('sr-only');
+        expect(details).toHaveTextContent('1 actual · 1 scheduled · 1 estimated · 1 unavailable · 1 reported, timing basis unknown');
+        expect(details.parentElement).toHaveAttribute('title', expect.stringContaining('Gate-to-gate. Estimates use distance and a fixed allowance.'));
         expect(region).toHaveTextContent('3 of 4 flights');
     });
 
@@ -64,8 +68,9 @@ describe('flight statistics accessibility', () => {
             makeFlight({ durationMinutes: 165 }),
             makeFlight({ durationMinutes: 180, durationKind: 'scheduled-block' }),
         ]);
-        render(<FlightHoursValue summary={summary} />);
-        expect(screen.getByText('5.8 h')).toHaveAttribute('aria-hidden', 'true');
+        render(<FlightTimeValue summary={summary} />);
+        expect(screen.getByText('6h')).toHaveAttribute('aria-hidden', 'true');
+        expect(screen.getByText('6h').parentElement).toHaveAttribute('title', expect.stringContaining('Est. flight time: 5.8 h'));
         const spoken = screen.getByText(/^Est\. flight time: 5 hours 45 minutes\./);
         expect(spoken).toHaveClass('sr-only');
         expect(spoken).toHaveTextContent('1 actual · 1 scheduled · 0 estimated');
@@ -75,7 +80,7 @@ describe('flight statistics accessibility', () => {
         const summary = summarizeFlightDurations(unusable
             ? [makeFlight({ durationMinutes: null, durationKind: null, durationSource: null, origin_lat: NaN })]
             : []);
-        render(<FlightHoursValue summary={summary} />);
+        render(<FlightTimeValue summary={summary} />);
         expect(screen.getByText('Unavailable')).toHaveAttribute('aria-hidden', 'true');
         expect(screen.getByText(/^Flight time unavailable\./)).toHaveClass('sr-only');
         expect(screen.queryByText(/0 h/)).not.toBeInTheDocument();
@@ -90,7 +95,7 @@ describe('flight statistics accessibility', () => {
             isMetric onToggleUnits={vi.fn()}
         />);
         const status = screen.getByRole('status');
-        expect(within(status).getByText('2.8 h')).toHaveAttribute('aria-hidden', 'true');
+        expect(within(status).getByText('3h')).toHaveAttribute('aria-hidden', 'true');
         expect(within(status).getByText(/flight time: 2 hours 45 minutes\./i)).toHaveClass('sr-only');
         if (durationKind === 'scheduled-block') expect(within(status).getByText('Est.')).toBeVisible();
         else expect(within(status).queryByText('Est.')).not.toBeInTheDocument();
