@@ -496,9 +496,8 @@ describe('route previews after filtering', () => {
         expect(within(screen.getByRole('dialog', { name: 'Route information' })).getByText('3h')).toBeVisible();
         fireEvent.click(screen.getByRole('button', { name: 'Use 2025' }));
         const dialog = screen.getByRole('dialog', { name: 'Route information' });
-        const totalTime = within(dialog).getByTitle(/^Est\. flight time: 4 h\./);
+        const totalTime = within(dialog).getByTitle('Flight time: 4 h.');
         expect(totalTime).toBeVisible();
-        expect(totalTime).toHaveAttribute('title', expect.stringContaining('0 actual · 1 scheduled · 0 estimated'));
         expect(dialog).not.toHaveTextContent('Flight time: 2 hours 45 minutes');
         fireEvent.click(screen.getByRole('button', { name: 'Use 2026' }));
         expect(screen.queryByRole('dialog', { name: 'Route information' })).not.toBeInTheDocument();
@@ -509,7 +508,7 @@ describe('route previews after filtering', () => {
         fireEvent.mouseEnter(screen.getByRole('button', { name: 'Tap route' }));
         expect(screen.getByRole('tooltip')).toHaveTextContent('Flight time: 2.8 h');
         fireEvent.click(screen.getByRole('button', { name: 'Use 2025' }));
-        expect(screen.getByRole('tooltip')).toHaveTextContent('Est. flight time: 4 h');
+        expect(screen.getByRole('tooltip')).toHaveTextContent('Flight time: 4 h');
         fireEvent.click(screen.getByRole('button', { name: 'Use 2026' }));
         expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     });

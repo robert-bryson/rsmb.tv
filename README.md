@@ -213,9 +213,10 @@ Tornado browser tests use fixed tracks and map tiles.
 They check phone WebGL, desktop WebGL, and the SVG fallback.
 They also check recovery after a failed historical request while phone controls remain open.
 
-Flight tests check duration input, timing coverage, filtering, route counts, and current phone details.
+Flight tests check duration input, timing-basis counts, filtering, route counts, and current phone details.
 They also check filtered airport visits, readable time totals, and keyboard control of statistics sections.
-Time checks cover hour and day rounding, visible timing coverage on phones, and the timing basis of each longest or shortest value.
+Time checks cover hour and day rounding, partial totals, escaped source details, and consistent labels across React and HTML tooltips.
+Phone and desktop checks verify that estimated-only flights show times without estimate labels or method notes.
 See the [flight guide](projects/flights/readme.md#flight-duration) for focused checks.
 See the [map code guide](projects/flights/readme.md#map-code) for camera recovery checks and their renderer assertions.
 Basemap tests use a fixture browser key and fixed provider responses.

@@ -10,7 +10,7 @@ import type { FlightDurationKind } from '../features/flights/utils/durationInput
 import { makeFlight } from './helpers/flights';
 
 describe('flight time regressions', () => {
-    it('shows timing coverage and the estimate method without hover', () => {
+    it('shows flight time without estimate labels, coverage, or method notes', () => {
         render(<DurationSummary summary={summarizeFlightDurations([
             makeFlight(),
             makeFlight({ durationMinutes: 80, durationKind: 'scheduled-block' }),
@@ -19,13 +19,14 @@ describe('flight time regressions', () => {
         ])} />);
 
         const region = screen.getByRole('region', { name: 'Flight time' });
-        expect(within(region).getByText('1 actual · 1 scheduled · 1 estimated · 1 unavailable · 1 reported, timing basis unknown')).toBeVisible();
-        expect(within(region).getByText('Gate-to-gate. Estimates use distance and a fixed allowance.')).toBeVisible();
+        expect(within(region).getByText('Total Time')).toBeVisible();
+        expect(within(region).getByText('Avg Time')).toBeVisible();
+        expect(region).not.toHaveTextContent(/Est\.|Estimated|actual ·|Gate-to-gate/);
     });
 
     it.each([
-        { actual: 45, other: 180, actualLabel: 'Shortest Flight Time', otherLabel: 'Est. Longest Flight Time' },
-        { actual: 180, other: 45, actualLabel: 'Longest Flight Time', otherLabel: 'Est. Shortest Flight Time' },
+        { actual: 45, other: 180, actualLabel: 'Shortest Flight Time', otherLabel: 'Longest Flight Time' },
+        { actual: 180, other: 45, actualLabel: 'Longest Flight Time', otherLabel: 'Shortest Flight Time' },
     ])('labels each extreme from its own timing basis: $actualLabel', ({ actual, other, actualLabel, otherLabel }) => {
         render(<DurationSummary summary={summarizeFlightDurations([
             makeFlight({ durationMinutes: actual }),
@@ -34,8 +35,8 @@ describe('flight time regressions', () => {
 
         expect(screen.getByText(actualLabel).parentElement).toHaveTextContent('Actual');
         expect(screen.getByText(otherLabel).parentElement).toHaveTextContent('Scheduled');
-        expect(screen.getByText('Est. Total Time')).toBeVisible();
-        expect(screen.getByText('Est. Avg Time')).toBeVisible();
+        expect(screen.getByText('Total Time')).toBeVisible();
+        expect(screen.getByText('Avg Time')).toBeVisible();
     });
 
     it('excludes unavailable legs from extrema and retains supplied and fallback estimates', () => {
@@ -51,8 +52,9 @@ describe('flight time regressions', () => {
             longest: { minutes: 60, kind: 'estimated-block' },
         });
         render(<DurationSummary summary={summary} />);
-        expect(screen.getByText('Est. Shortest Flight Time').parentElement).toHaveTextContent('Estimated');
-        expect(screen.getByText('Est. Longest Flight Time').parentElement).toHaveTextContent('Estimated');
+        expect(screen.getByText('Shortest Flight Time').parentElement).toHaveTextContent('30m');
+        expect(screen.getByText('Longest Flight Time').parentElement).toHaveTextContent('1h');
+        expect(screen.queryByText('Estimated')).not.toBeInTheDocument();
     });
 
     it.each([
@@ -92,6 +94,6 @@ describe('flight time regressions', () => {
         expect(compact.parentElement).toHaveAttribute('title', expect.stringContaining('1,167.4 h'));
         const spoken = screen.getByText(/^Flight time: 1167 hours 24 minutes\./);
         expect(spoken).toHaveClass('sr-only');
-        expect(spoken).toHaveTextContent('1 actual · 0 scheduled · 0 estimated · 1 unavailable');
+        expect(spoken).toHaveTextContent('Flight time: 1167 hours 24 minutes.');
     });
 });

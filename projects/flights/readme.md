@@ -1,6 +1,8 @@
 # Flights 3D map
 
-This project shows flight history on a 3D globe. It uses [react-globe.gl](https://github.com/vasturiano/react-globe.gl), Three.js, and WebGL. Build scripts convert the source CSV data to GeoJSON for the website.
+This project shows flight history on a 3D globe.
+It uses [react-globe.gl](https://github.com/vasturiano/react-globe.gl), Three.js, and WebGL.
+Build scripts convert the source CSV data to GeoJSON for the website.
 
 ## Folder structure
 
@@ -210,28 +212,30 @@ Screen readers receive full unit names, such as "2 hours 45 minutes."
 Distance-unit changes do not change flight-time units.
 
 Each statistics view has a **Flight Time** section.
-Use its button to show or hide the total, average, longest time, shortest time, and timing coverage.
+Use its button to show or hide the total, average, longest time, and shortest time.
 **Collapse All** and **Expand All** also control this section.
 Section buttons expose their expanded state to assistive technology.
 
-Coverage shows actual, scheduled, estimated, and unavailable flight counts.
-It remains visible when the section is open, including on touch devices.
-The compact total also supplies precise time and coverage as text for assistive technology.
-Hover text also includes the coverage and estimate method.
-Totals and averages have an **Est.** label when they include scheduled or estimated time.
-Any scheduled or estimated contribution makes the total **Est. flight time**.
+Totals and averages use the same labels for actual, scheduled, and estimated time.
+The interface omits **Est.**, **Estimated**, timing-basis counts, and method notes.
+Estimated flight details also omit source rows.
+Actual and scheduled flight details retain their timing basis and source.
+The resolver retains all duration kinds, sources, and counts for calculations.
+The compact total supplies precise time as text for assistive technology.
+Hover text shows decimal hours.
+Partial totals identify the usable subset, such as **Time available for 1 of 2 flights**.
+This note appears in compact hover text, screen reader text, and route, airport, and state tooltips.
+The statistics section also shows the usable flight count below its total.
 When all durations are missing, the interface shows **Flight time unavailable**.
 The average and time records exclude flights without usable duration data.
-Each time record retains its own timing basis: **Actual**, **Scheduled**, or **Estimated**.
-A scheduled or estimated record has an **Est.** label.
-Other flights do not change that record's label.
+Actual and scheduled time records retain their own timing-basis labels.
 For equal times, prefer actual data, then scheduled data, then estimated data.
 This rule gives the same result when the input order changes.
 Filters apply consistently to totals and selected airport, route, country, and region details.
 Country and region airport lists use only matching flights.
 Their visit counts include each matching arrival or departure within the selected area.
 An internal flight contributes two airport visits and one duration to the area's total.
-Route counts and time coverage use the same legs for the selected year and airline.
+Route counts and time totals use the same legs for the selected year and airline.
 Open phone and hover details use current route data after a filter change.
 A flight within one state contributes its duration once to that state's total.
 Dates retain their departure-calendar meaning; no local-clock subtraction is needed.
@@ -240,6 +244,7 @@ Validation rejects malformed duration input before updating CSV or generated fil
 Older CSV files without duration columns remain supported.
 No historical durations are invented or automatically assigned as actual.
 See the [duration research](../../docs/reviews/2026-11-02-flight-duration-research.md) for evidence sources and historical matching constraints.
+Its original label proposal is historical. Use the display rules in this guide for current work.
 
 Run the duration and ingestion checks:
 
@@ -247,6 +252,7 @@ Run the duration and ingestion checks:
 npx vitest run src/test/flightDuration.test.ts src/test/flightSummaries.test.tsx \
   src/test/DurationSummary.test.tsx src/test/flightStatsAccessibility.test.tsx \
   src/test/flightTimeRegressions.test.tsx \
+  src/test/flightTimePresentation.test.tsx src/test/tooltipHtml.test.ts \
   src/test/flightSelectionAirports.test.ts src/test/FlightsMap.test.tsx \
   src/test/flightFilterTransitions.test.tsx src/test/flightFilterCommitOrder.test.ts \
   scripts/__tests__/syncFlights.test.ts scripts/__tests__/flightDataIntegrity.test.ts \
@@ -262,9 +268,13 @@ Select the distance total at the bottom left to change the units.
 Metric units are `km` and `m`. Imperial units are `mi` and `ft`.
 The application stores the selected units locally.
 
-The stats panel stays open when you clear an airport, route, country, or region. Airport-code links show the full airport name in a native tooltip.
+The stats panel stays open when you clear an airport, route, country, or region.
+Airport-code links show the full airport name in a native tooltip.
 
-Use the pull tab on the left side of the map to open or close the stats panel. The closed panel does not show a scrollbar. The open panel uses the application scrollbar colors in supported browsers. In forced-colors mode, the browser controls the scrollbar colors.
+Use the pull tab on the left side of the map to open or close the stats panel.
+The closed panel does not show a scrollbar.
+The open panel uses the application scrollbar colors in supported browsers.
+In forced-colors mode, the browser controls the scrollbar colors.
 
 ## Keyboard shortcuts
 

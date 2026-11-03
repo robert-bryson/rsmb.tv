@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { FlightProperties } from '../features/flights/types';
 import { parseFlightDuration } from '../features/flights/utils/durationInput';
-import { flightDurationCoverage, flightDurationLabel, formatFlightDays, formatFlightDuration, formatFlightDurationAccessible, formatFlightHours, resolveFlightDuration, summarizeFlightDurations } from '../features/flights/utils/flightDuration';
+import { flightDurationLabel, formatFlightDays, formatFlightDuration, formatFlightDurationAccessible, formatFlightHours, resolveFlightDuration, summarizeFlightDurations } from '../features/flights/utils/flightDuration';
 import { flightMatchesFilters } from '../features/flights/utils/flightFilters';
 import { parseFlightDate } from '../features/flights/utils/flightDateInput';
 import { renderHook } from '@testing-library/react';
@@ -67,8 +67,7 @@ describe('duration resolution and aggregation', () => {
         expect(summary.totalMinutes).toBe(145 + resolveFlightDuration(leg()).minutes!);
         expect(summary.shortest).toEqual({ minutes: 65, kind: 'actual-block' });
         expect(summary.longest).toEqual({ minutes: resolveFlightDuration(leg()).minutes, kind: 'estimated-block' });
-        expect(flightDurationCoverage(summary)).toBe('1 actual · 1 scheduled · 1 estimated · 1 unavailable');
-        expect(flightDurationLabel(summary)).toBe('Est. flight time');
+        expect(flightDurationLabel(summary)).toBe('Flight time');
         expect(formatFlightHours(summarizeFlightDurations([]))).toBe('Unavailable');
         expect(formatFlightDays(summarizeFlightDurations([]))).toBe('Unavailable');
         expect(summarizeFlightDurations([])).toMatchObject({ longest: null, shortest: null });

@@ -11,8 +11,7 @@ describe('flight duration presentation', () => {
             makeFlight({ durationMinutes: null, durationKind: null, durationSource: null, origin_lat: NaN }),
         ])} />);
         const value = screen.getByText('3h').closest('[title]');
-        expect(value).toHaveAttribute('title', expect.stringContaining('1 actual · 0 scheduled · 0 estimated · 1 unavailable'));
-        expect(value).toHaveAttribute('title', expect.stringContaining('Flight time: 2.8 h'));
+        expect(value).toHaveAttribute('title', 'Flight time: 2.8 h. Time available for 1 of 2 flights.');
         expect(screen.getByRole('region', { name: 'Flight time' })).toHaveTextContent('1 of 2 flights');
         expect(screen.getAllByText('2 hours 45 minutes')).toHaveLength(3);
         expect(screen.getAllByText('2 hours 45 minutes').every(element => element.classList.contains('sr-only'))).toBe(true);
@@ -49,7 +48,7 @@ describe('flight duration presentation', () => {
 
     it('keeps unclassified reported time separate from the distance estimate', () => {
         render(<FlightDurationDetail flight={makeFlight({ durationMinutes: 40, durationKind: 'unclassified', durationSource: 'old log' })} />);
-        expect(screen.getByText('Source: Distance estimate')).toBeVisible();
+        expect(screen.queryByText(/Estimated|Distance estimate/)).not.toBeInTheDocument();
         expect(screen.getByText(/timing basis unknown; source: old log/)).toHaveTextContent('Reported duration: 40m');
     });
 

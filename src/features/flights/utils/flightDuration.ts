@@ -4,11 +4,6 @@ import { calculateDistance } from './index';
 import { parseFlightDuration, type FlightDurationKind } from './durationInput';
 
 export const DISTANCE_DURATION_SOURCE = 'distance-800-plus-60-v1';
-export const FLIGHT_DURATION_METHOD = 'Gate-to-gate. Estimates use distance and a fixed allowance.';
-
-export function flightDurationSourceLabel(source: string): string {
-    return source === DISTANCE_DURATION_SOURCE ? 'Distance estimate' : source;
-}
 
 export interface FlightDurationRecord {
     minutes: number;
@@ -19,6 +14,11 @@ export type ResolvedFlightDuration = (FlightDurationRecord | { minutes: null; ki
     source: string | null;
     reportedMinutes: number | null;
 };
+
+/** Estimate metadata stays in the data model but is omitted from flight details. */
+export function flightDurationSourceLabel(duration: ResolvedFlightDuration): string | null {
+    return duration.kind === 'estimated-block' ? null : duration.source;
+}
 
 export interface FlightDurationSummary {
     flightCount: number;
@@ -131,17 +131,15 @@ export function formatFlightDays(summary: FlightDurationSummary): string {
 
 export function flightDurationLabel(summary: FlightDurationSummary): string {
     if (summary.flightCount === summary.unavailableCount) return 'Flight time unavailable';
-    return summary.estimatedCount || summary.scheduledCount ? 'Est. flight time' : 'Flight time';
+    return 'Flight time';
 }
 
-export function flightDurationCoverage(summary: FlightDurationSummary): string {
-    return [
-        `${summary.actualCount} actual`, `${summary.scheduledCount} scheduled`, `${summary.estimatedCount} estimated`,
-        ...(summary.unavailableCount ? [`${summary.unavailableCount} unavailable`] : []),
-        ...(summary.unclassifiedCount ? [`${summary.unclassifiedCount} reported, timing basis unknown`] : []),
-    ].join(' · ');
+/** Identify incomplete totals without showing a timing-basis breakdown. */
+export function flightDurationAvailability(summary: FlightDurationSummary): string | null {
+    const count = summary.flightCount - summary.unavailableCount;
+    return count > 0 && summary.unavailableCount > 0 ? `${count} of ${summary.flightCount} flights` : null;
 }
 
 export function flightDurationKindLabel(kind: FlightDurationKind | null | undefined): string {
-    return kind === 'actual-block' ? 'Actual' : kind === 'scheduled-block' ? 'Scheduled' : kind === 'unclassified' ? 'Reported' : 'Estimated';
+    return kind === 'actual-block' ? 'Actual' : kind === 'scheduled-block' ? 'Scheduled' : kind === 'unclassified' ? 'Reported' : '';
 }

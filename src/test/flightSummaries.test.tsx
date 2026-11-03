@@ -76,7 +76,7 @@ describe('flight summary membership', () => {
         if (filters.selectedAirport) expect(value.flightStats.selectedAirportInfo?.duration).toEqual(value.flightStats.duration);
     });
 
-    it('keeps tooltip counts, duration coverage, and same-date leg identities together after filtering', () => {
+    it('keeps tooltip counts, duration totals, and same-date leg identities together after filtering', () => {
         const { result, rerender } = renderHook(({ selectedYear }) => {
             const globe = useGlobeData({ selectedYear, selectedAirline: 'Test' });
             const selection = useSelectionInfo({ selectedRoute: 'LAX-SEA', selectedCountry: null, selectedRegion: null, ...globe });
@@ -88,7 +88,8 @@ describe('flight summary membership', () => {
         expect(result.current.selectedRouteInfo?.flights?.map(f => [f.id, f.origin_code, f.durationMinutes])).toEqual([[1, 'SEA', 65], [2, 'LAX', 80]]);
         const tooltip = buildArcLabelHtml({ ...route, isStatic: true }, null);
         expect(tooltip).toContain('2 flights');
-        expect(tooltip).toContain('1 actual · 1 scheduled · 0 estimated');
+        expect(tooltip).toContain('2.4 h');
+        expect(tooltip).not.toContain('estimated');
         rerender({ selectedYear: 2025 });
         expect(result.current.staticArcsData[0].routeCount).toBe(1);
         expect(result.current.selectedRouteInfo?.duration?.totalMinutes).toBe(125);

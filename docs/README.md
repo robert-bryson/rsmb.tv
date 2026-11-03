@@ -34,6 +34,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-03 | [Flight display review: partial totals, shared presentation rules, and coverage](reviews/2026-11-03-flight-display-quality-review.md) |
 | 2026-11-03 | [Shared module review: airport input fixes, contract tests, and coverage](reviews/2026-11-03-shared-library-quality-review.md) |
 | 2026-11-03 | [Shared library consolidation: duplication, extraction candidates, and starting points](reviews/2026-11-03-shared-library-analysis.md) |
 | 2026-11-03 | [Basemap timeouts, camera startup, attribution, and regression coverage](reviews/2026-11-03-basemap-ci-quality-review.md) |

@@ -19,14 +19,13 @@ for (const selection of ['route=LAX-SEA', 'airport=LAX', 'country=US', 'region=U
         const panel = page.getByTestId('stats-panel-content');
         const time = panel.getByRole('region', { name: 'Flight time', exact: true });
         await expect(time.getByText('6h', { exact: true })).toBeVisible();
-        await expect(time.getByTitle(/^Est\. flight time: 5\.8 h\./)).toBeVisible();
-        await expect(time.getByText('1 actual · 1 scheduled · 0 estimated', { exact: true })).toBeVisible();
-        await expect(time.getByText('Gate-to-gate. Estimates use distance and a fixed allowance.', { exact: true })).toBeVisible();
-        await expect(time).toContainText('Est. Total Time');
-        await expect(time).toContainText('Est. Avg Time');
+        await expect(time.getByTitle('Flight time: 5.8 h.')).toBeVisible();
+        await expect(time).not.toContainText(/Est\.|Estimated|actual ·|Gate-to-gate/);
+        await expect(time).toContainText('Total Time');
+        await expect(time).toContainText('Avg Time');
         await expect(time.getByText('2h 53m', { exact: true })).toBeVisible();
-        await expect(time.getByText('Est. Longest Flight Time').locator('..')).toContainText('3h');
-        await expect(time.getByText('Est. Longest Flight Time').locator('..')).toContainText('Scheduled');
+        await expect(time.getByText('Longest Flight Time').locator('..')).toContainText('3h');
+        await expect(time.getByText('Longest Flight Time').locator('..')).toContainText('Scheduled');
         await expect(time.getByText('Shortest Flight Time', { exact: true }).locator('..')).toContainText('2h 45m');
         await expect(time.getByText('Shortest Flight Time', { exact: true }).locator('..')).toContainText('Actual');
         await expect(page.getByRole('status')).toContainText('6h');
@@ -41,13 +40,30 @@ for (const selection of ['route=LAX-SEA', 'airport=LAX', 'country=US', 'region=U
     });
 }
 
+for (const width of [1280, 320]) {
+    test(`estimated-only flight details omit estimate labels at ${width}px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto('/projects/flights/map?paths=0&year=2025&route=LAX-SEA');
+        const panel = page.getByTestId('stats-panel-content');
+        const time = panel.getByRole('region', { name: 'Flight time', exact: true });
+        await expect(time.getByText('3h', { exact: true })).toBeVisible();
+        await expect(time.getByText('Longest Flight Time', { exact: true })).toBeVisible();
+        await expect(time.getByText('Shortest Flight Time', { exact: true })).toBeVisible();
+        await panel.getByRole('button', { name: /All Flights \(1\)/ }).click();
+        await expect(panel.getByText('T101', { exact: false })).toBeVisible();
+        await expect(panel).not.toContainText(/Est\.|Estimated|\d+ actual ·|Gate-to-gate|Distance estimate/);
+        const status = page.getByRole('status');
+        await expect(status).toContainText('3h');
+        await expect(status).not.toContainText(/Est\.|Estimated/);
+    });
+}
+
 test('flight time remains accessible and the stats tab fits a narrow phone', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 720 });
     await page.goto('/projects/flights/map?paths=0&year=2024');
     const time = page.getByRole('region', { name: 'Flight time', exact: true });
     await expect(time.getByText('6h', { exact: true })).toBeVisible();
-    await expect(time.getByText('1 actual · 1 scheduled · 0 estimated', { exact: true })).toBeVisible();
-    await expect(time.getByText('Gate-to-gate. Estimates use distance and a fixed allowance.', { exact: true })).toBeVisible();
+    await expect(time).not.toContainText(/Est\.|Estimated|actual ·|Gate-to-gate/);
     const timeToggle = time.getByRole('button', { name: 'Flight Time', exact: true });
     await expect(timeToggle).toHaveAttribute('aria-expanded', 'true');
     await timeToggle.focus();

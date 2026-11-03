@@ -68,7 +68,6 @@ export const BottomStatsBar = memo(function BottomStatsBar({
                     <>
                         <span className="text-gray-600">•</span>
                         <span className="text-sky-300 font-semibold whitespace-nowrap">
-                            {duration.estimatedCount || duration.scheduledCount ? 'Est. ' : ''}
                             <FlightTimeValue summary={duration} />
                         </span>
                     </>
