@@ -88,6 +88,11 @@ describe('Route2Gpx page', () => {
         expect(screen.getByRole('heading', { level: 1, name: /route2gpx/i })).toBeInTheDocument();
         expect(screen.getByRole('link', { name: /Open route2gpx/i })).toHaveAttribute('href', 'https://route2gpx.rsmb.tv');
         expect(screen.getByRole('link', { name: /Source on GitHub/i })).toHaveAttribute('href', 'https://github.com/robert-bryson/route2gpx');
+        expect(screen.getByRole('img', { name: /download popup with GPX, KML, GeoJSON, TCX, and CSV/i })).toHaveAttribute('src', '/images/route2gpx/download-formats-v1-1.webp');
+        expect(screen.getByText(/web app 1\.1\.0 and Python CLI 0\.2\.0/i)).toBeInTheDocument();
+        expect(screen.getByText(/optional place-name lookups send locations/i)).toBeInTheDocument();
+        expect(screen.queryByText(/no data leaves your browser|your routes never touch a server|paste a Google Maps route URL/i)).not.toBeInTheDocument();
+        expect(screen.getByText('Nov 2026')).toHaveAttribute('datetime', '2026-11');
     });
 });
 

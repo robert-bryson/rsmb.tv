@@ -32,7 +32,7 @@ export const DEFAULT_PAGES = [
     { slug: 'temperature-records', title: 'U.S. Temperature Records', subtitle: 'Explore recent record events, county extremes, and standing record ages' },
     { slug: 'tornado-tracks', title: 'Tornado Tracks', subtitle: 'Historical tornado track map with timeline playback and EF-scale filters' },
     { slug: 'climate-trends', title: 'Standing Record Ages', subtitle: 'When were today’s county temperature extremes set?' },
-    { slug: 'route2gpx', title: 'route2gpx', subtitle: 'Convert Google Routes into GPX files for GPS devices' },
+    { slug: 'route2gpx', title: 'route2gpx', subtitle: 'Plan routes and export GPX, KML, GeoJSON, TCX, or CSV' },
     { slug: 'status-dashboard', title: 'Status Dashboard', subtitle: 'Live terminal monitoring for AWS infrastructure, GitHub CI, and site health' },
 ];
 

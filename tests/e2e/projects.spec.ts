@@ -60,3 +60,23 @@ for (const width of [320, 1280]) {
         expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
     });
 }
+
+for (const width of [320, 1280]) {
+    test(`Route2GPX page shows current formats and screenshots at ${width}px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto('/projects/route2gpx');
+        await expect(page.getByRole('heading', { level: 1, name: 'route2gpx', exact: true })).toBeVisible();
+        await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /GPX, KML, GeoJSON, TCX, or CSV/);
+        await expect(page.getByRole('heading', { name: 'Choose an Output', exact: true })).toBeVisible();
+        await expect(page.getByText(/web app 1\.1\.0 and Python CLI 0\.2\.0/)).toBeVisible();
+        await expect(page.getByText('Nov 2026', { exact: true })).toHaveAttribute('datetime', '2026-11');
+        const screenshots = page.locator('figure img');
+        await expect(screenshots).toHaveCount(3);
+        for (const image of await screenshots.all()) {
+            await image.scrollIntoViewIfNeeded();
+            await expect(image).toHaveAttribute('src', /\/images\/route2gpx\/.+-v1-1\.webp$/);
+            await expect.poll(() => image.evaluate(element => (element as HTMLImageElement).naturalWidth)).toBe(1440);
+        }
+        expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    });
+}

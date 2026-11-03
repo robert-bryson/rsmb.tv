@@ -2,6 +2,6 @@
   <rect width="1200" height="630" fill="#0a0a0a"/>
   <rect x="0" y="0" width="1200" height="4" fill="#7c3aed"/>
   <text font-family="sans-serif" font-size="60" font-weight="600" fill="#f4f4f5"><tspan x="80" y="210">route2gpx</tspan></text>
-  <text font-family="sans-serif" font-size="28" fill="#a1a1aa"><tspan x="80" y="410">Convert Google Routes into GPX files for GPS devices</tspan></text>
+  <text font-family="sans-serif" font-size="28" fill="#a1a1aa"><tspan x="80" y="410">Plan routes and export GPX, KML, GeoJSON, TCX, or CSV</tspan></text>
   <text x="80" y="560" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#52525b">rsmb.tv</text>
 </svg>

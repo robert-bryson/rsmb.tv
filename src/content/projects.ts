@@ -315,15 +315,24 @@ export const projects: Project[] = [
   {
     slug: 'route2gpx',
     title: 'route2gpx',
-    description: 'Convert Google Routes into GPX files for GPS devices and bike computers. A privacy-focused web app that runs entirely in your browser—your routes never touch a server.',
-    tech: ['JavaScript', 'Leaflet', 'Google Routes API'],
+    description: 'Plan routes or import GPS tracks, then export GPX, KML, GeoJSON, TCX, or CSV. File imports and conversion run locally in your browser.',
+    tech: ['JavaScript', 'Leaflet', 'Google Routes API', 'Python'],
     applicationCategory: 'TravelApplication',
     demoUrl: 'https://route2gpx.rsmb.tv',
     sourceUrl: 'https://github.com/robert-bryson/route2gpx',
-    previewImage: '/images/route2gpx/route-planning.webp',
+    previewImage: '/images/route2gpx/route-planning-v1-1.webp',
     year: 2024,
-    lastUpdated: '2026-04-07',
+    lastUpdated: '2026-11-03',
     changelog: [
+      {
+        date: '2026-11',
+        notes: [
+          'Choose GPX, KML, GeoJSON, TCX, or CSV from one download popup, with filename previews and track-data details',
+          'Export TCX courses with an explicit choice to generate estimated times when recorded times are incomplete',
+          'Export CSV rows with segment numbers, coordinates, elevations, and recorded times for spreadsheet analysis',
+          'Reuse saved routes in the planner and keep named, numbered planner points on the map',
+        ],
+      },
       {
         date: '2026-04',
         notes: [

@@ -83,7 +83,7 @@
   },
   "/projects/route2gpx": {
     "title": "route2gpx",
-    "description": "Convert Google Routes into GPX files for GPS devices and bike computers — a privacy-focused web app that runs entirely in your browser.",
+    "description": "Plan routes and convert GPS tracks to GPX, KML, GeoJSON, TCX, or CSV. Local file conversion, map previews, and batch GPX downloads.",
     "image": "/og/route2gpx.png",
     "operatingSystem": "Web"
   },

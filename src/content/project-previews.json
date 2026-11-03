@@ -53,10 +53,10 @@
     "width": 872,
     "height": 610
   },
-  "/images/route2gpx/route-planning.webp": {
-    "src": "/images/previews/route2gpx-960-5da916fa432e.webp",
-    "srcSet": "/images/previews/route2gpx-480-76bb87a8b0ab.webp 480w, /images/previews/route2gpx-960-5da916fa432e.webp 960w, /images/previews/route2gpx-1440-99001e4f181d.webp 1440w",
-    "width": 1811,
-    "height": 1390
+  "/images/route2gpx/route-planning-v1-1.webp": {
+    "src": "/images/previews/route2gpx-960-448440adc31c.webp",
+    "srcSet": "/images/previews/route2gpx-480-3fee8d2fa402.webp 480w, /images/previews/route2gpx-960-448440adc31c.webp 960w, /images/previews/route2gpx-1440-6dabf95ac0ce.webp 1440w",
+    "width": 1440,
+    "height": 1000
   }
 }
