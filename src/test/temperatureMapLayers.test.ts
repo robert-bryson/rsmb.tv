@@ -49,6 +49,14 @@ describe('temperature map layers', () => {
         expect(html).toContain('#a1a1aa');
     });
 
+    it.each([false, true])('formats record-age temperatures in the selected unit (compact: %s)', compact => {
+        const properties = { countyName: 'Test County', type: 'high', tempF: 104, year: 2026 };
+        expect(buildRecordAgePopupHtml(properties, { compact })).toContain('104°F');
+        const celsius = buildRecordAgePopupHtml(properties, { compact, useCelsius: true });
+        expect(celsius).toContain('40.0°C');
+        expect(celsius).not.toContain('104°F');
+    });
+
     it('removes only the missing-coordinate sentinel', () => {
         const collection = buildBrokenRecordsGeoJson([
             brokenRecord({ uid: 1, lat: 0, lon: 0 }),

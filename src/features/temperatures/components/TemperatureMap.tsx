@@ -91,7 +91,7 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
 
     if (layerType === 'broken') {
         const prevF = props.prevRecordF as number;
-        const prevDate = formatDate(props.prevRecordDate as string);
+        const prevDate = escapeMapText(formatDate(props.prevRecordDate as string));
         const margin = isHigh ? tempF - prevF : prevF - tempF;
         const arrow = isHigh ? '↑' : '↓';
         const baseScope = (props.recordScope as RecordScope) || 'daily';
@@ -128,7 +128,7 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
                 </div>` : ''}
                 <div style="display:flex;justify-content:space-between">
                     <span style="color:#a1a1aa">Date</span>
-                    <span style="color:#d4d4d8">${formatDate(props.date as string)}</span>
+                    <span style="color:#d4d4d8">${escapeMapText(formatDate(props.date as string))}</span>
                 </div>
             </div>
             <div style="border-top:1px solid #27272a;margin-top:6px;padding-top:5px;font-size:11px;color:#a1a1aa;text-align:center">
@@ -161,14 +161,14 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
                     <div style="font-size:10px;color:#a1a1aa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">🔥 Record High</div>
                     <div style="color:${HIGH_TEMP_COLOR};font-size:20px;font-weight:700">${formatTemp(hF, useCelsius)}</div>
                     <div style="color:#a1a1aa;font-size:11px">${formatTemp(hF, !useCelsius)}</div>
-                    <div style="color:#a1a1aa;font-size:11px;margin-top:4px">${formatDate(highRec.date as string)}</div>
+                    <div style="color:#a1a1aa;font-size:11px;margin-top:4px">${escapeMapText(formatDate(highRec.date as string))}</div>
                     <div style="color:#a1a1aa;font-size:10px">${escapeHtml(highRec.stationName as string || highRec.location as string || '')}</div>
                 </div>
                 <div style="flex:1;background:#27272a;border-radius:6px;padding:8px 10px;border-left:3px solid ${LOW_TEMP_COLOR}">
                     <div style="font-size:10px;color:#a1a1aa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">❄️ Record Low</div>
                     <div style="color:${LOW_TEMP_COLOR};font-size:20px;font-weight:700">${formatTemp(lF, useCelsius)}</div>
                     <div style="color:#a1a1aa;font-size:11px">${formatTemp(lF, !useCelsius)}</div>
-                    <div style="color:#a1a1aa;font-size:11px;margin-top:4px">${formatDate(lowRec.date as string)}</div>
+                    <div style="color:#a1a1aa;font-size:11px;margin-top:4px">${escapeMapText(formatDate(lowRec.date as string))}</div>
                     <div style="color:#a1a1aa;font-size:10px">${escapeHtml(lowRec.stationName as string || lowRec.location as string || '')}</div>
                 </div>
             </div>
@@ -184,7 +184,7 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
         : `Standing Observed County ${isHigh ? 'High' : 'Low'}`;
     const location = layerType === 'state' ? escapeHtml(props.location as string) : escapeHtml(props.stationName as string);
     const station = layerType === 'state' ? escapeHtml(props.station as string) : '';
-    const date = formatDate(props.date as string);
+    const date = escapeMapText(formatDate(props.date as string));
 
     return `<div style="
         font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
@@ -247,6 +247,14 @@ export function TemperatureMap() {
     const recentSort: RecordSort = searchParams.get('sort') === 'temp' || searchParams.get('sort') === 'margin'
         ? searchParams.get('sort') as RecordSort
         : 'departure';
+
+    // Reset view-specific selections before rendering the new view.
+    const [selectionView, setSelectionView] = useState(viewMode);
+    if (selectionView !== viewMode) {
+        setSelectionView(viewMode);
+        setSelectedStation(null);
+        setSelectedState(null);
+    }
 
     const updateSearchParam = useCallback((key: string, value: string, defaultValue = '') => {
         setSearchParams(previous => {
@@ -637,44 +645,13 @@ export function TemperatureMap() {
         map.addSource(sourceId, {
             type: 'geojson',
             data: brokenRecordsGeoJson as GeoJSON.GeoJSON,
-            cluster: true,
-            clusterMaxZoom: 6,
-            clusterRadius: 38,
         });
 
-        map.addLayer({
-            id: 'broken-clusters',
-            type: 'circle',
-            source: sourceId,
-            filter: ['has', 'point_count'],
-            paint: {
-                'circle-radius': ['step', ['get', 'point_count'], 15, 10, 19, 50, 24],
-                'circle-color': '#3f3f46',
-                'circle-opacity': 0.92,
-                'circle-stroke-width': 2,
-                'circle-stroke-color': '#d4d4d8',
-            },
-        });
-
-        map.addLayer({
-            id: 'broken-cluster-count',
-            type: 'symbol',
-            source: sourceId,
-            filter: ['has', 'point_count'],
-            layout: {
-                'text-field': ['get', 'point_count_abbreviated'],
-                'text-font': ['Open Sans Semibold'],
-                'text-size': 11,
-            },
-            paint: { 'text-color': '#f4f4f5' },
-        });
-
-        // Outer glow ring
+        // Draw every record's glow and marker, independently of label collisions.
         map.addLayer({
             id: 'broken-glow',
             type: 'circle',
             source: sourceId,
-            filter: ['!', ['has', 'point_count']],
             paint: {
                 'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 12, 7, 18, 10, 24],
                 'circle-color': [
@@ -691,7 +668,7 @@ export function TemperatureMap() {
             id: 'broken-highs',
             type: 'circle',
             source: sourceId,
-            filter: ['all', ['!', ['has', 'point_count']], ['==', ['get', 'type'], 'high']],
+            filter: ['==', ['get', 'type'], 'high'],
             paint: {
                 'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 5, 7, 8, 10, 11],
                 'circle-color': HIGH_TEMP_COLOR,
@@ -707,7 +684,7 @@ export function TemperatureMap() {
             id: 'broken-lows',
             type: 'circle',
             source: sourceId,
-            filter: ['all', ['!', ['has', 'point_count']], ['==', ['get', 'type'], 'low']],
+            filter: ['==', ['get', 'type'], 'low'],
             paint: {
                 'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 6, 7, 9, 10, 12],
                 'circle-color': 'transparent',
@@ -718,12 +695,11 @@ export function TemperatureMap() {
             },
         });
 
-        // Temperature labels for broken records
+        // Show temperature labels only where they fit without overlapping.
         map.addLayer({
             id: 'broken-labels',
             type: 'symbol',
             source: sourceId,
-            filter: ['!', ['has', 'point_count']],
             layout: {
                 'text-field': ['concat', ['to-string', ['get', 'tempF']], '°F'],
                 'text-font': ['Open Sans Semibold'],
@@ -879,7 +855,7 @@ export function TemperatureMap() {
                 : ['format', ['concat', ['to-string', ['coalesce', ['get', countyTempProp], '']], '°'], { 'text-color': countyTextColor }];
             map.setLayoutProperty('county-labels', 'text-field', countyExpr);
         }
-    }, [countyMergedGeoJson, mapLoaded, recordType, useCelsius]);
+    }, [brokenRecordsGeoJson, countyMergedGeoJson, mapLoaded, recordType, stateRecords, useCelsius]);
 
     // Keep county/state all-time symbology aligned with the selected high/low tab.
     useEffect(() => {
@@ -943,49 +919,35 @@ export function TemperatureMap() {
         }
     }, [mapLoaded, selectedState, stateDetailGeoJson, countyRecords]);
 
-    // Toggle layer visibility based on viewMode
+    // Close the map popup when the view changes.
+    useEffect(() => {
+        popupRef.current?.remove();
+        popupRef.current = null;
+    }, [viewMode]);
+
+    // Apply visibility after asynchronous data creates its layers.
     useEffect(() => {
         const map = mapRef.current;
         if (!map || !mapLoaded) return;
 
-        const recentLayers = ['broken-clusters', 'broken-cluster-count', 'broken-glow', 'broken-highs', 'broken-lows', 'broken-labels'];
-        const stateLayers = ['state-highs', 'state-lows', 'state-labels'];
-        const countyLayers = ['county-highs', 'county-lows', 'county-labels'];
-        const freshnessLayers = ['freshness-circles', 'freshness-labels'];
-        const stateDetailLayers = ['state-detail-glow', 'state-detail-circle', 'state-detail-label'];
+        const viewLayers: Record<ViewMode, string[]> = {
+            recent: ['broken-glow', 'broken-highs', 'broken-lows', 'broken-labels'],
+            state: ['state-highs', 'state-lows', 'state-labels'],
+            county: ['county-highs', 'county-lows', 'county-labels'],
+            freshness: ['freshness-circles', 'freshness-labels'],
+        };
 
-        const allLayers = [...recentLayers, ...stateLayers, ...countyLayers, ...freshnessLayers, ...stateDetailLayers];
-
-        // Close any open popup and station detail when switching views
-        popupRef.current?.remove();
-        popupRef.current = null;
-        setSelectedStation(null);
-        setSelectedState(null);
-
-        // Hide everything first
-        for (const id of allLayers) {
-            if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'none');
-        }
-
-        // Show only layers for the active view
-        if (viewMode === 'recent') {
-            for (const id of recentLayers) {
-                if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'visible');
-            }
-        } else if (viewMode === 'county') {
-            for (const id of countyLayers) {
-                if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'visible');
-            }
-        } else if (viewMode === 'state') {
-            for (const id of stateLayers) {
-                if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'visible');
-            }
-        } else {
-            for (const id of freshnessLayers) {
-                if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'visible');
+        for (const [view, layers] of Object.entries(viewLayers)) {
+            for (const id of layers) {
+                if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', view === viewMode ? 'visible' : 'none');
             }
         }
-    }, [mapLoaded, viewMode, showCounty]);
+        if (viewMode !== 'state') {
+            for (const id of ['state-detail-glow', 'state-detail-circle', 'state-detail-label']) {
+                if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'none');
+            }
+        }
+    }, [brokenRecordsGeoJson, countyMergedGeoJson, freshnessGeoJson, mapLoaded, stateRecords, viewMode]);
 
     // Highlight map features matching hovered chart period
     useEffect(() => {
@@ -1044,160 +1006,151 @@ export function TemperatureMap() {
         // Persistent hover tooltip (lightweight preview on mousemove)
         let hoverPopup: maplibregl.Popup | null = null;
 
-        map.on('click', 'broken-clusters', async event => {
-            const feature = event.features?.[0];
-            const clusterId = feature?.properties?.cluster_id;
-            const coordinates = (feature?.geometry as GeoJSON.Point | undefined)?.coordinates;
-            const source = map.getSource('broken-records') as maplibregl.GeoJSONSource | undefined;
-            if (!source || clusterId == null || !coordinates) return;
-            const zoom = await source.getClusterExpansionZoom(clusterId);
-            map.easeTo({ center: coordinates as [number, number], zoom });
-        });
-
         const allClickLayers = ['broken-highs', 'broken-lows', 'broken-glow', 'state-highs', 'state-lows', 'county-highs', 'county-lows', 'county-labels'];
 
-        for (const layerId of allClickLayers) {
-            map.on('click', layerId, (e) => {
-                if (!e.features?.length) return;
-                hoverPopup?.remove();
-                const props = e.features[0].properties;
-                const coords = (e.features[0].geometry as GeoJSON.Point).coordinates.slice() as [number, number];
-                const layerType: 'state' | 'county' | 'broken' = layerId.startsWith('broken-')
-                    ? 'broken'
-                    : layerId.startsWith('state-') ? 'state' : 'county';
+        // One query preserves rendered order: a marker wins over a neighboring glow.
+        map.on('click', allClickLayers, (e) => {
+            if (!e.features?.length) return;
+            const layerId = e.features[0].layer.id;
+            hoverPopup?.remove();
+            const props = e.features[0].properties;
+            const coords = (e.features[0].geometry as GeoJSON.Point).coordinates.slice() as [number, number];
+            const layerType: 'state' | 'county' | 'broken' = layerId.startsWith('broken-')
+                ? 'broken'
+                : layerId.startsWith('state-') ? 'state' : 'county';
 
-                // For merged county-labels layer, look up the actual records and show both
-                if (layerId === 'county-labels' && props.countyFips && countyRecordsRef.current) {
-                    const fips = props.countyFips as string;
-                    const highRec = countyRecordsRef.current.features.find(f => f.properties.countyFips === fips && f.properties.type === 'high');
-                    const lowRec = countyRecordsRef.current.features.find(f => f.properties.countyFips === fips && f.properties.type === 'low');
-                    const primary = highRec || lowRec;
-                    if (primary) {
-                        const counterpart = highRec && lowRec ? (primary === highRec ? lowRec.properties : highRec.properties) as unknown as Record<string, unknown> : null;
-                        popupRef.current?.remove();
-                        const popup = new maplibregl.Popup({ closeButton: true, maxWidth: counterpart ? '360px' : '300px', className: 'dark-popup' })
-                            .setLngLat(coords)
-                            .setHTML(buildPopupHTML(primary.properties as unknown as Record<string, unknown>, 'county', counterpart, undefined, useCelsiusRef.current))
-                            .addTo(map);
-                        popupRef.current = popup;
-                        popup.on('close', () => { if (popupRef.current === popup) popupRef.current = null; });
-                        styleDarkPopup(popup);
-                    }
-                    return;
+            // For merged county-labels layer, look up the actual records and show both
+            if (layerId === 'county-labels' && props.countyFips && countyRecordsRef.current) {
+                const fips = props.countyFips as string;
+                const highRec = countyRecordsRef.current.features.find(f => f.properties.countyFips === fips && f.properties.type === 'high');
+                const lowRec = countyRecordsRef.current.features.find(f => f.properties.countyFips === fips && f.properties.type === 'low');
+                const primary = highRec || lowRec;
+                if (primary) {
+                    const counterpart = highRec && lowRec ? (primary === highRec ? lowRec.properties : highRec.properties) as unknown as Record<string, unknown> : null;
+                    popupRef.current?.remove();
+                    const popup = new maplibregl.Popup({ closeButton: true, maxWidth: counterpart ? '360px' : '300px', className: 'dark-popup' })
+                        .setLngLat(coords)
+                        .setHTML(buildPopupHTML(primary.properties as unknown as Record<string, unknown>, 'county', counterpart, undefined, useCelsiusRef.current))
+                        .addTo(map);
+                    popupRef.current = popup;
+                    popup.on('close', () => { if (popupRef.current === popup) popupRef.current = null; });
+                    styleDarkPopup(popup);
                 }
+                return;
+            }
 
-                // Find the counterpart (high↔low) to show both in popup
-                let counterpart: Record<string, unknown> | null = null;
-                if (layerType === 'county' && props.countyFips && countyRecordsRef.current) {
-                    const fips = props.countyFips as string;
-                    const otherType = props.type === 'high' ? 'low' : 'high';
-                    const match = countyRecordsRef.current.features.find(
-                        f => f.properties.countyFips === fips && f.properties.type === otherType
-                    );
-                    if (match) counterpart = match.properties as unknown as Record<string, unknown>;
-                }
-                if (layerType === 'state' && props.state && stateRecordsRef.current) {
-                    const st = props.state as string;
-                    const otherType = props.type === 'high' ? 'low' : 'high';
-                    const match = stateRecordsRef.current.features.find(
-                        f => f.properties.state === st && f.properties.type === otherType
-                    );
-                    if (match) counterpart = match.properties as unknown as Record<string, unknown>;
-                }
+            // Find the counterpart (high↔low) to show both in popup
+            let counterpart: Record<string, unknown> | null = null;
+            if (layerType === 'county' && props.countyFips && countyRecordsRef.current) {
+                const fips = props.countyFips as string;
+                const otherType = props.type === 'high' ? 'low' : 'high';
+                const match = countyRecordsRef.current.features.find(
+                    f => f.properties.countyFips === fips && f.properties.type === otherType
+                );
+                if (match) counterpart = match.properties as unknown as Record<string, unknown>;
+            }
+            if (layerType === 'state' && props.state && stateRecordsRef.current) {
+                const st = props.state as string;
+                const otherType = props.type === 'high' ? 'low' : 'high';
+                const match = stateRecordsRef.current.features.find(
+                    f => f.properties.state === st && f.properties.type === otherType
+                );
+                if (match) counterpart = match.properties as unknown as Record<string, unknown>;
+            }
 
-                popupRef.current?.remove();
-                const scope = layerType === 'broken'
-                    ? classifyBrokenRecord(props, stateRecordsRef.current, countyRecordsRef.current)
-                    : undefined;
-                const popup = new maplibregl.Popup({ closeButton: true, maxWidth: (counterpart || layerType === 'state') ? '360px' : '300px', className: 'dark-popup' })
-                    .setLngLat(coords)
-                    .setHTML(buildPopupHTML(props, layerType, counterpart, scope, useCelsiusRef.current))
-                    .addTo(map);
-                popupRef.current = popup;
-                popup.on('close', () => { if (popupRef.current === popup) popupRef.current = null; });
-                styleDarkPopup(popup);
+            popupRef.current?.remove();
+            const scope = layerType === 'broken'
+                ? classifyBrokenRecord(props, stateRecordsRef.current, countyRecordsRef.current)
+                : undefined;
+            const popup = new maplibregl.Popup({ closeButton: true, maxWidth: (counterpart || layerType === 'state') ? '360px' : '300px', className: 'dark-popup' })
+                .setLngLat(coords)
+                .setHTML(buildPopupHTML(props, layerType, counterpart, scope, useCelsiusRef.current))
+                .addTo(map);
+            popupRef.current = popup;
+            popup.on('close', () => { if (popupRef.current === popup) popupRef.current = null; });
+            styleDarkPopup(popup);
 
-                // Zoom to state and show station detail markers
-                if (layerType === 'state') {
-                    setSelectedState(props.state as string);
-                }
+            // Zoom to state and show station detail markers
+            if (layerType === 'state') {
+                setSelectedState(props.state as string);
+            }
 
-                // Open station detail for broken records (which have uid)
-                if (layerType === 'broken' && props.uid) {
-                    setSelectedStation({
-                        uid: typeof props.uid === 'string' ? parseInt(props.uid, 10) : props.uid as number,
-                        name: (props.stationName as string) || 'Unknown',
-                        state: (props.stateName as string) || (props.state as string) || '',
-                    });
-                }
-            });
+            // Open station detail for broken records (which have uid)
+            if (layerType === 'broken' && props.uid) {
+                setSelectedStation({
+                    uid: typeof props.uid === 'string' ? parseInt(props.uid, 10) : props.uid as number,
+                    name: (props.stationName as string) || 'Unknown',
+                    state: (props.stateName as string) || (props.state as string) || '',
+                });
+            }
+        });
 
-            // Hover tooltip — show station/state name + temp on mousemove
-            map.on('mouseenter', layerId, () => { map.getCanvas().style.cursor = 'pointer'; });
-            map.on('mouseleave', layerId, () => {
-                map.getCanvas().style.cursor = '';
-                hoverPopup?.remove();
-                hoverPopup = null;
-            });
-            map.on('mousemove', layerId, (e) => {
-                if (!e.features?.length) return;
-                const props = e.features[0].properties;
-                const coords = (e.features[0].geometry as GeoJSON.Point).coordinates.slice() as [number, number];
-                const isStateLayer = layerId.startsWith('state-');
-                const isCountyLayer = layerId.startsWith('county-');
+        // Hover tooltip — show station/state name + temp on mousemove
+        map.on('mouseenter', allClickLayers, () => { map.getCanvas().style.cursor = 'pointer'; });
+        map.on('mouseleave', allClickLayers, () => {
+            map.getCanvas().style.cursor = '';
+            hoverPopup?.remove();
+            hoverPopup = null;
+        });
+        map.on('mousemove', allClickLayers, (e) => {
+            if (!e.features?.length) return;
+            const layerId = e.features[0].layer.id;
+            const props = e.features[0].properties;
+            const coords = (e.features[0].geometry as GeoJSON.Point).coordinates.slice() as [number, number];
+            const isStateLayer = layerId.startsWith('state-');
+            const isCountyLayer = layerId.startsWith('county-');
 
-                let hoverHTML: string;
-                if (isCountyLayer && countyRecordsRef.current) {
-                    // County hover: show both high and low stacked
-                    const fips = props.countyFips as string;
-                    const highRec = countyRecordsRef.current.features.find(f => f.properties.countyFips === fips && f.properties.type === 'high');
-                    const lowRec = countyRecordsRef.current.features.find(f => f.properties.countyFips === fips && f.properties.type === 'low');
-                    const countyName = escapeMapText(props.countyName);
-                    const state = escapeMapText(props.state);
-                    const highF = highRec?.properties.tempF;
-                    const lowF = lowRec?.properties.tempF;
-                    hoverHTML = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#18181b;color:#e4e4e7;padding:6px 10px;border-radius:6px;font-size:12px;white-space:nowrap;border:1px solid #3f3f46;box-shadow:0 2px 8px rgba(0,0,0,.4)">`
-                        + (highF != null ? `<div><span style="color:${HIGH_TEMP_COLOR};font-weight:700">${highF}°F</span></div>` : '')
-                        + (lowF != null ? `<div><span style="color:${LOW_TEMP_COLOR};font-weight:700">${lowF}°F</span></div>` : '')
-                        + `<div style="color:#a1a1aa;font-size:11px;margin-top:2px">${countyName}, ${state}</div></div>`;
-                } else if (isStateLayer && stateRecordsRef.current) {
-                    // State hover: show both high and low stacked
-                    const st = props.state as string;
-                    const highRec = stateRecordsRef.current.features.find(f => f.properties.state === st && f.properties.type === 'high');
-                    const lowRec = stateRecordsRef.current.features.find(f => f.properties.state === st && f.properties.type === 'low');
-                    const stateName = escapeMapText(props.stateName || st);
-                    const highF = highRec?.properties.tempF;
-                    const lowF = lowRec?.properties.tempF;
-                    hoverHTML = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#18181b;color:#e4e4e7;padding:6px 10px;border-radius:6px;font-size:12px;white-space:nowrap;border:1px solid #3f3f46;box-shadow:0 2px 8px rgba(0,0,0,.4)">`
-                        + (highF != null ? `<div><span style="color:${HIGH_TEMP_COLOR};font-weight:700">${highF}°F</span></div>` : '')
-                        + (lowF != null ? `<div><span style="color:${LOW_TEMP_COLOR};font-weight:700">${lowF}°F</span></div>` : '')
-                        + `<div style="color:#a1a1aa;font-size:11px;margin-top:2px">${stateName}</div></div>`;
-                } else {
-                    const name = escapeMapText(props.stationName || props.stateName || props.countyName);
-                    const tempF = props.tempF;
-                    const type = props.type as string;
-                    const color = type === 'high' ? HIGH_TEMP_COLOR : LOW_TEMP_COLOR;
-                    hoverHTML = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#18181b;color:#e4e4e7;padding:4px 8px;border-radius:6px;font-size:12px;white-space:nowrap;border:1px solid #3f3f46;box-shadow:0 2px 8px rgba(0,0,0,.4)"><span style="color:${color};font-weight:700">${tempF}°F</span> <span style="color:#a1a1aa">${name}</span></div>`;
-                }
+            let hoverHTML: string;
+            if (isCountyLayer && countyRecordsRef.current) {
+                // County hover: show both high and low stacked
+                const fips = props.countyFips as string;
+                const highRec = countyRecordsRef.current.features.find(f => f.properties.countyFips === fips && f.properties.type === 'high');
+                const lowRec = countyRecordsRef.current.features.find(f => f.properties.countyFips === fips && f.properties.type === 'low');
+                const countyName = escapeMapText(props.countyName);
+                const state = escapeMapText(props.state);
+                const highF = highRec?.properties.tempF;
+                const lowF = lowRec?.properties.tempF;
+                hoverHTML = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#18181b;color:#e4e4e7;padding:6px 10px;border-radius:6px;font-size:12px;white-space:nowrap;border:1px solid #3f3f46;box-shadow:0 2px 8px rgba(0,0,0,.4)">`
+                    + (highF != null ? `<div><span style="color:${HIGH_TEMP_COLOR};font-weight:700">${formatTemp(highF, useCelsiusRef.current)}</span></div>` : '')
+                    + (lowF != null ? `<div><span style="color:${LOW_TEMP_COLOR};font-weight:700">${formatTemp(lowF, useCelsiusRef.current)}</span></div>` : '')
+                    + `<div style="color:#a1a1aa;font-size:11px;margin-top:2px">${countyName}, ${state}</div></div>`;
+            } else if (isStateLayer && stateRecordsRef.current) {
+                // State hover: show both high and low stacked
+                const st = props.state as string;
+                const highRec = stateRecordsRef.current.features.find(f => f.properties.state === st && f.properties.type === 'high');
+                const lowRec = stateRecordsRef.current.features.find(f => f.properties.state === st && f.properties.type === 'low');
+                const stateName = escapeMapText(props.stateName || st);
+                const highF = highRec?.properties.tempF;
+                const lowF = lowRec?.properties.tempF;
+                hoverHTML = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#18181b;color:#e4e4e7;padding:6px 10px;border-radius:6px;font-size:12px;white-space:nowrap;border:1px solid #3f3f46;box-shadow:0 2px 8px rgba(0,0,0,.4)">`
+                    + (highF != null ? `<div><span style="color:${HIGH_TEMP_COLOR};font-weight:700">${formatTemp(highF, useCelsiusRef.current)}</span></div>` : '')
+                    + (lowF != null ? `<div><span style="color:${LOW_TEMP_COLOR};font-weight:700">${formatTemp(lowF, useCelsiusRef.current)}</span></div>` : '')
+                    + `<div style="color:#a1a1aa;font-size:11px;margin-top:2px">${stateName}</div></div>`;
+            } else {
+                const name = escapeMapText(props.stationName || props.stateName || props.countyName);
+                const tempF = props.tempF;
+                const type = props.type as string;
+                const color = type === 'high' ? HIGH_TEMP_COLOR : LOW_TEMP_COLOR;
+                hoverHTML = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#18181b;color:#e4e4e7;padding:4px 8px;border-radius:6px;font-size:12px;white-space:nowrap;border:1px solid #3f3f46;box-shadow:0 2px 8px rgba(0,0,0,.4)"><span style="color:${color};font-weight:700">${formatTemp(tempF as number, useCelsiusRef.current)}</span> <span style="color:#a1a1aa">${name}</span></div>`;
+            }
 
-                if (!hoverPopup) {
-                    hoverPopup = new maplibregl.Popup({ closeButton: false, closeOnClick: false, className: 'dark-popup hover-tip', offset: 12 });
-                }
-                hoverPopup
-                    .setLngLat(coords)
-                    .setHTML(hoverHTML)
-                    .addTo(map);
-                const el = hoverPopup.getElement();
-                if (el) {
-                    el.querySelectorAll('.maplibregl-popup-content').forEach(node => {
-                        (node as HTMLElement).style.cssText = 'background:transparent;padding:0;box-shadow:none;border:none;';
-                    });
-                    el.querySelectorAll('.maplibregl-popup-tip').forEach(node => {
-                        (node as HTMLElement).style.display = 'none';
-                    });
-                }
-            });
-        }
+            if (!hoverPopup) {
+                hoverPopup = new maplibregl.Popup({ closeButton: false, closeOnClick: false, className: 'dark-popup hover-tip', offset: 12 });
+            }
+            hoverPopup
+                .setLngLat(coords)
+                .setHTML(hoverHTML)
+                .addTo(map);
+            const el = hoverPopup.getElement();
+            if (el) {
+                el.querySelectorAll('.maplibregl-popup-content').forEach(node => {
+                    (node as HTMLElement).style.cssText = 'background:transparent;padding:0;box-shadow:none;border:none;';
+                });
+                el.querySelectorAll('.maplibregl-popup-tip').forEach(node => {
+                    (node as HTMLElement).style.display = 'none';
+                });
+            }
+        });
 
         // Freshness layer click
         map.on('click', 'freshness-circles', (e) => {
@@ -1209,7 +1162,7 @@ export function TemperatureMap() {
 
             const popup = new maplibregl.Popup({ closeButton: true, maxWidth: '260px', className: 'dark-popup' })
                 .setLngLat(coords)
-                .setHTML(buildRecordAgePopupHtml(p))
+                .setHTML(buildRecordAgePopupHtml(p, { useCelsius: useCelsiusRef.current }))
                 .addTo(map);
             popupRef.current = popup;
             popup.on('close', () => { if (popupRef.current === popup) popupRef.current = null; });
@@ -1232,7 +1185,7 @@ export function TemperatureMap() {
             }
             hoverPopup
                 .setLngLat(coords)
-                .setHTML(buildRecordAgePopupHtml(p, true))
+                .setHTML(buildRecordAgePopupHtml(p, { compact: true, useCelsius: useCelsiusRef.current }))
                 .addTo(map);
             const el = hoverPopup.getElement();
             if (el) {

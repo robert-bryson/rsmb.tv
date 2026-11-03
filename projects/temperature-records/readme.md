@@ -5,6 +5,7 @@ This package measures historical station record-event rates. It reconstructs cal
 The pipeline uses a fixed station cohort. It divides annual event counts by valid station-days. It uses station-block bootstrap samples for confidence intervals.
 
 This package does not supply data to the operational temperature map. The map uses `scripts/sync-temperatures.js`.
+See the [temperature map guide](../../docs/temperature-map.md) for map behavior, source files, and tests.
 
 ## Requirements
 

@@ -483,9 +483,13 @@ Local development uses `https://data.rsmb.tv` for temperature data by default. T
 The user interface uses these temperature record terms:
 
 - **Recent** shows daily and monthly station records that were broken yesterday or in the last seven days. The comparison average starts in 1950 and ends in the year before each observation.
-- **County All-Time** and **State All-Time** show the highest high and lowest low currently known for each geography.
+- **County Extremes** and **State Extremes** show standing county extremes and certified state records.
 - **Record Age** colors standing county records by broad year ranges.
 - **Standing Record History** groups the current county extremes by the year in which they occurred. It does not count records that were later superseded.
+
+The Recent view draws each station record as a red high marker or blue low ring.
+It does not cluster nearby records. Temperature labels appear where they fit without overlapping other labels.
+See the [temperature map guide](docs/temperature-map.md) for controls, code ownership, and regression tests.
 
 ### Temperature Data Sync
 
