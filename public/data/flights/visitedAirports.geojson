@@ -196,11 +196,12 @@
           "7/23/2025",
           "7/29/2025",
           "12/14/2025",
-          "10/13/2026"
+          "10/13/2026",
+          "11/6/2026"
         ],
-        "visitCount": 71,
+        "visitCount": 72,
         "arrivalCount": 34,
-        "departureCount": 37
+        "departureCount": 38
       },
       "geometry": {
         "type": "Point",
@@ -736,11 +737,12 @@
           "9/30/2024",
           "7/29/2025",
           "8/4/2025",
-          "7/2/2026"
+          "7/2/2026",
+          "11/6/2026"
         ],
-        "visitCount": 115,
-        "arrivalCount": 56,
-        "departureCount": 59
+        "visitCount": 117,
+        "arrivalCount": 57,
+        "departureCount": 60
       },
       "geometry": {
         "type": "Point",
@@ -3405,10 +3407,11 @@
           "7/2/2026",
           "7/6/2026",
           "9/24/2026",
-          "10/13/2026"
+          "10/13/2026",
+          "11/6/2026"
         ],
-        "visitCount": 24,
-        "arrivalCount": 13,
+        "visitCount": 25,
+        "arrivalCount": 14,
         "departureCount": 11
       },
       "geometry": {

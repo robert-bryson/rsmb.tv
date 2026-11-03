@@ -15604,10 +15604,104 @@
           ]
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 333,
+        "date": "11/6/2026",
+        "airline": "Alaska",
+        "flightNumber": "AS 683",
+        "durationMinutes": null,
+        "durationKind": null,
+        "durationSource": null,
+        "origin_code": "SAN",
+        "origin_name": "San Diego International Airport",
+        "origin_municipality": "San Diego",
+        "origin_region": "US-CA",
+        "origin_regionName": "California",
+        "origin_country": "US",
+        "origin_countryName": "United States",
+        "origin_continent": "NA",
+        "origin_continentName": "North America",
+        "origin_lon": -117.1900024,
+        "origin_lat": 32.73360062,
+        "destination_code": "SEA",
+        "destination_name": "Seattle–Tacoma International Airport",
+        "destination_municipality": "Seattle",
+        "destination_region": "US-WA",
+        "destination_regionName": "Washington",
+        "destination_country": "US",
+        "destination_countryName": "United States",
+        "destination_continent": "NA",
+        "destination_continentName": "North America",
+        "destination_lon": -122.310276,
+        "destination_lat": 47.447943
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -117.1900024,
+            32.73360062
+          ],
+          [
+            -122.310276,
+            47.447943
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 334,
+        "date": "11/6/2026",
+        "airline": "Alaska",
+        "flightNumber": "AS 647",
+        "durationMinutes": null,
+        "durationKind": null,
+        "durationSource": null,
+        "origin_code": "SEA",
+        "origin_name": "Seattle–Tacoma International Airport",
+        "origin_municipality": "Seattle",
+        "origin_region": "US-WA",
+        "origin_regionName": "Washington",
+        "origin_country": "US",
+        "origin_countryName": "United States",
+        "origin_continent": "NA",
+        "origin_continentName": "North America",
+        "origin_lon": -122.310276,
+        "origin_lat": 47.447943,
+        "destination_code": "STL",
+        "destination_name": "St. Louis Lambert International Airport",
+        "destination_municipality": "St Louis",
+        "destination_region": "US-MO",
+        "destination_regionName": "Missouri",
+        "destination_country": "US",
+        "destination_countryName": "United States",
+        "destination_continent": "NA",
+        "destination_continentName": "North America",
+        "destination_lon": -90.370003,
+        "destination_lat": 38.748697
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -122.310276,
+            47.447943
+          ],
+          [
+            -90.370003,
+            38.748697
+          ]
+        ]
+      }
     }
   ],
   "metadata": {
-    "totalFlights": 332,
+    "totalFlights": 334,
     "years": [
       2006,
       2007,
@@ -15635,7 +15729,7 @@
     "maxYear": 2026,
     "internationalFlights": 85,
     "intercontinentalFlights": 36,
-    "domesticFlights": 247,
-    "generatedAt": "2026-11-02T17:50:26.969Z"
+    "domesticFlights": 249,
+    "generatedAt": "2026-11-03T06:07:46.026Z"
   }
 }

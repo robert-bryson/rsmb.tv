@@ -331,3 +331,5 @@ date,airline,flightNumber,origin,destination,notes
 9/24/2026,Southwest,WN 4500,STL,MKE,
 10/13/2026,American,AA 2547,STL,PHX,
 10/13/2026,American,AA 1851,PHX,SAN,
+11/6/2026,Alaska,AS 683,SAN,SEA,
+11/6/2026,Alaska,AS 647,SEA,STL,
