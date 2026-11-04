@@ -12,7 +12,8 @@ vi.mock('virtual:post-content', () => ({
             development: { published: false, rowNumber: 2, issues: ['Missing content'], contentAvailable: false } },
         { slug: 'already-tagged', title: 'Tagged', date: '2024-05-18', description: 'Trip', tags: ['honda-cb500x', 'oregon', 'ca'], format: 'trip', tripId: 'boise-2024' },
         { slug: 'no-motorcycle', title: 'Other trip', date: '2024-05-17', description: 'Trip', tags: [], format: 'trip', tripId: 'other' },
-        { slug: 'writing', title: 'Writing', date: '2024-05-16', description: 'Post', tags: ['california', 'bicycle'], tripId: 'boise-2024' },
+        { slug: 'writing', title: 'Writing', date: '2024-05-16', description: 'Post', tags: ['california', 'bicycle'], tripId: 'boise-2024',
+            image: { src: '/photo.webp', alt: 'A coast', width: 1600, height: 900 } },
     ],
     mdxLoaders: { './blog/writing.mdx': async () => ({ default: () => 'Writing body' }) },
 }));
@@ -79,6 +80,12 @@ describe('generated post registry schema', () => {
 });
 
 describe('posts registry', () => {
+    it('retains the imported image in both article and listing metadata', () => {
+        const image = { src: '/photo.webp', alt: 'A coast', width: 1600, height: 900 };
+        expect(getPostBySlug('writing')?.image).toEqual(image);
+        expect(getAllPosts().find(post => post.slug === 'writing')?.image).toEqual(image);
+    });
+
     it('retains series and development metadata for navigation and publication status', () => {
         expect(getAllPosts().find(post => post.slug === 'boise')).toMatchObject({
             series: { id: 'rides', title: 'Rides', order: 1 },

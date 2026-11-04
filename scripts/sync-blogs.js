@@ -743,11 +743,12 @@ function normalizeGoogleRedirectHref(value) {
     }
 }
 
-function safeUrl(value, { allowedProtocols = SAFE_LINK_PROTOCOLS } = {}) {
+function safeUrl(value, { allowedProtocols = SAFE_LINK_PROTOCOLS, allowFragment = true } = {}) {
     const rawUrl = String(value ?? '').trim();
     if (!rawUrl) return '';
 
-    if (/^(#|\/(?!\/)|\.{1,2}\/)/.test(rawUrl)) return rawUrl;
+    if (rawUrl.startsWith('#')) return allowFragment ? rawUrl : '';
+    if (/^(\/(?!\/)|\.{1,2}\/)/.test(rawUrl)) return rawUrl;
 
     try {
         const url = new URL(rawUrl);
@@ -767,7 +768,7 @@ function normalizeGoogleDocsLinks(document) {
 
 function normalizeGoogleDocsMedia(document) {
     document.querySelectorAll('img[src]').forEach((image) => {
-        const src = safeUrl(image.getAttribute('src'), { allowedProtocols: SAFE_MEDIA_PROTOCOLS });
+        const src = safeUrl(image.getAttribute('src'), { allowedProtocols: SAFE_MEDIA_PROTOCOLS, allowFragment: false });
         if (src) image.setAttribute('src', src);
         else image.removeAttribute('src');
     });
@@ -894,17 +895,33 @@ function normalizeGoogleDocsHtml(document) {
     normalizeTypedCodeParagraphs(document);
 }
 
-function documentBodyHtml(html) {
+function prepareGoogleDocHtml(html) {
     const dom = new JSDOM(html);
     try {
         const document = dom.window.document;
         normalizeGoogleDocsHtml(document);
         document.querySelectorAll(`script, style, meta, title, link, ${UNSUPPORTED_GOOGLE_DOCS_ELEMENTS}`)
             .forEach((node) => node.remove());
-        return document.body?.innerHTML ?? html;
+        return { bodyHtml: document.body.innerHTML, image: postImageFromDocument(document) };
     } finally {
         dom.window.close();
     }
+}
+
+/** Select the first image retained by the article's normalization and removal rules. */
+function postImageFromDocument(document) {
+    const image = [...document.body.querySelectorAll('img[src]')]
+        .find(image => !image.closest('pre, code'));
+    if (!image) return undefined;
+    const width = Number(image.getAttribute('width'));
+    const height = Number(image.getAttribute('height'));
+    const alt = image.getAttribute('alt')?.trim();
+    return {
+        src: image.getAttribute('src'),
+        ...(alt ? { alt } : {}),
+        ...(Number.isSafeInteger(width) && width > 0 ? { width } : {}),
+        ...(Number.isSafeInteger(height) && height > 0 ? { height } : {}),
+    };
 }
 
 function escapedHtml(value) {
@@ -938,7 +955,7 @@ function serializeCodeTag(node) {
 }
 
 function serializeImageTag(node) {
-    const src = safeUrl(node.getAttribute('src'), { allowedProtocols: SAFE_MEDIA_PROTOCOLS });
+    const src = safeUrl(node.getAttribute('src'), { allowedProtocols: SAFE_MEDIA_PROTOCOLS, allowFragment: false });
     if (!src) return '';
 
     const alt = node.getAttribute('alt');
@@ -1125,9 +1142,10 @@ function escapeMdxModuleStatements(markdown) {
     ));
 }
 
-export function convertHtmlToMarkdown(html, { tripShortcodes = true, turndownService = createTurndownService(tripShortcodes) } = {}) {
+function convertGoogleDocHtml(html, { tripShortcodes = true, turndownService = createTurndownService(tripShortcodes) } = {}) {
+    const { bodyHtml, image } = prepareGoogleDocHtml(html);
     const markdown = normalizeTypedCodeFences(turndownService
-        .turndown(documentBodyHtml(html))
+        .turndown(bodyHtml)
         .replace(/\u00a0/g, ' ')
         .replace(/^([*-]) {3}/gm, '$1 ')
         .replace(/[ \t]+\n/g, '\n')
@@ -1138,7 +1156,11 @@ export function convertHtmlToMarkdown(html, { tripShortcodes = true, turndownSer
         throw new Error('Converted Google Doc content was empty.');
     }
 
-    return escapeMdxModuleStatements(markdown);
+    return { markdown: escapeMdxModuleStatements(markdown), image };
+}
+
+export function convertHtmlToMarkdown(html, options) {
+    return convertGoogleDocHtml(html, options).markdown;
 }
 
 export function expandTripShortcodes(markdown, post, manifest) {
@@ -1392,7 +1414,8 @@ export async function syncBlogPosts({
         if (!entry.docId) continue;
         try {
             const html = await fetchGoogleDocHtml(entry.docId, { fetchImpl });
-            const markdown = convertHtmlToMarkdown(html, { tripShortcodes: entry.post.format === TRIP_FORMAT });
+            const { markdown, image } = convertGoogleDocHtml(html, { tripShortcodes: entry.post.format === TRIP_FORMAT });
+            if (image && entry.post.format !== TRIP_FORMAT) entry.post.image = image;
             mdxFiles.push({
                 path: path.join(blogDir, `${entry.post.slug}.mdx`),
                 content: buildMdx(entry.post, markdown, tripManifests.get(entry.post.tripId)),

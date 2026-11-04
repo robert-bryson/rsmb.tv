@@ -1,8 +1,16 @@
 import sitePages from '../content/sitePages.json' with { type: 'json' };
+import projectPreviews from '../content/project-previews.json' with { type: 'json' };
 import { projects } from '../content/projects.ts';
 import { absoluteUrl, AUTHOR_PERSON, canonicalUrl, SITE_URL } from './siteMetadata.ts';
 
 type JsonLd = Record<string, unknown>;
+export interface MetadataImage {
+    src: string;
+    alt?: string;
+    width?: number;
+    height?: number;
+}
+
 export interface PageMetadata {
     title: string;
     description: string;
@@ -25,6 +33,7 @@ export interface PostMetadata {
     date: string;
     tags: string[];
     format?: string;
+    image?: MetadataImage;
     development?: { published: boolean };
 }
 
@@ -51,7 +60,7 @@ function projectApplication(slug: string): JsonLd {
         applicationCategory: project.applicationCategory, operatingSystem,
         author: AUTHOR_PERSON, keywords: project.tech,
         ...(project.lastUpdated ? { dateModified: project.lastUpdated } : {}),
-        ...(project.previewImage ? { screenshot: absoluteUrl(project.previewImage) } : {}),
+        ...(project.previewImage ? { screenshot: absoluteUrl(project.previewImage), image: absoluteUrl(project.previewImage) } : {}),
         ...(project.sourceUrl ? { subjectOf: { '@type': 'SoftwareSourceCode', codeRepository: project.sourceUrl } } : {}),
         ...(slug === 'parc' ? { softwareRequirements: 'Python 3.10+' } : {}),
     };
@@ -63,7 +72,10 @@ export function staticPageMetadata(pathname: string, posts: PostMetadata[] = [])
     if (!page) throw new Error(`Missing page metadata: ${pathname}`);
     const url = canonicalUrl(pathname);
     const { title, description, image } = page;
-    const common = { ...context, name: title, description, url, inLanguage: 'en-US', author: AUTHOR_PERSON, isPartOf: website };
+    const previewImage = projects.find(project => project.slug === pathname.split('/')[2])?.previewImage;
+    const dimensions = previewImage ? (projectPreviews as Record<string, { width: number; height: number }>)[previewImage] : undefined;
+    const ogImage = absoluteUrl(previewImage ?? image);
+    const common = { ...context, name: title, description, url, image: ogImage, inLanguage: 'en-US', author: AUTHOR_PERSON, isPartOf: website };
     let jsonLd: JsonLd;
     const trail = [{ name: 'Home', url: canonicalUrl('/') }];
 
@@ -101,20 +113,39 @@ export function staticPageMetadata(pathname: string, posts: PostMetadata[] = [])
         }
     }
     trail.push({ name: title, url });
-    return { title, description, ogImage: absoluteUrl(image), ogUrl: url, imageAlt: `${title === 'rsmb' ? 'rsmb.tv' : title} — Robby Bryson`, imageWidth: 1200, imageHeight: 630, jsonLd, breadcrumb: pathname === '/' ? null : breadcrumbs(trail) };
+    return {
+        title, description, ogImage, ogUrl: url,
+        imageAlt: previewImage ? `${title} screenshot` : `${title === 'rsmb' ? 'rsmb.tv' : title} — Robby Bryson`,
+        imageWidth: previewImage ? dimensions?.width : 1200, imageHeight: previewImage ? dimensions?.height : 630,
+        jsonLd, breadcrumb: pathname === '/' ? null : breadcrumbs(trail),
+    };
 }
 
 export function articleUrl(post: Pick<PostMetadata, 'format' | 'slug'>): string {
     return absoluteUrl(`/${post.format === 'trip' ? 'trips' : 'blog'}/${post.slug}`);
 }
 
-export function articleMetadata(post: PostMetadata, hero?: { src: string; alt?: string; width?: number; height?: number }): PageMetadata {
+/** Resolve relative image paths against the article, as its rendered body does. */
+function articleImage(image: MetadataImage | undefined, url: string): MetadataImage | undefined {
+    const src = image?.src.trim();
+    if (!src || src.startsWith('#')) return undefined;
+    try {
+        const resolved = new URL(src, url);
+        if (resolved.protocol !== 'http:' && resolved.protocol !== 'https:') return undefined;
+        return { ...image, src: resolved.href };
+    } catch {
+        return undefined;
+    }
+}
+
+export function articleMetadata(post: PostMetadata, hero?: MetadataImage): PageMetadata {
     const url = articleUrl(post);
-    const image = absoluteUrl(hero?.src ?? `/og/blog/${post.slug}.png`);
+    const photo = articleImage(hero, url) ?? articleImage(post.image, url);
+    const image = absoluteUrl(photo?.src ?? `/og/blog/${post.slug}.png`);
     return {
         title: post.title, description: post.description, ogImage: image, ogUrl: url,
-        ogType: 'article', publishedTime: post.date, imageAlt: hero?.alt ?? post.title,
-        imageWidth: hero ? hero.width : 1200, imageHeight: hero ? hero.height : 630,
+        ogType: 'article', publishedTime: post.date, imageAlt: photo?.alt || post.title,
+        imageWidth: photo ? photo.width : 1200, imageHeight: photo ? photo.height : 630,
         jsonLd: {
             ...context, '@type': 'BlogPosting', '@id': `${url}#article`,
             headline: post.title, description: post.description, datePublished: post.date,

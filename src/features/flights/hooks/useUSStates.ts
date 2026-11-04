@@ -104,11 +104,11 @@ export function useUSStateStats(
                     state.airportCount = visitedAirports.size;
                 }
 
-                const dates = legs.map(flight => parseDateString(flight.date));
-                if (dates && dates.length > 0) {
-                    dates.sort((a, b) => a.getTime() - b.getTime());
-                    state.firstVisitDate = dates[0].toLocaleDateString();
-                    state.lastVisitDate = dates[dates.length - 1].toLocaleDateString();
+                const dates = legs.map(flight => flight.date);
+                if (dates.length > 0) {
+                    dates.sort((a, b) => parseDateString(a).getTime() - parseDateString(b).getTime());
+                    state.firstVisitDate = dates[0];
+                    state.lastVisitDate = dates[dates.length - 1];
                 }
 
                 state.airlines = [...new Set(legs.map(flight => flight.airline).filter(Boolean))];

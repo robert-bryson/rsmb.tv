@@ -1,9 +1,25 @@
 import { expect, test } from '@playwright/test';
 import sitePages from '../../src/content/sitePages.json' with { type: 'json' };
 import siteAliases from '../../src/content/siteAliases.json' with { type: 'json' };
+import coastalTrip from '../fixtures/trip-content/trips/coastal-test.json' with { type: 'json' };
 
 test.describe('crawler metadata', () => {
     test.use({ javaScriptEnabled: false });
+
+    for (const [pathname, image] of [
+        ['/projects/flights', 'https://rsmb.tv/images/flights/flight-globe.webp'],
+        ['/projects/flights/map', 'https://rsmb.tv/images/flights/flight-globe.webp'],
+        ['/trips/coastal-test', `https://rsmb.tv${coastalTrip.photos.find(photo => photo.id === coastalTrip.hero)!.src}`],
+        ['/blog/reading-test', 'https://rsmb.tv/test-trip/photo-1-1600.svg'],
+    ]) {
+        test(`serves the page's image to link-preview crawlers: ${pathname}`, async ({ page }) => {
+            await page.goto(pathname);
+            await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', image);
+            await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute('content', image);
+            const schema = JSON.parse(await page.locator('script[type="application/ld+json"]').innerText());
+            expect(schema['@graph'][0].image).toBe(image);
+        });
+    }
 
     for (const [pathname, canonicalPath] of [
         ...Object.keys(sitePages).map(pathname => [pathname, pathname]),
@@ -27,6 +43,33 @@ test.describe('crawler metadata', () => {
             }
         });
     }
+});
+
+test('keeps the imported article image after React starts and clears its dimensions after navigation', async ({ page }) => {
+    await page.route('**/test-trip/photo-1-1600.svg', route => route.fulfill({
+        contentType: 'image/svg+xml',
+        body: '<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000"><rect width="1600" height="1000" fill="#405b6b"/></svg>',
+    }));
+    await page.goto('/blog/reading-test');
+    await expect(page.getByRole('heading', { level: 1, name: 'Reading test' })).toBeVisible();
+    await expect(page.locator('[data-prerendered]')).toHaveCount(0);
+    const image = 'https://rsmb.tv/test-trip/photo-1-1600.svg';
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', image);
+    await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute('content', image);
+    await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute('content', 'An illustrated coast');
+    await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute('content', '1600');
+    await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute('content', '1000');
+    const articleImage = page.getByRole('img', { name: 'An illustrated coast', exact: true });
+    await articleImage.scrollIntoViewIfNeeded();
+    await expect.poll(() => articleImage.evaluate(element => ({ src: (element as HTMLImageElement).currentSrc, width: (element as HTMLImageElement).naturalWidth })))
+        .toEqual({ src: image.replace('https://rsmb.tv', new URL(page.url()).origin), width: 1600 });
+    const schemas = await page.locator('script[type="application/ld+json"]').allTextContents();
+    expect(schemas.map(schema => JSON.parse(schema)).find(schema => schema['@type'] === 'BlogPosting')?.image).toBe(image);
+
+    await page.getByRole('link', { name: 'Projects', exact: true }).first().click();
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', 'https://rsmb.tv/og/projects.png');
+    await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute('content', '1200');
+    await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute('content', '630');
 });
 
 for (const [pathname, canonicalPath] of [

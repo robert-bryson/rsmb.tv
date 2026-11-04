@@ -8,6 +8,7 @@ import { pageMetadataHtml } from '../pageMetadataHtml';
 import siteAliases from '../../src/content/siteAliases.json';
 import { articleMetadata, staticPageMetadata, STATIC_PAGE_PATHS } from '../../src/utils/pageMetadata';
 import { canonicalUrl } from '../../src/utils/siteMetadata';
+import { projects } from '../../src/content/projects';
 
 describe('public page discovery', () => {
     it('covers every public route with static metadata, sitemap entries, and a social card', () => {
@@ -17,7 +18,12 @@ describe('public page discovery', () => {
         expect([...STATIC_PAGE_PATHS].sort()).toEqual(publicPaths.sort());
         expect(STATIC_ROUTES.map(route => route.path).sort()).toEqual([...STATIC_PAGE_PATHS].sort());
         const cards = new Set(DEFAULT_PAGES.map(page => `https://rsmb.tv/og/${page.slug}.png`));
-        for (const pathname of STATIC_PAGE_PATHS) expect(cards.has(staticPageMetadata(pathname).ogImage)).toBe(true);
+        for (const pathname of STATIC_PAGE_PATHS) {
+            const project = projects.find(project => project.slug === pathname.split('/')[2]);
+            const image = staticPageMetadata(pathname).ogImage;
+            if (project?.previewImage) expect(image).toBe(`https://rsmb.tv${project.previewImage}`);
+            else expect(cards.has(image)).toBe(true);
+        }
     });
 
     it('describes CLI projects accurately and connects maps to their application and breadcrumbs', () => {
@@ -47,6 +53,18 @@ describe('public page discovery', () => {
 });
 
 describe('crawler HTML', () => {
+    it.each(['/projects/flights', '/projects/flights/map'])('shares the project screenshot at %s before JavaScript runs', pathname => {
+        const template = fs.readFileSync(new URL('../../index.html', import.meta.url), 'utf8');
+        const metadata = staticPageMetadata(pathname);
+        const page = new JSDOM(pageMetadataHtml(template, metadata)).window.document;
+        const image = 'https://rsmb.tv/images/flights/flight-globe.webp';
+        expect(page.querySelector('meta[property="og:title"]')?.getAttribute('content')).toBe('Flights — rsmb');
+        expect(page.querySelector('meta[property="og:image"]')?.getAttribute('content')).toBe(image);
+        expect(page.querySelector('meta[name="twitter:image"]')?.getAttribute('content')).toBe(image);
+        expect(metadata.jsonLd).toMatchObject({ image });
+        expect(metadata).toMatchObject({ imageWidth: 1852, imageHeight: 1385 });
+    });
+
     it('replaces old metadata and JSON-LD when rendering another page from a generated document', () => {
         const template = fs.readFileSync(new URL('../../index.html', import.meta.url), 'utf8');
         const post = articleMetadata({ slug: 'example', title: 'A trip <&>', description: 'A coast & mountains trip', date: '2026-01-01', tags: [] });
@@ -55,7 +73,7 @@ describe('crawler HTML', () => {
         expect(page.querySelectorAll('link[rel="canonical"]')).toHaveLength(1);
         expect(page.querySelector('link[rel="canonical"]')?.getAttribute('href')).toBe('https://rsmb.tv/projects/parc');
         expect(page.querySelector('meta[property="article:published_time"]')).toBeNull();
-        expect(page.querySelector('meta[property="og:image"]')?.getAttribute('content')).toBe('https://rsmb.tv/og/parc.png');
+        expect(page.querySelector('meta[property="og:image"]')?.getAttribute('content')).toBe('https://rsmb.tv/images/parc/update-live-progress.webp');
         expect(page.querySelectorAll('script[type="application/ld+json"]')).toHaveLength(1);
         expect(page.documentElement.innerHTML).not.toContain('BlogPosting');
     });
@@ -64,5 +82,40 @@ describe('crawler HTML', () => {
         const page = articleMetadata({ slug: 'coast', title: 'Coast', description: 'A ride', date: '2026-01-01', tags: [], format: 'trip' }, { src: '/coast.webp', alt: 'Coast from above', width: 1600, height: 1000 });
         expect(page).toMatchObject({ ogImage: 'https://rsmb.tv/coast.webp', ogUrl: 'https://rsmb.tv/trips/coast', imageAlt: 'Coast from above', imageWidth: 1600, imageHeight: 1000 });
         expect(page.jsonLd).toMatchObject({ image: page.ogImage, mainEntityOfPage: { '@id': page.ogUrl }, author: { '@id': 'https://rsmb.tv/#person' } });
+    });
+
+    it('uses a regular post image in social tags and JSON-LD', () => {
+        const post = { slug: 'illustrated', title: 'Illustrated', description: 'A post', date: '2026-01-01', tags: [], image: { src: '/photos/coast.jpg', alt: 'Coast', width: 1600, height: 900 } };
+        const metadata = articleMetadata(post);
+        expect(metadata).toMatchObject({ ogImage: 'https://rsmb.tv/photos/coast.jpg', imageAlt: 'Coast', imageWidth: 1600, imageHeight: 900 });
+        expect(metadata.jsonLd.image).toBe(metadata.ogImage);
+        expect(articleMetadata(post, { src: '/hero.webp' }).ogImage).toBe('https://rsmb.tv/hero.webp');
+    });
+
+    it.each([
+        ['./coast.jpg', 'https://rsmb.tv/blog/coast.jpg'],
+        ['../photos/coast.jpg', 'https://rsmb.tv/photos/coast.jpg'],
+        ['/photos/coast.jpg', 'https://rsmb.tv/photos/coast.jpg'],
+        ['https://example.com/coast.jpg?size=large&v=2', 'https://example.com/coast.jpg?size=large&v=2'],
+    ])('resolves article image %s as the browser does', (src, expected) => {
+        const metadata = articleMetadata({ slug: 'illustrated', title: 'Illustrated', description: 'A post', date: '2026-01-01', tags: [], image: { src } });
+        expect(metadata.ogImage).toBe(expected);
+        expect(metadata.jsonLd.image).toBe(expected);
+    });
+
+    it.each(['', '  ', '#heading', 'javascript:alert(1)', 'data:image/png;base64,AAAA', 'https://[invalid'])('uses a fallback card for unusable image %s', src => {
+        const metadata = articleMetadata({ slug: 'plain', title: 'Plain', description: 'Text only', date: '2026-01-01', tags: [], image: { src, width: 1, height: 1 } });
+        expect(metadata).toMatchObject({ ogImage: 'https://rsmb.tv/og/blog/plain.png', imageWidth: 1200, imageHeight: 630, imageAlt: 'Plain' });
+    });
+
+    it('uses the post image when an optional hero URL is unusable', () => {
+        const metadata = articleMetadata({ slug: 'illustrated', title: 'Illustrated', description: 'A post', date: '2026-01-01', tags: [], image: { src: '/photo.jpg' } }, { src: '' });
+        expect(metadata.ogImage).toBe('https://rsmb.tv/photo.jpg');
+    });
+
+    it('retains generated cards for pages and posts without images', () => {
+        expect(staticPageMetadata('/projects/aborg')).toMatchObject({ ogImage: 'https://rsmb.tv/og/aborg.png', imageWidth: 1200, imageHeight: 630 });
+        expect(articleMetadata({ slug: 'plain', title: 'Plain', description: 'Text only', date: '2026-01-01', tags: [] }))
+            .toMatchObject({ ogImage: 'https://rsmb.tv/og/blog/plain.png', imageWidth: 1200, imageHeight: 630 });
     });
 });

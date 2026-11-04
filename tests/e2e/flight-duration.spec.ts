@@ -29,6 +29,7 @@ for (const selection of ['route=LAX-SEA', 'airport=LAX', 'country=US', 'region=U
         await expect(time.getByText('Shortest Flight Time', { exact: true }).locator('..')).toContainText('2h 45m');
         await expect(time.getByText('Shortest Flight Time', { exact: true }).locator('..')).toContainText('Actual');
         await expect(page.getByRole('status')).toContainText('6h');
+        await expect(panel).not.toContainText(/\b\d{1,2}\/\d{1,2}\/\d{4}\b|\b\d{4}-\d{2}-\d{2}\b/);
         if (selection.startsWith('route=')) {
             await panel.getByRole('button', { name: /All Flights \(2\)/ }).click();
             await expect(panel).toContainText('T101');
@@ -36,6 +37,7 @@ for (const selection of ['route=LAX-SEA', 'airport=LAX', 'country=US', 'region=U
             await expect(actual).toBeVisible();
             await expect(panel.getByText('3h', { exact: true }).locator('..').filter({ hasText: '· Scheduled' })).toBeVisible();
             await expect(actual.getByText('2 hours 45 minutes', { exact: true })).toHaveClass('sr-only');
+            await expect(panel).not.toContainText(/\b\d{1,2}\/\d{1,2}\/\d{4}\b|\b\d{4}-\d{2}-\d{2}\b/);
         }
     });
 }

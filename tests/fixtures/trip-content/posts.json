@@ -24,6 +24,12 @@
     "title": "Reading test",
     "date": "2024-01-01",
     "description": "An ordinary article.",
+    "image": {
+      "src": "../test-trip/photo-1-1600.svg",
+      "alt": "An illustrated coast",
+      "width": 1600,
+      "height": 1000
+    },
     "tags": [
       "coast"
     ]

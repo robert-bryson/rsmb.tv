@@ -1,5 +1,28 @@
 import { describe, it, expect } from 'vitest';
-import { parseDateString, sortDatesDescending } from '../features/flights/utils';
+import { formatFlightYear, formatFlightYears, parseDateString, sortDatesDescending } from '../features/flights/utils';
+
+describe('formatFlightYear', () => {
+    it.each([
+        ['5/14/2022', '2022'], ['2025-12-31', '2025'], ['2024-01-01', '2024'],
+        ['', 'Unknown year'], ['invalid <date>', 'Unknown year'], [undefined, 'Unknown year'],
+        [null, 'Unknown year'], ['2/29/2023', 'Unknown year'], ['2024-13-01', 'Unknown year'],
+        ['1/1/2024<script>', 'Unknown year'], ['1/1/2024/extra', 'Unknown year'],
+        ['12/31/0000', 'Unknown year'], ['2024-02-29', '2024'],
+    ])('formats %s without exposing the original date', (date, expected) => {
+        expect(formatFlightYear(date)).toBe(expected);
+    });
+});
+
+describe('formatFlightYears', () => {
+    it('puts unavailable years after valid years and removes duplicates', () => {
+        expect(formatFlightYears(['invalid', '1/1/2024', '2025-02-28', '2024-12-31', 'invalid'], 3))
+            .toBe('2025, 2024, Unknown year');
+    });
+
+    it('shows an unavailable year for an empty set of dates', () => {
+        expect(formatFlightYears([], 3)).toBe('Unknown year');
+    });
+});
 
 describe('parseDateString', () => {
     it('parses M/D/YYYY format', () => {

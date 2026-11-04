@@ -11,6 +11,7 @@ import { lazy, type ComponentType, type LazyExoticComponent } from 'react';
 import { getTripSummary } from '../features/trips/tripSummaries';
 import { tripFactTag } from './blogTags';
 import { separatePostGeography, type PostCountry } from './blogRegions';
+import type { MetadataImage } from '../utils/pageMetadata';
 
 export type BlogPostFormat = 'post' | 'trip';
 
@@ -38,6 +39,7 @@ export interface BlogPostMeta {
     countries?: PostCountry[];
     format?: BlogPostFormat;
     tripId?: string;
+    image?: MetadataImage;
     series?: { id: string; title: string; order: number };
     development?: DevelopmentPostMeta;
 }
@@ -91,7 +93,7 @@ const posts: BlogPost[] = postsMeta.map((meta) => {
 posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 export function getAllPosts(): BlogPostMeta[] {
-    return posts.map(({ slug, title, date, description, tags, countries, format, tripId, series, development }) => ({
+    return posts.map(({ slug, title, date, description, tags, countries, format, tripId, image, series, development }) => ({
         slug,
         title,
         date,
@@ -100,6 +102,7 @@ export function getAllPosts(): BlogPostMeta[] {
         countries,
         ...(format ? { format } : {}),
         ...(tripId ? { tripId } : {}),
+        ...(image ? { image } : {}),
         ...(series ? { series } : {}),
         ...(development ? { development } : {}),
     }));

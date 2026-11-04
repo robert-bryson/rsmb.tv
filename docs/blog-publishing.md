@@ -135,8 +135,12 @@ Anyone with the webhook URL can start a build.
 The webhook starts the build. Amplify environment variables control the import.
 
 The build writes article metadata into HTML files for both collection paths.
-The metadata includes the title, description, canonical URL, social image,
-publication date, `BlogPosting`, and breadcrumbs. Ordinary posts use generated
-PNG social cards; trip reports use the manifest hero with its alt text and size.
+The metadata includes the title, description, canonical URL, social image, publication date, `BlogPosting`, and breadcrumbs.
+Ordinary posts use the first retained article image with a usable URL.
+The importer rejects unsafe URLs and fragment references before image selection.
+Relative image paths resolve against the canonical article URL.
+Trip reports use the manifest hero with its alt description and dimensions.
+Posts without a usable image use generated PNG social cards.
+See [site metadata](site-metadata.md) for image sources and validation commands.
 Apply the page and article rewrite rules in `infra/main.tf` before production release.
 The browser still renders the article body.

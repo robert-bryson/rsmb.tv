@@ -173,6 +173,25 @@ They check subprocess errors before they check the exit status.
 
 ## Units and statistics
 
+### Flight dates
+
+Statistics, route histories, map tooltips, and phone details display flight years.
+Full departure dates remain in the data for chronological sorting and first and last visits.
+An invalid calendar date displays **Unknown year**.
+Use `formatFlightYear` and `formatFlightYears` from `src/features/flights/utils/index.ts` for these displays.
+Year summaries show distinct years, newest first.
+Phone summaries show up to three years. Desktop hover summaries show up to five years.
+An ellipsis indicates additional years.
+Year precision applies to the interface. The public flight data retains full dates.
+
+Run the date and presentation checks after a change:
+
+```bash
+npx vitest run src/test/parseDateString.test.ts src/test/StatsPanel.test.tsx \
+  src/test/flightTimePresentation.test.tsx src/test/flightDuration.test.ts src/test/tooltipHtml.test.ts
+PLAYWRIGHT_WEBKIT=1 npm run test:e2e -- tests/e2e/flight-duration.spec.ts
+```
+
 ### Flight duration
 
 Add these optional columns to the source Google Sheet or CSV:

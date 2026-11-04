@@ -188,6 +188,11 @@ describe('parseBlogSheet', () => {
 });
 
 describe('Google export helpers', () => {
+    it('retains fragment links while rejecting fragment image sources', () => {
+        const markdown = convertHtmlToMarkdown('<p><a href="#heading">Jump to heading</a><img src="#heading"></p>');
+        expect(markdown).toBe('[Jump to heading](#heading)');
+    });
+
     it('builds public export URLs for Sheets and Docs', () => {
         expect(buildSheetCsvUrl('sheet_123', 'Blog Posts'))
             .toBe('https://docs.google.com/spreadsheets/d/sheet_123/gviz/tq?tqx=out:csv&sheet=Blog%20Posts');
@@ -584,6 +589,58 @@ const validTripManifest = {
 };
 
 describe('syncBlogPosts', () => {
+    it.each([
+        '<form><img src="https://example.com/removed.jpg"></form>',
+        '<button><img src="https://example.com/removed.jpg"></button>',
+        '<object><img src="https://example.com/removed.jpg"></object>',
+        '<pre><code>Example code<img src="https://example.com/removed.jpg"></code></pre>',
+        '<img src="#heading">',
+    ])('selects the first retained article image after %s', async prefix => {
+        const repoRoot = createTempDir();
+        const csv = [
+            'slug,title,date,description,tags,google_doc_id,published',
+            'illustrated,Illustrated,2026-04-30,A post with photos,meta,doc_images,true',
+        ].join('\n');
+        await syncBlogPosts({ repoRoot, sheetId: 'test_sheet', today, fetchImpl: createFetch(csv, {
+            doc_images: `${prefix}<p><img src="https://example.com/article.jpg" alt="Article photo"></p>`,
+        }) });
+        const posts = JSON.parse(fs.readFileSync(path.join(repoRoot, 'src/content/posts.json'), 'utf8'));
+        const mdx = fs.readFileSync(path.join(repoRoot, 'src/content/blog/illustrated.mdx'), 'utf8');
+        expect(posts[0].image).toEqual({ src: 'https://example.com/article.jpg', alt: 'Article photo' });
+        expect(mdx).toContain('https://example.com/article.jpg');
+        expect(mdx).not.toMatch(/removed\.jpg|src="#heading"/);
+    });
+
+    it.each([
+        ['<p>Text only</p>', undefined],
+        ['<img src="data:image/png;base64,AAAA"><p>Text only</p>', undefined],
+        ['<img src="/photo.jpg" width="0" height="-20" alt="  ">', { src: '/photo.jpg' }],
+        ['<img src="/photo.jpg" width="1.5" height="Infinity">', { src: '/photo.jpg' }],
+        ['<img src="/photo.jpg" width="1600" height="900">', { src: '/photo.jpg', width: 1600, height: 900 }],
+    ])('stores only usable image metadata from %s', async (html, expected) => {
+        const repoRoot = createTempDir();
+        const csv = [
+            'slug,title,date,description,tags,google_doc_id,published',
+            'illustrated,Illustrated,2026-04-30,A post,meta,doc_images,true',
+        ].join('\n');
+        await syncBlogPosts({ repoRoot, sheetId: 'test_sheet', today, fetchImpl: createFetch(csv, { doc_images: html }) });
+        const posts = JSON.parse(fs.readFileSync(path.join(repoRoot, 'src/content/posts.json'), 'utf8'));
+        expect(posts[0].image).toEqual(expected);
+    });
+
+    it('keeps the first usable post image in the registry for crawler and browser metadata', async () => {
+        const repoRoot = createTempDir();
+        const csv = [
+            'slug,title,date,description,tags,google_doc_id,published',
+            'illustrated,Illustrated,2026-04-30,A post with photos,meta,doc_images,true',
+        ].join('\n');
+        await syncBlogPosts({ repoRoot, sheetId: 'test_sheet', today, fetchImpl: createFetch(csv, {
+            doc_images: '<html><body><img src="javascript:alert(1)"><img src="https://example.com/coast.jpg?size=large&amp;v=2" alt="Coast &amp; mountains" width="1600" height="900"><img src="https://example.com/later.jpg"></body></html>',
+        }) });
+        const posts = JSON.parse(fs.readFileSync(path.join(repoRoot, 'src/content/posts.json'), 'utf8'));
+        expect(posts[0].image).toEqual({ src: 'https://example.com/coast.jpg?size=large&v=2', alt: 'Coast & mountains', width: 1600, height: 900 });
+    });
+
     it('imports ordinary posts with literal shortcode text as compilable MDX', async () => {
         const repoRoot = createTempDir();
         const csv = [

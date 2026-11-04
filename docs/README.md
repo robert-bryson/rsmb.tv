@@ -35,6 +35,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-03 | [Flight years and article previews: image selection, URL resolution, validation, and coverage](reviews/2026-11-03-flight-years-and-preview-review.md) |
 | 2026-11-03 | [Temperature publication review: usable observations, calendar validation, camera framing, and focus restoration](reviews/2026-11-03-temperature-publication-review.md) |
 | 2026-11-03 | [Temperature map review: marker selection, late data, units, popup escaping, and coverage](reviews/2026-11-03-temperature-map-quality-review.md) |
 | 2026-11-03 | [Flight display review: partial totals, shared presentation rules, and coverage](reviews/2026-11-03-flight-display-quality-review.md) |

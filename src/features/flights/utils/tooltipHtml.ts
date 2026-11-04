@@ -1,5 +1,5 @@
 import type { GlobeAllAirportPoint, GlobePoint, GlobeStatePolygon, GlobeStaticArc } from '../types';
-import { escapeHtml, formatElevation, parseYear, sortDatesDescending, parseDateString } from './index';
+import { escapeHtml, formatElevation, formatFlightYear, formatFlightYears, parseYear, sortDatesDescending, parseDateString } from './index';
 import { flightDurationAvailability, flightDurationKindLabel, flightDurationLabel, flightDurationSourceLabel, formatFlightDuration, formatFlightDurationAccessible, formatFlightHours, resolveFlightDuration, summarizeFlightDurations, type FlightDurationSummary } from './flightDuration';
 
 type TooltipPoint = (GlobePoint | GlobeAllAirportPoint) & { isAllAirports?: boolean };
@@ -25,7 +25,6 @@ export function buildArcLabelHtml(
     const isSelected = selectedRoute === arcData.routeKey;
 
     if (!isSelected) {
-        const recentFlights = arcData.flights.slice(0, 5);
         return `
               <div class="bg-gray-900/95 px-3 py-2 rounded-lg shadow-xl border border-gray-700 text-sm">
                 <div class="font-bold text-purple-300">${escapeHtml(firstFlight.origin_code)} ↔ ${escapeHtml(firstFlight.destination_code)}</div>
@@ -36,7 +35,7 @@ export function buildArcLabelHtml(
                   <span class="text-purple-400">${arcData.routeCount} flight${arcData.routeCount > 1 ? 's' : ''}</span>
                 </div>
                 <div class="text-gray-500 text-xs mt-1">
-                  ${escapeHtml(recentFlights.map((flight) => flight.date).join(', '))}${arcData.flights.length > 5 ? '...' : ''}
+                  Years: ${escapeHtml(formatFlightYears(arcData.flights.map(flight => flight.date), 5))}
                 </div>
                 ${durationHtml}
                 <div class="text-gray-600 text-xs mt-2 italic">Click for details</div>
@@ -71,7 +70,7 @@ export function buildArcLabelHtml(
                 </div>
                 <div>
                   <div class="text-gray-500 text-xs">Last Flight</div>
-                  <div class="text-gray-300">${escapeHtml(allDates[0])}</div>
+                  <div class="text-gray-300">${formatFlightYear(allDates[0])}</div>
                 </div>
               </div>
 
@@ -89,7 +88,7 @@ export function buildArcLabelHtml(
                     return `
                     <div class="flex items-center gap-1.5 rounded border border-gray-700/70 bg-gray-800/70 px-2 py-1 text-gray-300">
                       <span class="text-[10px] text-gray-600">${String(index + 1).padStart(2, '0')}</span>
-                      <span>${escapeHtml(flight.date)}<br/>${escapeHtml(flight.origin_code)} → ${escapeHtml(flight.destination_code)}<br/>
+                      <span>${formatFlightYear(flight.date)}<br/>${escapeHtml(flight.origin_code)} → ${escapeHtml(flight.destination_code)}<br/>
                       ${escapeHtml(flight.airline)} ${escapeHtml(flight.flightNumber || '')}<br/>
                       ${resolved.minutes === null ? 'Flight time unavailable' : `<span aria-hidden="true">${formatFlightDuration(resolved.minutes)}</span><span class="sr-only">${formatFlightDurationAccessible(resolved.minutes)}</span>${kindLabel ? ` · ${kindLabel}` : ''}`}
                       ${source ? `<br/>Source: ${escapeHtml(source)}` : ''}
@@ -158,7 +157,7 @@ export function buildStatePolygonLabelHtml(poly: GlobeStatePolygon) {
                     </div>
                     ${stats.firstVisitDate ? `
                       <div class="mt-1 text-xs text-gray-500">
-                        First: ${escapeHtml(stats.firstVisitDate)}
+                        First: ${formatFlightYear(stats.firstVisitDate)}
                       </div>
                     ` : ''}
                   ` : `

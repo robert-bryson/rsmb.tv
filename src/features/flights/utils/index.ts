@@ -3,6 +3,7 @@ export { escapeHtml } from '../../../utils/escapeHtml';
 
 import { EARTH_RADIUS_KM } from '../constants';
 import type { FlightProperties, FlightTypeFilter } from '../types';
+import { parseFlightDate } from './flightDateInput';
 
 /** Haversine formula: great-circle distance between two lat/lon points in km */
 export function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -24,6 +25,22 @@ export function parseYear(dateStr: string): number {
     if (isoYear) return parseInt(isoYear[1], 10);
     const parts = dateStr.split('/');
     return parseInt(parts[2], 10);
+}
+
+/** Flight dates are displayed at year precision throughout the public UI. */
+export function formatFlightYear(dateStr: string | null | undefined): string {
+    try {
+        return String(parseFlightDate(dateStr ?? '').year);
+    } catch {
+        return 'Unknown year';
+    }
+}
+
+/** Show recent distinct years first; put an unavailable year after all valid years. */
+export function formatFlightYears(dates: readonly string[], limit: number): string {
+    const years = [...new Set(dates.map(formatFlightYear))]
+        .sort((a, b) => (Number(b) || 0) - (Number(a) || 0));
+    return (years.slice(0, limit).join(', ') || 'Unknown year') + (years.length > limit ? '...' : '');
 }
 
 /** Create alphabetically sorted route key for consistent deduplication */

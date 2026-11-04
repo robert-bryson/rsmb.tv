@@ -1,8 +1,9 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ComponentProps } from 'react';
 import { StatsPanel } from '../features/flights/components/StatsPanel';
 import type { FlightStats, SelectedRouteInfo } from '../features/flights/types';
+import { makeAirport, makeFlight } from './helpers/flights';
 
 /** Minimal FlightStats for rendering OverallStats without optional data. */
 function makeStats(overrides: Partial<FlightStats> = {}): FlightStats {
@@ -142,6 +143,46 @@ describe('StatsPanel', () => {
     });
 
     describe('panel content', () => {
+        it('shows only years for first and last airport visits', () => {
+            const { container } = renderStatsPanel({
+                isOpen: true,
+                stats: makeStats({ selectedAirportInfo: {
+                    ...makeAirport('SEA'), totalVisits: 2, arrivals: 1, departures: 1,
+                    firstVisit: { date: '5/14/2022', from: 'UIO', direction: 'arrival' },
+                    lastVisit: { date: '2025-12-31', to: 'DFW', direction: 'departure' },
+                    connectedAirports: 2, connectedCountries: [], topDestinations: [], topOrigins: [], airlines: [],
+                } }),
+            });
+            expect(screen.getByText('First visit:').parentElement).toHaveTextContent('2022 from UIO');
+            expect(screen.getByText('Last visit:').parentElement).toHaveTextContent('2025 to DFW');
+            expect(container.innerHTML).not.toMatch(/5\/14\/2022|2025-12-31/);
+        });
+
+        it.each([
+            ['1/1/2006', '2025-12-31', '2006 — 2025'],
+            ['1/1/2024', '2024-12-31', '2024'],
+        ])('shows the overall date range at year precision: %s to %s', (first, last, label) => {
+            const { container } = renderStatsPanel({ isOpen: true, stats: makeStats({
+                firstFlight: { route: 'SEA → LAX', date: first }, lastFlight: { route: 'LAX → SEA', date: last },
+            }) });
+            expect(screen.getByText(label, { exact: true })).toBeInTheDocument();
+            expect(container.innerHTML).not.toContain(first);
+            expect(container.innerHTML).not.toContain(last);
+        });
+
+        it('shows only years in the route timeline and individual flight entries', () => {
+            const flights = [makeFlight({ date: '2025-12-31' }), makeFlight({ id: 2, date: '5/14/2022' })];
+            const { container } = renderStatsPanel({ isOpen: true, selectedRouteInfo: {
+                ...makeSelectedRouteInfo(), totalFlights: 2, flights, dates: flights.map(flight => flight.date), years: [2022, 2025],
+            } });
+            fireEvent.click(screen.getByRole('button', { name: /All Flights \(2\)/ }));
+            expect(screen.getByText('First flight:').parentElement).toHaveTextContent('2022');
+            expect(screen.getByText('Last flight:').parentElement).toHaveTextContent('2025');
+            expect(screen.getByText('Latest').parentElement).toHaveTextContent('2025');
+            expect(screen.getByText('First', { exact: true }).parentElement).toHaveTextContent('2022');
+            expect(container.innerHTML).not.toMatch(/5\/14\/2022|2025-12-31/);
+        });
+
         it('shows overall flight statistics when open', () => {
             renderStatsPanel({ isOpen: true });
             expect(screen.getByText('Flight Statistics')).toBeInTheDocument();
@@ -264,11 +305,13 @@ describe('StatsPanel', () => {
 
             expect(screen.getByText('Latest')).toBeInTheDocument();
             expect(screen.getByText('8 more')).toBeInTheDocument();
-            expect(screen.queryByText('1/8/2024')).not.toBeInTheDocument();
+            const entries = document.getElementById(screen.getByRole('button', { name: /All Flights \(16\)/ }).getAttribute('aria-controls')!)!;
+            expect(within(entries).getAllByText('2024', { exact: true })).toHaveLength(8);
 
             fireEvent.click(screen.getByRole('button', { name: 'Show 8 more' }));
 
-            expect(screen.getByText('1/8/2024')).toBeInTheDocument();
+            expect(within(entries).getAllByText('2024', { exact: true })).toHaveLength(16);
+            expect(entries).not.toHaveTextContent(/\d{1,2}\/\d{1,2}\/\d{4}/);
             expect(screen.getByText('First')).toBeInTheDocument();
         });
 

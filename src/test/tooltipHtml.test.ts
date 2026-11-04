@@ -112,7 +112,8 @@ describe('tooltipHtml', () => {
         expect(html).toContain('Los Angeles &quot;International&quot;');
         expect(html).toContain('Air &amp; &lt;Script&gt;');
         expect(html).toContain('grid max-h-28 grid-cols-2');
-        expect(html).toContain('<span>2024-01-02<br/>');
+        expect(html).toContain('<span>2024<br/>');
+        expect(html).not.toContain('2024-01-02');
         expect(html).toContain('Flight time:');
         expect(html).not.toMatch(/Est\.|Estimated|actual ·|Distance estimate/);
         expect(html).not.toContain('<Script>');
@@ -157,7 +158,7 @@ describe('tooltipHtml', () => {
                 airportCount: 1,
                 totalAirports: 2,
                 flightCount: 3,
-                firstVisitDate: '2024-01-02 <bad>',
+                firstVisitDate: '2024-01-02',
                 lastVisitDate: '2024-01-02',
                 airlines: ['Airline'],
             },
@@ -168,7 +169,8 @@ describe('tooltipHtml', () => {
 
         expect(html).toContain('Wash &lt;script&gt;');
         expect(html).toContain('W&amp;A');
-        expect(html).toContain('2024-01-02 &lt;bad&gt;');
+        expect(html).toContain('First: 2024');
+        expect(html).not.toContain('2024-01-02');
         expect(html).not.toContain('Wash <script>');
     });
 });

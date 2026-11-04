@@ -2,6 +2,7 @@ import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { FlightDurationDetail } from '../features/flights/components/DurationSummary';
 import { HoverInfo } from '../features/flights/components/HoverInfo';
+import { MobileInfoOverlay } from '../features/flights/components/MobileInfoOverlay';
 import { FlightTimeValue } from '../features/flights/components/shared/FlightTimeValue';
 import type { FlightProperties, GlobePoint, GlobeStatePolygon, GlobeStaticArc } from '../features/flights/types';
 import { resolveFlightDuration, summarizeFlightDurations } from '../features/flights/utils/flightDuration';
@@ -50,6 +51,28 @@ function summaryTooltips(flights: FlightProperties[]) {
 }
 
 describe('flight time presentation across renderers', () => {
+    it('shows years instead of full dates in desktop and mobile route details', () => {
+        const flights = [
+            makeFlight({ date: '2025-12-31' }),
+            makeFlight({ id: 2, date: '5/14/2022' }),
+            makeFlight({ id: 3, date: '5/26/2022' }),
+        ];
+        const { container } = render(<MobileInfoOverlay arc={arc(flights)} onClose={() => {}} onSelect={() => {}} />);
+        expect(container).toHaveTextContent('Years: 2025, 2022');
+        for (const html of [container.innerHTML, buildArcLabelHtml(arc(flights), null), buildArcLabelHtml(arc(flights), 'LAX-SEA')]) {
+            expect(html).toContain('2022');
+            expect(html).toContain('2025');
+            for (const flight of flights) expect(html).not.toContain(flight.date);
+        }
+    });
+
+    it('keeps the newest distinct years when mobile and desktop summaries truncate a route', () => {
+        const flights = [2021, 2026, 2023, 2025, 2024, 2022, 2026].map((year, id) => makeFlight({ id, date: `1/1/${year}` }));
+        const { container } = render(<MobileInfoOverlay arc={arc(flights)} onClose={() => {}} onSelect={() => {}} />);
+        expect(container).toHaveTextContent('Years: 2026, 2025, 2024...');
+        expect(tooltip(buildArcLabelHtml(arc(flights), null))).toHaveTextContent('Years: 2026, 2025, 2024, 2023, 2022...');
+    });
+
     it.each(['actual-block', 'scheduled-block'] as const)('retains and escapes %s source details in React and HTML', durationKind => {
         const source = '<img src=x onerror=alert(1)> & "evidence"';
         const flight = makeFlight({ durationMinutes: 125, durationKind, durationSource: source });

@@ -406,6 +406,8 @@ The permitted width is `272` to `520` pixels.
 Distance values show the active unit. Hover a distance value to see the alternate unit.
 
 The route "All Flights" list uses incremental rendering. The panel shows an initial subset, then a "Show more" action for the rest.
+Flight dates display only their year in statistics, route histories, map tooltips, and mobile details.
+Full dates remain in the flight data for chronological sorting and selecting first and last visits.
 
 ## Blog publication
 

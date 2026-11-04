@@ -57,7 +57,11 @@ describe('trip publication contracts', () => {
             ...published, slug: 'unfinished', title: 'Unfinished journey', tripId: 'missing',
             development: { published: false, contentAvailable: false },
         };
-        const root = createContentFixture([published, draft], { manifests: [manifest], mode });
+        const illustrated = {
+            slug: 'illustrated', title: 'An illustrated post', description: 'A regular post with a photo.', date: '2026-04-08', tags: [],
+            image: { src: 'https://example.com/coast.jpg', alt: 'Coast & mountains', width: 1600, height: 900 },
+        };
+        const root = createContentFixture([published, illustrated, draft], { manifests: [manifest], mode });
         fs.writeFileSync(path.join(root, 'index.html'), `<html><head><title>Site</title>
             <meta name="description" content="Site" /><meta property="og:image" content="https://rsmb.tv/og/home.svg" />
             <link rel="canonical" href="https://rsmb.tv/" /></head><body><script type="module">
@@ -68,7 +72,7 @@ describe('trip publication contracts', () => {
         const assets = Object.fromEntries(result.output.filter(item => item.type === 'asset').map(item => [item.fileName, String(item.source)]));
         for (const pathname of STATIC_PAGE_PATHS) {
             const html = assets[pathname === '/' ? 'index.html' : `${pathname.slice(1)}.html`];
-            const metadata = staticPageMetadata(pathname, [published]);
+            const metadata = staticPageMetadata(pathname, [published, illustrated]);
             expect(html).toContain(`href="${metadata.ogUrl}"`);
             expect(html).toContain(`content="${metadata.ogImage}"`);
             expect(html.match(/rel="canonical"/g)).toHaveLength(1);
@@ -83,6 +87,10 @@ describe('trip publication contracts', () => {
         expect(assets['trips/coast.html']).toContain('<title>Coast &amp; mountains — rsmb</title>');
         expect(assets['trips/coast.html']).toContain('href="https://rsmb.tv/trips/coast"');
         expect(assets['trips/coast.html']).toContain(`content="https://rsmb.tv${manifest.photos.find(photo => photo.id === manifest.hero)!.src}"`);
+        expect(assets['blog/illustrated.html']).toContain('<meta property="og:image" content="https://example.com/coast.jpg"');
+        expect(assets['blog/illustrated.html']).toContain('<meta name="twitter:image" content="https://example.com/coast.jpg"');
+        expect(assets['blog/illustrated.html']).toContain('<meta property="og:image:alt" content="Coast &amp; mountains"');
+        expect(assets['blog/illustrated.html']).toContain('"image":"https://example.com/coast.jpg"');
         if (mode === 'development') {
             for (const [, html] of Object.entries(assets).filter(([filename]) => filename.endsWith('.html'))) {
                 expect(html).toMatch(/name="robots" content="noindex, nofollow"/);
@@ -94,6 +102,12 @@ describe('trip publication contracts', () => {
             expect(assets).not.toHaveProperty('trips/unfinished.html');
             expect(JSON.stringify(result.output)).not.toContain('Unfinished journey');
         }
+    });
+
+    it('preserves imported post images in the browser registry', () => {
+        const image = { src: 'https://example.com/coast.jpg', alt: 'Coast', width: 1600, height: 900 };
+        const output = loadPostRegistry([{ slug: 'illustrated', image }], 'build', [], 'virtual:post-content', { bodies: ['illustrated'] });
+        expect(String(output)).toContain(`"image":${JSON.stringify(image)}`);
     });
 
     it('includes incomplete unpublished metadata only in explicitly built development previews', () => {

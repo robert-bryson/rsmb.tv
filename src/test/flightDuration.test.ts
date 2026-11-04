@@ -106,6 +106,18 @@ describe('duration resolution and aggregation', () => {
         }));
         expect(result.current.get('US-WA')).toMatchObject({ flightCount: 1, duration: { actualCount: 1, totalMinutes: 90 } });
     });
+
+    it('retains source dates for state visits and sorts mixed formats by the full date', () => {
+        const dates = ['12/31/2025', '2024-01-01', '1/1/2025', '12/30/2025'];
+        const { result } = renderHook(() => useUSStateStats({
+            type: 'FeatureCollection', features: [{ type: 'Feature', properties: { code: 'US-WA', name: 'Washington', abbr: 'WA' }, geometry: { type: 'Polygon', coordinates: [] } }],
+        }, null, {
+            type: 'FeatureCollection', features: dates.map((date, id) => ({ type: 'Feature', geometry: { type: 'LineString', coordinates: [] }, properties: leg({ id, date }) })),
+        }));
+        expect(result.current.get('US-WA')).toMatchObject({
+            firstVisitDate: '2024-01-01', lastVisitDate: '12/31/2025', flightCount: 4,
+        });
+    });
     it('validates calendar dates without rolling invalid days into another month', () => {
         expect(parseFlightDate('2024-02-29')).toMatchObject({ year: 2024, canonical: '2/29/2024' });
         expect(() => parseFlightDate('2/29/2023')).toThrow('calendar date');

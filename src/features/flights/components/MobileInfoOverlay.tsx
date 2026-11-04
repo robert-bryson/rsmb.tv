@@ -2,6 +2,7 @@ import { memo } from 'react';
 import type { GlobeStaticArc } from '../types';
 import { DurationSummary } from './DurationSummary';
 import { summarizeFlightDurations } from '../utils/flightDuration';
+import { formatFlightYears } from '../utils';
 
 interface MobileInfoOverlayProps {
     arc: GlobeStaticArc | null;
@@ -50,8 +51,7 @@ export const MobileInfoOverlay = memo(function MobileInfoOverlay({ arc, onClose,
                     <div>{firstFlight.destination_name}</div>
                 </div>
                 <div className="mt-3 pt-3 border-t border-gray-700 text-xs text-gray-500">
-                    Dates: {arc.flights.slice(0, 3).map(f => f.date).join(', ')}
-                    {arc.flights.length > 3 && '...'}
+                    Years: {formatFlightYears(arc.flights.map(flight => flight.date), 3)}
                 </div>
                 <DurationSummary summary={summarizeFlightDurations(arc.flights)} />
                 <button

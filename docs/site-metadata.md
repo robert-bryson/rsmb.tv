@@ -9,7 +9,7 @@ A canonical URL identifies the preferred public address for a page.
 
 | Source | Purpose |
 | --- | --- |
-| `src/content/sitePages.json` | Public page titles, descriptions, social cards, and platforms |
+| `src/content/sitePages.json` | Public page titles, descriptions, fallback social cards, and platforms |
 | `src/content/siteAliases.json` | Legacy paths and their canonical pages |
 | `src/content/projects.ts` | Project descriptions, screenshots, repositories, and feature dates |
 | `src/utils/pageMetadata.ts` | Shared page and article metadata |
@@ -22,6 +22,17 @@ A canonical URL identifies the preferred public address for a page.
 
 Post metadata comes from the [blog import](blog-publishing.md).
 Trip manifests supply hero URLs, alt descriptions, and image dimensions.
+Project pages and their application subroutes use the project's preview screenshot in Open Graph, Twitter, and JSON-LD metadata.
+Screenshot dimensions come from `src/content/project-previews.json`.
+Regular posts use the first image retained in the imported article body.
+The importer removes unsupported elements and rejects unsafe image URLs before image selection.
+Images inside code examples cannot supply an article preview.
+Fragment references, such as `#heading`, cannot supply an image.
+Relative image paths resolve against the canonical article URL.
+The blog sync stores the image URL, alt description, and available dimensions in the post registry.
+Dimensions must be positive whole numbers. Missing or invalid dimensions remain absent.
+Trip heroes take priority over post images.
+Pages and posts without usable images retain generated social cards.
 The RSS build timestamp includes trip manifest changes.
 
 ## Schemas
@@ -85,6 +96,7 @@ PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- tests/trips/metadata.spec.ts -
 
 The browser command uses fixed content. It does not import Google documents.
 It checks clean paths, trailing slashes, HTML files, collection aliases, and navigation cleanup.
+Image checks cover project screenshots, trip heroes, relative article images, and React metadata after navigation.
 Crawler checks disable JavaScript. Separate checks verify React navigation.
 See [browser setup](trips/TESTING.md#browser-setup) before the first run.
 

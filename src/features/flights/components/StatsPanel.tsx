@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent as ReactPointerEvent } from 'react';
 import type { FlightProperties, FlightStats, SelectedRouteInfo, SelectedCountryInfo, SelectedRegionInfo, FlightTypeFilter } from '../types';
 import { EARTH_CIRCUMFERENCE_KM } from '../constants';
-import { formatElevation, getFlightTypeLabel } from '../utils';
+import { formatElevation, formatFlightYear, getFlightTypeLabel } from '../utils';
 import { StatItem, CollapsibleSection, ClickableAirport, ClickableRoute, ClickableCountry, ClickableRegion, FlightCount, VirtualizedList, DistanceValue } from './shared';
 import { AirlinesSection } from './AirlinesSection';
 import { CountriesSection } from './CountriesSection';
@@ -389,7 +389,7 @@ function AirportStats({
           <div className="flex justify-between text-xs mb-1">
             <span className="text-gray-400">First visit:</span>
             <span className="text-gray-300">
-              {airportInfo.firstVisit.date}{' '}
+              {formatFlightYear(airportInfo.firstVisit.date)}{' '}
               <span className="text-gray-500">
                 {airportInfo.firstVisit.direction === 'arrival' ? 'from ' : 'to '}
               </span>
@@ -407,7 +407,7 @@ function AirportStats({
           <div className="flex justify-between text-xs">
             <span className="text-gray-400">Last visit:</span>
             <span className="text-gray-300">
-              {airportInfo.lastVisit.date}{' '}
+              {formatFlightYear(airportInfo.lastVisit.date)}{' '}
               <span className="text-gray-500">
                 {airportInfo.lastVisit.direction === 'arrival' ? 'from ' : 'to '}
               </span>
@@ -667,11 +667,11 @@ function RouteStatsView({
         <div className="space-y-1 text-xs">
           <div className="flex justify-between">
             <span className="text-gray-400">First flight:</span>
-            <span className="text-gray-300">{routeInfo.dates[routeInfo.dates.length - 1]}</span>
+            <span className="text-gray-300">{formatFlightYear(routeInfo.dates[routeInfo.dates.length - 1])}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-gray-400">Last flight:</span>
-            <span className="text-gray-300">{routeInfo.dates[0]}</span>
+            <span className="text-gray-300">{formatFlightYear(routeInfo.dates[0])}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-gray-400">Years active:</span>
@@ -720,7 +720,7 @@ function RouteStatsView({
                 {String(index + 1).padStart(2, '0')}
               </span>
               <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-purple-400/80" aria-hidden="true" />
-              <span className="font-medium tabular-nums text-gray-300">{typeof flight === 'string' ? flight : flight.date}</span>
+              <span className="font-medium tabular-nums text-gray-300">{formatFlightYear(typeof flight === 'string' ? flight : flight.date)}</span>
               {typeof flight !== 'string' && (
                 <div className="w-full pl-8 text-gray-400">
                   <div>{flight.origin_code} → {flight.destination_code} · {flight.airline} {flight.flightNumber}</div>
@@ -1151,7 +1151,7 @@ function OverallStats({
       )}
       {!selectedYear && !selectedAirline && !selectedFlightType && stats.firstFlight && stats.lastFlight && (
         <div className="text-gray-500 text-xs mb-3">
-          {stats.firstFlight.date} — {stats.lastFlight.date}
+          {[...new Set([stats.firstFlight.date, stats.lastFlight.date].map(formatFlightYear))].join(' — ')}
         </div>
       )}
 

@@ -122,7 +122,6 @@ Complete these tasks after the affected trip passes its source review.
 ## Project content
 
 - [ ] Add screenshots to the Aborg project page.
-- [ ] Add screenshots to the Flights project page.
 - [ ] Publish more blog posts from the configured Google documents.
 
 ## Ride Ledger prerequisites
