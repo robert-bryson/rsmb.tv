@@ -48,24 +48,49 @@ Recent coverage requires completion metadata for every date in the selected peri
 Older snapshots without this metadata show **Coverage unverified**.
 Recent snapshots become stale after two days. Standing-record snapshots become stale after 45 days.
 
-The sync rejects failed or empty ACIS state responses.
-It also rejects a state when no station has a usable daily observation.
-Missing values, malformed numbers, and non-finite numbers cannot count as observations.
-A valid day with no broken records remains valid. Zero degrees is a valid observation.
-It validates all 48 contiguous states after county metadata filtering.
-It holds record files in memory until all upstream requests and validation checks succeed.
-An upstream failure leaves the previous record files in place.
-The script then replaces each output file atomically. The file set is not one transaction.
+## Sync and recovery
+
+The sync checks ACIS responses before it uses or caches them.
+Each POST request has up to three attempts.
+The sync waits one second before attempt two and two seconds before attempt three.
+Each attempt has a 60-second deadline, including the response body.
+HTTP 200 does not prove that a response contains valid data.
+Errors, empty responses, invalid station metadata, and invalid summary structures cause another attempt.
+A daily response must contain at least one usable station observation.
+Missing values, malformed numbers, and non-finite numbers do not count as observations.
+Zero degrees is valid. A day with observations and no broken records is also valid.
+
+The sync validates cached historical responses before reuse.
+It fetches a replacement when a cached response is invalid.
+Failed responses do not enter the response cache.
+
+Recent coverage requires successful requests for all 48 contiguous states on each date.
+County coverage is checked after county metadata filtering.
+Daily archives require verified state completion before reuse.
+Archives without this metadata must be regenerated.
+A warning identifies unverified coverage, unavailable archives, or missing station metadata.
+Rebuilt records replace that date's previous summary rows. This also removes old rows when the rebuilt date has no records.
+
+The sync keeps record files in memory until all upstream requests and validation checks succeed.
+An upstream failure leaves the previous record files in place and exits with code 1.
+After validation, the script replaces each output file atomically.
+The complete file set is not one transaction.
 The workflow uploads files only after the script succeeds.
-Failed ACIS responses do not enter the response cache.
-Daily archives require verified state completion before reuse. Legacy archives are regenerated once.
+An interrupted upload can leave different object versions visible together.
 
 Monthly historical requests end in the year before the observation.
 February includes a leap day only when that historical year has one.
 
-The first updated deployment needs a full temperature sync to restore missing California data.
-Use the **Sync Temperatures** workflow with **full_sync** enabled.
-Check `countyRecords.json`, `summary.json`, and recent per-date coverage after that run.
+Run a local recent-record sync with a writable cache directory:
+
+```bash
+TEMP_DATA_DIR=.temp/temperatures node scripts/sync-temperatures.js --recent-only
+```
+
+For a hosted sync, run the **Sync Temperatures** workflow.
+Enable **full_sync** to refresh state, county, and trend records.
+Check `countyRecords.json`, `summary.json`, and recent per-date coverage after a full sync.
+The pending production verification is tracked in [TODO.md](../TODO.md).
 
 ## Other views
 
@@ -113,7 +138,7 @@ Use the shared MapLibre entry point when adding a map. Its worker URL works on d
 Run the focused unit tests from the repository root:
 
 ```bash
-npx vitest run src/test/TemperatureMap.test.tsx src/test/temperatureDataStatus.test.tsx src/test/temperatureSchemas.test.ts src/test/temperatureMapLayers.test.ts src/test/temperatureSummaryPanel.test.tsx src/test/useTemperatureData.test.ts scripts/__tests__/syncTemperatures.test.ts scripts/__tests__/temperaturePublication.test.ts
+npx vitest run src/test/TemperatureMap.test.tsx src/test/temperatureDataStatus.test.tsx src/test/temperatureSchemas.test.ts src/test/temperatureMapLayers.test.ts src/test/temperatureSummaryPanel.test.tsx src/test/useTemperatureData.test.ts scripts/__tests__/syncTemperatures.test.ts scripts/__tests__/temperatureArchives.test.ts scripts/__tests__/temperaturePublication.test.ts scripts/__tests__/networkTimeouts.test.ts
 ```
 
 Run the browser tests:
@@ -132,6 +157,10 @@ Screenshots use CSS pixels, including on Retina displays.
 
 Unit tests verify the label collision setting, late data, units, view changes, and escaped popup dates.
 They also verify calendar dates, leap years, unusable observations, and time-based freshness changes.
+Sync tests check retries, invalid cache replacement, archive reconstruction, and all seven legacy dates.
+Publication tests run the CLI in temporary directories.
+They check output preservation after persistent daily, historical, and monthly failures.
+Subprocess execution does not contribute to Vitest coverage.
 The recovery tests keep the same canvas connected after a failed county request and a return to recent records.
 They also check that repeated fits do not create duplicate world copies of a station.
 The fixed browser font response does not verify font appearance or label placement.

@@ -36,6 +36,52 @@ function mockStateResponses(high: unknown, low: unknown) {
 }
 
 describe('temperature publication coverage', () => {
+    it.each([
+        ['daily', { data: [] }],
+        ['daily', { error: 'Temporarily unavailable' }],
+        ['daily', { data: [{ meta: { uid: 7 }, data: ['M', 'M'] }] }],
+        ['daily', null],
+        ['daily', { data: [null, { meta: { uid: 7 }, data: ['90', '10'] }] }],
+        ['historical', { data: [] }],
+        ['historical', { error: 'Temporarily unavailable' }],
+        ['historical', { data: [{ meta: { uid: 7 }, smry: [null, ['0', '2000-01-01']] }] }],
+        ['historical', { data: [{ meta: { uid: 7 }, smry: [[], []] }] }],
+        ['monthly', { data: [] }],
+        ['monthly', { error: 'Temporarily unavailable' }],
+        ['monthly', { data: [{ meta: { uid: 7 } }] }],
+        ['monthly', { data: [{ meta: { uid: 7 }, smry: [null, null] }] }],
+        ['monthly', { data: [{ meta: { uid: 7 }, smry: [[], []] }] }],
+    ])('retries an invalid %s response (%j) before rejecting the state', async (phase, failedResponse) => {
+        let requests = 0;
+        const fetchMock = vi.spyOn(globalThis, 'fetch').mockImplementation(async (_url, options) => {
+            const params = JSON.parse(String(options?.body));
+            const requestPhase = params.date ? 'daily' : params.elems[0].interval === 'mly' ? 'monthly' : 'historical';
+            if (requestPhase === phase && ++requests === 1) return new Response(JSON.stringify(failedResponse));
+            const station = params.date ? { data: ['90', '10'] }
+                : params.elems[0].interval === 'mly' ? { smry: ['100', '0'] }
+                    : { smry: [['100', '2000-07-01'], ['0', '2000-01-01'], '70', '40'] };
+            return new Response(JSON.stringify({ data: [{ meta: { uid: 7 }, ...station }] }));
+        });
+        try {
+            await expect(fetchStateForDate('DE', '2026-11-03', '11-03', 2026)).resolves.toMatchObject({
+                broken: [], observations: [{ uid: 7, maxt: 90, mint: 10 }],
+            });
+            expect(requests).toBe(2);
+        } finally { fetchMock.mockRestore(); }
+    });
+
+    it('bounds retries when a daily response stays empty', async () => {
+        vi.useFakeTimers();
+        const fetchMock = vi.spyOn(globalThis, 'fetch').mockImplementation(async () => new Response(JSON.stringify({ data: [] })));
+        try {
+            const outcome = expect(fetchStateForDate('DE', '2026-11-03', '11-03', 2026))
+                .rejects.toThrow('Recent records for DE on 2026-11-03: No station observations returned');
+            await vi.runAllTimersAsync();
+            await outcome;
+            expect(fetchMock).toHaveBeenCalledTimes(3);
+        } finally { vi.useRealTimers(); fetchMock.mockRestore(); }
+    });
+
     it.each([['M', 'M'], ['invalid', 'Infinity'], ['90junk', ''], [' ', false]])('rejects a state with no usable observations (%s, %s)', async (high, low) => {
         const fetchMock = mockStateResponses(high, low);
         try {
@@ -61,14 +107,31 @@ describe('temperature publication coverage', () => {
         } finally { fetchMock.mockRestore(); }
     });
 
+    it('accepts missing historical and monthly values alongside usable daily observations', async () => {
+        const fetchMock = vi.spyOn(globalThis, 'fetch').mockImplementation(async (_url, options) => {
+            const params = JSON.parse(String(options?.body));
+            const station = params.date ? { data: ['90', '10'] }
+                : params.elems[0].interval === 'mly' ? { smry: ['M', 'M'] }
+                    : { smry: [['M', 'M'], ['M', 'M'], 'M', 'M'] };
+            return new Response(JSON.stringify({ data: [{ meta: { uid: 1 }, ...station }] }));
+        });
+        try {
+            const result = await fetchStateForDate('DE', '2026-11-03', '11-03', 2026);
+            expect(result.broken).toEqual([]);
+            expect(result.observations).toEqual([{ uid: 1, maxt: 90, mint: 10 }]);
+        } finally { fetchMock.mockRestore(); }
+    });
+
     it.each([
         [2024, '2023-02-28'],
         [2025, '2024-02-29'],
     ])('uses the historical year to end the February monthly request for %i', async (year, expectedEnd) => {
         const requests: Array<{ edate?: string }> = [];
         const fetchMock = vi.spyOn(globalThis, 'fetch').mockImplementation(async (_url, options) => {
-            requests.push(JSON.parse(String(options?.body)));
-            return new Response(JSON.stringify({ data: [{ meta: { uid: 1 }, data: ['90', '10'], smry: [['M'], ['M']] }] }));
+            const params = JSON.parse(String(options?.body));
+            requests.push(params);
+            const smry = !params.date && params.elems[0].interval === 'mly' ? ['M', 'M'] : [['M', 'M'], ['M', 'M'], 'M', 'M'];
+            return new Response(JSON.stringify({ data: [{ meta: { uid: 1 }, data: ['90', '10'], smry }] }));
         });
         try {
             await fetchStateForDate('CA', `${year}-02-15`, '02-15', year);

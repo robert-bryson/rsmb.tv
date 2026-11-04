@@ -292,7 +292,7 @@ export async function fetchJson(url, options = {}) {
 }
 
 export async function postJson(url, params, options = {}) {
-    const { retries = 3, delay = 1000, timeoutMs = 60_000 } = options;
+    const { retries = 3, delay = 1000, timeoutMs = 60_000, validate } = options;
     for (let attempt = 1; attempt <= retries; attempt++) {
         try {
             const res = await fetch(url, {
@@ -302,12 +302,42 @@ export async function postJson(url, params, options = {}) {
                 body: JSON.stringify(params),
             });
             if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-            return await res.json();
+            const data = await res.json();
+            // ACIS can return HTTP 200 with an error or temporarily empty data.
+            // Validate inside the retry loop so these failures get another attempt.
+            if (validate) validate(data);
+            return data;
         } catch (err) {
             if (attempt === retries) throw err;
-            console.warn(`  Attempt ${attempt} failed, retrying in ${delay}ms...`);
+            const request = [params.state, params.date].filter(Boolean).join(' ');
+            console.warn(`  Attempt ${attempt} failed${request ? ` for ${request}` : ''}: ${err.message}; retrying in ${delay * attempt}ms...`);
             await sleep(delay * attempt);
         }
+    }
+}
+
+function assertStationData(data, emptyMessage = 'ACIS returned no station data') {
+    if (data?.error || !Array.isArray(data?.data) || data.data.length === 0) {
+        throw new Error(data?.error || emptyMessage);
+    }
+    if (data.data.some(station => !station || typeof station !== 'object'
+        || !station.meta || typeof station.meta !== 'object' || Array.isArray(station.meta))) {
+        throw new Error('ACIS returned invalid station metadata');
+    }
+}
+
+function assertStationSummaries(data, params) {
+    assertStationData(data);
+    const datedExtremes = params.elems[0].smry?.add === 'date';
+    const invalidSummary = data.data.some(station => {
+        const { smry } = station;
+        if (!Array.isArray(smry) || smry.length < 2) return true;
+        return smry.slice(0, 2).some(summary => datedExtremes
+            ? !Array.isArray(summary) || summary.length === 0
+            : typeof summary !== 'string' && typeof summary !== 'number');
+    });
+    if (invalidSummary) {
+        throw new Error('ACIS returned invalid station summaries');
     }
 }
 
@@ -354,22 +384,25 @@ function writeCacheLocal(key, data) {
  */
 async function cachedPostJson(url, params, category) {
     const key = cacheKey(category, params);
+    const validate = data => assertStationSummaries(data, params);
 
     // Try S3 cache first
     const cached = await readCacheFromS3(key);
-    if (cached && !cached.error && Array.isArray(cached.data) && cached.data.length > 0) {
-        ACIS_CACHE_STATS.hits++;
-        return cached;
+    if (cached) {
+        try {
+            validate(cached);
+            ACIS_CACHE_STATS.hits++;
+            return cached;
+        } catch {
+            console.warn(`  Ignoring invalid ACIS cache entry for ${category}; fetching again`);
+        }
     }
 
     // Cache miss — fetch from ACIS
     ACIS_CACHE_STATS.misses++;
-    const data = await postJson(url, params);
+    const data = await postJson(url, params, { validate });
 
-    // Failed or empty responses must be retried, rather than cached as valid data.
-    if (data.error || !Array.isArray(data.data) || data.data.length === 0) {
-        throw new Error(data.error || 'ACIS returned no station data');
-    }
+    // Only responses that passed validation enter the cache.
     writeCacheLocal(key, data);
     return data;
 }
@@ -495,11 +528,6 @@ export async function fetchCountyRecordsForState(stateAbbr) {
             'https://data.rcc-acis.org/MultiStnData', params,
             `county-alltime/${stateAbbr}`
         );
-        if (data.error) {
-            throw new Error(data.error);
-        }
-
-        if (!Array.isArray(data.data) || data.data.length === 0) throw new Error('No station records returned');
         const stationRecords = [];
 
         for (const station of data.data) {
@@ -640,11 +668,16 @@ export async function fetchStateForDate(abbr, dateStr, mmdd, year) {
             date: dateStr,
             meta: ['name', 'll', 'state', 'county', 'elev', 'uid'],
             elems: ['maxt', 'mint'],
+        }, {
+            validate(data) {
+                assertStationData(data, 'No station observations returned');
+                const hasUsableObservation = data.data.some(station => station?.meta?.uid
+                    && Array.isArray(station.data) && station.data.length >= 2
+                    && (numberOrNull(station.data[0]) !== null || numberOrNull(station.data[1]) !== null));
+                if (!hasUsableObservation) throw new Error('No usable station observations returned');
+            },
         });
 
-        if (obs.error || !Array.isArray(obs.data) || obs.data.length === 0) {
-            throw new Error(obs.error || 'No station observations returned');
-        }
         await sleep(200);
 
         // Query 2: historical records + normals for this calendar date (all prior years)
@@ -665,16 +698,12 @@ export async function fetchStateForDate(abbr, dateStr, mmdd, year) {
             `hist-daily/${abbr}/${mmdd}`
         );
 
-        if (hist.error || !Array.isArray(hist.data) || hist.data.length === 0) {
-            throw new Error(hist.error || 'No historical station records returned');
-        }
-
         // Build uid → historical record map
         const histMap = {};
-        for (const stn of hist.data || []) {
-            const uid = stn.meta?.uid;
+        for (const stn of hist.data) {
+            const uid = stn.meta.uid;
             const smry = stn.smry;
-            if (!uid || !smry || smry.length < 2) continue;
+            if (!uid) continue;
             if (smry[0][0] === 'M' && smry[1][0] === 'M') continue;
             const normalHigh = numberOrNull(smry[2]);
             const normalLow = numberOrNull(smry[3]);
@@ -705,14 +734,11 @@ export async function fetchStateForDate(abbr, dateStr, mmdd, year) {
             'https://data.rcc-acis.org/MultiStnData', monthlyParams,
             `monthly-extremes/${abbr}/${mm}`
         );
-        if (monthly.error || !Array.isArray(monthly.data) || monthly.data.length === 0) {
-            throw new Error(monthly.error || 'No monthly station records returned');
-        }
         const monthlyMap = {};
         for (const stn of monthly.data) {
-            const uid = stn.meta?.uid;
+            const uid = stn.meta.uid;
             const smry = stn.smry;
-            if (!uid || !smry || smry.length < 2) continue;
+            if (!uid) continue;
             monthlyMap[uid] = {
                 monthlyHigh: numberOrNull(smry[0]),
                 monthlyLow: numberOrNull(smry[1]),
@@ -937,7 +963,7 @@ export function buildBrokenRecordsFromDailyArchive(dateStr, archive, stationInde
  * Also collects ALL daily observations (not just broken) for archival to S3.
  * Returns { recentRecords, dailyObservations, stationIndex }.
  */
-async function fetchRecentRecords(numDays = 7) {
+export async function fetchRecentRecords(numDays = 7) {
     console.log(`\n📅 Detecting daily record-breaking temperatures (last ${numDays} days)...`);
 
     const now = new Date();
@@ -968,7 +994,7 @@ async function fetchRecentRecords(numDays = 7) {
     const skippedDates = [];
     const coverageByDate = {};
     const datesToFetch = [];
-    const rebuiltBroken = [];
+    const allBroken = [];
     let previousStationIndex = null;
 
     async function getPreviousStationIndex() {
@@ -980,6 +1006,7 @@ async function fetchRecentRecords(numDays = 7) {
         if (await dailyExistsOnS3(dateStr)) {
             if (previousDateSet.has(dateStr) && completeStateCoverage(previousRecentRecords?.coverageByDate?.[dateStr], stateAbbrs)) {
                 coverageByDate[dateStr] = previousRecentRecords.coverageByDate[dateStr];
+                allBroken.push(...previousBroken.filter(record => record.date === dateStr));
                 console.log(`  ✅ ${dateStr} — already on S3 and present in summary, skipping ACIS fetch`);
                 skippedDates.push(dateStr);
             } else {
@@ -989,10 +1016,13 @@ async function fetchRecentRecords(numDays = 7) {
                     coverageByDate[dateStr] = archive.coverage;
                     const restoredBroken = buildBrokenRecordsFromDailyArchive(dateStr, archive, archivedStationIndex);
                     console.log(`  ♻️ ${dateStr} — rebuilt ${restoredBroken.length} broken records from daily archive`);
-                    rebuiltBroken.push(...restoredBroken);
+                    allBroken.push(...restoredBroken);
                     skippedDates.push(dateStr);
                 } else {
-                    console.warn(`  ⚠️ ${dateStr} — daily archive exists but could not be rebuilt; recomputing`);
+                    const reason = !archive ? 'archive is unavailable or invalid'
+                        : !completeStateCoverage(archive.coverage, stateAbbrs) ? 'state coverage is unverified'
+                            : 'station metadata is unavailable';
+                    console.warn(`  ⚠️ ${dateStr} — ${reason}; recomputing`);
                     datesToFetch.push(dateStr);
                 }
             }
@@ -1000,12 +1030,6 @@ async function fetchRecentRecords(numDays = 7) {
             datesToFetch.push(dateStr);
         }
     }
-
-    const skippedDateSet = new Set(skippedDates);
-    const allBroken = [
-        ...previousBroken.filter(record => skippedDateSet.has(record.date)),
-        ...rebuiltBroken,
-    ];
 
     if (datesToFetch.length === 0) {
         console.log('\n  All dates already archived on S3, nothing to fetch.');
