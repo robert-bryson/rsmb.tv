@@ -135,11 +135,25 @@ Use the shared MapLibre entry point when adding a map. Its worker URL works on d
 
 ## Validation
 
+### Unit and sync checks
+
 Run the focused unit tests from the repository root:
 
 ```bash
 npx vitest run src/test/TemperatureMap.test.tsx src/test/temperatureDataStatus.test.tsx src/test/temperatureSchemas.test.ts src/test/temperatureMapLayers.test.ts src/test/temperatureSummaryPanel.test.tsx src/test/useTemperatureData.test.ts scripts/__tests__/syncTemperatures.test.ts scripts/__tests__/temperatureArchives.test.ts scripts/__tests__/temperaturePublication.test.ts scripts/__tests__/networkTimeouts.test.ts
 ```
+
+Unit tests verify label collisions, late data, units, view changes, and escaped popup dates.
+They also check calendar dates, leap years, unusable observations, and freshness changes over time.
+Map error tests check worker failures, WebGL failures, context loss, and nonfatal resource errors.
+Fatal errors remain visible after record source loading completes.
+
+Sync tests check retries, invalid cache replacement, archive reconstruction, and all seven legacy dates.
+Publication tests run the CLI in temporary directories.
+They check output preservation after persistent daily, historical, and monthly failures.
+Subprocess execution does not contribute to Vitest coverage.
+
+### Browser checks
 
 Run the browser tests:
 
@@ -148,21 +162,30 @@ PLAYWRIGHT_WEBKIT=1 npm run test:temperatures:browser
 ```
 
 The browser tests use fixed data, neutral basemap tiles, and an empty font response.
-They verify each nearby marker's color at phone and desktop widths.
+They count rendered high and low markers at phone and desktop widths.
 They also check period changes, Celsius hover text, and selection where a glow overlaps another marker.
 The dedicated command builds production assets with fixture content before starting the browser tests.
 It also checks phone filters, selection after **Show more**, focus restoration, coverage, and independent data requests.
 CI runs these production checks in Chromium and WebKit.
 Screenshots use CSS pixels, including on Retina displays.
 
-Unit tests verify the label collision setting, late data, units, view changes, and escaped popup dates.
-They also verify calendar dates, leap years, unusable observations, and time-based freshness changes.
-Sync tests check retries, invalid cache replacement, archive reconstruction, and all seven legacy dates.
-Publication tests run the CLI in temporary directories.
-They check output preservation after persistent daily, historical, and monthly failures.
-Subprocess execution does not contribute to Vitest coverage.
+Initial map readiness uses the remaining 30-second test budget, including worker startup and active record source loading.
+The wait stops when the map reports an error. The test error includes available alert text.
+Marker checks and period changes retain their five-second assertion budgets.
+Both marker widths also run with a delayed worker.
+The delay starts when the first worker request is intercepted and lasts six seconds.
+Routes match the production asset URL and Vite's development worker URL.
+They exclude Vite's module that exports the worker URL.
+Each case verifies interception and rendered marker counts after release.
+Cleanup cancels the timer and releases blocked requests, including after a test failure.
+
 The recovery tests keep the same canvas connected after a failed county request and a return to recent records.
 They also check that repeated fits do not create duplicate world copies of a station.
+Startup error tests use static HTML to check the wait helper and its diagnostic text.
+They do not test the map renderer.
+
+### Test limits
+
 The fixed browser font response does not verify font appearance or label placement.
 These fixtures do not verify production data or provider authorization.
 See [CARTO basemaps](carto-basemaps.md) for key configuration.

@@ -9,7 +9,7 @@ interface TestFeature {
     geometry: { type: 'Point'; coordinates: [number, number] };
     properties: Record<string, unknown>;
 }
-interface TestEvent { features?: TestFeature[]; point?: { x: number; y: number } }
+interface TestEvent { features?: TestFeature[]; point?: { x: number; y: number }; error?: Error }
 type Listener = (event: TestEvent) => void;
 
 const mapMocks = vi.hoisted(() => {
@@ -32,11 +32,11 @@ const mapMocks = vi.hoisted(() => {
                 ? { type, callback: layersOrListener }
                 : { type, layers: [layersOrListener].flat(), callback: listener! });
         }
-        fire(type: string, features: TestFeature[] = []) {
+        fire(type: string, features: TestFeature[] = [], event: TestEvent = {}) {
             this.renderedFeatures = features;
             for (const listener of this.listeners.filter(entry => entry.type === type)) {
                 const matches = listener.layers ? features.filter(feature => listener.layers!.includes(feature.layer.id)) : features;
-                if (!listener.layers || matches.length) listener.callback({ features: matches, point: { x: 100, y: 100 } });
+                if (!listener.layers || matches.length) listener.callback({ ...event, features: matches, point: { x: 100, y: 100 } });
             }
         }
         getSource(id: string) { return this.sources.get(id); }
@@ -134,7 +134,7 @@ beforeEach(() => {
     vi.mocked(useTemperatureData).mockReturnValue(data());
     vi.stubGlobal('matchMedia', vi.fn(() => ({ matches: false, addEventListener: vi.fn(), removeEventListener: vi.fn() })));
 });
-afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
+afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
 describe('temperature map record rendering', () => {
     it('fits the viewport with absolute padding so repeated fits cannot add it twice', () => {
@@ -189,6 +189,31 @@ describe('temperature map record rendering', () => {
         act(() => map.fire('sourcedata'));
         expect(screen.getByTestId('temperature-map')).toHaveAttribute('data-map-state', 'ready');
     });
+
+    it.each(['Worker failed to start', 'WebGL initialization failed', 'Rendering context lost'])('keeps fatal startup errors visible after source loading: %s', message => {
+        const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+        vi.mocked(useTemperatureData).mockReturnValue(data({ recentRecords: recent() }));
+        const { map } = mount();
+        act(() => map.fire('error', [], { error: new Error(message) }));
+        act(() => map.fire('sourcedata'));
+        expect(screen.getByTestId('temperature-map')).toHaveAttribute('data-map-state', 'error');
+        expect(screen.getByRole('alert')).toHaveTextContent('The temperature map could not start');
+        expect(screen.getByRole('button', { name: 'Retry' })).toBeVisible();
+        expect(consoleError).toHaveBeenCalledWith('MapLibre error:', message);
+    });
+
+    it('keeps records ready after nonfatal map errors, including events without an error object', () => {
+        const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+        vi.mocked(useTemperatureData).mockReturnValue(data({ recentRecords: recent() }));
+        const { map } = mount();
+        act(() => map.fire('error', [], { error: new Error('Basemap tile unavailable') }));
+        act(() => map.fire('error'));
+        act(() => map.fire('render'));
+        expect(screen.getByTestId('temperature-map')).toHaveAttribute('data-map-state', 'ready');
+        expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+        expect(consoleError).toHaveBeenCalledTimes(2);
+    });
+
     it('keeps nearby high and low records unclustered and limits collisions to text', () => {
         const records = [record(), record({ uid: 2, type: 'low', tempF: 20, lon: -100.01 })];
         vi.mocked(useTemperatureData).mockReturnValue(data({ recentRecords: recent(records) }));

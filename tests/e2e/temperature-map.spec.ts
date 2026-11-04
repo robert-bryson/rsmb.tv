@@ -77,18 +77,72 @@ async function markerCounts(page: Page) {
     return { high: found.filter(marker => marker.type === 'high').length, low: found.filter(marker => marker.type === 'low').length };
 }
 
-for (const width of [390, 1280]) {
-    test(`every high and low marker renders at ${width}px`, async ({ page }) => {
-        await page.setViewportSize({ width, height: 900 });
-        const records = Array.from({ length: 9 }, (_, index) => record(index));
-        const errors = await fixtures(page, records);
-        await page.goto('/projects/temperature-records/map');
-        await expect(page.getByTestId('temperature-map')).toHaveAttribute('data-map-state', 'ready');
-        await expect.poll(() => markerCounts(page)).toEqual({ high: 5, low: 4 });
-        await page.getByRole('button', { name: 'Last 7 Days', exact: true }).click();
-        await expect.poll(() => markerCounts(page)).toEqual({ high: 2, low: 2 });
-        expect(errors).toEqual([]);
+async function waitForMapReady(page: Page) {
+    // Cold worker/WebGL startup uses the test budget before five-second rendering checks.
+    const map = page.getByTestId('temperature-map');
+    await map.and(page.locator('[data-map-state="ready"], [data-map-state="error"]')).waitFor();
+    if (await map.getAttribute('data-map-state') === 'error') {
+        const details = (await map.getByRole('alert').allTextContents()).join(' ').trim();
+        throw new Error(`Temperature map startup failed: ${details || 'Unknown map error'}`);
+    }
+}
+
+for (const initialState of ['loading', 'error']) {
+    test(`map startup wait reports an error from ${initialState}`, async ({ page }) => {
+        page.setDefaultTimeout(1_000);
+        await page.setContent(`<div data-testid="temperature-map" data-map-state="${initialState}">
+            <div role="alert">The temperature map could not start</div>
+        </div>`);
+        if (initialState === 'loading') {
+            await page.evaluate(() => {
+                setTimeout(() => document.querySelector('[data-testid="temperature-map"]')!.setAttribute('data-map-state', 'error'), 50);
+            });
+        }
+        await expect(waitForMapReady(page)).rejects.toThrow('Temperature map startup failed: The temperature map could not start');
     });
+}
+
+test('map startup wait reports errors without alert text', async ({ page }) => {
+    page.setDefaultTimeout(1_000);
+    await page.setContent('<div data-testid="temperature-map" data-map-state="error">Map unavailable</div>');
+    await expect(waitForMapReady(page)).rejects.toThrow('Temperature map startup failed: Unknown map error');
+});
+
+for (const startup of ['normal', 'delayed worker'] as const) {
+    for (const width of [390, 1280]) {
+        test(`every high and low marker renders at ${width}px (${startup} startup)`, async ({ page }) => {
+            await page.setViewportSize({ width, height: 900 });
+            const records = Array.from({ length: 9 }, (_, index) => record(index));
+            const errors = await fixtures(page, records);
+            let releaseStartup!: () => void;
+            const startupGate = new Promise<void>(resolve => { releaseStartup = resolve; });
+            let workerDelayed = false;
+            let releaseTimer: ReturnType<typeof setTimeout> | undefined;
+            if (startup === 'delayed worker') {
+                await page.route(url => /\/maplibre-gl-worker-[^/]+\.js$/.test(url.pathname)
+                    || (url.pathname.endsWith('/maplibre-gl-worker.mjs') && url.searchParams.has('worker_file')), async route => {
+                    workerDelayed = true;
+                    // Hold the actual worker request in both development and production builds.
+                    releaseTimer ??= setTimeout(releaseStartup, 6_000);
+                    await startupGate;
+                    await route.continue();
+                });
+            }
+            try {
+                await page.goto('/projects/temperature-records/map', { waitUntil: 'domcontentloaded' });
+                await waitForMapReady(page);
+                if (startup === 'delayed worker') expect(workerDelayed).toBe(true);
+                await expect.poll(() => markerCounts(page)).toEqual({ high: 5, low: 4 });
+                await page.getByRole('button', { name: 'Last 7 Days', exact: true }).click();
+                await expect.poll(() => markerCounts(page)).toEqual({ high: 2, low: 2 });
+                expect(errors).toEqual([]);
+            } finally {
+                clearTimeout(releaseTimer);
+                releaseStartup();
+                await page.unrouteAll({ behavior: 'wait' });
+            }
+        });
+    }
 }
 
 test('clicking a marker selects that station when another glow overlaps it', async ({ page }) => {
@@ -99,7 +153,7 @@ test('clicking a marker selects that station when another glow overlaps it', asy
     const neighbor = record(1, { stationName: 'Neighbor station', lat: 39, lon: -99.3 });
     const errors = await fixtures(page, [target, neighbor]);
     await page.goto('/projects/temperature-records/map?unit=C');
-    await expect(page.getByTestId('temperature-map')).toHaveAttribute('data-map-state', 'ready');
+    await waitForMapReady(page);
     await expect.poll(() => markerCounts(page)).toEqual({ high: 1, low: 1 });
     const canvas = page.locator('.maplibregl-canvas');
     const position = (await markers(page)).find(marker => marker.type === 'high')!;
@@ -150,7 +204,7 @@ test('county view loads independently and exposes incomplete geographic coverage
     page.on('request', request => requests.push(request.url()));
     await page.goto('/projects/temperature-records/map?view=county');
     await expect(page.getByText('1/48 states', { exact: false })).toBeVisible();
-    await expect(page.getByTestId('temperature-map')).toHaveAttribute('data-map-state', 'ready');
+    await waitForMapReady(page);
     await expect(page.getByText('Failed to load temperature data')).toHaveCount(0);
     expect(requests.some(url => /recentRecords.json|stateRecords.json/.test(url))).toBe(false);
 });
@@ -160,7 +214,7 @@ test('a failed county feed keeps the map alive when returning to recent records'
     await page.route('**/countyRecords.json', route => route.fulfill({ status: 503, body: 'Unavailable' }));
     await page.goto('/projects/temperature-records/map');
     const map = page.getByTestId('temperature-map');
-    await expect(map).toHaveAttribute('data-map-state', 'ready');
+    await waitForMapReady(page);
     const canvas = await page.locator('.maplibregl-canvas').elementHandle();
     expect(canvas).not.toBeNull();
     await page.getByRole('button', { name: /County Extremes/ }).click();

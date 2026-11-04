@@ -35,6 +35,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-04 | [Temperature startup: worker URL formats, error diagnostics, and regression coverage](reviews/2026-11-04-temperature-startup-review.md) |
 | 2026-11-04 | [Basemap startup review: module delays, readiness guarantees, and configured keys](reviews/2026-11-04-basemap-startup-review.md) |
 | 2026-11-04 | [Temperature sync: response validation, cache rejection, archive replacement, and coverage](reviews/2026-11-04-temperature-sync-review.md) |
 | 2026-11-03 | [Flight years and article previews: image selection, URL resolution, validation, and coverage](reviews/2026-11-03-flight-years-and-preview-review.md) |
