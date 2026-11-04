@@ -168,6 +168,14 @@ The dedicated command builds production assets with fixture content before start
 It also checks phone filters, selection after **Show more**, focus restoration, coverage, and independent data requests.
 CI runs these production checks in Chromium and WebKit.
 Screenshots use CSS pixels, including on Retina displays.
+Marker cases check both period changes and the return to **Yesterday**.
+
+Pixel checks preserve the MapLibre WebGL drawing buffer, which holds the rendered frame.
+Linux WebKit can otherwise capture cleared or stale frames after compositing.
+The snapshot helper changes only `webgl` and `webgl2` requests from MapLibre canvases.
+Contract tests check both context types, requested options, unrelated canvases, unsupported names, and 2D drawing.
+Startup, control, and independent-feed cases use the default drawing buffer.
+A startup case checks this configuration explicitly.
 
 Initial map readiness uses the remaining 30-second test budget, including worker startup and active record source loading.
 The wait stops when the map reports an error. The test error includes available alert text.
@@ -186,6 +194,9 @@ They do not test the map renderer.
 
 ### Test limits
 
+Pixel checks use a preserved drawing buffer. They do not measure performance with the default drawing buffer.
+The separate default-buffer case checks startup and source readiness. It does not count marker pixels.
+Playwright cases do not contribute to Vitest V8 coverage.
 The fixed browser font response does not verify font appearance or label placement.
 These fixtures do not verify production data or provider authorization.
 See [CARTO basemaps](carto-basemaps.md) for key configuration.

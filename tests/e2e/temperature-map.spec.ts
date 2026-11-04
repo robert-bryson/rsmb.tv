@@ -12,6 +12,20 @@ function record(index: number, overrides: Partial<BrokenRecord> = {}): BrokenRec
     };
 }
 
+async function preserveMapDrawingBuffer(page: Page) {
+    // Linux WebKit snapshots can read a cleared or stale WebGL buffer after compositing.
+    // Preserve it in this browser fixture so pixel checks see the current rendered frame.
+    await page.addInitScript(() => {
+        const getContext = HTMLCanvasElement.prototype.getContext;
+        Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
+            value(this: HTMLCanvasElement, type: string, options?: object) {
+                const preserve = this.classList.contains('maplibregl-canvas') && (type === 'webgl' || type === 'webgl2');
+                return getContext.call(this, type, preserve ? { ...options, preserveDrawingBuffer: true } : options);
+            },
+        });
+    });
+}
+
 async function fixtures(page: Page, records: BrokenRecord[]) {
     const errors: string[] = [];
     page.on('pageerror', error => errors.push(error.message));
@@ -87,6 +101,69 @@ async function waitForMapReady(page: Page) {
     }
 }
 
+for (const type of ['webgl', 'webgl2'] as const) {
+    test(`snapshot fixture preserves only MapLibre ${type} buffers`, async ({ page }) => {
+        await preserveMapDrawingBuffer(page);
+        await page.goto('about:blank');
+        const attributes = await page.evaluate(type => {
+            const options = Object.freeze({ alpha: false, antialias: false, preserveDrawingBuffer: false });
+            return ['', 'maplibregl-canvas'].map(className => {
+                const canvas = document.createElement('canvas');
+                canvas.className = className;
+                const context = canvas.getContext(type, options) as WebGLRenderingContext | WebGL2RenderingContext | null;
+                const attributes = context?.getContextAttributes();
+                return attributes ? {
+                    alpha: attributes.alpha, antialias: attributes.antialias, preserveDrawingBuffer: attributes.preserveDrawingBuffer,
+                } : null;
+            });
+        }, type);
+        expect(attributes).toEqual([
+            { alpha: false, antialias: false, preserveDrawingBuffer: false },
+            { alpha: false, antialias: false, preserveDrawingBuffer: true },
+        ]);
+    });
+}
+
+test('snapshot fixture leaves unsupported context names and options untouched', async ({ page }) => {
+    const inspectContext = () => {
+        const canvas = document.createElement('canvas');
+        canvas.className = 'maplibregl-canvas';
+        let optionsRead = false;
+        const context = canvas.getContext('unsupported-webgl', { get alpha() { optionsRead = true; return false; } });
+        return { unsupported: context === null, optionsRead };
+    };
+    const native = await page.evaluate(inspectContext);
+    expect(native.unsupported).toBe(true);
+    await preserveMapDrawingBuffer(page);
+    await page.goto('about:blank');
+    expect(await page.evaluate(inspectContext)).toEqual(native);
+});
+
+test('snapshot fixture keeps 2D canvas drawing available', async ({ page }) => {
+    await preserveMapDrawingBuffer(page);
+    await page.goto('about:blank');
+    const result = await page.evaluate(() => {
+        const canvas = document.createElement('canvas');
+        canvas.className = 'maplibregl-canvas';
+        const context = canvas.getContext('2d', { alpha: false });
+        if (!context) return null;
+        context.fillStyle = '#ff0000';
+        context.fillRect(0, 0, 1, 1);
+        return [...context.getImageData(0, 0, 1, 1).data];
+    });
+    expect(result).toEqual([255, 0, 0, 255]);
+});
+
+test('map starts with the default WebGL drawing buffer', async ({ page }) => {
+    const errors = await fixtures(page, [record(0)]);
+    await page.goto('/projects/temperature-records/map');
+    await waitForMapReady(page);
+    const preserved = await page.locator('.maplibregl-canvas').evaluate(canvas =>
+        (canvas as HTMLCanvasElement).getContext('webgl2')?.getContextAttributes()?.preserveDrawingBuffer);
+    expect(preserved).toBe(false);
+    expect(errors).toEqual([]);
+});
+
 for (const initialState of ['loading', 'error']) {
     test(`map startup wait reports an error from ${initialState}`, async ({ page }) => {
         page.setDefaultTimeout(1_000);
@@ -112,6 +189,7 @@ for (const startup of ['normal', 'delayed worker'] as const) {
     for (const width of [390, 1280]) {
         test(`every high and low marker renders at ${width}px (${startup} startup)`, async ({ page }) => {
             await page.setViewportSize({ width, height: 900 });
+            await preserveMapDrawingBuffer(page);
             const records = Array.from({ length: 9 }, (_, index) => record(index));
             const errors = await fixtures(page, records);
             let releaseStartup!: () => void;
@@ -135,6 +213,8 @@ for (const startup of ['normal', 'delayed worker'] as const) {
                 await expect.poll(() => markerCounts(page)).toEqual({ high: 5, low: 4 });
                 await page.getByRole('button', { name: 'Last 7 Days', exact: true }).click();
                 await expect.poll(() => markerCounts(page)).toEqual({ high: 2, low: 2 });
+                await page.getByRole('button', { name: 'Yesterday', exact: true }).click();
+                await expect.poll(() => markerCounts(page)).toEqual({ high: 5, low: 4 });
                 expect(errors).toEqual([]);
             } finally {
                 clearTimeout(releaseTimer);
@@ -149,6 +229,7 @@ test('clicking a marker selects that station when another glow overlaps it', asy
     const width = 1280;
     const height = 900;
     await page.setViewportSize({ width, height });
+    await preserveMapDrawingBuffer(page);
     const target = record(0, { stationName: 'Target station', lat: 39, lon: -100 });
     const neighbor = record(1, { stationName: 'Neighbor station', lat: 39, lon: -99.3 });
     const errors = await fixtures(page, [target, neighbor]);
@@ -210,6 +291,7 @@ test('county view loads independently and exposes incomplete geographic coverage
 });
 
 test('a failed county feed keeps the map alive when returning to recent records', async ({ page }) => {
+    await preserveMapDrawingBuffer(page);
     const errors = await fixtures(page, [record(0)]);
     await page.route('**/countyRecords.json', route => route.fulfill({ status: 503, body: 'Unavailable' }));
     await page.goto('/projects/temperature-records/map');
