@@ -82,43 +82,70 @@ for (const path of [
     });
 }
 
-test.describe('flight basemap rendering', () => {
-    // Keep software WebGL work bounded on CI while exercising the real renderer.
-    test.use({ viewport: { width: 800, height: 600 }, reducedMotion: 'reduce' });
+for (const startup of ['normal', 'delayed module'] as const) {
+    test.describe(`flight basemap rendering (${startup} startup)`, () => {
+        // Keep software WebGL work bounded on CI while exercising the real renderer.
+        test.use({ viewport: { width: 800, height: 600 }, reducedMotion: 'reduce' });
 
-    for (const { initialStyle, initialLabel, initialColor, basemap, selectedColor } of [
-        { initialStyle: 'positron', initialLabel: 'Light', initialColor: 'red', basemap: 'Voyager', selectedColor: 'green' },
-        { initialStyle: 'voyager', initialLabel: 'Voyager', initialColor: 'green', basemap: 'Night', selectedColor: 'magenta' },
-    ] as const) {
-        test(`switching from ${initialLabel} to ${basemap} replaces the rendered basemap`, async ({ page }) => {
-            const requestedStyles = await mockCartoTiles(page);
-            const [night, bump] = await Promise.all([solidTile('#c832c8'), solidTile('#808080')]);
-            await page.route('**/basemaps/earth-night.webp', route => route.fulfill({ contentType: 'image/png', body: night }));
-            await page.route('**/basemaps/earth-topology.webp', route => route.fulfill({ contentType: 'image/png', body: bump }));
-            await page.route('**/data/flights/*.geojson', route => route.fulfill({ json: { type: 'FeatureCollection', features: [] } }));
+        for (const { initialStyle, initialLabel, initialColor, basemap, selectedColor } of [
+            { initialStyle: 'positron', initialLabel: 'Light', initialColor: 'red', basemap: 'Voyager', selectedColor: 'green' },
+            { initialStyle: 'voyager', initialLabel: 'Voyager', initialColor: 'green', basemap: 'Night', selectedColor: 'magenta' },
+        ] as const) {
+            test(`switching from ${initialLabel} to ${basemap} replaces the rendered basemap`, async ({ page }) => {
+                const requestedStyles = await mockCartoTiles(page);
+                const [night, bump] = await Promise.all([solidTile('#c832c8'), solidTile('#808080')]);
+                await page.route('**/basemaps/earth-night.webp', route => route.fulfill({ contentType: 'image/png', body: night }));
+                await page.route('**/basemaps/earth-topology.webp', route => route.fulfill({ contentType: 'image/png', body: bump }));
+                await page.route('**/data/flights/*.geojson', route => route.fulfill({ json: { type: 'FeatureCollection', features: [] } }));
 
-            await page.goto(`/projects/flights/map?paths=0&stats=0&basemap=${initialStyle}`);
-            await expect.poll(async () => (await basemapPixels(page))[initialColor]).toBeGreaterThan(10_000);
-            await page.getByRole('button', { name: 'Toggle layer options' }).click();
-            await page.getByRole('button', { name: `Basemap (${initialLabel})`, exact: true }).click();
-            await page.getByRole('button', { name: basemap, exact: true }).click();
-            if (basemap === 'Voyager') {
-                await expect(page).toHaveURL(/basemap=voyager/);
-                await expect.poll(() => requestedStyles.has('rastertiles/voyager_nolabels')).toBe(true);
-                await expectCartoAttribution(page);
-            } else {
-                await expect(page).not.toHaveURL(/basemap=/);
-                await expectCartoAttribution(page, false);
-            }
-            await expect(page.getByText('Loading globe...', { exact: true })).toHaveCount(0);
-            // Each style has its own color. Wrong styles and blank globes must fail too.
-            await expect.poll(async () => {
-                const pixels = await basemapPixels(page);
-                return {
-                    oldTilesVisible: pixels[initialColor] >= 1_000,
-                    selectedBasemapVisible: pixels[selectedColor] > 10_000,
-                };
-            }).toEqual({ oldTilesVisible: false, selectedBasemapVisible: true });
-        });
-    }
-});
+                let releaseStartup!: () => void;
+                const startupGate = new Promise<void>(resolve => { releaseStartup = resolve; });
+                let moduleDelayed = false;
+                if (startup === 'delayed module') {
+                    await page.route('**/src/features/flights/components/FlightsMap.tsx*', async route => {
+                        moduleDelayed = true;
+                        await startupGate;
+                        await route.continue();
+                    });
+                }
+                let releaseTimer: ReturnType<typeof setTimeout> | undefined;
+                try {
+                    // A held lazy module must not block navigation before its release timer starts.
+                    await page.goto(`/projects/flights/map?paths=0&stats=0&basemap=${initialStyle}`, { waitUntil: 'domcontentloaded' });
+                    if (startup === 'delayed module') {
+                        // Exceed the default five-second pixel assertion to expose the startup race.
+                        releaseTimer = setTimeout(releaseStartup, 6_000);
+                    }
+                    // Lazy component loading uses the test budget before pixel polling starts.
+                    await page.locator('.flights-globe canvas').waitFor({ state: 'visible' });
+                    await expect.poll(async () => (await basemapPixels(page))[initialColor]).toBeGreaterThan(10_000);
+                    if (startup === 'delayed module') expect(moduleDelayed).toBe(true);
+                    await page.getByRole('button', { name: 'Toggle layer options' }).click();
+                    await page.getByRole('button', { name: `Basemap (${initialLabel})`, exact: true }).click();
+                    await page.getByRole('button', { name: basemap, exact: true }).click();
+                    if (basemap === 'Voyager') {
+                        await expect(page).toHaveURL(/basemap=voyager/);
+                        await expect.poll(() => requestedStyles.has('rastertiles/voyager_nolabels')).toBe(true);
+                        await expectCartoAttribution(page);
+                    } else {
+                        await expect(page).not.toHaveURL(/basemap=/);
+                        await expectCartoAttribution(page, false);
+                    }
+                    await expect(page.getByText('Loading globe...', { exact: true })).toHaveCount(0);
+                    // Each style has its own color. Wrong styles and blank globes must fail too.
+                    await expect.poll(async () => {
+                        const pixels = await basemapPixels(page);
+                        return {
+                            oldTilesVisible: pixels[initialColor] >= 1_000,
+                            selectedBasemapVisible: pixels[selectedColor] > 10_000,
+                        };
+                    }).toEqual({ oldTilesVisible: false, selectedBasemapVisible: true });
+                } finally {
+                    clearTimeout(releaseTimer);
+                    releaseStartup();
+                    await page.unrouteAll({ behavior: 'wait' });
+                }
+            });
+        }
+    });
+}

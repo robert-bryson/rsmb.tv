@@ -61,9 +61,10 @@ CARTO's current [basemap terms](https://carto.com/legal/basemap-terms/index.html
 
 ## Validation
 
-Unit tests check URL encoding, tile placeholders, and behavior without a key.
-They check authenticated raster sources and both provider attribution links.
-Blank and whitespace-only keys must produce neutral raster and vector styles.
+Unit tests check explicit keys and configured browser keys.
+They cover missing, empty, whitespace-only, and valid configured values.
+They check key trimming, URL encoding, tile placeholders, and both provider attribution links.
+Missing or blank keys must produce neutral raster and vector styles with **Basemap unavailable** attribution.
 
 Configuration tests check key selection and rejection of release builds without a key.
 They check whitespace handling, fallback values, and priority between process variables and local files.
@@ -73,10 +74,15 @@ Browser tests verify authenticated requests and visible CARTO and OpenStreetMap 
 They check both link destinations.
 The tile fixtures accept only expected CARTO paths. Unknown paths fail the test.
 
-Flight transitions run as separate cases: **Light** to **Voyager**, then **Voyager** to **Night**.
-Each case starts with a fresh page and retains the real globe renderer.
+Flight cases check **Light** to **Voyager** and **Voyager** to **Night** with normal and delayed startup.
+Each case starts with a fresh page and uses the real globe renderer.
 The cases use an 800 × 600 viewport, reduced motion, empty flight data, and fixed image responses.
-These settings reduce software WebGL work under each default test timeout.
+These settings reduce software WebGL work.
+Each case waits for a visible canvas before it polls rendered colors.
+Canvas discovery uses the overall 30-second test budget. Each color assertion retains its five-second timeout.
+Canvas visibility does not establish tile rendering. The color checks verify rendered output.
+Delayed cases hold the lazy flight module for six seconds after navigation.
+The delay exceeds the color assertion timeout and detects a missing canvas wait.
 Light tiles are red. Voyager tiles are green. The Night texture is magenta.
 The checks require the selected color and reject the previous color.
 Blank globes and incorrect styles must fail.

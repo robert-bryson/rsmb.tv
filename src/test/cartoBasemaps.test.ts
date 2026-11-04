@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cartoRasterStyle, cartoRasterUrl, cartoVectorStyle } from '../maps/cartoBasemaps';
 
 describe('CARTO authentication', () => {
@@ -36,5 +36,45 @@ describe('CARTO authentication', () => {
         });
         expect(JSON.stringify(raster)).not.toContain('https://basemaps.cartocdn.com');
         expect(cartoVectorStyle('dark-matter', key)).toEqual(raster);
+    });
+});
+
+describe('configured CARTO browser key', () => {
+    afterEach(() => {
+        vi.unstubAllEnvs();
+        vi.resetModules();
+    });
+
+    it.each([undefined, '', ' \t '])('avoids provider requests when the configured key is %j', async key => {
+        vi.stubEnv('VITE_CARTO_API_KEY', key);
+        vi.resetModules();
+        const basemaps = await import('../maps/cartoBasemaps');
+
+        expect(basemaps.CARTO_API_KEY).toBe('');
+        expect(basemaps.BASEMAP_ATTRIBUTION).toContain('Basemap unavailable');
+        expect(basemaps.cartoRasterUrl('positron-nolabels')).toMatch(/^data:image\/png;base64,/);
+        const raster = basemaps.cartoRasterStyle();
+        expect(JSON.stringify(raster)).not.toContain('https://basemaps.cartocdn.com');
+        expect(raster.sources['carto-basemap']).toMatchObject({ attribution: basemaps.BASEMAP_ATTRIBUTION });
+        expect(basemaps.cartoVectorStyle()).toEqual(raster);
+    });
+
+    it('uses the trimmed configured key for default raster and vector requests', async () => {
+        vi.stubEnv('VITE_CARTO_API_KEY', ' fixture key/+& ');
+        vi.resetModules();
+        const basemaps = await import('../maps/cartoBasemaps');
+
+        expect(basemaps.CARTO_API_KEY).toBe('fixture key/+&');
+        expect(basemaps.BASEMAP_ATTRIBUTION).toBe(basemaps.CARTO_ATTRIBUTION);
+        expect(basemaps.cartoRasterUrl('positron-nolabels')).toBe(
+            'https://basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png?key=fixture%20key%2F%2B%26',
+        );
+        expect(basemaps.cartoRasterStyle().sources['carto-basemap']).toMatchObject({
+            tiles: ['https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png?key=fixture%20key%2F%2B%26'],
+            attribution: basemaps.CARTO_ATTRIBUTION,
+        });
+        expect(basemaps.cartoVectorStyle()).toBe(
+            'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json?key=fixture%20key%2F%2B%26',
+        );
     });
 });
