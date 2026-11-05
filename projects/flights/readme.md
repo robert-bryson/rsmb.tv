@@ -56,6 +56,7 @@ The map separates page controls from renderer behavior:
 
 Camera listeners remain active after filter and camera URL changes.
 The camera hook applies renderer readiness after its component commits.
+The globe appears at full size. Its decorative startup scale and rotation animation is disabled.
 Discarded renders cannot update camera state.
 A linked camera takes precedence over a year fit, including during browser history navigation.
 Selecting a year in the map controls fits its airports after data loads.
@@ -65,6 +66,8 @@ Unmount and superseding navigation also cancel pending camera synchronization.
 Late renderer callbacks cannot schedule or publish camera updates after unmount.
 Linked views retain explicit rotation. Direct interaction pauses it.
 The camera ignores URL updates from its own transitions and gestures, so synchronization cannot interrupt them.
+An overdue renderer callback cannot replace a newer pending navigation target.
+A direct gesture clears that target and cancels earlier camera synchronization.
 URL setters use the latest committed query and preserve newer pending writes through intermediate navigation commits.
 Browser history navigation clears pending writes.
 Writing an unchanged setting does not add a history entry.

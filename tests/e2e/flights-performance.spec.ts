@@ -15,7 +15,13 @@ test('flight animation toggles meet the mobile interaction budget', async ({ pag
     });
     await session.send('Emulation.setCPUThrottlingRate', { rate: 4 });
     await page.goto('/projects/flights/map?stats=0');
-    await expect(page.locator('.flight-map-label').first()).toBeVisible({ timeout: 60_000 });
+    const airportLabel = page.locator('.flight-map-label').first();
+    await expect(airportLabel).toBeVisible({ timeout: 60_000 });
+    // CSS2D can attach a visible node at the origin before its first projection.
+    await expect.poll(async () => {
+        const bounds = await airportLabel.boundingBox();
+        return bounds !== null && bounds.x > 0 && bounds.y > 0;
+    }).toBe(true);
     await expect(page.getByText('Loading globe...', { exact: true })).toHaveCount(0);
     await expect(page.getByRole('application')).toHaveAttribute('aria-label', /showing [1-9]\d* flights/, { timeout: 60_000 });
     const startup = await page.evaluate(() => ({

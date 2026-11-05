@@ -177,17 +177,22 @@ for (const delayedAsset of ['none', 'flights', 'textures'] as const) {
         const finishCameraAnimation = async () => {
             // Image decoding and GPU work use real time. A mocked clock can skip
             // the camera tween before the renderer projects the airport labels.
-            // Allow the 1 s camera tween and 1.2 s globe intro to finish.
+            // Allow the 1 s camera tween and subsequent label projection to finish.
             await page.waitForTimeout(2100);
         };
         await expect(labels).toHaveCount(2);
         await expect(labels.first()).toBeVisible();
         await finishCameraAnimation();
+        await expect.poll(camera).toEqual(fitted);
+        // These fixture airports are inside the fitted viewport. Nodes can be
+        // visible at (0, 0) before CSS2D has projected their geographic position.
+        await expect.poll(async () => Object.values(await labelPositions()).every(([x, y]) => x > 0 && y > 0)).toBe(true);
         const fittedLabels = await labelPositions();
         const reset = page.getByRole('button', { name: 'Reset globe view to default position' });
         await reset.click();
         await expect.poll(camera).toEqual([null, null, null]);
         await finishCameraAnimation();
+        await expect.poll(camera).toEqual([null, null, null]);
         await expect.poll(labelPositions).not.toEqual(fittedLabels);
         const selectYear = async (year: number) => {
             await page.getByRole('button', { name: 'Toggle filters' }).click();

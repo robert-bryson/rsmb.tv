@@ -258,6 +258,8 @@ export function FlightsGlobe({
 
   return (
     <Globe
+      // Show the usable globe immediately; keep startup free of scale/rotation tweens.
+      animateIn={false}
       ref={globeRef}
       globeImageUrl={basemap.image}
       globeTileEngineUrl={tileUrl}

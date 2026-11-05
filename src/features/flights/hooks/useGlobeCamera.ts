@@ -43,9 +43,14 @@ export function useGlobeCamera({
         if (!mounted.current || !ready || suppressSync.current) return;
         const current = view ?? globeRef.current?.pointOfView();
         if (!current || !Number.isFinite(current.lat) || !Number.isFinite(current.lng) || !Number.isFinite(current.altitude)) return;
+        // An overdue callback can run after navigation starts but before its
+        // URL update commits. It must not replace the newer camera target.
+        const target = navigationViewRef.current;
+        if (target && !globeViewsEqual(current, target)) return;
+        navigationViewRef.current = null;
         syncedView.current = current;
         onViewChange({ lat: current.lat, lng: current.lng, altitude: current.altitude }, { replace: true });
-    }, [globeRef, ready, onViewChange]);
+    }, [globeRef, navigationViewRef, ready, onViewChange]);
 
     const scheduleSync = useCallback((view?: GlobeViewState) => {
         if (!mounted.current || !ready || suppressSync.current) return;
@@ -102,7 +107,12 @@ export function useGlobeCamera({
             cancelSync();
             syncView();
         };
-        controls.addEventListener('start', onStopRotation);
+        const startInteraction = () => {
+            cancelSync();
+            navigationViewRef.current = null;
+            onStopRotation();
+        };
+        controls.addEventListener('start', startInteraction);
         controls.addEventListener('change', scheduleCurrentView);
         controls.addEventListener('end', flushCurrentView);
 
@@ -128,7 +138,7 @@ export function useGlobeCamera({
         };
         canvas.addEventListener('dblclick', zoom);
         return () => {
-            controls.removeEventListener('start', onStopRotation);
+            controls.removeEventListener('start', startInteraction);
             controls.removeEventListener('change', scheduleCurrentView);
             controls.removeEventListener('end', flushCurrentView);
             canvas.removeEventListener('dblclick', zoom);

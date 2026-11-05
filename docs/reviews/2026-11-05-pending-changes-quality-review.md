@@ -40,6 +40,22 @@ The camera tests use real animation time and wait for visible labels.
 A browser clock jump does not advance image decoding or GPU work. Under software rendering, the previous clock jumps captured labels before projection.
 The tests retain their camera, URL, reset, and projected-label assertions.
 
+### P2: delayed camera callbacks replaced newer navigation
+
+Software-renderer stress testing found an overdue camera callback publishing the default view just after a year fit started.
+The URL write could commit late and restore that old view.
+The camera now rejects old coordinates while a newer navigation target is pending.
+A direct gesture clears the target and cancels earlier synchronization.
+
+A regression uses the real camera and navigation hooks together.
+It covers callbacks queued before navigation, callbacks queued after navigation, and a late gesture-end callback.
+It also checks that a direct gesture can take control after a reset that retains the current URL.
+All four cases failed before the fix and pass after it.
+A fifth case checks that reaching an unchanged Reset target releases the pending target, so later camera rotation can synchronize.
+Browser cases now check that the fitted URL survives the animation and that Reset retains the default URL.
+They also require projected label coordinates before saving a comparison.
+The globe startup scale and rotation animation is disabled. It is decorative work, and software-renderer stress runs exposed label projection delays during that animation.
+
 No major standards findings remain after the follow-up review.
 
 ## Behavior and specification review

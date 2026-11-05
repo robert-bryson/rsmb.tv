@@ -3,6 +3,7 @@ import { act, fireEvent, render, renderHook } from '@testing-library/react';
 import type { GlobeMethods } from 'react-globe.gl';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { useGlobeCamera } from '../features/flights/hooks/useGlobeCamera';
+import { useZoomNavigation } from '../features/flights/hooks/useZoomNavigation';
 import { DEFAULT_VIEW } from '../features/flights/constants';
 import type { GlobeViewState } from '../features/flights/types';
 
@@ -29,6 +30,14 @@ function cameraOptions() {
             onViewChange: vi.fn(),
         },
     };
+}
+
+function renderNavigableCamera(options: ReturnType<typeof cameraOptions>['options']) {
+    return renderHook(() => {
+        const navigation = useZoomNavigation(options.globeRef, options.onViewChange);
+        const camera = useGlobeCamera({ ...options, navigationViewRef: navigation.navigationViewRef });
+        return { ...camera, ...navigation };
+    });
 }
 
 afterEach(() => {
@@ -85,6 +94,76 @@ describe('globe camera readiness lifecycle', () => {
         expect(vi.getTimerCount()).toBe(0);
         act(() => vi.advanceTimersByTime(250));
         expect(options.onViewChange).not.toHaveBeenCalled();
+    });
+
+    it.each(['before navigation', 'after navigation', 'gesture end'] as const)(
+        'keeps a new target when an old camera callback arrives %s', callback => {
+            vi.useFakeTimers();
+            const { controls, globe, options } = cameraOptions();
+            const { result } = renderNavigableCamera(options);
+            act(() => result.current.onGlobeReady());
+            act(() => vi.advanceTimersByTime(0));
+            const target = { lat: 10, lng: 20, altitude: 0.5 };
+            const onGestureEnd = controls.addEventListener.mock.calls.find(([type]) => type === 'end')![1] as () => void;
+            act(() => {
+                if (callback === 'before navigation') result.current.onZoom(DEFAULT_VIEW);
+                result.current.zoomToPoint(target, target.altitude);
+                if (callback === 'after navigation') result.current.onZoom(DEFAULT_VIEW);
+                if (callback === 'gesture end') onGestureEnd();
+                vi.advanceTimersByTime(250);
+            });
+            // The URL write can commit after an overdue renderer callback.
+            // The renderer still reports its previous view during the tween.
+            expect(options.onViewChange).toHaveBeenCalledExactlyOnceWith(target, { replace: true });
+
+            globe.pointOfView.mockReturnValue(target);
+            act(() => {
+                result.current.onZoom(target);
+                vi.advanceTimersByTime(250);
+            });
+            expect(options.onViewChange).toHaveBeenLastCalledWith(target, { replace: true });
+            expect(options.onViewChange).toHaveBeenCalledTimes(2);
+        },
+    );
+
+    it('lets a direct gesture supersede a pending navigation target', () => {
+        vi.useFakeTimers();
+        const { controls, globe, options } = cameraOptions();
+        const { result } = renderNavigableCamera(options);
+        act(() => result.current.onGlobeReady());
+        act(() => vi.advanceTimersByTime(0));
+        act(() => result.current.resetView());
+        const onGestureStart = controls.addEventListener.mock.calls.find(([type]) => type === 'start')![1] as () => void;
+        const dragged = { lat: 5, lng: 6, altitude: 1 };
+        globe.pointOfView.mockReturnValue(dragged);
+        act(() => {
+            onGestureStart();
+            result.current.onZoom(dragged);
+            vi.advanceTimersByTime(250);
+        });
+        expect(result.current.navigationViewRef.current).toBeNull();
+        expect(options.onStopRotation).toHaveBeenCalledOnce();
+        expect(options.onViewChange).toHaveBeenLastCalledWith(dragged, { replace: true });
+    });
+
+    it('resumes camera synchronization after an unchanged reset reaches its target', () => {
+        vi.useFakeTimers();
+        const { globe, options } = cameraOptions();
+        const { result } = renderNavigableCamera(options);
+        act(() => result.current.onGlobeReady());
+        act(() => vi.advanceTimersByTime(0));
+        act(() => {
+            result.current.resetView();
+            result.current.onZoom(DEFAULT_VIEW);
+            vi.advanceTimersByTime(250);
+        });
+        const rotated = { ...DEFAULT_VIEW, lng: 10 };
+        globe.pointOfView.mockReturnValue(rotated);
+        act(() => {
+            result.current.onZoom(rotated);
+            vi.advanceTimersByTime(250);
+        });
+        expect(options.onViewChange).toHaveBeenLastCalledWith(rotated, { replace: true });
     });
 
     it.each(['lat', 'lng', 'altitude'] as const)('rejects a non-finite %s from the renderer', key => {
