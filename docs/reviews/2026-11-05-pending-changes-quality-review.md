@@ -6,6 +6,7 @@ No dependency versions changed.
 
 The performance design is sound. Its original data validation and failure handling were insufficient for release.
 The review corrected those defects and added a publication check.
+The [publication repair](2026-11-05-tornado-publication-repair.md) addresses the missing production index found during release.
 
 ## Standards review
 

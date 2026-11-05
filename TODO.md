@@ -86,7 +86,6 @@ Keep the current budgets. See the [repository guide](README.md#testing-notes) fo
 
 ## Tornado Tracks
 
-- [ ] Publish `trend-index.json` with the updated tornado sync before frontend rollout. Verify the [release requirement](docs/reviews/2026-11-05-responsiveness-improvements.md#release-requirement).
 - [ ] Publish source coverage dates and omitted-coordinate counts separately from upload timestamps.
 - [ ] Add recovery for failed basemap requests. Check the degraded view and Retry with fixed browser responses.
 - [ ] Add keyboard-accessible state selection, chart data tables, and a clear zero-results action.

@@ -28,7 +28,7 @@ describe('tornado release publication check', () => {
         ]);
     });
 
-    it.each([404, 503])('blocks a release when the new artifact returns HTTP %s', async status => {
+    it.each([403, 404, 503])('blocks a release when the new artifact returns HTTP %s', async status => {
         const fetchImpl = vi.fn(async (url: URL) => url.pathname.endsWith('annual-summary.json') ? json(annual) : new Response(null, { status }));
         await expect(verifyTornadoPublication({ fetchImpl })).rejects.toMatchObject({
             message: expect.stringContaining('Publish matching'), cause: { message: `trend-index.json: HTTP ${status}` },

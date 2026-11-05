@@ -57,6 +57,11 @@ jobs:
         # files that actually changed will differ from the S3 copy.
         run: node projects/tornado-tracks/scripts/syncTornadoes.js
 
+      - name: Verify generated tornado publication
+        env:
+          VITE_TORNADO_DATA_BASE_URL: /data/tornadoes
+        run: npm run verify-tornado-publication
+
       - name: Configure AWS with OIDC
         if: vars.AWS_TORNADO_SYNC_ROLE_ARN != ''
         uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
@@ -94,7 +99,13 @@ jobs:
         if: env.TORNADO_DATA_CDN_ID != ''
         run: |
           set -euo pipefail
-          aws cloudfront create-invalidation \
+          invalidation_id=$(aws cloudfront create-invalidation \
             --distribution-id "${TORNADO_DATA_CDN_ID}" \
-            --paths "/tornadoes/*"
-          echo "✅ CloudFront cache invalidated"
+            --paths "/tornadoes/*" \
+            --query 'Invalidation.Id' --output text)
+          aws cloudfront wait invalidation-completed \
+            --distribution-id "${TORNADO_DATA_CDN_ID}" --id "$invalidation_id"
+          echo "✅ CloudFront cache invalidation completed"
+
+      - name: Verify public tornado publication
+        run: npm run verify-tornado-publication

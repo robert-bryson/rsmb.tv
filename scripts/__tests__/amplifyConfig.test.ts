@@ -96,6 +96,63 @@ describe('amplify.yml', () => {
     });
 });
 
+describe('tornado publication workflow', () => {
+    function steps() {
+        return (parse(readRepoFile('.github/workflows/sync-tornadoes.yml')) as {
+            jobs: { sync: { steps: Array<{ name: string; run?: string; env?: Record<string, string> }> } };
+        }).jobs.sync.steps;
+    }
+
+    it('validates generated data before upload and public data after cache invalidation', () => {
+        const workflowSteps = steps();
+        const orderedNames = [
+            'Sync tornado data (all years, cached downloads)',
+            'Verify generated tornado publication',
+            'Upload tornado data to S3',
+            'Invalidate CloudFront cache',
+            'Verify public tornado publication',
+        ];
+        const positions = orderedNames.map(name => workflowSteps.findIndex(step => step.name === name));
+        expect(Math.min(...positions)).toBeGreaterThanOrEqual(0);
+        expect(positions).toEqual([...positions].sort((a, b) => a - b));
+        const local = workflowSteps[positions[1]];
+        const remote = workflowSteps[positions[4]];
+        expect(local.env?.VITE_TORNADO_DATA_BASE_URL).toBe('/data/tornadoes');
+        expect(local.run).toBe('npm run verify-tornado-publication');
+        expect(remote.env?.VITE_TORNADO_DATA_BASE_URL).toBeUndefined();
+        expect(remote.run).toBe('npm run verify-tornado-publication');
+    });
+
+    it.each([false, true])('waits for cache invalidation only after successful creation (failure: %s)', failed => {
+        const root = fs.mkdtempSync(path.join(os.tmpdir(), 'rsmb-tornado-invalidation-'));
+        const log = path.join(root, 'calls.txt');
+        const step = steps().find(step => step.name === 'Invalidate CloudFront cache')!;
+        const stub = [
+            'aws() {',
+            "  printf '%s\\n' \"$*\" >> \"$AWS_CALL_LOG\"",
+            '  if [ "$2" = create-invalidation ]; then',
+            '    if [ "$FAIL_INVALIDATION" = 1 ]; then return 9; fi',
+            "    printf '%s\\n' INV123",
+            '  fi',
+            '}',
+        ].join('\n');
+        try {
+            const run = () => execFileSync('bash', ['-e', '-o', 'pipefail', '-c', stub + '\n' + step.run], {
+                env: { ...process.env, AWS_CALL_LOG: log, FAIL_INVALIDATION: failed ? '1' : '0', TORNADO_DATA_CDN_ID: 'TEST-CDN' },
+                stdio: 'pipe',
+            });
+            if (failed) expect(run).toThrow();
+            else run();
+            const calls = fs.readFileSync(log, 'utf8').trim().split('\n');
+            expect(calls[0]).toContain('cloudfront create-invalidation --distribution-id TEST-CDN --paths /tornadoes/*');
+            expect(calls).toHaveLength(failed ? 1 : 2);
+            if (!failed) expect(calls[1]).toBe('cloudfront wait invalidation-completed --distribution-id TEST-CDN --id INV123');
+        } finally {
+            fs.rmSync(root, { recursive: true, force: true });
+        }
+    });
+});
+
 describe('dependency installation contracts', () => {
     it('runs type checking with the compiler required by the lint adapter', () => {
         const help = execFileSync('npm', ['run', 'typecheck', '--', '--help'], { cwd: repoRoot, encoding: 'utf8' });

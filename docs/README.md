@@ -35,6 +35,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-05 | [Tornado publication repair: missing index, deployment order, and workflow verification](reviews/2026-11-05-tornado-publication-repair.md) |
 | 2026-11-05 | [Pending changes: aggregate validation, independent chart recovery, release checks, and coverage](reviews/2026-11-05-pending-changes-quality-review.md) |
 | 2026-11-05 | [Responsiveness implementation: tornado aggregates, globe rendering, homepage delivery, and measured comparisons](reviews/2026-11-05-responsiveness-improvements.md) |
 | 2026-11-05 | [Flights responsiveness research: callback identity, retained geometry, label churn, and rendering cost](reviews/2026-11-05-flight-responsiveness-research.md) |
