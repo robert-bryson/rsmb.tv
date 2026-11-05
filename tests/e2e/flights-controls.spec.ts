@@ -92,6 +92,7 @@ test('failed clipboard APIs offer manual copying without reporting success', asy
 });
 
 test('camera URL synchronization survives filter changes and keyboard reset', async ({ page }) => {
+    test.setTimeout(60_000);
     await page.goto('/projects/flights/map?paths=0&stats=0&lat=10&lng=20&alt=1');
     const canvas = page.locator('.flights-globe canvas');
     await expect(canvas).toBeVisible();
@@ -123,6 +124,7 @@ test('camera URL synchronization survives filter changes and keyboard reset', as
 
 for (const delayedAsset of ['none', 'flights', 'textures'] as const) {
     test(`returning from an empty filtered year fits its airports again (delayed: ${delayedAsset})`, async ({ page }) => {
+        test.setTimeout(60_000);
         const flight = makeFlight();
         const features = [flight, makeFlight({ id: 2, date: '1/1/2025', airline: 'Other' })]
             .map(properties => ({ type: 'Feature', properties, geometry: { type: 'LineString', coordinates: [] } }));

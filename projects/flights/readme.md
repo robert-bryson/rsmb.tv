@@ -102,6 +102,8 @@ A clock jump can finish a tween before the renderer projects its labels.
 The checks allow the camera and globe animations to finish, then compare the rendered label positions.
 Reset must move those labels. Returning from an empty year must restore their fitted positions.
 Request gates control delayed assets. A bounded 2.1-second wait covers the renderer animation durations.
+These multi-step cases have a 60-second test deadline for software rendering. Individual assertions retain their normal deadlines.
+The separate throttled-phone performance check retains its 8.5-second startup budget.
 
 ### Animation performance
 
