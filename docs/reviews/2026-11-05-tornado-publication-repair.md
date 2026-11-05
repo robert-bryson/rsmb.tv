@@ -51,15 +51,26 @@ Successful checks stop immediately. Persistent failures return a nonzero exit st
 The release checker also has an explicit HTTP 403 regression case.
 
 Before the workflow change, two regression cases failed.
-All 140 final focused tests passed.
+All 141 final focused tests passed, including the AVIF hosting regression.
 The focused suite covers workflow configuration, publication validation, aggregate correctness, and the tornado generator.
 
 ## Release verification
+
+Amplify build 425 passed the publication check and deployed commit 0440a73.
+The first live measurement then detected a separate hosting failure.
+AVIF preview URLs returned HTTP 200 with HTML content.
+The SPA rewrite excluded WebP and other static formats but omitted AVIF.
+
+The repair adds AVIF to the Terraform rule and the matching live hosting rule.
+A new regression applies the actual rule to every generated preview URL in the manifest.
+It also checks that application routes and unsupported extensions still select the SPA fallback.
+The regression failed on an AVIF URL before the rule changed.
 
 The original publication check now passes through the public CDN.
 The public index digest matches the validated upload:
 `8abe266d1d3f679504a6d2918eed4ce038cdbb9f5eb7f0cd2e2e25a3b05167ad`.
 ESLint and TypeScript checks also pass.
+Terraform formatting and configuration validation pass.
 
 After Amplify completes, verify `deployment.json` and repeat the three live feature checks.
 Use the same phone, CPU, and network conditions as the earlier production measurements.

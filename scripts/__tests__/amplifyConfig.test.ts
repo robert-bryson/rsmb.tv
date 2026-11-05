@@ -245,6 +245,26 @@ describe('Amplify response headers', () => {
 });
 
 describe('Amplify domain', () => {
+    it('preserves every generated project preview format instead of rewriting it to HTML', () => {
+        const config = readRepoFile('infra/main.tf');
+        const source = config.match(
+            /custom_rule \{[^}]*?source\s*=\s*"([^"]+)"[^}]*?target\s*=\s*"\/index\.html"/,
+        )?.[1];
+        expect(source).toBeDefined();
+        const rule = JSON.parse('"' + source + '"') as string;
+        const rewrite = new RegExp(rule.slice(2, -2));
+        expect(rewrite.test('/projects/flights/map')).toBe(true);
+        expect(rewrite.test('/unregistered.custom-format')).toBe(true);
+        const previews = JSON.parse(readRepoFile('src/content/project-previews.json')) as Record<string, {
+            src: string; srcSet: string; avifSrcSet?: string;
+        }>;
+        for (const image of Object.values(previews)) {
+            const candidates = [image.src, ...[image.srcSet, image.avifSrcSet ?? '']
+                .flatMap(set => set.split(',').filter(Boolean).map(candidate => candidate.trim().split(/\s+/)[0]))];
+            for (const candidate of candidates) expect(rewrite.test(candidate), candidate).toBe(false);
+        }
+    });
+
     it('serves JavaScript module assets without the SPA rewrite', () => {
         const config = readRepoFile('infra/main.tf');
         const spaRewrite = config.match(
