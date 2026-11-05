@@ -19,8 +19,8 @@ export const BASEMAPS: BasemapConfig[] = [
     {
         id: 'night',
         label: 'Night',
-        image: `${base}basemaps/earth-night.webp`,
-        bump: `${base}basemaps/earth-topology.webp`,
+        image: `${base}basemaps/earth-night-1536-8ec8613bb172.webp`,
+        bump: `${base}basemaps/earth-topology-1536-8bb5a2698ef0.webp`,
         atmosphere: 'lightskyblue',
         bg: 'rgba(0,0,17,1)',
     },

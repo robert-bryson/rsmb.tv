@@ -12,6 +12,10 @@ on:
         description: 'Run full sync (all-time county records + state records). Default is recent-only.'
         type: boolean
         default: false
+      repair_monthly_archives:
+        description: 'Repair all archived monthly thresholds before the rolling sync'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -24,7 +28,7 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: ${{ inputs.repair_monthly_archives == true && 180 || 45 }}
     env:
       AWS_REGION: us-east-1
       TEMPERATURE_DATA_BUCKET: rsmbtv-temperature-data
@@ -61,7 +65,7 @@ jobs:
         with:
           role-to-assume: ${{ vars.AWS_TEMPERATURE_SYNC_ROLE_ARN }}
           aws-region: us-east-1
-          role-duration-seconds: 3600
+          role-duration-seconds: ${{ inputs.repair_monthly_archives == true && 10800 || 3600 }}
 
       - name: Configure AWS with existing keys during migration
         if: vars.AWS_TEMPERATURE_SYNC_ROLE_ARN == ''
@@ -70,6 +74,10 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
+
+      - name: Regenerate stale monthly archive thresholds
+        if: inputs.repair_monthly_archives == true
+        run: node scripts/repair-temperature-archives.js
 
       - name: Sync temperature records
         run: node scripts/sync-temperatures.js ${{ steps.mode.outputs.args }}
@@ -105,9 +113,9 @@ jobs:
           if [[ "${{ steps.mode.outputs.label }}" == "full" ]]; then
             aws cloudfront create-invalidation \
               --distribution-id "${TEMPERATURE_DATA_CDN_ID}" \
-              --paths "/stations.json" "/recentRecords.json" "/countyRecords.json" "/stateRecords.json" "/climateTrends.json" "/summary.json"
+              --paths "/stations.json" "/recentRecords.json" "/daily/*" "/countyRecords.json" "/stateRecords.json" "/climateTrends.json" "/summary.json"
           else
             aws cloudfront create-invalidation \
               --distribution-id "${TEMPERATURE_DATA_CDN_ID}" \
-              --paths "/stations.json" "/recentRecords.json"
+              --paths "/stations.json" "/recentRecords.json" "/daily/*"
           fi

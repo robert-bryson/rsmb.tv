@@ -12,7 +12,7 @@ The recent station events and the county extremes come from NOAA Regional Climat
 
 A recent high occurs when a reported daily maximum is higher than the previous station value for the same calendar date. A recent low occurs when a reported daily minimum is lower than the previous station value for the same calendar date. These comparisons use observations from 1950 or later.
 
-A monthly record also exceeds the previous station extreme for that calendar month. County and state products show the current standing all-time extremes.
+A monthly record also exceeds the previous station extreme for that calendar month, using complete matching months in prior years and earlier observations in the same month of the current year. The target day's observation is excluded from its threshold. February includes leap days. A monthly event's previous value and date describe its monthly predecessor; a daily event's previous value and date describe its calendar-date predecessor. County and state products show the current standing all-time extremes.
 
 The client can classify a recent event as a county or state all-time record. The client compares the event with the applicable standing record. This classification does not change the source observation.
 

@@ -18,6 +18,17 @@ test('flight animation toggles meet the mobile interaction budget', async ({ pag
     await expect(page.locator('.flight-map-label').first()).toBeVisible({ timeout: 60_000 });
     await expect(page.getByText('Loading globe...', { exact: true })).toHaveCount(0);
     await expect(page.getByRole('application')).toHaveAttribute('aria-label', /showing [1-9]\d* flights/, { timeout: 60_000 });
+    const startup = await page.evaluate(() => ({
+        readyMs: performance.now(),
+        resources: performance.getEntriesByType('resource').map(entry => {
+            const resource = entry as PerformanceResourceTiming;
+            return { path: new URL(resource.name).pathname, startMs: resource.startTime, endMs: resource.responseEnd, bytes: resource.encodedBodySize };
+        }),
+    }));
+    expect(startup.readyMs, 'Cold mobile globe startup').toBeLessThan(8500);
+    const nightTexture = startup.resources.filter(resource => /earth-night.*\.webp$/.test(resource.path));
+    expect(nightTexture, 'Share the color texture request with Three').toHaveLength(1);
+    expect(nightTexture[0].bytes).toBeLessThan(60_000);
     const flightCount = Number((await page.getByRole('application').getAttribute('aria-label'))?.match(/showing (\d+) flights/)?.[1]);
     expect(flightCount).toBeGreaterThan(0);
 
@@ -52,6 +63,7 @@ test('flight animation toggles meet the mobile interaction budget', async ({ pag
         // The baseline exceeded 900 ms. This ceiling catches that regression
         // while retaining headroom over optimized samples at 4x CPU slowdown.
         flightCount, samples, budgetMs: 600,
+        startup,
         renderScale: await page.locator('.flights-globe canvas').evaluate(canvas => (canvas as HTMLCanvasElement).width / canvas.clientWidth),
         maxDurationMs: Math.max(...samples.map(sample => sample.durationMs)),
     };

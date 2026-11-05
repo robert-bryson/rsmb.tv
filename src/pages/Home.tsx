@@ -44,15 +44,15 @@ export function Home() {
               <li key={project.slug} className={`min-w-0 ${index === 0 ? 'sm:col-span-2' : ''}`}>
                 <Link
                   to={linkUrl}
-                  className={`group grid h-full overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900/30 hover:border-zinc-700 hover:bg-zinc-900/60 ${index === 0 ? 'sm:grid-cols-[minmax(0,1.45fr)_minmax(15rem,1fr)]' : ''}`}
+                  className="group flex h-full flex-col overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900/30 hover:border-zinc-700 hover:bg-zinc-900/60"
                 >
                   {project.previewImage && (
                     <ProjectPreview
                       src={project.previewImage}
                       alt=""
-                      className={`aspect-video w-full object-cover ${index === 0 ? 'sm:h-full border-b border-zinc-800 sm:border-r sm:border-b-0' : 'border-b border-zinc-800'}`}
+                      className="aspect-video w-full border-b border-zinc-800 object-cover"
                       priority={index === 0}
-                      sizes={index === 0 ? '(min-width: 768px) 427px, (min-width: 640px) calc(59.2vw - 1.776rem), calc(100vw - 3rem)' : '(min-width: 768px) 352px, (min-width: 640px) calc(50vw - 2rem), calc(100vw - 3rem)'}
+                      sizes={index === 0 ? '(min-width: 768px) 720px, calc(100vw - 3rem)' : '(min-width: 768px) 352px, (min-width: 640px) calc(50vw - 2rem), calc(100vw - 3rem)'}
                     />
                   )}
                   <div className="flex flex-1 flex-col p-4">

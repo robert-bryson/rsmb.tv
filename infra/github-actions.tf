@@ -19,7 +19,7 @@ locals {
 resource "aws_iam_role" "github_data_sync" {
   for_each             = local.github_sync_jobs
   name                 = "rsmbtv-sync-${each.key}"
-  max_session_duration = 3600
+  max_session_duration = each.key == "temperatures" ? 10800 : 3600
   tags                 = local.common_tags
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -72,4 +72,44 @@ resource "aws_iam_role_policy" "github_data_sync" {
 output "github_data_sync_role_arns" {
   description = "Set the matching AWS_TEMPERATURE_SYNC_ROLE_ARN and AWS_TORNADO_SYNC_ROLE_ARN repository variables after deployment."
   value       = { for job, role in aws_iam_role.github_data_sync : job => role.arn }
+}
+
+resource "aws_iam_role" "github_release" {
+  name                 = "rsmbtv-release"
+  max_session_duration = 7200
+  tags                 = local.common_tags
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect    = "Allow"
+      Action    = "sts:AssumeRoleWithWebIdentity"
+      Principal = { Federated = local.github_oidc_arn }
+      Condition = { StringEquals = {
+        "${local.github_oidc_host}:aud" = "sts.amazonaws.com"
+        "${local.github_oidc_host}:sub" = "repo:robert-bryson/rsmb.tv:ref:refs/heads/main"
+      } }
+    }]
+  })
+}
+
+resource "aws_iam_role_policy" "github_release" {
+  name = "validate-preview-and-release"
+  role = aws_iam_role.github_release.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      { Effect = "Allow", Action = ["amplify:GetApp"], Resource = aws_amplify_app.rsmbtv.arn },
+      { Effect = "Allow", Action = ["s3:PutObject"], Resource = "${aws_s3_bucket.temperature_data.arn}/release-validations/*" },
+      {
+        Effect   = "Allow"
+        Action   = ["amplify:StartJob", "amplify:GetJob"]
+        Resource = [for branch in ["main", "release-preview"] : "${aws_amplify_app.rsmbtv.arn}/branches/${branch}/jobs/*"]
+      },
+    ]
+  })
+}
+
+output "github_release_role_arn" {
+  description = "Set AWS_RELEASE_ROLE_ARN and AMPLIFY_APP_ID repository variables before enabling gated releases."
+  value       = aws_iam_role.github_release.arn
 }

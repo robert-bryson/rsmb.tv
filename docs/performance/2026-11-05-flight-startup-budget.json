@@ -1,0 +1,133 @@
+{
+  "browser": "156.0.8078.4",
+  "device": "Pixel 7",
+  "cpuSlowdown": 4,
+  "latencyMs": 150,
+  "downloadMbps": 1.6,
+  "uploadMbps": 0.75,
+  "flightCount": 334,
+  "samples": [
+    {
+      "action": "Pause flight animations",
+      "durationMs": 401.40000009536743
+    },
+    {
+      "action": "Play flight animations",
+      "durationMs": 318.5
+    },
+    {
+      "action": "Pause flight animations",
+      "durationMs": 307.6999999284744
+    },
+    {
+      "action": "Play flight animations",
+      "durationMs": 321.5
+    },
+    {
+      "action": "Pause flight animations",
+      "durationMs": 260.2999999523163
+    },
+    {
+      "action": "Play flight animations",
+      "durationMs": 312.6999999284744
+    }
+  ],
+  "budgetMs": 600,
+  "startup": {
+    "readyMs": 6012.199999928474,
+    "resources": [
+      {
+        "path": "/assets/index-Dbka2hmm.js",
+        "startMs": 195.09999990463257,
+        "endMs": 967.2999999523163,
+        "bytes": 82642
+      },
+      {
+        "path": "/assets/react-sySUN5R7.js",
+        "startMs": 195.89999997615814,
+        "endMs": 427,
+        "bytes": 3296
+      },
+      {
+        "path": "/assets/formatDate-DzlwLnWD.js",
+        "startMs": 196,
+        "endMs": 390.5,
+        "bytes": 502
+      },
+      {
+        "path": "/assets/chunk-6KYCQHYJ-BUJfIMNt.js",
+        "startMs": 196,
+        "endMs": 607.0999999046326,
+        "bytes": 13811
+      },
+      {
+        "path": "/assets/index-D2h7mAji.css",
+        "startMs": 196.39999997615814,
+        "endMs": 636.7999999523163,
+        "bytes": 16678
+      },
+      {
+        "path": "/assets/Flights-BoCDynC5.js",
+        "startMs": 1111.5999999046326,
+        "endMs": 1273.8999999761581,
+        "bytes": 592
+      },
+      {
+        "path": "/assets/FlightsMap-t2t-isZo.js",
+        "startMs": 1281.5,
+        "endMs": 3373.7999999523163,
+        "bytes": 379927
+      },
+      {
+        "path": "/assets/cartoBasemaps-6KDxvatL.js",
+        "startMs": 1282.2999999523163,
+        "endMs": 1439.1999999284744,
+        "bytes": 725
+      },
+      {
+        "path": "/assets/fetchCache-DyFHVuB9.js",
+        "startMs": 1282.3999999761581,
+        "endMs": 1446.8999999761581,
+        "bytes": 674
+      },
+      {
+        "path": "/assets/useReducedMotion-C2xWDdJE.js",
+        "startMs": 1282.3999999761581,
+        "endMs": 1455.6999999284744,
+        "bytes": 228
+      },
+      {
+        "path": "/assets/escapeHtml-CKuHtFmo.js",
+        "startMs": 1282.3999999761581,
+        "endMs": 1470.2999999523163,
+        "bytes": 115
+      },
+      {
+        "path": "/assets/usePersistedState-BvLeENa5.js",
+        "startMs": 1282.3999999761581,
+        "endMs": 1477.2999999523163,
+        "bytes": 255
+      },
+      {
+        "path": "/basemaps/earth-night-1536-8ec8613bb172.webp",
+        "startMs": 3712.0999999046326,
+        "endMs": 4342.199999928474,
+        "bytes": 54582
+      },
+      {
+        "path": "/data/flights/visitedAirports.geojson",
+        "startMs": 3714,
+        "endMs": 4035.1999999284744,
+        "bytes": 10484
+      },
+      {
+        "path": "/data/flights/flights.geojson",
+        "startMs": 3714,
+        "endMs": 4207.199999928474,
+        "bytes": 27679
+      }
+    ]
+  },
+  "renderScale": 1.5,
+  "maxDurationMs": 401.40000009536743
+}

@@ -137,6 +137,17 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
 describe('temperature map record rendering', () => {
+    it('shows repaired monthly records in the Monthly filter and its counts', () => {
+        const records = [record({ uid: 1, stationName: 'Monthly station', recordScope: 'monthly', tempF: 83, prevRecordF: 82, prevRecordDate: '1950-11-02' }), record({ uid: 2, stationName: 'Daily station' })];
+        vi.mocked(useTemperatureData).mockReturnValue(data({ recentRecords: recent(records) }));
+        const { map } = mount('/projects/temperature-records/map?scope=monthly');
+        expect(screen.getByText('0 daily · 1 monthly')).toBeVisible();
+        const source = map.getSource('broken-records');
+        expect(source?.type).toBe('geojson');
+        if (source?.type !== 'geojson' || typeof source.data !== 'object' || source.data.type !== 'FeatureCollection') throw new Error('Missing recent record source');
+        expect(source.data.features).toHaveLength(1);
+        expect(source.data.features[0].properties).toMatchObject({ stationName: 'Monthly station', recordScope: 'monthly', prevRecordF: 82 });
+    });
     it('fits the viewport with absolute padding so repeated fits cannot add it twice', () => {
         vi.mocked(useTemperatureData).mockReturnValue(data({ recentRecords: recent() }));
         const { map } = mount();

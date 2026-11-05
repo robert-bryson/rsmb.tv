@@ -69,6 +69,7 @@ resource "aws_s3_bucket_cors_configuration" "temperature_data" {
     allowed_origins = [
       "https://www.rsmb.tv",
       "https://dev.rsmb.tv",
+      "https://${aws_amplify_branch.release_preview.branch_name}.${aws_amplify_app.rsmbtv.default_domain}",
       "http://localhost:*",
       "http://127.0.0.1:*",
     ]

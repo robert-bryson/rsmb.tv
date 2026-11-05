@@ -1,0 +1,67 @@
+{
+  "checkedAt": "2026-11-05T19:10:39.002Z",
+  "source": "Public data.rsmb.tv archives; local repair only",
+  "dates": [
+    {
+      "date": "2026-11-04",
+      "observations": 2021,
+      "changedThresholds": 2021,
+      "rawObservationsUnchanged": true,
+      "version": 2
+    },
+    {
+      "date": "2026-11-03",
+      "observations": 3497,
+      "changedThresholds": 3496,
+      "rawObservationsUnchanged": true,
+      "version": 2
+    },
+    {
+      "date": "2026-11-02",
+      "observations": 3848,
+      "changedThresholds": 3847,
+      "rawObservationsUnchanged": true,
+      "version": 2
+    },
+    {
+      "date": "2026-11-01",
+      "observations": 4887,
+      "changedThresholds": 4880,
+      "rawObservationsUnchanged": true,
+      "version": 2
+    },
+    {
+      "date": "2026-10-31",
+      "observations": 6140,
+      "changedThresholds": 6139,
+      "rawObservationsUnchanged": true,
+      "version": 2
+    },
+    {
+      "date": "2026-10-30",
+      "observations": 6253,
+      "changedThresholds": 6252,
+      "rawObservationsUnchanged": true,
+      "version": 2
+    },
+    {
+      "date": "2026-10-29",
+      "observations": 6268,
+      "changedThresholds": 6267,
+      "rawObservationsUnchanged": true,
+      "version": 2
+    }
+  ],
+  "observations": 32914,
+  "changedThresholds": 32902,
+  "previousRecords": 990,
+  "repairedRecords": 990,
+  "previousMonthly": 2,
+  "repairedMonthly": 23,
+  "transitions": {
+    "daily->monthly": 22,
+    "monthly->daily": 1
+  },
+  "frontendSchema": "passed",
+  "published": false
+}

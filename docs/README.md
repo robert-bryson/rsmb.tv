@@ -8,6 +8,7 @@ Use [TODO.md](../TODO.md) for incomplete work.
 | Document | Use |
 | --- | --- |
 | [Repository guide](../README.md) | Install, develop, test, and build the site |
+| [Release validation](release-validation.md) | Activate hosted preview checks before production releases |
 | [Shared modules](shared-modules.md) | Reuse request caching, state identities, airport normalization, and project presentation |
 | [Blog publication](blog-publishing.md) | Configure the Sheet and import documents |
 | [Site metadata](site-metadata.md) | Maintain crawler metadata, social cards, canonical paths, and hosting rules |
@@ -35,6 +36,8 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-05 | [Pending changes quality review: archive safety, validation proofs, failure coverage, and source limits](reviews/2026-11-05-uncommitted-quality-review.md) |
+| 2026-11-05 | [Monthly data correctness, page recovery, release validation, Flights startup, and bounded caching](reviews/2026-11-05-correctness-recovery-startup.md) |
 | 2026-11-05 | [Tornado publication repair: missing index, deployment order, and workflow verification](reviews/2026-11-05-tornado-publication-repair.md) |
 | 2026-11-05 | [Pending changes: aggregate validation, independent chart recovery, release checks, and coverage](reviews/2026-11-05-pending-changes-quality-review.md) |
 | 2026-11-05 | [Responsiveness implementation: tornado aggregates, globe rendering, homepage delivery, and measured comparisons](reviews/2026-11-05-responsiveness-improvements.md) |

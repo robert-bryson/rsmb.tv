@@ -29,6 +29,8 @@ export function useGlobeTextures(basemap?: BasemapConfig) {
 
         for (const url of textures) {
             const image = new Image();
+            // Match Three's TextureLoader so the browser can share the request.
+            image.crossOrigin = 'anonymous';
             images.push(image);
             image.onload = () => {
                 if (cancelled || failed) return;

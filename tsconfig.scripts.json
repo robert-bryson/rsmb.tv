@@ -31,6 +31,7 @@
         "playwright.config.ts",
         "playwright.trip.config.ts",
         "playwright.temperature.config.ts",
+        "playwright.release.config.ts",
         "scripts/**/*.ts",
         "scripts/**/*.tsx",
         "shared/**/*.ts",

@@ -24,14 +24,14 @@ run "github_sync_permissions" {
 
   assert {
     condition = alltrue([
-      for role in aws_iam_role.github_data_sync : (
+      for key, role in aws_iam_role.github_data_sync : (
         jsondecode(role.assume_role_policy).Statement[0].Principal.Federated == "arn:aws:iam::123456789012:oidc-provider/token.actions.githubusercontent.com" &&
         jsondecode(role.assume_role_policy).Statement[0].Condition.StringEquals["token.actions.githubusercontent.com:sub"] == "repo:robert-bryson/rsmb.tv:ref:refs/heads/main" &&
         jsondecode(role.assume_role_policy).Statement[0].Condition.StringEquals["token.actions.githubusercontent.com:aud"] == "sts.amazonaws.com" &&
-        role.max_session_duration == 3600
+        role.max_session_duration == (key == "temperatures" ? 10800 : 3600)
       )
     ])
-    error_message = "Workflow roles must trust only this repository's main branch, the AWS audience, and one-hour sessions."
+    error_message = "Workflow roles must trust only this repository's main branch and AWS audience, with bounded sessions matching archive repair and routine sync."
   }
 
   assert {

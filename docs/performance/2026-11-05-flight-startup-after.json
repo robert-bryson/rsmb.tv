@@ -1,0 +1,505 @@
+{
+  "browser": "156.0.8078.4",
+  "conditions": {
+    "cpuSlowdown": 4,
+    "latencyMs": 150,
+    "downloadMbps": 1.6,
+    "device": "Pixel 7",
+    "cache": "disabled"
+  },
+  "samples": [
+    {
+      "readyMs": 5409.899999976158,
+      "longTasks": [
+        {
+          "start": 984.7999999523163,
+          "duration": 111
+        },
+        {
+          "start": 3388.600000023842,
+          "duration": 90
+        },
+        {
+          "start": 3520.5,
+          "duration": 74
+        },
+        {
+          "start": 3595.399999976158,
+          "duration": 194
+        },
+        {
+          "start": 4139.5,
+          "duration": 63
+        },
+        {
+          "start": 4207.899999976158,
+          "duration": 99
+        },
+        {
+          "start": 4309.899999976158,
+          "duration": 72
+        },
+        {
+          "start": 4383.600000023842,
+          "duration": 73
+        },
+        {
+          "start": 4462.899999976158,
+          "duration": 549
+        },
+        {
+          "start": 5023.399999976158,
+          "duration": 189
+        },
+        {
+          "start": 5215.700000047684,
+          "duration": 67
+        },
+        {
+          "start": 5289.799999952316,
+          "duration": 59
+        }
+      ],
+      "webgl": [
+        {
+          "start": 3525.600000023842,
+          "duration": 21.100000023841858
+        }
+      ],
+      "resources": [
+        {
+          "name": "/assets/FlightsMap-t2t-isZo.js",
+          "start": 1285.8999999761581,
+          "end": 3378.2999999523163,
+          "duration": 2092.399999976158,
+          "bytes": 379927
+        },
+        {
+          "name": "/assets/index-Dbka2hmm.js",
+          "start": 207.79999995231628,
+          "end": 978.2000000476837,
+          "duration": 770.4000000953674,
+          "bytes": 82642
+        },
+        {
+          "name": "/basemaps/earth-night-1536-8ec8613bb172.webp",
+          "start": 3592.2999999523163,
+          "end": 4224.899999976158,
+          "duration": 632.6000000238419,
+          "bytes": 54582
+        },
+        {
+          "name": "/data/flights/flights.geojson",
+          "start": 3595.2999999523163,
+          "end": 4090.7999999523163,
+          "duration": 495.5,
+          "bytes": 27679
+        },
+        {
+          "name": "/assets/index-D2h7mAji.css",
+          "start": 210.60000002384186,
+          "end": 648.2000000476837,
+          "duration": 437.60000002384186,
+          "bytes": 16678
+        },
+        {
+          "name": "/assets/chunk-6KYCQHYJ-BUJfIMNt.js",
+          "start": 209.20000004768372,
+          "end": 610.7000000476837,
+          "duration": 401.5,
+          "bytes": 13811
+        },
+        {
+          "name": "/data/flights/visitedAirports.geojson",
+          "start": 3594.2999999523163,
+          "end": 3918.2000000476837,
+          "duration": 323.90000009536743,
+          "bytes": 10484
+        },
+        {
+          "name": "/assets/react-sySUN5R7.js",
+          "start": 208.60000002384186,
+          "end": 444.5,
+          "duration": 235.89999997615814,
+          "bytes": 3296
+        },
+        {
+          "name": "/assets/usePersistedState-BvLeENa5.js",
+          "start": 1286.7999999523163,
+          "end": 1480.7000000476837,
+          "duration": 193.90000009536743,
+          "bytes": 255
+        },
+        {
+          "name": "/assets/useReducedMotion-C2xWDdJE.js",
+          "start": 1286.7000000476837,
+          "end": 1465.5,
+          "duration": 178.79999995231628,
+          "bytes": 228
+        },
+        {
+          "name": "/assets/formatDate-DzlwLnWD.js",
+          "start": 210.10000002384186,
+          "end": 385.7000000476837,
+          "duration": 175.60000002384186,
+          "bytes": 502
+        },
+        {
+          "name": "/assets/escapeHtml-CKuHtFmo.js",
+          "start": 1286.7000000476837,
+          "end": 1457.1000000238419,
+          "duration": 170.39999997615814,
+          "bytes": 115
+        },
+        {
+          "name": "/assets/fetchCache-DyFHVuB9.js",
+          "start": 1286.7000000476837,
+          "end": 1450.5,
+          "duration": 163.79999995231628,
+          "bytes": 674
+        },
+        {
+          "name": "/assets/Flights-BoCDynC5.js",
+          "start": 1118.7999999523163,
+          "end": 1277.1000000238419,
+          "duration": 158.30000007152557,
+          "bytes": 592
+        },
+        {
+          "name": "/assets/cartoBasemaps-6KDxvatL.js",
+          "start": 1286.6000000238419,
+          "end": 1442,
+          "duration": 155.39999997615814,
+          "bytes": 725
+        }
+      ],
+      "errors": []
+    },
+    {
+      "readyMs": 5242.700000047684,
+      "longTasks": [
+        {
+          "start": 945.5,
+          "duration": 56
+        },
+        {
+          "start": 3277.399999976158,
+          "duration": 83
+        },
+        {
+          "start": 3440.7999999523163,
+          "duration": 72
+        },
+        {
+          "start": 3989.600000023842,
+          "duration": 63
+        },
+        {
+          "start": 4057.2000000476837,
+          "duration": 93
+        },
+        {
+          "start": 4152.200000047684,
+          "duration": 70
+        },
+        {
+          "start": 4224.600000023842,
+          "duration": 80
+        },
+        {
+          "start": 4311.200000047684,
+          "duration": 464
+        },
+        {
+          "start": 4785,
+          "duration": 156
+        },
+        {
+          "start": 4943.5,
+          "duration": 155
+        },
+        {
+          "start": 5105.5,
+          "duration": 75
+        }
+      ],
+      "webgl": [
+        {
+          "start": 3400.899999976158,
+          "duration": 7
+        }
+      ],
+      "resources": [
+        {
+          "name": "/assets/FlightsMap-t2t-isZo.js",
+          "start": 1178.2000000476837,
+          "end": 3267.2000000476837,
+          "duration": 2089,
+          "bytes": 379927
+        },
+        {
+          "name": "/assets/index-Dbka2hmm.js",
+          "start": 173.10000002384186,
+          "end": 942.1000000238419,
+          "duration": 769,
+          "bytes": 82642
+        },
+        {
+          "name": "/basemaps/earth-night-1536-8ec8613bb172.webp",
+          "start": 3439.100000023842,
+          "end": 4070,
+          "duration": 630.8999999761581,
+          "bytes": 54582
+        },
+        {
+          "name": "/data/flights/flights.geojson",
+          "start": 3440.2000000476837,
+          "end": 3933.899999976158,
+          "duration": 493.6999999284744,
+          "bytes": 27679
+        },
+        {
+          "name": "/assets/index-D2h7mAji.css",
+          "start": 174.20000004768372,
+          "end": 611.2999999523163,
+          "duration": 437.09999990463257,
+          "bytes": 16678
+        },
+        {
+          "name": "/assets/chunk-6KYCQHYJ-BUJfIMNt.js",
+          "start": 173.89999997615814,
+          "end": 581.6000000238419,
+          "duration": 407.7000000476837,
+          "bytes": 13811
+        },
+        {
+          "name": "/data/flights/visitedAirports.geojson",
+          "start": 3440.100000023842,
+          "end": 3762.100000023842,
+          "duration": 322,
+          "bytes": 10484
+        },
+        {
+          "name": "/assets/react-sySUN5R7.js",
+          "start": 173.79999995231628,
+          "end": 417.2000000476837,
+          "duration": 243.40000009536743,
+          "bytes": 3296
+        },
+        {
+          "name": "/assets/formatDate-DzlwLnWD.js",
+          "start": 173.89999997615814,
+          "end": 365,
+          "duration": 191.10000002384186,
+          "bytes": 502
+        },
+        {
+          "name": "/assets/usePersistedState-BvLeENa5.js",
+          "start": 1179.2000000476837,
+          "end": 1368.7999999523163,
+          "duration": 189.59999990463257,
+          "bytes": 255
+        },
+        {
+          "name": "/assets/escapeHtml-CKuHtFmo.js",
+          "start": 1179.1000000238419,
+          "end": 1362.5,
+          "duration": 183.39999997615814,
+          "bytes": 115
+        },
+        {
+          "name": "/assets/useReducedMotion-C2xWDdJE.js",
+          "start": 1179.1000000238419,
+          "end": 1354.7000000476837,
+          "duration": 175.60000002384186,
+          "bytes": 228
+        },
+        {
+          "name": "/assets/fetchCache-DyFHVuB9.js",
+          "start": 1178.8999999761581,
+          "end": 1339.2000000476837,
+          "duration": 160.30000007152557,
+          "bytes": 674
+        },
+        {
+          "name": "/assets/Flights-BoCDynC5.js",
+          "start": 1015.5,
+          "end": 1173.3999999761581,
+          "duration": 157.89999997615814,
+          "bytes": 592
+        },
+        {
+          "name": "/assets/cartoBasemaps-6KDxvatL.js",
+          "start": 1178.2000000476837,
+          "end": 1331.1000000238419,
+          "duration": 152.89999997615814,
+          "bytes": 725
+        }
+      ],
+      "errors": []
+    },
+    {
+      "readyMs": 5256.5,
+      "longTasks": [
+        {
+          "start": 944.4000000953674,
+          "duration": 51
+        },
+        {
+          "start": 3277.5,
+          "duration": 89
+        },
+        {
+          "start": 3446.8000000715256,
+          "duration": 69
+        },
+        {
+          "start": 3987.4000000953674,
+          "duration": 64
+        },
+        {
+          "start": 4057.7000000476837,
+          "duration": 108
+        },
+        {
+          "start": 4166.5,
+          "duration": 79
+        },
+        {
+          "start": 4247.200000047684,
+          "duration": 75
+        },
+        {
+          "start": 4328.900000095367,
+          "duration": 473
+        },
+        {
+          "start": 4811.300000071526,
+          "duration": 161
+        },
+        {
+          "start": 4975.100000023842,
+          "duration": 137
+        },
+        {
+          "start": 5118.600000023842,
+          "duration": 75
+        }
+      ],
+      "webgl": [
+        {
+          "start": 3407.2000000476837,
+          "duration": 6.600000023841858
+        }
+      ],
+      "resources": [
+        {
+          "name": "/assets/FlightsMap-t2t-isZo.js",
+          "start": 1171.5,
+          "end": 3267.3000000715256,
+          "duration": 2095.8000000715256,
+          "bytes": 379927
+        },
+        {
+          "name": "/assets/index-Dbka2hmm.js",
+          "start": 174.90000009536743,
+          "end": 941.5,
+          "duration": 766.5999999046326,
+          "bytes": 82642
+        },
+        {
+          "name": "/basemaps/earth-night-1536-8ec8613bb172.webp",
+          "start": 3445.600000023842,
+          "end": 4077.8000000715256,
+          "duration": 632.2000000476837,
+          "bytes": 54582
+        },
+        {
+          "name": "/data/flights/flights.geojson",
+          "start": 3446.600000023842,
+          "end": 3942.5,
+          "duration": 495.89999997615814,
+          "bytes": 27679
+        },
+        {
+          "name": "/assets/index-D2h7mAji.css",
+          "start": 175,
+          "end": 611.5,
+          "duration": 436.5,
+          "bytes": 16678
+        },
+        {
+          "name": "/assets/chunk-6KYCQHYJ-BUJfIMNt.js",
+          "start": 175,
+          "end": 573.6000000238419,
+          "duration": 398.60000002384186,
+          "bytes": 13811
+        },
+        {
+          "name": "/data/flights/visitedAirports.geojson",
+          "start": 3445.7000000476837,
+          "end": 3769.8000000715256,
+          "duration": 324.10000002384186,
+          "bytes": 10484
+        },
+        {
+          "name": "/assets/react-sySUN5R7.js",
+          "start": 174.90000009536743,
+          "end": 408.60000002384186,
+          "duration": 233.69999992847443,
+          "bytes": 3296
+        },
+        {
+          "name": "/assets/usePersistedState-BvLeENa5.js",
+          "start": 1172.7000000476837,
+          "end": 1369.9000000953674,
+          "duration": 197.20000004768372,
+          "bytes": 255
+        },
+        {
+          "name": "/assets/escapeHtml-CKuHtFmo.js",
+          "start": 1172.3000000715256,
+          "end": 1362,
+          "duration": 189.69999992847443,
+          "bytes": 115
+        },
+        {
+          "name": "/assets/formatDate-DzlwLnWD.js",
+          "start": 175,
+          "end": 357.3000000715256,
+          "duration": 182.30000007152557,
+          "bytes": 502
+        },
+        {
+          "name": "/assets/useReducedMotion-C2xWDdJE.js",
+          "start": 1172.2000000476837,
+          "end": 1353.7000000476837,
+          "duration": 181.5,
+          "bytes": 228
+        },
+        {
+          "name": "/assets/fetchCache-DyFHVuB9.js",
+          "start": 1172.1000000238419,
+          "end": 1347.7000000476837,
+          "duration": 175.60000002384186,
+          "bytes": 674
+        },
+        {
+          "name": "/assets/cartoBasemaps-6KDxvatL.js",
+          "start": 1171.5,
+          "end": 1332.4000000953674,
+          "duration": 160.90000009536743,
+          "bytes": 725
+        },
+        {
+          "name": "/assets/Flights-BoCDynC5.js",
+          "start": 1009.2000000476837,
+          "end": 1166.9000000953674,
+          "duration": 157.70000004768372,
+          "bytes": 592
+        }
+      ],
+      "errors": []
+    }
+  ]
+}

@@ -52,7 +52,8 @@ The duplicate photos, unused galleries, and stale heading IDs are corrected loca
 
 ### Temperature record data
 
-- [ ] Correct calendar-month thresholds and regenerate affected archives and recent summaries. Cover the [query semantics and backfill conditions](docs/reviews/2026-11-05-data-pipeline-analysis.md#recommended-work-and-acceptance-conditions).
+- [ ] Review and publish the corrected version 2 monthly thresholds with **Sync Temperatures → repair_monthly_archives**, then verify the [backfill conditions](docs/reviews/2026-11-05-data-pipeline-analysis.md#recommended-work-and-acceptance-conditions) on the CDN. Use the [fresh backfill audit](docs/performance/2026-11-05-temperature-full-backfill.json); earlier unpublished staging predates station-coverage validation.
+- [ ] Investigate the twelve legacy daily/monthly threshold disagreements listed in that audit before claiming complete historical source accuracy. None affects the audited October 29–November 4 window. Preserve raw observations and legacy `rh`/`rl` until an evidence-based correction policy is defined.
 - [ ] Run a full temperature sync after deployment. Verify California and all per-date state coverage. See [the map guide](docs/temperature-map.md#freshness-and-coverage).
 
 The historical signal is not ready for publication.
@@ -108,8 +109,8 @@ Use fixed provider responses. Do not contact production services from unit tests
 
 Preserve passing publication checks when you change build scripts.
 
-- [ ] Add recovery for failed page downloads. Preserve site navigation and verify [production chunk failures and document recovery](docs/reviews/2026-11-05-project-analysis.md#2-a-failed-lazy-import-cannot-recover-through-try-again).
-- [ ] Deploy the [prepared OIDC roles](docs/github-actions-oidc.md). Set the role variables and verify both workflows before removing legacy credentials.
+- [ ] Activate the [hosted preview release gate](docs/release-validation.md#activation). Apply the preview branch, data CORS origin, production auto-build setting, and scoped proof permissions; set the GitHub variables and verify exact revision/job proofs and expiry on the hosted service.
+- [ ] Deploy the [three prepared OIDC roles](docs/github-actions-oidc.md). Set the role variables and verify both sync workflows and the gated release before removing legacy sync credentials.
 - [ ] Extract the remaining map rendering, interaction, and loading code. Preserve browser behavior and URL contracts.
 - [ ] Reduce MapLibre loading and worker costs. Preserve the passing article JavaScript budgets.
 - [ ] Split document conversion, shortcode handling, and publication checks in `scripts/sync-blogs.js`. Retain the compilation tests.

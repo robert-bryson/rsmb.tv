@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { execFileSync } from 'child_process';
-import { rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { usStates } from '../../shared/geography/usStates';
 
 const temporaryCache = await vi.hoisted(async () => {
@@ -14,7 +14,7 @@ const temporaryCache = await vi.hoisted(async () => {
     return directory;
 });
 vi.mock('child_process', () => ({ execFileSync: vi.fn() }));
-import { fetchRecentRecords, fetchStateForDate } from '../sync-temperatures.js';
+import { fetchRecentRecords, fetchStateForDate, MONTHLY_THRESHOLD_VERSION } from '../sync-temperatures.js';
 
 const states = usStates.filter(state => state.abbr !== 'AK' && state.abbr !== 'HI');
 const coverage = { expectedStates: states.map(state => state.abbr), completedStates: states.map(state => state.abbr) };
@@ -52,14 +52,54 @@ afterAll(() => { rmSync(temporaryCache, { recursive: true, force: true }); vi.un
 function archive(date: string, breaksRecords: boolean, verified = true) {
     return {
         date,
+        monthlyThresholdVersion: MONTHLY_THRESHOLD_VERSION,
         observations: stations.map(station => ({ uid: station.uid, maxt: breaksRecords ? 110 : 90, mint: 10, rh: 100, rl: 0 })),
         ...(verified ? { coverage } : {}),
     };
 }
 
 describe('recent temperature archive reuse', () => {
+    it('rebuilds the rolling summary from a staged repair before its S3 upload', async () => {
+        const stale = { ...archive(date, true), monthlyThresholdVersion: 1 };
+        bucket.set('daily/2026/11/' + date + '.json', stale);
+        const repaired = { ...stale, monthlyThresholdVersion: MONTHLY_THRESHOLD_VERSION,
+            observations: stale.observations.map(observation => ({ ...observation, mh: 105, mhd: '2020-11-01' })) };
+        const directory = temporaryCache + '/daily/2026/11';
+        const filename = directory + '/' + date + '.json';
+        mkdirSync(directory, { recursive: true });
+        writeFileSync(filename, JSON.stringify(repaired));
+        try {
+            const result = await fetchRecentRecords(1);
+            expect(fetch).not.toHaveBeenCalled();
+            expect(result.recentRecords.last7Days).toHaveLength(48);
+            expect(result.recentRecords.last7Days.every(record => record.recordScope === 'monthly' && record.prevRecordF === 105)).toBe(true);
+        } finally { rmSync(filename, { force: true }); }
+    });
+
+    it('repairs stale thresholds even when the old summary claims complete coverage', async () => {
+        bucket.set('recentRecords.json', { monthlyThresholdVersion: 1, dates: [date], yesterday: [previousRecord], last7Days: [previousRecord], coverageByDate: { [date]: coverage } });
+        const staleArchive = { ...archive(date, true), monthlyThresholdVersion: 1 };
+        const key = 'daily/2026/11/' + date + '.json';
+        bucket.set(key, staleArchive);
+        const requests: Array<{ date?: string; elems: Array<{ duration: string }> }> = [];
+        vi.mocked(globalThis.fetch).mockImplementation(async (_url, options) => {
+            const params = JSON.parse(String(options?.body));
+            requests.push(params);
+            const station = stations.find(station => station.state === params.state)!;
+            return new Response(JSON.stringify({ data: [{ meta: station, smry: [['105', '2020-11-01'], ['0', '2010-11-02']] }] }));
+        });
+        const result = await fetchRecentRecords(1);
+        expect(requests).toHaveLength(96);
+        expect(requests.every(request => !request.date && request.elems[0].duration === 'mtd')).toBe(true);
+        expect(result.recentRecords.monthlyThresholdVersion).toBe(MONTHLY_THRESHOLD_VERSION);
+        expect(result.recentRecords.last7Days).toHaveLength(48);
+        expect(result.recentRecords.last7Days.every(record => record.recordScope === 'monthly' && record.prevRecordF === 105)).toBe(true);
+        expect(result.dailyObservations.get(date)?.[0]).toMatchObject({ maxt: 110, mh: 105, mhd: '2020-11-01' });
+        expect(staleArchive.observations[0]).not.toHaveProperty('mh');
+    });
+
     it('reuses a verified summary without fetching observations or rebuilding records', async () => {
-        bucket.set('recentRecords.json', { dates: [date], yesterday: [previousRecord], last7Days: [previousRecord], coverageByDate: { [date]: coverage } });
+        bucket.set('recentRecords.json', { monthlyThresholdVersion: MONTHLY_THRESHOLD_VERSION, dates: [date], yesterday: [previousRecord], last7Days: [previousRecord], coverageByDate: { [date]: coverage } });
         bucket.set('daily/2026/11/' + date + '.json', archive(date, true));
         const result = await fetchRecentRecords(1);
         expect(result.recentRecords.last7Days).toEqual([previousRecord]);
@@ -87,7 +127,7 @@ describe('recent temperature archive reuse', () => {
             requests.push(params);
             const station = stations.find(station => station.state === params.state)!;
             const fields = params.date ? { data: ['110', '10'] }
-                : params.elems[0].interval === 'mly' ? { smry: ['120', '-20'] }
+                : params.elems[0].duration === 'mtd' ? { smry: [['120', '2000-11-01'], ['-20', '2000-11-01']] }
                     : { smry: [['100', '2000-07-01'], ['0', '2000-01-01'], '70', '40'] };
             return new Response(JSON.stringify({ data: [{ meta: station, ...fields }] }));
         });
@@ -119,17 +159,17 @@ describe('recent temperature archive reuse', () => {
         const phases: string[] = [];
         vi.mocked(globalThis.fetch).mockImplementation(async (_url, options) => {
             const params = JSON.parse(String(options?.body));
-            const phase = params.date ? 'daily' : params.elems[0].interval === 'mly' ? 'monthly' : 'historical';
+            const phase = params.date ? 'daily' : params.elems[0].duration === 'mtd' ? 'monthly' : 'historical';
             phases.push(phase);
             const fields = phase === 'daily' ? { data: ['110', '10'] }
-                : phase === 'monthly' ? { smry: ['120', '-20'] }
+                : phase === 'monthly' ? { smry: [['120', '2000-11-01'], ['-20', '2000-11-01']] }
                     : { smry: [['100', '2000-07-01'], ['0', '2000-01-01'], '70', '40'] };
             return new Response(JSON.stringify({ data: [{ meta: stations[0], ...fields }] }));
         });
         const pending = fetchStateForDate('DE', date, '11-03', 2026);
         await vi.runAllTimersAsync();
         const result = await pending;
-        expect(phases).toEqual(valid ? ['daily', 'monthly'] : ['daily', 'historical', 'monthly']);
+        expect(phases).toEqual(valid ? ['daily', 'monthly', 'monthly'] : ['daily', 'historical', 'monthly', 'monthly']);
         expect(result.broken).toEqual([expect.objectContaining({ type: 'high', tempF: 110, prevRecordF: 100 })]);
     });
 });

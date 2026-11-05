@@ -60,9 +60,18 @@ resource "aws_amplify_app" "rsmbtv" {
 
 # Production branch
 resource "aws_amplify_branch" "main" {
-  app_id      = aws_amplify_app.rsmbtv.id
-  branch_name = "main"
-  stage       = "PRODUCTION"
+  app_id            = aws_amplify_app.rsmbtv.id
+  branch_name       = "main"
+  stage             = "PRODUCTION"
+  enable_auto_build = false
+}
+
+# This branch uses production build commands and the same app-wide hosting rules.
+resource "aws_amplify_branch" "release_preview" {
+  app_id            = aws_amplify_app.rsmbtv.id
+  branch_name       = "release-preview"
+  stage             = "BETA"
+  enable_auto_build = false
 }
 
 # Dev branch

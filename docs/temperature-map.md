@@ -53,7 +53,8 @@ Recent snapshots become stale after two days. Standing-record snapshots become s
 The sync checks ACIS responses before it uses or caches them.
 Each POST request has up to three attempts.
 The sync waits one second before attempt two and two seconds before attempt three.
-Each attempt has a 60-second deadline, including the response body.
+Each attempt has a 60-second deadline by default, including the response body.
+Monthly threshold, full-month series, and station-series fallback requests use 120 seconds per attempt.
 HTTP 200 does not prove that a response contains valid data.
 Errors, empty responses, invalid station metadata, and invalid summary structures cause another attempt.
 A daily response must contain at least one usable station observation.
@@ -78,8 +79,16 @@ The complete file set is not one transaction.
 The workflow uploads files only after the script succeeds.
 An interrupted upload can leave different object versions visible together.
 
-Monthly historical requests end in the year before the observation.
-February includes a leap day only when that historical year has one.
+Monthly historical requests compare the matching calendar month in prior years.
+February sampling includes leap-day observations from leap years and complete February observations from ordinary years.
+A separate current-year sample includes only days preceding the target observation.
+Both fresh generation and archive repair require historical monthly values when calendar-date records prove that history exists.
+New stations without prior-year records can legitimately lack those values.
+
+Full archive repairs also verify current-month coverage for each archived station before reducing the series.
+If a state response omits a station, a cached `StnData` fallback must identify that station and supply every requested date with valid temperatures or explicit `M` values.
+At most eight omitted stations per state/month receive this fallback; broader omissions fail the repair.
+Malformed or unverifiable responses cannot replace archive thresholds or mark an archive as version 2.
 
 Run a local recent-record sync with a writable cache directory:
 
@@ -89,6 +98,24 @@ TEMP_DATA_DIR=.temp/temperatures node scripts/sync-temperatures.js --recent-only
 
 For a hosted sync, run the **Sync Temperatures** workflow.
 Enable **full_sync** to refresh state, county, and trend records.
+Enable **repair_monthly_archives** once to regenerate every stale archive's derived monthly fields before the rolling sync. It preserves raw observations, recovers missing station metadata through ACIS, and stages the results before uploading. Routine rolling syncs also repair old versions instead of reusing their summaries. Version 2 thresholds select the matching calendar month, include earlier observations in the current month, and retain monthly predecessor dates.
+
+To stage a repair locally from downloaded archives:
+
+```bash
+TEMP_DATA_DIR=.temp/temperature-repair TEMPERATURE_DATA_BUCKET='' npm run repair:temperature-archives -- --source /path/to/daily --stations /path/to/stations.json --out .temp/temperature-repair/daily
+```
+
+Without `--source`, the command downloads all archives and the station catalog from `TEMPERATURE_DATA_BUCKET` using AWS CLI credentials. It never uploads by itself.
+Use an output tree disjoint from the source archives, preserve the source station catalog, and inspect the staged archives before publishing.
+The release validator requires `monthlyThresholdVersion: 2` in the public recent summary.
+An existing version 2 marker does not establish that older staging passed the newer station-coverage checks: rebuild such staging from the original archives.
+
+The [November 5 backfill audit](performance/2026-11-05-temperature-full-backfill.json) records the fresh local staging, verified station fallbacks, and preservation checks.
+Twelve legacy daily thresholds disagree numerically with the newer historical monthly tables; none affects the audited October 29–November 4 window.
+Their cause remains unverified. The repair preserves raw observations and legacy daily thresholds without forcing the two derived snapshots to agree.
+Archive and schema checks do not independently establish historical source accuracy or resolve later ACIS corrections.
+Corrected data publication and production verification remain pending.
 Check `countyRecords.json`, `summary.json`, and recent per-date coverage after a full sync.
 The pending production verification is tracked in [TODO.md](../TODO.md).
 
@@ -140,7 +167,7 @@ Use the shared MapLibre entry point when adding a map. Its worker URL works on d
 Run the focused unit tests from the repository root:
 
 ```bash
-npx vitest run src/test/TemperatureMap.test.tsx src/test/temperatureDataStatus.test.tsx src/test/temperatureSchemas.test.ts src/test/temperatureMapLayers.test.ts src/test/temperatureSummaryPanel.test.tsx src/test/useTemperatureData.test.ts scripts/__tests__/syncTemperatures.test.ts scripts/__tests__/temperatureArchives.test.ts scripts/__tests__/temperaturePublication.test.ts scripts/__tests__/networkTimeouts.test.ts
+npx vitest run src/test/TemperatureMap.test.tsx src/test/temperatureDataStatus.test.tsx src/test/temperatureSchemas.test.ts src/test/temperatureMapLayers.test.ts src/test/temperatureSummaryPanel.test.tsx src/test/useTemperatureData.test.ts scripts/__tests__/syncTemperatures.test.ts scripts/__tests__/monthlyTemperatures.test.ts scripts/__tests__/repairTemperatureArchives.test.ts scripts/__tests__/temperatureArchives.test.ts scripts/__tests__/temperaturePublication.test.ts scripts/__tests__/networkTimeouts.test.ts
 ```
 
 Unit tests verify label collisions, late data, units, view changes, and escaped popup dates.

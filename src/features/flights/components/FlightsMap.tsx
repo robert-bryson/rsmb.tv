@@ -51,7 +51,9 @@ export function FlightsMap() {
   } = useFlightsFilters();
 
   const basemap = useMemo(() => getBasemap(basemapId), [basemapId]);
-  const textureState = useGlobeTextures(basemap);
+  // Terrain relief is optional and loads after the globe can be used.
+  const criticalTextures = useMemo(() => ({ ...basemap, bump: null }), [basemap]);
+  const textureState = useGlobeTextures(criticalTextures);
   const yearFit = useRef({
     year: selectedYear, view: selectedGlobeView,
     pending: selectedYear !== null && !selectedGlobeView,

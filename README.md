@@ -74,6 +74,8 @@ See the [basemap configuration guide](docs/carto-basemaps.md) for styles, attrib
 | `npm run test` | Run the Vitest suite and the historical temperature pipeline tests |
 | `npm run test:temperature-records` | Run the historical temperature pipeline tests |
 | `npm run test:temperatures:browser` | Build and test the temperature map with production assets |
+| `npm run test:page-recovery` | Test page-download recovery and the leading project image in a production bundle |
+| `npm run test:release-validation` | Test the release validator against local browser failure fixtures |
 | `npm run test:coverage` | Run tests with V8 coverage report |
 | `npm run watch` | Run terminal operations dashboard (`scripts/aws-watch.tsx`) |
 | `npm run typecheck` | Run all TypeScript project references without emitting files |
@@ -82,6 +84,8 @@ See the [basemap configuration guide](docs/carto-basemaps.md) for styles, attrib
 | `npm run sync-blogs:dev` | Sync blogs before local dev when `GOOGLE_BLOG_SHEET_ID` is configured |
 | `npm run sync-flights` | Sync flight data from Google Sheets (requires `GOOGLE_SHEET_ID`) |
 | `npm run sync-temperatures` | Generate temperature record JSON for upload to the S3-backed data CDN |
+| `npm run repair:temperature-archives -- --source <directory> --stations <file> --out <directory>` | Stage corrected monthly thresholds in a separate output tree |
+| `npm run validate:release -- --base-url <origin> --revision <sha>` | Validate a hosted preview; see the release guide for activation |
 | `npm run sync-tornadoes` | Sync NOAA/NCEI tornado tracks and generated public GeoJSON |
 | `npm run prepare-trip-assets -- <trip-id> --source <directory>` | Create trip image derivatives and sanitized route data |
 | `npm run prepare-trip-assets:dev` | Incrementally prepare local trip assets and report the output totals |
@@ -92,6 +96,7 @@ See the [basemap configuration guide](docs/carto-basemaps.md) for styles, attrib
 | `npm run audit` | Run `npm audit --audit-level=moderate` |
 
 The Amplify `dev` branch uses `build:dev`; other branches retain the published-only production build.
+Production releases validate `release-preview` before starting the main build. Activate the AWS role, branch settings, and repository variables using the [release guide](docs/release-validation.md).
 See Amplify's [branch-specific build commands](https://docs.aws.amazon.com/amplify/latest/userguide/edit-build-settings.html#setting-branch-specific-build-settings-with-scripting).
 Both builds verify tornado publication before content imports or bundling.
 Publish matching `annual-summary.json` and `trend-index.json` before releasing the frontend.

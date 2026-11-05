@@ -34,7 +34,8 @@
  *       rh / rl   — previous calendar-date record high / low (°F)
  *       rhd / rld — date of that previous record (YYYY-MM-DD, empty on very old stations)
  *       nh / nl   — 1950-baseline climatological normal high / low (°F)
- *       mh / ml   — all-time monthly high / low (°F)
+ *       mh / ml   — prior calendar-month high / low (°F)
+ *       mhd / mld — dates of those monthly predecessors
  *   $TEMP_DATA_DIR/stations.json — cumulative station metadata index
  *
  * USAGE
@@ -261,16 +262,30 @@ async function loadPreviousStationIndex() {
     const stations = previous.stations
         .filter(station => station && typeof station === 'object' && Number.isFinite(Number(station.uid)))
         .map(station => [Number(station.uid), { ...station, uid: Number(station.uid) }]);
-    return new Map(stations);
+    const index = new Map(stations);
+    // A staged archive repair can recover catalog entries missing from S3.
+    try {
+        const local = JSON.parse(readFileSync(localPath, 'utf8'));
+        return mergeStationIndexes(index, new Map(local.stations.map(station => [Number(station.uid), station])));
+    } catch { return index; }
 }
 
 async function loadDailyObservationArchive(dateStr) {
     const archivePath = dailySubpath(dateStr);
-    const archive = await loadJsonFromDataStore(
+    let archive = await loadJsonFromDataStore(
         `daily/${archivePath}`,
         resolve(DAILY_DIR, archivePath),
         `daily archive for ${dateStr}`
     );
+
+    // A full repair is staged before S3 upload. Rebuild the rolling summary
+    // from that corrected archive instead of requesting its thresholds again.
+    if (archive?.monthlyThresholdVersion !== MONTHLY_THRESHOLD_VERSION) {
+        try {
+            const staged = JSON.parse(readFileSync(resolve(DAILY_DIR, archivePath), 'utf8'));
+            if (staged.monthlyThresholdVersion === MONTHLY_THRESHOLD_VERSION && staged.date === dateStr && Array.isArray(staged.observations)) archive = staged;
+        } catch { /* No staged repair is available. */ }
+    }
 
     if (!archive || archive.date !== dateStr || !Array.isArray(archive.observations)) return null;
     return archive;
@@ -350,7 +365,7 @@ function assertStationSummaries(data, params) {
  * Categories (S3 prefix):
  *   - `hist-daily/{state}/{MMDD}`  — historical records for a calendar date
  *   - `county-alltime/{state}`     — county all-time records for a state
- *   - `monthly-extremes/{state}/{MM}` — monthly extreme records
+ *   - `monthly-v2/{state}/{MM}`     — calendar-month thresholds before the observation
  *
  * The cache is keyed by a SHA-256 hash of the full POST body so any
  * parameter change automatically busts the entry.
@@ -382,9 +397,17 @@ function writeCacheLocal(key, data) {
  * @param {object} params    POST body
  * @param {string} category  Cache prefix category (e.g. 'hist-daily/WY/03-25')
  */
-async function cachedPostJson(url, params, category) {
+async function cachedPostJson(url, params, category, { readLocal = false, timeoutMs = 60_000, validate: customValidate } = {}) {
     const key = cacheKey(category, params);
-    const validate = data => assertStationSummaries(data, params);
+    const validate = customValidate ?? (data => assertStationSummaries(data, params));
+    if (readLocal) {
+        try {
+            const local = JSON.parse(readFileSync(resolve(TEMP_DATA_DIR, key), 'utf8'));
+            validate(local);
+            ACIS_CACHE_STATS.hits++;
+            return local;
+        } catch { /* Resume repairs only from validated cached responses. */ }
+    }
 
     // Try S3 cache first
     const cached = await readCacheFromS3(key);
@@ -400,7 +423,7 @@ async function cachedPostJson(url, params, category) {
 
     // Cache miss — fetch from ACIS
     ACIS_CACHE_STATS.misses++;
-    const data = await postJson(url, params, { validate });
+    const data = await postJson(url, params, { validate, timeoutMs });
 
     // Only responses that passed validation enter the cache.
     writeCacheLocal(key, data);
@@ -651,6 +674,281 @@ async function fetchCountyMeta() {
 // ─── 4. Fetch Daily Record-Breaking Temperatures from ACIS ───────────
 
 const STATE_CONCURRENCY = 8; // Number of states to fetch in parallel
+export const MONTHLY_THRESHOLD_VERSION = 2;
+const MONTHLY_FIELDS = [[0, 'monthlyHigh', 'monthlyHighDate', 'rh'], [1, 'monthlyLow', 'monthlyLowDate', 'rl']];
+const MAX_MONTHLY_STATION_FALLBACKS = 8;
+
+function assertMonthlyStationData(data) {
+    assertStationData(data);
+    const uids = new Set();
+    for (const station of data.data) {
+        const raw = station.meta.uid;
+        const uid = numberOrNull(raw);
+        if (uid === null || !Number.isSafeInteger(uid) || uid < 0 || uids.has(uid)) throw new Error('Invalid or duplicate monthly station UID');
+        uids.add(uid);
+    }
+}
+
+function validMonthlyValue(value) {
+    return value === 'M' || numberOrNull(value) !== null;
+}
+
+function validMonthlyDate(value) {
+    if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+    const timestamp = Date.parse(`${value}T00:00:00Z`);
+    return Number.isFinite(timestamp) && new Date(timestamp).toISOString().slice(0, 10) === value;
+}
+
+function validDatedMonthlyValue(value) {
+    return Array.isArray(value) && value.length === 2 && validMonthlyValue(value[0])
+        && (value[0] === 'M' ? value[1] === 'M' || value[1] === '' : validMonthlyDate(value[1]));
+}
+
+function assertHistoricalMonthlyCoverage(monthly, observations, dateStr) {
+    for (const observation of observations) {
+        const uid = Number(observation.uid);
+        for (const [, field, , dailyField] of MONTHLY_FIELDS) {
+            // A prior calendar-date record proves that this calendar month's
+            // history contains this element. New stations may have no history.
+            if (numberOrNull(observation[dailyField]) !== null && monthly.get(uid)?.[field] == null) {
+                throw new Error(`Missing historical ${field} for station ${uid} on ${dateStr}`);
+            }
+        }
+    }
+}
+
+function mergeMonthlyReading(extremes, column, raw, date) {
+    const [, field, dateField] = MONTHLY_FIELDS[column];
+    const value = numberOrNull(raw);
+    if (value !== null && (extremes[field] == null || (column === 0 ? value > extremes[field] : value < extremes[field]))) {
+        extremes[field] = value;
+        extremes[dateField] = date && date !== 'M' ? date : '';
+    }
+}
+
+function mergeMonthlySummaries(monthly, response) {
+    for (const station of response.data) {
+        const uid = Number(station.meta.uid);
+        const extremes = { ...monthly.get(uid) };
+        for (const [column] of MONTHLY_FIELDS) mergeMonthlyReading(extremes, column, ...station.smry[column]);
+        monthly.set(uid, extremes);
+    }
+}
+
+async function monthlyResponse(params, category, requestCache, validate, url = 'https://data.rcc-acis.org/MultiStnData') {
+    const key = `${url}:${JSON.stringify(params)}`;
+    let pending = requestCache?.get(key);
+    if (!pending) {
+        pending = cachedPostJson(url, params, category, { readLocal: Boolean(requestCache), timeoutMs: 120_000, validate });
+        if (requestCache) {
+            requestCache.set(key, pending);
+            if (requestCache.size > 128) requestCache.delete(requestCache.keys().next().value);
+        }
+    }
+    try {
+        const response = await pending;
+        // Required station coverage can grow between archive dates even when
+        // those dates share the same cached full-month response.
+        if (validate) validate(response);
+        return response;
+    }
+    catch (error) { requestCache?.delete(key); throw error; }
+}
+
+async function stationMonthObservations(uid, month, monthEnd, requestCache) {
+    const days = Number(monthEnd.slice(8));
+    const response = await monthlyResponse({ uid, sdate: `${month}-01`, edate: monthEnd, meta: ['uid'], elems: ['maxt', 'mint'] },
+        `monthly-station-observations-v${MONTHLY_THRESHOLD_VERSION}/${uid}/${month}`, requestCache, data => {
+            if (data?.error || numberOrNull(data?.meta?.uid) !== uid || !Array.isArray(data?.data) || data.data.length !== days
+                || data.data.some((row, index) => !Array.isArray(row) || row.length !== 3
+                    || row[0] !== `${month}-${String(index + 1).padStart(2, '0')}` || !row.slice(1).every(validMonthlyValue))) {
+                throw new Error(`Invalid monthly observation series for station ${uid} in ${month}`);
+            }
+        }, 'https://data.rcc-acis.org/StnData');
+    return { meta: { uid }, data: response.data.map(row => row.slice(1)) };
+}
+
+/** Reduce dated monthly rows once for every month needed by a full backfill. */
+async function historicalMonthTable(abbr, year, requestCache, expectedObservations, dateStr) {
+    const params = { state: abbr, sdate: '1950-01', edate: `${year - 1}-12`, meta: ['uid'],
+        elems: ['maxt', 'mint'].map((name, index) => ({ name, interval: 'mly', duration: 'mly', reduce: { reduce: index === 0 ? 'max' : 'min', add: 'date' } })) };
+    const key = cacheKey(`monthly-table-v${MONTHLY_THRESHOLD_VERSION}/${abbr}`, params);
+    const assertCoverage = table => assertHistoricalMonthlyCoverage(
+        new Map(table.data.map(station => [station.uid, station.months[Number(dateStr.slice(5, 7)) - 1]])), expectedObservations, dateStr);
+    const existing = requestCache?.get(key);
+    if (existing) {
+        requestCache.delete(key);
+        requestCache.set(key, existing);
+        try {
+            const table = await existing;
+            assertCoverage(table);
+            return table;
+        } catch (error) {
+            requestCache.delete(key);
+            throw error;
+        }
+    }
+    const pending = (async () => {
+        const valid = table => table?.version === MONTHLY_THRESHOLD_VERSION && table.throughYear === year - 1 && Array.isArray(table.data) && table.data.length > 0
+            && new Set(table.data.map(station => station?.uid)).size === table.data.length
+            && table.data.every(station => station && Number.isSafeInteger(station.uid) && station.uid >= 0 && Array.isArray(station.months) && station.months.length === 12
+                && station.months.every((month, index) => month && typeof month === 'object' && !Array.isArray(month)
+                    && ['monthlyHigh', 'monthlyLow'].every(field => month[field] == null || Number.isFinite(month[field]))
+                    && MONTHLY_FIELDS.every(([, field, dateField]) => month[field] == null || (validMonthlyDate(month[dateField])
+                        && month[dateField].slice(5, 7) === String(index + 1).padStart(2, '0') && month[dateField] < `${year}-01-01`))));
+        const usable = table => {
+            if (!valid(table)) return false;
+            try { assertCoverage(table); return true; } catch { return false; }
+        };
+        try {
+            const local = JSON.parse(readFileSync(resolve(TEMP_DATA_DIR, key), 'utf8'));
+            if (usable(local)) return local;
+        } catch { /* Fetch or reconstruct missing/invalid local tables. */ }
+        const stored = await readJsonFromS3(key);
+        if (usable(stored)) return stored;
+        const rowCount = (year - 1950) * 12;
+        let table;
+        await postJson('https://data.rcc-acis.org/MultiStnData', params, { timeoutMs: 120_000, validate(data) {
+            assertMonthlyStationData(data);
+            if (data.data.some(station => !Array.isArray(station.data) || station.data.length !== rowCount
+                || station.data.some(row => !Array.isArray(row) || row.length !== 2 || !row.every(validDatedMonthlyValue)))) throw new Error('Invalid historical monthly series');
+            table = { version: MONTHLY_THRESHOLD_VERSION, throughYear: year - 1, data: data.data.map(station => {
+                const months = Array.from({ length: 12 }, () => ({}));
+                station.data.forEach((row, index) => {
+                    const month = months[index % 12];
+                    for (const [column] of MONTHLY_FIELDS) mergeMonthlyReading(month, column, row[column][0], row[column][1]);
+                });
+                return { uid: Number(station.meta.uid), months };
+            }) };
+            if (!valid(table)) throw new Error('Invalid reduced monthly table');
+            assertCoverage(table);
+        } });
+        writeCacheLocal(key, table);
+        return table;
+    })();
+    if (requestCache) {
+        requestCache.set(key, pending);
+        if (requestCache.size > 128) requestCache.delete(requestCache.keys().next().value);
+    }
+    try { return await pending; } catch (error) { requestCache?.delete(key); throw error; }
+}
+
+/** Calendar-month extremes before the observation, including this year's earlier days. */
+export async function fetchMonthlyThresholds(abbr, dateStr, requestCache, repairMonthEnd, expectedObservations = []) {
+    const year = Number(dateStr.slice(0, 4));
+    const mm = dateStr.slice(5, 7);
+    const lastDay = new Date(Date.UTC(year - 1, Number(mm), 0)).getUTCDate();
+    const ranges = repairMonthEnd ? [] : mm === '02'
+        // ACIS clamps an annual Feb 29 sample to Feb 28 in ordinary years.
+        // Anchor on a real leap day; 1950–51 require their own initial range.
+        ? [['1950-02-28', '1951-02-28'], ['1952-02-29', `${year - 1}-02-${lastDay}`]]
+        : [[`1950-${mm}-${lastDay}`, `${year - 1}-${mm}-${lastDay}`]];
+    const monthly = new Map();
+    if (repairMonthEnd) {
+        const table = await historicalMonthTable(abbr, year, requestCache, expectedObservations, dateStr);
+        for (const station of table.data) monthly.set(station.uid, { ...station.months[Number(mm) - 1] });
+    }
+    async function mergeSummary(sdate, edate, responseCache, checkCoverage = false) {
+        const params = {
+            state: abbr, sdate, edate, meta: ['uid'],
+            elems: ['maxt', 'mint'].map((name, index) => ({
+                name, interval: [1, 0, 0], duration: 'mtd',
+                reduce: { reduce: index === 0 ? 'max' : 'min', add: 'date' },
+                smry: { reduce: index === 0 ? 'max' : 'min', add: 'date' }, smry_only: 1,
+            })),
+        };
+        const response = await monthlyResponse(params, `monthly-v${MONTHLY_THRESHOLD_VERSION}/${abbr}/${mm}`, responseCache, data => {
+            assertMonthlyStationData(data);
+            if (data.data.some(station => !Array.isArray(station.smry) || station.smry.length !== 2
+                || !station.smry.every(validDatedMonthlyValue))) {
+                throw new Error('Invalid monthly station summaries');
+            }
+            if (checkCoverage) {
+                const combined = new Map(monthly);
+                mergeMonthlySummaries(combined, data);
+                assertHistoricalMonthlyCoverage(combined, expectedObservations, dateStr);
+            }
+        });
+        mergeMonthlySummaries(monthly, response);
+    }
+    for (let index = 0; index < ranges.length; index++) {
+        await mergeSummary(...ranges[index], requestCache, index === ranges.length - 1);
+    }
+    // Validate prior years before earlier days this year can hide an omitted
+    // historical station/element behind a plausible current-year threshold.
+    assertHistoricalMonthlyCoverage(monthly, expectedObservations, dateStr);
+    if (!repairMonthEnd && dateStr.slice(8) !== '01') {
+        const previousDay = new Date(`${dateStr}T00:00:00Z`);
+        previousDay.setUTCDate(previousDay.getUTCDate() - 1);
+        const end = previousDay.toISOString().slice(0, 10);
+        // These one-off queries must not evict the reusable prior-year set.
+        await mergeSummary(end, end);
+    }
+    if (repairMonthEnd && dateStr.slice(8) !== '01') {
+        // Full backfills share one daily series per state/month. Taking only
+        // the prefix before the target day excludes later and target readings.
+        const month = dateStr.slice(0, 7);
+        const params = { state: abbr, sdate: `${month}-01`, edate: repairMonthEnd, meta: ['uid'], elems: ['maxt', 'mint'] };
+        const days = Number(repairMonthEnd.slice(8));
+        const response = await monthlyResponse(params, `monthly-observations-v${MONTHLY_THRESHOLD_VERSION}/${abbr}/${month}`, requestCache, data => {
+            assertMonthlyStationData(data);
+            if (data.data.some(station => !Array.isArray(station.data) || station.data.length !== days
+                || station.data.some(row => !Array.isArray(row) || row.length !== 2 || !row.every(validMonthlyValue)))) throw new Error('Invalid monthly observation series');
+        });
+        const series = new Map(response.data.map(station => [Number(station.meta.uid), station]));
+        const missing = [...new Set(expectedObservations.map(observation => Number(observation.uid)))].filter(uid => !series.has(uid));
+        // Broad omissions indicate a truncated state response. Do not expand
+        // one failed state query into an unbounded set of station requests.
+        if (missing.length > MAX_MONTHLY_STATION_FALLBACKS) throw new Error(`Incomplete monthly observation coverage for ${abbr} in ${month}: ${missing.length} stations missing`);
+        for (const uid of missing) {
+            // MultiStnData can omit a station entirely. Only a verified dated
+            // series, including explicit M readings, establishes its coverage.
+            series.set(uid, await stationMonthObservations(uid, month, repairMonthEnd, requestCache));
+        }
+        for (const station of series.values()) {
+            const uid = Number(station.meta.uid);
+            const extremes = monthly.get(uid) ?? {};
+            for (let day = 1; day < Number(dateStr.slice(8)); day++) {
+                for (const [column] of MONTHLY_FIELDS) mergeMonthlyReading(extremes, column, station.data[day - 1][column], `${month}-${String(day).padStart(2, '0')}`);
+            }
+            monthly.set(uid, extremes);
+        }
+    }
+    return monthly;
+}
+
+/** Repairs derived fields without refetching or replacing archived observations. */
+export async function repairMonthlyArchive(dateStr, archive, stationIndex, requestCache, repairMonthEnd) {
+    if (archive.monthlyThresholdVersion === MONTHLY_THRESHOLD_VERSION) return archive;
+    const observationsByState = new Map();
+    for (const observation of archive.observations) {
+        if (numberOrNull(observation?.uid) === null) throw new Error(`Invalid archived station UID on ${dateStr}`);
+        const station = stationIndex.get(Number(observation.uid));
+        if (!station?.state) throw new Error(`Missing station metadata for ${observation.uid} on ${dateStr}`);
+        if (!observationsByState.has(station.state)) observationsByState.set(station.state, []);
+        observationsByState.get(station.state).push(observation);
+    }
+    const byState = new Map();
+    const stateList = [...observationsByState.keys()];
+    const repairConcurrency = 4;
+    for (let i = 0; i < stateList.length; i += repairConcurrency) {
+        await Promise.all(stateList.slice(i, i + repairConcurrency).map(async state => {
+            byState.set(state, await fetchMonthlyThresholds(state, dateStr, requestCache, repairMonthEnd, observationsByState.get(state)));
+        }));
+    }
+    const observations = archive.observations.map(observation => {
+        const next = { ...observation };
+        for (const key of ['mh', 'ml', 'mhd', 'mld']) delete next[key];
+        const uid = Number(next.uid);
+        const thresholds = byState.get(stationIndex.get(uid).state)?.get(uid);
+        if (thresholds?.monthlyHigh != null) next.mh = thresholds.monthlyHigh;
+        if (thresholds?.monthlyLow != null) next.ml = thresholds.monthlyLow;
+        if (thresholds?.monthlyHighDate) next.mhd = thresholds.monthlyHighDate;
+        if (thresholds?.monthlyLowDate) next.mld = thresholds.monthlyLowDate;
+        return next;
+    });
+    return { ...archive, observations, monthlyThresholdVersion: MONTHLY_THRESHOLD_VERSION };
+}
 
 /**
  * Fetch observations and historical records for a single state on a single date.
@@ -681,10 +979,13 @@ export async function fetchStateForDate(abbr, dateStr, mmdd, year) {
         await sleep(200);
 
         // Query 2: historical records + normals for this calendar date (all prior years)
+        const leapDay = mmdd === '02-29';
+        let previousYear = year - 1;
+        if (leapDay) while (new Date(Date.UTC(previousYear, 1, 29)).getUTCMonth() !== 1) previousYear--;
         const histParams = {
             state: abbr,
-            sdate: `1950-${mmdd}`,
-            edate: `${year - 1}-${mmdd}`,
+            sdate: `${leapDay ? 1952 : 1950}-${mmdd}`,
+            edate: `${previousYear}-${mmdd}`,
             meta: ['uid'],
             elems: [
                 { name: 'maxt', interval: [1, 0, 0], duration: 1, smry: { reduce: 'max', add: 'date' }, smry_only: 1 },
@@ -693,6 +994,11 @@ export async function fetchStateForDate(abbr, dateStr, mmdd, year) {
                 { name: 'mint', interval: [1, 0, 0], duration: 1, smry: { reduce: 'mean' }, smry_only: 1 },
             ],
         };
+        if (leapDay) {
+            // The ordinary annual step clamps Feb 29 to Feb 28. Sample real
+            // leap days for the daily predecessor and normals instead.
+            for (const element of histParams.elems) element.interval = [4, 0, 0];
+        }
         const hist = await cachedPostJson(
             'https://data.rcc-acis.org/MultiStnData', histParams,
             `hist-daily/${abbr}/${mmdd}`
@@ -717,33 +1023,11 @@ export async function fetchStateForDate(abbr, dateStr, mmdd, year) {
             };
         }
 
-        // Query 3: monthly extremes — all-time high/low for this calendar month
-        const mm = mmdd.slice(0, 2); // "03"
-        const lastDayOfMonth = new Date(Date.UTC(year - 1, parseInt(mm, 10), 0)).getUTCDate();
-        const monthlyParams = {
-            state: abbr,
-            sdate: `1950-${mm}-01`,
-            edate: `${year - 1}-${mm}-${String(lastDayOfMonth).padStart(2, '0')}`,
-            meta: ['uid'],
-            elems: [
-                { name: 'maxt', interval: 'mly', duration: 'mly', reduce: 'max', smry: { reduce: 'max' }, smry_only: 1 },
-                { name: 'mint', interval: 'mly', duration: 'mly', reduce: 'min', smry: { reduce: 'min' }, smry_only: 1 },
-            ],
-        };
-        const monthly = await cachedPostJson(
-            'https://data.rcc-acis.org/MultiStnData', monthlyParams,
-            `monthly-extremes/${abbr}/${mm}`
-        );
-        const monthlyMap = {};
-        for (const stn of monthly.data) {
-            const uid = stn.meta.uid;
-            const smry = stn.smry;
-            if (!uid) continue;
-            monthlyMap[uid] = {
-                monthlyHigh: numberOrNull(smry[0]),
-                monthlyLow: numberOrNull(smry[1]),
-            };
-        }
+        const expectedMonthlyObservations = obs.data.map(station => {
+            const uid = station.meta.uid;
+            return { uid, rh: histMap[uid]?.recordHigh, rl: histMap[uid]?.recordLow };
+        });
+        const monthlyMap = await fetchMonthlyThresholds(abbr, dateStr, undefined, undefined, expectedMonthlyObservations);
 
         // Compare observations against historical records
         for (const stn of obs.data || []) {
@@ -755,7 +1039,7 @@ export async function fetchStateForDate(abbr, dateStr, mmdd, year) {
 
             const [maxtStr, mintStr] = row;
             const rec = histMap[uid];
-            const monthlyExtremes = monthlyMap[uid];
+            const monthlyExtremes = monthlyMap.get(Number(uid));
 
             // Collect station metadata for index
             if (!stations.has(uid) && meta.ll) {
@@ -785,6 +1069,8 @@ export async function fetchStateForDate(abbr, dateStr, mmdd, year) {
                 if (monthlyExtremes) {
                     if (monthlyExtremes.monthlyHigh != null) obsEntry.mh = monthlyExtremes.monthlyHigh;
                     if (monthlyExtremes.monthlyLow != null) obsEntry.ml = monthlyExtremes.monthlyLow;
+                    if (monthlyExtremes.monthlyHighDate) obsEntry.mhd = monthlyExtremes.monthlyHighDate;
+                    if (monthlyExtremes.monthlyLowDate) obsEntry.mld = monthlyExtremes.monthlyLowDate;
                 }
                 observations.push(obsEntry);
             }
@@ -807,8 +1093,8 @@ export async function fetchStateForDate(abbr, dateStr, mmdd, year) {
                         elev: meta.elev ?? null,
                         type: 'high',
                         tempF: maxt,
-                        prevRecordF: rec.recordHigh,
-                        prevRecordDate: rec.recordHighDate,
+                        prevRecordF: monthlyBeat ? monthlyExtremes.monthlyHigh : rec.recordHigh,
+                        prevRecordDate: monthlyBeat ? monthlyExtremes.monthlyHighDate : rec.recordHighDate,
                         normalF: rec.normalHigh,
                         date: dateStr,
                         recordScope: monthlyBeat ? 'monthly' : 'daily',
@@ -830,8 +1116,8 @@ export async function fetchStateForDate(abbr, dateStr, mmdd, year) {
                         elev: meta.elev ?? null,
                         type: 'low',
                         tempF: mint,
-                        prevRecordF: rec.recordLow,
-                        prevRecordDate: rec.recordLowDate,
+                        prevRecordF: monthlyBeat ? monthlyExtremes.monthlyLow : rec.recordLow,
+                        prevRecordDate: monthlyBeat ? monthlyExtremes.monthlyLowDate : rec.recordLowDate,
                         normalF: rec.normalLow,
                         date: dateStr,
                         recordScope: monthlyBeat ? 'monthly' : 'daily',
@@ -871,6 +1157,8 @@ function archiveRecordScope(obs, type, tempF) {
 
 function buildArchivedBrokenRecord(dateStr, obs, station, type, tempF, prevRecordF, normalF) {
     const [lon = 0, lat = 0] = Array.isArray(station.ll) ? station.ll : [];
+    const recordScope = archiveRecordScope(obs, type, tempF);
+    const monthly = recordScope === 'monthly';
     return {
         stationName: station.name || 'Unknown',
         uid: station.uid,
@@ -882,11 +1170,11 @@ function buildArchivedBrokenRecord(dateStr, obs, station, type, tempF, prevRecor
         elev: station.elev ?? null,
         type,
         tempF,
-        prevRecordF,
-        prevRecordDate: previousRecordDate(obs, type),
+        prevRecordF: monthly ? numberOrNull(obs[type === 'high' ? 'mh' : 'ml']) : prevRecordF,
+        prevRecordDate: monthly ? (obs[type === 'high' ? 'mhd' : 'mld'] ?? '') : previousRecordDate(obs, type),
         normalF,
         date: dateStr,
-        recordScope: archiveRecordScope(obs, type, tempF),
+        recordScope,
     };
 }
 
@@ -899,7 +1187,7 @@ function buildArchivedBrokenRecord(dateStr, obs, station, type, tempF, prevRecor
  *   rh / rl   — previous calendar-date record high / low (°F)
  *   rhd / rld — date of that previous record (YYYY-MM-DD, may be empty on old archives)
  *   nh / nl   — 1950-baseline climatological normal high / low (°F)
- *   mh / ml   — all-time monthly high / low (°F)
+ *   mh / ml   — prior calendar-month high / low (°F)
  *
  * Any observation whose uid is absent from `stationIndex` is silently skipped
  * (station metadata is in a separate file and may lag archives for very new stations).
@@ -995,6 +1283,7 @@ export async function fetchRecentRecords(numDays = 7) {
     const coverageByDate = {};
     const datesToFetch = [];
     const allBroken = [];
+    const dailyObservations = new Map();
     let previousStationIndex = null;
 
     async function getPreviousStationIndex() {
@@ -1004,15 +1293,20 @@ export async function fetchRecentRecords(numDays = 7) {
 
     for (const dateStr of allDates) {
         if (await dailyExistsOnS3(dateStr)) {
-            if (previousDateSet.has(dateStr) && completeStateCoverage(previousRecentRecords?.coverageByDate?.[dateStr], stateAbbrs)) {
+            if (previousRecentRecords?.monthlyThresholdVersion === MONTHLY_THRESHOLD_VERSION
+                && previousDateSet.has(dateStr) && completeStateCoverage(previousRecentRecords?.coverageByDate?.[dateStr], stateAbbrs)) {
                 coverageByDate[dateStr] = previousRecentRecords.coverageByDate[dateStr];
                 allBroken.push(...previousBroken.filter(record => record.date === dateStr));
                 console.log(`  ✅ ${dateStr} — already on S3 and present in summary, skipping ACIS fetch`);
                 skippedDates.push(dateStr);
             } else {
-                const archive = await loadDailyObservationArchive(dateStr);
+                let archive = await loadDailyObservationArchive(dateStr);
                 const archivedStationIndex = await getPreviousStationIndex();
-                if (archive && archivedStationIndex.size > 0 && completeStateCoverage(archive.coverage, stateAbbrs)) {
+                if (archive && archive.observations.every(observation => archivedStationIndex.has(Number(observation.uid))) && completeStateCoverage(archive.coverage, stateAbbrs)) {
+                    if (archive.monthlyThresholdVersion !== MONTHLY_THRESHOLD_VERSION) {
+                        archive = await repairMonthlyArchive(dateStr, archive, archivedStationIndex);
+                        dailyObservations.set(dateStr, archive.observations);
+                    }
                     coverageByDate[dateStr] = archive.coverage;
                     const restoredBroken = buildBrokenRecordsFromDailyArchive(dateStr, archive, archivedStationIndex);
                     console.log(`  ♻️ ${dateStr} — rebuilt ${restoredBroken.length} broken records from daily archive`);
@@ -1033,11 +1327,11 @@ export async function fetchRecentRecords(numDays = 7) {
 
     if (datesToFetch.length === 0) {
         console.log('\n  All dates already archived on S3, nothing to fetch.');
-        const recentRecords = { ...buildRecentRecords(todayStr, yesterdayStr, allBroken, allDates), generatedAt: new Date().toISOString(), coverageByDate };
+        const recentRecords = { ...buildRecentRecords(todayStr, yesterdayStr, allBroken, allDates), generatedAt: new Date().toISOString(), coverageByDate, monthlyThresholdVersion: MONTHLY_THRESHOLD_VERSION };
         validateRecentRecords(recentRecords, allDates);
         return {
             recentRecords,
-            dailyObservations: new Map(),
+            dailyObservations,
             stationIndex: new Map(),
         };
     }
@@ -1045,7 +1339,6 @@ export async function fetchRecentRecords(numDays = 7) {
     console.log(`  📡 Fetching ${datesToFetch.length} missing date(s): ${datesToFetch.join(', ')}`);
 
     // Collect ALL observations per date for S3 archival (only for fetched dates)
-    const dailyObservations = new Map(); // dateStr → observation[]
     for (const d of datesToFetch) dailyObservations.set(d, []);
 
     // Collect unique station metadata for station index
@@ -1086,7 +1379,7 @@ export async function fetchRecentRecords(numDays = 7) {
         console.log(`  ${dateStr}: 🔥 ${dayHighs} highs, ❄️ ${dayLows} lows (${dayBroken} total)`);
     }
 
-    const recentRecords = { ...buildRecentRecords(todayStr, yesterdayStr, allBroken, allDates), generatedAt: new Date().toISOString(), coverageByDate };
+    const recentRecords = { ...buildRecentRecords(todayStr, yesterdayStr, allBroken, allDates), generatedAt: new Date().toISOString(), coverageByDate, monthlyThresholdVersion: MONTHLY_THRESHOLD_VERSION };
     validateRecentRecords(recentRecords, allDates);
 
     const yHighs = recentRecords.yesterday.filter(r => r.type === 'high').length;
@@ -1298,7 +1591,7 @@ function writeDailyObservations(dailyObservations, stationIndex, previousStation
         const subpath = dailySubpath(dateStr);
         const filePath = resolve(DAILY_DIR, subpath);
         mkdirSync(dirname(filePath), { recursive: true });
-        writeFileSync(filePath, JSON.stringify({ date: dateStr, count: observations.length, observations, coverage: coverageByDate[dateStr] }));
+        writeFileSync(filePath, JSON.stringify({ date: dateStr, count: observations.length, observations, coverage: coverageByDate[dateStr], monthlyThresholdVersion: MONTHLY_THRESHOLD_VERSION }));
         console.log(`  📁 daily/${subpath} — ${observations.length} observations`);
     }
 

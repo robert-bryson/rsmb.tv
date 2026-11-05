@@ -7,6 +7,7 @@
 interface CacheEntry<T> {
     data: T;
     timestamp: number;
+    expiresAt: number;
 }
 
 const cache = new Map<string, CacheEntry<unknown>>();
@@ -17,6 +18,30 @@ const activeRequestTokens = new Map<string, symbol>();
 const DEFAULT_TTL_MS = 5 * 60 * 1000;
 // Default request timeout: 30 seconds
 const DEFAULT_TIMEOUT_MS = 30 * 1000;
+export const MAX_CACHE_ENTRIES = 32;
+let expiryTimer: ReturnType<typeof setTimeout> | undefined;
+
+function pruneCache() {
+    const now = Date.now();
+    for (const [url, entry] of cache) {
+        if (entry.expiresAt <= now) cache.delete(url);
+    }
+    while (cache.size > MAX_CACHE_ENTRIES) cache.delete(cache.keys().next().value!);
+}
+
+function scheduleExpiry() {
+    clearTimeout(expiryTimer);
+    expiryTimer = undefined;
+    const nextExpiry = Math.min(...Array.from(cache.values(), entry => entry.expiresAt));
+    if (Number.isFinite(nextExpiry)) {
+        expiryTimer = setTimeout(() => { pruneCache(); scheduleExpiry(); }, Math.min(2_147_483_647, Math.max(1, nextExpiry - Date.now())));
+    }
+}
+
+/** Retained entry counts for diagnostics; pending requests are never evicted. */
+export function getCacheStats() {
+    return { entries: cache.size, pendingRequests: pendingRequests.size, capacity: MAX_CACHE_ENTRIES };
+}
 
 /**
  * Fetch data with caching and in-flight deduplication.
@@ -37,11 +62,14 @@ export async function fetchWithCache<T>(
     } = {}
 ): Promise<T> {
     const { ttl = DEFAULT_TTL_MS, forceRefresh = false, timeout = DEFAULT_TIMEOUT_MS } = options;
+    pruneCache();
 
     // Check cache first
     if (!forceRefresh) {
         const cached = cache.get(url);
         if (cached && Date.now() - cached.timestamp < ttl) {
+            cache.delete(url);
+            cache.set(url, cached);
             return cached.data as T;
         }
     }
@@ -70,10 +98,15 @@ export async function fetchWithCache<T>(
             const data = await response.json();
 
             if (activeRequestTokens.get(url) === requestToken) {
+                const timestamp = Date.now();
+                cache.delete(url);
                 cache.set(url, {
                     data,
-                    timestamp: Date.now(),
+                    timestamp,
+                    expiresAt: timestamp + (Number.isNaN(ttl) ? DEFAULT_TTL_MS : Math.max(0, ttl)),
                 });
+                pruneCache();
+                scheduleExpiry();
             }
 
             return data as T;
@@ -94,6 +127,8 @@ export async function fetchWithCache<T>(
  * Clear all cached data
  */
 export function clearCache(): void {
+    clearTimeout(expiryTimer);
+    expiryTimer = undefined;
     cache.clear();
     pendingRequests.clear();
     activeRequestTokens.clear();
@@ -106,6 +141,7 @@ export function invalidateCache(url: string): void {
     cache.delete(url);
     pendingRequests.delete(url);
     activeRequestTokens.delete(url);
+    scheduleExpiry();
 }
 
 /**

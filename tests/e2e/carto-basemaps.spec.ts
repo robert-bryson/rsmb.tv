@@ -94,8 +94,8 @@ for (const startup of ['normal', 'delayed module'] as const) {
             test(`switching from ${initialLabel} to ${basemap} replaces the rendered basemap`, async ({ page }) => {
                 const requestedStyles = await mockCartoTiles(page);
                 const [night, bump] = await Promise.all([solidTile('#c832c8'), solidTile('#808080')]);
-                await page.route('**/basemaps/earth-night.webp', route => route.fulfill({ contentType: 'image/png', body: night }));
-                await page.route('**/basemaps/earth-topology.webp', route => route.fulfill({ contentType: 'image/png', body: bump }));
+                await page.route('**/basemaps/earth-night*.webp', route => route.fulfill({ contentType: 'image/png', body: night }));
+                await page.route('**/basemaps/earth-topology*.webp', route => route.fulfill({ contentType: 'image/png', body: bump }));
                 await page.route('**/data/flights/*.geojson', route => route.fulfill({ json: { type: 'FeatureCollection', features: [] } }));
 
                 let releaseStartup!: () => void;

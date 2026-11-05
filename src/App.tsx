@@ -102,17 +102,24 @@ function AppRoutes() {
   );
 }
 
+function PageContent() {
+  const location = useLocation();
+  return (
+    <Layout>
+      <ErrorBoundary key={location.pathname}>
+        <Suspense fallback={<LoadingFallback />}>
+          <AppRoutes />
+        </Suspense>
+      </ErrorBoundary>
+    </Layout>
+  );
+}
+
 export default function App() {
   return (
     <Router basename={basename}>
       <ScrollToTop />
-      <ErrorBoundary>
-        <Layout>
-          <Suspense fallback={<LoadingFallback />}>
-            <AppRoutes />
-          </Suspense>
-        </Layout>
-      </ErrorBoundary>
+      <PageContent />
     </Router>
   );
 }

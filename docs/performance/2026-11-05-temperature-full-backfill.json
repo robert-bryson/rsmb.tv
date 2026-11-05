@@ -1,0 +1,2333 @@
+{
+  "checkedAt": "2026-11-05T20:07:22.780Z",
+  "source": "Immutable S3 archive snapshots via rsmbtv profile, rebuilt into fresh local staging after station-coverage fixes",
+  "provenance": {
+    "sourceDirectory": ".temp/temperature-monthly-repair/all-source",
+    "stagedDirectory": ".temp/temperature-review/daily",
+    "stationCatalog": ".temp/temperature-monthly-repair/stations.json",
+    "rollingSummary": ".temp/temperature-review/recentRecords.json",
+    "sourceArchiveSha256": "c092ed4a5a331850435f83e05ce5d80eb8777a26117dab77239da7d2001623c6",
+    "stagedArchiveSha256": "e81640ad040147a151884dd8b29f8643a895ca6bc8c1a2327ce5948ef2e91af2",
+    "hashEncoding": "Sorted relative POSIX path, NUL byte, then exact JSON bytes per archive",
+    "auditNetworkRequests": 0,
+    "previousUnverifiedStaging": ".temp/temperature-monthly-repair/all-daily",
+    "previousStagingSuperseded": true
+  },
+  "archiveCount": 226,
+  "firstDate": "2026-03-24",
+  "lastDate": "2026-11-04",
+  "observations": 492101,
+  "changedThresholds": 491959,
+  "reconstructedDailyRecords": 34214,
+  "previousMonthly": 275,
+  "repairedMonthly": 1558,
+  "transitions": {
+    "daily->monthly": 1344,
+    "monthly->daily": 61
+  },
+  "stationCount": 6877,
+  "recent": {
+    "records": 990,
+    "monthly": 23
+  },
+  "schemas": "all reconstructed dates and rolling summary passed shared/temperatureSchemas.ts",
+  "coverage": {
+    "stationMetadata": "All archived station UIDs present in merged catalog",
+    "historicalThresholdPresence": "Every archived rh/rl retains a finite corresponding repaired mh/ml",
+    "legitimatePriorYearHistoryOmissions": {
+      "observations": 492,
+      "stations": [
+        {
+          "state": "CO",
+          "uid": 118907,
+          "count": 20,
+          "firstDate": "2026-06-28",
+          "lastDate": "2026-11-03",
+          "anyArchivedDailyHistory": false
+        },
+        {
+          "state": "CO",
+          "uid": 118911,
+          "count": 20,
+          "firstDate": "2026-06-28",
+          "lastDate": "2026-11-03",
+          "anyArchivedDailyHistory": false
+        },
+        {
+          "state": "ID",
+          "uid": 5675,
+          "count": 12,
+          "firstDate": "2026-03-24",
+          "lastDate": "2026-11-02",
+          "anyArchivedDailyHistory": false
+        },
+        {
+          "state": "MA",
+          "uid": 115834,
+          "count": 195,
+          "firstDate": "2026-03-24",
+          "lastDate": "2026-11-04",
+          "anyArchivedDailyHistory": false
+        },
+        {
+          "state": "NE",
+          "uid": 112091,
+          "count": 19,
+          "firstDate": "2026-06-18",
+          "lastDate": "2026-08-17",
+          "anyArchivedDailyHistory": false
+        },
+        {
+          "state": "WA",
+          "uid": 26196,
+          "count": 226,
+          "firstDate": "2026-03-24",
+          "lastDate": "2026-11-04",
+          "anyArchivedDailyHistory": false
+        }
+      ]
+    },
+    "currentMonthStationFallbacks": {
+      "observations": 48,
+      "stationMonths": [
+        {
+          "state": "CA",
+          "month": "2026-04",
+          "uid": 3080,
+          "count": 4,
+          "dates": [
+            "2026-04-02",
+            "2026-04-03",
+            "2026-04-06",
+            "2026-04-07"
+          ],
+          "verifiedUID": true,
+          "contiguousDatedRows": 30,
+          "allHighAndLowValuesExplicitlyMissing": true,
+          "cachePath": ".temp/temperature-monthly-repair/cache/monthly-station-observations-v2/3080/2026-04/05074860fb1126d5.json"
+        },
+        {
+          "state": "GA",
+          "month": "2026-07",
+          "uid": 5114,
+          "count": 13,
+          "dates": [
+            "2026-07-02",
+            "2026-07-08",
+            "2026-07-09",
+            "2026-07-10",
+            "2026-07-11",
+            "2026-07-12",
+            "2026-07-15",
+            "2026-07-16",
+            "2026-07-18",
+            "2026-07-19",
+            "2026-07-22",
+            "2026-07-29",
+            "2026-07-30"
+          ],
+          "verifiedUID": true,
+          "contiguousDatedRows": 31,
+          "allHighAndLowValuesExplicitlyMissing": true,
+          "cachePath": ".temp/temperature-monthly-repair/cache/monthly-station-observations-v2/5114/2026-07/e426420b7da88c47.json"
+        },
+        {
+          "state": "IA",
+          "month": "2026-10",
+          "uid": 6703,
+          "count": 1,
+          "dates": [
+            "2026-10-12"
+          ],
+          "verifiedUID": true,
+          "contiguousDatedRows": 31,
+          "allHighAndLowValuesExplicitlyMissing": true,
+          "cachePath": ".temp/temperature-monthly-repair/cache/monthly-station-observations-v2/6703/2026-10/5fd8aac6866d884c.json"
+        },
+        {
+          "state": "WY",
+          "month": "2026-05",
+          "uid": 21733,
+          "count": 30,
+          "dates": [
+            "2026-05-02",
+            "2026-05-03",
+            "2026-05-04",
+            "2026-05-05",
+            "2026-05-06",
+            "2026-05-07",
+            "2026-05-08",
+            "2026-05-09",
+            "2026-05-10",
+            "2026-05-11",
+            "2026-05-12",
+            "2026-05-13",
+            "2026-05-14",
+            "2026-05-15",
+            "2026-05-16",
+            "2026-05-17",
+            "2026-05-18",
+            "2026-05-19",
+            "2026-05-20",
+            "2026-05-21",
+            "2026-05-22",
+            "2026-05-23",
+            "2026-05-24",
+            "2026-05-25",
+            "2026-05-26",
+            "2026-05-27",
+            "2026-05-28",
+            "2026-05-29",
+            "2026-05-30",
+            "2026-05-31"
+          ],
+          "verifiedUID": true,
+          "contiguousDatedRows": 31,
+          "allHighAndLowValuesExplicitlyMissing": true,
+          "cachePath": ".temp/temperature-monthly-repair/cache/monthly-station-observations-v2/21733/2026-05/9f8f808b98fa0432.json"
+        }
+      ]
+    }
+  },
+  "knownLimitations": {
+    "dailyMonthlyThresholdDisagreements": [
+      {
+        "date": "2026-03-26",
+        "state": "ID",
+        "uid": 29713,
+        "dailyField": "rh",
+        "archivedDailyThreshold": 71,
+        "historicalMonthlyThreshold": 70
+      },
+      {
+        "date": "2026-04-04",
+        "state": "GA",
+        "uid": 5209,
+        "dailyField": "rl",
+        "archivedDailyThreshold": 26,
+        "historicalMonthlyThreshold": 27
+      },
+      {
+        "date": "2026-04-04",
+        "state": "MN",
+        "uid": 10309,
+        "dailyField": "rl",
+        "archivedDailyThreshold": 4,
+        "historicalMonthlyThreshold": 5
+      },
+      {
+        "date": "2026-04-29",
+        "state": "CA",
+        "uid": 29451,
+        "dailyField": "rh",
+        "archivedDailyThreshold": 95,
+        "historicalMonthlyThreshold": 92
+      },
+      {
+        "date": "2026-06-26",
+        "state": "TX",
+        "uid": 34560,
+        "dailyField": "rh",
+        "archivedDailyThreshold": 104,
+        "historicalMonthlyThreshold": 102
+      },
+      {
+        "date": "2026-07-01",
+        "state": "CA",
+        "uid": 2000,
+        "dailyField": "rh",
+        "archivedDailyThreshold": 102,
+        "historicalMonthlyThreshold": 98
+      },
+      {
+        "date": "2026-07-12",
+        "state": "TX",
+        "uid": 32172,
+        "dailyField": "rl",
+        "archivedDailyThreshold": 57,
+        "historicalMonthlyThreshold": 59
+      },
+      {
+        "date": "2026-08-07",
+        "state": "SC",
+        "uid": 31724,
+        "dailyField": "rl",
+        "archivedDailyThreshold": 58,
+        "historicalMonthlyThreshold": 60
+      },
+      {
+        "date": "2026-08-12",
+        "state": "MS",
+        "uid": 10755,
+        "dailyField": "rl",
+        "archivedDailyThreshold": 54,
+        "historicalMonthlyThreshold": 56
+      },
+      {
+        "date": "2026-08-24",
+        "state": "AL",
+        "uid": 33735,
+        "dailyField": "rl",
+        "archivedDailyThreshold": 57,
+        "historicalMonthlyThreshold": 59
+      },
+      {
+        "date": "2026-08-28",
+        "state": "FL",
+        "uid": 4775,
+        "dailyField": "rl",
+        "archivedDailyThreshold": 52,
+        "historicalMonthlyThreshold": 54
+      },
+      {
+        "date": "2026-10-13",
+        "state": "CA",
+        "uid": 80334,
+        "dailyField": "rh",
+        "archivedDailyThreshold": 85,
+        "historicalMonthlyThreshold": 77
+      }
+    ],
+    "recentWindowDisagreements": 0,
+    "resolution": "Unresolved numerical conflicts between source vintages; cause unconfirmed. Preserve raw observations and legacy rh/rl without coercion. These checks establish schema, field presence, preservation and reconstruction, not independent historical source accuracy.",
+    "fallbackInterpretation": "Explicit M verifies the current upstream response and does not erase older archived temperatures or independently resolve source-vintage accuracy.",
+    "upstreamRevisionPolicy": "No automatic refresh policy for subsequent ACIS observation corrections."
+  },
+  "published": false,
+  "dates": [
+    {
+      "date": "2026-03-24",
+      "observations": 4271,
+      "changedThresholds": 4271,
+      "records": 787,
+      "previousMonthly": 0,
+      "repairedMonthly": 9,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-03-25",
+      "observations": 4223,
+      "changedThresholds": 4223,
+      "records": 1027,
+      "previousMonthly": 0,
+      "repairedMonthly": 103,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-03-26",
+      "observations": 4182,
+      "changedThresholds": 4182,
+      "records": 1176,
+      "previousMonthly": 0,
+      "repairedMonthly": 143,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-03-27",
+      "observations": 4116,
+      "changedThresholds": 4116,
+      "records": 859,
+      "previousMonthly": 0,
+      "repairedMonthly": 78,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-03-28",
+      "observations": 3966,
+      "changedThresholds": 3966,
+      "records": 489,
+      "previousMonthly": 0,
+      "repairedMonthly": 7,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-03-29",
+      "observations": 3927,
+      "changedThresholds": 3927,
+      "records": 648,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-03-30",
+      "observations": 3707,
+      "changedThresholds": 3707,
+      "records": 668,
+      "previousMonthly": 0,
+      "repairedMonthly": 4,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-03-31",
+      "observations": 2210,
+      "changedThresholds": 2210,
+      "records": 506,
+      "previousMonthly": 0,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-01",
+      "observations": 2169,
+      "changedThresholds": 2164,
+      "records": 237,
+      "previousMonthly": 0,
+      "repairedMonthly": 0,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-02",
+      "observations": 2132,
+      "changedThresholds": 2132,
+      "records": 117,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-03",
+      "observations": 2025,
+      "changedThresholds": 2025,
+      "records": 60,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-04",
+      "observations": 1737,
+      "changedThresholds": 1737,
+      "records": 101,
+      "previousMonthly": 0,
+      "repairedMonthly": 0,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-05",
+      "observations": 1728,
+      "changedThresholds": 1728,
+      "records": 163,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-06",
+      "observations": 2102,
+      "changedThresholds": 2102,
+      "records": 65,
+      "previousMonthly": 0,
+      "repairedMonthly": 0,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-07",
+      "observations": 2102,
+      "changedThresholds": 2102,
+      "records": 112,
+      "previousMonthly": 0,
+      "repairedMonthly": 11,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-08",
+      "observations": 2085,
+      "changedThresholds": 2085,
+      "records": 114,
+      "previousMonthly": 0,
+      "repairedMonthly": 14,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-09",
+      "observations": 2068,
+      "changedThresholds": 2068,
+      "records": 96,
+      "previousMonthly": 0,
+      "repairedMonthly": 6,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-10",
+      "observations": 2031,
+      "changedThresholds": 2031,
+      "records": 59,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-11",
+      "observations": 1724,
+      "changedThresholds": 1723,
+      "records": 55,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-12",
+      "observations": 1741,
+      "changedThresholds": 1741,
+      "records": 86,
+      "previousMonthly": 0,
+      "repairedMonthly": 0,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-13",
+      "observations": 2098,
+      "changedThresholds": 2098,
+      "records": 180,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-14",
+      "observations": 2123,
+      "changedThresholds": 2123,
+      "records": 73,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-15",
+      "observations": 2107,
+      "changedThresholds": 2107,
+      "records": 133,
+      "previousMonthly": 0,
+      "repairedMonthly": 4,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-16",
+      "observations": 2071,
+      "changedThresholds": 2071,
+      "records": 239,
+      "previousMonthly": 0,
+      "repairedMonthly": 16,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-17",
+      "observations": 2003,
+      "changedThresholds": 2003,
+      "records": 185,
+      "previousMonthly": 0,
+      "repairedMonthly": 5,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-18",
+      "observations": 1699,
+      "changedThresholds": 1699,
+      "records": 194,
+      "previousMonthly": 0,
+      "repairedMonthly": 7,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-19",
+      "observations": 1734,
+      "changedThresholds": 1734,
+      "records": 105,
+      "previousMonthly": 0,
+      "repairedMonthly": 4,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-20",
+      "observations": 2073,
+      "changedThresholds": 2073,
+      "records": 123,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-21",
+      "observations": 2060,
+      "changedThresholds": 2060,
+      "records": 294,
+      "previousMonthly": 0,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-22",
+      "observations": 2090,
+      "changedThresholds": 2090,
+      "records": 228,
+      "previousMonthly": 0,
+      "repairedMonthly": 4,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-23",
+      "observations": 2083,
+      "changedThresholds": 2083,
+      "records": 145,
+      "previousMonthly": 0,
+      "repairedMonthly": 13,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-24",
+      "observations": 2050,
+      "changedThresholds": 2050,
+      "records": 124,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-25",
+      "observations": 1714,
+      "changedThresholds": 1714,
+      "records": 67,
+      "previousMonthly": 0,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-26",
+      "observations": 1730,
+      "changedThresholds": 1730,
+      "records": 53,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-27",
+      "observations": 2146,
+      "changedThresholds": 2146,
+      "records": 114,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-28",
+      "observations": 2121,
+      "changedThresholds": 2121,
+      "records": 122,
+      "previousMonthly": 0,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-29",
+      "observations": 4012,
+      "changedThresholds": 4011,
+      "records": 84,
+      "previousMonthly": 1,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-04-30",
+      "observations": 2148,
+      "changedThresholds": 2148,
+      "records": 54,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-01",
+      "observations": 2056,
+      "changedThresholds": 2052,
+      "records": 81,
+      "previousMonthly": 0,
+      "repairedMonthly": 14,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-02",
+      "observations": 1292,
+      "changedThresholds": 1292,
+      "records": 126,
+      "previousMonthly": 0,
+      "repairedMonthly": 13,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-03",
+      "observations": 1714,
+      "changedThresholds": 1714,
+      "records": 212,
+      "previousMonthly": 0,
+      "repairedMonthly": 14,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-04",
+      "observations": 2077,
+      "changedThresholds": 2077,
+      "records": 153,
+      "previousMonthly": 0,
+      "repairedMonthly": 11,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-05",
+      "observations": 2092,
+      "changedThresholds": 2092,
+      "records": 100,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-06",
+      "observations": 2066,
+      "changedThresholds": 2066,
+      "records": 210,
+      "previousMonthly": 1,
+      "repairedMonthly": 4,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-07",
+      "observations": 2043,
+      "changedThresholds": 2043,
+      "records": 199,
+      "previousMonthly": 0,
+      "repairedMonthly": 6,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-08",
+      "observations": 1994,
+      "changedThresholds": 1994,
+      "records": 146,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-09",
+      "observations": 1710,
+      "changedThresholds": 1710,
+      "records": 60,
+      "previousMonthly": 0,
+      "repairedMonthly": 4,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-10",
+      "observations": 1828,
+      "changedThresholds": 1828,
+      "records": 65,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-11",
+      "observations": 2088,
+      "changedThresholds": 2088,
+      "records": 120,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-12",
+      "observations": 1954,
+      "changedThresholds": 1954,
+      "records": 179,
+      "previousMonthly": 0,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-13",
+      "observations": 2026,
+      "changedThresholds": 2026,
+      "records": 197,
+      "previousMonthly": 0,
+      "repairedMonthly": 8,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-14",
+      "observations": 2052,
+      "changedThresholds": 2052,
+      "records": 190,
+      "previousMonthly": 0,
+      "repairedMonthly": 4,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-15",
+      "observations": 2026,
+      "changedThresholds": 2026,
+      "records": 123,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-16",
+      "observations": 1712,
+      "changedThresholds": 1712,
+      "records": 134,
+      "previousMonthly": 1,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-17",
+      "observations": 1765,
+      "changedThresholds": 1765,
+      "records": 92,
+      "previousMonthly": 0,
+      "repairedMonthly": 0,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-18",
+      "observations": 2367,
+      "changedThresholds": 2366,
+      "records": 215,
+      "previousMonthly": 1,
+      "repairedMonthly": 9,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-19",
+      "observations": 2145,
+      "changedThresholds": 2145,
+      "records": 330,
+      "previousMonthly": 1,
+      "repairedMonthly": 30,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-20",
+      "observations": 2091,
+      "changedThresholds": 2091,
+      "records": 271,
+      "previousMonthly": 1,
+      "repairedMonthly": 27,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-21",
+      "observations": 2236,
+      "changedThresholds": 2235,
+      "records": 123,
+      "previousMonthly": 2,
+      "repairedMonthly": 12,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-22",
+      "observations": 2013,
+      "changedThresholds": 2013,
+      "records": 79,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-23",
+      "observations": 1729,
+      "changedThresholds": 1729,
+      "records": 37,
+      "previousMonthly": 0,
+      "repairedMonthly": 0,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-24",
+      "observations": 2046,
+      "changedThresholds": 2046,
+      "records": 63,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-25",
+      "observations": 1864,
+      "changedThresholds": 1864,
+      "records": 74,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-26",
+      "observations": 2424,
+      "changedThresholds": 2423,
+      "records": 126,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-27",
+      "observations": 2254,
+      "changedThresholds": 2253,
+      "records": 92,
+      "previousMonthly": 0,
+      "repairedMonthly": 8,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-28",
+      "observations": 2225,
+      "changedThresholds": 2224,
+      "records": 82,
+      "previousMonthly": 0,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-29",
+      "observations": 2050,
+      "changedThresholds": 2050,
+      "records": 77,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-30",
+      "observations": 1869,
+      "changedThresholds": 1868,
+      "records": 59,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-05-31",
+      "observations": 2010,
+      "changedThresholds": 2009,
+      "records": 109,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-01",
+      "observations": 2285,
+      "changedThresholds": 2278,
+      "records": 60,
+      "previousMonthly": 0,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-02",
+      "observations": 2208,
+      "changedThresholds": 2205,
+      "records": 71,
+      "previousMonthly": 0,
+      "repairedMonthly": 5,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-03",
+      "observations": 2259,
+      "changedThresholds": 2256,
+      "records": 104,
+      "previousMonthly": 0,
+      "repairedMonthly": 12,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-04",
+      "observations": 2256,
+      "changedThresholds": 2253,
+      "records": 149,
+      "previousMonthly": 0,
+      "repairedMonthly": 12,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-05",
+      "observations": 2031,
+      "changedThresholds": 2030,
+      "records": 111,
+      "previousMonthly": 0,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-06",
+      "observations": 1851,
+      "changedThresholds": 1850,
+      "records": 78,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-07",
+      "observations": 2112,
+      "changedThresholds": 2110,
+      "records": 63,
+      "previousMonthly": 1,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-08",
+      "observations": 2179,
+      "changedThresholds": 2179,
+      "records": 77,
+      "previousMonthly": 0,
+      "repairedMonthly": 4,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-09",
+      "observations": 2252,
+      "changedThresholds": 2250,
+      "records": 69,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-10",
+      "observations": 2464,
+      "changedThresholds": 2461,
+      "records": 66,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-11",
+      "observations": 2222,
+      "changedThresholds": 2219,
+      "records": 103,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-12",
+      "observations": 2185,
+      "changedThresholds": 2183,
+      "records": 207,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-13",
+      "observations": 1981,
+      "changedThresholds": 1979,
+      "records": 126,
+      "previousMonthly": 4,
+      "repairedMonthly": 6,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-14",
+      "observations": 2891,
+      "changedThresholds": 2888,
+      "records": 144,
+      "previousMonthly": 4,
+      "repairedMonthly": 7,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-15",
+      "observations": 2775,
+      "changedThresholds": 2773,
+      "records": 199,
+      "previousMonthly": 0,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-16",
+      "observations": 2278,
+      "changedThresholds": 2275,
+      "records": 143,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-17",
+      "observations": 2571,
+      "changedThresholds": 2568,
+      "records": 100,
+      "previousMonthly": 1,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-18",
+      "observations": 2210,
+      "changedThresholds": 2207,
+      "records": 75,
+      "previousMonthly": 1,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-19",
+      "observations": 1923,
+      "changedThresholds": 1922,
+      "records": 69,
+      "previousMonthly": 1,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-20",
+      "observations": 1883,
+      "changedThresholds": 1882,
+      "records": 67,
+      "previousMonthly": 1,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-21",
+      "observations": 2932,
+      "changedThresholds": 2929,
+      "records": 72,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-22",
+      "observations": 2268,
+      "changedThresholds": 2265,
+      "records": 68,
+      "previousMonthly": 0,
+      "repairedMonthly": 0,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-23",
+      "observations": 2217,
+      "changedThresholds": 2216,
+      "records": 74,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-24",
+      "observations": 2170,
+      "changedThresholds": 2167,
+      "records": 114,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-25",
+      "observations": 2176,
+      "changedThresholds": 2175,
+      "records": 83,
+      "previousMonthly": 0,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-26",
+      "observations": 2002,
+      "changedThresholds": 2002,
+      "records": 33,
+      "previousMonthly": 0,
+      "repairedMonthly": 0,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-27",
+      "observations": 2007,
+      "changedThresholds": 2006,
+      "records": 19,
+      "previousMonthly": 0,
+      "repairedMonthly": 0,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-28",
+      "observations": 1814,
+      "changedThresholds": 1811,
+      "records": 41,
+      "previousMonthly": 1,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-29",
+      "observations": 2027,
+      "changedThresholds": 2025,
+      "records": 94,
+      "previousMonthly": 2,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-06-30",
+      "observations": 2353,
+      "changedThresholds": 2351,
+      "records": 115,
+      "previousMonthly": 1,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-01",
+      "observations": 2045,
+      "changedThresholds": 2040,
+      "records": 123,
+      "previousMonthly": 1,
+      "repairedMonthly": 10,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-02",
+      "observations": 2085,
+      "changedThresholds": 2081,
+      "records": 283,
+      "previousMonthly": 4,
+      "repairedMonthly": 12,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-03",
+      "observations": 1732,
+      "changedThresholds": 1732,
+      "records": 296,
+      "previousMonthly": 8,
+      "repairedMonthly": 17,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-04",
+      "observations": 1674,
+      "changedThresholds": 1674,
+      "records": 242,
+      "previousMonthly": 13,
+      "repairedMonthly": 15,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-05",
+      "observations": 1809,
+      "changedThresholds": 1809,
+      "records": 120,
+      "previousMonthly": 6,
+      "repairedMonthly": 6,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-06",
+      "observations": 2238,
+      "changedThresholds": 2235,
+      "records": 89,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-07",
+      "observations": 2075,
+      "changedThresholds": 2075,
+      "records": 57,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-08",
+      "observations": 2450,
+      "changedThresholds": 2447,
+      "records": 57,
+      "previousMonthly": 1,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-09",
+      "observations": 2218,
+      "changedThresholds": 2215,
+      "records": 65,
+      "previousMonthly": 1,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-10",
+      "observations": 1997,
+      "changedThresholds": 1997,
+      "records": 62,
+      "previousMonthly": 1,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-11",
+      "observations": 1695,
+      "changedThresholds": 1695,
+      "records": 71,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-12",
+      "observations": 1883,
+      "changedThresholds": 1880,
+      "records": 167,
+      "previousMonthly": 14,
+      "repairedMonthly": 20,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-13",
+      "observations": 2009,
+      "changedThresholds": 2009,
+      "records": 180,
+      "previousMonthly": 42,
+      "repairedMonthly": 42,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-14",
+      "observations": 2061,
+      "changedThresholds": 2061,
+      "records": 158,
+      "previousMonthly": 23,
+      "repairedMonthly": 26,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-15",
+      "observations": 2040,
+      "changedThresholds": 2040,
+      "records": 210,
+      "previousMonthly": 14,
+      "repairedMonthly": 15,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-16",
+      "observations": 2001,
+      "changedThresholds": 2001,
+      "records": 106,
+      "previousMonthly": 3,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-17",
+      "observations": 1968,
+      "changedThresholds": 1968,
+      "records": 74,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-18",
+      "observations": 1690,
+      "changedThresholds": 1690,
+      "records": 88,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-19",
+      "observations": 1706,
+      "changedThresholds": 1706,
+      "records": 55,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-20",
+      "observations": 2059,
+      "changedThresholds": 2059,
+      "records": 102,
+      "previousMonthly": 0,
+      "repairedMonthly": 4,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-21",
+      "observations": 2042,
+      "changedThresholds": 2042,
+      "records": 115,
+      "previousMonthly": 3,
+      "repairedMonthly": 4,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-22",
+      "observations": 2030,
+      "changedThresholds": 2030,
+      "records": 116,
+      "previousMonthly": 3,
+      "repairedMonthly": 6,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-23",
+      "observations": 2020,
+      "changedThresholds": 2020,
+      "records": 214,
+      "previousMonthly": 1,
+      "repairedMonthly": 12,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-24",
+      "observations": 1984,
+      "changedThresholds": 1984,
+      "records": 198,
+      "previousMonthly": 2,
+      "repairedMonthly": 5,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-25",
+      "observations": 1686,
+      "changedThresholds": 1686,
+      "records": 144,
+      "previousMonthly": 2,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-26",
+      "observations": 1857,
+      "changedThresholds": 1854,
+      "records": 274,
+      "previousMonthly": 20,
+      "repairedMonthly": 24,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-27",
+      "observations": 2050,
+      "changedThresholds": 2050,
+      "records": 257,
+      "previousMonthly": 10,
+      "repairedMonthly": 14,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-28",
+      "observations": 2048,
+      "changedThresholds": 2048,
+      "records": 152,
+      "previousMonthly": 5,
+      "repairedMonthly": 9,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-29",
+      "observations": 2014,
+      "changedThresholds": 2014,
+      "records": 77,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-30",
+      "observations": 2010,
+      "changedThresholds": 2010,
+      "records": 77,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-07-31",
+      "observations": 2059,
+      "changedThresholds": 2059,
+      "records": 94,
+      "previousMonthly": 1,
+      "repairedMonthly": 5,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-01",
+      "observations": 1681,
+      "changedThresholds": 1678,
+      "records": 117,
+      "previousMonthly": 2,
+      "repairedMonthly": 17,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-02",
+      "observations": 1962,
+      "changedThresholds": 1960,
+      "records": 234,
+      "previousMonthly": 12,
+      "repairedMonthly": 49,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-03",
+      "observations": 2058,
+      "changedThresholds": 2058,
+      "records": 159,
+      "previousMonthly": 5,
+      "repairedMonthly": 26,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-04",
+      "observations": 2010,
+      "changedThresholds": 2010,
+      "records": 190,
+      "previousMonthly": 0,
+      "repairedMonthly": 10,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-05",
+      "observations": 2013,
+      "changedThresholds": 2013,
+      "records": 135,
+      "previousMonthly": 0,
+      "repairedMonthly": 0,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-06",
+      "observations": 1998,
+      "changedThresholds": 1998,
+      "records": 97,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-07",
+      "observations": 1974,
+      "changedThresholds": 1974,
+      "records": 121,
+      "previousMonthly": 0,
+      "repairedMonthly": 0,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-08",
+      "observations": 1681,
+      "changedThresholds": 1681,
+      "records": 115,
+      "previousMonthly": 4,
+      "repairedMonthly": 4,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-09",
+      "observations": 1693,
+      "changedThresholds": 1693,
+      "records": 109,
+      "previousMonthly": 2,
+      "repairedMonthly": 5,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-10",
+      "observations": 2052,
+      "changedThresholds": 2052,
+      "records": 118,
+      "previousMonthly": 2,
+      "repairedMonthly": 6,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-11",
+      "observations": 2015,
+      "changedThresholds": 2015,
+      "records": 93,
+      "previousMonthly": 1,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-12",
+      "observations": 2030,
+      "changedThresholds": 2030,
+      "records": 103,
+      "previousMonthly": 0,
+      "repairedMonthly": 0,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-13",
+      "observations": 1982,
+      "changedThresholds": 1982,
+      "records": 68,
+      "previousMonthly": 0,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-14",
+      "observations": 1984,
+      "changedThresholds": 1984,
+      "records": 73,
+      "previousMonthly": 1,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-15",
+      "observations": 1703,
+      "changedThresholds": 1703,
+      "records": 81,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-16",
+      "observations": 1704,
+      "changedThresholds": 1704,
+      "records": 66,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-17",
+      "observations": 2055,
+      "changedThresholds": 2055,
+      "records": 98,
+      "previousMonthly": 2,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-18",
+      "observations": 2043,
+      "changedThresholds": 2043,
+      "records": 130,
+      "previousMonthly": 2,
+      "repairedMonthly": 7,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-19",
+      "observations": 2015,
+      "changedThresholds": 2015,
+      "records": 129,
+      "previousMonthly": 3,
+      "repairedMonthly": 6,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-20",
+      "observations": 1985,
+      "changedThresholds": 1985,
+      "records": 123,
+      "previousMonthly": 1,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-21",
+      "observations": 1975,
+      "changedThresholds": 1975,
+      "records": 163,
+      "previousMonthly": 0,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-22",
+      "observations": 1677,
+      "changedThresholds": 1677,
+      "records": 132,
+      "previousMonthly": 0,
+      "repairedMonthly": 0,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-23",
+      "observations": 1705,
+      "changedThresholds": 1705,
+      "records": 100,
+      "previousMonthly": 1,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-24",
+      "observations": 2056,
+      "changedThresholds": 2056,
+      "records": 115,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-25",
+      "observations": 2010,
+      "changedThresholds": 2010,
+      "records": 137,
+      "previousMonthly": 2,
+      "repairedMonthly": 8,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-26",
+      "observations": 3232,
+      "changedThresholds": 3230,
+      "records": 155,
+      "previousMonthly": 1,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-27",
+      "observations": 3224,
+      "changedThresholds": 3222,
+      "records": 118,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-28",
+      "observations": 1976,
+      "changedThresholds": 1976,
+      "records": 57,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-29",
+      "observations": 1672,
+      "changedThresholds": 1672,
+      "records": 55,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-30",
+      "observations": 1674,
+      "changedThresholds": 1674,
+      "records": 61,
+      "previousMonthly": 0,
+      "repairedMonthly": 0,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-08-31",
+      "observations": 2196,
+      "changedThresholds": 2196,
+      "records": 87,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-01",
+      "observations": 2034,
+      "changedThresholds": 2031,
+      "records": 110,
+      "previousMonthly": 0,
+      "repairedMonthly": 17,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-02",
+      "observations": 2045,
+      "changedThresholds": 2045,
+      "records": 191,
+      "previousMonthly": 1,
+      "repairedMonthly": 26,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-03",
+      "observations": 2032,
+      "changedThresholds": 2032,
+      "records": 248,
+      "previousMonthly": 3,
+      "repairedMonthly": 44,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-04",
+      "observations": 1982,
+      "changedThresholds": 1982,
+      "records": 300,
+      "previousMonthly": 1,
+      "repairedMonthly": 32,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-05",
+      "observations": 1627,
+      "changedThresholds": 1627,
+      "records": 229,
+      "previousMonthly": 2,
+      "repairedMonthly": 25,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-06",
+      "observations": 1693,
+      "changedThresholds": 1693,
+      "records": 205,
+      "previousMonthly": 1,
+      "repairedMonthly": 33,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-07",
+      "observations": 1736,
+      "changedThresholds": 1736,
+      "records": 147,
+      "previousMonthly": 0,
+      "repairedMonthly": 7,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-08",
+      "observations": 2070,
+      "changedThresholds": 2070,
+      "records": 122,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-09",
+      "observations": 2019,
+      "changedThresholds": 2019,
+      "records": 222,
+      "previousMonthly": 1,
+      "repairedMonthly": 7,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-10",
+      "observations": 2052,
+      "changedThresholds": 2052,
+      "records": 200,
+      "previousMonthly": 1,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-11",
+      "observations": 1959,
+      "changedThresholds": 1959,
+      "records": 133,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-12",
+      "observations": 1666,
+      "changedThresholds": 1666,
+      "records": 115,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-13",
+      "observations": 1684,
+      "changedThresholds": 1684,
+      "records": 133,
+      "previousMonthly": 0,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-14",
+      "observations": 2068,
+      "changedThresholds": 2068,
+      "records": 153,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-15",
+      "observations": 2022,
+      "changedThresholds": 2022,
+      "records": 191,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-16",
+      "observations": 2002,
+      "changedThresholds": 2002,
+      "records": 268,
+      "previousMonthly": 2,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-17",
+      "observations": 2017,
+      "changedThresholds": 2017,
+      "records": 198,
+      "previousMonthly": 0,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-18",
+      "observations": 1955,
+      "changedThresholds": 1955,
+      "records": 257,
+      "previousMonthly": 1,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-19",
+      "observations": 1645,
+      "changedThresholds": 1645,
+      "records": 204,
+      "previousMonthly": 0,
+      "repairedMonthly": 0,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-20",
+      "observations": 1712,
+      "changedThresholds": 1712,
+      "records": 134,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-21",
+      "observations": 2065,
+      "changedThresholds": 2065,
+      "records": 104,
+      "previousMonthly": 0,
+      "repairedMonthly": 0,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-22",
+      "observations": 1837,
+      "changedThresholds": 1837,
+      "records": 103,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-23",
+      "observations": 2059,
+      "changedThresholds": 2059,
+      "records": 52,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-24",
+      "observations": 2030,
+      "changedThresholds": 2030,
+      "records": 60,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-25",
+      "observations": 1989,
+      "changedThresholds": 1989,
+      "records": 55,
+      "previousMonthly": 0,
+      "repairedMonthly": 4,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-26",
+      "observations": 1668,
+      "changedThresholds": 1668,
+      "records": 99,
+      "previousMonthly": 0,
+      "repairedMonthly": 9,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-27",
+      "observations": 1692,
+      "changedThresholds": 1692,
+      "records": 77,
+      "previousMonthly": 0,
+      "repairedMonthly": 7,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-28",
+      "observations": 2078,
+      "changedThresholds": 2078,
+      "records": 71,
+      "previousMonthly": 0,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-29",
+      "observations": 2082,
+      "changedThresholds": 2082,
+      "records": 50,
+      "previousMonthly": 0,
+      "repairedMonthly": 4,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-09-30",
+      "observations": 2165,
+      "changedThresholds": 2165,
+      "records": 48,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-01",
+      "observations": 2084,
+      "changedThresholds": 2081,
+      "records": 67,
+      "previousMonthly": 0,
+      "repairedMonthly": 16,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-02",
+      "observations": 1982,
+      "changedThresholds": 1981,
+      "records": 80,
+      "previousMonthly": 0,
+      "repairedMonthly": 8,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-03",
+      "observations": 2863,
+      "changedThresholds": 2861,
+      "records": 93,
+      "previousMonthly": 0,
+      "repairedMonthly": 12,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-04",
+      "observations": 1659,
+      "changedThresholds": 1658,
+      "records": 51,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-05",
+      "observations": 2039,
+      "changedThresholds": 2039,
+      "records": 108,
+      "previousMonthly": 1,
+      "repairedMonthly": 7,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-06",
+      "observations": 2043,
+      "changedThresholds": 2043,
+      "records": 166,
+      "previousMonthly": 1,
+      "repairedMonthly": 11,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-07",
+      "observations": 1888,
+      "changedThresholds": 1888,
+      "records": 171,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-08",
+      "observations": 2014,
+      "changedThresholds": 2014,
+      "records": 155,
+      "previousMonthly": 0,
+      "repairedMonthly": 0,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-09",
+      "observations": 1970,
+      "changedThresholds": 1970,
+      "records": 163,
+      "previousMonthly": 1,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-10",
+      "observations": 1644,
+      "changedThresholds": 1644,
+      "records": 139,
+      "previousMonthly": 1,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-11",
+      "observations": 1680,
+      "changedThresholds": 1680,
+      "records": 227,
+      "previousMonthly": 1,
+      "repairedMonthly": 7,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-12",
+      "observations": 1902,
+      "changedThresholds": 1902,
+      "records": 198,
+      "previousMonthly": 1,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-13",
+      "observations": 1993,
+      "changedThresholds": 1993,
+      "records": 373,
+      "previousMonthly": 1,
+      "repairedMonthly": 8,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-14",
+      "observations": 2023,
+      "changedThresholds": 2023,
+      "records": 529,
+      "previousMonthly": 1,
+      "repairedMonthly": 17,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-15",
+      "observations": 2000,
+      "changedThresholds": 2000,
+      "records": 332,
+      "previousMonthly": 0,
+      "repairedMonthly": 4,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-16",
+      "observations": 1996,
+      "changedThresholds": 1996,
+      "records": 242,
+      "previousMonthly": 1,
+      "repairedMonthly": 4,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-17",
+      "observations": 1633,
+      "changedThresholds": 1633,
+      "records": 160,
+      "previousMonthly": 0,
+      "repairedMonthly": 4,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-18",
+      "observations": 1632,
+      "changedThresholds": 1632,
+      "records": 74,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-19",
+      "observations": 2015,
+      "changedThresholds": 2015,
+      "records": 35,
+      "previousMonthly": 0,
+      "repairedMonthly": 0,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-20",
+      "observations": 2014,
+      "changedThresholds": 2013,
+      "records": 29,
+      "previousMonthly": 2,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-21",
+      "observations": 1924,
+      "changedThresholds": 1924,
+      "records": 39,
+      "previousMonthly": 2,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-22",
+      "observations": 680,
+      "changedThresholds": 680,
+      "records": 19,
+      "previousMonthly": 0,
+      "repairedMonthly": 0,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-23",
+      "observations": 1976,
+      "changedThresholds": 1976,
+      "records": 82,
+      "previousMonthly": 1,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-24",
+      "observations": 1631,
+      "changedThresholds": 1631,
+      "records": 74,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-25",
+      "observations": 1631,
+      "changedThresholds": 1631,
+      "records": 70,
+      "previousMonthly": 1,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-26",
+      "observations": 2044,
+      "changedThresholds": 2044,
+      "records": 94,
+      "previousMonthly": 1,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-27",
+      "observations": 2036,
+      "changedThresholds": 2036,
+      "records": 53,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-28",
+      "observations": 6328,
+      "changedThresholds": 6327,
+      "records": 200,
+      "previousMonthly": 0,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-29",
+      "observations": 6268,
+      "changedThresholds": 6267,
+      "records": 305,
+      "previousMonthly": 1,
+      "repairedMonthly": 2,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-30",
+      "observations": 6253,
+      "changedThresholds": 6252,
+      "records": 181,
+      "previousMonthly": 1,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-10-31",
+      "observations": 6140,
+      "changedThresholds": 6139,
+      "records": 90,
+      "previousMonthly": 0,
+      "repairedMonthly": 1,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-11-01",
+      "observations": 4887,
+      "changedThresholds": 4880,
+      "records": 84,
+      "previousMonthly": 0,
+      "repairedMonthly": 5,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-11-02",
+      "observations": 3848,
+      "changedThresholds": 3847,
+      "records": 101,
+      "previousMonthly": 0,
+      "repairedMonthly": 5,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-11-03",
+      "observations": 3497,
+      "changedThresholds": 3496,
+      "records": 111,
+      "previousMonthly": 0,
+      "repairedMonthly": 3,
+      "rawObservationsAndCoverageUnchanged": true
+    },
+    {
+      "date": "2026-11-04",
+      "observations": 2021,
+      "changedThresholds": 2021,
+      "records": 118,
+      "previousMonthly": 0,
+      "repairedMonthly": 6,
+      "rawObservationsAndCoverageUnchanged": true
+    }
+  ]
+}

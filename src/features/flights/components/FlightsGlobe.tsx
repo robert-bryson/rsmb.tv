@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, type RefObject } from 'react';
+import { useCallback, useEffect, useMemo, useState, type RefObject } from 'react';
 import Globe, { type GlobeMethods } from 'react-globe.gl';
 import { cartoRasterUrl } from '../../../maps/cartoBasemaps';
 import { useGlobeCamera } from '../hooks/useGlobeCamera';
@@ -68,6 +68,12 @@ export function FlightsGlobe({
     globeRef, navigationViewRef, selectedView, rotationEnabled: globeRotationEnabled, reducedMotion: prefersReducedMotion,
     tileUrl, onStopRotation, onViewChange,
   });
+  const [terrainReady, setTerrainReady] = useState(false);
+  useEffect(() => {
+    if (!ready) return;
+    const timer = setTimeout(() => setTerrainReady(true), 1000);
+    return () => clearTimeout(timer);
+  }, [ready]);
 
   useEffect(() => {
     const globe = globeRef.current;
@@ -255,7 +261,7 @@ export function FlightsGlobe({
       ref={globeRef}
       globeImageUrl={basemap.image}
       globeTileEngineUrl={tileUrl}
-      bumpImageUrl={basemap.bump ?? ''}
+      bumpImageUrl={terrainReady ? basemap.bump ?? '' : ''}
       backgroundColor={basemap.bg}
       atmosphereColor={basemap.atmosphere}
       atmosphereAltitude={ATMOSPHERE_ALTITUDE}

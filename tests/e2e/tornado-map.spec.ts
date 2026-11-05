@@ -107,10 +107,12 @@ for (const [width, renderer] of [[390, 'webgl'], [1280, 'webgl'], [1280, 'svg']]
         await expect(page.getByText('Loading tornado tracks...', { exact: true })).toHaveCount(0);
         if (exerciseRetry) {
             await expect(page.getByRole('alert')).toContainText('Unable to load tornado data');
+            await expect(page.getByTestId('tornado-map')).toHaveAttribute('data-map-state', 'error');
             await expect(page.getByRole('combobox', { name: 'Region', exact: true })).toBeEnabled();
             await page.getByRole('button', { name: 'Retry', exact: true }).click();
         }
         await expect(page.locator('#tornado-summary-panel h2')).toHaveText('1 tracks');
+        await expect(page.getByTestId('tornado-map')).toHaveAttribute('data-map-state', renderer === 'svg' ? 'fallback' : 'ready');
         const selectedYearRequests = trackRequests.length;
 
         const canvas = page.locator('canvas.maplibregl-canvas');

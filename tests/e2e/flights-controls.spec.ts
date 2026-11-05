@@ -58,7 +58,7 @@ test('keyboard shortcuts update filters, help, color modes, and optional layers'
 
 test('a failed globe texture can be retried without losing filters or the camera', async ({ page }) => {
     let fail = true;
-    await page.route('**/basemaps/earth-night.webp', route => fail ? route.abort('failed') : route.continue());
+    await page.route('**/basemaps/earth-night*.webp', route => fail ? route.abort('failed') : route.continue());
     await page.goto('/projects/flights/map?paths=0&stats=0&year=2024&lat=10&lng=20&alt=1');
     await expect(page.getByRole('alert')).toContainText('Failed to load globe textures');
     fail = false;

@@ -29,7 +29,7 @@ function mockStateResponses(high: unknown, low: unknown) {
     return vi.spyOn(globalThis, 'fetch').mockImplementation(async (_url, options) => {
         const params = JSON.parse(String(options?.body));
         const station = params.date ? { data: [high, low] }
-            : params.elems[0].interval === 'mly' ? { smry: ['100', '0'] }
+            : params.elems[0].duration === 'mtd' ? { smry: [['100', '2000-11-01'], ['0', '2000-11-01']] }
                 : { smry: [['100', '2000-07-01'], ['0', '2000-01-01'], '70', '40'] };
         return new Response(JSON.stringify({ data: [{ meta: { uid: 1 }, ...station }] }));
     });
@@ -55,10 +55,13 @@ describe('temperature publication coverage', () => {
         let requests = 0;
         const fetchMock = vi.spyOn(globalThis, 'fetch').mockImplementation(async (_url, options) => {
             const params = JSON.parse(String(options?.body));
-            const requestPhase = params.date ? 'daily' : params.elems[0].interval === 'mly' ? 'monthly' : 'historical';
-            if (requestPhase === phase && ++requests === 1) return new Response(JSON.stringify(failedResponse));
+            const requestPhase = params.date ? 'daily' : params.elems[0].duration === 'mtd' ? 'monthly' : 'historical';
+            if (requestPhase === phase) {
+                requests++;
+                if (requests === 1) return new Response(JSON.stringify(failedResponse));
+            }
             const station = params.date ? { data: ['90', '10'] }
-                : params.elems[0].interval === 'mly' ? { smry: ['100', '0'] }
+                : params.elems[0].duration === 'mtd' ? { smry: [['100', '2000-11-01'], ['0', '2000-11-01']] }
                     : { smry: [['100', '2000-07-01'], ['0', '2000-01-01'], '70', '40'] };
             return new Response(JSON.stringify({ data: [{ meta: { uid: 7 }, ...station }] }));
         });
@@ -66,7 +69,7 @@ describe('temperature publication coverage', () => {
             await expect(fetchStateForDate('DE', '2026-11-03', '11-03', 2026)).resolves.toMatchObject({
                 broken: [], observations: [{ uid: 7, maxt: 90, mint: 10 }],
             });
-            expect(requests).toBe(2);
+            expect(requests).toBe(phase === 'monthly' ? 3 : 2);
         } finally { fetchMock.mockRestore(); }
     });
 
@@ -111,7 +114,7 @@ describe('temperature publication coverage', () => {
         const fetchMock = vi.spyOn(globalThis, 'fetch').mockImplementation(async (_url, options) => {
             const params = JSON.parse(String(options?.body));
             const station = params.date ? { data: ['90', '10'] }
-                : params.elems[0].interval === 'mly' ? { smry: ['M', 'M'] }
+                : params.elems[0].duration === 'mtd' ? { smry: [['M', 'M'], ['M', 'M']] }
                     : { smry: [['M', 'M'], ['M', 'M'], 'M', 'M'] };
             return new Response(JSON.stringify({ data: [{ meta: { uid: 1 }, ...station }] }));
         });
@@ -130,12 +133,12 @@ describe('temperature publication coverage', () => {
         const fetchMock = vi.spyOn(globalThis, 'fetch').mockImplementation(async (_url, options) => {
             const params = JSON.parse(String(options?.body));
             requests.push(params);
-            const smry = !params.date && params.elems[0].interval === 'mly' ? ['M', 'M'] : [['M', 'M'], ['M', 'M'], 'M', 'M'];
+            const smry = !params.date && params.elems[0].duration === 'mtd' ? [['M', 'M'], ['M', 'M']] : [['M', 'M'], ['M', 'M'], 'M', 'M'];
             return new Response(JSON.stringify({ data: [{ meta: { uid: 1 }, data: ['90', '10'], smry }] }));
         });
         try {
             await fetchStateForDate('CA', `${year}-02-15`, '02-15', year);
-            expect(requests.at(-1)?.edate).toBe(expectedEnd);
+            expect(requests.at(-2)?.edate).toBe(expectedEnd);
         } finally { fetchMock.mockRestore(); }
     });
 
@@ -294,8 +297,8 @@ describe('temperature sync archive rebuild helpers', () => {
                 lon: -92.4903,
                 type: 'high',
                 tempF: 95,
-                prevRecordF: 90,
-                prevRecordDate: '2012-04-27',
+                prevRecordF: 94,
+                prevRecordDate: '',
                 normalF: 76,
                 date: '2026-04-27',
                 recordScope: 'monthly',

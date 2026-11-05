@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { fetchWithCache, clearCache, invalidateCache, preloadCache } from '../data/fetchCache';
+import { fetchWithCache, clearCache, invalidateCache, preloadCache, getCacheStats, MAX_CACHE_ENTRIES } from '../data/fetchCache';
 import * as legacyCache from '../features/flights/utils/fetchCache';
 import { jsonFetchResponse } from './helpers/fetch';
 
@@ -27,6 +27,42 @@ describe('fetchCache', () => {
         const cached = await fetchWithCache<typeof mockData>('/api/test');
         expect(cached).toEqual(mockData);
         expect(fetch).toHaveBeenCalledTimes(1);
+    });
+
+    it('evicts the least recently used result without disturbing a pending request', async () => {
+        const pending = deferredResponse();
+        globalThis.fetch = vi.fn().mockImplementation((url: string) => url === '/pending' ? pending.promise : Promise.resolve(jsonFetchResponse({ url })));
+        await fetchWithCache('/oldest');
+        await fetchWithCache('/retained');
+        const reader = fetchWithCache('/pending');
+        for (let index = 0; index < MAX_CACHE_ENTRIES - 2; index++) await fetchWithCache(`/entry/${index}`);
+        await fetchWithCache('/oldest'); // Promote this entry to most recently used.
+        await fetchWithCache('/overflow');
+        expect(getCacheStats()).toEqual({ entries: MAX_CACHE_ENTRIES, capacity: MAX_CACHE_ENTRIES, pendingRequests: 1 });
+        const count = vi.mocked(fetch).mock.calls.length;
+        await fetchWithCache('/oldest');
+        expect(fetch).toHaveBeenCalledTimes(count);
+        await fetchWithCache('/retained');
+        expect(fetch).toHaveBeenCalledTimes(count + 1);
+        const shared = fetchWithCache('/pending');
+        pending.resolve(jsonFetchResponse({ ready: true }));
+        expect(await reader).toEqual(await shared);
+        expect(vi.mocked(fetch).mock.calls.filter(([url]) => url === '/pending')).toHaveLength(1);
+    });
+
+    it('releases expired entries while idle and cannot extend them with a longer caller TTL', async () => {
+        vi.useFakeTimers();
+        try {
+            globalThis.fetch = vi.fn().mockResolvedValue(jsonFetchResponse({ value: true }));
+            await fetchWithCache('/short-lived', { ttl: 100 });
+            expect(getCacheStats().entries).toBe(1);
+            await vi.advanceTimersByTimeAsync(100);
+            expect(getCacheStats().entries).toBe(0);
+            await fetchWithCache('/short-lived', { ttl: 10_000 });
+            expect(fetch).toHaveBeenCalledTimes(2);
+            clearCache();
+            expect(vi.getTimerCount()).toBe(0);
+        } finally { clearCache(); vi.useRealTimers(); }
     });
 
     it('shares cached responses and invalidation with the legacy Flights import', async () => {

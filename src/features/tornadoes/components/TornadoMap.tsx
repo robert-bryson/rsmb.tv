@@ -1025,7 +1025,11 @@ export function TornadoMap() {
     const showStaticFallback = webglUnavailable;
 
     return (
-        <div className="relative h-full w-full overflow-hidden bg-[#020617] text-zinc-100">
+        <div
+            className="relative h-full w-full overflow-hidden bg-[#020617] text-zinc-100"
+            data-testid="tornado-map"
+            data-map-state={error ? 'error' : loading || (!mapLoaded && !showStaticFallback) ? 'loading' : showStaticFallback ? 'fallback' : 'ready'}
+        >
             <div ref={mapContainer} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
             {showStaticFallback && (
                 <StaticTornadoFallback

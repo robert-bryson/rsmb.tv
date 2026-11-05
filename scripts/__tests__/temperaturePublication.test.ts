@@ -72,7 +72,7 @@ it.each([
             globalThis.fetch = async (url, options) => {
                 if (options?.method !== 'POST') return new Response(JSON.stringify({ dates: [], last7Days: [], stations: [] }));
                 const params = JSON.parse(options.body);
-                const requestPhase = params.date ? 'daily' : params.elems[0].interval === 'mly' ? 'monthly' : 'historical';
+                const requestPhase = params.date ? 'daily' : params.elems[0].duration === 'mtd' ? 'monthly' : 'historical';
                 if (params.state === 'DE' && requestPhase === '${phase}') {
                     delawareAttempts++;
                     console.log('Delaware ${phase} attempt ' + delawareAttempts);
@@ -81,7 +81,7 @@ it.each([
                 const stateIndex = usStates.findIndex(state => state.abbr === params.state);
                 const meta = { uid: stateIndex + 1, name: 'Test', ll: [-100, 39], state: params.state };
                 const station = params.date ? { data: ['110', '-10'] }
-                    : params.elems[0].interval === 'mly' ? { smry: ['120', '-20'] }
+                    : params.elems[0].duration === 'mtd' ? { smry: [['120', '2000-11-01'], ['-20', '2000-11-01']] }
                         : { smry: [['100', '2000-07-01'], ['0', '2000-01-01'], '70', '40'] };
                 return new Response(JSON.stringify({ data: [{ meta, ...station }] }));
             };
@@ -99,7 +99,7 @@ it.each([
             expect(fs.existsSync(path.join(cache, 'daily'))).toBe(false);
             expect(fs.existsSync(path.join(cache, 'stations.json'))).toBe(false);
             if (phase !== 'daily') {
-                const category = phase === 'historical' ? 'hist-daily' : 'monthly-extremes';
+                const category = phase === 'historical' ? 'hist-daily' : 'monthly-v2';
                 expect(fs.existsSync(path.join(cache, 'cache', category, 'DE'))).toBe(false);
             }
         } else {

@@ -20,6 +20,10 @@ Validate external payloads in the caller before using them.
 The generic type parameter does not validate a response.
 
 - `ttl` sets the response lifetime in milliseconds. The default is five minutes.
+- Responses expire on a timer even when no further requests occur. A later caller cannot extend the stored lifetime.
+- At most 32 responses are retained. Reads promote entries; capacity eviction removes the least recently used response.
+- Pending requests are separate from stored responses and retain their deduplication and retry behavior during eviction.
+- `getCacheStats()` reports retained entries, pending requests, and capacity for diagnostics. The capacity bounds entry count, not payload bytes or a measured phone heap budget.
 - `timeout` sets the request deadline in milliseconds. The default is 30 seconds.
 - The deadline includes reading the response body.
 - `forceRefresh: true` bypasses a stored response and starts a new request.
@@ -31,6 +35,18 @@ The generic type parameter does not validate a response.
 
 Keep trip route loading in its existing module.
 Its reader tracking and cancellation rules differ from this cache.
+
+## Published data contracts
+
+Use [`shared/temperatureSchemas.ts`](../shared/temperatureSchemas.ts) for temperature payload validation in browser and Node callers.
+It owns record, summary, station-history, and climate-trend schemas and `parseTemperaturePayload`.
+The old feature path re-exports these definitions for compatibility.
+
+Use [`shared/flightSchemas.ts`](../shared/flightSchemas.ts) for published Flights GeoJSON validation.
+`flightsSchema` checks route geometry, coordinates, calendar dates, required airport properties, and duration metadata.
+`visitedAirportsSchema` checks point geometry, airport properties, visit counts, and visit dates.
+Release validation uses these contracts; a nonempty `FeatureCollection` alone does not establish compatibility.
+These modules have no browser runtime dependency and can be imported without loading map features.
 
 ## MapLibre maps
 

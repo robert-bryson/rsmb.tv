@@ -1,0 +1,310 @@
+{
+  "checkedAt": "2026-11-05T20:16:13.622Z",
+  "baselineRevision": "28abe7b8bd3846192c10e8eef5c09f422a53c63a",
+  "comparison": "Review-start uncommitted working tree versus final reviewed working tree",
+  "command": "vitest run --coverage --coverage.reporter=json-summary --coverage.reporter=text",
+  "before": {
+    "lines": {
+      "total": 11718,
+      "covered": 10082,
+      "skipped": 0,
+      "pct": 86.03
+    },
+    "statements": {
+      "total": 14037,
+      "covered": 11797,
+      "skipped": 0,
+      "pct": 84.04
+    },
+    "functions": {
+      "total": 3252,
+      "covered": 2680,
+      "skipped": 0,
+      "pct": 82.41
+    },
+    "branches": {
+      "total": 10935,
+      "covered": 8707,
+      "skipped": 0,
+      "pct": 79.62
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "after": {
+    "lines": {
+      "total": 11983,
+      "covered": 10348,
+      "skipped": 0,
+      "pct": 86.35
+    },
+    "statements": {
+      "total": 14365,
+      "covered": 12130,
+      "skipped": 0,
+      "pct": 84.44
+    },
+    "functions": {
+      "total": 3321,
+      "covered": 2745,
+      "skipped": 0,
+      "pct": 82.65
+    },
+    "branches": {
+      "total": 11195,
+      "covered": 8973,
+      "skipped": 0,
+      "pct": 80.15
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "reviewedModules": {
+    "scripts/sync-temperatures.js": {
+      "lines": {
+        "total": 755,
+        "covered": 573,
+        "skipped": 0,
+        "pct": 75.89
+      },
+      "functions": {
+        "total": 138,
+        "covered": 122,
+        "skipped": 0,
+        "pct": 88.4
+      },
+      "statements": {
+        "total": 919,
+        "covered": 693,
+        "skipped": 0,
+        "pct": 75.4
+      },
+      "branches": {
+        "total": 742,
+        "covered": 529,
+        "skipped": 0,
+        "pct": 71.29
+      }
+    },
+    "scripts/repair-temperature-archives.js": {
+      "lines": {
+        "total": 103,
+        "covered": 80,
+        "skipped": 0,
+        "pct": 77.66
+      },
+      "functions": {
+        "total": 17,
+        "covered": 15,
+        "skipped": 0,
+        "pct": 88.23
+      },
+      "statements": {
+        "total": 129,
+        "covered": 95,
+        "skipped": 0,
+        "pct": 73.64
+      },
+      "branches": {
+        "total": 95,
+        "covered": 69,
+        "skipped": 0,
+        "pct": 72.63
+      }
+    },
+    "scripts/release-proof.js": {
+      "lines": {
+        "total": 34,
+        "covered": 34,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 39,
+        "covered": 39,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 61,
+        "covered": 60,
+        "skipped": 0,
+        "pct": 98.36
+      }
+    },
+    "scripts/release-headers.js": {
+      "lines": {
+        "total": 69,
+        "covered": 66,
+        "skipped": 0,
+        "pct": 95.65
+      },
+      "functions": {
+        "total": 13,
+        "covered": 13,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 93,
+        "covered": 85,
+        "skipped": 0,
+        "pct": 91.39
+      },
+      "branches": {
+        "total": 74,
+        "covered": 67,
+        "skipped": 0,
+        "pct": 90.54
+      }
+    },
+    "scripts/release-amplify.js": {
+      "lines": {
+        "total": 30,
+        "covered": 24,
+        "skipped": 0,
+        "pct": 80
+      },
+      "functions": {
+        "total": 6,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 33.33
+      },
+      "statements": {
+        "total": 38,
+        "covered": 29,
+        "skipped": 0,
+        "pct": 76.31
+      },
+      "branches": {
+        "total": 25,
+        "covered": 18,
+        "skipped": 0,
+        "pct": 72
+      }
+    },
+    "scripts/verify-preview-revision.js": {
+      "lines": {
+        "total": 22,
+        "covered": 18,
+        "skipped": 0,
+        "pct": 81.81
+      },
+      "functions": {
+        "total": 1,
+        "covered": 1,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 27,
+        "covered": 21,
+        "skipped": 0,
+        "pct": 77.77
+      },
+      "branches": {
+        "total": 24,
+        "covered": 18,
+        "skipped": 0,
+        "pct": 75
+      }
+    },
+    "scripts/validate-release-preview.js": {
+      "lines": {
+        "total": 130,
+        "covered": 53,
+        "skipped": 0,
+        "pct": 40.76
+      },
+      "functions": {
+        "total": 26,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 34.61
+      },
+      "statements": {
+        "total": 170,
+        "covered": 63,
+        "skipped": 0,
+        "pct": 37.05
+      },
+      "branches": {
+        "total": 108,
+        "covered": 42,
+        "skipped": 0,
+        "pct": 38.88
+      }
+    },
+    "src/data/fetchCache.ts": {
+      "lines": {
+        "total": 64,
+        "covered": 64,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 13,
+        "covered": 13,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 70,
+        "covered": 70,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 30,
+        "covered": 29,
+        "skipped": 0,
+        "pct": 96.66
+      }
+    },
+    "src/utils/pageRecovery.ts": {
+      "lines": {
+        "total": 22,
+        "covered": 20,
+        "skipped": 0,
+        "pct": 90.9
+      },
+      "functions": {
+        "total": 6,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 50
+      },
+      "statements": {
+        "total": 30,
+        "covered": 27,
+        "skipped": 0,
+        "pct": 90
+      },
+      "branches": {
+        "total": 22,
+        "covered": 20,
+        "skipped": 0,
+        "pct": 90.9
+      }
+    }
+  },
+  "limitations": [
+    "V8 coverage measures Vitest execution. It does not include the separate Playwright browser integration suite.",
+    "Coverage totals include code added during the review; percentages alone do not establish correctness."
+  ]
+}

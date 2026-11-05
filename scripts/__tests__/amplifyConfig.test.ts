@@ -29,6 +29,7 @@ describe('amplify.yml', () => {
         expect(nodeVersion).toMatch(/^24\.\d+\.\d+$/);
         expect(preBuildCommands).toEqual([
             'nvm install',
+            'if [ "$AWS_BRANCH" = "main" ]; then node scripts/verify-preview-revision.js; fi',
             npmInstallCommand,
             'npm ci --cache .npm --prefer-offline',
         ]);
@@ -171,7 +172,8 @@ describe('dependency installation contracts', () => {
         expect(legacy.if).toBe(`vars.${variable} == ''`);
         expect(oidc.uses).toMatch(/^aws-actions\/configure-aws-credentials@[a-f0-9]{40}$/);
         expect(oidc.with['role-to-assume']).toBe(`\${{ vars.${variable} }}`);
-        expect(oidc.with['role-duration-seconds']).toBe(3600);
+        expect(oidc.with['role-duration-seconds']).toBe(filename.includes('temperatures')
+            ? '${{ inputs.repair_monthly_archives == true && 10800 || 3600 }}' : 3600);
         expect(oidc.with).not.toHaveProperty('aws-secret-access-key');
         expect(legacy.with['aws-secret-access-key']).toBe('${{ secrets.AWS_SECRET_ACCESS_KEY }}');
         for (const step of steps) expect(step.env ?? {}).not.toHaveProperty('AWS_SECRET_ACCESS_KEY');
