@@ -4,6 +4,8 @@ Production releases run after the CI and infrastructure checks in `.github/workf
 The release job advances `release-preview` to the candidate main revision, starts its Amplify build, waits for success, and validates its deployed URL.
 Both branches use the production build command and the same app-wide rewrites and headers.
 The separate `dev` branch continues to include draft content.
+The release checkout includes full Git history so it can prove the preview branch update is a fast-forward.
+A divergent preview branch stops the release; the workflow does not force-push over it.
 
 The validator checks:
 
