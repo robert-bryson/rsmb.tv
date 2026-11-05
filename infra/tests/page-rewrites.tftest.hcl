@@ -13,20 +13,6 @@ run "page_metadata_rewrites" {
 
   assert {
     condition = alltrue(flatten([
-      for collection in ["blog", "trips"] : [
-        for suffix in ["", "/"] : anytrue([
-          for index, rule in aws_amplify_app.rsmbtv.custom_rule :
-          rule.source == "/${collection}/<slug>.html${suffix}" &&
-          rule.target == "/${collection}/<slug>" && rule.status == "301" &&
-          index < index([for candidate in aws_amplify_app.rsmbtv.custom_rule : candidate.source], "/${collection}/<slug>${suffix}")
-        ])
-      ]
-    ]))
-    error_message = "HTML article files must redirect to clean paths before a generic article rule can append another extension."
-  }
-
-  assert {
-    condition = alltrue(flatten([
       for route in concat(
         [for route in keys(jsondecode(file("../src/content/sitePages.json"))) : route if route != "/"],
         keys(jsondecode(file("../src/content/siteAliases.json")))
@@ -39,22 +25,22 @@ run "page_metadata_rewrites" {
   }
 
   assert {
-    condition = alltrue(flatten([
-      for collection in ["blog", "trips"] : [for suffix in ["", "/"] : anytrue([
-        for rule in aws_amplify_app.rsmbtv.custom_rule :
-        rule.source == "/${collection}/<slug>${suffix}" && rule.target == "/${collection}/<slug>/" && rule.status == "200"
-      ])]
-    ]))
-    error_message = "Article rewrites must keep directory targets so missing HTML files cannot cause trailing-slash loops."
+    condition = alltrue([
+      for collection in ["blog", "trips"] : anytrue([
+        for rule in slice(aws_amplify_app.rsmbtv.custom_rule, 0, length(aws_amplify_app.rsmbtv.custom_rule) - 2) :
+        rule.source == "/${collection}/<*>" && rule.target == rule.source && rule.status == "200"
+      ])
+    ])
+    error_message = "Article collections must preserve the full request path for native HTML-file and directory-index lookup before the SPA fallback."
   }
 
   assert {
     condition = (
       aws_amplify_app.rsmbtv.custom_rule[length(aws_amplify_app.rsmbtv.custom_rule) - 1].source == "/<*>" &&
       aws_amplify_app.rsmbtv.custom_rule[length(aws_amplify_app.rsmbtv.custom_rule) - 1].target == "/index.html" &&
-      aws_amplify_app.rsmbtv.custom_rule[length(aws_amplify_app.rsmbtv.custom_rule) - 1].status == "404"
+      aws_amplify_app.rsmbtv.custom_rule[length(aws_amplify_app.rsmbtv.custom_rule) - 1].status == "404-200"
     )
-    error_message = "Missing files must reach the app's default 404 handler after normal routing."
+    error_message = "Missing files must reach the app through a 404 rewrite, not a redirect that replaces the requested URL."
   }
 
   assert {

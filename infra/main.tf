@@ -29,27 +29,13 @@ resource "aws_amplify_app" "rsmbtv" {
     }
   }
 
-  # Protect HTML file paths from receiving a second extension in article rewrites.
+  # Let Amplify resolve article HTML files and directory indexes before the SPA.
+  # Preserve the complete path, including extensions, for native file lookup.
   dynamic "custom_rule" {
-    for_each = flatten([for collection in ["blog", "trips"] : [
-      for suffix in ["", "/"] : {
-        source = "/${collection}/<slug>.html${suffix}"
-        target = "/${collection}/<slug>"
-      }
-    ]])
-    content {
-      source = custom_rule.value.source
-      target = custom_rule.value.target
-      status = "301"
-    }
-  }
-
-  # Article aliases retain the same canonical metadata as the current collection.
-  dynamic "custom_rule" {
-    for_each = ["/blog/<slug>", "/blog/<slug>/", "/trips/<slug>", "/trips/<slug>/"]
+    for_each = ["/blog/<*>", "/trips/<*>"]
     content {
       source = custom_rule.value
-      target = "${trimsuffix(custom_rule.value, "/")}/"
+      target = custom_rule.value
       status = "200"
     }
   }
@@ -61,11 +47,12 @@ resource "aws_amplify_app" "rsmbtv" {
     status = "200"
   }
 
-  # Render the app for missing files instead of repeating clean-URL redirects.
+  # Rewrite missing files to the app while preserving the requested URL.
+  # Amplify's "404" type redirects; "404-200" is its error rewrite type.
   custom_rule {
     source = "/<*>"
     target = "/index.html"
-    status = "404"
+    status = "404-200"
   }
 
   custom_headers = jsonencode(yamldecode(file("${path.module}/../customHttp.yml")).customHeaders)

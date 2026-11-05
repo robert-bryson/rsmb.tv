@@ -68,14 +68,16 @@ Legacy post indexes also retain these values when redirecting to `/posts`.
 Tracking parameters and fragments remain outside canonical URLs.
 
 Amplify rewrites public page paths to their generated HTML files.
-Article rewrites target directories with trailing slashes so Amplify can serve their `index.html` files.
-Removing that slash can make a missing article redirect to itself during Amplify's automatic URL cleanup.
+Article rewrites preserve the full request path so Amplify can select HTML files or directory indexes.
+Do not append extensions or remove trailing slashes in these rules.
+Those changes can break file URLs or make a missing article redirect to itself during Amplify's automatic URL cleanup.
 The page and article rules must precede the single-page application fallback.
-Article HTML-file redirects must precede generic article rewrites. Otherwise a filename can acquire a second `.html` suffix.
-The default 404 handler follows normal rewrites and serves the app for missing files.
+The default error handler follows normal rewrites and serves the app for missing files.
+Use Amplify's `404-200` rewrite type to keep the requested URL.
+The `404` type redirects to the fallback URL and prevents React from identifying the missing article.
 The local preview selects equivalent metadata and returns HTTP 404 for missing articles.
 Apply `infra/main.tf` with the HTML deployment. Otherwise direct requests can receive Home metadata.
-Deploy new article directory indexes before you switch existing article rewrites from HTML files to directories.
+Deploy new article directory indexes before you replace existing article rewrites with native file lookup.
 
 After you apply routing changes, redeploy the affected Amplify branch to clear cached HTML.
 Amplify can skip deployment when the build files have not changed.
@@ -163,5 +165,5 @@ terraform -chdir=infra test -no-color
 ```
 
 These tests use a mocked AWS provider. They do not apply infrastructure.
-The rewrite test checks page targets, article directory targets, the final 404 handler, and unique rule sources.
+The rewrite test checks page targets, article path preservation, the final error rewrite, and unique rule sources.
 Verify missing article URLs on the public host after routing changes. Local previews do not emulate Amplify's automatic redirects.
