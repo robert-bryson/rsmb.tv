@@ -1,4 +1,4 @@
-import { expect, test, type Locator, type Page } from '@playwright/test';
+import { expect, test, type Locator, type Page, type Response } from '@playwright/test';
 import sharp from 'sharp';
 
 const routeData = {
@@ -294,6 +294,94 @@ test('Escape clears a day selection while keeping the map and day controls', asy
     await expect.poll(async () => (await routePixels(overview)).amber).toBeGreaterThan(10);
     await expect.poll(async () => (await routePixels(overview)).blue).toBeGreaterThan(10);
 });
+
+for (const input of ['pointer', 'Space'] as const) {
+    for (const timing of ['after click', 'during press', 'already loaded', 'after Explore', 'during Explore press'] as const) {
+        test(`preview day activation retains ${input} input with the map module ${timing}`, async ({ page }) => {
+            await page.addInitScript(() => {
+                const Observer = window.IntersectionObserver;
+                window.IntersectionObserver = class extends Observer {
+                    constructor(callback: IntersectionObserverCallback, options?: IntersectionObserverInit) {
+                        super((entries, observer) => {
+                            const overview = document.querySelector('[data-trip-map-viewport]');
+                            if (options?.threshold === 0.1 && entries.some(entry => entry.target === overview)) {
+                                if (entries.some(entry => entry.isIntersecting && entry.intersectionRatio >= 0.1)) {
+                                    // Deliver the real visibility entry while the preview control is pressed.
+                                    (window as Window & { activateOverview?: () => void }).activateOverview = () => callback(entries, observer);
+                                }
+                            } else callback(entries, observer);
+                        }, options);
+                    }
+                };
+            });
+            let releaseMap!: () => void;
+            const mapModule = new Promise<void>(resolve => { releaseMap = resolve; });
+            const mapModuleUrl = /\/assets\/TripRouteMap-[^/]+\.js$/;
+            let mapRequested = false;
+            let mapResponse: Response | undefined;
+            page.on('response', response => {
+                if (mapModuleUrl.test(response.url())) mapResponse = response;
+            });
+            await page.route(mapModuleUrl, async route => {
+                mapRequested = true;
+                await mapModule;
+                await route.continue();
+            });
+            try {
+                await page.emulateMedia({ reducedMotion: 'reduce' });
+                await page.goto('/trips/daily-test');
+                await page.keyboard.press('ArrowDown');
+                if (timing === 'already loaded') {
+                    releaseMap();
+                    const inlineMap = page.locator('[data-trip-map]').nth(1);
+                    await inlineMap.scrollIntoViewIfNeeded();
+                    await expect(inlineMap.locator('canvas')).toBeVisible();
+                }
+                const overview = page.locator('[data-trip-map]').first();
+                const day = overview.getByRole('button', { name: '2. Homebound' });
+                await day.scrollIntoViewIfNeeded();
+                await expect.poll(() => page.evaluate(() => typeof (window as Window & { activateOverview?: () => void }).activateOverview)).toBe('function');
+                if (timing === 'after Explore') {
+                    await overview.getByRole('button', { name: 'Explore interactive map' }).click();
+                    await expect.poll(() => mapRequested).toBe(true);
+                }
+                if (timing === 'during Explore press') {
+                    const explore = overview.getByRole('button', { name: 'Explore interactive map' });
+                    await explore.hover();
+                    await page.mouse.down();
+                    await page.evaluate(() => (window as Window & { activateOverview?: () => void }).activateOverview!());
+                    await expect.poll(() => mapRequested).toBe(true);
+                    await page.mouse.up();
+                }
+                if (input === 'pointer') {
+                    await overview.getByRole('button', { name: '1. Coastbound' }).focus();
+                    await day.hover();
+                }
+                else await day.focus();
+                await day.evaluate(button => { button.setAttribute('data-pressed-preview', 'true'); });
+                if (input === 'pointer') await page.mouse.down();
+                else await page.keyboard.down('Space');
+                await page.evaluate(() => (window as Window & { activateOverview?: () => void }).activateOverview!());
+                if (timing !== 'after click' && timing !== 'already loaded') releaseMap();
+                if (timing !== 'after click') {
+                    await expect.poll(() => Boolean(mapResponse)).toBe(true);
+                    await mapResponse!.finished();
+                }
+                // Allow a ready React transition to commit before releasing the control.
+                await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+                await expect(day).toHaveAttribute('data-pressed-preview', 'true');
+                if (input === 'pointer') await page.mouse.up();
+                else await page.keyboard.up('Space');
+                releaseMap();
+                await expect(overview.locator('canvas')).toBeVisible();
+                await expect(day).toHaveAttribute('aria-pressed', 'true');
+                if (input === 'Space') await expect(day).toBeFocused();
+            } finally {
+                releaseMap();
+            }
+        });
+    }
+}
 
 for (const timing of ['before', 'after'] as const) {
     test(`Escape resets the selected day ${timing} its focused preview becomes interactive`, async ({ page }) => {

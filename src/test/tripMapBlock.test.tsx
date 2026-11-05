@@ -11,8 +11,8 @@ vi.mock('../features/trips/components/TripRoutePreview', () => ({
     </div>,
 }));
 vi.mock('../features/trips/components/TripRouteMap', () => ({
-    TripRouteMap: ({ active, initialDayId }: { active: boolean; initialDayId?: string }) => <div>
-        <p>{active ? 'Active map' : 'Suspended map'}</p><p>Requested day: {initialDayId}</p><button>Map control</button>
+    TripRouteMap: ({ active, initialDayId, onExplore }: { active: boolean; initialDayId?: string; onExplore: () => void }) => <div>
+        <p>{active ? 'Active map' : 'Suspended map'}</p><p>Requested day: {initialDayId}</p><button onClick={onExplore}>Map control</button>
     </div>,
 }));
 
@@ -32,6 +32,12 @@ afterEach(() => {
 });
 
 describe('trip map lifecycle', () => {
+    it('activates without visibility observers when the API is unavailable', async () => {
+        vi.stubGlobal('IntersectionObserver', undefined);
+        renderMapBlock();
+        expect(await screen.findByText('Active map')).toBeVisible();
+    });
+
     it('ignores a stale visibility entry when trip facts have pushed the map below the viewport', async () => {
         const { notify } = observe();
         const { container } = renderMapBlock();
@@ -98,6 +104,17 @@ describe('trip map lifecycle', () => {
         fireEvent.blur(control);
         control.blur();
         await waitFor(() => expect(screen.getByText('Suspended map')).toBeInTheDocument());
+    });
+
+    it('reactivates a suspended map from its preview control', async () => {
+        const { notify } = observe();
+        renderMapBlock();
+        notify(0, true);
+        await screen.findByText('Active map');
+        notify(1, false);
+        expect(screen.getByText('Suspended map')).toBeInTheDocument();
+        fireEvent.click(screen.getByRole('button', { name: 'Map control' }));
+        expect(screen.getByText('Active map')).toBeInTheDocument();
     });
 
     it('allows explicit activation before the visibility observer fires', async () => {

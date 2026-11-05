@@ -27,6 +27,17 @@ function keepPreview() {
 }
 
 describe('preview selection ownership', () => {
+    it.each(['Escape', 'outside click'] as const)('clears a preview selection on %s before the map loads', dismissal => {
+        keepPreview();
+        render(story('/first.geojson'));
+        const day = screen.getByRole('button', { name: '1. Coastbound' });
+        fireEvent.click(day);
+        expect(day).toHaveAttribute('aria-pressed', 'true');
+        if (dismissal === 'Escape') fireEvent.keyDown(day, { key: 'Escape' });
+        else fireEvent.click(document.body);
+        expect(day).toHaveAttribute('aria-pressed', 'false');
+    });
+
     it.each([{ trackId: 'return' }, { stopId: 'finish' }])(
         'clears the overview day when the block changes focus to %j', async focus => {
             keepPreview();

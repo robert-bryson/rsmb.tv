@@ -1,13 +1,16 @@
-import { Component, Suspense, lazy, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { Component, Suspense, lazy, startTransition, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { TripRoutePreview } from '../features/trips/components/TripRoutePreview';
 import { useTripStory } from '../features/trips/TripStoryContext';
+import { useTripMapDismiss } from '../features/trips/useTripMapDismiss';
 import type { TripMapFocus } from '../features/trips/tripMapView';
 
 const Gallery = lazy(() => import('../features/trips/components/TripGallery').then(module => ({ default: module.TripGallery })));
-const Map = lazy(() => import('../features/trips/components/TripRouteMap').then(module => ({ default: module.TripRouteMap })));
+const loadMap = () => import('../features/trips/components/TripRouteMap').then(module => ({ default: module.TripRouteMap }));
+const Map = lazy(loadMap);
 
 type TripBlockBoundaryProps = { children: ReactNode; fallback: ReactNode; resetKey: unknown };
 type TripBlockBoundaryState = { failed: boolean; resetKey: unknown };
+type PreviewPress = { pointerId: number } | { key: string };
 
 class TripBlockBoundary extends Component<TripBlockBoundaryProps, TripBlockBoundaryState> {
     state = { failed: false, resetKey: this.props.resetKey };
@@ -41,12 +44,58 @@ export function TripMapBlock(props: TripMapFocus) {
         () => ({ routeUrl, stops: manifest.stops, days: manifest.days, trackId: props.trackId, dayId: props.dayId }),
         [routeUrl, manifest.stops, manifest.days, props.trackId, props.dayId],
     );
-    const [attempt, setAttempt] = useState(() => typeof IntersectionObserver === 'undefined' ? 1 : 0);
-    const [active, setActive] = useState(() => typeof IntersectionObserver === 'undefined');
+    const [attempt, setAttempt] = useState(0);
+    const [active, setActive] = useState(false);
     const [retainedHeight, setRetainedHeight] = useState<number>();
+    const [previewPress, setPreviewPress] = useState<PreviewPress>();
+    const previewRef = useRef<HTMLElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    useTripMapDismiss(previewRef, Boolean(previewDayId), ({ resetSelection }) => {
+        if (resetSelection) setPreviewSelection({ scope: previewScope });
+    });
     useEffect(() => {
-        if (!containerRef.current || typeof IntersectionObserver === 'undefined') return;
+        if (!previewPress) return;
+        // Continue loading even when a pressed preview delays the replacement.
+        // The lazy component and error boundary report a rejected import after release.
+        if (attempt) void loadMap().catch(() => {});
+        let releaseTimer: ReturnType<typeof setTimeout>;
+        const cancel = () => startTransition(() => setPreviewPress(undefined));
+        const release = () => {
+            clearTimeout(releaseTimer);
+            // Native clicks follow pointerup/keyup. Keep their target through that event.
+            releaseTimer = setTimeout(cancel, 0);
+        };
+        const releaseKey = (event: KeyboardEvent) => {
+            if ('key' in previewPress && event.key === previewPress.key) release();
+        };
+        const releasePointer = (event: PointerEvent) => {
+            if ('pointerId' in previewPress && event.pointerId === previewPress.pointerId) release();
+        };
+        const cancelPointer = (event: PointerEvent) => {
+            if ('pointerId' in previewPress && event.pointerId === previewPress.pointerId) cancel();
+        };
+        document.addEventListener('pointerup', releasePointer);
+        document.addEventListener('pointercancel', cancelPointer);
+        document.addEventListener('keyup', releaseKey);
+        window.addEventListener('blur', cancel);
+        return () => {
+            clearTimeout(releaseTimer);
+            document.removeEventListener('pointerup', releasePointer);
+            document.removeEventListener('pointercancel', cancelPointer);
+            document.removeEventListener('keyup', releaseKey);
+            window.removeEventListener('blur', cancel);
+        };
+    }, [attempt, previewPress]);
+    useEffect(() => {
+        if (!containerRef.current) return;
+        const activate = () => startTransition(() => {
+            setAttempt(value => value || 1);
+            setActive(true);
+        });
+        if (typeof IntersectionObserver === 'undefined') {
+            activate();
+            return;
+        }
         const observer = new IntersectionObserver(entries => {
             if (entries.some(entry => entry.isIntersecting && entry.intersectionRatio >= 0.1)) {
                 // Portalled trip facts may move the map after this entry was captured.
@@ -54,8 +103,8 @@ export function TripMapBlock(props: TripMapFocus) {
                 if (!bounds || bounds.height <= 0) return;
                 const visibleHeight = Math.min(bounds.bottom, window.innerHeight) - Math.max(bounds.top, 0);
                 if (visibleHeight / bounds.height < 0.1) return;
-                setAttempt(value => value || 1);
-                setActive(true);
+                // Keep the current preview's controls mounted while the map module loads.
+                activate();
             }
         }, { threshold: 0.1 });
         observer.observe(containerRef.current);
@@ -89,34 +138,60 @@ export function TripMapBlock(props: TripMapFocus) {
         };
     }, []);
     const explore = () => {
-        setActive(true);
-        setAttempt(value => value + 1);
+        startTransition(() => {
+            setActive(true);
+            setAttempt(value => value || 1);
+        });
+    };
+    const retry = () => {
+        startTransition(() => {
+            setActive(true);
+            setAttempt(value => value + 1);
+        });
     };
     const previewProps = {
         ...props,
         dayId: props.dayId ?? previewDayId,
         allowDaySelection: !props.dayId && !props.trackId && !props.stopId,
         onDaySelect: (dayId?: string) => setPreviewSelection({ scope: previewScope, dayId }),
+        figureRef: previewRef,
     };
     const preview = <TripRoutePreview {...previewProps} onExplore={explore} />;
     const fallback = <div>
         <p role="status" className="text-sm text-zinc-300">
             Interactive map unavailable. The route and story are still available.
         </p>
-        {preview}
+        <TripRoutePreview {...previewProps} onExplore={retry} />
     </div>;
     return (
         <div className="scroll-mt-24" data-trip-map>
             <div data-trip-facts-slot />
             <div ref={containerRef} data-trip-map-viewport
+                onPointerDownCapture={event => {
+                    if (event.button === 0 && event.isPrimary !== false && previewRef.current?.contains(event.target as Node)) {
+                        setPreviewPress({ pointerId: event.pointerId });
+                    }
+                }}
+                onKeyDownCapture={event => {
+                    if ((event.key === ' ' || event.key === 'Enter') && previewRef.current?.contains(event.target as Node)) {
+                        setPreviewPress({ key: event.key });
+                    }
+                }}
+                onClick={() => startTransition(() => setPreviewPress(undefined))}
+                onBlurCapture={event => {
+                    if (previewPress && 'key' in previewPress && !event.currentTarget.contains(event.relatedTarget)) {
+                        setPreviewPress(undefined);
+                    }
+                }}
                 style={!active && retainedHeight ? { minHeight: retainedHeight } : undefined}>
-                {attempt ? (
-                    <TripBlockBoundary key={attempt} resetKey={resetKey} fallback={fallback}>
-                        <Suspense fallback={<TripRoutePreview {...previewProps} />}>
-                            <Map {...props} initialDayId={previewDayId} active={active} onExplore={() => setActive(true)} />
-                        </Suspense>
-                    </TripBlockBoundary>
-                ) : preview}
+                {/* Initial activation retains the boundary; explicit retries replace it. */}
+                <TripBlockBoundary key={attempt || 1} resetKey={resetKey} fallback={fallback}>
+                    <Suspense fallback={<TripRoutePreview {...previewProps} />}>
+                        {attempt && !previewPress
+                            ? <Map {...props} initialDayId={previewDayId} active={active} onExplore={() => setActive(true)} />
+                            : preview}
+                    </Suspense>
+                </TripBlockBoundary>
             </div>
             <div data-trip-navigation-slot />
         </div>

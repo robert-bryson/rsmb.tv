@@ -62,6 +62,14 @@ export function About() {
         <ul className="space-y-2 text-sm">
           <li>
             <a
+              href="mailto:hello@rsmb.tv"
+              className="text-zinc-400 hover:text-violet-400"
+            >
+              hello@rsmb.tv
+            </a>
+          </li>
+          <li>
+            <a
               href="https://github.com/robert-bryson"
               target="_blank"
               rel="me noopener noreferrer"

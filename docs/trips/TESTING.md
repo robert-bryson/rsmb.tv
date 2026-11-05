@@ -74,6 +74,8 @@ npx playwright show-trace path/to/trace.zip
 
 ## Regression coverage
 
+### Trip content
+
 Run the trip authoring checks without Drive, Google access, or public assets:
 
 ```bash
@@ -106,6 +108,8 @@ Validate its shortcodes against the manifest after you change media placements.
 | Animations | Defer video loading, retain posters and attribution after failure, honor reduced motion, and preserve user pause choices across visibility changes. |
 | Content | Retain literal captions, article metadata, return filters, country and region filters, and existing geographic tag links. |
 
+### Panorama layout
+
 Panorama checks run with default scrollbars and visible classic scrollbars.
 Desktop Chromium must reserve 15 CSS pixels in the classic-scrollbar case.
 The scrollbar fixture preserves configured executables, arguments, and other launch options.
@@ -120,9 +124,33 @@ An oversized body verifies the DOM measurements.
 A separate case places five pixels of content overflow inside a 15-pixel gutter.
 Both cases use the same overflow guard as the panorama layout checks.
 
+### Map input and activation
+
 Inline day maps use clicks, keyboard activation, and touch in separate cases.
 Each input runs with normal motion and reduced motion. Touch cases require a phone project.
 The cases check painted markers, stop lists, route colors, and camera bounds.
+Preview activation checks deliver a real visibility entry while a day button is pressed.
+Each check uses pointer input or the Space key.
+The module loads after the click, during the press, or before the press through another map.
+An additional case starts loading with **Explore interactive map** before pressing a day.
+Another case activates automatically while **Explore interactive map** is pressed.
+The checks verify that the original button remains until release.
+They then verify selection in the interactive map and keyboard focus after replacement.
+This detects lost clicks from replacing a pressed button, including when the module is already loaded.
+Run these checks with:
+
+```bash
+PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- \
+  tests/trips/day-maps.spec.ts --grep 'preview day activation' --workers=2
+```
+
+Automatic activation loads the module while a preview control is pressed.
+It delays replacement until the native click completes.
+Cancellation, release outside the map, loss of keyboard focus, and window blur also permit replacement.
+Unit tests check these exit paths and suspension during a pending load.
+They also check activation without `IntersectionObserver` and releases from a second touch pointer.
+Repeated exploration retains the current boundary. Only a failed-map retry replaces it.
+
 Recovery, reset, and camera restoration checks move the pointer outside the map before comparing pixels.
 This excludes intentional hover styling from those comparisons.
 Repeat the layout and input checks with:
@@ -151,7 +179,8 @@ Run the focused map unit tests with:
 
 ```bash
 npx vitest run src/test/tripMapView.test.tsx src/test/tripRouteMap.test.tsx \
-  src/test/tripMapBlock.test.tsx src/test/tripMapBlockSelection.test.tsx \
+  src/test/tripMapBlock.test.tsx src/test/tripMapBlockActivation.test.tsx \
+  src/test/tripMapBlockSelection.test.tsx \
   src/test/tripBlockRecovery.test.tsx src/test/tripMapDayFocus.test.tsx
 ```
 
@@ -167,6 +196,8 @@ The delayed-basemap case holds Light tile responses while checking stop markers.
 It releases those responses after the checks finish, including after a failure.
 Unit tests use MapLibre's event dispatcher to check coalescing, repeated render events, and listener removal.
 They also reject stop callbacks from replaced renderers.
+
+### Photos and galleries
 
 Photo unit tests also check recovery after changes to responsive sources or image slot width.
 Adaptive gallery tests check proportional pairs, balanced rows, portrait spans, panorama rows, and exact gutter geometry.
@@ -207,6 +238,8 @@ PLAYWRIGHT_BASE_URL=http://127.0.0.1:4184 PLAYWRIGHT_SKIP_WEB_SERVER=1 PLAYWRIGH
 
 Stop Vite after the tests finish.
 
+### Articles and filters
+
 Page tests use fixed post metadata and trip summaries.
 Development-status tests use fixed publication, source, and asset states.
 Tests must not depend on a previous content import.
@@ -234,6 +267,8 @@ Run the post filter checks with:
 npx vitest run src/test/blogRegions.test.ts src/test/PostRegionFilters.test.tsx src/test/blogPages.test.tsx
 npm run test:e2e -- tests/e2e/post-regions.spec.ts
 ```
+
+### Animations
 
 Run animation validation and playback tests with:
 
