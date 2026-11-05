@@ -15,6 +15,13 @@ The validator checks:
 - Temperature schemas and version 2 monthly thresholds, flight route/airport schemas, matching tornado annual summary/index contracts, and requested yearly tornado geometry.
 - Application errors, failed required requests, map worker errors, and usable Flights, temperature, and tornado map startup.
 
+The validator disables browser HTTP caching so header checks inspect network responses.
+Chromium can omit HSTS when it reuses a cached worker response. A repeated-worker regression runs without fixture interception, which would otherwise hide this behavior.
+The routing behavior follows the [Playwright reference](https://playwright.dev/docs/api/class-browsercontext#browser-context-route).
+
+CI installs browser dependencies through `scripts/install-ci-browsers.sh`.
+On GitHub's Ubuntu runners, it uses the primary Ubuntu archive after the Azure mirror stalled on package downloads. Package signatures remain enabled, and the installation step has a ten-minute limit.
+
 After browser validation succeeds, the release job writes a proof to `s3://rsmbtv-temperature-data/release-validations/{full-commit-sha}/{normalized-preview-job-id}.json`.
 `RELEASE_VALIDATION_BUCKET` selects that bucket in CI. The release role can write only the proof prefix; sync roles cannot write it.
 The proof records the revision, preview origin, normalized Amplify job ID, validation time, and SHA-256 digest of the successful report. Leading zeroes are removed from job IDs.
@@ -30,7 +37,9 @@ The preview and production are separate builds of the same revision, with the sa
 
 ## Activation
 
-The repository changes alone do not update AWS or GitHub settings. Infrastructure activation, hosted validation, and corrected data publication remain pending.
+The preview branch, release role, production build setting, data CORS origin, and GitHub variables were activated on 2026-11-05 after approval.
+The audited repair was published for all 226 temperature archives, the station catalog, and the recent summary. The public summary serves monthly threshold version 2.
+The steps below describe initial setup and the checks required for each release. Repository changes alone do not update AWS or GitHub settings.
 
 1. Apply the infrastructure changes to create `release-preview`, disable automatic production builds, create the `rsmbtv-release` OIDC role with its scoped proof permission, and allow the preview hostname in the data bucket's CORS configuration. Preserve existing Amplify build environment values. The build guard derives the preview URL from Amplify's `AWS_APP_ID`.
 2. Set repository variables `AMPLIFY_APP_ID` and `AWS_RELEASE_ROLE_ARN` using the infrastructure outputs. Confirm that the release job's `RELEASE_VALIDATION_BUCKET` selects the intended data bucket. GitHub Actions needs permission to advance the `release-preview` branch.

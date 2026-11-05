@@ -83,6 +83,9 @@ export async function validateReleasePreview({ baseURL, revision, jobId, browser
         activeBrowser ??= await chromium.launch();
         context = await activeBrowser.newContext({ serviceWorkers: 'block' });
         page = await context.newPage();
+        // Chromium omits HSTS on reused cached workers. Inspect network responses.
+        // Fallback preserves any caller-provided fixture handlers.
+        await context.route('**/*', route => route.fallback());
         page.setDefaultTimeout(timeoutMs);
         page.on('pageerror', error => report.errors.push(error.message));
         page.on('console', message => {

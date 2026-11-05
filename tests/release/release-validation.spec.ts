@@ -48,7 +48,7 @@ const payloads = new Map<string, unknown>([
     ['/data/flights/flights.geojson', flights], ['/data/flights/visitedAirports.geojson', airports],
     ['/data/temperatures/recentRecords.json', recent], ['/data/temperatures/stateRecords.json', states],
     ['/data/temperatures/countyRecords.json', counties], ['/data/tornadoes/annual-summary.json', summarizeTornadoTrends(trendIndex)],
-    ['/data/tornadoes/trend-index.json', trendIndex],
+    ['/data/tornadoes/trend-index.json', trendIndex], ['/data/tornadoes/tracks/2025.geojson', tracks],
 ]);
 
 // External files keep the fixture under the real production CSP. Readiness
@@ -60,6 +60,11 @@ const ready = () => {
     if (map) { map.dataset.mapState = 'ready'; map.textContent = 'Map ready'; }
 };
 const json = url => fetch(url).then(response => response.json());
+const workerReady = () => new Promise(resolve => {
+    const worker = new Worker('/assets/map-worker.js');
+    worker.onmessage = () => { worker.terminate(); resolve(); };
+    worker.onerror = event => { event.preventDefault(); worker.terminate(); resolve(); };
+});
 if (location.pathname === '/projects/flights/map') {
     Promise.all([json('/data/flights/flights.geojson'), json('/data/flights/visitedAirports.geojson')]).then(() => {
         const label = document.createElement('div'); label.className = 'flight-map-label'; label.textContent = 'SEA'; main.append(label);
@@ -67,23 +72,21 @@ if (location.pathname === '/projects/flights/map') {
 } else if (location.pathname === '/projects/temperature-records/map') {
     const view = new URLSearchParams(location.search).get('view');
     const file = view === 'state' ? 'stateRecords' : view === 'county' ? 'countyRecords' : 'recentRecords';
-    json('/data/temperatures/' + file + '.json').then(ready);
+    json('/data/temperatures/' + file + '.json').then(workerReady).then(ready);
 } else if (location.pathname === '/projects/tornado-tracks/map') {
-    Promise.allSettled([json('/data/tornadoes/annual-summary.json'), json('${trackURL}')]).then(() => {
-        const worker = new Worker('/assets/map-worker.js');
-        worker.onmessage = () => {
-            ready(); worker.terminate();
-            if (main.dataset.failure === 'map-console') console.error('MapLibre error: fixture context failure');
-        };
-        worker.onerror = event => { event.preventDefault(); ready(); worker.terminate(); };
+    Promise.allSettled([json('/data/tornadoes/annual-summary.json'), json('${trackURL}')]).then(workerReady).then(() => {
+        ready();
+        if (main.dataset.failure === 'map-console') console.error('MapLibre error: fixture context failure');
     });
 }
 `;
 
-async function startPreview(failure?: Failure) {
+async function startPreview(failure?: Failure, localOnly = false) {
     const servedPreviews = new Set<string>();
+    const requests: string[] = [];
     async function respond(request: IncomingMessage, response: ServerResponse) {
         const pathname = new URL(request.url ?? '/', 'http://fixture.invalid').pathname;
+        requests.push(pathname);
         const headers = expectedHostingHeaders(pathname);
         if (failure === 'csp' && pathname === '/about') {
             headers['content-security-policy'] = headers['content-security-policy'].replace("frame-ancestors 'none'", "frame-ancestors 'self'");
@@ -96,7 +99,7 @@ async function startPreview(failure?: Failure) {
         } else if (payloads.has(pathname)) {
             body = JSON.stringify(payloads.get(pathname)); contentType = 'application/json';
         } else if (pathname === '/assets/application.js') {
-            body = application; contentType = 'application/javascript';
+            body = localOnly ? application.replace(trackURL, '/data/tornadoes/tracks/2025.geojson') : application; contentType = 'application/javascript';
         } else if (pathname === '/assets/map-worker.js') {
             body = "postMessage('ready');"; contentType = 'application/javascript';
         } else if (pathname === '/assets/site.css') {
@@ -124,16 +127,16 @@ async function startPreview(failure?: Failure) {
     const address = server.address();
     if (!address || typeof address === 'string') throw new Error('Fixture server did not bind a port.');
     return {
-        origin: `http://127.0.0.1:${address.port}`, servedPreviews,
+        origin: `http://127.0.0.1:${address.port}`, servedPreviews, requests,
         close: async () => { server.closeAllConnections(); await new Promise<void>(resolve => server.close(() => resolve())); },
     };
 }
 
-async function validateFixture(browser: Browser, testInfo: TestInfo, failure?: Failure) {
-    const preview = await startPreview(failure);
+async function validateFixture(browser: Browser, testInfo: TestInfo, failure?: Failure, localOnly = false) {
+    const preview = await startPreview(failure, localOnly);
     const externalRequests: string[] = [];
     const unexpectedRequests: string[] = [];
-    const wrappedBrowser = new Proxy(browser, { get(target, property, receiver) {
+    const wrappedBrowser = localOnly ? browser : new Proxy(browser, { get(target, property, receiver) {
         if (property !== 'newContext') return Reflect.get(target, property, receiver);
         return async (options: BrowserContextOptions) => {
             const context = await target.newContext(options);
@@ -159,7 +162,7 @@ async function validateFixture(browser: Browser, testInfo: TestInfo, failure?: F
     try {
         const report = await validateReleasePreview({ baseURL: preview.origin, revision, jobId, browser: wrappedBrowser,
             outputPath: testInfo.outputPath('release-validation.json'), timeoutMs: 2_000 });
-        return { report, servedPreviews: preview.servedPreviews, externalRequests };
+        return { report, servedPreviews: preview.servedPreviews, externalRequests, requests: preview.requests };
     } finally {
         await preview.close();
         expect(unexpectedRequests, 'Every external request must use a local fixture').toEqual([]);
@@ -175,6 +178,13 @@ test('validates all direct routes, real responsive images, and published data in
     expect(externalRequests).toContain(trackURL);
     const saved: ReleaseValidationReport = JSON.parse(await fs.readFile(testInfo.outputPath('release-validation.json'), 'utf8'));
     expect(saved).toEqual(report);
+});
+
+test('checks network headers on each repeated immutable worker load', async ({ browser }, testInfo) => {
+    // No fixture interception: it would disable the browser cache and hide this regression.
+    const { report, requests } = await validateFixture(browser, testInfo, undefined, true);
+    expect(report.errors).toEqual([]);
+    expect(requests.filter(pathname => pathname === '/assets/map-worker.js')).toHaveLength(4);
 });
 
 test('rejects an aborted stylesheet even when headings remain visible', async ({ browser }, testInfo) => {

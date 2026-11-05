@@ -39,7 +39,8 @@ The release job requires OIDC and has no legacy-key fallback.
 Its `RELEASE_VALIDATION_BUCKET` environment value selects the data bucket for successful validation proofs.
 Each proof is written to `release-validations/{full-commit-sha}/{normalized-preview-job-id}.json`; production reads it through the data CDN.
 The proof expires for release authorization after 24 hours and cannot authorize another revision or preview build.
-The infrastructure and repository settings described here remain pending activation; mocked tests do not establish live role access.
+The release role and its repository variables were activated on 2026-11-05. The two sync-role migrations remain pending; their workflows retain the existing conditional legacy-key steps.
+Mocked tests do not establish live role access. A successful gated release verifies the release role through GitHub's token exchange and the scoped Amplify/S3 operations.
 
 The ARN values are configuration, not secrets. Keep private access keys out of repository variables.
 Do not remove the existing account OIDC provider. Other repositories can depend on it.

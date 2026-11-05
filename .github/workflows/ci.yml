@@ -34,7 +34,8 @@ jobs:
           cache: npm
       - run: npm install --global "$(node -p "require('./package.json').packageManager")"
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
+      - run: bash scripts/install-ci-browsers.sh chromium
+        timeout-minutes: 10
       - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
           role-to-assume: ${{ vars.AWS_RELEASE_ROLE_ARN }}
@@ -105,7 +106,8 @@ jobs:
         run: npm test
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium webkit
+        run: bash scripts/install-ci-browsers.sh chromium webkit
+        timeout-minutes: 10
 
       - name: Hosted release validator integration
         run: npm run test:release-validation
