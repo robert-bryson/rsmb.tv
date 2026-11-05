@@ -77,6 +77,7 @@ Use fixed data for browser checks. Record the browser, viewport, and expected re
 
 - [ ] Test list scroll restoration with browser Back and the article return link after delayed content loads.
 - [ ] Extend fixed-tile browser checks to verify stop marker selection and all three map styles.
+- [ ] Reproduce the intermittent flight-control failures and add regressions for the [confirmed cause](docs/reviews/2026-11-04-flight-duration-test-review.md#intermittent-controls-failures).
 
 Run trip browser checks with WebKit enabled. Include JavaScript budgets, photo viewers, and delayed map loading.
 Keep the current budgets. See the [repository guide](README.md#testing-notes) for browser setup.

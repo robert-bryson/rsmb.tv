@@ -279,6 +279,21 @@ npx vitest run src/test/flightDuration.test.ts src/test/flightSummaries.test.tsx
 PLAYWRIGHT_WEBKIT=1 npm run test:e2e -- tests/e2e/flight-duration.spec.ts
 ```
 
+The duration browser checks use [fixed flight and airport data](../../tests/e2e/fixtures/flight-duration.ts).
+Keep the flight endpoints and airport geometry consistent.
+Include flights that each filter must exclude.
+The fixture separates route, airport, region, country, domestic, and overall summaries.
+It also includes another airline and another year.
+Each case checks flight counts, airport counts, the selected view, and time values.
+
+The startup check waits up to 15 seconds for the expected filtered counts.
+This check confirms that the flight and visited-airport data have reached the summary.
+It does not confirm that the globe has finished rendering.
+Duration assertions retain their normal five-second timeout.
+Two regression cases delay required flight or visited-airport data for six seconds.
+Each case confirms interception and checks the completed country summary.
+Cleanup releases blocked requests and clears the timer, including after failures.
+
 ### Distance
 
 The application stores and calculates distances in kilometers.

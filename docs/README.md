@@ -35,6 +35,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-04 | [Flight duration tests: filter exclusions, delayed data, and startup regression coverage](reviews/2026-11-04-flight-duration-test-review.md) |
 | 2026-11-04 | [Trip preview activation: pending input, module timing, dismissal, and coverage](reviews/2026-11-04-trip-preview-activation-review.md) |
 | 2026-11-04 | [Metadata review: preview publication state, fixture resource delivery, and regression coverage](reviews/2026-11-04-metadata-standards-quality-review.md) |
 | 2026-11-04 | [Web discovery standards: browser identity, JSON Feed, profile links, preview controls, and deferred protocols](reviews/2026-11-04-web-discovery-standards-research.md) |

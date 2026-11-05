@@ -218,6 +218,10 @@ Flight tests check duration input, timing-basis counts, filtering, route counts,
 They also check filtered airport visits, readable time totals, and keyboard control of statistics sections.
 Time checks cover hour and day rounding, partial totals, escaped source details, and consistent labels across React and HTML tooltips.
 Phone and desktop checks verify that estimated-only flights show times without estimate labels or method notes.
+Duration browser checks use fixed flight and airport data.
+Excluded flights have different airlines, years, routes, countries, regions, and flight types.
+Each selection has explicit expected counts and times.
+Two startup cases delay required data beyond the normal assertion timeout.
 See the [flight guide](projects/flights/readme.md#flight-duration) for focused checks.
 See the [map code guide](projects/flights/readme.md#map-code) for camera recovery checks and their renderer assertions.
 Basemap tests use a fixture browser key and fixed provider responses.
