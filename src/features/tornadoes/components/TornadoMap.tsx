@@ -916,14 +916,18 @@ export function TornadoMap() {
             console.error('MapLibre error:', message);
         });
 
-        map.on('moveend', () => {
+        const handleMoveEnd = () => {
             const center = map.getCenter();
             setMapViewRef.current(center.lat, center.lng, map.getZoom());
-        });
+        };
+        map.on('moveend', handleMoveEnd);
 
         mapRef.current = map;
 
         return () => {
+            // A final camera event must not restore this route during disposal.
+            map.off('moveend', handleMoveEnd);
+            setMapViewRef.current = () => { };
             canvas.removeEventListener('webglcontextlost', handleContextLost);
             canvas.removeEventListener('webglcontextrestored', handleContextRestored);
             popupRef.current?.remove();

@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 import sharp from 'sharp';
 import { parse } from 'yaml';
 import type { AnnualTornadoSummary, TornadoTrackFeature } from '../../src/features/tornadoes/types';
+import type { Map as MapLibreMap } from 'maplibre-gl';
 
 const config = parse(fs.readFileSync('customHttp.yml', 'utf8'));
 const policy: string = config.customHeaders.find(({ pattern }: { pattern: string }) => pattern === '**')
@@ -198,6 +199,16 @@ for (const [width, renderer] of [[390, 'webgl'], [1280, 'webgl'], [1280, 'svg']]
         // A filtered full-history chart must not depend on historical geometry.
         // Unmount the first WebGL renderer before replacing its document. This
         // lets WebKit cancel worker/tile requests without navigation errors.
+        if (renderer === 'webgl') await page.evaluate(async moduleURL => {
+            const maplibre = await import(moduleURL);
+            const remove = maplibre.Map.prototype.remove;
+            // Stopping an active camera during disposal can emit moveend.
+            // Force that order even when a fast test machine finished flying.
+            maplibre.Map.prototype.remove = function (this: MapLibreMap) {
+                this.fire('moveend');
+                return remove.call(this);
+            };
+        }, '/src/maps/maplibre.ts');
         await page.getByRole('link', { name: '← rsmb.tv', exact: true }).click();
         await expect(page.getByRole('heading', { name: 'Tornado Tracks', level: 1, exact: true })).toBeVisible();
         const previousTrackRequests = trackRequests.length;

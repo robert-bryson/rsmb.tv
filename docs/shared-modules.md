@@ -55,6 +55,8 @@ This entry point sets the bundled worker URL before a map starts.
 Use it for full-page maps and embedded trip maps.
 Type-only imports can use `maplibre-gl` directly.
 Keep styles and attribution in [`cartoBasemaps.ts`](../src/maps/cartoBasemaps.ts).
+Detach listeners that write the URL before disposing of a renderer. A late camera
+event must not restore the map route after navigation has started.
 
 ## Tornado chart data
 
