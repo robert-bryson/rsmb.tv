@@ -100,6 +100,7 @@ test.describe('crawler metadata', () => {
     ]) {
         test(`serves canonical metadata before JavaScript: ${pathname}`, async ({ page }) => {
             const variants = pathname === '/' ? ['/', '/index.html'] : [pathname, `${pathname}/`, `${pathname}.html`];
+            if (/^\/(blog|trips)\/[a-z0-9-]+$/.test(pathname)) variants.push(`${pathname}/index.html`);
             for (const variant of variants) {
                 const response = await page.goto(`${variant}?source=share#heading`);
                 expect(response?.status()).toBe(200);
@@ -116,6 +117,20 @@ test.describe('crawler metadata', () => {
         });
     }
 });
+
+for (const collection of ['blog', 'trips']) {
+    for (const suffix of ['', '/', '.html', '/index.html']) {
+        test(`returns an app 404 and recovers from /${collection}/missing-metadata-check${suffix}`, async ({ page }) => {
+            const response = await page.goto(`/${collection}/missing-metadata-check${suffix}`);
+            expect(response?.status()).toBe(404);
+            await expect(page.getByRole('link', { name: /Back to posts$/ })).toBeVisible();
+            await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+            await page.getByRole('link', { name: /Back to posts$/ }).click();
+            await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://rsmb.tv/posts');
+            await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'max-image-preview:large');
+        });
+    }
+}
 
 test('keeps the imported article image after React starts and clears its dimensions after navigation', async ({ page }) => {
     await page.route('**/test-trip/photo-1-1600.svg', route => route.fulfill({
@@ -150,6 +165,8 @@ for (const [pathname, canonicalPath] of [
     ['/projects/parc.html', '/projects/parc'],
     ['/trips/coastal-test.html', '/trips/coastal-test'],
     ['/blog/coastal-test.html', '/trips/coastal-test'],
+    ['/trips/coastal-test/index.html', '/trips/coastal-test'],
+    ['/blog/reading-test/index.html', '/blog/reading-test'],
     ['/blog.html', '/posts'],
 ]) {
     test(`renders the public page from its HTML file: ${pathname}`, async ({ page }) => {

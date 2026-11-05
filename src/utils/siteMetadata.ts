@@ -17,8 +17,8 @@ export const AUTHOR_PERSON = {
 
 /** Resolve generated HTML files and trailing slashes to the application's route. */
 export function canonicalPathname(pathname: string): string {
-    const cleanPath = pathname.split(/[?#]/, 1)[0].replace(/\/+$/, '');
-    return cleanPath === '/index.html' ? '/' : cleanPath.replace(/\.html$/, '') || '/';
+    const cleanPath = pathname.split(/[?#]/, 1)[0].replace(/\/+$/, '').replace(/\/index\.html$/, '');
+    return cleanPath.replace(/\.html$/, '') || '/';
 }
 
 /** Use the same public path in routing and canonical metadata. */

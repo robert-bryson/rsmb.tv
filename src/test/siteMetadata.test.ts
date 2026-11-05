@@ -2,6 +2,12 @@ import { describe, it, expect } from 'vitest';
 import { SITE_URL, DEFAULT_OG_IMAGE, AUTHOR_PERSON, absoluteUrl, canonicalUrl } from '../utils/siteMetadata';
 
 describe('siteMetadata', () => {
+    it.each([
+        '/trips/example', '/trips/example/index.html', '/trips/example/index.html/',
+        '/trips/example/index.html/?source=share#heading',
+    ])('normalizes directory-index article URLs: %s', pathname => {
+        expect(canonicalUrl(pathname)).toBe('https://rsmb.tv/trips/example');
+    });
     it.each(['/', '/index.html', '/index.html/?source=share#top'])('uses the home canonical for %s', pathname => {
         expect(canonicalUrl(pathname)).toBe('https://rsmb.tv/');
     });

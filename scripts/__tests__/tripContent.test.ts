@@ -85,6 +85,8 @@ describe('trip publication contracts', () => {
             expect(assets[`${alias.slice(1)}.html`]).toContain(`href="https://rsmb.tv${pathname}"`);
         }
         expect(assets['trips/coast.html']).toBe(assets['blog/coast.html']);
+        expect(assets['trips/coast/index.html']).toBe(assets['trips/coast.html']);
+        expect(assets['blog/coast/index.html']).toBe(assets['blog/coast.html']);
         expect(assets['trips/coast.html']).toContain('<title>Coast &amp; mountains — rsmb</title>');
         expect(assets['trips/coast.html']).toContain('href="https://rsmb.tv/trips/coast"');
         expect(assets['trips/coast.html']).toContain(`content="https://rsmb.tv${manifest.photos.find(photo => photo.id === manifest.hero)!.src}"`);
@@ -102,6 +104,7 @@ describe('trip publication contracts', () => {
         } else {
             expect(assets['index.html']).not.toContain('noindex');
             expect(assets).not.toHaveProperty('trips/unfinished.html');
+            expect(assets).not.toHaveProperty('trips/unfinished/index.html');
             expect(JSON.stringify(result.output)).not.toContain('Unfinished journey');
         }
     });

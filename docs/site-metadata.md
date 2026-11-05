@@ -58,20 +58,24 @@ Do not invent prices, ratings, or reviews to satisfy search result requirements.
 ## Routes and indexing
 
 The build emits `index.html` for Home and `<path>.html` for each public page and legacy path.
-Each article has HTML files under both `/blog/` and `/trips/`.
-Both files identify the article's current collection as canonical.
+Each article has directory indexes under both `/blog/<slug>/index.html` and `/trips/<slug>/index.html`.
+Legacy `<slug>.html` files remain available in both collections. Every copy identifies the article's current collection as canonical.
 
 React normalizes `.html` paths and trailing slashes before it matches routes.
-It maps `/index.html` to `/`.
+It removes directory-index suffixes, including `/index.html` at the site root.
 These redirects retain query parameters, heading fragments, and navigation state. They replace the current history entry.
 Legacy post indexes also retain these values when redirecting to `/posts`.
 Tracking parameters and fragments remain outside canonical URLs.
 
-Amplify must rewrite clean paths and trailing-slash paths to their generated HTML files.
+Amplify rewrites public page paths to their generated HTML files.
+Article rewrites target directories with trailing slashes so Amplify can serve their `index.html` files.
+Removing that slash can make a missing article redirect to itself during Amplify's automatic URL cleanup.
 The page and article rules must precede the single-page application fallback.
 Article HTML-file redirects must precede generic article rewrites. Otherwise a filename can acquire a second `.html` suffix.
-The local preview performs equivalent file selection.
+The default 404 handler follows normal rewrites and serves the app for missing files.
+The local preview selects equivalent metadata and returns HTTP 404 for missing articles.
 Apply `infra/main.tf` with the HTML deployment. Otherwise direct requests can receive Home metadata.
+Deploy new article directory indexes before you switch existing article rewrites from HTML files to directories.
 
 After you apply routing changes, redeploy the affected Amplify branch to clear cached HTML.
 Amplify can skip deployment when the build files have not changed.
@@ -159,4 +163,5 @@ terraform -chdir=infra test -no-color
 ```
 
 These tests use a mocked AWS provider. They do not apply infrastructure.
-The rewrite test requires every public route variant before the fallback and rejects duplicate rule sources.
+The rewrite test checks page targets, article directory targets, the final 404 handler, and unique rule sources.
+Verify missing article URLs on the public host after routing changes. Local previews do not emulate Amplify's automatic redirects.

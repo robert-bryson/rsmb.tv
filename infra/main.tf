@@ -49,7 +49,7 @@ resource "aws_amplify_app" "rsmbtv" {
     for_each = ["/blog/<slug>", "/blog/<slug>/", "/trips/<slug>", "/trips/<slug>/"]
     content {
       source = custom_rule.value
-      target = "${trimsuffix(custom_rule.value, "/")}.html"
+      target = "${trimsuffix(custom_rule.value, "/")}/"
       status = "200"
     }
   }
@@ -59,6 +59,13 @@ resource "aws_amplify_app" "rsmbtv" {
     source = "</^[^.]+$|\\.(?!(css|html|gif|ico|jpg|js|mjs|mp4|png|txt|svg|woff|woff2|ttf|map|json|webmanifest|webp|xml|gz|br|geojson|glb)$)([^.]+$)/>"
     target = "/index.html"
     status = "200"
+  }
+
+  # Render the app for missing files instead of repeating clean-URL redirects.
+  custom_rule {
+    source = "/<*>"
+    target = "/index.html"
+    status = "404"
   }
 
   custom_headers = jsonencode(yamldecode(file("${path.module}/../customHttp.yml")).customHeaders)

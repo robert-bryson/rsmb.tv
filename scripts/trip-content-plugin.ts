@@ -6,6 +6,7 @@ import { validateBundledTripMedia } from './trip-media-assets.ts';
 import { articleMetadata, staticPageMetadata, STATIC_PAGE_PATHS } from '../src/utils/pageMetadata.ts';
 import { pageMetadataHtml } from './pageMetadataHtml.ts';
 import siteAliases from '../src/content/siteAliases.json' with { type: 'json' };
+import { canonicalPathname } from '../src/utils/siteMetadata.ts';
 
 /** Generate a small card registry, with full manifests behind async imports. */
 export function tripContentPlugin(): Plugin {
@@ -100,7 +101,10 @@ export function tripContentPlugin(): Plugin {
                 const hero = manifest?.photos.find(photo => photo.id === manifest.hero);
                 const source = pageMetadataHtml(originalTemplate, articleMetadata(post, hero));
                 // Both historic collections still redirect client-side to the canonical collection.
-                for (const collection of ['blog', 'trips']) this.emitFile({ type: 'asset', fileName: `${collection}/${post.slug}.html`, source });
+                for (const collection of ['blog', 'trips']) {
+                    this.emitFile({ type: 'asset', fileName: `${collection}/${post.slug}.html`, source });
+                    this.emitFile({ type: 'asset', fileName: `${collection}/${post.slug}/index.html`, source });
+                }
             }
         } },
         transformIndexHtml(html) {
@@ -111,12 +115,19 @@ export function tripContentPlugin(): Plugin {
             };
         },
         configurePreviewServer(server) {
-            server.middlewares.use((request, _response, next) => {
+            server.middlewares.use((request, response, next) => {
                 const url = new URL(request.url ?? '/', 'http://localhost');
-                const pathname = url.pathname.replace(/\/$/, '');
-                if (STATIC_PAGE_PATHS.includes(pathname) || Object.hasOwn(siteAliases, pathname) || /^\/(blog|trips)\/[a-z0-9-]+$/.test(pathname)) {
+                const pathname = canonicalPathname(url.pathname);
+                const article = /^\/(blog|trips)\/[a-z0-9-]+$/.test(pathname);
+                if (STATIC_PAGE_PATHS.includes(pathname) || Object.hasOwn(siteAliases, pathname) || article) {
                     const htmlPath = `${pathname}.html`;
                     if (fs.existsSync(path.resolve(config.root, config.build.outDir, `.${htmlPath}`))) request.url = htmlPath + url.search;
+                    else if (article && (request.method === 'GET' || request.method === 'HEAD')) {
+                        response.statusCode = 404;
+                        response.setHeader('Content-Type', 'text/html; charset=utf-8');
+                        response.end(request.method === 'HEAD' ? undefined : fs.readFileSync(path.resolve(config.root, config.build.outDir, 'index.html')));
+                        return;
+                    }
                 }
                 next();
             });
