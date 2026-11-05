@@ -2,6 +2,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
+import { createHash } from 'node:crypto';
 import sharp from 'sharp';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { generateProjectPreviews } from '../generate-project-previews.js';
@@ -29,6 +30,19 @@ afterEach(async () => {
 });
 
 describe('project preview publication', () => {
+    it('uses stable AVIF URLs that bypass the first release\'s immutable cached HTML', async () => {
+        const { repoRoot, manifest } = await fixture();
+        await generateProjectPreviews({ repoRoot, projectList });
+        const published = await fs.readFile(manifest, 'utf8');
+        const entry = JSON.parse(published)['/images/sample.webp'];
+        const avifPath = entry.avifSrcSet.split(' ')[0];
+        const content = await fs.readFile(path.join(repoRoot, 'public', avifPath));
+        const originalFingerprint = createHash('sha256').update(content).digest('hex').slice(0, 12);
+        expect(avifPath).not.toBe('/images/previews/sample-32-' + originalFingerprint + '.avif');
+        await generateProjectPreviews({ repoRoot, projectList });
+        expect(await fs.readFile(manifest, 'utf8')).toBe(published);
+    });
+
     it('retains both published formats when an AVIF replacement fails', async () => {
         const { repoRoot, manifest, output } = await fixture();
         await generateProjectPreviews({ repoRoot, projectList });

@@ -43,7 +43,8 @@ export async function generateProjectPreviews({ repoRoot = root, projectList = p
             await writeAtomically(path.join(directory, filename), output);
             variants.push({ src: `/images/previews/${filename}`, width: size });
             const avif = await sharp(input).resize({ width: size, withoutEnlargement: true }).avif({ quality: 50, effort: 6 }).toBuffer();
-            const avifFingerprint = createHash('sha256').update(avif).digest('hex').slice(0, 12);
+            // Bypass immutable HTML cached at AVIF URLs during the first release.
+            const avifFingerprint = createHash('sha256').update('avif-v2:').update(avif).digest('hex').slice(0, 12);
             const avifFilename = `${project.slug}-${size}-${avifFingerprint}.avif`;
             generated.add(avifFilename);
             await writeAtomically(path.join(directory, avifFilename), avif);
