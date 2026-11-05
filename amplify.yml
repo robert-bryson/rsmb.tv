@@ -11,6 +11,16 @@ frontend:
       # designated browser basemap key and rejects release builds without it.
       commands:
         - if [ "$AWS_BRANCH" = "dev" ]; then npm run build:dev; else npm run build; fi
+    postBuild:
+      commands:
+        # A new artifact makes Amplify deploy and clear cached routing responses.
+        - |
+          node --input-type=module -e '
+            import { writeFileSync } from "node:fs";
+            const { AWS_COMMIT_ID: commitId, AWS_JOB_ID: jobId } = process.env;
+            if (!commitId || !jobId) throw new Error("Missing Amplify build identity");
+            writeFileSync("dist/deployment.json", JSON.stringify({ commitId, jobId }) + "\n");
+          '
   artifacts:
     baseDirectory: dist
     files:

@@ -69,6 +69,13 @@ Article HTML-file redirects must precede generic article rewrites. Otherwise a f
 The local preview performs equivalent file selection.
 Apply `infra/main.tf` with the HTML deployment. Otherwise direct requests can receive Home metadata.
 
+After you apply routing changes, redeploy the affected Amplify branch to clear cached HTML.
+Amplify can skip deployment when the build files have not changed.
+The `postBuild` phase writes `dist/deployment.json` with the commit ID and job ID.
+The new job ID changes the build files on each run so a redeploy clears the cache.
+The marker contains no credentials. Local Vite builds do not create it.
+After deployment, check the public URL without JavaScript and confirm its `og:title` and `og:image` values.
+
 Development HTML uses `noindex, nofollow`.
 React retains these restrictions when a draft or missing page adds its own `noindex` rule.
 RSS and sitemap files include published articles only.

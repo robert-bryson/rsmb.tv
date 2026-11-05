@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
@@ -54,6 +55,44 @@ describe('amplify.yml', () => {
             env: { ...process.env, AWS_BRANCH: branch }, encoding: 'utf8',
         });
         expect(result.trim()).toBe(expectedCommand);
+    });
+
+    it('changes the deployment artifact when the same commit is rebuilt without publishing secrets', () => {
+        const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'rsmb-deployment-'));
+        try {
+            fs.mkdirSync(path.join(cwd, 'dist'));
+            const script = getPhaseCommands(readRepoFile('amplify.yml'), 'postBuild').join('\n');
+            const markerPath = path.join(cwd, 'dist/deployment.json');
+            const build = (jobId: string) => {
+                execFileSync('bash', ['-e', '-c', script], {
+                    cwd,
+                    env: { ...process.env, AWS_COMMIT_ID: 'same-commit', AWS_JOB_ID: jobId, AWS_SECRET_ACCESS_KEY: 'must-stay-private' },
+                });
+                return fs.readFileSync(markerPath, 'utf8');
+            };
+            const first = build('0000000416');
+            const second = build('0000000417');
+            expect(second).not.toBe(first);
+            expect(JSON.parse(first)).toEqual({ commitId: 'same-commit', jobId: '0000000416' });
+            expect(JSON.parse(second)).toEqual({ commitId: 'same-commit', jobId: '0000000417' });
+            expect(second).not.toContain('must-stay-private');
+        } finally {
+            fs.rmSync(cwd, { recursive: true, force: true });
+        }
+    });
+
+    it.each(['AWS_COMMIT_ID', 'AWS_JOB_ID'])('rejects a deployment marker without %s', missing => {
+        const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'rsmb-deployment-'));
+        try {
+            fs.mkdirSync(path.join(cwd, 'dist'));
+            const script = getPhaseCommands(readRepoFile('amplify.yml'), 'postBuild').join('\n');
+            const env = { ...process.env, AWS_COMMIT_ID: 'same-commit', AWS_JOB_ID: '0000000417', [missing]: '' };
+            expect(() => execFileSync('bash', ['-e', '-c', script], { cwd, env, stdio: 'pipe' }))
+                .toThrow(/Missing Amplify build identity/);
+            expect(fs.existsSync(path.join(cwd, 'dist/deployment.json'))).toBe(false);
+        } finally {
+            fs.rmSync(cwd, { recursive: true, force: true });
+        }
     });
 });
 
