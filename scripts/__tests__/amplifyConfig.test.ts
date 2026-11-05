@@ -120,33 +120,32 @@ describe('tornado publication workflow', () => {
         expect(local.env?.VITE_TORNADO_DATA_BASE_URL).toBe('/data/tornadoes');
         expect(local.run).toBe('npm run verify-tornado-publication');
         expect(remote.env?.VITE_TORNADO_DATA_BASE_URL).toBeUndefined();
-        expect(remote.run).toBe('npm run verify-tornado-publication');
+        expect(remote.run).toContain('npm run verify-tornado-publication');
     });
 
-    it.each([false, true])('waits for cache invalidation only after successful creation (failure: %s)', failed => {
-        const root = fs.mkdtempSync(path.join(os.tmpdir(), 'rsmb-tornado-invalidation-'));
+    it.each([0, 2, 6])('verifies the public CDN after %s failures and bounds retries', failures => {
+        const root = fs.mkdtempSync(path.join(os.tmpdir(), 'rsmb-tornado-publication-'));
         const log = path.join(root, 'calls.txt');
-        const step = steps().find(step => step.name === 'Invalidate CloudFront cache')!;
+        const waits = path.join(root, 'waits.txt');
+        const step = steps().find(step => step.name === 'Verify public tornado publication')!;
         const stub = [
-            'aws() {',
-            "  printf '%s\\n' \"$*\" >> \"$AWS_CALL_LOG\"",
-            '  if [ "$2" = create-invalidation ]; then',
-            '    if [ "$FAIL_INVALIDATION" = 1 ]; then return 9; fi',
-            "    printf '%s\\n' INV123",
-            '  fi',
+            'npm() {',
+            "  printf '%s\\n' \"$*\" >> \"$PUBLICATION_CALL_LOG\"",
+            '  [ "$(wc -l < "$PUBLICATION_CALL_LOG")" -gt "$PUBLICATION_FAILURES" ]',
             '}',
+            "sleep() { printf '%s\\n' \"$*\" >> \"$PUBLICATION_WAIT_LOG\"; }",
         ].join('\n');
         try {
             const run = () => execFileSync('bash', ['-e', '-o', 'pipefail', '-c', stub + '\n' + step.run], {
-                env: { ...process.env, AWS_CALL_LOG: log, FAIL_INVALIDATION: failed ? '1' : '0', TORNADO_DATA_CDN_ID: 'TEST-CDN' },
+                env: { ...process.env, PUBLICATION_CALL_LOG: log, PUBLICATION_WAIT_LOG: waits, PUBLICATION_FAILURES: String(failures) },
                 stdio: 'pipe',
             });
-            if (failed) expect(run).toThrow();
+            if (failures === 6) expect(run).toThrow();
             else run();
             const calls = fs.readFileSync(log, 'utf8').trim().split('\n');
-            expect(calls[0]).toContain('cloudfront create-invalidation --distribution-id TEST-CDN --paths /tornadoes/*');
-            expect(calls).toHaveLength(failed ? 1 : 2);
-            if (!failed) expect(calls[1]).toBe('cloudfront wait invalidation-completed --distribution-id TEST-CDN --id INV123');
+            expect(calls).toEqual(Array(Math.min(failures + 1, 6)).fill('run verify-tornado-publication'));
+            const delays = fs.existsSync(waits) ? fs.readFileSync(waits, 'utf8').trim().split('\n') : [];
+            expect(delays).toEqual(Array(Math.min(failures, 5)).fill('10'));
         } finally {
             fs.rmSync(root, { recursive: true, force: true });
         }

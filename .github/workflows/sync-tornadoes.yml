@@ -99,13 +99,17 @@ jobs:
         if: env.TORNADO_DATA_CDN_ID != ''
         run: |
           set -euo pipefail
-          invalidation_id=$(aws cloudfront create-invalidation \
+          aws cloudfront create-invalidation \
             --distribution-id "${TORNADO_DATA_CDN_ID}" \
-            --paths "/tornadoes/*" \
-            --query 'Invalidation.Id' --output text)
-          aws cloudfront wait invalidation-completed \
-            --distribution-id "${TORNADO_DATA_CDN_ID}" --id "$invalidation_id"
-          echo "✅ CloudFront cache invalidation completed"
+            --paths "/tornadoes/*"
+          echo "✅ CloudFront cache invalidation requested"
 
       - name: Verify public tornado publication
-        run: npm run verify-tornado-publication
+        run: |
+          set -euo pipefail
+          # Allow cached errors and summaries to expire during invalidation.
+          for attempt in 1 2 3 4 5 6; do
+            if npm run verify-tornado-publication; then exit 0; fi
+            if [ "$attempt" -lt 6 ]; then sleep 10; fi
+          done
+          exit 1

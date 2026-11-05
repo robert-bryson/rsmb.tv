@@ -89,8 +89,9 @@ After a process interruption during replacement, check for a sibling `.tornadoes
 
 In CI (`sync-tornadoes.yml`), output is uploaded to S3 instead of committed.
 The workflow validates generated annual summaries and aggregates before upload.
-It waits for configured CDN invalidation to finish, then validates both files through the public CDN.
-If no CDN distribution is configured, cached responses must expire before the public check can pass.
+It requests configured CDN invalidation, then validates both files through the public CDN.
+The public check tries at most six times, with ten seconds between attempts, while cached responses expire.
+It fails if public data remains unavailable or incompatible.
 
 ### Release order
 

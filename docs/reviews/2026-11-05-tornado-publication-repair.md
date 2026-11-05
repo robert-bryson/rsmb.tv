@@ -35,7 +35,8 @@ It retained the private bucket policy and the frontend publication check.
 ## Workflow changes
 
 The data workflow now validates its generated publication before uploading it.
-It waits for configured CloudFront invalidation to finish, then validates the public publication.
+It requests configured CloudFront invalidation, then validates the public publication.
+The public check tries at most six times, with ten seconds between attempts, while cached responses expire.
 The public check verifies that the browser can read matching annual summaries and aggregates.
 A workflow cannot report success when only its local output is valid.
 
@@ -44,13 +45,13 @@ It also lists the index in the generated archive layout.
 
 ## Regression checks
 
-New tests check the publication sequence and execute the actual cache-invalidation shell commands with an AWS stub.
-They verify that successful invalidation creation is followed by a wait for the returned invalidation ID.
-If creation fails, the shell stops before waiting.
+New tests check the publication sequence and execute the actual verification shell commands with npm and timer stubs.
+They verify immediate success, recovery after transient failures, and failure after all six attempts.
+Successful checks stop immediately. Persistent failures return a nonzero exit status.
 The release checker also has an explicit HTTP 403 regression case.
 
 Before the workflow change, two regression cases failed.
-After the change, all 139 focused tests passed.
+All 140 final focused tests passed.
 The focused suite covers workflow configuration, publication validation, aggregate correctness, and the tornado generator.
 
 ## Release verification
