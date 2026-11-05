@@ -3,6 +3,15 @@ import sitePages from '../../src/content/sitePages.json' with { type: 'json' };
 import siteAliases from '../../src/content/siteAliases.json' with { type: 'json' };
 import coastalTrip from '../fixtures/trip-content/trips/coastal-test.json' with { type: 'json' };
 
+test('exposes identity and feed links without horizontal overflow on narrow screens', async ({ page }) => {
+    await page.goto('/about');
+    const footer = page.locator('footer');
+    await footer.scrollIntoViewIfNeeded();
+    await expect(footer.getByRole('link', { name: 'JSON Feed', exact: true })).toHaveAttribute('href', '/feed.json');
+    await expect(footer.getByRole('link', { name: 'GitHub', exact: true })).toHaveAttribute('rel', 'me noopener noreferrer');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+});
+
 test.describe('crawler metadata', () => {
     test.use({ javaScriptEnabled: false });
 
@@ -36,7 +45,10 @@ test.describe('crawler metadata', () => {
                 expect(response?.status()).toBe(200);
                 await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `https://rsmb.tv${canonicalPath}`);
                 await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', `https://rsmb.tv${canonicalPath}`);
-                await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
+                await expect(page.locator('meta[name="robots"]')).toHaveCount(1);
+                await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'max-image-preview:large');
+                await expect(page.locator('link[rel="manifest"]')).toHaveAttribute('href', '/site.webmanifest');
+                await expect(page.locator('link[type="application/feed+json"]')).toHaveAttribute('href', '/feed.json');
                 const schemas = await page.locator('script[type="application/ld+json"]').allTextContents();
                 expect(schemas).toHaveLength(1);
                 expect(() => JSON.parse(schemas[0])).not.toThrow();
@@ -83,7 +95,7 @@ for (const [pathname, canonicalPath] of [
     test(`renders the public page from its HTML file: ${pathname}`, async ({ page }) => {
         await page.goto(`${pathname}?source=share#heading`);
         await expect(page.locator('h1').first()).toBeVisible();
-        await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
+        await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'max-image-preview:large');
         await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `https://rsmb.tv${canonicalPath}`);
         await expect.poll(() => new URL(page.url()).pathname).toBe(canonicalPath);
         expect(new URL(page.url()).searchParams.get('source')).toBe('share');
@@ -101,8 +113,8 @@ test('clears article metadata after navigation and recovers from a missing page'
     await expect.poll(async () => (await page.locator('script[type="application/ld+json"]').allTextContents()).join('')).not.toContain('BlogPosting');
 
     await page.goto('/blog/missing-post');
-    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, follow');
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, max-image-preview:large');
     await page.getByRole('link', { name: 'Back to posts' }).click();
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://rsmb.tv/posts');
-    await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'max-image-preview:large');
 });

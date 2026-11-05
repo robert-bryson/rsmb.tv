@@ -11,30 +11,16 @@ import { fileURLToPath } from 'node:url';
 import {
     filterPublishedPosts,
     formatRssDate,
-    loadJsonFile,
     resolveLatestTimestamp,
-    sortByDateDescending,
 } from './siteMetadata.js';
+import { FEED_SITE, loadFeedPosts as loadPosts, postUrl } from './feedMetadata.js';
+export { loadFeedPosts as loadPosts } from './feedMetadata.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.join(__dirname, '..');
 const POSTS_PATH = path.join(REPO_ROOT, 'src/content/posts.json');
 const OUTPUT_PATH = path.join(REPO_ROOT, 'public/rss.xml');
 const FEED_SOURCES = ['src/content/posts.json', 'src/content/blog', 'src/content/trips'];
-const SITE_URL = 'https://rsmb.tv';
-const SITE_TITLE = 'rsmb';
-const SITE_DESCRIPTION = 'Writing and trip stories by Robby Bryson — projects, engineering, maps, and things I find interesting.';
-
-function postUrl(post) {
-    return `${SITE_URL}/${post.format === 'trip' ? 'trips' : 'blog'}/${post.slug}`;
-}
-
-/**
- * Load post metadata from the shared JSON registry.
- */
-export function loadPosts(postsPath = POSTS_PATH) {
-    return sortByDateDescending(filterPublishedPosts(loadJsonFile(postsPath, { defaultValue: [] })));
-}
 
 function escapeXml(str) {
     return str
@@ -78,12 +64,12 @@ export function buildRssXml(posts, buildDate = resolveFeedBuildDate(posts)) {
     return `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>${escapeXml(SITE_TITLE)}</title>
-    <link>${SITE_URL}</link>
-    <description>${escapeXml(SITE_DESCRIPTION)}</description>
+    <title>${escapeXml(FEED_SITE.title)}</title>
+    <link>${FEED_SITE.url}</link>
+    <description>${escapeXml(FEED_SITE.description)}</description>
     <language>en-us</language>
     <lastBuildDate>${buildDate}</lastBuildDate>
-    <atom:link href="${SITE_URL}/rss.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="${FEED_SITE.url}/rss.xml" rel="self" type="application/rss+xml" />
 ${items}
   </channel>
 </rss>

@@ -198,6 +198,7 @@ describe('Amplify domain', () => {
         expect(spaRewrite).toBeDefined();
         expect(spaRewrite?.match(/\(css\|([^)]+)\)/)?.[1].split('|')).toContain('mjs');
         expect(spaRewrite?.match(/\(css\|([^)]+)\)/)?.[1].split('|')).toContain('mp4');
+        expect(spaRewrite?.match(/\(css\|([^)]+)\)/)?.[1].split('|')).toContain('webmanifest');
     });
 
     it('uses an Amplify-managed certificate for the hosted domain', () => {

@@ -103,9 +103,12 @@ export function tripContentPlugin(): Plugin {
                 for (const collection of ['blog', 'trips']) this.emitFile({ type: 'asset', fileName: `${collection}/${post.slug}.html`, source });
             }
         } },
-        transformIndexHtml() {
+        transformIndexHtml(html) {
             if (config.mode !== 'development') return;
-            return [{ tag: 'meta', attrs: { name: 'robots', content: 'noindex, nofollow' }, injectTo: 'head' }];
+            return {
+                html: html.replace(/<meta\s+name="robots"[^>]*>/g, ''),
+                tags: [{ tag: 'meta', attrs: { name: 'robots', content: 'noindex, nofollow' }, injectTo: 'head' as const }],
+            };
         },
         configurePreviewServer(server) {
             server.middlewares.use((request, _response, next) => {

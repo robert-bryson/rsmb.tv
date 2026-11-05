@@ -64,7 +64,7 @@ export function About() {
             <a
               href="https://github.com/robert-bryson"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="me noopener noreferrer"
               className="text-zinc-400 hover:text-violet-400"
             >
               GitHub

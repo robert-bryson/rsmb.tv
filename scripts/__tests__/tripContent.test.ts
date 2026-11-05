@@ -63,6 +63,7 @@ describe('trip publication contracts', () => {
         };
         const root = createContentFixture([published, illustrated, draft], { manifests: [manifest], mode });
         fs.writeFileSync(path.join(root, 'index.html'), `<html><head><title>Site</title>
+            <meta name="robots" content="max-image-preview:large" />
             <meta name="description" content="Site" /><meta property="og:image" content="https://rsmb.tv/og/home.svg" />
             <link rel="canonical" href="https://rsmb.tv/" /></head><body><script type="module">
             import { summaries } from 'virtual:trip-content'; globalThis.trips = summaries;
@@ -94,6 +95,7 @@ describe('trip publication contracts', () => {
         if (mode === 'development') {
             for (const [, html] of Object.entries(assets).filter(([filename]) => filename.endsWith('.html'))) {
                 expect(html).toMatch(/name="robots" content="noindex, nofollow"/);
+                expect(html.match(/name="robots"/g)).toHaveLength(1);
             }
             expect(assets['trips/unfinished.html']).toBe(assets['blog/unfinished.html']);
             expect(assets['trips/unfinished.html']).toContain('content="https://rsmb.tv/og/blog/unfinished.png"');

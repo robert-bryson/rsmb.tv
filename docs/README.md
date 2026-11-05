@@ -35,6 +35,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-04 | [Web discovery standards: browser identity, JSON Feed, profile links, preview controls, and deferred protocols](reviews/2026-11-04-web-discovery-standards-research.md) |
 | 2026-11-04 | [Temperature snapshots: fixture isolation, native context behavior, and browser coverage](reviews/2026-11-04-temperature-snapshot-review.md) |
 | 2026-11-04 | [Temperature startup: worker URL formats, error diagnostics, and regression coverage](reviews/2026-11-04-temperature-startup-review.md) |
 | 2026-11-04 | [Basemap startup review: module delays, readiness guarantees, and configured keys](reviews/2026-11-04-basemap-startup-review.md) |

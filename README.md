@@ -438,7 +438,8 @@ Keep incomplete work in [TODO.md](TODO.md). Use Git history for completed work.
 
 Public pages include titles, descriptions, canonical URLs, social tags, and JSON-LD before JavaScript runs.
 React uses the same metadata definitions during navigation. The browser renders page bodies.
-Social cards use PNG files. Trip reports use their hero photo.
+Project previews use each project's screenshot. Trip reports use their hero photo. Other pages use PNG social cards.
+The site also publishes RSS and JSON Feed, browser identity through a web manifest, and author profile links.
 
 The [metadata guide](docs/site-metadata.md) describes source files, schemas, route handling, and required checks.
 It also explains development indexing rules and hosting requirements.

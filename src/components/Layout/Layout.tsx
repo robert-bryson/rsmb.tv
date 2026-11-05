@@ -178,19 +178,22 @@ export function Layout({ children }: LayoutProps) {
 
       {/* Footer */}
       <footer className="border-t border-zinc-800/50">
-        <div className="max-w-3xl mx-auto px-6 py-6 flex justify-between items-center text-sm text-zinc-400">
+        <div className="max-w-3xl mx-auto px-6 py-6 flex flex-wrap justify-between items-center gap-4 text-sm text-zinc-400">
           <span>© {new Date().getFullYear()} · {__BUILD_DATE__}</span>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-x-4 gap-y-2">
             <a
               href="https://github.com/robert-bryson"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="me noopener noreferrer"
               className="hover:text-zinc-300"
             >
               GitHub
             </a>
             <a href="/rss.xml" className="hover:text-zinc-300">
               RSS
+            </a>
+            <a href="/feed.json" type="application/feed+json" className="hover:text-zinc-300">
+              JSON Feed
             </a>
             <a href="/sitemap.xml" className="hover:text-zinc-300">
               Sitemap

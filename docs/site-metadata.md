@@ -19,6 +19,10 @@ A canonical URL identifies the preferred public address for a page.
 | `scripts/trip-content-plugin.ts` | Generate page and article HTML during the Vite build |
 | `scripts/generate-og-images.js` | Generate 1200 × 630 PNG social cards and SVG sources |
 | `scripts/generate-sitemap.js` | List public routes and published articles |
+| `public/site.webmanifest` | Browser identity, launch URLs, colors, and icon declarations |
+| `scripts/generate-site-icons.js` | Derive PNG icons from existing vector artwork |
+| `scripts/feedMetadata.js` | Shared public-feed identity, canonical URLs, and post selection |
+| `scripts/generate-json-feed.js` | Generate JSON Feed 1.1 summaries at `/feed.json` |
 
 Post metadata comes from the [blog import](blog-publishing.md).
 Trip manifests supply hero URLs, alt descriptions, and image dimensions.
@@ -78,9 +82,38 @@ After deployment, check the public URL without JavaScript and confirm its `og:ti
 
 Development HTML uses `noindex, nofollow`.
 React retains these restrictions when a draft or missing page adds its own `noindex` rule.
-RSS and sitemap files include published articles only.
-React marks missing pages and posts `noindex, follow` in production.
+RSS, JSON Feed, and sitemap files include published articles only.
+React marks missing pages and posts `noindex` in production and retains existing preview rules.
 Unknown paths can receive the fallback document before React identifies the missing page.
+
+## Browser identity and discovery
+
+Every generated HTML page links to the manifest, RSS, JSON Feed, and the established GitHub profile.
+The GitHub link uses `rel="me"` and matches the About page's `Person.sameAs` identity.
+This relationship alone does not prove account verification by another service.
+
+The manifest uses root-relative identity and launch URLs. It retains normal browser navigation with `display: "browser"`.
+It adds no offline cache or service worker. The existing SVG and Apple touch icons remain available.
+The icon build derives 48-, 192-, and 512-pixel PNGs from `public/apple-touch-icon.svg`.
+Regenerate the PNGs when the artwork changes. Declared icon dimensions must match their files.
+
+JSON Feed 1.1 supplies summary-length `content_text`, canonical item IDs, and publication dates.
+RSS and JSON Feed share their site identity, post selection, and URL construction.
+Neither feed publishes development-only fields. A title edit does not change an item's ID.
+Changing an article's canonical collection changes its ID; review this as a subscription migration.
+`npm run build-blog-artifacts` regenerates both feeds and the browser icons without importing source documents.
+
+Production HTML permits `max-image-preview:large`. This allows larger search previews; it does not guarantee them.
+Development builds retain one `noindex, nofollow` tag. React preserves preview limits when it adds or removes `noindex`.
+
+Before release, apply the `.webmanifest` asset exception in `infra/main.tf`.
+Otherwise the SPA fallback can return HTML for the manifest.
+Deploy `customHttp.yml` with the assets so the manifest uses `application/manifest+json` and the feed uses `application/feed+json`.
+Both resources have a one-hour shared-cache limit and require browser revalidation.
+Redeploy after routing changes, then check the resource bodies and response headers on the public host.
+
+The [standards research](reviews/2026-11-04-web-discovery-standards-research.md) explains the chosen additions and deferred protocols.
+The support applies to pages built by this repository. Independently hosted project applications need separate changes.
 
 ## Add or change a public page
 
@@ -97,6 +130,7 @@ npm run build-blog-artifacts
 npm run typecheck
 npx vitest run scripts/__tests__/pageMetadata.test.ts scripts/__tests__/tripContent.test.ts \
   scripts/__tests__/generateFeeds.test.ts scripts/__tests__/generateOgImages.test.ts \
+  scripts/__tests__/discoveryStandards.test.ts scripts/__tests__/amplifyConfig.test.ts \
   src/test/routing.test.tsx src/test/useDocumentHead.test.ts
 PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- tests/trips/metadata.spec.ts --workers=3
 ```

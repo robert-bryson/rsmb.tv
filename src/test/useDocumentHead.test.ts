@@ -8,6 +8,16 @@ const wrapper = ({ children }: { children: ReactNode }) =>
     MemoryRouter({ initialEntries: ['/about'], children });
 
 describe('useDocumentHead', () => {
+    it.each(['max-image-preview:large', 'max-image-preview:none, nosnippet'])('retains preview policy %s when a missing page adds noindex', policy => {
+        const robots = document.createElement('meta');
+        robots.name = 'robots';
+        robots.content = policy;
+        document.head.appendChild(robots);
+        const { unmount } = renderHook(() => useDocumentHead({ title: 'Missing', noIndex: true }), { wrapper });
+        expect(robots.content).toBe(`noindex, ${policy}`);
+        unmount();
+        expect(robots.content).toBe(policy);
+    });
     afterEach(() => {
         cleanup();
         document.title = '';

@@ -211,6 +211,7 @@ projects/ride-ledger/receipts/
 /src/content/posts.json
 /src/content/blog/*.mdx
 /public/rss.xml
+/public/feed.json
 /public/sitemap.xml
 /public/og/blog/
 
