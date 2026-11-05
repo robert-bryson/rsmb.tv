@@ -143,7 +143,6 @@ for (const delayedAsset of ['none', 'flights', 'textures'] as const) {
                 await route.continue();
             });
         }
-        await page.clock.install();
         try {
             await page.goto('/projects/flights/map?paths=0&stats=0&year=2024&airline=Test', { waitUntil: 'domcontentloaded' });
             // Navigation can finish before the lazy page and its assets load.
@@ -155,7 +154,7 @@ for (const delayedAsset of ['none', 'flights', 'textures'] as const) {
                 await expect(page.getByRole('application')).toHaveAttribute('aria-label', /showing 1 flights/);
                 await expect(page.getByText('Loading globe...', { exact: true })).toBeVisible();
                 // Allow the year fit to run before the renderer reports readiness.
-                await page.clock.runFor(100);
+                await expect.poll(() => new URL(page.url()).searchParams.get('alt')).toBe('0.57');
             }
         } finally {
             releaseInitialAsset();
@@ -173,17 +172,14 @@ for (const delayedAsset of ['none', 'flights', 'textures'] as const) {
             const { x, y } = element.getBoundingClientRect();
             return [element.textContent, [Math.round(x), Math.round(y)]];
         })));
-        // Two seconds covers the camera tween and the initial globe animation.
         const finishCameraAnimation = async () => {
-            // Flush pending renderer updates before skipping tween time.
-            await page.clock.runFor(32);
-            await page.clock.fastForward(2000);
-            // The renderer projects labels before it updates the camera tween.
-            await page.clock.runFor(64);
+            // Image decoding and GPU work use real time. A mocked clock can skip
+            // the camera tween before the renderer projects the airport labels.
+            // Allow the 1 s camera tween and 1.2 s globe intro to finish.
+            await page.waitForTimeout(2100);
         };
-        // Labels attach after the renderer starts its initial globe animation.
-        // Texture preloading and the camera URL can finish before that point.
         await expect(labels).toHaveCount(2);
+        await expect(labels.first()).toBeVisible();
         await finishCameraAnimation();
         const fittedLabels = await labelPositions();
         const reset = page.getByRole('button', { name: 'Reset globe view to default position' });

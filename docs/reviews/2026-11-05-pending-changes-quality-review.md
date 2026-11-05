@@ -36,9 +36,9 @@ Preview tests now inject an AVIF replacement failure.
 The previous manifest and its images remain usable, and temporary files are removed.
 Browser tests also disable AVIF format selection and verify actual WebP decoding.
 
-The camera test now flushes pending renderer updates before it advances the animation clock.
-It then renders the final camera position before comparing label coordinates.
-The test retains its camera, URL, and projected-label assertions.
+The camera tests use real animation time and wait for visible labels.
+A browser clock jump does not advance image decoding or GPU work. Under software rendering, the previous clock jumps captured labels before projection.
+The tests retain their camera, URL, reset, and projected-label assertions.
 
 No major standards findings remain after the follow-up review.
 

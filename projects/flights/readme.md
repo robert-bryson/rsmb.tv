@@ -95,11 +95,13 @@ The camera recovery cases use fixed flight and airport data.
 They cover normal startup, delayed flights, and delayed textures.
 Each case waits for the canvas, filtered data, and texture loading before checking the camera target.
 The URL stores that target before the camera animation ends.
-The checks wait for the renderer to attach airport labels before advancing animation time.
+The checks wait for visible airport labels and use real animation time.
 Texture preload completion alone does not establish renderer readiness.
-The checks advance the browser clock, then compare airport label positions from the renderer.
+Do not skip the browser clock in these cases. Image decoding and GPU work run independently of that clock.
+A clock jump can finish a tween before the renderer projects its labels.
+The checks allow the camera and globe animations to finish, then compare the rendered label positions.
 Reset must move those labels. Returning from an empty year must restore their fitted positions.
-These checks use clock control and request gates. They do not use fixed wall-clock waits.
+Request gates control delayed assets. A bounded 2.1-second wait covers the renderer animation durations.
 
 ### Animation performance
 
