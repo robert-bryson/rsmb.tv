@@ -1,4 +1,5 @@
 import { cartoVectorStyle } from '../../../maps/cartoBasemaps';
+import { summarizeTornadoTrends } from '../../../../shared/tornadoTrends';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as maplibregl from '../../../maps/maplibre';
@@ -8,7 +9,6 @@ import { escapeHtml } from '../../../utils/escapeHtml';
 import {
     DECADE_COLORS,
     MAX_ZOOM,
-    MIN_DATA_YEAR,
     MIN_ZOOM,
     REGION_LABELS,
     REGION_STATES,
@@ -34,7 +34,6 @@ import {
     SVG_CANVAS_WIDTH,
     clampViewBox,
     computeStateBreakdown,
-    computeAnnualSummaryFromTracks,
     fallbackBounds,
     projectFallbackPoint,
     summarize,
@@ -538,15 +537,14 @@ export function TornadoMap() {
 
     // useTornadoFilters.setYearRange always stores start <= end in URL params,
     // so no additional normalization is needed before passing to useTornadoData.
-    // National, unfiltered trends already exist in the small annual summary.
-    // Only filtered comparisons need historical track geometry.
-    const needsHistoryTracks = filters.mode === 'trends'
+    // Charts use compact aggregates. Geometry remains limited to the visible years.
+    const needsTrendIndex = filters.mode === 'trends'
         && (filters.scaleFilter !== 'all' || filters.region !== 'conus' || !!filters.selectedState);
-    const dataStartYear = needsHistoryTracks ? MIN_DATA_YEAR : filters.startYear;
-    const dataEndYear = needsHistoryTracks ? new Date().getFullYear() : filters.endYear;
-    const { tracks, annualSummary, notableEvents, warningSummary, warningLoading, warningError, loading, error, minYear, maxYear, retry } = useTornadoData({
-        startYear: dataStartYear,
-        endYear: dataEndYear,
+    const { tracks, annualSummary, trendIndex, trendsLoading, trendsError, retryTrends,
+        notableEvents, warningSummary, warningLoading, warningError, loading, error, minYear, maxYear, retry } = useTornadoData({
+        startYear: filters.startYear,
+        endYear: filters.endYear,
+        loadTrends: needsTrendIndex,
         loadWarnings: filters.mode === 'trends',
     });
 
@@ -623,10 +621,14 @@ export function TornadoMap() {
     }, [mapAllTracks, filters.selectedState]);
 
     const stats = useMemo(() => summarize(filteredTracks.features), [filteredTracks]);
-    const filteredAnnualSummary = useMemo(
-        () => needsHistoryTracks ? computeAnnualSummaryFromTracks(timelineFeatures, annualSummary.map((summary) => summary.year)) : annualSummary,
-        [needsHistoryTracks, timelineFeatures, annualSummary],
-    );
+    const filteredAnnualSummary = useMemo(() => {
+        if (!needsTrendIndex) return annualSummary;
+        if (!trendIndex) return [];
+        return summarizeTornadoTrends(trendIndex, {
+            states: filters.selectedState ? [filters.selectedState] : regionStates,
+            minScale, maxScale,
+        }, annualSummary.map(summary => summary.year));
+    }, [needsTrendIndex, trendIndex, filters.selectedState, regionStates, minScale, maxScale, annualSummary]);
     const panelAnnualSummary = filters.mode === 'trends' ? filteredAnnualSummary : annualSummary;
     // Only compute the per-state breakdown when the trends panel is active —
     // it iterates all filtered features which can be 70k+ for broad year ranges.
@@ -1058,6 +1060,9 @@ export function TornadoMap() {
                 selectedTrack={selectedTrack}
                 notableEvents={notableEvents}
                 annualSummary={panelAnnualSummary}
+                trendsLoading={trendsLoading}
+                trendsError={trendsError}
+                onRetryTrends={retryTrends}
                 warningSummary={warningSummary}
                 warningLoading={warningLoading}
                 warningError={warningError}
@@ -1087,6 +1092,7 @@ export function TornadoMap() {
 
             <TornadoTimeline
                 annualSummary={filters.mode === 'trends' ? panelAnnualSummary : annualSummary}
+                countsStatus={needsTrendIndex && !trendIndex ? trendsLoading ? 'loading' : 'unavailable' : 'ready'}
                 startYear={normalizedRange.startYear}
                 endYear={normalizedRange.endYear}
                 minYear={minYear}

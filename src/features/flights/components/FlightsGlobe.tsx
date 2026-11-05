@@ -1,4 +1,4 @@
-import { useCallback, useMemo, type RefObject } from 'react';
+import { useCallback, useEffect, useMemo, type RefObject } from 'react';
 import Globe, { type GlobeMethods } from 'react-globe.gl';
 import { cartoRasterUrl } from '../../../maps/cartoBasemaps';
 import { useGlobeCamera } from '../hooks/useGlobeCamera';
@@ -12,6 +12,15 @@ import {
   ALL_AIRPORTS_POINT_SIZE, STATE_POLYGON_ALTITUDE, STATE_POLYGON_SIDE_COLOR,
 } from '../constants';
 import type { GlobeArc, GlobePoint, GlobeStaticArc, GlobeAllAirportPoint, GlobeStatePolygon, GlobeViewState } from '../types';
+
+const createAirportLabel = (d: object) => {
+  const point = d as GlobePoint;
+  const el = document.createElement('div');
+  el.className = 'flight-map-label';
+  el.textContent = point.label;
+  el.style.cssText = 'color: white; font-size: 10px; font-family: ui-monospace, monospace; font-weight: 600; text-shadow: 0 0 4px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,1), 1px 1px 1px rgba(0,0,0,0.8); pointer-events: none; user-select: none; white-space: nowrap;';
+  return el;
+};
 
 type MapLayers = ReturnType<typeof useFlightMapLayers>;
 type RenderedArc = (GlobeArc & { isStatic: false }) |
@@ -55,10 +64,25 @@ export function FlightsGlobe({
     const template = cartoRasterUrl(basemap.tiles);
     return (x: number, y: number, level: number) => template.replace('{z}', String(level)).replace('{x}', String(x)).replace('{y}', String(y));
   }, [basemap]);
-  const { onGlobeReady: handleGlobeReady, onZoom: handleGlobeZoom } = useGlobeCamera({
+  const { onGlobeReady: handleGlobeReady, onZoom: handleGlobeZoom, ready } = useGlobeCamera({
     globeRef, navigationViewRef, selectedView, rotationEnabled: globeRotationEnabled, reducedMotion: prefersReducedMotion,
     tileUrl, onStopRotation, onViewChange,
   });
+
+  useEffect(() => {
+    const globe = globeRef.current;
+    if (!ready || !globe) return;
+    const viewport = window.matchMedia('(max-width: 767px)');
+    const updateResolution = () => {
+      // HTML labels retain native resolution. Bound both GPU buffers together.
+      const ratio = Math.min(window.devicePixelRatio || 1, viewport.matches ? 1.5 : 2);
+      globe.renderer().setPixelRatio(ratio);
+      globe.postProcessingComposer().setPixelRatio(ratio);
+    };
+    updateResolution();
+    viewport.addEventListener('change', updateResolution);
+    return () => viewport.removeEventListener('change', updateResolution);
+  }, [globeRef, ready]);
 
   // Object identity is the renderer's geometry cache key. Pausing changes the
   // timing accessor below, so existing geometry and dash positions survive.
@@ -124,6 +148,108 @@ export function FlightsGlobe({
     };
   }, [selectedFlightType, flightTypeSelection]);
 
+  const arcColor = useCallback((d: object) => {
+    const arc = d as RenderedArc;
+    if (!arc.isStatic) {
+      return getAnimatedArcFlightTypeStyle(arc)?.color ?? arc.color;
+    }
+    const style = arcStyles.get(arc.routeKey);
+    return style?.color ?? arc.color;
+  }, [arcStyles, getAnimatedArcFlightTypeStyle]);
+
+  const arcStroke = useCallback((d: object) => {
+    const arc = d as RenderedArc;
+    if (!arc.isStatic) {
+      return getAnimatedArcFlightTypeStyle(arc)?.stroke ?? arc.stroke;
+    }
+    const style = arcStyles.get(arc.routeKey);
+    return style?.stroke ?? arc.stroke;
+  }, [arcStyles, getAnimatedArcFlightTypeStyle]);
+
+  const pointColor = useCallback((d: object) => {
+    const point = d as GlobePoint & { isAllAirports?: boolean; isCountryRegionUnvisited?: boolean };
+    // Handle all airports layer styling
+    if (point.isAllAirports) {
+      // Unvisited airports in selected country/region get a distinct color
+      if (point.isCountryRegionUnvisited || (selectedCountry && point.airport.country === selectedCountry) || (selectedRegion && point.airport.region === selectedRegion)) {
+        return selectedCountry ? 'hsla(150, 50%, 45%, 0.6)' : 'hsla(40, 60%, 50%, 0.6)';
+      }
+      return point.color; // Color is set by the symbol mode
+    }
+    // Regular visited airports
+    if (selectedRouteAirports) {
+      const isRouteEndpoint = point.airport.code === selectedRouteAirports.origin ||
+        point.airport.code === selectedRouteAirports.destination;
+      if (isRouteEndpoint) return 'hsl(50, 100%, 65%)'; // Bright gold for route endpoints
+      return 'rgba(100, 100, 120, 0.4)'; // Dim other airports
+    }
+    if (selectedCountry) {
+      if (point.airport.country === selectedCountry) return 'hsl(150, 80%, 55%)';
+      return 'rgba(100, 100, 120, 0.3)';
+    }
+    if (selectedRegion) {
+      if (point.airport.region === selectedRegion) return 'hsl(40, 90%, 60%)';
+      return 'rgba(100, 100, 120, 0.3)';
+    }
+    if (flightTypeSelection) {
+      if (flightTypeSelection.airportCodes.has(point.airport.code)) return flightTypeSelection.color;
+      return 'rgba(100, 100, 120, 0.3)';
+    }
+    return point.color;
+  }, [selectedRouteAirports, selectedCountry, selectedRegion, flightTypeSelection]);
+
+  const pointAltitude = useCallback((d: object) => {
+    const point = d as GlobePoint & { isAllAirports?: boolean; isCountryRegionUnvisited?: boolean };
+    // All airports render at a lower altitude
+    if (point.isAllAirports) {
+      // Unvisited airports in selected country/region render slightly higher than normal all-airports
+      if (point.isCountryRegionUnvisited || (selectedCountry && point.airport.country === selectedCountry) || (selectedRegion && point.airport.region === selectedRegion)) {
+        return POINT_ALTITUDE;
+      }
+      return ALL_AIRPORTS_POINT_ALTITUDE;
+    }
+    if (selectedRouteAirports) {
+      const isRouteEndpoint = point.airport.code === selectedRouteAirports.origin ||
+        point.airport.code === selectedRouteAirports.destination;
+      if (isRouteEndpoint) return SELECTED_POINT_ALTITUDE; // Raise route endpoints higher
+    }
+    if (selectedCountry && point.airport.country === selectedCountry) return SELECTED_POINT_ALTITUDE;
+    if (selectedRegion && point.airport.region === selectedRegion) return SELECTED_POINT_ALTITUDE;
+    if (flightTypeSelection && flightTypeSelection.airportCodes.has(point.airport.code)) return SELECTED_POINT_ALTITUDE;
+    return POINT_ALTITUDE;
+  }, [selectedRouteAirports, selectedCountry, selectedRegion, flightTypeSelection]);
+
+  const pointRadius = useCallback((d: object) => {
+    const point = d as GlobePoint & { isAllAirports?: boolean; isCountryRegionUnvisited?: boolean };
+    // All airports use smaller point size
+    if (point.isAllAirports) {
+      // Unvisited airports in selected country/region are slightly larger than default all-airports
+      if (point.isCountryRegionUnvisited || (selectedCountry && point.airport.country === selectedCountry) || (selectedRegion && point.airport.region === selectedRegion)) {
+        return ALL_AIRPORTS_POINT_SIZE * 1.2;
+      }
+      return point.size;
+    }
+    if (selectedRouteAirports) {
+      const isRouteEndpoint = point.airport.code === selectedRouteAirports.origin ||
+        point.airport.code === selectedRouteAirports.destination;
+      if (isRouteEndpoint) return point.size * 2; // Bigger for route endpoints
+      return point.size * 0.6; // Smaller for others
+    }
+    if (selectedCountry) {
+      if (point.airport.country === selectedCountry) return Math.max(point.size * 1.5, 0.3);
+      return point.size * 0.5;
+    }
+    if (selectedRegion) {
+      if (point.airport.region === selectedRegion) return Math.max(point.size * 1.5, 0.3);
+      return point.size * 0.5;
+    }
+    if (flightTypeSelection) {
+      if (flightTypeSelection.airportCodes.has(point.airport.code)) return Math.max(point.size * 1.45, 0.3);
+      return point.size * 0.55;
+    }
+    return point.size;
+  }, [selectedRouteAirports, selectedCountry, selectedRegion, flightTypeSelection]);
+
   return (
     <Globe
       ref={globeRef}
@@ -142,27 +268,13 @@ export function FlightsGlobe({
       arcStartLng="startLng"
       arcEndLat="endLat"
       arcEndLng="endLng"
-      arcColor={(d: object) => {
-        const arc = d as RenderedArc;
-        if (!arc.isStatic) {
-          return getAnimatedArcFlightTypeStyle(arc)?.color ?? arc.color;
-        }
-        const style = arcStyles.get(arc.routeKey);
-        return style?.color ?? arc.color;
-      }}
+      arcColor={arcColor}
       arcAltitudeAutoScale={ARC_ALTITUDE_AUTOSCALE}
       // Thin route tubes need fewer segments than the library's general-purpose
       // defaults. This also bounds the cost of pointer intersection checks.
       arcCurveResolution={24}
       arcCircularResolution={4}
-      arcStroke={(d: object) => {
-        const arc = d as RenderedArc;
-        if (!arc.isStatic) {
-          return getAnimatedArcFlightTypeStyle(arc)?.stroke ?? arc.stroke;
-        }
-        const style = arcStyles.get(arc.routeKey);
-        return style?.stroke ?? arc.stroke;
-      }}
+      arcStroke={arcStroke}
       arcDashLength="dashLength"
       arcDashGap="dashGap"
       arcDashInitialGap="dashInitialGap"
@@ -189,89 +301,11 @@ export function FlightsGlobe({
       }}
       // Points (airports - combined visited + all airports when layer is enabled)
       pointsData={combinedPointsData}
-      pointLat={(d: object) => (d as GlobePoint).lat}
-      pointLng={(d: object) => (d as GlobePoint).lng}
-      pointColor={(d: object) => {
-        const point = d as GlobePoint & { isAllAirports?: boolean; isCountryRegionUnvisited?: boolean };
-        // Handle all airports layer styling
-        if (point.isAllAirports) {
-          // Unvisited airports in selected country/region get a distinct color
-          if (point.isCountryRegionUnvisited || (selectedCountry && point.airport.country === selectedCountry) || (selectedRegion && point.airport.region === selectedRegion)) {
-            return selectedCountry ? 'hsla(150, 50%, 45%, 0.6)' : 'hsla(40, 60%, 50%, 0.6)';
-          }
-          return point.color; // Color is set by the symbol mode
-        }
-        // Regular visited airports
-        if (selectedRouteAirports) {
-          const isRouteEndpoint = point.airport.code === selectedRouteAirports.origin ||
-            point.airport.code === selectedRouteAirports.destination;
-          if (isRouteEndpoint) return 'hsl(50, 100%, 65%)'; // Bright gold for route endpoints
-          return 'rgba(100, 100, 120, 0.4)'; // Dim other airports
-        }
-        if (selectedCountry) {
-          if (point.airport.country === selectedCountry) return 'hsl(150, 80%, 55%)';
-          return 'rgba(100, 100, 120, 0.3)';
-        }
-        if (selectedRegion) {
-          if (point.airport.region === selectedRegion) return 'hsl(40, 90%, 60%)';
-          return 'rgba(100, 100, 120, 0.3)';
-        }
-        if (flightTypeSelection) {
-          if (flightTypeSelection.airportCodes.has(point.airport.code)) return flightTypeSelection.color;
-          return 'rgba(100, 100, 120, 0.3)';
-        }
-        return point.color;
-      }}
-      pointAltitude={(d: object) => {
-        const point = d as GlobePoint & { isAllAirports?: boolean; isCountryRegionUnvisited?: boolean };
-        // All airports render at a lower altitude
-        if (point.isAllAirports) {
-          // Unvisited airports in selected country/region render slightly higher than normal all-airports
-          if (point.isCountryRegionUnvisited || (selectedCountry && point.airport.country === selectedCountry) || (selectedRegion && point.airport.region === selectedRegion)) {
-            return POINT_ALTITUDE;
-          }
-          return ALL_AIRPORTS_POINT_ALTITUDE;
-        }
-        if (selectedRouteAirports) {
-          const isRouteEndpoint = point.airport.code === selectedRouteAirports.origin ||
-            point.airport.code === selectedRouteAirports.destination;
-          if (isRouteEndpoint) return SELECTED_POINT_ALTITUDE; // Raise route endpoints higher
-        }
-        if (selectedCountry && point.airport.country === selectedCountry) return SELECTED_POINT_ALTITUDE;
-        if (selectedRegion && point.airport.region === selectedRegion) return SELECTED_POINT_ALTITUDE;
-        if (flightTypeSelection && flightTypeSelection.airportCodes.has(point.airport.code)) return SELECTED_POINT_ALTITUDE;
-        return POINT_ALTITUDE;
-      }}
-      pointRadius={(d: object) => {
-        const point = d as GlobePoint & { isAllAirports?: boolean; isCountryRegionUnvisited?: boolean };
-        // All airports use smaller point size
-        if (point.isAllAirports) {
-          // Unvisited airports in selected country/region are slightly larger than default all-airports
-          if (point.isCountryRegionUnvisited || (selectedCountry && point.airport.country === selectedCountry) || (selectedRegion && point.airport.region === selectedRegion)) {
-            return ALL_AIRPORTS_POINT_SIZE * 1.2;
-          }
-          return point.size;
-        }
-        if (selectedRouteAirports) {
-          const isRouteEndpoint = point.airport.code === selectedRouteAirports.origin ||
-            point.airport.code === selectedRouteAirports.destination;
-          if (isRouteEndpoint) return point.size * 2; // Bigger for route endpoints
-          return point.size * 0.6; // Smaller for others
-        }
-        if (selectedCountry) {
-          if (point.airport.country === selectedCountry) return Math.max(point.size * 1.5, 0.3);
-          return point.size * 0.5;
-        }
-        if (selectedRegion) {
-          if (point.airport.region === selectedRegion) return Math.max(point.size * 1.5, 0.3);
-          return point.size * 0.5;
-        }
-        if (flightTypeSelection) {
-          if (flightTypeSelection.airportCodes.has(point.airport.code)) return Math.max(point.size * 1.45, 0.3);
-          return point.size * 0.55;
-        }
-        return point.size;
-      }}
+      pointLat="lat"
+      pointLng="lng"
+      pointColor={pointColor}
+      pointAltitude={pointAltitude}
+      pointRadius={pointRadius}
       pointsMerge={false}
       onPointHover={onPointHover as (point: object | null) => void}
       onPointClick={(point: object) => {
@@ -288,22 +322,15 @@ export function FlightsGlobe({
       }}
       // Labels - HTML overlay for readability on any basemap
       htmlElementsData={labeledAirports}
-      htmlLat={(d: object) => (d as GlobePoint).lat}
-      htmlLng={(d: object) => (d as GlobePoint).lng}
+      htmlLat="lat"
+      htmlLng="lng"
       htmlAltitude={LABEL_ALTITUDE}
-      htmlElement={(d: object) => {
-        const point = d as GlobePoint;
-        const el = document.createElement('div');
-        el.className = 'flight-map-label';
-        el.textContent = point.label;
-        el.style.cssText = 'color: white; font-size: 10px; font-family: ui-monospace, monospace; font-weight: 600; text-shadow: 0 0 4px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,1), 1px 1px 1px rgba(0,0,0,0.8); pointer-events: none; user-select: none; white-space: nowrap;';
-        return el;
-      }}
+      htmlElement={createAirportLabel}
       // US States polygons layer
       polygonsData={usStatesPolygons}
       polygonGeoJsonGeometry="geometry"
-      polygonCapColor={(d: object) => (d as GlobeStatePolygon).color}
-      polygonSideColor={() => STATE_POLYGON_SIDE_COLOR}
+      polygonCapColor="color"
+      polygonSideColor={STATE_POLYGON_SIDE_COLOR}
       polygonAltitude={STATE_POLYGON_ALTITUDE}
       polygonLabel={(d: object) => {
         const poly = d as GlobeStatePolygon;

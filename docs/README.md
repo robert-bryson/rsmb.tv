@@ -35,6 +35,11 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-05 | [Pending changes: aggregate validation, independent chart recovery, release checks, and coverage](reviews/2026-11-05-pending-changes-quality-review.md) |
+| 2026-11-05 | [Responsiveness implementation: tornado aggregates, globe rendering, homepage delivery, and measured comparisons](reviews/2026-11-05-responsiveness-improvements.md) |
+| 2026-11-05 | [Flights responsiveness research: callback identity, retained geometry, label churn, and rendering cost](reviews/2026-11-05-flight-responsiveness-research.md) |
+| 2026-11-05 | [Project analysis: monthly-record correctness, page recovery, tornado loading, and validation](reviews/2026-11-05-project-analysis.md) |
+| 2026-11-05 | [Data pipeline analysis: monthly thresholds and historical analysis windows](reviews/2026-11-05-data-pipeline-analysis.md) |
 | 2026-11-04 | [Flight duration tests: filter exclusions, delayed data, and startup regression coverage](reviews/2026-11-04-flight-duration-test-review.md) |
 | 2026-11-04 | [Trip preview activation: pending input, module timing, dismissal, and coverage](reviews/2026-11-04-trip-preview-activation-review.md) |
 | 2026-11-04 | [Metadata review: preview publication state, fixture resource delivery, and regression coverage](reviews/2026-11-04-metadata-standards-quality-review.md) |

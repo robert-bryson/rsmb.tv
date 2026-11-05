@@ -1,6 +1,34 @@
 import { expect, test } from '@playwright/test';
 import { projects } from '../../src/content/projects';
 
+test('project previews use the WebP fallback when the offered source format is unsupported', async ({ page }) => {
+    await page.goto('/');
+    const card = page.getByRole('link').filter({ has: page.getByRole('heading', { name: 'Through Routes', exact: true }) });
+    await card.locator('source').evaluate(source => { (source as HTMLSourceElement).type = 'image/x-unsupported-test'; });
+    await expect.poll(() => card.locator('img').evaluate(element => {
+        const img = element as HTMLImageElement;
+        return img.complete && img.naturalWidth > 0 ? img.currentSrc : '';
+    })).toMatch(/\/images\/previews\/through-routes-\d+-[a-f0-9]+\.webp$/);
+});
+
+for (const width of [390, 1280]) {
+    test(`homepage responsive previews decode and preserve layout at ${width}px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto('/');
+        const preview = page.getByRole('link').filter({ has: page.getByRole('heading', { name: 'Through Routes', exact: true }) }).locator('img');
+        await expect(preview).toHaveAttribute('loading', 'eager');
+        await expect.poll(() => preview.evaluate(img => (img as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+        const image = await preview.evaluate(element => {
+            const img = element as HTMLImageElement;
+            return { source: img.currentSrc, width: img.clientWidth, height: img.clientHeight };
+        });
+        expect(image.source).toMatch(/\/images\/previews\/through-routes-\d+-[a-f0-9]+\.avif$/);
+        expect(image.width).toBeGreaterThan(250);
+        expect(image.height).toBeGreaterThan(150);
+        expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    });
+}
+
 for (const width of [320, 1280]) {
     for (const slug of ['flights', 'temperature-records', 'tornado-tracks']) {
         test(`${slug} shared gallery loads without overflow at ${width}px`, async ({ page }) => {

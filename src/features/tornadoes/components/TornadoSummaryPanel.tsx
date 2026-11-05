@@ -30,6 +30,9 @@ interface TornadoSummaryPanelProps {
     selectedTrack: TornadoTrackFeature | null;
     notableEvents: NotableTornadoEvent[];
     annualSummary: AnnualTornadoSummary[];
+    trendsLoading: boolean;
+    trendsError: string | null;
+    onRetryTrends: () => void;
     warningSummary: WarningSummary | null;
     warningLoading: boolean;
     warningError: string | null;
@@ -567,11 +570,19 @@ function TrendWarnings({ warningSummary, startYear, endYear }: { warningSummary:
 // Wrapper — renders all three in sequence
 // ---------------------------------------------------------------------------
 
-function TrendSnapshot({ annualSummary, warningSummary, startYear, endYear, stateBreakdown }: { annualSummary: AnnualTornadoSummary[]; warningSummary: WarningSummary | null; startYear: number; endYear: number; stateBreakdown: StateAggregateSummary[] }) {
-    // Exclude the current in-progress year so partial data doesn't skew charts.
-    // Use the actual max year in the summary rather than calling new Date() on
-    // every render — the summary already stops at whatever NOAA has published.
+function TrendSnapshot({ annualSummary, warningSummary, startYear, endYear, stateBreakdown, trendsLoading, trendsError, onRetryTrends }: Pick<TornadoSummaryPanelProps,
+    'annualSummary' | 'warningSummary' | 'startYear' | 'endYear' | 'stateBreakdown' | 'trendsLoading' | 'trendsError' | 'onRetryTrends'>) {
+    // Completed-year comparisons exclude the current, incomplete calendar year.
     const fullHistory = useMemo(() => computeFullHistory(annualSummary), [annualSummary]);
+
+    if (trendsLoading) return <p role="status" className="border-t border-zinc-800 pt-4 text-xs text-zinc-400">Loading historical trends…</p>;
+    if (trendsError) return (
+        <div role="alert" className="space-y-2 border-t border-zinc-800 pt-4 text-xs text-amber-300">
+            <p>Historical trends are unavailable. Map controls and selected-year tracks remain available.</p>
+            <p>{trendsError}</p>
+            <button type="button" onClick={onRetryTrends} className="min-h-10 rounded bg-sky-500 px-3 py-2 font-medium text-zinc-950">Retry trends</button>
+        </div>
+    );
 
     return (
         <section className="space-y-5 border-t border-zinc-800 pt-4">
@@ -611,6 +622,9 @@ export function TornadoSummaryPanel({
     selectedTrack,
     notableEvents,
     annualSummary,
+    trendsLoading,
+    trendsError,
+    onRetryTrends,
     warningSummary,
     warningLoading,
     warningError,
@@ -828,7 +842,8 @@ export function TornadoSummaryPanel({
                     </div>
 
                     {!selected && (mode === 'trends' ? (
-                        <TrendSnapshot annualSummary={annualSummary} warningSummary={warningSummary} startYear={startYear} endYear={endYear} stateBreakdown={stateBreakdown} />
+                        <TrendSnapshot annualSummary={annualSummary} warningSummary={warningSummary} startYear={startYear} endYear={endYear} stateBreakdown={stateBreakdown}
+                            trendsLoading={trendsLoading} trendsError={trendsError} onRetryTrends={onRetryTrends} />
                     ) : (
                         <section className="border-t border-zinc-800 pt-4">
                             <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">Notable</div>

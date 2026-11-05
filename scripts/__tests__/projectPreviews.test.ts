@@ -29,6 +29,26 @@ afterEach(async () => {
 });
 
 describe('project preview publication', () => {
+    it('retains both published formats when an AVIF replacement fails', async () => {
+        const { repoRoot, manifest, output } = await fixture();
+        await generateProjectPreviews({ repoRoot, projectList });
+        const previousManifest = await fs.readFile(manifest, 'utf8');
+        const published = await fs.readdir(output);
+        const contents = await Promise.all(published.map(name => fs.readFile(path.join(output, name))));
+        const write = fs.writeFile.bind(fs);
+        vi.spyOn(fs, 'writeFile').mockImplementation(async (filename, ...args) => {
+            if (String(filename).includes('.avif')) {
+                await write(filename, 'partial AVIF');
+                throw Object.assign(new Error('Disk full'), { code: 'ENOSPC' });
+            }
+            return write(filename, ...args);
+        });
+        await expect(generateProjectPreviews({ repoRoot, projectList })).rejects.toMatchObject({ code: 'ENOSPC' });
+        expect(await fs.readFile(manifest, 'utf8')).toBe(previousManifest);
+        expect(await fs.readdir(output)).toEqual(published);
+        for (const [index, name] of published.entries()) expect(await fs.readFile(path.join(output, name))).toEqual(contents[index]);
+    });
+
     it.each(['inside', 'outside'])('rejects an output symlink %s public/images before writing or pruning files', async location => {
         const { repoRoot, output, manifest } = await fixture();
         const target = path.join(repoRoot, location === 'inside' ? 'public/images/originals' : 'private-previews');
@@ -137,17 +157,21 @@ describe('project preview publication', () => {
         const source = path.join(repoRoot, 'public/images/sample.webp');
         await sharp({ create: { width: 1800, height: 900, channels: 3, background: '#336699' } }).webp().toFile(source);
 
-        expect(await generateProjectPreviews({ repoRoot, projectList })).toEqual({ files: 3, projects: 1 });
+        expect(await generateProjectPreviews({ repoRoot, projectList })).toEqual({ files: 6, projects: 1 });
 
         const entry = JSON.parse(await fs.readFile(manifest, 'utf8'))['/images/sample.webp'];
         expect(entry).toMatchObject({ width: 1800, height: 900 });
         const variants: string[] = entry.srcSet.split(', ');
         expect(variants.map(variant => variant.split(' ')[1])).toEqual(['480w', '960w', '1440w']);
         expect(entry.src).toBe(variants[1].split(' ')[0]);
+        const avifVariants: string[] = entry.avifSrcSet.split(', ');
+        expect(avifVariants.map(variant => variant.split(' ')[1])).toEqual(['480w', '960w', '1440w']);
         for (const [index, variant] of variants.entries()) {
             const width = [480, 960, 1440][index];
             const metadata = await sharp(path.join(repoRoot, 'public', variant.split(' ')[0])).metadata();
             expect(metadata).toMatchObject({ format: 'webp', width, height: width / 2 });
+            const avif = await sharp(path.join(repoRoot, 'public', avifVariants[index].split(' ')[0])).metadata();
+            expect(avif).toMatchObject({ format: 'heif', compression: 'av1', width, height: width / 2 });
         }
         expect(await sharp(source).metadata()).toMatchObject({ width: 1800, height: 900 });
     });
@@ -155,7 +179,7 @@ describe('project preview publication', () => {
     it('writes decodable previews without enlargement and removes obsolete generated files', async () => {
         const { repoRoot, manifest, output, previous } = await fixture();
         await fs.writeFile(path.join(output, 'keep-me.txt'), 'user file');
-        expect(await generateProjectPreviews({ repoRoot, projectList })).toEqual({ files: 1, projects: 1 });
+        expect(await generateProjectPreviews({ repoRoot, projectList })).toEqual({ files: 2, projects: 1 });
         const entry = JSON.parse(await fs.readFile(manifest, 'utf8'))['/images/sample.webp'];
         expect(entry).toMatchObject({ width: 32, height: 16, srcSet: expect.stringMatching(/32w$/) });
         const metadata = await sharp(path.join(repoRoot, 'public', entry.src)).metadata();

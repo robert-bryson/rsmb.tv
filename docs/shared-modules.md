@@ -40,6 +40,16 @@ Use it for full-page maps and embedded trip maps.
 Type-only imports can use `maplibre-gl` directly.
 Keep styles and attribution in [`cartoBasemaps.ts`](../src/maps/cartoBasemaps.ts).
 
+## Tornado chart data
+
+Use [`shared/tornadoTrends.ts`](../shared/tornadoTrends.ts) for the generator and browser data contract.
+`buildTornadoTrendIndex` accepts normalized county segments and returns geometry-free groups with width histograms.
+`parseTornadoAnnualSummary` validates and orders published annual metadata.
+`parseTornadoTrendIndex` requires that metadata. It validates wire types and compares every year's totals.
+The comparison includes intensity counts, deaths, injuries, distance, and width medians.
+`summarizeTornadoTrends` applies geographic and intensity filters. Its year domain supplies zero-result rows.
+Validate the complete archive before filtering. Missing published data must not become a zero-result year.
+
 ## U.S. geography
 
 Import state identity data from [`shared/geography/usStates.ts`](../shared/geography/usStates.ts).

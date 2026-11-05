@@ -34,6 +34,7 @@ export async function generateProjectPreviews({ repoRoot = root, projectList = p
         if (!width || !height) throw new Error(`Project preview has no image dimensions: ${source}`);
         const widths = [...new Set([480, 960, 1440].map(candidate => Math.min(candidate, width)))];
         const variants = [];
+        const avifVariants = [];
         for (const size of widths) {
             const output = await sharp(input).resize({ width: size, withoutEnlargement: true }).webp({ quality: 82, effort: 6 }).toBuffer();
             const fingerprint = createHash('sha256').update(output).digest('hex').slice(0, 12);
@@ -41,17 +42,24 @@ export async function generateProjectPreviews({ repoRoot = root, projectList = p
             generated.add(filename);
             await writeAtomically(path.join(directory, filename), output);
             variants.push({ src: `/images/previews/${filename}`, width: size });
+            const avif = await sharp(input).resize({ width: size, withoutEnlargement: true }).avif({ quality: 50, effort: 6 }).toBuffer();
+            const avifFingerprint = createHash('sha256').update(avif).digest('hex').slice(0, 12);
+            const avifFilename = `${project.slug}-${size}-${avifFingerprint}.avif`;
+            generated.add(avifFilename);
+            await writeAtomically(path.join(directory, avifFilename), avif);
+            avifVariants.push({ src: `/images/previews/${avifFilename}`, width: size });
         }
         previews[source] = {
             src: variants.find(variant => variant.width >= 960)?.src ?? variants.at(-1).src,
             srcSet: variants.map(variant => `${variant.src} ${variant.width}w`).join(', '),
+            avifSrcSet: avifVariants.map(variant => `${variant.src} ${variant.width}w`).join(', '),
             width, height,
         };
     }
     // Publish references atomically before removing assets used by the previous manifest.
     await writeAtomically(manifest, `${JSON.stringify(previews, null, 2)}\n`);
     for (const filename of await fs.readdir(directory)) {
-        if (/^[a-z0-9-]+-\d+-[a-f0-9]{12}\.webp$/.test(filename) && !generated.has(filename)) {
+        if (/^[a-z0-9-]+-\d+-[a-f0-9]{12}\.(?:webp|avif)$/.test(filename) && !generated.has(filename)) {
             await fs.unlink(path.join(directory, filename));
         }
     }

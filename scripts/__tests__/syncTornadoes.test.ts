@@ -300,6 +300,9 @@ describe('buildTornadoOutputs', () => {
         expect(outputs.trackPoints.features[0].geometry).toEqual({ type: 'Point', coordinates: [-92.64, 41.25] });
         expect(outputs.annualSummary[0]).toMatchObject({ year: 2024, count: 1, ef2Plus: 1, deaths: 1, injuries: 3 });
         expect(outputs.stateSummary[0]).toMatchObject({ state: 'IA', year: 2024, count: 1, ef2Plus: 1 });
+        expect(outputs.trendIndex).toEqual({ version: 1, groups: [{
+            year: 2024, state: 'IA', scale: 3, count: 1, deaths: 1, injuries: 3, trackMiles: 12.4, widths: [[600, 1]],
+        }] });
         expect(outputs.notableEvents[0]).toMatchObject({ id: 'ncei-2024-1001' });
     });
 });
@@ -470,6 +473,8 @@ describe('writeTornadoOutputs', () => {
             const summary = JSON.parse(fs.readFileSync(summaryPath, 'utf-8'));
             expect(Array.isArray(summary)).toBe(true);
             expect(summary[0].year).toBe(2024);
+            expect(JSON.parse(fs.readFileSync(path.join(tmpDir, 'trend-index.json'), 'utf-8'))).toEqual(outputs.trendIndex);
+            expect(fs.readFileSync(path.join(tmpDir, 'trend-index.json'), 'utf-8')).toBe(`${JSON.stringify(outputs.trendIndex)}\n`);
 
             // State summary
             const stateStatePath = path.join(tmpDir, 'state-summary.json');

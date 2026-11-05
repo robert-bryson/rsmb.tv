@@ -63,8 +63,9 @@ See the [basemap configuration guide](docs/carto-basemaps.md) for styles, attrib
 | Command | Description |
 | ------- | ----------- |
 | `npm run dev` | Prepare local trips, sync published posts and drafts, build flight data, and start Vite |
-| `npm run build` | Sync blog posts, build generated data/artifacts, typecheck, and build for production |
-| `npm run build:dev` | Sync published posts and drafts and build development previews, including incomplete reports |
+| `npm run build` | Verify tornado publication, sync published posts, generate assets, typecheck, and build for production |
+| `npm run build:dev` | Verify tornado publication and build development previews, including incomplete reports |
+| `npm run verify-tornado-publication` | Check that published tornado aggregates match the annual summary |
 | `npm run build-blog` | Sync Google-authored posts and rebuild blog RSS/sitemap/OG artifacts |
 | `npm run build-rss` | Generate `public/rss.xml` from the blog registry |
 | `npm run build-sitemap` | Generate `public/sitemap.xml` from route and content metadata |
@@ -91,7 +92,11 @@ See the [basemap configuration guide](docs/carto-basemaps.md) for styles, attrib
 | `npm run audit` | Run `npm audit --audit-level=moderate` |
 
 The Amplify `dev` branch uses `build:dev`; other branches retain the published-only production build.
-This uses Amplify's documented [branch-specific build commands](https://docs.aws.amazon.com/amplify/latest/userguide/edit-build-settings.html#setting-branch-specific-build-settings-with-scripting).
+See Amplify's [branch-specific build commands](https://docs.aws.amazon.com/amplify/latest/userguide/edit-build-settings.html#setting-branch-specific-build-settings-with-scripting).
+Both builds verify tornado publication before content imports or bundling.
+Publish matching `annual-summary.json` and `trend-index.json` before releasing the frontend.
+The check uses `VITE_TORNADO_DATA_BASE_URL` for the selected build mode.
+Relative data prefixes resolve inside `public/`. Symlinks cannot escape that directory.
 Development builds include editorial preview metadata and mark HTML pages `noindex, nofollow`.
 RSS and sitemap files include published posts only, including during development builds.
 Hosted previews keep CDN asset URLs; local Vite uses prepared assets under `public/data/trips/`.

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import fs from 'node:fs';
+import { buildTornadoTrendIndex } from '../../../shared/tornadoTrends.ts';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gunzipSync } from 'node:zlib';
@@ -859,6 +860,7 @@ export function buildTornadoOutputs(features, warningContext = {}) {
             features: sortedFeatures.map(toPointFeature),
         },
         annualSummary,
+        trendIndex: buildTornadoTrendIndex(sortedFeatures),
         stateSummary: [...stateYears.values()].sort((a, b) => a.state.localeCompare(b.state) || a.year - b.year),
         notableEvents,
         warningSummary: buildWarningSummary(warningContext),
@@ -910,6 +912,7 @@ export function writeTornadoOutputs(outputs, outputDir = DEFAULT_OUTPUT_DIR) {
     const previous = `${staged}.previous`;
     const summaries = {
         'annual-summary.json': outputs.annualSummary,
+        'trend-index.json': outputs.trendIndex,
         'state-summary.json': outputs.stateSummary,
         'notable-events.json': outputs.notableEvents,
         'warning-summary.json': outputs.warningSummary,
@@ -926,7 +929,7 @@ export function writeTornadoOutputs(outputs, outputDir = DEFAULT_OUTPUT_DIR) {
         }
         writeYearCollections(staged, 'tracks', outputs.tracks);
         writeYearCollections(staged, 'track-points', outputs.trackPoints);
-        for (const [filename, data] of Object.entries(summaries)) writeJson(path.join(staged, filename), data, true);
+        for (const [filename, data] of Object.entries(summaries)) writeJson(path.join(staged, filename), data, filename !== 'trend-index.json');
         if (fs.existsSync(outputDir)) {
             fs.renameSync(outputDir, previous);
             backedUp = true;

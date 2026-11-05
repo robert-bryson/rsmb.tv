@@ -106,7 +106,10 @@ These checks use clock control and request gates. They do not use fixed wall-clo
 Pause and play reuse existing arc objects.
 The renderer changes their animation timing without resetting their dash positions.
 Thin route meshes use 24 curve segments and four tube sides.
-The canvas retains the library's display resolution.
+Rendering callbacks retain their identity until their data or selection changes.
+Animation toggles preserve airport label elements and point materials.
+Below 768 CSS pixels, canvas and post-processing pixel ratios are capped at 1.5.
+Larger viewports retain the library's cap of 2. HTML labels retain native display resolution.
 
 The optional performance check uses Pixel 7 emulation, 4× CPU slowdown, and a throttled network.
 It measures six trusted pause/play taps with the committed flight data.
@@ -135,7 +138,7 @@ Use one worker without concurrent browser or build work.
 The check attaches its samples as JSON.
 Set `FLIGHTS_PERFORMANCE_REPORT` to save another copy of the report.
 Ordinary browser runs skip this production-only check.
-Use the [review record](../../docs/reviews/2026-11-02-flight-map-recovery-and-performance.md) for measured results and test limits.
+Use the [responsiveness report](../../docs/reviews/2026-11-05-responsiveness-improvements.md) for current measured results and test limits.
 
 ## Airport validation
 

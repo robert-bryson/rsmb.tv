@@ -1,0 +1,681 @@
+{
+  "reviewDate": "2026-11-05",
+  "checkout": "b031e4b",
+  "environment": {
+    "node": "v26.12.0",
+    "npm": "11.20.0",
+    "browser": "Chromium 156.0.8078.4",
+    "buildMode": "trip-test",
+    "buildOutput": "/tmp/rsmb-audit-build"
+  },
+  "limitations": [
+    "Current installed dependencies were used; no clean npm installation was performed.",
+    "Browser request checks used fixture content, fixed responses, and blocked external map services.",
+    "Public CDN measurements are uncompressed object Content-Length headers, not observed compressed browser transfer or heap size.",
+    "Monthly ACIS evidence and historical estimator reproduction are documented separately in the pipeline report."
+  ],
+  "lazyImportRecovery": {
+    "initial": {
+      "url": "http://127.0.0.1:4188/about",
+      "aboutRequests": 1,
+      "navCount": 0
+    },
+    "afterRetry": {
+      "url": "http://127.0.0.1:4188/about",
+      "aboutRequests": 1,
+      "navCount": 0
+    },
+    "afterReload": {
+      "url": "http://127.0.0.1:4188/about",
+      "aboutRequests": 2,
+      "navCount": 1
+    },
+    "errors": []
+  },
+  "tornadoRequestCounts": {
+    "browser": "156.0.8078.4",
+    "data": "fixed metadata containing every year from 1950 through 2026; empty geometry; external services blocked",
+    "results": [
+      {
+        "query": "start=2025&end=2025&mode=trends",
+        "requests": 1,
+        "years": [
+          2025
+        ]
+      },
+      {
+        "query": "start=2025&end=2025&mode=trends&state=MO",
+        "requests": 77,
+        "years": [
+          1950,
+          1951,
+          1952,
+          1953,
+          1954,
+          1955,
+          1956,
+          1957,
+          1958,
+          1959,
+          1960,
+          1961,
+          1962,
+          1963,
+          1964,
+          1965,
+          1966,
+          1967,
+          1968,
+          1969,
+          1970,
+          1971,
+          1972,
+          1973,
+          1974,
+          1975,
+          1976,
+          1977,
+          1978,
+          1979,
+          1980,
+          1981,
+          1982,
+          1983,
+          1984,
+          1985,
+          1986,
+          1987,
+          1988,
+          1989,
+          1990,
+          1991,
+          1992,
+          1993,
+          1994,
+          1995,
+          1996,
+          1997,
+          1998,
+          1999,
+          2000,
+          2001,
+          2002,
+          2003,
+          2004,
+          2005,
+          2006,
+          2007,
+          2008,
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021,
+          2022,
+          2023,
+          2024,
+          2025,
+          2026
+        ]
+      }
+    ]
+  },
+  "tornadoPublicObjectSizes": {
+    "source": "https://data.rsmb.tv/tornadoes/annual-summary.json",
+    "method": "HEAD each tracks/{year}.geojson with Accept-Encoding: identity",
+    "years": 77,
+    "minYear": 1950,
+    "maxYear": 2026,
+    "events": 80221,
+    "totalObjectBytes": 44202461,
+    "sizes": [
+      {
+        "year": 1950,
+        "count": 223,
+        "status": 200,
+        "bytes": 119573,
+        "encoding": null
+      },
+      {
+        "year": 1951,
+        "count": 269,
+        "status": 200,
+        "bytes": 144107,
+        "encoding": null
+      },
+      {
+        "year": 1952,
+        "count": 271,
+        "status": 200,
+        "bytes": 145485,
+        "encoding": null
+      },
+      {
+        "year": 1953,
+        "count": 491,
+        "status": 200,
+        "bytes": 263014,
+        "encoding": null
+      },
+      {
+        "year": 1954,
+        "count": 608,
+        "status": 200,
+        "bytes": 325171,
+        "encoding": null
+      },
+      {
+        "year": 1955,
+        "count": 632,
+        "status": 200,
+        "bytes": 337853,
+        "encoding": null
+      },
+      {
+        "year": 1956,
+        "count": 567,
+        "status": 200,
+        "bytes": 303234,
+        "encoding": null
+      },
+      {
+        "year": 1957,
+        "count": 930,
+        "status": 200,
+        "bytes": 497550,
+        "encoding": null
+      },
+      {
+        "year": 1958,
+        "count": 608,
+        "status": 200,
+        "bytes": 325206,
+        "encoding": null
+      },
+      {
+        "year": 1959,
+        "count": 628,
+        "status": 200,
+        "bytes": 335588,
+        "encoding": null
+      },
+      {
+        "year": 1960,
+        "count": 645,
+        "status": 200,
+        "bytes": 344959,
+        "encoding": null
+      },
+      {
+        "year": 1961,
+        "count": 771,
+        "status": 200,
+        "bytes": 412325,
+        "encoding": null
+      },
+      {
+        "year": 1962,
+        "count": 670,
+        "status": 200,
+        "bytes": 357688,
+        "encoding": null
+      },
+      {
+        "year": 1963,
+        "count": 493,
+        "status": 200,
+        "bytes": 263565,
+        "encoding": null
+      },
+      {
+        "year": 1964,
+        "count": 757,
+        "status": 200,
+        "bytes": 404999,
+        "encoding": null
+      },
+      {
+        "year": 1965,
+        "count": 989,
+        "status": 200,
+        "bytes": 529075,
+        "encoding": null
+      },
+      {
+        "year": 1966,
+        "count": 605,
+        "status": 200,
+        "bytes": 323467,
+        "encoding": null
+      },
+      {
+        "year": 1967,
+        "count": 966,
+        "status": 200,
+        "bytes": 516343,
+        "encoding": null
+      },
+      {
+        "year": 1968,
+        "count": 715,
+        "status": 200,
+        "bytes": 382082,
+        "encoding": null
+      },
+      {
+        "year": 1969,
+        "count": 648,
+        "status": 200,
+        "bytes": 346332,
+        "encoding": null
+      },
+      {
+        "year": 1970,
+        "count": 700,
+        "status": 200,
+        "bytes": 374083,
+        "encoding": null
+      },
+      {
+        "year": 1971,
+        "count": 963,
+        "status": 200,
+        "bytes": 515118,
+        "encoding": null
+      },
+      {
+        "year": 1972,
+        "count": 777,
+        "status": 200,
+        "bytes": 415525,
+        "encoding": null
+      },
+      {
+        "year": 1973,
+        "count": 1198,
+        "status": 200,
+        "bytes": 640846,
+        "encoding": null
+      },
+      {
+        "year": 1974,
+        "count": 1119,
+        "status": 200,
+        "bytes": 598987,
+        "encoding": null
+      },
+      {
+        "year": 1975,
+        "count": 961,
+        "status": 200,
+        "bytes": 514175,
+        "encoding": null
+      },
+      {
+        "year": 1976,
+        "count": 934,
+        "status": 200,
+        "bytes": 500028,
+        "encoding": null
+      },
+      {
+        "year": 1977,
+        "count": 922,
+        "status": 200,
+        "bytes": 494515,
+        "encoding": null
+      },
+      {
+        "year": 1978,
+        "count": 875,
+        "status": 200,
+        "bytes": 469034,
+        "encoding": null
+      },
+      {
+        "year": 1979,
+        "count": 915,
+        "status": 200,
+        "bytes": 489353,
+        "encoding": null
+      },
+      {
+        "year": 1980,
+        "count": 972,
+        "status": 200,
+        "bytes": 520104,
+        "encoding": null
+      },
+      {
+        "year": 1981,
+        "count": 830,
+        "status": 200,
+        "bytes": 443634,
+        "encoding": null
+      },
+      {
+        "year": 1982,
+        "count": 1180,
+        "status": 200,
+        "bytes": 630568,
+        "encoding": null
+      },
+      {
+        "year": 1983,
+        "count": 995,
+        "status": 200,
+        "bytes": 532316,
+        "encoding": null
+      },
+      {
+        "year": 1984,
+        "count": 1020,
+        "status": 200,
+        "bytes": 545712,
+        "encoding": null
+      },
+      {
+        "year": 1985,
+        "count": 773,
+        "status": 200,
+        "bytes": 413588,
+        "encoding": null
+      },
+      {
+        "year": 1986,
+        "count": 847,
+        "status": 200,
+        "bytes": 452735,
+        "encoding": null
+      },
+      {
+        "year": 1987,
+        "count": 695,
+        "status": 200,
+        "bytes": 371564,
+        "encoding": null
+      },
+      {
+        "year": 1988,
+        "count": 773,
+        "status": 200,
+        "bytes": 413831,
+        "encoding": null
+      },
+      {
+        "year": 1989,
+        "count": 921,
+        "status": 200,
+        "bytes": 492568,
+        "encoding": null
+      },
+      {
+        "year": 1990,
+        "count": 1264,
+        "status": 200,
+        "bytes": 675578,
+        "encoding": null
+      },
+      {
+        "year": 1991,
+        "count": 1208,
+        "status": 200,
+        "bytes": 645633,
+        "encoding": null
+      },
+      {
+        "year": 1992,
+        "count": 1404,
+        "status": 200,
+        "bytes": 750986,
+        "encoding": null
+      },
+      {
+        "year": 1993,
+        "count": 424,
+        "status": 200,
+        "bytes": 227132,
+        "encoding": null
+      },
+      {
+        "year": 1994,
+        "count": 582,
+        "status": 200,
+        "bytes": 311359,
+        "encoding": null
+      },
+      {
+        "year": 1995,
+        "count": 751,
+        "status": 200,
+        "bytes": 402060,
+        "encoding": null
+      },
+      {
+        "year": 1996,
+        "count": 1236,
+        "status": 200,
+        "bytes": 670442,
+        "encoding": null
+      },
+      {
+        "year": 1997,
+        "count": 1176,
+        "status": 200,
+        "bytes": 638044,
+        "encoding": null
+      },
+      {
+        "year": 1998,
+        "count": 1524,
+        "status": 200,
+        "bytes": 840431,
+        "encoding": null
+      },
+      {
+        "year": 1999,
+        "count": 1517,
+        "status": 200,
+        "bytes": 846221,
+        "encoding": null
+      },
+      {
+        "year": 2000,
+        "count": 1157,
+        "status": 200,
+        "bytes": 654644,
+        "encoding": null
+      },
+      {
+        "year": 2001,
+        "count": 1335,
+        "status": 200,
+        "bytes": 755902,
+        "encoding": null
+      },
+      {
+        "year": 2002,
+        "count": 1034,
+        "status": 200,
+        "bytes": 585254,
+        "encoding": null
+      },
+      {
+        "year": 2003,
+        "count": 1492,
+        "status": 200,
+        "bytes": 844950,
+        "encoding": null
+      },
+      {
+        "year": 2004,
+        "count": 1906,
+        "status": 200,
+        "bytes": 1079223,
+        "encoding": null
+      },
+      {
+        "year": 2005,
+        "count": 1329,
+        "status": 200,
+        "bytes": 752800,
+        "encoding": null
+      },
+      {
+        "year": 2006,
+        "count": 1256,
+        "status": 200,
+        "bytes": 708809,
+        "encoding": null
+      },
+      {
+        "year": 2007,
+        "count": 1242,
+        "status": 200,
+        "bytes": 696030,
+        "encoding": null
+      },
+      {
+        "year": 2008,
+        "count": 1951,
+        "status": 200,
+        "bytes": 1102249,
+        "encoding": null
+      },
+      {
+        "year": 2009,
+        "count": 1273,
+        "status": 200,
+        "bytes": 719761,
+        "encoding": null
+      },
+      {
+        "year": 2010,
+        "count": 1451,
+        "status": 200,
+        "bytes": 820483,
+        "encoding": null
+      },
+      {
+        "year": 2011,
+        "count": 2071,
+        "status": 200,
+        "bytes": 1174659,
+        "encoding": null
+      },
+      {
+        "year": 2012,
+        "count": 1058,
+        "status": 200,
+        "bytes": 598003,
+        "encoding": null
+      },
+      {
+        "year": 2013,
+        "count": 1053,
+        "status": 200,
+        "bytes": 596186,
+        "encoding": null
+      },
+      {
+        "year": 2014,
+        "count": 1064,
+        "status": 200,
+        "bytes": 602004,
+        "encoding": null
+      },
+      {
+        "year": 2015,
+        "count": 1320,
+        "status": 200,
+        "bytes": 745722,
+        "encoding": null
+      },
+      {
+        "year": 2016,
+        "count": 1081,
+        "status": 200,
+        "bytes": 612115,
+        "encoding": null
+      },
+      {
+        "year": 2017,
+        "count": 1662,
+        "status": 200,
+        "bytes": 943375,
+        "encoding": null
+      },
+      {
+        "year": 2018,
+        "count": 1256,
+        "status": 200,
+        "bytes": 712899,
+        "encoding": null
+      },
+      {
+        "year": 2019,
+        "count": 1737,
+        "status": 200,
+        "bytes": 986111,
+        "encoding": null
+      },
+      {
+        "year": 2020,
+        "count": 1252,
+        "status": 200,
+        "bytes": 711317,
+        "encoding": null
+      },
+      {
+        "year": 2021,
+        "count": 1536,
+        "status": 200,
+        "bytes": 871418,
+        "encoding": null
+      },
+      {
+        "year": 2022,
+        "count": 1384,
+        "status": 200,
+        "bytes": 787607,
+        "encoding": null
+      },
+      {
+        "year": 2023,
+        "count": 1522,
+        "status": 200,
+        "bytes": 864800,
+        "encoding": null
+      },
+      {
+        "year": 2024,
+        "count": 2134,
+        "status": 200,
+        "bytes": 1213830,
+        "encoding": null
+      },
+      {
+        "year": 2025,
+        "count": 1591,
+        "status": 200,
+        "bytes": 905249,
+        "encoding": null
+      },
+      {
+        "year": 2026,
+        "count": 1132,
+        "status": 200,
+        "bytes": 643275,
+        "encoding": null
+      }
+    ]
+  }
+}

@@ -63,23 +63,7 @@ export type TornadoPointCollection = FeatureCollection<Point, TornadoPointProper
     };
 };
 
-export interface AnnualTornadoSummary {
-    year: number;
-    count: number;
-    unknown: number;
-    ef0: number;
-    ef1: number;
-    ef2: number;
-    ef3: number;
-    ef4: number;
-    ef5: number;
-    ef1Plus: number;
-    ef2Plus: number;
-    deaths: number;
-    injuries: number;
-    trackMiles: number;
-    medianWidthYards: number;
-}
+export type { AnnualTornadoSummary } from '../../../../shared/tornadoTrends';
 
 export interface StateTornadoSummary {
     state: string;

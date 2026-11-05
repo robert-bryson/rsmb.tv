@@ -111,7 +111,20 @@ See `scripts/backfill.js` for full option documentation.
 ## Trend analytics
 
 The Trends panel (`mode=trends`) uses `annual-summary.json` for unfiltered national comparisons.
-State, region, and intensity comparisons load historical tracks.
+State, region, and intensity comparisons load `trend-index.json` when required.
+This versioned index groups county segments by year, state, and intensity.
+Width histograms preserve exact medians when groups are combined.
+Geometry requests stay within the selected map years, including while Trends is open.
+The reader validates every group's types, counts, and width histogram.
+It also checks all years and annual totals against `annual-summary.json`.
+Incomplete or incompatible archives produce an error instead of false zero-count years.
+Chart loading and errors do not block the selected-year map.
+Retry trends refreshes both publication files. It retains geometry and optional analytics caches.
+The timeline keeps its controls available and hides counts until the chart data is valid.
+The app does not download historical geometry as a fallback.
+Publish the updated sync output, including `trend-index.json`, before releasing the updated frontend.
+Run `npm run verify-tornado-publication` to verify the release.
+Both release builds run this check automatically and stop if publication is unavailable or incompatible.
 Warning and watch data load separately when Trends opens. These requests cannot block the map.
 The panel contains these views:
 
@@ -156,14 +169,16 @@ Multi-year percentages and deaths per 100 segments use summed counts as their de
 Run the data and interaction tests from the repository root:
 
 ```bash
-npx vitest run scripts/__tests__/syncTornadoes.test.ts src/test/useTornadoData.test.ts \
-  src/test/useTornadoFilters.test.ts src/test/tornadoUtils.test.ts src/test/tornadoTimeline.test.tsx
+npx vitest run scripts/__tests__/syncTornadoes.test.ts scripts/__tests__/tornadoPublication.test.ts \
+  src/test/tornadoTrends.test.ts src/test/useTornadoData.test.ts src/test/useTornadoFilters.test.ts \
+  src/test/tornadoUtils.test.ts src/test/tornadoTimeline.test.tsx
 npm run test:e2e -- tests/e2e/tornado-map.spec.ts
 ```
 
 The browser tests use fixed data and map tiles.
 They check desktop WebGL, phone WebGL, and the desktop SVG fallback.
-The phone test fails a historical request while controls remain open. It then selects Retry and checks recovery.
+The phone test fails an aggregate request while controls remain open.
+It selects **Retry trends** and checks recovery without another geometry request.
 
 ## Known limitations
 

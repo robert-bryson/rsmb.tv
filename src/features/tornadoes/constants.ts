@@ -4,6 +4,7 @@ import type { TornadoColorMode, TornadoRegionPreset, TornadoScaleFilter } from '
 export const DATA_BASE_URL = (import.meta.env.VITE_TORNADO_DATA_BASE_URL || 'https://data.rsmb.tv/tornadoes').replace(/\/+$/, '');
 
 export const TORNADO_ANNUAL_SUMMARY_URL = `${DATA_BASE_URL}/annual-summary.json`;
+export const TORNADO_TREND_INDEX_URL = `${DATA_BASE_URL}/trend-index.json`;
 export const TORNADO_NOTABLE_EVENTS_URL = `${DATA_BASE_URL}/notable-events.json`;
 export const TORNADO_WARNING_SUMMARY_URL = `${DATA_BASE_URL}/warning-summary.json`;
 

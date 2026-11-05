@@ -21,6 +21,12 @@ test('flight animation toggles meet the mobile interaction budget', async ({ pag
     const flightCount = Number((await page.getByRole('application').getAttribute('aria-label'))?.match(/showing (\d+) flights/)?.[1]);
     expect(flightCount).toBeGreaterThan(0);
 
+    // Retain the actual label nodes: recreating them forces CSS2D layout on every toggle.
+    await page.evaluate(() => {
+        const state = window as typeof window & { originalFlightLabels?: Element[] };
+        state.originalFlightLabels = [...document.querySelectorAll('.flight-map-label')];
+    });
+
     // Use actual trusted clicks. End after two animation frames, so measurement
     // includes React's update, the globe's queued layer work, and a painted frame.
     const samples: { action: string; durationMs: number }[] = [];
@@ -49,9 +55,16 @@ test('flight animation toggles meet the mobile interaction budget', async ({ pag
         renderScale: await page.locator('.flights-globe canvas').evaluate(canvas => (canvas as HTMLCanvasElement).width / canvas.clientWidth),
         maxDurationMs: Math.max(...samples.map(sample => sample.durationMs)),
     };
+    expect(await page.evaluate(() => {
+        const state = window as typeof window & { originalFlightLabels?: Element[] };
+        const current = [...document.querySelectorAll('.flight-map-label')];
+        return !!current.length && current.length === state.originalFlightLabels?.length
+            && current.every((element, index) => element === state.originalFlightLabels?.[index]);
+    }), 'Animation toggles should retain airport labels').toBe(true);
     await testInfo.attach('flight-animation-performance', { body: JSON.stringify(report, null, 2), contentType: 'application/json' });
     if (process.env.FLIGHTS_PERFORMANCE_REPORT) {
         await fs.writeFile(process.env.FLIGHTS_PERFORMANCE_REPORT, `${JSON.stringify(report, null, 2)}\n`);
     }
     expect(report.maxDurationMs, JSON.stringify(samples)).toBeLessThanOrEqual(report.budgetMs);
+    expect(report.renderScale, 'Mobile canvas resolution remains bounded').toBeLessThanOrEqual(1.5);
 });

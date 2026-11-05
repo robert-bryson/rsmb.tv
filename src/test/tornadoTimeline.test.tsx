@@ -7,6 +7,22 @@ afterEach(() => { cleanup(); vi.useRealTimers(); });
 
 const annualSummary = [2020, 2021, 2022].map(year => ({ year, count: 1 }) as AnnualTornadoSummary);
 
+it('keeps controls available without publishing false zero counts during loading or failure', () => {
+    const onYearRangeChange = vi.fn();
+    const props = { annualSummary: [], minYear: 2020, maxYear: 2022, startYear: 2020, endYear: 2020, onYearRangeChange };
+    const { rerender } = render(<TornadoTimeline {...props} countsStatus="loading" />);
+    expect(screen.getByText('Loading historical counts…')).toBeVisible();
+    expect(screen.queryByText('0 tracks')).toBeNull();
+    expect(screen.queryByRole('group', { name: 'Annual track counts' })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    expect(onYearRangeChange).toHaveBeenCalledWith(2021, 2021);
+    rerender(<TornadoTimeline {...props} countsStatus="unavailable" />);
+    expect(screen.getByText('Historical counts unavailable')).toBeVisible();
+    expect(screen.getByRole('slider', { name: 'Start 2020' })).toBeEnabled();
+    rerender(<TornadoTimeline {...props} annualSummary={annualSummary} countsStatus="ready" />);
+    expect(screen.getByRole('button', { name: '2020: 1 track segments' })).toBeVisible();
+});
+
 describe('review regressions: timeline keyboard access', () => {
     it('keeps one histogram year in the tab order when a range starts in a gap', () => {
         const onYearRangeChange = vi.fn();

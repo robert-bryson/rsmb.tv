@@ -4,6 +4,7 @@ import type { AnnualTornadoSummary } from '../types';
 
 interface TornadoTimelineProps {
     annualSummary: AnnualTornadoSummary[];
+    countsStatus?: 'ready' | 'loading' | 'unavailable';
     startYear: number;
     endYear: number;
     minYear: number;
@@ -16,6 +17,7 @@ interface TornadoTimelineProps {
 
 export function TornadoTimeline({
     annualSummary,
+    countsStatus = 'ready',
     startYear,
     endYear,
     minYear,
@@ -118,7 +120,9 @@ export function TornadoTimeline({
                         <div className="text-xs uppercase tracking-wide text-zinc-500">Timeline</div>
                         <div className="text-sm font-medium text-zinc-100">
                             {startYear === endYear ? startYear : `${startYear}-${endYear}`}
-                            <span className="ml-2 text-xs font-normal text-zinc-400">{selectedCount.toLocaleString()} tracks</span>
+                            <span className="ml-2 text-xs font-normal text-zinc-400">{countsStatus === 'ready'
+                                ? `${selectedCount.toLocaleString()} tracks`
+                                : countsStatus === 'loading' ? 'Loading historical counts…' : 'Historical counts unavailable'}</span>
                         </div>
                     </div>
                     <div className="flex items-center gap-2 text-xs">
@@ -168,7 +172,7 @@ export function TornadoTimeline({
 
                 {!collapsed && (
                     <>
-                        <div className="grid h-20 grid-cols-[repeat(auto-fit,minmax(3px,1fr))] items-end gap-px rounded bg-zinc-900/80 p-2" role="group" aria-label="Annual track counts">
+                        {countsStatus === 'ready' && <div className="grid h-20 grid-cols-[repeat(auto-fit,minmax(3px,1fr))] items-end gap-px rounded bg-zinc-900/80 p-2" role="group" aria-label="Annual track counts">
                             {annualSummary.map((summary) => {
                                 const active = summary.year >= startYear && summary.year <= endYear;
                                 const barDecade = Math.floor(summary.year / 10) * 10;
@@ -201,7 +205,7 @@ export function TornadoTimeline({
                                     />
                                 );
                             })}
-                        </div>
+                        </div>}
 
                         <div className="grid gap-2 md:grid-cols-2">
                             <label className="grid gap-1 text-xs text-zinc-400">

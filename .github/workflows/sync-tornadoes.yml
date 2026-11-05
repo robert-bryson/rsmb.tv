@@ -76,7 +76,7 @@ jobs:
       - name: Upload tornado data to S3
         run: |
           set -euo pipefail
-          # JSON summary files (annual-summary, state-summary, notable-events)
+          # JSON summaries, including the versioned trend-index.json chart data.
           aws s3 sync public/data/tornadoes/ "s3://${TORNADO_DATA_BUCKET}/tornadoes/" \
             --content-type "application/json" \
             --cache-control "public, max-age=3600" \

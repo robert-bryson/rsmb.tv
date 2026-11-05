@@ -23,6 +23,11 @@ const summary: AnnualTornadoSummary = {
     year: 2025, count: 1, unknown: 0, ef0: 0, ef1: 0, ef2: 1, ef3: 0, ef4: 0, ef5: 0,
     ef1Plus: 1, ef2Plus: 1, deaths: 0, injuries: 0, trackMiles: 12, medianWidthYards: 100,
 };
+const trendIndex = { version: 1, groups: [
+    ...[2023, 2024, 2025].map(year => ({ year, state: 'KS', scale: year === 2024 ? 1 : 2, count: year === 2023 ? 7 : 1,
+        deaths: 0, injuries: 0, trackMiles: year === 2023 ? 84 : 12, widths: [[100, year === 2023 ? 7 : 1]] })),
+    { year: 2023, state: 'MO', scale: 2, count: 2, deaths: 0, injuries: 0, trackMiles: 24, widths: [[100, 2]] },
+] };
 
 for (const [width, renderer] of [[390, 'webgl'], [1280, 'webgl'], [1280, 'svg']] as const) {
     test(`tornado controls and selectable tracks work at ${width}px with ${renderer}`, async ({ page }) => {
@@ -38,10 +43,12 @@ for (const [width, renderer] of [[390, 'webgl'], [1280, 'webgl'], [1280, 'svg']]
         const pointRequests: string[] = [];
         const trackRequests: string[] = [];
         const warningRequests: string[] = [];
+        const trendRequests: string[] = [];
         page.on('pageerror', error => pageErrors.push(error.message));
         page.on('request', request => { if (request.url().includes('/track-points/')) pointRequests.push(request.url()); });
         page.on('request', request => { if (request.url().includes('/tornadoes/tracks/')) trackRequests.push(request.url()); });
         page.on('request', request => { if (request.url().endsWith('warning-summary.json')) warningRequests.push(request.url()); });
+        page.on('request', request => { if (request.url().endsWith('trend-index.json')) trendRequests.push(request.url()); });
 
         // Isolate rendering from provider availability; use a fake basemap key.
         await page.route('https://**/*', route => route.abort());
@@ -69,9 +76,10 @@ for (const [width, renderer] of [[390, 'webgl'], [1280, 'webgl'], [1280, 'svg']]
         });
         await page.route('https://data.rsmb.tv/tornadoes/**', route => {
             const pathname = new URL(route.request().url()).pathname;
-            if (pathname.endsWith('annual-summary.json')) return route.fulfill({ json: [{ ...summary, year: 2023 }, { ...summary, year: 2024 }, summary] });
+            if (pathname.endsWith('annual-summary.json')) return route.fulfill({ json: [{ ...summary, year: 2023, count: 9, ef2: 9, ef1Plus: 9, ef2Plus: 9, trackMiles: 108 }, { ...summary, year: 2024, ef1: 1, ef2: 0, ef2Plus: 0 }, summary] });
             if (pathname.endsWith('notable-events.json')) return route.fulfill({ json: [{ ...track.properties, id: 'notable-track', year: 2024, scale: 1, scaleLabel: 'EF1', coordinates: track.geometry.coordinates }] });
             if (pathname.endsWith('warning-summary.json')) return route.fulfill({ json: null });
+            if (pathname.endsWith('trend-index.json')) return route.fulfill({ json: trendIndex });
             if (exerciseRetry && !failedTrackRequest) {
                 failedTrackRequest = true;
                 return route.fulfill({ status: 503, json: { error: 'Temporarily unavailable' } });
@@ -168,18 +176,40 @@ for (const [width, renderer] of [[390, 'webgl'], [1280, 'webgl'], [1280, 'svg']]
         }
         if (width < 768) {
             let failHistory = true;
-            await page.route('https://data.rsmb.tv/tornadoes/tracks/2023.geojson', route => failHistory
+            await page.route('https://data.rsmb.tv/tornadoes/trend-index.json', route => failHistory
                 ? route.fulfill({ status: 503, json: { error: 'Historical data unavailable' } })
-                : route.fulfill({ json: { type: 'FeatureCollection', features: [] } }));
+                : route.fulfill({ json: trendIndex }));
             await page.getByRole('button', { name: 'EF2+', exact: true }).click();
             await page.getByRole('button', { name: /^trends$/i }).click();
-            await expect(page.getByRole('alert')).toContainText('Unable to load tornado data');
+            await expect(page.getByRole('alert')).toContainText('Historical trends are unavailable');
+            await expect(page.getByText('Loading tornado tracks...', { exact: true })).toHaveCount(0);
+            await expect(page.getByRole('button', { name: '2023: 0 track segments', exact: true })).toHaveCount(0);
             failHistory = false;
             // Retry must remain reachable while the mobile controls cover the map.
-            await page.getByRole('button', { name: 'Retry', exact: true }).click({ timeout: 3000 });
+            const geometryBeforeRetry = trackRequests.length;
+            await page.getByRole('button', { name: 'Retry trends', exact: true }).click({ timeout: 3000 });
             await expect(page.getByRole('alert')).toHaveCount(0);
+            await expect(page.getByText('A · Annual count vs selection')).toBeVisible();
+            expect(trackRequests).toHaveLength(geometryBeforeRetry);
             await expect(page.getByRole('button', { name: 'Close controls', exact: true })).toBeVisible();
         }
+        // A filtered full-history chart must not depend on historical geometry.
+        // Unmount the first WebGL renderer before replacing its document. This
+        // lets WebKit cancel worker/tile requests without navigation errors.
+        await page.getByRole('link', { name: '← rsmb.tv', exact: true }).click();
+        await expect(page.getByRole('heading', { name: 'Tornado Tracks', level: 1, exact: true })).toBeVisible();
+        const previousTrackRequests = trackRequests.length;
+        await page.goto('/projects/tornado-tracks/map?start=2025&end=2025&mode=trends&state=KS');
+        if (width < 768) await page.getByRole('button', { name: 'Filters & details', exact: true }).click();
+        await expect(page.getByText('A · Annual count vs selection')).toBeVisible();
+        await expect(page.getByText('Loading tornado tracks...', { exact: true })).toHaveCount(0);
+        await expect.poll(() => trendRequests.length).toBeGreaterThan(0);
+        expect(trackRequests.slice(previousTrackRequests).map(url => new URL(url).pathname)).toEqual(['/tornadoes/tracks/2025.geojson']);
+        if (width < 768) {
+            await page.getByRole('button', { name: 'Close controls', exact: true }).click();
+            await page.getByRole('button', { name: 'Expand timeline', exact: true }).click();
+        }
+        await expect(page.getByRole('button', { name: '2023: 7 track segments', exact: true })).toBeVisible();
         expect(pageErrors).toEqual([]);
     });
 }

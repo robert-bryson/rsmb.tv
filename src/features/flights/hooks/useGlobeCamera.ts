@@ -143,5 +143,5 @@ export function useGlobeCamera({
         if (mounted.current) setReady(true);
     }, []);
 
-    return { onGlobeReady, onZoom: scheduleSync };
+    return { onGlobeReady, onZoom: scheduleSync, ready };
 }

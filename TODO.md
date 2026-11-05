@@ -52,6 +52,7 @@ The duplicate photos, unused galleries, and stale heading IDs are corrected loca
 
 ### Temperature record data
 
+- [ ] Correct calendar-month thresholds and regenerate affected archives and recent summaries. Cover the [query semantics and backfill conditions](docs/reviews/2026-11-05-data-pipeline-analysis.md#recommended-work-and-acceptance-conditions).
 - [ ] Run a full temperature sync after deployment. Verify California and all per-date state coverage. See [the map guide](docs/temperature-map.md#freshness-and-coverage).
 
 The historical signal is not ready for publication.
@@ -61,6 +62,7 @@ The historical signal is not ready for publication.
 - [ ] Regenerate `climateTrends.json`. Include a zero-count row for each calendar year.
 - [ ] Complete the [publication checks](projects/temperature-records/methodology.md#validate-before-publication).
 - [ ] Store an approved station cohort with a version number before publication.
+- [ ] Bound historical `events.csv` to `--analysis-end`. Add the [CLI regression](docs/reviews/2026-11-05-data-pipeline-analysis.md#2-p2--the-offline-estimator-writes-events-after---analysis-end).
 - [ ] Publish station coverage, failed geography requests, and data quality in a manifest with a version number.
 
 ## ADV Atlas
@@ -84,7 +86,7 @@ Keep the current budgets. See the [repository guide](README.md#testing-notes) fo
 
 ## Tornado Tracks
 
-- [ ] Generate yearly state and scale aggregates. Filtered Trends must work without downloading the complete historical geometry.
+- [ ] Publish `trend-index.json` with the updated tornado sync before frontend rollout. Verify the [release requirement](docs/reviews/2026-11-05-responsiveness-improvements.md#release-requirement).
 - [ ] Publish source coverage dates and omitted-coordinate counts separately from upload timestamps.
 - [ ] Add recovery for failed basemap requests. Check the degraded view and Retry with fixed browser responses.
 - [ ] Add keyboard-accessible state selection, chart data tables, and a clear zero-results action.
@@ -107,6 +109,7 @@ Use fixed provider responses. Do not contact production services from unit tests
 
 Preserve passing publication checks when you change build scripts.
 
+- [ ] Add recovery for failed page downloads. Preserve site navigation and verify [production chunk failures and document recovery](docs/reviews/2026-11-05-project-analysis.md#2-a-failed-lazy-import-cannot-recover-through-try-again).
 - [ ] Deploy the [prepared OIDC roles](docs/github-actions-oidc.md). Set the role variables and verify both workflows before removing legacy credentials.
 - [ ] Extract the remaining map rendering, interaction, and loading code. Preserve browser behavior and URL contracts.
 - [ ] Reduce MapLibre loading and worker costs. Preserve the passing article JavaScript budgets.

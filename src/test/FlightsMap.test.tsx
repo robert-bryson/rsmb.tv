@@ -14,6 +14,8 @@ const renderer = vi.hoisted(() => ({
     listeners: new Map<string, Set<() => void>>(),
     controls: { autoRotate: false, autoRotateSpeed: 0, addEventListener: vi.fn(), removeEventListener: vi.fn() },
     canvas: null as HTMLCanvasElement | null,
+    setPixelRatio: vi.fn(),
+    setComposerPixelRatio: vi.fn(),
     pointOfView: vi.fn(),
     clearCache: vi.fn(),
     loadAsset: vi.fn(),
@@ -65,7 +67,8 @@ vi.mock('react-globe.gl', async () => {
             useImperativeHandle(ref, () => ({
                 pointOfView: renderer.pointOfView,
                 controls: () => renderer.controls,
-                renderer: () => ({ domElement: renderer.canvas }),
+                renderer: () => ({ domElement: renderer.canvas, setPixelRatio: renderer.setPixelRatio }),
+                postProcessingComposer: () => ({ setPixelRatio: renderer.setComposerPixelRatio }),
                 globeTileEngineClearCache: renderer.clearCache,
                 toGlobeCoords: () => ({ lat: 12, lng: 34 }),
             }) as unknown as GlobeMethods, []);
@@ -174,6 +177,54 @@ beforeEach(() => {
 });
 
 describe('globe lifecycle', () => {
+    it('bounds both mobile render buffers while retaining native HTML labels', () => {
+        vi.stubGlobal('devicePixelRatio', 3);
+        renderMap();
+        act(() => renderer.props.onGlobeReady?.());
+        expect(renderer.setPixelRatio).toHaveBeenLastCalledWith(1.5);
+        expect(renderer.setComposerPixelRatio).toHaveBeenLastCalledWith(1.5);
+        expect(renderer.props.htmlElementsData?.length).toBeGreaterThan(0);
+    });
+
+    it('updates both buffers across viewport changes and removes listeners on unmount', () => {
+        vi.stubGlobal('devicePixelRatio', 3);
+        const listeners = new Set<(event: MediaQueryListEvent) => void>();
+        const defaultMatchMedia = window.matchMedia;
+        const viewport = {
+            matches: true, media: '(max-width: 767px)',
+            addEventListener: vi.fn((_type: string, listener: (event: MediaQueryListEvent) => void) => { listeners.add(listener); }),
+            removeEventListener: vi.fn((_type: string, listener: (event: MediaQueryListEvent) => void) => { listeners.delete(listener); }),
+        };
+        vi.stubGlobal('matchMedia', vi.fn((query: string) => query === viewport.media ? viewport : defaultMatchMedia(query)));
+        const { unmount } = renderMap();
+        act(() => renderer.props.onGlobeReady?.());
+        const change = (matches: boolean) => act(() => {
+            viewport.matches = matches;
+            for (const listener of listeners) listener({ matches, media: viewport.media } as MediaQueryListEvent);
+        });
+        change(false);
+        expect(renderer.setPixelRatio).toHaveBeenLastCalledWith(2);
+        expect(renderer.setComposerPixelRatio).toHaveBeenLastCalledWith(2);
+        change(true);
+        expect(renderer.setPixelRatio).toHaveBeenLastCalledWith(1.5);
+        expect(renderer.setComposerPixelRatio).toHaveBeenLastCalledWith(1.5);
+        expect(listeners.size).toBeGreaterThan(0);
+        unmount();
+        expect(listeners.size).toBe(0);
+        renderer.setPixelRatio.mockClear();
+        renderer.setComposerPixelRatio.mockClear();
+        change(false);
+        expect(renderer.setPixelRatio).not.toHaveBeenCalled();
+        expect(renderer.setComposerPixelRatio).not.toHaveBeenCalled();
+    });
+
+    it('does not upscale a low-density display', () => {
+        vi.stubGlobal('devicePixelRatio', 1);
+        renderMap();
+        act(() => renderer.props.onGlobeReady?.());
+        expect(renderer.setPixelRatio).toHaveBeenLastCalledWith(1);
+        expect(renderer.setComposerPixelRatio).toHaveBeenLastCalledWith(1);
+    });
     it('shows texture errors after loading ends and offers Retry', () => {
         renderer.textureState.error = new Error('Failed to load texture');
         renderMap();
@@ -515,6 +566,18 @@ describe('route previews after filtering', () => {
 });
 
 describe('renderer layers and selection', () => {
+    it('keeps geometry, point materials, and airport labels stable when animation is toggled', () => {
+        renderMap();
+        const before = { ...renderer.props };
+        fireEvent.click(screen.getByRole('button', { name: 'Pause flight animations' }));
+        for (const key of ['arcsData', 'arcColor', 'arcStroke', 'pointLat', 'pointLng', 'pointColor', 'pointAltitude', 'pointRadius',
+            'htmlLat', 'htmlLng', 'htmlElement', 'polygonCapColor', 'polygonSideColor'] as const) {
+            expect(renderer.props[key], key).toBe(before[key]);
+        }
+        fireEvent.click(screen.getByRole('button', { name: 'Play flight animations' }));
+        expect(renderer.props.htmlElement).toBe(before.htmlElement);
+    });
+
     it('pauses and resumes existing arc objects without replacing their renderer data', () => {
         renderMap();
         const arcs = renderer.props.arcsData;
