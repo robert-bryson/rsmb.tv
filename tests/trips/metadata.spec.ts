@@ -2,6 +2,8 @@ import { expect, test } from '@playwright/test';
 import sitePages from '../../src/content/sitePages.json' with { type: 'json' };
 import siteAliases from '../../src/content/siteAliases.json' with { type: 'json' };
 import coastalTrip from '../fixtures/trip-content/trips/coastal-test.json' with { type: 'json' };
+import fixturePosts from '../fixtures/trip-content/posts.json' with { type: 'json' };
+import sharp from 'sharp';
 
 test('exposes identity and feed links without horizontal overflow on narrow screens', async ({ page }) => {
     await page.goto('/about');
@@ -14,6 +16,64 @@ test('exposes identity and feed links without horizontal overflow on narrow scre
 
 test.describe('crawler metadata', () => {
     test.use({ javaScriptEnabled: false });
+
+    test('serves discovery resource bodies linked by the generated page', async ({ page, request }) => {
+        await page.goto('/');
+        const manifestHref = await page.locator('link[rel="manifest"]').getAttribute('href');
+        expect(manifestHref).toBe('/site.webmanifest');
+        const manifestResponse = await request.get(new URL(manifestHref!, page.url()).href);
+        expect(manifestResponse.ok()).toBe(true);
+        expect(manifestResponse.headers()['content-type']).toContain('application/manifest+json');
+        const manifest = await manifestResponse.json();
+        expect(manifest).toMatchObject({ id: '/', start_url: '/', scope: '/', display: 'browser' });
+        expect(manifest.icons).toHaveLength(2);
+        for (const icon of manifest.icons) {
+            const response = await request.get(new URL(icon.src, manifestResponse.url()).href);
+            expect(response.ok()).toBe(true);
+            expect(response.headers()['content-type']).toContain('image/png');
+            const metadata = await sharp(await response.body()).metadata();
+            expect(`${metadata.width}x${metadata.height}`).toBe(icon.sizes);
+        }
+
+        const feedHref = await page.locator('link[type="application/feed+json"]').getAttribute('href');
+        expect(feedHref).toBe('/feed.json');
+        const feedResponse = await request.get(new URL(feedHref!, page.url()).href);
+        expect(feedResponse.ok()).toBe(true);
+        // Vite serves application/json; Amplify supplies application/feed+json.
+        expect(feedResponse.headers()['content-type']).toMatch(/^application\/(?:feed\+)?json(?:;|$)/);
+        const feed = await feedResponse.json();
+        expect(feed.version).toBe('https://jsonfeed.org/version/1.1');
+        const expectedIds = fixturePosts.filter(post => post.development?.published !== false)
+            .map(post => `https://rsmb.tv/${post.format === 'trip' ? 'trips' : 'blog'}/${post.slug}`);
+        expect(feed.items.map((item: { id: string }) => item.id).sort()).toEqual([...expectedIds].sort());
+        expect(feed.items.every((item: { content_text?: string }) => typeof item.content_text === 'string')).toBe(true);
+        expect(JSON.stringify(feed)).not.toMatch(/unfinished-draft|development|Excluded synthetic draft/);
+
+        const rssHref = await page.locator('link[type="application/rss+xml"]').getAttribute('href');
+        const rssResponse = await request.get(new URL(rssHref!, page.url()).href);
+        expect(rssResponse.ok()).toBe(true);
+        const rss = await page.evaluate(xml => {
+            const rssDocument = new DOMParser().parseFromString(xml, 'application/xml');
+            return {
+                error: rssDocument.querySelector('parsererror')?.textContent ?? null,
+                ids: [...rssDocument.querySelectorAll('item > guid')].map(item => item.textContent),
+                text: rssDocument.documentElement.textContent,
+            };
+        }, await rssResponse.text());
+        expect(rss.error).toBeNull();
+        expect(rss.ids.sort()).toEqual([...expectedIds].sort());
+        expect(rss.text).not.toMatch(/unfinished-draft|Excluded synthetic draft/);
+
+        for (const field of ['icon', 'favicon']) {
+            const imageUrl = new URL(feed[field]);
+            const response = await request.get(imageUrl.pathname);
+            expect(response.ok()).toBe(true);
+            expect(response.headers()['content-type']).toContain('image/png');
+            const image = await sharp(await response.body()).metadata();
+            expect(image.width).toBe(image.height);
+            expect(image.width).toBeGreaterThanOrEqual(field === 'icon' ? 512 : 64);
+        }
+    });
 
     for (const [pathname, image] of [
         ['/projects/flights', 'https://rsmb.tv/images/flights/flight-globe.webp'],

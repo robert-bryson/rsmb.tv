@@ -391,7 +391,7 @@ export function normalizeBlogRecords(records, { today = new Date(), previewSlug,
                 tags: normalizeTags(record.values.tags),
                 ...(format === TRIP_FORMAT ? { format, tripId } : {}),
                 ...(seriesId ? { series: { id: seriesId, title: seriesTitle, order: seriesOrder } } : {}),
-                ...(includeUnpublished ? {
+                ...(includeUnpublished || isPreview ? {
                     development: {
                         published,
                         rowNumber: record.rowNumber,
@@ -1381,16 +1381,9 @@ export async function syncBlogPosts({
             try {
                 const manifest = validateTripManifestFiles([entry.post], { repoRoot, fsImpl });
                 tripManifests.set(entry.post.tripId, manifest.get(entry.post.tripId));
-                entry.post.development.manifestAvailable = true;
             } catch (error) {
-                entry.post.development.manifestAvailable = false;
                 entry.post.development.issues.push(error.message);
             }
-            const tripAssetsPath = path.join(repoRoot, 'public', 'data', 'trips', entry.post.tripId);
-            entry.post.development.assets = {
-                webpFiles: countFiles(path.join(tripAssetsPath, 'photos'), '.webp', fsImpl),
-                geoJsonFiles: countFiles(path.join(tripAssetsPath, 'geo'), '.geojson', fsImpl),
-            };
         }
     } else {
         for (const [tripId, manifest] of validateTripManifestFiles(
@@ -1408,8 +1401,17 @@ export async function syncBlogPosts({
     const mdxFiles = [];
 
     for (const entry of entries) {
-        if (includeUnpublished) {
-            entry.post.development.sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit`;
+        const development = entry.post.development;
+        if (development) {
+            development.sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit`;
+            if (entry.post.format === TRIP_FORMAT) {
+                development.manifestAvailable = tripManifests.has(entry.post.tripId);
+                const tripAssetsPath = path.join(repoRoot, 'public', 'data', 'trips', entry.post.tripId);
+                development.assets = {
+                    webpFiles: countFiles(path.join(tripAssetsPath, 'photos'), '.webp', fsImpl),
+                    geoJsonFiles: countFiles(path.join(tripAssetsPath, 'geo'), '.geojson', fsImpl),
+                };
+            }
         }
         if (!entry.docId) continue;
         try {
@@ -1420,7 +1422,7 @@ export async function syncBlogPosts({
                 path: path.join(blogDir, `${entry.post.slug}.mdx`),
                 content: buildMdx(entry.post, markdown, tripManifests.get(entry.post.tripId)),
             });
-            if (includeUnpublished) entry.post.development.contentAvailable = true;
+            if (development) development.contentAvailable = true;
         } catch (error) {
             if (!includeUnpublished) throw error;
             entry.post.development.contentAvailable = false;

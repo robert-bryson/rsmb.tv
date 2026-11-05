@@ -3,8 +3,8 @@
 Google Sheets and Google Docs contain the source content.
 The build imports published Sheet rows and converts their documents to MDX.
 MDX is Markdown with React components.
-The build then generates RSS, sitemap, and Open Graph files.
-Git ignores these generated files.
+The build then generates RSS, JSON Feed, sitemap, and Open Graph files.
+Git ignores the imported registry, MDX, feeds, sitemap, and article cards.
 
 ## Configure the Sheet
 
@@ -50,8 +50,13 @@ Incomplete drafts do not stop other development content.
 The development panel shows the publication state, source links, and known errors.
 Without Sheet configuration, development uses existing generated files.
 Hosted development builds also include these previews. Their HTML pages use `noindex, nofollow`.
-RSS and sitemap files exclude unpublished rows in every build mode.
+RSS, JSON Feed, and sitemap files exclude unpublished rows in every build mode.
 These files use production URLs. A preview must not advertise an unpublished production article.
+
+The programmatic `previewSlug` option also marks its requested draft with `development.published: false`.
+It retains the draft's local MDX for review. Public discovery files and production page registries omit that draft.
+Both preview modes retain source links, document readiness, validated manifest status, and local trip asset counts.
+The normal production CLI does not request a single-draft preview.
 
 Production includes only published rows.
 Post slugs must be unique. Trip posts must contain a manifest ID.

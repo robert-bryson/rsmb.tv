@@ -3,6 +3,9 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { generateJsonFeed } from '../generate-json-feed.js';
+import { generateRss } from '../generate-rss.js';
+import { generateSitemap } from '../generate-sitemap.js';
 import {
     buildGoogleDocHtmlUrl,
     buildMdx,
@@ -1021,6 +1024,79 @@ describe('syncBlogPosts', () => {
             fetchImpl,
         });
         expect(secondRun.changed).toBe(false);
+    });
+
+    it.each([
+        { format: 'post', withPublished: false },
+        { format: 'post', withPublished: true },
+        { format: 'trip', withPublished: false },
+        { format: 'trip', withPublished: true },
+    ])('excludes requested draft previews from public artifacts ($format, published rows: $withPublished)', async ({ format, withPublished }) => {
+        const repoRoot = createTempDir();
+        const postsPath = path.join(repoRoot, 'src/content/posts.json');
+        const outputDir = path.join(repoRoot, 'public');
+        fs.mkdirSync(outputDir);
+        if (format === 'trip') {
+            const manifestDir = path.join(repoRoot, 'src/content/trips');
+            fs.mkdirSync(manifestDir, { recursive: true });
+            fs.writeFileSync(path.join(manifestDir, 'coastal-loop.json'), JSON.stringify(validTripManifest));
+            for (const [directory, filename] of [['photos', 'hero.webp'], ['geo', 'route.geojson']]) {
+                const assetsDir = path.join(outputDir, 'data/trips/coastal-loop', directory);
+                fs.mkdirSync(assetsDir, { recursive: true });
+                fs.writeFileSync(path.join(assetsDir, filename), 'fixture');
+            }
+        }
+        const csv = [
+            'slug,title,date,description,tags,google_doc_id,published,format,trip_id',
+            ...(withPublished ? ['public-post,Public post,2026-04-30,Public summary,notes,doc_public,true,,'] : []),
+            `private-preview,Private preview,,Do not publish this summary,notes,doc_preview,false,${format === 'trip' ? 'trip,coastal-loop' : ','}`,
+            'other-draft,Other draft,2026-04-29,Other private summary,notes,doc_other,false,,',
+        ].join('\n');
+        const fetchContent = createFetch(csv, {
+            doc_public: '<html><body><p>Public body.</p></body></html>',
+            doc_preview: '<html><body><p>Local preview body.</p></body></html>',
+        });
+        const fetchImpl = vi.fn(async (url: FetchInput, init?: RequestInit) => {
+            if (String(url).startsWith('https://data.rsmb.tv/')) {
+                if (init?.method === 'HEAD') return response('');
+                return response(JSON.stringify({
+                    type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: [[0, 0], [1, 1]] },
+                }));
+            }
+            return fetchContent(url);
+        });
+
+        await syncBlogPosts({
+            sheetId: 'sheet_123', repoRoot, today, previewSlug: 'private-preview',
+            fetchImpl,
+        });
+
+        const posts = JSON.parse(fs.readFileSync(postsPath, 'utf8'));
+        expect(posts.map((post: { slug: string }) => post.slug).sort())
+            .toEqual(withPublished ? ['private-preview', 'public-post'] : ['private-preview']);
+        expect(fs.readFileSync(path.join(repoRoot, 'src/content/blog/private-preview.mdx'), 'utf8'))
+            .toContain('Local preview body.');
+
+        const outputs = [
+            generateJsonFeed({ postsPath, outputPath: path.join(outputDir, 'feed.json') }),
+            generateRss({ repoRoot, postsPath, outputPath: path.join(outputDir, 'rss.xml') }),
+            generateSitemap({ repoRoot, postsPath, outputPath: path.join(outputDir, 'sitemap.xml'), routes: [] }),
+        ];
+        for (const { outPath, count } of outputs) {
+            expect(count).toBe(withPublished ? 1 : 0);
+            const content = fs.readFileSync(outPath, 'utf8');
+            expect(content).not.toMatch(/private-preview|Private preview|Do not publish this summary|other-draft/);
+            if (withPublished) expect(content).toContain('https://rsmb.tv/blog/public-post');
+        }
+        const preview = posts.find((post: { slug: string }) => post.slug === 'private-preview');
+        expect(preview.development.published).toBe(false);
+        if (format === 'trip') expect(preview.development).toMatchObject({
+            manifestAvailable: true, assets: { webpFiles: 1, geoJsonFiles: 1 },
+        });
+        expect(preview.development).toMatchObject({
+            contentAvailable: true, issues: [], sheetUrl: 'https://docs.google.com/spreadsheets/d/sheet_123/edit',
+        });
+        if (withPublished) expect(posts.find((post: { slug: string }) => post.slug === 'public-post')).not.toHaveProperty('development');
     });
 
     it('syncs all development rows while recording missing draft components', async () => {

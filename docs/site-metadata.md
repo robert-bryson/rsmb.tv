@@ -100,6 +100,8 @@ Regenerate the PNGs when the artwork changes. Declared icon dimensions must matc
 JSON Feed 1.1 supplies summary-length `content_text`, canonical item IDs, and publication dates.
 RSS and JSON Feed share their site identity, post selection, and URL construction.
 Neither feed publishes development-only fields. A title edit does not change an item's ID.
+The importer marks unpublished posts in both all-draft and single-draft preview modes.
+This marker also excludes preview-only posts from the sitemap and production page registries.
 Changing an article's canonical collection changes its ID; review this as a subscription migration.
 `npm run build-blog-artifacts` regenerates both feeds and the browser icons without importing source documents.
 
@@ -131,11 +133,17 @@ npm run typecheck
 npx vitest run scripts/__tests__/pageMetadata.test.ts scripts/__tests__/tripContent.test.ts \
   scripts/__tests__/generateFeeds.test.ts scripts/__tests__/generateOgImages.test.ts \
   scripts/__tests__/discoveryStandards.test.ts scripts/__tests__/amplifyConfig.test.ts \
+  scripts/__tests__/syncBlogs.test.ts \
   src/test/routing.test.tsx src/test/useDocumentHead.test.ts
 PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- tests/trips/metadata.spec.ts --workers=3
 ```
 
 The browser command uses fixed content. It does not import Google documents.
+The runner generates RSS, JSON Feed, and PNG icons in its temporary build directory.
+An asset allowlist supplies the manifest, SVG favicon, and Apple touch icon.
+Resource checks fetch the manifest, feeds, and generated PNG icons over HTTP.
+They validate resource bodies, image dimensions, and published item sets.
+Local Vite serves JSON Feed as `application/json`. Amplify's header checks cover the production `application/feed+json` configuration separately.
 It checks clean paths, trailing slashes, HTML files, collection aliases, and navigation cleanup.
 Image checks cover project screenshots, trip heroes, relative article images, and React metadata after navigation.
 Crawler checks disable JavaScript. Separate checks verify React navigation.
