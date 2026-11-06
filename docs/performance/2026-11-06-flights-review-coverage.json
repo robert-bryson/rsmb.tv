@@ -1,0 +1,446 @@
+{
+  "reviewedAt": "2026-11-06",
+  "baselineCommit": "d1a48a81dfd530c6fc5bd3b5359a684dc85e8d21",
+  "method": "Same final source, V8 provider, and six coverage include paths; original focused tests versus original tests plus eight added cases.",
+  "scope": [
+    "src/features/flights/components/AirlinesSection.tsx",
+    "src/features/flights/components/SkipLink.tsx",
+    "src/features/flights/components/StatsPanel.tsx",
+    "src/features/flights/components/TopNavigationBar.tsx",
+    "src/features/flights/components/shared/StatItem.tsx",
+    "src/pages/Flights.tsx"
+  ],
+  "originalTests": [
+    "src/test/StatsPanel.test.tsx",
+    "src/test/StatItem.test.tsx",
+    "src/test/BottomStatsBar.test.tsx",
+    "src/test/FlightsMap.test.tsx",
+    "src/test/flightStatsAccessibility.test.tsx"
+  ],
+  "originalTestFilter": "^(?!.*(?:replaces pending statistics|keeps a closed loading panel)).*$",
+  "addedFiles": [
+    "src/test/SkipLink.test.tsx",
+    "src/test/AirlinesSection.test.tsx",
+    "src/test/FlightsPage.test.tsx"
+  ],
+  "addedCasesInExistingFiles": [
+    "StatsPanel: replaces pending statistics",
+    "StatsPanel: keeps a closed loading panel"
+  ],
+  "passedTests": {
+    "before": 107,
+    "after": 115
+  },
+  "results": {
+    "before": {
+      "total": {
+        "lines": {
+          "total": 152,
+          "covered": 99,
+          "skipped": 0,
+          "pct": 65.13
+        },
+        "statements": {
+          "total": 163,
+          "covered": 106,
+          "skipped": 0,
+          "pct": 65.03
+        },
+        "functions": {
+          "total": 88,
+          "covered": 41,
+          "skipped": 0,
+          "pct": 46.59
+        },
+        "branches": {
+          "total": 225,
+          "covered": 192,
+          "skipped": 0,
+          "pct": 85.33
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/features/flights/components/AirlinesSection.tsx": {
+        "lines": {
+          "total": 9,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 66.66
+        },
+        "functions": {
+          "total": 6,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 33.33
+        },
+        "statements": {
+          "total": 10,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 60
+        },
+        "branches": {
+          "total": 16,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 37.5
+        }
+      },
+      "src/features/flights/components/SkipLink.tsx": {
+        "lines": {
+          "total": 5,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 20
+        },
+        "functions": {
+          "total": 2,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 50
+        },
+        "statements": {
+          "total": 5,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 20
+        },
+        "branches": {
+          "total": 2,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        }
+      },
+      "src/features/flights/components/StatsPanel.tsx": {
+        "lines": {
+          "total": 126,
+          "covered": 87,
+          "skipped": 0,
+          "pct": 69.04
+        },
+        "functions": {
+          "total": 74,
+          "covered": 36,
+          "skipped": 0,
+          "pct": 48.64
+        },
+        "statements": {
+          "total": 136,
+          "covered": 94,
+          "skipped": 0,
+          "pct": 69.11
+        },
+        "branches": {
+          "total": 197,
+          "covered": 176,
+          "skipped": 0,
+          "pct": 89.34
+        }
+      },
+      "src/features/flights/components/TopNavigationBar.tsx": {
+        "lines": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/features/flights/components/shared/StatItem.tsx": {
+        "lines": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/pages/Flights.tsx": {
+        "lines": {
+          "total": 7,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "functions": {
+          "total": 4,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "statements": {
+          "total": 7,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 0
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "after": {
+      "total": {
+        "lines": {
+          "total": 152,
+          "covered": 113,
+          "skipped": 0,
+          "pct": 74.34
+        },
+        "statements": {
+          "total": 163,
+          "covered": 121,
+          "skipped": 0,
+          "pct": 74.23
+        },
+        "functions": {
+          "total": 88,
+          "covered": 50,
+          "skipped": 0,
+          "pct": 56.81
+        },
+        "branches": {
+          "total": 225,
+          "covered": 204,
+          "skipped": 0,
+          "pct": 90.66
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/features/flights/components/AirlinesSection.tsx": {
+        "lines": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 16,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/features/flights/components/SkipLink.tsx": {
+        "lines": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/features/flights/components/StatsPanel.tsx": {
+        "lines": {
+          "total": 126,
+          "covered": 87,
+          "skipped": 0,
+          "pct": 69.04
+        },
+        "functions": {
+          "total": 74,
+          "covered": 36,
+          "skipped": 0,
+          "pct": 48.64
+        },
+        "statements": {
+          "total": 136,
+          "covered": 94,
+          "skipped": 0,
+          "pct": 69.11
+        },
+        "branches": {
+          "total": 197,
+          "covered": 176,
+          "skipped": 0,
+          "pct": 89.34
+        }
+      },
+      "src/features/flights/components/TopNavigationBar.tsx": {
+        "lines": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/features/flights/components/shared/StatItem.tsx": {
+        "lines": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/pages/Flights.tsx": {
+        "lines": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    }
+  },
+  "limits": [
+    "Focused source coverage only, not repository-wide coverage.",
+    "Browser execution is separate from V8 unit coverage.",
+    "JSX loading-state behavior has explicit assertions even where source-map coverage totals do not change."
+  ],
+  "validation": {
+    "javascript": {
+      "files": 179,
+      "passed": 2778
+    },
+    "python": {
+      "passed": 17
+    },
+    "browser": {
+      "passed": 57,
+      "skipped": 1,
+      "projects": [
+        "chromium",
+        "webkit"
+      ],
+      "environment": "Static trip-test production build with existing local public flight data and globe textures",
+      "skipReason": "WebKit does not support layout-shift measurement",
+      "retries": 0
+    },
+    "lint": "passed",
+    "typecheck": "passed",
+    "productionBuild": "passed",
+    "whitespace": "passed",
+    "localDocumentationLinks": "passed"
+  }
+}

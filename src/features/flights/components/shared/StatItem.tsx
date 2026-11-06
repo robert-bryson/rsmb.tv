@@ -11,14 +11,14 @@ interface BaseStatItemProps {
 type StaticStatItemProps = BaseStatItemProps & {
   onClick?: undefined;
   isSelected?: never;
-  ariaLabel?: never;
+  actionLabel?: never;
   title?: string;
 };
 
 type ClickableStatItemProps = BaseStatItemProps & {
   onClick: () => void;
   isSelected?: boolean;
-  ariaLabel: string;
+  actionLabel: string;
   title?: string;
 };
 
@@ -32,7 +32,7 @@ export function StatItem({
   className = '',
   onClick,
   isSelected = false,
-  ariaLabel,
+  actionLabel,
   title,
 }: StatItemProps) {
   const content = (
@@ -52,11 +52,11 @@ export function StatItem({
         type="button"
         onClick={onClick}
         aria-pressed={isSelected}
-        aria-label={ariaLabel}
         title={title}
         className={`flex w-full items-start gap-2 rounded-md p-1 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${isSelected ? 'bg-cyan-500/15 ring-1 ring-cyan-400/40' : 'hover:bg-white/5'} ${className}`}
       >
         {content}
+        <span className="sr-only">{actionLabel}</span>
       </button>
     );
   }

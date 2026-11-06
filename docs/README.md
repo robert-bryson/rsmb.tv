@@ -36,6 +36,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-06 | [Flights Lighthouse verification, review fixes, accessibility, caching, and coverage](reviews/2026-11-06-flights-lighthouse.md) |
 | 2026-11-05 | [Pending changes quality review: archive safety, validation proofs, failure coverage, and source limits](reviews/2026-11-05-uncommitted-quality-review.md) |
 | 2026-11-05 | [Monthly data correctness, page recovery, release validation, Flights startup, and bounded caching](reviews/2026-11-05-correctness-recovery-startup.md) |
 | 2026-11-05 | [Tornado publication repair: missing index, deployment order, and workflow verification](reviews/2026-11-05-tornado-publication-repair.md) |

@@ -32,10 +32,12 @@ export function AirlinesSection({
     >
       <div className="flex flex-wrap gap-1">
         <button
+          type="button"
+          aria-pressed={selectedAirline === null}
           onClick={() => onAirlineSelect(null)}
           className={`px-2 py-1 rounded text-xs transition-colors ${
             selectedAirline === null
-              ? 'bg-orange-600 text-white'
+              ? 'bg-orange-800 text-white'
               : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
           }`}
         >
@@ -44,20 +46,23 @@ export function AirlinesSection({
         {visibleAirlines.map(({ airline, count }) => (
           <button
             key={airline}
+            type="button"
+            aria-pressed={selectedAirline === airline}
             onClick={() => onAirlineSelect(selectedAirline === airline ? null : airline)}
             className={`px-2 py-1 rounded text-xs transition-colors ${
               selectedAirline === airline
-                ? 'bg-orange-600 text-white'
+                ? 'bg-orange-800 text-white'
                 : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
             }`}
           >
-            {airline || '(Unknown)'} <span className="text-orange-400">×{count}</span>
+            {airline || '(Unknown)'} <span className={selectedAirline === airline ? 'text-white' : 'text-orange-400'}>×{count}</span>
           </button>
         ))}
       </div>
       {hasMore && (
         <button
-          onClick={() => setShowAll(!showAll)}
+          type="button"
+          onClick={() => setShowAll(previous => !previous)}
           className="mt-2 text-xs text-purple-400 hover:text-purple-300 transition-colors"
         >
           {showAll ? '← Show less' : `Show ${airlineCounts.length - INITIAL_VISIBLE} more →`}

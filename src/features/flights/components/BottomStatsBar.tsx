@@ -60,7 +60,7 @@ export const BottomStatsBar = memo(function BottomStatsBar({
                     onClick={onToggleUnits}
                     className="text-green-300 font-semibold hover:text-green-200 transition-colors cursor-pointer whitespace-nowrap rounded px-1 -mx-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-300"
                     title={`${formatDistance(totalDistance, !isMetric)} • ${isMetric ? 'Click to switch to imperial units' : 'Click to switch to metric units'}`}
-                    aria-label={isMetric ? 'Switch to imperial units' : 'Switch to metric units'}
+                    aria-label={`${formatDistance(totalDistance, isMetric)}. ${isMetric ? 'Switch to imperial units' : 'Switch to metric units'}`}
                 >
                     <DistanceValue km={totalDistance} isMetric={isMetric} />
                 </button>

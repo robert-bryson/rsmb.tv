@@ -544,6 +544,7 @@ export function FlightsMap() {
       {/* Stats Panel */}
       <StatsPanel
         stats={flightStats}
+        loading={loading}
         isOpen={showStats}
         onToggle={() => setShowStats(!showStats)}
         selectedYear={selectedYear}

@@ -24,6 +24,9 @@ describe('hosting header selection', () => {
         ['/nested/worker.js', immutable],
         ['/nested/theme.css', immutable],
         ['/basemaps/nested/earth.webp', 'public, max-age=604800'],
+        ['/basemaps/earth-night-1536-8ec8613bb172.webp', immutable],
+        ['/basemaps/earth-topology-1536-8bb5a2698ef0.webp', immutable],
+        ['/basemaps/earth-night.webp', 'public, max-age=604800'],
         ['/data/flights/flights.geojson', 'public, max-age=3600'],
     ])('selects cache policy for %s', (pathname, cache) => {
         expect(expectedHostingHeaders(pathname)['cache-control']).toBe(cache);

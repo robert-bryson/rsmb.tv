@@ -19,11 +19,11 @@ describe('StatItem', () => {
                 value="240"
                 onClick={onClick}
                 isSelected
-                ariaLabel="Clear domestic flight type filter"
+                actionLabel="Clear domestic flight type filter"
             />,
         );
 
-        const button = screen.getByRole('button', { name: 'Clear domestic flight type filter' });
+        const button = screen.getByRole('button', { name: 'Domestic 240 Clear domestic flight type filter' });
         expect(button).toHaveAttribute('type', 'button');
         expect(button).toHaveAttribute('aria-pressed', 'true');
 

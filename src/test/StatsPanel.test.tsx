@@ -143,6 +143,33 @@ describe('StatsPanel', () => {
     });
 
     describe('panel content', () => {
+        it('replaces pending statistics with a loading state, then shows the loaded selection', () => {
+            const props = createStatsPanelProps({ isOpen: true, loading: true, selectedRouteInfo: makeSelectedRouteInfo() });
+            const { rerender } = render(<StatsPanel {...props} />);
+            const panel = screen.getByTestId('stats-panel-content');
+            expect(panel).toHaveAttribute('aria-busy', 'true');
+            expect(within(panel).getByRole('status')).toHaveTextContent('Loading flight statistics');
+            expect(within(panel).queryByRole('heading')).not.toBeInTheDocument();
+            expect(within(panel).queryByText('Total Flights')).not.toBeInTheDocument();
+            fireEvent.click(screen.getByRole('button', { name: 'Hide stats panel' }));
+            expect(props.onToggle).toHaveBeenCalledOnce();
+
+            rerender(<StatsPanel {...props} loading={false} />);
+            expect(panel).toHaveAttribute('aria-busy', 'false');
+            expect(within(panel).queryByRole('status')).not.toBeInTheDocument();
+            expect(within(panel).getByRole('heading', { name: 'SEA ↔ LAX', level: 2 })).toBeVisible();
+        });
+
+        it('keeps a closed loading panel hidden and inert while its toggle remains available', () => {
+            renderStatsPanel({ isOpen: false, loading: true });
+            const panel = screen.getByTestId('stats-panel-content');
+            expect(panel).toHaveAttribute('aria-busy', 'true');
+            expect(panel).toHaveAttribute('aria-hidden', 'true');
+            expect(panel).toHaveAttribute('inert');
+            expect(screen.queryByRole('status')).not.toBeInTheDocument();
+            expect(screen.getByRole('button', { name: 'Show stats panel' })).toHaveAttribute('id', 'flight-stats-toggle');
+        });
+
         it('shows only years for first and last airport visits', () => {
             const { container } = renderStatsPanel({
                 isOpen: true,
@@ -239,7 +266,7 @@ describe('StatsPanel', () => {
             const onFlightTypeSelect = vi.fn();
             renderStatsPanel({ isOpen: true, onFlightTypeSelect });
 
-            fireEvent.click(screen.getByRole('button', { name: 'Show intercontinental flights' }));
+            fireEvent.click(screen.getByRole('button', { name: /Intercontinental \d+ Show intercontinental flights/ }));
 
             expect(onFlightTypeSelect).toHaveBeenCalledWith('intercontinental');
         });
@@ -252,7 +279,7 @@ describe('StatsPanel', () => {
                 onFlightTypeSelect,
             });
 
-            const button = screen.getByRole('button', { name: 'Clear intercontinental flight type filter' });
+            const button = screen.getByRole('button', { name: /Intercontinental \d+ Clear intercontinental flight type filter/ });
             expect(button).toHaveAttribute('aria-pressed', 'true');
 
             fireEvent.click(button);

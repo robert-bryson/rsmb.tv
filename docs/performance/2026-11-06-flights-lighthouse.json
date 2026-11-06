@@ -1,0 +1,360 @@
+{
+  "reviewedAt": "2026-11-06",
+  "route": "/projects/flights/map",
+  "build": "npx vite build --mode test --outDir /tmp/rsmb-lighthouse-preview",
+  "origin": "http://127.0.0.1:4176",
+  "notes": [
+    "Individual local samples, not production measurements or field data.",
+    "The baseline Lighthouse audit overlapped regression checks. The performance-score difference does not establish a controlled speed improvement. Layout, accessibility, and request-order regressions were separately verified.",
+    "Desktop viewport and scoring; the default Lighthouse mobile user agent was retained in both samples.",
+    "The supplied Lighthouse 13.5 custom throttling parameters were not available.",
+    "LCP excludes canvas contents and does not establish globe readiness.",
+    "The delayed-data probe checks color contrast, heading order, skip links, main landmarks, and regions. It preceded the final accessible-name changes.",
+    "The final Lighthouse sample includes all accessible-name changes.",
+    "Cache policy changes are verified by hosting-header tests and take effect on the next Amplify deployment."
+  ],
+  "lighthouse": {
+    "before": {
+      "measuredAt": "2026-11-06T15:55:42.796Z",
+      "lighthouseVersion": "13.6.0",
+      "environment": {
+        "networkUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Mobile Safari/537.36",
+        "hostUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+        "benchmarkIndex": 3905,
+        "credits": {
+          "axe-core": "4.14.0"
+        }
+      },
+      "settings": {
+        "output": "json",
+        "maxWaitForFcp": 30000,
+        "maxWaitForLoad": 45000,
+        "pauseAfterFcpMs": 1000,
+        "pauseAfterLoadMs": 1000,
+        "networkQuietThresholdMs": 1000,
+        "cpuQuietThresholdMs": 1000,
+        "formFactor": "desktop",
+        "throttling": {
+          "rttMs": 40,
+          "throughputKbps": 10240,
+          "requestLatencyMs": 0,
+          "downloadThroughputKbps": 0,
+          "uploadThroughputKbps": 0,
+          "cpuSlowdownMultiplier": 1
+        },
+        "throttlingMethod": "simulate",
+        "screenEmulation": {
+          "mobile": false,
+          "width": 1350,
+          "height": 940,
+          "deviceScaleFactor": 1,
+          "disabled": false
+        },
+        "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+        "auditMode": false,
+        "gatherMode": false,
+        "clearStorageTypes": [
+          "file_systems",
+          "shader_cache",
+          "service_workers",
+          "cache_storage"
+        ],
+        "disableStorageReset": false,
+        "debugNavigation": false,
+        "channel": "node",
+        "usePassiveGathering": false,
+        "disableFullPageScreenshot": false,
+        "skipAboutBlank": false,
+        "blankPage": "about:blank",
+        "ignoreStatusCode": false,
+        "locale": "en-US",
+        "blockedUrlPatterns": null,
+        "additionalTraceCategories": null,
+        "extraHeaders": null,
+        "precomputedLanternData": null,
+        "onlyAudits": null,
+        "onlyCategories": [
+          "performance",
+          "accessibility",
+          "best-practices",
+          "seo"
+        ],
+        "skipAudits": null
+      },
+      "scores": {
+        "performance": 65,
+        "accessibility": 90,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": {
+          "value": 328.8117,
+          "unit": "millisecond"
+        },
+        "largest-contentful-paint": {
+          "value": 1616.826325,
+          "unit": "millisecond"
+        },
+        "total-blocking-time": {
+          "value": 757,
+          "unit": "millisecond"
+        },
+        "cumulative-layout-shift": {
+          "value": 0.07952833377112338,
+          "unit": "unitless"
+        },
+        "speed-index": {
+          "value": 1297.2680878232702,
+          "unit": "millisecond"
+        }
+      },
+      "accessibility": {
+        "color-contrast": {
+          "score": 0,
+          "weight": 7
+        },
+        "heading-order": {
+          "score": 0,
+          "weight": 3
+        },
+        "skip-link": {
+          "score": 0,
+          "weight": 3
+        },
+        "landmark-one-main": {
+          "score": 0,
+          "weight": 3
+        },
+        "label-content-name-mismatch": {
+          "score": 0,
+          "weight": 0
+        }
+      },
+      "diagnostics": {
+        "unused-javascript": {
+          "score": 0,
+          "displayValue": "Est savings of 212 KiB"
+        },
+        "bootup-time": {
+          "score": 0,
+          "displayValue": "2.3 s"
+        },
+        "render-blocking-insight": {
+          "score": 0,
+          "displayValue": "Est savings of 40 ms"
+        },
+        "network-dependency-tree-insight": {
+          "score": 0
+        },
+        "valid-source-maps": {
+          "score": 0
+        }
+      },
+      "warnings": []
+    },
+    "after": {
+      "measuredAt": "2026-11-06T16:07:44.700Z",
+      "lighthouseVersion": "13.6.0",
+      "environment": {
+        "networkUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Mobile Safari/537.36",
+        "hostUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+        "benchmarkIndex": 3848.5,
+        "credits": {
+          "axe-core": "4.14.0"
+        }
+      },
+      "settings": {
+        "output": "json",
+        "maxWaitForFcp": 30000,
+        "maxWaitForLoad": 45000,
+        "pauseAfterFcpMs": 1000,
+        "pauseAfterLoadMs": 1000,
+        "networkQuietThresholdMs": 1000,
+        "cpuQuietThresholdMs": 1000,
+        "formFactor": "desktop",
+        "throttling": {
+          "rttMs": 40,
+          "throughputKbps": 10240,
+          "requestLatencyMs": 0,
+          "downloadThroughputKbps": 0,
+          "uploadThroughputKbps": 0,
+          "cpuSlowdownMultiplier": 1
+        },
+        "throttlingMethod": "simulate",
+        "screenEmulation": {
+          "mobile": false,
+          "width": 1350,
+          "height": 940,
+          "deviceScaleFactor": 1,
+          "disabled": false
+        },
+        "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+        "auditMode": false,
+        "gatherMode": false,
+        "clearStorageTypes": [
+          "file_systems",
+          "shader_cache",
+          "service_workers",
+          "cache_storage"
+        ],
+        "disableStorageReset": false,
+        "debugNavigation": false,
+        "channel": "node",
+        "usePassiveGathering": false,
+        "disableFullPageScreenshot": false,
+        "skipAboutBlank": false,
+        "blankPage": "about:blank",
+        "ignoreStatusCode": false,
+        "locale": "en-US",
+        "blockedUrlPatterns": null,
+        "additionalTraceCategories": null,
+        "extraHeaders": null,
+        "precomputedLanternData": null,
+        "onlyAudits": null,
+        "onlyCategories": [
+          "performance",
+          "accessibility",
+          "best-practices",
+          "seo"
+        ],
+        "skipAudits": null
+      },
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": {
+          "value": 242.38569999999999,
+          "unit": "millisecond"
+        },
+        "largest-contentful-paint": {
+          "value": 242.38569999999999,
+          "unit": "millisecond"
+        },
+        "total-blocking-time": {
+          "value": 0.5,
+          "unit": "millisecond"
+        },
+        "cumulative-layout-shift": {
+          "value": 0,
+          "unit": "unitless"
+        },
+        "speed-index": {
+          "value": 784.0912330675474,
+          "unit": "millisecond"
+        }
+      },
+      "accessibility": {
+        "color-contrast": {
+          "score": 1,
+          "weight": 7
+        },
+        "heading-order": {
+          "score": 1,
+          "weight": 3
+        },
+        "skip-link": {
+          "score": 1,
+          "weight": 3
+        },
+        "landmark-one-main": {
+          "score": 1,
+          "weight": 3
+        },
+        "label-content-name-mismatch": {
+          "score": 1,
+          "weight": 0
+        }
+      },
+      "diagnostics": {
+        "unused-javascript": {
+          "score": 0.5,
+          "displayValue": "Est savings of 212 KiB"
+        },
+        "bootup-time": {
+          "score": 1,
+          "displayValue": "1.2 s"
+        },
+        "render-blocking-insight": {
+          "score": 0,
+          "displayValue": "Est savings of 80 ms"
+        },
+        "network-dependency-tree-insight": {
+          "score": 0
+        },
+        "valid-source-maps": {
+          "score": 0
+        }
+      },
+      "warnings": []
+    }
+  },
+  "delayedDataProbe": {
+    "before": {
+      "viewport": {
+        "width": 1350,
+        "height": 940
+      },
+      "dataDelayMs": 800,
+      "cls": 0.07952833377112338,
+      "failingRules": [
+        "color-contrast",
+        "heading-order",
+        "landmark-one-main",
+        "region",
+        "skip-link"
+      ],
+      "skipLink": {
+        "initiallyFocused": true,
+        "target": "skip link remained focused"
+      },
+      "textures": [
+        {
+          "path": "/basemaps/earth-night-1536-8ec8613bb172.webp",
+          "bytes": 54582
+        },
+        {
+          "path": "/basemaps/earth-topology-1536-8bb5a2698ef0.webp",
+          "bytes": 24662
+        }
+      ]
+    },
+    "after": {
+      "viewport": {
+        "width": 1350,
+        "height": 940
+      },
+      "dataDelayMs": 800,
+      "cls": 0.0007470349210518635,
+      "failingRules": [],
+      "skipLink": {
+        "initiallyFocused": true,
+        "target": "#flight-stats-toggle"
+      },
+      "textures": [
+        {
+          "path": "/basemaps/earth-night-1536-8ec8613bb172.webp",
+          "bytes": 54582
+        },
+        {
+          "path": "/basemaps/earth-topology-1536-8bb5a2698ef0.webp",
+          "bytes": 24662
+        }
+      ]
+    }
+  },
+  "validation": {
+    "javascriptTests": 2770,
+    "javascriptTestFiles": 176,
+    "pythonTests": 17,
+    "flightsBrowserTests": 29,
+    "finalAffectedBrowserChecks": 8,
+    "lint": "passed",
+    "typecheck": "passed",
+    "productionBuild": "passed"
+  }
+}

@@ -23,6 +23,7 @@ type SectionMode = 'defaults' | 'expanded' | 'collapsed';
 
 interface StatsPanelProps {
   stats: FlightStats;
+  loading?: boolean;
   isOpen: boolean;
   onToggle: () => void;
   selectedYear: number | null;
@@ -48,6 +49,7 @@ interface StatsPanelProps {
 
 export function StatsPanel({
   stats,
+  loading = false,
   isOpen,
   onToggle,
   selectedYear,
@@ -201,96 +203,110 @@ export function StatsPanel({
       <div
         data-testid="stats-panel-content"
         data-state={isOpen ? 'open' : 'closed'}
+        aria-busy={loading}
         className={`flights-stats-panel relative h-full bg-gray-900/90 backdrop-blur rounded-lg border border-gray-700 p-4 text-sm pointer-events-auto shadow-xl ${isResizingPanel ? 'select-none' : ''}`}
         aria-hidden={!isOpen || undefined}
         inert={!isOpen || undefined}
       >
-        {/* Collapse All / Expand All Button */}
-        <div className="flex justify-end mb-2">
-          <button
-            type="button"
-            onClick={toggleAll}
-            className="text-gray-500 hover:text-gray-300 text-xs px-2 py-1 rounded hover:bg-gray-800 transition-colors flex items-center gap-1"
-          >
-            {sectionMode === 'collapsed' ? '▶ Expand All' : '▼ Collapse All'}
-          </button>
-        </div>
+        {loading ? (
+          <div>
+            <p role="status" className="text-gray-300 text-sm">Loading flight statistics...</p>
+            <div aria-hidden="true" className="mt-4 space-y-4 animate-pulse motion-reduce:animate-none">
+              <div className="h-5 w-36 rounded bg-gray-700" />
+              <div className="h-32 rounded bg-gray-800" />
+              <div className="h-28 rounded bg-gray-800" />
+              <div className="h-28 rounded bg-gray-800" />
+            </div>
+          </div>
+        ) : (<>
+          {/* Collapse All / Expand All Button */}
+          <div className="flex justify-end mb-2">
+            <button
+              type="button"
+              onClick={toggleAll}
+              className="text-gray-500 hover:text-gray-300 text-xs px-2 py-1 rounded hover:bg-gray-800 transition-colors flex items-center gap-1"
+            >
+              {sectionMode === 'collapsed' ? '▶ Expand All' : '▼ Collapse All'}
+            </button>
+          </div>
 
-        {/* Airport-specific stats when an airport is selected */}
-        {airportInfo ? (
-          <AirportStats
-            airportInfo={airportInfo}
-            stats={stats}
-            onClearAirport={onClearAirport}
-            onAirportClick={onAirportClick}
-            onCountryClick={onCountryClick}
-            onRegionClick={onRegionClick}
-            getSectionOpen={getSectionOpen}
-            toggleSection={toggleSection}
-            validAirportCodes={validAirportCodes}
-            airportNames={airportNames}
-            isMetric={isMetric}
-          />
-        ) : selectedRouteInfo ? (
-          <RouteStatsView
-            routeInfo={selectedRouteInfo}
-            onClear={onClearRoute}
-            onAirportClick={onAirportClick}
-            onCountryClick={onCountryClick}
-            validAirportCodes={validAirportCodes}
-            airportNames={airportNames}
-            isMetric={isMetric}
-            getSectionOpen={getSectionOpen}
-            toggleSection={toggleSection}
-          />
-        ) : selectedCountryInfo ? (
-          <CountryStatsView
-            countryInfo={selectedCountryInfo}
-            onClear={onClearCountry}
-            onAirportClick={onAirportClick}
-            onCountryClick={onCountryClick}
-            onRouteClick={onRouteClick}
-            validAirportCodes={validAirportCodes}
-            airportNames={airportNames}
-            getSectionOpen={getSectionOpen}
-            toggleSection={toggleSection}
-          />
-        ) : selectedRegionInfo ? (
-          <RegionStatsView
-            regionInfo={selectedRegionInfo}
-            onClear={onClearRegion}
-            onAirportClick={onAirportClick}
-            onCountryClick={onCountryClick}
-            onRouteClick={onRouteClick}
-            validAirportCodes={validAirportCodes}
-            airportNames={airportNames}
-            getSectionOpen={getSectionOpen}
-            toggleSection={toggleSection}
-          />
-        ) : (
-          <OverallStats
-            stats={stats}
-            selectedYear={selectedYear}
-            selectedAirline={selectedAirline}
-            onAirlineSelect={onAirlineSelect}
-            selectedFlightType={selectedFlightType}
-            onFlightTypeSelect={onFlightTypeSelect}
-            onAirportClick={onAirportClick}
-            onRouteClick={onRouteClick}
-            onCountryClick={onCountryClick}
-            onRegionClick={onRegionClick}
-            timesAroundEarth={timesAroundEarth}
-            domesticFlights={domesticFlights}
-            getSectionOpen={getSectionOpen}
-            toggleSection={toggleSection}
-            validAirportCodes={validAirportCodes}
-            airportNames={airportNames}
-            isMetric={isMetric}
-          />
-        )}
+          {/* Airport-specific stats when an airport is selected */}
+          {airportInfo ? (
+            <AirportStats
+              airportInfo={airportInfo}
+              stats={stats}
+              onClearAirport={onClearAirport}
+              onAirportClick={onAirportClick}
+              onCountryClick={onCountryClick}
+              onRegionClick={onRegionClick}
+              getSectionOpen={getSectionOpen}
+              toggleSection={toggleSection}
+              validAirportCodes={validAirportCodes}
+              airportNames={airportNames}
+              isMetric={isMetric}
+            />
+          ) : selectedRouteInfo ? (
+            <RouteStatsView
+              routeInfo={selectedRouteInfo}
+              onClear={onClearRoute}
+              onAirportClick={onAirportClick}
+              onCountryClick={onCountryClick}
+              validAirportCodes={validAirportCodes}
+              airportNames={airportNames}
+              isMetric={isMetric}
+              getSectionOpen={getSectionOpen}
+              toggleSection={toggleSection}
+            />
+          ) : selectedCountryInfo ? (
+            <CountryStatsView
+              countryInfo={selectedCountryInfo}
+              onClear={onClearCountry}
+              onAirportClick={onAirportClick}
+              onCountryClick={onCountryClick}
+              onRouteClick={onRouteClick}
+              validAirportCodes={validAirportCodes}
+              airportNames={airportNames}
+              getSectionOpen={getSectionOpen}
+              toggleSection={toggleSection}
+            />
+          ) : selectedRegionInfo ? (
+            <RegionStatsView
+              regionInfo={selectedRegionInfo}
+              onClear={onClearRegion}
+              onAirportClick={onAirportClick}
+              onCountryClick={onCountryClick}
+              onRouteClick={onRouteClick}
+              validAirportCodes={validAirportCodes}
+              airportNames={airportNames}
+              getSectionOpen={getSectionOpen}
+              toggleSection={toggleSection}
+            />
+          ) : (
+            <OverallStats
+              stats={stats}
+              selectedYear={selectedYear}
+              selectedAirline={selectedAirline}
+              onAirlineSelect={onAirlineSelect}
+              selectedFlightType={selectedFlightType}
+              onFlightTypeSelect={onFlightTypeSelect}
+              onAirportClick={onAirportClick}
+              onRouteClick={onRouteClick}
+              onCountryClick={onCountryClick}
+              onRegionClick={onRegionClick}
+              timesAroundEarth={timesAroundEarth}
+              domesticFlights={domesticFlights}
+              getSectionOpen={getSectionOpen}
+              toggleSection={toggleSection}
+              validAirportCodes={validAirportCodes}
+              airportNames={airportNames}
+              isMetric={isMetric}
+            />
+          )}
+        </>)}
       </div>
 
       <button
+        id="flight-stats-toggle"
         type="button"
         onClick={onToggle}
         className="absolute left-full top-1/2 -translate-x-px -translate-y-1/2 h-24 w-10 bg-slate-900/95 backdrop-blur rounded-r-lg border border-l-0 border-slate-600/80 text-purple-200 hover:bg-slate-800/95 hover:text-white transition-colors pointer-events-auto flex flex-col items-center justify-center gap-2 shadow-xl ring-1 ring-white/10"
@@ -341,7 +357,7 @@ function AirportStats({
   return (
     <>
       <div className="flex items-center justify-between mb-1">
-        <h3 className="text-cyan-400 font-semibold text-base">{airportInfo.code}</h3>
+        <h2 className="text-cyan-400 font-semibold text-base">{airportInfo.code}</h2>
         <button
           onClick={onClearAirport}
           className="text-gray-500 hover:text-white text-xs px-2 py-0.5 rounded hover:bg-gray-700 transition-colors"
@@ -571,9 +587,9 @@ function RouteStatsView({
   return (
     <>
       <div className="flex items-center justify-between mb-1">
-        <h3 className="text-yellow-400 font-semibold text-base">
+        <h2 className="text-yellow-400 font-semibold text-base">
           {routeInfo.originCode} ↔ {routeInfo.destinationCode}
-        </h3>
+        </h2>
         <button
           onClick={onClear}
           className="text-gray-500 hover:text-white text-xs px-2 py-0.5 rounded hover:bg-gray-700 transition-colors"
@@ -770,7 +786,7 @@ function CountryStatsView({
   return (
     <>
       <div className="flex items-center justify-between mb-1">
-        <h3 className="text-emerald-400 font-semibold text-base">{countryInfo.name}</h3>
+        <h2 className="text-emerald-400 font-semibold text-base">{countryInfo.name}</h2>
         <button
           onClick={onClear}
           className="text-gray-500 hover:text-white text-xs px-2 py-0.5 rounded hover:bg-gray-700 transition-colors"
@@ -947,7 +963,7 @@ function RegionStatsView({
   return (
     <>
       <div className="flex items-center justify-between mb-1">
-        <h3 className="text-amber-400 font-semibold text-base">{regionInfo.name}</h3>
+        <h2 className="text-amber-400 font-semibold text-base">{regionInfo.name}</h2>
         <button
           onClick={onClear}
           className="text-gray-500 hover:text-white text-xs px-2 py-0.5 rounded hover:bg-gray-700 transition-colors"
@@ -1121,7 +1137,7 @@ function OverallStats({
 }) {
   return (
     <>
-      <h3 className="text-white font-semibold mb-1 text-base">Flight Statistics</h3>
+      <h2 className="text-white font-semibold mb-1 text-base">Flight Statistics</h2>
       {selectedYear && <div className="text-purple-400 text-xs mb-3">Filtered: {selectedYear}</div>}
       {selectedAirline && (
         <div className="text-orange-400 text-xs mb-3 flex items-center gap-2">
@@ -1205,7 +1221,7 @@ function OverallStats({
             value={domesticFlights.toString()}
             onClick={() => onFlightTypeSelect(selectedFlightType === 'domestic' ? null : 'domestic')}
             isSelected={selectedFlightType === 'domestic'}
-            ariaLabel={selectedFlightType === 'domestic' ? 'Clear domestic flight type filter' : 'Show domestic flights'}
+            actionLabel={selectedFlightType === 'domestic' ? 'Clear domestic flight type filter' : 'Show domestic flights'}
             title="Highlight domestic flights"
           />
           <StatItem
@@ -1214,7 +1230,7 @@ function OverallStats({
             value={stats.internationalFlights.toString()}
             onClick={() => onFlightTypeSelect(selectedFlightType === 'international' ? null : 'international')}
             isSelected={selectedFlightType === 'international'}
-            ariaLabel={selectedFlightType === 'international' ? 'Clear international flight type filter' : 'Show international flights'}
+            actionLabel={selectedFlightType === 'international' ? 'Clear international flight type filter' : 'Show international flights'}
             title="Highlight international flights"
           />
           <StatItem
@@ -1223,7 +1239,7 @@ function OverallStats({
             value={stats.intercontinentalFlights.toString()}
             onClick={() => onFlightTypeSelect(selectedFlightType === 'intercontinental' ? null : 'intercontinental')}
             isSelected={selectedFlightType === 'intercontinental'}
-            ariaLabel={selectedFlightType === 'intercontinental' ? 'Clear intercontinental flight type filter' : 'Show intercontinental flights'}
+            actionLabel={selectedFlightType === 'intercontinental' ? 'Clear intercontinental flight type filter' : 'Show intercontinental flights'}
             title="Highlight intercontinental flights"
           />
           {stats.mostVisitedCountry && (

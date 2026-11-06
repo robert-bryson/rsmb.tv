@@ -219,6 +219,8 @@ Flight-data generation requires network access to download the public U.S. state
 CI installs Chromium and WebKit before browser tests.
 Set `PLAYWRIGHT_WEBKIT=1` to include WebKit in the local fixture suite.
 Performance measurement tests run only in Chromium because they require its DevTools Protocol.
+The flight layout-shift check also requires Chromium's Layout Instability API.
+WebKit runs the other flight startup and accessibility checks.
 
 Tornado browser tests use fixed tracks and map tiles.
 They check phone WebGL, desktop WebGL, and the SVG fallback.

@@ -85,7 +85,7 @@ describe('BottomStatsBar', () => {
 
     it('renders metric distance as a unit-toggle button', () => {
         renderBar({ totalDistance: 100, isMetric: true });
-        const button = screen.getByRole('button', { name: 'Switch to imperial units' });
+        const button = screen.getByRole('button', { name: '100 km. Switch to imperial units' });
 
         expect(button).toHaveTextContent('100 km');
         expect(button).toHaveAttribute('title', '62 mi • Click to switch to imperial units');
@@ -96,14 +96,14 @@ describe('BottomStatsBar', () => {
     it('renders imperial distance when metric units are disabled', () => {
         renderBar({ totalDistance: 100, isMetric: false });
 
-        expect(screen.getByRole('button', { name: 'Switch to metric units' })).toHaveTextContent('62 mi');
+        expect(screen.getByRole('button', { name: '62 mi. Switch to metric units' })).toHaveTextContent('62 mi');
     });
 
     it('calls onToggleUnits when the distance button is clicked', () => {
         const onToggleUnits = vi.fn();
         renderBar({ totalDistance: 100, onToggleUnits });
 
-        fireEvent.click(screen.getByRole('button', { name: 'Switch to imperial units' }));
+        fireEvent.click(screen.getByRole('button', { name: '100 km. Switch to imperial units' }));
 
         expect(onToggleUnits).toHaveBeenCalledOnce();
     });

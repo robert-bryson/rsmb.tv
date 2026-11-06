@@ -141,7 +141,6 @@ export function LayersControl({
                     : 'bg-gray-900/80 border-gray-700 text-gray-400 hover:text-gray-200'
                     } backdrop-blur`}
                 aria-expanded={isExpanded}
-                aria-label="Toggle layer options"
                 aria-controls={isExpanded ? 'flights-layer-options' : undefined}
             >
                 {/* Layers icon */}
@@ -156,6 +155,7 @@ export function LayersControl({
                         {activeLayers}
                     </span>
                 )}
+                <span className="sr-only">Toggle layer options</span>
                 <svg
                     className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
                     fill="none"

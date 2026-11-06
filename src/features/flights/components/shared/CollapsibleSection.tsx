@@ -26,7 +26,7 @@ export function CollapsibleSection({
 
   return (
     <div className="mt-4 pt-3 border-t border-gray-700">
-      <h4>
+      <h3>
         <button
           type="button"
           aria-expanded={isOpen}
@@ -42,7 +42,7 @@ export function CollapsibleSection({
             {isOpen ? '▼' : '▶'}
           </span>
         </button>
-      </h4>
+      </h3>
       <div id={contentId} hidden={!isOpen} className="mt-2">{isOpen && children}</div>
     </div>
   );

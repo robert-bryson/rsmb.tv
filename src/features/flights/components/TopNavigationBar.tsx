@@ -41,7 +41,7 @@ export function TopNavigationBar({
             </Link>
 
             {/* Center: Title (hidden on very small screens) */}
-            <h1 className="hidden md:block text-white/80 text-sm font-medium">
+            <h1 className="sr-only md:not-sr-only text-white/80 text-sm font-medium">
                 Flight History
             </h1>
 

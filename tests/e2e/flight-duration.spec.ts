@@ -54,7 +54,7 @@ for (const { selection, heading, summary } of [
     test(`recorded durations agree across filtered summaries: ${selection || 'overall'}`, async ({ page }) => {
         await openFlightSummary(page, `year=2024&airline=Test&${selection}`, summary);
         const panel = page.getByTestId('stats-panel-content');
-        await expect(panel.getByRole('heading', { name: heading, level: 3, exact: true })).toBeVisible();
+        await expect(panel.getByRole('heading', { name: heading, level: 2, exact: true })).toBeVisible();
         if (selection === 'flightType=domestic') {
             await expect(panel.getByText('Flight type: Domestic', { exact: true })).toBeVisible();
         }
@@ -88,7 +88,7 @@ for (const filename of ['flights.geojson', 'visitedAirports.geojson']) {
             await openFlightSummary(page, 'year=2024&airline=Test&country=US', countrySummary);
             await expectRecordedTime(page, countrySummary);
             await expect(page.getByTestId('stats-panel-content').getByRole('heading', {
-                name: 'United States', level: 3, exact: true,
+                name: 'United States', level: 2, exact: true,
             })).toBeVisible();
             expect(requestDelayed).toBe(true);
         } finally {

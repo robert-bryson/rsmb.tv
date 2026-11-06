@@ -38,6 +38,8 @@ public/data/flights/usStates.geojson
 ```
 
 The flights feature loads these files when it needs them.
+The map page fetches flight records and visited airports while the globe JavaScript downloads.
+Both requests use the shared JSON cache. The map hooks reuse their pending requests and results.
 The state generator downloads public boundaries from GitHub. This step requires network access.
 
 ## Map code
@@ -57,6 +59,9 @@ The map separates page controls from renderer behavior:
 Camera listeners remain active after filter and camera URL changes.
 The camera hook applies renderer readiness after its component commits.
 The globe appears at full size. Its decorative startup scale and rotation animation is disabled.
+The statistics panel shows a loading state until its data is ready. This prevents empty statistics from shifting later sections.
+The skip link focuses the statistics toggle. The page uses a main landmark and sequential heading levels.
+Hashed 1536-pixel globe textures use a one-year immutable cache. Other basemap textures retain their seven-day cache.
 Discarded renders cannot update camera state.
 A linked camera takes precedence over a year fit, including during browser history navigation.
 Selecting a year in the map controls fits its airports after data loads.
@@ -90,9 +95,18 @@ The browser checks use the actual globe renderer:
 
 ```bash
 npx vitest run src/test/FlightsMap.test.tsx src/test/useGlobeCameraLifecycle.test.tsx \
-  src/test/useGlobeTextures.test.ts src/test/useZoomNavigation.test.ts
-PLAYWRIGHT_WEBKIT=1 npm run test:e2e -- tests/e2e/flights-controls.spec.ts tests/e2e/flight-duration.spec.ts tests/e2e/carto-basemaps.spec.ts
+  src/test/useGlobeTextures.test.ts src/test/useZoomNavigation.test.ts \
+  src/test/FlightsPage.test.tsx src/test/SkipLink.test.tsx \
+  src/test/AirlinesSection.test.tsx src/test/StatsPanel.test.tsx
+PLAYWRIGHT_WEBKIT=1 npm run test:e2e -- \
+  tests/e2e/flights-controls.spec.ts tests/e2e/flight-duration.spec.ts \
+  tests/e2e/carto-basemaps.spec.ts tests/e2e/flights-accessibility.spec.ts tests/e2e/flights-startup.spec.ts
 ```
+
+The startup checks hold the renderer module to verify concurrent data loading and shared requests.
+Accessibility checks cover keyboard focus, heading order, landmarks, button names, and selected-airline contrast.
+The layout-shift check requires Chromium's Layout Instability API. It verifies API support before it measures shifts.
+WebKit skips this measurement and runs the other checks.
 
 The camera recovery cases use fixed flight and airport data.
 They cover normal startup, delayed flights, and delayed textures.
@@ -199,8 +213,9 @@ Run the date and presentation checks after a change:
 ```bash
 npx vitest run src/test/parseDateString.test.ts src/test/StatsPanel.test.tsx \
   src/test/flightTimePresentation.test.tsx src/test/flightDuration.test.ts src/test/tooltipHtml.test.ts
-PLAYWRIGHT_WEBKIT=1 npm run test:e2e -- tests/e2e/flight-duration.spec.ts
 ```
+
+Use the [map browser checks](#map-code) to verify rendered date displays.
 
 ### Flight duration
 
@@ -286,8 +301,9 @@ npx vitest run src/test/flightDuration.test.ts src/test/flightSummaries.test.tsx
   src/test/flightFilterTransitions.test.tsx src/test/flightFilterCommitOrder.test.ts \
   scripts/__tests__/syncFlights.test.ts scripts/__tests__/flightDataIntegrity.test.ts \
   scripts/__tests__/flightBuildScripts.test.ts
-PLAYWRIGHT_WEBKIT=1 npm run test:e2e -- tests/e2e/flight-duration.spec.ts
 ```
+
+Use the [map browser checks](#map-code) to verify rendered durations.
 
 The duration browser checks use [fixed flight and airport data](../../tests/e2e/fixtures/flight-duration.ts).
 Keep the flight endpoints and airport geometry consistent.
