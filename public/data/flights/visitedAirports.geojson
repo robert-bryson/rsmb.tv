@@ -737,12 +737,11 @@
           "9/30/2024",
           "7/29/2025",
           "8/4/2025",
-          "7/2/2026",
-          "11/6/2026"
+          "7/2/2026"
         ],
-        "visitCount": 117,
-        "arrivalCount": 57,
-        "departureCount": 60
+        "visitCount": 115,
+        "arrivalCount": 56,
+        "departureCount": 59
       },
       "geometry": {
         "type": "Point",
@@ -1541,11 +1540,12 @@
           "9/30/2024",
           "12/14/2025",
           "8/20/2026",
-          "8/30/2026"
+          "8/30/2026",
+          "11/6/2026"
         ],
-        "visitCount": 17,
-        "arrivalCount": 7,
-        "departureCount": 10
+        "visitCount": 19,
+        "arrivalCount": 8,
+        "departureCount": 11
       },
       "geometry": {
         "type": "Point",

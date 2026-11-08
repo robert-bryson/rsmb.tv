@@ -15611,7 +15611,7 @@
         "id": 333,
         "date": "11/6/2026",
         "airline": "Alaska",
-        "flightNumber": "AS 683",
+        "flightNumber": "AS 1478",
         "durationMinutes": null,
         "durationKind": null,
         "durationSource": null,
@@ -15626,17 +15626,17 @@
         "origin_continentName": "North America",
         "origin_lon": -117.1900024,
         "origin_lat": 32.73360062,
-        "destination_code": "SEA",
-        "destination_name": "Seattle–Tacoma International Airport",
-        "destination_municipality": "Seattle",
-        "destination_region": "US-WA",
-        "destination_regionName": "Washington",
+        "destination_code": "ORD",
+        "destination_name": "Chicago O'Hare International Airport",
+        "destination_municipality": "Chicago",
+        "destination_region": "US-IL",
+        "destination_regionName": "Illinois",
         "destination_country": "US",
         "destination_countryName": "United States",
         "destination_continent": "NA",
         "destination_continentName": "North America",
-        "destination_lon": -122.310276,
-        "destination_lat": 47.447943
+        "destination_lon": -87.9048,
+        "destination_lat": 41.9786
       },
       "geometry": {
         "type": "LineString",
@@ -15646,8 +15646,8 @@
             32.73360062
           ],
           [
-            -122.310276,
-            47.447943
+            -87.9048,
+            41.9786
           ]
         ]
       }
@@ -15657,22 +15657,22 @@
       "properties": {
         "id": 334,
         "date": "11/6/2026",
-        "airline": "Alaska",
-        "flightNumber": "AS 647",
+        "airline": "American",
+        "flightNumber": "AA 3768",
         "durationMinutes": null,
         "durationKind": null,
         "durationSource": null,
-        "origin_code": "SEA",
-        "origin_name": "Seattle–Tacoma International Airport",
-        "origin_municipality": "Seattle",
-        "origin_region": "US-WA",
-        "origin_regionName": "Washington",
+        "origin_code": "ORD",
+        "origin_name": "Chicago O'Hare International Airport",
+        "origin_municipality": "Chicago",
+        "origin_region": "US-IL",
+        "origin_regionName": "Illinois",
         "origin_country": "US",
         "origin_countryName": "United States",
         "origin_continent": "NA",
         "origin_continentName": "North America",
-        "origin_lon": -122.310276,
-        "origin_lat": 47.447943,
+        "origin_lon": -87.9048,
+        "origin_lat": 41.9786,
         "destination_code": "STL",
         "destination_name": "St. Louis Lambert International Airport",
         "destination_municipality": "St Louis",
@@ -15689,8 +15689,8 @@
         "type": "LineString",
         "coordinates": [
           [
-            -122.310276,
-            47.447943
+            -87.9048,
+            41.9786
           ],
           [
             -90.370003,
@@ -15730,6 +15730,6 @@
     "internationalFlights": 85,
     "intercontinentalFlights": 36,
     "domesticFlights": 249,
-    "generatedAt": "2026-11-03T06:07:46.026Z"
+    "generatedAt": "2026-11-08T06:07:10.387Z"
   }
 }
