@@ -33,14 +33,14 @@ async function write(relative: string, content: string) {
 
 describe('lint toolchain dependency compatibility', () => {
     it.each(consumers)(
-        '$name bounds optimization-level-two pattern expansion', ({ modulePath }) => {
+        '$name rejects optimization-level-two pattern expansion beyond the limit', ({ modulePath }) => {
             const consumerRequire = createRequire(modulePath);
             const { Minimatch } = consumerRequire('minimatch') as {
                 Minimatch: new (pattern: string, options: { optimizationLevel: number; braceExpandMax: number }) => { set: unknown[] };
             };
             const pattern = Array.from({ length: 8 }, () => '**/../segment/leaf').join('/');
-            const matcher = new Minimatch(pattern, { optimizationLevel: 2, braceExpandMax: 16 });
-            expect(matcher.set.length).toBeLessThanOrEqual(16);
+            expect(() => new Minimatch(pattern, { optimizationLevel: 2, braceExpandMax: 16 }))
+                .toThrow('optimizationLevel 2: too many patterns');
         },
     );
 

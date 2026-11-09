@@ -97,6 +97,33 @@ describe('amplify.yml', () => {
     });
 });
 
+describe('temperature sync workflow', () => {
+    it.each([
+        ['daily', false, 'args=--recent-only\nlabel=recent-only\n'],
+        ['monthly', false, 'args=\nlabel=full\n'],
+        ['manual', false, 'args=--recent-only\nlabel=recent-only\n'],
+        ['manual', true, 'args=\nlabel=full\n'],
+    ])('selects the %s sync mode (full_sync: %s)', (event, fullSync, expected) => {
+        const workflow = parse(readRepoFile('.github/workflows/sync-temperatures.yml'));
+        const schedule = event === 'manual' ? '' : workflow.on.schedule[event === 'daily' ? 0 : 1].cron;
+        const mode = workflow.jobs.sync.steps.find((step: { id?: string }) => step.id === 'mode');
+        const script = mode.run
+            .replaceAll('${{ github.event_name }}', event === 'manual' ? 'workflow_dispatch' : 'schedule')
+            .replaceAll('${{ github.event.schedule }}', schedule)
+            .replaceAll('${{ inputs.full_sync }}', String(fullSync));
+        const root = fs.mkdtempSync(path.join(os.tmpdir(), 'rsmb-temperature-mode-'));
+        const output = path.join(root, 'github-output');
+        try {
+            execFileSync('bash', ['-e', '-o', 'pipefail', '-c', script], {
+                env: { ...process.env, GITHUB_OUTPUT: output }, stdio: 'pipe',
+            });
+            expect(fs.readFileSync(output, 'utf8')).toBe(expected);
+        } finally {
+            fs.rmSync(root, { recursive: true, force: true });
+        }
+    });
+});
+
 describe('tornado publication workflow', () => {
     function steps() {
         return (parse(readRepoFile('.github/workflows/sync-tornadoes.yml')) as {

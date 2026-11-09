@@ -50,6 +50,11 @@ Recent snapshots become stale after two days. Standing-record snapshots become s
 
 ## Sync and recovery
 
+The daily workflow runs at 13:17 UTC and again at 17:17 UTC.
+The later run recovers delayed previous-day observations and reuses already verified daily archives.
+ACIS availability is not guaranteed at either time. Persistent missing state data still fails the run.
+The monthly full sync remains at 08:30 UTC on the first day of the month.
+
 The sync checks ACIS responses before it uses or caches them.
 Each POST request has up to three attempts.
 The sync waits one second before attempt two and two seconds before attempt three.

@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint'
 import { globalIgnores } from 'eslint/config'
 
 export default tseslint.config([
-  globalIgnores(['dist', 'coverage', 'test-results', 'test-results-trips', 'playwright-report']),
+  globalIgnores(['dist', 'coverage', 'test-results', 'test-results-trips', 'playwright-report', '**/.venv/**']),
   {
     files: ['**/*.js'],
     ...js.configs.recommended,
