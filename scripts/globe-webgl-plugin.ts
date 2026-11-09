@@ -4,7 +4,7 @@ import type { Plugin } from 'vite';
 
 const reviewedSources = {
     'three-globe': 'b33b85fa0065a9bfa0e465bc2f773dc1a5a6496981b0818fd8517707a7b92501',
-    'three-render-objects': '4cb4d816ed01f12cc02d9cbc8a93e17c4f762d2f7576c90dbbdc6ce2cad9da48',
+    'three-render-objects': '33290d922119e9baf0e2ad7e6b8622578862c699b05e4f53aa90833835ec3956',
 } as const;
 
 export function specializeGlobeSource(code: string, id: string) {
@@ -36,11 +36,27 @@ export function specializeGlobeSource(code: string, id: string) {
         const importStart = code.indexOf(gpuImport);
         output.overwrite(start, start + selection.length, 'three.WebGLRenderer');
         output.remove(importStart, importStart + gpuImport.length);
+        const controls = `state.controls = new {
+      trackball: TrackballControls,
+      orbit: OrbitControls,
+      fly: FlyControls
+    }[controlType]`;
+        const controlsStart = code.indexOf(controls);
+        output.overwrite(controlsStart, controlsStart + controls.length,
+            `if (controlType !== 'orbit') throw new Error('The Flights renderer supports only orbit controls');
+    state.controls = new OrbitControls`);
+        for (const statement of [
+            "import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';",
+            "import { FlyControls } from 'three/examples/jsm/controls/FlyControls.js';",
+        ]) {
+            const controlImportStart = code.indexOf(statement);
+            output.remove(controlImportStart, controlImportStart + statement.length);
+        }
     }
     return { code: output.toString(), map: output.generateMap({ source: id, includeContent: true, hires: true }) };
 }
 
-/** Use WebGL rendering and the existing CPU heatmap fallback. This site does not use GPU heatmaps. */
+/** Use WebGL, orbit controls, and the CPU heatmap fallback required by this site. */
 export function globeWebglPlugin(): Plugin {
     return {
         name: 'globe-webgl',

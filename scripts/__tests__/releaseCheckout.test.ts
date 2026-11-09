@@ -18,7 +18,10 @@ describe('release checkout history', () => {
         const source = path.join(directory, 'source');
         const remote = path.join(directory, 'origin.git');
         const runner = path.join(directory, 'runner');
-        const git = (cwd: string, ...args: string[]) => execFileSync('git', ['-c', 'commit.gpgsign=false', '-c', 'core.hooksPath=/dev/null', '-C', cwd, ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+        const git = (cwd: string, ...args: string[]) => execFileSync('git', [
+            '-c', 'commit.gpgsign=false', '-c', 'core.hooksPath=/dev/null',
+            ...(cwd === remote ? ['--git-dir', remote] : ['-C', cwd]), ...args,
+        ], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
         fs.mkdirSync(source);
         git(directory, 'init', '--bare', remote);
         git(source, 'init', '--initial-branch=main');

@@ -52,9 +52,13 @@ it('keeps the WebGL build within budget and maps production errors to the origin
     expect(Buffer.byteLength(flights!.code, 'utf8')).toBeLessThan(1_400_000);
     expect(gzipSync(flights!.code, { level: 6 }).length).toBeLessThan(400_000);
     expect(chunks.flatMap(chunk => Object.keys(chunk.modules)).filter(id => /three\.(webgpu|tsl)\.js$/.test(id))).toEqual([]);
+    expect(chunks.flatMap(chunk => Object.keys(chunk.modules)).filter(id => /\/(?:Trackball|Fly)Controls\.js$/.test(id))).toEqual([]);
 
     // globe.gl currently exposes only the WebGL renderer. An upstream change requires adapter review.
-    expect(fs.readFileSync('node_modules/globe.gl/dist/globe.gl.mjs', 'utf8')).not.toContain('useWebGPU');
+    const globeSource = fs.readFileSync('node_modules/globe.gl/dist/globe.gl.mjs', 'utf8');
+    expect(globeSource).not.toContain('useWebGPU');
+    expect(globeSource).toMatch(/controlType:\s*'orbit'/);
+    expect(globeSource.match(/controlType:/g)).toHaveLength(1);
     const message = 'Route request timed out. Please try again.';
     const route = chunks.find(chunk => chunk.code.includes(message));
     expect(route).toBeDefined();

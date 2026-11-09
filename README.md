@@ -132,6 +132,7 @@ Use the configured Node.js and npm versions before you update dependencies.
 Use normal npm peer dependency checks. The MDX build plugin requires the declared Rollup development dependency.
 Keep React and React DOM on the same version.
 Keep Vitest and its coverage package on the same version.
+Dependabot groups Vitest packages so their updates pass the shared-version contract together.
 Do not override the major version of a dependency declared by React Router DOM.
 
 The ESLint adapter requires TypeScript below 6.1.
@@ -158,6 +159,8 @@ An empty `npm outdated` result does not prove that every transitive dependency u
 Check the audit result and dependency contracts. Do not force incompatible major versions into the dependency tree.
 
 GitHub Actions use complete commit hashes. Keep each release comment with its verified hash when you update an action.
+The WebGL build adapter also checks reviewed upstream source hashes. Compare the installed bundles before updating those hashes.
+It retains the globe's orbit controls and rejects other control types; unused Trackball and Fly controllers are excluded from production.
 Infrastructure CI validates all Terraform files. It tests mail, storage, and workflow roles with mocked AWS responses.
 
 ### Lint security override
