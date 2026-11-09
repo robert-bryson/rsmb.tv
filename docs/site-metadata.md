@@ -28,6 +28,8 @@ Post metadata comes from the [blog import](blog-publishing.md).
 Trip manifests supply hero URLs, alt descriptions, and image dimensions.
 Project pages and their application subroutes use the project's preview screenshot in Open Graph, Twitter, and JSON-LD metadata.
 Screenshot dimensions come from `src/content/project-previews.json`.
+The homepage HTML also preloads its first project image. The metadata renderer owns that hint and removes it when the template is used for another route.
+See [image delivery](image-assets.md#homepage-preload) for responsive sizes, recovery, and browser checks.
 Regular posts use the first image retained in the imported article body.
 The importer removes unsupported elements and rejects unsafe image URLs before image selection.
 Images inside code examples cannot supply an article preview.

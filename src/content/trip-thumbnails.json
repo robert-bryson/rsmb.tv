@@ -1,0 +1,20 @@
+{
+  "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-6077fdf330ac-1600.webp": {
+    "src": "/images/trip-thumbnails/boise-2024-320-aeed6c7daeb5.webp",
+    "width": 320,
+    "height": 240,
+    "srcSet": "/images/trip-thumbnails/boise-2024-160-854bcf973c6c.webp 160w, /images/trip-thumbnails/boise-2024-320-aeed6c7daeb5.webp 320w"
+  },
+  "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-beach-overlook-c975620c78d4-1600.webp": {
+    "src": "/images/trip-thumbnails/kalaloch-2024-320-af833076ae2a.webp",
+    "width": 320,
+    "height": 213,
+    "srcSet": "/images/trip-thumbnails/kalaloch-2024-160-69e110d45423.webp 160w, /images/trip-thumbnails/kalaloch-2024-320-af833076ae2a.webp 320w"
+  },
+  "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-1600.webp": {
+    "src": "/images/trip-thumbnails/ocean-shores-2024-320-9550e0ece59d.webp",
+    "width": 320,
+    "height": 213,
+    "srcSet": "/images/trip-thumbnails/ocean-shores-2024-160-7b9ff944ad7b.webp 160w, /images/trip-thumbnails/ocean-shores-2024-320-9550e0ece59d.webp 320w"
+  }
+}

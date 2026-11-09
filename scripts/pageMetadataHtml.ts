@@ -1,7 +1,21 @@
 import type { PageMetadata } from '../src/utils/pageMetadata.ts';
+import { getProjectPreview } from '../src/content/projectImages.ts';
+import { homeProjects, HOME_PROJECT_IMAGE_SIZES } from '../src/content/projects.ts';
+import { canonicalUrl } from '../src/utils/siteMetadata.ts';
 
 function escapeHtml(value: string): string {
     return value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+}
+
+/** Discover the homepage's responsive LCP image before the app executes. */
+function homeProjectImagePreload(): string | undefined {
+    const image = getProjectPreview(homeProjects[0]?.previewImage);
+    const srcSet = image?.avifSrcSet || image?.srcSet;
+    if (!srcSet) return;
+    const type = image?.avifSrcSet ? 'image/avif' : 'image/webp';
+    // Omitting href avoids a second, incorrect download in browsers that do not
+    // support responsive image preloads. Unsupported formats use the normal img.
+    return `<link rel="preload" as="image" data-page-image-preload type="${type}" imagesrcset="${escapeHtml(srcSet)}" imagesizes="${escapeHtml(HOME_PROJECT_IMAGE_SIZES)}" fetchpriority="high" />`;
 }
 
 /** Render crawler metadata without executing React, maps, or post content. */
@@ -23,6 +37,10 @@ export function pageMetadataHtml(template: string, metadata: PageMetadata): stri
     const tags = Object.entries(values).map(([key, value]) =>
         `<meta ${key.startsWith('og:') || key.startsWith('article:') ? 'property' : 'name'}="${key}" content="${escapeHtml(value)}" />`);
     tags.push(`<link rel="canonical" href="${escapeHtml(metadata.ogUrl)}" />`);
+    if (metadata.ogUrl === canonicalUrl('/')) {
+        const preload = homeProjectImagePreload();
+        if (preload) tags.push(preload);
+    }
     // A graph keeps related entities in one script; the runtime replaces it on startup.
     const schema = metadata.breadcrumb
         ? { '@context': 'https://schema.org', '@graph': [metadata.jsonLd, metadata.breadcrumb] }
@@ -32,6 +50,7 @@ export function pageMetadataHtml(template: string, metadata: PageMetadata): stri
         .replace(/<title>.*?<\/title>/s, () => `<title>${escapeHtml(title)}</title>`)
         .replace(/<meta\s+(?:name|property)="([^"]+)"[^>]*>/g, (tag, key: string) => key in values || key.startsWith('article:') || key.startsWith('og:image:') ? '' : tag)
         .replace(/<link\s+rel="canonical"[^>]*>/g, '')
+        .replace(/<link\b[^>]*\bdata-page-image-preload[^>]*>/g, '')
         .replace(/<script\b[^>]*data-prerendered[^>]*>.*?<\/script>/gs, '')
         .replace('</head>', () => `${tags.join('\n')}\n</head>`);
 }

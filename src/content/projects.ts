@@ -348,6 +348,9 @@ export const projects: Project[] = [
 ];
 
 export const featuredProjects = projects.filter(p => p.featured);
+export const homeProjects = featuredProjects.slice(0, 3);
+// Shared with the initial HTML preload so the browser requests the same variant.
+export const HOME_PROJECT_IMAGE_SIZES = '(min-width: 768px) 720px, calc(100vw - 3rem)';
 
 /**
  * Returns the project's `lastUpdated` date formatted as "Mon YYYY",

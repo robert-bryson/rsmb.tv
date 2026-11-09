@@ -78,6 +78,11 @@ describe('trip publication contracts', () => {
             expect(html).toContain(`content="${metadata.ogImage}"`);
             expect(html.match(/rel="canonical"/g)).toHaveLength(1);
             expect(html.match(/type="application\/ld\+json"/g)).toHaveLength(1);
+            expect(html.includes('rel="preload" as="image"')).toBe(pathname === '/');
+            if (pathname === '/') {
+                expect(html).toContain('type="image/avif" imagesrcset="/images/previews/through-routes-');
+                expect(html).toContain('fetchpriority="high"');
+            }
             const graph = JSON.parse(html.match(/data-prerendered>(.*?)<\/script>/s)![1]);
             expect(graph['@graph']?.[0] ?? graph).toEqual(metadata.jsonLd);
         }

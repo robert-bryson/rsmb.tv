@@ -1,13 +1,12 @@
 import { IntentLink } from '../components/IntentLink';
 import { ProjectPreview } from '../components/ProjectPreview';
-import { featuredProjects } from '../content/projects';
+import { TripThumbnail } from '../features/trips/components/TripThumbnail';
+import { homeProjects, HOME_PROJECT_IMAGE_SIZES } from '../content/projects';
 import { getAllPosts } from '../content/posts';
 import { getTripSummary } from '../features/trips/tripSummaries';
 import { usePageMetadata } from '../hooks/usePageMetadata';
 import { staticPageMetadata } from '../utils/pageMetadata';
 import { formatDate } from '../utils/formatDate';
-
-const selectedProjects = featuredProjects.slice(0, 3);
 
 export function Home() {
   const recentPosts = getAllPosts().slice(0, 3);
@@ -37,7 +36,7 @@ export function Home() {
           </IntentLink>
         </div>
         <ul className="grid gap-4 sm:grid-cols-2">
-          {selectedProjects.map((project, index) => {
+          {homeProjects.map((project, index) => {
             const linkUrl = `/projects/${project.slug}`;
 
             return (
@@ -52,7 +51,7 @@ export function Home() {
                       alt=""
                       className="aspect-video w-full border-b border-zinc-800 object-cover"
                       priority={index === 0}
-                      sizes={index === 0 ? '(min-width: 768px) 720px, calc(100vw - 3rem)' : '(min-width: 768px) 352px, (min-width: 640px) calc(50vw - 2rem), calc(100vw - 3rem)'}
+                      sizes={index === 0 ? HOME_PROJECT_IMAGE_SIZES : '(min-width: 768px) 352px, (min-width: 640px) calc(50vw - 2rem), calc(100vw - 3rem)'}
                     />
                   )}
                   <div className="flex flex-1 flex-col p-4">
@@ -110,15 +109,9 @@ export function Home() {
                       <p className="mt-1 text-sm leading-relaxed text-zinc-400">{post.description}</p>
                     </div>
                     {hero && (
-                      <img
-                        src={hero.src}
-                        srcSet={hero.srcSet}
+                      <TripThumbnail
+                        photo={hero}
                         sizes="(min-width: 640px) 128px, 96px"
-                        width={hero.width}
-                        height={hero.height}
-                        alt=""
-                        loading="lazy"
-                        decoding="async"
                         className="aspect-[4/3] w-24 sm:w-32 shrink-0 rounded-md border border-zinc-800 object-cover"
                       />
                     )}

@@ -1,7 +1,9 @@
 // @vitest-environment node
 import fs from 'node:fs';
 import { JSDOM } from 'jsdom';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import * as projectImages from '../../src/content/projectImages';
+import { HOME_PROJECT_IMAGE_SIZES } from '../../src/content/projects';
 import { STATIC_ROUTES } from '../generate-sitemap.js';
 import { DEFAULT_PAGES } from '../generate-og-images.js';
 import { pageMetadataHtml } from '../pageMetadataHtml';
@@ -9,6 +11,8 @@ import siteAliases from '../../src/content/siteAliases.json';
 import { articleMetadata, staticPageMetadata, STATIC_PAGE_PATHS } from '../../src/utils/pageMetadata';
 import { canonicalUrl } from '../../src/utils/siteMetadata';
 import { projects } from '../../src/content/projects';
+
+afterEach(() => vi.restoreAllMocks());
 
 describe('public page discovery', () => {
     it('covers every public route with static metadata, sitemap entries, and a social card', () => {
@@ -53,6 +57,41 @@ describe('public page discovery', () => {
 });
 
 describe('crawler HTML', () => {
+    it('emits one homepage preload and removes it when the template is used for another page', () => {
+        const template = fs.readFileSync(new URL('../../index.html', import.meta.url), 'utf8');
+        const home = pageMetadataHtml(template, staticPageMetadata('/'));
+        const repeated = pageMetadataHtml(home, staticPageMetadata('/'));
+        const homepage = new JSDOM(repeated).window.document;
+        expect(homepage.querySelectorAll('link[rel="preload"][as="image"]')).toHaveLength(1);
+        const about = new JSDOM(pageMetadataHtml(repeated, staticPageMetadata('/about'))).window.document;
+        expect(about.querySelectorAll('link[rel="preload"][as="image"]')).toHaveLength(0);
+    });
+
+    it('preloads the WebP candidates when AVIF is unavailable and escapes their attributes', () => {
+        const srcSet = '/preview.webp?label="<& 480w';
+        vi.spyOn(projectImages, 'getProjectPreview').mockReturnValue({ src: '/preview.webp', srcSet });
+        const page = new JSDOM(pageMetadataHtml('<head></head>', staticPageMetadata('/'))).window.document;
+        const preload = page.querySelector('link[as="image"]')!;
+        expect(preload.getAttribute('type')).toBe('image/webp');
+        expect(preload.getAttribute('imagesrcset')).toBe(srcSet);
+        expect(preload.getAttribute('imagesizes')).toBe(HOME_PROJECT_IMAGE_SIZES);
+        expect(preload.getAttribute('fetchpriority')).toBe('high');
+        expect(preload.hasAttribute('href')).toBe(false);
+    });
+
+    it.each([undefined, { src: '/original.webp' }])('omits image preloads when no responsive preview is available: %j', image => {
+        vi.spyOn(projectImages, 'getProjectPreview').mockReturnValue(image);
+        const page = new JSDOM(pageMetadataHtml('<head></head>', staticPageMetadata('/'))).window.document;
+        expect(page.querySelector('link[as="image"]')).toBeNull();
+    });
+
+    it('preserves image and font preloads owned by the original template', () => {
+        const template = '<head><link rel="preload" as="image" href="/other.webp"><link rel="preload" as="font" href="/font.woff2"></head>';
+        const home = pageMetadataHtml(template, staticPageMetadata('/'));
+        const page = new JSDOM(pageMetadataHtml(home, staticPageMetadata('/about'))).window.document;
+        expect(page.querySelectorAll('link[rel="preload"]')).toHaveLength(2);
+        expect(page.querySelector('link[as="image"]')).toHaveAttribute('href', '/other.webp');
+    });
     it.each(['/projects/flights', '/projects/flights/map'])('shares the project screenshot at %s before JavaScript runs', pathname => {
         const template = fs.readFileSync(new URL('../../index.html', import.meta.url), 'utf8');
         const metadata = staticPageMetadata(pathname);

@@ -318,13 +318,12 @@ Use landscape images for project cards. If the source is portrait, prepare a lan
 
 After you change a project's `previewImage`, run `npm run prepare-project-previews`.
 Commit the generated manifest and fingerprinted files in `public/images/previews/`.
-Home and Projects select responsive variants from that manifest. The original images remain available on project detail pages.
-The generator resolves source paths before it reads files.
-It rejects sources outside `public/images/` and sources inside its output directory.
-Do not use generated previews as source images.
-Keep `public/images/previews/` as a regular directory. The generator rejects an output directory that is a symbolic link.
-It publishes complete images and the manifest through atomic renames.
-It removes obsolete generated images after it publishes the manifest.
+Home and Projects select responsive variants from that manifest.
+
+After you publish a trip or change its hero photo, run `npm run prepare-trip-thumbnails`.
+First refresh the published post registry and mirror the exact hero source under `public/data/trips/`.
+Commit `src/content/trip-thumbnails.json` and `public/images/trip-thumbnails/`.
+See [image delivery](docs/image-assets.md) for source checks, encoding settings, atomic writes, error recovery, and preload tests.
 
 ## Performance checks
 

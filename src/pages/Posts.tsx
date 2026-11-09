@@ -6,6 +6,7 @@ import { filterPostsByTag, getAllBlogTags, tripFactTag } from '../content/blogTa
 import { filterPostsByRegion, findGeographicTag, getAllBlogRegions } from '../content/blogRegions';
 import { getAllPosts } from '../content/posts';
 import { getTripSummary } from '../features/trips/tripSummaries';
+import { TripThumbnail } from '../features/trips/components/TripThumbnail';
 import { TRIP_ATLAS_PATH } from '../features/trips/atlas/tripAtlasView';
 import { usePageMetadata } from '../hooks/usePageMetadata';
 import { staticPageMetadata } from '../utils/pageMetadata';
@@ -146,15 +147,9 @@ export function Posts() {
                                         {manifest && <p className="mt-2 text-xs text-zinc-300">{[manifest.distanceMiles && `${manifest.distanceMiles.toLocaleString()} miles`, manifest.ridingDays && `${manifest.ridingDays} riding days`].filter(Boolean).join(' · ')}</p>}
                                     </div>
                                     {hero && (
-                                        <img
-                                            src={hero.src}
-                                            srcSet={hero.srcSet}
+                                        <TripThumbnail
+                                            photo={hero}
                                             sizes="(min-width: 640px) 144px, 96px"
-                                            width={hero.width}
-                                            height={hero.height}
-                                            alt=""
-                                            loading="lazy"
-                                            decoding="async"
                                             className="aspect-[4/3] w-24 sm:w-36 shrink-0 rounded-md border border-zinc-800 object-cover"
                                         />
                                     )}

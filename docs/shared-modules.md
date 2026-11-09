@@ -121,12 +121,17 @@ Use the existing presentation modules for project introductions, screenshots, an
 | [`ProjectPageHeader`](../src/components/ProjectPageHeader.tsx) | Title, stack summary, description, and actions |
 | [`ProjectScreenshotGallery`](../src/components/ProjectScreenshotGallery.tsx) | Screenshot dimensions, captions, loading, and layout |
 | [`TechBadges`](../src/components/TechBadges.tsx) | Technology badge presentation and wrapping |
+| [`ProjectPreview`](../src/components/ProjectPreview.tsx) | Project card sources and original screenshot selection |
+| [`ResponsivePicture`](../src/components/ResponsivePicture.tsx) | Responsive candidates, loading priority, and bounded image recovery |
 
 Set `external: true` for actions that open another site in a new tab.
 Internal actions use React Router navigation.
 Use `project.tech` when the page and listing share the same technology list.
 Supply a detailed list when the project page intentionally names additional technologies.
 Keep editorial sections in the page itself.
+Use `ResponsiveImage` from `shared/responsiveImage.ts` for generated image records.
+Use `getProjectPreview` for project image lookup in React and HTML generation.
+Do not copy manifest casts into consumers. See [image delivery](image-assets.md) for generation and recovery rules.
 
 ## Validation
 

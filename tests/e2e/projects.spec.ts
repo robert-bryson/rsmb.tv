@@ -1,6 +1,22 @@
 import { expect, test } from '@playwright/test';
 import { projects } from '../../src/content/projects';
 
+for (const failedFormats of [['avif'], ['avif', 'webp']]) {
+    test(`project previews recover when ${failedFormats.join(' and ')} requests fail`, async ({ page }) => {
+        await page.route(/\/images\/previews\/through-routes-[^/]+\.(?:avif|webp)$/, route =>
+            failedFormats.includes(route.request().url().split('.').at(-1)!)
+                ? route.fulfill({ status: 503, body: 'Image temporarily unavailable' }) : route.continue());
+        await page.goto('/');
+        const card = page.getByRole('link').filter({ has: page.getByRole('heading', { name: 'Through Routes', exact: true }) });
+        await expect.poll(() => card.locator('img').evaluate(element => {
+            const image = element as HTMLImageElement;
+            return image.complete && image.naturalWidth > 0 ? new URL(image.currentSrc).pathname : '';
+        })).toMatch(failedFormats.length === 1
+            ? /^\/images\/previews\/through-routes-[^/]+\.webp$/
+            : /^\/images\/through-routes\/through-routes-curviness-map\.webp$/);
+    });
+}
+
 test('project previews use the WebP fallback when the offered source format is unsupported', async ({ page }) => {
     await page.goto('/');
     const card = page.getByRole('link').filter({ has: page.getByRole('heading', { name: 'Through Routes', exact: true }) });

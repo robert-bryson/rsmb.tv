@@ -63,6 +63,34 @@ test.beforeEach(async ({ page }) => {
     });
 });
 
+for (const width of [390, 1280]) {
+    test(`homepage image preload starts before the app and shares its download at ${width}px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 });
+        test.skip(!await page.evaluate(() => 'imageSrcset' in document.createElement('link')),
+            'This browser does not support responsive image preloads.');
+        const requests: string[] = [];
+        page.on('request', request => requests.push(request.url()));
+        let release!: () => void;
+        const blocked = new Promise<void>(resolve => { release = resolve; });
+        await page.route(/\/assets\/index-[^/]+\.js$/, async route => { await blocked; await route.continue(); });
+        const imageRequest = page.waitForRequest(request => /\/images\/previews\/through-routes-[^/]+\.avif$/.test(request.url()));
+        try {
+            await page.goto('/', { waitUntil: 'commit' });
+            const source = (await imageRequest).url();
+            await expect(page.locator('#root img')).toHaveCount(0);
+            release();
+            const image = page.locator('picture img').first();
+            await expect.poll(() => image.evaluate(element => {
+                const image = element as HTMLImageElement;
+                return image.complete && image.naturalWidth > 0 ? image.currentSrc : '';
+            })).toBe(source);
+            expect(requests.filter(url => url === source)).toHaveLength(1);
+        } finally {
+            release();
+        }
+    });
+}
+
 test('prefetch starts after sustained hover, reuses the route chunk, and preserves the current page', async ({ page }) => {
     const requests: string[] = [];
     page.on('request', request => { if (/\/About-[^/]+\.js$/.test(request.url())) requests.push(request.url()); });

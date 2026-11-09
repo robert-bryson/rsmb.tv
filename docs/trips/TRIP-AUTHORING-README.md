@@ -652,7 +652,9 @@ Update manifests to use fingerprinted URLs.
 2. Set the Sheet `published` value to `true`.
 3. Run `GOOGLE_BLOG_SHEET_ID=<sheet-id> npm run build-blog`.
 4. Correct each reported error.
-5. Start the production build in AWS Amplify.
+5. Mirror the published hero photo under `public/data/trips/<trip-id>/photos/`. Run `npm run prepare-trip-thumbnails`.
+6. Review and commit the thumbnail registry and generated images. See [image delivery](../image-assets.md#trip-card-thumbnails).
+7. Start the production build in AWS Amplify.
 
 The asset check tries `HEAD`, then `GET` if necessary. Each request has a 10-second timeout.
 Each URL must use `https://data.rsmb.tv/trips/<trip-id>/`.

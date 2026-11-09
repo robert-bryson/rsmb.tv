@@ -1,5 +1,5 @@
 import sitePages from '../content/sitePages.json' with { type: 'json' };
-import projectPreviews from '../content/project-previews.json' with { type: 'json' };
+import { getProjectPreview } from '../content/projectImages.ts';
 import { projects } from '../content/projects.ts';
 import { absoluteUrl, AUTHOR_PERSON, canonicalUrl, SITE_URL } from './siteMetadata.ts';
 
@@ -73,7 +73,7 @@ export function staticPageMetadata(pathname: string, posts: PostMetadata[] = [])
     const url = canonicalUrl(pathname);
     const { title, description, image } = page;
     const previewImage = projects.find(project => project.slug === pathname.split('/')[2])?.previewImage;
-    const dimensions = previewImage ? (projectPreviews as Record<string, { width: number; height: number }>)[previewImage] : undefined;
+    const dimensions = getProjectPreview(previewImage);
     const ogImage = absoluteUrl(previewImage ?? image);
     const common = { ...context, name: title, description, url, image: ogImage, inLanguage: 'en-US', author: AUTHOR_PERSON, isPartOf: website };
     let jsonLd: JsonLd;
