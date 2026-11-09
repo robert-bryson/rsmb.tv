@@ -2,6 +2,13 @@
 import type { BasemapId } from './types';
 import type { CartoRasterStyle } from '../../maps/cartoBasemaps';
 
+// Temporarily hide these UI elements; enable them here to restore them.
+export const FLIGHTS_UI_VISIBILITY = {
+    homeLink: false,
+    mapControls: false,
+    airlineBreakdown: false,
+};
+
 // Basemap definitions
 export interface BasemapConfig {
     id: BasemapId;

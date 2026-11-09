@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent as ReactPointerEvent } from 'react';
 import type { FlightProperties, FlightStats, SelectedRouteInfo, SelectedCountryInfo, SelectedRegionInfo, FlightTypeFilter } from '../types';
-import { EARTH_CIRCUMFERENCE_KM } from '../constants';
+import { EARTH_CIRCUMFERENCE_KM, FLIGHTS_UI_VISIBILITY } from '../constants';
 import { formatElevation, formatFlightYear, getFlightTypeLabel } from '../utils';
 import { StatItem, CollapsibleSection, ClickableAirport, ClickableRoute, ClickableCountry, ClickableRegion, FlightCount, VirtualizedList, DistanceValue } from './shared';
 import { AirlinesSection } from './AirlinesSection';
@@ -1260,7 +1260,7 @@ function OverallStats({
       </CollapsibleSection>
 
       {/* Airlines */}
-      {stats.airlineCounts.length > 0 && (
+      {FLIGHTS_UI_VISIBILITY.airlineBreakdown && stats.airlineCounts.length > 0 && (
         <AirlinesSection
           airlineCounts={stats.airlineCounts}
           selectedAirline={selectedAirline}

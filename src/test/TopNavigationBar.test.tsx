@@ -22,16 +22,14 @@ function renderTopNav(overrides: Partial<ComponentProps<typeof TopNavigationBar>
 }
 
 describe('TopNavigationBar', () => {
-    it('renders the rsmb.tv home link', () => {
+    it('temporarily hides the rsmb.tv home link', () => {
         renderTopNav();
-        // accessible name is the text content of both child spans joined
-        const link = screen.getByRole('link', { name: /rsmb\.tv/i });
-        expect(link).toBeInTheDocument();
+        expect(screen.queryByRole('link', { name: /rsmb\.tv/i })).not.toBeInTheDocument();
     });
 
-    it('home link navigates to /', () => {
-        renderTopNav();
-        expect(screen.getByRole('link', { name: /rsmb\.tv/i })).toHaveAttribute('href', '/');
+    it('temporarily hides the layer controls', () => {
+        renderTopNav({ layerControls: <button>Layers</button> });
+        expect(screen.queryByRole('button', { name: 'Layers' })).not.toBeInTheDocument();
     });
 
     it('does not show a "Back" label', () => {
@@ -44,10 +42,9 @@ describe('TopNavigationBar', () => {
         expect(screen.getByRole('heading', { level: 1, name: /Flight History/i })).toBeInTheDocument();
     });
 
-    it('renders filter panel when years are present', () => {
+    it('temporarily hides the filter panel when years are present', () => {
         renderTopNav({ years: [2024, 2023] });
-        // FilterPanel toggle button should be present
-        expect(screen.getByRole('button', { name: /toggle filters/i })).toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: /toggle filters/i })).not.toBeInTheDocument();
     });
 
     it('renders no filter button when years list is empty', () => {
