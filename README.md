@@ -165,15 +165,16 @@ Infrastructure CI validates all Terraform files. It tests mail, storage, and wor
 
 ### Lint security override
 
-`package.json` pins minimatch 11.0.3 for ESLint, `@eslint/config-array`, and `@typescript-eslint/typescript-estree`.
+`package.json` pins minimatch 11.0.5 for ESLint, `@eslint/config-array`, and `@typescript-eslint/typescript-estree`.
 This scoped override fixes [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249).
 It is a tested exception to those consumers' declared minimatch 10 ranges.
 
 Minimatch 11 removes APIs that these consumers do not use.
 They use the retained matching APIs for file discovery, ignored paths, and TypeScript project selection.
 The compatibility suite exercises those workflows and checks the advisory's pattern-expansion limit.
+Excessive optimization-level-two pattern expansion now throws instead of returning truncated patterns.
 It resolves minimatch through each consumer, rather than assuming one shared installation.
-Minimatch 11.0.3 supports all Node.js versions listed in the repository's engine ranges.
+Minimatch 11.0.5 supports all Node.js versions listed in the repository's engine ranges.
 
 Run the focused checks after changing the lint toolchain or these overrides:
 
