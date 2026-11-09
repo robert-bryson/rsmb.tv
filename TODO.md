@@ -80,7 +80,7 @@ See the [browser setup](README.md#testing-notes).
 Use the [laboratory report](docs/reviews/2026-10-24-performance-follow-up.md) as the measurement baseline.
 The [live prefetch check](docs/reviews/2026-11-09-live-release-verification.md) records the current production comparison. Physical-phone checks remain open.
 
-- [ ] Check reading and ADV Atlas on a real phone. Record LCP, CLS, INP, cold transfer, and startup. Compare prefetch modes `off`, `pages`, and `all` where input supports intent. Verify [atlas navigation and recovery](docs/trips/ADV-ATLAS.md).
+- [ ] Check reading, the flight globe, and ADV Atlas on a real phone. Record LCP, CLS, INP, cold transfer, and startup. Compare prefetch modes `off`, `pages`, and `all` where input supports intent. Include clicks during module evaluation and after a longer hover. See the [startup evidence](docs/reviews/2026-11-09-live-release-verification.md#prepared-globe-input). Verify [atlas navigation and recovery](docs/trips/ADV-ATLAS.md).
 - [ ] Test list scroll restoration after delayed content loads. Check browser Back and the article return link.
 - [ ] Extend fixed-tile checks to cover stop selection and all three map styles.
 - [ ] Reproduce the intermittent flight-control failures. Add regressions for the [confirmed cause](docs/reviews/2026-11-04-flight-duration-test-review.md#intermittent-controls-failures).

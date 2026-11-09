@@ -120,6 +120,8 @@ PLAYWRIGHT_WEBKIT=1 npm run test:page-recovery
 ```
 
 These checks cover preparation, request reuse, worker deferral, CSS recovery, and demanded navigation.
+The flight route paints a loading status before it mounts a prepared renderer.
+Its scheduled startup is canceled if navigation leaves before that paint opportunity.
 The trip suite also checks reading budgets and embedded maps.
 Use the [repository guide](../README.md#testing-notes) for browser setup.
 
@@ -148,6 +150,8 @@ These results are laboratory measurements. They do not establish field INP, CLS,
 The [live release check](reviews/2026-11-09-live-release-verification.md) records a controlled production comparison.
 It includes the frozen probe source and all 60 samples.
 The earlier About timings used coarse selector polling. Use the corrected live comparison for timing claims.
+The same report records a prepared-globe input delay and its startup fix.
+Code evaluation and renderer long tasks still need checks on physical phones.
 
 See the [historical implementation measurements](reviews/2026-11-09-intent-prefetch-implementation.md),
 [quality review](reviews/2026-11-09-intent-prefetch-quality-review.md), and [research plan](reviews/2026-11-09-intent-prefetch-plan.md).

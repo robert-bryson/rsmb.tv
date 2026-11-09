@@ -65,7 +65,39 @@ Browser fixtures cover first visits and return visits. They hold the destination
 
 The live comparison used a separate probe because the local helper blocks external HTTPS services.
 The [raw production evidence](../performance/2026-11-09-live-prefetch.json) includes all samples, distributions, deployment proof, production validation, and the frozen probe source with its SHA-256 digest.
-The follow-up changes the benchmark helper, tests, and documentation. It changes no application source.
+The first follow-up changes the benchmark helper, tests, and documentation.
+
+## Prepared globe input
+
+Further production probes used 500, 1,500, and 2,000 ms hover windows, with three samples per case.
+The 500 ms window did not show a reliable ready-time benefit.
+At 1,500 ms, module evaluation overlapped input. Pointerdown queued for 105–115 ms.
+Those clicks took 504–560 ms to reach their next paint.
+With a 2,000 ms hover, input queued briefly, but globe startup still held the next paint for 320–336 ms.
+Prefetching had made the renderer available during navigation, which moved its synchronous startup into the initial response.
+
+The flight route now paints a loading status before mounting the prepared renderer.
+Two animation frames provide a paint opportunity. A React transition keeps that status visible while lazy loading resolves.
+Leaving the route cancels the scheduled frame. Query changes do not restart the gate.
+The data and renderer loaders still share requests through their existing caches.
+
+A local production-format comparison used gzip compression, the same 334 flights and 114 airports, and the same browser limits as above.
+With a two-second hover, median click-to-next-paint fell from 312 to 32 ms.
+Prepared globe-ready medians were 1,371 ms before and 1,362 ms after. That small ready-time difference is inconclusive.
+The comparison used three samples per case.
+Immediate-click ready medians were 2,631 ms before and 2,771 ms after, a 140 ms increase of about 5%.
+This small comparison does not establish a cold-start regression. Final production checks must retain immediate-click coverage.
+
+Candidate clicks during module evaluation painted within 176–200 ms.
+They still queued for 87–101 ms, because painting the loading status does not remove JavaScript evaluation work.
+Long renderer tasks also remain after the first paint.
+The [startup evidence](../performance/2026-11-09-flight-startup-input.json) retains the production probes, local comparisons, source digests, and all event entries.
+Click-to-next-paint uses events with a positive interaction ID. It excludes hover-only events.
+These samples are not field INP measurements.
+
+Four page tests cover shared startup data, the initial loading status, and cancellation before either scheduled frame.
+The production prefetch and page-recovery suite passed all 18 Chromium checks after the change.
+Lint, type checking, and the production-format build passed.
 
 These are laboratory results from a headless desktop browser.
 Physical-phone, cellular, memory, and field Web Vitals checks remain in [TODO.md](../../TODO.md#browser-and-performance-checks).

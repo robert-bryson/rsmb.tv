@@ -55,3 +55,50 @@ it('shares pending startup requests with the mounted map and keeps its main land
     expect(await screen.findByText('12 flights, 4 airports')).toBeVisible();
     expect(fetchMock).toHaveBeenCalledTimes(2);
 });
+
+function controlAnimationFrames() {
+    const frames = new Map<number, FrameRequestCallback>();
+    let id = 0;
+    vi.stubGlobal('requestAnimationFrame', vi.fn((callback: FrameRequestCallback) => {
+        frames.set(++id, callback);
+        return id;
+    }));
+    vi.stubGlobal('cancelAnimationFrame', vi.fn((frame: number) => frames.delete(frame)));
+    return {
+        frames,
+        async advance() {
+            const callbacks = [...frames.values()];
+            frames.clear();
+            await act(async () => { callbacks.forEach(callback => callback(performance.now())); });
+        },
+    };
+}
+
+it('gives loading feedback a paint before mounting a prepared renderer', async () => {
+    const animation = controlAnimationFrames();
+    const fetchMock = vi.fn(() => new Promise<Response>(() => {}));
+    vi.stubGlobal('fetch', fetchMock);
+    const { unmount } = render(<MemoryRouter><Flights /></MemoryRouter>);
+    expect(screen.getByRole('status')).toHaveTextContent('Loading flight globe');
+    expect(fetchMock).not.toHaveBeenCalled();
+    await animation.advance();
+    expect(screen.getByRole('status')).toHaveTextContent('Loading flight globe');
+    expect(fetchMock).not.toHaveBeenCalled();
+    await animation.advance();
+    await screen.findByText('Loading flight data');
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    unmount();
+});
+
+it.each([0, 1])('cancels renderer startup when navigation leaves after %i frames', async elapsedFrames => {
+    const animation = controlAnimationFrames();
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+    const { unmount } = render(<MemoryRouter><Flights /></MemoryRouter>);
+    if (elapsedFrames) await animation.advance();
+    expect(animation.frames.size).toBe(1);
+    unmount();
+    expect(animation.frames.size).toBe(0);
+    await animation.advance();
+    expect(fetchMock).not.toHaveBeenCalled();
+});
