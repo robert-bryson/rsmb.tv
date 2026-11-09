@@ -1,38 +1,11 @@
 import type { Feature, FeatureCollection, LineString, Point } from 'geojson';
+import type { TornadoTrackProperties } from '../schemas';
+export type { TornadoTrackProperties, NotableTornadoEvent } from '../schemas';
 
 export type TornadoMode = 'tracks' | 'density' | 'trends';
 export type TornadoColorMode = 'scale' | 'year' | 'decade';
 export type TornadoScaleFilter = 'all' | 'ef0' | 'ef1' | 'ef2' | 'ef3' | 'ef4' | 'ef5' | 'ef1plus' | 'ef2plus' | 'ef3plus';
 export type TornadoRegionPreset = 'conus' | 'midwest' | 'plains' | 'dixie';
-
-export interface TornadoTrackProperties {
-    id: string;
-    eventId: string;
-    episodeId: string;
-    year: number;
-    month: number;
-    date: string;
-    beginTime: string;
-    endTime: string;
-    timezone: string;
-    state: string;
-    stateName: string;
-    county: string;
-    countyFips: string;
-    wfo: string;
-    scale: number;
-    scaleLabel: string;
-    lengthMiles: number;
-    widthYards: number;
-    deaths: number;
-    injuries: number;
-    propertyDamage: number;
-    cropDamage: number;
-    source: string;
-    dataSource: string;
-    narrative?: string;
-    episodeNarrative?: string;
-}
 
 export interface TornadoPointProperties {
     id: string;
@@ -74,10 +47,6 @@ export interface StateTornadoSummary {
     deaths: number;
     injuries: number;
     trackMiles: number;
-}
-
-export interface NotableTornadoEvent extends TornadoTrackProperties {
-    coordinates: [number, number][];
 }
 
 export interface AnnualWarningSummary {

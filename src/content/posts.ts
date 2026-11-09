@@ -8,6 +8,7 @@
 
 import { metadata, mdxLoaders } from 'virtual:post-content';
 import { lazy, type ComponentType, type LazyExoticComponent } from 'react';
+import { moduleLoader } from '../navigation/moduleLoader';
 import { getTripSummary } from '../features/trips/tripSummaries';
 import { tripFactTag } from './blogTags';
 import { separatePostGeography, type PostCountry } from './blogRegions';
@@ -74,7 +75,7 @@ function postComponentLoader(slug: string): BlogPost['loadComponent'] {
 }
 
 const posts: BlogPost[] = postsMeta.map((meta) => {
-    const loadComponent = postComponentLoader(meta.slug);
+    const loadComponent = moduleLoader(postComponentLoader(meta.slug));
     const trip = meta.format === 'trip' ? getTripSummary(meta.tripId) : undefined;
     const factTags = [
         ...(trip?.motorcycle ? ['motorcycle', trip.motorcycle] : []),

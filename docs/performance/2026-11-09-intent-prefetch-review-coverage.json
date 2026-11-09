@@ -1,0 +1,1032 @@
+{
+  "version": "0.3.0",
+  "scope": "Prefetch policy, shared JSON, module loaders, and selected feature startup modules; not repository-wide coverage.",
+  "beforeSource": "Pending prefetch implementation before the quality review; includes the version bump.",
+  "afterSource": "Reviewed working tree before commit.",
+  "baselineTests": 42,
+  "baselineTestFiles": 7,
+  "finalFocusedTests": 126,
+  "finalFocusedTestFiles": 16,
+  "comparisonFiles": [
+    "src/components/IntentLink.tsx",
+    "src/data/fetchCache.ts",
+    "src/data/warmJson.ts",
+    "src/features/flights/loadFlightsMap.ts",
+    "src/features/temperatures/loadTemperatureMap.ts",
+    "src/features/tornadoes/loadTornadoMap.ts",
+    "src/features/trips/atlas/loadTripAtlasMap.ts",
+    "src/navigation/intentPrefetch.ts",
+    "src/navigation/moduleLoader.ts",
+    "src/navigation/pageLoaders.ts",
+    "src/navigation/prefetchDestination.ts",
+    "src/navigation/prefetchTargets.ts",
+    "src/navigation/retryStylesheet.ts"
+  ],
+  "before": {
+    "lines": {
+      "total": 282,
+      "covered": 213,
+      "pct": 75.53
+    },
+    "statements": {
+      "total": 385,
+      "covered": 267,
+      "pct": 69.35
+    },
+    "functions": {
+      "total": 116,
+      "covered": 61,
+      "pct": 52.59
+    },
+    "branches": {
+      "total": 233,
+      "covered": 168,
+      "pct": 72.1
+    }
+  },
+  "after": {
+    "lines": {
+      "total": 291,
+      "covered": 269,
+      "pct": 92.44
+    },
+    "statements": {
+      "total": 392,
+      "covered": 356,
+      "pct": 90.82
+    },
+    "functions": {
+      "total": 116,
+      "covered": 83,
+      "pct": 71.55
+    },
+    "branches": {
+      "total": 243,
+      "covered": 229,
+      "pct": 94.24
+    }
+  },
+  "newFiles": [
+    "src/data/validatedJson.ts",
+    "src/features/temperatures/temperatureDataView.ts",
+    "src/features/tornadoes/schemas.ts"
+  ],
+  "expandedAfter": {
+    "lines": {
+      "total": 298,
+      "covered": 276,
+      "skipped": 0,
+      "pct": 92.61
+    },
+    "statements": {
+      "total": 401,
+      "covered": 365,
+      "skipped": 0,
+      "pct": 91.02
+    },
+    "functions": {
+      "total": 118,
+      "covered": 85,
+      "skipped": 0,
+      "pct": 72.03
+    },
+    "branches": {
+      "total": 248,
+      "covered": 234,
+      "skipped": 0,
+      "pct": 94.35
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "beforeByFile": {
+    "total": {
+      "lines": {
+        "total": 282,
+        "covered": 213,
+        "skipped": 0,
+        "pct": 75.53
+      },
+      "statements": {
+        "total": 385,
+        "covered": 267,
+        "skipped": 0,
+        "pct": 69.35
+      },
+      "functions": {
+        "total": 116,
+        "covered": 61,
+        "skipped": 0,
+        "pct": 52.58
+      },
+      "branches": {
+        "total": 233,
+        "covered": 168,
+        "skipped": 0,
+        "pct": 72.1
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "src/components/IntentLink.tsx": {
+      "lines": {
+        "total": 35,
+        "covered": 35,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 12,
+        "covered": 12,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 60,
+        "covered": 57,
+        "skipped": 0,
+        "pct": 95
+      },
+      "branches": {
+        "total": 48,
+        "covered": 40,
+        "skipped": 0,
+        "pct": 83.33
+      }
+    },
+    "src/data/fetchCache.ts": {
+      "lines": {
+        "total": 67,
+        "covered": 67,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 14,
+        "covered": 13,
+        "skipped": 0,
+        "pct": 92.85
+      },
+      "statements": {
+        "total": 74,
+        "covered": 73,
+        "skipped": 0,
+        "pct": 98.64
+      },
+      "branches": {
+        "total": 34,
+        "covered": 33,
+        "skipped": 0,
+        "pct": 97.05
+      }
+    },
+    "src/data/warmJson.ts": {
+      "lines": {
+        "total": 3,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 1,
+        "covered": 1,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 5,
+        "covered": 5,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "src/features/flights/loadFlightsMap.ts": {
+      "lines": {
+        "total": 6,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 7,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 85.71
+      },
+      "statements": {
+        "total": 8,
+        "covered": 8,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "src/features/temperatures/loadTemperatureMap.ts": {
+      "lines": {
+        "total": 5,
+        "covered": 5,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 5,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 60
+      },
+      "statements": {
+        "total": 7,
+        "covered": 5,
+        "skipped": 0,
+        "pct": 71.42
+      },
+      "branches": {
+        "total": 4,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 75
+      }
+    },
+    "src/features/tornadoes/loadTornadoMap.ts": {
+      "lines": {
+        "total": 5,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 60
+      },
+      "functions": {
+        "total": 6,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 33.33
+      },
+      "statements": {
+        "total": 7,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 42.85
+      },
+      "branches": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "src/features/trips/atlas/loadTripAtlasMap.ts": {
+      "lines": {
+        "total": 1,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 0
+      },
+      "functions": {
+        "total": 1,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 0
+      },
+      "statements": {
+        "total": 2,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 0
+      },
+      "branches": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "src/navigation/intentPrefetch.ts": {
+      "lines": {
+        "total": 56,
+        "covered": 51,
+        "skipped": 0,
+        "pct": 91.07
+      },
+      "functions": {
+        "total": 18,
+        "covered": 14,
+        "skipped": 0,
+        "pct": 77.77
+      },
+      "statements": {
+        "total": 72,
+        "covered": 63,
+        "skipped": 0,
+        "pct": 87.5
+      },
+      "branches": {
+        "total": 60,
+        "covered": 49,
+        "skipped": 0,
+        "pct": 81.66
+      }
+    },
+    "src/navigation/moduleLoader.ts": {
+      "lines": {
+        "total": 21,
+        "covered": 18,
+        "skipped": 0,
+        "pct": 85.71
+      },
+      "functions": {
+        "total": 8,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 75
+      },
+      "statements": {
+        "total": 28,
+        "covered": 21,
+        "skipped": 0,
+        "pct": 75
+      },
+      "branches": {
+        "total": 16,
+        "covered": 10,
+        "skipped": 0,
+        "pct": 62.5
+      }
+    },
+    "src/navigation/pageLoaders.ts": {
+      "lines": {
+        "total": 21,
+        "covered": 1,
+        "skipped": 0,
+        "pct": 4.76
+      },
+      "functions": {
+        "total": 25,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 0
+      },
+      "statements": {
+        "total": 26,
+        "covered": 1,
+        "skipped": 0,
+        "pct": 3.84
+      },
+      "branches": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "src/navigation/prefetchDestination.ts": {
+      "lines": {
+        "total": 13,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 0
+      },
+      "functions": {
+        "total": 6,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 0
+      },
+      "statements": {
+        "total": 23,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 0
+      },
+      "branches": {
+        "total": 16,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 0
+      }
+    },
+    "src/navigation/prefetchTargets.ts": {
+      "lines": {
+        "total": 24,
+        "covered": 24,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4,
+        "covered": 4,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 31,
+        "covered": 31,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 35,
+        "covered": 33,
+        "skipped": 0,
+        "pct": 94.28
+      }
+    },
+    "src/navigation/retryStylesheet.ts": {
+      "lines": {
+        "total": 25,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 0
+      },
+      "functions": {
+        "total": 9,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 0
+      },
+      "statements": {
+        "total": 42,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 0
+      },
+      "branches": {
+        "total": 20,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 0
+      }
+    }
+  },
+  "afterByFile": {
+    "total": {
+      "lines": {
+        "total": 298,
+        "covered": 276,
+        "skipped": 0,
+        "pct": 92.61
+      },
+      "statements": {
+        "total": 401,
+        "covered": 365,
+        "skipped": 0,
+        "pct": 91.02
+      },
+      "functions": {
+        "total": 118,
+        "covered": 85,
+        "skipped": 0,
+        "pct": 72.03
+      },
+      "branches": {
+        "total": 248,
+        "covered": 234,
+        "skipped": 0,
+        "pct": 94.35
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "src/components/IntentLink.tsx": {
+      "lines": {
+        "total": 35,
+        "covered": 35,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 12,
+        "covered": 12,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 60,
+        "covered": 57,
+        "skipped": 0,
+        "pct": 95
+      },
+      "branches": {
+        "total": 48,
+        "covered": 40,
+        "skipped": 0,
+        "pct": 83.33
+      }
+    },
+    "src/data/fetchCache.ts": {
+      "lines": {
+        "total": 67,
+        "covered": 67,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 14,
+        "covered": 13,
+        "skipped": 0,
+        "pct": 92.85
+      },
+      "statements": {
+        "total": 74,
+        "covered": 73,
+        "skipped": 0,
+        "pct": 98.64
+      },
+      "branches": {
+        "total": 34,
+        "covered": 33,
+        "skipped": 0,
+        "pct": 97.05
+      }
+    },
+    "src/data/validatedJson.ts": {
+      "lines": {
+        "total": 3,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 1,
+        "covered": 1,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 5,
+        "covered": 5,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "src/data/warmJson.ts": {
+      "lines": {
+        "total": 1,
+        "covered": 1,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 1,
+        "covered": 1,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1,
+        "covered": 1,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "src/features/flights/loadFlightsMap.ts": {
+      "lines": {
+        "total": 6,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 7,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 85.71
+      },
+      "statements": {
+        "total": 8,
+        "covered": 8,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1,
+        "covered": 1,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "src/features/temperatures/loadTemperatureMap.ts": {
+      "lines": {
+        "total": 5,
+        "covered": 5,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 5,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 60
+      },
+      "statements": {
+        "total": 7,
+        "covered": 5,
+        "skipped": 0,
+        "pct": 71.42
+      },
+      "branches": {
+        "total": 3,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "src/features/temperatures/temperatureDataView.ts": {
+      "lines": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 1,
+        "covered": 1,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 5,
+        "covered": 5,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "src/features/tornadoes/loadTornadoMap.ts": {
+      "lines": {
+        "total": 6,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 6,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 8,
+        "covered": 8,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1,
+        "covered": 1,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "src/features/tornadoes/schemas.ts": {
+      "lines": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "src/features/trips/atlas/loadTripAtlasMap.ts": {
+      "lines": {
+        "total": 1,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 0
+      },
+      "functions": {
+        "total": 1,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 0
+      },
+      "statements": {
+        "total": 2,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 0
+      },
+      "branches": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "src/navigation/intentPrefetch.ts": {
+      "lines": {
+        "total": 59,
+        "covered": 58,
+        "skipped": 0,
+        "pct": 98.3
+      },
+      "functions": {
+        "total": 18,
+        "covered": 15,
+        "skipped": 0,
+        "pct": 83.33
+      },
+      "statements": {
+        "total": 76,
+        "covered": 73,
+        "skipped": 0,
+        "pct": 96.05
+      },
+      "branches": {
+        "total": 62,
+        "covered": 61,
+        "skipped": 0,
+        "pct": 98.38
+      }
+    },
+    "src/navigation/moduleLoader.ts": {
+      "lines": {
+        "total": 21,
+        "covered": 21,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 8,
+        "covered": 8,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 28,
+        "covered": 28,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 16,
+        "covered": 15,
+        "skipped": 0,
+        "pct": 93.75
+      }
+    },
+    "src/navigation/pageLoaders.ts": {
+      "lines": {
+        "total": 21,
+        "covered": 1,
+        "skipped": 0,
+        "pct": 4.76
+      },
+      "functions": {
+        "total": 25,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 0
+      },
+      "statements": {
+        "total": 26,
+        "covered": 1,
+        "skipped": 0,
+        "pct": 3.84
+      },
+      "branches": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "src/navigation/prefetchDestination.ts": {
+      "lines": {
+        "total": 13,
+        "covered": 13,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 6,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 23,
+        "covered": 23,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 16,
+        "covered": 16,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "src/navigation/prefetchTargets.ts": {
+      "lines": {
+        "total": 23,
+        "covered": 23,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4,
+        "covered": 4,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 31,
+        "covered": 31,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 33,
+        "covered": 32,
+        "skipped": 0,
+        "pct": 96.96
+      }
+    },
+    "src/navigation/retryStylesheet.ts": {
+      "lines": {
+        "total": 33,
+        "covered": 33,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 48,
+        "covered": 48,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 27,
+        "covered": 25,
+        "skipped": 0,
+        "pct": 92.59
+      }
+    }
+  },
+  "commands": {
+    "coverageInclude": [
+      "src/navigation/**",
+      "src/components/IntentLink.tsx",
+      "src/data/warmJson.ts",
+      "src/data/fetchCache.ts",
+      "src/features/**/load*Map.ts"
+    ],
+    "additionalAfterInclude": [
+      "src/data/validatedJson.ts",
+      "src/features/temperatures/temperatureDataView.ts",
+      "src/features/tornadoes/schemas.ts"
+    ],
+    "before": "vitest run src/test/IntentLink.test.tsx src/test/intentPrefetch.test.ts src/test/prefetchTargets.test.ts src/test/mapPrefetchData.test.ts src/test/warmJson.test.ts src/test/FlightsPage.test.tsx src/test/fetchCache.test.ts --coverage",
+    "after": "Run the same seven files plus retryStylesheet, moduleLoaderRecovery, prefetchDestination, temperaturePagePreparation, tornadoPagePreparation, tornadoSchemas, useTornadoData, tripMapImportRecovery, and tripBlockRecovery tests with --coverage.",
+    "reporters": [
+      "json",
+      "json-summary"
+    ]
+  },
+  "notes": [
+    "Coverage flags use --coverage.include for every listed include pattern. Baseline and reviewed measurements use V8 on Node 26.13.0.",
+    "Percentages for comparison use the same 13 production file paths. Line and branch totals change when reviewed code changes.",
+    "Expanded reviewed coverage includes the three new production modules. Browser coverage is not merged into these unit results."
+  ],
+  "additionalNavigationRegression": {
+    "file": "src/features/tornadoes/hooks/useTornadoFilters.ts",
+    "tests": "src/test/useTornadoFilters.test.ts",
+    "testCount": 65,
+    "addedTests": 2,
+    "failedBeforeFix": true,
+    "passedAfterFix": true,
+    "symptom": "A retained callback restored /projects/tornado-tracks/map after history had advanced to /projects/tornado-tracks."
+  },
+  "fullValidation": {
+    "javascriptTests": 2860,
+    "javascriptFiles": 191,
+    "pythonTests": 17,
+    "lint": "passed",
+    "typecheck": "passed",
+    "dependencyAudit": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "productionBrowserChecks": 36,
+    "tornadoControlChecks": 6,
+    "readingChecks": 18,
+    "markdownFilesChecked": 122,
+    "missingRelativeFileLinks": 0
+  },
+  "finalBundle": {
+    "mode": "test",
+    "rollout": "all",
+    "initialJavaScript": [
+      {
+        "file": "assets/index-C26jVtJg.js",
+        "rawBytes": 266924,
+        "gzipBytes": 83517
+      },
+      {
+        "file": "assets/react-sySUN5R7.js",
+        "rawBytes": 8539,
+        "gzipBytes": 3281
+      },
+      {
+        "file": "assets/chunk-6KYCQHYJ-C415MiOv.js",
+        "rawBytes": 38931,
+        "gzipBytes": 13811
+      },
+      {
+        "file": "assets/moduleLoader-qZ93Uz_C.js",
+        "rawBytes": 740,
+        "gzipBytes": 472
+      },
+      {
+        "file": "assets/preload-helper-7y9sWmk5.js",
+        "rawBytes": 1615,
+        "gzipBytes": 828
+      },
+      {
+        "file": "assets/useDocumentHead-Iy6ReBG9.js",
+        "rawBytes": 2418,
+        "gzipBytes": 1180
+      },
+      {
+        "file": "assets/formatDate-DzlwLnWD.js",
+        "rawBytes": 1240,
+        "gzipBytes": 506
+      }
+    ],
+    "initialGzipBytes": 103595,
+    "beforeImplementationGzipBytes": 100369,
+    "initialOverheadGzipBytes": 3226,
+    "initialOverheadBudgetBytes": 5000,
+    "flightsRenderer": {
+      "file": "assets/FlightsMap-CrW9X7OB.js",
+      "rawBytes": 1387675,
+      "gzipBytes": 386616
+    }
+  }
+}

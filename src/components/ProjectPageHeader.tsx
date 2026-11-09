@@ -1,5 +1,5 @@
+import { IntentLink } from './IntentLink';
 import type { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
 
 interface ProjectHeaderAction {
   label: string;
@@ -45,9 +45,9 @@ export function ProjectPageHeader({ title, stack, description, actions }: Projec
           }
 
           return (
-            <Link key={`${action.label}-${action.href}`} to={action.href} className={baseClassName}>
+            <IntentLink prefetchMode="destination" key={`${action.label}-${action.href}`} to={action.href} className={baseClassName}>
               {action.label}
-            </Link>
+            </IntentLink>
           );
         })}
       </div>

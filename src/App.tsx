@@ -1,31 +1,33 @@
 import { BrowserRouter as Router, Navigate, Routes, Route, useLocation, useSearchParams } from 'react-router-dom';
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useLayoutEffect } from 'react';
+import { pageLoaders } from './navigation/pageLoaders';
+import { intentPrefetch } from './navigation/intentPrefetch';
 import { Layout } from './components/Layout';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ScrollToTop } from './components/ScrollToTop';
 import { canonicalPathname } from './utils/siteMetadata';
 import { Home } from './pages/Home';
 
-const About = lazy(() => import('./pages/About').then(m => ({ default: m.About })));
-const Projects = lazy(() => import('./pages/Projects').then(m => ({ default: m.Projects })));
-const NotFound = lazy(() => import('./pages/NotFound').then(m => ({ default: m.NotFound })));
-const Posts = lazy(() => import('./pages/Posts').then(m => ({ default: m.Posts })));
-const BlogPost = lazy(() => import('./pages/BlogPost').then(m => ({ default: m.BlogPost })));
-const ThroughRoutes = lazy(() => import('./pages/ThroughRoutes'));
-const FlightsAbout = lazy(() => import('./pages/FlightsAbout'));
-const Flights = lazy(() => import('./pages/Flights'));
-const AnkiArtisan = lazy(() => import('./pages/AnkiArtisan'));
-const Bookend = lazy(() => import('./pages/Bookend'));
-const TemperatureRecordsAbout = lazy(() => import('./pages/TemperatureRecordsAbout'));
-const TemperatureRecords = lazy(() => import('./pages/TemperatureRecords'));
-const ClimateTrendsPage = lazy(() => import('./pages/ClimateTrends'));
-const TornadoTracksAbout = lazy(() => import('./pages/TornadoTracksAbout'));
-const TornadoTracks = lazy(() => import('./pages/TornadoTracks'));
-const Route2Gpx = lazy(() => import('./pages/Route2Gpx'));
-const Aborg = lazy(() => import('./pages/Aborg'));
-const Parc = lazy(() => import('./pages/Parc'));
-const StatusDashboard = lazy(() => import('./pages/StatusDashboard'));
-const AdvAtlas = lazy(() => import('./pages/AdvAtlas'));
+const About = lazy(pageLoaders['/about']);
+const Projects = lazy(pageLoaders['/projects']);
+const NotFound = lazy(pageLoaders['notFound']);
+const Posts = lazy(pageLoaders['/posts']);
+const BlogPost = lazy(pageLoaders['article']);
+const ThroughRoutes = lazy(pageLoaders['/projects/through-routes']);
+const FlightsAbout = lazy(pageLoaders['/projects/flights']);
+const Flights = lazy(pageLoaders['/projects/flights/map']);
+const AnkiArtisan = lazy(pageLoaders['/projects/anki-artisan']);
+const Bookend = lazy(pageLoaders['/projects/bookend']);
+const TemperatureRecordsAbout = lazy(pageLoaders['/projects/temperature-records']);
+const TemperatureRecords = lazy(pageLoaders['/projects/temperature-records/map']);
+const ClimateTrendsPage = lazy(pageLoaders['/projects/temperature-records/trends']);
+const TornadoTracksAbout = lazy(pageLoaders['/projects/tornado-tracks']);
+const TornadoTracks = lazy(pageLoaders['/projects/tornado-tracks/map']);
+const Route2Gpx = lazy(pageLoaders['/projects/route2gpx']);
+const Aborg = lazy(pageLoaders['/projects/aborg']);
+const Parc = lazy(pageLoaders['/projects/parc']);
+const StatusDashboard = lazy(pageLoaders['/projects/status-dashboard']);
+const AdvAtlas = lazy(pageLoaders['/projects/adv-atlas/map']);
 
 const basename = import.meta.env.BASE_URL;
 
@@ -104,6 +106,7 @@ function AppRoutes() {
 
 function PageContent() {
   const location = useLocation();
+  useLayoutEffect(() => intentPrefetch.cancelPending(), [location.key]);
   return (
     <Layout>
       <ErrorBoundary key={location.pathname}>

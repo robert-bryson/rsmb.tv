@@ -27,8 +27,8 @@ The local registry contains nine trip entries. Two are marked published, one has
 | Report | Local status | Sources |
 | --- | --- | --- |
 | Going to the beach in the rain | Published; full review | [Story](../../src/content/blog/ocean-shores-2024.mdx), [manifest](../../src/content/trips/ocean-shores-2024.json), [source Google Doc](https://docs.google.com/document/d/1dEW6z_Z1HfylRlHNbRjcFFJdAA5AeVcEpVTXtx4XPT0/edit) |
-| 1,600 Miles to Boise and Back | Published; full review | [Story](../../src/content/blog/boise-2024.mdx), [manifest](../../src/content/trips/boise-2024.json), [source Google Doc](https://docs.google.com/document/d/1InEIRnzsj9ed-ERYBGWnIKMTPrmSC9Ave0zYOKsBmjc/edit) |
-| Like riding speeders through Endor | Unpublished; full review | [Story](../../src/content/blog/kalaloch-2024.mdx), [manifest](../../src/content/trips/kalaloch-2024.json), [source Google Doc](https://docs.google.com/document/d/1Dex7bs4H8H2V7bLzA2V0h7x4zPTUe2F4O-0ZXSpCurQ/edit) |
+| 1,600 Miles to Boise and Back | Published; full review | [Manifest](../../src/content/trips/boise-2024.json), [source Google Doc](https://docs.google.com/document/d/1InEIRnzsj9ed-ERYBGWnIKMTPrmSC9Ave0zYOKsBmjc/edit) |
+| Like riding speeders through Endor | Unpublished; full review | [Manifest](../../src/content/trips/kalaloch-2024.json), [source Google Doc](https://docs.google.com/document/d/1Dex7bs4H8H2V7bLzA2V0h7x4zPTUe2F4O-0ZXSpCurQ/edit) |
 | Down the West Coast | Unpublished; metadata only | `pch-2024` |
 | Weaving around Route 66 to St. Louis | Unpublished; metadata only | `route-66ish-2025` |
 | Up the Mississippi and Wisconsin | Unpublished; metadata only | `river-wisco-2025` |

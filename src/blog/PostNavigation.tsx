@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { IntentLink } from '../components/IntentLink';
 import type { BlogPostMeta } from '../content/posts';
 import { getTripSummary } from '../features/trips/tripSummaries';
 import type { TripPhotoData } from '../features/trips/types';
@@ -22,8 +22,8 @@ function NeighborLink({ post, direction, returnDestination }: {
     const previous = direction === 'previous';
 
     return (
-        <Link
-            to={`/${post.format === 'trip' ? 'trips' : 'blog'}/${post.slug}`}
+        <IntentLink
+            prefetchMode="destination" to={`/${post.format === 'trip' ? 'trips' : 'blog'}/${post.slug}`}
             state={returnDestination.onwardState}
             rel={previous ? 'prev' : 'next'}
             aria-label={`${previous ? 'Previous post' : 'Next post'} ${post.title}`}
@@ -47,7 +47,7 @@ function NeighborLink({ post, direction, returnDestination }: {
                 />
             )}
             <span className="break-words leading-snug group-hover:underline">{post.title}</span>
-        </Link>
+        </IntentLink>
     );
 }
 
@@ -61,13 +61,13 @@ export function PostNavigation({ previous, next, returnDestination }: {
             <div className="min-w-0">
                 {previous && <NeighborLink post={previous} direction="previous" returnDestination={returnDestination} />}
             </div>
-            <Link
+            <IntentLink
                 to={returnDestination.to}
                 state={returnDestination.returnState}
                 className="inline-flex min-h-11 items-center justify-center rounded-sm text-center text-violet-300 hover:text-violet-200 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-400"
             >
                 {returnDestination.label}
-            </Link>
+            </IntentLink>
             <div className="min-w-0">
                 {next && <NeighborLink post={next} direction="next" returnDestination={returnDestination} />}
             </div>

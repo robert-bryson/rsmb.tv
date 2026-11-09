@@ -1,5 +1,6 @@
+import { IntentLink } from '../IntentLink';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { projects } from '../../content/projects';
 
 interface LayoutProps {
@@ -101,12 +102,12 @@ export function Layout({ children }: LayoutProps) {
       {/* Header */}
       <header ref={headerRef} onFocusCapture={() => setIsHeaderVisible(true)} className={`site-header sticky top-0 z-40 border-b border-zinc-800/70 bg-[#0a0a0a]/95 backdrop-blur transition-transform duration-200 ease-out motion-reduce:transition-none ${isHeaderVisible ? 'translate-y-0' : '-translate-y-full'}`}>
         <nav className="max-w-3xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link
+          <IntentLink
             to="/"
             className="text-lg font-medium text-zinc-100 hover:text-violet-400"
           >
             rsmb
-          </Link>
+          </IntentLink>
           <ul className="flex gap-6 text-sm">
             {navLinks.map(({ to, label, activePaths }) => {
               const isActive = (activePaths ?? [to]).some((path) => isNavLinkActive(location.pathname, path));
@@ -116,13 +117,13 @@ export function Layout({ children }: LayoutProps) {
                     key={to}
                     className="group relative"
                   >
-                    <Link
+                    <IntentLink
                       to={to}
                       aria-haspopup="true"
                       className={getNavLinkClassName(isActive)}
                     >
                       {label}
-                    </Link>
+                    </IntentLink>
                     <div className="invisible absolute right-0 top-full z-50 min-w-52 pt-2 opacity-0 transition-opacity group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
                       <ul
                         aria-label="Project pages"
@@ -130,12 +131,12 @@ export function Layout({ children }: LayoutProps) {
                       >
                         {projects.map((project) => (
                           <li key={project.slug}>
-                            <Link
+                            <IntentLink
                               to={`/projects/${project.slug}`}
                               className={getProjectLinkClassName(isNavLinkActive(location.pathname, `/projects/${project.slug}`))}
                             >
                               {project.title}
-                            </Link>
+                            </IntentLink>
                           </li>
                         ))}
                       </ul>
@@ -145,12 +146,12 @@ export function Layout({ children }: LayoutProps) {
               }
               return (
                 <li key={to}>
-                  <Link
+                  <IntentLink
                     to={to}
                     className={getNavLinkClassName(isActive)}
                   >
                     {label}
-                  </Link>
+                  </IntentLink>
                 </li>
               );
             })}

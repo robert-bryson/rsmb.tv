@@ -1,4 +1,5 @@
-import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { IntentLink } from '../components/IntentLink';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { DevelopmentContentStatus } from '../components/DevelopmentContentStatus';
 import { PostRegionFilters } from '../components/PostRegionFilters';
 import { filterPostsByTag, getAllBlogTags, tripFactTag } from '../content/blogTags';
@@ -60,7 +61,7 @@ export function Posts() {
                     ['writing', 'Writing'],
                     ['trips', 'Trips'],
                 ] as const).map(([type, label]) => (
-                    <Link
+                    <IntentLink
                         key={type}
                         to={createPostsUrl(type)}
                         aria-current={activeType === type ? 'page' : undefined}
@@ -70,16 +71,16 @@ export function Posts() {
                             }`}
                     >
                         {label}
-                    </Link>
+                    </IntentLink>
                 ))}
             </nav>
 
-            {activeType === 'trips' && <Link to={TRIP_ATLAS_PATH} className="mb-5 inline-flex min-h-11 items-center text-sm text-violet-300 hover:underline">Explore ADV Atlas →</Link>}
+            {activeType === 'trips' && <IntentLink prefetchMode="destination" to={TRIP_ATLAS_PATH} className="mb-5 inline-flex min-h-11 items-center text-sm text-violet-300 hover:underline">Explore ADV Atlas →</IntentLink>}
 
             <div className="mb-8 space-y-5">
                 {allTags.length > 0 && <nav aria-label="Post tags" className="flex flex-wrap items-baseline gap-2">
                     <p className="mr-1 text-xs font-semibold uppercase tracking-wider text-zinc-500">Tags</p>
-                    <Link
+                    <IntentLink
                         to={createPostsUrl(activeType, '', activeCountry, activeRegion)}
                         aria-current={!activeTag ? 'page' : undefined}
                         className={`max-w-full rounded-full px-2.5 py-0.5 text-xs transition-colors ${!activeTag
@@ -88,9 +89,9 @@ export function Posts() {
                             }`}
                     >
                         All tags
-                    </Link>
+                    </IntentLink>
                     {allTags.map((tag) => (
-                        <Link
+                        <IntentLink
                             key={tag}
                             to={createPostsUrl(activeType, tag, activeCountry, activeRegion)}
                             aria-current={activeTag === tag ? 'page' : undefined}
@@ -100,7 +101,7 @@ export function Posts() {
                                 }`}
                         >
                             {tag}
-                        </Link>
+                        </IntentLink>
                     ))}
                 </nav>}
                 {countries.length > 0 && <PostRegionFilters
@@ -126,8 +127,8 @@ export function Posts() {
                         return (
                             <li key={post.slug} className="py-6 first:pt-0">
                                 <DevelopmentContentStatus post={post} compact />
-                                <Link
-                                    to={`/${isTrip ? 'trips' : 'blog'}/${post.slug}`}
+                                <IntentLink
+                                    prefetchMode="destination" to={`/${isTrip ? 'trips' : 'blog'}/${post.slug}`}
                                     state={{ from: location.pathname + location.search }}
                                     className="group flex items-start gap-5"
                                 >
@@ -157,7 +158,7 @@ export function Posts() {
                                             className="aspect-[4/3] w-24 sm:w-36 shrink-0 rounded-md border border-zinc-800 object-cover"
                                         />
                                     )}
-                                </Link>
+                                </IntentLink>
                             </li>
                         );
                     })}

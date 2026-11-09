@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import type { ReactNode } from 'react';
+import { BrowserRouter, MemoryRouter, useLocation } from 'react-router-dom';
+import { createElement, type ReactNode } from 'react';
 import { useTornadoFilters } from '../features/tornadoes/hooks/useTornadoFilters';
 import { DEFAULT_END_YEAR, DEFAULT_START_YEAR, INITIAL_CENTER, INITIAL_ZOOM } from '../features/tornadoes/constants';
 
@@ -13,6 +13,38 @@ function wrapperWithParams(params: string) {
     return ({ children }: { children: ReactNode }) =>
         MemoryRouter({ initialEntries: [`/tornadoes?${params}`], children });
 }
+
+it('does not let a retained camera callback replace navigation to another path', () => {
+    const initial = window.location.href;
+    const initialState: unknown = window.history.state;
+    let unmount: (() => void) | undefined;
+    try {
+        window.history.replaceState({}, '', '/projects/tornado-tracks/map');
+        const hook = renderHook(() => useTornadoFilters(), {
+            wrapper: ({ children }: { children: ReactNode }) => createElement(BrowserRouter, null, children),
+        });
+        unmount = hook.unmount;
+        act(() => hook.result.current.setMapView(35, -95, 5));
+        expect(new URL(window.location.href).searchParams.get('zoom')).toBe('5');
+        const retainedCamera = hook.result.current.setMapView;
+        // History advances before a lazy destination commits and removes the old map.
+        window.history.pushState({}, '', '/projects/tornado-tracks');
+        act(() => retainedCamera(36, -94, 6));
+        expect(window.location.pathname).toBe('/projects/tornado-tracks');
+        expect(window.location.search).toBe('');
+    } finally {
+        unmount?.();
+        window.history.replaceState(initialState, '', initial);
+    }
+});
+
+it('does not replace history for camera motion below the URL precision', () => {
+    const { result } = renderHook(() => ({ map: useTornadoFilters(), location: useLocation() }), { wrapper });
+    act(() => result.current.map.setMapView(35, -95, 5));
+    const key = result.current.location.key;
+    act(() => result.current.map.setMapView(35.00001, -95.00001, 5.001));
+    expect(result.current.location.key).toBe(key);
+});
 
 // ---------------------------------------------------------------------------
 // Default state

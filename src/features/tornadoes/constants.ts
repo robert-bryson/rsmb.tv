@@ -7,6 +7,7 @@ export const TORNADO_ANNUAL_SUMMARY_URL = `${DATA_BASE_URL}/annual-summary.json`
 export const TORNADO_TREND_INDEX_URL = `${DATA_BASE_URL}/trend-index.json`;
 export const TORNADO_NOTABLE_EVENTS_URL = `${DATA_BASE_URL}/notable-events.json`;
 export const TORNADO_WARNING_SUMMARY_URL = `${DATA_BASE_URL}/warning-summary.json`;
+export const TORNADO_DATA_TTL_MS = 30 * 60_000;
 
 export const MIN_DATA_YEAR = 1950;
 export const DEFAULT_START_YEAR = new Date().getFullYear() - 1;

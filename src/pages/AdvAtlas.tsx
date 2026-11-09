@@ -1,3 +1,4 @@
+import { loadTripAtlasMap } from '../features/trips/atlas/loadTripAtlasMap';
 import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigationType } from 'react-router-dom';
 import { getTripPosts } from '../content/posts';
@@ -24,7 +25,7 @@ import { usePageMetadata } from '../hooks/usePageMetadata';
 import { staticPageMetadata } from '../utils/pageMetadata';
 import '../features/trips/atlas/tripAtlasBrowser.css';
 
-const TripAtlasMap = lazy(() => import('../features/trips/atlas/TripAtlasMap'));
+const TripAtlasMap = lazy(loadTripAtlasMap);
 
 function RouteReader({ id, url, onChange }: { id: string; url: string; onChange: (id: string, state: AtlasRouteState) => void }) {
     const { route, error, retry } = useTripRoute(url);

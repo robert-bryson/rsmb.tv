@@ -59,9 +59,10 @@ export async function fetchWithCache<T>(
         ttl?: number;
         forceRefresh?: boolean;
         timeout?: number;
+        priority?: RequestPriority;
     } = {}
 ): Promise<T> {
-    const { ttl = DEFAULT_TTL_MS, forceRefresh = false, timeout = DEFAULT_TIMEOUT_MS } = options;
+    const { ttl = DEFAULT_TTL_MS, forceRefresh = false, timeout = DEFAULT_TIMEOUT_MS, priority } = options;
     pruneCache();
 
     // Check cache first
@@ -86,7 +87,7 @@ export async function fetchWithCache<T>(
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), timeout);
         try {
-            const response = await fetch(url, { signal: controller.signal });
+            const response = await fetch(url, { signal: controller.signal, ...(priority ? { priority } : {}) });
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
@@ -141,6 +142,13 @@ export function invalidateCache(url: string): void {
     cache.delete(url);
     pendingRequests.delete(url);
     activeRequestTokens.delete(url);
+    scheduleExpiry();
+}
+
+/** Discard only the response a validator rejected, preserving newer refreshes and pending readers. */
+export function discardCachedValue(url: string, value: unknown): void {
+    if (cache.get(url)?.data !== value) return;
+    cache.delete(url);
     scheduleExpiry();
 }
 

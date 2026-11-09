@@ -1,12 +1,9 @@
 import { Suspense, lazy } from 'react';
+import { startTornadoMap } from '../features/tornadoes/loadTornadoMap';
 import { usePageMetadata } from '../hooks/usePageMetadata';
 import { staticPageMetadata } from '../utils/pageMetadata';
 
-const TornadoMap = lazy(() =>
-    import('../features/tornadoes/components/TornadoMap').then((m) => ({
-        default: m.TornadoMap,
-    })),
-);
+const TornadoMap = lazy(startTornadoMap);
 
 export default function TornadoTracks() {
     usePageMetadata(staticPageMetadata('/projects/tornado-tracks/map'));

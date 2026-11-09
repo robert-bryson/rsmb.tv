@@ -1,5 +1,6 @@
+import { IntentLink } from '../components/IntentLink';
 import { Suspense, useEffect, useRef, useState } from 'react';
-import { useParams, useLocation, Link, Navigate } from 'react-router-dom';
+import { useParams, useLocation, Navigate } from 'react-router-dom';
 import { PostTagLink } from '../components/PostTagLink';
 import { DevelopmentContentStatus } from '../components/DevelopmentContentStatus';
 import { useDocumentHead } from '../hooks/useDocumentHead';
@@ -70,9 +71,9 @@ export function BlogPost({ collection }: BlogPostProps) {
         return (
             <div>
                 <h1 className="text-2xl font-bold text-zinc-100 mb-4">Post not found</h1>
-                <Link to="/posts" className="text-violet-400 hover:text-violet-300">
+                <IntentLink to="/posts" className="text-violet-400 hover:text-violet-300">
                     ← Back to posts
-                </Link>
+                </IntentLink>
             </div>
         );
     }
@@ -88,9 +89,9 @@ export function BlogPost({ collection }: BlogPostProps) {
     if (isTrip && !tripManifest) {
         return (
             <div>
-                <Link to={returnDestination.to} state={returnDestination.returnState} className="mb-6 inline-block text-sm text-zinc-400 hover:text-violet-400">
+                <IntentLink to={returnDestination.to} state={returnDestination.returnState} className="mb-6 inline-block text-sm text-zinc-400 hover:text-violet-400">
                     ← {returnDestination.label}
-                </Link>
+                </IntentLink>
                 <DevelopmentContentStatus post={post} />
                 {isDevelopmentContent() ? <>
                     <h1 className="mb-2 text-2xl font-bold text-zinc-100">{post.title}</h1>
@@ -126,12 +127,12 @@ export function BlogPost({ collection }: BlogPostProps) {
     return (
         <article className={isTrip ? 'trip-story' : undefined}>
             {!isTrip && <div className="mb-6 flex items-baseline justify-between gap-4 text-sm text-zinc-400">
-                <Link
+                <IntentLink
                     to={returnDestination.to} state={returnDestination.returnState}
                     className="shrink-0 hover:text-violet-400"
                 >
                     ← {returnDestination.label}
-                </Link>
+                </IntentLink>
             </div>}
 
             {tripManifest ? (
@@ -161,10 +162,10 @@ export function BlogPost({ collection }: BlogPostProps) {
                 {seriesPosts.length > 1 && <nav aria-label={series?.title}>
                     <p className="mb-2 font-medium">{series?.title}</p>
                     <ol className="space-y-2">{seriesPosts.map(part => <li key={part.slug}>
-                        <Link aria-current={part.slug === post.slug ? 'page' : undefined} className="text-violet-300 underline"
+                        <IntentLink prefetchMode="destination" aria-current={part.slug === post.slug ? 'page' : undefined} className="text-violet-300 underline"
                             to={`/${part.format === 'trip' ? 'trips' : 'blog'}/${part.slug}`} state={returnDestination.onwardState}>
                             {part.title}
-                        </Link>
+                        </IntentLink>
                     </li>)}</ol>
                 </nav>}
                 <PostNavigation previous={previousPost} next={nextPost} returnDestination={returnDestination} />

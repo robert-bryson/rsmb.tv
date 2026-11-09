@@ -60,6 +60,11 @@ Set a localhost CARTO Basemaps key as `CARTO_API_KEY` in `.env.local` for local 
 Amplify uses its configured `CARTO_API_KEY`. CI uses content fixtures and requires no production credentials.
 See the [basemap configuration guide](docs/carto-basemaps.md) for styles, attribution, and test behavior.
 
+Selected links prepare their destinations after pointer hover or keyboard focus.
+Set `VITE_INTENT_PREFETCH` to `all`, `pages`, or `off` before building.
+The default is `all`. Unknown nonempty values disable preparation.
+See the [prefetch guide](docs/intent-prefetch.md) for allowed resources, limits, and recovery tests.
+
 | Command | Description |
 | ------- | ----------- |
 | `npm run dev` | Prepare local trips, sync published posts and drafts, build flight data, and start Vite |
@@ -74,7 +79,7 @@ See the [basemap configuration guide](docs/carto-basemaps.md) for styles, attrib
 | `npm run test` | Run the Vitest suite and the historical temperature pipeline tests |
 | `npm run test:temperature-records` | Run the historical temperature pipeline tests |
 | `npm run test:temperatures:browser` | Build and test the temperature map with production assets |
-| `npm run test:page-recovery` | Test page-download recovery and the leading project image in a production bundle |
+| `npm run test:page-recovery` | Test intent prefetch, page-download recovery, and project layout in a production bundle |
 | `npm run test:release-validation` | Test the release validator against local browser failure fixtures |
 | `npm run test:coverage` | Run tests with V8 coverage report |
 | `npm run watch` | Run terminal operations dashboard (`scripts/aws-watch.tsx`) |

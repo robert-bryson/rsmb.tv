@@ -1,5 +1,5 @@
+import { IntentLink } from '../components/IntentLink';
 import { TechBadges } from '../components/TechBadges';
-import { Link } from 'react-router-dom';
 import { ProjectPreview } from '../components/ProjectPreview';
 import { projects, formatProjectDate, type Project } from '../content/projects';
 import { usePageMetadata } from '../hooks/usePageMetadata';
@@ -18,12 +18,12 @@ export function Projects() {
       <ul className="space-y-6">
         {projects.map((project, index) => (
           <li key={project.slug}>
-            <Link
+            <IntentLink prefetchMode="destination"
               to={`/projects/${project.slug}`}
               className="group block p-4 -mx-4 rounded-lg hover:bg-zinc-900/50 transition-colors"
             >
               <ProjectContent project={project} priority={index === 0} />
-            </Link>
+            </IntentLink>
           </li>
         ))}
       </ul>

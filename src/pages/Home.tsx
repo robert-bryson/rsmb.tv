@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { IntentLink } from '../components/IntentLink';
 import { ProjectPreview } from '../components/ProjectPreview';
 import { featuredProjects } from '../content/projects';
 import { getAllPosts } from '../content/posts';
@@ -32,9 +32,9 @@ export function Home() {
           <h2 className="text-sm font-medium text-zinc-400 uppercase tracking-wide">
             Selected projects
           </h2>
-          <Link to="/projects" className="text-sm text-zinc-400 hover:text-violet-400">
+          <IntentLink to="/projects" className="text-sm text-zinc-400 hover:text-violet-400">
             All projects →
-          </Link>
+          </IntentLink>
         </div>
         <ul className="grid gap-4 sm:grid-cols-2">
           {selectedProjects.map((project, index) => {
@@ -42,8 +42,8 @@ export function Home() {
 
             return (
               <li key={project.slug} className={`min-w-0 ${index === 0 ? 'sm:col-span-2' : ''}`}>
-                <Link
-                  to={linkUrl}
+                <IntentLink
+                  prefetchMode="destination" to={linkUrl}
                   className="group flex h-full flex-col overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900/30 hover:border-zinc-700 hover:bg-zinc-900/60"
                 >
                   {project.previewImage && (
@@ -73,7 +73,7 @@ export function Home() {
                       ))}
                     </ul>
                   </div>
-                </Link>
+                </IntentLink>
               </li>
             );
           })}
@@ -86,9 +86,9 @@ export function Home() {
             <h2 className="text-sm font-medium text-zinc-400 uppercase tracking-wide">
               Latest
             </h2>
-            <Link to="/posts" className="text-sm text-zinc-400 hover:text-violet-400">
+            <IntentLink to="/posts" className="text-sm text-zinc-400 hover:text-violet-400">
               All posts →
-            </Link>
+            </IntentLink>
           </div>
           <ul className="divide-y divide-zinc-800/70">
             {recentPosts.map((post) => {
@@ -98,7 +98,7 @@ export function Home() {
 
               return (
                 <li key={post.slug} className="py-5 first:pt-0 last:pb-0">
-                  <Link to={`/${isTrip ? 'trips' : 'blog'}/${post.slug}`} className="group flex items-start gap-5">
+                  <IntentLink prefetchMode="destination" to={`/${isTrip ? 'trips' : 'blog'}/${post.slug}`} className="group flex items-start gap-5">
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-zinc-400">
                         <time dateTime={post.date}>{formatDate(post.date)}</time>
@@ -122,7 +122,7 @@ export function Home() {
                         className="aspect-[4/3] w-24 sm:w-32 shrink-0 rounded-md border border-zinc-800 object-cover"
                       />
                     )}
-                  </Link>
+                  </IntentLink>
                 </li>
               );
             })}

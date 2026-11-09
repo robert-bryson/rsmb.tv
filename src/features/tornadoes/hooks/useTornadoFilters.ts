@@ -34,6 +34,7 @@ function parseState(value: string | null): string | null {
 
 export function useTornadoFilters() {
     const [searchParams, setSearchParams] = useSearchParams();
+    const ownerPathname = useRef(window.location.pathname);
     // React Router's setSearchParams functional-update form does NOT queue updates
     // like React setState — both calls in a single synchronous event receive the
     // same committed `prev`, so the second call overwrites the first. This ref
@@ -58,9 +59,12 @@ export function useTornadoFilters() {
     }, [searchParams]);
 
     const updateParams = useCallback((updater: (next: URLSearchParams) => void) => {
+        // A lazy navigation can advance history while this map is still mounted.
+        if (window.location.pathname !== ownerPathname.current) return;
         const base = pendingSearchParams.current ?? searchParams;
         const next = new URLSearchParams(base);
         updater(next);
+        if (next.toString() === base.toString()) return;
         pendingSearchParams.current = next;
         setSearchParams(next, { replace: true });
     }, [searchParams, setSearchParams]);

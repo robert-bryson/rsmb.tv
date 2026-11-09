@@ -10,6 +10,7 @@ Use [TODO.md](../TODO.md) for incomplete work.
 | [Repository guide](../README.md) | Install, develop, test, and build the site |
 | [Release validation](release-validation.md) | Activate hosted preview checks before production releases |
 | [Shared modules](shared-modules.md) | Reuse request caching, state identities, airport normalization, and project presentation |
+| [Intent prefetch](intent-prefetch.md) | Configure hover/focus destination preparation, resource limits, and browser measurements |
 | [Blog publication](blog-publishing.md) | Configure the Sheet and import documents |
 | [Site metadata](site-metadata.md) | Maintain crawler metadata, social cards, canonical paths, and hosting rules |
 | [CARTO basemaps](carto-basemaps.md) | Configure authenticated maps and visible attribution across projects |
@@ -36,6 +37,9 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-09 | [Prefetch quality review: data priority, metadata validation, lazy retry, CSS security attributes, and coverage](reviews/2026-11-09-intent-prefetch-quality-review.md) |
+| 2026-11-09 | [Intent prefetch implementation: hover/focus preparation, failure recovery, resource limits, and measured navigation](reviews/2026-11-09-intent-prefetch-implementation.md) |
+| 2026-11-09 | [Intent prefetch research and implementation plan: shared loaders, resource limits, failure recovery, and measurement](reviews/2026-11-09-intent-prefetch-plan.md) |
 | 2026-11-06 | [Flights Lighthouse verification, review fixes, accessibility, caching, and coverage](reviews/2026-11-06-flights-lighthouse.md) |
 | 2026-11-05 | [Pending changes quality review: archive safety, validation proofs, failure coverage, and source limits](reviews/2026-11-05-uncommitted-quality-review.md) |
 | 2026-11-05 | [Monthly data correctness, page recovery, release validation, Flights startup, and bounded caching](reviews/2026-11-05-correctness-recovery-startup.md) |

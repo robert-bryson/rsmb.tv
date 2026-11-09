@@ -4,6 +4,7 @@ import { clearCache } from '../data/fetchCache';
 import { useTornadoData } from '../features/tornadoes/hooks/useTornadoData';
 import { jsonFetchResponse } from './helpers/fetch';
 import type { AnnualTornadoSummary } from '../features/tornadoes/types';
+import { makeNotableEvent } from './helpers/tornadoes';
 
 const collection = { type: 'FeatureCollection', features: [] };
 const annualSummary: AnnualTornadoSummary[] = Array.from({ length: 26 }, (_, index) => ({
@@ -28,6 +29,23 @@ function deferredResponse() {
 describe('useTornadoData', () => {
     beforeEach(() => clearCache());
     afterEach(() => { clearCache(); vi.unstubAllGlobals(); });
+
+    it('ignores malformed optional events and recovers through the map retry action', async () => {
+        let repaired = false;
+        vi.stubGlobal('fetch', vi.fn(async (input: RequestInfo | URL) => {
+            const url = String(input);
+            if (url.endsWith('notable-events.json')) return jsonFetchResponse(repaired ? [makeNotableEvent()] : [{ lengthMiles: null }]);
+            return url.includes('/tracks/') ? jsonFetchResponse(collection) : metadataResponse(input);
+        }));
+        const { result } = renderHook(() => useTornadoData({ startYear: 2025, endYear: 2025 }));
+        await waitFor(() => expect(result.current.loading).toBe(false));
+        expect(result.current.notableEvents).toEqual([]);
+        expect(result.current.error).toBeNull();
+        repaired = true;
+        act(() => result.current.retry());
+        await waitFor(() => expect(result.current.notableEvents).toEqual([makeNotableEvent()]));
+        expect(result.current.error).toBeNull();
+    });
 
     it('loads chart aggregates independently without expanding geometry years', async () => {
         const fetchMock = vi.fn((input: RequestInfo | URL) => Promise.resolve(String(input).endsWith('trend-index.json')

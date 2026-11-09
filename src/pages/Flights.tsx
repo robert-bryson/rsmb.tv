@@ -1,18 +1,9 @@
 import { Suspense, lazy } from 'react';
 import { usePageMetadata } from '../hooks/usePageMetadata';
 import { staticPageMetadata } from '../utils/pageMetadata';
-import { preloadCache } from '../data/fetchCache';
+import { startFlightsMap } from '../features/flights/loadFlightsMap';
 
-const FlightsMap = lazy(() => {
-  // Fetch the required data in parallel with the much larger WebGL bundle.
-  // The map's hooks share these requests through the existing JSON cache.
-  void preloadCache(['flights.geojson', 'visitedAirports.geojson'].map(
-    filename => `${import.meta.env.BASE_URL}data/flights/${filename}`,
-  ));
-  return import('../features/flights/components/FlightsMap').then((m) => ({
-    default: m.FlightsMap,
-  }));
-});
+const FlightsMap = lazy(startFlightsMap);
 
 export default function Flights() {
   usePageMetadata(staticPageMetadata('/projects/flights/map'));

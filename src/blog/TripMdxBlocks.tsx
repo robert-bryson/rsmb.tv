@@ -3,10 +3,12 @@ import { TripRoutePreview } from '../features/trips/components/TripRoutePreview'
 import { useTripStory } from '../features/trips/TripStoryContext';
 import { useTripMapDismiss } from '../features/trips/useTripMapDismiss';
 import type { TripMapFocus } from '../features/trips/tripMapView';
+import { MAPLIBRE_STYLESHEET, moduleLoader } from '../navigation/moduleLoader';
 
 const Gallery = lazy(() => import('../features/trips/components/TripGallery').then(module => ({ default: module.TripGallery })));
-const loadMap = () => import('../features/trips/components/TripRouteMap').then(module => ({ default: module.TripRouteMap }));
-const Map = lazy(loadMap);
+const loadMap = moduleLoader(() => import('../features/trips/components/TripRouteMap').then(module => ({ default: module.TripRouteMap })), MAPLIBRE_STYLESHEET);
+// Isolate React's lazy state and thenable tracking while sharing the module request.
+const createMap = () => lazy(async () => loadMap());
 
 type TripBlockBoundaryProps = { children: ReactNode; fallback: ReactNode; resetKey: unknown };
 type TripBlockBoundaryState = { failed: boolean; resetKey: unknown };
@@ -45,6 +47,7 @@ export function TripMapBlock(props: TripMapFocus) {
         [routeUrl, manifest.stops, manifest.days, props.trackId, props.dayId],
     );
     const [attempt, setAttempt] = useState(0);
+    const [Map, setMap] = useState(createMap);
     const [active, setActive] = useState(false);
     const [retainedHeight, setRetainedHeight] = useState<number>();
     const [previewPress, setPreviewPress] = useState<PreviewPress>();
@@ -145,6 +148,8 @@ export function TripMapBlock(props: TripMapFocus) {
     };
     const retry = () => {
         startTransition(() => {
+            // React.lazy retains a rejected promise independently of the shared loader.
+            setMap(createMap);
             setActive(true);
             setAttempt(value => value + 1);
         });

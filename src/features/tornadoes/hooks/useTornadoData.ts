@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { FeatureCollection } from 'geojson';
 import { fetchWithCache, invalidateCache } from '../../../data/fetchCache';
+import { fetchValidatedJson } from '../../../data/validatedJson';
+import { notableEventsSchema } from '../schemas';
 import { parseTornadoAnnualSummary, parseTornadoTrendIndex, type TornadoTrendIndex } from '../../../../shared/tornadoTrends';
 import {
     DEFAULT_END_YEAR,
@@ -10,6 +12,7 @@ import {
     TORNADO_TREND_INDEX_URL,
     TORNADO_NOTABLE_EVENTS_URL,
     TORNADO_WARNING_SUMMARY_URL,
+    TORNADO_DATA_TTL_MS,
     tornadoPointsYearUrl,
     tornadoTracksYearUrl,
 } from '../constants';
@@ -80,7 +83,7 @@ async function fetchYearCollections<T>(years: number[], yearUrl: (year: number) 
         while (next < years.length && !cancelled() && !failed) {
             const index = next++;
             try {
-                collections[index] = await fetchWithCache<T>(yearUrl(years[index]), { ttl: 30 * 60 * 1000 });
+                collections[index] = await fetchWithCache<T>(yearUrl(years[index]), { ttl: TORNADO_DATA_TTL_MS });
             } catch (error) {
                 failed = true;
                 throw error;
@@ -130,7 +133,7 @@ export function useTornadoData({ startYear = DEFAULT_START_YEAR, endYear = DEFAU
 
         async function load() {
             try {
-                const annualData = parseTornadoAnnualSummary(await fetchWithCache<unknown>(TORNADO_ANNUAL_SUMMARY_URL, { ttl: 30 * 60 * 1000 }));
+                const annualData = parseTornadoAnnualSummary(await fetchWithCache<unknown>(TORNADO_ANNUAL_SUMMARY_URL, { ttl: TORNADO_DATA_TTL_MS }));
 
                 if (cancelled) return;
                 setAnnualSummary(annualData);
@@ -150,8 +153,8 @@ export function useTornadoData({ startYear = DEFAULT_START_YEAR, endYear = DEFAU
         if (trendRequest?.version === trendVersion && trendRequest.annual === annualSummary) return;
         let cancelled = false;
         Promise.all([
-            fetchWithCache<unknown>(TORNADO_ANNUAL_SUMMARY_URL, { ttl: 30 * 60 * 1000 }),
-            fetchWithCache<unknown>(TORNADO_TREND_INDEX_URL, { ttl: 30 * 60 * 1000 }),
+            fetchWithCache<unknown>(TORNADO_ANNUAL_SUMMARY_URL, { ttl: TORNADO_DATA_TTL_MS }),
+            fetchWithCache<unknown>(TORNADO_TREND_INDEX_URL, { ttl: TORNADO_DATA_TTL_MS }),
         ]).then(([annualPayload, indexPayload]) => {
             if (cancelled) return;
             const annual = parseTornadoAnnualSummary(annualPayload);
@@ -169,7 +172,7 @@ export function useTornadoData({ startYear = DEFAULT_START_YEAR, endYear = DEFAU
 
     useEffect(() => {
         let cancelled = false;
-        fetchWithCache<NotableTornadoEvent[]>(TORNADO_NOTABLE_EVENTS_URL, { ttl: 30 * 60 * 1000 })
+        fetchValidatedJson(TORNADO_NOTABLE_EVENTS_URL, value => notableEventsSchema.parse(value), { ttl: TORNADO_DATA_TTL_MS })
             .then(data => { if (!cancelled) setNotableEvents(data); })
             .catch(() => { if (!cancelled) setNotableEvents([]); });
         return () => { cancelled = true; };
@@ -178,7 +181,7 @@ export function useTornadoData({ startYear = DEFAULT_START_YEAR, endYear = DEFAU
     useEffect(() => {
         if (!loadWarnings) return;
         let cancelled = false;
-        fetchWithCache<WarningSummary>(TORNADO_WARNING_SUMMARY_URL, { ttl: 30 * 60 * 1000 })
+        fetchWithCache<WarningSummary>(TORNADO_WARNING_SUMMARY_URL, { ttl: TORNADO_DATA_TTL_MS })
             .then(data => {
                 if (!cancelled) {
                     setWarningSummary(data);

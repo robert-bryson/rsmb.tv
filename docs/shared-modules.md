@@ -19,6 +19,14 @@ const payload = await fetchWithCache<unknown>(url, { ttl: 300_000 });
 Validate external payloads in the caller before using them.
 The generic type parameter does not validate a response.
 
+Use [`fetchValidatedJson`](../src/data/validatedJson.ts) when malformed data must be removed from the cache.
+Supply a schema parser as its validation function.
+It returns validated data and removes only the rejected cached value.
+It also handles asynchronous validators.
+Use [`warmJson`](../src/data/warmJson.ts) for validated speculative requests.
+New speculative requests use low priority. New navigation requests use normal priority.
+Shared pending requests keep their original priority.
+
 - `ttl` sets the response lifetime in milliseconds. The default is five minutes.
 - Responses expire on a timer even when no further requests occur. A later caller cannot extend the stored lifetime.
 - At most 32 responses are retained. Reads promote entries; capacity eviction removes the least recently used response.
@@ -47,6 +55,11 @@ Use [`shared/flightSchemas.ts`](../shared/flightSchemas.ts) for published Flight
 `visitedAirportsSchema` checks point geometry, airport properties, visit counts, and visit dates.
 Release validation uses these contracts; a nonempty `FeatureCollection` alone does not establish compatibility.
 These modules have no browser runtime dependency and can be imported without loading map features.
+
+Use [`src/features/tornadoes/schemas.ts`](../src/features/tornadoes/schemas.ts) for notable-event metadata.
+The schema checks event fields and geographic coordinates.
+Its inferred types also define the existing track properties contract.
+Keep the schema and its types together when adding event fields.
 
 ## MapLibre maps
 

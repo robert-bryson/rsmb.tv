@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { IntentLink } from '../../../components/IntentLink';
 import { useMemo, useState, type CSSProperties, type FocusEvent, type MouseEvent, type PointerEvent } from 'react';
 import { formatDateRange } from '../../../utils/formatDate';
 import type { TripAtlasEntry } from './tripAtlasEntries';
@@ -58,13 +58,13 @@ function ResultActions({ entry, props }: { entry: TripAtlasEntry; props: Props }
     const state = props.routes[entry.id];
     return <>
         <div className="mt-3 flex min-w-0 flex-col gap-2">
-                {entry.reports.map(report => <Link key={report.slug} to={report.href} state={{ from: props.returnUrl, returnKey: props.returnKey }}
+                {entry.reports.map(report => <IntentLink prefetchMode="destination" key={report.slug} to={report.href} state={{ from: props.returnUrl, returnKey: props.returnKey }}
                     className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-[color:var(--trip-atlas-color)] px-3 py-2 text-center text-sm font-semibold leading-snug text-zinc-950 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--trip-atlas-color)]">
                     <span className="min-w-0 break-words">
                         {entry.reports.length === 1 ? entry.summary && report.contentAvailable ? 'Read trip report' : 'Preview report' : report.title}
                         {props.development && report.draft && entry.reports.length > 1 && <span className="ml-1 inline-block rounded border border-amber-800 bg-amber-950 px-1.5 py-0.5 text-[11px] font-medium text-amber-300">Draft</span>}
                     </span><span aria-hidden="true" className="shrink-0">→</span>
-                </Link>)}
+                </IntentLink>)}
         </div>
         {!entry.summary ? <p className="mt-2 text-xs text-zinc-400">Route data not available yet.</p>
             : state?.error ? <p role="status" className="mt-2 text-xs text-amber-300">Route unavailable. <button type="button" onClick={state.retry} className="min-h-11 underline">Retry route</button></p>
