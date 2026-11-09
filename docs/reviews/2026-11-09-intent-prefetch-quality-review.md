@@ -165,6 +165,8 @@ All 122 Markdown files passed the relative-file link check.
 The [current guide](../intent-prefetch.md) owns configuration, limits, resources, and recovery instructions.
 The [initial implementation report](2026-11-09-intent-prefetch-implementation.md) retains its earlier measurements.
 Those timings are not a new benchmark of the reviewed code.
+The [live release check](2026-11-09-live-release-verification.md) records the reviewed build on production.
+It also corrects selector-polling and synthetic-input limits in the earlier benchmark helper.
 
 The TODO list now separates unpublished content, published-source checks, operations, browser work, and maintenance.
 Completed publication and release-configuration entries were removed.

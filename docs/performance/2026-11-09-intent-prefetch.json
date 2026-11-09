@@ -19,8 +19,9 @@
     "Warm source setup scrolls the target into view and waits for active requests plus 500 ms of quiet before the measured activation. Warm journey bytes include the initial visit and Back.",
     "CDP encoded byte counts reflect local preview transfer, not production gzip transfer.",
     "Pre-click byte counts show already transferred resources; abandoning an import can still incur its remaining transfer.",
-    "Activation is a native element.click() executed in the page. This excludes input dispatch delay; separate intent long-task totals expose main-thread work.",
-    "Layout shifts include the full journey. Synthetic activation can count expected route layout changes; these are not field CLS, INP, or real-user percentiles."
+    "Activation is a synthetic element.click() executed in the page. This excludes input dispatch delay; separate intent long-task totals expose main-thread work.",
+    "Layout shifts include the full journey. Synthetic activation can count expected route layout changes; these are not field CLS, INP, or real-user percentiles.",
+    "Later validation found that selector polling inflated About page-ready timings. Retain these values as historical evidence. Use 2026-11-09-live-prefetch.json for corrected same-build production comparisons with trusted input and browser readiness timestamps."
   ],
   "bundleSizes": {
     "baseline": {

@@ -1,4 +1,4 @@
-/* global window, document, innerHeight */
+/* global window, document, innerHeight, requestAnimationFrame, location, getComputedStyle */
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
@@ -10,12 +10,47 @@ const journeys = {
     flights: { from: '/projects/flights', href: '/projects/flights/map', ready: 'flights' },
 };
 
-export async function measurePrefetch({ baseURL, label, samples = 10, hovers = [0, 200, 500, 1000], out, warm = false }) {
-    const browser = await chromium.launch({ headless: true });
-    const report = { label, measuredAt: new Date().toISOString(), conditions: {
+// This function runs in the page. Capture readiness there so selector polling
+// and the browser protocol cannot inflate the reported navigation time.
+function installNavigationProbe(target) {
+    const data = window.__prefetchMeasure = { input: null, readyAt: null, longTasks: [], shifts: [] };
+    function checkReady() {
+        let ready = false;
+        if (location.pathname === target.href) {
+            if (target.ready === 'about') {
+                const heading = document.querySelector('h1');
+                const box = heading?.getBoundingClientRect();
+                ready = heading?.textContent?.trim() === 'About' && box.width > 0 && box.height > 0
+                    && getComputedStyle(heading).visibility !== 'hidden';
+            } else {
+                ready = document.querySelector('.flights-globe canvas')
+                    && /showing [1-9]\d* flights/.test(document.querySelector('[role="application"]')?.getAttribute('aria-label') ?? '')
+                    && ![...document.querySelectorAll('div')].some(element => element.textContent === 'Loading globe...');
+            }
+        }
+        if (ready) requestAnimationFrame(() => requestAnimationFrame(() => { data.readyAt = performance.now(); }));
+        else requestAnimationFrame(checkReady);
+    }
+    document.addEventListener('pointerdown', event => {
+        if (data.input || !event.target?.closest?.('a')) return;
+        data.input = { timeStamp: event.timeStamp, handlerAt: performance.now(), trusted: event.isTrusted };
+        requestAnimationFrame(checkReady);
+    }, true);
+    if (PerformanceObserver.supportedEntryTypes.includes('longtask')) new PerformanceObserver(list => {
+        data.longTasks.push(...list.getEntries().map(entry => ({ start: entry.startTime, duration: entry.duration })));
+    }).observe({ type: 'longtask', buffered: true });
+    if (PerformanceObserver.supportedEntryTypes.includes('layout-shift')) new PerformanceObserver(list => {
+        data.shifts.push(...list.getEntries().filter(entry => !entry.hadRecentInput).map(entry => ({ start: entry.startTime, value: entry.value })));
+    }).observe({ type: 'layout-shift', buffered: true });
+}
+
+export async function measurePrefetch({ baseURL, label, samples = 10, hovers = [0, 200, 500, 1000], out, warm = false }, { browser: suppliedBrowser } = {}) {
+    const browser = suppliedBrowser ?? await chromium.launch({ headless: true });
+    const report = { measurementVersion: 2, label, measuredAt: new Date().toISOString(), conditions: {
         browser: browser.version(), samples, hoverMs: hovers, cache: warm ? 'previously visited destination in the same document' : 'fresh context per sample',
         viewport: '1280x900', reducedMotion: 'reduce', latencyMs: 100, downloadMbps: 10, cpuSlowdown: 4,
         notes: 'Local production preview; response compression is determined by the preview. Not field measurements. External services blocked.',
+        activation: 'Trusted browser mouse input; timing includes input queue delay. Readiness is timestamped in the page after two animation frames.',
     }, results: [] };
     try {
         for (const [journey, target] of Object.entries(journeys)) for (const hoverMs of hovers) for (let sample = 1; sample <= samples; sample++) {
@@ -37,45 +72,36 @@ export async function measurePrefetch({ baseURL, label, samples = 10, hovers = [
                 await session.send('Emulation.setCPUThrottlingRate', { rate: 4 });
                 const errors = [];
                 page.on('pageerror', error => errors.push(error.message));
-                await page.addInitScript(() => {
-                    window.__prefetchMeasure = { longTasks: [], shifts: [] };
-                    if (PerformanceObserver.supportedEntryTypes.includes('longtask')) new PerformanceObserver(list => {
-                        window.__prefetchMeasure.longTasks.push(...list.getEntries().map(e => ({ start: e.startTime, duration: e.duration })));
-                    }).observe({ type: 'longtask', buffered: true });
-                    if (PerformanceObserver.supportedEntryTypes.includes('layout-shift')) new PerformanceObserver(list => {
-                        window.__prefetchMeasure.shifts.push(...list.getEntries().filter(e => !e.hadRecentInput).map(e => ({ start: e.startTime, value: e.value })));
-                    }).observe({ type: 'layout-shift', buffered: true });
-                });
+                await page.addInitScript(installNavigationProbe, target);
                 const waitReady = async () => {
-                    if (target.ready === 'about') await page.getByRole('heading', { name: 'About', exact: true }).waitFor();
-                    else await page.waitForFunction(() => {
-                        const canvas = document.querySelector('.flights-globe canvas');
-                        const globe = document.querySelector('[role="application"]');
-                        return canvas && /showing [1-9]\d* flights/.test(globe?.getAttribute('aria-label') ?? '')
-                            && ![...document.querySelectorAll('div')].some(e => e.textContent === 'Loading globe...');
-                    });
+                    const handle = await page.waitForFunction(() => window.__prefetchMeasure.readyAt !== null);
+                    await handle.dispose();
                 };
                 await page.goto(new URL(target.from, baseURL).href, { waitUntil: 'networkidle' });
                 if (warm) {
-                    await page.locator(`a[href="${target.href}"]`).first().evaluate(element => element.click());
+                    await page.locator(`a[href="${target.href}"]`).first().click();
                     await waitReady();
                     await page.goBack();
                     await page.waitForURL(new URL(target.from, baseURL).href);
                     await page.locator('main h1').waitFor();
-                    await page.locator(`a[href="${target.href}"]`).first().scrollIntoViewIfNeeded();
-                    // A same-document Back visit can retain an earlier load-state event.
-                    // Wait for current requests, including nearby lazy images, to settle.
-                    const deadline = Date.now() + 30_000;
-                    while (pendingRequests.size || Date.now() - networkActivity < 500) {
-                        if (Date.now() > deadline) throw new Error('Return-visit source requests did not settle');
-                        await new Promise(resolve => setTimeout(resolve, 50));
-                    }
                 }
+                await page.mouse.move(1, 850);
+                const link = page.locator(`a[href="${target.href}"]`).first();
+                await link.scrollIntoViewIfNeeded();
+                await page.evaluate(() => document.fonts.ready);
                 await page.waitForFunction(() => [...document.images].every(image => {
                     const box = image.getBoundingClientRect();
                     return image.complete || box.bottom <= 0 || box.top >= innerHeight || box.width === 0;
                 }));
-                await page.mouse.move(1, 850);
+                // Scrolling and same-document Back can start new image requests
+                // after an earlier networkidle event. Exclude them from the sample.
+                const deadline = Date.now() + 30_000;
+                while (pendingRequests.size || Date.now() - networkActivity < 500) {
+                    if (Date.now() > deadline) throw new Error('Source requests did not settle');
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                }
+                const box = await link.boundingBox();
+                if (!box) throw new Error('Destination link is not visible');
                 const sourceBytes = encodedBytes;
                 const requests = [];
                 const bodies = [];
@@ -83,24 +109,35 @@ export async function measurePrefetch({ baseURL, label, samples = 10, hovers = [
                 page.on('response', response => {
                     if (response.request().resourceType() === 'script') bodies.push(response.finished().then(async () => ({ url: response.url(), decodedBytes: (await response.body()).length })).catch(() => null));
                 });
-                const link = page.locator(`a[href="${target.href}"]`).first();
-                await link.scrollIntoViewIfNeeded();
-                const intentStart = await page.evaluate(() => performance.now());
-                if (hoverMs) { await link.hover(); await page.waitForTimeout(hoverMs); }
+                const { timeOrigin, intentStart } = await page.evaluate(() => {
+                    window.__prefetchMeasure.input = null;
+                    window.__prefetchMeasure.readyAt = null;
+                    return { timeOrigin: performance.timeOrigin, intentStart: performance.now() };
+                });
+                await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+                if (hoverMs) await new Promise(resolve => setTimeout(resolve, hoverMs));
                 const beforeClickRequests = [...requests];
                 const beforeClickBytes = encodedBytes - sourceBytes;
-                const start = await page.evaluate(() => performance.now());
-                // Native activation without Playwright's implicit pre-click hover.
-                await link.evaluate(element => element.click());
+                // Do not evaluate in the page after hover: a busy main thread
+                // would postpone the input and conceal its dispatch delay.
+                const epoch = Date.now();
+                const start = epoch - timeOrigin;
+                await session.send('Input.dispatchMouseEvent', { type: 'mousePressed', x: box.x + box.width / 2,
+                    y: box.y + box.height / 2, button: 'left', clickCount: 1, timestamp: epoch / 1000 });
+                await session.send('Input.dispatchMouseEvent', { type: 'mouseReleased', x: box.x + box.width / 2,
+                    y: box.y + box.height / 2, button: 'left', clickCount: 1, timestamp: (epoch + 1) / 1000 });
                 await waitReady();
+                await page.waitForTimeout(80);
                 const metrics = await page.evaluate(({ start, intentStart }) => {
-                    const end = performance.now();
                     const data = window.__prefetchMeasure;
-                    return { clickToReadyMs: end - start,
+                    return { clickToReadyMs: data.readyAt - start, readyAt: data.readyAt, activationAt: start,
+                        trustedInput: data.input?.trusted ?? false,
+                        inputDelayMs: data.input ? data.input.handlerAt - data.input.timeStamp : null,
                         intentLongTaskMs: data.longTasks.filter(e => e.start >= intentStart && e.start < start).reduce((sum, e) => sum + e.duration, 0),
-                        longTaskMs: data.longTasks.filter(e => e.start >= start).reduce((sum, e) => sum + e.duration, 0),
+                        longTaskMs: data.longTasks.filter(e => e.start >= start && e.start <= data.readyAt).reduce((sum, e) => sum + e.duration, 0),
                         cls: data.shifts.reduce((sum, e) => sum + e.value, 0) };
                 }, { start, intentStart });
+                if (!metrics.trustedInput) throw new Error('Measurement did not receive trusted browser input');
                 const resources = (await Promise.all(bodies)).filter(Boolean);
                 const duplicates = [...new Set(requests.filter((url, index) => requests.indexOf(url) !== index))];
                 report.results.push({ journey, hoverMs, sample, ...metrics, journeyEncodedBytes: encodedBytes,
@@ -110,7 +147,7 @@ export async function measurePrefetch({ baseURL, label, samples = 10, hovers = [
                 await fs.writeFile(out, `${JSON.stringify(report, null, 2)}\n`);
             } finally { await context.close(); }
         }
-    } finally { await browser.close(); }
+    } finally { if (!suppliedBrowser) await browser.close(); }
     return report;
 }
 

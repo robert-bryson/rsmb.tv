@@ -123,7 +123,7 @@ These checks cover preparation, request reuse, worker deferral, CSS recovery, an
 The trip suite also checks reading budgets and embedded maps.
 Use the [repository guide](../README.md#testing-notes) for browser setup.
 
-Build and preview each rollout mode before a timing comparison.
+Build and preview each rollout mode before a local timing comparison.
 Run each comparison separately:
 
 ```bash
@@ -131,14 +131,23 @@ node scripts/measure-prefetch.js --base-url http://127.0.0.1:4189 --label off --
 ```
 
 Use a different output file for each mode.
+This helper uses a local HTTP preview. It blocks all external HTTPS requests.
+Do not use it against the public HTTPS site.
 The script measures About content and a Flights globe with loaded data.
 Fresh contexts compare several intent windows. `--warm` revisits a destination in the same document.
 Return-visit setup waits for active requests and 500 ms of network quiet.
 Request routing disables HTTP cache. Document modules and application JSON still remain cached.
 
-The report records timings, request lists, transferred bytes, long tasks, layout shifts, duplicates, and errors.
-Synthetic activation excludes input dispatch delay. Expected route changes can also appear as layout shifts.
+The report records timings, input delay, request lists, transferred bytes, long tasks, layout shifts, duplicates, and errors.
+Version 2 uses trusted browser input and includes input queue delay.
+It records readiness inside the page after two animation frames.
+Test-runner polling and transport delay do not affect that timestamp.
+Expected route changes can also appear as layout shifts.
 These results are laboratory measurements. They do not establish field INP, CLS, or real-user percentiles.
 
-See the [implementation measurements](reviews/2026-11-09-intent-prefetch-implementation.md),
+The [live release check](reviews/2026-11-09-live-release-verification.md) records a controlled production comparison.
+It includes the frozen probe source and all 60 samples.
+The earlier About timings used coarse selector polling. Use the corrected live comparison for timing claims.
+
+See the [historical implementation measurements](reviews/2026-11-09-intent-prefetch-implementation.md),
 [quality review](reviews/2026-11-09-intent-prefetch-quality-review.md), and [research plan](reviews/2026-11-09-intent-prefetch-plan.md).

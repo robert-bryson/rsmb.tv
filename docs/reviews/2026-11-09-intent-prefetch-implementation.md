@@ -8,6 +8,9 @@ The [operating instructions](../intent-prefetch.md) describe configuration, owne
 This report records the initial implementation before its final review.
 The [quality review](2026-11-09-intent-prefetch-quality-review.md) records later fixes and validation.
 The timings below apply to the earlier measured builds.
+Later release checks found that selector polling inflated the About readiness times.
+The earlier activation also used a synthetic click, which excluded input dispatch delay.
+Keep the table below as historical evidence. Use the [corrected live comparison](2026-11-09-live-release-verification.md) for current timing claims.
 
 **Behavior and resource ownership.**
 
@@ -119,8 +122,9 @@ One `all` sample took 4.8 seconds. It remains in the raw report.
 These noisy samples do not establish a repeatable change in cached globe startup.
 Both return-visit modes transferred zero bytes before the measured activation.
 
-With one-second intent, the default `all` mode reduces the About median by 768 ms and the globe median by 712 ms.
-The globe improvement exceeds the 46 ms baseline interquartile range for that intent window.
+The earlier one-second comparison reported reductions of 768 ms for About and 712 ms for the globe.
+The About figure includes selector-polling delay. These deltas must not be used as current responsiveness results.
+The corrected live comparison records trusted input and timestamps readiness inside the browser.
 The baseline no-hover globe samples have a much wider 503 ms interquartile range.
 Its 30 ms difference with `all` remains below the decision thresholds.
 The 500 ms globe difference does not exceed its baseline variation. It is inconclusive.

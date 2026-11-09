@@ -78,6 +78,7 @@ Use fixed data. Record the browser, viewport, and expected result.
 Keep the current reading budgets. Include WebKit in trip checks.
 See the [browser setup](README.md#testing-notes).
 Use the [laboratory report](docs/reviews/2026-10-24-performance-follow-up.md) as the measurement baseline.
+The [live prefetch check](docs/reviews/2026-11-09-live-release-verification.md) records the current production comparison. Physical-phone checks remain open.
 
 - [ ] Check reading and ADV Atlas on a real phone. Record LCP, CLS, INP, cold transfer, and startup. Compare prefetch modes `off`, `pages`, and `all` where input supports intent. Verify [atlas navigation and recovery](docs/trips/ADV-ATLAS.md).
 - [ ] Test list scroll restoration after delayed content loads. Check browser Back and the article return link.
