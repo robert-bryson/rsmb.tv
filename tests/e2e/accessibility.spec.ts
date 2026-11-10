@@ -53,12 +53,27 @@ for (const width of [390, 1280]) {
     ]) {
         test(`@a11y map controls ${path} at ${width}px`, async ({ page }) => {
             await page.setViewportSize({ width, height: 900 });
+            if (path === 'temperature-records') {
+                const records = (['high', 'low'] as const).map((type, index) => ({
+                    uid: index + 1, stationName: `Test ${type} station`, state: 'KS', stateName: 'Kansas', county: '20001',
+                    lat: 38, lon: -98, elev: 100, type, tempF: type === 'high' ? 100 : 20,
+                    prevRecordF: type === 'high' ? 99 : 21, prevRecordDate: '2000-11-02', normalF: 60,
+                    date: '2026-11-02', recordScope: 'daily',
+                }));
+                await page.route('**/recentRecords.json', route => route.fulfill({ json: {
+                    asOf: '2026-11-03', yesterday: records, last7Days: records,
+                } }));
+            }
             await page.goto(`/projects/${path}/map`);
             await expect(page.getByTestId(id)).toHaveAttribute('data-map-state', 'ready', { timeout: 30_000 });
             await expect(page.getByRole('main')).toHaveCount(1);
             await expect(page.locator('h1')).toHaveCount(1);
             await accessible(page);
             if (path === 'temperature-records') {
+                if (width < 768) await page.getByRole('button', { name: 'Show summary panel', exact: true }).click();
+                await expect(page.getByRole('heading', { name: 'Daily/Monthly Record Highs Broken', level: 2 })).toBeVisible();
+                await expect(page.getByRole('heading', { name: 'Daily/Monthly Record Lows Broken', level: 2 })).toBeVisible();
+                await accessible(page);
                 await page.getByRole('button', { name: 'Filters', exact: true }).click();
                 await expect(page.getByRole('combobox', { name: 'State filter' })).toBeVisible();
                 await accessible(page);

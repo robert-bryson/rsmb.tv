@@ -201,9 +201,9 @@ function RecordsPanel({ recentRecords, useCelsius, onFlyTo, activePeriod, onPeri
                     <>
                         {highs.length > 0 && (
                             <div ref={highsRef}>
-                                <h3 className="text-xs font-semibold mb-2" style={{ color: HIGH_TEMP_COLOR }}>
+                                <h2 className="text-xs font-semibold mb-2" style={{ color: HIGH_TEMP_COLOR }}>
                                     Daily/Monthly Record Highs Broken
-                                </h3>
+                                </h2>
                                 <ol className="space-y-0.5">
                                     {highs.slice(0, highsVisible).map((r, i) => (
                                         <RecordRow key={`high-${r.uid}-${r.date}`} record={r} rank={i + 1} sort={sort} useCelsius={useCelsius} onClick={handleRowClick} />
@@ -222,9 +222,9 @@ function RecordsPanel({ recentRecords, useCelsius, onFlyTo, activePeriod, onPeri
 
                         {lows.length > 0 && (
                             <div ref={lowsRef}>
-                                <h3 className="text-xs font-semibold mb-2" style={{ color: LOW_TEMP_COLOR }}>
+                                <h2 className="text-xs font-semibold mb-2" style={{ color: LOW_TEMP_COLOR }}>
                                     Daily/Monthly Record Lows Broken
-                                </h3>
+                                </h2>
                                 <ol className="space-y-0.5">
                                     {lows.slice(0, lowsVisible).map((r, i) => (
                                         <RecordRow key={`low-${r.uid}-${r.date}`} record={r} rank={i + 1} sort={sort} useCelsius={useCelsius} onClick={handleRowClick} />

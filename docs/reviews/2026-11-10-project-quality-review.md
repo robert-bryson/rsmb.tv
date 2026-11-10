@@ -190,3 +190,18 @@ Camera, sharing, reload, and history checks passed on desktop Chromium,
 phone Chromium, and WebKit: 59 passed and four device-specific checks skipped.
 The complete suite passed 3,018 unit tests and 18 Python tests.
 Lint and TypeScript checks passed.
+
+The [third run](https://github.com/robert-bryson/rsmb.tv/actions/runs/42878238577)
+passed CI, preview validation, and production deployment.
+Live checks confirmed faster article loading and successful map recovery.
+The full live accessibility scan then found a heading gap in populated temperature results.
+The page used an `h1`, but the two record sections used `h3` headings.
+Those sections now use `h2` headings.
+
+The CI accessibility fixture had empty temperature results.
+It now supplies high and low records and opens the phone summary panel.
+The new unit and browser checks failed before the fix.
+They verify both record headings and scan the populated panel.
+All four populated-panel browser checks passed on Chromium and WebKit.
+Lint and TypeScript checks passed.
+The complete suite passed 3,019 unit tests and 18 Python tests.
