@@ -38,7 +38,7 @@ function ProjectContent({ project, priority }: { project: Project; priority: boo
         <h2 className="text-lg font-medium text-zinc-100 group-hover:text-violet-400">
           {project.title}
         </h2>
-        <span className="text-sm text-zinc-500 whitespace-nowrap">
+        <span className="text-sm text-zinc-400 whitespace-nowrap">
           {project.lastUpdated ? (
             <>Updated <time dateTime={project.lastUpdated}>{formatProjectDate(project)}</time></>
           ) : project.year}

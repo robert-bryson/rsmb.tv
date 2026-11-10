@@ -20,7 +20,9 @@ export interface PerformanceSample {
     sample: number;
     status: number | null;
     metrics: Partial<Record<'LCP' | 'CLS' | 'FCP' | 'TTFB', VitalMeasurement>> | null;
+    mapReady: { durationMs: number; state: 'ready' | 'degraded' | 'fallback' } | null;
     scriptBytes: number | null;
+    externalScriptRequests: number;
     interaction: string | null;
     sampledINP: VitalMeasurement | null;
     errors: string[];
@@ -42,3 +44,5 @@ export function measurePerformance(options: PerformanceOptions, adapters?: {
     browser?: Browser;
     onSample?: (sample: PerformanceSample) => void;
 }): Promise<PerformanceReport>;
+
+export function scriptBodyBytes(transfers: Array<{ url: string; contentLength: number | null }>, resources: Array<{ name: string; encodedBodySize: number; decodedBodySize: number; transferSize: number }>): number;

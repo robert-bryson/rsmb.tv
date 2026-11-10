@@ -4,6 +4,15 @@ This file lists incomplete work. Keep completed tasks in Git history.
 Use the [review index](docs/README.md) for dated evidence and test results.
 Use the [trip authoring guide](docs/trips/TRIP-AUTHORING-README.md#6-publish-assets) for recurring photo checks and asset publication steps.
 
+## Next release checks
+
+Do these checks after the reviewed changes reach a hosted preview or production.
+Local browser tests cannot verify the analytics account or physical devices.
+
+- [ ] Verify Web Vitals in the Umami Performance view after deployment. Record the build revision and observation period.
+- [ ] Verify one `map-ready` event for each map visit. Check failure and recovery events. Confirm that events exclude query values.
+- [ ] Test navigation and map controls with VoiceOver or NVDA. Include hover dismissal, route announcements, help dismissal, and disabled character shortcuts.
+
 ## Content publication
 
 Complete these checks before publishing the affected story.
@@ -19,7 +28,7 @@ Complete these checks before publishing the affected story.
 
 ### Mississippi–Wisconsin 2025 and ON–QC–New England 2026
 
-- [ ] Continue the [starter outlines](docs/trips/TRIP-SOURCE-INVENTORY.md). Confirm dates, motorcycle, stops, and report boundaries.
+- [ ] Complete the [starter outlines](docs/trips/TRIP-SOURCE-INVENTORY.md). Confirm dates, motorcycle, stops, and report boundaries.
 - [ ] Complete the Mississippi–Wisconsin source description. Complete the 2026 descriptions and series columns. Sheet row 7 links its source Doc.
 - [ ] Confirm photo membership for Mississippi–Wisconsin. Expand the 2026 photo collection beyond its temporary July 17 hero.
 - [ ] Apply the current 2026 outlines to the source Docs. Replace stale `.json.draft` notes. Add the recovered July 17 map and gallery.
@@ -57,7 +66,7 @@ Use the [editorial review](docs/reviews/2026-10-29-trip-editorial-review.md) for
 
 ### Operational checks
 
-- [ ] Approve a correction and refresh policy for the twelve legacy daily thresholds. The [November 9 comparison](docs/performance/2026-11-09-temperature-threshold-check.json) retains current ACIS requests and responses. Preserve raw observations and legacy `rh` and `rl` until the policy is approved.
+- [ ] Approve a correction and refresh policy for the twelve legacy daily thresholds. Use the [November 9 comparison](docs/performance/2026-11-09-temperature-threshold-check.json) as evidence. Preserve raw observations and legacy `rh` and `rl` until approval.
 
 ### Historical signal publication
 
@@ -77,7 +86,8 @@ Use fixed data. Record the browser, viewport, and expected result.
 Keep the current reading budgets. Include WebKit in trip checks.
 See the [browser setup](README.md#testing-notes).
 Use the [laboratory report](docs/reviews/2026-10-24-performance-follow-up.md) as the measurement baseline.
-The [live prefetch check](docs/reviews/2026-11-09-live-release-verification.md) records the current production comparison. Physical-phone checks remain open.
+The [live prefetch check](docs/reviews/2026-11-09-live-release-verification.md) records the production comparison from November 9.
+Use the [November 10 review](docs/reviews/2026-11-10-project-quality-review.md) for measurement scope and known limits.
 
 ### Physical devices
 
@@ -87,7 +97,7 @@ The [live prefetch check](docs/reviews/2026-11-09-live-release-verification.md) 
 
 ### Automated checks
 
-- [ ] Test list scroll restoration after delayed content loads. Check browser Back and the article return link.
+- [ ] Test list scroll restoration with content delayed for more than three seconds. Check browser Back and the article return link.
 - [ ] Extend fixed-tile checks to cover stop selection and all three map styles.
 - [ ] Reproduce the intermittent flight-control failures. Confirm the cause, then add regressions. See the [unresolved failure report](docs/reviews/2026-11-04-flight-duration-test-review.md#intermittent-controls-failures).
 

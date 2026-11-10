@@ -54,6 +54,13 @@ export function FlightsMap() {
   // Terrain relief is optional and loads after the globe can be used.
   const criticalTextures = useMemo(() => ({ ...basemap, bump: null }), [basemap]);
   const textureState = useGlobeTextures(criticalTextures);
+  const [readyAttempt, setReadyAttempt] = useState<number | null>(null);
+  const [globeFailure, setGlobeFailure] = useState(false);
+  const handleRendererFailure = useCallback((failed: boolean) => {
+    setGlobeFailure(failed);
+    if (failed) setReadyAttempt(null);
+  }, []);
+  const handleRendererReady = useCallback(() => setReadyAttempt(textureState.attempt), [textureState.attempt]);
   const yearFit = useRef({
     year: selectedYear, view: selectedGlobeView,
     pending: selectedYear !== null && !selectedGlobeView,
@@ -177,7 +184,7 @@ export function FlightsMap() {
   }, [stopGlobeRotation, showCopiedFeedback]);
 
   // Keyboard shortcuts
-  useKeyboardShortcuts({
+  const { shortcutsEnabled, setShortcutsEnabled } = useKeyboardShortcuts({
     onToggleStats: () => setShowStats(prev => !prev),
     onToggleFilter: () => setFilterOpen(prev => !prev),
     onResetView: handleResetView,
@@ -398,6 +405,8 @@ export function FlightsMap() {
   return (
     <div
       ref={swipeRef}
+      data-testid="flights-map"
+      data-map-state={error || textureState.error || globeFailure ? 'error' : loading || textureState.isLoading || readyAttempt !== textureState.attempt ? 'loading' : 'ready'}
       className="relative w-full h-full bg-[#000011] flex flex-col"
       onPointerDownCapture={handleMapInteraction}
       onTouchStartCapture={handleMapInteraction}
@@ -481,6 +490,7 @@ export function FlightsMap() {
         globeRotationDisabled={prefersReducedMotion}
         onShareUrl={handleShareUrl}
         copiedUrl={copiedUrl}
+        onShowHelp={() => setShowHelp(true)}
       />
 
       {/* Empty State */}
@@ -494,7 +504,7 @@ export function FlightsMap() {
       )}
 
       {/* Globe Container with ARIA */}
-      <GlobeErrorBoundary>
+      <GlobeErrorBoundary onStateChange={handleRendererFailure}>
         <div
           role="application"
           aria-label={`Interactive 3D globe showing ${flightStats.totalFlights} flights across ${flightStats.totalAirports} airports. Click and drag to rotate, scroll to zoom, click on routes or airports for details.`}
@@ -504,6 +514,7 @@ export function FlightsMap() {
           <FlightsGlobe
             key={textureState.attempt}
             globeRef={globeRef}
+            onReady={handleRendererReady}
             navigationViewRef={navigationViewRef}
             basemap={basemap}
             selectedView={selectedGlobeView}
@@ -629,7 +640,7 @@ export function FlightsMap() {
       />
 
       {/* Keyboard Help Modal */}
-      <KeyboardHelp isOpen={showHelp} onClose={() => setShowHelp(false)} />
+      <KeyboardHelp isOpen={showHelp} onClose={() => setShowHelp(false)} shortcutsEnabled={shortcutsEnabled} onShortcutsChange={setShortcutsEnabled} />
     </div>
   );
 }

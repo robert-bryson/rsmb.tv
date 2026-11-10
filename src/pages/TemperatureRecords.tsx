@@ -4,6 +4,7 @@ import { loadTemperatureMap, warmTemperatureData } from '../features/temperature
 import { usePageMetadata } from '../hooks/usePageMetadata';
 import { staticPageMetadata } from '../utils/pageMetadata';
 import { temperatureDataView } from '../features/temperatures/temperatureDataView';
+import { MapSkipLink } from '../components/MapSkipLink';
 
 const TemperatureMap = lazy(loadTemperatureMap);
 
@@ -15,16 +16,18 @@ export default function TemperatureRecords() {
     usePageMetadata(staticPageMetadata('/projects/temperature-records/map'));
 
     return (
-        <section className="h-full w-full overflow-hidden">
+        <main tabIndex={-1} className="h-full w-full overflow-hidden">
+            <h1 className="sr-only">U.S. Temperature Records</h1>
+            <MapSkipLink targetId="temperature-controls" />
             <Suspense
                 fallback={
-                    <div className="h-full w-full grid place-items-center text-zinc-300 text-sm">
+                    <div role="status" className="h-full w-full grid place-items-center text-zinc-300 text-sm">
                         Loading temperature map...
                     </div>
                 }
             >
                 <TemperatureMap />
             </Suspense>
-        </section>
+        </main>
     );
 }

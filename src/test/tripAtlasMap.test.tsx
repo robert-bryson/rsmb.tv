@@ -22,6 +22,7 @@ const fake = vi.hoisted(() => ({
         once: ReturnType<typeof vi.fn>;
         off: ReturnType<typeof vi.fn>;
         triggerRepaint: ReturnType<typeof vi.fn>;
+        isSourceLoaded: ReturnType<typeof vi.fn>;
         queryRenderedFeatures: ReturnType<typeof vi.fn>;
         canvas: HTMLCanvasElement;
         isMoving: () => boolean;
@@ -95,6 +96,7 @@ vi.mock('maplibre-gl', () => ({
         stop() { this.events.get('moveend')?.forEach(listener => listener()); return this; }
         getLayer() { return {}; }
         getSource() { return { setData: vi.fn() }; }
+        isSourceLoaded = vi.fn(() => true);
         getCenter() { return this.center; }
         getBounds() { return { contains: () => true }; }
         getZoom() { return 5.5; }
@@ -128,6 +130,53 @@ const route: RouteGeoJson = { type: 'Feature', properties: {}, geometry: { type:
 
 describe('atlas route hit testing', () => {
     const pointer = { point: { x: 100, y: 100 }, lngLat: { lng: -122, lat: 47 } };
+
+    it('waits for route data and worker processing before reporting a usable map', () => {
+        const props = { entries: [entry], routes: { coast: { route: null as RouteGeoJson | null, error: '', retry: vi.fn() } },
+            fitVersion: 0, panelOpen: true, onSelect: vi.fn(), onHover: vi.fn(), onCameraChange: vi.fn() };
+        const { rerender } = render(<TripAtlasMap {...props} />);
+        const instance = fake.instances[0];
+        const map = screen.getByTestId('trip-atlas-map');
+        act(() => instance.events.get('style.load')?.forEach(listener => listener()));
+        expect(map).toHaveAttribute('data-map-state', 'loading');
+        instance.isSourceLoaded.mockReturnValue(false);
+        rerender(<TripAtlasMap {...props} routes={{ coast: { ...props.routes.coast, route } }} />);
+        act(() => instance.events.get('render')?.forEach(listener => listener()));
+        expect(map).toHaveAttribute('data-map-state', 'loading');
+        instance.isSourceLoaded.mockReturnValue(true);
+        act(() => instance.events.get('render')?.forEach(listener => listener()));
+        expect(map).toHaveAttribute('data-map-state', 'ready');
+    });
+
+    it('distinguishes an empty filter result from failed route downloads', () => {
+        const props = { entries: [entry], routes: { coast: { route: null, error: 'Route unavailable', retry: vi.fn() } },
+            fitVersion: 0, panelOpen: true, onSelect: vi.fn(), onHover: vi.fn(), onCameraChange: vi.fn() };
+        const { rerender } = render(<TripAtlasMap {...props} />);
+        const instance = fake.instances[0];
+        act(() => instance.events.get('style.load')?.forEach(listener => listener()));
+        expect(screen.getByTestId('trip-atlas-map')).toHaveAttribute('data-map-state', 'error');
+        rerender(<TripAtlasMap {...props} entries={[]} routes={{}} />);
+        act(() => instance.events.get('render')?.forEach(listener => listener()));
+        expect(screen.getByTestId('trip-atlas-map')).toHaveAttribute('data-map-state', 'ready');
+    });
+
+    it('invalidates route readiness when the renderer is retried', () => {
+        render(<TripAtlasMap entries={[entry]} routes={{ coast: { route, error: '', retry: vi.fn() } }}
+            fitVersion={0} panelOpen onSelect={vi.fn()} onHover={vi.fn()} onCameraChange={vi.fn()} />);
+        const original = fake.instances[0];
+        act(() => original.events.get('style.load')?.forEach(listener => listener()));
+        act(() => original.events.get('render')?.forEach(listener => listener()));
+        expect(screen.getByTestId('trip-atlas-map')).toHaveAttribute('data-map-state', 'ready');
+        act(() => original.events.get('error')?.forEach(listener => listener({ error: new Error('WebGL context lost') })));
+        fireEvent.click(screen.getByRole('button', { name: 'Retry map' }));
+        expect(screen.getByTestId('trip-atlas-map')).toHaveAttribute('data-map-state', 'loading');
+        act(() => original.events.get('render')?.forEach(listener => listener()));
+        expect(screen.getByTestId('trip-atlas-map')).toHaveAttribute('data-map-state', 'loading');
+        const replacement = fake.instances[1];
+        act(() => replacement.events.get('style.load')?.forEach(listener => listener()));
+        act(() => replacement.events.get('render')?.forEach(listener => listener()));
+        expect(screen.getByTestId('trip-atlas-map')).toHaveAttribute('data-map-state', 'ready');
+    });
 
     it('ignores removed routes while the renderer still returns their old features', () => {
         const onSelect = vi.fn();

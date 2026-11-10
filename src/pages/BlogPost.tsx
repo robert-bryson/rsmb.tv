@@ -84,7 +84,11 @@ export function BlogPost({ collection }: BlogPostProps) {
     }
 
     if (isTrip && tripId && loaded?.id !== tripId) {
-        return <div><h1 className="text-3xl font-bold">{post.title}</h1><p role="status" className="py-8 text-zinc-400">Loading trip…</p></div>;
+        return <div className="trip-story">
+            <div className="trip-hero-gallery grid place-items-center px-6 py-12">
+                <div><h1 className="text-3xl font-bold">{post.title}</h1><p role="status" className="py-8 text-zinc-400">Loading trip…</p></div>
+            </div>
+        </div>;
     }
     if (isTrip && !tripManifest) {
         return (

@@ -80,7 +80,7 @@ export function Posts() {
 
             <div className="mb-8 space-y-5">
                 {allTags.length > 0 && <nav aria-label="Post tags" className="flex flex-wrap items-baseline gap-2">
-                    <p className="mr-1 text-xs font-semibold uppercase tracking-wider text-zinc-500">Tags</p>
+                    <p className="mr-1 text-xs font-semibold uppercase tracking-wider text-zinc-400">Tags</p>
                     <IntentLink
                         to={createPostsUrl(activeType, '', activeCountry, activeRegion)}
                         aria-current={!activeTag ? 'page' : undefined}

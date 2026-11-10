@@ -71,7 +71,7 @@ The component advances through each recovery stage once. A failed original stops
 A new image source resets recovery. Alt text, dimensions, loading priority, and display sizes remain in place.
 The browser can skip an unsupported image format without a failed request.
 
-## Homepage preload
+## Page image preloads
 
 The HTML metadata renderer emits one responsive preload for the first homepage project image.
 `HOME_PROJECT_IMAGE_SIZES` supplies the same sizes to the preload and the rendered card.
@@ -82,6 +82,14 @@ It omits `href` so browsers without responsive preload support do not fetch an i
 Those browsers use the normal eager image request.
 The renderer replaces its own preload on repeated calls. It removes that preload when rendering another route.
 Unrelated template preloads remain in place.
+
+Article HTML also preloads the initial trip hero from its validated manifest.
+The preload uses the same responsive candidates and `100vw` sizes as `TripHeroGallery`.
+It starts before the article module and manifest imports finish.
+The metadata renderer owns both hints. It replaces its hint when it renders another route.
+Article browser checks block the entry script.
+They require one hero request at phone and desktop widths.
+They test pixel densities 1 and 2.
 
 ## Checks
 
@@ -101,7 +109,7 @@ npm run test:e2e -- tests/e2e/projects.spec.ts --workers=2
 Check native preload discovery in a production fixture build:
 
 ```bash
-PLAYWRIGHT_WEBKIT=1 npm run test:page-recovery -- --grep 'homepage image preload'
+PLAYWRIGHT_WEBKIT=1 npm run test:page-recovery -- --grep 'image preload|hero preload'
 ```
 
 The preload check blocks the app entry script. The image must start before React renders.

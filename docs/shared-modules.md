@@ -3,6 +3,15 @@
 Use these modules when adding a project or extending an existing project.
 Keep project-specific URLs, processing rules, and content with their callers.
 
+## Map background recovery
+
+Use [`src/maps/recoverBasemap.ts`](../src/maps/recoverBasemap.ts) for provider deadlines, background recovery, retry, and cleanup.
+Temperature and Tornado adapters supply provider styles and application source IDs.
+The helper checks provider sources. It does not wait for application data or camera motion.
+Each feature restores its data layers on `style.load`.
+Each feature controls its camera and selection state.
+Dispose the helper before you remove the renderer.
+
 ## Browser data requests
 
 Import request caching from [`src/data/fetchCache.ts`](../src/data/fetchCache.ts).

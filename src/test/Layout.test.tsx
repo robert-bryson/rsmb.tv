@@ -33,29 +33,47 @@ describe('Layout', () => {
         expect(screen.getByText('Page content')).toBeInTheDocument();
     });
 
-    it('renders direct project links in a hover and focus-visible flyout', () => {
+    it('opens a project disclosure and dismisses it without losing keyboard focus', () => {
         renderLayout('/projects');
-
+        const toggle = screen.getByRole('button', { name: 'Project pages' });
+        expect(toggle).toHaveAttribute('aria-expanded', 'false');
+        expect(screen.queryByRole('list', { name: 'Project pages' })).not.toBeInTheDocument();
+        fireEvent.click(toggle);
         const projectPages = screen.getByRole('list', { name: 'Project pages' });
-        expect(projectPages.parentElement).toHaveClass(
-            'pt-2',
-            'group-hover:visible',
-            'group-focus-within:visible'
-        );
-
+        expect(toggle).toHaveAttribute('aria-controls', projectPages.parentElement!.id);
         for (const project of projects) {
             expect(within(projectPages).getByRole('link', { name: project.title })).toHaveAttribute(
                 'href',
                 `/projects/${project.slug}`
             );
         }
+        act(() => within(projectPages).getByRole('link', { name: projects[0].title }).focus());
+        fireEvent.keyDown(projectPages, { key: 'Escape' });
+        expect(toggle).toHaveFocus();
+        expect(toggle).toHaveAttribute('aria-expanded', 'false');
+        expect(screen.queryByRole('list', { name: 'Project pages' })).not.toBeInTheDocument();
     });
 
     it('marks nested project routes active in both nav levels', () => {
         renderLayout('/projects/temperature-records/trends');
 
         expect(screen.getByRole('link', { name: 'Projects' })).toHaveClass('text-violet-400');
+        expect(screen.getByRole('link', { name: 'Projects' })).toHaveAttribute('aria-current', 'location');
+        fireEvent.click(screen.getByRole('button', { name: 'Project pages' }));
         expect(screen.getByRole('link', { name: 'U.S. Temperature Records' })).toHaveClass('text-violet-300');
+        expect(screen.getByRole('link', { name: 'U.S. Temperature Records' })).toHaveAttribute('aria-current', 'location');
+    });
+
+    it('dismisses a hover disclosure with Escape while focus remains outside it', () => {
+        renderLayout();
+        const posts = screen.getByRole('link', { name: 'Posts' });
+        posts.focus();
+        fireEvent.pointerEnter(screen.getByRole('link', { name: 'Projects' }).closest('li')!);
+        const toggle = screen.getByRole('button', { name: 'Project pages' });
+        expect(toggle).toHaveAttribute('aria-expanded', 'true');
+        fireEvent.keyDown(posts, { key: 'Escape' });
+        expect(toggle).toHaveAttribute('aria-expanded', 'false');
+        expect(posts).toHaveFocus();
     });
 
     it.each(['/posts', '/blog/a-post', '/trips/a-trip'])('marks Posts active for %s', (route) => {

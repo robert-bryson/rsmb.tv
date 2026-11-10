@@ -59,13 +59,32 @@ export function validatePerformanceSample(sample) {
     if (!Number.isFinite(sample.scriptBytes) || sample.scriptBytes < 0) throw new Error('Invalid script byte measurement.');
 }
 
+/** Sum completed script bodies without HTTP headers or CDP buffering artifacts. */
+export function scriptBodyBytes(transfers, resources) {
+    const entries = new Map();
+    for (const resource of resources) {
+        const matches = entries.get(resource.name) ?? [];
+        matches.push(resource);
+        entries.set(resource.name, matches);
+    }
+    return transfers.reduce((sum, transfer) => {
+        const resource = entries.get(transfer.url)?.shift();
+        // Cross-origin entries without Timing-Allow-Origin hide all size fields.
+        // Content-Length still describes the compressed body, when provided.
+        const observable = resource && (resource.transferSize > 0 || resource.decodedBodySize > 0);
+        const bytes = observable ? resource.encodedBodySize : transfer.contentLength;
+        if (!Number.isFinite(bytes) || bytes < 0) throw new Error(`JavaScript body size unavailable: ${transfer.url}`);
+        return sum + bytes;
+    }, 0);
+}
+
 export async function measurePerformance(options, { browser, onSample = row => console.log(JSON.stringify(row)) } = {}) {
     const activeBrowser = browser ?? await chromium.launch({ headless: true });
     const { baseURL, paths, samples, outputPath, settleMs, timeoutMs } = options;
     const bundle = fileURLToPath(new URL('./web-vitals.attribution.iife.js', import.meta.resolve('web-vitals/attribution')));
     const report = {
         measuredAt: new Date().toISOString(), baseURL,
-        conditions: { browser: activeBrowser.version(), device: 'Pixel 7 emulation', cpuSlowdown: 4, latencyMs: 150, downloadMbps: 1.6, uploadMbps: 0.75, samples, browserCache: 'disabled', settleMs, timeoutMs },
+        conditions: { browser: activeBrowser.version(), device: 'Pixel 7 emulation', cpuSlowdown: 4, latencyMs: 150, downloadMbps: 1.6, uploadMbps: 0.75, samples, browserCache: 'disabled', scriptByteScope: 'same-origin encoded bodies', settleMs, timeoutMs },
         failedSamples: 0, errors: [], results: [],
     };
     async function persistReport() {
@@ -74,14 +93,26 @@ export async function measurePerformance(options, { browser, onSample = row => c
     }
     try {
         const instrumentation = `${await fs.readFile(bundle, 'utf8')}
+performance.setResourceTimingBufferSize(10000);
 window.__metrics = {};
 for (const name of ['LCP', 'CLS', 'INP', 'FCP', 'TTFB']) {
     webVitals['on' + name](metric => {
         window.__metrics[name] = { value: metric.value, rating: metric.rating, target: metric.attribution?.target ?? metric.attribution?.largestShiftTarget ?? null };
     }, { reportAllChanges: true });
+}
+window.__mapReady = null;
+if (location.pathname.endsWith('/map')) {
+    const observer = new MutationObserver(() => {
+        const state = document.querySelector('[data-map-state]')?.getAttribute('data-map-state');
+        if (['ready', 'degraded', 'fallback'].includes(state)) {
+            window.__mapReady = { durationMs: performance.now(), state };
+            observer.disconnect();
+        }
+    });
+    observer.observe(document, { subtree: true, childList: true, attributes: true, attributeFilter: ['data-map-state'] });
 }`;
         for (const route of paths) for (let sample = 1; sample <= samples; sample++) {
-            const row = { route, sample, status: null, metrics: null, scriptBytes: null, interaction: null, sampledINP: null, errors: [] };
+            const row = { route, sample, status: null, metrics: null, mapReady: null, scriptBytes: null, externalScriptRequests: 0, interaction: null, sampledINP: null, errors: [] };
             let context;
             try {
                 context = await activeBrowser.newContext({ ...devices['Pixel 7'], serviceWorkers: 'block' });
@@ -89,22 +120,34 @@ for (const name of ['LCP', 'CLS', 'INP', 'FCP', 'TTFB']) {
                 page.setDefaultTimeout(5000);
                 page.on('pageerror', error => row.errors.push(error.message));
                 page.on('console', message => {
-                    if (message.type() === 'error' && message.text().includes('MapLibre error:')) row.errors.push(message.text());
+                    const text = message.text();
+                    // Provider failures can recover to a usable neutral background.
+                    // Terminal map state handles data failures; retain fatal renderer errors.
+                    if (message.type() === 'error' && text.includes('MapLibre error:') && /worker|webgl|context/i.test(text)) row.errors.push(text);
                 });
+                const scriptRequests = new Map();
+                const completedScripts = [];
                 page.on('response', response => {
-                    if (/maplibre.*worker/.test(response.url()) && !response.ok()) row.errors.push(`Map worker HTTP ${response.status()}`);
-                });
-                const session = await context.newCDPSession(page);
-                const scriptRequests = new Set();
-                let scriptBytes = 0;
-                session.on('Network.responseReceived', ({ requestId, type, response }) => {
-                    if (type === 'Script' || /^(?:application|text)\/(?:x-)?(?:java|ecma)script(?:;|$)/i.test(response.mimeType)) {
-                        scriptRequests.add(requestId);
+                    if (/maplibre.*worker/.test(response.url()) && !response.ok()) {
+                        row.errors.push(`Map worker HTTP ${response.status()}`);
+                        return;
+                    }
+                    const request = response.request();
+                    const headers = response.headers();
+                    if (request.resourceType() === 'script' || /^(?:application|text)\/(?:x-)?(?:java|ecma)script(?:;|$)/i.test(headers['content-type'] ?? '')) {
+                        const length = headers['content-length'];
+                        scriptRequests.set(request, {
+                            url: response.url(),
+                            contentLength: /^\d+$/.test(length ?? '') ? Number(length) : null,
+                        });
                     }
                 });
-                session.on('Network.dataReceived', ({ requestId, encodedDataLength }) => {
-                    if (scriptRequests.has(requestId)) scriptBytes += encodedDataLength;
+                page.on('requestfinished', request => {
+                    const transfer = scriptRequests.get(request);
+                    if (transfer) completedScripts.push(transfer);
+                    scriptRequests.delete(request);
                 });
+                const session = await context.newCDPSession(page);
                 await session.send('Network.enable');
                 await session.send('Network.setCacheDisabled', { cacheDisabled: true });
                 await session.send('Network.emulateNetworkConditions', { offline: false, latency: 150, downloadThroughput: 1_600_000 / 8, uploadThroughput: 750_000 / 8 });
@@ -123,14 +166,24 @@ for (const name of ['LCP', 'CLS', 'INP', 'FCP', 'TTFB']) {
                     if (images.some(image => image.complete && !image.naturalWidth)) throw new Error('An above-fold image failed to load.');
                     return images.every(image => image.complete && image.naturalWidth > 0) && document.fonts.status === 'loaded';
                 }, undefined, { timeout: timeoutMs });
-                if (route.startsWith('/projects/temperature-records/map')) {
-                    await page.waitForFunction(() => document.querySelector('[data-testid="temperature-map"]')?.getAttribute('data-map-state') === 'ready', undefined, { timeout: timeoutMs });
+                if (new URL(route, baseURL).pathname.endsWith('/map')) {
+                    await page.waitForFunction(() => {
+                        if (document.querySelector('[data-map-state="error"]')) throw new Error('Map startup failed.');
+                        return window.__mapReady !== null;
+                    }, undefined, { timeout: timeoutMs });
+                    row.mapReady = await page.evaluate(() => window.__mapReady);
                 }
                 await page.waitForTimeout(settleMs);
                 row.metrics = await page.evaluate(() => window.__metrics);
-                // CDP reports compressed body bytes, including modulepreloads and repeated transfers.
-                // Freeze this total before interaction; exclude headers and non-JavaScript responses.
-                row.scriptBytes = scriptBytes;
+                const resources = await page.evaluate(() => performance.getEntriesByType('resource').map(entry => ({
+                    name: entry.name, encodedBodySize: entry.encodedBodySize,
+                    decodedBodySize: entry.decodedBodySize, transferSize: entry.transferSize,
+                })));
+                // Resource Timing includes buffered/modulepreloaded bodies. Request identity
+                // preserves repeated transfers; opaque cross-origin sizes use Content-Length.
+                const applicationScripts = completedScripts.filter(transfer => new URL(transfer.url).origin === baseURL);
+                row.externalScriptRequests = completedScripts.length - applicationScripts.length;
+                row.scriptBytes = scriptBodyBytes(applicationScripts, resources);
                 validatePerformanceSample(row);
                 row.interaction = 'Tab focus';
                 const pause = page.getByRole('button', { name: 'Pause flight animations', exact: true });

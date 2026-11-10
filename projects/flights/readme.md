@@ -79,7 +79,7 @@ Writing an unchanged setting does not add a history entry.
 Camera fitting uses the smallest longitude interval that contains the selected airports.
 Pacific routes can cross the date line without moving the camera to Greenwich.
 
-Texture failures show an error and a **Try Again** button.
+Texture failures and requests that exceed 30 seconds show an error and a **Try Again** button.
 Retry loads a fresh texture batch and creates a fresh globe renderer.
 It retains the URL filters and camera.
 Changing basemaps also clears errors from the previous texture batch.
@@ -337,6 +337,14 @@ The open panel uses the application scrollbar colors in supported browsers.
 In forced-colors mode, the browser controls the scrollbar colors.
 
 ## Keyboard shortcuts
+
+Open the **Keyboard shortcuts** control (`?`) to view help.
+Turn off **Enable character shortcuts** to disable letter, number, and Shift shortcuts.
+This preference persists across visits. Escape remains available for dismissal.
+The visible help control also lets you re-enable shortcuts.
+Map shortcuts do not run while help is open.
+Escape closes help without changing the map selection.
+Press Escape again after help closes to clear the selection.
 
 | Key       | Action                                                                  |
 | --------- | ----------------------------------------------------------------------- |

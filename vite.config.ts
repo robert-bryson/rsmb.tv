@@ -21,6 +21,7 @@ export default defineConfig(({ mode, command }) => {
   base: '/',
   define: {
     __BUILD_DATE__: JSON.stringify(buildDate),
+    __BUILD_REVISION__: JSON.stringify(process.env.AWS_COMMIT_ID || process.env.GITHUB_SHA || 'local'),
     'import.meta.env.VITE_CARTO_API_KEY': JSON.stringify(cartoKey),
   },
   plugins: [

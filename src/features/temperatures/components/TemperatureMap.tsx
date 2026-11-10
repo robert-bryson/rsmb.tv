@@ -1,4 +1,6 @@
 import { cartoRasterStyle } from '../../../maps/cartoBasemaps';
+import { recoverTemperatureBasemap } from '../map/temperatureBasemap';
+import type { BasemapState } from '../../../maps/recoverBasemap';
 import { useRef, useEffect, useState, useCallback, useMemo, Suspense, lazy } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import * as maplibregl from '../../../maps/maplibre';
@@ -221,8 +223,11 @@ export function TemperatureMap() {
     const toolbarRef = useRef<HTMLDivElement>(null);
     const reduceMotion = useReducedMotion();
     const lastCameraKey = useRef('');
+    const lastStateFit = useRef('');
     const returnFocusKey = useRef<string | null>(null);
     const [mapFailure, setMapFailure] = useState(false);
+    const [basemapState, setBasemapState] = useState<BasemapState>('loading');
+    const retryBasemap = useRef(() => {});
     const [renderedView, setRenderedView] = useState('');
     const mapContainer = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibregl.Map | null>(null);
@@ -230,7 +235,8 @@ export function TemperatureMap() {
     const clickHandlersAttached = useRef(false);
     const isMobile = useIsMobile();
     const [searchParams, setSearchParams] = useSearchParams();
-    const [mapLoaded, setMapLoaded] = useState(false);
+    // A new style removes application layers. Reinstall them on every style load.
+    const [mapLoaded, setMapLoaded] = useState(0);
     const [showCounty, setShowCounty] = useState(false);
     const [panelOpen, setPanelOpen] = useState(
         () => typeof window === 'undefined' || !window.matchMedia('(max-width: 767px)').matches,
@@ -334,7 +340,7 @@ export function TemperatureMap() {
         }
     }, []);
 
-    const { stateRecords, countyRecords, recentRecords, summary, loading, error } = useTemperatureData({
+    const { stateRecords, countyRecords, recentRecords, summary, loading, error, retry: retryData } = useTemperatureData({
         loadRecentRecords: viewMode === 'recent',
         loadStateRecords: viewMode === 'state',
         loadCountyRecords: viewMode === 'county' || viewMode === 'freshness' || (viewMode === 'state' && selectedState !== null),
@@ -520,9 +526,9 @@ export function TemperatureMap() {
             if (/worker|webgl|context/i.test(e.error?.message || '')) setMapFailure(true);
         });
 
-        map.on('load', () => {
+        map.on('style.load', () => {
             map.resize();
-            setMapLoaded(true);
+            setMapLoaded(version => version + 1);
         });
 
         map.on('zoom', () => {
@@ -531,8 +537,14 @@ export function TemperatureMap() {
         });
 
         mapRef.current = map;
+        const recovery = recoverTemperatureBasemap(map, setBasemapState);
+        retryBasemap.current = recovery.retry;
 
         return () => {
+            recovery.dispose();
+            retryBasemap.current = () => {};
+            clickHandlersAttached.current = false;
+            popupRef.current?.remove();
             map.remove();
             mapRef.current = null;
         };
@@ -969,6 +981,7 @@ export function TemperatureMap() {
         if (!source) return;
         const detailLayers = ['state-detail-glow', 'state-detail-circle', 'state-detail-label'];
         if (!selectedState || !stateDetailGeoJson.features.length) {
+            lastStateFit.current = '';
             source.setData({ type: 'FeatureCollection', features: [] });
             for (const id of detailLayers) {
                 if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'none');
@@ -991,10 +1004,14 @@ export function TemperatureMap() {
                     if (lat < minLat) minLat = lat;
                     if (lat > maxLat) maxLat = lat;
                 }
-                map.fitBounds([[minLng, minLat], [maxLng, maxLat]], { padding: 60, duration: 1200, maxZoom: 9 });
+                const fitKey = `${selectedState}:${minLng}:${minLat}:${maxLng}:${maxLat}`;
+                if (lastStateFit.current !== fitKey) {
+                    lastStateFit.current = fitKey;
+                    map.fitBounds([[minLng, minLat], [maxLng, maxLat]], { padding: 60, absolutePadding: true, duration: reduceMotion ? 0 : 1200, maxZoom: 9 });
+                }
             }
         }
-    }, [mapLoaded, selectedState, stateDetailGeoJson, countyRecords]);
+    }, [mapLoaded, selectedState, stateDetailGeoJson, countyRecords, reduceMotion]);
 
     // Close the map popup when the view changes.
     useEffect(() => {
@@ -1339,7 +1356,7 @@ export function TemperatureMap() {
     }, [loading, mapLoaded, renderKey, viewMode]);
 
     return (
-        <div data-testid="temperature-map" data-map-state={error || mapFailure ? 'error' : mapLoaded && !loading && renderedView === renderKey ? 'ready' : 'loading'} className="relative h-full w-full [&_.maplibregl-ctrl-group_button]:h-11 [&_.maplibregl-ctrl-group_button]:w-11">
+        <div data-testid="temperature-map" data-map-state={error || mapFailure ? 'error' : mapLoaded && !loading && renderedView === renderKey && basemapState !== 'loading' ? basemapState === 'unavailable' ? 'degraded' : 'ready' : 'loading'} className="relative h-full w-full [&_.maplibregl-ctrl-group_button]:h-11 [&_.maplibregl-ctrl-group_button]:w-11">
             <div ref={mapContainer} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
 
             {(error || mapFailure) && (
@@ -1348,7 +1365,7 @@ export function TemperatureMap() {
                         <p className="text-lg mb-2">{mapFailure ? 'The temperature map could not start' : 'Failed to load temperature data'}</p>
                         <p className="text-sm text-zinc-400 mb-4">{mapFailure ? 'Reload to try the map again.' : error}</p>
                         <button
-                            onClick={() => window.location.reload()}
+                            onClick={() => mapFailure ? window.location.reload() : retryData()}
                             className="px-4 py-2 text-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg border border-zinc-700 transition-colors"
                         >
                             Retry
@@ -1356,6 +1373,15 @@ export function TemperatureMap() {
                     </div>
                 </div>
             )}
+
+            {!mapFailure && basemapState === 'unavailable' && (
+                <div role="alert" className={`absolute inset-x-3 z-30 mx-auto max-w-md rounded-lg border border-amber-700 bg-zinc-950 p-3 text-sm text-zinc-200 shadow-xl md:bottom-auto md:top-4 ${panelOpen ? 'bottom-[calc(40dvh+0.75rem)]' : 'bottom-8'}`}>
+                    Map background unavailable. Records and filters still work.
+                    <button type="button" onClick={() => retryBasemap.current()} className="ml-2 min-h-11 rounded bg-zinc-700 px-3 text-white">Retry background</button>
+                </div>
+            )}
+
+            {!mapFailure && !loading && basemapState === 'loading' && <p role="status" className="pointer-events-none absolute inset-x-3 bottom-20 z-30 mx-auto w-fit rounded bg-zinc-900/95 px-4 py-2 text-sm text-zinc-200">Loading map background…</p>}
 
             {loading && (
                 <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
@@ -1370,6 +1396,7 @@ export function TemperatureMap() {
             <div ref={toolbarRef} className="absolute top-3 left-3 z-20 flex flex-col gap-1.5 max-w-[calc(100vw-4.5rem)] sm:max-w-md">
                 <div className="flex items-center gap-1.5 overflow-x-auto">
                     <Link
+                        id="temperature-controls"
                         to="/projects"
                         aria-label="Back to projects"
                         className="bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white px-2.5 sm:px-3 py-1.5 min-h-11 min-w-11 rounded-lg text-sm border border-zinc-700/50 hover:border-zinc-600 transition-colors"
@@ -1391,7 +1418,7 @@ export function TemperatureMap() {
                         onClick={() => setUseCelsius(c => !c)}
                         className="bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white px-2.5 py-1.5 min-h-11 min-w-11 rounded-lg text-sm font-semibold border border-zinc-700/50 hover:border-zinc-600 transition-colors"
                         title={useCelsius ? 'Switch to °F' : 'Switch to °C'}
-                        aria-label={useCelsius ? 'Switch to Fahrenheit' : 'Switch to Celsius'}
+                        aria-label={useCelsius ? '°C. Switch to Fahrenheit' : '°F. Switch to Celsius'}
                     >
                         {useCelsius ? '°C' : '°F'}
                     </button>
@@ -1402,7 +1429,7 @@ export function TemperatureMap() {
                         aria-label={panelOpen ? 'Hide summary panel' : 'Show summary panel'}
                         aria-expanded={panelOpen}
                     >
-                        <span aria-hidden="true">{panelOpen ? '▾' : '▴'}</span><span className="hidden sm:inline"> {panelOpen ? 'Hide Panel' : 'Show Panel'}</span>
+                        <span aria-hidden="true">{panelOpen ? '▾' : '▴'}</span><span className="hidden sm:inline"> {panelOpen ? 'Hide summary panel' : 'Show summary panel'}</span>
                     </button>
                 </div>
                 <div className="flex gap-0.5 bg-zinc-900/80 backdrop-blur rounded-lg border border-zinc-700/50 p-0.5 overflow-x-auto">

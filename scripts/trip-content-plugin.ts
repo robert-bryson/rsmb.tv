@@ -99,7 +99,7 @@ export function tripContentPlugin(): Plugin {
                     }
                 }
                 const hero = manifest?.photos.find(photo => photo.id === manifest.hero);
-                const source = pageMetadataHtml(originalTemplate, articleMetadata(post, hero));
+                const source = pageMetadataHtml(originalTemplate, articleMetadata(post, hero), hero);
                 // Both historic collections still redirect client-side to the canonical collection.
                 for (const collection of ['blog', 'trips']) {
                     this.emitFile({ type: 'asset', fileName: `${collection}/${post.slug}.html`, source });

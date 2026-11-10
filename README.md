@@ -81,6 +81,7 @@ See the [prefetch guide](docs/intent-prefetch.md) for allowed resources, limits,
 | `npm run test:temperature-records` | Run the historical temperature pipeline tests |
 | `npm run test:temperatures:browser` | Build and test the temperature map with production assets |
 | `npm run test:page-recovery` | Test intent prefetch, page-download recovery, and project layout in a production bundle |
+| `npm run test:accessibility` | Scan production reading pages, map controls, and expanded dialogs with axe; check navigation and shortcut settings |
 | `npm run test:release-validation` | Test the release validator against local browser failure fixtures |
 | `npm run test:coverage` | Run tests with V8 coverage report |
 | `npm run watch` | Run terminal operations dashboard (`scripts/aws-watch.tsx`) |
@@ -231,6 +232,12 @@ Set `PLAYWRIGHT_WEBKIT=1` to include WebKit in the local fixture suite.
 Performance measurement tests run only in Chromium because they require its DevTools Protocol.
 The flight layout-shift check also requires Chromium's Layout Instability API.
 WebKit runs the other flight startup and accessibility checks.
+The production page-recovery suite includes axe scans at phone and desktop widths.
+Use `PLAYWRIGHT_WEBKIT=1 npm run test:accessibility` to run only those scans and their interaction checks.
+Automated scans complement keyboard and assistive-technology testing.
+Run the full unit suite before browser suites.
+Two unit checks build the production bundle and have 30-second limits.
+Parallel local builds can exceed those limits.
 
 Tornado browser tests use fixed tracks and map tiles.
 They check phone WebGL, desktop WebGL, and the SVG fallback.
@@ -343,12 +350,31 @@ Use `--settle-ms` to change the observation period. Use `--timeout-ms` to change
 HTTP failures, application crashes, failed visible images, and missing metrics fail the sample.
 The JSON report retains failed samples and their causes.
 Report files use atomic replacement.
-`scriptBytes` counts encoded JavaScript response bodies received before interaction.
-It includes module preloads and repeated network transfers. It excludes response headers, stylesheets, and images.
-An encoded body retains the server's compression.
+`scriptBytes` counts completed same-origin JavaScript bodies before interaction.
+It keeps the server's compression.
+The report declares this scope in `conditions.scriptByteScope`.
+`externalScriptRequests` counts completed third-party scripts.
+The browser can hide third-party body sizes. These responses do not become zero-byte application scripts.
+The byte count includes module preloads and repeated requests.
+It excludes response headers, stylesheets, and images.
+Resource Timing accounts for buffered responses whose incremental CDP byte events are zero.
+Completed responses without a Resource Timing entry use their compressed Content-Length when available.
+Missing or invalid counters fail the sample.
+Map routes also report `mapReady.durationMs` and the first usable `state` (`ready`, `degraded`, or `fallback`).
+This timing starts at document navigation. It is separate from LCP, which may describe a loading message.
+Atlas waits for route data and worker processing before it reports readiness.
+An empty filter result can be ready. Failed route downloads report an error.
+Recovered provider failures can produce valid samples with a degraded background.
+Fatal renderer errors and terminal map errors still fail the sample.
 `failedSamples` counts failed sample rows. `errors` records failures that affect the complete run, including browser cleanup failures.
 The command returns a nonzero status when either field reports a failure.
 These are laboratory samples. They do not establish real-device or population performance.
+
+Production analytics enables Umami's built-in Web Vitals collection.
+Custom `map-ready` and `map-startup-error` events include the feature, build revision, prefetch mode, and viewport class.
+Document visits measure from navigation start; client visits measure from the route commit.
+Events preserve the originating pathname, exclude query parameters, respect Do Not Track, and tolerate blocked analytics.
+Check the production Umami Performance view after deployment; local and preview hosts do not send analytics.
 
 The build uses WebGL rendering and the globe library's existing CPU heatmap fallback.
 The guarded build adapter removes unused WebGPU imports. It checks complete source hashes for the two modified dependencies.

@@ -1,7 +1,7 @@
 import { IntentLink } from '../IntentLink';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
-import { projects } from '../../content/projects';
+import { ProjectsNavigation } from './ProjectsNavigation';
 
 interface LayoutProps {
   children: ReactNode;
@@ -19,14 +19,6 @@ function isNavLinkActive(pathname: string, to: string) {
 
 function getNavLinkClassName(isActive: boolean) {
   return `hover:text-violet-400 ${isActive ? 'text-violet-400' : 'text-zinc-400'}`;
-}
-
-function getProjectLinkClassName(isActive: boolean) {
-  const activeClassName = isActive
-    ? 'bg-zinc-800/70 text-violet-300'
-    : 'text-zinc-400';
-
-  return `block truncate px-4 py-1.5 hover:bg-zinc-800/60 hover:text-violet-400 ${activeClassName}`;
 }
 
 export function Layout({ children }: LayoutProps) {
@@ -101,54 +93,26 @@ export function Layout({ children }: LayoutProps) {
 
       {/* Header */}
       <header ref={headerRef} onFocusCapture={() => setIsHeaderVisible(true)} className={`site-header sticky top-0 z-40 border-b border-zinc-800/70 bg-[#0a0a0a]/95 backdrop-blur transition-transform duration-200 ease-out motion-reduce:transition-none ${isHeaderVisible ? 'translate-y-0' : '-translate-y-full'}`}>
-        <nav className="max-w-3xl mx-auto px-6 py-4 flex justify-between items-center">
+        <nav className="max-w-3xl mx-auto px-6 py-2 flex justify-between items-center" aria-label="Main navigation">
           <IntentLink
             to="/"
-            className="text-lg font-medium text-zinc-100 hover:text-violet-400"
+            aria-current={location.pathname === '/' ? 'page' : undefined}
+            className="inline-flex min-h-11 items-center text-lg font-medium text-zinc-100 hover:text-violet-400"
           >
             rsmb
           </IntentLink>
-          <ul className="flex gap-6 text-sm">
+          <ul className="flex items-center gap-3 sm:gap-6 text-sm">
             {navLinks.map(({ to, label, activePaths }) => {
               const isActive = (activePaths ?? [to]).some((path) => isNavLinkActive(location.pathname, path));
               if (to === '/projects') {
-                return (
-                  <li
-                    key={to}
-                    className="group relative"
-                  >
-                    <IntentLink
-                      to={to}
-                      aria-haspopup="true"
-                      className={getNavLinkClassName(isActive)}
-                    >
-                      {label}
-                    </IntentLink>
-                    <div className="invisible absolute right-0 top-full z-50 min-w-52 pt-2 opacity-0 transition-opacity group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-                      <ul
-                        aria-label="Project pages"
-                        className="rounded-lg border border-zinc-800 bg-zinc-900 py-1 shadow-lg"
-                      >
-                        {projects.map((project) => (
-                          <li key={project.slug}>
-                            <IntentLink
-                              to={`/projects/${project.slug}`}
-                              className={getProjectLinkClassName(isNavLinkActive(location.pathname, `/projects/${project.slug}`))}
-                            >
-                              {project.title}
-                            </IntentLink>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </li>
-                );
+                return <ProjectsNavigation key={`projects:${location.pathname}`} pathname={location.pathname} active={isActive} />;
               }
               return (
                 <li key={to}>
                   <IntentLink
                     to={to}
-                    className={getNavLinkClassName(isActive)}
+                    aria-current={isActive ? location.pathname === to ? 'page' : 'location' : undefined}
+                    className={`inline-flex min-h-11 items-center ${getNavLinkClassName(isActive)}`}
                   >
                     {label}
                   </IntentLink>
@@ -160,7 +124,7 @@ export function Layout({ children }: LayoutProps) {
       </header>
 
       {/* Main content */}
-      <main id="main-content" className="site-content flex-1 w-full">
+      <main id="main-content" tabIndex={-1} className="site-content flex-1 w-full">
         <div className="site-content-inner max-w-3xl mx-auto px-6 py-12 w-full">
           {children}
         </div>

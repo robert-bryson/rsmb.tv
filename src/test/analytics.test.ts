@@ -1,9 +1,11 @@
-import { afterEach, describe, expect, it } from 'vitest'
-import { initializeUmamiAnalytics } from '../utils/analytics'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { initializeUmamiAnalytics, trackAnalyticsEvent } from '../utils/analytics'
 
 describe('initializeUmamiAnalytics', () => {
     afterEach(() => {
+        document.getElementById('umami-analytics')?.dispatchEvent(new Event('error'))
         document.getElementById('umami-analytics')?.remove()
+        vi.unstubAllGlobals()
     })
 
     it('adds the configured deferred tracker to the document head in production', () => {
@@ -19,6 +21,7 @@ describe('initializeUmamiAnalytics', () => {
             domains: 'www.rsmb.tv',
             excludeSearch: 'true',
             doNotTrack: 'true',
+            performance: 'true',
         })
     })
 
@@ -34,5 +37,30 @@ describe('initializeUmamiAnalytics', () => {
         initializeUmamiAnalytics({ websiteId: 'website-id', hostname: 'www.rsmb.tv' })
 
         expect(document.querySelectorAll('#umami-analytics')).toHaveLength(1)
+    })
+
+    it('queues bounded events until the tracker loads and retains the original route', () => {
+        initializeUmamiAnalytics({ hostname: 'www.rsmb.tv' })
+        const location = { hostname: 'www.rsmb.tv', pathname: '/projects/flights/map' }
+        const target = { location, umami: undefined as undefined | { track: ReturnType<typeof vi.fn> } }
+        vi.stubGlobal('window', target)
+        for (let index = 0; index < 10; index++) trackAnalyticsEvent('map-ready', { index })
+        location.pathname = '/about'
+        target.umami = { track: vi.fn() }
+        document.getElementById('umami-analytics')!.dispatchEvent(new Event('load'))
+        expect(target.umami.track).toHaveBeenCalledTimes(8)
+        const payload = target.umami.track.mock.calls[0][0]({ url: '/about?private=value' })
+        expect(payload).toMatchObject({ name: 'map-ready', url: '/projects/flights/map', data: { index: 2 } })
+    })
+
+    it('respects Do Not Track and isolates tracker failures', () => {
+        initializeUmamiAnalytics({ hostname: 'www.rsmb.tv' })
+        const track = vi.fn(() => { throw new Error('Tracker unavailable') })
+        vi.stubGlobal('window', { location: { hostname: 'www.rsmb.tv', pathname: '/' }, umami: { track } })
+        vi.stubGlobal('navigator', { doNotTrack: '1' })
+        trackAnalyticsEvent('map-ready', {})
+        expect(track).not.toHaveBeenCalled()
+        vi.stubGlobal('navigator', { doNotTrack: '0' })
+        expect(() => trackAnalyticsEvent('map-ready', {})).not.toThrow()
     })
 })

@@ -4,7 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { chromium, type Browser } from '@playwright/test';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { measurePerformance, parsePerformanceOptions, validatePerformanceSample } from '../measure-performance.js';
+import { measurePerformance, parsePerformanceOptions, validatePerformanceSample, scriptBodyBytes } from '../measure-performance.js';
 
 const roots: string[] = [];
 afterEach(async () => {
@@ -98,9 +98,17 @@ async function browserFixture({ status = 200, applicationError = '', control = '
     function receiveBody(requestId: string, encodedDataLength: number) {
         listeners.get('Network.dataReceived')?.({ requestId, encodedDataLength });
     }
+    const resources: Array<{ name: string; encodedBodySize: number; decodedBodySize: number; transferSize: number }> = [];
     function receive(transfer: NetworkTransfer) {
+        resources.push({ name: transfer.url ?? 'https://example.test/script.js', encodedBodySize: transfer.bytes, decodedBodySize: transfer.bytes * 2, transferSize: transfer.bytes + 300 });
         listeners.get('Network.responseReceived')?.({ requestId: transfer.requestId, type: transfer.type, response: { mimeType: transfer.mimeType, url: transfer.url } });
         receiveBody(transfer.requestId, transfer.bytes);
+        const request = {
+            resourceType: () => transfer.type.toLowerCase(),
+            sizes: async () => ({ responseBodySize: transfer.bytes }),
+        };
+        pageEvents.get('response')?.({ request: () => request, headers: () => ({ 'content-type': transfer.mimeType }), url: () => transfer.url ?? 'https://example.test/script.js', ok: () => true });
+        pageEvents.get('requestfinished')?.(request);
     }
     const locator = (name: string) => ({
         count: vi.fn(async () => Number(control === name)),
@@ -128,18 +136,67 @@ async function browserFixture({ status = 200, applicationError = '', control = '
                 if (applicationError) onError(new Error(applicationError));
                 return sample().metrics;
             })
+            .mockImplementationOnce(async () => resources)
             .mockResolvedValueOnce(null),
         getByRole: vi.fn((role: string, options?: { name?: string }) => role === 'link' ? controls.projects : options?.name ? controls.pause : controls.button),
         keyboard: { press: vi.fn(async () => {}) },
     };
     const context = { newPage: vi.fn(async () => page), newCDPSession: vi.fn(async () => session), close: vi.fn(async () => {}) };
     const browser = { newContext: vi.fn(async () => context), version: () => 'test Chromium', close: vi.fn(async () => {}) };
-    const options = parsePerformanceOptions(['--samples', '1', '--paths', '/', '--out', path.join(directory, 'report.json'), '--settle-ms', '0']);
-    return { browser: browser as unknown as Browser, context, page, controls, options, receive, receiveBody,
+    const options = parsePerformanceOptions(['--base-url', 'https://example.test', '--samples', '1', '--paths', '/', '--out', path.join(directory, 'report.json'), '--settle-ms', '0']);
+    return { browser: browser as unknown as Browser, context, page, controls, options, receive, receiveBody, resources,
         emit: (event: string, payload: unknown) => pageEvents.get(event)?.(payload) };
 }
 
+describe('body size accounting', () => {
+    it('uses compressed Resource Timing bodies and excludes protocol overhead', () => {
+        expect(scriptBodyBytes([{ url: '/chunk.js', contentLength: null }], [
+            { name: '/chunk.js', encodedBodySize: 726, decodedBodySize: 1800, transferSize: 1026 },
+        ])).toBe(726);
+    });
+    it('uses Content-Length for an opaque cross-origin response', () => {
+        expect(scriptBodyBytes([{ url: 'https://tracker.test/script.js', contentLength: 200 }], [
+            { name: 'https://tracker.test/script.js', encodedBodySize: 0, decodedBodySize: 0, transferSize: 0 },
+        ])).toBe(200);
+    });
+    it('rejects opaque cross-origin bodies whose length is unavailable', () => {
+        expect(() => scriptBodyBytes([{ url: 'https://tracker.test/script.js', contentLength: null }], []))
+            .toThrow(/body size unavailable/);
+    });
+});
+
 describe('measurement lifecycle', () => {
+    it('allows a recoverable provider error instead of rejecting a usable map', async () => {
+        const fixture = await browserFixture();
+        fixture.page.waitForTimeout.mockImplementationOnce(async () => {
+            fixture.emit('console', { type: () => 'error', text: () => 'MapLibre error: AJAXError: Service Unavailable (503): https://basemaps.example.test/tile.png' });
+        });
+        const report = await measurePerformance(fixture.options, { browser: fixture.browser, onSample: vi.fn() });
+        expect(report.failedSamples).toBe(0);
+        expect(report.results[0].errors).toEqual([]);
+    });
+    it('reports the first-party byte scope and counts external scripts separately', async () => {
+        const fixture = await browserFixture({ transfers: [
+            { requestId: 'application', type: 'Script', mimeType: 'text/javascript', bytes: 100 },
+            { requestId: 'tracker', type: 'Script', mimeType: 'text/javascript', bytes: NaN, url: 'https://tracker.test/script.js' },
+        ] });
+        const report = await measurePerformance(fixture.options, { browser: fixture.browser, onSample: vi.fn() });
+        expect(report.failedSamples).toBe(0);
+        expect(report.conditions.scriptByteScope).toBe('same-origin encoded bodies');
+        expect(report.results[0]).toMatchObject({ scriptBytes: 100, externalScriptRequests: 1 });
+    });
+    it('accepts a genuine empty JavaScript body reported by Resource Timing', async () => {
+        const fixture = await browserFixture({ transfers: [{ requestId: 'empty-script', type: 'Script', mimeType: 'text/javascript', bytes: 0 }] });
+        const report = await measurePerformance(fixture.options, { browser: fixture.browser, onSample: vi.fn() });
+        expect(report.failedSamples).toBe(0);
+        expect(report.results[0].scriptBytes).toBe(0);
+    });
+    it('rejects unavailable byte counters instead of reporting a successful zero', async () => {
+        const fixture = await browserFixture({ transfers: [{ requestId: 'script', type: 'Script', mimeType: 'text/javascript', bytes: NaN }] });
+        const report = await measurePerformance(fixture.options, { browser: fixture.browser, onSample: vi.fn() });
+        expect(report.failedSamples).toBe(1);
+        expect(report.results[0].error).toMatch(/body size unavailable/);
+    });
     it('checks actual readiness callbacks without treating offscreen failures as load failures', async () => {
         const fixture = await browserFixture();
         const image = (top: number, naturalWidth: number) => ({
@@ -147,6 +204,7 @@ describe('measurement lifecycle', () => {
             getBoundingClientRect: () => ({ width: 100, height: 100, left: 0, right: 100, top, bottom: top + 100 }),
         });
         vi.stubGlobal('window', { innerHeight: 844, innerWidth: 390, __metrics: sample().metrics });
+        vi.stubGlobal('performance', { getEntriesByType: () => fixture.resources });
         vi.stubGlobal('document', { querySelector: () => ({}), images: [image(0, 100), image(1000, 0)], fonts: { status: 'loaded' } });
         fixture.page.waitForFunction.mockImplementation(async (predicate: () => unknown) => { if (!predicate()) throw new Error('Assets not ready'); });
         fixture.page.evaluate.mockReset().mockImplementation(async (evaluate: () => unknown) => evaluate());
@@ -166,13 +224,13 @@ describe('measurement lifecycle', () => {
             fixture.receiveBody('script-1', 25);
             fixture.receiveBody('style', 50);
             return sample().metrics;
-        }).mockResolvedValueOnce(null);
+        }).mockImplementationOnce(async () => fixture.resources).mockResolvedValueOnce(null);
         fixture.controls.pause.click.mockImplementation(async () => {
             fixture.receive({ requestId: 'interactive-script', type: 'Script', mimeType: 'application/javascript', bytes: 400 });
         });
         const report = await measurePerformance(fixture.options, { browser: fixture.browser, onSample: vi.fn() });
         expect(report.failedSamples).toBe(0);
-        expect(report.results[0].scriptBytes).toBe(275);
+        expect(report.results[0].scriptBytes).toBe(250);
     });
 
     it.each([200, 503])('persists cleanup failures without counting the HTTP %s sample twice', async status => {

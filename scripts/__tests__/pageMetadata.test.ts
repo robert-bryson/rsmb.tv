@@ -57,6 +57,20 @@ describe('public page discovery', () => {
 });
 
 describe('crawler HTML', () => {
+    it('preloads the article hero once and clears the hint when the template changes routes', () => {
+        const hero = { src: '/beach-1600.webp', srcSet: '/beach-480.webp 480w, /beach-1600.webp 1600w' };
+        const metadata = articleMetadata({ slug: 'coast', title: 'Coast', description: 'A ride', date: '2026-01-01', tags: [], format: 'trip' }, hero);
+        const html = pageMetadataHtml('<head></head>', metadata, hero);
+        const page = new JSDOM(pageMetadataHtml(html, metadata, hero)).window.document;
+        expect(page.querySelectorAll('link[data-page-image-preload]')).toHaveLength(1);
+        const preload = page.querySelector('link[as="image"]')!;
+        expect(preload).toHaveAttribute('imagesrcset', hero.srcSet);
+        expect(preload).toHaveAttribute('imagesizes', '100vw');
+        expect(preload).toHaveAttribute('fetchpriority', 'high');
+        expect(preload.hasAttribute('href')).toBe(false);
+        expect(new JSDOM(pageMetadataHtml(html, staticPageMetadata('/about'))).window.document.querySelector('link[data-page-image-preload]')).toBeNull();
+    });
+
     it('emits one homepage preload and removes it when the template is used for another page', () => {
         const template = fs.readFileSync(new URL('../../index.html', import.meta.url), 'utf8');
         const home = pageMetadataHtml(template, staticPageMetadata('/'));

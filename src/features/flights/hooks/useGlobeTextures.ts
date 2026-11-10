@@ -7,6 +7,8 @@ interface TextureLoadingState {
     error: Error | null;
 }
 
+export const GLOBE_TEXTURE_TIMEOUT_MS = 30_000;
+
 /** Preloads a texture batch. Retry starts a fresh batch and renderer instance. */
 export function useGlobeTextures(basemap?: BasemapConfig) {
     const imageUrl = basemap?.image;
@@ -26,6 +28,11 @@ export function useGlobeTextures(basemap?: BasemapConfig) {
         let loadedCount = 0;
         let failed = false;
         let cancelled = false;
+        const timeout = setTimeout(() => {
+            if (cancelled || failed) return;
+            failed = true;
+            setState({ batch, isLoading: false, progress: 0, error: new Error('The globe background took too long to load. Please try again.') });
+        }, GLOBE_TEXTURE_TIMEOUT_MS);
 
         for (const url of textures) {
             const image = new Image();
@@ -37,6 +44,7 @@ export function useGlobeTextures(basemap?: BasemapConfig) {
                 image.onload = null;
                 image.onerror = null;
                 loadedCount++;
+                if (loadedCount === textures.length) clearTimeout(timeout);
                 setState({
                     batch, error: null,
                     isLoading: loadedCount < textures.length,
@@ -46,12 +54,14 @@ export function useGlobeTextures(basemap?: BasemapConfig) {
             image.onerror = () => {
                 if (cancelled || failed) return;
                 failed = true;
+                clearTimeout(timeout);
                 setState({ isLoading: false, progress: 0, error: new Error(`Failed to load texture: ${url}`), batch });
             };
             image.src = url;
         }
         return () => {
             cancelled = true;
+            clearTimeout(timeout);
             for (const image of images) {
                 image.onload = null;
                 image.onerror = null;

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { usePersistedState } from '../../../hooks/usePersistedState';
 
 interface UseKeyboardShortcutsOptions {
   onToggleStats: () => void;
@@ -38,12 +39,24 @@ export function useKeyboardShortcuts({
   onHelpChange,
 }: UseKeyboardShortcutsOptions) {
   const [internalShowHelp, setInternalShowHelp] = useState(false);
+  const [storedEnabled, setShortcutsEnabled] = usePersistedState<boolean>('flights-character-shortcuts', true);
+  const shortcutsEnabled = storedEnabled !== false;
   const showHelp = controlledShowHelp ?? internalShowHelp;
   const setShowHelp = onHelpChange ?? setInternalShowHelp;
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (isEditableTarget(e.target) || e.ctrlKey || e.metaKey || e.altKey) {
+      if (e.defaultPrevented || e.isComposing || isEditableTarget(e.target) || e.ctrlKey || e.metaKey || e.altKey
+        || (!shortcutsEnabled && e.key !== 'Escape')) {
+        return;
+      }
+
+      // The help dialog owns keyboard input while it is open.
+      if (showHelp) {
+        if (e.key === 'Escape' || e.key.toLowerCase() === 'h') {
+          e.preventDefault();
+          setShowHelp(false);
+        }
         return;
       }
 
@@ -106,7 +119,7 @@ export function useKeyboardShortcuts({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onToggleStats, onToggleFilter, onResetView, onClearSelection, onColorModeChange, onToggleAllAirports, onToggleUSStates, onShortcut, setShowHelp]);
+  }, [onToggleStats, onToggleFilter, onResetView, onClearSelection, onColorModeChange, onToggleAllAirports, onToggleUSStates, onShortcut, setShowHelp, shortcutsEnabled, showHelp]);
 
-  return { showHelp, setShowHelp };
+  return { showHelp, setShowHelp, shortcutsEnabled, setShortcutsEnabled };
 }

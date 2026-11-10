@@ -40,7 +40,7 @@ function TripGalleryContent({ galleryId }: { galleryId: string }) {
     const portraitOnly = galleryPhotos.length === 1 && galleryPhotos[0].height > galleryPhotos[0].width;
     return (
         <section aria-labelledby={elementId} className={`${portraitOnly ? '' : 'trip-breakout'} my-10`}>
-            <h2 id={elementId} className="sr-only">Photo gallery</h2>
+            <h2 id={elementId} className="sr-only">{galleryId.replaceAll('-', ' ')} photo gallery</h2>
             <div ref={galleryRef} className="trip-gallery-grid" style={{ gap: TRIP_GALLERY_GAP }}>
                 {galleryPhotos.map((photo, index) => {
                     if (index >= visibleCount) return <TripPhotoLink key={photo.id} photo={photo} hidden />;

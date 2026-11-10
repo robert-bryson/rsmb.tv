@@ -115,7 +115,7 @@ function CountryRegions({ country, activeCountry, activeRegion, createUrl }: Omi
                     {expanded ? 'Show less' : `See all (${country.regions.length})`}
                 </button>
             )}
-            {country.regions.length === 0 && <span className="text-xs text-zinc-500">{country.count} {country.count === 1 ? 'post' : 'posts'}</span>}
+            {country.regions.length === 0 && <span className="text-xs text-zinc-400">{country.count} {country.count === 1 ? 'post' : 'posts'}</span>}
         </div>
     );
 }
@@ -125,7 +125,7 @@ export function PostRegionFilters(props: RegionFilterProps) {
     return (
         <nav aria-label="Post regions" className="space-y-3">
             <div className="flex flex-wrap items-baseline gap-3">
-                <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500">Regions</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Regions</p>
                 <Link
                     to={props.createUrl()}
                     aria-current={active ? 'page' : undefined}

@@ -40,6 +40,8 @@ const mapMocks = vi.hoisted(() => {
             }
         }
         getSource(id: string) { return this.sources.get(id); }
+        getStyle() { return { sources: Object.fromEntries(this.sources) }; }
+        setStyle = vi.fn(() => { this.layers.clear(); this.sources.clear(); });
         isSourceLoaded = vi.fn((id: string) => this.sources.has(id));
         off(type: string, callback: Listener) { this.listeners = this.listeners.filter(listener => listener.type !== type || listener.callback !== callback); }
         addSource(id: string, source: SourceSpecification) { this.sources.set(id, { ...source, setData: vi.fn() }); }
@@ -112,14 +114,14 @@ function allTimeData() {
 function data(overrides: Partial<ReturnType<typeof useTemperatureData>> = {}) {
     return {
         stateRecords: null, countyRecords: null, recentRecords: null, summary: null,
-        loading: false, error: null, stateHighs: [], stateLows: [], ...overrides,
+        loading: false, error: null, retry: vi.fn(), stateHighs: [], stateLows: [], ...overrides,
     };
 }
 function mount(path = '/projects/temperature-records/map') {
     const tree = () => <MemoryRouter initialEntries={[path]}><TemperatureMap /></MemoryRouter>;
     const rendered = render(tree());
     const map = mapMocks.Map.instances.at(-1)!;
-    act(() => map.fire('load'));
+    act(() => { map.fire('style.load'); map.fire('idle'); });
     return { map, refresh: () => rendered.rerender(tree()) };
 }
 function label(map: InstanceType<typeof mapMocks.Map>, id: string) {
@@ -137,6 +139,19 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
 describe('temperature map record rendering', () => {
+    it('restores state layers without refitting the camera or duplicating selection handlers', () => {
+        vi.mocked(useTemperatureData).mockReturnValue(data(allTimeData()));
+        const { map } = mount('/projects/temperature-records/map?view=state');
+        fireEvent.click(screen.getByRole('button', { name: /Kansas/ }));
+        expect(map.fitBounds).toHaveBeenCalled();
+        map.fitBounds.mockClear();
+        map.setStyle();
+        act(() => map.fire('style.load'));
+        act(() => map.fire('render'));
+        expect(map.getSource('state-detail-records')).toBeDefined();
+        expect(map.fitBounds).not.toHaveBeenCalled();
+        expect(map.listeners.filter(listener => listener.type === 'click' && listener.layers?.includes('state-highs'))).toHaveLength(1);
+    });
     it('shows repaired monthly records in the Monthly filter and its counts', () => {
         const records = [record({ uid: 1, stationName: 'Monthly station', recordScope: 'monthly', tempF: 83, prevRecordF: 82, prevRecordDate: '1950-11-02' }), record({ uid: 2, stationName: 'Daily station' })];
         vi.mocked(useTemperatureData).mockReturnValue(data({ recentRecords: recent(records) }));
@@ -213,15 +228,17 @@ describe('temperature map record rendering', () => {
         expect(consoleError).toHaveBeenCalledWith('MapLibre error:', message);
     });
 
-    it('keeps records ready after nonfatal map errors, including events without an error object', () => {
+    it('keeps record layers usable after a tile failure and reports a degraded background', () => {
         const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
         vi.mocked(useTemperatureData).mockReturnValue(data({ recentRecords: recent() }));
         const { map } = mount();
         act(() => map.fire('error', [], { error: new Error('Basemap tile unavailable') }));
         act(() => map.fire('error'));
+        act(() => map.fire('style.load'));
         act(() => map.fire('render'));
-        expect(screen.getByTestId('temperature-map')).toHaveAttribute('data-map-state', 'ready');
-        expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+        expect(screen.getByTestId('temperature-map')).toHaveAttribute('data-map-state', 'degraded');
+        expect(screen.getByRole('alert')).toHaveTextContent('Records and filters still work');
+        expect(map.getSource('broken-records')).toBeDefined();
         expect(consoleError).toHaveBeenCalledTimes(2);
     });
 
@@ -306,7 +323,7 @@ describe('temperature map record rendering', () => {
     it('uses the current unit for hover text and selects the top marker once', () => {
         vi.mocked(useTemperatureData).mockReturnValue(data({ recentRecords: recent() }));
         const { map } = mount();
-        fireEvent.click(screen.getByRole('button', { name: 'Switch to Celsius' }));
+        fireEvent.click(screen.getByRole('button', { name: /Switch to Celsius$/ }));
         act(() => map.fire('mousemove', [feature('broken-highs'), feature('broken-glow', record({ uid: 2, stationName: 'Neighbor' }))]));
         expect(mapMocks.Popup.instances).toHaveLength(1);
         expect(mapMocks.Popup.instances[0].element.textContent).toContain('32.2°C');

@@ -1,4 +1,4 @@
-import type { PageMetadata } from '../src/utils/pageMetadata.ts';
+import type { MetadataImage, PageMetadata } from '../src/utils/pageMetadata.ts';
 import { getProjectPreview } from '../src/content/projectImages.ts';
 import { homeProjects, HOME_PROJECT_IMAGE_SIZES } from '../src/content/projects.ts';
 import { canonicalUrl } from '../src/utils/siteMetadata.ts';
@@ -19,7 +19,7 @@ function homeProjectImagePreload(): string | undefined {
 }
 
 /** Render crawler metadata without executing React, maps, or post content. */
-export function pageMetadataHtml(template: string, metadata: PageMetadata): string {
+export function pageMetadataHtml(template: string, metadata: PageMetadata, hero?: MetadataImage & { srcSet?: string }): string {
     const title = metadata.title === 'rsmb' ? 'rsmb' : `${metadata.title} — rsmb`;
     const values: Record<string, string> = {
         description: metadata.description,
@@ -40,6 +40,11 @@ export function pageMetadataHtml(template: string, metadata: PageMetadata): stri
     if (metadata.ogUrl === canonicalUrl('/')) {
         const preload = homeProjectImagePreload();
         if (preload) tags.push(preload);
+    } else if (hero && metadata.ogType === 'article') {
+        const source = hero.srcSet
+            ? `imagesrcset="${escapeHtml(hero.srcSet)}" imagesizes="100vw"`
+            : `href="${escapeHtml(hero.src)}"`;
+        tags.push(`<link rel="preload" as="image" data-page-image-preload ${source} fetchpriority="high" />`);
     }
     // A graph keeps related entities in one script; the runtime replaces it on startup.
     const schema = metadata.breadcrumb

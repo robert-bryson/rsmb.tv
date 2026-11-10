@@ -5,6 +5,8 @@ import { intentPrefetch } from './navigation/intentPrefetch';
 import { Layout } from './components/Layout';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ScrollToTop } from './components/ScrollToTop';
+import { RouteOrientation } from './components/RouteOrientation';
+import { MapPerformance } from './components/MapPerformance';
 import { canonicalPathname } from './utils/siteMetadata';
 import { Home } from './pages/Home';
 
@@ -47,7 +49,8 @@ export function AdvAtlasRedirect() {
 
 function LoadingFallback() {
   return (
-    <div className="animate-pulse space-y-6 p-8 max-w-2xl min-h-[60vh]">
+    <div role="status" className="animate-pulse motion-reduce:animate-none space-y-6 p-8 max-w-2xl min-h-[60vh]">
+      <span className="sr-only">Loading page…</span>
       <div className="h-7 w-48 bg-zinc-800 rounded" />
       <div className="h-4 w-32 bg-zinc-800/40 rounded" />
       <div className="space-y-2">
@@ -109,9 +112,12 @@ function PageContent() {
   useLayoutEffect(() => intentPrefetch.cancelPending(), [location.key]);
   return (
     <Layout>
+      <RouteOrientation />
+      <MapPerformance />
       <ErrorBoundary key={location.pathname}>
         <Suspense fallback={<LoadingFallback />}>
           <AppRoutes />
+          <span hidden data-route-path={location.pathname} />
         </Suspense>
       </ErrorBoundary>
     </Layout>

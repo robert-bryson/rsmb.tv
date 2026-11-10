@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { afterEach, describe, it, expect, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useKeyboardShortcuts } from '../features/flights/hooks/useKeyboardShortcuts';
 
@@ -19,7 +19,28 @@ function pressKey(key: string, opts: Partial<KeyboardEventInit> = {}) {
     window.dispatchEvent(new KeyboardEvent('keydown', { key, ...opts }));
 }
 
+afterEach(() => localStorage.removeItem('flights-character-shortcuts'));
+
 describe('useKeyboardShortcuts', () => {
+    it('persists disabled character shortcuts, including Shift combinations, while retaining Escape', () => {
+        const handlers = createHandlers();
+        const first = renderHook(() => useKeyboardShortcuts(handlers));
+        act(() => first.result.current.setShortcutsEnabled(false));
+        first.unmount();
+        const next = renderHook(() => useKeyboardShortcuts(handlers));
+        expect(next.result.current.shortcutsEnabled).toBe(false);
+        act(() => {
+            for (const key of ['h', 's', 'f', 'r', '1', '4']) pressKey(key);
+            pressKey('A', { shiftKey: true });
+            pressKey('U', { shiftKey: true });
+        });
+        expect(handlers.onShortcut).not.toHaveBeenCalled();
+        act(() => pressKey('Escape'));
+        expect(handlers.onClearSelection).toHaveBeenCalledOnce();
+        act(() => next.result.current.setShortcutsEnabled(true));
+        act(() => pressKey('s'));
+        expect(handlers.onToggleStats).toHaveBeenCalledOnce();
+    });
     it('toggles help with H key', () => {
         const handlers = createHandlers();
         const { result } = renderHook(() => useKeyboardShortcuts(handlers));
@@ -82,7 +103,7 @@ describe('useKeyboardShortcuts', () => {
         expect(handlers.onResetView).toHaveBeenCalledOnce();
     });
 
-    it('calls onClearSelection and closes help on Escape', () => {
+    it('closes help with Escape before clearing map selection', () => {
         const handlers = createHandlers();
         const { result } = renderHook(() => useKeyboardShortcuts(handlers));
 
@@ -91,7 +112,31 @@ describe('useKeyboardShortcuts', () => {
         expect(result.current.showHelp).toBe(true);
 
         act(() => pressKey('Escape'));
+        expect(handlers.onClearSelection).not.toHaveBeenCalled();
+        expect(result.current.showHelp).toBe(false);
+        act(() => pressKey('Escape'));
         expect(handlers.onClearSelection).toHaveBeenCalledOnce();
+    });
+
+    it('does not change map controls behind an open help dialog', () => {
+        const handlers = createHandlers();
+        const { result } = renderHook(() => useKeyboardShortcuts(handlers));
+        act(() => pressKey('h'));
+        handlers.onShortcut.mockClear();
+        act(() => {
+            for (const key of ['s', 'f', 'r', '1', '4']) pressKey(key);
+            pressKey('A', { shiftKey: true });
+            pressKey('U', { shiftKey: true });
+        });
+        expect(handlers.onShortcut).not.toHaveBeenCalled();
+        expect(handlers.onResetView).not.toHaveBeenCalled();
+        expect(handlers.onToggleStats).not.toHaveBeenCalled();
+        expect(handlers.onToggleFilter).not.toHaveBeenCalled();
+        expect(handlers.onColorModeChange).not.toHaveBeenCalled();
+        expect(handlers.onToggleAllAirports).not.toHaveBeenCalled();
+        expect(handlers.onToggleUSStates).not.toHaveBeenCalled();
+        expect(result.current.showHelp).toBe(true);
+        act(() => pressKey('h'));
         expect(result.current.showHelp).toBe(false);
     });
 

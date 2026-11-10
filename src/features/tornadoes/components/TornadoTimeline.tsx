@@ -154,7 +154,7 @@ export function TornadoTimeline({
                                 type="button"
                                 onClick={() => setStride(1)}
                                 aria-pressed={stride === 1}
-                                className={`px-2 ${stride === 1 ? 'bg-zinc-500 text-zinc-950 font-semibold' : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200'}`}
+                                className={`px-2 ${stride === 1 ? 'bg-zinc-400 text-zinc-950 font-semibold' : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200'}`}
                             >
                                 1yr
                             </button>

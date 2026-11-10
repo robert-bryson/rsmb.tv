@@ -36,19 +36,19 @@ export function About() {
         </h2>
         <ul className="space-y-4 text-sm">
           <li className="flex gap-4">
-            <span className="text-zinc-500 w-28 shrink-0">Xentity</span>
+            <span className="text-zinc-400 w-28 shrink-0">Xentity</span>
             <span className="text-zinc-300">Federal geospatial projects — Data.gov, USFS EGP</span>
           </li>
           <li className="flex gap-4">
-            <span className="text-zinc-500 w-28 shrink-0">Microsoft</span>
+            <span className="text-zinc-400 w-28 shrink-0">Microsoft</span>
             <span className="text-zinc-300">Geospatial Engineer — Azure Cloud Infrastructure and Operations</span>
           </li>
           <li className="flex gap-4">
-            <span className="text-zinc-500 w-28 shrink-0">Startups</span>
+            <span className="text-zinc-400 w-28 shrink-0">Startups</span>
             <span className="text-zinc-300">Geospatial backend engineering</span>
           </li>
           <li className="flex gap-4">
-            <span className="text-zinc-500 w-28 shrink-0">State/County</span>
+            <span className="text-zinc-400 w-28 shrink-0">State/County</span>
             <span className="text-zinc-300">GIS applications for government agencies</span>
           </li>
         </ul>

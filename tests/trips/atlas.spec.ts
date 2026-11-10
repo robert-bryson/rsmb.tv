@@ -4,6 +4,25 @@ import { atlas, atlasCamera, expectAtlasUrl, followReport, geometry, mockAtlasAs
 
 test.beforeEach(async ({ page }) => mockAtlasAssets(page));
 
+test('map readiness waits for route downloads after the background renders', async ({ page }) => {
+    let release!: () => void;
+    const held = new Promise<void>(resolve => { release = resolve; });
+    await page.route('**/test-trip/*.geojson', async route => {
+        await held;
+        await route.fulfill({ json: geometry });
+    });
+    const background = page.waitForResponse(response => response.url().includes('basemaps.cartocdn.com') && response.ok());
+    try {
+        await page.goto(atlas);
+        await background;
+        await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+        await expect(page.getByTestId('trip-atlas-map')).toHaveAttribute('data-map-state', 'loading');
+        release();
+        await expect(page.getByTestId('trip-atlas-map')).toHaveAttribute('data-map-state', 'ready');
+        await expect(page.getByText('2/2 routes', { exact: false })).toBeVisible();
+    } finally { release(); }
+});
+
 test('project entry opens a playable map with published routes and accessible card selection', async ({ page }) => {
     await page.goto('/projects/adv-atlas');
     await expectAtlasUrl(page);

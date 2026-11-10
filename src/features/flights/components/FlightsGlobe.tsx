@@ -29,6 +29,7 @@ type GlobeSelection = Pick<ReturnType<typeof useFlightsFilters>,
   'selectedRoute' | 'selectedRouteAirports' | 'selectedCountry' | 'selectedRegion' | 'selectedFlightType'>;
 
 interface FlightsGlobeProps {
+  onReady: () => void;
   globeRef: RefObject<GlobeMethods | undefined>;
   navigationViewRef: RefObject<GlobeViewState | null>;
   basemap: BasemapConfig;
@@ -53,7 +54,7 @@ interface FlightsGlobeProps {
 
 /** Adapts filtered flight layers and selection to the WebGL renderer. */
 export function FlightsGlobe({
-  globeRef, navigationViewRef, basemap, selectedView, globeRotationEnabled, prefersReducedMotion,
+  globeRef, onReady, navigationViewRef, basemap, selectedView, globeRotationEnabled, prefersReducedMotion,
   animationEnabled, showFlightPaths, isMetric, selection, arcsData, staticArcsData, layers,
   onViewChange, onStopRotation, onRouteClick, onRouteHover, onPointClick, onPointHover, onBackgroundClick,
 }: FlightsGlobeProps) {
@@ -69,6 +70,7 @@ export function FlightsGlobe({
     tileUrl, onStopRotation, onViewChange,
   });
   const [terrainReady, setTerrainReady] = useState(false);
+  useEffect(() => { if (ready) onReady(); }, [ready, onReady]);
   useEffect(() => {
     if (!ready) return;
     const timer = setTimeout(() => setTerrainReady(true), 1000);

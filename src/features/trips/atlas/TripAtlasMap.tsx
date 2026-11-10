@@ -134,6 +134,7 @@ export default function TripAtlasMap(props: Props) {
         return () => document.removeEventListener('keydown', dismiss);
     }, []);
     const data = useMemo(() => combineAtlasRoutes(routes), [routes]);
+    const [renderedRoutes, setRenderedRoutes] = useState<{ map: maplibregl.Map; data: typeof data; attempt: number } | null>(null);
     const { dayBreaks, endpoints } = useAtlasRouteMarkers(selectedId, selectedId ? routes[selectedId]?.route : undefined);
     const getCurrent = useEffectEvent(() => props);
     const select = useEffectEvent((id?: string) => props.onSelect(id));
@@ -372,6 +373,21 @@ export default function TripAtlasMap(props: Props) {
 
     useEffect(() => {
         if (!map || mapRef.current !== map) return;
+        let active = true;
+        let wasLoaded = false;
+        const checkRoutes = () => {
+            if (!active || mapRef.current !== map) return;
+            const loaded = Boolean(map.getSource('atlas-routes') && map.isSourceLoaded('atlas-routes'));
+            if (loaded === wasLoaded) return;
+            wasLoaded = loaded;
+            setRenderedRoutes(loaded ? { map, data, attempt } : null);
+        };
+        map.on('render', checkRoutes);
+        return () => { active = false; map.off('render', checkRoutes); };
+    }, [map, data, attempt]);
+
+    useEffect(() => {
+        if (!map || mapRef.current !== map) return;
         (map.getSource('atlas-day-breaks') as maplibregl.GeoJSONSource | undefined)?.setData(dayBreaks);
     }, [map, dayBreaks]);
 
@@ -489,9 +505,14 @@ export default function TripAtlasMap(props: Props) {
         props.onHover(choicePreview.current.hoveredId ?? choicePreview.current.focusedId);
     };
     const retry = () => { setFailure(false); setTileFailure(false); setAttempt(value => value + 1); };
+    const routesFailed = entries.length > 0 && entries.every(entry => routes[entry.id]?.error);
+    const routesAvailable = entries.length === 0 || entries.some(entry => routes[entry.id]?.route);
+    const routesRendered = renderedRoutes?.map === map && renderedRoutes?.data === data && renderedRoutes?.attempt === attempt;
+    const mapState = failure || routesFailed ? 'error' : !routesAvailable || !routesRendered ? 'loading' : tileFailure ? 'degraded' : 'ready';
     return (
         <div className="absolute inset-0">
             <div ref={container} data-testid="trip-atlas-map" data-selected-trip={selectedId ?? ''} data-highlighted-trip={highlightedId ?? ''}
+                data-map-state={mapState}
                 onPointerLeave={() => { routeHover.current = null; props.onHover(undefined); }}
                 onPointerOver={event => { if (event.target !== mapRef.current?.getCanvas()) { routeHover.current = null; props.onHover(undefined); } }}
                 role="region" aria-label="Motorcycle trip routes. Dots mark day breaks; pins with a play symbol and stop square mark the selected trip's start and end. Choose a trip in the list to explore its route."

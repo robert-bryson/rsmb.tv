@@ -118,7 +118,7 @@ jobs:
       - name: Browser smoke tests
         run: npm run test:e2e
 
-      - name: Production intent prefetch, page-download recovery, and project layout
+      - name: Production accessibility, navigation, intent prefetch, and page recovery
         run: PLAYWRIGHT_WEBKIT=1 npm run test:page-recovery
 
       - name: Production temperature browser tests

@@ -91,6 +91,31 @@ for (const width of [390, 1280]) {
     });
 }
 
+for (const width of [390, 1280]) for (const density of [1, 2]) {
+    test(`article hero preload precedes JavaScript and shares its request at ${width}px density ${density}`, async ({ browser, baseURL }) => {
+        const context = await browser.newContext({ baseURL, viewport: { width, height: 900 }, deviceScaleFactor: density });
+        const page = await context.newPage();
+        await fixtureAssets(page);
+        let release!: () => void;
+        const gate = new Promise<void>(resolve => { release = resolve; });
+        const requests: string[] = [];
+        page.on('request', request => requests.push(request.url()));
+        await page.route(/\/assets\/index-[^/]+\.js$/, async route => { await gate; await route.continue(); });
+        try {
+            const early = page.waitForRequest(request => /\/test-trip\/photo-1(?:-\d+)?\.svg$/.test(new URL(request.url()).pathname));
+            await page.goto('/trips/coastal-test', { waitUntil: 'commit' });
+            const selected = (await early).url();
+            await expect(page.locator('#root img')).toHaveCount(0);
+            release();
+            await expect.poll(() => page.locator('.trip-hero img').evaluate(element => {
+                const image = element as HTMLImageElement;
+                return image.complete && image.naturalWidth ? image.currentSrc : '';
+            })).toBe(selected);
+            expect(requests.filter(url => url === selected)).toHaveLength(1);
+        } finally { release(); await context.close(); }
+    });
+}
+
 test('prefetch starts after sustained hover, reuses the route chunk, and preserves the current page', async ({ page }) => {
     const requests: string[] = [];
     page.on('request', request => { if (/\/About-[^/]+\.js$/.test(request.url())) requests.push(request.url()); });

@@ -9,6 +9,7 @@ interface ControlButtonsProps {
     globeRotationDisabled?: boolean;
     onShareUrl: () => void;
     copiedUrl: boolean;
+    onShowHelp?: () => void;
 }
 
 /**
@@ -23,9 +24,14 @@ export const ControlButtons = memo(function ControlButtons({
     globeRotationDisabled = false,
     onShareUrl,
     copiedUrl,
+    onShowHelp,
 }: ControlButtonsProps) {
     return (
         <div className="absolute bottom-[calc(env(safe-area-inset-bottom,0px)+1rem)] right-4 flex flex-col gap-2 z-20">
+            {onShowHelp && <button type="button" onClick={onShowHelp} aria-label="Keyboard shortcuts"
+                className="grid min-h-11 min-w-11 place-items-center rounded-lg border border-gray-700 bg-gray-900/90 text-lg text-gray-300 hover:bg-gray-800">
+                <span aria-hidden="true">?</span>
+            </button>}
             {/* Reset View */}
             <button
                 onClick={onResetView}

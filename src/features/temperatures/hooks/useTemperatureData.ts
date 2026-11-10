@@ -1,6 +1,7 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import type { z } from 'zod';
-import { fetchWithCache } from '../../../data/fetchCache';
+import { invalidateCache } from '../../../data/fetchCache';
+import { fetchValidatedJson } from '../../../data/validatedJson';
 import { STATE_RECORDS_URL, COUNTY_RECORDS_URL, RECENT_RECORDS_URL, SUMMARY_URL } from '../constants';
 import { countyRecordsSchema, parseTemperaturePayload, recentRecordsSchema, stateRecordsSchema, temperatureSummarySchema } from '../schemas';
 
@@ -8,14 +9,19 @@ function useTemperatureResource<T>(url: string, schema: z.ZodType<T>, label: str
     const [state, setState] = useState<{ data: T | null; loading: boolean; error: string | null }>({
         data: null, loading: true, error: null,
     });
+    const [attempt, setAttempt] = useState(0);
+    const retry = useCallback(() => {
+        invalidateCache(url);
+        setState(previous => ({ ...previous, error: null, loading: true }));
+        setAttempt(value => value + 1);
+    }, [url]);
     useEffect(() => {
         if (!enabled || state.data) return;
         let cancelled = false;
         async function load() {
             setState(previous => ({ ...previous, loading: true, error: null }));
             try {
-                const payload = await fetchWithCache<unknown>(url);
-                const data = parseTemperaturePayload(schema, payload, label);
+                const data = await fetchValidatedJson(url, payload => parseTemperaturePayload(schema, payload, label));
                 if (!cancelled) setState({ data, loading: false, error: null });
             } catch (error) {
                 if (!cancelled) setState({ data: null, loading: false, error: error instanceof Error ? error.message : `Failed to load ${label}` });
@@ -23,8 +29,8 @@ function useTemperatureResource<T>(url: string, schema: z.ZodType<T>, label: str
         }
         void load();
         return () => { cancelled = true; };
-    }, [enabled, label, schema, state.data, url]);
-    return { ...state, loading: enabled && state.loading, error: enabled ? state.error : null };
+    }, [attempt, enabled, label, schema, state.data, url]);
+    return { ...state, retry, loading: enabled && state.loading, error: enabled ? state.error : null };
 }
 
 interface UseTemperatureDataOptions {
@@ -56,6 +62,9 @@ export function useTemperatureData({
         summary: summary.data,
         loading: recent.loading || states.loading || counties.loading,
         error: recent.error ?? states.error ?? counties.error,
+        retry: () => {
+            for (const resource of [recent, states, counties, summary]) if (resource.error) resource.retry();
+        },
         stateHighs, stateLows,
     };
 }

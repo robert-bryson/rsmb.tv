@@ -1,0 +1,93 @@
+{
+  "recordedAt": "2026-11-10T16:56:16.882Z",
+  "scope": "Local implementation of the six November 10 audit priorities; not a deployment or a before/after speed benchmark.",
+  "validation": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "unit": {
+      "files": 204,
+      "tests": 3000,
+      "status": "passed"
+    },
+    "python": {
+      "tests": 18,
+      "status": "passed"
+    },
+    "productionBrowsers": {
+      "projects": [
+        "chromium",
+        "webkit"
+      ],
+      "tests": 96,
+      "status": "passed",
+      "coverage": [
+        "axe at phone and desktop widths",
+        "keyboard and touch navigation",
+        "route focus",
+        "shortcut persistence",
+        "responsive preloads at DPR 1 and 2",
+        "prefetch and page recovery"
+      ]
+    },
+    "temperatures": {
+      "chromium": {
+        "tests": 20,
+        "status": "passed"
+      },
+      "webkit": {
+        "tests": 20,
+        "status": "passed"
+      }
+    },
+    "flightTornadoMeasurement": {
+      "project": "chromium",
+      "tests": 29,
+      "status": "passed"
+    },
+    "finalMeasurement": {
+      "project": "chromium",
+      "tests": 8,
+      "status": "passed"
+    },
+    "reading": {
+      "projects": [
+        "chromium",
+        "mobile-chromium"
+      ],
+      "tests": 14,
+      "status": "passed",
+      "coverage": [
+        "JavaScript gzip budgets",
+        "opening layout",
+        "gallery focus",
+        "return navigation"
+      ]
+    },
+    "gitDiffCheck": "passed"
+  },
+  "byteAccounting": {
+    "definition": "Same-origin encoded JavaScript bodies of requests completed before interaction; excludes HTTP headers. External scripts counted separately.",
+    "deployment": {
+      "commitId": "d9cec3d503e6899ee2e798f9fc2629faeb5d06a5",
+      "jobId": "0000000436"
+    },
+    "browser": "158.0.8127.18",
+    "sampleFailed": 0,
+    "scriptBytes": 101622,
+    "externalScriptRequests": 1,
+    "independentlyObservedSameOriginResourceTimingBytes": 101622,
+    "oldCompletedRequestAPITotalIncludingOverhead": 112081,
+    "note": "Independent accounting checks of the unchanged live homepage. Analytics event delivery was blocked. Timing values are intentionally omitted; these are not before/after performance samples."
+  },
+  "hostedTracker": {
+    "url": "https://cloud.umami.is/script.js",
+    "sha256": "c11c9d29ac15ee26ef07059add176fd7db95acbf8e8bdb1a79796b0ffdb58f18",
+    "performanceOptionPresent": true,
+    "accountSettingsChanged": false
+  },
+  "limitations": [
+    "Field Web Vitals require deployment, subsequent traffic, and dashboard verification.",
+    "Automated accessibility checks do not establish complete conformance; real screen-reader/device testing remains useful.",
+    "WebKit used a local wrapper for required system libraries."
+  ]
+}

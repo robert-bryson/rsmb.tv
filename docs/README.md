@@ -3,6 +3,16 @@
 Use this index to find current instructions and dated reviews.
 Use [TODO.md](../TODO.md) for incomplete work.
 
+## Writing rules
+
+Use short sentences and active voice.
+Give one instruction in each sentence.
+Use one term for each item.
+Define a technical term before its first use.
+Keep code identifiers, commands, and source quotations unchanged.
+Keep dated reports as evidence. Add a new report when findings change.
+Use [ASD-STE100](https://www.asd-ste100.org/) as the language guide for current instructions and new reports.
+
 ## Current instructions
 
 | Document | Use |
@@ -38,6 +48,9 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-10 | [Project quality review: confirmed defects, regression tests, coverage, documentation, and remaining work](reviews/2026-11-10-project-quality-review.md) |
+| 2026-11-10 | [Project audit implementation: article preloads, navigation, temperature recovery, accessibility, telemetry, and browser CI](reviews/2026-11-10-project-improvements.md) |
+| 2026-11-10 | [Project audit: measured article preload, navigation, map recovery, accessibility, performance instrumentation, and ranked quick wins](reviews/2026-11-10-project-audit.md) |
 | 2026-11-09 | [Next-task code review: data integrity, county cache validation, background deadlines, state selection, and coverage](reviews/2026-11-09-next-tasks-quality-review.md) |
 | 2026-11-09 | [Next-task implementation: temperature cutoff, Tornado recovery and accessibility, full-sync staging, threshold evidence, and infrastructure inspection](reviews/2026-11-09-next-tasks.md) |
 | 2026-11-09 | [Image delivery quality review: request recovery, empty publication, preload ownership, source validation, and coverage](reviews/2026-11-09-image-delivery-quality-review.md) |

@@ -3,6 +3,7 @@ import { Component, type ReactNode } from 'react';
 interface Props {
     children: ReactNode;
     fallback?: ReactNode;
+    onStateChange?: (failed: boolean) => void;
 }
 
 interface State {
@@ -21,10 +22,12 @@ export class GlobeErrorBoundary extends Component<Props, State> {
     }
 
     componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+        this.props.onStateChange?.(true);
         console.error('Globe rendering error:', error, errorInfo);
     }
 
     handleRetry = () => {
+        this.props.onStateChange?.(false);
         this.setState({ hasError: false, error: null });
     };
 

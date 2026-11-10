@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { act, renderHook, waitFor } from '@testing-library/react';
-import { useGlobeTextures } from '../features/flights/hooks/useGlobeTextures';
+import { GLOBE_TEXTURE_TIMEOUT_MS, useGlobeTextures } from '../features/flights/hooks/useGlobeTextures';
 import type { BasemapConfig } from '../features/flights/constants';
 
 const mockBasemap: BasemapConfig = {
@@ -23,8 +23,28 @@ const altBasemap: BasemapConfig = {
 
 describe('useGlobeTextures', () => {
     afterEach(() => {
+        vi.useRealTimers();
         vi.restoreAllMocks();
         vi.unstubAllGlobals();
+    });
+
+    it('bounds a stalled texture and ignores its late completion after retry', () => {
+        vi.useFakeTimers();
+        const images: { onload: (() => void) | null; onerror: (() => void) | null; src: string }[] = [];
+        vi.stubGlobal('Image', class {
+            onload = null; onerror = null; src = '';
+            constructor() { images.push(this); }
+        });
+        const { result, unmount } = renderHook(() => useGlobeTextures(altBasemap));
+        const late = images[0].onload;
+        act(() => vi.advanceTimersByTime(GLOBE_TEXTURE_TIMEOUT_MS));
+        expect(result.current.error?.message).toMatch(/too long/);
+        act(() => result.current.retry());
+        act(() => late?.());
+        expect(result.current.isLoading).toBe(true);
+        act(() => images[1].onload?.());
+        expect(result.current).toMatchObject({ isLoading: false, progress: 100, error: null });
+        unmount();
     });
 
     it('starts in loading state', () => {

@@ -3,9 +3,11 @@ import { useFocusTrap } from '../hooks/useFocusTrap';
 interface KeyboardHelpProps {
   isOpen: boolean;
   onClose: () => void;
+  shortcutsEnabled: boolean;
+  onShortcutsChange: (enabled: boolean) => void;
 }
 
-export function KeyboardHelp({ isOpen, onClose }: KeyboardHelpProps) {
+export function KeyboardHelp({ isOpen, onClose, shortcutsEnabled, onShortcutsChange }: KeyboardHelpProps) {
   const dialogRef = useFocusTrap<HTMLDivElement>(isOpen);
 
   if (!isOpen) return null;
@@ -16,41 +18,49 @@ export function KeyboardHelp({ isOpen, onClose }: KeyboardHelpProps) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="keyboard-help-title"
+      onKeyDown={event => {
+        if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); onClose(); }
+      }}
     >
       <div
         ref={dialogRef}
-        className="bg-gray-900 border border-gray-700 rounded-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden"
+        className="bg-gray-900 border border-gray-700 rounded-xl shadow-2xl max-w-md w-full mx-4 max-h-[calc(100dvh-2rem)] overflow-y-auto"
         tabIndex={-1}
       >
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700">
           <h2 id="keyboard-help-title" className="text-lg font-semibold text-white">Keyboard Shortcuts</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="grid size-11 shrink-0 place-items-center text-gray-400 hover:text-white transition-colors"
             aria-label="Close keyboard shortcuts"
           >
             ✕
           </button>
         </div>
         <div className="px-6 py-4 space-y-3">
+          <label className="flex min-h-11 items-center gap-3 text-sm text-gray-200">
+            <input type="checkbox" checked={shortcutsEnabled} onChange={event => onShortcutsChange(event.target.checked)} />
+            Enable character shortcuts
+          </label>
+          {!shortcutsEnabled && <p className="text-xs text-gray-300">Character shortcuts are off. Use the map controls; Escape still closes this dialog.</p>}
           <ShortcutRow keys={['H']} description="Show/hide this help" />
           <ShortcutRow keys={['S']} description="Toggle stats panel" />
           <ShortcutRow keys={['F']} description="Toggle filter panel" />
           <ShortcutRow keys={['R']} description="Reset view to default" />
           <ShortcutRow keys={['Shift', 'A']} description="Toggle all airports layer" />
           <ShortcutRow keys={['Shift', 'U']} description="Toggle US states layer" />
-          <ShortcutRow keys={['Esc']} description="Clear airport/route selection and close panels" />
+          <ShortcutRow keys={['Esc']} description="Close help; otherwise clear selection and panels" />
           <ShortcutRow keys={['1-4']} description="Switch color modes" />
           <div className="pt-3 border-t border-gray-700">
-            <div className="text-gray-500 text-xs uppercase tracking-wide mb-2">Mouse/Touch</div>
+            <div className="text-gray-400 text-xs uppercase tracking-wide mb-2">Mouse/Touch</div>
             <ShortcutRow keys={['Drag']} description="Rotate globe" />
             <ShortcutRow keys={['Scroll']} description="Zoom in/out" />
             <ShortcutRow keys={['Click']} description="Select airport/route" />
           </div>
         </div>
         <div className="px-6 py-3 bg-gray-800/50 border-t border-gray-700">
-          <p className="text-gray-500 text-xs text-center">
-            Press <kbd className="px-1.5 py-0.5 bg-gray-700 rounded text-gray-300">H</kbd> to close
+          <p className="text-gray-400 text-xs text-center">
+            Press <kbd className="px-1.5 py-0.5 bg-gray-700 rounded text-gray-300">Escape</kbd> to close
           </p>
         </div>
       </div>

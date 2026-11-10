@@ -40,8 +40,12 @@ test.beforeAll(async () => {
         const status = request.url === '/unavailable' ? 503 : 200;
         const crash = request.url === '/crash' ? '<script>throw new Error("Synthetic application crash")</script>' : '';
         const picture = request.url === '/slow-image' || request.url === '/modulepreload' ? '<img src="/delayed.svg" width="320" height="180" alt="Synthetic preview">' : request.url === '/broken-image' ? '<img src="/missing.svg" width="320" height="180" alt="Broken preview">' : '';
+        const external = request.url === '/external-script' ? `<script src="${origin.replace('127.0.0.1', 'localhost')}/preloaded.js"></script>` : '';
         const preload = request.url === '/modulepreload' ? '<link rel="modulepreload" href="/preloaded.js"><link rel="stylesheet" href="/fixture.css"><script type="module" src="/preloaded.js"></script>' : '';
-        response.writeHead(status, { 'Content-Type': 'text/html' }).end(`<!doctype html><html><head><meta name="viewport" content="width=device-width">${preload}</head><body><h1>Synthetic page</h1>${picture}<button>Filter</button>${crash}</body></html>`);
+        const state = request.url === '/failed/map' ? 'error' : request.url === '/recovered/map' ? 'degraded' : 'ready';
+        const warning = request.url === '/recovered/map' ? 'console.error("MapLibre error: AJAXError: background HTTP 503");' : '';
+        const map = request.url?.endsWith('/map') ? `<div data-map-state="loading"></div><script>${warning}setTimeout(() => document.querySelector('[data-map-state]').setAttribute('data-map-state', '${state}'), 300)</script>` : '';
+        response.writeHead(status, { 'Content-Type': 'text/html' }).end(`<!doctype html><html><head><meta name="viewport" content="width=device-width">${preload}${external}</head><body><h1>Synthetic page</h1>${picture}${map}<button>Filter</button>${crash}</body></html>`);
     });
     await new Promise<void>(resolve => server.listen(0, '127.0.0.1', resolve));
     const address = server.address();
@@ -94,4 +98,31 @@ test('measurement counts compressed modulepreloads without counting styles or im
     const report = await measurePerformance(options('/modulepreload'), { browser, onSample() {} });
     expect(report.failedSamples).toBe(0);
     expect(report.results[0].scriptBytes).toBe(preloadedScript.length);
+});
+
+test('measurement records map readiness separately from an earlier text paint', async ({ browser }) => {
+    const report = await measurePerformance(options('/synthetic/map'), { browser, onSample() {} });
+    expect(report.failedSamples).toBe(0);
+    expect(report.results[0].mapReady?.state).toBe('ready');
+    expect(report.results[0].mapReady?.durationMs).toBeGreaterThanOrEqual(300);
+});
+
+test('measurement rejects a map startup error even when the document loaded', async ({ browser }) => {
+    const report = await measurePerformance(options('/failed/map'), { browser, onSample() {} });
+    expect(report.failedSamples).toBe(1);
+    expect(report.results[0].error).toContain('Map startup failed');
+});
+
+test('measurement accepts a usable map after its background provider fails', async ({ browser }) => {
+    const report = await measurePerformance(options('/recovered/map'), { browser, onSample() {} });
+    expect(report.failedSamples).toBe(0);
+    expect(report.results[0].mapReady?.state).toBe('degraded');
+    expect(report.results[0].errors).toEqual([]);
+});
+
+test('measurement identifies its first-party scope and separately counts opaque external scripts', async ({ browser }) => {
+    const report = await measurePerformance(options('/external-script'), { browser, onSample() {} });
+    expect(report.failedSamples).toBe(0);
+    expect(report.conditions.scriptByteScope).toBe('same-origin encoded bodies');
+    expect(report.results[0]).toMatchObject({ scriptBytes: 0, externalScriptRequests: 1 });
 });

@@ -101,6 +101,49 @@ async function waitForMapReady(page: Page) {
     }
 }
 
+for (const failure of ['failed', 'stalled'] as const) for (const width of [390, 1280]) {
+    test(`temperature ${failure} background preserves records, selection, and filters at ${width}px`, async ({ page }) => {
+        test.setTimeout(45_000);
+        await page.setViewportSize({ width, height: 900 });
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        const records = [record(0, { lon: -98, lat: 38 }), record(1, { lon: -97.5, lat: 38.5 })];
+        await fixtures(page, records);
+        const errors: string[] = [];
+        page.on('pageerror', error => errors.push(error.message));
+        let requests = 0;
+        page.on('request', request => { if (request.url().endsWith('/recentRecords.json')) requests++; });
+        const tile = await sharp({ create: { width: 256, height: 256, channels: 3, background: '#171b24' } }).png().toBuffer();
+        let broken = true;
+        let release!: () => void;
+        const gate = new Promise<void>(resolve => { release = resolve; });
+        await page.route('https://basemaps.cartocdn.com/**', async route => {
+            if (broken) {
+                if (failure === 'stalled') await gate;
+                return route.fulfill({ status: 503, body: 'Background unavailable' }).catch(() => {});
+            }
+            return route.fulfill({ contentType: 'image/png', body: tile });
+        });
+        try {
+            await page.goto('/projects/temperature-records/map?unit=C&period=7d&scope=daily&state=KS&sort=margin');
+            await expect(page.getByTestId('temperature-map')).toHaveAttribute('data-map-state', 'degraded', { timeout: 25_000 });
+            await expect(page.getByRole('alert')).toContainText('Records and filters still work');
+            if (width < 768) await page.getByRole('button', { name: 'Show summary panel' }).click();
+            await page.getByRole('button', { name: /Station 1/ }).first().click();
+            await expect(page.getByRole('heading', { name: 'Station 1', exact: true })).toBeVisible();
+            const before = new URL(page.url()).search;
+            const dataRequests = requests;
+            broken = false; release();
+            await page.getByRole('button', { name: 'Retry background', exact: true }).click();
+            await expect(page.getByTestId('temperature-map')).toHaveAttribute('data-map-state', 'ready');
+            await expect(page.getByRole('alert')).toHaveCount(0);
+            await expect(page.getByRole('heading', { name: 'Station 1', exact: true })).toBeVisible();
+            expect(new URL(page.url()).search).toBe(before);
+            expect(requests).toBe(dataRequests);
+            expect(errors).toEqual([]);
+        } finally { release(); await page.unrouteAll({ behavior: 'wait' }); }
+    });
+}
+
 for (const type of ['webgl', 'webgl2'] as const) {
     test(`snapshot fixture preserves only MapLibre ${type} buffers`, async ({ page }) => {
         await preserveMapDrawingBuffer(page);

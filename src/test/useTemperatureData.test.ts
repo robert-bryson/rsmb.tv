@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { useTemperatureData } from '../features/temperatures/hooks/useTemperatureData';
 import { clearCache } from '../data/fetchCache';
 import { jsonFetchResponse } from './helpers/fetch';
@@ -39,6 +39,22 @@ const countyRecords = {
 };
 
 describe('useTemperatureData', () => {
+    it('retries only failed resources and discards rejected cached JSON', async () => {
+        let repaired = false;
+        const calls: string[] = [];
+        globalThis.fetch = vi.fn(async (input: RequestInfo | URL) => {
+            const url = String(input); calls.push(url);
+            return jsonFetchResponse(url.endsWith('/summary.json') ? summary : repaired ? recentRecords : { yesterday: [] });
+        });
+        const { result } = renderHook(() => useTemperatureData({ loadAllTimeRecords: false }));
+        await waitFor(() => expect(result.current.error).toMatch(/Invalid recent records/));
+        repaired = true;
+        act(() => result.current.retry());
+        await waitFor(() => expect(result.current.recentRecords).toEqual(recentRecords));
+        expect(result.current.error).toBeNull();
+        expect(calls.filter(url => url.endsWith('/recentRecords.json'))).toHaveLength(2);
+        expect(calls.filter(url => url.endsWith('/summary.json'))).toHaveLength(1);
+    });
     beforeEach(() => {
         clearCache();
         vi.restoreAllMocks();

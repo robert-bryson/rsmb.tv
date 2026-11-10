@@ -1,0 +1,689 @@
+{
+  "recordedAt": "2026-11-10T17:16:59.441Z",
+  "scope": "Review of all pending November 10 app changes, with five confirmed defects fixed. No deployment.",
+  "reproduction": {
+    "failedAssertions": 6,
+    "testFiles": 4,
+    "status": "reproduced before fixes"
+  },
+  "fixes": [
+    "Hover disclosure Escape with outside focus",
+    "Help modal shortcut isolation and accurate close instructions",
+    "Current-page versus ancestor-location labels",
+    "Atlas readiness after route and worker completion, including retry identity",
+    "Recovered provider failures accepted by performance measurement"
+  ],
+  "coverage": {
+    "provider": "v8",
+    "scope": "Same ten reviewed modules; not whole-repository coverage",
+    "before": {
+      "lines": {
+        "total": 426,
+        "covered": 405,
+        "skipped": 0,
+        "pct": 95.07
+      },
+      "statements": {
+        "total": 526,
+        "covered": 480,
+        "skipped": 0,
+        "pct": 91.25
+      },
+      "functions": {
+        "total": 105,
+        "covered": 91,
+        "skipped": 0,
+        "pct": 86.66
+      },
+      "branches": {
+        "total": 364,
+        "covered": 305,
+        "skipped": 0,
+        "pct": 83.79
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "after": {
+      "lines": {
+        "total": 438,
+        "covered": 425,
+        "skipped": 0,
+        "pct": 97.03
+      },
+      "statements": {
+        "total": 538,
+        "covered": 509,
+        "skipped": 0,
+        "pct": 94.6
+      },
+      "functions": {
+        "total": 105,
+        "covered": 98,
+        "skipped": 0,
+        "pct": 93.33
+      },
+      "branches": {
+        "total": 378,
+        "covered": 335,
+        "skipped": 0,
+        "pct": 88.62
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "modules": [
+      {
+        "path": "scripts/measure-performance.js",
+        "before": {
+          "lines": {
+            "total": 128,
+            "covered": 117,
+            "skipped": 0,
+            "pct": 91.4
+          },
+          "functions": {
+            "total": 27,
+            "covered": 24,
+            "skipped": 0,
+            "pct": 88.88
+          },
+          "statements": {
+            "total": 157,
+            "covered": 143,
+            "skipped": 0,
+            "pct": 91.08
+          },
+          "branches": {
+            "total": 125,
+            "covered": 108,
+            "skipped": 0,
+            "pct": 86.4
+          }
+        },
+        "after": {
+          "lines": {
+            "total": 129,
+            "covered": 118,
+            "skipped": 0,
+            "pct": 91.47
+          },
+          "functions": {
+            "total": 27,
+            "covered": 24,
+            "skipped": 0,
+            "pct": 88.88
+          },
+          "statements": {
+            "total": 158,
+            "covered": 144,
+            "skipped": 0,
+            "pct": 91.13
+          },
+          "branches": {
+            "total": 126,
+            "covered": 110,
+            "skipped": 0,
+            "pct": 87.3
+          }
+        }
+      },
+      {
+        "path": "src/components/MapPerformance.tsx",
+        "before": {
+          "lines": {
+            "total": 24,
+            "covered": 24,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 4,
+            "covered": 4,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 31,
+            "covered": 28,
+            "skipped": 0,
+            "pct": 90.32
+          },
+          "branches": {
+            "total": 28,
+            "covered": 22,
+            "skipped": 0,
+            "pct": 78.57
+          }
+        },
+        "after": {
+          "lines": {
+            "total": 25,
+            "covered": 25,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 4,
+            "covered": 4,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 33,
+            "covered": 32,
+            "skipped": 0,
+            "pct": 96.96
+          },
+          "branches": {
+            "total": 29,
+            "covered": 28,
+            "skipped": 0,
+            "pct": 96.55
+          }
+        }
+      },
+      {
+        "path": "src/components/RouteOrientation.tsx",
+        "before": {
+          "lines": {
+            "total": 37,
+            "covered": 37,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 6,
+            "covered": 5,
+            "skipped": 0,
+            "pct": 83.33
+          },
+          "statements": {
+            "total": 43,
+            "covered": 40,
+            "skipped": 0,
+            "pct": 93.02
+          },
+          "branches": {
+            "total": 21,
+            "covered": 14,
+            "skipped": 0,
+            "pct": 66.66
+          }
+        },
+        "after": {
+          "lines": {
+            "total": 37,
+            "covered": 37,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 6,
+            "covered": 6,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 43,
+            "covered": 42,
+            "skipped": 0,
+            "pct": 97.67
+          },
+          "branches": {
+            "total": 21,
+            "covered": 17,
+            "skipped": 0,
+            "pct": 80.95
+          }
+        }
+      },
+      {
+        "path": "src/components/Layout/ProjectsNavigation.tsx",
+        "before": {
+          "lines": {
+            "total": 23,
+            "covered": 20,
+            "skipped": 0,
+            "pct": 86.95
+          },
+          "functions": {
+            "total": 11,
+            "covered": 8,
+            "skipped": 0,
+            "pct": 72.72
+          },
+          "statements": {
+            "total": 31,
+            "covered": 23,
+            "skipped": 0,
+            "pct": 74.19
+          },
+          "branches": {
+            "total": 28,
+            "covered": 18,
+            "skipped": 0,
+            "pct": 64.28
+          }
+        },
+        "after": {
+          "lines": {
+            "total": 28,
+            "covered": 26,
+            "skipped": 0,
+            "pct": 92.85
+          },
+          "functions": {
+            "total": 11,
+            "covered": 9,
+            "skipped": 0,
+            "pct": 81.81
+          },
+          "statements": {
+            "total": 35,
+            "covered": 29,
+            "skipped": 0,
+            "pct": 82.85
+          },
+          "branches": {
+            "total": 34,
+            "covered": 24,
+            "skipped": 0,
+            "pct": 70.58
+          }
+        }
+      },
+      {
+        "path": "src/features/flights/components/KeyboardHelp.tsx",
+        "before": {
+          "lines": {
+            "total": 7,
+            "covered": 0,
+            "skipped": 0,
+            "pct": 0
+          },
+          "functions": {
+            "total": 5,
+            "covered": 0,
+            "skipped": 0,
+            "pct": 0
+          },
+          "statements": {
+            "total": 11,
+            "covered": 0,
+            "skipped": 0,
+            "pct": 0
+          },
+          "branches": {
+            "total": 6,
+            "covered": 0,
+            "skipped": 0,
+            "pct": 0
+          }
+        },
+        "after": {
+          "lines": {
+            "total": 7,
+            "covered": 7,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 5,
+            "covered": 5,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 11,
+            "covered": 11,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 6,
+            "covered": 6,
+            "skipped": 0,
+            "pct": 100
+          }
+        }
+      },
+      {
+        "path": "src/features/flights/hooks/useGlobeTextures.ts",
+        "before": {
+          "lines": {
+            "total": 43,
+            "covered": 43,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 9,
+            "covered": 9,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 51,
+            "covered": 50,
+            "skipped": 0,
+            "pct": 98.03
+          },
+          "branches": {
+            "total": 22,
+            "covered": 21,
+            "skipped": 0,
+            "pct": 95.45
+          }
+        },
+        "after": {
+          "lines": {
+            "total": 43,
+            "covered": 43,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 9,
+            "covered": 9,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 51,
+            "covered": 50,
+            "skipped": 0,
+            "pct": 98.03
+          },
+          "branches": {
+            "total": 22,
+            "covered": 21,
+            "skipped": 0,
+            "pct": 95.45
+          }
+        }
+      },
+      {
+        "path": "src/features/flights/hooks/useKeyboardShortcuts.ts",
+        "before": {
+          "lines": {
+            "total": 55,
+            "covered": 55,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 6,
+            "covered": 6,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 58,
+            "covered": 58,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 43,
+            "covered": 41,
+            "skipped": 0,
+            "pct": 95.34
+          }
+        },
+        "after": {
+          "lines": {
+            "total": 60,
+            "covered": 60,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 6,
+            "covered": 6,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 63,
+            "covered": 63,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 49,
+            "covered": 48,
+            "skipped": 0,
+            "pct": 97.95
+          }
+        }
+      },
+      {
+        "path": "src/features/temperatures/hooks/useTemperatureData.ts",
+        "before": {
+          "lines": {
+            "total": 25,
+            "covered": 25,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 17,
+            "covered": 16,
+            "skipped": 0,
+            "pct": 94.11
+          },
+          "statements": {
+            "total": 41,
+            "covered": 40,
+            "skipped": 0,
+            "pct": 97.56
+          },
+          "branches": {
+            "total": 32,
+            "covered": 29,
+            "skipped": 0,
+            "pct": 90.62
+          }
+        },
+        "after": {
+          "lines": {
+            "total": 25,
+            "covered": 25,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 17,
+            "covered": 16,
+            "skipped": 0,
+            "pct": 94.11
+          },
+          "statements": {
+            "total": 41,
+            "covered": 40,
+            "skipped": 0,
+            "pct": 97.56
+          },
+          "branches": {
+            "total": 32,
+            "covered": 29,
+            "skipped": 0,
+            "pct": 90.62
+          }
+        }
+      },
+      {
+        "path": "src/maps/recoverBasemap.ts",
+        "before": {
+          "lines": {
+            "total": 54,
+            "covered": 54,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 13,
+            "covered": 13,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 65,
+            "covered": 62,
+            "skipped": 0,
+            "pct": 95.38
+          },
+          "branches": {
+            "total": 37,
+            "covered": 31,
+            "skipped": 0,
+            "pct": 83.78
+          }
+        },
+        "after": {
+          "lines": {
+            "total": 54,
+            "covered": 54,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 13,
+            "covered": 13,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 65,
+            "covered": 62,
+            "skipped": 0,
+            "pct": 95.38
+          },
+          "branches": {
+            "total": 37,
+            "covered": 31,
+            "skipped": 0,
+            "pct": 83.78
+          }
+        }
+      },
+      {
+        "path": "src/utils/analytics.ts",
+        "before": {
+          "lines": {
+            "total": 30,
+            "covered": 30,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 7,
+            "covered": 6,
+            "skipped": 0,
+            "pct": 85.71
+          },
+          "statements": {
+            "total": 38,
+            "covered": 36,
+            "skipped": 0,
+            "pct": 94.73
+          },
+          "branches": {
+            "total": 22,
+            "covered": 21,
+            "skipped": 0,
+            "pct": 95.45
+          }
+        },
+        "after": {
+          "lines": {
+            "total": 30,
+            "covered": 30,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 7,
+            "covered": 6,
+            "skipped": 0,
+            "pct": 85.71
+          },
+          "statements": {
+            "total": 38,
+            "covered": 36,
+            "skipped": 0,
+            "pct": 94.73
+          },
+          "branches": {
+            "total": 22,
+            "covered": 21,
+            "skipped": 0,
+            "pct": 95.45
+          }
+        }
+      }
+    ]
+  },
+  "verification": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "unit": {
+      "files": 205,
+      "tests": 3012,
+      "status": "passed"
+    },
+    "python": {
+      "tests": 18,
+      "status": "passed"
+    },
+    "productionBrowsers": {
+      "projects": [
+        "chromium",
+        "webkit"
+      ],
+      "tests": 96,
+      "status": "passed"
+    },
+    "flightAndMeasurementBrowser": {
+      "project": "chromium",
+      "tests": 24,
+      "status": "passed"
+    },
+    "trips": {
+      "projects": [
+        "chromium",
+        "mobile-chromium"
+      ],
+      "tests": 18,
+      "status": "passed"
+    },
+    "dependencyAudit": {
+      "tool": "npm 12.2.2",
+      "vulnerabilities": 0,
+      "status": "passed"
+    },
+    "documentationLinks": "passed",
+    "gitDiffCheck": "passed"
+  },
+  "executionNote": "The first full unit run overlapped browser jobs. Two build checks reached existing 30-second timeouts. The isolated final full run passed without increasing timeouts or skipping checks.",
+  "documentation": {
+    "language": "STE-style short sentences, active voice, single instructions, and consistent technical terms in edited guides and new reports; no formal dictionary-compliance percentage claimed.",
+    "history": "Dated evidence retains its original results.",
+    "todo": "Next-release checks are separate from content, data, device, infrastructure, and refactor work."
+  },
+  "remaining": [
+    "Production field-metric verification after deployment",
+    "Physical-device and screen-reader checks",
+    "Delayed list scroll restoration beyond the current three-second observation window",
+    "Separate refactors for large map components and the document importer"
+  ]
+}

@@ -1067,7 +1067,7 @@ export function TornadoMap() {
             )}
 
             <div className="absolute left-3 top-3 z-20 flex max-w-[calc(100vw-5.5rem)] flex-wrap items-center gap-2 rounded-lg border border-zinc-700/80 bg-zinc-950/90 p-2 text-xs shadow-2xl backdrop-blur-md md:left-6 md:top-6">
-                <Link to="/projects/tornado-tracks" className="rounded-md px-2 py-1.5 font-medium text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100">
+                <Link id="tornado-controls" to="/projects/tornado-tracks" className="rounded-md px-2 py-1.5 font-medium text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100">
                     ← rsmb.tv
                 </Link>
                 <div className="h-5 w-px bg-zinc-700" />
