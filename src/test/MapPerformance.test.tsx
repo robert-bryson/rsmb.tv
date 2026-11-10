@@ -40,7 +40,7 @@ describe('map performance', () => {
         expect(trackAnalyticsEvent).toHaveBeenLastCalledWith('map-ready', expect.objectContaining({
             feature: 'flights', state: 'ready', navigation: 'client', device: 'desktop',
         }), '/projects/flights/map');
-        const duration = vi.mocked(trackAnalyticsEvent).mock.calls[0][1].durationMs;
+        const duration = vi.mocked(trackAnalyticsEvent).mock.calls[0][1]!.durationMs;
         expect(duration).toBeGreaterThanOrEqual(0);
         expect(duration).toBeLessThanOrEqual(Math.ceil(performance.now() - start));
         fireEvent.click(screen.getByRole('button', { name: 'About' }));
@@ -71,11 +71,34 @@ describe('map performance', () => {
         map.dataset.mapState = 'error';
         await waitFor(() => expect(trackAnalyticsEvent).toHaveBeenCalledWith('map-startup-error', expect.objectContaining({ feature: 'temperature-records', state: 'error', navigation: 'document' }), '/projects/temperature-records/map'));
         map.dataset.mapState = 'degraded';
-        await waitFor(() => expect(trackAnalyticsEvent).toHaveBeenCalledTimes(2));
-        expect(trackAnalyticsEvent).toHaveBeenLastCalledWith('map-ready', expect.objectContaining({ state: 'degraded', device: 'mobile', revision: expect.any(String) }), '/projects/temperature-records/map');
+        await waitFor(() => expect(trackAnalyticsEvent).toHaveBeenCalledTimes(3));
+        expect(trackAnalyticsEvent).toHaveBeenCalledWith('map-ready', expect.objectContaining({ state: 'degraded', device: 'mobile', revision: expect.any(String) }), '/projects/temperature-records/map');
+        expect(trackAnalyticsEvent).toHaveBeenLastCalledWith('map-recovered', { feature: 'temperature-records', state: 'degraded', phase: 'startup' }, '/projects/temperature-records/map');
         fireEvent.click(screen.getByRole('button', { name: 'Filter' }));
         map.dataset.mapState = 'ready';
         await new Promise<void>(resolve => queueMicrotask(resolve));
-        expect(trackAnalyticsEvent).toHaveBeenCalledTimes(2);
+        expect(trackAnalyticsEvent).toHaveBeenCalledTimes(3);
+        map.dataset.mapState = 'error';
+        await waitFor(() => expect(trackAnalyticsEvent).toHaveBeenCalledTimes(4));
+        map.dataset.mapState = 'fallback';
+        await waitFor(() => expect(trackAnalyticsEvent).toHaveBeenCalledTimes(5));
+        expect(trackAnalyticsEvent).toHaveBeenLastCalledWith('map-recovered', { feature: 'temperature-records', state: 'fallback', phase: 'runtime' }, '/projects/temperature-records/map');
+    });
+
+    it('reports a runtime failure and recovery without duplicating readiness', async () => {
+        render(<MemoryRouter initialEntries={['/projects/flights/map']}><Scene /></MemoryRouter>);
+        const map = screen.getByTestId('flights-map');
+        map.dataset.mapState = 'ready';
+        await waitFor(() => expect(trackAnalyticsEvent).toHaveBeenCalledOnce());
+        map.dataset.mapState = 'error';
+        await waitFor(() => expect(trackAnalyticsEvent).toHaveBeenCalledWith('map-runtime-error', expect.objectContaining({ feature: 'flights' }), '/projects/flights/map'));
+        map.dataset.mapState = 'loading';
+        await new Promise<void>(resolve => queueMicrotask(resolve));
+        map.dataset.mapState = 'fallback';
+        await waitFor(() => expect(trackAnalyticsEvent).toHaveBeenCalledTimes(3));
+        expect(trackAnalyticsEvent).toHaveBeenLastCalledWith('map-recovered', { feature: 'flights', state: 'fallback', phase: 'runtime' }, '/projects/flights/map');
+        map.dataset.mapState = 'ready';
+        await new Promise<void>(resolve => queueMicrotask(resolve));
+        expect(trackAnalyticsEvent).toHaveBeenCalledTimes(3);
     });
 });

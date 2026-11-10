@@ -1,3 +1,4 @@
+import { useMapInteraction } from '../../../hooks/useMapInteraction';
 import { cartoRasterStyle } from '../../../maps/cartoBasemaps';
 import { recoverTemperatureBasemap } from '../map/temperatureBasemap';
 import type { BasemapState } from '../../../maps/recoverBasemap';
@@ -220,6 +221,7 @@ function buildPopupHTML(props: Record<string, unknown>, layerType: 'state' | 'co
 }
 
 export function TemperatureMap() {
+    const trackInteraction = useMapInteraction('temperature-records');
     const toolbarRef = useRef<HTMLDivElement>(null);
     const reduceMotion = useReducedMotion();
     const lastCameraKey = useRef('');
@@ -271,6 +273,7 @@ export function TemperatureMap() {
     }
 
     const updateSearchParam = useCallback((key: string, value: string, defaultValue = '') => {
+        trackInteraction('filter');
         if (['state', 'scope', 'margin', 'period'].includes(key)) {
             setSelectedStation(null);
             popupRef.current?.remove();
@@ -281,16 +284,17 @@ export function TemperatureMap() {
             else next.set(key, value);
             return next;
         }, { replace: true });
-    }, [setSearchParams]);
+    }, [setSearchParams, trackInteraction]);
 
     const setViewMode = useCallback((mode: ViewMode) => {
+        trackInteraction('view');
         setSearchParams(prev => {
             const next = new URLSearchParams(prev);
             if (mode === 'recent') next.delete('view');
             else next.set('view', mode);
             return next;
         }, { replace: true });
-    }, [setSearchParams]);
+    }, [setSearchParams, trackInteraction]);
 
     const setRecordType = useCallback((type: 'high' | 'low') => {
         setSearchParams(prev => {
@@ -492,11 +496,12 @@ export function TemperatureMap() {
     }, [cameraPadding, reduceMotion]);
 
     const selectRecord = useCallback((record: BrokenRecord) => {
+        trackInteraction('selection');
         popupRef.current?.remove();
         returnFocusKey.current = `${record.uid}-${record.date}-${record.type}`;
         setSelectedStation({ uid: record.uid, name: record.stationName, state: record.stateName });
         flyToLocation(record.lon, record.lat);
-    }, [flyToLocation]);
+    }, [flyToLocation, trackInteraction]);
 
     const closeStation = () => {
         setSelectedStation(null);
@@ -1165,6 +1170,7 @@ export function TemperatureMap() {
             styleDarkPopup(popup);
 
             // Zoom to state and show station detail markers
+            trackInteraction('selection');
             if (layerType === 'state') {
                 setSelectedState(props.state as string);
             }
@@ -1250,6 +1256,7 @@ export function TemperatureMap() {
         // Freshness layer click
         map.on('click', 'freshness-circles', (e) => {
             if (!e.features?.length) return;
+            trackInteraction('selection');
             hoverPopup?.remove();
             popupRef.current?.remove();
             const p = e.features[0].properties;
@@ -1332,7 +1339,7 @@ export function TemperatureMap() {
                 setSelectedState(null);
             }
         });
-    }, [mapLoaded]);
+    }, [mapLoaded, trackInteraction]);
 
     const renderKey = `${viewMode}:${recordType}:${activePeriod}:${stateFilter}:${scopeFilter}:${minimumMargin}`;
     useEffect(() => {

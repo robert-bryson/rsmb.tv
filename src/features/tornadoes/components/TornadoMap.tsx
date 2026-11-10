@@ -1,3 +1,5 @@
+import { useMapInteraction } from '../../../hooks/useMapInteraction';
+import { trackAnalyticsEvent } from '../../../utils/analytics';
 import { cartoVectorStyle } from '../../../maps/cartoBasemaps';
 import { summarizeTornadoTrends } from '../../../../shared/tornadoTrends';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -441,6 +443,7 @@ function StaticTornadoFallback({
 }
 
 export function TornadoMap() {
+    const trackInteraction = useMapInteraction('tornado-tracks');
     const mapContainer = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibregl.Map | null>(null);
     const popupRef = useRef<maplibregl.Popup | null>(null);
@@ -499,13 +502,16 @@ export function TornadoMap() {
     }, []);
 
     const handleModeChange = useCallback((mode: Parameters<typeof setMode>[0]) => {
+        trackInteraction('view');
         setSelectedTrack(null);
         setMode(mode);
-    }, [setMode, setSelectedTrack]);
+    }, [setMode, setSelectedTrack, trackInteraction]);
 
     const handleShare = useCallback(() => {
         const url = window.location.href;
+        const pathname = window.location.pathname;
         const onCopied = () => {
+            trackAnalyticsEvent('share-action', { feature: 'tornado-tracks', method: 'clipboard', outcome: 'copied' }, pathname);
             if (copiedUrlTimer.current) clearTimeout(copiedUrlTimer.current);
             setCopiedUrl(true);
             copiedUrlTimer.current = setTimeout(() => setCopiedUrl(false), 2000);
@@ -521,19 +527,20 @@ export function TornadoMap() {
         return () => { if (copiedUrlTimer.current) clearTimeout(copiedUrlTimer.current); };
     }, []);
     const handleSelectState = useCallback((state: string) => {
+        trackInteraction('selection');
         setSelectedTrackState(null);
         setSummaryCollapsed(false);
         setMobileControlsOpen(true);
         selectState(state);
-    }, [selectState]);
+    }, [selectState, trackInteraction]);
 
     useEffect(() => {
         selectStateRef.current = handleSelectState;
     }, [handleSelectState]);
 
     useEffect(() => {
-        selectTrackRef.current = setSelectedTrack;
-    }, [setSelectedTrack]);
+        selectTrackRef.current = track => { trackInteraction('selection'); setSelectedTrack(track); };
+    }, [setSelectedTrack, trackInteraction]);
 
     useEffect(() => {
         setMapViewRef.current = setMapView;
@@ -1061,7 +1068,7 @@ export function TornadoMap() {
                     states={stateBoundaries}
                     selectedTrackId={selectedTrack?.properties.id}
                     selectedState={filters.selectedState}
-                    onSelectTrack={setSelectedTrack}
+                    onSelectTrack={track => { trackInteraction('selection'); setSelectedTrack(track); }}
                     onSelectState={handleSelectState}
                 />
             )}
@@ -1129,7 +1136,7 @@ export function TornadoMap() {
                 minYear={minYear}
                 maxYear={maxYear}
                 onYearRangeChange={setYearRange}
-                onPlayingChange={setTimelinePlaying}
+                onPlayingChange={playing => { if (playing) trackInteraction('playback'); setTimelinePlaying(playing); }}
                 collapsed={timelineCollapsed}
                 onCollapseChange={setTimelineCollapsed}
             />

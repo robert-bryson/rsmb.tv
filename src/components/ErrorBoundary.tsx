@@ -2,6 +2,7 @@ import { Component } from 'react';
 import type { ErrorInfo, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { retryCurrentPage } from '../utils/pageRecovery';
+import { captureAnalyticsException, trackAnalyticsEvent } from '../utils/analytics';
 
 interface Props {
     children: ReactNode;
@@ -21,6 +22,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
     componentDidCatch(error: Error, info: ErrorInfo) {
         console.error('Uncaught error:', error, info.componentStack);
+        captureAnalyticsException(error);
     }
 
     render() {
@@ -35,7 +37,7 @@ export class ErrorBoundary extends Component<Props, State> {
                     </p>
                     <button
                         className="px-4 py-2 bg-zinc-700 text-zinc-200 rounded hover:bg-zinc-600 transition-colors"
-                        onClick={() => { if (!retryCurrentPage()) this.setState({ retryLimited: true }); }}
+                        onClick={() => { trackAnalyticsEvent('page-retry'); if (!retryCurrentPage()) this.setState({ retryLimited: true }); }}
                     >
                         Try again
                     </button>

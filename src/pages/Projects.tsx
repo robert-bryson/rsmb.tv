@@ -4,6 +4,7 @@ import { ProjectPreview } from '../components/ProjectPreview';
 import { projects, formatProjectDate, type Project } from '../content/projects';
 import { usePageMetadata } from '../hooks/usePageMetadata';
 import { staticPageMetadata } from '../utils/pageMetadata';
+import { trackAnalyticsEvent } from '../utils/analytics';
 
 export function Projects() {
   usePageMetadata(staticPageMetadata('/projects'));
@@ -20,6 +21,7 @@ export function Projects() {
           <li key={project.slug}>
             <IntentLink prefetchMode="destination"
               to={`/projects/${project.slug}`}
+              onClick={() => trackAnalyticsEvent('project-link-click', { project: project.slug, destination: 'details', placement: 'projects' })}
               className="group block p-4 -mx-4 rounded-lg hover:bg-zinc-900/50 transition-colors"
             >
               <ProjectContent project={project} priority={index === 0} />

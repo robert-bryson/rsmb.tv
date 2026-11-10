@@ -1,10 +1,13 @@
 import { Component, type ReactNode } from 'react';
+import { captureAnalyticsException } from '../../../utils/analytics';
 
 /** Isolate renderer-module failures while the atlas list stays available. */
 export class TripAtlasMapBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
     state = { failed: false };
 
     static getDerivedStateFromError() { return { failed: true }; }
+
+    componentDidCatch(error: Error) { captureAnalyticsException(error); }
 
     render() {
         if (this.state.failed) return (

@@ -1,11 +1,14 @@
 import { IntentLink } from './IntentLink';
 import type { ReactNode } from 'react';
+import { useLocation } from 'react-router-dom';
+import { trackAnalyticsEvent } from '../utils/analytics';
 
 interface ProjectHeaderAction {
   label: string;
   href: string;
   variant?: 'primary' | 'secondary';
   external?: boolean;
+  analyticsDestination?: 'data';
 }
 
 interface ProjectPageHeaderProps {
@@ -16,6 +19,10 @@ interface ProjectPageHeaderProps {
 }
 
 export function ProjectPageHeader({ title, stack, description, actions }: ProjectPageHeaderProps) {
+  const project = useLocation().pathname.split('/')[2];
+  const trackAction = (action: ProjectHeaderAction) => trackAnalyticsEvent('project-link-click', {
+    project, destination: action.analyticsDestination ?? (action.href.startsWith('https://github.com/') ? 'source' : 'demo'), placement: 'project-header',
+  });
   return (
     <>
       <h1 className="mb-2 text-2xl font-semibold text-zinc-100">{title}</h1>
@@ -35,6 +42,7 @@ export function ProjectPageHeader({ title, stack, description, actions }: Projec
               <a
                 key={`${action.label}-${action.href}`}
                 href={action.href}
+                onClick={() => trackAction(action)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={baseClassName}
@@ -45,7 +53,7 @@ export function ProjectPageHeader({ title, stack, description, actions }: Projec
           }
 
           return (
-            <IntentLink prefetchMode="destination" key={`${action.label}-${action.href}`} to={action.href} className={baseClassName}>
+            <IntentLink prefetchMode="destination" key={`${action.label}-${action.href}`} to={action.href} className={baseClassName} onClick={() => trackAction(action)}>
               {action.label}
             </IntentLink>
           );

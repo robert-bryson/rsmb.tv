@@ -20,6 +20,7 @@ import { TripStoryDetails } from '../features/trips/components/TripStoryDetails'
 import { TripStoryProvider } from '../features/trips/TripStoryProvider';
 import type { TripManifest } from '../features/trips/types';
 import { getPostReturnDestination } from '../blog/postReturnDestination';
+import { ArticleEngagement } from '../components/ArticleEngagement';
 
 interface BlogPostProps {
     collection: 'blog' | 'trips';
@@ -138,6 +139,7 @@ export function BlogPost({ collection }: BlogPostProps) {
                     )}
                 </div>
                 {isTrip && <TripStoryDetails contentRef={contentRef} />}
+                {post.development?.contentAvailable !== false && <ArticleEngagement key={post.slug} contentType={isTrip ? 'trip' : 'writing'} />}
                 {postFooter}
             </Suspense>
         </PostHeadingProvider>

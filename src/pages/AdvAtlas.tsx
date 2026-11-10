@@ -1,3 +1,5 @@
+import { useMapInteraction } from '../hooks/useMapInteraction';
+import { analyticsResultBucket, trackAnalyticsEvent } from '../utils/analytics';
 import { loadTripAtlasMap } from '../features/trips/atlas/loadTripAtlasMap';
 import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigationType } from 'react-router-dom';
@@ -34,6 +36,7 @@ function RouteReader({ id, url, onChange }: { id: string; url: string; onChange:
 }
 
 export default function AdvAtlas() {
+    const trackInteraction = useMapInteraction('adv-atlas');
     const development = isDevelopmentContent();
     const entries = useMemo(() => buildTripAtlasEntries(getTripPosts(), getTripSummary, { includeDrafts: development, includeIncomplete: development }), [development]);
     const location = useLocation();
@@ -127,6 +130,7 @@ export default function AdvAtlas() {
         resetScroll();
     };
     const selectTrip = (id: string, options: { reveal?: boolean; focusCard?: boolean } = {}) => {
+        trackInteraction('selection');
         updateParams(next => { next.set('trip', id); next.delete('camera'); });
         setFitRequest(current => ({ tripId: id, version: current.version + 1 }));
         if (options.reveal) {
@@ -147,6 +151,8 @@ export default function AdvAtlas() {
         resetScroll();
     };
     const changeFilters = (next: AtlasFilters) => {
+        trackInteraction('filter');
+        trackAnalyticsEvent('filters-applied', { feature: 'adv-atlas', resultBucket: analyticsResultBucket(filterAtlasEntries(entries, next).length) });
         updateParams(current => writeAtlasBrowse(current, next, sort), false);
         setFitRequest(current => ({ ...current, cancelled: true }));
         resetScroll();

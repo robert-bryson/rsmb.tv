@@ -54,7 +54,7 @@ export default function TornadoTracksAbout() {
                 actions={[
                     { label: 'Open interactive map →', href: '/projects/tornado-tracks/map', variant: 'primary' },
                     { label: 'Source on GitHub →', href: 'https://github.com/robert-bryson/rsmb.tv/tree/main/src/features/tornadoes', external: true },
-                    { label: 'NOAA source data →', href: 'https://www.ncei.noaa.gov/pub/data/swdi/stormevents/csvfiles/', external: true },
+                    { label: 'NOAA source data →', href: 'https://www.ncei.noaa.gov/pub/data/swdi/stormevents/csvfiles/', external: true, analyticsDestination: 'data' },
                 ]}
             />
 

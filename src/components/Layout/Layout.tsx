@@ -2,6 +2,7 @@ import { IntentLink } from '../IntentLink';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ProjectsNavigation } from './ProjectsNavigation';
+import { trackAnalyticsEvent } from '../../utils/analytics';
 
 interface LayoutProps {
   children: ReactNode;
@@ -154,10 +155,10 @@ export function Layout({ children }: LayoutProps) {
             >
               GitHub
             </a>
-            <a href="/rss.xml" className="hover:text-zinc-300">
+            <a href="/rss.xml" className="hover:text-zinc-300" onClick={() => trackAnalyticsEvent('feed-link-click', { format: 'rss', placement: 'footer' })}>
               RSS
             </a>
-            <a href="/feed.json" type="application/feed+json" className="hover:text-zinc-300">
+            <a href="/feed.json" type="application/feed+json" className="hover:text-zinc-300" onClick={() => trackAnalyticsEvent('feed-link-click', { format: 'json', placement: 'footer' })}>
               JSON Feed
             </a>
             <a href="/sitemap.xml" className="hover:text-zinc-300">

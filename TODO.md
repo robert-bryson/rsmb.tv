@@ -10,7 +10,8 @@ Do these checks after the reviewed changes reach a hosted preview or production.
 Local browser tests cannot verify the analytics account or physical devices.
 
 - [ ] Verify Web Vitals in the Umami Performance view after deployment. Record the build revision and observation period.
-- [ ] Verify one `map-ready` event for each map visit. Check failure and recovery events. Confirm that events exclude query values.
+- [ ] Verify one `map-ready` event for each map visit. Check startup failure, runtime failure, and phase-specific recovery. Confirm that events exclude query values.
+- [ ] Verify the `rsmb-tv` tag, project and map events, caught error reports, and privacy preferences in Umami. Create the goals and funnel in the [analytics guide](docs/umami-analytics.md).
 - [ ] Test navigation and map controls with VoiceOver or NVDA. Include hover dismissal, route announcements, help dismissal, and disabled character shortcuts.
 
 ## Content publication

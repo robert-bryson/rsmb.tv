@@ -1,6 +1,7 @@
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
 import PhotoSwipeDynamicCaption from 'photoswipe-dynamic-caption-plugin';
 import type { TripPhotoData } from '../types';
+import { trackAnalyticsEvent } from '../../../utils/analytics';
 import 'photoswipe/style.css';
 import 'photoswipe-dynamic-caption-plugin/photoswipe-dynamic-caption-plugin.css';
 
@@ -32,7 +33,10 @@ export function createTripPhotoLightbox(gallery: HTMLElement, getGalleryPhotos?:
         if (event.target instanceof Element) returnTarget = event.target.closest<HTMLElement>('a[data-pswp-width], button');
     };
     gallery.addEventListener('click', rememberTrigger, true);
-    lightbox.on('bindEvents', () => lightbox.pswp?.element?.focus({ preventScroll: true }));
+    lightbox.on('bindEvents', () => {
+        lightbox.pswp?.element?.focus({ preventScroll: true });
+        trackAnalyticsEvent('gallery-opened', { galleryType: 'trip' });
+    });
     lightbox.on('destroy', () => { if (returnTarget?.isConnected) returnTarget.focus({ preventScroll: true }); });
     const destroy = lightbox.destroy.bind(lightbox);
     lightbox.destroy = () => { gallery.removeEventListener('click', rememberTrigger, true); destroy(); };

@@ -7,6 +7,7 @@ import { getTripSummary } from '../features/trips/tripSummaries';
 import { usePageMetadata } from '../hooks/usePageMetadata';
 import { staticPageMetadata } from '../utils/pageMetadata';
 import { formatDate } from '../utils/formatDate';
+import { trackAnalyticsEvent } from '../utils/analytics';
 
 export function Home() {
   const recentPosts = getAllPosts().slice(0, 3);
@@ -43,6 +44,7 @@ export function Home() {
               <li key={project.slug} className={`min-w-0 ${index === 0 ? 'sm:col-span-2' : ''}`}>
                 <IntentLink
                   prefetchMode="destination" to={linkUrl}
+                  onClick={() => trackAnalyticsEvent('project-link-click', { project: project.slug, destination: 'details', placement: 'home' })}
                   className="group flex h-full flex-col overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900/30 hover:border-zinc-700 hover:bg-zinc-900/60"
                 >
                   {project.previewImage && (

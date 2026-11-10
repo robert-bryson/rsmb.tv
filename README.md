@@ -521,9 +521,9 @@ Check Terraform state before you apply these records. Existing DNS records must 
 
 ## Analytics
 
-The production site loads Umami Cloud analytics only on `www.rsmb.tv`. The tracker does not load on local or development hosts. It excludes URL query strings and obeys the browser Do Not Track setting.
+Production loads Umami Cloud only on `www.rsmb.tv`. The tracker excludes query strings and hashes. It respects Do Not Track, Global Privacy Control, and the local opt-out. See the [analytics contract](docs/umami-analytics.md) for events, privacy rules, and dashboard checks.
 
-The content security policy in `infra/main.tf` permits the Umami script and collection endpoint. Apply the Terraform configuration before you enable or change the tracker. Use `terraform -chdir=infra plan` to review the infrastructure change, then use `terraform -chdir=infra apply` to deploy it.
+The content security policy in `customHttp.yml` permits the Umami script and collection endpoint. The Amplify configuration also reads that file from `infra/main.tf`. Review the hosting configuration when you change the policy.
 
 ## Data
 

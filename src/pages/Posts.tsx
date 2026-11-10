@@ -1,5 +1,7 @@
 import { IntentLink } from '../components/IntentLink';
 import { useLocation, useSearchParams } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { analyticsResultBucket, trackAnalyticsEvent } from '../utils/analytics';
 import { DevelopmentContentStatus } from '../components/DevelopmentContentStatus';
 import { PostRegionFilters } from '../components/PostRegionFilters';
 import { filterPostsByTag, getAllBlogTags, tripFactTag } from '../content/blogTags';
@@ -47,6 +49,12 @@ export function Posts() {
     const allTags = getAllBlogTags(postsByType);
     const countries = getAllBlogRegions(postsByType);
     const posts = filterPostsByRegion(filterPostsByTag(postsByType, activeTag), activeCountry, activeRegion);
+    const previousFilters = useRef(location.search);
+    useEffect(() => {
+        if (previousFilters.current === location.search) return;
+        previousFilters.current = location.search;
+        trackAnalyticsEvent('filters-applied', { feature: 'posts', resultBucket: analyticsResultBucket(posts.length) });
+    }, [location.search, posts.length]);
 
     const metadata = staticPageMetadata('/posts', allPosts);
     usePageMetadata(metadata);

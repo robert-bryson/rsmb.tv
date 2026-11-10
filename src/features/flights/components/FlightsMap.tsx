@@ -29,8 +29,11 @@ import { LayersControl } from './LayersControl';
 import { getBasemap, VIEW_TRANSITION_MS, COPY_FEEDBACK_MS, COLOR_MODES } from '../constants';
 import type { GlobePoint, GlobeStaticArc, GlobeViewState } from '../types';
 import { globeViewsEqual } from '../utils/globeView';
+import { useMapInteraction } from '../../../hooks/useMapInteraction';
+import { trackAnalyticsEvent } from '../../../utils/analytics';
 
 export function FlightsMap() {
+  const trackInteraction = useMapInteraction('flights');
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const prefersReducedMotion = useReducedMotion();
 
@@ -116,9 +119,10 @@ export function FlightsMap() {
   }, [resetView, stopGlobeRotation]);
 
   const handleToggleAnimation = useCallback(() => {
+    trackInteraction('playback');
     stopGlobeRotation();
     setAnimationEnabled((enabled) => !enabled);
-  }, [setAnimationEnabled, stopGlobeRotation]);
+  }, [setAnimationEnabled, stopGlobeRotation, trackInteraction]);
 
   const { arcsData, staticArcsData, pointsData, flightStats, matchingFlights, loading, error } = useGlobeData({
     selectedYear,
@@ -149,9 +153,12 @@ export function FlightsMap() {
     stopGlobeRotation();
     const request = ++copyRequest.current;
     const url = window.location.href;
+    const pathname = window.location.pathname;
+    const recordCopy = () => trackAnalyticsEvent('share-action', { feature: 'flights', method: 'clipboard', outcome: 'copied' }, pathname);
     try {
       await navigator.clipboard.writeText(url);
       if (request !== copyRequest.current) return;
+      recordCopy();
       showCopiedFeedback();
     } catch {
       if (request !== copyRequest.current) return;
@@ -167,6 +174,7 @@ export function FlightsMap() {
       // Note: document.execCommand is deprecated but serves as last-resort fallback
       try {
         if (document.execCommand('copy')) {
+          recordCopy();
           showCopiedFeedback();
         } else {
           setCopiedUrl(false);
@@ -222,10 +230,11 @@ export function FlightsMap() {
 
   // Year change handler with zoom-to-fit
   const handleYearChange = useCallback((year: number | null) => {
+    trackInteraction('filter');
     stopGlobeRotation();
     yearFit.current.requestedYear = year;
     setSelectedYear(year);
-  }, [stopGlobeRotation, setSelectedYear]);
+  }, [stopGlobeRotation, setSelectedYear, trackInteraction]);
 
   // US States visibility handler - zoom to US when enabling
   const handleUSStatesVisibilityChange = useCallback((visible: boolean) => {
@@ -275,6 +284,7 @@ export function FlightsMap() {
 
   // Static arc click - zoom to fit the entire route and select it
   const handleStaticArcClick = useCallback((arc: GlobeStaticArc) => {
+    trackInteraction('selection');
     stopGlobeRotation();
 
     // If clicking the same route, deselect; otherwise select the new route
@@ -290,10 +300,11 @@ export function FlightsMap() {
     } else {
       setShowStats(false);
     }
-  }, [stopGlobeRotation, selectedRoute, setSelectedRoute, zoomToRoute, setShowStats]);
+  }, [stopGlobeRotation, selectedRoute, setSelectedRoute, zoomToRoute, setShowStats, trackInteraction]);
 
   // Point click - fly to airport showing all its routes, and toggle selection
   const handlePointClick = useCallback((point: GlobePoint) => {
+    trackInteraction('selection');
     stopGlobeRotation();
 
     const newSelection = selectedAirport === point.airport.code ? null : point.airport.code;
@@ -321,10 +332,11 @@ export function FlightsMap() {
     } else {
       setShowStats(false);
     }
-  }, [stopGlobeRotation, selectedAirport, setSelectedAirport, setShowStats, staticArcsData, zoomToAirportWithConnections]);
+  }, [stopGlobeRotation, selectedAirport, setSelectedAirport, setShowStats, staticArcsData, zoomToAirportWithConnections, trackInteraction]);
 
   // Handle clicking on an airport code in the stats panel
   const handleAirportCodeClick = useCallback((code: string) => {
+    trackInteraction('selection');
     stopGlobeRotation();
     const airport = pointsData.find(p => p.airport.code === code);
     if (airport) {
@@ -332,7 +344,7 @@ export function FlightsMap() {
     }
     setSelectedAirport(code);
     setShowStats(true);
-  }, [stopGlobeRotation, pointsData, setSelectedAirport, setShowStats, zoomToPoint]);
+  }, [stopGlobeRotation, pointsData, setSelectedAirport, setShowStats, zoomToPoint, trackInteraction]);
 
   // Handle clicking on a route in the stats panel
   const handleRouteCodeClick = useCallback((origin: string, destination: string) => {
@@ -557,13 +569,13 @@ export function FlightsMap() {
         stats={flightStats}
         loading={loading}
         isOpen={showStats}
-        onToggle={() => setShowStats(!showStats)}
+        onToggle={() => { trackInteraction('statistics'); setShowStats(!showStats); }}
         selectedYear={selectedYear}
         onClearAirport={() => {
           setSelectedAirport(null);
         }}
         selectedAirline={selectedAirline}
-        onAirlineSelect={setSelectedAirline}
+        onAirlineSelect={airline => { trackInteraction('filter'); setSelectedAirline(airline); }}
         selectedFlightType={selectedFlightType}
         onFlightTypeSelect={(flightType) => {
           stopGlobeRotation();

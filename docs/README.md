@@ -21,6 +21,7 @@ Use [ASD-STE100](https://www.asd-ste100.org/) as the language guide for current 
 | [Release validation](release-validation.md) | Activate hosted preview checks before production releases |
 | [Shared modules](shared-modules.md) | Reuse request caching, state identities, airport normalization, and project presentation |
 | [Intent prefetch](intent-prefetch.md) | Configure hover/focus destination preparation, resource limits, and browser measurements |
+| [Umami analytics](umami-analytics.md) | Review event definitions, privacy rules, and dashboard checks |
 | [Blog publication](blog-publishing.md) | Configure the Sheet and import documents |
 | [Site metadata](site-metadata.md) | Maintain crawler metadata, social cards, canonical paths, and hosting rules |
 | [Image delivery](image-assets.md) | Prepare card images, recover failed requests, and check homepage preloads |

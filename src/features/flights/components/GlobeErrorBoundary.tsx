@@ -1,4 +1,5 @@
 import { Component, type ReactNode } from 'react';
+import { captureAnalyticsException } from '../../../utils/analytics';
 
 interface Props {
     children: ReactNode;
@@ -24,6 +25,7 @@ export class GlobeErrorBoundary extends Component<Props, State> {
     componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
         this.props.onStateChange?.(true);
         console.error('Globe rendering error:', error, errorInfo);
+        captureAnalyticsException(error);
     }
 
     handleRetry = () => {

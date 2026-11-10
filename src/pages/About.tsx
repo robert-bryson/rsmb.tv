@@ -1,5 +1,6 @@
 import { usePageMetadata } from '../hooks/usePageMetadata';
 import { staticPageMetadata } from '../utils/pageMetadata';
+import { trackAnalyticsEvent } from '../utils/analytics';
 
 export function About() {
   usePageMetadata(staticPageMetadata('/about'));
@@ -63,6 +64,7 @@ export function About() {
           <li>
             <a
               href="mailto:hello@rsmb.tv"
+              onClick={() => trackAnalyticsEvent('contact-link-click', { placement: 'about' })}
               className="text-zinc-400 hover:text-violet-400"
             >
               hello@rsmb.tv
