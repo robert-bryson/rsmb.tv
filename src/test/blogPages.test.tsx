@@ -208,7 +208,7 @@ describe('Posts page', () => {
 });
 
 describe('BlogPost tag navigation', () => {
-    it('preserves the originating atlas visit through series links and the article return', () => {
+    it('preserves the originating atlas visit through series links and the article return', async () => {
         const parts = testPosts.slice(0, 2).map((post, index) => ({
             ...post, series: { id: 'journey', title: 'Journey reports', order: index + 1 },
         }));
@@ -232,7 +232,7 @@ describe('BlogPost tag navigation', () => {
                     <Route path="/projects/adv-atlas/map" element={<ReturnProbe />} />
                 </Routes>
             </MemoryRouter>);
-            fireEvent.click(within(screen.getByRole('navigation', { name: 'Journey reports' })).getByRole('link', { name: 'Weather Records' }));
+            fireEvent.click(within(await screen.findByRole('navigation', { name: 'Journey reports' })).getByRole('link', { name: 'Weather Records' }));
             fireEvent.click(screen.getAllByRole('link', { name: /Back to map/ })[0]);
             expect(JSON.parse(screen.getByTestId('return-state').textContent!)).toEqual({ restoreScroll: true, returnKey: 'original-visit' });
         } finally {

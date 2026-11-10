@@ -146,3 +146,34 @@ The following work remains open:
 - Split the remaining large map components and document importer through separate changes with behavior tests.
 
 The review does not change production infrastructure or publish a release.
+
+## Release follow-up
+
+The first pushed revision, `f3edac4`, reached the final CI suite.
+The suite passed 620 trip checks and failed two WebKit checks.
+The release gate blocked deployment.
+See the [failed run](https://github.com/robert-bryson/rsmb.tv/actions/runs/42863656528).
+
+The hero check matched the title in the loading placeholder.
+It then measured a hero that was being replaced.
+The check now waits for the real `Trip photos` region and its subtitle.
+
+The return-link trace showed layout changes during footer activation.
+The footer appeared before the lazy story body had loaded.
+Scroll restoration also remained active after pointer input.
+The footer now shares the story body's Suspense boundary.
+The hero and header return link remain available while the body loads.
+Pointer input now cancels restoration, including queued resize callbacks.
+The footer-return test targets the named Post navigation region.
+
+A new held-module browser check verifies the loading boundary.
+Five unit cases verify restoration and input ownership.
+The pointer case failed before the fix.
+Repeated WebKit checks verify both failed flows and delayed body loading.
+The final stress run passed all 30 WebKit checks.
+Desktop and phone Chromium passed 14 related checks, including reading budgets.
+The complete suite passed 3,017 unit tests in 206 files and all 18 Python tests.
+Lint and TypeScript checks passed.
+
+Trip CI now emits GitHub failure annotations and stops at its first failure.
+Passing releases still run the full suite.

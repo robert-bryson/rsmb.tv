@@ -110,21 +110,36 @@ export function BlogPost({ collection }: BlogPostProps) {
     }
 
     const { Component } = post;
+    const postFooter = (
+        <footer className="mt-12 space-y-5 border-t border-zinc-800 pt-6 text-sm">
+            {seriesPosts.length > 1 && <nav aria-label={series?.title}>
+                <p className="mb-2 font-medium">{series?.title}</p>
+                <ol className="space-y-2">{seriesPosts.map(part => <li key={part.slug}>
+                    <IntentLink prefetchMode="destination" aria-current={part.slug === post.slug ? 'page' : undefined} className="text-violet-300 underline"
+                        to={`/${part.format === 'trip' ? 'trips' : 'blog'}/${part.slug}`} state={returnDestination.onwardState}>
+                        {part.title}
+                    </IntentLink>
+                </li>)}</ol>
+            </nav>}
+            <PostNavigation previous={previousPost} next={nextPost} returnDestination={returnDestination} />
+        </footer>
+    );
     const postContent = (
         <PostHeadingProvider key={post.slug}>
-            {!isTrip && <PostTableOfContents contentRef={contentRef} />}
-            <div ref={contentRef} id="trip-story-body" className="scroll-mt-24">
-                {post.development && !post.development.contentAvailable ? (
-                    <p className="text-zinc-400">
-                        The draft {isTrip ? 'story' : 'post'} body is not available yet.
-                    </p>
-                ) : (
-                    <Suspense fallback={<div className="text-sm text-zinc-400">Loading {isTrip ? 'story' : 'post'}...</div>}>
+            <Suspense fallback={<div role="status" className="text-sm text-zinc-400">Loading {isTrip ? 'story' : 'post'}...</div>}>
+                {!isTrip && <PostTableOfContents contentRef={contentRef} />}
+                <div ref={contentRef} id="trip-story-body" className="scroll-mt-24">
+                    {post.development && !post.development.contentAvailable ? (
+                        <p className="text-zinc-400">
+                            The draft {isTrip ? 'story' : 'post'} body is not available yet.
+                        </p>
+                    ) : (
                         <Component components={mdxComponents} />
-                    </Suspense>
-                )}
-            </div>
-            {isTrip && <TripStoryDetails contentRef={contentRef} />}
+                    )}
+                </div>
+                {isTrip && <TripStoryDetails contentRef={contentRef} />}
+                {postFooter}
+            </Suspense>
         </PostHeadingProvider>
     );
 
@@ -162,18 +177,6 @@ export function BlogPost({ collection }: BlogPostProps) {
                     {postContent}
                 </>
             )}
-            <footer className="mt-12 space-y-5 border-t border-zinc-800 pt-6 text-sm">
-                {seriesPosts.length > 1 && <nav aria-label={series?.title}>
-                    <p className="mb-2 font-medium">{series?.title}</p>
-                    <ol className="space-y-2">{seriesPosts.map(part => <li key={part.slug}>
-                        <IntentLink prefetchMode="destination" aria-current={part.slug === post.slug ? 'page' : undefined} className="text-violet-300 underline"
-                            to={`/${part.format === 'trip' ? 'trips' : 'blog'}/${part.slug}`} state={returnDestination.onwardState}>
-                            {part.title}
-                        </IntentLink>
-                    </li>)}</ol>
-                </nav>}
-                <PostNavigation previous={previousPost} next={nextPost} returnDestination={returnDestination} />
-            </footer>
         </article>
     );
 }

@@ -34,6 +34,7 @@ export function ScrollToTop() {
         observer?.observe(document.body);
         const stop = () => { restoring = false; observer?.disconnect(); };
         const timeout = window.setTimeout(stop, 3000);
+        window.addEventListener('pointerdown', stop, { passive: true });
         window.addEventListener('wheel', stop, { passive: true });
         window.addEventListener('touchstart', stop, { passive: true });
         window.addEventListener('keydown', stop);
@@ -45,6 +46,7 @@ export function ScrollToTop() {
         return () => {
             stop(); cancelAnimationFrame(frame); clearTimeout(timeout);
             window.removeEventListener('scroll', remember);
+            window.removeEventListener('pointerdown', stop);
             window.removeEventListener('wheel', stop); window.removeEventListener('touchstart', stop); window.removeEventListener('keydown', stop);
             window.history.scrollRestoration = previous;
         };

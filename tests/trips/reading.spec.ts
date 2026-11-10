@@ -90,12 +90,33 @@ test('the opening flows from the hero into prose, facts, map, and expanded conte
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(await page.evaluate(() => innerWidth));
 });
 
+test('post navigation waits for the lazy story body while its hero remains usable', async ({ page }) => {
+    let release!: () => void;
+    const held = new Promise<void>(resolve => { release = resolve; });
+    await page.route(/\/assets\/coastal-test-[^/]+\.js$/, async route => {
+        const response = await route.fetch();
+        // The manifest and MDX body share a generated filename prefix.
+        if ((await response.text()).includes('Opening story paragraph.')) await held;
+        await route.fulfill({ response });
+    });
+    try {
+        await page.goto('/trips/coastal-test', { waitUntil: 'domcontentloaded' });
+        await expect(page.getByRole('region', { name: 'Trip photos', exact: true })).toBeVisible();
+        await expect(page.getByText('Loading story...', { exact: true })).toBeVisible();
+        await expect(page.getByRole('navigation', { name: 'Post navigation', exact: true })).toHaveCount(0);
+        release();
+        await expect(page.getByText('Opening story paragraph.', { exact: true })).toBeVisible();
+        await expect(page.getByRole('navigation', { name: 'Post navigation', exact: true })).toBeVisible();
+    } finally { release(); }
+});
+
 scrollbarTest('the trip hero spans the page below the nav and contains its title and subtitle', async ({ page }) => {
     await page.goto('/trips/coastal-test');
-    const hero = page.locator('.trip-hero-gallery');
+    const hero = page.getByRole('region', { name: 'Trip photos', exact: true });
     const title = hero.getByRole('heading', { level: 1, name: 'Coastal test trip' });
     const subtitle = hero.getByText('A synthetic two-day trip.');
     await expect(title).toBeVisible();
+    await expect(subtitle).toBeVisible();
     const heroBox = (await hero.boundingBox())!;
     const navBox = (await page.locator('.site-header').boundingBox())!;
     expect(heroBox.x).toBeCloseTo(0, 0);

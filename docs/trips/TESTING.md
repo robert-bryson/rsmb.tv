@@ -66,6 +66,8 @@ The available files remain downloadable for seven days.
 Both browser suites capture traces and screenshots for failed tests. A retry is not required.
 Browser setup failures can lack screenshots.
 The artifact also includes available error contexts.
+Trip CI stops on its first failure and emits GitHub annotations.
+The complete suite still runs when checks pass.
 Download and extract the artifact. Open a trace with:
 
 ```bash
@@ -249,6 +251,10 @@ Its browser suite checks both JavaScript-disabled requests and React navigation 
 
 The hero tests check photo selection, wraparound, viewer order, focus return, and image failure recovery.
 They also check title placement, reserved height, responsive image sizes, and reduced motion.
+Wait for the `Trip photos` region before measuring the hero.
+The loading view also contains the story title and reserves the same CSS space.
+A held-module test verifies that footer navigation waits for the story body.
+The hero remains usable during that wait.
 Single-photo checks measure portrait, landscape, and explicit panorama widths from 320 to 1440 pixels.
 They check reserved image height after failure and responsive sources on high-density displays.
 Caption checks use long words with pointer and touch input in Chromium and WebKit.
@@ -434,6 +440,9 @@ Hover previews do not select routes or scroll the list.
 Phone checks use card taps, route selection, and shared-road choices.
 Keyboard panning checks use desktop Chromium.
 Report-return checks capture list scroll at link activation, after any browser scrolling needed to expose the link.
+Scroll restoration stops on pointer, wheel, touch, or keyboard input.
+Queued resize callbacks must not move the page after that input.
+Footer-return checks target the named Post navigation region. They cannot select the header link during loading.
 They compare the restored position exactly. Measuring before activation can capture a different position.
 Fresh-visit checks wait for the initial fit before measuring painted routes.
 Fit padding reserves fixed control space. Delayed tiles and attribution must not change the framing.

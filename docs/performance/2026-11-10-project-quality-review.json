@@ -685,5 +685,34 @@
     "Physical-device and screen-reader checks",
     "Delayed list scroll restoration beyond the current three-second observation window",
     "Separate refactors for large map components and the document importer"
-  ]
+  ],
+  "releaseFollowUp": {
+    "failedRevision": "f3edac438f08229b34a06db1459a04b678fe49b3",
+    "failedRun": "https://github.com/robert-bryson/rsmb.tv/actions/runs/42863656528",
+    "tripResults": {
+      "passed": 620,
+      "skipped": 17,
+      "failed": 2
+    },
+    "issues": [
+      "Hero test matched the transient loading title before the real photo region mounted",
+      "Footer activation raced with lazy story layout and restoration continuing after pointer input"
+    ],
+    "fixes": [
+      "Footer and story body share a Suspense boundary while the hero stays usable",
+      "Pointer input cancels scroll restoration and queued resize work",
+      "Hero and footer tests target stable named regions",
+      "Trip CI reports failures immediately and stops at the first failure"
+    ],
+    "validation": {
+      "unitTests": 3017,
+      "unitFiles": 206,
+      "pythonTests": 18,
+      "webkitRepeatedChecks": 30,
+      "chromiumDesktopAndPhoneChecks": 14,
+      "lint": "passed",
+      "typecheck": "passed"
+    },
+    "reproduction": "The pointer-restoration regression and one of ten old WebKit hero measurements failed before the fix."
+  }
 }

@@ -112,8 +112,10 @@ for (const returnLink of ['header', 'footer after another report'] as const) {
             await page.getByRole('link', { name: /^Previous post|^Next post/ }).click();
             await page.reload();
         }
-        const back = page.getByRole('link', { name: /Back to map/ });
-        await (returnLink === 'header' ? back.first() : back.last()).click();
+        const back = returnLink === 'header'
+            ? page.getByRole('region', { name: 'Trip photos', exact: true }).getByRole('link', { name: /Back to map/ })
+            : page.getByRole('navigation', { name: 'Post navigation', exact: true }).getByRole('link', { name: 'Back to map', exact: true });
+        await back.click();
         await expectAtlasUrl(page, { trip: 'coastal-test' });
         await expect(page.locator('#atlas-panel-toggle')).toHaveAttribute('aria-expanded', 'true');
         await expect.poll(() => page.locator('#atlas-trip-list').evaluate(element => element.scrollTop)).toBeCloseTo(scroll, 0);

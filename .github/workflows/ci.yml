@@ -125,7 +125,7 @@ jobs:
         run: PLAYWRIGHT_WEBKIT=1 npm run test:temperatures:browser
 
       - name: Production trip browser tests
-        run: PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser
+        run: PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- --max-failures=1 --reporter=github
 
       - name: Preserve browser failure evidence
         if: ${{ failure() }}
