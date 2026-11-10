@@ -57,19 +57,18 @@ Use the [editorial review](docs/reviews/2026-10-29-trip-editorial-review.md) for
 
 ### Operational checks
 
-- [ ] Investigate the twelve legacy threshold disagreements in the [backfill audit](docs/performance/2026-11-05-temperature-full-backfill.json). Preserve raw observations and legacy `rh` and `rl` until a correction policy is approved.
-- [ ] Run a full temperature sync after deployment. Verify California and every per-date state count. See [freshness and coverage](docs/temperature-map.md#freshness-and-coverage).
+- [ ] Approve a correction and refresh policy for the twelve legacy daily thresholds. The [November 9 comparison](docs/performance/2026-11-09-temperature-threshold-check.json) retains current ACIS requests and responses. Preserve raw observations and legacy `rh` and `rl` until the policy is approved.
 
 ### Historical signal publication
 
 The historical signal is not ready for publication.
+The operational map's standing-record history is a separate dataset.
+Its November 9 snapshot already includes all calendar years from 1890 through 2026.
 
 - [ ] Build an ACIS extraction command that can continue after an interruption. Retain raw responses and request manifests.
 - [ ] Verify ACIS flags and certification fields against current RCC documentation.
-- [ ] Regenerate `climateTrends.json`. Include a zero-count row for each calendar year.
 - [ ] Complete the [publication checks](projects/temperature-records/methodology.md#validate-before-publication).
 - [ ] Store an approved station cohort with a version number.
-- [ ] Bound historical `events.csv` to `--analysis-end`. Add the [CLI regression](docs/reviews/2026-11-05-data-pipeline-analysis.md#2-p2--the-offline-estimator-writes-events-after---analysis-end).
 - [ ] Publish station coverage, failed geography requests, and data quality in a manifest with a version number.
 
 ## Browser and performance checks
@@ -90,19 +89,16 @@ The [live prefetch check](docs/reviews/2026-11-09-live-release-verification.md) 
 
 - [ ] Test list scroll restoration after delayed content loads. Check browser Back and the article return link.
 - [ ] Extend fixed-tile checks to cover stop selection and all three map styles.
-- [ ] Reproduce the intermittent flight-control failures. Add regressions for the [confirmed cause](docs/reviews/2026-11-04-flight-duration-test-review.md#intermittent-controls-failures).
+- [ ] Reproduce the intermittent flight-control failures. Confirm the cause, then add regressions. See the [unresolved failure report](docs/reviews/2026-11-04-flight-duration-test-review.md#intermittent-controls-failures).
 
 ## Tornado Tracks
 
 - [ ] Publish source coverage dates and omitted-coordinate counts separately from upload timestamps.
-- [ ] Add recovery for failed basemap requests. Check the degraded view and Retry with fixed responses.
-- [ ] Add keyboard-accessible state selection, chart data tables, and a clear zero-results action.
 - [ ] Separate renderer lifecycle and trend presentation. Preserve interaction coverage.
 
 ## Infrastructure
 
 - [ ] Deploy the two remaining [sync OIDC roles](docs/github-actions-oidc.md). Set the role variables. Verify both sync workflows before removing legacy sync credentials.
-- [ ] Confirm [mail record ownership](docs/email-dns.md#adopt-existing-records) in remote Terraform state before applying DNS changes.
 - [ ] Verify [Gmail signing and external delivery](docs/email-dns.md#enable-and-verify-signing) with the configured Google Admin account.
 
 ## Dashboard checks
@@ -118,7 +114,7 @@ Use fixed provider responses. Do not contact production services from unit tests
 Preserve passing publication checks when changing build scripts.
 
 - [ ] Remove scoped minimatch overrides when all three upstream consumers declare a patched compatible range. Run the [compatibility checks](README.md#lint-security-override).
-- [ ] Extract the remaining map rendering, interaction, and loading code. Preserve browser behavior and URL contracts.
+- [ ] Extract the remaining temperature-map rendering, interaction, and loading code. Preserve browser behavior and URL contracts. Track tornado-map work in its own section above.
 - [ ] Reduce MapLibre loading and worker costs. Preserve the article JavaScript budgets.
 - [ ] Split document conversion, shortcode handling, and publication checks in `scripts/sync-blogs.js`. Retain compilation tests.
 - [ ] Replace the TypeScript 6 lint compiler after `typescript-eslint` supports TypeScript 7. Run lint and typecheck first.

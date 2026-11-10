@@ -158,7 +158,10 @@ def run_analysis(args: argparse.Namespace) -> dict[str, int]:
         raise ValueError("fixed cohort is empty; inspect completeness thresholds and operating periods")
 
     cohort_stations = [station for station in stations if station.station_id in cohort_ids]
-    cohort_observations = [row for row in observations if row.station_id in cohort_ids]
+    cohort_observations = [
+        row for row in observations
+        if row.station_id in cohort_ids and args.baseline_start <= row.observed_on <= args.analysis_end
+    ]
     events = reconstruct_record_events(
         cohort_stations,
         cohort_observations,

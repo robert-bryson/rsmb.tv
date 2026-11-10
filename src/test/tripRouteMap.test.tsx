@@ -449,9 +449,13 @@ describe('TripRouteMap', () => {
     });
 
     it('links route hover to the day label and a popup without selecting or zooming', async () => {
+        mapMocks.once.mockImplementation(() => undefined);
         vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
         render(<TripStoryProvider manifest={dayMapManifest}><TripRouteMap /></TripStoryProvider>);
         await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        expect(mapMocks.on.mock.calls.some(([event]) => event === 'mousemove')).toBe(false);
+        act(() => mapMocks.once.mock.calls.filter(([event]) => event === 'load').forEach(([, listener]) => listener()));
+        await waitFor(() => expect(mapMocks.on).toHaveBeenCalledWith('mousemove', 'trip-route-halo', expect.any(Function)));
         const move = mapMocks.on.mock.calls.find(([event, layer]) => event === 'mousemove' && layer === 'trip-route-halo')?.[2];
         const leave = mapMocks.on.mock.calls.find(([event, layer]) => event === 'mouseleave' && layer === 'trip-route-halo')?.[2];
         const event = { features: [{ properties: { trackId: 'return' } }], lngLat: { lng: -123, lat: 46 } };
@@ -477,7 +481,7 @@ describe('TripRouteMap', () => {
         const trip = { ...dayMapManifest, days: [{ ...dayMapManifest.days![0], title }] };
         vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
         render(<TripStoryProvider manifest={trip}><TripRouteMap /></TripStoryProvider>);
-        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        await waitFor(() => expect(mapMocks.on).toHaveBeenCalledWith('mousemove', 'trip-route-halo', expect.any(Function)));
         const day = screen.getByRole('button', { name: `1. ${title}` });
         fireEvent.mouseEnter(day);
         expect(screen.getByRole('tooltip')).toHaveTextContent(title);
@@ -492,7 +496,7 @@ describe('TripRouteMap', () => {
         vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => dayMapRoute }));
         const story = (active: boolean) => <TripStoryProvider manifest={dayMapManifest}><TripRouteMap active={active} /></TripStoryProvider>;
         const { rerender } = render(story(true));
-        await waitFor(() => expect(mapMocks.Map).toHaveBeenCalledOnce());
+        await waitFor(() => expect(mapMocks.on).toHaveBeenCalledWith('mousemove', 'trip-route-halo', expect.any(Function)));
         const move = mapMocks.on.mock.calls.find(([event, layer]) => event === 'mousemove' && layer === 'trip-route-halo')?.[2];
         const hover = (trackId: unknown) => move({ features: [{ properties: { trackId } }], lngLat: { lng: -123, lat: 46 } });
         act(() => hover('morning'));

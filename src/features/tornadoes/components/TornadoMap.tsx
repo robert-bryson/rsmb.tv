@@ -43,6 +43,7 @@ import {
 } from '../utils';
 import { TornadoSummaryPanel } from './TornadoSummaryPanel';
 import { TornadoTimeline } from './TornadoTimeline';
+import { recoverTornadoBasemap, type TornadoBasemapState } from '../tornadoBasemap';
 
 const LARGE_TRACK_WARNING_THRESHOLD = 5_000;
 
@@ -448,7 +449,10 @@ export function TornadoMap() {
     const selectStateRef = useRef<(state: string) => void>(() => { });
     const selectTrackRef = useRef<(track: TornadoTrackFeature) => void>(() => { });
     const setMapViewRef = useRef<(lat: number, lng: number, zoom: number) => void>(() => { });
-    const [mapLoaded, setMapLoaded] = useState(false);
+    const [mapStyleVersion, setMapStyleVersion] = useState(0);
+    const mapLoaded = mapStyleVersion > 0;
+    const [basemapState, setBasemapState] = useState<TornadoBasemapState>('loading');
+    const retryBasemap = useRef<() => void>(() => { });
     const [selectedTrack, setSelectedTrackState] = useState<TornadoTrackFeature | null>(null);
     const [timelinePlaying, setTimelinePlaying] = useState(false);
     const [timelineCollapsed, setTimelineCollapsed] = useState(() => window.matchMedia?.('(max-width: 767px)').matches ?? false);
@@ -712,7 +716,8 @@ export function TornadoMap() {
         canvas.addEventListener('webglcontextlost', handleContextLost);
         canvas.addEventListener('webglcontextrestored', handleContextRestored);
 
-        map.on('load', () => {
+        let resizeFrame = 0;
+        map.on('style.load', () => {
             map.addSource('tornado-tracks', { type: 'geojson', data: EMPTY_TRACKS });
             map.addSource('tornado-track-points', { type: 'geojson', data: EMPTY_TRACK_POINTS });
             map.addSource('tornado-points', { type: 'geojson', data: EMPTY_POINTS });
@@ -856,65 +861,69 @@ export function TornadoMap() {
                 },
             });
 
-            // A simple flag to prevent a track click from also triggering state
-            // selection. Track handlers run first (registered first); they set this flag
-            // which is cleared after the current event via setTimeout.
-            let trackClickConsumed = false;
+            map.resize();
+            cancelAnimationFrame(resizeFrame);
+            resizeFrame = requestAnimationFrame(() => map.resize());
+            setMapStyleVersion(version => version + 1);
+        });
 
-            for (const layerId of ['tornado-track-line', 'tornado-track-point']) {
-                map.on('mouseenter', layerId, () => {
-                    map.getCanvas().style.cursor = 'pointer';
-                });
+        // A simple flag to prevent a track click from also triggering state
+        // selection. Track handlers run first (registered first); they set this flag
+        // which is cleared after the current event via setTimeout.
+        let trackClickConsumed = false;
 
-                map.on('mouseleave', layerId, () => {
-                    map.getCanvas().style.cursor = '';
-                    popupRef.current?.remove();
-                });
-
-                map.on('mousemove', layerId, (event) => {
-                    const rendered = event.features?.[0];
-                    const id = rendered?.properties?.id as string | undefined;
-                    const feature = id ? trackLookup.current.get(id) : null;
-                    if (!feature || !event.lngLat) return;
-                    popupRef.current?.setLngLat(event.lngLat).setHTML(formatPopup(feature)).addTo(map);
-                });
-
-                map.on('click', layerId, (event) => {
-                    const rendered = event.features?.[0];
-                    const id = rendered?.properties?.id as string | undefined;
-                    const feature = id ? trackLookup.current.get(id) : null;
-                    if (feature) {
-                        trackClickConsumed = true;
-                        window.setTimeout(() => { trackClickConsumed = false; }, 0);
-                        selectTrackRef.current(feature);
-                    }
-                });
-            }
-
-            map.on('mouseenter', 'us-state-fill', () => {
+        for (const layerId of ['tornado-track-line', 'tornado-track-point']) {
+            map.on('mouseenter', layerId, () => {
                 map.getCanvas().style.cursor = 'pointer';
             });
 
-            map.on('mouseleave', 'us-state-fill', () => {
+            map.on('mouseleave', layerId, () => {
                 map.getCanvas().style.cursor = '';
+                popupRef.current?.remove();
             });
 
-            map.on('click', 'us-state-fill', (event) => {
-                if (trackClickConsumed) return;
-                const state = event.features?.[0]?.properties?.abbr as string | undefined;
-                if (state) selectStateRef.current(state);
+            map.on('mousemove', layerId, (event) => {
+                const rendered = event.features?.[0];
+                const id = rendered?.properties?.id as string | undefined;
+                const feature = id ? trackLookup.current.get(id) : null;
+                if (!feature || !event.lngLat) return;
+                popupRef.current?.setLngLat(event.lngLat).setHTML(formatPopup(feature)).addTo(map);
             });
 
-            map.resize();
-            requestAnimationFrame(() => map.resize());
-            setMapLoaded(true);
+            map.on('click', layerId, (event) => {
+                const rendered = event.features?.[0];
+                const id = rendered?.properties?.id as string | undefined;
+                const feature = id ? trackLookup.current.get(id) : null;
+                if (feature) {
+                    trackClickConsumed = true;
+                    window.setTimeout(() => { trackClickConsumed = false; }, 0);
+                    selectTrackRef.current(feature);
+                }
+            });
+        }
+
+        map.on('mouseenter', 'us-state-fill', () => {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+
+        map.on('mouseleave', 'us-state-fill', () => {
+            map.getCanvas().style.cursor = '';
+        });
+
+        map.on('click', 'us-state-fill', (event) => {
+            if (trackClickConsumed) return;
+            const state = event.features?.[0]?.properties?.abbr as string | undefined;
+            if (state) selectStateRef.current(state);
         });
 
         map.on('error', (event) => {
             const message = event.error?.message || String(event);
-            if (/webgl|context/i.test(message)) setWebglUnavailable(true);
+            if (/webgl|context|worker/i.test(message)) setWebglUnavailable(true);
             console.error('MapLibre error:', message);
         });
+
+        const basemapRecovery = recoverTornadoBasemap(map, setBasemapState);
+        retryBasemap.current = basemapRecovery.retry;
 
         const handleMoveEnd = () => {
             const center = map.getCenter();
@@ -925,6 +934,9 @@ export function TornadoMap() {
         mapRef.current = map;
 
         return () => {
+            basemapRecovery.dispose();
+            retryBasemap.current = () => { };
+            cancelAnimationFrame(resizeFrame);
             // A final camera event must not restore this route during disposal.
             map.off('moveend', handleMoveEnd);
             setMapViewRef.current = () => { };
@@ -942,21 +954,21 @@ export function TornadoMap() {
 
     useEffect(() => {
         const map = mapRef.current;
-        if (!map || !mapLoaded) return;
+        if (!map || !mapStyleVersion || !map.getSource('tornado-tracks')) return;
         (map.getSource('tornado-tracks') as maplibregl.GeoJSONSource).setData(mapAllTracks);
         (map.getSource('tornado-track-points') as maplibregl.GeoJSONSource).setData(mapAllTrackPoints);
         (map.getSource('tornado-points') as maplibregl.GeoJSONSource).setData(filteredPoints);
-    }, [mapLoaded, mapAllTracks, mapAllTrackPoints, filteredPoints]);
+    }, [mapStyleVersion, mapAllTracks, mapAllTrackPoints, filteredPoints]);
 
     useEffect(() => {
         const map = mapRef.current;
-        if (!map || !mapLoaded) return;
+        if (!map || !mapStyleVersion || !map.getSource('us-states')) return;
         (map.getSource('us-states') as maplibregl.GeoJSONSource).setData(stateBoundaries ?? EMPTY_STATE_BOUNDARIES);
-    }, [mapLoaded, stateBoundaries]);
+    }, [mapStyleVersion, stateBoundaries]);
 
     useEffect(() => {
         const map = mapRef.current;
-        if (!map || !mapLoaded) return;
+        if (!map || !mapStyleVersion || !map.getSource('tornado-tracks')) return;
         const trackVisible = filters.mode !== 'density';
         const bgVisible = trackVisible && !!filters.selectedState;
         map.setLayoutProperty('tornado-density', 'visibility', filters.mode === 'density' ? 'visible' : 'none');
@@ -974,11 +986,11 @@ export function TornadoMap() {
                 : YEAR_COLOR_EXPRESSION;
         map.setPaintProperty('tornado-track-line', 'line-color', trackColorExpr);
         map.setPaintProperty('tornado-track-point', 'circle-color', trackColorExpr);
-    }, [mapLoaded, filters.mode, filters.colorMode, filters.selectedState]);
+    }, [mapStyleVersion, filters.mode, filters.colorMode, filters.selectedState]);
 
     useEffect(() => {
         const map = mapRef.current;
-        if (!map || !mapLoaded) return;
+        if (!map || !mapStyleVersion || !map.getSource('us-states')) return;
         const selectedState = filters.selectedState ?? '';
         const selectedStateMatch = ['==', ['get', 'abbr'], selectedState] as unknown as maplibregl.ExpressionSpecification;
         map.setPaintProperty('us-state-fill', 'fill-opacity', ['case', selectedStateMatch, 0.22, 0.04]);
@@ -1004,16 +1016,16 @@ export function TornadoMap() {
             map.setFilter('tornado-tracks-bg-line', null);
             map.setFilter('tornado-tracks-bg-point', null);
         }
-    }, [mapLoaded, filters.selectedState]);
+    }, [mapStyleVersion, filters.selectedState]);
 
     useEffect(() => {
         const map = mapRef.current;
-        if (!map || !mapLoaded) return;
+        if (!map || !mapStyleVersion || !map.getSource('selected-tornado-track')) return;
         const selectedCollection: TornadoTrackCollection = selectedTrack
             ? { type: 'FeatureCollection', features: [selectedTrack] }
             : EMPTY_TRACKS;
         (map.getSource('selected-tornado-track') as maplibregl.GeoJSONSource).setData(selectedCollection);
-    }, [mapLoaded, selectedTrack]);
+    }, [mapStyleVersion, selectedTrack]);
 
     const selectNotableEvent = useCallback((event: NotableTornadoEvent) => {
         pendingFlyTo.current = event.coordinates[0] as [number, number] | undefined ?? null;
@@ -1027,12 +1039,16 @@ export function TornadoMap() {
 
     const filterSummary = `${normalizedRange.startYear === normalizedRange.endYear ? normalizedRange.startYear : `${normalizedRange.startYear}-${normalizedRange.endYear}`} · ${REGION_LABELS[filters.region]}`;
     const showStaticFallback = webglUnavailable;
+    const backgroundLoading = !showStaticFallback && (!mapLoaded || basemapState === 'loading');
+    const backgroundUnavailable = !showStaticFallback && basemapState === 'unavailable';
+    const mapState = error ? 'error' : loading || backgroundLoading ? 'loading'
+        : showStaticFallback ? 'fallback' : backgroundUnavailable ? 'degraded' : 'ready';
 
     return (
         <div
             className="relative h-full w-full overflow-hidden bg-[#020617] text-zinc-100"
             data-testid="tornado-map"
-            data-map-state={error ? 'error' : loading || (!mapLoaded && !showStaticFallback) ? 'loading' : showStaticFallback ? 'fallback' : 'ready'}
+            data-map-state={mapState}
         >
             <div ref={mapContainer} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
             {showStaticFallback && (
@@ -1090,12 +1106,19 @@ export function TornadoMap() {
                 onCollapseChange={setSummaryCollapsed}
                 onScaleFilterChange={setScaleFilter}
                 onRegionChange={setRegion}
-                onSelectedStateChange={setSelectedState}
+                onSelectedStateChange={state => state ? handleSelectState(state) : setSelectedState(null)}
                 onColorModeChange={setColorMode}
                 onModeChange={handleModeChange}
                 onSelectEvent={selectNotableEvent}
                 onShare={handleShare}
                 onCloseSelection={() => setSelectedTrack(null)}
+                resultsReady={!loading && !error}
+                onResetFilters={() => {
+                    setYearRange(minYear, maxYear);
+                    setScaleFilter('all');
+                    setRegion('conus');
+                    setSelectedTrack(null);
+                }}
             />
 
             <TornadoTimeline
@@ -1117,13 +1140,20 @@ export function TornadoMap() {
                 </div>
             )}
 
-            {(loading || error || (!mapLoaded && !showStaticFallback)) && !timelinePlaying && (
-                <div className={`pointer-events-none absolute inset-x-3 top-32 flex justify-center md:top-24 ${error ? 'z-50' : 'z-30'}`}>
+            <div className={`pointer-events-none absolute inset-x-3 top-32 flex flex-col items-center gap-2 md:top-24 ${error || backgroundUnavailable ? 'z-50' : 'z-30'}`}>
+                {backgroundUnavailable && (
+                    <div role="alert" className="pointer-events-auto rounded-lg border border-amber-700 bg-zinc-950 px-4 py-3 text-sm text-zinc-200 shadow-2xl">
+                        Map background unavailable. Tracks and filters still work.
+                        <button type="button" onClick={() => retryBasemap.current()} className="ml-3 min-h-11 rounded bg-sky-500 px-3 py-2 font-medium text-zinc-950">Retry background</button>
+                    </div>
+                )}
+
+                {(loading || error || backgroundLoading) && !timelinePlaying && (
                     <div role={error ? 'alert' : 'status'} className="pointer-events-auto rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-zinc-300 shadow-2xl">
                         {error ? <>Unable to load tornado data: {error}<button type="button" onClick={retry} className="ml-3 rounded bg-sky-500 px-3 py-2 font-medium text-zinc-950">Retry</button></> : loading ? 'Loading tornado tracks...' : 'Loading map background...'}
                     </div>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 }

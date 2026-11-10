@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { usJurisdictions } from '../../../../shared/geography/usStates';
 import { DEFAULT_END_YEAR, DEFAULT_START_YEAR, INITIAL_CENTER, INITIAL_ZOOM, MAX_ZOOM, MIN_ZOOM } from '../constants';
 import type { TornadoColorMode, TornadoMode, TornadoRegionPreset, TornadoScaleFilter } from '../types';
 
@@ -7,7 +8,7 @@ const SCALE_FILTERS = new Set<TornadoScaleFilter>(['all', 'ef0', 'ef1', 'ef2', '
 const REGIONS = new Set<TornadoRegionPreset>(['conus', 'midwest', 'plains', 'dixie']);
 const MODES = new Set<TornadoMode>(['tracks', 'density', 'trends']);
 const COLOR_MODES = new Set<TornadoColorMode>(['scale', 'year', 'decade']);
-const STATE_ABBR_RE = /^[A-Z]{2}$/;
+const STATE_ABBREVIATIONS = new Set<string>(usJurisdictions.map(state => state.abbr));
 
 function parseYear(value: string | null, fallback: number) {
     if (value === null || value === '') return fallback;
@@ -29,7 +30,7 @@ function parseSetValue<T extends string>(value: string | null, allowed: Set<T>, 
 function parseState(value: string | null): string | null {
     if (!value) return null;
     const normalized = value.trim().toUpperCase();
-    return STATE_ABBR_RE.test(normalized) ? normalized : null;
+    return STATE_ABBREVIATIONS.has(normalized) ? normalized : null;
 }
 
 export function useTornadoFilters() {

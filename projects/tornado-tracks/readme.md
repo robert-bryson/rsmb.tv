@@ -18,6 +18,8 @@ Route: `/projects/tornado-tracks/map`
 - Filter and camera settings stored in URL parameters
 - Share button copies the current URL to the clipboard
 - Mobile controls/details panel, with automatic opening on track or state selection
+- Plain-background recovery and **Retry background** after failed or stalled basemap requests
+- Keyboard state selection, expandable chart data tables, and an empty-results reset
 
 ## Data storage
 
@@ -41,12 +43,14 @@ src/features/tornadoes/
   components/
     TornadoMap.tsx          # Main map component + SVG fallback
     TornadoSummaryPanel.tsx # Right-side stats + filters + trends panel
+    TornadoDataTable.tsx    # Expandable tables for chart values
     TornadoTimeline.tsx     # Bottom timeline + year range controls
   hooks/
     useTornadoData.ts       # Per-year GeoJSON fetching with cache
     useTornadoFilters.ts    # URL-param filter state
   utils.ts                  # Pure utility functions (tested)
   constants.ts              # Colors, URLs, region state lists
+  tornadoBasemap.ts          # Provider readiness, retry, deadline, and cleanup
   types/index.ts            # All TypeScript types
 projects/tornado-tracks/
   scripts/
@@ -190,7 +194,8 @@ Run the data and interaction tests from the repository root:
 ```bash
 npx vitest run scripts/__tests__/syncTornadoes.test.ts scripts/__tests__/tornadoPublication.test.ts \
   src/test/tornadoTrends.test.ts src/test/useTornadoData.test.ts src/test/useTornadoFilters.test.ts \
-  src/test/tornadoUtils.test.ts src/test/tornadoTimeline.test.tsx
+  src/test/tornadoUtils.test.ts src/test/tornadoTimeline.test.tsx src/test/TornadoSummaryPanel.test.tsx \
+  src/test/tornadoBasemap.test.ts src/test/tornadoBasemapReview.test.ts src/test/tornadoStateReview.test.ts
 npm run test:e2e -- tests/e2e/tornado-map.spec.ts
 ```
 
@@ -198,6 +203,25 @@ The browser tests use fixed data and map tiles.
 They check desktop WebGL, phone WebGL, and the desktop SVG fallback.
 The phone test fails an aggregate request while controls remain open.
 It selects **Retry trends** and checks recovery without another geometry request.
+Phone and desktop cases also fail the background style and tiles independently.
+They select a track on the plain background, retry, and verify rendered provider tiles.
+The selected track, state, filters, color mode, and camera survive recovery without another track download.
+
+The background has a 15-second startup deadline.
+The deadline checks provider sources. Track-data loading and camera motion do not cause a background failure.
+Renderer failures suspend this deadline. A restored context resumes a pending check.
+A failed background does not retry automatically. **Retry background** requests a fresh style.
+Data layers and their current selections are restored whenever the style changes.
+Background and track-data errors have separate recovery actions.
+WebGL and worker failures retain the existing SVG overview.
+
+The **State** selector provides the same state filtering as map selection and opens Trends.
+Both controls clear the selected track in the same URL update.
+Unknown state codes in URLs are ignored. The selector includes Alaska, Hawaii, and Puerto Rico.
+Chart tables expose annual, decade, state, national warning, and weather-office values.
+Completed-year tables exclude the current year, as their charts do.
+**Reset filters** clears geographic and EF filters, selects all available years, and clears the selected track.
+It preserves the current camera, color choice, and view mode.
 
 ## Known limitations
 
@@ -210,8 +234,8 @@ It selects **Retry trends** and checks recovery without another geometry request
   polygons would improve modern events but require a separate data layer.
 - EF0 count trends are noisy (reporting practices changed over time). Filtering
   to EF1+ improves trend interpretation.
-- WebGL is unavailable in WSL without GPU passthrough; the SVG fallback handles
-  this automatically.
+- WebGL availability depends on the browser and graphics support.
+  The SVG overview covers unsupported or failed renderers.
 - `state-summary.json` is generated and stored in S3 but not yet consumed by
   the frontend (state breakdown is computed client-side from loaded tracks).
 - Warning report matching is approximate: warnings are matched to StormEvents by

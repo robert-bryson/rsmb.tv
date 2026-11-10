@@ -59,7 +59,7 @@ The sync checks ACIS responses before it uses or caches them.
 Each POST request has up to three attempts.
 The sync waits one second before attempt two and two seconds before attempt three.
 Each attempt has a 60-second deadline by default, including the response body.
-Monthly threshold, full-month series, and station-series fallback requests use 120 seconds per attempt.
+County history, monthly threshold, full-month series, and station-series fallback requests use 120 seconds per attempt.
 HTTP 200 does not prove that a response contains valid data.
 Errors, empty responses, invalid station metadata, and invalid summary structures cause another attempt.
 A daily response must contain at least one usable station observation.
@@ -69,6 +69,12 @@ Zero degrees is valid. A day with observations and no broken records is also val
 The sync validates cached historical responses before reuse.
 It fetches a replacement when a cached response is invalid.
 Failed responses do not enter the response cache.
+Full county syncs reuse validated local responses for the same request, so an interrupted local run can resume.
+Cache validation and output conversion use the same county-record function.
+It accepts numeric zero and the explicit `M` marker for missing data.
+It rejects malformed numbers, invalid dates, future observations, and invalid station locations.
+County FIPS codes must have five digits and match the requested state.
+Stations without a location or county do not supply map records.
 
 Recent coverage requires successful requests for all 48 contiguous states on each date.
 County coverage is checked after county metadata filtering.
@@ -103,7 +109,12 @@ TEMP_DATA_DIR=.temp/temperatures node scripts/sync-temperatures.js --recent-only
 
 For a hosted sync, run the **Sync Temperatures** workflow.
 Enable **full_sync** to refresh state, county, and trend records.
-Enable **repair_monthly_archives** once to regenerate every stale archive's derived monthly fields before the rolling sync. It preserves raw observations, recovers missing station metadata through ACIS, and stages the results before uploading. Routine rolling syncs also repair old versions instead of reusing their summaries. Version 2 thresholds select the matching calendar month, include earlier observations in the current month, and retain monthly predecessor dates.
+Enable **repair_monthly_archives** once to rebuild derived monthly fields in stale archives before the rolling sync.
+This repair preserves raw observations. It recovers missing station metadata through ACIS.
+It stages all results before upload.
+Routine rolling syncs also repair old versions before using their summaries.
+Version 2 thresholds select the matching calendar month and include earlier observations in the current month.
+They retain the monthly predecessor dates.
 
 To stage a repair locally from downloaded archives:
 
@@ -118,11 +129,37 @@ An existing version 2 marker does not establish that older staging passed the ne
 
 The [November 5 backfill audit](performance/2026-11-05-temperature-full-backfill.json) records the fresh local staging, verified station fallbacks, and preservation checks.
 Twelve legacy daily thresholds disagree numerically with the newer historical monthly tables; none affects the audited October 29–November 4 window.
-Their cause remains unverified. The repair preserves raw observations and legacy daily thresholds without forcing the two derived snapshots to agree.
+The [November 9 comparison](performance/2026-11-09-temperature-threshold-check.json) retains fresh ACIS reads for all twelve conflicts.
+Every historical monthly threshold matches the earlier audit; every current daily predecessor differs from the legacy value.
+The current reads contain no daily/monthly conflict. One station also agrees through the operational multi-station endpoint.
+The cause of the older differences remains unverified. A correction and refresh policy is still needed.
+The repair preserves raw observations and legacy daily thresholds without forcing the two derived snapshots to agree.
 Archive and schema checks do not independently establish historical source accuracy or resolve later ACIS corrections.
-Corrected data publication and production verification remain pending.
-Check `countyRecords.json`, `summary.json`, and recent per-date coverage after a full sync.
-The pending production verification is tracked in [TODO.md](../TODO.md).
+The [November 9 full refresh](performance/2026-11-09-next-tasks-verification.json) was published after explicit approval.
+Public verification confirmed 6,080 county records, including 114 restored California records, and all 48 contiguous states on each of the seven recent dates.
+All five public JSON files matched their approved SHA-256 digests after the CDN invalidation completed.
+Daily archives and the station catalog retain their previous contents.
+The legacy correction policy remains in [TODO.md](../TODO.md).
+
+Run the independent publication check after a full sync and CDN invalidation:
+
+```bash
+npm run verify-temperature-publication -- --as-of YYYY-MM-DD --updated-since SYNC_START_ISO_TIMESTAMP
+```
+
+The check requires both high and low county records for all 48 contiguous states.
+State records must include both types for all 50 states.
+County records must have unique county/type pairs, valid coordinates, and matching state FIPS prefixes.
+Station coordinates and county marker centroids are checked separately. They can differ.
+It compares summary counts with the actual records and checks completion metadata for every declared recent date.
+It also reconciles standing-record history with the county records and requires a row for every calendar year from 1890.
+Decade counts, ratios, and rolling ten-year values must match those annual counts.
+Recent records must identify valid stations and states without duplicate station/date/type rows.
+The yesterday list must match the preceding day's rows in the seven-day list.
+It requires all seven preceding dates, version 2 monthly thresholds, and valid generation timestamps.
+Use `--updated-since` with the sync start time to reject an older snapshot.
+Use `--base-url` for a separately hosted staging dataset and `--output` to retain the JSON report.
+Zero-record days pass when their state coverage is complete.
 
 ## Other views
 

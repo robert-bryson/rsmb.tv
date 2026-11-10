@@ -38,6 +38,8 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-09 | [Next-task code review: data integrity, county cache validation, background deadlines, state selection, and coverage](reviews/2026-11-09-next-tasks-quality-review.md) |
+| 2026-11-09 | [Next-task implementation: temperature cutoff, Tornado recovery and accessibility, full-sync staging, threshold evidence, and infrastructure inspection](reviews/2026-11-09-next-tasks.md) |
 | 2026-11-09 | [Image delivery quality review: request recovery, empty publication, preload ownership, source validation, and coverage](reviews/2026-11-09-image-delivery-quality-review.md) |
 | 2026-11-09 | [Prefetch quality review: data priority, metadata validation, lazy retry, CSS security attributes, and coverage](reviews/2026-11-09-intent-prefetch-quality-review.md) |
 | 2026-11-09 | [Intent prefetch implementation: hover/focus preparation, failure recovery, resource limits, and measured navigation](reviews/2026-11-09-intent-prefetch-implementation.md) |

@@ -1,0 +1,513 @@
+{
+  "checkedAt": "2026-11-10T00:20:40.477Z",
+  "publicationStatus": "Published and verified through data.rsmb.tv after explicit user approval.",
+  "hostedAttempt": {
+    "url": "https://github.com/robert-bryson/rsmb.tv/actions/runs/42721006438",
+    "result": "Failed at California after three 60-second request deadlines; upload steps did not run."
+  },
+  "californiaProbe": {
+    "params": {
+      "state": "CA",
+      "sdate": "1890-01-01",
+      "edate": "2026-11-09",
+      "meta": [
+        "name",
+        "ll",
+        "county",
+        "state"
+      ],
+      "elems": [
+        {
+          "name": "maxt",
+          "interval": "yly",
+          "duration": "yly",
+          "reduce": "max",
+          "smry": {
+            "reduce": "max",
+            "add": "date"
+          },
+          "smry_only": 1
+        },
+        {
+          "name": "mint",
+          "interval": "yly",
+          "duration": "yly",
+          "reduce": "min",
+          "smry": {
+            "reduce": "min",
+            "add": "date"
+          },
+          "smry_only": 1
+        }
+      ]
+    },
+    "responseStatus": 200,
+    "elapsedMs": 62971.947809,
+    "stations": 1302,
+    "responseSha256": "a4dfdd660b086953083368c7f1717939995aaaf807f30dbc23b1c960c1461183"
+  },
+  "previousPublication": {
+    "lastUpdated": "2026-11-01T09:04:26.825Z",
+    "reportedStates": 48,
+    "actualCountyStates": [
+      "AL",
+      "AR",
+      "AZ",
+      "CO",
+      "CT",
+      "DE",
+      "FL",
+      "GA",
+      "IA",
+      "ID",
+      "IL",
+      "IN",
+      "KS",
+      "KY",
+      "LA",
+      "MA",
+      "MD",
+      "ME",
+      "MI",
+      "MN",
+      "MO",
+      "MS",
+      "MT",
+      "NC",
+      "ND",
+      "NE",
+      "NH",
+      "NJ",
+      "NM",
+      "NV",
+      "NY",
+      "OH",
+      "OK",
+      "OR",
+      "PA",
+      "RI",
+      "SC",
+      "SD",
+      "TN",
+      "TX",
+      "UT",
+      "VA",
+      "VT",
+      "WA",
+      "WI",
+      "WV",
+      "WY"
+    ],
+    "countyRecords": 5966,
+    "californiaCountyRecords": 0
+  },
+  "stagedVerification": {
+    "baseUrl": "http://127.0.0.1:4174/data/temperatures/",
+    "checkedAt": "2026-11-10T00:08:23.628Z",
+    "asOf": "2026-11-09",
+    "lastUpdated": "2026-11-10T00:07:35.459Z",
+    "recentGeneratedAt": "2026-11-10T00:07:56.905Z",
+    "monthlyThresholdVersion": 2,
+    "countyRecords": 6080,
+    "stateRecords": 138,
+    "standingHistoryYears": 137,
+    "californiaCountyRecords": 114,
+    "countyStates": [
+      "AL",
+      "AR",
+      "AZ",
+      "CA",
+      "CO",
+      "CT",
+      "DE",
+      "FL",
+      "GA",
+      "IA",
+      "ID",
+      "IL",
+      "IN",
+      "KS",
+      "KY",
+      "LA",
+      "MA",
+      "MD",
+      "ME",
+      "MI",
+      "MN",
+      "MO",
+      "MS",
+      "MT",
+      "NC",
+      "ND",
+      "NE",
+      "NH",
+      "NJ",
+      "NM",
+      "NV",
+      "NY",
+      "OH",
+      "OK",
+      "OR",
+      "PA",
+      "RI",
+      "SC",
+      "SD",
+      "TN",
+      "TX",
+      "UT",
+      "VA",
+      "VT",
+      "WA",
+      "WI",
+      "WV",
+      "WY"
+    ],
+    "recentCoverage": {
+      "2026-11-08": {
+        "states": 48,
+        "records": 69
+      },
+      "2026-11-07": {
+        "states": 48,
+        "records": 62
+      },
+      "2026-11-06": {
+        "states": 48,
+        "records": 52
+      },
+      "2026-11-05": {
+        "states": 48,
+        "records": 154
+      },
+      "2026-11-04": {
+        "states": 48,
+        "records": 118
+      },
+      "2026-11-03": {
+        "states": 48,
+        "records": 111
+      },
+      "2026-11-02": {
+        "states": 48,
+        "records": 101
+      }
+    }
+  },
+  "files": [
+    {
+      "name": "stateRecords.json",
+      "bytes": 31153,
+      "sha256": "39688d7b03cd7a6f3320e810ce175d7028f3ba44a2dbea2e42c96d4361b812df"
+    },
+    {
+      "name": "countyRecords.json",
+      "bytes": 1644884,
+      "sha256": "f4b39d7fb3f609caf9540d7a4f067e1e9166ab5bc53e733234b903d89973a732"
+    },
+    {
+      "name": "climateTrends.json",
+      "bytes": 13147,
+      "sha256": "08268f4b5be1e7f46aff96578a5985592105aeb36bbf0d1c782af32a0e907095"
+    },
+    {
+      "name": "recentRecords.json",
+      "bytes": 200330,
+      "sha256": "169c695b7a9485d7af48a0d5ccd083d613cf93c84a0fdde34fb9a3ab0a53c280"
+    },
+    {
+      "name": "summary.json",
+      "bytes": 649,
+      "sha256": "222136d387bb919f4decdcf6c145b6d328d59ce880cb5679564d61d14037bab1"
+    }
+  ],
+  "resumption": {
+    "countyCacheHits": 48,
+    "countyCacheMisses": 0,
+    "verifiedRecentDatesReused": 7,
+    "newDailyArchives": 0
+  },
+  "rollbackCopies": ".temp/temperature-full-check/previous-publication",
+  "infrastructure": {
+    "mailRecordsOwnedByRemoteState": [
+      "aws_route53_record.mail_spf",
+      "aws_route53_record.mail_dkim",
+      "aws_route53_record.mail_dmarc"
+    ],
+    "fullPlan": {
+      "create": 4,
+      "update": 4,
+      "destroy": 0
+    },
+    "targetedOidcPlan": {
+      "create": 4,
+      "update": 1,
+      "destroy": 0,
+      "additionalUpdate": "CloudFront fingerprinted trip-photo cache behavior"
+    },
+    "applied": false
+  },
+  "initialVerificationRecordedAt": "2026-11-10T00:10:13.514Z",
+  "baseRevision": "8bf2902",
+  "sourceHasWorkingTreeChanges": true,
+  "syncScriptSha256": "a46c19459cbd070be5404157d6bb8532d5c5926b34a7cd1a251a0ec160c41cae",
+  "publication": {
+    "journal": {
+      "startedAt": "2026-11-10T00:16:36.867Z",
+      "userApproval": "Approve publication",
+      "bucket": "rsmbtv-temperature-data",
+      "objects": [
+        {
+          "name": "stateRecords.json",
+          "previousETag": "\"6288d0e7556cd8115da2b0d6643e0665\"",
+          "etag": "\"41d9184c71495b731bdcaf1280ca8956\"",
+          "sha256": "39688d7b03cd7a6f3320e810ce175d7028f3ba44a2dbea2e42c96d4361b812df"
+        },
+        {
+          "name": "countyRecords.json",
+          "previousETag": "\"7bf5bd06e94f05776e1d9c25ccc8410c\"",
+          "etag": "\"757886bb38e888badc52f3100c0d7212\"",
+          "sha256": "f4b39d7fb3f609caf9540d7a4f067e1e9166ab5bc53e733234b903d89973a732"
+        },
+        {
+          "name": "climateTrends.json",
+          "previousETag": "\"bf8ad90d4211050d1f9944ae325a25f9\"",
+          "etag": "\"35294d7c1e489a6044fdb6e29edc0163\"",
+          "sha256": "08268f4b5be1e7f46aff96578a5985592105aeb36bbf0d1c782af32a0e907095"
+        },
+        {
+          "name": "recentRecords.json",
+          "previousETag": "\"0304f9d2e6ddd6dfa86b0edaf83c3688\"",
+          "etag": "\"f80f61d160403b802a53657aa22a0a26\"",
+          "sha256": "169c695b7a9485d7af48a0d5ccd083d613cf93c84a0fdde34fb9a3ab0a53c280"
+        },
+        {
+          "name": "summary.json",
+          "previousETag": "\"bd3b9d663b49c734cabc85968ef476ff\"",
+          "etag": "\"e3cde872bacd9674f3c1e82846ccf90d\"",
+          "sha256": "222136d387bb919f4decdcf6c145b6d328d59ce880cb5679564d61d14037bab1"
+        }
+      ],
+      "rollback": [],
+      "completedAt": "2026-11-10T00:16:50.605Z"
+    },
+    "originVerification": {
+      "checkedAt": "2026-11-10T00:17:30.545Z",
+      "objects": [
+        {
+          "name": "stateRecords.json",
+          "sha256": "39688d7b03cd7a6f3320e810ce175d7028f3ba44a2dbea2e42c96d4361b812df",
+          "ETag": "\"41d9184c71495b731bdcaf1280ca8956\"",
+          "ContentType": "application/json",
+          "CacheControl": "public, max-age=3600"
+        },
+        {
+          "name": "countyRecords.json",
+          "sha256": "f4b39d7fb3f609caf9540d7a4f067e1e9166ab5bc53e733234b903d89973a732",
+          "ETag": "\"757886bb38e888badc52f3100c0d7212\"",
+          "ContentType": "application/json",
+          "CacheControl": "public, max-age=3600"
+        },
+        {
+          "name": "climateTrends.json",
+          "sha256": "08268f4b5be1e7f46aff96578a5985592105aeb36bbf0d1c782af32a0e907095",
+          "ETag": "\"35294d7c1e489a6044fdb6e29edc0163\"",
+          "ContentType": "application/json",
+          "CacheControl": "public, max-age=3600"
+        },
+        {
+          "name": "recentRecords.json",
+          "sha256": "169c695b7a9485d7af48a0d5ccd083d613cf93c84a0fdde34fb9a3ab0a53c280",
+          "ETag": "\"f80f61d160403b802a53657aa22a0a26\"",
+          "ContentType": "application/json",
+          "CacheControl": "public, max-age=3600"
+        },
+        {
+          "name": "summary.json",
+          "sha256": "222136d387bb919f4decdcf6c145b6d328d59ce880cb5679564d61d14037bab1",
+          "ETag": "\"e3cde872bacd9674f3c1e82846ccf90d\"",
+          "ContentType": "application/json",
+          "CacheControl": "public, max-age=3600"
+        }
+      ]
+    },
+    "invalidation": {
+      "checkedAt": "2026-11-10T00:19:10.840Z",
+      "distributionId": "E2DQD0H9ITFKOF",
+      "Invalidation": {
+        "Id": "I7YC5VHLKFZRWQ71T7TYBP0CAE",
+        "Status": "Completed",
+        "CreateTime": "2026-11-10T00:17:36.093000+00:00",
+        "InvalidationBatch": {
+          "Paths": {
+            "Quantity": 5,
+            "Items": [
+              "/stateRecords.json",
+              "/countyRecords.json",
+              "/recentRecords.json",
+              "/summary.json",
+              "/climateTrends.json"
+            ]
+          },
+          "CallerReference": "cli-1794269853-100592"
+        }
+      }
+    },
+    "publicVerification": {
+      "report": {
+        "baseUrl": "https://data.rsmb.tv/",
+        "checkedAt": "2026-11-10T00:18:20.405Z",
+        "asOf": "2026-11-09",
+        "lastUpdated": "2026-11-10T00:07:35.459Z",
+        "recentGeneratedAt": "2026-11-10T00:07:56.905Z",
+        "monthlyThresholdVersion": 2,
+        "countyRecords": 6080,
+        "stateRecords": 138,
+        "standingHistoryYears": 137,
+        "californiaCountyRecords": 114,
+        "countyStates": [
+          "AL",
+          "AR",
+          "AZ",
+          "CA",
+          "CO",
+          "CT",
+          "DE",
+          "FL",
+          "GA",
+          "IA",
+          "ID",
+          "IL",
+          "IN",
+          "KS",
+          "KY",
+          "LA",
+          "MA",
+          "MD",
+          "ME",
+          "MI",
+          "MN",
+          "MO",
+          "MS",
+          "MT",
+          "NC",
+          "ND",
+          "NE",
+          "NH",
+          "NJ",
+          "NM",
+          "NV",
+          "NY",
+          "OH",
+          "OK",
+          "OR",
+          "PA",
+          "RI",
+          "SC",
+          "SD",
+          "TN",
+          "TX",
+          "UT",
+          "VA",
+          "VT",
+          "WA",
+          "WI",
+          "WV",
+          "WY"
+        ],
+        "recentCoverage": {
+          "2026-11-08": {
+            "states": 48,
+            "records": 69
+          },
+          "2026-11-07": {
+            "states": 48,
+            "records": 62
+          },
+          "2026-11-06": {
+            "states": 48,
+            "records": 52
+          },
+          "2026-11-05": {
+            "states": 48,
+            "records": 154
+          },
+          "2026-11-04": {
+            "states": 48,
+            "records": 118
+          },
+          "2026-11-03": {
+            "states": 48,
+            "records": 111
+          },
+          "2026-11-02": {
+            "states": 48,
+            "records": 101
+          }
+        }
+      },
+      "responses": [
+        {
+          "filename": "summary.json",
+          "bytes": 649,
+          "sha256": "222136d387bb919f4decdcf6c145b6d328d59ce880cb5679564d61d14037bab1",
+          "contentType": "application/json",
+          "cacheControl": "public, max-age=3600",
+          "etag": "\"e3cde872bacd9674f3c1e82846ccf90d\"",
+          "lastModified": "Tue, 10 Nov 2026 00:16:51 GMT",
+          "cache": "Miss from cloudfront",
+          "age": null
+        },
+        {
+          "filename": "climateTrends.json",
+          "bytes": 13147,
+          "sha256": "08268f4b5be1e7f46aff96578a5985592105aeb36bbf0d1c782af32a0e907095",
+          "contentType": "application/json",
+          "cacheControl": "public, max-age=3600",
+          "etag": "W/\"35294d7c1e489a6044fdb6e29edc0163\"",
+          "lastModified": "Tue, 10 Nov 2026 00:16:46 GMT",
+          "cache": "Miss from cloudfront",
+          "age": null
+        },
+        {
+          "filename": "stateRecords.json",
+          "bytes": 31153,
+          "sha256": "39688d7b03cd7a6f3320e810ce175d7028f3ba44a2dbea2e42c96d4361b812df",
+          "contentType": "application/json",
+          "cacheControl": "public, max-age=3600",
+          "etag": "W/\"41d9184c71495b731bdcaf1280ca8956\"",
+          "lastModified": "Tue, 10 Nov 2026 00:16:40 GMT",
+          "cache": "Miss from cloudfront",
+          "age": null
+        },
+        {
+          "filename": "recentRecords.json",
+          "bytes": 200330,
+          "sha256": "169c695b7a9485d7af48a0d5ccd083d613cf93c84a0fdde34fb9a3ab0a53c280",
+          "contentType": "application/json",
+          "cacheControl": "public, max-age=3600",
+          "etag": "W/\"f80f61d160403b802a53657aa22a0a26\"",
+          "lastModified": "Tue, 10 Nov 2026 00:16:48 GMT",
+          "cache": "Miss from cloudfront",
+          "age": null
+        },
+        {
+          "filename": "countyRecords.json",
+          "bytes": 1644884,
+          "sha256": "f4b39d7fb3f609caf9540d7a4f067e1e9166ab5bc53e733234b903d89973a732",
+          "contentType": "application/json",
+          "cacheControl": "public, max-age=3600",
+          "etag": "W/\"757886bb38e888badc52f3100c0d7212\"",
+          "lastModified": "Tue, 10 Nov 2026 00:16:43 GMT",
+          "cache": "Miss from cloudfront",
+          "age": null
+        }
+      ],
+      "attempts": [
+        {
+          "attempt": 1,
+          "passed": true
+        }
+      ]
+    }
+  }
+}

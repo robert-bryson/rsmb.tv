@@ -67,6 +67,9 @@ See [Terraform's provider lock command](https://developer.hashicorp.com/terrafor
 
 ## Adopt existing records
 
+On November 9, 2026, the configured remote state contained all three mail record resources.
+The refreshed Terraform plan proposed no mail record changes. No imports or DNS writes were needed.
+
 The three authentication records already existed in public DNS on 2026-10-20.
 DNS results do not show whether Terraform already manages a record.
 Do not add `allow_overwrite` to bypass an ownership conflict.

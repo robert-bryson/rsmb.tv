@@ -92,7 +92,7 @@ The pipeline uses the supplied IDs without a new selection. It still reports cur
 ## Review the outputs
 
 - `cohort.json` contains the cohort IDs, completeness values, and exclusion reasons.
-- `events.csv` contains each post-baseline record event and its prior record.
+- `events.csv` contains each post-baseline record event through `--analysis-end`, inclusive, and its prior record.
 - `annual-rates.json` contains national, regional, and state rates.
 - `station-availability.json` contains annual station counts and metric exposure.
 - `manifest.json` contains parameters, checksums, and the UTC generation time.

@@ -71,6 +71,7 @@ See the [prefetch guide](docs/intent-prefetch.md) for allowed resources, limits,
 | `npm run build` | Verify tornado publication, sync published posts, generate assets, typecheck, and build for production |
 | `npm run build:dev` | Verify tornado publication and build development previews, including incomplete reports |
 | `npm run verify-tornado-publication` | Check that published tornado aggregates match the annual summary |
+| `npm run verify-temperature-publication` | Check full-sync counts, state coverage, recent dates, and monthly threshold version |
 | `npm run build-blog` | Sync Google-authored posts and rebuild blog RSS/sitemap/OG artifacts |
 | `npm run build-rss` | Generate `public/rss.xml` from the blog registry |
 | `npm run build-sitemap` | Generate `public/sitemap.xml` from route and content metadata |

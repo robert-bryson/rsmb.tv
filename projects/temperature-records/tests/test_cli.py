@@ -6,11 +6,57 @@ import unittest
 from datetime import date
 from pathlib import Path
 
-from pipeline.cli import _read_cohort_ids, _validate_observation_periods, _validate_output_paths, run_analysis
+from pipeline.cli import _read_cohort_ids, _validate_observation_periods, _validate_output_paths, build_parser, run_analysis
 from pipeline.models import Observation, Station
 
 
 class CliIntegrationTests(unittest.TestCase):
+    def test_analysis_end_bounds_events_and_keeps_boundary_records(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            stations = root / "stations.csv"
+            observations = root / "observations.csv"
+            cohort = root / "frozen-cohort.json"
+            stations.write_text(
+                "station_id,name,latitude,longitude,state,region,operating_start,operating_end\n"
+                "A,Alpha,40,-100,NE,Plains,2000-07-01,\n",
+                encoding="utf-8",
+            )
+            observations.write_text(
+                "station_id,date,max_f,min_f,max_flag,min_flag,status\n"
+                "A,2000-07-01,90,60,,,certified\n"
+                "A,2000-07-02,90,60,,,certified\n"
+                "A,2001-07-01,95,55,,,certified\n"
+                "A,2001-07-02,96,54,,,certified\n"
+                "A,2002-07-01,100,50,,,certified\n",
+                encoding="utf-8",
+            )
+            cohort.write_text('{"stationIds":["A"]}', encoding="utf-8")
+
+            for frozen in (False, True):
+                with self.subTest(frozen_cohort=frozen):
+                    output = root / ("frozen" if frozen else "selected")
+                    arguments = [
+                        "--stations", str(stations), "--observations", str(observations),
+                        "--output", str(output), "--baseline-start", "2000-07-01",
+                        "--baseline-end", "2000-07-02", "--analysis-end", "2001-07-01",
+                        "--minimum-completeness", "0.005", "--bootstrap-iterations", "10",
+                    ]
+                    if frozen:
+                        arguments.extend(["--cohort-file", str(cohort)])
+                    counts = run_analysis(build_parser().parse_args(arguments))
+
+                    with (output / "events.csv").open(newline="", encoding="utf-8") as handle:
+                        events = list(csv.DictReader(handle))
+                    self.assertEqual(counts["events"], 2)
+                    self.assertEqual({row["observed_on"] for row in events}, {"2001-07-01"})
+                    self.assertEqual({row["kind"] for row in events}, {"high", "low"})
+                    self.assertEqual({row["prior_record_date"] for row in events}, {"2000-07-01"})
+                    rates = json.loads((output / "annual-rates.json").read_text(encoding="utf-8"))
+                    self.assertEqual({row["year"] for row in rates["rows"]}, {2001})
+                    manifest = json.loads((output / "manifest.json").read_text(encoding="utf-8"))
+                    self.assertEqual(manifest["parameters"]["analysisEnd"], "2001-07-01")
+
     def test_writes_reproducible_analysis_artifacts(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

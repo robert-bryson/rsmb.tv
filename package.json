@@ -13,6 +13,7 @@
     "build": "npm run verify-tornado-publication && npm run build-flights && npm run build-blog && npm run typecheck && vite build",
     "build:dev": "npm run verify-tornado-publication -- --mode development && npm run build-flights && npm run build-blog:dev && npm run typecheck && vite build --mode development",
     "verify-tornado-publication": "node scripts/verify-tornado-publication.js",
+    "verify-temperature-publication": "node scripts/verify-temperature-publication.js",
     "build-blog": "npm run sync-blogs && npm run build-blog-artifacts",
     "build-blog:dev": "npm run sync-blogs:dev && npm run build-blog-artifacts",
     "build-blog-artifacts": "npm run build-site-icons && npm run build-og && npm run build-rss && npm run build-json-feed && npm run build-sitemap",

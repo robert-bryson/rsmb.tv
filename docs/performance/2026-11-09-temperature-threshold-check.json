@@ -1,0 +1,1504 @@
+{
+  "checkedAt": "2026-11-09T23:55:26.277Z",
+  "source": "https://data.rcc-acis.org/StnData",
+  "historicalEndYear": 2025,
+  "results": [
+    {
+      "date": "2026-03-26",
+      "state": "ID",
+      "uid": 29713,
+      "dailyField": "rh",
+      "archivedDailyThreshold": 71,
+      "historicalMonthlyThreshold": 70,
+      "freshDaily": 70,
+      "freshDailyDate": "2025-03-26",
+      "freshMonthly": 70,
+      "freshMonthlyDate": "2025-03-26",
+      "dailyChanged": true,
+      "monthlyChanged": false,
+      "conflictStillPresent": false
+    },
+    {
+      "date": "2026-04-04",
+      "state": "GA",
+      "uid": 5209,
+      "dailyField": "rl",
+      "archivedDailyThreshold": 26,
+      "historicalMonthlyThreshold": 27,
+      "freshDaily": 31,
+      "freshDailyDate": "1997-04-04",
+      "freshMonthly": 27,
+      "freshMonthlyDate": "1998-04-15",
+      "dailyChanged": true,
+      "monthlyChanged": false,
+      "conflictStillPresent": false
+    },
+    {
+      "date": "2026-04-04",
+      "state": "MN",
+      "uid": 10309,
+      "dailyField": "rl",
+      "archivedDailyThreshold": 4,
+      "historicalMonthlyThreshold": 5,
+      "freshDaily": 6,
+      "freshDailyDate": "1975-04-04",
+      "freshMonthly": 5,
+      "freshMonthlyDate": "1982-04-06",
+      "dailyChanged": true,
+      "monthlyChanged": false,
+      "conflictStillPresent": false
+    },
+    {
+      "date": "2026-04-29",
+      "state": "CA",
+      "uid": 29451,
+      "dailyField": "rh",
+      "archivedDailyThreshold": 95,
+      "historicalMonthlyThreshold": 92,
+      "freshDaily": 87,
+      "freshDailyDate": "2015-04-29",
+      "freshMonthly": 92,
+      "freshMonthlyDate": "2008-04-12",
+      "dailyChanged": true,
+      "monthlyChanged": false,
+      "conflictStillPresent": false
+    },
+    {
+      "date": "2026-06-26",
+      "state": "TX",
+      "uid": 34560,
+      "dailyField": "rh",
+      "archivedDailyThreshold": 104,
+      "historicalMonthlyThreshold": 102,
+      "freshDaily": 93,
+      "freshDailyDate": "2023-06-26",
+      "freshMonthly": 102,
+      "freshMonthlyDate": "2012-06-25",
+      "dailyChanged": true,
+      "monthlyChanged": false,
+      "conflictStillPresent": false
+    },
+    {
+      "date": "2026-07-01",
+      "state": "CA",
+      "uid": 2000,
+      "dailyField": "rh",
+      "archivedDailyThreshold": 102,
+      "historicalMonthlyThreshold": 98,
+      "freshDaily": 87,
+      "freshDailyDate": "2015-07-01",
+      "freshMonthly": 98,
+      "freshMonthlyDate": "1985-07-02",
+      "dailyChanged": true,
+      "monthlyChanged": false,
+      "conflictStillPresent": false
+    },
+    {
+      "date": "2026-07-12",
+      "state": "TX",
+      "uid": 32172,
+      "dailyField": "rl",
+      "archivedDailyThreshold": 57,
+      "historicalMonthlyThreshold": 59,
+      "freshDaily": 68,
+      "freshDailyDate": "2002-07-12",
+      "freshMonthly": 59,
+      "freshMonthlyDate": "2007-07-14",
+      "dailyChanged": true,
+      "monthlyChanged": false,
+      "conflictStillPresent": false
+    },
+    {
+      "date": "2026-08-07",
+      "state": "SC",
+      "uid": 31724,
+      "dailyField": "rl",
+      "archivedDailyThreshold": 58,
+      "historicalMonthlyThreshold": 60,
+      "freshDaily": 71,
+      "freshDailyDate": "2013-08-07",
+      "freshMonthly": 60,
+      "freshMonthlyDate": "2004-08-08",
+      "dailyChanged": true,
+      "monthlyChanged": false,
+      "conflictStillPresent": false
+    },
+    {
+      "date": "2026-08-12",
+      "state": "MS",
+      "uid": 10755,
+      "dailyField": "rl",
+      "archivedDailyThreshold": 54,
+      "historicalMonthlyThreshold": 56,
+      "freshDaily": 62,
+      "freshDailyDate": "1990-08-12",
+      "freshMonthly": 56,
+      "freshMonthlyDate": "2004-08-15",
+      "dailyChanged": true,
+      "monthlyChanged": false,
+      "conflictStillPresent": false
+    },
+    {
+      "date": "2026-08-24",
+      "state": "AL",
+      "uid": 33735,
+      "dailyField": "rl",
+      "archivedDailyThreshold": 57,
+      "historicalMonthlyThreshold": 59,
+      "freshDaily": 66,
+      "freshDailyDate": "2012-08-24",
+      "freshMonthly": 59,
+      "freshMonthlyDate": "2009-08-25",
+      "dailyChanged": true,
+      "monthlyChanged": false,
+      "conflictStillPresent": false
+    },
+    {
+      "date": "2026-08-28",
+      "state": "FL",
+      "uid": 4775,
+      "dailyField": "rl",
+      "archivedDailyThreshold": 52,
+      "historicalMonthlyThreshold": 54,
+      "freshDaily": 61,
+      "freshDailyDate": "2014-08-28",
+      "freshMonthly": 54,
+      "freshMonthlyDate": "1996-08-19",
+      "dailyChanged": true,
+      "monthlyChanged": false,
+      "conflictStillPresent": false
+    },
+    {
+      "date": "2026-10-13",
+      "state": "CA",
+      "uid": 80334,
+      "dailyField": "rh",
+      "archivedDailyThreshold": 85,
+      "historicalMonthlyThreshold": 77,
+      "freshDaily": 72,
+      "freshDailyDate": "2020-10-13",
+      "freshMonthly": 77,
+      "freshMonthlyDate": "2018-10-01",
+      "dailyChanged": true,
+      "monthlyChanged": false,
+      "conflictStillPresent": false
+    }
+  ],
+  "policy": "Read-only comparison; no raw observations or legacy thresholds modified.",
+  "documentation": "https://docs.rcc-acis.org/acisws/",
+  "requestsAndResponses": [
+    {
+      "item": {
+        "date": "2026-04-04",
+        "state": "MN",
+        "uid": 10309,
+        "dailyField": "rl",
+        "archivedDailyThreshold": 4,
+        "historicalMonthlyThreshold": 5
+      },
+      "responses": {
+        "daily": {
+          "params": {
+            "uid": 10309,
+            "sdate": "1950-04-04",
+            "edate": "2025-04-04",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "mint",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": 1,
+                "smry": {
+                  "reduce": "min",
+                  "add": "date"
+                },
+                "smry_only": 1
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "MN",
+              "uid": 10309,
+              "name": "WORTHINGTON MUNICIPAL AIRPORT"
+            },
+            "smry": [
+              [
+                "6",
+                "1975-04-04"
+              ]
+            ]
+          }
+        },
+        "monthly": {
+          "params": {
+            "uid": 10309,
+            "sdate": "1950-04-30",
+            "edate": "2025-04-30",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "mint",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": "mtd",
+                "smry": {
+                  "reduce": "min",
+                  "add": "date"
+                },
+                "smry_only": 1,
+                "reduce": "min"
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "MN",
+              "uid": 10309,
+              "name": "WORTHINGTON MUNICIPAL AIRPORT"
+            },
+            "smry": [
+              [
+                "5",
+                "1982-04-06"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    {
+      "item": {
+        "date": "2026-08-12",
+        "state": "MS",
+        "uid": 10755,
+        "dailyField": "rl",
+        "archivedDailyThreshold": 54,
+        "historicalMonthlyThreshold": 56
+      },
+      "responses": {
+        "daily": {
+          "params": {
+            "uid": 10755,
+            "sdate": "1950-08-12",
+            "edate": "2025-08-12",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "mint",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": 1,
+                "smry": {
+                  "reduce": "min",
+                  "add": "date"
+                },
+                "smry_only": 1
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "MS",
+              "uid": 10755,
+              "name": "COLUMBIA"
+            },
+            "smry": [
+              [
+                "62",
+                "1990-08-12"
+              ]
+            ]
+          }
+        },
+        "monthly": {
+          "params": {
+            "uid": 10755,
+            "sdate": "1950-08-31",
+            "edate": "2025-08-31",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "mint",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": "mtd",
+                "smry": {
+                  "reduce": "min",
+                  "add": "date"
+                },
+                "smry_only": 1,
+                "reduce": "min"
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "MS",
+              "uid": 10755,
+              "name": "COLUMBIA"
+            },
+            "smry": [
+              [
+                "56",
+                "2004-08-15"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    {
+      "item": {
+        "date": "2026-07-01",
+        "state": "CA",
+        "uid": 2000,
+        "dailyField": "rh",
+        "archivedDailyThreshold": 102,
+        "historicalMonthlyThreshold": 98
+      },
+      "responses": {
+        "daily": {
+          "params": {
+            "uid": 2000,
+            "sdate": "1950-07-01",
+            "edate": "2025-07-01",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "maxt",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": 1,
+                "smry": {
+                  "reduce": "max",
+                  "add": "date"
+                },
+                "smry_only": 1
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "CA",
+              "uid": 2000,
+              "name": "CULVER CITY"
+            },
+            "smry": [
+              [
+                "87",
+                "2015-07-01"
+              ]
+            ]
+          }
+        },
+        "monthly": {
+          "params": {
+            "uid": 2000,
+            "sdate": "1950-07-31",
+            "edate": "2025-07-31",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "maxt",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": "mtd",
+                "smry": {
+                  "reduce": "max",
+                  "add": "date"
+                },
+                "smry_only": 1,
+                "reduce": "max"
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "CA",
+              "uid": 2000,
+              "name": "CULVER CITY"
+            },
+            "smry": [
+              [
+                "98",
+                "1985-07-02"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    {
+      "item": {
+        "date": "2026-04-29",
+        "state": "CA",
+        "uid": 29451,
+        "dailyField": "rh",
+        "archivedDailyThreshold": 95,
+        "historicalMonthlyThreshold": 92
+      },
+      "responses": {
+        "daily": {
+          "params": {
+            "uid": 29451,
+            "sdate": "1950-04-29",
+            "edate": "2025-04-29",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "maxt",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": 1,
+                "smry": {
+                  "reduce": "max",
+                  "add": "date"
+                },
+                "smry_only": 1
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "CA",
+              "uid": 29451,
+              "name": "OCEANSIDE MUNICIPAL AP"
+            },
+            "smry": [
+              [
+                "87",
+                "2015-04-29"
+              ]
+            ]
+          }
+        },
+        "monthly": {
+          "params": {
+            "uid": 29451,
+            "sdate": "1950-04-30",
+            "edate": "2025-04-30",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "maxt",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": "mtd",
+                "smry": {
+                  "reduce": "max",
+                  "add": "date"
+                },
+                "smry_only": 1,
+                "reduce": "max"
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "CA",
+              "uid": 29451,
+              "name": "OCEANSIDE MUNICIPAL AP"
+            },
+            "smry": [
+              [
+                "92",
+                "2008-04-12"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    {
+      "item": {
+        "date": "2026-03-26",
+        "state": "ID",
+        "uid": 29713,
+        "dailyField": "rh",
+        "archivedDailyThreshold": 71,
+        "historicalMonthlyThreshold": 70
+      },
+      "responses": {
+        "daily": {
+          "params": {
+            "uid": 29713,
+            "sdate": "1950-03-26",
+            "edate": "2025-03-26",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "maxt",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": 1,
+                "smry": {
+                  "reduce": "max",
+                  "add": "date"
+                },
+                "smry_only": 1
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "ID",
+              "uid": 29713,
+              "name": "COEUR D ALENE AIR TERMINAL"
+            },
+            "smry": [
+              [
+                "70",
+                "2025-03-26"
+              ]
+            ]
+          }
+        },
+        "monthly": {
+          "params": {
+            "uid": 29713,
+            "sdate": "1950-03-31",
+            "edate": "2025-03-31",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "maxt",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": "mtd",
+                "smry": {
+                  "reduce": "max",
+                  "add": "date"
+                },
+                "smry_only": 1,
+                "reduce": "max"
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "ID",
+              "uid": 29713,
+              "name": "COEUR D ALENE AIR TERMINAL"
+            },
+            "smry": [
+              [
+                "70",
+                "2025-03-26"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    {
+      "item": {
+        "date": "2026-08-07",
+        "state": "SC",
+        "uid": 31724,
+        "dailyField": "rl",
+        "archivedDailyThreshold": 58,
+        "historicalMonthlyThreshold": 60
+      },
+      "responses": {
+        "daily": {
+          "params": {
+            "uid": 31724,
+            "sdate": "1950-08-07",
+            "edate": "2025-08-07",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "mint",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": 1,
+                "smry": {
+                  "reduce": "min",
+                  "add": "date"
+                },
+                "smry_only": 1
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "SC",
+              "uid": 31724,
+              "name": "MCCLELLANVILLE 7 NE"
+            },
+            "smry": [
+              [
+                "71",
+                "2013-08-07"
+              ]
+            ]
+          }
+        },
+        "monthly": {
+          "params": {
+            "uid": 31724,
+            "sdate": "1950-08-31",
+            "edate": "2025-08-31",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "mint",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": "mtd",
+                "smry": {
+                  "reduce": "min",
+                  "add": "date"
+                },
+                "smry_only": 1,
+                "reduce": "min"
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "SC",
+              "uid": 31724,
+              "name": "MCCLELLANVILLE 7 NE"
+            },
+            "smry": [
+              [
+                "60",
+                "2004-08-08"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    {
+      "item": {
+        "date": "2026-07-12",
+        "state": "TX",
+        "uid": 32172,
+        "dailyField": "rl",
+        "archivedDailyThreshold": 57,
+        "historicalMonthlyThreshold": 59
+      },
+      "responses": {
+        "daily": {
+          "params": {
+            "uid": 32172,
+            "sdate": "1950-07-12",
+            "edate": "2025-07-12",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "mint",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": 1,
+                "smry": {
+                  "reduce": "min",
+                  "add": "date"
+                },
+                "smry_only": 1
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "TX",
+              "uid": 32172,
+              "name": "ARMSTRONG 4SE"
+            },
+            "smry": [
+              [
+                "68",
+                "2002-07-12"
+              ]
+            ]
+          }
+        },
+        "monthly": {
+          "params": {
+            "uid": 32172,
+            "sdate": "1950-07-31",
+            "edate": "2025-07-31",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "mint",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": "mtd",
+                "smry": {
+                  "reduce": "min",
+                  "add": "date"
+                },
+                "smry_only": 1,
+                "reduce": "min"
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "TX",
+              "uid": 32172,
+              "name": "ARMSTRONG 4SE"
+            },
+            "smry": [
+              [
+                "59",
+                "2007-07-14"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    {
+      "item": {
+        "date": "2026-08-24",
+        "state": "AL",
+        "uid": 33735,
+        "dailyField": "rl",
+        "archivedDailyThreshold": 57,
+        "historicalMonthlyThreshold": 59
+      },
+      "responses": {
+        "daily": {
+          "params": {
+            "uid": 33735,
+            "sdate": "1950-08-24",
+            "edate": "2025-08-24",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "mint",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": 1,
+                "smry": {
+                  "reduce": "min",
+                  "add": "date"
+                },
+                "smry_only": 1
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "AL",
+              "uid": 33735,
+              "name": "FAIRHOPE 3 NE"
+            },
+            "smry": [
+              [
+                "66",
+                "2012-08-24"
+              ]
+            ]
+          }
+        },
+        "monthly": {
+          "params": {
+            "uid": 33735,
+            "sdate": "1950-08-31",
+            "edate": "2025-08-31",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "mint",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": "mtd",
+                "smry": {
+                  "reduce": "min",
+                  "add": "date"
+                },
+                "smry_only": 1,
+                "reduce": "min"
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "AL",
+              "uid": 33735,
+              "name": "FAIRHOPE 3 NE"
+            },
+            "smry": [
+              [
+                "59",
+                "2009-08-25"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    {
+      "item": {
+        "date": "2026-06-26",
+        "state": "TX",
+        "uid": 34560,
+        "dailyField": "rh",
+        "archivedDailyThreshold": 104,
+        "historicalMonthlyThreshold": 102
+      },
+      "responses": {
+        "daily": {
+          "params": {
+            "uid": 34560,
+            "sdate": "1950-06-26",
+            "edate": "2025-06-26",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "maxt",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": 1,
+                "smry": {
+                  "reduce": "max",
+                  "add": "date"
+                },
+                "smry_only": 1
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "TX",
+              "uid": 34560,
+              "name": "PORT ARANSAS 32 NNE"
+            },
+            "smry": [
+              [
+                "93",
+                "2023-06-26"
+              ]
+            ]
+          }
+        },
+        "monthly": {
+          "params": {
+            "uid": 34560,
+            "sdate": "1950-06-30",
+            "edate": "2025-06-30",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "maxt",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": "mtd",
+                "smry": {
+                  "reduce": "max",
+                  "add": "date"
+                },
+                "smry_only": 1,
+                "reduce": "max"
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "TX",
+              "uid": 34560,
+              "name": "PORT ARANSAS 32 NNE"
+            },
+            "smry": [
+              [
+                "102",
+                "2012-06-25"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    {
+      "item": {
+        "date": "2026-08-28",
+        "state": "FL",
+        "uid": 4775,
+        "dailyField": "rl",
+        "archivedDailyThreshold": 52,
+        "historicalMonthlyThreshold": 54
+      },
+      "responses": {
+        "daily": {
+          "params": {
+            "uid": 4775,
+            "sdate": "1950-08-28",
+            "edate": "2025-08-28",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "mint",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": 1,
+                "smry": {
+                  "reduce": "min",
+                  "add": "date"
+                },
+                "smry_only": 1
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "FL",
+              "uid": 4775,
+              "name": "GLEN ST MARY 1 W"
+            },
+            "smry": [
+              [
+                "61",
+                "2014-08-28"
+              ]
+            ]
+          }
+        },
+        "monthly": {
+          "params": {
+            "uid": 4775,
+            "sdate": "1950-08-31",
+            "edate": "2025-08-31",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "mint",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": "mtd",
+                "smry": {
+                  "reduce": "min",
+                  "add": "date"
+                },
+                "smry_only": 1,
+                "reduce": "min"
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "FL",
+              "uid": 4775,
+              "name": "GLEN ST MARY 1 W"
+            },
+            "smry": [
+              [
+                "54",
+                "1996-08-19"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    {
+      "item": {
+        "date": "2026-04-04",
+        "state": "GA",
+        "uid": 5209,
+        "dailyField": "rl",
+        "archivedDailyThreshold": 26,
+        "historicalMonthlyThreshold": 27
+      },
+      "responses": {
+        "daily": {
+          "params": {
+            "uid": 5209,
+            "sdate": "1950-04-04",
+            "edate": "2025-04-04",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "mint",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": 1,
+                "smry": {
+                  "reduce": "min",
+                  "add": "date"
+                },
+                "smry_only": 1
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "GA",
+              "uid": 5209,
+              "name": "FARGO 17 NE"
+            },
+            "smry": [
+              [
+                "31",
+                "1997-04-04"
+              ]
+            ]
+          }
+        },
+        "monthly": {
+          "params": {
+            "uid": 5209,
+            "sdate": "1950-04-30",
+            "edate": "2025-04-30",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "mint",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": "mtd",
+                "smry": {
+                  "reduce": "min",
+                  "add": "date"
+                },
+                "smry_only": 1,
+                "reduce": "min"
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "GA",
+              "uid": 5209,
+              "name": "FARGO 17 NE"
+            },
+            "smry": [
+              [
+                "27",
+                "1998-04-15"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    {
+      "item": {
+        "date": "2026-10-13",
+        "state": "CA",
+        "uid": 80334,
+        "dailyField": "rh",
+        "archivedDailyThreshold": 85,
+        "historicalMonthlyThreshold": 77
+      },
+      "responses": {
+        "daily": {
+          "params": {
+            "uid": 80334,
+            "sdate": "1950-10-13",
+            "edate": "2025-10-13",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "maxt",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": 1,
+                "smry": {
+                  "reduce": "max",
+                  "add": "date"
+                },
+                "smry_only": 1
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "CA",
+              "uid": 80334,
+              "name": "LONG VALLEY 2"
+            },
+            "smry": [
+              [
+                "72",
+                "2020-10-13"
+              ]
+            ]
+          }
+        },
+        "monthly": {
+          "params": {
+            "uid": 80334,
+            "sdate": "1950-10-31",
+            "edate": "2025-10-31",
+            "meta": [
+              "uid",
+              "name",
+              "state"
+            ],
+            "elems": [
+              {
+                "name": "maxt",
+                "interval": [
+                  1,
+                  0,
+                  0
+                ],
+                "duration": "mtd",
+                "smry": {
+                  "reduce": "max",
+                  "add": "date"
+                },
+                "smry_only": 1,
+                "reduce": "max"
+              }
+            ]
+          },
+          "status": 200,
+          "data": {
+            "meta": {
+              "state": "CA",
+              "uid": 80334,
+              "name": "LONG VALLEY 2"
+            },
+            "smry": [
+              [
+                "77",
+                "2018-10-01"
+              ]
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "representativeMultiStation": {
+    "metaRequest": {
+      "uid": 29713,
+      "sdate": "1950-03-26",
+      "edate": "2025-03-26",
+      "meta": [
+        "uid",
+        "sids",
+        "name",
+        "state"
+      ],
+      "elems": [
+        {
+          "name": "maxt",
+          "interval": [
+            1,
+            0,
+            0
+          ],
+          "duration": 1,
+          "smry": {
+            "reduce": "max",
+            "add": "date"
+          },
+          "smry_only": 1
+        }
+      ]
+    },
+    "metaResponse": {
+      "meta": {
+        "state": "ID",
+        "sids": [
+          "24136 1",
+          "101960 2",
+          "101951 2",
+          "COE 3",
+          "KCOE 5",
+          "USW00024136 6",
+          "COE 7",
+          "USW00024136 32"
+        ],
+        "uid": 29713,
+        "name": "COEUR D ALENE AIR TERMINAL"
+      },
+      "smry": [
+        [
+          "70",
+          "2025-03-26"
+        ]
+      ]
+    },
+    "multiRequest": {
+      "sids": [
+        "USW00024136 6"
+      ],
+      "sdate": "1950-03-26",
+      "edate": "2025-03-26",
+      "meta": [
+        "uid",
+        "name",
+        "state"
+      ],
+      "elems": [
+        {
+          "name": "maxt",
+          "interval": [
+            1,
+            0,
+            0
+          ],
+          "duration": 1,
+          "smry": {
+            "reduce": "max",
+            "add": "date"
+          },
+          "smry_only": 1
+        },
+        {
+          "name": "mint",
+          "interval": [
+            1,
+            0,
+            0
+          ],
+          "duration": 1,
+          "smry": {
+            "reduce": "min",
+            "add": "date"
+          },
+          "smry_only": 1
+        },
+        {
+          "name": "maxt",
+          "interval": [
+            1,
+            0,
+            0
+          ],
+          "duration": 1,
+          "smry": {
+            "reduce": "mean"
+          },
+          "smry_only": 1
+        },
+        {
+          "name": "mint",
+          "interval": [
+            1,
+            0,
+            0
+          ],
+          "duration": 1,
+          "smry": {
+            "reduce": "mean"
+          },
+          "smry_only": 1
+        }
+      ]
+    },
+    "multiResponse": {
+      "data": [
+        {
+          "meta": {
+            "state": "ID",
+            "uid": 29713,
+            "name": "COEUR D ALENE AIR TERMINAL"
+          },
+          "smry": [
+            [
+              "70",
+              "2025-03-26"
+            ],
+            [
+              "19",
+              "1990-03-26"
+            ],
+            "52.8",
+            "32.4"
+          ]
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "These requests compare 1950–2025 historical thresholds, excluding earlier days in the 2026 observation month.",
+    "Current station reads differ from the legacy daily thresholds; the reason is not established by this comparison.",
+    "The representative MultiStnData request agrees with StnData. The other eleven stations were not cross-checked through MultiStnData.",
+    "No raw observations, rh/rl fields, or public archives were rewritten. A correction and refresh policy still requires approval."
+  ]
+}

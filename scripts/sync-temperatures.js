@@ -515,6 +515,39 @@ function isPlausible(type, tempF, state, date) {
     return true;
 }
 
+/** Use the same conversion for cache validation and publication. */
+function countyStationRecords(data, stateAbbr, params) {
+    const records = [];
+    for (const { meta, smry } of data.data) {
+        // ACIS includes stations that have no county or location. They cannot make a map record.
+        if (meta.ll == null || meta.county == null || meta.county === '') continue;
+        const invalidLocation = !Array.isArray(meta.ll) || meta.ll.length !== 2
+            || meta.ll.some(value => typeof value !== 'number' || !Number.isFinite(value))
+            || Math.abs(meta.ll[0]) > 180 || Math.abs(meta.ll[1]) > 90;
+        if (invalidLocation || typeof meta.county !== 'string' || !/^\d{5}$/.test(meta.county) || !meta.county.startsWith(ABBR_TO_FIPS[stateAbbr])
+            || (meta.name != null && typeof meta.name !== 'string')
+            || (meta.state != null && meta.state !== stateAbbr)) {
+            throw new Error('Invalid county station location or state');
+        }
+        for (const [index, type] of ['high', 'low'].entries()) {
+            const extreme = smry[index];
+            if (!validDatedValue(extreme)
+                || (extreme[0] !== 'M' && (extreme[1] < params.sdate || extreme[1] > params.edate))) {
+                throw new Error('Invalid county observation value or date');
+            }
+            const [value, date] = extreme;
+            const tempF = numberOrNull(value);
+            if (tempF === null || !isPlausible(type, tempF, stateAbbr, date)) continue;
+            const [lon, lat] = meta.ll;
+            records.push({
+                countyFips: meta.county, stationName: meta.name || 'Unknown', state: stateAbbr,
+                type, tempF, date, lat, lon,
+            });
+        }
+    }
+    return records;
+}
+
 export async function fetchCountyRecordsForState(stateAbbr) {
     const fips = ABBR_TO_FIPS[stateAbbr];
     if (!fips) return [];
@@ -549,56 +582,19 @@ export async function fetchCountyRecordsForState(stateAbbr) {
     try {
         const data = await cachedPostJson(
             'https://data.rcc-acis.org/MultiStnData', params,
-            `county-alltime/${stateAbbr}`
+            `county-alltime/${stateAbbr}`,
+            {
+                timeoutMs: 120_000,
+                readLocal: true,
+                validate(data) {
+                    assertStationSummaries(data, params);
+                    if (countyStationRecords(data, stateAbbr, params).length === 0) {
+                        throw new Error('No usable county observations returned');
+                    }
+                },
+            }
         );
-        const stationRecords = [];
-
-        for (const station of data.data) {
-            const meta = station.meta;
-            if (!meta?.ll || !meta.county) continue;
-
-            const [lon, lat] = meta.ll;
-            const countyFips = meta.county;
-
-            // smry format: [[maxTemp, maxDate], [minTemp, minDate]]
-            const smry = station.smry;
-            if (!smry || smry.length < 2) continue;
-
-            const [maxTemp, maxDate] = smry[0] || [];
-            const [minTemp, minDate] = smry[1] || [];
-
-            if (maxTemp && maxTemp !== 'M' && maxTemp !== null) {
-                const t = parseFloat(maxTemp);
-                if (!isNaN(t) && isPlausible('high', t, stateAbbr, maxDate || '')) {
-                    stationRecords.push({
-                        countyFips,
-                        stationName: meta.name || 'Unknown',
-                        state: stateAbbr,
-                        type: 'high',
-                        tempF: t,
-                        date: maxDate || '',
-                        lat,
-                        lon,
-                    });
-                }
-            }
-
-            if (minTemp && minTemp !== 'M' && minTemp !== null) {
-                const t = parseFloat(minTemp);
-                if (!isNaN(t) && isPlausible('low', t, stateAbbr, minDate || '')) {
-                    stationRecords.push({
-                        countyFips,
-                        stationName: meta.name || 'Unknown',
-                        state: stateAbbr,
-                        type: 'low',
-                        tempF: t,
-                        date: minDate || '',
-                        lat,
-                        lon,
-                    });
-                }
-            }
-        }
+        const stationRecords = countyStationRecords(data, stateAbbr, params);
 
         return stationRecords;
     } catch (err) {
@@ -693,15 +689,15 @@ function validMonthlyValue(value) {
     return value === 'M' || numberOrNull(value) !== null;
 }
 
-function validMonthlyDate(value) {
+function validObservationDate(value) {
     if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
     const timestamp = Date.parse(`${value}T00:00:00Z`);
     return Number.isFinite(timestamp) && new Date(timestamp).toISOString().slice(0, 10) === value;
 }
 
-function validDatedMonthlyValue(value) {
+function validDatedValue(value) {
     return Array.isArray(value) && value.length === 2 && validMonthlyValue(value[0])
-        && (value[0] === 'M' ? value[1] === 'M' || value[1] === '' : validMonthlyDate(value[1]));
+        && (value[0] === 'M' ? value[1] === 'M' || value[1] === '' : validObservationDate(value[1]));
 }
 
 function assertHistoricalMonthlyCoverage(monthly, observations, dateStr) {
@@ -794,7 +790,7 @@ async function historicalMonthTable(abbr, year, requestCache, expectedObservatio
             && table.data.every(station => station && Number.isSafeInteger(station.uid) && station.uid >= 0 && Array.isArray(station.months) && station.months.length === 12
                 && station.months.every((month, index) => month && typeof month === 'object' && !Array.isArray(month)
                     && ['monthlyHigh', 'monthlyLow'].every(field => month[field] == null || Number.isFinite(month[field]))
-                    && MONTHLY_FIELDS.every(([, field, dateField]) => month[field] == null || (validMonthlyDate(month[dateField])
+                    && MONTHLY_FIELDS.every(([, field, dateField]) => month[field] == null || (validObservationDate(month[dateField])
                         && month[dateField].slice(5, 7) === String(index + 1).padStart(2, '0') && month[dateField] < `${year}-01-01`))));
         const usable = table => {
             if (!valid(table)) return false;
@@ -811,7 +807,7 @@ async function historicalMonthTable(abbr, year, requestCache, expectedObservatio
         await postJson('https://data.rcc-acis.org/MultiStnData', params, { timeoutMs: 120_000, validate(data) {
             assertMonthlyStationData(data);
             if (data.data.some(station => !Array.isArray(station.data) || station.data.length !== rowCount
-                || station.data.some(row => !Array.isArray(row) || row.length !== 2 || !row.every(validDatedMonthlyValue)))) throw new Error('Invalid historical monthly series');
+                || station.data.some(row => !Array.isArray(row) || row.length !== 2 || !row.every(validDatedValue)))) throw new Error('Invalid historical monthly series');
             table = { version: MONTHLY_THRESHOLD_VERSION, throughYear: year - 1, data: data.data.map(station => {
                 const months = Array.from({ length: 12 }, () => ({}));
                 station.data.forEach((row, index) => {
@@ -860,7 +856,7 @@ export async function fetchMonthlyThresholds(abbr, dateStr, requestCache, repair
         const response = await monthlyResponse(params, `monthly-v${MONTHLY_THRESHOLD_VERSION}/${abbr}/${mm}`, responseCache, data => {
             assertMonthlyStationData(data);
             if (data.data.some(station => !Array.isArray(station.smry) || station.smry.length !== 2
-                || !station.smry.every(validDatedMonthlyValue))) {
+                || !station.smry.every(validDatedValue))) {
                 throw new Error('Invalid monthly station summaries');
             }
             if (checkCoverage) {

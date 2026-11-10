@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { usJurisdictions } from '../../../../shared/geography/usStates';
+import { TornadoDataTable } from './TornadoDataTable';
 import {
     COLOR_MODE_LABELS,
     DECADE_COLORS,
@@ -58,6 +60,8 @@ interface TornadoSummaryPanelProps {
     onSelectEvent: (event: NotableTornadoEvent) => void;
     onShare: () => void;
     onCloseSelection: () => void;
+    resultsReady: boolean;
+    onResetFilters: () => void;
 }
 
 function Stat({ label, value }: { label: string; value: string }) {
@@ -311,6 +315,8 @@ function TrendDecadeTable({ allYears }: { allYears: AnnualTornadoSummary[] }) {
                     );
                 })}
             </div>
+            <TornadoDataTable caption="Decade comparison data" columns={['Period', 'Segments per year', 'Deaths per year', 'EF2+ percent', 'Deaths per 100 segments']}
+                rows={decades.map(row => [row.label, row.avgCount.toFixed(1), row.avgDeaths.toFixed(1), row.ef2Pct.toFixed(1), row.dPer100.toFixed(1)])} />
         </div>
     );
 }
@@ -386,6 +392,8 @@ function TrendByState({ stateBreakdown }: { stateBreakdown: StateAggregateSummar
                     );
                 })}
             </div>
+            <TornadoDataTable caption="Top states data" columns={['State', 'Track segments', 'EF2+ percent', 'Deaths']}
+                rows={rows.map(row => [row.stateName, row.count, row.ef2Pct.toFixed(1), row.deaths])} />
         </div>
     );
 }
@@ -528,6 +536,9 @@ function TrendWarnings({ warningSummary, startYear, endYear }: { warningSummary:
                 <div className="flex justify-between text-[10px] text-zinc-600">
                     <span>{firstYear}</span><span>{lastYear}</span>
                 </div>
+                <TornadoDataTable caption="Annual national warning data" columns={['Year', 'Warnings', 'TOR warnings', 'Matched warnings', 'Watches', 'Matched watches', 'Selected']}
+                    rows={years.map(row => [row.year, row.warnings, row.tornadoWarnings, row.matchedWarnings, row.watches, row.matchedWatches,
+                        row.year >= startYear && row.year <= endYear ? 'Yes' : 'No'])} />
             </div>
 
             <div>
@@ -561,6 +572,8 @@ function TrendWarnings({ warningSummary, startYear, endYear }: { warningSummary:
                         );
                     })}
                 </div>
+                <TornadoDataTable caption="Weather office warning data" columns={['Office', 'Warnings', 'TOR warnings', 'Matched warnings']}
+                    rows={topWfos.map(row => [row.wfo, row.warnings, row.tornadoWarnings, row.matchedWarnings])} />
             </div>
         </div>
     );
@@ -594,6 +607,9 @@ function TrendSnapshot({ annualSummary, warningSummary, startYear, endYear, stat
             <div>
                 <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">B · Frequency vs deaths per 100 segments</div>
                 <TrendDualMetric allYears={fullHistory} startYear={startYear} endYear={endYear} />
+                <TornadoDataTable caption="Annual track data" columns={['Year', 'Track segments', 'EF2+ segments', 'Deaths', 'Deaths per 100 segments', 'Selected']}
+                    rows={fullHistory.map(row => [row.year, row.count, row.ef2Plus, row.deaths, (row.count ? row.deaths / row.count * 100 : 0).toFixed(1),
+                        row.year >= startYear && row.year <= endYear ? 'Yes' : 'No'])} />
             </div>
             <div>
                 <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">C · Decade comparison</div>
@@ -650,6 +666,8 @@ export function TornadoSummaryPanel({
     onSelectEvent,
     onShare,
     onCloseSelection,
+    resultsReady,
+    onResetFilters,
 }: TornadoSummaryPanelProps) {
     const selected = selectedTrack?.properties;
     const panelRef = useRef<HTMLElement>(null);
@@ -713,6 +731,13 @@ export function TornadoSummaryPanel({
                         <Stat label="Miles" value={Math.round(stats.trackMiles).toLocaleString()} />
                     </div>
 
+                    {resultsReady && stats.count === 0 && (
+                        <div role="status" className="mb-4 rounded border border-zinc-700 p-3 text-xs text-zinc-300">
+                            <p>No tracks match the selected years, state, region, and EF filters.</p>
+                            <button type="button" onClick={() => { onResetFilters(); panelRef.current?.focus(); }} className="mt-2 min-h-11 rounded bg-sky-500 px-3 py-2 font-medium text-zinc-950">Reset filters</button>
+                        </div>
+                    )}
+
                     <div className="mb-4 space-y-3">
                         {!densityAvailable && <p role="status" className="text-xs leading-relaxed text-amber-300">WebGL is unavailable. Showing a track overview; density rendering requires WebGL.</p>}
                         <div>
@@ -773,6 +798,14 @@ export function TornadoSummaryPanel({
                                 {(Object.keys(REGION_LABELS) as TornadoRegionPreset[]).map((value) => (
                                     <option key={value} value={value}>{REGION_LABELS[value]}</option>
                                 ))}
+                            </select>
+                        </label>
+
+                        <label className="grid gap-1.5 text-xs text-zinc-500">
+                            State
+                            <select value={selectedState ?? ''} onChange={event => onSelectedStateChange(event.target.value || null)} className="min-h-11 rounded-md border border-zinc-700 bg-zinc-900 px-2 py-2 text-sm text-zinc-100">
+                                <option value="">All states</option>
+                                {usJurisdictions.map(state => <option key={state.abbr} value={state.abbr}>{state.name}</option>)}
                             </select>
                         </label>
 
