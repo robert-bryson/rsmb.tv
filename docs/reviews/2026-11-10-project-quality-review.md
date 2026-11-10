@@ -177,3 +177,16 @@ Lint and TypeScript checks passed.
 
 Trip CI now emits GitHub failure annotations and stops at its first failure.
 Passing releases still run the full suite.
+
+The [second run](https://github.com/robert-bryson/rsmb.tv/actions/runs/42872430887)
+stopped on an atlas wheel-zoom check. The release gate blocked deployment again.
+Camera URL updates could arrive after the next gesture had started.
+The map treated that update as an external command and stopped the new gesture.
+The map now recognizes its last published camera before it applies a URL update.
+Browser Back and Forward still restore the requested camera.
+A regression test failed before this fix and passes after it.
+The unchanged wheel check passed 20 consecutive Chromium runs.
+Camera, sharing, reload, and history checks passed on desktop Chromium,
+phone Chromium, and WebKit: 59 passed and four device-specific checks skipped.
+The complete suite passed 3,018 unit tests and 18 Python tests.
+Lint and TypeScript checks passed.

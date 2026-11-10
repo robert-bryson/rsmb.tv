@@ -26,6 +26,7 @@ const fake = vi.hoisted(() => ({
         queryRenderedFeatures: ReturnType<typeof vi.fn>;
         canvas: HTMLCanvasElement;
         isMoving: () => boolean;
+        stop: () => unknown;
         getZoom: () => number;
         getBearing: () => number;
         getPitch: () => number;
@@ -465,6 +466,27 @@ describe('atlas renderer lifecycle', () => {
         unmount();
         act(() => { instance.events.get('moveend')?.forEach(listener => listener()); });
         expect(idle).toHaveBeenCalledOnce();
+    });
+
+    it('does not cancel a newer gesture when its previous camera URL is committed late', () => {
+        const idle = vi.fn();
+        const camera: AtlasCamera = { center: [-121.5, 46.5], zoom: 5.5, bearing: 0, pitch: 0 };
+        const props = { entries: [entry], routes: {}, fitVersion: 0, panelOpen: true, initialCamera: camera,
+            onSelect: vi.fn(), onHover: vi.fn(), onCameraChange: vi.fn(), onCameraIdle: idle };
+        const { rerender } = render(<TripAtlasMap {...props} />);
+        const instance = fake.instances[0];
+        act(() => { instance.events.get('styledata')?.forEach(listener => listener()); });
+        act(() => { instance.events.get('moveend')?.forEach(listener => listener()); });
+        expect(idle).toHaveBeenLastCalledWith(camera);
+        // The reader starts another gesture before React commits the previous URL write.
+        instance.center = { lng: -120, lat: 45 };
+        const stop = vi.spyOn(instance, 'stop');
+        rerender(<TripAtlasMap {...props} cameraTarget={camera} />);
+        expect(stop).not.toHaveBeenCalled();
+        expect(instance.jumpTo).not.toHaveBeenCalled();
+        // A real history navigation to that same camera must still restore it.
+        rerender(<TripAtlasMap {...props} cameraTarget={camera} cameraRevision="back-navigation" />);
+        expect(instance.jumpTo).toHaveBeenCalledExactlyOnceWith(camera);
     });
 
     it.each([true, false])('keeps fit padding stable while attribution loads (phone: %s)', phone => {

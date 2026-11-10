@@ -114,6 +114,7 @@ export default function TripAtlasMap(props: Props) {
     const initialFitKey = useRef(`${fitId ?? 'all'}:${fitVersion}`);
     const userMoved = useRef(false);
     const suppressCameraPublish = useRef(false);
+    const publishedCamera = useRef<{ map: maplibregl.Map; value: string } | undefined>(undefined);
     const lastFit = useRef<{ map: maplibregl.Map; key: string } | undefined>(undefined);
     const reducedMotion = useReducedMotion();
     const tooltipId = useId();
@@ -140,7 +141,11 @@ export default function TripAtlasMap(props: Props) {
     const select = useEffectEvent((id?: string) => props.onSelect(id));
     const hover = useEffectEvent((id?: string) => props.onHover(id));
     const rememberCamera = useEffectEvent((value: AtlasCamera) => props.onCameraChange(value));
-    const publishCamera = useEffectEvent((value: AtlasCamera) => props.onCameraIdle?.(value));
+    const publishCamera = useEffectEvent((value: AtlasCamera) => {
+        const encoded = encodeAtlasCamera(value);
+        if (mapRef.current && encoded) publishedCamera.current = { map: mapRef.current, value: encoded };
+        props.onCameraIdle?.(value);
+    });
     const compareOverview = useEffectEvent(() => {
         const instance = mapRef.current;
         if (!instance || !container.current || props.selectedId || lastFit.current?.map !== instance) return;
@@ -456,6 +461,11 @@ export default function TripAtlasMap(props: Props) {
     useLayoutEffect(() => {
         const target = props.cameraTarget;
         if (!map || mapRef.current !== map || !target) return;
+        const published = publishedCamera.current;
+        publishedCamera.current = undefined;
+        // A URL acknowledgement can arrive after the reader starts another gesture.
+        // Only history navigation should restore an already-published camera.
+        if (!props.cameraRevision && published?.map === map && published.value === encodeAtlasCamera(target)) return;
         const current: AtlasCamera = { center: [map.getCenter().lng, map.getCenter().lat], zoom: map.getZoom(), bearing: map.getBearing(), pitch: map.getPitch() };
         // URL writes from this map must not interrupt movement or introduce rounding drift.
         if (encodeAtlasCamera(current) === encodeAtlasCamera(target)) return;
