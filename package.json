@@ -19,6 +19,8 @@
     "build-blog-artifacts": "npm run build-site-icons && npm run build-og && npm run build-rss && npm run build-json-feed && npm run build-sitemap",
     "build-site-icons": "node scripts/generate-site-icons.js",
     "build-flights": "node projects/flights/scripts/convertFlights.js && node projects/flights/scripts/generateAllAirports.js && node projects/flights/scripts/generateUSStates.js",
+    "build-pins": "python3 projects/pins-of-inaccessibility/generate.py",
+    "test:pins-data": "python3 -m unittest discover -s projects/pins-of-inaccessibility/tests -v",
     "prepare-project-previews": "node --import tsx/esm scripts/generate-project-previews.js",
     "prepare-trip-thumbnails": "node --import tsx/esm scripts/generate-trip-thumbnails.js",
     "build-og": "node scripts/generate-og-images.js",

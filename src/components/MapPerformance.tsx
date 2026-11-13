@@ -8,6 +8,7 @@ const maps: Record<string, { feature: MapFeature; selector: string }> = {
   '/projects/temperature-records/map': { feature: 'temperature-records', selector: '[data-testid="temperature-map"]' },
   '/projects/tornado-tracks/map': { feature: 'tornado-tracks', selector: '[data-testid="tornado-map"]' },
   '/projects/adv-atlas/map': { feature: 'adv-atlas', selector: '[data-testid="trip-atlas-map"]' },
+  '/projects/pins-of-inaccessibility/map': { feature: 'pins-of-inaccessibility', selector: '[data-testid="pins-map"]' },
 };
 
 /** Initial usability, the first failure at each stage, and the first recovery. */

@@ -40,6 +40,7 @@ Use [ASD-STE100](https://www.asd-ste100.org/) as the language guide for current 
 | [Temperature methodology](../projects/temperature-records/methodology.md) | Check the historical temperature data |
 | [Temperature map](temperature-map.md) | Maintain record markers, units, selections, and map regression tests |
 | [Tornado Tracks](../projects/tornado-tracks/readme.md) | Sync tornado data and check map behavior |
+| [Pins of Inaccessibility](../projects/pins-of-inaccessibility/readme.md) | Regenerate state, territory, and county pins and check the map |
 | [Ride Ledger design](../projects/ride-ledger/readme.md) | Review the proposed application and open decisions |
 
 ## Reviews
@@ -49,6 +50,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-12 | [Pins quality review: invalid geometry, publication contracts, map recovery, source checks, tests, and coverage](reviews/2026-11-12-pins-quality-review.md) |
 | 2026-11-10 | [Project quality review: confirmed defects, regression tests, coverage, documentation, and remaining work](reviews/2026-11-10-project-quality-review.md) |
 | 2026-11-10 | [Project audit implementation: article preloads, navigation, temperature recovery, accessibility, telemetry, and browser CI](reviews/2026-11-10-project-improvements.md) |
 | 2026-11-10 | [Project audit: measured article preload, navigation, map recovery, accessibility, performance instrumentation, and ranked quick wins](reviews/2026-11-10-project-audit.md) |

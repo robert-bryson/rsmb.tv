@@ -31,6 +31,9 @@ A generated share or link click does not prove that a recipient opened it.
 `map-ready` can follow `map-startup-error` after recovery. Do not treat their counts as exclusive outcomes.
 Separate document and client navigation when you compare readiness times.
 `ready`, `degraded`, and `fallback` are usable states. Review them separately.
+The Pins map uses `pins-of-inaccessibility` as its feature value.
+Its readiness, error, and recovery events use the same map monitor.
+Pin IDs, search terms, and selected coordinates are excluded.
 Result-count buckets are `0`, `1`, `2-10`, `11-50`, and `51+`.
 The `device` property on existing map events describes the viewport width, not a device model.
 

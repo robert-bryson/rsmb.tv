@@ -22,6 +22,8 @@ export const pageLoaders = {
     '/projects/parc': moduleLoader(() => import('../pages/Parc')),
     '/projects/status-dashboard': moduleLoader(() => import('../pages/StatusDashboard')),
     '/projects/adv-atlas/map': moduleLoader(() => import('../pages/AdvAtlas')),
+    '/projects/pins-of-inaccessibility': moduleLoader(() => import('../pages/PinsOfInaccessibilityAbout')),
+    '/projects/pins-of-inaccessibility/map': moduleLoader(() => import('../pages/PinsOfInaccessibility')),
 };
 
 export type PageLoaderKey = keyof typeof pageLoaders;

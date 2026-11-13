@@ -20,12 +20,12 @@ type AnalyticsWindow = Window & {
   rsmbAnalyticsBeforeSend?: typeof sanitizeAnalyticsPayload
 }
 
-export type MapFeature = 'flights' | 'temperature-records' | 'tornado-tracks' | 'adv-atlas'
+export type MapFeature = 'flights' | 'temperature-records' | 'tornado-tracks' | 'adv-atlas' | 'pins-of-inaccessibility'
 export type MapAction = 'filter' | 'selection' | 'view' | 'playback' | 'statistics'
 
 const oneOf = (...values: string[]) => (value: unknown) => typeof value === 'string' && values.includes(value)
 const fields: Record<string, (value: unknown) => boolean> = {
-  feature: oneOf('flights', 'temperature-records', 'tornado-tracks', 'adv-atlas', 'posts'),
+  feature: oneOf('flights', 'temperature-records', 'tornado-tracks', 'adv-atlas', 'pins-of-inaccessibility', 'posts'),
   action: oneOf('filter', 'selection', 'view', 'playback', 'statistics'),
   phase: oneOf('startup', 'runtime'),
   state: oneOf('ready', 'degraded', 'fallback', 'error'),

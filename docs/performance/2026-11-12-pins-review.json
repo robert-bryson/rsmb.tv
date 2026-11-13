@@ -1,0 +1,105 @@
+{
+  "date": "2026-11-12",
+  "scope": "Uncommitted Pins of Inaccessibility project and shared integrations",
+  "coverage": {
+    "provider": "Vitest 5.1.0 with V8",
+    "before": {
+      "include": [
+        "src/features/pins/**",
+        "shared/pins.ts"
+      ],
+      "totals": {
+        "lines": {
+          "total": 448,
+          "covered": 81,
+          "skipped": 0,
+          "pct": 18.08
+        },
+        "statements": {
+          "total": 580,
+          "covered": 106,
+          "skipped": 0,
+          "pct": 18.27
+        },
+        "functions": {
+          "total": 143,
+          "covered": 30,
+          "skipped": 0,
+          "pct": 20.97
+        },
+        "branches": {
+          "total": 326,
+          "covered": 74,
+          "skipped": 0,
+          "pct": 22.69
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "after": {
+      "include": [
+        "src/features/pins/**",
+        "shared/pins.ts",
+        "shared/geography/geodesy.ts"
+      ],
+      "totals": {
+        "lines": {
+          "total": 530,
+          "covered": 525,
+          "skipped": 0,
+          "pct": 99.05
+        },
+        "statements": {
+          "total": 690,
+          "covered": 667,
+          "skipped": 0,
+          "pct": 96.66
+        },
+        "functions": {
+          "total": 170,
+          "covered": 164,
+          "skipped": 0,
+          "pct": 96.47
+        },
+        "branches": {
+          "total": 439,
+          "covered": 405,
+          "skipped": 0,
+          "pct": 92.25
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "note": "The direct geodesic calculation moved from feature geometry to shared geography. Both scopes include that calculation. Source changes increase the denominator. Shared adapters are checked by separate regressions."
+  },
+  "sourceVerification": {
+    "checked": 3292,
+    "circleSamples": 237024,
+    "maxRadiusErrorMeters": 0.6736075807639281,
+    "maxContactBoundaryErrorMeters": 0.7361473459749076,
+    "sourceSha256": {
+      "state": "59a220888a8d9be8117c4fcd38f542bd02d81abf0d198c78113595ad540dd957",
+      "county": "9c6e9d9076abce2670d1de255de3710c35ecca00a7005d88e012dec52d95f763"
+    },
+    "radiusAndContactToleranceMeters": 1,
+    "circleSampleStepDegrees": 5,
+    "circleSampleInwardMarginMeters": 2,
+    "method": "Reproject the full densified Census component around each rounded published pin. Measure its nearest boundary and contact offsets. Check 72 circle samples.",
+    "limit": "This reuses generator projection helpers. It does not independently certify the global geodesic maximum or complete circle containment."
+  },
+  "publicationSha256": {
+    "pins.json": "b9eb53b6aa701d36e91597044b7b233b41e4162b947165f2893f39f8c44d65e2",
+    "states.geojson": "063cc1f5f34ab2da9babc3690cf31128a49409b8260fe8236ea49f13e8c8be19",
+    "counties.geojson": "685ed4e72a99655022eef50c98c9191682e3c9c7a6bb2def6ac7f1830e3983f1"
+  }
+}

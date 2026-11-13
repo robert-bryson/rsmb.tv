@@ -18,6 +18,7 @@ export async function prepareDestination(target: PrefetchTarget, destination: bo
             case 'temperatures': tasks.push(import('../features/temperatures/loadTemperatureMap').then(m => settlePreparation([m.loadTemperatureMap(), m.warmTemperatureData(target.search)]))); break;
             case 'tornadoes': tasks.push(import('../features/tornadoes/loadTornadoMap').then(m => settlePreparation([m.loadTornadoMap(), m.warmTornadoData()]))); break;
             case 'atlas': tasks.push(import('../features/trips/atlas/loadTripAtlasMap').then(m => m.loadTripAtlasMap())); break;
+            case 'pins': tasks.push(import('../features/pins/loadPinsMap').then(m => m.loadPinsMap())); break;
         }
     }
     // Keep the speculative slot until every started branch settles, including after a failure.

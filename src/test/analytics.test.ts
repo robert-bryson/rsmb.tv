@@ -106,6 +106,16 @@ describe('initializeUmamiAnalytics', () => {
         expect(JSON.stringify(performance)).not.toMatch(/private|sensitive|secret/i)
     })
 
+    it('accepts the pins map feature without recording its selected geography', () => {
+        expect(sanitizeAnalyticsPayload('event', {
+            name: 'map-ready', url: '/projects/pins-of-inaccessibility/map?pin=county-51610',
+            data: { feature: 'pins-of-inaccessibility', state: 'ready', pin: 'county-51610' },
+        })).toMatchObject({
+            url: '/projects/pins-of-inaccessibility/map',
+            data: { feature: 'pins-of-inaccessibility', state: 'ready' },
+        })
+    })
+
     it('retains only an error type and public bundle locations', () => {
         const error = sanitizeAnalyticsPayload('error', {
             website: 'untrusted', url: '/projects/flights/map?key=private', name: 'TypeError', handled: true,

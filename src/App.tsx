@@ -30,6 +30,8 @@ const Aborg = lazy(pageLoaders['/projects/aborg']);
 const Parc = lazy(pageLoaders['/projects/parc']);
 const StatusDashboard = lazy(pageLoaders['/projects/status-dashboard']);
 const AdvAtlas = lazy(pageLoaders['/projects/adv-atlas/map']);
+const PinsOfInaccessibilityAbout = lazy(pageLoaders['/projects/pins-of-inaccessibility']);
+const PinsOfInaccessibility = lazy(pageLoaders['/projects/pins-of-inaccessibility/map']);
 
 const basename = import.meta.env.BASE_URL;
 
@@ -86,6 +88,8 @@ function AppRoutes() {
       <Route path="/projects" element={<Projects />} />
       <Route path="/projects/adv-atlas" element={<AdvAtlasRedirect />} />
       <Route path="/projects/adv-atlas/map" element={<AdvAtlas />} />
+      <Route path="/projects/pins-of-inaccessibility" element={<PinsOfInaccessibilityAbout />} />
+      <Route path="/projects/pins-of-inaccessibility/map" element={<PinsOfInaccessibility />} />
       <Route path="/projects/motorcycle-trips" element={<AdvAtlasRedirect />} />
       <Route path="/projects/motorcycle-trips/map" element={<AdvAtlasRedirect />} />
       <Route path="/projects/through-routes" element={<ThroughRoutes />} />

@@ -27,6 +27,8 @@ export const STATIC_ROUTES = [
     { path: '/', priority: '1.0', changefreq: 'weekly', sources: ['src/pages/Home.tsx', 'src/content/projects.ts'] },
     { path: '/about', priority: '0.8', changefreq: 'monthly', sources: ['src/pages/About.tsx'] },
     { path: '/projects', priority: '0.8', changefreq: 'monthly', sources: ['src/pages/Projects.tsx', 'src/content/projects.ts'] },
+    { path: '/projects/pins-of-inaccessibility', priority: '0.7', changefreq: 'yearly', sources: ['src/pages/PinsOfInaccessibilityAbout.tsx', 'projects/pins-of-inaccessibility'] },
+    { path: '/projects/pins-of-inaccessibility/map', priority: '0.8', changefreq: 'yearly', sources: ['src/pages/PinsOfInaccessibility.tsx', 'src/features/pins', 'projects/pins-of-inaccessibility'] },
     { path: '/projects/adv-atlas/map', priority: '0.8', changefreq: 'monthly', sources: ['src/pages/AdvAtlas.tsx', 'src/features/trips/atlas', 'src/content/posts.json', 'src/content/trips'] },
     { path: '/projects/through-routes', priority: '0.7', changefreq: 'monthly', sources: ['src/pages/ThroughRoutes.tsx'] },
     { path: '/projects/flights', priority: '0.9', changefreq: 'weekly', sources: ['src/pages/Flights.tsx', 'src/features/flights'] },

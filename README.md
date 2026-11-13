@@ -6,6 +6,7 @@ A personal website with software projects, data maps, writing, and motorcycle tr
 
 ## Features
 
+- **[Pins of Inaccessibility](projects/pins-of-inaccessibility/readme.md)** — Explore the national U.S. pole, state and county interior pins, radius circles, and geographic rankings.
 - **[ADV Atlas](docs/trips/ADV-ATLAS.md)** — Explore motorcycle journeys on a map, browse trip photographs, and open the full reports.
 - **Flights** — A globe with flight routes, filters, camera controls, and travel statistics.
 - **Temperature Records** — An interactive MapLibre GL map of U.S. temperature records. It shows recent station records, standing county and state extremes, and standing-record history.
@@ -87,6 +88,8 @@ See the [prefetch guide](docs/intent-prefetch.md) for allowed resources, limits,
 | `npm run watch` | Run terminal operations dashboard (`scripts/aws-watch.tsx`) |
 | `npm run typecheck` | Run all TypeScript project references without emitting files |
 | `npm run build-flights` | Convert flight CSV data to GeoJSON |
+| `npm run build-pins` | Recalculate state, territory, and county pins with the optional Python dependencies |
+| `npm run test:pins-data` | Check pin geometry, publication validity, locks, and rollback with the optional Python packages |
 | `npm run sync-blogs` | Sync blog metadata from Google Sheets and post bodies from Google Docs |
 | `npm run sync-blogs:dev` | Sync blogs before local dev when `GOOGLE_BLOG_SHEET_ID` is configured |
 | `npm run sync-flights` | Sync flight data from Google Sheets (requires `GOOGLE_SHEET_ID`) |
@@ -208,6 +211,7 @@ See the [security fix report](docs/reviews/2026-10-31-minimatch-security-fix.md)
 ├── shared/             # Pure modules used by browser code and generators
 ├── projects/
 │   ├── flights/        # Flight data and conversion scripts
+│   ├── pins-of-inaccessibility/ # Census boundary calculation and geometry tests
 │   └── temperature-records/ # Historical record-rate analysis pipeline
 ├── public/
 │   ├── data/           # Generated/static data files

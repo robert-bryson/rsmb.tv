@@ -6,7 +6,7 @@ Keep project-specific URLs, processing rules, and content with their callers.
 ## Map background recovery
 
 Use [`src/maps/recoverBasemap.ts`](../src/maps/recoverBasemap.ts) for provider deadlines, background recovery, retry, and cleanup.
-Temperature and Tornado adapters supply provider styles and application source IDs.
+Temperature, Tornado, and Pins adapters supply provider styles and application source IDs.
 The helper checks provider sources. It does not wait for application data or camera motion.
 Each feature restores its data layers on `style.load`.
 Each feature controls its camera and selection state.
@@ -16,7 +16,7 @@ Dispose the helper before you remove the renderer.
 
 Import request caching from [`src/data/fetchCache.ts`](../src/data/fetchCache.ts).
 It stores JSON responses and shares pending requests for each URL.
-Flights, Temperature Records, and Tornado Tracks use the same cache.
+Flights, Temperature Records, Tornado Tracks, and Pins use the same cache.
 The old Flights path exports the same functions for compatibility.
 
 ```ts
@@ -65,6 +65,16 @@ Use [`shared/flightSchemas.ts`](../shared/flightSchemas.ts) for published Flight
 Release validation uses these contracts; a nonempty `FeatureCollection` alone does not establish compatibility.
 These modules have no browser runtime dependency and can be imported without loading map features.
 
+Use [`shared/pins.ts`](../shared/pins.ts) for the Pins publication contract.
+It validates complete 2025 coverage, geographic identities, bounds, and contact distances and bearings.
+State and county readers reject a file served under the wrong geographic level.
+The Python generator checks full polygon validity before publication.
+The browser also checks closed, nonzero-area rings and date-line edges.
+These browser checks do not replace full polygon topology checks.
+
+The [Census snapshot](../shared/geography/census2025.json) supplies source checksums and county counts to Python and TypeScript.
+Update both publications and tests when changing this snapshot.
+
 Use [`src/features/tornadoes/schemas.ts`](../src/features/tornadoes/schemas.ts) for notable-event metadata.
 The schema checks event fields and geographic coordinates.
 Its inferred types also define the existing track properties contract.
@@ -76,6 +86,12 @@ Import MapLibre runtime values from [`src/maps/maplibre.ts`](../src/maps/maplibr
 This entry point sets the bundled worker URL before a map starts.
 Use it for full-page maps and embedded trip maps.
 Type-only imports can use `maplibre-gl` directly.
+Use [`screenGeometry.ts`](../src/maps/screenGeometry.ts) for map label clipping and rectangle collision checks.
+The atlas compatibility path re-exports these functions.
+Use [`ResilientFullscreenControl.ts`](../src/maps/ResilientFullscreenControl.ts) when replacing a renderer during fullscreen use.
+Retain the control while its fullscreen target remains active.
+Create a fresh control if the user exited fullscreen while the renderer was detached.
+Atlas adds its own tooltip text through a small adapter.
 Keep styles and attribution in [`cartoBasemaps.ts`](../src/maps/cartoBasemaps.ts).
 Detach listeners that write the URL before disposing of a renderer. A late camera
 event must not restore the map route after navigation has started.
@@ -100,11 +116,16 @@ Each record contains `abbr`, `name`, and `fips`. FIPS codes are strings that pre
 | `usStates` | 50 states | Temperature sync |
 | `usStatesAndDc` | 50 states and DC | Flight state boundaries |
 | `usJurisdictions` | 50 states, DC, and Puerto Rico | Tornado normalization |
+| `usStatesAndTerritories` | 50 states, DC, and five inhabited territories | Pins of Inaccessibility |
 
 Choose the subset that matches the project's existing data coverage.
 Derive lookup maps from these records instead of copying identity tables.
 Keep display centroids and source-data validation bounds with their projects.
 The registry has no browser or Node dependencies.
+
+Use [`geodesy.ts`](../shared/geography/geodesy.ts) for WGS84 direct destinations.
+Its longitude output stays continuous around the origin across the date line.
+Pins uses the same calculation for drawing and contact validation.
 
 ## Flight airport data
 

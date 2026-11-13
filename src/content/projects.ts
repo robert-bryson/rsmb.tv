@@ -26,6 +26,25 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    slug: 'pins-of-inaccessibility',
+    title: 'Pins of Inaccessibility',
+    description: 'Find the point farthest from the U.S. boundary and from each state, territory, and county boundary. Explore radius circles, compare the largest and smallest, and zoom into local geography.',
+    summary: 'Explore the national U.S. pole and the interior pins of states, territories, and counties.',
+    tech: ['React', 'TypeScript', 'MapLibre GL', 'Python', 'GeoJSON'],
+    applicationCategory: 'EducationalApplication',
+    demoUrl: '/projects/pins-of-inaccessibility/map',
+    previewImage: '/images/pins-of-inaccessibility/overview.webp',
+    sourceUrl: 'https://github.com/robert-bryson/rsmb.tv/tree/main/projects/pins-of-inaccessibility',
+    year: 2026,
+    lastUpdated: '2026-11-12',
+    changelog: [{ date: '2026-11', notes: [
+      'Added radius spokes with distance labels that appear as you zoom in',
+      'Added the national U.S. pole with internal state borders dissolved',
+      'Added state, territory, and county pins calculated from Census administrative boundaries',
+      'Added geodesic radius circles, county zoom controls, search, and radius rankings',
+    ] }],
+  },
+  {
     slug: 'adv-atlas',
     title: 'ADV Atlas',
     description: 'Explore motorcycle journeys on an interactive map. Browse route maps, photographs, and trip facts, then open the full ride reports.',

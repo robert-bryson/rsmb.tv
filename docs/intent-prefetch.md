@@ -69,6 +69,7 @@ Touch interaction does not start preparation.
 | Temperature map | Renderer and summary. Also prepare Recent records for the Recent view. | County and state archives, history, tiles, and GPU initialization |
 | Tornado map | Renderer, annual summary, and notable events | Historical geometry, analytics, warnings, tiles, and GPU initialization |
 | ADV Atlas | Renderer | Routes, tiles, workers, photos, and GPU initialization |
+| Pins of Inaccessibility | Renderer | Pin index, geographic outlines, tiles, workers, and GPU initialization |
 
 Camera and filter URL changes do not repeat temperature startup preparation.
 Only its data view changes the startup resource selection.

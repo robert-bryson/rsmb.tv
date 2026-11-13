@@ -25,6 +25,17 @@
     "image": "/og/adv-atlas.png",
     "operatingSystem": "Web"
   },
+  "/projects/pins-of-inaccessibility": {
+    "title": "Pins of Inaccessibility",
+    "description": "Explore the national U.S. pole of inaccessibility and the interior pins of states, territories, and counties, with radius circles and geographic rankings.",
+    "image": "/og/pins-of-inaccessibility.png",
+    "operatingSystem": "Web"
+  },
+  "/projects/pins-of-inaccessibility/map": {
+    "title": "Pins of Inaccessibility",
+    "description": "Interactive map of the national U.S. pole and state, territory, and county poles of inaccessibility. Compare radius circles, search places, and explore county pins as you zoom.",
+    "image": "/og/pins-of-inaccessibility.png"
+  },
   "/projects/through-routes": {
     "title": "Through Routes",
     "description": "Find scenic, twisty motorcycle loop routes on rural roads using OpenStreetMap data.",

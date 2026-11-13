@@ -207,6 +207,12 @@ projects/ride-ledger/data/
 projects/ride-ledger/exports/
 projects/ride-ledger/receipts/
 
+# === Project: Pins of Inaccessibility ===
+.venv-pins/
+public/data/.pins-of-inaccessibility.lock
+public/data/.pins-publish-*/
+projects/pins-of-inaccessibility/**/__pycache__/
+
 # === Blog content generated from Google Sheets/Docs at build time ===
 /src/content/posts.json
 /src/content/blog/*.mdx

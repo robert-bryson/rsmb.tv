@@ -23,6 +23,7 @@ function Scene() {
         {failed && <section data-testid="page-error" />}
         <div data-testid="temperature-map" data-map-state="loading" />
         <div data-testid="flights-map" data-map-state="loading" />
+        <div data-testid="pins-map" data-map-state="loading" />
     </>;
 }
 
@@ -85,18 +86,18 @@ describe('map performance', () => {
         expect(trackAnalyticsEvent).toHaveBeenLastCalledWith('map-recovered', { feature: 'temperature-records', state: 'fallback', phase: 'runtime' }, '/projects/temperature-records/map');
     });
 
-    it('reports a runtime failure and recovery without duplicating readiness', async () => {
-        render(<MemoryRouter initialEntries={['/projects/flights/map']}><Scene /></MemoryRouter>);
-        const map = screen.getByTestId('flights-map');
+    it.each(['flights', 'pins-of-inaccessibility'] as const)('reports %s runtime failure and recovery without duplicating readiness', async feature => {
+        render(<MemoryRouter initialEntries={[`/projects/${feature}/map`]}><Scene /></MemoryRouter>);
+        const map = screen.getByTestId(feature === 'flights' ? 'flights-map' : 'pins-map');
         map.dataset.mapState = 'ready';
         await waitFor(() => expect(trackAnalyticsEvent).toHaveBeenCalledOnce());
         map.dataset.mapState = 'error';
-        await waitFor(() => expect(trackAnalyticsEvent).toHaveBeenCalledWith('map-runtime-error', expect.objectContaining({ feature: 'flights' }), '/projects/flights/map'));
+        await waitFor(() => expect(trackAnalyticsEvent).toHaveBeenCalledWith('map-runtime-error', expect.objectContaining({ feature }), `/projects/${feature}/map`));
         map.dataset.mapState = 'loading';
         await new Promise<void>(resolve => queueMicrotask(resolve));
         map.dataset.mapState = 'fallback';
         await waitFor(() => expect(trackAnalyticsEvent).toHaveBeenCalledTimes(3));
-        expect(trackAnalyticsEvent).toHaveBeenLastCalledWith('map-recovered', { feature: 'flights', state: 'fallback', phase: 'runtime' }, '/projects/flights/map');
+        expect(trackAnalyticsEvent).toHaveBeenLastCalledWith('map-recovered', { feature, state: 'fallback', phase: 'runtime' }, `/projects/${feature}/map`);
         map.dataset.mapState = 'ready';
         await new Promise<void>(resolve => queueMicrotask(resolve));
         expect(trackAnalyticsEvent).toHaveBeenCalledTimes(3);

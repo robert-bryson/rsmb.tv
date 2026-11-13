@@ -8,7 +8,7 @@ export type PrefetchRollout = 'off' | 'pages' | 'all';
 export interface PrefetchTarget {
     key: string;
     page: PageLoaderKey;
-    map?: 'flights' | 'temperatures' | 'tornadoes' | 'atlas';
+    map?: 'flights' | 'temperatures' | 'tornadoes' | 'atlas' | 'pins';
     slug?: string;
     search: string;
 }
@@ -22,6 +22,7 @@ const aliases: Record<string, string> = {
 const maps: Record<string, PrefetchTarget['map']> = {
     '/projects/flights/map': 'flights', '/projects/temperature-records/map': 'temperatures',
     '/projects/tornado-tracks/map': 'tornadoes', '/projects/adv-atlas/map': 'atlas',
+    '/projects/pins-of-inaccessibility/map': 'pins',
 };
 
 export function prefetchRollout(value: string | undefined = import.meta.env.VITE_INTENT_PREFETCH): PrefetchRollout {

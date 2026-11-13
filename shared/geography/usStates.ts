@@ -63,3 +63,12 @@ export const usJurisdictions = [
     ...usStatesAndDc,
     { abbr: 'PR', name: 'Puerto Rico', fips: '72' },
 ] as const;
+
+/** Census state equivalents cover DC and the five inhabited U.S. territories. */
+export const usStatesAndTerritories = [
+    ...usJurisdictions,
+    { abbr: 'AS', name: 'American Samoa', fips: '60' },
+    { abbr: 'GU', name: 'Guam', fips: '66' },
+    { abbr: 'MP', name: 'Northern Mariana Islands', fips: '69' },
+    { abbr: 'VI', name: 'United States Virgin Islands', fips: '78' },
+] as const;

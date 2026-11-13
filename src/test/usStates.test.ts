@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { usJurisdictions, usStates, usStatesAndDc } from '../../shared/geography/usStates';
+import { usJurisdictions, usStates, usStatesAndDc, usStatesAndTerritories } from '../../shared/geography/usStates';
 
 // Independent expected identities protect every generator from a registry typo.
 const expectedStates = `AL|Alabama|01
@@ -61,18 +61,29 @@ describe('shared U.S. state identities', () => {
         expect(usStates).toEqual(expectedStates);
     });
 
-    it('includes DC only for flight boundaries and tornado normalization', () => {
+    it('provides the 50 states and DC without adding territories', () => {
         expect(usStatesAndDc).toEqual([
             ...expectedStates,
             { abbr: 'DC', name: 'District of Columbia', fips: '11' },
         ]);
     });
 
-    it('includes Puerto Rico only for tornado normalization', () => {
+    it('preserves the existing tornado jurisdiction subset', () => {
         expect(usJurisdictions).toEqual([
             ...expectedStates,
             { abbr: 'DC', name: 'District of Columbia', fips: '11' },
             { abbr: 'PR', name: 'Puerto Rico', fips: '72' },
         ]);
+    });
+
+    it('adds each inhabited territory once without changing the existing subsets', () => {
+        expect(usStatesAndTerritories).toEqual([
+            ...usJurisdictions,
+            { abbr: 'AS', name: 'American Samoa', fips: '60' },
+            { abbr: 'GU', name: 'Guam', fips: '66' },
+            { abbr: 'MP', name: 'Northern Mariana Islands', fips: '69' },
+            { abbr: 'VI', name: 'United States Virgin Islands', fips: '78' },
+        ]);
+        expect(new Set(usStatesAndTerritories.map(state => state.fips)).size).toBe(56);
     });
 });

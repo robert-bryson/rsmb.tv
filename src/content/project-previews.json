@@ -1,4 +1,11 @@
 {
+  "/images/pins-of-inaccessibility/overview.webp": {
+    "src": "/images/previews/pins-of-inaccessibility-960-beb4b77a0129.webp",
+    "srcSet": "/images/previews/pins-of-inaccessibility-480-c62cf2b90029.webp 480w, /images/previews/pins-of-inaccessibility-960-beb4b77a0129.webp 960w, /images/previews/pins-of-inaccessibility-1440-16a9d8cea971.webp 1440w",
+    "avifSrcSet": "/images/previews/pins-of-inaccessibility-480-f205a2b67460.avif 480w, /images/previews/pins-of-inaccessibility-960-27bb875089ac.avif 960w, /images/previews/pins-of-inaccessibility-1440-1437ecac9c0f.avif 1440w",
+    "width": 1440,
+    "height": 960
+  },
   "/images/adv-atlas/adv-atlas.webp": {
     "src": "/images/previews/adv-atlas-960-fe288b96512f.webp",
     "srcSet": "/images/previews/adv-atlas-480-c7dd4f588225.webp 480w, /images/previews/adv-atlas-960-fe288b96512f.webp 960w, /images/previews/adv-atlas-1440-7361d4e7741c.webp 1440w",
