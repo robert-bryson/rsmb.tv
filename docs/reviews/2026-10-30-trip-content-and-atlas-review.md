@@ -90,7 +90,7 @@ This is an approximate ASD-STE100 cleanup, without formal vocabulary certificati
 
 The source inventory records prior Sheet and archive checks.
 This review checks repository consistency. It does not independently verify those external sources or unpublished CDN assets.
-Publication work remains in [TODO.md](../../TODO.md#publication-blockers).
+Publication work remains in [TODO.md](../../TODO.md#content-publication).
 
 ## Dependency security
 
@@ -108,7 +108,7 @@ The latest inspected ESLint and TypeScript ESLint packages still require minimat
 | `@typescript-eslint/typescript-estree` | `8.72.1` | `^10.2.2` |
 
 The repository guide prohibits forcing incompatible dependency majors.
-The task is recorded in [TODO.md](../../TODO.md#dependency-security) for a compatible upstream update.
+The task is recorded in [TODO.md](../../TODO.md#build-and-maintenance) for a compatible upstream update.
 No dependency version or lockfile was changed.
 The production-only audit reports zero vulnerabilities.
 That result does not clear the full development dependency audit.

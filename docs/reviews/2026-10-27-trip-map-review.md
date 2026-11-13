@@ -159,7 +159,7 @@ The documentation index links this review. The earlier research results remain h
 ## Remaining limits
 
 Stop-marker selection and all three basemap styles still need dedicated fixed-tile browser coverage.
-These tasks remain in [TODO.md](../../TODO.md#browser-checks).
+These tasks remain in [TODO.md](../../TODO.md#browser-and-performance-checks).
 Unit tests verify their state and map calls, but do not prove rendered behavior in every browser.
 This review does not verify live tile availability, real-device GPU use, private source records, or deployment.
 

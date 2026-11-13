@@ -1,0 +1,46 @@
+{
+  "release": "47bc96ed1bbbeca4ce7381db3856c018121a4530706a44aecf539c7d955bea4b",
+  "generatedAt": "2026-11-13T15:02:32.763256+00:00",
+  "coverage": {
+    "elevations": 8091,
+    "pins": 8091,
+    "places": 8091
+  },
+  "uniqueCoordinates": 8037,
+  "files": 307,
+  "totalBytes": 2586600,
+  "largestFileBytes": 81417,
+  "elevationDatasets": {
+    "srtm30m": 7985,
+    "aster30m": 106
+  },
+  "placeCatalogCount": 237024,
+  "cdnVerification": {
+    "release": "47bc96ed1bbbeca4ce7381db3856c018121a4530706a44aecf539c7d955bea4b",
+    "files": 307,
+    "bytes": 2586600,
+    "coverage": {
+      "elevations": 8091,
+      "pins": 8091,
+      "places": 8091
+    },
+    "cors": "http://localhost:5173",
+    "manifestCacheControl": "public,max-age=300"
+  },
+  "liveBrowserVerification": {
+    "pageErrors": [],
+    "failedData": [],
+    "dataResponses": [
+      200,
+      200,
+      200,
+      200
+    ],
+    "mobileWidth": 320,
+    "screenshots": [
+      "/tmp/pins-context-live-desktop.png",
+      "/tmp/pins-context-live-globe.png",
+      "/tmp/pins-context-live-mobile.png"
+    ]
+  }
+}

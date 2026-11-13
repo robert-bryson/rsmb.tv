@@ -88,7 +88,7 @@ describe('shared global map geometry and presentation', () => {
         const circle = pinCircles([ontario]).features[0].geometry.coordinates[0];
         expect(circle[0]).toEqual(circle.at(-1));
         expect(radiusLines([ontario], 'km', ontario.id).features[0].properties.name).toBe('Ontario, Canada');
-        expect(pinPoints([ontario]).features[0].properties).toMatchObject({ stateAbbr: 'CA-ON', label: 'CA-ON' });
+        expect(pinPoints([ontario]).features[0].properties).toMatchObject({ stateAbbr: 'CA-ON', label: 'Ontario' });
         expect(visibleRadiusPins([ontario], 16, true, false, null, false)).toEqual([]);
         expect(visibleRadiusPins([ontario], 16, false, false, ontario, false)).toEqual([ontario]);
         const bounds = focusBounds(ontario);

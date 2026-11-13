@@ -31,7 +31,7 @@ No applicable `AGENTS.md` was found in the repository or its ancestors.
 These questions follow the architecture review of this plan.
 Ask unanswered questions when the relevant phase starts.
 Unanswered preferences use the suggested defaults in the first playable version.
-Track remaining implementation work in [TODO.md](../../TODO.md#adv-atlas).
+Track remaining implementation work in [TODO.md](../../TODO.md#browser-and-performance-checks).
 
 1. **Return state, before navigation work:** Should returning from a report restore the previous camera, panel state, and card position?
    Suggested default: restore the previous view during the same session. Fit the selected route for a fresh shared URL.

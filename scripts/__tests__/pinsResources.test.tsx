@@ -1,7 +1,7 @@
 import { act, cleanup, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { clearCache, getCacheStats } from '../../src/data/fetchCache';
-import { usePinsData } from '../../src/features/pins/data';
+import { usePinResource, usePinsData } from '../../src/features/pins/data';
 import { publishedPins, readPinsArtifact } from './pinsFixtures';
 
 const states = readPinsArtifact('states.geojson');
@@ -12,6 +12,23 @@ const response = (data: unknown) => new Response(JSON.stringify(data), { headers
 describe('pin resource loading', () => {
     beforeEach(() => clearCache());
     afterEach(() => { cleanup(); clearCache(); vi.unstubAllGlobals(); });
+
+    it('revalidates cached data when its reader contract changes at the same URL', async () => {
+        const fetch = vi.fn(async () => response({ count: 1 }));
+        vi.stubGlobal('fetch', fetch);
+        const accept = (value: unknown) => value as { count: number };
+        const reject = () => { throw new Error('The new inventory requires two records'); };
+        const hook = renderHook(({ parse }) => usePinResource('context.json', parse), { initialProps: { parse: accept } });
+        await waitFor(() => expect(hook.result.current.data).toEqual({ count: 1 }));
+        hook.rerender({ parse: reject });
+        expect(hook.result.current.data).toBeNull();
+        await waitFor(() => expect(hook.result.current.error).toBe('Could not load context.json.'));
+        expect(fetch).toHaveBeenCalledTimes(1);
+        expect(getCacheStats().entries).toBe(0);
+        hook.rerender({ parse: accept });
+        await waitFor(() => expect(hook.result.current.data).toEqual({ count: 1 }));
+        expect(fetch).toHaveBeenCalledTimes(2);
+    });
 
     it('deduplicates readers and loads counties only when enabled, then reuses them', async () => {
         const fetch = vi.fn(async (url: string) => response(artifacts[url.split('/').at(-1)!]));

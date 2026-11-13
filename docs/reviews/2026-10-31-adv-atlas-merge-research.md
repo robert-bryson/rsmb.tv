@@ -47,7 +47,7 @@ Its Escape listener belongs to the map wrapper, which does not contain the focus
 The page's document listener clears hover state but does not close the choices.
 See [TripAtlasMap.tsx:320](../../src/features/trips/atlas/TripAtlasMap.tsx#L320) and [AdvAtlas.tsx:130](../../src/pages/AdvAtlas.tsx#L130).
 
-The [testing contract:264](../trips/TESTING.md#L264) states: "Escape dismisses previews and choices."
+The [testing contract:264](../trips/TESTING.md#map-input-and-activation) states: "Escape dismisses previews and choices."
 Register dismissal at page or document scope, and add a regression that moves focus outside the map before pressing Escape.
 The visible close button remains usable, limiting the impact.
 No other concrete documented-standard breach or material baseline code smell was confirmed.
@@ -60,7 +60,7 @@ These temporary files are local verification artifacts, not repository sources.
 
 Severity: P2. Status: reproduced at the reviewed head.
 
-The [atlas contract:26](../trips/ADV-ATLAS.md#L26) requires returns to restore the camera, panel state, and card position.
+The [atlas contract:26](../trips/ADV-ATLAS.md#trip-panel) requires returns to restore the camera, panel state, and card position.
 The following sequence violates that contract:
 
 1. Open selected atlas visit A with its panel open.
@@ -187,7 +187,7 @@ All four draft trips have local combined routes under `public/data/trips/` in th
 Their CDN destinations remain unavailable.
 Hosted development deliberately retains CDN URLs, so these cards show unavailable photos and route errors there.
 Local previews use the prepared media instead.
-The [atlas guide:44](../trips/ADV-ATLAS.md#L44) documents this distinction.
+The [atlas guide:44](../trips/ADV-ATLAS.md#content-and-recovery) documents this distinction.
 
 The production importer validates public media before it writes published content.
 It also checks route geometry and declared track IDs.
@@ -248,9 +248,9 @@ Current official registry manifests still exclude the patched major:
 
 The registry checks agree with the earlier reviews, but were repeated for this report.
 A normal update to those latest toolchain releases does not permit minimatch 11 through these ranges.
-The repository prohibits forced incompatible dependency majors in [README.md:143](../../README.md#L143).
+The repository prohibits forced incompatible dependency majors in [README.md:143](../../README.md#lint-security-override).
 No override, forced audit fix, dependency downgrade, or security-gate change was made.
-The finding remains tracked in [TODO.md:62](../../TODO.md#L62).
+The finding remains tracked in [TODO.md:62](../../TODO.md#build-and-maintenance).
 
 The branch changes no dependency declarations or lockfile entries.
 Baseline and head have the same `package-lock.json` SHA-256:
@@ -284,28 +284,28 @@ The 2026 manifest currently contains one temporary hero photograph.
 Recovered mileage, riding days, dates, stops, and motorcycle details remain provisional.
 
 The live Sheet confirms these publication gaps.
-The [source inventory:69](../trips/TRIP-SOURCE-INVENTORY.md#L69) and [:93](../trips/TRIP-SOURCE-INVENTORY.md#L93) describe their current treatment.
+The [source inventory:69](../trips/TRIP-SOURCE-INVENTORY.md#mississippiwisconsin-2025) and [:93](../trips/TRIP-SOURCE-INVENTORY.md#onqcnew-england-2026) describe their current treatment.
 These records remain unpublished, so their incomplete prose and provisional facts do not block the published-only atlas.
 The preexisting [multipart-trip research](2026-10-31-adv-atlas-multipart-trips-research.md) covers future chapter-navigation design separately.
 This report does not replace it.
 
 ### Some publication instructions no longer match the sources
 
-The [Kalaloch TODO:27](../../TODO.md#L27) records an October 1 HTTP 403 result and still requires uploads and `published=false`.
+The [Kalaloch TODO:27](../../TODO.md#kalaloch) records an October 1 HTTP 403 result and still requires uploads and `published=false`.
 Current evidence shows all 76 referenced URLs available and the Sheet value already `Yes`.
 The historical observation can retain its date, but the active upload and publication instructions need reconciliation.
 Remaining source, date, mileage, and caption checks still require their own evidence.
 This review does not mark those editorial checks complete.
 
-The [PCH checklist:104](../trips/pch-2024-galleries.md#L104) still instructs creation and linking of a source Doc.
+The [PCH checklist:104](../trips/pch-2024-galleries.md#publication-checks) still instructs creation and linking of a source Doc.
 The live Sheet already contains that link.
-The [Route 66ish checklist:170](../trips/route-66ish-2025-galleries.md#L170) and [closing note:178](../trips/route-66ish-2025-galleries.md#L178) make the same stale claim.
+The [Route 66ish checklist:170](../trips/route-66ish-2025-galleries.md#publication-checks) and [closing note:178](../trips/route-66ish-2025-galleries.md#publication-checks) make the same stale claim.
 Its source Doc is linked, while its missing description remains an actual task.
 These are documentation cleanup items, not evidence of unavailable production content.
 
 ### Existing maintenance work remains separate
 
-The real-phone cold-cache check remains open in [TODO.md:58](../../TODO.md#L58).
+The real-phone cold-cache check remains open in [TODO.md:58](../../TODO.md#source-corrections).
 Emulated phone browsers do not establish physical-device transfer or initialization costs.
 Linux CI also needs a successful run after the audit issue is addressed.
 This research did not execute an Amplify deployment or certify production account configuration.

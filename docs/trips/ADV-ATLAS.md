@@ -289,6 +289,6 @@ Review the generated diff before you commit it.
 | `src/features/trips/atlas/AtlasFullscreenControl.ts` | Keep the fullscreen icon correct after renderer replacement |
 
 Use the [trip testing guide](TESTING.md#adv-atlas) for regression commands and required behavior.
-Use [TODO.md](../../TODO.md#adv-atlas) for incomplete work.
+Use [TODO.md](../../TODO.md#browser-and-performance-checks) for incomplete work.
 The dated [research report](../reviews/2026-10-30-adv-atlas-research.md) records the original design decisions.
 The [browsing research](../reviews/2026-10-31-adv-atlas-browsing-research.md) compares drawer, filtering, sorting, and accessibility guidance.

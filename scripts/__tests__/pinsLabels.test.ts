@@ -25,11 +25,12 @@ function fixture(width = 800, height = 500) {
         getContainer: () => container, getZoom: () => zoom, getCenter: () => ({ lng: center }),
         getBounds: () => ({ getWest: () => center - 90, getEast: () => center + 90, getSouth: () => -1000, getNorth: () => 1000 }),
         project: ([lng, lat]: number[]) => ({ x: width / 2 + (lng - center) * 2, y: height / 2 - lat * 2 }),
+        unproject: ({ x, y }: { x: number; y: number }) => ({ lng: (x - width / 2) / 2 + center, lat: (height / 2 - y) / 2 }),
         on: (name: string, callback: () => void) => { if (!listeners.has(name)) listeners.set(name, new Set()); listeners.get(name)!.add(callback); },
         off: (name: string, callback: () => void) => listeners.get(name)?.delete(callback),
     };
     const labels = attachRadiusLabels(map as unknown as MapLibreMap, overlay);
-    return { parent, container, overlay, labels, listeners,
+    return { parent, container, overlay, labels, listeners, map,
         move(nextZoom = zoom, nextCenter = center) { zoom = nextZoom; center = nextCenter; for (const callback of listeners.get('move') ?? []) callback(); } };
 }
 beforeEach(() => {
@@ -40,6 +41,20 @@ beforeEach(() => {
 afterEach(() => { document.body.replaceChildren(); vi.unstubAllGlobals(); });
 
 describe('radius badge layout', () => {
+    it('hides occluded globe segments and restores them when their surface becomes visible', () => {
+        const f = fixture();
+        const unproject = vi.spyOn(f.map, 'unproject');
+        unproject.mockReturnValue({ lng: 170, lat: 0 });
+        f.labels.setData(data(line('back-side', [[-50, 0], [0, 0], [50, 0]], { selected: true })));
+        flush();
+        expect(f.overlay.children).toHaveLength(0);
+        unproject.mockRestore();
+        f.move(); flush();
+        expect(f.overlay.children).toHaveLength(1);
+        expect(f.overlay.firstElementChild).toHaveClass('is-selected');
+        f.labels.dispose();
+    });
+
     it('reveals labels by zoom, retains selected labels, and updates distance text', () => {
         const f = fixture();
         f.labels.setData(data(line('ordinary'), line('selected', [[-100, 50], [100, 50]], { selected: true, minimumZoom: 12 })));

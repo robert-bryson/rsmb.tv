@@ -55,6 +55,16 @@ npm ci
 npm run dev
 ```
 
+If generated content is already available, start Vite directly for interface work:
+
+```bash
+npx vite --host 0.0.0.0 --port 5173 --strictPort
+```
+
+Open [localhost:5173](http://localhost:5173/).
+This command skips trip preparation, content imports, and flight generation.
+Use `npm run dev` when those inputs need an update.
+
 ### Available Scripts
 
 Set a localhost CARTO Basemaps key as `CARTO_API_KEY` in `.env.local` for local maps and release builds.
@@ -90,9 +100,11 @@ See the [prefetch guide](docs/intent-prefetch.md) for allowed resources, limits,
 | `npm run build-flights` | Convert flight CSV data to GeoJSON |
 | `npm run build-pins` | Recalculate state, territory, and county pins with the optional Python dependencies |
 | `npm run build-pins:world` | Recalculate global country and province pins from the pinned Natural Earth sources |
+| `npm run build-pins:context` | Generate elevation and nearby-place files after validating the complete pin inventory |
+| `npm run publish-pins:context` | Validate location files and show the publication plan without uploading |
 | `npm run test:pins-data` | Check pin geometry, publication validity, locks, and rollback with the optional Python packages |
 | `npm run sync-blogs` | Sync blog metadata from Google Sheets and post bodies from Google Docs |
-| `npm run sync-blogs:dev` | Sync blogs before local dev when `GOOGLE_BLOG_SHEET_ID` is configured |
+| `npm run sync-blogs:dev` | Refresh published posts and drafts locally when `GOOGLE_BLOG_SHEET_ID` is configured |
 | `npm run sync-flights` | Sync flight data from Google Sheets (requires `GOOGLE_SHEET_ID`) |
 | `npm run sync-temperatures` | Generate temperature record JSON for upload to the S3-backed data CDN |
 | `npm run repair:temperature-archives -- --source <directory> --stations <file> --out <directory>` | Stage corrected monthly thresholds in a separate output tree |

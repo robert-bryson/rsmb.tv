@@ -3,18 +3,21 @@ import { MemoryRouter, useLocation } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import PinsExplorer from '../../src/features/pins/PinsExplorer';
 import { usePinsData, useWorldPinsData } from '../../src/features/pins/data';
+import { usePinDetails } from '../../src/features/pins/usePinDetails';
 import type { PinsMapProps } from '../../src/features/pins/types';
 import { publishedPins } from './pinsFixtures';
 import { readPinsArtifact } from './pinsFixtures';
-import { parseWorldCountries, parseWorldRegionPins, worldPinsDataSchema } from '../../shared/worldPins';
+import { parseWorldBoundaries, parseWorldCountries, parseWorldRegionPins, worldPinsDataSchema } from '../../shared/worldPins';
 
 vi.mock('../../src/features/pins/data', () => ({ usePinsData: vi.fn(), useWorldPinsData: vi.fn() }));
+vi.mock('../../src/features/pins/usePinDetails', () => ({ usePinDetails: vi.fn() }));
 vi.mock('../../src/features/pins/PinsMap', () => ({ PinsMap: (props: PinsMapProps) => <div>
     <button onClick={() => props.onSelect('country-US')}>Select national pin on map</button>
     <button onClick={() => props.onSelect('unknown')}>Select unknown map feature</button>
     <button onClick={() => props.onZoom(6)}>Set county zoom</button>
     <output aria-label="Map view bounds">{props.view?.bounds.join(',')}</output>
     <output aria-label="Map resource state">{props.dataState}</output>
+    <output aria-label="Map boundary IDs">{props.states?.features.map(feature => feature.id).join(',')}</output>
 </div> }));
 vi.mock('../../src/components/IntentLink', () => ({ IntentLink: ({ to, children, ...props }: { to: string; children: React.ReactNode }) => <a href={to} {...props}>{children}</a> }));
 
@@ -31,6 +34,7 @@ const worldOutlines = parseWorldCountries(readPinsArtifact('world/countries.geoj
 const canada = parseWorldRegionPins(readPinsArtifact('world/regions/CAN.json'), 'CAN');
 
 beforeEach(() => {
+    vi.mocked(usePinDetails).mockReturnValue({ data: null, loading: false, error: true, retry: vi.fn() });
     vi.mocked(usePinsData).mockReturnValue(resources());
     vi.mocked(useWorldPinsData).mockReturnValue({ pins: resource(null), countries: resource(null), regions: resource(null), outlines: resource(null) });
     localStorage.clear();
@@ -42,6 +46,23 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 
 describe('pin explorer behavior', () => {
+    it('uses province coastlines without overlaying a conflicting country overview', () => {
+        const tobago = parseWorldRegionPins(readPinsArtifact('world/regions/TTO.json'), 'TTO');
+        const outlines = parseWorldBoundaries(readPinsArtifact('world/regions/TTO.geojson'), 'TTO');
+        vi.mocked(useWorldPinsData).mockReturnValue({
+            pins: resource(worldCountries), countries: resource(worldOutlines), regions: resource(tobago), outlines: resource(outlines),
+        });
+        open('?country=TTO');
+        const boundaries = screen.getByLabelText('Map boundary IDs');
+        expect(boundaries).toHaveTextContent('region-TTO-5090');
+        expect(boundaries).not.toHaveTextContent('country-TTO');
+        fireEvent.click(screen.getByRole('checkbox', { name: 'States & provinces', exact: true }));
+        expect(boundaries).toHaveTextContent(/^country-TTO$/);
+        fireEvent.click(screen.getByRole('checkbox', { name: 'States & provinces', exact: true }));
+        expect(boundaries).not.toHaveTextContent('country-TTO');
+        expect(boundaries).toHaveTextContent('region-TTO-5090');
+    });
+
     it('switches from world countries to real Canadian provinces and preserves URL context', () => {
         vi.mocked(useWorldPinsData).mockImplementation(code => ({
             pins: resource(worldCountries), countries: resource(worldOutlines),
@@ -128,9 +149,12 @@ describe('pin explorer behavior', () => {
         const initialView = screen.getByLabelText('Map view bounds').textContent;
         fireEvent.click(screen.getByRole('button', { name: 'Zoom to pin ↗' }));
         expect(screen.getByLabelText('Map view bounds')).toHaveTextContent(initialView!);
-        fireEvent.click(screen.getByRole('button', { name: 'Clear selected pin' }));
-        expect(screen.getByLabelText('Current query')).toHaveTextContent('?keep=value');
+        fireEvent.click(screen.getByRole('button', { name: 'Close selection and return to globe' }));
+        expect(screen.getByLabelText('Current query')).toHaveTextContent('?keep=value&country=ALL');
         expect(screen.queryByRole('region', { name: 'Selected pin' })).not.toBeInTheDocument();
+        expect(screen.getByLabelText('Map view bounds')).toHaveTextContent('-180,-60,180,83');
+        expect(screen.getByRole('button', { name: 'World overview', exact: true })).toHaveFocus();
+        fireEvent.change(screen.getByLabelText('Country / territory'), { target: { value: 'USA' } });
         fireEvent.change(screen.getByLabelText('Within'), { target: { value: '66' } });
         fireEvent.click(screen.getByRole('button', { name: 'Select national pin on map' }));
         expect(screen.getByLabelText('Within')).toHaveValue('');
@@ -138,6 +162,23 @@ describe('pin explorer behavior', () => {
         expect(screen.getByLabelText('Current query')).toHaveTextContent('pin=country-US');
         fireEvent.click(screen.getByRole('button', { name: 'Select unknown map feature' }));
         expect(screen.getByLabelText('Current query')).toHaveTextContent('pin=country-US');
+    });
+
+    it('returns to the globe with Escape or the persistent toolbar and resets ranking filters', () => {
+        open('?pin=state-08&keep=1');
+        fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'Colorado' } });
+        fireEvent.keyDown(screen.getByRole('region', { name: 'Selected pin' }), { key: 'Escape' });
+        expect(screen.getByRole('searchbox')).toHaveValue('');
+        expect(screen.getByLabelText('Country / territory')).toHaveValue('ALL');
+        expect(screen.getByLabelText('Current query')).toHaveTextContent('keep=1');
+        expect(screen.getByLabelText('Current query')).not.toHaveTextContent('pin=');
+        const globe = screen.getByRole('button', { name: 'World overview', exact: true });
+        expect(globe).toHaveFocus();
+        fireEvent.click(globe);
+        expect(screen.getByLabelText('Map view bounds')).toHaveTextContent('-180,-60,180,83');
+        fireEvent.change(screen.getByLabelText('Country / territory'), { target: { value: 'CAN' } });
+        fireEvent.click(screen.getByRole('button', { name: 'Back to globe', exact: true }));
+        expect(screen.getByLabelText('Country / territory')).toHaveValue('ALL');
     });
 
     it('updates unit preferences and county visibility and zooms to region shortcuts', () => {

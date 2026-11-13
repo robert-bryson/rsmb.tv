@@ -2,6 +2,7 @@
 """Build global country and first-level region pins from pinned Natural Earth sources."""
 
 import argparse
+from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 import json
@@ -12,7 +13,7 @@ import urllib.request
 from urllib.parse import urlparse
 import zipfile
 
-from shapely import make_valid
+from shapely import coverage_is_valid, make_valid
 from shapely.geometry import MultiPolygon, Point, shape
 from shapely.geometry.polygon import orient
 
@@ -108,6 +109,33 @@ def mapped_area(geometry_):
                for part in geometry.polygons(make_valid(geometry_))) / 1_000_000
 
 
+def boundary_feature(shape_, pin):
+    # Independent simplification of adjacent regions creates overlaps and slivers.
+    # Keep regional source vertices; only reduce their coordinate precision.
+    # Cap country overview simplification per island, including small islands
+    # belonging to large countries, rather than using the whole country's extent.
+    display = geometry.display_geometry(shape_,
+        simplification_degrees=0.02 if pin['level'] == 'country' else 0,
+        max_component_fraction=0.001 if pin['level'] == 'country' else None)
+    return {'type': 'Feature', 'id': pin['id'],
+            'properties': {key: pin[key] for key in ['id', 'name', 'countryCode', 'level']},
+            'geometry': display}
+
+
+def validate_regional_coverage(records, features):
+    """Reject display changes that break an edge-matched source coverage."""
+    groups = defaultdict(list)
+    for record, shape_ in records:
+        groups[record['adm0_a3']].append(shape_)
+    checked = 0
+    for code, shapes in groups.items():
+        if coverage_is_valid(shapes):
+            if not coverage_is_valid([shape(feature['geometry']) for feature in features[code]]):
+                raise ValueError(f'Display outlines break matched source boundaries: {code}')
+            checked += 1
+    return checked
+
+
 def build_pin(record, shape_, level, countries):
     country_code = record['ADM0_A3'] if level == 'country' else record['adm0_a3']
     code = country_code if level == 'country' else record['adm1_code']
@@ -132,14 +160,45 @@ def build_pin(record, shape_, level, countries):
            'countryBoundaryAdjusted': bool(record.get('countryBoundaryAdjusted', False))}
     pin['boundaryContacts'] = geometry.boundary_contacts(shape_, pin, coordinate_precision=8, distance_precision=3)
     error = geometry.verify_source_pin(pin, shape_, sample_margin=min(2, radius * 0.001))
-    display = geometry.display_geometry(shape_, simplification_degrees=0.02 if level == 'country' else 0.0015)
-    feature = {'type': 'Feature', 'id': identifier,
-               'properties': {'id': identifier, 'name': name, 'countryCode': country_code, 'level': pin['level']},
-               'geometry': display}
-    return pin, feature, error
+    return pin, boundary_feature(shape_, pin), error
 
 
-def validate_artifact(name, payload):
+def refresh_outlines(archives, output):
+    """Replace display geometry only, using the existing publication's pinned sources."""
+    countries = country_records(archives['country'])
+    regions = region_records(archives['region'], countries)
+    published = json.loads((output / 'pins.json').read_text(encoding='utf-8'))
+    validate_artifact('pins.json', published)
+    us = json.loads(US_PUBLICATION.read_text(encoding='utf-8'))
+    catalog = json.loads(CATALOG_PATH.read_text(encoding='utf-8'))
+    if make_catalog(countries, regions, us['pins']) != catalog:
+        raise ValueError('Source coverage differs from worldCatalog.json; run a full generation')
+    pins = {pin['id']: pin for pin in published['pins']}
+    for country in catalog['countries']:
+        if country['code'] == 'USA':
+            continue
+        name = f"regions/{country['code']}.json"
+        payload = json.loads((output / name).read_text(encoding='utf-8'))
+        validate_artifact(name, payload)
+        pins.update({pin['id']: pin for pin in payload['pins']})
+    artifacts = {'countries.geojson': {'type': 'FeatureCollection', 'features': []}}
+    artifacts.update({f"regions/{country['code']}.geojson": {'type': 'FeatureCollection', 'features': []}
+                      for country in catalog['countries'] if country['code'] != 'USA'})
+    for record, shape_ in countries:
+        code = record['ADM0_A3']
+        identifier = 'country-US' if code == 'USA' else f'country-{code}'
+        pin = {**pins[identifier], 'countryCode': code}
+        artifacts['countries.geojson']['features'].append(boundary_feature(shape_, pin))
+    for record, shape_ in regions:
+        artifacts[f"regions/{record['adm0_a3']}.geojson"]['features'].append(
+            boundary_feature(shape_, pins[f"region-{record['adm1_code']}"]))
+    checked = validate_regional_coverage(regions, {country['code']: artifacts[f"regions/{country['code']}.geojson"]['features']
+                                                 for country in catalog['countries'] if country['code'] != 'USA'})
+    geometry.write_publication(output, artifacts, validate=validate_artifact)
+    return {'outlinesUpdated': len(artifacts), 'matchedRegionalCoverages': checked}
+
+
+def validate_artifact(name, payload, *, us_publication=None):
     catalog = json.loads(CATALOG_PATH.read_text(encoding='utf-8'))
     countries = {country['code']: country for country in catalog['countries']}
     foreign = {code: country for code, country in countries.items() if code != 'USA'}
@@ -179,7 +238,7 @@ def validate_artifact(name, payload):
             if pin.get('level') != ('state' if region_code else 'country'):
                 raise ValueError('World pin has the wrong administrative level')
             if pin['id'] == 'country-US':
-                expected = next(item for item in json.loads(US_PUBLICATION.read_text(encoding='utf-8'))['pins'] if item['id'] == 'country-US')
+                expected = next(item for item in json.loads((us_publication or US_PUBLICATION).read_text(encoding='utf-8'))['pins'] if item['id'] == 'country-US')
                 if pin != expected:
                     raise ValueError('The world index must retain the published Census national pin')
                 continue
@@ -222,18 +281,22 @@ def verify_publication(archives, output):
     catalog = json.loads(CATALOG_PATH.read_text(encoding='utf-8'))['countries']
     artifacts = ['pins.json', 'countries.geojson'] + [f'regions/{country["code"]}.{suffix}'
         for country in catalog if country['code'] != 'USA' for suffix in ['json', 'geojson']]
-    pins = {}
+    pins, region_features = {}, {}
     for name in artifacts:
         payload = json.loads((output / name).read_text(encoding='utf-8'))
         validate_artifact(name, payload)
         if name.endswith('.json'):
             pins.update({pin['id']: pin for pin in payload['pins']})
+        elif name.startswith('regions/'):
+            region_features[name[8:-8]] = payload['features']
     errors = []
     countries = country_records(archives['country'])
+    regions = region_records(archives['region'], countries)
+    matched_coverages = validate_regional_coverage(regions, region_features)
     parents = {record['ADM0_A3']: make_valid(shape_) for record, shape_ in countries}
     national_pins = {pin['countryCode']: pin for pin in pins.values() if pin['level'] == 'country' and pin['id'] != 'country-US'}
     max_regional_radius_excess = 0
-    for level, records in [('country', countries), ('region', region_records(archives['region'], countries))]:
+    for level, records in [('country', countries), ('region', regions)]:
         for record, shape_ in records:
             code = record['ADM0_A3'] if level == 'country' else record['adm1_code']
             if level == 'country' and code == 'USA':
@@ -255,6 +318,7 @@ def verify_publication(archives, output):
     if adjusted_count != json.loads((output / 'pins.json').read_text(encoding='utf-8'))['metadata']['adjustedRegionCount']:
         raise ValueError('Regional alignment count differs from the publication metadata')
     return {'checked': len(errors), 'circleSamples': len(errors) * 72,
+            'matchedRegionalCoverages': matched_coverages,
             'maxRadiusErrorMeters': max(error[0] for error in errors),
             'maxContactBoundaryErrorMeters': max(error[1] for error in errors),
             'regionsInsideParent': sum(pin['level'] == 'state' for pin in pins.values()),
@@ -311,9 +375,8 @@ def generate(archives, output, write_catalog=False):
     for level, records in [('country', countries), ('region', regions)]:
         for index, (record, shape_) in enumerate(records):
             if level == 'country' and record['ADM0_A3'] == 'USA':
-                country_features.append({'type': 'Feature', 'id': 'country-US',
-                    'properties': {'id': 'country-US', 'name': 'United States', 'countryCode': 'USA', 'level': 'country'},
-                    'geometry': geometry.display_geometry(shape_, simplification_degrees=0.02)})
+                national = next(pin for pin in us['pins'] if pin['id'] == 'country-US')
+                country_features.append(boundary_feature(shape_, {**national, 'countryCode': 'USA'}))
                 continue
             pin, feature, error = build_pin(record, shape_, level, lookup)
             if level == 'region':
@@ -351,6 +414,7 @@ def generate(archives, output, write_catalog=False):
             artifacts[f'regions/{code}.geojson'] = {'type': 'FeatureCollection', 'features': region_features.get(code, [])}
             artifacts[f'regions/{code}.json'] = {'metadata': {'version': SNAPSHOT['version'], 'countryCode': code, 'sourceSha256': metadata['sourceSha256']},
                                                 'pins': [pin for pin in pins if pin['level'] == 'state' and pin['countryCode'] == code]}
+    validate_regional_coverage(regions, region_features)
     geometry.write_publication(output, artifacts, validate=validate_artifact)
     print(json.dumps(metadata, indent=2), flush=True)
 
@@ -363,11 +427,14 @@ def main():
     mode.add_argument('--write-catalog', action='store_true', help='Write the source identity catalog without calculating pins')
     mode.add_argument('--verify-only', action='store_true', help='Check every world artifact and pin against its full source')
     mode.add_argument('--benchmark', action='store_true', help='Measure country solver sensitivity to four different origins')
+    mode.add_argument('--outlines-only', action='store_true', help='Refresh display outlines with matching sources, preserving calculated pins')
     args = parser.parse_args()
     args.cache.mkdir(parents=True, exist_ok=True)
     with ThreadPoolExecutor(max_workers=2) as executor:
         archives = dict(zip(SNAPSHOT['sources'], executor.map(lambda key: download(key, args.cache), SNAPSHOT['sources'])))
-    if args.verify_only or args.benchmark:
+    if args.outlines_only:
+        print(json.dumps(refresh_outlines(archives, args.output), indent=2), flush=True)
+    elif args.verify_only or args.benchmark:
         result = verify_publication(archives, args.output) if args.verify_only else benchmark(archives, args.output)
         print(json.dumps(result, indent=2), flush=True)
     else:

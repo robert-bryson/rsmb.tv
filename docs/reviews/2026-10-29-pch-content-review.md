@@ -120,7 +120,7 @@ Repeated Fujifilm coordinates do not establish new stop locations.
 
 The review did not check public CDN availability or run a live Google import.
 It did not change UI behavior, so browser checks were not repeated.
-Use [TODO.md](../../TODO.md#pch-2024-trip) for the remaining publication work.
+Use [TODO.md](../../TODO.md#pch-2024) for the remaining publication work.
 
 Standards: two P3 findings, both corrected; the main issue was mixed instructions and historical results.
 Spec: zero findings.

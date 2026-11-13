@@ -165,7 +165,7 @@ The current procedures distinguish local component checks from deployed file che
 
 Google content imports, Terraform changes, uploads, and deployment were not performed.
 The new source gallery references were confirmed by the user, not by an external content fetch.
-Existing [publication tasks](../../TODO.md#publication-blockers) remain open.
+Existing [publication tasks](../../TODO.md#content-publication) remain open.
 
 Standards: two additional maintenance findings, both corrected; the browser matrix issue was the higher priority.
 Spec: one confirmed recovery defect, corrected; the gallery split remains valid under the updated source context.

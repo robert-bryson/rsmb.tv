@@ -91,7 +91,7 @@ Local default-branch history verified the four projects maintained in this repos
 
 The temperature analysis command came from merged commit `3fef451` on September 4.
 The September 8 commit added standing-record summaries. Its merged title still contains `[WIP]`; the title does not establish branch status.
-The historical temperature publication checks remain open in [TODO.md](../../TODO.md#temperature-record-data).
+The historical temperature publication checks remain open in [TODO.md](../../TODO.md#temperature-data).
 
 The source review also checked the external projects' feature groups around their latest update dates.
 It did not find another incorrect month or maintenance-only note.

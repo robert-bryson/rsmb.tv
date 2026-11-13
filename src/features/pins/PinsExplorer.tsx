@@ -7,6 +7,7 @@ import { pinArea, pinContext, pinCountryCode, pinSource, pinStateFips, resolveCo
 import { usStatesAndTerritories } from '../../../shared/geography/usStates';
 import { usePinsData, useWorldPinsData } from './data';
 import { PinsMap } from './PinsMap';
+import { PinLocationDetails } from './PinLocationDetails';
 import type { ViewRequest } from './types';
 import { countiesVisible, COUNTY_ZOOM, focusBounds, formatArea, formatRadius, OVERVIEW_BOUNDS, rankPins, type CountyMode } from './geometry';
 import './pins.css';
@@ -69,9 +70,11 @@ export default function PinsExplorer() {
     const outlines = useMemo<DisplayBoundaries | null>(() => {
         if (isUS) return resources.states.data;
         if (!world.countries.data || isWorld) return world.countries.data;
+        // Province polygons already include the coastline. Drawing the coarser
+        // overview on top adds a second, conflicting border at close zooms.
+        if (showRegions && world.outlines.data?.features.length) return world.outlines.data;
         return { type: 'FeatureCollection', features: [
             ...world.countries.data.features.filter(feature => feature.properties.countryCode === countryCode),
-            ...(showRegions ? world.outlines.data?.features ?? [] : []),
         ] };
     }, [isUS, isWorld, resources.states.data, world.countries.data, world.outlines.data, countryCode, showRegions]);
     const primaryBoundaries = isUS ? resources.states : world.countries;
@@ -84,7 +87,9 @@ export default function PinsExplorer() {
     const viewKey = useRef(0);
     const focusedId = useRef<string | null>(null);
     const toggleRef = useRef<HTMLButtonElement>(null);
+    const globeRef = useRef<HTMLButtonElement>(null);
     const resultsRef = useRef<HTMLDivElement>(null);
+    const sidebarRef = useRef<HTMLElement>(null);
     const selectionRef = useRef<HTMLElement>(null);
     const ranked = useMemo(() => rankPins(pins, activeLevel, isUS ? stateFips : '', query, sort), [pins, activeLevel, isUS, stateFips, query, sort]);
     const extremes = useMemo(() => [...ranked].sort((a, b) => b.radiusMeters - a.radiusMeters), [ranked]);
@@ -121,8 +126,12 @@ export default function PinsExplorer() {
     }, [selected, selectPin]);
 
     useEffect(() => {
-        if (selected) selectionRef.current?.scrollIntoView({ block: 'nearest', behavior: 'auto' });
-    }, [selected]);
+        const sidebar = sidebarRef.current, card = selectionRef.current;
+        if (selected && panelOpen && sidebar && card) {
+            const top = sidebar.scrollTop + card.getBoundingClientRect().top - sidebar.getBoundingClientRect().top;
+            sidebar.scrollTo({ top: Math.max(0, top - 12), behavior: 'auto' });
+        }
+    }, [selected, panelOpen]);
 
     const clearSelection = () => {
         focusedId.current = null;
@@ -138,6 +147,11 @@ export default function PinsExplorer() {
             return next;
         }, { replace: true });
         if (code === countryCode) requestView(overviewBounds);
+    };
+    const returnToGlobe = () => {
+        changeCountry('ALL');
+        sidebarRef.current?.scrollTo({ top: 0, behavior: 'auto' });
+        globeRef.current?.focus({ preventScroll: true });
     };
     const setScope = (fips: string) => {
         setStateFips(fips);
@@ -161,7 +175,9 @@ export default function PinsExplorer() {
     };
     const closePanel = () => { setPanelOpen(false); toggleRef.current?.focus({ preventScroll: true }); };
 
-    return <div className={`pins-app ${panelOpen ? 'pins-panel-open' : ''}`}>
+    return <div className={`pins-app ${panelOpen ? 'pins-panel-open' : ''}`} onKeyDown={event => {
+        if (event.key === 'Escape' && selected) { event.preventDefault(); event.stopPropagation(); returnToGlobe(); }
+    }}>
         <header className="pins-header">
             <IntentLink to="/projects" className="pins-back" aria-label="Back to projects">← <span>Projects</span></IntentLink>
             <div className="pins-brand"><PinIcon /><div><p className="pins-eyebrow">An exploration of the interior</p><h1>Pins of Inaccessibility</h1></div></div>
@@ -173,8 +189,8 @@ export default function PinsExplorer() {
         </header>
 
         <div className="pins-workspace">
-            <aside className="pins-sidebar" id="pins-sidebar" aria-label="Pin explorer" hidden={!panelOpen}
-                onKeyDown={event => { if (event.key === 'Escape') { event.stopPropagation(); closePanel(); } }}>
+            <aside ref={sidebarRef} className="pins-sidebar" id="pins-sidebar" aria-label="Pin explorer" hidden={!panelOpen}
+                onKeyDown={event => { if (event.key === 'Escape' && !selected) { event.stopPropagation(); closePanel(); } }}>
                 <div className="pins-panel-intro">
                     <p className="pins-eyebrow">How far inside can you go?</p>
                     <h2>The farthest point<br />from every edge.</h2>
@@ -215,10 +231,11 @@ export default function PinsExplorer() {
                 {pinError && <div className="pins-data-error" role="alert">Pin data could not be loaded.<button type="button" onClick={retryPins}>Retry pin data</button></div>}
 
                 {selected && <section ref={selectionRef} className="pins-selection" aria-label="Selected pin">
-                    <div className="pins-selection-heading"><p className="pins-eyebrow">Selected {selected.kind}</p><button type="button" onClick={clearSelection} aria-label="Clear selected pin">×</button></div>
+                    <div className="pins-selection-heading"><p className="pins-eyebrow">Selected {selected.kind}</p><button type="button" onClick={returnToGlobe} aria-label="Close selection and return to globe"><span aria-hidden="true">×</span> Close selection</button></div>
                     <h3>{selected.name}{pinContext(selected) && <span>, {pinContext(selected)}</span>}</h3>
                     <p className="pins-selected-radius">{formatRadius(selected.radiusMeters, unit)}<span>to the nearest boundary</span></p>
                     <dl><div><dt>Coordinates</dt><dd>{selected.lat.toFixed(5)}, {selected.lng.toFixed(5)}</dd></div><div><dt>{selectedArea!.label}</dt><dd>{formatArea(selectedArea!.value)}</dd></div><div><dt>Source</dt><dd>{pinSource(selected)}</dd></div></dl>
+                    <PinLocationDetails pin={selected} unit={unit} />
                     <button type="button" className="pins-text-button" onClick={() => requestView(focusBounds(selected))}>Zoom to pin ↗</button>
                     <p className="pins-selected-note">The dashed lines reach the nearest boundary contacts. Their labels show the distances. The selected circle stays visible.</p>
                     {selected.level === 'country' && <p className="pins-selected-note">{pinCountryCode(selected) === 'USA' ? 'International borders and coastal jurisdiction limits count. Internal state borders do not.' : 'Country borders and source coastlines count. Internal province borders do not.'}</p>}
@@ -252,7 +269,7 @@ export default function PinsExplorer() {
                         : 'No pins match this selection. Try another name or jurisdiction.'}</p>}
                     {ranked.length > limit && <button type="button" className="pins-show-more" onClick={() => setLimit(value => value + 50)}>Show {Math.min(50, ranked.length - limit)} more · {ranked.length - limit} remaining</button>}
                 </div>
-                <footer className="pins-panel-footer">{!isUS && <p>Natural Earth 5.1.1 · 1:10 million. Boundaries and region names follow this generalized source, including disputed units. Antarctica is outside this map. U.S. pins retain Census data.</p>}<details><summary>How the pins are calculated</summary><p>A pin maximizes the distance to its nearest source boundary. Borders, coastlines, and source enclaves count. Inland lake shores add no edges.</p>{isUS && <p>The U.S. pole uses the merged Census extent, including jurisdictional water. Internal state borders are removed; international borders and coastal jurisdiction limits remain. A pin can lie over water.</p>}{isUS && <><p>Approximate WGS84 results from {metadata?.vintage ?? '2025'} Census TIGER/Line boundaries. The search uses a 25 m tolerance and 20 m boundary simplification. These describe the calculation, not the accuracy of the source survey.</p><p>Coverage includes the national pole, 50 states, DC, five inhabited territories, and their county equivalents. Minor outlying islands are absent from the Census files.</p><a href="https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html" target="_blank" rel="noreferrer">Census boundary data ↗</a></>}{!isUS && <p>Other countries use Natural Earth administrative borders and coastlines. Large lakes remain filled. Smaller regions use tighter solver tolerances. These source-scale estimates are not survey results. <a href="https://www.naturalearthdata.com/downloads/10m-cultural-vectors/" target="_blank" rel="noreferrer">Natural Earth source data ↗</a></p>}</details></footer>
+                <footer className="pins-panel-footer">{!isUS && <p>Natural Earth 5.1.1 · 1:10 million. Boundaries and region names follow this generalized source, including disputed units. Antarctica has no pins in this dataset. U.S. pins retain Census data.</p>}<details><summary>How the pins are calculated</summary><p>A pin maximizes the distance to its nearest source boundary. Borders, coastlines, and source enclaves count. Inland lake shores add no edges.</p>{isUS && <p>The U.S. pole uses the merged Census extent, including jurisdictional water. Internal state borders are removed; international borders and coastal jurisdiction limits remain. A pin can lie over water.</p>}{isUS && <><p>Approximate WGS84 results from {metadata?.vintage ?? '2025'} Census TIGER/Line boundaries. The search uses a 25 m tolerance and 20 m boundary simplification. These describe the calculation, not the accuracy of the source survey.</p><p>Coverage includes the national pole, 50 states, DC, five inhabited territories, and their county equivalents. Minor outlying islands are absent from the Census files.</p><a href="https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html" target="_blank" rel="noreferrer">Census boundary data ↗</a></>}{!isUS && <p>Other countries use Natural Earth administrative borders and coastlines. Large lakes remain filled. Smaller regions use tighter solver tolerances. These source-scale estimates are not survey results. <a href="https://www.naturalearthdata.com/downloads/10m-cultural-vectors/" target="_blank" rel="noreferrer">Natural Earth source data ↗</a></p>}</details></footer>
             </aside>
 
             <section className="pins-map-area" aria-label="Geographic map">
@@ -261,10 +278,11 @@ export default function PinsExplorer() {
                     dataState={pinError || requiredBoundaryError ? 'error' : pinLoading || boundaryLoading ? 'loading' : 'ready'}
                     circles={circles} zoom={zoom} selected={selected} view={view} unit={unit} reducedMotion={reducedMotion} onSelect={selectPin} onZoom={setZoom} />
                 <div className="pins-map-toolbar">
+                    <button type="button" ref={globeRef} className="pins-button pins-world-overview" onClick={returnToGlobe}><span aria-hidden="true">{isWorld && !selectedId ? '◎' : '←'}</span> {isWorld && !selectedId ? 'World overview' : 'Back to globe'}</button>
                     <div className="pins-region-control"><PinIcon small /><label className="sr-only" htmlFor="pins-region">Jump to region</label><select id="pins-region" value="" onChange={event => isUS ? jumpTo(event.target.value) : isWorld ? changeCountry(event.target.value) : selectPin(event.target.value)}>
                         <option value="" disabled>Jump to a region</option>{isUS ? REGION_SHORTCUTS.map(([value, label]) => <option key={value} value={value}>{label}</option>) : isWorld ? COUNTRIES.map(country => <option key={country.code} value={country.code}>{country.name}</option>) : pins.map(pin => <option key={pin.id} value={pin.id}>{pin.name}</option>)}
                     </select></div>
-                    <button type="button" className="pins-button pins-reset" onClick={() => isUS ? jumpTo('overview') : requestView(overviewBounds)}>{isUS ? 'U.S. overview' : isWorld ? 'World overview' : `${countryName} overview`}</button>
+                    {!isWorld && <button type="button" className="pins-button pins-reset" onClick={() => isUS ? jumpTo('overview') : requestView(overviewBounds)}>{isUS ? 'U.S. overview' : `${countryName} overview`}</button>}
                 </div>
                 <div className="pins-layers" aria-label="Map layers">
                     <label className="pins-circle-toggle"><input type="checkbox" checked={circles} onChange={event => setCircles(event.target.checked)} /><span>All radius circles</span></label>

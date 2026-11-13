@@ -108,7 +108,7 @@ No test was skipped to obtain these results.
 
 The checks use fixed content and synthetic image responses.
 They do not verify that every public Kalaloch asset exists or that each source description is accurate.
-The publication checks remain in [TODO.md](../../TODO.md#kalaloch-trip).
+The publication checks remain in [TODO.md](../../TODO.md#kalaloch).
 The full Google-backed publication build and deployment are outside this review.
 The fixed-content production build checks application compilation without importing Google documents.
 

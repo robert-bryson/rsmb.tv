@@ -214,6 +214,8 @@ public/data/.pins-publish-*/
 public/data/pins-of-inaccessibility/.world.lock
 public/data/pins-of-inaccessibility/.pins-publish-*/
 projects/pins-of-inaccessibility/**/__pycache__/
+public/data/pins-of-inaccessibility/context/
+.cache/pins-of-inaccessibility/context/
 
 # === Blog content generated from Google Sheets/Docs at build time ===
 /src/content/posts.json

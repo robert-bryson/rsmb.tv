@@ -118,6 +118,6 @@ No files were excluded to improve these results.
 Validation used Node.js 26.12.0, which satisfies the declared engine range.
 Browser checks used macOS and emulated phone viewports.
 They do not replace real-phone or Linux WebKit checks.
-PCH publication and source-review tasks remain in [TODO.md](../../TODO.md#pch-2024-trip).
+PCH publication and source-review tasks remain in [TODO.md](../../TODO.md#pch-2024).
 
 Standards: one fixed finding. Spec: one fixed finding.

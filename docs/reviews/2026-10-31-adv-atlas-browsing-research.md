@@ -273,4 +273,4 @@ These tests check draft cancellation, range validation, country and region repla
 
 Final loaded-source coverage is 81.70% statements, 76.69% branches, 80.29% functions, and 83.82% lines.
 Browser checks supplement that measurement. These percentages do not describe every repository file.
-Physical-phone cold-cache verification remains in the existing [atlas follow-up list](../../TODO.md#adv-atlas).
+Physical-phone cold-cache verification remains in the existing [atlas follow-up list](../../TODO.md#browser-and-performance-checks).

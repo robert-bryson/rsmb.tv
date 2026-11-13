@@ -42,14 +42,18 @@ const mocks = vi.hoisted(() => {
         isSourceLoaded = () => this.loaded;
         setStyle = vi.fn((style: unknown) => { this.style = style; this.sources.clear(); this.layers.clear(); this.emit('style.load'); });
         setLayoutProperty = vi.fn();
+        setProjection = vi.fn();
+        setSky = vi.fn();
         setFilter = vi.fn();
         fitBounds = vi.fn();
+        flyTo = vi.fn();
         resize = vi.fn();
         remove = vi.fn(() => this.handlers.clear());
         getZoom = () => 8;
         getCenter = () => ({ lng: -100 });
         getBounds = () => ({ getWest: () => -180, getEast: () => 180, getSouth: () => -85, getNorth: () => 85 });
         project = ([lng, lat]: number[]) => ({ x: lng + 180, y: 90 - lat });
+        unproject = ({ x, y }: { x: number; y: number }) => ({ lng: x - 180, lat: 90 - y });
         queryRenderedFeatures = vi.fn((_point: unknown, options: { layers: string[] }) => this.features.filter(feature => options.layers.includes(feature.layer.id)));
     }
     class PopupStub {
@@ -91,6 +95,31 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.useRealTimers(); vi.unstubAllGlobals(); });
 
 describe('map lifecycle', () => {
+    it('keeps CARTO on a globe through background failure and recovery', () => {
+        render(<PinsMap {...props()} />); flushFrames();
+        const renderer = map();
+        act(() => { renderer.emit('style.load'); renderer.emit('render'); });
+        expect(renderer.setProjection).toHaveBeenLastCalledWith({ type: 'globe' });
+        expect(renderer.setSky).toHaveBeenLastCalledWith(expect.objectContaining({ 'atmosphere-blend': 0.8 }));
+        act(() => { renderer.emit('error', { error: { message: 'tile unavailable' } }); renderer.emit('render'); });
+        expect(renderer.setProjection).toHaveBeenCalledTimes(2);
+        fireEvent.click(screen.getByRole('button', { name: 'Retry background' }));
+        expect(renderer.setProjection).toHaveBeenCalledTimes(3);
+        expect(renderer.setProjection).toHaveBeenLastCalledWith({ type: 'globe' });
+        expect(renderer.sources.get('pin-points')!.setData.mock.calls[0][0].features).toHaveLength(3);
+    });
+
+    it('frames the world as a sphere rather than fitting the date-line seam', () => {
+        render(<PinsMap {...props({ view: { key: 1, bounds: [-180, -60, 180, 83] } })} />); flushFrames();
+        Object.defineProperty(screen.getByTestId('pins-map'), 'clientHeight', { value: 640 });
+        Object.defineProperty(screen.getByTestId('pins-map'), 'clientWidth', { value: 900 });
+        act(() => map().emit('style.load'));
+        expect(map().fitBounds).not.toHaveBeenCalled();
+        expect(map().flyTo).toHaveBeenCalledWith(expect.objectContaining({ center: [0, 20], duration: 0, pitch: 0, bearing: 0 }));
+        expect(map().flyTo.mock.calls[0][0].zoom).toBeGreaterThan(1);
+        expect(map().flyTo.mock.calls[0][0].zoom).toBeLessThan(2);
+    });
+
     it('cancels startup before unmount and cleans up a mounted renderer', () => {
         const first = render(<PinsMap {...props()} />);
         first.unmount(); flushFrames();

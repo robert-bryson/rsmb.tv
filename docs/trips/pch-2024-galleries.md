@@ -106,7 +106,7 @@ Confirm exact place names from the route, visible landmarks, and your own record
 
 ## Publication checks
 
-Use [TODO.md](../../TODO.md#pch-2024-trip) to track completion.
+Use [TODO.md](../../TODO.md#pch-2024) to track completion.
 
 1. Replace the outline prompts.
 2. Remove author notes and unused media placements.

@@ -86,7 +86,7 @@ They check selected-trip retention, camera restoration, and callbacks from remov
 Edited procedures use short sentences, active verbs, and consistent terms.
 This is an approximate ASD-STE100 cleanup, without formal vocabulary certification.
 Historical review results retain their original context.
-Publication tasks remain in [TODO.md](../../TODO.md#publication-blockers).
+Publication tasks remain in [TODO.md](../../TODO.md#content-publication).
 
 ## Dependency security
 
@@ -104,7 +104,7 @@ Current registry checks found these requirements:
 
 These packages still require minimatch 10. The patched major is outside those declared ranges.
 The repository prohibits forced incompatible major updates.
-No dependency versions changed. The existing [dependency task](../../TODO.md#dependency-security) remains open.
+No dependency versions changed. The existing [dependency task](../../TODO.md#build-and-maintenance) remains open.
 The full audit therefore remains a failing CI check.
 
 ## Validation

@@ -37,7 +37,6 @@ GitHub Actions variables do not configure Amplify.
 | --- | --- |
 | `GOOGLE_BLOG_SHEET_NAME` | Select the Sheet tab. Default: `Blog Posts`. |
 | `GOOGLE_BLOG_REPLACE_ALL` | Replace the generated registry. Keep the default value, `true`. |
-| `GOOGLE_BLOG_SYNC_ON_DEV` | Set `false` to omit automatic import during development. |
 
 ## Import content
 
@@ -45,7 +44,9 @@ GitHub Actions variables do not configure Amplify.
 GOOGLE_BLOG_SHEET_ID=your-sheet-id npm run build-blog
 ```
 
-`npm run dev` imports published posts and drafts when the Sheet is configured.
+`npm run dev` imports the latest published posts and drafts on every startup when the Sheet is configured.
+`npm run sync-blogs:dev` refreshes both while the local server is running; Vite reloads the content automatically.
+Development imports always include drafts, even if a local environment file still sets `GOOGLE_BLOG_SYNC_ON_DEV=false`.
 Incomplete drafts do not stop other development content.
 The development panel shows the publication state, source links, and known errors.
 Without Sheet configuration, development uses existing generated files.

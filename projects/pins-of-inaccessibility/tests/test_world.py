@@ -7,7 +7,9 @@ import sys
 import tempfile
 import unittest
 
-from shapely.geometry import Polygon
+from shapely import coverage_is_valid
+from shapely.geometry import MultiPolygon, Polygon, shape
+from shapely.ops import unary_union
 
 PROJECT = Path(__file__).resolve().parents[1]
 # The project is a standalone command directory, so load its sibling modules as the CLI does.
@@ -18,6 +20,37 @@ PUBLIC = world.ROOT / 'public/data/pins-of-inaccessibility/world'
 
 
 class WorldPublicationTests(unittest.TestCase):
+    def test_publication_rejects_overlaps_introduced_into_a_matched_source(self):
+        left = Polygon([(0, 0), (1, 0), (1, 1), (0, 1)])
+        right = Polygon([(1, 0), (2, 0), (2, 1), (1, 1)])
+        records = [({'adm0_a3': 'TST'}, part) for part in [left, right]]
+        features = [world.boundary_feature(part,
+            {'id': f'region-{index}', 'name': 'Test', 'countryCode': 'TST', 'level': 'state'})
+            for index, part in enumerate([left, right])]
+        self.assertEqual(world.validate_regional_coverage(records, {'TST': features}), 1)
+        features[1]['geometry'] = world.geometry.mapping(Polygon([(0.99, 0), (2, 0), (2, 1), (0.99, 1)]))
+        with self.assertRaisesRegex(ValueError, 'matched source boundaries: TST'):
+            world.validate_regional_coverage(records, {'TST': features})
+
+    def test_country_overview_retains_small_island_detail_beside_a_large_mainland(self):
+        mainland = Polygon([(0, 0), (10, 0), (10, 10), (0, 10)])
+        island = Polygon([(20, 0), (20.1, 0), (20.1, 0.1), (20.06, 0.1),
+                          (20.05, 0.095), (20.04, 0.1), (20, 0.1)])
+        feature = world.boundary_feature(MultiPolygon([mainland, island]),
+            {'id': 'country-TEST', 'name': 'Test', 'countryCode': 'TST', 'level': 'country'})
+        displayed = max(shape(feature['geometry']).geoms, key=lambda part: part.centroid.x)
+        # The old fixed 0.02-degree tolerance erased this inlet entirely.
+        self.assertLess(displayed.boundary.hausdorff_distance(island.boundary), 0.00001)
+
+    def test_published_tobago_provinces_keep_a_shared_border_without_gaps_or_overlaps(self):
+        features = json.loads((PUBLIC / 'regions/TTO.geojson').read_text())['features']
+        regions = [shape(feature['geometry']) for feature in features]
+        self.assertTrue(coverage_is_valid(regions))
+        countries = json.loads((PUBLIC / 'countries.geojson').read_text())['features']
+        country = shape(next(feature['geometry'] for feature in countries if feature['id'] == 'country-TTO'))
+        # The former country outline deviated by over 2 km from this coastline.
+        self.assertLess(country.boundary.hausdorff_distance(unary_union(regions).boundary) * 111700, 110)
+
     def test_world_pin_contract_rejects_invalid_numeric_fields_and_bounds(self):
         published = json.loads((PUBLIC / 'regions/CAN.json').read_text())
         contact = published['pins'][0]['boundaryContacts'][0]

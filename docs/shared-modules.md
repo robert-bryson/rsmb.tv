@@ -85,8 +85,17 @@ Foreign area is labeled as mapped area; Census area retains its land-area label.
 Foreign regions use the intersection of the regional and parent-country source boundaries.
 The snapshot records this rule. Each changed pin carries a flag for its source note.
 Country-specific resource state is tied to its URL. A delayed response cannot replace the current country.
+Pin readers also track their validation function. A changed function checks cached data again before use.
+Keep those functions stable with module constants or `useMemo`.
 Province outlines load only while their layer is enabled. Hidden outline failures do not block country pins.
 The Python generators share coordinate, bounds, contact, and raw polygon checks before replacing publication files.
+
+Use [`shared/pinDetails.ts`](../shared/pinDetails.ts) for selected-pin context files and their manifest.
+A manifest lists release files, checksums, byte counts, and record counts.
+The browser checks field types, scope, pin identity, and sampled coordinates before showing location details.
+The Python [context contract](../projects/pins-of-inaccessibility/context_contract.py) applies the same field limits during generation and publication.
+It also checks nearby-place distances and bearings against WGS84 calculations.
+The publisher validates a private copy of every release file. It uploads that copy's manifest after checking the remote inventory.
 
 Use [`src/features/tornadoes/schemas.ts`](../src/features/tornadoes/schemas.ts) for notable-event metadata.
 The schema checks event fields and geographic coordinates.

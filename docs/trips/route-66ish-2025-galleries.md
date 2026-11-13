@@ -161,7 +161,7 @@ Review those images when making the final selection. Existing processing setting
 
 ## Publication checks
 
-Track remaining work in [TODO.md](../../TODO.md#route-66ish-2025-trip).
+Track remaining work in [TODO.md](../../TODO.md#route-66ish-2025).
 
 1. Confirm the trip end date, May 15 activities, and May 18–19 membership.
 2. Confirm the motorcycle and distance used in the final story.

@@ -1,0 +1,187 @@
+{
+  "date": "2026-11-13",
+  "reviewedBase": "4def384",
+  "scope": "Pending Pins globe, outline, context, development, and documentation changes",
+  "runtime": {
+    "node": "26.13.0",
+    "npm": "11.20.0",
+    "note": "Host differs from the supported versions declared in package.json and .nvmrc"
+  },
+  "tests": {
+    "javascript": {
+      "files": 216,
+      "passed": 3120
+    },
+    "temperaturePython": {
+      "passed": 18
+    },
+    "pinsPython": {
+      "before": 37,
+      "after": 48
+    },
+    "focusedPins": {
+      "files": 9,
+      "before": 77,
+      "after": 82
+    },
+    "browser": {
+      "status": "pass",
+      "projects": {
+        "chromium": 20,
+        "webkit": 20
+      },
+      "passed": 40,
+      "workers": 1,
+      "durationMinutes": 5.3,
+      "serverStartedSeparately": true,
+      "baseURL": "http://127.0.0.1:5274",
+      "configuration": "Base Playwright config; temporary overrides for the separate server and existing WebKit compatibility launcher",
+      "suite": "tests/e2e/pins-map.spec.ts"
+    },
+    "lint": "pass",
+    "typecheck": "pass",
+    "viteFixtureBuild": "pass"
+  },
+  "coverage": {
+    "provider": "v8",
+    "selection": [
+      "scripts/__tests__/pins*.test.*",
+      "scripts/__tests__/worldPins*.test.*"
+    ],
+    "include": [
+      "src/features/pins/**",
+      "shared/pinDetails.ts",
+      "shared/pins.ts",
+      "shared/worldPins.ts",
+      "shared/pinGeometry.ts",
+      "shared/geography/geodesy.ts"
+    ],
+    "before": {
+      "lines": {
+        "total": 732,
+        "covered": 727,
+        "skipped": 0,
+        "pct": 99.31
+      },
+      "statements": {
+        "total": 970,
+        "covered": 941,
+        "skipped": 0,
+        "pct": 97.01
+      },
+      "functions": {
+        "total": 242,
+        "covered": 237,
+        "skipped": 0,
+        "pct": 97.93
+      },
+      "branches": {
+        "total": 850,
+        "covered": 794,
+        "skipped": 0,
+        "pct": 93.41
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "after": {
+      "lines": {
+        "total": 730,
+        "covered": 725,
+        "skipped": 0,
+        "pct": 99.31
+      },
+      "statements": {
+        "total": 968,
+        "covered": 939,
+        "skipped": 0,
+        "pct": 97
+      },
+      "functions": {
+        "total": 242,
+        "covered": 237,
+        "skipped": 0,
+        "pct": 97.93
+      },
+      "branches": {
+        "total": 852,
+        "covered": 800,
+        "skipped": 0,
+        "pct": 93.89
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "sourceVerification": {
+    "checked": 4799,
+    "circleSamples": 345528,
+    "matchedRegionalCoverages": 236,
+    "maxRadiusErrorMeters": 0.00113475901162019,
+    "maxContactBoundaryErrorMeters": 0.0007705183962984304,
+    "regionsInsideParent": 4543,
+    "adjustedRegionCount": 1852,
+    "maxRegionalRadiusExcessMeters": 4.454000000000633
+  },
+  "contextDryRun": {
+    "pins": 8091,
+    "files": 307,
+    "bytes": 2586600,
+    "published": false,
+    "release": "47bc96ed1bbbeca4ce7381db3856c018121a4530706a44aecf539c7d955bea4b"
+  },
+  "audits": {
+    "npm": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "python": {
+      "packages": 30,
+      "vulnerabilities": 0
+    }
+  },
+  "documentation": {
+    "documents": 137,
+    "staleLinksBefore": 41,
+    "staleLinksAfter": 0,
+    "writingRulesConsolidated": true,
+    "languageNote": "ASD-STE100 guidance for sentence length, active voice, and consistent technical names."
+  },
+  "limits": [
+    "Browser checks use fixed map and context responses.",
+    "Physical devices, hosted content imports, and assistive-technology checks remain open.",
+    "Source comparisons do not establish current legal geography or an independent global geodesic optimum."
+  ],
+  "sourceSha256": {
+    "projects/pins-of-inaccessibility/context_contract.py": "c5f415c715aa451c90a88d00aeade90b26029dbb53164423838a986887a93439",
+    "projects/pins-of-inaccessibility/enrich.py": "24cb97414d542426400607a3510f4c8bb4a3f956a68e96d2b3acb0ee311b9424",
+    "projects/pins-of-inaccessibility/publish_context.py": "2288c79dad5265fc1d5d17867849b5a9bc383814bfdcb06d0b9ad28ac0fd8cec",
+    "projects/pins-of-inaccessibility/generate.py": "6d36bb28845de445422bae28b4ebb75c84395836dcc93dea371610fa83f21571",
+    "projects/pins-of-inaccessibility/generate_world.py": "80a26cb3ffb3d76d8ad2f881eb4742d142412754e45ed0f604171144290faf55",
+    "projects/pins-of-inaccessibility/tests/test_context.py": "021a3505964c88f2e462ea697639c4d2e5afeb1b6646f3b6eb93f2e9a37ec04f",
+    "shared/pinDetails.ts": "20a9ca79900e124a6c6f198256290fc06f46bd990e819c053757dcdca6441490",
+    "src/features/pins/data.ts": "c00be5c5dbe0c97e79937e7c921886505ac7ac20068d8b218d9396257ccb71a5",
+    "src/features/pins/usePinDetails.ts": "80bfcc8fe31faff0266523eefa1e50e9995f71dcc9cf09786cbe80edf468aa63",
+    "src/features/pins/PinLocationDetails.tsx": "99c4767da7067e2e433da2f462b1dd57e3418065abc5c96094e3abfb92a8edba",
+    "src/features/pins/locationDetails.ts": "27577622699d659cf338cbfe18f57e1895fd2aa273b5b9410194efd323fb9d86",
+    "src/features/pins/PinsExplorer.tsx": "ac3a9aa35068fb256a5ddd9ed80b68b304b2c6e3ca4f96fb74f70c0d8fd3a45d",
+    "src/features/pins/mapRenderer.ts": "2cadb367b49e0a8d24598896b0eaa3c53e1231bc59cb4c19faa8dcf549a24db7",
+    "src/features/pins/radiusLabels.ts": "e556117ae4052a5c42cfeab50071e5ce0f7d3a68e6e671981584a14064471923",
+    "scripts/__tests__/pinsDetails.test.tsx": "39be9df8452ebdd1300991e928a5d6f784e27a66edd80618951d2ecaadd76dc3",
+    "scripts/__tests__/pinsResources.test.tsx": "76b09173b29e86288b482d191865fb2f104ca289f5ac6686899982dddb8204cf",
+    "tests/e2e/pins-map.spec.ts": "e45b66106f3f438ef53ced7f82166821bb7b806a35d635d6e787daf2d2c6bd04",
+    "tests/fixtures/pinContext.ts": "fbb59715c8f7c80b253a9e3a0ceaea40927ae5f5edba904c33531aedcac771ba"
+  }
+}

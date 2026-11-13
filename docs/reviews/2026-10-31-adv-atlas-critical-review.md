@@ -129,7 +129,7 @@ The installed ESLint toolchain requires minimatch 10.
 The audit failure still blocks the unchanged CI workflow.
 The repair preserves that security gate.
 It does not force minimatch 11 outside the declared dependency contracts.
-The unresolved task remains in [TODO.md](../../TODO.md#dependency-security).
+The unresolved task remains in [TODO.md](../../TODO.md#build-and-maintenance).
 
 ## Validation
 

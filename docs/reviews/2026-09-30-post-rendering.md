@@ -86,7 +86,7 @@ Unverified track dates remain unset.
 The public route and one sampled photo returned HTTP 403 during this review.
 The Sheet already marks Boise as unpublished.
 The local manifest supports preview, but the trip is not ready for publication.
-See [the manifest](../../src/content/trips/boise-2024.json) and [publication tasks](../../TODO.md#boise-trip).
+See [the manifest](../../src/content/trips/boise-2024.json) and [publication tasks](../../TODO.md#source-corrections).
 
 ### Low: generated data and documentation caused review noise
 

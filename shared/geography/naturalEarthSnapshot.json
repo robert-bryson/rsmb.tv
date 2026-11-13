@@ -16,6 +16,6 @@
       "count": 4596
     }
   },
-  "excludedCountries": { "ATA": "Antarctica needs a polar projection and is outside this administrative map's coverage." },
+  "excludedCountries": { "ATA": "Antarctica has no comparable administrative hierarchy in this dataset." },
   "usDefinition": "Retain the 2025 Census national, state, territory, and county pins."
 }

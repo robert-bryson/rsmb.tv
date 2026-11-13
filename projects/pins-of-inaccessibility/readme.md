@@ -16,6 +16,16 @@ Choose a country to explore its state, province, or regional pins.
 The default view retains the original U.S. map and county controls.
 Country and pin URL parameters preserve the chosen view.
 A shared province link can also infer its country from the pin ID.
+The persistent **Back to globe** button clears the selection, search, and jurisdiction scope.
+The selected card's **Close selection** button and Escape do the same.
+With no selected pin, Escape in the panel closes the panel.
+Every selected pin links to its exact coordinates in Google Maps and OpenStreetMap.
+
+The map uses MapLibre's globe projection with the CARTO Dark Matter basemap.
+Choose **World overview** to see and drag the sphere, then select a country or pin to zoom in.
+The projection transitions to a local flat view at street-level zooms.
+Globe projection and atmosphere are restored after background reloads and recovery.
+Distance badges appear only on the visible surface; back-side spokes do not show labels through the globe.
 
 Global coverage uses Natural Earth 5.1.1 at 1:10 million scale.
 The 257 entries are source map units, including countries, territories, and disputed units.
@@ -25,7 +35,7 @@ Region levels and dates vary by country.
 For example, the source has 13 Canadian units, 11 Australian units, and 101 French units.
 These counts describe the pinned source, not a claim about current legal divisions.
 Six regions have no source name and retain a clear code-based label.
-Antarctica and its two source regions are excluded from this Mercator map.
+Antarctica and its two source regions have no pins in this administrative dataset.
 
 The existing U.S. national, state, territory, and county pins retain Census data.
 The global country index copies the published U.S. national pin exactly.
@@ -101,11 +111,18 @@ The search tolerance does not certify a global geodesic optimum or source survey
 Rectangular jurisdictions can have several points with nearly equal radii.
 The 72 samples check circle containment; they do not prove containment between samples.
 
-Census and global province outlines use a separate 0.0015-degree simplification.
-Global overview country outlines use 0.02 degrees.
+Census display outlines use a separate 0.0015-degree simplification.
+Global province outlines retain source vertices rather than independently simplifying neighboring polygons.
+Independent simplification created gaps and overlaps along shared borders, even where the source polygons matched.
+Global overview country outlines use at most 0.02 degrees, capped at 0.1% of each component's smaller longitude or latitude extent.
+This preserves small-island detail even when an island belongs to a large country.
+Country views use province coastlines while that layer is visible, without overlaying the coarser country outline.
 The generator reduces them to a six-decimal precision grid that preserves valid geometry.
 Collapsed small pieces can be removed by precision reduction.
 Every final outline must remain valid and nonempty.
+Publication and source verification also reject display changes that break an edge-matched regional source coverage.
+Precision reduction can leave sub-meter seams; existing source gaps and overlaps are not repaired.
+These display changes do not increase the source's survey accuracy or update its administrative divisions.
 Use the original TIGER data for detailed boundary analysis.
 
 ## Generate U.S. data
@@ -164,8 +181,8 @@ The global files live under `public/data/pins-of-inaccessibility/world/`:
 | `regions/CODE.geojson` | Province and regional outlines for one country |
 
 The global index is about 188 KiB before compression.
-Overview outlines are about 2.5 MiB.
-Canada adds about 10 KiB of pins and 1.4 MiB of province outlines.
+Overview outlines are about 6.0 MiB, or 2.2 MiB with gzip.
+Canada adds about 10 KiB of pins and 1.7 MiB of province outlines.
 These files load only when needed; the default U.S. view requests no global files.
 Province files are loaded only for the chosen country.
 Province pins supply the rankings even when their map layer is hidden.
@@ -178,6 +195,10 @@ The source catalog is a build input.
 After an intentional source update, inspect and regenerate it with `--write-catalog`.
 Do not accept a new checksum or identity list without reviewing the source change.
 
+Use `--outlines-only` to refresh display geometry without recalculating pin positions, radii, or contacts.
+This mode requires a complete existing publication with matching source hashes and catalog identities.
+All replacement outlines are validated before publication begins.
+
 Repeat the source checks and origin-sensitivity benchmark:
 
 ```bash
@@ -188,6 +209,77 @@ Repeat the source checks and origin-sensitivity benchmark:
 The benchmark compares four projection origins in eight selected country components.
 It measures solver sensitivity, not independent proof of a global geodesic optimum.
 See the [research and implementation report](../../docs/reviews/2026-11-12-pins-world-expansion.md) for results and source tradeoffs.
+
+## Elevation and nearby places
+
+Selected pins load a small context file from `https://data.rsmb.tv/maps/pins/context`.
+Context does not block pin results, boundaries, or the external map links.
+The browser checks field types, scope, pin ID, and sampled coordinates.
+It rejects context from an older pole.
+Changing the distance preference also switches elevation between feet and meters.
+
+The offline enrichment samples NASA/USGS SRTM 30 m terrain through [Open Topo Data](https://www.opentopodata.org/), with NASA/METI ASTER GDEM v3 as fallback.
+These are approximate raster elevations above sea level, not surveyed measurements.
+Missing samples remain unavailable; zero and negative elevations remain valid.
+No elevation or geocoding service is called from a visitor's browser.
+
+Nearby places come from [GeoNames cities500](https://download.geonames.org/export/dump/readme.txt), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+That catalog includes towns with over 500 residents and administrative seats down to PPLA4.
+The card says **Nearest listed place** because smaller settlements may be absent.
+Distance is the shortest WGS84 geodesic to the listed place coordinates, not a driving or walking route.
+The compass bearing describes the pin's direction from that place.
+The nearest listed place can be across a border.
+Place elevation is never substituted for terrain elevation at the pin.
+
+Generate with the same Python environment:
+
+```bash
+.venv-pins/bin/python projects/pins-of-inaccessibility/enrich.py
+.venv-pins/bin/python projects/pins-of-inaccessibility/publish_context.py
+.venv-pins/bin/python projects/pins-of-inaccessibility/publish_context.py --profile rsmbtv-admin --publish
+```
+
+The generator first validates every required U.S. and global pin file.
+It uses the pinned country catalog to find required files. A missing region file stops generation and publication.
+An extra working file cannot add pins to the context release.
+
+Generation and publication use the same Python context checks.
+They reject invalid names, IDs, coordinates, counts, terrain samples, and place fields.
+Booleans cannot replace numbers. Nonfinite coordinates cannot pass the coordinate comparison.
+Cached terrain samples must pass the same checks before reuse.
+Cache checkpoints and release files use unique temporary files and atomic replacement.
+An interrupted file write keeps the previous file.
+
+The publisher defaults to a dry run. `--publish` uploads to the existing data bucket.
+It completes these steps before changing the active manifest:
+
+1. Validate the manifest, file checksums, current pin coordinates, and nearby-place measurements.
+2. Copy only listed release files to a private temporary directory.
+3. Validate the temporary files against their copied manifest.
+4. Upload the temporary release files with immutable cache headers.
+5. Compare the remote file inventory with the manifest.
+6. Upload the copied manifest last.
+
+A concurrent local build cannot replace the manifest used by an active upload.
+A failed release upload or inventory check leaves the active manifest unchanged.
+Old releases remain available. The publisher does not delete files or invalidate the CDN cache.
+The publication destination is scoped to `maps/pins/context/`.
+
+Generated context and source downloads live in the ignored `.cache/pins-of-inaccessibility/context/` directory.
+They are outside Git and the application's `public` directory.
+The first publication covers 8,091 pins with 8,091 elevation samples and nearest places: 2,586,600 bytes in 307 files.
+The largest file is about 80 KiB; the selected pin loads only its country-pole index, country-region file, or U.S. state county file.
+The manifest records source URLs and SHA-256 checksums, terrain providers, release checksums, and coverage counts.
+
+GeoNames downloads are cached. Use `--refresh-sources` for a deliberate catalog refresh.
+Terrain requests are batched to at most 100 coordinates, paced below one request per second, and checkpointed after every successful batch.
+The public elevation service currently permits 1,000 requests per day; the initial build used 81 requests for 8,037 unique coordinates.
+Reruns reuse terrain samples by coordinates. `--retry-missing` explicitly retries missing samples.
+Regenerate and publish context after recalculating poles or changing the source catalog.
+
+For a local context preview, generate with `--output public/data/pins-of-inaccessibility/context` and set `VITE_PINS_CONTEXT_DATA_BASE_URL=/data/pins-of-inaccessibility/context` before starting Vite.
+That optional mirror is ignored; remove it before building the application to keep data on the CDN.
+With packages available to `python3`, the equivalent commands are `npm run build-pins:context` and `npm run publish-pins:context -- --profile rsmbtv-admin --publish`.
 
 ## Publication
 
@@ -308,6 +400,11 @@ Local and preview hosts do not send analytics.
 | `src/features/pins/mapLayers.ts` | Source and layer definitions |
 | `src/features/pins/radii.ts` | Spoke geometry and zoom thresholds |
 | `src/features/pins/radiusLabels.ts` | Badge placement and collision checks |
+| `src/features/pins/usePinDetails.ts` | Selected scope loading, context retry, and stale-coordinate rejection |
+| `src/features/pins/PinLocationDetails.tsx` | External maps, terrain units, place details, and source credits |
+| `src/features/pins/locationDetails.ts` | Coordinate links, elevation units, and compass formatting |
+| `shared/pinDetails.ts` | Browser context fields, manifest checks, and scope ownership |
+| `projects/pins-of-inaccessibility/context_contract.py` | Shared offline context validation |
 | `shared/pins.ts` | Census browser and Node publication validation |
 | `shared/worldPins.ts` | Global contracts, catalog lookup, and shared pin presentation |
 | `shared/pinGeometry.ts` | Source-independent geometry fields and validation |
@@ -351,6 +448,8 @@ Install browser system libraries as described in the [repository guide](../../RE
 
 Python tests check analytic radii, dissolved borders, enclaves, islands, and date-line geometry.
 They also check every published outline, source checksums, failed writes, rollback, and writer locks.
+Context tests check complete source inventories, malformed fields, terrain checkpoints, upload snapshots, and failed remote inventories.
+Upload tests use fixed AWS responses. They do not contact AWS or the terrain service.
 Global checks also cover the 514 country and regional artifacts, tiny units, and equatorial component bounds.
 Corruption tests also check world metadata, administrative levels, bounds, raw polygon rings, and rollback before replacement.
 CI installs the pinned Python packages and runs these tests without a Census download.

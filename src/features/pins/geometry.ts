@@ -35,7 +35,7 @@ export function pinCircles(pins: MapPin[], steps = 72): FeatureCollection<Polygo
 export function pinPoints(pins: MapPin[]): FeatureCollection<Point> {
     return { type: 'FeatureCollection', features: pins.map(pin => ({
         type: 'Feature', id: pin.id,
-        properties: { id: pin.id, level: pin.level, name: pin.name, stateAbbr: pinDisplayCode(pin), stateFips: pinStateFips(pin), label: pin.id === 'country-US' ? 'U.S. pole' : pinDisplayCode(pin) },
+        properties: { id: pin.id, level: pin.level, name: pin.name, stateAbbr: pinDisplayCode(pin), stateFips: pinStateFips(pin), label: pin.id === 'country-US' ? 'U.S. pole' : pin.name },
         geometry: { type: 'Point', coordinates: [pin.lng, pin.lat] },
     })) };
 }

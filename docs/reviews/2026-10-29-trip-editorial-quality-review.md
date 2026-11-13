@@ -138,7 +138,7 @@ This is a practical simplified-English edit. It is not a certified ASD-STE100 co
 The source Google Docs and Sheet were not changed.
 Generated MDX was checked locally. It was not edited because the next content import would replace those edits.
 Copy corrections, ferry wording, Boise route provenance, the overnight boundary, and location confirmation remain source work.
-See the [editorial report](2026-10-29-trip-editorial-review.md) and [open work](../../TODO.md#trip-story-sources).
+See the [editorial report](2026-10-29-trip-editorial-review.md) and [open work](../../TODO.md#source-corrections).
 
 Local media checks do not establish public CDN availability.
 No assets were uploaded and no site or infrastructure was deployed.

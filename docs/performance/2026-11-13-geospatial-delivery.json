@@ -1,0 +1,879 @@
+{
+  "date": "2026-11-13",
+  "gitHead": "4def3845eb545e104bf2f919b70a008e0008f410",
+  "scope": "Working-tree UI data and local tile prototypes; local temperature and trip mirrors do not include all S3 source or observation archives.",
+  "inventory": {
+    "public/data/pins-of-inaccessibility": {
+      "files": 517,
+      "bytes": 47754012,
+      "trackedFiles": 517,
+      "trackedWorkingBytes": 47754012,
+      "largest": [
+        {
+          "path": "public/data/pins-of-inaccessibility/counties.geojson",
+          "bytes": 6960868
+        },
+        {
+          "path": "public/data/pins-of-inaccessibility/world/countries.geojson",
+          "bytes": 6323222
+        },
+        {
+          "path": "public/data/pins-of-inaccessibility/world/regions/RUS.geojson",
+          "bytes": 2982344
+        },
+        {
+          "path": "public/data/pins-of-inaccessibility/pins.json",
+          "bytes": 1902469
+        }
+      ]
+    },
+    "public/data/flights": {
+      "files": 4,
+      "bytes": 2207593,
+      "trackedFiles": 4,
+      "trackedWorkingBytes": 2207593,
+      "largest": [
+        {
+          "path": "public/data/flights/allAirports.geojson",
+          "bytes": 1546386
+        },
+        {
+          "path": "public/data/flights/flights.geojson",
+          "bytes": 482558
+        },
+        {
+          "path": "public/data/flights/visitedAirports.geojson",
+          "bytes": 90014
+        },
+        {
+          "path": "public/data/flights/usStates.geojson",
+          "bytes": 88635
+        }
+      ]
+    },
+    "public/data/temperatures": {
+      "files": 5,
+      "bytes": 1890163,
+      "trackedFiles": 0,
+      "trackedWorkingBytes": 0,
+      "largest": [
+        {
+          "path": "public/data/temperatures/countyRecords.json",
+          "bytes": 1644884
+        },
+        {
+          "path": "public/data/temperatures/recentRecords.json",
+          "bytes": 200330
+        },
+        {
+          "path": "public/data/temperatures/stateRecords.json",
+          "bytes": 31153
+        },
+        {
+          "path": "public/data/temperatures/climateTrends.json",
+          "bytes": 13147
+        }
+      ]
+    },
+    "public/data/tornadoes": {
+      "files": 158,
+      "bytes": 64564661,
+      "trackedFiles": 0,
+      "trackedWorkingBytes": 0,
+      "largest": [
+        {
+          "path": "public/data/tornadoes/tracks/2024.geojson",
+          "bytes": 1213830
+        },
+        {
+          "path": "public/data/tornadoes/tracks/2011.geojson",
+          "bytes": 1174659
+        },
+        {
+          "path": "public/data/tornadoes/tracks/2008.geojson",
+          "bytes": 1102249
+        },
+        {
+          "path": "public/data/tornadoes/tracks/2004.geojson",
+          "bytes": 1079223
+        }
+      ]
+    },
+    "public/data/trips": {
+      "files": 22,
+      "bytes": 1177914,
+      "trackedFiles": 0,
+      "trackedWorkingBytes": 0,
+      "largest": [
+        {
+          "path": "public/data/trips/boise-2024/geo/route.geojson",
+          "bytes": 284531
+        },
+        {
+          "path": "public/data/trips/on-qc-new-england-2026/geo/route.geojson",
+          "bytes": 177939
+        },
+        {
+          "path": "public/data/trips/kalaloch-2024/geo/route.geojson",
+          "bytes": 75842
+        },
+        {
+          "path": "public/data/trips/boise-2024/geo/track-2024-05-18-campsite-panther-creek-reconstructed.geojson",
+          "bytes": 74865
+        }
+      ]
+    },
+    "public/data/pins-of-inaccessibility/pins.json": {
+      "bytes": 1902469,
+      "gzip6Bytes": 399043,
+      "features": 3292
+    },
+    "public/data/pins-of-inaccessibility/states.geojson": {
+      "bytes": 986688,
+      "gzip6Bytes": 345712,
+      "features": 56
+    },
+    "public/data/pins-of-inaccessibility/counties.geojson": {
+      "bytes": 6960868,
+      "gzip6Bytes": 2311089,
+      "features": 3235
+    },
+    "public/data/pins-of-inaccessibility/world/pins.json": {
+      "bytes": 192685,
+      "gzip6Bytes": 44184,
+      "features": 257
+    },
+    "public/data/pins-of-inaccessibility/world/countries.geojson": {
+      "bytes": 6323222,
+      "gzip6Bytes": 2254419,
+      "features": 257
+    },
+    "public/data/pins-of-inaccessibility/world/regions/CAN.geojson": {
+      "bytes": 1775497,
+      "gzip6Bytes": 615172,
+      "features": 13
+    },
+    "public/data/flights/allAirports.geojson": {
+      "bytes": 1546386,
+      "gzip6Bytes": 240741,
+      "features": 4371
+    },
+    "public/data/flights/usStates.geojson": {
+      "bytes": 88635,
+      "gzip6Bytes": 28759,
+      "features": 51
+    },
+    "pinsHEAD": {
+      "files": 517,
+      "bytes": 36611257
+    },
+    "pinsWorldWorking": {
+      "jsonBytes": 3634367,
+      "geojsonBytes": 34269620
+    }
+  },
+  "pinsPublishedFileSetSha256": "46640c1f066a2ba81ce89e11b847c0697d3c12cde186773c228756fe84fea9f6",
+  "tools": {
+    "tippecanoe": "2.79.0",
+    "pmtilesPython": "3.8.1",
+    "vectorTileDecoder": "2.2.0",
+    "compilerMaxThreads": 4
+  },
+  "inputs": {
+    "countries": 257,
+    "regions": 4599,
+    "counties": 3235
+  },
+  "inputFiles": {
+    "countries.geojsonseq": {
+      "sha256": "77810cf47ddc8ea4e12355f22aa51c8c00ec05bcc39405933fc4ed3ca1a251fa",
+      "bytes": 6325262
+    },
+    "regions.geojsonseq": {
+      "sha256": "4e3bae6b8b95635e6facf955bf1008296aef295f3c61405a05c48ad331783c82",
+      "bytes": 28947815
+    },
+    "counties.geojsonseq": {
+      "sha256": "498ddffeb8dc38505debc7df1a537051a12994fdcd3ca1937d9913cfce1cb63d",
+      "bytes": 7103235
+    },
+    "tto.geojsonseq": {
+      "sha256": "3ad306f5772356c218e7f78a04cf258150e3c3e14282ee0d9c3b184f75d4c5ab",
+      "bytes": 21002
+    }
+  },
+  "tileProfiles": {
+    "global": {
+      "regionMinzoom": 3,
+      "countyMinzoom": 6,
+      "countriesMinzoom": 0,
+      "flags": [
+        "--no-feature-limit",
+        "--no-tile-size-limit",
+        "--no-tiny-polygon-reduction",
+        "--no-simplification-of-shared-nodes"
+      ]
+    },
+    "trinidadAndTobago": {
+      "allFeaturesMinzoom": 0,
+      "maxzoom": 14
+    }
+  },
+  "tileSamplesMethod": "Inclusive Web Mercator tile coordinates at stated zoom and bounding box. Tile payload sizes include internal gzip. Unique reader range sizes exclude HTTP headers, JS-reader 16 KiB initial prefetch, metadata loading, buffering, mixed tile zooms, browser caching, and CDN behavior; these are not observed browser transfers or timings.",
+  "sampleBounds": {
+    "worldZ1": {
+      "zoom": 1,
+      "tiles": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          1,
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          1
+        ]
+      ]
+    },
+    "usLower48Z3": {
+      "zoom": 3,
+      "bounds": [
+        -125,
+        24,
+        -66,
+        50
+      ]
+    },
+    "coloradoZ7": {
+      "zoom": 7,
+      "bounds": [
+        -109.1,
+        36.9,
+        -101.9,
+        41.1
+      ]
+    },
+    "tobagoZ13": {
+      "zoom": 13,
+      "bounds": [
+        -60.88,
+        11.12,
+        -60.5,
+        11.37
+      ]
+    }
+  },
+  "tiles": [
+    {
+      "file": "boundaries-z8.pmtiles",
+      "bytes": 20416834,
+      "header": {
+        "version": 3,
+        "root_offset": 127,
+        "root_length": 52,
+        "metadata_offset": 179,
+        "metadata_length": 4121,
+        "leaf_directory_offset": 4300,
+        "leaf_directory_length": 45060,
+        "tile_data_offset": 49360,
+        "tile_data_length": 20367474,
+        "addressed_tiles_count": 23511,
+        "tile_entries_count": 20653,
+        "tile_contents_count": 17037,
+        "clustered": true,
+        "internal_compression": 2,
+        "tile_compression": 2,
+        "tile_type": 1,
+        "min_zoom": 0,
+        "max_zoom": 8,
+        "min_lon_e7": -1800000000,
+        "min_lat_e7": -594727520,
+        "max_lon_e7": 1800000000,
+        "max_lat_e7": 836341010,
+        "center_zoom": 8,
+        "center_lon_e7": 217968750,
+        "center_lat_e7": 415064360
+      },
+      "zoomTileCounts": {
+        "0": 1,
+        "1": 4,
+        "2": 12,
+        "3": 44,
+        "4": 149,
+        "5": 458,
+        "6": 1439,
+        "7": 4768,
+        "8": 16636
+      },
+      "layers": [
+        {
+          "id": "counties",
+          "description": "",
+          "minzoom": 0,
+          "maxzoom": 8,
+          "fields": {
+            "countryCode": "String",
+            "fips": "String",
+            "id": "String",
+            "level": "String",
+            "name": "String",
+            "stateFips": "String"
+          }
+        },
+        {
+          "id": "countries",
+          "description": "",
+          "minzoom": 0,
+          "maxzoom": 8,
+          "fields": {
+            "countryCode": "String",
+            "id": "String",
+            "level": "String",
+            "name": "String"
+          }
+        },
+        {
+          "id": "regions",
+          "description": "",
+          "minzoom": 0,
+          "maxzoom": 8,
+          "fields": {
+            "countryCode": "String",
+            "fips": "String",
+            "id": "String",
+            "level": "String",
+            "name": "String",
+            "stateFips": "String"
+          }
+        }
+      ],
+      "tileSizeMedian": 379,
+      "tileSizeMax": 159886,
+      "largestTiles": [
+        {
+          "zxy": [
+            3,
+            4,
+            2
+          ],
+          "bytes": 159886
+        },
+        {
+          "zxy": [
+            4,
+            8,
+            5
+          ],
+          "bytes": 107587
+        },
+        {
+          "zxy": [
+            3,
+            4,
+            3
+          ],
+          "bytes": 102072
+        },
+        {
+          "zxy": [
+            3,
+            6,
+            3
+          ],
+          "bytes": 94672
+        }
+      ],
+      "samples": {
+        "worldZ1": {
+          "coordinates": 4,
+          "nonemptyTiles": 4,
+          "tilePayloadBytes": 151089,
+          "uniquePayloadRanges": 4,
+          "uniquePayloadBytes": 151089,
+          "uniqueDirectoryAndHeaderBytes": 9545,
+          "readerUniqueRanges": 7
+        },
+        "usLower48Z3": {
+          "coordinates": 4,
+          "nonemptyTiles": 4,
+          "tilePayloadBytes": 132802,
+          "uniquePayloadRanges": 4,
+          "uniquePayloadBytes": 132802,
+          "uniqueDirectoryAndHeaderBytes": 9545,
+          "readerUniqueRanges": 7
+        },
+        "coloradoZ7": {
+          "coordinates": 9,
+          "nonemptyTiles": 9,
+          "tilePayloadBytes": 23031,
+          "uniquePayloadRanges": 9,
+          "uniquePayloadBytes": 23031,
+          "uniqueDirectoryAndHeaderBytes": 9545,
+          "readerUniqueRanges": 12
+        }
+      },
+      "sha256": "ab0e1faecd13e7078a666d912fd545aadab3ae243cadd7ac836df332059709af",
+      "buildWallTime": "0:07.33",
+      "peakRssKiB": 164892
+    },
+    {
+      "file": "boundaries-z10.pmtiles",
+      "bytes": 60683295,
+      "header": {
+        "version": 3,
+        "root_offset": 127,
+        "root_length": 278,
+        "metadata_offset": 405,
+        "metadata_length": 4123,
+        "leaf_directory_offset": 4528,
+        "leaf_directory_length": 392048,
+        "tile_data_offset": 396576,
+        "tile_data_length": 60286719,
+        "addressed_tiles_count": 314275,
+        "tile_entries_count": 223851,
+        "tile_contents_count": 122147,
+        "clustered": true,
+        "internal_compression": 2,
+        "tile_compression": 2,
+        "tile_type": 1,
+        "min_zoom": 0,
+        "max_zoom": 10,
+        "min_lon_e7": -1800000000,
+        "min_lat_e7": -594727520,
+        "max_lon_e7": 1800000000,
+        "max_lat_e7": 836341010,
+        "center_zoom": 10,
+        "center_lon_e7": -1757810,
+        "center_lat_e7": 515086110
+      },
+      "zoomTileCounts": {
+        "0": 1,
+        "1": 4,
+        "2": 12,
+        "3": 44,
+        "4": 149,
+        "5": 458,
+        "6": 1439,
+        "7": 4768,
+        "8": 16636,
+        "9": 60782,
+        "10": 229982
+      },
+      "layers": [
+        {
+          "id": "counties",
+          "description": "",
+          "minzoom": 0,
+          "maxzoom": 10,
+          "fields": {
+            "countryCode": "String",
+            "fips": "String",
+            "id": "String",
+            "level": "String",
+            "name": "String",
+            "stateFips": "String"
+          }
+        },
+        {
+          "id": "countries",
+          "description": "",
+          "minzoom": 0,
+          "maxzoom": 10,
+          "fields": {
+            "countryCode": "String",
+            "id": "String",
+            "level": "String",
+            "name": "String"
+          }
+        },
+        {
+          "id": "regions",
+          "description": "",
+          "minzoom": 0,
+          "maxzoom": 10,
+          "fields": {
+            "countryCode": "String",
+            "fips": "String",
+            "id": "String",
+            "level": "String",
+            "name": "String",
+            "stateFips": "String"
+          }
+        }
+      ],
+      "tileSizeMedian": 201,
+      "tileSizeMax": 159886,
+      "largestTiles": [
+        {
+          "zxy": [
+            3,
+            4,
+            2
+          ],
+          "bytes": 159886
+        },
+        {
+          "zxy": [
+            4,
+            8,
+            5
+          ],
+          "bytes": 107587
+        },
+        {
+          "zxy": [
+            3,
+            4,
+            3
+          ],
+          "bytes": 102072
+        },
+        {
+          "zxy": [
+            3,
+            6,
+            3
+          ],
+          "bytes": 94672
+        }
+      ],
+      "samples": {
+        "worldZ1": {
+          "coordinates": 4,
+          "nonemptyTiles": 4,
+          "tilePayloadBytes": 151089,
+          "uniquePayloadRanges": 4,
+          "uniquePayloadBytes": 151089,
+          "uniqueDirectoryAndHeaderBytes": 9771,
+          "readerUniqueRanges": 7
+        },
+        "usLower48Z3": {
+          "coordinates": 4,
+          "nonemptyTiles": 4,
+          "tilePayloadBytes": 132802,
+          "uniquePayloadRanges": 4,
+          "uniquePayloadBytes": 132802,
+          "uniqueDirectoryAndHeaderBytes": 9771,
+          "readerUniqueRanges": 7
+        },
+        "coloradoZ7": {
+          "coordinates": 9,
+          "nonemptyTiles": 9,
+          "tilePayloadBytes": 23031,
+          "uniquePayloadRanges": 9,
+          "uniquePayloadBytes": 23031,
+          "uniqueDirectoryAndHeaderBytes": 9771,
+          "readerUniqueRanges": 12
+        }
+      },
+      "sha256": "1002df958df1bfa599a9ac41d9787d48c8c6738198278d1b83b5c139f7e6d90b",
+      "buildWallTime": "0:31.38",
+      "peakRssKiB": 165064
+    },
+    {
+      "file": "tto-z14.pmtiles",
+      "bytes": 219802,
+      "header": {
+        "version": 3,
+        "root_offset": 127,
+        "root_length": 2593,
+        "metadata_offset": 2720,
+        "metadata_length": 779,
+        "leaf_directory_offset": 3499,
+        "leaf_directory_length": 0,
+        "tile_data_offset": 3499,
+        "tile_data_length": 216303,
+        "addressed_tiles_count": 1492,
+        "tile_entries_count": 1175,
+        "tile_contents_count": 784,
+        "clustered": true,
+        "internal_compression": 2,
+        "tile_compression": 2,
+        "tile_type": 1,
+        "min_zoom": 0,
+        "max_zoom": 14,
+        "min_lon_e7": -619287000,
+        "min_lat_e7": 100420600,
+        "max_lon_e7": -605220840,
+        "max_lat_e7": 113510600,
+        "center_zoom": 14,
+        "center_lon_e7": -612927250,
+        "center_lat_e7": 106282160
+      },
+      "zoomTileCounts": {
+        "0": 1,
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "9": 6,
+        "10": 14,
+        "11": 34,
+        "12": 94,
+        "13": 296,
+        "14": 1032
+      },
+      "layers": [
+        {
+          "id": "countries",
+          "description": "",
+          "minzoom": 0,
+          "maxzoom": 14,
+          "fields": {
+            "countryCode": "String",
+            "id": "String",
+            "level": "String",
+            "name": "String"
+          }
+        },
+        {
+          "id": "regions",
+          "description": "",
+          "minzoom": 0,
+          "maxzoom": 14,
+          "fields": {
+            "countryCode": "String",
+            "id": "String",
+            "level": "String",
+            "name": "String"
+          }
+        }
+      ],
+      "tileSizeMedian": 210.0,
+      "tileSizeMax": 1887,
+      "largestTiles": [
+        {
+          "zxy": [
+            8,
+            84,
+            120
+          ],
+          "bytes": 1887
+        },
+        {
+          "zxy": [
+            7,
+            42,
+            60
+          ],
+          "bytes": 1665
+        },
+        {
+          "zxy": [
+            6,
+            21,
+            30
+          ],
+          "bytes": 1458
+        },
+        {
+          "zxy": [
+            10,
+            337,
+            481
+          ],
+          "bytes": 1268
+        }
+      ],
+      "samples": {
+        "worldZ1": {
+          "coordinates": 4,
+          "nonemptyTiles": 1,
+          "tilePayloadBytes": 792,
+          "uniquePayloadRanges": 1,
+          "uniquePayloadBytes": 792,
+          "uniqueDirectoryAndHeaderBytes": 2720,
+          "readerUniqueRanges": 3
+        },
+        "usLower48Z3": {
+          "coordinates": 4,
+          "nonemptyTiles": 1,
+          "tilePayloadBytes": 961,
+          "uniquePayloadRanges": 1,
+          "uniquePayloadBytes": 961,
+          "uniqueDirectoryAndHeaderBytes": 2720,
+          "readerUniqueRanges": 3
+        },
+        "coloradoZ7": {
+          "coordinates": 9,
+          "nonemptyTiles": 0,
+          "tilePayloadBytes": 0,
+          "uniquePayloadRanges": 0,
+          "uniquePayloadBytes": 0,
+          "uniqueDirectoryAndHeaderBytes": 2720,
+          "readerUniqueRanges": 2
+        },
+        "tobagoZ13": {
+          "coordinates": 70,
+          "nonemptyTiles": 26,
+          "tilePayloadBytes": 5627,
+          "uniquePayloadRanges": 25,
+          "uniquePayloadBytes": 5439,
+          "uniqueDirectoryAndHeaderBytes": 2720,
+          "readerUniqueRanges": 27
+        }
+      },
+      "sha256": "9db34c226c03749252a383a5ef64fdad6d37b99ac5cccdf4c86a702f3bf28b07",
+      "buildWallTime": "0:00.31",
+      "peakRssKiB": 91488
+    }
+  ],
+  "tileIdentityValidation": [
+    {
+      "file": "boundaries-z8.pmtiles",
+      "maxzoom": 8,
+      "maxzoomTiles": 16636,
+      "distinctMaxzoomPayloads": 11180,
+      "layers": {
+        "countries": {
+          "expected": 257,
+          "found": 257,
+          "missing": [],
+          "unexpected": []
+        },
+        "regions": {
+          "expected": 4599,
+          "found": 4599,
+          "missing": [],
+          "unexpected": []
+        },
+        "counties": {
+          "expected": 3235,
+          "found": 3235,
+          "missing": [],
+          "unexpected": []
+        }
+      },
+      "invalidCountyFips": []
+    },
+    {
+      "file": "boundaries-z10.pmtiles",
+      "maxzoom": 10,
+      "maxzoomTiles": 229982,
+      "distinctMaxzoomPayloads": 76188,
+      "layers": {
+        "countries": {
+          "expected": 257,
+          "found": 257,
+          "missing": [],
+          "unexpected": []
+        },
+        "regions": {
+          "expected": 4599,
+          "found": 4599,
+          "missing": [],
+          "unexpected": []
+        },
+        "counties": {
+          "expected": 3235,
+          "found": 3235,
+          "missing": [],
+          "unexpected": []
+        }
+      },
+      "invalidCountyFips": []
+    },
+    {
+      "file": "tto-z14.pmtiles",
+      "maxzoom": 14,
+      "maxzoomTiles": 1032,
+      "distinctMaxzoomPayloads": 437,
+      "layers": {
+        "countries": {
+          "expected": 1,
+          "found": 1,
+          "missing": [],
+          "unexpected": []
+        },
+        "regions": {
+          "expected": 16,
+          "found": 16,
+          "missing": [],
+          "unexpected": []
+        }
+      },
+      "invalidCountyFips": []
+    }
+  ],
+  "circleGeneration": {
+    "pinCount": 3292,
+    "circleCoordinates": 240316,
+    "serializedBytes": 9759958,
+    "generatedMs": 87.640896,
+    "method": "One Node.js generation call using current pinCircles with all 3292 U.S. pins; generatedMs excludes JSON serialization; this is a laboratory call, not a phone/browser frame benchmark."
+  },
+  "publicCdnRangeProbes": [
+    {
+      "url": "https://data.rsmb.tv/countyRecords.json",
+      "status": 206,
+      "bytesRead": 127,
+      "headers": {
+        "Content-Type": "application/json",
+        "Content-Length": "127",
+        "Content-Range": "bytes 0-126/1644884",
+        "Cache-Control": "public, max-age=3600",
+        "Access-Control-Allow-Origin": "https://www.rsmb.tv",
+        "Access-Control-Expose-Headers": "ETag, Content-Length",
+        "ETag": "\"757886bb38e888badc52f3100c0d7212\"",
+        "X-Cache": "Miss from cloudfront"
+      }
+    },
+    {
+      "url": "https://data.rsmb.tv/tornadoes/tracks/2025.geojson",
+      "status": 206,
+      "bytesRead": 127,
+      "headers": {
+        "Content-Type": "application/geo+json",
+        "Content-Length": "127",
+        "Content-Range": "bytes 0-126/905249",
+        "Cache-Control": "public, max-age=3600",
+        "Access-Control-Allow-Origin": "https://www.rsmb.tv",
+        "Access-Control-Expose-Headers": "ETag, Content-Length",
+        "ETag": "\"77802b95deba5364ca20bea2811a4829\"",
+        "X-Cache": "Miss from cloudfront"
+      }
+    },
+    {
+      "url": "https://data.rsmb.tv/trips/boise-2024/geo/route.geojson",
+      "status": 206,
+      "bytesRead": 127,
+      "headers": {
+        "Content-Type": "application/geo+json",
+        "Content-Length": "127",
+        "Content-Range": "bytes 0-126/284531",
+        "Cache-Control": "public,max-age=3600",
+        "Access-Control-Allow-Origin": "https://www.rsmb.tv",
+        "Access-Control-Expose-Headers": "ETag, Content-Length",
+        "ETag": "\"8ad34135455e7374ab2237c1865de09b\"",
+        "X-Cache": "Miss from cloudfront"
+      }
+    }
+  ],
+  "s3Pricing": {
+    "url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonS3/current/us-east-1/index.json",
+    "publicationDate": "2026-11-09T15:43:10Z",
+    "s3StandardStorage": [
+      {
+        "sku": "WP9ANXZGBYYSGJEA",
+        "unit": "GB-Mo",
+        "rateUSD": "0.0230000000",
+        "description": "$0.023 per GB - first 50 TB / month of storage used"
+      }
+    ]
+  }
+}

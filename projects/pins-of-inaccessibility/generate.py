@@ -213,10 +213,16 @@ def solve_geometry(geometry, search_tolerance=SEARCH_TOLERANCE, simplification=S
     return best
 
 
-def display_geometry(geometry, simplification_degrees=0.0015):
+def display_geometry(geometry, simplification_degrees=0.0015, max_component_fraction=None):
     parts = []
     for polygon in polygons(make_valid(geometry)):
-        unwrapped = unwrap_polygon(polygon).simplify(simplification_degrees, preserve_topology=True)
+        unwrapped = unwrap_polygon(polygon)
+        tolerance = simplification_degrees
+        if max_component_fraction is not None:
+            west, south, east, north = unwrapped.bounds
+            tolerance = min(tolerance, min(east - west, north - south) * max_component_fraction)
+        if tolerance:
+            unwrapped = unwrapped.simplify(tolerance, preserve_topology=True)
         pieces = [unwrapped]
         for longitude in [-180, 180]:
             cutter = LineString([(longitude, -90), (longitude, 90)])
@@ -302,14 +308,14 @@ def update_boundary_contacts(published, state_shapes, county_shapes):
     published["metadata"].update(generatedAt=datetime.now(timezone.utc).isoformat())
 
 
-def write_json(path, payload):
+def write_json(path, payload, *, sort_keys=False):
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = None
     try:
         with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent,
                                          prefix=f".{path.name}.", suffix=".tmp", delete=False) as output:
             temporary = Path(output.name)
-            json.dump(payload, output, separators=(",", ":"), ensure_ascii=False, allow_nan=False)
+            json.dump(payload, output, separators=(",", ":"), ensure_ascii=False, allow_nan=False, sort_keys=sort_keys)
             output.flush()
             os.fsync(output.fileno())
         os.replace(temporary, path)

@@ -113,7 +113,7 @@ The publication tasks require identification of reconstructed tracks in public c
 The manifest retains the revised campsite names and six riding days.
 Those authored facts still require verification before publication.
 No source route, Google document, Sheet row, or CDN object was changed.
-See [Boise publication tasks](../../TODO.md#boise-trip).
+See [Boise publication tasks](../../TODO.md#source-corrections).
 
 ## Documentation and maintenance
 

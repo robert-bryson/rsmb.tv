@@ -87,16 +87,23 @@ Use the [Pins guide](projects/pins-of-inaccessibility/readme.md) for generation 
 Use the [November 12 review](docs/reviews/2026-11-12-pins-quality-review.md) for confirmed fixes and measurement limits.
 Use the [global expansion report](docs/reviews/2026-11-12-pins-world-expansion.md) for country coverage, source choices, and coastline alignment.
 Use the [November 13 review](docs/reviews/2026-11-13-pins-review.md) for publication guards, layer loading, renderer readiness, and hover behavior.
+Use the [context review](docs/reviews/2026-11-13-pins-context-review.md) for location contracts, publication snapshots, and inventory checks.
 
 ### Source and calculation
 
 - [ ] Compare large and irregular jurisdictions with an independent geodesic search. Measure tolerance sensitivity and near-equal radius rankings.
 - [ ] Evaluate current national boundary providers for global countries that need more detail. Check license, dates, water treatment, and source IDs.
-- [ ] Assess a polar view before adding Antarctica. The current world map excludes it.
+- [ ] Assess Antarctic boundary definitions and polar calculation coverage before adding its pins to the globe.
 
 ### Hosted release
 
 - [ ] Check the hosted map with the configured CARTO key. Verify origin restrictions, attribution, and every territory shortcut.
+- [ ] Verify context loading and retry from the deployed origin. Check CORS headers and recovery after a context release change.
+
+### Data delivery and refresh
+
+- [ ] Compare tiled boundary delivery with the current GeoJSON files. Use the [delivery research](docs/reviews/2026-11-13-geospatial-delivery-research.md) and retain numeric pin indexes for search.
+- [ ] Set a refresh schedule for GeoNames and terrain data. Record the selected source dates before each context release.
 
 Track phone measurements in [Physical devices](#physical-devices).
 

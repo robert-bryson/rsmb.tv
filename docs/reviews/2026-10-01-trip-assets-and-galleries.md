@@ -74,7 +74,7 @@ The Boise manifest passes the shared schema.
 All 46 existing photo entries remain unchanged. The manifest adds 30 photos.
 The highlights gallery contains all 76 photos in chronological order.
 These checks do not verify captions, recorded dates, route reconstruction, public asset availability, or story totals.
-The [Boise publication tasks](../../TODO.md#boise-trip) remain open.
+The [Boise publication tasks](../../TODO.md#source-corrections) remain open.
 
 The flight data changes contain generated timestamp updates.
 They are retained with the supplied changes. Stable generation remains an explicit maintenance task.
@@ -167,7 +167,7 @@ All 81 highlights entries are unique. Each photo occurs in that gallery.
 The supplied changes add five photos without changing the 76 existing photo entries.
 The manifest passes the shared schema and declares five route tracks.
 These checks do not verify captions, dates, distances, reconstruction, or public asset availability.
-Keep the [publication blockers](../../TODO.md#boise-trip) open until those checks pass.
+Keep the [publication blockers](../../TODO.md#source-corrections) open until those checks pass.
 
 ### Follow-up validation
 

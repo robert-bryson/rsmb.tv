@@ -65,7 +65,7 @@ The intervening beach and town photos fit that earlier window.
 
 Both GPX exports lack per-point timestamps, so they cannot resolve the disagreement independently.
 The manifest dates and original EXIF remain unchanged pending author confirmation.
-The conflict is recorded in the current inventory and [TODO.md](../../TODO.md#ocean-shores-trip).
+The conflict is recorded in the current inventory and [TODO.md](../../TODO.md#ocean-shores).
 
 ## Recovered July 17 route
 

@@ -11,11 +11,6 @@ import { loadLocalEnvFiles, syncBlogPosts } from './sync-blogs.js';
 
 loadLocalEnvFiles();
 
-if (/^(0|false|no|off)$/i.test(String(process.env.GOOGLE_BLOG_SYNC_ON_DEV ?? ''))) {
-    console.log('Skipping blog sync before dev because GOOGLE_BLOG_SYNC_ON_DEV is disabled.');
-    process.exit(0);
-}
-
 if (!process.env.GOOGLE_BLOG_SHEET_ID) {
     console.log('Skipping blog sync before dev because GOOGLE_BLOG_SHEET_ID is not configured.');
     process.exit(0);

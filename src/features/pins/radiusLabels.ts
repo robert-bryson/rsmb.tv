@@ -43,7 +43,7 @@ export function attachRadiusLabels(map: MapLibreMap, overlay: HTMLElement) {
             occupied.push({ left: obstacle.left - box.left - 4, top: obstacle.top - box.top - 4,
                 right: obstacle.right - box.left + 4, bottom: obstacle.bottom - box.top + 4 });
         }
-        const visible: Array<{ entry: typeof entries[number]; points: ReturnType<MapLibreMap['project']>[] }> = [];
+        const visible: Array<{ entry: typeof entries[number]; points: Array<ReturnType<MapLibreMap['project']> | null> }> = [];
         const pins = new Set<string>();
         for (const entry of entries) {
             if (!entry.feature.properties.selected && map.getZoom() < entry.feature.properties.minimumZoom) continue;
@@ -51,9 +51,19 @@ export function attachRadiusLabels(map: MapLibreMap, overlay: HTMLElement) {
             const offset = 360 * Math.round((centerLng - coordinates[0][0]) / 360);
             if (entry.bounds.east + offset < geographic.getWest() || entry.bounds.west + offset > geographic.getEast()
                 || entry.bounds.north < geographic.getSouth() || entry.bounds.south > geographic.getNorth()) continue;
-            const points = coordinates.map(([lng, lat]) => map.project([lng + offset, lat]));
+            const points = coordinates.map(([lng, lat]) => {
+                const point = map.project([lng + offset, lat]);
+                if (!Number.isFinite(point.x) || !Number.isFinite(point.y)) return null;
+                // Back-side locations can project onto the visible hemisphere.
+                // A round trip through the public surface API distinguishes them.
+                const surface = map.unproject(point);
+                if (!Number.isFinite(surface.lng) || !Number.isFinite(surface.lat)) return null;
+                const longitudeError = Math.abs(surface.lng - lng) % 360;
+                if (Math.min(longitudeError, 360 - longitudeError) > 0.001 || Math.abs(surface.lat - lat) > 0.001) return null;
+                return point;
+            });
             visible.push({ entry, points });
-            if (!pins.has(entry.feature.properties.pinId) && containsPoint(viewport, points[0])) {
+            if (points[0] && !pins.has(entry.feature.properties.pinId) && containsPoint(viewport, points[0])) {
                 pins.add(entry.feature.properties.pinId);
                 const { x, y } = points[0];
                 occupied.push({ left: x - 10, top: y - 10, right: x + 10, bottom: y + 10 });
@@ -65,7 +75,9 @@ export function attachRadiusLabels(map: MapLibreMap, overlay: HTMLElement) {
             if (active.size >= maximum) break;
             const segments: TooltipSegment[] = [];
             for (let index = 1; index < points.length; index++) {
-                const clipped = clipSegment(points[index - 1], points[index], viewport);
+                const start = points[index - 1], end = points[index];
+                if (!start || !end) continue;
+                const clipped = clipSegment(start, end, viewport);
                 if (clipped) segments.push(clipped);
             }
             if (!segments.length) continue;
@@ -117,6 +129,8 @@ export function attachRadiusLabels(map: MapLibreMap, overlay: HTMLElement) {
     }
     map.on('move', schedule);
     map.on('resize', schedule);
+    map.on('projectiontransition', schedule);
+    map.on('style.load', schedule);
     return {
         setData(data: RadiusLines) {
             if (data === previous) { schedule(); return; }
@@ -136,6 +150,8 @@ export function attachRadiusLabels(map: MapLibreMap, overlay: HTMLElement) {
             if (frame !== null) cancelAnimationFrame(frame);
             map.off('move', schedule);
             map.off('resize', schedule);
+            map.off('projectiontransition', schedule);
+            map.off('style.load', schedule);
             overlay.replaceChildren();
             labels.clear();
         },

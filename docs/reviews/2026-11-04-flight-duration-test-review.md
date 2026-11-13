@@ -116,7 +116,7 @@ The duration patch uses routes scoped to each test page.
 Its delayed cases clear timers and release blocked requests during cleanup.
 Review found no shared mutation that connects these changes to the controls failures.
 Their cause remains unconfirmed.
-The [open-work list](../../TODO.md#browser-checks) records the investigation.
+The [open-work list](../../TODO.md#browser-and-performance-checks) records the investigation.
 Retain a failed run's trace before changing waits or application logic.
 Closure requires a stable reproduction, a verified cause, and a regression that fails before the correction.
 

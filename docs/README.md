@@ -5,13 +5,16 @@ Use [TODO.md](../TODO.md) for incomplete work.
 
 ## Writing rules
 
+Use [ASD-STE100](https://www.asd-ste100.org/assets/files/ASD-STE100_ISSUE9.pdf) as the language guide for repository documentation.
 Use short sentences and active voice.
-Give one instruction in each sentence.
-Use one term for each item.
-Define a technical term before its first use.
-Keep code identifiers, commands, and source quotations unchanged.
-Keep dated reports as evidence. Add a new report when findings change.
-Use [ASD-STE100](https://www.asd-ste100.org/) as the language guide for current instructions and new reports.
+Give one instruction in each sentence. Use no more than 20 words in an instruction.
+Use no more than 25 words in a description.
+Use one term for each concept. Define technical terms before their first use.
+Keep commands, identifiers, product names, and source quotations exact.
+Keep dated findings and measurements as evidence. Add a new report when findings change.
+Record each incomplete task once in [TODO.md](../TODO.md). Link to its acceptance conditions.
+Keep an alt description separate from a photo caption.
+An alt description states the visible content. A caption can supply other information.
 
 ## Current instructions
 
@@ -40,7 +43,7 @@ Use [ASD-STE100](https://www.asd-ste100.org/) as the language guide for current 
 | [Temperature methodology](../projects/temperature-records/methodology.md) | Check the historical temperature data |
 | [Temperature map](temperature-map.md) | Maintain record markers, units, selections, and map regression tests |
 | [Tornado Tracks](../projects/tornado-tracks/readme.md) | Sync tornado data and check map behavior |
-| [Pins of Inaccessibility](../projects/pins-of-inaccessibility/readme.md) | Regenerate state, territory, and county pins and check the map |
+| [Pins of Inaccessibility](../projects/pins-of-inaccessibility/readme.md) | Generate global and U.S. pins, validate location details, and check publication |
 | [Ride Ledger design](../projects/ride-ledger/readme.md) | Review the proposed application and open decisions |
 
 ## Reviews
@@ -50,6 +53,8 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-13 | [Pins context review: publication snapshots, complete source inventories, validation, cache recovery, and documentation links](reviews/2026-11-13-pins-context-review.md) |
+| 2026-11-13 | [Geospatial delivery research: S3, CloudFront, PMTiles prototypes, project comparisons, and migration priorities](reviews/2026-11-13-geospatial-delivery-research.md) |
 | 2026-11-13 | [Pins review: publication guards, point-source readiness, hidden province outlines, hover behavior, and regression coverage](reviews/2026-11-13-pins-review.md) |
 | 2026-11-13 | [Dependency update and audit: patched Node runtimes, npm and Python audits, globe compatibility, and Terraform](reviews/2026-11-13-dependency-audit.md) |
 | 2026-11-12 | [Global Pins expansion: source research, province coverage, calculation checks, lazy data, and implementation](reviews/2026-11-12-pins-world-expansion.md) |
@@ -149,17 +154,3 @@ An older finding can be corrected by a later change.
 | 2026-10-01 | [Trip implementation](reviews/2026-10-01-trip-report-implementation.md) |
 | 2026-10-01 | [Initial trip audit](reviews/2026-10-01-trip-report-audit.md) |
 | 2026-09-30 | [Post rendering](reviews/2026-09-30-post-rendering.md) |
-
-## Writing rules
-
-Use [ASD-STE100](https://www.asd-ste100.org/) for technical documentation.
-Use short sentences, active voice, and one instruction per sentence.
-Use no more than 20 words in an instruction. Use no more than 25 words in a description.
-Use one term for each concept. Keep commands, identifiers, and product names exact.
-Define technical terms when readers need them.
-Keep current procedures separate from historical results.
-Record each incomplete task once in `TODO.md`. Link to detailed acceptance conditions when necessary.
-Use these rules for all repository documentation.
-Use exact software names as technical terms.
-Keep an alt description separate from a photo caption.
-An alt description states the visible content. A caption can supply other information.

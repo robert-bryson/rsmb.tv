@@ -157,9 +157,9 @@ Use that report for the later measurements and remaining deployment steps.
 The initial audit build reported a large Flights chunk and a Tailwind source-map warning. The follow-up resolved both warnings.
 Real-device LCP, CLS, and INP measurements remain separate from the passing byte budgets.
 Large map components remain maintenance hotspots. Data sync workflows still use long-lived AWS credentials.
-The related work is recorded in [TODO.md](../../TODO.md#build-and-maintenance) and [trip release tasks](../../TODO.md#trip-release-tasks).
+The related work is recorded in [TODO.md](../../TODO.md#build-and-maintenance) and [trip release tasks](../../TODO.md#content-publication).
 
-Existing trip publication, historical data, and mail deployment checks remain in [TODO.md](../../TODO.md#publication-blockers).
+Existing trip publication, historical data, and mail deployment checks remain in [TODO.md](../../TODO.md#content-publication).
 The historical estimator's tests do not certify the ACIS source data or its publication readiness.
 
 Infrastructure changes were validated locally with mocked AWS responses. No infrastructure, workflow secret, Google source document, or published asset was changed remotely.

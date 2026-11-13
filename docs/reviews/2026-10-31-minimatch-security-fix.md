@@ -93,5 +93,5 @@ Local verification logs use `/private/tmp/rsmb-audit-fix-*`.
 
 Remove the three overrides when their upstream dependency ranges accept a patched release.
 Run the [focused and complete dependency checks](../../README.md#lint-security-override) after removal.
-Track that remaining work in [TODO.md](../../TODO.md#dependency-security).
+Track that remaining work in [TODO.md](../../TODO.md#build-and-maintenance).
 The earlier audit findings remain in their dated reports, with links to this correction.

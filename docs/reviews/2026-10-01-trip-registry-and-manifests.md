@@ -50,7 +50,7 @@ The Boise manifest now contains 82 photos. The old TODO count was 81.
 Kalaloch contains 20 photos and three tracks.
 Some track filenames disagree with the stated trip dates. The review did not infer replacement dates from filenames.
 Source dates, distances, riding days, and reconstructed tracks still require review.
-See the [publication blockers](../../TODO.md#publication-blockers).
+See the [publication blockers](../../TODO.md#content-publication).
 
 ## Documentation
 

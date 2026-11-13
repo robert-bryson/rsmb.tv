@@ -62,7 +62,7 @@ export function createPinsRenderer(options: Options) {
         };
         cleanups.push(() => clearTimeout(deadline));
         const canvas = map.getCanvas();
-        canvas.setAttribute('aria-label', 'Interactive map of country, state, province, territory, and county pins');
+        canvas.setAttribute('aria-label', 'Interactive globe of country, state, province, territory, and county pins');
         map.addControl(new NavigationControl({ showCompass: false }), 'top-right');
         const target = container.parentElement ?? container;
         const fullscreen = restoreFullscreenControl(target, options.previousFullscreen,
@@ -75,7 +75,7 @@ export function createPinsRenderer(options: Options) {
         cleanups.push(recovery.dispose);
         const labels = attachRadiusLabels(map, overlay);
         cleanups.push(labels.dispose);
-        const popup = new Popup({ closeButton: false, closeOnClick: true, offset: 14 });
+        const popup = new Popup({ closeButton: false, closeOnClick: true, offset: 14, locationOccludedOpacity: 0 });
         cleanups.push(() => popup.remove());
         let hovered = '';
         let hoverPoints: FeatureCollection | undefined;
@@ -132,6 +132,13 @@ export function createPinsRenderer(options: Options) {
                 map.resize();
                 // Leave a visible center even in a short landscape viewport.
                 const width = container.clientWidth, height = container.clientHeight;
+                if (current.view.bounds[2] - current.view.bounds[0] >= 360) {
+                    // Opposite edges of a world-sized bounds box meet on a globe.
+                    // Frame the sphere explicitly instead of fitting that seam.
+                    map.flyTo({ center: [0, 20], zoom: Math.max(0, Math.log2(Math.max(128, Math.min(width, height)) / 256) + 0.5),
+                        bearing: 0, pitch: 0, roll: 0, duration: current.reducedMotion ? 0 : 900 });
+                    return;
+                }
                 map.fitBounds(current.view.bounds, {
                     padding: { top: Math.min(80, height / 4), right: Math.min(50, width / 4), bottom: Math.min(60, height / 4), left: Math.min(50, width / 4) },
                     maxZoom: 13, duration: current.reducedMotion ? 0 : 900,
@@ -142,6 +149,11 @@ export function createPinsRenderer(options: Options) {
             if (disposed || failed) return;
             dismissPopup();
             sent.clear();
+            // Hosted CARTO styles and the recovery style have their own defaults.
+            // Restore the globe whenever either background is loaded.
+            map.setProjection({ type: 'globe' });
+            map.setSky({ 'sky-color': '#080e16', 'horizon-color': '#344d60', 'fog-color': '#171f26',
+                'fog-ground-blend': 0, 'atmosphere-blend': 0.8 });
             installPinLayers(map);
             sync();
         });

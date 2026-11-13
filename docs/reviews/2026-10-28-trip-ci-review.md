@@ -132,7 +132,7 @@ The later complete run passed without those startup failures.
 
 The original intermittent Linux WebKit marker failure did not reproduce locally.
 The original scenario remains covered, and CI retains evidence if it fails again.
-The investigation remains in [TODO.md](../../TODO.md#browser-checks).
+The investigation remains in [TODO.md](../../TODO.md#browser-and-performance-checks).
 This review does not claim a verified application-level cause or fix for that failure.
 
 The [testing guide](../trips/TESTING.md) records current commands and failure-evidence procedures.

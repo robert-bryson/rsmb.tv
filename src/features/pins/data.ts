@@ -8,27 +8,29 @@ export const PINS_DATA_ROOT = `${import.meta.env.BASE_URL}data/pins-of-inaccessi
 const parsePins = (value: unknown) => pinsDataSchema.parse(value);
 const parseWorldPins = (value: unknown) => worldPinsDataSchema.parse(value);
 
-function usePinResource<T>(filename: string, parse: (value: unknown) => T, enabled = true) {
-    const url = `${PINS_DATA_ROOT}/${filename}`;
-    const [stored, setResource] = useState<{ url: string; data: T | null; loading: boolean; error: string | null }>({ url, data: null, loading: true, error: null });
-    const resource = stored.url === url ? stored : { url, data: null, loading: true, error: null };
+export function usePinResource<T>(filename: string, parse: (value: unknown) => T, enabled = true, baseUrl = PINS_DATA_ROOT) {
+    const url = `${baseUrl}/${filename}`;
+    // A changed inventory can require a new validator at the same URL.
+    // Keep parser functions stable, as with the other effect dependencies.
+    const [stored, setResource] = useState<{ url: string; parse: typeof parse; data: T | null; loading: boolean; error: string | null }>({ url, parse, data: null, loading: true, error: null });
+    const resource = stored.url === url && stored.parse === parse ? stored : { url, data: null, loading: true, error: null };
     const [attempt, setAttempt] = useState(0);
     const retry = useCallback(() => {
         invalidateCache(url);
-        setResource({ url, data: null, loading: true, error: null });
+        setResource({ url, parse, data: null, loading: true, error: null });
         setAttempt(value => value + 1);
-    }, [url]);
+    }, [url, parse]);
     useEffect(() => {
         if (!enabled || resource.data) return;
         let cancelled = false;
         void fetchValidatedJson(url, parse, { ttl: 3_600_000 }).then(data => {
-            if (!cancelled) setResource({ url, data, loading: false, error: null });
+            if (!cancelled) setResource({ url, parse, data, loading: false, error: null });
         }).catch(() => {
-            if (!cancelled) setResource({ url, data: null, loading: false, error: `Could not load ${filename}.` });
+            if (!cancelled) setResource({ url, parse, data: null, loading: false, error: `Could not load ${filename}.` });
         });
         return () => { cancelled = true; };
     }, [url, filename, parse, enabled, attempt, resource.data]);
-    return { ...resource, loading: enabled && resource.loading, error: enabled ? resource.error : null, retry };
+    return { url, data: resource.data, loading: enabled && resource.loading, error: enabled ? resource.error : null, retry };
 }
 
 export function usePinsData(showCounties: boolean, enabled = true) {
