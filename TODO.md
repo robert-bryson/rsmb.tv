@@ -86,12 +86,19 @@ Its November 9 snapshot already includes all calendar years from 1890 through 20
 Use the [Pins guide](projects/pins-of-inaccessibility/readme.md) for generation and regression tests.
 Use the [November 12 review](docs/reviews/2026-11-12-pins-quality-review.md) for confirmed fixes and measurement limits.
 Use the [global expansion report](docs/reviews/2026-11-12-pins-world-expansion.md) for country coverage, source choices, and coastline alignment.
+Use the [November 13 review](docs/reviews/2026-11-13-pins-review.md) for publication guards, layer loading, renderer readiness, and hover behavior.
 
-- [ ] Check the hosted map with the configured CARTO key. Verify origin restrictions, attribution, and every territory shortcut.
+### Source and calculation
+
 - [ ] Compare large and irregular jurisdictions with an independent geodesic search. Measure tolerance sensitivity and near-equal radius rankings.
 - [ ] Evaluate current national boundary providers for global countries that need more detail. Check license, dates, water treatment, and source IDs.
 - [ ] Assess a polar view before adding Antarctica. The current world map excludes it.
-- [ ] Measure cold transfer, parsing time, and memory on a real phone. Compare the initial pin index with the lazy county outlines.
+
+### Hosted release
+
+- [ ] Check the hosted map with the configured CARTO key. Verify origin restrictions, attribution, and every territory shortcut.
+
+Track phone measurements in [Physical devices](#physical-devices).
 
 ## Browser and performance checks
 
@@ -105,6 +112,7 @@ Use the [November 10 review](docs/reviews/2026-11-10-project-quality-review.md) 
 ### Physical devices
 
 - [ ] Check reading, the flight globe, ADV Atlas, and Pins on a real phone. Record LCP, CLS, INP, cold transfer, and startup. Verify [atlas navigation and recovery](docs/trips/ADV-ATLAS.md).
+- [ ] Measure Pins parsing time and peak memory on a real phone. Compare the U.S. pin index, county outlines, world overview, and country-specific province outlines.
 - [ ] Compare prefetch modes `off`, `pages`, and `all` where input supports intent. Include clicks during module evaluation and after a longer hover. Use the [startup evidence](docs/reviews/2026-11-09-live-release-verification.md#prepared-globe-input) as the baseline.
 - [ ] Review the compressed project previews and trip thumbnails on a real phone at standard and high pixel density. Check fine map detail and photo quality. See [image delivery](docs/image-assets.md#checks).
 

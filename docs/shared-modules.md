@@ -9,6 +9,7 @@ Use [`src/maps/recoverBasemap.ts`](../src/maps/recoverBasemap.ts) for provider d
 Temperature, Tornado, and Pins adapters supply provider styles and application source IDs.
 The helper checks provider sources. It does not wait for application data or camera motion.
 Each feature restores its data layers on `style.load`.
+Pins also tracks each update to its point source. Background recovery does not establish pin readiness.
 Each feature controls its camera and selection state.
 Dispose the helper before you remove the renderer.
 
@@ -84,6 +85,8 @@ Foreign area is labeled as mapped area; Census area retains its land-area label.
 Foreign regions use the intersection of the regional and parent-country source boundaries.
 The snapshot records this rule. Each changed pin carries a flag for its source note.
 Country-specific resource state is tied to its URL. A delayed response cannot replace the current country.
+Province outlines load only while their layer is enabled. Hidden outline failures do not block country pins.
+The Python generators share coordinate, bounds, contact, and raw polygon checks before replacing publication files.
 
 Use [`src/features/tornadoes/schemas.ts`](../src/features/tornadoes/schemas.ts) for notable-event metadata.
 The schema checks event fields and geographic coordinates.

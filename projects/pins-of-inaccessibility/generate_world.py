@@ -2,7 +2,6 @@
 """Build global country and first-level region pins from pinned Natural Earth sources."""
 
 import argparse
-from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 import json
@@ -144,6 +143,7 @@ def validate_artifact(name, payload):
     catalog = json.loads(CATALOG_PATH.read_text(encoding='utf-8'))
     countries = {country['code']: country for country in catalog['countries']}
     foreign = {code: country for code, country in countries.items() if code != 'USA'}
+    foreign_region_count = sum(len(country['regionIds']) for country in foreign.values())
     if name == 'pins.json' or (name.startswith('regions/') and name.endswith('.json') and name[8:-5] in foreign):
         pins, metadata = payload['pins'], payload['metadata']
         region_code = None if name == 'pins.json' else name[8:-5]
@@ -156,10 +156,28 @@ def validate_artifact(name, payload):
             raise ValueError('World region payload names the wrong country')
         if not region_code and (metadata['countryCount'] != len(countries) or metadata['regionCount'] != sum(len(country['regionIds']) for country in countries.values())):
             raise ValueError('World pin metadata counts differ from coverage')
-        if not region_code and (metadata['regionalBoundaryAlignment'] != SNAPSHOT['regionalBoundaryAlignment']
-                                or not 0 <= metadata['adjustedRegionCount'] <= sum(len(country['regionIds']) for country in foreign.values())):
-            raise ValueError('World regional alignment metadata differs from the publication policy')
+        if not region_code:
+            adjusted = metadata.get('adjustedRegionCount')
+            if (metadata.get('regionalBoundaryAlignment') != SNAPSHOT['regionalBoundaryAlignment']
+                    or not isinstance(adjusted, int) or isinstance(adjusted, bool) or not 0 <= adjusted <= foreign_region_count):
+                raise ValueError('World regional alignment metadata differs from the publication policy')
+            for field, expected in [('scale', SNAPSHOT['scale']), ('license', SNAPSHOT['license']),
+                                    ('source', 'Natural Earth / U.S. Census')]:
+                if metadata.get(field) != expected:
+                    raise ValueError(f'World {field} differs from its source metadata')
+            geometry.validate_name(metadata.get('definition'), 'world boundary definition', maximum=2000)
+            geometry.validate_timestamp(metadata.get('generatedAt'))
+            verification = metadata.get('verification')
+            if (not isinstance(verification, dict) or verification.get('checked') != len(foreign) + foreign_region_count
+                    or verification.get('circleSamples') != verification['checked'] * 72):
+                raise ValueError('World source verification coverage is incomplete')
+            for field in ['maxRadiusErrorMeters', 'maxContactBoundaryErrorMeters']:
+                geometry.validate_number(verification.get(field), field)
+                if verification[field] >= 1:
+                    raise ValueError('World source verification exceeds the publication tolerance')
         for pin in pins:
+            if pin.get('level') != ('state' if region_code else 'country'):
+                raise ValueError('World pin has the wrong administrative level')
             if pin['id'] == 'country-US':
                 expected = next(item for item in json.loads(US_PUBLICATION.read_text(encoding='utf-8'))['pins'] if item['id'] == 'country-US')
                 if pin != expected:
@@ -170,34 +188,34 @@ def validate_artifact(name, payload):
                 raise ValueError('World pin country identity differs from the catalog')
             if pin['id'] not in ([country['id']] if pin['level'] == 'country' else country['regionIds']):
                 raise ValueError('World pin identity differs from its country')
-            if not 0 < pin['radiusMeters'] <= SNAPSHOT['maxRadiusMeters'] or not -85 <= pin['lat'] <= 85:
-                raise ValueError('World pin is outside the supported geographic range')
-            if not isinstance(pin['countryBoundaryAdjusted'], bool):
+            geometry.validate_pin_geometry(pin, SNAPSHOT['maxRadiusMeters'])
+            geometry.validate_number(pin.get('areaKm2'), 'mapped area')
+            geometry.validate_number(pin.get('searchToleranceMeters'), 'search tolerance', maximum=25, positive=True)
+            geometry.validate_number(pin.get('solveSimplificationMeters'), 'working simplification', maximum=20)
+            geometry.validate_name(pin.get('kind'), 'jurisdiction kind')
+            geometry.validate_name(pin.get('code'), 'jurisdiction code', maximum=60)
+            if pin['level'] == 'country' and pin['name'] != country['name']:
+                raise ValueError('Country name differs from the pinned catalog')
+            if not isinstance(pin.get('unnamed'), bool) or not isinstance(pin.get('countryBoundaryAdjusted'), bool):
                 raise ValueError('Missing regional alignment provenance')
-            contacts = pin['boundaryContacts']
-            if not 1 <= len(contacts) <= geometry.MAX_BOUNDARY_CONTACTS:
-                raise ValueError('Invalid world contact coverage')
-            if geometry.GEOD.inv(*contacts[0]['coordinates'], *pin['nearestBoundary'])[2] > 1 or abs(contacts[0]['distanceMeters'] - pin['radiusMeters']) > 1:
-                raise ValueError('World primary contact differs from the nearest boundary')
-            for contact in contacts:
-                lng, lat, _ = geometry.GEOD.fwd(pin['lng'], pin['lat'], contact['bearingDegrees'], contact['distanceMeters'])
-                if geometry.GEOD.inv(lng, lat, *contact['coordinates'])[2] > 1:
-                    raise ValueError('Inconsistent world contact geometry')
-                if abs(contact['distanceMeters'] - pin['radiusMeters']) > min(100, pin['radiusMeters'] * 0.01) + 2:
-                    raise ValueError('World contact is not near the radius')
         return
     if name == 'countries.geojson':
-        expected_ids = {country['id'] for country in countries.values()}
+        owners = {country['id']: (country['code'], 'country') for country in countries.values()}
     elif name.startswith('regions/') and name.endswith('.geojson') and name[8:-8] in foreign:
-        expected_ids = set(foreign[name[8:-8]]['regionIds'])
+        code = name[8:-8]
+        owners = {identifier: (code, 'state') for identifier in foreign[code]['regionIds']}
     else:
         raise ValueError(f'Unsupported world artifact: {name}')
+    expected_ids = set(owners)
     if payload.get('type') != 'FeatureCollection' or len(payload['features']) != len(expected_ids) or {feature['id'] for feature in payload['features']} != expected_ids:
         raise ValueError('Incomplete or duplicate world boundaries')
     for feature in payload['features']:
-        shape_ = shape(feature['geometry'])
-        if feature['id'] != feature['properties']['id'] or shape_.is_empty or not shape_.is_valid:
-            raise ValueError('Invalid world display geometry')
+        properties = feature['properties']
+        if (feature.get('type') != 'Feature' or feature['id'] != properties['id']
+                or (properties.get('countryCode'), properties.get('level')) != owners[feature['id']]):
+            raise ValueError('Invalid world boundary identity')
+        geometry.validate_name(properties.get('name'))
+        geometry.validate_display_geometry(feature['geometry'])
 
 
 def verify_publication(archives, output):

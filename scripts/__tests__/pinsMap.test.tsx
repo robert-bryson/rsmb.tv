@@ -23,6 +23,7 @@ const mocks = vi.hoisted(() => {
             if (MapStub.fail) throw new Error('no WebGL');
             MapStub.instances.push(this);
             this.getContainer = () => options.container;
+            options.container.append(this.canvas);
             this.style = options.style;
         }
         on(name: string, callback: (event: unknown) => void) {
@@ -54,11 +55,12 @@ const mocks = vi.hoisted(() => {
     class PopupStub {
         static instances: PopupStub[] = [];
         content: HTMLElement | null = null;
+        visible = false;
         constructor() { PopupStub.instances.push(this); }
-        remove = vi.fn();
+        remove = vi.fn(() => { this.visible = false; });
         setLngLat() { return this; }
         setDOMContent(content: HTMLElement) { this.content = content; return this; }
-        addTo() { return this; }
+        addTo() { this.visible = true; return this; }
     }
     return { MapStub, PopupStub };
 });
@@ -101,7 +103,11 @@ describe('map lifecycle', () => {
         expect(screen.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'loading');
         act(() => mounted.emit('render'));
         expect(screen.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'ready');
+        const popup = mocks.PopupStub.instances.at(-1)!;
         second.unmount();
+        popup.remove.mockClear();
+        fireEvent.keyDown(document, { key: 'Escape' });
+        expect(popup.remove).not.toHaveBeenCalled();
         expect(mounted.remove).toHaveBeenCalledOnce();
         expect(mounted.handlers.size).toBe(0);
         expect(frames.size).toBe(0);
@@ -158,9 +164,73 @@ describe('map lifecycle', () => {
         expect(screen.queryByRole('alert')).not.toBeInTheDocument();
     });
 
+    it('waits for replacement pin batches and reports a later stalled worker', () => {
+        const current = props();
+        const view = render(<PinsMap {...current} />); flushFrames();
+        act(() => { map().emit('style.load'); map().emit('render'); });
+        expect(screen.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'ready');
+        map().loaded = false;
+        view.rerender(<PinsMap {...current} pins={[colorado]} />);
+        expect(screen.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'loading');
+        act(() => map().emit('sourcedata'));
+        expect(screen.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'loading');
+        map().loaded = true;
+        act(() => map().emit('render'));
+        expect(screen.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'ready');
+        map().loaded = false;
+        view.rerender(<PinsMap {...current} pins={[national]} />);
+        act(() => vi.advanceTimersByTime(POINT_SOURCE_TIMEOUT_MS + 1));
+        expect(screen.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'error');
+        expect(screen.getByRole('button', { name: 'Retry map' })).toBeVisible();
+    });
+
+    it.each(['mouseleave', 'Escape', 'movestart'])('dismisses a hovered pin on %s and can show it again', event => {
+        render(<PinsMap {...props()} />); flushFrames();
+        act(() => map().emit('style.load'));
+        map().features = [{ layer: { id: 'state-pins' }, properties: { id: colorado.id } }];
+        act(() => map().emit('mousemove', { point: { x: 1, y: 1 } }));
+        const popup = mocks.PopupStub.instances.at(-1)!;
+        expect(popup.visible).toBe(true);
+        if (event === 'Escape') {
+            fireEvent.keyDown(document, { key: 'ArrowLeft' });
+            expect(popup.visible).toBe(true);
+            fireEvent.keyDown(document, { key: 'Escape' });
+        }
+        else if (event === 'mouseleave') {
+            fireEvent.mouseLeave(map().canvas);
+            expect(popup.visible).toBe(true);
+            fireEvent.mouseLeave(map().getContainer());
+        }
+        else act(() => map().emit(event));
+        expect(popup.visible).toBe(false);
+        act(() => map().emit('mousemove', { point: { x: 1, y: 1 } }));
+        expect(popup.visible).toBe(true);
+    });
+
+    it('removes stale hover details when the country or units change', () => {
+        const current = props();
+        const view = render(<PinsMap {...current} />); flushFrames();
+        act(() => map().emit('style.load'));
+        map().features = [{ layer: { id: 'state-pins' }, properties: { id: colorado.id } }];
+        act(() => map().emit('mousemove', { point: { x: 1, y: 1 } }));
+        const popup = mocks.PopupStub.instances.at(-1)!;
+        expect(popup.visible).toBe(true);
+        view.rerender(<PinsMap {...current} pins={[national]} />);
+        expect(popup.visible).toBe(false);
+        view.rerender(<PinsMap {...current} />);
+        act(() => map().emit('mousemove', { point: { x: 1, y: 1 } }));
+        expect(popup.visible).toBe(true);
+        view.rerender(<PinsMap {...current} unit="km" />);
+        expect(popup.visible).toBe(false);
+        act(() => map().emit('mousemove', { point: { x: 1, y: 1 } }));
+        expect(popup.content).toHaveTextContent('km');
+    });
+
     it('rebuilds data after a background failure and retries only the background', () => {
         render(<PinsMap {...props()} />); flushFrames();
         act(() => { map().emit('style.load'); map().emit('render'); map().emit('error', { error: { message: 'tile unavailable' } }); });
+        expect(screen.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'loading');
+        act(() => map().emit('render'));
         expect(screen.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'degraded');
         const restored = map().sources.get('pin-points')!;
         expect(restored.setData.mock.calls[0][0].features).toHaveLength(3);
@@ -221,7 +291,7 @@ describe('map lifecycle', () => {
         const container = document.createElement('div');
         expect(() => createPinsRenderer({ container, overlay: document.createElement('div'), previousFullscreen: null,
             getProps: () => props(), getData: () => ({ points: pinPoints([colorado]), circles: empty, selection: empty, radii: empty }),
-            onError: vi.fn(), onBasemapState: vi.fn(), onReady: vi.fn() })).toThrow('canvas failed');
+            onError: vi.fn(), onBasemapState: vi.fn(), onLoading: vi.fn(), onReady: vi.fn() })).toThrow('canvas failed');
         expect(map().remove).toHaveBeenCalledOnce();
     });
 });

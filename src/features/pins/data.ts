@@ -38,7 +38,7 @@ export function usePinsData(showCounties: boolean, enabled = true) {
     return { pins, states, counties };
 }
 
-export function useWorldPinsData(countryCode: string) {
+export function useWorldPinsData(countryCode: string, showRegions = true) {
     const enabled = countryCode !== 'USA';
     const country = WORLD_COUNTRY_LOOKUP.get(countryCode);
     const regional = enabled && !!country && country.regionIds.length > 0;
@@ -47,6 +47,6 @@ export function useWorldPinsData(countryCode: string) {
     const pins = usePinResource('world/pins.json', parseWorldPins, enabled);
     const countries = usePinResource('world/countries.geojson', parseWorldCountries, enabled);
     const regions = usePinResource(`world/regions/${country?.code ?? 'unused'}.json`, parseRegions, regional);
-    const outlines = usePinResource(`world/regions/${country?.code ?? 'unused'}.geojson`, parseOutlines, regional);
+    const outlines = usePinResource(`world/regions/${country?.code ?? 'unused'}.geojson`, parseOutlines, regional && showRegions);
     return { pins, countries, regions, outlines };
 }

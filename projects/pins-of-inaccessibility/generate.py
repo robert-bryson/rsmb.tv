@@ -11,6 +11,7 @@ import math
 import os
 from pathlib import Path
 import platform
+import re
 import shutil
 import tempfile
 import urllib.request
@@ -317,15 +318,127 @@ def write_json(path, payload):
             temporary.unlink(missing_ok=True)
 
 
+def finite_number(value):
+    if not isinstance(value, (int, float)) or isinstance(value, bool):
+        return False
+    try:
+        return math.isfinite(value)
+    except OverflowError:
+        return False
+
+
+def validate_number(value, name, minimum=0, maximum=math.inf, positive=False):
+    if (not finite_number(value) or value < minimum or value > maximum or (positive and value == 0)):
+        raise ValueError(f'Invalid {name}')
+
+
+def validate_name(value, name='geographic name', maximum=200):
+    if not isinstance(value, str) or not 1 <= len(value.strip()) <= maximum:
+        raise ValueError(f'Invalid {name}')
+
+
+def validate_timestamp(value):
+    if not isinstance(value, str) or not re.fullmatch(
+            r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:\d{2})', value):
+        raise ValueError('Invalid publication timestamp')
+    try:
+        datetime.fromisoformat(value)
+    except ValueError as error:
+        raise ValueError('Invalid publication timestamp') from error
+
+
+def validate_position(point):
+    if (not isinstance(point, (list, tuple)) or len(point) != 2
+            or not all(finite_number(value) for value in point)
+            or not -180 <= point[0] <= 180 or not -90 <= point[1] <= 90):
+        raise ValueError('Invalid pin or boundary coordinates')
+
+
+def validate_pin_geometry(pin, maximum_radius):
+    """Apply the shared browser geometry contract before a publication can replace files."""
+    validate_name(pin.get('id'), 'pin ID', maximum=100)
+    validate_name(pin.get('name'))
+    validate_number(pin.get('radiusMeters'), 'pin radius', maximum=maximum_radius, positive=True)
+    contacts = pin.get('boundaryContacts')
+    if (not isinstance(contacts, list) or not 1 <= len(contacts) <= MAX_BOUNDARY_CONTACTS
+            or any(not isinstance(contact, dict) for contact in contacts)):
+        raise ValueError('Invalid boundary contact count')
+    positions = [[pin.get('lng'), pin.get('lat')], pin.get('nearestBoundary'),
+                 *[contact.get('coordinates') for contact in contacts]]
+    for point in positions:
+        validate_position(point)
+    if not -85 <= pin['lat'] <= 85:
+        raise ValueError('Pin is outside the map projection')
+    bounds = pin.get('bounds')
+    if (not isinstance(bounds, (list, tuple)) or len(bounds) != 4
+            or not all(finite_number(value) for value in bounds)
+            or not -180 <= bounds[0] <= 180 or not -180 <= bounds[2] <= 540
+            or not -90 <= bounds[1] < bounds[3] <= 90 or not 0 < bounds[2] - bounds[0] <= 360):
+        raise ValueError('Invalid geographic bounds')
+    west, south, east, north = bounds
+    for lng, lat in positions:
+        wrapped = lng + 360 * round(((west + east) / 2 - lng) / 360)
+        if not west - 0.00002 <= wrapped <= east + 0.00002 or not south - 0.00002 <= lat <= north + 0.00002:
+            raise ValueError('Pin or contact is outside its jurisdiction bounds')
+    for index, contact in enumerate(contacts):
+        validate_number(contact.get('bearingDegrees'), 'contact bearing', minimum=-180, maximum=180)
+        validate_number(contact.get('distanceMeters'), 'contact distance', positive=True)
+        if abs(contact['distanceMeters'] - pin['radiusMeters']) > min(100, pin['radiusMeters'] * 0.01) + 2:
+            raise ValueError('Boundary contact is not near the radius')
+        endpoint = GEOD.fwd(pin['lng'], pin['lat'], contact['bearingDegrees'], contact['distanceMeters'])
+        if GEOD.inv(endpoint[0], endpoint[1], *contact['coordinates'])[2] > 1:
+            raise ValueError('Inconsistent boundary contact geometry')
+        if any(abs((previous['bearingDegrees'] - contact['bearingDegrees'] + 540) % 360 - 180) < 24.99999
+               for previous in contacts[:index]):
+            raise ValueError('Duplicate boundary contact direction')
+    if (GEOD.inv(*contacts[0]['coordinates'], *pin['nearestBoundary'])[2] > 1
+            or abs(contacts[0]['distanceMeters'] - pin['radiusMeters']) > 1):
+        raise ValueError('Primary boundary contact disagrees with the radius')
+
+
+def validate_display_geometry(geometry):
+    """Reject raw GeoJSON that Shapely could silently close or coerce into another type."""
+    if not isinstance(geometry, dict) or geometry.get('type') not in {'Polygon', 'MultiPolygon'}:
+        raise ValueError('Display geometry must be a polygon or multipolygon')
+    coordinates = geometry.get('coordinates')
+    parts = [coordinates] if geometry['type'] == 'Polygon' else coordinates
+    if not isinstance(parts, (list, tuple)) or not parts:
+        raise ValueError('Empty display geometry')
+    for polygon in parts:
+        if not isinstance(polygon, (list, tuple)) or not polygon:
+            raise ValueError('Empty display polygon')
+        for ring in polygon:
+            if not isinstance(ring, (list, tuple)) or len(ring) < 4:
+                raise ValueError('Invalid display ring')
+            for point in ring:
+                validate_position(point)
+            if ring[0] != ring[-1] or any(abs(point[0] - ring[index - 1][0]) > 180 for index, point in enumerate(ring) if index):
+                raise ValueError('Unclosed display ring or unsplit date-line edge')
+            x, y = ring[0]
+            area = sum((ring[index][0] - x) * (point[1] - y) - (point[0] - x) * (ring[index][1] - y)
+                       for index, point in enumerate(ring[1:]))
+            if abs(area) <= 1e-14:
+                raise ValueError('Display ring has no area')
+    converted = shape(geometry)
+    if converted.is_empty or not converted.is_valid:
+        raise ValueError('Invalid display polygon topology')
+
+
 def validate_artifact(name, payload):
     if name == "pins.json":
         metadata, pins = payload["metadata"], payload["pins"]
         expected = {"country": 1, "state": len(SNAPSHOT["countyCounts"]), "county": COUNTY_COUNT}
         if metadata["vintage"] != VINTAGE or metadata["sourceSha256"] != SNAPSHOT["sourceSha256"]:
             raise ValueError("Pin provenance differs from the pinned Census snapshot")
+        validate_timestamp(metadata.get('generatedAt'))
+        for field in ['source', 'method', 'coverage', 'water', 'nationalDefinition']:
+            validate_name(metadata.get(field), field, maximum=2000)
+        validate_number(metadata.get('searchToleranceMeters'), 'search tolerance', positive=True)
+        validate_number(metadata.get('solveSimplificationMeters'), 'working simplification')
         if Counter(pin["level"] for pin in pins) != expected or len({pin["id"] for pin in pins}) != len(pins):
             raise ValueError("Incomplete or duplicate pin coverage")
-        if {key: metadata[f"{key}Count"] for key in expected} != expected:
+        if any(isinstance(metadata.get(f'{key}Count'), bool) or metadata.get(f'{key}Count') != count
+               for key, count in expected.items()):
             raise ValueError("Pin metadata totals do not match coverage")
         if Counter(pin["stateFips"] for pin in pins if pin["level"] == "county") != SNAPSHOT["countyCounts"]:
             raise ValueError("County coverage differs from the pinned Census snapshot")
@@ -335,33 +448,15 @@ def validate_artifact(name, payload):
             if pin["id"] != f"{pin['level']}-{pin['fips']}":
                 raise ValueError("Pin identity differs from its geographic code")
             if pin["level"] == "country":
-                if (pin["fips"], pin["stateFips"], pin["stateAbbr"], pin["kind"]) != ("US", "", "US", "country"):
+                if ((pin["fips"], pin["stateFips"], pin["stateAbbr"], pin["kind"]) != ("US", "", "US", "country")
+                        or pin.get('name') != 'United States'):
                     raise ValueError("Invalid national identity")
             elif (pin["stateFips"] not in SNAPSHOT["countyCounts"] or not pin["fips"].isdigit()
                   or len(pin["fips"]) != (2 if pin["level"] == "state" else 5)
                   or (pin["fips"] != pin["stateFips"] if pin["level"] == "state" else not pin["fips"].startswith(pin["stateFips"]))):
                 raise ValueError("Invalid jurisdiction identity")
-            if not 0 < pin["radiusMeters"] <= SNAPSHOT["maxRadiusMeters"]:
-                raise ValueError("Pin radius is outside the supported U.S. range")
-            contacts = pin["boundaryContacts"]
-            if not 1 <= len(contacts) <= MAX_BOUNDARY_CONTACTS:
-                raise ValueError("Invalid boundary contact count")
-            positions = [[pin["lng"], pin["lat"]], pin["nearestBoundary"], *[contact["coordinates"] for contact in contacts]]
-            if any(len(point) != 2 or not all(isinstance(value, (int, float)) and not isinstance(value, bool)
-                                              and math.isfinite(value) for value in point)
-                   or not -180 <= point[0] <= 180 or not -90 <= point[1] <= 90 for point in positions):
-                raise ValueError("Invalid pin or contact coordinates")
-            if GEOD.inv(*contacts[0]["coordinates"], *pin["nearestBoundary"])[2] > 1 or abs(contacts[0]["distanceMeters"] - pin["radiusMeters"]) > 1:
-                raise ValueError("Primary boundary contact disagrees with the radius")
-            for contact in contacts:
-                if (not math.isfinite(contact["bearingDegrees"]) or not -180 <= contact["bearingDegrees"] <= 180
-                        or not math.isfinite(contact["distanceMeters"]) or contact["distanceMeters"] <= 0):
-                    raise ValueError("Invalid contact bearing or distance")
-                endpoint = GEOD.fwd(pin["lng"], pin["lat"], contact["bearingDegrees"], contact["distanceMeters"])
-                if GEOD.inv(endpoint[0], endpoint[1], *contact["coordinates"])[2] > 1:
-                    raise ValueError("Inconsistent boundary contact geometry")
-                if abs(contact["distanceMeters"] - pin["radiusMeters"]) > min(100, pin["radiusMeters"] * 0.01) + 2:
-                    raise ValueError("Boundary contact is not near the radius")
+            validate_pin_geometry(pin, SNAPSHOT['maxRadiusMeters'])
+            validate_number(pin.get('landAreaKm2'), 'land area')
         return
     if name not in {"states.geojson", "counties.geojson"} or payload.get("type") != "FeatureCollection":
         raise ValueError(f"Unsupported publication artifact: {name}")
@@ -372,15 +467,14 @@ def validate_artifact(name, payload):
         raise ValueError(f"Incomplete or duplicate {level} boundaries")
     for feature in features:
         properties = feature["properties"]
-        if feature["id"] != properties["id"] or feature["id"] != f"{level}-{properties['fips']}":
+        if feature.get('type') != 'Feature' or feature["id"] != properties["id"] or feature["id"] != f"{level}-{properties['fips']}":
             raise ValueError("Boundary identity differs from its geographic code")
+        validate_name(properties.get('name'))
         if (properties["stateFips"] not in SNAPSHOT["countyCounts"] or not properties["fips"].isdigit()
                 or len(properties["fips"]) != (2 if level == "state" else 5)
                 or (properties["fips"] != properties["stateFips"] if level == "state" else not properties["fips"].startswith(properties["stateFips"]))):
             raise ValueError("Boundary state identity is invalid")
-        geometry = shape(feature["geometry"])
-        if geometry.geom_type not in {"Polygon", "MultiPolygon"} or geometry.is_empty or not geometry.is_valid:
-            raise ValueError(f"Invalid display geometry: {feature['id']}")
+        validate_display_geometry(feature['geometry'])
     if level == "county" and Counter(feature["properties"]["stateFips"] for feature in features) != SNAPSHOT["countyCounts"]:
         raise ValueError("Incomplete county boundary coverage")
     if level == "state" and {feature["properties"]["fips"] for feature in features} != set(SNAPSHOT["countyCounts"]):

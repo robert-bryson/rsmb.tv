@@ -58,4 +58,23 @@ describe('country-specific lazy resources', () => {
         await waitFor(() => expect(result.current.regions.data?.pins).toHaveLength(13), { timeout: 10_000 });
         expect(fetch).toHaveBeenCalledTimes(5);
     }, 20_000);
+
+    it('loads outlines only while the province layer is enabled and suppresses a hidden outline error', async () => {
+        let invalid = true;
+        const fetch = vi.fn(async (url: string) => response(invalid && filename(url) === 'world/regions/CAN.geojson' ? {} : artifacts.get(filename(url))));
+        vi.stubGlobal('fetch', fetch);
+        const hook = renderHook(({ visible }) => useWorldPinsData('CAN', visible), { initialProps: { visible: false } });
+        await waitFor(() => expect(hook.result.current.regions.data?.pins).toHaveLength(13), { timeout: 10_000 });
+        expect(fetch).toHaveBeenCalledTimes(3);
+        expect(hook.result.current.outlines.loading).toBe(false);
+        hook.rerender({ visible: true });
+        await waitFor(() => expect(hook.result.current.outlines.error).not.toBeNull(), { timeout: 10_000 });
+        hook.rerender({ visible: false });
+        expect(hook.result.current.outlines.error).toBeNull();
+        expect(hook.result.current.outlines.loading).toBe(false);
+        invalid = false;
+        hook.rerender({ visible: true });
+        await waitFor(() => expect(hook.result.current.outlines.data?.features).toHaveLength(13), { timeout: 10_000 });
+        expect(fetch).toHaveBeenCalledTimes(5);
+    }, 20_000);
 });

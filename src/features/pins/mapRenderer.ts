@@ -19,6 +19,7 @@ interface Options {
     getData: () => PinsMapData;
     onError: (message: string) => void;
     onBasemapState: (state: BasemapState) => void;
+    onLoading: () => void;
     onReady: () => void;
 }
 
@@ -56,10 +57,12 @@ export function createPinsRenderer(options: Options) {
         const startDeadline = () => {
             if (pointsPending) return;
             pointsPending = true;
+            options.onLoading();
             deadline = setTimeout(() => fail('The map could not draw the pins. Retry the map to continue.'), POINT_SOURCE_TIMEOUT_MS);
         };
         cleanups.push(() => clearTimeout(deadline));
-        map.getCanvas().setAttribute('aria-label', 'Interactive map of state, territory, and county pins');
+        const canvas = map.getCanvas();
+        canvas.setAttribute('aria-label', 'Interactive map of country, state, province, territory, and county pins');
         map.addControl(new NavigationControl({ showCompass: false }), 'top-right');
         const target = container.parentElement ?? container;
         const fullscreen = restoreFullscreenControl(target, options.previousFullscreen,
@@ -72,6 +75,25 @@ export function createPinsRenderer(options: Options) {
         cleanups.push(recovery.dispose);
         const labels = attachRadiusLabels(map, overlay);
         cleanups.push(labels.dispose);
+        const popup = new Popup({ closeButton: false, closeOnClick: true, offset: 14 });
+        cleanups.push(() => popup.remove());
+        let hovered = '';
+        let hoverPoints: FeatureCollection | undefined;
+        let hoverUnit: PinsMapProps['unit'] | undefined;
+        const dismissPopup = () => {
+            hovered = '';
+            canvas.style.cursor = '';
+            popup.remove();
+        };
+        const dismissOnEscape = (event: KeyboardEvent) => { if (event.key === 'Escape') dismissPopup(); };
+        container.addEventListener('mouseleave', dismissPopup);
+        document.addEventListener('keydown', dismissOnEscape, true);
+        map.on('movestart', dismissPopup);
+        cleanups.push(() => {
+            container.removeEventListener('mouseleave', dismissPopup);
+            document.removeEventListener('keydown', dismissOnEscape, true);
+            map.off('movestart', dismissPopup);
+        });
         const sent = new Map<string, unknown>();
         let lastViewKey: number | undefined;
         const send = (id: string, data: FeatureCollection | null) => {
@@ -84,6 +106,11 @@ export function createPinsRenderer(options: Options) {
         const sync = () => {
             if (disposed || failed) return;
             const current = getProps(), data = getData();
+            if (hoverPoints !== data.points || hoverUnit !== current.unit) {
+                hoverPoints = data.points;
+                hoverUnit = current.unit;
+                dismissPopup();
+            }
             if (data.points.features.length && sent.get('pin-points') !== data.points) startDeadline();
             if (!map.getLayer('state-pins')) return;
             send('pin-states', current.states);
@@ -113,6 +140,7 @@ export function createPinsRenderer(options: Options) {
         };
         map.on('style.load', () => {
             if (disposed || failed) return;
+            dismissPopup();
             sent.clear();
             installPinLayers(map);
             sync();
@@ -137,15 +165,12 @@ export function createPinsRenderer(options: Options) {
                 if (feature?.properties?.id) { getProps().onSelect(String(feature.properties.id)); return; }
             }
         });
-        const popup = new Popup({ closeButton: false, closeOnClick: true, offset: 14 });
-        cleanups.push(() => popup.remove());
-        let hovered = '';
         map.on('mousemove', event => {
             const current = getProps();
             const layers = ['country-pins', 'state-pins', 'county-pins'].filter(id => map.getLayer(id));
             const feature = layers.length ? map.queryRenderedFeatures(event.point, { layers })[0] : null;
             const id = feature?.properties?.id ? String(feature.properties.id) : null;
-            map.getCanvas().style.cursor = id ? 'pointer' : '';
+            canvas.style.cursor = id ? 'pointer' : '';
             const signature = `${id}:${current.unit}`;
             if (hovered === signature) return;
             hovered = signature;

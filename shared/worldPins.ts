@@ -75,7 +75,7 @@ const worldBoundariesSchema = z.object({
 });
 export type DisplayBoundaries = FeatureCollection<Polygon | MultiPolygon, { id: string; name: string; stateFips?: string; countryCode?: string; level?: string }>;
 
-/** Each country has its own exact province IDs; a swapped file must never enter the cache. */
+/** Validate exact province IDs so a file for another country cannot be used. */
 export function parseWorldBoundaries(value: unknown, countryCode?: string): DisplayBoundaries {
     const country = countryCode ? WORLD_COUNTRY_LOOKUP.get(countryCode) : undefined;
     if (countryCode && (!country || countryCode === 'USA')) throw new Error('Unsupported global boundary country');

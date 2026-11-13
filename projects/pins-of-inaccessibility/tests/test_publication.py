@@ -17,7 +17,7 @@ PUBLIC = generator.ROOT / "public/data/pins-of-inaccessibility"
 
 
 class PublishedArtifactsTests(unittest.TestCase):
-    def test_invalid_pin_coordinates_and_jurisdiction_codes_are_rejected(self):
+    def test_invalid_pin_geometry_metadata_and_jurisdiction_codes_are_rejected(self):
         published = json.loads((PUBLIC / "pins.json").read_text(encoding="utf-8"))
         national = next(index for index, pin in enumerate(published["pins"]) if pin["level"] == "country")
         state = next(index for index, pin in enumerate(published["pins"]) if pin["level"] == "state")
@@ -32,11 +32,34 @@ class PublishedArtifactsTests(unittest.TestCase):
                 publication["pins"][index].update(changed)
                 with self.assertRaises(ValueError):
                     generator.validate_artifact("pins.json", publication)
+        for changed in [{'countryCount': True}, {'generatedAt': 'yesterday'}, {'nationalDefinition': ''},
+                        {'searchToleranceMeters': float('inf')}, {'method': None}]:
+            with self.subTest(metadata=changed):
+                publication = deepcopy(published)
+                publication['metadata'].update(changed)
+                with self.assertRaises(ValueError):
+                    generator.validate_artifact('pins.json', publication)
 
     def test_every_published_artifact_has_complete_coverage_and_valid_geometry(self):
         for name in ["pins.json", "states.geojson", "counties.geojson"]:
             with self.subTest(artifact=name):
                 generator.validate_artifact(name, json.loads((PUBLIC / name).read_text(encoding="utf-8")))
+
+    def test_census_publication_uses_the_same_bounds_contact_and_ring_guards(self):
+        published = json.loads((PUBLIC / 'pins.json').read_text(encoding='utf-8'))
+        for changed in [{'bounds': [0, 1, 0, -1]}, {'bounds': [0, 0, 1, 1]},
+                        {'boundaryContacts': [published['pins'][0]['boundaryContacts'][0]] * 2}]:
+            with self.subTest(changed=changed):
+                data = deepcopy(published)
+                data['pins'][0].update(changed)
+                with self.assertRaises(ValueError):
+                    generator.validate_artifact('pins.json', data)
+        boundaries = json.loads((PUBLIC / 'states.geojson').read_text(encoding='utf-8'))
+        boundaries['features'][0]['geometry'] = {'type': 'Polygon', 'coordinates': [
+            [[0, 0], [1, 0], [1, 1], [0, 1]],
+        ]}
+        with self.assertRaises(ValueError):
+            generator.validate_artifact('states.geojson', boundaries)
 
     def test_narrow_enclave_survives_display_precision_reduction(self):
         # This small fixture reproduces the precision failure found in Weld County.

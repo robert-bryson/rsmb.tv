@@ -1,5 +1,6 @@
 """Check global coverage, source geometry edge cases, and isolated publication paths."""
 
+from copy import deepcopy
 import json
 from pathlib import Path
 import sys
@@ -17,6 +18,72 @@ PUBLIC = world.ROOT / 'public/data/pins-of-inaccessibility/world'
 
 
 class WorldPublicationTests(unittest.TestCase):
+    def test_world_pin_contract_rejects_invalid_numeric_fields_and_bounds(self):
+        published = json.loads((PUBLIC / 'regions/CAN.json').read_text())
+        contact = published['pins'][0]['boundaryContacts'][0]
+        for changed in [
+            {'lng': published['pins'][0]['lng'] + 360}, {'lng': float('nan')}, {'lat': 86},
+            {'bounds': [0, 1, 0, -1]}, {'bounds': [0, 0, 1, 1]}, {'radiusMeters': True},
+            {'areaKm2': -1}, {'areaKm2': 10 ** 500}, {'searchToleranceMeters': 26}, {'solveSimplificationMeters': -1},
+            {'code': ''}, {'kind': ''}, {'name': ''}, {'unnamed': 1},
+            {'level': 'county'},
+            {'boundaryContacts': []}, {'boundaryContacts': [None]},
+            {'boundaryContacts': [{**contact, 'bearingDegrees': 181}]},
+            {'boundaryContacts': [{**contact, 'distanceMeters': float('nan')}]},
+        ]:
+            with self.subTest(changed=changed):
+                data = deepcopy(published)
+                data['pins'][0].update(changed)
+                with self.assertRaises(ValueError):
+                    world.validate_artifact('regions/CAN.json', data)
+
+    def test_world_index_requires_complete_verification_and_source_metadata(self):
+        published = json.loads((PUBLIC / 'pins.json').read_text())
+        for key, value in [('verification', None), ('verification', {}), ('scale', 'wrong'),
+                           ('license', 'wrong'), ('source', 'wrong'), ('generatedAt', 'yesterday'),
+                           ('generatedAt', '2026-11-13T12:00:00'),
+                           ('generatedAt', '2026-11-13 12:00:00+00:00'), ('generatedAt', '2026-11-13T12:00:00+0000'),
+                           ('definition', ''),
+                           ('adjustedRegionCount', True), ('adjustedRegionCount', 0.5)]:
+            with self.subTest(field=key):
+                data = deepcopy(published)
+                data['metadata'][key] = value
+                with self.assertRaises(ValueError):
+                    world.validate_artifact('pins.json', data)
+
+    def test_world_boundaries_reject_nonpolygons_bad_rings_and_wrong_parents(self):
+        published = json.loads((PUBLIC / 'regions/CAN.geojson').read_text())
+        for geometry in [
+            {'type': 'Point', 'coordinates': [0, 0]},
+            {'type': 'Polygon', 'coordinates': [[[0, 0], [1, 0], [1, 1], [0, 1]]]},
+            {'type': 'Polygon', 'coordinates': [[[179, 10], [-179, 10], [-179, 11], [179, 11], [179, 10]]]},
+        ]:
+            with self.subTest(geometry=geometry['type']):
+                data = deepcopy(published)
+                data['features'][0]['geometry'] = geometry
+                with self.assertRaises(ValueError):
+                    world.validate_artifact('regions/CAN.geojson', data)
+        for field, value in [('countryCode', 'AUS'), ('level', 'country')]:
+            with self.subTest(field=field):
+                data = deepcopy(published)
+                data['features'][0]['properties'][field] = value
+                with self.assertRaises(ValueError):
+                    world.validate_artifact('regions/CAN.geojson', data)
+
+    def test_invalid_world_data_cannot_replace_other_published_artifacts(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            output = Path(temporary) / 'world'
+            (output / 'regions').mkdir(parents=True)
+            artifacts = {name: json.loads((PUBLIC / name).read_text())
+                         for name in ['countries.geojson', 'regions/CAN.json']}
+            artifacts['regions/CAN.json']['pins'][0]['bounds'] = [0, 1, 0, -1]
+            for name in artifacts:
+                (output / name).write_text('previous', encoding='utf-8')
+            with self.assertRaises(ValueError):
+                world.geometry.write_publication(output, artifacts, validate=world.validate_artifact)
+            self.assertTrue(all((output / name).read_text() == 'previous' for name in artifacts))
+            self.assertFalse((output.parent / '.world.lock').exists())
+
     def test_regional_coastlines_are_aligned_to_the_country_before_calculation(self):
         country = Polygon([(0, 0), (1, 0), (1, 1), (0, 1)])
         region = Polygon([(0.5, 0.25), (1.5, 0.25), (1.5, 0.75), (0.5, 0.75)])

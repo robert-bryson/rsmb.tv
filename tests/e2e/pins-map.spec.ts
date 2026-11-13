@@ -51,6 +51,27 @@ async function mapColorPixels(page: Page, color: 'amber' | 'teal' | 'circle' | '
     return count;
 }
 
+async function nationalPinPosition(page: Page) {
+    const canvas = page.locator('.maplibregl-canvas');
+    const { data, info } = await sharp(await canvas.screenshot({
+        mask: [page.locator('.pins-map-toolbar'), page.locator('.pins-layers'), page.locator('.pins-map-legend'), page.locator('.pins-unit-control')],
+        maskColor: '#171f26',
+    })).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+    const box = (await canvas.boundingBox())!;
+    let count = 0, sumX = 0, sumY = 0;
+    for (let pixel = 0; pixel < info.width * info.height; pixel++) {
+        const offset = pixel * info.channels;
+        const [r, g, b] = data.subarray(offset, offset + 3);
+        // Separate the bright violet marker from its dimmer radius circle.
+        if (r > 175 && r < 220 && g > 120 && g < 185 && b > 220) {
+            sumX += pixel % info.width; sumY += Math.floor(pixel / info.width); count++;
+        }
+    }
+    expect(count).toBeGreaterThan(30);
+    // Screenshots use device pixels; pointer input uses CSS pixels.
+    return { x: box.x + sumX / count * box.width / info.width, y: box.y + sumY / count * box.height / info.height };
+}
+
 test('reveals distance badges on zoom and keeps selected radii when other circles are hidden', async ({ page }) => {
     const errors = await prepare(page);
     await openMap(page);
@@ -100,24 +121,8 @@ test('draws the national pole, supports map selection, and restores its shared l
     await openMap(page);
     await expect(page.getByRole('region', { name: 'U.S. pole', exact: true })).toContainText('678.2 mi');
     await expect.poll(() => mapColorPixels(page, 'national')).toBeGreaterThan(50);
-    const canvas = page.locator('.maplibregl-canvas');
-    const { data, info } = await sharp(await canvas.screenshot({
-        mask: [page.locator('.pins-map-toolbar'), page.locator('.pins-layers'), page.locator('.pins-map-legend'), page.locator('.pins-unit-control')],
-        maskColor: '#171f26',
-    })).removeAlpha().raw().toBuffer({ resolveWithObject: true });
-    const box = (await canvas.boundingBox())!;
-    let count = 0, sumX = 0, sumY = 0;
-    for (let pixel = 0; pixel < info.width * info.height; pixel++) {
-        const offset = pixel * info.channels;
-        const [r, g, b] = data.subarray(offset, offset + 3);
-        // The bright violet marker is independent of the dimmer circle outline.
-        if (r > 175 && r < 220 && g > 120 && g < 185 && b > 220) {
-            sumX += pixel % info.width; sumY += Math.floor(pixel / info.width); count++;
-        }
-    }
-    expect(count).toBeGreaterThan(30);
-    // Screenshots use device pixels; pointer input uses CSS pixels.
-    await page.mouse.click(box.x + sumX / count * box.width / info.width, box.y + sumY / count * box.height / info.height);
+    const point = await nationalPinPosition(page);
+    await page.mouse.click(point.x, point.y);
     await expect(page).toHaveURL(/pin=country-US/);
     await expect(page.getByRole('region', { name: 'Selected pin' })).toContainText('United States');
     await expect(page.getByRole('region', { name: 'Selected pin' })).toContainText('Internal state borders do not');
@@ -127,6 +132,41 @@ test('draws the national pole, supports map selection, and restores its shared l
     await page.getByRole('region', { name: 'U.S. pole', exact: true }).getByRole('button').click();
     await expect(page.getByLabel('Within', { exact: true })).toHaveValue('');
     await expect(page).toHaveURL(/pin=country-US/);
+    expect(errors).toEqual([]);
+});
+
+test('dismisses hover details without canvas focus and clears them when changing country', async ({ page }) => {
+    const errors = await prepare(page);
+    await openMap(page);
+    const point = await nationalPinPosition(page);
+    await page.mouse.move(point.x, point.y);
+    const tooltip = page.locator('.pins-tooltip');
+    await expect(tooltip).toContainText('United States');
+    await page.keyboard.press('Escape');
+    await expect(tooltip).toHaveCount(0);
+    await page.mouse.move(point.x + 1, point.y);
+    await expect(tooltip).toBeVisible();
+    await page.getByLabel('Country / territory', { exact: true }).selectOption('CAN');
+    await expect(tooltip).toHaveCount(0);
+    await expect(page.locator('.pins-results li')).toHaveCount(13);
+    expect(errors).toEqual([]);
+});
+
+test('a hidden province outline cannot block country pins and reloads when shown', async ({ page }) => {
+    const errors = await prepare(page);
+    let invalid = true;
+    await page.route('**/world/regions/CAN.geojson', route => invalid ? route.fulfill({ json: {} }) : route.continue());
+    await page.goto('/projects/pins-of-inaccessibility/map?country=CAN');
+    await expect(page.getByRole('button', { name: 'Retry boundaries' })).toBeVisible();
+    await expect(page.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'error');
+    await page.getByRole('checkbox', { name: 'States & provinces', exact: true }).uncheck();
+    await expect(page.getByRole('button', { name: 'Retry boundaries' })).toHaveCount(0);
+    await expect(page.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'ready');
+    await expect(page.locator('.pins-results li')).toHaveCount(13);
+    invalid = false;
+    await page.getByRole('checkbox', { name: 'States & provinces', exact: true }).check();
+    await expect(page.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'ready');
+    await expect(page.getByRole('button', { name: 'Retry boundaries' })).toHaveCount(0);
     expect(errors).toEqual([]);
 });
 

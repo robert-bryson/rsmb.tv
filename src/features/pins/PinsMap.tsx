@@ -47,7 +47,8 @@ export function PinsMap(props: PinsMapProps) {
                     container: container.current, overlay: labelOverlay.current,
                     previousFullscreen: fullscreen.current,
                     getProps: () => latest.current, getData: () => datasets.current,
-                    onError: setError, onBasemapState: setBasemapState, onReady: () => setRendered(true),
+                    onError: setError, onBasemapState: setBasemapState,
+                    onLoading: () => setRendered(false), onReady: () => setRendered(true),
                 });
                 fullscreen.current = renderer.current.fullscreen;
             } catch {

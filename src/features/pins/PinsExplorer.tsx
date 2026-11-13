@@ -53,7 +53,7 @@ export default function PinsExplorer() {
     const reducedMotion = useReducedMotion();
     const showCounties = isUS && countiesVisible(countyMode, zoom);
     const resources = usePinsData(showCounties, isUS);
-    const world = useWorldPinsData(countryCode);
+    const world = useWorldPinsData(countryCode, showRegions);
     const metadata = resources.pins.data?.metadata;
     const allPins = useMemo<MapPin[]>(() => isUS ? resources.pins.data?.pins ?? EMPTY_PINS
         : [...world.pins.data?.pins ?? EMPTY_PINS, ...world.regions.data?.pins ?? EMPTY_PINS],

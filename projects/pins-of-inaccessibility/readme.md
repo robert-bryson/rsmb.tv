@@ -60,7 +60,8 @@ The data is [public domain](https://www.naturalearthdata.com/about/terms-of-use/
 The [global snapshot](../../shared/geography/naturalEarthSnapshot.json) pins URLs, checksums, counts, and the excluded polar unit.
 The [identity catalog](../../shared/geography/worldCatalog.json) pins country names, bounds, and every regional ID.
 The generator rejects source drift before publication.
-The browser checks exact coverage and country ownership before caching any file.
+The browser checks exact coverage and country ownership before use.
+It removes a rejected response from the shared cache if that response is still current.
 Global records use Natural Earth and available ISO codes. They do not invent FIPS codes.
 
 The generator reads full [2025 state](https://www2.census.gov/geo/tiger/TIGER2025/STATE/) and [county](https://www2.census.gov/geo/tiger/TIGER2025/COUNTY/) TIGER/Line archives.
@@ -167,6 +168,9 @@ Overview outlines are about 2.5 MiB.
 Canada adds about 10 KiB of pins and 1.4 MiB of province outlines.
 These files load only when needed; the default U.S. view requests no global files.
 Province files are loaded only for the chosen country.
+Province pins supply the rankings even when their map layer is hidden.
+Province outlines load only while that layer is on.
+An outline error does not block the country view while the layer is off.
 A country change cancels the old UI reader and clears data from the previous country.
 The shared cache can still retain a completed response for a later return.
 
@@ -207,6 +211,9 @@ A killed writer can leave this lock behind.
 Check that the process has stopped before removing a stale lock.
 
 The writer stages all selected outputs before replacing any file.
+Both generators use the same coordinate, bounds, contact, and polygon checks.
+They reject nonfinite numbers, invalid map coordinates, duplicate contact directions, open rings, and unsplit date-line edges.
+The world validator also checks the file's administrative level, parent country, and verification metadata.
 Each file replacement is atomic.
 An I/O error or handled interruption restores the previous files.
 This sequence is not one atomic transaction across all three files.
@@ -218,7 +225,8 @@ The normal site build needs no Python environment or Census download.
 Use `--verify-only` for a source comparison after generation.
 It checks every pin, radius, contact, and 72 circle samples for each pin.
 Published radii and contacts must agree with the source within one meter.
-Circle samples use a two-meter inward margin for coordinate rounding.
+U.S. circle samples use a two-meter inward margin for coordinate rounding.
+Global samples use the smaller of two meters and 0.1% of the pin radius.
 This check reuses the source projection method; it does not certify a global geodesic optimum.
 
 ## Interface
@@ -228,6 +236,8 @@ The country selector opens the world view or any covered country.
 Country views rank first-level regions and provide a national pole card.
 A province-layer checkbox controls foreign province markers and outlines.
 The selected pin keeps its circle and spokes when that layer is hidden.
+Hover details close when the pointer leaves the map, the camera moves, or the displayed pins or units change.
+Press Escape to close hover details without changing focus.
 Foreign selected cards label area as mapped area.
 They show source scale and flag especially small or unnamed source units.
 The violet marker identifies the national pole.
@@ -277,6 +287,7 @@ Its retry action reloads only the background.
 
 Renderer errors show **Retry map**.
 A 15-second deadline also detects pins that never finish rendering.
+Each replacement pin batch must finish loading in the renderer before the map reports ready again.
 Background changes do not restart an existing pin deadline.
 The data panel remains usable during a renderer failure.
 A retry restores current layers, selection, camera request, and fullscreen controls.
@@ -341,6 +352,7 @@ Install browser system libraries as described in the [repository guide](../../RE
 Python tests check analytic radii, dissolved borders, enclaves, islands, and date-line geometry.
 They also check every published outline, source checksums, failed writes, rollback, and writer locks.
 Global checks also cover the 514 country and regional artifacts, tiny units, and equatorial component bounds.
+Corruption tests also check world metadata, administrative levels, bounds, raw polygon rings, and rollback before replacement.
 CI installs the pinned Python packages and runs these tests without a Census download.
 
 Interface tests check loading, retries, rankings, scope, preferences, cleanup, deadlines, and badge placement.
@@ -348,4 +360,4 @@ Browser tests use the real renderer and published geographic files.
 They replace remote tiles and glyph responses with fixed responses.
 They check rendered pixels, fullscreen retry, stalled workers, county loading, selection, accessible controls, and mobile layout.
 
-See the [November 12 review](../../docs/reviews/2026-11-12-pins-quality-review.md) for measured coverage and remaining limits.
+See the [November 13 review](../../docs/reviews/2026-11-13-pins-review.md) for current coverage, confirmed fixes, and remaining limits.

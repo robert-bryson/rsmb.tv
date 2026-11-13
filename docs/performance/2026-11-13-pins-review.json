@@ -1,0 +1,214 @@
+{
+  "date": "2026-11-13",
+  "baselineCommit": "703cd00",
+  "scope": [
+    "Pins explorer and renderer",
+    "Country-specific resources",
+    "Python Census and global publication validation",
+    "Recent dependency integration"
+  ],
+  "findings": [
+    {
+      "priority": "P2",
+      "issue": "World publication validation admitted browser-incompatible data",
+      "fixed": true
+    },
+    {
+      "priority": "P2",
+      "issue": "Replacement pin batches retained the first batch ready flag",
+      "fixed": true
+    },
+    {
+      "priority": "P2",
+      "issue": "Hidden province outlines could block country pins",
+      "fixed": true
+    },
+    {
+      "priority": "P2",
+      "issue": "Hover details survived scope changes and had no Escape dismissal",
+      "fixed": true
+    }
+  ],
+  "publicationCounterexamples": [
+    {
+      "case": "longitude outside the normalized range",
+      "artifact": "regions/CAN.json",
+      "before": "accepted",
+      "after": "rejected"
+    },
+    {
+      "case": "inverted bounds",
+      "artifact": "regions/CAN.json",
+      "before": "accepted",
+      "after": "rejected"
+    },
+    {
+      "case": "negative mapped area",
+      "artifact": "regions/CAN.json",
+      "before": "accepted",
+      "after": "rejected"
+    },
+    {
+      "case": "point geometry in a polygon file",
+      "artifact": "regions/CAN.geojson",
+      "before": "accepted",
+      "after": "rejected"
+    },
+    {
+      "case": "missing source verification",
+      "artifact": "pins.json",
+      "before": "accepted",
+      "after": "rejected"
+    }
+  ],
+  "validation": {
+    "javascriptTests": 3105,
+    "javascriptFiles": 215,
+    "focusedTests": 67,
+    "pinsPythonTests": 30,
+    "temperaturePythonTests": 18,
+    "chromiumBrowserScenarios": 15,
+    "webkitBrowserScenarios": 15,
+    "browserFailures": 0,
+    "lint": "passed",
+    "typecheck": "passed",
+    "viteBuild": "passed"
+  },
+  "coverage": {
+    "scope": [
+      "src/features/pins/**",
+      "shared/pins.ts",
+      "shared/pinGeometry.ts",
+      "shared/worldPins.ts",
+      "shared/geography/geodesy.ts"
+    ],
+    "before": {
+      "lines": {
+        "total": 645,
+        "covered": 639,
+        "skipped": 0,
+        "pct": 99.06
+      },
+      "statements": {
+        "total": 862,
+        "covered": 832,
+        "skipped": 0,
+        "pct": 96.51
+      },
+      "functions": {
+        "total": 217,
+        "covered": 211,
+        "skipped": 0,
+        "pct": 97.23
+      },
+      "branches": {
+        "total": 729,
+        "covered": 678,
+        "skipped": 0,
+        "pct": 93
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "after": {
+      "lines": {
+        "total": 664,
+        "covered": 659,
+        "skipped": 0,
+        "pct": 99.24
+      },
+      "statements": {
+        "total": 884,
+        "covered": 856,
+        "skipped": 0,
+        "pct": 96.83
+      },
+      "functions": {
+        "total": 221,
+        "covered": 216,
+        "skipped": 0,
+        "pct": 97.73
+      },
+      "branches": {
+        "total": 738,
+        "covered": 690,
+        "skipped": 0,
+        "pct": 93.49
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "sourceChecks": {
+    "us": {
+      "checked": 3292,
+      "circleSamples": 237024,
+      "maxRadiusErrorMeters": 0.6736075807639281,
+      "maxContactBoundaryErrorMeters": 0.7361473459749076
+    },
+    "addedGlobal": {
+      "checked": 4799,
+      "circleSamples": 345528,
+      "maxRadiusErrorMeters": 0.00113475901162019,
+      "maxContactBoundaryErrorMeters": 0.0007705183962984304,
+      "regionsInsideParent": 4543,
+      "adjustedRegionCount": 1852,
+      "maxRegionalRadiusExcessMeters": 4.454000000000633
+    },
+    "distinctPins": 8091,
+    "circleSamples": 582552,
+    "publishedDataChanged": false,
+    "note": "Source consistency uses the existing projection method; this is not an independent geodesic optimum proof."
+  },
+  "security": {
+    "npmAdvisories": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "pythonPackagesAudited": 30,
+    "pythonAdvisories": 0,
+    "pythonSkippedPackages": [],
+    "configuredCredentialsInStagedFiles": 0
+  },
+  "runtime": {
+    "node": "24.22.3",
+    "npm": "12.2.2"
+  },
+  "fingerprints": {
+    "TODO.md": "b63e47345259305885cc6663404041116bf3638bde3867b9b05ef45e38d62e8f",
+    "docs/README.md": "979e5542f2c6c1ee3a7594328f48564cabf7371d9c1335398ebd944a77d956b7",
+    "docs/reviews/2026-11-13-pins-review.md": "1242097f348eb6a3855cc78f7359771e27ea6f6e5d32f3d2780c25ef7281da9c",
+    "docs/shared-modules.md": "950f2972ee0d57b0789ac609876df5c60e68f1d90e2ecf7876af3401adcca444",
+    "projects/pins-of-inaccessibility/generate.py": "b8ab1005caf81c6d38076f9513c89e97383d8ce2b9c83961e6b9e5b43bdb4145",
+    "projects/pins-of-inaccessibility/generate_world.py": "1854c149ef030d790d2c04405f663d87d91a3911eead5e5da0e7085a14c66871",
+    "projects/pins-of-inaccessibility/readme.md": "3c1b62d20b426c063e49fbd1fc6ba830a6e594b064a5458584208f78705b122a",
+    "projects/pins-of-inaccessibility/tests/test_publication.py": "528c70be50411f0b0a51d9e0183bcaf2a81848bdb25df131bdf116c9df9afc73",
+    "projects/pins-of-inaccessibility/tests/test_world.py": "cf8ff01c2f085f83ab521fda9d7bf0ce5c53d8d6b7bad5a148b04b4d96b83af0",
+    "scripts/__tests__/pinsExplorer.test.tsx": "6dfcb39d443c25c8949e91de9879a49c210cea6de6c7fe9b666057761572050b",
+    "scripts/__tests__/pinsMap.test.tsx": "eed135b80cea3f64e22fb579cc93e3bb85b6380afecdf25e3601cda170945fb3",
+    "scripts/__tests__/worldPinsResources.test.tsx": "a5d445b3036de954ab2250e4a2a9f9d6d791e4f1e7e1e4f471d046ee588afcf0",
+    "shared/worldPins.ts": "e83d6f0ebf6ebf0a1473e3eb2994640de25dccab81f84f9b8a88d084d6b8e108",
+    "src/features/pins/PinsExplorer.tsx": "43bd315f83747f8f7135df65c1d355b16622615a23fd91a33386a5e7f67fe0ec",
+    "src/features/pins/PinsMap.tsx": "c0bc91fd2e8e4e03564713cd4999bce80043ca1802fc5cccfc2ae4ca86081e06",
+    "src/features/pins/data.ts": "757d409bdfa9c4db5761fa7f1c68ddaf5d6d67aedb05034d49d9af91ae780e83",
+    "src/features/pins/mapRenderer.ts": "681076b747374de46739e04acf7df67e6b7badca99f91875ff463136ddb22505",
+    "tests/e2e/pins-map.spec.ts": "68a9a24da99c4802f51df001a0a6dac008a99c69f1d0d26cd5af96249a499c03"
+  },
+  "limits": [
+    "Natural Earth generalization and mixed administrative dates and levels remain.",
+    "Hosted origin, physical-device, and assistive-technology checks remain open.",
+    "Package advisories do not certify absence of security defects."
+  ]
+}

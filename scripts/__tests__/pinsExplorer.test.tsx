@@ -14,6 +14,7 @@ vi.mock('../../src/features/pins/PinsMap', () => ({ PinsMap: (props: PinsMapProp
     <button onClick={() => props.onSelect('unknown')}>Select unknown map feature</button>
     <button onClick={() => props.onZoom(6)}>Set county zoom</button>
     <output aria-label="Map view bounds">{props.view?.bounds.join(',')}</output>
+    <output aria-label="Map resource state">{props.dataState}</output>
 </div> }));
 vi.mock('../../src/components/IntentLink', () => ({ IntentLink: ({ to, children, ...props }: { to: string; children: React.ReactNode }) => <a href={to} {...props}>{children}</a> }));
 
@@ -78,7 +79,25 @@ describe('pin explorer behavior', () => {
         view.unmount();
         open('?country=../../private');
         expect(screen.getByLabelText('Country / territory')).toHaveValue('USA');
-        expect(useWorldPinsData).toHaveBeenLastCalledWith('USA');
+        expect(useWorldPinsData).toHaveBeenLastCalledWith('USA', true);
+    });
+
+    it('keeps a failed hidden province outline from blocking country pins and retries on demand', () => {
+        const retry = vi.fn();
+        vi.mocked(useWorldPinsData).mockImplementation((_code, visible = true) => ({
+            pins: resource(worldCountries), countries: resource(worldOutlines), regions: resource(canada),
+            outlines: { ...resource(null, visible ? 'failed' : null), retry },
+        }));
+        open('?country=CAN');
+        expect(screen.getByLabelText('Map resource state')).toHaveTextContent('error');
+        fireEvent.click(screen.getByRole('checkbox', { name: 'States & provinces', exact: true }));
+        expect(useWorldPinsData).toHaveBeenLastCalledWith('CAN', false);
+        expect(screen.getByLabelText('Map resource state')).toHaveTextContent('ready');
+        expect(screen.queryByRole('button', { name: 'Retry boundaries' })).not.toBeInTheDocument();
+        expect(rows()).toHaveLength(13);
+        fireEvent.click(screen.getByRole('checkbox', { name: 'States & provinces', exact: true }));
+        fireEvent.click(screen.getByRole('button', { name: 'Retry boundaries' }));
+        expect(retry).toHaveBeenCalledOnce();
     });
     it('paginates rankings, filters by scope and search, and changes sort order', () => {
         open();
