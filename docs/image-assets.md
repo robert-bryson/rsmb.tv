@@ -29,13 +29,13 @@ Use a fresh browser context, reduced motion, and a device scale factor of one.
 
 | File in `public/images/pins-of-inaccessibility/` | Map view | Viewport |
 | --- | --- | --- |
-| `overview.webp` | Default U.S. overview with the explorer open | 1440 × 960 |
+| `overview.webp` | Default U.S. overview with the explorer and layer dock open | 1440 × 960 |
 | `radius-detail.webp` | `?pin=county-51610`, with the explorer hidden and one zoom step out | 1280 × 720 |
 | `canada.webp` | `?country=CAN`, with the explorer open | 1440 × 960 |
 
 Use `/projects/pins-of-inaccessibility/map` for these views.
 Wait for pins, boundaries, background tiles, and fonts to finish loading.
-Collapse **Map layers** before each capture.
+Open **Map layers** for the overview. Collapse the dock for the other captures.
 Keep provider attribution visible.
 Check that the location trail and parent action are readable.
 The county view must show selected distances and muted surrounding pins.

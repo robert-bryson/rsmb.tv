@@ -38,6 +38,7 @@ export const projects: Project[] = [
     year: 2026,
     lastUpdated: '2026-11-13',
     changelog: [{ date: '2026-11', notes: [
+      'Docked map layer controls below the canvas so settings do not cover the map',
       'Added parent navigation, location trails, shared state views, and browser history',
       'Added muted, selectable context pins and peer-circle outlines',
       'Added terrain elevation, nearby-place details, and external map links for selected pins',

@@ -21,7 +21,7 @@ export default function PinsOfInaccessibilityAbout() {
         <ProjectScreenshotGallery screenshots={[{
             src: '/images/pins-of-inaccessibility/overview.webp', width: 1440, height: 960, loading: 'eager',
             alt: 'U.S. interior pins and radius circles with the World and United States location trail',
-            caption: 'Start with the U.S. overview, compare state radii, and use the location trail to return to the world.',
+            caption: 'Display controls stay below the map. Compare state radii, then use the location trail to return to the world.',
         }, {
             src: '/images/pins-of-inaccessibility/radius-detail.webp', width: 1280, height: 720, loading: 'lazy',
             alt: 'Selected Falls Church city pin, radius distances, and a location trail through Virginia to the world',

@@ -353,6 +353,9 @@ U.S. state views retain neighboring state markers and omit counties outside the 
 On touch screens, marker picking uses an expanded area of about 44 by 44 CSS pixels.
 The closest marker wins when these areas overlap.
 The layer controls start collapsed on phones and short screens.
+They sit in a dock along the bottom edge of the map.
+Opening the controls resizes the canvas above them and keeps map content clear.
+The dock remains available in fullscreen mode.
 The location trail and parent action remain visible.
 Short landscape screens place the explorer beside the map.
 Camera framing keeps a selected point below controls when they cover the map center.
@@ -431,6 +434,7 @@ Local and preview hosts do not send analytics.
 | `src/features/pins/PinsExplorer.tsx` | Search, scope, rankings, preferences, and URL selection |
 | `src/features/pins/navigation.ts` | Geographic parents, shared scopes, ranking transitions, and location paths |
 | `src/features/pins/PinsNavigation.tsx` | Location trail, parent action, and view announcements |
+| `src/features/pins/PinsLayerControls.tsx` | Docked layer controls and their disclosure state |
 | `src/features/pins/presentation.ts` | Visible context, muted pins, and peer-circle selection |
 | `src/features/pins/PinsMap.tsx` | React state and renderer lifetime |
 | `src/features/pins/mapRenderer.ts` | Map events, data updates, deadlines, and cleanup |

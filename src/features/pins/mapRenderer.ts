@@ -67,7 +67,7 @@ export function createPinsRenderer(options: Options) {
         const canvas = map.getCanvas();
         canvas.setAttribute('aria-label', 'Interactive globe of country, state, province, territory, and county pins');
         map.addControl(new NavigationControl({ showCompass: false }), 'top-right');
-        const target = container.parentElement ?? container;
+        const target = container.closest<HTMLElement>('.pins-map-area') ?? container.parentElement ?? container;
         const fullscreen = restoreFullscreenControl(target, options.previousFullscreen,
             element => new ResilientFullscreenControl({ container: element }));
         map.addControl(fullscreen, 'top-right');

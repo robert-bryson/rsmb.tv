@@ -169,6 +169,39 @@ test('restores county, state, and country views through parent navigation and br
     expect(errors).toEqual([]);
 });
 
+for (const width of [320, 1280]) {
+    test(`docks map layers below the canvas and preserves the view at ${width}px`, async ({ page }) => {
+        const errors = await prepare(page);
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto('/projects/pins-of-inaccessibility/map?pin=county-51610');
+        await expectMapReady(page);
+        const layers = page.locator('.pins-layers'), summary = layers.locator('summary');
+        if (await layers.evaluate(element => (element as HTMLDetailsElement).open)) await summary.click();
+        const area = (await page.getByRole('region', { name: 'Geographic map', exact: true }).boundingBox())!;
+        const canvas = page.locator('.maplibregl-canvas');
+        const before = (await canvas.boundingBox())!;
+        await summary.focus();
+        await summary.press('Enter');
+        await expect(page.getByRole('checkbox', { name: 'All radius circles' })).toBeVisible();
+        await expect.poll(async () => (await canvas.boundingBox())!.height).toBeLessThan(before.height);
+        const dock = (await layers.boundingBox())!, map = (await canvas.boundingBox())!;
+        expect(Math.abs(dock.x - area.x)).toBeLessThanOrEqual(1);
+        expect(Math.abs(dock.width - area.width)).toBeLessThanOrEqual(1);
+        expect(Math.abs(dock.y + dock.height - area.y - area.height)).toBeLessThanOrEqual(1);
+        expect(map.y + map.height).toBeLessThanOrEqual(dock.y + 1);
+        expect(map.height).toBeGreaterThan(100);
+        await page.getByRole('checkbox', { name: 'All radius circles' }).uncheck();
+        await expect(page).toHaveURL(/pin=county-51610/);
+        expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+        await page.screenshot({ path: `/tmp/pins-layer-dock-${width}.png` });
+        await summary.focus();
+        await summary.press('Space');
+        await expect(page.getByRole('checkbox', { name: 'All radius circles' })).toBeHidden();
+        await expect.poll(async () => Math.abs((await canvas.boundingBox())!.height - before.height)).toBeLessThanOrEqual(1);
+        expect(errors).toEqual([]);
+    });
+}
+
 test.describe('touch hierarchy', () => {
     test.use({ viewport: { width: 320, height: 844 }, hasTouch: true });
 
@@ -261,6 +294,8 @@ test('reveals distance badges on zoom and keeps selected radii when other circle
     await openMap(page);
     const badges = page.locator('[data-pin-radius-label]');
     await expect(badges).toHaveCount(0);
+    // The dock changes the available canvas height and its initial overview zoom.
+    await page.getByRole('button', { name: 'Zoom in', exact: true }).click();
     await page.getByRole('button', { name: 'Zoom in', exact: true }).click();
     const national = page.locator('[data-pin-radius-label="country-US"]');
     await expect.poll(() => national.count()).toBeGreaterThan(1);
@@ -271,6 +306,8 @@ test('reveals distance badges on zoom and keeps selected radii when other circle
     await expect(badges).toHaveCount(0);
     await page.getByRole('checkbox', { name: 'All radius circles' }).check();
     await page.getByLabel('Within', { exact: true }).selectOption('08');
+    await expectMapReady(page);
+    await page.getByRole('button', { name: 'Zoom in', exact: true }).click();
     const colorado = page.locator('[data-pin-radius-label="state-08"]');
     await expect.poll(() => colorado.count()).toBeGreaterThan(1);
     await expect(page.locator('.pins-radius-label.is-selected')).toHaveCount(0);
@@ -467,6 +504,13 @@ test('keeps fullscreen controls correct after graphics loss and renderer retry',
     await page.getByRole('button', { name: 'Enter fullscreen', exact: true }).click();
     await expect.poll(() => page.evaluate(() => !!document.fullscreenElement
         || !!document.querySelector('.maplibregl-pseudo-fullscreen'))).toBe(true);
+    await expect.poll(() => page.evaluate(() => {
+        const fullscreen = document.fullscreenElement ?? document.querySelector('.maplibregl-pseudo-fullscreen');
+        return fullscreen?.contains(document.querySelector('.pins-layers')) ?? false;
+    })).toBe(true);
+    await expect(page.getByRole('checkbox', { name: 'All radius circles' })).toBeVisible();
+    await page.getByRole('checkbox', { name: 'All radius circles' }).uncheck();
+    await page.getByRole('checkbox', { name: 'All radius circles' }).check();
     await page.locator('.maplibregl-canvas').evaluate(canvas => canvas.dispatchEvent(new Event('webglcontextlost')));
     await page.getByRole('button', { name: 'Retry map', exact: true }).click();
     await expectMapReady(page);
