@@ -11,7 +11,7 @@ export default function PinsOfInaccessibilityAbout() {
     const project = projects.find(project => project.slug === 'pins-of-inaccessibility')!;
     return <div>
         <ProjectPageHeader title={project.title} stack="React + MapLibre GL · Natural Earth + Census TIGER/Line · Python"
-            description={<>How far can you get from every edge of a place? A pole of inaccessibility is the point with the greatest distance to its nearest boundary. Explore country and province poles worldwide, with detailed U.S. state, territory, and county data.</>}
+            description={project.description}
             actions={[
                 { label: 'Open interactive map →', href: project.demoUrl!, variant: 'primary' },
                 { label: 'Source on GitHub →', href: project.sourceUrl!, external: true },
@@ -20,18 +20,19 @@ export default function PinsOfInaccessibilityAbout() {
             ]} />
         <ProjectScreenshotGallery screenshots={[{
             src: '/images/pins-of-inaccessibility/overview.webp', width: 1440, height: 960, loading: 'eager',
-            alt: 'Map of the national U.S. pole in violet and state interior pins with amber radius circles',
-            caption: 'The U.S. overview compares the national and state pins and their distances to a nearest administrative boundary.',
+            alt: 'U.S. interior pins and radius circles with the World and United States location trail',
+            caption: 'Start with the U.S. overview, compare state radii, and use the location trail to return to the world.',
         }, {
             src: '/images/pins-of-inaccessibility/radius-detail.webp', width: 1280, height: 720, loading: 'lazy',
-            alt: 'Colorado interior pin with two dashed radius lines and distance badges at the nearest state boundaries',
-            caption: 'Zoomed radius details connect the pin to nearby boundary contacts and label each measured distance.',
+            alt: 'Selected Falls Church city pin, radius distances, and a location trail through Virginia to the world',
+            caption: 'Select a county to inspect its boundary distances. Other pins remain selectable in gray, and Up one level returns to its state.',
         }, {
             src: '/images/pins-of-inaccessibility/canada.webp', width: 1440, height: 960, loading: 'lazy',
-            alt: 'Canada country pole and thirteen province and territory pins on a dark world map',
-            caption: 'Choose a country to compare its national pole with state, province, and regional pins. Canada includes thirteen source regions.',
+            alt: 'Canada country pole and thirteen province and territory pins with parent navigation',
+            caption: 'Canada’s thirteen provinces and territories load together. Select a province for its details, or move up to the world.',
         }]} />
         <h2 className="mb-3 text-lg font-medium text-zinc-100">Explore the interior</h2>
+        <p className="mb-4 text-sm leading-relaxed text-zinc-400">A pole of inaccessibility is the point farthest from the nearest boundary. Its radius circle reaches the closest boundary contacts.</p>
         <ul className="mb-7 list-inside list-disc space-y-2 text-sm leading-relaxed text-zinc-400">
             <li>A national U.S. pole with a distinct violet pin, radius circle, and zoom shortcut.</li>
             <li>Country and territory poles worldwide, with states, provinces, departments, and other source regions.</li>
@@ -42,7 +43,7 @@ export default function PinsOfInaccessibilityAbout() {
             <li>County pins appear automatically at zoom level 6. Switch the layer off or keep it on at every zoom.</li>
             <li>Search by name, state abbreviation, or FIPS code. Compare the largest and smallest radii, then click to zoom.</li>
             <li>Use miles or kilometers. Copy the address of a selected pin to share it.</li>
-            <li>Each selected pin includes approximate terrain elevation, a straight-line distance to the nearest listed town, and Google Maps and OpenStreetMap links.</li>
+            <li>Selected pins link to Google Maps and OpenStreetMap. Available location data adds approximate terrain elevation and the straight-line distance to the nearest listed town.</li>
             <li>Click outside a selection or use Up one level to return to its parent geography. Use the World trail button for the globe.</li>
             <li>Other pins stay selectable in muted colors. Peer circles become quiet outlines while the selected pin shows its distances.</li>
         </ul>

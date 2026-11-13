@@ -6,7 +6,7 @@ A personal website with software projects, data maps, writing, and motorcycle tr
 
 ## Features
 
-- **[Pins of Inaccessibility](projects/pins-of-inaccessibility/readme.md)** — Explore country poles, states and provinces worldwide, U.S. counties, radius circles, and geographic rankings.
+- **[Pins of Inaccessibility](projects/pins-of-inaccessibility/readme.md)** — Explore global interior pins, compare boundary distances, and navigate from local regions to the world.
 - **[ADV Atlas](docs/trips/ADV-ATLAS.md)** — Explore motorcycle journeys on a map, browse trip photographs, and open the full reports.
 - **Flights** — A globe with flight routes, filters, camera controls, and travel statistics.
 - **Temperature Records** — An interactive MapLibre GL map of U.S. temperature records. It shows recent station records, standing county and state extremes, and standing-record history.

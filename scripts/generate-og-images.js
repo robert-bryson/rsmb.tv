@@ -23,7 +23,7 @@ export const DEFAULT_PAGES = [
     { slug: 'trips', title: 'Trips', subtitle: 'Motorcycle journeys told through photographs, routes, and field notes' },
     { slug: 'projects', title: 'Projects', subtitle: 'Interactive data visualizations, geospatial tools, and more' },
     { slug: 'adv-atlas', title: 'ADV Atlas', subtitle: 'Motorcycle journeys through route maps, photographs, and trip reports' },
-    { slug: 'pins-of-inaccessibility', title: 'Pins of Inaccessibility', subtitle: 'Country poles and province pins worldwide, with detailed U.S. counties' },
+    { slug: 'pins-of-inaccessibility', title: 'Pins of Inaccessibility', subtitle: 'Explore global interior pins, compare boundary distances, and follow each place back to the world' },
     { slug: 'through-routes', title: 'Through Routes', subtitle: 'Find scenic, twisty motorcycle loop routes on rural roads' },
     { slug: 'flights', title: 'Flights', subtitle: 'Interactive 3D globe visualization of flights around the world' },
     { slug: 'anki-artisan', title: 'Anki Artisan', subtitle: 'Generate Anki flashcard decks from iNaturalist and eBird data' },

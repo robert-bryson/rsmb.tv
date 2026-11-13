@@ -46,7 +46,7 @@ for (const width of [390, 1280]) {
 }
 
 for (const width of [320, 1280]) {
-    for (const slug of ['flights', 'temperature-records', 'tornado-tracks']) {
+    for (const slug of ['pins-of-inaccessibility', 'flights', 'temperature-records', 'tornado-tracks']) {
         test(`${slug} shared gallery loads without overflow at ${width}px`, async ({ page }) => {
             await page.setViewportSize({ width, height: 900 });
             await page.goto(`/projects/${slug}`);

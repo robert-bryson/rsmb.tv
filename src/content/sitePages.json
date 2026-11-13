@@ -27,13 +27,13 @@
   },
   "/projects/pins-of-inaccessibility": {
     "title": "Pins of Inaccessibility",
-    "description": "Explore poles of inaccessibility for countries, territories, states, and provinces worldwide, plus detailed U.S. counties, with radius circles and geographic rankings.",
+    "description": "Explore global interior pins and detailed U.S. counties on a 3D globe. Compare boundary distances, navigate geographic levels, and view terrain and nearby places.",
     "image": "/og/pins-of-inaccessibility.png",
     "operatingSystem": "Web"
   },
   "/projects/pins-of-inaccessibility/map": {
     "title": "Pins of Inaccessibility",
-    "description": "Map country and province poles of inaccessibility worldwide. Search places, compare radius circles and boundary distances, and explore detailed U.S. state and county pins.",
+    "description": "Search country, province, and U.S. county interior pins. Compare radius circles, select a pin for location details, and move up through geographic levels.",
     "image": "/og/pins-of-inaccessibility.png"
   },
   "/projects/through-routes": {

@@ -11,10 +11,12 @@ import Route2Gpx from '../pages/Route2Gpx';
 import Aborg from '../pages/Aborg';
 import Parc from '../pages/Parc';
 import StatusDashboard from '../pages/StatusDashboard';
+import PinsOfInaccessibilityAbout from '../pages/PinsOfInaccessibilityAbout';
 import { renderWithRouter } from './helpers/router';
 
 describe('shared project galleries', () => {
     it.each([
+        { Page: PinsOfInaccessibilityAbout, path: '/projects/pins-of-inaccessibility', dimensions: [[1440, 960], [1280, 720], [1440, 960]] },
         { Page: FlightsAbout, path: '/projects/flights', dimensions: [[1852, 1385], [1853, 1389], [1860, 1390]] },
         { Page: TemperatureRecordsAbout, path: '/projects/temperature-records', dimensions: [[1633, 973], [1624, 967], [1628, 968]] },
         { Page: TornadoTracksAbout, path: '/projects/tornado-tracks', dimensions: [[1440, 1082], [1440, 1080], [1440, 1079]] },
