@@ -50,7 +50,7 @@ Use these Google Docs styles:
 
 | Content | Google Docs style | Site result |
 | --- | --- | --- |
-| Chapter | Heading 2 | Section heading and table-of-contents link |
+| Chapter | Heading 2 | Sticky chapter heading and table-of-contents link |
 | Section in a chapter | Heading 3 | Section heading and table-of-contents link |
 | Distance or other supporting text | Subtitle | Small gray paragraph below the heading |
 | Story text | Normal text | Body paragraph |
@@ -60,6 +60,11 @@ Place a subtitle directly after its heading. Subtitles have no heading ID or tab
 The importer retains inline emphasis and links in subtitles.
 Do not use a heading style for distance text such as `(339 mi. / 545 km.)`.
 The table of contents starts expanded. Readers can select **Collapse** to hide its links.
+
+Chapter headings stay at the top while the reader scrolls through each chapter.
+The next chapter pushes the previous heading out of view.
+Subsections scroll with the text. The story title does not stay at the top.
+If the body contains level-one headings, those headings define the chapters instead.
 
 The site creates the story title from the Sheet. Do not repeat that title in the document body.
 The Google Docs Title style becomes a level-one heading if you include it in the body.
@@ -219,10 +224,9 @@ Each photo needs a nonempty alt description. The manifest parser removes spaces 
 Do not repeat the caption in the alt text.
 Long words and URLs wrap inside the caption for both single photos and galleries.
 
-A single portrait photo stays within the text column.
-A single landscape or square photo uses the wider media area.
+A single photo stays within the text column, regardless of its orientation.
 The panorama shortcode uses the full page width for any photo orientation.
-All three layouts retain the photo's proportions and reserve its height after an image failure.
+Both layouts retain the photo's proportions and reserve its height after an image failure.
 
 ### Route output
 
@@ -442,8 +446,8 @@ A leading portrait can span two rows beside landscapes when the proportions fit.
 These spanning patterns require a precise pointer and a screen width of at least 640 pixels.
 Touch captions remain below their photos in separate rows.
 Panoramas with an aspect ratio of at least `2.5:1` receive a complete row.
-A gallery with one portrait stays within the text body.
-A single landscape retains the wider media width.
+A gallery with one photo stays within the text column, regardless of its orientation.
+Galleries with multiple photos use the wider media area.
 The layout preserves the manifest order.
 Hover and keyboard focus reveal captions without enlarging or cropping photos.
 The frame edge does not reduce the image area.

@@ -38,7 +38,7 @@ export function TripGalleriesFixture() {
     return <main className="site-content w-full">
         <article className="site-content-inner mx-auto w-full max-w-3xl px-6 py-12">
             <h1>Adaptive galleries</h1>
-            <p data-text-body>The text body sets the width of a single portrait photo.</p>
+            <p data-text-body>The text body sets the width of each single photo.</p>
             <TripStoryProvider manifest={manifest}>
                 <div data-photo-example="portrait"><TripPhoto photoId="portrait-0" /></div>
                 <div data-photo-example="landscape"><TripPhoto photoId="landscape-0" /></div>

@@ -189,6 +189,67 @@ u {
   padding-top: 0;
 }
 
+.site-layout {
+  --site-header-offset: var(--site-header-height, 61px);
+}
+
+.site-layout[data-header-visible="false"]:not(:has(> .site-header:focus-within)) {
+  --site-header-offset: 0px;
+}
+
+/* Section bounds let the next chapter push the current title out naturally.
+   Keep spacing inside the section so there is no gap during the handoff. */
+.trip-story .trip-chapter {
+  --trip-chapter-gap: 3rem;
+  display: flow-root;
+}
+
+.trip-story .trip-chapter::after {
+  content: '';
+  display: block;
+  block-size: var(--trip-chapter-gap);
+}
+
+.trip-story .trip-chapter:has(> h1:first-child) {
+  --trip-chapter-gap: 4rem;
+}
+
+.trip-story .trip-chapter:not(.trip-chapter + .trip-chapter) {
+  margin-block-start: var(--trip-chapter-gap);
+}
+
+.trip-story .trip-chapter > :is(h1, h2):first-child {
+  position: sticky;
+  top: var(--site-header-offset, 0px);
+  z-index: 30;
+  margin-block: 0;
+  padding-block: 0.75rem 1rem;
+  background: #0a0a0a;
+  transition: top 200ms ease-out;
+}
+
+@media (min-width: 640px) {
+  .trip-story .trip-chapter {
+    --trip-chapter-gap: 4rem;
+  }
+
+  .trip-story .trip-chapter:has(> h1:first-child) {
+    --trip-chapter-gap: 5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trip-story .trip-chapter > :is(h1, h2):first-child {
+    transition: none;
+  }
+}
+
+@media print {
+  .trip-story .trip-chapter > :is(h1, h2):first-child {
+    position: static;
+  }
+}
+
 .trip-photo-pano {
   --photo-focus-outline-offset: -3px;
   width: 100%;

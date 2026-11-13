@@ -18,6 +18,7 @@ describe('Layout', () => {
     afterEach(() => {
         Object.defineProperty(window, 'scrollY', { configurable: true, value: 0 });
         vi.restoreAllMocks();
+        vi.unstubAllGlobals();
     });
 
     it('renders the site navigation and keeps Projects clickable', () => {
@@ -93,6 +94,7 @@ describe('Layout', () => {
         });
 
         await waitFor(() => expect(header).toHaveClass('-translate-y-full'));
+        expect(header.parentElement).toHaveAttribute('data-header-visible', 'false');
         const scrollTopButton = screen.getByRole('button', { name: 'Scroll to top' });
 
         act(() => {
@@ -101,8 +103,32 @@ describe('Layout', () => {
         });
 
         await waitFor(() => expect(header).toHaveClass('translate-y-0'));
+        expect(header.parentElement).toHaveAttribute('data-header-visible', 'true');
         fireEvent.click(scrollTopButton);
         expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'smooth' });
+    });
+
+    it('measures the navigation for sticky content and releases its resize observer', () => {
+        let onResize: ResizeObserverCallback = () => undefined;
+        const observe = vi.fn();
+        const disconnect = vi.fn();
+        vi.stubGlobal('ResizeObserver', class {
+            constructor(callback: ResizeObserverCallback) { onResize = callback; }
+            observe = observe;
+            disconnect = disconnect;
+        });
+        const bounds = vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+            .mockReturnValue({ height: 61 } as DOMRect);
+        const { unmount } = renderLayout('/trips/coast');
+        const header = screen.getByRole('banner');
+        const layout = header.parentElement!;
+        expect(observe).toHaveBeenCalledWith(header);
+        expect(layout.style.getPropertyValue('--site-header-height')).toBe('61px');
+        bounds.mockReturnValue({ height: 90 } as DOMRect);
+        act(() => onResize([], {} as ResizeObserver));
+        expect(layout.style.getPropertyValue('--site-header-height')).toBe('90px');
+        unmount();
+        expect(disconnect).toHaveBeenCalledOnce();
     });
 
     it('keeps focused header navigation visible during downward scrolling', async () => {

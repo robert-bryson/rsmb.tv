@@ -37,15 +37,15 @@ function TripGalleryContent({ galleryId }: { galleryId: string }) {
     const visiblePhotos = galleryPhotos.slice(0, visibleCount);
     const narrow = layoutTripGallery(visiblePhotos, false);
     const wide = layoutTripGallery(visiblePhotos, true);
-    const portraitOnly = galleryPhotos.length === 1 && galleryPhotos[0].height > galleryPhotos[0].width;
+    const singlePhoto = galleryPhotos.length === 1;
     return (
-        <section aria-labelledby={elementId} className={`${portraitOnly ? '' : 'trip-breakout'} my-10`}>
+        <section aria-labelledby={elementId} className={`${singlePhoto ? '' : 'trip-breakout'} my-10`}>
             <h2 id={elementId} className="sr-only">{galleryId.replaceAll('-', ' ')} photo gallery</h2>
             <div ref={galleryRef} className="trip-gallery-grid" style={{ gap: TRIP_GALLERY_GAP }}>
                 {galleryPhotos.map((photo, index) => {
                     if (index >= visibleCount) return <TripPhotoLink key={photo.id} photo={photo} hidden />;
                     return <TripPhotoFigure key={photo.id} photo={photo}
-                        sizes={tripGallerySizes(narrow[index], wide[index], portraitOnly)}
+                        sizes={tripGallerySizes(narrow[index], wide[index], singlePhoto)}
                         className="trip-gallery-photo"
                         style={{
                             '--trip-photo-ratio': `${photo.width} / ${photo.height}`,

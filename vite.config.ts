@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react'
 import mdx from '@mdx-js/rollup'
 import rehypeShiki from '@shikijs/rehype'
 import remarkFrontmatter from 'remark-frontmatter'
+import { remarkTripChapters } from './scripts/remark-trip-chapters.ts'
 import tailwindcss from '@tailwindcss/vite'
 import { tripContentPlugin } from './scripts/trip-content-plugin.ts'
 import { globeWebglPlugin } from './scripts/globe-webgl-plugin.ts'
@@ -26,7 +27,7 @@ export default defineConfig(({ mode, command }) => {
   },
   plugins: [
     mdx({
-      remarkPlugins: [remarkFrontmatter],
+      remarkPlugins: [remarkFrontmatter, remarkTripChapters],
       rehypePlugins: [[rehypeShiki, { theme: 'github-dark-default' }]],
     }),
     react(),

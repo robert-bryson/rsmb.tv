@@ -151,7 +151,7 @@ test('six mixed photos use a compact two-row composition', async ({ page }) => {
     expect((await gallery.boundingBox())!.height).toBeLessThan(600);
 });
 
-test('single portraits follow the text column and panoramas retain full-width frames', async ({ page }) => {
+test('single photos follow the text column and gallery panoramas retain full-width frames', async ({ page }) => {
     for (const width of [320, 800, 1440]) {
         await page.setViewportSize({ width, height: 1000 });
         const body = (await page.locator('[data-text-body]').boundingBox())!;
@@ -159,7 +159,8 @@ test('single portraits follow the text column and panoramas retain full-width fr
         expect(portrait.x).toBeCloseTo(body.x, 0);
         expect(portrait.width).toBeCloseTo(body.width, 0);
         const landscape = (await page.locator('[data-gallery-example="landscape"] .image-caption-frame').boundingBox())!;
-        expect(landscape.width).toBeCloseTo(Math.min(1152, width - 32), 0);
+        expect(landscape.x).toBeCloseTo(body.x, 0);
+        expect(landscape.width).toBeCloseTo(body.width, 0);
         const gallery = page.locator('[data-gallery-example="panorama"] .trip-gallery-grid');
         const photo = (await frames(gallery))[1];
         expect(photo.width).toBeCloseTo((await gallery.boundingBox())!.width, 0);
@@ -176,8 +177,7 @@ test('standalone photos follow their layout and retain their image height after 
             const example = page.locator(`[data-photo-example="${group}"]`);
             const figure = example.locator('figure');
             const box = (await figure.boundingBox())!;
-            const expectedWidth = group === 'portrait' ? body.width : group === 'panorama'
-                ? pageWidth : Math.min(1152, pageWidth - 32);
+            const expectedWidth = group === 'panorama' ? pageWidth : body.width;
             expect(box.width).toBeCloseTo(expectedWidth, 0);
             expect(box.x).toBeCloseTo((pageWidth - expectedWidth) / 2, 0);
             const photo = example.getByRole('img');
@@ -296,7 +296,7 @@ for (const fallback of [false, true]) {
                 }
                 await page.goto('/tests/e2e/fixtures/trip-galleries.html');
                 if (fallback) await expect(page.locator('img[sizes^="auto,"]')).toHaveCount(0);
-                for (const group of ['mixed', 'collage', 'portrait', 'panorama']) {
+                for (const group of ['mixed', 'collage', 'portrait', 'landscape', 'panorama']) {
                     const photos = page.locator(`[data-gallery-example="${group}"] img`);
                     for (const photo of await photos.all()) await expectSuitableImageSource(photo);
                 }

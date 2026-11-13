@@ -122,8 +122,8 @@ export function galleryLength(length: GalleryLength) {
 }
 
 /** Explicit fallbacks for browsers without lazy-image automatic sizes. */
-export function tripGallerySizes(narrow: TripGalleryPlacement, wide: TripGalleryPlacement, portraitOnly: boolean) {
-    if (portraitOnly) return 'auto, (min-width: 768px) 720px, calc(100vw - 3rem)';
+export function tripGallerySizes(narrow: TripGalleryPlacement, wide: TripGalleryPlacement, singlePhoto: boolean) {
+    if (singlePhoto) return 'auto, (min-width: 768px) 720px, calc(100vw - 3rem)';
     const viewportSlot = ({ fraction, pixels }: GalleryLength) =>
         `calc(${fraction * 100}vw - ${fraction * 32 - pixels}px)`;
     const desktop = '(hover: hover) and (pointer: fine)';

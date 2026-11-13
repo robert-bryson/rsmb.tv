@@ -31,6 +31,19 @@ export function Layout({ children }: LayoutProps) {
   const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+    const updateHeight = () => {
+      header.parentElement?.style.setProperty('--site-header-height', `${header.getBoundingClientRect().height}px`);
+    };
+    updateHeight();
+    if (typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(header);
+    return () => observer.disconnect();
+  }, [isFullScreenPage]);
+
+  useEffect(() => {
     previousScrollY.current = window.scrollY;
 
     if (isFullScreenPage) return;
@@ -83,7 +96,7 @@ export function Layout({ children }: LayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-zinc-100 flex flex-col">
+    <div data-header-visible={isHeaderVisible} className="site-layout min-h-screen bg-[#0a0a0a] text-zinc-100 flex flex-col">
       {/* Skip to content — visible on focus for keyboard users */}
       <a
         href="#main-content"

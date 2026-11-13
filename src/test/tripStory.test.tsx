@@ -162,8 +162,8 @@ describe('trip story primitives', () => {
 
     it.each([
         { width: 800, height: 1200, layout: 'default' as const, breakout: false },
-        { width: 1200, height: 800, layout: 'default' as const, breakout: true },
-        { width: 800, height: 800, layout: 'default' as const, breakout: true },
+        { width: 1200, height: 800, layout: 'default' as const, breakout: false },
+        { width: 800, height: 800, layout: 'default' as const, breakout: false },
         { width: 800, height: 1200, layout: 'pano' as const, breakout: false },
     ])('sizes a standalone $width x $height photo in $layout layout', ({ width, height, layout, breakout }) => {
         const photo = { ...manifest.photos[0], width, height };
@@ -174,9 +174,7 @@ describe('trip story primitives', () => {
         const figure = image.closest('figure')!;
         expect(figure.classList.contains('trip-breakout')).toBe(breakout);
         expect(figure.classList.contains('trip-photo-pano')).toBe(layout === 'pano');
-        expect(image).toHaveAttribute('sizes', layout === 'pano' ? '100vw' : breakout
-            ? '(min-width: 1184px) 1152px, calc(100vw - 2rem)'
-            : '(min-width: 768px) 720px, calc(100vw - 3rem)');
+        expect(image).toHaveAttribute('sizes', layout === 'pano' ? '100vw' : '(min-width: 768px) 720px, calc(100vw - 3rem)');
     });
 
     it('reports an unknown standalone photo instead of rendering an empty block', () => {
@@ -347,23 +345,20 @@ describe('trip story primitives', () => {
     });
 
     it.each([
-        { width: 800, height: 1200, breakout: false },
-        { width: 1200, height: 800, breakout: true },
-        { width: 800, height: 800, breakout: true },
-    ])('uses the correct article width for a single $width × $height photo', ({ width, height, breakout }) => {
+        { width: 800, height: 1200 },
+        { width: 1200, height: 800 },
+        { width: 800, height: 800 },
+    ])('uses the text column for a single $width × $height photo', ({ width, height }) => {
         const photo = { ...manifest.photos[0], width, height };
         renderStory(<TripGallery galleryId="single" />, {
             ...manifest, photos: [photo], galleries: { single: [photo.id] },
         });
         const image = screen.getByRole('img', { name: photo.alt });
         const gallery = image.closest('section')!;
-        expect(gallery.classList.contains('trip-breakout')).toBe(breakout);
+        expect(gallery).not.toHaveClass('trip-breakout');
         expect(screen.queryByRole('button', { name: /Show all/ })).not.toBeInTheDocument();
-        if (!breakout) {
-            // A lone portrait uses the 45rem article body, including on browsers without auto sizes.
-            expect(image.getAttribute('sizes')).toContain('720px');
-            expect(image.getAttribute('sizes')).toContain('calc(100vw - 3rem)');
-        }
+        expect(image.getAttribute('sizes')).toContain('720px');
+        expect(image.getAttribute('sizes')).toContain('calc(100vw - 3rem)');
     });
 
     it('reports a missing gallery photo instead of silently dropping it', () => {

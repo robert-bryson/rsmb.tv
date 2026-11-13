@@ -105,7 +105,7 @@ Validate its shortcodes against the manifest after you change media placements.
 | Dismissal | Close day popups with Escape. Clear day selection only when dismissal applies to that map. |
 | Recovery | Restore the saved camera. Ignore callbacks from replaced maps. Retain usable previews and downloads. |
 | Resources | Release distant maps. Keep maps active during keyboard interaction and fullscreen use. |
-| Layout | Prevent horizontal scrolling after maps paint. Keep single portraits within the text column. Preserve panorama proportions and reserved image height. |
+| Layout | Prevent horizontal scrolling after maps paint. Keep single photos within the text column. Preserve panorama proportions and reserved image height. |
 | Photos | Select suitable responsive sources. Wrap long captions within each photo. Support mouse, touch, and keyboard controls. Restore focus after closing. |
 | Animations | Defer video loading, retain posters and attribution after failure, honor reduced motion, and preserve user pause choices across visibility changes. |
 | Content | Retain literal captions, article metadata, return filters, country and region filters, and existing geographic tag links. |
@@ -256,10 +256,23 @@ The loading view also contains the story title and reserves the same CSS space.
 A held-module test verifies that footer navigation waits for the story body.
 The hero remains usable during that wait.
 Single-photo checks measure portrait, landscape, and explicit panorama widths from 320 to 1440 pixels.
+Standalone photos and one-photo galleries must match the text column. Explicit panoramas must reach the page edges.
 They check reserved image height after failure and responsive sources on high-density displays.
 Caption checks use long words with pointer and touch input in Chromium and WebKit.
 The unit tests also check viewer cleanup when the photo or link setting changes.
 Country fact links must retain their country. Region fact links must retain both their country and region.
+
+Chapter checks compile trip MDX with the production remark plugin.
+They verify chapter boundaries, h1 precedence, h2 chapters, nested headings, module exports, and Markdown references.
+Writing posts retain their existing structure.
+Browser checks measure sticky headings at phone and desktop widths.
+They verify continuous handoffs, the end of the story, visible navigation, navigation resizing, links, reduced motion, and print layout.
+The feature uses native CSS scrolling. A resize observer measures the site navigation; it does not add a scroll handler.
+
+```bash
+npx vitest run scripts/__tests__/remarkTripChapters.test.tsx src/test/tripStory.test.tsx src/test/Layout.test.tsx
+PLAYWRIGHT_WEBKIT=1 npx playwright test tests/e2e/trip-headings.spec.ts tests/e2e/trip-galleries.spec.ts tests/e2e/post-rendering.spec.ts
+```
 
 Post filter tests use a separate browser fixture with the application styles.
 Its container must have an explicit full width, as the application layout does.

@@ -118,12 +118,11 @@ export function TripPhoto({ photoId, layout = 'default', className = '', ...prop
     const { photos } = useTripStory();
     const photo = photos.get(photoId);
     if (!photo) throw new Error(`Unknown trip photo: ${photoId}`);
-    const portraitOnly = photo.height > photo.width;
     return (
         <div ref={galleryRef}>
             <TripPhotoFigure photo={photo} {...props}
-                sizes={layout === 'pano' ? '100vw' : portraitOnly ? '(min-width: 768px) 720px, calc(100vw - 3rem)' : undefined}
-                className={`${layout === 'pano' ? 'trip-photo-pano' : portraitOnly ? '' : 'trip-breakout'} my-8 ${className}`} />
+                sizes={layout === 'pano' ? '100vw' : '(min-width: 768px) 720px, calc(100vw - 3rem)'}
+                className={`${layout === 'pano' ? 'trip-photo-pano' : ''} my-8 ${className}`} />
         </div>
     );
 }
