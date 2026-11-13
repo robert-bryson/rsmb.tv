@@ -88,6 +88,11 @@ Country-specific resource state is tied to its URL. A delayed response cannot re
 Pin readers also track their validation function. A changed function checks cached data again before use.
 Keep those functions stable with module constants or `useMemo`.
 Province outlines load only while their layer is enabled. Hidden outline failures do not block country pins.
+The small country index also supplies muted context markers in U.S. views.
+Global country outlines and unrelated province files remain lazy.
+Pins navigation uses one geographic parent model for map clicks, keyboard input, and visible controls.
+The URL stores the selected pin, country, and optional U.S. state scope.
+Use [`navigation.ts`](../src/features/pins/navigation.ts) for those transitions and [`presentation.ts`](../src/features/pins/presentation.ts) for muted context.
 The Python generators share coordinate, bounds, contact, and raw polygon checks before replacing publication files.
 
 Use [`shared/pinDetails.ts`](../shared/pinDetails.ts) for selected-pin context files and their manifest.

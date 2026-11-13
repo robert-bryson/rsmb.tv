@@ -1,0 +1,211 @@
+{
+  "date": "2026-11-13",
+  "reviewedBase": "733aafc",
+  "scope": "Pins geographic parent navigation, muted map context, and responsive controls",
+  "runtime": {
+    "node": "26.13.0",
+    "npm": "11.20.0",
+    "note": "Host differs from the supported versions declared in package.json and .nvmrc"
+  },
+  "decisions": [
+    "Use one parent model for background clicks, Escape, breadcrumbs, and visible controls.",
+    "Retain selectable context markers below active markers.",
+    "Use muted peer-circle outlines during selection; reserve distance labels for the selected pin.",
+    "Store U.S. state scope in the URL and preserve browser history.",
+    "Cancel delayed background navigation during native gestures and location changes."
+  ],
+  "tests": {
+    "javascript": {
+      "status": "pass",
+      "command": "node node_modules/vitest/vitest.mjs run --config vitest.verify.config.ts --maxWorkers=4",
+      "sourceSnapshot": "733aafc plus the staged map changes in an isolated worktree",
+      "configuration": "Repository Vite config with its linked node_modules directory added to the filesystem allow list",
+      "files": 217,
+      "passed": 3144,
+      "durationSeconds": 88.45
+    },
+    "focusedPins": {
+      "status": "pass",
+      "files": 10,
+      "before": 82,
+      "after": 106
+    },
+    "browser": {
+      "status": "pass with targeted recovery rerun",
+      "expectedScenariosPerProject": 23,
+      "suite": "tests/e2e/pins-map.spec.ts",
+      "workers": 1,
+      "baseURL": "http://127.0.0.1:5274",
+      "configuration": "Base Playwright config with a separate Vite server, filesystem watching and HMR disabled, and the existing WebKit compatibility launcher",
+      "data": "Real renderer and published geometry with fixed remote tiles and context responses",
+      "readiness": "Ready-state assertions allow 20 seconds; the renderer retains its 15-second point-source deadline. Scenario timeouts remain unchanged.",
+      "verifiedDistinctScenarios": 46,
+      "projects": {
+        "chromium": 23,
+        "webkit": 23
+      },
+      "fullRun": {
+        "passed": 45,
+        "failed": 1,
+        "durationMinutes": 7.5
+      },
+      "targetedRecoveryRun": {
+        "passed": 2,
+        "failed": 0,
+        "durationSeconds": 20.1
+      },
+      "note": "The existing late-country-response recovery case exceeded its five-second assertion window in WebKit during the combined workload. It passed in both engines after the JavaScript suite finished. New navigation cases passed in both engines during the full run."
+    },
+    "lint": "pass",
+    "typecheck": "pass",
+    "workspaceJavascript": {
+      "passed": 3143,
+      "failed": 1,
+      "failure": "scripts/__tests__/tripManifestAuthoring.test.ts: pch-2024 gallery reference table",
+      "cause": "Separate concurrent trip-manifest edits added gallery IDs without corresponding importer-guide rows. Those edits remain outside this commit."
+    },
+    "temperaturePython": {
+      "passed": 18
+    },
+    "documentationLinks": {
+      "documents": 138,
+      "broken": 0
+    },
+    "viteFixtureBuild": "pass; included in the full JavaScript suite"
+  },
+  "coverage": {
+    "provider": "v8",
+    "selection": [
+      "scripts/__tests__/pins*.test.*",
+      "scripts/__tests__/worldPins*.test.*"
+    ],
+    "include": [
+      "src/features/pins/**",
+      "shared/pinDetails.ts",
+      "shared/pins.ts",
+      "shared/worldPins.ts",
+      "shared/pinGeometry.ts",
+      "shared/geography/geodesy.ts"
+    ],
+    "before": {
+      "lines": {
+        "total": 730,
+        "covered": 725,
+        "skipped": 0,
+        "pct": 99.31
+      },
+      "statements": {
+        "total": 968,
+        "covered": 939,
+        "skipped": 0,
+        "pct": 97
+      },
+      "functions": {
+        "total": 242,
+        "covered": 237,
+        "skipped": 0,
+        "pct": 97.93
+      },
+      "branches": {
+        "total": 852,
+        "covered": 800,
+        "skipped": 0,
+        "pct": 93.89
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "after": {
+      "lines": {
+        "total": 850,
+        "covered": 847,
+        "skipped": 0,
+        "pct": 99.64
+      },
+      "statements": {
+        "total": 1121,
+        "covered": 1092,
+        "skipped": 0,
+        "pct": 97.41
+      },
+      "functions": {
+        "total": 285,
+        "covered": 281,
+        "skipped": 0,
+        "pct": 98.59
+      },
+      "branches": {
+        "total": 1056,
+        "covered": 1003,
+        "skipped": 0,
+        "pct": 94.98
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "geometry": {
+    "countryIndexBytes": 192685,
+    "countryIndexGzipBytes": 44184,
+    "case": "Selected Falls Church city, county-51610, within Virginia",
+    "assumptions": [
+      "Ordinary circles enabled",
+      "County details visible",
+      "Selected high-resolution circle counted separately"
+    ],
+    "points": {
+      "before": 3292,
+      "after": 446
+    },
+    "ordinaryCircles": {
+      "before": 3292,
+      "after": 132
+    },
+    "note": "Source and generated feature counts; not frame-time or peak-memory measurements."
+  },
+  "localServer": {
+    "url": "http://localhost:5173/projects/pins-of-inaccessibility/map",
+    "httpStatus": 200,
+    "browserSmoke": "pass",
+    "parentNavigation": "pass",
+    "uncaughtBrowserErrors": 0,
+    "externalServices": "Blocked during the local browser smoke check"
+  },
+  "limits": [
+    "Physical-device performance and assistive-technology checks remain in TODO.md.",
+    "Boundary sources and published pin coordinates are unchanged."
+  ],
+  "fingerprints": {
+    "TODO.md": "700546d61957fd1975f46453155866650d7f24879f4baa55bc90764e0b4c9178",
+    "docs/README.md": "01b5690991e99a2f03a5bfa33bf05a026042bc65be0dd052da4721d5c4fe6d6c",
+    "docs/reviews/2026-11-13-pins-navigation-design.md": "7f2a95fd7d1f317ea4cc9f859d5cdc2c4425ba4adcb626af3d773095783a0c93",
+    "docs/shared-modules.md": "fe20ca147080ce3ff7915a6567d769e298c0d5e93887fa2e838a38ae07651d62",
+    "projects/pins-of-inaccessibility/readme.md": "468454792def5f044497a959c6940743733fadc2346c38b287b1b8fb049b3339",
+    "scripts/__tests__/pinsExplorer.test.tsx": "4f15fd44ba81e8192bda2a34d6c9a23fa184e55c789a010a0a3efa1a16d3deb8",
+    "scripts/__tests__/pinsMap.test.tsx": "a579ac317619d907a70d45aabb1c4c418ef711d2a48ae254fd11ad74ab7aa161",
+    "scripts/__tests__/pinsNavigation.test.ts": "5bde0bc4d4c4eea48458044359f27f1a8aba034dde18e45f1fd348432b4c4536",
+    "scripts/__tests__/worldPinsResources.test.tsx": "c713ac5ca7cce2091f3bef0e1db005b999951776419f3b022f9f3cb7e7aa3ac2",
+    "src/features/pins/PinsExplorer.tsx": "9acd496ad29323e711dfed6f09e19ae831cbe00cb751e52fd3ee9a48e74676c4",
+    "src/features/pins/PinsMap.tsx": "361ff2e80f74b77f2af0f79de303264eee8d61c1b4b61cafb64970cbc0754875",
+    "src/features/pins/PinsNavigation.tsx": "c858516ab4d7ca87ccbfd3192297cc655b30b5b8df097d5e9dc38d7c4d7dc7b1",
+    "src/features/pins/data.ts": "76db5ee331d0cc277cd3a359ce578709736bee177010a78c95b1912ee06e9007",
+    "src/features/pins/geometry.ts": "6c7e4ce51a1e1924d4f322b00ff42cf341f03d8f32ecc95ad79eddf7fceab640",
+    "src/features/pins/mapLayers.ts": "8e807dd37cccb5f0603e626862166e7e9b00c7a2534cc11b1bff4d8fec7db742",
+    "src/features/pins/mapRenderer.ts": "28395e658e29f379999c441a35bce3a4d460a5fae8c6188bfc253942e9e36ad5",
+    "src/features/pins/navigation.ts": "ce4b5a25b73704b65862b76c939829945f049ccab11e5bef487f3b782c817840",
+    "src/features/pins/pins.css": "914aad92394436254fad7ce0eb5a14a68d551c1bf9e01cc1b9190572abb7fcfa",
+    "src/features/pins/presentation.ts": "de4a29eec7a59eb89ac65ca92f07077a19e275054b5549a61a5135709e8fe833",
+    "src/features/pins/radiusLabels.ts": "a9a89d2f0bf87cf0b0211ddd57ed796580f64ec5b41a80532c4debe23986c6da",
+    "src/features/pins/types.ts": "c2acccfdb809272e8eda28c7ebbc61fa089f4866db1b139fb483f4b9af6d327d",
+    "src/pages/PinsOfInaccessibilityAbout.tsx": "e3428f6cf5a09be2c4c8055ef9edd375aa3ed0a9024e50136a2dd0fa77f3c3ba",
+    "tests/e2e/pins-map.spec.ts": "a95494eea3d68ac986d36eaa7e308934c39e46bdd2990bef5bf46f93a6bc0488"
+  }
+}

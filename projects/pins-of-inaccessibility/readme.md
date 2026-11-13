@@ -16,9 +16,14 @@ Choose a country to explore its state, province, or regional pins.
 The default view retains the original U.S. map and county controls.
 Country and pin URL parameters preserve the chosen view.
 A shared province link can also infer its country from the pin ID.
-The persistent **Back to globe** button clears the selection, search, and jurisdiction scope.
-The selected card's **Close selection** button and Escape do the same.
-With no selected pin, Escape in the panel closes the panel.
+Click outside a selection to return one geographic level.
+A county returns to its state. A state or province returns to its country. A country returns to the world.
+The **Up one level** button, the selected card's parent button, and Escape use the same hierarchy.
+The location trail shows the current path. Its **World** button returns directly to the globe.
+At the world level, Escape closes the explorer panel.
+Escape first closes a hover tooltip or clears a nonempty search field. Native selectors retain their Escape behavior.
+Parent views remain in the URL. Browser Back and Forward restore the path.
+For a U.S. state view, `state=51` retains Virginia without selecting a county.
 Every selected pin links to its exact coordinates in Google Maps and OpenStreetMap.
 
 The map uses MapLibre's globe projection with the CARTO Dark Matter basemap.
@@ -183,7 +188,9 @@ The global files live under `public/data/pins-of-inaccessibility/world/`:
 The global index is about 188 KiB before compression.
 Overview outlines are about 6.0 MiB, or 2.2 MiB with gzip.
 Canada adds about 10 KiB of pins and 1.7 MiB of province outlines.
-These files load only when needed; the default U.S. view requests no global files.
+The default U.S. view also loads the small global country index for context markers.
+The index is 192,685 bytes before compression, or 44,184 bytes in a local gzip measurement.
+Global country outlines still load only when the world or a foreign country needs them.
 Province files are loaded only for the chosen country.
 Province pins supply the rankings even when their map layer is hidden.
 Province outlines load only while that layer is on.
@@ -324,6 +331,33 @@ This check reuses the source projection method; it does not certify a global geo
 ## Interface
 
 The map starts over the contiguous U.S.
+The location trail shows world, country, state or province, and selected county levels.
+Choose an ancestor in the trail to open that view.
+The **Up one level** button and the selected card's parent button provide explicit alternatives to clicking outside a selection.
+An empty map click moves up after a 500 ms window for native double-click and double-tap zoom.
+Dragging, zooming, starting another touch, and changing location cancel a pending background action.
+Clicks on map controls do not navigate.
+Click another pin to select it directly.
+A polygon inside the selected geography can open a child geography.
+Click a sibling polygon's area to return to the parent view.
+Clicking inside the selected polygon retains that selection.
+
+Selection keeps other pins visible in muted colors.
+The pointer changes over muted pins, and their hover details remain available.
+Only peer circles at the selected geographic level remain as quiet outlines.
+These circles have no fill or distance badges.
+The selected pin keeps its stronger marker, circle, boundary, and measurements.
+Country context uses the lightweight index. It does not load other countries' province geometry.
+U.S. state views retain neighboring state markers and omit counties outside the chosen state.
+
+On touch screens, marker picking uses an expanded area of about 44 by 44 CSS pixels.
+The closest marker wins when these areas overlap.
+The layer controls start collapsed on phones and short screens.
+The location trail and parent action remain visible.
+Short landscape screens place the explorer beside the map.
+Camera framing keeps a selected point below controls when they cover the map center.
+The globe view clears this camera padding when returning to the world.
+
 The country selector opens the world view or any covered country.
 Country views rank first-level regions and provide a national pole card.
 A province-layer checkbox controls foreign province markers and outlines.
@@ -395,6 +429,9 @@ Local and preview hosts do not send analytics.
 | Module | Responsibility |
 | --- | --- |
 | `src/features/pins/PinsExplorer.tsx` | Search, scope, rankings, preferences, and URL selection |
+| `src/features/pins/navigation.ts` | Geographic parents, shared scopes, ranking transitions, and location paths |
+| `src/features/pins/PinsNavigation.tsx` | Location trail, parent action, and view announcements |
+| `src/features/pins/presentation.ts` | Visible context, muted pins, and peer-circle selection |
 | `src/features/pins/PinsMap.tsx` | React state and renderer lifetime |
 | `src/features/pins/mapRenderer.ts` | Map events, data updates, deadlines, and cleanup |
 | `src/features/pins/mapLayers.ts` | Source and layer definitions |
@@ -455,8 +492,11 @@ Corruption tests also check world metadata, administrative levels, bounds, raw p
 CI installs the pinned Python packages and runs these tests without a Census download.
 
 Interface tests check loading, retries, rankings, scope, preferences, cleanup, deadlines, and badge placement.
+Navigation tests check parent steps, shared state scopes, browser history, gesture cancellation, and muted context.
 Browser tests use the real renderer and published geographic files.
 They replace remote tiles and glyph responses with fixed responses.
 They check rendered pixels, fullscreen retry, stalled workers, county loading, selection, accessible controls, and mobile layout.
+Touch checks include a 320-pixel viewport, short landscape layout, native disclosure controls, and tapping outside a country.
 
-See the [November 13 review](../../docs/reviews/2026-11-13-pins-review.md) for current coverage, confirmed fixes, and remaining limits.
+See the [navigation design review](../../docs/reviews/2026-11-13-pins-navigation-design.md) for interaction decisions and current validation.
+The [November 13 review](../../docs/reviews/2026-11-13-pins-review.md) records earlier fixes and source-check limits.

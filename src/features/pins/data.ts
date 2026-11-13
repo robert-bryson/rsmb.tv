@@ -46,7 +46,9 @@ export function useWorldPinsData(countryCode: string, showRegions = true) {
     const regional = enabled && !!country && country.regionIds.length > 0;
     const parseRegions = useMemo(() => (value: unknown) => parseWorldRegionPins(value, countryCode), [countryCode]);
     const parseOutlines = useMemo(() => (value: unknown) => parseWorldBoundaries(value, countryCode), [countryCode]);
-    const pins = usePinResource('world/pins.json', parseWorldPins, enabled);
+    // The small country index supplies context markers. Heavy outlines and
+    // province data remain scoped to the requested geography.
+    const pins = usePinResource('world/pins.json', parseWorldPins);
     const countries = usePinResource('world/countries.geojson', parseWorldCountries, enabled);
     const regions = usePinResource(`world/regions/${country?.code ?? 'unused'}.json`, parseRegions, regional);
     const outlines = usePinResource(`world/regions/${country?.code ?? 'unused'}.geojson`, parseOutlines, regional && showRegions);

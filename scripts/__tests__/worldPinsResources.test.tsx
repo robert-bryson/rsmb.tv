@@ -13,11 +13,14 @@ beforeEach(() => clearCache());
 afterEach(() => { cleanup(); clearCache(); vi.unstubAllGlobals(); });
 
 describe('country-specific lazy resources', () => {
-    it('does not load global files for the U.S. or province files for the world overview', async () => {
+    it('loads only the lightweight country index for U.S. context and no province files for the world overview', async () => {
         const fetch = vi.fn(async (url: string) => response(artifacts.get(filename(url))));
         vi.stubGlobal('fetch', fetch);
         const hook = renderHook(({ country }) => useWorldPinsData(country), { initialProps: { country: 'USA' } });
-        expect(fetch).not.toHaveBeenCalled();
+        await waitFor(() => expect(hook.result.current.pins.data?.pins).toHaveLength(257));
+        expect(fetch).toHaveBeenCalledTimes(1);
+        expect(filename(fetch.mock.calls[0][0])).toBe('world/pins.json');
+        expect(hook.result.current.countries.loading).toBe(false);
         hook.rerender({ country: 'ALL' });
         await waitFor(() => expect(hook.result.current.pins.data?.pins).toHaveLength(257), { timeout: 10_000 });
         await waitFor(() => expect(hook.result.current.countries.data?.features).toHaveLength(257), { timeout: 10_000 });

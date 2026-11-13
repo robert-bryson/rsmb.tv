@@ -1,5 +1,5 @@
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import { MemoryRouter, useLocation } from 'react-router-dom';
+import { MemoryRouter, useLocation, useNavigate } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import PinsExplorer from '../../src/features/pins/PinsExplorer';
 import { usePinsData, useWorldPinsData } from '../../src/features/pins/data';
@@ -13,9 +13,13 @@ vi.mock('../../src/features/pins/data', () => ({ usePinsData: vi.fn(), useWorldP
 vi.mock('../../src/features/pins/usePinDetails', () => ({ usePinDetails: vi.fn() }));
 vi.mock('../../src/features/pins/PinsMap', () => ({ PinsMap: (props: PinsMapProps) => <div>
     <button onClick={() => props.onSelect('country-US')}>Select national pin on map</button>
+    <button onClick={() => props.onSelect('state-08')}>Select Colorado on map</button>
+    <button onClick={() => props.onSelect('county-51610')}>Select Falls Church on map</button>
+    <button onClick={() => props.onNavigateUp?.()}>Click empty map</button>
     <button onClick={() => props.onSelect('unknown')}>Select unknown map feature</button>
     <button onClick={() => props.onZoom(6)}>Set county zoom</button>
     <output aria-label="Map view bounds">{props.view?.bounds.join(',')}</output>
+    <output aria-label="Map view request">{props.view?.key}</output>
     <output aria-label="Map resource state">{props.dataState}</output>
     <output aria-label="Map boundary IDs">{props.states?.features.map(feature => feature.id).join(',')}</output>
 </div> }));
@@ -23,7 +27,10 @@ vi.mock('../../src/components/IntentLink', () => ({ IntentLink: ({ to, children,
 
 const resource = <T,>(data: T | null, error: string | null = null, loading = false) => ({ data, error, loading, retry: vi.fn() });
 function resources() { return { pins: resource(publishedPins), states: resource(null), counties: resource(null) }; }
-function Location() { const { search } = useLocation(); return <output aria-label="Current query">{search}</output>; }
+function Location() {
+    const { search } = useLocation(), navigate = useNavigate();
+    return <><output aria-label="Current query">{search}</output><button onClick={() => navigate(-1)}>Map history back</button><button onClick={() => navigate(1)}>Map history forward</button></>;
+}
 function open(query = '') {
     return render(<MemoryRouter initialEntries={[`/projects/pins-of-inaccessibility/map${query}`]}><PinsExplorer /><Location /></MemoryRouter>);
 }
@@ -46,6 +53,149 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 
 describe('pin explorer behavior', () => {
+    it('opens a county with its state scope and recenters a repeated selection without duplicating history', () => {
+        open('?state=08&keep=1');
+        fireEvent.click(screen.getByRole('button', { name: 'Off', exact: true }));
+        fireEvent.click(screen.getByRole('button', { name: 'Select Falls Church on map' }));
+        expect(screen.getByLabelText('Within')).toHaveValue('51');
+        expect(screen.getByRole('button', { name: 'Counties', exact: true })).toHaveAttribute('aria-pressed', 'true');
+        expect(screen.getByRole('button', { name: 'Auto', exact: true })).toHaveAttribute('aria-pressed', 'true');
+        const camera = screen.getByLabelText('Map view request').textContent;
+        const query = screen.getByLabelText('Current query').textContent;
+        fireEvent.click(screen.getByRole('button', { name: 'Select Falls Church on map' }));
+        expect(screen.getByLabelText('Current query').textContent).toBe(query);
+        expect(screen.getByLabelText('Map view request').textContent).not.toBe(camera);
+        fireEvent.click(screen.getByRole('button', { name: 'Map history back' }));
+        expect(screen.getByLabelText('Within')).toHaveValue('08');
+        expect(screen.queryByRole('region', { name: 'Selected pin' })).toBeNull();
+    });
+
+    it('lets the location trail skip to an ancestor and the parent control return to the world', () => {
+        open('?pin=county-51610&keep=1');
+        const trail = screen.getByRole('navigation', { name: 'Map location' });
+        fireEvent.click(within(trail).getByRole('button', { name: 'United States', exact: true }));
+        expect(screen.getByLabelText('Within')).toHaveValue('');
+        expect(screen.queryByRole('region', { name: 'Selected pin' })).toBeNull();
+        expect(screen.getByLabelText('Current query')).toHaveTextContent('?keep=1');
+        fireEvent.click(screen.getByRole('button', { name: 'Up one level: world overview', exact: true }));
+        expect(screen.getByLabelText('Country / territory')).toHaveValue('ALL');
+        expect(within(trail).getByRole('button', { name: 'World overview' })).toHaveFocus();
+    });
+
+    it('uses the jump control for countries and provinces and lets their ranking tabs switch levels', () => {
+        vi.mocked(useWorldPinsData).mockImplementation(code => ({
+            pins: resource(worldCountries), countries: resource(worldOutlines), regions: resource(code === 'CAN' ? canada : null), outlines: resource(null),
+        }));
+        open('?country=ALL&keep=1');
+        fireEvent.change(screen.getByLabelText('Jump to region'), { target: { value: 'CAN' } });
+        expect(rows()).toHaveLength(13);
+        fireEvent.click(screen.getByRole('button', { name: 'Countries & territories', exact: true }));
+        expect(rows()).toHaveLength(1);
+        fireEvent.click(screen.getByRole('button', { name: 'States & provinces', exact: true }));
+        expect(rows()).toHaveLength(13);
+        fireEvent.change(screen.getByLabelText('Jump to region'), { target: { value: 'region-CAN-682' } });
+        expect(screen.getByRole('region', { name: 'Selected pin' })).toHaveTextContent('Ontario');
+        expect(screen.getByLabelText('Current query')).toHaveTextContent('keep=1&country=CAN&pin=region-CAN-682');
+    });
+
+    it('normalizes conflicting shared country parameters before navigating to a parent', () => {
+        vi.mocked(useWorldPinsData).mockReturnValue({ pins: resource(worldCountries), countries: resource(worldOutlines), regions: resource(null), outlines: resource(null) });
+        open('?country=CAN&pin=country-US&keep=1');
+        expect(screen.getByLabelText('Country / territory')).toHaveValue('USA');
+        expect(screen.getByLabelText('Current query')).toHaveTextContent('?keep=1&pin=country-US');
+        fireEvent.click(screen.getByRole('button', { name: 'Up one level: world overview', exact: true }));
+        fireEvent.click(screen.getByRole('button', { name: 'Map history back' }));
+        expect(screen.getByLabelText('Country / territory')).toHaveValue('USA');
+        expect(screen.getByRole('region', { name: 'Selected pin' })).toHaveTextContent('United States');
+    });
+
+    it('recenters an unchanged overview only when requested and keeps layer disclosure independent of location', () => {
+        open('?keep=1');
+        const view = screen.getByLabelText('Map view request');
+        const original = view.textContent;
+        fireEvent.click(screen.getByRole('button', { name: 'Set county zoom' }));
+        expect(view.textContent).toBe(original);
+        fireEvent.click(screen.getByRole('button', { name: 'U.S. overview' }));
+        expect(view.textContent).not.toBe(original);
+        const reset = view.textContent;
+        const disclosure = document.querySelector<HTMLDetailsElement>('.pins-layers')!;
+        disclosure.open = false;
+        fireEvent(disclosure, new Event('toggle'));
+        expect(disclosure.open).toBe(false);
+        expect(view.textContent).toBe(reset);
+        expect(screen.getByLabelText('Current query')).toHaveTextContent('?keep=1');
+        fireEvent.click(screen.getByRole('button', { name: 'World overview', exact: true }));
+        const world = view.textContent;
+        fireEvent.click(screen.getByRole('button', { name: 'World overview', exact: true }));
+        expect(view.textContent).not.toBe(world);
+    });
+
+    it('keeps failed optional country context from blocking the U.S. map and makes it retryable in world view', () => {
+        const world = { pins: resource(null, 'failed'), countries: resource(worldOutlines), regions: resource(null), outlines: resource(null) };
+        vi.mocked(useWorldPinsData).mockReturnValue(world);
+        open();
+        expect(screen.getByLabelText('Map resource state')).toHaveTextContent('ready');
+        expect(screen.queryByRole('button', { name: 'Retry pin data' })).toBeNull();
+        fireEvent.click(screen.getByRole('button', { name: 'World overview', exact: true }));
+        expect(screen.getByLabelText('Map resource state')).toHaveTextContent('error');
+        fireEvent.click(screen.getByRole('button', { name: 'Retry pin data' }));
+        expect(world.pins.retry).toHaveBeenCalledOnce();
+    });
+
+    it('clears a search before navigating up and lets native selectors handle Escape', () => {
+        open('?pin=state-08');
+        const search = screen.getByRole('searchbox');
+        fireEvent.change(search, { target: { value: 'Colorado' } });
+        fireEvent.keyDown(search, { key: 'Escape' });
+        expect(search).toHaveValue('');
+        expect(screen.getByRole('region', { name: 'Selected pin' })).toHaveTextContent('Colorado');
+        fireEvent.keyDown(screen.getByLabelText('Country / territory'), { key: 'Escape' });
+        expect(screen.getByRole('region', { name: 'Selected pin' })).toHaveTextContent('Colorado');
+        fireEvent.keyDown(document, { key: 'Escape', repeat: true });
+        expect(screen.getByRole('region', { name: 'Selected pin' })).toHaveTextContent('Colorado');
+        fireEvent.keyDown(document, { key: 'Escape' });
+        expect(screen.queryByRole('region', { name: 'Selected pin' })).toBeNull();
+        expect(screen.getByLabelText('Country / territory')).toHaveValue('USA');
+    });
+    it('moves from a county through state and country views to the world on empty-map clicks', () => {
+        open('?pin=county-51610&keep=1');
+        const location = screen.getByRole('navigation', { name: 'Map location' });
+        expect(location).toHaveTextContent('WorldUnited StatesVirginiaFalls Church city');
+        fireEvent.click(screen.getByRole('button', { name: 'Click empty map' }));
+        expect(screen.getByLabelText('Within')).toHaveValue('51');
+        expect(screen.queryByRole('region', { name: 'Selected pin' })).toBeNull();
+        expect(location.querySelector('[aria-current="location"]')).toHaveTextContent('Virginia');
+        expect(screen.getByLabelText('Current query')).toHaveTextContent('state=51');
+        fireEvent.click(screen.getByRole('button', { name: 'Click empty map' }));
+        expect(screen.getByLabelText('Within')).toHaveValue('');
+        expect(location.querySelector('[aria-current="location"]')).toHaveTextContent('United States');
+        fireEvent.click(screen.getByRole('button', { name: 'Click empty map' }));
+        expect(screen.getByLabelText('Country / territory')).toHaveValue('ALL');
+        expect(location.querySelector('[aria-current="location"]')).toHaveTextContent('World');
+        expect(screen.getByLabelText('Current query')).toHaveTextContent('keep=1&country=ALL');
+        expect(screen.queryByRole('button', { name: /Up one level:/ })).toBeNull();
+    });
+
+    it('keeps foreign parent navigation and browser history in sync', () => {
+        vi.mocked(useWorldPinsData).mockImplementation(code => ({
+            pins: resource(worldCountries), countries: resource(worldOutlines), regions: resource(code === 'CAN' ? canada : null), outlines: resource(null),
+        }));
+        open('?country=CAN&pin=region-CAN-682&keep=1');
+        fireEvent.click(screen.getByRole('button', { name: 'Click empty map' }));
+        expect(screen.getByLabelText('Country / territory')).toHaveValue('CAN');
+        expect(screen.queryByRole('region', { name: 'Selected pin' })).toBeNull();
+        expect(screen.getByRole('navigation', { name: 'Map location' }).querySelector('[aria-current]')).toHaveTextContent('Canada');
+        fireEvent.click(screen.getByRole('button', { name: 'Click empty map' }));
+        expect(screen.getByLabelText('Country / territory')).toHaveValue('ALL');
+        fireEvent.click(screen.getByRole('button', { name: 'Map history back' }));
+        expect(screen.getByLabelText('Country / territory')).toHaveValue('CAN');
+        fireEvent.click(screen.getByRole('button', { name: 'Map history back' }));
+        expect(screen.getByRole('region', { name: 'Selected pin' })).toHaveTextContent('Ontario');
+        fireEvent.click(screen.getByRole('button', { name: 'Map history forward' }));
+        expect(screen.queryByRole('region', { name: 'Selected pin' })).toBeNull();
+        expect(screen.getByLabelText('Current query')).toHaveTextContent('keep=1');
+    });
+
     it('uses province coastlines without overlaying a conflicting country overview', () => {
         const tobago = parseWorldRegionPins(readPinsArtifact('world/regions/TTO.json'), 'TTO');
         const outlines = parseWorldBoundaries(readPinsArtifact('world/regions/TTO.geojson'), 'TTO');
@@ -149,11 +299,11 @@ describe('pin explorer behavior', () => {
         const initialView = screen.getByLabelText('Map view bounds').textContent;
         fireEvent.click(screen.getByRole('button', { name: 'Zoom to pin ↗' }));
         expect(screen.getByLabelText('Map view bounds')).toHaveTextContent(initialView!);
-        fireEvent.click(screen.getByRole('button', { name: 'Close selection and return to globe' }));
-        expect(screen.getByLabelText('Current query')).toHaveTextContent('?keep=value&country=ALL');
+        fireEvent.click(screen.getByRole('button', { name: 'Back to Virginia, close selection' }));
+        expect(screen.getByLabelText('Current query')).toHaveTextContent('?keep=value&state=51');
         expect(screen.queryByRole('region', { name: 'Selected pin' })).not.toBeInTheDocument();
-        expect(screen.getByLabelText('Map view bounds')).toHaveTextContent('-180,-60,180,83');
-        expect(screen.getByRole('button', { name: 'World overview', exact: true })).toHaveFocus();
+        expect(screen.getByLabelText('Map view bounds')).toHaveTextContent(publishedPins.pins.find(pin => pin.id === 'state-51')!.bounds.join(','));
+        expect(screen.getByRole('button', { name: 'Up one level: United States', exact: true })).toHaveFocus();
         fireEvent.change(screen.getByLabelText('Country / territory'), { target: { value: 'USA' } });
         fireEvent.change(screen.getByLabelText('Within'), { target: { value: '66' } });
         fireEvent.click(screen.getByRole('button', { name: 'Select national pin on map' }));
@@ -164,20 +314,23 @@ describe('pin explorer behavior', () => {
         expect(screen.getByLabelText('Current query')).toHaveTextContent('pin=country-US');
     });
 
-    it('returns to the globe with Escape or the persistent toolbar and resets ranking filters', () => {
+    it('moves up one geographic level with Escape and lets the world breadcrumb return home', () => {
         open('?pin=state-08&keep=1');
         fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'Colorado' } });
         fireEvent.keyDown(screen.getByRole('region', { name: 'Selected pin' }), { key: 'Escape' });
         expect(screen.getByRole('searchbox')).toHaveValue('');
-        expect(screen.getByLabelText('Country / territory')).toHaveValue('ALL');
+        expect(screen.getByLabelText('Country / territory')).toHaveValue('USA');
+        expect(screen.getByLabelText('Within')).toHaveValue('');
         expect(screen.getByLabelText('Current query')).toHaveTextContent('keep=1');
         expect(screen.getByLabelText('Current query')).not.toHaveTextContent('pin=');
+        expect(screen.getByRole('button', { name: 'Up one level: world overview', exact: true })).toHaveFocus();
         const globe = screen.getByRole('button', { name: 'World overview', exact: true });
-        expect(globe).toHaveFocus();
         fireEvent.click(globe);
+        expect(screen.getByLabelText('Country / territory')).toHaveValue('ALL');
+        expect(globe).toHaveFocus();
         expect(screen.getByLabelText('Map view bounds')).toHaveTextContent('-180,-60,180,83');
         fireEvent.change(screen.getByLabelText('Country / territory'), { target: { value: 'CAN' } });
-        fireEvent.click(screen.getByRole('button', { name: 'Back to globe', exact: true }));
+        fireEvent.click(screen.getByRole('button', { name: 'World overview', exact: true }));
         expect(screen.getByLabelText('Country / territory')).toHaveValue('ALL');
     });
 
@@ -216,9 +369,11 @@ describe('pin explorer behavior', () => {
         const panel = screen.getByRole('complementary', { name: 'Pin explorer' });
         fireEvent.click(screen.getByRole('button', { name: 'Retry pin data' })); expect(data.pins.retry).toHaveBeenCalledOnce();
         fireEvent.click(screen.getByRole('button', { name: 'Retry boundaries' })); expect(data.states.retry).toHaveBeenCalledOnce();
+        fireEvent.keyDown(panel, { key: 'Escape' });
         fireEvent.keyDown(panel, { key: 'Escape' }); expect(toggle).toHaveFocus();
         expect(toggle).toHaveAttribute('aria-expanded', 'false');
         data.states.error = null; data.counties.error = 'failed'; data.pins.loading = true;
+        fireEvent.change(screen.getByLabelText('Country / territory'), { target: { value: 'USA' } });
         view.rerender(<MemoryRouter><PinsExplorer /><Location /></MemoryRouter>);
         fireEvent.click(toggle);
         expect(screen.getByText('Calculations complete. Loading the pins…')).toBeVisible();

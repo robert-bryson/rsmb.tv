@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { IntentLink } from '../../components/IntentLink';
 import { usePersistedState } from '../../hooks/usePersistedState';
@@ -8,6 +8,8 @@ import { usStatesAndTerritories } from '../../../shared/geography/usStates';
 import { usePinsData, useWorldPinsData } from './data';
 import { PinsMap } from './PinsMap';
 import { PinLocationDetails } from './PinLocationDetails';
+import { PinsNavigation } from './PinsNavigation';
+import { parentPinScope, pinBreadcrumbs, pinScopeName, rankingAfterNavigation, resolveStateScope, scopeSearchParams, type PinScope } from './navigation';
 import type { ViewRequest } from './types';
 import { countiesVisible, COUNTY_ZOOM, focusBounds, formatArea, formatRadius, OVERVIEW_BOUNDS, rankPins, type CountyMode } from './geometry';
 import './pins.css';
@@ -34,19 +36,21 @@ export default function PinsExplorer() {
     // A primitive URL selection also keeps React Compiler's memoization stable.
     const countryCode = String(resolveCountry(searchParams.get('country'), selectedId));
     const isUS = countryCode === 'USA', isWorld = countryCode === 'ALL';
+    const stateFips = resolveStateScope(countryCode, selectedId, searchParams.get('state'));
+    const navigationKey = `${countryCode}:${stateFips}:${selectedId ?? ''}`;
     const country = WORLD_COUNTRY_LOOKUP.get(countryCode);
     const countryName = country?.name ?? 'World';
     const overviewBounds = isUS ? OVERVIEW_BOUNDS : isWorld ? WORLD_OVERVIEW_BOUNDS : country!.bounds as ViewRequest['bounds'];
-    const [level, setLevel] = useState<'country' | 'state' | 'county'>('state');
+    const [level, setLevel] = useState<'country' | 'state' | 'county'>(() => rankingAfterNavigation('country', { countryCode, stateFips }, selectedId));
     const activeLevel = isWorld ? 'country' : !isUS && level === 'county' ? 'state' : level;
     const [showRegions, setShowRegions] = useState(true);
     const [countyMode, setCountyMode] = useState<CountyMode>('auto');
     const [zoom, setZoom] = useState(3);
-    const [stateFips, setStateFips] = useState('');
     const [query, setQuery] = useState('');
     const [sort, setSort] = useState<'largest' | 'smallest' | 'name'>('largest');
     const [limit, setLimit] = useState(30);
     const [panelOpen, setPanelOpen] = useState(() => window.innerWidth >= 768);
+    const [layersOpen, setLayersOpen] = useState(() => window.innerWidth >= 768 && window.innerHeight >= 600);
     const [storedCircles, setCircles] = usePersistedState('pins-radius-circles', true);
     const [storedUnit, setUnit] = usePersistedState<'mi' | 'km'>('pins-distance-unit', 'mi');
     const circles = storedCircles === true;
@@ -56,13 +60,22 @@ export default function PinsExplorer() {
     const resources = usePinsData(showCounties, isUS);
     const world = useWorldPinsData(countryCode, showRegions);
     const metadata = resources.pins.data?.metadata;
-    const allPins = useMemo<MapPin[]>(() => isUS ? resources.pins.data?.pins ?? EMPTY_PINS
+    const allPins = useMemo<MapPin[]>(() => isUS ? [...new Map([
+        ...world.pins.data?.pins ?? EMPTY_PINS, ...resources.pins.data?.pins ?? EMPTY_PINS,
+    ].map(pin => [pin.id, pin])).values()]
         : [...world.pins.data?.pins ?? EMPTY_PINS, ...world.regions.data?.pins ?? EMPTY_PINS],
     [isUS, resources.pins.data, world.pins.data, world.regions.data]);
-    const pins = useMemo(() => isUS || isWorld ? allPins : allPins.filter(pin => pinCountryCode(pin) === countryCode), [allPins, isUS, isWorld, countryCode]);
+    const pins = useMemo(() => isWorld ? allPins.filter(pin => pin.level === 'country') : allPins.filter(pin => pinCountryCode(pin) === countryCode), [allPins, isWorld, countryCode]);
+    const contextPins = useMemo(() => isWorld ? EMPTY_PINS : allPins.filter(pin => pin.level === 'country' && pinCountryCode(pin) !== countryCode), [allPins, isWorld, countryCode]);
     const nationalPin = isWorld ? null : pins.find(pin => pin.level === 'country');
     const selected = allPins.find(pin => pin.id === selectedId) ?? null;
     const selectedArea = selected ? pinArea(selected) : null;
+    const scopePin = isUS && stateFips ? pins.find(pin => pin.level === 'state' && pinStateFips(pin) === stateFips) : null;
+    const parent = parentPinScope({ countryCode, stateFips }, selected);
+    const parentCountryCode = parent?.countryCode ?? '';
+    const parentStateFips = parent?.stateFips ?? '';
+    const trail = pinBreadcrumbs({ countryCode, stateFips }, selected);
+    const parentName = parent ? pinScopeName(parent) : '';
     const pinResource = isUS ? resources.pins : world.pins;
     const pinLoading = pinResource.loading || (!isUS && !isWorld && world.regions.loading);
     const pinError = pinResource.error || (!isUS && !isWorld && world.regions.error);
@@ -83,11 +96,31 @@ export default function PinsExplorer() {
     const boundaryError = boundaryResource.error;
     const requiredBoundaryError = primaryBoundaries.error || (!isUS && detailBoundaries.error);
     const boundaryLoading = isUS ? resources.states.loading : world.countries.loading || (!isWorld && world.outlines.loading);
-    const [view, setView] = useState<ViewRequest | null>(null);
-    const viewKey = useRef(0);
-    const focusedId = useRef<string | null>(null);
+    const [manualView, setManualView] = useState<{ location: string; sequence: number; bounds: ViewRequest['bounds'] } | null>(null);
+    const [observedLocation, setObservedLocation] = useState(navigationKey);
+    const [observedSelection, setObservedSelection] = useState<string | null>(null);
+    // Synchronize local controls before React commits a changed URL view.
+    if (observedLocation !== navigationKey) {
+        setObservedLocation(navigationKey);
+        setLevel(previous => rankingAfterNavigation(previous, { countryCode, stateFips }, selectedId));
+    }
+    if (observedSelection !== (selected?.id ?? null)) {
+        setObservedSelection(selected?.id ?? null);
+        if (selected) {
+            setPanelOpen(true);
+            if (selected.level === 'county') setCountyMode(previous => previous === 'off' ? 'auto' : previous);
+        }
+    }
+    const pendingView = pinLoading && (!!selectedId && !selected || !!stateFips && !scopePin);
+    const manual = manualView?.location === navigationKey ? manualView : null;
+    const view: ViewRequest | null = pendingView ? null : {
+        key: manual ? `${navigationKey}:manual:${manual.sequence}` : navigationKey,
+        bounds: manual?.bounds ?? (selected ? focusBounds(selected) : scopePin?.bounds ?? overviewBounds),
+    };
+    const restoreFocus = useRef(false);
     const toggleRef = useRef<HTMLButtonElement>(null);
     const globeRef = useRef<HTMLButtonElement>(null);
+    const upRef = useRef<HTMLButtonElement>(null);
     const resultsRef = useRef<HTMLDivElement>(null);
     const sidebarRef = useRef<HTMLElement>(null);
     const selectionRef = useRef<HTMLElement>(null);
@@ -96,34 +129,36 @@ export default function PinsExplorer() {
     const largest = extremes[0], smallest = extremes.at(-1);
     const filteredState = JURISDICTIONS.find(state => state.fips === stateFips);
 
-    const requestView = useCallback((bounds: ViewRequest['bounds']) => setView({ bounds, key: ++viewKey.current }), []);
+    const requestView = useCallback((bounds: ViewRequest['bounds']) => setManualView(previous => ({ location: navigationKey, bounds, sequence: (previous?.sequence ?? 0) + 1 })), [navigationKey]);
     const selectPin = useCallback((id: string) => {
         const pin = allPins.find(pin => pin.id === id);
         if (!pin) return;
-        focusedId.current = id;
         const targetCountry = pinCountryCode(pin);
         if (targetCountry !== countryCode) { setQuery(''); setLimit(30); setLevel('state'); }
         if (pin.level === 'county') {
             setLevel('county');
             setCountyMode(previous => previous === 'off' ? 'auto' : previous);
         }
-        // Reveal a selected pin even when it falls outside the current scope.
-        setStateFips(previous => previous && previous !== pinStateFips(pin) ? '' : previous);
-        setSearchParams(previous => { const next = new URLSearchParams(previous); next.set('pin', id); if (targetCountry === 'USA') next.delete('country'); else next.set('country', targetCountry); return next; }, { replace: true });
-        requestView(focusBounds(pin));
+        if (id === selectedId) requestView(focusBounds(pin));
+        else setSearchParams(previous => scopeSearchParams(previous, { countryCode: targetCountry, stateFips: pin.level === 'country' ? '' : pinStateFips(pin) }, pin));
         setPanelOpen(true);
-    }, [allPins, countryCode, requestView, setSearchParams, setQuery, setLimit, setLevel, setCountyMode, setStateFips, setPanelOpen]);
-
-    const viewedCountry = useRef('USA');
-    useEffect(() => {
-        if (viewedCountry.current === countryCode) return;
-        viewedCountry.current = countryCode;
-        if (!selectedId || focusedId.current !== selectedId) requestView(overviewBounds);
-    }, [countryCode, selectedId, overviewBounds, requestView]);
+    }, [allPins, countryCode, selectedId, requestView, setSearchParams, setQuery, setLimit, setLevel, setCountyMode, setPanelOpen]);
 
     useEffect(() => {
-        if (selected && focusedId.current !== selected.id) selectPin(selected.id);
-    }, [selected, selectPin]);
+        // Hydrate shared links without adding a second history entry. User
+        // navigation and browser Back then use the same geographic URL state.
+        if (selected && pinCountryCode(selected) !== countryCode) {
+            setSearchParams(previous => scopeSearchParams(previous, { countryCode: pinCountryCode(selected), stateFips: pinStateFips(selected) }, selected), { replace: true });
+            return;
+        }
+    }, [selected, countryCode, setSearchParams]);
+
+    useEffect(() => {
+        if (restoreFocus.current) {
+            restoreFocus.current = false;
+            (upRef.current ?? globeRef.current)?.focus({ preventScroll: true });
+        }
+    }, [navigationKey]);
 
     useEffect(() => {
         const sidebar = sidebarRef.current, card = selectionRef.current;
@@ -133,51 +168,48 @@ export default function PinsExplorer() {
         }
     }, [selected, panelOpen]);
 
-    const clearSelection = () => {
-        focusedId.current = null;
-        setSearchParams(previous => { const next = new URLSearchParams(previous); next.delete('pin'); return next; }, { replace: true });
+    const goToScope = (target: PinScope, focus = false) => {
+        restoreFocus.current = focus;
+        setQuery(''); setLimit(30);
+        if (target.countryCode === countryCode && target.stateFips === stateFips && !selectedId) {
+            requestView(scopePin?.bounds ?? overviewBounds);
+            if (focus) (upRef.current ?? globeRef.current)?.focus({ preventScroll: true });
+            restoreFocus.current = false;
+        } else setSearchParams(previous => scopeSearchParams(previous, target));
+        sidebarRef.current?.scrollTo({ top: 0, behavior: 'auto' });
     };
     const changeCountry = (code: string) => {
-        if (code !== 'ALL' && !WORLD_COUNTRY_LOOKUP.has(code)) return;
-        focusedId.current = null;
-        setStateFips(''); setQuery(''); setLimit(30); setLevel(code === 'ALL' ? 'country' : 'state');
-        setSearchParams(previous => {
-            const next = new URLSearchParams(previous); next.delete('pin');
-            if (code === 'USA') next.delete('country'); else next.set('country', code);
-            return next;
-        }, { replace: true });
-        if (code === countryCode) requestView(overviewBounds);
+        if (code === 'ALL' || WORLD_COUNTRY_LOOKUP.has(code)) goToScope({ countryCode: code, stateFips: '' });
     };
-    const returnToGlobe = () => {
-        changeCountry('ALL');
-        sidebarRef.current?.scrollTo({ top: 0, behavior: 'auto' });
-        globeRef.current?.focus({ preventScroll: true });
-    };
-    const setScope = (fips: string) => {
-        setStateFips(fips);
-        setQuery('');
-        setLimit(30);
-        clearSelection();
-        const state = pins.find(pin => pin.level === 'state' && 'fips' in pin && pin.fips === fips);
-        requestView(state?.bounds ?? OVERVIEW_BOUNDS);
-    };
+    const navigateUp = (focus = false) => { if (parentCountryCode) goToScope({ countryCode: parentCountryCode, stateFips: parentStateFips }, focus); };
+    const setScope = (fips: string) => goToScope({ countryCode: 'USA', stateFips: fips });
     const jumpTo = (fips: string) => {
         if (fips === 'country-US') { selectPin('country-US'); return; }
-        setStateFips('');
-        clearSelection();
-        const state = pins.find(pin => pin.level === 'state' && 'fips' in pin && pin.fips === fips);
-        requestView(state?.bounds ?? OVERVIEW_BOUNDS);
+        setScope(fips === 'overview' ? '' : fips);
     };
     const changeLevel = (next: 'country' | 'state' | 'county') => {
         setLevel(next);
         setLimit(30);
         if (next === 'county' && countyMode === 'off') setCountyMode('auto');
     };
-    const closePanel = () => { setPanelOpen(false); toggleRef.current?.focus({ preventScroll: true }); };
+    const onEscape = useEffectEvent((event: KeyboardEvent) => {
+        if (event.key !== 'Escape' || event.repeat || event.defaultPrevented || document.fullscreenElement) return;
+        const target = event.target;
+        if (target instanceof HTMLSelectElement) return;
+        event.preventDefault();
+        if (target instanceof HTMLInputElement && target.type === 'search' && target.value) {
+            setQuery(''); setLimit(30); return;
+        }
+        if (parentCountryCode) navigateUp(true);
+        else if (panelOpen) { setPanelOpen(false); toggleRef.current?.focus({ preventScroll: true }); }
+    });
+    useEffect(() => {
+        const escape = (event: KeyboardEvent) => onEscape(event);
+        document.addEventListener('keydown', escape);
+        return () => document.removeEventListener('keydown', escape);
+    }, []);
 
-    return <div className={`pins-app ${panelOpen ? 'pins-panel-open' : ''}`} onKeyDown={event => {
-        if (event.key === 'Escape' && selected) { event.preventDefault(); event.stopPropagation(); returnToGlobe(); }
-    }}>
+    return <div className={`pins-app ${panelOpen ? 'pins-panel-open' : ''}`}>
         <header className="pins-header">
             <IntentLink to="/projects" className="pins-back" aria-label="Back to projects">← <span>Projects</span></IntentLink>
             <div className="pins-brand"><PinIcon /><div><p className="pins-eyebrow">An exploration of the interior</p><h1>Pins of Inaccessibility</h1></div></div>
@@ -189,8 +221,7 @@ export default function PinsExplorer() {
         </header>
 
         <div className="pins-workspace">
-            <aside ref={sidebarRef} className="pins-sidebar" id="pins-sidebar" aria-label="Pin explorer" hidden={!panelOpen}
-                onKeyDown={event => { if (event.key === 'Escape' && !selected) { event.stopPropagation(); closePanel(); } }}>
+            <aside ref={sidebarRef} className="pins-sidebar" id="pins-sidebar" aria-label="Pin explorer" hidden={!panelOpen}>
                 <div className="pins-panel-intro">
                     <p className="pins-eyebrow">How far inside can you go?</p>
                     <h2>The farthest point<br />from every edge.</h2>
@@ -231,7 +262,7 @@ export default function PinsExplorer() {
                 {pinError && <div className="pins-data-error" role="alert">Pin data could not be loaded.<button type="button" onClick={retryPins}>Retry pin data</button></div>}
 
                 {selected && <section ref={selectionRef} className="pins-selection" aria-label="Selected pin">
-                    <div className="pins-selection-heading"><p className="pins-eyebrow">Selected {selected.kind}</p><button type="button" onClick={returnToGlobe} aria-label="Close selection and return to globe"><span aria-hidden="true">×</span> Close selection</button></div>
+                    <div className="pins-selection-heading"><p className="pins-eyebrow">Selected {selected.kind}</p><button type="button" onClick={() => navigateUp(true)} aria-label={`Back to ${parentName}, close selection`}><span aria-hidden="true">↑</span> Back to {parentName}</button></div>
                     <h3>{selected.name}{pinContext(selected) && <span>, {pinContext(selected)}</span>}</h3>
                     <p className="pins-selected-radius">{formatRadius(selected.radiusMeters, unit)}<span>to the nearest boundary</span></p>
                     <dl><div><dt>Coordinates</dt><dd>{selected.lat.toFixed(5)}, {selected.lng.toFixed(5)}</dd></div><div><dt>{selectedArea!.label}</dt><dd>{formatArea(selectedArea!.value)}</dd></div><div><dt>Source</dt><dd>{pinSource(selected)}</dd></div></dl>
@@ -273,18 +304,21 @@ export default function PinsExplorer() {
             </aside>
 
             <section className="pins-map-area" aria-label="Geographic map">
-                <PinsMap pins={pins} states={outlines} counties={isUS ? resources.counties.data : null} stateFips={isUS ? stateFips : ''} showCounties={showCounties}
+                <PinsMap pins={pins} contextPins={contextPins} states={outlines} counties={isUS ? resources.counties.data : null} stateFips={isUS ? stateFips : ''} showCounties={showCounties}
                     showRegions={isUS || showRegions}
                     dataState={pinError || requiredBoundaryError ? 'error' : pinLoading || boundaryLoading ? 'loading' : 'ready'}
-                    circles={circles} zoom={zoom} selected={selected} view={view} unit={unit} reducedMotion={reducedMotion} onSelect={selectPin} onZoom={setZoom} />
-                <div className="pins-map-toolbar">
-                    <button type="button" ref={globeRef} className="pins-button pins-world-overview" onClick={returnToGlobe}><span aria-hidden="true">{isWorld && !selectedId ? '◎' : '←'}</span> {isWorld && !selectedId ? 'World overview' : 'Back to globe'}</button>
+                    circles={circles} zoom={zoom} selected={selected} view={view} navigationKey={navigationKey} unit={unit} reducedMotion={reducedMotion} onSelect={selectPin} onNavigateUp={navigateUp} onZoom={setZoom} />
+                <div className="pins-map-tools">
+                <div className={`pins-map-toolbar${isWorld ? ' is-world' : ''}`}>
+                    <PinsNavigation trail={trail} parent={parent} worldRef={globeRef} upRef={upRef} onNavigate={scope => goToScope(scope, true)} onUp={() => navigateUp(true)} />
                     <div className="pins-region-control"><PinIcon small /><label className="sr-only" htmlFor="pins-region">Jump to region</label><select id="pins-region" value="" onChange={event => isUS ? jumpTo(event.target.value) : isWorld ? changeCountry(event.target.value) : selectPin(event.target.value)}>
-                        <option value="" disabled>Jump to a region</option>{isUS ? REGION_SHORTCUTS.map(([value, label]) => <option key={value} value={value}>{label}</option>) : isWorld ? COUNTRIES.map(country => <option key={country.code} value={country.code}>{country.name}</option>) : pins.map(pin => <option key={pin.id} value={pin.id}>{pin.name}</option>)}
+                        <option value="" disabled>Jump to…</option>{isUS ? REGION_SHORTCUTS.map(([value, label]) => <option key={value} value={value}>{label}</option>) : isWorld ? COUNTRIES.map(country => <option key={country.code} value={country.code}>{country.name}</option>) : pins.map(pin => <option key={pin.id} value={pin.id}>{pin.name}</option>)}
                     </select></div>
-                    {!isWorld && <button type="button" className="pins-button pins-reset" onClick={() => isUS ? jumpTo('overview') : requestView(overviewBounds)}>{isUS ? 'U.S. overview' : `${countryName} overview`}</button>}
+                    {!isWorld && <button type="button" className="pins-button pins-reset" onClick={() => goToScope({ countryCode, stateFips: '' })}>{isUS ? 'U.S. overview' : `${countryName} overview`}</button>}
                 </div>
-                <div className="pins-layers" aria-label="Map layers">
+                <details className="pins-layers" open={layersOpen} onToggle={event => setLayersOpen(event.currentTarget.open)}>
+                    <summary>Map layers</summary>
+                    <div className="pins-layer-options" aria-label="Map layers">
                     <label className="pins-circle-toggle"><input type="checkbox" checked={circles} onChange={event => setCircles(event.target.checked)} /><span>All radius circles</span></label>
                     <div className="pins-layer-divider" />
                     {!isUS && !isWorld && <label className="pins-circle-toggle"><input type="checkbox" checked={showRegions} onChange={event => setShowRegions(event.target.checked)} /><span>States & provinces</span></label>}
@@ -292,12 +326,15 @@ export default function PinsExplorer() {
                     <fieldset><legend>County layer</legend><div className="pins-segments">{(['off', 'auto', 'on'] as const).map(mode => <button type="button" key={mode} aria-pressed={countyMode === mode} onClick={() => setCountyMode(mode)}>{mode[0].toUpperCase() + mode.slice(1)}</button>)}</div></fieldset>
                     <p aria-live="polite">{countyMode === 'auto' ? showCounties ? 'County pins visible' : `Zoom in to show counties · z${COUNTY_ZOOM}+` : countyMode === 'on' ? 'County pins always visible' : 'County pins hidden'}</p>
                     </>}
-                    <p className="pins-radius-hint">Radius lines and distances appear as you zoom in.</p>
+                    <p className="pins-radius-hint">{selected ? 'Muted pins remain selectable. Only the selected pin shows distance labels.' : 'Radius lines and distances appear as you zoom in.'}</p>
+                    </div>
+                </details>
+                {parent && <p className="pins-navigation-hint">{selected ? 'Click outside the selection' : 'Click empty map'} or press Esc to go up one level.</p>}
                 </div>
                 {boundaryError && <div className="pins-boundary-error" role="alert">{isUS ? resources.states.error ? 'State boundaries unavailable.' : 'County boundaries unavailable.' : 'Country or province boundaries unavailable.'}<button type="button" onClick={boundaryResource.retry}>Retry boundaries</button></div>}
                 {showCounties && resources.counties.loading && <div className="pins-boundary-error" role="status">Loading county boundaries…</div>}
                 {!isUS && pinLoading && <div className="pins-boundary-error" role="status">Loading country and province pins…</div>}
-                <div className="pins-map-legend"><span><i className="pins-national-dot" />{isUS ? 'U.S. pole' : 'Country poles'}</span>{!isWorld && <span><i className="pins-state-dot" />{isUS ? 'States & territories' : 'States & provinces'}</span>}{isUS && <span><i className="pins-county-dot" />Counties</span>}<span className="pins-legend-circle"><i />Radius to nearest edge</span></div>
+                <div className="pins-map-legend">{selected ? <><span><i className="pins-selected-dot" />Selected pin</span><span><i className="pins-context-dot" />Other pins · selectable</span></> : <><span><i className="pins-national-dot" />{isUS ? 'U.S. pole' : 'Country poles'}</span>{!isWorld && <span><i className="pins-state-dot" />{isUS ? 'States & territories' : 'States & provinces'}</span>}{isUS && <span><i className="pins-county-dot" />Counties</span>}</>}<span className="pins-legend-circle"><i />Radius to nearest edge</span></div>
                 <div className="pins-unit-control" role="group" aria-label="Distance units">{(['mi', 'km'] as const).map(value => <button type="button" key={value} aria-pressed={unit === value} onClick={() => setUnit(value)}>{value}</button>)}</div>
             </section>
         </div>

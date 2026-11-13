@@ -43,7 +43,8 @@ export default function PinsOfInaccessibilityAbout() {
             <li>Search by name, state abbreviation, or FIPS code. Compare the largest and smallest radii, then click to zoom.</li>
             <li>Use miles or kilometers. Copy the address of a selected pin to share it.</li>
             <li>Each selected pin includes approximate terrain elevation, a straight-line distance to the nearest listed town, and Google Maps and OpenStreetMap links.</li>
-            <li>Use Back to globe, Close selection, or Escape to return to the world overview.</li>
+            <li>Click outside a selection or use Up one level to return to its parent geography. Use the World trail button for the globe.</li>
+            <li>Other pins stay selectable in muted colors. Peer circles become quiet outlines while the selected pin shows its distances.</li>
         </ul>
         <h2 className="mb-3 text-lg font-medium text-zinc-100">What counts as an edge?</h2>
         <p className="mb-5 text-sm leading-relaxed text-zinc-400">The map uses administrative boundaries, including jurisdictional water. Inland lake shores add no extra edges. Enclaves remain holes: an independent city inside a county is a separate jurisdiction. A pin can lie over water. U.S. coastal edges follow Census jurisdiction limits, which can extend offshore.</p>

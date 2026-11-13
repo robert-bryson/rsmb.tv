@@ -26,11 +26,16 @@ async function prepare(page: Page, background = '#171f26') {
     return errors;
 }
 
+async function expectMapReady(page: Page, state: string | RegExp = 'ready') {
+    // Source parsing precedes the renderer's 15-second drawing deadline.
+    await expect(page.getByTestId('pins-map')).toHaveAttribute('data-map-state', state, { timeout: 20_000 });
+}
+
 async function openMap(page: Page) {
     await page.goto('/projects/pins-of-inaccessibility/map');
     await expect(page.locator('.pins-coverage')).toContainText('3,235');
     await expect(page.locator('.maplibregl-canvas')).toBeVisible();
-    await expect(page.getByTestId('pins-map')).toHaveAttribute('data-map-state', /ready|degraded/);
+    await expectMapReady(page, /ready|degraded/);
     await expect(page.getByRole('link', { name: 'CARTO', exact: true })).toBeVisible();
     await expect(page.getByRole('link', { name: 'OpenStreetMap', exact: true })).toBeVisible();
 }
@@ -41,6 +46,7 @@ test('shows selected elevation and nearby town with map links, then closes to th
     await page.route('**/maps/pins/context/releases/*/countries.json', route => route.fulfill({ json: pinContextFileFixture }));
     await page.goto('/projects/pins-of-inaccessibility/map?pin=country-US&keep=value');
     const selected = page.getByRole('region', { name: 'Selected pin' });
+    await expectMapReady(page);
     await expect(selected.getByText('1,280 ft above sea level')).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Pins of Inaccessibility', exact: true })).toBeInViewport();
     await expect(selected).toContainText('8.31 mi E of Bennington');
@@ -51,7 +57,7 @@ test('shows selected elevation and nearby town with map links, then closes to th
     await expect(selected).toContainText('13.4 km E of Bennington');
     const scan = await new AxeBuilder({ page }).analyze();
     expect(scan.violations).toEqual([]);
-    await selected.getByRole('button', { name: 'Close selection and return to globe' }).click();
+    await selected.getByRole('button', { name: 'Back to world overview, close selection' }).click();
     await expect(selected).toHaveCount(0);
     await expect(page.getByLabel('Country / territory')).toHaveValue('ALL');
     await expect(page.locator('.pins-panel-intro h2')).toBeInViewport();
@@ -68,14 +74,15 @@ test('opens a shared pin directly to its card and map links on a narrow phone', 
     await page.route('**/maps/pins/context/releases/*/countries.json', route => route.fulfill({ json: pinContextFileFixture }));
     await page.goto('/projects/pins-of-inaccessibility/map?pin=country-US');
     const selected = page.getByRole('region', { name: 'Selected pin' });
+    await expectMapReady(page);
     await expect(selected.getByText('1,280 ft above sea level')).toBeVisible();
-    await expect(selected.getByRole('button', { name: 'Close selection and return to globe' })).toBeInViewport();
+    await expect(selected.getByRole('button', { name: 'Back to world overview, close selection' })).toBeInViewport();
     await expect(selected.getByRole('link', { name: 'Google Maps ↗' })).toBeInViewport();
     await expect(selected.getByRole('link', { name: 'OpenStreetMap ↗' })).toBeInViewport();
     await expect(selected.locator('.pins-nearby-place')).toBeInViewport();
     await expect(page.getByRole('heading', { name: 'Pins of Inaccessibility', exact: true })).toBeInViewport();
-    await expect(page.getByRole('button', { name: 'Back to globe', exact: true })).toBeInViewport();
-    await page.getByRole('button', { name: 'Back to globe', exact: true }).click();
+    await expect(page.getByRole('button', { name: 'World overview', exact: true })).toBeInViewport();
+    await page.getByRole('button', { name: 'World overview', exact: true }).click();
     await expect(page.getByLabel('Country / territory')).toHaveValue('ALL');
     await expect(page.locator('.pins-panel-intro h2')).toBeInViewport();
     expect(errors).toEqual([]);
@@ -90,9 +97,10 @@ test('recovers malformed location context without blocking the selected pin or m
     }));
     await page.goto('/projects/pins-of-inaccessibility/map?pin=country-US');
     const selected = page.getByRole('region', { name: 'Selected pin' });
+    await expectMapReady(page);
     await expect(selected.getByRole('button', { name: 'Retry location details' })).toBeVisible();
     await expect(selected.getByRole('link', { name: 'Google Maps ↗' })).toBeVisible();
-    await expect(page.getByTestId('pins-map')).toHaveAttribute('data-map-state', /ready|degraded/);
+    await expectMapReady(page, /ready|degraded/);
     invalid = false;
     await selected.getByRole('button', { name: 'Retry location details' }).click();
     await expect(selected.getByText('1,280 ft above sea level')).toBeVisible();
@@ -101,7 +109,115 @@ test('recovers malformed location context without blocking the selected pin or m
     expect(errors).toEqual([]);
 });
 
-async function mapColorPixels(page: Page, color: 'amber' | 'teal' | 'circle' | 'national') {
+test('clicks away from a selected country to the world while preserving native map gestures', async ({ page }) => {
+    const errors = await prepare(page);
+    await page.goto('/projects/pins-of-inaccessibility/map?country=TTO&pin=country-TTO&keep=1');
+    await expectMapReady(page);
+    const selected = page.getByRole('region', { name: 'Selected pin' });
+    await expect(selected).toContainText('Trinidad and Tobago');
+    await expect(page.locator('.pins-map-legend')).toContainText('Other pins · selectable');
+    await expect(page.locator('.pins-radius-label:not(.is-selected)')).toHaveCount(0);
+    const canvas = page.locator('.maplibregl-canvas');
+    const box = (await canvas.boundingBox())!;
+    const point = { x: box.width - 80, y: box.height * 0.6 };
+    const before = await canvas.screenshot();
+    await canvas.dblclick({ position: point });
+    await expect.poll(async () => (await canvas.screenshot()).equals(before)).toBe(false);
+    await expect(page).toHaveURL(/pin=country-TTO/);
+    await page.mouse.move(box.x + point.x, box.y + point.y);
+    await page.mouse.down();
+    await page.mouse.move(box.x + point.x - 55, box.y + point.y + 10, { steps: 8 });
+    await page.mouse.up();
+    await expect(selected).toBeVisible();
+    // Restore the same known camera before testing empty ocean east of Trinidad.
+    await selected.getByRole('button', { name: 'Zoom to pin ↗' }).click();
+    await expectMapReady(page);
+    await canvas.click({ position: point });
+    await expect(page.getByLabel('Country / territory')).toHaveValue('ALL');
+    await expect(selected).toHaveCount(0);
+    await expect(page).toHaveURL(/keep=1/);
+    await expect(page.getByRole('navigation', { name: 'Map location' }).locator('[aria-current]')).toHaveText('World');
+    expect(errors).toEqual([]);
+});
+
+test('restores county, state, and country views through parent navigation and browser history', async ({ page }) => {
+    const errors = await prepare(page);
+    await page.goto('/projects/pins-of-inaccessibility/map?pin=county-51610&keep=1');
+    const selected = page.getByRole('region', { name: 'Selected pin' });
+    const location = page.getByRole('navigation', { name: 'Map location' });
+    await expect(selected).toContainText('Falls Church city');
+    await selected.getByRole('button', { name: 'Back to Virginia, close selection' }).click();
+    await expect(page.getByLabel('Within', { exact: true })).toHaveValue('51');
+    await expect(page).toHaveURL(/state=51/);
+    await expect(location.locator('[aria-current]')).toHaveText('Virginia');
+    await page.reload();
+    await expect(location.locator('[aria-current]')).toHaveText('Virginia');
+    await expect(selected).toHaveCount(0);
+    await page.getByRole('button', { name: 'Up one level: United States', exact: true }).click();
+    await expect(location.locator('[aria-current]')).toHaveText('United States');
+    await page.getByRole('button', { name: 'Up one level: world overview', exact: true }).click();
+    await expect(page.getByLabel('Country / territory')).toHaveValue('ALL');
+    await page.goBack();
+    await expect(location.locator('[aria-current]')).toHaveText('United States');
+    await page.goBack();
+    await expect(location.locator('[aria-current]')).toHaveText('Virginia');
+    await page.goBack();
+    await expect(selected).toContainText('Falls Church city');
+    await page.goForward();
+    await expect(selected).toHaveCount(0);
+    await expect(page.getByLabel('Within', { exact: true })).toHaveValue('51');
+    expect(errors).toEqual([]);
+});
+
+test.describe('touch hierarchy', () => {
+    test.use({ viewport: { width: 320, height: 844 }, hasTouch: true });
+
+    test('keeps the trail usable at 320 pixels and supports tapping away from a country', async ({ page }) => {
+        const errors = await prepare(page);
+        await page.goto('/projects/pins-of-inaccessibility/map?pin=county-51610');
+        const selected = page.getByRole('region', { name: 'Selected pin' });
+        await expect(selected).toContainText('Falls Church city');
+        const up = page.getByRole('button', { name: 'Up one level: Virginia', exact: true });
+        await expect(up).toBeInViewport();
+        const upBox = (await up.boundingBox())!;
+        expect(upBox.height).toBeGreaterThanOrEqual(44);
+        expect(upBox.width).toBeGreaterThanOrEqual(44);
+        await expect(up).toHaveCSS('touch-action', 'manipulation');
+        await expect(page.getByRole('checkbox', { name: 'All radius circles' })).toBeHidden();
+        await page.locator('.pins-layers summary').tap();
+        await expect(page.getByRole('checkbox', { name: 'All radius circles' })).toBeVisible();
+        await page.locator('.pins-layers summary').tap();
+        await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+        const scan = await new AxeBuilder({ page }).analyze();
+        expect(scan.violations).toEqual([]);
+        await page.screenshot({ path: '/tmp/pins-hierarchy-mobile.png' });
+        await page.setViewportSize({ width: 667, height: 375 });
+        const mapBox = (await page.locator('.maplibregl-canvas').boundingBox())!;
+        const panelBox = (await page.getByRole('complementary', { name: 'Pin explorer' }).boundingBox())!;
+        expect(mapBox.height).toBeGreaterThan(250);
+        expect(mapBox.x).toBeGreaterThanOrEqual(panelBox.x + panelBox.width - 1);
+        await expect(up).toBeInViewport();
+        await page.screenshot({ path: '/tmp/pins-hierarchy-landscape.png' });
+        await page.setViewportSize({ width: 320, height: 844 });
+        await up.tap();
+        await expect(page).toHaveURL(/state=51/);
+        await expect(selected).toHaveCount(0);
+        await page.getByRole('button', { name: 'Up one level: United States', exact: true }).tap();
+        await expect(page.getByRole('navigation', { name: 'Map location' }).locator('[aria-current]')).toHaveText('United States');
+        await page.getByRole('button', { name: 'Up one level: world overview', exact: true }).tap();
+        await expect(page.getByLabel('Country / territory')).toHaveValue('ALL');
+        await page.getByLabel('Jump to region').selectOption('TTO');
+        await page.getByLabel('Jump to region').selectOption('country-TTO');
+        await expect(selected).toContainText('Trinidad and Tobago');
+        await expectMapReady(page);
+        const canvas = (await page.locator('.maplibregl-canvas').boundingBox())!;
+        await page.touchscreen.tap(canvas.x + canvas.width - 16, canvas.y + canvas.height * 0.65);
+        await expect(page.getByLabel('Country / territory')).toHaveValue('ALL');
+        expect(errors).toEqual([]);
+    });
+});
+
+async function mapColorPixels(page: Page, color: 'amber' | 'teal' | 'circle' | 'national' | 'selected') {
     const { data, info } = await sharp(await page.locator('.maplibregl-canvas').screenshot({
         mask: [page.locator('.pins-map-toolbar'), page.locator('.pins-layers'), page.locator('.pins-map-legend'), page.locator('.pins-unit-control')],
         maskColor: '#171f26', animations: 'disabled',
@@ -111,7 +227,8 @@ async function mapColorPixels(page: Page, color: 'amber' | 'teal' | 'circle' | '
         const offset = pixel * info.channels;
         const [r, g, b] = data.subarray(offset, offset + 3);
         if (color === 'amber' ? r > 180 && g > 115 && g < 220 && b < 150
-            : color === 'national' ? r > 160 && g > 100 && b > r && b > g * 1.1
+            : color === 'selected' ? r > 225 && g > 195 && b > 155 && b < 240
+                : color === 'national' ? r > 160 && g > 100 && b > r && b > g * 1.1
             : color === 'circle' ? r > 90 && r < 180 && g > 65 && b < 115 && r > g * 1.15
                 : g > 130 && b > 100 && r < 135 && g > r * 1.3) count++;
     }
@@ -194,8 +311,10 @@ test('draws the national pole, supports map selection, and restores its shared l
     await expect(page.getByRole('region', { name: 'Selected pin' })).toContainText('United States');
     await expect(page.getByRole('region', { name: 'Selected pin' })).toContainText('Internal state borders do not');
     await page.reload();
+    await expectMapReady(page);
     await expect(page.getByRole('region', { name: 'Selected pin' })).toContainText('United States');
     await page.getByLabel('Within', { exact: true }).selectOption('66');
+    await expect.poll(() => mapColorPixels(page, 'amber')).toBeGreaterThan(20);
     await page.getByRole('region', { name: 'U.S. pole', exact: true }).getByRole('button').click();
     await expect(page.getByLabel('Within', { exact: true })).toHaveValue('');
     await expect(page).toHaveURL(/pin=country-US/);
@@ -228,11 +347,11 @@ test('a hidden province outline cannot block country pins and reloads when shown
     await expect(page.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'error');
     await page.getByRole('checkbox', { name: 'States & provinces', exact: true }).uncheck();
     await expect(page.getByRole('button', { name: 'Retry boundaries' })).toHaveCount(0);
-    await expect(page.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'ready');
+    await expectMapReady(page);
     await expect(page.locator('.pins-results li')).toHaveCount(13);
     invalid = false;
     await page.getByRole('checkbox', { name: 'States & provinces', exact: true }).check();
-    await expect(page.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'ready');
+    await expectMapReady(page);
     await expect(page.getByRole('button', { name: 'Retry boundaries' })).toHaveCount(0);
     expect(errors).toEqual([]);
 });
@@ -285,7 +404,7 @@ test('loads counties on zoom, selects a county, and restores a shared pin', asyn
     await expect(page.locator('[data-pin-radius-label="county-51610"]').first()).toContainText('mi');
     await expect.poll(() => countyRequests).toBe(1);
     await expect(page.getByText('County pins visible', { exact: true })).toBeVisible();
-    await expect.poll(() => mapColorPixels(page, 'teal')).toBeGreaterThan(20);
+    await expect.poll(() => mapColorPixels(page, 'selected')).toBeGreaterThan(20);
     await expect(page).toHaveURL(/pin=county-51610/);
     await page.reload();
     await expect(page.getByRole('region', { name: 'Selected pin' })).toContainText('Falls Church city');
@@ -305,8 +424,9 @@ test('shows territorial counties, filters rankings, and supports accessible cont
     await expect(page.locator('.pins-results')).toContainText('Guam');
     await page.locator('.pins-results button').first().click();
     await expect(page.getByRole('region', { name: 'Selected pin' })).toContainText('Guam');
-    await page.getByRole('button', { name: 'Close selection and return to globe' }).click();
-    await expect(page.getByLabel('Country / territory')).toHaveValue('ALL');
+    await page.getByRole('button', { name: 'Back to Guam, close selection' }).click();
+    await expect(page.getByLabel('Country / territory')).toHaveValue('USA');
+    await expect(page.getByLabel('Within', { exact: true })).toHaveValue('66');
     await expect(page.getByRole('button', { name: 'World overview', exact: true })).toBeVisible();
     await page.getByRole('searchbox', { name: 'Search pins' }).fill('no such county');
     await expect(page.getByText('No pins match this selection.', { exact: false })).toBeVisible();
@@ -332,8 +452,9 @@ test('keeps the map and explorer usable at a mobile width', async ({ page }) => 
     await page.screenshot({ path: '/tmp/pins-mobile-panel.png' });
     await page.keyboard.press('Escape');
     await expect(page.getByRole('region', { name: 'Selected pin' })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Up one level: world overview', exact: true })).toBeFocused();
+    await page.keyboard.press('Escape');
     await expect(page.getByRole('button', { name: 'World overview', exact: true })).toBeFocused();
-    await page.getByRole('searchbox', { name: 'Search pins' }).focus();
     await page.keyboard.press('Escape');
     await expect(page.getByRole('button', { name: 'Explore pins' })).toBeFocused();
     await page.screenshot({ path: '/tmp/pins-mobile.png' });
@@ -348,7 +469,7 @@ test('keeps fullscreen controls correct after graphics loss and renderer retry',
         || !!document.querySelector('.maplibregl-pseudo-fullscreen'))).toBe(true);
     await page.locator('.maplibregl-canvas').evaluate(canvas => canvas.dispatchEvent(new Event('webglcontextlost')));
     await page.getByRole('button', { name: 'Retry map', exact: true }).click();
-    await expect(page.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'ready');
+    await expectMapReady(page);
     await page.getByRole('button', { name: 'Exit fullscreen', exact: true }).click();
     await expect.poll(() => page.evaluate(() => !!document.fullscreenElement
         || !!document.querySelector('.maplibregl-pseudo-fullscreen'))).toBe(false);
@@ -375,7 +496,7 @@ test('recovers a stalled worker while keeping the data panel usable', async ({ p
     await expect(page.getByRole('region', { name: 'Selected pin' })).toContainText('United States');
     failWorker = false;
     await page.getByRole('button', { name: 'Retry map', exact: true }).click();
-    await expect(page.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'ready');
+    await expectMapReady(page);
     await expect(page.getByRole('region', { name: 'Selected pin' })).toContainText('United States');
     await expect.poll(() => mapColorPixels(page, 'national')).toBeGreaterThan(50);
     expect(errors).toEqual([]);
@@ -404,10 +525,10 @@ test('keeps global files lazy and expands Canada into its thirteen provinces and
     const globalRequests: string[] = [];
     page.on('request', request => { if (request.url().includes('/pins-of-inaccessibility/world/')) globalRequests.push(new URL(request.url()).pathname); });
     await openMap(page);
-    expect(globalRequests).toEqual([]);
+    expect(globalRequests).toEqual(['/data/pins-of-inaccessibility/world/pins.json']);
     await page.getByLabel('Country / territory', { exact: true }).selectOption('CAN');
     await expect(page.locator('.pins-results li')).toHaveCount(13);
-    await expect(page.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'ready');
+    await expectMapReady(page);
     await expect(page.getByRole('region', { name: 'Canada pole', exact: true })).toBeVisible();
     expect(globalRequests.some(path => path.endsWith('/CAN.json'))).toBe(true);
     expect(globalRequests.some(path => path.endsWith('/AUS.json'))).toBe(false);
@@ -433,13 +554,13 @@ test('ranks global country poles and opens a date-line country without world-spa
     await page.goto('/projects/pins-of-inaccessibility/map?country=ALL');
     await expect(page.locator('.pins-coverage')).toContainText('257');
     await expect(page.getByText('257 pins ranked by radius')).toBeVisible();
-    await expect(page.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'ready');
+    await expectMapReady(page);
     await page.getByRole('searchbox', { name: 'Search pins' }).fill('Fiji');
     await expect(page.locator('.pins-results li')).toHaveCount(1);
     await page.locator('.pins-results button').first().click();
     await expect(page.getByLabel('Country / territory', { exact: true })).toHaveValue('FJI');
     await expect(page.getByRole('region', { name: 'Selected pin' })).toContainText('Fiji');
-    await expect(page.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'ready');
+    await expectMapReady(page);
     await expect.poll(() => page.locator('.pins-radius-label.is-selected').count()).toBeGreaterThan(0);
     await page.getByRole('button', { name: 'Fiji overview', exact: true }).click();
     await expect(page.locator('.pins-results li')).toHaveCount(5);
@@ -452,15 +573,15 @@ test('renders Tobago detail and switches between province and country outlines',
     await page.goto('/projects/pins-of-inaccessibility/map?country=TTO&pin=region-TTO-5090');
     await expect(page.locator('.pins-results li')).toHaveCount(16);
     await expect(page.getByRole('region', { name: 'Selected pin' })).toContainText('Tobago, Trinidad and Tobago');
-    await expect(page.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'ready');
+    await expectMapReady(page);
     const selectedBadges = page.locator('.pins-radius-label.is-selected');
     await expect.poll(() => selectedBadges.count()).toBeGreaterThan(1);
     await expect(selectedBadges.first()).toContainText('2.24 mi');
     await page.getByRole('checkbox', { name: 'States & provinces', exact: true }).uncheck();
-    await expect(page.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'ready');
+    await expectMapReady(page);
     await expect.poll(() => selectedBadges.count()).toBeGreaterThan(1);
     await page.getByRole('checkbox', { name: 'States & provinces', exact: true }).check();
-    await expect(page.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'ready');
+    await expectMapReady(page);
     await page.screenshot({ path: '/tmp/pins-tobago-boundaries.png' });
     expect(errors).toEqual([]);
 });
@@ -468,7 +589,7 @@ test('renders Tobago detail and switches between province and country outlines',
 test('wraps the CARTO basemap around a globe and supports dragging and world reset', async ({ page }) => {
     const errors = await prepare(page, '#35546a');
     await page.goto('/projects/pins-of-inaccessibility/map?country=ALL');
-    await expect(page.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'ready');
+    await expectMapReady(page);
     const canvas = page.locator('.maplibregl-canvas');
     await expect(canvas).toHaveAttribute('aria-label', /Interactive globe/);
     const before = await canvas.screenshot();
@@ -489,7 +610,7 @@ test('wraps the CARTO basemap around a globe and supports dragging and world res
     await page.mouse.up();
     await expect.poll(async () => (await canvas.screenshot()).equals(before)).toBe(false);
     await page.getByRole('button', { name: 'World overview', exact: true }).click();
-    await expect(page.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'ready');
+    await expectMapReady(page);
     await page.screenshot({ path: '/tmp/pins-carto-globe.png' });
     expect(errors).toEqual([]);
 });

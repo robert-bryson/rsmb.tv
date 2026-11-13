@@ -2,9 +2,10 @@ import type { FeatureCollection } from 'geojson';
 import type { DisplayBoundaries, MapPin } from '../../../shared/worldPins';
 import type { RadiusLines } from './radii';
 
-export interface ViewRequest { bounds: [number, number, number, number]; key: number }
+export interface ViewRequest { bounds: [number, number, number, number]; key: number | string }
 export interface PinsMapProps {
     pins: MapPin[];
+    contextPins?: MapPin[];
     states: DisplayBoundaries | null;
     counties: DisplayBoundaries | null;
     stateFips: string;
@@ -13,11 +14,13 @@ export interface PinsMapProps {
     zoom: number;
     selected: MapPin | null;
     view: ViewRequest | null;
+    navigationKey?: string;
     unit: 'mi' | 'km';
     reducedMotion: boolean;
     showRegions?: boolean;
     dataState: 'loading' | 'ready' | 'error';
     onSelect: (id: string) => void;
+    onNavigateUp?: () => void;
     onZoom: (zoom: number) => void;
 }
 

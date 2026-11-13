@@ -88,6 +88,7 @@ Use the [November 12 review](docs/reviews/2026-11-12-pins-quality-review.md) for
 Use the [global expansion report](docs/reviews/2026-11-12-pins-world-expansion.md) for country coverage, source choices, and coastline alignment.
 Use the [November 13 review](docs/reviews/2026-11-13-pins-review.md) for publication guards, layer loading, renderer readiness, and hover behavior.
 Use the [context review](docs/reviews/2026-11-13-pins-context-review.md) for location contracts, publication snapshots, and inventory checks.
+Use the [navigation design review](docs/reviews/2026-11-13-pins-navigation-design.md) for geographic parents, muted context, and touch behavior.
 
 ### Source and calculation
 
@@ -98,6 +99,7 @@ Use the [context review](docs/reviews/2026-11-13-pins-context-review.md) for loc
 ### Hosted release
 
 - [ ] Check the hosted map with the configured CARTO key. Verify origin restrictions, attribution, and every territory shortcut.
+- [ ] Check parent navigation and context markers on physical touch devices. Include slow double taps, rotation, and assistive-technology announcements.
 - [ ] Verify context loading and retry from the deployed origin. Check CORS headers and recovery after a context release change.
 
 ### Data delivery and refresh

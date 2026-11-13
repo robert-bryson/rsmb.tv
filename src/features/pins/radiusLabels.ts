@@ -5,7 +5,7 @@ import type { RadiusLines } from './radii';
 
 const COLORS = { country: NATIONAL_COLOR, state: STATE_COLOR, county: COUNTY_COLOR };
 const ORDER = { country: 0, state: 1, county: 2 };
-const OBSTACLES = '.pins-map-toolbar, .pins-layers, .pins-map-legend, .pins-unit-control, .maplibregl-ctrl, .pins-map-message, .pins-boundary-error';
+const OBSTACLES = '.pins-map-toolbar, .pins-layers, .pins-navigation-hint, .pins-map-legend, .pins-unit-control, .maplibregl-ctrl, .pins-map-message, .pins-boundary-error';
 
 function alongPath(segments: TooltipSegment[], fraction: number) {
     const lengths = segments.map(([a, b]) => Math.hypot(b.x - a.x, b.y - a.y));

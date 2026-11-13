@@ -9,6 +9,8 @@ export const OVERVIEW_BOUNDS: [number, number, number, number] = [-125, 24, -66,
 export const STATE_COLOR = '#f5bd63';
 export const COUNTY_COLOR = '#69d2c1';
 export const NATIONAL_COLOR = '#c3a2f6';
+export const CONTEXT_COLOR = '#93a1af';
+const NO_CONTEXT: ReadonlySet<string> = new Set();
 
 export function countiesVisible(mode: CountyMode, zoom: number) {
     return mode === 'on' || (mode === 'auto' && zoom >= COUNTY_ZOOM);
@@ -24,18 +26,18 @@ export function formatArea(areaKm2: number) {
     return `${areaKm2.toLocaleString('en-US', { maximumFractionDigits: areaKm2 < 1 ? 4 : 0 })} km²`;
 }
 
-export function pinCircles(pins: MapPin[], steps = 72): FeatureCollection<Polygon> {
+export function pinCircles(pins: MapPin[], steps = 72, context: ReadonlySet<string> = NO_CONTEXT): FeatureCollection<Polygon> {
     return { type: 'FeatureCollection', features: pins.map(pin => {
         const ring = Array.from({ length: steps }, (_, step) => destination(pin.lng, pin.lat, step * 360 / steps, pin.radiusMeters));
         ring.push(ring[0]);
-        return { type: 'Feature', properties: { id: pin.id, level: pin.level }, geometry: { type: 'Polygon', coordinates: [ring] } };
+        return { type: 'Feature', properties: { id: pin.id, level: pin.level, context: context.has(pin.id) }, geometry: { type: 'Polygon', coordinates: [ring] } };
     }) };
 }
 
-export function pinPoints(pins: MapPin[]): FeatureCollection<Point> {
+export function pinPoints(pins: MapPin[], context: ReadonlySet<string> = NO_CONTEXT): FeatureCollection<Point> {
     return { type: 'FeatureCollection', features: pins.map(pin => ({
         type: 'Feature', id: pin.id,
-        properties: { id: pin.id, level: pin.level, name: pin.name, stateAbbr: pinDisplayCode(pin), stateFips: pinStateFips(pin), label: pin.id === 'country-US' ? 'U.S. pole' : pin.name },
+        properties: { id: pin.id, level: pin.level, name: pin.name, context: context.has(pin.id), stateAbbr: pinDisplayCode(pin), stateFips: pinStateFips(pin), label: pin.id === 'country-US' ? 'U.S. pole' : pin.name },
         geometry: { type: 'Point', coordinates: [pin.lng, pin.lat] },
     })) };
 }

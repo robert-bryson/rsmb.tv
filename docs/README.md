@@ -53,6 +53,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-13 | [Pins navigation design: geographic parents, muted context, gesture handling, history, and touch layout](reviews/2026-11-13-pins-navigation-design.md) |
 | 2026-11-13 | [Pins context review: publication snapshots, complete source inventories, validation, cache recovery, and documentation links](reviews/2026-11-13-pins-context-review.md) |
 | 2026-11-13 | [Geospatial delivery research: S3, CloudFront, PMTiles prototypes, project comparisons, and migration priorities](reviews/2026-11-13-geospatial-delivery-research.md) |
 | 2026-11-13 | [Pins review: publication guards, point-source readiness, hidden province outlines, hover behavior, and regression coverage](reviews/2026-11-13-pins-review.md) |
