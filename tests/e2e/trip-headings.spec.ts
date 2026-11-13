@@ -81,6 +81,13 @@ for (const width of [390, 1280]) {
         await header.locator('nav').evaluate(node => { node.style.paddingBlock = '2rem'; });
         const resizedHeight = (await header.boundingBox())!.height;
         await expectTop(first, resizedHeight);
+        // Padding and borders change the border box without resizing the
+        // observed content box. Both offsets must follow those changes too.
+        await header.evaluate(node => {
+            node.style.paddingBlock = '20px';
+            node.style.borderBottomWidth = '5px';
+        });
+        await expectTop(first, (await header.boundingBox())!.height);
         await expect(page.getByRole('link', { name: 'rsmb', exact: true })).toBeFocused();
     });
 }
@@ -88,7 +95,7 @@ for (const width of [390, 1280]) {
 test('chapter links keep their IDs, keyboard access, and reload position', async ({ page }) => {
     await page.goto('/tests/e2e/fixtures/trip-headings.html');
     const toc = page.getByRole('navigation', { name: 'Table of contents' });
-    await expect(toc.getByRole('link')).toHaveCount(4);
+    await expect(toc.getByRole('link')).toHaveCount(5);
     await toc.getByRole('link', { name: 'Second day along the coast and through the mountains', exact: true }).click();
     await expect(page).toHaveURL(/#second-day-along-the-coast-and-through-the-mountains$/);
     await page.reload();
@@ -102,7 +109,78 @@ test('chapter links keep their IDs, keyboard access, and reload position', async
     await expect(page).toHaveURL(/#second-day-along-the-coast-and-through-the-mountains$/);
     const ids = await page.locator('[data-post-heading]').evaluateAll(nodes => nodes.map(node => node.id));
     expect(new Set(ids).size).toBe(ids.length);
-    expect(ids).toHaveLength(4);
+    expect(ids).toHaveLength(5);
+});
+
+for (const level of [1, 2]) {
+    test(`subsection links clear sticky h${level} chapters when moving upward and after reload`, async ({ page }) => {
+        await page.setViewportSize({ width: 390, height: 900 });
+        await page.goto(`/tests/e2e/fixtures/trip-headings.html?heading-level=${level}`);
+        const chapters = page.locator('.trip-chapter');
+        const end = await documentTop(chapters.nth(2));
+        await scrollTo(page, end + 200);
+        await expect(page.locator('.site-layout')).toHaveAttribute('data-header-visible', 'false');
+
+        for (const id of ['a-pass-through-the-mountains', 'a-scene-in-the-forest']) {
+            await page.evaluate(id => { window.location.hash = id; }, id);
+            await expect(page.locator('.site-layout')).toHaveAttribute('data-header-visible', 'true');
+            const target = page.locator(`#${id}`);
+            await expect.poll(() => target.evaluate(node => {
+                const title = node.closest('.trip-chapter')!.firstElementChild!;
+                return node.getBoundingClientRect().top - title.getBoundingClientRect().bottom;
+            })).toBeGreaterThanOrEqual(8);
+            await expect(target).toBeInViewport();
+        }
+        await page.reload();
+        const target = page.locator('#a-scene-in-the-forest');
+        await expect(target).toBeInViewport();
+        await expect.poll(() => target.evaluate(node => node.getBoundingClientRect().top
+            - node.closest('.trip-chapter')!.firstElementChild!.getBoundingClientRect().bottom)).toBeGreaterThanOrEqual(8);
+
+        // Reflow the long title, then repeat the jump with its new height.
+        await page.addStyleTag({ content: 'html { font-size: 24px; }' });
+        await expect.poll(() => chapters.nth(1).evaluate(node => parseFloat(node.style.getPropertyValue('--trip-chapter-heading-height'))))
+            .toBeGreaterThan(120);
+        await scrollTo(page, await documentTop(chapters.nth(2)) + 200);
+        await page.evaluate(() => { window.location.hash = 'a-pass-through-the-mountains'; });
+        const mountain = page.locator('#a-pass-through-the-mountains');
+        await expect.poll(() => mountain.evaluate(node => node.getBoundingClientRect().top
+            - node.closest('.trip-chapter')!.firstElementChild!.getBoundingClientRect().bottom)).toBeGreaterThanOrEqual(8);
+    });
+
+    test(`oversized h${level} titles leave reading space on a short screen and recover after rotation`, async ({ page }) => {
+        await page.setViewportSize({ width: 390, height: 320 });
+        await page.goto(`/tests/e2e/fixtures/trip-headings.html?heading-level=${level}`);
+        const chapters = page.locator('.trip-chapter');
+        const longChapter = chapters.nth(1);
+        const title = longChapter.locator(':scope > :first-child');
+        await expect(longChapter).toHaveAttribute('data-trip-chapter-static');
+        await expect(title).toHaveCSS('position', 'static');
+        await scrollTo(page, await documentTop(longChapter) + 250);
+        await expect.poll(async () => (await title.boundingBox())!.y + (await title.boundingBox())!.height).toBeLessThan(0);
+        await page.setViewportSize({ width: 390, height: 900 });
+        await expect(longChapter).not.toHaveAttribute('data-trip-chapter-static');
+        await expect(title).toHaveCSS('position', 'sticky');
+        await page.addStyleTag({ content: 'html { font-size: 32px; }' });
+        await expect(longChapter).toHaveAttribute('data-trip-chapter-static');
+        await expect(title).toHaveCSS('position', 'static');
+    });
+}
+
+test('200% text keeps navigation visible within the phone width', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 900 });
+    await page.goto('/tests/e2e/fixtures/trip-headings.html');
+    await page.addStyleTag({ content: 'html { font-size: 32px; }' });
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
+    const navigation = page.getByRole('navigation', { name: 'Main navigation' });
+    for (const name of ['rsmb', 'Posts', 'Projects', 'About']) {
+        const link = navigation.getByRole('link', { name, exact: true });
+        await link.focus();
+        await expect(link).toBeInViewport();
+        const bounds = (await link.boundingBox())!;
+        expect(bounds.x).toBeGreaterThanOrEqual(0);
+        expect(bounds.x + bounds.width).toBeLessThanOrEqual(390);
+    }
 });
 
 test('reduced motion removes heading offset animations and print restores normal flow', async ({ page }) => {

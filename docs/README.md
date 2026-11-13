@@ -53,6 +53,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-13 | [Trip layout quality review: hidden subsection links, short screens, header sizing, responsive images, and browser CI](reviews/2026-11-13-trip-layout-quality-review.md) |
 | 2026-11-13 | [Pins zoom quality review: unreachable measurements, stale badge positions, marker input, camera limits, and gallery references](reviews/2026-11-13-pins-zoom-quality-review.md) |
 | 2026-11-13 | [Pins zoom transitions: staged county detail, native fades, bounded geometry tasks, and source update budgets](reviews/2026-11-13-pins-zoom-transitions.md) |
 | 2026-11-13 | [Pins navigation design: geographic parents, muted context, gesture handling, history, and touch layout](reviews/2026-11-13-pins-navigation-design.md) |

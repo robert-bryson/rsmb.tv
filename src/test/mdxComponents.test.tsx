@@ -1,5 +1,5 @@
 import { act, StrictMode, useRef } from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { PostHeadingProvider } from '../blog/LinkedHeading';
 import { mdxComponents } from '../blog/MdxComponents';
@@ -9,6 +9,13 @@ const Anchor = mdxComponents.a;
 const Heading2 = mdxComponents.h2;
 const Heading3 = mdxComponents.h3;
 const Heading6 = mdxComponents.h6;
+const originalScrollIntoView = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'scrollIntoView');
+
+function mockScrollIntoView() {
+    const scrollIntoView = vi.fn();
+    Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', { configurable: true, value: scrollIntoView });
+    return scrollIntoView;
+}
 
 function TableOfContentsFixture({
     duplicateHeading = false,
@@ -45,6 +52,8 @@ afterEach(() => {
     window.history.replaceState(null, '', '/');
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
+    if (originalScrollIntoView) Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', originalScrollIntoView);
+    else Reflect.deleteProperty(HTMLElement.prototype, 'scrollIntoView');
 });
 
 describe('MDX links', () => {
@@ -177,11 +186,7 @@ describe('MDX headings', () => {
     });
 
     it('resolves an initial hash only after duplicate heading IDs are assigned', async () => {
-        const scrollIntoView = vi.fn(function (this: HTMLElement) { return this.id; });
-        Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
-            configurable: true,
-            value: scrollIntoView,
-        });
+        const scrollIntoView = mockScrollIntoView();
         vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
             callback(0);
             return 1;
@@ -243,11 +248,7 @@ describe('MDX headings', () => {
     });
 
     it('scrolls to a hash target that mounts after the page loads', async () => {
-        const scrollIntoView = vi.fn();
-        Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
-            configurable: true,
-            value: scrollIntoView,
-        });
+        const scrollIntoView = mockScrollIntoView();
         vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
             callback(0);
             return 1;
@@ -261,11 +262,7 @@ describe('MDX headings', () => {
     });
 
     it('handles a hash change after the headings mount', async () => {
-        const scrollIntoView = vi.fn();
-        Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
-            configurable: true,
-            value: scrollIntoView,
-        });
+        const scrollIntoView = mockScrollIntoView();
         vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
             callback(0);
             return 1;
@@ -279,5 +276,79 @@ describe('MDX headings', () => {
         });
 
         await waitFor(() => expect(scrollIntoView).toHaveBeenCalledOnce());
+    });
+
+    it('keeps the contents disclosure usable after collapsing and reopening it', async () => {
+        render(<TableOfContentsFixture />);
+        const navigation = await screen.findByRole('navigation', { name: 'Table of contents' });
+        fireEvent.click(within(navigation).getByRole('button', { name: 'Collapse' }));
+        expect(within(navigation).getByRole('button', { name: 'Expand' })).toHaveAttribute('aria-expanded', 'false');
+        expect(navigation.querySelector('ul')).toHaveClass('hidden');
+        fireEvent.click(within(navigation).getByRole('button', { name: 'Expand' }));
+        expect(within(navigation).getByRole('link', { name: 'Camp Notes' })).toHaveAttribute('href', '#camp-notes');
+        expect(navigation.querySelector('ul')).not.toHaveClass('hidden');
+    });
+
+    it('marks the visible subsection and disconnects its visibility observer on unmount', async () => {
+        let onIntersection: IntersectionObserverCallback = () => undefined;
+        const observe = vi.fn();
+        const disconnect = vi.fn();
+        vi.stubGlobal('IntersectionObserver', class {
+            constructor(callback: IntersectionObserverCallback) { onIntersection = callback; }
+            observe = observe;
+            disconnect = disconnect;
+        });
+        const { unmount } = render(<TableOfContentsFixture />);
+        const navigation = await screen.findByRole('navigation', { name: 'Table of contents' });
+        const subsection = screen.getByRole('heading', { name: 'Camp Notes' });
+        expect(observe).toHaveBeenCalledWith(subsection);
+        const visible: IntersectionObserverEntry = {
+            target: subsection, isIntersecting: true, boundingClientRect: new DOMRect(0, 140, 720, 30),
+            intersectionRatio: 1, intersectionRect: new DOMRect(0, 140, 720, 30), rootBounds: null, time: 0,
+        };
+        act(() => onIntersection([
+            visible,
+            { ...visible, target: screen.getByRole('heading', { name: 'First Stop' }), isIntersecting: false, intersectionRatio: 0 },
+        ], {} as IntersectionObserver));
+        expect(within(navigation).getByRole('link', { name: 'Camp Notes' })).toHaveAttribute('aria-current', 'location');
+        expect(within(navigation).getByRole('link', { name: 'First Stop' })).not.toHaveAttribute('aria-current');
+        act(() => onIntersection([], {} as IntersectionObserver));
+        expect(within(navigation).getByRole('link', { name: 'Camp Notes' })).toHaveAttribute('aria-current', 'location');
+        unmount();
+        expect(disconnect).toHaveBeenCalledOnce();
+    });
+
+    it('cancels stale hash scrolls and pending work when the article unmounts', async () => {
+        const scrollIntoView = mockScrollIntoView();
+        const frames = new Map<number, FrameRequestCallback>();
+        let nextFrame = 0;
+        vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
+            const id = nextFrame++;
+            frames.set(id, callback);
+            return id;
+        });
+        vi.stubGlobal('cancelAnimationFrame', (id: number) => frames.delete(id));
+        window.history.replaceState(null, '', '#first-stop');
+        const { unmount } = render(<TableOfContentsFixture />);
+        await screen.findByRole('navigation', { name: 'Table of contents' });
+        act(() => {
+            window.history.replaceState(null, '', '#camp-notes');
+            window.dispatchEvent(new HashChangeEvent('hashchange'));
+        });
+        expect(frames.size).toBe(1);
+        act(() => {
+            const pending = [...frames.values()];
+            frames.clear();
+            pending.forEach(callback => callback(0));
+        });
+        expect(scrollIntoView).toHaveBeenCalledOnce();
+        expect(scrollIntoView.mock.contexts[0]).toBe(screen.getByRole('heading', { name: 'Camp Notes' }));
+        act(() => {
+            window.history.replaceState(null, '', '#first-stop');
+            window.dispatchEvent(new HashChangeEvent('hashchange'));
+        });
+        expect(frames.size).toBe(1);
+        unmount();
+        expect(frames.size).toBe(0);
     });
 });

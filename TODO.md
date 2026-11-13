@@ -116,7 +116,8 @@ Use the [November 10 review](docs/reviews/2026-11-10-project-quality-review.md) 
 
 ### Physical devices
 
-- [ ] Check reading, the flight globe, ADV Atlas, and Pins on a real phone. Record LCP, CLS, INP, cold transfer, and startup. Verify [atlas navigation and recovery](docs/trips/ADV-ATLAS.md).
+- [ ] Check [trip reading](docs/reviews/2026-11-13-trip-layout-quality-review.md#remaining-checks) on a real phone. Include large text, chapter changes, subsection links, and rotation.
+- [ ] Check the flight globe, ADV Atlas, and Pins on a real phone. Record LCP, CLS, INP, cold transfer, and startup. Verify [atlas navigation and recovery](docs/trips/ADV-ATLAS.md).
 - [ ] Measure Pins parsing time, peak memory, and input delay on a real phone.
   Compare the U.S. index, county outlines, world overview, and province outlines.
   Compare first-use and cached circle preparation during zoom gestures.

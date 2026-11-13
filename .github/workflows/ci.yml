@@ -127,8 +127,8 @@ jobs:
       - name: Browser smoke tests
         run: npm run test:e2e
 
-      - name: Pins map in WebKit
-        run: PLAYWRIGHT_WEBKIT=1 npm run test:e2e -- tests/e2e/pins-map.spec.ts --project=webkit
+      - name: Pins and trip layout in WebKit
+        run: PLAYWRIGHT_WEBKIT=1 npm run test:e2e -- tests/e2e/pins-map.spec.ts tests/e2e/trip-headings.spec.ts tests/e2e/trip-galleries.spec.ts tests/e2e/post-rendering.spec.ts --project=webkit
 
       - name: Production accessibility, navigation, intent prefetch, and page recovery
         run: PLAYWRIGHT_WEBKIT=1 npm run test:page-recovery

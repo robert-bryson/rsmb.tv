@@ -65,6 +65,8 @@ Chapter headings stay at the top while the reader scrolls through each chapter.
 The next chapter pushes the previous heading out of view.
 Subsections scroll with the text. The story title does not stay at the top.
 If the body contains level-one headings, those headings define the chapters instead.
+Subsection links leave space for the chapter heading and site navigation.
+Tall headings scroll normally when headings and navigation would occupy more than half of the visible screen.
 
 The site creates the story title from the Sheet. Do not repeat that title in the document body.
 The Google Docs Title style becomes a level-one heading if you include it in the body.
@@ -227,6 +229,8 @@ Long words and URLs wrap inside the caption for both single photos and galleries
 A single photo stays within the text column, regardless of its orientation.
 The panorama shortcode uses the full page width for any photo orientation.
 Both layouts retain the photo's proportions and reserve its height after an image failure.
+Lazy photos use automatic source sizes when the browser supports them.
+Fallback sizes use relative font units to support larger browser font settings.
 
 ### Route output
 

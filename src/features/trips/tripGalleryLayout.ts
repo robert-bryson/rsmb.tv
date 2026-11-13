@@ -1,4 +1,5 @@
 import type { TripPhotoData } from './types';
+import { TRIP_TEXT_PHOTO_SIZES } from './tripPhotoSizes';
 
 export const TRIP_GALLERY_GAP = 12;
 const PANORAMA_RATIO = 2.5;
@@ -123,9 +124,11 @@ export function galleryLength(length: GalleryLength) {
 
 /** Explicit fallbacks for browsers without lazy-image automatic sizes. */
 export function tripGallerySizes(narrow: TripGalleryPlacement, wide: TripGalleryPlacement, singlePhoto: boolean) {
-    if (singlePhoto) return 'auto, (min-width: 768px) 720px, calc(100vw - 3rem)';
+    if (singlePhoto) return TRIP_TEXT_PHOTO_SIZES;
     const viewportSlot = ({ fraction, pixels }: GalleryLength) =>
-        `calc(${fraction * 100}vw - ${fraction * 32 - pixels}px)`;
+        `calc(${fraction * 100}vw - ${fraction * 2}rem ${pixels < 0 ? '-' : '+'} ${Math.abs(pixels)}px)`;
+    const cappedSlot = ({ fraction, pixels }: GalleryLength) =>
+        `calc(${fraction * 72}rem ${pixels < 0 ? '-' : '+'} ${Math.abs(pixels)}px)`;
     const desktop = '(hover: hover) and (pointer: fine)';
-    return `auto, (min-width: 1184px) and ${desktop} ${wide.width.fraction * 1152 + wide.width.pixels}px, (min-width: 640px) and ${desktop} ${viewportSlot(wide.width)}, (min-width: 1184px) ${narrow.width.fraction * 1152 + narrow.width.pixels}px, ${viewportSlot(narrow.width)}`;
+    return `(min-width: 74rem) and ${desktop} ${cappedSlot(wide.width)}, (min-width: 640px) and ${desktop} ${viewportSlot(wide.width)}, (min-width: 74rem) ${cappedSlot(narrow.width)}, ${viewportSlot(narrow.width)}`;
 }

@@ -1,4 +1,5 @@
 import { expect, test, type Locator, type Page, type Request } from '@playwright/test';
+import fs from 'node:fs/promises';
 import sharp from 'sharp';
 import { measureJavaScriptGzip } from '../../scripts/trip-browser-budget';
 import { scrollbarTest } from './scrollbars';
@@ -59,6 +60,9 @@ for (const [path, budget] of [
         expect(requests.map(request => request.url()).filter(url => /maplibre|FlightsMap|three-globe|three-/.test(url))).toEqual([]);
         const resources = await measureJavaScriptGzip(requests);
         const bytes = resources.reduce((sum, entry) => sum + entry.bytes, 0);
+        const reportPath = test.info().outputPath('javascript-budget.json');
+        await fs.writeFile(reportPath, JSON.stringify({ path, gzipBytes: bytes, budget, resources }, null, 2));
+        await test.info().attach('reading-javascript-budget', { path: reportPath, contentType: 'application/json' });
         expect(bytes, `${path} gzip bytes: ${JSON.stringify(resources)}`).toBeLessThan(budget);
     });
 }
@@ -336,7 +340,7 @@ for (const [scrollbars, panoramaTest] of [['default', test], ['classic', scrollb
             if (scrollbars === 'classic' && browserName === 'chromium' && !isMobile) {
                 expect(width - layout.pageWidth).toBe(15);
             }
-            await expect(photo).toHaveAttribute('sizes', '100vw');
+            await expect(photo).toHaveAttribute('sizes', 'auto, 100vw');
             await expect(photo.locator('..')).toHaveAttribute('data-pswp-width', '3200');
         }
         // Browsers can retain a loaded candidate after resize. Check source
@@ -394,18 +398,37 @@ test('failed panoramas preserve the reserved image height', async ({ page }) => 
         .toHaveAccessibleDescription('A view from stop 4.');
 });
 
-test('unlinked panoramas keep keyboard focus inside the page and ordinary photos keep their width', async ({ page }) => {
+test('unlinked panoramas keep keyboard focus and single photos follow the text column', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/trips/daily-test');
-    const ordinary = page.locator('figure.image-caption-figure.trip-breakout');
+    const body = page.locator('#trip-story-body');
+    const ordinary = body.locator('figure.image-caption-figure:not(.trip-photo-pano):not(.trip-gallery-photo)');
     const panorama = page.locator('figure.trip-photo-pano');
-    expect((await ordinary.boundingBox())!.width).toBeCloseTo(1152, 0);
+    expect((await ordinary.boundingBox())!.width).toBeCloseTo((await body.boundingBox())!.width, 0);
+    expect((await ordinary.boundingBox())!.x).toBeCloseTo((await body.boundingBox())!.x, 0);
     expect((await panorama.boundingBox())!.width).toBe(await page.evaluate(() => document.documentElement.clientWidth));
 
     await panorama.focus();
     await expect(panorama).toBeFocused();
     await expect(panorama.locator('.image-caption-frame')).toHaveCSS('outline-offset', '-3px');
     await expect(panorama.locator('a')).toHaveCount(0);
+});
+
+test('production trip chapters stick and subsection links clear the current title', async ({ page }) => {
+    await page.goto('/trips/coastal-test');
+    const contents = page.getByRole('navigation', { name: 'Table of contents' });
+    await contents.getByRole('link', { name: 'First day', exact: true }).click();
+    const title = page.getByRole('heading', { name: 'First day', exact: true });
+    await expect(title.locator('..')).toHaveClass('trip-chapter');
+    await page.evaluate(() => window.scrollBy(0, 200));
+    await expect.poll(async () => (await title.boundingBox())!.y).toBeCloseTo(0, 0);
+    const second = page.getByRole('heading', { name: 'Second day', exact: true });
+    await page.evaluate(top => window.scrollTo(0, top + 150), await second.evaluate(node => node.getBoundingClientRect().top + window.scrollY));
+    await page.evaluate(() => { window.location.hash = 'a-coastal-lookout'; });
+    const subsection = page.getByRole('heading', { name: 'A coastal lookout', exact: true });
+    await expect(subsection).toBeInViewport();
+    await expect.poll(() => subsection.evaluate(node => node.getBoundingClientRect().top
+        - node.closest('.trip-chapter')!.firstElementChild!.getBoundingClientRect().bottom)).toBeGreaterThanOrEqual(8);
 });
 
 test('photo navigation continues between galleries in both directions', async ({ page, isMobile }) => {

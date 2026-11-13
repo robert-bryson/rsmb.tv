@@ -4,11 +4,13 @@ import {
     isValidElement,
     useCallback,
     useContext,
+    useMemo,
     useRef,
     useState,
     type HTMLAttributes,
     type ReactNode,
 } from 'react';
+import { useTripChapterHeadings } from '../features/trips/useTripChapterHeadings';
 
 type HeadingTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
@@ -17,10 +19,16 @@ interface HeadingIdReservation {
     release: () => void;
 }
 
-const HeadingIdContext = createContext<((baseId: string) => HeadingIdReservation) | null>(null);
+interface PostHeadingContextValue {
+    reserveId: (baseId: string) => HeadingIdReservation;
+    observeChapter: (heading: HTMLElement) => (() => void) | undefined;
+}
+
+const PostHeadingContext = createContext<PostHeadingContextValue | null>(null);
 
 export function PostHeadingProvider({ children }: { children: ReactNode }) {
     const reservedIds = useRef(new Set(['post-table-of-contents']));
+    const observeChapter = useTripChapterHeadings();
 
     const reserveId = useCallback((baseId: string): HeadingIdReservation => {
         const ids = reservedIds.current;
@@ -30,7 +38,8 @@ export function PostHeadingProvider({ children }: { children: ReactNode }) {
         return { id, release: () => { ids.delete(id); } };
     }, []);
 
-    return <HeadingIdContext value={reserveId}>{children}</HeadingIdContext>;
+    const context = useMemo(() => ({ reserveId, observeChapter }), [reserveId, observeChapter]);
+    return <PostHeadingContext value={context}>{children}</PostHeadingContext>;
 }
 
 function headingText(children: ReactNode): string {
@@ -66,16 +75,20 @@ export function LinkedHeading({
 }: HTMLAttributes<HTMLHeadingElement> & { as: HeadingTag }) {
     const text = headingText(children);
     const baseId = id ?? headingId(children);
-    const reserveId = useContext(HeadingIdContext);
+    const context = useContext(PostHeadingContext);
     const [reservation, setReservation] = useState<{ baseId: string; id: string } | null>(null);
     // Reserve IDs only when React commits the node. Discarded renders must not consume IDs.
     const headingRef = useCallback((node: HTMLHeadingElement | null) => {
-        if (!node || !reserveId) return;
-        const reserved = reserveId(baseId);
+        if (!node || !context) return;
+        const reserved = context.reserveId(baseId);
         setReservation({ baseId, id: reserved.id });
-        return reserved.release;
-    }, [baseId, reserveId]);
-    const anchorId = reserveId ? (reservation?.baseId === baseId ? reservation.id : undefined) : baseId;
+        const unobserve = context.observeChapter(node);
+        return () => {
+            reserved.release();
+            unobserve?.();
+        };
+    }, [baseId, context]);
+    const anchorId = context ? (reservation?.baseId === baseId ? reservation.id : undefined) : baseId;
     const hasContentLink = containsLink(children);
     const isMajorHeading = Heading === 'h1' || Heading === 'h2';
     const title = (

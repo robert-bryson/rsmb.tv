@@ -201,7 +201,14 @@ u {
    Keep spacing inside the section so there is no gap during the handoff. */
 .trip-story .trip-chapter {
   --trip-chapter-gap: 3rem;
+  --trip-chapter-sticky-clearance: var(--trip-chapter-heading-height, 0px);
   display: flow-root;
+}
+
+.trip-story .trip-chapter [data-post-heading] {
+  /* Use the full navigation height: an upward anchor jump reveals it after
+     the browser computes the target's scroll position. */
+  scroll-margin-block-start: max(6rem, calc(var(--site-header-height, 61px) + var(--trip-chapter-sticky-clearance) + 1rem));
 }
 
 .trip-story .trip-chapter::after {
@@ -225,7 +232,16 @@ u {
   margin-block: 0;
   padding-block: 0.75rem 1rem;
   background: #0a0a0a;
+  scroll-margin-block-start: max(6rem, calc(var(--site-header-height, 61px) + 1rem));
   transition: top 200ms ease-out;
+}
+
+.trip-story .trip-chapter[data-trip-chapter-static] {
+  --trip-chapter-sticky-clearance: 0px;
+}
+
+.trip-story .trip-chapter[data-trip-chapter-static] > :is(h1, h2):first-child {
+  position: static;
 }
 
 @media (min-width: 640px) {

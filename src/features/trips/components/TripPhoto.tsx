@@ -4,6 +4,7 @@ import { TripPhotoLink } from './TripPhotoLink';
 import { useDismissibleCaption } from '../../../hooks/useDismissibleCaption';
 import type { TripPhotoData } from '../types';
 import { useTripStory } from '../TripStoryContext';
+import { TRIP_TEXT_PHOTO_SIZES, TRIP_WIDE_PHOTO_SIZES } from '../tripPhotoSizes';
 
 interface TripPhotoProps {
     photoId: string;
@@ -34,7 +35,7 @@ function TripPhotoImage({ photo, sizes, priority, describedBy }: {
             src={photo.src}
             onError={() => setFailed(true)}
             srcSet={photo.srcSet}
-            sizes={sizes}
+            sizes={priority || sizes === 'auto' || sizes.startsWith('auto,') ? sizes : `auto, ${sizes}`}
             width={photo.width}
             height={photo.height}
             alt={photo.alt}
@@ -54,7 +55,7 @@ export function TripPhotoFigure({
     showCaption = true,
     className = '',
     style,
-    sizes = '(min-width: 1184px) 1152px, calc(100vw - 2rem)',
+    sizes = TRIP_WIDE_PHOTO_SIZES,
 }: {
     photo: TripPhotoData;
     sizes?: string;
@@ -121,7 +122,7 @@ export function TripPhoto({ photoId, layout = 'default', className = '', ...prop
     return (
         <div ref={galleryRef}>
             <TripPhotoFigure photo={photo} {...props}
-                sizes={layout === 'pano' ? '100vw' : '(min-width: 768px) 720px, calc(100vw - 3rem)'}
+                sizes={layout === 'pano' ? '100vw' : TRIP_TEXT_PHOTO_SIZES}
                 className={`${layout === 'pano' ? 'trip-photo-pano' : ''} my-8 ${className}`} />
         </div>
     );

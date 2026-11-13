@@ -174,7 +174,12 @@ describe('trip story primitives', () => {
         const figure = image.closest('figure')!;
         expect(figure.classList.contains('trip-breakout')).toBe(breakout);
         expect(figure.classList.contains('trip-photo-pano')).toBe(layout === 'pano');
-        expect(image).toHaveAttribute('sizes', layout === 'pano' ? '100vw' : '(min-width: 768px) 720px, calc(100vw - 3rem)');
+        expect(image).toHaveAttribute('sizes', layout === 'pano' ? 'auto, 100vw' : 'auto, (min-width: 48rem) 45rem, calc(100vw - 3rem)');
+    });
+
+    it.each(['auto', 'auto, 50vw'])('retains an explicit %s source size without adding a second auto hint', sizes => {
+        renderStory(<TripPhotoFigure photo={manifest.photos[0]} sizes={sizes} />);
+        expect(screen.getByRole('img')).toHaveAttribute('sizes', sizes);
     });
 
     it('reports an unknown standalone photo instead of rendering an empty block', () => {
@@ -217,7 +222,7 @@ describe('trip story primitives', () => {
         const image = screen.getByRole('img', { name: photo.alt });
         expect(image).toHaveAttribute('width', '3200');
         expect(image).toHaveAttribute('height', '560');
-        expect(image).toHaveAttribute('sizes', '100vw');
+        expect(image).toHaveAttribute('sizes', 'auto, 100vw');
         expect(image).toHaveAttribute('srcset', photo.srcSet);
         expect(image).toHaveAttribute('loading', 'lazy');
         expect(image.closest('a')).toHaveAttribute('data-pswp-width', '3200');
@@ -255,6 +260,7 @@ describe('trip story primitives', () => {
         expect(image).toHaveAccessibleDescription(manifest.photos[1].caption);
         expect(image).toHaveAttribute('loading', 'eager');
         expect(image).toHaveAttribute('fetchpriority', 'high');
+        expect(image.getAttribute('sizes')).not.toMatch(/^auto/);
         expect(image.closest('figure')).toHaveAttribute('tabindex', '0');
         expect(image.closest('a')).toBeNull();
 
@@ -357,7 +363,7 @@ describe('trip story primitives', () => {
         const gallery = image.closest('section')!;
         expect(gallery).not.toHaveClass('trip-breakout');
         expect(screen.queryByRole('button', { name: /Show all/ })).not.toBeInTheDocument();
-        expect(image.getAttribute('sizes')).toContain('720px');
+        expect(image.getAttribute('sizes')).toContain('45rem');
         expect(image.getAttribute('sizes')).toContain('calc(100vw - 3rem)');
     });
 

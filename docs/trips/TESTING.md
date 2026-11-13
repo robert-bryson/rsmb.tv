@@ -2,6 +2,7 @@
 
 Use fixed content for automated checks. Do not require Google access or published trip assets.
 The fixtures are in `tests/fixtures/trip-content/`.
+Trip MDX fixtures include `format: trip` frontmatter, as imported stories do.
 
 ## CI bundle check
 
@@ -36,6 +37,7 @@ PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- --workers=2
 The command builds the production application with fixed content. It starts preview on `127.0.0.1:4175`.
 It removes the temporary build directory when the tests finish.
 The default projects use desktop and phone Chromium. CI also enables iPhone WebKit.
+CI runs the separate heading, gallery, and post-link fixtures in Chromium and desktop WebKit.
 Verify renderer fixes on Linux as well as macOS. WebKit can paint differently on each platform.
 Host library installation can require administrator permission.
 A missing library is a setup failure, not a passing behavior check.
@@ -258,6 +260,10 @@ The hero remains usable during that wait.
 Single-photo checks measure portrait, landscape, and explicit panorama widths from 320 to 1440 pixels.
 Standalone photos and one-photo galleries must match the text column. Explicit panoramas must reach the page edges.
 They check reserved image height after failure and responsive sources on high-density displays.
+Larger-text checks cover automatic sizing in both engines.
+A Chromium check sets the browser's default font to 24px and disables automatic sizing.
+It verifies fallback sources for eager photos and galleries from 900 to 2000 pixels.
+Page-level root-font overrides require automatic sizing; fallback rem units follow the browser's default font.
 Caption checks use long words with pointer and touch input in Chromium and WebKit.
 The unit tests also check viewer cleanup when the photo or link setting changes.
 Country fact links must retain their country. Region fact links must retain both their country and region.
@@ -267,12 +273,21 @@ They verify chapter boundaries, h1 precedence, h2 chapters, nested headings, mod
 Writing posts retain their existing structure.
 Browser checks measure sticky headings at phone and desktop widths.
 They verify continuous handoffs, the end of the story, visible navigation, navigation resizing, links, reduced motion, and print layout.
-The feature uses native CSS scrolling. A resize observer measures the site navigation; it does not add a scroll handler.
+Subsection links must clear both headers after upward jumps and reloads.
+The production reading suite also checks chapter grouping, sticky placement, and subsection clearance on an actual trip route.
+Short-screen checks return tall h1 and h2 titles to normal flow. Rotation must restore sticky behavior when space permits.
+Phone checks also enlarge text to 200%. Navigation links must remain visible without horizontal scrolling.
+Header checks change padding and borders without changing the content box.
+The feature uses native CSS scrolling. Each post shares one title resize observer and one queued measurement frame.
+The site navigation has its own border-box observer. Neither observer adds a scroll handler.
+Unit checks cover observer cleanup, missing browser APIs, Strict Mode, and callbacks received after unmount.
 
 ```bash
-npx vitest run scripts/__tests__/remarkTripChapters.test.tsx src/test/tripStory.test.tsx src/test/Layout.test.tsx
+npx vitest run scripts/__tests__/remarkTripChapters.test.tsx src/test/tripChapterHeadings.test.tsx src/test/mdxComponents.test.tsx src/test/tripStory.test.tsx src/test/Layout.test.tsx
 PLAYWRIGHT_WEBKIT=1 npx playwright test tests/e2e/trip-headings.spec.ts tests/e2e/trip-galleries.spec.ts tests/e2e/post-rendering.spec.ts
 ```
+
+The [trip layout quality review](../reviews/2026-11-13-trip-layout-quality-review.md) records reproduced defects and coverage measurements.
 
 Post filter tests use a separate browser fixture with the application styles.
 Its container must have an explicit full width, as the application layout does.

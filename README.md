@@ -256,6 +256,7 @@ Set `PLAYWRIGHT_WEBKIT=1` to include WebKit in the local fixture suite.
 Performance measurement tests run only in Chromium because they require its DevTools Protocol.
 The flight layout-shift check also requires Chromium's Layout Instability API.
 WebKit runs the other flight startup and accessibility checks.
+CI also runs trip chapter, gallery, and post-link fixtures in WebKit.
 The production page-recovery suite includes axe scans at phone and desktop widths.
 Use `PLAYWRIGHT_WEBKIT=1 npm run test:accessibility` to run only those scans and their interaction checks.
 Automated scans complement keyboard and assistive-technology testing.
@@ -283,6 +284,7 @@ See the [basemap guide](docs/carto-basemaps.md#validation) for the configuration
 The post browser tests use a fixed Google Docs fixture in `tests/fixtures`.
 A compilation test compares the fixture MDX with the importer output.
 Browser tests check subtitle styles at phone and desktop widths, unique heading IDs, reload, and browser history.
+Trip checks cover sticky chapter handoffs, subsection clearance, short screens, and larger-text image sizing.
 Post filter tests check country and region links, responsive rows, and long labels at phone widths.
 They also check that geographic aliases cannot replace a visible topical tag.
 These tests do not require Google access or published trip assets.

@@ -122,7 +122,7 @@ describe('Layout', () => {
         const { unmount } = renderLayout('/trips/coast');
         const header = screen.getByRole('banner');
         const layout = header.parentElement!;
-        expect(observe).toHaveBeenCalledWith(header);
+        expect(observe).toHaveBeenCalledWith(header, { box: 'border-box' });
         expect(layout.style.getPropertyValue('--site-header-height')).toBe('61px');
         bounds.mockReturnValue({ height: 90 } as DOMRect);
         act(() => onResize([], {} as ResizeObserver));
@@ -147,6 +147,20 @@ describe('Layout', () => {
         });
         await waitFor(() => expect(screen.getByRole('button', { name: 'Scroll to top' })).toBeInTheDocument());
         expect(header).toHaveClass('translate-y-0');
+    });
+
+    it('updates header clearance on viewport resize without ResizeObserver', () => {
+        vi.stubGlobal('ResizeObserver', undefined);
+        const removeListener = vi.spyOn(window, 'removeEventListener');
+        const bounds = vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+            .mockReturnValue({ height: 61 } as DOMRect);
+        const { unmount } = renderLayout('/trips/coast');
+        const layout = screen.getByRole('banner').parentElement!;
+        bounds.mockReturnValue({ height: 100 } as DOMRect);
+        fireEvent.resize(window);
+        expect(layout.style.getPropertyValue('--site-header-height')).toBe('100px');
+        unmount();
+        expect(removeListener).toHaveBeenCalledWith('resize', expect.any(Function));
     });
 
     it('omits header and footer chrome for fullscreen map pages', () => {

@@ -33,6 +33,7 @@ const manifest: TripManifest = {
     route: { geoJson: '/unused.geojson' }, stops: [], photos,
     galleries: Object.fromEntries(Object.keys(groups).map(group => [group, photos.filter(photo => photo.id.startsWith(`${group}-`)).map(photo => photo.id)])),
 };
+const priority = new URLSearchParams(window.location.search).has('priority');
 
 export function TripGalleriesFixture() {
     return <main className="site-content w-full">
@@ -40,9 +41,9 @@ export function TripGalleriesFixture() {
             <h1>Adaptive galleries</h1>
             <p data-text-body>The text body sets the width of each single photo.</p>
             <TripStoryProvider manifest={manifest}>
-                <div data-photo-example="portrait"><TripPhoto photoId="portrait-0" /></div>
-                <div data-photo-example="landscape"><TripPhoto photoId="landscape-0" /></div>
-                <div data-photo-example="panorama"><TripPhoto photoId="portrait-0" layout="pano" /></div>
+                <div data-photo-example="portrait"><TripPhoto photoId="portrait-0" priority={priority} /></div>
+                <div data-photo-example="landscape"><TripPhoto photoId="landscape-0" priority={priority} /></div>
+                <div data-photo-example="panorama"><TripPhoto photoId="portrait-0" layout="pano" priority={priority} /></div>
                 {Object.keys(groups).map(group => <div key={group} data-gallery-example={group}>
                     <h2>{group}</h2><TripGallery galleryId={group} />
                 </div>)}

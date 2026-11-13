@@ -309,3 +309,59 @@ for (const fallback of [false, true]) {
         }
     });
 }
+
+test('automatic image sizes follow larger authored text without requesting blurry sources', async ({ browser }) => {
+    for (const width of [900, 1600]) {
+        const context = await browser.newContext({ viewport: { width, height: 1000 }, deviceScaleFactor: 1 });
+        try {
+            const page = await context.newPage();
+            await galleryAssets(page);
+            await page.addInitScript(() => {
+                new MutationObserver(() => { document.documentElement.style.fontSize = '24px'; })
+                    .observe(document, { childList: true, subtree: true });
+            });
+            await page.goto('/tests/e2e/fixtures/trip-galleries.html');
+            for (const group of ['portrait', 'landscape', 'panorama']) {
+                const image = page.locator(`[data-photo-example="${group}"] img`);
+                await expect(image).toHaveAttribute('sizes', /^auto, /);
+                await expectSuitableImageSource(image);
+            }
+        } finally {
+            await context.close();
+        }
+    }
+});
+
+test('fallback image sizes honor a larger browser font preference, including eager photos', async ({ playwright, browserName }) => {
+    test.skip(browserName !== 'chromium', 'This check uses the Chromium default-font preference flag.');
+    const browser = await playwright.chromium.launch({ args: ['--blink-settings=defaultFontSize=24'] });
+    try {
+        for (const width of [900, 1600, 2000]) {
+            const page = await browser.newPage({ viewport: { width, height: 1000 }, deviceScaleFactor: 1 });
+            await galleryAssets(page);
+            await page.addInitScript(() => {
+                new MutationObserver(() => {
+                    document.querySelectorAll<HTMLImageElement>('img[sizes^="auto,"]').forEach(image => {
+                        image.sizes = image.sizes.replace(/^auto,\s*/, '');
+                    });
+                }).observe(document, { subtree: true, childList: true });
+            });
+            await page.goto('/tests/e2e/fixtures/trip-galleries.html?priority=1');
+            await expect(page.locator('html')).toHaveCSS('font-size', '24px');
+            await expect(page.locator('img[sizes^="auto,"]')).toHaveCount(0);
+            for (const group of ['portrait', 'landscape', 'panorama']) {
+                const image = page.locator(`[data-photo-example="${group}"] img`);
+                await expect(image).toHaveAttribute('loading', 'eager');
+                await expectSuitableImageSource(image);
+            }
+            for (const group of ['mixed', 'collage', 'portrait', 'landscape', 'panorama']) {
+                for (const image of await page.locator(`[data-gallery-example="${group}"] img`).all()) {
+                    await expectSuitableImageSource(image);
+                }
+            }
+            await page.close();
+        }
+    } finally {
+        await browser.close();
+    }
+});

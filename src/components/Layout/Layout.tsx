@@ -37,9 +37,12 @@ export function Layout({ children }: LayoutProps) {
       header.parentElement?.style.setProperty('--site-header-height', `${header.getBoundingClientRect().height}px`);
     };
     updateHeight();
-    if (typeof ResizeObserver === 'undefined') return;
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', updateHeight, { passive: true });
+      return () => window.removeEventListener('resize', updateHeight);
+    }
     const observer = new ResizeObserver(updateHeight);
-    observer.observe(header);
+    observer.observe(header, { box: 'border-box' });
     return () => observer.disconnect();
   }, [isFullScreenPage]);
 
@@ -107,7 +110,7 @@ export function Layout({ children }: LayoutProps) {
 
       {/* Header */}
       <header ref={headerRef} onFocusCapture={() => setIsHeaderVisible(true)} className={`site-header sticky top-0 z-40 border-b border-zinc-800/70 bg-[#0a0a0a]/95 backdrop-blur transition-transform duration-200 ease-out motion-reduce:transition-none ${isHeaderVisible ? 'translate-y-0' : '-translate-y-full'}`}>
-        <nav className="max-w-3xl mx-auto px-6 py-2 flex justify-between items-center" aria-label="Main navigation">
+        <nav className="max-w-3xl mx-auto px-6 py-2 flex flex-wrap justify-between items-center gap-x-4" aria-label="Main navigation">
           <IntentLink
             to="/"
             aria-current={location.pathname === '/' ? 'page' : undefined}
@@ -115,7 +118,7 @@ export function Layout({ children }: LayoutProps) {
           >
             rsmb
           </IntentLink>
-          <ul className="flex items-center gap-3 sm:gap-6 text-sm">
+          <ul className="flex flex-wrap items-center gap-3 sm:gap-6 text-sm">
             {navLinks.map(({ to, label, activePaths }) => {
               const isActive = (activePaths ?? [to]).some((path) => isNavLinkActive(location.pathname, path));
               if (to === '/projects') {

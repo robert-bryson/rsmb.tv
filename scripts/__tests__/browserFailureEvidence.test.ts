@@ -30,3 +30,13 @@ it('uploads both browser output directories after failure without granting write
     expect(workflow.permissions).toEqual({ contents: 'read' });
     expect(workflow.jobs.ci.permissions ?? workflow.permissions).toEqual({ contents: 'read' });
 });
+
+it('runs trip heading, gallery, and permalink regressions in CI WebKit', () => {
+    const workflow = parse(fs.readFileSync(new URL('../../.github/workflows/ci.yml', import.meta.url), 'utf8'));
+    const commands = workflow.jobs.ci.steps.map((step: { run?: string }) => step.run ?? '');
+    const webkit = commands.find((command: string) => command.includes('test:e2e') && command.includes('--project=webkit'));
+    expect(webkit).toContain('PLAYWRIGHT_WEBKIT=1');
+    for (const spec of ['trip-headings', 'trip-galleries', 'post-rendering']) {
+        expect(webkit).toContain(`tests/e2e/${spec}.spec.ts`);
+    }
+});
