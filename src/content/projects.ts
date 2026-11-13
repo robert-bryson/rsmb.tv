@@ -28,8 +28,8 @@ export const projects: Project[] = [
   {
     slug: 'pins-of-inaccessibility',
     title: 'Pins of Inaccessibility',
-    description: 'Find the point farthest from the U.S. boundary and from each state, territory, and county boundary. Explore radius circles, compare the largest and smallest, and zoom into local geography.',
-    summary: 'Explore the national U.S. pole and the interior pins of states, territories, and counties.',
+    description: 'Explore the farthest interior points of countries, territories, states, and provinces worldwide. Compare radius circles and boundary distances, with detailed Census pins for U.S. states and counties.',
+    summary: 'Explore country poles and province pins worldwide, with detailed U.S. state and county coverage.',
     tech: ['React', 'TypeScript', 'MapLibre GL', 'Python', 'GeoJSON'],
     applicationCategory: 'EducationalApplication',
     demoUrl: '/projects/pins-of-inaccessibility/map',
@@ -38,6 +38,7 @@ export const projects: Project[] = [
     year: 2026,
     lastUpdated: '2026-11-12',
     changelog: [{ date: '2026-11', notes: [
+      'Added global country and province pins, a country selector, and lazy country-specific data',
       'Added radius spokes with distance labels that appear as you zoom in',
       'Added the national U.S. pole with internal state borders dissolved',
       'Added state, territory, and county pins calculated from Census administrative boundaries',

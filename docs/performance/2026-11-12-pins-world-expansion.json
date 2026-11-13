@@ -1,0 +1,155 @@
+{
+  "date": "2026-11-12",
+  "sources": {
+    "version": "5.1.1",
+    "scale": "1:10,000,000",
+    "license": "Public domain",
+    "maxRadiusMeters": 5000000,
+    "regionalBoundaryAlignment": "Intersect regional geometry with its Natural Earth parent country before calculation.",
+    "sources": {
+      "country": {
+        "url": "https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip",
+        "sha256": "ce1ac7036499a0edd641fbc093cd209a98f96a49d2eca8480aaacad35138a7f6",
+        "count": 258
+      },
+      "region": {
+        "url": "https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_1_states_provinces.zip",
+        "sha256": "efc59726337323058f9446210adc96673179cd344e053666ee3d28cb58ba2b05",
+        "count": 4596
+      }
+    },
+    "excludedCountries": {
+      "ATA": "Antarctica needs a polar projection and is outside this administrative map's coverage."
+    },
+    "usDefinition": "Retain the 2025 Census national, state, territory, and county pins."
+  },
+  "coverage": {
+    "countriesAndTerritories": 257,
+    "firstLevelRegionsIncludingUS": 4599,
+    "additionalCountries": 256,
+    "additionalFirstLevelRegions": 4543,
+    "retainedUSCounties": 3235
+  },
+  "sourceVerification": {
+    "checked": 4799,
+    "circleSamples": 345528,
+    "maxRadiusErrorMeters": 0.00113475901162019,
+    "maxContactBoundaryErrorMeters": 0.0007705183962984304,
+    "regionsInsideParent": 4543,
+    "adjustedRegionCount": 1852,
+    "maxRegionalRadiusExcessMeters": 4.454000000000633
+  },
+  "regionalAlignment": {
+    "policy": "Intersect each foreign region with its pinned parent-country geometry before calculation and display simplification.",
+    "adjustedRegionCount": 1852,
+    "initialOutsideParentCases": [
+      "Coral Sea Islands",
+      "Alo, Wallis and Futuna"
+    ],
+    "remainingOutsideParentCenters": 0,
+    "note": "Original archives are unchanged. This resolves cross-layer edge differences without claiming legal boundary accuracy."
+  },
+  "solverSensitivity": {
+    "countries": 8,
+    "originsPerCountry": 4,
+    "maxSpreadMeters": 4.023095165146515,
+    "maxGainMeters": 1.9907470132457092,
+    "note": "Different projection origins using the same source and solver. Not independent proof of a global optimum."
+  },
+  "publication": {
+    "fileCount": 514,
+    "bytes": 26761232,
+    "aggregateSha256": "c023d9b5fd43419dbf0ba5fec4d68fbea4646dffd2cd192bbbd0bb4deafd1a32",
+    "fingerprintMethod": "Sort relative filenames; hash filename UTF-8, NUL, then the file SHA-256 bytes for every published file.",
+    "selectedFiles": {
+      "pins.json": {
+        "bytes": 192685,
+        "gzipBytes": 44184,
+        "sha256": "74a408fb74696f516e1fc6871fc3450e23a7a707d384cc03faf3e007973fd976"
+      },
+      "countries.geojson": {
+        "bytes": 2612087,
+        "gzipBytes": 964556,
+        "sha256": "5dab90e3c0d22fcbef52848043bf7904135e61788e84a72a903858be931e2343"
+      },
+      "regions/CAN.json": {
+        "bytes": 9868,
+        "gzipBytes": 2478,
+        "sha256": "d23e7f8ce724a534292cc5c3ac2e53ad7fc85f50df8f14b17ba770dc3ec77a67"
+      },
+      "regions/CAN.geojson": {
+        "bytes": 1461848,
+        "gzipBytes": 510884,
+        "sha256": "03f8c279fa6e9649835e17109e4cd7570e257df2a730fed5995976b4199551fa"
+      },
+      "regions/RUS.json": {
+        "bytes": 63019,
+        "gzipBytes": 14078,
+        "sha256": "818cc5a2e8d1ba134f7611f5d03145cbd99c121a98400249994a3930d9330a5e"
+      },
+      "regions/RUS.geojson": {
+        "bytes": 2100853,
+        "gzipBytes": 757600,
+        "sha256": "aac6f463df07b4f6ccc2be51d533cb0b2824329cb519b35c1c183868c2e7b760"
+      }
+    }
+  },
+  "pinsRouteChunk": {
+    "filename": "PinsExplorer-r4gCDT95.js",
+    "bytes": 150961,
+    "gzipBytes": 40326,
+    "note": "Includes the global identity catalog. Country data remains lazy; this is an added JavaScript cost for the Pins route."
+  },
+  "tests": {
+    "javascript": 3096,
+    "testFiles": 215,
+    "pinsPython": 25,
+    "temperaturePython": 18,
+    "mapBrowserScenariosPerEngine": 13,
+    "browserEngines": [
+      "Chromium",
+      "WebKit"
+    ],
+    "focusedTests": 60,
+    "focusedV8Coverage": {
+      "lines": {
+        "total": 645,
+        "covered": 639,
+        "skipped": 0,
+        "pct": 99.06
+      },
+      "statements": {
+        "total": 862,
+        "covered": 832,
+        "skipped": 0,
+        "pct": 96.51
+      },
+      "functions": {
+        "total": 217,
+        "covered": 211,
+        "skipped": 0,
+        "pct": 97.23
+      },
+      "branches": {
+        "total": 729,
+        "covered": 678,
+        "skipped": 0,
+        "pct": 93
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "limits": [
+    "Natural Earth 1:10 million generalization and mixed administrative dates and levels.",
+    "Source units include territories and disputed units; not a count of sovereign states.",
+    "Regional polygons are derived through parent-country intersection.",
+    "Antarctica excluded from the Mercator administrative view.",
+    "Source consistency and origin sensitivity do not certify global geodesic optimality.",
+    "Physical-phone and screen-reader measurements remain open."
+  ]
+}

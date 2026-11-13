@@ -6,6 +6,7 @@ import { cartoRasterStyle, cartoVectorStyleUrl } from '../../maps/cartoBasemaps'
 import { recoverBasemap, type BasemapState } from '../../maps/recoverBasemap';
 import { OVERVIEW_BOUNDS, formatRadius } from './geometry';
 import { attachRadiusLabels } from './radiusLabels';
+import { pinContext } from '../../../shared/worldPins';
 import { DATA_SOURCES, EMPTY, installPinLayers } from './mapLayers';
 import type { PinsMapData, PinsMapProps } from './types';
 
@@ -26,7 +27,7 @@ export function createPinsRenderer(options: Options) {
     const { container, overlay, getProps, getData, onError, onReady } = options;
     const map = new MapLibreMap({
         container, style: cartoVectorStyleUrl('dark-matter'), bounds: OVERVIEW_BOUNDS,
-        fitBoundsOptions: { padding: 32 }, minZoom: 1.5, maxZoom: 16,
+        fitBoundsOptions: { padding: 32 }, minZoom: 0, maxZoom: 16,
         attributionControl: { compact: false },
     });
     const cleanups: Array<() => void> = [() => map.remove()];
@@ -95,6 +96,7 @@ export function createPinsRenderer(options: Options) {
             for (const id of ['county-fill', 'county-lines', 'county-pins', 'county-labels']) {
                 map.setLayoutProperty(id, 'visibility', current.showCounties ? 'visible' : 'none');
             }
+            for (const id of ['state-pins', 'state-labels']) map.setLayoutProperty(id, 'visibility', current.showRegions === false ? 'none' : 'visible');
             const filter: FilterSpecification = current.stateFips ? ['==', ['get', 'stateFips'], current.stateFips] : ['has', 'id'];
             for (const id of ['state-fill', 'state-lines', 'county-fill', 'county-lines']) map.setFilter(id, filter);
             for (const id of ['selected-state', 'selected-county', 'selected-pin']) map.setFilter(id, ['==', ['get', 'id'], current.selected?.id ?? '']);
@@ -153,7 +155,7 @@ export function createPinsRenderer(options: Options) {
             const content = document.createElement('div');
             content.className = 'pins-tooltip';
             const title = document.createElement('strong');
-            title.textContent = pin.level === 'county' ? `${pin.name}, ${pin.stateAbbr}` : pin.name;
+            title.textContent = pinContext(pin) ? `${pin.name}, ${pinContext(pin)}` : pin.name;
             const distance = document.createElement('span');
             distance.textContent = `${formatRadius(pin.radiusMeters, current.unit)} to the nearest edge`;
             content.append(title, distance);

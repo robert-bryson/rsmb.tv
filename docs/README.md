@@ -50,6 +50,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-12 | [Global Pins expansion: source research, province coverage, calculation checks, lazy data, and implementation](reviews/2026-11-12-pins-world-expansion.md) |
 | 2026-11-12 | [Pins quality review: invalid geometry, publication contracts, map recovery, source checks, tests, and coverage](reviews/2026-11-12-pins-quality-review.md) |
 | 2026-11-10 | [Project quality review: confirmed defects, regression tests, coverage, documentation, and remaining work](reviews/2026-11-10-project-quality-review.md) |
 | 2026-11-10 | [Project audit implementation: article preloads, navigation, temperature recovery, accessibility, telemetry, and browser CI](reviews/2026-11-10-project-improvements.md) |

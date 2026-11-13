@@ -1,0 +1,21 @@
+{
+  "version": "5.1.1",
+  "scale": "1:10,000,000",
+  "license": "Public domain",
+  "maxRadiusMeters": 5000000,
+  "regionalBoundaryAlignment": "Intersect regional geometry with its Natural Earth parent country before calculation.",
+  "sources": {
+    "country": {
+      "url": "https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip",
+      "sha256": "ce1ac7036499a0edd641fbc093cd209a98f96a49d2eca8480aaacad35138a7f6",
+      "count": 258
+    },
+    "region": {
+      "url": "https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_1_states_provinces.zip",
+      "sha256": "efc59726337323058f9446210adc96673179cd344e053666ee3d28cb58ba2b05",
+      "count": 4596
+    }
+  },
+  "excludedCountries": { "ATA": "Antarctica needs a polar projection and is outside this administrative map's coverage." },
+  "usDefinition": "Retain the 2025 Census national, state, territory, and county pins."
+}

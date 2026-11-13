@@ -1,0 +1,101 @@
+{
+  "method": "Four AEQD origins in the component containing each published country pin. This measures solver sensitivity, not independent proof of a global geodesic optimum.",
+  "results": [
+    {
+      "country": "IDN",
+      "publishedRadiusMeters": 247858.685,
+      "seedRadiiMeters": [
+        247858.68511638325,
+        247858.68261486365,
+        247858.68261082226,
+        247858.6826182915
+      ],
+      "spreadMeters": 0.0025055609876289964,
+      "bestGainMeters": 0.0001163832494057715
+    },
+    {
+      "country": "CHN",
+      "publishedRadiusMeters": 1049611.708,
+      "seedRadiiMeters": [
+        1049611.7084158147,
+        1049611.758603715,
+        1049610.5711464407,
+        1049610.6403231223
+      ],
+      "spreadMeters": 1.1874572744127363,
+      "bestGainMeters": 0.05060371500439942
+    },
+    {
+      "country": "FRA",
+      "publishedRadiusMeters": 289271.49,
+      "seedRadiiMeters": [
+        289271.4895147423,
+        289271.2587517814,
+        289271.41067265416,
+        289271.4123346277
+      ],
+      "spreadMeters": 0.23076296085491776,
+      "bestGainMeters": -0.00048525771126151085
+    },
+    {
+      "country": "BRA",
+      "publishedRadiusMeters": 1084984.676,
+      "seedRadiiMeters": [
+        1084984.6762313636,
+        1084984.692808586,
+        1084984.6763099069,
+        1084984.6605073519
+      ],
+      "spreadMeters": 0.03230123408138752,
+      "bestGainMeters": 0.01680858596228063
+    },
+    {
+      "country": "RUS",
+      "publishedRadiusMeters": 1219101.621,
+      "seedRadiiMeters": [
+        1219101.6213528384,
+        1219102.2048755363,
+        1219101.9124826775,
+        1219101.9011150873
+      ],
+      "spreadMeters": 0.5835226979106665,
+      "bestGainMeters": 0.5838755362201482
+    },
+    {
+      "country": "CAN",
+      "publishedRadiusMeters": 996010.268,
+      "seedRadiiMeters": [
+        996010.268478384,
+        996008.2356518481,
+        996012.2587470133,
+        996009.0667866895
+      ],
+      "spreadMeters": 4.023095165146515,
+      "bestGainMeters": 1.9907470132457092
+    },
+    {
+      "country": "AUS",
+      "publishedRadiusMeters": 925632.465,
+      "seedRadiiMeters": [
+        925632.4650635982,
+        925632.4650358626,
+        925632.465055693,
+        925632.4649865985
+      ],
+      "spreadMeters": 7.69997714087367e-05,
+      "bestGainMeters": 6.359827239066362e-05
+    },
+    {
+      "country": "GRL",
+      "publishedRadiusMeters": 472865.046,
+      "seedRadiiMeters": [
+        472865.04634822655,
+        472866.43983627507,
+        472866.4403129398,
+        472866.44066210213
+      ],
+      "spreadMeters": 1.3943138755857944,
+      "bestGainMeters": 1.3946621021605097
+    }
+  ]
+}

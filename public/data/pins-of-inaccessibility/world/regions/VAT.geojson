@@ -1,0 +1,1 @@
+{"type":"FeatureCollection","features":[{"type":"Feature","id":"region-VAT+00?","properties":{"id":"region-VAT+00?","name":"Vatican City","countryCode":"VAT","level":"state"},"geometry":{"type":"MultiPolygon","coordinates":[[[[12.453983,41.903862],[12.454035,41.902752],[12.452714,41.903016],[12.453983,41.903862]]]]}}]}

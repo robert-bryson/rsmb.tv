@@ -2,11 +2,13 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import { MemoryRouter, useLocation } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import PinsExplorer from '../../src/features/pins/PinsExplorer';
-import { usePinsData } from '../../src/features/pins/data';
+import { usePinsData, useWorldPinsData } from '../../src/features/pins/data';
 import type { PinsMapProps } from '../../src/features/pins/types';
 import { publishedPins } from './pinsFixtures';
+import { readPinsArtifact } from './pinsFixtures';
+import { parseWorldCountries, parseWorldRegionPins, worldPinsDataSchema } from '../../shared/worldPins';
 
-vi.mock('../../src/features/pins/data', () => ({ usePinsData: vi.fn() }));
+vi.mock('../../src/features/pins/data', () => ({ usePinsData: vi.fn(), useWorldPinsData: vi.fn() }));
 vi.mock('../../src/features/pins/PinsMap', () => ({ PinsMap: (props: PinsMapProps) => <div>
     <button onClick={() => props.onSelect('country-US')}>Select national pin on map</button>
     <button onClick={() => props.onSelect('unknown')}>Select unknown map feature</button>
@@ -23,9 +25,13 @@ function open(query = '') {
 }
 const results = () => document.querySelector('.pins-results') as HTMLElement;
 const rows = () => within(results()).queryAllByRole('listitem');
+const worldCountries = worldPinsDataSchema.parse(readPinsArtifact('world/pins.json'));
+const worldOutlines = parseWorldCountries(readPinsArtifact('world/countries.geojson'));
+const canada = parseWorldRegionPins(readPinsArtifact('world/regions/CAN.json'), 'CAN');
 
 beforeEach(() => {
     vi.mocked(usePinsData).mockReturnValue(resources());
+    vi.mocked(useWorldPinsData).mockReturnValue({ pins: resource(null), countries: resource(null), regions: resource(null), outlines: resource(null) });
     localStorage.clear();
     vi.stubGlobal('matchMedia', () => ({ matches: true, addEventListener: vi.fn(), removeEventListener: vi.fn() }));
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 1280 });
@@ -35,6 +41,45 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 
 describe('pin explorer behavior', () => {
+    it('switches from world countries to real Canadian provinces and preserves URL context', () => {
+        vi.mocked(useWorldPinsData).mockImplementation(code => ({
+            pins: resource(worldCountries), countries: resource(worldOutlines),
+            regions: resource(code === 'CAN' ? canada : null), outlines: resource(null),
+        }));
+        open('?keep=1');
+        fireEvent.change(screen.getByLabelText('Country / territory'), { target: { value: 'ALL' } });
+        expect(screen.getByText('257 pins ranked by radius')).toBeVisible();
+        expect(usePinsData).toHaveBeenLastCalledWith(false, false);
+        fireEvent.change(screen.getByLabelText('Country / territory'), { target: { value: 'CAN' } });
+        expect(rows()).toHaveLength(13);
+        expect(screen.getByRole('region', { name: 'Canada pole' })).toBeVisible();
+        fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'CA-ON' } });
+        expect(rows()).toHaveLength(1);
+        fireEvent.click(within(results()).getByRole('button'));
+        expect(screen.getByRole('region', { name: 'Selected pin' })).toHaveTextContent('Ontario, Canada');
+        expect(screen.getByRole('region', { name: 'Selected pin' })).toHaveTextContent('Mapped area');
+        expect(screen.getByLabelText('Current query')).toHaveTextContent('keep=1');
+        expect(screen.getByLabelText('Current query')).toHaveTextContent('pin=region-CAN-682');
+        fireEvent.change(screen.getByLabelText('Country / territory'), { target: { value: 'USA' } });
+        expect(screen.getByLabelText('Current query')).toHaveTextContent('?keep=1');
+        expect(screen.getByRole('region', { name: 'U.S. pole' })).toBeVisible();
+        fireEvent.change(screen.getByLabelText('Country / territory'), { target: { value: 'BJN' } });
+        expect(screen.getByText(/This source has no regional divisions/)).toBeVisible();
+        fireEvent.change(screen.getByLabelText('Country / territory'), { target: { value: 'VAT' } });
+        fireEvent.click(within(screen.getByRole('region', { name: 'Vatican City pole' })).getByRole('button'));
+        expect(screen.getByRole('region', { name: 'Selected pin' })).toHaveTextContent('especially approximate');
+    });
+
+    it('restores a province-only shared link and rejects unknown country paths', () => {
+        vi.mocked(useWorldPinsData).mockReturnValue({ pins: resource(worldCountries), countries: resource(worldOutlines), regions: resource(canada), outlines: resource(null) });
+        const view = open('?pin=region-CAN-682');
+        expect(screen.getByLabelText('Country / territory')).toHaveValue('CAN');
+        expect(screen.getByRole('region', { name: 'Selected pin' })).toHaveTextContent('Ontario');
+        view.unmount();
+        open('?country=../../private');
+        expect(screen.getByLabelText('Country / territory')).toHaveValue('USA');
+        expect(useWorldPinsData).toHaveBeenLastCalledWith('USA');
+    });
     it('paginates rankings, filters by scope and search, and changes sort order', () => {
         open();
         expect(rows()).toHaveLength(30);
@@ -84,7 +129,7 @@ describe('pin explorer behavior', () => {
         expect(screen.getByRole('button', { name: 'Auto', exact: true })).toHaveAttribute('aria-pressed', 'true');
         fireEvent.click(screen.getByRole('button', { name: 'Set county zoom' }));
         expect(screen.getByText('County pins visible')).toBeVisible();
-        expect(usePinsData).toHaveBeenLastCalledWith(true);
+        expect(usePinsData).toHaveBeenLastCalledWith(true, true);
         fireEvent.click(screen.getByRole('button', { name: 'On', exact: true }));
         expect(screen.getByText('County pins always visible')).toBeVisible();
         fireEvent.click(screen.getByRole('checkbox', { name: 'All radius circles' }));

@@ -75,6 +75,16 @@ These browser checks do not replace full polygon topology checks.
 The [Census snapshot](../shared/geography/census2025.json) supplies source checksums and county counts to Python and TypeScript.
 Update both publications and tests when changing this snapshot.
 
+Use [`shared/pinGeometry.ts`](../shared/pinGeometry.ts) for common geometry fields and contact checks.
+Use [`shared/worldPins.ts`](../shared/worldPins.ts) for global country and region payloads.
+The world contract validates every expected ID against its country catalog.
+The global catalog uses Natural Earth identities and available ISO codes, independently of Census FIPS codes.
+Global and Census pins share drawing, radius labels, and presentation helpers.
+Foreign area is labeled as mapped area; Census area retains its land-area label.
+Foreign regions use the intersection of the regional and parent-country source boundaries.
+The snapshot records this rule. Each changed pin carries a flag for its source note.
+Country-specific resource state is tied to its URL. A delayed response cannot replace the current country.
+
 Use [`src/features/tornadoes/schemas.ts`](../src/features/tornadoes/schemas.ts) for notable-event metadata.
 The schema checks event fields and geographic coordinates.
 Its inferred types also define the existing track properties contract.

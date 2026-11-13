@@ -34,6 +34,7 @@
 .pins-tabs button[aria-pressed="true"] { background: #2b2c27; color: #f5cc8a; box-shadow: inset 0 0 0 1px #78613d60; }
 .pins-field-label { display: block; color: var(--pins-muted); font-size: 10px; margin-bottom: 6px; }
 .pins-input { width: 100%; background: #151f27; border: 1px solid #33414b; border-radius: 4px; min-height: 38px; padding: 7px 10px; font-size: 12px; }
+.pins-country-select { margin-bottom: 12px; }
 .pins-search { display: flex; gap: 8px; align-items: center; border: 1px solid #33414b; border-radius: 4px; margin-top: 9px; padding: 0 9px; background: #0d151c; }
 .pins-search > span { color: var(--pins-muted); font-size: 23px; line-height: 1; }
 .pins-search input { width: 100%; min-width: 0; background: transparent; font-size: 11px; min-height: 38px; outline-offset: 5px; }

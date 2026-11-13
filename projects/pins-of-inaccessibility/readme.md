@@ -1,7 +1,8 @@
 # Pins of Inaccessibility
 
 Explore the point farthest from each administrative boundary.
-The map includes a national pin, 56 state jurisdictions, and 3,235 counties or county equivalents.
+The map includes 257 country or territory poles and 4,599 state, province, and regional pins.
+The U.S. also has 3,235 county or county-equivalent pins.
 Each circle shows the distance from its pin to the nearest boundary.
 A boundary contact is a point where a radius reaches an edge.
 
@@ -10,23 +11,57 @@ Open `/projects/pins-of-inaccessibility` for the project description.
 
 ## Coverage
 
+Choose **World overview** to rank country poles.
+Choose a country to explore its state, province, or regional pins.
+The default view retains the original U.S. map and county controls.
+Country and pin URL parameters preserve the chosen view.
+A shared province link can also infer its country from the pin ID.
+
+Global coverage uses Natural Earth 5.1.1 at 1:10 million scale.
+The 257 entries are source map units, including countries, territories, and disputed units.
+They are not a count of sovereign states.
+The source follows its default de facto boundary policy.
+Region levels and dates vary by country.
+For example, the source has 13 Canadian units, 11 Australian units, and 101 French units.
+These counts describe the pinned source, not a claim about current legal divisions.
+Six regions have no source name and retain a clear code-based label.
+Antarctica and its two source regions are excluded from this Mercator map.
+
+The existing U.S. national, state, territory, and county pins retain Census data.
+The global country index copies the published U.S. national pin exactly.
+The global overview uses a generalized Natural Earth U.S. outline.
+Choose the U.S. view for its Census outlines.
+
 The state dataset contains 50 states, DC, and five inhabited territories.
 The territories are American Samoa, Guam, the Northern Mariana Islands, Puerto Rico, and the U.S. Virgin Islands.
 County equivalents include boroughs, census areas, parishes, independent cities, Connecticut planning regions, and territorial equivalents.
 The Census files omit minor outlying islands.
 
-Administrative boundaries include jurisdictional water.
+U.S. administrative boundaries include jurisdictional water.
+Global sources use administrative borders and source coastlines.
+Foreign regions are intersected with their parent country before calculation.
+This aligns differences between the source layers' coastlines and international edges.
+The current publication flags 1,852 adjusted regions and explains the change in each selected card.
+The Natural Earth files retain large inland lakes, instead of cutting their shores into new edges.
 Inland lake shores add no edges.
 Administrative enclaves remain holes in the surrounding jurisdiction.
 Coastal limits can extend offshore, so a pin can lie over water.
 
-The national calculation merges all covered state and territory polygons.
+The U.S. national calculation merges all covered state and territory polygons.
 It removes shared state borders.
 International borders and coastal jurisdiction limits remain edges.
 This definition differs from a calculation that uses only the continental coastline.
 See the original [pole of inaccessibility concept](https://en.wikipedia.org/wiki/Pole_of_inaccessibility).
 
 ## Sources and calculation
+
+The global generator reads Natural Earth's [country](https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-0-countries/) and [first-level region](https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-1-states-provinces/) archives.
+The data is [public domain](https://www.naturalearthdata.com/about/terms-of-use/).
+The [global snapshot](../../shared/geography/naturalEarthSnapshot.json) pins URLs, checksums, counts, and the excluded polar unit.
+The [identity catalog](../../shared/geography/worldCatalog.json) pins country names, bounds, and every regional ID.
+The generator rejects source drift before publication.
+The browser checks exact coverage and country ownership before caching any file.
+Global records use Natural Earth and available ISO codes. They do not invent FIPS codes.
 
 The generator reads full [2025 state](https://www2.census.gov/geo/tiger/TIGER2025/STATE/) and [county](https://www2.census.gov/geo/tiger/TIGER2025/COUNTY/) TIGER/Line archives.
 The [snapshot contract](../../shared/geography/census2025.json) stores URLs, SHA-256 checksums, and county counts for each state.
@@ -40,8 +75,8 @@ For each jurisdiction, the generator does these steps:
 2. Unwrap each component across the date line.
 3. Densify segments to at most 0.02 degrees.
 4. Use a local WGS84 azimuthal equidistant projection.
-5. Simplify the working boundary by 20 meters.
-6. Find its maximum inscribed circle with a 25-meter search tolerance.
+5. Simplify the working boundary by at most 20 meters.
+6. Find its maximum inscribed circle with at most a 25-meter search tolerance.
 7. Recenter the projection at the candidate pin, for at most six passes.
 8. Measure the final radius against the original densified boundary.
 9. Check the pin and 72 circle samples against that boundary.
@@ -55,19 +90,24 @@ Each contact stores its measured distance and initial bearing.
 The browser uses a shared Vincenty direct calculation to draw geodesic circles and spokes.
 A geodesic follows the shortest path on the WGS84 ellipsoid.
 
+Small global units use tighter limits derived from their mapped area.
+The minimum search tolerance is 0.01 meters; the minimum working simplification is 0.001 meters.
+These numerical limits do not establish the accuracy of Natural Earth boundaries.
+
 Results are approximate.
 Projection iteration can change the selected point.
 The search tolerance does not certify a global geodesic optimum or source survey accuracy.
 Rectangular jurisdictions can have several points with nearly equal radii.
 The 72 samples check circle containment; they do not prove containment between samples.
 
-Display outlines use a separate 0.0015-degree simplification.
+Census and global province outlines use a separate 0.0015-degree simplification.
+Global overview country outlines use 0.02 degrees.
 The generator reduces them to a six-decimal precision grid that preserves valid geometry.
 Collapsed small pieces can be removed by precision reduction.
 Every final outline must remain valid and nonempty.
 Use the original TIGER data for detailed boundary analysis.
 
-## Generate data
+## Generate U.S. data
 
 Use Python 3.12 or later.
 Install the pinned packages in a separate environment.
@@ -97,9 +137,57 @@ Partial modes preserve the other pins and display outlines.
 They require an existing publication with matching source hashes.
 With the packages available to `python3`, `npm run build-pins` runs the full generator.
 
+## Generate global data
+
+Use the same prepared Python environment:
+
+```bash
+.venv-pins/bin/python projects/pins-of-inaccessibility/generate_world.py
+```
+
+With packages available to `python3`, use `npm run build-pins:world`.
+The first run downloads about 20 MB into `.cache/pins-of-inaccessibility/world/`.
+It reuses the existing U.S. solver, source reader, display geometry, contacts, verification, and publication writer.
+It does not replace the U.S. data files.
+All 4,799 added pins receive source and sampled-circle checks before publication.
+Regional source checks use the full country-aligned geometry, before display simplification.
+The checks also confirm that each regional pin lies inside its parent country.
+
+The global files live under `public/data/pins-of-inaccessibility/world/`:
+
+| File | Contents |
+| --- | --- |
+| `pins.json` | A small index of 257 country poles, including the retained Census U.S. pole |
+| `countries.geojson` | Generalized country and territory overview outlines |
+| `regions/CODE.json` | Province and regional pins for one country |
+| `regions/CODE.geojson` | Province and regional outlines for one country |
+
+The global index is about 188 KiB before compression.
+Overview outlines are about 2.5 MiB.
+Canada adds about 10 KiB of pins and 1.4 MiB of province outlines.
+These files load only when needed; the default U.S. view requests no global files.
+Province files are loaded only for the chosen country.
+A country change cancels the old UI reader and clears data from the previous country.
+The shared cache can still retain a completed response for a later return.
+
+The source catalog is a build input.
+After an intentional source update, inspect and regenerate it with `--write-catalog`.
+Do not accept a new checksum or identity list without reviewing the source change.
+
+Repeat the source checks and origin-sensitivity benchmark:
+
+```bash
+.venv-pins/bin/python projects/pins-of-inaccessibility/generate_world.py --verify-only
+.venv-pins/bin/python projects/pins-of-inaccessibility/generate_world.py --benchmark
+```
+
+The benchmark compares four projection origins in eight selected country components.
+It measures solver sensitivity, not independent proof of a global geodesic optimum.
+See the [research and implementation report](../../docs/reviews/2026-11-12-pins-world-expansion.md) for results and source tradeoffs.
+
 ## Publication
 
-The generator writes these tracked files:
+The U.S. generator writes these tracked files:
 
 | File | Contents |
 | --- | --- |
@@ -136,10 +224,16 @@ This check reuses the source projection method; it does not certify a global geo
 ## Interface
 
 The map starts over the contiguous U.S.
+The country selector opens the world view or any covered country.
+Country views rank first-level regions and provide a national pole card.
+A province-layer checkbox controls foreign province markers and outlines.
+The selected pin keeps its circle and spokes when that layer is hidden.
+Foreign selected cards label area as mapped area.
+They show source scale and flag especially small or unnamed source units.
 The violet marker identifies the national pole.
 Regional shortcuts reach Alaska, Hawaii, and each inhabited territory.
 The national card and region menu can zoom to the U.S. pole.
-The national pin has `level: "country"`, `fips: "US"`, and an empty `stateFips`.
+The U.S. national pin has `level: "country"`, `fips: "US"`, and an empty `stateFips`.
 It stays separate from state and county rankings.
 
 Rankings support radius and name order.
@@ -203,7 +297,9 @@ Local and preview hosts do not send analytics.
 | `src/features/pins/mapLayers.ts` | Source and layer definitions |
 | `src/features/pins/radii.ts` | Spoke geometry and zoom thresholds |
 | `src/features/pins/radiusLabels.ts` | Badge placement and collision checks |
-| `shared/pins.ts` | Browser and Node publication validation |
+| `shared/pins.ts` | Census browser and Node publication validation |
+| `shared/worldPins.ts` | Global contracts, catalog lookup, and shared pin presentation |
+| `shared/pinGeometry.ts` | Source-independent geometry fields and validation |
 | `shared/geography/census2025.json` | Python and TypeScript snapshot contract |
 | `shared/geography/geodesy.ts` | Direct WGS84 destinations |
 
@@ -223,7 +319,7 @@ Run the geometry and publication tests in the prepared environment:
 Run the interface and contract tests:
 
 ```bash
-npx vitest run scripts/__tests__/pins*.test.* src/test/usStates.test.ts src/test/AtlasFullscreenControl.test.ts src/test/MapPerformance.test.tsx src/test/analytics.test.ts
+npx vitest run scripts/__tests__/pins*.test.* scripts/__tests__/worldPins*.test.* src/test/usStates.test.ts src/test/AtlasFullscreenControl.test.ts src/test/MapPerformance.test.tsx src/test/analytics.test.ts
 npm run lint
 npm run typecheck
 npm run test:e2e -- tests/e2e/pins-map.spec.ts
@@ -234,6 +330,7 @@ Install browser system libraries as described in the [repository guide](../../RE
 
 Python tests check analytic radii, dissolved borders, enclaves, islands, and date-line geometry.
 They also check every published outline, source checksums, failed writes, rollback, and writer locks.
+Global checks also cover the 514 country and regional artifacts, tiny units, and equatorial component bounds.
 CI installs the pinned Python packages and runs these tests without a Census download.
 
 Interface tests check loading, retries, rankings, scope, preferences, cleanup, deadlines, and badge placement.

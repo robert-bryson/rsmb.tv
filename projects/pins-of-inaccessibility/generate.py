@@ -51,7 +51,7 @@ def generator_versions():
             **{name: version(name) for name in ["shapely", "pyproj", "pyshp", "numpy"]}}
 
 
-def boundary_contacts(geometry, pin):
+def boundary_contacts(geometry, pin, coordinate_precision=6, distance_precision=1):
     """Find distinct, nearly tangent boundary contacts without resolving the pole."""
     component = None
     for polygon in polygons(make_valid(geometry)):
@@ -82,8 +82,8 @@ def boundary_contacts(geometry, pin):
 
     def contact(lng, lat):
         bearing, _, distance = GEOD.inv(pin["lng"], pin["lat"], lng, lat)
-        return {"coordinates": [round(lng, 6), round(lat, 6)],
-                "distanceMeters": round(distance, 1), "bearingDegrees": round(bearing, 6)}
+        return {"coordinates": [round(lng, coordinate_precision), round(lat, coordinate_precision)],
+                "distanceMeters": round(distance, distance_precision), "bearingDegrees": round(bearing, 6)}
 
     contacts = [contact(*pin["nearestBoundary"])]
     for _, lng, lat in sorted(candidates):
@@ -134,7 +134,7 @@ def read_shapes(archive_path):
 
 def polygons(geometry):
     if isinstance(geometry, Polygon):
-        return [geometry]
+        return [] if geometry.is_empty else [geometry]
     if hasattr(geometry, "geoms"):
         return [polygon for part in geometry.geoms for polygon in polygons(part) if not polygon.is_empty]
     return []
@@ -151,22 +151,22 @@ def projection_at(lng, lat):
             Transformer.from_crs(local, "EPSG:4326", always_xy=True))
 
 
-def solve_polygon(polygon):
+def solve_polygon(polygon, search_tolerance=SEARCH_TOLERANCE, simplification=SOLVE_SIMPLIFICATION, initial_origin=None):
     """Recenter an ellipsoidal azimuthal equidistant projection at the solution."""
     polygon = unwrap_polygon(polygon)
     origin = polygon.representative_point()
-    lng, lat = origin.x, origin.y
+    lng, lat = initial_origin if initial_origin is not None else (origin.x, origin.y)
     # Densification limits straight projected segments on long legal water borders.
     dense = segmentize(polygon, 0.02)
     for _ in range(6):
         forward, inverse = projection_at(lng, lat)
         projected = transform(forward.transform, dense)
-        line = maximum_inscribed_circle(projected.simplify(SOLVE_SIMPLIFICATION, preserve_topology=True), SEARCH_TOLERANCE)
+        line = maximum_inscribed_circle(projected.simplify(simplification, preserve_topology=True), search_tolerance)
         center = Point(line.coords[0])
         next_lng, next_lat = inverse.transform(center.x, center.y)
         movement = GEOD.inv(lng, lat, next_lng, next_lat)[2]
         lng, lat = next_lng, next_lat
-        if movement < SEARCH_TOLERANCE:
+        if movement < search_tolerance:
             break
     # At this origin, radial projected distances are ellipsoidal geodesic distances.
     forward, inverse = projection_at(lng, lat)
@@ -188,21 +188,23 @@ def solve_polygon(polygon):
     return lng, lat, radius, edge_lng, edge_lat
 
 
-def solve_geometry(geometry):
+def component_radius_bound(polygon):
+    west, south, east, north = polygon.bounds
+    # Equatorial components attain their largest longitude scale between the endpoints.
+    cosine = 1 if south <= 0 <= north else max(math.cos(math.radians(south)), math.cos(math.radians(north)))
+    width = (east - west) * 111_700 * cosine
+    height = (north - south) * 111_700
+    return min(width, height) / 2
+
+
+def solve_geometry(geometry, search_tolerance=SEARCH_TOLERANCE, simplification=SOLVE_SIMPLIFICATION):
     parts = [unwrap_polygon(polygon) for polygon in polygons(make_valid(geometry))]
-    # Try the most promising component first, then bound smaller islands cheaply.
-    def upper_bound(polygon):
-        west, south, east, north = polygon.bounds
-        # Deliberately generous bounds, including variation in longitude scale.
-        width = (east - west) * 111_700 * max(math.cos(math.radians(south)), math.cos(math.radians(north)))
-        height = (north - south) * 111_700
-        return min(width, height) / 2
-    parts.sort(key=upper_bound, reverse=True)
+    parts.sort(key=component_radius_bound, reverse=True)
     best = None
     for polygon in parts:
-        if best and upper_bound(polygon) < best[2] - SEARCH_TOLERANCE:
+        if best and component_radius_bound(polygon) < best[2] - search_tolerance:
             continue
-        candidate = solve_polygon(polygon)
+        candidate = solve_polygon(polygon, search_tolerance, simplification)
         if best is None or candidate[2] > best[2]:
             best = candidate
     if best is None:
@@ -210,10 +212,10 @@ def solve_geometry(geometry):
     return best
 
 
-def display_geometry(geometry):
+def display_geometry(geometry, simplification_degrees=0.0015):
     parts = []
     for polygon in polygons(make_valid(geometry)):
-        unwrapped = unwrap_polygon(polygon).simplify(0.0015, preserve_topology=True)
+        unwrapped = unwrap_polygon(polygon).simplify(simplification_degrees, preserve_topology=True)
         pieces = [unwrapped]
         for longitude in [-180, 180]:
             cutter = LineString([(longitude, -90), (longitude, 90)])
@@ -385,7 +387,7 @@ def validate_artifact(name, payload):
         raise ValueError("Incomplete state boundary coverage")
 
 
-def verify_source_pin(pin, geometry):
+def verify_source_pin(pin, geometry, sample_margin=2):
     """Compare a rounded published pin with its full source boundary."""
     component = None
     for polygon in polygons(make_valid(geometry)):
@@ -409,7 +411,7 @@ def verify_source_pin(pin, geometry):
     if contact_error >= 1:
         raise ValueError(f"Published contact is off its source boundary: {pin['id']}")
     for bearing in range(0, 360, 5):
-        lng, lat, _ = GEOD.fwd(pin["lng"], pin["lat"], bearing, max(0, pin["radiusMeters"] - 2))
+        lng, lat, _ = GEOD.fwd(pin["lng"], pin["lat"], bearing, max(0, pin["radiusMeters"] - sample_margin))
         if not projected.covers(Point(*forward.transform(lng, lat))):
             raise ValueError(f"Published circle sample escapes its source: {pin['id']}")
     return radius_error, contact_error
@@ -436,9 +438,11 @@ def verify_publication(directory, state_shapes, county_shapes):
             "maxContactBoundaryErrorMeters": max(error[1] for error in errors)}
 
 
-def write_publication(directory, artifacts):
+def write_publication(directory, artifacts, validate=None):
     """Stage and validate outputs, reject concurrent writes, and roll back I/O failures."""
     directory = Path(directory)
+    if any(Path(name).is_absolute() or '..' in Path(name).parts for name in artifacts):
+        raise ValueError('Publication paths must stay inside the output directory')
     directory.parent.mkdir(parents=True, exist_ok=True)
     lock = directory.parent / f".{directory.name}.lock"
     try:
@@ -452,7 +456,7 @@ def write_publication(directory, artifacts):
             staging = Path(temporary)
             directory.mkdir(parents=True, exist_ok=True)
             for name, payload in artifacts.items():
-                validate_artifact(name, payload)
+                (validate or validate_artifact)(name, payload)
                 if name == "pins.json":
                     payload = {**payload, "metadata": {**payload["metadata"], "generatorVersions": generator_versions()}}
                 write_json(staging / name, payload)
@@ -465,6 +469,7 @@ def write_publication(directory, artifacts):
                     backups[name] = backup
             try:
                 for name in artifacts:
+                    (directory / name).parent.mkdir(parents=True, exist_ok=True)
                     written.append(name)
                     os.replace(staging / name, directory / name)
             except BaseException:

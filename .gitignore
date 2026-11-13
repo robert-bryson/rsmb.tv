@@ -211,6 +211,8 @@ projects/ride-ledger/receipts/
 .venv-pins/
 public/data/.pins-of-inaccessibility.lock
 public/data/.pins-publish-*/
+public/data/pins-of-inaccessibility/.world.lock
+public/data/pins-of-inaccessibility/.pins-publish-*/
 projects/pins-of-inaccessibility/**/__pycache__/
 
 # === Blog content generated from Google Sheets/Docs at build time ===

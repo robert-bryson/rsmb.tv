@@ -85,9 +85,12 @@ Its November 9 snapshot already includes all calendar years from 1890 through 20
 
 Use the [Pins guide](projects/pins-of-inaccessibility/readme.md) for generation and regression tests.
 Use the [November 12 review](docs/reviews/2026-11-12-pins-quality-review.md) for confirmed fixes and measurement limits.
+Use the [global expansion report](docs/reviews/2026-11-12-pins-world-expansion.md) for country coverage, source choices, and coastline alignment.
 
 - [ ] Check the hosted map with the configured CARTO key. Verify origin restrictions, attribution, and every territory shortcut.
 - [ ] Compare large and irregular jurisdictions with an independent geodesic search. Measure tolerance sensitivity and near-equal radius rankings.
+- [ ] Evaluate current national boundary providers for global countries that need more detail. Check license, dates, water treatment, and source IDs.
+- [ ] Assess a polar view before adding Antarctica. The current world map excludes it.
 - [ ] Measure cold transfer, parsing time, and memory on a real phone. Compare the initial pin index with the lazy county outlines.
 
 ## Browser and performance checks

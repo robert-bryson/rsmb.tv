@@ -3,6 +3,7 @@ import type { FeatureCollection } from 'geojson';
 import type { BasemapState } from '../../maps/recoverBasemap';
 import type { ResilientFullscreenControl } from '../../maps/ResilientFullscreenControl';
 import { pinCircles, pinPoints } from './geometry';
+import { pinStateFips } from '../../../shared/worldPins';
 import { radiusLines, visibleRadiusPins } from './radii';
 import { EMPTY } from './mapLayers';
 import { createPinsRenderer } from './mapRenderer';
@@ -19,18 +20,17 @@ export function PinsMap(props: PinsMapProps) {
     const [error, setError] = useState<string | null>(null);
     const [rendered, setRendered] = useState(false);
     const [basemapState, setBasemapState] = useState<BasemapState>('loading');
-    const scopedPins = useMemo(() => props.pins.filter(pin => !props.stateFips || pin.stateFips === props.stateFips), [props.pins, props.stateFips]);
+    const scopedPins = useMemo(() => props.pins.filter(pin => !props.stateFips || pinStateFips(pin) === props.stateFips), [props.pins, props.stateFips]);
     const points = useMemo(() => pinPoints(scopedPins), [scopedPins]);
-    const circles = useMemo(() => props.circles ? pinCircles(scopedPins.filter(pin => pin.level !== 'county' || props.showCounties)) : EMPTY,
-        [scopedPins, props.circles, props.showCounties]);
+    const circles = useMemo(() => props.circles ? pinCircles(scopedPins.filter(pin => (pin.level !== 'county' || props.showCounties) && (pin.level !== 'state' || props.showRegions !== false))) : EMPTY,
+        [scopedPins, props.circles, props.showCounties, props.showRegions]);
     const selection = useMemo<FeatureCollection>(() => {
         if (!props.selected) return EMPTY;
         return pinCircles([props.selected], 144);
     }, [props.selected]);
-    const radii = useMemo(() => radiusLines(visibleRadiusPins(scopedPins, props.zoom, props.circles, props.showCounties, props.selected), props.unit, props.selected?.id ?? null),
-        [scopedPins, props.zoom, props.circles, props.showCounties, props.selected, props.unit]);
+    const radii = useMemo(() => radiusLines(visibleRadiusPins(scopedPins, props.zoom, props.circles, props.showCounties, props.selected, props.showRegions), props.unit, props.selected?.id ?? null),
+        [scopedPins, props.zoom, props.circles, props.showCounties, props.selected, props.unit, props.showRegions]);
     const datasets = useRef({ points, circles, selection, radii });
-
 
     useEffect(() => {
         latest.current = props;
