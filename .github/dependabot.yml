@@ -17,3 +17,7 @@ updates:
     directory: "/infra"
     schedule:
       interval: "daily"
+  - package-ecosystem: "pip"
+    directory: "/projects/pins-of-inaccessibility"
+    schedule:
+      interval: "daily"

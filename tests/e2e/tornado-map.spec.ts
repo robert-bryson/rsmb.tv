@@ -292,6 +292,9 @@ for (const [width, renderer] of [[390, 'webgl'], [1280, 'webgl'], [1280, 'svg']]
         }, '/src/maps/maplibre.ts');
         await page.getByRole('link', { name: '← rsmb.tv', exact: true }).click();
         await expect(page.getByRole('heading', { name: 'Tornado Tracks', level: 1, exact: true })).toBeVisible();
+        // Both pages have the same heading. Wait for the lazy route to unmount
+        // the renderer before replacing the document and its pending tile work.
+        await expect(page.getByTestId('tornado-map')).toHaveCount(0);
         const previousTrackRequests = trackRequests.length;
         await page.goto('/projects/tornado-tracks/map?start=2025&end=2025&mode=trends&state=KS&track=test-track');
         await expect(page.getByRole('heading', { name: 'Test County, KS', exact: true })).toBeVisible();

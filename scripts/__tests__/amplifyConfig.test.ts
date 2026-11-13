@@ -232,14 +232,14 @@ describe('dependency installation contracts', () => {
         expect(manifest.dependencies.react).toBe(manifest.dependencies['react-dom']);
         expect(manifest.devDependencies.vitest).toBe(manifest.devDependencies['@vitest/coverage-v8']);
         expect(manifest.overrides).not.toHaveProperty('react-router');
-        expect(manifest.devDependencies.typescript).toMatch(/^npm:@typescript\/typescript6@/);
+        expect(manifest.devDependencies.typescript).toMatch(/^~6\.0\.\d+$/);
     });
 
     it('declares the supported Node lines and the npm major used by automated builds', () => {
         const manifest = JSON.parse(readRepoFile('package.json'));
         expect(manifest.packageManager).toMatch(/^npm@12\.\d+\.\d+$/);
         expect(manifest.engines.npm).toBe('>=12.2 <13');
-        expect(manifest.engines.node).toBe('^22.22.2 || ^24.15.0 || ^26.0.0');
+        expect(manifest.engines.node).toBe('^22.23.5 || ^24.22.3 || ^26.13.1');
     });
 });
 

@@ -35,7 +35,7 @@ A personal website with software projects, data maps, writing, and motorcycle tr
 
 Run `nvm install` from the repository root. This installs and activates the Node.js version in `.nvmrc`.
 The supported Node.js lines are 22, 24, and 26.
-Use Node.js 22.22.2 or later in line 22. Use Node.js 24.15.0 or later in line 24.
+Use Node.js 22.23.5 or later in line 22, 24.22.3 or later in line 24, or 26.13.1 or later in line 26.
 See `package.json` for the exact version ranges.
 CI and Amplify install the npm version from `packageManager` before they install dependencies.
 
@@ -147,8 +147,9 @@ Dependabot groups Vitest packages so their updates pass the shared-version contr
 Do not override the major version of a dependency declared by React Router DOM.
 
 The ESLint adapter requires TypeScript below 6.1.
-The `typescript` package uses the `@typescript/typescript6` alias to meet that requirement.
-`npm run typecheck` invokes that package's `tsc6` executable.
+The `typescript` package stays on the latest supported 6.0 patch series to meet that requirement.
+`npm run typecheck` invokes that package's compiler entry directly.
+This avoids the shared `tsc` command name also supplied by TypeScript 7.
 The separate `@typescript/native` alias supplies TypeScript 7. The lint and typecheck commands do not use it.
 Do not replace the lint compiler with TypeScript 7 until the adapter supports it.
 
@@ -168,15 +169,21 @@ PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser
 
 An empty `npm outdated` result does not prove that every transitive dependency uses its newest release.
 Check the audit result and dependency contracts. Do not force incompatible major versions into the dependency tree.
+Check aliased compilers and exact security overrides separately. `npm outdated --all` can expose updates hidden by those constraints.
+
+The Pins Python development requirements include the pinned audit tool.
+CI audits that file and its resolved dependencies with `pip-audit --strict`.
+Dependabot checks the Python requirements each day.
+See the [Pins guide](projects/pins-of-inaccessibility/readme.md#validation) for local checks.
 
 GitHub Actions use complete commit hashes. Keep each release comment with its verified hash when you update an action.
 The WebGL build adapter also checks reviewed upstream source hashes. Compare the installed bundles before updating those hashes.
-It retains the globe's orbit controls and rejects other control types; unused Trackball and Fly controllers are excluded from production.
+It retains the globe's orbit controls and rejects other control types; unused Trackball, Arcball, and Fly controllers are excluded from production.
 Infrastructure CI validates all Terraform files. It tests mail, storage, and workflow roles with mocked AWS responses.
 
 ### Lint security override
 
-`package.json` pins minimatch 11.0.5 for ESLint, `@eslint/config-array`, and `@typescript-eslint/typescript-estree`.
+`package.json` pins minimatch 11.0.8 for ESLint, `@eslint/config-array`, and `@typescript-eslint/typescript-estree`.
 This scoped override fixes [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249).
 It is a tested exception to those consumers' declared minimatch 10 ranges.
 
@@ -185,7 +192,7 @@ They use the retained matching APIs for file discovery, ignored paths, and TypeS
 The compatibility suite exercises those workflows and checks the advisory's pattern-expansion limit.
 Excessive optimization-level-two pattern expansion now throws instead of returning truncated patterns.
 It resolves minimatch through each consumer, rather than assuming one shared installation.
-Minimatch 11.0.5 supports all Node.js versions listed in the repository's engine ranges.
+Minimatch 11.0.8 supports all Node.js versions listed in the repository's engine ranges.
 
 Run the focused checks after changing the lint toolchain or these overrides:
 

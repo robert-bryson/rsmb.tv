@@ -316,6 +316,16 @@ Run the geometry and publication tests in the prepared environment:
 .venv-pins/bin/python -m unittest discover -s projects/pins-of-inaccessibility/tests -v
 ```
 
+Install the development requirements to run the same security audit as CI:
+
+```bash
+.venv-pins/bin/python -m pip install --requirement projects/pins-of-inaccessibility/requirements-dev.txt
+.venv-pins/bin/python -m pip_audit --requirement projects/pins-of-inaccessibility/requirements-dev.txt --strict
+```
+
+This audit includes the geometry packages, the audit tool, and their resolved dependencies.
+It fails if a package cannot be audited. Do not add advisory ignores without reviewing the affected code.
+
 Run the interface and contract tests:
 
 ```bash

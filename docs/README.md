@@ -50,6 +50,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-13 | [Dependency update and audit: patched Node runtimes, npm and Python audits, globe compatibility, and Terraform](reviews/2026-11-13-dependency-audit.md) |
 | 2026-11-12 | [Global Pins expansion: source research, province coverage, calculation checks, lazy data, and implementation](reviews/2026-11-12-pins-world-expansion.md) |
 | 2026-11-12 | [Pins quality review: invalid geometry, publication contracts, map recovery, source checks, tests, and coverage](reviews/2026-11-12-pins-quality-review.md) |
 | 2026-11-10 | [Project quality review: confirmed defects, regression tests, coverage, documentation, and remaining work](reviews/2026-11-10-project-quality-review.md) |

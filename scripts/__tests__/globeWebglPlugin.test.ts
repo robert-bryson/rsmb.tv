@@ -18,6 +18,7 @@ describe('reviewed WebGL build adapter', () => {
             expect(result.code).toContain('new (three.WebGLRenderer)');
             expect(result.code).toContain('new OrbitControls(state.camera, state.renderer.domElement)');
             expect(result.code).not.toContain('TrackballControls');
+            expect(result.code).not.toContain('ArcballControls');
             expect(result.code).not.toContain('FlyControls');
         }
     });
@@ -28,7 +29,13 @@ describe('reviewed WebGL build adapter', () => {
         expect(() => specializeGlobeSource(changed, id)).toThrow(`Unreviewed ${dependency} source`);
     });
 
-    it.each(['orbit', 'trackball', 'fly'])('initializes only supported %s controls without substituting camera behavior', controlType => {
+    it.each([
+        { name: 'orbit', controlType: 'orbit' },
+        { name: 'trackball', controlType: 'trackball' },
+        { name: 'arcball', controlType: 'arcball' },
+        { name: 'fly', controlType: 'fly' },
+        { name: 'custom class', controlType: class CustomControls {} },
+    ])('initializes only supported $name controls without substituting camera behavior', ({ controlType }) => {
         const id = `${process.cwd()}/node_modules/three-render-objects/dist/three-render-objects.mjs`;
         const result = specializeGlobeSource(fs.readFileSync(id, 'utf8'), id)!;
         const setup = result.code.slice(result.code.indexOf('// configure controls'), result.code.indexOf("if (controlType === 'fly')"));

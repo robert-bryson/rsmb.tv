@@ -4,7 +4,7 @@ import type { Plugin } from 'vite';
 
 const reviewedSources = {
     'three-globe': 'b33b85fa0065a9bfa0e465bc2f773dc1a5a6496981b0818fd8517707a7b92501',
-    'three-render-objects': '33290d922119e9baf0e2ad7e6b8622578862c699b05e4f53aa90833835ec3956',
+    'three-render-objects': '72ffcdc853ea1b5a150e960c1c766d6581341b1441d50203a53a4028c0475e91',
 } as const;
 
 export function specializeGlobeSource(code: string, id: string) {
@@ -36,19 +36,18 @@ export function specializeGlobeSource(code: string, id: string) {
         const importStart = code.indexOf(gpuImport);
         output.overwrite(start, start + selection.length, 'three.WebGLRenderer');
         output.remove(importStart, importStart + gpuImport.length);
-        const controls = `state.controls = new {
+        const controls = `state.controls = new (isClass(controlType) ? controlType : {
       trackball: TrackballControls,
+      arcball: ArcballControls,
       orbit: OrbitControls,
       fly: FlyControls
-    }[controlType]`;
+    }[controlType])`;
         const controlsStart = code.indexOf(controls);
         output.overwrite(controlsStart, controlsStart + controls.length,
             `if (controlType !== 'orbit') throw new Error('The Flights renderer supports only orbit controls');
     state.controls = new OrbitControls`);
-        for (const statement of [
-            "import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';",
-            "import { FlyControls } from 'three/examples/jsm/controls/FlyControls.js';",
-        ]) {
+        for (const control of ['Trackball', 'Arcball', 'Fly']) {
+            const statement = `import { ${control}Controls } from 'three/addons/controls/${control}Controls.js';`;
             const controlImportStart = code.indexOf(statement);
             output.remove(controlImportStart, controlImportStart + statement.length);
         }

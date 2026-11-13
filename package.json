@@ -4,7 +4,7 @@
   "version": "0.3.0",
   "packageManager": "npm@12.2.2",
   "engines": {
-    "node": "^22.22.2 || ^24.15.0 || ^26.0.0",
+    "node": "^22.23.5 || ^24.22.3 || ^26.13.1",
     "npm": ">=12.2 <13"
   },
   "type": "module",
@@ -41,7 +41,7 @@
     "aws-status": "bash scripts/aws-status.sh",
     "watch": "node --env-file-if-exists=.env.local --import tsx/esm scripts/aws-watch.tsx",
     "lint": "eslint . --max-warnings=0",
-    "typecheck": "tsc6 -b --noEmit",
+    "typecheck": "node node_modules/typescript/bin/tsc -b --noEmit",
     "bundle-report": "node scripts/bundle-report.js",
     "measure:performance": "node scripts/measure-performance.js",
     "validate:release": "node scripts/validate-release-preview.js",
@@ -62,8 +62,8 @@
     "test:temperatures:browser": "playwright test --config playwright.temperature.config.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-cloudfront": "^3.1164.0",
-    "maplibre-gl": "^6.17.0",
+    "@aws-sdk/client-cloudfront": "^3.1168.0",
+    "maplibre-gl": "^6.18.0",
     "photoswipe": "^5.4.4",
     "photoswipe-dynamic-caption-plugin": "^1.2.7",
     "react": "^19.3.1",
@@ -73,11 +73,11 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@aws-sdk/client-amplify": "^3.1164.0",
-    "@aws-sdk/client-cloudwatch": "^3.1164.0",
-    "@aws-sdk/client-cost-explorer": "^3.1164.0",
-    "@aws-sdk/client-route-53": "^3.1164.0",
-    "@aws-sdk/credential-providers": "^3.1164.0",
+    "@aws-sdk/client-amplify": "^3.1168.0",
+    "@aws-sdk/client-cloudwatch": "^3.1168.0",
+    "@aws-sdk/client-cost-explorer": "^3.1168.0",
+    "@aws-sdk/client-route-53": "^3.1168.0",
+    "@aws-sdk/credential-providers": "^3.1168.0",
     "@axe-core/playwright": "^4.14.0",
     "@eslint/js": "^10.0.1",
     "@mdx-js/mdx": "^3.1.1",
@@ -109,7 +109,7 @@
     "ink": "^8.0.0",
     "ink-spinner": "^5.0.0",
     "iso-3166-2": "^1.0.0",
-    "jsdom": "^31.0.0",
+    "jsdom": "^31.0.1",
     "lightningcss": "^1.33.0",
     "lint-staged": "^17.6.0",
     "magic-string": "^1.4.5",
@@ -121,9 +121,9 @@
     "terminal-size": "^4.0.1",
     "tsx": "^4.23.15",
     "turndown": "^7.2.5",
-    "typescript": "npm:@typescript/typescript6@^6.0.2",
-    "typescript-eslint": "^8.72.1",
-    "vite": "^8.3.7",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.72.2",
+    "vite": "^8.3.8",
     "vitest": "^5.1.0",
     "web-vitals": "^6.2.3",
     "yaml": "^2.9.1"
@@ -139,13 +139,13 @@
   },
   "overrides": {
     "eslint": {
-      "minimatch": "11.0.5"
+      "minimatch": "11.0.8"
     },
     "@eslint/config-array": {
-      "minimatch": "11.0.5"
+      "minimatch": "11.0.8"
     },
     "@typescript-eslint/typescript-estree": {
-      "minimatch": "11.0.5"
+      "minimatch": "11.0.8"
     }
   }
 }

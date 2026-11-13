@@ -1,0 +1,1110 @@
+{
+  "date": "2026-11-13",
+  "toolchain": {
+    "node": "24.22.3",
+    "npm": "12.2.2",
+    "terraform": "1.17.1",
+    "supportedNodeMinimums": [
+      "22.23.5",
+      "24.22.3",
+      "26.13.1"
+    ]
+  },
+  "declaredDependencies": {
+    "@aws-sdk/client-cloudfront": {
+      "range": "^3.1168.0",
+      "installed": "3.1168.0"
+    },
+    "maplibre-gl": {
+      "range": "^6.18.0",
+      "installed": "6.18.0"
+    },
+    "photoswipe": {
+      "range": "^5.4.4",
+      "installed": "5.4.4"
+    },
+    "photoswipe-dynamic-caption-plugin": {
+      "range": "^1.2.7",
+      "installed": "1.2.7"
+    },
+    "react": {
+      "range": "^19.3.1",
+      "installed": "19.3.1"
+    },
+    "react-dom": {
+      "range": "^19.3.1",
+      "installed": "19.3.1"
+    },
+    "react-globe.gl": {
+      "range": "^2.38.0",
+      "installed": "2.38.0"
+    },
+    "react-router-dom": {
+      "range": "^7.18.5",
+      "installed": "7.18.5"
+    },
+    "zod": {
+      "range": "^4.6.7",
+      "installed": "4.6.7"
+    },
+    "@aws-sdk/client-amplify": {
+      "range": "^3.1168.0",
+      "installed": "3.1168.0"
+    },
+    "@aws-sdk/client-cloudwatch": {
+      "range": "^3.1168.0",
+      "installed": "3.1168.0"
+    },
+    "@aws-sdk/client-cost-explorer": {
+      "range": "^3.1168.0",
+      "installed": "3.1168.0"
+    },
+    "@aws-sdk/client-route-53": {
+      "range": "^3.1168.0",
+      "installed": "3.1168.0"
+    },
+    "@aws-sdk/credential-providers": {
+      "range": "^3.1168.0",
+      "installed": "3.1168.0"
+    },
+    "@axe-core/playwright": {
+      "range": "^4.14.0",
+      "installed": "4.14.0"
+    },
+    "@eslint/js": {
+      "range": "^10.0.1",
+      "installed": "10.0.1"
+    },
+    "@mdx-js/mdx": {
+      "range": "^3.1.1",
+      "installed": "3.1.1"
+    },
+    "@mdx-js/rollup": {
+      "range": "^3.1.1",
+      "installed": "3.1.1"
+    },
+    "@octokit/rest": {
+      "range": "^22.0.1",
+      "installed": "22.0.1"
+    },
+    "@playwright/test": {
+      "range": "^1.65.0",
+      "installed": "1.65.0"
+    },
+    "@shikijs/rehype": {
+      "range": "^4.6.0",
+      "installed": "4.6.0"
+    },
+    "@tailwindcss/vite": {
+      "range": "^4.3.5",
+      "installed": "4.3.5"
+    },
+    "@testing-library/dom": {
+      "range": "^10.4.2",
+      "installed": "10.4.2"
+    },
+    "@testing-library/jest-dom": {
+      "range": "^7.0.1",
+      "installed": "7.0.1"
+    },
+    "@testing-library/react": {
+      "range": "^16.3.3",
+      "installed": "16.3.3"
+    },
+    "@tmcw/togeojson": {
+      "range": "^7.1.3",
+      "installed": "7.1.3"
+    },
+    "@types/geojson": {
+      "range": "^7946.0.16",
+      "installed": "7946.0.16"
+    },
+    "@types/node": {
+      "range": "^26.6.6",
+      "installed": "26.6.6"
+    },
+    "@types/react": {
+      "range": "^19.3.0",
+      "installed": "19.3.0"
+    },
+    "@types/react-dom": {
+      "range": "^19.3.0",
+      "installed": "19.3.0"
+    },
+    "@types/turndown": {
+      "range": "^5.0.6",
+      "installed": "5.0.6"
+    },
+    "@typescript/native": {
+      "range": "npm:typescript@^7.0.2",
+      "installed": "7.0.2"
+    },
+    "@vitejs/plugin-react": {
+      "range": "^6.3.0",
+      "installed": "6.3.0"
+    },
+    "@vitest/coverage-v8": {
+      "range": "^5.1.0",
+      "installed": "5.1.0"
+    },
+    "@xmldom/xmldom": {
+      "range": "^0.9.12",
+      "installed": "0.9.12"
+    },
+    "csv-parse": {
+      "range": "^7.0.3",
+      "installed": "7.0.3"
+    },
+    "eslint": {
+      "range": "^10.14.0",
+      "installed": "10.14.0"
+    },
+    "eslint-plugin-react-hooks": {
+      "range": "^7.1.1",
+      "installed": "7.1.1"
+    },
+    "eslint-plugin-react-refresh": {
+      "range": "^0.5.7",
+      "installed": "0.5.7"
+    },
+    "globals": {
+      "range": "^17.14.0",
+      "installed": "17.14.0"
+    },
+    "husky": {
+      "range": "^9.1.7",
+      "installed": "9.1.7"
+    },
+    "i18n-iso-countries": {
+      "range": "^7.14.0",
+      "installed": "7.14.0"
+    },
+    "ink": {
+      "range": "^8.0.0",
+      "installed": "8.0.0"
+    },
+    "ink-spinner": {
+      "range": "^5.0.0",
+      "installed": "5.0.0"
+    },
+    "iso-3166-2": {
+      "range": "^1.0.0",
+      "installed": "1.0.0"
+    },
+    "jsdom": {
+      "range": "^31.0.1",
+      "installed": "31.0.1"
+    },
+    "lightningcss": {
+      "range": "^1.33.0",
+      "installed": "1.33.0"
+    },
+    "lint-staged": {
+      "range": "^17.6.0",
+      "installed": "17.6.0"
+    },
+    "magic-string": {
+      "range": "^1.4.5",
+      "installed": "1.4.5"
+    },
+    "remark-frontmatter": {
+      "range": "^5.0.0",
+      "installed": "5.0.0"
+    },
+    "rollup": {
+      "range": "^4.67.4",
+      "installed": "4.68.2"
+    },
+    "sharp": {
+      "range": "^0.35.5",
+      "installed": "0.35.5"
+    },
+    "simplify-js": {
+      "range": "^1.2.4",
+      "installed": "1.2.4"
+    },
+    "tailwindcss": {
+      "range": "^4.3.5",
+      "installed": "4.3.5"
+    },
+    "terminal-size": {
+      "range": "^4.0.1",
+      "installed": "4.0.1"
+    },
+    "tsx": {
+      "range": "^4.23.15",
+      "installed": "4.23.15"
+    },
+    "turndown": {
+      "range": "^7.2.5",
+      "installed": "7.2.5"
+    },
+    "typescript": {
+      "range": "~6.0.3",
+      "installed": "6.0.3"
+    },
+    "typescript-eslint": {
+      "range": "^8.72.2",
+      "installed": "8.72.2"
+    },
+    "vite": {
+      "range": "^8.3.8",
+      "installed": "8.3.8"
+    },
+    "vitest": {
+      "range": "^5.1.0",
+      "installed": "5.1.0"
+    },
+    "web-vitals": {
+      "range": "^6.2.3",
+      "installed": "6.2.3"
+    },
+    "yaml": {
+      "range": "^2.9.1",
+      "installed": "2.9.1"
+    }
+  },
+  "directVersionChanges": {
+    "@aws-sdk/client-cloudfront": {
+      "before": "^3.1164.0",
+      "after": "^3.1168.0"
+    },
+    "maplibre-gl": {
+      "before": "^6.17.0",
+      "after": "^6.18.0"
+    },
+    "@aws-sdk/client-amplify": {
+      "before": "^3.1164.0",
+      "after": "^3.1168.0"
+    },
+    "@aws-sdk/client-cloudwatch": {
+      "before": "^3.1164.0",
+      "after": "^3.1168.0"
+    },
+    "@aws-sdk/client-cost-explorer": {
+      "before": "^3.1164.0",
+      "after": "^3.1168.0"
+    },
+    "@aws-sdk/client-route-53": {
+      "before": "^3.1164.0",
+      "after": "^3.1168.0"
+    },
+    "@aws-sdk/credential-providers": {
+      "before": "^3.1164.0",
+      "after": "^3.1168.0"
+    },
+    "jsdom": {
+      "before": "^31.0.0",
+      "after": "^31.0.1"
+    },
+    "typescript": {
+      "before": "npm:@typescript/typescript6@^6.0.2",
+      "after": "~6.0.3"
+    },
+    "typescript-eslint": {
+      "before": "^8.72.1",
+      "after": "^8.72.2"
+    },
+    "vite": {
+      "before": "^8.3.7",
+      "after": "^8.3.8"
+    }
+  },
+  "resolvedVersionChanges": [
+    {
+      "path": "node_modules/@aws-sdk/client-amplify",
+      "before": "3.1164.0",
+      "after": "3.1168.0"
+    },
+    {
+      "path": "node_modules/@aws-sdk/client-cloudfront",
+      "before": "3.1164.0",
+      "after": "3.1168.0"
+    },
+    {
+      "path": "node_modules/@aws-sdk/client-cloudwatch",
+      "before": "3.1164.0",
+      "after": "3.1168.0"
+    },
+    {
+      "path": "node_modules/@aws-sdk/client-cost-explorer",
+      "before": "3.1164.0",
+      "after": "3.1168.0"
+    },
+    {
+      "path": "node_modules/@aws-sdk/client-route-53",
+      "before": "3.1164.0",
+      "after": "3.1168.0"
+    },
+    {
+      "path": "node_modules/@aws-sdk/core",
+      "before": "3.980.1",
+      "after": "3.981.0"
+    },
+    {
+      "path": "node_modules/@aws-sdk/credential-provider-cognito-identity",
+      "before": "3.972.81",
+      "after": "3.972.83"
+    },
+    {
+      "path": "node_modules/@aws-sdk/credential-provider-env",
+      "before": "3.972.82",
+      "after": "3.972.84"
+    },
+    {
+      "path": "node_modules/@aws-sdk/credential-provider-http",
+      "before": "3.972.84",
+      "after": "3.972.86"
+    },
+    {
+      "path": "node_modules/@aws-sdk/credential-provider-ini",
+      "before": "3.973.27",
+      "after": "3.973.30"
+    },
+    {
+      "path": "node_modules/@aws-sdk/credential-provider-login",
+      "before": "3.972.89",
+      "after": "3.972.92"
+    },
+    {
+      "path": "node_modules/@aws-sdk/credential-provider-node",
+      "before": "3.972.94",
+      "after": "3.972.97"
+    },
+    {
+      "path": "node_modules/@aws-sdk/credential-provider-process",
+      "before": "3.972.82",
+      "after": "3.972.84"
+    },
+    {
+      "path": "node_modules/@aws-sdk/credential-provider-sso",
+      "before": "3.973.26",
+      "after": "3.973.28"
+    },
+    {
+      "path": "node_modules/@aws-sdk/credential-provider-web-identity",
+      "before": "3.972.88",
+      "after": "3.972.90"
+    },
+    {
+      "path": "node_modules/@aws-sdk/credential-providers",
+      "before": "3.1164.0",
+      "after": "3.1168.0"
+    },
+    {
+      "path": "node_modules/@aws-sdk/middleware-sdk-route53",
+      "before": "3.972.28",
+      "after": "3.972.29"
+    },
+    {
+      "path": "node_modules/@aws-sdk/nested-clients",
+      "before": "3.998.1",
+      "after": "3.998.3"
+    },
+    {
+      "path": "node_modules/@aws-sdk/signature-v4-multi-region",
+      "before": "3.996.51",
+      "after": "3.996.52"
+    },
+    {
+      "path": "node_modules/@aws-sdk/token-providers",
+      "before": "3.1164.0",
+      "after": "3.1166.0"
+    },
+    {
+      "path": "node_modules/@aws-sdk/types",
+      "before": "3.975.0",
+      "after": "3.975.1"
+    },
+    {
+      "path": "node_modules/@aws-sdk/xml-builder",
+      "before": "3.972.42",
+      "after": "3.972.43"
+    },
+    {
+      "path": "node_modules/@babel/generator",
+      "before": "7.29.13",
+      "after": "7.29.14"
+    },
+    {
+      "path": "node_modules/@babel/helper-module-transforms",
+      "before": "7.29.13",
+      "after": "7.29.14"
+    },
+    {
+      "path": "node_modules/@babel/helper-string-parser",
+      "before": "7.29.13",
+      "after": "7.29.14"
+    },
+    {
+      "path": "node_modules/@babel/helpers",
+      "before": "7.29.13",
+      "after": "7.29.14"
+    },
+    {
+      "path": "node_modules/@babel/parser",
+      "before": "7.29.13",
+      "after": "7.29.14"
+    },
+    {
+      "path": "node_modules/@babel/runtime",
+      "before": "7.29.13",
+      "after": "7.29.14"
+    },
+    {
+      "path": "node_modules/@babel/traverse",
+      "before": "7.29.13",
+      "after": "7.29.14"
+    },
+    {
+      "path": "node_modules/@babel/types",
+      "before": "7.29.11",
+      "after": "7.29.14"
+    },
+    {
+      "path": "node_modules/@jridgewell/resolve-uri",
+      "before": "3.1.2",
+      "after": "3.1.3"
+    },
+    {
+      "path": "node_modules/@maplibre/geojson-vt",
+      "before": "6.3.0",
+      "after": "6.3.1"
+    },
+    {
+      "path": "node_modules/@maplibre/maplibre-gl-style-spec",
+      "before": "26.5.1",
+      "after": "26.6.0"
+    },
+    {
+      "path": "node_modules/@rolldown/binding-android-arm-eabi",
+      "before": "1.2.18",
+      "after": "1.2.19"
+    },
+    {
+      "path": "node_modules/@rolldown/binding-android-arm64",
+      "before": "1.2.18",
+      "after": "1.2.19"
+    },
+    {
+      "path": "node_modules/@rolldown/binding-darwin-arm64",
+      "before": "1.2.18",
+      "after": "1.2.19"
+    },
+    {
+      "path": "node_modules/@rolldown/binding-darwin-x64",
+      "before": "1.2.18",
+      "after": "1.2.19"
+    },
+    {
+      "path": "node_modules/@rolldown/binding-freebsd-x64",
+      "before": "1.2.18",
+      "after": "1.2.19"
+    },
+    {
+      "path": "node_modules/@rolldown/binding-linux-arm-gnueabihf",
+      "before": "1.2.18",
+      "after": "1.2.19"
+    },
+    {
+      "path": "node_modules/@rolldown/binding-linux-arm64-gnu",
+      "before": "1.2.18",
+      "after": "1.2.19"
+    },
+    {
+      "path": "node_modules/@rolldown/binding-linux-arm64-musl",
+      "before": "1.2.18",
+      "after": "1.2.19"
+    },
+    {
+      "path": "node_modules/@rolldown/binding-linux-ppc64-gnu",
+      "before": "1.2.18",
+      "after": "1.2.19"
+    },
+    {
+      "path": "node_modules/@rolldown/binding-linux-s390x-gnu",
+      "before": "1.2.18",
+      "after": "1.2.19"
+    },
+    {
+      "path": "node_modules/@rolldown/binding-linux-x64-gnu",
+      "before": "1.2.18",
+      "after": "1.2.19"
+    },
+    {
+      "path": "node_modules/@rolldown/binding-linux-x64-musl",
+      "before": "1.2.18",
+      "after": "1.2.19"
+    },
+    {
+      "path": "node_modules/@rolldown/binding-openharmony-arm64",
+      "before": "1.2.18",
+      "after": "1.2.19"
+    },
+    {
+      "path": "node_modules/@rolldown/binding-win32-arm64-msvc",
+      "before": "1.2.18",
+      "after": "1.2.19"
+    },
+    {
+      "path": "node_modules/@rolldown/binding-win32-x64-msvc",
+      "before": "1.2.18",
+      "after": "1.2.19"
+    },
+    {
+      "path": "node_modules/@smithy/core",
+      "before": "3.39.0",
+      "after": "3.40.0"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/eslint-plugin",
+      "before": "8.72.1",
+      "after": "8.72.2"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/parser",
+      "before": "8.72.1",
+      "after": "8.72.2"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/project-service",
+      "before": "8.72.1",
+      "after": "8.72.2"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/scope-manager",
+      "before": "8.72.1",
+      "after": "8.72.2"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/tsconfig-utils",
+      "before": "8.72.1",
+      "after": "8.72.2"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/type-utils",
+      "before": "8.72.1",
+      "after": "8.72.2"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/types",
+      "before": "8.72.1",
+      "after": "8.72.2"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/typescript-estree",
+      "before": "8.72.1",
+      "after": "8.72.2"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/utils",
+      "before": "8.72.1",
+      "after": "8.72.2"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/visitor-keys",
+      "before": "8.72.1",
+      "after": "8.72.2"
+    },
+    {
+      "path": "node_modules/baseline-browser-mapping",
+      "before": "2.11.35",
+      "after": "2.11.37"
+    },
+    {
+      "path": "node_modules/brace-expansion",
+      "before": "5.0.12",
+      "after": "5.0.13"
+    },
+    {
+      "path": "node_modules/caniuse-lite",
+      "before": "1.0.30001823",
+      "after": "1.0.30001826"
+    },
+    {
+      "path": "node_modules/electron-to-chromium",
+      "before": "1.5.478",
+      "after": "1.5.485"
+    },
+    {
+      "path": "node_modules/enhanced-resolve",
+      "before": "5.26.1",
+      "after": "5.27.0"
+    },
+    {
+      "path": "node_modules/graceful-fs",
+      "before": "4.2.11",
+      "after": "4.2.12"
+    },
+    {
+      "path": "node_modules/jsdom",
+      "before": "31.0.0",
+      "after": "31.0.1"
+    },
+    {
+      "path": "node_modules/maplibre-gl",
+      "before": "6.17.0",
+      "after": "6.18.0"
+    },
+    {
+      "path": "node_modules/minimatch",
+      "before": "11.0.5",
+      "after": "11.0.8"
+    },
+    {
+      "path": "node_modules/rolldown",
+      "before": "1.2.18",
+      "after": "1.2.19"
+    },
+    {
+      "path": "node_modules/three-render-objects",
+      "before": "1.43.1",
+      "after": "1.44.1"
+    },
+    {
+      "path": "node_modules/tldts",
+      "before": "7.4.19",
+      "after": "7.5.1"
+    },
+    {
+      "path": "node_modules/tldts-core",
+      "before": "7.4.20",
+      "after": "7.5.1"
+    },
+    {
+      "path": "node_modules/typescript",
+      "before": "6.0.2",
+      "after": "6.0.3"
+    },
+    {
+      "path": "node_modules/typescript-eslint",
+      "before": "8.72.1",
+      "after": "8.72.2"
+    },
+    {
+      "path": "node_modules/vite",
+      "before": "8.3.7",
+      "after": "8.3.8"
+    }
+  ],
+  "npmAudit": {
+    "auditReportVersion": 2,
+    "vulnerabilities": {},
+    "metadata": {
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      },
+      "dependencies": {
+        "prod": 110,
+        "dev": 610,
+        "optional": 150,
+        "peer": 0,
+        "peerOptional": 0,
+        "total": 719
+      }
+    }
+  },
+  "remainingDirectOutdated": {
+    "typescript": {
+      "current": "6.0.3",
+      "wanted": "6.0.3",
+      "latest": "7.0.2"
+    }
+  },
+  "compatibilityLimits": [
+    "The lint adapter requires TypeScript below 6.1. TypeScript 6.0.3 is the latest supported patch; TypeScript 7.0.2 remains available through its separate alias.",
+    "The router package and other upstream dependencies retain their declared versions. Bundled optional WASM dependencies cannot be replaced independently."
+  ],
+  "python": {
+    "requirements": [
+      {
+        "name": "shapely",
+        "current": "2.2.0",
+        "latest": "2.2.0",
+        "requiresPython": ">=3.11",
+        "yanked": false
+      },
+      {
+        "name": "pyproj",
+        "current": "3.8.0",
+        "latest": "3.8.0",
+        "requiresPython": ">=3.12",
+        "yanked": false
+      },
+      {
+        "name": "pyshp",
+        "current": "3.1.8",
+        "latest": "3.1.8",
+        "requiresPython": ">=3.9",
+        "yanked": false
+      },
+      {
+        "name": "numpy",
+        "current": "2.5.4",
+        "latest": "2.5.4",
+        "requiresPython": ">=3.12",
+        "yanked": false
+      },
+      {
+        "name": "certifi",
+        "current": "2026.10.23",
+        "latest": "2026.10.23",
+        "requiresPython": ">=3.7",
+        "yanked": false
+      }
+    ],
+    "auditTool": "pip-audit 2.10.1",
+    "audit": {
+      "dependencies": [
+        {
+          "name": "shapely",
+          "version": "2.2.0",
+          "vulns": []
+        },
+        {
+          "name": "pyproj",
+          "version": "3.8.0",
+          "vulns": []
+        },
+        {
+          "name": "pyshp",
+          "version": "3.1.8",
+          "vulns": []
+        },
+        {
+          "name": "numpy",
+          "version": "2.5.4",
+          "vulns": []
+        },
+        {
+          "name": "certifi",
+          "version": "2026.10.23",
+          "vulns": []
+        },
+        {
+          "name": "pip-audit",
+          "version": "2.10.1",
+          "vulns": []
+        },
+        {
+          "name": "cyclonedx-python-lib",
+          "version": "11.12.0",
+          "vulns": []
+        },
+        {
+          "name": "license-expression",
+          "version": "30.4.4",
+          "vulns": []
+        },
+        {
+          "name": "packageurl-python",
+          "version": "0.17.6",
+          "vulns": []
+        },
+        {
+          "name": "py-serializable",
+          "version": "2.2.0",
+          "vulns": []
+        },
+        {
+          "name": "defusedxml",
+          "version": "0.7.1",
+          "vulns": []
+        },
+        {
+          "name": "sortedcontainers",
+          "version": "2.4.0",
+          "vulns": []
+        },
+        {
+          "name": "boolean-py",
+          "version": "5.0",
+          "vulns": []
+        },
+        {
+          "name": "cachecontrol",
+          "version": "0.14.4",
+          "vulns": []
+        },
+        {
+          "name": "msgpack",
+          "version": "1.2.4",
+          "vulns": []
+        },
+        {
+          "name": "filelock",
+          "version": "4.2.10",
+          "vulns": []
+        },
+        {
+          "name": "pip-api",
+          "version": "0.0.35",
+          "vulns": []
+        },
+        {
+          "name": "pip-requirements-parser",
+          "version": "32.0.1",
+          "vulns": []
+        },
+        {
+          "name": "platformdirs",
+          "version": "4.14.5",
+          "vulns": []
+        },
+        {
+          "name": "requests",
+          "version": "2.34.2",
+          "vulns": []
+        },
+        {
+          "name": "charset-normalizer",
+          "version": "3.5.2",
+          "vulns": []
+        },
+        {
+          "name": "idna",
+          "version": "3.20",
+          "vulns": []
+        },
+        {
+          "name": "urllib3",
+          "version": "2.8.0",
+          "vulns": []
+        },
+        {
+          "name": "rich",
+          "version": "15.0.0",
+          "vulns": []
+        },
+        {
+          "name": "pygments",
+          "version": "2.21.0",
+          "vulns": []
+        },
+        {
+          "name": "markdown-it-py",
+          "version": "4.3.0",
+          "vulns": []
+        },
+        {
+          "name": "mdurl",
+          "version": "0.1.2",
+          "vulns": []
+        },
+        {
+          "name": "tomli",
+          "version": "2.5.0",
+          "vulns": []
+        },
+        {
+          "name": "tomli-w",
+          "version": "1.2.0",
+          "vulns": []
+        },
+        {
+          "name": "pyparsing",
+          "version": "3.3.3",
+          "vulns": []
+        }
+      ],
+      "fixes": []
+    },
+    "skippedPackages": 0
+  },
+  "githubActions": [
+    {
+      "name": "actions/checkout",
+      "tag": "v7.0.1",
+      "sha": "3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "source": "https://github.com/actions/checkout/releases/tag/v7.0.1"
+    },
+    {
+      "name": "actions/setup-node",
+      "tag": "v7.1.0",
+      "sha": "949feb2413d6458794dcd2491c4babbbce0c15c1",
+      "source": "https://github.com/actions/setup-node/releases/tag/v7.1.0"
+    },
+    {
+      "name": "actions/upload-artifact",
+      "tag": "v7.0.2",
+      "sha": "cf430e030ddbb5b0abf93d22962f4752f3646cd9",
+      "source": "https://github.com/actions/upload-artifact/releases/tag/v7.0.2"
+    },
+    {
+      "name": "aws-actions/configure-aws-credentials",
+      "tag": "v6.3.0",
+      "sha": "e1253824e5c10ff9df46874f81ed3ec929e19cfd",
+      "source": "https://github.com/aws-actions/configure-aws-credentials/releases/tag/v6.3.0"
+    },
+    {
+      "name": "actions/cache",
+      "tag": "v6.1.0",
+      "sha": "55cc8345863c7cc4c66a329aec7e433d2d1c52a9",
+      "source": "https://github.com/actions/cache/releases/tag/v6.1.0"
+    },
+    {
+      "name": "hashicorp/setup-terraform",
+      "tag": "v4.0.1",
+      "sha": "dfe3c3f87815947d99a8997f908cb6525fc44e9e",
+      "source": "https://github.com/hashicorp/setup-terraform/releases/tag/v4.0.1"
+    }
+  ],
+  "terraform": {
+    "provider": "hashicorp/aws",
+    "before": "6.72.0",
+    "after": "6.73.0",
+    "signatureVerifiedByTerraform": true,
+    "validation": "passed",
+    "mockedTestsPassed": 5
+  },
+  "checks": {
+    "cleanInstall": "passed in the repository and a separate directory; dependency install scripts enabled",
+    "dependencyTreeProblems": [],
+    "lint": "passed",
+    "typecheck": "passed",
+    "viteBuild": "passed",
+    "javascriptTests": 3098,
+    "javascriptTestFiles": 215,
+    "pinsPythonTests": 25,
+    "temperaturePythonTests": 18,
+    "coverage": {
+      "lines": {
+        "total": 13750,
+        "covered": 12084,
+        "skipped": 0,
+        "pct": 87.88
+      },
+      "statements": {
+        "total": 16633,
+        "covered": 14316,
+        "skipped": 0,
+        "pct": 86.06
+      },
+      "functions": {
+        "total": 3899,
+        "covered": 3282,
+        "skipped": 0,
+        "pct": 84.17
+      },
+      "branches": {
+        "total": 12973,
+        "covered": 10650,
+        "skipped": 0,
+        "pct": 82.09
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "changedGlobeAdapterCoverage": {
+      "lines": {
+        "total": 31,
+        "covered": 30,
+        "skipped": 0,
+        "pct": 96.77
+      },
+      "functions": {
+        "total": 4,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 75
+      },
+      "statements": {
+        "total": 32,
+        "covered": 31,
+        "skipped": 0,
+        "pct": 96.87
+      },
+      "branches": {
+        "total": 6,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "browserChecks": {
+    "chromiumDefault": {
+      "passed": 132,
+      "skipped": 53,
+      "skipReasons": {
+        "separateProductionFixtureChecks": 52,
+        "optInPerformanceMeasurement": 1
+      }
+    },
+    "productionTripMaps": {
+      "passed": 106,
+      "skipped": 6,
+      "engines": [
+        "Chromium",
+        "mobile WebKit"
+      ],
+      "scope": [
+        "atlas.spec.ts",
+        "day-maps.spec.ts",
+        "route-choices.spec.ts"
+      ],
+      "skipReason": "Existing input-method and browser-feature conditions."
+    },
+    "webkitSelectedInitial": {
+      "passed": 54,
+      "failed": 1,
+      "scope": [
+        "flights-startup.spec.ts",
+        "flights-controls.spec.ts",
+        "pins-map.spec.ts",
+        "temperature-map.spec.ts",
+        "tornado-map.spec.ts"
+      ]
+    },
+    "tornadoNavigationRace": {
+      "diagnosis": "The test used a heading shared by both routes to wait for unmount; hard navigation could replace the document before the lazy route removed the map.",
+      "fix": "Wait for the tornado map container to disappear; preserve all page-error assertions.",
+      "isolatedBefore": {
+        "passed": 1,
+        "failed": 2
+      },
+      "isolatedAfter": {
+        "passed": 3,
+        "failed": 0
+      }
+    },
+    "livePreview": {
+      "regions": 13,
+      "selected": "Ontario",
+      "providerTiles": 8,
+      "pageErrors": 0
+    },
+    "tornadoFinal": {
+      "chromiumPassed": 7,
+      "webkitPassed": 7,
+      "failed": 0
+    },
+    "webkitUniqueCasesPassedAfterTargetedFix": 55
+  },
+  "fingerprints": {
+    "package.json": "2e75d7c71dd1d6d8d8f7303f8be1f81b555244377bc5acaa61064ec29b78184b",
+    "package-lock.json": "7e0e5ef52a23d30dfc4dfbeab7d70e284092b4a172fe76106c7e5d15a2d5b6d7",
+    ".nvmrc": "584f19ccde29925286e32f566a2aa06c89efb4e2eb2bb2fc9ea5d56e2d190ac4",
+    ".github/workflows/ci.yml": "8581f0163f55c477032bbbad42785551e8b669cc284848210d0d4119b84df3a9",
+    ".github/dependabot.yml": "5cc590077771b383b5b93e8e0d5807ae29b518dfc9313584bd9028ff97403a7a",
+    "projects/pins-of-inaccessibility/requirements.txt": "0897aeb2092ba743153cf47f4c8dee3c9081690ab727d12824c5e2a0c23382c1",
+    "projects/pins-of-inaccessibility/requirements-dev.txt": "64d829d61fdf0e5cfb2bd06c41c863237979fb869711d6ed5c66441e307a7718",
+    "infra/.terraform.lock.hcl": "ca9068030dd79a0b01eac42cd227eb03f8e4df5d9eca1580870c160d4fb6b6e9",
+    "scripts/globe-webgl-plugin.ts": "cd1d41ebdf25bb89e9d8dd859219c9f41879721509ab3040c7c308ed1e026990",
+    "tests/e2e/tornado-map.spec.ts": "60411cd7f6353c7e72f389f660f7bc0d94c258899392f03b492bbea171eacedd"
+  },
+  "limits": [
+    "Advisory scans report known package advisories at scan time.",
+    "Operating-system packages and native libraries bundled inside Python wheels are outside these package audits.",
+    "The default browser run does not execute the separate production-fixture or opt-in performance suites."
+  ]
+}

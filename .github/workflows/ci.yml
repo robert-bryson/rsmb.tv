@@ -111,8 +111,11 @@ jobs:
       - name: Validate pins geometry and publication
         run: |
           python3 -m venv /tmp/pins-ci
-          /tmp/pins-ci/bin/python -m pip install --requirement projects/pins-of-inaccessibility/requirements.txt
+          /tmp/pins-ci/bin/python -m pip install --requirement projects/pins-of-inaccessibility/requirements-dev.txt
           /tmp/pins-ci/bin/python -m unittest discover -s projects/pins-of-inaccessibility/tests -v
+
+      - name: Audit Python dependencies
+        run: /tmp/pins-ci/bin/python -m pip_audit --requirement projects/pins-of-inaccessibility/requirements-dev.txt --strict
 
       - name: Install Playwright browsers
         run: bash scripts/install-ci-browsers.sh chromium webkit
