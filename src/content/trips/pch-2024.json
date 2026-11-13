@@ -1035,7 +1035,7 @@
     "days": [
         {
             "id": "day-one",
-            "title": "October 3",
+            "title": "Seattle to Centralia",
             "date": "2024-10-03",
             "headingId": "october-3",
             "trackIds": [
@@ -1046,7 +1046,7 @@
         },
         {
             "id": "day-two",
-            "title": "October 4",
+            "title": "Centralia to Reedsport",
             "date": "2024-10-04",
             "headingId": "october-4",
             "trackIds": [
@@ -1057,7 +1057,7 @@
         },
         {
             "id": "day-three",
-            "title": "October 5",
+            "title": "Reedsport to Fort Bragg",
             "date": "2024-10-05",
             "headingId": "october-5",
             "trackIds": [
@@ -1068,7 +1068,7 @@
         },
         {
             "id": "day-four",
-            "title": "October 6",
+            "title": "Fort Bragg to Bridgeport",
             "date": "2024-10-06",
             "headingId": "october-6",
             "trackIds": [
@@ -1079,7 +1079,7 @@
         },
         {
             "id": "day-five",
-            "title": "October 7",
+            "title": "Bridgeport to Valley Center",
             "date": "2024-10-07",
             "headingId": "october-7",
             "trackIds": [
@@ -1119,6 +1119,10 @@
             "r003232",
             "20241004-183101"
         ],
+        "day-two-2": [
+            "r003205",
+            "r003207"
+        ],
         "day-three": [
             "dscf9104",
             "dscf9110",
@@ -1154,6 +1158,21 @@
             "dscf9197",
             "dscf9205",
             "dscf9211"
+        ],
+        "day-three-1": [
+            "dscf9104",
+            "dscf9110"
+        ],
+        "day-three-2": [
+            "dscf9147",
+            "dscf9149"
+        ],
+        "day-three-3": [
+            "dscf9186",
+            "dscf9187",
+            "dscf9193",
+            "dscf9197",
+            "dscf9205"
         ],
         "day-four": [
             "20241006-085052",
@@ -1209,8 +1228,6 @@
             "r003267"
         ],
         "oregon-coast-overlooks": [
-            "r003205",
-            "r003207",
             "r003211",
             "r003212",
             "r003214",
@@ -1222,8 +1239,6 @@
             "r003232"
         ],
         "oregon-coast-morning": [
-            "dscf9104",
-            "dscf9110",
             "dscf9114",
             "dscf9122",
             "dscf9126"
@@ -1241,9 +1256,6 @@
             "dscf9145"
         ],
         "california-and-redwoods": [
-            "20241005-121820",
-            "dscf9147",
-            "dscf9149",
             "20241005-154727",
             "20241005-154800",
             "dscf9155",
@@ -1255,13 +1267,7 @@
             "dscf9170",
             "dscf9171",
             "dscf9172",
-            "dscf9177",
-            "dscf9186",
-            "dscf9187",
-            "dscf9193",
-            "dscf9197",
-            "dscf9205",
-            "dscf9211"
+            "dscf9177"
         ],
         "inland-california": [
             "20241006-085052",

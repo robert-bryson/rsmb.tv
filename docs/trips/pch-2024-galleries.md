@@ -1,6 +1,6 @@
 # PCH 2024 starter galleries
 
-The [manifest](../../src/content/trips/pch-2024.json) contains 107 photos and 24 galleries.
+The [manifest](../../src/content/trips/pch-2024.json) contains 107 photos and 28 galleries.
 The hero is `dscf9177`: the motorcycle above the Mendocino coast.
 Each day uses its matching full-day gallery through `days[].galleryId`.
 
@@ -36,18 +36,22 @@ Day assignments do not insert galleries automatically.
 | `{{trip-gallery:pre-trip}}` | 4 | October 1 — Seattle before departure |
 | `{{trip-gallery:day-one}}` | 6 | October 3 — Seattle to Centralia |
 | `{{trip-gallery:day-two}}` | 13 | October 4 — Centralia to Reedsport |
+| `{{trip-gallery:day-two-2}}` | 2 | October 4 — Beach and forested headland |
 | `{{trip-gallery:day-three}}` | 34 | October 5 — Reedsport to Fort Bragg |
+| `{{trip-gallery:day-three-1}}` | 2 | October 5 — Morning river views |
+| `{{trip-gallery:day-three-2}}` | 2 | October 5 — Coastal headlands and Victorian house |
+| `{{trip-gallery:day-three-3}}` | 5 | October 5 — Beach stops, tree arch, and evening bridge |
 | `{{trip-gallery:day-four}}` | 42 | October 6 — Fort Bragg to Bridgeport |
-| `{{trip-gallery:day-five}}` | 7 | October 7 — Bridgeport to northern San Diego County |
-| `{{trip-gallery:oregon-coast-overlooks}}` | 6 | October 4 — Beaches, headlands, and wooded overlooks |
+| `{{trip-gallery:day-five}}` | 7 | October 7 — Bridgeport to Valley Center |
+| `{{trip-gallery:oregon-coast-overlooks}}` | 4 | October 4 — Beaches, headlands, and wooded overlooks |
 | `{{trip-gallery:lakeside-reflections}}` | 3 | October 4 — Lake, dock, and reflections |
-| `{{trip-gallery:oregon-coast-morning}}` | 5 | October 5 — Rivers, lighthouse, and sea stacks |
+| `{{trip-gallery:oregon-coast-morning}}` | 3 | October 5 — Lighthouse and sea stacks |
 | `{{trip-gallery:southern-oregon-coast}}` | 10 | October 5 — Lunch, harbor, and southern Oregon beaches |
 | `{{trip-gallery:langlois-lunch}}` | 2 | October 5 — The lunch stop before Port Orford |
 | `{{trip-gallery:port-orford}}` | 2 | October 5 — Harbor and motorcycle details beside the separate bay panorama |
 | `{{trip-gallery:southern-oregon-beaches}}` | 4 | October 5 — Sea arch, misty coast, and beach stops after Port Orford |
-| `{{trip-gallery:california-and-redwoods}}` | 7 | October 5 — California border, coast, Victorian house, and redwoods |
-| `{{trip-gallery:mendocino-coast-evening}}` | 12 | October 5 — Coastal riding and the evening arrival |
+| `{{trip-gallery:california-and-redwoods}}` | 4 | October 5 — Redwood forest and roadside motorcycle |
+| `{{trip-gallery:mendocino-coast-evening}}` | 6 | October 5 — Coastal riding and motorcycle overlook |
 | `{{trip-gallery:inland-california}}` | 7 | October 6 — Leaving the coast, lake, foothills, and ranchland |
 | `{{trip-gallery:sierra-crossing}}` | 13 | October 6 — Granite peaks, mountain lake, and autumn color; panorama placed separately |
 | `{{trip-gallery:eastern-sierra-valleys}}` | 6 | October 6 — River stop and open valleys; panorama placed separately |
