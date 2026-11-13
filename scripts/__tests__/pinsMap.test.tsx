@@ -18,10 +18,12 @@ const mocks = vi.hoisted(() => {
         loaded = true;
         features: Array<{ layer: { id: string }; properties: { id: string } }> = [];
         getContainer: () => HTMLElement;
-        constructor(options: { container: HTMLElement }) {
+        style: unknown;
+        constructor(options: { container: HTMLElement; style: unknown }) {
             if (MapStub.fail) throw new Error('no WebGL');
             MapStub.instances.push(this);
             this.getContainer = () => options.container;
+            this.style = options.style;
         }
         on(name: string, callback: (event: unknown) => void) {
             if (!this.handlers.has(name)) this.handlers.set(name, new Set());
@@ -37,7 +39,7 @@ const mocks = vi.hoisted(() => {
         getLayer = (id: string) => this.layers.get(id);
         getStyle = () => ({ sources: { background: {} } });
         isSourceLoaded = () => this.loaded;
-        setStyle = vi.fn(() => { this.sources.clear(); this.layers.clear(); this.emit('style.load'); });
+        setStyle = vi.fn((style: unknown) => { this.style = style; this.sources.clear(); this.layers.clear(); this.emit('style.load'); });
         setLayoutProperty = vi.fn();
         setFilter = vi.fn();
         fitBounds = vi.fn();
@@ -93,6 +95,7 @@ describe('map lifecycle', () => {
         expect(mocks.MapStub.instances).toHaveLength(0);
         const second = render(<PinsMap {...props()} />); flushFrames();
         const mounted = map();
+        expect(mounted.style).toMatch(/^https:\/\/basemaps\.cartocdn\.com\/gl\/dark-matter-gl-style\/style\.json(?:\?key=.+)?$/);
         act(() => mounted.emit('style.load'));
         expect(mounted.sources.size).toBe(6);
         expect(screen.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'loading');
@@ -165,6 +168,7 @@ describe('map lifecycle', () => {
         fireEvent.click(screen.getByRole('button', { name: 'Retry background' }));
         expect(map()).toBe(renderer);
         expect(renderer.setStyle).toHaveBeenCalledTimes(2);
+        expect(renderer.setStyle.mock.calls.at(-1)![0]).toMatch(/^https:\/\/basemaps\.cartocdn\.com\/gl\/dark-matter-gl-style\/style\.json(?:\?key=.+)?$/);
         act(() => renderer.emit('render'));
         expect(screen.queryByRole('button', { name: 'Retry background' })).not.toBeInTheDocument();
     });

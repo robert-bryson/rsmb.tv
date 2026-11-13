@@ -2,6 +2,8 @@ import { expect, test, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import sharp from 'sharp';
 
+const CARTO_FIXTURE_ATTRIBUTION = '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · <a href="https://carto.com/attribution/">CARTO</a>';
+
 async function prepare(page: Page) {
     const errors: string[] = [];
     page.on('pageerror', error => errors.push(error.message));
@@ -9,6 +11,15 @@ async function prepare(page: Page) {
     const tile = await sharp({ create: { width: 256, height: 256, channels: 3, background: '#171f26' } }).png().toBuffer();
     await page.route('https://**/*', route => route.abort());
     await page.route('https://basemaps.cartocdn.com/**', route => route.fulfill({ contentType: 'image/png', body: tile }));
+    await page.route('https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json*', route => {
+        expect(new URL(route.request().url()).searchParams.get('key')).toBe('browser-test-key');
+        return route.fulfill({ json: {
+            version: 8, glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
+            sources: { 'carto-fixture': { type: 'raster', tileSize: 256,
+                tiles: ['https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png?key=browser-test-key'], attribution: CARTO_FIXTURE_ATTRIBUTION } },
+            layers: [{ id: 'carto-fixture', type: 'raster', source: 'carto-fixture' }],
+        } });
+    });
     await page.route('https://demotiles.maplibre.org/font/**', route => route.fulfill({ contentType: 'application/x-protobuf', body: Buffer.alloc(0) }));
     await page.emulateMedia({ reducedMotion: 'reduce' });
     return errors;
@@ -19,6 +30,8 @@ async function openMap(page: Page) {
     await expect(page.locator('.pins-coverage')).toContainText('3,235');
     await expect(page.locator('.maplibregl-canvas')).toBeVisible();
     await expect(page.getByTestId('pins-map')).toHaveAttribute('data-map-state', /ready|degraded/);
+    await expect(page.getByRole('link', { name: 'CARTO', exact: true })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'OpenStreetMap', exact: true })).toBeVisible();
 }
 
 async function mapColorPixels(page: Page, color: 'amber' | 'teal' | 'circle' | 'national') {

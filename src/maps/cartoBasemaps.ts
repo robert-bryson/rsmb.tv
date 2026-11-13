@@ -1,6 +1,7 @@
 import type { StyleSpecification } from 'maplibre-gl';
 
 export type CartoRasterStyle = 'dark' | 'positron' | 'voyager' | 'positron-nolabels' | 'voyager-nolabels' | 'dark-nolabels';
+export type CartoVectorStyle = 'dark-matter' | 'positron' | 'voyager';
 const rasterPaths: Record<CartoRasterStyle, string> = {
     dark: 'dark_all', positron: 'light_all', voyager: 'rastertiles/voyager',
     'positron-nolabels': 'light_nolabels', 'voyager-nolabels': 'rastertiles/voyager_nolabels', 'dark-nolabels': 'dark_nolabels',
@@ -30,8 +31,14 @@ export function cartoRasterStyle(style: CartoRasterStyle = 'dark', key = CARTO_A
     };
 }
 
-export function cartoVectorStyle(style: 'dark-matter' | 'positron' | 'voyager' = 'dark-matter', key = CARTO_API_KEY): string | StyleSpecification {
+/** CARTO currently serves its hosted vector styles with or without a basemap key. */
+export function cartoVectorStyleUrl(style: CartoVectorStyle = 'dark-matter', key = CARTO_API_KEY): string {
+    const query = key.trim() ? `?key=${encodeURIComponent(key.trim())}` : '';
+    return `https://basemaps.cartocdn.com/gl/${style}-gl-style/style.json${query}`;
+}
+
+export function cartoVectorStyle(style: CartoVectorStyle = 'dark-matter', key = CARTO_API_KEY): string | StyleSpecification {
     return key.trim()
-        ? `https://basemaps.cartocdn.com/gl/${style}-gl-style/style.json?key=${encodeURIComponent(key.trim())}`
+        ? cartoVectorStyleUrl(style, key)
         : cartoRasterStyle('dark', '');
 }

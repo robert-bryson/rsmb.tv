@@ -1,13 +1,14 @@
 # CARTO basemaps
 
 All in-repository map projects share [cartoBasemaps.ts](../src/maps/cartoBasemaps.ts).
-Trips, ADV Atlas, both temperature maps, Tornado Tracks, and CARTO globe styles use this configuration.
+Trips, ADV Atlas, both temperature maps, Tornado Tracks, Pins, and CARTO globe styles use this configuration.
 The flights globe also retains its local NASA imagery choices.
 
 ## Key configuration
 
 Set `CARTO_API_KEY` in the Amplify build environment.
 Amplify runs its own build and reads this configured value.
+The existing `rsmbtv` Amplify app stores `CARTO_API_KEY` at app level.
 A local key does not configure Amplify.
 CI builds tracked content fixtures with `--mode trip-test` and requires no production credentials.
 
@@ -32,15 +33,20 @@ For local development, place a localhost development key in the ignored `.env.lo
 CARTO_API_KEY=your-development-basemap-key
 ```
 
-Local maps without a key use neutral tiles and show **Basemap unavailable**.
+Raster maps without a key use neutral tiles and show **Basemap unavailable**.
 They do not send unauthenticated CARTO requests.
+Pins uses the hosted Dark Matter vector style through `cartoVectorStyleUrl`.
+CARTO currently serves this vector style without a key, so local Pins previews include the actual basemap.
+The helper includes a configured key when one is available.
+The existing `cartoVectorStyle` helper retains its neutral fallback for maps that require configured keys.
+See CARTO's [vector migration guidance](https://docs.carto.com/faqs/carto-basemaps#should-i-move-from-raster-to-vector-basemaps).
 Browser tests supply `browser-test-key` and intercept provider responses.
 Never use production credentials in browser traces or fixtures.
 
 ## Styles and attribution
 
 Raster URLs carry an encoded `key` query parameter.
-Tornado Tracks uses CARTO's current hosted dark vector style.
+Tornado Tracks and Pins use CARTO's current hosted dark vector style.
 Use the hosted style URL with its `key` parameter.
 CARTO maintains the style's tile, font, and icon URLs.
 Do not copy those dependent URLs into application code.
@@ -64,7 +70,9 @@ CARTO's current [basemap terms](https://carto.com/legal/basemap-terms/index.html
 Unit tests check explicit keys and configured browser keys.
 They cover missing, empty, whitespace-only, and valid configured values.
 They check key trimming, URL encoding, tile placeholders, and both provider attribution links.
-Missing or blank keys must produce neutral raster and vector styles with **Basemap unavailable** attribution.
+Missing keys make `cartoRasterStyle` and `cartoVectorStyle` return neutral styles with **Basemap unavailable** attribution.
+The explicit public-vector URL helper supports missing keys and encodes configured keys.
+Pins tests check Dark Matter on startup and background retry, with visible provider attribution.
 
 Configuration tests check key selection and rejection of release builds without a key.
 They check whitespace handling, fallback values, and priority between process variables and local files.

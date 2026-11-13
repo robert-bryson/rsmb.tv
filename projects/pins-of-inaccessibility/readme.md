@@ -170,6 +170,12 @@ A badge is hidden when no clear position is available.
 
 ## Loading and recovery
 
+The background uses CARTO's hosted Dark Matter vector style.
+It includes roads, place labels, and geographic detail.
+The current public vector endpoint works without a local key.
+A configured basemap key is included when available.
+CARTO and OpenStreetMap attribution remains visible.
+
 Required data failures show a data retry action.
 Optional county failures show a boundary retry action.
 A failed background uses a neutral style and keeps the application layers.

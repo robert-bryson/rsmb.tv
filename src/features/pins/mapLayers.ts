@@ -38,10 +38,10 @@ export function installPinLayers(map: Map) {
     map.addLayer({ id: 'selected-pin', type: 'circle', source: 'pin-points', filter: ['==', ['get', 'id'], ''],
         paint: { 'circle-color': '#fff2d5', 'circle-radius': 7, 'circle-stroke-width': 2, 'circle-stroke-color': '#b77b2a' } });
     map.addLayer({ id: 'state-labels', type: 'symbol', source: 'pin-points', filter: ['==', ['get', 'level'], 'state'], minzoom: 3,
-        layout: { 'text-field': ['get', 'stateAbbr'], 'text-font': ['Open Sans Semibold'], 'text-size': 10, 'text-offset': [0, 1.55] },
+        layout: { 'text-field': ['get', 'stateAbbr'], 'text-font': ['Open Sans Bold'], 'text-size': 10, 'text-offset': [0, 1.55] },
         paint: { 'text-color': '#eed5b2', 'text-halo-color': '#111820', 'text-halo-width': 1.5 } });
     map.addLayer({ id: 'country-label', type: 'symbol', source: 'pin-points', filter: ['==', ['get', 'level'], 'country'],
-        layout: { 'text-field': 'U.S. pole', 'text-font': ['Open Sans Semibold'], 'text-size': 12, 'text-offset': [0, 1.7], 'text-allow-overlap': true },
+        layout: { 'text-field': 'U.S. pole', 'text-font': ['Open Sans Bold'], 'text-size': 12, 'text-offset': [0, 1.7], 'text-allow-overlap': true },
         paint: { 'text-color': '#deceff', 'text-halo-color': '#111820', 'text-halo-width': 2 } });
     map.addLayer({ id: 'county-labels', type: 'symbol', source: 'pin-points', filter: ['==', ['get', 'level'], 'county'], minzoom: 9,
         layout: { 'text-field': ['get', 'name'], 'text-font': ['Open Sans Regular'], 'text-size': 10, 'text-offset': [0, 1.4] },

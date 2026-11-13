@@ -2,7 +2,7 @@ import { Map as MapLibreMap, NavigationControl, Popup } from '../../maps/maplibr
 import type { FilterSpecification, GeoJSONSource } from 'maplibre-gl';
 import type { FeatureCollection } from 'geojson';
 import { ResilientFullscreenControl, restoreFullscreenControl } from '../../maps/ResilientFullscreenControl';
-import { cartoRasterStyle } from '../../maps/cartoBasemaps';
+import { cartoRasterStyle, cartoVectorStyleUrl } from '../../maps/cartoBasemaps';
 import { recoverBasemap, type BasemapState } from '../../maps/recoverBasemap';
 import { OVERVIEW_BOUNDS, formatRadius } from './geometry';
 import { attachRadiusLabels } from './radiusLabels';
@@ -25,7 +25,7 @@ interface Options {
 export function createPinsRenderer(options: Options) {
     const { container, overlay, getProps, getData, onError, onReady } = options;
     const map = new MapLibreMap({
-        container, style: cartoRasterStyle('dark'), bounds: OVERVIEW_BOUNDS,
+        container, style: cartoVectorStyleUrl('dark-matter'), bounds: OVERVIEW_BOUNDS,
         fitBoundsOptions: { padding: 32 }, minZoom: 1.5, maxZoom: 16,
         attributionControl: { compact: false },
     });
@@ -66,7 +66,7 @@ export function createPinsRenderer(options: Options) {
         map.addControl(fullscreen, 'top-right');
         const recovery = recoverBasemap(map, {
             dataSources: DATA_SOURCES,
-            providerStyle: () => cartoRasterStyle('dark'), neutralStyle: () => cartoRasterStyle('dark', ''),
+            providerStyle: () => cartoVectorStyleUrl('dark-matter'), neutralStyle: () => cartoRasterStyle('dark', ''),
         }, options.onBasemapState);
         cleanups.push(recovery.dispose);
         const labels = attachRadiusLabels(map, overlay);

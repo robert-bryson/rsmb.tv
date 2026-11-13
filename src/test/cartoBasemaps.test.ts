@@ -1,7 +1,13 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cartoRasterStyle, cartoRasterUrl, cartoVectorStyle } from '../maps/cartoBasemaps';
+import { cartoRasterStyle, cartoRasterUrl, cartoVectorStyle, cartoVectorStyleUrl } from '../maps/cartoBasemaps';
 
 describe('CARTO authentication', () => {
+    it('supports the public Dark Matter vector style and encodes configured keys', () => {
+        expect(cartoVectorStyleUrl('dark-matter', '')).toBe('https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json');
+        expect(cartoVectorStyleUrl('dark-matter', ' \t ')).toBe(cartoVectorStyleUrl('dark-matter', ''));
+        expect(cartoVectorStyleUrl('dark-matter', ' fixture key/+& '))
+            .toBe('https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json?key=fixture%20key%2F%2B%26');
+    });
     it('encodes only the key and preserves tile placeholders', () => {
         const url = cartoRasterUrl('voyager', 'test key/+&');
         expect(url).toBe('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=test%20key%2F%2B%26');
