@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { parseWorldBoundaries, parseWorldCountries, parseWorldRegionPins, pinArea, pinCountryCode, pinDisplayCode,
     resolveCountry, WORLD_COUNTRIES, WORLD_COUNTRY_COUNT, WORLD_REGION_COUNT, worldPinSchema, worldPinsDataSchema } from '../../shared/worldPins';
 import { focusBounds, formatArea, formatRadius, pinCircles, pinPoints, rankPins } from '../../src/features/pins/geometry';
-import { radiusLines, visibleRadiusPins } from '../../src/features/pins/radii';
+import { radiusLines } from '../../src/features/pins/radii';
 import { national, publishedPins, readPinsArtifact } from './pinsFixtures';
 
 const countries = worldPinsDataSchema.parse(readPinsArtifact('world/pins.json'));
@@ -89,8 +89,6 @@ describe('shared global map geometry and presentation', () => {
         expect(circle[0]).toEqual(circle.at(-1));
         expect(radiusLines([ontario], 'km', ontario.id).features[0].properties.name).toBe('Ontario, Canada');
         expect(pinPoints([ontario]).features[0].properties).toMatchObject({ stateAbbr: 'CA-ON', label: 'Ontario' });
-        expect(visibleRadiusPins([ontario], 16, true, false, null, false)).toEqual([]);
-        expect(visibleRadiusPins([ontario], 16, false, false, ontario, false)).toEqual([ontario]);
         const bounds = focusBounds(ontario);
         expect(bounds[0]).toBeLessThan(bounds[2]);
         expect(bounds[1]).toBeLessThan(bounds[3]);

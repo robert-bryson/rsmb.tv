@@ -29,7 +29,7 @@ export function PinsLayerControls(props: Props) {
         <div className={`pins-layer-options${props.geography === 'world' ? ' is-world' : ''}`}>
             <div className="pins-layer-group">
                 <label className="pins-circle-toggle"><input type="checkbox" checked={props.circles} onChange={event => props.onCirclesChange(event.target.checked)} /><span>All radius circles</span></label>
-                <p className="pins-radius-hint">{props.selected ? 'The selected circle and distances stay visible.' : 'Distances appear as you zoom in.'}</p>
+                <p className="pins-radius-hint">{props.selected ? 'The selected circle and distances stay visible.' : props.geography === 'us' ? 'Zoom in for county dots, then circles, then distances.' : 'Distances appear as you zoom in.'}</p>
             </div>
             {props.geography === 'country' && <div className="pins-layer-group">
                 <label className="pins-circle-toggle"><input type="checkbox" checked={props.showRegions} onChange={event => props.onRegionsChange(event.target.checked)} /><span>States & provinces</span></label>

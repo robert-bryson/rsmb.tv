@@ -377,6 +377,7 @@ It stays separate from state and county rankings.
 
 Rankings support radius and name order.
 Search accepts names, state abbreviations, and FIPS codes.
+Returning to the world zooms out around the current map center, including any manual pan.
 The jurisdiction selector filters results and map layers.
 The largest and smallest cards use the current search and jurisdiction filter.
 The `pin` URL parameter preserves a selected pin.
@@ -384,16 +385,41 @@ Distance units and the circle preference use local storage.
 
 County modes are **Off**, **Auto**, and **On**.
 Auto reveals counties at zoom 6.
-County outlines load when the county layer first becomes visible.
+Small county dots fade in before county geometry loads.
+County outlines load and fade in at zoom 7.
+County circles fade in at zoom 8.
+County names start at zoom 9.
+On keeps county dots visible at every zoom. Other county details retain their zoom thresholds.
 County pins remain searchable before the outlines load.
+Selecting a county loads its boundary immediately.
 
 The selected circle stays visible when other circles are hidden.
 Its dashed spokes reach the published boundary contacts.
 Badges show each contact's distance in miles or kilometers.
-Unselected national details start at zoom 4.
-State details start at zoom 6, and county details start at zoom 9.
-Small circles wait until their radius spans about 70 pixels.
+Unselected national spokes start at zoom 4.
+State spokes start at zoom 5, and county spokes start at zoom 10.
+Small radii wait until they span about 70 pixels.
+Spokes fade in across 0.75 zoom levels. Distance badges appear when that fade finishes.
+At the maximum zoom of 16, readable measurements appear without waiting for an unreachable fade endpoint.
+Measurements that need a higher zoom remain hidden unless selected.
 A selected pin shows its spokes at any zoom.
+
+County circles use a separate source that starts drawing at zoom 8.
+Preparation starts after the camera settles at zoom 7.
+Each task prepares at most 128 circles and checks a six-millisecond budget after every eight circles.
+The completed batch reaches the map worker in one update.
+Changing scope or hiding circles cancels unfinished preparation.
+Circle geometry uses a weak cache, which permits reuse without retaining discarded pin datasets.
+
+Overview county circles use 48 segments and six decimal places for coordinates.
+Selected circles retain 144 segments and full coordinate precision.
+Published pin coordinates, distances, contacts, and geodesic calculations retain their existing precision.
+Native zoom expressions control fades. Fractional zoom changes do not replace the geometry sources.
+The map uses one county display mode for geometry preparation and native drawing.
+Selected measurements do not rebuild when ordinary county detail stages change.
+Distance badges recalculate their positions when map controls or error messages change.
+See the [zoom transition review](../../docs/reviews/2026-11-13-pins-zoom-transitions.md) for research, alternatives, and measurements.
+Use the [quality review](../../docs/reviews/2026-11-13-pins-zoom-quality-review.md) for later corrections and current verification.
 
 Badges use the visible part of each spoke.
 They avoid map controls, spoke origins, and other badges.
@@ -439,6 +465,8 @@ Local and preview hosts do not send analytics.
 | `src/features/pins/PinsMap.tsx` | React state and renderer lifetime |
 | `src/features/pins/mapRenderer.ts` | Map events, data updates, deadlines, and cleanup |
 | `src/features/pins/mapLayers.ts` | Source and layer definitions |
+| `src/features/pins/zoom.ts` | County detail stages and native zoom fades |
+| `src/features/pins/useCountyCircles.ts` | Cancellable county geometry batches and prepared-data reuse |
 | `src/features/pins/radii.ts` | Spoke geometry and zoom thresholds |
 | `src/features/pins/radiusLabels.ts` | Badge placement and collision checks |
 | `src/features/pins/usePinDetails.ts` | Selected scope loading, context retry, and stale-coordinate rejection |
@@ -478,7 +506,7 @@ It fails if a package cannot be audited. Do not add advisory ignores without rev
 Run the interface and contract tests:
 
 ```bash
-npx vitest run scripts/__tests__/pins*.test.* scripts/__tests__/worldPins*.test.* src/test/usStates.test.ts src/test/AtlasFullscreenControl.test.ts src/test/MapPerformance.test.tsx src/test/analytics.test.ts
+npx vitest run scripts/__tests__/pins*.test.* scripts/__tests__/worldPins*.test.* src/test/PinsOfInaccessibilityAbout.test.tsx src/test/usStates.test.ts src/test/AtlasFullscreenControl.test.ts src/test/MapPerformance.test.tsx src/test/analytics.test.ts
 npm run lint
 npm run typecheck
 npm run test:e2e -- tests/e2e/pins-map.spec.ts
@@ -496,11 +524,15 @@ Corruption tests also check world metadata, administrative levels, bounds, raw p
 CI installs the pinned Python packages and runs these tests without a Census download.
 
 Interface tests check loading, retries, rankings, scope, preferences, cleanup, deadlines, and badge placement.
+They also check preparation budgets, cancellation, cache reuse, and lazy imports without graphics allocation.
+Radius tests exercise native style expressions and layer filters, including the maximum zoom.
+Source-link tests check article placement, external-link isolation, and bounded analytics fields.
 Navigation tests check parent steps, shared state scopes, browser history, gesture cancellation, and muted context.
 Browser tests use the real renderer and published geographic files.
 They replace remote tiles and glyph responses with fixed responses.
 They check rendered pixels, fullscreen retry, stalled workers, county loading, selection, accessible controls, and mobile layout.
 Touch checks include a 320-pixel viewport, short landscape layout, native disclosure controls, and tapping outside a country.
+World-view checks cover ordinary and reduced-motion navigation, date-line pans, and cameras already farther out than the fitted globe.
 
 See the [navigation design review](../../docs/reviews/2026-11-13-pins-navigation-design.md) for interaction decisions and current validation.
 The [November 13 review](../../docs/reviews/2026-11-13-pins-review.md) records earlier fixes and source-check limits.

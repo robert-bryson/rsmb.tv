@@ -13,6 +13,7 @@ import { PinsLayerControls } from './PinsLayerControls';
 import { parentPinScope, pinBreadcrumbs, pinScopeName, rankingAfterNavigation, resolveStateScope, scopeSearchParams, type PinScope } from './navigation';
 import type { ViewRequest } from './types';
 import { countiesVisible, focusBounds, formatArea, formatRadius, OVERVIEW_BOUNDS, rankPins, type CountyMode } from './geometry';
+import { COUNTY_BOUNDARY_ZOOM } from './zoom';
 import './pins.css';
 
 const EMPTY_PINS: MapPin[] = [];
@@ -57,7 +58,8 @@ export default function PinsExplorer() {
     const unit = storedUnit === 'km' ? 'km' : 'mi';
     const reducedMotion = useReducedMotion();
     const showCounties = isUS && countiesVisible(countyMode, zoom);
-    const resources = usePinsData(showCounties, isUS);
+    const showCountyBoundaries = isUS && countyMode !== 'off' && (zoom >= COUNTY_BOUNDARY_ZOOM || selectedId?.startsWith('county-') === true);
+    const resources = usePinsData(showCountyBoundaries, isUS);
     const world = useWorldPinsData(countryCode, showRegions);
     const metadata = resources.pins.data?.metadata;
     const allPins = useMemo<MapPin[]>(() => isUS ? [...new Map([
@@ -305,8 +307,8 @@ export default function PinsExplorer() {
 
             <section className="pins-map-area" aria-label="Geographic map">
                 <div className="pins-map-viewport">
-                    <PinsMap pins={pins} contextPins={contextPins} states={outlines} counties={isUS ? resources.counties.data : null} stateFips={isUS ? stateFips : ''} showCounties={showCounties}
-                        showRegions={isUS || showRegions}
+                    <PinsMap pins={pins} contextPins={contextPins} states={outlines} counties={isUS ? resources.counties.data : null} stateFips={isUS ? stateFips : ''}
+                        showRegions={isUS || showRegions} countyMode={isUS ? countyMode : 'off'}
                         dataState={pinError || requiredBoundaryError ? 'error' : pinLoading || boundaryLoading ? 'loading' : 'ready'}
                         circles={circles} zoom={zoom} selected={selected} view={view} navigationKey={navigationKey} unit={unit} reducedMotion={reducedMotion} onSelect={selectPin} onNavigateUp={navigateUp} onZoom={setZoom} />
                     <div className="pins-map-tools">
@@ -320,7 +322,7 @@ export default function PinsExplorer() {
                         {parent && <p className="pins-navigation-hint">{selected ? 'Click outside the selection' : 'Click empty map'} or press Esc to go up one level.</p>}
                     </div>
                     {boundaryError && <div className="pins-boundary-error" role="alert">{isUS ? resources.states.error ? 'State boundaries unavailable.' : 'County boundaries unavailable.' : 'Country or province boundaries unavailable.'}<button type="button" onClick={boundaryResource.retry}>Retry boundaries</button></div>}
-                    {showCounties && resources.counties.loading && <div className="pins-boundary-error" role="status">Loading county boundaries…</div>}
+                    {showCountyBoundaries && resources.counties.loading && <div className="pins-boundary-error" role="status">Loading county boundaries…</div>}
                     {!isUS && pinLoading && <div className="pins-boundary-error" role="status">Loading country and province pins…</div>}
                     <div className="pins-map-legend">{selected ? <><span><i className="pins-selected-dot" />Selected pin</span><span><i className="pins-context-dot" />Other pins · selectable</span></> : <><span><i className="pins-national-dot" />{isUS ? 'U.S. pole' : 'Country poles'}</span>{!isWorld && <span><i className="pins-state-dot" />{isUS ? 'States & territories' : 'States & provinces'}</span>}{isUS && <span><i className="pins-county-dot" />Counties</span>}</>}<span className="pins-legend-circle"><i />Radius to nearest edge</span></div>
                     <div className="pins-unit-control" role="group" aria-label="Distance units">{(['mi', 'km'] as const).map(value => <button type="button" key={value} aria-pressed={unit === value} onClick={() => setUnit(value)}>{value}</button>)}</div>

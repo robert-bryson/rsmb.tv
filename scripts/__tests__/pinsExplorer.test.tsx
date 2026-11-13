@@ -18,6 +18,7 @@ vi.mock('../../src/features/pins/PinsMap', () => ({ PinsMap: (props: PinsMapProp
     <button onClick={() => props.onNavigateUp?.()}>Click empty map</button>
     <button onClick={() => props.onSelect('unknown')}>Select unknown map feature</button>
     <button onClick={() => props.onZoom(6)}>Set county zoom</button>
+    <button onClick={() => props.onZoom(7)}>Set county boundary zoom</button>
     <output aria-label="Map view bounds">{props.view?.bounds.join(',')}</output>
     <output aria-label="Map view request">{props.view?.key}</output>
     <output aria-label="Map resource state">{props.dataState}</output>
@@ -342,6 +343,8 @@ describe('pin explorer behavior', () => {
         expect(screen.getByRole('button', { name: 'Auto', exact: true })).toHaveAttribute('aria-pressed', 'true');
         fireEvent.click(screen.getByRole('button', { name: 'Set county zoom' }));
         expect(screen.getByText('County pins visible')).toBeVisible();
+        expect(usePinsData).toHaveBeenLastCalledWith(false, true);
+        fireEvent.click(screen.getByRole('button', { name: 'Set county boundary zoom' }));
         expect(usePinsData).toHaveBeenLastCalledWith(true, true);
         fireEvent.click(screen.getByRole('button', { name: 'On', exact: true }));
         expect(screen.getByText('County pins always visible')).toBeVisible();

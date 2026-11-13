@@ -19,7 +19,7 @@ function fixture(width = 800, height = 500) {
     const container = document.createElement('div'), overlay = document.createElement('div');
     parent.append(container, overlay); document.body.append(parent);
     container.getBoundingClientRect = () => rect(width, height);
-    let zoom = 6, center = 0;
+    let zoom = 8, center = 0;
     const listeners = new Map<string, Set<() => void>>();
     const map = {
         getContainer: () => container, getZoom: () => zoom, getCenter: () => ({ lng: center }),
@@ -41,6 +41,49 @@ beforeEach(() => {
 afterEach(() => { document.body.replaceChildren(); vi.unstubAllGlobals(); });
 
 describe('radius badge layout', () => {
+    it('clears badges without measuring layout after zooming below every readable radius', () => {
+        const f = fixture();
+        f.labels.setData(data(line('ordinary'))); flush();
+        expect(f.overlay.children).toHaveLength(1);
+        const measure = vi.spyOn(f.container, 'getBoundingClientRect');
+        f.move(3); flush();
+        expect(f.overlay.children).toHaveLength(0);
+        expect(measure).not.toHaveBeenCalled();
+        f.labels.dispose();
+    });
+
+    it.each(['project', 'unproject'] as const)('omits segments when %s returns nonfinite coordinates', method => {
+        const f = fixture();
+        if (method === 'project') vi.spyOn(f.map, 'project').mockReturnValue({ x: NaN, y: 0 });
+        else vi.spyOn(f.map, 'unproject').mockReturnValue({ lng: NaN, lat: 0 });
+        f.labels.setData(data(line('invalid-surface'))); flush();
+        expect(f.overlay.children).toHaveLength(0);
+        f.labels.dispose();
+    });
+
+    it('refreshes unchanged data when a new map overlay occupies an existing badge', () => {
+        const f = fixture();
+        const lines = data(line('ordinary'));
+        f.labels.setData(lines); flush();
+        const badge = f.overlay.firstElementChild as HTMLElement;
+        const before = [badge.style.left, badge.style.top];
+        const obstacle = document.createElement('div'); obstacle.className = 'pins-boundary-error';
+        obstacle.getBoundingClientRect = () => rect(80, 40, parseFloat(before[0]) - 40, parseFloat(before[1]) - 20);
+        f.parent.append(obstacle);
+        f.labels.setData(lines); flush();
+        expect([badge.style.left, badge.style.top]).not.toEqual(before);
+        f.labels.dispose();
+    });
+
+    it('shows terminal-zoom badges and excludes radii below the readable-size limit', () => {
+        const f = fixture();
+        f.labels.setData(data(line('terminal', undefined, { minimumZoom: 16 }), line('too-small', undefined, { minimumZoom: 17 })));
+        f.move(16); flush();
+        expect(f.overlay.querySelector('[data-pin-radius-label="terminal"]')).not.toBeNull();
+        expect(f.overlay.querySelector('[data-pin-radius-label="too-small"]')).toBeNull();
+        f.labels.dispose();
+    });
+
     it('hides occluded globe segments and restores them when their surface becomes visible', () => {
         const f = fixture();
         const unproject = vi.spyOn(f.map, 'unproject');
@@ -61,7 +104,8 @@ describe('radius badge layout', () => {
         f.move(3); flush();
         expect(f.overlay.children).toHaveLength(1);
         expect(f.overlay.firstElementChild).toHaveClass('is-selected');
-        f.move(6); flush(); expect(f.overlay.children).toHaveLength(2);
+        f.move(6.74); flush(); expect(f.overlay.children).toHaveLength(1);
+        f.move(6.75); flush(); expect(f.overlay.children).toHaveLength(2);
         f.labels.setData(data(line('ordinary', undefined, { label: '16.1 km' }))); flush();
         expect(f.overlay.children).toHaveLength(1);
         expect(f.overlay).toHaveTextContent('Pin ordinary: 16.1 km');

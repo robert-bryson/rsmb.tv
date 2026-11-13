@@ -2,15 +2,20 @@ import { geodesicDestination as destination } from '../../../shared/geography/ge
 export { geodesicDestination as destination } from '../../../shared/geography/geodesy';
 import type { FeatureCollection, Point, Polygon } from 'geojson';
 import { pinContext, pinDisplayCode, pinStateFips, type MapPin } from '../../../shared/worldPins';
+import { COUNTY_ZOOM } from './zoom';
+export { COUNTY_ZOOM } from './zoom';
 
 export type CountyMode = 'off' | 'auto' | 'on';
-export const COUNTY_ZOOM = 6;
 export const OVERVIEW_BOUNDS: [number, number, number, number] = [-125, 24, -66, 50];
 export const STATE_COLOR = '#f5bd63';
 export const COUNTY_COLOR = '#69d2c1';
 export const NATIONAL_COLOR = '#c3a2f6';
 export const CONTEXT_COLOR = '#93a1af';
 const NO_CONTEXT: ReadonlySet<string> = new Set();
+// Geometry is independent of units, selection, and context styling. Weak keys
+// release it when its pin dataset is no longer retained by the resource cache.
+const circleGeometry: Partial<Record<number, WeakMap<MapPin, Polygon>>> = { 48: new WeakMap(), 72: new WeakMap() };
+export const COUNTY_CIRCLE_STEPS = 48;
 
 export function countiesVisible(mode: CountyMode, zoom: number) {
     return mode === 'on' || (mode === 'auto' && zoom >= COUNTY_ZOOM);
@@ -28,9 +33,21 @@ export function formatArea(areaKm2: number) {
 
 export function pinCircles(pins: MapPin[], steps = 72, context: ReadonlySet<string> = NO_CONTEXT): FeatureCollection<Polygon> {
     return { type: 'FeatureCollection', features: pins.map(pin => {
-        const ring = Array.from({ length: steps }, (_, step) => destination(pin.lng, pin.lat, step * 360 / steps, pin.radiusMeters));
-        ring.push(ring[0]);
-        return { type: 'Feature', properties: { id: pin.id, level: pin.level, context: context.has(pin.id) }, geometry: { type: 'Polygon', coordinates: [ring] } };
+        const cache = circleGeometry[steps];
+        let geometry = cache?.get(pin);
+        if (!geometry) {
+            const ring = Array.from({ length: steps }, (_, step) => destination(pin.lng, pin.lat, step * 360 / steps, pin.radiusMeters));
+            // Six decimal places are about 0.1 m. Overview county circles do
+            // not need full double precision in the worker message.
+            if (steps === COUNTY_CIRCLE_STEPS) for (const point of ring) {
+                point[0] = Math.round(point[0] * 1e6) / 1e6;
+                point[1] = Math.round(point[1] * 1e6) / 1e6;
+            }
+            ring.push(ring[0]);
+            geometry = { type: 'Polygon', coordinates: [ring] };
+            cache?.set(pin, geometry);
+        }
+        return { type: 'Feature', properties: { id: pin.id, level: pin.level, context: context.has(pin.id) }, geometry };
     }) };
 }
 

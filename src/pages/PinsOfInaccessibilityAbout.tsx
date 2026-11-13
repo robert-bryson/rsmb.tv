@@ -5,18 +5,20 @@ import { ProjectScreenshotGallery } from '../components/ProjectScreenshotGallery
 import { usePageMetadata } from '../hooks/usePageMetadata';
 import { staticPageMetadata } from '../utils/pageMetadata';
 import { projects } from '../content/projects';
+import { trackAnalyticsEvent } from '../utils/analytics';
 
 export default function PinsOfInaccessibilityAbout() {
     usePageMetadata(staticPageMetadata('/projects/pins-of-inaccessibility'));
     const project = projects.find(project => project.slug === 'pins-of-inaccessibility')!;
+    const trackDataSource = () => trackAnalyticsEvent('project-link-click', {
+        project: project.slug, destination: 'data', placement: 'about',
+    });
     return <div>
         <ProjectPageHeader title={project.title} stack="React + MapLibre GL · Natural Earth + Census TIGER/Line · Python"
             description={project.description}
             actions={[
                 { label: 'Open interactive map →', href: project.demoUrl!, variant: 'primary' },
                 { label: 'Source on GitHub →', href: project.sourceUrl!, external: true },
-                { label: 'Census source data →', href: 'https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html', external: true, analyticsDestination: 'data' },
-                { label: 'Global source data →', href: 'https://www.naturalearthdata.com/downloads/10m-cultural-vectors/', external: true, analyticsDestination: 'data' },
             ]} />
         <ProjectScreenshotGallery screenshots={[{
             src: '/images/pins-of-inaccessibility/overview.webp', width: 1440, height: 960, loading: 'eager',
@@ -50,7 +52,9 @@ export default function PinsOfInaccessibilityAbout() {
         <h2 className="mb-3 text-lg font-medium text-zinc-100">What counts as an edge?</h2>
         <p className="mb-5 text-sm leading-relaxed text-zinc-400">The map uses administrative boundaries, including jurisdictional water. Inland lake shores add no extra edges. Enclaves remain holes: an independent city inside a county is a separate jurisdiction. A pin can lie over water. U.S. coastal edges follow Census jurisdiction limits, which can extend offshore.</p>
         <p className="mb-5 text-sm leading-relaxed text-zinc-400">For the U.S. national pole, the covered state and territory polygons are merged. Internal state borders do not count. International borders and coastal jurisdiction limits define the national circle.</p>
-        <p className="mb-5 text-sm leading-relaxed text-zinc-400">Other countries use Natural Earth 5.1.1 at 1:10 million scale. These generalized boundaries follow the source's territorial divisions, mapped coastlines, and default treatment of disputed areas. Regional geometry is aligned to its parent country before calculation. Administrative levels and dates vary. Small units can be strongly generalized. Antarctica has no pins in this dataset. Province outlines load only for the chosen country.</p>
+        <h2 className="mb-3 text-lg font-medium text-zinc-100">Sources</h2>
+        <p className="mb-5 text-sm leading-relaxed text-zinc-400">U.S. boundaries use <a className="text-violet-400 underline" href="https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html" target="_blank" rel="noopener noreferrer" onClick={trackDataSource}>2025 Census TIGER/Line data</a>.</p>
+        <p className="mb-5 text-sm leading-relaxed text-zinc-400">Other countries use <a className="text-violet-400 underline" href="https://www.naturalearthdata.com/downloads/10m-cultural-vectors/" target="_blank" rel="noopener noreferrer" onClick={trackDataSource}>Natural Earth 5.1.1</a> at 1:10 million scale. These generalized boundaries follow the source's territorial divisions, mapped coastlines, and default treatment of disputed areas. Regional geometry is aligned to its parent country before calculation. Administrative levels and dates vary. Small units can be strongly generalized. Antarctica has no pins in this dataset. Province outlines load only for the chosen country.</p>
         <h2 className="mb-3 text-lg font-medium text-zinc-100">How the calculation works</h2>
         <p className="mb-5 text-sm leading-relaxed text-zinc-400">A Python pipeline reads the full 2025 Census TIGER/Line boundaries. It checks disconnected pieces separately, then solves for the largest inscribed circle in a local WGS84 azimuthal equidistant projection. The projection is recentered at the candidate pin to improve radial distances. The final radius is checked against the original boundary.</p>
         <p className="mb-7 text-sm leading-relaxed text-zinc-400">Results are approximate. The solver uses at most a 25-meter search tolerance and 20-meter working simplification. Small global units use tighter limits. These values describe the algorithm, not source accuracy. Display outlines are simplified separately. The Census files omit minor outlying islands; global coverage follows Natural Earth. Read about the original <a className="text-violet-400 underline" href="https://en.wikipedia.org/wiki/Pole_of_inaccessibility" target="_blank" rel="noreferrer">pole of inaccessibility concept</a>.</p>

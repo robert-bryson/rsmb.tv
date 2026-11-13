@@ -84,11 +84,8 @@ Its November 9 snapshot already includes all calendar years from 1890 through 20
 ## Pins of Inaccessibility
 
 Use the [Pins guide](projects/pins-of-inaccessibility/readme.md) for generation and regression tests.
-Use the [November 12 review](docs/reviews/2026-11-12-pins-quality-review.md) for confirmed fixes and measurement limits.
-Use the [global expansion report](docs/reviews/2026-11-12-pins-world-expansion.md) for country coverage, source choices, and coastline alignment.
-Use the [November 13 review](docs/reviews/2026-11-13-pins-review.md) for publication guards, layer loading, renderer readiness, and hover behavior.
-Use the [context review](docs/reviews/2026-11-13-pins-context-review.md) for location contracts, publication snapshots, and inventory checks.
-Use the [navigation design review](docs/reviews/2026-11-13-pins-navigation-design.md) for geographic parents, muted context, and touch behavior.
+Use the [zoom quality review](docs/reviews/2026-11-13-pins-zoom-quality-review.md) for current defects, fixes, and measurement limits.
+Use the [review index](docs/README.md#reviews) for source, context, and navigation history.
 
 ### Source and calculation
 
@@ -99,7 +96,6 @@ Use the [navigation design review](docs/reviews/2026-11-13-pins-navigation-desig
 ### Hosted release
 
 - [ ] Check the hosted map with the configured CARTO key. Verify origin restrictions, attribution, and every territory shortcut.
-- [ ] Check parent navigation and context markers on physical touch devices. Include slow double taps, rotation, and assistive-technology announcements.
 - [ ] Verify context loading and retry from the deployed origin. Check CORS headers and recovery after a context release change.
 
 ### Data delivery and refresh
@@ -121,7 +117,14 @@ Use the [November 10 review](docs/reviews/2026-11-10-project-quality-review.md) 
 ### Physical devices
 
 - [ ] Check reading, the flight globe, ADV Atlas, and Pins on a real phone. Record LCP, CLS, INP, cold transfer, and startup. Verify [atlas navigation and recovery](docs/trips/ADV-ATLAS.md).
-- [ ] Measure Pins parsing time and peak memory on a real phone. Compare the U.S. pin index, county outlines, world overview, and country-specific province outlines.
+- [ ] Measure Pins parsing time, peak memory, and input delay on a real phone.
+  Compare the U.S. index, county outlines, world overview, and province outlines.
+  Compare first-use and cached circle preparation during zoom gestures.
+  Check the dot, boundary, circle, name, and distance stages.
+  Check parent navigation, slow double taps, rotation, and context markers.
+  Verify that world navigation preserves the center and does not zoom in.
+  Verify small-pin measurements at zoom 16.
+  Record the device, browser, data files, and measurements in one report.
 - [ ] Compare prefetch modes `off`, `pages`, and `all` where input supports intent. Include clicks during module evaluation and after a longer hover. Use the [startup evidence](docs/reviews/2026-11-09-live-release-verification.md#prepared-globe-input) as the baseline.
 - [ ] Review the compressed project previews and trip thumbnails on a real phone at standard and high pixel density. Check fine map detail and photo quality. See [image delivery](docs/image-assets.md#checks).
 

@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { pinsDataSchema, pinSchema, parseBoundaries } from '../../shared/pins';
 import { usStatesAndTerritories } from '../../shared/geography/usStates';
 import { countiesVisible, destination, focusBounds, formatRadius, pinCircles, rankPins } from '../../src/features/pins/geometry';
-import { radiusLines, radiusMinimumZoom, visibleRadiusPins } from '../../src/features/pins/radii';
+import { radiusLines, radiusMinimumZoom } from '../../src/features/pins/radii';
 
 const loadJson = (filename: string) => JSON.parse(fs.readFileSync(new URL(`../../public/data/pins-of-inaccessibility/${filename}`, import.meta.url), 'utf8'));
 const data = pinsDataSchema.parse(loadJson('pins.json'));
@@ -89,18 +89,13 @@ describe('ellipsoidal display geometry', () => {
         }
     });
 
-    it('reveals radius details by zoom and physical size, and retains the selected pin', () => {
+    it('sets level and readable-size limits for the published radii', () => {
         const national = data.pins.find(pin => pin.level === 'country')!;
         const state = data.pins.find(pin => pin.id === 'state-08')!;
         const county = data.pins.find(pin => pin.id === 'county-51610')!;
-        expect(visibleRadiusPins([national, state, county], 3, true, true, null)).toEqual([]);
         expect(radiusMinimumZoom(national)).toBe(4);
-        expect(radiusMinimumZoom(state)).toBe(6);
+        expect(radiusMinimumZoom(state)).toBe(5);
         expect(radiusMinimumZoom(county)).toBeGreaterThan(9);
-        expect(visibleRadiusPins([state, county], 6, true, true, null)).toEqual([state]);
-        expect(visibleRadiusPins([county], 16, true, false, null)).toEqual([]);
-        expect(visibleRadiusPins([national, state], 16, false, true, null)).toEqual([]);
-        expect(visibleRadiusPins([], 3, false, false, county)).toEqual([county]);
     });
 
     it('draws geodesic spokes to the published contacts and changes their distance units', () => {
@@ -141,5 +136,20 @@ describe('ellipsoidal display geometry', () => {
         expect(east).toBeGreaterThan(pin.lng);
         expect(south).toBeLessThan(pin.lat);
         expect(north).toBeGreaterThan(pin.lat);
+    });
+
+    it('bounds overview coordinate rounding and retains full selected-circle precision', () => {
+        const pin = data.pins.find(pin => pin.id === 'county-51610')!;
+        const overview = pinCircles([pin], 48).features[0].geometry.coordinates[0];
+        expect(overview).toHaveLength(49);
+        for (let step = 0; step < 48; step++) {
+            const exact = destination(pin.lng, pin.lat, step * 360 / 48, pin.radiusMeters);
+            expect(Math.abs(overview[step][0] - exact[0])).toBeLessThanOrEqual(0.00000051);
+            expect(Math.abs(overview[step][1] - exact[1])).toBeLessThanOrEqual(0.00000051);
+        }
+        const selected = pinCircles([pin], 144).features[0].geometry.coordinates[0];
+        expect(selected).toHaveLength(145);
+        expect(selected[1]).toEqual(destination(pin.lng, pin.lat, 2.5, pin.radiusMeters));
+        expect(pinCircles([pin]).features[0].geometry.coordinates[0]).toHaveLength(73);
     });
 });

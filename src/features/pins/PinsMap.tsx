@@ -5,12 +5,14 @@ import type { ResilientFullscreenControl } from '../../maps/ResilientFullscreenC
 import { pinCircles, pinPoints } from './geometry';
 import type { MapPin } from '../../../shared/worldPins';
 import { circlePeers, contextPinIds, visibleMapPins } from './presentation';
-import { radiusLines, visibleRadiusPins } from './radii';
+import { RADIUS_MIN_ZOOM, radiusLines } from './radii';
+import { COUNTY_CIRCLE_ZOOM } from './zoom';
 import { EMPTY } from './mapLayers';
 import { createPinsRenderer } from './mapRenderer';
+import { useCountyCircles } from './useCountyCircles';
 import type { PinsMapProps } from './types';
 import 'maplibre-gl/dist/maplibre-gl.css';
-const NO_CONTEXT_PINS: MapPin[] = [];
+const NO_PINS: MapPin[] = [];
 
 export function PinsMap(props: PinsMapProps) {
     const container = useRef<HTMLDivElement>(null);
@@ -22,27 +24,37 @@ export function PinsMap(props: PinsMapProps) {
     const [error, setError] = useState<string | null>(null);
     const [rendered, setRendered] = useState(false);
     const [basemapState, setBasemapState] = useState<BasemapState>('loading');
-    const contextPins = props.contextPins ?? NO_CONTEXT_PINS;
+    const contextPins = props.contextPins ?? NO_PINS;
     const scopedPins = useMemo(() => visibleMapPins(props.pins, contextPins, props.stateFips), [props.pins, contextPins, props.stateFips]);
     const context = useMemo(() => contextPinIds(scopedPins, contextPins, props.stateFips, props.selected), [scopedPins, contextPins, props.stateFips, props.selected]);
     const points = useMemo(() => pinPoints(scopedPins, context), [scopedPins, context]);
-    const circles = useMemo(() => props.circles ? pinCircles(circlePeers(scopedPins, context, props.selected)
-        .filter(pin => pin.id !== props.selected?.id && (pin.level !== 'county' || props.showCounties) && (pin.level !== 'state' || props.showRegions !== false)), 72, context) : EMPTY,
-        [scopedPins, context, props.selected, props.circles, props.showCounties, props.showRegions]);
+    const countiesEnabled = props.countyMode !== 'off';
+    const prepareCountyCircles = countiesEnabled && props.zoom >= COUNTY_CIRCLE_ZOOM - 1;
+    const prepareCountyRadii = countiesEnabled && props.zoom >= RADIUS_MIN_ZOOM.county - 1;
+    const peers = useMemo(() => props.circles ? circlePeers(scopedPins, context, props.selected).filter(pin => pin.id !== props.selected?.id) : [],
+        [scopedPins, context, props.selected, props.circles]);
+    const circles = useMemo(() => pinCircles(peers.filter(pin => pin.level !== 'county' && (pin.level !== 'state' || props.showRegions !== false)), 72, context),
+        [peers, context, props.showRegions]);
+    const countyPins = useMemo(() => peers.filter(pin => pin.level === 'county'), [peers]);
+    const countyCircles = useCountyCircles(countyPins, context, prepareCountyCircles);
     const selection = useMemo<FeatureCollection>(() => {
         if (!props.selected) return EMPTY;
         return pinCircles([props.selected], 144);
     }, [props.selected]);
-    const radii = useMemo(() => radiusLines(props.selected ? [props.selected]
-        : visibleRadiusPins(scopedPins.filter(pin => !context.has(pin.id)), props.zoom, props.circles, props.showCounties, null, props.showRegions), props.unit, props.selected?.id ?? null),
-        [scopedPins, context, props.zoom, props.circles, props.showCounties, props.selected, props.unit, props.showRegions]);
-    const datasets = useRef({ points, circles, selection, radii });
+    // Native zoom filters and paint stops reveal each measurement. Only prepare
+    // a new batch when a detail stage changes, never on fractional zoom updates.
+    const overviewRadiusPins = useMemo(() => props.selected || !props.circles ? NO_PINS
+        : scopedPins.filter(pin => !context.has(pin.id) && (pin.level !== 'county' || prepareCountyRadii) && (pin.level !== 'state' || props.showRegions !== false)),
+        [scopedPins, context, prepareCountyRadii, props.circles, props.selected, props.showRegions]);
+    const radii = useMemo(() => radiusLines(props.selected ? [props.selected] : overviewRadiusPins, props.unit, props.selected?.id ?? null),
+        [props.selected, overviewRadiusPins, props.unit]);
+    const datasets = useRef({ points, circles, countyCircles, selection, radii });
 
     useEffect(() => {
         latest.current = props;
-        datasets.current = { points, circles, selection, radii };
+        datasets.current = { points, circles, countyCircles, selection, radii };
         renderer.current?.sync();
-    }, [props, points, circles, selection, radii]);
+    }, [props, points, circles, countyCircles, selection, radii]);
 
     useEffect(() => {
         // Start after layout. A cancelled mount must not allocate a WebGL context.

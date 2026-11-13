@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { PinsMap } from '../../src/features/pins/PinsMap';
 import { BACKGROUND_CLICK_DELAY_MS, createPinsRenderer, POINT_SOURCE_TIMEOUT_MS } from '../../src/features/pins/mapRenderer';
 import { pinPoints } from '../../src/features/pins/geometry';
+import { loadPinsMap } from '../../src/features/pins/loadPinsMap';
 import type { PinsMapProps } from '../../src/features/pins/types';
 import { colorado, fallsChurch, national, publishedPins } from './pinsFixtures';
 
@@ -42,6 +43,8 @@ const mocks = vi.hoisted(() => {
         isSourceLoaded = () => this.loaded;
         setStyle = vi.fn((style: unknown) => { this.style = style; this.sources.clear(); this.layers.clear(); this.emit('style.load'); });
         setLayoutProperty = vi.fn();
+        setLayerZoomRange = vi.fn();
+        setPaintProperty = vi.fn();
         setProjection = vi.fn();
         setSky = vi.fn();
         setFilter = vi.fn();
@@ -49,8 +52,10 @@ const mocks = vi.hoisted(() => {
         flyTo = vi.fn();
         resize = vi.fn();
         remove = vi.fn(() => this.handlers.clear());
-        getZoom = () => 8;
-        getCenter = () => ({ lng: -100 });
+        zoom = 8;
+        getZoom = () => this.zoom;
+        center = { lng: -100, lat: 35 };
+        getCenter = () => this.center;
         getBounds = () => ({ getWest: () => -180, getEast: () => 180, getSouth: () => -85, getNorth: () => 85 });
         project = ([lng, lat]: number[]) => ({ x: lng + 180, y: 90 - lat });
         unproject = ({ x, y }: { x: number; y: number }) => ({ lng: x - 180, lat: 90 - y });
@@ -74,7 +79,7 @@ vi.mock('../../src/maps/maplibre', async importOriginal => ({
 
 const empty = { type: 'FeatureCollection' as const, features: [] };
 function props(overrides: Partial<PinsMapProps> = {}): PinsMapProps {
-    return { pins: [national, colorado, fallsChurch], states: null, counties: null, stateFips: '', showCounties: false,
+    return { pins: [national, colorado, fallsChurch], states: null, counties: null, stateFips: '', countyMode: 'auto',
         circles: true, zoom: 3, selected: null, view: null, unit: 'mi', reducedMotion: true, dataState: 'ready',
         onSelect: vi.fn(), onZoom: vi.fn(), ...overrides };
 }
@@ -96,6 +101,123 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.useRealTimers(); vi.unstubAllGlobals(); });
 
 describe('map lifecycle', () => {
+    it('prepares the lazy explorer without allocating a renderer before navigation', async () => {
+        const explorer = await loadPinsMap();
+        expect(explorer.default).toBeTypeOf('function');
+        expect(mocks.MapStub.instances).toHaveLength(0);
+    });
+
+    it('shows hover details for a selected county when the ordinary county layer is off', () => {
+        render(<PinsMap {...props({ selected: fallsChurch, countyMode: 'off' })} />); flushFrames();
+        act(() => { map().emit('style.load'); map().emit('render'); });
+        map().features = [{ layer: { id: 'selected-pin' }, properties: { id: fallsChurch.id } }];
+        act(() => map().emit('mousemove', { point: { x: 1, y: 1 } }));
+        expect(mocks.PopupStub.instances.at(-1)!.visible).toBe(true);
+        expect(mocks.PopupStub.instances.at(-1)!.content).toHaveTextContent('Falls Church city, VA');
+        expect(map().canvas.style.cursor).toBe('pointer');
+    });
+
+    it('does not rebuild selected measurements when crossing ordinary county detail thresholds', () => {
+        const current = props({ selected: colorado, countyMode: 'auto', zoom: 3 });
+        const view = render(<PinsMap {...current} />); flushFrames();
+        act(() => map().emit('style.load'));
+        const radii = map().sources.get('pin-radii')!.setData;
+        for (const zoom of [6, 7, 8, 9, 10, 16]) view.rerender(<PinsMap {...current} zoom={zoom} />);
+        expect(radii).toHaveBeenCalledOnce();
+    });
+
+    it('hides overview regional details while keeping a selected region measurable', () => {
+        const current = props({ showRegions: false, countyMode: 'off' });
+        const view = render(<PinsMap {...current} />); flushFrames();
+        act(() => map().emit('style.load'));
+        for (const source of ['pin-circles', 'pin-radii']) {
+            const features = map().sources.get(source)!.setData.mock.calls.at(-1)![0].features;
+            expect(features.length).toBeGreaterThan(0);
+            expect(features.every((feature: { properties: { level: string } }) => feature.properties.level === 'country')).toBe(true);
+        }
+        view.rerender(<PinsMap {...current} selected={colorado} circles={false} />);
+        const selected = map().sources.get('pin-radii')!.setData.mock.calls.at(-1)![0].features;
+        expect(selected).toHaveLength(colorado.boundaryContacts.length);
+        expect(selected.every((feature: { properties: { pinId: string; selected: boolean } }) => feature.properties.pinId === colorado.id && feature.properties.selected)).toBe(true);
+    });
+
+    it('keeps county discovery lightweight and avoids source and style writes within each zoom stage', () => {
+        const current = props({ pins: publishedPins.pins, countyMode: 'auto', zoom: 5.9 });
+        const view = render(<PinsMap {...current} />); flushFrames();
+        act(() => map().emit('style.load'));
+        const circles = map().sources.get('pin-circles')!.setData;
+        const countyCircles = map().sources.get('pin-county-circles')!.setData;
+        const radii = map().sources.get('pin-radii')!.setData;
+        expect(circles.mock.calls[0][0].features).toHaveLength(57);
+        expect(countyCircles.mock.calls[0][0].features).toHaveLength(0);
+        expect(radii.mock.calls[0][0].features.every((f: { properties: { level: string } }) => f.properties.level !== 'county')).toBe(true);
+        const writes = [map().setFilter.mock.calls.length, map().setLayoutProperty.mock.calls.length,
+            map().setPaintProperty.mock.calls.length, map().setLayerZoomRange.mock.calls.length];
+        for (const zoom of [6, 6.25, 6.9]) view.rerender(<PinsMap {...current} zoom={zoom} />);
+        expect(circles).toHaveBeenCalledOnce();
+        expect(countyCircles).toHaveBeenCalledOnce();
+        expect(radii).toHaveBeenCalledOnce();
+        expect([map().setFilter.mock.calls.length, map().setLayoutProperty.mock.calls.length,
+            map().setPaintProperty.mock.calls.length, map().setLayerZoomRange.mock.calls.length]).toEqual(writes);
+        view.rerender(<PinsMap {...current} zoom={7} />);
+        act(() => vi.advanceTimersByTime(1000));
+        expect(countyCircles).toHaveBeenCalledTimes(2);
+        expect(countyCircles.mock.calls[1][0].features).toHaveLength(3235);
+        const countyCircle = countyCircles.mock.calls[1][0].features.find((f: { properties: { id: string } }) => f.properties.id === fallsChurch.id);
+        expect(countyCircle.geometry.coordinates[0]).toHaveLength(49);
+        for (const zoom of [7.5, 8, 8.9]) view.rerender(<PinsMap {...current} zoom={zoom} />);
+        expect(circles).toHaveBeenCalledOnce();
+        expect(countyCircles).toHaveBeenCalledTimes(2);
+        expect(radii).toHaveBeenCalledOnce();
+        view.rerender(<PinsMap {...current} zoom={9} />);
+        expect(radii).toHaveBeenCalledTimes(2);
+        expect(radii.mock.calls[1][0].features.some((f: { properties: { level: string } }) => f.properties.level === 'county')).toBe(true);
+        for (const zoom of [9.5, 10, 11.25]) view.rerender(<PinsMap {...current} zoom={zoom} />);
+        expect(radii).toHaveBeenCalledTimes(2);
+        view.rerender(<PinsMap {...current} zoom={6} />);
+        view.rerender(<PinsMap {...current} zoom={7} />);
+        const restored = countyCircles.mock.calls.at(-1)![0].features.find((f: { properties: { id: string } }) => f.properties.id === fallsChurch.id);
+        expect(restored.geometry).toBe(countyCircle.geometry);
+    });
+
+    it('cancels unfinished county geometry when changing scope or hiding circles', () => {
+        const current = props({ pins: publishedPins.pins, countyMode: 'auto', zoom: 8 });
+        const view = render(<PinsMap {...current} />); flushFrames();
+        act(() => map().emit('style.load'));
+        const circles = map().sources.get('pin-county-circles')!.setData;
+        act(() => vi.advanceTimersByTime(1));
+        view.rerender(<PinsMap {...current} stateFips="51" />);
+        act(() => vi.advanceTimersByTime(1000));
+        const features = circles.mock.calls.at(-1)![0].features;
+        expect(features.length).toBeGreaterThan(100);
+        expect(features.every((feature: { properties: { id: string } }) => feature.properties.id.startsWith('county-51'))).toBe(true);
+        view.rerender(<PinsMap {...current} circles={false} />);
+        act(() => vi.advanceTimersByTime(1000));
+        expect(circles.mock.calls.at(-1)![0].features).toHaveLength(0);
+    });
+
+    it('lets On reveal dots at any zoom and restores automatic fades after style recovery', () => {
+        const current = props({ countyMode: 'on', zoom: 3 });
+        const view = render(<PinsMap {...current} />); flushFrames();
+        act(() => map().emit('style.load'));
+        expect(map().setLayerZoomRange).toHaveBeenCalledWith('county-pins', 0, 24);
+        expect(map().setPaintProperty).toHaveBeenCalledWith('county-pins', 'circle-opacity', 1);
+        view.rerender(<PinsMap {...current} countyMode="auto" />);
+        expect(map().setLayerZoomRange).toHaveBeenLastCalledWith('context-county-pins', 6, 24);
+        expect(map().setLayoutProperty).toHaveBeenCalledWith('county-pins', 'visibility', 'visible');
+        const before = map().setLayerZoomRange.mock.calls.length;
+        act(() => map().emit('style.load'));
+        expect(map().setLayerZoomRange.mock.calls.length).toBe(before + 2);
+    });
+
+    it('retains a selected county circle, boundary hit area, and radii below the ordinary detail thresholds', () => {
+        render(<PinsMap {...props({ selected: fallsChurch, circles: false, countyMode: 'off', zoom: 2 })} />); flushFrames();
+        act(() => map().emit('style.load'));
+        expect(map().sources.get('pin-selection')!.setData.mock.calls[0][0].features).toHaveLength(1);
+        expect(map().sources.get('pin-radii')!.setData.mock.calls[0][0].features).toHaveLength(fallsChurch.boundaryContacts.length);
+        expect(map().setFilter).toHaveBeenCalledWith('selected-county-fill', ['==', ['get', 'id'], fallsChurch.id]);
+    });
+
     it('draws context below active pins and preserves layer switches for muted features', () => {
         const current = props({ selected: colorado });
         const view = render(<PinsMap {...current} />); flushFrames();
@@ -104,7 +226,7 @@ describe('map lifecycle', () => {
         for (const active of ['country-pins', 'state-pins', 'county-pins', 'selected-pin']) {
             expect(order.indexOf('context-pins')).toBeLessThan(order.indexOf(active));
         }
-        view.rerender(<PinsMap {...current} showRegions={false} showCounties={false} />);
+        view.rerender(<PinsMap {...current} showRegions={false} countyMode="off" />);
         expect(map().setFilter).toHaveBeenCalledWith('context-pins', ['all', ['==', ['get', 'context'], true],
             ['!=', ['get', 'level'], 'county'], ['!=', ['get', 'level'], 'state']]);
     });
@@ -121,7 +243,7 @@ describe('map lifecycle', () => {
 
     it('moves up when clicking a sibling polygon but allows direct selection of its marker', () => {
         const fairfax = publishedPins.pins.find(pin => pin.id === 'county-51059')!;
-        const current = props({ pins: [national, fallsChurch, fairfax], selected: fallsChurch, stateFips: '51', showCounties: true, onNavigateUp: vi.fn() });
+        const current = props({ pins: [national, fallsChurch, fairfax], selected: fallsChurch, stateFips: '51', countyMode: 'on', onNavigateUp: vi.fn() });
         render(<PinsMap {...current} />); flushFrames();
         act(() => { map().emit('style.load'); map().emit('render'); });
         map().features = [{ layer: { id: 'county-fill' }, properties: { id: fallsChurch.id } }];
@@ -208,7 +330,7 @@ describe('map lifecycle', () => {
     });
 
     it('reserves spoke measurements for selection while retaining muted point context', () => {
-        render(<PinsMap {...props({ selected: colorado, zoom: 16, showCounties: true })} />); flushFrames();
+        render(<PinsMap {...props({ selected: colorado, zoom: 16, countyMode: 'on' })} />); flushFrames();
         act(() => { map().emit('style.load'); map().emit('render'); });
         const points = map().sources.get('pin-points')!.setData.mock.calls[0][0].features;
         expect(points.map((feature: { properties: { id: string; context: boolean } }) => [feature.properties.id, feature.properties.context]))
@@ -242,6 +364,42 @@ describe('map lifecycle', () => {
         expect(map().flyTo.mock.calls[0][0].zoom).toBeLessThan(2);
     });
 
+    it.each([true, false])('keeps the panned center when returning from a country to the world (reduced motion: %s)', reducedMotion => {
+        const current = props({ reducedMotion, view: { key: 'country', bounds: colorado.bounds } });
+        const view = render(<PinsMap {...current} />); flushFrames();
+        act(() => map().emit('style.load'));
+        expect(map().fitBounds).toHaveBeenCalledOnce();
+        // Include a wrapped longitude: returning to the world must retain the
+        // actual camera location, including pans beyond the date line.
+        map().center = { lng: 187.25, lat: -17.5 };
+        view.rerender(<PinsMap {...current} view={{ key: 'world', bounds: [-180, -60, 180, 83] }} />);
+        expect(map().flyTo).toHaveBeenCalledOnce();
+        expect(map().flyTo).toHaveBeenCalledWith(expect.objectContaining({
+            center: { lng: 187.25, lat: -17.5 }, padding: { top: 0, right: 0, bottom: 0, left: 0 }, duration: reducedMotion ? 0 : 900,
+        }));
+        expect(map().fitBounds).toHaveBeenCalledOnce();
+    });
+
+    it('does not zoom in when the current camera already shows more than the fitted world', () => {
+        const current = props({ view: { key: 'country', bounds: colorado.bounds } });
+        const view = render(<PinsMap {...current} />); flushFrames();
+        Object.defineProperties(screen.getByTestId('pins-map'), { clientWidth: { value: 900 }, clientHeight: { value: 640 } });
+        act(() => map().emit('style.load'));
+        map().zoom = 0.25;
+        map().center = { lng: 135, lat: 22 };
+        view.rerender(<PinsMap {...current} view={{ key: 'world', bounds: [-180, -60, 180, 83] }} />);
+        expect(map().flyTo).toHaveBeenCalledWith(expect.objectContaining({ center: map().center, zoom: 0.25 }));
+    });
+
+    it('preserves a pan made while the first country view is waiting for its data', () => {
+        const current = props({ view: null, dataState: 'loading' });
+        const view = render(<PinsMap {...current} />); flushFrames();
+        act(() => map().emit('style.load'));
+        map().center = { lng: 135, lat: 22 };
+        view.rerender(<PinsMap {...current} view={{ key: 'world', bounds: [-180, -60, 180, 83] }} />);
+        expect(map().flyTo).toHaveBeenCalledWith(expect.objectContaining({ center: map().center }));
+    });
+
     it('cancels startup before unmount and cleans up a mounted renderer', () => {
         const first = render(<PinsMap {...props()} />);
         first.unmount(); flushFrames();
@@ -250,7 +408,7 @@ describe('map lifecycle', () => {
         const mounted = map();
         expect(mounted.style).toMatch(/^https:\/\/basemaps\.cartocdn\.com\/gl\/dark-matter-gl-style\/style\.json(?:\?key=.+)?$/);
         act(() => mounted.emit('style.load'));
-        expect(mounted.sources.size).toBe(6);
+        expect(mounted.sources.size).toBe(7);
         expect(screen.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'loading');
         act(() => mounted.emit('render'));
         expect(screen.getByTestId('pins-map')).toHaveAttribute('data-map-state', 'ready');
@@ -402,7 +560,7 @@ describe('map lifecycle', () => {
         act(() => map().emit('style.load'));
         expect(map().fitBounds.mock.calls[0][1].padding).toEqual({ top: 25, right: 40, bottom: 25, left: 40 });
         const source = map().sources.get('pin-points')!;
-        view.rerender(<PinsMap {...current} unit="km" showCounties />);
+        view.rerender(<PinsMap {...current} unit="km" countyMode="on" />);
         expect(source.setData).toHaveBeenCalledOnce();
         expect(map().fitBounds).toHaveBeenCalledOnce();
         expect(map().setLayoutProperty).toHaveBeenCalledWith('county-pins', 'visibility', 'visible');
@@ -444,7 +602,7 @@ describe('map lifecycle', () => {
         mocks.MapStub.failCanvas = true;
         const container = document.createElement('div');
         expect(() => createPinsRenderer({ container, overlay: document.createElement('div'), previousFullscreen: null,
-            getProps: () => props(), getData: () => ({ points: pinPoints([colorado]), circles: empty, selection: empty, radii: empty }),
+            getProps: () => props(), getData: () => ({ points: pinPoints([colorado]), circles: empty, countyCircles: empty, selection: empty, radii: empty }),
             onError: vi.fn(), onBasemapState: vi.fn(), onLoading: vi.fn(), onReady: vi.fn() })).toThrow('canvas failed');
         expect(map().remove).toHaveBeenCalledOnce();
     });

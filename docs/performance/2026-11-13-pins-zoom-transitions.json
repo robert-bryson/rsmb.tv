@@ -1,0 +1,92 @@
+{
+  "date": "2026-11-13",
+  "baselineCommit": "a699c4ca9e6ed32788d6771ce279cb656a082ce7",
+  "node": "v26.13.0",
+  "method": "Real U.S. pin publication. Legacy circle collection uses 72 full-precision samples for every pin. New sources use 72 samples for country/state circles and 48 samples with six decimal places for county circles. CPU timings exclude timer delays, schema parsing, source serialization, worker indexing, network, and GPU work. Batches reproduce the hook count and time limits synchronously.",
+  "before": {
+    "countyDiscoveryZoom": 6,
+    "circleFeaturesAtDiscovery": 3292,
+    "circleCoordinatesAtDiscovery": 240316,
+    "allCirclesJsonBytes": 9812630,
+    "coldGeometryMs": 133.74
+  },
+  "after": {
+    "stages": {
+      "nationalSpokes": 4,
+      "stateSpokes": 5,
+      "countyDots": 6,
+      "countyBoundariesAndCirclePreparation": 7,
+      "countyCircles": 8,
+      "countyNamesAndSpokePreparation": 9,
+      "countySpokes": 10
+    },
+    "fadeZooms": 0.75,
+    "radiusMinimumPixels": 70,
+    "circleFeaturesAtDiscovery": 57,
+    "circleCoordinatesAtDiscovery": 4161,
+    "overviewCircleJsonBytes": 170151,
+    "countyCircleFeatures": 3235,
+    "countyCircleCoordinates": 158515,
+    "countyCircleJsonBytes": 4079288,
+    "combinedCircleJsonBytes": 4249439,
+    "circleMessageByteReductionPercent": 56.69,
+    "coldCountyGeometryTasks": 26,
+    "maximumPinsPerTask": 128,
+    "budgetMs": 6,
+    "budgetCheckEveryPins": 8,
+    "observedMaximumTaskCpuMs": 5.19,
+    "totalCountyGeometryCpuMs": 88.35,
+    "warmCountyGeometryCpuMs": 1.12,
+    "countyBoundaryBytesDeferredUntilZoom7": 6960868,
+    "browserSourceUpdatesFromZoom6_25Through10_75": {
+      "pin-points": 0,
+      "pin-circles": 0,
+      "pin-county-circles": 1,
+      "pin-radii": 1
+    },
+    "browserCountyBoundaryRequestsThroughZoom6_75": 0,
+    "browserCountyBoundaryRequestsThroughZoom10_75": 1
+  },
+  "verification": {
+    "focusedTests": {
+      "files": 11,
+      "passed": 114
+    },
+    "typecheck": "pass",
+    "viteProductionBundle": "pass",
+    "zoomStagesChromium": {
+      "viewportWidths": [
+        320,
+        1280
+      ],
+      "passed": 2
+    },
+    "chromium": {
+      "passed": 27,
+      "fullRunPassed": 26,
+      "correctedExistingAltTextAssertionRerunPassed": 1
+    },
+    "webkit": {
+      "passed": 27,
+      "fullRunPassed": 25,
+      "isolatedArtifactRerunPassed": 2,
+      "runtime": "WebKit 2388 through existing /tmp/rsmb-next-webkit.sh WPE launcher and cached local libraries",
+      "note": "Default GTK launch lacked system libraries. Two initial scenario teardowns lost trace files because a concurrent Chromium runner cleaned their parent artifact directory. Both scenarios passed with isolated output."
+    },
+    "documentation": {
+      "filesChecked": 3,
+      "brokenLocalLinks": 0
+    }
+  },
+  "fingerprints": {
+    "public/data/pins-of-inaccessibility/pins.json": "b9eb53b6aa701d36e91597044b7b233b41e4162b947165f2893f39f8c44d65e2",
+    "src/features/pins/geometry.ts": "b72850dea8f34ec8566356c5d36d21445a1aec82e2dc8632b6a62480df1a6644",
+    "src/features/pins/mapLayers.ts": "25a6cef80d0ebd42b33c4aa12a5df6816c92315bedaa7d644fe6b338d672a752",
+    "src/features/pins/PinsMap.tsx": "caea6d5c7674398727a1f01141e2d8bac5e38955b73bc58c8e0ffa1d938c0d55",
+    "src/features/pins/mapRenderer.ts": "f4fbe633b1cf7cec2998ca8ffd5b35254287d967c327ed3a319fcfb4abe36a9e",
+    "src/features/pins/radii.ts": "a18d1f4dc8d6f9b2069b16e057504bb78a89ef41473428ed0fa4d1852892a32e",
+    "src/features/pins/radiusLabels.ts": "42d538ac6a8775aefc37a1cf99f27c4e32ce5131243698b91cec5145745b6a64",
+    "src/features/pins/useCountyCircles.ts": "1767884749178542131da935334b289800828ca5b7bc73587cf621d7686f0a5f",
+    "src/features/pins/zoom.ts": "bcfb0b53d401ab75613499a081a656de61bea75644995ca2219c4315e3818081"
+  }
+}

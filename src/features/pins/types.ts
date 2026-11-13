@@ -1,6 +1,7 @@
 import type { FeatureCollection } from 'geojson';
 import type { DisplayBoundaries, MapPin } from '../../../shared/worldPins';
 import type { RadiusLines } from './radii';
+import type { CountyMode } from './geometry';
 
 export interface ViewRequest { bounds: [number, number, number, number]; key: number | string }
 export interface PinsMapProps {
@@ -9,7 +10,7 @@ export interface PinsMapProps {
     states: DisplayBoundaries | null;
     counties: DisplayBoundaries | null;
     stateFips: string;
-    showCounties: boolean;
+    countyMode: CountyMode;
     circles: boolean;
     zoom: number;
     selected: MapPin | null;
@@ -27,6 +28,7 @@ export interface PinsMapProps {
 export interface PinsMapData {
     points: FeatureCollection;
     circles: FeatureCollection;
+    countyCircles: FeatureCollection;
     selection: FeatureCollection;
     radii: RadiusLines;
 }

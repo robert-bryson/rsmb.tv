@@ -40,6 +40,135 @@ async function openMap(page: Page) {
     await expect(page.getByRole('link', { name: 'OpenStreetMap', exact: true })).toBeVisible();
 }
 
+async function capturePinsRenderer(page: Page) {
+    // Capture this real renderer through its public camera method. The hook
+    // exists only in this test and restores the prototype after one call.
+    await page.evaluate(async () => {
+        const modulePath = '/src/maps/maplibre.ts';
+        const { Map } = await import(modulePath);
+        const original = Map.prototype.getZoom;
+        Map.prototype.getZoom = function () {
+            Map.prototype.getZoom = original;
+            (window as typeof window & { pinsZoomReview: unknown }).pinsZoomReview = { map: this, writes: {} };
+            return original.call(this);
+        };
+    });
+    await page.getByRole('button', { name: 'Zoom out', exact: true }).click();
+    await expect.poll(() => page.evaluate(() => 'pinsZoomReview' in window)).toBe(true);
+    return page.evaluateHandle(() => (window as typeof window & {
+        pinsZoomReview: { map: import('maplibre-gl').Map; writes: Record<string, number> };
+    }).pinsZoomReview);
+}
+
+for (const reducedMotion of [true, false]) {
+    test(`keeps the current center when returning to the world (reduced motion: ${reducedMotion})`, async ({ page }) => {
+        const errors = await prepare(page);
+        await page.emulateMedia({ reducedMotion: reducedMotion ? 'reduce' : 'no-preference' });
+        await page.goto('/projects/pins-of-inaccessibility/map?country=FJI');
+        await expectMapReady(page);
+        const review = await capturePinsRenderer(page);
+        await review.evaluate(({ map }) => {
+            map.jumpTo({ center: [187.25, -17.5], zoom: 6, padding: { top: 90, right: 20, bottom: 30, left: 20 } });
+        });
+        const before = await review.evaluate(({ map }) => ({ center: map.getCenter().toArray(), zoom: map.getZoom() }));
+        await page.getByRole('button', { name: 'Up one level: world overview', exact: true }).click();
+        await expect(page.getByLabel('Country / territory', { exact: true })).toHaveValue('ALL');
+        await expect.poll(() => review.evaluate(({ map }) => map.getZoom())).toBeLessThan(before.zoom);
+        await expect.poll(() => review.evaluate(({ map }) => map.isMoving())).toBe(false);
+        const after = await review.evaluate(({ map }) => ({ center: map.getCenter().toArray(), padding: map.getPadding() }));
+        expect(Math.abs((after.center[0] - before.center[0] + 540) % 360 - 180)).toBeLessThan(0.000001);
+        expect(after.center[1]).toBeCloseTo(before.center[1], 6);
+        expect(after.padding).toEqual({ top: 0, right: 0, bottom: 0, left: 0 });
+        await review.evaluate(({ map }) => { map.jumpTo({ center: [135, 22], zoom: 0.25 }); });
+        const distant = await review.evaluate(({ map }) => map.getCenter().toArray());
+        await page.getByRole('button', { name: 'World overview', exact: true }).click();
+        await expect.poll(() => review.evaluate(({ map }) => map.isMoving())).toBe(false);
+        const repeated = await review.evaluate(({ map }) => ({ center: map.getCenter().toArray(), zoom: map.getZoom() }));
+        expect(repeated.zoom).toBeLessThanOrEqual(0.25);
+        expect(repeated.center[0]).toBeCloseTo(distant[0], 6);
+        expect(repeated.center[1]).toBeCloseTo(distant[1], 6);
+        expect(errors).toEqual([]);
+        await review.dispose();
+    });
+}
+
+test('reveals readable national measurements at the maximum map zoom', async ({ page }) => {
+    const errors = await prepare(page);
+    await page.goto('/projects/pins-of-inaccessibility/map?country=BJN');
+    await expectMapReady(page);
+    const review = await capturePinsRenderer(page);
+    await review.evaluate(({ map }) => {
+        const data = (map.getSource('pin-points') as import('maplibre-gl').GeoJSONSource).serialize().data;
+        if (typeof data !== 'object' || !('features' in data)) throw new Error('Point data unavailable');
+        const feature = data.features.find(feature => feature.properties?.id === 'country-BJN');
+        if (feature?.geometry.type !== 'Point') throw new Error('Bajo Nuevo Bank point unavailable');
+        map.jumpTo({ center: feature.geometry.coordinates as [number, number], zoom: map.getMaxZoom(), padding: { top: 0, right: 0, bottom: 0, left: 0 } });
+    });
+    await expect.poll(() => page.locator('[data-pin-radius-label="country-BJN"]').count()).toBeGreaterThan(0);
+    await expect(page.locator('.pins-radius-label.is-selected')).toHaveCount(0);
+    expect(errors).toEqual([]);
+    await review.dispose();
+});
+
+for (const width of [320, 1280]) {
+    test(`stages county detail without redundant source updates at ${width}px`, async ({ page }) => {
+        test.setTimeout(60_000);
+        const errors = await prepare(page);
+        await page.setViewportSize({ width, height: 900 });
+        let countyRequests = 0;
+        page.on('request', request => { if (request.url().endsWith('/counties.geojson')) countyRequests++; });
+        await openMap(page);
+        const review = await capturePinsRenderer(page);
+        await review.evaluate(({ map, writes }) => {
+            for (const id of ['pin-points', 'pin-circles', 'pin-county-circles', 'pin-radii']) {
+                const source = map.getSource(id) as import('maplibre-gl').GeoJSONSource;
+                const setData = source.setData.bind(source);
+                writes[id] = 0;
+                source.setData = (...args) => { writes[id]++; return setData(...args); };
+            }
+        });
+        const zoomTo = async (zoom: number) => {
+            await review.evaluate(({ map }, zoom) => { map.jumpTo({ center: [-98, 38], zoom }); }, zoom);
+            await expect.poll(() => review.evaluate(({ map }) => map.getZoom())).toBe(zoom);
+        };
+        const rendered = (layer: string) => review.evaluate(({ map }, layer) => map.queryRenderedFeatures({ layers: [layer] }).length, layer);
+        const circleCount = () => review.evaluate(({ map }) => {
+            const data = (map.getSource('pin-county-circles') as import('maplibre-gl').GeoJSONSource).serialize().data;
+            return typeof data === 'object' && 'features' in data ? data.features.length : 0;
+        });
+        await zoomTo(6.25);
+        await expect.poll(() => rendered('county-pins')).toBeGreaterThan(0);
+        await expect.poll(circleCount).toBe(0);
+        for (const zoom of [6.5, 6.75]) {
+            await zoomTo(zoom);
+            await expect.poll(() => mapColorPixels(page, 'teal')).toBeGreaterThan(100);
+        }
+        expect(await rendered('county-lines')).toBe(0);
+        expect(await rendered('county-circle-lines')).toBe(0);
+        expect(await review.evaluate(({ writes }) => writes)).toEqual({ 'pin-points': 0, 'pin-circles': 0, 'pin-county-circles': 0, 'pin-radii': 0 });
+        expect(countyRequests).toBe(0);
+        await page.screenshot({ path: `/tmp/pins-zoom-dots-${width}.png` });
+        await zoomTo(7.75);
+        await expect.poll(() => rendered('county-lines')).toBeGreaterThan(0);
+        await expect.poll(circleCount).toBe(3235);
+        expect(await rendered('county-circle-lines')).toBe(0);
+        await zoomTo(8.75);
+        await expect.poll(() => rendered('county-circle-lines')).toBeGreaterThan(0);
+        expect(await rendered('county-radii')).toBe(0);
+        await page.screenshot({ path: `/tmp/pins-zoom-circles-${width}.png` });
+        await zoomTo(9.75);
+        expect(await rendered('county-radii')).toBe(0);
+        await zoomTo(10.75);
+        await expect.poll(() => rendered('county-radii')).toBeGreaterThan(0);
+        await expect.poll(() => page.locator('[data-pin-radius-label^="county-"]').count()).toBeGreaterThan(0);
+        expect(await review.evaluate(({ writes }) => writes)).toEqual({ 'pin-points': 0, 'pin-circles': 0, 'pin-county-circles': 1, 'pin-radii': 1 });
+        expect(countyRequests).toBe(1);
+        await page.screenshot({ path: `/tmp/pins-zoom-radii-${width}.png` });
+        expect(errors).toEqual([]);
+        await review.dispose();
+    });
+}
+
 test('shows selected elevation and nearby town with map links, then closes to the globe', async ({ page }) => {
     const errors = await prepare(page);
     await page.route('**/maps/pins/context/manifest-v1.json', route => route.fulfill({ json: pinContextManifestFixture }));
@@ -398,7 +527,7 @@ test('opens the project page and map through existing project navigation', async
     await page.goto('/projects');
     await page.getByRole('link').filter({ has: page.getByRole('heading', { name: 'Pins of Inaccessibility', exact: true }) }).click();
     await expect(page).toHaveURL(/\/projects\/pins-of-inaccessibility$/);
-    const image = page.getByRole('img', { name: 'Map of the national U.S. pole in violet and state interior pins with amber radius circles' });
+    const image = page.getByRole('img', { name: 'U.S. interior pins and radius circles with the World and United States location trail' });
     await expect.poll(() => image.evaluate(element => (element as HTMLImageElement).naturalWidth)).toBe(1440);
     await page.getByRole('link', { name: 'Open interactive map →' }).click();
     await expect(page.locator('.pins-coverage')).toContainText('3,235');
@@ -447,6 +576,17 @@ test('loads counties on zoom, selects a county, and restores a shared pin', asyn
     await expect(page.getByRole('region', { name: 'Selected pin' })).toContainText('Falls Church city');
     await page.getByRole('button', { name: 'Off', exact: true }).click();
     await expect(page.getByText('County pins hidden', { exact: true })).toBeVisible();
+    const review = await capturePinsRenderer(page);
+    const point = await review.evaluate(({ map }) => {
+        const selected = map.queryRenderedFeatures({ layers: ['selected-pin'] }).find(feature => feature.geometry.type === 'Point');
+        if (selected?.geometry.type !== 'Point') throw new Error('Selected county point unavailable');
+        const projected = map.project(selected.geometry.coordinates as [number, number]);
+        return { x: projected.x, y: projected.y };
+    });
+    await page.locator('.maplibregl-canvas').hover({ position: point });
+    await expect(page.locator('.pins-tooltip')).toContainText('Falls Church city');
+    await expect(page.locator('.maplibregl-canvas')).toHaveCSS('cursor', 'pointer');
+    await review.dispose();
     await page.getByRole('button', { name: 'On', exact: true }).click();
     await expect(page.getByText('County pins always visible', { exact: true })).toBeVisible();
     expect(errors).toEqual([]);

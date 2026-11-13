@@ -1,7 +1,7 @@
 import type { Map as MapLibreMap } from 'maplibre-gl';
 import { clipSegment, containsPoint, expandRect, overlaps, type TooltipRect, type TooltipSegment } from '../../maps/screenGeometry';
 import { COUNTY_COLOR, NATIONAL_COLOR, STATE_COLOR } from './geometry';
-import type { RadiusLines } from './radii';
+import { radiusLabelMinimumZoom, type RadiusLines } from './radii';
 
 const COLORS = { country: NATIONAL_COLOR, state: STATE_COLOR, county: COUNTY_COLOR };
 const ORDER = { country: 0, state: 1, county: 2 };
@@ -31,6 +31,12 @@ export function attachRadiusLabels(map: MapLibreMap, overlay: HTMLElement) {
 
     function render() {
         if (disposed) return;
+        const zoom = map.getZoom();
+        const eligible = entries.filter(entry => entry.feature.properties.selected || zoom >= radiusLabelMinimumZoom(entry.feature.properties.minimumZoom));
+        if (!eligible.length) {
+            if (labels.size) { overlay.replaceChildren(); labels.clear(); }
+            return;
+        }
         const container = map.getContainer();
         const box = container.getBoundingClientRect();
         const viewport = { left: 8, top: 8, right: box.width - 8, bottom: box.height - 8 };
@@ -45,8 +51,7 @@ export function attachRadiusLabels(map: MapLibreMap, overlay: HTMLElement) {
         }
         const visible: Array<{ entry: typeof entries[number]; points: Array<ReturnType<MapLibreMap['project']> | null> }> = [];
         const pins = new Set<string>();
-        for (const entry of entries) {
-            if (!entry.feature.properties.selected && map.getZoom() < entry.feature.properties.minimumZoom) continue;
+        for (const entry of eligible) {
             const coordinates = entry.feature.geometry.coordinates;
             const offset = 360 * Math.round((centerLng - coordinates[0][0]) / 360);
             if (entry.bounds.east + offset < geographic.getWest() || entry.bounds.west + offset > geographic.getEast()

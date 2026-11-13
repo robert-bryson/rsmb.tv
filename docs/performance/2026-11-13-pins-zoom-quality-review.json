@@ -1,0 +1,214 @@
+{
+  "date": "2026-11-13",
+  "baselineCommit": "a699c4ca9e6ed32788d6771ce279cb656a082ce7",
+  "scope": "Review of the uncommitted Pins zoom, camera, Sources section, and PCH gallery changes after the baseline commit.",
+  "runtime": {
+    "baselineCoverageNode": "v26.13.0",
+    "validationNode": "v26.13.1",
+    "validationV8": "14.6.202.34-node.40",
+    "python": "3.15.2",
+    "webkit": "2388, existing WPE launcher and cached system libraries"
+  },
+  "coverage": {
+    "include": [
+      "src/features/pins/**",
+      "src/pages/PinsOfInaccessibilityAbout.tsx",
+      "shared/pins.ts",
+      "shared/worldPins.ts",
+      "shared/pinGeometry.ts",
+      "shared/geography/geodesy.ts"
+    ],
+    "before": {
+      "lines": {
+        "total": 913,
+        "covered": 908,
+        "skipped": 0,
+        "pct": 99.45
+      },
+      "statements": {
+        "total": 1201,
+        "covered": 1167,
+        "skipped": 0,
+        "pct": 97.16
+      },
+      "functions": {
+        "total": 297,
+        "covered": 292,
+        "skipped": 0,
+        "pct": 98.31
+      },
+      "branches": {
+        "total": 1090,
+        "covered": 1038,
+        "skipped": 0,
+        "pct": 95.22
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "after": {
+      "lines": {
+        "total": 919,
+        "covered": 917,
+        "skipped": 0,
+        "pct": 99.78
+      },
+      "statements": {
+        "total": 1206,
+        "covered": 1181,
+        "skipped": 0,
+        "pct": 97.92
+      },
+      "functions": {
+        "total": 296,
+        "covered": 293,
+        "skipped": 0,
+        "pct": 98.98
+      },
+      "branches": {
+        "total": 1078,
+        "covered": 1030,
+        "skipped": 0,
+        "pct": 95.54
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "baselineTests": 134,
+    "finalTests": 153,
+    "baselineFiles": 13,
+    "finalFiles": 15
+  },
+  "reproduced": {
+    "failingNewRegressionTestsBeforeFixes": 5,
+    "terminalZoom": 16,
+    "unreachableFadeEndpoint": 16.75,
+    "affectedPublishedPins": [
+      "country-BJN",
+      "country-SCR",
+      "country-SER",
+      "region-MDV-5235"
+    ],
+    "selectedMeasurementWritesAcrossDetailThresholds": {
+      "before": 2,
+      "after": 1
+    },
+    "worldAlreadyZoomedOut": {
+      "currentZoom": 0.25,
+      "fittedZoom900x640": 1.8219280948873624
+    },
+    "pchGalleryCount": {
+      "documentedBefore": 24,
+      "actualAndDocumentedAfter": 28
+    }
+  },
+  "verification": {
+    "javascript": {
+      "files": 220,
+      "passed": 3174
+    },
+    "focused": {
+      "files": 15,
+      "passed": 153
+    },
+    "pinsPython": {
+      "passed": 48
+    },
+    "temperaturePython": {
+      "passed": 18
+    },
+    "chromium": {
+      "passed": 30
+    },
+    "webkit": {
+      "passed": 30
+    },
+    "lint": "pass",
+    "typecheck": "pass",
+    "productionViteBundle": "pass",
+    "diffWhitespace": "pass",
+    "notes": [
+      "The full JavaScript suite needed subprocess support outside the restricted executor.",
+      "Default Python lacked the geometry packages; the existing Pins virtual environment provided the pinned dependencies.",
+      "Browser runs used separate artifact directories."
+    ]
+  },
+  "security": {
+    "npm": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "python": {
+      "packages": 30,
+      "knownVulnerabilities": 0
+    },
+    "newDependencies": 0
+  },
+  "writing": {
+    "style": "ASD-STE100-style short active sentences and consistent technical terms",
+    "sentenceLengthCheck": [
+      {
+        "file": "TODO.md",
+        "sentences": 146,
+        "atMost25Words": 146,
+        "percentage": 100.0
+      },
+      {
+        "file": "docs/README.md",
+        "sentences": 20,
+        "atMost25Words": 20,
+        "percentage": 100.0
+      },
+      {
+        "file": "projects/pins-of-inaccessibility/readme.md",
+        "sentences": 382,
+        "atMost25Words": 382,
+        "percentage": 100.0
+      },
+      {
+        "file": "docs/trips/pch-2024-galleries.md",
+        "sentences": 57,
+        "atMost25Words": 57,
+        "percentage": 100.0
+      },
+      {
+        "file": "docs/reviews/2026-11-13-pins-zoom-quality-review.md",
+        "sentences": 91,
+        "atMost25Words": 91,
+        "percentage": 100.0
+      }
+    ],
+    "note": "Sentence length is an editorial check, not a formal STE vocabulary certification."
+  },
+  "fingerprints": {
+    "src/features/pins/PinsMap.tsx": "80405439450a42c492e42c1ef925b5b7fcfafcacb6920fbee60dbfa244c16e50",
+    "src/features/pins/mapRenderer.ts": "63346480e386b2a4a5614546843c4de39dbac86dfd4cea0369919eecb14e46fa",
+    "src/features/pins/mapLayers.ts": "c987e09f1c3b228417ec4f0b0d59b661b35502dc984f37ecec34df1a286bb10d",
+    "src/features/pins/radii.ts": "e6748fc3e5233199817e46a6849d20623239aa8a18b7ca89546f316bde9938c0",
+    "src/features/pins/radiusLabels.ts": "8b9c40f941469fa43f1604303a4d91527dfe621a10708964c52995e2d9fec591",
+    "src/features/pins/types.ts": "f90a680655ac7a8465a7e5e96ebfed55b5939840f02c06d5fec52754c27897f4",
+    "src/features/pins/geometry.ts": "b72850dea8f34ec8566356c5d36d21445a1aec82e2dc8632b6a62480df1a6644",
+    "src/features/pins/useCountyCircles.ts": "1767884749178542131da935334b289800828ca5b7bc73587cf621d7686f0a5f",
+    "src/features/pins/zoom.ts": "dbbb7143f9642b611e4aebde002720b865b5e250c68dd863dd9d46a362c673d8",
+    "src/pages/PinsOfInaccessibilityAbout.tsx": "ff55ef9283ecb50aab2c412bf1b96e2452b6b6c1b9f5a9fb6ef1ef855c8613ba",
+    "src/content/trips/pch-2024.json": "13afe013e959b10b52768c0eb3ea20a08b3e0e82085cda784f1b2bee86683527"
+  },
+  "documentation": {
+    "filesChecked": 141,
+    "relativeLinksChecked": 1053,
+    "brokenLocalLinks": [],
+    "unresolvedMarkdownAnchors": []
+  }
+}

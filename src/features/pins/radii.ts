@@ -1,9 +1,29 @@
 import type { FeatureCollection, LineString } from 'geojson';
 import { pinContext, type MapPin } from '../../../shared/worldPins';
 import { destination, formatRadius } from './geometry';
+import type { ExpressionSpecification } from '../../maps/maplibre';
+import { PIN_MAX_ZOOM, ZOOM_FADE } from './zoom';
 
-export const RADIUS_MIN_ZOOM = { country: 4, state: 6, county: 9 } as const;
+export const RADIUS_MIN_ZOOM = { country: 4, state: 5, county: 10 } as const;
 export const RADIUS_MIN_PIXELS = 70;
+
+/** Composite paint stops fade each spoke at its own screen-size threshold.
+ * Keep zoom at the top level, as required by the MapLibre expression grammar. */
+export function radiusOpacity(minimumZoom: number): ExpressionSpecification {
+    const stops: Array<number | ExpressionSpecification> = [];
+    for (let zoom = minimumZoom; zoom < PIN_MAX_ZOOM; zoom++) {
+        stops.push(zoom, ['case', ['<', ['get', 'minimumZoom'], zoom], 0.8, 0],
+            zoom + ZOOM_FADE, ['case', ['<=', ['get', 'minimumZoom'], zoom], 0.8, 0]);
+    }
+    // Features that first become readable at the zoom limit cannot wait for a
+    // fade beyond it. The layer filter keeps them hidden before this last stop.
+    stops.push(PIN_MAX_ZOOM, ['case', ['<=', ['get', 'minimumZoom'], PIN_MAX_ZOOM], 0.8, 0]);
+    return ['interpolate', ['linear'], ['zoom'], ...stops] as ExpressionSpecification;
+}
+
+export function radiusLabelMinimumZoom(minimumZoom: number) {
+    return Math.max(minimumZoom, Math.min(minimumZoom + ZOOM_FADE, PIN_MAX_ZOOM));
+}
 
 export interface RadiusProperties {
     id: string;
@@ -37,11 +57,4 @@ export function radiusLines(pins: MapPin[], unit: 'mi' | 'km', selectedId: strin
             minimumZoom: radiusMinimumZoom(pin),
         }, geometry: { type: 'LineString' as const, coordinates } };
     })) };
-}
-
-export function visibleRadiusPins(pins: MapPin[], zoom: number, circles: boolean, showCounties: boolean, selected: MapPin | null, showRegions = true) {
-    const visible = pins.filter(pin => pin.id === selected?.id
-        || (circles && (pin.level !== 'county' || showCounties) && (pin.level !== 'state' || showRegions) && zoom >= radiusMinimumZoom(pin)));
-    if (selected && !visible.some(pin => pin.id === selected.id)) visible.push(selected);
-    return visible;
 }

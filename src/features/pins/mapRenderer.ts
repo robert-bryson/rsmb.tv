@@ -9,11 +9,13 @@ import { attachRadiusLabels } from './radiusLabels';
 import { pinContext } from '../../../shared/worldPins';
 import { isDescendantPin } from './navigation';
 import { DATA_SOURCES, EMPTY, installPinLayers } from './mapLayers';
+import { COUNTY_ZOOM, PIN_MAX_ZOOM, zoomFade } from './zoom';
 import type { PinsMapData, PinsMapProps, ViewRequest } from './types';
 
 export const POINT_SOURCE_TIMEOUT_MS = 15_000;
 // MapLibre's tap recognizer allows 500 ms between taps.
 export const BACKGROUND_CLICK_DELAY_MS = 500;
+const PIN_PICK_LAYERS = ['selected-pin', 'country-pins', 'state-pins', 'county-pins', 'context-pins', 'context-county-pins'];
 interface Options {
     container: HTMLDivElement;
     overlay: HTMLDivElement;
@@ -29,9 +31,11 @@ interface Options {
 /** Own the renderer, its deadlines, and every resource that must survive a style change. */
 export function createPinsRenderer(options: Options) {
     const { container, overlay, getProps, getData, onError, onReady } = options;
+    const openingView = getProps().view;
+    const opensOnWorld = !!openingView && openingView.bounds[2] - openingView.bounds[0] >= 360;
     const map = new MapLibreMap({
         container, style: cartoVectorStyleUrl('dark-matter'), bounds: OVERVIEW_BOUNDS,
-        fitBoundsOptions: { padding: 32 }, minZoom: 0, maxZoom: 16,
+        fitBoundsOptions: { padding: 32 }, minZoom: 0, maxZoom: PIN_MAX_ZOOM,
         attributionControl: { compact: false },
     });
     const cleanups: Array<() => void> = [() => map.remove()];
@@ -116,6 +120,18 @@ export function createPinsRenderer(options: Options) {
             map.off('touchstart', cancelBackgroundClick);
         });
         const sent = new Map<string, unknown>();
+        const styles = new Map<string, string>();
+        const updateStyle = (key: string, value: unknown, update: () => void) => {
+            const signature = JSON.stringify(value);
+            if (styles.get(key) === signature) return;
+            update();
+            styles.set(key, signature);
+        };
+        const filterLayer = (id: string, filter: FilterSpecification) => updateStyle(`filter:${id}`, filter, () => map.setFilter(id, filter));
+        const showLayer = (id: string, visible: boolean) => {
+            const visibility = visible ? 'visible' : 'none';
+            updateStyle(`visibility:${id}`, visibility, () => map.setLayoutProperty(id, 'visibility', visibility));
+        };
         let lastViewKey: ViewRequest['key'] | undefined;
         const send = (id: string, data: FeatureCollection | null) => {
             const source = map.getSource(id) as GeoJSONSource | undefined;
@@ -138,30 +154,44 @@ export function createPinsRenderer(options: Options) {
             send('pin-counties', current.counties);
             send('pin-points', data.points);
             send('pin-circles', data.circles);
+            send('pin-county-circles', data.countyCircles);
             send('pin-selection', data.selection);
             send('pin-radii', data.radii);
             labels.setData(data.radii);
-            for (const id of ['county-fill', 'county-lines', 'county-pins', 'county-labels']) {
-                map.setLayoutProperty(id, 'visibility', current.showCounties ? 'visible' : 'none');
+            const countyMode = current.countyMode;
+            for (const id of ['county-fill', 'county-lines', 'county-pins', 'context-county-pins', 'county-circle-fill', 'county-circle-lines', 'county-labels']) {
+                showLayer(id, countyMode !== 'off');
             }
-            for (const id of ['state-pins', 'state-labels']) map.setLayoutProperty(id, 'visibility', current.showRegions === false ? 'none' : 'visible');
-            map.setFilter('context-pins', ['all', ['==', ['get', 'context'], true],
-                current.showCounties ? true : ['!=', ['get', 'level'], 'county'],
+            for (const id of ['county-pins', 'context-county-pins']) {
+                const minimumZoom = countyMode === 'on' ? 0 : COUNTY_ZOOM;
+                updateStyle(`zoom:${id}`, minimumZoom, () => map.setLayerZoomRange(id, minimumZoom, 24));
+                const opacity = id === 'context-county-pins' ? 0.8 : 1;
+                const fade = countyMode === 'on' ? opacity : zoomFade(COUNTY_ZOOM, opacity);
+                for (const property of ['circle-opacity', 'circle-stroke-opacity'] as const) {
+                    updateStyle(`${property}:${id}`, fade, () => map.setPaintProperty(id, property, fade));
+                }
+            }
+            for (const id of ['state-pins', 'state-labels']) showLayer(id, current.showRegions !== false);
+            filterLayer('context-pins', ['all', ['==', ['get', 'context'], true], ['!=', ['get', 'level'], 'county'],
                 current.showRegions === false ? ['!=', ['get', 'level'], 'state'] : true]);
             const filter: FilterSpecification = current.stateFips ? ['==', ['get', 'stateFips'], current.stateFips] : ['has', 'id'];
-            for (const id of ['state-fill', 'state-lines', 'county-fill', 'county-lines']) map.setFilter(id, filter);
-            for (const id of ['selected-state', 'selected-county', 'selected-pin']) map.setFilter(id, ['==', ['get', 'id'],
+            for (const id of ['state-fill', 'state-lines', 'county-fill', 'county-lines']) filterLayer(id, filter);
+            for (const id of ['selected-state', 'selected-county', 'selected-county-fill', 'selected-pin']) filterLayer(id, ['==', ['get', 'id'],
                 id === 'selected-state' && current.stateFips ? `state-${current.stateFips}` : current.selected?.id ?? '']);
             if (current.view && current.view.key !== lastViewKey) {
+                const initialView = lastViewKey === undefined;
                 lastViewKey = current.view.key;
                 map.resize();
                 // Leave a visible center even in a short landscape viewport.
                 const width = container.clientWidth, height = container.clientHeight;
                 if (current.view.bounds[2] - current.view.bounds[0] >= 360) {
                     // Opposite edges of a world-sized bounds box meet on a globe.
-                    // Frame the sphere explicitly instead of fitting that seam.
-                    map.flyTo({ center: [0, 20], zoom: Math.max(0, Math.log2(Math.max(128, Math.min(width, height)) / 256) + 0.5),
-                        padding: 0, bearing: 0, pitch: 0, roll: 0, duration: current.reducedMotion ? 0 : 900 });
+                    // Zoom out around the current location instead of fitting
+                    // that seam or panning away from the place being explored.
+                    const fitZoom = Math.max(0, Math.log2(Math.max(128, Math.min(width, height)) / 256) + 0.5);
+                    const initializeWorld = initialView && opensOnWorld;
+                    map.flyTo({ center: initializeWorld ? [0, 20] : map.getCenter(), zoom: initializeWorld ? fitZoom : Math.min(map.getZoom(), fitZoom),
+                        padding: { top: 0, right: 0, bottom: 0, left: 0 }, bearing: 0, pitch: 0, roll: 0, duration: current.reducedMotion ? 0 : 900 });
                     return;
                 }
                 const tools = container.parentElement?.querySelector<HTMLElement>('.pins-map-tools')?.getBoundingClientRect();
@@ -177,6 +207,7 @@ export function createPinsRenderer(options: Options) {
             if (disposed || failed) return;
             dismissPopup();
             sent.clear();
+            styles.clear();
             // Hosted CARTO styles and the recovery style have their own defaults.
             // Restore the globe whenever either background is loaded.
             map.setProjection({ type: 'globe' });
@@ -204,7 +235,7 @@ export function createPinsRenderer(options: Options) {
             const target = native?.target;
             if (target instanceof Element && target.closest('button, a, input, select, summary, .maplibregl-ctrl, .maplibregl-popup')) return;
             if ((native?.detail ?? 1) > 1) return;
-            const layers = ['selected-pin', 'country-pins', 'state-pins', 'county-pins', 'context-pins'].filter(id => map.getLayer(id));
+            const layers = PIN_PICK_LAYERS.filter(id => map.getLayer(id));
             const tolerance = window.matchMedia('(pointer: coarse)').matches ? 22 : 6;
             const { x, y } = event.point;
             const features = layers.length ? map.queryRenderedFeatures([[x - tolerance, y - tolerance], [x + tolerance, y + tolerance]], { layers }) : [];
@@ -218,7 +249,7 @@ export function createPinsRenderer(options: Options) {
             features.sort((a, b) => (distance(a) - distance(b) || layers.indexOf(a.layer.id) - layers.indexOf(b.layer.id)));
             const marker = features.find(feature => feature.properties?.id);
             if (marker) { current.onSelect(String(marker.properties.id)); return; }
-            const polygons = ['county-fill', 'state-fill'].filter(id => map.getLayer(id));
+            const polygons = ['selected-county-fill', 'county-fill', 'state-fill'].filter(id => map.getLayer(id));
             const boundaries = polygons.length ? map.queryRenderedFeatures([x, y], { layers: polygons }) : [];
             for (const id of polygons) {
                 const feature = boundaries.find(feature => feature.layer.id === id);
@@ -243,16 +274,16 @@ export function createPinsRenderer(options: Options) {
         });
         map.on('mousemove', event => {
             const current = getProps();
-            const layers = ['country-pins', 'state-pins', 'county-pins', 'context-pins'].filter(id => map.getLayer(id));
+            const layers = PIN_PICK_LAYERS.filter(id => map.getLayer(id));
             const feature = layers.length ? map.queryRenderedFeatures(event.point, { layers })[0] : null;
             const id = feature?.properties?.id ? String(feature.properties.id) : null;
-            canvas.style.cursor = id ? 'pointer' : '';
             const signature = `${id}:${current.unit}`;
             if (hovered === signature) return;
             dismissPopup();
             const pin = current.pins.find(pin => pin.id === id) ?? current.contextPins?.find(pin => pin.id === id);
             if (!pin) return;
             hovered = signature;
+            canvas.style.cursor = 'pointer';
             const content = document.createElement('div');
             content.className = 'pins-tooltip';
             const title = document.createElement('strong');
