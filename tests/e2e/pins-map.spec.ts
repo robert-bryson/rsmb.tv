@@ -46,7 +46,7 @@ async function openLayers(page: Page) {
     if (await toggle.getAttribute('aria-expanded') !== 'true') await toggle.click();
 }
 
-async function capturePinsRenderer(page: Page) {
+async function capturePinsRenderer(page: Page, trigger: () => Promise<void> = () => page.getByRole('button', { name: 'Zoom out', exact: true }).click()) {
     // Capture this real renderer through its public camera method. The hook
     // exists only in this test and restores the prototype after one call.
     await page.evaluate(async () => {
@@ -59,11 +59,22 @@ async function capturePinsRenderer(page: Page) {
             return original.call(this);
         };
     });
-    await page.getByRole('button', { name: 'Zoom out', exact: true }).click();
+    await trigger();
     await expect.poll(() => page.evaluate(() => 'pinsZoomReview' in window)).toBe(true);
     return page.evaluateHandle(() => (window as typeof window & {
         pinsZoomReview: { map: import('maplibre-gl').Map; writes: Record<string, number> };
     }).pinsZoomReview);
+}
+
+async function reloadSettledMap(page: Page, review: Awaited<ReturnType<typeof capturePinsRenderer>>) {
+    // Let this camera finish requesting tiles before replacing the document.
+    // A previous networkidle event does not cover new map work. WebKit can
+    // report cancelled requests as page errors during replacement:
+    // https://github.com/microsoft/playwright/issues/43120.
+    await expect.poll(() => review.evaluate(({ map }) => map.loaded() && !map.isMoving()), { timeout: 20_000 }).toBe(true);
+    await review.dispose();
+    await page.reload();
+    await expectMapReady(page);
 }
 
 for (const reducedMotion of [true, false]) {
@@ -144,11 +155,11 @@ for (const width of [320, 1280]) {
         });
         await zoomTo(4.25);
         await expect.poll(() => rendered('county-pins')).toBeGreaterThan(0);
-        await expect.poll(circleCount).toBe(3235);
+        await expect.poll(circleCount, { timeout: 20_000 }).toBe(3235);
         for (const zoom of [4.5, 4.75]) {
             await zoomTo(zoom);
             // This earlier stage intentionally shows only the largest counties.
-            await expect.poll(() => mapColorPixels(page, 'teal')).toBeGreaterThan(0);
+            await expect.poll(() => mapColorPixels(page, 'teal'), { timeout: 20_000 }).toBeGreaterThan(0);
         }
         expect(await rendered('county-lines')).toBe(0);
         expect(await rendered('county-circle-lines')).toBe(0);
@@ -162,6 +173,14 @@ for (const width of [320, 1280]) {
         expect(await rendered('county-radii')).toBe(0);
         await page.screenshot({ path: `/tmp/pins-zoom-circles-${width}.png` });
         await zoomTo(6.75);
+        // This zoom starts the lazy boundary download and worker parsing.
+        // Wait for that source before checking its rendered pixels.
+        await expect.poll(() => review.evaluate(({ map }) => {
+            const source = map.getSource('pin-counties') as import('maplibre-gl').GeoJSONSource;
+            const data = source.serialize().data;
+            return typeof data === 'object' && 'features' in data && data.features.length === 3235
+                && map.isSourceLoaded('pin-counties');
+        }), { timeout: 20_000 }).toBe(true);
         await expect.poll(() => rendered('county-lines')).toBeGreaterThan(0);
         await expect.poll(() => rendered('county-radii')).toBeGreaterThan(0);
         await expect.poll(() => page.locator('[data-pin-radius-label^="county-"]').count()).toBeGreaterThan(0);
@@ -302,16 +321,19 @@ test('clicks away from a selected country to the world while preserving native m
 });
 
 test('restores county, state, and country views through parent navigation and browser history', async ({ page }) => {
+    // Several cameras, a reload, and four history changes run in this scenario.
+    test.setTimeout(60_000);
     const errors = await prepare(page);
     await page.goto('/projects/pins-of-inaccessibility/map?pin=county-51610&keep=1');
     const selected = page.getByRole('region', { name: 'Selected pin' });
     const location = page.getByRole('navigation', { name: 'Map location' });
     await expect(selected).toContainText('Falls Church city');
-    await selected.getByRole('button', { name: 'Back to Virginia, close selection' }).click();
+    await expectMapReady(page);
+    const review = await capturePinsRenderer(page, () => selected.getByRole('button', { name: 'Back to Virginia, close selection' }).click());
     await expect(page.getByLabel('Within', { exact: true })).toHaveValue('51');
     await expect(page).toHaveURL(/state=51/);
     await expect(location.locator('[aria-current]')).toHaveText('Virginia');
-    await page.reload();
+    await reloadSettledMap(page, review);
     await expect(location.locator('[aria-current]')).toHaveText('Virginia');
     await expect(selected).toHaveCount(0);
     await page.getByRole('button', { name: 'Up one level: United States', exact: true }).click();
@@ -511,21 +533,18 @@ test('reveals distance badges on zoom and keeps selected radii when other circle
 });
 
 test('draws the national pole, supports map selection, and restores its shared link', async ({ page }) => {
+    // Keep the reload and territory camera within one bounded scenario.
+    test.setTimeout(60_000);
     const errors = await prepare(page);
     await openMap(page);
     await expect(page.getByRole('region', { name: 'U.S. pole', exact: true })).toContainText('678.2 mi');
     await expect.poll(() => mapColorPixels(page, 'national')).toBeGreaterThan(50);
     const point = await nationalPinPosition(page);
-    await page.mouse.click(point.x, point.y);
+    const review = await capturePinsRenderer(page, () => page.mouse.click(point.x, point.y));
     await expect(page).toHaveURL(/pin=country-US/);
     await expect(page.getByRole('region', { name: 'Selected pin' })).toContainText('United States');
     await expect(page.getByRole('region', { name: 'Selected pin' })).toContainText('Internal state borders do not');
-    // Keep WebKit's document-replacement cancellation errors out of this
-    // shared-link test: https://github.com/microsoft/playwright/issues/43120.
-    // Application readiness remains checked separately by expectMapReady.
-    await page.waitForLoadState('networkidle');
-    await page.reload();
-    await expectMapReady(page);
+    await reloadSettledMap(page, review);
     await expect(page.getByRole('region', { name: 'Selected pin' })).toContainText('United States');
     await page.getByLabel('Within', { exact: true }).selectOption('66');
     await expect.poll(() => mapColorPixels(page, 'amber')).toBeGreaterThan(20);
@@ -832,6 +851,8 @@ test('renders Tobago detail and switches between province and country outlines',
 });
 
 test('wraps the CARTO basemap around a globe and supports dragging and world reset', async ({ page }) => {
+    // Software WebGL needs time for the twelve real drag input frames.
+    test.setTimeout(60_000);
     const errors = await prepare(page, '#35546a');
     await page.goto('/projects/pins-of-inaccessibility/map?country=ALL');
     await expectMapReady(page);

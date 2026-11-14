@@ -138,3 +138,27 @@ That check does not certify vocabulary or complete ASD-STE100 conformity.
 Hosted analytics, physical-phone memory, and source editorial facts still need their recorded checks.
 No deployment or push is part of this review.
 The user's development server remains on `http://localhost:5173/`.
+
+## Release follow-up
+
+The user later requested a push, deployment monitoring, and hosted verification.
+The first [CI run](https://github.com/robert-bryson/rsmb.tv/actions/runs/43544240009) stopped before the preview or production release.
+Five browser cases failed. Their traces identified test setup and timing assumptions.
+
+The county zoom test now waits for the lazy boundary source to finish loading and parsing.
+It then checks rendered outlines, radii, badges, request counts, and source-write counts.
+Three long map scenarios have a 60-second total limit for camera changes, history, reloads, and real drag input.
+The application's startup deadline remains unchanged.
+
+The heading rotation fixtures now measure their size before expecting static placement.
+Compact headings can fit within half of a 320-pixel screen.
+The fixtures use a shorter screen, then verify that rotation restores sticky placement.
+They also measure the combined height after increasing text size.
+
+A two-CPU retest also exposed tile cancellation during WebKit reloads.
+The shared-link and history cases now wait for the renderer to finish its camera and tile work before replacing the document.
+The prior `networkidle` event did not cover later requests from the map.
+The test still rejects page errors and verifies readiness after the reload.
+
+All 14 focused cases pass in Chromium and WebKit with two CPUs and two workers.
+Lint, TypeScript, and the changed documents' relative links also pass.

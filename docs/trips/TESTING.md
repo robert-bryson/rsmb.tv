@@ -288,6 +288,9 @@ They verify continuous handoffs, the end of the story, visible navigation, navig
 Subsection links must clear both headers after upward jumps and reloads.
 The production reading suite also checks chapter grouping, sticky placement, and subsection clearance on an actual trip route.
 Short-screen checks return tall h1 and h2 titles to normal flow. Rotation must restore sticky behavior when space permits.
+These fixtures first verify that the title and navigation exceed half the screen height.
+They repeat that check after increasing the text size.
+This keeps the test meaningful when banner spacing changes.
 Phone checks also enlarge text to 200%. Navigation links must remain visible without horizontal scrolling.
 Header checks change padding and borders without changing the content box.
 The feature uses native CSS scrolling. Each post shares one title resize observer and one queued measurement frame.

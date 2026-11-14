@@ -149,11 +149,16 @@ for (const level of [1, 2]) {
     });
 
     test(`oversized h${level} titles leave reading space on a short screen and recover after rotation`, async ({ page }) => {
-        await page.setViewportSize({ width: 390, height: 320 });
+        await page.setViewportSize({ width: 390, height: 240 });
         await page.goto(`/tests/e2e/fixtures/trip-headings.html?heading-level=${level}`);
         const chapters = page.locator('.trip-chapter');
         const longChapter = chapters.nth(1);
         const title = longChapter.locator(':scope > :first-child');
+        const combinedHeight = () => title.evaluate(node => node.getBoundingClientRect().height
+            + document.querySelector('.site-header')!.getBoundingClientRect().height);
+        // The compact banner can fit at 320px. Make this fixture exceed the
+        // half-screen limit explicitly instead of assuming a particular wrap.
+        await expect.poll(combinedHeight).toBeGreaterThan(120);
         await expect(longChapter).toHaveAttribute('data-trip-chapter-static');
         await expect(title).toHaveCSS('position', 'static');
         await scrollTo(page, await documentTop(longChapter) + 250);
@@ -161,7 +166,8 @@ for (const level of [1, 2]) {
         await page.setViewportSize({ width: 390, height: 900 });
         await expect(longChapter).not.toHaveAttribute('data-trip-chapter-static');
         await expect(title).toHaveCSS('position', 'sticky');
-        await page.addStyleTag({ content: 'html { font-size: 32px; }' });
+        await page.addStyleTag({ content: 'html { font-size: 40px; }' });
+        await expect.poll(combinedHeight).toBeGreaterThan(450);
         await expect(longChapter).toHaveAttribute('data-trip-chapter-static');
         await expect(title).toHaveCSS('position', 'static');
     });
