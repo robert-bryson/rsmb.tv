@@ -9,6 +9,10 @@ Use [`src/maps/recoverBasemap.ts`](../src/maps/recoverBasemap.ts) for provider d
 Temperature, Tornado, and Pins adapters supply provider styles and application source IDs.
 The helper checks provider sources. It does not wait for application data or camera motion.
 Each feature restores its data layers on `style.load`.
+Defer data writes between `styledataloading` and the next `style.load`.
+An earlier style version does not permit writes into a replacement that is still loading.
+Temperature also clears its rendered-data state during this interval.
+The next style-load event restores the latest records and layer settings.
 Pins also tracks each update to its point source. Background recovery does not establish pin readiness.
 Each feature controls its camera and selection state.
 Dispose the helper before you remove the renderer.

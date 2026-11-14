@@ -53,6 +53,8 @@ Recent snapshots become stale after two days. Standing-record snapshots become s
 The hosted background has a 15-second startup deadline.
 A failed or stalled background switches to a neutral map while records, filters, and station selection remain usable.
 Use **Retry background** to load the hosted tiles again. Background retry preserves the current camera and loaded datasets.
+While a replacement style loads, data updates wait for its style-load event.
+The map reports loading until the record source finishes drawing again.
 A data error has a separate **Retry** action. It clears only failed resources from the validated response cache.
 Successful data remains available. Renderer failures still offer a page reload.
 

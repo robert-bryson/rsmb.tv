@@ -26,6 +26,7 @@ const mapMocks = vi.hoisted(() => {
         flyTo = vi.fn();
         easeTo = vi.fn();
         zoom = 3.5;
+        styleLoaded = false;
         constructor() { TestMap.instances.push(this); }
         on(type: string, layersOrListener: string | string[] | Listener, listener?: Listener) {
             this.listeners.push(typeof layersOrListener === 'function'
@@ -33,6 +34,8 @@ const mapMocks = vi.hoisted(() => {
                 : { type, layers: [layersOrListener].flat(), callback: listener! });
         }
         fire(type: string, features: TestFeature[] = [], event: TestEvent = {}) {
+            if (type === 'style.load') this.styleLoaded = true;
+            if (type === 'styledataloading') this.styleLoaded = false;
             this.renderedFeatures = features;
             for (const listener of this.listeners.filter(entry => entry.type === type)) {
                 const matches = listener.layers ? features.filter(feature => listener.layers!.includes(feature.layer.id)) : features;
@@ -41,10 +44,13 @@ const mapMocks = vi.hoisted(() => {
         }
         getSource(id: string) { return this.sources.get(id); }
         getStyle() { return { sources: Object.fromEntries(this.sources) }; }
-        setStyle = vi.fn(() => { this.layers.clear(); this.sources.clear(); });
+        setStyle = vi.fn(() => { this.layers.clear(); this.sources.clear(); this.fire('styledataloading'); });
         isSourceLoaded = vi.fn((id: string) => this.sources.has(id));
         off(type: string, callback: Listener) { this.listeners = this.listeners.filter(listener => listener.type !== type || listener.callback !== callback); }
-        addSource(id: string, source: SourceSpecification) { this.sources.set(id, { ...source, setData: vi.fn() }); }
+        addSource(id: string, source: SourceSpecification) {
+            if (!this.styleLoaded) throw new Error('Style is not done loading.');
+            this.sources.set(id, { ...source, setData: vi.fn() });
+        }
         getLayer(id: string) { return this.layers.get(id); }
         addLayer(layer: LayerSpecification) { this.layers.set(layer.id, structuredClone(layer)); }
         setLayoutProperty(id: string, property: string, value: unknown) {
@@ -139,6 +145,29 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
 describe('temperature map record rendering', () => {
+    it.each(['recent', 'state', 'county', 'freshness'])('defers %s data updates until the replacement style loads', view => {
+        vi.mocked(useTemperatureData).mockReturnValue(data({ ...allTimeData(), recentRecords: recent() }));
+        const { map, refresh } = mount(`/projects/temperature-records/map?view=${view}`);
+        act(() => map.setStyle());
+        expect(screen.getByTestId('temperature-map')).toHaveAttribute('data-map-state', 'loading');
+        vi.mocked(useTemperatureData).mockReturnValue(data({
+            ...allTimeData(), recentRecords: recent([record({ uid: 2, stationName: 'New station' })]),
+        }));
+        expect(() => refresh()).not.toThrow();
+        expect(map.sources.size).toBe(0);
+        act(() => map.fire('style.load'));
+        const restored = map.getSource('broken-records');
+        if (restored?.type !== 'geojson') throw new Error('Recent records were not restored');
+        expect(restored.data).toMatchObject({ features: [{ properties: { uid: 2 } }] });
+        expect(map.getSource('state-records')).toBeDefined();
+        expect(map.getSource('county-records')).toBeDefined();
+        expect(map.getSource('county-labels-source')).toBeDefined();
+        expect(map.getSource('freshness-records')).toBeDefined();
+        expect(map.getSource('state-detail-records')).toBeDefined();
+        act(() => map.fire('render'));
+        expect(screen.getByTestId('temperature-map')).toHaveAttribute('data-map-state', 'ready');
+    });
+
     it('restores state layers without refitting the camera or duplicating selection handlers', () => {
         vi.mocked(useTemperatureData).mockReturnValue(data(allTimeData()));
         const { map } = mount('/projects/temperature-records/map?view=state');

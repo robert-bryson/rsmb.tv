@@ -179,3 +179,18 @@ The 25 heading and contents unit tests also pass, along with lint and TypeScript
 A separate control restores the old contents layout in each browser.
 At 200% text size, it produces a 375-pixel page on a 320-pixel screen.
 The corrected layout stays at 320 pixels in both browsers.
+
+The local production temperature suite then exposed an application race during background recovery.
+A data update could add sources after the old style was removed, while its replacement was still loading.
+MapLibre rejected that write and the page showed its error boundary.
+The map now tracks style readiness separately from its style version.
+Data effects wait between `styledataloading` and `style.load`, then restore the latest records and settings.
+The transition also clears the previous rendered-data state.
+
+The map test double now rejects source writes while its style is loading, as MapLibre does.
+Four new regressions cover recent, state, county, and freshness views.
+All four reproduce the crash before the fix and pass afterward.
+All 44 related map and basemap unit checks pass.
+All 40 production temperature browser cases pass in Chromium and WebKit.
+They cover failed and stalled backgrounds, retry, station selection, filters, worker startup, and data-feed recovery.
+Lint and TypeScript also pass.

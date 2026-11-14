@@ -233,12 +233,13 @@ export function TemperatureMap() {
     const [renderedView, setRenderedView] = useState('');
     const mapContainer = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibregl.Map | null>(null);
+    const styleReady = useRef(false);
     const popupRef = useRef<maplibregl.Popup | null>(null);
     const clickHandlersAttached = useRef(false);
     const isMobile = useIsMobile();
     const [searchParams, setSearchParams] = useSearchParams();
     // A new style removes application layers. Reinstall them on every style load.
-    const [mapLoaded, setMapLoaded] = useState(0);
+    const [styleVersion, setStyleVersion] = useState(0);
     const [showCounty, setShowCounty] = useState(false);
     const [panelOpen, setPanelOpen] = useState(
         () => typeof window === 'undefined' || !window.matchMedia('(max-width: 767px)').matches,
@@ -465,7 +466,7 @@ export function TemperatureMap() {
     useEffect(() => {
         const map = mapRef.current;
         const key = `${viewMode}:${stateFilter}`;
-        if (!map || !mapLoaded || loading || lastCameraKey.current === key) return;
+        if (!map || !styleReady.current || !styleVersion || loading || lastCameraKey.current === key) return;
         lastCameraKey.current = key;
         if (viewMode === 'recent' && stateFilter && STATE_CENTERS[stateFilter]) {
             const points = recentRecords?.last7Days.filter(record => record.state === stateFilter && record.lat && record.lon) ?? [];
@@ -481,12 +482,12 @@ export function TemperatureMap() {
         } else {
             map.fitBounds(CONUS_BOUNDS, { padding: cameraPadding(), absolutePadding: true, duration: 0 });
         }
-    }, [cameraPadding, loading, mapLoaded, recentRecords, reduceMotion, stateFilter, viewMode]);
+    }, [cameraPadding, loading, styleVersion, recentRecords, reduceMotion, stateFilter, viewMode]);
 
     // Reposition the current camera when panels change without resetting the zoom.
     useEffect(() => {
-        if (mapLoaded) mapRef.current?.easeTo({ padding: cameraPadding(), duration: 0 });
-    }, [cameraPadding, mapLoaded]);
+        if (styleReady.current && styleVersion) mapRef.current?.easeTo({ padding: cameraPadding(), duration: 0 });
+    }, [cameraPadding, styleVersion]);
 
     /** Fly to a specific location (station or state) */
     const flyToLocation = useCallback((lng: number, lat: number) => {
@@ -531,9 +532,16 @@ export function TemperatureMap() {
             if (/worker|webgl|context/i.test(e.error?.message || '')) setMapFailure(true);
         });
 
+        // Style replacement is asynchronous. A version from the previous
+        // style must not allow data effects to write into its replacement.
+        map.on('styledataloading', () => {
+            styleReady.current = false;
+            setRenderedView('');
+        });
         map.on('style.load', () => {
+            styleReady.current = true;
             map.resize();
-            setMapLoaded(version => version + 1);
+            setStyleVersion(version => version + 1);
         });
 
         map.on('zoom', () => {
@@ -546,6 +554,7 @@ export function TemperatureMap() {
         retryBasemap.current = recovery.retry;
 
         return () => {
+            styleReady.current = false;
             recovery.dispose();
             retryBasemap.current = () => {};
             clickHandlersAttached.current = false;
@@ -558,7 +567,7 @@ export function TemperatureMap() {
     // Add/update state records layer
     useEffect(() => {
         const map = mapRef.current;
-        if (!map || !mapLoaded || !stateRecords) return;
+        if (!map || !styleReady.current || !styleVersion || !stateRecords) return;
 
         const sourceId = 'state-records';
         if (map.getSource(sourceId)) {
@@ -636,12 +645,12 @@ export function TemperatureMap() {
                 'text-halo-width': 2,
             },
         });
-    }, [mapLoaded, stateRecords, showCounty]);
+    }, [styleVersion, stateRecords, showCounty]);
 
     // Add/update county records layer
     useEffect(() => {
         const map = mapRef.current;
-        if (!map || !mapLoaded || !countyRecords) return;
+        if (!map || !styleReady.current || !styleVersion || !countyRecords) return;
 
         const sourceId = 'county-records';
         if (map.getSource(sourceId)) {
@@ -684,12 +693,12 @@ export function TemperatureMap() {
                 },
             });
         }
-    }, [mapLoaded, countyRecords]);
+    }, [styleVersion, countyRecords]);
 
     // Add/update combined county labels layer (one feature per county, shows both high and low)
     useEffect(() => {
         const map = mapRef.current;
-        if (!map || !mapLoaded || !countyMergedGeoJson) return;
+        if (!map || !styleReady.current || !styleVersion || !countyMergedGeoJson) return;
 
         const sourceId = 'county-labels-source';
         if (map.getSource(sourceId)) {
@@ -723,12 +732,12 @@ export function TemperatureMap() {
                 },
             });
         }
-    }, [mapLoaded, countyMergedGeoJson]);
+    }, [styleVersion, countyMergedGeoJson]);
 
     // Add/update broken records layer (yesterday's record breakers)
     useEffect(() => {
         const map = mapRef.current;
-        if (!map || !mapLoaded || !brokenRecordsGeoJson) return;
+        if (!map || !styleReady.current || !styleVersion || !brokenRecordsGeoJson) return;
 
         const sourceId = 'broken-records';
         if (map.getSource(sourceId)) {
@@ -812,12 +821,12 @@ export function TemperatureMap() {
                 'text-halo-width': 1.5,
             },
         });
-    }, [mapLoaded, brokenRecordsGeoJson]);
+    }, [styleVersion, brokenRecordsGeoJson]);
 
     // Add/update freshness records layer
     useEffect(() => {
         const map = mapRef.current;
-        if (!map || !mapLoaded || !freshnessGeoJson) return;
+        if (!map || !styleReady.current || !styleVersion || !freshnessGeoJson) return;
 
         const sourceId = 'freshness-records';
         if (map.getSource(sourceId)) {
@@ -861,12 +870,12 @@ export function TemperatureMap() {
                 'text-halo-width': 1,
             },
         });
-    }, [mapLoaded, freshnessGeoJson]);
+    }, [styleVersion, freshnessGeoJson]);
 
     // State detail markers — shown when a state is selected in state view
     useEffect(() => {
         const map = mapRef.current;
-        if (!map || !mapLoaded) return;
+        if (!map || !styleReady.current || !styleVersion) return;
         const sourceId = 'state-detail-records';
         if (map.getSource(sourceId)) return;
         map.addSource(sourceId, { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
@@ -912,12 +921,12 @@ export function TemperatureMap() {
                 'text-halo-width': 2,
             },
         });
-    }, [mapLoaded]);
+    }, [styleVersion]);
 
     // Update all map layer text-fields when unit (°F / °C) changes
     useEffect(() => {
         const map = mapRef.current;
-        if (!map || !mapLoaded) return;
+        if (!map || !styleReady.current || !styleVersion) return;
 
         // MapLibre expression to convert °F → °C inline: round((tempF - 32) * 5/9)
         const tempExpr = (prop: string): maplibregl.ExpressionSpecification =>
@@ -949,12 +958,12 @@ export function TemperatureMap() {
                 : ['format', ['concat', ['to-string', ['coalesce', ['get', countyTempProp], '']], '°'], { 'text-color': countyTextColor }];
             map.setLayoutProperty('county-labels', 'text-field', countyExpr);
         }
-    }, [brokenRecordsGeoJson, countyMergedGeoJson, mapLoaded, recordType, stateRecords, useCelsius]);
+    }, [brokenRecordsGeoJson, countyMergedGeoJson, styleVersion, recordType, stateRecords, useCelsius]);
 
     // Keep county/state all-time symbology aligned with the selected high/low tab.
     useEffect(() => {
         const map = mapRef.current;
-        if (!map || !mapLoaded) return;
+        if (!map || !styleReady.current || !styleVersion) return;
 
         const selectedCountyOpacity: maplibregl.ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], 3, 0.65, 6, 0.85, 8, 0.45];
         const mutedCountyOpacity: maplibregl.ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], 3, 0.12, 6, 0.18, 8, 0.08];
@@ -975,12 +984,12 @@ export function TemperatureMap() {
         if (map.getLayer('state-lows')) {
             map.setPaintProperty('state-lows', 'text-opacity', recordType === 'low' ? 1 : 0.25);
         }
-    }, [countyRecords, mapLoaded, recordType, stateRecords]);
+    }, [countyRecords, styleVersion, recordType, stateRecords]);
 
     // Update state detail source data and zoom when selectedState changes
     useEffect(() => {
         const map = mapRef.current;
-        if (!map || !mapLoaded) return;
+        if (!map || !styleReady.current || !styleVersion) return;
         const sourceId = 'state-detail-records';
         const source = map.getSource(sourceId) as maplibregl.GeoJSONSource | undefined;
         if (!source) return;
@@ -1016,7 +1025,7 @@ export function TemperatureMap() {
                 }
             }
         }
-    }, [mapLoaded, selectedState, stateDetailGeoJson, countyRecords, reduceMotion]);
+    }, [styleVersion, selectedState, stateDetailGeoJson, countyRecords, reduceMotion]);
 
     // Close the map popup when the view changes.
     useEffect(() => {
@@ -1027,7 +1036,7 @@ export function TemperatureMap() {
     // Apply visibility after asynchronous data creates its layers.
     useEffect(() => {
         const map = mapRef.current;
-        if (!map || !mapLoaded) return;
+        if (!map || !styleReady.current || !styleVersion) return;
 
         const viewLayers: Record<ViewMode, string[]> = {
             recent: ['broken-glow', 'broken-highs', 'broken-lows', 'broken-labels'],
@@ -1046,12 +1055,12 @@ export function TemperatureMap() {
                 if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'none');
             }
         }
-    }, [brokenRecordsGeoJson, countyMergedGeoJson, freshnessGeoJson, mapLoaded, stateRecords, viewMode]);
+    }, [brokenRecordsGeoJson, countyMergedGeoJson, freshnessGeoJson, styleVersion, stateRecords, viewMode]);
 
     // Highlight map features matching hovered chart period
     useEffect(() => {
         const map = mapRef.current;
-        if (!map || !mapLoaded) return;
+        if (!map || !styleReady.current || !styleVersion) return;
 
         if (!map.getLayer('freshness-circles')) return;
 
@@ -1091,7 +1100,7 @@ export function TemperatureMap() {
             map.setPaintProperty('freshness-circles', 'circle-stroke-width', 0.5);
             map.setPaintProperty('freshness-circles', 'circle-stroke-color', 'rgba(255,255,255,0.15)');
         }
-    }, [mapLoaded, highlightRange]);
+    }, [styleVersion, highlightRange]);
 
     // State labels are symbol layers now — no circle opacity to manage
     // (state layers only show in state view mode, not in recent)
@@ -1099,7 +1108,7 @@ export function TemperatureMap() {
     // Set up click + hover handlers once — guarded to avoid duplicate listeners
     useEffect(() => {
         const map = mapRef.current;
-        if (!map || !mapLoaded || clickHandlersAttached.current) return;
+        if (!map || !styleReady.current || !styleVersion || clickHandlersAttached.current) return;
         clickHandlersAttached.current = true;
 
         // Persistent hover tooltip (lightweight preview on mousemove)
@@ -1339,12 +1348,12 @@ export function TemperatureMap() {
                 setSelectedState(null);
             }
         });
-    }, [mapLoaded, trackInteraction]);
+    }, [styleVersion, trackInteraction]);
 
     const renderKey = `${viewMode}:${recordType}:${activePeriod}:${stateFilter}:${scopeFilter}:${minimumMargin}`;
     useEffect(() => {
         const map = mapRef.current;
-        if (!map || !mapLoaded) return;
+        if (!map || !styleReady.current || !styleVersion) return;
         const sourceId = viewMode === 'recent' ? 'broken-records' : viewMode === 'state' ? 'state-records'
             : viewMode === 'county' ? 'county-records' : 'freshness-records';
         let cancelled = false;
@@ -1360,10 +1369,10 @@ export function TemperatureMap() {
             map.off('sourcedata', checkSource);
             map.off('render', checkSource);
         };
-    }, [loading, mapLoaded, renderKey, viewMode]);
+    }, [loading, styleVersion, renderKey, viewMode]);
 
     return (
-        <div data-testid="temperature-map" data-map-state={error || mapFailure ? 'error' : mapLoaded && !loading && renderedView === renderKey && basemapState !== 'loading' ? basemapState === 'unavailable' ? 'degraded' : 'ready' : 'loading'} className="relative h-full w-full [&_.maplibregl-ctrl-group_button]:h-11 [&_.maplibregl-ctrl-group_button]:w-11">
+        <div data-testid="temperature-map" data-map-state={error || mapFailure ? 'error' : styleVersion && !loading && renderedView === renderKey && basemapState !== 'loading' ? basemapState === 'unavailable' ? 'degraded' : 'ready' : 'loading'} className="relative h-full w-full [&_.maplibregl-ctrl-group_button]:h-11 [&_.maplibregl-ctrl-group_button]:w-11">
             <div ref={mapContainer} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
 
             {(error || mapFailure) && (
