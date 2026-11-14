@@ -6,6 +6,7 @@
   },
   "distanceMiles": 240,
   "ridingDays": 2,
+  "motorcycle": "Honda CB500X",
   "countries": [
     { "code": "US", "regions": ["Washington", "Oregon", "California", "Idaho", "Montana", "Wyoming", "Colorado", "Utah", "Nevada", "Arizona", "New Mexico", "Texas"] },
     { "code": "CA", "regions": ["British Columbia"] }

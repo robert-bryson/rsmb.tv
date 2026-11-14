@@ -10,11 +10,11 @@ export function TripStoryHeader({ post, returnDestination }: { post: BlogPostMet
     return (
         <header className="mb-6">
             <TripHeroGallery>
-                <div className="absolute inset-x-6 top-4 z-2 flex items-start justify-between gap-4 text-sm text-zinc-100">
-                    <Link to={returnDestination.to} state={returnDestination.returnState} className="inline-flex min-h-11 shrink-0 items-center hover:text-violet-300">
+                <div className="absolute inset-x-6 top-4 z-2 flex flex-wrap items-start justify-between gap-4 text-sm text-zinc-100">
+                    <Link to={returnDestination.to} state={returnDestination.returnState} className="inline-flex min-h-11 max-w-full shrink-0 items-center hover:text-violet-300">
                         ← {returnDestination.label}
                     </Link>
-                    <time dateTime={post.date} className="py-3 text-right">{formatMonthYear(post.date, 'long')}</time>
+                    <time dateTime={post.date} className="ml-auto py-3 text-right">{formatMonthYear(post.date, 'long')}</time>
                 </div>
                 <div className="trip-hero-content">
                     <h1 className="trip-hero-title font-bold text-white">{post.title}</h1>

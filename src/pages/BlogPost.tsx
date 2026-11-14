@@ -129,7 +129,7 @@ export function BlogPost({ collection }: BlogPostProps) {
         <PostHeadingProvider key={post.slug}>
             <Suspense fallback={<div role="status" className="text-sm text-zinc-400">Loading {isTrip ? 'story' : 'post'}...</div>}>
                 {!isTrip && <PostTableOfContents contentRef={contentRef} />}
-                <div ref={contentRef} id="trip-story-body" className="scroll-mt-24">
+                <div ref={contentRef} id="trip-story-body" className="scroll-mt-24 wrap-anywhere">
                     {post.development && !post.development.contentAvailable ? (
                         <p className="text-zinc-400">
                             The draft {isTrip ? 'story' : 'post'} body is not available yet.

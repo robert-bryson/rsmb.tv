@@ -66,18 +66,10 @@ export function TripFacts() {
         });
     }
 
-    const desktopColumns = [
-        'lg:grid-cols-1',
-        'lg:grid-cols-2',
-        'lg:grid-cols-3',
-        'lg:grid-cols-4',
-        'lg:grid-cols-[1.2fr_0.65fr_1.2fr_1.2fr_1.1fr]',
-    ][facts.length - 1];
-
     return (
-        <dl aria-label="Trip details" className={`trip-breakout my-8 grid grid-cols-2 gap-x-8 gap-y-4 border-y border-zinc-800 py-5 ${desktopColumns}`}>
+        <dl aria-label="Trip details" className="trip-breakout my-8 grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-x-8 gap-y-4 border-y border-zinc-800 py-5">
             {facts.map(({ label, heading, value }) => (
-                <div key={label} className={`min-w-0 ${label === 'Region' ? 'col-span-2 lg:col-span-1' : ''}`}>
+                <div key={label} className={`min-w-0 ${label === 'Region' ? 'col-span-full lg:col-span-1' : ''}`}>
                     <dt className="text-[0.8125rem] font-semibold uppercase tracking-wider text-zinc-400">{heading ?? label}</dt>
                     <dd className="mt-2 text-base font-medium leading-snug text-zinc-100 sm:text-lg">{value}</dd>
                 </div>

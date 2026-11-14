@@ -41,7 +41,14 @@ test('a lost WebGL context shows a route preview and allows retry', async ({ pag
 
 async function routePixels(map: Locator) {
     const screenshot = await map.locator('canvas').screenshot({
-        style: '.site-header, .maplibregl-control-container, .maplibregl-popup { visibility: hidden !important; }',
+        // Sticky chapter titles can cover the route while the navigation bar
+        // slides away. Measure the map, independent of those page overlays.
+        style: `
+            .site-header,
+            .trip-chapter > :is(h1, h2):first-child,
+            .maplibregl-control-container,
+            .maplibregl-popup { visibility: hidden !important; }
+        `,
     });
     const { data, info } = await sharp(screenshot).removeAlpha().raw().toBuffer({ resolveWithObject: true });
     let amber = 0;

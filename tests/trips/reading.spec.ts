@@ -6,6 +6,11 @@ import { scrollbarTest } from './scrollbars';
 import { expectSuitableImageSource } from '../responsive-images';
 
 async function assets(page: Page) {
+    // Reading checks must not switch to a map fallback because an external
+    // basemap rejects the test key while a disclosure is being clicked.
+    const tile = await sharp({ create: { width: 256, height: 256, channels: 3, background: '#999' } }).png().toBuffer();
+    await page.route('https://basemaps.cartocdn.com/**', route => route.fulfill({ contentType: 'image/png', body: tile }));
+    await page.route('https://demotiles.maplibre.org/**', route => route.fulfill({ body: '' }));
     await page.route('**/test-trip/**', async route => {
         if (route.request().url().endsWith('.geojson')) return route.fulfill({
             json: {
@@ -18,6 +23,53 @@ async function assets(page: Page) {
     });
 }
 test.beforeEach(async ({ page }) => assets(page));
+
+for (const width of [320, 390]) {
+    for (const font of ['', 'DejaVu Sans']) {
+        test(`trip prose and metadata reflow at 200% text (${width}px, ${font || 'default font'})`, async ({ page }) => {
+            await page.setViewportSize({ width, height: 900 });
+            let releasePost!: () => void;
+            const postReady = new Promise<void>(resolve => { releasePost = resolve; });
+            page.once('close', releasePost);
+            await page.route(/\/assets\/BlogPost-[^/]+\.js$/, async route => {
+                await postReady;
+                await route.continue();
+            });
+            await page.goto('/trips/coastal-test');
+            await page.addStyleTag({ content: `html { font-size: 32px; ${font ? `font-family: '${font}', sans-serif;` : ''} }` });
+            try {
+                await expect(page.getByRole('status').filter({ hasText: 'Loading page…' })).toBeVisible();
+                await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+            } finally {
+                releasePost();
+            }
+            const facts = page.locator('dl[aria-label="Trip details"]');
+            await expect(page.getByRole('link', { name: 'Motorcycle', exact: true })).toBeAttached();
+
+            const header = page.locator('.trip-story > header');
+            const indented = page.locator('#trip-story-body p').filter({ hasText: 'A paragraph with an authored first-line indent' });
+            await expect(indented).toHaveCSS('text-indent', '48px');
+            for (const elements of [header.locator('time'), header.getByRole('link', { name: /Back to posts/ }), facts.locator('dt, dd'), indented]) {
+                // Text ranges catch long words that overflow an otherwise
+                // correctly sized block, as well as overflowing metadata rows.
+                const linesFit = () => elements.evaluateAll(nodes => nodes.every(node => {
+                    const range = document.createRange();
+                    range.selectNodeContents(node);
+                    return Array.from(range.getClientRects()).every(rect => rect.left >= 0 && rect.right <= innerWidth);
+                }));
+                await expect.poll(linesFit).toBe(true);
+            }
+            await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+
+            const contents = page.getByRole('navigation', { name: 'Table of contents' });
+            await contents.getByRole('button', { name: 'Collapse', exact: true }).click();
+            await expect(contents.locator('ul')).toBeHidden();
+            await contents.getByRole('button', { name: 'Expand', exact: true }).click();
+            await expect(contents.getByRole('link', { name: 'First day', exact: true })).toBeVisible();
+            await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+        });
+    }
+}
 
 test('emphasis and code inherit the article link color', async ({ page, isMobile }) => {
     await page.goto('/blog/reading-test');

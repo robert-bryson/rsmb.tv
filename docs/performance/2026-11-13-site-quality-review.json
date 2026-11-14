@@ -376,7 +376,7 @@
     "method": "Tracked and untracked repository Markdown. Excludes fences, tables, headings, quotations, and fragments. Counts inline identifiers and URLs as one word. This is a sentence-length measure, not ASD-STE100 certification."
   },
   "releaseFollowUpLocalValidation": {
-    "verifiedAt": "2026-11-14T04:00:38.190967+00:00",
+    "verifiedAt": "2026-11-14T05:56:08.633551+00:00",
     "unitTests": 3261,
     "unitTestsAddedSinceBaseline": 39,
     "testFiles": 225,
@@ -425,6 +425,56 @@
       "beforeScrollWidth": 334,
       "afterScrollWidth": 320
     },
-    "hostedReleasePending": true
+    "hostedReleasePending": true,
+    "fullPinsAndTripLayoutWebKit": {
+      "passed": 65,
+      "skipped": 1,
+      "cpus": 2,
+      "workers": 2
+    },
+    "chromiumOptionalReviewScreenshots": {
+      "casesPassed": 3,
+      "sourceImages": 3,
+      "attachments": 3
+    },
+    "tripBrowserReleaseChecks": {
+      "fullRun": {
+        "cases": 663,
+        "passed": 645,
+        "skipped": 17,
+        "readingFixtureFailure": 1
+      },
+      "mapCaptureFailureReproducedBeforeFix": 4,
+      "readingPassedAfterFix": 111,
+      "loadingAndDisclosureRepeatedCasesPassed": 30,
+      "enlargedTextCasesFailBeforeFix": 4,
+      "enlargedTextCasesPassAfterFix": 12,
+      "storyAndContentsUnitTestsPassed": 76,
+      "caseAssertionsRelaxed": false
+    },
+    "publishedContentRehearsal": {
+      "origin": "http://127.0.0.1:4191",
+      "checksPassed": 7,
+      "browserErrors": 0,
+      "hostedDeployment": false,
+      "tripDesktopAndPhone": true,
+      "countyZoomStages": true,
+      "temperatureMapRecovery": true,
+      "paragraphIndentPx": 48,
+      "storyPanoramaIndex": 38,
+      "storyPhotoCount": 79
+    },
+    "publishedReportReflow": {
+      "textSizePercent": 200,
+      "viewportWidth": 320,
+      "beforeScrollWidth": 382,
+      "afterScrollWidth": 320,
+      "fonts": [
+        "default",
+        "DejaVu Sans"
+      ],
+      "firstLineIndentPreserved": true,
+      "loadingPlaceholderChecked": true
+    }
   }
 }

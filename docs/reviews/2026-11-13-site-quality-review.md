@@ -239,3 +239,38 @@ Three Chromium cases also pass under the same CPU and worker limits.
 They cover both revised reload paths and the zoom stages with optional review images enabled.
 All three review images are present in the correct test artifact directory.
 Lint and TypeScript pass.
+
+The [next CI run](https://github.com/robert-bryson/rsmb.tv/actions/runs/43559260513) passed every gate before the final trip browser suite.
+The trip suite found a map screenshot error caused by the new floating chapter title.
+The title covered the route as the site navigation moved out of view.
+The screenshot therefore measured the title's edge as the route's upper bound.
+All four desktop input and motion cases reproduced this failure locally.
+The map capture now hides chapter titles, as it already hides navigation and map controls.
+The exact route bounds, stop counts, and route-color assertions remain unchanged.
+The production page keeps its floating title.
+
+The complete 663-case trip run found one separate WebKit reading failure: 645 passed and 17 were skipped.
+The reading fixture allowed real basemap requests with an invalid test key.
+A rejected request replaced the map while the contents button was being clicked.
+Reading checks now supply fixed tiles and font responses.
+Tests that hold or reject requests keep their own explicit overrides.
+
+A fresh production build also exposed overflow in the actual Boise report at 200% text size.
+The page was 382 pixels wide on a 320-pixel screen.
+The hero date row now wraps, and fact columns adapt to the text size.
+This removes the fixed column-count table.
+Long prose words can wrap without removing the imported first-line indent.
+Loading placeholders also stay within their available width.
+
+The fixture now includes a motorcycle label and the prose pattern that caused the real overflow.
+All four new width and font cases fail before the fix.
+The complete reading suite passes afterward: 111 cases across desktop Chromium, phone Chromium, and WebKit.
+This includes 12 enlarged-text cases and the former disclosure failure.
+All 76 story and contents unit tests, lint, and TypeScript pass.
+The loading and loaded reflow cases and the disclosure case also pass twice in all three browsers: 30 repeated checks.
+
+The published-content rehearsal passes seven checks with no browser errors.
+It confirms full-width blurred chapter surfaces, purple dividers, subtitle clearance, paragraph indents, viewer image files, panorama navigation, county zoom stages, and temperature-map recovery.
+The 320-pixel page fits at 200% text size with both the default font and DejaVu Sans.
+This rehearsal uses a local production build and live public data.
+The release must still pass CI and hosted preview validation before production.

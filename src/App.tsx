@@ -53,8 +53,8 @@ function LoadingFallback() {
   return (
     <div role="status" className="animate-pulse motion-reduce:animate-none space-y-6 p-8 max-w-2xl min-h-[60vh]">
       <span className="sr-only">Loading page…</span>
-      <div className="h-7 w-48 bg-zinc-800 rounded" />
-      <div className="h-4 w-32 bg-zinc-800/40 rounded" />
+      <div className="h-7 w-48 max-w-full bg-zinc-800 rounded" />
+      <div className="h-4 w-32 max-w-full bg-zinc-800/40 rounded" />
       <div className="space-y-2">
         <div className="h-4 w-full bg-zinc-800/60 rounded" />
         <div className="h-4 w-5/6 bg-zinc-800/60 rounded" />
