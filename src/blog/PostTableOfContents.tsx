@@ -61,10 +61,20 @@ export function PostTableOfContents({ contentRef, collapsible = false }: PostTab
             if (hashTarget && !hasScrolledToHash) {
                 hasScrolledToHash = true;
                 if (hashScrollFrame !== undefined) cancelAnimationFrame(hashScrollFrame);
-                hashScrollFrame = requestAnimationFrame(() => {
+                let previousTop: number | undefined;
+                let remainingFrames = 4;
+                const alignHashTarget = () => {
                     hashScrollFrame = undefined;
+                    if (!hashTarget.isConnected || currentHashId() !== hashTarget.id) return;
+                    const top = hashTarget.getBoundingClientRect().top + window.scrollY;
+                    if (previousTop !== undefined && Math.abs(top - previousTop) < 0.5) return;
+                    previousTop = top;
                     hashTarget.scrollIntoView();
-                });
+                    // Scrolling can compact earlier chapter titles on the next
+                    // frame. Re-align only while their layout changes settle.
+                    if (--remainingFrames > 0) hashScrollFrame = requestAnimationFrame(alignHashTarget);
+                };
+                hashScrollFrame = requestAnimationFrame(alignHashTarget);
             }
         };
         const handleHashChange = () => {

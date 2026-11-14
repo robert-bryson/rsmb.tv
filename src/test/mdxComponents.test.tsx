@@ -318,6 +318,41 @@ describe('MDX headings', () => {
         expect(disconnect).toHaveBeenCalledOnce();
     });
 
+    it('keeps a hash target aligned when earlier chapter titles change height after scrolling', async () => {
+        const scrollIntoView = mockScrollIntoView();
+        const frames = new Map<number, FrameRequestCallback>();
+        let nextFrame = 0;
+        vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
+            const id = nextFrame++;
+            frames.set(id, callback);
+            return id;
+        });
+        vi.stubGlobal('cancelAnimationFrame', (id: number) => frames.delete(id));
+        const flushFrame = () => act(() => {
+            const pending = [...frames.values()];
+            frames.clear();
+            pending.forEach(callback => callback(0));
+        });
+        render(<TableOfContentsFixture />);
+        await screen.findByRole('navigation', { name: 'Table of contents' });
+        const target = screen.getByRole('heading', { name: 'Camp Notes' });
+        let top = 500;
+        vi.spyOn(target, 'getBoundingClientRect').mockImplementation(() => new DOMRect(0, top, 300, 40));
+        act(() => {
+            window.history.replaceState(null, '', '#camp-notes');
+            window.dispatchEvent(new HashChangeEvent('hashchange'));
+        });
+        flushFrame();
+        expect(scrollIntoView).toHaveBeenCalledOnce();
+        top = 475;
+        flushFrame();
+        expect(scrollIntoView).toHaveBeenCalledTimes(2);
+        expect(scrollIntoView.mock.contexts.every(node => node === target)).toBe(true);
+        flushFrame();
+        expect(scrollIntoView).toHaveBeenCalledTimes(2);
+        expect(frames.size).toBe(0);
+    });
+
     it('cancels stale hash scrolls and pending work when the article unmounts', async () => {
         const scrollIntoView = mockScrollIntoView();
         const frames = new Map<number, FrameRequestCallback>();

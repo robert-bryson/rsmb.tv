@@ -68,6 +68,9 @@ Wrapped lines stay aligned with the text column.
 Paragraphs without an authored indent stay flush left.
 
 Chapter headings stay at the top while the reader scrolls through each chapter.
+They shrink into a compact reminder after reaching the top.
+Scrolling back restores their normal size.
+Reduced motion makes this change immediate. Printed headings retain their normal size.
 The next chapter pushes the previous heading out of view.
 Subsections scroll with the text. The story title does not stay at the top.
 If the body contains level-one headings, those headings define the chapters instead.

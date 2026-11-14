@@ -524,6 +524,8 @@ test('production trip chapters stick and subsection links clear the current titl
     await page.keyboard.press('ArrowDown');
     await page.evaluate(() => window.scrollBy(0, 200));
     await expect.poll(async () => (await title.boundingBox())!.y).toBeCloseTo(0, 0);
+    await expect(title).toHaveCSS('font-size', '17px');
+    expect((await title.boundingBox())!.height).toBeLessThanOrEqual(44);
     const second = page.getByRole('heading', { name: 'Second day', exact: true });
     await page.evaluate(top => window.scrollTo(0, top + 150), await second.evaluate(node => node.getBoundingClientRect().top + window.scrollY));
     await page.evaluate(() => { window.location.hash = 'a-coastal-lookout'; });
@@ -669,6 +671,8 @@ test('gallery captions support hover, keyboard focus, touch, and reduced motion'
     const caption = figure.locator('figcaption');
     const image = figure.locator('img');
     const trigger = figure.locator('a');
+    // User scrolling ends route restoration before positioning the gallery.
+    if (!isMobile) await page.mouse.wheel(0, 100);
     await figure.scrollIntoViewIfNeeded();
     if (isMobile) {
         await expect(caption).toHaveCSS('position', 'static');

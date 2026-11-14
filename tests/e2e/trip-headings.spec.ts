@@ -14,6 +14,58 @@ async function expectTop(element: Locator, top: number) {
     await expect.poll(async () => (await element.boundingBox())!.y).toBeCloseTo(top, 0);
 }
 
+async function fontSize(element: Locator) {
+    return element.evaluate(node => parseFloat(getComputedStyle(node).fontSize));
+}
+
+for (const level of [1, 2]) for (const width of [390, 1280]) {
+    test(`h${level} chapter titles shrink smoothly into a compact reminder at ${width}px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto(`/tests/e2e/fixtures/trip-headings.html?heading-level=${level}`);
+        const heading = page.locator(chapterSelector).first();
+        const chapterTop = await documentTop(heading.locator('..'));
+        const expandedSize = await fontSize(heading);
+        const expandedHeight = (await heading.boundingBox())!.height;
+        await scrollTo(page, chapterTop + 8);
+        await expect(page.locator('.site-layout')).toHaveAttribute('data-header-visible', 'false');
+        await expect.poll(() => fontSize(heading)).toBeLessThan(expandedSize - 0.5);
+        await expect.poll(() => fontSize(heading)).toBeGreaterThan(17.1);
+        await expect.poll(() => page.evaluate(top => Math.abs(window.scrollY - top), chapterTop + 8)).toBeLessThanOrEqual(1);
+        await scrollTo(page, chapterTop + 100);
+        await expectTop(heading, 0);
+        await expect.poll(() => fontSize(heading)).toBeCloseTo(17, 1);
+        expect((await heading.boundingBox())!.height).toBeLessThan(expandedHeight * 0.8);
+        expect((await heading.boundingBox())!.height).toBeLessThanOrEqual(44);
+        await expect(heading).toHaveText('First day#↑');
+        const permalink = heading.getByRole('link', { name: 'Link to First day', exact: true });
+        await permalink.evaluate(node => (node as HTMLElement).focus({ preventScroll: true }));
+        await expect(permalink).toBeFocused();
+        await page.emulateMedia({ media: 'print' });
+        await expect.poll(() => fontSize(heading)).toBeCloseTo(expandedSize, 1);
+        await expect(heading).toHaveCSS('position', 'static');
+        await page.emulateMedia({ media: 'screen' });
+        await scrollTo(page, chapterTop - 150);
+        await expect.poll(() => fontSize(heading)).toBeCloseTo(expandedSize, 1);
+    });
+}
+
+test('reduced motion snaps sticky titles to the compact size and large text stays readable', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 900 });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/tests/e2e/fixtures/trip-headings.html');
+    await page.addStyleTag({ content: 'html { font-size: 32px; }' });
+    const heading = page.locator(chapterSelector).first();
+    const top = await documentTop(heading.locator('..'));
+    const expandedSize = await fontSize(heading);
+    await scrollTo(page, top + 100);
+    await expect.poll(() => fontSize(heading)).toBeCloseTo(34, 1);
+    await expect(heading).toHaveCSS('transition-duration', '0s');
+    await expect(heading).toHaveCSS('animation-timing-function', 'steps(1)');
+    const navigationHeight = (await page.getByRole('banner').boundingBox())!.height;
+    await scrollTo(page, top - navigationHeight - 100);
+    await expect.poll(() => fontSize(heading)).toBeCloseTo(expandedSize, 1);
+});
+
 for (const width of [390, 1280]) {
     test(`trip chapters stick, push each other out, and end with the story at ${width}px`, async ({ page }) => {
         await page.setViewportSize({ width, height: 900 });
@@ -27,12 +79,13 @@ for (const width of [390, 1280]) {
         await expect(page.getByRole('heading', { name: 'A scene in the forest', exact: true })).toHaveCSS('position', 'static');
         await expect(page.locator('[data-trip-title]')).toHaveCSS('position', 'static');
         const firstTop = await documentTop(first.locator('..'));
-        const secondTop = await documentTop(second.locator('..'));
-        const firstHeight = (await first.boundingBox())!.height;
 
         await scrollTo(page, firstTop + 150);
         await expectTop(first, 0);
+        await expect.poll(() => fontSize(first)).toBeCloseTo(17, 1);
         await expect(page.locator('.site-layout')).toHaveAttribute('data-header-visible', 'false');
+        const firstHeight = (await first.boundingBox())!.height;
+        const secondTop = await documentTop(second.locator('..'));
         // Breakout media keeps its width inside the chapter boundary.
         const bodyWidth = (await page.locator('#trip-story-body').boundingBox())!.width;
         const mediaWidth = (await page.locator('figure.trip-breakout').boundingBox())!.width;
@@ -166,6 +219,8 @@ for (const level of [1, 2]) {
         await page.setViewportSize({ width: 390, height: 900 });
         await expect(longChapter).not.toHaveAttribute('data-trip-chapter-static');
         await expect(title).toHaveCSS('position', 'sticky');
+        // Measure enlarged titles in normal flow, before they become compact.
+        await scrollTo(page, 0);
         await page.addStyleTag({ content: 'html { font-size: 40px; }' });
         await expect.poll(combinedHeight).toBeGreaterThan(450);
         await expect(longChapter).toHaveAttribute('data-trip-chapter-static');

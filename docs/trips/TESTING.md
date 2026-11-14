@@ -291,8 +291,13 @@ Chapter checks compile trip MDX with the production remark plugin.
 They verify chapter boundaries, h1 precedence, h2 chapters, nested headings, module exports, and Markdown references.
 Writing posts retain their existing structure.
 Browser checks measure sticky headings at phone and desktop widths.
+They check full, intermediate, and compact title sizes for h1 and h2 chapters.
+Scroll-linked size checks use scroll positions instead of animation delays.
+The scroll position must stay fixed while the title changes size.
+Reduced-motion checks verify an immediate compact state and readable enlarged text.
 They verify continuous handoffs, the end of the story, visible navigation, navigation resizing, links, reduced motion, and print layout.
 Subsection links must clear both headers after upward jumps and reloads.
+Fragment links must keep their target position after earlier titles change height.
 The production reading suite also checks chapter grouping, sticky placement, and subsection clearance on an actual trip route.
 Short-screen checks return tall h1 and h2 titles to normal flow. Rotation must restore sticky behavior when space permits.
 These fixtures first verify that the title and navigation exceed half the screen height.
