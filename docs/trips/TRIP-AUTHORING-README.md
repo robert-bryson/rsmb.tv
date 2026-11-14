@@ -335,6 +335,7 @@ You can also set `ridingDays`, `distanceMiles`, `motorcycle`, `countries`, and `
 The motorcycle, country, and region facts link to post filters.
 The registry adds motorcycle tags automatically. It uses lowercase text and replaces spaces with hyphens.
 For example, `Honda CB500X` adds `motorcycle` and `honda-cb500x`.
+On the post list, trips with the `motorcycle` tag show `motorcycle` before their distance and riding days.
 Countries and regions appear under **Regions** on the post list. Other Sheet tags keep their original text.
 
 Group regions under their country using two-letter uppercase country codes.

@@ -86,6 +86,7 @@ import { Home } from '../pages/Home';
 import { Posts } from '../pages/Posts';
 import * as postRegistry from '../content/posts';
 import * as tripManifests from '../features/trips/tripManifests';
+import * as tripSummaries from '../features/trips/tripSummaries';
 
 function LocationProbe() {
     return <output data-testid="location">{useLocation().pathname}</output>;
@@ -127,6 +128,48 @@ describe('Posts page', () => {
         expect(tripLink).toHaveAttribute('href', '/trips/coastal-loop');
         expect(tripLink.querySelector('img')).toBeInTheDocument();
         expect(screen.getByRole('link', { name: /Mapping Boring Data/i })).toHaveAttribute('href', '/blog/mapping-boring-data');
+    });
+
+    it.each([
+        { name: 'tagged trip', tags: ['motorcycle'], distanceMiles: 450, ridingDays: 3, expected: 'motorcycle · 450 miles · 3 riding days' },
+        { name: 'untagged trip', tags: ['coast'], distanceMiles: 1450, ridingDays: 3, expected: '1,450 miles · 3 riding days' },
+        { name: 'distance only', tags: ['motorcycle'], distanceMiles: 450, ridingDays: undefined, expected: 'motorcycle · 450 miles' },
+        { name: 'riding days only', tags: ['motorcycle'], distanceMiles: undefined, ridingDays: 3, expected: 'motorcycle · 3 riding days' },
+        { name: 'no trip summary', tags: ['motorcycle'], distanceMiles: undefined, ridingDays: undefined, expected: 'motorcycle' },
+    ])('shows trip listing details for $name without extra separators', ({ tags, distanceMiles, ridingDays, expected }) => {
+        const posts = vi.spyOn(postRegistry, 'getAllPosts').mockReturnValue([{ ...testTrips[0], tags }]);
+        const summary = vi.spyOn(tripSummaries, 'getTripSummary').mockReturnValue(
+            distanceMiles === undefined && ridingDays === undefined ? undefined : {
+                id: testTrips[0].tripId,
+                dates: { start: '2026-04-01', end: '2026-04-03' },
+                hero: { id: 'hero', src: '/hero.webp', alt: '', width: 1600, height: 1000 },
+                route: { geoJson: '/route.geojson' },
+                distanceMiles,
+                ridingDays,
+            },
+        );
+        try {
+            renderWithRouter(<Posts />, { route: '/posts' });
+            const tripLink = screen.getByRole('link', { name: /Coastal Loop/i });
+            const details = within(tripLink).getByText(expected, { exact: true });
+            expect(details.tagName).toBe('P');
+            expect(tripLink).toHaveAttribute('href', '/trips/coastal-loop');
+            expect(tripLink.querySelectorAll('a')).toHaveLength(0);
+        } finally {
+            summary.mockRestore();
+            posts.mockRestore();
+        }
+    });
+
+    it('keeps motorcycle tags out of writing post details', () => {
+        const posts = vi.spyOn(postRegistry, 'getAllPosts').mockReturnValue([{ ...testPosts[0], tags: ['motorcycle'] }]);
+        try {
+            renderWithRouter(<Posts />, { route: '/posts' });
+            const postLink = screen.getByRole('link', { name: /Mapping Boring Data/i });
+            expect(within(postLink).queryByText('motorcycle')).not.toBeInTheDocument();
+        } finally {
+            posts.mockRestore();
+        }
     });
 
     it('renders unique tags for the active type', () => {

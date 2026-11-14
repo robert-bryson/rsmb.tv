@@ -132,6 +132,11 @@ export function Posts() {
                         const isTrip = post.format === 'trip';
                         const manifest = isTrip ? getTripSummary(post.tripId) : undefined;
                         const hero = manifest?.hero;
+                        const tripDetails = isTrip ? [
+                            post.tags.includes('motorcycle') && 'motorcycle',
+                            manifest?.distanceMiles && `${manifest.distanceMiles.toLocaleString()} miles`,
+                            manifest?.ridingDays && `${manifest.ridingDays} riding days`,
+                        ].filter(Boolean).join(' · ') : '';
 
                         return (
                             <li key={post.slug} className="py-6 first:pt-0">
@@ -152,7 +157,7 @@ export function Posts() {
                                             {post.title}
                                         </h2>
                                         <p className="mt-1 text-sm leading-relaxed text-zinc-400">{post.description}</p>
-                                        {manifest && <p className="mt-2 text-xs text-zinc-300">{[manifest.distanceMiles && `${manifest.distanceMiles.toLocaleString()} miles`, manifest.ridingDays && `${manifest.ridingDays} riding days`].filter(Boolean).join(' · ')}</p>}
+                                        {tripDetails && <p className="mt-2 text-xs text-zinc-300">{tripDetails}</p>}
                                     </div>
                                     {hero && (
                                         <TripThumbnail
