@@ -33,14 +33,18 @@ describe('review regressions: November 14 watcher lifecycle', () => {
         const clearMeasures = vi.spyOn(performance, 'clearMeasures');
         const clearMarks = vi.spyOn(performance, 'clearMarks');
         const running = import('../aws-watch.tsx');
-        await vi.waitFor(() => expect(terminal.render).toHaveBeenCalledOnce());
-        expect(vi.getTimerCount()).toBe(1);
-        vi.advanceTimersByTime(60_000);
-        expect(clearMeasures).toHaveBeenCalledOnce();
-        expect(clearMarks).toHaveBeenCalledOnce();
-        expect(terminal.restore).not.toHaveBeenCalled();
-        exit();
-        await running;
+        try {
+            await vi.waitFor(() => expect(terminal.render).toHaveBeenCalledOnce());
+            expect(terminal.render).toHaveBeenCalledWith(expect.anything(), { patchConsole: false });
+            expect(vi.getTimerCount()).toBe(1);
+            vi.advanceTimersByTime(60_000);
+            expect(clearMeasures).toHaveBeenCalledOnce();
+            expect(clearMarks).toHaveBeenCalledOnce();
+            expect(terminal.restore).not.toHaveBeenCalled();
+        } finally {
+            exit();
+            await running;
+        }
         expect(vi.getTimerCount()).toBe(0);
         expect(terminal.restore).toHaveBeenCalledOnce();
     });

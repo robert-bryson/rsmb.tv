@@ -297,7 +297,7 @@ Event tests also check expiry, duplicate snapshots, output formatting, and stder
 Run the focused suite with:
 
 ```bash
-npx vitest run scripts/dashboard/__tests__ scripts/__tests__/awsWatch.test.tsx
+npx vitest run scripts/dashboard/__tests__ scripts/__tests__/awsWatch.test.tsx scripts/__tests__/awsWatchIntegration.test.tsx
 ```
 
 Coverage reports measure loaded source files. They do not measure every repository file.

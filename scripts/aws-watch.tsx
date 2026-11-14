@@ -92,7 +92,8 @@ const performanceDrain = setInterval(() => {
     performance.clearMarks();
 }, 60_000);
 try {
-    await render(React.createElement(App, { config })).waitUntilExit();
+    // The event log owns console capture. Ink's patch would replace it.
+    await render(React.createElement(App, { config }), { patchConsole: false }).waitUntilExit();
 } finally {
     clearInterval(performanceDrain);
     restoreConsole();

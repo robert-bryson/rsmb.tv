@@ -1,0 +1,83 @@
+{
+  "date": "2026-11-14",
+  "baselineCommit": "6660fee",
+  "finding": "Ink default console patch replaced event-log capture.",
+  "beforeFixProbe": {
+    "consoleLogCaptured": false,
+    "consoleLogEscapedToTerminal": true,
+    "consoleErrorLevel": "warn",
+    "consoleErrorSource": "stderr"
+  },
+  "failingRegressionsBeforeFix": 2,
+  "fix": {
+    "file": "scripts/aws-watch.tsx",
+    "renderOptions": {
+      "patchConsole": false
+    },
+    "sourceSha256": "32a5a3d9c5dbd43428701d6fd8d73ce192a1028afd520400846c9ed9f17473cc"
+  },
+  "checks": {
+    "unit": {
+      "passed": 3283,
+      "files": 228
+    },
+    "dashboardAndWatcher": {
+      "passed": 143,
+      "files": 14
+    },
+    "lint": "passed",
+    "applicationTypes": "passed",
+    "dashboardTypes": "passed",
+    "scope": "Real Ink renderer with synthetic terminal streams. Dashboard body and provider configuration replaced. No provider requests."
+  },
+  "coverage": {
+    "lines": {
+      "total": 14337,
+      "covered": 12715,
+      "skipped": 0,
+      "pct": 88.68
+    },
+    "statements": {
+      "total": 17335,
+      "covered": 15082,
+      "skipped": 0,
+      "pct": 87
+    },
+    "functions": {
+      "total": 4038,
+      "covered": 3451,
+      "skipped": 0,
+      "pct": 85.46
+    },
+    "branches": {
+      "total": 13630,
+      "covered": 11324,
+      "skipped": 0,
+      "pct": 83.08
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "remote": {
+    "main": "620c25c104680e31ceb00a04378a3225e20fccd0",
+    "releasePreview": "620c25c104680e31ceb00a04378a3225e20fccd0",
+    "baseCi": {
+      "conclusion": "success",
+      "url": "https://github.com/robert-bryson/rsmb.tv/actions/runs/43563971219"
+    },
+    "branchDivergence": false
+  },
+  "commands": {
+    "focused": "npx vitest run scripts/__tests__/awsWatch.test.tsx scripts/__tests__/awsWatchIntegration.test.tsx scripts/dashboard/__tests__",
+    "full": "npm run test:coverage -- --maxWorkers=4"
+  },
+  "release": {
+    "pushPerformed": false,
+    "deploymentPerformed": false,
+    "pending": "CI and hosted preview validation for the new revision after push."
+  }
+}

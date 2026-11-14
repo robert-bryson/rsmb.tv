@@ -44,6 +44,8 @@ Clearing the event log does not clear incidents.
 ## Output capture
 
 Console capture prevents provider messages from corrupting the terminal display.
+The watcher disables Ink's console patch because the event log already owns capture.
+This keeps console messages in the log and preserves their levels.
 It uses Node.js formatting for errors, circular objects, numeric values, and format arguments.
 Captured messages exclude terminal control sequences.
 Messages longer than 200 characters are shortened.
@@ -70,9 +72,11 @@ It also stops the performance-buffer timer, so that timer cannot keep the watche
 Run the dashboard tests without provider access:
 
 ```bash
-npx vitest run scripts/dashboard/__tests__ scripts/__tests__/awsWatch.test.tsx
+npx vitest run scripts/dashboard/__tests__ scripts/__tests__/awsWatch.test.tsx scripts/__tests__/awsWatchIntegration.test.tsx
 ```
 
 Tests use fixed times, provider responses, and terminal streams.
 They cover event capacity, expiry, duplicate counts, formatting, callbacks, rendering, and timer cleanup.
+The watcher integration test mounts real Ink with synthetic terminal streams.
+It checks capture, message levels, output isolation, and restoration after exit.
 Use [TODO.md](../TODO.md#dashboard-checks) for the remaining provider and cost-cache tests.
