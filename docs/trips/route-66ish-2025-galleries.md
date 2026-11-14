@@ -1,6 +1,7 @@
 # Route 66ish 2025 starter media
 
-The [manifest](../../src/content/trips/route-66ish-2025.json) contains 57 selected photos, eight tracks, nine photographed stops, and 26 galleries.
+The [manifest](../../src/content/trips/route-66ish-2025.json) contains 57 photos and 26 galleries.
+It also contains eight tracks and nine photographed stops.
 The [writing outline](route-66ish-2025-outline.md) follows the existing trip reports: opening, preparation, dated chapters, and reflections.
 The hero is `r004114`, the motorcycle on a narrow road beside open grassland.
 

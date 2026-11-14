@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { useState, useEffect, useRef } from 'react';
+import { format, stripVTControlCharacters } from 'node:util';
 import { Box, Text } from 'ink';
 
 export interface DashboardEvent {
@@ -21,7 +22,11 @@ let revision = 0;
 
 function pruneExpired() {
     const cutoff = Date.now() - EVENT_TTL_MS;
-    events = events.filter((e) => e.timestamp.getTime() > cutoff);
+    const current = events.filter((e) => e.timestamp.getTime() > cutoff);
+    if (current.length !== events.length) {
+        events = current;
+        revision++;
+    }
 }
 
 export function addEvent(
@@ -36,9 +41,9 @@ export function addEvent(
         (e) => e.source === source && e.level === level && e.message === message,
     );
     if (existing) {
-        existing.timestamp = new Date();
-        existing.count += 1;
-        events = [...events];
+        events = events.map(event => event === existing
+            ? { ...event, timestamp: new Date(), count: event.count + 1 }
+            : event);
         revision++;
         return;
     }
@@ -55,44 +60,49 @@ export function clearEvents(): void {
     revision++;
 }
 
-let interceptInstalled = false;
+let restoreInterception: (() => void) | undefined;
 
 /**
  * Intercept console.log / .warn / .error and process.stderr.write so that
  * stray output from AWS SDK, Octokit, etc. doesn't corrupt the Ink display.
  * Captured lines are routed into the event log instead.
  */
-export function interceptConsole(): void {
-    if (interceptInstalled) return;
-    interceptInstalled = true;
-
-    function capture(level: DashboardEvent['level'], args: unknown[]): void {
-        const msg = args
-            .map((a) => (typeof a === 'string' ? a : JSON.stringify(a)))
-            .join(' ')
-            .trim();
-        if (!msg) return;
-        // Truncate long messages
-        const short = msg.length > 200 ? msg.slice(0, 197) + '…' : msg;
-        addEvent(level, 'console', short);
-    }
-
-    console.log = (...args: unknown[]) => capture('info', args);
-    console.warn = (...args: unknown[]) => capture('warn', args);
-    console.error = (...args: unknown[]) => capture('error', args);
+export function interceptConsole(): () => void {
+    if (restoreInterception) return restoreInterception;
+    const original = { log: console.log, warn: console.warn, error: console.error, write: process.stderr.write };
 
     // Intercept raw stderr writes (AWS SDK sometimes writes directly)
     // Filter out Octokit HTTP request debug lines (e.g. "GET /repos/... - 403 with id ...")
     const HTTP_DEBUG_RE = /^(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS) \/.*\d{3} with id/;
 
-    process.stderr.write = ((chunk: unknown) => {
-        const str = typeof chunk === 'string' ? chunk : Buffer.isBuffer(chunk) ? chunk.toString('utf-8') : '';
-        const trimmed = str.trim();
-        if (!trimmed || HTTP_DEBUG_RE.test(trimmed)) return true;
-        addEvent('warn', 'stderr', trimmed.length > 200 ? trimmed.slice(0, 197) + '…' : trimmed);
-        // Don't actually write to stderr — it would corrupt Ink's display
+    function capture(level: DashboardEvent['level'], source: 'console' | 'stderr', value: string): void {
+        const message = stripVTControlCharacters(value).trim();
+        if (!message || (source === 'stderr' && HTTP_DEBUG_RE.test(message))) return;
+        addEvent(level, source, message.length > 200 ? message.slice(0, 197) + '…' : message);
+    }
+
+    console.log = (...args: unknown[]) => capture('info', 'console', format(...args));
+    console.warn = (...args: unknown[]) => capture('warn', 'console', format(...args));
+    console.error = (...args: unknown[]) => capture('error', 'console', format(...args));
+
+    process.stderr.write = (chunk: string | Uint8Array, encodingOrCallback?: BufferEncoding | ((error?: Error | null) => void), callback?: (error?: Error | null) => void) => {
+        const encoding = typeof encodingOrCallback === 'string' ? encodingOrCallback : 'utf8';
+        capture('warn', 'stderr', typeof chunk === 'string' ? chunk : Buffer.from(chunk).toString(encoding));
+        const done = typeof encodingOrCallback === 'function' ? encodingOrCallback : callback;
+        if (done) queueMicrotask(() => done());
         return true;
-    }) as typeof process.stderr.write;
+    };
+
+    const restore = () => {
+        if (restoreInterception !== restore) return;
+        console.log = original.log;
+        console.warn = original.warn;
+        console.error = original.error;
+        process.stderr.write = original.write;
+        restoreInterception = undefined;
+    };
+    restoreInterception = restore;
+    return restore;
 }
 
 /** Polls the event store on a timer instead of synchronous notifications,
@@ -102,12 +112,15 @@ export function useEvents(): DashboardEvent[] {
     const lastRevision = useRef(revision);
 
     useEffect(() => {
-        const id = setInterval(() => {
+        const update = () => {
+            pruneExpired();
             if (revision !== lastRevision.current) {
                 lastRevision.current = revision;
                 setTick((t) => t + 1);
             }
-        }, POLL_INTERVAL_MS);
+        };
+        update();
+        const id = setInterval(update, POLL_INTERVAL_MS);
         return () => clearInterval(id);
     }, []);
 

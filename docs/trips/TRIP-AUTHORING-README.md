@@ -484,7 +484,8 @@ The layout preserves the manifest order.
 Hover and keyboard focus reveal captions without enlarging or cropping photos.
 The frame edge does not reduce the image area.
 
-A gallery first shows up to nine photos.
+A gallery first shows up to 12 photos.
+The Show all button appears only when the gallery contains more than 12 photos.
 Its viewer includes all photos from mounted story galleries, including collapsed photos.
 Next and Previous follow the gallery order in the story.
 The hero viewer contains every manifest photo, with the hero first.
@@ -653,7 +654,7 @@ Check desktop and phone widths:
 - Press Escape while the photo link has focus. Confirm that its caption closes.
 - Enable reduced motion. Confirm that captions do not animate.
 - Confirm that phone captions remain visible below their photos.
-- For galleries with more than nine photos, open the viewer.
+- For galleries with more than 12 photos, open the viewer.
 - Check that collapsed photos retain their alt text in the viewer.
 - Use Next and Previous to move between story galleries.
 - Expand the gallery. Confirm that each viewer caption retains the same text and location.

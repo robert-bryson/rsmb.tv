@@ -220,16 +220,29 @@ test('long standalone captions fit the photo on pointer and touch screens', asyn
     }
 });
 
+test('a twelve-photo gallery needs no expansion control on phones or desktops', async ({ page }) => {
+    for (const width of [390, 1440]) {
+        await page.setViewportSize({ width, height: 1000 });
+        const example = page.locator('[data-gallery-example="twelve"]');
+        await example.scrollIntoViewIfNeeded();
+        await expect(example.locator('img')).toHaveCount(12);
+        await expect(example.getByRole('button', { name: /Show all/ })).toHaveCount(0);
+        expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+    }
+});
+
 test('expanded galleries retain hidden viewer links and a failed image retains its planned frame', async ({ page }) => {
     const example = page.locator('[data-gallery-example="expanded"]');
     const links = example.locator('a[data-pswp-width]');
     const before = await links.evaluateAll(elements => elements.map(element => element.getAttribute('href')));
-    await expect(example.locator('img')).toHaveCount(9);
-    await example.getByRole('button', { name: 'Show all 11 photos' }).click();
-    await expect(example.locator('img')).toHaveCount(11);
+    await expect(links).toHaveCount(14);
+    await expect(example.locator('img')).toHaveCount(12);
+    await expect(example.locator('a[data-pswp-width][hidden]')).toHaveCount(2);
+    await example.getByRole('button', { name: 'Show all 14 photos' }).click();
+    await expect(example.locator('img')).toHaveCount(14);
     expect(await links.evaluateAll(elements => elements.map(element => element.getAttribute('href')))).toEqual(before);
     await example.getByRole('button', { name: 'Show fewer photos' }).click();
-    await expect(example.locator('img')).toHaveCount(9);
+    await expect(example.locator('img')).toHaveCount(12);
     const failed = page.locator('[data-gallery-example="collage"] figure').first();
     const box = (await failed.locator('.image-caption-frame').boundingBox())!;
     await failed.locator('img').evaluate(image => image.dispatchEvent(new Event('error')));
@@ -237,6 +250,28 @@ test('expanded galleries retain hidden viewer links and a failed image retains i
     const after = (await failed.locator('.image-caption-frame').boundingBox())!;
     expect(after.width).toBeCloseTo(box.width, 0);
     expect(after.height).toBeCloseTo(box.height, 0);
+});
+
+test('the viewer reaches photos beyond the twelve-photo limit and returns focus to its trigger', async ({ page }) => {
+    for (const width of [390, 1440]) {
+        await page.setViewportSize({ width, height: 1000 });
+        const example = page.locator('[data-gallery-example="expanded"]');
+        const trigger = example.locator('figure a').nth(11);
+        await expect(example.locator('img')).toHaveCount(12);
+        await trigger.click();
+        const activeSlide = page.locator('.pswp__item[aria-hidden="false"]');
+        await expect(activeSlide.getByRole('img', { name: 'expanded photo 12', exact: true })).toBeVisible();
+        await page.keyboard.press('ArrowRight');
+        await expect(activeSlide.getByRole('img', { name: 'expanded photo 13', exact: true })).toBeVisible();
+        await expect(activeSlide.locator('.pswp__dynamic-caption')).toHaveText('Caption for expanded photo 13.');
+        await page.keyboard.press('ArrowRight');
+        await expect(activeSlide.getByRole('img', { name: 'expanded photo 14', exact: true })).toBeVisible();
+        await page.keyboard.press('Escape');
+        await expect(page.locator('.pswp')).toHaveCount(0);
+        await expect(trigger).toBeFocused();
+        await expect(example.locator('img')).toHaveCount(12);
+        await expect(example.locator('a[data-pswp-width][hidden]')).toHaveCount(2);
+    }
 });
 
 test('touch captions stay in flow without spanning rows', async ({ browser }) => {

@@ -7,13 +7,6 @@ import { App } from './dashboard/App.js';
 import { createConfig } from './dashboard/config.js';
 import { interceptConsole } from './dashboard/useEventLog.js';
 
-// Node's built-in fetch creates a performance.measure() entry per request.
-// Over long-running sessions this fills the global buffer. Drain it periodically.
-setInterval(() => {
-    performance.clearMeasures();
-    performance.clearMarks();
-}, 60_000);
-
 // Auto-detect timezone in WSL (where system TZ often defaults to UTC)
 if (!process.env.TZ) {
     try {
@@ -92,6 +85,15 @@ const config = createConfig({
 });
 
 // Capture stray console/stderr output before Ink takes over the terminal
-interceptConsole();
-
-render(React.createElement(App, { config }));
+const restoreConsole = interceptConsole();
+// Node fetch adds performance entries. Release this timer when the terminal session ends.
+const performanceDrain = setInterval(() => {
+    performance.clearMeasures();
+    performance.clearMarks();
+}, 60_000);
+try {
+    await render(React.createElement(App, { config })).waitUntilExit();
+} finally {
+    clearInterval(performanceDrain);
+    restoreConsole();
+}

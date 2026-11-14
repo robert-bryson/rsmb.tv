@@ -87,6 +87,41 @@ test('heading links use unique IDs and support reload and browser history', asyn
     expect(new Set(ids).size).toBe(ids.length);
 });
 
+test('contents highlighting retains headings between partial visibility updates', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 1000 });
+    await page.goto('/tests/e2e/fixtures/post.html');
+    const contents = page.getByRole('navigation', { name: 'Table of contents' });
+    await expect(contents.getByRole('link')).toHaveCount(4);
+    const first = contents.locator('a[href="#route-notes"]');
+    const second = contents.locator('a[href="#first-stop"]');
+    const firstTop = await page.locator('#trip-story-body').evaluate(content => {
+        content.style.position = 'relative';
+        content.style.minHeight = '4000px';
+        const headings = [...content.querySelectorAll<HTMLElement>('[data-post-heading]')];
+        headings.forEach((heading, index) => {
+            Object.assign(heading.style, { position: 'absolute', margin: '0', top: `${index < 2 ? 200 + index * 130 : 1500 + index * 500}px` });
+        });
+        return headings[0].getBoundingClientRect().top + window.scrollY;
+    });
+    for (const viewport of [{ width: 1280, height: 1000 }, { width: 1920, height: 720 }]) {
+        await page.setViewportSize(viewport);
+        const scroll = (firstHeadingTop: number) => page.evaluate(async y => {
+            window.scrollTo(0, y);
+            await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+        }, firstTop - firstHeadingTop);
+        const readingBottom = viewport.height * 0.4;
+        await scroll(readingBottom - 100);
+        await expect(first).toHaveAttribute('aria-current', 'location');
+        await scroll(readingBottom - 180);
+        await expect(first).toHaveAttribute('aria-current', 'location');
+        await expect(second).not.toHaveAttribute('aria-current');
+        await scroll(20);
+        await expect(second).toHaveAttribute('aria-current', 'location');
+        await scroll(readingBottom - 180);
+        await expect(first).toHaveAttribute('aria-current', 'location');
+    }
+});
+
 test('heading titles are permalinks with pointer and keyboard feedback', async ({ page, browserName }) => {
     await page.goto('/tests/e2e/fixtures/post.html');
     const heading = page.getByRole('heading', { name: 'First Stop', exact: true }).first();

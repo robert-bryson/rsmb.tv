@@ -5,7 +5,7 @@ import { createTripPhotoLightbox } from './tripPhotoSwipe';
 import { TripPhotoLink } from './TripPhotoLink';
 import { galleryLength, layoutTripGallery, tripGallerySizes, TRIP_GALLERY_GAP } from '../tripGalleryLayout';
 
-const COLLAPSED_PHOTO_COUNT = 9;
+const COLLAPSED_PHOTO_COUNT = 12;
 
 export function TripGallery({ galleryId }: { galleryId: string }) {
     return <TripGalleryContent key={galleryId} galleryId={galleryId} />;

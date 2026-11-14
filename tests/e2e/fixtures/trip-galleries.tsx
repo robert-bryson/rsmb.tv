@@ -16,7 +16,8 @@ const groups = {
     portrait: [2 / 3],
     landscape: [1.5],
     panorama: [1.5, 5.73, 1.5],
-    expanded: [2 / 3, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 4 / 3, 1.5, 0.75, 1.5],
+    twelve: Array.from({ length: 12 }, (_, index) => index === 0 ? 2 / 3 : 1.5),
+    expanded: [2 / 3, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 4 / 3, 1.5, 0.75, 1.5, 4 / 3, 1.5, 1.5],
 };
 const photos = Object.entries(groups).flatMap(([group, ratios]) => ratios.map((ratio, index) => ({
     id: `${group}-${index}`,

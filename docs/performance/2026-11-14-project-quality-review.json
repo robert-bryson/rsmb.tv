@@ -1,0 +1,295 @@
+{
+  "date": "2026-11-14",
+  "baselineCommit": "620c25c104680e31ceb00a04378a3225e20fccd0",
+  "initialChangedFiles": 6,
+  "initialTests": {
+    "passed": 3262,
+    "failed": 2,
+    "total": 3264,
+    "failures": [
+      "PCH inline morning photo placement",
+      "PCH gallery reference table"
+    ]
+  },
+  "reproducedRegressions": {
+    "unitFailuresBeforeFix": 5,
+    "contentsBrowserFailuresWithOriginalCallback": 2
+  },
+  "toolchain": {
+    "node": "v24.22.3",
+    "npm": "12.2.2",
+    "v8": "13.6.233.17-node.63",
+    "vite": "8.3.8",
+    "vitest": "5.1.0",
+    "coverageV8": "5.1.0",
+    "typescript": "6.0.3",
+    "reactPlugin": "6.3.0"
+  },
+  "tests": {
+    "unit": {
+      "filesPassed": 227,
+      "testsPassed": 3282,
+      "testsSkipped": 0
+    },
+    "addedUnitRegressions": 18,
+    "galleryAndArticleBrowsers": {
+      "passed": 47,
+      "skipped": 1,
+      "engines": [
+        "Chromium",
+        "WebKit"
+      ],
+      "skippedCase": "Browser font preference launch flag is specific to Chromium."
+    },
+    "productionReadingBrowsers": {
+      "passed": 111,
+      "skipped": 0,
+      "profiles": [
+        "desktop Chromium",
+        "phone Chromium",
+        "phone WebKit"
+      ]
+    },
+    "python": {
+      "temperatureRecordsPassed": 18,
+      "pinsPassed": 48
+    },
+    "lint": "passed",
+    "typecheck": "passed",
+    "dashboardScriptTypecheck": "passed",
+    "productionFixtureBuild": "passed"
+  },
+  "coverage": {
+    "scope": "Identical source and loaded file population. Both runs include three watcher lifecycle tests. The after run adds the remaining fifteen regressions.",
+    "workers": 4,
+    "sourceFileCount": 421,
+    "comparisonBeforeTests": {
+      "filesPassed": 226,
+      "testsPassed": 3267,
+      "testsSkipped": 4
+    },
+    "before": {
+      "lines": {
+        "covered": 12652,
+        "total": 14337,
+        "percent": 88.24
+      },
+      "branches": {
+        "covered": 11282,
+        "total": 13630,
+        "percent": 82.77
+      },
+      "statements": {
+        "covered": 15002,
+        "total": 17335,
+        "percent": 86.54
+      },
+      "functions": {
+        "covered": 3427,
+        "total": 4038,
+        "percent": 84.86
+      }
+    },
+    "after": {
+      "lines": {
+        "covered": 12715,
+        "total": 14337,
+        "percent": 88.68
+      },
+      "branches": {
+        "covered": 11324,
+        "total": 13630,
+        "percent": 83.08
+      },
+      "statements": {
+        "covered": 15082,
+        "total": 17335,
+        "percent": 87
+      },
+      "functions": {
+        "covered": 3451,
+        "total": 4038,
+        "percent": 85.46
+      }
+    },
+    "modules": {
+      "scripts/dashboard/useEventLog.tsx": {
+        "before": {
+          "lines": {
+            "covered": 6,
+            "total": 68,
+            "percent": 8.82
+          },
+          "branches": {
+            "covered": 0,
+            "total": 42,
+            "percent": 0
+          },
+          "statements": {
+            "covered": 6,
+            "total": 85,
+            "percent": 7.05
+          },
+          "functions": {
+            "covered": 0,
+            "total": 23,
+            "percent": 0
+          }
+        },
+        "after": {
+          "lines": {
+            "covered": 68,
+            "total": 68,
+            "percent": 100
+          },
+          "branches": {
+            "covered": 42,
+            "total": 42,
+            "percent": 100
+          },
+          "statements": {
+            "covered": 85,
+            "total": 85,
+            "percent": 100
+          },
+          "functions": {
+            "covered": 23,
+            "total": 23,
+            "percent": 100
+          }
+        }
+      },
+      "src/blog/PostTableOfContents.tsx": {
+        "before": {
+          "lines": {
+            "covered": 59,
+            "total": 60,
+            "percent": 98.33
+          },
+          "branches": {
+            "covered": 42,
+            "total": 50,
+            "percent": 84
+          },
+          "statements": {
+            "covered": 72,
+            "total": 75,
+            "percent": 96
+          },
+          "functions": {
+            "covered": 22,
+            "total": 23,
+            "percent": 95.65
+          }
+        },
+        "after": {
+          "lines": {
+            "covered": 60,
+            "total": 60,
+            "percent": 100
+          },
+          "branches": {
+            "covered": 42,
+            "total": 50,
+            "percent": 84
+          },
+          "statements": {
+            "covered": 73,
+            "total": 75,
+            "percent": 97.33
+          },
+          "functions": {
+            "covered": 23,
+            "total": 23,
+            "percent": 100
+          }
+        }
+      },
+      "scripts/aws-watch.tsx": {
+        "before": {
+          "lines": {
+            "covered": 14,
+            "total": 28,
+            "percent": 50
+          },
+          "branches": {
+            "covered": 2,
+            "total": 22,
+            "percent": 9.09
+          },
+          "statements": {
+            "covered": 15,
+            "total": 30,
+            "percent": 50
+          },
+          "functions": {
+            "covered": 2,
+            "total": 2,
+            "percent": 100
+          }
+        },
+        "after": {
+          "lines": {
+            "covered": 14,
+            "total": 28,
+            "percent": 50
+          },
+          "branches": {
+            "covered": 2,
+            "total": 22,
+            "percent": 9.09
+          },
+          "statements": {
+            "covered": 15,
+            "total": 30,
+            "percent": 50
+          },
+          "functions": {
+            "covered": 2,
+            "total": 2,
+            "percent": 100
+          }
+        }
+      }
+    },
+    "sourceSha256": {
+      "scripts/dashboard/useEventLog.tsx": "a1c9359cbf5f9f53abba7dcaa59c4d6fa4750e2502c8a398ed37a1d8008a8659",
+      "src/blog/PostTableOfContents.tsx": "4585c5fafc641789f7889c597870ca4a11dee565895eced475caaa575aaf3bf0",
+      "scripts/aws-watch.tsx": "e982634d52c87bc340c7f0eadbb5c030febb2ab301ac88a69cca92d6d9e3cb33"
+    }
+  },
+  "dependencies": {
+    "npmAudit": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    }
+  },
+  "docs": {
+    "markdownFilesChecked": 148,
+    "missingLocalLinkTargets": 0,
+    "linkCheckScope": "Local target existence. Code examples and URL schemes are excluded. Heading anchors are not validated.",
+    "language": "Revised prose uses short sentences, active voice, and stable terms. The guide targets 80% simplified technical English."
+  },
+  "content": {
+    "pchPhotos": 108,
+    "pchGalleries": 32,
+    "collapsedGalleryPhotoLimit": 12
+  },
+  "commands": {
+    "comparisonBefore": "npx vitest run --coverage --maxWorkers=4 --exclude scripts/dashboard/__tests__/useEventLog.test.tsx --testNamePattern '^(?!.*review regressions: November 14 (contents visibility|PCH scene placements|dashboard events)).*'",
+    "comparisonAfter": "npm run test:coverage -- --maxWorkers=4",
+    "galleryAndArticles": "PLAYWRIGHT_WEBKIT=1 npx playwright test tests/e2e/trip-galleries.spec.ts tests/e2e/post-rendering.spec.ts --workers=2",
+    "productionReading": "PLAYWRIGHT_WEBKIT=1 npm run test:trips:browser -- tests/trips/reading.spec.ts --workers=2",
+    "dashboardTypes": "node node_modules/typescript/bin/tsc --ignoreConfig --noEmit --strict --skipLibCheck --jsx react-jsx --module esnext --moduleResolution bundler --target es2023 --allowImportingTsExtensions --types node scripts/dashboard/useEventLog.tsx scripts/aws-watch.tsx scripts/dashboard/__tests__/useEventLog.test.tsx scripts/__tests__/awsWatch.test.tsx src/test/setup.ts"
+  },
+  "environmentNotes": [
+    "Subprocess and browser checks ran outside the restrictive sandbox after EPERM failures.",
+    "Browser fixtures used a test CARTO key and fixed assets. Hosted services were not deployed.",
+    "Linux WebKit used the existing local WPE launcher and host libraries. Temporary runner files were not committed.",
+    "Pins tests used the existing Python environment with NumPy and Shapely. The default host Python lacks those packages."
+  ]
+}

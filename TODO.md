@@ -7,6 +7,8 @@ Use the [trip authoring guide](docs/trips/TRIP-AUTHORING-README.md#6-publish-ass
 ## Priority and ownership
 
 Each task appears once below. Linked guides define its acceptance conditions.
+Write tasks as actions with a clear expected result.
+Move completed results to a dated review. Remove their checkboxes from this file.
 The site owner must confirm travel dates, source descriptions, and other editorial facts.
 Hosted checks require a deployed build. Device checks require the named physical device.
 
@@ -160,11 +162,11 @@ Use the [November 10 review](docs/reviews/2026-11-10-project-quality-review.md) 
 
 ## Dashboard checks
 
-Use fixed provider responses. Do not contact production services from unit tests.
+Use the [dashboard guide](docs/dashboard.md#code-and-tests) for code ownership and completed event-log checks.
+Use fixed provider responses and UTC dates.
 
 - [ ] Test build fetchers with throttled, failed, empty, and malformed responses. Verify the displayed status and error.
 - [ ] Test cost cache reads, writes, provider failures, and month-end forecasts. Use fixed UTC dates.
-- [ ] Test event log rendering, its size limit, and removal. Verify that unmounted subscribers receive no updates.
 
 ## Build and maintenance
 

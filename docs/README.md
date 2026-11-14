@@ -6,6 +6,7 @@ Use [TODO.md](../TODO.md) for incomplete work.
 ## Writing rules
 
 Use [ASD-STE100](https://www.asd-ste100.org/assets/files/ASD-STE100_ISSUE9.pdf) as the language guide for repository documentation.
+Aim for simplified technical English in at least 80% of new or revised prose.
 Use short sentences and active voice.
 Give one instruction in each sentence. Use no more than 20 words in an instruction.
 Use no more than 25 words in a description.
@@ -21,6 +22,7 @@ An alt description states the visible content. A caption can supply other inform
 | Document | Use |
 | --- | --- |
 | [Repository guide](../README.md) | Install, develop, test, and build the site |
+| [Status dashboard](dashboard.md) | Use terminal controls and maintain event storage, output capture, and cleanup |
 | [Release validation](release-validation.md) | Activate hosted preview checks before production releases |
 | [Shared modules](shared-modules.md) | Reuse request caching, state identities, airport normalization, and project presentation |
 | [Intent prefetch](intent-prefetch.md) | Configure hover/focus destination preparation, resource limits, and browser measurements |
@@ -53,6 +55,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-14 | [Project quality review: gallery contracts, contents visibility, event expiry, output capture, watcher cleanup, and regression coverage](reviews/2026-11-14-project-quality-review.md) |
 | 2026-11-13 | [Site quality review: release cache exclusion, manifest safety, image geometry, Docs formatting, shared URL handling, and regression coverage](reviews/2026-11-13-site-quality-review.md) |
 | 2026-11-13 | [Trip responsive photo quality: all reports reprocessed, quality-99 viewer sizes, source selection, research, and local measurements](reviews/2026-11-13-trip-responsive-photo-quality.md) |
 | 2026-11-13 | [Trip headings and photo quality: full-width chapter bands, native-resolution viewing, the new PCH photo, and panorama navigation](reviews/2026-11-13-trip-heading-photo-quality.md) |

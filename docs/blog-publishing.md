@@ -91,6 +91,9 @@ Use short, unique headings.
 The site derives heading IDs from the heading text.
 For example, `Day 1: Seattle to Boise` becomes `#day-1-seattle-to-boise`.
 Repeated headings receive numeric suffixes.
+The contents list marks the first visible heading in the reading area.
+Partial visibility updates retain other headings that remain in that area.
+If no heading is visible, the list retains the last current location.
 Each heading links to itself and back to the table of contents.
 Click heading text to open its section link.
 If a heading contains an authored link, that link keeps its destination. Use the adjacent `#` for the section link.

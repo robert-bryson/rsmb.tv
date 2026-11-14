@@ -352,3 +352,37 @@ describe('MDX headings', () => {
         expect(frames.size).toBe(0);
     });
 });
+
+describe('review regressions: November 14 contents visibility', () => {
+    it.each(['enter', 'exit'])('keeps the first visible heading current after a partial %s notification', async change => {
+        let onIntersection: IntersectionObserverCallback = () => undefined;
+        vi.stubGlobal('IntersectionObserver', class {
+            constructor(callback: IntersectionObserverCallback) { onIntersection = callback; }
+            observe() {}
+            disconnect() {}
+        });
+        render(<TableOfContentsFixture />);
+        const navigation = await screen.findByRole('navigation', { name: 'Table of contents' });
+        const first = screen.getByRole('heading', { name: 'First Stop' });
+        const second = screen.getByRole('heading', { name: 'Camp Notes' });
+        vi.spyOn(first, 'getBoundingClientRect').mockReturnValue(new DOMRect(0, 120, 720, 30));
+        vi.spyOn(second, 'getBoundingClientRect').mockReturnValue(new DOMRect(0, 240, 720, 30));
+        const entry = (target: Element, isIntersecting: boolean): IntersectionObserverEntry => ({
+            target, isIntersecting, boundingClientRect: target.getBoundingClientRect(),
+            intersectionRatio: isIntersecting ? 1 : 0, intersectionRect: new DOMRect(), rootBounds: null, time: 0,
+        });
+        const notify = (...entries: IntersectionObserverEntry[]) => act(() => onIntersection(entries, {} as IntersectionObserver));
+
+        notify(entry(first, true));
+        if (change === 'enter') {
+            notify(entry(second, true));
+            expect(within(navigation).getByRole('link', { name: 'First Stop' })).toHaveAttribute('aria-current', 'location');
+            expect(within(navigation).getByRole('link', { name: 'Camp Notes' })).not.toHaveAttribute('aria-current');
+        } else {
+            notify(entry(second, true), entry(first, true));
+            notify(entry(first, false));
+            expect(within(navigation).getByRole('link', { name: 'Camp Notes' })).toHaveAttribute('aria-current', 'location');
+            expect(within(navigation).getByRole('link', { name: 'First Stop' })).not.toHaveAttribute('aria-current');
+        }
+    });
+});

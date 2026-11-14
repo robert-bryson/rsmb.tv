@@ -137,22 +137,9 @@ Missing manifests, photos, or story bodies remain visible as incomplete atlas ca
 
 ### Status Dashboard Controls
 
-The status dashboard supports the following keys:
-
-- `q` quit
-- `h` toggle compact/detail view
-- `e` clear event log
-- `c` clear resolved incidents
-- `↑/↓` or `j/k` scroll the dashboard
-
+Use the [dashboard guide](docs/dashboard.md) for keyboard controls, terminal sizing, event expiry, and output capture.
 The dashboard shows AWS Amplify deployments and GitHub Actions separately.
-If a repository specifies workflows, the dashboard shows those workflows.
-A workflow stays visible before its first run. Old or unknown results require review.
-
-Ink supplies the terminal dimensions and handles resize events.
-If the output stream has no dimensions, Ink detects the host terminal size.
-If detection fails, Ink uses 80 columns and 24 rows.
-The tests use a synthetic stream. They do not contact AWS, GitHub, or external status pages.
+Its tests use fixed provider responses and synthetic terminal streams.
 
 ## Dependency Maintenance
 
@@ -305,11 +292,12 @@ Atlas checks include interrupted panel drags, saved table columns, keyboard focu
 Use the [trip testing guide](docs/trips/TESTING.md) for browser setup, focused commands, and budget definitions.
 CI includes Chromium and iPhone WebKit. Local runs can also include Firefox.
 
-The dashboard tests check terminal height, resize events, keyboard controls, problem reports, recovery, and listener removal.
+The dashboard tests check terminal sizing, keyboard controls, provider recovery, and event log cleanup.
+Event tests also check expiry, duplicate snapshots, output formatting, and stderr completion callbacks.
 Run the focused suite with:
 
 ```bash
-npx vitest run scripts/dashboard/__tests__/App.test.tsx
+npx vitest run scripts/dashboard/__tests__ scripts/__tests__/awsWatch.test.tsx
 ```
 
 Coverage reports measure loaded source files. They do not measure every repository file.
@@ -509,7 +497,9 @@ The route cache shares active requests and removes unused entries when its size 
 Active readers can temporarily require more entries.
 Story gallery viewers follow the mounted galleries in document order.
 They include collapsed photos and retain each photo's alt text.
-The hero viewer contains every manifest photo. Inline photos use separate viewers.
+Galleries first show up to 12 photos. Larger galleries offer a Show all button.
+Linked inline photos and panoramas join the same story viewer.
+The hero viewer contains every manifest photo, with the hero first.
 
 ## Documentation rules
 

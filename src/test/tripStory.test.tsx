@@ -334,10 +334,28 @@ describe('trip story primitives', () => {
         expect(() => parseTripManifest({ ...manifest, galleries })).toThrow();
     });
 
-    it('keeps hidden and expanded gallery captions equal, including locations', () => {
-        const photos = Array.from({ length: 11 }, (_, index) => ({
+    it.each([11, 12, 13])('shows up to twelve photos before offering expansion for a %i-photo gallery', count => {
+        const photos = Array.from({ length: count }, (_, index) => ({
             ...manifest.photos[1], id: `photo-${index}`, src: `/photo-${index}.webp`,
-            caption: index === 10 ? '   ' : ' Camp. ', location: ' Coast ',
+        }));
+        const { container } = renderStory(<TripGallery galleryId="highlights" />, {
+            ...manifest, photos, hero: photos[0].id, galleries: { highlights: photos.map(photo => photo.id) },
+        });
+
+        expect(screen.getAllByRole('img')).toHaveLength(Math.min(count, 12));
+        expect(container.querySelectorAll('a[data-pswp-width]')).toHaveLength(count);
+        if (count > 12) {
+            expect(screen.getByRole('button', { name: `Show all ${count} photos` })).toHaveAttribute('aria-expanded', 'false');
+            expect(container.querySelectorAll('a[data-pswp-width][hidden]')).toHaveLength(count - 12);
+        } else {
+            expect(screen.queryByRole('button', { name: /Show all/ })).not.toBeInTheDocument();
+        }
+    });
+
+    it('keeps hidden and expanded gallery captions equal, including locations', () => {
+        const photos = Array.from({ length: 14 }, (_, index) => ({
+            ...manifest.photos[1], id: `photo-${index}`, src: `/photo-${index}.webp`,
+            caption: index === 13 ? '   ' : ' Camp. ', location: ' Coast ',
         }));
         const { container } = renderStory(<TripGallery galleryId="highlights" />, {
             ...manifest, photos, hero: photos[0].id, galleries: { highlights: photos.map(photo => photo.id) },
@@ -345,15 +363,15 @@ describe('trip story primitives', () => {
         const captions = () => Array.from(container.querySelectorAll('a[data-pswp-width]'))
             .map(link => link.getAttribute('data-trip-caption'));
         const collapsed = captions();
-        expect(screen.getAllByRole('img')).toHaveLength(9);
-        expect(collapsed[9]).toBe('Camp. · Coast');
-        expect(collapsed[10]).toBe(`${manifest.photos[1].alt} · Coast`);
-        fireEvent.click(screen.getByRole('button', { name: 'Show all 11 photos' }));
-        expect(screen.getAllByRole('img')).toHaveLength(11);
+        expect(screen.getAllByRole('img')).toHaveLength(12);
+        expect(collapsed[12]).toBe('Camp. · Coast');
+        expect(collapsed[13]).toBe(`${manifest.photos[1].alt} · Coast`);
+        fireEvent.click(screen.getByRole('button', { name: 'Show all 14 photos' }));
+        expect(screen.getAllByRole('img')).toHaveLength(14);
         expect(captions()).toEqual(collapsed);
         expect(screen.getByRole('button', { name: 'Show fewer photos' })).toHaveAttribute('aria-expanded', 'true');
         fireEvent.click(screen.getByRole('button', { name: 'Show fewer photos' }));
-        expect(screen.getAllByRole('img')).toHaveLength(9);
+        expect(screen.getAllByRole('img')).toHaveLength(12);
         expect(captions()).toEqual(collapsed);
     });
 
@@ -381,7 +399,7 @@ describe('trip story primitives', () => {
     });
 
     it('resets expansion when the gallery changes', () => {
-        const photos = Array.from({ length: 11 }, (_, index) => ({
+        const photos = Array.from({ length: 13 }, (_, index) => ({
             ...manifest.photos[1], id: `photo-${index}`, src: `/photo-${index}.webp`,
         }));
         const tripManifest = {
@@ -392,23 +410,23 @@ describe('trip story primitives', () => {
             <TripStoryProvider manifest={tripManifest}><TripGallery galleryId={galleryId} /></TripStoryProvider>
         );
         const { rerender } = render(story('first'));
-        fireEvent.click(screen.getByRole('button', { name: 'Show all 11 photos' }));
-        expect(screen.getAllByRole('img')).toHaveLength(11);
+        fireEvent.click(screen.getByRole('button', { name: 'Show all 13 photos' }));
+        expect(screen.getAllByRole('img')).toHaveLength(13);
 
         rerender(story('second'));
 
-        expect(screen.getAllByRole('img')).toHaveLength(9);
-        expect(screen.getByRole('button', { name: 'Show all 11 photos' })).toHaveAttribute('aria-expanded', 'false');
+        expect(screen.getAllByRole('img')).toHaveLength(12);
+        expect(screen.getByRole('button', { name: 'Show all 13 photos' })).toHaveAttribute('aria-expanded', 'false');
     });
 
     it('connects galleries, inline panoramas, and collapsed photos in story order', () => {
-        const photos = Array.from({ length: 14 }, (_, index) => ({
+        const photos = Array.from({ length: 16 }, (_, index) => ({
             ...manifest.photos[1], id: `photo-${index}`, src: `/photo-${index}.webp`, alt: `Photo ${index}`,
         }));
         const tripManifest = {
             ...manifest, photos, hero: photos[0].id,
             // Deliberately use a different order than the rendered story.
-            galleries: { second: ['photo-12', 'photo-13'], unused: ['photo-0'], first: photos.slice(1, 12).map(photo => photo.id) },
+            galleries: { second: ['photo-14', 'photo-15'], unused: ['photo-0'], first: photos.slice(1, 14).map(photo => photo.id) },
         };
         const opened: { index: number; sources: (string | undefined)[] }[] = [];
         const open = vi.spyOn(PhotoSwipeLightbox.prototype, 'loadAndOpen').mockImplementation(function (this: PhotoSwipeLightbox, index, dataSource) {
@@ -427,22 +445,22 @@ describe('trip story primitives', () => {
                 <TripGallery galleryId="second" />
             </TripStoryProvider>;
             const { rerender } = render(story(true));
-            fireEvent.click(screen.getByRole('img', { name: 'Photo 12' }));
-            const expectedSources = [...photos.slice(1, 12), photos[0], ...photos.slice(12)]
+            fireEvent.click(screen.getByRole('img', { name: 'Photo 14' }));
+            const expectedSources = [...photos.slice(1, 14), photos[0], ...photos.slice(14)]
                 .map(photo => new URL(photo.src, window.location.href).href);
-            expect(opened.at(-1)).toEqual({ index: 12, sources: expectedSources });
+            expect(opened.at(-1)).toEqual({ index: 14, sources: expectedSources });
             fireEvent.click(document.querySelector('.trip-photo-pano img')!);
-            expect(opened.at(-1)).toEqual({ index: 11, sources: expectedSources });
+            expect(opened.at(-1)).toEqual({ index: 13, sources: expectedSources });
             fireEvent.click(screen.getByRole('img', { name: 'Photo 2' }));
             expect(opened.at(-1)).toEqual({ index: 1, sources: expectedSources });
 
-            fireEvent.click(screen.getByRole('button', { name: 'Show all 11 photos' }));
-            fireEvent.click(screen.getByRole('img', { name: 'Photo 11' }));
-            expect(opened.at(-1)).toEqual({ index: 10, sources: expectedSources });
+            fireEvent.click(screen.getByRole('button', { name: 'Show all 13 photos' }));
+            fireEvent.click(screen.getByRole('img', { name: 'Photo 13' }));
+            expect(opened.at(-1)).toEqual({ index: 12, sources: expectedSources });
 
             rerender(story(false));
-            fireEvent.click(screen.getByRole('img', { name: 'Photo 12' }));
-            expect(opened.at(-1)).toEqual({ index: 1, sources: expectedSources.slice(11) });
+            fireEvent.click(screen.getByRole('img', { name: 'Photo 14' }));
+            expect(opened.at(-1)).toEqual({ index: 1, sources: expectedSources.slice(13) });
         } finally {
             open.mockRestore();
         }

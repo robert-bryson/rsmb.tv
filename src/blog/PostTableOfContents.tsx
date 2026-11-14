@@ -91,11 +91,22 @@ export function PostTableOfContents({ contentRef, collapsible = false }: PostTab
 
     useEffect(() => {
         if (!items.length || typeof IntersectionObserver === 'undefined') return;
+        const visibleHeadings = new Set<Element>();
         const observer = new IntersectionObserver(entries => {
-            const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
-            if (visible) setActiveId(visible.target.id);
+            // Notifications contain only changed intersections, not every visible heading.
+            for (const entry of entries) {
+                if (entry.isIntersecting) visibleHeadings.add(entry.target);
+                else visibleHeadings.delete(entry.target);
+            }
+            const first = [...visibleHeadings]
+                .map(heading => ({ heading, top: heading.getBoundingClientRect().top }))
+                .sort((a, b) => a.top - b.top)[0];
+            if (first) setActiveId(first.heading.id);
         }, { rootMargin: '-80px 0px -60% 0px' });
-        items.forEach(item => { const heading = document.getElementById(item.id); if (heading) observer.observe(heading); });
+        for (const item of items) {
+            const heading = document.getElementById(item.id);
+            if (heading) observer.observe(heading);
+        }
         return () => observer.disconnect();
     }, [items]);
 

@@ -89,6 +89,9 @@ npx vitest run scripts/__tests__/tripContent.test.ts scripts/__tests__/tripManif
 These checks validate tracked manifests, daily photo assignments, responsive filenames, gallery counts, and shortcode references.
 The PCH checks include the separate `{{trip-photo:20241003-150610}}` placement.
 That photo remains outside the October 3 gallery to prevent duplication.
+October 6 checks cover the three split scene galleries and four inline photos.
+They verify photo membership across the scene groups and the complete day gallery.
+Gallery reference tables must list every gallery once, with its current photo count.
 Recovered-trip checks compare the source inventory with tracked manifests.
 They check the Mississippi–Wisconsin photo dates, responsive images, gallery placements, and map headings.
 They also check all 37 calendar days and recorded-track assignments across the three 2026 outlines.
@@ -214,6 +217,8 @@ Photo unit tests also check recovery after changes to responsive sources or imag
 Adaptive gallery tests check proportional pairs, balanced rows, portrait spans, panorama rows, and exact gutter geometry.
 Browser checks measure both image frames and image content.
 They check hover, keyboard focus, visible scrollbars, image failure, expansion, and focus during viewport changes.
+Boundary checks cover 11, 12, and 13 photos. Only galleries larger than 12 offer expansion.
+Viewer checks reach collapsed photos and return focus to the opening link after Escape.
 Touch cases include long captions and unbroken text at phone and tablet widths.
 Source checks use fresh contexts with device pixel ratios of 1, 2, and 3.
 They compare the selected resolution with the rendered width and available sources.
@@ -255,6 +260,8 @@ Importer tests compile the generated document and render its HTML.
 They check first-line indents, exported tab spaces, stylesheet order, and safe inline formatting.
 Browser tests measure the first and wrapped lines at desktop and phone widths.
 The checks also compare paragraph color, line height, and spacing.
+Contents checks send partial visibility updates while other headings remain visible.
+Browser checks verify current-location links during downward and upward scrolling.
 
 Page tests use fixed post metadata and trip summaries.
 Development-status tests use fixed publication, source, and asset states.

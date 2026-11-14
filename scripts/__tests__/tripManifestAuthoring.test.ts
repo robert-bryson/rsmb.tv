@@ -99,7 +99,7 @@ describe('tracked trip content', () => {
         expect(manifest.galleries!['day-two'].at(-1)).toBe('20241004-183101');
         expect(photos.get('20241006-075214')).toMatchObject({ date: '2024-10-06', full: { width: 4000, height: 3000 } });
         expect(manifest.galleries!['day-four'][0]).toBe('20241006-075214');
-        expect(manifest.galleries!['inland-california'][0]).toBe('20241006-075214');
+        expect(manifest.galleries!['inland-california']).not.toContain('20241006-075214');
     });
 
     it('connects the latest PCH import evidence to the selected files and authored capture dates', () => {
@@ -174,7 +174,9 @@ describe('tracked trip content', () => {
     it.each([pch, route66])('keeps the $id gallery reference table consistent with the importer', trip => {
         const guide = fs.readFileSync(new URL(`../../docs/trips/${trip.id}-galleries.md`, import.meta.url), 'utf8');
         const rows = [...guide.matchAll(/^\| `\{\{trip-gallery:([a-z0-9-]+)\}\}` \| (\d+) \|/gm)];
+        expect(rows).toHaveLength(Object.keys(trip.galleries).length);
         expect(new Set(rows.map(row => row[1]))).toEqual(new Set(Object.keys(trip.galleries)));
+        expect(guide).toContain(`contains ${trip.photos.length} photos and ${Object.keys(trip.galleries).length} galleries`);
         const manifest = tripManifestSchema.parse(trip);
         const post = { format: 'trip', tripId: manifest.id };
         for (const [, id, count] of rows) {
@@ -226,6 +228,33 @@ describe('tracked trip content', () => {
         expect(new Set(placedPhotos)).toEqual(new Set(photos.keys()));
         const post = { format: 'trip', tripId: manifest.id };
         expect(() => expandTripShortcodes(outline, post, manifest)).not.toThrow();
+    });
+});
+
+describe('review regressions: November 14 PCH scene placements', () => {
+    it('places October 6 scene photos once while retaining the omitted motel photo in the full-day gallery', () => {
+        const manifest = tripManifestSchema.parse(pch);
+        const galleries = manifest.galleries!;
+        const scenePhotos = [
+            'day-four-1', 'inland-california', 'day-four-2', 'day-four-3',
+            'sierra-crossing', 'eastern-sierra-valleys', 'bridgeport-evening', 'bridgeport-night',
+        ].flatMap(id => galleries[id]);
+        const inlinePhotos = ['20241006-075214', '20241006-085052', 'dscf9240-pano', 'dscf9279-pano'];
+        const placedPhotos = [...scenePhotos, ...inlinePhotos];
+        expect(new Set(placedPhotos).size).toBe(placedPhotos.length);
+        expect(new Set(placedPhotos)).toEqual(new Set(galleries['day-four'].filter(id => id !== '20241006-173636')));
+        expect(manifest.photos.find(photo => photo.id === '20241006-173636')).toBeDefined();
+        expect(galleries['day-four']).toContain('20241006-173636');
+        const guide = fs.readFileSync(new URL('../../docs/trips/pch-2024-galleries.md', import.meta.url), 'utf8');
+        for (const id of inlinePhotos) expect(guide).toContain(`{{trip-photo${id.endsWith('-pano') ? '-pano' : ''}:${id}}}`);
+    });
+
+    it('keeps the October 7 park photo inline without losing a trip-day photo', () => {
+        const manifest = tripManifestSchema.parse(pch);
+        const galleries = manifest.galleries!;
+        const placements = [...galleries['desert-homeward'], 'r003259', 'r003242-pano', 'r003247-pano', 'r003254-pano'];
+        expect(new Set(placements).size).toBe(placements.length);
+        expect(new Set(placements)).toEqual(new Set(galleries['day-five'].filter(id => id !== 'r003242')));
     });
 });
 
