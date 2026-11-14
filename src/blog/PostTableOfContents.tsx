@@ -107,7 +107,7 @@ export function PostTableOfContents({ contentRef, collapsible = false }: PostTab
             aria-label="Table of contents"
             className="scroll-mt-24 mb-8 border-l border-zinc-700 pl-4"
         >
-            <div className="mb-2 flex items-center justify-between gap-3"><p className="text-sm font-medium text-zinc-300">Table of contents</p>
+            <div className="mb-2 flex flex-wrap items-center justify-between gap-3"><p className="text-sm font-medium text-zinc-300">Table of contents</p>
                 <button type="button" aria-expanded={expanded} aria-controls="post-contents-list" className={`min-h-11 px-3 text-sm text-violet-300 ${collapsible ? '' : 'sm:hidden'}`} onClick={() => setExpanded(value => !value)}>{expanded ? 'Collapse' : 'Expand'}</button></div>
             <ul id="post-contents-list" className={`${expanded ? '' : collapsible ? 'hidden ' : 'hidden sm:block '}space-y-1 text-sm`}>
                 {items.map((item) => (

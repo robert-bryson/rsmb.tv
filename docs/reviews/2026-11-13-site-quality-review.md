@@ -162,3 +162,20 @@ The test still rejects page errors and verifies readiness after the reload.
 
 All 14 focused cases pass in Chromium and WebKit with two CPUs and two workers.
 Lint, TypeScript, and the changed documents' relative links also pass.
+
+The [next CI run](https://github.com/robert-bryson/rsmb.tv/actions/runs/43548022723) passed the Chromium suite, then found five WebKit failures.
+One exposed a layout defect: the contents header could exceed a phone screen by four pixels at 200% text size.
+Its title and button can now wrap onto separate rows.
+The browser check covers 320- and 390-pixel screens, complete tap targets, and collapse/expand behavior.
+
+The remaining failures checked map pixels before rendering settled or checked a data error before its injected response arrived.
+Camera checks now wait for the renderer's loaded state.
+Project navigation checks wait for application readiness before comparing pixels.
+The retry case waits for its invalid response before checking the error control.
+Feature, source-write, request-count, and pixel assertions remain in place.
+
+All 18 focused browser cases pass with two CPUs and two workers.
+The 25 heading and contents unit tests also pass, along with lint and TypeScript.
+A separate control restores the old contents layout in each browser.
+At 200% text size, it produces a 375-pixel page on a 320-pixel screen.
+The corrected layout stays at 320 pixels in both browsers.

@@ -291,7 +291,10 @@ Short-screen checks return tall h1 and h2 titles to normal flow. Rotation must r
 These fixtures first verify that the title and navigation exceed half the screen height.
 They repeat that check after increasing the text size.
 This keeps the test meaningful when banner spacing changes.
-Phone checks also enlarge text to 200%. Navigation links must remain visible without horizontal scrolling.
+Phone checks also enlarge text to 200% at 320 and 390 pixels.
+Navigation links and table-of-contents controls must remain within the screen.
+The contents header can wrap its button onto another row.
+The checks verify complete tap targets and collapse/expand behavior without horizontal scrolling.
 Header checks change padding and borders without changing the content box.
 The feature uses native CSS scrolling. Each post shares one title resize observer and one queued measurement frame.
 The site navigation has its own border-box observer. Neither observer adds a scroll handler.

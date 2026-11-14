@@ -173,21 +173,35 @@ for (const level of [1, 2]) {
     });
 }
 
-test('200% text keeps navigation visible within the phone width', async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 900 });
-    await page.goto('/tests/e2e/fixtures/trip-headings.html');
-    await page.addStyleTag({ content: 'html { font-size: 32px; }' });
-    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
-    const navigation = page.getByRole('navigation', { name: 'Main navigation' });
-    for (const name of ['rsmb', 'Posts', 'Projects', 'About']) {
-        const link = navigation.getByRole('link', { name, exact: true });
-        await link.focus();
-        await expect(link).toBeInViewport();
-        const bounds = (await link.boundingBox())!;
+for (const width of [320, 390]) {
+    test(`200% text keeps navigation and contents controls within ${width}px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto('/tests/e2e/fixtures/trip-headings.html');
+        await page.addStyleTag({ content: 'html { font-size: 32px; }' });
+        await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+        const navigation = page.getByRole('navigation', { name: 'Main navigation' });
+        for (const name of ['rsmb', 'Posts', 'Projects', 'About']) {
+            const link = navigation.getByRole('link', { name, exact: true });
+            await link.focus();
+            await expect(link).toBeInViewport();
+            const bounds = (await link.boundingBox())!;
+            expect(bounds.x).toBeGreaterThanOrEqual(0);
+            expect(bounds.x + bounds.width).toBeLessThanOrEqual(width);
+        }
+        const contents = page.getByRole('navigation', { name: 'Table of contents' });
+        const collapse = contents.getByRole('button', { name: 'Collapse', exact: true });
+        await collapse.scrollIntoViewIfNeeded();
+        const bounds = (await collapse.boundingBox())!;
         expect(bounds.x).toBeGreaterThanOrEqual(0);
-        expect(bounds.x + bounds.width).toBeLessThanOrEqual(390);
-    }
-});
+        expect(bounds.x + bounds.width).toBeLessThanOrEqual(width);
+        expect(bounds.height).toBeGreaterThanOrEqual(44);
+        await collapse.click();
+        await expect(contents.locator('ul')).toBeHidden();
+        await contents.getByRole('button', { name: 'Expand', exact: true }).click();
+        await expect(contents.locator('ul')).toBeVisible();
+        expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+    });
+}
 
 test('reduced motion removes heading offset animations and print restores normal flow', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });

@@ -66,12 +66,16 @@ async function capturePinsRenderer(page: Page, trigger: () => Promise<void> = ()
     }).pinsZoomReview);
 }
 
+async function expectPinsSettled(review: Awaited<ReturnType<typeof capturePinsRenderer>>) {
+    await expect.poll(() => review.evaluate(({ map }) => map.loaded() && !map.isMoving()), { timeout: 20_000 }).toBe(true);
+}
+
 async function reloadSettledMap(page: Page, review: Awaited<ReturnType<typeof capturePinsRenderer>>) {
     // Let this camera finish requesting tiles before replacing the document.
     // A previous networkidle event does not cover new map work. WebKit can
     // report cancelled requests as page errors during replacement:
     // https://github.com/microsoft/playwright/issues/43120.
-    await expect.poll(() => review.evaluate(({ map }) => map.loaded() && !map.isMoving()), { timeout: 20_000 }).toBe(true);
+    await expectPinsSettled(review);
     await review.dispose();
     await page.reload();
     await expectMapReady(page);
@@ -147,6 +151,7 @@ for (const width of [320, 1280]) {
         const zoomTo = async (zoom: number) => {
             await review.evaluate(({ map }, zoom) => { map.jumpTo({ center: [-116, 35], zoom }); }, zoom);
             await expect.poll(() => review.evaluate(({ map }) => map.getZoom())).toBe(zoom);
+            await expectPinsSettled(review);
         };
         const rendered = (layer: string) => review.evaluate(({ map }, layer) => map.queryRenderedFeatures({ layers: [layer] }).length, layer);
         const circleCount = () => review.evaluate(({ map }) => {
@@ -193,6 +198,7 @@ for (const width of [320, 1280]) {
 }
 
 test('shows western county measurements at regional scales and retains small-county size limits', async ({ page }) => {
+    test.setTimeout(60_000);
     const errors = await prepare(page);
     await page.goto('/projects/pins-of-inaccessibility/map?state=06');
     await expectMapReady(page);
@@ -200,8 +206,10 @@ test('shows western county measurements at regional scales and retains small-cou
     const renderedCounty = (layer: string, id: string) => review.evaluate(({ map }, { layer, id }) =>
         map.queryRenderedFeatures({ layers: [layer] }).some(feature => feature.properties?.id === id || feature.properties?.pinId === id), { layer, id });
     await review.evaluate(({ map }) => { map.jumpTo({ center: [-116, 35], zoom: 6.75, padding: { top: 0, right: 0, bottom: 0, left: 0 } }); });
+    await expectPinsSettled(review);
     await expect.poll(() => renderedCounty('county-radii', 'county-06071')).toBe(true);
     await review.evaluate(({ map }) => { map.jumpTo({ center: [-115.5, 33.1], zoom: 7.75 }); });
+    await expectPinsSettled(review);
     await expect.poll(() => renderedCounty('county-circle-lines', 'county-06025')).toBe(true);
     await expect.poll(() => renderedCounty('county-radii', 'county-06025')).toBe(true);
     await expect(page.locator('[data-pin-radius-label="county-06025"]')).toHaveCount(1);
@@ -210,10 +218,12 @@ test('shows western county measurements at regional scales and retains small-cou
     await page.getByLabel('Within', { exact: true }).selectOption('51');
     await expect.poll(() => review.evaluate(({ map }) => map.getFilter('selected-state'))).toEqual(['==', ['get', 'id'], 'state-51']);
     await review.evaluate(({ map }) => { map.jumpTo({ center: [-77.17, 38.89], zoom: 9.75, padding: { top: 0, right: 0, bottom: 0, left: 0 } }); });
+    await expectPinsSettled(review);
     await expect.poll(() => renderedCounty('county-pins', 'county-51610')).toBe(true);
     expect(await renderedCounty('county-radii', 'county-51610')).toBe(false);
     await expect(page.locator('[data-pin-radius-label="county-51610"]')).toHaveCount(0);
     await review.evaluate(({ map }) => { map.jumpTo({ zoom: 13.75 }); });
+    await expectPinsSettled(review);
     await expect.poll(() => renderedCounty('county-radii', 'county-51610')).toBe(true);
     await expect(page.locator('[data-pin-radius-label="county-51610"]')).toHaveCount(1);
     expect(errors).toEqual([]);
@@ -600,6 +610,7 @@ test('opens the project page and map through existing project navigation', async
     await expect.poll(() => image.evaluate(element => (element as HTMLImageElement).naturalWidth)).toBe(1440);
     await page.getByRole('link', { name: 'Open interactive map →' }).click();
     await expect(page.locator('.pins-coverage')).toContainText('3,235');
+    await expectMapReady(page);
     await expect.poll(() => mapColorPixels(page, 'amber')).toBeGreaterThan(1500);
     await page.getByRole('link', { name: 'Back to projects' }).click();
     await expect(page).toHaveURL(/\/projects$/);
@@ -882,6 +893,7 @@ test('wraps the CARTO basemap around a globe and supports dragging and world res
 });
 
 test('ignores a late country response and recovers malformed province pins', async ({ page }) => {
+    test.setTimeout(60_000);
     const errors = await prepare(page);
     let release!: () => void;
     const gate = new Promise<void>(resolve => { release = resolve; });
@@ -897,7 +909,9 @@ test('ignores a late country response and recovers malformed province pins', asy
     let invalid = true;
     await page.unroute('**/world/regions/CAN.*');
     await page.route('**/world/regions/JPN.json', route => invalid ? route.fulfill({ json: {} }) : route.continue());
+    const invalidResponse = page.waitForResponse('**/world/regions/JPN.json', { timeout: 20_000 });
     await page.getByLabel('Country / territory', { exact: true }).selectOption('JPN');
+    await invalidResponse;
     await expect(page.getByRole('button', { name: 'Retry pin data' })).toBeVisible();
     invalid = false;
     await page.getByRole('button', { name: 'Retry pin data' }).click();
