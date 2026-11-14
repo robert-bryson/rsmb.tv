@@ -61,8 +61,8 @@ describe('pin browsing', () => {
     });
 
     it('reveals counties at the automatic threshold, and respects manual overrides', () => {
-        expect(countiesVisible('auto', 5.99)).toBe(false);
-        expect(countiesVisible('auto', 6)).toBe(true);
+        expect(countiesVisible('auto', 3.99)).toBe(false);
+        expect(countiesVisible('auto', 4)).toBe(true);
         expect(countiesVisible('off', 12)).toBe(false);
         expect(countiesVisible('on', 2)).toBe(true);
     });

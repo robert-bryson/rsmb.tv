@@ -69,363 +69,603 @@
   "photos": [
     {
       "id": "dsc01068",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01068-f88e7598a93f-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01068-61cb5fe3000b-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Three cats perched on the porch railing of a pale blue house beneath leafy branches.",
       "date": "2025-10-07",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01068-f88e7598a93f-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01068-f88e7598a93f-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01068-f88e7598a93f-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01068-61cb5fe3000b-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01068-61cb5fe3000b-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01068-61cb5fe3000b-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01068-61cb5fe3000b-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01068-61cb5fe3000b-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01068-61cb5fe3000b-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01068-61cb5fe3000b-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01068-61cb5fe3000b-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01068-61cb5fe3000b-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01068-61cb5fe3000b-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01068-61cb5fe3000b-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01068-61cb5fe3000b-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01068-61cb5fe3000b-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01069",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01069-3533b8524cbf-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01069-7d7bf0d10f6f-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Cats sitting on the porch railing of a blue house behind leafy trees.",
       "date": "2025-10-07",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01069-3533b8524cbf-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01069-3533b8524cbf-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01069-3533b8524cbf-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01069-7d7bf0d10f6f-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01069-7d7bf0d10f6f-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01069-7d7bf0d10f6f-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01069-7d7bf0d10f6f-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01069-7d7bf0d10f6f-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01069-7d7bf0d10f6f-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01069-7d7bf0d10f6f-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01069-7d7bf0d10f6f-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01069-7d7bf0d10f6f-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01069-7d7bf0d10f6f-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01069-7d7bf0d10f6f-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01069-7d7bf0d10f6f-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01069-7d7bf0d10f6f-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01070",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01070-df91b6ea910b-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01070-827a0858fd86-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Blue picnic tables beneath a metal pavilion beside a flagpole.",
       "date": "2025-10-07",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01070-df91b6ea910b-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01070-df91b6ea910b-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01070-df91b6ea910b-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01070-827a0858fd86-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01070-827a0858fd86-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01070-827a0858fd86-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01070-827a0858fd86-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01070-827a0858fd86-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01070-827a0858fd86-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01070-827a0858fd86-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01070-827a0858fd86-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01070-827a0858fd86-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01070-827a0858fd86-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01070-827a0858fd86-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01070-827a0858fd86-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01070-827a0858fd86-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01071",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01071-6eae26374f0e-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01071-4e615c7ba11a-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Ornate two-story storefront with tall arched windows and sunlight above the roof.",
       "date": "2025-10-07",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01071-6eae26374f0e-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01071-6eae26374f0e-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01071-6eae26374f0e-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01071-4e615c7ba11a-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01071-4e615c7ba11a-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01071-4e615c7ba11a-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01071-4e615c7ba11a-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01071-4e615c7ba11a-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01071-4e615c7ba11a-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01071-4e615c7ba11a-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01071-4e615c7ba11a-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01071-4e615c7ba11a-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01071-4e615c7ba11a-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01071-4e615c7ba11a-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01071-4e615c7ba11a-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01071-4e615c7ba11a-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01072",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01072-fff2fa452b04-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01072-426928529cbf-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Freestanding street clock and an American flag among ornate brick storefronts.",
       "date": "2025-10-07",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01072-fff2fa452b04-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01072-fff2fa452b04-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01072-fff2fa452b04-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01072-426928529cbf-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01072-426928529cbf-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01072-426928529cbf-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01072-426928529cbf-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01072-426928529cbf-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01072-426928529cbf-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01072-426928529cbf-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01072-426928529cbf-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01072-426928529cbf-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01072-426928529cbf-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01072-426928529cbf-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01072-426928529cbf-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01072-426928529cbf-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01073",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01073-118c79a29514-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01073-ff483279f94f-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Street clock in front of a row of brick buildings.",
       "date": "2025-10-07",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01073-118c79a29514-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01073-118c79a29514-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01073-118c79a29514-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01073-ff483279f94f-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01073-ff483279f94f-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01073-ff483279f94f-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01073-ff483279f94f-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01073-ff483279f94f-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01073-ff483279f94f-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01073-ff483279f94f-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01073-ff483279f94f-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01073-ff483279f94f-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01073-ff483279f94f-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01073-ff483279f94f-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01073-ff483279f94f-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01073-ff483279f94f-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01075",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01075-aa0a29bfccc3-1600.webp",
-      "width": 1600,
-      "height": 1066,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01075-d5534c396815-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Distant river valley and farmland framed by leafy branches beneath a cloudy sky.",
       "date": "2025-10-07",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01075-aa0a29bfccc3-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01075-aa0a29bfccc3-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01075-aa0a29bfccc3-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01075-d5534c396815-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01075-d5534c396815-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01075-d5534c396815-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01075-d5534c396815-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01075-d5534c396815-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01075-d5534c396815-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01075-d5534c396815-full.jpg",
+        "width": 5402,
+        "height": 3601,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01075-d5534c396815-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01075-d5534c396815-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01075-d5534c396815-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01075-d5534c396815-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01075-d5534c396815-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01075-d5534c396815-full.jpg 5402w"
+      }
     },
     {
       "id": "dsc01076",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01076-6bdf6ab72f7b-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01076-c81c3f0d4d07-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Narrow paved road curving beneath an arch of leafy trees.",
       "date": "2025-10-07",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01076-6bdf6ab72f7b-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01076-6bdf6ab72f7b-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01076-6bdf6ab72f7b-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01076-c81c3f0d4d07-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01076-c81c3f0d4d07-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01076-c81c3f0d4d07-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01076-c81c3f0d4d07-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01076-c81c3f0d4d07-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01076-c81c3f0d4d07-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01076-c81c3f0d4d07-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01076-c81c3f0d4d07-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01076-c81c3f0d4d07-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01076-c81c3f0d4d07-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01076-c81c3f0d4d07-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01076-c81c3f0d4d07-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01076-c81c3f0d4d07-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01078",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01078-e25fbac8d48c-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01078-4dabdec135a2-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Loaded motorcycle parked beside a wooded road curving past a metal guardrail.",
       "date": "2025-10-07",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01078-e25fbac8d48c-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01078-e25fbac8d48c-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01078-e25fbac8d48c-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01078-4dabdec135a2-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01078-4dabdec135a2-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01078-4dabdec135a2-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01078-4dabdec135a2-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01078-4dabdec135a2-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01078-4dabdec135a2-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01078-4dabdec135a2-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01078-4dabdec135a2-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01078-4dabdec135a2-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01078-4dabdec135a2-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01078-4dabdec135a2-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01078-4dabdec135a2-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01078-4dabdec135a2-full.jpg 5472w"
+      }
     },
     {
       "id": "20251007-151256",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-151256-4ebc990fa34b-1600.webp",
-      "width": 1600,
-      "height": 1200,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-151256-c79653e3c0b9-3840.webp",
+      "width": 3840,
+      "height": 2880,
       "alt": "Close view of dry brown oak leaves overlapping on the forest floor.",
       "date": "2025-10-07",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-151256-4ebc990fa34b-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-151256-4ebc990fa34b-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-151256-4ebc990fa34b-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-151256-c79653e3c0b9-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-151256-c79653e3c0b9-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-151256-c79653e3c0b9-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-151256-c79653e3c0b9-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-151256-c79653e3c0b9-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-151256-c79653e3c0b9-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-151256-c79653e3c0b9-full.jpg",
+        "width": 4000,
+        "height": 3000,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-151256-c79653e3c0b9-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-151256-c79653e3c0b9-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-151256-c79653e3c0b9-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-151256-c79653e3c0b9-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-151256-c79653e3c0b9-full.jpg 4000w"
+      }
     },
     {
       "id": "dsc01080",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01080-f1e34c52e3e7-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01080-3de7d7052405-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Pale stone building with three arched entrances and a tall central tower.",
       "date": "2025-10-07",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01080-f1e34c52e3e7-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01080-f1e34c52e3e7-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01080-f1e34c52e3e7-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01080-3de7d7052405-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01080-3de7d7052405-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01080-3de7d7052405-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01080-3de7d7052405-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01080-3de7d7052405-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01080-3de7d7052405-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01080-3de7d7052405-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01080-3de7d7052405-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01080-3de7d7052405-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01080-3de7d7052405-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01080-3de7d7052405-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01080-3de7d7052405-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01080-3de7d7052405-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01081",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01081-dc15debb1baa-1600.webp",
-      "width": 1600,
-      "height": 2231,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01081-c068f2b65f2a-3132.webp",
+      "width": 3132,
+      "height": 4367,
       "alt": "Pale stone temple with three arched entrances and a tiered tower against a deep blue sky.",
       "date": "2025-10-07",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01081-dc15debb1baa-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01081-dc15debb1baa-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01081-dc15debb1baa-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01081-c068f2b65f2a-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01081-c068f2b65f2a-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01081-c068f2b65f2a-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01081-c068f2b65f2a-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01081-c068f2b65f2a-3132.webp 3132w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01081-c068f2b65f2a-full.jpg",
+        "width": 3132,
+        "height": 4367,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01081-c068f2b65f2a-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01081-c068f2b65f2a-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01081-c068f2b65f2a-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01081-c068f2b65f2a-full.jpg 3132w"
+      }
     },
     {
       "id": "dsc01083",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01083-27c01c294ef4-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01083-3cba8bb81ae5-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Broad river beyond layers of wooded hills and a sunlit grassy slope.",
       "date": "2025-10-07",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01083-27c01c294ef4-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01083-27c01c294ef4-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01083-27c01c294ef4-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01083-3cba8bb81ae5-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01083-3cba8bb81ae5-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01083-3cba8bb81ae5-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01083-3cba8bb81ae5-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01083-3cba8bb81ae5-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01083-3cba8bb81ae5-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01083-3cba8bb81ae5-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01083-3cba8bb81ae5-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01083-3cba8bb81ae5-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01083-3cba8bb81ae5-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01083-3cba8bb81ae5-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01083-3cba8bb81ae5-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01083-3cba8bb81ae5-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01085",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01085-838767a542e2-1600.webp",
-      "width": 1600,
-      "height": 832,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01085-e67dcf9c696e-3840.webp",
+      "width": 3840,
+      "height": 1996,
       "alt": "Dallas City post office beside a white two-story house on a quiet street.",
       "date": "2025-10-07",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01085-838767a542e2-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01085-838767a542e2-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01085-838767a542e2-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01085-e67dcf9c696e-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01085-e67dcf9c696e-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01085-e67dcf9c696e-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01085-e67dcf9c696e-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01085-e67dcf9c696e-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01085-e67dcf9c696e-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01085-e67dcf9c696e-full.jpg",
+        "width": 5472,
+        "height": 2844,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01085-e67dcf9c696e-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01085-e67dcf9c696e-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01085-e67dcf9c696e-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01085-e67dcf9c696e-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01085-e67dcf9c696e-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01085-e67dcf9c696e-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01086",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01086-d6f7bd7b0b82-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01086-fd48685e9010-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Weathered white brick facade with a neon beer sign, window air conditioners, and an exterior staircase.",
       "date": "2025-10-07",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01086-d6f7bd7b0b82-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01086-d6f7bd7b0b82-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01086-d6f7bd7b0b82-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01086-fd48685e9010-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01086-fd48685e9010-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01086-fd48685e9010-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01086-fd48685e9010-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01086-fd48685e9010-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01086-fd48685e9010-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01086-fd48685e9010-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01086-fd48685e9010-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01086-fd48685e9010-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01086-fd48685e9010-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01086-fd48685e9010-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01086-fd48685e9010-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01086-fd48685e9010-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01087",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01087-6f85b39f86d9-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01087-3666919913ff-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Two-story red brick corner building with ivy, a small front porch, and an old beer sign.",
       "date": "2025-10-07",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01087-6f85b39f86d9-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01087-6f85b39f86d9-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01087-6f85b39f86d9-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01087-3666919913ff-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01087-3666919913ff-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01087-3666919913ff-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01087-3666919913ff-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01087-3666919913ff-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01087-3666919913ff-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01087-3666919913ff-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01087-3666919913ff-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01087-3666919913ff-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01087-3666919913ff-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01087-3666919913ff-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01087-3666919913ff-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01087-3666919913ff-full.jpg 5472w"
+      }
     },
     {
       "id": "20251007-184006",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-184006-ba1f6543668b-1600.webp",
-      "width": 1600,
-      "height": 1200,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-184006-b3c647397337-3840.webp",
+      "width": 3840,
+      "height": 2880,
       "alt": "Straight paved lane between two rows of pine trees beneath a pale sunset sky.",
       "date": "2025-10-07",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-184006-ba1f6543668b-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-184006-ba1f6543668b-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-184006-ba1f6543668b-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-184006-b3c647397337-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-184006-b3c647397337-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-184006-b3c647397337-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-184006-b3c647397337-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-184006-b3c647397337-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-184006-b3c647397337-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-184006-b3c647397337-full.jpg",
+        "width": 4000,
+        "height": 3000,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-184006-b3c647397337-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-184006-b3c647397337-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-184006-b3c647397337-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-184006-b3c647397337-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251007-184006-b3c647397337-full.jpg 4000w"
+      }
     },
     {
       "id": "20251008-062750",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-062750-b94871101d54-1600.webp",
-      "width": 1600,
-      "height": 1200,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-062750-cee20503059e-3840.webp",
+      "width": 3840,
+      "height": 2880,
       "alt": "Loaded motorcycle beside a tarp shelter at a shaded campsite among autumn trees.",
       "date": "2025-10-08",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-062750-b94871101d54-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-062750-b94871101d54-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-062750-b94871101d54-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-062750-cee20503059e-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-062750-cee20503059e-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-062750-cee20503059e-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-062750-cee20503059e-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-062750-cee20503059e-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-062750-cee20503059e-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-062750-cee20503059e-full.jpg",
+        "width": 4000,
+        "height": 3000,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-062750-cee20503059e-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-062750-cee20503059e-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-062750-cee20503059e-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-062750-cee20503059e-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-062750-cee20503059e-full.jpg 4000w"
+      }
     },
     {
       "id": "dsc01088",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01088-071ebbeff1b7-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01088-44bb782fb56f-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Gravel campground lane curving between mature trees and scattered picnic tables.",
       "date": "2025-10-08",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01088-071ebbeff1b7-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01088-071ebbeff1b7-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01088-071ebbeff1b7-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01088-44bb782fb56f-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01088-44bb782fb56f-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01088-44bb782fb56f-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01088-44bb782fb56f-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01088-44bb782fb56f-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01088-44bb782fb56f-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01088-44bb782fb56f-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01088-44bb782fb56f-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01088-44bb782fb56f-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01088-44bb782fb56f-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01088-44bb782fb56f-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01088-44bb782fb56f-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01088-44bb782fb56f-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01089",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01089-dc3f4f8f30f2-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01089-ef06441c5425-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Motorcycle and luggage parked at a wooded campsite.",
       "date": "2025-10-08",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01089-dc3f4f8f30f2-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01089-dc3f4f8f30f2-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01089-dc3f4f8f30f2-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01089-ef06441c5425-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01089-ef06441c5425-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01089-ef06441c5425-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01089-ef06441c5425-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01089-ef06441c5425-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01089-ef06441c5425-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01089-ef06441c5425-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01089-ef06441c5425-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01089-ef06441c5425-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01089-ef06441c5425-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01089-ef06441c5425-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01089-ef06441c5425-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01089-ef06441c5425-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01090",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01090-263586d538f4-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01090-55e6ba05e0ed-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Low sunlight casting long shadows across a road lined with evergreen trees.",
       "date": "2025-10-08",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01090-263586d538f4-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01090-263586d538f4-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01090-263586d538f4-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01090-55e6ba05e0ed-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01090-55e6ba05e0ed-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01090-55e6ba05e0ed-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01090-55e6ba05e0ed-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01090-55e6ba05e0ed-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01090-55e6ba05e0ed-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01090-55e6ba05e0ed-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01090-55e6ba05e0ed-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01090-55e6ba05e0ed-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01090-55e6ba05e0ed-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01090-55e6ba05e0ed-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01090-55e6ba05e0ed-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01090-55e6ba05e0ed-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01091",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01091-86465248fb90-1600.webp",
-      "width": 1600,
-      "height": 1298,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01091-e33859ce89a1-3840.webp",
+      "width": 3840,
+      "height": 3116,
       "alt": "Low morning sunlight casting long shadows across a lane lined with pine trees.",
       "date": "2025-10-08",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01091-86465248fb90-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01091-86465248fb90-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01091-86465248fb90-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01091-e33859ce89a1-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01091-e33859ce89a1-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01091-e33859ce89a1-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01091-e33859ce89a1-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01091-e33859ce89a1-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01091-e33859ce89a1-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01091-e33859ce89a1-full.jpg",
+        "width": 4184,
+        "height": 3395,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01091-e33859ce89a1-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01091-e33859ce89a1-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01091-e33859ce89a1-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01091-e33859ce89a1-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01091-e33859ce89a1-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01091-e33859ce89a1-full.jpg 4184w"
+      }
     },
     {
       "id": "dsc01093",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-63eb7a6e6f5a-3200.webp",
-      "width": 3200,
-      "height": 855,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-903e7b53f6cb-5459.webp",
+      "width": 5459,
+      "height": 1458,
       "alt": "Wide view of a country road descending through misty fields beneath a pale morning sky.",
       "date": "2025-10-08",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-63eb7a6e6f5a-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-63eb7a6e6f5a-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-63eb7a6e6f5a-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-63eb7a6e6f5a-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-63eb7a6e6f5a-3200.webp 3200w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-903e7b53f6cb-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-903e7b53f6cb-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-903e7b53f6cb-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-903e7b53f6cb-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-903e7b53f6cb-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-903e7b53f6cb-4800.webp 4800w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-903e7b53f6cb-5459.webp 5459w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-903e7b53f6cb-full.jpg",
+        "width": 5459,
+        "height": 1458,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-903e7b53f6cb-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-903e7b53f6cb-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-903e7b53f6cb-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-903e7b53f6cb-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-903e7b53f6cb-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-903e7b53f6cb-view-4800.jpg 4800w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01093-903e7b53f6cb-full.jpg 5459w"
+      }
     },
     {
       "id": "dsc01095",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01095-3841bca696e4-1600.webp",
-      "width": 1600,
-      "height": 657,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01095-6bdb6d6c4b6f-3840.webp",
+      "width": 3840,
+      "height": 1577,
       "alt": "Country road dipping into fog among open fields, utility poles, and distant farm buildings.",
       "date": "2025-10-08",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01095-3841bca696e4-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01095-3841bca696e4-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01095-3841bca696e4-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01095-6bdb6d6c4b6f-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01095-6bdb6d6c4b6f-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01095-6bdb6d6c4b6f-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01095-6bdb6d6c4b6f-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01095-6bdb6d6c4b6f-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01095-6bdb6d6c4b6f-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01095-6bdb6d6c4b6f-full.jpg",
+        "width": 5472,
+        "height": 2247,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01095-6bdb6d6c4b6f-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01095-6bdb6d6c4b6f-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01095-6bdb6d6c4b6f-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01095-6bdb6d6c4b6f-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01095-6bdb6d6c4b6f-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01095-6bdb6d6c4b6f-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01097",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01097-5f91aa116421-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01097-2ca7a6e504b3-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Pale morning mist lying over fields beneath a clear blue sky.",
       "date": "2025-10-08",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01097-5f91aa116421-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01097-5f91aa116421-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01097-5f91aa116421-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01097-2ca7a6e504b3-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01097-2ca7a6e504b3-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01097-2ca7a6e504b3-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01097-2ca7a6e504b3-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01097-2ca7a6e504b3-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01097-2ca7a6e504b3-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01097-2ca7a6e504b3-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01097-2ca7a6e504b3-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01097-2ca7a6e504b3-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01097-2ca7a6e504b3-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01097-2ca7a6e504b3-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01097-2ca7a6e504b3-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01097-2ca7a6e504b3-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01098",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01098-c1b0ebd90da9-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01098-ee0ff3768219-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Rural road climbing between trees and a sunlit grassy bank.",
       "date": "2025-10-08",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01098-c1b0ebd90da9-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01098-c1b0ebd90da9-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01098-c1b0ebd90da9-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01098-ee0ff3768219-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01098-ee0ff3768219-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01098-ee0ff3768219-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01098-ee0ff3768219-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01098-ee0ff3768219-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01098-ee0ff3768219-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01098-ee0ff3768219-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01098-ee0ff3768219-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01098-ee0ff3768219-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01098-ee0ff3768219-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01098-ee0ff3768219-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01098-ee0ff3768219-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01098-ee0ff3768219-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01100",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01100-1fb080121c78-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01100-08e9e1ddae71-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Red brick corner building with faded striped awnings over its ground-floor windows.",
       "date": "2025-10-08",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01100-1fb080121c78-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01100-1fb080121c78-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01100-1fb080121c78-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01100-08e9e1ddae71-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01100-08e9e1ddae71-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01100-08e9e1ddae71-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01100-08e9e1ddae71-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01100-08e9e1ddae71-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01100-08e9e1ddae71-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01100-08e9e1ddae71-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01100-08e9e1ddae71-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01100-08e9e1ddae71-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01100-08e9e1ddae71-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01100-08e9e1ddae71-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01100-08e9e1ddae71-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01100-08e9e1ddae71-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01101",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01101-60b4feded988-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01101-27111744ff70-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Small brick post office with Reynolds, Illinois, lettering above the entrance.",
       "date": "2025-10-08",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01101-60b4feded988-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01101-60b4feded988-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01101-60b4feded988-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01101-27111744ff70-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01101-27111744ff70-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01101-27111744ff70-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01101-27111744ff70-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01101-27111744ff70-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01101-27111744ff70-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01101-27111744ff70-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01101-27111744ff70-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01101-27111744ff70-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01101-27111744ff70-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01101-27111744ff70-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01101-27111744ff70-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01101-27111744ff70-full.jpg 5472w"
+      }
     },
     {
       "id": "20251008-092750-0",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-092750-0-21a654b92411-1600.webp",
-      "width": 1600,
-      "height": 1200,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-092750-0-944a86db1f47-3840.webp",
+      "width": 3840,
+      "height": 2880,
       "alt": "Concrete boat ramp and rock breakwaters beside a broad river under a clear blue sky.",
       "date": "2025-10-08",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-092750-0-21a654b92411-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-092750-0-21a654b92411-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-092750-0-21a654b92411-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-092750-0-944a86db1f47-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-092750-0-944a86db1f47-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-092750-0-944a86db1f47-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-092750-0-944a86db1f47-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-092750-0-944a86db1f47-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-092750-0-944a86db1f47-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-092750-0-944a86db1f47-full.jpg",
+        "width": 4000,
+        "height": 3000,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-092750-0-944a86db1f47-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-092750-0-944a86db1f47-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-092750-0-944a86db1f47-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-092750-0-944a86db1f47-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-092750-0-944a86db1f47-full.jpg 4000w"
+      }
     },
     {
       "id": "20251008-110452",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-110452-feacd1d61d54-1600.webp",
-      "width": 1600,
-      "height": 1200,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-110452-61f30fbcebab-3840.webp",
+      "width": 3840,
+      "height": 2880,
       "alt": "Motorcycle cockpit beside a country road with fields and distant wind turbines.",
       "date": "2025-10-08",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-110452-feacd1d61d54-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-110452-feacd1d61d54-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-110452-feacd1d61d54-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-110452-61f30fbcebab-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-110452-61f30fbcebab-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-110452-61f30fbcebab-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-110452-61f30fbcebab-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-110452-61f30fbcebab-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-110452-61f30fbcebab-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-110452-61f30fbcebab-full.jpg",
+        "width": 4000,
+        "height": 3000,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-110452-61f30fbcebab-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-110452-61f30fbcebab-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-110452-61f30fbcebab-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-110452-61f30fbcebab-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-110452-61f30fbcebab-full.jpg 4000w"
+      }
     },
     {
       "id": "20251008-114218",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-114218-408847669ef8-1600.webp",
-      "width": 1600,
-      "height": 1200,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-114218-23dcd99d7e88-3840.webp",
+      "width": 3840,
+      "height": 2880,
       "alt": "Kwik Trip storefront with a green metal roof and cars parked by the entrance.",
       "date": "2025-10-08",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-114218-408847669ef8-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-114218-408847669ef8-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-114218-408847669ef8-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-114218-23dcd99d7e88-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-114218-23dcd99d7e88-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-114218-23dcd99d7e88-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-114218-23dcd99d7e88-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-114218-23dcd99d7e88-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-114218-23dcd99d7e88-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-114218-23dcd99d7e88-full.jpg",
+        "width": 4000,
+        "height": 3000,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-114218-23dcd99d7e88-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-114218-23dcd99d7e88-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-114218-23dcd99d7e88-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-114218-23dcd99d7e88-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/20251008-114218-23dcd99d7e88-full.jpg 4000w"
+      }
     },
     {
       "id": "dsc01103",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01103-1f6b57545613-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01103-f46045d50a09-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Picnic table and wooden bench beside a pond surrounded by green and yellow trees.",
       "date": "2025-10-08",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01103-1f6b57545613-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01103-1f6b57545613-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01103-1f6b57545613-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01103-f46045d50a09-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01103-f46045d50a09-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01103-f46045d50a09-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01103-f46045d50a09-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01103-f46045d50a09-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01103-f46045d50a09-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01103-f46045d50a09-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01103-f46045d50a09-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01103-f46045d50a09-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01103-f46045d50a09-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01103-f46045d50a09-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01103-f46045d50a09-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01103-f46045d50a09-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01105",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01105-05d0a6d30448-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01105-1c714cfd4de3-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Line of tall trees silhouetted above a grassy slope at sunset.",
       "date": "2025-10-09",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01105-05d0a6d30448-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01105-05d0a6d30448-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01105-05d0a6d30448-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01105-1c714cfd4de3-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01105-1c714cfd4de3-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01105-1c714cfd4de3-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01105-1c714cfd4de3-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01105-1c714cfd4de3-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01105-1c714cfd4de3-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01105-1c714cfd4de3-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01105-1c714cfd4de3-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01105-1c714cfd4de3-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01105-1c714cfd4de3-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01105-1c714cfd4de3-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01105-1c714cfd4de3-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01105-1c714cfd4de3-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01106",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01106-4ab1c3ae4f2b-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01106-b0e3ec573adf-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Row of slender deciduous trees beside a field in warm evening light.",
       "date": "2025-10-09",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01106-4ab1c3ae4f2b-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01106-4ab1c3ae4f2b-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01106-4ab1c3ae4f2b-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01106-b0e3ec573adf-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01106-b0e3ec573adf-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01106-b0e3ec573adf-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01106-b0e3ec573adf-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01106-b0e3ec573adf-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01106-b0e3ec573adf-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01106-b0e3ec573adf-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01106-b0e3ec573adf-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01106-b0e3ec573adf-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01106-b0e3ec573adf-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01106-b0e3ec573adf-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01106-b0e3ec573adf-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01106-b0e3ec573adf-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01107",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01107-1ed7ba697ec2-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01107-b16cebb7ac9d-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Golden evening sunlight filtering through evergreen branches onto a grassy lawn.",
       "date": "2025-10-09",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01107-1ed7ba697ec2-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01107-1ed7ba697ec2-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01107-1ed7ba697ec2-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01107-b16cebb7ac9d-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01107-b16cebb7ac9d-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01107-b16cebb7ac9d-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01107-b16cebb7ac9d-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01107-b16cebb7ac9d-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01107-b16cebb7ac9d-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01107-b16cebb7ac9d-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01107-b16cebb7ac9d-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01107-b16cebb7ac9d-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01107-b16cebb7ac9d-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01107-b16cebb7ac9d-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01107-b16cebb7ac9d-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01107-b16cebb7ac9d-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01108",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01108-fb678e0a7833-1600.webp",
-      "width": 1600,
-      "height": 2400,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01108-41d3c714ee5a-3648.webp",
+      "width": 3648,
+      "height": 5472,
       "alt": "Warmly lit interior corridor with wood paneling and coat hooks.",
       "date": "2025-10-09",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01108-fb678e0a7833-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01108-fb678e0a7833-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01108-fb678e0a7833-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01108-41d3c714ee5a-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01108-41d3c714ee5a-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01108-41d3c714ee5a-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01108-41d3c714ee5a-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01108-41d3c714ee5a-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01108-41d3c714ee5a-3648.webp 3648w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01108-41d3c714ee5a-full.jpg",
+        "width": 3648,
+        "height": 5472,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01108-41d3c714ee5a-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01108-41d3c714ee5a-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01108-41d3c714ee5a-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01108-41d3c714ee5a-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01108-41d3c714ee5a-full.jpg 3648w"
+      }
     },
     {
       "id": "dsc01109",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01109-03d7be0966e3-1600.webp",
-      "width": 1600,
-      "height": 2400,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01109-e01a188d5f98-3648.webp",
+      "width": 3648,
+      "height": 5472,
       "alt": "Narrow restaurant corridor with wood paneling and coat hangers opening into a warmly lit dining room.",
       "date": "2025-10-09",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01109-03d7be0966e3-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01109-03d7be0966e3-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01109-03d7be0966e3-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01109-e01a188d5f98-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01109-e01a188d5f98-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01109-e01a188d5f98-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01109-e01a188d5f98-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01109-e01a188d5f98-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01109-e01a188d5f98-3648.webp 3648w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01109-e01a188d5f98-full.jpg",
+        "width": 3648,
+        "height": 5472,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01109-e01a188d5f98-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01109-e01a188d5f98-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01109-e01a188d5f98-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01109-e01a188d5f98-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01109-e01a188d5f98-full.jpg 3648w"
+      }
     },
     {
       "id": "img-2468",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/img-2468-a6430253b48a-1600.webp",
-      "width": 1600,
-      "height": 2133,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/img-2468-4bed4509ef64-3840.webp",
+      "width": 3840,
+      "height": 5120,
       "alt": "Two people beside a white Yamaha motorcycle in a garage with a red Jeep behind them.",
       "date": "2025-10-11",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/img-2468-a6430253b48a-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/img-2468-a6430253b48a-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/img-2468-a6430253b48a-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/img-2468-4bed4509ef64-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/img-2468-4bed4509ef64-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/img-2468-4bed4509ef64-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/img-2468-4bed4509ef64-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/img-2468-4bed4509ef64-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/img-2468-4bed4509ef64-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/img-2468-4bed4509ef64-full.jpg",
+        "width": 4284,
+        "height": 5712,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/img-2468-4bed4509ef64-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/img-2468-4bed4509ef64-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/img-2468-4bed4509ef64-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/img-2468-4bed4509ef64-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/img-2468-4bed4509ef64-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/img-2468-4bed4509ef64-full.jpg 4284w"
+      }
     },
     {
       "id": "dsc01112",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01112-70209c8491f9-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01112-41eae77262df-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Paved path between mature trees leading to a stone memorial topped with a cross.",
       "date": "2025-10-13",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01112-70209c8491f9-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01112-70209c8491f9-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01112-70209c8491f9-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01112-41eae77262df-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01112-41eae77262df-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01112-41eae77262df-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01112-41eae77262df-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01112-41eae77262df-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01112-41eae77262df-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01112-41eae77262df-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01112-41eae77262df-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01112-41eae77262df-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01112-41eae77262df-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01112-41eae77262df-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01112-41eae77262df-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01112-41eae77262df-full.jpg 5472w"
+      }
     },
     {
       "id": "dsc01118",
-      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01118-92e38e11ec65-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01118-25d2281905a9-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Helmeted rider in a high-visibility jacket reflected in a storefront window behind a closed sign.",
       "date": "2025-10-13",
-      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01118-92e38e11ec65-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01118-92e38e11ec65-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01118-92e38e11ec65-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01118-25d2281905a9-480.webp 480w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01118-25d2281905a9-960.webp 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01118-25d2281905a9-1600.webp 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01118-25d2281905a9-2400.webp 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01118-25d2281905a9-3200.webp 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01118-25d2281905a9-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01118-25d2281905a9-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "srcSet": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01118-25d2281905a9-view-960.jpg 960w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01118-25d2281905a9-view-1600.jpg 1600w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01118-25d2281905a9-view-2400.jpg 2400w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01118-25d2281905a9-view-3200.jpg 3200w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01118-25d2281905a9-view-3840.jpg 3840w, https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01118-25d2281905a9-full.jpg 5472w"
+      }
     }
   ],
   "days": [

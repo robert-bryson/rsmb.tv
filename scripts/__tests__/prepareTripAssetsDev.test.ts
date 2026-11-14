@@ -121,7 +121,7 @@ describe('prepare trip assets before dev', () => {
             tripId: 'coastal-loop',
             source: path.join(sourceRoot, 'coastal-loop'),
         });
-        expect(totals).toEqual({ trips: 1, photos: 2, webpFiles: 5, geoJsonFiles: 3, failures: [], skipped: [] });
+        expect(totals).toEqual({ trips: 1, photos: 2, webpFiles: 5, fullFiles: 0, viewerFiles: 0, geoJsonFiles: 3, failures: [], skipped: [] });
         expect(formatAssetTotals(totals)).toBe(
             'Processed 1 trip with 2 photos and 3 GeoJSON files before dev (5 WebP derivatives).',
         );
@@ -154,6 +154,23 @@ describe('prepare trip assets before dev', () => {
         expect(formatAssetTotals(totals)).toContain('1 trip incomplete');
     });
 
+    it('mirrors screen-sized viewer exports and counts them separately from native originals', async () => {
+        const sourceRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'trip-assets-viewer-'));
+        tempDirs.push(sourceRoot);
+        const source = path.join(sourceRoot, 'test-trip');
+        const photos = path.join(source, 'photos', 'processed');
+        fs.mkdirSync(photos, { recursive: true });
+        const filenames = ['photo-012345abcdef-full.jpg', 'photo-012345abcdef-view-960.jpg', 'alpha-012345abcdef-view-960.png'];
+        for (const filename of filenames) fs.writeFileSync(path.join(photos, filename), filename);
+        fs.writeFileSync(path.join(photos, 'private-original.jpg'), 'not a processed viewer file');
+        const outputRoot = path.join(sourceRoot, 'output');
+        const totals = await prepareTripAssetsForDev({ sourceRoot, previewSlug: 'test-trip', outputRoot,
+            prepare: vi.fn().mockResolvedValue({ photos: [{}, {}] }) });
+        expect(totals).toMatchObject({ fullFiles: 1, viewerFiles: 2, failures: [] });
+        expect(formatAssetTotals(totals)).toContain('1 full-resolution photo, 2 viewer derivatives');
+        expect(fs.readdirSync(path.join(outputRoot, 'test-trip', 'photos')).sort()).toEqual(filenames.sort());
+    });
+
     it('prepares and mirrors photos and routes when native copying is unsupported', async () => {
         const sourceRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'trip-assets-dev-'));
         tempDirs.push(sourceRoot);
@@ -170,7 +187,7 @@ describe('prepare trip assets before dev', () => {
 
         for (let run = 0; run < 2; run++) {
             const totals = await prepareTripAssetsForDev({ sourceRoot, previewSlug: 'test-trip', outputRoot });
-            expect(totals).toEqual({ trips: 1, photos: 1, webpFiles: 4, geoJsonFiles: 2, failures: [], skipped: [] });
+            expect(totals).toEqual({ trips: 1, photos: 1, webpFiles: 4, fullFiles: 1, viewerFiles: 0, geoJsonFiles: 2, failures: [], skipped: [] });
             const report = JSON.parse(fs.readFileSync(path.join(source, 'asset-metadata.json'), 'utf8'));
             for (const derivative of report.photos[0].derivatives) {
                 const bytes = fs.readFileSync(path.join(source, 'photos', 'processed', derivative.filename));
@@ -178,6 +195,9 @@ describe('prepare trip assets before dev', () => {
                     expect(fs.readFileSync(path.join(outputRoot, 'test-trip', 'photos', filename))).toEqual(bytes);
                 }
             }
+            const full = report.photos[0].full.filename;
+            expect(fs.readFileSync(path.join(outputRoot, 'test-trip', 'photos', full)))
+                .toEqual(fs.readFileSync(path.join(source, 'photos', 'processed', full)));
             expect(JSON.parse(fs.readFileSync(path.join(outputRoot, 'test-trip', 'geo', 'route.geojson'), 'utf8'))
                 .features).toHaveLength(1);
         }

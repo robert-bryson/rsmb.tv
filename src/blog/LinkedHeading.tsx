@@ -92,7 +92,7 @@ export function LinkedHeading({
     const hasContentLink = containsLink(children);
     const isMajorHeading = Heading === 'h1' || Heading === 'h2';
     const title = (
-        <span className={`[&_*]:text-inherit ${isMajorHeading ? 'box-decoration-clone border-b-2 border-violet-400 pb-1' : ''}`}>
+        <span data-heading-title className={`[&_*]:text-inherit ${isMajorHeading ? 'box-decoration-clone border-b-2 border-violet-400 pb-1' : ''}`}>
             {children}
         </span>
     );

@@ -1,4 +1,5 @@
 import { tripManifestSchema } from '../../../shared/tripManifestSchema';
+import { localTripAssetUrl, localTripPhoto } from '../../../shared/tripAssetUrls';
 import type { TripManifest } from './types';
 import { loaders, issues } from 'virtual:trip-content';
 export { tripManifestSchema };
@@ -7,21 +8,14 @@ export function parseTripManifest(value: unknown): TripManifest {
     const manifest = tripManifestSchema.parse(value);
     if (!import.meta.env.DEV) return manifest;
 
-    const localUrl = (url: string) => url.replace(/^https:\/\/data\.rsmb\.tv(?=\/trips\/)/, '/data');
-    const localPhoto = (photo: TripManifest['photos'][number]) => ({
-        ...photo,
-        src: localUrl(photo.src),
-        srcSet: photo.srcSet?.replaceAll('https://data.rsmb.tv', '/data'),
-    });
-
     return {
         ...manifest,
         route: {
             ...manifest.route,
-            geoJson: localUrl(manifest.route.geoJson),
-            staticImage: manifest.route.staticImage ? localUrl(manifest.route.staticImage) : undefined,
+            geoJson: localTripAssetUrl(manifest.route.geoJson),
+            staticImage: manifest.route.staticImage ? localTripAssetUrl(manifest.route.staticImage) : undefined,
         },
-        photos: manifest.photos.map(localPhoto),
+        photos: manifest.photos.map(localTripPhoto),
     };
 }
 

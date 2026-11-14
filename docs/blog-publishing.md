@@ -75,6 +75,10 @@ Subtitles have no heading ID or table-of-contents entry.
 Use Normal text for paragraphs.
 
 The importer retains lists, links, images, code blocks, emphasis, highlights, and tables.
+It also retains first-line paragraph indents and leading tabs.
+Use the Google Docs first-line indent setting for consistent paragraph formatting.
+Wrapped lines stay aligned with the text column.
+Conflicting exported class rules follow stylesheet order.
 It removes active HTML and restricts URL protocols.
 It treats braces, angle brackets, and module statements in ordinary text as literal content.
 Code blocks retain their original characters.

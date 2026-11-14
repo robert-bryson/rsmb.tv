@@ -110,13 +110,14 @@ export function TripPhotoFigure({
 }
 
 export function TripPhoto({ photoId, layout = 'default', className = '', ...props }: TripPhotoProps) {
+    const { photos, registerGallery, getGalleryPhotos } = useTripStory();
     const galleryRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         if (!galleryRef.current || props.linked === false) return;
-        const lightbox = createTripPhotoLightbox(galleryRef.current);
-        return () => lightbox.destroy();
-    }, [photoId, props.linked]);
-    const { photos } = useTripStory();
+        const unregister = registerGallery(galleryRef.current);
+        const lightbox = createTripPhotoLightbox(galleryRef.current, getGalleryPhotos);
+        return () => { lightbox.destroy(); unregister(); };
+    }, [photoId, props.linked, registerGallery, getGalleryPhotos]);
     const photo = photos.get(photoId);
     if (!photo) throw new Error(`Unknown trip photo: ${photoId}`);
     return (

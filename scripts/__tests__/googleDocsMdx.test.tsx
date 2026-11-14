@@ -56,7 +56,108 @@ describe('Google Docs to rendered MDX', () => {
         expect(html).toBe('<p class="blog-subtitle"><em>Notes</em> and <strong>details</strong>.</p>');
     });
 
-    it.each(['p', 'p class="subtitle"'])('renders expression syntax as text in %s', async tag => {
+    it('preserves authored first-line indents from Docs classes and inline overrides', async () => {
+        const html = await renderDocument(`
+            <style>.first-line { text-indent: 36pt; margin-left: 0; }</style>
+            <p class="first-line">First <strong>paragraph</strong> with <a href="https://example.com">a link</a>.</p>
+            <p class="first-line" style="text-indent: 2.5em">A different indent with <code>{value}</code>.</p>
+            <p class="first-line" style="text-indent: 0px">An unindented paragraph.</p>
+            <p>Ordinary body text.</p>
+        `);
+        const dom = new JSDOM(html);
+        try {
+            const paragraphs = [...dom.window.document.querySelectorAll('p')];
+            expect(paragraphs).toHaveLength(4);
+            expect(paragraphs.map(p => p.style.textIndent)).toEqual(['36pt', '2.5em', '', '']);
+            expect(paragraphs[0]).toHaveClass('text-zinc-300', 'leading-relaxed', 'mb-4');
+            expect(paragraphs[0].querySelector('strong')).toHaveTextContent('paragraph');
+            expect(paragraphs[0].querySelector('a')).toHaveAttribute('href', 'https://example.com');
+            expect(paragraphs[1].querySelector('code')).toHaveTextContent('{value}');
+        } finally {
+            dom.window.close();
+        }
+    });
+
+    it('preserves typed tabs and split nonbreaking spaces as first-line whitespace', async () => {
+        const html = await renderDocument(`
+            <p><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<em>Tabbed prose</em> continues here.</span></p>
+            <p>\tAnother tabbed paragraph.</p>
+            <p> A single ordinary leading space.</p>
+        `);
+        const dom = new JSDOM(html);
+        try {
+            const paragraphs = [...dom.window.document.querySelectorAll('p')];
+            expect(paragraphs).toHaveLength(3);
+            expect(paragraphs[0].textContent).toBe(`${'\u00a0'.repeat(8)}Tabbed prose continues here.`);
+            expect(paragraphs[0].querySelector('em')).toHaveTextContent('Tabbed prose');
+            expect(paragraphs[1].textContent).toBe(`${'\u00a0'.repeat(8)}Another tabbed paragraph.`);
+            expect(paragraphs[2].textContent).toBe('A single ordinary leading space.');
+            expect(dom.window.document.querySelector('pre')).toBeNull();
+        } finally {
+            dom.window.close();
+        }
+    });
+
+    it('resolves conflicting Docs classes in stylesheet order, including repeated rules', async () => {
+        const html = await renderDocument(`
+            <style>
+                .first-line { text-indent: 36pt; font-weight: 700; }
+                .reset { text-indent: 0px; font-weight: 400; }
+                .first-line { font-style: italic; }
+            </style>
+            <p class="reset first-line">The reset wins regardless of class attribute order.</p>
+            <p class="first-line reset">The same reset wins here.</p>
+        `);
+        const dom = new JSDOM(html);
+        try {
+            const paragraphs = [...dom.window.document.querySelectorAll('p')];
+            expect(paragraphs).toHaveLength(2);
+            expect(paragraphs.map(p => p.style.textIndent)).toEqual(['', '']);
+            expect(dom.window.document.querySelectorAll('strong')).toHaveLength(0);
+            expect(dom.window.document.querySelectorAll('em')).toHaveLength(2);
+        } finally {
+            dom.window.close();
+        }
+    });
+
+    it('retains line breaks in indented prose without nesting paragraphs', async () => {
+        const html = await renderDocument('<p style="text-indent: 48px">First line.<br>Second <em>line</em>.</p>');
+        const dom = new JSDOM(html);
+        try {
+            expect(dom.window.document.querySelectorAll('p')).toHaveLength(1);
+            expect(dom.window.document.querySelector('p')?.textContent).toBe('First line.\nSecond line.');
+            expect(dom.window.document.querySelector('em')).toHaveTextContent('line');
+        } finally {
+            dom.window.close();
+        }
+    });
+
+    it('keeps indentation out of code, list layout, subtitles, and trip components', () => {
+        const markdown = convertHtmlToMarkdown(`
+            <style>.first-line { text-indent: 48px; }</style>
+            <p class="first-line">\`\`\`text</p><p class="first-line">\tCode indentation.</p><p class="first-line">\`\`\`</p>
+            <ul><li><p class="first-line">List item.</p></li></ul>
+            <p class="subtitle first-line">Supporting text.</p>
+            <p class="first-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{trip-map}}</p>
+        `);
+        expect(markdown).toContain('```text\n\tCode indentation.\n```');
+        expect(markdown).toContain('- List item.');
+        expect(markdown).toContain('<p className="blog-subtitle">Supporting text.</p>');
+        expect(expandTripShortcodes(markdown, { format: 'trip' })).toContain('<TripMap />');
+        expect(markdown).not.toContain('textIndent');
+    });
+
+    it('does not carry arbitrary paragraph styles or attributes into MDX', async () => {
+        const html = await renderDocument(`
+            <p style="text-indent: 48px; background: url(https://example.com/unwanted); position: fixed" onclick="alert(1)">Safe indent.</p>
+            <p style="text-indent: calc(1px + 2em)" data-blog-text-indent="48px" data-blog-indent-spaces="20">No imported expression.</p>
+        `);
+        expect(html).toContain('style="text-indent:48px"');
+        expect(html).not.toMatch(/unwanted|position|onclick|data-blog|calc\(/);
+        expect(html).toContain('<p>No imported expression.</p>');
+    });
+
+    it.each(['p', 'p class="subtitle"', 'p style="text-indent: 48px"'])('renders expression syntax as text in %s', async tag => {
         const html = await renderDocument(`<${tag}>{globalThis.mdxInjected = 1} &lt;button&gt; &amp; text</p>`);
         expect(html).toContain('{globalThis.mdxInjected = 1} &lt;button&gt; &amp; text');
         expect(Reflect.has(globalThis, 'mdxInjected')).toBe(false);

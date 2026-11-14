@@ -61,6 +61,12 @@ The importer retains inline emphasis and links in subtitles.
 Do not use a heading style for distance text such as `(339 mi. / 545 km.)`.
 The table of contents starts expanded. Readers can select **Collapse** to hide its links.
 
+Body paragraphs retain first-line indentation from Google Docs.
+Set this with **Format → Align & indent → Indentation options → Special indent → First line**.
+Existing tabs at the start of a paragraph are also retained.
+Wrapped lines stay aligned with the text column.
+Paragraphs without an authored indent stay flush left.
+
 Chapter headings stay at the top while the reader scrolls through each chapter.
 The next chapter pushes the previous heading out of view.
 Subsections scroll with the text. The story title does not stay at the top.
@@ -185,17 +191,26 @@ Add `--force` to regenerate an existing version.
 ### Photo output
 
 The command corrects orientation, removes metadata, and retains the aspect ratio.
-It creates WebP files at quality 84. It does not enlarge the source image.
+The aspect ratio is the relationship between image width and height.
+Page images use WebP quality 92 with high-quality chroma subsampling.
+The command also creates a native-resolution viewer image from each original.
+These JPEG files use quality 99 and 4:4:4 chroma, with no resizing.
+Separate viewer sizes use the same quality at 960, 1600, 2400, 3200, and 3840 pixels.
+Wide panoramas also receive 4800- and 6400-pixel viewer sizes when the source permits.
+Sources with transparency use lossless PNG for the native export and smaller viewer sizes.
+Original metadata stays out of both formats. No output enlarges the source.
 
 | Width | Use |
 | --- | --- |
 | 480 px | Phone display and gallery thumbnail |
 | 960 px | Inline photo |
-| 1600 px | Header photo and full-screen display |
-| 2400 px | Panorama on a large display |
-| 3200 px | Panorama on a large display or a display with higher pixel density |
+| 1600 px | Inline photos and larger gallery tiles |
+| 2400 / 3200 / 3840 px | Header photos, wide galleries, and high-density displays |
+| 4800 / 6400 / 7680 px | Full-width panoramas on larger or high-density displays |
+| Original resolution | Full detail when zoomed and direct image links |
 
-Only sources at least 2.5 times as wide as tall receive outputs above 1600 pixels.
+Ordinary page images stop at 3840 pixels.
+Sources at least 2.5 times as wide as tall use the panorama sizes through 7680 pixels instead.
 The command checks this ratio after orientation correction.
 Smaller sources receive smaller outputs without enlargement.
 This rule controls prepared image sizes.
@@ -205,6 +220,8 @@ A source named `Camp at Dusk.jpg` produces files such as `camp-at-dusk-012345abc
 Use clear, stable filenames. The command checks all photo IDs before it writes files.
 It stops if two source names produce the same photo ID.
 It retains versioned files so published URLs remain usable.
+The quality upgrade uses new fingerprints; old published image versions remain intact.
+Pipeline revision 4 adds viewer sizes while retaining the existing quality-92 and native quality-99 encodings.
 It also writes compatibility aliases without fingerprints for older manifests. It removes stale aliases.
 The report records each file size. Review files above these limits:
 
@@ -212,12 +229,11 @@ The report records each file size. Review files above these limits:
 - 300 KB at 960 pixels.
 - 800 KB at larger widths.
 
-Copy the largest output width and height from `asset-metadata.json` into the manifest.
+Apply the responsive and full-resolution exports with `update-trip-manifest-assets`.
 Do not assume that each source can produce a 1600-pixel image.
 
 Existing 1600-pixel photos work with the panorama shortcode, but can appear soft on large displays.
-Prepare the original again to create larger panorama outputs.
-Apply the outputs with `update-trip-manifest-assets`.
+Prepare the original again to create the larger page images and original-size viewer export.
 Publish the prepared assets before you deploy the updated manifest.
 See section 3 for the update command.
 
@@ -231,6 +247,18 @@ The panorama shortcode uses the full page width for any photo orientation.
 Both layouts retain the photo's proportions and reserve its height after an image failure.
 Lazy photos use automatic source sizes when the browser supports them.
 Fallback sizes use relative font units to support larger browser font settings.
+
+Story galleries and linked inline photos share one fullscreen browsing sequence in page order.
+This sequence includes panoramas and the hidden remainder of collapsed galleries.
+The hero's viewer retains the complete manifest photo collection.
+The `full` entry retains the native export, dimensions, and a separate viewer `srcSet`.
+The `srcSet` field lists available files and their pixel widths.
+The viewer selects a file for the screen's pixel density.
+It requests a larger file when the reader zooms in.
+Every JPEG candidate in that set uses quality 99.
+Page thumbnails remain separate.
+The manifest updater omits a resized candidate when the native image uses fewer or equal bytes.
+Only the next slide is prefetched.
 
 ### Route output
 
@@ -460,7 +488,7 @@ A gallery first shows up to nine photos.
 Its viewer includes all photos from mounted story galleries, including collapsed photos.
 Next and Previous follow the gallery order in the story.
 The hero viewer contains every manifest photo, with the hero first.
-An inline photo has its own viewer.
+Linked inline photos and panoramas join the story viewer in document order.
 Each viewer slide retains the manifest alt text.
 Expanding or collapsing the gallery does not change viewer captions or photo order.
 Changing the gallery ID starts the new gallery in its collapsed state.
@@ -505,6 +533,12 @@ Example photo entry:
   "srcSet": "https://data.rsmb.tv/trips/ozarks-2012/photos/camp-at-dusk-012345abcdef-480.webp 480w, https://data.rsmb.tv/trips/ozarks-2012/photos/camp-at-dusk-012345abcdef-960.webp 960w, https://data.rsmb.tv/trips/ozarks-2012/photos/camp-at-dusk-012345abcdef-1600.webp 1600w",
   "width": 1600,
   "height": 1067,
+  "full": {
+    "src": "https://data.rsmb.tv/trips/ozarks-2012/photos/camp-at-dusk-012345abcdef-full.jpg",
+    "width": 6000,
+    "height": 4000,
+    "srcSet": "https://data.rsmb.tv/trips/ozarks-2012/photos/camp-at-dusk-012345abcdef-view-1600.jpg 1600w, https://data.rsmb.tv/trips/ozarks-2012/photos/camp-at-dusk-012345abcdef-view-3200.jpg 3200w, https://data.rsmb.tv/trips/ozarks-2012/photos/camp-at-dusk-012345abcdef-full.jpg 6000w"
+  },
   "alt": "A tent beside the motorcycle under a red sky.",
   "caption": "The first dry campsite after two days of rain.",
   "date": "2012-05-19"
@@ -527,10 +561,17 @@ For an existing manifest, apply prepared photo URLs and dimensions without chang
 npm run update-trip-manifest-assets -- ozarks-2012 --source "/path/to/rsmb.tv/trips/ozarks-2012"
 ```
 
-Review the manifest diff. Publish the prepared assets before you deploy the manifest.
+Review the manifest diff.
+Publish the page and viewer assets before you deploy the manifest.
 Each derivative filename must match its photo ID and width.
 All derivatives for one photo must use the same fingerprint.
 Derivative widths must be unique. Width and height must be positive integers.
+The full-resolution filename must use the same photo ID and fingerprint as the responsive files.
+It must be at least as large as the largest responsive candidate.
+All candidates must retain the source aspect ratio.
+One pixel of rounding is allowed at the candidate's size.
+The update command rejects duplicate photo IDs and malformed image records.
+It validates image records before sorting them or changing the manifest.
 The update command stops if these checks fail. Run preparation again instead of editing the report.
 
 ## 4. Add the Sheet row
@@ -566,7 +607,11 @@ npm run dev
 ```
 
 The command prepares local assets and imports published and unpublished Sheet rows.
-It copies WebP and GeoJSON files to `public/data/trips/<trip-id>` for local preview.
+It copies page images, viewer images, and route files to `public/data/trips/<trip-id>` for local preview.
+Only trip URLs from `https://data.rsmb.tv` use this local mirror.
+Other hosts and URL query values retain their original values.
+Release builds exclude this local mirror, including unused photo versions and draft media.
+Reviewed animations under `public/media/trips/` remain bundled with the site.
 This cache is ignored by Git. An incomplete trip does not stop preparation of other trips.
 Trips with no selected photos or original GPX files are skipped without changing existing outputs.
 The command stages both preview directories before replacement. A failed copy retains the previous preview.

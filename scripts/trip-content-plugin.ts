@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { Plugin, ResolvedConfig } from 'vite';
 import { tripManifestSchema, type TripManifest, type TripSummary } from '../shared/tripManifestSchema.ts';
+import { localTripAssetUrl, localTripPhoto } from '../shared/tripAssetUrls.ts';
 import { validateBundledTripMedia } from './trip-media-assets.ts';
 import { articleMetadata, staticPageMetadata, STATIC_PAGE_PATHS } from '../src/utils/pageMetadata.ts';
 import { pageMetadataHtml } from './pageMetadataHtml.ts';
@@ -142,13 +143,13 @@ export function tripContentPlugin(): Plugin {
 }
 function summary(manifest: TripManifest, local: boolean): TripSummary {
     const hero = manifest.photos.find(photo => photo.id === manifest.hero)!;
-    const url = (value: string) => local ? value.replaceAll('https://data.rsmb.tv/trips/', '/data/trips/') : value;
     return {
         id: manifest.id, dates: manifest.dates, ridingDays: manifest.ridingDays,
         distanceMiles: manifest.distanceMiles, series: manifest.series, motorcycle: manifest.motorcycle, regions: manifest.regions,
         countries: manifest.countries,
-        hero: { ...hero, src: url(hero.src), srcSet: hero.srcSet && url(hero.srcSet) },
-        route: { geoJson: url(manifest.route.geoJson), ...(manifest.route.alt ? { alt: manifest.route.alt } : {}) },
+        hero: local ? localTripPhoto(hero) : hero,
+        route: { geoJson: local ? localTripAssetUrl(manifest.route.geoJson) : manifest.route.geoJson,
+            ...(manifest.route.alt ? { alt: manifest.route.alt } : {}) },
     };
 }
 

@@ -64,6 +64,9 @@ npx vite --host 0.0.0.0 --port 5173 --strictPort
 Open [localhost:5173](http://localhost:5173/).
 This command skips trip preparation, content imports, and flight generation.
 Use `npm run dev` when those inputs need an update.
+Use `npm run sync-blogs:dev` to refresh document text without processing photos again.
+Trip paragraphs retain the first-line indentation from Google Docs.
+See the [authoring guide](docs/trips/TRIP-AUTHORING-README.md#photo-output) for page and fullscreen photo quality.
 
 ### Available Scripts
 
@@ -128,6 +131,8 @@ Relative data prefixes resolve inside `public/`. Symlinks cannot escape that dir
 Development builds include editorial preview metadata and mark HTML pages `noindex, nofollow`.
 RSS and sitemap files include published posts only, including during development builds.
 Hosted previews keep CDN asset URLs; local Vite uses prepared assets under `public/data/trips/`.
+Release builds exclude that local trip mirror from their output.
+Other public assets and reviewed animations under `public/media/trips/` remain in the build.
 Missing manifests, photos, or story bodies remain visible as incomplete atlas cards, with route controls enabled only for validated map data.
 
 ### Status Dashboard Controls

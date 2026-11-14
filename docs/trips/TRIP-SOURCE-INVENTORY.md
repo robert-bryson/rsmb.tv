@@ -1,7 +1,7 @@
 # Trip source inventory and starter structure
 
 Inventory snapshot: October 31, 2026.
-PCH photo additions were checked on November 1, 2026.
+PCH photo additions were checked on November 13, 2026.
 Mississippi–Wisconsin album additions were checked on November 2, 2026.
 Other source entries retain the October 31 review.
 The source review used the live `Blog Posts` Sheet and the locally synced source folders.
@@ -13,6 +13,9 @@ The [machine inventory](trip-source-inventory.json) records filenames, prepared 
 Source archives remain intact. New media was processed locally and copied into the existing Drive trip folders.
 Publication values and source Google Docs were not changed.
 
+The November 13 [quality refresh](../reviews/2026-11-13-trip-responsive-photo-quality.md) adds sharper exports and responsive quality-99 viewer images.
+It preserves the existing photo selections, except for one new PCH morning photo.
+
 ## All trips
 
 Photo counts describe manifest entries. Recorded miles describe available geometry, including local activity and possible travel by other modes.
@@ -23,7 +26,7 @@ The dates below come from existing manifests or recovered recordings. Sheet date
 | [Ocean Shores](../../src/content/trips/ocean-shores-2024.json) | February 17–20, 2024 | 2 | 10 | Existing story: ferry departure, beach stay, rainy return |
 | [Boise](../../src/content/trips/boise-2024.json) | May 11–19, 2024 | 6 | 79 | Existing story: Blue Mountains, work in Boise, Hells Canyon, return through the Cascades |
 | [Kalaloch](../../src/content/trips/kalaloch-2024.json) | June 21–23, 2024 | 3 | 25 | Existing story: ferry and forest roads, beach camp, peninsula loop |
-| [PCH](../../src/content/trips/pch-2024.json) | October 3–7, 2024 | 5 | 107 | Pre-trip Seattle gallery and five riding days: coast, redwoods, Sierra crossing, desert |
+| [PCH](../../src/content/trips/pch-2024.json) | October 3–7, 2024 | 5 | 108 | Pre-trip Seattle gallery and five riding days: coast, redwoods, Sierra crossing, desert |
 | [Route 66ish](route-66ish-2025-outline.md) | May 9–19, 2025; GPS through May 17 | 8 | 57 | Existing dated outline: California and Arizona, New Mexico, plains, Ozarks, St. Louis |
 | [Mississippi–Wisconsin](river-wisco-2025-outline.md) | October 7–13, 2025, inferred | 8 | 40 | Seven-day outline: river towns, camp, Wisconsin visits, Madison, Illinois return |
 | [ON–QC–New England](on-qc-new-england-2026-part-1-outline.md) | July 10–August 15, 2026, inferred | 35 | 1 | Three-part outline: Upper Peninsula, Canada, New England and return |
@@ -140,8 +143,9 @@ The [machine inventory](trip-source-inventory.json) records included and exclude
 The temporary hero is `20260717-135454`, a loaded motorcycle beside the Arctic Watershed sign.
 The original is `Downloads/20260717_135454.jpg`; its EXIF timestamp is July 17, 2026, at 13:54:54.
 The unchanged JPG is archived under both `photos/originals` and `photos/selects`.
-Processing creates WebP images at 480 × 360, 960 × 720, and 1600 × 1200 pixels.
-The manifest supplies responsive URLs and visible-content alt text.
+The November 13 refresh supplies responsive WebP images through 3840 × 2880 pixels.
+Its fullscreen export retains the original 4000 × 3000 dimensions.
+The manifest supplies both source types and visible-content alt text.
 The photograph belongs to the `jul-17` gallery and its matching day entry.
 It confirms a photographed stop during the recovered July 17 route.
 

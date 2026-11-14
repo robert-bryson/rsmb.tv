@@ -142,7 +142,7 @@ describe('map lifecycle', () => {
     });
 
     it('keeps county discovery lightweight and avoids source and style writes within each zoom stage', () => {
-        const current = props({ pins: publishedPins.pins, countyMode: 'auto', zoom: 5.9 });
+        const current = props({ pins: publishedPins.pins, countyMode: 'auto', zoom: 3.9 });
         const view = render(<PinsMap {...current} />); flushFrames();
         act(() => map().emit('style.load'));
         const circles = map().sources.get('pin-circles')!.setData;
@@ -153,29 +153,29 @@ describe('map lifecycle', () => {
         expect(radii.mock.calls[0][0].features.every((f: { properties: { level: string } }) => f.properties.level !== 'county')).toBe(true);
         const writes = [map().setFilter.mock.calls.length, map().setLayoutProperty.mock.calls.length,
             map().setPaintProperty.mock.calls.length, map().setLayerZoomRange.mock.calls.length];
-        for (const zoom of [6, 6.25, 6.9]) view.rerender(<PinsMap {...current} zoom={zoom} />);
+        for (const zoom of [3.95, 3.99]) view.rerender(<PinsMap {...current} zoom={zoom} />);
         expect(circles).toHaveBeenCalledOnce();
         expect(countyCircles).toHaveBeenCalledOnce();
         expect(radii).toHaveBeenCalledOnce();
         expect([map().setFilter.mock.calls.length, map().setLayoutProperty.mock.calls.length,
             map().setPaintProperty.mock.calls.length, map().setLayerZoomRange.mock.calls.length]).toEqual(writes);
-        view.rerender(<PinsMap {...current} zoom={7} />);
+        view.rerender(<PinsMap {...current} zoom={4} />);
         act(() => vi.advanceTimersByTime(1000));
         expect(countyCircles).toHaveBeenCalledTimes(2);
         expect(countyCircles.mock.calls[1][0].features).toHaveLength(3235);
         const countyCircle = countyCircles.mock.calls[1][0].features.find((f: { properties: { id: string } }) => f.properties.id === fallsChurch.id);
         expect(countyCircle.geometry.coordinates[0]).toHaveLength(49);
-        for (const zoom of [7.5, 8, 8.9]) view.rerender(<PinsMap {...current} zoom={zoom} />);
+        for (const zoom of [4.25, 4.5, 4.9]) view.rerender(<PinsMap {...current} zoom={zoom} />);
         expect(circles).toHaveBeenCalledOnce();
         expect(countyCircles).toHaveBeenCalledTimes(2);
         expect(radii).toHaveBeenCalledOnce();
-        view.rerender(<PinsMap {...current} zoom={9} />);
+        view.rerender(<PinsMap {...current} zoom={5} />);
         expect(radii).toHaveBeenCalledTimes(2);
         expect(radii.mock.calls[1][0].features.some((f: { properties: { level: string } }) => f.properties.level === 'county')).toBe(true);
-        for (const zoom of [9.5, 10, 11.25]) view.rerender(<PinsMap {...current} zoom={zoom} />);
+        for (const zoom of [5.5, 6, 7.25]) view.rerender(<PinsMap {...current} zoom={zoom} />);
         expect(radii).toHaveBeenCalledTimes(2);
-        view.rerender(<PinsMap {...current} zoom={6} />);
-        view.rerender(<PinsMap {...current} zoom={7} />);
+        view.rerender(<PinsMap {...current} zoom={3} />);
+        view.rerender(<PinsMap {...current} zoom={4} />);
         const restored = countyCircles.mock.calls.at(-1)![0].features.find((f: { properties: { id: string } }) => f.properties.id === fallsChurch.id);
         expect(restored.geometry).toBe(countyCircle.geometry);
     });
@@ -203,7 +203,7 @@ describe('map lifecycle', () => {
         expect(map().setLayerZoomRange).toHaveBeenCalledWith('county-pins', 0, 24);
         expect(map().setPaintProperty).toHaveBeenCalledWith('county-pins', 'circle-opacity', 1);
         view.rerender(<PinsMap {...current} countyMode="auto" />);
-        expect(map().setLayerZoomRange).toHaveBeenLastCalledWith('context-county-pins', 6, 24);
+        expect(map().setLayerZoomRange).toHaveBeenLastCalledWith('context-county-pins', 4, 24);
         expect(map().setLayoutProperty).toHaveBeenCalledWith('county-pins', 'visibility', 'visible');
         const before = map().setLayerZoomRange.mock.calls.length;
         act(() => map().emit('style.load'));

@@ -197,6 +197,13 @@ u {
   --site-header-offset: 0px;
 }
 
+.site-header,
+.trip-story .trip-chapter > :is(h1, h2):first-child {
+  background-color: rgb(10 10 10 / 95%);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
 /* Section bounds let the next chapter push the current title out naturally.
    Keep spacing inside the section so there is no gap during the handoff. */
 .trip-story .trip-chapter {
@@ -230,10 +237,31 @@ u {
   top: var(--site-header-offset, 0px);
   z-index: 30;
   margin-block: 0;
-  padding-block: 0.75rem 1rem;
-  background: #0a0a0a;
+  padding-block: 0.65rem 0.75rem;
+  border-block-end: 1px solid var(--color-violet-400, #a78bfa);
   scroll-margin-block-start: max(6rem, calc(var(--site-header-height, 61px) + 1rem));
   transition: top 200ms ease-out;
+}
+
+.trip-story .trip-chapter > :is(h1, h2):first-child [data-heading-title] {
+  border-block-end: 0;
+  padding-block-end: 0;
+}
+
+.trip-story .trip-chapter > :is(h1, h2):first-child + .blog-subtitle {
+  /* Chapter titles have no bottom margin. Keep the subtitle's line box
+     clear of the sticky background instead of pulling it upward. */
+  margin-block-start: 0.25rem;
+}
+
+@supports (container-type: inline-size) and (width: 1cqw) {
+  .site-content .trip-chapter > :is(h1, h2):first-child {
+    /* The backdrop spans wide maps and panoramas while the text continues
+       to follow the article column. Container units exclude the scrollbar. */
+    width: 100cqw;
+    margin-inline: calc((100% - 100cqw) / 2);
+    padding-inline: calc((100cqw - 100%) / 2);
+  }
 }
 
 .trip-story .trip-chapter[data-trip-chapter-static] {
@@ -242,6 +270,29 @@ u {
 
 .trip-story .trip-chapter[data-trip-chapter-static] > :is(h1, h2):first-child {
   position: static;
+}
+
+@media (max-width: 639px) {
+  .trip-story [data-post-heading] {
+    display: flex;
+    align-items: baseline;
+  }
+
+  .trip-story [data-post-heading] > :first-child {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .trip-story [data-post-heading] > [data-heading-anchor] {
+    flex: none;
+  }
+
+  /* The title already links to the section. Its decorative marker should
+     not force an extra line in a narrow chapter banner. Keep standalone
+     permalink controls for headings that contain their own content links. */
+  .trip-story [data-post-heading] > a:not([data-heading-anchor]) > span[data-heading-anchor] {
+    display: none;
+  }
 }
 
 @media (min-width: 640px) {
@@ -263,6 +314,9 @@ u {
 @media print {
   .trip-story .trip-chapter > :is(h1, h2):first-child {
     position: static;
+    width: auto;
+    margin-inline: 0;
+    padding-inline: 0;
   }
 }
 

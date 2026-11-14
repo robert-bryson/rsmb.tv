@@ -1,0 +1,191 @@
+{
+  "date": "2026-11-13",
+  "baselineCommit": "8035e92958a80f8d57556703ca79c120550c288f",
+  "scope": "Pins interface refinement and county eligibility thresholds; no physical-device or task-completion measurements",
+  "dataset": {
+    "file": "public/data/pins-of-inaccessibility/pins.json",
+    "countyCount": 3235,
+    "sha256": "b9eb53b6aa701d36e91597044b7b233b41e4162b947165f2893f39f8c44d65e2",
+    "unchangedFromBaseline": true
+  },
+  "countyEligibility": {
+    "meaning": "Integer threshold eligibility before opacity fades, viewport culling, or label collision checks",
+    "histograms": {
+      "countyPinZoom": {
+        "4": 293,
+        "5": 1683,
+        "6": 1259
+      },
+      "countyCircleZoom": {
+        "5": 124,
+        "6": 737,
+        "7": 1967,
+        "8": 407
+      },
+      "countyLabelZoom": {
+        "6": 170,
+        "7": 1093,
+        "8": 1659,
+        "9": 313
+      },
+      "measurementZoom": {
+        "6": 28,
+        "7": 206,
+        "8": 1451,
+        "9": 1331,
+        "10": 133,
+        "11": 65,
+        "12": 18,
+        "13": 3
+      }
+    }
+  },
+  "samples": [
+    {
+      "id": "county-06025",
+      "name": "Imperial County",
+      "radiusMeters": 42709.2,
+      "countyPinZoom": 4,
+      "countyCircleZoom": 6,
+      "countyLabelZoom": 6,
+      "previousMeasurementZoom": 10,
+      "measurementZoom": 7,
+      "badgeEligibleZoom": 7.75
+    },
+    {
+      "id": "county-06071",
+      "name": "San Bernardino County",
+      "radiusMeters": 97753.1,
+      "countyPinZoom": 4,
+      "countyCircleZoom": 5,
+      "countyLabelZoom": 6,
+      "previousMeasurementZoom": 10,
+      "measurementZoom": 6,
+      "badgeEligibleZoom": 6.75
+    },
+    {
+      "id": "county-06065",
+      "name": "Riverside County",
+      "radiusMeters": 36126.1,
+      "countyPinZoom": 4,
+      "countyCircleZoom": 6,
+      "countyLabelZoom": 7,
+      "previousMeasurementZoom": 10,
+      "measurementZoom": 7,
+      "badgeEligibleZoom": 7.75
+    },
+    {
+      "id": "county-04005",
+      "name": "Coconino County",
+      "radiusMeters": 93233.8,
+      "countyPinZoom": 4,
+      "countyCircleZoom": 5,
+      "countyLabelZoom": 6,
+      "previousMeasurementZoom": 10,
+      "measurementZoom": 6,
+      "badgeEligibleZoom": 6.75
+    },
+    {
+      "id": "county-32023",
+      "name": "Nye County",
+      "radiusMeters": 75296.1,
+      "countyPinZoom": 4,
+      "countyCircleZoom": 5,
+      "countyLabelZoom": 6,
+      "previousMeasurementZoom": 10,
+      "measurementZoom": 6,
+      "badgeEligibleZoom": 6.75
+    },
+    {
+      "id": "county-32003",
+      "name": "Clark County",
+      "radiusMeters": 55302.6,
+      "countyPinZoom": 4,
+      "countyCircleZoom": 5,
+      "countyLabelZoom": 6,
+      "previousMeasurementZoom": 10,
+      "measurementZoom": 7,
+      "badgeEligibleZoom": 7.75
+    },
+    {
+      "id": "county-49037",
+      "name": "San Juan County",
+      "radiusMeters": 59302,
+      "countyPinZoom": 4,
+      "countyCircleZoom": 5,
+      "countyLabelZoom": 6,
+      "previousMeasurementZoom": 10,
+      "measurementZoom": 7,
+      "badgeEligibleZoom": 7.75
+    },
+    {
+      "id": "county-51059",
+      "name": "Fairfax County",
+      "radiusMeters": 8857.2,
+      "countyPinZoom": 6,
+      "countyCircleZoom": 8,
+      "countyLabelZoom": 9,
+      "previousMeasurementZoom": 10,
+      "measurementZoom": 9,
+      "badgeEligibleZoom": 9.75
+    },
+    {
+      "id": "county-51610",
+      "name": "Falls Church city",
+      "radiusMeters": 878.1,
+      "countyPinZoom": 6,
+      "countyCircleZoom": 8,
+      "countyLabelZoom": 9,
+      "previousMeasurementZoom": 13,
+      "measurementZoom": 13,
+      "badgeEligibleZoom": 13.75
+    }
+  ],
+  "sourceFingerprints": {
+    "src/features/pins/zoom.ts": "2fece23056aaab78dfcbddb0d179027158669e470630a617ee83cf27adc79de6",
+    "src/features/pins/radii.ts": "ec2f91157e110da99724effc7b5b1c1a40c9da71b98d0ea5bb2b8de6ca6d2e21",
+    "src/features/pins/geometry.ts": "6ee5bc686de3bee0d796624f58aa47c9368e801058ebe0508fea5be649c85b2a",
+    "src/features/pins/mapLayers.ts": "381b05576eedca0a32b22fac46d135eded01334ff1f6f67a7a602b0c1b0de7be",
+    "src/features/pins/mapRenderer.ts": "d3f950ab15a934e4b309e8ec7abde20d5e492ffaea5ebe5d04ed00f441bd958d",
+    "src/features/pins/PinsExplorer.tsx": "d322f69b68193403273734326b559b23b450aa083825252000a7f29852bfc559",
+    "src/features/pins/PinsNavigation.tsx": "c7d72bc22fe610c041030720dc9cc64ed0c31c286554e86812b2f663191b9f2f",
+    "src/features/pins/PinsLayerControls.tsx": "aed291964910493c7fb72e1284274a1c48d08865d788579e7561fef42b3e5de4",
+    "src/features/pins/radiusLabels.ts": "565291c5d8be5abab1b45e334c3f3b68aa1c88454f6ab961d3936c312675fc65",
+    "src/features/pins/pins.css": "2ebe5886ef8a9994383416c01da072f64c0cc1fcf879b55c8a16d0cd1cdcbf55",
+    "tests/e2e/pins-map.spec.ts": "2f7469789d0c83a2287df8a6167364e705466e2abb3b98422cd25698192af390"
+  },
+  "verification": {
+    "focusedUnitTests": {
+      "passed": 136,
+      "files": 12
+    },
+    "typescript": "passed",
+    "productionViteBuild": "passed",
+    "chromium": {
+      "uniqueScenariosVerified": 31,
+      "fullRunPassed": 29,
+      "finalFocusedRunPassed": 7,
+      "note": "The initial full run exposed two outdated test assumptions. The corrected camera location and overview menu action pass with the final responsive, touch, and county checks."
+    },
+    "webkit": {
+      "uniqueScenariosVerified": 31,
+      "fullRunPassed": 30,
+      "finalFocusedRunPassed": 1,
+      "note": "The shared-link reload check passes after background requests finish before document replacement. Renderer readiness keeps its existing deadline."
+    },
+    "documentationRelativeLinks": {
+      "files": 3,
+      "missing": 0
+    },
+    "liveBasemap": {
+      "views": [
+        "world",
+        "Imperial County selection"
+      ],
+      "rendererState": "ready",
+      "failedRequests": 0,
+      "pageErrors": 0,
+      "note": "Public CARTO style, tiles, and glyphs; localhost Chromium visual check. Not a production-host verification."
+    }
+  }
+}

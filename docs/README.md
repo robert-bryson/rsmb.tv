@@ -53,6 +53,10 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-13 | [Site quality review: release cache exclusion, manifest safety, image geometry, Docs formatting, shared URL handling, and regression coverage](reviews/2026-11-13-site-quality-review.md) |
+| 2026-11-13 | [Trip responsive photo quality: all reports reprocessed, quality-99 viewer sizes, source selection, research, and local measurements](reviews/2026-11-13-trip-responsive-photo-quality.md) |
+| 2026-11-13 | [Trip headings and photo quality: full-width chapter bands, native-resolution viewing, the new PCH photo, and panorama navigation](reviews/2026-11-13-trip-heading-photo-quality.md) |
+| 2026-11-13 | [Pins UI refinement: map-first controls, label hierarchy, design research, and western county visibility](reviews/2026-11-13-pins-ui-refinement.md) |
 | 2026-11-13 | [Trip layout quality review: hidden subsection links, short screens, header sizing, responsive images, and browser CI](reviews/2026-11-13-trip-layout-quality-review.md) |
 | 2026-11-13 | [Pins zoom quality review: unreachable measurements, stale badge positions, marker input, camera limits, and gallery references](reviews/2026-11-13-pins-zoom-quality-review.md) |
 | 2026-11-13 | [Pins zoom transitions: staged county detail, native fades, bounded geometry tasks, and source update budgets](reviews/2026-11-13-pins-zoom-transitions.md) |

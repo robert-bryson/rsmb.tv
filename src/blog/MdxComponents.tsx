@@ -1,4 +1,5 @@
 import type { ComponentPropsWithoutRef } from 'react';
+import { BLOG_PARAGRAPH_CLASS_NAME } from '../../shared/blogTypography';
 import { TripFacts } from '../features/trips/components/TripFacts';
 import { TripPhoto } from '../features/trips/components/TripPhoto';
 import { TripAnimation } from '../features/trips/components/TripAnimation';
@@ -53,7 +54,7 @@ export const mdxComponents = {
         <LinkedHeading as="h6" className="text-sm sm:text-base font-semibold text-zinc-300 mt-6 sm:mt-8 mb-2" {...props} />
     ),
     p: (props: ComponentPropsWithoutRef<'p'>) => (
-        <p className="text-zinc-300 leading-relaxed mb-4" {...props} />
+        <p className={BLOG_PARAGRAPH_CLASS_NAME} {...props} />
     ),
     a: (props: ComponentPropsWithoutRef<'a'>) => {
         const isExternal = isExternalHttpUrl(props.href);

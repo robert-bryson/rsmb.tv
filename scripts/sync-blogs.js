@@ -26,6 +26,7 @@
 
 import fs from 'node:fs';
 import { tripManifestSchema } from '../shared/tripManifestSchema.ts';
+import { BLOG_PARAGRAPH_CLASS_NAME } from '../shared/blogTypography.ts';
 import { isRouteGeoJson, routeFeatures } from '../shared/routeGeometry.ts';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -513,6 +514,10 @@ function manifestAssetUrls(manifest) {
 
     for (const photo of manifest?.photos ?? []) {
         urls.add(photo.src);
+        if (photo.full) {
+            urls.add(photo.full.src);
+            for (const url of parseSrcSetUrls(photo.full.srcSet)) urls.add(url);
+        }
         for (const srcSetUrl of parseSrcSetUrls(photo.srcSet)) {
             urls.add(srcSetUrl);
         }
@@ -636,7 +641,7 @@ function parseCssDeclarations(styleText) {
 }
 
 function parseGoogleDocsClassStyles(document) {
-    const classStyles = new Map();
+    const classStyles = [];
 
     document.querySelectorAll('style').forEach((styleElement) => {
         const css = String(styleElement.textContent ?? '');
@@ -644,10 +649,7 @@ function parseGoogleDocsClassStyles(document) {
         let match = classRulePattern.exec(css);
 
         while (match) {
-            classStyles.set(match[1], {
-                ...(classStyles.get(match[1]) ?? {}),
-                ...parseCssDeclarations(match[2]),
-            });
+            classStyles.push({ className: match[1], declarations: parseCssDeclarations(match[2]) });
             match = classRulePattern.exec(css);
         }
     });
@@ -658,8 +660,10 @@ function parseGoogleDocsClassStyles(document) {
 function elementStyleDeclarations(element, classStyles) {
     const declarations = {};
 
-    for (const className of element.classList) {
-        Object.assign(declarations, classStyles.get(className) ?? {});
+    // Equal-specificity class rules follow stylesheet order, not the order of
+    // names in the class attribute. Keep repeated rules separate for each property.
+    for (const rule of classStyles) {
+        if (element.classList.contains(rule.className)) Object.assign(declarations, rule.declarations);
     }
 
     Object.assign(declarations, parseCssDeclarations(element.getAttribute('style')));
@@ -720,13 +724,50 @@ function canApplySemanticStyles(element) {
 
 function normalizeGoogleDocsInlineStyles(document) {
     const classStyles = parseGoogleDocsClassStyles(document);
-    if (classStyles.size === 0 && document.querySelectorAll('[style]').length === 0) return;
+    if (classStyles.length === 0 && document.querySelectorAll('[style]').length === 0) return;
 
     document.querySelectorAll('[class], [style]').forEach((element) => {
         if (!canApplySemanticStyles(element)) return;
         if (element.closest('pre, code')) return;
         applySemanticStyles(element, elementStyleDeclarations(element, classStyles));
     });
+}
+
+function safeTextIndent(value) {
+    const indent = String(value ?? '').trim().toLowerCase();
+    return /^-?(?:\d+(?:\.\d+)?|\.\d+)(?:px|pt|pc|em|rem|in|cm|mm|%)$/.test(indent)
+        && Number.parseFloat(indent) !== 0 ? indent : '';
+}
+
+function normalizeGoogleDocsParagraphIndents(document) {
+    const classStyles = parseGoogleDocsClassStyles(document);
+
+    for (const paragraph of document.querySelectorAll('p')) {
+        paragraph.removeAttribute('data-blog-text-indent');
+        paragraph.removeAttribute('data-blog-indent-spaces');
+        if (paragraph.classList.contains('subtitle') || !canApplySemanticStyles(paragraph)
+            || paragraph.closest('pre, code, li, blockquote, table')) continue;
+
+        const indent = safeTextIndent(elementStyleDeclarations(paragraph, classStyles)['text-indent']);
+        if (indent) paragraph.setAttribute('data-blog-text-indent', indent);
+
+        // Docs exports typed tabs as runs of nonbreaking spaces. Capture them
+        // before Turndown collapses whitespace, including runs split over spans.
+        const prefix = String(paragraph.textContent ?? '').match(/^[ \t\u00a0]*/)[0];
+        if (!prefix.includes('\t') && (prefix.match(/\u00a0/g)?.length ?? 0) < 2) continue;
+        if (!normalizedTextContent(paragraph).trim()) continue;
+
+        const spaces = prefix.replace(/\t/g, '        ').length;
+        paragraph.setAttribute('data-blog-indent-spaces', String(spaces));
+        const walker = document.createTreeWalker(paragraph, document.defaultView.NodeFilter.SHOW_TEXT);
+        let remaining = prefix.length;
+        while (remaining > 0 && walker.nextNode()) {
+            const text = walker.currentNode;
+            const removed = Math.min(remaining, text.textContent.length);
+            text.textContent = text.textContent.slice(removed);
+            remaining -= removed;
+        }
+    }
 }
 
 function normalizeGoogleRedirectHref(value) {
@@ -893,6 +934,7 @@ function normalizeGoogleDocsHtml(document) {
     normalizeGoogleDocsMedia(document);
     normalizeGoogleDocsCodeBlocks(document);
     normalizeTypedCodeParagraphs(document);
+    normalizeGoogleDocsParagraphIndents(document);
 }
 
 function prepareGoogleDocHtml(html) {
@@ -1081,6 +1123,23 @@ function createTurndownService(tripShortcodes = true) {
     service.addRule('table', {
         filter: 'table',
         replacement: (_content, node) => tableToHtml(node),
+    });
+
+    service.addRule('indentedParagraph', {
+        filter: (node) => node.nodeName === 'P'
+            && (node.hasAttribute('data-blog-text-indent') || node.hasAttribute('data-blog-indent-spaces')),
+        replacement: (content, node) => {
+            const indent = safeTextIndent(node.getAttribute('data-blog-text-indent'));
+            const spaces = Number(node.getAttribute('data-blog-indent-spaces') ?? 0);
+            const prefix = Number.isSafeInteger(spaces) && spaces > 0 ? '&#160;'.repeat(spaces) : '';
+            const text = `${prefix}${content.trim()}`;
+            if (!text) return '';
+            // Keep inline Markdown so links, emphasis, and code still use the
+            // site's MDX components. Only the validated first-line length survives.
+            return indent
+                ? `\n\n<p className="${BLOG_PARAGRAPH_CLASS_NAME}" style={{ textIndent: "${indent}" }}>${text}</p>\n\n`
+                : `\n\n${text}\n\n`;
+        },
     });
 
     service.addRule('subtitle', {

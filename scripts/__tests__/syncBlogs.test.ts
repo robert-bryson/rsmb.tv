@@ -742,6 +742,33 @@ describe('syncBlogPosts', () => {
         await expect(validateTripAssetUrls([post], manifests, { fetchImpl })).rejects.toThrow(/missing track "outbound"/);
     });
 
+    it('checks full-resolution viewer files before accepting trip media', async () => {
+        const post = { slug: 'coastal-loop', format: 'trip', tripId: 'coastal-loop' };
+        const src = 'https://data.rsmb.tv/trips/coastal-loop/photos/hero-full.jpg';
+        const manifests = new Map([['coastal-loop', { photos: [{
+            src: 'https://data.rsmb.tv/trips/coastal-loop/photos/hero-1600.webp',
+            full: { src, width: 6000, height: 4000 },
+        }] }]]);
+        const fetchImpl = vi.fn(async (url: FetchInput) => String(url) === src
+            ? response('', 404, 'Not Found') : response('', 200, 'OK'));
+        await expect(validateTripAssetUrls([post], manifests, { fetchImpl })).rejects.toThrow(/asset URL is not available/);
+        expect(fetchImpl).toHaveBeenCalledWith(src, expect.objectContaining({ method: 'HEAD' }));
+    });
+
+    it('checks responsive viewer candidates before accepting trip media', async () => {
+        const post = { slug: 'coastal-loop', format: 'trip', tripId: 'coastal-loop' };
+        const src = 'https://data.rsmb.tv/trips/coastal-loop/photos/hero-view-1600.jpg';
+        const manifests = new Map([['coastal-loop', { photos: [{
+            src: 'https://data.rsmb.tv/trips/coastal-loop/photos/hero-1600.webp',
+            full: { src: 'https://data.rsmb.tv/trips/coastal-loop/photos/hero-full.jpg', width: 6000, height: 4000,
+                srcSet: `${src} 1600w` },
+        }] }]]);
+        const fetchImpl = vi.fn(async (url: FetchInput) => String(url) === src
+            ? response('', 404, 'Not Found') : response('', 200, 'OK'));
+        await expect(validateTripAssetUrls([post], manifests, { fetchImpl })).rejects.toThrow(/asset URL is not available/);
+        expect(fetchImpl).toHaveBeenCalledWith(src, expect.objectContaining({ method: 'HEAD' }));
+    });
+
     it('checks CDN animation files and leaves bundled media to filesystem validation', async () => {
         const post = { slug: 'coastal-loop', format: 'trip', tripId: 'coastal-loop' };
         const src = 'https://data.rsmb.tv/trips/coastal-loop/animations/speeders.mp4';

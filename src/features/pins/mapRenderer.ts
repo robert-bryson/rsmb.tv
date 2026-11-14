@@ -8,8 +8,8 @@ import { OVERVIEW_BOUNDS, formatRadius } from './geometry';
 import { attachRadiusLabels } from './radiusLabels';
 import { pinContext } from '../../../shared/worldPins';
 import { isDescendantPin } from './navigation';
-import { DATA_SOURCES, EMPTY, installPinLayers } from './mapLayers';
-import { COUNTY_ZOOM, PIN_MAX_ZOOM, zoomFade } from './zoom';
+import { countyPinFilter, DATA_SOURCES, EMPTY, installPinLayers } from './mapLayers';
+import { COUNTY_ZOOM, featureZoomFade, PIN_MAX_ZOOM } from './zoom';
 import type { PinsMapData, PinsMapProps, ViewRequest } from './types';
 
 export const POINT_SOURCE_TIMEOUT_MS = 15_000;
@@ -166,7 +166,8 @@ export function createPinsRenderer(options: Options) {
                 const minimumZoom = countyMode === 'on' ? 0 : COUNTY_ZOOM;
                 updateStyle(`zoom:${id}`, minimumZoom, () => map.setLayerZoomRange(id, minimumZoom, 24));
                 const opacity = id === 'context-county-pins' ? 0.8 : 1;
-                const fade = countyMode === 'on' ? opacity : zoomFade(COUNTY_ZOOM, opacity);
+                filterLayer(id, countyPinFilter(id === 'context-county-pins', countyMode !== 'on'));
+                const fade = countyMode === 'on' ? opacity : featureZoomFade(COUNTY_ZOOM, 'countyPinZoom', opacity);
                 for (const property of ['circle-opacity', 'circle-stroke-opacity'] as const) {
                     updateStyle(`${property}:${id}`, fade, () => map.setPaintProperty(id, property, fade));
                 }

@@ -392,6 +392,106 @@ describe('trip publication contracts', () => {
         expect(() => updateManifestAssets(manifest, { ...report, photos: [] })).toThrow(/Missing prepared photo/);
     });
 
+    it('keeps original-resolution viewer exports separate from responsive page candidates', () => {
+        const report = { tripId: manifest.id, photoPipelineVersion: 3, photos: manifest.photos.map(photo => ({
+            id: photo.id, derivatives: [{ filename: `${photo.id}-012345abcdef-1600.webp`, width: 1600, height: 1000 }],
+            full: { filename: `${photo.id}-012345abcdef-full.jpg`, width: 6000, height: 3750 },
+        })) };
+        const updated = updateManifestAssets(manifest, report);
+        expect(updated.photos[0].full).toEqual({ src: `https://data.rsmb.tv/trips/${manifest.id}/photos/${manifest.photos[0].id}-012345abcdef-full.jpg`, width: 6000, height: 3750 });
+        expect(updated.photos[0].srcSet).not.toContain('-full');
+        expect(() => updateManifestAssets(manifest, { ...report, photos: report.photos.map(photo => ({ ...photo, full: undefined })) }))
+            .toThrow(/Missing prepared full-resolution/);
+        for (const full of [
+            { filename: '../different-full.jpg', width: 6000, height: 3750 },
+            { filename: `${manifest.photos[0].id}-abcdef012345-full.jpg`, width: 6000, height: 3750 },
+            { filename: `${manifest.photos[0].id}-012345abcdef-full.jpg`, width: 800, height: 500 },
+            { filename: `${manifest.photos[0].id}-012345abcdef-full.jpg`, width: 6000, height: 6000 },
+        ]) expect(() => updateManifestAssets(manifest, { ...report, photos: [{ ...report.photos[0], full }, ...report.photos.slice(1)] }))
+            .toThrow(/Invalid prepared full-resolution/);
+    });
+
+    it.each([null, {}, [null], [{ width: 480, height: 300 }]])('rejects malformed page image reports with a useful error: %j', derivatives => {
+        expect(() => updateManifestAssets(manifest, { tripId: manifest.id, photos: [
+            { id: manifest.photos[0].id, derivatives },
+        ] })).toThrow(/prepared (photo|derivative)/);
+    });
+
+    it('rejects inconsistent page aspect ratios before generating responsive candidates', () => {
+        const photos = manifest.photos.map((photo, index) => ({ id: photo.id, derivatives: [
+            { filename: `${photo.id}-012345abcdef-480.webp`, width: 480, height: index === 0 ? 480 : 300 },
+            { filename: `${photo.id}-012345abcdef-1600.webp`, width: 1600, height: 1000 },
+        ] }));
+        expect(() => updateManifestAssets(manifest, { tripId: manifest.id, photos })).toThrow(/Invalid prepared derivative/);
+    });
+
+    it('rejects duplicate prepared photos instead of silently taking the first result', () => {
+        const photos = manifest.photos.map(photo => ({ id: photo.id, derivatives: [
+            { filename: `${photo.id}-012345abcdef-480.webp`, width: 480, height: 300 },
+        ] }));
+        expect(() => updateManifestAssets(manifest, { tripId: manifest.id, photos: [...photos, photos[0]] }))
+            .toThrow(/Duplicate prepared photo/);
+    });
+
+    it.each([undefined, null, {}, [null], [{ derivatives: [] }]])('rejects malformed photo collections with a useful error: %j', photos => {
+        expect(() => updateManifestAssets(manifest, { tripId: manifest.id, photos })).toThrow(/Invalid prepared photo report/);
+    });
+
+    it.each([
+        { width: 800, height: 500 },
+        { width: 6000, height: 6000 },
+    ])('rejects invalid manually authored full-image geometry: %j', dimensions => {
+        const photos = manifest.photos.map((photo, index) => index === 0
+            ? { ...photo, full: { src: '/full.jpg', ...dimensions } } : photo);
+        expect(() => tripManifestSchema.parse({ ...manifest, photos })).toThrow(/full-resolution photo/);
+    });
+
+    it('accepts rounded page dimensions and native-only viewer reports', () => {
+        const report = { tripId: manifest.id, photoPipelineVersion: 4, photos: manifest.photos.map(photo => ({
+            id: photo.id, derivatives: [{ filename: `${photo.id}-012345abcdef-480.webp`, width: 480, height: 311 }],
+            full: { filename: `${photo.id}-012345abcdef-full.png`, width: 600, height: 389, derivatives: [] },
+        })) };
+        const result = updateManifestAssets(manifest, report);
+        expect(result.photos[0].full).toEqual({ src: `https://data.rsmb.tv/trips/${manifest.id}/photos/${manifest.photos[0].id}-012345abcdef-full.png`,
+            width: 600, height: 389, srcSet: `https://data.rsmb.tv/trips/${manifest.id}/photos/${manifest.photos[0].id}-012345abcdef-full.png 600w` });
+    });
+
+    it('builds and validates dedicated viewer candidates with the native export last', () => {
+        const report = { tripId: manifest.id, photoPipelineVersion: 4, photos: manifest.photos.map(photo => ({
+            id: photo.id, derivatives: [{ filename: `${photo.id}-012345abcdef-1600.webp`, width: 1600, height: 1000 }],
+            full: { filename: `${photo.id}-012345abcdef-full.jpg`, width: 6000, height: 3750, derivatives: [
+                { filename: `${photo.id}-012345abcdef-view-3200.jpg`, width: 3200, height: 2000 },
+                { filename: `${photo.id}-012345abcdef-view-1600.jpg`, width: 1600, height: 1000 },
+            ] },
+        })) };
+        const updated = updateManifestAssets(manifest, report);
+        expect(updated.photos[0].full?.srcSet).toMatch(/view-1600.jpg 1600w, .*view-3200.jpg 3200w, .*full.jpg 6000w$/);
+        expect(updated.photos[0].srcSet).not.toContain('-view-');
+        const first = report.photos[0];
+        for (const derivatives of [
+            undefined, [null], {}, [first.full.derivatives[0], first.full.derivatives[0]],
+            [{ ...first.full.derivatives[0], filename: '../unrelated-view-3200.jpg' }],
+            [{ ...first.full.derivatives[0], filename: `${first.id}-abcdef012345-view-3200.jpg` }],
+            [{ ...first.full.derivatives[0], width: 7000 }],
+            [{ ...first.full.derivatives[0], height: 500 }],
+        ]) expect(() => updateManifestAssets(manifest, { ...report, photos: [
+            { ...first, full: { ...first.full, derivatives } }, ...report.photos.slice(1),
+        ] })).toThrow(/prepared viewer derivative/);
+    });
+
+    it('omits a resized viewer candidate when the native image has fewer bytes and more pixels', () => {
+        const report = { tripId: manifest.id, photoPipelineVersion: 4, photos: manifest.photos.map(photo => ({
+            id: photo.id, derivatives: [{ filename: `${photo.id}-012345abcdef-1600.webp`, width: 1600, height: 1000 }],
+            full: { filename: `${photo.id}-012345abcdef-full.jpg`, width: 6000, height: 3750, bytes: 1_000_000, derivatives: [
+                { filename: `${photo.id}-012345abcdef-view-1600.jpg`, width: 1600, height: 1000, bytes: 200_000 },
+                { filename: `${photo.id}-012345abcdef-view-3200.jpg`, width: 3200, height: 2000, bytes: 1_200_000 },
+            ] },
+        })) };
+        const result = updateManifestAssets(manifest, report);
+        expect(result.photos[0].full?.srcSet).toMatch(/view-1600.jpg 1600w, .*full.jpg 6000w$/);
+        expect(result.photos[0].full?.srcSet).not.toContain('view-3200');
+    });
+
     it('rejects unknown day references and duplicate day IDs before publication', () => {
         const day = { id: 'first-day', title: 'Coastbound', headingId: 'coastbound', stopIds: ['missing-stop'] };
         expect(() => tripManifestSchema.parse({ ...manifest, days: [day, day] })).toThrow(/Duplicate day ID/);

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { hasMatchingImageAspectRatio } from './responsiveImage.ts';
 
 const slugSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 const dateSchema = z.iso.date();
@@ -17,6 +18,20 @@ const photoSchema = z.object({
     date: dateSchema.optional(),
     srcSet: z.string().optional(),
     sizes: z.string().optional(),
+    full: z.object({
+        src: z.string().min(1),
+        width: z.number().int().positive(),
+        height: z.number().int().positive(),
+        srcSet: z.string().optional(),
+    }).optional(),
+}).superRefine((photo, context) => {
+    if (!photo.full) return;
+    if (photo.full.width < photo.width || photo.full.height < photo.height) {
+        context.addIssue({ code: 'custom', path: ['full'], message: 'The full-resolution photo must be at least as large as the page photo.' });
+    }
+    if (!hasMatchingImageAspectRatio(photo, photo.full)) {
+        context.addIssue({ code: 'custom', path: ['full'], message: 'The full-resolution photo must retain the page photo aspect ratio.' });
+    }
 });
 
 function mediaUrlSchema(extension: 'mp4' | 'webp') {

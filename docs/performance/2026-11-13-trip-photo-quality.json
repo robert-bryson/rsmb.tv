@@ -1,0 +1,369 @@
+{
+  "reviewedOn": "2026-11-13",
+  "pipeline": {
+    "version": 3,
+    "webpQuality": 92,
+    "webpSmartSubsample": true,
+    "regularWidths": [
+      480,
+      960,
+      1600,
+      2400,
+      3200,
+      3840
+    ],
+    "panoramaWidths": [
+      480,
+      960,
+      1600,
+      2400,
+      3200,
+      4800,
+      6400,
+      7680
+    ],
+    "fullJpegQuality": 99,
+    "fullJpegChromaSubsampling": "4:4:4",
+    "fullDimensions": "Native source dimensions after orientation correction",
+    "transparentFullFormat": "Lossless PNG",
+    "viewerPreload": [
+      0,
+      1
+    ]
+  },
+  "totals": {
+    "trips": 7,
+    "manifestPhotos": 320,
+    "publicFiles": 2238,
+    "responsiveBytes": 2394265714,
+    "fullResolutionBytes": 4599141818
+  },
+  "trips": [
+    {
+      "id": "boise-2024",
+      "manifestPhotos": 79,
+      "preparedSelections": 82,
+      "excludedSelections": [
+        "boise-2024-05-11-blue-mountains-sunset",
+        "boise-2024-05-11-camp-moto",
+        "boise-2024-05-11-yakima-river-hills"
+      ],
+      "responsiveFiles": 474,
+      "fullResolutionFiles": 79,
+      "publicFiles": 553,
+      "responsiveBytes": 668936478,
+      "fullResolutionBytes": 1158325297,
+      "medianFullResolutionBytes": 17053033,
+      "largestFullResolutionBytes": 21265238,
+      "maximumNativeWidth": 8626,
+      "reportGeneratedAt": "2026-11-13T23:25:30.505Z",
+      "authoredMetadataPreserved": true
+    },
+    {
+      "id": "kalaloch-2024",
+      "manifestPhotos": 25,
+      "preparedSelections": 25,
+      "excludedSelections": [],
+      "responsiveFiles": 145,
+      "fullResolutionFiles": 25,
+      "publicFiles": 170,
+      "responsiveBytes": 174327218,
+      "fullResolutionBytes": 308769077,
+      "medianFullResolutionBytes": 13475231,
+      "largestFullResolutionBytes": 19229079,
+      "maximumNativeWidth": 6240,
+      "reportGeneratedAt": "2026-11-13T23:14:19.102Z",
+      "authoredMetadataPreserved": true
+    },
+    {
+      "id": "ocean-shores-2024",
+      "manifestPhotos": 10,
+      "preparedSelections": 10,
+      "excludedSelections": [],
+      "responsiveFiles": 59,
+      "fullResolutionFiles": 10,
+      "publicFiles": 69,
+      "responsiveBytes": 85323678,
+      "fullResolutionBytes": 126887132,
+      "medianFullResolutionBytes": 10902592,
+      "largestFullResolutionBytes": 32783611,
+      "maximumNativeWidth": 6240,
+      "reportGeneratedAt": "2026-11-13T23:15:52.448Z",
+      "authoredMetadataPreserved": true
+    },
+    {
+      "id": "on-qc-new-england-2026",
+      "manifestPhotos": 1,
+      "preparedSelections": 1,
+      "excludedSelections": [],
+      "responsiveFiles": 6,
+      "fullResolutionFiles": 1,
+      "publicFiles": 7,
+      "responsiveBytes": 10748454,
+      "fullResolutionBytes": 9802984,
+      "medianFullResolutionBytes": 9802984,
+      "largestFullResolutionBytes": 9802984,
+      "maximumNativeWidth": 4000,
+      "reportGeneratedAt": "2026-11-13T23:16:36.119Z",
+      "authoredMetadataPreserved": true
+    },
+    {
+      "id": "pch-2024",
+      "manifestPhotos": 108,
+      "preparedSelections": 108,
+      "excludedSelections": [],
+      "responsiveFiles": 651,
+      "fullResolutionFiles": 108,
+      "publicFiles": 759,
+      "responsiveBytes": 814486338,
+      "fullResolutionBytes": 1713294574,
+      "medianFullResolutionBytes": 17111917,
+      "largestFullResolutionBytes": 24076081,
+      "maximumNativeWidth": 8505,
+      "reportGeneratedAt": "2026-11-13T23:10:52.132Z",
+      "authoredMetadataPreserved": true
+    },
+    {
+      "id": "river-wisco-2025",
+      "manifestPhotos": 40,
+      "preparedSelections": 40,
+      "excludedSelections": [],
+      "responsiveFiles": 240,
+      "fullResolutionFiles": 40,
+      "publicFiles": 280,
+      "responsiveBytes": 280281132,
+      "fullResolutionBytes": 538488296,
+      "medianFullResolutionBytes": 12783418,
+      "largestFullResolutionBytes": 22826150,
+      "maximumNativeWidth": 5472,
+      "reportGeneratedAt": "2026-11-13T23:26:08.519Z",
+      "authoredMetadataPreserved": true
+    },
+    {
+      "id": "route-66ish-2025",
+      "manifestPhotos": 57,
+      "preparedSelections": 57,
+      "excludedSelections": [],
+      "responsiveFiles": 343,
+      "fullResolutionFiles": 57,
+      "publicFiles": 400,
+      "responsiveBytes": 360162416,
+      "fullResolutionBytes": 743574458,
+      "medianFullResolutionBytes": 13644655,
+      "largestFullResolutionBytes": 19869490,
+      "maximumNativeWidth": 6000,
+      "reportGeneratedAt": "2026-11-13T23:33:04.081Z",
+      "authoredMetadataPreserved": true
+    }
+  ],
+  "newPchPhoto": {
+    "filename": "20241006_075214.jpg",
+    "id": "20241006-075214",
+    "sha256": "812246580c8c323f4958364ab1af2f33e1eac13f1d554d3b0876aae90633b7d6",
+    "dateTimeOriginal": "2024:10:06 07:52:14",
+    "offsetTimeOriginal": "-07:00",
+    "width": 4000,
+    "height": 3000
+  },
+  "representativeFidelity": [
+    {
+      "id": "20241006-075214",
+      "width": 4000,
+      "height": 3000,
+      "sourceBytes": 7233449,
+      "fullBytes": 6693201,
+      "psnrDb": 50.31,
+      "rootMeanSquareChannelError": 0.779,
+      "maximumChannelError": 6,
+      "sourceMetadataRemoved": true
+    },
+    {
+      "id": "dscf9177",
+      "width": 6240,
+      "height": 4160,
+      "sourceBytes": 15111724,
+      "fullBytes": 17017515,
+      "psnrDb": 54.76,
+      "rootMeanSquareChannelError": 0.466,
+      "maximumChannelError": 5,
+      "sourceMetadataRemoved": true
+    },
+    {
+      "id": "r003242-pano",
+      "width": 6420,
+      "height": 1640,
+      "sourceBytes": 3036602,
+      "fullBytes": 7497560,
+      "psnrDb": 52.37,
+      "rootMeanSquareChannelError": 0.614,
+      "maximumChannelError": 6,
+      "sourceMetadataRemoved": true
+    }
+  ],
+  "realPchPreview": {
+    "headingMetrics": {
+      "left": 0,
+      "width": 1440,
+      "textLeft": 360,
+      "top": 0,
+      "background": "rgb(10, 10, 10)",
+      "clientWidth": 1440,
+      "scrollWidth": 1440
+    },
+    "mobileHeading": {
+      "width": 390,
+      "left": 0,
+      "clientWidth": 390,
+      "scrollWidth": 390
+    },
+    "newPhotoSource": "/data/trips/pch-2024/photos/20241006-075214-e34c445b8cfc-full.jpg",
+    "panoramaSource": "http://127.0.0.1:4188/data/trips/pch-2024/photos/r003242-pano-a776e45477da-full.jpg",
+    "panoramaNativeWidth": 6420,
+    "nextPanoramaNativeWidth": 4657,
+    "errors": []
+  },
+  "publication": {
+    "verifiedAt": "2026-11-13T23:37:17.180Z",
+    "bucket": "rsmbtv-temperature-data",
+    "uploadedOnlyReferencedProcessedPhotos": true,
+    "oldVersionsRetained": true,
+    "rawOriginalsUploadedPublicly": false,
+    "applicationDeployed": false,
+    "storyPublicationChanged": false,
+    "trips": [
+      {
+        "id": "boise-2024",
+        "verifiedObjects": 553,
+        "verifiedBytes": 1827261775,
+        "cdnChecks": [
+          {
+            "url": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-a63caa4664cc-480.webp",
+            "status": 200,
+            "bytes": 48048,
+            "immutable": true
+          },
+          {
+            "url": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-a63caa4664cc-full.jpg",
+            "status": 200,
+            "bytes": 7192005,
+            "immutable": true
+          }
+        ]
+      },
+      {
+        "id": "kalaloch-2024",
+        "verifiedObjects": 170,
+        "verifiedBytes": 483096295,
+        "cdnChecks": [
+          {
+            "url": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-ferry-motorcycles-a03c2f7db902-480.webp",
+            "status": 200,
+            "bytes": 59844,
+            "immutable": true
+          },
+          {
+            "url": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-ferry-motorcycles-a03c2f7db902-full.jpg",
+            "status": 200,
+            "bytes": 6700460,
+            "immutable": true
+          }
+        ]
+      },
+      {
+        "id": "ocean-shores-2024",
+        "verifiedObjects": 69,
+        "verifiedBytes": 212210810,
+        "cdnChecks": [
+          {
+            "url": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-092b85bfb257-480.webp",
+            "status": 200,
+            "bytes": 114600,
+            "immutable": true
+          },
+          {
+            "url": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-092b85bfb257-full.jpg",
+            "status": 200,
+            "bytes": 6516910,
+            "immutable": true
+          }
+        ]
+      },
+      {
+        "id": "on-qc-new-england-2026",
+        "verifiedObjects": 7,
+        "verifiedBytes": 20551438,
+        "cdnChecks": [
+          {
+            "url": "https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-480.webp",
+            "status": 200,
+            "bytes": 87626,
+            "immutable": true
+          },
+          {
+            "url": "https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-full.jpg",
+            "status": 200,
+            "bytes": 9802984,
+            "immutable": true
+          }
+        ]
+      },
+      {
+        "id": "pch-2024",
+        "verifiedObjects": 759,
+        "verifiedBytes": 2527780912,
+        "cdnChecks": [
+          {
+            "url": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9076-d56327552491-480.webp",
+            "status": 200,
+            "bytes": 37518,
+            "immutable": true
+          },
+          {
+            "url": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9076-d56327552491-full.jpg",
+            "status": 200,
+            "bytes": 19541296,
+            "immutable": true
+          }
+        ]
+      },
+      {
+        "id": "river-wisco-2025",
+        "verifiedObjects": 280,
+        "verifiedBytes": 818769428,
+        "cdnChecks": [
+          {
+            "url": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01068-61cb5fe3000b-480.webp",
+            "status": 200,
+            "bytes": 76298,
+            "immutable": true
+          },
+          {
+            "url": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01068-61cb5fe3000b-full.jpg",
+            "status": 200,
+            "bytes": 17448564,
+            "immutable": true
+          }
+        ]
+      },
+      {
+        "id": "route-66ish-2025",
+        "verifiedObjects": 400,
+        "verifiedBytes": 1103736874,
+        "cdnChecks": [
+          {
+            "url": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-f6e75a206114-480.webp",
+            "status": 200,
+            "bytes": 25702,
+            "immutable": true
+          },
+          {
+            "url": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-f6e75a206114-full.jpg",
+            "status": 200,
+            "bytes": 6468472,
+            "immutable": true
+          }
+        ]
+      }
+    ]
+  }
+}

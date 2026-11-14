@@ -5,7 +5,7 @@ import { radiusLabelMinimumZoom, type RadiusLines } from './radii';
 
 const COLORS = { country: NATIONAL_COLOR, state: STATE_COLOR, county: COUNTY_COLOR };
 const ORDER = { country: 0, state: 1, county: 2 };
-const OBSTACLES = '.pins-map-toolbar, .pins-layers, .pins-navigation-hint, .pins-map-legend, .pins-unit-control, .maplibregl-ctrl, .pins-map-message, .pins-boundary-error';
+const OBSTACLES = '.pins-location-bar, .pins-region-control, .pins-layers-toggle, .pins-layer-options, .pins-unit-control, .maplibregl-ctrl, .pins-map-message, .pins-boundary-error';
 
 function alongPath(segments: TooltipSegment[], fraction: number) {
     const lengths = segments.map(([a, b]) => Math.hypot(b.x - a.x, b.y - a.y));
@@ -75,9 +75,14 @@ export function attachRadiusLabels(map: MapLibreMap, overlay: HTMLElement) {
             }
         }
         const active = new Set<string>();
+        const labeledPins = new Set<string>();
         const maximum = box.width < 600 ? 20 : 45;
         for (const { entry, points } of visible) {
             if (active.size >= maximum) break;
+            const properties = entry.feature.properties;
+            // Overview badges identify more distinct pins instead of repeating
+            // the same value on every contact. Selection reveals every contact.
+            if (!properties.selected && labeledPins.has(properties.pinId)) continue;
             const segments: TooltipSegment[] = [];
             for (let index = 1; index < points.length; index++) {
                 const start = points[index - 1], end = points[index];
@@ -86,7 +91,6 @@ export function attachRadiusLabels(map: MapLibreMap, overlay: HTMLElement) {
                 if (clipped) segments.push(clipped);
             }
             if (!segments.length) continue;
-            const properties = entry.feature.properties;
             const width = properties.label.length * 7 + 16, height = 24;
             let placement: { x: number; y: number; bounds: TooltipRect } | null = null;
             for (const fraction of [0.5, 0.7, 0.3]) {
@@ -105,6 +109,7 @@ export function attachRadiusLabels(map: MapLibreMap, overlay: HTMLElement) {
             if (!placement) continue;
             occupied.push(expandRect(placement.bounds, 4));
             active.add(properties.id);
+            labeledPins.add(properties.pinId);
             let label = labels.get(properties.id);
             if (!label) {
                 const element = document.createElement('span');
@@ -120,7 +125,8 @@ export function attachRadiusLabels(map: MapLibreMap, overlay: HTMLElement) {
             label.element.dataset.pinRadiusLabel = properties.pinId;
             label.element.dataset.radiusId = properties.id;
             label.element.classList.toggle('is-selected', properties.selected);
-            label.element.style.setProperty('--radius-color', COLORS[properties.level]);
+            label.element.style.setProperty('--radius-color', properties.selected
+                ? properties.level === 'country' ? '#deceff' : '#ffe3ad' : COLORS[properties.level]);
             label.element.style.left = `${placement.x}px`;
             label.element.style.top = `${placement.y}px`;
             label.element.title = `${properties.name}: ${properties.label} to the boundary`;
@@ -136,6 +142,9 @@ export function attachRadiusLabels(map: MapLibreMap, overlay: HTMLElement) {
     map.on('resize', schedule);
     map.on('projectiontransition', schedule);
     map.on('style.load', schedule);
+    // Display disclosures change occupied space without resizing the canvas.
+    const controls = new ResizeObserver(schedule);
+    for (const element of map.getContainer().parentElement?.querySelectorAll<HTMLElement>('.pins-layers') ?? []) controls.observe(element);
     return {
         setData(data: RadiusLines) {
             if (data === previous) { schedule(); return; }
@@ -157,6 +166,7 @@ export function attachRadiusLabels(map: MapLibreMap, overlay: HTMLElement) {
             map.off('resize', schedule);
             map.off('projectiontransition', schedule);
             map.off('style.load', schedule);
+            controls.disconnect();
             overlay.replaceChildren();
             labels.clear();
         },

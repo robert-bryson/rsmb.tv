@@ -12,13 +12,16 @@ export function tripPhotoCaption(photo: TripPhotoData) {
 export function createTripPhotoLightbox(gallery: HTMLElement, getGalleryPhotos?: () => HTMLAnchorElement[]) {
     const lightbox = new PhotoSwipeLightbox({
         gallery, children: 'a[data-pswp-width]', pswpModule: () => import('photoswipe'),
+        // Responsive viewer sources follow the display and zoom size.
+        // Keep only the next slide warm.
+        preload: [0, 1],
     });
     if (getGalleryPhotos) {
         lightbox.addFilter('clickedIndex', (_index, event) => {
             if (!(event.target instanceof Element)) return -1;
             const trigger = event.target.closest('a[data-pswp-width]');
             if (!trigger || !gallery.contains(trigger)) return -1;
-            // Snapshot the current grids, including hidden photos, for this viewer session.
+            // Snapshot story order, including collapsed photos and inline panoramas.
             const photos = getGalleryPhotos();
             lightbox.options.children = photos;
             return photos.findIndex(photo => photo === trigger);

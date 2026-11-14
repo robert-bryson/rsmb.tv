@@ -228,12 +228,18 @@
   "photos": [
     {
       "id": "20260717-135454",
-      "src": "https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-6cd75655d565-1600.webp",
-      "width": 1600,
-      "height": 1200,
+      "src": "https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-3840.webp",
+      "width": 3840,
+      "height": 2880,
       "alt": "A loaded green motorcycle parked beside an Arctic Watershed sign at the edge of a dense forest.",
       "date": "2026-07-17",
-      "srcSet": "https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-6cd75655d565-480.webp 480w, https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-6cd75655d565-960.webp 960w, https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-6cd75655d565-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-480.webp 480w, https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-960.webp 960w, https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-1600.webp 1600w, https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-2400.webp 2400w, https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-3200.webp 3200w, https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-full.jpg",
+        "width": 4000,
+        "height": 3000,
+        "srcSet": "https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-view-960.jpg 960w, https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-view-1600.jpg 1600w, https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-view-2400.jpg 2400w, https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-view-3200.jpg 3200w, https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-full.jpg 4000w"
+      }
     }
   ],
   "days": [

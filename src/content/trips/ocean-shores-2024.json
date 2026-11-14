@@ -10,7 +10,9 @@
     "countries": [
         {
             "code": "US",
-            "regions": ["Washington"]
+            "regions": [
+                "Washington"
+            ]
         }
     ],
     "hero": "2024-ocean-shores-4-beach",
@@ -30,24 +32,6 @@
             }
         ]
     },
-    "days": [
-        {
-            "id": "seattle-to-ocean-shores",
-            "title": "Seattle to Ocean Shores",
-            "date": "2024-02-17",
-            "headingId": "seattle-to-ocean-shores",
-            "trackIds": ["paseo-de-rever-02-17-24"],
-            "stopIds": ["seattle-departure", "ocean-shores"]
-        },
-        {
-            "id": "ocean-shores-to-seattle",
-            "title": "Ocean Shores to Seattle",
-            "date": "2024-02-20",
-            "headingId": "the-ride-home-ocean-shores-back-to-seattle",
-            "trackIds": ["paseo-de-rever-02-20-24"],
-            "stopIds": ["ocean-shores", "seattle-return"]
-        }
-    ],
     "stops": [
         {
             "id": "seattle-departure",
@@ -80,83 +64,171 @@
     "photos": [
         {
             "id": "2024-ocean-shores-1-cb500x-ferry",
-            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-1600.webp 1600w",
-            "width": 1600,
-            "height": 2133,
-            "alt": "My Honda CB500X leaves Fauntleroy on its first Washington ferry trip."
+            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-092b85bfb257-3000.webp",
+            "width": 3000,
+            "height": 4000,
+            "alt": "My Honda CB500X leaves Fauntleroy on its first Washington ferry trip.",
+            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-092b85bfb257-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-092b85bfb257-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-092b85bfb257-1600.webp 1600w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-092b85bfb257-2400.webp 2400w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-092b85bfb257-3000.webp 3000w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-092b85bfb257-full.jpg",
+                "width": 3000,
+                "height": 4000,
+                "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-092b85bfb257-view-960.jpg 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-092b85bfb257-view-1600.jpg 1600w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-092b85bfb257-view-2400.jpg 2400w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-092b85bfb257-full.jpg 3000w"
+            }
         },
         {
             "id": "2024-ocean-shores-2-ferry-rainier",
-            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-2-ferry-rainier-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-2-ferry-rainier-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-2-ferry-rainier-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-2-ferry-rainier-1600.webp 1600w",
-            "width": 1600,
-            "height": 1200,
-            "alt": "The mountain is out, but the weather looks iffy. Mount Rainier seen across the water."
+            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-2-ferry-rainier-07c337264a51-3767.webp",
+            "width": 3767,
+            "height": 2825,
+            "alt": "The mountain is out, but the weather looks iffy. Mount Rainier seen across the water.",
+            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-2-ferry-rainier-07c337264a51-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-2-ferry-rainier-07c337264a51-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-2-ferry-rainier-07c337264a51-1600.webp 1600w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-2-ferry-rainier-07c337264a51-2400.webp 2400w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-2-ferry-rainier-07c337264a51-3200.webp 3200w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-2-ferry-rainier-07c337264a51-3767.webp 3767w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-2-ferry-rainier-07c337264a51-full.jpg",
+                "width": 3767,
+                "height": 2825,
+                "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-2-ferry-rainier-07c337264a51-view-960.jpg 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-2-ferry-rainier-07c337264a51-view-1600.jpg 1600w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-2-ferry-rainier-07c337264a51-view-2400.jpg 2400w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-2-ferry-rainier-07c337264a51-full.jpg 3767w"
+            }
         },
         {
             "id": "2024-ocean-shores-3-ferry-baker",
-            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-1600.webp 1600w",
-            "width": 1600,
-            "height": 1200,
-            "alt": "Mount Baker visible beyond Puget Sound to the north from the ferry. It looks much nicer up there."
+            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-785377c842a7-3840.webp",
+            "width": 3840,
+            "height": 2880,
+            "alt": "Mount Baker visible beyond Puget Sound to the north from the ferry. It looks much nicer up there.",
+            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-785377c842a7-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-785377c842a7-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-785377c842a7-1600.webp 1600w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-785377c842a7-2400.webp 2400w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-785377c842a7-3200.webp 3200w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-785377c842a7-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-785377c842a7-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-785377c842a7-view-960.jpg 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-785377c842a7-view-1600.jpg 1600w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-785377c842a7-view-2400.jpg 2400w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-785377c842a7-view-3200.jpg 3200w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-3-ferry-baker-785377c842a7-full.jpg 4000w"
+            }
         },
         {
             "id": "2024-ocean-shores-4-beach",
-            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
-            "alt": "A few brave and hardy souls on the broad beach at Ocean Shores beneath an overcast sky."
+            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-c063ab734f48-3840.webp",
+            "width": 3840,
+            "height": 2560,
+            "alt": "A few brave and hardy souls on the broad beach at Ocean Shores beneath an overcast sky.",
+            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-c063ab734f48-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-c063ab734f48-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-c063ab734f48-1600.webp 1600w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-c063ab734f48-2400.webp 2400w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-c063ab734f48-3200.webp 3200w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-c063ab734f48-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-c063ab734f48-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-c063ab734f48-view-960.jpg 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-c063ab734f48-view-1600.jpg 1600w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-c063ab734f48-view-2400.jpg 2400w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-c063ab734f48-view-3200.jpg 3200w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-c063ab734f48-view-3840.jpg 3840w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-c063ab734f48-full.jpg 6240w"
+            }
         },
         {
             "id": "2024-ocean-shores-5-bears",
-            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
-            "alt": "Chainsaw bear figures beside the road during the ride through western Washington."
+            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-3af82d84160e-3840.webp",
+            "width": 3840,
+            "height": 2560,
+            "alt": "Chainsaw bear figures beside the road during the ride through western Washington.",
+            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-3af82d84160e-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-3af82d84160e-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-3af82d84160e-1600.webp 1600w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-3af82d84160e-2400.webp 2400w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-3af82d84160e-3200.webp 3200w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-3af82d84160e-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-3af82d84160e-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-3af82d84160e-view-960.jpg 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-3af82d84160e-view-1600.jpg 1600w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-3af82d84160e-view-2400.jpg 2400w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-3af82d84160e-view-3200.jpg 3200w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-3af82d84160e-view-3840.jpg 3840w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-5-bears-3af82d84160e-full.jpg 6240w"
+            }
         },
         {
             "id": "2024-ocean-shores-6-bear-gun",
-            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-1600.webp 1600w",
-            "width": 1600,
-            "height": 2400,
-            "alt": "Yup. A roadside bear figure holding a carved wooden rifle."
+            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-a0b7fc0b67b2-3840.webp",
+            "width": 3840,
+            "height": 5760,
+            "alt": "Yup. A roadside bear figure holding a carved wooden rifle.",
+            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-a0b7fc0b67b2-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-a0b7fc0b67b2-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-a0b7fc0b67b2-1600.webp 1600w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-a0b7fc0b67b2-2400.webp 2400w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-a0b7fc0b67b2-3200.webp 3200w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-a0b7fc0b67b2-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-a0b7fc0b67b2-full.jpg",
+                "width": 4160,
+                "height": 6240,
+                "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-a0b7fc0b67b2-view-960.jpg 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-a0b7fc0b67b2-view-1600.jpg 1600w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-a0b7fc0b67b2-view-2400.jpg 2400w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-a0b7fc0b67b2-view-3200.jpg 3200w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-a0b7fc0b67b2-view-3840.jpg 3840w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-6-bear-gun-a0b7fc0b67b2-full.jpg 4160w"
+            }
         },
         {
             "id": "2024-ocean-shores-7-asparagus",
-            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-1600.webp 1600w",
-            "width": 1600,
-            "height": 2400,
-            "alt": "A large asparagus for sale hand-painted sign, but I didn't see any actual asparagus for sale."
+            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-5f4b3f92915e-3840.webp",
+            "width": 3840,
+            "height": 5760,
+            "alt": "A large asparagus for sale hand-painted sign, but I didn't see any actual asparagus for sale.",
+            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-5f4b3f92915e-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-5f4b3f92915e-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-5f4b3f92915e-1600.webp 1600w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-5f4b3f92915e-2400.webp 2400w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-5f4b3f92915e-3200.webp 3200w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-5f4b3f92915e-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-5f4b3f92915e-full.jpg",
+                "width": 4160,
+                "height": 6240,
+                "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-5f4b3f92915e-view-960.jpg 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-5f4b3f92915e-view-1600.jpg 1600w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-5f4b3f92915e-view-2400.jpg 2400w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-5f4b3f92915e-view-3200.jpg 3200w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-5f4b3f92915e-view-3840.jpg 3840w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-7-asparagus-5f4b3f92915e-full.jpg 4160w"
+            }
         },
         {
             "id": "2024-ocean-shores-8-bog",
-            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-8-bog-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-8-bog-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-8-bog-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-8-bog-1600.webp 1600w",
-            "width": 1600,
-            "height": 1200,
-            "alt": "A wetland bog behind the dunes under gray winter skies near Ocean Shores."
+            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-8-bog-1960650caba8-3840.webp",
+            "width": 3840,
+            "height": 2880,
+            "alt": "A wetland bog behind the dunes under gray winter skies near Ocean Shores.",
+            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-8-bog-1960650caba8-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-8-bog-1960650caba8-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-8-bog-1960650caba8-1600.webp 1600w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-8-bog-1960650caba8-2400.webp 2400w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-8-bog-1960650caba8-3200.webp 3200w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-8-bog-1960650caba8-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-8-bog-1960650caba8-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-8-bog-1960650caba8-view-960.jpg 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-8-bog-1960650caba8-view-1600.jpg 1600w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-8-bog-1960650caba8-view-2400.jpg 2400w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-8-bog-1960650caba8-view-3200.jpg 3200w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-8-bog-1960650caba8-full.jpg 4000w"
+            }
         },
         {
             "id": "2024-ocean-shores-9-maze",
-            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-9-maze-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-9-maze-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-9-maze-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-9-maze-1600.webp 1600w",
-            "width": 1600,
-            "height": 1200,
-            "alt": "A maze drawn in the wet sand on the beach near Ocean Shores."
+            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-9-maze-414f996b8d91-3840.webp",
+            "width": 3840,
+            "height": 2880,
+            "alt": "A maze drawn in the wet sand on the beach near Ocean Shores.",
+            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-9-maze-414f996b8d91-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-9-maze-414f996b8d91-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-9-maze-414f996b8d91-1600.webp 1600w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-9-maze-414f996b8d91-2400.webp 2400w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-9-maze-414f996b8d91-3200.webp 3200w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-9-maze-414f996b8d91-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-9-maze-414f996b8d91-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-9-maze-414f996b8d91-view-960.jpg 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-9-maze-414f996b8d91-view-1600.jpg 1600w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-9-maze-414f996b8d91-view-2400.jpg 2400w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-9-maze-414f996b8d91-view-3200.jpg 3200w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-9-maze-414f996b8d91-full.jpg 4000w"
+            }
         },
         {
             "id": "2024-ocean-shores-10-seattle-skyline",
-            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-1600.webp 1600w",
-            "width": 1600,
-            "height": 1200,
-            "alt": "The Seattle skyline viewed across the water on the return trip."
+            "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-36a246e57f6a-3840.webp",
+            "width": 3840,
+            "height": 2880,
+            "alt": "The Seattle skyline viewed across the water on the return trip.",
+            "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-36a246e57f6a-480.webp 480w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-36a246e57f6a-960.webp 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-36a246e57f6a-1600.webp 1600w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-36a246e57f6a-2400.webp 2400w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-36a246e57f6a-3200.webp 3200w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-36a246e57f6a-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-36a246e57f6a-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-36a246e57f6a-view-960.jpg 960w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-36a246e57f6a-view-1600.jpg 1600w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-36a246e57f6a-view-2400.jpg 2400w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-36a246e57f6a-view-3200.jpg 3200w, https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-36a246e57f6a-full.jpg 4000w"
+            }
+        }
+    ],
+    "days": [
+        {
+            "id": "seattle-to-ocean-shores",
+            "title": "Seattle to Ocean Shores",
+            "date": "2024-02-17",
+            "headingId": "seattle-to-ocean-shores",
+            "trackIds": [
+                "paseo-de-rever-02-17-24"
+            ],
+            "stopIds": [
+                "seattle-departure",
+                "ocean-shores"
+            ]
+        },
+        {
+            "id": "ocean-shores-to-seattle",
+            "title": "Ocean Shores to Seattle",
+            "date": "2024-02-20",
+            "headingId": "the-ride-home-ocean-shores-back-to-seattle",
+            "trackIds": [
+                "paseo-de-rever-02-20-24"
+            ],
+            "stopIds": [
+                "ocean-shores",
+                "seattle-return"
+            ]
         }
     ],
     "galleries": {

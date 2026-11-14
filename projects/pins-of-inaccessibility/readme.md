@@ -333,6 +333,7 @@ This check reuses the source projection method; it does not certify a global geo
 The map starts over the contiguous U.S.
 The location trail shows world, country, state or province, and selected county levels.
 Choose an ancestor in the trail to open that view.
+Choose the current location to recenter without clearing its selection.
 The **Up one level** button and the selected card's parent button provide explicit alternatives to clicking outside a selection.
 An empty map click moves up after a 500 ms window for native double-click and double-tap zoom.
 Dragging, zooming, starting another touch, and changing location cancel a pending background action.
@@ -352,10 +353,12 @@ U.S. state views retain neighboring state markers and omit counties outside the 
 
 On touch screens, marker picking uses an expanded area of about 44 by 44 CSS pixels.
 The closest marker wins when these areas overlap.
-The layer controls start collapsed on phones and short screens.
-They sit in a dock along the bottom edge of the map.
-Opening the controls resizes the canvas above them and keeps map content clear.
-The dock remains available in fullscreen mode.
+The **Map layers** disclosure starts collapsed at every screen size.
+It groups layer settings, the symbol legend, and navigation help in a floating panel.
+Opening it preserves the canvas size and camera. Badges avoid the expanded panel.
+Escape closes the panel and restores its button's focus before geographic navigation.
+Clicking outside also closes the panel. The controls remain available in fullscreen mode.
+Distance units remain visible, including when the phone explorer is open.
 The location trail and parent action remain visible.
 Short landscape screens place the explorer beside the map.
 Camera framing keeps a selected point below controls when they cover the map center.
@@ -371,6 +374,7 @@ Foreign selected cards label area as mapped area.
 They show source scale and flag especially small or unnamed source units.
 The violet marker identifies the national pole.
 Regional shortcuts reach Alaska, Hawaii, and each inhabited territory.
+The jump menu also returns to the current country's overview without selecting a pin.
 The national card and region menu can zoom to the U.S. pole.
 The U.S. national pin has `level: "country"`, `fips: "US"`, and an empty `stateFips`.
 It stays separate from state and county rankings.
@@ -384,12 +388,12 @@ The `pin` URL parameter preserves a selected pin.
 Distance units and the circle preference use local storage.
 
 County modes are **Off**, **Auto**, and **On**.
-Auto reveals counties at zoom 6.
-Small county dots fade in before county geometry loads.
-County outlines load and fade in at zoom 7.
-County circles fade in at zoom 8.
-County names start at zoom 9.
-On keeps county dots visible at every zoom. Other county details retain their zoom thresholds.
+Auto reveals large county dots from zoom 4, circles from zoom 5, and names from zoom 6.
+Each county waits until its radius spans approximately 8, 22, or 40 pixels for those stages.
+Dots, circles, and names retain their previous latest reveal levels of 6, 8, and 9.
+This brings large western counties in earlier without delaying smaller counties.
+County outlines load and fade in at zoom 6.
+On keeps county dots visible at every zoom. Other county details retain their size thresholds.
 County pins remain searchable before the outlines load.
 Selecting a county loads its boundary immediately.
 
@@ -397,15 +401,15 @@ The selected circle stays visible when other circles are hidden.
 Its dashed spokes reach the published boundary contacts.
 Badges show each contact's distance in miles or kilometers.
 Unselected national spokes start at zoom 4.
-State spokes start at zoom 5, and county spokes start at zoom 10.
+State spokes start at zoom 5, and county spokes can start at zoom 6.
 Small radii wait until they span about 70 pixels.
 Spokes fade in across 0.75 zoom levels. Distance badges appear when that fade finishes.
 At the maximum zoom of 16, readable measurements appear without waiting for an unreachable fade endpoint.
 Measurements that need a higher zoom remain hidden unless selected.
 A selected pin shows its spokes at any zoom.
 
-County circles use a separate source that starts drawing at zoom 8.
-Preparation starts after the camera settles at zoom 7.
+County circles use a separate source that starts drawing eligible counties at zoom 5.
+Preparation starts after the camera settles at zoom 4.
 Each task prepares at most 128 circles and checks a six-millisecond budget after every eight circles.
 The completed batch reaches the map worker in one update.
 Changing scope or hiding circles cancels unfinished preparation.
@@ -420,9 +424,13 @@ Selected measurements do not rebuild when ordinary county detail stages change.
 Distance badges recalculate their positions when map controls or error messages change.
 See the [zoom transition review](../../docs/reviews/2026-11-13-pins-zoom-transitions.md) for research, alternatives, and measurements.
 Use the [quality review](../../docs/reviews/2026-11-13-pins-zoom-quality-review.md) for later corrections and current verification.
+The [UI refinement review](../../docs/reviews/2026-11-13-pins-ui-refinement.md) describes the current controls and size-based reveals.
 
 Badges use the visible part of each spoke.
+Overview views show one distance badge per pin. Selecting the pin shows every contact distance.
 They avoid map controls, spoke origins, and other badges.
+Point labels try several positions and give larger radii priority when labels compete for space.
+Overview country markers and circle outlines use less visual weight than the selection.
 A wide map shows at most 45 badges.
 A map narrower than 600 pixels shows at most 20.
 A badge is hidden when no clear position is available.
@@ -460,12 +468,12 @@ Local and preview hosts do not send analytics.
 | `src/features/pins/PinsExplorer.tsx` | Search, scope, rankings, preferences, and URL selection |
 | `src/features/pins/navigation.ts` | Geographic parents, shared scopes, ranking transitions, and location paths |
 | `src/features/pins/PinsNavigation.tsx` | Location trail, parent action, and view announcements |
-| `src/features/pins/PinsLayerControls.tsx` | Docked layer controls and their disclosure state |
+| `src/features/pins/PinsLayerControls.tsx` | Floating display disclosure, legend, help, and dismissal |
 | `src/features/pins/presentation.ts` | Visible context, muted pins, and peer-circle selection |
 | `src/features/pins/PinsMap.tsx` | React state and renderer lifetime |
 | `src/features/pins/mapRenderer.ts` | Map events, data updates, deadlines, and cleanup |
 | `src/features/pins/mapLayers.ts` | Source and layer definitions |
-| `src/features/pins/zoom.ts` | County detail stages and native zoom fades |
+| `src/features/pins/zoom.ts` | Screen-size thresholds, county detail stages, and native zoom fades |
 | `src/features/pins/useCountyCircles.ts` | Cancellable county geometry batches and prepared-data reuse |
 | `src/features/pins/radii.ts` | Spoke geometry and zoom thresholds |
 | `src/features/pins/radiusLabels.ts` | Badge placement and collision checks |
@@ -531,7 +539,7 @@ Navigation tests check parent steps, shared state scopes, browser history, gestu
 Browser tests use the real renderer and published geographic files.
 They replace remote tiles and glyph responses with fixed responses.
 They check rendered pixels, fullscreen retry, stalled workers, county loading, selection, accessible controls, and mobile layout.
-Touch checks include a 320-pixel viewport, short landscape layout, native disclosure controls, and tapping outside a country.
+Touch checks include a 320-pixel viewport, short landscape layout, the display disclosure, and tapping outside a country.
 World-view checks cover ordinary and reduced-motion navigation, date-line pans, and cameras already farther out than the fitted globe.
 
 See the [navigation design review](../../docs/reviews/2026-11-13-pins-navigation-design.md) for interaction decisions and current validation.

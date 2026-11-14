@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { prepareTripAssets } from './prepare-trip-assets.js';
 import { loadLocalEnvFiles } from './sync-blogs.js';
 import { copyTripAsset } from './copy-trip-asset.js';
+import { isFullTripPhoto, isTripViewerDerivative } from './trip-photo-files.js';
 
 const TRIP_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const DEFAULT_TRIP_ASSETS_ROOTS = [
@@ -33,7 +34,9 @@ function countLabel(count, singular, plural = `${singular}s`) {
 export function formatAssetTotals(totals) {
     const failures = totals.failures.length > 0 ? ` ${countLabel(totals.failures.length, 'trip')} incomplete.` : '';
     const skipped = totals.skipped.length > 0 ? ` Skipped ${countLabel(totals.skipped.length, 'empty trip')}.` : '';
-    return `Processed ${countLabel(totals.trips, 'trip')} with ${countLabel(totals.photos, 'photo')} and ${countLabel(totals.geoJsonFiles, 'GeoJSON file')} before dev (${countLabel(totals.webpFiles, 'WebP derivative')}).${skipped}${failures}`;
+    const full = totals.fullFiles ? `, ${countLabel(totals.fullFiles, 'full-resolution photo')}` : '';
+    const viewer = totals.viewerFiles ? `, ${countLabel(totals.viewerFiles, 'viewer derivative')}` : '';
+    return `Processed ${countLabel(totals.trips, 'trip')} with ${countLabel(totals.photos, 'photo')} and ${countLabel(totals.geoJsonFiles, 'GeoJSON file')} before dev (${countLabel(totals.webpFiles, 'WebP derivative')}${full}${viewer}).${skipped}${failures}`;
 }
 
 export async function findTripAssetsRoot(configuredRoot = process.env.TRIP_ASSETS_ROOT) {
@@ -55,7 +58,7 @@ async function mirrorFiles(source, destination, extension) {
     let filenames = [];
     try {
         filenames = (await fs.readdir(source, { withFileTypes: true }))
-            .filter((entry) => entry.isFile() && path.extname(entry.name).toLowerCase() === extension)
+            .filter((entry) => entry.isFile() && (typeof extension === 'function' ? extension(entry.name) : path.extname(entry.name).toLowerCase() === extension))
             .map((entry) => entry.name);
     } catch (error) {
         if (error?.code !== 'ENOENT') throw error;
@@ -81,6 +84,8 @@ export async function mirrorPreparedTripAssets({ source, tripId, outputRoot }) {
     let retainBackup = false;
     try {
         const webpFiles = await mirrorFiles(path.join(source, 'photos', 'processed'), path.join(staged, 'photos'), '.webp');
+        const fullFiles = await mirrorFiles(path.join(source, 'photos', 'processed'), path.join(staged, 'photos'), isFullTripPhoto);
+        const viewerFiles = await mirrorFiles(path.join(source, 'photos', 'processed'), path.join(staged, 'photos'), isTripViewerDerivative);
         const geoJsonFiles = await mirrorFiles(path.join(source, 'gps', 'processed'), path.join(staged, 'geo'), '.geojson');
         let hadPrevious = false;
         try {
@@ -103,7 +108,7 @@ export async function mirrorPreparedTripAssets({ source, tripId, outputRoot }) {
             }
             throw error;
         }
-        return { webpFiles, geoJsonFiles };
+        return { webpFiles, fullFiles, viewerFiles, geoJsonFiles };
     } finally {
         if (!retainBackup) await fs.rm(temporary, { recursive: true, force: true });
     }
@@ -127,7 +132,7 @@ export async function prepareTripAssetsForDev({
 
     if (tripIds.length === 0) throw new Error(`No trip directories found under ${sourceRoot}.`);
 
-    const totals = { trips: 0, photos: 0, webpFiles: 0, geoJsonFiles: 0, failures: [], skipped: [] };
+    const totals = { trips: 0, photos: 0, webpFiles: 0, fullFiles: 0, viewerFiles: 0, geoJsonFiles: 0, failures: [], skipped: [] };
     for (const tripId of tripIds) {
         const source = path.join(sourceRoot, tripId);
         try {
@@ -137,6 +142,8 @@ export async function prepareTripAssetsForDev({
             totals.trips += 1;
             totals.photos += report.photos.length;
             totals.webpFiles += mirrored.webpFiles;
+            totals.fullFiles += mirrored.fullFiles;
+            totals.viewerFiles += mirrored.viewerFiles;
             totals.geoJsonFiles += mirrored.geoJsonFiles;
         } catch (error) {
             const entries = error?.code === 'NO_TRIP_ASSETS' ? totals.skipped : totals.failures;

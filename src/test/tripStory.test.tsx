@@ -49,6 +49,13 @@ function renderStory(children: React.ReactNode, tripManifest = manifest) {
 }
 
 describe('trip story primitives', () => {
+    it('resolves full-resolution exports through the local trip cache in development', () => {
+        const full = { src: 'https://data.rsmb.tv/trips/coastal-loop/photos/camp-full.jpg', width: 6000, height: 4000,
+            srcSet: 'https://data.rsmb.tv/trips/coastal-loop/photos/camp-view-1600.jpg 1600w, https://data.rsmb.tv/trips/coastal-loop/photos/camp-full.jpg 6000w' };
+        const parsed = parseTripManifest({ ...manifest, photos: manifest.photos.map(photo => ({ ...photo, full })) });
+        expect(parsed.photos[0].full).toEqual({ ...full, src: '/data/trips/coastal-loop/photos/camp-full.jpg',
+            srcSet: '/data/trips/coastal-loop/photos/camp-view-1600.jpg 1600w, /data/trips/coastal-loop/photos/camp-full.jpg 6000w' });
+    });
     it('filter review regressions: scopes identically named regions to their own countries', () => {
         renderStory(<TripFacts />, {
             ...manifest, regions: undefined,
@@ -394,7 +401,7 @@ describe('trip story primitives', () => {
         expect(screen.getByRole('button', { name: 'Show all 11 photos' })).toHaveAttribute('aria-expanded', 'false');
     });
 
-    it('connects mounted galleries in story order, including collapsed photos', () => {
+    it('connects galleries, inline panoramas, and collapsed photos in story order', () => {
         const photos = Array.from({ length: 14 }, (_, index) => ({
             ...manifest.photos[1], id: `photo-${index}`, src: `/photo-${index}.webp`, alt: `Photo ${index}`,
         }));
@@ -416,12 +423,15 @@ describe('trip story primitives', () => {
             const story = (showFirst: boolean) => <TripStoryProvider manifest={tripManifest}>
                 <TripHeroGallery />
                 {showFirst && <TripGallery galleryId="first" />}
-                <TripPhoto photoId="photo-0" />
+                <TripPhoto photoId="photo-0" layout="pano" />
                 <TripGallery galleryId="second" />
             </TripStoryProvider>;
             const { rerender } = render(story(true));
             fireEvent.click(screen.getByRole('img', { name: 'Photo 12' }));
-            const expectedSources = photos.slice(1).map(photo => new URL(photo.src, window.location.href).href);
+            const expectedSources = [...photos.slice(1, 12), photos[0], ...photos.slice(12)]
+                .map(photo => new URL(photo.src, window.location.href).href);
+            expect(opened.at(-1)).toEqual({ index: 12, sources: expectedSources });
+            fireEvent.click(document.querySelector('.trip-photo-pano img')!);
             expect(opened.at(-1)).toEqual({ index: 11, sources: expectedSources });
             fireEvent.click(screen.getByRole('img', { name: 'Photo 2' }));
             expect(opened.at(-1)).toEqual({ index: 1, sources: expectedSources });
@@ -432,7 +442,7 @@ describe('trip story primitives', () => {
 
             rerender(story(false));
             fireEvent.click(screen.getByRole('img', { name: 'Photo 12' }));
-            expect(opened.at(-1)).toEqual({ index: 0, sources: expectedSources.slice(11) });
+            expect(opened.at(-1)).toEqual({ index: 1, sources: expectedSources.slice(11) });
         } finally {
             open.mockRestore();
         }

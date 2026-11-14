@@ -1,6 +1,6 @@
 # PCH 2024 starter galleries
 
-The [manifest](../../src/content/trips/pch-2024.json) contains 107 photos and 28 galleries.
+The [manifest](../../src/content/trips/pch-2024.json) contains 108 photos and 28 galleries.
 The hero is `dscf9177`: the motorcycle above the Mendocino coast.
 Each day uses its matching full-day gallery through `days[].galleryId`.
 
@@ -14,7 +14,7 @@ Keep the writing source and image files there.
 | `pch-2024-outline.md` | Writing prompts and media placements |
 | `photos/originals/` | Original photos with unchanged filenames and contents |
 | `photos/selects/` | Photos selected for processing |
-| `photos/processed/` | Generated WebP files |
+| `photos/processed/` | Responsive WebP files and full-resolution JPEG/PNG exports |
 | `gps/originals/` | Original GPX files |
 | `gps/processed/` | Generated route files |
 | `asset-metadata.json` | Generated filenames, dimensions, file sizes, and processing warnings |
@@ -41,9 +41,9 @@ Day assignments do not insert galleries automatically.
 | `{{trip-gallery:day-three-1}}` | 2 | October 5 — Morning river views |
 | `{{trip-gallery:day-three-2}}` | 2 | October 5 — Coastal headlands and Victorian house |
 | `{{trip-gallery:day-three-3}}` | 5 | October 5 — Beach stops, tree arch, and evening bridge |
-| `{{trip-gallery:day-four}}` | 42 | October 6 — Fort Bragg to Bridgeport |
+| `{{trip-gallery:day-four}}` | 43 | October 6 — Fort Bragg to Bridgeport |
 | `{{trip-gallery:day-five}}` | 7 | October 7 — Bridgeport to Valley Center |
-| `{{trip-gallery:oregon-coast-overlooks}}` | 4 | October 4 — Beaches, headlands, and wooded overlooks |
+| `{{trip-gallery:oregon-coast-overlooks}}` | 3 | October 4 — Beaches, headlands, and wooded overlooks |
 | `{{trip-gallery:lakeside-reflections}}` | 3 | October 4 — Lake, dock, and reflections |
 | `{{trip-gallery:oregon-coast-morning}}` | 3 | October 5 — Lighthouse and sea stacks |
 | `{{trip-gallery:southern-oregon-coast}}` | 10 | October 5 — Lunch, harbor, and southern Oregon beaches |
@@ -52,7 +52,7 @@ Day assignments do not insert galleries automatically.
 | `{{trip-gallery:southern-oregon-beaches}}` | 4 | October 5 — Sea arch, misty coast, and beach stops after Port Orford |
 | `{{trip-gallery:california-and-redwoods}}` | 4 | October 5 — Redwood forest and roadside motorcycle |
 | `{{trip-gallery:mendocino-coast-evening}}` | 6 | October 5 — Coastal riding and motorcycle overlook |
-| `{{trip-gallery:inland-california}}` | 7 | October 6 — Leaving the coast, lake, foothills, and ranchland |
+| `{{trip-gallery:inland-california}}` | 8 | October 6 — Morning coast, lake, foothills, and ranchland |
 | `{{trip-gallery:sierra-crossing}}` | 13 | October 6 — Granite peaks, mountain lake, and autumn color; panorama placed separately |
 | `{{trip-gallery:eastern-sierra-valleys}}` | 6 | October 6 — River stop and open valleys; panorama placed separately |
 | `{{trip-gallery:bridgeport-evening}}` | 14 | October 6 — Motel arrival, town walk, sunset, and night |
@@ -68,7 +68,7 @@ Remove unused definitions after you finish the story's media placements.
 
 The report places `{{trip-photo:20241003-150610}}` separately in the October 3 text.
 Keep this photo in the manifest. Exclude it from `day-one` to prevent a repeated photo.
-The full-day galleries contain 102 photos. The inline placement supplies the remaining trip-day photo.
+The full-day galleries contain 103 photos. The inline placement supplies the remaining trip-day photo.
 The separate `pre-trip` gallery contains four October 1 photos.
 Place `{{trip-gallery:pre-trip}}` in the preparation section, before the October 3 chapter.
 For an inline forest-road photo, place `{{trip-photo:r003203}}` between the restaurant and coastal overlooks.
@@ -84,12 +84,16 @@ Use these photo shortcodes for panoramas across the full page width:
 
 | Shortcode | Visible subject | Largest prepared width |
 | --- | --- | ---: |
-| `{{trip-photo-pano:dscf9130-pano}}` | A wide panorama of a blue bay, offshore rocks, a distant headland, and a harbor pier. | 3200 px |
-| `{{trip-photo-pano:dscf9240-pano}}` | A wide mountain panorama with granite ridges, forested valleys, and a winding roadside guardrail. | 3200 px |
-| `{{trip-photo-pano:dscf9279-pano}}` | A wide panorama of grazing cattle in an open valley beneath cloud-covered mountains. | 3200 px |
-| `{{trip-photo-pano:r003242-pano}}` | A wide panorama of golden autumn trees, open sagebrush, and rounded mountain peaks. | 3200 px |
-| `{{trip-photo-pano:r003247-pano}}` | A broad valley descending toward a blue lake with a mountain wall along one side. | 1600 px |
-| `{{trip-photo-pano:r003254-pano}}` | A wide panorama of a pale granite mountain above a dry valley and scattered trees. | 3200 px |
+| `{{trip-photo-pano:dscf9130-pano}}` | A wide panorama of a blue bay, offshore rocks, a distant headland, and a harbor pier. | 7672 px |
+| `{{trip-photo-pano:dscf9240-pano}}` | A wide mountain panorama with granite ridges, forested valleys, and a winding roadside guardrail. | 7680 px |
+| `{{trip-photo-pano:dscf9279-pano}}` | A wide panorama of grazing cattle in an open valley beneath cloud-covered mountains. | 7680 px |
+| `{{trip-photo-pano:r003242-pano}}` | A wide panorama of golden autumn trees, open sagebrush, and rounded mountain peaks. | 6420 px |
+| `{{trip-photo-pano:r003247-pano}}` | A broad valley descending toward a blue lake with a mountain wall along one side. | 3840 px |
+| `{{trip-photo-pano:r003254-pano}}` | A wide panorama of a pale granite mountain above a dry valley and scattered trees. | 6716 px |
+
+The fullscreen viewer selects a quality-99 image for the display and zoom level.
+Native dimensions remain available when zooming, including the 8505-pixel mountain panorama.
+Linked panoramas join the galleries in story order when readers use the viewer arrows.
 
 ## Dates and order
 
@@ -97,6 +101,9 @@ Photo dates cover October 1–7, 2024.
 The four October 1 photos belong only to `pre-trip`.
 The riding dates remain October 3–7, 2024.
 The photo inventory follows recorded camera times.
+The November 13 addition, `20241006-075214`, starts `day-four` and `inland-california`.
+Its camera timestamp is October 6 at 07:52:14, with a recorded UTC offset of −07:00.
+It shows the coast before the morning departure from Fort Bragg.
 The October 4 gallery puts the coast and lake stops before the motel arrival.
 This order follows the GPS route.
 

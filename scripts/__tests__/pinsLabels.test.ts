@@ -12,6 +12,8 @@ function line(id: string, coordinates = [[-100, 0], [100, 0]], overrides: Partia
 const data = (...features: RadiusLines['features']) => ({ type: 'FeatureCollection' as const, features });
 const rect = (width = 800, height = 500, left = 0, top = 0) => ({ width, height, left, top, right: left + width, bottom: top + height, x: left, y: top, toJSON() {} });
 let frames: Map<number, FrameRequestCallback>;
+let resizeControls: () => void;
+const disconnect = vi.fn();
 const flush = () => { const pending = [...frames.values()]; frames.clear(); for (const frame of pending) frame(0); };
 
 function fixture(width = 800, height = 500) {
@@ -37,10 +39,41 @@ beforeEach(() => {
     frames = new Map(); let id = 0;
     vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => { frames.set(++id, callback); return id; });
     vi.stubGlobal('cancelAnimationFrame', (id: number) => frames.delete(id));
+    vi.stubGlobal('ResizeObserver', class {
+        constructor(callback: () => void) { resizeControls = callback; }
+        observe() {}
+        disconnect = disconnect;
+    });
+    disconnect.mockClear();
 });
 afterEach(() => { document.body.replaceChildren(); vi.unstubAllGlobals(); });
 
 describe('radius badge layout', () => {
+    it('uses one overview badge per pin and restores every boundary contact on selection', () => {
+        const f = fixture();
+        const contacts = [line('a', [[-100, -40], [100, -40]], { pinId: 'county-06025' }),
+            line('b', [[-100, 40], [100, 40]], { pinId: 'county-06025' })];
+        f.labels.setData(data(...contacts)); flush();
+        expect(f.overlay.children).toHaveLength(1);
+        f.labels.setData(data(...contacts.map(feature => ({ ...feature, properties: { ...feature.properties, selected: true } })))); flush();
+        expect(f.overlay.children).toHaveLength(2);
+        expect(f.overlay.querySelectorAll('.is-selected')).toHaveLength(2);
+        f.labels.dispose();
+    });
+
+    it('repositions badges when floating controls expand without a camera or data change', () => {
+        const f = fixture();
+        f.labels.setData(data(line('ordinary'))); flush();
+        const badge = f.overlay.firstElementChild as HTMLElement;
+        const before = [badge.style.left, badge.style.top];
+        const panel = document.createElement('div'); panel.className = 'pins-layer-options';
+        panel.getBoundingClientRect = () => rect(80, 40, parseFloat(before[0]) - 40, parseFloat(before[1]) - 20);
+        f.parent.append(panel);
+        resizeControls(); flush();
+        expect([badge.style.left, badge.style.top]).not.toEqual(before);
+        f.labels.dispose();
+        expect(disconnect).toHaveBeenCalledOnce();
+    });
     it('clears badges without measuring layout after zooming below every readable radius', () => {
         const f = fixture();
         f.labels.setData(data(line('ordinary'))); flush();
@@ -115,7 +148,7 @@ describe('radius badge layout', () => {
 
     it('keeps labels inside the viewport and avoids toolbar, pin, and badge collisions', () => {
         const f = fixture();
-        const obstacle = document.createElement('div'); obstacle.className = 'pins-map-toolbar';
+        const obstacle = document.createElement('div'); obstacle.className = 'pins-location-bar';
         obstacle.getBoundingClientRect = () => rect(70, 50, 365, 225); f.parent.append(obstacle);
         f.labels.setData(data(line('selected', undefined, { selected: true }), line('same-line'),
             line('clipped', [[-300, 80], [0, 80]]), line('offscreen', [[-80, 1000], [80, 1000]])));

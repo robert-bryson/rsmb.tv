@@ -2,7 +2,7 @@ import { geodesicDestination as destination } from '../../../shared/geography/ge
 export { geodesicDestination as destination } from '../../../shared/geography/geodesy';
 import type { FeatureCollection, Point, Polygon } from 'geojson';
 import { pinContext, pinDisplayCode, pinStateFips, type MapPin } from '../../../shared/worldPins';
-import { COUNTY_ZOOM } from './zoom';
+import { countyDetailZooms, COUNTY_ZOOM } from './zoom';
 export { COUNTY_ZOOM } from './zoom';
 
 export type CountyMode = 'off' | 'auto' | 'on';
@@ -47,14 +47,17 @@ export function pinCircles(pins: MapPin[], steps = 72, context: ReadonlySet<stri
             geometry = { type: 'Polygon', coordinates: [ring] };
             cache?.set(pin, geometry);
         }
-        return { type: 'Feature', properties: { id: pin.id, level: pin.level, context: context.has(pin.id) }, geometry };
+        return { type: 'Feature', properties: { id: pin.id, level: pin.level, context: context.has(pin.id),
+            ...(pin.level === 'county' ? { countyCircleZoom: countyDetailZooms(pin).countyCircleZoom } : {}) }, geometry };
     }) };
 }
 
 export function pinPoints(pins: MapPin[], context: ReadonlySet<string> = NO_CONTEXT): FeatureCollection<Point> {
     return { type: 'FeatureCollection', features: pins.map(pin => ({
         type: 'Feature', id: pin.id,
-        properties: { id: pin.id, level: pin.level, name: pin.name, context: context.has(pin.id), stateAbbr: pinDisplayCode(pin), stateFips: pinStateFips(pin), label: pin.id === 'country-US' ? 'U.S. pole' : pin.name },
+        properties: { id: pin.id, level: pin.level, name: pin.name, radiusMeters: pin.radiusMeters,
+            ...(pin.level === 'county' ? countyDetailZooms(pin) : {}),
+            context: context.has(pin.id), stateAbbr: pinDisplayCode(pin), stateFips: pinStateFips(pin), label: pin.id === 'country-US' ? 'U.S. pole' : pin.name },
         geometry: { type: 'Point', coordinates: [pin.lng, pin.lat] },
     })) };
 }

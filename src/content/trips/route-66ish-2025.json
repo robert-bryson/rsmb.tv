@@ -163,523 +163,865 @@
   "photos": [
     {
       "id": "r003940",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-9004256f00ae-1600.webp",
-      "width": 1600,
-      "height": 753,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-f6e75a206114-3840.webp",
+      "width": 3840,
+      "height": 1807,
       "alt": "A lake bordered by green marshes beneath a low range of mountains.",
       "date": "2025-05-09",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-9004256f00ae-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-9004256f00ae-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-9004256f00ae-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-f6e75a206114-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-f6e75a206114-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-f6e75a206114-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-f6e75a206114-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-f6e75a206114-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-f6e75a206114-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-f6e75a206114-full.jpg",
+        "width": 6000,
+        "height": 2824,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-f6e75a206114-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-f6e75a206114-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-f6e75a206114-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-f6e75a206114-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-f6e75a206114-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-f6e75a206114-full.jpg 6000w"
+      }
     },
     {
       "id": "20250509-084110",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-084110-5cb111395c91-1600.webp",
-      "width": 1600,
-      "height": 1200,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-084110-3cfb6e82114f-3840.webp",
+      "width": 3840,
+      "height": 2880,
       "alt": "A dirt track crossing an open grassy valley toward rugged mountains.",
       "date": "2025-05-09",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-084110-5cb111395c91-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-084110-5cb111395c91-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-084110-5cb111395c91-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-084110-3cfb6e82114f-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-084110-3cfb6e82114f-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-084110-3cfb6e82114f-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-084110-3cfb6e82114f-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-084110-3cfb6e82114f-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-084110-3cfb6e82114f-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-084110-3cfb6e82114f-full.jpg",
+        "width": 4000,
+        "height": 3000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-084110-3cfb6e82114f-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-084110-3cfb6e82114f-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-084110-3cfb6e82114f-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-084110-3cfb6e82114f-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-084110-3cfb6e82114f-full.jpg 4000w"
+      }
     },
     {
       "id": "r003946",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-bdf84bda1137-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-a9c27150f249-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "A creosote bush growing in flat sandy desert beneath a clear blue sky.",
       "date": "2025-05-09",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-bdf84bda1137-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-bdf84bda1137-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-bdf84bda1137-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-a9c27150f249-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-a9c27150f249-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-a9c27150f249-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-a9c27150f249-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-a9c27150f249-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-a9c27150f249-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-a9c27150f249-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-a9c27150f249-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-a9c27150f249-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-a9c27150f249-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-a9c27150f249-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-a9c27150f249-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003946-a9c27150f249-full.jpg 6000w"
+      }
     },
     {
       "id": "r003947",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-bc3085a37fb3-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-c18975c67e86-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "A loaded touring motorcycle parked beside a broad golden sand dune.",
+      "caption": "The motorcycle beside the dunes, May 9.",
       "date": "2025-05-09",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-bc3085a37fb3-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-bc3085a37fb3-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-bc3085a37fb3-1600.webp 1600w",
-      "caption": "The motorcycle beside the dunes, May 9."
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-c18975c67e86-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-c18975c67e86-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-c18975c67e86-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-c18975c67e86-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-c18975c67e86-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-c18975c67e86-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-c18975c67e86-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-c18975c67e86-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-c18975c67e86-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-c18975c67e86-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-c18975c67e86-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-c18975c67e86-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003947-c18975c67e86-full.jpg 6000w"
+      }
     },
     {
       "id": "20250509-103323",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-103323-40abf5136e62-1600.webp",
-      "width": 1600,
-      "height": 1200,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-103323-38aad4bc61d0-3840.webp",
+      "width": 3840,
+      "height": 2880,
       "alt": "Pale sand dunes and scattered desert shrubs stretching toward distant mountains.",
       "date": "2025-05-09",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-103323-40abf5136e62-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-103323-40abf5136e62-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-103323-40abf5136e62-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-103323-38aad4bc61d0-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-103323-38aad4bc61d0-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-103323-38aad4bc61d0-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-103323-38aad4bc61d0-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-103323-38aad4bc61d0-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-103323-38aad4bc61d0-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-103323-38aad4bc61d0-full.jpg",
+        "width": 4000,
+        "height": 3000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-103323-38aad4bc61d0-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-103323-38aad4bc61d0-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-103323-38aad4bc61d0-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-103323-38aad4bc61d0-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-103323-38aad4bc61d0-full.jpg 4000w"
+      }
     },
     {
       "id": "20250509-130232-2",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-130232-2-f55880bdb3f6-1600.webp",
-      "width": 1600,
-      "height": 860,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-130232-2-79302dc4a3ff-3840.webp",
+      "width": 3840,
+      "height": 2063,
       "alt": "A two-lane road curving across the desert beside utility poles and distant mountains.",
       "date": "2025-05-09",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-130232-2-f55880bdb3f6-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-130232-2-f55880bdb3f6-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-130232-2-f55880bdb3f6-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-130232-2-79302dc4a3ff-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-130232-2-79302dc4a3ff-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-130232-2-79302dc4a3ff-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-130232-2-79302dc4a3ff-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-130232-2-79302dc4a3ff-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-130232-2-79302dc4a3ff-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-130232-2-79302dc4a3ff-full.jpg",
+        "width": 3910,
+        "height": 2101,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-130232-2-79302dc4a3ff-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-130232-2-79302dc4a3ff-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-130232-2-79302dc4a3ff-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-130232-2-79302dc4a3ff-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250509-130232-2-79302dc4a3ff-full.jpg 3910w"
+      }
     },
     {
       "id": "r003972",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-8342e6c36ba7-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-3c5f46ac2f51-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "An expansive valley seen between pine branches from a wooded mountain overlook.",
       "date": "2025-05-10",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-8342e6c36ba7-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-8342e6c36ba7-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-8342e6c36ba7-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-3c5f46ac2f51-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-3c5f46ac2f51-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-3c5f46ac2f51-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-3c5f46ac2f51-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-3c5f46ac2f51-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-3c5f46ac2f51-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-3c5f46ac2f51-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-3c5f46ac2f51-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-3c5f46ac2f51-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-3c5f46ac2f51-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-3c5f46ac2f51-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-3c5f46ac2f51-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003972-3c5f46ac2f51-full.jpg 6000w"
+      }
     },
     {
       "id": "r003979",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-c12c4fe09366-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-52bf8b0cc675-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Red exterior stairs climbing the side of an old brick building on a hillside.",
+      "caption": "Jerome, Arizona.",
       "date": "2025-05-10",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-c12c4fe09366-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-c12c4fe09366-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-c12c4fe09366-1600.webp 1600w",
-      "caption": "Jerome, Arizona."
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-52bf8b0cc675-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-52bf8b0cc675-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-52bf8b0cc675-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-52bf8b0cc675-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-52bf8b0cc675-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-52bf8b0cc675-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-52bf8b0cc675-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-52bf8b0cc675-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-52bf8b0cc675-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-52bf8b0cc675-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-52bf8b0cc675-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-52bf8b0cc675-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003979-52bf8b0cc675-full.jpg 6000w"
+      }
     },
     {
       "id": "r003981",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-b544cb354645-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-a0652012ae6c-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "An old mining cart above a hillside town surrounded by dry green slopes.",
       "date": "2025-05-10",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-b544cb354645-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-b544cb354645-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-b544cb354645-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-a0652012ae6c-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-a0652012ae6c-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-a0652012ae6c-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-a0652012ae6c-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-a0652012ae6c-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-a0652012ae6c-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-a0652012ae6c-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-a0652012ae6c-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-a0652012ae6c-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-a0652012ae6c-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-a0652012ae6c-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-a0652012ae6c-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003981-a0652012ae6c-full.jpg 6000w"
+      }
     },
     {
       "id": "r003994",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-b680de795bff-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-e6b4474d3c7a-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "A rocky ledge and pine trees overlooking a broad forested basin.",
       "date": "2025-05-10",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-b680de795bff-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-b680de795bff-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-b680de795bff-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-e6b4474d3c7a-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-e6b4474d3c7a-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-e6b4474d3c7a-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-e6b4474d3c7a-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-e6b4474d3c7a-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-e6b4474d3c7a-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-e6b4474d3c7a-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-e6b4474d3c7a-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-e6b4474d3c7a-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-e6b4474d3c7a-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-e6b4474d3c7a-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-e6b4474d3c7a-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003994-e6b4474d3c7a-full.jpg 6000w"
+      }
     },
     {
       "id": "r003996",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-be4a6ac793c1-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-591bd6861cf8-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Layered cliffs and pine trees dropping into a deep forested canyon.",
       "date": "2025-05-10",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-be4a6ac793c1-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-be4a6ac793c1-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-be4a6ac793c1-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-591bd6861cf8-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-591bd6861cf8-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-591bd6861cf8-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-591bd6861cf8-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-591bd6861cf8-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-591bd6861cf8-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-591bd6861cf8-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-591bd6861cf8-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-591bd6861cf8-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-591bd6861cf8-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-591bd6861cf8-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-591bd6861cf8-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r003996-591bd6861cf8-full.jpg 6000w"
+      }
     },
     {
       "id": "20250510-134320",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-134320-d562d0fcbd3e-1600.webp",
-      "width": 1600,
-      "height": 1200,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-134320-7885649cfaae-3840.webp",
+      "width": 3840,
+      "height": 2880,
       "alt": "A rocky cliff above a forested valley beneath scattered white clouds.",
       "date": "2025-05-10",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-134320-d562d0fcbd3e-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-134320-d562d0fcbd3e-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-134320-d562d0fcbd3e-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-134320-7885649cfaae-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-134320-7885649cfaae-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-134320-7885649cfaae-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-134320-7885649cfaae-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-134320-7885649cfaae-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-134320-7885649cfaae-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-134320-7885649cfaae-full.jpg",
+        "width": 4000,
+        "height": 3000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-134320-7885649cfaae-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-134320-7885649cfaae-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-134320-7885649cfaae-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-134320-7885649cfaae-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-134320-7885649cfaae-full.jpg 4000w"
+      }
     },
     {
       "id": "20250510-144308",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-144308-af2da2ac0072-1600.webp",
-      "width": 1600,
-      "height": 1200,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-144308-bd3c76728ed3-3840.webp",
+      "width": 3840,
+      "height": 2880,
       "alt": "A long straight road visible far below a rocky overlook and pine-covered plateau.",
       "date": "2025-05-10",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-144308-af2da2ac0072-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-144308-af2da2ac0072-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-144308-af2da2ac0072-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-144308-bd3c76728ed3-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-144308-bd3c76728ed3-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-144308-bd3c76728ed3-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-144308-bd3c76728ed3-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-144308-bd3c76728ed3-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-144308-bd3c76728ed3-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-144308-bd3c76728ed3-full.jpg",
+        "width": 4000,
+        "height": 3000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-144308-bd3c76728ed3-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-144308-bd3c76728ed3-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-144308-bd3c76728ed3-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-144308-bd3c76728ed3-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250510-144308-bd3c76728ed3-full.jpg 4000w"
+      }
     },
     {
       "id": "r004006",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-33b46510c189-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-1b05cc8a3f97-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "A loaded motorcycle parked outside a red-and-yellow roadside lodge with picnic tables.",
       "date": "2025-05-10",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-33b46510c189-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-33b46510c189-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-33b46510c189-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-1b05cc8a3f97-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-1b05cc8a3f97-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-1b05cc8a3f97-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-1b05cc8a3f97-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-1b05cc8a3f97-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-1b05cc8a3f97-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-1b05cc8a3f97-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-1b05cc8a3f97-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-1b05cc8a3f97-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-1b05cc8a3f97-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-1b05cc8a3f97-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-1b05cc8a3f97-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004006-1b05cc8a3f97-full.jpg 6000w"
+      }
     },
     {
       "id": "r004010",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-c410b9ea2597-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-052de0526d4c-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Evenly spaced pine trunks rising from an open grassy forest floor.",
       "date": "2025-05-10",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-c410b9ea2597-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-c410b9ea2597-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-c410b9ea2597-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-052de0526d4c-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-052de0526d4c-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-052de0526d4c-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-052de0526d4c-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-052de0526d4c-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-052de0526d4c-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-052de0526d4c-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-052de0526d4c-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-052de0526d4c-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-052de0526d4c-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-052de0526d4c-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-052de0526d4c-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004010-052de0526d4c-full.jpg 6000w"
+      }
     },
     {
       "id": "r004041",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-481ab94519f4-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-905edd60f498-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Grazing cattle in a golden meadow beneath a low hill and a pastel evening sky.",
       "date": "2025-05-10",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-481ab94519f4-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-481ab94519f4-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-481ab94519f4-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-905edd60f498-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-905edd60f498-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-905edd60f498-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-905edd60f498-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-905edd60f498-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-905edd60f498-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-905edd60f498-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-905edd60f498-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-905edd60f498-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-905edd60f498-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-905edd60f498-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-905edd60f498-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004041-905edd60f498-full.jpg 6000w"
+      }
     },
     {
       "id": "r004047",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-5631e3bb649c-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-96f6f6ab8ec1-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "A motorcycle parked between utility trucks outside a Howard Johnson motel.",
       "date": "2025-05-10",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-5631e3bb649c-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-5631e3bb649c-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-5631e3bb649c-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-96f6f6ab8ec1-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-96f6f6ab8ec1-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-96f6f6ab8ec1-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-96f6f6ab8ec1-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-96f6f6ab8ec1-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-96f6f6ab8ec1-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-96f6f6ab8ec1-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-96f6f6ab8ec1-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-96f6f6ab8ec1-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-96f6f6ab8ec1-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-96f6f6ab8ec1-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-96f6f6ab8ec1-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004047-96f6f6ab8ec1-full.jpg 6000w"
+      }
     },
     {
       "id": "20250511-090759",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-090759-66941bc10d8d-1600.webp",
-      "width": 1600,
-      "height": 1200,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-090759-cdee539de0ed-3840.webp",
+      "width": 3840,
+      "height": 2880,
       "alt": "Forested mountain ridges extending into the distance beneath wispy clouds.",
       "date": "2025-05-11",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-090759-66941bc10d8d-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-090759-66941bc10d8d-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-090759-66941bc10d8d-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-090759-cdee539de0ed-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-090759-cdee539de0ed-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-090759-cdee539de0ed-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-090759-cdee539de0ed-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-090759-cdee539de0ed-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-090759-cdee539de0ed-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-090759-cdee539de0ed-full.jpg",
+        "width": 4000,
+        "height": 3000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-090759-cdee539de0ed-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-090759-cdee539de0ed-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-090759-cdee539de0ed-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-090759-cdee539de0ed-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-090759-cdee539de0ed-full.jpg 4000w"
+      }
     },
     {
       "id": "r004060",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-d5e7bcd47daa-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-21beee427df4-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Stone picnic tables beside a wooden fence at a high forest overlook.",
       "date": "2025-05-11",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-d5e7bcd47daa-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-d5e7bcd47daa-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-d5e7bcd47daa-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-21beee427df4-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-21beee427df4-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-21beee427df4-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-21beee427df4-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-21beee427df4-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-21beee427df4-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-21beee427df4-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-21beee427df4-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-21beee427df4-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-21beee427df4-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-21beee427df4-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-21beee427df4-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004060-21beee427df4-full.jpg 6000w"
+      }
     },
     {
       "id": "20250511-132505",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-132505-d1b922aacc38-1600.webp",
-      "width": 1600,
-      "height": 1200,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-132505-c233acc4dbde-3840.webp",
+      "width": 3840,
+      "height": 2880,
       "alt": "A broad desert plain with scattered shrubs and pale buildings beneath distant mountains.",
       "date": "2025-05-11",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-132505-d1b922aacc38-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-132505-d1b922aacc38-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-132505-d1b922aacc38-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-132505-c233acc4dbde-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-132505-c233acc4dbde-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-132505-c233acc4dbde-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-132505-c233acc4dbde-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-132505-c233acc4dbde-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-132505-c233acc4dbde-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-132505-c233acc4dbde-full.jpg",
+        "width": 4000,
+        "height": 3000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-132505-c233acc4dbde-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-132505-c233acc4dbde-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-132505-c233acc4dbde-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-132505-c233acc4dbde-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250511-132505-c233acc4dbde-full.jpg 4000w"
+      }
     },
     {
       "id": "r004092",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-a17fdb33fc35-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-9b481b8e8a27-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "An abandoned building beyond a rusted gate and a broken road on an open plain.",
       "date": "2025-05-11",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-a17fdb33fc35-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-a17fdb33fc35-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-a17fdb33fc35-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-9b481b8e8a27-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-9b481b8e8a27-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-9b481b8e8a27-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-9b481b8e8a27-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-9b481b8e8a27-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-9b481b8e8a27-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-9b481b8e8a27-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-9b481b8e8a27-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-9b481b8e8a27-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-9b481b8e8a27-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-9b481b8e8a27-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-9b481b8e8a27-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004092-9b481b8e8a27-full.jpg 6000w"
+      }
     },
     {
       "id": "r004097",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-268a87457771-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-3b41888c235b-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "A large orange restaurant sign topped by four brightly colored globes.",
       "date": "2025-05-11",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-268a87457771-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-268a87457771-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-268a87457771-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-3b41888c235b-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-3b41888c235b-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-3b41888c235b-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-3b41888c235b-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-3b41888c235b-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-3b41888c235b-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-3b41888c235b-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-3b41888c235b-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-3b41888c235b-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-3b41888c235b-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-3b41888c235b-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-3b41888c235b-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004097-3b41888c235b-full.jpg 6000w"
+      }
     },
     {
       "id": "r004103",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-dd39e7b46024-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-72715e2625f7-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "The weathered Rio Pecos Ranch Truck Terminal sign above an abandoned roadside building.",
+      "caption": "Rio Pecos Ranch Truck Terminal.",
       "date": "2025-05-11",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-dd39e7b46024-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-dd39e7b46024-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-dd39e7b46024-1600.webp 1600w",
-      "caption": "Rio Pecos Ranch Truck Terminal."
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-72715e2625f7-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-72715e2625f7-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-72715e2625f7-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-72715e2625f7-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-72715e2625f7-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-72715e2625f7-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-72715e2625f7-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-72715e2625f7-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-72715e2625f7-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-72715e2625f7-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-72715e2625f7-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-72715e2625f7-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004103-72715e2625f7-full.jpg 6000w"
+      }
     },
     {
       "id": "r004108",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-19f00119b1d0-1600.webp",
-      "width": 1600,
-      "height": 2400,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-88e77c6bca41-3840.webp",
+      "width": 3840,
+      "height": 5760,
       "alt": "Purple bell-shaped wildflowers growing in warm evening light.",
       "date": "2025-05-11",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-19f00119b1d0-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-19f00119b1d0-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-19f00119b1d0-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-88e77c6bca41-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-88e77c6bca41-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-88e77c6bca41-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-88e77c6bca41-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-88e77c6bca41-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-88e77c6bca41-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-88e77c6bca41-full.jpg",
+        "width": 4000,
+        "height": 6000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-88e77c6bca41-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-88e77c6bca41-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-88e77c6bca41-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-88e77c6bca41-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-88e77c6bca41-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004108-88e77c6bca41-full.jpg 4000w"
+      }
     },
     {
       "id": "r004114",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-db169fa33c6d-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-d8115e5dabb1-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "A motorcycle on a narrow paved road ending at a stop sign beside open grassland.",
       "date": "2025-05-11",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-db169fa33c6d-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-db169fa33c6d-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-db169fa33c6d-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-d8115e5dabb1-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-d8115e5dabb1-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-d8115e5dabb1-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-d8115e5dabb1-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-d8115e5dabb1-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-d8115e5dabb1-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-d8115e5dabb1-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-d8115e5dabb1-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-d8115e5dabb1-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-d8115e5dabb1-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-d8115e5dabb1-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-d8115e5dabb1-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004114-d8115e5dabb1-full.jpg 6000w"
+      }
     },
     {
       "id": "r004132",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-142542cb82a2-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-3a236d798df6-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "An abandoned wooden house with a sagging roof surrounded by tall grass.",
       "date": "2025-05-11",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-142542cb82a2-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-142542cb82a2-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-142542cb82a2-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-3a236d798df6-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-3a236d798df6-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-3a236d798df6-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-3a236d798df6-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-3a236d798df6-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-3a236d798df6-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-3a236d798df6-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-3a236d798df6-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-3a236d798df6-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-3a236d798df6-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-3a236d798df6-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-3a236d798df6-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004132-3a236d798df6-full.jpg 6000w"
+      }
     },
     {
       "id": "r004139",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-79ef8d9eb026-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-2bde3ff0699d-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "The illuminated Motel Safari sign with its camel figure above a low motel building.",
+      "caption": "Motel Safari, Tucumcari.",
       "date": "2025-05-11",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-79ef8d9eb026-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-79ef8d9eb026-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-79ef8d9eb026-1600.webp 1600w",
-      "caption": "Motel Safari, Tucumcari."
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-2bde3ff0699d-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-2bde3ff0699d-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-2bde3ff0699d-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-2bde3ff0699d-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-2bde3ff0699d-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-2bde3ff0699d-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-2bde3ff0699d-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-2bde3ff0699d-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-2bde3ff0699d-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-2bde3ff0699d-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-2bde3ff0699d-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-2bde3ff0699d-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004139-2bde3ff0699d-full.jpg 6000w"
+      }
     },
     {
       "id": "r004155",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-6984516e4b11-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-4095fa7ab7b1-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "A weathered roadside storefront with a parked car and a tree beside its porch.",
       "date": "2025-05-12",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-6984516e4b11-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-6984516e4b11-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-6984516e4b11-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-4095fa7ab7b1-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-4095fa7ab7b1-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-4095fa7ab7b1-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-4095fa7ab7b1-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-4095fa7ab7b1-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-4095fa7ab7b1-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-4095fa7ab7b1-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-4095fa7ab7b1-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-4095fa7ab7b1-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-4095fa7ab7b1-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-4095fa7ab7b1-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-4095fa7ab7b1-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004155-4095fa7ab7b1-full.jpg 6000w"
+      }
     },
     {
       "id": "r004156",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-c1647b100d05-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-9310de6d2781-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "The neon Tee Pee Curios sign and its teepee-shaped entrance at dusk.",
+      "caption": "Tee Pee Curios, Tucumcari.",
       "date": "2025-05-12",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-c1647b100d05-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-c1647b100d05-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-c1647b100d05-1600.webp 1600w",
-      "caption": "Tee Pee Curios, Tucumcari."
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-9310de6d2781-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-9310de6d2781-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-9310de6d2781-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-9310de6d2781-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-9310de6d2781-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-9310de6d2781-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-9310de6d2781-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-9310de6d2781-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-9310de6d2781-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-9310de6d2781-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-9310de6d2781-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-9310de6d2781-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004156-9310de6d2781-full.jpg 6000w"
+      }
     },
     {
       "id": "r004165",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-195943e53ea0-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-617044f21356-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "A flat grassy plain dotted with low shrubs beneath an enormous pale blue sky.",
       "date": "2025-05-13",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-195943e53ea0-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-195943e53ea0-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-195943e53ea0-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-617044f21356-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-617044f21356-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-617044f21356-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-617044f21356-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-617044f21356-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-617044f21356-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-617044f21356-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-617044f21356-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-617044f21356-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-617044f21356-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-617044f21356-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-617044f21356-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004165-617044f21356-full.jpg 6000w"
+      }
     },
     {
       "id": "r004168",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-361cd91035c0-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-1d2e2ec5a905-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Bright orange wildflowers among green roadside stems and leaves.",
       "date": "2025-05-13",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-361cd91035c0-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-361cd91035c0-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-361cd91035c0-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-1d2e2ec5a905-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-1d2e2ec5a905-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-1d2e2ec5a905-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-1d2e2ec5a905-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-1d2e2ec5a905-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-1d2e2ec5a905-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-1d2e2ec5a905-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-1d2e2ec5a905-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-1d2e2ec5a905-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-1d2e2ec5a905-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-1d2e2ec5a905-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-1d2e2ec5a905-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004168-1d2e2ec5a905-full.jpg 6000w"
+      }
     },
     {
       "id": "r004180",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-04d8d96b6092-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-eb1f426405ae-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "A broad canyon with layers of red and pale rock above a wooded floor.",
       "date": "2025-05-13",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-04d8d96b6092-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-04d8d96b6092-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-04d8d96b6092-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-eb1f426405ae-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-eb1f426405ae-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-eb1f426405ae-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-eb1f426405ae-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-eb1f426405ae-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-eb1f426405ae-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-eb1f426405ae-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-eb1f426405ae-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-eb1f426405ae-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-eb1f426405ae-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-eb1f426405ae-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-eb1f426405ae-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004180-eb1f426405ae-full.jpg 6000w"
+      }
     },
     {
       "id": "r004184",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1846d1eda420-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1ddd71feeacc-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Red canyon walls and green trees beneath a flat, distant rim.",
       "date": "2025-05-13",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1846d1eda420-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1846d1eda420-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1846d1eda420-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1ddd71feeacc-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1ddd71feeacc-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1ddd71feeacc-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1ddd71feeacc-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1ddd71feeacc-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1ddd71feeacc-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1ddd71feeacc-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1ddd71feeacc-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1ddd71feeacc-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1ddd71feeacc-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1ddd71feeacc-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1ddd71feeacc-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004184-1ddd71feeacc-full.jpg 6000w"
+      }
     },
     {
       "id": "r004200",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-39065a9338ad-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-736d817f69c2-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "A shaded brick picnic shelter framing a view across a red-rock canyon.",
       "date": "2025-05-13",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-39065a9338ad-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-39065a9338ad-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-39065a9338ad-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-736d817f69c2-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-736d817f69c2-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-736d817f69c2-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-736d817f69c2-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-736d817f69c2-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-736d817f69c2-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-736d817f69c2-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-736d817f69c2-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-736d817f69c2-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-736d817f69c2-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-736d817f69c2-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-736d817f69c2-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004200-736d817f69c2-full.jpg 6000w"
+      }
     },
     {
       "id": "r004204",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-a9617ddb2d2b-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-8d2d55bb8ff8-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Birds flying above shallow water on a rust-red salt flat.",
       "date": "2025-05-13",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-a9617ddb2d2b-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-a9617ddb2d2b-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-a9617ddb2d2b-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-8d2d55bb8ff8-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-8d2d55bb8ff8-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-8d2d55bb8ff8-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-8d2d55bb8ff8-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-8d2d55bb8ff8-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-8d2d55bb8ff8-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-8d2d55bb8ff8-full.jpg",
+        "width": 5829,
+        "height": 3886,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-8d2d55bb8ff8-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-8d2d55bb8ff8-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-8d2d55bb8ff8-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-8d2d55bb8ff8-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-8d2d55bb8ff8-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004204-8d2d55bb8ff8-full.jpg 5829w"
+      }
     },
     {
       "id": "r004223",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-badfdabde073-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-7b8f730afc8c-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "A colorful Shamrock, Texas mural painted on the side of a red-brick building.",
+      "caption": "Shamrock, Texas.",
       "date": "2025-05-13",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-badfdabde073-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-badfdabde073-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-badfdabde073-1600.webp 1600w",
-      "caption": "Shamrock, Texas."
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-7b8f730afc8c-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-7b8f730afc8c-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-7b8f730afc8c-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-7b8f730afc8c-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-7b8f730afc8c-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-7b8f730afc8c-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-7b8f730afc8c-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-7b8f730afc8c-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-7b8f730afc8c-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-7b8f730afc8c-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-7b8f730afc8c-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-7b8f730afc8c-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004223-7b8f730afc8c-full.jpg 6000w"
+      }
     },
     {
       "id": "r004226",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004226-1c95cbb5af8b-1600.webp",
-      "width": 1600,
-      "height": 2400,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004226-bbb7dd4a3b57-3840.webp",
+      "width": 3840,
+      "height": 5760,
       "alt": "A blue door with a large white star set into a red, white, and blue wall.",
       "date": "2025-05-13",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004226-1c95cbb5af8b-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004226-1c95cbb5af8b-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004226-1c95cbb5af8b-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004226-bbb7dd4a3b57-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004226-bbb7dd4a3b57-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004226-bbb7dd4a3b57-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004226-bbb7dd4a3b57-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004226-bbb7dd4a3b57-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004226-bbb7dd4a3b57-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004226-bbb7dd4a3b57-full.jpg",
+        "width": 4000,
+        "height": 6000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004226-bbb7dd4a3b57-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004226-bbb7dd4a3b57-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004226-bbb7dd4a3b57-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004226-bbb7dd4a3b57-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004226-bbb7dd4a3b57-full.jpg 4000w"
+      }
     },
     {
       "id": "r004231",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004231-fd52c408e1f1-1600.webp",
-      "width": 1600,
-      "height": 2400,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004231-bfe07d3bd4fe-3840.webp",
+      "width": 3840,
+      "height": 5760,
       "alt": "The cream-colored Art Deco Conoco tower above the U-Drop Inn entrance.",
+      "caption": "The Conoco tower at the U-Drop Inn, Shamrock.",
       "date": "2025-05-13",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004231-fd52c408e1f1-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004231-fd52c408e1f1-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004231-fd52c408e1f1-1600.webp 1600w",
-      "caption": "The Conoco tower at the U-Drop Inn, Shamrock."
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004231-bfe07d3bd4fe-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004231-bfe07d3bd4fe-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004231-bfe07d3bd4fe-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004231-bfe07d3bd4fe-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004231-bfe07d3bd4fe-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004231-bfe07d3bd4fe-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004231-bfe07d3bd4fe-full.jpg",
+        "width": 4000,
+        "height": 6000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004231-bfe07d3bd4fe-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004231-bfe07d3bd4fe-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004231-bfe07d3bd4fe-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004231-bfe07d3bd4fe-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004231-bfe07d3bd4fe-full.jpg 4000w"
+      }
     },
     {
       "id": "r004237",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-bb4f6b20ed68-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-ac22e1df3f18-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "A collapsing wooden farmhouse behind a wire fence on an open grassy plain.",
       "date": "2025-05-14",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-bb4f6b20ed68-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-bb4f6b20ed68-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-bb4f6b20ed68-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-ac22e1df3f18-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-ac22e1df3f18-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-ac22e1df3f18-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-ac22e1df3f18-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-ac22e1df3f18-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-ac22e1df3f18-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-ac22e1df3f18-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-ac22e1df3f18-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-ac22e1df3f18-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-ac22e1df3f18-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-ac22e1df3f18-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-ac22e1df3f18-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004237-ac22e1df3f18-full.jpg 6000w"
+      }
     },
     {
       "id": "r004244",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-13bb46bd7e92-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-2e9e5d79f8db-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "A lake below rounded rocky hills beneath a softly clouded sky.",
       "date": "2025-05-14",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-13bb46bd7e92-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-13bb46bd7e92-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-13bb46bd7e92-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-2e9e5d79f8db-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-2e9e5d79f8db-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-2e9e5d79f8db-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-2e9e5d79f8db-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-2e9e5d79f8db-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-2e9e5d79f8db-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-2e9e5d79f8db-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-2e9e5d79f8db-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-2e9e5d79f8db-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-2e9e5d79f8db-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-2e9e5d79f8db-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-2e9e5d79f8db-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004244-2e9e5d79f8db-full.jpg 6000w"
+      }
     },
     {
       "id": "r004251",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-f4416e58b66e-3200.webp",
-      "width": 3200,
-      "height": 1249,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-d5a8d16c776a-6000.webp",
+      "width": 6000,
+      "height": 2342,
       "alt": "A straight rural road and utility poles crossing flat green fields toward a distant horizon.",
       "date": "2025-05-14",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-f4416e58b66e-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-f4416e58b66e-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-f4416e58b66e-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-f4416e58b66e-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-f4416e58b66e-3200.webp 3200w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-d5a8d16c776a-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-d5a8d16c776a-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-d5a8d16c776a-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-d5a8d16c776a-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-d5a8d16c776a-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-d5a8d16c776a-4800.webp 4800w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-d5a8d16c776a-6000.webp 6000w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-d5a8d16c776a-full.jpg",
+        "width": 6000,
+        "height": 2342,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-d5a8d16c776a-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-d5a8d16c776a-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-d5a8d16c776a-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-d5a8d16c776a-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-d5a8d16c776a-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004251-d5a8d16c776a-full.jpg 6000w"
+      }
     },
     {
       "id": "r004258",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-e4b0ad2fd6ea-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-939195ae6441-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Cattle grazing in a green meadow beneath low, rounded granite hills.",
       "date": "2025-05-14",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-e4b0ad2fd6ea-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-e4b0ad2fd6ea-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-e4b0ad2fd6ea-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-939195ae6441-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-939195ae6441-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-939195ae6441-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-939195ae6441-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-939195ae6441-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-939195ae6441-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-939195ae6441-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-939195ae6441-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-939195ae6441-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-939195ae6441-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-939195ae6441-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-939195ae6441-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004258-939195ae6441-full.jpg 6000w"
+      }
     },
     {
       "id": "r004265",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-6ea2d51cfc01-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-5c83bd8ddb65-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "A rocky mountaintop overlooking wooded hills, open plains, and a distant lake.",
       "date": "2025-05-14",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-6ea2d51cfc01-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-6ea2d51cfc01-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-6ea2d51cfc01-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-5c83bd8ddb65-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-5c83bd8ddb65-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-5c83bd8ddb65-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-5c83bd8ddb65-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-5c83bd8ddb65-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-5c83bd8ddb65-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-5c83bd8ddb65-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-5c83bd8ddb65-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-5c83bd8ddb65-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-5c83bd8ddb65-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-5c83bd8ddb65-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-5c83bd8ddb65-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004265-5c83bd8ddb65-full.jpg 6000w"
+      }
     },
     {
       "id": "r004267",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-9821fec1e694-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-84330d27f77b-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "A mountain road curving downhill beside large rounded granite boulders.",
       "date": "2025-05-14",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-9821fec1e694-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-9821fec1e694-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-9821fec1e694-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-84330d27f77b-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-84330d27f77b-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-84330d27f77b-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-84330d27f77b-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-84330d27f77b-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-84330d27f77b-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-84330d27f77b-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-84330d27f77b-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-84330d27f77b-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-84330d27f77b-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-84330d27f77b-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-84330d27f77b-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004267-84330d27f77b-full.jpg 6000w"
+      }
     },
     {
       "id": "r004274",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-a3dc4225eb62-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-9c5cd39456e1-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "An ivy-covered two-story brick storefront beside a quiet small-town road.",
       "date": "2025-05-14",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-a3dc4225eb62-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-a3dc4225eb62-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-a3dc4225eb62-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-9c5cd39456e1-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-9c5cd39456e1-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-9c5cd39456e1-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-9c5cd39456e1-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-9c5cd39456e1-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-9c5cd39456e1-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-9c5cd39456e1-full.jpg",
+        "width": 5829,
+        "height": 3886,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-9c5cd39456e1-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-9c5cd39456e1-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-9c5cd39456e1-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-9c5cd39456e1-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-9c5cd39456e1-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004274-9c5cd39456e1-full.jpg 5829w"
+      }
     },
     {
       "id": "r004280",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-9aa9eae9369a-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-f889fee9303e-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Trees reflected in a pond bordered by reeds and green grass at dusk.",
       "date": "2025-05-14",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-9aa9eae9369a-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-9aa9eae9369a-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-9aa9eae9369a-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-f889fee9303e-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-f889fee9303e-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-f889fee9303e-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-f889fee9303e-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-f889fee9303e-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-f889fee9303e-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-f889fee9303e-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-f889fee9303e-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-f889fee9303e-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-f889fee9303e-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-f889fee9303e-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-f889fee9303e-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004280-f889fee9303e-full.jpg 6000w"
+      }
     },
     {
       "id": "r004283",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-1de45fab5d30-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-b2fdea0a4622-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "A quiet downtown street lined with brick buildings beneath an evening sky.",
       "date": "2025-05-14",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-1de45fab5d30-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-1de45fab5d30-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-1de45fab5d30-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-b2fdea0a4622-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-b2fdea0a4622-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-b2fdea0a4622-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-b2fdea0a4622-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-b2fdea0a4622-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-b2fdea0a4622-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-b2fdea0a4622-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-b2fdea0a4622-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-b2fdea0a4622-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-b2fdea0a4622-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-b2fdea0a4622-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-b2fdea0a4622-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004283-b2fdea0a4622-full.jpg 6000w"
+      }
     },
     {
       "id": "r004296",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-170266b3a18b-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-96807422b4fe-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "Misty forested mountain ridges beneath low gray clouds.",
       "date": "2025-05-16",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-170266b3a18b-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-170266b3a18b-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-170266b3a18b-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-96807422b4fe-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-96807422b4fe-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-96807422b4fe-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-96807422b4fe-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-96807422b4fe-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-96807422b4fe-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-96807422b4fe-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-96807422b4fe-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-96807422b4fe-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-96807422b4fe-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-96807422b4fe-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-96807422b4fe-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004296-96807422b4fe-full.jpg 6000w"
+      }
     },
     {
       "id": "r004299",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-edf6515d666f-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-98d854b2550d-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "A still brown-green river enclosed by steep, densely wooded banks.",
       "date": "2025-05-16",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-edf6515d666f-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-edf6515d666f-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-edf6515d666f-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-98d854b2550d-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-98d854b2550d-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-98d854b2550d-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-98d854b2550d-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-98d854b2550d-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-98d854b2550d-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-98d854b2550d-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-98d854b2550d-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-98d854b2550d-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-98d854b2550d-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-98d854b2550d-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-98d854b2550d-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004299-98d854b2550d-full.jpg 6000w"
+      }
     },
     {
       "id": "r004311",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-f82f66acf6d4-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-3233a70a1d5c-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "A small red-brick roadside building with an American flag and an old gas pump.",
       "date": "2025-05-16",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-f82f66acf6d4-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-f82f66acf6d4-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-f82f66acf6d4-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-3233a70a1d5c-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-3233a70a1d5c-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-3233a70a1d5c-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-3233a70a1d5c-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-3233a70a1d5c-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-3233a70a1d5c-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-3233a70a1d5c-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-3233a70a1d5c-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-3233a70a1d5c-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-3233a70a1d5c-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-3233a70a1d5c-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-3233a70a1d5c-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004311-3233a70a1d5c-full.jpg 6000w"
+      }
     },
     {
       "id": "20250516-142741",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250516-142741-db27cfe64cc8-1600.webp",
-      "width": 1600,
-      "height": 1200,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250516-142741-81d3162b45f4-3840.webp",
+      "width": 3840,
+      "height": 2880,
       "alt": "A stone-paved overlook and wooden fence above a broad green valley.",
       "date": "2025-05-16",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250516-142741-db27cfe64cc8-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250516-142741-db27cfe64cc8-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250516-142741-db27cfe64cc8-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250516-142741-81d3162b45f4-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250516-142741-81d3162b45f4-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250516-142741-81d3162b45f4-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250516-142741-81d3162b45f4-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250516-142741-81d3162b45f4-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250516-142741-81d3162b45f4-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250516-142741-81d3162b45f4-full.jpg",
+        "width": 4000,
+        "height": 3000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250516-142741-81d3162b45f4-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250516-142741-81d3162b45f4-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250516-142741-81d3162b45f4-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250516-142741-81d3162b45f4-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250516-142741-81d3162b45f4-full.jpg 4000w"
+      }
     },
     {
       "id": "r004338",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-512a58132004-1600.webp",
-      "width": 1600,
-      "height": 1067,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-7b3a96d4bee6-3840.webp",
+      "width": 3840,
+      "height": 2560,
       "alt": "A sunlit grassy field bordered by trees beneath distant wooded ridges.",
       "date": "2025-05-16",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-512a58132004-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-512a58132004-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-512a58132004-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-7b3a96d4bee6-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-7b3a96d4bee6-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-7b3a96d4bee6-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-7b3a96d4bee6-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-7b3a96d4bee6-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-7b3a96d4bee6-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-7b3a96d4bee6-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-7b3a96d4bee6-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-7b3a96d4bee6-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-7b3a96d4bee6-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-7b3a96d4bee6-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-7b3a96d4bee6-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004338-7b3a96d4bee6-full.jpg 6000w"
+      }
     },
     {
       "id": "r004344",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004344-7ca125fd522b-1600.webp",
-      "width": 1600,
-      "height": 2400,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004344-e9b02f728944-3840.webp",
+      "width": 3840,
+      "height": 5760,
       "alt": "Colorful decorative tiles surrounding a large window in a historic brick storefront.",
       "date": "2025-05-16",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004344-7ca125fd522b-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004344-7ca125fd522b-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004344-7ca125fd522b-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004344-e9b02f728944-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004344-e9b02f728944-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004344-e9b02f728944-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004344-e9b02f728944-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004344-e9b02f728944-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004344-e9b02f728944-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004344-e9b02f728944-full.jpg",
+        "width": 4000,
+        "height": 6000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004344-e9b02f728944-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004344-e9b02f728944-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004344-e9b02f728944-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004344-e9b02f728944-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004344-e9b02f728944-full.jpg 4000w"
+      }
     },
     {
       "id": "r004346",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004346-65d0c2d4be38-1600.webp",
-      "width": 1600,
-      "height": 2400,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004346-cd8f2ca903e9-3840.webp",
+      "width": 3840,
+      "height": 5760,
       "alt": "An ornate brick building with arched windows, striped columns, and a small tower.",
       "date": "2025-05-16",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004346-65d0c2d4be38-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004346-65d0c2d4be38-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004346-65d0c2d4be38-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004346-cd8f2ca903e9-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004346-cd8f2ca903e9-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004346-cd8f2ca903e9-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004346-cd8f2ca903e9-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004346-cd8f2ca903e9-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004346-cd8f2ca903e9-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004346-cd8f2ca903e9-full.jpg",
+        "width": 4000,
+        "height": 6000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004346-cd8f2ca903e9-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004346-cd8f2ca903e9-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004346-cd8f2ca903e9-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004346-cd8f2ca903e9-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004346-cd8f2ca903e9-full.jpg 4000w"
+      }
     },
     {
       "id": "20250517-104532",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-104532-d26cb7248f88-1600.webp",
-      "width": 1600,
-      "height": 1200,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-104532-11ee2a241376-3840.webp",
+      "width": 3840,
+      "height": 2880,
       "alt": "The open deck and loading ramp of a small vehicle ferry crossing a blue lake.",
       "date": "2025-05-17",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-104532-d26cb7248f88-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-104532-d26cb7248f88-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-104532-d26cb7248f88-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-104532-11ee2a241376-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-104532-11ee2a241376-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-104532-11ee2a241376-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-104532-11ee2a241376-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-104532-11ee2a241376-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-104532-11ee2a241376-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-104532-11ee2a241376-full.jpg",
+        "width": 4000,
+        "height": 3000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-104532-11ee2a241376-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-104532-11ee2a241376-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-104532-11ee2a241376-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-104532-11ee2a241376-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-104532-11ee2a241376-full.jpg 4000w"
+      }
     },
     {
       "id": "r004357",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004357-7ae056c913a4-1600.webp",
-      "width": 1600,
-      "height": 2400,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004357-df7e0114395c-3840.webp",
+      "width": 3840,
+      "height": 5760,
       "alt": "A wooden picnic table beneath the spreading branches of large leafy trees.",
       "date": "2025-05-17",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004357-7ae056c913a4-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004357-7ae056c913a4-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004357-7ae056c913a4-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004357-df7e0114395c-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004357-df7e0114395c-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004357-df7e0114395c-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004357-df7e0114395c-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004357-df7e0114395c-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004357-df7e0114395c-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004357-df7e0114395c-full.jpg",
+        "width": 4000,
+        "height": 6000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r004357-df7e0114395c-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004357-df7e0114395c-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004357-df7e0114395c-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004357-df7e0114395c-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/r004357-df7e0114395c-full.jpg 4000w"
+      }
     },
     {
       "id": "20250517-151118",
-      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-c07949656e43-1600.webp",
-      "width": 1600,
-      "height": 1200,
+      "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-eae7984d7853-3840.webp",
+      "width": 3840,
+      "height": 2880,
       "alt": "A shallow clear river flowing between dense green trees beneath a blue sky.",
       "date": "2025-05-17",
-      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-c07949656e43-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-c07949656e43-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-c07949656e43-1600.webp 1600w"
+      "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-eae7984d7853-480.webp 480w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-eae7984d7853-960.webp 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-eae7984d7853-1600.webp 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-eae7984d7853-2400.webp 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-eae7984d7853-3200.webp 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-eae7984d7853-3840.webp 3840w",
+      "full": {
+        "src": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-eae7984d7853-full.jpg",
+        "width": 4000,
+        "height": 3000,
+        "srcSet": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-eae7984d7853-view-960.jpg 960w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-eae7984d7853-view-1600.jpg 1600w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-eae7984d7853-view-2400.jpg 2400w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-eae7984d7853-view-3200.jpg 3200w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-eae7984d7853-view-3840.jpg 3840w, https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-eae7984d7853-full.jpg 4000w"
+      }
     }
   ],
   "days": [
@@ -762,7 +1104,7 @@
     },
     {
       "id": "may-15",
-      "title": "McAlester \u2014 confirm the layover",
+      "title": "McAlester — confirm the layover",
       "date": "2025-05-15",
       "headingId": "may-15",
       "trackIds": [],
@@ -796,7 +1138,7 @@
     },
     {
       "id": "may-18",
-      "title": "St. Louis \u2014 confirm the trip timeline",
+      "title": "St. Louis — confirm the trip timeline",
       "date": "2025-05-18",
       "headingId": "may-18",
       "trackIds": [],
@@ -804,7 +1146,7 @@
     },
     {
       "id": "may-19",
-      "title": "St. Louis \u2014 confirm the trip end",
+      "title": "St. Louis — confirm the trip end",
       "date": "2025-05-19",
       "headingId": "may-19",
       "trackIds": [],

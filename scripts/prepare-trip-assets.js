@@ -10,13 +10,20 @@ import { gpx } from '@tmcw/togeojson';
 import sharp from 'sharp';
 import simplify from 'simplify-js';
 import { copyTripAsset } from './copy-trip-asset.js';
+import { isVersionedTripPhoto } from './trip-photo-files.js';
 
 const TRIP_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const PHOTO_EXTENSIONS = new Set(['.avif', '.heic', '.heif', '.jpeg', '.jpg', '.png', '.tif', '.tiff', '.webp']);
-const WIDTHS = [480, 960, 1600];
-const PANORAMA_WIDTHS = [...WIDTHS, 2400, 3200];
-export const WEBP_QUALITY = 84;
-export const PHOTO_PIPELINE_VERSION = 2;
+const WIDTHS = [480, 960, 1600, 2400, 3200, 3840];
+const PANORAMA_WIDTHS = [480, 960, 1600, 2400, 3200, 4800, 6400, 7680];
+const VIEWER_WIDTHS = [960, 1600, 2400, 3200, 3840];
+const PANORAMA_VIEWER_WIDTHS = [...VIEWER_WIDTHS, 4800, 6400];
+export const WEBP_QUALITY = 92;
+export const FULL_IMAGE_QUALITY = 99;
+export const PHOTO_PIPELINE_VERSION = 4;
+// Existing page and native-resolution encodings retain their immutable URLs.
+// Pipeline revision 4 adds resized viewer files with the same encoder settings.
+const PHOTO_ENCODING_VERSION = 3;
 export const DEFAULT_ROUTE_SIMPLIFICATION_TOLERANCE_METERS = 5;
 
 export function parseArgs(args) {
@@ -143,15 +150,21 @@ async function preparePhotos(tripRoot, force, filenames) {
 
     for (const { filename, id } of selectedPhotos) {
         const inputPath = path.join(selectsPath, filename);
-        const source = sharp(inputPath, { failOn: 'warning' }).rotate();
+        const input = await fs.readFile(inputPath);
+        const source = sharp(input, { failOn: 'warning' }).rotate();
         const metadata = await source.metadata();
         const orientedWidth = metadata.autoOrient?.width ?? metadata.width;
         const orientedHeight = metadata.autoOrient?.height ?? metadata.height;
         if (!orientedWidth || !orientedHeight) throw new Error(`Could not read dimensions for ${filename}.`);
-        // Wide sources need enough resolution for a full-page panorama. Keep
-        // ordinary photo settings (and their existing fingerprints) unchanged.
+        // Page images cover high-density displays. The viewer has a separate
+        // original-size export, so it never enlarges a page-sized derivative.
         const widths = orientedWidth / orientedHeight >= 2.5 ? PANORAMA_WIDTHS : WIDTHS;
-        const fingerprint = createHash('sha256').update(await fs.readFile(inputPath)).update(JSON.stringify({ version: PHOTO_PIPELINE_VERSION, quality: WEBP_QUALITY, widths, sharp: sharp.versions.sharp })).digest('hex').slice(0, 12);
+        const fullExtension = metadata.hasAlpha ? 'png' : 'jpg';
+        const fingerprint = createHash('sha256').update(input).update(JSON.stringify({
+            version: PHOTO_ENCODING_VERSION, quality: WEBP_QUALITY, smartSubsample: true, widths,
+            fullQuality: FULL_IMAGE_QUALITY, fullChromaSubsampling: '4:4:4', fullExtension,
+            sharp: sharp.versions.sharp,
+        })).digest('hex').slice(0, 12);
 
         const derivatives = [];
         for (const width of widths.filter((candidate) => candidate < orientedWidth).concat(orientedWidth)) {
@@ -162,10 +175,10 @@ async function preparePhotos(tripRoot, force, filenames) {
             const legacyFilename = `${id}-${outputWidth}.webp`;
             const outputPath = path.join(processedPath, outputName);
             if (force || !(await exists(outputPath))) {
-                await sharp(inputPath)
+                await sharp(input)
                     .rotate()
                     .resize({ width: outputWidth, withoutEnlargement: true })
-                    .webp({ quality: WEBP_QUALITY })
+                    .webp({ quality: WEBP_QUALITY, smartSubsample: true })
                     .toFile(outputPath);
             }
 
@@ -181,16 +194,43 @@ async function preparePhotos(tripRoot, force, filenames) {
             });
         }
 
-        photos.push({ id, source: filename, fingerprint, derivatives });
+        const fullFilename = `${id}-${fingerprint}-full.${fullExtension}`;
+        const fullPath = path.join(processedPath, fullFilename);
+        if (force || !(await exists(fullPath))) {
+            const fullImage = sharp(input).rotate();
+            // JPEG supports very wide panoramas beyond WebP's dimension limit.
+            // Preserve transparency with lossless PNG when the source has alpha.
+            if (metadata.hasAlpha) await fullImage.png().toFile(fullPath);
+            else await fullImage.jpeg({ quality: FULL_IMAGE_QUALITY, chromaSubsampling: '4:4:4' }).toFile(fullPath);
+        }
+        const fullMetadata = await sharp(fullPath).metadata();
+        const viewerWidths = orientedWidth / orientedHeight >= 2.5 ? PANORAMA_VIEWER_WIDTHS : VIEWER_WIDTHS;
+        const viewerDerivatives = [];
+        for (const width of viewerWidths.filter(width => width < orientedWidth)) {
+            const filename = `${id}-${fingerprint}-view-${width}.${fullExtension}`;
+            const outputPath = path.join(processedPath, filename);
+            if (force || !(await exists(outputPath))) {
+                const image = sharp(input).rotate().resize({ width, withoutEnlargement: true });
+                if (metadata.hasAlpha) await image.png().toFile(outputPath);
+                else await image.jpeg({ quality: FULL_IMAGE_QUALITY, chromaSubsampling: '4:4:4' }).toFile(outputPath);
+            }
+            const outputMetadata = await sharp(outputPath).metadata();
+            viewerDerivatives.push({ filename, bytes: (await fs.stat(outputPath)).size,
+                width: outputMetadata.width, height: outputMetadata.height });
+        }
+        const full = { filename: fullFilename, bytes: (await fs.stat(fullPath)).size,
+            width: fullMetadata.width, height: fullMetadata.height, derivatives: viewerDerivatives };
+        photos.push({ id, source: filename, fingerprint, derivatives, full });
     }
 
     const expectedFilenames = new Set(photos.flatMap((photo) => (
-        photo.derivatives.flatMap((derivative) => [derivative.filename, derivative.legacyFilename])
+        [...photo.derivatives.flatMap((derivative) => [derivative.filename, derivative.legacyFilename]),
+            photo.full.filename, ...photo.full.derivatives.map(image => image.filename)]
     )));
     await removeUnexpectedFiles(
         processedPath,
         expectedFilenames,
-        (name) => path.extname(name).toLowerCase() === '.webp' && !/-[a-f0-9]{12}-\d+\.webp$/.test(name),
+        (name) => path.extname(name).toLowerCase() === '.webp' && !isVersionedTripPhoto(name),
     );
 
     return photos;
@@ -442,7 +482,12 @@ export async function prepareTripAssets({
         tripId,
         generatedAt: new Date().toISOString(),
         photoPipelineVersion: PHOTO_PIPELINE_VERSION,
+        photoEncodingVersion: PHOTO_ENCODING_VERSION,
         webpQuality: WEBP_QUALITY,
+        fullImageQuality: FULL_IMAGE_QUALITY,
+        fullImageChromaSubsampling: '4:4:4',
+        viewerWidths: VIEWER_WIDTHS,
+        panoramaViewerWidths: PANORAMA_VIEWER_WIDTHS,
         warnings: photos.flatMap(photo => photo.derivatives.filter(image => image.bytes > (image.width <= 480 ? 100_000 : image.width <= 960 ? 300_000 : 800_000)).map(image => `${image.filename} exceeds the suggested image budget (${image.bytes} bytes).`)),
         photos,
         route,

@@ -38,6 +38,52 @@ test('emphasis and code inherit the article link color', async ({ page, isMobile
     }
 });
 
+test('imported paragraph indents affect only the first line', async ({ page }) => {
+    await page.goto('/trips/coastal-test');
+    const ordinary = page.getByText('The coast makes a good place to stop.', { exact: true });
+    await expect(ordinary).toBeAttached();
+
+    for (const [prefix, indent] of [
+        ['A paragraph with an authored first-line indent', 48],
+        ['A paragraph with an authored tab', null],
+    ] as const) {
+        const paragraph = page.locator('#trip-story-body p').filter({ hasText: prefix });
+        const lines = await paragraph.evaluate(element => {
+            const left = element.getBoundingClientRect().left;
+            const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+            const positions = new Map<number, number>();
+            const range = document.createRange();
+            while (walker.nextNode()) {
+                const node = walker.currentNode;
+                for (let i = 0; i < node.textContent!.length; i++) {
+                    if (/\s/.test(node.textContent![i])) continue;
+                    range.setStart(node, i);
+                    range.setEnd(node, i + 1);
+                    const rect = range.getBoundingClientRect();
+                    const y = Math.round(rect.top);
+                    positions.set(y, Math.min(positions.get(y) ?? Infinity, rect.left - left));
+                }
+            }
+            return [...positions.values()];
+        });
+        expect(lines.length).toBeGreaterThan(1);
+        if (indent !== null) {
+            await expect(paragraph).toHaveCSS('text-indent', `${indent}px`);
+            expect(lines[0]).toBeCloseTo(indent, 0);
+        } else {
+            expect(lines[0]).toBeGreaterThan(24);
+            expect(lines[0]).toBeLessThan(64);
+        }
+        for (const left of lines.slice(1)) expect(left).toBeCloseTo(0, 0);
+        for (const property of ['color', 'line-height', 'margin-bottom']) {
+            await expect(paragraph).toHaveCSS(property, await ordinary.evaluate(
+                (element, name) => getComputedStyle(element).getPropertyValue(name), property));
+        }
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth))
+        .toBe(await page.evaluate(() => document.documentElement.clientWidth));
+});
+
 for (const [path, budget] of [
     ['/', 125_000],
     ['/posts', 125_000],
@@ -420,6 +466,10 @@ test('production trip chapters stick and subsection links clear the current titl
     await contents.getByRole('link', { name: 'First day', exact: true }).click();
     const title = page.getByRole('heading', { name: 'First day', exact: true });
     await expect(title.locator('..')).toHaveClass('trip-chapter');
+    // Finish fragment navigation before scrolling. Keyboard input also ends
+    // the page's temporary scroll restoration, as a reader's input would.
+    await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+    await page.keyboard.press('ArrowDown');
     await page.evaluate(() => window.scrollBy(0, 200));
     await expect.poll(async () => (await title.boundingBox())!.y).toBeCloseTo(0, 0);
     const second = page.getByRole('heading', { name: 'Second day', exact: true });
@@ -431,7 +481,28 @@ test('production trip chapters stick and subsection links clear the current titl
         - node.closest('.trip-chapter')!.firstElementChild!.getBoundingClientRect().bottom)).toBeGreaterThanOrEqual(8);
 });
 
-test('photo navigation continues between galleries in both directions', async ({ page, isMobile }) => {
+test('the chapter subtitle stays fully below the floating heading banner', async ({ page }) => {
+    await page.goto('/trips/coastal-test');
+    const heading = page.getByRole('heading', { name: 'First day', exact: true });
+    const subtitle = page.locator('.trip-chapter > .blog-subtitle').first();
+    await expect(heading).toBeVisible();
+    // Reader input ends temporary page-load scroll restoration before this
+    // check scrolls to the chapter and tests the subtitle's hit target.
+    await page.keyboard.press('ArrowDown');
+    await heading.scrollIntoViewIfNeeded();
+    await expect(subtitle).toBeInViewport();
+    await expect(subtitle).toHaveText('(105 mi / 170 km)');
+    expect(await subtitle.evaluate(element => element.getBoundingClientRect().top
+        - element.previousElementSibling!.getBoundingClientRect().bottom)).toBeGreaterThanOrEqual(0);
+    expect(await subtitle.evaluate(element => {
+        const range = document.createRange();
+        range.selectNodeContents(element);
+        const text = range.getBoundingClientRect();
+        return element.contains(document.elementFromPoint(text.left + 4, text.top + 2));
+    })).toBe(true);
+});
+
+test('photo navigation includes inline panoramas between and after galleries in both directions', async ({ page, isMobile }) => {
     await page.goto('/trips/coastal-test');
     const caption = page.locator('.pswp__item[aria-hidden="false"] .pswp__dynamic-caption');
     const navigate = async (direction: 'Next' | 'Previous') => {
@@ -442,10 +513,10 @@ test('photo navigation continues between galleries in both directions', async ({
     const lastPhoto = page.getByRole('link', { name: 'Coast photograph 3' });
     await lastPhoto.click();
     await expect(page.locator('.pswp--open')).toBeFocused();
-    await expect(page.locator('.pswp__counter')).toHaveText('2 / 4');
+    await expect(page.locator('.pswp__counter')).toHaveText('2 / 5');
     await navigate('Next');
     await expect(caption).toHaveText('A view from stop 5.');
-    await expect(page.locator('.pswp__counter')).toHaveText('3 / 4');
+    await expect(page.locator('.pswp__counter')).toHaveText('3 / 5');
     await navigate('Previous');
     await expect(caption).toHaveText('A view of <harbor> & "coast".');
     await page.keyboard.press('Escape');
@@ -459,9 +530,52 @@ test('photo navigation continues between galleries in both directions', async ({
     await expect(caption).toHaveText('A view of <harbor> & "coast".');
     await page.keyboard.press('ArrowRight');
     await expect(caption).toHaveText('A view from stop 5.');
+    await navigate('Next');
+    await expect(caption).toHaveText('A view from stop 6.');
+    await navigate('Next');
+    await expect(caption).toHaveText('A view from stop 4.');
+    await expect(page.locator('.pswp__counter')).toHaveText('5 / 5');
+    await navigate('Previous');
+    await expect(caption).toHaveText('A view from stop 6.');
     await page.keyboard.press('Escape');
     await expect(page.locator('.pswp--open')).toHaveCount(0);
     await expect(firstPhoto).toBeFocused();
+});
+
+test('expanded photos use dedicated viewer sizes and upgrade resolution when zoomed', async ({ page }) => {
+    await page.goto('/trips/coastal-test');
+    await page.getByRole('link', { name: 'Coast photograph 3', exact: true }).click();
+    const image = page.locator('.pswp__item[aria-hidden="false"] .pswp__img:not(.pswp__img--placeholder)');
+    await expect(image).toHaveAttribute('src', /photo-3-full-6000\.svg$/);
+    await expect(image).toHaveAttribute('srcset', /photo-3-view-1600\.svg 1600w/);
+    await expectSuitableImageSource(image);
+    const initialWidth = await image.evaluate((element: HTMLImageElement) =>
+        Number(element.currentSrc.match(/-(\d+)\.svg$/)?.[1]));
+    expect(initialWidth).toBeLessThan(6000);
+    await page.locator('.pswp__button--zoom').click();
+    await expect.poll(() => image.evaluate((element: HTMLImageElement) =>
+        Number(element.currentSrc.match(/-(\d+)\.svg$/)?.[1]))).toBeGreaterThan(initialWidth);
+    await expectSuitableImageSource(image);
+});
+
+test('chapter heading backgrounds span the usable page while their text follows the article column', async ({ page }) => {
+    await page.goto('/trips/coastal-test');
+    const heading = page.getByRole('heading', { name: 'First day', exact: true });
+    await heading.scrollIntoViewIfNeeded();
+    const paragraph = page.getByText('The coast makes a good place to stop.', { exact: true });
+    const text = heading.locator('[data-heading-title]');
+    const width = await page.evaluate(() => document.documentElement.clientWidth);
+    const banner = (await heading.boundingBox())!;
+    expect(banner.x).toBeCloseTo(0, 0);
+    expect(banner.width).toBeCloseTo(width, 0);
+    expect((await text.boundingBox())!.x).toBeCloseTo((await paragraph.boundingBox())!.x, 0);
+    const navigationSurface = await page.locator('.site-header').evaluate(element => {
+        const style = getComputedStyle(element);
+        return { background: style.backgroundColor, blur: style.getPropertyValue('backdrop-filter') };
+    });
+    await expect(heading).toHaveCSS('background-color', navigationSurface.background);
+    await expect(heading).toHaveCSS('backdrop-filter', navigationSurface.blur);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
 });
 
 test('photo captions render as literal text in the gallery, inline, and hero viewers', async ({ page }) => {

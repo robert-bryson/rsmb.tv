@@ -56,6 +56,10 @@
     {
       "id": "photo-3",
       "src": "/test-trip/photo-3-1600.svg",
+      "full": {
+        "src": "/test-trip/photo-3-full-6000.svg", "width": 6000, "height": 3750,
+        "srcSet": "/test-trip/photo-3-view-960.svg 960w, /test-trip/photo-3-view-1600.svg 1600w, /test-trip/photo-3-view-3200.svg 3200w, /test-trip/photo-3-full-6000.svg 6000w"
+      },
       "srcSet": "/test-trip/photo-3-480.svg 480w, /test-trip/photo-3-960.svg 960w, /test-trip/photo-3-1600.svg 1600w",
       "width": 1600,
       "height": 1000,

@@ -124,13 +124,15 @@ Remove unused optional galleries after choosing the final story placements.
 ## Panorama and video choices
 
 Use `{{trip-photo-pano:r004251}}` for the straight Oklahoma road across green fields on May 14.
-The source is already wide at 6000 × 2342; it produces 480, 960, 1600, 2400, and 3200-pixel derivatives.
-The largest is 3200 × 1249.
+The source is already wide at 6000 × 2342 pixels.
+It produces 480, 960, 1600, 2400, 3200, 4800, and 6000-pixel page images.
+The largest page image and the separate fullscreen export retain its native 6000 × 2342 dimensions.
 The panorama shortcode places this existing photograph across the page width without changing the original crop.
 No new stitched panoramas were created.
 
 `r003940` is another broad landscape, but its source ratio is below the panorama processing threshold.
-It remains in the May 9 scene gallery with outputs through 1600 pixels.
+It remains in the May 9 scene gallery with page images through 3840 pixels.
+Its separate fullscreen export retains the native 6000 × 2824 dimensions.
 
 The two videos are `20250510_132140.mp4` and `20250513_162552.mp4`.
 They remain unchanged in `videos/originals/`.
@@ -151,13 +153,15 @@ The old Obsidian notes label the initial departure and the Springerville departu
 Their descriptions remain useful prompts, with the date conflict called out in the outline.
 The May 19 screenshot establishes its capture date rather than another travel day.
 
-The versioned images total 28,216,900 bytes, excluding compatibility aliases.
-The processor reports five size advisories across two leafy images:
+The earlier processing review recorded 28,216,900 bytes of versioned images, excluding compatibility aliases.
+That review reported five size advisories across two leafy images:
 
 - `20250517-151118`: 308,234 bytes at 960 px and 893,570 bytes at 1600 px.
 - `r004357`: 130,840 bytes at 480 px, 520,602 bytes at 960 px, and 1,400,526 bytes at 1600 px.
 
-Review those images when making the final selection. Existing processing settings were retained.
+The November 13 [quality refresh](../reviews/2026-11-13-trip-heading-photo-quality.md) supplies larger, sharper page images and native-resolution viewer exports.
+Use the current `asset-metadata.json` for current sizes and advisories.
+Review large images when making the final selection.
 
 ## Publication checks
 

@@ -189,6 +189,12 @@ export default function PinsExplorer() {
         if (fips === 'country-US') { selectPin('country-US'); return; }
         setScope(fips === 'overview' ? '' : fips);
     };
+    const jumpToRegion = (value: string) => {
+        if (isUS) jumpTo(value);
+        else if (isWorld) changeCountry(value);
+        else if (value === 'overview') goToScope({ countryCode, stateFips: '' });
+        else selectPin(value);
+    };
     const changeLevel = (next: 'country' | 'state' | 'county') => {
         setLevel(next);
         setLimit(30);
@@ -225,9 +231,10 @@ export default function PinsExplorer() {
         <div className="pins-workspace">
             <aside ref={sidebarRef} className="pins-sidebar" id="pins-sidebar" aria-label="Pin explorer" hidden={!panelOpen}>
                 <div className="pins-panel-intro">
-                    <p className="pins-eyebrow">How far inside can you go?</p>
-                    <h2>The farthest point<br />from every edge.</h2>
-                    <p>Country poles around the world, with states, provinces, and regions. The U.S. also includes counties and equivalents.</p>
+                    <h2>The farthest point from every edge.</h2>
+                    <details className="pins-intro-details"><summary>How far inside can you go?</summary>
+                        <p>Country poles around the world, with states, provinces, and regions. The U.S. also includes counties and equivalents.</p>
+                    </details>
                     <div className="pins-coverage">{isUS ? <><span><strong>{metadata?.stateCount ?? '56'}</strong> jurisdictions</span><span><strong>{metadata?.countyCount.toLocaleString() ?? '—'}</strong> counties & equivalents</span></> : <><span><strong>{isWorld ? WORLD_COUNTRY_COUNT : 1}</strong> {isWorld ? 'countries & territories' : 'country / territory'}</span><span><strong>{(isWorld ? WORLD_REGION_COUNT : country?.regionIds.length ?? 0).toLocaleString()}</strong> states, provinces & regions</span></>}</div>
                 </div>
 
@@ -245,7 +252,7 @@ export default function PinsExplorer() {
                         <option value="ALL">World overview</option>
                         {COUNTRIES.map(country => <option key={country.code} value={country.code}>{country.name}</option>)}
                     </select>
-                    <div className="pins-tabs" role="group" aria-label="Rank pins by geography">
+                    <div className="pins-tabs" role="group" aria-label="Rank pins by geography" hidden={isWorld}>
                         {!isUS && <button type="button" aria-pressed={activeLevel === 'country'} onClick={() => changeLevel('country')}>Countries & territories</button>}
                         {!isWorld && <button type="button" aria-pressed={activeLevel === 'state'} onClick={() => changeLevel('state')}>{isUS ? 'States & territories' : 'States & provinces'}</button>}
                         {isUS && <button type="button" aria-pressed={activeLevel === 'county'} onClick={() => changeLevel('county')}>Counties</button>}
@@ -313,23 +320,24 @@ export default function PinsExplorer() {
                         circles={circles} zoom={zoom} selected={selected} view={view} navigationKey={navigationKey} unit={unit} reducedMotion={reducedMotion} onSelect={selectPin} onNavigateUp={navigateUp} onZoom={setZoom} />
                     <div className="pins-map-tools">
                         <div className={`pins-map-toolbar${isWorld ? ' is-world' : ''}`}>
-                            <PinsNavigation trail={trail} parent={parent} worldRef={globeRef} upRef={upRef} onNavigate={scope => goToScope(scope, true)} onUp={() => navigateUp(true)} />
-                            <div className="pins-region-control"><PinIcon small /><label className="sr-only" htmlFor="pins-region">Jump to region</label><select id="pins-region" value="" onChange={event => isUS ? jumpTo(event.target.value) : isWorld ? changeCountry(event.target.value) : selectPin(event.target.value)}>
-                                <option value="" disabled>Jump to…</option>{isUS ? REGION_SHORTCUTS.map(([value, label]) => <option key={value} value={value}>{label}</option>) : isWorld ? COUNTRIES.map(country => <option key={country.code} value={country.code}>{country.name}</option>) : pins.map(pin => <option key={pin.id} value={pin.id}>{pin.name}</option>)}
+                            <PinsNavigation trail={trail} parent={parent} worldRef={globeRef} upRef={upRef} onNavigate={scope => goToScope(scope, true)} onUp={() => navigateUp(true)}
+                                onRecenter={() => requestView(selected ? focusBounds(selected) : scopePin?.bounds ?? overviewBounds)} />
+                            <div className="pins-region-control"><PinIcon small /><label className="sr-only" htmlFor="pins-region">Jump to region</label><select id="pins-region" value="" onChange={event => jumpToRegion(event.target.value)}>
+                                <option value="" disabled>Jump to…</option>
+                                {!isUS && !isWorld && <option value="overview">{countryName} overview</option>}
+                                {isUS ? REGION_SHORTCUTS.map(([value, label]) => <option key={value} value={value}>{label}</option>) : isWorld ? COUNTRIES.map(country => <option key={country.code} value={country.code}>{country.name}</option>) : pins.map(pin => <option key={pin.id} value={pin.id}>{pin.name}</option>)}
                             </select></div>
-                            {!isWorld && <button type="button" className="pins-button pins-reset" onClick={() => goToScope({ countryCode, stateFips: '' })}>{isUS ? 'U.S. overview' : `${countryName} overview`}</button>}
                         </div>
-                        {parent && <p className="pins-navigation-hint">{selected ? 'Click outside the selection' : 'Click empty map'} or press Esc to go up one level.</p>}
                     </div>
                     {boundaryError && <div className="pins-boundary-error" role="alert">{isUS ? resources.states.error ? 'State boundaries unavailable.' : 'County boundaries unavailable.' : 'Country or province boundaries unavailable.'}<button type="button" onClick={boundaryResource.retry}>Retry boundaries</button></div>}
                     {showCountyBoundaries && resources.counties.loading && <div className="pins-boundary-error" role="status">Loading county boundaries…</div>}
                     {!isUS && pinLoading && <div className="pins-boundary-error" role="status">Loading country and province pins…</div>}
-                    <div className="pins-map-legend">{selected ? <><span><i className="pins-selected-dot" />Selected pin</span><span><i className="pins-context-dot" />Other pins · selectable</span></> : <><span><i className="pins-national-dot" />{isUS ? 'U.S. pole' : 'Country poles'}</span>{!isWorld && <span><i className="pins-state-dot" />{isUS ? 'States & territories' : 'States & provinces'}</span>}{isUS && <span><i className="pins-county-dot" />Counties</span>}</>}<span className="pins-legend-circle"><i />Radius to nearest edge</span></div>
                     <div className="pins-unit-control" role="group" aria-label="Distance units">{(['mi', 'km'] as const).map(value => <button type="button" key={value} aria-pressed={unit === value} onClick={() => setUnit(value)}>{value}</button>)}</div>
+                    <PinsLayerControls geography={isUS ? 'us' : isWorld ? 'world' : 'country'} circles={circles} countyMode={countyMode}
+                        showCounties={showCounties} showRegions={showRegions} selected={!!selected}
+                        navigationHint={parent ? `${selected ? 'Click outside the selection' : 'Click empty map'} or press Esc to go up one level.` : null}
+                        onCirclesChange={setCircles} onCountyModeChange={setCountyMode} onRegionsChange={setShowRegions} />
                 </div>
-                <PinsLayerControls geography={isUS ? 'us' : isWorld ? 'world' : 'country'} circles={circles} countyMode={countyMode}
-                    showCounties={showCounties} showRegions={showRegions} selected={!!selected}
-                    onCirclesChange={setCircles} onCountyModeChange={setCountyMode} onRegionsChange={setShowRegions} />
             </section>
         </div>
     </div>;

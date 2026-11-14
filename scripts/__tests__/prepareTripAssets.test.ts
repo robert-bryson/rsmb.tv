@@ -11,6 +11,7 @@ import {
     photoId,
     prepareTripAssets,
     WEBP_QUALITY,
+    FULL_IMAGE_QUALITY,
 } from '../prepare-trip-assets.js';
 
 const tempDirs: string[] = [];
@@ -63,7 +64,8 @@ describe('prepare trip assets', () => {
     it('creates stable URL-safe photo IDs', () => {
         expect(photoId('Camp at Dusk.JPG')).toBe('camp-at-dusk');
         expect(photoId('Café-stop.jpeg')).toBe('cafe-stop');
-        expect(WEBP_QUALITY).toBe(84);
+        expect(WEBP_QUALITY).toBe(92);
+        expect(FULL_IMAGE_QUALITY).toBe(99);
         expect(DEFAULT_ROUTE_SIMPLIFICATION_TOLERANCE_METERS).toBe(5);
     });
 
@@ -83,6 +85,8 @@ describe('prepare trip assets', () => {
         const report = await prepareTripAssets({ tripId: 'ozarks-2012', source: root });
 
         expect(report.photos[0].derivatives.map((item) => item.width)).toEqual([480, 960, 1200]);
+        expect(report.photos[0].full).toMatchObject({ width: 1200, height: 800 });
+        expect(report.photos[0].full.filename).toMatch(/-full\.jpg$/);
         expect(fs.existsSync(path.join(root, 'photos', 'processed', 'camp-at-dusk-480.webp'))).toBe(true);
         const route = JSON.parse(fs.readFileSync(path.join(root, 'gps', 'processed', 'route.geojson'), 'utf8'));
         expect(route.features[0].properties).toEqual({
@@ -111,11 +115,11 @@ describe('prepare trip assets', () => {
     });
 
     it.each([
-        { width: 4000, height: 800, expected: [480, 960, 1600, 2400, 3200] },
+        { width: 4000, height: 800, expected: [480, 960, 1600, 2400, 3200, 4000] },
         { width: 2700, height: 900, expected: [480, 960, 1600, 2400, 2700] },
         { width: 900, height: 300, expected: [480, 900] },
-        { width: 4000, height: 1600, expected: [480, 960, 1600, 2400, 3200] },
-        { width: 4000, height: 1601, expected: [480, 960, 1600] },
+        { width: 4000, height: 1600, expected: [480, 960, 1600, 2400, 3200, 4000] },
+        { width: 4000, height: 1601, expected: [480, 960, 1600, 2400, 3200, 3840] },
     ])('prepares suitable widths without enlarging a $width × $height source', async ({ width, height, expected }) => {
         const root = createTripDirectory();
         await sharp({ create: { width, height, channels: 3, background: '#405b6b' } })
@@ -136,26 +140,83 @@ describe('prepare trip assets', () => {
             .withMetadata({ orientation: 6 }).jpeg().toFile(path.join(root, 'photos', 'selects', 'rotated.jpg'));
         const report = await prepareTripAssets({ tripId: 'test-trip', source: root });
         const largest = report.photos[0].derivatives.at(-1)!;
-        expect(largest).toMatchObject({ width: 3200, height: 640 });
+        expect(largest).toMatchObject({ width: 4000, height: 800 });
         expect((await sharp(path.join(root, 'photos', 'processed', largest.filename)).metadata()).orientation)
             .toBeUndefined();
+        const full = report.photos[0].full;
+        expect(full).toMatchObject({ width: 4000, height: 800 });
+        const fullMetadata = await sharp(path.join(root, 'photos', 'processed', full.filename)).metadata();
+        expect(fullMetadata.orientation).toBeUndefined();
+        expect(fullMetadata.exif).toBeUndefined();
     });
 
-    it('keeps ordinary photo fingerprints compatible with the original pipeline settings', async () => {
+    it('creates separate viewer sizes at quality 99 while retaining native dimensions and stable page URLs', async () => {
+        const root = createTripDirectory();
+        const input = await sharp({ create: { width: 4200, height: 2800, channels: 3, background: '#405b6b' } })
+            .jpeg().toBuffer();
+        fs.writeFileSync(path.join(root, 'photos', 'selects', 'camp.jpg'), input);
+        const report = await prepareTripAssets({ tripId: 'test-trip', source: root });
+        const photo = report.photos[0];
+        const previousFingerprint = createHash('sha256').update(input).update(JSON.stringify({
+            version: 3, quality: 92, smartSubsample: true, widths: [480, 960, 1600, 2400, 3200, 3840],
+            fullQuality: 99, fullChromaSubsampling: '4:4:4', fullExtension: 'jpg', sharp: sharp.versions.sharp,
+        })).digest('hex').slice(0, 12);
+        expect(photo.fingerprint).toBe(previousFingerprint);
+        expect(report).toMatchObject({ photoPipelineVersion: 4, photoEncodingVersion: 3, webpQuality: 92, fullImageQuality: 99 });
+        expect(photo.full).toMatchObject({ width: 4200, height: 2800 });
+        expect(photo.full.derivatives.map(image => image.width)).toEqual([960, 1600, 2400, 3200, 3840]);
+        for (const image of photo.full.derivatives) {
+            expect(image.filename).toBe(`camp-${photo.fingerprint}-view-${image.width}.jpg`);
+            const metadata = await sharp(path.join(root, 'photos', 'processed', image.filename)).metadata();
+            expect(metadata).toMatchObject({ format: 'jpeg', width: image.width, height: image.height, chromaSubsampling: '4:4:4' });
+            expect(metadata.exif).toBeUndefined();
+        }
+        const processed = path.join(root, 'photos', 'processed');
+        const cached = [...photo.derivatives, photo.full, ...photo.full.derivatives].map(image => path.join(processed, image.filename));
+        for (const filename of cached) fs.utimesSync(filename, 1000, 1000);
+        await prepareTripAssets({ tripId: 'test-trip', source: root });
+        expect(cached.every(filename => fs.statSync(filename).mtimeMs === 1_000_000)).toBe(true);
+    }, 20_000);
+
+    it('versions higher-quality images separately and retains previously published files', async () => {
         const root = createTripDirectory();
         const input = await sharp({ create: { width: 1800, height: 1200, channels: 3, background: '#405b6b' } })
             .jpeg().toBuffer();
         fs.writeFileSync(path.join(root, 'photos', 'selects', 'camp.jpg'), input);
-        // This is the pre-panorama cache contract. Changing it invalidates published ordinary-photo URLs.
         const previousFingerprint = createHash('sha256').update(input).update(JSON.stringify({
             version: 2, quality: 84, widths: [480, 960, 1600], sharp: sharp.versions.sharp,
         })).digest('hex').slice(0, 12);
+        const processed = path.join(root, 'photos', 'processed');
+        fs.mkdirSync(processed);
+        const previousPath = path.join(processed, `camp-${previousFingerprint}-1600.webp`);
+        fs.writeFileSync(previousPath, 'previous published image');
 
         const report = await prepareTripAssets({ tripId: 'test-trip', source: root });
-        expect(report.photos[0].fingerprint).toBe(previousFingerprint);
+        expect(report.photos[0].fingerprint).not.toBe(previousFingerprint);
         expect(report.photos[0].derivatives.map(image => image.filename)).toEqual(
-            [480, 960, 1600].map(width => `camp-${previousFingerprint}-${width}.webp`),
+            [480, 960, 1600, 1800].map(width => `camp-${report.photos[0].fingerprint}-${width}.webp`),
         );
+        expect(fs.readFileSync(previousPath, 'utf8')).toBe('previous published image');
+        expect(report.photos[0].full).toMatchObject({ width: 1800, height: 1200 });
+    });
+
+    it('exports the original resolution beyond the WebP width limit and preserves source transparency', async () => {
+        const root = createTripDirectory();
+        await sharp({ create: { width: 17000, height: 100, channels: 3, background: '#405b6b' } })
+            .jpeg().toFile(path.join(root, 'photos', 'selects', 'wide.jpg'));
+        await sharp({ create: { width: 1200, height: 900, channels: 4, background: '#ff000080' } })
+            .png().toFile(path.join(root, 'photos', 'selects', 'transparent.png'));
+        const report = await prepareTripAssets({ tripId: 'test-trip', source: root });
+        const wide = report.photos.find(photo => photo.id === 'wide')!;
+        expect(wide.full).toMatchObject({ width: 17000, height: 100 });
+        expect(wide.derivatives.at(-1)?.width).toBe(7680);
+        const transparent = report.photos.find(photo => photo.id === 'transparent')!;
+        const output = await sharp(path.join(root, 'photos', 'processed', transparent.full.filename)).metadata();
+        expect(output).toMatchObject({ format: 'png', hasAlpha: true, width: 1200, height: 900 });
+        const viewer = transparent.full.derivatives[0];
+        expect(viewer).toMatchObject({ width: 960, height: 720 });
+        expect(await sharp(path.join(root, 'photos', 'processed', viewer.filename)).metadata())
+            .toMatchObject({ format: 'png', hasAlpha: true, width: 960, height: 720 });
     });
 
     it('reuses unchanged derivatives and versions changed sources without deleting published files', async () => {
@@ -166,14 +227,18 @@ describe('prepare trip assets', () => {
         const first = await prepareTripAssets({ tripId: 'test-trip', source: root });
         const original = first.photos[0].derivatives[0].filename;
         const originalPath = path.join(root, 'photos', 'processed', original);
+        const originalFullPath = path.join(root, 'photos', 'processed', first.photos[0].full.filename);
         fs.utimesSync(originalPath, 1000, 1000);
+        fs.utimesSync(originalFullPath, 1000, 1000);
         const repeated = await prepareTripAssets({ tripId: 'test-trip', source: root });
         expect(repeated.photos[0].fingerprint).toBe(first.photos[0].fingerprint);
         expect(fs.statSync(originalPath).mtimeMs).toBe(1_000_000);
+        expect(fs.statSync(originalFullPath).mtimeMs).toBe(1_000_000);
         await writePhoto('#314bc8');
         const changed = await prepareTripAssets({ tripId: 'test-trip', source: root });
         expect(changed.photos[0].fingerprint).not.toBe(first.photos[0].fingerprint);
         expect(fs.existsSync(originalPath)).toBe(true);
+        expect(fs.existsSync(originalFullPath)).toBe(true);
         const derivative = changed.photos[0].derivatives[0];
         expect(fs.readFileSync(path.join(root, 'photos', 'processed', derivative.legacyFilename)))
             .toEqual(fs.readFileSync(path.join(root, 'photos', 'processed', derivative.filename)));

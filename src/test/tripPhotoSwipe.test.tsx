@@ -29,6 +29,27 @@ function viewer(gallery: HTMLElement, getPhotos?: () => HTMLAnchorElement[]) {
 }
 
 describe('trip photo viewer', () => {
+    it('uses dedicated quality-99 viewer candidates and keeps the native image available for zooming', () => {
+        const full = { src: '/camp-full.jpg', width: 6000, height: 4000,
+            srcSet: '/camp-view-1600.jpg 1600w, /camp-view-3200.jpg 3200w, /camp-full.jpg 6000w' };
+        const { container } = render(<TripPhotoLink photo={{ ...photo, full }}><img src={photo.src} srcSet={photo.srcSet} alt={photo.alt} /></TripPhotoLink>);
+        const { lightbox } = viewer(container);
+        fireEvent.click(screen.getByRole('img'));
+        expect(lightbox.getItemData(0)).toMatchObject({ src: new URL(full.src, window.location.href).href,
+            width: 6000, height: 4000, srcset: full.srcSet });
+        expect(screen.getByRole('img')).toHaveAttribute('srcset', photo.srcSet);
+        expect(lightbox.getItemData(0).srcset).not.toBe(photo.srcSet);
+    });
+    it('opens the full-resolution export without substituting a smaller page image', () => {
+        const full = { src: '/camp-full.jpg', width: 6000, height: 4000 };
+        const { container } = render(<TripPhotoLink photo={{ ...photo, full }}><img src={photo.src} srcSet={photo.srcSet} alt={photo.alt} /></TripPhotoLink>);
+        const { lightbox } = viewer(container);
+        fireEvent.click(screen.getByRole('img'));
+        expect(lightbox.getItemData(0)).toMatchObject({ src: new URL(full.src, window.location.href).href, width: 6000, height: 4000 });
+        expect(lightbox.getItemData(0).srcset).toBeUndefined();
+        expect(screen.getByRole('img')).toHaveAttribute('src', photo.src);
+        expect(screen.getByRole('img')).toHaveAttribute('srcset', photo.srcSet);
+    });
     it('retains alt text, responsive sources, and captions for hidden slides', () => {
         const { container } = render(<div>
             <TripPhotoLink photo={photo}><img src={photo.src} alt={photo.alt} /></TripPhotoLink>

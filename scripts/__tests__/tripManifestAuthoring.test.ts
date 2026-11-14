@@ -7,6 +7,9 @@ import pch from '../../src/content/trips/pch-2024.json';
 import route66 from '../../src/content/trips/route-66ish-2025.json';
 import river from '../../src/content/trips/river-wisco-2025.json';
 import summer from '../../src/content/trips/on-qc-new-england-2026.json';
+import boise from '../../src/content/trips/boise-2024.json';
+import kalaloch from '../../src/content/trips/kalaloch-2024.json';
+import oceanShores from '../../src/content/trips/ocean-shores-2024.json';
 import inventory from '../../docs/trips/trip-source-inventory.json';
 import { tripAtlasColorAssignments, tripAtlasPalette } from '../../src/features/trips/atlas/tripAtlasColors';
 import { expandTripShortcodes } from '../sync-blogs.js';
@@ -94,6 +97,9 @@ describe('tracked trip content', () => {
         expect(placements.length).toBe(photos.size);
         expect(new Set(placements)).toEqual(new Set(photos.keys()));
         expect(manifest.galleries!['day-two'].at(-1)).toBe('20241004-183101');
+        expect(photos.get('20241006-075214')).toMatchObject({ date: '2024-10-06', full: { width: 4000, height: 3000 } });
+        expect(manifest.galleries!['day-four'][0]).toBe('20241006-075214');
+        expect(manifest.galleries!['inland-california'][0]).toBe('20241006-075214');
     });
 
     it('connects the latest PCH import evidence to the selected files and authored capture dates', () => {
@@ -113,8 +119,9 @@ describe('tracked trip content', () => {
         }
     });
 
-    it.each([pch, route66, river, summer])('uses matching fingerprints and widths for every responsive photo in $id', trip => {
-        for (const photo of trip.photos) {
+    it.each([pch, route66, river, summer, boise, kalaloch, oceanShores])('uses matching fingerprints and widths for every responsive photo in $id', trip => {
+        for (const photo of tripManifestSchema.parse(trip).photos) {
+            expect(photo.full, `${trip.id}/${photo.id} needs a native-resolution viewer export`).toBeDefined();
             const candidates = photo.srcSet.split(', ').map(candidate => {
                 const [src, descriptor] = candidate.split(' ');
                 expect(descriptor, photo.id).toMatch(/^[1-9]\d*w$/);
@@ -134,8 +141,33 @@ describe('tracked trip content', () => {
             expect(widths, photo.id).toEqual([...new Set(widths)].sort((a, b) => a - b));
             expect(new Set(candidates.map(candidate => candidate.fingerprint)).size, photo.id).toBe(1);
             expect(candidates.at(-1), photo.id).toMatchObject({ src: photo.src, width: photo.width });
-            const expectedWidths = [480, 960, 1600, 2400, 3200].filter(width => width < photo.width).concat(photo.width);
+            const supportedWidths = photo.full
+                ? photo.full.width / photo.full.height >= 2.5
+                    ? [480, 960, 1600, 2400, 3200, 4800, 6400, 7680]
+                    : [480, 960, 1600, 2400, 3200, 3840]
+                : [480, 960, 1600, 2400, 3200];
+            const expectedWidths = supportedWidths.filter(width => width < photo.width).concat(photo.width);
             expect(widths, photo.id).toEqual(expectedWidths);
+            if (photo.full) {
+                expect(photo.full.src, photo.id).toMatch(new RegExp(`/photos/${photo.id}-${candidates[0].fingerprint}-full\\.(?:jpg|png)$`));
+                expect(photo.full.width, photo.id).toBeGreaterThanOrEqual(photo.width);
+                expect(photo.full.height, photo.id).toBeGreaterThanOrEqual(photo.height);
+                expect(photo.full.srcSet, `${trip.id}/${photo.id} needs viewer sources`).toBeTruthy();
+                const viewer = photo.full.srcSet!.split(', ').map(candidate => {
+                    const [src, descriptor] = candidate.split(' ');
+                    const width = Number(descriptor.replace(/w$/, ''));
+                    expect(new URL(src).origin, photo.id).toBe('https://data.rsmb.tv');
+                    expect(src, photo.id).not.toContain('.webp');
+                    if (src !== photo.full!.src) {
+                        expect(src, photo.id).toMatch(new RegExp(`/photos/${photo.id}-${candidates[0].fingerprint}-view-${width}\\.(?:jpg|png)$`));
+                        expect(width, photo.id).toBeLessThan(photo.full!.width);
+                    }
+                    return { src, width };
+                });
+                expect(viewer.map(image => image.width), photo.id)
+                    .toEqual([...new Set(viewer.map(image => image.width))].sort((a, b) => a - b));
+                expect(viewer.at(-1), photo.id).toEqual({ src: photo.full.src, width: photo.full.width });
+            }
         }
     });
 
@@ -217,7 +249,7 @@ describe('review regressions: recovered trip authoring', () => {
     it('loads the 2026 manifest with its author-selected July 17 hero', () => {
         const manifest = tripManifestSchema.parse(summer);
         expect(manifest.photos.find(photo => photo.id === manifest.hero)).toMatchObject({
-            id: '20260717-135454', date: '2026-07-17', width: 1600, height: 1200,
+            id: '20260717-135454', date: '2026-07-17',
         });
     });
 

@@ -1,0 +1,582 @@
+{
+  "reviewedOn": "2026-11-13",
+  "verifiedAt": "2026-11-14T00:45:34.414Z",
+  "pipeline": {
+    "version": 4,
+    "encodingVersion": 3,
+    "inlineWebpQuality": 92,
+    "viewerJpegQuality": 99,
+    "viewerChromaSubsampling": "4:4:4",
+    "viewerWidths": [
+      960,
+      1600,
+      2400,
+      3200,
+      3840
+    ],
+    "panoramaViewerWidths": [
+      960,
+      1600,
+      2400,
+      3200,
+      3840,
+      4800,
+      6400
+    ],
+    "transparentViewerFormat": "lossless PNG",
+    "omitCandidatesWithoutByteSavings": true,
+    "nativeResolutionAvailableOnZoom": true,
+    "preload": [
+      0,
+      1
+    ]
+  },
+  "totals": {
+    "trips": 7,
+    "photos": 320,
+    "otherThanPchPhotos": 212,
+    "viewerFilesGenerated": 1580,
+    "viewerFilesReferenced": 1506,
+    "viewerFilesOmittedForNoByteSavings": 74,
+    "viewerBytes": 6050884475
+  },
+  "trips": [
+    {
+      "id": "boise-2024",
+      "photos": 79,
+      "preparedPhotos": 82,
+      "viewerFilesGenerated": 393,
+      "viewerFilesReferenced": 365,
+      "viewerFilesOmittedForNoByteSavings": 28,
+      "viewerBytes": 1494609308,
+      "allReferencedFilesVerified": 918,
+      "authoredContentUnchanged": true,
+      "inlineAndNativeUrlsUnchanged": true,
+      "cdnChecks": [
+        {
+          "url": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-a63caa4664cc-view-960.jpg",
+          "status": 200,
+          "immutable": true
+        },
+        {
+          "url": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-699a73729500-view-3840.jpg",
+          "status": 200,
+          "immutable": true
+        }
+      ]
+    },
+    {
+      "id": "kalaloch-2024",
+      "photos": 25,
+      "preparedPhotos": 25,
+      "viewerFilesGenerated": 115,
+      "viewerFilesReferenced": 109,
+      "viewerFilesOmittedForNoByteSavings": 6,
+      "viewerBytes": 410349020,
+      "allReferencedFilesVerified": 279,
+      "authoredContentUnchanged": true,
+      "inlineAndNativeUrlsUnchanged": true,
+      "cdnChecks": [
+        {
+          "url": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-21-ferry-motorcycles-a03c2f7db902-view-960.jpg",
+          "status": 200,
+          "immutable": true
+        },
+        {
+          "url": "https://data.rsmb.tv/trips/kalaloch-2024/photos/kalaloch-2024-06-23-evening-ferry-view-562d3f660582-view-3200.jpg",
+          "status": 200,
+          "immutable": true
+        }
+      ]
+    },
+    {
+      "id": "ocean-shores-2024",
+      "photos": 10,
+      "preparedPhotos": 10,
+      "viewerFilesGenerated": 47,
+      "viewerFilesReferenced": 42,
+      "viewerFilesOmittedForNoByteSavings": 5,
+      "viewerBytes": 213290762,
+      "allReferencedFilesVerified": 111,
+      "authoredContentUnchanged": true,
+      "inlineAndNativeUrlsUnchanged": true,
+      "cdnChecks": [
+        {
+          "url": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-1-cb500x-ferry-092b85bfb257-view-960.jpg",
+          "status": 200,
+          "immutable": true
+        },
+        {
+          "url": "https://data.rsmb.tv/trips/ocean-shores-2024/photos/2024-ocean-shores-10-seattle-skyline-36a246e57f6a-view-3200.jpg",
+          "status": 200,
+          "immutable": true
+        }
+      ]
+    },
+    {
+      "id": "on-qc-new-england-2026",
+      "photos": 1,
+      "preparedPhotos": 1,
+      "viewerFilesGenerated": 5,
+      "viewerFilesReferenced": 4,
+      "viewerFilesOmittedForNoByteSavings": 1,
+      "viewerBytes": 15813195,
+      "allReferencedFilesVerified": 11,
+      "authoredContentUnchanged": true,
+      "inlineAndNativeUrlsUnchanged": true,
+      "cdnChecks": [
+        {
+          "url": "https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-view-960.jpg",
+          "status": 200,
+          "immutable": true
+        },
+        {
+          "url": "https://data.rsmb.tv/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-view-3200.jpg",
+          "status": 200,
+          "immutable": true
+        }
+      ]
+    },
+    {
+      "id": "pch-2024",
+      "photos": 108,
+      "preparedPhotos": 108,
+      "viewerFilesGenerated": 537,
+      "viewerFilesReferenced": 524,
+      "viewerFilesOmittedForNoByteSavings": 13,
+      "viewerBytes": 2081810517,
+      "allReferencedFilesVerified": 1283,
+      "authoredContentUnchanged": true,
+      "inlineAndNativeUrlsUnchanged": true,
+      "cdnChecks": [
+        {
+          "url": "https://data.rsmb.tv/trips/pch-2024/photos/dscf9076-d56327552491-view-960.jpg",
+          "status": 200,
+          "immutable": true
+        },
+        {
+          "url": "https://data.rsmb.tv/trips/pch-2024/photos/r003267-64a0f4db90a1-view-3840.jpg",
+          "status": 200,
+          "immutable": true
+        }
+      ]
+    },
+    {
+      "id": "river-wisco-2025",
+      "photos": 40,
+      "preparedPhotos": 40,
+      "viewerFilesGenerated": 197,
+      "viewerFilesReferenced": 191,
+      "viewerFilesOmittedForNoByteSavings": 6,
+      "viewerBytes": 801597734,
+      "allReferencedFilesVerified": 471,
+      "authoredContentUnchanged": true,
+      "inlineAndNativeUrlsUnchanged": true,
+      "cdnChecks": [
+        {
+          "url": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01068-61cb5fe3000b-view-960.jpg",
+          "status": 200,
+          "immutable": true
+        },
+        {
+          "url": "https://data.rsmb.tv/trips/river-wisco-2025/photos/dsc01118-25d2281905a9-view-3840.jpg",
+          "status": 200,
+          "immutable": true
+        }
+      ]
+    },
+    {
+      "id": "route-66ish-2025",
+      "photos": 57,
+      "preparedPhotos": 57,
+      "viewerFilesGenerated": 286,
+      "viewerFilesReferenced": 271,
+      "viewerFilesOmittedForNoByteSavings": 15,
+      "viewerBytes": 1033413939,
+      "allReferencedFilesVerified": 671,
+      "authoredContentUnchanged": true,
+      "inlineAndNativeUrlsUnchanged": true,
+      "cdnChecks": [
+        {
+          "url": "https://data.rsmb.tv/trips/route-66ish-2025/photos/r003940-f6e75a206114-view-960.jpg",
+          "status": 200,
+          "immutable": true
+        },
+        {
+          "url": "https://data.rsmb.tv/trips/route-66ish-2025/photos/20250517-151118-eae7984d7853-view-3840.jpg",
+          "status": 200,
+          "immutable": true
+        }
+      ]
+    }
+  ],
+  "browser": [
+    {
+      "screen": "desktop",
+      "slug": "boise-2024",
+      "inline": {
+        "src": "http://127.0.0.1:5173/data/trips/boise-2024/photos/boise-2024-05-18-gravel-road-c9802c40736f-3200.webp",
+        "width": 1440,
+        "dpr": 2,
+        "encodedWidth": 3200,
+        "encodedHeight": 2400,
+        "bytes": 1736870
+      },
+      "initialViewer": {
+        "src": "http://127.0.0.1:5173/data/trips/boise-2024/photos/boise-2024-05-18-gravel-road-c9802c40736f-view-3200.jpg",
+        "width": 1140,
+        "dpr": 2,
+        "encodedWidth": 3200,
+        "encodedHeight": 2400,
+        "bytes": 5495781
+      },
+      "native": {
+        "src": "http://127.0.0.1:5173/data/trips/boise-2024/photos/boise-2024-05-18-gravel-road-c9802c40736f-full.jpg",
+        "width": 4000,
+        "height": 3000,
+        "bytes": 6797560
+      },
+      "nativeRequestedOnOpen": false,
+      "loadsNativeOnZoom": true,
+      "bytesSavedPercent": 19.2,
+      "errors": []
+    },
+    {
+      "screen": "desktop",
+      "slug": "kalaloch-2024",
+      "inline": {
+        "src": "http://127.0.0.1:5173/data/trips/kalaloch-2024/photos/kalaloch-2024-06-23-beach-overlook-deb7d99eae33-3200.webp",
+        "width": 1440,
+        "dpr": 2,
+        "encodedWidth": 3200,
+        "encodedHeight": 2133,
+        "bytes": 971196
+      },
+      "initialViewer": {
+        "src": "http://127.0.0.1:5173/data/trips/kalaloch-2024/photos/kalaloch-2024-06-23-beach-overlook-deb7d99eae33-view-3200.jpg",
+        "width": 1439,
+        "dpr": 2,
+        "encodedWidth": 3200,
+        "encodedHeight": 2133,
+        "bytes": 4188563
+      },
+      "native": {
+        "src": "http://127.0.0.1:5173/data/trips/kalaloch-2024/photos/kalaloch-2024-06-23-beach-overlook-deb7d99eae33-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "bytes": 13475231
+      },
+      "nativeRequestedOnOpen": false,
+      "loadsNativeOnZoom": true,
+      "bytesSavedPercent": 68.9,
+      "errors": []
+    },
+    {
+      "screen": "desktop",
+      "slug": "ocean-shores-2024",
+      "inline": {
+        "src": "http://127.0.0.1:5173/data/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-c063ab734f48-3200.webp",
+        "width": 1440,
+        "dpr": 2,
+        "encodedWidth": 3200,
+        "encodedHeight": 2133,
+        "bytes": 1305554
+      },
+      "initialViewer": {
+        "src": "http://127.0.0.1:5173/data/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-c063ab734f48-view-3200.jpg",
+        "width": 1439,
+        "dpr": 2,
+        "encodedWidth": 3200,
+        "encodedHeight": 2133,
+        "bytes": 4645308
+      },
+      "native": {
+        "src": "http://127.0.0.1:5173/data/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-c063ab734f48-full.jpg",
+        "width": 6240,
+        "height": 4160,
+        "bytes": 16106638
+      },
+      "nativeRequestedOnOpen": false,
+      "loadsNativeOnZoom": true,
+      "bytesSavedPercent": 71.2,
+      "errors": []
+    },
+    {
+      "screen": "desktop",
+      "slug": "river-wisco-2025",
+      "inline": {
+        "src": "http://127.0.0.1:5173/data/trips/river-wisco-2025/photos/dsc01078-4dabdec135a2-3200.webp",
+        "width": 1440,
+        "dpr": 2,
+        "encodedWidth": 3200,
+        "encodedHeight": 2133,
+        "bytes": 3371332
+      },
+      "initialViewer": {
+        "src": "http://127.0.0.1:5173/data/trips/river-wisco-2025/photos/dsc01078-4dabdec135a2-view-3200.jpg",
+        "width": 1439,
+        "dpr": 2,
+        "encodedWidth": 3200,
+        "encodedHeight": 2133,
+        "bytes": 9756402
+      },
+      "native": {
+        "src": "http://127.0.0.1:5173/data/trips/river-wisco-2025/photos/dsc01078-4dabdec135a2-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "bytes": 21643792
+      },
+      "nativeRequestedOnOpen": false,
+      "loadsNativeOnZoom": true,
+      "bytesSavedPercent": 54.9,
+      "errors": []
+    },
+    {
+      "screen": "desktop",
+      "slug": "route-66ish-2025",
+      "inline": {
+        "src": "http://127.0.0.1:5173/data/trips/route-66ish-2025/photos/r004114-d8115e5dabb1-3200.webp",
+        "width": 1440,
+        "dpr": 2,
+        "encodedWidth": 3200,
+        "encodedHeight": 2133,
+        "bytes": 1269194
+      },
+      "initialViewer": {
+        "src": "http://127.0.0.1:5173/data/trips/route-66ish-2025/photos/r004114-d8115e5dabb1-view-3200.jpg",
+        "width": 1439,
+        "dpr": 2,
+        "encodedWidth": 3200,
+        "encodedHeight": 2133,
+        "bytes": 4758446
+      },
+      "native": {
+        "src": "http://127.0.0.1:5173/data/trips/route-66ish-2025/photos/r004114-d8115e5dabb1-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "bytes": 13074119
+      },
+      "nativeRequestedOnOpen": false,
+      "loadsNativeOnZoom": true,
+      "bytesSavedPercent": 63.6,
+      "errors": []
+    },
+    {
+      "screen": "desktop",
+      "slug": "on-qc-new-england-2026-part-1",
+      "inline": {
+        "src": "http://127.0.0.1:5173/data/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-3200.webp",
+        "width": 1440,
+        "dpr": 2,
+        "encodedWidth": 3200,
+        "encodedHeight": 2400,
+        "bytes": 3100358
+      },
+      "initialViewer": {
+        "src": "http://127.0.0.1:5173/data/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-view-3200.jpg",
+        "width": 1140,
+        "dpr": 2,
+        "encodedWidth": 3200,
+        "encodedHeight": 2400,
+        "bytes": 7725225
+      },
+      "native": {
+        "src": "http://127.0.0.1:5173/data/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-full.jpg",
+        "width": 4000,
+        "height": 3000,
+        "bytes": 9802984
+      },
+      "nativeRequestedOnOpen": false,
+      "loadsNativeOnZoom": true,
+      "bytesSavedPercent": 21.2,
+      "errors": []
+    },
+    {
+      "screen": "phone",
+      "slug": "boise-2024",
+      "inline": {
+        "src": "http://127.0.0.1:5173/data/trips/boise-2024/photos/boise-2024-05-18-gravel-road-c9802c40736f-1600.webp",
+        "width": 390,
+        "dpr": 3,
+        "encodedWidth": 1600,
+        "encodedHeight": 1200,
+        "bytes": 398674
+      },
+      "initialViewer": {
+        "src": "http://127.0.0.1:5173/data/trips/boise-2024/photos/boise-2024-05-18-gravel-road-c9802c40736f-view-1600.jpg",
+        "width": 390,
+        "dpr": 3,
+        "encodedWidth": 1600,
+        "encodedHeight": 1200,
+        "bytes": 1457293
+      },
+      "native": {
+        "src": "http://127.0.0.1:5173/data/trips/boise-2024/photos/boise-2024-05-18-gravel-road-c9802c40736f-full.jpg",
+        "width": 4000,
+        "height": 3000,
+        "bytes": 6797560
+      },
+      "nativeRequestedOnOpen": false,
+      "loadsNativeOnZoom": true,
+      "bytesSavedPercent": 78.6,
+      "errors": []
+    },
+    {
+      "screen": "phone",
+      "slug": "kalaloch-2024",
+      "inline": {
+        "src": "http://127.0.0.1:5173/data/trips/kalaloch-2024/photos/kalaloch-2024-06-23-beach-overlook-deb7d99eae33-1600.webp",
+        "width": 390,
+        "dpr": 3,
+        "encodedWidth": 1600,
+        "encodedHeight": 1067,
+        "bytes": 268106
+      },
+      "initialViewer": {
+        "src": "http://127.0.0.1:5173/data/trips/kalaloch-2024/photos/kalaloch-2024-06-23-beach-overlook-deb7d99eae33-view-1600.jpg",
+        "width": 390,
+        "dpr": 3,
+        "encodedWidth": 1600,
+        "encodedHeight": 1067,
+        "bytes": 1052493
+      },
+      "native": {
+        "src": "http://127.0.0.1:5173/data/trips/kalaloch-2024/photos/kalaloch-2024-06-23-beach-overlook-deb7d99eae33-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "bytes": 13475231
+      },
+      "nativeRequestedOnOpen": false,
+      "loadsNativeOnZoom": true,
+      "bytesSavedPercent": 92.2,
+      "errors": []
+    },
+    {
+      "screen": "phone",
+      "slug": "ocean-shores-2024",
+      "inline": {
+        "src": "http://127.0.0.1:5173/data/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-c063ab734f48-1600.webp",
+        "width": 390,
+        "dpr": 3,
+        "encodedWidth": 1600,
+        "encodedHeight": 1067,
+        "bytes": 246418
+      },
+      "initialViewer": {
+        "src": "http://127.0.0.1:5173/data/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-c063ab734f48-view-1600.jpg",
+        "width": 390,
+        "dpr": 3,
+        "encodedWidth": 1600,
+        "encodedHeight": 1067,
+        "bytes": 1019372
+      },
+      "native": {
+        "src": "http://127.0.0.1:5173/data/trips/ocean-shores-2024/photos/2024-ocean-shores-4-beach-c063ab734f48-full.jpg",
+        "width": 6240,
+        "height": 4160,
+        "bytes": 16106638
+      },
+      "nativeRequestedOnOpen": false,
+      "loadsNativeOnZoom": true,
+      "bytesSavedPercent": 93.7,
+      "errors": []
+    },
+    {
+      "screen": "phone",
+      "slug": "river-wisco-2025",
+      "inline": {
+        "src": "http://127.0.0.1:5173/data/trips/river-wisco-2025/photos/dsc01078-4dabdec135a2-1600.webp",
+        "width": 390,
+        "dpr": 3,
+        "encodedWidth": 1600,
+        "encodedHeight": 1067,
+        "bytes": 971436
+      },
+      "initialViewer": {
+        "src": "http://127.0.0.1:5173/data/trips/river-wisco-2025/photos/dsc01078-4dabdec135a2-view-1600.jpg",
+        "width": 390,
+        "dpr": 3,
+        "encodedWidth": 1600,
+        "encodedHeight": 1067,
+        "bytes": 2782548
+      },
+      "native": {
+        "src": "http://127.0.0.1:5173/data/trips/river-wisco-2025/photos/dsc01078-4dabdec135a2-full.jpg",
+        "width": 5472,
+        "height": 3648,
+        "bytes": 21643792
+      },
+      "nativeRequestedOnOpen": false,
+      "loadsNativeOnZoom": true,
+      "bytesSavedPercent": 87.1,
+      "errors": []
+    },
+    {
+      "screen": "phone",
+      "slug": "route-66ish-2025",
+      "inline": {
+        "src": "http://127.0.0.1:5173/data/trips/route-66ish-2025/photos/r004114-d8115e5dabb1-1600.webp",
+        "width": 390,
+        "dpr": 3,
+        "encodedWidth": 1600,
+        "encodedHeight": 1067,
+        "bytes": 310012
+      },
+      "initialViewer": {
+        "src": "http://127.0.0.1:5173/data/trips/route-66ish-2025/photos/r004114-d8115e5dabb1-view-1600.jpg",
+        "width": 390,
+        "dpr": 3,
+        "encodedWidth": 1600,
+        "encodedHeight": 1067,
+        "bytes": 1239041
+      },
+      "native": {
+        "src": "http://127.0.0.1:5173/data/trips/route-66ish-2025/photos/r004114-d8115e5dabb1-full.jpg",
+        "width": 6000,
+        "height": 4000,
+        "bytes": 13074119
+      },
+      "nativeRequestedOnOpen": false,
+      "loadsNativeOnZoom": true,
+      "bytesSavedPercent": 90.5,
+      "errors": []
+    },
+    {
+      "screen": "phone",
+      "slug": "on-qc-new-england-2026-part-1",
+      "inline": {
+        "src": "http://127.0.0.1:5173/data/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-1600.webp",
+        "width": 390,
+        "dpr": 3,
+        "encodedWidth": 1600,
+        "encodedHeight": 1200,
+        "bytes": 1031088
+      },
+      "initialViewer": {
+        "src": "http://127.0.0.1:5173/data/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-view-1600.jpg",
+        "width": 390,
+        "dpr": 3,
+        "encodedWidth": 1600,
+        "encodedHeight": 1200,
+        "bytes": 2350114
+      },
+      "native": {
+        "src": "http://127.0.0.1:5173/data/trips/on-qc-new-england-2026/photos/20260717-135454-ebbb86b3379f-full.jpg",
+        "width": 4000,
+        "height": 3000,
+        "bytes": 9802984
+      },
+      "nativeRequestedOnOpen": false,
+      "loadsNativeOnZoom": true,
+      "bytesSavedPercent": 76,
+      "errors": []
+    }
+  ],
+  "validation": {
+    "unitTests": 300,
+    "browserFixtureTests": 12,
+    "realReportBrowserScenarios": 12,
+    "typecheck": true
+  },
+  "applicationDeployed": false
+}

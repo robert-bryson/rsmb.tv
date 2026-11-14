@@ -4,6 +4,19 @@ This file lists incomplete work. Keep completed tasks in Git history.
 Use the [review index](docs/README.md) for dated evidence and test results.
 Use the [trip authoring guide](docs/trips/TRIP-AUTHORING-README.md#6-publish-assets) for recurring photo checks and asset publication steps.
 
+## Priority and ownership
+
+Each task appears once below. Linked guides define its acceptance conditions.
+The site owner must confirm travel dates, source descriptions, and other editorial facts.
+Hosted checks require a deployed build. Device checks require the named physical device.
+
+| When | Work |
+| --- | --- |
+| Before the next hosted release | [Release checks](#next-release-checks), [Pins hosting](#hosted-release), and [physical devices](#physical-devices) |
+| Before publishing a story | [Content publication](#content-publication) and the affected [source checks](#published-story-checks) |
+| Before historical signal publication | [Temperature publication](#historical-signal-publication) |
+| Later engineering work | [Build and maintenance](#build-and-maintenance), [dashboard checks](#dashboard-checks), and [infrastructure](#infrastructure) |
+
 ## Next release checks
 
 Do these checks after the reviewed changes reach a hosted preview or production.
@@ -116,7 +129,7 @@ Use the [November 10 review](docs/reviews/2026-11-10-project-quality-review.md) 
 
 ### Physical devices
 
-- [ ] Check [trip reading](docs/reviews/2026-11-13-trip-layout-quality-review.md#remaining-checks) on a real phone. Include large text, chapter changes, subsection links, and rotation.
+- [ ] Check [trip reading](docs/reviews/2026-11-13-trip-layout-quality-review.md#remaining-checks) on a real phone. Include large text, chapter changes, subsection links, and rotation. Measure opening time and memory with the quality-99 viewer. Include a large panorama, repeated arrow navigation, and native-resolution zoom. Record the device, browser, selected source widths, and transfer sizes.
 - [ ] Check the flight globe, ADV Atlas, and Pins on a real phone. Record LCP, CLS, INP, cold transfer, and startup. Verify [atlas navigation and recovery](docs/trips/ADV-ATLAS.md).
 - [ ] Measure Pins parsing time, peak memory, and input delay on a real phone.
   Compare the U.S. index, county outlines, world overview, and province outlines.
@@ -160,7 +173,7 @@ Preserve passing publication checks when changing build scripts.
 - [ ] Remove scoped minimatch overrides when all three upstream consumers declare a patched compatible range. Run the [compatibility checks](README.md#lint-security-override).
 - [ ] Extract the remaining temperature-map rendering, interaction, and loading code. Preserve browser behavior and URL contracts. Track tornado-map work in its own section above.
 - [ ] Reduce MapLibre loading and worker costs. Preserve the article JavaScript budgets.
-- [ ] Split document conversion, shortcode handling, and publication checks in `scripts/sync-blogs.js`. Retain compilation tests.
+- [ ] Split document conversion, shortcode handling, and publication checks into separate modules. Keep `scripts/sync-blogs.js` as the coordinator. Retain compilation, formatting, and unsafe-content tests.
 - [ ] Replace the TypeScript 6 lint compiler after `typescript-eslint` supports TypeScript 7. Run lint and typecheck first.
 
 ## Project content

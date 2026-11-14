@@ -8,6 +8,7 @@ import { remarkTripChapters } from './scripts/remark-trip-chapters.ts'
 import tailwindcss from '@tailwindcss/vite'
 import { tripContentPlugin } from './scripts/trip-content-plugin.ts'
 import { globeWebglPlugin } from './scripts/globe-webgl-plugin.ts'
+import { publicAssetsPlugin } from './scripts/public-assets-plugin.ts'
 
 const buildDate = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
@@ -33,6 +34,7 @@ export default defineConfig(({ mode, command }) => {
     react(),
     globeWebglPlugin(),
     tripContentPlugin(),
+    publicAssetsPlugin(),
     tailwindcss(),
   ],
   assetsInclude: ['**/*.glb'],

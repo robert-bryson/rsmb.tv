@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { isVersionedTripPhoto } from './trip-photo-files.js';
 
 const TRIP_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -69,7 +70,7 @@ export function buildUploadCommands({ tripId, source, sourceBucket, publicBucket
             args: [
                 's3', 'sync', photosPath, `s3://${publicBucket}/trips/${tripId}/photos/`,
                 '--exclude', '*', '--include', '*.webp',
-                ...fs.readdirSync(photosPath).filter(name => /-[a-f0-9]{12}-\d+\.webp$/.test(name)).flatMap(name => ['--exclude', name]),
+                ...fs.readdirSync(photosPath).filter(isVersionedTripPhoto).flatMap(name => ['--exclude', name]),
                 '--cache-control', 'public,max-age=3600',
                 ...(dryRun ? ['--dryrun'] : []),
             ],
@@ -79,7 +80,7 @@ export function buildUploadCommands({ tripId, source, sourceBucket, publicBucket
 
     // Only content-addressed derivatives may be cached as immutable. Never delete old published versions.
     if (fs.existsSync(photosPath)) {
-        const versioned = fs.readdirSync(photosPath).filter(name => /-[a-f0-9]{12}-\d+\.webp$/.test(name));
+        const versioned = fs.readdirSync(photosPath).filter(isVersionedTripPhoto);
         if (versioned.length) commands.push({ command: 'aws', args: [
             's3', 'sync', photosPath, `s3://${publicBucket}/trips/${tripId}/photos/`,
             '--exclude', '*', ...versioned.flatMap(name => ['--include', name]),

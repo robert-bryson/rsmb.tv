@@ -203,6 +203,13 @@ They also reject stop callbacks from replaced renderers.
 
 ### Photos and galleries
 
+The image processor uses real encoders in its tests.
+The largest image test has a 20-second limit for slower or shared machines.
+Other unit tests retain their normal limits.
+Manifest tests reject mixed aspect ratios, duplicate reports, invalid dimensions, and malformed viewer records.
+They also permit one pixel of rounding and a native-only viewer set.
+Local URL tests distinguish the media host from lookalike hosts and embedded query values.
+
 Photo unit tests also check recovery after changes to responsive sources or image slot width.
 Adaptive gallery tests check proportional pairs, balanced rows, portrait spans, panorama rows, and exact gutter geometry.
 Browser checks measure both image frames and image content.
@@ -243,6 +250,11 @@ PLAYWRIGHT_BASE_URL=http://127.0.0.1:4184 PLAYWRIGHT_SKIP_WEB_SERVER=1 PLAYWRIGH
 Stop Vite after the tests finish.
 
 ### Articles and filters
+
+Importer tests compile the generated document and render its HTML.
+They check first-line indents, exported tab spaces, stylesheet order, and safe inline formatting.
+Browser tests measure the first and wrapped lines at desktop and phone widths.
+The checks also compare paragraph color, line height, and spacing.
 
 Page tests use fixed post metadata and trip summaries.
 Development-status tests use fixed publication, source, and asset states.

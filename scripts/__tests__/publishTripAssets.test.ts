@@ -60,10 +60,18 @@ describe('publish trip assets', () => {
         const source = createTripDirectory();
         const versioned = 'camp-012345abcdef-480.webp';
         fs.writeFileSync(path.join(source, 'photos', 'processed', versioned), 'image');
+        for (const filename of ['camp-012345abcdef-full.jpg', 'alpha-012345abcdef-full.png',
+            'camp-012345abcdef-view-1600.jpg', 'alpha-012345abcdef-view-960.png']) {
+            fs.writeFileSync(path.join(source, 'photos', 'processed', filename), 'full-resolution image');
+        }
         const commands = buildUploadCommands({ tripId: 'test-trip', source, sourceBucket: 'private', publicBucket: 'public' });
         const immutable = commands.find(command => command.args.includes('public,max-age=31536000,immutable'));
         const legacy = commands.find(command => command.args.includes('*.webp'));
         expect(immutable?.args).toContain(versioned);
+        expect(immutable?.args).toContain('camp-012345abcdef-full.jpg');
+        expect(immutable?.args).toContain('alpha-012345abcdef-full.png');
+        expect(immutable?.args).toContain('camp-012345abcdef-view-1600.jpg');
+        expect(immutable?.args).toContain('alpha-012345abcdef-view-960.png');
         expect(legacy?.args).toContain('public,max-age=3600');
         expect(legacy?.args.slice(legacy.args.indexOf(versioned) - 1, legacy.args.indexOf(versioned) + 1)).toEqual(['--exclude', versioned]);
         expect(commands.flatMap(command => command.args)).not.toContain('--delete');

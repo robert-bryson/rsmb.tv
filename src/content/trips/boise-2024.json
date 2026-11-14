@@ -10,7 +10,11 @@
     "countries": [
         {
             "code": "US",
-            "regions": ["Washington", "Oregon", "Idaho"]
+            "regions": [
+                "Washington",
+                "Oregon",
+                "Idaho"
+            ]
         }
     ],
     "hero": "boise-2024-05-18-gravel-road",
@@ -47,53 +51,6 @@
             }
         ]
     },
-    "days": [
-        {
-            "id": "seattle-to-blue-mountains",
-            "title": "Seattle to Blue Mountains",
-            "headingId": "seattle-to-blue-mountains",
-            "trackIds": ["paseo-de-rever-05-12-24"],
-            "stopIds": ["seattle-departure", "camp-1"]
-        },
-        {
-            "id": "blue-mountains-to-nampa",
-            "title": "Blue Mountains to Nampa",
-            "headingId": "blue-mountains-to-nampa",
-            "trackIds": ["paseo-de-rever-05-13-24"],
-            "stopIds": ["camp-1"]
-        },
-        {
-            "id": "nampa-to-boise",
-            "title": "Nampa to Boise",
-            "headingId": "workdays-in-boise",
-            "trackIds": ["almost-to-boise"],
-            "stopIds": ["boise"]
-        },
-        {
-            "id": "boise-to-wallowas",
-            "title": "Boise to Wallowas",
-            "date": "2024-05-17",
-            "headingId": "boise-hells-canyon-wallowas",
-            "trackIds": ["2024-05-17-boise-hells-canyon-campsite-reconstructed"],
-            "stopIds": ["boise", "camp-2"]
-        },
-        {
-            "id": "wallowas-to-panther-creek",
-            "title": "Wallowas to Panther Creek",
-            "date": "2024-05-18",
-            "headingId": "wallowas-to-panther-creek",
-            "trackIds": ["2024-05-18-campsite-panther-creek-reconstructed"],
-            "stopIds": ["camp-2", "panther-creek-campground"]
-        },
-        {
-            "id": "panther-creek-to-seattle",
-            "title": "Panther Creek to Seattle",
-            "date": "2024-05-19",
-            "headingId": "the-ride-home",
-            "trackIds": ["2024-05-19-panther-creek-seattle-reconstructed"],
-            "stopIds": ["panther-creek-campground", "seattle-return"]
-        }
-    ],
     "stops": [
         {
             "id": "seattle-departure",
@@ -153,715 +110,1264 @@
     "photos": [
         {
             "id": "boise-2024-05-11-cle-elum",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-0e96ec08d728-1600.webp",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-a63caa4664cc-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "The motorcycle parked outside a small gas station in Cle Elum.",
             "date": "2024-05-11",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-0e96ec08d728-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-0e96ec08d728-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-0e96ec08d728-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-a63caa4664cc-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-a63caa4664cc-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-a63caa4664cc-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-a63caa4664cc-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-a63caa4664cc-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-a63caa4664cc-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-a63caa4664cc-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-a63caa4664cc-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-a63caa4664cc-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-a63caa4664cc-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-a63caa4664cc-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-cle-elum-a63caa4664cc-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-11-upper-yakima",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-550b196338f8-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-550b196338f8-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-550b196338f8-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-550b196338f8-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-ea465afb2ba6-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "The Yakima River and a railway winding through a green valley beneath open hills.",
-            "date": "2024-05-11"
+            "date": "2024-05-11",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-ea465afb2ba6-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-ea465afb2ba6-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-ea465afb2ba6-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-ea465afb2ba6-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-ea465afb2ba6-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-ea465afb2ba6-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-ea465afb2ba6-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-ea465afb2ba6-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-ea465afb2ba6-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-ea465afb2ba6-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-ea465afb2ba6-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-ea465afb2ba6-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-ea465afb2ba6-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-11-upper-yakima-windmills",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-b1f046e01e87-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-b1f046e01e87-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-b1f046e01e87-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-b1f046e01e87-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-27af142887c8-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "Two white wind turbines rising above a grassy hillside near Ellensburg.",
-            "date": "2024-05-11"
+            "date": "2024-05-11",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-27af142887c8-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-27af142887c8-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-27af142887c8-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-27af142887c8-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-27af142887c8-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-27af142887c8-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-27af142887c8-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-27af142887c8-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-27af142887c8-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-27af142887c8-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-27af142887c8-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-27af142887c8-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-upper-yakima-windmills-27af142887c8-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-11-yakima-canyon",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-336c17a5fac8-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-336c17a5fac8-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-336c17a5fac8-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-336c17a5fac8-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-51e37a09e418-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "The Yakima River flowing below red-brown canyon walls.",
-            "date": "2024-05-11"
+            "date": "2024-05-11",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-51e37a09e418-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-51e37a09e418-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-51e37a09e418-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-51e37a09e418-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-51e37a09e418-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-51e37a09e418-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-51e37a09e418-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-51e37a09e418-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-51e37a09e418-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-51e37a09e418-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-51e37a09e418-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-51e37a09e418-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-yakima-canyon-51e37a09e418-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-11-warehouse",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-8a9b10bc7d81-1600.webp",
-            "width": 1600,
-            "height": 2400,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-e1adde5acbc9-3840.webp",
+            "width": 3840,
+            "height": 5760,
             "alt": "An old weathered warehouse with faded lettering.",
             "date": "2024-05-11",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-8a9b10bc7d81-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-8a9b10bc7d81-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-8a9b10bc7d81-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-e1adde5acbc9-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-e1adde5acbc9-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-e1adde5acbc9-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-e1adde5acbc9-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-e1adde5acbc9-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-e1adde5acbc9-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-e1adde5acbc9-full.jpg",
+                "width": 4160,
+                "height": 6240,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-e1adde5acbc9-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-e1adde5acbc9-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-e1adde5acbc9-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-e1adde5acbc9-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-e1adde5acbc9-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-warehouse-e1adde5acbc9-full.jpg 4160w"
+            }
         },
         {
             "id": "boise-2024-05-11-farm-road",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-aa7d31429a34-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-aa7d31429a34-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-aa7d31429a34-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-aa7d31429a34-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-7b97d5329f11-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A straight farm road crossing open rolling country.",
-            "date": "2024-05-11"
+            "date": "2024-05-11",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-7b97d5329f11-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-7b97d5329f11-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-7b97d5329f11-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-7b97d5329f11-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-7b97d5329f11-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-7b97d5329f11-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-7b97d5329f11-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-7b97d5329f11-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-7b97d5329f11-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-7b97d5329f11-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-7b97d5329f11-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-7b97d5329f11-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-farm-road-7b97d5329f11-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-11-curve-road",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-e77314136610-1600.webp",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-39539615d5ec-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A paved road curving downhill through open farmland toward distant ridges.",
             "date": "2024-05-11",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-e77314136610-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-e77314136610-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-e77314136610-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-39539615d5ec-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-39539615d5ec-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-39539615d5ec-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-39539615d5ec-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-39539615d5ec-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-39539615d5ec-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-39539615d5ec-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-39539615d5ec-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-39539615d5ec-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-39539615d5ec-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-39539615d5ec-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-39539615d5ec-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-curve-road-39539615d5ec-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-11-no-tresspassing",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-f2b0fcd1d7e4-1600.webp",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-b1d82c81b908-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A metal gate with a No Trespassing sign overlooking rolling open country, with a tiny bit of Mt. Adams in the distance.",
             "date": "2024-05-11",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-f2b0fcd1d7e4-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-f2b0fcd1d7e4-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-f2b0fcd1d7e4-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-b1d82c81b908-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-b1d82c81b908-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-b1d82c81b908-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-b1d82c81b908-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-b1d82c81b908-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-b1d82c81b908-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-b1d82c81b908-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-b1d82c81b908-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-b1d82c81b908-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-b1d82c81b908-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-b1d82c81b908-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-b1d82c81b908-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-no-tresspassing-b1d82c81b908-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-11-velvet-hills",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-3bd310650a34-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-3bd310650a34-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-3bd310650a34-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-3bd310650a34-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-3341772a54bf-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "Smooth, treeless hills rolling above a fenced green pasture beneath a blue sky.",
-            "date": "2024-05-11"
+            "date": "2024-05-11",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-3341772a54bf-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-3341772a54bf-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-3341772a54bf-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-3341772a54bf-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-3341772a54bf-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-3341772a54bf-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-3341772a54bf-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-3341772a54bf-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-3341772a54bf-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-3341772a54bf-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-3341772a54bf-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-3341772a54bf-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-velvet-hills-3341772a54bf-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-11-view",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-917f677553d9-1600.webp",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-0d102c6397a6-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A shaded picnic shelter at an overlook above a broad river valley.",
             "date": "2024-05-11",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-917f677553d9-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-917f677553d9-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-917f677553d9-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-0d102c6397a6-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-0d102c6397a6-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-0d102c6397a6-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-0d102c6397a6-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-0d102c6397a6-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-0d102c6397a6-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-0d102c6397a6-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-0d102c6397a6-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-0d102c6397a6-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-0d102c6397a6-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-0d102c6397a6-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-0d102c6397a6-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-view-0d102c6397a6-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-11-butter-creek",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-833a26d43a55-1600.webp",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-884a34baeb4d-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "A quiet paved road following a green valley between rounded hills.",
             "date": "2024-05-11",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-833a26d43a55-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-833a26d43a55-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-833a26d43a55-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-884a34baeb4d-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-884a34baeb4d-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-884a34baeb4d-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-884a34baeb4d-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-884a34baeb4d-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-884a34baeb4d-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-884a34baeb4d-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-884a34baeb4d-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-884a34baeb4d-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-884a34baeb4d-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-884a34baeb4d-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-884a34baeb4d-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-11-butter-creek-hills",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-906392d923f6-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-906392d923f6-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-906392d923f6-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-906392d923f6-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-d72dbed55139-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "Butter Creek winding below rounded grassy hills with birds flying overhead.",
-            "date": "2024-05-11"
+            "date": "2024-05-11",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-d72dbed55139-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-d72dbed55139-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-d72dbed55139-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-d72dbed55139-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-d72dbed55139-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-d72dbed55139-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-d72dbed55139-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-d72dbed55139-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-d72dbed55139-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-d72dbed55139-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-d72dbed55139-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-d72dbed55139-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-hills-d72dbed55139-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-11-butter-creek-y",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-f62ddb4b88be-1600.webp",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-94b2e86e5159-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "A paved road climbing between green hills beside fences and utility poles.",
             "date": "2024-05-11",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-f62ddb4b88be-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-f62ddb4b88be-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-f62ddb4b88be-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-94b2e86e5159-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-94b2e86e5159-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-94b2e86e5159-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-94b2e86e5159-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-94b2e86e5159-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-94b2e86e5159-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-94b2e86e5159-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-94b2e86e5159-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-94b2e86e5159-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-94b2e86e5159-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-94b2e86e5159-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-butter-creek-y-94b2e86e5159-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-11-blue-mountains-afternoon",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-afternoon-580aec98919b-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-afternoon-580aec98919b-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-afternoon-580aec98919b-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-afternoon-580aec98919b-1600.webp 1600w",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-afternoon-e6e9cdf38299-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "Afternoon sun over grassy Blue Mountains ridges and wooded ravines beyond a weathered fence.",
-            "date": "2024-05-11"
+            "date": "2024-05-11",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-afternoon-e6e9cdf38299-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-afternoon-e6e9cdf38299-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-afternoon-e6e9cdf38299-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-afternoon-e6e9cdf38299-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-afternoon-e6e9cdf38299-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-afternoon-e6e9cdf38299-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-afternoon-e6e9cdf38299-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-afternoon-e6e9cdf38299-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-afternoon-e6e9cdf38299-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-afternoon-e6e9cdf38299-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-afternoon-e6e9cdf38299-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-blue-mountains-afternoon-e6e9cdf38299-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-11-battle-mt-meadow",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-575466de2703-1600.webp",
-            "width": 1600,
-            "height": 2400,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-47a14e232f85-3840.webp",
+            "width": 3840,
+            "height": 5760,
             "alt": "Evening sunlight falling across a grassy meadow among tall pine trees.",
             "date": "2024-05-11",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-575466de2703-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-575466de2703-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-575466de2703-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-47a14e232f85-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-47a14e232f85-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-47a14e232f85-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-47a14e232f85-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-47a14e232f85-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-47a14e232f85-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-47a14e232f85-full.jpg",
+                "width": 4160,
+                "height": 6240,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-47a14e232f85-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-47a14e232f85-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-47a14e232f85-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-47a14e232f85-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-47a14e232f85-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-meadow-47a14e232f85-full.jpg 4160w"
+            }
         },
         {
             "id": "boise-2024-05-11-battle-mt-moto",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-390cdf4622bf-1600.webp",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-7c0fa0a10d76-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "The loaded motorcycle parked beside a pine forest in evening sunlight.",
             "date": "2024-05-11",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-390cdf4622bf-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-390cdf4622bf-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-390cdf4622bf-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-7c0fa0a10d76-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-7c0fa0a10d76-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-7c0fa0a10d76-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-7c0fa0a10d76-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-7c0fa0a10d76-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-7c0fa0a10d76-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-7c0fa0a10d76-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-7c0fa0a10d76-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-7c0fa0a10d76-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-7c0fa0a10d76-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-7c0fa0a10d76-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-7c0fa0a10d76-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-battle-mt-moto-7c0fa0a10d76-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-11-forest-road",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-b1d32cafcdfb-1600.webp",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-5136a2efdb46-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A narrow dirt road winding through pine trees in the fading evening light.",
             "date": "2024-05-11",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-b1d32cafcdfb-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-b1d32cafcdfb-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-b1d32cafcdfb-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-5136a2efdb46-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-5136a2efdb46-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-5136a2efdb46-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-5136a2efdb46-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-5136a2efdb46-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-5136a2efdb46-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-5136a2efdb46-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-5136a2efdb46-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-5136a2efdb46-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-5136a2efdb46-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-5136a2efdb46-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-5136a2efdb46-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-forest-road-5136a2efdb46-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-11-pond-sunset",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-8cec3a8d8f50-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-8cec3a8d8f50-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-8cec3a8d8f50-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-8cec3a8d8f50-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-b2949893919b-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "Pine trees silhouetted at sunset and reflected in a still pond.",
-            "date": "2024-05-11"
+            "date": "2024-05-11",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-b2949893919b-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-b2949893919b-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-b2949893919b-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-b2949893919b-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-b2949893919b-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-b2949893919b-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-b2949893919b-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-b2949893919b-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-b2949893919b-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-b2949893919b-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-b2949893919b-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-b2949893919b-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-pond-sunset-b2949893919b-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-11-moto-sunset",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-06ae71ea7cea-1600.webp",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-46077524f07f-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "The motorcycle parked beneath a pine beside a track leading toward the sunset.",
             "date": "2024-05-11",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-06ae71ea7cea-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-06ae71ea7cea-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-06ae71ea7cea-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-46077524f07f-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-46077524f07f-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-46077524f07f-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-46077524f07f-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-46077524f07f-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-46077524f07f-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-46077524f07f-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-46077524f07f-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-46077524f07f-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-46077524f07f-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-46077524f07f-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-46077524f07f-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-moto-sunset-46077524f07f-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-11-stars",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-stars-5e1baeb02ca8-1600.webp",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-stars-21a9ba5af777-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "Stars scattered across the night sky above the silhouettes of pine branches.",
             "date": "2024-05-11",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-stars-5e1baeb02ca8-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-stars-5e1baeb02ca8-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-stars-5e1baeb02ca8-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-stars-21a9ba5af777-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-stars-21a9ba5af777-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-stars-21a9ba5af777-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-stars-21a9ba5af777-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-stars-21a9ba5af777-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-stars-21a9ba5af777-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-stars-21a9ba5af777-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-stars-21a9ba5af777-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-stars-21a9ba5af777-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-stars-21a9ba5af777-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-stars-21a9ba5af777-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-11-stars-21a9ba5af777-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-12-meadow-camp",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-0ac227d7856e-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-0ac227d7856e-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-0ac227d7856e-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-0ac227d7856e-1600.webp 1600w",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-bf24a3ed3009-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "A yellow tent and motorcycle camped beside a lone pine in a meadow.",
-            "date": "2024-05-12"
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-bf24a3ed3009-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-bf24a3ed3009-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-bf24a3ed3009-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-bf24a3ed3009-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-bf24a3ed3009-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-bf24a3ed3009-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-bf24a3ed3009-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-bf24a3ed3009-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-bf24a3ed3009-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-bf24a3ed3009-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-bf24a3ed3009-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-meadow-camp-bf24a3ed3009-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-12-blues-meadow",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-b9fbfe23d114-1600.webp",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-680350233ca6-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "An open mountain meadow bordered by scattered pines beneath a clear blue sky.",
             "date": "2024-05-12",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-b9fbfe23d114-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-b9fbfe23d114-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-b9fbfe23d114-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-680350233ca6-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-680350233ca6-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-680350233ca6-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-680350233ca6-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-680350233ca6-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-680350233ca6-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-680350233ca6-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-680350233ca6-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-680350233ca6-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-680350233ca6-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-680350233ca6-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-680350233ca6-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-meadow-680350233ca6-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-12-aspen-grove",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-e20e3695c8c8-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-e20e3695c8c8-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-e20e3695c8c8-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-e20e3695c8c8-1600.webp 1600w",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-5df1494f2e4c-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "A sparse grove of white-barked aspens beneath a deep blue sky.",
-            "date": "2024-05-12"
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-5df1494f2e4c-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-5df1494f2e4c-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-5df1494f2e4c-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-5df1494f2e4c-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-5df1494f2e4c-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-5df1494f2e4c-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-5df1494f2e4c-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-5df1494f2e4c-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-5df1494f2e4c-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-5df1494f2e4c-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-5df1494f2e4c-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-aspen-grove-5df1494f2e4c-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-12-blues-road",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-road-92b190d4ab76-1600.webp",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-road-3c125e9abd90-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "The motorcycle's windscreen and navigation display facing a quiet road across a meadow.",
             "date": "2024-05-12",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-road-92b190d4ab76-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-road-92b190d4ab76-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-road-92b190d4ab76-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-road-3c125e9abd90-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-road-3c125e9abd90-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-road-3c125e9abd90-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-road-3c125e9abd90-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-road-3c125e9abd90-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-road-3c125e9abd90-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-road-3c125e9abd90-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-road-3c125e9abd90-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-road-3c125e9abd90-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-road-3c125e9abd90-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-road-3c125e9abd90-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-blues-road-3c125e9abd90-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-12-prairie-creek",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-102e21fc5b6a-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-102e21fc5b6a-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-102e21fc5b6a-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-102e21fc5b6a-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-55e8d1cba07b-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A winding creek crossing flat grassland under a clear sky.",
-            "date": "2024-05-12"
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-55e8d1cba07b-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-55e8d1cba07b-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-55e8d1cba07b-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-55e8d1cba07b-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-55e8d1cba07b-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-55e8d1cba07b-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-55e8d1cba07b-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-55e8d1cba07b-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-55e8d1cba07b-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-55e8d1cba07b-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-55e8d1cba07b-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-55e8d1cba07b-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-prairie-creek-55e8d1cba07b-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-12-antlers-inn",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-5eabda81f776-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-5eabda81f776-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-5eabda81f776-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-5eabda81f776-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-9bc9d613d84a-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "The Antlers Inn facade decorated with rows of antlers.",
-            "date": "2024-05-12"
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-9bc9d613d84a-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-9bc9d613d84a-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-9bc9d613d84a-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-9bc9d613d84a-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-9bc9d613d84a-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-9bc9d613d84a-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-9bc9d613d84a-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-9bc9d613d84a-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-9bc9d613d84a-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-9bc9d613d84a-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-9bc9d613d84a-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-9bc9d613d84a-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-antlers-inn-9bc9d613d84a-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-12-view-south",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-caa78ad65f7a-1600.webp",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-5f994369b3d9-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A view through scattered pines across forested slopes toward distant hills.",
             "date": "2024-05-12",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-caa78ad65f7a-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-caa78ad65f7a-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-caa78ad65f7a-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-5f994369b3d9-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-5f994369b3d9-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-5f994369b3d9-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-5f994369b3d9-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-5f994369b3d9-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-5f994369b3d9-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-5f994369b3d9-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-5f994369b3d9-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-5f994369b3d9-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-5f994369b3d9-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-5f994369b3d9-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-5f994369b3d9-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-view-south-5f994369b3d9-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-12-larch",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-larch-33d9f43c569a-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-larch-33d9f43c569a-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-larch-33d9f43c569a-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-larch-33d9f43c569a-1600.webp 1600w",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-larch-0ae0ed89166b-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "Larches with fresh green needles overlooking forested hills and distant snow-covered mountains.",
-            "date": "2024-05-12"
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-larch-0ae0ed89166b-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-larch-0ae0ed89166b-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-larch-0ae0ed89166b-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-larch-0ae0ed89166b-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-larch-0ae0ed89166b-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-larch-0ae0ed89166b-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-larch-0ae0ed89166b-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-larch-0ae0ed89166b-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-larch-0ae0ed89166b-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-larch-0ae0ed89166b-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-larch-0ae0ed89166b-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-larch-0ae0ed89166b-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-12-flooded-meadow",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-a86e984808a5-1600.webp",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-6437f6441bed-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "Pools of water in a broad mountain meadow below wooded hills and a rocky summit.",
             "date": "2024-05-12",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-a86e984808a5-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-a86e984808a5-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-a86e984808a5-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-6437f6441bed-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-6437f6441bed-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-6437f6441bed-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-6437f6441bed-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-6437f6441bed-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-6437f6441bed-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-6437f6441bed-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-6437f6441bed-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-6437f6441bed-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-6437f6441bed-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-6437f6441bed-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-6437f6441bed-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-flooded-meadow-6437f6441bed-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-12-map",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-map-ccf9174702f8-1600.webp",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-map-a8143ba5d748-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "An outdoor recreation map mounted in a wooden information shelter.",
             "date": "2024-05-12",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-map-ccf9174702f8-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-map-ccf9174702f8-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-map-ccf9174702f8-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-map-a8143ba5d748-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-map-a8143ba5d748-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-map-a8143ba5d748-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-map-a8143ba5d748-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-map-a8143ba5d748-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-map-a8143ba5d748-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-map-a8143ba5d748-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-map-a8143ba5d748-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-map-a8143ba5d748-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-map-a8143ba5d748-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-map-a8143ba5d748-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-map-a8143ba5d748-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-12-snowy-road",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-bb4b45efe20a-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-bb4b45efe20a-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-bb4b45efe20a-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-bb4b45efe20a-1600.webp 1600w",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-6935e7c79d72-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "The motorcycle crossing a mountain road still partly covered in snow.",
-            "date": "2024-05-12"
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-6935e7c79d72-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-6935e7c79d72-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-6935e7c79d72-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-6935e7c79d72-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-6935e7c79d72-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-6935e7c79d72-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-6935e7c79d72-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-6935e7c79d72-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-6935e7c79d72-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-6935e7c79d72-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-6935e7c79d72-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-road-6935e7c79d72-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-12-creek",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-creek-2f3eacf73085-1600.webp",
-            "width": 1600,
-            "height": 2400,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-creek-67395eb227f2-3840.webp",
+            "width": 3840,
+            "height": 5760,
             "alt": "A rocky creek flowing through an evergreen forest beneath a blue sky.",
             "date": "2024-05-12",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-creek-2f3eacf73085-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-creek-2f3eacf73085-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-creek-2f3eacf73085-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-creek-67395eb227f2-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-creek-67395eb227f2-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-creek-67395eb227f2-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-creek-67395eb227f2-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-creek-67395eb227f2-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-creek-67395eb227f2-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-creek-67395eb227f2-full.jpg",
+                "width": 4160,
+                "height": 6240,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-creek-67395eb227f2-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-creek-67395eb227f2-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-creek-67395eb227f2-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-creek-67395eb227f2-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-creek-67395eb227f2-full.jpg 4160w"
+            }
         },
         {
             "id": "boise-2024-05-12-mailboxes",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-5575a815aca0-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-5575a815aca0-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-5575a815aca0-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-5575a815aca0-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-00cac9d5293b-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A long row of rural mailboxes beneath a roadside shelter.",
-            "date": "2024-05-12"
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-00cac9d5293b-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-00cac9d5293b-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-00cac9d5293b-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-00cac9d5293b-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-00cac9d5293b-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-00cac9d5293b-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-00cac9d5293b-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-00cac9d5293b-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-00cac9d5293b-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-00cac9d5293b-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-00cac9d5293b-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-00cac9d5293b-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-mailboxes-00cac9d5293b-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-12-snowy-mts",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-mts-80a691e715c9-1600.webp",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-mts-f2a0f5a4bcec-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "A snow-covered mountain range rising beyond densely forested green hills.",
             "date": "2024-05-12",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-mts-80a691e715c9-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-mts-80a691e715c9-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-mts-80a691e715c9-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-mts-f2a0f5a4bcec-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-mts-f2a0f5a4bcec-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-mts-f2a0f5a4bcec-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-mts-f2a0f5a4bcec-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-mts-f2a0f5a4bcec-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-mts-f2a0f5a4bcec-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-mts-f2a0f5a4bcec-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-mts-f2a0f5a4bcec-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-mts-f2a0f5a4bcec-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-mts-f2a0f5a4bcec-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-mts-f2a0f5a4bcec-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-snowy-mts-f2a0f5a4bcec-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-12-wallowa-barn",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-e3d2ca3474c2-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-e3d2ca3474c2-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-e3d2ca3474c2-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-e3d2ca3474c2-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-b57b9c87b940-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A dark wooden barn beside the road with the Wallowa Mountains behind it.",
-            "date": "2024-05-12"
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-b57b9c87b940-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-b57b9c87b940-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-b57b9c87b940-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-b57b9c87b940-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-b57b9c87b940-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-b57b9c87b940-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-b57b9c87b940-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-b57b9c87b940-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-b57b9c87b940-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-b57b9c87b940-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-b57b9c87b940-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-b57b9c87b940-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wallowa-barn-b57b9c87b940-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-12-barn-and-mountains",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-18db567a676e-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-18db567a676e-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-18db567a676e-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-18db567a676e-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-450a558e20fe-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A small barn in a green valley below snow-covered mountains.",
-            "date": "2024-05-12"
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-450a558e20fe-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-450a558e20fe-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-450a558e20fe-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-450a558e20fe-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-450a558e20fe-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-450a558e20fe-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-450a558e20fe-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-450a558e20fe-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-450a558e20fe-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-450a558e20fe-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-450a558e20fe-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-450a558e20fe-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-barn-and-mountains-450a558e20fe-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-12-motorcycle-and-mountains",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-f851a0b78a75-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-f851a0b78a75-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-f851a0b78a75-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-f851a0b78a75-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-c6a4c1d046d0-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "The loaded motorcycle at an overlook with snow-covered mountains beyond.",
-            "date": "2024-05-12"
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-c6a4c1d046d0-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-c6a4c1d046d0-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-c6a4c1d046d0-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-c6a4c1d046d0-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-c6a4c1d046d0-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-c6a4c1d046d0-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-c6a4c1d046d0-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-c6a4c1d046d0-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-c6a4c1d046d0-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-c6a4c1d046d0-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-c6a4c1d046d0-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-c6a4c1d046d0-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-motorcycle-and-mountains-c6a4c1d046d0-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-12-strawberries-pano",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-9138bda9cba1-1600.webp",
-            "width": 1600,
-            "height": 279,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-00a860e2dea9-7680.webp",
+            "width": 7680,
+            "height": 1339,
             "alt": "A wide panorama of open ranchland and distant snow-covered mountains.",
             "date": "2024-05-12",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-9138bda9cba1-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-9138bda9cba1-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-9138bda9cba1-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-00a860e2dea9-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-00a860e2dea9-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-00a860e2dea9-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-00a860e2dea9-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-00a860e2dea9-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-00a860e2dea9-4800.webp 4800w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-00a860e2dea9-6400.webp 6400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-00a860e2dea9-7680.webp 7680w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-00a860e2dea9-full.jpg",
+                "width": 8626,
+                "height": 1504,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-00a860e2dea9-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-00a860e2dea9-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-00a860e2dea9-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-00a860e2dea9-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-00a860e2dea9-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-00a860e2dea9-view-4800.jpg 4800w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-00a860e2dea9-view-6400.jpg 6400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-strawberries-pano-00a860e2dea9-full.jpg 8626w"
+            }
         },
         {
             "id": "boise-2024-05-12-wagon",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-33e7b77d0a68-1600.webp",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-a181b257f7d9-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A green covered wagon with red wheels and a white canvas top at a roadside overlook.",
             "date": "2024-05-12",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-33e7b77d0a68-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-33e7b77d0a68-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-33e7b77d0a68-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-a181b257f7d9-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-a181b257f7d9-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-a181b257f7d9-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-a181b257f7d9-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-a181b257f7d9-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-a181b257f7d9-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-a181b257f7d9-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-a181b257f7d9-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-a181b257f7d9-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-a181b257f7d9-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-a181b257f7d9-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-a181b257f7d9-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-wagon-a181b257f7d9-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-12-cattle-and-mountains",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-7abbc8b3ddc9-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-7abbc8b3ddc9-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-7abbc8b3ddc9-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-7abbc8b3ddc9-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-24cfbef52a0d-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "Cattle grazing in a green pasture below snow-covered mountains.",
-            "date": "2024-05-12"
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-24cfbef52a0d-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-24cfbef52a0d-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-24cfbef52a0d-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-24cfbef52a0d-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-24cfbef52a0d-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-24cfbef52a0d-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-24cfbef52a0d-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-24cfbef52a0d-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-24cfbef52a0d-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-24cfbef52a0d-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-24cfbef52a0d-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-24cfbef52a0d-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-cattle-and-mountains-24cfbef52a0d-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-12-vale-66",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-a41fdfbbfd90-1600.webp",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-40a852ca9192-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "The motorcycle beside a US 26 junction sign pointing toward Prairie City, John Day, Vale, and Unity.",
             "date": "2024-05-12",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-a41fdfbbfd90-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-a41fdfbbfd90-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-a41fdfbbfd90-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-40a852ca9192-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-40a852ca9192-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-40a852ca9192-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-40a852ca9192-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-40a852ca9192-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-40a852ca9192-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-40a852ca9192-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-40a852ca9192-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-40a852ca9192-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-40a852ca9192-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-40a852ca9192-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-40a852ca9192-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-vale-66-40a852ca9192-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-12-gravel-road-clouds",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-ac29b9769433-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-ac29b9769433-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-ac29b9769433-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-ac29b9769433-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-5ab28ff27687-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A straight gravel road disappearing beneath bright clouds in open country.",
-            "date": "2024-05-12"
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-5ab28ff27687-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-5ab28ff27687-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-5ab28ff27687-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-5ab28ff27687-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-5ab28ff27687-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-5ab28ff27687-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-5ab28ff27687-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-5ab28ff27687-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-5ab28ff27687-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-5ab28ff27687-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-5ab28ff27687-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-5ab28ff27687-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-road-clouds-5ab28ff27687-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-12-gravel-moto",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-b288b6724e3f-1600.webp",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-44d12b107430-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "The loaded motorcycle parked on a straight gravel road through sagebrush country.",
             "date": "2024-05-12",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-b288b6724e3f-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-b288b6724e3f-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-b288b6724e3f-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-44d12b107430-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-44d12b107430-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-44d12b107430-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-44d12b107430-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-44d12b107430-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-44d12b107430-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-44d12b107430-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-44d12b107430-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-44d12b107430-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-44d12b107430-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-44d12b107430-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-44d12b107430-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-gravel-moto-44d12b107430-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-12-sunset-market",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-32249a5e8965-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-32249a5e8965-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-32249a5e8965-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-32249a5e8965-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-4c7afc918328-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "The weathered Sunset Market and Cafe beside an empty rural road.",
-            "date": "2024-05-12"
+            "date": "2024-05-12",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-4c7afc918328-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-4c7afc918328-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-4c7afc918328-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-4c7afc918328-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-4c7afc918328-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-4c7afc918328-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-4c7afc918328-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-4c7afc918328-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-4c7afc918328-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-4c7afc918328-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-4c7afc918328-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-4c7afc918328-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-sunset-market-4c7afc918328-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-12-a-street",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-a-street-0a8ea996e219-1600.webp",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-a-street-2ad12595dcb9-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "A small white roadside service station with yellow and green trim.",
             "date": "2024-05-12",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-a-street-0a8ea996e219-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-a-street-0a8ea996e219-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-a-street-0a8ea996e219-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-a-street-2ad12595dcb9-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-a-street-2ad12595dcb9-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-a-street-2ad12595dcb9-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-a-street-2ad12595dcb9-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-a-street-2ad12595dcb9-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-a-street-2ad12595dcb9-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-a-street-2ad12595dcb9-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-a-street-2ad12595dcb9-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-a-street-2ad12595dcb9-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-a-street-2ad12595dcb9-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-a-street-2ad12595dcb9-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-a-street-2ad12595dcb9-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-12-hotel-view",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-cf15d7092643-1600.webp",
-            "width": 1600,
-            "height": 2400,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-8af95ff6e2af-3840.webp",
+            "width": 3840,
+            "height": 5760,
             "alt": "Daylight through a hotel room window overlooking a parking lot and trees.",
             "caption": "Not an ideal hotel room view, but it was a good deal...",
             "date": "2024-05-13",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-cf15d7092643-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-cf15d7092643-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-cf15d7092643-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-8af95ff6e2af-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-8af95ff6e2af-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-8af95ff6e2af-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-8af95ff6e2af-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-8af95ff6e2af-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-8af95ff6e2af-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-8af95ff6e2af-full.jpg",
+                "width": 4160,
+                "height": 6240,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-8af95ff6e2af-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-8af95ff6e2af-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-8af95ff6e2af-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-8af95ff6e2af-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-8af95ff6e2af-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-12-hotel-view-8af95ff6e2af-full.jpg 4160w"
+            }
         },
         {
             "id": "boise-2024-05-14-wildfire-center",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-5774759059ca-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-5774759059ca-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-5774759059ca-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-5774759059ca-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-a7f6e774fffd-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "The National Interagency Fire Center building and an airtanker tail in Boise.",
-            "date": "2024-05-14"
+            "date": "2024-05-14",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-a7f6e774fffd-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-a7f6e774fffd-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-a7f6e774fffd-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-a7f6e774fffd-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-a7f6e774fffd-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-a7f6e774fffd-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-a7f6e774fffd-full.jpg",
+                "width": 6000,
+                "height": 4000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-a7f6e774fffd-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-a7f6e774fffd-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-a7f6e774fffd-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-a7f6e774fffd-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-a7f6e774fffd-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-wildfire-center-a7f6e774fffd-full.jpg 6000w"
+            }
         },
         {
             "id": "boise-2024-05-14-saloon",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-saloon-6e98bb8ee61e-1600.webp",
-            "width": 1600,
-            "height": 2400,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-saloon-4271cbbe6b62-3840.webp",
+            "width": 3840,
+            "height": 5760,
             "alt": "A dimly lit saloon interior with hanging lamps and a wooden bar.",
             "date": "2024-05-14",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-saloon-6e98bb8ee61e-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-saloon-6e98bb8ee61e-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-saloon-6e98bb8ee61e-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-saloon-4271cbbe6b62-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-saloon-4271cbbe6b62-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-saloon-4271cbbe6b62-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-saloon-4271cbbe6b62-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-saloon-4271cbbe6b62-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-saloon-4271cbbe6b62-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-saloon-4271cbbe6b62-full.jpg",
+                "width": 4000,
+                "height": 6000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-saloon-4271cbbe6b62-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-saloon-4271cbbe6b62-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-saloon-4271cbbe6b62-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-saloon-4271cbbe6b62-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-14-saloon-4271cbbe6b62-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-16-river-wave",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-51e7b549c01c-1600.webp",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-625338e74e1c-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A standing wave breaking across a river channel bordered by rocks and leafy trees.",
             "date": "2024-05-16",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-51e7b549c01c-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-51e7b549c01c-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-51e7b549c01c-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-625338e74e1c-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-625338e74e1c-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-625338e74e1c-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-625338e74e1c-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-625338e74e1c-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-625338e74e1c-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-625338e74e1c-full.jpg",
+                "width": 6000,
+                "height": 4000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-625338e74e1c-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-625338e74e1c-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-625338e74e1c-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-625338e74e1c-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-625338e74e1c-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-16-river-wave-625338e74e1c-full.jpg 6000w"
+            }
         },
         {
             "id": "boise-2024-05-17-midvale",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-midvale-6164469fc244-1600.webp",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-midvale-d905eced0e2d-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "A grassy roadside overlook above a broad valley of fields and distant hills.",
             "date": "2024-05-17",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-midvale-6164469fc244-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-midvale-6164469fc244-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-midvale-6164469fc244-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-midvale-d905eced0e2d-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-midvale-d905eced0e2d-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-midvale-d905eced0e2d-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-midvale-d905eced0e2d-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-midvale-d905eced0e2d-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-midvale-d905eced0e2d-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-midvale-d905eced0e2d-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-midvale-d905eced0e2d-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-midvale-d905eced0e2d-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-midvale-d905eced0e2d-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-midvale-d905eced0e2d-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-midvale-d905eced0e2d-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-17-wallowa-mountains",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-wallowa-mountains-a2eb0f862e7a-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-wallowa-mountains-a2eb0f862e7a-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-wallowa-mountains-a2eb0f862e7a-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-wallowa-mountains-a2eb0f862e7a-1600.webp 1600w",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-wallowa-mountains-a05b3d6a0fe8-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "Snow-covered Wallowa Mountains beyond green sagebrush country.",
-            "date": "2024-05-17"
+            "date": "2024-05-17",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-wallowa-mountains-a05b3d6a0fe8-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-wallowa-mountains-a05b3d6a0fe8-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-wallowa-mountains-a05b3d6a0fe8-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-wallowa-mountains-a05b3d6a0fe8-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-wallowa-mountains-a05b3d6a0fe8-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-wallowa-mountains-a05b3d6a0fe8-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-wallowa-mountains-a05b3d6a0fe8-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-wallowa-mountains-a05b3d6a0fe8-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-wallowa-mountains-a05b3d6a0fe8-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-wallowa-mountains-a05b3d6a0fe8-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-wallowa-mountains-a05b3d6a0fe8-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-wallowa-mountains-a05b3d6a0fe8-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-17-snake-river",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snake-river-7a5c9bc3c943-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snake-river-7a5c9bc3c943-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snake-river-7a5c9bc3c943-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snake-river-7a5c9bc3c943-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snake-river-7ab9f85120ab-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "The broad Snake River winding among smooth, treeless hills.",
-            "date": "2024-05-17"
+            "date": "2024-05-17",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snake-river-7ab9f85120ab-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snake-river-7ab9f85120ab-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snake-river-7ab9f85120ab-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snake-river-7ab9f85120ab-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snake-river-7ab9f85120ab-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snake-river-7ab9f85120ab-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snake-river-7ab9f85120ab-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snake-river-7ab9f85120ab-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snake-river-7ab9f85120ab-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snake-river-7ab9f85120ab-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snake-river-7ab9f85120ab-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snake-river-7ab9f85120ab-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snake-river-7ab9f85120ab-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-17-snowy-ridge",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snowy-ridge-9c283fb893cb-1600.webp",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snowy-ridge-ed18064eb47f-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "Blue reservoir water below steep green hills with a snowy ridge in the distance.",
             "date": "2024-05-17",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snowy-ridge-9c283fb893cb-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snowy-ridge-9c283fb893cb-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snowy-ridge-9c283fb893cb-1600.webp 1600w"
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snowy-ridge-ed18064eb47f-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snowy-ridge-ed18064eb47f-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snowy-ridge-ed18064eb47f-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snowy-ridge-ed18064eb47f-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snowy-ridge-ed18064eb47f-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snowy-ridge-ed18064eb47f-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snowy-ridge-ed18064eb47f-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snowy-ridge-ed18064eb47f-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snowy-ridge-ed18064eb47f-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snowy-ridge-ed18064eb47f-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snowy-ridge-ed18064eb47f-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-snowy-ridge-ed18064eb47f-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-17-hells-canyon-peak",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-peak-78e9bf43e13c-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-peak-78e9bf43e13c-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-peak-78e9bf43e13c-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-peak-78e9bf43e13c-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-peak-85a5bdf7112a-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A sharp rocky peak rising against a clear blue sky in Hells Canyon.",
-            "date": "2024-05-17"
+            "date": "2024-05-17",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-peak-85a5bdf7112a-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-peak-85a5bdf7112a-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-peak-85a5bdf7112a-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-peak-85a5bdf7112a-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-peak-85a5bdf7112a-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-peak-85a5bdf7112a-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-peak-85a5bdf7112a-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-peak-85a5bdf7112a-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-peak-85a5bdf7112a-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-peak-85a5bdf7112a-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-peak-85a5bdf7112a-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-peak-85a5bdf7112a-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-peak-85a5bdf7112a-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-17-hells-canyon-reservoir",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-reservoir-8e25e2a55199-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-reservoir-8e25e2a55199-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-reservoir-8e25e2a55199-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-reservoir-8e25e2a55199-1600.webp 1600w",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-reservoir-bd44a66ba693-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "Blue reservoir water bordered by the steep slopes of Hells Canyon.",
-            "date": "2024-05-17"
+            "date": "2024-05-17",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-reservoir-bd44a66ba693-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-reservoir-bd44a66ba693-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-reservoir-bd44a66ba693-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-reservoir-bd44a66ba693-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-reservoir-bd44a66ba693-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-reservoir-bd44a66ba693-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-reservoir-bd44a66ba693-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-reservoir-bd44a66ba693-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-reservoir-bd44a66ba693-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-reservoir-bd44a66ba693-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-reservoir-bd44a66ba693-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-reservoir-bd44a66ba693-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-17-canyon-rapids",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-rapids-7502e86dfb58-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-rapids-7502e86dfb58-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-rapids-7502e86dfb58-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-rapids-7502e86dfb58-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-rapids-8e3908131a57-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "White water rushing through the shadowed depths of Hells Canyon.",
-            "date": "2024-05-17"
+            "date": "2024-05-17",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-rapids-8e3908131a57-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-rapids-8e3908131a57-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-rapids-8e3908131a57-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-rapids-8e3908131a57-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-rapids-8e3908131a57-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-rapids-8e3908131a57-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-rapids-8e3908131a57-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-rapids-8e3908131a57-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-rapids-8e3908131a57-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-rapids-8e3908131a57-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-rapids-8e3908131a57-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-rapids-8e3908131a57-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-rapids-8e3908131a57-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-17-canyon-bridge",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-bridge-95f8f2bf6953-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-bridge-95f8f2bf6953-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-bridge-95f8f2bf6953-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-bridge-95f8f2bf6953-1600.webp 1600w",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-bridge-d23bc86edf76-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "The motorcycle parked on a bridge beneath jagged canyon walls.",
-            "date": "2024-05-17"
+            "date": "2024-05-17",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-bridge-d23bc86edf76-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-bridge-d23bc86edf76-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-bridge-d23bc86edf76-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-bridge-d23bc86edf76-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-bridge-d23bc86edf76-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-bridge-d23bc86edf76-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-bridge-d23bc86edf76-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-bridge-d23bc86edf76-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-bridge-d23bc86edf76-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-bridge-d23bc86edf76-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-bridge-d23bc86edf76-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-bridge-d23bc86edf76-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-17-motorcycle-by-river",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-motorcycle-by-river-cc53e08baa13-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-motorcycle-by-river-cc53e08baa13-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-motorcycle-by-river-cc53e08baa13-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-motorcycle-by-river-cc53e08baa13-1600.webp 1600w",
-            "width": 1600,
-            "height": 2133,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-motorcycle-by-river-514549806c27-3000.webp",
+            "width": 3000,
+            "height": 4000,
             "alt": "The motorcycle parked beside the Snake River under towering canyon walls.",
-            "date": "2024-05-17"
+            "date": "2024-05-17",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-motorcycle-by-river-514549806c27-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-motorcycle-by-river-514549806c27-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-motorcycle-by-river-514549806c27-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-motorcycle-by-river-514549806c27-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-motorcycle-by-river-514549806c27-3000.webp 3000w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-motorcycle-by-river-514549806c27-full.jpg",
+                "width": 3000,
+                "height": 4000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-motorcycle-by-river-514549806c27-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-motorcycle-by-river-514549806c27-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-motorcycle-by-river-514549806c27-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-motorcycle-by-river-514549806c27-full.jpg 3000w"
+            }
         },
         {
             "id": "boise-2024-05-17-canyon-at-dusk",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-at-dusk-311b704078a9-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-at-dusk-311b704078a9-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-at-dusk-311b704078a9-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-at-dusk-311b704078a9-1600.webp 1600w",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-at-dusk-7fa147577d5b-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "The Snake River and canyon walls falling into evening shadow.",
-            "date": "2024-05-17"
+            "date": "2024-05-17",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-at-dusk-7fa147577d5b-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-at-dusk-7fa147577d5b-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-at-dusk-7fa147577d5b-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-at-dusk-7fa147577d5b-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-at-dusk-7fa147577d5b-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-at-dusk-7fa147577d5b-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-at-dusk-7fa147577d5b-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-at-dusk-7fa147577d5b-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-at-dusk-7fa147577d5b-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-at-dusk-7fa147577d5b-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-at-dusk-7fa147577d5b-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-at-dusk-7fa147577d5b-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-17-canyon-cliffs",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-cliffs-511783e4deb0-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-cliffs-511783e4deb0-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-cliffs-511783e4deb0-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-cliffs-511783e4deb0-1600.webp 1600w",
-            "width": 1600,
-            "height": 2133,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-cliffs-f538fc2dece4-3000.webp",
+            "width": 3000,
+            "height": 4000,
             "alt": "A motorcycle dwarfed by a sheer cliff beside the canyon road.",
-            "date": "2024-05-17"
+            "date": "2024-05-17",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-cliffs-f538fc2dece4-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-cliffs-f538fc2dece4-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-cliffs-f538fc2dece4-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-cliffs-f538fc2dece4-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-cliffs-f538fc2dece4-3000.webp 3000w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-cliffs-f538fc2dece4-full.jpg",
+                "width": 3000,
+                "height": 4000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-cliffs-f538fc2dece4-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-cliffs-f538fc2dece4-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-cliffs-f538fc2dece4-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-cliffs-f538fc2dece4-full.jpg 3000w"
+            }
         },
         {
             "id": "boise-2024-05-17-canyon-road",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-road-fb1e8f44372f-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-road-fb1e8f44372f-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-road-fb1e8f44372f-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-road-fb1e8f44372f-1600.webp 1600w",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-road-1ac363778a39-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "A narrow paved road squeezed between a rock wall and the Snake River.",
-            "date": "2024-05-17"
+            "date": "2024-05-17",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-road-1ac363778a39-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-road-1ac363778a39-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-road-1ac363778a39-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-road-1ac363778a39-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-road-1ac363778a39-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-road-1ac363778a39-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-road-1ac363778a39-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-road-1ac363778a39-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-road-1ac363778a39-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-road-1ac363778a39-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-road-1ac363778a39-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-road-1ac363778a39-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-17-canyon-river",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-0faa6bb1a744-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-0faa6bb1a744-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-0faa6bb1a744-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-0faa6bb1a744-1600.webp 1600w",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-e60d2ad72b35-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "The Snake River winding through the rugged walls of Hells Canyon.",
-            "date": "2024-05-17"
+            "date": "2024-05-17",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-e60d2ad72b35-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-e60d2ad72b35-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-e60d2ad72b35-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-e60d2ad72b35-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-e60d2ad72b35-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-e60d2ad72b35-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-e60d2ad72b35-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-e60d2ad72b35-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-e60d2ad72b35-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-e60d2ad72b35-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-e60d2ad72b35-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-e60d2ad72b35-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-17-canyon-river-bend",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-bend-db327b419c7f-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-bend-db327b419c7f-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-bend-db327b419c7f-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-bend-db327b419c7f-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-bend-27f0a0786b58-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "The Snake River bending between shadowed canyon walls.",
-            "date": "2024-05-17"
+            "date": "2024-05-17",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-bend-27f0a0786b58-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-bend-27f0a0786b58-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-bend-27f0a0786b58-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-bend-27f0a0786b58-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-bend-27f0a0786b58-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-bend-27f0a0786b58-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-bend-27f0a0786b58-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-bend-27f0a0786b58-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-bend-27f0a0786b58-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-bend-27f0a0786b58-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-bend-27f0a0786b58-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-bend-27f0a0786b58-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-canyon-river-bend-27f0a0786b58-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-17-hells-canyon-inn",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-inn-67493a1d36c6-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-inn-67493a1d36c6-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-inn-67493a1d36c6-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-inn-67493a1d36c6-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-inn-831aae2464b6-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "The blue Hells Canyon Inn and Cafe beneath a steep hillside.",
-            "date": "2024-05-17"
+            "date": "2024-05-17",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-inn-831aae2464b6-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-inn-831aae2464b6-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-inn-831aae2464b6-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-inn-831aae2464b6-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-inn-831aae2464b6-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-inn-831aae2464b6-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-inn-831aae2464b6-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-inn-831aae2464b6-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-inn-831aae2464b6-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-inn-831aae2464b6-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-inn-831aae2464b6-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-inn-831aae2464b6-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-17-hells-canyon-inn-831aae2464b6-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-18-forest-camp",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-a1ba0ea3c291-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-a1ba0ea3c291-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-a1ba0ea3c291-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-a1ba0ea3c291-1600.webp 1600w",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-1fbcafd30579-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "A yellow tent and motorcycle in a grassy forest campsite.",
-            "date": "2024-05-18"
+            "date": "2024-05-18",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-1fbcafd30579-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-1fbcafd30579-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-1fbcafd30579-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-1fbcafd30579-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-1fbcafd30579-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-1fbcafd30579-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-1fbcafd30579-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-1fbcafd30579-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-1fbcafd30579-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-1fbcafd30579-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-1fbcafd30579-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-forest-camp-1fbcafd30579-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-18-red-classic-car",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-fe64b1ac0477-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-fe64b1ac0477-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-fe64b1ac0477-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-fe64b1ac0477-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-08f8cffd0546-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A red classic car parked beside weathered farm buildings.",
-            "date": "2024-05-18"
+            "date": "2024-05-18",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-08f8cffd0546-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-08f8cffd0546-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-08f8cffd0546-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-08f8cffd0546-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-08f8cffd0546-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-08f8cffd0546-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-08f8cffd0546-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-08f8cffd0546-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-08f8cffd0546-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-08f8cffd0546-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-08f8cffd0546-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-08f8cffd0546-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-red-classic-car-08f8cffd0546-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-18-halfway-sign",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-6e33991f524d-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-6e33991f524d-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-6e33991f524d-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-6e33991f524d-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-6aa11a7612b1-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A Welcome to Halfway sign with snow-covered mountains behind it.",
-            "date": "2024-05-18"
+            "date": "2024-05-18",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-6aa11a7612b1-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-6aa11a7612b1-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-6aa11a7612b1-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-6aa11a7612b1-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-6aa11a7612b1-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-6aa11a7612b1-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-6aa11a7612b1-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-6aa11a7612b1-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-6aa11a7612b1-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-6aa11a7612b1-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-6aa11a7612b1-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-6aa11a7612b1-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-halfway-sign-6aa11a7612b1-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-18-high-desert-overlook",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-ac05bf5e53b1-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-ac05bf5e53b1-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-ac05bf5e53b1-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-ac05bf5e53b1-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-36456d918927-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A broad view across rust-colored high desert hills.",
-            "date": "2024-05-18"
+            "date": "2024-05-18",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-36456d918927-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-36456d918927-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-36456d918927-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-36456d918927-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-36456d918927-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-36456d918927-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-36456d918927-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-36456d918927-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-36456d918927-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-36456d918927-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-36456d918927-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-36456d918927-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-high-desert-overlook-36456d918927-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-18-snowy-mountain-road",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-91e44870fbfb-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-91e44870fbfb-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-91e44870fbfb-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-91e44870fbfb-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-aa2dd2b052ed-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A gravel road leads toward snow-covered mountains across green ranchland.",
-            "date": "2024-05-18"
+            "date": "2024-05-18",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-aa2dd2b052ed-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-aa2dd2b052ed-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-aa2dd2b052ed-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-aa2dd2b052ed-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-aa2dd2b052ed-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-aa2dd2b052ed-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-aa2dd2b052ed-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-aa2dd2b052ed-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-aa2dd2b052ed-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-aa2dd2b052ed-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-aa2dd2b052ed-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-aa2dd2b052ed-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-snowy-mountain-road-aa2dd2b052ed-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-18-clouds-over-river",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-c8357b86bd90-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-c8357b86bd90-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-c8357b86bd90-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-c8357b86bd90-1600.webp 1600w",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-99841b0588cb-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "Rippling clouds stretch across a blue sky above a winding river canyon.",
-            "date": "2024-05-18"
+            "date": "2024-05-18",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-99841b0588cb-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-99841b0588cb-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-99841b0588cb-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-99841b0588cb-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-99841b0588cb-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-99841b0588cb-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-99841b0588cb-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-99841b0588cb-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-99841b0588cb-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-99841b0588cb-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-99841b0588cb-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-clouds-over-river-99841b0588cb-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-18-weathered-shed",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-4cdf4489245c-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-4cdf4489245c-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-4cdf4489245c-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-4cdf4489245c-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-225e3e7a4bd7-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A leaning wooden shed in a field with snowy mountains beyond.",
-            "date": "2024-05-18"
+            "date": "2024-05-18",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-225e3e7a4bd7-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-225e3e7a4bd7-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-225e3e7a4bd7-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-225e3e7a4bd7-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-225e3e7a4bd7-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-225e3e7a4bd7-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-225e3e7a4bd7-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-225e3e7a4bd7-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-225e3e7a4bd7-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-225e3e7a4bd7-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-225e3e7a4bd7-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-225e3e7a4bd7-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-weathered-shed-225e3e7a4bd7-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-18-gravel-road",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-6077fdf330ac-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-6077fdf330ac-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-6077fdf330ac-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-6077fdf330ac-1600.webp 1600w",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-c9802c40736f-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "The motorcycle stopped on a straight gravel road beneath streaked clouds.",
-            "date": "2024-05-18"
+            "date": "2024-05-18",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-c9802c40736f-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-c9802c40736f-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-c9802c40736f-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-c9802c40736f-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-c9802c40736f-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-c9802c40736f-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-c9802c40736f-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-c9802c40736f-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-c9802c40736f-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-c9802c40736f-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-c9802c40736f-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-gravel-road-c9802c40736f-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-18-old-barn-gate",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-8aef7a89ea3e-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-8aef7a89ea3e-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-8aef7a89ea3e-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-8aef7a89ea3e-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-0cf9b54770d9-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "An old barn beyond a metal gate in open ranchland.",
-            "date": "2024-05-18"
+            "date": "2024-05-18",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-0cf9b54770d9-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-0cf9b54770d9-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-0cf9b54770d9-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-0cf9b54770d9-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-0cf9b54770d9-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-0cf9b54770d9-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-0cf9b54770d9-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-0cf9b54770d9-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-0cf9b54770d9-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-0cf9b54770d9-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-0cf9b54770d9-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-0cf9b54770d9-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-old-barn-gate-0cf9b54770d9-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-18-volcano-compass",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-b9745f2c69fb-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-b9745f2c69fb-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-b9745f2c69fb-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-b9745f2c69fb-1600.webp 1600w",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-a0057c11fa54-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "A compass rose at an overlook points toward distant Cascade volcanoes.",
-            "date": "2024-05-18"
+            "date": "2024-05-18",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-a0057c11fa54-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-a0057c11fa54-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-a0057c11fa54-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-a0057c11fa54-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-a0057c11fa54-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-a0057c11fa54-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-a0057c11fa54-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-a0057c11fa54-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-a0057c11fa54-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-a0057c11fa54-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-a0057c11fa54-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-volcano-compass-a0057c11fa54-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-18-canyon-overlook",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-0fb9eb4d9546-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-0fb9eb4d9546-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-0fb9eb4d9546-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-0fb9eb4d9546-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-4f8d00d442e9-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A river curving between steep, dry canyon walls.",
-            "date": "2024-05-18"
+            "date": "2024-05-18",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-4f8d00d442e9-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-4f8d00d442e9-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-4f8d00d442e9-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-4f8d00d442e9-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-4f8d00d442e9-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-4f8d00d442e9-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-4f8d00d442e9-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-4f8d00d442e9-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-4f8d00d442e9-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-4f8d00d442e9-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-4f8d00d442e9-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-4f8d00d442e9-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-18-canyon-overlook-4f8d00d442e9-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-19-forest-trail",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-dd13b816bfbf-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-dd13b816bfbf-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-dd13b816bfbf-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-dd13b816bfbf-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-2468e7c3ea91-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A narrow trail winding through sword ferns and tall forest trees.",
-            "date": "2024-05-19"
+            "date": "2024-05-19",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-2468e7c3ea91-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-2468e7c3ea91-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-2468e7c3ea91-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-2468e7c3ea91-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-2468e7c3ea91-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-2468e7c3ea91-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-2468e7c3ea91-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-2468e7c3ea91-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-2468e7c3ea91-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-2468e7c3ea91-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-2468e7c3ea91-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-2468e7c3ea91-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-forest-trail-2468e7c3ea91-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-19-panther-creek-falls",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-e8d69af2fca4-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-e8d69af2fca4-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-e8d69af2fca4-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-e8d69af2fca4-1600.webp 1600w",
-            "width": 1600,
-            "height": 1200,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-b9f68d4ede0d-3840.webp",
+            "width": 3840,
+            "height": 2880,
             "alt": "Panther Creek Falls flowing through a mossy evergreen forest.",
-            "date": "2024-05-19"
+            "date": "2024-05-19",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-b9f68d4ede0d-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-b9f68d4ede0d-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-b9f68d4ede0d-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-b9f68d4ede0d-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-b9f68d4ede0d-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-b9f68d4ede0d-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-b9f68d4ede0d-full.jpg",
+                "width": 4000,
+                "height": 3000,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-b9f68d4ede0d-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-b9f68d4ede0d-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-b9f68d4ede0d-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-b9f68d4ede0d-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-panther-creek-falls-b9f68d4ede0d-full.jpg 4000w"
+            }
         },
         {
             "id": "boise-2024-05-19-falcon-for-sale",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-e830f4f5179c-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-e830f4f5179c-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-e830f4f5179c-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-e830f4f5179c-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-27fbe54f979c-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A weathered Ford Falcon for sale in a grassy yard.",
-            "date": "2024-05-19"
+            "date": "2024-05-19",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-27fbe54f979c-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-27fbe54f979c-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-27fbe54f979c-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-27fbe54f979c-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-27fbe54f979c-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-27fbe54f979c-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-27fbe54f979c-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-27fbe54f979c-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-27fbe54f979c-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-27fbe54f979c-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-27fbe54f979c-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-27fbe54f979c-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-falcon-for-sale-27fbe54f979c-full.jpg 6240w"
+            }
         },
         {
             "id": "boise-2024-05-19-mountain-pond",
-            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-9d76fc056312-1600.webp",
-            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-9d76fc056312-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-9d76fc056312-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-9d76fc056312-1600.webp 1600w",
-            "width": 1600,
-            "height": 1067,
+            "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-699a73729500-3840.webp",
+            "width": 3840,
+            "height": 2560,
             "alt": "A calm pond reflecting forested hills beneath scattered clouds.",
-            "date": "2024-05-19"
+            "date": "2024-05-19",
+            "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-699a73729500-480.webp 480w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-699a73729500-960.webp 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-699a73729500-1600.webp 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-699a73729500-2400.webp 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-699a73729500-3200.webp 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-699a73729500-3840.webp 3840w",
+            "full": {
+                "src": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-699a73729500-full.jpg",
+                "width": 6240,
+                "height": 4160,
+                "srcSet": "https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-699a73729500-view-960.jpg 960w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-699a73729500-view-1600.jpg 1600w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-699a73729500-view-2400.jpg 2400w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-699a73729500-view-3200.jpg 3200w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-699a73729500-view-3840.jpg 3840w, https://data.rsmb.tv/trips/boise-2024/photos/boise-2024-05-19-mountain-pond-699a73729500-full.jpg 6240w"
+            }
+        }
+    ],
+    "days": [
+        {
+            "id": "seattle-to-blue-mountains",
+            "title": "Seattle to Blue Mountains",
+            "headingId": "seattle-to-blue-mountains",
+            "trackIds": [
+                "paseo-de-rever-05-12-24"
+            ],
+            "stopIds": [
+                "seattle-departure",
+                "camp-1"
+            ]
+        },
+        {
+            "id": "blue-mountains-to-nampa",
+            "title": "Blue Mountains to Nampa",
+            "headingId": "blue-mountains-to-nampa",
+            "trackIds": [
+                "paseo-de-rever-05-13-24"
+            ],
+            "stopIds": [
+                "camp-1"
+            ]
+        },
+        {
+            "id": "nampa-to-boise",
+            "title": "Nampa to Boise",
+            "headingId": "workdays-in-boise",
+            "trackIds": [
+                "almost-to-boise"
+            ],
+            "stopIds": [
+                "boise"
+            ]
+        },
+        {
+            "id": "boise-to-wallowas",
+            "title": "Boise to Wallowas",
+            "date": "2024-05-17",
+            "headingId": "boise-hells-canyon-wallowas",
+            "trackIds": [
+                "2024-05-17-boise-hells-canyon-campsite-reconstructed"
+            ],
+            "stopIds": [
+                "boise",
+                "camp-2"
+            ]
+        },
+        {
+            "id": "wallowas-to-panther-creek",
+            "title": "Wallowas to Panther Creek",
+            "date": "2024-05-18",
+            "headingId": "wallowas-to-panther-creek",
+            "trackIds": [
+                "2024-05-18-campsite-panther-creek-reconstructed"
+            ],
+            "stopIds": [
+                "camp-2",
+                "panther-creek-campground"
+            ]
+        },
+        {
+            "id": "panther-creek-to-seattle",
+            "title": "Panther Creek to Seattle",
+            "date": "2024-05-19",
+            "headingId": "the-ride-home",
+            "trackIds": [
+                "2024-05-19-panther-creek-seattle-reconstructed"
+            ],
+            "stopIds": [
+                "panther-creek-campground",
+                "seattle-return"
+            ]
         }
     ],
     "galleries": {

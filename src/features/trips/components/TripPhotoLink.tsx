@@ -9,11 +9,11 @@ export function TripPhotoLink({ photo, children, hidden, describedBy }: {
     describedBy?: string;
 }) {
     return <a
-        href={photo.src}
+        href={photo.full?.src ?? photo.src}
         hidden={hidden}
-        data-pswp-width={photo.width}
-        data-pswp-height={photo.height}
-        data-pswp-srcset={photo.srcSet}
+        data-pswp-width={photo.full?.width ?? photo.width}
+        data-pswp-height={photo.full?.height ?? photo.height}
+        data-pswp-srcset={photo.full ? photo.full.srcSet : photo.srcSet}
         data-trip-alt={photo.alt}
         data-trip-caption={tripPhotoCaption(photo)}
         target="_blank"
