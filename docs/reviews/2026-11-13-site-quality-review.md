@@ -215,3 +215,27 @@ It uses the original four-worker limit and 20-second test limit.
 Line coverage increases from the review baseline of 88.36% to 88.39%.
 Branch coverage increases from 82.85% to 82.92%.
 The measurement record retains both the original review and these release checks.
+
+The [next CI run](https://github.com/robert-bryson/rsmb.tv/actions/runs/43554486665) passed all checks through Chromium and all but one WebKit case.
+The Ontario reload case checked its selected card while the application still showed its pin-loading state.
+All Pins reloads now share the renderer-settle and application-readiness helper.
+Initial coverage checks also wait for application readiness before reading data counts.
+
+The full local WebKit run then identified the same five-second assumption in other data-driven assertions.
+Pins tests now use one 20-second assertion budget and one 60-second limit for each complete case.
+This replaces ten repeated case limits and several separate wait settings.
+The application's 15-second startup deadline and its explicit failure checks remain unchanged.
+The renderer capture also clears its old handle before waiting for a new camera callback.
+Independent local browser processes use separate artifact directories.
+
+Thirteen review screenshots were also captured during every normal map run.
+They did not assert image contents and used shared paths outside the test artifact directories.
+These extra captures now require `PINS_REVIEW_SCREENSHOTS=1` and attach to their own test's output.
+Functional pixel assertions and automatic failure evidence remain enabled.
+
+The complete 66-case WebKit run passes under two CPUs and two workers: 65 pass and one Chromium-only measurement is skipped.
+This includes all Pins, heading, gallery, and post-rendering cases.
+Three Chromium cases also pass under the same CPU and worker limits.
+They cover both revised reload paths and the zoom stages with optional review images enabled.
+All three review images are present in the correct test artifact directory.
+Lint and TypeScript pass.

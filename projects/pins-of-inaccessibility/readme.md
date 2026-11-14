@@ -537,6 +537,13 @@ Radius tests exercise native style expressions and layer filters, including the 
 Source-link tests check article placement, external-link isolation, and bounded analytics fields.
 Navigation tests check parent steps, shared state scopes, browser history, gesture cancellation, and muted context.
 Browser tests use the real renderer and published geographic files.
+Pins assertions allow 20 seconds for data parsing, camera updates, and software WebGL.
+Each complete case has a 60-second limit.
+The application's 15-second startup deadline remains separate.
+Reload cases wait for the current map to settle, then verify readiness after replacement.
+Use separate artifact directories when you run independent Playwright processes in parallel.
+Set `PINS_REVIEW_SCREENSHOTS=1` to capture additional review images in each test's artifact directory.
+Normal runs retain pixel assertions, traces after failure, and automatic failure screenshots.
 They replace remote tiles and glyph responses with fixed responses.
 They check rendered pixels, fullscreen retry, stalled workers, county loading, selection, accessible controls, and mobile layout.
 Touch checks include a 320-pixel viewport, short landscape layout, the display disclosure, and tapping outside a country.
