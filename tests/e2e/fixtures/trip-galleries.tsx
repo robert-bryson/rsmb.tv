@@ -6,6 +6,7 @@ import { TripStoryProvider } from '../../../src/features/trips/TripStoryProvider
 import type { TripManifest } from '../../../src/features/trips/types';
 import '../../../src/index.css';
 
+const params = new URLSearchParams(window.location.search);
 const groups = {
     pair: [1.5, 1.5],
     mixed: [0.75, 4 / 3],
@@ -17,7 +18,8 @@ const groups = {
     landscape: [1.5],
     panorama: [1.5, 5.73, 1.5],
     twelve: Array.from({ length: 12 }, (_, index) => index === 0 ? 2 / 3 : 1.5),
-    expanded: [2 / 3, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 4 / 3, 1.5, 0.75, 1.5, 4 / 3, 1.5, 1.5],
+    expanded: params.has('long-gallery') ? Array.from({ length: 40 }, () => 1.5)
+        : [2 / 3, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 4 / 3, 1.5, 0.75, 1.5, 4 / 3, 1.5, 1.5],
 };
 const photos = Object.entries(groups).flatMap(([group, ratios]) => ratios.map((ratio, index) => ({
     id: `${group}-${index}`,
@@ -34,11 +36,11 @@ const manifest: TripManifest = {
     route: { geoJson: '/unused.geojson' }, stops: [], photos,
     galleries: Object.fromEntries(Object.keys(groups).map(group => [group, photos.filter(photo => photo.id.startsWith(`${group}-`)).map(photo => photo.id)])),
 };
-const priority = new URLSearchParams(window.location.search).has('priority');
+const priority = params.has('priority');
 
 export function TripGalleriesFixture() {
     return <main className="site-content w-full">
-        <article className="site-content-inner mx-auto w-full max-w-3xl px-6 py-12">
+        <article className="trip-story site-content-inner mx-auto w-full max-w-3xl px-6 py-12">
             <h1>Adaptive galleries</h1>
             <p data-text-body>The text body sets the width of each single photo.</p>
             <TripStoryProvider manifest={manifest}>

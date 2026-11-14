@@ -490,6 +490,7 @@ The frame edge does not reduce the image area.
 
 A gallery first shows up to 12 photos.
 The Show all button appears only when the gallery contains more than 12 photos.
+Selecting **Show fewer photos** keeps the control at the same position on the screen.
 Its viewer includes all photos from mounted story galleries, including collapsed photos.
 Next and Previous follow the gallery order in the story.
 The hero viewer contains every manifest photo, with the hero first.

@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import { useTripStory } from '../TripStoryContext';
 import { TripPhotoFigure } from './TripPhoto';
 import { createTripPhotoLightbox } from './tripPhotoSwipe';
@@ -15,9 +15,20 @@ function TripGalleryContent({ galleryId }: { galleryId: string }) {
     const { manifest, photos, registerGallery, getGalleryPhotos } = useTripStory();
     const elementId = `trip-gallery-${useId().replaceAll(':', '')}`;
     const galleryRef = useRef<HTMLDivElement>(null);
+    const toggleRef = useRef<HTMLButtonElement>(null);
+    const collapseTop = useRef<number | null>(null);
     const [expanded, setExpanded] = useState(false);
     const photoIds = manifest.galleries && Object.hasOwn(manifest.galleries, galleryId)
         ? manifest.galleries[galleryId] : undefined;
+    useLayoutEffect(() => {
+        const top = collapseTop.current;
+        collapseTop.current = null;
+        if (top === null || !toggleRef.current) return;
+        // Collapsing removes rows above the focused control. Keep the reader
+        // at that control even when native scroll anchoring cannot retain it.
+        const delta = toggleRef.current.getBoundingClientRect().top - top;
+        if (delta) window.scrollBy({ top: delta, behavior: 'instant' });
+    }, [expanded]);
     useEffect(() => {
         if (!galleryRef.current) return;
         const unregister = registerGallery(galleryRef.current);
@@ -60,7 +71,10 @@ function TripGalleryContent({ galleryId }: { galleryId: string }) {
                         } as CSSProperties} />;
                 })}
             </div>
-            {photoIds.length > COLLAPSED_PHOTO_COUNT && <button type="button" aria-expanded={expanded} onClick={() => setExpanded(value => !value)}
+            {photoIds.length > COLLAPSED_PHOTO_COUNT && <button ref={toggleRef} type="button" aria-expanded={expanded} onClick={event => {
+                if (expanded) collapseTop.current = event.currentTarget.getBoundingClientRect().top;
+                setExpanded(value => !value);
+            }}
                 className="mt-3 min-h-11 rounded-md border border-zinc-700 px-4 text-sm text-zinc-200 hover:bg-zinc-800">
                 {expanded ? 'Show fewer photos' : `Show all ${photoIds.length} photos`}
             </button>}

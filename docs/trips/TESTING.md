@@ -218,6 +218,9 @@ Adaptive gallery tests check proportional pairs, balanced rows, portrait spans, 
 Browser checks measure both image frames and image content.
 They check hover, keyboard focus, visible scrollbars, image failure, expansion, and focus during viewport changes.
 Boundary checks cover 11, 12, and 13 photos. Only galleries larger than 12 offer expansion.
+Forty-photo checks keep the gallery control at the same screen position after collapse and retain keyboard focus.
+They cover phone and desktop widths with native scroll anchoring enabled and disabled.
+Control positions may differ by one CSS pixel because browsers round scroll offsets.
 Viewer checks reach collapsed photos and return focus to the opening link after Escape.
 Touch cases include long captions and unbroken text at phone and tablet widths.
 Source checks use fresh contexts with device pixel ratios of 1, 2, and 3.

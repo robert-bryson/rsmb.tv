@@ -231,6 +231,31 @@ test('a twelve-photo gallery needs no expansion control on phones or desktops', 
     }
 });
 
+for (const width of [390, 1280]) for (const anchor of ['auto', 'none']) {
+    test(`collapsing a long gallery preserves reading position at ${width}px with scroll anchoring ${anchor}`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto('/tests/e2e/fixtures/trip-galleries.html?long-gallery');
+        await page.addStyleTag({ content: `.trip-story { overflow-anchor: ${anchor}; }` });
+        await page.evaluate(() => {
+            const after = document.createElement('div');
+            after.style.height = '200vh';
+            document.body.append(after);
+        });
+        const example = page.locator('[data-gallery-example="expanded"]');
+        const button = example.getByRole('button');
+        await button.click();
+        await expect(example.locator('figure')).toHaveCount(40);
+        await button.scrollIntoViewIfNeeded();
+        const top = (await button.boundingBox())!.y;
+        await button.click();
+        await expect(example.locator('figure')).toHaveCount(12);
+        await expect(button).toHaveAttribute('aria-expanded', 'false');
+        await expect(button).toBeFocused();
+        await expect(button).toBeInViewport({ ratio: 1 });
+        await expect.poll(async () => Math.abs((await button.boundingBox())!.y - top)).toBeLessThanOrEqual(1);
+    });
+}
+
 test('expanded galleries retain hidden viewer links and a failed image retains its planned frame', async ({ page }) => {
     const example = page.locator('[data-gallery-example="expanded"]');
     const links = example.locator('a[data-pswp-width]');

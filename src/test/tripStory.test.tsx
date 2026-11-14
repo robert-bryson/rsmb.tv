@@ -352,6 +352,32 @@ describe('trip story primitives', () => {
         }
     });
 
+    it.each([0, 480])('preserves the gallery control at viewport position %ipx when collapsing', top => {
+        const photos = Array.from({ length: 14 }, (_, index) => ({
+            ...manifest.photos[1], id: `photo-${index}`, src: `/photo-${index}.webp`,
+        }));
+        renderStory(<TripGallery galleryId="highlights" />, {
+            ...manifest, photos, hero: photos[0].id, galleries: { highlights: photos.map(photo => photo.id) },
+        });
+        const button = screen.getByRole('button', { name: 'Show all 14 photos' });
+        const scrollBy = vi.spyOn(window, 'scrollBy').mockImplementation(() => {});
+        const measure = vi.spyOn(button, 'getBoundingClientRect').mockImplementation(() => new DOMRect(
+            0, button.getAttribute('aria-expanded') === 'true' ? top : top - 9000, 160, 44,
+        ));
+        try {
+            fireEvent.click(button);
+            expect(scrollBy).not.toHaveBeenCalled();
+            button.focus();
+            fireEvent.click(button);
+            expect(scrollBy).toHaveBeenCalledExactlyOnceWith({ top: -9000, behavior: 'instant' });
+            expect(button).toHaveFocus();
+            expect(button).toHaveAttribute('aria-expanded', 'false');
+        } finally {
+            scrollBy.mockRestore();
+            measure.mockRestore();
+        }
+    });
+
     it('keeps hidden and expanded gallery captions equal, including locations', () => {
         const photos = Array.from({ length: 14 }, (_, index) => ({
             ...manifest.photos[1], id: `photo-${index}`, src: `/photo-${index}.webp`,
