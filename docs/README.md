@@ -55,6 +55,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-14 | [Follow-up quality review: polling limits, event retention, binary output, reader input, and coverage](reviews/2026-11-14-follow-up-quality-review.md) |
 | 2026-11-14 | [Pre-push review: real Ink console capture, startup integration, and remote branch checks](reviews/2026-11-14-pre-push-review.md) |
 | 2026-11-14 | [Project quality review: gallery contracts, contents visibility, event expiry, output capture, watcher cleanup, and regression coverage](reviews/2026-11-14-project-quality-review.md) |
 | 2026-11-13 | [Site quality review: release cache exclusion, manifest safety, image geometry, Docs formatting, shared URL handling, and regression coverage](reviews/2026-11-13-site-quality-review.md) |

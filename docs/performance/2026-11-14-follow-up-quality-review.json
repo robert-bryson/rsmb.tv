@@ -1,0 +1,250 @@
+{
+  "date": "2026-11-14",
+  "reviewedHead": "4686589",
+  "comparisonBase": "620c25c",
+  "environment": {
+    "node": "v24.22.3",
+    "packageManager": "npm@12.2.2",
+    "unitWorkers": 2
+  },
+  "defects": [
+    "unsafe polling intervals",
+    "event recency eviction",
+    "provider messages bypassed normalization",
+    "stderr byte and encoding contracts",
+    "fragment corrections ignored reader input"
+  ],
+  "reproduction": {
+    "splitUtf8Run": {
+      "failed": 2,
+      "passed": 21,
+      "files": 1
+    },
+    "initialRegressionSet": {
+      "failed": 24,
+      "passed": 65,
+      "files": 4
+    }
+  },
+  "validation": {
+    "before": {
+      "passed": 3290,
+      "files": 228
+    },
+    "after": {
+      "passed": 3326,
+      "files": 228
+    },
+    "browserFixtures": {
+      "passed": 52,
+      "engines": [
+        "Chromium",
+        "WebKit"
+      ],
+      "suites": [
+        "trip-headings.spec.ts",
+        "post-rendering.spec.ts"
+      ]
+    },
+    "productionReading": {
+      "passed": 9,
+      "profiles": [
+        "desktop Chromium",
+        "mobile Chromium",
+        "mobile WebKit"
+      ],
+      "scenarios": [
+        "chapter links",
+        "subtitle clearance",
+        "return navigation"
+      ]
+    },
+    "lint": "passed",
+    "applicationTypes": "passed",
+    "scriptTypes": "passed",
+    "dependencyAudit": {
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      },
+      "dependencies": {
+        "prod": 110,
+        "dev": 610,
+        "optional": 150,
+        "peer": 0,
+        "peerOptional": 0,
+        "total": 719
+      }
+    }
+  },
+  "coverage": {
+    "before": {
+      "overall": {
+        "statements": {
+          "covered": 15092,
+          "total": 17346,
+          "percent": 87.0
+        },
+        "branches": {
+          "covered": 11336,
+          "total": 13644,
+          "percent": 83.08
+        },
+        "functions": {
+          "covered": 3451,
+          "total": 4038,
+          "percent": 85.46
+        },
+        "lines": {
+          "covered": 12723,
+          "total": 14345,
+          "percent": 88.69
+        }
+      },
+      "files": {
+        "scripts/dashboard/useEventLog.tsx": {
+          "lines": {
+            "covered": 68,
+            "total": 68,
+            "percent": 100.0
+          },
+          "branches": {
+            "covered": 42,
+            "total": 42,
+            "percent": 100.0
+          }
+        },
+        "scripts/dashboard/config.ts": {
+          "lines": {
+            "covered": 52,
+            "total": 54,
+            "percent": 96.29
+          },
+          "branches": {
+            "covered": 48,
+            "total": 51,
+            "percent": 94.11
+          }
+        },
+        "scripts/aws-watch.tsx": {
+          "lines": {
+            "covered": 14,
+            "total": 28,
+            "percent": 50.0
+          },
+          "branches": {
+            "covered": 2,
+            "total": 22,
+            "percent": 9.09
+          }
+        },
+        "src/blog/PostTableOfContents.tsx": {
+          "lines": {
+            "covered": 67,
+            "total": 67,
+            "percent": 100.0
+          },
+          "branches": {
+            "covered": 50,
+            "total": 60,
+            "percent": 83.33
+          }
+        }
+      }
+    },
+    "after": {
+      "overall": {
+        "statements": {
+          "covered": 15123,
+          "total": 17371,
+          "percent": 87.05
+        },
+        "branches": {
+          "covered": 11350,
+          "total": 13648,
+          "percent": 83.16
+        },
+        "functions": {
+          "covered": 3451,
+          "total": 4038,
+          "percent": 85.46
+        },
+        "lines": {
+          "covered": 12754,
+          "total": 14371,
+          "percent": 88.74
+        }
+      },
+      "files": {
+        "scripts/dashboard/useEventLog.tsx": {
+          "lines": {
+            "covered": 73,
+            "total": 73,
+            "percent": 100.0
+          },
+          "branches": {
+            "covered": 42,
+            "total": 42,
+            "percent": 100.0
+          }
+        },
+        "scripts/dashboard/config.ts": {
+          "lines": {
+            "covered": 58,
+            "total": 60,
+            "percent": 96.66
+          },
+          "branches": {
+            "covered": 54,
+            "total": 57,
+            "percent": 94.73
+          }
+        },
+        "scripts/aws-watch.tsx": {
+          "lines": {
+            "covered": 21,
+            "total": 30,
+            "percent": 70.0
+          },
+          "branches": {
+            "covered": 10,
+            "total": 22,
+            "percent": 45.45
+          }
+        },
+        "src/blog/PostTableOfContents.tsx": {
+          "lines": {
+            "covered": 80,
+            "total": 80,
+            "percent": 100.0
+          },
+          "branches": {
+            "covered": 50,
+            "total": 58,
+            "percent": 86.2
+          }
+        }
+      }
+    }
+  },
+  "commands": {
+    "units": "vitest run --coverage --reporter=dot --maxWorkers=2",
+    "fixtureBrowsers": "PLAYWRIGHT_WEBKIT=1 playwright test tests/e2e/trip-headings.spec.ts tests/e2e/post-rendering.spec.ts --workers=2",
+    "productionReading": "PLAYWRIGHT_WEBKIT=1 node scripts/run-trip-browser-tests.js tests/trips/reading.spec.ts --grep 'chapters stick|subtitle stays|return navigation' --workers=2",
+    "lint": "npm run lint",
+    "types": [
+      "npm run typecheck",
+      "tsc -p tsconfig.scripts.json --noEmit"
+    ],
+    "audit": "npm audit --json"
+  },
+  "notes": [
+    "Browser runs used temporary local server configuration and a WebKit library wrapper; repository test configuration was preserved.",
+    "Provider responses and terminal streams were synthetic; no live provider checks ran.",
+    "Hosted release, physical-device, and editorial checks remain in TODO.md."
+  ]
+}

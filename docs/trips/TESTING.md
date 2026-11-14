@@ -298,6 +298,8 @@ Reduced-motion checks verify an immediate compact state and readable enlarged te
 They verify continuous handoffs, the end of the story, visible navigation, navigation resizing, links, reduced motion, and print layout.
 Subsection links must clear both headers after upward jumps and reloads.
 Fragment links must keep their target position after earlier titles change height.
+Pointer, wheel, touch, and keyboard input must stop pending fragment corrections.
+A browser check interrupts a fragment jump between its first scroll and its next measurement.
 The production reading suite also checks chapter grouping, sticky placement, and subsection clearance on an actual trip route.
 Short-screen checks return tall h1 and h2 titles to normal flow. Rotation must restore sticky behavior when space permits.
 These fixtures first verify that the title and navigation exceed half the screen height.

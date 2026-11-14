@@ -1,5 +1,7 @@
 import { useEffect, useState, type RefObject } from 'react';
 
+const HASH_SCROLL_INPUT_EVENTS = ['pointerdown', 'wheel', 'touchstart', 'keydown'] as const;
+
 interface TableOfContentsItem {
     id: string;
     level: number;
@@ -44,6 +46,11 @@ export function PostTableOfContents({ contentRef, collapsible = false }: PostTab
 
         let hasScrolledToHash = false;
         let hashScrollFrame: number | undefined;
+        const stopHashScroll = () => {
+            if (hashScrollFrame !== undefined) cancelAnimationFrame(hashScrollFrame);
+            hashScrollFrame = undefined;
+            for (const event of HASH_SCROLL_INPUT_EVENTS) window.removeEventListener(event, stopHashScroll, true);
+        };
         const updateItems = () => {
             const firstMap = content.querySelector<HTMLElement>('[data-trip-map]');
             if (firstMap && !firstMap.id) firstMap.id = 'trip-route';
@@ -60,24 +67,35 @@ export function PostTableOfContents({ contentRef, collapsible = false }: PostTab
             const hashTarget = headings.find((heading) => heading.id === hashId);
             if (hashTarget && !hasScrolledToHash) {
                 hasScrolledToHash = true;
-                if (hashScrollFrame !== undefined) cancelAnimationFrame(hashScrollFrame);
+                stopHashScroll();
+                for (const event of HASH_SCROLL_INPUT_EVENTS) {
+                    window.addEventListener(event, stopHashScroll, { capture: true, passive: true });
+                }
                 let previousTop: number | undefined;
                 let remainingFrames = 4;
                 const alignHashTarget = () => {
                     hashScrollFrame = undefined;
-                    if (!hashTarget.isConnected || currentHashId() !== hashTarget.id) return;
+                    if (!hashTarget.isConnected || currentHashId() !== hashTarget.id) {
+                        stopHashScroll();
+                        return;
+                    }
                     const top = hashTarget.getBoundingClientRect().top + window.scrollY;
-                    if (previousTop !== undefined && Math.abs(top - previousTop) < 0.5) return;
+                    if (previousTop !== undefined && Math.abs(top - previousTop) < 0.5) {
+                        stopHashScroll();
+                        return;
+                    }
                     previousTop = top;
                     hashTarget.scrollIntoView();
                     // Scrolling can compact earlier chapter titles on the next
                     // frame. Re-align only while their layout changes settle.
                     if (--remainingFrames > 0) hashScrollFrame = requestAnimationFrame(alignHashTarget);
+                    else stopHashScroll();
                 };
                 hashScrollFrame = requestAnimationFrame(alignHashTarget);
             }
         };
         const handleHashChange = () => {
+            stopHashScroll();
             hasScrolledToHash = false;
             updateItems();
         };
@@ -95,7 +113,7 @@ export function PostTableOfContents({ contentRef, collapsible = false }: PostTab
         return () => {
             observer.disconnect();
             window.removeEventListener('hashchange', handleHashChange);
-            if (hashScrollFrame !== undefined) cancelAnimationFrame(hashScrollFrame);
+            stopHashScroll();
         };
     }, [contentRef]);
 

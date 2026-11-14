@@ -18,6 +18,31 @@ async function fontSize(element: Locator) {
     return element.evaluate(node => parseFloat(getComputedStyle(node).fontSize));
 }
 
+test('reader input stops fragment correction before it can pull the story back', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/tests/e2e/fixtures/trip-headings.html');
+    await expect(page.getByRole('navigation', { name: 'Table of contents' }).getByRole('link')).toHaveCount(5);
+    const heading = page.locator(chapterSelector).first();
+    await heading.evaluate(node => {
+        const scroll = node.scrollIntoView.bind(node);
+        let interrupted = false;
+        node.scrollIntoView = options => {
+            scroll(options);
+            if (interrupted) return;
+            interrupted = true;
+            // Input arrives after the initial fragment jump, before the next
+            // frame can re-align titles changed by the scroll animation.
+            queueMicrotask(() => {
+                window.dispatchEvent(new WheelEvent('wheel', { deltaY: 250 }));
+                window.scrollBy({ top: 250, behavior: 'instant' });
+            });
+        };
+        window.location.hash = node.id;
+    });
+    await expectTop(heading, 0);
+    await expect(heading).toHaveCSS('font-size', '17px');
+});
+
 for (const level of [1, 2]) for (const width of [390, 1280]) {
     test(`h${level} chapter titles shrink smoothly into a compact reminder at ${width}px`, async ({ page }) => {
         await page.setViewportSize({ width, height: 900 });

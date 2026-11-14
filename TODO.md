@@ -131,7 +131,13 @@ Use the [November 10 review](docs/reviews/2026-11-10-project-quality-review.md) 
 
 ### Physical devices
 
-- [ ] Check [trip reading](docs/reviews/2026-11-13-trip-layout-quality-review.md#remaining-checks) on a real phone. Include large text, chapter changes, subsection links, and rotation. Measure opening time and memory with the quality-99 viewer. Include a large panorama, repeated arrow navigation, and native-resolution zoom. Record the device, browser, selected source widths, and transfer sizes.
+- [ ] Check [trip reading](docs/reviews/2026-11-13-trip-layout-quality-review.md#remaining-checks) on a real phone.
+  Include large text, chapter changes, subsection links, and rotation.
+  Check title shrinking, reduced motion, and reader input during a section jump.
+  Record the device, browser, and result.
+- [ ] Measure trip photos and the quality-99 viewer on a real phone.
+  Record opening time, peak memory, selected image widths, and transfer sizes.
+  Include a large panorama, repeated arrow navigation, and native-resolution zoom.
 - [ ] Check the flight globe, ADV Atlas, and Pins on a real phone. Record LCP, CLS, INP, cold transfer, and startup. Verify [atlas navigation and recovery](docs/trips/ADV-ATLAS.md).
 - [ ] Measure Pins parsing time, peak memory, and input delay on a real phone.
   Compare the U.S. index, county outlines, world overview, and province outlines.
@@ -165,8 +171,10 @@ Use the [November 10 review](docs/reviews/2026-11-10-project-quality-review.md) 
 Use the [dashboard guide](docs/dashboard.md#code-and-tests) for code ownership and completed event-log checks.
 Use fixed provider responses and UTC dates.
 
-- [ ] Test build fetchers with throttled, failed, empty, and malformed responses. Verify the displayed status and error.
-- [ ] Test cost cache reads, writes, provider failures, and month-end forecasts. Use fixed UTC dates.
+- [ ] Test build fetchers with throttled, failed, empty, and malformed responses.
+  Verify the displayed status and error for each response.
+- [ ] Test cost cache reads, writes, provider failures, and month-end forecasts.
+  Use fixed UTC dates and check the resulting totals.
 
 ## Build and maintenance
 

@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { useState, useEffect, useRef } from 'react';
 import { format, stripVTControlCharacters } from 'node:util';
+import { StringDecoder } from 'node:string_decoder';
 import { Box, Text } from 'ink';
 
 export interface DashboardEvent {
@@ -15,6 +16,7 @@ export interface DashboardEvent {
 const MAX_EVENTS = 20;
 const EVENT_TTL_MS = 10 * 60 * 1000; // 10 minutes
 const POLL_INTERVAL_MS = 2000;
+const HTTP_DEBUG_RE = /^(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS) \/.*\d{3} with id/;
 
 let events: DashboardEvent[] = [];
 let nextId = 1;
@@ -32,8 +34,12 @@ function pruneExpired() {
 export function addEvent(
     level: DashboardEvent['level'],
     source: string,
-    message: string,
+    rawMessage: string,
 ): void {
+    const text = stripVTControlCharacters(rawMessage).trim();
+    if (!text || (source === 'stderr' && HTTP_DEBUG_RE.test(text))) return;
+    // Avoid cutting a UTF-16 surrogate pair at the truncation boundary.
+    const message = text.length > 200 ? text.slice(0, 197).replace(/[\uD800-\uDBFF]$/u, '') + '…' : text;
     pruneExpired();
 
     // Deduplicate: if any recent event has same source+level+message, bump count
@@ -41,9 +47,10 @@ export function addEvent(
         (e) => e.source === source && e.level === level && e.message === message,
     );
     if (existing) {
-        events = events.map(event => event === existing
-            ? { ...event, timestamp: new Date(), count: event.count + 1 }
-            : event);
+        events = [
+            ...events.filter(event => event !== existing),
+            { ...existing, timestamp: new Date(), count: existing.count + 1 },
+        ];
         revision++;
         return;
     }
@@ -70,24 +77,19 @@ let restoreInterception: (() => void) | undefined;
 export function interceptConsole(): () => void {
     if (restoreInterception) return restoreInterception;
     const original = { log: console.log, warn: console.warn, error: console.error, write: process.stderr.write };
+    const stderrDecoder = new StringDecoder('utf8');
 
-    // Intercept raw stderr writes (AWS SDK sometimes writes directly)
-    // Filter out Octokit HTTP request debug lines (e.g. "GET /repos/... - 403 with id ...")
-    const HTTP_DEBUG_RE = /^(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS) \/.*\d{3} with id/;
+    console.log = (...args: unknown[]) => addEvent('info', 'console', format(...args));
+    console.warn = (...args: unknown[]) => addEvent('warn', 'console', format(...args));
+    console.error = (...args: unknown[]) => addEvent('error', 'console', format(...args));
 
-    function capture(level: DashboardEvent['level'], source: 'console' | 'stderr', value: string): void {
-        const message = stripVTControlCharacters(value).trim();
-        if (!message || (source === 'stderr' && HTTP_DEBUG_RE.test(message))) return;
-        addEvent(level, source, message.length > 200 ? message.slice(0, 197) + '…' : message);
-    }
-
-    console.log = (...args: unknown[]) => capture('info', 'console', format(...args));
-    console.warn = (...args: unknown[]) => capture('warn', 'console', format(...args));
-    console.error = (...args: unknown[]) => capture('error', 'console', format(...args));
-
-    process.stderr.write = (chunk: string | Uint8Array, encodingOrCallback?: BufferEncoding | ((error?: Error | null) => void), callback?: (error?: Error | null) => void) => {
+    process.stderr.write = (chunk: string | NodeJS.ArrayBufferView, encodingOrCallback?: BufferEncoding | ((error?: Error | null) => void), callback?: (error?: Error | null) => void) => {
+        // Node ignores the encoding argument for binary chunks. Interpret the
+        // terminal's bytes as UTF-8, regardless of that string-only option.
         const encoding = typeof encodingOrCallback === 'string' ? encodingOrCallback : 'utf8';
-        capture('warn', 'stderr', typeof chunk === 'string' ? chunk : Buffer.from(chunk).toString(encoding));
+        const bytes = typeof chunk === 'string' ? Buffer.from(chunk, encoding)
+            : Buffer.from(chunk.buffer, chunk.byteOffset, chunk.byteLength);
+        addEvent('warn', 'stderr', stderrDecoder.write(bytes));
         const done = typeof encodingOrCallback === 'function' ? encodingOrCallback : callback;
         if (done) queueMicrotask(() => done());
         return true;
@@ -95,6 +97,8 @@ export function interceptConsole(): () => void {
 
     const restore = () => {
         if (restoreInterception !== restore) return;
+        const remaining = stderrDecoder.end();
+        if (remaining) addEvent('warn', 'stderr', remaining);
         console.log = original.log;
         console.warn = original.warn;
         console.error = original.error;

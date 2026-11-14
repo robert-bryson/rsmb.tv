@@ -206,6 +206,7 @@ const INTERVAL_FLOORS: Record<keyof DashboardConfig['intervals'], { min: number;
     external: { min: 60, multiplier: 1 },
     github: { min: 120, multiplier: 2 },
 };
+const MAX_TIMER_DELAY_MS = 2_147_483_647;
 
 // ─── Env-var overrides for AWS resource IDs ──────────────────────────────────
 // Set AMPLIFY_APP_IDS="rsmb.tv=abc123,route2gpx=def456" in .env.local to
@@ -257,14 +258,21 @@ export function createConfig(flags: {
     timeZone?: string;
 }): DashboardConfig {
     const baseInterval = flags.interval ?? 60;
+    if (!Number.isFinite(baseInterval) || baseInterval <= 0) {
+        throw new RangeError('Refresh interval must be a positive, finite number of seconds.');
+    }
     const resolvedProjects = applyEnvOverrides(projects);
     validateProjectConfigs(resolvedProjects);
 
     const intervals = Object.fromEntries(
-        Object.entries(INTERVAL_FLOORS).map(([key, { min, multiplier }]) => [
-            key,
-            Math.max(min, baseInterval * multiplier),
-        ]),
+        Object.entries(INTERVAL_FLOORS).map(([key, { min, multiplier }]) => {
+            const interval = Math.max(min, baseInterval * multiplier);
+            // Node turns overflowing delays into 1ms timers, bypassing floors.
+            if (interval * 1000 > MAX_TIMER_DELAY_MS) {
+                throw new RangeError(`Refresh interval exceeds the ${key} timer range. Reduce --interval.`);
+            }
+            return [key, interval];
+        }),
     ) as DashboardConfig['intervals'];
 
     return {

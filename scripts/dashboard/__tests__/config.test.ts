@@ -122,6 +122,20 @@ describe('createConfig', () => {
         expect(config.intervals.github).toBeGreaterThanOrEqual(120);
     });
 
+    it.each([NaN, Infinity, -Infinity, 0, -1, 429496.8, Number.MAX_VALUE])(
+        'rejects unsupported refresh interval %s', interval => {
+            expect(() => createConfig({ interval })).toThrow(/interval/i);
+        },
+    );
+
+    it('accepts long intervals only when every scaled panel timer fits the Node timer range', () => {
+        const config = createConfig({ interval: 429496.7 });
+        for (const interval of Object.values(config.intervals)) {
+            expect(interval * 1000).toBeLessThanOrEqual(2_147_483_647);
+        }
+        expect(config.intervals.costs).toBeCloseTo(2147483.5);
+    });
+
     it('scales intervals with multiplier when base is high', () => {
         const config = createConfig({ interval: 300 });
         // costs has multiplier 5 → 300*5=1500, which is > min 300

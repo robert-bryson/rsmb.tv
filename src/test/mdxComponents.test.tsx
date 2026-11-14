@@ -17,6 +17,25 @@ function mockScrollIntoView() {
     return scrollIntoView;
 }
 
+function mockAnimationFrames() {
+    const frames = new Map<number, FrameRequestCallback>();
+    let nextFrame = 0;
+    vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
+        const id = nextFrame++;
+        frames.set(id, callback);
+        return id;
+    });
+    vi.stubGlobal('cancelAnimationFrame', (id: number) => frames.delete(id));
+    return {
+        frames,
+        flushFrame: () => act(() => {
+            const pending = [...frames.values()];
+            frames.clear();
+            pending.forEach(callback => callback(0));
+        }),
+    };
+}
+
 function TableOfContentsFixture({
     duplicateHeading = false,
     showHeadings = true,
@@ -320,19 +339,7 @@ describe('MDX headings', () => {
 
     it('keeps a hash target aligned when earlier chapter titles change height after scrolling', async () => {
         const scrollIntoView = mockScrollIntoView();
-        const frames = new Map<number, FrameRequestCallback>();
-        let nextFrame = 0;
-        vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
-            const id = nextFrame++;
-            frames.set(id, callback);
-            return id;
-        });
-        vi.stubGlobal('cancelAnimationFrame', (id: number) => frames.delete(id));
-        const flushFrame = () => act(() => {
-            const pending = [...frames.values()];
-            frames.clear();
-            pending.forEach(callback => callback(0));
-        });
+        const { frames, flushFrame } = mockAnimationFrames();
         render(<TableOfContentsFixture />);
         await screen.findByRole('navigation', { name: 'Table of contents' });
         const target = screen.getByRole('heading', { name: 'Camp Notes' });
@@ -353,16 +360,66 @@ describe('MDX headings', () => {
         expect(frames.size).toBe(0);
     });
 
+    it.each(['wheel', 'touchstart', 'pointerdown', 'keydown'])(
+        'lets reader %s input cancel a pending hash alignment', async event => {
+            const scrollIntoView = mockScrollIntoView();
+            const { frames, flushFrame } = mockAnimationFrames();
+            window.history.replaceState(null, '', '#camp-notes');
+            render(<TableOfContentsFixture />);
+            await screen.findByRole('navigation', { name: 'Table of contents' });
+            const target = screen.getByRole('heading', { name: 'Camp Notes' });
+            let top = 500;
+            vi.spyOn(target, 'getBoundingClientRect').mockImplementation(() => new DOMRect(0, top, 300, 40));
+            flushFrame();
+            expect(scrollIntoView).toHaveBeenCalledOnce();
+            top = 475;
+            act(() => window.dispatchEvent(new Event(event)));
+            expect(frames.size).toBe(0);
+            flushFrame();
+            expect(scrollIntoView).toHaveBeenCalledOnce();
+        },
+    );
+
+    it('bounds hash corrections and releases input listeners when layout never settles', async () => {
+        const scrollIntoView = mockScrollIntoView();
+        const { frames, flushFrame } = mockAnimationFrames();
+        const removeListener = vi.spyOn(window, 'removeEventListener');
+        window.history.replaceState(null, '', '#camp-notes');
+        render(<TableOfContentsFixture />);
+        await screen.findByRole('navigation', { name: 'Table of contents' });
+        let top = 500;
+        vi.spyOn(screen.getByRole('heading', { name: 'Camp Notes' }), 'getBoundingClientRect')
+            .mockImplementation(() => new DOMRect(0, top, 300, 40));
+        for (let index = 0; index < 8; index++) {
+            top += 25;
+            flushFrame();
+        }
+        expect(scrollIntoView).toHaveBeenCalledTimes(4);
+        expect(frames.size).toBe(0);
+        for (const event of ['pointerdown', 'wheel', 'touchstart', 'keydown']) {
+            expect(removeListener).toHaveBeenCalledWith(event, expect.any(Function), true);
+        }
+    });
+
+    it.each(['remove', 'rename'])('abandons a hash target after a content update can %s it', async change => {
+        const scrollIntoView = mockScrollIntoView();
+        const { frames, flushFrame } = mockAnimationFrames();
+        window.history.replaceState(null, '', '#camp-notes');
+        render(<TableOfContentsFixture />);
+        await screen.findByRole('navigation', { name: 'Table of contents' });
+        const target = screen.getByRole('heading', { name: 'Camp Notes' });
+        await act(async () => {
+            if (change === 'remove') target.remove();
+            else target.id = 'renamed-notes';
+        });
+        flushFrame();
+        expect(scrollIntoView).not.toHaveBeenCalled();
+        expect(frames.size).toBe(0);
+    });
+
     it('cancels stale hash scrolls and pending work when the article unmounts', async () => {
         const scrollIntoView = mockScrollIntoView();
-        const frames = new Map<number, FrameRequestCallback>();
-        let nextFrame = 0;
-        vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
-            const id = nextFrame++;
-            frames.set(id, callback);
-            return id;
-        });
-        vi.stubGlobal('cancelAnimationFrame', (id: number) => frames.delete(id));
+        const { frames, flushFrame } = mockAnimationFrames();
         window.history.replaceState(null, '', '#first-stop');
         const { unmount } = render(<TableOfContentsFixture />);
         await screen.findByRole('navigation', { name: 'Table of contents' });
@@ -371,11 +428,7 @@ describe('MDX headings', () => {
             window.dispatchEvent(new HashChangeEvent('hashchange'));
         });
         expect(frames.size).toBe(1);
-        act(() => {
-            const pending = [...frames.values()];
-            frames.clear();
-            pending.forEach(callback => callback(0));
-        });
+        flushFrame();
         expect(scrollIntoView).toHaveBeenCalledOnce();
         expect(scrollIntoView.mock.contexts[0]).toBe(screen.getByRole('heading', { name: 'Camp Notes' }));
         act(() => {

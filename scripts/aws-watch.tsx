@@ -41,8 +41,10 @@ function parseArgs(args: string[]) {
             flags.profile = args[++i];
         } else if (arg === '--region' && args[i + 1]) {
             flags.region = args[++i];
-        } else if (arg === '--interval' && args[i + 1]) {
-            flags.interval = args[++i];
+        } else if (arg === '--interval') {
+            const value = args[++i];
+            if (value === undefined) throw new Error('--interval requires a number of seconds.');
+            flags.interval = value;
         } else if (arg === '--help' || arg === '-h') {
             console.log(`
 rsmb.tv Status Dashboard — Live terminal monitoring
@@ -81,7 +83,7 @@ const flags = parseArgs(process.argv.slice(2));
 const config = createConfig({
     profile: flags.profile,
     region: flags.region,
-    interval: flags.interval ? parseInt(flags.interval, 10) : undefined,
+    interval: flags.interval !== undefined ? Number(flags.interval) : undefined,
 });
 
 // Capture stray console/stderr output before Ink takes over the terminal
