@@ -292,6 +292,8 @@ These fixtures first verify that the title and navigation exceed half the screen
 They repeat that check after increasing the text size.
 This keeps the test meaningful when banner spacing changes.
 Phone checks also enlarge text to 200% at 320 and 390 pixels.
+They use the default font and DejaVu Sans to cover wider word measurements.
+Long chapter-title words must wrap within the text column.
 Navigation links and table-of-contents controls must remain within the screen.
 The contents header can wrap its button onto another row.
 The checks verify complete tap targets and collapse/expand behavior without horizontal scrolling.

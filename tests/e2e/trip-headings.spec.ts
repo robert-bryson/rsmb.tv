@@ -173,11 +173,11 @@ for (const level of [1, 2]) {
     });
 }
 
-for (const width of [320, 390]) {
-    test(`200% text keeps navigation and contents controls within ${width}px`, async ({ page }) => {
+for (const font of ['', 'DejaVu Sans']) for (const width of [320, 390]) {
+    test(`200% text keeps navigation and contents controls within ${width}px (${font || 'default font'})`, async ({ page }) => {
         await page.setViewportSize({ width, height: 900 });
         await page.goto('/tests/e2e/fixtures/trip-headings.html');
-        await page.addStyleTag({ content: 'html { font-size: 32px; }' });
+        await page.addStyleTag({ content: `html { font-size: 32px; ${font ? `font-family: '${font}', sans-serif;` : ''} }` });
         await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
         const navigation = page.getByRole('navigation', { name: 'Main navigation' });
         for (const name of ['rsmb', 'Posts', 'Projects', 'About']) {

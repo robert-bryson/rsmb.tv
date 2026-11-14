@@ -194,3 +194,24 @@ All 44 related map and basemap unit checks pass.
 All 40 production temperature browser cases pass in Chromium and WebKit.
 They cover failed and stalled backgrounds, retry, station selection, filters, worker startup, and data-feed recovery.
 Lint and TypeScript also pass.
+
+The [following CI run](https://github.com/robert-bryson/rsmb.tv/actions/runs/43551662078) exposed two remaining WebKit assumptions.
+DejaVu Sans made one chapter-title word exceed the phone's text column at 200% text size.
+This produced a 334-pixel page on a 320-pixel screen.
+Shared headings now permit long words to wrap.
+The browser checks cover the default font and DejaVu Sans at both phone widths.
+A separate layout probe confirms no overflow with Ubuntu, DejaVu Sans, Arial, or generic sans-serif.
+
+A map screenshot took longer than the five-second DOM assertion limit.
+Pixel comparisons now use one helper with a 20-second capture and decode budget.
+All pixel thresholds remain unchanged.
+The national selection and reload case also waits for its territory camera to settle before capturing pixels.
+
+All 22 focused cases pass in Chromium and WebKit with two CPUs and two workers.
+The 25 heading unit tests, lint, and TypeScript also pass.
+
+The final unit coverage run passes 3,261 tests across 225 files.
+It uses the original four-worker limit and 20-second test limit.
+Line coverage increases from the review baseline of 88.36% to 88.39%.
+Branch coverage increases from 82.85% to 82.92%.
+The measurement record retains both the original review and these release checks.

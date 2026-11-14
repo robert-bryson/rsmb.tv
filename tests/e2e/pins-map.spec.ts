@@ -46,7 +46,7 @@ async function openLayers(page: Page) {
     if (await toggle.getAttribute('aria-expanded') !== 'true') await toggle.click();
 }
 
-async function capturePinsRenderer(page: Page, trigger: () => Promise<void> = () => page.getByRole('button', { name: 'Zoom out', exact: true }).click()) {
+async function capturePinsRenderer(page: Page, trigger: () => Promise<unknown> = () => page.getByRole('button', { name: 'Zoom out', exact: true }).click()) {
     // Capture this real renderer through its public camera method. The hook
     // exists only in this test and restores the prototype after one call.
     await page.evaluate(async () => {
@@ -164,7 +164,7 @@ for (const width of [320, 1280]) {
         for (const zoom of [4.5, 4.75]) {
             await zoomTo(zoom);
             // This earlier stage intentionally shows only the largest counties.
-            await expect.poll(() => mapColorPixels(page, 'teal'), { timeout: 20_000 }).toBeGreaterThan(0);
+            await expectMapPixels(page, 'teal').toBeGreaterThan(0);
         }
         expect(await rendered('county-lines')).toBe(0);
         expect(await rendered('county-circle-lines')).toBe(0);
@@ -450,7 +450,15 @@ test.describe('touch hierarchy', () => {
     });
 });
 
-async function mapColorPixels(page: Page, color: 'amber' | 'teal' | 'circle' | 'national' | 'selected') {
+type MapColor = 'amber' | 'teal' | 'circle' | 'national' | 'selected';
+
+function expectMapPixels(page: Page, color: MapColor) {
+    // Capturing and decoding software-WebGL frames can exceed the normal
+    // DOM assertion limit. Keep their pixel checks within an explicit budget.
+    return expect.poll(() => mapColorPixels(page, color), { timeout: 20_000 });
+}
+
+async function mapColorPixels(page: Page, color: MapColor) {
     const { data, info } = await sharp(await page.locator('.maplibregl-canvas').screenshot({
         mask: [page.locator('.pins-map-toolbar'), page.locator('.pins-layers'), page.locator('.pins-map-legend'), page.locator('.pins-unit-control')],
         maskColor: '#171f26', animations: 'disabled',
@@ -548,7 +556,7 @@ test('draws the national pole, supports map selection, and restores its shared l
     const errors = await prepare(page);
     await openMap(page);
     await expect(page.getByRole('region', { name: 'U.S. pole', exact: true })).toContainText('678.2 mi');
-    await expect.poll(() => mapColorPixels(page, 'national')).toBeGreaterThan(50);
+    await expectMapPixels(page, 'national').toBeGreaterThan(50);
     const point = await nationalPinPosition(page);
     const review = await capturePinsRenderer(page, () => page.mouse.click(point.x, point.y));
     await expect(page).toHaveURL(/pin=country-US/);
@@ -556,8 +564,10 @@ test('draws the national pole, supports map selection, and restores its shared l
     await expect(page.getByRole('region', { name: 'Selected pin' })).toContainText('Internal state borders do not');
     await reloadSettledMap(page, review);
     await expect(page.getByRole('region', { name: 'Selected pin' })).toContainText('United States');
-    await page.getByLabel('Within', { exact: true }).selectOption('66');
-    await expect.poll(() => mapColorPixels(page, 'amber')).toBeGreaterThan(20);
+    const territoryView = await capturePinsRenderer(page, () => page.getByLabel('Within', { exact: true }).selectOption('66'));
+    await expectPinsSettled(territoryView);
+    await expectMapPixels(page, 'amber').toBeGreaterThan(20);
+    await territoryView.dispose();
     await page.getByRole('region', { name: 'U.S. pole', exact: true }).getByRole('button').click();
     await expect(page.getByLabel('Within', { exact: true })).toHaveValue('');
     await expect(page).toHaveURL(/pin=country-US/);
@@ -611,7 +621,7 @@ test('opens the project page and map through existing project navigation', async
     await page.getByRole('link', { name: 'Open interactive map →' }).click();
     await expect(page.locator('.pins-coverage')).toContainText('3,235');
     await expectMapReady(page);
-    await expect.poll(() => mapColorPixels(page, 'amber')).toBeGreaterThan(1500);
+    await expectMapPixels(page, 'amber').toBeGreaterThan(1500);
     await page.getByRole('link', { name: 'Back to projects' }).click();
     await expect(page).toHaveURL(/\/projects$/);
     expect(errors).toEqual([]);
@@ -626,12 +636,12 @@ test('draws real pins and circles, changes units, and recovers invalid pin data'
     fail = false;
     await page.getByRole('button', { name: 'Retry pin data' }).click();
     await expect(page.locator('.pins-coverage')).toContainText('3,235');
-    await expect.poll(() => mapColorPixels(page, 'amber')).toBeGreaterThan(1500);
-    await expect.poll(() => mapColorPixels(page, 'circle')).toBeGreaterThan(1500);
+    await expectMapPixels(page, 'amber').toBeGreaterThan(1500);
+    await expectMapPixels(page, 'circle').toBeGreaterThan(1500);
     const withCircles = await mapColorPixels(page, 'circle');
     await openLayers(page);
     await page.getByRole('checkbox', { name: 'All radius circles' }).uncheck();
-    await expect.poll(() => mapColorPixels(page, 'circle')).toBeLessThan(withCircles * 0.5);
+    await expectMapPixels(page, 'circle').toBeLessThan(withCircles * 0.5);
     await page.getByRole('group', { name: 'Distance units' }).getByRole('button', { name: 'km', exact: true }).click();
     await expect(page.getByRole('region', { name: 'Radius extremes' })).toContainText('484.8 km');
     expect(errors).toEqual([]);
@@ -652,7 +662,7 @@ test('loads counties on zoom, selects a county, and restores a shared pin', asyn
     await expect.poll(() => countyRequests).toBe(1);
     await openLayers(page);
     await expect(page.getByText('County pins visible', { exact: true })).toBeVisible();
-    await expect.poll(() => mapColorPixels(page, 'selected')).toBeGreaterThan(20);
+    await expectMapPixels(page, 'selected').toBeGreaterThan(20);
     await expect(page).toHaveURL(/pin=county-51610/);
     await page.reload();
     await expect(page.getByRole('region', { name: 'Selected pin' })).toContainText('Falls Church city');
@@ -744,7 +754,7 @@ test('keeps fullscreen controls correct after graphics loss and renderer retry',
     await page.getByRole('button', { name: 'Exit fullscreen', exact: true }).click();
     await expect.poll(() => page.evaluate(() => !!document.fullscreenElement
         || !!document.querySelector('.maplibregl-pseudo-fullscreen'))).toBe(false);
-    await expect.poll(() => mapColorPixels(page, 'national')).toBeGreaterThan(50);
+    await expectMapPixels(page, 'national').toBeGreaterThan(50);
     expect(errors).toEqual([]);
 });
 
@@ -769,7 +779,7 @@ test('recovers a stalled worker while keeping the data panel usable', async ({ p
     await page.getByRole('button', { name: 'Retry map', exact: true }).click();
     await expectMapReady(page);
     await expect(page.getByRole('region', { name: 'Selected pin' })).toContainText('United States');
-    await expect.poll(() => mapColorPixels(page, 'national')).toBeGreaterThan(50);
+    await expectMapPixels(page, 'national').toBeGreaterThan(50);
     expect(errors).toEqual([]);
 });
 
@@ -780,7 +790,7 @@ test('retains application layers when tiles fail and retries malformed county bo
     await page.route('**/data/pins-of-inaccessibility/counties.geojson', route => failCounties ? route.fulfill({ json: {} }) : route.continue());
     await openMap(page);
     await expect(page.getByRole('button', { name: 'Retry background' })).toBeVisible();
-    await expect.poll(() => mapColorPixels(page, 'amber')).toBeGreaterThan(1500);
+    await expectMapPixels(page, 'amber').toBeGreaterThan(1500);
     await page.getByLabel('Within', { exact: true }).selectOption('66');
     await openLayers(page);
     await page.getByRole('button', { name: 'On', exact: true }).click();
@@ -788,7 +798,7 @@ test('retains application layers when tiles fail and retries malformed county bo
     failCounties = false;
     await page.getByRole('button', { name: 'Retry boundaries' }).click();
     await expect(page.getByRole('alert')).toHaveCount(0);
-    await expect.poll(() => mapColorPixels(page, 'teal')).toBeGreaterThan(20);
+    await expectMapPixels(page, 'teal').toBeGreaterThan(20);
     expect(errors).toEqual([]);
 });
 

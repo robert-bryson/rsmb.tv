@@ -374,5 +374,57 @@
     "sentencesAtMost25Words": 16223,
     "sentencesAtMost25WordsPercent": 99.52,
     "method": "Tracked and untracked repository Markdown. Excludes fences, tables, headings, quotations, and fragments. Counts inline identifiers and URLs as one word. This is a sentence-length measure, not ASD-STE100 certification."
+  },
+  "releaseFollowUpLocalValidation": {
+    "verifiedAt": "2026-11-14T04:00:38.190967+00:00",
+    "unitTests": 3261,
+    "unitTestsAddedSinceBaseline": 39,
+    "testFiles": 225,
+    "coverage": {
+      "workers": 4,
+      "testTimeoutMs": 20000,
+      "lines": {
+        "total": 14291,
+        "covered": 12632,
+        "pct": 88.39
+      },
+      "branches": {
+        "total": 13601,
+        "covered": 11279,
+        "pct": 82.92
+      },
+      "statements": {
+        "total": 17287,
+        "covered": 14983,
+        "pct": 86.67
+      },
+      "functions": {
+        "total": 4035,
+        "covered": 3426,
+        "pct": 84.9
+      }
+    },
+    "focusedBrowserCases": 22,
+    "focusedBrowserCpus": 2,
+    "focusedBrowserWorkers": 2,
+    "headingUnitTests": 25,
+    "temperatureAndBasemapUnitTests": 44,
+    "temperatureBrowserCases": 40,
+    "productionRecoveryBrowserCases": 102,
+    "hostedTrackerCasesSkippedLocally": 2,
+    "tripCdn": {
+      "trips": 7,
+      "photos": 320,
+      "urlsChecked": 960,
+      "errors": 0
+    },
+    "widerFontLayout": {
+      "font": "DejaVu Sans",
+      "textSizePercent": 200,
+      "viewportWidth": 320,
+      "beforeScrollWidth": 334,
+      "afterScrollWidth": 320
+    },
+    "hostedReleasePending": true
   }
 }

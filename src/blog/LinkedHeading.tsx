@@ -104,7 +104,7 @@ export function LinkedHeading({
             id={anchorId}
             aria-label={text}
             data-post-heading={anchorId ? true : undefined}
-            className={`group scroll-mt-24 ${className ?? ''}`}
+            className={`group scroll-mt-24 wrap-anywhere ${className ?? ''}`}
         >
             {hasContentLink && title}
             <a
