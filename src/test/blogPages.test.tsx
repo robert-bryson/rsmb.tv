@@ -1,8 +1,9 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { lazy } from 'react';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { renderWithRouter } from './helpers/router';
+import { advanceSearchCommit } from './helpers/search';
 
 const testPosts = vi.hoisted(() => [
     {
@@ -94,6 +95,9 @@ function LocationProbe() {
 }
 
 describe('Posts page', () => {
+    beforeEach(() => { vi.useFakeTimers(); });
+    afterEach(() => { vi.clearAllTimers(); vi.useRealTimers(); });
+
     function SearchLocationProbe() {
         const location = useLocation();
         const navigate = useNavigate();
@@ -106,11 +110,12 @@ describe('Posts page', () => {
         </>;
     }
 
-    it('searches immediately and keeps the query in the URL', () => {
+    it('searches immediately and commits the query after the input pause', () => {
         renderWithRouter(<><Posts /><SearchLocationProbe /></>, { route: '/posts' });
         const search = screen.getByRole('searchbox', { name: 'Search posts' });
         fireEvent.change(search, { target: { value: 'weather normals' } });
         expect(screen.getAllByRole('heading', { level: 2 }).map(heading => heading.textContent)).toEqual(['Weather Records']);
+        advanceSearchCommit();
         expect(screen.getByTestId('search-location')).toHaveTextContent('/posts?q=weather+normals');
         expect(screen.getByRole('status')).toHaveTextContent('1 of 5 posts');
         fireEvent.submit(screen.getByRole('search', { name: 'Search posts' }));
@@ -122,16 +127,21 @@ describe('Posts page', () => {
             pathname: '/posts', state: { readerContext: { source: 'saved-list' }, restoreScroll: true },
         }]}><Posts /><SearchLocationProbe /></MemoryRouter>);
         fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'maps' } });
+        advanceSearchCommit();
         const state = JSON.parse(screen.getByTestId('search-state').textContent!);
         expect(state.readerContext).toEqual({ source: 'saved-list' });
         expect(state).not.toHaveProperty('restoreScroll');
         fireEvent.click(screen.getByRole('button', { name: 'Clear all filters' }));
-        expect(JSON.parse(screen.getByTestId('search-state').textContent!)).toEqual({ readerContext: { source: 'saved-list' } });
+        expect(JSON.parse(screen.getByTestId('search-state').textContent!)).toEqual({
+            readerContext: { source: 'saved-list' },
+            __rsmbSearchOwner: { owner: expect.any(String), revision: 2, search: '', navigation: 'PUSH' },
+        });
     });
 
     it.each([null, 'legacy-state', ['legacy-state']])('accepts non-object navigation state %j', state => {
         render(<MemoryRouter initialEntries={[{ pathname: '/posts', state }]}><Posts /><SearchLocationProbe /></MemoryRouter>);
         fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'maps' } });
+        advanceSearchCommit();
         expect(screen.getByRole('searchbox')).toHaveValue('maps');
         expect(screen.getByTestId('search-location')).toHaveTextContent('/posts?q=maps');
     });
@@ -161,15 +171,15 @@ describe('Posts page', () => {
         const view = renderWithRouter(<Posts />, { route: '/posts' });
         try {
             fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'm' } });
-            vi.advanceTimersByTime(200);
+            act(() => { vi.advanceTimersByTime(200); });
             fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'maps' } });
-            vi.advanceTimersByTime(299);
+            act(() => { vi.advanceTimersByTime(299); });
             expect(track).not.toHaveBeenCalled();
-            vi.advanceTimersByTime(1);
+            act(() => { vi.advanceTimersByTime(1); });
             expect(track.mock.calls).toEqual([['filters-applied', { feature: 'posts', resultBucket: '1' }]]);
             fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'private-keyword' } });
             view.unmount();
-            vi.advanceTimersByTime(1000);
+            act(() => { vi.advanceTimersByTime(1000); });
             expect(track).toHaveBeenCalledOnce();
         } finally {
             view.unmount();
@@ -194,6 +204,7 @@ describe('Posts page', () => {
         renderWithRouter(<><Posts /><SearchLocationProbe /></>, { route: '/posts?type=writing&tag=Data+Viz&country=US&q=missing' });
         expect(screen.getByText('No posts match these filters.')).toBeInTheDocument();
         fireEvent.click(screen.getByRole('button', { name: 'Clear search' }));
+        advanceSearchCommit();
         expect(screen.getByRole('searchbox')).toHaveValue('');
         expect(screen.getByRole('searchbox')).toHaveFocus();
         expect(screen.getByTestId('search-location')).toHaveTextContent('/posts?type=writing&tag=Data+Viz&country=US');
@@ -217,6 +228,7 @@ describe('Posts page', () => {
         </MemoryRouter>);
         fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'm' } });
         fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'maps' } });
+        advanceSearchCommit();
         fireEvent.click(within(screen.getByRole('navigation', { name: 'Post tags' })).getByRole('link', { name: 'Maps' }));
         expect(screen.getByTestId('search-location')).toHaveTextContent('/posts?tag=Maps&country=US&q=maps');
         fireEvent.click(screen.getByRole('button', { name: 'Browser back' }));

@@ -7,21 +7,23 @@ Use the [trip authoring guide](docs/trips/TRIP-AUTHORING-README.md#6-publish-ass
 ## Priority and ownership
 
 Each task appears once below. Linked guides define its acceptance conditions.
+Keep local checks separate from work that needs a deployment, an owner decision, or a physical device.
 Write tasks as actions with a clear expected result.
 Move completed results to a dated review. Remove their checkboxes from this file.
 The site owner must confirm travel dates, source descriptions, and other editorial facts.
 Hosted checks require a deployed build. Device checks require the named physical device.
 
-| When | Work |
-| --- | --- |
-| Before the next hosted release | [Release checks](#next-release-checks), [Pins hosting](#hosted-release), and [physical devices](#physical-devices) |
-| Before publishing a story | [Content publication](#content-publication) and the affected [source checks](#published-story-checks) |
-| Before historical signal publication | [Temperature publication](#historical-signal-publication) |
-| Next local validation | [Automated checks](#automated-checks) |
-| Later engineering work | [Build and maintenance](#build-and-maintenance), [Tornado Tracks](#tornado-tracks), and [dashboard checks](#dashboard-checks) |
-| Infrastructure changes | [Infrastructure](#infrastructure) |
-| Content additions | [Project content](#project-content) |
-| Application planning | [Ride Ledger prerequisites](#ride-ledger-prerequisites) |
+| When | Work | Required access or decision |
+| --- | --- | --- |
+| Next local validation | [Automated checks](#automated-checks) | Local test environment |
+| Before the next hosted release | [Release checks](#next-release-checks) and [Pins hosting](#hosted-release) | Deployed origin and analytics account |
+| Before closing device checks | [Physical devices](#physical-devices) | Named hardware or assistive technology |
+| Before publishing a story | [Content publication](#content-publication) and [source checks](#published-story-checks) | Owner confirmation and source files |
+| Before historical signal publication | [Temperature publication](#historical-signal-publication) | Approved data and methodology |
+| Later engineering work | [Build and maintenance](#build-and-maintenance), [Tornado Tracks](#tornado-tracks), and [dashboard checks](#dashboard-checks) | Local implementation and regression tests |
+| Infrastructure changes | [Infrastructure](#infrastructure) | AWS or Google Admin access |
+| Content additions | [Project content](#project-content) | Reviewed content and assets |
+| Application planning | [Ride Ledger prerequisites](#ride-ledger-prerequisites) | Owner decisions and synthetic fixtures |
 
 ## Next release checks
 
@@ -30,9 +32,12 @@ Local browser tests cannot verify the analytics account or physical devices.
 
 - [ ] Verify Web Vitals in the Umami Performance view after deployment. Record the build revision and observation period.
 - [ ] Verify one `map-ready` event for each map visit. Check startup failure, runtime failure, and phase-specific recovery. Confirm that events exclude query values.
-- [ ] Verify the `rsmb-tv` tag, project and map events, caught error reports, and privacy preferences in Umami. Create the goals and funnel in the [analytics guide](docs/umami-analytics.md).
-- [ ] Test navigation, post search, and map controls with VoiceOver or NVDA.
+- [ ] Verify the `rsmb-tv` tag, project events, map events, error reports, and privacy preferences in Umami.
+  Check the details, demo, and source destinations on project cards.
+  Create the goals and funnel in the [analytics guide](docs/umami-analytics.md).
+- [ ] Test navigation, post search, project search, and map controls with VoiceOver or NVDA.
   Check search result announcements and focus after clearing.
+  Check category counts and the new-tab descriptions on project actions.
   Include hover dismissal, route announcements, help dismissal, and disabled character shortcuts.
 
 ## Content publication
@@ -137,8 +142,11 @@ Use the [November 10 review](docs/reviews/2026-11-10-project-quality-review.md) 
 
 ### Physical devices
 
-- [ ] Check post search with a phone keyboard.
-  Include composed text, accented place names, clearing, and returning from a result.
+- [ ] Check post and project search with a phone keyboard.
+  Include composed text, accented names, clearing, and returning from a result.
+  Type immediately after clearing a category. Verify the URL, field, counts, and results.
+  Check URL updates after a pause, Enter, and leaving the field.
+  Press Back while a query update is pending. Verify that navigation remains on the selected entry.
   Record the device, keyboard, browser, and result.
 - [ ] Check [trip reading](docs/reviews/2026-11-13-trip-layout-quality-review.md#remaining-checks) on a real phone.
   Include large text, chapter changes, subsection links, and rotation.

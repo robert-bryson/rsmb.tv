@@ -11,7 +11,7 @@ A personal website with software projects, data maps, writing, and motorcycle tr
 - **Flights** — A globe with flight routes, filters, camera controls, and travel statistics.
 - **Temperature Records** — An interactive MapLibre GL map of U.S. temperature records. It shows recent station records, standing county and state extremes, and standing-record history.
 - **Tornado Tracks** — Recorded tornado county segments, density maps, annual trends, and warning context. See the [project guide](projects/tornado-tracks/readme.md).
-- **Projects** — Software tools, data maps, and project descriptions.
+- **Projects** — Search names, descriptions, and technologies. Filter by category and share the selected view. Open maps, demos, and source repositories from the cards.
 - **Posts** — Writing and trip reports from Google documents. Search titles, summaries, tags, and places. Combine search with type and location filters. Includes RSS and social images.
 - **Trips** — Motorcycle trip reports with responsive photographs, route maps, accessible galleries, and short animations with playback controls.
 - **About** — Background on my experience in geospatial engineering and software development.
@@ -280,6 +280,9 @@ Trip checks cover sticky chapter handoffs, subsection clearance, short screens, 
 Post filter tests check country and region links, responsive rows, and long labels at phone widths.
 They also check that geographic aliases cannot replace a visible topical tag.
 Search checks cover URL encoding, combined filters, history, result counts, keyboard focus, and anonymous events.
+Project search checks also cover category counts, direct actions, empty directories, and map-data loading after explicit navigation.
+The production recovery runner includes these checks in Chromium and WebKit.
+Use the [project search guide](docs/project-discovery.md) for URL rules, code ownership, and focused commands.
 Contents checks cover partial visibility and callbacks from retired observers.
 Use the [search and article guide](docs/blog-publishing.md#check-article-navigation) for URL rules and focused test commands.
 These tests do not require Google access or published trip assets.
@@ -304,7 +307,7 @@ npx vitest run scripts/dashboard/__tests__ scripts/__tests__/awsWatch.test.tsx s
 ```
 
 Coverage reports measure loaded source files. They do not measure every repository file.
-For a test-coverage comparison, keep the source, compiler, and coverage provider unchanged.
+For a test-coverage comparison, keep the source, runtime, compiler, and coverage provider unchanged.
 State which tests each measurement includes.
 
 Run the importer and navigation tests with:

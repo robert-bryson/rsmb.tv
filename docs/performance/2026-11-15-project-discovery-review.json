@@ -1,0 +1,579 @@
+{
+  "date": "2026-11-15",
+  "reviewedHead": "1c81d70",
+  "startingState": "Pending project discovery implementation; the working tree was not clean.",
+  "scope": "Project directory changes, shared search input and history, production browser integration, tests, and affected documentation.",
+  "environment": {
+    "node": "v24.22.3",
+    "npm": "12.2.2",
+    "vitest": "5.1.0",
+    "typescript": "6.0.3",
+    "playwright": "1.65.0",
+    "unitWorkers": 2,
+    "browserWorkers": 2
+  },
+  "reproduction": {
+    "initialSuite": {
+      "passed": 3389,
+      "files": 231,
+      "node": "v24.22.3",
+      "npm": "11.19.1"
+    },
+    "initialBehaviorRegressions": {
+      "failed": 5,
+      "passed": 10,
+      "files": 2
+    },
+    "additionalCases": [
+      "Delayed clearing could restore the removed category during newer typing.",
+      "A consumed-revision watermark rejected an earlier pending commit.",
+      "Render-phase reconciliation erased input when React replayed an older router snapshot.",
+      "Category counts had no accessible description.",
+      "WebKit rejected more than 100 history.replaceState calls within ten seconds."
+    ],
+    "instrumentedTypingAfterCommitReconciliation": {
+      "attempts": 80,
+      "failures": 0,
+      "viewports": [
+        320,
+        1280
+      ]
+    }
+  },
+  "validation": {
+    "unitSuite": {
+      "passed": 3414,
+      "files": 235
+    },
+    "focusedSuite": {
+      "passed": 151,
+      "files": 11
+    },
+    "temperaturePython": {
+      "passed": 18
+    },
+    "productionBrowser": {
+      "passed": 40,
+      "skipped": 4,
+      "failed": 0,
+      "flaky": 0,
+      "engines": [
+        "Chromium",
+        "WebKit"
+      ],
+      "repeatedTypingSequences": 80,
+      "skipReason": "WebKit does not support forced-color emulation."
+    },
+    "productionBuild": "passed without refreshing external source content",
+    "productionFixtureBuild": "passed through the standard page-recovery runner",
+    "lint": "passed with zero warnings",
+    "applicationTypes": "passed",
+    "scriptTypes": "passed",
+    "externalAudit": "not run; no dependency versions changed"
+  },
+  "coverage": {
+    "initialFullSuite": {
+      "lines": {
+        "total": 14459,
+        "covered": 12844,
+        "skipped": 0,
+        "pct": 88.83
+      },
+      "statements": {
+        "total": 17477,
+        "covered": 15231,
+        "skipped": 0,
+        "pct": 87.14
+      },
+      "functions": {
+        "total": 4071,
+        "covered": 3484,
+        "skipped": 0,
+        "pct": 85.58
+      },
+      "branches": {
+        "total": 13739,
+        "covered": 11443,
+        "skipped": 0,
+        "pct": 83.28
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "finalFullSuite": {
+      "lines": {
+        "total": 14486,
+        "covered": 12872,
+        "skipped": 0,
+        "pct": 88.85
+      },
+      "statements": {
+        "total": 17516,
+        "covered": 15271,
+        "skipped": 0,
+        "pct": 87.18
+      },
+      "functions": {
+        "total": 4083,
+        "covered": 3497,
+        "skipped": 0,
+        "pct": 85.64
+      },
+      "branches": {
+        "total": 13763,
+        "covered": 11468,
+        "skipped": 0,
+        "pct": 83.32
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "matchedFinalSourceComparison": {
+      "scope": [
+        "src/pages/Projects.tsx",
+        "src/content/projectFilters.ts",
+        "src/hooks/useSearchQuery.ts",
+        "src/components/ContentSearch.tsx",
+        "src/utils/search.ts"
+      ],
+      "subset": {
+        "passed": 126,
+        "skipped": 4,
+        "files": 7,
+        "coverage": {
+          "lines": {
+            "total": 94,
+            "covered": 93,
+            "skipped": 0,
+            "pct": 98.93
+          },
+          "statements": {
+            "total": 114,
+            "covered": 113,
+            "skipped": 0,
+            "pct": 99.12
+          },
+          "functions": {
+            "total": 38,
+            "covered": 37,
+            "skipped": 0,
+            "pct": 97.36
+          },
+          "branches": {
+            "total": 94,
+            "covered": 92,
+            "skipped": 0,
+            "pct": 97.87
+          },
+          "branchesTrue": {
+            "total": 0,
+            "covered": 0,
+            "skipped": 0,
+            "pct": 100
+          }
+        }
+      },
+      "complete": {
+        "passed": 151,
+        "files": 11,
+        "coverage": {
+          "lines": {
+            "total": 94,
+            "covered": 94,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 114,
+            "covered": 114,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 38,
+            "covered": 38,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 94,
+            "covered": 94,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branchesTrue": {
+            "total": 0,
+            "covered": 0,
+            "skipped": 0,
+            "pct": 100
+          }
+        }
+      },
+      "omittedTestFiles": [
+        "src/test/useSearchQuery.test.tsx",
+        "src/test/ContentSearch.test.tsx",
+        "src/test/search.test.ts",
+        "src/test/searchTransition.test.tsx"
+      ],
+      "omittedGroup": "project directory review regressions",
+      "method": "The source, Node runtime, TypeScript compiler, V8 provider, included production modules, and two-worker limit are unchanged between these comparison runs. The subset retains adapted existing tests and new project URL assertions; the complete run includes every focused case."
+    },
+    "finalFiles": {
+      "src/pages/Projects.tsx": {
+        "lines": {
+          "total": 25,
+          "covered": 25,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 27,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 39,
+          "covered": 39,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/content/projectFilters.ts": {
+        "lines": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/hooks/useSearchQuery.ts": {
+        "lines": {
+          "total": 48,
+          "covered": 48,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 58,
+          "covered": 58,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 29,
+          "covered": 29,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/components/ContentSearch.tsx": {
+        "lines": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/utils/search.ts": {
+        "lines": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/pages/Posts.tsx": {
+        "lines": {
+          "total": 36,
+          "covered": 36,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 38,
+          "covered": 38,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 72,
+          "covered": 72,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/content/postFilters.ts": {
+        "lines": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 17,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/content/postSearch.ts": {
+        "lines": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/content/projects.ts": {
+        "lines": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "globalComparisonNote": "Initial and final repository snapshots contain different source. The matched focused comparison isolates the effect of the additional regression tests on unchanged final source."
+  },
+  "sourceSha256": {
+    "src/pages/Projects.tsx": "6f48cf279cd26e521bedf5bfdc41b60df3c365546a3414d3578a424350ffa62c",
+    "src/content/projectFilters.ts": "edbc4ad7617a7b3ada4835a94581e92353858924ef1a54e8151304201fd7fdd0",
+    "src/hooks/useSearchQuery.ts": "8e94a3d4994be55cadc75db2805e23613ce3d55577a8f37b6959d6e71e7527fa",
+    "src/components/ContentSearch.tsx": "15731be4f143815bf51cf01f6125aede3027d5cc500817b7f245c0f3e1de1df1",
+    "src/utils/search.ts": "ae76ed58b963e1f136c40bf1a9a97d85be17637ad92e4fc9d07878436040ecad",
+    "src/pages/Posts.tsx": "b983e93b2a7863f821f0a582febf88ef942fcf33449acf1fd91d6f4ee2879fd9",
+    "src/content/postFilters.ts": "91499a290226ebcc181e287e22d24ffa857b46eb738bdee7718c3b9ae2a51af4",
+    "src/content/postSearch.ts": "9866240b5779fc3ece2fddd48422eed87f335fc5b72d2f7d42699754c9b53851",
+    "src/content/projects.ts": "45afd103d5dd00702445bea703c7b8398a3602e0f04ef69d676da5df3c8fe9b3"
+  },
+  "behavior": {
+    "queryCommitDelayMs": 400,
+    "postTelemetryDelayMs": 300,
+    "commitOn": [
+      "blur",
+      "submit"
+    ],
+    "cancelOn": [
+      "other navigation",
+      "native popstate",
+      "unmount"
+    ]
+  },
+  "documentation": {
+    "files": 153,
+    "missing": [],
+    "scope": "Repository Markdown files, excluding dependencies, caches, generated reports, and virtual environments; local target existence only.",
+    "sentenceLengthSample": {
+      "method": "Paragraph-aware prose sample; code blocks, tables, and headings excluded. This is a length check, not a vocabulary or STE certification.",
+      "files": {
+        "README.md": {
+          "sentences": 442,
+          "atMost25Words": 442,
+          "percent": 100.0
+        },
+        "TODO.md": {
+          "sentences": 175,
+          "atMost25Words": 175,
+          "percent": 100.0
+        },
+        "docs/README.md": {
+          "sentences": 21,
+          "atMost25Words": 21,
+          "percent": 100.0
+        },
+        "docs/blog-publishing.md": {
+          "sentences": 161,
+          "atMost25Words": 161,
+          "percent": 100.0
+        },
+        "docs/shared-modules.md": {
+          "sentences": 185,
+          "atMost25Words": 185,
+          "percent": 100.0
+        },
+        "docs/umami-analytics.md": {
+          "sentences": 59,
+          "atMost25Words": 59,
+          "percent": 100.0
+        },
+        "docs/project-discovery.md": {
+          "sentences": 86,
+          "atMost25Words": 86,
+          "percent": 100.0
+        },
+        "docs/reviews/2026-11-14-post-search-review.md": {
+          "sentences": 82,
+          "atMost25Words": 82,
+          "percent": 100.0
+        },
+        "docs/reviews/2026-11-15-project-discovery-review.md": {
+          "sentences": 124,
+          "atMost25Words": 124,
+          "percent": 100.0
+        }
+      }
+    }
+  },
+  "commands": {
+    "unitSuite": "node node_modules/vitest/vitest.mjs run --coverage --coverage.reporter=json-summary --coverage.reporter=json --coverage.reporter=text-summary --coverage.reportsDirectory=/tmp/rsmb-project-review-final --maxWorkers=2",
+    "focusedTests": [
+      "src/test/Projects.test.tsx",
+      "src/test/projectFilters.test.ts",
+      "src/test/projects.test.ts",
+      "src/test/useSearchQuery.test.tsx",
+      "src/test/ContentSearch.test.tsx",
+      "src/test/search.test.ts",
+      "src/test/searchTransition.test.tsx",
+      "src/test/postFilters.test.ts",
+      "src/test/postSearch.test.ts",
+      "src/test/blogPages.test.tsx",
+      "src/test/pages.test.tsx"
+    ],
+    "coverageInclude": "src/{pages/Projects.tsx,content/projectFilters.ts,hooks/useSearchQuery.ts,components/ContentSearch.tsx,utils/search.ts}",
+    "subsetPattern": "^(?!.*project directory review regressions)",
+    "productionBrowser": "PLAYWRIGHT_WEBKIT=1 node scripts/run-page-recovery-tests.js --config /tmp/rsmb-project-review-playwright.config.ts --grep 'project |projects search|post search|reading page /projects|reading page /posts' --workers=2 --reporter=list,json",
+    "productionBuild": "Vite build API with production mode, a new temporary outDir, and emptyOutDir enabled; no content sync commands ran.",
+    "python": "npm run test:temperature-records",
+    "lint": "node node_modules/eslint/bin/eslint.js . --max-warnings=0",
+    "types": [
+      "node node_modules/typescript/bin/tsc -b --noEmit",
+      "node node_modules/typescript/bin/tsc -p tsconfig.scripts.json --noEmit"
+    ]
+  },
+  "notes": [
+    "The local WebKit run used its cached WPE launcher and host libraries through a temporary Playwright config. Repository browser engine configuration was preserved.",
+    "The query debounce is separate from filtering and anonymous filter-event timing.",
+    "A narrow set-state-in-effect lint exception is documented beside committed-location reconciliation. Speculative router renders must not reset urgent input.",
+    "Coverage measures loaded source, not every repository file or all possible event interleavings.",
+    "Physical keyboard, screen-reader, hosted analytics, and source-publication checks remain in TODO.md."
+  ]
+}

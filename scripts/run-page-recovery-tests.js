@@ -21,6 +21,7 @@ try {
         'tests/e2e/intent-prefetch.spec.ts',
         'tests/e2e/accessibility.spec.ts',
         'tests/e2e/post-search.spec.ts',
+        'tests/e2e/project-discovery.spec.ts',
         '--workers=1',
         ...process.argv.slice(2),
     ], {

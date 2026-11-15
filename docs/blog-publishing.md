@@ -118,7 +118,10 @@ Search does not load article bodies or trip manifests.
 For example, `/posts?type=trips&q=british+columbia` searches trip metadata for both words.
 Use country and region filters when you need an exact geographic selection.
 
-Each search edit replaces the current history entry.
+Input and results update immediately.
+The URL replaces the current history entry 400ms after the last edit.
+Enter and blur commit the pending query immediately.
+Other navigation, native Back, and unmount cancel delayed writes.
 Filter and article links keep the current query, including text from a pending URL update.
 Type links keep the query and clear tag and geographic selections.
 **Clear search** keeps the other filters. **Clear all filters** resets every list filter.
@@ -154,7 +157,9 @@ Collection redirects retain query parameters, heading fragments, and navigation 
 
 Keep input state separate from URL state.
 The router can commit a URL change after a newer input event.
-The search hook marks its own URL writes to prevent stale commits from replacing current text.
+The search hook records each write's owner, revision, parameters, and navigation type.
+It consumes matching records once. Earlier commits cannot replace newer input.
+Copied history state cannot suppress a different query.
 Other navigation restores the query from its selected URL.
 Editing removes the pending scroll-return flag. Other object navigation state remains.
 
@@ -162,20 +167,23 @@ Editing removes the pending scroll-return flag. Other object navigation state re
 | --- | --- |
 | `src/content/postSearch.ts` | Match words against metadata |
 | `src/content/postFilters.ts` | Build filter URLs with named options and encoded query values |
-| `src/hooks/usePostSearchQuery.ts` | Keep input, history, and return links consistent |
-| `src/components/PostSearch.tsx` | Render the labeled field, clear button, and focus outline |
+| `src/utils/search.ts` | Normalize text and replace encoded query values |
+| `src/hooks/useSearchQuery.ts` | Keep draft parameters, history, and return links consistent |
+| `src/components/ContentSearch.tsx` | Render the labeled field, clear button, and focus outline |
 | `src/pages/Posts.tsx` | Combine filters, show results, and send bounded event counts |
 
 Use `URLSearchParams` to encode typed text. Do not insert raw search text into a URL.
+Projects share these input modules. See [project search](project-discovery.md#history-and-input) before changing their write records.
 Use an outline for keyboard focus. Box shadows can disappear in forced-color mode.
-Filter events wait 300ms after the last change.
+Filter events wait 300ms after the last input or filter change.
+They use draft filters. Committing the same URL does not restart the event timer.
 They send the feature name and a result-count bucket. They do not send the query.
 Unmount cancels a pending event. See the [analytics contract](umami-analytics.md#event-contract).
 
 Run the focused unit checks:
 
 ```bash
-npx vitest run src/test/postSearch.test.ts src/test/postFilters.test.ts src/test/blogPages.test.tsx src/test/mdxComponents.test.tsx
+npx vitest run src/test/postSearch.test.ts src/test/postFilters.test.ts src/test/search.test.ts src/test/useSearchQuery.test.tsx src/test/ContentSearch.test.tsx src/test/blogPages.test.tsx src/test/mdxComponents.test.tsx
 ```
 
 Run browser checks against fixed production content:

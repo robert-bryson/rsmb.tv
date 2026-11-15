@@ -28,6 +28,7 @@ An alt description states the visible content. A caption can supply other inform
 | [Intent prefetch](intent-prefetch.md) | Configure hover/focus destination preparation, resource limits, and browser measurements |
 | [Umami analytics](umami-analytics.md) | Review event definitions, privacy rules, and dashboard checks |
 | [Blog publication and search](blog-publishing.md) | Import documents and maintain search, filter URLs, history, and article navigation |
+| [Project search and filters](project-discovery.md) | Maintain directory URLs, counts, actions, input state, and production browser checks |
 | [Site metadata](site-metadata.md) | Maintain crawler metadata, social cards, canonical paths, and hosting rules |
 | [Image delivery](image-assets.md) | Prepare card images, recover failed requests, and check homepage preloads |
 | [CARTO basemaps](carto-basemaps.md) | Configure authenticated maps and visible attribution across projects |
@@ -55,6 +56,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-15 | [Project discovery review: copied state, delayed clears, category counts, production browser coverage, and documentation](reviews/2026-11-15-project-discovery-review.md) |
 | 2026-11-14 | [Post search review: navigation state, forced-color focus, observer lifetime, URL contracts, and coverage](reviews/2026-11-14-post-search-review.md) |
 | 2026-11-14 | [Follow-up quality review: polling limits, event retention, binary output, reader input, and coverage](reviews/2026-11-14-follow-up-quality-review.md) |
 | 2026-11-14 | [Pre-push review: real Ink console capture, startup integration, and remote branch checks](reviews/2026-11-14-pre-push-review.md) |

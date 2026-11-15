@@ -16,7 +16,7 @@ These failures exposed conditions that the passing suite did not test.
 Each query edit replaced the complete navigation state with an ownership marker.
 Unrelated object properties disappeared. Clearing all filters also discarded them.
 
-The [search hook](../../src/hooks/usePostSearchQuery.ts) now copies navigation context before writing the new entry.
+The [search hook](../../src/hooks/useSearchQuery.ts) now copies navigation context before writing the new entry.
 It removes the temporary scroll-return flag because editing starts a different list view.
 Clearing all filters also removes the private query marker.
 Neither action changes the source state object.
@@ -35,7 +35,7 @@ The input disabled its outline. Its surrounding field used a box shadow for focu
 Forced-color mode removed that shadow, leaving no visible indicator.
 The failure occurred at 320px and 1280px.
 
-The [search field](../../src/components/PostSearch.tsx) now uses an outline around the complete field.
+The [search field](../../src/components/ContentSearch.tsx) now uses an outline around the complete field.
 The field keeps its visible label, hint, clear action, and 44px control height.
 Each instance receives unique label and hint IDs.
 
@@ -126,6 +126,9 @@ Revised prose uses short sentences, active voice, and consistent terms.
 
 Physical keyboard and screen-reader checks remain in [TODO.md](../../TODO.md).
 Hosted analytics delivery remains a release check.
+
+The source links above use their current shared-module paths.
+See [project discovery](../project-discovery.md) for the later input outline and write-ownership rules.
 
 The external dependency audit did not run.
 Automatic approval review blocked `npm audit` because it exports dependency metadata to npm's registry.

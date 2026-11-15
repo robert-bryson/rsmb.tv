@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createPostsUrl, getPostType, withPostSearchQuery } from '../content/postFilters';
+import { createPostsUrl, getPostType } from '../content/postFilters';
 
 describe('post filter URLs', () => {
     it.each([
@@ -24,18 +24,5 @@ describe('post filter URLs', () => {
         expect(url.searchParams.get('q')).toBe(query);
         expect(url.searchParams.getAll('country')).toEqual(['CA']);
         expect(url.hash).toBe('');
-    });
-
-    it('replaces or clears every query value without changing the source or unrelated parameters', () => {
-        const source = new URLSearchParams('type=writing&q=stale&q=duplicate&source=one&source=two');
-        const updated = withPostSearchQuery(source, 'weather maps ');
-        expect(updated.getAll('q')).toEqual(['weather maps ']);
-        expect(updated.getAll('source')).toEqual(['one', 'two']);
-        expect(source.getAll('q')).toEqual(['stale', 'duplicate']);
-        const cleared = withPostSearchQuery(updated, '');
-        expect(cleared.has('q')).toBe(false);
-        expect(cleared.get('type')).toBe('writing');
-        expect(cleared.getAll('source')).toEqual(['one', 'two']);
-        expect(updated.get('q')).toBe('weather maps ');
     });
 });

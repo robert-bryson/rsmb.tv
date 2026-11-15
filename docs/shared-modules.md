@@ -194,6 +194,19 @@ Use `ResponsiveImage` from `shared/responsiveImage.ts` for generated image recor
 Use `getProjectPreview` for project image lookup in React and HTML generation.
 Do not copy manifest casts into consumers. See [image delivery](image-assets.md) for generation and recovery rules.
 
+## Search fields and URLs
+
+Posts and Projects share [`ContentSearch`](../src/components/ContentSearch.tsx) and [`useSearchQuery`](../src/hooks/useSearchQuery.ts).
+The field supplies a visible label, a hint, a clear button, and native keyboard focus.
+The hook keeps draft parameters ahead of delayed router commits.
+It accepts Back, Forward, and other navigation from their selected URLs.
+It preserves unrelated object navigation state.
+
+Use [`search.ts`](../src/utils/search.ts) for text normalization and query replacement.
+Keep collection-specific matching and URL options in their content modules.
+Use named filter options. Do not pass a sequence of query and category strings.
+See [project discovery](project-discovery.md) and [post search](blog-publishing.md#maintain-search-behavior) for their contracts and tests.
+
 ## Validation
 
 Run the focused unit tests after changing these modules:

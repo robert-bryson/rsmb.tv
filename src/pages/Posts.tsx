@@ -1,10 +1,9 @@
 import { IntentLink } from '../components/IntentLink';
-import { useLocation } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 import { analyticsResultBucket, trackAnalyticsEvent } from '../utils/analytics';
 import { DevelopmentContentStatus } from '../components/DevelopmentContentStatus';
 import { PostRegionFilters } from '../components/PostRegionFilters';
-import { PostSearch } from '../components/PostSearch';
+import { ContentSearch } from '../components/ContentSearch';
 import { filterPostsByTag, getAllBlogTags, tripFactTag } from '../content/blogTags';
 import { filterPostsByRegion, findGeographicTag, getAllBlogRegions } from '../content/blogRegions';
 import { getAllPosts } from '../content/posts';
@@ -14,16 +13,15 @@ import { getTripSummary } from '../features/trips/tripSummaries';
 import { TripThumbnail } from '../features/trips/components/TripThumbnail';
 import { TRIP_ATLAS_PATH } from '../features/trips/atlas/tripAtlasView';
 import { usePageMetadata } from '../hooks/usePageMetadata';
-import { usePostSearchQuery } from '../hooks/usePostSearchQuery';
+import { useSearchQuery } from '../hooks/useSearchQuery';
 import { staticPageMetadata } from '../utils/pageMetadata';
 import { formatDate } from '../utils/formatDate';
 
 const filterClasses = 'rounded-md px-3 py-1.5 text-sm transition-colors';
 
 export function Posts() {
-    const location = useLocation();
     const allPosts = getAllPosts();
-    const { query, updateQuery, clearFilters, searchParams, returnUrl } = usePostSearchQuery();
+    const { query, updateQuery, commitQuery, clearFilters, searchParams, returnUrl } = useSearchQuery();
     const searchRef = useRef<HTMLInputElement>(null);
     const activeType = getPostType(searchParams.get('type'));
     const tag = searchParams.get('tag')?.trim() ?? '';
@@ -40,15 +38,15 @@ export function Posts() {
     const posts = searchPosts(filterPostsByRegion(filterPostsByTag(postsByType, activeTag), activeCountry, activeRegion), query);
     const hasActiveFilters = activeType !== 'all' || !!(activeTag || activeCountry || activeRegion || query);
 
-    const previousFilters = useRef(location.search);
+    const previousFilters = useRef(returnUrl);
     useEffect(() => {
-        if (previousFilters.current === location.search) return;
+        if (previousFilters.current === returnUrl) return;
         const timeout = window.setTimeout(() => {
-            previousFilters.current = location.search;
+            previousFilters.current = returnUrl;
             trackAnalyticsEvent('filters-applied', { feature: 'posts', resultBucket: analyticsResultBucket(posts.length) });
         }, 300);
         return () => window.clearTimeout(timeout);
-    }, [location.search, posts.length]);
+    }, [returnUrl, posts.length]);
 
     const metadata = staticPageMetadata('/posts', allPosts);
     usePageMetadata(metadata);
@@ -58,7 +56,8 @@ export function Posts() {
             <h1 className="mb-2 text-3xl font-bold text-zinc-100">Posts</h1>
             <p className="mb-6 max-w-2xl text-zinc-400">{metadata.description}</p>
 
-            <PostSearch query={query} onChange={updateQuery} inputRef={searchRef} />
+            <ContentSearch label="Search posts" hint="Search titles, summaries, tags, and places."
+                placeholder="Try a topic or a place…" query={query} onChange={updateQuery} onCommit={commitQuery} inputRef={searchRef} />
 
             <nav aria-label="Post type" className="mb-5 flex w-fit gap-1 rounded-lg bg-zinc-900 p-1">
                 {([

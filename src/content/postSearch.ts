@@ -1,12 +1,8 @@
 import { getCountryName } from './blogRegions';
 import type { BlogPostMeta } from './posts';
+import { normalizeSearch } from '../utils/search';
 
 type SearchablePost = Pick<BlogPostMeta, 'title' | 'description' | 'tags' | 'countries' | 'series'>;
-
-function normalizeSearch(value: string): string {
-    return value.normalize('NFKD').replace(/\p{M}/gu, '').toLowerCase()
-        .replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
-}
 
 /** Match every keyword against metadata without downloading article bodies. */
 export function searchPosts<Post extends SearchablePost>(posts: Post[], query: string): Post[] {

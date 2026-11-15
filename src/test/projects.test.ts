@@ -35,9 +35,16 @@ describe('projects data', () => {
     it('demoUrls are valid URLs or internal paths', () => {
         for (const p of projects) {
             if (p.demoUrl) {
-                expect(
-                    p.demoUrl.startsWith('/') || p.demoUrl.startsWith('https://')
-                ).toBe(true);
+                const url = new URL(p.demoUrl, 'https://rsmb.tv');
+                expect(url.protocol).toBe('https:');
+                expect(url.username).toBe('');
+                expect(url.password).toBe('');
+                if (p.demoUrl.startsWith('/')) {
+                    expect(url.origin).toBe('https://rsmb.tv');
+                    expect(p.demoUrl).toMatch(/^\/projects\//);
+                } else {
+                    expect(p.demoUrl).toMatch(/^https:\/\//);
+                }
             }
         }
     });
@@ -45,7 +52,12 @@ describe('projects data', () => {
     it('sourceUrls are GitHub URLs', () => {
         for (const p of projects) {
             if (p.sourceUrl) {
-                expect(p.sourceUrl).toMatch(/^https:\/\/github\.com\//);
+                const url = new URL(p.sourceUrl);
+                expect(url.protocol).toBe('https:');
+                expect(url.host).toBe('github.com');
+                expect(url.username).toBe('');
+                expect(url.password).toBe('');
+                expect(url.pathname).toMatch(/^\/[^/]+\/[^/]+/);
             }
         }
     });
@@ -87,6 +99,7 @@ function makeProject(overrides: Partial<Project> = {}): Project {
         description: 'desc',
         tech: ['TS'],
         applicationCategory: 'UtilitiesApplication',
+        category: 'tools',
         year: 2024,
         ...overrides,
     };

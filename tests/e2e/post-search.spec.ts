@@ -31,7 +31,7 @@ for (const width of [320, 1280]) {
         await expect(page.locator('main h2')).toHaveText(['Coastal test trip']);
         await expect(page.getByRole('status')).toHaveText('1 of 3 posts');
         expect(new URL(page.url()).searchParams.get('country')).toBe('CA');
-        expect(new URL(page.url()).searchParams.get('q')).toBe('british columbia');
+        await expect.poll(() => new URL(page.url()).searchParams.get('q')).toBe('british columbia');
         await search.press('Enter');
         await expect(search).toBeFocused();
 
@@ -92,5 +92,23 @@ for (const width of [320, 1280]) {
         await expect(search).toHaveValue('ordinary article');
         await expect(page.locator('main h2')).toHaveText(['Reading test']);
         expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+    });
+
+    test(`post search retains every character through repeated router transitions at ${width}px`, async ({ page }) => {
+        const errors: string[] = [];
+        page.on('pageerror', error => errors.push(error.message));
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto('/posts?type=trips&tag=coast&country=CA');
+        const search = page.getByRole('searchbox', { name: 'Search posts' });
+        for (let attempt = 0; attempt < 20; attempt++) {
+            const query = attempt % 2 === 0 ? 'british columbia' : 'ordinary article';
+            await search.fill('');
+            await search.pressSequentially(query);
+            await expect(search).toHaveValue(query);
+            await expect(search).toBeFocused();
+            await expect.poll(() => new URL(page.url()).searchParams.get('q')).toBe(query);
+            expect(new URL(page.url()).searchParams.get('country')).toBe('CA');
+        }
+        expect(errors).toEqual([]);
     });
 }

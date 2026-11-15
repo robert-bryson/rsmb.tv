@@ -1,5 +1,13 @@
 import { formatMonthYear } from '../utils/formatDate.ts';
 
+export const projectCategories = {
+  maps: 'Maps & data',
+  apps: 'Web apps',
+  tools: 'Command line',
+} as const;
+
+export type ProjectCategory = keyof typeof projectCategories;
+
 export interface ChangelogEntry {
   /** Feature month (YYYY-MM), in descending order within each project. */
   date: string;
@@ -10,6 +18,7 @@ export interface Project {
   slug: string;
   title: string;
   description: string;
+  category: ProjectCategory;
   /** Short description used when the project appears in a compact card. */
   summary?: string;
   tech: string[];
@@ -28,6 +37,7 @@ export const projects: Project[] = [
   {
     slug: 'pins-of-inaccessibility',
     title: 'Pins of Inaccessibility',
+    category: 'maps',
     description: 'Explore country, province, and U.S. county poles on a 3D globe. Compare boundary distances, move between geographic levels, and check available terrain and nearby-place details.',
     summary: 'Explore global interior pins, compare boundary distances, and follow geographic levels back to the world.',
     tech: ['React', 'TypeScript', 'MapLibre GL', 'Python', 'GeoJSON'],
@@ -53,6 +63,7 @@ export const projects: Project[] = [
   {
     slug: 'adv-atlas',
     title: 'ADV Atlas',
+    category: 'maps',
     description: 'Explore motorcycle journeys on an interactive map. Browse route maps, photographs, and trip facts, then open the full ride reports.',
     summary: 'Discover motorcycle journeys through route maps, photographs, and trip reports.',
     tech: ['React', 'TypeScript', 'MapLibre GL', 'GeoJSON'],
@@ -64,6 +75,7 @@ export const projects: Project[] = [
   {
     slug: 'through-routes',
     title: 'Through Routes',
+    category: 'maps',
     description: 'Find scenic, twisty motorcycle loop routes on rural roads. Processes OpenStreetMap data to build a loop-friendly road graph, scores roads by curviness and elevation change, and generates ranked circular routes from any start point.',
     summary: 'Generate ranked motorcycle loops using road curviness, elevation, and OpenStreetMap data.',
     tech: ['Python', 'NumPy', 'FastAPI', 'TypeScript', 'MapLibre GL', 'Docker'],
@@ -101,6 +113,7 @@ export const projects: Project[] = [
   {
     slug: 'flights',
     title: 'Flights',
+    category: 'maps',
     description: 'An interactive 3D globe visualization of flights I\'ve taken around the world. Filter by year, see route frequencies, and explore travel statistics.',
     summary: 'Explore my flight history on an interactive 3D globe with filters and travel statistics.',
     tech: ['React', 'Three.js', 'WebGL', 'GeoJSON'],
@@ -155,6 +168,7 @@ export const projects: Project[] = [
   {
     slug: 'anki-artisan',
     title: 'Anki Artisan',
+    category: 'tools',
     description: 'Craft Anki flashcard decks from iNaturalist observations and eBird region data. Automatically fetches species photos, audio, and taxonomy to generate visual ID, nomenclature, sound ID, and confusion species cards.',
     summary: 'Build media-rich wildlife flashcards from iNaturalist observations and eBird region data.',
     tech: ['Python', 'Click', 'eBird API', 'iNaturalist API', 'SQLite'],
@@ -188,6 +202,7 @@ export const projects: Project[] = [
   {
     slug: 'aborg',
     title: 'aborg',
+    category: 'tools',
     description: 'A CLI tool to scan, organize, and manage audiobook file collections. Outputs an Audiobookshelf-compatible directory structure with smart filename parsing, metadata extraction, and Libby/OverDrive integration.',
     tech: ['Python', 'Click', 'Mutagen', 'Rich', 'YAML'],
     applicationCategory: 'UtilitiesApplication',
@@ -209,6 +224,7 @@ export const projects: Project[] = [
   {
     slug: 'parc',
     title: 'parc',
+    category: 'tools',
     description: 'A Python CLI for building a long-running podcast archive. Manages feed subscriptions, scans for new episodes, downloads with resumable crash-safe transfers, and audits local archive state.',
     tech: ['Python', 'Click', 'Rich', 'SQLite', 'RSS/OPML', 'Requests'],
     applicationCategory: 'MultimediaApplication',
@@ -242,6 +258,7 @@ export const projects: Project[] = [
   {
     slug: 'bookend',
     title: 'Bookend',
+    category: 'apps',
     description: 'A personal book-tracking app to log reads, organize books into lists, and explore reading stats. Integrates with Google Books, Open Library, and Wikidata for enrichment—covers, descriptions, author links, and more.',
     summary: 'Track reading, organize book lists, and enrich library data from multiple open APIs.',
     tech: ['Next.js', 'TypeScript', 'Prisma', 'PostgreSQL', 'Tailwind CSS', 'Docker'],
@@ -267,6 +284,7 @@ export const projects: Project[] = [
   {
     slug: 'temperature-records',
     title: 'U.S. Temperature Records',
+    category: 'maps',
     description: 'Explore recent station record events, observed county extremes, certified state extremes, and the ages of standing records.',
     tech: ['React', 'MapLibre GL', 'NOAA ACIS', 'GeoJSON'],
     applicationCategory: 'WeatherApplication',
@@ -296,6 +314,7 @@ export const projects: Project[] = [
   {
     slug: 'tornado-tracks',
     title: 'Tornado Tracks',
+    category: 'maps',
     description: 'A time-first MapLibre archive of NOAA/NCEI tornado tracks with EF-scale filters, regional presets, density mode, and annual playback.',
     tech: ['React', 'MapLibre GL', 'NOAA/NCEI', 'GeoJSON'],
     applicationCategory: 'WeatherApplication',
@@ -317,6 +336,7 @@ export const projects: Project[] = [
   {
     slug: 'status-dashboard',
     title: 'Status Dashboard',
+    category: 'tools',
     description: 'A live terminal monitoring dashboard for AWS infrastructure, GitHub CI builds, and site health. Renders health checks, CloudWatch alarms, build statuses, cost forecasts, and incident logs side-by-side in the terminal using Ink.',
     tech: ['TypeScript', 'React (Ink)', 'AWS SDK v3', 'CloudWatch', 'Route53', 'GitHub API'],
     applicationCategory: 'DeveloperApplication',
@@ -340,6 +360,7 @@ export const projects: Project[] = [
   {
     slug: 'route2gpx',
     title: 'route2gpx',
+    category: 'maps',
     description: 'Plan routes or import GPS tracks, then export GPX, KML, GeoJSON, TCX, or CSV. File imports and conversion run locally in your browser.',
     tech: ['JavaScript', 'Leaflet', 'Google Routes API', 'Python'],
     applicationCategory: 'TravelApplication',

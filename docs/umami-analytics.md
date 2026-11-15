@@ -36,6 +36,8 @@ Its readiness, error, and recovery events use the same map monitor.
 Pin IDs, search terms, and selected coordinates are excluded.
 Result-count buckets are `0`, `1`, `2-10`, `11-50`, and `51+`.
 Post events wait 300ms after the last filter change.
+Post search uses the current draft filters for this timer.
+Its separate 400ms URL timer does not delay or duplicate the filter event.
 Further input restarts the delay. Leaving the page cancels a pending event.
 The event contains no search text, tag, country, or region value.
 The `device` property on existing map events describes the viewport width, not a device model.
