@@ -108,7 +108,23 @@ Do not edit generated MDX as the content source.
 
 ## Check article navigation
 
-The post list supports `type`, `tag`, `country`, and `region` query parameters.
+The post list supports `q`, `type`, `tag`, `country`, and `region` query parameters.
+The `q` value contains the search text.
+Search reads titles, summaries, tags, country names and codes, region names, and series titles.
+Each search word must occur in this metadata. A word can match part of another word.
+Case, accents, and punctuation do not change the match.
+An empty search, or punctuation alone, adds no keyword restriction.
+Search does not load article bodies or trip manifests.
+For example, `/posts?type=trips&q=british+columbia` searches trip metadata for both words.
+Use country and region filters when you need an exact geographic selection.
+
+Each search edit replaces the current history entry.
+Filter and article links keep the current query, including text from a pending URL update.
+Type links keep the query and clear tag and geographic selections.
+**Clear search** keeps the other filters. **Clear all filters** resets every list filter.
+Both clear buttons return focus to the search field.
+Back, Forward, reload, and the article return link retain the search for their selected list entry.
+
 For example, `/posts?type=writing&tag=Maps` selects writing with the exact `Maps` tag.
 Topical tags keep their original case. Motorcycle facts add normalized tags, such as `honda-cb500x`.
 The registry separates countries and regions from topical tags.
@@ -133,6 +149,47 @@ Previous selects the older article. Next selects the newer article.
 The links retain the original list filter.
 The return link requests restoration of the list scroll position.
 Collection redirects retain query parameters, heading fragments, and navigation state.
+
+### Maintain search behavior
+
+Keep input state separate from URL state.
+The router can commit a URL change after a newer input event.
+The search hook marks its own URL writes to prevent stale commits from replacing current text.
+Other navigation restores the query from its selected URL.
+Editing removes the pending scroll-return flag. Other object navigation state remains.
+
+| File | Responsibility |
+| --- | --- |
+| `src/content/postSearch.ts` | Match words against metadata |
+| `src/content/postFilters.ts` | Build filter URLs with named options and encoded query values |
+| `src/hooks/usePostSearchQuery.ts` | Keep input, history, and return links consistent |
+| `src/components/PostSearch.tsx` | Render the labeled field, clear button, and focus outline |
+| `src/pages/Posts.tsx` | Combine filters, show results, and send bounded event counts |
+
+Use `URLSearchParams` to encode typed text. Do not insert raw search text into a URL.
+Use an outline for keyboard focus. Box shadows can disappear in forced-color mode.
+Filter events wait 300ms after the last change.
+They send the feature name and a result-count bucket. They do not send the query.
+Unmount cancels a pending event. See the [analytics contract](umami-analytics.md#event-contract).
+
+Run the focused unit checks:
+
+```bash
+npx vitest run src/test/postSearch.test.ts src/test/postFilters.test.ts src/test/blogPages.test.tsx src/test/mdxComponents.test.tsx
+```
+
+Run browser checks against fixed production content:
+
+```bash
+PLAYWRIGHT_WEBKIT=1 npm run test:page-recovery -- --grep 'post search|reading page /posts'
+```
+
+The browser cases check fast typing, combined filters, clearing, history, reload, and article return links.
+They also check that typing does not load an article body.
+Opening a result must then request that body's module.
+Chromium checks the focus outline in forced-color mode.
+Both engines scan search results for accessibility errors.
+Use the [browser setup](../README.md#testing-notes) before these checks.
 
 ## Start a content deployment
 

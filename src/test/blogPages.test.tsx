@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { lazy } from 'react';
 import { fireEvent, render, screen, within } from '@testing-library/react';
-import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { renderWithRouter } from './helpers/router';
 
 const testPosts = vi.hoisted(() => [
@@ -87,12 +87,163 @@ import { Posts } from '../pages/Posts';
 import * as postRegistry from '../content/posts';
 import * as tripManifests from '../features/trips/tripManifests';
 import * as tripSummaries from '../features/trips/tripSummaries';
+import * as analytics from '../utils/analytics';
 
 function LocationProbe() {
     return <output data-testid="location">{useLocation().pathname}</output>;
 }
 
 describe('Posts page', () => {
+    function SearchLocationProbe() {
+        const location = useLocation();
+        const navigate = useNavigate();
+        return <>
+            <span data-testid="search-location">{location.pathname + location.search}</span>
+            <span data-testid="search-state">{JSON.stringify(location.state)}</span>
+            <button onClick={() => navigate(-1)}>Browser back</button>
+            <button onClick={() => navigate(1)}>Browser forward</button>
+            <button onClick={() => navigate('/posts?q=weather', { replace: true })}>Replace search externally</button>
+        </>;
+    }
+
+    it('searches immediately and keeps the query in the URL', () => {
+        renderWithRouter(<><Posts /><SearchLocationProbe /></>, { route: '/posts' });
+        const search = screen.getByRole('searchbox', { name: 'Search posts' });
+        fireEvent.change(search, { target: { value: 'weather normals' } });
+        expect(screen.getAllByRole('heading', { level: 2 }).map(heading => heading.textContent)).toEqual(['Weather Records']);
+        expect(screen.getByTestId('search-location')).toHaveTextContent('/posts?q=weather+normals');
+        expect(screen.getByRole('status')).toHaveTextContent('1 of 5 posts');
+        fireEvent.submit(screen.getByRole('search', { name: 'Search posts' }));
+        expect(search).toHaveValue('weather normals');
+    });
+
+    it('preserves unrelated navigation state when a query changes', () => {
+        render(<MemoryRouter initialEntries={[{
+            pathname: '/posts', state: { readerContext: { source: 'saved-list' }, restoreScroll: true },
+        }]}><Posts /><SearchLocationProbe /></MemoryRouter>);
+        fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'maps' } });
+        const state = JSON.parse(screen.getByTestId('search-state').textContent!);
+        expect(state.readerContext).toEqual({ source: 'saved-list' });
+        expect(state).not.toHaveProperty('restoreScroll');
+        fireEvent.click(screen.getByRole('button', { name: 'Clear all filters' }));
+        expect(JSON.parse(screen.getByTestId('search-state').textContent!)).toEqual({ readerContext: { source: 'saved-list' } });
+    });
+
+    it.each([null, 'legacy-state', ['legacy-state']])('accepts non-object navigation state %j', state => {
+        render(<MemoryRouter initialEntries={[{ pathname: '/posts', state }]}><Posts /><SearchLocationProbe /></MemoryRouter>);
+        fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'maps' } });
+        expect(screen.getByRole('searchbox')).toHaveValue('maps');
+        expect(screen.getByTestId('search-location')).toHaveTextContent('/posts?q=maps');
+    });
+
+    it('replaces a typed draft after an external navigation to the same page', () => {
+        renderWithRouter(<><Posts /><SearchLocationProbe /></>, { route: '/posts?q=maps' });
+        fireEvent.click(screen.getByRole('button', { name: 'Replace search externally' }));
+        expect(screen.getByRole('searchbox')).toHaveValue('weather');
+        expect(screen.getAllByRole('heading', { level: 2 }).map(heading => heading.textContent)).toEqual(['Weather Records']);
+    });
+
+    it('keeps the unpublished empty-library state distinct from a search with no matches', () => {
+        const posts = vi.spyOn(postRegistry, 'getAllPosts').mockReturnValue([]);
+        try {
+            renderWithRouter(<Posts />, { route: '/posts' });
+            expect(screen.getByText('No posts yet.')).toBeInTheDocument();
+            expect(screen.getByRole('status')).toHaveTextContent('0 posts');
+            expect(screen.queryByRole('button', { name: 'Clear all filters' })).not.toBeInTheDocument();
+        } finally {
+            posts.mockRestore();
+        }
+    });
+
+    it('debounces filter telemetry and sends only the bounded result count', () => {
+        vi.useFakeTimers();
+        const track = vi.spyOn(analytics, 'trackAnalyticsEvent').mockImplementation(() => {});
+        const view = renderWithRouter(<Posts />, { route: '/posts' });
+        try {
+            fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'm' } });
+            vi.advanceTimersByTime(200);
+            fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'maps' } });
+            vi.advanceTimersByTime(299);
+            expect(track).not.toHaveBeenCalled();
+            vi.advanceTimersByTime(1);
+            expect(track.mock.calls).toEqual([['filters-applied', { feature: 'posts', resultBucket: '1' }]]);
+            fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'private-keyword' } });
+            view.unmount();
+            vi.advanceTimersByTime(1000);
+            expect(track).toHaveBeenCalledOnce();
+        } finally {
+            view.unmount();
+            vi.useRealTimers();
+            track.mockRestore();
+        }
+    });
+
+    it('combines shared keyword searches with existing filters and retains the query in filter links', () => {
+        renderWithRouter(<Posts />, { route: '/posts?type=writing&tag=Data+Viz&country=US&region=washington&q=maps' });
+        expect(screen.getByRole('searchbox')).toHaveValue('maps');
+        expect(screen.getAllByRole('heading', { level: 2 }).map(heading => heading.textContent)).toEqual(['Mapping Boring Data']);
+        expect(within(screen.getByRole('navigation', { name: 'Post tags' })).getByRole('link', { name: 'All tags' }))
+            .toHaveAttribute('href', '/posts?type=writing&country=US&region=washington&q=maps');
+        expect(within(screen.getByRole('navigation', { name: 'Post regions' })).getByRole('link', { name: 'All regions' }))
+            .toHaveAttribute('href', '/posts?type=writing&tag=Data+Viz&q=maps');
+        expect(within(screen.getByRole('navigation', { name: 'Post type' })).getByRole('link', { name: 'Trips' }))
+            .toHaveAttribute('href', '/posts?type=trips&q=maps');
+    });
+
+    it('clears only the search and returns keyboard focus to the input', () => {
+        renderWithRouter(<><Posts /><SearchLocationProbe /></>, { route: '/posts?type=writing&tag=Data+Viz&country=US&q=missing' });
+        expect(screen.getByText('No posts match these filters.')).toBeInTheDocument();
+        fireEvent.click(screen.getByRole('button', { name: 'Clear search' }));
+        expect(screen.getByRole('searchbox')).toHaveValue('');
+        expect(screen.getByRole('searchbox')).toHaveFocus();
+        expect(screen.getByTestId('search-location')).toHaveTextContent('/posts?type=writing&tag=Data+Viz&country=US');
+        expect(screen.getAllByRole('heading', { level: 2 }).map(heading => heading.textContent)).toEqual(['Mapping Boring Data']);
+    });
+
+    it('recovers from empty results by clearing every filter', () => {
+        renderWithRouter(<><Posts /><SearchLocationProbe /></>, { route: '/posts?type=writing&tag=Maps&country=CA&q=missing' });
+        expect(screen.getByRole('status')).toHaveTextContent('0 of 5 posts');
+        fireEvent.click(screen.getByRole('button', { name: 'Clear all filters' }));
+        expect(screen.getByRole('searchbox')).toHaveFocus();
+        expect(screen.getByTestId('search-location').textContent).toBe('/posts');
+        expect(screen.getByRole('status')).toHaveTextContent('5 posts');
+        expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(5);
+        expect(screen.queryByRole('button', { name: 'Clear all filters' })).not.toBeInTheDocument();
+    });
+
+    it('restores search on Back and Forward without adding a history entry for every keystroke', () => {
+        render(<MemoryRouter initialEntries={['/about', '/posts?country=US']}>
+            <Posts /><SearchLocationProbe />
+        </MemoryRouter>);
+        fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'm' } });
+        fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'maps' } });
+        fireEvent.click(within(screen.getByRole('navigation', { name: 'Post tags' })).getByRole('link', { name: 'Maps' }));
+        expect(screen.getByTestId('search-location')).toHaveTextContent('/posts?tag=Maps&country=US&q=maps');
+        fireEvent.click(screen.getByRole('button', { name: 'Browser back' }));
+        expect(screen.getByTestId('search-location')).toHaveTextContent('/posts?country=US&q=maps');
+        expect(screen.getByRole('searchbox')).toHaveValue('maps');
+        fireEvent.click(screen.getByRole('button', { name: 'Browser back' }));
+        expect(screen.getByTestId('search-location').textContent).toBe('/about');
+        fireEvent.click(screen.getByRole('button', { name: 'Browser forward' }));
+        expect(screen.getByRole('searchbox')).toHaveValue('maps');
+    });
+
+    it('keeps the exact search when returning from an article', () => {
+        const from = '/posts?type=writing&tag=Data+Viz&q=maps';
+        render(<MemoryRouter initialEntries={[from]}>
+            <Routes>
+                <Route path="/posts" element={<Posts />} />
+                <Route path="/blog/:slug" element={<BlogPost collection="blog" />} />
+            </Routes>
+            <SearchLocationProbe />
+        </MemoryRouter>);
+        fireEvent.click(screen.getByRole('link', { name: /Mapping Boring Data/ }));
+        fireEvent.click(screen.getByRole('link', { name: 'Back to posts' }));
+        expect(screen.getByTestId('search-location').textContent).toBe(from);
+        expect(screen.getByRole('searchbox')).toHaveValue('maps');
+        expect(screen.getAllByRole('heading', { level: 2 }).map(heading => heading.textContent)).toEqual(['Mapping Boring Data']);
+    });
+
     it('filter review regressions: keeps a visible topic selectable when it matches a country name', () => {
         const topicPost = { ...testPosts[0], tags: ['Japan'], countries: [] };
         const posts = vi.spyOn(postRegistry, 'getAllPosts');

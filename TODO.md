@@ -17,7 +17,11 @@ Hosted checks require a deployed build. Device checks require the named physical
 | Before the next hosted release | [Release checks](#next-release-checks), [Pins hosting](#hosted-release), and [physical devices](#physical-devices) |
 | Before publishing a story | [Content publication](#content-publication) and the affected [source checks](#published-story-checks) |
 | Before historical signal publication | [Temperature publication](#historical-signal-publication) |
-| Later engineering work | [Build and maintenance](#build-and-maintenance), [dashboard checks](#dashboard-checks), and [infrastructure](#infrastructure) |
+| Next local validation | [Automated checks](#automated-checks) |
+| Later engineering work | [Build and maintenance](#build-and-maintenance), [Tornado Tracks](#tornado-tracks), and [dashboard checks](#dashboard-checks) |
+| Infrastructure changes | [Infrastructure](#infrastructure) |
+| Content additions | [Project content](#project-content) |
+| Application planning | [Ride Ledger prerequisites](#ride-ledger-prerequisites) |
 
 ## Next release checks
 
@@ -27,7 +31,9 @@ Local browser tests cannot verify the analytics account or physical devices.
 - [ ] Verify Web Vitals in the Umami Performance view after deployment. Record the build revision and observation period.
 - [ ] Verify one `map-ready` event for each map visit. Check startup failure, runtime failure, and phase-specific recovery. Confirm that events exclude query values.
 - [ ] Verify the `rsmb-tv` tag, project and map events, caught error reports, and privacy preferences in Umami. Create the goals and funnel in the [analytics guide](docs/umami-analytics.md).
-- [ ] Test navigation and map controls with VoiceOver or NVDA. Include hover dismissal, route announcements, help dismissal, and disabled character shortcuts.
+- [ ] Test navigation, post search, and map controls with VoiceOver or NVDA.
+  Check search result announcements and focus after clearing.
+  Include hover dismissal, route announcements, help dismissal, and disabled character shortcuts.
 
 ## Content publication
 
@@ -131,6 +137,9 @@ Use the [November 10 review](docs/reviews/2026-11-10-project-quality-review.md) 
 
 ### Physical devices
 
+- [ ] Check post search with a phone keyboard.
+  Include composed text, accented place names, clearing, and returning from a result.
+  Record the device, keyboard, browser, and result.
 - [ ] Check [trip reading](docs/reviews/2026-11-13-trip-layout-quality-review.md#remaining-checks) on a real phone.
   Include large text, chapter changes, subsection links, and rotation.
   Check title shrinking, reduced motion, and reader input during a section jump.

@@ -12,7 +12,7 @@ A personal website with software projects, data maps, writing, and motorcycle tr
 - **Temperature Records** — An interactive MapLibre GL map of U.S. temperature records. It shows recent station records, standing county and state extremes, and standing-record history.
 - **Tornado Tracks** — Recorded tornado county segments, density maps, annual trends, and warning context. See the [project guide](projects/tornado-tracks/readme.md).
 - **Projects** — Software tools, data maps, and project descriptions.
-- **Posts** — Writing and trip reports imported from Google documents. Includes RSS, social images, and list filters.
+- **Posts** — Writing and trip reports from Google documents. Search titles, summaries, tags, and places. Combine search with type and location filters. Includes RSS and social images.
 - **Trips** — Motorcycle trip reports with responsive photographs, route maps, accessible galleries, and short animations with playback controls.
 - **About** — Background on my experience in geospatial engineering and software development.
 
@@ -279,6 +279,9 @@ Browser tests check subtitle styles at phone and desktop widths, unique heading 
 Trip checks cover sticky chapter handoffs, subsection clearance, short screens, and larger-text image sizing.
 Post filter tests check country and region links, responsive rows, and long labels at phone widths.
 They also check that geographic aliases cannot replace a visible topical tag.
+Search checks cover URL encoding, combined filters, history, result counts, keyboard focus, and anonymous events.
+Contents checks cover partial visibility and callbacks from retired observers.
+Use the [search and article guide](docs/blog-publishing.md#check-article-navigation) for URL rules and focused test commands.
 These tests do not require Google access or published trip assets.
 Page unit tests use fixed post metadata and trip summaries.
 Development-status tests use fixed publication, source, and asset states.

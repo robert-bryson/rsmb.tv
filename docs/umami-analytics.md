@@ -10,7 +10,7 @@ Use the Hostname filter or the `rsmb-tv` tag to isolate this site.
 | --- | --- | --- |
 | `project-link-click` | A visitor opens project details, a demo, source code, or source data | Project, destination, placement |
 | `map-interacted` | The first deliberate action on a map visit | Feature, action |
-| `filters-applied` | The visitor changes post filters or applies Atlas filters | Feature, result-count bucket |
+| `filters-applied` | A visitor changes post search or filters, or applies Atlas filters | Feature, result-count bucket |
 | `article-engaged` | The story end is visible and the page has been visible for 30 seconds | Content type |
 | `gallery-opened` | A trip lightbox opens | Gallery type |
 | `share-action` | A map link is copied, handed off, cancelled, or shown for manual copy | Feature, method, outcome |
@@ -35,6 +35,9 @@ The Pins map uses `pins-of-inaccessibility` as its feature value.
 Its readiness, error, and recovery events use the same map monitor.
 Pin IDs, search terms, and selected coordinates are excluded.
 Result-count buckets are `0`, `1`, `2-10`, `11-50`, and `51+`.
+Post events wait 300ms after the last filter change.
+Further input restarts the delay. Leaving the page cancels a pending event.
+The event contains no search text, tag, country, or region value.
 The `device` property on existing map events describes the viewport width, not a device model.
 
 ## Privacy and delivery

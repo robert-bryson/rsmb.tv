@@ -320,7 +320,7 @@ describe('MDX headings', () => {
         const { unmount } = render(<TableOfContentsFixture />);
         const navigation = await screen.findByRole('navigation', { name: 'Table of contents' });
         const subsection = screen.getByRole('heading', { name: 'Camp Notes' });
-        expect(observe).toHaveBeenCalledWith(subsection);
+        await waitFor(() => expect(observe).toHaveBeenCalledWith(subsection));
         const visible: IntersectionObserverEntry = {
             target: subsection, isIntersecting: true, boundingClientRect: new DOMRect(0, 140, 720, 30),
             intersectionRatio: 1, intersectionRect: new DOMRect(0, 140, 720, 30), rootBounds: null, time: 0,
@@ -442,17 +442,56 @@ describe('MDX headings', () => {
 });
 
 describe('review regressions: November 14 contents visibility', () => {
+    it('observes article headings when an unrelated element has the same ID', async () => {
+        const observe = vi.fn();
+        vi.stubGlobal('IntersectionObserver', class {
+            observe = observe;
+            disconnect() {}
+        });
+        render(<><h2 id="first-stop">Unrelated heading</h2><TableOfContentsFixture /></>);
+        const heading = screen.getByRole('heading', { name: 'First Stop' });
+        await waitFor(() => expect(observe).toHaveBeenCalledWith(heading));
+        expect(observe).not.toHaveBeenCalledWith(screen.getByRole('heading', { name: 'Unrelated heading' }));
+    });
+
+    it('ignores queued entries from an observer replaced after a heading changes', async () => {
+        const observers: { callback: IntersectionObserverCallback; observe: ReturnType<typeof vi.fn> }[] = [];
+        vi.stubGlobal('IntersectionObserver', class {
+            observe = vi.fn();
+            disconnect() {}
+            constructor(callback: IntersectionObserverCallback) { observers.push({ callback, observe: this.observe }); }
+        });
+        render(<TableOfContentsFixture />);
+        const navigation = await screen.findByRole('navigation', { name: 'Table of contents' });
+        const first = screen.getByRole('heading', { name: 'First Stop' });
+        const second = screen.getByRole('heading', { name: 'Camp Notes' });
+        await waitFor(() => expect(observers.at(-1)?.observe).toHaveBeenCalledWith(second));
+        const previous = observers.at(-1)!;
+        await act(async () => { second.id = 'updated-camp-notes'; });
+        await waitFor(() => expect(observers.at(-1)).not.toBe(previous));
+        const entry = (target: Element): IntersectionObserverEntry => ({
+            target, isIntersecting: true, boundingClientRect: new DOMRect(), intersectionRatio: 1,
+            intersectionRect: new DOMRect(), rootBounds: null, time: 0,
+        });
+        act(() => observers.at(-1)!.callback([entry(second)], {} as IntersectionObserver));
+        expect(within(navigation).getByRole('link', { name: 'Camp Notes' })).toHaveAttribute('aria-current', 'location');
+        act(() => previous.callback([entry(first)], {} as IntersectionObserver));
+        expect(within(navigation).getByRole('link', { name: 'Camp Notes' })).toHaveAttribute('aria-current', 'location');
+    });
+
     it.each(['enter', 'exit'])('keeps the first visible heading current after a partial %s notification', async change => {
         let onIntersection: IntersectionObserverCallback = () => undefined;
+        let ready = false;
         vi.stubGlobal('IntersectionObserver', class {
-            constructor(callback: IntersectionObserverCallback) { onIntersection = callback; }
-            observe() {}
+            constructor(callback: IntersectionObserverCallback) { onIntersection = callback; ready = false; }
+            observe(target: Element) { if (target.id === 'camp-notes') ready = true; }
             disconnect() {}
         });
         render(<TableOfContentsFixture />);
         const navigation = await screen.findByRole('navigation', { name: 'Table of contents' });
         const first = screen.getByRole('heading', { name: 'First Stop' });
         const second = screen.getByRole('heading', { name: 'Camp Notes' });
+        await waitFor(() => expect(ready).toBe(true));
         vi.spyOn(first, 'getBoundingClientRect').mockReturnValue(new DOMRect(0, 120, 720, 30));
         vi.spyOn(second, 'getBoundingClientRect').mockReturnValue(new DOMRect(0, 240, 720, 30));
         const entry = (target: Element, isIntersecting: boolean): IntersectionObserverEntry => ({

@@ -1,0 +1,363 @@
+{
+  "date": "2026-11-14",
+  "reviewedHead": "e48e14c",
+  "startingState": "Seven pending post-search files; the starting working tree was not clean.",
+  "scope": "Pending post search and its contents-navigation integration, tests, and documentation.",
+  "environment": {
+    "node": "v24.22.3",
+    "npm": "12.2.2",
+    "unitWorkers": 2
+  },
+  "reproduction": {
+    "initialFocusedSuite": {
+      "passed": 87,
+      "files": 3,
+      "node": "v26.13.0"
+    },
+    "newUnitRegressions": {
+      "failed": 2,
+      "passed": 70,
+      "files": 2
+    },
+    "forcedColorRegressions": {
+      "failed": 2,
+      "widths": [
+        320,
+        1280
+      ],
+      "engine": "Chromium"
+    }
+  },
+  "fixedDefects": [
+    "Query edits and clearing discarded navigation context.",
+    "Search focus disappeared in forced colors.",
+    "Retired contents callbacks could overwrite the active heading.",
+    "Contents lookup could observe an element outside the article."
+  ],
+  "validation": {
+    "unitSuite": {
+      "passed": 3371,
+      "files": 230
+    },
+    "focusedSuite": {
+      "passed": 106,
+      "files": 4
+    },
+    "pythonSuite": {
+      "passed": 18
+    },
+    "productionSearch": {
+      "passed": 14,
+      "skipped": 2,
+      "engines": [
+        "Chromium",
+        "WebKit"
+      ],
+      "skipReason": "WebKit does not support forced-color emulation."
+    },
+    "articleAndChapterFixtures": {
+      "passed": 52,
+      "engines": [
+        "Chromium",
+        "WebKit"
+      ]
+    },
+    "lint": "passed",
+    "applicationTypes": "passed",
+    "scriptTypes": "passed",
+    "externalAudit": {
+      "status": "blocked",
+      "reason": "Automatic approval review rejected export of dependency metadata to the npm registry without explicit authorization."
+    }
+  },
+  "coverage": {
+    "initialFocusedSample": {
+      "src/pages/Posts.tsx": {
+        "lines": {
+          "total": 65,
+          "covered": 63,
+          "skipped": 0,
+          "pct": 96.92
+        },
+        "functions": {
+          "total": 18,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 94.44
+        },
+        "statements": {
+          "total": 75,
+          "covered": 73,
+          "skipped": 0,
+          "pct": 97.33
+        },
+        "branches": {
+          "total": 108,
+          "covered": 107,
+          "skipped": 0,
+          "pct": 99.07
+        }
+      },
+      "src/content/postSearch.ts": {
+        "lines": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/blog/PostTableOfContents.tsx": {
+        "lines": {
+          "total": 80,
+          "covered": 80,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 24,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 96,
+          "covered": 94,
+          "skipped": 0,
+          "pct": 97.91
+        },
+        "branches": {
+          "total": 58,
+          "covered": 50,
+          "skipped": 0,
+          "pct": 86.2
+        }
+      }
+    },
+    "finalFullSuite": {
+      "lines": {
+        "total": 14430,
+        "covered": 12815,
+        "skipped": 0,
+        "pct": 88.8
+      },
+      "statements": {
+        "total": 17443,
+        "covered": 15197,
+        "skipped": 0,
+        "pct": 87.12
+      },
+      "functions": {
+        "total": 4058,
+        "covered": 3471,
+        "skipped": 0,
+        "pct": 85.53
+      },
+      "branches": {
+        "total": 13700,
+        "covered": 11405,
+        "skipped": 0,
+        "pct": 83.24
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "finalFiles": {
+      "src/pages/Posts.tsx": {
+        "lines": {
+          "total": 37,
+          "covered": 37,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 39,
+          "covered": 39,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 72,
+          "covered": 72,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/content/postSearch.ts": {
+        "lines": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/content/postFilters.ts": {
+        "lines": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 17,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 19,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/hooks/usePostSearchQuery.ts": {
+        "lines": {
+          "total": 24,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 25,
+          "covered": 25,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 19,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/components/PostSearch.tsx": {
+        "lines": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/blog/PostTableOfContents.tsx": {
+        "lines": {
+          "total": 84,
+          "covered": 84,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 25,
+          "covered": 25,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 102,
+          "covered": 100,
+          "skipped": 0,
+          "pct": 98.03
+        },
+        "branches": {
+          "total": 62,
+          "covered": 53,
+          "skipped": 0,
+          "pct": 85.48
+        }
+      }
+    },
+    "comparisonNote": "The initial sample and final full suite use different scopes and runtimes. Keep global percentages separate."
+  },
+  "commands": {
+    "units": "node node_modules/vitest/vitest.mjs run --coverage --coverage.reporter=json-summary --coverage.reporter=text --coverage.reportsDirectory=/tmp/rsmb-review-coverage-final --maxWorkers=2",
+    "focused": "node node_modules/vitest/vitest.mjs run src/test/blogPages.test.tsx src/test/mdxComponents.test.tsx src/test/postSearch.test.ts src/test/postFilters.test.ts",
+    "python": "npm run test:temperature-records",
+    "productionSearch": "PLAYWRIGHT_WEBKIT=1 node scripts/run-page-recovery-tests.js --config /tmp/rsmb-review-browser.config.ts --grep 'post search|reading page /posts'",
+    "readingFixtures": "RSMB_REVIEW_DEV_FIXTURES=1 PLAYWRIGHT_WEBKIT=1 node node_modules/@playwright/test/cli.js test tests/e2e/post-rendering.spec.ts tests/e2e/trip-headings.spec.ts --config /tmp/rsmb-review-browser.config.ts --workers=2",
+    "lint": "npm run lint",
+    "types": [
+      "npm run typecheck",
+      "node node_modules/typescript/bin/tsc -p tsconfig.scripts.json --noEmit"
+    ]
+  },
+  "notes": [
+    "Browser checks used fixed content and a temporary WebKit launcher; repository browser engine configuration was preserved.",
+    "The audit rejection was not bypassed through another tool or destination.",
+    "Manual phone-keyboard, screen-reader, hosted analytics, and source-publication checks remain in TODO.md."
+  ]
+}
