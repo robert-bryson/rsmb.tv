@@ -3,7 +3,6 @@ import { useEffect, useRef } from 'react';
 import { analyticsResultBucket, trackAnalyticsEvent } from '../utils/analytics';
 import { DevelopmentContentStatus } from '../components/DevelopmentContentStatus';
 import { PostRegionFilters } from '../components/PostRegionFilters';
-import { ContentSearch } from '../components/ContentSearch';
 import { filterPostsByTag, getAllBlogTags, tripFactTag } from '../content/blogTags';
 import { filterPostsByRegion, findGeographicTag, getAllBlogRegions } from '../content/blogRegions';
 import { getAllPosts } from '../content/posts';
@@ -21,8 +20,8 @@ const filterClasses = 'rounded-md px-3 py-1.5 text-sm transition-colors';
 
 export function Posts() {
     const allPosts = getAllPosts();
-    const { query, updateQuery, commitQuery, clearFilters, searchParams, returnUrl } = useSearchQuery();
-    const searchRef = useRef<HTMLInputElement>(null);
+    const { query, clearFilters, searchParams, returnUrl } = useSearchQuery();
+    const titleRef = useRef<HTMLHeadingElement>(null);
     const activeType = getPostType(searchParams.get('type'));
     const tag = searchParams.get('tag')?.trim() ?? '';
     const geographicTag = findGeographicTag(allPosts, tag);
@@ -53,11 +52,8 @@ export function Posts() {
 
     return (
         <div>
-            <h1 className="mb-2 text-3xl font-bold text-zinc-100">Posts</h1>
+            <h1 ref={titleRef} tabIndex={-1} className="mb-2 text-3xl font-bold text-zinc-100">Posts</h1>
             <p className="mb-6 max-w-2xl text-zinc-400">{metadata.description}</p>
-
-            <ContentSearch label="Search posts" hint="Search titles, summaries, tags, and places."
-                placeholder="Try a topic or a place…" query={query} onChange={updateQuery} onCommit={commitQuery} inputRef={searchRef} />
 
             <nav aria-label="Post type" className="mb-5 flex w-fit gap-1 rounded-lg bg-zinc-900 p-1">
                 {([
@@ -122,12 +118,13 @@ export function Posts() {
                     {posts.length === allPosts.length
                         ? `${posts.length} ${posts.length === 1 ? 'post' : 'posts'}`
                         : `${posts.length} of ${allPosts.length} posts`}
+                    {query && <> matching “{query}”</>}
                 </p>
                 {hasActiveFilters && <button
                     type="button"
                     onClick={() => {
                         clearFilters();
-                        searchRef.current?.focus();
+                        titleRef.current?.focus();
                     }}
                     className="min-h-11 rounded-md px-2 text-sm text-violet-300 hover:underline focus-visible:outline-2 focus-visible:outline-violet-400"
                 >Clear all filters</button>}

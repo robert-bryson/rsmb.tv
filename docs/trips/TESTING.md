@@ -292,6 +292,7 @@ Country fact links must retain their country. Region fact links must retain both
 
 Chapter checks compile trip MDX with the production remark plugin.
 They verify chapter boundaries, h1 precedence, h2 chapters, nested headings, module exports, and Markdown references.
+Trip contents tests list main chapters only and retain direct links to omitted subsections.
 Writing posts retain their existing structure.
 Browser checks measure sticky headings at phone and desktop widths.
 They check full, intermediate, and compact title sizes for h1 and h2 chapters.
@@ -313,6 +314,8 @@ They use the default font and DejaVu Sans to cover wider word measurements.
 Long chapter-title words must wrap within the text column.
 Navigation links and table-of-contents controls must remain within the screen.
 The contents header can wrap its button onto another row.
+The site navigation must also retain the search field at 200% text size.
+Check both the default font and a wider font at 320, 390, 640, and 768 pixels.
 The checks verify complete tap targets and collapse/expand behavior without horizontal scrolling.
 Header checks change padding and borders without changing the content box.
 The feature uses native CSS scrolling. Each post shares one title resize observer and one queued measurement frame.

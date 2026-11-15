@@ -38,12 +38,12 @@ export function ProjectsNavigation({ pathname, active }: { pathname: string; act
     >
       <div className="flex items-center">
         <IntentLink to="/projects" aria-current={active ? pathname === '/projects' ? 'page' : 'location' : undefined}
-          className={`inline-flex min-h-11 items-center hover:text-violet-400 ${active ? 'text-violet-400' : 'text-zinc-400'}`}>
+          className={`inline-flex min-h-[44px] items-center hover:text-violet-400 ${active ? 'text-violet-400' : 'text-zinc-400'}`}>
           Projects
         </IntentLink>
         <button ref={toggle} type="button" aria-label="Project pages" aria-expanded={open} aria-controls={id}
           onClick={() => setOpen(value => !value)}
-          className="grid min-h-11 min-w-8 place-items-center rounded text-zinc-400 hover:text-violet-300">
+          className="grid min-h-[44px] min-w-[24px] items-center justify-items-end rounded text-zinc-400 hover:text-violet-300">
           <svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5">
             <path d={open ? 'm3 7 3-3 3 3' : 'm3 5 3 3 3-3'} />
           </svg>

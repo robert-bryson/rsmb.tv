@@ -21,7 +21,7 @@ async function fontSize(element: Locator) {
 test('reader input stops fragment correction before it can pull the story back', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/tests/e2e/fixtures/trip-headings.html');
-    await expect(page.getByRole('navigation', { name: 'Table of contents' }).getByRole('link')).toHaveCount(5);
+    await expect(page.getByRole('navigation', { name: 'Table of contents' }).getByRole('link')).toHaveCount(3);
     const heading = page.locator(chapterSelector).first();
     await heading.evaluate(node => {
         const scroll = node.scrollIntoView.bind(node);
@@ -173,7 +173,7 @@ for (const width of [390, 1280]) {
 test('chapter links keep their IDs, keyboard access, and reload position', async ({ page }) => {
     await page.goto('/tests/e2e/fixtures/trip-headings.html');
     const toc = page.getByRole('navigation', { name: 'Table of contents' });
-    await expect(toc.getByRole('link')).toHaveCount(5);
+    await expect(toc.getByRole('link')).toHaveCount(3);
     await toc.getByRole('link', { name: 'Second day along the coast and through the mountains', exact: true }).click();
     await expect(page).toHaveURL(/#second-day-along-the-coast-and-through-the-mountains$/);
     await page.reload();
@@ -253,7 +253,7 @@ for (const level of [1, 2]) {
     });
 }
 
-for (const font of ['', 'DejaVu Sans']) for (const width of [320, 390]) {
+for (const font of ['', 'DejaVu Sans']) for (const width of [320, 390, 640, 768]) {
     test(`200% text keeps navigation and contents controls within ${width}px (${font || 'default font'})`, async ({ page }) => {
         await page.setViewportSize({ width, height: 900 });
         await page.goto('/tests/e2e/fixtures/trip-headings.html');
@@ -268,7 +268,20 @@ for (const font of ['', 'DejaVu Sans']) for (const width of [320, 390]) {
             expect(bounds.x).toBeGreaterThanOrEqual(0);
             expect(bounds.x + bounds.width).toBeLessThanOrEqual(width);
         }
+        const search = navigation.getByRole('searchbox', { name: 'Search site' });
+        await search.focus();
+        await expect(search).toBeInViewport();
+        const searchBounds = (await search.boundingBox())!;
+        expect(searchBounds.x).toBeGreaterThanOrEqual(0);
+        expect(searchBounds.x + searchBounds.width).toBeLessThanOrEqual(width);
+        const projectToggle = (await navigation.getByRole('button', { name: 'Project pages', exact: true }).boundingBox())!;
+        expect(projectToggle.width).toBeGreaterThanOrEqual(24);
+        expect(projectToggle.height).toBeGreaterThanOrEqual(44);
         const contents = page.getByRole('navigation', { name: 'Table of contents' });
+        if (width >= 640) {
+            await expect(contents.locator('ul')).toBeVisible();
+            return;
+        }
         const collapse = contents.getByRole('button', { name: 'Collapse', exact: true });
         await collapse.scrollIntoViewIfNeeded();
         const bounds = (await collapse.boundingBox())!;

@@ -67,6 +67,23 @@ function TableOfContentsFixture({
     );
 }
 
+function TripContentsFixture({ level }: { level: 1 | 2 }) {
+    const contentRef = useRef<HTMLDivElement>(null);
+    const Chapter = level === 1 ? mdxComponents.h1 : mdxComponents.h2;
+    const Subheading = level === 1 ? mdxComponents.h2 : mdxComponents.h3;
+    return <article className="trip-story">
+        <h1>Trip title outside the story</h1>
+        <PostHeadingProvider>
+            <PostTableOfContents contentRef={contentRef} />
+            <div ref={contentRef}>
+                <Chapter>First Stop</Chapter>
+                <Subheading>Camp Notes</Subheading>
+                <Chapter>Second Day</Chapter>
+            </div>
+        </PostHeadingProvider>
+    </article>;
+}
+
 afterEach(() => {
     window.history.replaceState(null, '', '/');
     vi.unstubAllGlobals();
@@ -122,6 +139,35 @@ describe('MDX links', () => {
         const link = screen.getByRole('link', { name: 'Protected' });
         expect(link).toHaveAttribute('target', '_blank');
         expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+    });
+});
+
+describe('November 15 trip contents review regressions', () => {
+    it.each([1, 2] as const)('lists only h%s chapters and keeps subsection permalinks usable', async level => {
+        const scrollIntoView = mockScrollIntoView();
+        const { flushFrame } = mockAnimationFrames();
+        window.history.replaceState(null, '', '#camp-notes');
+        render(<TripContentsFixture level={level} />);
+        const navigation = await screen.findByRole('navigation', { name: 'Table of contents' });
+        expect(within(navigation).getAllByRole('link').map(link => link.textContent)).toEqual(['First Stop', 'Second Day']);
+        expect(within(navigation).queryByRole('link', { name: 'Camp Notes' })).not.toBeInTheDocument();
+        expect(screen.getByRole('link', { name: 'Link to Camp Notes' })).toHaveAttribute('href', '#camp-notes');
+        flushFrame();
+        expect(scrollIntoView).toHaveBeenCalledOnce();
+        expect(scrollIntoView.mock.contexts[0]).toBe(screen.getByRole('heading', { name: 'Camp Notes' }));
+    });
+
+    it('observes chapter headings only when updating the current trip location', async () => {
+        const observe = vi.fn();
+        vi.stubGlobal('IntersectionObserver', class {
+            observe = observe;
+            disconnect() {}
+        });
+        render(<TripContentsFixture level={1} />);
+        await screen.findByRole('navigation', { name: 'Table of contents' });
+        expect(observe).toHaveBeenCalledWith(screen.getByRole('heading', { name: 'First Stop' }));
+        expect(observe).toHaveBeenCalledWith(screen.getByRole('heading', { name: 'Second Day' }));
+        expect(observe).not.toHaveBeenCalledWith(screen.getByRole('heading', { name: 'Camp Notes' }));
     });
 });
 

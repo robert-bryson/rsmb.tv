@@ -12,7 +12,8 @@ A personal website with software projects, data maps, writing, and motorcycle tr
 - **Temperature Records** — An interactive MapLibre GL map of U.S. temperature records. It shows recent station records, standing county and state extremes, and standing-record history.
 - **Tornado Tracks** — Recorded tornado county segments, density maps, annual trends, and warning context. See the [project guide](projects/tornado-tracks/readme.md).
 - **Projects** — Search names, descriptions, and technologies. Filter by category and share the selected view. Open maps, demos, and source repositories from the cards.
-- **Posts** — Writing and trip reports from Google documents. Search titles, summaries, tags, and places. Combine search with type and location filters. Includes RSS and social images.
+- **Site search** — A compact header field searches articles, projects, technologies, captions, and other pages. Results highlight matching words.
+- **Posts** — Writing and trip reports from Google documents. Browse by type, topic, and location. Includes RSS and social images.
 - **Trips** — Motorcycle trip reports with responsive photographs, route maps, accessible galleries, and short animations with playback controls.
 - **About** — Background on my experience in geospatial engineering and software development.
 
@@ -279,10 +280,11 @@ Browser tests check subtitle styles at phone and desktop widths, unique heading 
 Trip checks cover sticky chapter handoffs, subsection clearance, short screens, and larger-text image sizing.
 Post filter tests check country and region links, responsive rows, and long labels at phone widths.
 They also check that geographic aliases cannot replace a visible topical tag.
-Search checks cover URL encoding, combined filters, history, result counts, keyboard focus, and anonymous events.
+Search checks cover full article text, page and project matches, lazy loading, draft exclusion, highlighted excerpts, and keyboard focus. Filter checks cover existing query URLs, history, counts, and anonymous events.
 Project search checks also cover category counts, direct actions, empty directories, and map-data loading after explicit navigation.
 The production recovery runner includes these checks in Chromium and WebKit.
-Use the [project search guide](docs/project-discovery.md) for URL rules, code ownership, and focused commands.
+Use the [site search guide](docs/site-search.md) for index sources, publication rules, keyboard controls, and focused commands.
+Use the [project filter guide](docs/project-discovery.md) for directory URLs, counts, actions, and browser checks.
 Contents checks cover partial visibility and callbacks from retired observers.
 Use the [search and article guide](docs/blog-publishing.md#check-article-navigation) for URL rules and focused test commands.
 These tests do not require Google access or published trip assets.

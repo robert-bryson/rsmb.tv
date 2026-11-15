@@ -35,8 +35,8 @@ Local browser tests cannot verify the analytics account or physical devices.
 - [ ] Verify the `rsmb-tv` tag, project events, map events, error reports, and privacy preferences in Umami.
   Check the details, demo, and source destinations on project cards.
   Create the goals and funnel in the [analytics guide](docs/umami-analytics.md).
-- [ ] Test navigation, post search, project search, and map controls with VoiceOver or NVDA.
-  Check search result announcements and focus after clearing.
+- [ ] Test navigation, site search, list filters, and map controls with VoiceOver or NVDA.
+  Check result announcements, keyboard browsing, Escape, retry, and focus after clearing.
   Check category counts and the new-tab descriptions on project actions.
   Include hover dismissal, route announcements, help dismissal, and disabled character shortcuts.
 
@@ -46,7 +46,10 @@ Complete these checks before publishing the affected story.
 
 ### PCH 2024
 
-- [ ] Complete the [PCH publication checks](docs/trips/pch-2024-galleries.md#publication-checks).
+The November 15 asset checks passed. All photos and processed routes are hosted.
+The imported Sheet row is marked published. No site deployment ran during the asset check.
+
+- [ ] Resolve the remaining chronology, mileage, and image privacy decisions in the [PCH publication checks](docs/trips/pch-2024-galleries.md#publication-checks).
 
 ### Route 66ish 2025
 
@@ -142,11 +145,10 @@ Use the [November 10 review](docs/reviews/2026-11-10-project-quality-review.md) 
 
 ### Physical devices
 
-- [ ] Check post and project search with a phone keyboard.
+- [ ] Check site search and list filters with a phone keyboard.
   Include composed text, accented names, clearing, and returning from a result.
-  Type immediately after clearing a category. Verify the URL, field, counts, and results.
-  Check URL updates after a pause, Enter, and leaving the field.
-  Press Back while a query update is pending. Verify that navigation remains on the selected entry.
+  Confirm that composition keys keep focus in the field and do not open a result.
+  Verify filter counts, clearing, and restoration through Back, Forward, and reload.
   Record the device, keyboard, browser, and result.
 - [ ] Check [trip reading](docs/reviews/2026-11-13-trip-layout-quality-review.md#remaining-checks) on a real phone.
   Include large text, chapter changes, subsection links, and rotation.

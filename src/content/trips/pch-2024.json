@@ -5,7 +5,7 @@
         "end": "2024-10-07"
     },
     "ridingDays": 5,
-    "distanceMiles": 1641,
+    "distanceMiles": 1639,
     "motorcycle": "Honda CB500X",
     "countries": [
         {
@@ -1696,7 +1696,7 @@
             "id": "day-one",
             "title": "Seattle to Centralia",
             "date": "2024-10-03",
-            "headingId": "october-3",
+            "headingId": "seattle-to-centralia",
             "trackIds": [
                 "oct-3-2024-14-10-48"
             ],
@@ -1707,7 +1707,7 @@
             "id": "day-two",
             "title": "Centralia to Reedsport",
             "date": "2024-10-04",
-            "headingId": "october-4",
+            "headingId": "centralia-to-reedsport",
             "trackIds": [
                 "oct-4-2024-09-09-11"
             ],
@@ -1718,7 +1718,7 @@
             "id": "day-three",
             "title": "Reedsport to Fort Bragg",
             "date": "2024-10-05",
-            "headingId": "october-5",
+            "headingId": "reedsport-to-fort-bragg",
             "trackIds": [
                 "oct-5-2024-08-02-47"
             ],
@@ -1729,7 +1729,7 @@
             "id": "day-four",
             "title": "Fort Bragg to Bridgeport",
             "date": "2024-10-06",
-            "headingId": "october-6",
+            "headingId": "fort-bragg-to-bridgeport",
             "trackIds": [
                 "oct-6-2024-07-53-56"
             ],
@@ -1740,7 +1740,7 @@
             "id": "day-five",
             "title": "Bridgeport to Valley Center",
             "date": "2024-10-07",
-            "headingId": "october-7",
+            "headingId": "bridgeport-to-valley-center",
             "trackIds": [
                 "oct-7-2024-08-55-55"
             ],

@@ -9,7 +9,6 @@ const total = projects.length;
 const totalLabel = `${total} ${total === 1 ? 'project' : 'projects'}`;
 const pythonProjects = projects.filter(project => project.tech.includes('Python'));
 const pythonTools = pythonProjects.filter(project => project.category === 'tools');
-const tools = projects.filter(project => project.category === 'tools');
 
 async function expectAccessible(page: Page) {
     const audit = await new AxeBuilder({ page })
@@ -20,52 +19,39 @@ async function expectAccessible(page: Page) {
 for (const width of [320, 1280]) {
     test(`project discovery combines filters and restores browser history at ${width}px`, async ({ page }) => {
         await page.setViewportSize({ width, height: 900 });
-        await page.goto('/projects');
-        const search = page.getByRole('searchbox', { name: 'Search projects' });
+        await page.goto('/projects?q=python');
+        const search = page.getByRole('searchbox', { name: 'Search site' });
         const categories = page.getByRole('navigation', { name: 'Project categories' });
         const results = page.getByRole('list', { name: 'Projects', exact: true });
-        await expect(results.getByRole('heading', { level: 2 })).toHaveCount(total);
-
-        await search.pressSequentially('python');
-        await expect(search).toBeFocused();
+        const matching = ' matching “python”';
+        await expect(search).toHaveValue('');
+        await expect(page.locator('main').getByRole('searchbox')).toHaveCount(0);
         await expect(results.getByRole('heading', { level: 2 })).toHaveText(pythonProjects.map(project => project.title));
-        await expect(page.getByRole('status')).toHaveText(`${pythonProjects.length} of ${totalLabel}`);
+        await expect(page.getByRole('status')).toHaveText(`${pythonProjects.length} of ${totalLabel}${matching}`);
         await expect(categories.getByRole('link', { name: 'Maps & data' })).toHaveAttribute('href', '/projects?category=maps&q=python');
         await categories.getByRole('link', { name: 'Command line' }).click();
-        await expect(page.getByRole('status')).toHaveText(`${pythonTools.length} of ${totalLabel}`);
+        await expect(page.getByRole('status')).toHaveText(`${pythonTools.length} of ${totalLabel}${matching}`);
         await expect(results.getByRole('heading', { level: 2 })).toHaveText(pythonTools.map(project => project.title));
         await expect(categories.getByRole('link', { name: 'Command line' })).toHaveAccessibleDescription(`${pythonTools.length} matching projects`);
 
         await page.reload();
-        await expect(search).toHaveValue('python');
         await expect(categories.getByRole('link', { name: 'Command line' })).toHaveAttribute('aria-current', 'page');
         await results.getByRole('link').filter({ has: page.getByRole('heading', { name: 'Anki Artisan', exact: true }) }).click();
         await expect(page.getByRole('heading', { level: 1, name: 'Anki Artisan', exact: true })).toBeVisible();
         await page.goBack();
-        await expect(search).toHaveValue('python');
-        await expect(page.getByRole('status')).toHaveText(`${pythonTools.length} of ${totalLabel}`);
+        await expect(page.getByRole('status')).toHaveText(`${pythonTools.length} of ${totalLabel}${matching}`);
         await page.goBack();
         await expect(page).toHaveURL(/\/projects\?q=python$/);
-        await expect(page.getByRole('status')).toHaveText(`${pythonProjects.length} of ${totalLabel}`);
+        await expect(page.getByRole('status')).toHaveText(`${pythonProjects.length} of ${totalLabel}${matching}`);
         await page.goForward();
-        await expect(page.getByRole('status')).toHaveText(`${pythonTools.length} of ${totalLabel}`);
+        await expect(page.getByRole('status')).toHaveText(`${pythonTools.length} of ${totalLabel}${matching}`);
 
-        await search.fill('no matching project');
-        await expect(page.getByText('No projects match these filters.')).toBeVisible();
-        await expect(page.getByRole('status')).toHaveText(`0 of ${totalLabel}`);
-        expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
-        await expectAccessible(page);
-
-        await search.press('Tab');
-        await expect(page.getByRole('button', { name: 'Clear search' })).toBeFocused();
-        await page.keyboard.press('Enter');
-        await expect(search).toHaveValue('');
-        await expect(search).toBeFocused();
-        await expect(page.getByRole('status')).toHaveText(`${tools.length} of ${totalLabel}`);
         await page.getByRole('button', { name: 'Clear all filters' }).click();
         await expect(page).toHaveURL(/\/projects$/);
-        await expect(search).toBeFocused();
+        await expect(page.getByRole('heading', { level: 1, name: 'Projects' })).toBeFocused();
         await expect(results.getByRole('heading', { level: 2 })).toHaveCount(total);
+        expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+        await expectAccessible(page);
     });
 
     test(`project cards provide distinct actions and readable previews at ${width}px`, async ({ page }) => {
@@ -97,11 +83,16 @@ for (const width of [320, 1280]) {
         const isFlightData = (url: string) => new URL(url).pathname === '/data/flights/flights.geojson';
         page.on('request', request => { if (isFlightData(request.url())) requests.push(request.url()); });
         await page.goto('/projects');
-        await page.getByRole('searchbox', { name: 'Search projects' }).pressSequentially('flights');
-        await expect(page.getByRole('list', { name: 'Projects', exact: true }).getByRole('heading', { level: 2 })).toHaveText(['Flights']);
+        await page.getByRole('searchbox', { name: 'Search site' }).pressSequentially('flights');
+        await expect(page.getByRole('region', { name: 'Search results' }).getByRole('link').first()).toContainText('Flights');
+        await page.waitForLoadState('networkidle');
+        const map = page.getByRole('region', { name: 'Search results' }).locator('a[href="/projects/flights/map"]');
+        await map.focus();
+        // Wait beyond the destination prefetch delay while browsing results.
+        await page.waitForTimeout(500);
         expect(requests).toEqual([]);
         const mapRequest = page.waitForRequest(request => isFlightData(request.url()));
-        await page.getByRole('link', { name: 'Open map: Flights', exact: true }).click();
+        await map.click();
         await mapRequest;
         await expect(page).toHaveURL(/\/projects\/flights\/map$/);
         expect(requests.length).toBeGreaterThan(0);
@@ -112,7 +103,7 @@ for (const width of [320, 1280]) {
         await page.emulateMedia({ forcedColors: 'active' });
         await page.setViewportSize({ width, height: 900 });
         await page.goto('/projects');
-        const search = page.getByRole('searchbox', { name: 'Search projects' });
+        const search = page.getByRole('searchbox', { name: 'Search site' });
         await search.focus();
         await expect(search).toBeFocused();
         const outline = await search.evaluate(element => {

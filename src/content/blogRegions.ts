@@ -1,9 +1,7 @@
 import { tripFactTag } from './blogTags';
+import type { PostCountry } from './postMetadata';
 
-export interface PostCountry {
-    code: string;
-    regions: string[];
-}
+export type { PostCountry } from './postMetadata';
 
 type LocatedPost = { countries?: PostCountry[]; tags?: string[] };
 

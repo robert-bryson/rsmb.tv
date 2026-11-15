@@ -1,7 +1,8 @@
-# Project search and filters
+# Project directory and filters
 
-Use `/projects` to search the project directory.
-The directory reads local metadata. Search does not load a project application or its data.
+Use the `/projects` directory to browse categories and open project descriptions, maps, demos, or source code.
+Use [site search](site-search.md) in the top navigation to search content across the site.
+Existing keyword URLs continue to filter this directory.
 
 ## Filter URLs
 
@@ -27,37 +28,16 @@ The result count compares the visible projects with the complete directory.
 An empty directory shows **No projects yet.**
 An unsuccessful search shows **No projects match these filters.**
 
-## History and input
+## Existing query links
 
-Input and results update immediately.
-The URL replaces the current history entry 400ms after the last edit.
-This delay combines rapid edits into one URL write.
-Browsers limit the rate of history writes.
-Enter and blur commit the pending query immediately.
-Pass the hook's `commitQuery` function to the field's `onCommit` property.
-A category link creates an entry and retains the search text.
-**Clear search** removes only `q`. **Clear all filters** removes every list filter and creates an entry.
-Both clear buttons return focus to the field.
-Clearing all filters commits the previous draft first, so Back can restore it.
-Other navigation, native Back, and unmount cancel delayed writes.
-Back, Forward, and reload restore the selected entry.
+Existing `/projects?q=...` links continue filtering project metadata.
+The count displays the active query so that it does not silently hide projects.
+Category links retain the query. Back, Forward, and reload restore the selected filters.
+**Clear all filters** clears the query and category, creates a history entry, and focuses the page heading.
+The header field always searches the whole site, independently of directory filters.
 
-The shared search hook keeps one draft of the complete parameter string.
-Each mounted field receives an owner ID. A revision is the increasing number assigned to a local write.
-Reconcile router state after commit, in a layout effect before paint.
-React can replay an older router snapshot during an urgent input render.
-That snapshot must not reset the draft or consume write records.
-Each local write records its owner, revision, parameters, and navigation type.
-Only an unconsumed, matching write can retain newer input during an older router commit.
-Consume each pending revision separately. Earlier commits can arrive after a newer commit.
-Remove a revision when it commits. Other navigation clears the pending list.
-Copied navigation state cannot make another URL look like a new input write.
-The same rule applies when clearing filters creates a history entry.
-New text must not restore a category that the user just cleared.
-
-Writes copy unrelated object navigation state. They remove the temporary `restoreScroll` flag.
-The internal write record remains in history so that delayed clear actions can be identified.
-It is not a public URL parameter or an analytics property.
+The shared `useSearchQuery` hook still handles filter URL state and preserves unrelated object navigation state.
+Its delayed input API remains covered by its focused unit tests.
 
 ## Project actions
 
@@ -84,10 +64,9 @@ See the [analytics contract](umami-analytics.md#event-contract).
 | [`projectFilters.ts`](../src/content/projectFilters.ts) | Matching, category parsing, and encoded URLs |
 | [`search.ts`](../src/utils/search.ts) | Shared text normalization and query replacement |
 | [`useSearchQuery.ts`](../src/hooks/useSearchQuery.ts) | Draft parameters, write ownership, and history |
-| [`ContentSearch.tsx`](../src/components/ContentSearch.tsx) | Labels, hints, input, clearing, and keyboard focus |
 | [`Projects.tsx`](../src/pages/Projects.tsx) | Counts, cards, actions, and empty states |
 
-Posts use the same field, hook, and text helpers.
+Posts and Projects use the same header search and retain their own filter URL helpers.
 Keep post-specific matching and filters in their existing modules.
 See [post search](blog-publishing.md#maintain-search-behavior) and [image delivery](image-assets.md) before changing shared behavior.
 
@@ -96,24 +75,22 @@ See [post search](blog-publishing.md#maintain-search-behavior) and [image delive
 Run the focused unit checks:
 
 ```bash
-npx vitest run src/test/Projects.test.tsx src/test/projectFilters.test.ts src/test/projects.test.ts src/test/useSearchQuery.test.tsx src/test/ContentSearch.test.tsx src/test/search.test.ts src/test/blogPages.test.tsx
+npx vitest run src/test/Projects.test.tsx src/test/projectFilters.test.ts src/test/projects.test.ts src/test/useSearchQuery.test.tsx src/test/ContentSearch.test.tsx src/test/searchTransition.test.tsx
 ```
 
 Run project and post search against fixed production content:
 
 ```bash
-PLAYWRIGHT_WEBKIT=1 npm run test:page-recovery -- --grep 'project |projects search|post search'
+PLAYWRIGHT_WEBKIT=1 npm run test:page-recovery -- --grep 'project |projects search|site search|post filters'
 ```
 
 The standard recovery runner includes project discovery. CI runs it in Chromium and WebKit.
 Chromium checks forced-color focus. WebKit skips only cases that require unsupported emulation.
-The tests check typing, category counts, history, reload, clearing, action links, accessibility, and horizontal overflow.
-Map-data checks require no request while searching and a real request after **Open map**.
+The tests check header search, category counts, history, reload, clearing, action links, accessibility, and horizontal overflow.
+Map-data checks require no request while browsing search results and a real request after selecting the map.
 This second assertion verifies that the request detector works.
 
 The search hook tests delay router commits in a controlled queue.
 They check copied state, replayed state, clear actions, and newer input during earlier commits.
 Tests use a controlled clock to check combined writes, explicit commits, cancellation, and the exact delay.
-Browser tests also repeat twenty uninterrupted searches at each width in both engines.
-They check every character, focus, the final URL, and retained country filters.
 Real phone keyboards and screen readers still require the checks in [TODO.md](../TODO.md).

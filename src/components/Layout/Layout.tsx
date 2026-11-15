@@ -2,6 +2,7 @@ import { IntentLink } from '../IntentLink';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ProjectsNavigation } from './ProjectsNavigation';
+import { SiteSearch } from './SiteSearch';
 import { trackAnalyticsEvent } from '../../utils/analytics';
 
 interface LayoutProps {
@@ -110,15 +111,16 @@ export function Layout({ children }: LayoutProps) {
 
       {/* Header */}
       <header ref={headerRef} onFocusCapture={() => setIsHeaderVisible(true)} className={`site-header sticky top-0 z-40 border-b border-zinc-800/70 transition-transform duration-200 ease-out motion-reduce:transition-none ${isHeaderVisible ? 'translate-y-0' : '-translate-y-full'}`}>
-        <nav className="max-w-3xl mx-auto px-6 py-2 flex flex-wrap justify-between items-center gap-x-4" aria-label="Main navigation">
+        {/* Fixed minimum targets and side padding leave room for enlarged text. */}
+        <nav className="max-w-3xl mx-auto px-[24px] py-2 flex flex-wrap items-center justify-end gap-x-3 gap-y-1 sm:gap-x-6" aria-label="Main navigation">
           <IntentLink
             to="/"
             aria-current={location.pathname === '/' ? 'page' : undefined}
-            className="inline-flex min-h-11 items-center text-lg font-medium text-zinc-100 hover:text-violet-400"
+            className="mr-auto inline-flex min-h-[44px] items-center text-lg font-medium text-zinc-100 hover:text-violet-400"
           >
             rsmb
           </IntentLink>
-          <ul className="flex flex-wrap items-center gap-3 sm:gap-6 text-sm">
+          <ul className="order-2 flex flex-wrap items-center gap-3 text-sm sm:gap-6">
             {navLinks.map(({ to, label, activePaths }) => {
               const isActive = (activePaths ?? [to]).some((path) => isNavLinkActive(location.pathname, path));
               if (to === '/projects') {
@@ -129,7 +131,7 @@ export function Layout({ children }: LayoutProps) {
                   <IntentLink
                     to={to}
                     aria-current={isActive ? location.pathname === to ? 'page' : 'location' : undefined}
-                    className={`inline-flex min-h-11 items-center ${getNavLinkClassName(isActive)}`}
+                    className={`inline-flex min-h-[44px] items-center ${getNavLinkClassName(isActive)}`}
                   >
                     {label}
                   </IntentLink>
@@ -137,6 +139,7 @@ export function Layout({ children }: LayoutProps) {
               );
             })}
           </ul>
+          <SiteSearch key={location.key} />
         </nav>
       </header>
 

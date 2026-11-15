@@ -11,39 +11,10 @@ import { lazy, type ComponentType, type LazyExoticComponent } from 'react';
 import { moduleLoader } from '../navigation/moduleLoader';
 import { getTripSummary } from '../features/trips/tripSummaries';
 import { tripFactTag } from './blogTags';
-import { separatePostGeography, type PostCountry } from './blogRegions';
-import type { MetadataImage } from '../utils/pageMetadata';
+import { separatePostGeography } from './blogRegions';
+import type { BlogPostMeta } from './postMetadata';
 
-export type BlogPostFormat = 'post' | 'trip';
-
-export interface DevelopmentPostMeta {
-    published: boolean;
-    rowNumber: number;
-    issues: string[];
-    contentAvailable: boolean;
-    manifestAvailable?: boolean;
-    sheetUrl?: string;
-    documentUrl?: string;
-    driveFolderUrl?: string;
-    assets?: {
-        webpFiles: number;
-        geoJsonFiles: number;
-    };
-}
-
-export interface BlogPostMeta {
-    slug: string;
-    title: string;
-    date: string;
-    description: string;
-    tags: string[];
-    countries?: PostCountry[];
-    format?: BlogPostFormat;
-    tripId?: string;
-    image?: MetadataImage;
-    series?: { id: string; title: string; order: number };
-    development?: DevelopmentPostMeta;
-}
+export type { BlogPostMeta, BlogPostFormat, DevelopmentPostMeta } from './postMetadata';
 
 export interface MdxComponentProps {
     components?: Record<string, unknown>;

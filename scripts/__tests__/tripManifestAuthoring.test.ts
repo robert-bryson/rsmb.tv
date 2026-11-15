@@ -27,6 +27,16 @@ const tripWithDays = tripManifestSchema.parse({
 });
 
 describe('trip authoring references', () => {
+    it('keeps PCH day anchors aligned with the current city-to-city story chapters', () => {
+        expect(pch.days.map(day => [day.title, day.headingId])).toEqual([
+            ['Seattle to Centralia', 'seattle-to-centralia'],
+            ['Centralia to Reedsport', 'centralia-to-reedsport'],
+            ['Reedsport to Fort Bragg', 'reedsport-to-fort-bragg'],
+            ['Fort Bragg to Bridgeport', 'fort-bragg-to-bridgeport'],
+            ['Bridgeport to Valley Center', 'bridgeport-to-valley-center'],
+        ]);
+    });
+
     it('accepts shared overnight stops and overlapping galleries on separate days', () => {
         const trip = structuredClone(tripWithDays);
         trip.galleries!.camp = [...trip.galleries!.coast];

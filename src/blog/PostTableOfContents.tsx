@@ -55,11 +55,17 @@ export function PostTableOfContents({ contentRef, collapsible = false }: PostTab
             const firstMap = content.querySelector<HTMLElement>('[data-trip-map]');
             if (firstMap && !firstMap.id) firstMap.id = 'trip-route';
             const headings = Array.from(content.querySelectorAll<HTMLElement>('[data-post-heading]'));
+            // Trip chapters use h1, or h2 in reports whose title sits outside MDX.
+            // Keep every heading available below for direct subsection links.
+            const chapterLevel = content.closest('.trip-story')
+                ? Math.min(...headings.map(heading => Number(heading.tagName.slice(1))))
+                : undefined;
             const nextItems = headings.map((heading) => ({
                 id: heading.id,
                 level: Number(heading.tagName.slice(1)),
                 text: getHeadingText(heading),
-            })).filter((item) => item.id && item.text);
+            })).filter((item) => item.id && item.text
+                && (chapterLevel === undefined || item.level === chapterLevel));
 
             setItems((currentItems) => (itemsMatch(currentItems, nextItems) ? currentItems : nextItems));
 

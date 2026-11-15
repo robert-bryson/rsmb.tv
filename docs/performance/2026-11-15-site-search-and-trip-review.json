@@ -1,0 +1,476 @@
+{
+  "date": "2026-11-15",
+  "reviewedHead": "a665de3",
+  "scope": "Outstanding site search, navigation, trip presentation, PCH metadata, tests, and documentation changes.",
+  "environment": {
+    "node": "v26.13.0",
+    "npm": "11.20.0",
+    "declaredNode": "24.22.3",
+    "declaredPackageManager": "npm@12.2.2",
+    "vitest": "5.1.0",
+    "playwright": "1.65.0",
+    "unitWorkers": 2,
+    "browserWorkers": 2,
+    "runtimeNote": "The local runtime differs from the declared CI runtime. These results do not verify a clean install under the declared versions."
+  },
+  "reproduction": {
+    "baselineUnit": {
+      "passed": 3438,
+      "files": 238
+    },
+    "initialTripBrowser": {
+      "passed": 18,
+      "failed": 2
+    },
+    "firstReviewUnitRegressions": {
+      "failed": 8
+    },
+    "additionalIndexRegressions": {
+      "failed": 4
+    },
+    "prefetchBrowserRegressions": {
+      "failed": 2
+    },
+    "largeTextPopupRegression": {
+      "failed": 1,
+      "viewportHeight": 900,
+      "panelBottom": 998
+    },
+    "additionalDesktopBreakpointFailures": {
+      "width": 640,
+      "fonts": 2
+    }
+  },
+  "validation": {
+    "unitSuite": {
+      "passed": 3461,
+      "files": 239,
+      "exitCode": 0,
+      "addedTests": 23
+    },
+    "coverageRun": {
+      "passed": 3461,
+      "files": 239,
+      "execExitCode": 143,
+      "note": "All tests and coverage reports completed. Exec reported termination after the complete summary. The separate full test run verified a clean exit."
+    },
+    "productionBrowser": {
+      "passed": 52,
+      "skipped": 4,
+      "failed": 0,
+      "engines": [
+        "Chromium",
+        "WebKit"
+      ],
+      "skipReason": "WebKit does not support forced-color emulation."
+    },
+    "tripHeadingsBrowser": {
+      "passed": 48,
+      "failed": 0,
+      "engines": [
+        "Chromium",
+        "WebKit"
+      ],
+      "largeTextWidths": [
+        320,
+        390,
+        640,
+        768
+      ],
+      "fonts": [
+        "default",
+        "DejaVu Sans"
+      ]
+    },
+    "temperaturePython": {
+      "passed": 18
+    },
+    "productionBuild": "passed using current imported content without source sync or deployment",
+    "productionSmoke": {
+      "tripChapters": 7,
+      "dayAnchors": 5,
+      "slugSearch": true,
+      "motorcycleSearch": true,
+      "popupWithinViewport": true,
+      "pageErrors": 0
+    },
+    "lint": "passed with zero warnings",
+    "types": "application, Vite configuration, and scripts passed",
+    "dependencyAudit": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "intermediateLoadRun": {
+      "passed": 3458,
+      "failed": 3,
+      "condition": "The image-encoding cases hit their 5-second limit while production builds and coverage jobs ran concurrently. The quiet rerun passed all tests with the existing timeout."
+    }
+  },
+  "coverage": {
+    "beforeFull": {
+      "lines": {
+        "covered": 13050,
+        "total": 14675,
+        "pct": 88.92
+      },
+      "branches": {
+        "covered": 11679,
+        "total": 14008,
+        "pct": 83.37
+      },
+      "functions": {
+        "covered": 3552,
+        "total": 4144,
+        "pct": 85.71
+      },
+      "statements": {
+        "covered": 15493,
+        "total": 17758,
+        "pct": 87.24
+      }
+    },
+    "afterFull": {
+      "lines": {
+        "covered": 13079,
+        "total": 14698,
+        "pct": 88.98
+      },
+      "branches": {
+        "covered": 11729,
+        "total": 14053,
+        "pct": 83.46
+      },
+      "functions": {
+        "covered": 3557,
+        "total": 4144,
+        "pct": 85.83
+      },
+      "statements": {
+        "covered": 15533,
+        "total": 17788,
+        "pct": 87.32
+      }
+    },
+    "fullComparisonNote": "The full snapshots contain different source. Use the matched final-source comparison to isolate the effect of the added tests.",
+    "matchedFinalSource": {
+      "subset": {
+        "passed": 145,
+        "skipped": 22,
+        "metrics": {
+          "lines": {
+            "covered": 288,
+            "total": 314,
+            "pct": 91.71
+          },
+          "branches": {
+            "covered": 300,
+            "total": 376,
+            "pct": 79.78
+          },
+          "functions": {
+            "covered": 82,
+            "total": 92,
+            "pct": 89.13
+          },
+          "statements": {
+            "covered": 353,
+            "total": 399,
+            "pct": 88.47
+          }
+        }
+      },
+      "complete": {
+        "passed": 167,
+        "metrics": {
+          "lines": {
+            "covered": 308,
+            "total": 314,
+            "pct": 98.08
+          },
+          "branches": {
+            "covered": 338,
+            "total": 376,
+            "pct": 89.89
+          },
+          "functions": {
+            "covered": 90,
+            "total": 92,
+            "pct": 97.82
+          },
+          "statements": {
+            "covered": 386,
+            "total": 399,
+            "pct": 96.74
+          }
+        }
+      },
+      "omittedPattern": "November 15|site search index loading",
+      "method": "Same final production source, runtime, provider, six included modules, and worker count; only the selected test groups differ."
+    },
+    "finalFiles": {
+      "scripts/post-registry.ts": {
+        "lines": {
+          "covered": 17,
+          "total": 17,
+          "pct": 100
+        },
+        "branches": {
+          "covered": 22,
+          "total": 22,
+          "pct": 100
+        },
+        "functions": {
+          "covered": 2,
+          "total": 2,
+          "pct": 100
+        },
+        "statements": {
+          "covered": 20,
+          "total": 20,
+          "pct": 100
+        }
+      },
+      "scripts/site-search-plugin.ts": {
+        "lines": {
+          "covered": 116,
+          "total": 121,
+          "pct": 95.86
+        },
+        "branches": {
+          "covered": 157,
+          "total": 179,
+          "pct": 87.7
+        },
+        "functions": {
+          "covered": 30,
+          "total": 31,
+          "pct": 96.77
+        },
+        "statements": {
+          "covered": 144,
+          "total": 153,
+          "pct": 94.11
+        }
+      },
+      "src/blog/PostTableOfContents.tsx": {
+        "lines": {
+          "covered": 86,
+          "total": 86,
+          "pct": 100
+        },
+        "branches": {
+          "covered": 57,
+          "total": 66,
+          "pct": 86.36
+        },
+        "functions": {
+          "covered": 26,
+          "total": 26,
+          "pct": 100
+        },
+        "statements": {
+          "covered": 102,
+          "total": 104,
+          "pct": 98.07
+        }
+      },
+      "src/components/Layout/SiteSearch.tsx": {
+        "lines": {
+          "covered": 59,
+          "total": 60,
+          "pct": 98.33
+        },
+        "branches": {
+          "covered": 70,
+          "total": 73,
+          "pct": 95.89
+        },
+        "functions": {
+          "covered": 22,
+          "total": 23,
+          "pct": 95.65
+        },
+        "statements": {
+          "covered": 80,
+          "total": 82,
+          "pct": 97.56
+        }
+      },
+      "src/content/siteSearch.ts": {
+        "lines": {
+          "covered": 28,
+          "total": 28,
+          "pct": 100
+        },
+        "branches": {
+          "covered": 32,
+          "total": 36,
+          "pct": 88.88
+        },
+        "functions": {
+          "covered": 8,
+          "total": 8,
+          "pct": 100
+        },
+        "statements": {
+          "covered": 37,
+          "total": 37,
+          "pct": 100
+        }
+      },
+      "src/navigation/siteSearchIndex.ts": {
+        "lines": {
+          "covered": 2,
+          "total": 2,
+          "pct": 100
+        },
+        "branches": {
+          "covered": 0,
+          "total": 0,
+          "pct": 100
+        },
+        "functions": {
+          "covered": 2,
+          "total": 2,
+          "pct": 100
+        },
+        "statements": {
+          "covered": 3,
+          "total": 3,
+          "pct": 100
+        }
+      }
+    }
+  },
+  "searchChunk": {
+    "file": "_virtual_site-search-DLWNjPtP.js",
+    "bytes": 111266,
+    "gzipBytes": 37850
+  },
+  "sourceSha256": {
+    "scripts/post-registry.ts": "421c1742c260d9ad4cb6dcfa8e4bd41197b0ff6b0980fb6b6e035f634509461d",
+    "scripts/site-search-plugin.ts": "3f5fa0346b0e30d058389882d396a0d906f289182ff0c3b27340089fa0697ac2",
+    "scripts/trip-content-plugin.ts": "1ee868974ef39824b884822c2eb083ab32297dc03ea16e4db913033baa8f7333",
+    "src/blog/PostTableOfContents.tsx": "8385c5917a5644c8dac15a1ee7c68248f2f9c75ffc18b14e8ccc64350de36a70",
+    "src/components/Layout/Layout.tsx": "042077a24303c6c94736bd664bae98eba873546fb319fde6fcae46f33068cc47",
+    "src/components/Layout/ProjectsNavigation.tsx": "b5b40e07ca2371bbdc2292244a2704e727a460e4a11f8b8f2a954e42cea32d09",
+    "src/components/Layout/SiteSearch.tsx": "0e037b11b6b723a1e4eff192a81f898798f0b313b2a56e0f076a73dea18566cc",
+    "src/content/blogRegions.ts": "32029f4dde4ec804216642d8a3b8385dae3c6ae212d44c6d5bb8480f2a3eabf2",
+    "src/content/postMetadata.ts": "a9a7c840b0bc83e6ae4c054a4f7f47581054b751af8185484e4477b62798bdf3",
+    "src/content/posts.ts": "d3115f3e8e00666eb66b32b6eb328a09a4f6bacc8f5c250b94fed79a2eb7c555",
+    "src/content/siteSearch.ts": "bb9910395220e62f1abff03e5fbb07edb191ad411c8d1406b95e0e88daddfa71",
+    "src/content/trips/pch-2024.json": "33190386f20d69fa0979d05c25c14368976868e20509b86fbe5bd6c8baefd22a",
+    "src/index.css": "786a12d54398d209a585402bdef6f51df1af1e9e21eb3b59f58198a14055649a",
+    "src/navigation/siteSearchIndex.ts": "f6f6276f62b481ed7038369eb4e15ea6e0c9109011fbdc52228bbf21648f0da0",
+    "src/pages/Posts.tsx": "5286e6d929d7e2ce1a0af549fdcca6b9ad6bab86bcafa3dac1bb61d26dc7fea4",
+    "src/pages/Projects.tsx": "54414b1efa27762d0d5195ed1b0cbe704be48ad3816e5787fd46c9e1fb322d77",
+    "src/trip-content.d.ts": "88d6d54b9d84aa1c01008b98890d5cfe553a06cbab1ea2eed351804067e72d69",
+    "vite.config.ts": "e069085c06561e8f1535bd95b8b0ae730a3f7a53417c2fc24a76d1726c22895b"
+  },
+  "documentation": {
+    "files": 155,
+    "missingLocalLinks": [],
+    "method": "Paragraph-aware sentence length check. Code, headings, tables, and quotations excluded. Not a vocabulary audit or STE certification.",
+    "aggregate": {
+      "sentences": 17860,
+      "atMost25Words": 17772,
+      "percent": 99.51
+    },
+    "below80": [],
+    "changedProse": {
+      "README.md": {
+        "sentences": 431,
+        "atMost25Words": 430,
+        "percent": 99.77
+      },
+      "TODO.md": {
+        "sentences": 175,
+        "atMost25Words": 175,
+        "percent": 100
+      },
+      "docs/README.md": {
+        "sentences": 21,
+        "atMost25Words": 21,
+        "percent": 100
+      },
+      "docs/site-search.md": {
+        "sentences": 61,
+        "atMost25Words": 61,
+        "percent": 100
+      },
+      "docs/blog-publishing.md": {
+        "sentences": 148,
+        "atMost25Words": 148,
+        "percent": 100
+      },
+      "docs/project-discovery.md": {
+        "sentences": 60,
+        "atMost25Words": 60,
+        "percent": 100
+      },
+      "docs/shared-modules.md": {
+        "sentences": 190,
+        "atMost25Words": 190,
+        "percent": 100
+      },
+      "docs/trips/TESTING.md": {
+        "sentences": 458,
+        "atMost25Words": 458,
+        "percent": 100
+      },
+      "docs/trips/TRIP-AUTHORING-README.md": {
+        "sentences": 530,
+        "atMost25Words": 530,
+        "percent": 100
+      },
+      "docs/trips/pch-2024-galleries.md": {
+        "sentences": 86,
+        "atMost25Words": 85,
+        "percent": 98.84
+      },
+      "docs/reviews/2026-11-15-site-search-and-trip-review.md": {
+        "sentences": 115,
+        "atMost25Words": 115,
+        "percent": 100
+      }
+    }
+  },
+  "commands": {
+    "fullSuite": "node node_modules/vitest/vitest.mjs run --maxWorkers=2",
+    "coverage": "node node_modules/vitest/vitest.mjs run --maxWorkers=2 --coverage --coverage.reporter=json-summary --coverage.reporter=text-summary",
+    "focusedTests": [
+      "src/test/SiteSearch.test.tsx",
+      "src/test/siteSearch.test.ts",
+      "src/test/siteSearchIndex.test.ts",
+      "src/test/mdxComponents.test.tsx",
+      "scripts/__tests__/siteSearch.test.ts",
+      "scripts/__tests__/tripContent.test.ts"
+    ],
+    "coverageInclude": [
+      "scripts/post-registry.ts",
+      "scripts/site-search-plugin.ts",
+      "src/blog/PostTableOfContents.tsx",
+      "src/components/Layout/SiteSearch.tsx",
+      "src/content/siteSearch.ts",
+      "src/navigation/siteSearchIndex.ts"
+    ],
+    "subsetPattern": "^(?!.*(?:November 15|site search index loading)).*$",
+    "productionBrowser": "PLAYWRIGHT_WEBKIT=1 node scripts/run-page-recovery-tests.js --config /tmp/rsmbtv-review-webkit.config.ts --grep 'site search|site navigation|post filters|project |projects search|reading page /projects|reading page /posts' --workers=2",
+    "tripBrowser": "PLAYWRIGHT_WEBKIT=1 node scripts/run-playwright.js --config /tmp/rsmbtv-review-webkit.config.ts tests/e2e/trip-headings.spec.ts --workers=2",
+    "types": "npm run typecheck",
+    "lint": "npm run lint",
+    "python": "npm run test:temperature-records",
+    "audit": "npm audit --audit-level=moderate --json",
+    "productionBuild": "Vite build and preview APIs with production mode and temporary output; Chromium smoke checks against the preview."
+  },
+  "notes": [
+    "The WebKit run used an already cached WPE launcher and libraries through a temporary Playwright config. Repository browser settings were preserved.",
+    "The existing image test timeouts and assertions were retained.",
+    "The GPS asset privacy cutoff and previously hosted files were unchanged by this review.",
+    "Owner publication decisions and physical-device checks remain in TODO.md."
+  ]
+}

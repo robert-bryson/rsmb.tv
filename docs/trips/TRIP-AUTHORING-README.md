@@ -51,7 +51,7 @@ Use these Google Docs styles:
 | Content | Google Docs style | Site result |
 | --- | --- | --- |
 | Chapter | Heading 2 | Sticky chapter heading and table-of-contents link |
-| Section in a chapter | Heading 3 | Section heading and table-of-contents link |
+| Section in a chapter | Heading 3 | Section heading with a direct link |
 | Distance or other supporting text | Subtitle | Small gray paragraph below the heading |
 | Story text | Normal text | Body paragraph |
 | Shortcode | Normal text in a separate paragraph | Trip map, photo, gallery, or facts |
@@ -60,6 +60,7 @@ Place a subtitle directly after its heading. Subtitles have no heading ID or tab
 The importer retains inline emphasis and links in subtitles.
 Do not use a heading style for distance text such as `(339 mi. / 545 km.)`.
 The table of contents starts expanded. Readers can select **Collapse** to hide its links.
+It lists main chapters only. Subsections retain their direct links.
 
 Body paragraphs retain first-line indentation from Google Docs.
 Set this with **Format → Align & indent → Indentation options → Special indent → First line**.
@@ -74,6 +75,7 @@ Reduced motion makes this change immediate. Printed headings retain their normal
 The next chapter pushes the previous heading out of view.
 Subsections scroll with the text. The story title does not stay at the top.
 If the body contains level-one headings, those headings define the chapters instead.
+The purple chapter divider matches the map and gallery width.
 Subsection links leave space for the chapter heading and site navigation.
 Tall headings scroll normally when headings and navigation would occupy more than half of the visible screen.
 
@@ -187,6 +189,9 @@ npm run prepare-trip-assets -- \
 ```
 
 The command prepares photos and routes. It writes `asset-metadata.json` at the trip root.
+Preserve each trip's documented GPS privacy cutoff before preparing routes.
+Check both the daily route and combined route after processing.
+Private original backups must remain outside public asset folders.
 It uses existing photo derivatives when the source and processing settings have not changed.
 The source bytes and processing settings determine the filename fingerprint.
 Add `--force` to regenerate an existing version.

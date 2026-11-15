@@ -8,3 +8,7 @@ declare module 'virtual:post-content' {
     export const metadata: import('./content/posts').BlogPostMeta[];
     export const mdxLoaders: Record<string, () => Promise<{ default: import('react').ComponentType<import('./content/posts').MdxComponentProps> }>>;
 }
+
+declare module 'virtual:site-search' {
+    export const documents: import('./content/siteSearch').SiteSearchDocument[];
+}

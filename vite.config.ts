@@ -9,6 +9,7 @@ import tailwindcss from '@tailwindcss/vite'
 import { tripContentPlugin } from './scripts/trip-content-plugin.ts'
 import { globeWebglPlugin } from './scripts/globe-webgl-plugin.ts'
 import { publicAssetsPlugin } from './scripts/public-assets-plugin.ts'
+import { siteSearchPlugin } from './scripts/site-search-plugin.ts'
 
 const buildDate = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
@@ -34,6 +35,7 @@ export default defineConfig(({ mode, command }) => {
     react(),
     globeWebglPlugin(),
     tripContentPlugin(),
+    siteSearchPlugin(),
     publicAssetsPlugin(),
     tailwindcss(),
   ],

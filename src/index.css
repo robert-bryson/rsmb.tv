@@ -171,9 +171,13 @@ u {
   font-weight: 600;
 }
 
-.trip-breakout {
+.trip-breakout,
+.trip-story .trip-chapter > :is(h1, h2):first-child {
   --trip-width-limit: 72rem;
   --trip-width: min(var(--trip-width-limit), calc(100vw - 2rem));
+}
+
+.trip-breakout {
   width: var(--trip-width);
   /* Firefox can retain pre-transform overflow after an interactive map paints. */
   margin-inline: calc((100% - var(--trip-width)) / 2);
@@ -239,7 +243,12 @@ u {
   margin-block: 0;
   padding-block: calc(0.65rem - 0.3rem * var(--trip-chapter-compactness, 0))
     calc(0.75rem - 0.35rem * var(--trip-chapter-compactness, 0));
-  border-block-end: 1px solid var(--color-violet-400, #a78bfa);
+  border-block-end: 1px solid transparent;
+  background-image: linear-gradient(var(--color-violet-400, #a78bfa), var(--color-violet-400, #a78bfa));
+  background-size: var(--trip-width) 1px;
+  background-position: center bottom;
+  background-origin: border-box;
+  background-repeat: no-repeat;
   scroll-margin-block-start: max(6rem, calc(var(--site-header-height, 61px) + 1rem));
   transition: top 200ms ease-out;
 }
@@ -358,6 +367,8 @@ u {
     width: auto;
     margin-inline: 0;
     padding-inline: 0;
+    border-block-end-color: var(--color-violet-400, #a78bfa);
+    background-image: none;
   }
 }
 
@@ -367,7 +378,8 @@ u {
 }
 
 @supports (container-type: inline-size) and (width: 1cqw) {
-  .site-content .trip-breakout {
+  .site-content .trip-breakout,
+  .site-content .trip-chapter > :is(h1, h2):first-child {
     --trip-width: min(var(--trip-width-limit), calc(100cqw - 2rem));
   }
 
@@ -645,6 +657,16 @@ u {
 .site-header:focus-within {
   translate: 0;
   transform: translateY(0);
+}
+
+.site-search-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+.site-search-match {
+  background: transparent;
+  color: #c4b5fd;
+  padding: 0;
 }
 
 .image-caption-figure {

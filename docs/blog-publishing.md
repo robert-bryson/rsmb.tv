@@ -88,6 +88,9 @@ Shortcodes in sentences, headings, lists, blockquotes, tables, and code examples
 Use the [trip shortcode table](trips/TRIP-AUTHORING-README.md#shortcodes) for supported forms.
 
 Use short, unique headings.
+Trip tables of contents show only the main chapters.
+Level-one body headings define chapters when present. Otherwise, level-two headings define chapters.
+Subheadings retain their direct section links.
 The site derives heading IDs from the heading text.
 For example, `Day 1: Seattle to Boise` becomes `#day-1-seattle-to-boise`.
 Repeated headings receive numeric suffixes.
@@ -118,15 +121,14 @@ Search does not load article bodies or trip manifests.
 For example, `/posts?type=trips&q=british+columbia` searches trip metadata for both words.
 Use country and region filters when you need an exact geographic selection.
 
-Input and results update immediately.
-The URL replaces the current history entry 400ms after the last edit.
-Enter and blur commit the pending query immediately.
-Other navigation, native Back, and unmount cancel delayed writes.
-Filter and article links keep the current query, including text from a pending URL update.
-Type links keep the query and clear tag and geographic selections.
-**Clear search** keeps the other filters. **Clear all filters** resets every list filter.
-Both clear buttons return focus to the search field.
-Back, Forward, reload, and the article return link retain the search for their selected list entry.
+Use **Search site** in the top navigation for full-text searches across posts, projects, and other pages.
+It searches article bodies and photo captions as well as titles and summaries.
+See the [site search guide](site-search.md) for index generation and keyboard behavior.
+
+The post list retains type, tag, and geographic filters. Existing `q` links remain supported and display their query beside the count.
+Filter and article links retain the query. Type links clear tag and geographic selections.
+**Clear all filters** resets every list filter and focuses the Posts heading.
+Back, Forward, reload, and the article return link retain the selected filter URL.
 
 For example, `/posts?type=writing&tag=Maps` selects writing with the exact `Maps` tag.
 Topical tags keep their original case. Motorcycle facts add normalized tags, such as `honda-cb500x`.
@@ -155,46 +157,30 @@ Collection redirects retain query parameters, heading fragments, and navigation 
 
 ### Maintain search behavior
 
-Keep input state separate from URL state.
-The router can commit a URL change after a newer input event.
-The search hook records each write's owner, revision, parameters, and navigation type.
-It consumes matching records once. Earlier commits cannot replace newer input.
-Copied history state cannot suppress a different query.
-Other navigation restores the query from its selected URL.
-Editing removes the pending scroll-return flag. Other object navigation state remains.
+The header search uses a separate text index. See [site search](site-search.md) for sources, controls, and extraction rules.
+Search and article generation share publication rules in `scripts/post-registry.ts`.
+Keep build metadata types in `src/content/postMetadata.ts`.
+Build tools must not import the browser's virtual article loaders to obtain these types.
 
-| File | Responsibility |
-| --- | --- |
-| `src/content/postSearch.ts` | Match words against metadata |
-| `src/content/postFilters.ts` | Build filter URLs with named options and encoded query values |
-| `src/utils/search.ts` | Normalize text and replace encoded query values |
-| `src/hooks/useSearchQuery.ts` | Keep draft parameters, history, and return links consistent |
-| `src/components/ContentSearch.tsx` | Render the labeled field, clear button, and focus outline |
-| `src/pages/Posts.tsx` | Combine filters, show results, and send bounded event counts |
-
-Use `URLSearchParams` to encode typed text. Do not insert raw search text into a URL.
-Projects share these input modules. See [project search](project-discovery.md#history-and-input) before changing their write records.
-Use an outline for keyboard focus. Box shadows can disappear in forced-color mode.
-Filter events wait 300ms after the last input or filter change.
-They use draft filters. Committing the same URL does not restart the event timer.
-They send the feature name and a result-count bucket. They do not send the query.
-Unmount cancels a pending event. See the [analytics contract](umami-analytics.md#event-contract).
+The page list still uses `postSearch.ts`, `postFilters.ts`, and `useSearchQuery.ts` for legacy query links and filter navigation.
+Use `URLSearchParams` to encode query values. Keep collection filters separate from the shared header field.
+Filter analytics send only the feature name and a result-count bucket; they do not send search text.
+See the [analytics contract](umami-analytics.md#event-contract).
 
 Run the focused unit checks:
 
 ```bash
-npx vitest run src/test/postSearch.test.ts src/test/postFilters.test.ts src/test/search.test.ts src/test/useSearchQuery.test.tsx src/test/ContentSearch.test.tsx src/test/blogPages.test.tsx src/test/mdxComponents.test.tsx
+npx vitest run src/test/siteSearch.test.ts src/test/SiteSearch.test.tsx scripts/__tests__/siteSearch.test.ts src/test/postSearch.test.ts src/test/postFilters.test.ts src/test/blogPages.test.tsx src/test/mdxComponents.test.tsx
 ```
 
 Run browser checks against fixed production content:
 
 ```bash
-PLAYWRIGHT_WEBKIT=1 npm run test:page-recovery -- --grep 'post search|reading page /posts'
+PLAYWRIGHT_WEBKIT=1 npm run test:page-recovery -- --grep 'site search|post filters|reading page /posts'
 ```
 
-The browser cases check fast typing, combined filters, clearing, history, reload, and article return links.
-They also check that typing does not load an article body.
-Opening a result must then request that body's module.
+The browser cases check full-body matches, project and page results, lazy index loading, keyboard controls, clearing, and draft exclusion.
+Filter cases retain coverage for history, reload, and article return links. Searching does not load article body modules; opening a result can load its destination.
 Chromium checks the focus outline in forced-color mode.
 Both engines scan search results for accessibility errors.
 Use the [browser setup](../README.md#testing-notes) before these checks.

@@ -196,8 +196,16 @@ Do not copy manifest casts into consumers. See [image delivery](image-assets.md)
 
 ## Search fields and URLs
 
-Posts and Projects share [`ContentSearch`](../src/components/ContentSearch.tsx) and [`useSearchQuery`](../src/hooks/useSearchQuery.ts).
-The field supplies a visible label, a hint, a clear button, and native keyboard focus.
+The layout supplies [`SiteSearch`](../src/components/Layout/SiteSearch.tsx) on every reading page.
+Its lazy text index searches complete articles, project content, and other site pages.
+[`siteSearch.ts`](../src/content/siteSearch.ts) handles matching, ranking, and excerpts.
+[`site-search-plugin.ts`](../scripts/site-search-plugin.ts) extracts text during development and builds, excluding drafts from production.
+It shares publication and identifier checks with the article plugin through [`post-registry.ts`](../scripts/post-registry.ts).
+Keep metadata types in [`postMetadata.ts`](../src/content/postMetadata.ts), separate from virtual article loaders.
+Use the shared module loader for retryable index requests.
+See [site search](site-search.md) for extraction limits and keyboard behavior.
+
+Posts and Projects retain [`useSearchQuery`](../src/hooks/useSearchQuery.ts) for filter URLs and older shared keyword links.
 The hook keeps draft parameters ahead of delayed router commits.
 It accepts Back, Forward, and other navigation from their selected URLs.
 It preserves unrelated object navigation state.

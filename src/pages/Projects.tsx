@@ -1,6 +1,5 @@
 import { useId, useRef } from 'react';
 import { IntentLink } from '../components/IntentLink';
-import { ContentSearch } from '../components/ContentSearch';
 import { TechBadges } from '../components/TechBadges';
 import { ProjectPreview } from '../components/ProjectPreview';
 import { projects, projectCategories, formatProjectDate, type Project, type ProjectCategory } from '../content/projects';
@@ -17,8 +16,8 @@ const categories: Array<{ value: ProjectCategory | 'all'; label: string }> = [
 
 export function Projects() {
   usePageMetadata(staticPageMetadata('/projects'));
-  const { query, updateQuery, commitQuery, clearFilters, searchParams } = useSearchQuery();
-  const searchRef = useRef<HTMLInputElement>(null);
+  const { query, clearFilters, searchParams } = useSearchQuery();
+  const titleRef = useRef<HTMLHeadingElement>(null);
   const categoryCountsId = useId();
   const category = getProjectCategory(searchParams.get('category'));
   const matchingProjects = filterProjects(projects, { query });
@@ -27,13 +26,10 @@ export function Projects() {
 
   return (
     <div>
-      <h1 className="mb-2 text-2xl font-semibold text-zinc-100">Projects</h1>
+      <h1 ref={titleRef} tabIndex={-1} className="mb-2 text-2xl font-semibold text-zinc-100">Projects</h1>
       <p className="mb-8 text-zinc-400">
         Maps, data explorations, and tools I've built. Find something to explore or use.
       </p>
-
-      <ContentSearch label="Search projects" hint="Search project names, descriptions, and technologies."
-        placeholder="Try maps, Python, or books…" query={query} onChange={updateQuery} onCommit={commitQuery} inputRef={searchRef} />
 
       <nav aria-label="Project categories" className="mb-5 flex flex-wrap gap-2">
         {categories.map(({ value, label }) => {
@@ -56,9 +52,10 @@ export function Projects() {
         <p role="status" aria-live="polite" aria-atomic="true" className="text-sm text-zinc-400">
           {visibleProjects.length !== projects.length && `${visibleProjects.length} of `}
           {projects.length} {projects.length === 1 ? 'project' : 'projects'}
+          {query && <> matching “{query}”</>}
         </p>
         {hasFilters && <button type="button" className="min-h-11 rounded-md px-2 text-sm text-violet-300 hover:underline"
-          onClick={() => { clearFilters(); searchRef.current?.focus(); }}
+          onClick={() => { clearFilters(); titleRef.current?.focus(); }}
         >Clear all filters</button>}
       </div>
 

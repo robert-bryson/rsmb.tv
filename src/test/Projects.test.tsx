@@ -5,7 +5,6 @@ import { Projects } from '../pages/Projects';
 import { renderWithRouter } from './helpers/router';
 import { trackAnalyticsEvent } from '../utils/analytics';
 import { projects } from '../content/projects';
-import { advanceSearchCommit } from './helpers/search';
 
 vi.mock('../utils/analytics', () => ({ trackAnalyticsEvent: vi.fn() }));
 
@@ -46,7 +45,8 @@ function LocationProbe() {
 describe('project discovery', () => {
     it('restores shared filters and retains the query in category links', () => {
         renderWithRouter(<Projects />, { route: '/projects?category=maps&q=python' });
-        expect(screen.getByRole('searchbox', { name: 'Search projects' })).toHaveValue('python');
+        expect(screen.queryByRole('searchbox')).not.toBeInTheDocument();
+        expect(screen.getByRole('status')).toHaveTextContent('matching “python”');
         expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(1);
         expect(screen.getByRole('heading', { name: 'Route explorer' })).toBeInTheDocument();
         expect(screen.getByRole('status')).toHaveTextContent('1 of 4 projects');
@@ -55,36 +55,26 @@ describe('project discovery', () => {
         expect(within(categories).getByRole('link', { name: 'Command line' })).toHaveAttribute('href', '/projects?category=tools&q=python');
     });
 
-    it('updates search immediately without adding a history entry for each keystroke', () => {
-        renderWithRouter(<><Projects /><LocationProbe /></>, { route: '/projects' });
-        const search = screen.getByRole('searchbox');
-        fireEvent.change(search, { target: { value: 'motorcycle python' } });
+    it('preserves legacy query links through category navigation and browser history', () => {
+        renderWithRouter(<><Projects /><LocationProbe /></>, { route: '/projects?q=motorcycle+python' });
         expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(1);
-        advanceSearchCommit();
         expect(screen.getByTestId('location')).toHaveTextContent('/projects?q=motorcycle+python');
         fireEvent.click(screen.getByRole('link', { name: 'Command line' }));
         expect(screen.getByText('No projects match these filters.')).toBeInTheDocument();
         fireEvent.click(screen.getByRole('button', { name: 'Back' }));
         expect(screen.getByTestId('location')).toHaveTextContent('/projects?q=motorcycle+python');
-        expect(search).toHaveValue('motorcycle python');
+        expect(screen.getByRole('status')).toHaveTextContent('matching “motorcycle python”');
         expect(screen.getByRole('heading', { name: 'Route explorer' })).toBeInTheDocument();
         fireEvent.click(screen.getByRole('button', { name: 'Forward' }));
         expect(screen.getByText('No projects match these filters.')).toBeInTheDocument();
     });
 
-    it('clears the query while retaining the category, then clears every filter with focus', () => {
+    it('clears legacy queries and categories and focuses the page heading', () => {
         renderWithRouter(<><Projects /><LocationProbe /></>, { route: '/projects?category=maps&q=missing' });
-        const search = screen.getByRole('searchbox');
         expect(screen.getByRole('status')).toHaveTextContent('0 of 4 projects');
-        fireEvent.click(screen.getByRole('button', { name: 'Clear search' }));
-        advanceSearchCommit();
-        expect(search).toHaveValue('');
-        expect(search).toHaveFocus();
-        expect(screen.getByTestId('location')).toHaveTextContent('/projects?category=maps');
-        expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(1);
         fireEvent.click(screen.getByRole('button', { name: 'Clear all filters' }));
         expect(screen.getByTestId('location').textContent).toBe('/projects');
-        expect(search).toHaveFocus();
+        expect(screen.getByRole('heading', { name: 'Projects', level: 1 })).toHaveFocus();
         expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(4);
     });
 
@@ -163,10 +153,10 @@ describe('project directory review regressions', () => {
     it('uses a singular total for a one-project directory and an unmatched search', () => {
         const saved = projects.splice(1);
         try {
-            renderWithRouter(<Projects />, { route: '/projects' });
+            renderWithRouter(<Projects />, { route: '/projects?q=missing' });
+            expect(screen.getByRole('status')).toHaveTextContent('0 of 1 project matching “missing”');
+            fireEvent.click(screen.getByRole('button', { name: 'Clear all filters' }));
             expect(screen.getByRole('status')).toHaveTextContent(/^1 project$/);
-            fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'missing' } });
-            expect(screen.getByRole('status')).toHaveTextContent(/^0 of 1 project$/);
         } finally {
             projects.push(...saved);
         }

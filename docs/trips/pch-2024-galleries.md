@@ -1,8 +1,9 @@
-# PCH 2024 starter galleries
+# PCH 2024 photos and publication
 
 The [manifest](../../src/content/trips/pch-2024.json) contains 108 photos and 32 galleries.
 The hero is `dscf9177`: the motorcycle above the Mendocino coast.
 Each day uses its matching full-day gallery through `days[].galleryId`.
+Day heading IDs match the current city-to-city chapter titles.
 
 ## Source locations
 
@@ -15,7 +16,7 @@ Keep the writing source and image files there.
 | `photos/originals/` | Original photos with unchanged filenames and contents |
 | `photos/selects/` | Photos selected for processing |
 | `photos/processed/` | Responsive WebP files and full-resolution JPEG/PNG exports |
-| `gps/originals/` | Original GPX files |
+| `gps/originals/` | GPX source files, with the final privacy cut applied |
 | `gps/processed/` | Generated route files |
 | `asset-metadata.json` | Generated filenames, dimensions, file sizes, and processing warnings |
 
@@ -23,9 +24,25 @@ The local preview cache is `public/data/trips/pch-2024/`.
 Git ignores this cache.
 The application loads the `.json` manifest for local preview.
 
+For privacy, the October 7 GPX source omits the last two miles and the endpoint waypoint.
+The daily and combined GeoJSON routes use that trimmed source.
+Keep this cutoff when preparing or publishing the trip again.
+
+## Verified assets
+
+The November 15, 2026 check covered all 108 photo sets and six GeoJSON route files.
+The photo sets contain 1,283 responsive images and full-resolution files.
+All files are hosted under `https://data.rsmb.tv/trips/pch-2024/`.
+Hosted file hashes match the prepared files.
+Public URL, content type, cache, and CORS checks passed.
+The final-day privacy cutoff remains intact.
+The full-resolution photo exports contain no EXIF, XMP, or IPTC metadata.
+Repeat the asset checks after changing a source file or processing setting.
+
 ## Use in the story
 
-Replace the outline prompts with your own account.
+The source Google Doc contains the current report.
+Use the placement tables below when editing its photos.
 Paste each shortcode into a separate Normal text paragraph in the source Google Doc.
 Use a full-day gallery or its smaller scene galleries at each story location.
 This choice prevents repeated photos.
@@ -68,7 +85,8 @@ Day assignments do not insert galleries automatically.
 
 The `highlights`, `motorcycle-stops`, and `panoramas` galleries are optional selections.
 They overlap the daily galleries.
-Remove unused definitions after you finish the story's media placements.
+Keep full-day galleries referenced by `days[].galleryId`.
+Remove a gallery definition only when no day or story placement uses it.
 
 The report places `{{trip-photo:20241003-150610}}` separately in the October 3 text.
 Keep this photo in the manifest. Exclude it from `day-one` to prevent a repeated photo.
@@ -141,17 +159,24 @@ Confirm exact place names from the route, visible landmarks, and your own record
 
 Use [TODO.md](../../TODO.md#pch-2024) to track completion.
 
-1. Replace the outline prompts.
-2. Remove author notes and unused media placements.
-3. Verify place names, photo dates, captions, and gallery order.
-4. Review size warnings in `asset-metadata.json`.
-5. Continue the source Google Doc already linked in the Sheet's `google_doc_id` column.
-6. Confirm that it includes the current outline.
-7. Apply the Google Docs styles from the [authoring guide](TRIP-AUTHORING-README.md#1-write-the-story).
-8. Publish the processed assets.
-9. Verify each public photo and route URL.
-10. Import the source document.
-11. Check the story at phone and desktop widths.
-12. Keep the Sheet's `published` value `false` until the checks pass.
+The imported Sheet row was marked published on November 15.
+The asset check did not deploy the site.
+Earlier copy errors and the Clear Lake and Ridgecrest descriptions are corrected in the current imported source.
+Two references still describe other 2024 trips as occurring “last year.”
+The final-day subtitle still states 430 miles, while the public route omits the last two miles.
+The hero also shows a readable motorcycle plate.
+
+Before the next content deployment:
+
+1. Resolve the two chronology references in the source Google Doc.
+2. State whether the final-day distance describes the complete ride or the public route.
+3. Decide whether the visible plate fits the intended image privacy level.
+4. Verify photo dates, captions, gallery order, and the final GPS cutoff.
+5. Import the source with `npm run build-blog:dev`.
+6. Check the story at phone and desktop widths.
+
+Assets are already processed and published.
+After changing assets, repeat preparation, upload, public URL checks, and manifest validation.
+Use the [authoring guide](TRIP-AUTHORING-README.md#6-publish-assets) for those steps.
 
 Use the [import review](../reviews/2026-10-29-pch-content-review.md) for completed processing checks and their limits.

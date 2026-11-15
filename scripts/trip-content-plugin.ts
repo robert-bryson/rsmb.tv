@@ -8,6 +8,8 @@ import { articleMetadata, staticPageMetadata, STATIC_PAGE_PATHS } from '../src/u
 import { pageMetadataHtml } from './pageMetadataHtml.ts';
 import siteAliases from '../src/content/siteAliases.json' with { type: 'json' };
 import { canonicalPathname } from '../src/utils/siteMetadata.ts';
+import { readPostRegistry } from './post-registry.ts';
+import type { BlogPostMeta } from '../src/content/postMetadata.ts';
 
 /** Generate a small card registry, with full manifests behind async imports. */
 export function tripContentPlugin(): Plugin {
@@ -22,18 +24,16 @@ export function tripContentPlugin(): Plugin {
             const contentDir = config.mode === 'trip-test' ? 'tests/fixtures/trip-content' : 'src/content';
             const postsPath = path.join(config.root, contentDir, 'posts.json');
             const production = config.command === 'build' && config.mode !== 'development';
-            const posts = readPosts(postsPath, production);
+            const posts = readPostRegistry(postsPath, production);
             if (fs.existsSync(postsPath)) this.addWatchFile(postsPath);
-            validatePostReferences(posts.filter(post => !production || post.development?.published !== false), production);
             if (id === '\0virtual:post-content') {
-                const visible = posts.filter(post => !production || post.development?.published !== false);
-                const metadata = visible.map(post => {
+                const metadata = posts.map(post => {
                     if (!production) return post;
                     const publicPost = { ...post };
                     delete publicPost.development;
                     return publicPost;
                 });
-                const loaders = visible.flatMap(post => {
+                const loaders = posts.flatMap(post => {
                     const file = path.join(config.root, contentDir, 'blog', `${post.slug}.mdx`);
                     if (!fs.existsSync(file)) {
                         if (production) throw new Error(`Missing published post content: ${post.slug}`);
@@ -44,7 +44,7 @@ export function tripContentPlugin(): Plugin {
                 });
                 return `export const metadata = ${JSON.stringify(metadata)}; export const mdxLoaders = {${loaders.join(',')}};`;
             }
-            const referenced = new Set(posts.filter(p => !production || p.development?.published !== false).map(p => p.tripId));
+            const referenced = new Set(posts.map(p => p.tripId));
             const directory = path.join(config.root, contentDir, 'trips');
             const summaries: Record<string, TripSummary> = {};
             const issues: Record<string, string> = {};
@@ -78,9 +78,7 @@ export function tripContentPlugin(): Plugin {
             const contentDir = config.mode === 'trip-test' ? 'tests/fixtures/trip-content' : 'src/content';
             const postsPath = path.join(config.root, contentDir, 'posts.json');
             const development = config.mode === 'development';
-            const posts = readPosts(postsPath, !development);
-            const visible = posts.filter(post => development || post.development?.published !== false);
-            validatePostReferences(visible, !development);
+            const visible = readPostRegistry(postsPath, !development);
             const originalTemplate = String(template.source);
             for (const pathname of STATIC_PAGE_PATHS) {
                 const source = pageMetadataHtml(originalTemplate, staticPageMetadata(pathname, visible));
@@ -153,33 +151,6 @@ function summary(manifest: TripManifest, local: boolean): TripSummary {
     };
 }
 
-interface PostMeta {
-    slug: string; title: string; description: string; date: string; tags: string[];
-    format?: string; tripId?: string; development?: { published: boolean };
-}
-function readPosts(postsPath: string, production: boolean): PostMeta[] {
-    if (fs.existsSync(postsPath)) return JSON.parse(fs.readFileSync(postsPath, 'utf8'));
-    if (production) throw new Error('Missing post registry. Run blog sync before the production build.');
-    return [];
-}
-function validatePostReferences(posts: PostMeta[], production: boolean) {
-    const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-    const slugs = new Set<string>();
-    for (const post of posts) {
-        if (typeof post.slug !== 'string' || !slugPattern.test(post.slug)) {
-            throw new Error(`Invalid post slug: ${post.slug}`);
-        }
-        if (slugs.has(post.slug)) throw new Error(`Duplicate post slug: ${post.slug}`);
-        slugs.add(post.slug);
-        if (post.tripId !== undefined && (typeof post.tripId !== 'string' || !slugPattern.test(post.tripId))) {
-            throw new Error(`Invalid trip ID for post ${post.slug}: ${post.tripId}`);
-        }
-        if (production && post.format === 'trip' && !post.tripId) {
-            throw new Error(`Missing trip ID for published post: ${post.slug}`);
-        }
-    }
-}
-
-export function articleHtml(template: string, post: PostMeta, hero?: string) {
+export function articleHtml(template: string, post: BlogPostMeta, hero?: string) {
     return pageMetadataHtml(template, articleMetadata(post, hero ? { src: hero } : undefined));
 }
