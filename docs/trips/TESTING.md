@@ -329,16 +329,16 @@ PLAYWRIGHT_WEBKIT=1 npx playwright test tests/e2e/trip-headings.spec.ts tests/e2
 
 The [trip layout quality review](../reviews/2026-11-13-trip-layout-quality-review.md) records reproduced defects and coverage measurements.
 
-Post filter tests use a separate browser fixture with the application styles.
-Its container must have an explicit full width, as the application layout does.
-A container that shrinks to its visible links can cause repeated measurement changes.
-The browser cases check resizing, independent expansion, selected regions, and long labels at 320 pixels.
-Unit tests check observer cleanup, missing browser APIs, topic precedence, and ambiguous geographic names.
+Post filter tests use a separate browser fixture with the application layout and styles.
+The browser cases check complete region lists, selected filters, long labels, short screens, and enlarged text.
+They also check native scrollbar focus and dismissal when the button scrolls out of view.
+Unit tests check placement, visual viewport changes, observer cleanup, and missing browser APIs.
+Geographic tests retain topic precedence and ambiguous-name checks.
 
 Run the post filter checks with:
 
 ```bash
-npx vitest run src/test/blogRegions.test.ts src/test/PostRegionFilters.test.tsx src/test/blogPages.test.tsx
+npx vitest run src/test/blogRegions.test.ts src/test/PostFilters.test.tsx src/test/PostRegionFilters.test.tsx src/test/usePostFilterPosition.test.tsx src/test/blogPages.test.tsx
 npm run test:e2e -- tests/e2e/post-regions.spec.ts
 ```
 

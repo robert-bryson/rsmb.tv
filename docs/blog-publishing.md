@@ -126,6 +126,14 @@ It searches article bodies and photo captions as well as titles and summaries.
 See the [site search guide](site-search.md) for index generation and keyboard behavior.
 
 The post list retains type, tag, and geographic filters. Existing `q` links remain supported and display their query beside the count.
+The All, Writing, and Trips controls align with the page heading on wide screens.
+Open **Filters** below those controls to select tags, countries, and regions.
+The button shows the number of active tag and location filters.
+Escape closes the dropdown and returns focus to its button.
+The panel uses the available space below the button, or opens above when that provides more room.
+It stays clear of the site header and updates after resizing or content changes.
+Scrolling the button out of view closes the panel without moving the page back.
+The scroll area can receive mouse focus. Tab still moves directly between the button and filter links.
 Filter and article links retain the query. Type links clear tag and geographic selections.
 **Clear all filters** resets every list filter and focuses the Posts heading.
 Back, Forward, reload, and the article return link retain the selected filter URL.
@@ -138,8 +146,7 @@ Trip manifests supply country groups for other regions.
 For example, `/posts?country=CA&region=british-columbia` selects posts about British Columbia.
 Combine a `tag` with geographic filters to narrow the results.
 The Regions filter groups places by country and shows matching post counts for the selected post type.
-Each country initially shows as many regions as fit on its row, starting with the most-used regions.
-Select **See all** to expand the remaining regions.
+The dropdown shows every available region, starting with the most-used regions in each country.
 Existing geographic tag links, such as `/posts?tag=us`, remain supported.
 An exact topical tag takes priority over a geographic alias.
 For example, a `Japan` topic remains selectable when another post has JP geography.
@@ -167,10 +174,23 @@ Use `URLSearchParams` to encode query values. Keep collection filters separate f
 Filter analytics send only the feature name and a result-count bucket; they do not send search text.
 See the [analytics contract](umami-analytics.md#event-contract).
 
+### Maintain post filters
+
+`PostFilters` owns the disclosure, dismissal, and focus behavior.
+`usePostFilterPosition` fits this body-page panel inside the visual viewport and reserves space for the site header.
+Its observers and event listeners run only while the panel is open.
+It cancels scheduled layout work when closed or unmounted.
+Panel padding shrinks when the available height cannot hold the normal spacing.
+
+Use `PostFilterLink` for tag, country, and region links.
+It supplies the shared pill styles and `aria-current` state.
+Use `createPostsUrl` to retain the other filters and encode their values.
+Keep country and region lists complete. They need no second expansion control or hidden measurement copy.
+
 Run the focused unit checks:
 
 ```bash
-npx vitest run src/test/siteSearch.test.ts src/test/SiteSearch.test.tsx scripts/__tests__/siteSearch.test.ts src/test/postSearch.test.ts src/test/postFilters.test.ts src/test/blogPages.test.tsx src/test/mdxComponents.test.tsx
+npx vitest run src/test/siteSearch.test.ts src/test/SiteSearch.test.tsx scripts/__tests__/siteSearch.test.ts src/test/postSearch.test.ts src/test/postFilters.test.ts src/test/PostFilters.test.tsx src/test/PostRegionFilters.test.tsx src/test/usePostFilterPosition.test.tsx src/test/blogPages.test.tsx src/test/mdxComponents.test.tsx
 ```
 
 Run browser checks against fixed production content:
@@ -181,6 +201,7 @@ PLAYWRIGHT_WEBKIT=1 npm run test:page-recovery -- --grep 'site search|post filte
 
 The browser cases check full-body matches, project and page results, lazy index loading, keyboard controls, clearing, and draft exclusion.
 Filter cases retain coverage for history, reload, and article return links. Searching does not load article body modules; opening a result can load its destination.
+Filter layout cases check short screens, complete region lists, scrollbars, keyboard focus, and viewport changes.
 Chromium checks the focus outline in forced-color mode.
 Both engines scan search results for accessibility errors.
 Use the [browser setup](../README.md#testing-notes) before these checks.

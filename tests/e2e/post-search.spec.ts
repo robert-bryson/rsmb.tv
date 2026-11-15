@@ -6,6 +6,65 @@ test.skip(process.env.PAGE_RECOVERY !== '1', 'Uses the production bundle and fix
 test.beforeEach(async ({ page }) => { await auditAssets(page); });
 
 for (const width of [320, 1280]) {
+    test(`post filter review regressions: all options fit the visible screen at ${width}px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 480 });
+        await page.goto('/posts');
+        await page.getByRole('button', { name: 'Filters', exact: true }).click();
+        const panel = page.getByRole('region', { name: 'Post filters' });
+        await expect(panel).toBeVisible();
+        await expect.poll(async () => {
+            const bounds = (await panel.boundingBox())!;
+            return bounds.y + bounds.height;
+        }).toBeLessThanOrEqual(480);
+        const bounds = (await panel.boundingBox())!;
+        const header = (await page.getByRole('banner').boundingBox())!;
+        expect(bounds.y).toBeGreaterThanOrEqual(Math.max(0, header.y + header.height));
+        await panel.evaluate(node => { node.scrollTop = node.scrollHeight; });
+        await expect(panel.getByRole('link').last()).toBeInViewport({ ratio: 1 });
+        await page.setViewportSize({ width, height: 700 });
+        const audit = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+        expect(audit.violations).toEqual([]);
+    });
+
+    test(`post filters open below the right-aligned type controls at ${width}px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto('/posts');
+        const types = page.getByRole('navigation', { name: 'Post type' });
+        const button = page.getByRole('button', { name: 'Filters', exact: true });
+        const panel = page.getByRole('region', { name: 'Post filters' });
+        await expect(button).toHaveAttribute('aria-expanded', 'false');
+        await expect(page.getByRole('navigation', { name: 'Post tags' })).toHaveCount(0);
+        const typeBounds = (await types.boundingBox())!;
+        const buttonBounds = (await button.boundingBox())!;
+        expect(buttonBounds.x + buttonBounds.width).toBeCloseTo(typeBounds.x + typeBounds.width, 0);
+        expect(buttonBounds.y).toBeGreaterThanOrEqual(typeBounds.y + typeBounds.height);
+        if (width >= 640) {
+            const title = (await page.getByRole('heading', { level: 1, name: 'Posts' }).boundingBox())!;
+            expect(typeBounds.y + typeBounds.height / 2).toBeCloseTo(title.y + title.height / 2, 0);
+        }
+        await button.click();
+        await expect(panel).toBeVisible();
+        await expect(panel.getByRole('navigation', { name: 'Post regions' })).toBeVisible();
+        await expect(panel.getByRole('button', { name: /See all/ })).toHaveCount(0);
+        const bounds = (await panel.boundingBox())!;
+        expect(bounds.x).toBeGreaterThanOrEqual(0);
+        expect(bounds.x + bounds.width).toBeLessThanOrEqual(width);
+        await panel.getByRole('navigation', { name: 'Post tags' }).getByRole('link', { name: 'coast', exact: true }).click();
+        await expect(panel).toBeVisible();
+        await panel.getByRole('navigation', { name: 'Post regions' }).getByRole('link', { name: 'Canada', exact: true }).click();
+        await expect(page).toHaveURL(/\/posts\?tag=coast&country=CA$/);
+        await expect(button).toHaveAccessibleDescription('2 active filters');
+        await page.keyboard.press('Escape');
+        await expect(button).toBeFocused();
+        await expect(panel).toBeHidden();
+        await button.click();
+        const audit = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+        expect(audit.violations).toEqual([]);
+        await page.getByRole('heading', { level: 1, name: 'Posts' }).click();
+        await expect(panel).toBeHidden();
+        expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+    });
+
     test(`site search keeps large-text results within the viewport at ${width}px`, async ({ page }) => {
         await page.setViewportSize({ width, height: 900 });
         await page.goto('/projects');
@@ -142,6 +201,7 @@ for (const width of [320, 1280]) {
         await page.goto('/posts?q=ordinary+article');
         await expect(page.locator('main h2')).toHaveText(['Reading test']);
         await expect(page.getByRole('status')).toHaveText('1 of 3 posts matching “ordinary article”');
+        await page.getByRole('button', { name: 'Filters', exact: true }).click();
         await page.getByRole('navigation', { name: 'Post tags' }).getByRole('link', { name: 'coast', exact: true }).click();
         await expect(page).toHaveURL(/\/posts\?tag=coast&q=ordinary\+article$/);
         await page.goBack();

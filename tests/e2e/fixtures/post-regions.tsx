@@ -1,7 +1,9 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { MemoryRouter, useSearchParams } from 'react-router-dom';
+import { MemoryRouter, useLocation, useSearchParams } from 'react-router-dom';
 import { PostRegionFilters } from '../../../src/components/PostRegionFilters';
+import { PostFilters } from '../../../src/components/PostFilters';
+import { Layout } from '../../../src/components/Layout';
 import '../../../src/index.css';
 
 const countries = [
@@ -19,19 +21,27 @@ const countries = [
 
 export function RegionFiltersFixture() {
     const [params] = useSearchParams();
-    return <main className="mx-auto w-full max-w-5xl p-6">
-        <PostRegionFilters
-            countries={countries}
-            activeCountry={params.get('country') ?? ''}
-            activeRegion={params.get('region') ?? ''}
-            createUrl={(country = '', region = '') => {
-                const search = new URLSearchParams();
-                if (country) search.set('country', country);
-                if (region) search.set('region', region);
-                return `/posts?${search}`;
-            }}
-        />
-    </main>;
+    const location = useLocation();
+    return <Layout>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+            <h1 className="text-3xl font-bold">Post filters</h1>
+            <PostFilters count={Number(!!(params.get('country') || params.get('region')))}>
+                <PostRegionFilters
+                    countries={countries}
+                    activeCountry={params.get('country') ?? ''}
+                    activeRegion={params.get('region') ?? ''}
+                    createUrl={(country = '', region = '') => {
+                        const search = new URLSearchParams();
+                        if (country) search.set('country', country);
+                        if (region) search.set('region', region);
+                        return `/posts?${search}`;
+                    }}
+                />
+            </PostFilters>
+        </div>
+        <output data-testid="region-url" className="sr-only">{location.pathname + location.search}</output>
+        <div aria-hidden="true" className="h-[150vh]" />
+    </Layout>;
 }
 
 createRoot(document.getElementById('root')!).render(<StrictMode>

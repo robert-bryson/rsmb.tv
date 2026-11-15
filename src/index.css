@@ -659,6 +659,12 @@ u {
   transform: translateY(0);
 }
 
+.post-filter-panel {
+  max-height: var(--post-filter-height, 65dvh);
+  /* Padding must leave room for option text, even in a short viewport. */
+  padding: clamp(0px, calc((var(--post-filter-height, 65dvh) - 2rem) / 2), 1.25rem);
+}
+
 .site-search-input::-webkit-search-cancel-button {
   -webkit-appearance: none;
 }

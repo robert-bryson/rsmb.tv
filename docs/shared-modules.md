@@ -205,6 +205,12 @@ Keep metadata types in [`postMetadata.ts`](../src/content/postMetadata.ts), sepa
 Use the shared module loader for retryable index requests.
 See [site search](site-search.md) for extraction limits and keyboard behavior.
 
+Post tags and regions use [`PostFilterLink`](../src/components/PostFilterLink.tsx) for pill styles and selected state.
+[`PostFilters`](../src/components/PostFilters.tsx) owns their shared disclosure and focus behavior.
+[`usePostFilterPosition`](../src/hooks/usePostFilterPosition.ts) places this body-page panel around its trigger and clear of the site header.
+Keep the complete region list in [`PostRegionFilters`](../src/components/PostRegionFilters.tsx).
+See [post filter maintenance](blog-publishing.md#maintain-post-filters) for ownership and lifecycle checks.
+
 Posts and Projects retain [`useSearchQuery`](../src/hooks/useSearchQuery.ts) for filter URLs and older shared keyword links.
 The hook keeps draft parameters ahead of delayed router commits.
 It accepts Back, Forward, and other navigation from their selected URLs.

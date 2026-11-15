@@ -1,0 +1,391 @@
+{
+  "date": "2026-11-15",
+  "reviewedHead": "dc2c334",
+  "scope": "Pending Posts control placement, tag and region dropdown, tests, and related documentation.",
+  "environment": {
+    "node": "v26.13.0",
+    "npm": "11.20.0",
+    "declaredNode": "24.22.3",
+    "declaredPackageManager": "npm@12.2.2",
+    "vitest": "5.1.0",
+    "playwright": "1.65.0",
+    "unitWorkers": 2,
+    "browserWorkers": 2,
+    "runtimeNote": "The local runtime differs from the declared runtime. Installation under the declared versions was not verified."
+  },
+  "reproduction": {
+    "initialFocusedUnitSuite": {
+      "passed": 50,
+      "files": 3
+    },
+    "shortScreen": {
+      "content": "Current imported production content",
+      "viewport": {
+        "width": 320,
+        "height": 480
+      },
+      "panelTop": 370.1875,
+      "panelBottom": 682.1875,
+      "lastLinkBottom": 661.375,
+      "pageScrollBeforeAndAfterPanelWheel": 0,
+      "wheelPixels": 1500,
+      "browserRegressionBeforeFix": {
+        "failed": 1,
+        "passed": 1
+      }
+    },
+    "nativeScrollbarFocus": {
+      "engine": "Chromium",
+      "focusBefore": "Filter link",
+      "focusAfter": "Main page element",
+      "panelClosed": true,
+      "unitRegressionBeforeFix": {
+        "failed": 1,
+        "passed": 6
+      },
+      "fix": "Give the scroll container tabIndex=-1 so it can retain mouse focus without an extra Tab stop."
+    }
+  },
+  "validation": {
+    "unitSuite": {
+      "passed": 3485,
+      "files": 241,
+      "exitCode": 0,
+      "addedTestsSinceHead": 24
+    },
+    "focusedUnitSuite": {
+      "passed": 68,
+      "files": 4,
+      "exitCode": 0
+    },
+    "productionBrowser": {
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0,
+      "engines": [
+        "Chromium",
+        "WebKit"
+      ],
+      "checks": [
+        "Control alignment",
+        "Combined filters",
+        "Short screens",
+        "Escape and outside dismissal",
+        "Legacy query URLs",
+        "History and reload",
+        "Article return",
+        "Clear focus",
+        "Axe reading and filter scans"
+      ]
+    },
+    "regionFixtureBrowser": {
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0,
+      "engines": [
+        "Chromium",
+        "WebKit"
+      ],
+      "widths": [
+        320,
+        390,
+        500,
+        800,
+        1280
+      ],
+      "shortHeights": [
+        240,
+        480,
+        600
+      ],
+      "fontSizes": [
+        16,
+        32
+      ],
+      "scrollbarNote": "Chromium verifies the native gutter; WPE WebKit uses overlay scrollbars. Both verify scroll-area focus, Tab, and Escape."
+    },
+    "temperaturePython": {
+      "passed": 18,
+      "exitCode": 0
+    },
+    "productionBuild": "Vite production build with current imported content passed; no source sync or deployment.",
+    "currentContentSmoke": {
+      "headingAlignment": true,
+      "combinedFilters": true,
+      "escapeFocus": true,
+      "clearFocus": true,
+      "shortScreen": true,
+      "pageErrors": 0,
+      "note": "This smoke run preceded the final child-list observer addition. The final-source fixture builds and both browser suites passed afterward."
+    },
+    "lint": "Passed with zero warnings",
+    "types": "Application, Vite configuration, and script checks passed",
+    "dependencyAudit": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    }
+  },
+  "coverage": {
+    "matchedFinalSource": {
+      "method": "Same final source, runtime, coverage provider, five included modules, and worker count. Only the selected regression groups differ.",
+      "subset": {
+        "passed": 53,
+        "skipped": 15,
+        "metrics": {
+          "lines": {
+            "covered": 129,
+            "total": 129,
+            "pct": 100
+          },
+          "statements": {
+            "covered": 140,
+            "total": 145,
+            "pct": 96.55
+          },
+          "branches": {
+            "covered": 153,
+            "total": 166,
+            "pct": 92.16
+          },
+          "functions": {
+            "covered": 29,
+            "total": 29,
+            "pct": 100
+          }
+        }
+      },
+      "complete": {
+        "passed": 68,
+        "metrics": {
+          "lines": {
+            "covered": 129,
+            "total": 129,
+            "pct": 100
+          },
+          "statements": {
+            "covered": 145,
+            "total": 145,
+            "pct": 100
+          },
+          "branches": {
+            "covered": 164,
+            "total": 166,
+            "pct": 98.79
+          },
+          "functions": {
+            "covered": 29,
+            "total": 29,
+            "pct": 100
+          }
+        }
+      },
+      "omittedPattern": "post filter review regressions"
+    },
+    "finalFiles": {
+      "src/components/PostFilterLink.tsx": {
+        "lines": {
+          "covered": 1,
+          "total": 1,
+          "pct": 100
+        },
+        "statements": {
+          "covered": 1,
+          "total": 1,
+          "pct": 100
+        },
+        "branches": {
+          "covered": 4,
+          "total": 4,
+          "pct": 100
+        },
+        "functions": {
+          "covered": 1,
+          "total": 1,
+          "pct": 100
+        }
+      },
+      "src/components/PostFilters.tsx": {
+        "lines": {
+          "covered": 27,
+          "total": 27,
+          "pct": 100
+        },
+        "statements": {
+          "covered": 33,
+          "total": 33,
+          "pct": 100
+        },
+        "branches": {
+          "covered": 24,
+          "total": 26,
+          "pct": 92.3
+        },
+        "functions": {
+          "covered": 9,
+          "total": 9,
+          "pct": 100
+        }
+      },
+      "src/components/PostRegionFilters.tsx": {
+        "lines": {
+          "covered": 4,
+          "total": 4,
+          "pct": 100
+        },
+        "statements": {
+          "covered": 4,
+          "total": 4,
+          "pct": 100
+        },
+        "branches": {
+          "covered": 15,
+          "total": 15,
+          "pct": 100
+        },
+        "functions": {
+          "covered": 3,
+          "total": 3,
+          "pct": 100
+        }
+      },
+      "src/hooks/usePostFilterPosition.ts": {
+        "lines": {
+          "covered": 60,
+          "total": 60,
+          "pct": 100
+        },
+        "statements": {
+          "covered": 68,
+          "total": 68,
+          "pct": 100
+        },
+        "branches": {
+          "covered": 50,
+          "total": 50,
+          "pct": 100
+        },
+        "functions": {
+          "covered": 6,
+          "total": 6,
+          "pct": 100
+        }
+      },
+      "src/pages/Posts.tsx": {
+        "lines": {
+          "covered": 37,
+          "total": 37,
+          "pct": 100
+        },
+        "statements": {
+          "covered": 39,
+          "total": 39,
+          "pct": 100
+        },
+        "branches": {
+          "covered": 71,
+          "total": 71,
+          "pct": 100
+        },
+        "functions": {
+          "covered": 10,
+          "total": 10,
+          "pct": 100
+        }
+      }
+    },
+    "note": "These results describe the five reviewed modules, not the complete application. The initial 50-test snapshot used different source and is not a matched coverage comparison."
+  },
+  "sourceSha256": {
+    "src/components/PostFilterLink.tsx": "769f9dccb0622c7868997613b9d50497bc9a483ce2c68e8904d805532c8e5f3f",
+    "src/components/PostFilters.tsx": "d00131e548a04b80d85666f3a46be69ea6c27448c1fdb26603e574e3fefdf3b3",
+    "src/components/PostRegionFilters.tsx": "995af88d0f0896f7e064f3e5211007d5f3cabb908ede720a503d177416998bee",
+    "src/hooks/usePostFilterPosition.ts": "5c4ce814c24b6a52e12267544505a040075ab7ab7781a917321ca41843cd428e",
+    "src/index.css": "2948adbebe6f689f15b93b26a05b31de151efbe59cdab3dfb681e70546babc42",
+    "src/pages/Posts.tsx": "2c9d5653b51006c2b727ae43c4e8c75aa9bd64d8d459ab4474934e44d36eb7c4"
+  },
+  "documentation": {
+    "files": 156,
+    "missingLocalLinks": [],
+    "method": "Paragraph-aware sentence length check. Code, headings, tables, and quotations excluded. Not a vocabulary audit or STE certification.",
+    "aggregate": {
+      "sentences": 17978,
+      "atMost25Words": 17890,
+      "percent": 99.51
+    },
+    "below80": [],
+    "changedProse": {
+      "README.md": {
+        "sentences": 431,
+        "atMost25Words": 430,
+        "percent": 99.77
+      },
+      "TODO.md": {
+        "sentences": 178,
+        "atMost25Words": 178,
+        "percent": 100.0
+      },
+      "docs/README.md": {
+        "sentences": 21,
+        "atMost25Words": 21,
+        "percent": 100.0
+      },
+      "docs/blog-publishing.md": {
+        "sentences": 167,
+        "atMost25Words": 167,
+        "percent": 100.0
+      },
+      "docs/shared-modules.md": {
+        "sentences": 195,
+        "atMost25Words": 195,
+        "percent": 100.0
+      },
+      "docs/trips/TESTING.md": {
+        "sentences": 458,
+        "atMost25Words": 458,
+        "percent": 100.0
+      },
+      "docs/reviews/2026-11-15-post-filter-review.md": {
+        "sentences": 91,
+        "atMost25Words": 91,
+        "percent": 100.0
+      }
+    },
+    "linkNote": "The local link audit checks file targets, not Markdown fragment identifiers."
+  },
+  "commands": {
+    "fullSuite": "node node_modules/vitest/vitest.mjs run --maxWorkers=2",
+    "focusedTests": [
+      "src/test/PostFilters.test.tsx",
+      "src/test/PostRegionFilters.test.tsx",
+      "src/test/usePostFilterPosition.test.tsx",
+      "src/test/blogPages.test.tsx"
+    ],
+    "coverageInclude": [
+      "src/components/PostFilterLink.tsx",
+      "src/components/PostFilters.tsx",
+      "src/components/PostRegionFilters.tsx",
+      "src/hooks/usePostFilterPosition.ts",
+      "src/pages/Posts.tsx"
+    ],
+    "coverageOptions": "--maxWorkers=2 --coverage --coverage.reporter=json-summary --coverage.reporter=text-summary",
+    "subsetPattern": "^(?!.*post filter review regressions).*",
+    "productionBrowser": "PLAYWRIGHT_WEBKIT=1 node scripts/run-page-recovery-tests.js --config /tmp/rsmbtv-review-webkit.config.ts --grep 'post filter|reading page /posts' --workers=2 --output=/tmp/rsmbtv-filter-review-final-production-results",
+    "regionBrowser": "PLAYWRIGHT_WEBKIT=1 node scripts/run-playwright.js --config /tmp/rsmbtv-review-webkit.config.ts tests/e2e/post-regions.spec.ts --workers=2 --output=/tmp/rsmbtv-filter-review-final-regions-results",
+    "lint": "npm run lint",
+    "types": "npm run typecheck",
+    "python": "npm run test:temperature-records",
+    "audit": "npm audit --audit-level=moderate --json",
+    "productionBuild": "Vite build and preview APIs with production mode, temporary output, and a Chromium smoke check.",
+    "markdownFiles": "git ls-files --cached --others --exclude-standard '*.md' -z"
+  },
+  "notes": [
+    "The WebKit run used an already cached WPE launcher and libraries through a temporary Playwright config. Repository browser settings were preserved.",
+    "An intermediate parallel browser run reused an output directory and failed during artifact cleanup. Final runs use separate output directories and pass.",
+    "The full unit suite ran without concurrent builds and retained the existing timeouts and assertions.",
+    "Phone and screen-reader checks remain in existing TODO entries. No new engineering defect remains open from this review."
+  ]
+}

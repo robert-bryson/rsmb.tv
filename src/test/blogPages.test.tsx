@@ -93,6 +93,12 @@ function LocationProbe() {
     return <output data-testid="location">{useLocation().pathname}</output>;
 }
 
+function postFilterNavigation(name: 'Post tags' | 'Post regions') {
+    const button = screen.getByRole('button', { name: 'Filters' });
+    if (button.getAttribute('aria-expanded') === 'false') fireEvent.click(button);
+    return screen.getByRole('navigation', { name });
+}
+
 describe('Posts page', () => {
     beforeEach(() => { vi.useFakeTimers(); });
     afterEach(() => { vi.clearAllTimers(); vi.useRealTimers(); });
@@ -115,6 +121,22 @@ describe('Posts page', () => {
         expect(screen.getAllByRole('heading', { level: 2 }).map(heading => heading.textContent)).toEqual(['Weather Records']);
         expect(screen.getByTestId('search-location')).toHaveTextContent('/posts?q=weather+normals');
         expect(screen.getByRole('status')).toHaveTextContent('1 of 5 posts matching “weather normals”');
+    });
+
+    it('hides tag and region filters until requested and keeps the dropdown open while combining selections', () => {
+        renderWithRouter(<><Posts /><SearchLocationProbe /></>, { route: '/posts' });
+        const button = screen.getByRole('button', { name: 'Filters' });
+        expect(button).toHaveAttribute('aria-expanded', 'false');
+        expect(screen.queryByRole('navigation', { name: 'Post tags' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('navigation', { name: 'Post regions' })).not.toBeInTheDocument();
+        fireEvent.click(button);
+        fireEvent.click(within(screen.getByRole('navigation', { name: 'Post tags' })).getByRole('link', { name: 'Maps' }));
+        expect(button).toHaveAttribute('aria-expanded', 'true');
+        fireEvent.click(within(screen.getByRole('navigation', { name: 'Post regions' })).getByRole('link', { name: 'United States' }));
+        expect(button).toHaveAccessibleDescription('2 active filters');
+        expect(screen.getByTestId('search-location')).toHaveTextContent('/posts?tag=Maps&country=US');
+        fireEvent.click(within(screen.getByRole('navigation', { name: 'Post type' })).getByRole('link', { name: 'Writing' }));
+        expect(screen.getByRole('button', { name: 'Filters' })).toHaveAttribute('aria-expanded', 'false');
     });
 
     it('preserves unrelated navigation state when filters are cleared', () => {
@@ -158,14 +180,14 @@ describe('Posts page', () => {
         const track = vi.spyOn(analytics, 'trackAnalyticsEvent').mockImplementation(() => {});
         const view = renderWithRouter(<Posts />, { route: '/posts' });
         try {
-            fireEvent.click(within(screen.getByRole('navigation', { name: 'Post tags' })).getByRole('link', { name: 'Maps' }));
+            fireEvent.click(within(postFilterNavigation('Post tags')).getByRole('link', { name: 'Maps' }));
             act(() => { vi.advanceTimersByTime(200); });
-            fireEvent.click(within(screen.getByRole('navigation', { name: 'Post tags' })).getByRole('link', { name: 'Weather' }));
+            fireEvent.click(within(postFilterNavigation('Post tags')).getByRole('link', { name: 'Weather' }));
             act(() => { vi.advanceTimersByTime(299); });
             expect(track).not.toHaveBeenCalled();
             act(() => { vi.advanceTimersByTime(1); });
             expect(track.mock.calls).toEqual([['filters-applied', { feature: 'posts', resultBucket: '1' }]]);
-            fireEvent.click(within(screen.getByRole('navigation', { name: 'Post tags' })).getByRole('link', { name: 'React' }));
+            fireEvent.click(within(postFilterNavigation('Post tags')).getByRole('link', { name: 'React' }));
             view.unmount();
             act(() => { vi.advanceTimersByTime(1000); });
             expect(track).toHaveBeenCalledOnce();
@@ -180,9 +202,9 @@ describe('Posts page', () => {
         renderWithRouter(<Posts />, { route: '/posts?type=writing&tag=Data+Viz&country=US&region=washington&q=maps' });
         expect(screen.getByRole('status')).toHaveTextContent('matching “maps”');
         expect(screen.getAllByRole('heading', { level: 2 }).map(heading => heading.textContent)).toEqual(['Mapping Boring Data']);
-        expect(within(screen.getByRole('navigation', { name: 'Post tags' })).getByRole('link', { name: 'All tags' }))
+        expect(within(postFilterNavigation('Post tags')).getByRole('link', { name: 'All tags' }))
             .toHaveAttribute('href', '/posts?type=writing&country=US&region=washington&q=maps');
-        expect(within(screen.getByRole('navigation', { name: 'Post regions' })).getByRole('link', { name: 'All regions' }))
+        expect(within(postFilterNavigation('Post regions')).getByRole('link', { name: 'All regions' }))
             .toHaveAttribute('href', '/posts?type=writing&tag=Data+Viz&q=maps');
         expect(within(screen.getByRole('navigation', { name: 'Post type' })).getByRole('link', { name: 'Trips' }))
             .toHaveAttribute('href', '/posts?type=trips&q=maps');
@@ -203,7 +225,7 @@ describe('Posts page', () => {
         render(<MemoryRouter initialEntries={['/about', '/posts?country=US&q=maps']}>
             <Posts /><SearchLocationProbe />
         </MemoryRouter>);
-        fireEvent.click(within(screen.getByRole('navigation', { name: 'Post tags' })).getByRole('link', { name: 'Maps' }));
+        fireEvent.click(within(postFilterNavigation('Post tags')).getByRole('link', { name: 'Maps' }));
         expect(screen.getByTestId('search-location')).toHaveTextContent('/posts?tag=Maps&country=US&q=maps');
         fireEvent.click(screen.getByRole('button', { name: 'Browser back' }));
         expect(screen.getByTestId('search-location')).toHaveTextContent('/posts?country=US&q=maps');
@@ -237,7 +259,7 @@ describe('Posts page', () => {
         try {
             renderWithRouter(<Posts />, { route: '/posts?type=writing&tag=Japan' });
             expect(screen.getAllByRole('heading', { level: 2 }).map(heading => heading.textContent)).toEqual(['Mapping Boring Data']);
-            expect(within(screen.getByRole('navigation', { name: 'Post tags' })).getByRole('link', { name: 'Japan' }))
+            expect(within(postFilterNavigation('Post tags')).getByRole('link', { name: 'Japan' }))
                 .toHaveAttribute('aria-current', 'page');
         } finally {
             posts.mockRestore();
@@ -246,6 +268,7 @@ describe('Posts page', () => {
 
     it('filter review regressions: accepts region names and lowercase country codes from shared URLs', () => {
         renderWithRouter(<Posts />, { route: '/posts?country=ca&region=British+Columbia' });
+        postFilterNavigation('Post regions');
         expect(screen.getAllByRole('heading', { level: 2 }).map(heading => heading.textContent)).toEqual(['Coastal Loop']);
         expect(within(screen.getByRole('group', { name: 'Canada' })).getByRole('link', { name: /British Columbia/ }))
             .toHaveAttribute('aria-current', 'page');
@@ -312,7 +335,7 @@ describe('Posts page', () => {
     it('renders unique tags for the active type', () => {
         renderWithRouter(<Posts />, { route: '/posts?type=writing' });
 
-        const tagNavigation = screen.getByRole('navigation', { name: 'Post tags' });
+        const tagNavigation = postFilterNavigation('Post tags');
         expect(within(tagNavigation).getAllByRole('link').map((link) => link.textContent)).toEqual([
             'All tags',
             'Data Viz',
@@ -330,7 +353,7 @@ describe('Posts page', () => {
         expect(screen.queryByRole('heading', { level: 2, name: 'React Routing' })).not.toBeInTheDocument();
         expect(screen.queryByRole('heading', { level: 2, name: 'Coastal Loop' })).not.toBeInTheDocument();
 
-        const tagNavigation = screen.getByRole('navigation', { name: 'Post tags' });
+        const tagNavigation = postFilterNavigation('Post tags');
         expect(within(tagNavigation).getByRole('link', { name: 'Data Viz' })).toHaveAttribute('aria-current', 'page');
         expect(within(tagNavigation).getByRole('link', { name: 'Data Viz' })).toHaveAttribute(
             'href',
@@ -346,7 +369,7 @@ describe('Posts page', () => {
 
     it('groups regions by country and sorts them by matching post count', () => {
         renderWithRouter(<Posts />, { route: '/posts' });
-        const regions = within(screen.getByRole('navigation', { name: 'Post regions' }));
+        const regions = within(postFilterNavigation('Post regions'));
         const us = within(regions.getByRole('group', { name: 'United States' }));
         expect(us.getAllByRole('link').map(link => link.textContent)).toEqual(['United States', 'Washington3', 'Idaho2', 'Oregon2', 'California1']);
         expect(us.getByLabelText('3 posts')).toBeInTheDocument();
@@ -357,8 +380,8 @@ describe('Posts page', () => {
     it('combines topical and regional filters and preserves the other category when clearing one', () => {
         renderWithRouter(<Posts />, { route: '/posts?tag=Data+Viz&country=US&region=washington' });
         expect(screen.getAllByRole('heading', { level: 2 }).map(heading => heading.textContent)).toEqual(['Mapping Boring Data']);
-        const tags = within(screen.getByRole('navigation', { name: 'Post tags' }));
-        const regions = within(screen.getByRole('navigation', { name: 'Post regions' }));
+        const tags = within(postFilterNavigation('Post tags'));
+        const regions = within(postFilterNavigation('Post regions'));
         expect(tags.getByRole('link', { name: 'All tags' })).toHaveAttribute('href', '/posts?country=US&region=washington');
         expect(regions.getByRole('link', { name: 'All regions' })).toHaveAttribute('href', '/posts?tag=Data+Viz');
         expect(regions.getByRole('link', { name: /Washington/ })).toHaveAttribute('aria-current', 'page');
@@ -366,7 +389,7 @@ describe('Posts page', () => {
 
     it('marks a selected region from a shared URL', () => {
         renderWithRouter(<Posts />, { route: '/posts?type=trips&country=US&region=california' });
-        const regions = within(screen.getByRole('navigation', { name: 'Post regions' }));
+        const regions = within(postFilterNavigation('Post regions'));
         expect(regions.getByRole('link', { name: /California/ })).toHaveAttribute('aria-current', 'page');
         expect(screen.getAllByRole('heading', { level: 2 }).map(heading => heading.textContent)).toEqual(['Coastal Loop']);
     });
@@ -378,7 +401,7 @@ describe('Posts page', () => {
     ])('keeps historic geographic tag links working for %s', (tag, titles) => {
         renderWithRouter(<Posts />, { route: `/posts?tag=${tag}` });
         expect(screen.getAllByRole('heading', { level: 2 }).map(heading => heading.textContent)).toEqual(titles);
-        expect(screen.getByRole('navigation', { name: 'Post regions' })).toBeInTheDocument();
+        expect(postFilterNavigation('Post regions')).toBeInTheDocument();
     });
 
     it('shows an empty state for incompatible filters', () => {

@@ -3,6 +3,8 @@ import { useEffect, useRef } from 'react';
 import { analyticsResultBucket, trackAnalyticsEvent } from '../utils/analytics';
 import { DevelopmentContentStatus } from '../components/DevelopmentContentStatus';
 import { PostRegionFilters } from '../components/PostRegionFilters';
+import { PostFilters } from '../components/PostFilters';
+import { PostFilterLink } from '../components/PostFilterLink';
 import { filterPostsByTag, getAllBlogTags, tripFactTag } from '../content/blogTags';
 import { filterPostsByRegion, findGeographicTag, getAllBlogRegions } from '../content/blogRegions';
 import { getAllPosts } from '../content/posts';
@@ -36,6 +38,7 @@ export function Posts() {
     const countries = getAllBlogRegions(postsByType);
     const posts = searchPosts(filterPostsByRegion(filterPostsByTag(postsByType, activeTag), activeCountry, activeRegion), query);
     const hasActiveFilters = activeType !== 'all' || !!(activeTag || activeCountry || activeRegion || query);
+    const activeFilterCount = Number(Boolean(activeTag)) + Number(Boolean(activeCountry || activeRegion));
 
     const previousFilters = useRef(returnUrl);
     useEffect(() => {
@@ -52,66 +55,61 @@ export function Posts() {
 
     return (
         <div>
-            <h1 ref={titleRef} tabIndex={-1} className="mb-2 text-3xl font-bold text-zinc-100">Posts</h1>
-            <p className="mb-6 max-w-2xl text-zinc-400">{metadata.description}</p>
-
-            <nav aria-label="Post type" className="mb-5 flex w-fit gap-1 rounded-lg bg-zinc-900 p-1">
-                {([
-                    ['all', 'All'],
-                    ['writing', 'Writing'],
-                    ['trips', 'Trips'],
-                ] as const).map(([type, label]) => (
-                    <IntentLink
-                        key={type}
-                        to={createPostsUrl({ type, query })}
-                        aria-current={activeType === type ? 'page' : undefined}
-                        className={`${filterClasses} ${activeType === type
-                            ? 'bg-zinc-700 text-zinc-100'
-                            : 'text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
-                            }`}
-                    >
-                        {label}
-                    </IntentLink>
-                ))}
-            </nav>
+            <div className="mb-6">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                    <h1 ref={titleRef} tabIndex={-1} className="text-3xl font-bold text-zinc-100">Posts</h1>
+                    <nav aria-label="Post type" className="ml-auto flex w-fit max-w-full flex-wrap gap-1 rounded-lg bg-zinc-900 p-1">
+                        {([
+                            ['all', 'All'],
+                            ['writing', 'Writing'],
+                            ['trips', 'Trips'],
+                        ] as const).map(([type, label]) => (
+                            <IntentLink
+                                key={type}
+                                to={createPostsUrl({ type, query })}
+                                aria-current={activeType === type ? 'page' : undefined}
+                                className={`${filterClasses} ${activeType === type
+                                    ? 'bg-zinc-700 text-zinc-100'
+                                    : 'text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
+                                    }`}
+                            >
+                                {label}
+                            </IntentLink>
+                        ))}
+                    </nav>
+                </div>
+                <div className="mt-3 flex flex-wrap items-start justify-end gap-x-4 gap-y-3">
+                    <p className="min-w-0 flex-[1_1_12rem] text-zinc-400">{metadata.description}</p>
+                    {(allTags.length > 0 || countries.length > 0) && <PostFilters key={activeType} count={activeFilterCount}>
+                        {allTags.length > 0 && <nav aria-label="Post tags" className="flex flex-wrap items-baseline gap-2">
+                            <p className="mr-1 text-xs font-semibold uppercase tracking-wider text-zinc-400">Tags</p>
+                            <PostFilterLink
+                                to={createPostsUrl({ type: activeType, country: activeCountry, region: activeRegion, query })}
+                                active={!activeTag}
+                            >
+                                All tags
+                            </PostFilterLink>
+                            {allTags.map((tag) => (
+                                <PostFilterLink
+                                    key={tag}
+                                    to={createPostsUrl({ type: activeType, tag, country: activeCountry, region: activeRegion, query })}
+                                    active={activeTag === tag}
+                                >
+                                    {tag}
+                                </PostFilterLink>
+                            ))}
+                        </nav>}
+                        {countries.length > 0 && <PostRegionFilters
+                            countries={countries}
+                            activeCountry={activeCountry}
+                            activeRegion={activeRegion}
+                            createUrl={(country = '', region = '') => createPostsUrl({ type: activeType, tag: activeTag, country, region, query })}
+                        />}
+                    </PostFilters>}
+                </div>
+            </div>
 
             {activeType === 'trips' && <IntentLink prefetchMode="destination" to={TRIP_ATLAS_PATH} className="mb-5 inline-flex min-h-11 items-center text-sm text-violet-300 hover:underline">Explore ADV Atlas →</IntentLink>}
-
-            <div className="mb-5 space-y-5">
-                {allTags.length > 0 && <nav aria-label="Post tags" className="flex flex-wrap items-baseline gap-2">
-                    <p className="mr-1 text-xs font-semibold uppercase tracking-wider text-zinc-400">Tags</p>
-                    <IntentLink
-                        to={createPostsUrl({ type: activeType, country: activeCountry, region: activeRegion, query })}
-                        aria-current={!activeTag ? 'page' : undefined}
-                        className={`max-w-full rounded-full px-2.5 py-0.5 text-xs transition-colors ${!activeTag
-                            ? 'bg-violet-600 text-zinc-100'
-                            : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200'
-                            }`}
-                    >
-                        All tags
-                    </IntentLink>
-                    {allTags.map((tag) => (
-                        <IntentLink
-                            key={tag}
-                            to={createPostsUrl({ type: activeType, tag, country: activeCountry, region: activeRegion, query })}
-                            aria-current={activeTag === tag ? 'page' : undefined}
-                            className={`max-w-full break-words rounded-full px-2.5 py-0.5 text-xs transition-colors ${activeTag === tag
-                                ? 'bg-violet-600 text-zinc-100'
-                                : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200'
-                                }`}
-                        >
-                            {tag}
-                        </IntentLink>
-                    ))}
-                </nav>}
-                {countries.length > 0 && <PostRegionFilters
-                    key={activeType}
-                    countries={countries}
-                    activeCountry={activeCountry}
-                    activeRegion={activeRegion}
-                    createUrl={(country = '', region = '') => createPostsUrl({ type: activeType, tag: activeTag, country, region, query })}
-                />}
-            </div>
 
             <div className="mb-6 flex min-h-11 flex-wrap items-center justify-between gap-x-4 gap-y-1 border-b border-zinc-800/70 pb-3">
                 <p role="status" aria-live="polite" aria-atomic="true" className="text-sm text-zinc-400">

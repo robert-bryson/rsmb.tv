@@ -278,7 +278,7 @@ The post browser tests use a fixed Google Docs fixture in `tests/fixtures`.
 A compilation test compares the fixture MDX with the importer output.
 Browser tests check subtitle styles at phone and desktop widths, unique heading IDs, reload, and browser history.
 Trip checks cover sticky chapter handoffs, subsection clearance, short screens, and larger-text image sizing.
-Post filter tests check country and region links, responsive rows, and long labels at phone widths.
+Post filter tests check dropdown placement, complete region lists, scrollbar focus, and long labels at phone widths.
 They also check that geographic aliases cannot replace a visible topical tag.
 Search checks cover full article text, page and project matches, lazy loading, draft exclusion, highlighted excerpts, and keyboard focus. Filter checks cover existing query URLs, history, counts, and anonymous events.
 Project search checks also cover category counts, direct actions, empty directories, and map-data loading after explicit navigation.
