@@ -57,7 +57,7 @@ afterEach(() => { vi.clearAllTimers(); vi.useRealTimers(); });
 
 describe('search write ownership review regressions', () => {
     it('keeps urgent input and return links ahead of delayed router commits', () => {
-        openSearch();
+        openSearch({ context: 'saved-list', restoreScroll: true, siteSearchQuery: 'maps' });
         const input = screen.getByRole('textbox', { name: 'Search' });
         fireEvent.change(input, { target: { value: 'p' } });
         advanceSearchCommit();
@@ -73,6 +73,7 @@ describe('search write ownership review regressions', () => {
         const state = JSON.parse(screen.getByTestId('state').textContent!);
         expect(state.context).toBe('saved-list');
         expect(state).not.toHaveProperty('restoreScroll');
+        expect(state).not.toHaveProperty('siteSearchQuery');
     });
 
     it('keeps the latest input when its own pending commits arrive out of order', () => {

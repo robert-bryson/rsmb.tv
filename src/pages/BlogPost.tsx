@@ -85,7 +85,7 @@ export function BlogPost({ collection }: BlogPostProps) {
     }
 
     if (isTrip && tripId && loaded?.id !== tripId) {
-        return <div className="trip-story">
+        return <div className="trip-story" data-search-pending>
             <div className="trip-hero-gallery grid place-items-center px-6 py-12">
                 <div><h1 className="text-3xl font-bold">{post.title}</h1><p role="status" className="py-8 text-zinc-400">Loading trip…</p></div>
             </div>
@@ -127,7 +127,7 @@ export function BlogPost({ collection }: BlogPostProps) {
     );
     const postContent = (
         <PostHeadingProvider key={post.slug}>
-            <Suspense fallback={<div role="status" className="text-sm text-zinc-400">Loading {isTrip ? 'story' : 'post'}...</div>}>
+            <Suspense fallback={<div role="status" data-search-pending className="text-sm text-zinc-400">Loading {isTrip ? 'story' : 'post'}...</div>}>
                 {!isTrip && <PostTableOfContents contentRef={contentRef} />}
                 <div ref={contentRef} id="trip-story-body" className="scroll-mt-24 wrap-anywhere">
                     {post.development && !post.development.contentAvailable ? (

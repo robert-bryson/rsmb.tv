@@ -79,7 +79,7 @@ export function SiteSearch() {
             event.preventDefault();
             if (composing.current) return;
             setOpen(true);
-            if (results[0]) { setOpen(false); setQuery(''); navigate(results[0].url); }
+            if (results[0]) { setOpen(false); setQuery(''); navigate(results[0].url, { state: { siteSearchQuery: query } }); }
         }}
     >
         <label htmlFor={id} className="sr-only">Search site</label>
@@ -111,7 +111,7 @@ export function SiteSearch() {
                 Couldn’t load search. <button type="button" onClick={() => void loadIndex()} className="min-h-9 text-violet-300 hover:underline">Try again</button>
             </div> : documents && (results.length ? <ul aria-label="Search matches" className="max-h-[min(65dvh,32rem)] min-h-0 overflow-y-auto overscroll-contain p-1">
                 {results.map((result, index) => <li key={result.url}>
-                    <IntentLink to={result.url} prefetchMode="none" ref={link => { links.current[index] = link; }}
+                    <IntentLink to={result.url} state={{ siteSearchQuery: query }} prefetchMode="none" ref={link => { links.current[index] = link; }}
                         className="block rounded-md px-3 py-3 hover:bg-zinc-800/60 focus-visible:bg-zinc-800/60 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-violet-400"
                         onClick={() => { setOpen(false); setQuery(''); }}>
                         <div className="mb-1 flex items-baseline justify-between gap-3">

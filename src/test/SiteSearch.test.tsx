@@ -13,7 +13,10 @@ const documents: SiteSearchDocument[] = [
     { url: '/about', kind: 'Page', title: 'About', description: 'My background.', content: 'Geospatial engineering in Québec.' },
 ];
 
-function Location() { return <span data-testid="location">{useLocation().pathname}</span>; }
+function Location() {
+    const location = useLocation();
+    return <span data-testid="location" data-state={JSON.stringify(location.state)}>{location.pathname}{location.search}{location.hash}</span>;
+}
 function renderSearch() {
     render(<MemoryRouter><SiteSearch /><Location /><button>Outside</button></MemoryRouter>);
     return screen.getByRole('searchbox', { name: 'Search site' });
@@ -57,8 +60,18 @@ describe('header site search', () => {
         await screen.findByRole('link', { name: /Forest maps/ });
         fireEvent.submit(screen.getByRole('search', { name: 'Site search' }));
         expect(screen.getByTestId('location')).toHaveTextContent('/projects/forest');
+        expect(screen.getByTestId('location')).toHaveAttribute('data-state', JSON.stringify({ siteSearchQuery: 'python' }));
         expect(input).toHaveValue('');
         expect(screen.queryByRole('region', { name: 'Search results' })).not.toBeInTheDocument();
+    });
+
+    it('passes the query on a result click without adding it to the destination URL', async () => {
+        const input = renderSearch();
+        fireEvent.change(input, { target: { value: 'driftwood' } });
+        fireEvent.click(await screen.findByRole('link', { name: /A weekend away/ }));
+        expect(screen.getByTestId('location')).toHaveTextContent(/^\/trips\/coast$/);
+        expect(screen.getByTestId('location')).toHaveAttribute('data-state', JSON.stringify({ siteSearchQuery: 'driftwood' }));
+        expect(input).toHaveValue('');
     });
 
     it('shows an empty state, clears the field, and dismisses when focus leaves search', async () => {

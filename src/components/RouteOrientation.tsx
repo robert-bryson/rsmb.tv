@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useLocation, useNavigationType } from 'react-router-dom';
+import { getSiteSearchQuery } from '../navigation/siteSearchMatch';
 
 /** Orient a new page visit after its lazy content commits, without changing return navigation. */
 export function RouteOrientation() {
@@ -27,7 +28,7 @@ export function RouteOrientation() {
       const main = document.querySelector<HTMLElement>('main, [role="main"]');
       const title = main?.querySelector('h1')?.textContent?.trim() || document.title;
       if (announcement.current) announcement.current.textContent = `${title} loaded`;
-      if (main && !interacted) {
+      if (main && !interacted && !getSiteSearchQuery(location.state)) {
         main.tabIndex = -1;
         main.focus({ preventScroll: true });
       }

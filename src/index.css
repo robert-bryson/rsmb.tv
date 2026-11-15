@@ -675,6 +675,16 @@ u {
   padding: 0;
 }
 
+::highlight(site-search-result) {
+  background-color: #6d28d9;
+  color: #f5f3ff;
+}
+
+[data-site-search-match]:focus-visible {
+  outline: 2px solid #a78bfa;
+  outline-offset: 4px;
+}
+
 .image-caption-figure {
   position: relative;
 }

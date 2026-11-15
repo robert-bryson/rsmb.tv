@@ -5,6 +5,7 @@ import { intentPrefetch } from './navigation/intentPrefetch';
 import { Layout } from './components/Layout';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ScrollToTop } from './components/ScrollToTop';
+import { SearchMatch } from './components/SearchMatch';
 import { RouteOrientation } from './components/RouteOrientation';
 import { MapPerformance } from './components/MapPerformance';
 import { canonicalPathname } from './utils/siteMetadata';
@@ -117,6 +118,7 @@ function PageContent() {
   return (
     <Layout>
       <RouteOrientation />
+      <SearchMatch />
       <MapPerformance />
       <ErrorBoundary key={location.pathname}>
         <Suspense fallback={<LoadingFallback />}>

@@ -1,6 +1,7 @@
 import { useId, useLayoutEffect, useRef, useState, type RefObject } from 'react';
 import { useLocation, useNavigationType, useSearchParams } from 'react-router-dom';
 import { withSearchQuery } from '../utils/search';
+import { withoutSiteSearchQuery } from '../navigation/siteSearchMatch';
 
 const OWNER_STATE_KEY = '__rsmbSearchOwner';
 const QUERY_COMMIT_DELAY_MS = 400;
@@ -67,7 +68,7 @@ export function useSearchQuery() {
         const revision = ++writeRevision.current;
         const nextSearch = params.toString();
         setDraft(previous => ({ ...previous, search: nextSearch, pendingRevisions: [...previous.pendingRevisions, revision] }));
-        const state = navigationState(location.state);
+        const state = navigationState(withoutSiteSearchQuery(location.state));
         // Editing starts a new list view. Preserve context, but end return-scroll correction.
         delete state.restoreScroll;
         state[OWNER_STATE_KEY] = { owner, revision, search: nextSearch, navigation: replace ? 'REPLACE' : 'PUSH' };

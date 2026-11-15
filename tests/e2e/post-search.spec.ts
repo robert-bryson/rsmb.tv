@@ -6,6 +6,105 @@ test.skip(process.env.PAGE_RECOVERY !== '1', 'Uses the production bundle and fix
 test.beforeEach(async ({ page }) => { await auditAssets(page); });
 
 for (const width of [320, 1280]) {
+    test(`site search landing finds a passage after the trip body loads at ${width}px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 700 });
+        let release!: () => void;
+        const gate = new Promise<void>(resolve => { release = resolve; });
+        let requested = false;
+        await page.route(/\/assets\/coastal-test-[^/]+\.js$/, async route => {
+            requested = true;
+            await gate;
+            await route.continue();
+        });
+        await page.goto('/posts');
+        await page.getByRole('searchbox', { name: 'Search site' }).fill('the quiet harbor');
+        const result = page.getByRole('region', { name: 'Search results' }).locator('a[href="/trips/coastal-test"]');
+        await expect(result).toBeVisible();
+        expect(requested).toBe(false);
+        await result.click();
+        await expect.poll(() => requested).toBe(true);
+        expect(await page.locator('[data-site-search-match]').count()).toBe(0);
+        release();
+        const match = page.locator('[data-site-search-match]');
+        await expect(match).toContainText('authored first-line indent');
+        await expect(match).toBeFocused();
+        await expect(page).toHaveURL(/\/trips\/coastal-test$/);
+        await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(300);
+        await expect.poll(() => match.evaluate(node => {
+            const range = CSS.highlights?.get('site-search-result')?.values().next().value as Range | undefined;
+            const bounds = range?.getBoundingClientRect() ?? node.getBoundingClientRect();
+            const chapter = node.closest('.trip-chapter')?.querySelector(':scope > :is(h1,h2):first-child');
+            const header = document.querySelector('.site-header');
+            return bounds.top >= Math.max(0, header?.getBoundingClientRect().bottom ?? 0)
+                + (chapter?.getBoundingClientRect().height ?? 0) + 8 && bounds.bottom <= window.innerHeight;
+        })).toBe(true);
+        const audit = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+        expect(audit.violations).toEqual([]);
+    });
+
+    test(`site search landing supports Enter and phrases across article formatting at ${width}px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 700 });
+        await page.goto('/projects');
+        const search = page.getByRole('searchbox', { name: 'Search site' });
+        await search.fill('bold emphasized and code');
+        const results = page.getByRole('region', { name: 'Search results' });
+        await expect(results.getByRole('link').first()).toHaveAttribute('href', '/blog/reading-test');
+        await search.press('Enter');
+        const match = page.locator('[data-site-search-match]');
+        await expect(match).toContainText('link text');
+        await expect(match).toBeFocused();
+        await expect(match).toBeInViewport({ ratio: 1 });
+        await expect(page).toHaveURL(/\/blog\/reading-test$/);
+        expect(await page.evaluate(() => {
+            const range = CSS.highlights?.get('site-search-result')?.values().next().value as Range | undefined;
+            return range?.toString() ?? 'bold, emphasized, and code';
+        })).toBe('bold, emphasized, and code');
+    });
+
+    test(`site search landing reaches project text and another match on the current page at ${width}px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 700 });
+        await page.goto('/posts');
+        const search = page.getByRole('searchbox', { name: 'Search site' });
+        await search.fill('vagrants');
+        await page.getByRole('region', { name: 'Search results' }).locator('a[href="/projects/anki-artisan"]').click();
+        await expect(page.locator('[data-site-search-match]')).toContainText('vagrants');
+        await expect(page.locator('[data-site-search-match]')).toBeFocused();
+        await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(300);
+        await search.fill('Microsoft');
+        await page.getByRole('region', { name: 'Search results' }).locator('a[href="/about"]').click();
+        await expect(page.locator('[data-site-search-match]')).toContainText('several years at Microsoft');
+        await search.fill('hello@rsmb.tv');
+        await page.getByRole('region', { name: 'Search results' }).locator('a[href="/about"]').click();
+        await expect(page.locator('[data-site-search-match]')).toContainText('hello@rsmb.tv');
+        await expect(page.locator('[data-site-search-match]')).toBeFocused();
+        await expect(page.locator('[data-site-search-match]')).toBeInViewport({ ratio: 1 });
+        await expect(page).toHaveURL(/\/about$/);
+        expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+    });
+
+    test(`site search landing preserves the reader position through history at ${width}px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 700 });
+        await page.goto('/posts');
+        await page.getByRole('searchbox', { name: 'Search site' }).fill('quiet harbor');
+        await page.getByRole('region', { name: 'Search results' }).locator('a[href="/trips/coastal-test"]').click();
+        await expect(page.locator('[data-site-search-match]')).toBeFocused();
+        await page.keyboard.press('Escape');
+        await page.evaluate(() => window.scrollTo({ top: 700, behavior: 'instant' }));
+        await expect.poll(() => page.evaluate(() => scrollY)).toBe(700);
+        // Programmatic activation avoids changing the saved position to reveal the sticky navigation.
+        await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'About', exact: true })
+            .evaluate(node => (node as HTMLAnchorElement).click());
+        await expect(page.getByRole('heading', { level: 1, name: 'About' })).toBeVisible();
+        await page.goBack();
+        await expect(page).toHaveURL(/\/trips\/coastal-test$/);
+        await expect.poll(() => page.evaluate(() => scrollY)).toBe(700);
+        await expect(page.locator('[data-site-search-match]')).toHaveCount(0);
+        await page.goForward();
+        await expect(page).toHaveURL(/\/about$/);
+        await page.goBack();
+        await expect.poll(() => page.evaluate(() => scrollY)).toBe(700);
+    });
+
     test(`post filter review regressions: all options fit the visible screen at ${width}px`, async ({ page }) => {
         await page.setViewportSize({ width, height: 480 });
         await page.goto('/posts');

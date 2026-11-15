@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from 'react';
 import { useLocation, useNavigationType } from 'react-router-dom';
+import { getSiteSearchQuery } from '../navigation/siteSearchMatch';
 const positions = new Map<string, number>();
 const listPositions = new Map<string, number>();
 
@@ -14,8 +15,9 @@ export function ScrollToTop() {
         const returning = (location.state as { restoreScroll?: boolean } | null)?.restoreScroll;
         const samePath = previousPath.current === location.pathname;
         previousPath.current = location.pathname;
-        const target = navigation === 'POP' ? positions.get(location.key) ?? 0 : returning ? listPositions.get(url) ?? 0 : samePath ? window.scrollY : 0;
-        let restoring = true;
+        const searching = navigation !== 'POP' && !location.hash && Boolean(getSiteSearchQuery(location.state));
+        const target = navigation === 'POP' ? positions.get(location.key) ?? 0 : returning ? listPositions.get(url) ?? 0 : samePath && !searching ? window.scrollY : 0;
+        let restoring = !searching;
         let frame = 0;
         const restore = () => {
             cancelAnimationFrame(frame);
@@ -28,9 +30,9 @@ export function ScrollToTop() {
                 else if (!hash) window.scrollTo(0, target);
             });
         };
-        if (!location.hash && (!samePath || navigation === 'POP' || returning)) window.scrollTo(0, target);
+        if (!location.hash && (!samePath || navigation === 'POP' || returning || searching)) window.scrollTo(0, target);
         else if (location.hash) restore();
-        const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(restore);
+        const observer = searching || typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(restore);
         observer?.observe(document.body);
         const stop = () => { restoring = false; observer?.disconnect(); };
         const timeout = window.setTimeout(stop, 3000);

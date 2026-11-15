@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { createMemoryRouter, MemoryRouter, RouterProvider } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ScrollToTop } from '../components/ScrollToTop';
 
@@ -23,6 +23,28 @@ function mount() {
 }
 
 describe('scroll restoration input ownership', () => {
+    it('yields delayed layout restoration to a new search landing but retains history positions', async () => {
+        const scroll = vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
+        const callbacks: ResizeObserverCallback[] = [];
+        vi.stubGlobal('ResizeObserver', class {
+            constructor(callback: ResizeObserverCallback) { callbacks.push(callback); }
+            observe() {}
+            disconnect() {}
+        });
+        const router = createMemoryRouter([{ path: '*', element: <ScrollToTop /> }], { initialEntries: ['/'] });
+        render(<RouterProvider router={router} />);
+        await act(() => router.navigate('/article', { state: { siteSearchQuery: 'harbor' } }));
+        expect(callbacks).toHaveLength(1);
+        expect(scroll).toHaveBeenLastCalledWith(0, 0);
+        vi.stubGlobal('scrollY', 700);
+        fireEvent.scroll(window);
+        await act(() => router.navigate('/about'));
+        scroll.mockClear();
+        await act(() => router.navigate(-1));
+        expect(scroll).toHaveBeenCalledWith(0, 700);
+        expect(callbacks).toHaveLength(3);
+    });
+
     it.each(['pointerdown', 'wheel', 'touchstart', 'keydown'])('cancels a queued restoration after %s', type => {
         const state = mount();
         state.resize();

@@ -1,5 +1,6 @@
 import { useCallback, useLayoutEffect, useMemo, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { withoutSiteSearchQuery } from '../../../navigation/siteSearchMatch';
 
 /** Compose same-event edits, including a route selection that also opens the panel. */
 export function useAtlasUrlState() {
@@ -15,7 +16,7 @@ export function useAtlasUrlState() {
         if (result.toString() === (pending.current ?? params).toString()) return result;
         pending.current = result;
         void navigate({ pathname: location.pathname, search: `?${result}`, hash: location.hash }, {
-            replace, state: location.state, preventScrollReset: true,
+            replace, state: withoutSiteSearchQuery(location.state), preventScrollReset: true,
         });
         return result;
     }, [getParams, params, location.pathname, location.hash, location.state, navigate]);

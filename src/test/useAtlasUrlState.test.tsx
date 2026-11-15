@@ -23,7 +23,7 @@ function Harness() {
 
 describe('atlas URL updates', () => {
     it('composes same-event writes, preserves return state and fragments, and keeps Apply as one Back step', () => {
-        render(<MemoryRouter initialEntries={[{ pathname: '/projects/adv-atlas/map', search: '?country=CA', hash: '#map', state: { returnKey: 'origin' } }]}><Harness /></MemoryRouter>);
+        render(<MemoryRouter initialEntries={[{ pathname: '/projects/adv-atlas/map', search: '?country=CA', hash: '#map', state: { returnKey: 'origin', siteSearchQuery: 'coast' } }]}><Harness /></MemoryRouter>);
         fireEvent.click(screen.getByRole('button', { name: 'Compose' }));
         expect(screen.getByTestId('query')).toHaveTextContent('country=CA&trip=coast&panel=compact&camera=-123%2C48%2C7%2C0%2C0');
         expect(screen.getByTestId('state')).toHaveTextContent('{"returnKey":"origin"}');

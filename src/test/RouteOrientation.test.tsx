@@ -18,6 +18,7 @@ function Navigation() {
         <button onClick={() => navigate(-1)}>Back</button>
         <button onClick={() => navigate('/first', { state: { restoreScroll: true } })}>Return to list</button>
         <button onClick={() => navigate('/first#anchor')}>Anchor</button>
+        <button onClick={() => { setReady(true); navigate('/second', { state: { siteSearchQuery: 'harbor' } }); }}>Search result</button>
         <main>{failed ? <section data-testid="page-error"><h1>Page unavailable</h1></section>
             : <><h1>{location.pathname}</h1>{ready && <span hidden data-route-path={location.pathname} />}</>}</main>
     </>;
@@ -26,6 +27,15 @@ function Navigation() {
 function mount() { return render(<MemoryRouter initialEntries={['/first']}><Navigation /></MemoryRouter>); }
 
 describe('route orientation', () => {
+    it('announces search destinations while leaving passage focus to search landing', async () => {
+        mount();
+        const button = screen.getByRole('button', { name: 'Search result' });
+        button.focus();
+        fireEvent.click(button);
+        await waitFor(() => expect(document.querySelector('[data-route-announcement]')).toHaveTextContent('/second loaded'));
+        expect(button).toHaveFocus();
+    });
+
     it('waits for lazy content and focuses the completed destination without scrolling', async () => {
         mount();
         const button = screen.getByRole('button', { name: 'New page' });

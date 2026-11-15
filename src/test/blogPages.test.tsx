@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { lazy } from 'react';
+import { lazy, type ReactNode } from 'react';
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { renderWithRouter } from './helpers/router';
@@ -411,6 +411,20 @@ describe('Posts page', () => {
 });
 
 describe('BlogPost tag navigation', () => {
+    it('marks the lazy body as pending until its text is available for search landing', async () => {
+        let resolve!: (module: { default: () => ReactNode }) => void;
+        const loadComponent = () => new Promise<{ default: () => ReactNode }>(done => { resolve = done; });
+        const Component = lazy(loadComponent);
+        const getPost = vi.spyOn(postRegistry, 'getPostBySlug').mockReturnValue({ ...testPosts[0], loadComponent, Component });
+        try {
+            renderWithRouter(<Routes><Route path="/blog/:slug" element={<BlogPost collection="blog" />} /></Routes>, { route: '/blog/mapping-boring-data' });
+            expect(screen.getByText('Loading post...')).toHaveAttribute('data-search-pending');
+            await act(async () => { resolve({ default: () => <p>The article body is ready.</p> }); });
+            expect(screen.getByText('The article body is ready.')).toBeInTheDocument();
+            expect(document.querySelector('[data-search-pending]')).toBeNull();
+        } finally { getPost.mockRestore(); }
+    });
+
     it('preserves the originating atlas visit through series links and the article return', async () => {
         const parts = testPosts.slice(0, 2).map((post, index) => ({
             ...post, series: { id: 'journey', title: 'Journey reports', order: index + 1 },
@@ -451,7 +465,9 @@ describe('BlogPost tag navigation', () => {
             render(<MemoryRouter initialEntries={[{ pathname: '/trips/coastal-loop', state: { from } }]}>
                 <Routes><Route path="/trips/:slug" element={<BlogPost collection="trips" />} /></Routes>
             </MemoryRouter>);
+            expect(screen.getByText('Loading trip…').closest('[data-search-pending]')).not.toBeNull();
             expect(await screen.findByRole('heading', { name: 'Trip not configured' })).toBeInTheDocument();
+            expect(document.querySelector('[data-search-pending]')).toBeNull();
             expect(screen.getByRole('link', { name: /Back to posts/ })).toHaveAttribute('href', from);
         } finally {
             load.mockRestore();

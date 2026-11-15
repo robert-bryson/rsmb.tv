@@ -204,6 +204,10 @@ It shares publication and identifier checks with the article plugin through [`po
 Keep metadata types in [`postMetadata.ts`](../src/content/postMetadata.ts), separate from virtual article loaders.
 Use the shared module loader for retryable index requests.
 See [site search](site-search.md) for extraction limits and keyboard behavior.
+Search result navigation passes its query through browser history state.
+[`siteSearchMatch.ts`](../src/navigation/siteSearchMatch.ts) finds a visible passage and maps normalized text to its original DOM range.
+[`SearchMatch`](../src/components/SearchMatch.tsx) owns the destination jump, focus, highlight, and layout correction.
+Normal history restoration remains in `ScrollToTop`. New search visits yield to the passage jump.
 
 Post tags and regions use [`PostFilterLink`](../src/components/PostFilterLink.tsx) for pill styles and selected state.
 [`PostFilters`](../src/components/PostFilters.tsx) owns their shared disclosure and focus behavior.

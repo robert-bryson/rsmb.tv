@@ -37,6 +37,7 @@ Local browser tests cannot verify the analytics account or physical devices.
   Create the goals and funnel in the [analytics guide](docs/umami-analytics.md).
 - [ ] Test navigation, site search, list filters, and map controls with VoiceOver or NVDA.
   Check result announcements, keyboard browsing, Escape, retry, and focus after clearing.
+  Open a search result and check passage focus, the highlight, sticky heading clearance, and Back/Forward positions.
   Check the post filter button's active count, link order, selected states, and focus after dismissal.
   Check category counts and the new-tab descriptions on project actions.
   Include hover dismissal, route announcements, help dismissal, and disabled character shortcuts.
