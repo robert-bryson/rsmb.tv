@@ -3,6 +3,24 @@
 ADV Atlas connects motorcycle trip reports through a shared route map.
 Open `/projects/adv-atlas/map` to browse the collection.
 The project entry opens this explorer directly.
+Filter trips by year, riding days, distance, or location.
+Compare their facts in cards or a sortable table. Share the current map view.
+Reports include day maps, sticky chapter headings, and zoomable photographs. Photo browsing includes inline panoramas.
+
+## Published collection and screenshots
+
+The published collection checked on November 15, 2026 contains four trips.
+It now includes [Down the West Coast](https://www.rsmb.tv/trips/pch-2024), a five-day, 1,639-mile ride through Washington, Oregon, and California.
+The other reports cover the Olympic Peninsula, Boise, and Ocean Shores.
+Unpublished reports remain available only in development previews.
+
+![ADV Atlas showing all four published routes and the Down the West Coast report in the compact trip panel](../../public/images/adv-atlas/adv-atlas.webp)
+
+The [selected West Coast trip](../../public/images/adv-atlas/selected-trip.webp) shows its start and end pins and recorded day breaks.
+The [expanded comparison table](../../public/images/adv-atlas/trip-comparison.webp) shows all four trips with dates, mileage, riding days, motorcycles, locations, and report links.
+See [image delivery](../image-assets.md#adv-atlas-screenshot-views) for capture settings and refresh steps.
+
+## Route markers
 
 Select a trip to show route-colored dots with a broad black halo at recorded day breaks.
 Each dot marks the end of an authored day's final track.

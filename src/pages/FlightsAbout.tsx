@@ -10,25 +10,25 @@ const screenshots: ProjectScreenshot[] = [
     {
         src: '/images/flights/flight-globe.webp',
         alt: '3D globe showing all flight routes with stats panel',
-        caption: 'Overview of all flights on the interactive 3D globe with aggregate statistics, airline breakdown, and country-level data',
-        width: 1852,
-        height: 1385,
+        caption: 'Overview — flight routes, airport and country totals, distance, and recorded travel time on the 3D globe.',
+        width: 1600,
+        height: 1000,
         loading: 'eager',
     },
     {
         src: '/images/flights/flight-routes.webp',
         alt: 'Globe filtered to show routes from Seattle-Tacoma International Airport',
         caption: 'Filtering by airport — all routes from Seattle-Tacoma (SEA) with visit timeline, top destinations, and connected airports',
-        width: 1853,
-        height: 1389,
+        width: 1600,
+        height: 1000,
         loading: 'lazy',
     },
     {
         src: '/images/flights/flight-stats.webp',
         alt: 'Globe zoomed into the United Kingdom showing airport markers and flight routes',
         caption: 'Country view — flights to and from the United Kingdom with airport markers, top routes, and airline details',
-        width: 1860,
-        height: 1390,
+        width: 1600,
+        height: 1000,
         loading: 'lazy',
     },
 ];
@@ -47,7 +47,9 @@ export default function FlightsAbout() {
                     <>
                         An interactive 3D globe visualization of flights I've taken
                         around the world. Animated arcs trace each route across the
-                        globe, with filtering by year, airport, and airline. Built with{' '}
+                        globe, with filtering by year, airport, airline, and country.
+                        Compare distance, recorded flight time, and travel statistics, then
+                        share the current view. Built with{' '}
                         <a
                             href="https://github.com/vasturiano/react-globe.gl"
                             target="_blank"
@@ -70,11 +72,13 @@ export default function FlightsAbout() {
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Features</h2>
             <ul className="space-y-1.5 text-zinc-400 text-sm mb-6 list-disc list-inside">
                 <li>3D globe with animated flight arcs using WebGL</li>
-                <li>Filter by year, airport, or airline</li>
+                <li>Filter by year, airport, airline, country, region, or flight type</li>
+                <li>Recorded flight durations with actual, scheduled, and estimated timing coverage</li>
                 <li>Color modes — by airline, frequency, or distance</li>
                 <li>Route frequency visualization showing most-traveled paths</li>
                 <li>Deep-linking support for sharing specific views</li>
                 <li>Mobile-optimized touch controls</li>
+                <li>Resizable statistics panel and saved character-shortcut preferences</li>
             </ul>
 
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Data Pipeline</h2>

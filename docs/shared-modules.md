@@ -192,6 +192,8 @@ Supply a detailed list when the project page intentionally names additional tech
 Keep editorial sections in the page itself.
 Use `ResponsiveImage` from `shared/responsiveImage.ts` for generated image records.
 Use `getProjectPreview` for project image lookup in React and HTML generation.
+Project preview records also contain the original file's `sourceHash`.
+The asset tests use this hash to reject stale variants after a screenshot changes.
 Do not copy manifest casts into consumers. See [image delivery](image-assets.md) for generation and recovery rules.
 
 ## Search fields and URLs
@@ -232,6 +234,7 @@ Run the focused unit tests after changing these modules:
 
 ```bash
 npx vitest run src/test/fetchCache.test.ts src/test/fetchCacheTimeout.test.ts src/test/usStates.test.ts scripts/__tests__/airportData.test.ts scripts/__tests__/flightBuildScripts.test.ts scripts/__tests__/syncTornadoes.test.ts src/test/ProjectPageHeader.test.tsx src/test/projectPages.test.tsx
+npx vitest run scripts/__tests__/projectAssets.test.tsx scripts/__tests__/generateOgImages.test.ts
 ```
 
 The airport helper tests measure coverage directly.

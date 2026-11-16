@@ -51,6 +51,7 @@ export async function generateProjectPreviews({ repoRoot = root, projectList = p
             avifVariants.push({ src: `/images/previews/${avifFilename}`, width: size });
         }
         previews[source] = {
+            sourceHash: createHash('sha256').update(input).digest('hex'),
             src: variants.find(variant => variant.width >= 960)?.src ?? variants.at(-1).src,
             srcSet: variants.map(variant => `${variant.src} ${variant.width}w`).join(', '),
             avifSrcSet: avifVariants.map(variant => `${variant.src} ${variant.width}w`).join(', '),

@@ -57,6 +57,8 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-15 | [Project quality review: safe image output, preview integrity, feature dates, coverage, and documentation](reviews/2026-11-15-project-quality-review.md) |
+| 2026-11-15 | [Project presentation refresh: current screenshots, descriptions, feature dates, and source evidence](reviews/2026-11-15-project-presentation-refresh.md) |
 | 2026-11-15 | [Search landing review: rendered text, phrase boundaries, native focus, scroll areas, viewport limits, history races, and coverage](reviews/2026-11-15-search-landing-review.md) |
 | 2026-11-15 | [Post filter review: viewport bounds, native scrollbar focus, complete region lists, ownership, and coverage](reviews/2026-11-15-post-filter-review.md) |
 | 2026-11-15 | [Site search and trip review: extraction safety, publication rules, input composition, result loading, large text, and coverage](reviews/2026-11-15-site-search-and-trip-review.md) |

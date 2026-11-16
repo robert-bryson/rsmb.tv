@@ -11,25 +11,25 @@ const THROUGH_ROUTES_URL = 'https://through-routes.rsmb.tv/';
 const screenshots: ProjectScreenshot[] = [
     {
         src: '/images/through-routes/through-routes-curviness-map.webp',
-        alt: 'Through Routes map of the Midwest with roads colored by curviness score and filter controls',
-        caption: 'Curviness heat map — roads colored red-to-blue by twist score with filters for road type, length, and surface',
-        width: 1856,
-        height: 1394,
+        alt: 'Through Routes map of the Ozarks with roads colored by curviness score and filter controls',
+        caption: 'Curviness map — explore scored motorcycle roads with the current color scale and road filters.',
+        width: 1600,
+        height: 1000,
         loading: 'eager',
     },
     {
         src: '/images/through-routes/through-routes-overview.webp',
-        alt: 'Through Routes overview map showing a broad region with roads scored by curviness',
-        caption: 'Regional overview — Northern California road network scored by curviness, showing dense rural riding terrain east of the Bay',
-        width: 1860,
-        height: 1391,
+        alt: 'Through Routes overview map with roads scored by curviness and the basemap, scenic stop, and amenity layer controls open',
+        caption: 'Map layers — choose a basemap and show roads, labels, fuel, gates, scenic stops, and amenities independently.',
+        width: 1600,
+        height: 1000,
     },
     {
         src: '/images/through-routes/through-routes-road-detail.webp',
-        alt: 'Road detail panel for US 2 near Seattle showing flow score 6.3, curvature metrics, elevation gain, and road geometry stats',
-        caption: 'Road detail — US 2 near Seattle: flow score 6.3, length 11.4 mi, 180 m elevation gain, curvature/mile metrics, and surface data',
-        width: 1862,
-        height: 1395,
+        alt: 'Road detail panel with the selected road highlighted and its curvature and elevation profile',
+        caption: 'Road detail — inspect the selected road, its ride-quality score, curvature and elevation profile, and riding metrics.',
+        width: 1600,
+        height: 1000,
     },
 ];
 
@@ -55,9 +55,9 @@ export default function ThroughRoutes() {
                         >
                             OpenStreetMap
                         </a>{' '}
-                        data to build a loop-friendly road graph, scores roads by
-                        curviness and elevation change, and generates ranked circular
-                        routes from any start point.
+                        data to score roads by curvature and ride quality. Inspect road
+                        profiles and hairpins, find scenic stops, assemble routes with undo
+                        and redo, or generate loops and export GPX.
                     </>
                 )}
                 actions={[
@@ -82,7 +82,10 @@ export default function ThroughRoutes() {
                 <li>Curviness scoring based on road geometry deflection angles</li>
                 <li>Elevation profile analysis using DEM data</li>
                 <li>Configurable route distance and loop constraints</li>
-                <li>Interactive map with route preview and elevation charts</li>
+                <li>Expanded road profiles with curvature, elevation, grade, and scored hairpin locations</li>
+                <li>Independent basemap, road, scenic stop, and amenity controls</li>
+                <li>Route Builder with saved drafts, undo and redo, connection checks, and GPX export</li>
+                <li>Shared map views with road selection, filters, and independent unit preferences</li>
                 <li>Dockerized backend with a FastAPI REST API</li>
             </ul>
 

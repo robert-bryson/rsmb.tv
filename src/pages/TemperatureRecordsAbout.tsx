@@ -9,26 +9,26 @@ import { ProjectChangelog } from '../components/ProjectChangelog';
 const screenshots: ProjectScreenshot[] = [
     {
         src: '/images/temperature-records/records-daily.webp',
-        alt: 'Map showing 626 record highs and 42 record lows broken yesterday across the US',
-        caption: 'Recent view — daily/monthly station records broken in a single day',
-        width: 1633,
-        height: 973,
+        alt: 'Recent station record highs and lows with observation date, data freshness, state coverage, and record filters',
+        caption: 'Recent view — reporting-station events with observation dates, snapshot freshness, coverage, and scope and margin filters.',
+        width: 1600,
+        height: 1000,
         loading: 'eager',
     },
     {
         src: '/images/temperature-records/state-records.webp',
         alt: 'Map of certified state temperature extremes across the US',
         caption: 'State Extremes view — NOAA-certified highest high and lowest low for each state',
-        width: 1624,
-        height: 967,
+        width: 1600,
+        height: 1000,
         loading: 'lazy',
     },
     {
         src: '/images/temperature-records/freshness-county.webp',
         alt: 'County records colored by decade showing when each record was set',
         caption: 'Record Age view — county all-time records colored by the decade each standing record was set',
-        width: 1628,
-        height: 968,
+        width: 1600,
+        height: 1000,
         loading: 'lazy',
     },
 ];
@@ -85,6 +85,8 @@ export default function TemperatureRecordsAbout() {
                 <li>High/low tabs that keep the side panel and map symbology synchronized</li>
                 <li>Click any state or county to see the record details — temperature, date, and station</li>
                 <li>Summary panel showing recent daily/monthly station records broken across the country</li>
+                <li>Recent-record filters for state, daily or monthly scope, and minimum record margin</li>
+                <li>Visible snapshot freshness, observation dates, and reporting-state coverage</li>
                 <li>Companion record-age page showing when today&apos;s surviving county extremes were set</li>
             </ul>
 

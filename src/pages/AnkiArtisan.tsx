@@ -70,7 +70,7 @@ export default function AnkiArtisan() {
                         >
                             eBird
                         </a>{' '}
-                        region data. It fetches species photos, audio, and taxonomy to
+                        region data, CSV files, and Wikipedia tables. It fetches species photos, audio, and taxonomy to
                         automatically build study-ready decks for learning birds, plants, and
                         other wildlife.
                     </>
@@ -111,6 +111,7 @@ export default function AnkiArtisan() {
                 <li>Higher-taxa cards for families, orders, etc. alongside species</li>
                 <li>SQLite-backed caching for API responses, taxa, and media</li>
                 <li>Change tracking — knows which cards are new, updated, or unchanged</li>
+                <li>CSV and Wikipedia-table sources, build previews, and incremental exports</li>
             </ul>
 
             <h2 className="text-lg font-medium text-zinc-100 mb-3">Usage</h2>

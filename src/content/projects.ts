@@ -64,20 +64,42 @@ export const projects: Project[] = [
     slug: 'adv-atlas',
     title: 'ADV Atlas',
     category: 'maps',
-    description: 'Explore motorcycle journeys on an interactive map. Browse route maps, photographs, and trip facts, then open the full ride reports.',
-    summary: 'Discover motorcycle journeys through route maps, photographs, and trip reports.',
+    description: 'Explore motorcycle journeys on a shared route map. Filter by year, riding days, distance, or location, compare trips in cards or a sortable table, and read ride reports with photographs and day maps.',
+    summary: 'Filter motorcycle journeys, compare trip facts, and explore ride reports with photographs and day maps.',
     tech: ['React', 'TypeScript', 'MapLibre GL', 'GeoJSON'],
     applicationCategory: 'TravelApplication',
     demoUrl: '/projects/adv-atlas/map',
     previewImage: '/images/adv-atlas/adv-atlas.webp',
     year: 2026,
+    lastUpdated: '2026-11-13',
+    changelog: [
+      {
+        date: '2026-11',
+        notes: [
+          'Added sticky chapter headings that keep the current day visible while reading',
+          'Added inline panoramas to the trip report photo viewer',
+          'Added draggable trip panels and customizable columns in the comparison table',
+          'Added presets for year, riding days, and distance, plus clickable locations that filter and frame the map',
+          'Added start and end pins and markers between recorded riding days',
+        ],
+      },
+      {
+        date: '2026-10',
+        notes: [
+          'Launched a shared route map connecting motorcycle journeys, photographs, and ride reports',
+          'Added trip filters, sorting, detailed cards, and a comparison table',
+          'Added shareable map views with trip selection, filters, panel settings, and camera position',
+          'Added map and trip-list restoration when returning from a report or reloading the page',
+        ],
+      },
+    ],
   },
   {
     slug: 'through-routes',
     title: 'Through Routes',
     category: 'maps',
-    description: 'Find scenic, twisty motorcycle loop routes on rural roads. Processes OpenStreetMap data to build a loop-friendly road graph, scores roads by curviness and elevation change, and generates ranked circular routes from any start point.',
-    summary: 'Generate ranked motorcycle loops using road curviness, elevation, and OpenStreetMap data.',
+    description: 'Explore motorcycle roads scored by curvature and ride quality. Inspect elevation and hairpins, find scenic stops, build routes with undo and redo, or generate loops and export GPX.',
+    summary: 'Find motorcycle roads and loops, inspect road profiles, and build routes with GPX export.',
     tech: ['Python', 'NumPy', 'FastAPI', 'TypeScript', 'MapLibre GL', 'Docker'],
     applicationCategory: 'TravelApplication',
     featured: true,
@@ -85,8 +107,17 @@ export const projects: Project[] = [
     sourceUrl: 'https://github.com/robert-bryson/through-routes',
     previewImage: '/images/through-routes/through-routes-curviness-map.webp',
     year: 2026,
-    lastUpdated: '2026-10-02',
+    lastUpdated: '2026-11-14',
     changelog: [
+      {
+        date: '2026-11',
+        notes: [
+          'Added undo and redo for road additions, removals, reordering, and clearing the route builder',
+          'Added expanded road profiles with curvature, elevation, grade, and scored hairpin inspection',
+          'Added independent scenic-stop and amenity layers alongside fuel stations and gates',
+          'Added a shared basemap and layer menu, independent unit preferences, and persistent selected-road highlighting',
+        ],
+      },
       {
         date: '2026-10',
         notes: [
@@ -114,19 +145,20 @@ export const projects: Project[] = [
     slug: 'flights',
     title: 'Flights',
     category: 'maps',
-    description: 'An interactive 3D globe visualization of flights I\'ve taken around the world. Filter by year, see route frequencies, and explore travel statistics.',
-    summary: 'Explore my flight history on an interactive 3D globe with filters and travel statistics.',
+    description: 'Explore my flight history on a 3D globe. Filter by year, airport, airline, or country, compare routes and recorded flight times, and share the current view.',
+    summary: 'Explore flight routes, recorded travel time, and airport and country statistics on a 3D globe.',
     tech: ['React', 'Three.js', 'WebGL', 'GeoJSON'],
     applicationCategory: 'TravelApplication',
     featured: true,
     demoUrl: '/projects/flights/map',
     previewImage: '/images/flights/flight-globe.webp',
     year: 2025,
-    lastUpdated: '2026-11-02',
+    lastUpdated: '2026-11-10',
     changelog: [
       {
         date: '2026-11',
         notes: [
+          'Added a saved setting to enable or disable character keyboard shortcuts from the help dialog',
           'Added recorded flight durations, hour totals, and actual, scheduled, and estimated coverage',
           'Added authenticated CARTO globe tiles',
         ],
@@ -169,8 +201,8 @@ export const projects: Project[] = [
     slug: 'anki-artisan',
     title: 'Anki Artisan',
     category: 'tools',
-    description: 'Craft Anki flashcard decks from iNaturalist observations and eBird region data. Automatically fetches species photos, audio, and taxonomy to generate visual ID, nomenclature, sound ID, and confusion species cards.',
-    summary: 'Build media-rich wildlife flashcards from iNaturalist observations and eBird region data.',
+    description: 'Build Anki decks from iNaturalist observations, eBird regions, CSV files, and Wikipedia tables. Generate photo, sound, nomenclature, and taxonomy cards, preview a build, and export only changed cards.',
+    summary: 'Build wildlife flashcards from observations, bird checklists, CSV files, and Wikipedia tables.',
     tech: ['Python', 'Click', 'eBird API', 'iNaturalist API', 'SQLite'],
     applicationCategory: 'EducationalApplication',
     featured: true,
@@ -259,8 +291,8 @@ export const projects: Project[] = [
     slug: 'bookend',
     title: 'Bookend',
     category: 'apps',
-    description: 'A personal book-tracking app to log reads, organize books into lists, and explore reading stats. Integrates with Google Books, Open Library, and Wikidata for enrichment—covers, descriptions, author links, and more.',
-    summary: 'Track reading, organize book lists, and enrich library data from multiple open APIs.',
+    description: 'Track reading, explore award lists, and compare reading patterns across five analytics views. Browse the public reading demo, organize personal lists, and enrich book and author metadata with administrator controls to protect corrected fields.',
+    summary: 'Track reading, explore award lists and reading analytics, or try the public reading demo.',
     tech: ['Next.js', 'TypeScript', 'Prisma', 'PostgreSQL', 'Tailwind CSS', 'Docker'],
     applicationCategory: 'LifestyleApplication',
     featured: true,
@@ -268,8 +300,18 @@ export const projects: Project[] = [
     sourceUrl: 'https://github.com/robert-bryson/bookend',
     previewImage: '/images/bookend/bookend-home.webp',
     year: 2026,
-    lastUpdated: '2026-05-08',
+    lastUpdated: '2026-11-15',
     changelog: [
+      {
+        date: '2026-11',
+        notes: [
+          'Added administrator controls to protect corrected book and author fields from enrichment and undo',
+          'Added full book and author catalog links that retain the global search query',
+          'Added bulk personal-list assignment with explicit handling of mixed book memberships',
+          'Rebuilt reading profiles with five analytics views, period comparisons, reading-history links, and exports',
+          'Added a public reading demo with a dashboard, reading history, lists, and profile analytics',
+        ],
+      },
       {
         date: '2026-05',
         notes: [
@@ -285,17 +327,24 @@ export const projects: Project[] = [
     slug: 'temperature-records',
     title: 'U.S. Temperature Records',
     category: 'maps',
-    description: 'Explore recent station record events, observed county extremes, certified state extremes, and the ages of standing records.',
+    description: 'Explore recent station records with state, scope, and margin filters and visible data freshness and coverage. Compare observed county extremes, certified state extremes, and the ages of standing records.',
     tech: ['React', 'MapLibre GL', 'NOAA ACIS', 'GeoJSON'],
     applicationCategory: 'WeatherApplication',
     demoUrl: '/projects/temperature-records/map',
     previewImage: '/images/temperature-records/records-daily.webp',
     year: 2025,
-    lastUpdated: '2026-09-08',
+    lastUpdated: '2026-11-03',
     changelog: [
+      {
+        date: '2026-11',
+        notes: [
+          'Added snapshot freshness and state-coverage indicators for published temperature observations',
+        ],
+      },
       {
         date: '2026-09',
         notes: [
+          'Added state, daily or monthly scope, and minimum record-margin filters for recent station records',
           'Added standing-record summaries with median age and the share set in the last 25 years',
           'Added historical record analysis with station cohorts and quality checks',
         ],
@@ -315,7 +364,7 @@ export const projects: Project[] = [
     slug: 'tornado-tracks',
     title: 'Tornado Tracks',
     category: 'maps',
-    description: 'A time-first MapLibre archive of NOAA/NCEI tornado tracks with EF-scale filters, regional presets, density mode, and annual playback.',
+    description: 'Explore recorded tornado county segments from NOAA/NCEI StormEvents. Filter by year, intensity, region, or state, inspect reported paths, and compare density and historical trends.',
     tech: ['React', 'MapLibre GL', 'NOAA/NCEI', 'GeoJSON'],
     applicationCategory: 'WeatherApplication',
     demoUrl: '/projects/tornado-tracks/map',
@@ -338,15 +387,23 @@ export const projects: Project[] = [
     title: 'Status Dashboard',
     category: 'tools',
     description: 'A live terminal monitoring dashboard for AWS infrastructure, GitHub CI builds, and site health. Renders health checks, CloudWatch alarms, build statuses, cost forecasts, and incident logs side-by-side in the terminal using Ink.',
+    summary: 'Monitor site health, AWS resources, Amplify deployments, and named GitHub Actions workflows.',
     tech: ['TypeScript', 'React (Ink)', 'AWS SDK v3', 'CloudWatch', 'Route53', 'GitHub API'],
     applicationCategory: 'DeveloperApplication',
     year: 2025,
-    lastUpdated: '2026-04-21',
+    lastUpdated: '2026-05-28',
     previewImage: '/images/status-dashboard/status-dashboard-calm.webp',
     changelog: [
       {
+        date: '2026-05',
+        notes: [
+          'Added visible status for configured workflows before their first run',
+        ],
+      },
+      {
         date: '2026-04',
         notes: [
+          'Added separate Amplify and GitHub Actions sections with named workflow status and links',
           'Added compact and detail views for health, alarms, builds, and AWS cost forecasts',
           'Added external uptime monitoring and GitHub pull request and issue panels',
           'Added AWS resource monitoring with CloudFront and Lambda discovery',

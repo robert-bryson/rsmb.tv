@@ -35,6 +35,8 @@ describe('project preview publication', () => {
         await generateProjectPreviews({ repoRoot, projectList });
         const published = await fs.readFile(manifest, 'utf8');
         const entry = JSON.parse(published)['/images/sample.webp'];
+        expect(entry.sourceHash).toBe(createHash('sha256')
+            .update(await fs.readFile(path.join(repoRoot, 'public/images/sample.webp'))).digest('hex'));
         const avifPath = entry.avifSrcSet.split(' ')[0];
         const content = await fs.readFile(path.join(repoRoot, 'public', avifPath));
         const originalFingerprint = createHash('sha256').update(content).digest('hex').slice(0, 12);

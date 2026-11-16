@@ -17,9 +17,9 @@ import { renderWithRouter } from './helpers/router';
 describe('shared project galleries', () => {
     it.each([
         { Page: PinsOfInaccessibilityAbout, path: '/projects/pins-of-inaccessibility', dimensions: [[1440, 960], [1280, 720], [1440, 960]] },
-        { Page: FlightsAbout, path: '/projects/flights', dimensions: [[1852, 1385], [1853, 1389], [1860, 1390]] },
-        { Page: TemperatureRecordsAbout, path: '/projects/temperature-records', dimensions: [[1633, 973], [1624, 967], [1628, 968]] },
-        { Page: TornadoTracksAbout, path: '/projects/tornado-tracks', dimensions: [[1440, 1082], [1440, 1080], [1440, 1079]] },
+        { Page: FlightsAbout, path: '/projects/flights', dimensions: [[1600, 1000], [1600, 1000], [1600, 1000]] },
+        { Page: TemperatureRecordsAbout, path: '/projects/temperature-records', dimensions: [[1600, 1000], [1600, 1000], [1600, 1000]] },
+        { Page: TornadoTracksAbout, path: '/projects/tornado-tracks', dimensions: [[1600, 1000], [1600, 1000], [1600, 1000]] },
     ])('preserves screenshot sizing, loading, and captions on $path', ({ Page, path, dimensions }) => {
         renderWithRouter(<Page />, { route: path });
         const images = screen.getAllByRole('img');
@@ -44,9 +44,9 @@ describe('ThroughRoutes page', () => {
         expect(screen.getByRole('link', { name: /Open Through Routes/i })).toHaveAttribute('href', 'https://through-routes.rsmb.tv/');
         expect(screen.getByRole('link', { name: /Source on GitHub/i })).toHaveAttribute('href', 'https://github.com/robert-bryson/through-routes');
         expect(screen.getByRole('img', { name: /roads colored by curviness score/i })).toHaveAttribute('src', '/images/through-routes/through-routes-curviness-map.webp');
-        expect(screen.getByRole('img', { name: /broad region with roads scored by curviness/i })).toHaveAttribute('src', '/images/through-routes/through-routes-overview.webp');
-        expect(screen.getByRole('img', { name: /Road detail panel for US 2 near Seattle/i })).toHaveAttribute('src', '/images/through-routes/through-routes-road-detail.webp');
-        expect(screen.getByText(/Curviness heat map/i)).toBeInTheDocument();
+        expect(screen.getByRole('img', { name: /overview map with roads scored by curviness/i })).toHaveAttribute('src', '/images/through-routes/through-routes-overview.webp');
+        expect(screen.getByRole('img', { name: /Road detail panel with the selected road/i })).toHaveAttribute('src', '/images/through-routes/through-routes-road-detail.webp');
+        expect(screen.getByText(/Curviness map/i)).toBeInTheDocument();
     });
 });
 
@@ -77,7 +77,7 @@ describe('Bookend page', () => {
         expect(screen.getByRole('heading', { level: 1, name: /Bookend/i })).toBeInTheDocument();
         expect(screen.getByRole('link', { name: /Open Bookend/i })).toHaveAttribute('href', 'https://bookend.rsmb.tv');
         expect(screen.getByRole('link', { name: /Source on GitHub/i })).toHaveAttribute('href', 'https://github.com/robert-bryson/bookend');
-        expect(screen.getByRole('img', { name: /Bookend home page/i })).toHaveAttribute('src', '/images/bookend/bookend-home.webp');
+        expect(screen.getByRole('img', { name: /Bookend public reading demo/i })).toHaveAttribute('src', '/images/bookend/bookend-home.webp');
         expect(screen.getByRole('img', { name: /Booker Prize Fiction award list/i })).toHaveAttribute('src', '/images/bookend/bookend-award-lists.webp');
         expect(screen.getByRole('img', { name: /Book detail page for Lincoln in the Bardo/i })).toHaveAttribute('src', '/images/bookend/bookend-book-detail.webp');
         expect(screen.getByText(/Award list view/i)).toBeInTheDocument();
@@ -115,8 +115,8 @@ describe('TornadoTracksAbout page', () => {
         expect(screen.getByRole('link', { name: /Source on GitHub/i })).toHaveAttribute('href', 'https://github.com/robert-bryson/rsmb.tv/tree/main/src/features/tornadoes');
         expect(screen.getByRole('link', { name: /NOAA source data/i })).toHaveAttribute('href', 'https://www.ncei.noaa.gov/pub/data/swdi/stormevents/csvfiles/');
         expect(screen.getByRole('img', { name: /Map of 2025 tornado tracks across the continental United States/i })).toBeInTheDocument();
-        expect(screen.getByRole('img', { name: /Map focused on St. Louis with a selected EF3 tornado track detail popup/i })).toBeInTheDocument();
-        expect(screen.getByRole('img', { name: /Tornado Trends view showing annual counts, fatality rate, decade comparison, and top states/i })).toBeInTheDocument();
+        expect(screen.getByRole('img', { name: /Map focused on St. Louis with the selected April 2013 EF2 county segment/i })).toBeInTheDocument();
+        expect(screen.getByRole('img', { name: /Tornado Trends view showing annual county-segment counts/i })).toBeInTheDocument();
     });
 });
 

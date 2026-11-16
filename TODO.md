@@ -47,13 +47,6 @@ Local browser tests cannot verify the analytics account or physical devices.
 
 Complete these checks before publishing the affected story.
 
-### PCH 2024
-
-The November 15 asset checks passed. All photos and processed routes are hosted.
-The imported Sheet row is marked published. No site deployment ran during the asset check.
-
-- [ ] Resolve the remaining chronology, mileage, and image privacy decisions in the [PCH publication checks](docs/trips/pch-2024-galleries.md#publication-checks).
-
 ### Route 66ish 2025
 
 - [ ] Write the report from the [starter outline](docs/trips/route-66ish-2025-outline.md). Check the May 9–19 window against the recorded May 17 arrival.
@@ -72,6 +65,13 @@ The imported Sheet row is marked published. No site deployment ran during the as
 - [ ] Complete the date and description in Sheet row 12. Make its source Doc export accessible. The import returns HTTP 401.
 
 ## Published story checks
+
+### PCH 2024
+
+The imported Sheet row is marked published. The November 15 asset checks passed.
+All photos and processed routes are hosted. The asset check did not deploy the site.
+
+- [ ] Resolve the remaining chronology, mileage, and image privacy decisions in the [PCH source checks](docs/trips/pch-2024-galleries.md#publication-checks).
 
 ### Ocean Shores
 
@@ -213,8 +213,13 @@ Preserve passing publication checks when changing build scripts.
 
 ## Project content
 
-- [ ] Add screenshots to the Aborg project page.
-- [ ] Publish more blog posts from the configured Google documents.
+- [ ] Add aborg screenshots from a controlled audiobook fixture. Show real scan and organize output. Record the app revision and remove personal paths.
+- [ ] Recheck the Through Routes expanded road profile after an upstream fix.
+  Select a road from **In View**, then expand its profile. The November 15 capture showed a chart and a **Loading profile** label together.
+  Confirm that the label clears. Then capture the expanded view and update its caption.
+  The current gallery uses the loaded compact panel. See the [presentation review](docs/reviews/2026-11-15-project-presentation-refresh.md#capture-views).
+
+Track pending stories in [Content publication](#content-publication). Do not add duplicate story tasks here.
 
 ## Ride Ledger prerequisites
 

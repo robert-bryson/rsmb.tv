@@ -46,13 +46,17 @@ for (const width of [390, 1280]) {
 }
 
 for (const width of [320, 1280]) {
-    for (const slug of ['pins-of-inaccessibility', 'flights', 'temperature-records', 'tornado-tracks']) {
+    for (const [slug, count] of [
+        ['pins-of-inaccessibility', 3], ['flights', 3], ['temperature-records', 3],
+        ['tornado-tracks', 3], ['through-routes', 3], ['bookend', 4],
+        ['status-dashboard', 3], ['anki-artisan', 3], ['parc', 1],
+    ] as const) {
         test(`${slug} shared gallery loads without overflow at ${width}px`, async ({ page }) => {
             await page.setViewportSize({ width, height: 900 });
             await page.goto(`/projects/${slug}`);
 
             const images = page.locator('figure img');
-            await expect(images).toHaveCount(3);
+            await expect(images).toHaveCount(count);
             for (const [index, image] of (await images.all()).entries()) {
                 await expect(image).toHaveAttribute('loading', index === 0 ? 'eager' : 'lazy');
                 await image.scrollIntoViewIfNeeded();

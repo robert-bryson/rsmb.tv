@@ -21,7 +21,7 @@
   },
   "/projects/adv-atlas/map": {
     "title": "ADV Atlas",
-    "description": "Explore motorcycle journeys on a map, compare trip facts, and read the reports.",
+    "description": "Explore motorcycle routes, filter trips by year, distance, days, or location, compare trip facts, and read ride reports with photographs and day maps.",
     "image": "/og/adv-atlas.png",
     "operatingSystem": "Web"
   },
@@ -38,42 +38,42 @@
   },
   "/projects/through-routes": {
     "title": "Through Routes",
-    "description": "Find scenic, twisty motorcycle loop routes on rural roads using OpenStreetMap data.",
+    "description": "Explore scored motorcycle roads, inspect elevation and hairpins, find scenic stops, and build or generate routes with GPX export.",
     "image": "/og/through-routes.png",
     "operatingSystem": "Web"
   },
   "/projects/flights": {
     "title": "Flights",
-    "description": "An interactive 3D globe visualization of flights around the world — filter by year, see route frequencies, and explore travel statistics.",
+    "description": "Explore flight routes on a 3D globe. Filter by year, airport, airline, or country, compare distance and recorded flight time, and share the current view.",
     "image": "/og/flights.png",
     "operatingSystem": "Web"
   },
   "/projects/flights/map": {
     "title": "Flights",
-    "description": "Interactive 3D globe visualization of flights around the world. Filter by year, see route frequencies, and explore travel statistics.",
+    "description": "Explore flight routes on a 3D globe. Filter by year, airport, airline, or country, compare distance and recorded flight time, and share the current view.",
     "image": "/og/flights.png"
   },
   "/projects/anki-artisan": {
     "title": "Anki Artisan",
-    "description": "A CLI tool that generates Anki flashcard decks from iNaturalist observations and eBird region data.",
+    "description": "Build Anki flashcards from iNaturalist observations, eBird regions, CSV files, and Wikipedia tables, with build previews and incremental exports.",
     "image": "/og/anki-artisan.png",
     "operatingSystem": "Cross-platform"
   },
   "/projects/bookend": {
     "title": "Bookend",
-    "description": "A personal book-tracking app to log reads, organize books into lists, and explore reading stats.",
+    "description": "Track reading, explore award lists and five reading analytics views, organize personal lists, and try the public reading demo without an account.",
     "image": "/og/bookend.png",
     "operatingSystem": "Web"
   },
   "/projects/temperature-records": {
     "title": "U.S. Temperature Records",
-    "description": "Interactive map of all-time record high and low temperatures across US states and counties, powered by NOAA and ACIS data.",
+    "description": "Explore recent station records, observed county extremes, certified state extremes, and standing-record ages, with visible data freshness and coverage.",
     "image": "/og/temperature-records.png",
     "operatingSystem": "Web"
   },
   "/projects/temperature-records/map": {
     "title": "U.S. Temperature Records",
-    "description": "Interactive map of all-time record high and low temperatures across US states and counties, with recent extremes summary.",
+    "description": "Filter recent station records by state, scope, and margin. Compare county and state extremes and standing-record ages with visible data freshness and coverage.",
     "image": "/og/temperature-records.png"
   },
   "/projects/temperature-records/trends": {
@@ -83,13 +83,13 @@
   },
   "/projects/tornado-tracks": {
     "title": "Tornado Tracks",
-    "description": "A full-screen historical tornado track map powered by NOAA/NCEI StormEvents data and MapLibre GL.",
+    "description": "Explore recorded tornado county segments from NOAA/NCEI StormEvents, with year, intensity, regional and state filters, density maps, and historical comparisons.",
     "image": "/og/tornado-tracks.png",
     "operatingSystem": "Web"
   },
   "/projects/tornado-tracks/map": {
     "title": "Tornado Tracks",
-    "description": "Interactive MapLibre archive of NOAA/NCEI tornado tracks with timeline, EF-scale filters, regional presets, and density mode.",
+    "description": "Explore recorded tornado county segments, filter by year, intensity, region, or state, and compare reported paths, density, and historical trends.",
     "image": "/og/tornado-tracks.png"
   },
   "/projects/route2gpx": {
@@ -112,7 +112,7 @@
   },
   "/projects/status-dashboard": {
     "title": "Status Dashboard",
-    "description": "A live terminal monitoring dashboard for AWS infrastructure, GitHub CI builds, and site health — rendered with Ink.",
+    "description": "Monitor site health, AWS resources and costs, Amplify deployments, named GitHub Actions workflows, incidents, and events in an Ink terminal dashboard.",
     "image": "/og/status-dashboard.png",
     "operatingSystem": "Cross-platform"
   }

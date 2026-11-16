@@ -115,7 +115,7 @@ describe('crawler HTML', () => {
         expect(page.querySelector('meta[property="og:image"]')?.getAttribute('content')).toBe(image);
         expect(page.querySelector('meta[name="twitter:image"]')?.getAttribute('content')).toBe(image);
         expect(metadata.jsonLd).toMatchObject({ image });
-        expect(metadata).toMatchObject({ imageWidth: 1852, imageHeight: 1385 });
+        expect(metadata).toMatchObject({ imageWidth: 1600, imageHeight: 1000 });
     });
 
     it('replaces old metadata and JSON-LD when rendering another page from a generated document', () => {

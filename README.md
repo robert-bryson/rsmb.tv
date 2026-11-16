@@ -7,9 +7,9 @@ A personal website with software projects, data maps, writing, and motorcycle tr
 ## Features
 
 - **[Pins of Inaccessibility](projects/pins-of-inaccessibility/readme.md)** — Explore global interior pins, compare boundary distances, and navigate from local regions to the world.
-- **[ADV Atlas](docs/trips/ADV-ATLAS.md)** — Explore motorcycle journeys on a map, browse trip photographs, and open the full reports.
-- **Flights** — A globe with flight routes, filters, camera controls, and travel statistics.
-- **Temperature Records** — An interactive MapLibre GL map of U.S. temperature records. It shows recent station records, standing county and state extremes, and standing-record history.
+- **[ADV Atlas](docs/trips/ADV-ATLAS.md)** — Filter motorcycle journeys by year, distance, riding days, or location. Compare trips in cards or a table, share map views, and read reports with photographs and day maps.
+- **Flights** — A 3D globe with flight routes, recorded travel time, airport and country statistics, shared views, and saved keyboard-shortcut preferences.
+- **Temperature Records** — Filter recent station records by state, scope, and margin. Check snapshot freshness and coverage, compare county and state extremes, and explore standing-record history.
 - **Tornado Tracks** — Recorded tornado county segments, density maps, annual trends, and warning context. See the [project guide](projects/tornado-tracks/readme.md).
 - **Projects** — Search names, descriptions, and technologies. Filter by category and share the selected view. Open maps, demos, and source repositories from the cards.
 - **Site search** — A compact header field searches articles, projects, technologies, captions, and other pages. Results highlight matching words.
@@ -339,11 +339,17 @@ Missing or invalid elevations use zero feet and zero meters.
 Name mappings use their own nonempty string entries. Unmapped codes remain visible.
 See the [flight data guide](projects/flights/readme.md) for input checks.
 
-The image generator reads `DEFAULT_PAGES` in `scripts/generate-og-images.js`.
+The image generator reads project titles and summaries from `src/content/projects.ts`.
+It uses the project description when no summary is set.
+Other page cards use `DEFAULT_PAGES` in `scripts/generate-og-images.js`.
 Commit static page images under `public/og/`.
 For a new project, add its slug to `src/content/projects.ts`.
-Add its route to `src/App.tsx`. Add its social image entry to `DEFAULT_PAGES`.
+Add its route to `src/App.tsx`. Its social card is added from the project record.
 Run `npm run build-og`.
+The command checks all card records and renders all images before it writes files.
+It replaces each file with an atomic rename. It then removes stale blog cards.
+It rejects unsafe slugs, duplicate slugs, invalid text, and output directory links.
+See [image delivery](docs/image-assets.md#social-cards) for failure behavior.
 
 ## Project Image Assets
 
@@ -354,6 +360,8 @@ Use landscape images for project cards. If the source is portrait, prepare a lan
 After you change a project's `previewImage`, run `npm run prepare-project-previews`.
 Commit the generated manifest and fingerprinted files in `public/images/previews/`.
 Home and Projects select responsive variants from that manifest.
+Run the same command after you replace a screenshot at an existing path.
+Asset tests compare each source hash and check every generated file.
 
 After you publish a trip or change its hero photo, run `npm run prepare-trip-thumbnails`.
 First refresh the published post registry and mirror the exact hero source under `public/data/trips/`.

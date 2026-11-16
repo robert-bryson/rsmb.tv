@@ -11,10 +11,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
+import { projects } from '../src/content/projects.ts';
+import { writeAtomically } from './atomic-write.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = path.join(__dirname, '../public/og');
 const POSTS_PATH = path.join(__dirname, '../src/content/posts.json');
+const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export const DEFAULT_PAGES = [
     { slug: 'home', title: 'rsmb', subtitle: 'Interactive data visualizations, geospatial projects, and web tools' },
@@ -22,19 +25,8 @@ export const DEFAULT_PAGES = [
     { slug: 'blog', title: 'Posts', subtitle: 'Writing, motorcycle journeys, and things I find interesting' },
     { slug: 'trips', title: 'Trips', subtitle: 'Motorcycle journeys told through photographs, routes, and field notes' },
     { slug: 'projects', title: 'Projects', subtitle: 'Interactive data visualizations, geospatial tools, and more' },
-    { slug: 'adv-atlas', title: 'ADV Atlas', subtitle: 'Motorcycle journeys through route maps, photographs, and trip reports' },
-    { slug: 'pins-of-inaccessibility', title: 'Pins of Inaccessibility', subtitle: 'Explore global interior pins, compare boundary distances, and follow each place back to the world' },
-    { slug: 'through-routes', title: 'Through Routes', subtitle: 'Find scenic, twisty motorcycle loop routes on rural roads' },
-    { slug: 'flights', title: 'Flights', subtitle: 'Interactive 3D globe visualization of flights around the world' },
-    { slug: 'anki-artisan', title: 'Anki Artisan', subtitle: 'Generate Anki flashcard decks from iNaturalist and eBird data' },
-    { slug: 'aborg', title: 'aborg', subtitle: 'Organize audiobook collections for Audiobookshelf' },
-    { slug: 'parc', title: 'parc', subtitle: 'Archive podcast feeds with resumable downloads and SQLite state' },
-    { slug: 'bookend', title: 'Bookend', subtitle: 'A personal book-tracking app with reading stats and enrichment' },
-    { slug: 'temperature-records', title: 'U.S. Temperature Records', subtitle: 'Explore recent record events, county extremes, and standing record ages' },
-    { slug: 'tornado-tracks', title: 'Tornado Tracks', subtitle: 'Historical tornado track map with timeline playback and EF-scale filters' },
+    ...projects.map(({ slug, title, summary, description }) => ({ slug, title, subtitle: summary ?? description })),
     { slug: 'climate-trends', title: 'Standing Record Ages', subtitle: 'When were today’s county temperature extremes set?' },
-    { slug: 'route2gpx', title: 'route2gpx', subtitle: 'Plan routes and export GPX, KML, GeoJSON, TCX, or CSV' },
-    { slug: 'status-dashboard', title: 'Status Dashboard', subtitle: 'Live terminal monitoring for AWS infrastructure, GitHub CI, and site health' },
 ];
 
 export function escapeXml(str) {
@@ -68,36 +60,76 @@ export function generateSvg({ title, subtitle }) {
 </svg>`;
 }
 
-export function loadBlogPosts(postsPath = POSTS_PATH, { fsImpl = fs } = {}) {
-    if (!fsImpl.existsSync(postsPath)) return [];
-    return JSON.parse(fsImpl.readFileSync(postsPath, 'utf-8'));
+export function loadBlogPosts(postsPath = POSTS_PATH) {
+    let content;
+    try {
+        content = fs.readFileSync(postsPath, 'utf-8');
+    } catch (error) {
+        if (error.code === 'ENOENT') return [];
+        throw error;
+    }
+    return JSON.parse(content);
+}
+
+function validateCards(cards, kind) {
+    if (!Array.isArray(cards)) throw new Error(`OG ${kind} registry must be an array`);
+    const slugs = new Set();
+    for (const card of cards) {
+        if (!card || typeof card.slug !== 'string' || !SLUG_PATTERN.test(card.slug)) {
+            throw new Error(`Invalid OG ${kind} slug`);
+        }
+        if (slugs.has(card.slug)) throw new Error(`Duplicate OG ${kind} slug: ${card.slug}`);
+        slugs.add(card.slug);
+        if (typeof card.title !== 'string' || !card.title.trim() || typeof card.subtitle !== 'string') {
+            throw new Error(`Invalid OG ${kind} text: ${card.slug}`);
+        }
+    }
+}
+
+function checkOutputDirectory(directory) {
+    const entry = fs.lstatSync(directory, { throwIfNoEntry: false });
+    if (entry?.isSymbolicLink()) throw new Error('OG output directory must not be a symbolic link');
+    if (entry && !entry.isDirectory()) throw new Error('OG output path must be a directory');
 }
 
 export async function generateOgImages({
     outDir = OUT_DIR,
     postsPath = POSTS_PATH,
     pages = DEFAULT_PAGES,
-    fsImpl = fs,
 } = {}) {
-    fsImpl.mkdirSync(outDir, { recursive: true });
-
-    async function writeCard(directory, slug, card) {
-        const svg = generateSvg(card);
-        fsImpl.writeFileSync(path.join(directory, `${slug}.svg`), svg, 'utf-8');
-        fsImpl.writeFileSync(path.join(directory, `${slug}.png`), await sharp(Buffer.from(svg)).png().toBuffer());
-    }
-
-    for (const page of pages) {
-        await writeCard(outDir, page.slug, page);
-    }
+    const posts = loadBlogPosts(postsPath);
+    if (!Array.isArray(posts)) throw new Error('OG post registry must be an array');
+    const blogCards = posts.map(post => ({ slug: post?.slug, title: post?.title, subtitle: post?.description }));
+    validateCards(pages, 'page');
+    validateCards(blogCards, 'post');
 
     const blogDir = path.join(outDir, 'blog');
-    fsImpl.rmSync(blogDir, { recursive: true, force: true });
-    fsImpl.mkdirSync(blogDir, { recursive: true });
+    checkOutputDirectory(outDir);
+    checkOutputDirectory(blogDir);
 
-    const posts = loadBlogPosts(postsPath, { fsImpl });
-    for (const post of posts) {
-        await writeCard(blogDir, post.slug, { title: post.title, subtitle: post.description });
+    // Render the complete batch before changing any published file.
+    const rendered = [];
+    for (const [directory, cards] of [[outDir, pages], [blogDir, blogCards]]) {
+        for (const card of cards) {
+            const svg = generateSvg(card);
+            const png = await sharp(Buffer.from(svg)).png().toBuffer();
+            rendered.push({ directory, slug: card.slug, svg, png });
+        }
+    }
+
+    fs.mkdirSync(blogDir, { recursive: true });
+    for (const { directory, slug, svg, png } of rendered) {
+        await writeAtomically(path.join(directory, `${slug}.svg`), svg);
+        await writeAtomically(path.join(directory, `${slug}.png`), png);
+    }
+
+    // Remove only stale generated cards, after every required write succeeds.
+    const currentSlugs = new Set(blogCards.map(card => card.slug));
+    for (const entry of fs.readdirSync(blogDir, { withFileTypes: true })) {
+        const match = /^([a-z0-9]+(?:-[a-z0-9]+)*)\.(?:svg|png)$/.exec(entry.name);
+        if (entry.isFile() && match && !currentSlugs.has(match[1])) {
+            fs.unlinkSync(path.join(blogDir, entry.name));
+        }
     }
 
     return { outDir, pageCount: pages.length, blogPostCount: posts.length };

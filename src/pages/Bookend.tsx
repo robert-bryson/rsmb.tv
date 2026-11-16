@@ -11,25 +11,32 @@ const BOOKEND_URL = 'https://bookend.rsmb.tv';
 const screenshots: ProjectScreenshot[] = [
     {
         src: '/images/bookend/bookend-home.webp',
-        alt: 'Bookend home page with hero text, feature highlights, and site statistics',
-        caption: 'Home page — feature highlights and catalogue statistics including 22,510 award-winning books and 3,115 enriched authors',
-        width: 1656,
-        height: 1618,
+        alt: 'Bookend public reading demo with the current book, annual goal, reading totals, and award-list progress',
+        caption: 'Public reading demo — explore the reading dashboard and list progress without signing in.',
+        width: 1600,
+        height: 1000,
         loading: 'eager',
     },
     {
         src: '/images/bookend/bookend-award-lists.webp',
-        alt: 'Booker Prize Fiction award list showing books by year with scores and reading progress indicators',
-        caption: 'Award list view — Booker Prize Fiction entries by year with scores, author links, and per-book reading progress',
-        width: 1854,
-        height: 1387,
+        alt: 'Booker Prize Fiction award list showing recognition years, award status, and the public demo reader’s progress',
+        caption: 'Award list view — browse Booker Prize entries in a table with award and reading filters, sourced context, and demo progress.',
+        width: 1600,
+        height: 1000,
     },
     {
         src: '/images/bookend/bookend-book-detail.webp',
         alt: 'Book detail page for Lincoln in the Bardo showing enriched metadata, subjects, tags, and reading history',
-        caption: 'Book detail — auto-enriched metadata from Open Library and Wikidata: subjects, publisher, edition links, and reading history',
-        width: 1852,
-        height: 1389,
+        caption: 'Book detail — Lincoln in the Bardo with enriched metadata, award recognition, edition links, and public reading history.',
+        width: 1600,
+        height: 1000,
+    },
+    {
+        src: '/images/bookend/bookend-profile.webp',
+        alt: 'Bookend reading profile with period controls, finished reads, author totals, monthly activity, and reading highlights',
+        caption: 'Reading profile — compare periods and explore activity, authors, formats, languages, and book patterns.',
+        width: 1600,
+        height: 1000,
     },
 ];
 
@@ -45,8 +52,9 @@ export default function Bookend() {
                 stack="Next.js + PostgreSQL"
                 description={(
                     <>
-                        A personal book-tracking app to log reads, organize books into
-                        lists, and explore reading stats. Integrates with{' '}
+                        Track reading, explore award lists, and compare reading patterns
+                        across five analytics views. Try the public demo without an account.
+                        Integrates with{' '}
                         <a
                             href="https://developers.google.com/books"
                             target="_blank"
@@ -73,11 +81,13 @@ export default function Bookend() {
                         >
                             Wikidata
                         </a>{' '}
-                        for enrichment—covers, descriptions, author links, and more.
+                        for covers, descriptions, author links, and other metadata.
+                        Administrators can protect corrected fields from enrichment and undo.
                     </>
                 )}
                 actions={[
                     { label: 'Open Bookend →', href: BOOKEND_URL, variant: 'primary', external: true },
+                    { label: 'Try the public reading demo →', href: `${BOOKEND_URL}/demo`, external: true },
                     { label: 'Source on GitHub →', href: 'https://github.com/robert-bryson/bookend', external: true },
                 ]}
             />
@@ -89,12 +99,16 @@ export default function Bookend() {
                 <li>Search and add books via Google Books or Open Library</li>
                 <li>Log reads with dates, ratings, and notes</li>
                 <li>Organize books into custom lists and shelves</li>
-                <li>Reading stats — books per year, pages read, genre breakdown</li>
+                <li>Five reading analytics views with period comparisons, reading-history links, and exports</li>
+                <li>Public demo with a reading dashboard, log, award progress, and profile analytics</li>
+                <li>Bulk personal-list assignment that preserves mixed memberships until you change them</li>
+                <li>Global search with direct links to complete book and author catalog results</li>
                 <li>
                     Auto-enrichment from multiple sources: covers, descriptions,
                     page counts, author bios
                 </li>
                 <li>Wikidata linking for author pages and canonical metadata</li>
+                <li>Administrator controls to protect corrected book and author fields</li>
                 <li>Dockerized for easy self-hosting</li>
             </ul>
 

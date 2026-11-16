@@ -12,24 +12,24 @@ const screenshots: ProjectScreenshot[] = [
     {
         src: '/images/status-dashboard/status-dashboard-calm.webp',
         alt: 'Status Dashboard calm view showing all-OK summary for health, alarms, builds, GitHub, cost, and AWS resources',
-        caption: 'Calm view — all-green summary across health checks, CloudWatch alarms, builds, and AWS resource usage',
-        width: 872,
-        height: 610,
+        caption: 'Calm view — the current Ink dashboard with representative sample data for health, alarms, builds, costs, and resources.',
+        width: 1280,
+        height: 980,
         loading: 'eager',
     },
     {
         src: '/images/status-dashboard/status-dashboard-builds.webp',
         alt: 'Status Dashboard detail view showing build panel with AWS Amplify and GitHub Actions workflow run results for multiple projects',
-        caption: 'Builds panel — Amplify deployments and GitHub Actions runs across all projects, with build numbers, branches, and elapsed time',
-        width: 869,
-        height: 625,
+        caption: 'Builds panel — separate Amplify deployments and named GitHub Actions workflows with status, branch, and run links. Sample data.',
+        width: 1280,
+        height: 980,
     },
     {
         src: '/images/status-dashboard/status-dashboard-resources.webp',
         alt: 'Status Dashboard detail view showing AWS resource panel with S3 bucket sizes, CloudFront distribution traffic, Lambda invocations, and cost forecast',
-        caption: 'Resources panel — S3 storage by bucket, CloudFront request rates across distributions, Lambda invocation rates and p50 latency, and MTD cost forecast',
-        width: 877,
-        height: 616,
+        caption: 'Resources panel — S3 storage, CloudFront traffic, Lambda activity, and monthly cost forecasts. Sample data.',
+        width: 1280,
+        height: 980,
     },
 ];
 
@@ -115,7 +115,8 @@ export default function StatusDashboard() {
 
             <h2 className="mb-3 text-lg font-medium text-zinc-100">Usage</h2>
             <pre className="mb-6 overflow-x-auto rounded-lg bg-zinc-900 p-4 text-sm text-zinc-300">
-                <code>{`tsx scripts/aws-watch.tsx [options]
+                <code>{`npm run watch -- [options]
+# Direct entry: tsx scripts/aws-watch.tsx [options]
 
 Options:
   --profile <name>    AWS profile (default: $AWS_PROFILE)
@@ -133,7 +134,8 @@ Environment variables:
                 <li><code className="text-zinc-300">q</code> — quit</li>
                 <li><code className="text-zinc-300">h</code> — toggle detail view</li>
                 <li><code className="text-zinc-300">e</code> — clear event log</li>
-                <li><code className="text-zinc-300">j / k</code> — scroll down / up</li>
+                <li><code className="text-zinc-300">c</code> — clear resolved incidents</li>
+                <li><code className="text-zinc-300">↓ / j</code> and <code className="text-zinc-300">↑ / k</code> — scroll down and up</li>
             </ul>
 
             <h2 className="mb-3 text-lg font-medium text-zinc-100">Tech Stack</h2>

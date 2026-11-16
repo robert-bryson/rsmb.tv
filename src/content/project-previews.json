@@ -1,5 +1,6 @@
 {
   "/images/pins-of-inaccessibility/overview.webp": {
+    "sourceHash": "503bdedcd75e5bd0d674766b015ad3a533a038fcfad1d4588325d4b063c247bd",
     "src": "/images/previews/pins-of-inaccessibility-960-0085e89117e7.webp",
     "srcSet": "/images/previews/pins-of-inaccessibility-480-abbaf33cc6f4.webp 480w, /images/previews/pins-of-inaccessibility-960-0085e89117e7.webp 960w, /images/previews/pins-of-inaccessibility-1440-5dcee8f43317.webp 1440w",
     "avifSrcSet": "/images/previews/pins-of-inaccessibility-480-0a2c682bb340.avif 480w, /images/previews/pins-of-inaccessibility-960-acfbeff0820e.avif 960w, /images/previews/pins-of-inaccessibility-1440-7b624d4f0383.avif 1440w",
@@ -7,27 +8,31 @@
     "height": 960
   },
   "/images/adv-atlas/adv-atlas.webp": {
-    "src": "/images/previews/adv-atlas-960-fe288b96512f.webp",
-    "srcSet": "/images/previews/adv-atlas-480-c7dd4f588225.webp 480w, /images/previews/adv-atlas-960-fe288b96512f.webp 960w, /images/previews/adv-atlas-1440-7361d4e7741c.webp 1440w",
-    "avifSrcSet": "/images/previews/adv-atlas-480-d8c0784904a8.avif 480w, /images/previews/adv-atlas-960-6313613fb5bd.avif 960w, /images/previews/adv-atlas-1440-bdd7eda4b104.avif 1440w",
+    "sourceHash": "8cf1dda8eb38d3c8310418976c60c36fb380bc88503be7b8a80df4c5442c3d7d",
+    "src": "/images/previews/adv-atlas-960-3d81a2d2e775.webp",
+    "srcSet": "/images/previews/adv-atlas-480-f0f6048ee900.webp 480w, /images/previews/adv-atlas-960-3d81a2d2e775.webp 960w, /images/previews/adv-atlas-1440-ec4569e24af0.webp 1440w",
+    "avifSrcSet": "/images/previews/adv-atlas-480-c225d9b0d4ad.avif 480w, /images/previews/adv-atlas-960-2c35abf91b37.avif 960w, /images/previews/adv-atlas-1440-565e6bdbb888.avif 1440w",
     "width": 1600,
     "height": 900
   },
   "/images/through-routes/through-routes-curviness-map.webp": {
-    "src": "/images/previews/through-routes-960-44d713527a68.webp",
-    "srcSet": "/images/previews/through-routes-480-8e1912495caf.webp 480w, /images/previews/through-routes-960-44d713527a68.webp 960w, /images/previews/through-routes-1440-35b93338f98d.webp 1440w",
-    "avifSrcSet": "/images/previews/through-routes-480-c1ea6d2ffdba.avif 480w, /images/previews/through-routes-960-5ccf507e8b95.avif 960w, /images/previews/through-routes-1440-6e891e6591b0.avif 1440w",
-    "width": 1856,
-    "height": 1394
+    "sourceHash": "769be714c7e48e4b24967b018e02972fc107c02b400684d1019bcc60a09049f9",
+    "src": "/images/previews/through-routes-960-22cd4347ab7e.webp",
+    "srcSet": "/images/previews/through-routes-480-454b8b4584f7.webp 480w, /images/previews/through-routes-960-22cd4347ab7e.webp 960w, /images/previews/through-routes-1440-1c9b8a651631.webp 1440w",
+    "avifSrcSet": "/images/previews/through-routes-480-774ef059183f.avif 480w, /images/previews/through-routes-960-5f5e84cd90fc.avif 960w, /images/previews/through-routes-1440-187aa68580f2.avif 1440w",
+    "width": 1600,
+    "height": 1000
   },
   "/images/flights/flight-globe.webp": {
-    "src": "/images/previews/flights-960-35df1d74bca9.webp",
-    "srcSet": "/images/previews/flights-480-13236f0176dd.webp 480w, /images/previews/flights-960-35df1d74bca9.webp 960w, /images/previews/flights-1440-cc8fe5a87a9a.webp 1440w",
-    "avifSrcSet": "/images/previews/flights-480-1e57ef2ff4f9.avif 480w, /images/previews/flights-960-0786abdeca97.avif 960w, /images/previews/flights-1440-61e0ef9bf565.avif 1440w",
-    "width": 1852,
-    "height": 1385
+    "sourceHash": "1701825a961fd668b75a08f7a8b2ad8af472753c72f79167bb269657dbf5e105",
+    "src": "/images/previews/flights-960-df02b38be814.webp",
+    "srcSet": "/images/previews/flights-480-c447740bc5db.webp 480w, /images/previews/flights-960-df02b38be814.webp 960w, /images/previews/flights-1440-e1e2c7852622.webp 1440w",
+    "avifSrcSet": "/images/previews/flights-480-dd7b8fef4743.avif 480w, /images/previews/flights-960-9292fcac2ab5.avif 960w, /images/previews/flights-1440-319c2f6f14b6.avif 1440w",
+    "width": 1600,
+    "height": 1000
   },
   "/images/anki-artisan/anki-artisan-preview.webp": {
+    "sourceHash": "dd6796e8db9e9b7621322516e31957457e9d7dced2a017ffd641aac91fc0dc8b",
     "src": "/images/previews/anki-artisan-960-b635fd7b2e46.webp",
     "srcSet": "/images/previews/anki-artisan-480-2a5729453df6.webp 480w, /images/previews/anki-artisan-960-b635fd7b2e46.webp 960w, /images/previews/anki-artisan-1440-7dc59b2252f4.webp 1440w",
     "avifSrcSet": "/images/previews/anki-artisan-480-f256d40a083d.avif 480w, /images/previews/anki-artisan-960-368214b50870.avif 960w, /images/previews/anki-artisan-1440-d177a0923670.avif 1440w",
@@ -35,6 +40,7 @@
     "height": 900
   },
   "/images/parc/update-live-progress.webp": {
+    "sourceHash": "030d3d8d3f972f0451574f15540b16a362baaf80f8bd8f78034258c76b3badf6",
     "src": "/images/previews/parc-960-6807afb825fb.webp",
     "srcSet": "/images/previews/parc-480-33e779e93fe2.webp 480w, /images/previews/parc-960-6807afb825fb.webp 960w, /images/previews/parc-1440-d30841dd21ae.webp 1440w",
     "avifSrcSet": "/images/previews/parc-480-46467ad26513.avif 480w, /images/previews/parc-960-1b05a338486f.avif 960w, /images/previews/parc-1440-17af2a1706ba.avif 1440w",
@@ -42,34 +48,39 @@
     "height": 592
   },
   "/images/bookend/bookend-home.webp": {
-    "src": "/images/previews/bookend-960-3e550397c3cc.webp",
-    "srcSet": "/images/previews/bookend-480-2ebc59f91393.webp 480w, /images/previews/bookend-960-3e550397c3cc.webp 960w, /images/previews/bookend-1440-2d59e9e96d1a.webp 1440w",
-    "avifSrcSet": "/images/previews/bookend-480-3e178ed5d434.avif 480w, /images/previews/bookend-960-3a185e1d3d42.avif 960w, /images/previews/bookend-1440-a9960793c974.avif 1440w",
-    "width": 1656,
-    "height": 1618
+    "sourceHash": "00165da6d60951d1ad222d7253615494a76ad86e981824cec8e81b8c4e09d576",
+    "src": "/images/previews/bookend-960-21c5fc13b6b5.webp",
+    "srcSet": "/images/previews/bookend-480-41ffb6ec36e6.webp 480w, /images/previews/bookend-960-21c5fc13b6b5.webp 960w, /images/previews/bookend-1440-9078b2fd0d11.webp 1440w",
+    "avifSrcSet": "/images/previews/bookend-480-2478b869e7f8.avif 480w, /images/previews/bookend-960-8ae841ff1597.avif 960w, /images/previews/bookend-1440-d4d30531424b.avif 1440w",
+    "width": 1600,
+    "height": 1000
   },
   "/images/temperature-records/records-daily.webp": {
-    "src": "/images/previews/temperature-records-960-4d062a8af900.webp",
-    "srcSet": "/images/previews/temperature-records-480-c4bdb221de86.webp 480w, /images/previews/temperature-records-960-4d062a8af900.webp 960w, /images/previews/temperature-records-1440-ee732c2dc64c.webp 1440w",
-    "avifSrcSet": "/images/previews/temperature-records-480-f8dd564b5dc0.avif 480w, /images/previews/temperature-records-960-ac387c8c65c5.avif 960w, /images/previews/temperature-records-1440-102e04e66ffb.avif 1440w",
-    "width": 1633,
-    "height": 973
+    "sourceHash": "628c0e0f254c3a3ddcaa6a4e0fcf622b11a65cc74c0afd8397b88e7ea31f8548",
+    "src": "/images/previews/temperature-records-960-753bf15ad74d.webp",
+    "srcSet": "/images/previews/temperature-records-480-69bf3b0f3ef9.webp 480w, /images/previews/temperature-records-960-753bf15ad74d.webp 960w, /images/previews/temperature-records-1440-f06f584169d7.webp 1440w",
+    "avifSrcSet": "/images/previews/temperature-records-480-c2faae88b8d8.avif 480w, /images/previews/temperature-records-960-7caf98730dd1.avif 960w, /images/previews/temperature-records-1440-d80156b112f1.avif 1440w",
+    "width": 1600,
+    "height": 1000
   },
   "/images/tornado-tracks/conus-tracks.webp": {
-    "src": "/images/previews/tornado-tracks-960-4e748f01dfed.webp",
-    "srcSet": "/images/previews/tornado-tracks-480-b20291a9071c.webp 480w, /images/previews/tornado-tracks-960-4e748f01dfed.webp 960w, /images/previews/tornado-tracks-1440-2992cf64cf67.webp 1440w",
-    "avifSrcSet": "/images/previews/tornado-tracks-480-ffdff79b14fd.avif 480w, /images/previews/tornado-tracks-960-7c6c6e4a2b6d.avif 960w, /images/previews/tornado-tracks-1440-d776ad6bb5aa.avif 1440w",
-    "width": 1440,
-    "height": 1082
+    "sourceHash": "fcd831d235d688dd6376038b2727508b0046f30b3be68ef1f2fa5454140001b6",
+    "src": "/images/previews/tornado-tracks-960-6b7b6e160f1d.webp",
+    "srcSet": "/images/previews/tornado-tracks-480-228be95a0818.webp 480w, /images/previews/tornado-tracks-960-6b7b6e160f1d.webp 960w, /images/previews/tornado-tracks-1440-a5d4eeeaf953.webp 1440w",
+    "avifSrcSet": "/images/previews/tornado-tracks-480-9da24875cda1.avif 480w, /images/previews/tornado-tracks-960-448c6723c585.avif 960w, /images/previews/tornado-tracks-1440-0dab3dba560e.avif 1440w",
+    "width": 1600,
+    "height": 1000
   },
   "/images/status-dashboard/status-dashboard-calm.webp": {
-    "src": "/images/previews/status-dashboard-872-843d73045d3c.webp",
-    "srcSet": "/images/previews/status-dashboard-480-a31554190f64.webp 480w, /images/previews/status-dashboard-872-843d73045d3c.webp 872w",
-    "avifSrcSet": "/images/previews/status-dashboard-480-32dd2af540cb.avif 480w, /images/previews/status-dashboard-872-dad7996fa02b.avif 872w",
-    "width": 872,
-    "height": 610
+    "sourceHash": "4228545ab702a0bc4c69c62701709a2c305c089d331fa4b8446ab1400286b8f3",
+    "src": "/images/previews/status-dashboard-960-c1e970a1ea07.webp",
+    "srcSet": "/images/previews/status-dashboard-480-fa6da95f0610.webp 480w, /images/previews/status-dashboard-960-c1e970a1ea07.webp 960w, /images/previews/status-dashboard-1280-58b59f3412b2.webp 1280w",
+    "avifSrcSet": "/images/previews/status-dashboard-480-85de0eb92856.avif 480w, /images/previews/status-dashboard-960-92b7df5a3420.avif 960w, /images/previews/status-dashboard-1280-fd179a0c9509.avif 1280w",
+    "width": 1280,
+    "height": 980
   },
   "/images/route2gpx/route-planning-v1-1.webp": {
+    "sourceHash": "42e734614bd0f896557e6bddd179138cf90e74b5b44e511610a0ecca84d9beda",
     "src": "/images/previews/route2gpx-960-448440adc31c.webp",
     "srcSet": "/images/previews/route2gpx-480-e53344440ffc.webp 480w, /images/previews/route2gpx-960-448440adc31c.webp 960w, /images/previews/route2gpx-1440-6dabf95ac0ce.webp 1440w",
     "avifSrcSet": "/images/previews/route2gpx-480-0002a4a04357.avif 480w, /images/previews/route2gpx-960-f350a23cbc17.avif 960w, /images/previews/route2gpx-1440-2119326a6d2c.avif 1440w",

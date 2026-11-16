@@ -10,25 +10,25 @@ const screenshots: ProjectScreenshot[] = [
     {
         src: '/images/tornado-tracks/conus-tracks.webp',
         alt: 'Map of 2025 tornado tracks across the continental United States with EF-scale filters and timeline controls',
-        caption: 'CONUS overview — 2025 tornado tracks colored by EF scale with timeline brushing, scale filters, and notable-event context',
-        width: 1440,
-        height: 1082,
+        caption: 'U.S. archive — recorded county segments with intensity, regional and state filters, timeline controls, and notable-event context.',
+        width: 1600,
+        height: 1000,
         loading: 'eager',
     },
     {
         src: '/images/tornado-tracks/st-louis-detail.webp',
-        alt: 'Map focused on St. Louis with a selected EF3 tornado track detail popup and decade range selected',
-        caption: 'Track detail — selected St. Louis EF3 event with path length, width, casualty totals, and the 2010s range highlighted',
-        width: 1440,
-        height: 1080,
+        alt: 'Map focused on St. Louis with the selected April 2013 EF2 county segment and reported path details',
+        caption: 'Track detail — a recorded St. Louis EF2 county segment from April 10, 2013, with reported length, width, casualties, and source.',
+        width: 1600,
+        height: 1000,
         loading: 'lazy',
     },
     {
         src: '/images/tornado-tracks/trends-dashboard.webp',
-        alt: 'Tornado Trends view showing annual counts, fatality rate, decade comparison, and top states alongside mapped tracks',
-        caption: 'Trends view — annual counts, fatality rate, decade comparison, and top-state summaries next to the active map',
-        width: 1440,
-        height: 1079,
+        alt: 'Tornado Trends view showing annual county-segment counts and deaths per 100 segments alongside mapped reports',
+        caption: 'Trends view — annual recorded segments and deaths per 100 segments, with the current incomplete year excluded from comparisons.',
+        width: 1600,
+        height: 1000,
         loading: 'lazy',
     },
 ];
@@ -45,10 +45,9 @@ export default function TornadoTracksAbout() {
                 stack="React + MapLibre GL"
                 description={(
                     <>
-                        A time-first map for exploring historical United States tornado
-                        tracks from NOAA/NCEI StormEvents. The first slice focuses on
-                        track geometry, EF-scale filtering, Midwest and regional presets,
-                        density mode, annual playback, and track-level details.
+                        Explore recorded United States tornado county segments from
+                        NOAA/NCEI StormEvents. Filter by year, intensity, region, or state,
+                        inspect reported paths, and compare density and historical trends.
                     </>
                 )}
                 actions={[
@@ -65,6 +64,7 @@ export default function TornadoTracksAbout() {
                 <li>MapLibre track map with EF/F-scale color encoding and density mode</li>
                 <li>Timeline histogram with range brushing, playback, and era presets</li>
                 <li>Filters for EF1+, EF2+, EF3+, Midwest, Plains, and Dixie Alley</li>
+                <li>State selection, shareable map views, and historical comparison charts</li>
                 <li>Clickable track detail panel with length, width, casualties, damages, WFO, and source</li>
                 <li>NOAA/IEM sync script that scrapes StormEvents, warning, and watch archives</li>
             </ul>
