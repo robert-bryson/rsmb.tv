@@ -115,6 +115,9 @@ Validate its shortcodes against the manifest after you change media placements.
 | Animations | Defer video loading, retain posters and attribution after failure, honor reduced motion, and preserve user pause choices across visibility changes. |
 | Content | Retain literal captions, article metadata, return filters, country and region filters, and existing geographic tag links. |
 
+Country facts navigate to Posts with a country or region query.
+The browser test checks the active filter count, opens Filters, and checks the selected region.
+
 ### Panorama layout
 
 Panorama checks run with default scrollbars and visible classic scrollbars.

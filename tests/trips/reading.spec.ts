@@ -360,7 +360,12 @@ test('trip country facts link to country filters and preserve regional filters',
     }
     await facts.getByRole('link', { name: 'CA', exact: true }).click();
     await expect(page).toHaveURL(/\/posts\?country=CA$/);
-    await expect(page.getByRole('link', { name: 'Canada', exact: true })).toHaveAttribute('aria-current', 'page');
+    const filters = page.getByRole('button', { name: 'Filters', exact: true });
+    await expect(filters).toHaveAttribute('aria-expanded', 'false');
+    await expect(filters).toHaveAccessibleDescription('1 active filter');
+    await filters.click();
+    const regions = page.getByRole('navigation', { name: 'Post regions' });
+    await expect(regions.getByRole('link', { name: 'Canada', exact: true })).toHaveAttribute('aria-current', 'page');
     await expect(page.getByRole('heading', { name: 'Coastal test trip', exact: true })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Daily map test trip', exact: true })).toHaveCount(0);
 });
