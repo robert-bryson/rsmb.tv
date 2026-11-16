@@ -146,7 +146,9 @@ test('reveals readable national measurements at the maximum map zoom', async ({ 
 
 for (const width of [320, 1280]) {
     test(`stages county detail without redundant source updates at ${width}px`, async ({ page }) => {
-
+        // Five camera stages share real Census data and software WebGL. Keep
+        // each readiness check at 20 seconds; allow the whole sequence to finish.
+        test.setTimeout(120_000);
         const errors = await prepare(page);
         await page.setViewportSize({ width, height: 900 });
         let countyRequests = 0;

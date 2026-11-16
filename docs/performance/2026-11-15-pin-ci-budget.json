@@ -1,0 +1,61 @@
+{
+  "date": "2026-11-15",
+  "timezone": "America/Chicago",
+  "sourceBaseRevision": "d8652e62ffc70665556800f9e3170cf0c7f77f0d",
+  "failure": {
+    "runId": 43779487714,
+    "runUrl": "https://github.com/robert-bryson/rsmb.tv/actions/runs/43779487714",
+    "jobId": 133013203810,
+    "artifactId": 14188254514,
+    "step": "Pins and trip layout in WebKit",
+    "test": "stages county detail without redundant source updates at 1280px",
+    "passed": 81,
+    "failed": 1,
+    "skipped": 1,
+    "totalCaseBudgetMs": 60000,
+    "readinessCheckBudgetMs": 20000,
+    "finalReadinessWaitMs": 9904,
+    "finalZoom": 6.75,
+    "countyResponseMs": 213.593,
+    "countyResponseStatus": 200,
+    "cause": "The total case budget expired before the final readiness check could use its own deadline.",
+    "note": "The trace reached all five camera stages. The final screenshot showed county boundaries and radius labels. The final map.loaded readiness check was cut short by the overall test deadline."
+  },
+  "releaseImpact": {
+    "releaseJob": "skipped",
+    "observedProductionCommit": "1c81d700faa9717f4e84b865303ffd15be198d2f",
+    "observedProductionJob": "0000000442",
+    "observedAt": "2026-11-16T01:18:18Z"
+  },
+  "fix": {
+    "file": "tests/e2e/pins-map.spec.ts",
+    "affectedCases": "The county staging sequence at 320px and 1280px only.",
+    "cameraZooms": [4.25, 4.5, 4.75, 5.75, 6.75],
+    "totalCaseBudgetMs": 120000,
+    "readinessCheckBudgetMs": 20000,
+    "applicationStartupDeadlineMs": 15000,
+    "otherCaseBudgetMs": 60000,
+    "assertions": "Unchanged counts, pixels, source writes, lazy requests, rendered layers, and page-error checks.",
+    "productionCodeChanged": false
+  },
+  "localValidation": {
+    "before": {
+      "engine": "WebKit",
+      "passed": 2,
+      "durationsSeconds": {"320px": 15.8, "1280px": 20.9}
+    },
+    "after": {
+      "passed": 4,
+      "failed": 0,
+      "engines": ["Chromium", "WebKit"],
+      "durationsSeconds": {
+        "chromium320px": 14.8,
+        "chromium1280px": 18.7,
+        "webkit320px": 11.0,
+        "webkit1280px": 18.9
+      }
+    },
+    "command": "PLAYWRIGHT_WEBKIT=1 node scripts/run-playwright.js --config /tmp/rsmbtv-review-webkit.config.ts tests/e2e/pins-map.spec.ts --grep 'stages county detail' --workers=2 --output=/tmp/rsmbtv-ci-pin-budget-validation-results",
+    "note": "Local timing samples do not establish CI renderer speed. The existing WPE WebKit launcher was selected through a temporary config."
+  }
+}

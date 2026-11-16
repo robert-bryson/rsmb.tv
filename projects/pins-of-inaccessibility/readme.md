@@ -538,7 +538,9 @@ Source-link tests check article placement, external-link isolation, and bounded 
 Navigation tests check parent steps, shared state scopes, browser history, gesture cancellation, and muted context.
 Browser tests use the real renderer and published geographic files.
 Pins assertions allow 20 seconds for data parsing, camera updates, and software WebGL.
-Each complete case has a 60-second limit.
+Most complete cases have a 60-second limit.
+The county staging case allows 120 seconds for five camera stages on software WebGL.
+The [CI budget evidence](../../docs/performance/2026-11-15-pin-ci-budget.json) records the exhausted total budget and local checks.
 The application's 15-second startup deadline remains separate.
 Reload cases wait for the current map to settle, then verify readiness after replacement.
 Use separate artifact directories when you run independent Playwright processes in parallel.

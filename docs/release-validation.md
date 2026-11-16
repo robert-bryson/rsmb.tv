@@ -7,6 +7,11 @@ The separate `dev` branch continues to include draft content.
 The release checkout includes full Git history so it can prove the preview branch update is a fast-forward.
 A divergent preview branch stops the release; the workflow does not force-push over it.
 
+Check the CI and release jobs after a push.
+Then compare the pushed commit with `https://www.rsmb.tv/deployment.json`.
+That file identifies the build currently served by production.
+If CI fails, the release job is skipped and the previous deployment remains available.
+
 The validator checks:
 
 - The exact full commit ID and Amplify job identity in `deployment.json`, before and after validation.
