@@ -74,5 +74,8 @@ npm run test:page-recovery
 ```
 
 The fixture preview used by that check verifies failure behavior and layout. Hosted release validation verifies the actual Amplify rules.
+The layout checks include project cards and search results at 200% text size.
+They wait for the page body and use a wider font to detect overflow beyond the search panel.
+The [November 15 layout evidence](performance/2026-11-15-search-layout-release.json) records the failed release check and its repair.
 
 The implementation follows the official [Amplify job API](https://docs.aws.amazon.com/amplify/latest/APIReference/API_StartJob.html), [build environment reference](https://docs.aws.amazon.com/amplify/latest/userguide/environment-variables.html), and [IAM resource model](https://docs.aws.amazon.com/service-authorization/latest/reference/list_amplify.html).

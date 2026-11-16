@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-15",
+  "timezone": "America/Chicago",
+  "sourceBaseRevision": "67d21687924eb5bc1e60ac17b3cee1c5ec78b2d4",
+  "failedRelease": {
+    "runId": 43787374850,
+    "jobId": 133037922974,
+    "artifactId": 14191104932,
+    "runUrl": "https://github.com/robert-bryson/rsmb.tv/actions/runs/43787374850",
+    "step": "Production accessibility, navigation, intent prefetch, and page recovery",
+    "engine": "WebKit",
+    "case": "site search keeps large-text results within the viewport at 320px",
+    "expectedDocumentWidthPx": 320,
+    "actualDocumentWidthPx": 334,
+    "passed": 165,
+    "failed": 1,
+    "skipped": 6,
+    "releaseJob": "skipped",
+    "productionCommit": "1c81d700faa9717f4e84b865303ffd15be198d2f",
+    "productionJob": "0000000442"
+  },
+  "reproduction": {
+    "page": "/projects",
+    "viewportWidthPx": 320,
+    "rootFontSizePx": 32,
+    "fontFamily": "DejaVu Sans",
+    "documentWidthBeforePx": 334,
+    "documentWidthAfterPx": 320,
+    "cause": "The project card used its long title's intrinsic minimum width. Search results could load before the page body, hiding the overflow in local checks."
+  },
+  "fix": {
+    "projectCards": "Constrain the content column, wrap long text, and allow dates to wrap.",
+    "searchResults": "Wrap titles, type labels, and unbroken excerpt text within each result.",
+    "regressions": "Wait for all cards, use enlarged text with a wider font, and check text bounds as well as document width.",
+    "assertionChanges": "Retain viewport and keyboard focus assertions; add card text and result overflow assertions.",
+    "releaseGatesBypassed": false
+  },
+  "validation": {
+    "targetedBrowserCasesPassed": 8,
+    "fullProductionBrowserCasesPassed": 170,
+    "fullProductionBrowserCasesSkipped": 6,
+    "fullProductionBrowserCasesFailed": 0,
+    "fullProductionBrowserCommand": "PLAYWRIGHT_WEBKIT=1 node scripts/run-page-recovery-tests.js --config /tmp/rsmbtv-review-webkit.config.ts --output=/tmp/rsmbtv-publication-recovery-results",
+    "engines": ["Chromium", "WebKit"],
+    "relatedUnitTestsPassed": 25,
+    "lintPassed": true,
+    "typecheckPassed": true,
+    "note": "Local WebKit used the cached WPE browser through a temporary launcher. CI uses the repository's standard browser installation."
+  }
+}

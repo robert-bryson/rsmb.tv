@@ -17,6 +17,26 @@ async function expectAccessible(page: Page) {
 }
 
 for (const width of [320, 1280]) {
+    test(`project cards reflow enlarged titles, dates, and badges at ${width}px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto('/projects');
+        const results = page.getByRole('list', { name: 'Projects', exact: true });
+        await expect(results.getByRole('heading', { level: 2 })).toHaveCount(total);
+        await page.addStyleTag({ content: 'html { font-size: 32px; font-family: "DejaVu Sans", sans-serif; }' });
+        expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+        // Check text itself so clipping an oversized card cannot pass.
+        expect(await results.locator(':scope > li').evaluateAll(cards => cards.every(card => {
+            const bounds = card.getBoundingClientRect();
+            const text = document.createTreeWalker(card, NodeFilter.SHOW_TEXT);
+            while (text.nextNode()) {
+                const range = document.createRange();
+                range.selectNodeContents(text.currentNode);
+                if ([...range.getClientRects()].some(rect => rect.left < bounds.left - 0.5 || rect.right > bounds.right + 0.5)) return false;
+            }
+            return true;
+        }))).toBe(true);
+    });
+
     test(`project discovery combines filters and restores browser history at ${width}px`, async ({ page }) => {
         await page.setViewportSize({ width, height: 900 });
         await page.goto('/projects?q=python');

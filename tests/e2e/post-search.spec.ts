@@ -167,7 +167,10 @@ for (const width of [320, 1280]) {
     test(`site search keeps large-text results within the viewport at ${width}px`, async ({ page }) => {
         await page.setViewportSize({ width, height: 900 });
         await page.goto('/projects');
-        await page.addStyleTag({ content: 'html { font-size: 32px; }' });
+        // Search can load before the page body. Include its layout, and use a
+        // wider installed font so local font fallback cannot hide overflow.
+        await expect(page.getByRole('list', { name: 'Projects', exact: true })).toBeVisible();
+        await page.addStyleTag({ content: 'html { font-size: 32px; font-family: "DejaVu Sans", sans-serif; }' });
         await page.getByRole('searchbox', { name: 'Search site' }).fill('a');
         const results = page.getByRole('region', { name: 'Search results' });
         const last = results.getByRole('link').last();
@@ -178,6 +181,7 @@ for (const width of [320, 1280]) {
         expect(bounds.y + bounds.height).toBeLessThanOrEqual(900);
         await last.focus();
         await expect(last).toBeInViewport({ ratio: 1 });
+        expect(await results.getByRole('link').evaluateAll(links => links.every(link => link.scrollWidth <= link.clientWidth))).toBe(true);
         expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
     });
 

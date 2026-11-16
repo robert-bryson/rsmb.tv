@@ -119,10 +119,10 @@ function ProjectContent({ project, priority }: { project: Project; priority: boo
           className="aspect-video w-full shrink-0 rounded-md border border-zinc-800 object-cover sm:w-48"
           sizes="(min-width: 640px) 192px, calc(100vw - 5rem)" />
       )}
-      <div className="min-w-0 flex-1">
+      <div className="w-full min-w-0 flex-1 wrap-anywhere">
         <div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
           <h2 className="text-lg font-medium text-zinc-100 group-hover:text-violet-400">{project.title}</h2>
-          <span className="whitespace-nowrap text-xs text-zinc-400">
+          <span className="text-xs text-zinc-400">
             {project.lastUpdated ? <>Updated <time dateTime={project.lastUpdated}>{formatProjectDate(project)}</time></> : project.year}
           </span>
         </div>

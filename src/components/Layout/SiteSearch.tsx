@@ -114,11 +114,11 @@ export function SiteSearch() {
                     <IntentLink to={result.url} state={{ siteSearchQuery: query }} prefetchMode="none" ref={link => { links.current[index] = link; }}
                         className="block rounded-md px-3 py-3 hover:bg-zinc-800/60 focus-visible:bg-zinc-800/60 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-violet-400"
                         onClick={() => { setOpen(false); setQuery(''); }}>
-                        <div className="mb-1 flex items-baseline justify-between gap-3">
-                            <span className="text-sm font-medium text-zinc-200"><Highlight text={result.title} query={query} /></span>
+                        <div className="mb-1 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                            <span className="min-w-0 wrap-anywhere text-sm font-medium text-zinc-200"><Highlight text={result.title} query={query} /></span>
                             <span className="shrink-0 text-[11px] text-zinc-400">{result.kind}{result.draft ? ' · Draft' : ''}</span>
                         </div>
-                        <p className="line-clamp-2 text-xs leading-relaxed text-zinc-400"><Highlight text={result.excerpt} query={query} /></p>
+                        <p className="line-clamp-2 wrap-anywhere text-xs leading-relaxed text-zinc-400"><Highlight text={result.excerpt} query={query} /></p>
                     </IntentLink>
                 </li>)}
             </ul> : <p className="px-4 py-5 text-sm text-zinc-400">No results for “{query.trim()}”. Try another word or phrase.</p>)}
