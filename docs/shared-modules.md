@@ -207,6 +207,7 @@ See [site search](site-search.md) for extraction limits and keyboard behavior.
 Search result navigation passes its query through browser history state.
 [`siteSearchMatch.ts`](../src/navigation/siteSearchMatch.ts) finds a visible passage and maps normalized text to its original DOM range.
 [`SearchMatch`](../src/components/SearchMatch.tsx) owns the destination jump, focus, highlight, and layout correction.
+[`scrollToSiteSearchMatch`](../src/navigation/scrollToSiteSearchMatch.ts) reveals the first matched line inside scroll areas and the visual viewport.
 Normal history restoration remains in `ScrollToTop`. New search visits yield to the passage jump.
 
 Post tags and regions use [`PostFilterLink`](../src/components/PostFilterLink.tsx) for pill styles and selected state.

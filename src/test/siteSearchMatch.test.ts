@@ -12,10 +12,38 @@ beforeEach(() => {
     vi.spyOn(HTMLElement.prototype, 'getClientRects').mockImplementation(function (this: HTMLElement) {
         return (getComputedStyle(this).display === 'none' ? [] : [new DOMRect(0, 400, 300, 24)]) as unknown as DOMRectList;
     });
+    const createRange = document.createRange.bind(document);
+    vi.spyOn(document, 'createRange').mockImplementation(() => {
+        const range = createRange();
+        range.getClientRects = () => (getComputedStyle(range.startContainer.parentElement!).display === 'none'
+            ? [] : [new DOMRect(0, 400, 300, 24)]) as unknown as DOMRectList;
+        return range;
+    });
 });
 afterEach(() => { document.body.replaceChildren(); vi.restoreAllMocks(); });
 
 describe('site search passage matching', () => {
+    it('search match review regressions: finds rendered text when its wrapper has no layout box', () => {
+        vi.mocked(HTMLElement.prototype.getClientRects).mockReturnValue([] as unknown as DOMRectList);
+        const match = passage('<p>A <span style="display:contents">quiet harbor</span>.</p>', 'quiet harbor');
+        expect(match?.range.toString()).toBe('quiet harbor');
+    });
+
+    it('search match review regressions: ignores fully transparent ancestors', () => {
+        const match = passage('<div style="opacity:0"><p>Quiet harbor.</p></div><p>A visible quiet harbor.</p>', 'quiet harbor');
+        expect(match?.element.textContent).toBe('A visible quiet harbor.');
+    });
+
+    it('search match review regressions: treats explicit line breaks as word boundaries', () => {
+        const match = passage('<p>Quiet<br>harbor.</p>', 'quiet harbor');
+        expect(match?.range.toString()).toBe('Quietharbor');
+    });
+
+    it('search match review regressions: treats displayed block spans as word boundaries', () => {
+        const match = passage('<p>Quiet<span style="display:block">harbor</span>tonight.</p>', 'quiet harbor tonight');
+        expect(match?.range.toString()).toBe('Quietharbortonight');
+    });
+
     it('matches phrases across inline markup and separate whitespace nodes', () => {
         const match = passage('<p>Before.</p><p>Past the <em>quiet</em> <strong>harbor</strong> at dusk.</p>', 'quiet harbor');
         expect(match?.range.toString()).toBe('quiet harbor');

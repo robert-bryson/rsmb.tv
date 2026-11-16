@@ -18,11 +18,18 @@ Clear empties the field and retains focus.
 Opening a result clears the search.
 In the current tab, it also moves to the first visible matching passage and focuses that passage.
 The match stays clear of the site navigation and sticky trip heading.
+Only headings that remain sticky add chapter clearance.
+On short screens, the first matched line takes priority over unused navigation space.
+The jump also reveals text inside scrollable code blocks and other scroll areas.
 Supported browsers highlight the matched text without changing the article markup.
 An exact phrase takes priority. Otherwise, the jump prefers a passage with all search words, then the first matching word.
+Explicit line breaks and block elements separate words. Inline formatting keeps words together.
+Hidden and fully transparent text cannot win over a visible passage.
+Text remains searchable when its wrapper uses `display: contents` and has no layout box.
 When only metadata matches, the page opens at its normal starting position.
 Search does not open hidden controls or photo viewers to reveal a match.
 Back and Forward restore the reader's position instead of repeating the jump.
+Restoration records the departure position even when the browser has not delivered its final scroll event.
 Editing collection or atlas filters removes the old landing request and retains the caller's navigation context.
 Composed text input retains its own arrow and Enter keys until composition ends.
 Modified arrow keys retain their browser or operating system behavior.
@@ -36,6 +43,8 @@ It is not added to the URL or analytics events.
 Copied result URLs and results opened in a new tab open at the normal page position.
 The jump waits for lazy article text and briefly corrects delayed layout changes.
 Scrolling, touching, clicking, or pressing a key stops that correction immediately.
+Visual viewport changes update placement until correction stops.
+Native focusable elements retain their Tab order after a match.
 Article loading placeholders use `data-search-pending` so temporary titles cannot trigger an early match.
 
 ## Index sources
@@ -86,6 +95,8 @@ See [blog publication](blog-publishing.md) for Sheet configuration and source ow
 | [`siteSearchIndex.ts`](../src/navigation/siteSearchIndex.ts) | Lazy index loading through the shared module loader |
 | [`siteSearchMatch.ts`](../src/navigation/siteSearchMatch.ts) | Navigation state, visible passage selection, and original text ranges |
 | [`SearchMatch.tsx`](../src/components/SearchMatch.tsx) | Lazy destination text, passage focus, highlighting, scroll clearance, and cancellation |
+| [`scrollToSiteSearchMatch.ts`](../src/navigation/scrollToSiteSearchMatch.ts) | Scroll-area reveal, text fragment bounds, visual viewport limits, and sticky heading clearance |
+| [`ScrollToTop.tsx`](../src/components/ScrollToTop.tsx) | Ordinary scroll restoration and departure position capture |
 | [`site-search-plugin.ts`](../scripts/site-search-plugin.ts) | Text extraction, build output, and development updates |
 | [`post-registry.ts`](../scripts/post-registry.ts) | Shared publication filtering and reference checks |
 | [`postMetadata.ts`](../src/content/postMetadata.ts) | Build and browser metadata types without virtual loaders |
@@ -97,17 +108,20 @@ Use [project filters](project-discovery.md) and [post filters](blog-publishing.m
 Run the focused unit checks:
 
 ```bash
-npx vitest run src/test/siteSearch.test.ts src/test/SiteSearch.test.tsx src/test/siteSearchIndex.test.ts src/test/siteSearchMatch.test.ts src/test/SearchMatch.test.tsx src/test/ScrollToTop.test.tsx src/test/RouteOrientation.test.tsx scripts/__tests__/siteSearch.test.ts scripts/__tests__/tripContent.test.ts
+npx vitest run src/test/siteSearch.test.ts src/test/SiteSearch.test.tsx src/test/siteSearchIndex.test.ts src/test/siteSearchMatch.test.ts src/test/SearchMatch.test.tsx src/test/scrollToSiteSearchMatch.test.ts src/test/ScrollToTop.test.tsx src/test/RouteOrientation.test.tsx scripts/__tests__/siteSearch.test.ts scripts/__tests__/tripContent.test.ts
 ```
 
 Run the production browser checks:
 
 ```bash
 PLAYWRIGHT_WEBKIT=1 npm run test:page-recovery -- --grep 'site search|site navigation|project search defers'
+PLAYWRIGHT_WEBKIT=1 npm run test:e2e -- tests/e2e/search-match.spec.ts
 ```
 
 The browser cases check full-body matches, draft exclusion, index retries, navigation, focus, accessibility, and responsive spacing.
 Landing cases check lazy trip text, article formatting, deep project text, repeated searches on one page, and history positions.
+The separate landing fixture uses the real layout and trip heading measurement.
+It checks native summary controls, transparent content, nested scroll areas, code blocks, and enlarged text on short screens.
 For a current-content check, search for **Avenue of the Giants** and open the PCH trip result.
 Confirm that the linked phrase is highlighted below the sticky chapter heading and receives keyboard focus.
 At 200% text size, the result panel must fit below the navigation and keep its final result reachable.

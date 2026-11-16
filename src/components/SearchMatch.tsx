@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigationType } from 'react-router-dom';
 import { findSiteSearchMatch, getSiteSearchQuery } from '../navigation/siteSearchMatch';
+import { scrollToSiteSearchMatch } from '../navigation/scrollToSiteSearchMatch';
 
 const inputEvents = ['pointerdown', 'wheel', 'touchstart', 'keydown'] as const;
 
@@ -11,6 +12,7 @@ export function SearchMatch() {
     useEffect(() => {
         const query = getSiteSearchQuery(location.state);
         if (!query || navigation === 'POP' || location.hash) return;
+        const viewport = window.visualViewport;
         let active = true;
         let frame: number | undefined;
         let match: ReturnType<typeof findSiteSearchMatch>;
@@ -26,6 +28,8 @@ export function SearchMatch() {
             if (frame !== undefined) cancelAnimationFrame(frame);
             window.clearTimeout(timeout);
             window.removeEventListener('resize', schedule);
+            viewport?.removeEventListener('resize', schedule);
+            viewport?.removeEventListener('scroll', schedule);
             for (const event of inputEvents) window.removeEventListener(event, stop, true);
         };
         const align = () => {
@@ -45,7 +49,7 @@ export function SearchMatch() {
                     return;
                 }
                 previousTabIndex = match.element.getAttribute('tabindex');
-                if (previousTabIndex === null) match.element.tabIndex = -1;
+                if (previousTabIndex === null && match.element.tabIndex < 0) match.element.tabIndex = -1;
                 match.element.dataset.siteSearchMatch = '';
                 match.element.focus({ preventScroll: true });
                 if (typeof Highlight !== 'undefined' && typeof CSS !== 'undefined' && CSS.highlights) {
@@ -56,13 +60,8 @@ export function SearchMatch() {
                 window.clearTimeout(timeout);
                 timeout = window.setTimeout(stop, 3000);
             }
-            if (!match.element.isConnected) { stop(); return; }
-            const header = document.querySelector<HTMLElement>('.site-header');
-            const chapter = match.element.closest('.trip-chapter')?.querySelector<HTMLElement>(':scope > :is(h1,h2):first-child');
-            const clearance = (header?.getBoundingClientRect().height ?? 0)
-                + (chapter && !chapter.contains(match.range.startContainer) ? chapter.getBoundingClientRect().height : 0) + 24;
-            const top = window.scrollY + match.range.getBoundingClientRect().top - clearance;
-            window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
+            if (!match.element.isConnected || match.range.collapsed) { stop(); return; }
+            scrollToSiteSearchMatch(match);
         };
         const schedule = () => {
             if (active && frame === undefined) frame = requestAnimationFrame(align);
@@ -73,6 +72,8 @@ export function SearchMatch() {
         const resize = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(schedule);
         resize?.observe(document.body);
         window.addEventListener('resize', schedule);
+        viewport?.addEventListener('resize', schedule);
+        viewport?.addEventListener('scroll', schedule);
         for (const event of inputEvents) window.addEventListener(event, stop, { capture: true, passive: true });
         schedule();
         return () => {

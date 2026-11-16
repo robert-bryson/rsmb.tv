@@ -46,6 +46,8 @@ export function ScrollToTop() {
         };
         window.addEventListener('scroll', remember, { passive: true });
         return () => {
+            // A route can commit before the browser delivers its last scroll event.
+            remember();
             stop(); cancelAnimationFrame(frame); clearTimeout(timeout);
             window.removeEventListener('scroll', remember);
             window.removeEventListener('pointerdown', stop);

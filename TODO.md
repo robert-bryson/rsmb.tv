@@ -38,6 +38,7 @@ Local browser tests cannot verify the analytics account or physical devices.
 - [ ] Test navigation, site search, list filters, and map controls with VoiceOver or NVDA.
   Check result announcements, keyboard browsing, Escape, retry, and focus after clearing.
   Open a search result and check passage focus, the highlight, sticky heading clearance, and Back/Forward positions.
+  Check that a matched summary control remains in its normal Tab order.
   Check the post filter button's active count, link order, selected states, and focus after dismissal.
   Check category counts and the new-tab descriptions on project actions.
   Include hover dismissal, route announcements, help dismissal, and disabled character shortcuts.
@@ -152,6 +153,7 @@ Use the [November 10 review](docs/reviews/2026-11-10-project-quality-review.md) 
   Confirm that composition keys keep focus in the field and do not open a result.
   Verify filter counts, clearing, and restoration through Back, Forward, and reload.
   Open post filters with enlarged text and after rotation. Scroll to the final region and close the panel.
+  Open a search match in a code block and on a short screen. Check placement after the keyboard and browser chrome resize.
   Record the device, keyboard, browser, and result.
 - [ ] Check [trip reading](docs/reviews/2026-11-13-trip-layout-quality-review.md#remaining-checks) on a real phone.
   Include large text, chapter changes, subsection links, and rotation.

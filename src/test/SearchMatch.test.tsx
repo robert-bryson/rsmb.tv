@@ -55,6 +55,7 @@ beforeEach(() => {
     vi.spyOn(document, 'createRange').mockImplementation(() => {
         const range = createRange();
         range.getBoundingClientRect = () => new DOMRect(0, targetTop - window.scrollY, 160, 24);
+        range.getClientRects = () => [range.getBoundingClientRect()] as unknown as DOMRectList;
         return range;
     });
 });
@@ -62,6 +63,42 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.useRealTimers(); });
 
 describe('search match landing', () => {
+    it('search match review regressions: updates for visual viewport events and cancels those events on input', async () => {
+        const viewport = Object.assign(new EventTarget(), { height: 300, offsetTop: 0 });
+        vi.stubGlobal('visualViewport', viewport);
+        await mount();
+        flush();
+        viewport.height = 100;
+        viewport.dispatchEvent(new Event('resize'));
+        flush();
+        expect(scroll).toHaveBeenLastCalledWith({ top: 540, behavior: 'instant' });
+        viewport.offsetTop = 120;
+        viewport.dispatchEvent(new Event('scroll'));
+        flush();
+        expect(scroll).toHaveBeenLastCalledWith({ top: 420, behavior: 'instant' });
+        fireEvent.keyDown(window, { key: 'Escape' });
+        viewport.dispatchEvent(new Event('resize'));
+        expect(frames.size).toBe(0);
+    });
+
+    it('search match review regressions: stops correction when a live range collapses after text replacement', async () => {
+        await mount();
+        flush();
+        await act(async () => { screen.getByText('Past the quiet harbor.').textContent = 'Replacement text.'; });
+        flush();
+        resize();
+        flush();
+        expect(scroll).toHaveBeenCalledOnce();
+    });
+
+    it('search match review regressions: preserves the native Tab stop of a summary', async () => {
+        await mount('<details><summary>Quiet harbor</summary><p>Other text.</p></details>');
+        flush();
+        const summary = screen.getByText('Quiet harbor');
+        expect(summary).not.toHaveAttribute('tabindex');
+        expect(summary.tabIndex).toBe(0);
+    });
+
     it('focuses and highlights the original passage below the navigation', async () => {
         await mount();
         flush();
@@ -118,11 +155,11 @@ describe('search match landing', () => {
         expect(document.querySelector('[data-site-search-match]')).toBeNull();
     });
 
-    it.each(['<section class="trip-chapter"><h2>First day</h2><p>Quiet harbor.</p></section>',
-        '<section class="trip-chapter"><h2>Quiet harbor</h2><p>First day.</p></section>'])('clears a sticky chapter heading when appropriate: %s', async html => {
+    it.each(['<section class="trip-chapter"><h2 style="position:sticky">First day</h2><p>Quiet harbor.</p></section>',
+        '<section class="trip-chapter"><h2 style="position:sticky">Quiet harbor</h2><p>First day.</p></section>'])('clears a sticky chapter heading when appropriate: %s', async html => {
         await mount(html);
         flush();
-        expect(scroll).toHaveBeenLastCalledWith({ top: html.includes('<h2>Quiet') ? 504 : 444, behavior: 'instant' });
+        expect(scroll).toHaveBeenLastCalledWith({ top: html.includes('>Quiet harbor</h2>') ? 504 : 444, behavior: 'instant' });
     });
 
     it('still scrolls and focuses without the CSS highlight API', async () => {

@@ -23,6 +23,19 @@ function mount() {
 }
 
 describe('scroll restoration input ownership', () => {
+    it('search match review regressions: saves departure position before a queued scroll event arrives', async () => {
+        const scroll = vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
+        const router = createMemoryRouter([{ path: '*', element: <ScrollToTop /> }], { initialEntries: ['/start'] });
+        render(<RouterProvider router={router} />);
+        await act(() => router.navigate('/article', { state: { siteSearchQuery: 'harbor' } }));
+        vi.stubGlobal('scrollY', 700);
+        // Browsers can commit navigation before delivering the scroll event.
+        await act(() => router.navigate('/about'));
+        scroll.mockClear();
+        await act(() => router.navigate(-1));
+        expect(scroll).toHaveBeenCalledWith(0, 700);
+    });
+
     it('yields delayed layout restoration to a new search landing but retains history positions', async () => {
         const scroll = vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
         const callbacks: ResizeObserverCallback[] = [];
