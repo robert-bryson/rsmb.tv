@@ -79,7 +79,7 @@
     "@aws-sdk/client-cloudwatch": "^3.1168.0",
     "@aws-sdk/client-cost-explorer": "^3.1168.0",
     "@aws-sdk/client-route-53": "^3.1168.0",
-    "@aws-sdk/credential-providers": "^3.1168.0",
+    "@aws-sdk/credential-providers": "^3.1169.0",
     "@axe-core/playwright": "^4.14.0",
     "@eslint/js": "^10.0.1",
     "@mdx-js/mdx": "^3.1.1",
