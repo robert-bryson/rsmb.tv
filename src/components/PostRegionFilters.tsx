@@ -12,7 +12,7 @@ interface RegionFilterProps {
 export function PostRegionFilters({ countries, activeCountry, activeRegion, createUrl }: RegionFilterProps) {
     return <nav aria-label="Post regions" className="space-y-3">
         <div className="flex flex-wrap items-baseline gap-3">
-            <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Regions</p>
+            <p className="text-sm font-medium text-zinc-300">Regions</p>
             <PostFilterLink to={createUrl()} active={!activeCountry && !activeRegion}>All regions</PostFilterLink>
         </div>
         {countries.map(country => <div key={country.code} role="group" aria-label={country.name} className="flex flex-wrap items-baseline gap-2">

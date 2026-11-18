@@ -106,18 +106,18 @@ export function TornadoTimeline({
                 <button
                     type="button"
                     onClick={() => onCollapseChange(!collapsed)}
-                    className="flex w-full items-center justify-center gap-1.5 rounded-t-lg pt-2 pb-1 text-zinc-500 transition-colors hover:bg-zinc-800/60 hover:text-zinc-300"
+                    className="flex min-h-11 w-full items-center justify-center gap-2 rounded-t-lg text-zinc-400 transition-colors hover:bg-zinc-800/60 hover:text-zinc-200"
                     aria-label={collapsed ? 'Expand timeline' : 'Collapse timeline'}
                     aria-expanded={!collapsed}
                 >
                     <div className="h-1 w-8 rounded-full bg-zinc-600" />
-                    <span className="text-[10px] leading-none">{collapsed ? '▲' : '▼'}</span>
+                    <span className="text-xs leading-none">{collapsed ? '▲' : '▼'}</span>
                 </button>
             )}
             <div className={`flex flex-col gap-3 p-3 md:p-4${onCollapseChange ? ' pt-1 md:pt-1' : ''}`}>
                 <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
-                        <div className="text-xs uppercase tracking-wide text-zinc-500">Timeline</div>
+                        <div className="text-xs text-zinc-500">Timeline</div>
                         <div className="text-sm font-medium text-zinc-100">
                             {startYear === endYear ? startYear : `${startYear}-${endYear}`}
                             <span className="ml-2 text-xs font-normal text-zinc-400">{countsStatus === 'ready'
@@ -125,11 +125,11 @@ export function TornadoTimeline({
                                 : countsStatus === 'loading' ? 'Loading historical counts…' : 'Historical counts unavailable'}</span>
                         </div>
                     </div>
-                    <div className="flex items-center gap-2 text-xs">
+                    <div className="flex flex-wrap items-center gap-2 text-xs">
                         <button
                             type="button"
                             onClick={stepBack}
-                            className="h-8 rounded-md border border-zinc-700 bg-zinc-900 px-2.5 text-zinc-200 hover:bg-zinc-800"
+                            className="h-11 min-w-11 rounded-md border border-zinc-700 bg-zinc-900 px-3 text-zinc-200 hover:bg-zinc-800"
                         >
                             Prev
                         </button>
@@ -137,19 +137,19 @@ export function TornadoTimeline({
                             type="button"
                             onClick={togglePlaying}
                             aria-pressed={playing}
-                            className="h-8 min-w-16 rounded-md bg-sky-500 px-3 font-medium text-zinc-950 hover:bg-sky-400"
+                            className="h-11 min-w-16 rounded-md bg-sky-500 px-3 font-medium text-zinc-950 hover:bg-sky-400"
                         >
                             {playing ? 'Pause' : 'Play'}
                         </button>
                         <button
                             type="button"
                             onClick={stepForward}
-                            className="h-8 rounded-md border border-zinc-700 bg-zinc-900 px-2.5 text-zinc-200 hover:bg-zinc-800"
+                            className="h-11 min-w-11 rounded-md border border-zinc-700 bg-zinc-900 px-3 text-zinc-200 hover:bg-zinc-800"
                         >
                             Next
                         </button>
                         {/* Stride toggle */}
-                        <div className="flex h-8 overflow-hidden rounded-md border border-zinc-700 text-[11px]">
+                        <div className="flex h-11 overflow-hidden rounded-md border border-zinc-700 text-xs [&>button]:min-w-11">
                             <button
                                 type="button"
                                 onClick={() => setStride(1)}

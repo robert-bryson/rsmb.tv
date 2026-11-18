@@ -7,7 +7,7 @@ export function About() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold text-zinc-100 mb-6">About</h1>
+      <h1 className="page-title mb-6">About</h1>
 
       <div className="prose space-y-4">
         <p>
@@ -32,7 +32,7 @@ export function About() {
 
       {/* Experience */}
       <section className="mt-12">
-        <h2 className="text-sm font-medium text-zinc-400 uppercase tracking-wide mb-4">
+        <h2 className="section-title mb-4">
           Experience
         </h2>
         <ul className="space-y-4 text-sm">
@@ -57,7 +57,7 @@ export function About() {
 
       {/* Contact */}
       <section className="mt-12">
-        <h2 className="text-sm font-medium text-zinc-400 uppercase tracking-wide mb-4">
+        <h2 className="section-title mb-4">
           Connect
         </h2>
         <ul className="space-y-2 text-sm">

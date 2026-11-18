@@ -29,8 +29,8 @@ export function TripAtlasLocations({ entry, onExplore }: { entry: TripAtlasEntry
         observer?.observe(element);
         return () => observer?.disconnect();
     }, [items]);
-    if (!items.length) return <p className="mt-2 text-xs text-zinc-400">Location not recorded</p>;
-    return <div className="atlas-locations relative mt-2 text-xs text-zinc-400">
+    if (!items.length) return <p className="atlas-locations text-xs text-zinc-400">Location not recorded</p>;
+    return <div className="atlas-locations relative text-xs text-zinc-400">
         <div ref={measurement} aria-hidden="true" className="pointer-events-none invisible absolute inset-x-0 top-0">
             {items.map((item, index) => <Fragment key={`${item.country}/${item.region ?? ''}`}>
                 {index > 0 && <span> · </span>}

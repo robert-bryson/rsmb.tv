@@ -1,5 +1,9 @@
 import { normalizeSearch } from '../utils/search';
 
+const EXCERPT_LENGTH = 190;
+const EXCERPT_LEADING_CONTEXT = 55;
+const STATUS_PASSAGE = /\b(?:failed|unable|couldn['’]t) to (?:load|fetch)|^(?:loading\b|try again\b|no (?:results|matches)\b)/i;
+
 export interface SiteSearchDocument {
     url: string;
     title: string;
@@ -34,23 +38,43 @@ export function searchSite(documents: SiteSearchDocument[], query: string): Site
 }
 
 function searchExcerpt(document: SiteSearchDocument, terms: string[]): string {
-    if (terms.every(term => normalizeSearch(document.description).includes(term))) return document.description;
-    let match: RegExpExecArray | undefined;
-    for (const word of document.content.matchAll(/\S+/gu)) {
-        if (terms.some(term => normalizeSearch(word[0]).includes(term))) {
-            match = word;
-            break;
-        }
-    }
-    if (!match) return document.description;
+    const metadata = normalizeSearch(`${document.title} ${document.description} ${document.keywords ?? ''}`);
+    if (document.description && terms.every(term => metadata.includes(term))) return document.description;
 
-    const text = document.content;
-    let start = Math.max(0, match.index - 55);
-    if (start) start = text.indexOf(' ', start) + 1;
-    let end = Math.min(text.length, start + 190);
-    if (end < text.length) {
-        const space = text.lastIndexOf(' ', end);
-        if (space > start) end = space;
+    // Page extraction keeps paragraph boundaries. Prefer a complete relevant
+    // passage over a slice joining controls, loading states, and change notes.
+    const bodyTerms = terms.filter(term => !metadata.includes(term));
+    const isArticle = document.kind === 'Post' || document.kind === 'Trip report';
+    let selected: { passage: string; matches: number } | undefined;
+    for (const block of document.content.split(/\n+/)) {
+        const passage = block.trim();
+        if (!passage || (!isArticle && STATUS_PASSAGE.test(passage))) continue;
+        const normalized = normalizeSearch(passage);
+        if (!bodyTerms.every(term => normalized.includes(term))) continue;
+        const matches = terms.filter(term => normalized.includes(term)).length;
+        if (matches && (!selected || matches > selected.matches)) selected = { passage, matches };
     }
-    return `${start ? '…' : ''}${text.slice(start, end).trim()}${end < text.length ? '…' : ''}`;
+    if (!selected) return document.description;
+    if (selected.passage.length <= EXCERPT_LENGTH) return selected.passage;
+
+    const passage = selected.passage;
+    const excerptTerms = bodyTerms.length ? bodyTerms : terms;
+    let best: { start: number; end: number; matches: number } | undefined;
+    for (const word of passage.matchAll(/\S+/gu)) {
+        if (!excerptTerms.some(term => normalizeSearch(word[0]).includes(term))) continue;
+        let start = Math.max(0, word.index - EXCERPT_LEADING_CONTEXT);
+        if (start) start = passage.indexOf(' ', start) + 1;
+        let end = Math.min(passage.length, start + EXCERPT_LENGTH);
+        if (end < passage.length) {
+            const space = passage.lastIndexOf(' ', end);
+            if (space > start) end = space;
+        }
+        const preview = normalizeSearch(passage.slice(start, end));
+        const matches = terms.filter(term => preview.includes(term)).length;
+        if (!best || matches > best.matches) best = { start, end, matches };
+        if (matches === terms.length) break;
+    }
+    if (!best) return document.description;
+    const { start, end } = best;
+    return `${start ? '…' : ''}${passage.slice(start, end).trim()}${end < passage.length ? '…' : ''}`;
 }

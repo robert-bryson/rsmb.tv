@@ -14,7 +14,7 @@ export function ProjectChangelog({ entries }: ProjectChangelogProps) {
             <dl className="space-y-3 text-sm">
                 {entries.map(({ date, notes }) => (
                     <div key={date} className="grid gap-x-4 gap-y-1 sm:grid-cols-[7.5rem_minmax(0,1fr)]">
-                        <dt className="text-zinc-500 tabular-nums whitespace-nowrap">
+                        <dt className="text-zinc-400 tabular-nums whitespace-nowrap">
                             <time dateTime={date}>
                                 {date.length === 7 ? formatMonthYear(date) : formatDate(date, 'short')}
                             </time>

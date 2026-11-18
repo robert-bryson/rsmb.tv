@@ -1053,7 +1053,7 @@ export function TornadoMap() {
 
     return (
         <div
-            className="relative h-full w-full overflow-hidden bg-[#020617] text-zinc-100"
+            className="map-controls relative h-full w-full overflow-hidden bg-[#020617] text-zinc-100"
             data-testid="tornado-map"
             data-map-state={mapState}
         >

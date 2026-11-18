@@ -22,6 +22,42 @@ body {
   flex-direction: column;
 }
 
+/* Shared hierarchy for the portfolio's reading and discovery pages. */
+.page-title {
+  color: #f4f4f5;
+  font-size: 1.75rem;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.section-title {
+  color: #e4e4e7;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+@media (min-width: 640px) {
+  .page-title { font-size: 2rem; }
+}
+
+/* The same navigation target size in each full-screen map. */
+.map-controls .maplibregl-ctrl-group button {
+  width: 44px;
+  height: 44px;
+}
+
+.map-controls .maplibregl-ctrl-group button:focus-visible {
+  outline: 2px solid #a78bfa;
+  outline-offset: -3px;
+}
+
+#tornado-summary-panel button,
+#tornado-summary-panel select {
+  min-height: 44px;
+  min-width: 44px;
+}
+
 /* Focus states */
 :focus-visible {
   outline: 2px solid #a78bfa;

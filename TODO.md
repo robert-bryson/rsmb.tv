@@ -68,9 +68,6 @@ Complete these checks before publishing the affected story.
 
 ### PCH 2024
 
-The imported Sheet row is marked published. The November 15 asset checks passed.
-All photos and processed routes are hosted. The asset check did not deploy the site.
-
 - [ ] Resolve the remaining chronology, mileage, and image privacy decisions in the [PCH source checks](docs/trips/pch-2024-galleries.md#publication-checks).
 
 ### Ocean Shores
@@ -78,9 +75,6 @@ All photos and processed routes are hosted. The asset check did not deploy the s
 - [ ] Confirm the travel dates against the [photo and GPS evidence](docs/reviews/2026-10-31-blog-and-trip-asset-refresh.md#source-date-conflict). Photo EXIF spans February 16–19. The manifest uses February 17–20.
 
 ### Kalaloch
-
-The manifest's 76 external asset URLs returned HTTP 200 on October 31, 2026.
-Source accuracy still needs review.
 
 - [ ] Compare each photo with its source. Verify alt text, dates, and gallery order.
 - [ ] Verify track dates against source records. Some filenames contain dates outside the stated trip period.
@@ -104,8 +98,7 @@ Use the [editorial review](docs/reviews/2026-10-29-trip-editorial-review.md) for
 ### Historical signal publication
 
 The historical signal is not ready for publication.
-The operational map's standing-record history is a separate dataset.
-Its November 9 snapshot already includes all calendar years from 1890 through 2026.
+Keep it separate from the operational map's standing-record data.
 
 - [ ] Build an ACIS extraction command that can continue after an interruption. Retain raw responses and request manifests.
 - [ ] Verify ACIS flags and certification fields against current RCC documentation.
@@ -206,6 +199,8 @@ Use fixed provider responses and UTC dates.
 Preserve passing publication checks when changing build scripts.
 
 - [ ] Remove scoped minimatch overrides when all three upstream consumers declare a patched compatible range. Run the [compatibility checks](README.md#lint-security-override).
+- [ ] Recheck the development-tool [picomatch advisory](https://github.com/advisories/GHSA-fc5q-39xc-vjpf) when a patched compatible release is available.
+  The [main branch review](docs/reviews/2026-11-17-main-branch-review.md#dependency-audit) records the audit scope and current result.
 - [ ] Extract the remaining temperature-map rendering, interaction, and loading code. Preserve browser behavior and URL contracts. Track tornado-map work in its own section above.
 - [ ] Reduce MapLibre loading and worker costs. Preserve the article JavaScript budgets.
 - [ ] Split document conversion, shortcode handling, and publication checks into separate modules. Keep `scripts/sync-blogs.js` as the coordinator. Retain compilation, formatting, and unsafe-content tests.

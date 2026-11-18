@@ -28,9 +28,10 @@ vi.mock('virtual:trip-content', () => ({
 }));
 
 describe('Home page', () => {
-    it('renders greeting', () => {
+    it('keeps the original personal introduction', () => {
         renderWithRouter(<Home />);
-        expect(screen.getByText(/Hi, I'm Robby/i)).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 1, name: "Hi, I'm Robby" })).toBeInTheDocument();
+        expect(screen.getByText('I build maps, data visualizations, and tools for exploring the world.')).toBeInTheDocument();
     });
 
     it('renders projects section', () => {

@@ -14,6 +14,19 @@ const moduleId = 'virtual:site-search';
 const textProperties = new Set(['title', 'description', 'summary', 'label', 'caption', 'alt', 'name', 'text', 'notes', 'stack', 'tech', 'placeholder']);
 const mdx = createProcessor({ remarkPlugins: [remarkFrontmatter] });
 const countryNames = new Intl.DisplayNames(['en'], { type: 'region' });
+const entityText = new Map<string, string>();
+function decodeEntities(text: string): string {
+    return text.replace(/&(?:#\d+|#x[\da-f]+|[a-z][\da-z]+);/gi, entity => {
+        if (!entityText.has(entity)) {
+            // Decode a single text token with the existing Markdown parser;
+            // neither source markup nor expressions are evaluated.
+            const tree = mdx.parse(entity) as { children: { children?: { type: string; value?: string }[] }[] };
+            const node = tree.children[0]?.children?.[0];
+            entityText.set(entity, node?.type === 'text' ? node.value ?? entity : entity);
+        }
+        return entityText.get(entity)!;
+    });
+}
 const compact = (text: string) => text.replace(/\s+/g, ' ').trim();
 
 interface StaticExpression {
@@ -60,7 +73,7 @@ export function extractArticleText(source: string): string {
     return compact(text.join(' '));
 }
 
-export function extractPageText(source: string): string {
+export function extractPageText(source: string, separateBlocks = false): string {
     const file = ts.createSourceFile('page.tsx', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
     const text: string[] = [];
     function literals(node: ts.Expression): string[] {
@@ -70,20 +83,26 @@ export function extractPageText(source: string): string {
     }
     function visit(node: ts.Node) {
         if (ts.isJsxAttribute(node) && !textProperties.has(node.name.getText(file))) return;
-        if (ts.isJsxText(node)) text.push(node.text);
+        if (ts.isJsxText(node)) text.push(decodeEntities(node.text));
         if (ts.isJsxExpression(node) && node.expression) {
             const parent = node.parent;
             if (!ts.isJsxAttribute(parent) || textProperties.has(parent.name.getText(file))) text.push(...literals(node.expression));
         }
         if (ts.isJsxAttribute(node) && node.initializer && ts.isStringLiteral(node.initializer)
-            && textProperties.has(node.name.getText(file))) text.push(node.initializer.text);
+            && textProperties.has(node.name.getText(file))) text.push(decodeEntities(node.initializer.text));
         if (ts.isPropertyAssignment(node) && textProperties.has(node.name.getText(file).replace(/^['"]|['"]$/g, ''))) {
             text.push(...literals(node.initializer));
         }
         ts.forEachChild(node, visit);
+        if (separateBlocks && ts.isJsxElement(node)
+            && ['p', 'li', 'h1', 'h2', 'h3', 'h4', 'figcaption', 'blockquote', 'div', 'section'].includes(node.openingElement.tagName.getText(file))) {
+            text.push('\n');
+        }
     }
     visit(file);
-    return compact(text.join(' '));
+    return separateBlocks
+        ? text.join(' ').replace(/[^\S\n]+/g, ' ').replace(/ *\n */g, '\n').replace(/\n{2,}/g, '\n').trim()
+        : compact(text.join(' '));
 }
 
 function importedFiles(file: string, source: string): string[] {
@@ -143,10 +162,10 @@ export function buildSiteSearchIndex(config: Pick<ResolvedConfig, 'root' | 'mode
         const source = fs.readFileSync(file, 'utf8');
         let text = pageTextCache.get(file);
         if (text === undefined) {
-            text = extractPageText(source);
+            text = extractPageText(source, true);
             pageTextCache.set(file, text);
         }
-        return [text, ...importedFiles(file, source).map(imported => pageText(imported, visited))].join(' ');
+        return [text, ...importedFiles(file, source).map(imported => pageText(imported, visited))].filter(Boolean).join('\n');
     }
 
     const documents: SiteSearchDocument[] = Object.entries(metadata).map(([url, page]) => {
@@ -159,10 +178,10 @@ export function buildSiteSearchIndex(config: Pick<ResolvedConfig, 'root' | 'mode
             description: page.description,
             kind: isMap ? 'Map' : project ? 'Project' : 'Page',
             keywords: project ? [project.slug, ...project.tech].join(' ') : undefined,
-            content: compact([
-                source ? pageText(source) : '', project?.description ?? '', project?.summary ?? '',
+            content: [
+                project?.summary ?? '', project?.description ?? '', source ? pageText(source) : '',
                 ...(project?.changelog?.flatMap(entry => entry.notes) ?? []),
-            ].join(' ')),
+            ].filter(Boolean).join('\n'),
         };
     });
 

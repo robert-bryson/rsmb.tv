@@ -25,7 +25,7 @@ export function ProjectPageHeader({ title, stack, description, actions }: Projec
   });
   return (
     <>
-      <h1 className="mb-2 text-2xl font-semibold text-zinc-100">{title}</h1>
+      <h1 className="page-title mb-2">{title}</h1>
       <p className="mb-6 text-sm text-zinc-400">{stack}</p>
 
       <p className="mb-6 leading-relaxed text-zinc-300">{description}</p>
@@ -34,8 +34,8 @@ export function ProjectPageHeader({ title, stack, description, actions }: Projec
         {actions.map((action) => {
           const isPrimary = action.variant === 'primary';
           const baseClassName = isPrimary
-            ? 'inline-flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-violet-500'
-            : 'inline-flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-700';
+            ? 'inline-flex min-h-11 items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-violet-700'
+            : 'inline-flex min-h-11 items-center gap-2 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-700';
 
           if (action.external) {
             return (

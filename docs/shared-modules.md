@@ -3,6 +3,14 @@
 Use these modules when adding a project or extending an existing project.
 Keep project-specific URLs, processing rules, and content with their callers.
 
+## Media queries
+
+Use [`useMediaQuery`](../src/hooks/useMediaQuery.ts) for a CSS media query.
+It retains one browser query for each query string.
+It removes the listener when the query changes or the component unmounts.
+It returns `false` during server rendering or when `matchMedia` is absent.
+The reduced-motion hook uses this same subscription.
+
 ## Map background recovery
 
 Use [`src/maps/recoverBasemap.ts`](../src/maps/recoverBasemap.ts) for provider deadlines, background recovery, retry, and cleanup.

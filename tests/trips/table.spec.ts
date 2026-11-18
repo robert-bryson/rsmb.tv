@@ -8,6 +8,43 @@ test.beforeEach(async ({ page }) => {
     await mockAtlasAssets(page);
 });
 
+test('table text aligns across columns for short, wrapped, and selected trip names', async ({ page }) => {
+    await page.goto(`${atlas}?panel=expanded&results=table`);
+    const table = page.getByRole('table', { name: 'Trip comparison', exact: true });
+    await expect(table.locator('tbody tr')).toHaveCount(2);
+    const expectAlignedText = async () => {
+        // Compare the first text lines, not the taller button hit areas.
+        const rows = await table.locator('tbody tr').evaluateAll(rows => rows.map(row => {
+            const locationIndex = [...row.closest('table')!.querySelectorAll('thead th')]
+                .findIndex(header => header.textContent?.trim().startsWith('Location'));
+            const location = row.children[locationIndex];
+            const bottoms = [row.querySelector('h2 button'), row.querySelector('td'), location.querySelector('button, p')].map(element => {
+                const text = element?.firstChild;
+                if (!text) throw new Error('Missing first-line text in the Trip, Motorcycle, or Location column');
+                const range = document.createRange();
+                range.selectNodeContents(text);
+                return range.getClientRects()[0].bottom;
+            });
+            return { trip: row.querySelector('h2')?.textContent, difference: Math.max(...bottoms) - Math.min(...bottoms) };
+        }));
+        for (const row of rows) expect(row.difference, `${row.trip}: first lines must align`).toBeLessThanOrEqual(2);
+    };
+    await expectAlignedText();
+    const row = table.locator('[data-trip-id="coastal-test"]');
+    const title = row.getByRole('button', { name: 'Coastal test trip', exact: true });
+    await title.evaluate(element => { element.style.maxWidth = '9ch'; });
+    expect(await title.evaluate(element => {
+        const range = document.createRange();
+        range.selectNodeContents(element.firstChild!);
+        return range.getClientRects().length;
+    })).toBeGreaterThan(1);
+    await expectAlignedText();
+    await title.click();
+    await expect(row).toHaveAttribute('data-selected', 'true');
+    expect((await title.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    await expectAlignedText();
+});
+
 test('clicking table row content selects and fits that trip', async ({ page }) => {
     await page.goto(`${atlas}?panel=expanded&results=table&camera=-100,40,3,0,0`);
     await expect(page.getByRole('columnheader', { name: 'Motorcycle', exact: true })).toBeVisible();

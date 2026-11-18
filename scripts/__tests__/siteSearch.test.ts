@@ -57,6 +57,14 @@ describe('site search index', () => {
         expect(text).not.toMatch(/private-/);
     });
 
+    it('decodes JSX entities and keeps paragraphs separate for search previews', () => {
+        const source = `<><h1>Record ages</h1><p>Explore today&apos;s records &amp; yesterday&#8217;s extremes.</p><p>Failed to load record data</p><p>Compare coastal stations.</p></>`;
+        expect(extractPageText(source, true)).toBe('Record ages\nExplore today\'s records & yesterday’s extremes.\nFailed to load record data\nCompare coastal stations.');
+        expect(extractPageText('<p>&copy; &#x1F30D; &unknown; &lt;script&gt;</p>')).toBe('© 🌍 &unknown; <script>');
+        expect(extractPageText(`<p>One &amp;amp; example {'Another &amp; example'}</p>`)).toBe('One &amp; example Another &amp; example');
+        expect(extractArticleText('Use `&amp;` in HTML.')).toBe('Use &amp; in HTML.');
+    });
+
     it('indexes all page routes, nested component text, project technologies, and complete articles', () => {
         const { root } = fixture();
         const watched: string[] = [];
@@ -186,7 +194,7 @@ describe('November 15 search review regressions', () => {
         write('src/components/Experience.tsx', `import About from '../pages/About'; export const Experience = () => <p>Wildfire mapping.</p>;`);
         write('src/pages/Private.tsx', 'export default () => <p>unregistered private text</p>;');
         const index = buildSiteSearchIndex({ root, mode: 'development', command: 'serve' });
-        expect(index.find(doc => doc.url === '/about')?.content).toBe('About this site. Wildfire mapping.');
+        expect(index.find(doc => doc.url === '/about')?.content).toBe('About this site.\nWildfire mapping.');
         expect(JSON.stringify(index)).not.toContain('unregistered private text');
     });
 

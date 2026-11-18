@@ -39,6 +39,8 @@ The supported Node.js lines are 22, 24, and 26.
 Use Node.js 22.23.5 or later in line 22, 24.22.3 or later in line 24, or 26.13.1 or later in line 26.
 See `package.json` for the exact version ranges.
 CI and Amplify install the npm version from `packageManager` before they install dependencies.
+Before validation, check `node --version` and `npm --version`.
+Use `.nvmrc` and `packageManager` as the reference values.
 
 ### Installation
 
@@ -249,7 +251,7 @@ Set `PLAYWRIGHT_WEBKIT=1` to include WebKit in the local fixture suite.
 Performance measurement tests run only in Chromium because they require its DevTools Protocol.
 The flight layout-shift check also requires Chromium's Layout Instability API.
 WebKit runs the other flight startup and accessibility checks.
-CI also runs trip chapter, gallery, and post-link fixtures in WebKit.
+CI also runs map layout, trip chapter, gallery, and post-link fixtures in WebKit.
 The production page-recovery suite includes axe scans at phone and desktop widths.
 Use `PLAYWRIGHT_WEBKIT=1 npm run test:accessibility` to run only those scans and their interaction checks.
 Automated scans complement keyboard and assistive-technology testing.
@@ -260,6 +262,7 @@ Parallel local builds can exceed those limits.
 Tornado browser tests use fixed tracks and map tiles.
 They check phone WebGL, desktop WebGL, and the SVG fallback.
 They also check recovery after a failed historical request while phone controls remain open.
+Layout checks cover Tornado playback controls at 200% text size.
 
 Flight tests check duration input, timing-basis counts, filtering, route counts, and current phone details.
 They also check filtered airport visits, readable time totals, and keyboard control of statistics sections.

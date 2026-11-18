@@ -127,7 +127,7 @@ export function TripAtlasResults(props: Props) {
                     className="sticky left-0 z-1 bg-zinc-950 p-3 font-normal">
                     <h2 className="font-semibold text-zinc-100"><button type="button" id={`atlas-select-${entry.id}`}
                         disabled={!entry.summary} aria-pressed={entry.id === props.selectedId} onClick={() => props.onSelect(entry.id)}
-                        className="min-h-11 text-left enabled:hover:text-violet-300 focus-visible:outline-2 focus-visible:outline-violet-400">
+                        className="flex min-h-11 items-start text-left enabled:hover:text-violet-300 focus-visible:outline-2 focus-visible:outline-violet-400">
                         {entry.title}
                     </button></h2>
                     {entry.id === props.selectedId && <span className="text-xs text-violet-300">Selected</span>}
@@ -167,7 +167,7 @@ export function TripAtlasResults(props: Props) {
                     {summary?.ridingDays !== undefined && <span>{summary.ridingDays} riding days</span>}
                     {summary?.motorcycle && <span>{summary.motorcycle}</span>}
                 </p>}
-                <TripAtlasLocations entry={entry} onExplore={props.onExploreLocation} />
+                <div className="mt-2"><TripAtlasLocations entry={entry} onExplore={props.onExploreLocation} /></div>
                 <ResultActions entry={entry} props={props} />
             </div>
         </li>;

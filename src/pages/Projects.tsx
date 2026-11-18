@@ -26,7 +26,7 @@ export function Projects() {
 
   return (
     <div>
-      <h1 ref={titleRef} tabIndex={-1} className="mb-2 text-2xl font-semibold text-zinc-100">Projects</h1>
+      <h1 ref={titleRef} tabIndex={-1} className="page-title mb-2">Projects</h1>
       <p className="mb-8 text-zinc-400">
         Maps, data explorations, and tools I've built. Find something to explore or use.
       </p>

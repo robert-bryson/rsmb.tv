@@ -67,7 +67,7 @@ interface TornadoSummaryPanelProps {
 function Stat({ label, value }: { label: string; value: string }) {
     return (
         <div className="rounded-md bg-zinc-900/80 p-2">
-            <div className="text-[10px] uppercase tracking-wide text-zinc-500">{label}</div>
+            <div className="text-xs text-zinc-500">{label}</div>
             <div className="mt-1 text-sm font-semibold text-zinc-100">{value}</div>
         </div>
     );
@@ -134,7 +134,7 @@ function TrendSparkline({ allYears, startYear, endYear }: {
 
     return (
         <div>
-            <div className="mb-1 flex items-center justify-between text-[10px] text-zinc-500">
+            <div className="mb-1 flex items-center justify-between text-xs text-zinc-500">
                 <span>Annual track segments, {minYear}–{maxYear}</span>
                 <span className="text-orange-400/80">— {slopeLabel}</span>
             </div>
@@ -155,10 +155,10 @@ function TrendSparkline({ allYears, startYear, endYear }: {
                 <line x1={0} y1={ry1} x2={W} y2={ry2}
                     stroke="#f97316" strokeWidth="1" strokeDasharray="3,2" opacity="0.75" />
             </svg>
-            <div className="flex justify-between text-[10px] text-zinc-600">
+            <div className="flex justify-between text-xs text-zinc-600">
                 <span>{minYear}</span><span>{maxYear}</span>
             </div>
-            <div className="mt-2 grid grid-cols-3 gap-1 text-[11px]">
+            <div className="mt-2 grid grid-cols-3 gap-1 text-xs">
                 {pills.map(({ label, selValue, histValue, higherIsBad }) => {
                     const higher = selValue > histValue;
                     const accent = higher
@@ -172,9 +172,9 @@ function TrendSparkline({ allYears, startYear, endYear }: {
                         : Math.round(histValue).toLocaleString();
                     return (
                         <div key={label} className="rounded bg-zinc-900 p-1.5">
-                            <div className="text-[10px] text-zinc-500">{label}</div>
+                            <div className="text-xs text-zinc-500">{label}</div>
                             <div className="font-semibold text-zinc-100">{selDisplay}</div>
-                            <div className={`text-[10px] ${accent}`}>{higher ? '▲' : '▼'} {histDisplay}</div>
+                            <div className={`text-xs ${accent}`}>{higher ? '▲' : '▼'} {histDisplay}</div>
                         </div>
                     );
                 })}
@@ -215,7 +215,7 @@ function TrendDualMetric({ allYears, startYear, endYear }: {
 
     return (
         <div>
-            <div className="mb-1 flex gap-3 text-[10px] text-zinc-500">
+            <div className="mb-1 flex gap-3 text-xs text-zinc-500">
                 <span className="flex items-center gap-1.5">
                     <span className="inline-block h-2.5 w-3 rounded-sm bg-emerald-600/70" />
                     Track segments/yr
@@ -241,7 +241,7 @@ function TrendDualMetric({ allYears, startYear, endYear }: {
                 })}
                 <polyline points={linePoints} fill="none" stroke="#fb7185" strokeWidth="1.3" opacity="0.9" />
             </svg>
-            <div className="flex justify-between text-[10px] text-zinc-600">
+            <div className="flex justify-between text-xs text-zinc-600">
                 <span>{firstYear} · ~{firstD} d/100</span>
                 <span>{lastYear} · ~{lastD} d/100</span>
             </div>
@@ -280,7 +280,7 @@ function TrendDecadeTable({ allYears }: { allYears: AnnualTornadoSummary[] }) {
     return (
         <div>
             {/* Metric toggle */}
-            <div className="mb-2 flex flex-wrap gap-1 text-[10px]">
+            <div className="mb-2 flex flex-wrap gap-1 text-xs">
                 {(Object.keys(DECADE_METRIC_LABELS) as DecadeMetric[]).map((key) => (
                     <button
                         key={key}
@@ -302,7 +302,7 @@ function TrendDecadeTable({ allYears }: { allYears: AnnualTornadoSummary[] }) {
                         ? value.toFixed(1)
                         : Math.round(value).toLocaleString();
                     return (
-                        <div key={d.label} className="flex items-center gap-2 text-[11px]">
+                        <div key={d.label} className="flex items-center gap-2 text-xs">
                             <span className="w-10 shrink-0 text-zinc-400">{d.label}</span>
                             <div className="relative h-4 min-w-0 flex-1 overflow-hidden rounded-sm bg-zinc-900">
                                 <div
@@ -359,7 +359,7 @@ function TrendByState({ stateBreakdown }: { stateBreakdown: StateAggregateSummar
 
     return (
         <div>
-            <div className="mb-2 flex flex-wrap gap-1 text-[10px]">
+            <div className="mb-2 flex flex-wrap gap-1 text-xs">
                 {(Object.keys(STATE_METRIC_LABELS) as StateMetric[]).map((key) => (
                     <button
                         key={key}
@@ -379,7 +379,7 @@ function TrendByState({ stateBreakdown }: { stateBreakdown: StateAggregateSummar
                         ? `${value.toFixed(0)}%`
                         : Math.round(value).toLocaleString();
                     return (
-                        <div key={row.state} className="flex items-center gap-2 text-[11px]">
+                        <div key={row.state} className="flex items-center gap-2 text-xs">
                             <span className="w-6 shrink-0 text-zinc-400">{row.state}</span>
                             <div className="relative h-3.5 min-w-0 flex-1 overflow-hidden rounded-sm bg-zinc-900">
                                 <div
@@ -494,27 +494,27 @@ function TrendWarnings({ warningSummary, startYear, endYear }: { warningSummary:
 
     return (
         <div className="space-y-3">
-            <div className="grid grid-cols-4 gap-1 text-[11px]">
+            <div className="grid grid-cols-4 gap-1 text-xs">
                 <div className="rounded bg-zinc-900 p-1.5">
-                    <div className="text-[10px] text-zinc-500">Warnings</div>
+                    <div className="text-xs text-zinc-500">Warnings</div>
                     <div className="font-semibold text-zinc-100">{selectedTotals.warnings.toLocaleString()}</div>
                 </div>
                 <div className="rounded bg-zinc-900 p-1.5">
-                    <div className="text-[10px] text-zinc-500">Report match</div>
+                    <div className="text-xs text-zinc-500">Report match</div>
                     <div className="font-semibold text-zinc-100">{percent(selectedTotals.matchedWarnings, selectedTotals.warnings)}%</div>
                 </div>
                 <div className="rounded bg-zinc-900 p-1.5">
-                    <div className="text-[10px] text-zinc-500">Watches</div>
+                    <div className="text-xs text-zinc-500">Watches</div>
                     <div className="font-semibold text-zinc-100">{selectedTotals.watches.toLocaleString()}</div>
                 </div>
                 <div className="rounded bg-zinc-900 p-1.5">
-                    <div className="text-[10px] text-zinc-500">Report match</div>
+                    <div className="text-xs text-zinc-500">Report match</div>
                     <div className="font-semibold text-zinc-100">{percent(selectedTotals.matchedWatches, selectedTotals.watches)}%</div>
                 </div>
             </div>
 
             <div>
-                <div className="mb-1 flex items-center justify-between text-[10px] text-zinc-500">
+                <div className="mb-1 flex items-center justify-between text-xs text-zinc-500">
                     <span>Storm-based warnings, {firstYear}-{lastYear}</span>
                     <span>{selectedTotals.tornadoWarnings.toLocaleString()} TOR warnings</span>
                 </div>
@@ -533,7 +533,7 @@ function TrendWarnings({ warningSummary, startYear, endYear }: { warningSummary:
                         );
                     })}
                 </svg>
-                <div className="flex justify-between text-[10px] text-zinc-600">
+                <div className="flex justify-between text-xs text-zinc-600">
                     <span>{firstYear}</span><span>{lastYear}</span>
                 </div>
                 <TornadoDataTable caption="Annual national warning data" columns={['Year', 'Warnings', 'TOR warnings', 'Matched warnings', 'Watches', 'Matched watches', 'Selected']}
@@ -542,7 +542,7 @@ function TrendWarnings({ warningSummary, startYear, endYear }: { warningSummary:
             </div>
 
             <div>
-                <div className="mb-2 flex flex-wrap gap-1 text-[10px]">
+                <div className="mb-2 flex flex-wrap gap-1 text-xs">
                     {(Object.keys(WARNING_AREA_METRIC_LABELS) as WarningAreaMetric[]).map((key) => (
                         <button
                             key={key}
@@ -559,7 +559,7 @@ function TrendWarnings({ warningSummary, startYear, endYear }: { warningSummary:
                         const value = row[areaMetric];
                         const pct = (value / maxWfoValue) * 100;
                         return (
-                            <div key={row.wfo} className="flex items-center gap-2 text-[11px]">
+                            <div key={row.wfo} className="flex items-center gap-2 text-xs">
                                 <span className="w-8 shrink-0 text-zinc-400">{row.wfo}</span>
                                 <div className="relative h-3.5 min-w-0 flex-1 overflow-hidden rounded-sm bg-zinc-900">
                                     <div
@@ -601,29 +601,29 @@ function TrendSnapshot({ annualSummary, warningSummary, startYear, endYear, stat
         <section className="space-y-5 border-t border-zinc-800 pt-4">
             <p className="text-xs leading-relaxed text-zinc-400">Comparisons exclude the current, incomplete calendar year. Rates use recorded track segments; changes in reporting affect long-term counts.</p>
             <div>
-                <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">A · Annual count vs selection</div>
+                <div className="mb-2 text-xs text-zinc-500">A · Annual count vs selection</div>
                 <TrendSparkline allYears={fullHistory} startYear={startYear} endYear={endYear} />
             </div>
             <div>
-                <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">B · Frequency vs deaths per 100 segments</div>
+                <div className="mb-2 text-xs text-zinc-500">B · Frequency vs deaths per 100 segments</div>
                 <TrendDualMetric allYears={fullHistory} startYear={startYear} endYear={endYear} />
                 <TornadoDataTable caption="Annual track data" columns={['Year', 'Track segments', 'EF2+ segments', 'Deaths', 'Deaths per 100 segments', 'Selected']}
                     rows={fullHistory.map(row => [row.year, row.count, row.ef2Plus, row.deaths, (row.count ? row.deaths / row.count * 100 : 0).toFixed(1),
                         row.year >= startYear && row.year <= endYear ? 'Yes' : 'No'])} />
             </div>
             <div>
-                <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">C · Decade comparison</div>
+                <div className="mb-2 text-xs text-zinc-500">C · Decade comparison</div>
                 <TrendDecadeTable allYears={fullHistory} />
             </div>
             {stateBreakdown.length > 0 && (
                 <div>
-                    <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">D · Top states</div>
+                    <div className="mb-2 text-xs text-zinc-500">D · Top states</div>
                     <TrendByState stateBreakdown={stateBreakdown} />
                 </div>
             )}
             {warningSummary && (
                 <div>
-                    <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">E · National warnings and watches</div>
+                    <div className="mb-2 text-xs text-zinc-500">E · National warnings and watches</div>
                     <p className="mb-2 text-xs leading-relaxed text-zinc-400">National totals are independent of state and EF filters. Report matching is approximate and is not formal warning verification.</p>
                     <TrendWarnings warningSummary={warningSummary} startYear={startYear} endYear={endYear} />
                 </div>
@@ -682,11 +682,11 @@ export function TornadoSummaryPanel({
             aria-label="Tornado controls and details"
             tabIndex={-1}
             onKeyDown={event => { if (event.key === 'Escape') onMobileClose(); }}
-            className={`absolute inset-x-3 bottom-8 top-28 z-40 overflow-y-auto overscroll-contain rounded-lg border border-zinc-700/80 bg-zinc-950/95 text-sm text-zinc-300 shadow-2xl backdrop-blur-md md:bottom-auto md:left-auto md:top-20 md:z-20 md:max-h-[calc(100dvh-220px)] md:w-80 ${mobileOpen ? 'block' : 'hidden md:block'}`}
+            className={`absolute inset-x-3 bottom-8 top-28 z-40 overflow-y-auto overscroll-contain rounded-lg border border-zinc-700/80 bg-zinc-950/95 text-sm text-zinc-300 shadow-2xl backdrop-blur-md md:bottom-auto md:left-auto md:top-28 md:z-20 md:max-h-[calc(100dvh-252px)] md:w-80 ${mobileOpen ? 'block' : 'hidden md:block'}`}
         >
             <div className="sticky top-0 z-10 flex items-start justify-between gap-3 bg-zinc-950/95 p-4">
                 <div>
-                    <div className="text-xs uppercase tracking-wide text-zinc-500">Tornado Tracks</div>
+                    <div className="text-xs text-zinc-500">Tornado Tracks</div>
                     <h2 className="text-lg font-semibold text-zinc-100">{stats.count.toLocaleString()} tracks</h2>
                     {selectedState && (
                         <div className="mt-0.5 text-xs text-sky-300">{selectedStateName ?? selectedState}</div>
@@ -741,7 +741,7 @@ export function TornadoSummaryPanel({
                     <div className="mb-4 space-y-3">
                         {!densityAvailable && <p role="status" className="text-xs leading-relaxed text-amber-300">WebGL is unavailable. Showing a track overview; density rendering requires WebGL.</p>}
                         <div>
-                            <div className="mb-1.5 text-xs uppercase tracking-wide text-zinc-500">Mode</div>
+                            <div className="mb-1.5 text-xs text-zinc-500">Mode</div>
                             <div className="grid grid-cols-3 rounded-md bg-zinc-900 p-1 text-xs">
                                 {(['tracks', 'density', 'trends'] as TornadoMode[]).map((value) => (
                                     <button
@@ -759,7 +759,7 @@ export function TornadoSummaryPanel({
                         </div>
 
                         <div>
-                            <div className="mb-1.5 text-xs uppercase tracking-wide text-zinc-500">Scale</div>
+                            <div className="mb-1.5 text-xs text-zinc-500">Scale</div>
                             <div className="grid grid-cols-4 gap-1 text-xs">
                                 {(['all', 'ef1plus', 'ef2plus', 'ef3plus'] as TornadoScaleFilter[]).map((value) => (
                                     <button
@@ -823,7 +823,7 @@ export function TornadoSummaryPanel({
                         )}
 
                         <div>
-                            <div className="mb-1.5 text-xs uppercase tracking-wide text-zinc-500">Color</div>
+                            <div className="mb-1.5 text-xs text-zinc-500">Color</div>
                             <div className="grid grid-cols-3 gap-1 text-xs">
                                 {(Object.keys(COLOR_MODE_LABELS) as TornadoColorMode[]).map((value) => (
                                     <button
@@ -841,7 +841,7 @@ export function TornadoSummaryPanel({
                     </div>
 
                     <div className="mb-4">
-                        <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">Legend</div>
+                        <div className="mb-2 text-xs text-zinc-500">Legend</div>
                         {colorMode === 'year' ? (
                             <>
                                 <div
@@ -879,7 +879,7 @@ export function TornadoSummaryPanel({
                             trendsLoading={trendsLoading} trendsError={trendsError} onRetryTrends={onRetryTrends} />
                     ) : (
                         <section className="border-t border-zinc-800 pt-4">
-                            <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">Notable</div>
+                            <div className="mb-2 text-xs text-zinc-500">Notable</div>
                             <div className="space-y-1.5">
                                 {notableEvents.slice(0, 6).map((event) => (
                                     <button

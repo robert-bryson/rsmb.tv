@@ -57,7 +57,7 @@ export function Posts() {
         <div>
             <div className="mb-6">
                 <div className="flex flex-wrap items-center justify-between gap-3">
-                    <h1 ref={titleRef} tabIndex={-1} className="text-3xl font-bold text-zinc-100">Posts</h1>
+                    <h1 ref={titleRef} tabIndex={-1} className="page-title">Posts</h1>
                     <nav aria-label="Post type" className="ml-auto flex w-fit max-w-full flex-wrap gap-1 rounded-lg bg-zinc-900 p-1">
                         {([
                             ['all', 'All'],
@@ -82,7 +82,7 @@ export function Posts() {
                     <p className="min-w-0 flex-[1_1_12rem] text-zinc-400">{metadata.description}</p>
                     {(allTags.length > 0 || countries.length > 0) && <PostFilters key={activeType} count={activeFilterCount}>
                         {allTags.length > 0 && <nav aria-label="Post tags" className="flex flex-wrap items-baseline gap-2">
-                            <p className="mr-1 text-xs font-semibold uppercase tracking-wider text-zinc-400">Tags</p>
+                            <p className="mr-1 text-sm font-medium text-zinc-300">Tags</p>
                             <PostFilterLink
                                 to={createPostsUrl({ type: activeType, country: activeCountry, region: activeRegion, query })}
                                 active={!activeTag}
@@ -158,7 +158,7 @@ export function Posts() {
                                     <div className="min-w-0 flex-1">
                                         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-zinc-400">
                                             <time dateTime={post.date}>{formatDate(post.date)}</time>
-                                            <span className="text-xs uppercase text-zinc-400">
+                                            <span className="text-xs text-zinc-400">
                                                 {isTrip ? 'Trip report' : 'Writing'}
                                             </span>
                                         </div>

@@ -9,6 +9,13 @@ Every search word must match. Words can occur in different fields or within long
 Search ignores case, accents, repeated words, and punctuation.
 Title matches rank ahead of matches in descriptions, technologies, and body text.
 Each result has a title, content type, and short excerpt.
+Title and metadata matches use the page description as their preview.
+For body matches, first find paragraphs that contain every required body word.
+Then choose the paragraph with the most matching query words.
+If no paragraph qualifies, use the description. Keep the result searchable.
+Long previews use a nearby group of matching words.
+Project previews omit loading and error messages.
+Decode JSX entity text once. Keep literal code examples unchanged.
 Matching words are highlighted. Empty queries do not display results.
 
 Use Up and Down to move between results.
@@ -64,6 +71,7 @@ Changes to watched article, manifest, metadata, and component files reload the i
 The parser reads literal text and known text properties.
 It accepts static string expressions, template strings, and literal string arrays.
 It does not evaluate expressions or render pages to extract dynamic runtime data.
+Page extraction retains paragraph boundaries for result previews.
 Keep descriptive text in these sources when adding a page.
 Add an extraction test when introducing another content form.
 

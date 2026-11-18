@@ -1372,7 +1372,7 @@ export function TemperatureMap() {
     }, [loading, styleVersion, renderKey, viewMode]);
 
     return (
-        <div data-testid="temperature-map" data-map-state={error || mapFailure ? 'error' : styleVersion && !loading && renderedView === renderKey && basemapState !== 'loading' ? basemapState === 'unavailable' ? 'degraded' : 'ready' : 'loading'} className="relative h-full w-full [&_.maplibregl-ctrl-group_button]:h-11 [&_.maplibregl-ctrl-group_button]:w-11">
+        <div data-testid="temperature-map" data-map-state={error || mapFailure ? 'error' : styleVersion && !loading && renderedView === renderKey && basemapState !== 'loading' ? basemapState === 'unavailable' ? 'degraded' : 'ready' : 'loading'} className="map-controls relative h-full w-full">
             <div ref={mapContainer} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
 
             {(error || mapFailure) && (

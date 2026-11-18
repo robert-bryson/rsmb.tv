@@ -58,6 +58,8 @@ Reduced-motion settings disable the slide animation.
 Expanded view offers **Cards** and **Table**.
 Cards include descriptions, dates, exact mileage, riding days, motorcycles, locations, and report links.
 The table supports column sorting, trip selection through titles, and report links.
+Each row aligns the first line of its title, facts, and locations.
+Title buttons retain their full touch height when the text fits on one line.
 Select **Customize table columns** to show, hide, or reorder columns.
 On short screens, column settings float over the panel or map to retain usable space.
 Trip names remain visible and first. They stay pinned during horizontal scrolling.
