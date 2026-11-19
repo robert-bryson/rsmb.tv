@@ -19,6 +19,7 @@ import { useSearchQuery } from '../hooks/useSearchQuery';
 import { MAPLIBRE_STYLESHEET, moduleLoader } from '../navigation/moduleLoader';
 import { staticPageMetadata } from '../utils/pageMetadata';
 import locationDownload from '../../projects/ski-status/data/locations.json?url';
+import terrainDownload from '../../projects/ski-status/data/resort-terrain.pmtiles?url';
 
 const SkiStatusMap = lazy(moduleLoader(() => import('../features/ski-status/SkiStatusMap'), MAPLIBRE_STYLESHEET));
 const { countries, regions } = skiRegionOptions(skiAreas);
@@ -65,6 +66,7 @@ export default function SkiStatus() {
     const selectedId = searchParams.get('area');
     const colors = readMarkerMode(searchParams.get('color'));
     const terrain = searchParams.get('terrain') === '1';
+    const resortTerrain = searchParams.get('skiTerrain') !== '0';
     const legend = markerLegend(colors, units, pass === 'indy-discounts');
     const areas = useMemo(() => filterSkiAreas(skiAreas, { query, region, pass, night, skiing }), [query, region, pass, night, skiing]);
     const selected = areas.find(area => area.id === selectedId);
@@ -205,6 +207,10 @@ export default function SkiStatus() {
                         <input type="checkbox" checked={terrain} onChange={event => setParam('terrain', event.target.checked ? '1' : undefined)}
                             className="size-4 accent-cyan-400" /> Terrain relief
                     </label>
+                    <label className="flex min-h-11 items-center gap-2" title="Shows mapped footprints, runs, and lifts at resort zoom">
+                        <input type="checkbox" checked={resortTerrain} onChange={event => setParam('skiTerrain', event.target.checked ? undefined : '0')}
+                            className="size-4 accent-cyan-400" /> Ski terrain
+                    </label>
                 </div>
                 {legend.length > 0 && <ul aria-label="Resort dot legend" className="flex flex-wrap gap-x-3 gap-y-1 border-b border-zinc-800 px-3 py-2 text-xs text-zinc-300">
                     {legend.map(({ color, label, family, multiple }) => <li key={label} className="flex items-center gap-1.5">
@@ -217,7 +223,7 @@ export default function SkiStatus() {
                 <div className={`flex-1 ${selected ? 'min-h-96 lg:min-h-0' : 'min-h-0'}`}>
                     {(showMap || mapOpened) && <ErrorBoundary fallback={<MapMessage failed />}><Suspense fallback={<MapMessage />}>
                         <SkiStatusMap areas={areas} selected={selected} colors={colors} passFilter={pass} terrain={terrain} visible={showMap} inView={inView} units={units}
-                            onVisibleAreasChange={updateVisibleAreas} onSelect={selectArea} />
+                            resortTerrain={resortTerrain} onVisibleAreasChange={updateVisibleAreas} onSelect={selectArea} />
                     </Suspense></ErrorBoundary>}
                 </div>
             </section>
@@ -226,6 +232,7 @@ export default function SkiStatus() {
             <span>Locations and terrain</span>
             {Object.entries(locationAttribution).map(([name, url]) => <a key={name} href={url} className="underline underline-offset-2 hover:text-zinc-200">{name}</a>)}
             <a href={locationDownload} download="ski-status-locations.json" className="underline underline-offset-2 hover:text-zinc-200">Marker data</a>
+            <a href={terrainDownload} download="ski-status-resort-terrain.pmtiles" className="underline underline-offset-2 hover:text-zinc-200">Terrain data</a>
             <a href={locationLicense} className="underline underline-offset-2 hover:text-zinc-200">ODbL</a>
         </footer>
     </main>;

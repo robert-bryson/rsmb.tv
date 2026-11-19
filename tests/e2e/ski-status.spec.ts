@@ -38,7 +38,7 @@ async function captureMap(page: Page, { phone = false, state = 'ready' }: { phon
     });
     await page.getByRole('link', { name: 'Open map: ski-status', exact: true }).click();
     if (phone) await page.getByRole('button', { name: 'Map', exact: true }).click();
-    await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', state);
+    await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', state, { timeout: 10_000 });
     const renderer = await page.evaluateHandle(() => (window as ReviewWindow).skiStatusMap!);
     await expect.poll(() => renderer.evaluate(map => map.loaded() && !map.isMoving())).toBe(true);
     return renderer;
@@ -722,6 +722,76 @@ test('loads terrain only when enabled and zoomed in, with CARTO underneath', asy
     expect(await renderer.evaluate(map => Boolean(map.getLayer('background')))).toBe(true);
     await page.getByRole('checkbox', { name: 'Terrain relief' }).uncheck();
     await expect.poll(() => renderer.evaluate(map => Boolean(map.getSource('ski-terrain-dem')))).toBe(false);
+    await renderer.dispose();
+});
+
+test('loads and filters resort terrain by zoom and pass using byte ranges', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await prepare(page);
+    const requests: string[] = [];
+    page.on('request', request => {
+        const url = new URL(request.url());
+        if (url.pathname.endsWith('/resort-terrain.pmtiles') && !url.searchParams.has('import')) requests.push(request.headers().range ?? '');
+    });
+    const renderer = await captureMap(page);
+    const skiTerrain = page.getByRole('checkbox', { name: 'Ski terrain', exact: true });
+    await expect(skiTerrain).toBeChecked();
+    expect(requests).toEqual([]);
+
+    const layers = ['ski-resort-footprints', 'ski-resort-lifts', 'ski-resort-runs', 'ski-resort-lift-stations'];
+    const counts = () => renderer.evaluate((map, ids) => ids.map(id => map.getLayer(id)
+        ? map.queryRenderedFeatures({ layers: [id] }).length : 0), layers);
+    await renderer.evaluate(map => { map.jumpTo({ center: [-119.896153, 38.943699], zoom: 13.05 }); });
+    await expect.poll(async () => (await counts()).every(count => count > 0)).toBe(true);
+    expect(requests.length).toBeGreaterThan(0);
+    expect(requests.every(range => /^bytes=\d+-\d+$/.test(range))).toBe(true);
+
+    const liftPosition = await renderer.evaluate(map => {
+        const { clientWidth, clientHeight } = map.getContainer();
+        const lifts = map.queryRenderedFeatures({ layers: ['ski-resort-lifts'] })
+            .filter(feature => feature.properties.name === 'Heavenly Gondola');
+        for (const { geometry } of lifts) {
+            const paths = geometry.type === 'LineString' ? [geometry.coordinates]
+                : geometry.type === 'MultiLineString' ? geometry.coordinates : [];
+            for (const points of paths) {
+                for (const [index, first] of points.slice(0, -1).entries()) {
+                    const second = points[index + 1];
+                    const { x, y } = map.project([(first[0] + second[0]) / 2, (first[1] + second[1]) / 2]);
+                    if (x >= 100 && x <= clientWidth - 100 && y >= 100 && y <= clientHeight - 100) return { x, y };
+                }
+            }
+        }
+    });
+    expect(liftPosition).toBeDefined();
+    await page.locator('.maplibregl-canvas').hover({ position: liftPosition });
+    await expect(page.getByText('Heavenly Gondola · gondola', { exact: true })).toBeVisible();
+
+    await page.getByRole('checkbox', { name: 'In map view' }).check();
+    const pass = page.getByLabel('Pass', { exact: true });
+    await pass.selectOption('ikon');
+    await expect.poll(counts).toEqual([0, 0, 0, 0]);
+    await pass.selectOption('epic');
+    await expect.poll(async () => (await counts()).every(count => count > 0)).toBe(true);
+
+    await skiTerrain.uncheck();
+    await expect.poll(counts).toEqual([0, 0, 0, 0]);
+    await expect(page).toHaveURL(/skiTerrain=0/);
+    await skiTerrain.check();
+    await expect.poll(async () => (await counts()).every(count => count > 0)).toBe(true);
+    await renderer.evaluate(map => { map.jumpTo({ zoom: 10 }); });
+    await expect.poll(counts).toEqual([0, 0, 0, 0]);
+    await renderer.dispose();
+});
+
+test('keeps the basemap and resort dots available if the terrain archive fails', async ({ page }) => {
+    await prepare(page);
+    await page.route('**/resort-terrain.pmtiles', route => route.fulfill({ status: 503, body: 'Unavailable' }));
+    const renderer = await captureMap(page);
+    await renderer.evaluate(map => { map.jumpTo({ center: [-119.896153, 38.943699], zoom: 12 }); });
+    await expect(page.getByText('Ski terrain unavailable.', { exact: true })).toBeVisible();
+    await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
+    expect(await renderer.evaluate(map => map.queryRenderedFeatures({ layers: ['ski-area-points'] })
+        .some(feature => feature.properties.areaId === 'heavenly'))).toBe(true);
     await renderer.dispose();
 });
 

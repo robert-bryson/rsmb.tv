@@ -61,7 +61,9 @@ An acreage value such as `200+` gives a minimum. The table sorts by that minimum
 
 The globe uses the hosted CARTO Dark Matter vector style. Turn on **Terrain relief** to see shaded slopes from zoom level 8. CARTO continues to provide the streets and labels. Mapterhorn supplies the elevation tiles. [CARTO Basemaps](https://docs.carto.com/faqs/carto-basemaps), [MapLibre projections](https://maplibre.org/maplibre-style-spec/types/#projectiondefinition), [Mapterhorn elevation tiles](https://mapterhorn.com/data-access/)
 
-CARTO publishes Dark Matter, Voyager, and Positron. MapTiler offers a separate Winter style with ski runs for a future resort view. [CARTO styles](https://carto.com/basemaps/#styles), [MapTiler topographic and winter maps](https://www.maptiler.com/maps/outdoor-topo/)
+Zoom in to level 11 to see ski-area outlines, runs, and lifts for the current results. Dashed gold lines show lifts. Run colors follow the local difficulty scale. Cyan runs show Nordic trails and violet runs show ski touring routes. Lift stations appear at zoom level 13. Hover or tap a run or lift to see its mapped name and type. Use **Ski terrain** to hide or show these layers.
+
+CARTO publishes Dark Matter, Voyager, and Positron. MapTiler offers a separate Winter basemap. [CARTO styles](https://carto.com/basemaps/#styles), [MapTiler topographic and winter maps](https://www.maptiler.com/maps/outdoor-topo/)
 
 ## Catalog
 
@@ -73,9 +75,10 @@ Each area has a published fact or a mapped terrain value. The catalog has at lea
 | --- | --- |
 | [Area statistics](data/areas.json) | Resort sites, published mountain statistics, and official report links. Empty fields display as unknown. |
 | [Locations and mapped terrain](data/locations.json) | Points and mapped values from the November 16 OpenSkiData build. The file also includes points from OpenStreetMap and operator directions. Each record has source links and the file has ODbL attribution. |
+| [Resort terrain index](data/resort-terrain.json) and [PMTiles archive](data/resort-terrain.pmtiles) | Footprints, runs, lifts, and lift stations for 533 catalog areas. The index records the source date, checksums, and which areas share terrain. |
 | [Pass memberships](data/passes-2026-27.json) | Family access for the 2026/27 season. The details show discounts and listings with unconfirmed access. Each entry links to a source. |
 
-Use the same area ID in the three files. Add one point per area and one membership per pass family. Put the country of the representative point in `country`. Put verified additional countries of a shared area in `otherCountries`. Add state or province codes to North American areas that use them.
+Use the same area ID in the area, location, and pass records. The terrain importer uses those IDs. Add one point per area and one membership per pass family. Put the country of the representative point in `country`. Put verified additional countries of a shared area in `otherCountries`. Add state or province codes to North American areas that use them.
 
 Use the operator's statistics when the source names the terrain or equipment that the figures cover. Keep the source of the pass rules with the membership. Use absolute HTTPS source links. The catalog checks IDs, references, statistics, and the format of geographic codes. It checks the location attribution and the pass season. [Catalog validation](../../src/features/ski-status/catalog.ts)
 
@@ -279,7 +282,17 @@ Give each ski area a conditions panel in its details. Match reports and forecast
 
 ### Runs and lifts at resort zoom
 
-Show named runs, lift lines, and terminals from OpenSkiData at resort zoom. Use local difficulty grades. Identify official and unofficial trail areas. Show run length, maximum slope, and grooming status where sources supply them. Link to the resort map and identify gaps in the map data. Load one resort at a time. Check byte range requests, caching, and attribution if you serve PMTiles. [OpenSkiData runs and lifts](https://www.openskidata.org/), [PMTiles on cloud storage](https://docs.protomaps.com/pmtiles/cloud-storage), [Repository tile delivery review](../../docs/reviews/2026-11-13-geospatial-delivery-research.md)
+OpenSkiMap uses OpenSkiData. Its pipeline combines OpenStreetMap ski features with Skimap.org area records. It adds place names from Who’s On First and elevations from Mapterhorn. The ski-status overlay uses a snapshot of the downloadable data under ODbL. [OpenSkiData source and license](https://www.openskidata.org/#license)
+
+The November 16, 2026 snapshot gives the catalog 406 footprints, 40,688 run features, 5,535 lifts, and 7,148 lift stations. A run feature can be one segment of a trail. Shared ski areas can use the same geometry. Use operator reports to check current openings and closures. [OpenSkiData datasets](https://www.openskidata.org/#whats-in-the-data)
+
+To update the overlay, download the GeoPackage and its matching `metadata.json`. Use the system Python with GDAL bindings and install Tippecanoe. The importer matches source IDs and checks the catalog location against mapped footprints when the source IDs leave a gap. Update both output files together. [OpenSkiData downloads](https://www.openskidata.org/#downloads), [Tippecanoe](https://github.com/felt/tippecanoe)
+
+```bash
+python3 projects/ski-status/scripts/build-resort-terrain.py path/to/openskidata.gpkg path/to/metadata.json
+```
+
+The app serves the archive with its site assets. Check HTTP `206 Partial Content` and `Content-Range` on the hosted archive. Keep the stored byte offsets when you move it to object storage. [PMTiles on cloud storage](https://docs.protomaps.com/pmtiles/cloud-storage), [Repository tile delivery review](../../docs/reviews/2026-11-13-geospatial-delivery-research.md)
 
 ### Access routes and webcams
 

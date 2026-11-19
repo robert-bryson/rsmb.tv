@@ -68,6 +68,7 @@
     "maplibre-gl": "^6.18.0",
     "photoswipe": "^5.4.4",
     "photoswipe-dynamic-caption-plugin": "^1.2.7",
+    "pmtiles": "4.5.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-globe.gl": "^2.38.0",
