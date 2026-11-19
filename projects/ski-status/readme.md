@@ -42,6 +42,8 @@ When **Table** hides the map on a narrow screen, the table uses the last visible
 
 The default map shows one cyan dot per ski area. Use **Color by** to show pass access, skiable area, vertical drop, summit elevation, or highest lift terminal. The legend shows ranges in your selected units. Gray marks an unknown value. A gold outline shows the selected area.
 
+In **Map** view, the second column follows **Color by**. Select its header to sort by the displayed number. With **Resort dots** selected, the column shows the active sort field or skiable area when you sort by name.
+
 With **Pass access** selected, the map shows a brand icon for each area with included access. The icons grow as you zoom in. A yellow **+** marks an area with access on more than one pass. Use the pass filter to choose which icon appears on a multi-pass badge. Select an area to see all its passes.
 
 An orange dot marks an area with discount-only access. With **Indy discounts** selected, the map uses orange for each Indy discount. A gray dot marks an area without confirmed access. The legend shows the pass for each icon.

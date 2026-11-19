@@ -24,6 +24,41 @@ describe('ski-status comparison table', () => {
         expect(onSort).toHaveBeenCalledWith('acres');
     });
 
+    it.each([
+        ['acres', 'Skiable area', '2,614 ac'], ['verticalFt', 'Vertical drop', '2,538 ft'],
+        ['summitFt', 'Summit elevation', '11,068 ft'], ['highestLiftTerminalFt', 'Highest lift terminal', 'Unknown'],
+    ] as const)('shows the %s color value in the compact list and can sort by it', (colorBy, label, value) => {
+        const alta = skiAreas.find(area => area.id === 'alta')!;
+        const onSort = vi.fn();
+        render(<SkiAreaTable areas={[alta]} units="imperial" sort={{ key: 'region', direction: 'asc' }}
+            compact colorBy={colorBy} inView={false} selectedButtonRef={null} onSort={onSort} onSelect={vi.fn()} />);
+
+        const list = within(screen.getByRole('region', { name: 'Ski area list' }));
+        expect(list.getAllByRole('columnheader')).toHaveLength(2);
+        expect(list.getByRole('cell', { name: value })).toBeVisible();
+        fireEvent.click(list.getByRole('button', { name: label }));
+        expect(onSort).toHaveBeenCalledWith(colorBy);
+    });
+
+    it('uses the map badge and access labels in the compact pass column', () => {
+        const areas = skiAreas.filter(area => ['alta', 'north-cascade-heli', 'big-snow-american-dream'].includes(area.id));
+        const props = {
+            areas, units: 'imperial', sort: { key: 'name', direction: 'asc' }, compact: true, colorBy: 'pass', inView: false,
+            selectedButtonRef: null, onSort: vi.fn(), onSelect: vi.fn(),
+        } as const;
+        const { rerender } = render(<SkiAreaTable {...props} passFilter="mountain-collective" />);
+
+        const list = within(screen.getByRole('region', { name: 'Ski area list' }));
+        expect(list.getByRole('columnheader', { name: 'Pass access' })).toBeVisible();
+        const multiPass = list.getByRole('cell', { name: 'Mountain Collective and other passes' });
+        expect(multiPass.querySelector('img')).toHaveAttribute('src', expect.stringContaining('mountain-collective.png'));
+        expect(list.getByRole('cell', { name: 'No confirmed access' })).toBeVisible();
+        expect(list.getByRole('cell', { name: 'Discount only' })).toBeVisible();
+
+        rerender(<SkiAreaTable {...props} passFilter="indy-discounts" />);
+        expect(list.getByRole('cell', { name: 'Indy discount' })).toBeVisible();
+    });
+
     it('identifies the reason for an empty table', () => {
         const props = {
             areas: [], units: 'imperial', sort: { key: 'name', direction: 'asc' }, compact: false,

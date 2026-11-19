@@ -28,6 +28,7 @@ const passColors: Record<PassFamily, string> = {
     ikon: '#c084fc', epic: '#fb7185', indy: '#4ade80', 'mountain-collective': '#60a5fa',
 };
 const discountOnly = { color: '#fb923c', label: 'Discount only' };
+const indyDiscount = { ...discountOnly, label: 'Indy discount' };
 const unconfirmedPass = { color: unknown.color, label: 'No confirmed access' };
 const numericColors = ['#bae6fd', '#38bdf8', '#818cf8', '#e879f9'] as const;
 const thresholds = {
@@ -40,7 +41,7 @@ const thresholds = {
 export function markerLegend(mode: MarkerMode, units: SkiUnits, indyDiscounts = false): LegendEntry[] {
     if (mode === 'default') return [];
     if (mode === 'pass') {
-        if (indyDiscounts) return [{ ...discountOnly, label: 'Indy discount' }];
+        if (indyDiscounts) return [indyDiscount];
         return [...passFamilySchema.options.map(family => ({ color: passColors[family], label: passNames[family], family })),
             { color: multiplePassColor, label: 'Multiple passes', multiple: true }, discountOnly, unconfirmedPass];
     }
@@ -54,20 +55,25 @@ export function passBadgeId(family: PassFamily, multiple: boolean) {
     return multiple ? `${family}-plus` as const : family;
 }
 
+export function passAccessAppearance(area: SkiArea, passFilter?: PassFilter): LegendEntry {
+    if (passFilter === 'indy-discounts' && area.passes.some(membership => matchesPassFilter(membership, passFilter))) {
+        return indyDiscount;
+    }
+    const included = passFamilySchema.options.filter(family =>
+        area.passes.some(pass => pass.family === family && pass.access === 'included'));
+    if (!included.length) return area.passes.some(pass => pass.access === 'discount') ? discountOnly : unconfirmedPass;
+
+    const preferredPass = passFilter && passFilterFamily(passFilter);
+    const family = preferredPass && included.includes(preferredPass) ? preferredPass : included[0];
+    const multiple = included.length > 1;
+    return { color: multiple ? multiplePassColor : passColors[family], label: passNames[family], family, multiple };
+}
+
 export function markerAppearance(area: SkiArea, mode: MarkerMode, passFilter?: PassFilter): MarkerAppearance {
     if (mode === 'default') return { color: defaultColor };
     if (mode === 'pass') {
-        if (passFilter === 'indy-discounts' && area.passes.some(membership => matchesPassFilter(membership, passFilter))) {
-            return { color: discountOnly.color };
-        }
-        const included = passFamilySchema.options.filter(family =>
-            area.passes.some(pass => pass.family === family && pass.access === 'included'));
-        if (!included.length) return { color: area.passes.some(pass => pass.access === 'discount') ? discountOnly.color : unconfirmedPass.color };
-
-        const preferredPass = passFilter && passFilterFamily(passFilter);
-        const primary = preferredPass && included.includes(preferredPass) ? preferredPass : included[0];
-        const multiple = included.length > 1;
-        return { color: multiple ? multiplePassColor : passColors[primary], passBadge: passBadgeId(primary, multiple) };
+        const { color, family, multiple } = passAccessAppearance(area, passFilter);
+        return family ? { color, passBadge: passBadgeId(family, Boolean(multiple)) } : { color };
     }
     const value = area[mode];
     if (value === undefined) return { color: unknown.color };

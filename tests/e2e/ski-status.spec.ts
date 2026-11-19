@@ -676,6 +676,34 @@ test('switches between all desktop layouts and keeps the camera, filters, sort, 
     await renderer.dispose();
 });
 
+test('shows the color-by metric in the Map view list and sorts it when its header is selected', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await prepare(page);
+    await page.goto(`${path}?view=map&region=UT&sort=acres%3Adesc`);
+    const list = page.getByRole('region', { name: 'Ski area list' });
+    const summit = list.getByRole('columnheader', { name: 'Summit elevation', exact: true });
+    await expect(list.getByRole('columnheader', { name: 'Skiable area' })).toHaveAttribute('aria-sort', 'descending');
+
+    await page.getByLabel('Color by', { exact: true }).selectOption('summitFt');
+    await expect(summit).toBeVisible();
+    await expect(list.getByRole('columnheader', { name: 'Skiable area' })).toHaveCount(0);
+    await expect(list.getByRole('row').nth(1)).toContainText('Park City Mountain');
+    await expect(list.getByRole('row').nth(1).getByRole('cell')).toHaveText('10,026 ft');
+    await expect(page).toHaveURL(/sort=acres%3Adesc/);
+
+    await page.reload();
+    await expect(summit).toBeVisible();
+    await summit.getByRole('button').click();
+    await expect(summit).toHaveAttribute('aria-sort', 'descending');
+    await expect(list.getByRole('row').nth(1)).toContainText('Alta Ski Area');
+    await expect(page).toHaveURL(/sort=summitFt%3Adesc/);
+
+    await page.getByRole('group', { name: 'Results view' }).getByRole('button', { name: 'Table' }).click();
+    const table = page.getByRole('region', { name: 'Ski area comparison table' });
+    await expect(table.getByRole('columnheader', { name: 'Skiable area' })).toBeVisible();
+    await expect(table.getByRole('columnheader', { name: 'Summit', exact: true })).toHaveAttribute('aria-sort', 'descending');
+});
+
 const tile = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==', 'base64');
 
 test('loads terrain only when enabled and zoomed in, with CARTO underneath', async ({ page }) => {

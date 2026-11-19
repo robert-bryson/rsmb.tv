@@ -187,7 +187,7 @@ export default function SkiStatus() {
             <section aria-label="Ski area statistics" className={`min-h-0 min-w-0 flex-col bg-zinc-950 ${showTable || selected ? 'flex' : 'hidden'} ${view === 'map' ? 'max-lg:order-last' : ''}`}>
                 <div className={showTable ? 'min-h-0 flex-1' : 'hidden'}>
                     <SkiAreaTable areas={sorted} units={units} sort={sort} selected={selected} compact={view === 'map'} inView={Boolean(viewportIds)}
-                        selectedButtonRef={selectedButton} onSort={setSort} onSelect={selectArea} />
+                        colorBy={colors} passFilter={pass} selectedButtonRef={selectedButton} onSort={setSort} onSelect={selectArea} />
                 </div>
                 {selected && <div key={selected.id} className={`shrink-0 overflow-y-auto border-t border-zinc-700 ${showTable ? 'max-h-[min(42%,20rem)]' : 'max-h-[32dvh]'}`}>
                     <SkiAreaDetails area={selected} units={units} onClose={closeDetails} />
