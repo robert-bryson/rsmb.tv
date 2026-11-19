@@ -6,7 +6,7 @@ import {
     filterSkiAreas, readPassFilter, readSkiResultsView, readSkiSort, skiResultsViews, sortSkiAreas, type SkiResultsView, type SkiSort, type SkiUnits,
 } from '../features/ski-status/browse';
 import { locationAttribution, locationLicense, passNames, passSeason, skiAreas } from '../features/ski-status/catalog';
-import { markerLegend, markerModes, readMarkerMode } from '../features/ski-status/mapAppearance';
+import { markerLegend, markerModes, passBadgeTextColor, readMarkerMode } from '../features/ski-status/mapAppearance';
 import { SkiAreaDetails } from '../features/ski-status/SkiAreaDetails';
 import { SkiAreaTable } from '../features/ski-status/SkiAreaTable';
 import { SkiPassIcon } from '../features/ski-status/SkiPassIcon';
@@ -192,13 +192,16 @@ export default function SkiStatus() {
                     </label>
                 </div>
                 {legend.length > 0 && <ul aria-label="Resort dot legend" className="flex flex-wrap gap-x-3 gap-y-1 border-b border-zinc-800 px-3 py-2 text-xs text-zinc-300">
-                    {legend.map(({ color, label, family }) => <li key={label} className="flex items-center gap-1.5">
-                        {family ? <SkiPassIcon family={family} /> : <span aria-hidden="true" className="size-2.5 rounded-full" style={{ backgroundColor: color }} />}{label}
+                    {legend.map(({ color, label, family, multiple }) => <li key={label} className="flex items-center gap-1.5">
+                        {family ? <SkiPassIcon family={family} size={20} />
+                            : multiple ? <span aria-hidden="true" className="grid size-5 shrink-0 place-items-center rounded-full text-base leading-none font-bold"
+                                style={{ backgroundColor: color, color: passBadgeTextColor }}>+</span>
+                            : <span aria-hidden="true" className="size-2.5 rounded-full" style={{ backgroundColor: color }} />}{label}
                     </li>)}
                 </ul>}
                 <div className="min-h-0 flex-1">
                     {(showMap || mapOpened) && <ErrorBoundary fallback={<MapMessage failed />}><Suspense fallback={<MapMessage />}>
-                        <SkiStatusMap areas={areas} selected={selected} colors={colors} terrain={terrain} visible={showMap} inView={inView}
+                        <SkiStatusMap areas={areas} selected={selected} colors={colors} preferredPass={pass} terrain={terrain} visible={showMap} inView={inView}
                             onVisibleAreasChange={updateVisibleAreas} onSelect={selectArea} />
                     </Suspense></ErrorBoundary>}
                 </div>

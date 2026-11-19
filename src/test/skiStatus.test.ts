@@ -166,10 +166,12 @@ describe('ski-status marker colors', () => {
         const whiteface = skiAreas.find(area => area.id === 'whiteface')!;
         const whaleback = skiAreas.find(area => area.id === 'whaleback')!;
         expect(markerAppearance({ ...alta, passes: [...alta.passes].reverse() }, 'pass')).toEqual({
-            color: legend.find(entry => entry.label === 'Multiple passes')?.color,
-            ikon: -9, 'mountain-collective': 9,
+            color: legend.find(entry => entry.multiple)?.color,
+            passBadge: 'ikon-plus',
         });
-        expect(markerAppearance(whaleback, 'pass')).toEqual({ color: legend.find(entry => entry.family === 'indy')?.color, indy: 0 });
+        expect(markerAppearance(alta, 'pass', 'mountain-collective').passBadge).toBe('mountain-collective-plus');
+        expect(markerAppearance(alta, 'pass', 'epic').passBadge).toBe('ikon-plus');
+        expect(markerAppearance(whaleback, 'pass')).toEqual({ color: legend.find(entry => entry.family === 'indy')?.color, passBadge: 'indy' });
         expect(markerAppearance({ ...whiteface, passes: whiteface.passes.filter(pass => pass.access === 'discount') }, 'pass'))
             .toEqual({ color: legend.find(entry => entry.label === 'Discount only')?.color });
         expect(markerAppearance({ ...alta, passes: [] }, 'pass')).toEqual({ color: legend.find(entry => entry.label === 'No pass recorded')?.color });

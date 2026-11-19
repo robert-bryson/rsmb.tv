@@ -35,9 +35,11 @@ When **Table** hides the map on a narrow screen, the table uses the last visible
 
 The default map shows one cyan dot per ski area. Use **Color by** to show pass access, skiable area, vertical drop, summit elevation, or highest lift terminal. The legend shows ranges in your selected units. Gray marks an unknown value. A gold outline shows the selected area.
 
-With **Pass access** selected, the map shows an icon for each pass that includes lift access. Multiple icons appear side by side. An orange dot marks discount-only access. A gray dot marks an area with no pass access on file. If an icon fails to load, the resort dot stays visible. The legend and area details show icons beside the pass names.
+With **Pass access** selected, the map shows a brand icon for each area with included lift access. The icons grow as you zoom in. A yellow **+** marks an area with access on more than one pass. Use the pass filter to choose which icon appears on a multi-pass badge. Select an area to see all its passes.
 
-The app serves the pass images with its own files. The images use these sources.
+An orange dot marks discount-only access. A gray dot marks an area with no pass access on file. The legend shows which brand each icon represents.
+
+The map, filter, and area details use the pass images below. The app serves these images with its own files.
 
 | Pass | Source |
 | --- | --- |
@@ -76,7 +78,7 @@ Run the catalog, table, and marker tests.
 npx vitest run src/test/skiStatus.test.ts
 ```
 
-Run the browser tests. They check map position, fallback, and view changes.
+Run the browser tests. They check map position, pass icons, view changes, and error recovery.
 
 ```bash
 npm run test:e2e -- tests/e2e/ski-status.spec.ts --project=chromium

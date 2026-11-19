@@ -48,7 +48,7 @@ export const projects: Project[] = [
       'Expanded the ski area catalog to 197 areas',
       'Added Map, Split, and Table views, resort dot colors, and terrain relief',
       'Added an In map view filter for the comparison table',
-      'Added pass icons to the map and resort details',
+      'Added larger pass icons and compact multi-pass badges',
     ] }],
   },
   {

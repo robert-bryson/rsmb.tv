@@ -242,12 +242,7 @@ test('draws one point per resort and changes its color without moving the camera
     await renderer.dispose();
 });
 
-test('renders the included pass icons on the map and beside their names', async ({ page }) => {
-    const offsetWarnings: string[] = [];
-    page.on('console', message => {
-        const text = message.text();
-        if (text.includes('layout.icon-offset')) offsetWarnings.push(text);
-    });
+test('shows larger pass icons at overview zoom and one badge per multi-pass resort', async ({ page }) => {
     await prepare(page);
     const renderer = await captureMap(page);
     const colors = page.getByLabel('Color by', { exact: true });
@@ -256,43 +251,47 @@ test('renders the included pass icons on the map and beside their names', async 
     const icons = legend.locator('img');
     await expect(icons).toHaveCount(4);
     await expect.poll(() => icons.evaluateAll(images => images.every(image =>
-        image instanceof HTMLImageElement && image.naturalWidth === 32 && new URL(image.src).origin === location.origin))).toBe(true);
+        image instanceof HTMLImageElement && image.naturalWidth >= 32 && new URL(image.src).origin === location.origin))).toBe(true);
+    await expect(legend.getByText('+', { exact: true })).toBeVisible();
 
-    const passLayers = ['epic', 'ikon', 'indy', 'mountain-collective'].map(family => `ski-status-pass-${family}`);
-    await expect.poll(() => renderer.evaluate((map, ids) => ids.every(id => map.hasImage(id) && map.getLayer(id)), passLayers)).toBe(true);
+    const passLayers = ['ski-status-pass-badges', 'ski-status-selected-pass-badge'];
+    await expect.poll(() => renderer.evaluate(map => map.hasImage('ski-status-pass-badge-ikon-plus'))).toBe(true);
+    expect(await renderer.evaluate(map => {
+        const image = map.getImage('ski-status-pass-badge-ikon-plus');
+        return image.data.width / image.pixelRatio;
+    })).toBe(26);
     const alta = locations.locations.find(location => location.id === 'alta')!.coordinates as [number, number];
-    await renderer.evaluate((map, center) => { map.jumpTo({ center, zoom: 11 }); }, alta);
-    const renderedPasses = () => renderer.evaluate((map, layers) => [...new Set(map.queryRenderedFeatures({ layers })
-        .filter(feature => feature.properties.areaId === 'alta').map(feature => feature.layer.id))].sort(), passLayers);
-    await expect.poll(renderedPasses).toEqual(['ski-status-pass-ikon', 'ski-status-pass-mountain-collective']);
-    const renderedSides = () => renderer.evaluate((map, { center, layers }) => {
-        const { x, y } = map.project(center);
-        return [-12, 12].map(offset => [...new Set(map.queryRenderedFeatures([x + offset, y], { layers })
-            .filter(feature => feature.properties.areaId === 'alta').map(feature => feature.layer.id))]);
-    }, { center: alta, layers: passLayers });
-    const includedSides = [['ski-status-pass-ikon'], ['ski-status-pass-mountain-collective']];
-    await expect.poll(renderedSides).toEqual(includedSides);
+    await renderer.evaluate((map, center) => { map.jumpTo({ center, zoom: 3 }); }, alta);
+    const cottonwood = ['alta', 'snowbird'];
+    const renderedBadges = () => renderer.evaluate((map, { layers, ids }) =>
+        map.queryRenderedFeatures({ layers }).filter(feature => ids.includes(feature.properties.areaId))
+            .map(feature => ({ layer: feature.layer.id, area: feature.properties.areaId, badge: feature.properties.passBadge }))
+            .sort((first, second) => first.area.localeCompare(second.area)), { layers: passLayers, ids: cottonwood });
+    await expect.poll(renderedBadges).toEqual(cottonwood.map(area => ({ layer: 'ski-status-pass-badges', area, badge: 'ikon-plus' })));
 
+    await renderer.evaluate((map, center) => { map.jumpTo({ center, zoom: 8 }); }, alta);
     await page.getByRole('button', { name: 'Alta Ski Area', exact: true }).click();
     const details = page.getByRole('region', { name: 'Alta Ski Area', exact: true });
     await expect(details.getByRole('link', { name: 'Ikon', exact: true }).locator('img')).toBeVisible();
     await expect(details.getByRole('link', { name: 'Mountain Collective', exact: true }).locator('img')).toBeVisible();
+    await page.getByLabel('Pass', { exact: true }).selectOption('mountain-collective');
+    await expect.poll(renderedBadges).toEqual([
+        { layer: 'ski-status-selected-pass-badge', area: 'alta', badge: 'mountain-collective-plus' },
+        { layer: 'ski-status-pass-badges', area: 'snowbird', badge: 'mountain-collective-plus' },
+    ]);
     await colors.selectOption('default');
-    await expect.poll(renderedPasses).toEqual([]);
-    await colors.selectOption('pass');
-    await expect.poll(renderedSides).toEqual(includedSides);
-    expect(offsetWarnings).toEqual([]);
+    await expect.poll(renderedBadges).toEqual([]);
     await renderer.dispose();
 });
 
-test('keeps the colored dots when an icon fails and restores other icons after a background retry', async ({ page }) => {
+test('keeps a fallback dot if a pass image fails and restores other badges after a background retry', async ({ page }) => {
     await prepare(page, null);
     await page.route(/\/pass-icons\/indy\.png\?no-inline$/, route => route.abort());
     const renderer = await captureMap(page, { state: 'degraded' });
     await page.getByLabel('Color by', { exact: true }).selectOption('pass');
-    await expect.poll(() => renderer.evaluate(map => map.hasImage('ski-status-pass-ikon'))).toBe(true);
-    expect(await renderer.evaluate(map => map.hasImage('ski-status-pass-indy'))).toBe(false);
-
+    const anotherPassBadge = () => renderer.evaluate(map => map.hasImage('ski-status-pass-badge-ikon-plus'));
+    await expect.poll(anotherPassBadge).toBe(true);
+    expect(await renderer.evaluate(map => map.hasImage('ski-status-pass-badge-indy'))).toBe(false);
     await page.getByRole('button', { name: 'Whaleback Mountain', exact: true }).click();
     await expect.poll(() => renderer.evaluate(map => map.queryRenderedFeatures({ layers: ['ski-area-points'] })
         .some(feature => feature.properties.areaId === 'whaleback'))).toBe(true);
@@ -300,7 +299,7 @@ test('keeps the colored dots when an icon fails and restores other icons after a
     await page.route(styleUrl, route => route.fulfill({ json: baseStyle, headers: { 'access-control-allow-origin': '*' } }));
     await page.getByRole('button', { name: 'Retry background', exact: true }).click();
     await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
-    await expect.poll(() => renderer.evaluate(map => map.hasImage('ski-status-pass-ikon') && Boolean(map.getLayer('ski-status-pass-ikon')))).toBe(true);
+    await expect.poll(anotherPassBadge).toBe(true);
     await renderer.dispose();
 });
 

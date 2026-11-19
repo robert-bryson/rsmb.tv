@@ -7,16 +7,18 @@ import { recoverBasemap, type BasemapState } from '../../maps/recoverBasemap';
 import { distanceSquared, type TooltipPoint } from '../../maps/screenGeometry';
 import { skiAreaIdsInViewport } from './browse';
 import { passFamilySchema, skiAreas, type PassFamily, type SkiArea } from './catalog';
-import { markerAppearance, type MarkerMode } from './mapAppearance';
-import { passIconSize, passIconSpacing, passIconUrls } from './passIcons';
+import { markerAppearance, multiplePassColor, passBadgeId, passBadgeSize, passBadgeTextColor, type MarkerMode } from './mapAppearance';
+import { passIconUrls } from './passIcons';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 const sourceId = 'ski-areas';
 const pointLayer = 'ski-area-points';
 const selectedLayer = 'ski-area-selected';
-const passMarkerId = (family: PassFamily) => `ski-status-pass-${family}`;
-const markerLayers = [selectedLayer, pointLayer, ...passFamilySchema.options.map(passMarkerId)];
-const maxPassIconOffset = (passFamilySchema.options.length - 1) * passIconSpacing / 2;
+const passBadgeLayer = 'ski-status-pass-badges';
+const selectedPassBadgeLayer = 'ski-status-selected-pass-badge';
+const passImagePrefix = 'ski-status-pass-badge-';
+const selectedPassImagePrefix = 'ski-status-selected-pass-badge-';
+const markerLayers = [selectedLayer, pointLayer, passBadgeLayer, selectedPassBadgeLayer];
 const terrainSource = 'ski-terrain-dem';
 const terrainLayer = 'ski-terrain-relief';
 const pointZoom = 9;
@@ -26,6 +28,7 @@ interface Props {
     areas: readonly SkiArea[];
     selected?: SkiArea;
     colors: MarkerMode;
+    preferredPass?: PassFamily;
     terrain: boolean;
     visible: boolean;
     inView: boolean;
@@ -45,7 +48,15 @@ function fitAreas(map: maplibre.Map, areas: readonly SkiArea[], duration: number
 }
 
 function highlightArea(map: maplibre.Map, area?: SkiArea) {
-    map.setFilter(selectedLayer, ['==', ['get', 'areaId'], area?.id ?? '']);
+    const selectedId = area?.id ?? '';
+    const isSelected: maplibre.FilterSpecification = ['==', ['get', 'areaId'], selectedId];
+    map.setFilter(selectedLayer, isSelected);
+    if (map.getLayer(passBadgeLayer)) {
+        const badges = map.listImages().filter(id => id.startsWith(passImagePrefix)).map(id => id.slice(passImagePrefix.length));
+        const hasBadge: maplibre.FilterSpecification = ['in', ['get', 'passBadge'], ['literal', badges]];
+        map.setFilter(passBadgeLayer, ['all', hasBadge, ['!=', ['get', 'areaId'], selectedId]]);
+        map.setFilter(selectedPassBadgeLayer, ['all', hasBadge, isSelected]);
+    }
 }
 
 function addAreaLayers(map: maplibre.Map, data: FeatureCollection<Point>) {
@@ -76,24 +87,72 @@ async function loadPassImages(map: maplibre.Map) {
     }));
 }
 
-function addPassMarker(map: maplibre.Map, family: PassFamily, image: HTMLImageElement | ImageBitmap) {
-    const id = passMarkerId(family);
-    if (map.getLayer(id)) return;
-    if (!map.hasImage(id)) map.addImage(id, image, { pixelRatio: image.width / passIconSize });
-    map.addLayer({
-        id, type: 'symbol', source: sourceId, filter: ['has', family],
-        layout: {
-            'icon-image': id,
-            // Vector tiles can serialize array-valued properties as strings. Use a numeric property.
-            'icon-offset': ['interpolate', ['linear'], ['number', ['get', family]],
-                -maxPassIconOffset, ['literal', [-maxPassIconOffset, 0]],
-                maxPassIconOffset, ['literal', [maxPassIconOffset, 0]]],
-            'icon-size': ['interpolate', ['linear'], ['zoom'], 2, 0.5, 6, 0.7, 10, 1],
-            'icon-allow-overlap': true,
-            'icon-ignore-placement': true,
-            'icon-rotation-alignment': 'viewport',
-        },
-    });
+function drawPassBadge(context: CanvasRenderingContext2D, image: CanvasImageSource, multiple: boolean, selected: boolean) {
+    context.clearRect(0, 0, passBadgeSize, passBadgeSize);
+    const inset = 1.5;
+    const size = passBadgeSize - 2 * inset;
+    context.beginPath();
+    context.roundRect(inset, inset, size, size, 4);
+    context.fillStyle = passBadgeTextColor;
+    context.fill();
+    context.save();
+    context.clip();
+    context.drawImage(image, inset, inset, size, size);
+    context.restore();
+    context.strokeStyle = selected ? '#fbbf24' : passBadgeTextColor;
+    context.lineWidth = selected ? 2.5 : 1.5;
+    context.stroke();
+
+    if (!multiple) return;
+    const corner = passBadgeSize - 6;
+    context.beginPath();
+    context.arc(corner, corner, 5.5, 0, Math.PI * 2);
+    context.fillStyle = multiplePassColor;
+    context.fill();
+    context.strokeStyle = passBadgeTextColor;
+    context.lineWidth = 1;
+    context.stroke();
+    context.beginPath();
+    context.moveTo(corner - 2.5, corner);
+    context.lineTo(corner + 2.5, corner);
+    context.moveTo(corner, corner - 2.5);
+    context.lineTo(corner, corner + 2.5);
+    context.lineWidth = 1.6;
+    context.stroke();
+}
+
+function addPassBadges(map: maplibre.Map, images: Awaited<ReturnType<typeof loadPassImages>>) {
+    if (map.getLayer(passBadgeLayer) || !images.some(({ image }) => image)) return;
+    const pixelRatio = 2;
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = passBadgeSize * pixelRatio;
+    const context = canvas.getContext('2d');
+    if (!context) return;
+
+    context.scale(pixelRatio, pixelRatio);
+    for (const { family, image } of images) {
+        if (!image) continue;
+        for (const multiple of [false, true]) {
+            for (const selected of [false, true]) {
+                drawPassBadge(context, image, multiple, selected);
+                const id = (selected ? selectedPassImagePrefix : passImagePrefix) + passBadgeId(family, multiple);
+                map.addImage(id, context.getImageData(0, 0, canvas.width, canvas.height), { pixelRatio });
+            }
+        }
+    }
+
+    for (const [id, prefix] of [[passBadgeLayer, passImagePrefix], [selectedPassBadgeLayer, selectedPassImagePrefix]]) {
+        map.addLayer({
+            id, type: 'symbol', source: sourceId,
+            layout: {
+                'icon-image': ['image', ['concat', prefix, ['get', 'passBadge']]],
+                'icon-size': ['interpolate', ['linear'], ['zoom'], 2, 0.68, 5, 0.8, 9, 0.95, 12, 1],
+                'icon-allow-overlap': true,
+                'icon-ignore-placement': true,
+                'icon-rotation-alignment': 'viewport',
+            },
+        });
+    }
 }
 
 function syncTerrain(map: maplibre.Map, enabled: boolean) {
@@ -108,7 +167,7 @@ function syncTerrain(map: maplibre.Map, enabled: boolean) {
         encoding: 'terrarium', tileSize: 512, minzoom: 8, maxzoom: 12,
         attribution: '<a href="https://mapterhorn.com/attribution/">© Mapterhorn terrain</a>',
     });
-    const firstLabel = map.getStyle().layers.find(layer => layer.type === 'symbol');
+    const firstLabel = map.getStyle().layers.find(layer => layer.type === 'symbol' && !markerLayers.includes(layer.id));
     map.addLayer({
         id: terrainLayer, type: 'hillshade', source: terrainSource, minzoom: 8,
         paint: { 'hillshade-exaggeration': 0.4, 'hillshade-shadow-color': '#09090b', 'hillshade-highlight-color': '#cbd5e1' },
@@ -139,7 +198,7 @@ function closestArea(map: maplibre.Map, point: TooltipPoint, areas: readonly Ski
     return nearest;
 }
 
-export default function SkiStatusMap({ areas, selected, colors, terrain, visible, inView, onVisibleAreasChange, onSelect }: Props) {
+export default function SkiStatusMap({ areas, selected, colors, preferredPass, terrain, visible, inView, onVisibleAreasChange, onSelect }: Props) {
     const container = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibre.Map | null>(null);
     const recoveryRef = useRef<ReturnType<typeof recoverBasemap> | null>(null);
@@ -155,20 +214,21 @@ export default function SkiStatusMap({ areas, selected, colors, terrain, visible
     const points = useMemo<FeatureCollection<Point>>(() => ({
         type: 'FeatureCollection',
         features: areas.map(area => ({
-            type: 'Feature', id: area.id, properties: { areaId: area.id, ...markerAppearance(area, colors) },
+            type: 'Feature', id: area.id, properties: { areaId: area.id, ...markerAppearance(area, colors, preferredPass) },
             geometry: { type: 'Point', coordinates: area.location.coordinates },
         })),
-    }), [areas, colors]);
-    const current = useEffectEvent(() => ({ areas, points, selected, terrain }));
+    }), [areas, colors, preferredPass]);
+    const current = useEffectEvent(() => ({ areas, points, selected, colors, terrain }));
     const selectArea = useEffectEvent(onSelect);
-    const syncPassMarkers = useEffectEvent((map: maplibre.Map) => {
-        if (colors !== 'pass' || !map.getSource(sourceId)) return;
+    const syncPassBadges = useEffectEvent((map: maplibre.Map) => {
+        if (colors !== 'pass' || !map.getSource(sourceId) || map.getLayer(passBadgeLayer)) return;
         passImages.current ??= loadPassImages(map);
         void passImages.current.then(images => {
             if (mapRef.current !== map || !map.getSource(sourceId)) return;
-            for (const { family, image } of images) {
-                if (image) addPassMarker(map, family, image);
-            }
+            const data = current();
+            if (data.colors !== 'pass') return;
+            addPassBadges(map, images);
+            highlightArea(map, data.selected);
         });
     });
     const syncCamera = useEffectEvent((map: maplibre.Map) => {
@@ -235,7 +295,7 @@ export default function SkiStatusMap({ areas, selected, colors, terrain, visible
                 const data = current();
                 if (!instance.getSource(sourceId)) addAreaLayers(instance, data.points);
                 highlightArea(instance, data.selected);
-                syncPassMarkers(instance);
+                syncPassBadges(instance);
                 syncTerrain(instance, data.terrain);
                 setTerrainUnavailable(false);
                 syncCamera(instance);
@@ -282,11 +342,6 @@ export default function SkiStatusMap({ areas, selected, colors, terrain, visible
 
     useEffect(() => {
         const map = mapRef.current;
-        if (map) syncPassMarkers(map);
-    }, [colors]);
-
-    useEffect(() => {
-        const map = mapRef.current;
         if (map) syncCamera(map);
     }, [areas, selected, visible, inView]);
 
@@ -297,8 +352,10 @@ export default function SkiStatusMap({ areas, selected, colors, terrain, visible
 
     useEffect(() => {
         const map = mapRef.current;
-        if (map?.getLayer(selectedLayer)) highlightArea(map, selected);
-    }, [selected]);
+        if (!map?.getLayer(selectedLayer)) return;
+        syncPassBadges(map);
+        highlightArea(map, selected);
+    }, [colors, selected]);
 
     const state = failed ? 'error' : !ready || basemap === 'loading' ? 'loading' : basemap === 'unavailable' ? 'degraded' : 'ready';
     return <div className="relative h-full min-h-0">
