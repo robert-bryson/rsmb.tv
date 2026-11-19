@@ -1,5 +1,6 @@
 import { columns, formatSkiStat, type SkiUnits } from './browse';
 import { passNames, passSeason, type SkiArea } from './catalog';
+import { SkiPassIcon } from './SkiPassIcon';
 
 const linkClass = 'inline-flex min-h-11 items-center text-cyan-300 underline decoration-cyan-700 underline-offset-4 hover:text-cyan-100';
 
@@ -39,7 +40,9 @@ export function SkiAreaDetails({ area, units, onClose }: { area: SkiArea; units:
         {area.passes.length > 0 && <div className="mt-4 border-t border-zinc-800 pt-3">
             <h3 className="text-sm font-medium text-zinc-200">{passSeason} pass access</h3>
             <ul className="flex flex-wrap gap-x-5 text-sm">{area.passes.map(pass => <li key={pass.family}>
-                <a className={linkClass} href={pass.source}>{passNames[pass.family]}{pass.access === 'discount' ? ' (discount only)' : ''}</a>
+                <a className={`${linkClass} gap-2`} href={pass.source}>
+                    <SkiPassIcon family={pass.family} />{passNames[pass.family]}{pass.access === 'discount' ? ' (discount only)' : ''}
+                </a>
             </li>)}</ul>
         </div>}
     </section>;

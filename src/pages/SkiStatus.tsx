@@ -9,6 +9,7 @@ import { locationAttribution, locationLicense, passNames, passSeason, skiAreas }
 import { markerLegend, markerModes, readMarkerMode } from '../features/ski-status/mapAppearance';
 import { SkiAreaDetails } from '../features/ski-status/SkiAreaDetails';
 import { SkiAreaTable } from '../features/ski-status/SkiAreaTable';
+import { SkiPassIcon } from '../features/ski-status/SkiPassIcon';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { usePageMetadata } from '../hooks/usePageMetadata';
 import { usePersistedState } from '../hooks/usePersistedState';
@@ -131,7 +132,9 @@ export default function SkiStatus() {
                         </select>
                     </div>
                     <div className={filterClass}>
-                        <label htmlFor="ski-pass">Pass</label>
+                        <label htmlFor="ski-pass" className="flex items-center gap-1.5">
+                            {pass && <SkiPassIcon family={pass} />}Pass
+                        </label>
                         <select id="ski-pass" value={pass ?? ''} onChange={event => setParam('pass', event.target.value)} className={inputClass}>
                             <option value="">All ski areas</option>{Object.entries(passNames).map(([key, name]) => <option key={key} value={key}>{name}</option>)}
                         </select>
@@ -189,8 +192,8 @@ export default function SkiStatus() {
                     </label>
                 </div>
                 {legend.length > 0 && <ul aria-label="Resort dot legend" className="flex flex-wrap gap-x-3 gap-y-1 border-b border-zinc-800 px-3 py-2 text-xs text-zinc-300">
-                    {legend.map(({ color, label }) => <li key={label} className="flex items-center gap-1.5">
-                        <span aria-hidden="true" className="size-2.5 rounded-full" style={{ backgroundColor: color }} />{label}
+                    {legend.map(({ color, label, family }) => <li key={label} className="flex items-center gap-1.5">
+                        {family ? <SkiPassIcon family={family} /> : <span aria-hidden="true" className="size-2.5 rounded-full" style={{ backgroundColor: color }} />}{label}
                     </li>)}
                 </ul>}
                 <div className="min-h-0 flex-1">

@@ -6,13 +6,17 @@ import * as maplibre from '../../maps/maplibre';
 import { recoverBasemap, type BasemapState } from '../../maps/recoverBasemap';
 import { distanceSquared, type TooltipPoint } from '../../maps/screenGeometry';
 import { skiAreaIdsInViewport } from './browse';
-import { skiAreas, type SkiArea } from './catalog';
-import { markerColor, type MarkerMode } from './mapAppearance';
+import { passFamilySchema, skiAreas, type PassFamily, type SkiArea } from './catalog';
+import { markerAppearance, type MarkerMode } from './mapAppearance';
+import { passIconSize, passIconSpacing, passIconUrls } from './passIcons';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 const sourceId = 'ski-areas';
 const pointLayer = 'ski-area-points';
 const selectedLayer = 'ski-area-selected';
+const passMarkerId = (family: PassFamily) => `ski-status-pass-${family}`;
+const markerLayers = [selectedLayer, pointLayer, ...passFamilySchema.options.map(passMarkerId)];
+const maxPassIconOffset = (passFamilySchema.options.length - 1) * passIconSpacing / 2;
 const terrainSource = 'ski-terrain-dem';
 const terrainLayer = 'ski-terrain-relief';
 const pointZoom = 9;
@@ -62,6 +66,36 @@ function addAreaLayers(map: maplibre.Map, data: FeatureCollection<Point>) {
     });
 }
 
+async function loadPassImages(map: maplibre.Map) {
+    return Promise.all(passFamilySchema.options.map(async family => {
+        try {
+            return { family, image: (await map.loadImage(passIconUrls[family])).data };
+        } catch {
+            return { family };
+        }
+    }));
+}
+
+function addPassMarker(map: maplibre.Map, family: PassFamily, image: HTMLImageElement | ImageBitmap) {
+    const id = passMarkerId(family);
+    if (map.getLayer(id)) return;
+    if (!map.hasImage(id)) map.addImage(id, image, { pixelRatio: image.width / passIconSize });
+    map.addLayer({
+        id, type: 'symbol', source: sourceId, filter: ['has', family],
+        layout: {
+            'icon-image': id,
+            // Vector tiles can serialize array-valued properties as strings. Use a numeric property.
+            'icon-offset': ['interpolate', ['linear'], ['number', ['get', family]],
+                -maxPassIconOffset, ['literal', [-maxPassIconOffset, 0]],
+                maxPassIconOffset, ['literal', [maxPassIconOffset, 0]]],
+            'icon-size': ['interpolate', ['linear'], ['zoom'], 2, 0.5, 6, 0.7, 10, 1],
+            'icon-allow-overlap': true,
+            'icon-ignore-placement': true,
+            'icon-rotation-alignment': 'viewport',
+        },
+    });
+}
+
 function syncTerrain(map: maplibre.Map, enabled: boolean) {
     if (!enabled) {
         if (map.getLayer(terrainLayer)) map.removeLayer(terrainLayer);
@@ -82,7 +116,7 @@ function syncTerrain(map: maplibre.Map, enabled: boolean) {
 }
 
 function closestArea(map: maplibre.Map, point: TooltipPoint, areas: readonly SkiArea[]) {
-    const layers = [selectedLayer, pointLayer].filter(layer => map.getLayer(layer));
+    const layers = markerLayers.filter(layer => map.getLayer(layer));
     if (!layers.length) return;
 
     // Allow a tap next to the circle. Use distance instead of layer order when circles overlap.
@@ -109,6 +143,7 @@ export default function SkiStatusMap({ areas, selected, colors, terrain, visible
     const container = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibre.Map | null>(null);
     const recoveryRef = useRef<ReturnType<typeof recoverBasemap> | null>(null);
+    const passImages = useRef<ReturnType<typeof loadPassImages> | undefined>(undefined);
     const appliedCamera = useRef<{ areas: readonly SkiArea[]; selectedId?: string } | undefined>(undefined);
     const [attempt, setAttempt] = useState(0);
     const [basemap, setBasemap] = useState<BasemapState>('loading');
@@ -120,12 +155,22 @@ export default function SkiStatusMap({ areas, selected, colors, terrain, visible
     const points = useMemo<FeatureCollection<Point>>(() => ({
         type: 'FeatureCollection',
         features: areas.map(area => ({
-            type: 'Feature', id: area.id, properties: { areaId: area.id, color: markerColor(area, colors) },
+            type: 'Feature', id: area.id, properties: { areaId: area.id, ...markerAppearance(area, colors) },
             geometry: { type: 'Point', coordinates: area.location.coordinates },
         })),
     }), [areas, colors]);
     const current = useEffectEvent(() => ({ areas, points, selected, terrain }));
     const selectArea = useEffectEvent(onSelect);
+    const syncPassMarkers = useEffectEvent((map: maplibre.Map) => {
+        if (colors !== 'pass' || !map.getSource(sourceId)) return;
+        passImages.current ??= loadPassImages(map);
+        void passImages.current.then(images => {
+            if (mapRef.current !== map || !map.getSource(sourceId)) return;
+            for (const { family, image } of images) {
+                if (image) addPassMarker(map, family, image);
+            }
+        });
+    });
     const syncCamera = useEffectEvent((map: maplibre.Map) => {
         if (!visible || !map.getLayer(pointLayer)) return;
         const { clientWidth, clientHeight } = map.getContainer();
@@ -190,6 +235,7 @@ export default function SkiStatusMap({ areas, selected, colors, terrain, visible
                 const data = current();
                 if (!instance.getSource(sourceId)) addAreaLayers(instance, data.points);
                 highlightArea(instance, data.selected);
+                syncPassMarkers(instance);
                 syncTerrain(instance, data.terrain);
                 setTerrainUnavailable(false);
                 syncCamera(instance);
@@ -210,10 +256,8 @@ export default function SkiStatusMap({ areas, selected, colors, terrain, visible
                 if ('sourceId' in event && event.sourceId === terrainSource) setTerrainUnavailable(true);
                 else if (/webgl|context|worker/i.test(event.error?.message ?? '')) setFailed(true);
             });
-            for (const layer of [pointLayer, selectedLayer]) {
-                instance.on('mouseenter', layer, () => { instance.getCanvas().style.cursor = 'pointer'; });
-                instance.on('mouseleave', layer, () => { instance.getCanvas().style.cursor = ''; });
-            }
+            instance.on('mouseenter', markerLayers, () => { instance.getCanvas().style.cursor = 'pointer'; });
+            instance.on('mouseleave', markerLayers, () => { instance.getCanvas().style.cursor = ''; });
             instance.on('click', event => {
                 if (!instance.getSource(sourceId) || !instance.isSourceLoaded(sourceId)) return;
                 const id = closestArea(instance, event.point, current().areas);
@@ -227,6 +271,7 @@ export default function SkiStatusMap({ areas, selected, colors, terrain, visible
             recoveryRef.current = null;
             map?.remove();
             mapRef.current = null;
+            passImages.current = undefined;
             appliedCamera.current = undefined;
         };
     }, [attempt]);
@@ -234,6 +279,11 @@ export default function SkiStatusMap({ areas, selected, colors, terrain, visible
     useEffect(() => {
         mapRef.current?.getSource<maplibre.GeoJSONSource>(sourceId)?.setData(points);
     }, [points]);
+
+    useEffect(() => {
+        const map = mapRef.current;
+        if (map) syncPassMarkers(map);
+    }, [colors]);
 
     useEffect(() => {
         const map = mapRef.current;

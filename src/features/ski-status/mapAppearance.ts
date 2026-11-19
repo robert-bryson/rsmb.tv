@@ -1,5 +1,6 @@
 import { formatArea, formatElevation, type SkiUnits } from './browse';
 import { passFamilySchema, passNames, type PassFamily, type SkiArea } from './catalog';
+import { passIconSpacing } from './passIcons';
 
 export const markerModes = {
     default: 'Resort dots',
@@ -16,7 +17,8 @@ export function readMarkerMode(value: string | null): MarkerMode {
     return value && Object.hasOwn(markerModes, value) ? value as MarkerMode : 'default';
 }
 
-interface LegendEntry { label: string; color: string }
+interface LegendEntry { label: string; color: string; family?: PassFamily }
+type MarkerAppearance = { color: string } & Partial<Record<PassFamily, number>>;
 
 const defaultColor = '#67e8f9';
 const unknown = { color: '#a1a1aa', label: 'Unknown' };
@@ -37,7 +39,7 @@ const thresholds = {
 export function markerLegend(mode: MarkerMode, units: SkiUnits): LegendEntry[] {
     if (mode === 'default') return [];
     if (mode === 'pass') {
-        return [...passFamilySchema.options.map(family => ({ color: passColors[family], label: passNames[family] })),
+        return [...passFamilySchema.options.map(family => ({ color: passColors[family], label: passNames[family], family })),
             multiplePasses, discountOnly, noRecordedPass];
     }
     const format = mode === 'acres' ? formatArea : formatElevation;
@@ -46,17 +48,20 @@ export function markerLegend(mode: MarkerMode, units: SkiUnits): LegendEntry[] {
     return [...numericColors.map((color, index) => ({ color, label: labels[index] })), unknown];
 }
 
-export function markerColor(area: SkiArea, mode: MarkerMode): string {
-    if (mode === 'default') return defaultColor;
+export function markerAppearance(area: SkiArea, mode: MarkerMode): MarkerAppearance {
+    if (mode === 'default') return { color: defaultColor };
     if (mode === 'pass') {
-        const included = area.passes.filter(pass => pass.access === 'included');
-        if (included.length > 1) return multiplePasses.color;
-        if (included[0]) return passColors[included[0].family];
-        return area.passes.some(pass => pass.access === 'discount') ? discountOnly.color : noRecordedPass.color;
+        const included = passFamilySchema.options.filter(family =>
+            area.passes.some(pass => pass.family === family && pass.access === 'included'));
+        if (!included.length) return { color: area.passes.length ? discountOnly.color : noRecordedPass.color };
+
+        const midpoint = (included.length - 1) / 2;
+        const offsets = Object.fromEntries(included.map((family, index) => [family, (index - midpoint) * passIconSpacing]));
+        return { color: included.length > 1 ? multiplePasses.color : passColors[included[0]], ...offsets };
     }
     const value = area[mode];
-    if (value === undefined) return unknown.color;
+    if (value === undefined) return { color: unknown.color };
     const cutoffs = thresholds[mode];
-    if (mode === 'acres' && area.acresQualifier === 'lower-bound' && value < cutoffs[2]) return unknown.color;
-    return numericColors[cutoffs.filter(cutoff => value >= cutoff).length];
+    if (mode === 'acres' && area.acresQualifier === 'lower-bound' && value < cutoffs[2]) return { color: unknown.color };
+    return { color: numericColors[cutoffs.filter(cutoff => value >= cutoff).length] };
 }

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { filterSkiAreas, formatArea, formatSkiStat, readPassFilter, readSkiResultsView, readSkiSort, skiAreaIdsInViewport, sortSkiAreas } from '../features/ski-status/browse';
 import { readSkiCatalog, skiAreas } from '../features/ski-status/catalog';
-import { markerColor, markerLegend, readMarkerMode } from '../features/ski-status/mapAppearance';
+import { markerAppearance, markerLegend, readMarkerMode } from '../features/ski-status/mapAppearance';
 
 const area = {
     id: 'test-mountain', name: 'Test Mountain', country: 'US', region: 'WA', locality: 'Test Town', acres: 100,
@@ -165,33 +165,36 @@ describe('ski-status marker colors', () => {
         const alta = skiAreas.find(area => area.id === 'alta')!;
         const whiteface = skiAreas.find(area => area.id === 'whiteface')!;
         const whaleback = skiAreas.find(area => area.id === 'whaleback')!;
-        expect(markerColor(alta, 'pass')).toBe(legend.find(entry => entry.label === 'Multiple passes')?.color);
-        expect(markerColor(whaleback, 'pass')).toBe(legend.find(entry => entry.label === 'Indy')?.color);
-        expect(markerColor({ ...whiteface, passes: whiteface.passes.filter(pass => pass.access === 'discount') }, 'pass'))
-            .toBe(legend.find(entry => entry.label === 'Discount only')?.color);
-        expect(markerColor({ ...alta, passes: [] }, 'pass')).toBe(legend.find(entry => entry.label === 'No pass recorded')?.color);
+        expect(markerAppearance({ ...alta, passes: [...alta.passes].reverse() }, 'pass')).toEqual({
+            color: legend.find(entry => entry.label === 'Multiple passes')?.color,
+            ikon: -9, 'mountain-collective': 9,
+        });
+        expect(markerAppearance(whaleback, 'pass')).toEqual({ color: legend.find(entry => entry.family === 'indy')?.color, indy: 0 });
+        expect(markerAppearance({ ...whiteface, passes: whiteface.passes.filter(pass => pass.access === 'discount') }, 'pass'))
+            .toEqual({ color: legend.find(entry => entry.label === 'Discount only')?.color });
+        expect(markerAppearance({ ...alta, passes: [] }, 'pass')).toEqual({ color: legend.find(entry => entry.label === 'No pass recorded')?.color });
+        expect(markerAppearance(alta, 'default')).toEqual({ color: '#67e8f9' });
     });
 
     it('uses the numeric bin at its boundary and marks unknown values separately', () => {
         const legend = markerLegend('acres', 'metric');
         const source = skiAreas[0];
         expect(legend[0]?.label).toBe('Under 101.2 ha');
-        expect(markerColor({ ...source, acres: 249 }, 'acres')).toBe(legend[0]?.color);
-        expect(markerColor({ ...source, acres: 250 }, 'acres')).toBe(legend[1]?.color);
-        expect(markerColor({ ...source, acres: undefined }, 'acres')).toBe(legend.at(-1)?.color);
+        expect(markerAppearance({ ...source, acres: 249 }, 'acres')).toEqual({ color: legend[0]?.color });
+        expect(markerAppearance({ ...source, acres: 250 }, 'acres').color).toBe(legend[1]?.color);
+        expect(markerAppearance({ ...source, acres: undefined }, 'acres').color).toBe(legend.at(-1)?.color);
         expect(markerLegend('default', 'metric')).toEqual([]);
         expect(readMarkerMode('__proto__')).toBe('default');
         expect(readMarkerMode(null)).toBe('default');
         expect(readMarkerMode('verticalFt')).toBe('verticalFt');
-        expect(markerColor(source, 'default')).toBe(markerColor({ ...source, acres: undefined }, 'default'));
         expect(markerLegend('highestLiftTerminalFt', 'imperial').at(-2)?.label).toBe('9,000 ft and up');
     });
 
     it('assigns lower bounds to a color only when the published value proves the range', () => {
         const peak = skiAreas.find(area => area.id === 'granite-peak')!;
         const legend = markerLegend('acres', 'imperial');
-        expect(markerColor(peak, 'acres')).toBe(legend.at(-1)?.color);
-        expect(markerColor({ ...peak, acres: 2_500 }, 'acres')).toBe(legend.at(-2)?.color);
-        expect(markerColor({ ...peak, acresQualifier: undefined }, 'acres')).toBe(legend[0]?.color);
+        expect(markerAppearance(peak, 'acres').color).toBe(legend.at(-1)?.color);
+        expect(markerAppearance({ ...peak, acres: 2_500 }, 'acres').color).toBe(legend.at(-2)?.color);
+        expect(markerAppearance({ ...peak, acresQualifier: undefined }, 'acres').color).toBe(legend[0]?.color);
     });
 });

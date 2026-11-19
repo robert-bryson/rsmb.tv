@@ -35,6 +35,17 @@ When **Table** hides the map on a narrow screen, the table uses the last visible
 
 The default map shows one cyan dot per ski area. Use **Color by** to show pass access, skiable area, vertical drop, summit elevation, or highest lift terminal. The legend shows ranges in your selected units. Gray marks an unknown value. A gold outline shows the selected area.
 
+With **Pass access** selected, the map shows an icon for each pass that includes lift access. Multiple icons appear side by side. An orange dot marks discount-only access. A gray dot marks an area with no pass access on file. If an icon fails to load, the resort dot stays visible. The legend and area details show icons beside the pass names.
+
+The app serves the pass images with its own files. The images use these sources.
+
+| Pass | Source |
+| --- | --- |
+| Ikon | [Ikon Pass favicon](https://www.ikonpass.com/favicon/favicon-white-32x32.png) |
+| Epic | [Vail Resorts My Epic app icon](https://apps.apple.com/us/app/my-epic-skiing-snowboarding/id395375487) |
+| Indy | [Indy Pass website icon](https://www.indyskipass.com/themes/custom/origin/images/favicon/apple-touch-icon.png) |
+| Mountain Collective | [Cached Mountain Collective site icon](https://www.google.com/s2/favicons?domain=mountaincollective.com&sz=64) |
+
 An acreage value such as `200+` gives a minimum. The table sorts by that minimum. If the minimum leaves more than one possible color range, the map shows a gray dot.
 
 The map uses the hosted CARTO Dark Matter vector style. Turn on **Terrain relief** to see shaded slopes from zoom level 8. CARTO continues to provide the streets and labels. Mapterhorn supplies the elevation tiles. [CARTO Basemaps](https://docs.carto.com/faqs/carto-basemaps), [Mapterhorn elevation tiles](https://mapterhorn.com/data-access/)
