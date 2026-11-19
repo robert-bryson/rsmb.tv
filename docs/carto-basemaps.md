@@ -36,6 +36,7 @@ CARTO_API_KEY=your-development-basemap-key
 Raster maps without a key use neutral tiles and show **Basemap unavailable**.
 They do not send unauthenticated CARTO requests.
 Pins and ski-status use the hosted Dark Matter vector style through `cartoVectorStyleUrl`.
+They restore the globe projection and sky when the active background style loads.
 CARTO currently serves this vector style without a key, so local previews include the actual basemap.
 The helper includes a configured key when one is available.
 The existing `cartoVectorStyle` helper retains its neutral fallback for maps that require configured keys.

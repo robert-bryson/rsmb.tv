@@ -1,6 +1,8 @@
 import { useEffect, useState, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
+import { projectVisibleGlobeLocation } from '../../maps/globe';
 import { Popup, type Map } from '../../maps/maplibre';
+import { containsPoint } from '../../maps/screenGeometry';
 import { columns, formatSkiLocation, formatSkiStat, type SkiUnits } from './browse';
 import type { SkiArea } from './catalog';
 
@@ -21,9 +23,23 @@ export function SkiAreaPopup({ area, mapRef, onClose, units }: Props) {
         const popup = new Popup({
             closeButton: false, closeOnClick: false, focusAfterOpen: false,
             offset: 16, maxWidth: 'min(16rem, calc(100% - 1.5rem))',
+            locationOccludedOpacity: 0,
             className: selected ? 'ski-area-popup ski-area-popup-selected' : 'ski-area-popup ski-area-popup-hover',
         }).setLngLat(coordinates).setDOMContent(content).addTo(map);
-        return () => { popup.remove(); };
+        const element = popup.getElement();
+        const updateVisibility = () => {
+            const { clientWidth, clientHeight } = map.getContainer();
+            const point = projectVisibleGlobeLocation(map, coordinates);
+            const visible = point && containsPoint({ left: 0, top: 0, right: clientWidth, bottom: clientHeight }, point);
+            element.style.visibility = visible ? '' : 'hidden';
+        };
+        const events = ['move', 'resize', 'projectiontransition'] as const;
+        for (const event of events) map.on(event, updateVisibility);
+        updateVisibility();
+        return () => {
+            for (const event of events) map.off(event, updateVisibility);
+            popup.remove();
+        };
     }, [content, coordinates, mapRef, selected]);
 
     const stats = units ? summaryColumns.flatMap(({ key, label }) => {

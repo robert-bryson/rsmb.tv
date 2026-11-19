@@ -111,13 +111,33 @@ export function filterSkiAreas(areas: readonly SkiArea[], query: string, region:
 export function skiAreaIdsInViewport(
     areas: readonly SkiArea[],
     viewport: TooltipRect,
-    project: (coordinates: SkiArea['location']['coordinates']) => TooltipPoint,
+    project: (coordinates: SkiArea['location']['coordinates']) => TooltipPoint | undefined,
 ): ReadonlySet<string> {
     const ids = new Set<string>();
     for (const area of areas) {
-        if (containsPoint(viewport, project(area.location.coordinates))) ids.add(area.id);
+        const point = project(area.location.coordinates);
+        if (point && containsPoint(viewport, point)) ids.add(area.id);
     }
     return ids;
+}
+
+export function skiAreaBounds(areas: readonly SkiArea[]): [number, number, number, number] | undefined {
+    if (!areas.length) return;
+    const coordinates = areas.map(area => area.location.coordinates);
+    const longitudes = coordinates.map(([longitude]) => longitude).sort((a, b) => a - b);
+    const latitudes = coordinates.map(([, latitude]) => latitude);
+    let west = longitudes[0];
+    let east = longitudes[longitudes.length - 1];
+    let largestGap = west + 360 - east;
+    // Leave the largest gap outside the bounds, including the gap that crosses the date line.
+    for (let index = 1; index < longitudes.length; index++) {
+        const gap = longitudes[index] - longitudes[index - 1];
+        if (gap <= largestGap) continue;
+        largestGap = gap;
+        west = longitudes[index];
+        east = longitudes[index - 1] + 360;
+    }
+    return [west, Math.min(...latitudes), east, Math.max(...latitudes)];
 }
 
 const collator = new Intl.Collator('en', { sensitivity: 'base', numeric: true });

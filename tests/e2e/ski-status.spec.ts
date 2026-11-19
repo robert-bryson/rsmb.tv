@@ -44,14 +44,14 @@ async function captureMap(page: Page, { phone = false, state = 'ready' }: { phon
     return renderer;
 }
 
-test('fits worldwide resorts on a phone and shows Ikon badges for a selected country', async ({ page }) => {
+test('opens a globe on a phone and fits the Ikon resorts in a selected country', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 780 });
     await prepare(page);
     const renderer = await captureMap(page, { phone: true });
-    await expect.poll(() => renderer.evaluate(map => {
-        const points = map.queryRenderedFeatures({ layers: ['ski-area-points'] });
-        return [...new Set(points.map(feature => feature.properties.areaId))].length;
-    })).toBe(locations.locations.length);
+    expect(await renderer.evaluate(map => map.getProjection().type)).toBe('globe');
+    await expect(page.getByText(`${locations.locations.length} of ${locations.locations.length} ski areas`)).toBeVisible();
+    await expect.poll(() => renderer.evaluate(map => map.queryRenderedFeatures({ layers: ['ski-area-points'] })
+        .some(feature => feature.properties.areaId === 'alta'))).toBe(true);
 
     const filters = page.getByRole('button', { name: 'Filters', exact: true });
     await filters.click();
@@ -70,6 +70,46 @@ test('fits worldwide resorts on a phone and shows Ikon badges for a selected cou
     await expect(table.locator('tbody tr')).toHaveCount(3);
     await table.getByRole('button', { name: 'Mt Hutt', exact: true }).click();
     await expect(page.getByText('Methven, New Zealand', { exact: true })).toBeVisible();
+    await renderer.dispose();
+});
+
+test('keeps rear-side resorts and their popups out of the globe view', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await prepare(page);
+    const renderer = await captureMap(page);
+    const table = page.getByRole('region', { name: 'Ski area comparison table' });
+    const alta = table.getByRole('button', { name: 'Alta Ski Area', exact: true });
+    const mtHutt = table.getByRole('button', { name: 'Mt Hutt', exact: true });
+    const popup = page.getByRole('region', { name: 'Alta Ski Area map popup', exact: true });
+
+    await page.getByRole('checkbox', { name: 'In map view' }).check();
+    await expect(alta).toBeVisible();
+    await expect(mtHutt).toHaveCount(0);
+    await alta.click();
+    await expect(popup).toBeVisible();
+
+    const canvas = (await page.getByTestId('ski-status-map').boundingBox())!;
+    const beforeDrag = await renderer.evaluate(map => map.getCenter().lng);
+    const dragStart = { x: canvas.x + canvas.width / 2, y: canvas.y + canvas.height * 0.65 };
+    await page.mouse.move(dragStart.x, dragStart.y);
+    await page.mouse.down();
+    await page.mouse.move(dragStart.x + 70, dragStart.y, { steps: 8 });
+    await page.mouse.up();
+    await expect.poll(() => renderer.evaluate(map => map.getCenter().lng)).not.toBe(beforeDrag);
+    await expect(page).toHaveURL(/area=alta/);
+
+    await renderer.evaluate(map => { map.jumpTo({ center: [171.53, -43.49], zoom: 0.75 }); });
+    await expect(mtHutt).toBeVisible();
+    await expect(alta).toHaveCount(0);
+    await expect(popup).toBeHidden();
+    await expect(page.getByRole('region', { name: 'Alta Ski Area', exact: true })).toBeVisible();
+    await expect(page.getByText('Selected area is outside the map view.')).toBeVisible();
+    const altaCoordinates = locations.locations.find(location => location.id === 'alta')!.coordinates as [number, number];
+    expect(await renderer.evaluate((map, coordinates) => {
+        const point = map.project(coordinates);
+        const { clientWidth, clientHeight } = map.getContainer();
+        return point.x >= 0 && point.x <= clientWidth && point.y >= 0 && point.y <= clientHeight;
+    }, altaCoordinates)).toBe(true);
     await renderer.dispose();
 });
 
@@ -298,6 +338,7 @@ test('fits changes made in the phone table after the real map viewport returns',
 test('centers the resort selected while the background style is being retried', async ({ page }) => {
     await prepare(page, null);
     const renderer = await captureMap(page, { state: 'degraded' });
+    expect(await renderer.evaluate(map => map.getProjection().type)).toBe('globe');
     await page.getByLabel('Region', { exact: true }).selectOption('WA');
     let release = () => {};
     const waiting = new Promise<void>(resolve => { release = resolve; });
@@ -530,6 +571,7 @@ test('keeps a fallback dot if a pass image fails and restores other badges after
     await page.route(styleUrl, route => route.fulfill({ json: baseStyle, headers: { 'access-control-allow-origin': '*' } }));
     await page.getByRole('button', { name: 'Retry background', exact: true }).click();
     await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
+    expect(await renderer.evaluate(map => map.getProjection().type)).toBe('globe');
     await expect.poll(anotherPassBadge).toBe(true);
     await renderer.dispose();
 });

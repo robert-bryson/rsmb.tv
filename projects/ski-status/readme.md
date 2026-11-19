@@ -19,7 +19,7 @@ On a wide screen, the page starts in **Split**. On a narrow screen, it starts in
 - Search by ski area, alternative name, town, country, or skiing type. Search for **cross-country** to find Nordic centers and areas that offer both types of skiing.
 - Use **Region** to select a country, state, or province. A shared ski area appears under each country that it covers. On a narrow screen, select **Filters** to see the region, pass, and night skiing controls.
 - Select **Indy** for included access. Select **Indy discounts** for Alpine Allied discounts and the North Cascade Heli offer.
-- Turn on **In map view** beside the results count to limit the table to the map area.
+- Turn on **In map view** beside the results count to limit the table to the visible side of the globe.
 - Select a column header to change the sort order.
 - Hover over a dot to see the area name and location. Zoom in to separate nearby dots.
 - Click or tap a dot to select the area and open its map popup. Select a table row to open the same popup when the map is visible.
@@ -33,7 +33,9 @@ The map keeps its position when you change views. With **In map view** off, filt
 
 ### Map display
 
-With **In map view** on, the table and count update after you pan or zoom. They also update when the map pane changes size. An area is in view when the center of its dot is within the map. Change the other filters or sort the table to compare areas in view. These changes keep the map at its current position. Select **Fit all results** to see all areas that match the other filters.
+Drag the globe to see other regions. Zoom in to see a local map. Select **Fit results** to frame matches in the same region. For matches across the world, the map zooms out to a globe overview.
+
+With **In map view** on, the table and count update after you turn the globe or change the zoom. They also update when the map pane changes size. A marker must be on the visible side of the globe and inside the map pane. Change the other filters or sort the table to compare areas in view. **Fit all results** uses the other filters to set the map view.
 
 When **Table** hides the map on a narrow screen, the table uses the last visible map area. Before the map opens, the table uses the other filters. Open **Map** to set the area. If you pan away from the selected area, its details stay open.
 
@@ -54,7 +56,7 @@ The map, filter, and area details use the pass images below. The app serves thes
 
 An acreage value such as `200+` gives a minimum. The table sorts by that minimum. If the minimum leaves more than one possible color range, the map shows a gray dot.
 
-The map uses the hosted CARTO Dark Matter vector style. Turn on **Terrain relief** to see shaded slopes from zoom level 8. CARTO continues to provide the streets and labels. Mapterhorn supplies the elevation tiles. [CARTO Basemaps](https://docs.carto.com/faqs/carto-basemaps), [Mapterhorn elevation tiles](https://mapterhorn.com/data-access/)
+The globe uses the hosted CARTO Dark Matter vector style. Turn on **Terrain relief** to see shaded slopes from zoom level 8. CARTO continues to provide the streets and labels. Mapterhorn supplies the elevation tiles. [CARTO Basemaps](https://docs.carto.com/faqs/carto-basemaps), [MapLibre projections](https://maplibre.org/maplibre-style-spec/types/#projectiondefinition), [Mapterhorn elevation tiles](https://mapterhorn.com/data-access/)
 
 CARTO publishes Dark Matter, Voyager, and Positron. MapTiler offers a separate Winter style with ski runs for a future resort view. [CARTO styles](https://carto.com/basemaps/#styles), [MapTiler topographic and winter maps](https://www.maptiler.com/maps/outdoor-topo/)
 
@@ -102,7 +104,7 @@ Run the unit tests for the catalog, table, details, and markers.
 npx vitest run src/test/skiStatus.test.ts src/test/skiStatusComponents.test.tsx
 ```
 
-Run the browser tests. They check map fit, shared areas, pass colors, popups, view changes, and error recovery.
+Run the browser tests. They check globe fit, visible results, pass colors, popups, view changes, and error recovery.
 
 ```bash
 npm run test:e2e -- tests/e2e/ski-status.spec.ts --project=chromium

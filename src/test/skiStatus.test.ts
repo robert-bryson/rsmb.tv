@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { filterSkiAreas, formatArea, formatSkiLocation, formatSkiStat, passFilterFamily, readPassFilter, readSkiResultsView, readSkiSort, skiAreaIdsInViewport, skiRegionOptions, sortSkiAreas } from '../features/ski-status/browse';
+import { filterSkiAreas, formatArea, formatSkiLocation, formatSkiStat, passFilterFamily, readPassFilter, readSkiResultsView, readSkiSort, skiAreaBounds, skiAreaIdsInViewport, skiRegionOptions, sortSkiAreas } from '../features/ski-status/browse';
 import { readSkiCatalog, skiAreas } from '../features/ski-status/catalog';
 import { markerAppearance, markerLegend, readMarkerMode } from '../features/ski-status/mapAppearance';
 
@@ -144,6 +144,16 @@ describe('ski-status catalog and browse', () => {
         });
         const visible = skiAreaIdsInViewport(areas, viewport, ([x, y]) => ({ x, y }));
         expect([...visible]).toEqual(areas.slice(0, 3).map(area => area.id));
+        const frontSideOnly = skiAreaIdsInViewport(areas, viewport, ([x, y]) => x === 160 ? undefined : { x, y });
+        expect([...frontSideOnly]).toEqual(areas.slice(0, 2).map(area => area.id));
+    });
+
+    it('fits nearby ski areas across the date line within the shorter longitude span', () => {
+        const coordinates: [number, number][] = [[170, -46], [-175, -42], [179, -44]];
+        const areas = coordinates.map((value, index) => ({ ...skiAreas[index], location: { ...skiAreas[index].location, coordinates: value } }));
+        expect(skiAreaBounds(areas)).toEqual([170, -46, 185, -42]);
+        expect(skiAreaBounds(areas.slice(0, 1))).toEqual([170, -46, 170, -46]);
+        expect(skiAreaBounds([])).toBeUndefined();
     });
 
     it('requires a known yes for night skiing and ignores invalid pass or sort parameters', () => {

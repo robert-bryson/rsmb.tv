@@ -3,6 +3,7 @@ import type { FilterSpecification, GeoJSONSource } from 'maplibre-gl';
 import type { FeatureCollection } from 'geojson';
 import { ResilientFullscreenControl, restoreFullscreenControl } from '../../maps/ResilientFullscreenControl';
 import { cartoRasterStyle, cartoVectorStyleUrl } from '../../maps/cartoBasemaps';
+import { applyGlobeStyle, globeOverviewZoom } from '../../maps/globe';
 import { recoverBasemap, type BasemapState } from '../../maps/recoverBasemap';
 import { OVERVIEW_BOUNDS, formatRadius } from './geometry';
 import { attachRadiusLabels } from './radiusLabels';
@@ -189,7 +190,7 @@ export function createPinsRenderer(options: Options) {
                     // Opposite edges of a world-sized bounds box meet on a globe.
                     // Zoom out around the current location instead of fitting
                     // that seam or panning away from the place being explored.
-                    const fitZoom = Math.max(0, Math.log2(Math.max(128, Math.min(width, height)) / 256) + 0.5);
+                    const fitZoom = globeOverviewZoom(width, height);
                     const initializeWorld = initialView && opensOnWorld;
                     map.flyTo({ center: initializeWorld ? [0, 20] : map.getCenter(), zoom: initializeWorld ? fitZoom : Math.min(map.getZoom(), fitZoom),
                         padding: { top: 0, right: 0, bottom: 0, left: 0 }, bearing: 0, pitch: 0, roll: 0, duration: current.reducedMotion ? 0 : 900 });
@@ -211,9 +212,7 @@ export function createPinsRenderer(options: Options) {
             styles.clear();
             // Hosted CARTO styles and the recovery style have their own defaults.
             // Restore the globe whenever either background is loaded.
-            map.setProjection({ type: 'globe' });
-            map.setSky({ 'sky-color': '#080e16', 'horizon-color': '#344d60', 'fog-color': '#171f26',
-                'fog-ground-blend': 0, 'atmosphere-blend': 0.8 });
+            applyGlobeStyle(map);
             installPinLayers(map);
             sync();
         });

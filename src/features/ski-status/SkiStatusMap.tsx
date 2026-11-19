@@ -2,10 +2,11 @@ import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
 import type { FeatureCollection, Point } from 'geojson';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { cartoRasterStyle, cartoVectorStyleUrl } from '../../maps/cartoBasemaps';
+import { applyGlobeStyle, globeOverviewZoom, projectVisibleGlobeLocation } from '../../maps/globe';
 import * as maplibre from '../../maps/maplibre';
 import { recoverBasemap, type BasemapState } from '../../maps/recoverBasemap';
-import { clamp, distanceSquared, type TooltipPoint } from '../../maps/screenGeometry';
-import { skiAreaIdsInViewport, type PassFilter, type SkiUnits } from './browse';
+import { distanceSquared, type TooltipPoint } from '../../maps/screenGeometry';
+import { skiAreaBounds, skiAreaIdsInViewport, type PassFilter, type SkiUnits } from './browse';
 import { passFamilySchema, skiAreas, type SkiArea } from './catalog';
 import { markerAppearance, multiplePassColor, passBadgeId, passBadgeSize, passBadgeTextColor, type MarkerMode } from './mapAppearance';
 import { passIconUrls } from './passIcons';
@@ -26,14 +27,8 @@ const terrainLayer = 'ski-terrain-relief';
 const pointZoom = 9;
 const minZoom = -2;
 const maxZoom = 16;
-const mercatorLimit = new maplibre.MercatorCoordinate(0, 0).toLngLat().lat;
+const overviewCenter: [number, number] = [-100, 44];
 const providerStyle = () => cartoVectorStyleUrl('dark-matter');
-
-const constrainCamera: maplibre.TransformConstrainFunction = (center, zoom) => ({
-    // The world can be smaller than the viewport when a narrow map fits all resorts.
-    center: new maplibre.LngLat(clamp(center.lng, -180, 180), clamp(center.lat, -mercatorLimit, mercatorLimit)),
-    zoom: clamp(zoom, minZoom, maxZoom),
-});
 
 interface Props {
     areas: readonly SkiArea[];
@@ -49,13 +44,29 @@ interface Props {
 }
 
 function fitAreas(map: maplibre.Map, areas: readonly SkiArea[], duration: number) {
-    if (!areas.length) return;
+    const bounds = skiAreaBounds(areas);
+    if (!bounds) return;
     const { clientWidth, clientHeight } = map.getContainer();
     const padding = Math.min(46, clientWidth / 4, clientHeight / 4);
     if (!padding) return;
     map.resize();
-    const bounds = new maplibre.LngLatBounds();
-    for (const area of areas) bounds.extend(area.location.coordinates);
+    if (bounds[2] - bounds[0] >= 180) {
+        // A single face of the globe cannot show results spread around the world.
+        let center: maplibre.LngLatLike = overviewCenter;
+        if (areas.length !== skiAreas.length) {
+            const current = map.getCenter();
+            let nearestDistance = Infinity;
+            for (const area of areas) {
+                const location = maplibre.LngLat.convert(area.location.coordinates);
+                const distance = current.distanceTo(location);
+                if (distance >= nearestDistance) continue;
+                nearestDistance = distance;
+                center = location;
+            }
+        }
+        map.easeTo({ center, zoom: globeOverviewZoom(clientWidth, clientHeight), duration });
+        return;
+    }
     map.fitBounds(bounds, { padding, maxZoom: pointZoom, duration });
 }
 
@@ -199,7 +210,9 @@ function closestArea(map: maplibre.Map, point: TooltipPoint, areas: ReadonlyMap<
         const id: unknown = feature.properties.areaId;
         const area = typeof id === 'string' ? areas.get(id) : undefined;
         if (!area) continue;
-        const distance = distanceSquared(point, map.project(area.location.coordinates));
+        const position = projectVisibleGlobeLocation(map, area.location.coordinates);
+        if (!position) continue;
+        const distance = distanceSquared(point, position);
         if (distance >= nearestDistance) continue;
         nearest = area;
         nearestDistance = distance;
@@ -268,7 +281,7 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
         if (!clientWidth || !clientHeight) return;
         // Use all locations so filters can change while the map is hidden in Table view.
         const viewport = { left: 0, top: 0, right: clientWidth, bottom: clientHeight };
-        onVisibleAreasChange(skiAreaIdsInViewport(skiAreas, viewport, coordinates => map.project(coordinates)));
+        onVisibleAreasChange(skiAreaIdsInViewport(skiAreas, viewport, coordinates => projectVisibleGlobeLocation(map, coordinates)));
     });
 
     useEffect(() => {
@@ -286,8 +299,8 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
             let instance: maplibre.Map;
             try {
                 instance = new maplibre.Map({
-                    container: container.current, style: providerStyle(), center: [-100, 44], zoom: 2.7,
-                    minZoom, maxZoom, transformConstrain: constrainCamera, renderWorldCopies: false, dragRotate: false, pitchWithRotate: false,
+                    container: container.current, style: providerStyle(), center: overviewCenter, zoom: 1,
+                    minZoom, maxZoom, dragRotate: false, pitchWithRotate: false,
                 });
             } catch {
                 setFailed(true);
@@ -310,6 +323,7 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
             });
             instance.on('style.load', () => {
                 clearHover();
+                applyGlobeStyle(instance);
                 const data = current();
                 if (!instance.getSource(sourceId)) addAreaLayers(instance, data.points);
                 highlightArea(instance, data.selected);
@@ -326,6 +340,7 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
             });
             instance.on('movestart', clearHover);
             instance.on('moveend', queueViewport);
+            instance.on('projectiontransition', queueViewport);
             instance.on('sourcedata', event => {
                 if (event.sourceId === sourceId && event.isSourceLoaded) setReady(true);
                 if (event.sourceId === terrainSource && event.isSourceLoaded && event.sourceDataType === 'content') setTerrainUnavailable(false);
