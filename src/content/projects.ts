@@ -44,7 +44,10 @@ export const projects: Project[] = [
     demoUrl: '/projects/ski-status/map',
     year: 2026,
     lastUpdated: '2026-11-19',
-    changelog: [{ date: '2026-11', notes: ['Added the 25-area pilot map, comparison table, and pass filters'] }],
+    changelog: [{ date: '2026-11', notes: [
+      'Expanded the ski area catalog to 197 areas',
+      'Added full screen map and table views, resort dot colors, and terrain relief',
+    ] }],
   },
   {
     slug: 'pins-of-inaccessibility',

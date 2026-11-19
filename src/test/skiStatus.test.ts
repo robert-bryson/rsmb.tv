@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { filterSkiAreas, formatSkiStat, readPassFilter, readSkiSort, sortSkiAreas } from '../features/ski-status/browse';
+import { filterSkiAreas, formatArea, formatSkiStat, readPassFilter, readSkiSort, sortSkiAreas } from '../features/ski-status/browse';
 import { readSkiCatalog, skiAreas } from '../features/ski-status/catalog';
+import { markerColor, markerLegend, readMarkerMode } from '../features/ski-status/mapAppearance';
 
 const area = {
     id: 'test-mountain', name: 'Test Mountain', country: 'US', region: 'WA', locality: 'Test Town', acres: 100,
@@ -37,7 +38,13 @@ describe('ski-status catalog validation', () => {
         expect(readSkiCatalog([area], locations, { ...passes, memberships: [] }).areas[0]?.passes).toEqual([]);
     });
 
+    it('retains a matched pass resort whose stats and conditions are unknown', () => {
+        const unknown = { ...area, acres: undefined, statsUrl: undefined, reportUrl: undefined };
+        expect(readSkiCatalog([unknown], locations, passes).areas[0]).toMatchObject({ id: area.id, passes: [membership] });
+    });
+
     it.each([
+        [{ statsUrl: undefined }, /No skiable acreage source/],
         [{ trailCountQualifier: 'lower-bound' }, /Lower bound.*reported value/],
         [{ highestLiftTerminalFt: 3_000, lowestLiftTerminalFt: 3_100 }, /Inverted lift terminal/],
         [{ nightSkiing: false, nightAcres: 20 }, /Conflicting night skiing/],
@@ -50,9 +57,9 @@ describe('ski-status catalog validation', () => {
     });
 });
 
-describe('ski-status pilot', () => {
+describe('ski-status catalog and browse', () => {
     it('maps each eligible area once and keeps split base data under one resort', () => {
-        expect(skiAreas).toHaveLength(25);
+        expect(skiAreas.length).toBeGreaterThanOrEqual(197);
         expect(new Set(skiAreas.map(area => area.id)).size).toBe(skiAreas.length);
         expect(new Set(skiAreas.map(area => area.location.coordinates.join(','))).size).toBe(skiAreas.length);
         expect(skiAreas.every(area => (area.acres ?? 0) >= 100 || area.passes.some(pass => pass.access === 'included'))).toBe(true);
@@ -60,15 +67,16 @@ describe('ski-status pilot', () => {
     });
 
     it('includes a small pass partner while excluding discount-only access from that filter', () => {
-        expect(filterSkiAreas(skiAreas, '', '', 'indy').map(area => area.id)).toEqual(['whaleback']);
-        expect(filterSkiAreas(skiAreas, 'whiteface', '')[0]?.passes).toMatchObject([{ family: 'indy', access: 'discount' }]);
+        expect(filterSkiAreas(skiAreas, 'whaleback', '', 'indy').map(area => area.id)).toEqual(['whaleback']);
+        expect(filterSkiAreas(skiAreas, 'whiteface', '', 'indy')).toEqual([]);
+        expect(filterSkiAreas(skiAreas, 'whiteface', '')[0]?.passes).toContainEqual(expect.objectContaining({ family: 'indy', access: 'discount' }));
         expect(filterSkiAreas(skiAreas, 'quebec le massif', 'QC', 'mountain-collective').map(area => area.id)).toEqual(['le-massif']);
         expect(filterSkiAreas(skiAreas, 'heavenly', 'NV', 'epic').map(area => area.id)).toEqual(['heavenly']);
     });
 
     it('finds ski areas by full country name', () => {
         const canada = filterSkiAreas(skiAreas, 'Canada', '');
-        expect(canada).toHaveLength(8);
+        expect(canada.length).toBeGreaterThanOrEqual(30);
         expect(canada.every(area => area.country === 'CA')).toBe(true);
     });
 
@@ -86,6 +94,7 @@ describe('ski-status pilot', () => {
         expect(formatSkiStat(peak, 'name', 'metric')).toBe('Granite Peak');
         expect(formatSkiStat(peak, 'acres', 'imperial')).toBe('200+ ac');
         expect(formatSkiStat(peak, 'acres', 'metric')).toBe('80.9+ ha');
+        expect(formatArea(101, 'metric', true)).toBe('40.8+ ha');
         expect(formatSkiStat({ ...peak, verticalFt: 1000 }, 'verticalFt', 'metric')).toBe('305 m');
         expect(formatSkiStat({ ...peak, nightSkiing: false }, 'nightSkiing', 'metric')).toBe('No');
     });
@@ -100,5 +109,30 @@ describe('ski-status pilot', () => {
             expect(sortSkiAreas([unreported, zero], { key: 'trailCount', direction })).toEqual([zero, unreported]);
         }
         expect(readSkiSort(new URLSearchParams('sort=unrecognized:desc'))).toEqual({ key: 'name', direction: 'asc' });
+    });
+});
+
+describe('ski-status marker colors', () => {
+    it('distinguishes included passes, multiple passes, and discount-only access', () => {
+        const legend = markerLegend('pass', 'imperial');
+        const alta = skiAreas.find(area => area.id === 'alta')!;
+        const whiteface = skiAreas.find(area => area.id === 'whiteface')!;
+        const whaleback = skiAreas.find(area => area.id === 'whaleback')!;
+        expect(markerColor(alta, 'pass')).toBe(legend.find(entry => entry.label === 'Multiple passes')?.color);
+        expect(markerColor(whaleback, 'pass')).toBe(legend.find(entry => entry.label === 'Indy')?.color);
+        expect(markerColor({ ...whiteface, passes: whiteface.passes.filter(pass => pass.access === 'discount') }, 'pass'))
+            .toBe(legend.find(entry => entry.label === 'Discount only')?.color);
+        expect(markerColor({ ...alta, passes: [] }, 'pass')).toBe(legend.find(entry => entry.label === 'No pass recorded')?.color);
+    });
+
+    it('uses the numeric bin at its boundary and marks unknown values separately', () => {
+        const legend = markerLegend('acres', 'metric');
+        const source = skiAreas[0];
+        expect(legend[0]?.label).toBe('Under 101.2 ha');
+        expect(markerColor({ ...source, acres: 249 }, 'acres')).toBe(legend[0]?.color);
+        expect(markerColor({ ...source, acres: 250 }, 'acres')).toBe(legend[1]?.color);
+        expect(markerColor({ ...source, acres: undefined }, 'acres')).toBe(legend.at(-1)?.color);
+        expect(markerLegend('default', 'metric')).toEqual([]);
+        expect(readMarkerMode('__proto__')).toBe('default');
     });
 });

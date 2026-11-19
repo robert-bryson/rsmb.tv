@@ -4,29 +4,40 @@ November 19, 2026
 
 ski-status is a personal map and comparison table for North American downhill ski areas. Use it to compare mountain statistics and find ski areas on your pass.
 
-## Use the pilot
+## Use ski-status
 
-The pilot contains 25 ski areas in the United States and Canada. Open `/projects/ski-status/map` from the project directory. The desktop view shows the map beside the table. On a phone, select **Map** or **Table**.
+Open `/projects/ski-status/map`. The desktop view shows the map beside the table. On a phone, select **Map** or **Table**.
 
 - Search by ski area, alternative name, town, or country.
 - Filter by region, pass family, or night skiing.
 - Select a column header to change the sort order.
-- Select a map marker or table row to show the area details.
-- Select **Official conditions** to open the operator's report.
+- Select a dot or table row to show the area details. Zoom in to separate nearby dots.
+- Select **Full screen** in the map or table toolbar. Press Escape or select **Exit full screen** to return to the previous layout. Both views keep the current filters.
+- Select **Official conditions** where available to open the operator's report. Each area also has a link to its website.
 
-The URL stores the search text, filters, sort order, selection, and phone view. The browser stores your unit preference. The table remains available when the basemap or map renderer fails.
+The URL stores the search text, filters, sort order, selection, phone view, and map colors and relief settings. The browser stores your unit preference. The table remains available when the basemap or map renderer fails.
 
-## Pilot catalog
+### Map display
+
+The default map shows one cyan dot per ski area. Use **Color by** to show pass access, skiable area, vertical drop, summit elevation, or highest lift terminal. The legend shows the ranges in your selected units. Gray marks an unknown value. A gold outline shows the selected area.
+
+The map uses the hosted CARTO Dark Matter vector style. Turn on **Terrain relief** to see shaded slopes from zoom level 8. CARTO continues to provide the streets and labels. Mapterhorn supplies the elevation tiles. [CARTO Basemaps](https://docs.carto.com/faqs/carto-basemaps), [Mapterhorn elevation tiles](https://mapterhorn.com/data-access/)
+
+CARTO publishes Dark Matter, Voyager, and Positron. MapTiler offers a separate Winter style with ski runs for a future resort view. [CARTO styles](https://carto.com/basemaps/#styles), [MapTiler topographic and winter maps](https://www.maptiler.com/maps/outdoor-topo/)
+
+## Catalog
+
+The catalog includes 197 ski areas across 33 regions. It has 167 areas in the United States and 30 in Canada. The current files have 83 published acreage figures and 48 direct links to official conditions reports. Each area meets the acreage or pass rule below. The full list still needs a review of remaining candidates and pass partners.
 
 | File | Use |
 | --- | --- |
-| [Area statistics](data/pilot-areas.json) | Mountain statistics and report links checked on November 19, 2026. Empty fields display as unknown. |
-| [Area locations](data/pilot-locations.json) | Points from the November 16 OpenSkiData build. Each point has source identifiers. The file includes ODbL attribution. |
-| [Pass memberships](data/passes-2026-27.json) | Family access for the 2026/27 season. The details show discounts. The pass filter includes areas with lift access. |
+| [Area statistics](data/areas.json) | Resort sites, published mountain statistics, and official report links. Empty fields display as unknown. |
+| [Area locations](data/locations.json) | Points from the November 16 OpenSkiData build. Each point has source identifiers. The file includes ODbL attribution. |
+| [Pass memberships](data/passes-2026-27.json) | Family access for the 2026/27 season. The details show discounts. The pass filter includes areas with lift access. Each entry links to a source. |
 
 Use the same area ID in the three files. Add one point for each area. Add at most one membership for each area and pass family. Palisades Tahoe uses one point with sources for both bases. A value with a plus sign sorts by its stated minimum.
 
-The catalog checks for duplicate IDs and missing references. It checks eligibility and rejects conflicting values. Use HTTPS source URLs without embedded credentials. [Catalog validation](../../src/features/ski-status/catalog.ts)
+The catalog checks for duplicate IDs, missing references, and conflicting values. Cite an operator source for each published acreage. Use HTTPS source URLs without embedded credentials. [Catalog validation](../../src/features/ski-status/catalog.ts)
 
 ## Local checks
 
@@ -52,12 +63,10 @@ Whaleback has 86 skiable acres and qualifies through Indy lift access. Show Indy
 
 ### Map and table
 
-- Show a map beside the table on desktops. Keep filters and selection when a phone user changes views.
-- Group nearby markers at low zoom. Show individual markers at high zoom. Use one detail panel for map and table selections.
-- Search by area name, alternative name, state, province, country, or town. Filter by family, product, ski date, operating status, and night skiing.
-- Sort by any published statistic. Compare numbers in common units. Put unknown values last in both directions. Give reported and forecast snow their own columns.
+- Add filters for pass product, ski date, and operating status.
+- Color dots by operating status after the app can check report age. Use gray when the latest report is unavailable or stale.
+- Add separate columns for observed and forecast snow. Compare numbers in common units. Put unknown values last in both directions.
 - Group columns by mountain statistics, conditions, and season dates. Save visible columns and units on the device. Use **In map view** to limit results to the map bounds.
-- Store filters, sort order, and the selected area in the URL. Keep the table usable if the basemap or renderer fails.
 - Export filtered rows as CSV where licenses permit it. Include units, report times, and source links.
 
 ### Comparable mountain statistics
@@ -96,10 +105,10 @@ The CSV has SHA-256 `9c5a372b8d02aedd281fd387c581c16f48915d89abacec7eba0faa53726
 
 ### Build the catalog
 
-1. Import a versioned OpenSkiData file. Import names, points, source IDs, and candidate websites. Check official pass lists and regional directories for missing areas. [OpenSkiData downloads](https://www.openskidata.org/#downloads), [NSAA inventory by state](https://nsaa.org/NSAA/About/Media/Industry_Stats/NSAA/About/Media/Industry_Stats.aspx), [Canadian Ski Council directory](https://www.skicanada.org/ski-area-list/), [Québec ski area directory](https://maneige.ski/en/stations-et-conditions/)
+1. Import names, points, source IDs, and candidate websites from a versioned OpenSkiData file. Use regional directories to find missing areas. Check directory terms before you collect source data. [OpenSkiData downloads](https://www.openskidata.org/#downloads), [NSAA inventory by state](https://nsaa.org/NSAA/About/Media/Industry_Stats/NSAA/About/Media/Industry_Stats.aspx), [Canadian Ski Council directory](https://www.skicanada.org/ski-area-list/), [Québec ski area directory](https://maneige.ski/en/stations-et-conditions/)
 2. Match by source ID or a verified name and location. Assign a stable local ID for links, reports, and visits. OpenSkiData feature IDs can change between builds. [OpenSkiData feature IDs](https://www.openskidata.org/#whats-in-the-data)
 3. Review uncertain matches. Group bases when the operator publishes combined statistics. Palisades Tahoe publishes combined resort statistics. Keep independently operated areas separate if they share a pass allowance. [Palisades Tahoe statistics](https://www.palisadestahoe.com/footer/mountain-statistics), [Ikon access comparison](https://www.ikonpass.com/en/compare-benefits)
-4. Verify eligibility with operator acreage or a current pass list. Record the reason and source. Keep areas with unresolved acreage in the review list. Remove duplicate, closed, and private areas from the release catalog.
+4. Verify eligibility with operator acreage or a current source for pass access. Record the reason and source. Keep unresolved areas in the review list. Remove duplicate, closed, and private areas from the release catalog. [Indy Pass website terms](https://www.indyskipass.com/website-terms-of-use)
 5. Add operator statistics for each eligible area. Record the source URL, verification date, and scope. Label mapped lift terminal estimates. Use operator statistics for the official trail count. [OpenSkiData data definitions](https://www.openskidata.org/#whats-in-the-data)
 6. Count resolved and unresolved candidates by region. Measure coverage for acres, elevations, grades, night acres, and dates. Skibowl reports total acres and the number of lit runs. Keep night skiable acres unknown until you find a source. [Skibowl statistics](https://skibowl.com/about-winter/stats/)
 
@@ -148,7 +157,7 @@ On November 19, the SnoCountry demo returned Bolton Valley, Bromley, and Burke. 
 
 The project uses React, TypeScript, Vite, and MapLibre. The `/projects/ski-status` route opens `/projects/ski-status/map`. Keep data preparation in `projects/ski-status/`. Keep feature code in `src/features/ski-status/`. Use the shared CARTO configuration and map recovery. [CARTO basemap configuration](../../docs/carto-basemaps.md), [Existing project routes](../../src/App.tsx)
 
-Use a GeoJSON source for clustered points and typed JSON for table data. Join static facts, pass rules, reported operations, and forecast snapshots by the local area ID. A single filter result drives the map and table.
+Use a GeoJSON source for the resort dots and typed JSON for the table. A single filter result drives both views. Join static facts, pass rules, resort reports, and forecasts by the local area ID in later stages.
 
 ```mermaid
 flowchart LR

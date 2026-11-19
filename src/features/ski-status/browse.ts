@@ -62,15 +62,24 @@ export function sortSkiAreas(areas: readonly SkiArea[], sort: SkiSort) {
 const integer = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
 const areaNumber = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 });
 
+export function formatArea(acres: number, units: SkiUnits, lowerBound = false) {
+    const value = units === 'metric' ? acres * 0.40468564224 : acres;
+    const shown = lowerBound ? Math.floor(value * 10) / 10 : value;
+    return `${areaNumber.format(shown)}${lowerBound ? '+' : ''} ${units === 'metric' ? 'ha' : 'ac'}`;
+}
+
+export function formatElevation(feet: number, units: SkiUnits) {
+    return units === 'metric' ? `${integer.format(feet * 0.3048)} m` : `${integer.format(feet)} ft`;
+}
+
 export function formatSkiStat(area: SkiArea, key: ColumnKey, units: SkiUnits): string | undefined {
     const value = area[key];
     if (value === undefined) return;
     if (typeof value === 'string') return value;
     if (typeof value === 'boolean') return value ? 'Yes' : 'No';
     if (key === 'acres' || key === 'nightAcres') {
-        const suffix = key === 'acres' && area.acresQualifier ? '+' : '';
-        return units === 'metric' ? `${areaNumber.format(value * 0.40468564224)}${suffix} ha` : `${areaNumber.format(value)}${suffix} ac`;
+        return formatArea(value, units, key === 'acres' && area.acresQualifier === 'lower-bound');
     }
-    if (key.endsWith('Ft')) return units === 'metric' ? `${integer.format(value * 0.3048)} m` : `${integer.format(value)} ft`;
+    if (key.endsWith('Ft')) return formatElevation(value, units);
     return `${integer.format(value)}${key === 'trailCount' && area.trailCountQualifier ? '+' : ''}`;
 }

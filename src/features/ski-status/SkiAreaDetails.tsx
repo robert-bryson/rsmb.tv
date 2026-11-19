@@ -16,8 +16,8 @@ export function SkiAreaDetails({ area, units, onClose }: { area: SkiArea; units:
         </div>
         <div className="flex flex-wrap gap-x-5 text-sm">
             <a className={linkClass} href={area.website}>Resort website</a>
-            <a className={linkClass} href={area.reportUrl}>Official conditions</a>
-            <a className={linkClass} href={area.statsUrl}>Mountain stats source</a>
+            {area.reportUrl && <a className={linkClass} href={area.reportUrl}>Official conditions</a>}
+            {area.statsUrl && <a className={linkClass} href={area.statsUrl}>Mountain stats source</a>}
             {area.additionalSources?.map((url, index) => <a key={url} className={linkClass} href={url}>Additional source {index + 1}</a>)}
         </div>
         <dl className="grid grid-cols-2 gap-3 border-t border-zinc-800 pt-3 text-sm sm:grid-cols-3 xl:grid-cols-6">

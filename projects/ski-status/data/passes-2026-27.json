@@ -3,6 +3,30 @@
   "checkedOn": "2026-11-19",
   "memberships": [
     {
+      "areaId": "49-north-mountain-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.ski49n.com/promotions-perks/details/indy-pass-49"
+    },
+    {
+      "areaId": "afton-alps",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "alpental",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.summitatsnoqualmie.com/season-passes/ikon-pass"
+    },
+    {
+      "areaId": "alpine-valley",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
       "areaId": "alta",
       "family": "ikon",
       "access": "included",
@@ -15,6 +39,48 @@
       "source": "https://mountaincollective.com/resorts/"
     },
     {
+      "areaId": "alyeska-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.alyeskaresort.com/ikon-pass/"
+    },
+    {
+      "areaId": "arapahoe-basin",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.arapahoebasin.com/als-blog/passes-on-sale-march-12/"
+    },
+    {
+      "areaId": "aspen-highlands",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.aspensnowmass.com/partner-passes/ikon-pass/ikon-pass-holders-guide-to-aspen-snowmass"
+    },
+    {
+      "areaId": "aspen-highlands",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://www.aspensnowmass.com/discover/experiences/guides/your-pre-arrival-guide"
+    },
+    {
+      "areaId": "aspen-mountain",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.aspensnowmass.com/partner-passes/ikon-pass/ikon-pass-holders-guide-to-aspen-snowmass"
+    },
+    {
+      "areaId": "aspen-mountain",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://www.aspensnowmass.com/discover/experiences/guides/your-pre-arrival-guide"
+    },
+    {
+      "areaId": "attitash-mountain-resort",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
       "areaId": "banff-sunshine",
       "family": "ikon",
       "access": "included",
@@ -25,6 +91,192 @@
       "family": "mountain-collective",
       "access": "included",
       "source": "https://mountaincollective.com/resorts/"
+    },
+    {
+      "areaId": "bear-mountain",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.bigbearmountainresort.com/employment/~/link.aspx?_id=06F9EB759AA6405D88BA264751583959&_z=z"
+    },
+    {
+      "areaId": "beaver-creek-resort",
+      "family": "epic",
+      "access": "included",
+      "source": "https://investors.vailresorts.com/news-releases/news-release-details/how-save-your-ski-season-epic-passes-go-sale-december-6"
+    },
+    {
+      "areaId": "berkshire-east-ski-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://berkshireeast.com/winter/indy-pass"
+    },
+    {
+      "areaId": "big-boulder",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "big-sky-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.bigskyresort.com/ikon-pass"
+    },
+    {
+      "areaId": "big-sky-resort",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://www.bigskyresort.com/partners"
+    },
+    {
+      "areaId": "blue-mountain-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.skibluemt.com/ikonpass/"
+    },
+    {
+      "areaId": "blue-mountain-resort-on",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.bluemountain.ca/plan-your-trip/season-passes/purchasing-guide"
+    },
+    {
+      "areaId": "bluewood",
+      "family": "indy",
+      "access": "included",
+      "source": "https://bluewood.com/indy-pass-at-bluewood"
+    },
+    {
+      "areaId": "bolton-valley-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.boltonvalley.com/winter/tickets-passes/indy-pass/"
+    },
+    {
+      "areaId": "boston-mills",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "boyne-mountain",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.boynemountain.com/ikon-pass"
+    },
+    {
+      "areaId": "brandywine",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "breckenridge-ski-resort",
+      "family": "epic",
+      "access": "included",
+      "source": "https://investors.vailresorts.com/news-releases/news-release-details/how-save-your-ski-season-epic-passes-go-sale-december-6"
+    },
+    {
+      "areaId": "brighton-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.brightonresort.com/season-pass/ikon-pass"
+    },
+    {
+      "areaId": "bromont-montagne-dexperiences",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://www.bromontmontagne.com/en/mountain_collective_en/"
+    },
+    {
+      "areaId": "brundage-mountain-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://brundage.com/indypassvisitors/"
+    },
+    {
+      "areaId": "buck-hill",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.lutsen.com/ikon-pass"
+    },
+    {
+      "areaId": "burke-mountain-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.skiburke.com/component/content/category/the-mountain"
+    },
+    {
+      "areaId": "buttermilk",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.aspensnowmass.com/partner-passes/ikon-pass/ikon-pass-holders-guide-to-aspen-snowmass"
+    },
+    {
+      "areaId": "buttermilk",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://www.aspensnowmass.com/discover/experiences/guides/your-pre-arrival-guide"
+    },
+    {
+      "areaId": "caberfae-peaks",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.alterramtn.co/en/news/ikon-pass-expands-further-into-japan-and-china-for-winter-2627"
+    },
+    {
+      "areaId": "camelback-mountain-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.camelbackresort.com/ikon-pass-faqs"
+    },
+    {
+      "areaId": "camp-fortune",
+      "family": "indy",
+      "access": "included",
+      "source": "https://campfortune.com/en/indy-pass/"
+    },
+    {
+      "areaId": "cannon-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.cannonmt.com/indy-pass"
+    },
+    {
+      "areaId": "castle-mountain-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.skicastle.ca/indypass/"
+    },
+    {
+      "areaId": "catamount-mountain-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://catamountski.com/winter/tickets-passes/indy-pass-reservations"
+    },
+    {
+      "areaId": "copper-mountain",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.coppercolorado.com/tickets-passes/season-passes/ikon-pass/?season=summer"
+    },
+    {
+      "areaId": "cranmore-mountain-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://cranmore.com/news/cranmore-mountain-becomes-bonus-mountain-on-ikon-pass"
+    },
+    {
+      "areaId": "crested-butte-mountain-resort",
+      "family": "epic",
+      "access": "included",
+      "source": "https://investors.vailresorts.com/news-releases/news-release-details/how-save-your-ski-season-epic-passes-go-sale-december-6"
+    },
+    {
+      "areaId": "crotched-mountain",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
     },
     {
       "areaId": "crystal-mountain",
@@ -33,16 +285,82 @@
       "source": "https://www.ikonpass.com/en/compare-benefits"
     },
     {
+      "areaId": "crystal-mountain-mi",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.crystalmountain.com/ski/season-passes/season-pass-perks"
+    },
+    {
+      "areaId": "crystal-ridge",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.alterramtn.co/en/news/deer-valley-now-3-days-on-ikon-base-pass-for-winter-2627"
+    },
+    {
       "areaId": "cypress-mountain",
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/compare-benefits"
     },
     {
+      "areaId": "deer-valley-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.deervalley.com/media-room/110926-ikon-base-pass"
+    },
+    {
+      "areaId": "devil-s-head-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.lutsen.com/ikon-pass"
+    },
+    {
+      "areaId": "eaglecrest-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://skieaglecrest.com/visit/"
+    },
+    {
+      "areaId": "eldora-mountain-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.eldora.com/ikon-pass/"
+    },
+    {
+      "areaId": "fernie-alpine-resort",
+      "family": "epic",
+      "access": "included",
+      "source": "https://skircr.zohodesk.com/portal/en/kb/articles/which-resorts-of-the-canadian-rockies-mountains-are-included-on-the-epic-pass-and-epic-day-pass"
+    },
+    {
+      "areaId": "giants-ridge",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.alterramtn.co/en/news/two-weeks-left-to-grab-an-ikon-pass-at-its-current-lowest-spring-prices"
+    },
+    {
+      "areaId": "grand-targhee-resort",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://www.grandtarghee.com/tickets-passes/season-passes/mountain-collective-pass"
+    },
+    {
       "areaId": "granite-peak",
       "family": "ikon",
       "access": "included",
-      "source": "https://www.ikonpass.com/en/compare-benefits"
+      "source": "https://www.lutsen.com/ikon-pass"
+    },
+    {
+      "areaId": "greek-peak-mountain-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.greekpeak.net/ski-ride/indy-pass/"
+    },
+    {
+      "areaId": "grouse-mountain",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.alterramtn.co/en/news/2627-ikon-pass-goes-on-sale-march-12-with-new-benefits-new-offers-and-new-discounts"
     },
     {
       "areaId": "heavenly",
@@ -51,10 +369,76 @@
       "source": "https://www.epicpass.com/regions/destination.aspx"
     },
     {
+      "areaId": "hidden-valley-resort",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "hidden-valley-ski-resort",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "hoodoo-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://skihoodoo.com/rates/indy-pass/"
+    },
+    {
+      "areaId": "hunter-mountain",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "jack-frost-mountain",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "jackson-hole-mountain-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://cams.jacksonhole.com/ikon-pass"
+    },
+    {
+      "areaId": "jackson-hole-mountain-resort",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://www.jacksonhole.com/the-mountain-collective"
+    },
+    {
+      "areaId": "jay-peak-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://jaypeakresort.com/resort/partnerships-and-sponsors"
+    },
+    {
+      "areaId": "jiminy-peak-mountain-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.jiminypeak.com/skiing-riding/tickets-passes/jiminy-peak-ikon-pass-bonus-mountain/"
+    },
+    {
+      "areaId": "june-mountain",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.junemountain.com/plan-your-trip/season-passes"
+    },
+    {
+      "areaId": "keystone-resort",
+      "family": "epic",
+      "access": "included",
+      "source": "https://investors.vailresorts.com/news-releases/news-release-details/how-save-your-ski-season-epic-passes-go-sale-december-6"
+    },
+    {
       "areaId": "kicking-horse",
       "family": "epic",
       "access": "included",
-      "source": "https://www.epicpass.com/regions/canada/rcr.aspx"
+      "source": "https://skircr.zohodesk.com/portal/en/kb/articles/which-resorts-of-the-canadian-rockies-mountains-are-included-on-the-epic-pass-and-epic-day-pass"
     },
     {
       "areaId": "killington",
@@ -63,6 +447,18 @@
       "source": "https://www.ikonpass.com/en/compare-benefits"
     },
     {
+      "areaId": "kimberley-alpine-resort",
+      "family": "epic",
+      "access": "included",
+      "source": "https://skircr.zohodesk.com/portal/en/kb/articles/which-resorts-of-the-canadian-rockies-mountains-are-included-on-the-epic-pass-and-epic-day-pass"
+    },
+    {
+      "areaId": "kirkwood-mountain-resort",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
       "areaId": "lake-louise",
       "family": "ikon",
       "access": "included",
@@ -75,6 +471,12 @@
       "source": "https://mountaincollective.com/resorts/"
     },
     {
+      "areaId": "laurel-mountain",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
       "areaId": "le-massif",
       "family": "ikon",
       "access": "included",
@@ -85,6 +487,54 @@
       "family": "mountain-collective",
       "access": "included",
       "source": "https://mountaincollective.com/resorts/"
+    },
+    {
+      "areaId": "liberty-mountain-resort",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "little-switzerland",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.alterramtn.co/en/news/deer-valley-now-3-days-on-ikon-base-pass-for-winter-2627"
+    },
+    {
+      "areaId": "loon-mountain-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.loonmtn.com/season-passes/ikon-pass"
+    },
+    {
+      "areaId": "lost-trail",
+      "family": "indy",
+      "access": "included",
+      "source": "https://losttrail.com/indypass/"
+    },
+    {
+      "areaId": "loveland-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://skiloveland.com/indypass/"
+    },
+    {
+      "areaId": "lutsen-mountains",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.lutsen.com/ikon-pass"
+    },
+    {
+      "areaId": "mad-river-mountain",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "magic-mountain-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.magicmtn.com/lift-ticket-info"
     },
     {
       "areaId": "mammoth-mountain",
@@ -93,10 +543,124 @@
       "source": "https://www.ikonpass.com/en/compare-benefits"
     },
     {
+      "areaId": "marmot-basin",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://www.skimarmot.com/tickets-passes/mountain-collective/"
+    },
+    {
+      "areaId": "middlebury-snowbowl",
+      "family": "indy",
+      "access": "included",
+      "source": "https://middleburysnowbowl.com/lift-tickets/"
+    },
+    {
+      "areaId": "mont-sainte-anne",
+      "family": "epic",
+      "access": "included",
+      "source": "https://mont-sainte-anne.com/en/epic-pass/"
+    },
+    {
+      "areaId": "mont-sutton",
+      "family": "indy",
+      "access": "included",
+      "source": "https://montsutton.com/avantages-aux-membres/"
+    },
+    {
+      "areaId": "mount-snow",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "mount-sunapee",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "mount-washington-alpine-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.mountwashington.ca/purchase/gold-pass-perks-26-27/"
+    },
+    {
+      "areaId": "mt-bachelor",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.mtbachelor.com/tickets-passes/ikon-pass/?page=2556"
+    },
+    {
+      "areaId": "mt-brighton",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "mt-hood-meadows",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.skihood.com/explore/indy-pass"
+    },
+    {
+      "areaId": "mt-norquay",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.skibig3.com/season-passes/ikon-pass/"
+    },
+    {
+      "areaId": "nakiska-ski-area",
+      "family": "epic",
+      "access": "included",
+      "source": "https://skircr.zohodesk.com/portal/en/kb/articles/which-resorts-of-the-canadian-rockies-mountains-are-included-on-the-epic-pass-and-epic-day-pass"
+    },
+    {
+      "areaId": "nordic-mountain",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.alterramtn.co/en/news/deer-valley-now-3-days-on-ikon-base-pass-for-winter-2627"
+    },
+    {
+      "areaId": "northstar-california-resort",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "nub-s-nob",
+      "family": "indy",
+      "access": "included",
+      "source": "https://shop.nubsnob.com/tickets"
+    },
+    {
+      "areaId": "okemo-mountain-resort",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
       "areaId": "palisades-tahoe",
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "panorama-mountain-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.panoramaresort.com/planning/tickets-and-passes/ikon-pass"
+    },
+    {
+      "areaId": "panorama-mountain-resort",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://www.panoramaresort.com/public/planning/tickets-and-passes/mountain-collective"
+    },
+    {
+      "areaId": "paoli-peaks",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
     },
     {
       "areaId": "park-city-mountain",
@@ -105,22 +669,130 @@
       "source": "https://www.epicpass.com/regions/destination.aspx"
     },
     {
+      "areaId": "pats-peak",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.patspeak.com/plan-your-visit/planning-tools/indy-pass/"
+    },
+    {
       "areaId": "pico-mountain",
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/compare-benefits"
     },
     {
+      "areaId": "ragged-mountain-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.raggedmountainresort.com/all-tickets/"
+    },
+    {
+      "areaId": "red-mountain-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.redresort.com/ikon-pass/"
+    },
+    {
       "areaId": "revelstoke",
       "family": "ikon",
       "access": "included",
-      "source": "https://www.ikonpass.com/en/compare-benefits"
+      "source": "https://www.revelstokemountainresort.com/tickets-passes/ikon-pass/"
     },
     {
       "areaId": "revelstoke",
       "family": "mountain-collective",
       "access": "included",
-      "source": "https://mountaincollective.com/resorts/"
+      "source": "https://www.revelstokemountainresort.com/tickets-passes/mountain-collective/"
+    },
+    {
+      "areaId": "roundtop-mountain-resort",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "saddleback",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.saddlebackmaine.com/lift-tickets/"
+    },
+    {
+      "areaId": "sasquatch-mountain-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://sasquatchmountain.ca/indy-pass/"
+    },
+    {
+      "areaId": "schuss-mountain-at-shanty-creek",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.shantycreek.com/ski/lift-tickets-season-passes/indy-pass/"
+    },
+    {
+      "areaId": "schweitzer-mountain-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.schweitzer.com/-/media/schweitzer/pdfs-and-maps/press/schweitzer-newsrelease-springpass2627.pdf?hash=A805B39FC043336A24514526E60DAB1F&rev=630537fab3a049e0be8c57315042ea03"
+    },
+    {
+      "areaId": "seven-springs-mountain-resort",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "sierra-at-tahoe-ski-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://sierraattahoe.com/ikon-pass/"
+    },
+    {
+      "areaId": "silverstar-mountain-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.alterramtn.co/en/news/two-weeks-left-to-grab-an-ikon-pass-at-its-current-lowest-spring-prices"
+    },
+    {
+      "areaId": "ski-butternut",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.alterramtn.co/en/news/2627-ikon-pass-goes-on-sale-march-12-with-new-benefits-new-offers-and-new-discounts"
+    },
+    {
+      "areaId": "smugglers-notch-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://vermontbiz.com/news/2026/september/08/smugglers-notch-resort-joins-indy-pass"
+    },
+    {
+      "areaId": "snow-creek",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "snow-summit",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.bigbearmountainresort.com/employment/~/link.aspx?_id=06F9EB759AA6405D88BA264751583959&_z=z"
+    },
+    {
+      "areaId": "snow-valley-mountain-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.bigbearmountainresort.com/employment/~/link.aspx?_id=06F9EB759AA6405D88BA264751583959&_z=z"
+    },
+    {
+      "areaId": "snowbasin-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.snowbasin.com/tickets-passes/"
+    },
+    {
+      "areaId": "snowbasin-resort",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://www.snowbasin.com/tickets-passes/"
     },
     {
       "areaId": "snowbird",
@@ -133,6 +805,72 @@
       "family": "mountain-collective",
       "access": "included",
       "source": "https://mountaincollective.com/resorts/"
+    },
+    {
+      "areaId": "snowmass",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.aspensnowmass.com/partner-passes/ikon-pass/ikon-pass-holders-guide-to-aspen-snowmass"
+    },
+    {
+      "areaId": "snowmass",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://www.aspensnowmass.com/discover/experiences/guides/your-pre-arrival-guide"
+    },
+    {
+      "areaId": "snowriver-mountain-resort-black-river-basin",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.lutsen.com/ikon-pass"
+    },
+    {
+      "areaId": "snowriver-mountain-resort-jackson-creek-summit",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.lutsen.com/ikon-pass"
+    },
+    {
+      "areaId": "snowshoe-mountain",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.snowshoemtn.com/plan-your-trip/lift-tickets-season-pass/ikon-pass"
+    },
+    {
+      "areaId": "snowy-range-ski-area",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.alterramtn.co/en/news/ikon-pass-expands-further-into-japan-and-china-for-winter-2627"
+    },
+    {
+      "areaId": "soldier-mountain-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://soldiermountain.com/restrictions-policies/"
+    },
+    {
+      "areaId": "solitude-mountain-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://blog.solitudemountain.com/2026/ambers-updates-solitude-opens-for-the-26-27-winter-season/"
+    },
+    {
+      "areaId": "spirit-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://spiritmt.com/winter/downhill/"
+    },
+    {
+      "areaId": "station-touristique-stoneham",
+      "family": "epic",
+      "access": "included",
+      "source": "https://skircr.zohodesk.com/portal/en/kb/articles/which-resorts-of-the-canadian-rockies-mountains-are-included-on-the-epic-pass-and-epic-day-pass"
+    },
+    {
+      "areaId": "steamboat-ski-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.steamboat.com/plan-your-trip/lift-tickets-ski-pass/ikon-pass"
     },
     {
       "areaId": "stevens-pass",
@@ -147,6 +885,24 @@
       "source": "https://www.epicpass.com/regions/destination.aspx"
     },
     {
+      "areaId": "stratton-mountain-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.stratton.com/plan-your-trip/deals-and-packages/ikon-deals"
+    },
+    {
+      "areaId": "sugar-bowl-resort",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://www.sugarbowl.com/mountaincollective"
+    },
+    {
+      "areaId": "sugarbush-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://blog.sugarbush.com/guides/26-27-season-passes-are-launching-heres-the-guide/"
+    },
+    {
       "areaId": "sugarloaf",
       "family": "ikon",
       "access": "included",
@@ -159,10 +915,112 @@
       "source": "https://mountaincollective.com/resorts/"
     },
     {
+      "areaId": "sun-peaks-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.sunpeaksresort.com/ski-ride/tickets-passes/ikon-pass"
+    },
+    {
+      "areaId": "sun-peaks-resort",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://www.sunpeaksresort.com/ski-ride/tickets-passes/mountain-collective"
+    },
+    {
+      "areaId": "sun-valley-bald-mountain",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.sunvalley.com/tickets-passes/ikon-pass/"
+    },
+    {
+      "areaId": "sun-valley-bald-mountain",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://www.sunvalley.com/Tickets-Passes/Mountain-Collective"
+    },
+    {
+      "areaId": "sun-valley-dollar-mountain",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.sunvalley.com/tickets-passes/ikon-pass/"
+    },
+    {
+      "areaId": "sun-valley-dollar-mountain",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://www.sunvalley.com/Tickets-Passes/Mountain-Collective"
+    },
+    {
+      "areaId": "sunday-river",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.alterramtn.co/en/news/26-27-opening-dates"
+    },
+    {
+      "areaId": "sunday-river",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://www.sundayriver.com/mountain-collective"
+    },
+    {
+      "areaId": "tamarack-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://tamarackidaho.com/ikon-faq"
+    },
+    {
+      "areaId": "taos-ski-valley",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.skitaos.com/blog/2025/ikon-at-taos"
+    },
+    {
+      "areaId": "taos-ski-valley",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://www.skitaos.com/winter-activities-pre-arrival"
+    },
+    {
+      "areaId": "telluride-ski-resort",
+      "family": "epic",
+      "access": "included",
+      "source": "https://tellurideskiresort.com/epic/"
+    },
+    {
+      "areaId": "the-highlands-at-harbor-springs",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.boynemountain.com/ikon-pass"
+    },
+    {
+      "areaId": "the-summit-at-snoqualmie",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.summitatsnoqualmie.com/season-passes/ikon-pass"
+    },
+    {
       "areaId": "tremblant",
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "trollhaugen-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://trollhaugen.com/hours-and-rates/"
+    },
+    {
+      "areaId": "vail-mountain",
+      "family": "epic",
+      "access": "included",
+      "source": "https://investors.vailresorts.com/news-releases/news-release-details/how-save-your-ski-season-epic-passes-go-sale-december-6"
+    },
+    {
+      "areaId": "west-mountain-ski-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://westmountain.com/indypass/"
     },
     {
       "areaId": "whaleback",
@@ -177,10 +1035,52 @@
       "source": "https://www.epicpass.com/regions/destination.aspx"
     },
     {
+      "areaId": "white-pass-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://skiwhitepass.com/the-mountain/indypass"
+    },
+    {
       "areaId": "whiteface",
       "family": "indy",
       "access": "discount",
       "source": "https://www.indyskipass.com/our-resorts/whiteface-mountain"
+    },
+    {
+      "areaId": "whiteface",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://whiteface.com/seasonpasses/"
+    },
+    {
+      "areaId": "whitetail-resort",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "wild-mountain",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.lutsen.com/ikon-pass"
+    },
+    {
+      "areaId": "wildcat-mountain",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "wilmot-mountain",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "winter-park-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.winterparkresort.com/plan-your-trip/lift-tickets-ski-pass"
     }
   ]
 }

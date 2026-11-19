@@ -7,16 +7,17 @@ interface Props {
     units: SkiUnits;
     sort: SkiSort;
     selected?: SkiArea;
+    expanded: boolean;
     selectedButtonRef: Ref<HTMLButtonElement>;
     onSort: (key: SkiSort['key']) => void;
     onSelect: (id: string) => void;
 }
 
-export function SkiAreaTable({ areas, units, sort, selected, selectedButtonRef, onSort, onSelect }: Props) {
+export function SkiAreaTable({ areas, units, sort, selected, expanded, selectedButtonRef, onSort, onSelect }: Props) {
     if (!areas.length) return <p className="p-4 text-zinc-300">No ski areas match these filters.</p>;
 
     return <div role="region" aria-label="Ski area comparison table" tabIndex={0}
-        className="relative max-h-[min(53dvh,34rem)] overflow-auto focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-cyan-300 lg:h-full lg:max-h-none">
+        className={`relative overflow-auto focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-cyan-300 ${expanded ? 'h-full' : 'max-h-[min(53dvh,34rem)] lg:h-full lg:max-h-none'}`}>
         <table className="w-full border-separate border-spacing-0 whitespace-nowrap text-left text-sm">
             <caption className="sr-only">Compare ski areas</caption>
             <thead className="sticky top-0 z-10 bg-zinc-900 text-zinc-200"><tr>

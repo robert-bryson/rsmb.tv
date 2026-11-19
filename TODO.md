@@ -221,9 +221,10 @@ Track pending stories in [Content publication](#content-publication). Do not add
 
 ### First release
 
-- [ ] Review the remaining area candidates by region. Record the result for each candidate. Publish coverage by field. [Catalog rules](projects/ski-status/readme.md#build-the-catalog)
+- [ ] Review candidates beyond the 197-area catalog. Check skiable acreage and missing pass partners by region. Record the result for each candidate. Publish coverage by field. [Catalog rules](projects/ski-status/readme.md#build-the-catalog)
 - [ ] Add exact pass products and access by local ski date. Test day limits, shared days, blackout dates, and reservations. [Pass rules](projects/ski-status/readme.md#pass-access-by-product-and-date)
 - [ ] Publish forecasts and scheduled resort reports from permitted sources. Measure coverage and report age. [Conditions pilot](projects/ski-status/readme.md#sources-and-pilot)
+- [ ] Add dot colors for open, limited, closed, and unknown after the app can check report age. [Map and table](projects/ski-status/readme.md#map-and-table)
 - [ ] Finish the comparison controls. Add column settings, the map bounds filter, and CSV export for permitted data. [Map and table](projects/ski-status/readme.md#map-and-table)
 
 ### Version 2

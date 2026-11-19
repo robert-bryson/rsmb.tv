@@ -1,7 +1,7 @@
 # CARTO basemaps
 
 All in-repository map projects share [cartoBasemaps.ts](../src/maps/cartoBasemaps.ts).
-Trips, ADV Atlas, both temperature maps, Tornado Tracks, Pins, and CARTO globe styles use this configuration.
+Trips, ADV Atlas, both temperature maps, Tornado Tracks, Pins, ski-status, and CARTO globe styles use this configuration.
 The flights globe also retains its local NASA imagery choices.
 
 ## Key configuration
@@ -35,8 +35,8 @@ CARTO_API_KEY=your-development-basemap-key
 
 Raster maps without a key use neutral tiles and show **Basemap unavailable**.
 They do not send unauthenticated CARTO requests.
-Pins uses the hosted Dark Matter vector style through `cartoVectorStyleUrl`.
-CARTO currently serves this vector style without a key, so local Pins previews include the actual basemap.
+Pins and ski-status use the hosted Dark Matter vector style through `cartoVectorStyleUrl`.
+CARTO currently serves this vector style without a key, so local previews include the actual basemap.
 The helper includes a configured key when one is available.
 The existing `cartoVectorStyle` helper retains its neutral fallback for maps that require configured keys.
 See CARTO's [vector migration guidance](https://docs.carto.com/faqs/carto-basemaps#should-i-move-from-raster-to-vector-basemaps).
@@ -46,11 +46,15 @@ Never use production credentials in browser traces or fixtures.
 ## Styles and attribution
 
 Raster URLs carry an encoded `key` query parameter.
-Tornado Tracks and Pins use CARTO's current hosted dark vector style.
+Tornado Tracks, Pins, and ski-status use CARTO's current hosted dark vector style.
 Use the hosted style URL with its `key` parameter.
 CARTO maintains the style's tile, font, and icon URLs.
 Do not copy those dependent URLs into application code.
 See the [CARTO basemap guide](https://docs.carto.com/faqs/carto-basemaps).
+
+The ski-status **Terrain relief** option adds Mapterhorn elevation shading from zoom level 8.
+CARTO still provides the basemap and labels.
+See the [Mapterhorn tile guide](https://mapterhorn.com/data-access/).
 
 Trip styles are **Muted**, **Street**, and **Light**.
 The legacy `terrain` identifier remains internal for compatibility; its label now describes the CARTO light style.

@@ -261,6 +261,7 @@ describe('Amplify response headers', () => {
         expect(policy).toContain("media-src 'self' https://data.rsmb.tv");
         expect(imageSources).toContain('https://tile.openstreetmap.org');
         expect(imageSources).toContain('https://tile.opentopomap.org');
+        expect(imageSources).toContain('https://tiles.mapterhorn.com');
         expect(imageSources).toContain('https://tiles.openfreemap.org');
         expect(connectSources).toContain('https://cloud.umami.is');
         expect(connectSources).toContain('https://gateway.umami.is');
@@ -269,6 +270,7 @@ describe('Amplify response headers', () => {
         expect(connectSources).toContain('https://demotiles.maplibre.org');
         expect(connectSources).toContain('https://tile.openstreetmap.org');
         expect(connectSources).toContain('https://tile.opentopomap.org');
+        expect(connectSources).toContain('https://tiles.mapterhorn.com');
         expect(connectSources).toContain('https://tiles.openfreemap.org');
     });
 });

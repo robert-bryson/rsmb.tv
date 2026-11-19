@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import areaData from '../../../projects/ski-status/data/pilot-areas.json';
-import locationData from '../../../projects/ski-status/data/pilot-locations.json';
+import areaData from '../../../projects/ski-status/data/areas.json';
+import locationData from '../../../projects/ski-status/data/locations.json';
 import passData from '../../../projects/ski-status/data/passes-2026-27.json';
 
 const id = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
@@ -23,8 +23,8 @@ const areaSchema = z.strictObject({
     country: z.string().regex(/^[A-Z]{2}$/),
     locality: z.string().min(1),
     website: httpsUrl,
-    statsUrl: httpsUrl,
-    reportUrl: httpsUrl,
+    statsUrl: httpsUrl.optional(),
+    reportUrl: httpsUrl.optional(),
     acres: amount.optional(),
     acresQualifier: z.literal('lower-bound').optional(),
     liftCount: count.optional(),
@@ -115,6 +115,7 @@ export function readSkiCatalog(areaInput: unknown, locationInput: unknown, passI
         const location = points.get(area.id);
         if (!location) throw new Error(`No map point for ${area.id}`);
         const areaPasses = memberships.get(area.id) ?? [];
+        if (area.acres !== undefined && !area.statsUrl) throw new Error(`No skiable acreage source for ${area.id}`);
         if ((area.acres ?? 0) < minimumSkiableAcres && !areaPasses.some(pass => pass.access === 'included')) {
             throw new Error(`Ski area ${area.id} requires ${minimumSkiableAcres} skiable acres or included pass access`);
         }
