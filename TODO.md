@@ -234,6 +234,7 @@ Track pending stories in [Content publication](#content-publication). Do not add
 
 ### Version 2
 
+- [ ] Add a conditions panel to ski area details. Show current weather, a 5-day forecast, and reported snowfall. Test local dates, units, and missing values. [Resort conditions](projects/ski-status/readme.md#resort-conditions-and-5-day-forecast)
 - [ ] Show runs, lifts, and lift terminals from OpenSkiData at resort zoom. Link to official resort trail maps. [Runs and lifts](projects/ski-status/readme.md#runs-and-lifts-at-resort-zoom)
 - [ ] Show polygons for official and unofficial trail areas. Show run length, maximum slope, and grooming status where sources supply them. [Runs and lifts](projects/ski-status/readme.md#runs-and-lifts-at-resort-zoom)
 - [ ] Use operator directions to match resorts to access roads. Show agency road restrictions. Link to official agency and resort webcams. [Access routes and webcams](projects/ski-status/readme.md#access-routes-and-webcams)
