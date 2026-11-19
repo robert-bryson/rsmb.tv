@@ -5,6 +5,7 @@ import passData from '../../../projects/ski-status/data/passes-2026-27.json';
 
 const id = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 const label = z.string().trim().min(1);
+const countryCode = z.string().regex(/^[A-Z]{2}$/);
 const httpsUrl = z.string().trim().refine(value => {
     if (!/^https:\/\//i.test(value)) return false;
     try {
@@ -46,7 +47,8 @@ const areaSchema = z.strictObject({
     name: label,
     aliases: z.array(label).optional(),
     region: z.string().regex(/^[A-Z]{2}(?:\/[A-Z]{2})?$/).optional(),
-    country: z.string().regex(/^[A-Z]{2}$/),
+    country: countryCode,
+    otherCountries: z.array(countryCode).min(1).optional(),
     locality: label,
     skiing: skiingSchema.default('downhill'),
     website: httpsUrl,
@@ -125,6 +127,9 @@ export function readSkiCatalog(areaInput: unknown, locationInput: unknown, passI
         const location = points.get(area.id);
         if (!location) throw new Error(`No map point for ${area.id}`);
         const areaPasses = memberships.get(area.id) ?? [];
+        if (area.otherCountries && new Set([area.country, ...area.otherCountries]).size !== area.otherCountries.length + 1) {
+            throw new Error(`Duplicate country for ${area.id}`);
+        }
         if (!area.statsUrl && statisticKeys.some(key => area[key] !== undefined)) throw new Error(`No mountain statistics source for ${area.id}`);
         if ((area.acres ?? 0) < minimumSkiableAcres && areaPasses.length === 0) {
             throw new Error(`Ski area ${area.id} requires ${minimumSkiableAcres} skiable acres or an official pass listing`);

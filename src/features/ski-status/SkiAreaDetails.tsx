@@ -5,6 +5,25 @@ import { SkiPassIcon } from './SkiPassIcon';
 const linkClass = 'inline-flex min-h-11 items-center text-cyan-300 underline decoration-cyan-700 underline-offset-4 hover:text-cyan-100';
 const passAccessNotes = { included: '', discount: ' (discount only)', listed: ' (lift access unconfirmed)' };
 
+function detailSourceLinks(area: SkiArea) {
+    const seen = new Set(area.passes.map(pass => pass.source));
+    const links: { url: string; label: string }[] = [];
+    const addLink = (url: string | undefined, label: string) => {
+        if (!url || seen.has(url)) return;
+        seen.add(url);
+        links.push({ url, label });
+    };
+    addLink(area.website, area.website === area.reportUrl ? 'Resort website and conditions' : 'Resort website');
+    addLink(area.reportUrl, 'Official conditions');
+    addLink(area.statsUrl, 'Mountain stats source');
+    let extra = 0;
+    for (const url of area.additionalSources ?? []) {
+        if (seen.has(url)) continue;
+        addLink(url, `Additional source ${++extra}`);
+    }
+    return links;
+}
+
 export function SkiAreaDetails({ area, units, onClose }: { area: SkiArea; units: SkiUnits; onClose: () => void }) {
     const stats = columns.slice(2).map(({ key, label }) => ({ label, value: formatSkiStat(area, key, units) }));
     return <section id="ski-area-details" tabIndex={-1} aria-labelledby="ski-area-name" className="bg-zinc-950 px-3 py-2">
@@ -16,10 +35,7 @@ export function SkiAreaDetails({ area, units, onClose }: { area: SkiArea; units:
             <button type="button" onClick={onClose} className="min-h-11 px-2 text-sm text-zinc-300 underline underline-offset-4 hover:text-white">Close details</button>
         </div>
         <div className="flex flex-wrap gap-x-5 text-sm">
-            <a className={linkClass} href={area.website}>Resort website</a>
-            {area.reportUrl && <a className={linkClass} href={area.reportUrl}>Official conditions</a>}
-            {area.statsUrl && <a className={linkClass} href={area.statsUrl}>Mountain stats source</a>}
-            {area.additionalSources?.map((url, index) => <a key={url} className={linkClass} href={url}>Additional source {index + 1}</a>)}
+            {detailSourceLinks(area).map(({ url, label }) => <a key={url} className={linkClass} href={url}>{label}</a>)}
         </div>
         <dl className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,7rem),1fr))] gap-3 border-t border-zinc-800 pt-3 text-sm">
             {stats.map(({ label, value }) => <div key={label}>

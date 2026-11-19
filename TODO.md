@@ -221,15 +221,21 @@ Track pending stories in [Content publication](#content-publication). Do not add
 
 ### First release
 
-- [ ] Review the remaining areas by region. Record the reason to include or exclude each area. Record unresolved areas. Check missing pass partners and publish field coverage. [Catalog rules](projects/ski-status/readme.md#build-the-catalog)
-- [ ] Add pass products and access rules for each local ski date. Test day limits, shared days, blackout dates, and reservations. [Pass rules](projects/ski-status/readme.md#pass-access-by-product-and-date)
-- [ ] Add resort reports and forecasts from sources that permit reuse. Include lift and trail status, hours, and grooming data where available. Measure coverage and report age. [Conditions pilot](projects/ski-status/readme.md#sources-and-pilot)
-- [ ] Add dot colors for open, limited, closed, and unknown when the app can check report age. [Map and table](projects/ski-status/readme.md#map-and-table)
-- [ ] Add column settings. Add CSV export for data that permits export. [Map and table](projects/ski-status/readme.md#map-and-table)
+- [ ] Review the remaining North American areas by region. Record the source and decision for each area. List unresolved areas. [Catalog rules](projects/ski-status/readme.md#build-the-catalog)
+- [ ] Add rules by pass product and local ski date. Test day limits, shared days, blackout dates, and reservations. [Pass rules](projects/ski-status/readme.md#pass-access-by-product-and-date)
+- [ ] Add resort reports and forecasts from sources that permit reuse. Measure field coverage and report age. [Conditions pilot](projects/ski-status/readme.md#sources-and-pilot)
+- [ ] Add operating status colors after the app can check report age. [Map and table](projects/ski-status/readme.md#map-and-table)
+- [ ] Add column settings and CSV export. Verify the data license for export. [Map and table](projects/ski-status/readme.md#map-and-table)
+
+### Catalog maintenance
+
+- [ ] Check each pass roster at the start of the season. Verify included access and discounts. Check the countries that each shared area covers. [Catalog rules](projects/ski-status/readme.md#build-the-catalog)
+- [ ] Fill missing statistics and conditions links from operator sources. Check the units and terrain that each figure covers. Publish field coverage. [Mountain statistics](projects/ski-status/readme.md#comparable-mountain-statistics)
 
 ### Version 2
 
 - [ ] Show runs, lifts, and lift terminals from OpenSkiData at resort zoom. Link to official resort trail maps. [Runs and lifts](projects/ski-status/readme.md#runs-and-lifts-at-resort-zoom)
+- [ ] Show polygons for official and unofficial trail areas. Show run length, maximum slope, and grooming status where sources supply them. [Runs and lifts](projects/ski-status/readme.md#runs-and-lifts-at-resort-zoom)
 - [ ] Use operator directions to match resorts to access roads. Show agency road restrictions. Link to official agency and resort webcams. [Access routes and webcams](projects/ski-status/readme.md#access-routes-and-webcams)
 - [ ] Record parking locations, prices, and shuttle service where operators publish them. [Access routes and webcams](projects/ski-status/readme.md#access-routes-and-webcams)
 - [ ] Add device-local visits, a visited filter, and a backup format. [Visited areas](projects/ski-status/readme.md#visited-areas)
@@ -239,6 +245,7 @@ Track pending stories in [Content publication](#content-publication). Do not add
 - [ ] Link to operator policies for uphill travel.
 - [ ] Compare lift ticket and rental prices. Link to resort dining details and prices.
 - [ ] Add links to Wikipedia articles about ski areas.
+- [ ] Compare ski areas with maps and mountain statistics side by side. Use the same zoom for both maps.
 
 ## Ride Ledger prerequisites
 

@@ -4,7 +4,7 @@ November 19, 2026
 
 ski-status is a personal map and table for North American ski areas and worldwide Ikon, Epic, and Indy destinations. Use it to compare mountain statistics and find areas on your pass.
 
-The catalog includes links to official conditions reports. Pass filters show access by family for the listed season. See the [release tasks](TODO.md).
+Use the operator links for current conditions. Pass filters show access by family for the listed season. See the [release tasks](TODO.md).
 
 ## Use ski-status
 
@@ -17,12 +17,12 @@ Open `/projects/ski-status/map`. Select **Map**, **Split**, or **Table** at the 
 On a wide screen, the page starts in **Split**. On a narrow screen, it starts in **Table**.
 
 - Search by ski area, alternative name, town, country, or skiing type. Search for **cross-country** to find Nordic centers and areas that offer both types of skiing.
-- Use **Region** to select a country, state, or province. You can also filter by pass family or night skiing. On a narrow screen, select **Filters** to see these controls.
+- Use **Region** to select a country, state, or province. A shared ski area appears under each country that it covers. On a narrow screen, select **Filters** to see the region, pass, and night skiing controls.
 - Select **Indy** for included access. Select **Indy discounts** for Alpine Allied discounts and the North Cascade Heli offer.
 - Turn on **In map view** beside the results count to limit the table to the map area.
 - Select a column header to change the sort order.
 - Select a dot or table row to show the area details. Use the area name below the filters to go to its details. Zoom in to separate nearby dots.
-- Select **Official conditions** where available to open the operator's report. Each area also has a link to its website.
+- Select **Official conditions** to open the operator's report. If the resort publishes conditions on its main page, use **Resort website and conditions**.
 
 The URL stores the search text, filters, sort order, selected area, view, and map settings. The browser stores your unit preference.
 
@@ -38,7 +38,7 @@ The default map shows one cyan dot per ski area. Use **Color by** to show pass a
 
 With **Pass access** selected, the map shows a brand icon for each area with included access. The icons grow as you zoom in. A yellow **+** marks an area with access on more than one pass. Use the pass filter to choose which icon appears on a multi-pass badge. Select an area to see all its passes.
 
-An orange dot marks discount-only access. A gray dot marks an area with no pass access on file. The legend shows which brand each icon represents.
+An orange dot marks an area with discount-only access. With **Indy discounts** selected, the map uses orange for each Indy discount. A gray dot marks an area without confirmed access. The legend shows the pass for each icon.
 
 The map, filter, and area details use the pass images below. The app serves these images with its own files.
 
@@ -57,7 +57,7 @@ CARTO publishes Dark Matter, Voyager, and Positron. MapTiler offers a separate W
 
 ## Catalog
 
-On November 19, 2026, the catalog had 561 areas in 20 countries. It had 319 in the United States, 66 in Canada, and 176 in other countries. It included 126 areas with Ikon access, 98 with Epic access, and 298 with included Indy access. It had 113 acreage figures and 171 links to conditions reports.
+On November 19, 2026, the catalog had 561 map points in 20 countries. It had 319 points in the United States, 66 in Canada, and 176 in other countries. The country filter also includes Germany through shared areas. The catalog had 126 areas with Ikon access, 98 with Epic access, and 298 with included Indy access. It had 113 acreage figures and 173 conditions links.
 
 | File | Use |
 | --- | --- |
@@ -65,9 +65,9 @@ On November 19, 2026, the catalog had 561 areas in 20 countries. It had 319 in t
 | [Area locations](data/locations.json) | Points from the November 16 OpenSkiData build and additional OpenStreetMap features. Each point has source links. The file includes ODbL attribution. |
 | [Pass memberships](data/passes-2026-27.json) | Family access for the 2026/27 season. The details show discounts and listings with unconfirmed access. Each entry links to a source. |
 
-Use the same area ID in the three files. Add one point for each area. Add at most one membership for each area and pass family. Use the country code for each area. Add a state or province code where this code is in use in the catalog.
+Use the same area ID in the three files. Add one point per area and one membership per pass family. Put the country of the representative point in `country`. Put verified additional countries of a shared area in `otherCountries`. Add state or province codes to North American areas that use them.
 
-Cite the operator or pass provider for published statistics. Keep the source of the pass rules with the membership. Use absolute HTTPS URLs without usernames or passwords. The catalog checks for duplicate IDs, missing references, and conflicting values. It requires location attribution and a pass season that ends the next year. [Catalog validation](../../src/features/ski-status/catalog.ts)
+Use the operator's statistics when the source names the terrain or equipment that the figures cover. Keep the source of the pass rules with the membership. Use absolute HTTPS source links. The catalog checks IDs, references, statistics, and the format of geographic codes. It checks the location attribution and the pass season. [Catalog validation](../../src/features/ski-status/catalog.ts)
 
 ### Ikon destinations
 
@@ -85,7 +85,7 @@ The three Australian resorts have access in the 2027 winter season. Select **Epi
 
 The catalog covers all 302 cards from the November 19 roster, plus the Gore Mountain Nordic Center. It includes 69 destinations outside the United States and Canada. The 303 records have 298 included memberships and five discounts. [Indy resort roster](https://www.indyskipass.com/our-resorts), [Indy November additions](https://www.indyskipass.com/this-is-indy/news/whiteface-gore-and-belleayre-join-allied-program-as-indy-pass-announces-15-additional-resorts-for)
 
-Gore has a pin for downhill discounts and a separate pin for included Nordic access. The Manning Park Nordic Centre and the downhill resort also have separate pins. Groups such as Innsbruck Region and Portes du Soleil have one representative pin and searchable member names. Each group link gives the shared day limits and redemption rules. [Innsbruck access](https://www.indyskipass.com/our-resorts/innsbruck-region), [Portes du Soleil access](https://www.indyskipass.com/our-resorts/portes-du-soleil)
+Gore has a pin for downhill discounts and a separate pin for included Nordic access. Manning Park also has separate downhill and Nordic pins. Use the group link for shared day limits and redemption rules. Portes du Soleil appears under France and Switzerland. Oberstdorf Kleinwalsertal and Steinplatte appear under Austria and Germany. Each group has one representative pin. [Innsbruck access](https://www.indyskipass.com/our-resorts/innsbruck-region), [Portes du Soleil access](https://www.indyskipass.com/our-resorts/portes-du-soleil), [Oberstdorf and Kleinwalsertal ski areas](https://www.ok-bergbahnen.com/en/skigebiete/), [Steinplatte ski area](https://www.steinplatte.tirol/en/steinplatte-winklmoosalm-ski-area-in-winter.html)
 
 The catalog uses the published roster figures for vertical drop, lifts, trail count, night skiing, and terrain parks. Use the operator's figures when the operator gives a more precise value for the same area. Leave fields empty when the source gives no comparable figure. The **Skiing** column identifies Nordic, mixed, heli-skiing, and indoor venues. The night skiing field describes the venue. Open the pass link to check which sessions it covers. [Indy access rules](https://www.indyskipass.com/this-is-indy/how-it-works), [North Cascade Heli discount](https://www.indyskipass.com/our-resorts/north-cascade-heli), [Stoke Mountain profile](https://www.indyskipass.com/our-resorts/stoke-mountain)
 
@@ -93,13 +93,13 @@ The catalog uses the published roster figures for vertical drop, lifts, trail co
 
 Install the repository dependencies. Run `npm run dev` to start Vite. Open `/projects/ski-status/map` on the local server.
 
-Run the catalog, table, and marker tests.
+Run the unit tests for the catalog, table, details, and markers.
 
 ```bash
-npx vitest run src/test/skiStatus.test.ts
+npx vitest run src/test/skiStatus.test.ts src/test/skiStatusComponents.test.tsx
 ```
 
-Run the browser tests. They check world map fit, country filters, pass icons, Indy discounts, view changes, and error recovery.
+Run the browser tests. They check map fit, shared areas, pass colors, view changes, and error recovery.
 
 ```bash
 npm run test:e2e -- tests/e2e/ski-status.spec.ts --project=chromium
@@ -126,7 +126,7 @@ Whaleback has 86 skiable acres and qualifies through Indy lift access. Use skiab
 | Area identity | Store the official name, website, ID, region, country, and time zone. Keep former names for search. Place the point near a base, trailhead, or visitor entrance. |
 | Skiable acres | Use the operator's published skiable area. Record which mountains or terrain the figure covers. |
 | Lifts | Use the operator's total for the same area. Include surface lifts. Record the counts by lift type when available. |
-| Elevation and vertical | Store the highest and lowest lift terminal elevations. Use their difference for lift elevation range. Keep the operator's skiable vertical. |
+| Elevation and vertical | Store the highest and lowest lift terminal elevations in their own fields. Use the operator's drop for skiable vertical. If the operator gives only the elevations, calculate the range for the same skiable area. |
 | Trails | Store the total and the number for each published grade. Keep the original basis for percentages such as trail count or terrain area. |
 | Night skiing | Store yes, no, or unknown. Show night skiable acres when the operator publishes them. Track scheduled night operations in the conditions report. |
 | Season dates | Keep planned and actual dates. Use the median of up to five completed seasons for each typical date. Verify at least three actual opening or closing dates for each median. |
@@ -158,8 +158,8 @@ The CSV has SHA-256 `9c5a372b8d02aedd281fd387c581c16f48915d89abacec7eba0faa53726
 1. Import names, points, source IDs, and candidate websites from a versioned OpenSkiData file. Use regional directories to find missing areas. Check directory terms before you collect source data. [OpenSkiData downloads](https://www.openskidata.org/#downloads), [NSAA inventory by state](https://nsaa.org/NSAA/About/Media/Industry_Stats/NSAA/About/Media/Industry_Stats.aspx), [Canadian Ski Council directory](https://www.skicanada.org/ski-area-list/), [Québec ski area directory](https://maneige.ski/en/stations-et-conditions/)
 2. Match by source ID or a verified name and location. Assign a stable local ID for links, reports, and visits. OpenSkiData feature IDs can change between builds. [OpenSkiData feature IDs](https://www.openskidata.org/#whats-in-the-data)
 3. Review uncertain matches. Group bases when the operator publishes combined statistics. Palisades Tahoe publishes combined resort statistics. Keep independently operated areas separate if they share a pass allowance. [Palisades Tahoe statistics](https://www.palisadestahoe.com/footer/mountain-statistics), [Ikon access comparison](https://www.ikonpass.com/en/compare-benefits)
-4. Verify eligibility with operator acreage, a current source for included access, or an official pass destination listing. Record the reason and source. Keep other unresolved areas in the review list. Remove duplicate, closed, and private areas from the release catalog. [Indy Pass website terms](https://www.indyskipass.com/website-terms-of-use)
-5. Add operator statistics for each eligible area. Record the source URL, verification date, and scope. Label mapped lift terminal estimates. Use operator statistics for the official trail count. [OpenSkiData data definitions](https://www.openskidata.org/#whats-in-the-data)
+4. Use operator acreage or an official pass listing to verify eligibility. Record the reason and source. List unresolved areas. Check for duplicate, closed, and private areas before release. [Indy Pass website terms](https://www.indyskipass.com/website-terms-of-use)
+5. Add operator statistics for each eligible area. Record the source, date, and scope of the figures. Use map data to check large differences. Verify the figure with the operator before changing the record. [OpenSkiData data definitions](https://www.openskidata.org/#whats-in-the-data)
 6. Count resolved and unresolved candidates by region. Measure coverage for acres, elevations, grades, night acres, and dates. Skibowl reports total acres and the number of lit runs. Keep night skiable acres unknown until you find a source. [Skibowl statistics](https://skibowl.com/about-winter/stats/)
 
 ### Similar tools
@@ -177,7 +177,7 @@ Create a reviewed file for each season and pass family. Record the product, area
 | Indy | Base, Indy+, and Add-On variants. Track excluded dates and reservations by area. Record Allied discounts separately from included ski days. [Indy products](https://www.indyskipass.com/shop), [Blackouts and reservations](https://www.indyskipass.com/blackout-dates-reservations) |
 | Mountain Collective | Included days, any published bonus days, and advance reservations where required. [Pass terms](https://mountaincollective.com/), [Destination reservation rules](https://mountaincollective.com/how-to-use-my-pass/) |
 
-The family filter finds included partners for the season. When the user selects a product and date, apply the rules for the resort's local date. Show **Included**, **No access**, **Blackout**, **Reservation required**, or **Rules unverified**. Show reservation requirements on eligible results. Show the total allowance and any shared days. Individual usage and reservation availability need their own sources.
+The current family filter shows included partners for the season. For the planned product filter, apply the rules for the resort's local date. Show the access status, reservation rules, total allowance, and shared days. Use separate sources for individual usage and reservation availability.
 
 Review the pass lists at the start of each season. Check for changes each week. Confirm each change with the pass operator. Keep pending changes visible until the review completes.
 
@@ -231,9 +231,9 @@ Refresh pilot forecasts every six hours. With 400 areas and one point per area, 
 
 Credit sources where their data appears. OpenSkiData permits use under ODbL and requires source credits. Limit automatic downloads to once per day. Build tiles from the downloads. Publish modified ODbL data with its license and attribution. Verify each feed's terms for storage, display, and export before use. [OpenSkiData terms and attribution](https://www.openskidata.org/#license), [OpenStreetMap Foundation licensing guidance](https://osmfoundation.org/wiki/Licence/Community_Guidelines)
 
-## Implementation sequence and acceptance checks
+## Release checks
 
-The pilot used 25 areas to test catalog joins and map controls. The expanded catalog and views use the same checks. Use the [task list](TODO.md) for remaining work.
+Use the [task list](TODO.md) to track remaining work. Verify the changes before each release.
 
 | Work | Acceptance check |
 | --- | --- |
@@ -241,13 +241,13 @@ The pilot used 25 areas to test catalog joins and map controls. The expanded cat
 | Conditions pilot | Measure report age and field coverage for a week. Compare values with operator reports. Test failed updates, stale reports, unknown values, zero values, and partial openings. |
 | First release | Verify the source and eligibility of each area. Check links. Verify the source and time of each report. Publish counts of recent reports and coverage by field. |
 
-At four minutes per area, a manual review of 848 candidates would take about 57 hours. Use regional directories and official sources to find eligible areas. Review uncertain matches and acreage near the threshold. Measure review time before you set the release schedule. Use existing hosting and the free forecast feed for the pilot. Measure report coverage before you consider a paid feed.
+Use regional directories and operator sources to check uncertain matches. Check acreage near the release threshold. Use the free forecast feed for the conditions pilot. Measure report coverage before you choose a paid feed.
 
 ## Version 2
 
 ### Runs and lifts at resort zoom
 
-Show named runs, lift lines, and terminals from OpenSkiData at resort zoom. Use local difficulty grades. Link to the resort map. Report incomplete mapping. Load one resort at a time. Use PMTiles on S3 and CloudFront if tests show a benefit. Check byte range requests, caching, and attribution on hosted tiles. [OpenSkiData runs and lifts](https://www.openskidata.org/), [PMTiles on cloud storage](https://docs.protomaps.com/pmtiles/cloud-storage), [Repository tile delivery review](../../docs/reviews/2026-11-13-geospatial-delivery-research.md)
+Show named runs, lift lines, and terminals from OpenSkiData at resort zoom. Use local difficulty grades. Identify official and unofficial trail areas. Show run length, maximum slope, and grooming status where sources supply them. Link to the resort map and identify gaps in the map data. Load one resort at a time. Check byte range requests, caching, and attribution if you serve PMTiles. [OpenSkiData runs and lifts](https://www.openskidata.org/), [PMTiles on cloud storage](https://docs.protomaps.com/pmtiles/cloud-storage), [Repository tile delivery review](../../docs/reviews/2026-11-13-geospatial-delivery-research.md)
 
 ### Access routes and webcams
 

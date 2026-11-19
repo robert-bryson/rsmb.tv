@@ -132,6 +132,13 @@ test('filters worldwide Indy memberships and discounts on the map and table', as
     await region.selectOption('');
     await pass.selectOption({ label: 'Indy discounts' });
     await expect(table.locator('tbody tr')).toHaveCount(5);
+    await expect(page.getByRole('list', { name: 'Resort dot legend' })).toHaveText('Indy discount');
+    await expect.poll(() => renderer.evaluate(async map => {
+        const data = await map.getSource<GeoJSONSource>('ski-areas')?.getData();
+        return data?.type === 'FeatureCollection'
+            ? data.features.find(feature => feature.properties?.areaId === 'whiteface')?.properties
+            : undefined;
+    })).toEqual({ areaId: 'whiteface', color: '#fb923c' });
     await table.getByRole('button', { name: 'North Cascade Heli', exact: true }).click();
     const details = page.getByRole('region', { name: 'North Cascade Heli', exact: true });
     await expect(details.getByText('Heli-skiing', { exact: true })).toBeVisible();
@@ -141,6 +148,25 @@ test('filters worldwide Indy memberships and discounts on the map and table', as
         const source = map.getSource<GeoJSONSource>('ski-areas');
         return source?.getData().then(data => data.type === 'FeatureCollection' ? data.features.length : 0);
     })).toBe(5);
+    await renderer.dispose();
+});
+
+test('shows a single shared destination on the map and table for either country', async ({ page }) => {
+    await prepare(page);
+    const renderer = await captureMap(page);
+    const table = page.getByRole('region', { name: 'Ski area comparison table' });
+    const region = page.getByLabel('Region', { exact: true });
+    await page.getByRole('searchbox', { name: 'Search areas' }).fill('Portes du Soleil');
+    await page.getByLabel('Pass', { exact: true }).selectOption('indy');
+    for (const country of ['France', 'Switzerland']) {
+        await region.selectOption({ label: country });
+        await expect(table.locator('tbody tr')).toHaveCount(1);
+        await expect(table.getByRole('cell', { name: 'France / Switzerland', exact: true })).toBeVisible();
+        await expect.poll(() => renderer.evaluate(async map => {
+            const data = await map.getSource<GeoJSONSource>('ski-areas')?.getData();
+            return data?.type === 'FeatureCollection' ? data.features.map(feature => feature.id) : [];
+        })).toEqual(['portes-du-soleil']);
+    }
     await renderer.dispose();
 });
 

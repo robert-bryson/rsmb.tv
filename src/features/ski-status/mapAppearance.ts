@@ -1,4 +1,4 @@
-import { formatArea, formatElevation, type SkiUnits } from './browse';
+import { formatArea, formatElevation, matchesPassFilter, passFilterFamily, type PassFilter, type SkiUnits } from './browse';
 import { passFamilySchema, passNames, type PassFamily, type SkiArea } from './catalog';
 
 export const markerModes = {
@@ -28,7 +28,7 @@ const passColors: Record<PassFamily, string> = {
     ikon: '#c084fc', epic: '#fb7185', indy: '#4ade80', 'mountain-collective': '#60a5fa',
 };
 const discountOnly = { color: '#fb923c', label: 'Discount only' };
-const noRecordedPass = { color: unknown.color, label: 'No pass recorded' };
+const unconfirmedPass = { color: unknown.color, label: 'No confirmed access' };
 const numericColors = ['#bae6fd', '#38bdf8', '#818cf8', '#e879f9'] as const;
 const thresholds = {
     acres: [250, 1_000, 2_500],
@@ -37,11 +37,12 @@ const thresholds = {
     highestLiftTerminalFt: [3_000, 6_000, 9_000],
 } as const;
 
-export function markerLegend(mode: MarkerMode, units: SkiUnits): LegendEntry[] {
+export function markerLegend(mode: MarkerMode, units: SkiUnits, indyDiscounts = false): LegendEntry[] {
     if (mode === 'default') return [];
     if (mode === 'pass') {
+        if (indyDiscounts) return [{ ...discountOnly, label: 'Indy discount' }];
         return [...passFamilySchema.options.map(family => ({ color: passColors[family], label: passNames[family], family })),
-            { color: multiplePassColor, label: 'Multiple passes', multiple: true }, discountOnly, noRecordedPass];
+            { color: multiplePassColor, label: 'Multiple passes', multiple: true }, discountOnly, unconfirmedPass];
     }
     const format = mode === 'acres' ? formatArea : formatElevation;
     const [low, middle, high] = thresholds[mode].map(value => format(value, units));
@@ -53,13 +54,17 @@ export function passBadgeId(family: PassFamily, multiple: boolean) {
     return multiple ? `${family}-plus` as const : family;
 }
 
-export function markerAppearance(area: SkiArea, mode: MarkerMode, preferredPass?: PassFamily): MarkerAppearance {
+export function markerAppearance(area: SkiArea, mode: MarkerMode, passFilter?: PassFilter): MarkerAppearance {
     if (mode === 'default') return { color: defaultColor };
     if (mode === 'pass') {
+        if (passFilter === 'indy-discounts' && area.passes.some(membership => matchesPassFilter(membership, passFilter))) {
+            return { color: discountOnly.color };
+        }
         const included = passFamilySchema.options.filter(family =>
             area.passes.some(pass => pass.family === family && pass.access === 'included'));
-        if (!included.length) return { color: area.passes.some(pass => pass.access === 'discount') ? discountOnly.color : noRecordedPass.color };
+        if (!included.length) return { color: area.passes.some(pass => pass.access === 'discount') ? discountOnly.color : unconfirmedPass.color };
 
+        const preferredPass = passFilter && passFilterFamily(passFilter);
         const primary = preferredPass && included.includes(preferredPass) ? preferredPass : included[0];
         const multiple = included.length > 1;
         return { color: multiple ? multiplePassColor : passColors[primary], passBadge: passBadgeId(primary, multiple) };

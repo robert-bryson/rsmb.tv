@@ -77,6 +77,17 @@ describe('ski-status catalog validation', () => {
         expect(() => readSkiCatalog([area], { ...locations, attribution: {} }, passes)).toThrow('Add a location attribution link');
         expect(() => readSkiCatalog([area], locations, { ...passes, season: '2026/28' })).toThrow('Pass season must end the next year');
     });
+
+    it('rejects duplicate country codes in a shared area', () => {
+        const shared = { ...area, otherCountries: ['CA'] };
+        const [sharedArea] = readSkiCatalog([shared], locations, passes).areas;
+        expect(sharedArea).toMatchObject(shared);
+        expect(formatSkiLocation(sharedArea)).toBe('Test Town, United States / Canada');
+        expect(filterSkiAreas([sharedArea], '', 'country:CA')).toEqual([sharedArea]);
+        for (const otherCountries of [['US'], ['CA', 'CA']]) {
+            expect(() => readSkiCatalog([{ ...area, otherCountries }], locations, passes)).toThrow('Duplicate country for test-mountain');
+        }
+    });
 });
 
 describe('ski-status catalog and browse', () => {
@@ -275,6 +286,19 @@ describe('2026/27 Indy destination coverage', () => {
         expect(skiAreas.find(area => area.id === 'pila')?.passes.map(pass => pass.family)).toEqual(['ikon', 'indy']);
     });
 
+    it('finds one shared destination from either side of the national border', () => {
+        expect(skiRegionOptions(skiAreas).countries).toContainEqual({ value: 'country:DE', label: 'Germany' });
+        for (const region of ['country:FR', 'country:CH']) {
+            const result = filterSkiAreas(skiAreas, 'portes du soleil', region, 'indy');
+            expect(result.map(area => area.id)).toEqual(['portes-du-soleil']);
+            expect(formatSkiStat(result[0], 'region', 'imperial')).toBe('France / Switzerland');
+        }
+        expect(filterSkiAreas(skiAreas, 'oberstdorf kleinwalsertal', 'country:DE', 'indy').map(area => area.id))
+            .toEqual(['oberstdorf-kleinwalsertal-bergbahnen']);
+        expect(filterSkiAreas(skiAreas, 'portés du soleil switzerland', '', 'indy').map(area => area.id))
+            .toEqual(['portes-du-soleil']);
+    });
+
     it('keeps included access separate from Allied and heli-ski discounts', () => {
         const pass = readPassFilter(new URLSearchParams('pass=indy-discounts'));
         expect(pass).toBe('indy-discounts');
@@ -297,6 +321,18 @@ describe('2026/27 Indy destination coverage', () => {
         expect(formatSkiStat(alpine, 'acres', 'imperial')).toBe('220+ ac');
         expect(sortSkiAreas([alpine, nordic], { key: 'skiing', direction: 'asc' })).toEqual([nordic, alpine]);
     });
+
+    it.each([
+        ['pitztal-glacier', 5_774, 'www.pitztaler-gletscher.at'],
+        ['pizol', 5_636, 'pizol.com'],
+        ['corralco-resort-de-montana', 2_854, 'resort-de-montana.corralco.com'],
+        ['skeetawk', 300, 'skeetawk.com'],
+    ] as const)('uses operator terrain figures for %s', (id, verticalFt, sourceHost) => {
+        const area = skiAreas.find(area => area.id === id)!;
+        expect(area.verticalFt).toBe(verticalFt);
+        expect(new URL(area.statsUrl!).hostname).toBe(sourceHost);
+        expect(area.passes).toContainEqual(expect.objectContaining({ access: 'included', family: 'indy' }));
+    });
 });
 
 describe('ski-status marker colors', () => {
@@ -314,8 +350,16 @@ describe('ski-status marker colors', () => {
         expect(markerAppearance(whaleback, 'pass')).toEqual({ color: legend.find(entry => entry.family === 'indy')?.color, passBadge: 'indy' });
         expect(markerAppearance({ ...whiteface, passes: whiteface.passes.filter(pass => pass.access === 'discount') }, 'pass'))
             .toEqual({ color: legend.find(entry => entry.label === 'Discount only')?.color });
-        expect(markerAppearance({ ...alta, passes: [] }, 'pass')).toEqual({ color: legend.find(entry => entry.label === 'No pass recorded')?.color });
+        expect(markerAppearance({ ...alta, passes: [] }, 'pass')).toEqual({ color: legend.find(entry => entry.label === 'No confirmed access')?.color });
         expect(markerAppearance(alta, 'default')).toEqual({ color: '#67e8f9' });
+    });
+
+    it('colors a resort by the filtered Indy discount even if another pass includes skiing', () => {
+        const whiteface = skiAreas.find(area => area.id === 'whiteface')!;
+        expect(markerAppearance(whiteface, 'pass').passBadge).toBe('mountain-collective');
+        const legend = markerLegend('pass', 'imperial', true);
+        expect(legend).toEqual([{ label: 'Indy discount', color: '#fb923c' }]);
+        expect(markerAppearance(whiteface, 'pass', 'indy-discounts')).toEqual({ color: legend[0].color });
     });
 
     it('uses the numeric bin at its boundary and marks unknown values separately', () => {

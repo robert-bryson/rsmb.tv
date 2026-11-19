@@ -38,12 +38,14 @@ export function SkiAreaTable({ areas, units, sort, selected, compact, inView, se
             </tr></thead>
             <tbody>{areas.map(area => {
                 const active = area.id === selected?.id;
+                const descriptionId = compact ? `ski-area-place-${area.id}` : undefined;
                 return <tr key={area.id} data-selected={active || undefined} className={active ? 'bg-cyan-950/50' : ''}>
                     <th scope="row" className={`sticky left-0 z-5 max-w-[11rem] whitespace-normal border-b border-zinc-800 px-2.5 sm:max-w-none ${active ? 'bg-cyan-950' : 'bg-zinc-950'}`}>
                         <button type="button" ref={active ? selectedButtonRef : undefined} aria-pressed={active} aria-label={compact ? area.name : undefined}
+                            aria-describedby={descriptionId}
                             onClick={() => onSelect(area.id)} className={`min-h-11 w-full py-2 text-left ${active ? 'text-cyan-200' : 'text-zinc-100 hover:text-cyan-300'}`}>
                             {area.name}
-                            {compact && <span className="mt-0.5 block text-xs font-normal text-zinc-400">{formatSkiLocation(area)}</span>}
+                            {compact && <span id={descriptionId} className="mt-0.5 block text-xs font-normal text-zinc-400">{formatSkiLocation(area)}</span>}
                         </button>
                     </th>
                     {visibleColumns.slice(1).map(({ key }) => <td key={key} className="border-b border-zinc-800 px-2.5 py-2 tabular-nums text-zinc-300">

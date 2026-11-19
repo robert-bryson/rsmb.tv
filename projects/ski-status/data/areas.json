@@ -1788,10 +1788,10 @@
     "country": "CL",
     "locality": "Malalcahuello",
     "website": "https://corralco.com/montana/",
-    "statsUrl": "https://www.indyskipass.com/our-resorts/corralco-resort-de-montana",
+    "statsUrl": "https://resort-de-montana.corralco.com/preventa-invierno/",
     "liftCount": 8,
     "trailCount": 34,
-    "verticalFt": 4052,
+    "verticalFt": 2854,
     "nightSkiing": false,
     "terrainParks": true,
     "additionalSources": [
@@ -3493,10 +3493,12 @@
     "name": "Ischgl / Samnaun",
     "aliases": [
       "Silvretta Arena",
-      "Tyrol",
-      "Samnaun, Switzerland"
+      "Tyrol"
     ],
     "country": "AT",
+    "otherCountries": [
+      "CH"
+    ],
     "locality": "Ischgl",
     "website": "https://www.ischgl.com/en",
     "statsUrl": "https://www.ischgl.com/en/winter/operating-times-prices/ski-network-tickets/ikon-pass",
@@ -5737,6 +5739,9 @@
       "Ifen"
     ],
     "country": "AT",
+    "otherCountries": [
+      "DE"
+    ],
     "locality": "Riezlern",
     "website": "https://www.kleinwalsertal.com",
     "statsUrl": "https://www.indyskipass.com/our-resorts/oberstdorf-kleinwalsertal-bergbahnen",
@@ -6323,17 +6328,22 @@
   },
   {
     "id": "pitztal-glacier",
-    "name": "Pitztal Glacier",
+    "name": "Pitztal Glacier / Rifflsee",
     "aliases": [
       "Pitztaler Gletscher"
     ],
     "country": "AT",
     "locality": "Mittelberg",
     "website": "https://www.pitztaler-gletscher.at/",
-    "statsUrl": "https://www.indyskipass.com/our-resorts/pitztal-glacier",
+    "statsUrl": "https://www.pitztaler-gletscher.at/media/2025_2026_pt_fo_winter_eng_panorama.pdf",
+    "reportUrl": "https://www.pitztaler-gletscher.at/en/status",
     "liftCount": 13,
     "trailCount": 28,
-    "verticalFt": 8498,
+    "baseFt": 5512,
+    "summitFt": 11286,
+    "verticalFt": 5774,
+    "lowestLiftTerminalFt": 5512,
+    "highestLiftTerminalFt": 11286,
     "nightSkiing": false,
     "terrainParks": false
   },
@@ -6343,10 +6353,12 @@
     "country": "CH",
     "locality": "Bad Ragaz",
     "website": "https://pizol.com/",
-    "statsUrl": "https://www.indyskipass.com/our-resorts/pizol",
+    "statsUrl": "https://pizol.com/unternehmen/unternehmen/",
     "liftCount": 12,
-    "trailCount": 36,
-    "verticalFt": 7726,
+    "trailCount": 28,
+    "verticalFt": 5636,
+    "lowestLiftTerminalFt": 1670,
+    "highestLiftTerminalFt": 7382,
     "nightSkiing": true,
     "terrainParks": true
   },
@@ -6394,8 +6406,6 @@
     "name": "Portes du Soleil",
     "aliases": [
       "Les Portes du Soleil",
-      "France",
-      "Switzerland",
       "Avoriaz",
       "Morzine",
       "Les Gets",
@@ -6411,6 +6421,9 @@
       "Val-d’Illiez"
     ],
     "country": "FR",
+    "otherCountries": [
+      "CH"
+    ],
     "locality": "French–Swiss Alps",
     "website": "https://www.portesdusoleil.com/",
     "statsUrl": "https://www.indyskipass.com/our-resorts/portes-du-soleil",
@@ -7113,10 +7126,11 @@
     "region": "AK",
     "locality": "Palmer",
     "website": "https://skeetawk.com/",
-    "statsUrl": "https://www.indyskipass.com/our-resorts/skeetawk",
+    "statsUrl": "https://skeetawk.com/history",
+    "reportUrl": "https://skeetawk.com/snow-report",
     "liftCount": 2,
     "trailCount": 12,
-    "verticalFt": 1236,
+    "verticalFt": 300,
     "nightSkiing": true,
     "terrainParks": true
   },
@@ -7739,6 +7753,9 @@
       "Waidring"
     ],
     "country": "AT",
+    "otherCountries": [
+      "DE"
+    ],
     "locality": "Waidring",
     "website": "https://www.steinplatte.tirol/",
     "statsUrl": "https://www.indyskipass.com/our-resorts/steinplatte",

@@ -3,12 +3,16 @@ import { normalizeSearch } from '../../utils/search';
 import { passFamilySchema, passNames, type PassFamily, type SkiArea } from './catalog';
 
 export type SkiUnits = 'imperial' | 'metric';
-type PassFilter = PassFamily | 'indy-discounts';
+export type PassFilter = PassFamily | 'indy-discounts';
 
 export const passFilterOptions: Record<PassFilter, string> = { ...passNames, 'indy-discounts': 'Indy discounts' };
 
 export function passFilterFamily(pass: PassFilter): PassFamily {
     return pass === 'indy-discounts' ? 'indy' : pass;
+}
+
+export function matchesPassFilter(membership: SkiArea['passes'][number], pass: PassFilter) {
+    return membership.family === passFilterFamily(pass) && membership.access === (pass === 'indy-discounts' ? 'discount' : 'included');
 }
 
 const skiingLabels: Record<SkiArea['skiing'], string> = {
@@ -69,16 +73,21 @@ function countryName(country: string) {
     return countryNames.of(country) ?? country;
 }
 
+function areaCountries(area: SkiArea) {
+    return [area.country, ...(area.otherCountries ?? [])];
+}
+
 function regionName(area: SkiArea) {
+    if (area.otherCountries) return areaCountries(area).map(countryName).join(' / ');
     return area.region ?? countryName(area.country);
 }
 
 export function formatSkiLocation(area: SkiArea) {
-    return `${area.locality}, ${regionName(area).replace('/', ' / ')}`;
+    return `${area.locality}, ${regionName(area).replace(/\s*\/\s*/g, ' / ')}`;
 }
 
 export function skiRegionOptions(areas: readonly SkiArea[]) {
-    const countries = [...new Set(areas.map(area => area.country))].map(code => ({ value: `${countryPrefix}${code}`, label: countryName(code) }));
+    const countries = [...new Set(areas.flatMap(areaCountries))].map(code => ({ value: `${countryPrefix}${code}`, label: countryName(code) }));
     const regions = [...new Set(areas.flatMap(area => area.region?.split('/') ?? []))].sort();
     return { countries: countries.sort((first, second) => first.label.localeCompare(second.label)), regions };
 }
@@ -86,15 +95,14 @@ export function skiRegionOptions(areas: readonly SkiArea[]) {
 export function filterSkiAreas(areas: readonly SkiArea[], query: string, region: string, pass?: PassFilter, night?: boolean) {
     const words = normalizeSearch(query).split(' ').filter(Boolean);
     const country = region.startsWith(countryPrefix) ? region.slice(countryPrefix.length) : '';
-    const family = pass && passFilterFamily(pass);
-    const access = pass === 'indy-discounts' ? 'discount' : 'included';
     return areas.filter(area => {
-        if (country ? area.country !== country : region && !area.region?.split('/').includes(region)) return false;
-        if (family && !area.passes.some(membership => membership.family === family && membership.access === access)) return false;
+        if (country ? !areaCountries(area).includes(country) : region && !area.region?.split('/').includes(region)) return false;
+        if (pass && !area.passes.some(membership => matchesPassFilter(membership, pass))) return false;
         if (night && area.nightSkiing !== true) return false;
         if (!words.length) return true;
+        const countries = areaCountries(area);
         const searchable = normalizeSearch([
-            area.name, area.locality, area.region, area.country, countryName(area.country), skiingLabels[area.skiing], ...(area.aliases ?? []),
+            area.name, area.locality, area.region, ...countries, ...countries.map(countryName), skiingLabels[area.skiing], ...(area.aliases ?? []),
         ].join(' '));
         return words.every(word => searchable.includes(word));
     });

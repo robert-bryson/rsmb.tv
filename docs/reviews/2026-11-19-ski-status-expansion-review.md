@@ -34,4 +34,34 @@ Type checks and lint passed. Vitest passed 3,650 tests, including the clean buil
 
 The guide explains how the map fits results and how it shows acreage limits. The repository task list puts each idea in first release, version 2, or later work. The documentation uses short sentences and the same terms as the app. [ASD-STE100 writing guidance](https://www.asd-ste100.org/about_STE.html), [ski-status tasks](../../TODO.md#ski-status)
 
-The release still needs more catalog coverage, exact pass product rules, and scheduled conditions reports. The current catalog includes 197 areas and 48 links to official conditions reports. [Catalog](../../projects/ski-status/readme.md#catalog)
+The catalog at the end of this review had 197 areas and 48 conditions links. See the guide for the latest totals. [Catalog](../../projects/ski-status/readme.md#catalog)
+
+## Review after the worldwide roster updates
+
+The follow-up review covers the branch from `main` at `2b9dfa1` through the Indy update at `3d17865`. It checks the catalog, pass filters, map and table, source links, and release entry points.
+
+### Defects and corrections
+
+| Defect | Correction |
+| --- | --- |
+| The Indy discounts filter showed a Mountain Collective icon for Whiteface. | Use the selected access type for the map color. Show an orange marker and the Indy discount legend when the user selects this filter. |
+| The country filter used only the country of the map point. It hid shared ski areas from the other country. | Save the other countries with the area record. Use them in the filter and region text. Keep one pin and one comparison row for each shared area. |
+| Resort details repeated some links. A pass link could appear again as the statistics source. | Keep the labeled pass link. Show each other source once. Combine the website and conditions labels when both use the same address. |
+| The compact table gave two areas with the same name identical accessible labels. | Include the town and region in the button description. |
+
+The review also compared reported vertical drops with mapped elevations. It used the operator sources to correct four conflicts.
+
+| Ski area | Previous vertical | Corrected vertical | Basis |
+| --- | ---: | ---: | --- |
+| Pitztal Glacier / Rifflsee | 8,498 ft | 5,774 ft | Elevation range from Mandarfen to the upper glacier station. [Operator trail map](https://www.pitztaler-gletscher.at/media/2025_2026_pt_fo_winter_eng_panorama.pdf) |
+| Pizol | 7,726 ft | 5,636 ft | Published ski descent to Wangs. [Operator statistics](https://pizol.com/unternehmen/unternehmen/) |
+| Corralco | 4,052 ft | 2,854 ft | Published ski area drop. [Operator statistics](https://resort-de-montana.corralco.com/preventa-invierno/) |
+| Skeetawk | 1,236 ft | 300 ft | Published vertical for the chairlift terrain. [Operator history](https://skeetawk.com/history) |
+
+### Follow-up checks
+
+The four UI regression tests failed before the fixes. All 18 Chromium tests passed with MapLibre and controlled CARTO responses. The repository unit suite passed 3,706 tests. The Python suite passed 18 tests. Type checks, lint, and a Vite build in fixture mode passed. [Unit tests](../../src/test/skiStatus.test.ts), [Component tests](../../src/test/skiStatusComponents.test.tsx), [Browser tests](../../tests/e2e/ski-status.spec.ts)
+
+The focused unit coverage includes ski-status and its shared search hook. It rose from 39.31% to 46.11% for lines and from 39.05% to 49.83% for branches. The Chromium suite covers map and page interactions.
+
+The guide uses short instructions, active verbs, and the app's terms. The task list keeps the checks for each season with the release work. [ASD-STE100 writing rules](https://www.asd-ste100.org/assets/files/ASD-STE100_ISSUE9.pdf), [ski-status tasks](../../TODO.md#ski-status)

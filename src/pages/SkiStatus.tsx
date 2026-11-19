@@ -63,7 +63,7 @@ export default function SkiStatus() {
     const selectedId = searchParams.get('area');
     const colors = readMarkerMode(searchParams.get('color'));
     const terrain = searchParams.get('terrain') === '1';
-    const legend = markerLegend(colors, units);
+    const legend = markerLegend(colors, units, pass === 'indy-discounts');
     const areas = useMemo(() => filterSkiAreas(skiAreas, query, region, pass, night), [query, region, pass, night]);
     const selected = areas.find(area => area.id === selectedId);
     const viewportIds = inView ? visibleAreaIds : undefined;
@@ -206,7 +206,7 @@ export default function SkiStatus() {
                 </ul>}
                 <div className="min-h-0 flex-1">
                     {(showMap || mapOpened) && <ErrorBoundary fallback={<MapMessage failed />}><Suspense fallback={<MapMessage />}>
-                        <SkiStatusMap areas={areas} selected={selected} colors={colors} preferredPass={passFamily} terrain={terrain} visible={showMap} inView={inView}
+                        <SkiStatusMap areas={areas} selected={selected} colors={colors} passFilter={pass} terrain={terrain} visible={showMap} inView={inView}
                             onVisibleAreasChange={updateVisibleAreas} onSelect={selectArea} />
                     </Suspense></ErrorBoundary>}
                 </div>

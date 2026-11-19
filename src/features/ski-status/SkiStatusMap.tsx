@@ -5,8 +5,8 @@ import { cartoRasterStyle, cartoVectorStyleUrl } from '../../maps/cartoBasemaps'
 import * as maplibre from '../../maps/maplibre';
 import { recoverBasemap, type BasemapState } from '../../maps/recoverBasemap';
 import { clamp, distanceSquared, type TooltipPoint } from '../../maps/screenGeometry';
-import { skiAreaIdsInViewport } from './browse';
-import { passFamilySchema, skiAreas, type PassFamily, type SkiArea } from './catalog';
+import { skiAreaIdsInViewport, type PassFilter } from './browse';
+import { passFamilySchema, skiAreas, type SkiArea } from './catalog';
 import { markerAppearance, multiplePassColor, passBadgeId, passBadgeSize, passBadgeTextColor, type MarkerMode } from './mapAppearance';
 import { passIconUrls } from './passIcons';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -37,7 +37,7 @@ interface Props {
     areas: readonly SkiArea[];
     selected?: SkiArea;
     colors: MarkerMode;
-    preferredPass?: PassFamily;
+    passFilter?: PassFilter;
     terrain: boolean;
     visible: boolean;
     inView: boolean;
@@ -207,7 +207,7 @@ function closestArea(map: maplibre.Map, point: TooltipPoint, areas: readonly Ski
     return nearest;
 }
 
-export default function SkiStatusMap({ areas, selected, colors, preferredPass, terrain, visible, inView, onVisibleAreasChange, onSelect }: Props) {
+export default function SkiStatusMap({ areas, selected, colors, passFilter, terrain, visible, inView, onVisibleAreasChange, onSelect }: Props) {
     const container = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibre.Map | null>(null);
     const recoveryRef = useRef<ReturnType<typeof recoverBasemap> | null>(null);
@@ -223,10 +223,10 @@ export default function SkiStatusMap({ areas, selected, colors, preferredPass, t
     const points = useMemo<FeatureCollection<Point>>(() => ({
         type: 'FeatureCollection',
         features: areas.map(area => ({
-            type: 'Feature', id: area.id, properties: { areaId: area.id, ...markerAppearance(area, colors, preferredPass) },
+            type: 'Feature', id: area.id, properties: { areaId: area.id, ...markerAppearance(area, colors, passFilter) },
             geometry: { type: 'Point', coordinates: area.location.coordinates },
         })),
-    }), [areas, colors, preferredPass]);
+    }), [areas, colors, passFilter]);
     const current = useEffectEvent(() => ({ areas, points, selected, colors, terrain }));
     const selectArea = useEffectEvent(onSelect);
     const syncPassBadges = useEffectEvent((map: maplibre.Map) => {
