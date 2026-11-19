@@ -21,7 +21,7 @@ async function prepare(page: Page, style: StyleSpecification | null = baseStyle)
     await page.emulateMedia({ reducedMotion: 'reduce' });
 }
 
-async function captureMap(page: Page) {
+async function captureMap(page: Page, { phone = false, state = 'ready' }: { phone?: boolean; state?: 'ready' | 'degraded' } = {}) {
     await page.goto('/projects');
     // Capture the renderer by its public method. Restore the method after one call.
     await page.evaluate(async () => {
@@ -37,11 +37,64 @@ async function captureMap(page: Page) {
         };
     });
     await page.getByRole('link', { name: 'Open map: ski-status', exact: true }).click();
-    await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
+    if (phone) await page.getByRole('button', { name: 'Map', exact: true }).click();
+    await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', state);
     const renderer = await page.evaluateHandle(() => (window as ReviewWindow).skiStatusMap!);
     await expect.poll(() => renderer.evaluate(map => map.loaded() && !map.isMoving())).toBe(true);
     return renderer;
 }
+
+test('fits changes made in the phone table after the real map viewport returns', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 780 });
+    await prepare(page);
+    const renderer = await captureMap(page, { phone: true });
+    await page.getByRole('button', { name: 'Table', exact: true }).click();
+    await expect(page.getByTestId('ski-status-map')).toBeHidden();
+    await renderer.evaluate(map => { map.resize(); });
+    const filters = page.getByRole('button', { name: 'Filters', exact: true });
+    await filters.click();
+    await page.getByLabel('Region', { exact: true }).selectOption('BC');
+    await filters.click();
+    await page.getByRole('button', { name: 'Map', exact: true }).click();
+    const edges = ['mount-washington-alpine-resort', 'fernie-alpine-resort'].map(id =>
+        locations.locations.find(location => location.id === id)!.coordinates as [number, number]);
+    await expect.poll(() => renderer.evaluate((map, points) => {
+        const { clientWidth } = map.getContainer();
+        return Math.min(...points.flatMap(point => {
+            const { x } = map.project(point);
+            return [x, clientWidth - x];
+        }));
+    }, edges)).toBeGreaterThan(35);
+    await renderer.dispose();
+});
+
+test('centers the resort selected while the background style is being retried', async ({ page }) => {
+    await prepare(page, null);
+    const renderer = await captureMap(page, { state: 'degraded' });
+    await page.getByLabel('Region', { exact: true }).selectOption('WA');
+    let release = () => {};
+    const waiting = new Promise<void>(resolve => { release = resolve; });
+    let requested = false;
+    await page.route(styleUrl, async route => {
+        requested = true;
+        await waiting;
+        await route.fulfill({ json: baseStyle, headers: { 'access-control-allow-origin': '*' } });
+    });
+    try {
+        await page.getByRole('button', { name: 'Retry background' }).click();
+        await expect.poll(() => requested).toBe(true);
+        await page.getByLabel('Region', { exact: true }).selectOption('UT');
+        await page.getByRole('button', { name: 'Alta Ski Area', exact: true }).click();
+        await expect(page.getByRole('heading', { name: 'Alta Ski Area', exact: true })).toBeVisible();
+    } finally {
+        release();
+    }
+    await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
+    const alta = locations.locations.find(location => location.id === 'alta')!.coordinates;
+    await expect.poll(() => renderer.evaluate(map => map.getCenter().lng)).toBeCloseTo(alta[0], 3);
+    await expect.poll(() => renderer.evaluate(map => map.getZoom())).toBeGreaterThanOrEqual(9);
+    await renderer.dispose();
+});
 
 test('selects the closest ski area where two markers overlap', async ({ page }) => {
     await prepare(page);

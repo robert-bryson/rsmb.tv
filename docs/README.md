@@ -48,7 +48,7 @@ An alt description states the visible content. A caption can supply other inform
 | [Temperature map](temperature-map.md) | Maintain record markers, units, selections, and map regression tests |
 | [Tornado Tracks](../projects/tornado-tracks/readme.md) | Sync tornado data and check map behavior |
 | [Pins of Inaccessibility](../projects/pins-of-inaccessibility/readme.md) | Generate global and U.S. pins, validate location details, and check publication |
-| [ski-status guide and plan](../projects/ski-status/readme.md) | Use the pilot, check catalog rules, and review the release plan |
+| [ski-status guide and plan](../projects/ski-status/readme.md) | Use the map and table. Check catalog rules and release plans. |
 | [Ride Ledger design](../projects/ride-ledger/readme.md) | Review the proposed application and open decisions |
 
 ## Reviews
@@ -58,7 +58,8 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
-| 2026-11-19 | [ski-status quality review](reviews/2026-11-19-ski-status-quality-review.md) |
+| 2026-11-19 | [ski-status catalog and layout review](reviews/2026-11-19-ski-status-expansion-review.md) |
+| 2026-11-19 | [ski-status pilot review](reviews/2026-11-19-ski-status-quality-review.md) |
 | 2026-11-17 | [Main branch review: shared UI, search previews, atlas alignment, and flight separation](reviews/2026-11-17-main-branch-review.md) |
 | 2026-11-15 | [Project quality review: safe image output, preview integrity, feature dates, coverage, and documentation](reviews/2026-11-15-project-quality-review.md) |
 | 2026-11-15 | [Project presentation refresh: current screenshots, descriptions, feature dates, and source evidence](reviews/2026-11-15-project-presentation-refresh.md) |

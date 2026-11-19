@@ -1,5 +1,5 @@
 import { formatArea, formatElevation, type SkiUnits } from './browse';
-import { passNames, type PassFamily, type SkiArea } from './catalog';
+import { passFamilySchema, passNames, type PassFamily, type SkiArea } from './catalog';
 
 export const markerModes = {
     default: 'Resort dots',
@@ -32,20 +32,18 @@ const thresholds = {
     verticalFt: [1_000, 2_000, 3_000],
     summitFt: [3_000, 6_000, 9_000],
     highestLiftTerminalFt: [3_000, 6_000, 9_000],
-};
+} as const;
 
 export function markerLegend(mode: MarkerMode, units: SkiUnits): LegendEntry[] {
     if (mode === 'default') return [];
     if (mode === 'pass') {
-        return [...Object.entries(passColors).map(([family, color]) => ({ color, label: passNames[family as PassFamily] })),
+        return [...passFamilySchema.options.map(family => ({ color: passColors[family], label: passNames[family] })),
             multiplePasses, discountOnly, noRecordedPass];
     }
-    const cutoffs = thresholds[mode];
     const format = mode === 'acres' ? formatArea : formatElevation;
-    return [...numericColors.map((color, index) => ({
-        color,
-        label: index === 0 ? `Under ${format(cutoffs[0], units)}` : `${format(cutoffs[index - 1], units)}${index === 3 ? ' and up' : ` to under ${format(cutoffs[index], units)}`}`,
-    })), unknown];
+    const [low, middle, high] = thresholds[mode].map(value => format(value, units));
+    const labels = [`Under ${low}`, `${low} to under ${middle}`, `${middle} to under ${high}`, `${high} and up`];
+    return [...numericColors.map((color, index) => ({ color, label: labels[index] })), unknown];
 }
 
 export function markerColor(area: SkiArea, mode: MarkerMode): string {
@@ -58,5 +56,7 @@ export function markerColor(area: SkiArea, mode: MarkerMode): string {
     }
     const value = area[mode];
     if (value === undefined) return unknown.color;
-    return numericColors[thresholds[mode].filter(cutoff => value >= cutoff).length];
+    const cutoffs = thresholds[mode];
+    if (mode === 'acres' && area.acresQualifier === 'lower-bound' && value < cutoffs[2]) return unknown.color;
+    return numericColors[cutoffs.filter(cutoff => value >= cutoff).length];
 }

@@ -4,27 +4,20 @@ import locationData from '../../../projects/ski-status/data/locations.json';
 import passData from '../../../projects/ski-status/data/passes-2026-27.json';
 
 const id = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
-const httpsUrl = z.url({ protocol: /^https$/ }).refine(value => {
+const label = z.string().trim().min(1);
+const httpsUrl = z.string().trim().refine(value => {
+    if (!/^https:\/\//i.test(value)) return false;
     try {
         const { username, password } = new URL(value);
         return !username && !password;
     } catch {
         return false;
     }
-}, 'Source URLs must not contain credentials');
+}, 'Use an HTTPS source URL without credentials');
 const amount = z.number().nonnegative();
 const count = z.int().nonnegative();
 const minimumSkiableAcres = 100;
-const areaSchema = z.strictObject({
-    id,
-    name: z.string().min(1),
-    aliases: z.array(z.string().min(1)).optional(),
-    region: z.string().regex(/^[A-Z]{2}(?:\/[A-Z]{2})?$/),
-    country: z.string().regex(/^[A-Z]{2}$/),
-    locality: z.string().min(1),
-    website: httpsUrl,
-    statsUrl: httpsUrl.optional(),
-    reportUrl: httpsUrl.optional(),
+const mountainStats = {
     acres: amount.optional(),
     acresQualifier: z.literal('lower-bound').optional(),
     liftCount: count.optional(),
@@ -37,13 +30,26 @@ const areaSchema = z.strictObject({
     lowestLiftTerminalFt: z.number().optional(),
     nightSkiing: z.boolean().optional(),
     nightAcres: amount.optional(),
-    seasonWindow: z.string().min(1).optional(),
+    seasonWindow: label.optional(),
     grades: z.strictObject({
         unit: z.enum(['count', 'percent']),
         of: z.enum(['terrain', 'trails']).optional(),
-        values: z.record(z.string().min(1), amount),
+        values: z.record(label, amount),
     }).refine(grades => Object.values(grades.values).every(value =>
         grades.unit === 'percent' ? value <= 100 : Number.isInteger(value)), 'Use whole trail counts or percentages from 0 to 100').optional(),
+};
+const statisticKeys = Object.keys(mountainStats) as (keyof typeof mountainStats)[];
+const areaSchema = z.strictObject({
+    id,
+    name: label,
+    aliases: z.array(label).optional(),
+    region: z.string().regex(/^[A-Z]{2}(?:\/[A-Z]{2})?$/),
+    country: z.string().regex(/^[A-Z]{2}$/),
+    locality: label,
+    website: httpsUrl,
+    statsUrl: httpsUrl.optional(),
+    reportUrl: httpsUrl.optional(),
+    ...mountainStats,
     additionalSources: z.array(httpsUrl).optional(),
 });
 
@@ -51,7 +57,7 @@ const locationsSchema = z.strictObject({
     source: httpsUrl,
     buildTime: z.iso.datetime(),
     license: httpsUrl,
-    attribution: z.record(z.string().min(1), httpsUrl),
+    attribution: z.record(label, httpsUrl).refine(links => Object.keys(links).length > 0, 'Add a location attribution link'),
     locations: z.array(z.strictObject({
         id,
         coordinates: z.tuple([z.number().min(-180).max(180), z.number().min(-90).max(90)]),
@@ -66,7 +72,8 @@ export const passNames: Record<PassFamily, string> = {
 };
 
 const passesSchema = z.strictObject({
-    season: z.string().regex(/^\d{4}\/\d{2}$/),
+    season: z.string().regex(/^\d{4}\/\d{2}$/).refine(value =>
+        Number(value.slice(5)) === (Number(value.slice(0, 4)) + 1) % 100, 'Pass season must end the next year'),
     checkedOn: z.iso.date(),
     memberships: z.array(z.strictObject({
         areaId: id,
@@ -115,7 +122,7 @@ export function readSkiCatalog(areaInput: unknown, locationInput: unknown, passI
         const location = points.get(area.id);
         if (!location) throw new Error(`No map point for ${area.id}`);
         const areaPasses = memberships.get(area.id) ?? [];
-        if (area.acres !== undefined && !area.statsUrl) throw new Error(`No skiable acreage source for ${area.id}`);
+        if (!area.statsUrl && statisticKeys.some(key => area[key] !== undefined)) throw new Error(`No mountain statistics source for ${area.id}`);
         if ((area.acres ?? 0) < minimumSkiableAcres && !areaPasses.some(pass => pass.access === 'included')) {
             throw new Error(`Ski area ${area.id} requires ${minimumSkiableAcres} skiable acres or included pass access`);
         }
@@ -123,6 +130,12 @@ export function readSkiCatalog(areaInput: unknown, locationInput: unknown, passI
             throw new Error(`Lower bound for ${area.id} requires a reported value`);
         }
         if (area.nightSkiing === false && (area.nightAcres ?? 0) > 0) throw new Error(`Conflicting night skiing values for ${area.id}`);
+        if (area.nightAcres !== undefined && area.acres !== undefined && !area.acresQualifier && area.nightAcres > area.acres) {
+            throw new Error(`Night skiable acreage exceeds skiable acreage for ${area.id}`);
+        }
+        if (area.baseFt !== undefined && area.summitFt !== undefined && area.baseFt > area.summitFt) {
+            throw new Error(`Inverted base and summit elevations for ${area.id}`);
+        }
         if (area.lowestLiftTerminalFt !== undefined && area.highestLiftTerminalFt !== undefined
             && area.lowestLiftTerminalFt > area.highestLiftTerminalFt) throw new Error(`Inverted lift terminal elevations for ${area.id}`);
         joined.push({ ...area, location, passes: areaPasses });

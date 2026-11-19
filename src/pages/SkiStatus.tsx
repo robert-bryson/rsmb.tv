@@ -178,7 +178,7 @@ export default function SkiStatus() {
                 </ul>}
                 <div className="min-h-0 flex-1">
                     {(showMap || mapOpened) && <ErrorBoundary fallback={<MapMessage failed />}><Suspense fallback={<MapMessage />}>
-                        <SkiStatusMap areas={areas} selected={selected} colors={colors} terrain={terrain} onSelect={selectArea} />
+                        <SkiStatusMap areas={areas} selected={selected} colors={colors} terrain={terrain} visible={showMap} onSelect={selectArea} />
                     </Suspense></ErrorBoundary>}
                 </div>
             </section>

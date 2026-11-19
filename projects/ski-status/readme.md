@@ -4,27 +4,33 @@ November 19, 2026
 
 ski-status is a personal map and comparison table for North American downhill ski areas. Use it to compare mountain statistics and find ski areas on your pass.
 
+The catalog includes links to official conditions reports. Pass filters show access by family for the listed season. See the [release tasks](TODO.md).
+
 ## Use ski-status
 
-Open `/projects/ski-status/map`. Use **Map**, **Split**, or **Table** at the top of the page. Each view keeps your filters, sort order, and selected area.
+Open `/projects/ski-status/map`. Select **Map**, **Split**, or **Table** at the top of the page. Each view keeps your filters, sort order, and selected area.
 
 - **Map** gives the map most of the space. On a wide screen, use the list beside it to select an area.
 - **Split** gives both panes equal space on a wide screen. On a narrow screen, scroll between the table and map.
-- **Table** gives the comparison table most of the space. On a wide screen, the map stays beside it. On a narrow screen, use **Filters** to see more search options.
+- **Table** gives the comparison table most of the space. On a wide screen, the map stays beside it.
 
 On a wide screen, the page starts in **Split**. On a narrow screen, it starts in **Table**.
 
 - Search by ski area, alternative name, town, or country.
-- Filter by region, pass family, or night skiing.
+- Filter by region, pass family, or night skiing. On a narrow screen, select **Filters** to see these controls.
 - Select a column header to change the sort order.
 - Select a dot or table row to show the area details. Use the area name below the filters to go to its details. Zoom in to separate nearby dots.
 - Select **Official conditions** where available to open the operator's report. Each area also has a link to its website.
 
-The URL stores the search text, filters, sort order, selected area, view, and map settings. The browser stores your unit preference. The table remains available when the basemap or map renderer fails.
+The URL stores the search text, filters, sort order, selected area, view, and map settings. The browser stores your unit preference.
+
+The map keeps its position when you change views. If you change the filters, the map fits the results when it is visible and no area is selected. If the background fails, select **Retry background**. The table stays available during map failures.
 
 ### Map display
 
-The default map shows one cyan dot per ski area. Use **Color by** to show pass access, skiable area, vertical drop, summit elevation, or highest lift terminal. The legend shows the ranges in your selected units. Gray marks an unknown value. A gold outline shows the selected area.
+The default map shows one cyan dot per ski area. Use **Color by** to show pass access, skiable area, vertical drop, summit elevation, or highest lift terminal. The legend shows ranges in your selected units. Gray marks an unknown value. A gold outline shows the selected area.
+
+An acreage value such as `200+` gives a minimum. The table sorts by that minimum. If the minimum leaves more than one possible color range, the map shows a gray dot.
 
 The map uses the hosted CARTO Dark Matter vector style. Turn on **Terrain relief** to see shaded slopes from zoom level 8. CARTO continues to provide the streets and labels. Mapterhorn supplies the elevation tiles. [CARTO Basemaps](https://docs.carto.com/faqs/carto-basemaps), [Mapterhorn elevation tiles](https://mapterhorn.com/data-access/)
 
@@ -32,7 +38,7 @@ CARTO publishes Dark Matter, Voyager, and Positron. MapTiler offers a separate W
 
 ## Catalog
 
-The catalog includes 197 ski areas across 33 regions. It has 167 areas in the United States and 30 in Canada. The current files have 83 published acreage figures and 48 direct links to official conditions reports. Each area meets the acreage or pass rule below. The full list still needs a review of remaining candidates and pass partners.
+On November 19, 2026, the catalog had 197 ski areas across 33 regions. It had 167 areas in the United States and 30 in Canada. It had 83 published acreage figures and 48 links to official conditions reports. Each area meets the acreage or pass rule below.
 
 | File | Use |
 | --- | --- |
@@ -40,21 +46,21 @@ The catalog includes 197 ski areas across 33 regions. It has 167 areas in the Un
 | [Area locations](data/locations.json) | Points from the November 16 OpenSkiData build. Each point has source identifiers. The file includes ODbL attribution. |
 | [Pass memberships](data/passes-2026-27.json) | Family access for the 2026/27 season. The details show discounts. The pass filter includes areas with lift access. Each entry links to a source. |
 
-Use the same area ID in the three files. Add one point for each area. Add at most one membership for each area and pass family. Palisades Tahoe uses one point with sources for both bases. A value with a plus sign sorts by its stated minimum.
+Use the same area ID in the three files. Add one point for each area. Add at most one membership for each area and pass family. Palisades Tahoe uses one point with sources for both bases.
 
-The catalog checks for duplicate IDs, missing references, and conflicting values. Cite an operator source for each published acreage. Use HTTPS source URLs without embedded credentials. [Catalog validation](../../src/features/ski-status/catalog.ts)
+Cite an operator source for the mountain statistics in each record. Use absolute HTTPS URLs without usernames or passwords. The catalog checks for duplicate IDs, missing references, and conflicting values. It requires location attribution and a pass season that ends the next year. [Catalog validation](../../src/features/ski-status/catalog.ts)
 
 ## Local checks
 
-Start Vite with `npm run dev` after you install the repository dependencies. Open `/projects/ski-status/map` on the local server.
+Install the repository dependencies. Run `npm run dev` to start Vite. Open `/projects/ski-status/map` on the local server.
 
-Run the catalog tests.
+Run the catalog, table, and marker tests.
 
 ```bash
 npx vitest run src/test/skiStatus.test.ts
 ```
 
-Run the browser regression tests.
+Run the browser tests. They check map position, fallback, and view changes.
 
 ```bash
 npm run test:e2e -- tests/e2e/ski-status.spec.ts --project=chromium
@@ -70,8 +76,8 @@ Whaleback has 86 skiable acres and qualifies through Indy lift access. Show Indy
 
 - Add filters for pass product, ski date, and operating status.
 - Color dots by operating status after the app can check report age. Use gray when the latest report is unavailable or stale.
-- Add separate columns for observed and forecast snow. Compare numbers in common units. Put unknown values last in both directions.
-- Group columns by mountain statistics, conditions, and season dates. Save visible columns and units on the device. Use **In map view** to limit results to the map bounds.
+- Add separate columns for measured snow and forecast snow. Compare each field in common units. Put unknown values last in both directions.
+- Group columns by mountain statistics, conditions, and season dates. Save the column settings on the device. Use **In map view** to limit results to the map bounds.
 - Export filtered rows as CSV where licenses permit it. Include units, report times, and source links.
 
 ### Comparable mountain statistics
@@ -88,7 +94,7 @@ Whaleback has 86 skiable acres and qualifies through Indy lift access. Show Indy
 
 Store values in common units. Keep the original unit and source. Display acres, feet, and inches by default. Offer metric units.
 
-Use operator announcements and reports to verify season dates. Record the first and last days when the regular winter season has public lift access. Compare typical dates in winter season order across the year boundary. If you have fewer verified dates, show the published season window or mark the typical dates as unknown. Use the resort's time zone. Use **Year-round** for areas that offer lift access in every season. [Big SNOW specifications](https://www.bigsnowamericandream.com/press-room/), [Palisades Tahoe mountain statistics and season windows](https://www.palisadestahoe.com/footer/mountain-statistics)
+Use operator announcements and reports to verify season dates. Record the first and last days of public lift access for each winter season. Use the resort's time zone. Compare dates in winter season order across the year boundary. If fewer than three dates are available, show the published season window or show **Unknown**. Use **Year-round** for areas with lift access in every season. [Big SNOW specifications](https://www.bigsnowamericandream.com/press-room/), [Palisades Tahoe mountain statistics and season windows](https://www.palisadestahoe.com/footer/mountain-statistics)
 
 ## Inventory and data quality
 
@@ -104,7 +110,7 @@ The November 19 download contained 12,440 world records. The audit selected name
 | Greenland | 3 | 2 | 3 | 3 |
 | **Total** | **848** | **771** | **750** | **787** |
 
-These counts precede the acreage and pass checks. Use operator sources for skiable acreage. A named row can describe one base area. Verify the mapped elevations with the operator. The CSV shows 3–4 m of elevation for indoor Big SNOW. The operator reports 160 ft of vertical and four skiable acres. [OpenSkiData schema](https://www.openskidata.org/#schema), [Big SNOW specifications](https://www.bigsnowamericandream.com/press-room/)
+The audit counts candidates before the acreage and pass checks. A named row can describe one base area. Verify the acreage and elevations with the operator. The CSV shows 3–4 m of elevation for indoor Big SNOW. The operator reports 160 ft of vertical and four skiable acres. [OpenSkiData schema](https://www.openskidata.org/#schema), [Big SNOW specifications](https://www.bigsnowamericandream.com/press-room/)
 
 The CSV has SHA-256 `9c5a372b8d02aedd281fd387c581c16f48915d89abacec7eba0faa53726a9df5`.
 
@@ -151,8 +157,8 @@ On November 19, the SnoCountry demo returned Bolton Valley, Bromley, and Burke. 
 
 ### Report and forecast rules
 
-- Store operating status with each report. Use open, limited, temporarily closed, season closed, or unknown. Store planned opening dates and the area's daily schedule.
-- Show open and total lifts, trails, and acres when reported. Calculate closed counts and percentages from counts with the same scope and time. Use distinct columns for **trails open %** and **acres open %**.
+- Store operating status with each report. Use open, limited, temporarily closed, season closed, or unknown. Store hours and planned opening dates when the operator publishes them.
+- Show open and total lifts, trails, and acres when the operator reports them. Show grooming status where available. Calculate closed counts and percentages from counts with the same scope and time. Use separate columns for **trails open %** and **acres open %**.
 - Keep the snow depth unit, range, and measurement location. Show the reporting period for new snow. Use one column for forecast snow. Show empty values as unknown. Show reported zeros as zero.
 - Keep the operator's report time and the time the app retrieved it. Mark pilot reports older than 24 hours as stale. Keep the last report and date visible. Identify missing fields on new reports.
 - Use a freshness limit for each source when its schedule changes. Show the date of an official seasonal closure. Calculate report age from the source time.
@@ -160,9 +166,11 @@ On November 19, the SnoCountry demo returned Bolton Valley, Bromley, and Burke. 
 
 ## Repository and hosting design
 
-The project uses React, TypeScript, Vite, and MapLibre. The `/projects/ski-status` route opens `/projects/ski-status/map`. Keep data preparation in `projects/ski-status/`. Keep feature code in `src/features/ski-status/`. Use the shared CARTO configuration and map recovery. [CARTO basemap configuration](../../docs/carto-basemaps.md), [Existing project routes](../../src/App.tsx)
+The project uses React, TypeScript, Vite, and MapLibre. The `/projects/ski-status` route opens `/projects/ski-status/map`. Keep data preparation in `projects/ski-status/`. Keep feature code in `src/features/ski-status/`. Use the shared CARTO configuration and map recovery. [CARTO basemap configuration](../../docs/carto-basemaps.md), [Project routes](../../src/App.tsx)
 
-Use a GeoJSON source for the resort dots and typed JSON for the table. A single filter result drives both views. Join static facts, pass rules, resort reports, and forecasts by the local area ID in later stages.
+The client uses a GeoJSON source for the dots and JSON for the table. Both views use the same results. The map applies camera changes when its resort layer is ready and it has a visible viewport.
+
+Join static facts, pass rules, resort reports, and forecasts by the local area ID in later stages. The following diagram shows the planned data flow.
 
 ```mermaid
 flowchart LR
@@ -186,15 +194,15 @@ Credit sources where their data appears. OpenSkiData permits use under ODbL and 
 
 ## Implementation sequence and acceptance checks
 
-| Stage | Deliverable | Acceptance check |
-| --- | --- | --- |
-| 1. Catalog pilot | Review 25 eligible areas. Include a small pass partner, a resort with multiple bases, and an area with night skiing. | Verify eligibility, points, source links, and field definitions for each area. Publish coverage for the pilot. |
-| 2. Map and table | Build the views, details, search, sortable columns, URL state, and unit choices. | Check that views use the same results and selection. Test keyboard access, phone layout, and map recovery. Verify sorting for zero, unknown, and stale values. |
-| 3. Pass products | Add date rules for the first four families. Verify them against official season sources. | Test shared days, reservations, excluded products, blackout date boundaries, and discount partners. Match every included partner or record why it is outside scope. |
-| 4. Conditions pilot | Add forecasts and official report links. Schedule updates from permitted sources. | Measure fresh status, terrain, depth, and snow for a week. Compare values with operator reports. Test failed updates, stale reports, empty values, zero, and partial openings. |
-| 5. First release | Review eligible areas by region. Expand report coverage. Publish coverage by field and source. | Verify the reason for each area's inclusion and its website. Verify the source and time on each report. Count areas with a fresh report. |
+The pilot used 25 areas to test catalog joins and map controls. The expanded catalog and views use the same checks. Use the [task list](TODO.md) for remaining work.
 
-At four minutes per area, manual review of 848 candidates takes about 57 hours. Start with official pass lists and regional directories. Use the map data to find matches. Review uncertain areas and areas near the acreage threshold. Measure the time for 25 reviews before you estimate the full catalog. Use existing hosting and the free forecast feed for the pilot. Measure report coverage before you consider a paid feed.
+| Work | Acceptance check |
+| --- | --- |
+| Pass products | Test shared days, reservations, excluded products, blackout dates, and discount partners. Match each included partner or record why it is outside scope. |
+| Conditions pilot | Measure report age and field coverage for a week. Compare values with operator reports. Test failed updates, stale reports, unknown values, zero values, and partial openings. |
+| First release | Verify the source and eligibility of each area. Check links. Verify the source and time of each report. Publish counts of recent reports and coverage by field. |
+
+At four minutes per area, a manual review of 848 candidates would take about 57 hours. Use regional directories and official sources to find eligible areas. Review uncertain matches and acreage near the threshold. Measure review time before you set the release schedule. Use existing hosting and the free forecast feed for the pilot. Measure report coverage before you consider a paid feed.
 
 ## Version 2
 
@@ -204,7 +212,7 @@ Show named runs, lift lines, and terminals from OpenSkiData at resort zoom. Use 
 
 ### Access routes and webcams
 
-Start with Washington and British Columbia. Match each resort base to road segments and directions. Use US 2 for Stevens Pass. Use the applicable Highway 99 segments for Whistler. Match closures, restrictions, and cameras by agency ID and road geometry. Show the agency's report time. Mark missing coverage as unknown. Link to agency cameras. Embed views where an agency permits it. Consider Utah's feed for expansion. [WSDOT Traveler Information API](https://apps.wsdot.wa.gov/traffic/api/), [DriveBC Open511](https://api.open511.gov.bc.ca/help), [BC HighwayCams](https://images.drivebc.ca/bchighwaycam/pub/html/www/index.html), [UDOT API](https://www.udottraffic.utah.gov/developers/doc)
+Start with Washington and British Columbia. Use operator directions to match each resort base to road segments. Use US 2 for Stevens Pass. Use the applicable Highway 99 segments for Whistler. Match closures, restrictions, and cameras to these roads. Use agency IDs and road geometry for each match. Show the agency's report time. Mark missing coverage as unknown. Link to agency and resort cameras. Embed feeds where the source permits it. Record parking prices, locations, and shuttles that operators publish. Consider Utah's feed for expansion. [WSDOT Traveler Information API](https://apps.wsdot.wa.gov/traffic/api/), [DriveBC Open511](https://api.open511.gov.bc.ca/help), [BC HighwayCams](https://images.drivebc.ca/bchighwaycam/pub/html/www/index.html), [UDOT API](https://www.udottraffic.utah.gov/developers/doc)
 
 ### Visited areas
 

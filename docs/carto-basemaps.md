@@ -77,6 +77,8 @@ They check key trimming, URL encoding, tile placeholders, and both provider attr
 Missing keys make `cartoRasterStyle` and `cartoVectorStyle` return neutral styles with **Basemap unavailable** attribution.
 The explicit public-vector URL helper supports missing keys and encodes configured keys.
 Pins tests check Dark Matter on startup and background retry, with visible provider attribution.
+Ski-status tests check background retry with a delayed style request.
+The tests check that the map centers on the resort selected during the delay.
 
 Configuration tests check key selection and rejection of release builds without a key.
 They check whitespace handling, fallback values, and priority between process variables and local files.

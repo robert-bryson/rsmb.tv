@@ -22,14 +22,19 @@ interface Props {
     selected?: SkiArea;
     colors: MarkerMode;
     terrain: boolean;
+    visible: boolean;
     onSelect: (id: string) => void;
 }
 
 function fitAreas(map: maplibre.Map, areas: readonly SkiArea[], duration: number) {
     if (!areas.length) return;
+    const { clientWidth, clientHeight } = map.getContainer();
+    const padding = Math.min(46, clientWidth / 4, clientHeight / 4);
+    if (!padding) return;
+    map.resize();
     const bounds = new maplibre.LngLatBounds();
     for (const area of areas) bounds.extend(area.location.coordinates);
-    map.fitBounds(bounds, { padding: 46, maxZoom: pointZoom, duration });
+    map.fitBounds(bounds, { padding, maxZoom: pointZoom, duration });
 }
 
 function highlightArea(map: maplibre.Map, area?: SkiArea) {
@@ -97,10 +102,11 @@ function closestArea(map: maplibre.Map, point: TooltipPoint, areas: readonly Ski
     return nearest;
 }
 
-export default function SkiStatusMap({ areas, selected, colors, terrain, onSelect }: Props) {
+export default function SkiStatusMap({ areas, selected, colors, terrain, visible, onSelect }: Props) {
     const container = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibre.Map | null>(null);
     const recoveryRef = useRef<ReturnType<typeof recoverBasemap> | null>(null);
+    const appliedCamera = useRef<{ areas: readonly SkiArea[]; selectedId?: string } | undefined>(undefined);
     const [attempt, setAttempt] = useState(0);
     const [basemap, setBasemap] = useState<BasemapState>('loading');
     const [ready, setReady] = useState(false);
@@ -115,12 +121,30 @@ export default function SkiStatusMap({ areas, selected, colors, terrain, onSelec
             geometry: { type: 'Point', coordinates: area.location.coordinates },
         })),
     }), [areas, colors]);
-    const current = useEffectEvent(() => ({ areas, points, selected, duration, terrain }));
+    const current = useEffectEvent(() => ({ areas, points, selected, terrain }));
     const selectArea = useEffectEvent(onSelect);
+    const syncCamera = useEffectEvent((map: maplibre.Map) => {
+        if (!visible || !map.getLayer(pointLayer)) return;
+        const { clientWidth, clientHeight } = map.getContainer();
+        if (!clientWidth || !clientHeight) return;
+
+        // Keep changes pending while the map is hidden or a replacement style loads.
+        const previous = appliedCamera.current;
+        appliedCamera.current = { areas, selectedId: selected?.id };
+        if (selected && selected.id !== previous?.selectedId) {
+            map.resize();
+            map.easeTo({
+                center: selected.location.coordinates,
+                zoom: previous ? Math.max(pointZoom, map.getZoom()) : pointZoom,
+                duration: previous ? duration : 0,
+            });
+        } else if (!selected && areas !== previous?.areas) {
+            fitAreas(map, areas, previous ? duration : 0);
+        }
+    });
 
     useEffect(() => {
         let map: maplibre.Map | undefined;
-        let fitted = false;
         const frame = requestAnimationFrame(() => {
             if (!container.current) return;
             let instance: maplibre.Map;
@@ -148,12 +172,9 @@ export default function SkiStatusMap({ areas, selected, colors, terrain, onSelec
                 highlightArea(instance, data.selected);
                 syncTerrain(instance, data.terrain);
                 setTerrainUnavailable(false);
-                if (!fitted) {
-                    if (data.selected) instance.jumpTo({ center: data.selected.location.coordinates, zoom: pointZoom });
-                    else fitAreas(instance, data.areas, 0);
-                    fitted = true;
-                }
+                syncCamera(instance);
             });
+            instance.on('resize', () => syncCamera(instance));
             instance.on('sourcedata', event => {
                 if (event.sourceId === sourceId && event.isSourceLoaded) setReady(true);
                 if (event.sourceId === terrainSource && event.isSourceLoaded && event.sourceDataType === 'content') setTerrainUnavailable(false);
@@ -180,6 +201,7 @@ export default function SkiStatusMap({ areas, selected, colors, terrain, onSelec
             recoveryRef.current = null;
             map?.remove();
             mapRef.current = null;
+            appliedCamera.current = undefined;
         };
     }, [attempt]);
 
@@ -189,10 +211,8 @@ export default function SkiStatusMap({ areas, selected, colors, terrain, onSelec
 
     useEffect(() => {
         const map = mapRef.current;
-        if (!map?.getSource(sourceId)) return;
-        const { selected, duration } = current();
-        if (!selected) fitAreas(map, areas, duration);
-    }, [areas]);
+        if (map) syncCamera(map);
+    }, [areas, selected, visible]);
 
     useEffect(() => {
         const map = mapRef.current;
@@ -201,9 +221,7 @@ export default function SkiStatusMap({ areas, selected, colors, terrain, onSelec
 
     useEffect(() => {
         const map = mapRef.current;
-        if (!map?.getLayer(selectedLayer)) return;
-        highlightArea(map, selected);
-        if (selected) map.easeTo({ center: selected.location.coordinates, zoom: Math.max(pointZoom, map.getZoom()), duration: current().duration });
+        if (map?.getLayer(selectedLayer)) highlightArea(map, selected);
     }, [selected]);
 
     const state = failed ? 'error' : !ready || basemap === 'loading' ? 'loading' : basemap === 'unavailable' ? 'degraded' : 'ready';

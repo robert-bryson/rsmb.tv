@@ -41,19 +41,38 @@ describe('ski-status catalog validation', () => {
     it('retains a matched pass resort whose stats and conditions are unknown', () => {
         const unknown = { ...area, acres: undefined, statsUrl: undefined, reportUrl: undefined };
         expect(readSkiCatalog([unknown], locations, passes).areas[0]).toMatchObject({ id: area.id, passes: [membership] });
+        expect(() => readSkiCatalog([{ ...unknown, summitFt: 1_500 }], locations, passes)).toThrow('No mountain statistics source');
     });
 
     it.each([
-        [{ statsUrl: undefined }, /No skiable acreage source/],
+        [{ statsUrl: undefined }, /No mountain statistics source/],
+        [{ name: '   ' }, /Too small/],
         [{ trailCountQualifier: 'lower-bound' }, /Lower bound.*reported value/],
+        [{ baseFt: 3_000, summitFt: 2_500 }, /Inverted base and summit/],
         [{ highestLiftTerminalFt: 3_000, lowestLiftTerminalFt: 3_100 }, /Inverted lift terminal/],
         [{ nightSkiing: false, nightAcres: 20 }, /Conflicting night skiing/],
+        [{ nightSkiing: true, nightAcres: 125 }, /Night skiable acreage exceeds/],
         [{ grades: { unit: 'count', values: { Expert: 0.5 } } }, /Use whole trail counts/],
         [{ grades: { unit: 'percent', values: { Expert: 101 } } }, /percentages from 0 to 100/],
-        [{ reportUrl: 'https://test:example@example.org/conditions' }, /Source URLs must not contain credentials/],
-        [{ reportUrl: 'http://example.org/conditions' }, /Invalid URL/],
+        [{ reportUrl: 'https://test:example@example.org/conditions' }, /Use an HTTPS source URL without credentials/],
+        [{ reportUrl: 'http://example.org/conditions' }, /Use an HTTPS source URL without credentials/],
+        [{ reportUrl: '/conditions' }, /Use an HTTPS source URL without credentials/],
+        [{ reportUrl: 'https:example.org/conditions' }, /Use an HTTPS source URL without credentials/],
+        [{ reportUrl: 'https://' }, /Use an HTTPS source URL without credentials/],
     ])('rejects invalid area fields %j', (field, reason) => {
         expect(() => readSkiCatalog([{ ...area, ...field }], locations, passes)).toThrow(reason);
+    });
+
+    it('accepts negative elevations and night acreage above a published lower bound', () => {
+        const lowerBound = { ...area, acresQualifier: 'lower-bound', nightAcres: 125, nightSkiing: true, baseFt: -20, summitFt: 40 };
+        const catalog = readSkiCatalog([lowerBound], locations, { ...passes, season: '2099/00' });
+        expect(catalog.areas[0]).toMatchObject(lowerBound);
+        expect(catalog.passSeason).toBe('2099/00');
+    });
+
+    it('requires map attribution and a pass season that ends in the next year', () => {
+        expect(() => readSkiCatalog([area], { ...locations, attribution: {} }, passes)).toThrow('Add a location attribution link');
+        expect(() => readSkiCatalog([area], locations, { ...passes, season: '2026/28' })).toThrow('Pass season must end the next year');
     });
 });
 
@@ -115,10 +134,17 @@ describe('ski-status catalog and browse', () => {
         expect(formatSkiStat(reported, 'trailCount', 'imperial')).toBe('330+');
         const zero = { ...reported, trailCount: 0, trailCountQualifier: undefined };
         expect(formatSkiStat(zero, 'trailCount', 'imperial')).toBe('0');
+        const otherUnknown = { ...unreported, id: 'other-unknown', name: 'Z Unknown' };
         for (const direction of ['asc', 'desc'] as const) {
-            expect(sortSkiAreas([unreported, zero], { key: 'trailCount', direction })).toEqual([zero, unreported]);
+            expect(sortSkiAreas([otherUnknown, unreported, zero], { key: 'trailCount', direction })).toEqual([zero, unreported, otherUnknown]);
         }
         expect(readSkiSort(new URLSearchParams('sort=unrecognized:desc'))).toEqual({ key: 'name', direction: 'asc' });
+    });
+
+    it('sorts names and regions as text', () => {
+        const rows = [{ ...skiAreas[0], name: 'Ski 2', region: 'VT' }, { ...skiAreas[1], name: 'Ski 10', region: 'CA' }];
+        expect(sortSkiAreas(rows, { key: 'name', direction: 'desc' })).toEqual([rows[1], rows[0]]);
+        expect(sortSkiAreas(rows, { key: 'region', direction: 'asc' })).toEqual([rows[1], rows[0]]);
     });
 });
 
@@ -144,5 +170,17 @@ describe('ski-status marker colors', () => {
         expect(markerColor({ ...source, acres: undefined }, 'acres')).toBe(legend.at(-1)?.color);
         expect(markerLegend('default', 'metric')).toEqual([]);
         expect(readMarkerMode('__proto__')).toBe('default');
+        expect(readMarkerMode(null)).toBe('default');
+        expect(readMarkerMode('verticalFt')).toBe('verticalFt');
+        expect(markerColor(source, 'default')).toBe(markerColor({ ...source, acres: undefined }, 'default'));
+        expect(markerLegend('highestLiftTerminalFt', 'imperial').at(-2)?.label).toBe('9,000 ft and up');
+    });
+
+    it('assigns lower bounds to a color only when the published value proves the range', () => {
+        const peak = skiAreas.find(area => area.id === 'granite-peak')!;
+        const legend = markerLegend('acres', 'imperial');
+        expect(markerColor(peak, 'acres')).toBe(legend.at(-1)?.color);
+        expect(markerColor({ ...peak, acres: 2_500 }, 'acres')).toBe(legend.at(-2)?.color);
+        expect(markerColor({ ...peak, acresQualifier: undefined }, 'acres')).toBe(legend[0]?.color);
     });
 });
