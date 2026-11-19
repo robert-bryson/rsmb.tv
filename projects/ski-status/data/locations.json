@@ -121,6 +121,17 @@
       ]
     },
     {
+      "id": "amihari-onsen-ski-resort",
+      "coordinates": [
+        140.93618,
+        39.828279
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/678520467",
+        "https://www.skimap.org/SkiAreas/view/13372"
+      ]
+    },
+    {
       "id": "andermatt-gemsstock",
       "coordinates": [
         8.602325,
@@ -142,6 +153,17 @@
       ]
     },
     {
+      "id": "andes-tower-hills",
+      "coordinates": [
+        -95.613072,
+        45.852679
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/313781036",
+        "https://www.skimap.org/SkiAreas/view/391"
+      ]
+    },
+    {
       "id": "angel-fire-resort",
       "coordinates": [
         -105.249543,
@@ -150,6 +172,39 @@
       "upstream": [
         "https://www.openstreetmap.org/way/1263733614",
         "https://www.skimap.org/SkiAreas/view/331"
+      ]
+    },
+    {
+      "id": "antelope-butte",
+      "coordinates": [
+        -107.512365,
+        44.605495
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1554646670",
+        "https://www.skimap.org/SkiAreas/view/153"
+      ]
+    },
+    {
+      "id": "aomori-spring-ski-resort",
+      "coordinates": [
+        140.282116,
+        40.684602
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/677033105",
+        "https://www.skimap.org/SkiAreas/view/6212"
+      ]
+    },
+    {
+      "id": "apex-mountain-resort",
+      "coordinates": [
+        -119.917877,
+        49.384435
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1138569632",
+        "https://www.skimap.org/SkiAreas/view/49"
       ]
     },
     {
@@ -197,6 +252,17 @@
       ]
     },
     {
+      "id": "arctic-valley",
+      "coordinates": [
+        -149.52103,
+        61.245959
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/10517367",
+        "https://www.skimap.org/SkiAreas/view/555"
+      ]
+    },
+    {
       "id": "asessippi-ski-area-resort",
       "coordinates": [
         -101.338217,
@@ -240,6 +306,26 @@
       ]
     },
     {
+      "id": "bad-kleinkirchheim",
+      "coordinates": [
+        13.785881,
+        46.814977
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/341904633"
+      ]
+    },
+    {
+      "id": "baldy-mountain-resort",
+      "coordinates": [
+        -119.235306,
+        49.15297
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/37"
+      ]
+    },
+    {
       "id": "balme-vallorcine",
       "coordinates": [
         6.951956,
@@ -262,6 +348,38 @@
       ]
     },
     {
+      "id": "baqueira-beret",
+      "coordinates": [
+        0.966439,
+        42.704876
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/2924735",
+        "https://www.skimap.org/SkiAreas/view/1976"
+      ]
+    },
+    {
+      "id": "bear-basin-nordic-center",
+      "coordinates": [
+        -116.149539,
+        44.944485
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/882093832"
+      ]
+    },
+    {
+      "id": "bear-creek",
+      "coordinates": [
+        -75.628835,
+        40.47565
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/281594168",
+        "https://www.skimap.org/SkiAreas/view/256"
+      ]
+    },
+    {
       "id": "bear-mountain",
       "coordinates": [
         -116.8605,
@@ -273,6 +391,27 @@
       ]
     },
     {
+      "id": "bear-valley-adventure-company",
+      "coordinates": [
+        -120.044731,
+        38.452017
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/7025848"
+      ]
+    },
+    {
+      "id": "bear-valley-mountain-resort",
+      "coordinates": [
+        -120.050297,
+        38.482607
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/16792393",
+        "https://www.skimap.org/SkiAreas/view/534"
+      ]
+    },
+    {
       "id": "beaver-creek-resort",
       "coordinates": [
         -106.529633,
@@ -280,6 +419,17 @@
       ],
       "upstream": [
         "https://www.skimap.org/SkiAreas/view/497"
+      ]
+    },
+    {
+      "id": "beaver-mountain",
+      "coordinates": [
+        -111.550144,
+        41.971773
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1070694657",
+        "https://www.skimap.org/SkiAreas/view/220"
       ]
     },
     {
@@ -294,6 +444,39 @@
       ]
     },
     {
+      "id": "beito-resort",
+      "coordinates": [
+        8.904429,
+        61.254151
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/4429439",
+        "https://www.skimap.org/SkiAreas/view/14313"
+      ]
+    },
+    {
+      "id": "belleayre-mountain",
+      "coordinates": [
+        -74.488524,
+        42.128219
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/6373343",
+        "https://www.skimap.org/SkiAreas/view/324",
+        "https://www.skimap.org/SkiAreas/view/4972"
+      ]
+    },
+    {
+      "id": "bergbahnen-hohsaas",
+      "coordinates": [
+        7.965783,
+        46.138497
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/9144020"
+      ]
+    },
+    {
       "id": "berkshire-east-ski-resort",
       "coordinates": [
         -72.872566,
@@ -305,6 +488,17 @@
       ]
     },
     {
+      "id": "bethel-village-trails",
+      "coordinates": [
+        -70.799556,
+        44.398855
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1197168541",
+        "https://www.skimap.org/SkiAreas/view/17980"
+      ]
+    },
+    {
       "id": "big-boulder",
       "coordinates": [
         -75.599476,
@@ -313,6 +507,39 @@
       "upstream": [
         "https://www.openstreetmap.org/way/390166745",
         "https://www.skimap.org/SkiAreas/view/252"
+      ]
+    },
+    {
+      "id": "big-moose",
+      "coordinates": [
+        -69.706734,
+        45.497298
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/379478843",
+        "https://www.skimap.org/SkiAreas/view/457"
+      ]
+    },
+    {
+      "id": "big-powderhorn",
+      "coordinates": [
+        -90.091622,
+        46.507327
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/473859024",
+        "https://www.skimap.org/SkiAreas/view/420"
+      ]
+    },
+    {
+      "id": "big-rock-mountain",
+      "coordinates": [
+        -67.822184,
+        46.523234
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/255071260",
+        "https://www.skimap.org/SkiAreas/view/455"
       ]
     },
     {
@@ -335,6 +562,60 @@
       "upstream": [
         "https://www.openstreetmap.org/way/476836855",
         "https://www.skimap.org/SkiAreas/view/57"
+      ]
+    },
+    {
+      "id": "bjorkliden",
+      "coordinates": [
+        18.668144,
+        68.395779
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/691080634",
+        "https://www.skimap.org/SkiAreas/view/2000"
+      ]
+    },
+    {
+      "id": "black-jack-cross-country-ski-club",
+      "coordinates": [
+        -117.813606,
+        49.113096
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/575"
+      ]
+    },
+    {
+      "id": "black-mountain-of-maine",
+      "coordinates": [
+        -70.62112,
+        44.581168
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/19733493",
+        "https://www.skimap.org/SkiAreas/view/454"
+      ]
+    },
+    {
+      "id": "black-mountain-ski-area",
+      "coordinates": [
+        -71.166356,
+        44.172099
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1154306823",
+        "https://www.skimap.org/SkiAreas/view/348"
+      ]
+    },
+    {
+      "id": "blue-knob-all-season-resort",
+      "coordinates": [
+        -78.557577,
+        40.294022
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1221894855",
+        "https://www.skimap.org/SkiAreas/view/241"
       ]
     },
     {
@@ -401,6 +682,27 @@
       "upstream": [
         "https://www.openstreetmap.org/way/452323654",
         "https://www.skimap.org/SkiAreas/view/276"
+      ]
+    },
+    {
+      "id": "bottineau-winter-park",
+      "coordinates": [
+        -100.471945,
+        48.950521
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/280"
+      ]
+    },
+    {
+      "id": "bousquet-mountain-0",
+      "coordinates": [
+        -73.279157,
+        42.415266
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1278125600",
+        "https://www.skimap.org/SkiAreas/view/444"
       ]
     },
     {
@@ -514,6 +816,17 @@
       ]
     },
     {
+      "id": "bruce-mound-winter-sports-area",
+      "coordinates": [
+        -90.785307,
+        44.444802
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/613145242",
+        "https://www.skimap.org/SkiAreas/view/164"
+      ]
+    },
+    {
       "id": "brundage-mountain-resort",
       "coordinates": [
         -116.142586,
@@ -536,6 +849,17 @@
       ]
     },
     {
+      "id": "bryce-resort",
+      "coordinates": [
+        -78.766709,
+        38.813733
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/5881007",
+        "https://www.skimap.org/SkiAreas/view/196"
+      ]
+    },
+    {
       "id": "buck-hill",
       "coordinates": [
         -93.286574,
@@ -544,6 +868,17 @@
       "upstream": [
         "https://www.openstreetmap.org/way/1344641638",
         "https://www.skimap.org/SkiAreas/view/386"
+      ]
+    },
+    {
+      "id": "buffalo-ski-club",
+      "coordinates": [
+        -78.697442,
+        42.676692
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1026073030",
+        "https://www.skimap.org/SkiAreas/view/3228"
       ]
     },
     {
@@ -580,6 +915,39 @@
       ]
     },
     {
+      "id": "calabogie-peaks-resort",
+      "coordinates": [
+        -76.785486,
+        45.269535
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/387979659",
+        "https://www.skimap.org/SkiAreas/view/111"
+      ]
+    },
+    {
+      "id": "caledonia-nordic-ski-club",
+      "coordinates": [
+        -122.877948,
+        53.966805
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1133346229",
+        "https://www.skimap.org/SkiAreas/view/2264"
+      ]
+    },
+    {
+      "id": "camden-snow-bowl",
+      "coordinates": [
+        -69.139751,
+        44.213529
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1366642639",
+        "https://www.skimap.org/SkiAreas/view/452"
+      ]
+    },
+    {
       "id": "camelback-mountain-resort",
       "coordinates": [
         -75.354203,
@@ -589,6 +957,16 @@
         "https://www.openstreetmap.org/way/52067284",
         "https://www.skimap.org/SkiAreas/view/13602",
         "https://www.skimap.org/SkiAreas/view/238"
+      ]
+    },
+    {
+      "id": "camp-10-ski-area",
+      "coordinates": [
+        -89.504027,
+        45.550151
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/2990"
       ]
     },
     {
@@ -604,6 +982,28 @@
       ]
     },
     {
+      "id": "canaan-valley",
+      "coordinates": [
+        -79.436487,
+        39.004024
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/12130404",
+        "https://www.skimap.org/SkiAreas/view/180"
+      ]
+    },
+    {
+      "id": "canmore-ski-village",
+      "coordinates": [
+        142.54002,
+        43.730486
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/667593226",
+        "https://www.skimap.org/SkiAreas/view/1238"
+      ]
+    },
+    {
       "id": "cannon-mountain",
       "coordinates": [
         -71.703119,
@@ -612,6 +1012,17 @@
       "upstream": [
         "https://www.openstreetmap.org/way/334259037",
         "https://www.skimap.org/SkiAreas/view/347"
+      ]
+    },
+    {
+      "id": "carters-xc-ski-center",
+      "coordinates": [
+        -70.786091,
+        44.468698
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1362834254",
+        "https://www.skimap.org/SkiAreas/view/18021"
       ]
     },
     {
@@ -626,6 +1037,17 @@
       ]
     },
     {
+      "id": "cataloochee-ski-area",
+      "coordinates": [
+        -83.089571,
+        35.558736
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/5886629",
+        "https://www.skimap.org/SkiAreas/view/288"
+      ]
+    },
+    {
       "id": "catamount-mountain-resort",
       "coordinates": [
         -73.47641,
@@ -634,6 +1056,37 @@
       "upstream": [
         "https://www.openstreetmap.org/way/1176086204",
         "https://www.skimap.org/SkiAreas/view/323"
+      ]
+    },
+    {
+      "id": "catamount-outdoor-family-center",
+      "coordinates": [
+        -73.048735,
+        44.448003
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/node/408489913"
+      ]
+    },
+    {
+      "id": "cazenovia-ski-club",
+      "coordinates": [
+        -75.852699,
+        42.977149
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/3229"
+      ]
+    },
+    {
+      "id": "centre-vorlage",
+      "coordinates": [
+        -75.937061,
+        45.644856
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/387976210",
+        "https://www.skimap.org/SkiAreas/view/110"
       ]
     },
     {
@@ -648,6 +1101,49 @@
       ]
     },
     {
+      "id": "cherry-peak",
+      "coordinates": [
+        -111.75395,
+        41.925196
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1275118072",
+        "https://www.skimap.org/SkiAreas/view/4337"
+      ]
+    },
+    {
+      "id": "chestnut-mountain-resort",
+      "coordinates": [
+        -90.398207,
+        42.317934
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/867570853",
+        "https://www.skimap.org/SkiAreas/view/471"
+      ]
+    },
+    {
+      "id": "china-peak",
+      "coordinates": [
+        -119.158055,
+        37.22644
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/15717134",
+        "https://www.skimap.org/SkiAreas/view/527"
+      ]
+    },
+    {
+      "id": "christie-mountain",
+      "coordinates": [
+        -91.383419,
+        45.50755
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/178"
+      ]
+    },
+    {
       "id": "civetta",
       "coordinates": [
         12.075271,
@@ -659,6 +1155,16 @@
       ]
     },
     {
+      "id": "coffee-mill-ski-area",
+      "coordinates": [
+        -92.042599,
+        44.360494
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/378"
+      ]
+    },
+    {
       "id": "cooper",
       "coordinates": [
         -106.288898,
@@ -667,6 +1173,16 @@
       "upstream": [
         "https://www.openstreetmap.org/way/531009606",
         "https://www.skimap.org/SkiAreas/view/512"
+      ]
+    },
+    {
+      "id": "cooper-spur-ski-area",
+      "coordinates": [
+        -121.6054,
+        45.4125
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/272"
       ]
     },
     {
@@ -689,6 +1205,17 @@
       "upstream": [
         "https://www.openstreetmap.org/relation/6451819",
         "https://www.skimap.org/SkiAreas/view/1116"
+      ]
+    },
+    {
+      "id": "corralco-resort-de-montana",
+      "coordinates": [
+        -71.561514,
+        -38.39493
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1412281678",
+        "https://www.skimap.org/SkiAreas/view/1156"
       ]
     },
     {
@@ -783,6 +1310,16 @@
       ]
     },
     {
+      "id": "crosscut-mountain-sports-center",
+      "coordinates": [
+        -110.886585,
+        45.826835
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1264671748"
+      ]
+    },
+    {
       "id": "crotched-mountain",
       "coordinates": [
         -71.880381,
@@ -826,6 +1363,28 @@
       ]
     },
     {
+      "id": "cuchara",
+      "coordinates": [
+        -105.129777,
+        37.344187
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1212155021",
+        "https://www.skimap.org/SkiAreas/view/3198"
+      ]
+    },
+    {
+      "id": "cupid-valley",
+      "coordinates": [
+        138.490334,
+        37.046032
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1458695224",
+        "https://www.skimap.org/SkiAreas/view/1477"
+      ]
+    },
+    {
       "id": "cypress-mountain",
       "coordinates": [
         -123.18925,
@@ -834,6 +1393,17 @@
       "upstream": [
         "https://www.openstreetmap.org/relation/15317924",
         "https://www.skimap.org/SkiAreas/view/50"
+      ]
+    },
+    {
+      "id": "dartmouth-skiway",
+      "coordinates": [
+        -72.101262,
+        43.785689
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/15475391",
+        "https://www.skimap.org/SkiAreas/view/345"
       ]
     },
     {
@@ -849,6 +1419,28 @@
       ]
     },
     {
+      "id": "destination-owls-head",
+      "coordinates": [
+        -72.295371,
+        45.071748
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1232163832",
+        "https://www.skimap.org/SkiAreas/view/82"
+      ]
+    },
+    {
+      "id": "detroit-mountain",
+      "coordinates": [
+        -95.783728,
+        46.814838
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1246948337",
+        "https://www.skimap.org/SkiAreas/view/4463"
+      ]
+    },
+    {
       "id": "devil-s-head-resort",
       "coordinates": [
         -89.629764,
@@ -857,6 +1449,16 @@
       "upstream": [
         "https://www.openstreetmap.org/way/302670313",
         "https://www.skimap.org/SkiAreas/view/179"
+      ]
+    },
+    {
+      "id": "devils-thumb-ranch",
+      "coordinates": [
+        -105.782912,
+        39.967796
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/13787"
       ]
     },
     {
@@ -881,6 +1483,82 @@
       ]
     },
     {
+      "id": "dodge-ridge",
+      "coordinates": [
+        -119.939334,
+        38.189917
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/3139919",
+        "https://www.skimap.org/SkiAreas/view/533"
+      ]
+    },
+    {
+      "id": "dog-creek-lodge-nordic-center",
+      "coordinates": [
+        -114.607637,
+        48.589894
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/17891"
+      ]
+    },
+    {
+      "id": "domaine-skiable-des-contamines",
+      "coordinates": [
+        6.68549,
+        45.791166
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/5993391",
+        "https://www.skimap.org/SkiAreas/view/815"
+      ]
+    },
+    {
+      "id": "donner-ski-ranch",
+      "coordinates": [
+        -120.336977,
+        39.321323
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/3184079",
+        "https://www.skimap.org/SkiAreas/view/542"
+      ]
+    },
+    {
+      "id": "dry-hill-ski-area",
+      "coordinates": [
+        -75.901658,
+        43.929882
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/679909874",
+        "https://www.skimap.org/SkiAreas/view/304"
+      ]
+    },
+    {
+      "id": "dynaland",
+      "coordinates": [
+        136.862215,
+        35.991355
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1458947806",
+        "https://www.skimap.org/SkiAreas/view/1713"
+      ]
+    },
+    {
+      "id": "eagle-point",
+      "coordinates": [
+        -112.378016,
+        38.322228
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/5671444",
+        "https://www.skimap.org/SkiAreas/view/231"
+      ]
+    },
+    {
       "id": "eaglecrest-ski-area",
       "coordinates": [
         -134.508659,
@@ -889,6 +1567,29 @@
       "upstream": [
         "https://www.openstreetmap.org/way/1010412985",
         "https://www.skimap.org/SkiAreas/view/553"
+      ]
+    },
+    {
+      "id": "eastman-cross-country",
+      "coordinates": [
+        -72.111557,
+        43.505379
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1363087011",
+        "https://www.skimap.org/SkiAreas/view/15110",
+        "https://www.skimap.org/SkiAreas/view/4939"
+      ]
+    },
+    {
+      "id": "echo-mountain",
+      "coordinates": [
+        -105.520385,
+        39.685474
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/530998534",
+        "https://www.skimap.org/SkiAreas/view/1034"
       ]
     },
     {
@@ -911,6 +1612,50 @@
       "upstream": [
         "https://www.openstreetmap.org/way/422321232",
         "https://www.skimap.org/SkiAreas/view/251"
+      ]
+    },
+    {
+      "id": "elm-creek-park-reserve",
+      "coordinates": [
+        -93.43824,
+        45.145978
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/18015832",
+        "https://www.skimap.org/SkiAreas/view/5246"
+      ]
+    },
+    {
+      "id": "enchanted-forest-xc",
+      "coordinates": [
+        -105.362041,
+        36.697883
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/756454880",
+        "https://www.skimap.org/SkiAreas/view/15246"
+      ]
+    },
+    {
+      "id": "engstligenalp",
+      "coordinates": [
+        7.572427,
+        46.434855
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/14360201",
+        "https://www.skimap.org/SkiAreas/view/17212"
+      ]
+    },
+    {
+      "id": "fairmont-hot-springs",
+      "coordinates": [
+        -115.820729,
+        50.337524
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/4080466",
+        "https://www.skimap.org/SkiAreas/view/47"
       ]
     },
     {
@@ -946,6 +1691,40 @@
       ]
     },
     {
+      "id": "fort-kent-outdoor-center",
+      "coordinates": [
+        -68.595793,
+        47.23677
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/19344106",
+        "https://www.skimap.org/SkiAreas/view/17994",
+        "https://www.skimap.org/SkiAreas/view/3204"
+      ]
+    },
+    {
+      "id": "franconia-village-xc-ski-area",
+      "coordinates": [
+        -71.741955,
+        44.191918
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1363129372",
+        "https://www.skimap.org/SkiAreas/view/18044"
+      ]
+    },
+    {
+      "id": "frost-fire-park",
+      "coordinates": [
+        -98.067829,
+        48.911169
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/656372511",
+        "https://www.skimap.org/SkiAreas/view/283"
+      ]
+    },
+    {
       "id": "furano-ski-resort",
       "coordinates": [
         142.339841,
@@ -969,6 +1748,27 @@
       ]
     },
     {
+      "id": "garnet-hill-xc",
+      "coordinates": [
+        -74.108214,
+        43.71119
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/17657"
+      ]
+    },
+    {
+      "id": "geto-kogen",
+      "coordinates": [
+        140.897375,
+        39.238306
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1201571470",
+        "https://www.skimap.org/SkiAreas/view/1353"
+      ]
+    },
+    {
       "id": "giants-ridge",
       "coordinates": [
         -92.30457,
@@ -977,6 +1777,61 @@
       "upstream": [
         "https://www.openstreetmap.org/way/1314867881",
         "https://www.skimap.org/SkiAreas/view/388"
+      ]
+    },
+    {
+      "id": "glencoe-mountain-resort",
+      "coordinates": [
+        -4.838003,
+        56.621895
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/258880201",
+        "https://www.skimap.org/SkiAreas/view/1050"
+      ]
+    },
+    {
+      "id": "glenshee-ski-centre",
+      "coordinates": [
+        -3.397448,
+        56.885179
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1266093483",
+        "https://www.skimap.org/SkiAreas/view/1051"
+      ]
+    },
+    {
+      "id": "gore-mountain",
+      "coordinates": [
+        -74.016402,
+        43.681533
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1238042221",
+        "https://www.skimap.org/SkiAreas/view/2744",
+        "https://www.skimap.org/SkiAreas/view/320"
+      ]
+    },
+    {
+      "id": "gore-mountain-nordic-center",
+      "coordinates": [
+        -73.990907,
+        43.694538
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/815765733"
+      ]
+    },
+    {
+      "id": "granby-ranch",
+      "coordinates": [
+        -105.904801,
+        40.036663
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1266097397",
+        "https://www.skimap.org/SkiAreas/view/516"
       ]
     },
     {
@@ -1024,6 +1879,16 @@
       ]
     },
     {
+      "id": "great-bear-ski-valley",
+      "coordinates": [
+        -96.664242,
+        43.577161
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1214114449"
+      ]
+    },
+    {
       "id": "great-divide-ski-area",
       "coordinates": [
         -112.326932,
@@ -1032,6 +1897,17 @@
       "upstream": [
         "https://www.openstreetmap.org/way/147037315",
         "https://www.skimap.org/SkiAreas/view/371"
+      ]
+    },
+    {
+      "id": "great-glen-trails-outdoor-center",
+      "coordinates": [
+        -71.227162,
+        44.29312
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1361269903",
+        "https://www.skimap.org/SkiAreas/view/17979"
       ]
     },
     {
@@ -1066,6 +1942,17 @@
         "https://www.openstreetmap.org/way/47798396",
         "https://www.skimap.org/SkiAreas/view/342",
         "https://www.skimap.org/SkiAreas/view/5014"
+      ]
+    },
+    {
+      "id": "hafjell",
+      "coordinates": [
+        10.467924,
+        61.236917
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/268326089",
+        "https://www.skimap.org/SkiAreas/view/1844"
       ]
     },
     {
@@ -1145,6 +2032,37 @@
       ]
     },
     {
+      "id": "hardwood-ski-and-bike",
+      "coordinates": [
+        -79.591098,
+        44.517807
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/14784"
+      ]
+    },
+    {
+      "id": "hatley-pointe",
+      "coordinates": [
+        -82.509651,
+        35.950229
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1126110799",
+        "https://www.skimap.org/SkiAreas/view/289"
+      ]
+    },
+    {
+      "id": "haymaker-nordic-center",
+      "coordinates": [
+        -106.81412,
+        40.426578
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/node/5892165397"
+      ]
+    },
+    {
       "id": "heavenly",
       "coordinates": [
         -119.910798,
@@ -1178,6 +2096,27 @@
       ]
     },
     {
+      "id": "high-point-xc-ski-center",
+      "coordinates": [
+        -74.667549,
+        41.319733
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/17890"
+      ]
+    },
+    {
+      "id": "hilltop-ski-area",
+      "coordinates": [
+        -149.739318,
+        61.141203
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/839939642",
+        "https://www.skimap.org/SkiAreas/view/556"
+      ]
+    },
+    {
       "id": "hintertux-glacier",
       "coordinates": [
         11.664875,
@@ -1189,6 +2128,17 @@
       ]
     },
     {
+      "id": "hirugano-kogen-ski-resort",
+      "coordinates": [
+        136.912934,
+        36.005503
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1189279617",
+        "https://www.skimap.org/SkiAreas/view/1696"
+      ]
+    },
+    {
       "id": "hochfuegen-hochzillertal",
       "coordinates": [
         11.817512,
@@ -1197,6 +2147,50 @@
       "upstream": [
         "https://www.openstreetmap.org/relation/5675207",
         "https://www.skimap.org/SkiAreas/view/12306"
+      ]
+    },
+    {
+      "id": "hochzeiger-bergbahnen-pitztal-ag",
+      "coordinates": [
+        10.774674,
+        47.157823
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/539400408",
+        "https://www.skimap.org/SkiAreas/view/636"
+      ]
+    },
+    {
+      "id": "hockley-valley-resort",
+      "coordinates": [
+        -80.048472,
+        43.975283
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1254864403",
+        "https://www.skimap.org/SkiAreas/view/123"
+      ]
+    },
+    {
+      "id": "hodaigi-mountain-resort",
+      "coordinates": [
+        139.080918,
+        36.833315
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/908946630",
+        "https://www.skimap.org/SkiAreas/view/1452"
+      ]
+    },
+    {
+      "id": "homestake-lodge",
+      "coordinates": [
+        -112.387798,
+        45.905119
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1219679745",
+        "https://www.skimap.org/SkiAreas/view/17892"
       ]
     },
     {
@@ -1233,6 +2227,50 @@
       ]
     },
     {
+      "id": "howelsen-hill",
+      "coordinates": [
+        -106.839698,
+        40.483514
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/530989200",
+        "https://www.skimap.org/SkiAreas/view/498"
+      ]
+    },
+    {
+      "id": "hudson-bay-mountain",
+      "coordinates": [
+        -127.261482,
+        54.770237
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1135215380",
+        "https://www.skimap.org/SkiAreas/view/38"
+      ]
+    },
+    {
+      "id": "huff-hills-ski-area",
+      "coordinates": [
+        -100.724834,
+        46.625713
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/846739537",
+        "https://www.skimap.org/SkiAreas/view/282"
+      ]
+    },
+    {
+      "id": "hunt-hollow-ski-club",
+      "coordinates": [
+        -77.48359,
+        42.642017
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1303060558",
+        "https://www.skimap.org/SkiAreas/view/325"
+      ]
+    },
+    {
       "id": "hunter-mountain",
       "coordinates": [
         -74.21842,
@@ -1241,6 +2279,38 @@
       "upstream": [
         "https://www.openstreetmap.org/relation/14322044",
         "https://www.skimap.org/SkiAreas/view/315"
+      ]
+    },
+    {
+      "id": "hurricane-ridge",
+      "coordinates": [
+        -123.494478,
+        47.970983
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/1024"
+      ]
+    },
+    {
+      "id": "hyland-hills",
+      "coordinates": [
+        -93.365549,
+        44.843159
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/956685533",
+        "https://www.skimap.org/SkiAreas/view/389"
+      ]
+    },
+    {
+      "id": "innsbruck-region",
+      "coordinates": [
+        11.124628,
+        46.991608
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/539209006",
+        "https://www.skimap.org/SkiAreas/view/640"
       ]
     },
     {
@@ -1274,6 +2344,17 @@
       "upstream": [
         "https://www.openstreetmap.org/way/1074335726",
         "https://www.skimap.org/SkiAreas/view/151"
+      ]
+    },
+    {
+      "id": "jackson-xc",
+      "coordinates": [
+        -71.191848,
+        44.170002
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/20066584",
+        "https://www.skimap.org/SkiAreas/view/17893"
       ]
     },
     {
@@ -1321,6 +2402,28 @@
       ]
     },
     {
+      "id": "kamui-ski-links",
+      "coordinates": [
+        142.202211,
+        43.700879
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/479915906",
+        "https://www.skimap.org/SkiAreas/view/1243"
+      ]
+    },
+    {
+      "id": "kandatsu-snow-resort",
+      "coordinates": [
+        138.809466,
+        36.902345
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/948360186",
+        "https://www.skimap.org/SkiAreas/view/1531"
+      ]
+    },
+    {
       "id": "kappl",
       "coordinates": [
         10.357004,
@@ -1340,6 +2443,38 @@
       "upstream": [
         "https://www.openstreetmap.org/way/936980547",
         "https://www.skimap.org/SkiAreas/view/1675"
+      ]
+    },
+    {
+      "id": "kaunertal-glacier",
+      "coordinates": [
+        10.707502,
+        46.865679
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/601130440"
+      ]
+    },
+    {
+      "id": "kelly-canyon",
+      "coordinates": [
+        -111.622233,
+        43.640828
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/375130755",
+        "https://www.skimap.org/SkiAreas/view/486"
+      ]
+    },
+    {
+      "id": "kendall-mountain-ski-area",
+      "coordinates": [
+        -107.656265,
+        37.811487
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/528962955",
+        "https://www.skimap.org/SkiAreas/view/499"
       ]
     },
     {
@@ -1388,6 +2523,27 @@
       ]
     },
     {
+      "id": "kimberley-nordic-club",
+      "coordinates": [
+        -116.00693,
+        49.6823
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/475131780"
+      ]
+    },
+    {
+      "id": "king-pine",
+      "coordinates": [
+        -71.088828,
+        43.864838
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1363577242",
+        "https://www.skimap.org/SkiAreas/view/354"
+      ]
+    },
+    {
       "id": "kirkwood-mountain-resort",
       "coordinates": [
         -120.067434,
@@ -1429,6 +2585,28 @@
       "upstream": [
         "https://www.openstreetmap.org/way/474258174",
         "https://www.skimap.org/SkiAreas/view/2087"
+      ]
+    },
+    {
+      "id": "krvavec-ski-resort",
+      "coordinates": [
+        14.530486,
+        46.298707
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/4594387",
+        "https://www.skimap.org/SkiAreas/view/1969"
+      ]
+    },
+    {
+      "id": "kvitfjell",
+      "coordinates": [
+        10.112713,
+        61.45605
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1466199986",
+        "https://www.skimap.org/SkiAreas/view/1847"
       ]
     },
     {
@@ -1498,6 +2676,28 @@
       ]
     },
     {
+      "id": "le-relais",
+      "coordinates": [
+        -71.296969,
+        46.936467
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/422839115",
+        "https://www.skimap.org/SkiAreas/view/78"
+      ]
+    },
+    {
+      "id": "leavenworth-winter-sports-club",
+      "coordinates": [
+        -120.669132,
+        47.614188
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/15657891",
+        "https://www.skimap.org/SkiAreas/view/3323"
+      ]
+    },
+    {
       "id": "lech-am-arlberg",
       "coordinates": [
         10.1424258,
@@ -1506,6 +2706,17 @@
       "upstream": [
         "https://www.openstreetmap.org/node/285898460",
         "https://www.openstreetmap.org/way/105896648"
+      ]
+    },
+    {
+      "id": "les-7-laux",
+      "coordinates": [
+        6.02186,
+        45.259009
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/294826110",
+        "https://www.skimap.org/SkiAreas/view/733"
       ]
     },
     {
@@ -1530,6 +2741,27 @@
       ]
     },
     {
+      "id": "leukerbad-torrent-ski-resort-gemmi-resort",
+      "coordinates": [
+        7.641447,
+        46.371762
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1226017306",
+        "https://www.skimap.org/SkiAreas/view/996"
+      ]
+    },
+    {
+      "id": "levi-ski-resort",
+      "coordinates": [
+        24.846063,
+        67.787692
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1107815765"
+      ]
+    },
+    {
       "id": "liberty-mountain-resort",
       "coordinates": [
         -77.36847,
@@ -1541,6 +2773,17 @@
       ]
     },
     {
+      "id": "little-ski-hill",
+      "coordinates": [
+        -116.161976,
+        44.928812
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/767350052",
+        "https://www.skimap.org/SkiAreas/view/3009"
+      ]
+    },
+    {
       "id": "little-switzerland",
       "coordinates": [
         -88.2807,
@@ -1548,6 +2791,17 @@
       ],
       "upstream": [
         "https://www.skimap.org/SkiAreas/view/161"
+      ]
+    },
+    {
+      "id": "loch-lomond",
+      "coordinates": [
+        -89.346827,
+        48.292529
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/5432030",
+        "https://www.skimap.org/SkiAreas/view/138"
       ]
     },
     {
@@ -1570,6 +2824,28 @@
       "upstream": [
         "https://www.openstreetmap.org/way/1290903952",
         "https://www.skimap.org/SkiAreas/view/374"
+      ]
+    },
+    {
+      "id": "lost-valley",
+      "coordinates": [
+        -70.284027,
+        44.138262
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/860486037",
+        "https://www.skimap.org/SkiAreas/view/449"
+      ]
+    },
+    {
+      "id": "loup-loup-ski-bowl",
+      "coordinates": [
+        -119.917426,
+        48.392766
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/266484152",
+        "https://www.skimap.org/SkiAreas/view/192"
       ]
     },
     {
@@ -1629,6 +2905,17 @@
       ]
     },
     {
+      "id": "magic-mountain-idaho",
+      "coordinates": [
+        -114.285454,
+        42.186111
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/859506501",
+        "https://www.skimap.org/SkiAreas/view/490"
+      ]
+    },
+    {
       "id": "magic-mountain-ski-area",
       "coordinates": [
         -72.766333,
@@ -1640,6 +2927,28 @@
       ]
     },
     {
+      "id": "maiko-resort",
+      "coordinates": [
+        138.83217,
+        36.978321
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/679253285",
+        "https://www.skimap.org/SkiAreas/view/1474"
+      ]
+    },
+    {
+      "id": "mala-upa",
+      "coordinates": [
+        15.821878,
+        50.735348
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/17574396",
+        "https://www.skimap.org/SkiAreas/view/14180"
+      ]
+    },
+    {
       "id": "mammoth-mountain",
       "coordinates": [
         -119.008844,
@@ -1648,6 +2957,49 @@
       "upstream": [
         "https://www.openstreetmap.org/way/682231907",
         "https://www.skimap.org/SkiAreas/view/530"
+      ]
+    },
+    {
+      "id": "manning-park",
+      "coordinates": [
+        -120.838386,
+        49.077034
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1132263707",
+        "https://www.skimap.org/SkiAreas/view/42"
+      ]
+    },
+    {
+      "id": "manning-park-xc",
+      "coordinates": [
+        -120.786467,
+        49.063622
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/node/3828083744"
+      ]
+    },
+    {
+      "id": "maple-ski-ridge",
+      "coordinates": [
+        -74.033537,
+        42.815968
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1367181096",
+        "https://www.skimap.org/SkiAreas/view/3235"
+      ]
+    },
+    {
+      "id": "maplelag-resort",
+      "coordinates": [
+        -95.779104,
+        47.016181
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/18084213",
+        "https://www.skimap.org/SkiAreas/view/17894"
       ]
     },
     {
@@ -1673,6 +3025,38 @@
       ]
     },
     {
+      "id": "marquette-mountain",
+      "coordinates": [
+        -87.42,
+        46.508333
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/419"
+      ]
+    },
+    {
+      "id": "massanutten-resort",
+      "coordinates": [
+        -78.760483,
+        38.397854
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/5881053",
+        "https://www.skimap.org/SkiAreas/view/197"
+      ]
+    },
+    {
+      "id": "massif-du-sud",
+      "coordinates": [
+        -70.495192,
+        46.618821
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1561814599",
+        "https://www.skimap.org/SkiAreas/view/95"
+      ]
+    },
+    {
       "id": "mayrhofen",
       "coordinates": [
         11.793236,
@@ -1681,6 +3065,17 @@
       "upstream": [
         "https://www.openstreetmap.org/way/539196496",
         "https://www.skimap.org/SkiAreas/view/634"
+      ]
+    },
+    {
+      "id": "mcintyre-ski-area",
+      "coordinates": [
+        -71.44074,
+        43.005082
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/361561697",
+        "https://www.skimap.org/SkiAreas/view/3012"
       ]
     },
     {
@@ -1717,6 +3112,27 @@
       ]
     },
     {
+      "id": "minocqua-winter-park",
+      "coordinates": [
+        -89.895287,
+        45.830474
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/12245"
+      ]
+    },
+    {
+      "id": "mohawk-mountain",
+      "coordinates": [
+        -73.307948,
+        41.836133
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/68519530",
+        "https://www.skimap.org/SkiAreas/view/493"
+      ]
+    },
+    {
       "id": "mona-yongpyong",
       "coordinates": [
         128.67867,
@@ -1739,6 +3155,50 @@
       ]
     },
     {
+      "id": "mont-edouard",
+      "coordinates": [
+        -70.290264,
+        48.162818
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1561818257",
+        "https://www.skimap.org/SkiAreas/view/1064"
+      ]
+    },
+    {
+      "id": "mont-kanasuta",
+      "coordinates": [
+        -79.403089,
+        48.17901
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/5300844",
+        "https://www.skimap.org/SkiAreas/view/2215"
+      ]
+    },
+    {
+      "id": "mont-rigaud",
+      "coordinates": [
+        -74.334991,
+        45.465898
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/5365820",
+        "https://www.skimap.org/SkiAreas/view/2214"
+      ]
+    },
+    {
+      "id": "mont-ripley-ski-area",
+      "coordinates": [
+        -88.561397,
+        47.130027
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/19733089",
+        "https://www.skimap.org/SkiAreas/view/427"
+      ]
+    },
+    {
       "id": "mont-sainte-anne",
       "coordinates": [
         -70.918848,
@@ -1757,6 +3217,28 @@
       ],
       "upstream": [
         "https://www.skimap.org/SkiAreas/view/90"
+      ]
+    },
+    {
+      "id": "montage-mountain",
+      "coordinates": [
+        -75.664993,
+        41.353526
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/45096232",
+        "https://www.skimap.org/SkiAreas/view/248"
+      ]
+    },
+    {
+      "id": "montana-snowbowl",
+      "coordinates": [
+        -114.00368,
+        47.02043
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1335348646",
+        "https://www.skimap.org/SkiAreas/view/368"
       ]
     },
     {
@@ -1793,6 +3275,16 @@
       ]
     },
     {
+      "id": "mount-baldy-ski-area",
+      "coordinates": [
+        -89.128288,
+        48.525599
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/137"
+      ]
+    },
+    {
       "id": "mount-bohemia",
       "coordinates": [
         -88.011929,
@@ -1801,6 +3293,39 @@
       "upstream": [
         "https://www.openstreetmap.org/relation/19375326",
         "https://www.skimap.org/SkiAreas/view/428"
+      ]
+    },
+    {
+      "id": "mount-cain",
+      "coordinates": [
+        -126.34675,
+        50.22323
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/579980733",
+        "https://www.skimap.org/SkiAreas/view/54"
+      ]
+    },
+    {
+      "id": "mount-kato",
+      "coordinates": [
+        -94.035236,
+        44.130711
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/713467426",
+        "https://www.skimap.org/SkiAreas/view/387"
+      ]
+    },
+    {
+      "id": "mount-racey-ski-resort",
+      "coordinates": [
+        141.977662,
+        43.046275
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1083653058",
+        "https://www.skimap.org/SkiAreas/view/1291"
       ]
     },
     {
@@ -1834,6 +3359,29 @@
       "upstream": [
         "https://www.openstreetmap.org/relation/10664978",
         "https://www.skimap.org/SkiAreas/view/29"
+      ]
+    },
+    {
+      "id": "mountain-high",
+      "coordinates": [
+        -117.689526,
+        34.370053
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/3185646",
+        "https://www.skimap.org/SkiAreas/view/4061",
+        "https://www.skimap.org/SkiAreas/view/521"
+      ]
+    },
+    {
+      "id": "mt-abram",
+      "coordinates": [
+        -70.710316,
+        44.374733
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/415176032",
+        "https://www.skimap.org/SkiAreas/view/447"
       ]
     },
     {
@@ -1881,6 +3429,28 @@
       ]
     },
     {
+      "id": "mt-eyak",
+      "coordinates": [
+        -145.73992,
+        60.551696
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1010406137",
+        "https://www.skimap.org/SkiAreas/view/554"
+      ]
+    },
+    {
+      "id": "mt-holiday",
+      "coordinates": [
+        -85.515889,
+        44.741964
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/896064328",
+        "https://www.skimap.org/SkiAreas/view/411"
+      ]
+    },
+    {
       "id": "mt-hood-meadows",
       "coordinates": [
         -121.661789,
@@ -1914,6 +3484,17 @@
       ]
     },
     {
+      "id": "mt-la-crosse",
+      "coordinates": [
+        -91.183451,
+        43.74588
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/817289254",
+        "https://www.skimap.org/SkiAreas/view/171"
+      ]
+    },
+    {
       "id": "mt-norquay",
       "coordinates": [
         -115.598973,
@@ -1922,6 +3503,17 @@
       "upstream": [
         "https://www.openstreetmap.org/way/1563251164",
         "https://www.skimap.org/SkiAreas/view/16"
+      ]
+    },
+    {
+      "id": "mt-pisgah",
+      "coordinates": [
+        -74.126108,
+        44.344708
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1464128439",
+        "https://www.skimap.org/SkiAreas/view/314"
       ]
     },
     {
@@ -1958,6 +3550,38 @@
       ]
     },
     {
+      "id": "mt-van-hoevenberg",
+      "coordinates": [
+        -73.914857,
+        44.223398
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/13700"
+      ]
+    },
+    {
+      "id": "muica-snow-resort",
+      "coordinates": [
+        138.839193,
+        37.073107
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/626857453",
+        "https://www.skimap.org/SkiAreas/view/1507"
+      ]
+    },
+    {
+      "id": "murray-ridge-ski-area",
+      "coordinates": [
+        -124.200396,
+        54.524867
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/5517057",
+        "https://www.skimap.org/SkiAreas/view/31"
+      ]
+    },
+    {
       "id": "myoko-suginohara-ski-resort",
       "coordinates": [
         138.134165,
@@ -1980,6 +3604,17 @@
       ]
     },
     {
+      "id": "nayoro-piyashiri-ski-resort",
+      "coordinates": [
+        142.512191,
+        44.410386
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/290283443",
+        "https://www.skimap.org/SkiAreas/view/1247"
+      ]
+    },
+    {
       "id": "nekoma-mountain",
       "coordinates": [
         140.034027,
@@ -1991,6 +3626,16 @@
       ]
     },
     {
+      "id": "nelson-nordic-ski-club",
+      "coordinates": [
+        -117.204208,
+        49.404746
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/2271"
+      ]
+    },
+    {
       "id": "nendaz",
       "coordinates": [
         7.2911752,
@@ -1999,6 +3644,28 @@
       "upstream": [
         "https://www.openstreetmap.org/node/13352480891",
         "https://www.openstreetmap.org/way/29289978"
+      ]
+    },
+    {
+      "id": "nickel-plate-cross-country-ski-club",
+      "coordinates": [
+        -119.969915,
+        49.374132
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/2240738",
+        "https://www.skimap.org/SkiAreas/view/572"
+      ]
+    },
+    {
+      "id": "ninox-snow-park",
+      "coordinates": [
+        139.478673,
+        37.922185
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1208479232",
+        "https://www.skimap.org/SkiAreas/view/1527"
       ]
     },
     {
@@ -2024,6 +3691,38 @@
       ]
     },
     {
+      "id": "norefjell-ski-resort",
+      "coordinates": [
+        9.56918,
+        60.218332
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1138053358",
+        "https://www.skimap.org/SkiAreas/view/1849"
+      ]
+    },
+    {
+      "id": "north-cascade-heli",
+      "coordinates": [
+        -120.43915,
+        48.59567
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/362347635"
+      ]
+    },
+    {
+      "id": "northern-maine-community-trails",
+      "coordinates": [
+        -67.927856,
+        46.729853
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1233544805",
+        "https://www.skimap.org/SkiAreas/view/18056"
+      ]
+    },
+    {
       "id": "northstar-california-resort",
       "coordinates": [
         -120.133082,
@@ -2032,6 +3731,17 @@
       "upstream": [
         "https://www.openstreetmap.org/relation/7095958",
         "https://www.skimap.org/SkiAreas/view/531"
+      ]
+    },
+    {
+      "id": "norway-mountain",
+      "coordinates": [
+        -87.86738,
+        45.790467
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1057550035",
+        "https://www.skimap.org/SkiAreas/view/410"
       ]
     },
     {
@@ -2046,6 +3756,61 @@
       ]
     },
     {
+      "id": "nutt-hill",
+      "coordinates": [
+        -87.989548,
+        43.750043
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/702101323",
+        "https://www.skimap.org/SkiAreas/view/3287"
+      ]
+    },
+    {
+      "id": "oak-hill-outdoor-center",
+      "coordinates": [
+        -72.26301,
+        43.721822
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1363312802",
+        "https://www.skimap.org/SkiAreas/view/18050"
+      ]
+    },
+    {
+      "id": "ober-mountain",
+      "coordinates": [
+        -83.559566,
+        35.70158
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1282431650",
+        "https://www.skimap.org/SkiAreas/view/232"
+      ]
+    },
+    {
+      "id": "oberstdorf-kleinwalsertal-bergbahnen",
+      "coordinates": [
+        10.214369,
+        47.363549
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/7772597",
+        "https://www.skimap.org/SkiAreas/view/981"
+      ]
+    },
+    {
+      "id": "obertauern",
+      "coordinates": [
+        13.556659,
+        47.253771
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/3165847",
+        "https://www.skimap.org/SkiAreas/view/605"
+      ]
+    },
+    {
       "id": "okemo-mountain-resort",
       "coordinates": [
         -72.730504,
@@ -2054,6 +3819,50 @@
       "upstream": [
         "https://www.openstreetmap.org/way/1236284348",
         "https://www.skimap.org/SkiAreas/view/204"
+      ]
+    },
+    {
+      "id": "okunakayama-kogen",
+      "coordinates": [
+        141.183391,
+        40.084466
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1221242138",
+        "https://www.skimap.org/SkiAreas/view/1363"
+      ]
+    },
+    {
+      "id": "onikoube-ski-resort",
+      "coordinates": [
+        140.635347,
+        38.781729
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/485475104",
+        "https://www.skimap.org/SkiAreas/view/1372"
+      ]
+    },
+    {
+      "id": "oppdal",
+      "coordinates": [
+        9.679247,
+        62.613609
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1359304443",
+        "https://www.skimap.org/SkiAreas/view/1850"
+      ]
+    },
+    {
+      "id": "orcieres-merlette-1850",
+      "coordinates": [
+        6.324672,
+        44.712248
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1137686002",
+        "https://www.skimap.org/SkiAreas/view/685"
       ]
     },
     {
@@ -2074,6 +3883,18 @@
       ],
       "upstream": [
         "https://www.openstreetmap.org/relation/19751525"
+      ]
+    },
+    {
+      "id": "osceola-tug-hill-xc-ski-center",
+      "coordinates": [
+        -75.706081,
+        43.499836
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1467326241",
+        "https://www.skimap.org/SkiAreas/view/19556",
+        "https://www.skimap.org/SkiAreas/view/19563"
       ]
     },
     {
@@ -2107,6 +3928,17 @@
       "upstream": [
         "https://www.openstreetmap.org/relation/4638280",
         "https://www.skimap.org/SkiAreas/view/1807"
+      ]
+    },
+    {
+      "id": "palcall-tsumagoi-resort",
+      "coordinates": [
+        138.450442,
+        36.557486
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1188381817",
+        "https://www.skimap.org/SkiAreas/view/1460"
       ]
     },
     {
@@ -2157,6 +3989,17 @@
       ]
     },
     {
+      "id": "pass-powderkeg",
+      "coordinates": [
+        -114.452716,
+        49.601405
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/5450140",
+        "https://www.skimap.org/SkiAreas/view/2177"
+      ]
+    },
+    {
       "id": "pats-peak",
       "coordinates": [
         -71.795878,
@@ -2165,6 +4008,48 @@
       "upstream": [
         "https://www.openstreetmap.org/way/662615625",
         "https://www.skimap.org/SkiAreas/view/355"
+      ]
+    },
+    {
+      "id": "paul-bunyan-ski-hill",
+      "coordinates": [
+        -88.52427,
+        45.325532
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/5010"
+      ]
+    },
+    {
+      "id": "paul-smiths-college-visitor-interpretive-center",
+      "coordinates": [
+        -74.27187,
+        44.442605
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/18193"
+      ]
+    },
+    {
+      "id": "pebble-creek-ski-area",
+      "coordinates": [
+        -112.151682,
+        42.773756
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/4851664",
+        "https://www.skimap.org/SkiAreas/view/478"
+      ]
+    },
+    {
+      "id": "peek-n-peak",
+      "coordinates": [
+        -79.740155,
+        42.064075
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1024235364",
+        "https://www.skimap.org/SkiAreas/view/302"
       ]
     },
     {
@@ -2191,6 +4076,28 @@
       ]
     },
     {
+      "id": "petzen",
+      "coordinates": [
+        14.776882,
+        46.523342
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/7845886",
+        "https://www.skimap.org/SkiAreas/view/588"
+      ]
+    },
+    {
+      "id": "phoenix-mountain",
+      "coordinates": [
+        -118.586922,
+        49.105365
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/5552850",
+        "https://www.skimap.org/SkiAreas/view/51"
+      ]
+    },
+    {
       "id": "pico-mountain",
       "coordinates": [
         -72.840606,
@@ -2213,6 +4120,17 @@
       ]
     },
     {
+      "id": "pine-mountain",
+      "coordinates": [
+        -88.086202,
+        45.836036
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1043087316",
+        "https://www.skimap.org/SkiAreas/view/433"
+      ]
+    },
+    {
       "id": "pinzolo",
       "coordinates": [
         10.790024,
@@ -2220,6 +4138,60 @@
       ],
       "upstream": [
         "https://www.openstreetmap.org/way/540714830"
+      ]
+    },
+    {
+      "id": "pippu-ski-resort",
+      "coordinates": [
+        142.500364,
+        43.933816
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/478522135",
+        "https://www.skimap.org/SkiAreas/view/1249"
+      ]
+    },
+    {
+      "id": "pitztal-glacier",
+      "coordinates": [
+        10.876017,
+        46.922335
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/5682591",
+        "https://www.skimap.org/SkiAreas/view/2568"
+      ]
+    },
+    {
+      "id": "pizol",
+      "coordinates": [
+        9.439469,
+        46.989378
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/9051527",
+        "https://www.skimap.org/SkiAreas/view/1022"
+      ]
+    },
+    {
+      "id": "plain-valley-ski-trails",
+      "coordinates": [
+        -120.660782,
+        47.749638
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/16981"
+      ]
+    },
+    {
+      "id": "pomerelle-mountain-resort",
+      "coordinates": [
+        -113.611168,
+        42.314305
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1213960940",
+        "https://www.skimap.org/SkiAreas/view/477"
       ]
     },
     {
@@ -2231,6 +4203,41 @@
       "upstream": [
         "https://www.openstreetmap.org/way/542235880",
         "https://www.skimap.org/SkiAreas/view/2085"
+      ]
+    },
+    {
+      "id": "portes-du-soleil",
+      "coordinates": [
+        6.763919,
+        46.228511
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/19457834",
+        "https://www.skimap.org/SkiAreas/view/4389",
+        "https://www.skimap.org/SkiAreas/view/4756",
+        "https://www.skimap.org/SkiAreas/view/988"
+      ]
+    },
+    {
+      "id": "powder-ridge",
+      "coordinates": [
+        -94.308844,
+        45.344539
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/859046254",
+        "https://www.skimap.org/SkiAreas/view/385"
+      ]
+    },
+    {
+      "id": "powder-ridge-connecticut",
+      "coordinates": [
+        -72.738326,
+        41.501962
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/43441045",
+        "https://www.skimap.org/SkiAreas/view/492"
       ]
     },
     {
@@ -2256,6 +4263,28 @@
       ]
     },
     {
+      "id": "pyha-ski-resort",
+      "coordinates": [
+        27.226861,
+        67.026278
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/6652645",
+        "https://www.skimap.org/SkiAreas/view/3964"
+      ]
+    },
+    {
+      "id": "quarry-road-trails",
+      "coordinates": [
+        -69.65731,
+        44.579577
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1362707723",
+        "https://www.skimap.org/SkiAreas/view/4154"
+      ]
+    },
+    {
       "id": "ragged-mountain-resort",
       "coordinates": [
         -71.844026,
@@ -2264,6 +4293,39 @@
       "upstream": [
         "https://www.openstreetmap.org/way/255716854",
         "https://www.skimap.org/SkiAreas/view/351"
+      ]
+    },
+    {
+      "id": "rangeley-lakes-trail-center",
+      "coordinates": [
+        -70.55016,
+        44.959425
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1230214267",
+        "https://www.skimap.org/SkiAreas/view/16598"
+      ]
+    },
+    {
+      "id": "rauriser-hochalmbahnen",
+      "coordinates": [
+        12.97029,
+        47.226093
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/341989985",
+        "https://www.skimap.org/SkiAreas/view/12294"
+      ]
+    },
+    {
+      "id": "red-lodge-mountain",
+      "coordinates": [
+        -109.358548,
+        45.187898
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1266090145",
+        "https://www.skimap.org/SkiAreas/view/364"
       ]
     },
     {
@@ -2299,6 +4361,28 @@
       ]
     },
     {
+      "id": "rikert-nordic-center",
+      "coordinates": [
+        -72.991259,
+        43.962295
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1367387224",
+        "https://www.skimap.org/SkiAreas/view/17895"
+      ]
+    },
+    {
+      "id": "riksgransen",
+      "coordinates": [
+        18.113684,
+        68.415435
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1244144549",
+        "https://www.skimap.org/SkiAreas/view/2021"
+      ]
+    },
+    {
       "id": "rio-pusteria-bressanone",
       "coordinates": [
         11.649592,
@@ -2318,6 +4402,17 @@
       "upstream": [
         "https://www.openstreetmap.org/way/390539624",
         "https://www.skimap.org/SkiAreas/view/242"
+      ]
+    },
+    {
+      "id": "ruka-ski-resort",
+      "coordinates": [
+        29.158381,
+        66.167064
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1236288758",
+        "https://www.skimap.org/SkiAreas/view/1833"
       ]
     },
     {
@@ -2376,6 +4471,17 @@
       ]
     },
     {
+      "id": "saskadena-six-ski-area",
+      "coordinates": [
+        -72.547793,
+        43.663041
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1079343060",
+        "https://www.skimap.org/SkiAreas/view/203"
+      ]
+    },
+    {
       "id": "sasquatch-mountain-resort",
       "coordinates": [
         -121.944097,
@@ -2419,6 +4525,16 @@
       ]
     },
     {
+      "id": "scotts-cobble-nordic-center",
+      "coordinates": [
+        -73.943784,
+        44.248504
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/31766959"
+      ]
+    },
+    {
       "id": "see",
       "coordinates": [
         10.479219,
@@ -2441,6 +4557,28 @@
       ]
     },
     {
+      "id": "shames-mountain",
+      "coordinates": [
+        -128.961886,
+        54.491527
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1363000015",
+        "https://www.skimap.org/SkiAreas/view/55"
+      ]
+    },
+    {
+      "id": "shawnee-mountain-ski-area",
+      "coordinates": [
+        -75.080879,
+        41.036256
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1223350355",
+        "https://www.skimap.org/SkiAreas/view/246"
+      ]
+    },
+    {
       "id": "shiga-kogen-mountain-resort",
       "coordinates": [
         138.502918,
@@ -2448,6 +4586,28 @@
       ],
       "upstream": [
         "https://www.skimap.org/SkiAreas/view/1645"
+      ]
+    },
+    {
+      "id": "shimokura",
+      "coordinates": [
+        140.945604,
+        39.897713
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/960915602",
+        "https://www.skimap.org/SkiAreas/view/1354"
+      ]
+    },
+    {
+      "id": "showdown-montana",
+      "coordinates": [
+        -110.708369,
+        46.836067
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/5264735",
+        "https://www.skimap.org/SkiAreas/view/365"
       ]
     },
     {
@@ -2517,6 +4677,27 @@
       ]
     },
     {
+      "id": "skaneateles-ski-club",
+      "coordinates": [
+        -76.331892,
+        42.915641
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/12240"
+      ]
+    },
+    {
+      "id": "skeetawk",
+      "coordinates": [
+        -149.237603,
+        61.743275
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/934351305",
+        "https://www.skimap.org/SkiAreas/view/3003"
+      ]
+    },
+    {
       "id": "ski-apache",
       "coordinates": [
         -105.801187,
@@ -2525,6 +4706,17 @@
       "upstream": [
         "https://www.openstreetmap.org/relation/4640183",
         "https://www.skimap.org/SkiAreas/view/334"
+      ]
+    },
+    {
+      "id": "ski-big-bear",
+      "coordinates": [
+        -75.023454,
+        41.524201
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/392376125",
+        "https://www.skimap.org/SkiAreas/view/237"
       ]
     },
     {
@@ -2539,6 +4731,27 @@
       ]
     },
     {
+      "id": "ski-land",
+      "coordinates": [
+        -147.409916,
+        65.045781
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/2134"
+      ]
+    },
+    {
+      "id": "ski-saint-bruno",
+      "coordinates": [
+        -73.331693,
+        45.555781
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/5303695",
+        "https://www.skimap.org/SkiAreas/view/2211"
+      ]
+    },
+    {
       "id": "ski-santa-fe",
       "coordinates": [
         -105.790648,
@@ -2550,6 +4763,28 @@
       ]
     },
     {
+      "id": "ski-sawmill",
+      "coordinates": [
+        -77.292436,
+        41.517605
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1235201198",
+        "https://www.skimap.org/SkiAreas/view/262"
+      ]
+    },
+    {
+      "id": "ski-vallee-bleue",
+      "coordinates": [
+        -74.218667,
+        46.024704
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/498378487",
+        "https://www.skimap.org/SkiAreas/view/102"
+      ]
+    },
+    {
       "id": "skicircus-saalbach",
       "coordinates": [
         12.650167,
@@ -2558,6 +4793,49 @@
       "upstream": [
         "https://www.openstreetmap.org/way/342018770",
         "https://www.skimap.org/SkiAreas/view/606"
+      ]
+    },
+    {
+      "id": "skigebiet-heiligenblut-grossglockner",
+      "coordinates": [
+        12.856863,
+        47.059037
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/341908909",
+        "https://www.skimap.org/SkiAreas/view/582"
+      ]
+    },
+    {
+      "id": "skiwelt",
+      "coordinates": [
+        12.24012,
+        47.467174
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/4643831",
+        "https://www.skimap.org/SkiAreas/view/641"
+      ]
+    },
+    {
+      "id": "sleepy-hollow",
+      "coordinates": [
+        -73.032512,
+        44.352087
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1363366559",
+        "https://www.skimap.org/SkiAreas/view/4043"
+      ]
+    },
+    {
+      "id": "smokey-mountain-ski-club",
+      "coordinates": [
+        -66.92094,
+        52.977947
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/1"
       ]
     },
     {
@@ -2591,6 +4869,28 @@
       "upstream": [
         "https://www.openstreetmap.org/way/1076348034",
         "https://www.skimap.org/SkiAreas/view/156"
+      ]
+    },
+    {
+      "id": "snow-resort-the-cupid-of-romance",
+      "coordinates": [
+        138.404857,
+        36.816354
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/955246841",
+        "https://www.skimap.org/SkiAreas/view/1623",
+        "https://www.skimap.org/SkiAreas/view/1631"
+      ]
+    },
+    {
+      "id": "snow-ridge",
+      "coordinates": [
+        -75.420628,
+        43.639802
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/312"
       ]
     },
     {
@@ -2684,6 +4984,16 @@
       ]
     },
     {
+      "id": "snowstar",
+      "coordinates": [
+        -90.747499,
+        41.42458
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/473"
+      ]
+    },
+    {
       "id": "snowy-range-ski-area",
       "coordinates": [
         -106.180155,
@@ -2728,6 +5038,17 @@
       ]
     },
     {
+      "id": "sovereign-lake-nordic-club",
+      "coordinates": [
+        -119.105725,
+        50.361996
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/55949859",
+        "https://www.skimap.org/SkiAreas/view/2277"
+      ]
+    },
+    {
       "id": "spieljoch",
       "coordinates": [
         11.813412,
@@ -2746,6 +5067,17 @@
       "upstream": [
         "https://www.openstreetmap.org/relation/18019724",
         "https://www.skimap.org/SkiAreas/view/383"
+      ]
+    },
+    {
+      "id": "spring-mountain-adventures",
+      "coordinates": [
+        -75.453524,
+        40.271831
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1223977161",
+        "https://www.skimap.org/SkiAreas/view/261"
       ]
     },
     {
@@ -2771,6 +5103,17 @@
       ]
     },
     {
+      "id": "st-johann-in-tirol",
+      "coordinates": [
+        12.427831,
+        47.498331
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/5636350",
+        "https://www.skimap.org/SkiAreas/view/638"
+      ]
+    },
+    {
       "id": "station-touristique-stoneham",
       "coordinates": [
         -71.388645,
@@ -2793,6 +5136,29 @@
       ]
     },
     {
+      "id": "steamboat-ski-touring-center",
+      "coordinates": [
+        -106.803988,
+        40.468881
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/236899238"
+      ]
+    },
+    {
+      "id": "steinplatte",
+      "coordinates": [
+        12.567217,
+        47.630694
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/342015824",
+        "https://www.skimap.org/SkiAreas/view/19097",
+        "https://www.skimap.org/SkiAreas/view/19098",
+        "https://www.skimap.org/SkiAreas/view/982"
+      ]
+    },
+    {
       "id": "stevens-pass",
       "coordinates": [
         -121.09096,
@@ -2804,6 +5170,27 @@
       ]
     },
     {
+      "id": "stoke-mountain",
+      "coordinates": [
+        -122.25345,
+        47.447794
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/293324333"
+      ]
+    },
+    {
+      "id": "stoten-i-salen",
+      "coordinates": [
+        12.894012,
+        61.269221
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1243554890",
+        "https://www.skimap.org/SkiAreas/view/2025"
+      ]
+    },
+    {
       "id": "stowe",
       "coordinates": [
         -72.788162,
@@ -2812,6 +5199,17 @@
       "upstream": [
         "https://www.openstreetmap.org/way/620836496",
         "https://www.skimap.org/SkiAreas/view/212"
+      ]
+    },
+    {
+      "id": "stranda-ski-resort",
+      "coordinates": [
+        6.835374,
+        62.289872
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/391682955",
+        "https://www.skimap.org/SkiAreas/view/4062"
       ]
     },
     {
@@ -2915,6 +5313,17 @@
       ]
     },
     {
+      "id": "sunburst-ski-area",
+      "coordinates": [
+        -88.224092,
+        43.496901
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/734696805",
+        "https://www.skimap.org/SkiAreas/view/173"
+      ]
+    },
+    {
       "id": "sunday-river",
       "coordinates": [
         -70.874407,
@@ -2926,6 +5335,38 @@
       ]
     },
     {
+      "id": "sundown-mountain",
+      "coordinates": [
+        -90.822705,
+        42.516749
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/834317212",
+        "https://www.skimap.org/SkiAreas/view/466"
+      ]
+    },
+    {
+      "id": "sunlight-mountain-resort",
+      "coordinates": [
+        -107.338956,
+        39.394177
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/530530657",
+        "https://www.skimap.org/SkiAreas/view/506"
+      ]
+    },
+    {
+      "id": "swain-resort",
+      "coordinates": [
+        -77.854958,
+        42.47311
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/310"
+      ]
+    },
+    {
       "id": "tahoe-donner-downhill-ski-resort",
       "coordinates": [
         -120.263266,
@@ -2934,6 +5375,17 @@
       "upstream": [
         "https://www.openstreetmap.org/relation/10906075",
         "https://www.skimap.org/SkiAreas/view/529"
+      ]
+    },
+    {
+      "id": "takasu-snow-park",
+      "coordinates": [
+        136.867141,
+        35.999183
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1189278314",
+        "https://www.skimap.org/SkiAreas/view/1713"
       ]
     },
     {
@@ -2959,6 +5411,29 @@
       ]
     },
     {
+      "id": "tazawako",
+      "coordinates": [
+        140.772051,
+        39.762775
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1201573017",
+        "https://www.skimap.org/SkiAreas/view/1377"
+      ]
+    },
+    {
+      "id": "telemark-nordic-center",
+      "coordinates": [
+        -119.721652,
+        49.870477
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/168091593",
+        "https://www.skimap.org/SkiAreas/view/2275",
+        "https://www.skimap.org/SkiAreas/view/52"
+      ]
+    },
+    {
       "id": "telluride-ski-resort",
       "coordinates": [
         -107.834827,
@@ -2970,6 +5445,28 @@
       ]
     },
     {
+      "id": "tenney-mountain",
+      "coordinates": [
+        -71.768419,
+        43.745606
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1230198090",
+        "https://www.skimap.org/SkiAreas/view/1077"
+      ]
+    },
+    {
+      "id": "terry-peak",
+      "coordinates": [
+        -103.83163,
+        44.33412
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1214147821",
+        "https://www.skimap.org/SkiAreas/view/233"
+      ]
+    },
+    {
       "id": "the-highlands-at-harbor-springs",
       "coordinates": [
         -84.936727,
@@ -2978,6 +5475,17 @@
       "upstream": [
         "https://www.openstreetmap.org/way/997160539",
         "https://www.skimap.org/SkiAreas/view/407"
+      ]
+    },
+    {
+      "id": "the-loppet",
+      "coordinates": [
+        -93.324923,
+        44.98549
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/18011566",
+        "https://www.skimap.org/SkiAreas/view/5262"
       ]
     },
     {
@@ -3016,6 +5524,17 @@
       ]
     },
     {
+      "id": "thrill-hills",
+      "coordinates": [
+        -97.938225,
+        46.531208
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/497195316",
+        "https://www.skimap.org/SkiAreas/view/281"
+      ]
+    },
+    {
       "id": "thyon",
       "coordinates": [
         7.3834167,
@@ -3035,6 +5554,60 @@
       "upstream": [
         "https://www.openstreetmap.org/way/679189584",
         "https://www.skimap.org/SkiAreas/view/266"
+      ]
+    },
+    {
+      "id": "titus-mountain",
+      "coordinates": [
+        -74.239969,
+        44.75658
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/691518491",
+        "https://www.skimap.org/SkiAreas/view/316"
+      ]
+    },
+    {
+      "id": "togakushi-ski-resort",
+      "coordinates": [
+        138.100302,
+        36.748029
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/936983347",
+        "https://www.skimap.org/SkiAreas/view/1678"
+      ]
+    },
+    {
+      "id": "togari-onsen-snow-resort",
+      "coordinates": [
+        138.380398,
+        36.940757
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1174493817",
+        "https://www.skimap.org/SkiAreas/view/1679"
+      ]
+    },
+    {
+      "id": "trapp-family-lodge",
+      "coordinates": [
+        -72.752651,
+        44.473732
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1363367352",
+        "https://www.skimap.org/SkiAreas/view/17896"
+      ]
+    },
+    {
+      "id": "treetops-resort",
+      "coordinates": [
+        -84.591765,
+        45.038081
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/423"
       ]
     },
     {
@@ -3059,6 +5632,17 @@
       ]
     },
     {
+      "id": "tschiertschen-chur",
+      "coordinates": [
+        9.595879,
+        46.808467
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/6083872",
+        "https://www.skimap.org/SkiAreas/view/4048"
+      ]
+    },
+    {
       "id": "tsugaike-mountain-resort",
       "coordinates": [
         137.851537,
@@ -3067,6 +5651,37 @@
       "upstream": [
         "https://www.openstreetmap.org/way/773558920",
         "https://www.skimap.org/SkiAreas/view/1680"
+      ]
+    },
+    {
+      "id": "turpin-meadow-ranch",
+      "coordinates": [
+        -110.269999,
+        43.854492
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/node/11210988224"
+      ]
+    },
+    {
+      "id": "tussey-mountain",
+      "coordinates": [
+        -77.752617,
+        40.768387
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/257"
+      ]
+    },
+    {
+      "id": "tyrol-basin-ski-and-snowboard",
+      "coordinates": [
+        -89.780748,
+        43.046079
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/304469711",
+        "https://www.skimap.org/SkiAreas/view/162"
       ]
     },
     {
@@ -3104,6 +5719,17 @@
       "upstream": [
         "https://www.openstreetmap.org/way/542223677",
         "https://www.skimap.org/SkiAreas/view/2094"
+      ]
+    },
+    {
+      "id": "val-direne",
+      "coordinates": [
+        -67.579107,
+        48.477213
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/5291542",
+        "https://www.skimap.org/SkiAreas/view/103"
       ]
     },
     {
@@ -3151,6 +5777,17 @@
       ]
     },
     {
+      "id": "veterans-memorial-recreation-area",
+      "coordinates": [
+        -71.691123,
+        43.443032
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1363084977",
+        "https://www.skimap.org/SkiAreas/view/4092"
+      ]
+    },
+    {
       "id": "veysonnaz",
       "coordinates": [
         7.3429929,
@@ -3159,6 +5796,28 @@
       "upstream": [
         "https://www.openstreetmap.org/node/3415179933",
         "https://www.openstreetmap.org/way/6272955"
+      ]
+    },
+    {
+      "id": "washigatake-ski-resort",
+      "coordinates": [
+        136.929284,
+        35.944056
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1221231986",
+        "https://www.skimap.org/SkiAreas/view/1714"
+      ]
+    },
+    {
+      "id": "waterville-valley-resort",
+      "coordinates": [
+        -71.535051,
+        43.962971
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1362922705",
+        "https://www.skimap.org/SkiAreas/view/353"
       ]
     },
     {
@@ -3206,6 +5865,17 @@
       ]
     },
     {
+      "id": "white-grass-ski-touring",
+      "coordinates": [
+        -79.420977,
+        39.015301
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/12247315",
+        "https://www.skimap.org/SkiAreas/view/17456"
+      ]
+    },
+    {
       "id": "white-pass-ski-area",
       "coordinates": [
         -121.396901,
@@ -3217,6 +5887,38 @@
       ]
     },
     {
+      "id": "white-pine-resort",
+      "coordinates": [
+        -109.751018,
+        42.972995
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/5277176",
+        "https://www.skimap.org/SkiAreas/view/148"
+      ]
+    },
+    {
+      "id": "white-pine-touring-nordic-center",
+      "coordinates": [
+        -111.524962,
+        40.677514
+      ],
+      "upstream": [
+        "https://www.skimap.org/SkiAreas/view/17628"
+      ]
+    },
+    {
+      "id": "whitecap-mountains-resort",
+      "coordinates": [
+        -90.400336,
+        46.407084
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1340416269",
+        "https://www.skimap.org/SkiAreas/view/158"
+      ]
+    },
+    {
       "id": "whiteface",
       "coordinates": [
         -73.87793,
@@ -3225,6 +5927,28 @@
       "upstream": [
         "https://www.openstreetmap.org/way/428125408",
         "https://www.skimap.org/SkiAreas/view/295"
+      ]
+    },
+    {
+      "id": "whitehorse-nordic-centre",
+      "coordinates": [
+        -135.127655,
+        60.71656
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1133684053",
+        "https://www.skimap.org/SkiAreas/view/2898"
+      ]
+    },
+    {
+      "id": "whitepia-takasu",
+      "coordinates": [
+        136.938067,
+        35.95172
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1221232599",
+        "https://www.skimap.org/SkiAreas/view/1715"
       ]
     },
     {
@@ -3261,6 +5985,17 @@
       ]
     },
     {
+      "id": "williams-lake-cross-country-ski-club",
+      "coordinates": [
+        -122.137544,
+        52.237891
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/168084314",
+        "https://www.skimap.org/SkiAreas/view/3110"
+      ]
+    },
+    {
       "id": "wilmot-mountain",
       "coordinates": [
         -88.189433,
@@ -3284,6 +6019,17 @@
       ]
     },
     {
+      "id": "winter4kids",
+      "coordinates": [
+        -74.480381,
+        41.18516
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1200712921",
+        "https://www.skimap.org/SkiAreas/view/341"
+      ]
+    },
+    {
       "id": "wintergreen-resort",
       "coordinates": [
         -78.940669,
@@ -3292,6 +6038,17 @@
       "upstream": [
         "https://www.openstreetmap.org/way/1023791593",
         "https://www.skimap.org/SkiAreas/view/199"
+      ]
+    },
+    {
+      "id": "winterplace-ski-resort",
+      "coordinates": [
+        -81.11927,
+        37.595138
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/5884205",
+        "https://www.skimap.org/SkiAreas/view/182"
       ]
     },
     {
@@ -3317,6 +6074,17 @@
       ]
     },
     {
+      "id": "woodstock-nordic-center",
+      "coordinates": [
+        -72.512748,
+        43.612134
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/16843653",
+        "https://www.skimap.org/SkiAreas/view/16475"
+      ]
+    },
+    {
       "id": "yunding-snow-park",
       "coordinates": [
         115.418153,
@@ -3325,6 +6093,17 @@
       "upstream": [
         "https://www.openstreetmap.org/way/533579023",
         "https://www.skimap.org/SkiAreas/view/3478"
+      ]
+    },
+    {
+      "id": "yuzawa-nakazato-snow-resort",
+      "coordinates": [
+        138.852632,
+        36.91152
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/680041845",
+        "https://www.skimap.org/SkiAreas/view/1549"
       ]
     },
     {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { filterSkiAreas, formatArea, formatSkiLocation, formatSkiStat, readPassFilter, readSkiResultsView, readSkiSort, skiAreaIdsInViewport, skiRegionOptions, sortSkiAreas } from '../features/ski-status/browse';
+import { filterSkiAreas, formatArea, formatSkiLocation, formatSkiStat, passFilterFamily, readPassFilter, readSkiResultsView, readSkiSort, skiAreaIdsInViewport, skiRegionOptions, sortSkiAreas } from '../features/ski-status/browse';
 import { readSkiCatalog, skiAreas } from '../features/ski-status/catalog';
 import { markerAppearance, markerLegend, readMarkerMode } from '../features/ski-status/mapAppearance';
 
@@ -30,12 +30,12 @@ describe('ski-status catalog validation', () => {
             .toThrow('Duplicate indy membership for test-mountain');
     });
 
-    it('applies the acreage floor unless the resort has included access or an official pass listing', () => {
+    it('applies the acreage floor to resorts with no official pass listing', () => {
         const smallArea = { ...area, acres: 99 };
-        expect(readSkiCatalog([smallArea], locations, passes).areas[0]?.id).toBe(area.id);
-        expect(readSkiCatalog([smallArea], locations, { ...passes, memberships: [{ ...membership, access: 'listed' }] }).areas[0]?.id).toBe(area.id);
-        expect(() => readSkiCatalog([smallArea], locations, { ...passes, memberships: [{ ...membership, access: 'discount' }] }))
-            .toThrow('requires 100 skiable acres');
+        for (const access of ['included', 'listed', 'discount']) {
+            expect(readSkiCatalog([smallArea], locations, { ...passes, memberships: [{ ...membership, access }] }).areas[0]?.id).toBe(area.id);
+        }
+        expect(() => readSkiCatalog([smallArea], locations, { ...passes, memberships: [] })).toThrow('requires 100 skiable acres');
         expect(readSkiCatalog([area], locations, { ...passes, memberships: [] }).areas[0]?.passes).toEqual([]);
     });
 
@@ -48,6 +48,8 @@ describe('ski-status catalog validation', () => {
     it.each([
         [{ statsUrl: undefined }, /No mountain statistics source/],
         [{ name: '   ' }, /Too small/],
+        [{ skiing: 'snowshoeing' }, /Invalid option/],
+        [{ terrainParks: 'yes' }, /expected boolean/],
         [{ trailCountQualifier: 'lower-bound' }, /Lower bound.*reported value/],
         [{ baseFt: 3_000, summitFt: 2_500 }, /Inverted base and summit/],
         [{ highestLiftTerminalFt: 3_000, lowestLiftTerminalFt: 3_100 }, /Inverted lift terminal/],
@@ -92,7 +94,7 @@ describe('ski-status catalog and browse', () => {
         expect(skiAreas.length).toBeGreaterThanOrEqual(197);
         expect(new Set(skiAreas.map(area => area.id)).size).toBe(skiAreas.length);
         expect(new Set(skiAreas.map(area => area.location.coordinates.join(','))).size).toBe(skiAreas.length);
-        expect(skiAreas.every(area => (area.acres ?? 0) >= 100 || area.passes.some(pass => pass.access !== 'discount'))).toBe(true);
+        expect(skiAreas.every(area => (area.acres ?? 0) >= 100 || area.passes.length > 0)).toBe(true);
         expect(filterSkiAreas(skiAreas, 'alpine meadows', '').map(area => area.id)).toEqual(['palisades-tahoe']);
     });
 
@@ -243,6 +245,57 @@ describe('2026/27 Epic destination coverage', () => {
         ['Skirama Dolomiti', 8], ['Verbier 4 Vallées', 6], ['Zillertal', 5],
     ] as const)('finds all Epic entries for %s by group name', (name, count) => {
         expect(filterSkiAreas(skiAreas, name, '', 'epic')).toHaveLength(count);
+    });
+});
+
+describe('2026/27 Indy destination coverage', () => {
+    it('retains every roster profile and its source', () => {
+        const indy = skiAreas.flatMap(area => area.passes.filter(pass => pass.family === 'indy').map(pass => ({ area, pass })));
+        expect(indy).toHaveLength(303);
+        expect(new Set(indy.map(({ pass }) => pass.source)).size).toBe(303);
+        expect(indy.filter(({ pass }) => new URL(pass.source).pathname.startsWith('/our-resorts/'))).toHaveLength(302);
+        const countries = new Map<string, number>();
+        for (const { area } of indy) countries.set(area.country, (countries.get(area.country) ?? 0) + 1);
+        expect(Object.fromEntries(countries)).toEqual({
+            AT: 13, CA: 43, CH: 5, CL: 1, CZ: 1, ES: 1, FI: 3, FR: 4, GB: 2, IT: 1, JP: 28, NO: 6, SE: 3, SI: 1, US: 191,
+        });
+        expect(indy.every(({ area }) => area.statsUrl && area.nightSkiing !== undefined)).toBe(true);
+    });
+
+    it('finds international areas by country and keeps distinct shared-pass entries', () => {
+        const filteredIds = (query: string, country: string) =>
+            filterSkiAreas(skiAreas, query, `country:${country}`, 'indy').map(area => area.id);
+        expect(filteredIds('amihari', 'JP')).toEqual(['amihari-onsen-ski-resort']);
+        expect(filteredIds('corralco', 'CL')).toEqual(['corralco-resort-de-montana']);
+        expect(filteredIds('krvavec', 'SI')).toEqual(['krvavec-ski-resort']);
+        expect(filteredIds('kühtai', 'AT')).toEqual(['innsbruck-region']);
+        expect(filteredIds('portes du soleil', 'FR')).toEqual(['portes-du-soleil']);
+        expect(filteredIds('manning park', 'CA')).toEqual(['manning-park', 'manning-park-xc']);
+        expect(filteredIds('pila', 'IT')).toContain('pila');
+        expect(skiAreas.find(area => area.id === 'pila')?.passes.map(pass => pass.family)).toEqual(['ikon', 'indy']);
+    });
+
+    it('keeps included access separate from Allied and heli-ski discounts', () => {
+        const pass = readPassFilter(new URLSearchParams('pass=indy-discounts'));
+        expect(pass).toBe('indy-discounts');
+        expect(passFilterFamily('indy-discounts')).toBe('indy');
+        expect(filterSkiAreas(skiAreas, '', '', pass).map(area => area.id))
+            .toEqual(['belleayre-mountain', 'gore-mountain', 'mont-ripley-ski-area', 'north-cascade-heli', 'whiteface']);
+        expect(filterSkiAreas(skiAreas, '', '', 'indy')).toHaveLength(298);
+        expect(filterSkiAreas(skiAreas, 'gore mountain', '', 'indy').map(area => area.id)).toEqual(['gore-mountain-nordic-center']);
+        expect(filterSkiAreas(skiAreas, 'stoke mountain', '', 'indy')[0]?.skiing).toBe('indoor');
+    });
+
+    it('searches and sorts by skiing type and keeps missing Nordic lift counts empty', () => {
+        const nordic = filterSkiAreas(skiAreas, 'cross-country manning', 'BC', 'indy')[0]!;
+        const alpine = filterSkiAreas(skiAreas, 'cherry peak', 'UT', 'indy')[0]!;
+        expect(nordic.id).toBe('manning-park-xc');
+        expect(formatSkiStat(nordic, 'skiing', 'imperial')).toBe('Cross-country');
+        expect(formatSkiStat(nordic, 'liftCount', 'imperial')).toBeUndefined();
+        expect(formatSkiStat(nordic, 'terrainParks', 'imperial')).toBe('No');
+        expect(formatSkiStat(alpine, 'terrainParks', 'imperial')).toBe('Yes');
+        expect(formatSkiStat(alpine, 'acres', 'imperial')).toBe('220+ ac');
+        expect(sortSkiAreas([alpine, nordic], { key: 'skiing', direction: 'asc' })).toEqual([nordic, alpine]);
     });
 });
 

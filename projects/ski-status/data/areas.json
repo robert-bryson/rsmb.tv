@@ -21,12 +21,37 @@
     "id": "49-north-mountain-resort",
     "name": "49° North Mountain Resort",
     "aliases": [
-      "Washington"
+      "Washington",
+      "49 Degrees North"
     ],
     "country": "US",
     "region": "WA",
     "locality": "Chewelah",
-    "website": "https://www.ski49n.com"
+    "skiing": "both",
+    "website": "https://www.ski49n.com",
+    "statsUrl": "https://new.ski49n.com/mountain-info/trail-map-stats",
+    "reportUrl": "https://www.ski49n.com/mountain-info/expanded-conditions",
+    "acres": 2325,
+    "liftCount": 7,
+    "trailCount": 90,
+    "baseFt": 3923,
+    "summitFt": 5774,
+    "verticalFt": 1851,
+    "nightSkiing": false,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "trails",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 40,
+        "Advanced": 25,
+        "Expert": 5
+      }
+    },
+    "additionalSources": [
+      "https://www.ski49n.com/promotions-perks/details/indy-pass-49"
+    ]
   },
   {
     "id": "afton-alps",
@@ -145,6 +170,22 @@
     "website": "https://www.alyeskaresort.com/"
   },
   {
+    "id": "amihari-onsen-ski-resort",
+    "name": "Amihari Onsen Ski Resort",
+    "aliases": [
+      "網張温泉スキー場"
+    ],
+    "country": "JP",
+    "locality": "Morioka City",
+    "website": "https://qkamura.or.jp/iwate/ski/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/amihari-onsen-ski-resort",
+    "liftCount": 4,
+    "trailCount": 7,
+    "verticalFt": 1969,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
     "id": "andermatt-gemsstock",
     "name": "Andermatt – Gemsstock",
     "aliases": [
@@ -175,6 +216,21 @@
     "reportUrl": "https://live.andermatt-sedrun-disentis.ch/"
   },
   {
+    "id": "andes-tower-hills",
+    "name": "Andes Tower Hills",
+    "country": "US",
+    "region": "MN",
+    "locality": "Alexandria",
+    "skiing": "both",
+    "website": "https://www.andestowerhills.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/andes-tower-hills",
+    "liftCount": 6,
+    "trailCount": 16,
+    "verticalFt": 290,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "angel-fire-resort",
     "name": "Angel Fire Resort",
     "aliases": [
@@ -186,6 +242,51 @@
     "website": "https://www.angelfireresort.com/",
     "statsUrl": "https://www.angelfireresort.com/activities/winter-activities/skiing-and-snowboarding/mountain-stats/",
     "acres": 627
+  },
+  {
+    "id": "antelope-butte",
+    "name": "Antelope Butte",
+    "country": "US",
+    "region": "WY",
+    "locality": "Shell",
+    "website": "https://www.skiantelopebutte.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/antelope-butte",
+    "liftCount": 3,
+    "trailCount": 40,
+    "verticalFt": 1000,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "aomori-spring-ski-resort",
+    "name": "Aomori Spring Ski Resort",
+    "aliases": [
+      "青森スプリング・スキーリゾート",
+      "Aomori Spring Resort"
+    ],
+    "country": "JP",
+    "locality": "Hirosaki",
+    "website": "https://aomorispringski.com",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/aomori-spring-ski-resort",
+    "liftCount": 5,
+    "trailCount": 14,
+    "verticalFt": 1788,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "apex-mountain-resort",
+    "name": "Apex Mountain Resort",
+    "country": "CA",
+    "region": "BC",
+    "locality": "Penticton",
+    "website": "https://apexresort.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/apex-mountain-resort",
+    "liftCount": 4,
+    "trailCount": 80,
+    "verticalFt": 1979,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "appi-resort",
@@ -252,6 +353,23 @@
     "website": "https://www.arapahoebasin.com/"
   },
   {
+    "id": "arctic-valley",
+    "name": "Arctic Valley",
+    "aliases": [
+      "Arctic Valley Ski Area"
+    ],
+    "country": "US",
+    "region": "AK",
+    "locality": "Anchorage",
+    "website": "https://arcticvalley.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/arctic-valley",
+    "liftCount": 4,
+    "trailCount": 15,
+    "verticalFt": 1400,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
     "id": "asessippi-ski-area-resort",
     "name": "Asessippi Ski Area & Resort",
     "aliases": [
@@ -304,6 +422,41 @@
     "website": "https://www.attitash.com/"
   },
   {
+    "id": "bad-kleinkirchheim",
+    "name": "Bad Kleinkirchheim",
+    "country": "AT",
+    "locality": "Kleinkirchheim",
+    "website": "https://www.badkleinkirchheim.com/bergbahnen-skigebiet/skigebiet/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/bad-kleinkirchheim",
+    "liftCount": 24,
+    "trailCount": 35,
+    "verticalFt": 3176,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "baldy-mountain-resort",
+    "name": "Baldy Mountain Resort",
+    "aliases": [
+      "Mt. Baldy Family Ski Area"
+    ],
+    "country": "CA",
+    "region": "BC",
+    "locality": "Oliver",
+    "website": "https://baldyresort.com/",
+    "statsUrl": "https://baldyresort.com/mountain/",
+    "reportUrl": "https://baldyresort.com/baldy-weather-cams/",
+    "acres": 600,
+    "liftCount": 3,
+    "trailCount": 35,
+    "baseFt": 5665,
+    "summitFt": 7580,
+    "verticalFt": 1315,
+    "highestLiftTerminalFt": 6965,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "balme-vallorcine",
     "name": "Balme – Le Tour / Vallorcine",
     "aliases": [
@@ -340,6 +493,51 @@
     ]
   },
   {
+    "id": "baqueira-beret",
+    "name": "Baqueira Beret",
+    "aliases": [
+      "Estació d'Esquí Baqueira-Beret"
+    ],
+    "country": "ES",
+    "locality": "Baqueira",
+    "website": "https://www.baqueira.es/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/baqueiraberet",
+    "liftCount": 36,
+    "trailCount": 122,
+    "verticalFt": 3608,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "bear-basin-nordic-center",
+    "name": "Bear Basin Nordic Center",
+    "country": "US",
+    "region": "ID",
+    "locality": "McCall",
+    "skiing": "cross-country",
+    "website": "https://payettelakesskiclub.org/pages/bear-basin-nordic-center",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/bear-basin-nordic-center",
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "bear-creek",
+    "name": "Bear Creek",
+    "aliases": [
+      "Bear Creek Mountain Resort Ski Slopes"
+    ],
+    "country": "US",
+    "region": "PA",
+    "locality": "Macungie",
+    "website": "https://www.bcmountainresort.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/bear-creek",
+    "liftCount": 6,
+    "trailCount": 23,
+    "verticalFt": 510,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "bear-mountain",
     "name": "Bear Mountain",
     "aliases": [
@@ -350,6 +548,38 @@
     "region": "CA",
     "locality": "Big Bear Lake",
     "website": "https://www.bigbearmountainresort.com/"
+  },
+  {
+    "id": "bear-valley-adventure-company",
+    "name": "Bear Valley Adventure Company",
+    "country": "US",
+    "region": "CA",
+    "locality": "Bear Valley",
+    "skiing": "cross-country",
+    "website": "https://www.bvadventures.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/bear-valley-adventure-company",
+    "reportUrl": "https://www.bvadventures.com/daily-trail-report",
+    "trailCount": 38,
+    "verticalFt": 900,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "bear-valley-mountain-resort",
+    "name": "Bear Valley Mountain Resort",
+    "aliases": [
+      "Bear Valley"
+    ],
+    "country": "US",
+    "region": "CA",
+    "locality": "Bear Valley",
+    "website": "https://www.bearvalley.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/bear-valley-mountain-resort",
+    "liftCount": 9,
+    "trailCount": 75,
+    "verticalFt": 1900,
+    "nightSkiing": false,
+    "terrainParks": true
   },
   {
     "id": "beaver-creek-resort",
@@ -375,6 +605,20 @@
     ]
   },
   {
+    "id": "beaver-mountain",
+    "name": "Beaver Mountain",
+    "country": "US",
+    "region": "UT",
+    "locality": "Garden City",
+    "website": "https://www.skithebeav.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/beaver-mountain",
+    "liftCount": 6,
+    "trailCount": 48,
+    "verticalFt": 1700,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "beidahu-ski-resort",
     "name": "Beidahu Ski Resort",
     "aliases": [
@@ -394,15 +638,104 @@
     ]
   },
   {
+    "id": "beito-resort",
+    "name": "Beito Resort",
+    "aliases": [
+      "Beitostølen Skisenter",
+      "Raudalen"
+    ],
+    "country": "NO",
+    "locality": "Beitostølen",
+    "website": "https://www.beitostolen.com/Ski/Alpint/Beitost-len-skisenter/beitost-len-skisenter-7516.page",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/beito-resort",
+    "liftCount": 6,
+    "trailCount": 23,
+    "verticalFt": 659,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "belleayre-mountain",
+    "name": "Belleayre Mountain",
+    "aliases": [
+      "Belleayre Mountain Ski Center"
+    ],
+    "country": "US",
+    "region": "NY",
+    "locality": "Highmount",
+    "website": "https://www.belleayre.com/",
+    "statsUrl": "https://www.belleayre.com/mountain/trail-map-and-mountain-stats/",
+    "reportUrl": "https://www.belleayre.com/mountain/conditions/",
+    "acres": 171,
+    "liftCount": 8,
+    "trailCount": 62,
+    "baseFt": 2025,
+    "summitFt": 3429,
+    "verticalFt": 1404,
+    "nightSkiing": false,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "trails",
+      "values": {
+        "Easiest": 22,
+        "More difficult": 58,
+        "Most difficult": 20
+      }
+    }
+  },
+  {
+    "id": "bergbahnen-hohsaas",
+    "name": "Bergbahnen Hohsaas",
+    "aliases": [
+      "Saas Grund"
+    ],
+    "country": "CH",
+    "locality": "Saas-Grund",
+    "website": "https://www.hohsaas.ch/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/bergbahnen-hohsaas",
+    "liftCount": 8,
+    "trailCount": 13,
+    "verticalFt": 5577,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
     "id": "berkshire-east-ski-resort",
     "name": "Berkshire East Ski Resort",
     "aliases": [
-      "Massachusetts"
+      "Massachusetts",
+      "Berkshire East Mountain Resort"
     ],
     "country": "US",
     "region": "MA",
     "locality": "Charlemont",
-    "website": "https://berkshireeast.com/"
+    "website": "https://berkshireeast.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/berkshire-east-mountain-resort",
+    "reportUrl": "https://berkshireeast.com/winter/mountain-conditions",
+    "liftCount": 6,
+    "trailCount": 45,
+    "verticalFt": 1180,
+    "nightSkiing": true,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://berkshireeast.com/winter/indy-pass"
+    ]
+  },
+  {
+    "id": "bethel-village-trails",
+    "name": "Bethel Village Trails",
+    "aliases": [
+      "Inland Woods and Trails"
+    ],
+    "country": "US",
+    "region": "ME",
+    "locality": "Bethel",
+    "skiing": "cross-country",
+    "website": "https://woodsandtrails.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/bethel-village-trails",
+    "nightSkiing": false,
+    "terrainParks": false
   },
   {
     "id": "big-boulder",
@@ -415,6 +748,54 @@
     "region": "PA",
     "locality": "Lake Harmony",
     "website": "https://jfbb.com/"
+  },
+  {
+    "id": "big-moose",
+    "name": "Big Moose",
+    "aliases": [
+      "Big Moose Mountain Ski Area"
+    ],
+    "country": "US",
+    "region": "ME",
+    "locality": "447 Ski Resort Rd",
+    "website": "https://skibigmoose.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/big-moose",
+    "liftCount": 2,
+    "trailCount": 29,
+    "verticalFt": 600,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "big-powderhorn",
+    "name": "Big Powderhorn",
+    "aliases": [
+      "Big Powderhorn Mountain Resort"
+    ],
+    "country": "US",
+    "region": "MI",
+    "locality": "Bessemer",
+    "website": "https://bigpowderhorn.net/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/big-powderhorn",
+    "liftCount": 10,
+    "trailCount": 45,
+    "verticalFt": 622,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "big-rock-mountain",
+    "name": "Big Rock Mountain",
+    "country": "US",
+    "region": "ME",
+    "locality": "Mars Hill",
+    "website": "https://www.bigrockmaine.com",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/big-rock-mountain",
+    "liftCount": 4,
+    "trailCount": 29,
+    "verticalFt": 920,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "big-sky-resort",
@@ -438,11 +819,93 @@
     "locality": "Kelowna",
     "website": "https://www.bigwhite.com/",
     "statsUrl": "https://www.bigwhite.com/explore/mountain-info/mountain-statistics",
+    "reportUrl": "https://www.bigwhite.com/daily-snow-report",
     "acres": 2834,
+    "liftCount": 17,
     "trailCount": 119,
     "summitFt": 7608,
+    "verticalFt": 2550,
     "nightSkiing": true,
-    "nightAcres": 38
+    "nightAcres": 38,
+    "terrainParks": true
+  },
+  {
+    "id": "bjorkliden",
+    "name": "Björkliden",
+    "country": "SE",
+    "locality": "Lapland",
+    "website": "https://bjorkliden.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/bjorkliden",
+    "liftCount": 5,
+    "verticalFt": 1640,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
+    "id": "black-jack-cross-country-ski-club",
+    "name": "Black Jack Cross Country Ski Club",
+    "aliases": [
+      "Black Jack Ski Club"
+    ],
+    "country": "CA",
+    "region": "BC",
+    "locality": "Rossland",
+    "skiing": "cross-country",
+    "website": "https://www.skiblackjack.ca/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/black-jack-cross-country-ski-club",
+    "trailCount": 30,
+    "verticalFt": 1062,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
+    "id": "black-mountain-of-maine",
+    "name": "Black Mountain of Maine",
+    "country": "US",
+    "region": "ME",
+    "locality": "Rumford",
+    "skiing": "both",
+    "website": "https://www.skiblackmountain.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/black-mountain-of-maine",
+    "liftCount": 2,
+    "trailCount": 31,
+    "verticalFt": 1380,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "black-mountain-ski-area",
+    "name": "Black Mountain Ski Area",
+    "aliases": [
+      "Black Mountain"
+    ],
+    "country": "US",
+    "region": "NH",
+    "locality": "Jackson",
+    "website": "https://www.blackmt.com",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/black-mountain-ski-area",
+    "liftCount": 5,
+    "trailCount": 45,
+    "verticalFt": 1100,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "blue-knob-all-season-resort",
+    "name": "Blue Knob All Season Resort",
+    "aliases": [
+      "Blue Knob"
+    ],
+    "country": "US",
+    "region": "PA",
+    "locality": "Claysburg",
+    "website": "https://www.blueknob.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/blue-knob-all-season-resort",
+    "liftCount": 6,
+    "trailCount": 34,
+    "verticalFt": 1068,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "blue-mountain-resort",
@@ -478,12 +941,22 @@
     "id": "bluewood",
     "name": "Bluewood",
     "aliases": [
-      "Washington"
+      "Washington",
+      "Ski Bluewood"
     ],
     "country": "US",
     "region": "WA",
     "locality": "Dayton",
-    "website": "https://www.bluewood.com"
+    "website": "https://www.bluewood.com",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/ski-bluewood",
+    "liftCount": 4,
+    "trailCount": 25,
+    "verticalFt": 1120,
+    "nightSkiing": false,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://bluewood.com/indy-pass-at-bluewood"
+    ]
   },
   {
     "id": "bogus-basin",
@@ -510,7 +983,17 @@
     "country": "US",
     "region": "VT",
     "locality": "Bolton Valley",
-    "website": "https://www.boltonvalley.com"
+    "website": "https://www.boltonvalley.com",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/bolton-valley-resort",
+    "reportUrl": "https://www.boltonvalley.com/winter/trail-maps-snow-reports/",
+    "liftCount": 6,
+    "trailCount": 71,
+    "verticalFt": 1704,
+    "nightSkiing": true,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://www.boltonvalley.com/winter/tickets-passes/indy-pass/"
+    ]
   },
   {
     "id": "boston-mills",
@@ -523,6 +1006,34 @@
     "region": "OH",
     "locality": "Peninsula",
     "website": "https://www.bmbw.com/"
+  },
+  {
+    "id": "bottineau-winter-park",
+    "name": "Bottineau Winter Park",
+    "country": "US",
+    "region": "ND",
+    "locality": "Bottineau",
+    "website": "https://skibwp.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/bottineau-winter-park",
+    "liftCount": 6,
+    "trailCount": 9,
+    "verticalFt": 200,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "bousquet-mountain-0",
+    "name": "Bousquet Mountain",
+    "country": "US",
+    "region": "MA",
+    "locality": "Pittsfield",
+    "website": "https://bousquetmountain.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/bousquet-mountain-0",
+    "liftCount": 4,
+    "trailCount": 22,
+    "verticalFt": 750,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "boyne-mountain",
@@ -685,6 +1196,20 @@
     "nightSkiing": true
   },
   {
+    "id": "bruce-mound-winter-sports-area",
+    "name": "Bruce Mound Winter Sports Area",
+    "country": "US",
+    "region": "WI",
+    "locality": "Merrillan",
+    "website": "https://www.clarkcountywi.gov/brucemound",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/bruce-mound-winter-sports-area",
+    "liftCount": 5,
+    "trailCount": 10,
+    "verticalFt": 375,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "brundage-mountain-resort",
     "name": "Brundage Mountain Resort",
     "aliases": [
@@ -702,7 +1227,12 @@
     "trailCount": 70,
     "baseFt": 5882,
     "summitFt": 7803,
-    "verticalFt": 1921
+    "verticalFt": 1921,
+    "nightSkiing": false,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://brundage.com/indypassvisitors/"
+    ]
   },
   {
     "id": "bruson",
@@ -718,6 +1248,20 @@
     "reportUrl": "https://verbier4vallees.ch/en/useful-information/live-information-winter"
   },
   {
+    "id": "bryce-resort",
+    "name": "Bryce Resort",
+    "country": "US",
+    "region": "VA",
+    "locality": "Basye",
+    "website": "https://bryceresort.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/bryce-resort",
+    "liftCount": 4,
+    "trailCount": 8,
+    "verticalFt": 500,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
     "id": "buck-hill",
     "name": "Buck Hill",
     "aliases": [
@@ -729,15 +1273,39 @@
     "website": "https://buckhill.com/"
   },
   {
+    "id": "buffalo-ski-club",
+    "name": "Buffalo Ski Club",
+    "country": "US",
+    "region": "NY",
+    "locality": "Colden",
+    "website": "https://www.buffaloskicenter.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/buffalo-ski-club",
+    "liftCount": 7,
+    "trailCount": 38,
+    "verticalFt": 464,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
     "id": "burke-mountain-resort",
     "name": "Burke Mountain Resort",
     "aliases": [
-      "Vermont"
+      "Vermont",
+      "Burke Mountain"
     ],
     "country": "US",
     "region": "VT",
     "locality": "East Burke",
-    "website": "https://www.skiburke.com/"
+    "website": "https://www.skiburke.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/burke-mountain",
+    "liftCount": 4,
+    "trailCount": 54,
+    "verticalFt": 2011,
+    "nightSkiing": false,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://www.skiburke.com/component/content/category/the-mountain"
+    ]
   },
   {
     "id": "buttermilk",
@@ -763,6 +1331,53 @@
     "website": "https://caberfaepeaks.com"
   },
   {
+    "id": "calabogie-peaks-resort",
+    "name": "Calabogie Peaks Resort",
+    "aliases": [
+      "Calabogie Peaks"
+    ],
+    "country": "CA",
+    "region": "ON",
+    "locality": "Calabogie",
+    "website": "https://www.calabogie.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/calabogie-peaks-resort",
+    "liftCount": 3,
+    "trailCount": 25,
+    "verticalFt": 781,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "caledonia-nordic-ski-club",
+    "name": "Caledonia Nordic Ski Club",
+    "aliases": [
+      "Caledonia Nordic Ski Center"
+    ],
+    "country": "CA",
+    "region": "BC",
+    "locality": "Prince George",
+    "skiing": "cross-country",
+    "website": "https://www.caledonianordic.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/caledonia-nordic-ski-club",
+    "trailCount": 55,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
+    "id": "camden-snow-bowl",
+    "name": "Camden Snow Bowl",
+    "country": "US",
+    "region": "ME",
+    "locality": "Camden",
+    "website": "https://www.camdensnowbowl.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/camden-snow-bowl",
+    "liftCount": 3,
+    "trailCount": 15,
+    "verticalFt": 1070,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "camelback-mountain-resort",
     "name": "Camelback Mountain Resort",
     "aliases": [
@@ -774,6 +1389,23 @@
     "website": "https://www.camelbackresort.com/"
   },
   {
+    "id": "camp-10-ski-area",
+    "name": "Camp 10 Ski Area",
+    "aliases": [
+      "Camp 10"
+    ],
+    "country": "US",
+    "region": "WI",
+    "locality": "Rhinelander",
+    "website": "https://www.facebook.com/CAMP10SKIAREA/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/camp-10-ski-area",
+    "liftCount": 4,
+    "trailCount": 15,
+    "verticalFt": 230,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "camp-fortune",
     "name": "Camp Fortune",
     "aliases": [
@@ -782,7 +1414,50 @@
     "country": "CA",
     "region": "QC",
     "locality": "Chelsea",
-    "website": "https://campfortune.com/"
+    "website": "https://campfortune.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/camp-fortune",
+    "liftCount": 8,
+    "trailCount": 27,
+    "verticalFt": 627,
+    "nightSkiing": true,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://campfortune.com/en/indy-pass/"
+    ]
+  },
+  {
+    "id": "canaan-valley",
+    "name": "Canaan Valley",
+    "aliases": [
+      "Canaan Valley Resort"
+    ],
+    "country": "US",
+    "region": "WV",
+    "locality": "Davis",
+    "website": "https://www.canaanresort.com/winter/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/canaan-valley",
+    "liftCount": 6,
+    "trailCount": 47,
+    "verticalFt": 850,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "canmore-ski-village",
+    "name": "Canmore Ski Village",
+    "aliases": [
+      "キャンモア・スキービレッジ",
+      "Canmore Ski Resort"
+    ],
+    "country": "JP",
+    "locality": "Hokkaido",
+    "website": "https://www.canmore-ski.jp/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/canmore-ski-village",
+    "liftCount": 2,
+    "trailCount": 8,
+    "verticalFt": 820,
+    "nightSkiing": true,
+    "terrainParks": false
   },
   {
     "id": "cannon-mountain",
@@ -795,9 +1470,31 @@
     "locality": "Franconia",
     "website": "https://www.cannonmt.com/",
     "statsUrl": "https://www.cannonmt.com/mountain-stats",
+    "reportUrl": "https://www.cannonmt.com/mountain-report",
     "acres": 287,
     "liftCount": 9,
-    "trailCount": 98
+    "trailCount": 98,
+    "verticalFt": 2180,
+    "nightSkiing": false,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://www.cannonmt.com/indy-pass"
+    ]
+  },
+  {
+    "id": "carters-xc-ski-center",
+    "name": "Carters XC Ski Center",
+    "aliases": [
+      "Carter's XC Ski"
+    ],
+    "country": "US",
+    "region": "ME",
+    "locality": "Bethel",
+    "skiing": "cross-country",
+    "website": "https://www.cartersxcski.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/carters-xc-ski-center",
+    "nightSkiing": false,
+    "terrainParks": false
   },
   {
     "id": "castle-mountain-resort",
@@ -808,7 +1505,31 @@
     "country": "CA",
     "region": "AB",
     "locality": "Pincher Creek",
-    "website": "https://www.skicastle.ca"
+    "website": "https://www.skicastle.ca",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/castle-mountain-resort",
+    "reportUrl": "https://www.skicastle.ca/snowreport/",
+    "liftCount": 7,
+    "trailCount": 95,
+    "verticalFt": 2845,
+    "nightSkiing": false,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://www.skicastle.ca/indypass/"
+    ]
+  },
+  {
+    "id": "cataloochee-ski-area",
+    "name": "Cataloochee Ski Area",
+    "country": "US",
+    "region": "NC",
+    "locality": "Maggie Valley",
+    "website": "https://cataloochee.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/cataloochee-ski-area",
+    "liftCount": 5,
+    "trailCount": 18,
+    "verticalFt": 740,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "catamount-mountain-resort",
@@ -820,7 +1541,59 @@
     "country": "US",
     "region": "MA/NY",
     "locality": "South Egremont / Hillsdale",
-    "website": "https://www.catamountski.com/"
+    "website": "https://www.catamountski.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/catamount-mountain-resort",
+    "liftCount": 8,
+    "trailCount": 44,
+    "verticalFt": 1000,
+    "nightSkiing": true,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://catamountski.com/winter/tickets-passes/indy-pass-reservations"
+    ]
+  },
+  {
+    "id": "catamount-outdoor-family-center",
+    "name": "Catamount Outdoor Family Center",
+    "country": "US",
+    "region": "VT",
+    "locality": "Williston",
+    "skiing": "cross-country",
+    "website": "https://catamountoutdoor.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/catamount-outdoor-family-center",
+    "reportUrl": "https://www.nordic-pulse.com/ski-areas/US/VT/Catamount-Outdoor-Family-Center",
+    "trailCount": 100,
+    "verticalFt": 250,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
+    "id": "cazenovia-ski-club",
+    "name": "Cazenovia Ski Club",
+    "country": "US",
+    "region": "NY",
+    "locality": "Cazenovia",
+    "website": "https://skicaz.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/cazenovia-ski-club",
+    "liftCount": 2,
+    "trailCount": 14,
+    "verticalFt": 500,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "centre-vorlage",
+    "name": "Centre Vorlage",
+    "country": "CA",
+    "region": "QC",
+    "locality": "Wakefield",
+    "website": "https://centrevorlage.ca/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/centre-vorlage",
+    "liftCount": 4,
+    "trailCount": 29,
+    "verticalFt": 466,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "cervino-ski-paradise",
@@ -835,6 +1608,76 @@
     "locality": "Breuil-Cervinia",
     "website": "https://cervinia.it/en/",
     "reportUrl": "https://cervinia.it/impianti/"
+  },
+  {
+    "id": "cherry-peak",
+    "name": "Cherry Peak",
+    "aliases": [
+      "Cherry Peak Ski Area"
+    ],
+    "country": "US",
+    "region": "UT",
+    "locality": "Richmond",
+    "website": "https://www.skicpr.com/",
+    "statsUrl": "https://www.skicpr.com/mountain-stats",
+    "reportUrl": "https://www.skicpr.com/ski-report",
+    "acres": 220,
+    "acresQualifier": "lower-bound",
+    "liftCount": 4,
+    "trailCount": 38,
+    "baseFt": 5775,
+    "summitFt": 7040,
+    "verticalFt": 1265,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "chestnut-mountain-resort",
+    "name": "Chestnut Mountain Resort",
+    "country": "US",
+    "region": "IL",
+    "locality": "Galena",
+    "website": "https://www.chestnutmtn.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/chestnut-mountain-resort",
+    "liftCount": 9,
+    "trailCount": 19,
+    "verticalFt": 475,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "china-peak",
+    "name": "China Peak",
+    "aliases": [
+      "China Peak Mountain Resort"
+    ],
+    "country": "US",
+    "region": "CA",
+    "locality": "Lakeshore",
+    "website": "https://www.skichinapeak.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/china-peak",
+    "liftCount": 9,
+    "trailCount": 55,
+    "verticalFt": 1700,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "christie-mountain",
+    "name": "Christie Mountain",
+    "aliases": [
+      "Christie Mountain Ski Area"
+    ],
+    "country": "US",
+    "region": "WI",
+    "locality": "Bruce",
+    "website": "https://www.christiemountain.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/christie-mountain",
+    "liftCount": 5,
+    "trailCount": 33,
+    "verticalFt": 350,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "civetta",
@@ -855,6 +1698,23 @@
     "seasonWindow": "Nov 28, 2026 – Mar 29, 2027 (planned)"
   },
   {
+    "id": "coffee-mill-ski-area",
+    "name": "Coffee Mill Ski Area",
+    "aliases": [
+      "Coffee Mill"
+    ],
+    "country": "US",
+    "region": "MN",
+    "locality": "Wabasha",
+    "website": "https://cmskiarea.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/coffee-mill-ski-area",
+    "liftCount": 3,
+    "trailCount": 14,
+    "verticalFt": 425,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
     "id": "cooper",
     "name": "Cooper",
     "aliases": [
@@ -872,6 +1732,20 @@
     "baseFt": 10500,
     "summitFt": 11700,
     "verticalFt": 1200
+  },
+  {
+    "id": "cooper-spur-ski-area",
+    "name": "Cooper Spur Ski Area",
+    "country": "US",
+    "region": "OR",
+    "locality": "Parkdale",
+    "website": "https://cooperspur.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/cooper-spur-ski-area",
+    "liftCount": 2,
+    "trailCount": 9,
+    "verticalFt": 400,
+    "nightSkiing": true,
+    "terrainParks": false
   },
   {
     "id": "copper-mountain",
@@ -904,6 +1778,25 @@
     "highestLiftTerminalFt": 5410,
     "nightSkiing": true,
     "seasonWindow": "May 29 – Oct 3, 2027 (planned)"
+  },
+  {
+    "id": "corralco-resort-de-montana",
+    "name": "Corralco Resort de Montaña",
+    "aliases": [
+      "Corralco"
+    ],
+    "country": "CL",
+    "locality": "Malalcahuello",
+    "website": "https://corralco.com/montana/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/corralco-resort-de-montana",
+    "liftCount": 8,
+    "trailCount": 34,
+    "verticalFt": 4052,
+    "nightSkiing": false,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://corralco.com/montana/mapa-de-pista/"
+    ]
   },
   {
     "id": "cortina-d-ampezzo",
@@ -1036,6 +1929,21 @@
     }
   },
   {
+    "id": "crosscut-mountain-sports-center",
+    "name": "Crosscut Mountain Sports Center",
+    "country": "US",
+    "region": "MT",
+    "locality": "Bozeman",
+    "skiing": "cross-country",
+    "website": "https://www.crosscutmt.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/crosscut-mountain-sports-center",
+    "reportUrl": "https://www.crosscutmt.org/trails",
+    "trailCount": 35,
+    "verticalFt": 600,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
     "id": "crotched-mountain",
     "name": "Crotched Mountain",
     "aliases": [
@@ -1079,7 +1987,16 @@
     "country": "US",
     "region": "MI",
     "locality": "Thompsonville",
-    "website": "https://www.crystalmountain.com"
+    "website": "https://www.crystalmountain.com",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/crystal-mountain",
+    "liftCount": 8,
+    "trailCount": 59,
+    "verticalFt": 375,
+    "nightSkiing": true,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://www.crystalmountain.com/ski/season-passes/season-pass-perks"
+    ]
   },
   {
     "id": "crystal-ridge",
@@ -1092,6 +2009,40 @@
     "region": "WI",
     "locality": "Franklin",
     "website": "https://crystalridge.com/"
+  },
+  {
+    "id": "cuchara",
+    "name": "Cuchara",
+    "aliases": [
+      "Cuchara Mountain Resort"
+    ],
+    "country": "US",
+    "region": "CO",
+    "locality": "Cuchara",
+    "website": "https://cucharamountainpark.org",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/cuchara",
+    "liftCount": 1,
+    "trailCount": 9,
+    "verticalFt": 300,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "cupid-valley",
+    "name": "Cupid Valley",
+    "aliases": [
+      "キューピットバレイスキー場",
+      "Cupid Valley Ski Area"
+    ],
+    "country": "JP",
+    "locality": "Jōetsu",
+    "website": "https://yukidaruma-kogen.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/cupid-valley",
+    "liftCount": 3,
+    "trailCount": 12,
+    "verticalFt": 1607,
+    "nightSkiing": false,
+    "terrainParks": false
   },
   {
     "id": "cypress-mountain",
@@ -1118,6 +2069,20 @@
     ]
   },
   {
+    "id": "dartmouth-skiway",
+    "name": "Dartmouth Skiway",
+    "country": "US",
+    "region": "NH",
+    "locality": "Lyme Center",
+    "website": "https://skiway.dartmouth.edu/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/dartmouth-skiway",
+    "liftCount": 4,
+    "trailCount": 28,
+    "verticalFt": 986,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
     "id": "deer-valley-resort",
     "name": "Deer Valley Resort",
     "aliases": [
@@ -1127,6 +2092,37 @@
     "region": "UT",
     "locality": "Park City",
     "website": "https://www.deervalley.com/"
+  },
+  {
+    "id": "destination-owls-head",
+    "name": "Destination Owls Head",
+    "aliases": [
+      "Owl's Head"
+    ],
+    "country": "CA",
+    "region": "QC",
+    "locality": "Mansonville",
+    "website": "https://www.owlshead.com",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/destination-owls-head",
+    "liftCount": 6,
+    "trailCount": 50,
+    "verticalFt": 1770,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "detroit-mountain",
+    "name": "Detroit Mountain",
+    "country": "US",
+    "region": "MN",
+    "locality": "Detroit Lakes",
+    "website": "https://detroitmountain.com",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/detroit-mountain",
+    "liftCount": 6,
+    "trailCount": 21,
+    "verticalFt": 210,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "devil-s-head-resort",
@@ -1145,6 +2141,22 @@
     "liftCount": 8,
     "trailCount": 30,
     "verticalFt": 500
+  },
+  {
+    "id": "devils-thumb-ranch",
+    "name": "Devil's Thumb Ranch",
+    "aliases": [
+      "Devil's Thumb"
+    ],
+    "country": "US",
+    "region": "CO",
+    "locality": "Tabernash",
+    "skiing": "cross-country",
+    "website": "https://www.devilsthumbranch.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/devils-thumb-ranch",
+    "trailCount": 37,
+    "nightSkiing": false,
+    "terrainParks": false
   },
   {
     "id": "diavolezza-lagalb",
@@ -1172,16 +2184,159 @@
     "reportUrl": "https://live.andermatt-sedrun-disentis.ch/"
   },
   {
+    "id": "dodge-ridge",
+    "name": "Dodge Ridge",
+    "aliases": [
+      "Dodge Ridge Ski Area"
+    ],
+    "country": "US",
+    "region": "CA",
+    "locality": "Pinecrest",
+    "website": "https://www.dodgeridge.com/site/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/dodge-ridge",
+    "liftCount": 11,
+    "trailCount": 67,
+    "verticalFt": 1600,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "dog-creek-lodge-nordic-center",
+    "name": "Dog Creek Lodge & Nordic Center",
+    "country": "US",
+    "region": "MT",
+    "locality": "Whitefish",
+    "skiing": "cross-country",
+    "website": "https://www.dogcreeklodge.com/nordic-trail-map",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/dog-creek-lodge-nordic-center",
+    "trailCount": 25,
+    "verticalFt": 440,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "domaine-skiable-des-contamines",
+    "name": "Domaine skiable des Contamines",
+    "aliases": [
+      "Les Contamines"
+    ],
+    "country": "FR",
+    "locality": "Les Contamines-Montjoie",
+    "website": "https://www.lescontamines.net/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/domaine-skiable-des-contamines",
+    "liftCount": 25,
+    "trailCount": 120,
+    "verticalFt": 4265,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "donner-ski-ranch",
+    "name": "Donner Ski Ranch",
+    "country": "US",
+    "region": "CA",
+    "locality": "Norden",
+    "website": "https://www.donnerskiranch.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/donner-ski-ranch",
+    "liftCount": 8,
+    "trailCount": 52,
+    "verticalFt": 800,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "dry-hill-ski-area",
+    "name": "Dry Hill Ski Area",
+    "country": "US",
+    "region": "NY",
+    "locality": "Watertown",
+    "website": "https://skidryhill.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/dry-hill-ski-area",
+    "liftCount": 3,
+    "trailCount": 13,
+    "verticalFt": 300,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "dynaland",
+    "name": "Dynaland",
+    "aliases": [
+      "ダイナランドスキー場",
+      "Dynaland Ski Area"
+    ],
+    "country": "JP",
+    "locality": "Gujo",
+    "website": "https://www.takasu.gr.jp/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/dynaland",
+    "liftCount": 5,
+    "trailCount": 18,
+    "verticalFt": 1467,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "eagle-point",
+    "name": "Eagle Point",
+    "country": "US",
+    "region": "UT",
+    "locality": "Beaver",
+    "website": "https://www.eaglepointresort.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/eagle-point",
+    "liftCount": 5,
+    "trailCount": 40,
+    "verticalFt": 1500,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
     "id": "eaglecrest-ski-area",
     "name": "Eaglecrest Ski Area",
     "aliases": [
-      "Alaska"
+      "Alaska",
+      "Eaglecrest"
     ],
     "country": "US",
     "region": "AK",
     "locality": "Juneau",
     "website": "https://skieaglecrest.com/",
-    "reportUrl": "https://skieaglecrest.com/conditions/"
+    "statsUrl": "https://www.indyskipass.com/our-resorts/eaglecrest",
+    "reportUrl": "https://skieaglecrest.com/conditions/",
+    "liftCount": 4,
+    "trailCount": 36,
+    "verticalFt": 1620,
+    "nightSkiing": true,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://skieaglecrest.com/visit/"
+    ]
+  },
+  {
+    "id": "eastman-cross-country",
+    "name": "Eastman Cross Country",
+    "country": "US",
+    "region": "NH",
+    "locality": "Grantham",
+    "skiing": "cross-country",
+    "website": "https://eastmannh.org/ski/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/eastman-cross-country",
+    "trailCount": 23,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "echo-mountain",
+    "name": "Echo Mountain",
+    "country": "US",
+    "region": "CO",
+    "locality": "Evergreen",
+    "website": "https://echomntn.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/echo-mountain",
+    "liftCount": 2,
+    "trailCount": 8,
+    "verticalFt": 600,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "eldora-mountain-resort",
@@ -1210,6 +2365,67 @@
     "reportUrl": "https://www.elkskier.com/conditions/",
     "acres": 180,
     "trailCount": 27
+  },
+  {
+    "id": "elm-creek-park-reserve",
+    "name": "Elm Creek Park Reserve",
+    "country": "US",
+    "region": "MN",
+    "locality": "Maple Grove",
+    "skiing": "both",
+    "website": "https://www.threeriversparks.org/elmcreekwinter",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/elm-creek-park-reserve",
+    "reportUrl": "https://www.threeriversparks.org/elmcreekwinter",
+    "liftCount": 3,
+    "trailCount": 6,
+    "verticalFt": 80,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "enchanted-forest-xc",
+    "name": "Enchanted Forest XC",
+    "aliases": [
+      "Enchanted Forest"
+    ],
+    "country": "US",
+    "region": "NM",
+    "locality": "Red River",
+    "skiing": "cross-country",
+    "website": "https://enchantedforestxc.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/enchanted-forest-xc",
+    "reportUrl": "https://enchantedforestxc.com/",
+    "trailCount": 35,
+    "verticalFt": 400,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "engstligenalp",
+    "name": "Engstligenalp",
+    "country": "CH",
+    "locality": "Adelboden",
+    "website": "https://engstligenalp.ch",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/engstligenalp",
+    "liftCount": 9,
+    "trailCount": 11,
+    "verticalFt": 1312,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "fairmont-hot-springs",
+    "name": "Fairmont Hot Springs",
+    "country": "CA",
+    "region": "BC",
+    "locality": "Fairmont Hot Springs",
+    "website": "https://www.fairmonthotsprings.com",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/fairmont-hot-springs",
+    "liftCount": 3,
+    "trailCount": 14,
+    "verticalFt": 1000,
+    "nightSkiing": false,
+    "terrainParks": false
   },
   {
     "id": "falls-creek",
@@ -1254,6 +2470,48 @@
     "trailCount": 36
   },
   {
+    "id": "fort-kent-outdoor-center",
+    "name": "Fort Kent Outdoor Center",
+    "country": "US",
+    "region": "ME",
+    "locality": "Fort Kent",
+    "skiing": "cross-country",
+    "website": "https://www.fortkentoc.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/fort-kent-outdoor-center",
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "franconia-village-xc-ski-area",
+    "name": "Franconia Village XC Ski Area",
+    "aliases": [
+      "Franconia Village XC Ski Center"
+    ],
+    "country": "US",
+    "region": "NH",
+    "locality": "Franconia",
+    "skiing": "cross-country",
+    "website": "https://www.skinh.com/resorts/franconia-village-xc-ski-center",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/franconia-village-xc-ski-area",
+    "trailCount": 12,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "frost-fire-park",
+    "name": "Frost Fire Park",
+    "country": "US",
+    "region": "ND",
+    "locality": "Walhalla",
+    "website": "https://frostfirepark.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/frost-fire-park",
+    "liftCount": 2,
+    "trailCount": 12,
+    "verticalFt": 350,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
     "id": "furano-ski-resort",
     "name": "Furano Ski Resort",
     "aliases": [
@@ -1283,6 +2541,36 @@
     "reportUrl": "https://www.galtuer.com/en/bergbahnen-galtuer/facilities/open-lifts-facilities"
   },
   {
+    "id": "garnet-hill-xc",
+    "name": "Garnet Hill XC",
+    "aliases": [
+      "Garnet Hill"
+    ],
+    "country": "US",
+    "region": "NY",
+    "locality": "North River",
+    "skiing": "cross-country",
+    "website": "https://www.garnet-hill.com/outdoor-center/winter-sports/skiing/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/garnet-hill-xc",
+    "trailCount": 35,
+    "verticalFt": 760,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "geto-kogen",
+    "name": "Geto Kogen",
+    "country": "JP",
+    "locality": "Kitakami, Iwate",
+    "website": "https://www.getokogen.com/winter",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/geto-kogen",
+    "liftCount": 5,
+    "trailCount": 14,
+    "verticalFt": 1410,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "giants-ridge",
     "name": "Giants Ridge",
     "aliases": [
@@ -1293,6 +2581,90 @@
     "region": "MN",
     "locality": "Biwabik",
     "website": "https://www.giantsridge.com/"
+  },
+  {
+    "id": "glencoe-mountain-resort",
+    "name": "Glencoe Mountain Resort",
+    "country": "GB",
+    "locality": "Glencoe",
+    "website": "https://www.glencoemountain.co.uk/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/glencoe-mountain-resort",
+    "reportUrl": "https://www.glencoemountain.co.uk/snow-report/",
+    "liftCount": 8,
+    "trailCount": 20,
+    "verticalFt": 2388,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "glenshee-ski-centre",
+    "name": "Glenshee Ski Centre",
+    "aliases": [
+      "Glenshee Ski Center"
+    ],
+    "country": "GB",
+    "locality": "Braemar, Scotland",
+    "website": "https://www.ski-glenshee.co.uk/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/glenshee-ski-centre",
+    "liftCount": 21,
+    "trailCount": 36,
+    "verticalFt": 1272,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "gore-mountain",
+    "name": "Gore Mountain",
+    "country": "US",
+    "region": "NY",
+    "locality": "North Creek",
+    "website": "https://goremountain.com",
+    "statsUrl": "https://goremountain.com/the-mountain/trail-maps/",
+    "reportUrl": "https://goremountain.com/the-mountain/conditions/",
+    "acres": 453,
+    "liftCount": 14,
+    "trailCount": 109,
+    "baseFt": 998,
+    "summitFt": 3600,
+    "verticalFt": 2537,
+    "nightSkiing": true,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Easier": 11,
+        "More difficult": 53,
+        "Most difficult": 36
+      }
+    }
+  },
+  {
+    "id": "gore-mountain-nordic-center",
+    "name": "Gore Mountain Nordic Center",
+    "country": "US",
+    "region": "NY",
+    "locality": "North Creek",
+    "skiing": "cross-country",
+    "website": "https://goremountain.com/the-mountain/nordic-center/",
+    "statsUrl": "https://goremountain.com/the-mountain/nordic-center/",
+    "reportUrl": "https://goremountain.com/the-mountain/conditions/",
+    "nightSkiing": true
+  },
+  {
+    "id": "granby-ranch",
+    "name": "Granby Ranch",
+    "country": "US",
+    "region": "CO",
+    "locality": "Granby",
+    "skiing": "both",
+    "website": "https://granbyranch.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/granby-ranch",
+    "liftCount": 6,
+    "trailCount": 45,
+    "verticalFt": 1000,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "grand-targhee-resort",
@@ -1382,6 +2754,24 @@
     ]
   },
   {
+    "id": "great-bear-ski-valley",
+    "name": "Great Bear Ski Valley",
+    "aliases": [
+      "Great Bear Recreation Park"
+    ],
+    "country": "US",
+    "region": "SD",
+    "locality": "Sioux Falls",
+    "website": "https://www.greatbearpark.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/great-bear-ski-valley",
+    "reportUrl": "https://www.greatbearpark.com/trail-status/",
+    "liftCount": 3,
+    "trailCount": 14,
+    "verticalFt": 182,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "great-divide-ski-area",
     "name": "Great Divide Ski Area",
     "aliases": [
@@ -1395,6 +2785,21 @@
     "acres": 1500
   },
   {
+    "id": "great-glen-trails-outdoor-center",
+    "name": "Great Glen Trails Outdoor Center",
+    "aliases": [
+      "Great Glen Trails"
+    ],
+    "country": "US",
+    "region": "NH",
+    "locality": "Gorham",
+    "skiing": "cross-country",
+    "website": "https://greatglentrails.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/great-glen-trails-outdoor-center",
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
     "id": "greek-peak-mountain-resort",
     "name": "Greek Peak Mountain Resort",
     "aliases": [
@@ -1403,7 +2808,16 @@
     "country": "US",
     "region": "NY",
     "locality": "Cortland",
-    "website": "https://www.greekpeak.net/"
+    "website": "https://www.greekpeak.net/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/greek-peak-mountain-resort",
+    "liftCount": 8,
+    "trailCount": 55,
+    "verticalFt": 952,
+    "nightSkiing": true,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://www.greekpeak.net/ski-ride/indy-pass/"
+    ]
   },
   {
     "id": "grouse-mountain",
@@ -1431,6 +2845,19 @@
     "acres": 227,
     "liftCount": 8,
     "nightSkiing": true
+  },
+  {
+    "id": "hafjell",
+    "name": "Hafjell",
+    "country": "NO",
+    "locality": "Øyer",
+    "website": "https://www.hafjell.no/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/hafjell",
+    "liftCount": 18,
+    "trailCount": 30,
+    "verticalFt": 2740,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "hakuba-47",
@@ -1635,6 +3062,47 @@
     }
   },
   {
+    "id": "hardwood-ski-and-bike",
+    "name": "Hardwood Ski and Bike",
+    "country": "CA",
+    "region": "ON",
+    "locality": "Barrie",
+    "skiing": "cross-country",
+    "website": "https://www.hardwoodskiandbike.ca/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/hardwood-ski-and-bike",
+    "trailCount": 6,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
+    "id": "hatley-pointe",
+    "name": "Hatley Pointe",
+    "country": "US",
+    "region": "NC",
+    "locality": "Mars Hill",
+    "website": "https://hatleypointe.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/hatley-pointe",
+    "liftCount": 4,
+    "trailCount": 17,
+    "verticalFt": 700,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "haymaker-nordic-center",
+    "name": "Haymaker Nordic Center",
+    "country": "US",
+    "region": "CO",
+    "locality": "Steamboat Springs",
+    "skiing": "cross-country",
+    "website": "https://www.steamboatsprings.net/1449/Nordic-Center",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/haymaker-nordic-center",
+    "reportUrl": "https://www.steamboatsprings.net/1449/Nordic-Center",
+    "trailCount": 4,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
     "id": "heavenly",
     "name": "Heavenly Mountain Resort",
     "aliases": [
@@ -1689,6 +3157,34 @@
     "website": "https://www.hiddenvalleyski.com/"
   },
   {
+    "id": "high-point-xc-ski-center",
+    "name": "High Point XC Ski Center",
+    "country": "US",
+    "region": "NJ",
+    "locality": "Sussex",
+    "skiing": "cross-country",
+    "website": "https://www.xcskihighpoint.com/home",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/high-point-xc-ski-center",
+    "trailCount": 6,
+    "verticalFt": 400,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
+    "id": "hilltop-ski-area",
+    "name": "Hilltop Ski Area",
+    "country": "US",
+    "region": "AK",
+    "locality": "Anchorage",
+    "website": "https://www.hilltopskiarea.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/hilltop-ski-area",
+    "liftCount": 3,
+    "trailCount": 11,
+    "verticalFt": 294,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "hintertux-glacier",
     "name": "Hintertux Glacier",
     "aliases": [
@@ -1699,6 +3195,22 @@
     "country": "AT",
     "locality": "Hintertux",
     "website": "https://www.hintertuxergletscher.at/en/"
+  },
+  {
+    "id": "hirugano-kogen-ski-resort",
+    "name": "Hirugano Kogen Ski Resort",
+    "aliases": [
+      "ひるがの高原スキー場"
+    ],
+    "country": "JP",
+    "locality": "Gujo",
+    "website": "https://www.hiruganokogen.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/hirugano-kogen-ski-resort",
+    "liftCount": 3,
+    "trailCount": 8,
+    "verticalFt": 492,
+    "nightSkiing": false,
+    "terrainParks": false
   },
   {
     "id": "hochfuegen-hochzillertal",
@@ -1712,6 +3224,66 @@
     "country": "AT",
     "locality": "Kaltenbach / Hochfügen",
     "website": "https://www.hochzillertal.com/"
+  },
+  {
+    "id": "hochzeiger-bergbahnen-pitztal-ag",
+    "name": "Hochzeiger Bergbahnen Pitztal AG",
+    "aliases": [
+      "Hochzeiger"
+    ],
+    "country": "AT",
+    "locality": "Jerzens",
+    "website": "https://www.hochzeiger.com",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/hochzeiger-bergbahnen-pitztal-ag",
+    "liftCount": 9,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "hockley-valley-resort",
+    "name": "Hockley Valley Resort",
+    "country": "CA",
+    "region": "ON",
+    "locality": "Mono",
+    "website": "https://www.hockley.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/hockley-valley-resort",
+    "liftCount": 4,
+    "trailCount": 13,
+    "verticalFt": 374,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "hodaigi-mountain-resort",
+    "name": "Hodaigi Mountain Resort",
+    "aliases": [
+      "宝台樹スキー場",
+      "Hodaigi Ski Resort"
+    ],
+    "country": "JP",
+    "locality": "Minakami, Gunma",
+    "website": "https://hodaigi.jp/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/hodaigi-mountain-resort",
+    "liftCount": 7,
+    "trailCount": 16,
+    "verticalFt": 1869,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "homestake-lodge",
+    "name": "Homestake Lodge",
+    "aliases": [
+      "Homestake Lodge & Ski Area"
+    ],
+    "country": "US",
+    "region": "MT",
+    "locality": "Butte",
+    "skiing": "cross-country",
+    "website": "https://www.homestakelodge.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/homestake-lodge",
+    "nightSkiing": false,
+    "terrainParks": false
   },
   {
     "id": "homewood-mountain-resort",
@@ -1733,12 +3305,26 @@
     "id": "hoodoo-ski-area",
     "name": "Hoodoo Ski Area",
     "aliases": [
-      "Oregon"
+      "Oregon",
+      "Hoodoo"
     ],
     "country": "US",
     "region": "OR",
     "locality": "Sisters",
-    "website": "https://skihoodoo.com/"
+    "website": "https://skihoodoo.com/",
+    "statsUrl": "https://skihoodoo.com/about/",
+    "reportUrl": "https://skihoodoo.com/the-mountain/mountain-lift-status/",
+    "acres": 800,
+    "liftCount": 5,
+    "trailCount": 34,
+    "baseFt": 4668,
+    "summitFt": 5703,
+    "verticalFt": 1035,
+    "nightSkiing": true,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://skihoodoo.com/rates/indy-pass/"
+    ]
   },
   {
     "id": "hotham",
@@ -1770,6 +3356,69 @@
     }
   },
   {
+    "id": "howelsen-hill",
+    "name": "Howelsen Hill",
+    "aliases": [
+      "Howelson Hill Ski Area"
+    ],
+    "country": "US",
+    "region": "CO",
+    "locality": "Steamboat Springs",
+    "skiing": "both",
+    "website": "https://steamboatsprings.net/131/Howelsen-Hill-Ski-Area",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/howelsen-hill",
+    "liftCount": 4,
+    "trailCount": 19,
+    "verticalFt": 440,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "hudson-bay-mountain",
+    "name": "Hudson Bay Mountain",
+    "country": "CA",
+    "region": "BC",
+    "locality": "Smithers",
+    "website": "https://hudsonbaymountain.ca/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/hudson-bay-mountain",
+    "liftCount": 3,
+    "trailCount": 44,
+    "verticalFt": 1750,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "huff-hills-ski-area",
+    "name": "Huff Hills Ski Area",
+    "aliases": [
+      "Huff Hills Ski Resort"
+    ],
+    "country": "US",
+    "region": "ND",
+    "locality": "Mandan",
+    "website": "https://www.huffhills.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/huff-hills-ski-area",
+    "liftCount": 4,
+    "trailCount": 16,
+    "verticalFt": 400,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "hunt-hollow-ski-club",
+    "name": "Hunt Hollow Ski Club",
+    "country": "US",
+    "region": "NY",
+    "locality": "Naples",
+    "website": "https://www.hunthollow.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/hunt-hollow-ski-club",
+    "liftCount": 4,
+    "trailCount": 21,
+    "verticalFt": 875,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "hunter-mountain",
     "name": "Hunter Mountain",
     "aliases": [
@@ -1779,6 +3428,65 @@
     "region": "NY",
     "locality": "Hunter",
     "website": "https://www.huntermtn.com"
+  },
+  {
+    "id": "hurricane-ridge",
+    "name": "Hurricane Ridge",
+    "country": "US",
+    "region": "WA",
+    "locality": "Port Angeles",
+    "website": "https://hurricaneridge.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/hurricane-ridge",
+    "liftCount": 3,
+    "trailCount": 12,
+    "verticalFt": 700,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "hyland-hills",
+    "name": "Hyland Hills",
+    "aliases": [
+      "Hyland Hills Ski Area"
+    ],
+    "country": "US",
+    "region": "MN",
+    "locality": "Bloomington",
+    "website": "https://www.threeriversparks.org/location/hyland-hills-ski-area",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/hyland-hills",
+    "liftCount": 9,
+    "trailCount": 13,
+    "verticalFt": 175,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "innsbruck-region",
+    "name": "Innsbruck Region",
+    "aliases": [
+      "Stubaier Gletscher",
+      "Ski Plus City Pass",
+      "Stubai Glacier",
+      "Kühtai",
+      "Axamer Lizum",
+      "Schlick 2000",
+      "Muttereralm",
+      "Patscherkofel",
+      "Nordkette",
+      "Rangger Köpfl",
+      "Bergeralm",
+      "Glungezer",
+      "Elferbahnen",
+      "Serlesbahnen"
+    ],
+    "country": "AT",
+    "locality": "Innsbruck",
+    "website": "https://www.innsbruck.info/en/skiing/ski-plus-city-pass/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/innsbruck-region",
+    "liftCount": 111,
+    "verticalFt": 5282,
+    "nightSkiing": false,
+    "terrainParks": true
   },
   {
     "id": "ischgl-samnaun",
@@ -1819,6 +3527,20 @@
     "website": "https://www.jacksonhole.com"
   },
   {
+    "id": "jackson-xc",
+    "name": "Jackson XC",
+    "country": "US",
+    "region": "NH",
+    "locality": "Jackson",
+    "skiing": "cross-country",
+    "website": "https://www.jacksonxc.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/jackson-xc",
+    "trailCount": 60,
+    "verticalFt": 1000,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
     "id": "jay-peak-resort",
     "name": "Jay Peak Resort",
     "aliases": [
@@ -1827,6 +3549,7 @@
     "country": "US",
     "region": "VT",
     "locality": "Jay",
+    "skiing": "both",
     "website": "https://jaypeakresort.com/",
     "statsUrl": "https://jaypeakresort.com/skiing-riding/mountain",
     "acres": 385,
@@ -1834,7 +3557,12 @@
     "trailCount": 81,
     "baseFt": 1750,
     "summitFt": 3862,
-    "verticalFt": 2122
+    "verticalFt": 2122,
+    "nightSkiing": false,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://jaypeakresort.com/resort/partnerships-and-sponsors"
+    ]
   },
   {
     "id": "jigatake",
@@ -1889,6 +3617,40 @@
     "website": "https://www.junemountain.com/"
   },
   {
+    "id": "kamui-ski-links",
+    "name": "Kamui Ski Links",
+    "aliases": [
+      "カムイスキーリンクス"
+    ],
+    "country": "JP",
+    "locality": "Asahikawa",
+    "website": "https://www.kamui-skilinks.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/kamui-ski-links",
+    "liftCount": 6,
+    "trailCount": 25,
+    "verticalFt": 1968,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "kandatsu-snow-resort",
+    "name": "Kandatsu Snow Resort",
+    "aliases": [
+      "神立高原スキー場",
+      "Kandatsu Kogen Ski Resort",
+      "Kandatsu kōgen sukī-ba"
+    ],
+    "country": "JP",
+    "locality": "Yuzawa, Niigata",
+    "website": "https://www.kandatsu.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/kandatsu-snow-resort",
+    "liftCount": 5,
+    "trailCount": 16,
+    "verticalFt": 1772,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
     "id": "kappl",
     "name": "Kappl",
     "aliases": [
@@ -1927,6 +3689,56 @@
         "Advanced": 17
       }
     }
+  },
+  {
+    "id": "kaunertal-glacier",
+    "name": "Kaunertal Glacier",
+    "aliases": [
+      "Kaunertaler Gletscher"
+    ],
+    "country": "AT",
+    "locality": "Kaunertal",
+    "website": "https://www.kaunertaler-gletscher.at",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/kaunertal-glacier",
+    "liftCount": 10,
+    "trailCount": 55,
+    "verticalFt": 3160,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "kelly-canyon",
+    "name": "Kelly Canyon",
+    "aliases": [
+      "Kelly Canyon Ski Resort"
+    ],
+    "country": "US",
+    "region": "ID",
+    "locality": "Ririe",
+    "website": "https://skikelly.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/kelly-canyon",
+    "liftCount": 5,
+    "trailCount": 27,
+    "verticalFt": 1200,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "kendall-mountain-ski-area",
+    "name": "Kendall Mountain Ski Area",
+    "aliases": [
+      "Kendall Mountain Recreation Area"
+    ],
+    "country": "US",
+    "region": "CO",
+    "locality": "Silverton",
+    "website": "https://www.skikendall.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/kendall-mountain-ski-area",
+    "liftCount": 1,
+    "trailCount": 5,
+    "verticalFt": 283,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "keystone-resort",
@@ -2033,6 +3845,36 @@
     "website": "https://www.skikimberley.com"
   },
   {
+    "id": "kimberley-nordic-club",
+    "name": "Kimberley Nordic Club",
+    "country": "CA",
+    "region": "BC",
+    "locality": "Kimberley",
+    "skiing": "cross-country",
+    "website": "https://www.kimberleynordic.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/kimberley-nordic-club",
+    "trailCount": 35,
+    "nightSkiing": true,
+    "terrainParks": false,
+    "additionalSources": [
+      "https://www.kimberleynordic.org/maps"
+    ]
+  },
+  {
+    "id": "king-pine",
+    "name": "King Pine",
+    "country": "US",
+    "region": "NH",
+    "locality": "Madison",
+    "website": "https://www.kingpine.com",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/king-pine",
+    "liftCount": 6,
+    "trailCount": 23,
+    "verticalFt": 350,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "kirkwood-mountain-resort",
     "name": "Kirkwood Mountain Resort",
     "aliases": [
@@ -2099,6 +3941,35 @@
     "liftCount": 31,
     "trailCount": 82,
     "seasonWindow": "Nov 28, 2026 – Apr 11, 2027 (planned)"
+  },
+  {
+    "id": "krvavec-ski-resort",
+    "name": "Krvavec Ski Resort",
+    "aliases": [
+      "The Krvavec Ski Resort",
+      "Krvavec"
+    ],
+    "country": "SI",
+    "locality": "Cerklje na Gorenjskem",
+    "website": "https://www.rtc-krvavec.si/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/the-krvavec-ski-resort",
+    "liftCount": 10,
+    "verticalFt": 1709,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "kvitfjell",
+    "name": "Kvitfjell",
+    "country": "NO",
+    "locality": "Fåvang",
+    "website": "https://www.kvitfjell.no/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/kvitfjell",
+    "liftCount": 14,
+    "trailCount": 36,
+    "verticalFt": 2802,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "la-thuile-espace-san-bernardo",
@@ -2208,6 +4079,41 @@
     ]
   },
   {
+    "id": "le-relais",
+    "name": "Le Relais",
+    "aliases": [
+      "Centre de Ski Le Relais"
+    ],
+    "country": "CA",
+    "region": "QC",
+    "locality": "Lac-Beauport",
+    "website": "https://www.skirelais.com",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/le-relais",
+    "liftCount": 7,
+    "trailCount": 33,
+    "verticalFt": 735,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "leavenworth-winter-sports-club",
+    "name": "Leavenworth Winter Sports Club",
+    "aliases": [
+      "Leavenworth Ski Hill"
+    ],
+    "country": "US",
+    "region": "WA",
+    "locality": "Leavenworth",
+    "skiing": "both",
+    "website": "https://skileavenworth.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/leavenworth-winter-sports-club",
+    "liftCount": 3,
+    "trailCount": 3,
+    "verticalFt": 300,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
     "id": "lech-am-arlberg",
     "name": "Lech am Arlberg",
     "aliases": [
@@ -2219,6 +4125,19 @@
     "locality": "Lech am Arlberg",
     "website": "https://www.skiarlberg.at/en",
     "reportUrl": "https://www.skiarlberg.at/en/live-info"
+  },
+  {
+    "id": "les-7-laux",
+    "name": "Les 7 Laux",
+    "country": "FR",
+    "locality": "Les Adrets",
+    "website": "https://www.les7laux.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/les-7-laux",
+    "liftCount": 22,
+    "trailCount": 53,
+    "verticalFt": 3444,
+    "nightSkiing": false,
+    "terrainParks": true
   },
   {
     "id": "les-houches",
@@ -2248,6 +4167,41 @@
     "seasonWindow": "Dec 5, 2026 – Apr 18, 2027 (planned)"
   },
   {
+    "id": "leukerbad-torrent-ski-resort-gemmi-resort",
+    "name": "Leukerbad Torrent Ski Resort & Gemmi Resort",
+    "aliases": [
+      "Leukerbad (Torrent)"
+    ],
+    "country": "CH",
+    "locality": "Leukerbad",
+    "skiing": "both",
+    "website": "https://www.leukerbad.ch/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/leukerbad-torrent-ski-resort-gemmi-resort",
+    "liftCount": 14,
+    "trailCount": 50,
+    "verticalFt": 3937,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "levi-ski-resort",
+    "name": "Levi Ski Resort",
+    "aliases": [
+      "Levi, Finland",
+      "Levin hiihtokeskus"
+    ],
+    "country": "FI",
+    "locality": "Kittilä",
+    "website": "https://www.levi.fi/",
+    "statsUrl": "https://www.levi.fi/en/info/",
+    "reportUrl": "https://www.levi.fi/en/ski/ski-resort-today/",
+    "liftCount": 26,
+    "trailCount": 44,
+    "verticalFt": 1066,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "liberty-mountain-resort",
     "name": "Liberty Mountain Resort",
     "aliases": [
@@ -2259,6 +4213,20 @@
     "website": "https://www.libertymountainresort.com/"
   },
   {
+    "id": "little-ski-hill",
+    "name": "Little Ski Hill",
+    "country": "US",
+    "region": "ID",
+    "locality": "McCall",
+    "website": "https://www.littleskihill.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/little-ski-hill",
+    "liftCount": 4,
+    "trailCount": 14,
+    "verticalFt": 374,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "little-switzerland",
     "name": "Little Switzerland",
     "aliases": [
@@ -2268,6 +4236,20 @@
     "region": "WI",
     "locality": "Slinger",
     "website": "https://www.littleswitz.com/"
+  },
+  {
+    "id": "loch-lomond",
+    "name": "Loch Lomond",
+    "country": "CA",
+    "region": "ON",
+    "locality": "Thunder Bay",
+    "website": "https://www.lochlomond.ca/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/loch-lomond",
+    "liftCount": 3,
+    "trailCount": 18,
+    "verticalFt": 751,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "loon-mountain-resort",
@@ -2285,12 +4267,54 @@
     "name": "Lost Trail",
     "aliases": [
       "Idaho",
-      "Montana"
+      "Montana",
+      "Lost Trail Powder Mountain"
     ],
     "country": "US",
     "region": "ID/MT",
     "locality": "Sula",
-    "website": "https://losttrail.com/"
+    "website": "https://losttrail.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/lost-trail-powder-mountain",
+    "liftCount": 8,
+    "trailCount": 69,
+    "verticalFt": 1800,
+    "nightSkiing": false,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://losttrail.com/indypass/"
+    ]
+  },
+  {
+    "id": "lost-valley",
+    "name": "Lost Valley",
+    "aliases": [
+      "Lost Valley Ski Area"
+    ],
+    "country": "US",
+    "region": "ME",
+    "locality": "Auburn",
+    "website": "https://www.lostvalleyski.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/lost-valley",
+    "liftCount": 3,
+    "trailCount": 22,
+    "verticalFt": 233,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "loup-loup-ski-bowl",
+    "name": "Loup Loup Ski Bowl",
+    "country": "US",
+    "region": "WA",
+    "locality": "Twisp",
+    "skiing": "both",
+    "website": "https://skitheloup.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/loup-loup-ski-bowl",
+    "liftCount": 3,
+    "trailCount": 14,
+    "verticalFt": 1240,
+    "nightSkiing": false,
+    "terrainParks": true
   },
   {
     "id": "loveland-ski-area",
@@ -2304,11 +4328,18 @@
     "locality": "Georgetown",
     "website": "https://www.skiloveland.com/",
     "statsUrl": "https://skiloveland.com/the-mountain/trail-map-mountain-stats/",
+    "reportUrl": "https://skiloveland.com/snow-report/",
     "acres": 1800,
+    "liftCount": 12,
     "trailCount": 94,
     "baseFt": 10800,
     "summitFt": 13010,
-    "verticalFt": 2210
+    "verticalFt": 2210,
+    "nightSkiing": false,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://skiloveland.com/indypass/"
+    ]
   },
   {
     "id": "lutsen-mountains",
@@ -2364,15 +4395,73 @@
     "trailCount": 41
   },
   {
+    "id": "magic-mountain-idaho",
+    "name": "Magic Mountain Resort (Idaho)",
+    "aliases": [
+      "Magic Mountain Idaho",
+      "Magic Mountain Resort"
+    ],
+    "country": "US",
+    "region": "ID",
+    "locality": "Kimberly",
+    "website": "https://magicmountainresort.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/magic-mountain-idaho",
+    "liftCount": 4,
+    "trailCount": 22,
+    "verticalFt": 800,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
     "id": "magic-mountain-ski-area",
     "name": "Magic Mountain Ski Area",
     "aliases": [
-      "Vermont"
+      "Vermont",
+      "Magic Mountain"
     ],
     "country": "US",
     "region": "VT",
     "locality": "Londonderry",
-    "website": "https://www.magicmtn.com"
+    "website": "https://www.magicmtn.com",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/magic-mountain",
+    "liftCount": 5,
+    "trailCount": 50,
+    "verticalFt": 1500,
+    "nightSkiing": false,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://www.magicmtn.com/lift-ticket-info"
+    ]
+  },
+  {
+    "id": "maiko-resort",
+    "name": "Maiko Resort",
+    "aliases": [
+      "舞子スノーリゾート",
+      "Maiko Snow Resort"
+    ],
+    "country": "JP",
+    "locality": "Minamiuonuma, Niigata",
+    "website": "https://www.maiko-resort.com/winter/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/maiko-resort",
+    "liftCount": 10,
+    "trailCount": 26,
+    "verticalFt": 2166,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "mala-upa",
+    "name": "Malá Úpa",
+    "country": "CZ",
+    "locality": "Malá Úpa",
+    "website": "https://www.skimu.cz/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/mala-upa",
+    "liftCount": 9,
+    "trailCount": 8,
+    "verticalFt": 853,
+    "nightSkiing": false,
+    "terrainParks": true
   },
   {
     "id": "mammoth-mountain",
@@ -2408,6 +4497,67 @@
     ]
   },
   {
+    "id": "manning-park",
+    "name": "Manning Park",
+    "aliases": [
+      "Manning Park Resort"
+    ],
+    "country": "CA",
+    "region": "BC",
+    "locality": "Manning Park",
+    "website": "https://www.manningpark.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/manning-park",
+    "liftCount": 4,
+    "trailCount": 35,
+    "verticalFt": 1417,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "manning-park-xc",
+    "name": "Manning Park Nordic Centre",
+    "aliases": [
+      "Manning Park XC"
+    ],
+    "country": "CA",
+    "region": "BC",
+    "locality": "Manning Park",
+    "skiing": "cross-country",
+    "website": "https://manningpark.com/winter-activities/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/manning-park-xc",
+    "trailCount": 35,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "maple-ski-ridge",
+    "name": "Maple Ski Ridge",
+    "country": "US",
+    "region": "NY",
+    "locality": "Schenectady",
+    "website": "https://www.mapleskiridge.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/maple-ski-ridge",
+    "liftCount": 4,
+    "trailCount": 8,
+    "verticalFt": 270,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
+    "id": "maplelag-resort",
+    "name": "Maplelag Resort",
+    "country": "US",
+    "region": "MN",
+    "locality": "Callaway",
+    "skiing": "cross-country",
+    "website": "https://www.maplelag.com",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/maplelag-resort",
+    "trailCount": 17,
+    "verticalFt": 110,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
     "id": "marble-mountain",
     "name": "Marble Mountain",
     "aliases": [
@@ -2420,8 +4570,12 @@
     "statsUrl": "https://skimarble.com/mountain-stats/",
     "reportUrl": "https://skimarble.com/terrain-status/",
     "acres": 230,
+    "liftCount": 5,
+    "trailCount": 43,
     "summitFt": 1791,
-    "verticalFt": 1758
+    "verticalFt": 1758,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "marmot-basin",
@@ -2433,6 +4587,51 @@
     "region": "AB",
     "locality": "Jasper",
     "website": "https://www.skimarmot.com"
+  },
+  {
+    "id": "marquette-mountain",
+    "name": "Marquette Mountain",
+    "country": "US",
+    "region": "MI",
+    "locality": "Marquette",
+    "website": "https://marquettemountain.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/marquette-mountain",
+    "liftCount": 4,
+    "trailCount": 29,
+    "verticalFt": 540,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "massanutten-resort",
+    "name": "Massanutten Resort",
+    "country": "US",
+    "region": "VA",
+    "locality": "Massanutten",
+    "website": "https://www.massresort.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/massanutten-resort",
+    "liftCount": 7,
+    "trailCount": 23,
+    "verticalFt": 1100,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "massif-du-sud",
+    "name": "Massif du Sud",
+    "aliases": [
+      "Station  touristique du Massif du Sud"
+    ],
+    "country": "CA",
+    "region": "QC",
+    "locality": "Saint-Philémon",
+    "website": "https://massifdusud.net/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/massif-du-sud",
+    "liftCount": 2,
+    "trailCount": 37,
+    "verticalFt": 1686,
+    "nightSkiing": false,
+    "terrainParks": true
   },
   {
     "id": "mayrhofen",
@@ -2447,6 +4646,20 @@
     "country": "AT",
     "locality": "Mayrhofen",
     "website": "https://www.mayrhofner-bergbahnen.com/"
+  },
+  {
+    "id": "mcintyre-ski-area",
+    "name": "McIntyre Ski Area",
+    "country": "US",
+    "region": "NH",
+    "locality": "Manchester",
+    "website": "https://www.mcintyreskiarea.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/mcintyre-ski-area",
+    "liftCount": 5,
+    "trailCount": 11,
+    "verticalFt": 200,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "megeve",
@@ -2485,7 +4698,46 @@
     "country": "US",
     "region": "VT",
     "locality": "Hancock",
-    "website": "https://www.middleburysnowbowl.com/"
+    "website": "https://www.middleburysnowbowl.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/middlebury-snowbowl",
+    "liftCount": 4,
+    "trailCount": 17,
+    "verticalFt": 1020,
+    "nightSkiing": true,
+    "terrainParks": false,
+    "additionalSources": [
+      "https://middleburysnowbowl.com/lift-tickets/"
+    ]
+  },
+  {
+    "id": "minocqua-winter-park",
+    "name": "Minocqua Winter Park",
+    "country": "US",
+    "region": "WI",
+    "locality": "Minocqua",
+    "skiing": "cross-country",
+    "website": "https://minocquawinterpark.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/minocqua-winter-park",
+    "trailCount": 30,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "mohawk-mountain",
+    "name": "Mohawk Mountain",
+    "aliases": [
+      "Mohawk Mountain Ski Area"
+    ],
+    "country": "US",
+    "region": "CT",
+    "locality": "Cornwall",
+    "website": "https://www.mohawkmtn.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/mohawk-mountain",
+    "liftCount": 8,
+    "trailCount": 26,
+    "verticalFt": 650,
+    "nightSkiing": true,
+    "terrainParks": false
   },
   {
     "id": "mona-yongpyong",
@@ -2522,6 +4774,64 @@
     "verticalFt": 1225
   },
   {
+    "id": "mont-edouard",
+    "name": "Mont Edouard",
+    "country": "CA",
+    "region": "QC",
+    "locality": "L'Anse-Saint-Jean",
+    "website": "https://www.montedouard.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/mont-edouard",
+    "liftCount": 3,
+    "trailCount": 44,
+    "verticalFt": 1480,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "mont-kanasuta",
+    "name": "Mont-Kanasuta",
+    "country": "CA",
+    "region": "QC",
+    "locality": "Rouyn-Noranda",
+    "website": "https://www.kanasuta.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/mont-kanasuta",
+    "liftCount": 2,
+    "trailCount": 22,
+    "verticalFt": 482,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "mont-rigaud",
+    "name": "Mont Rigaud",
+    "country": "CA",
+    "region": "QC",
+    "locality": "Rigaud",
+    "website": "https://ski.montrigaud.com/home",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/mont-rigaud",
+    "liftCount": 4,
+    "trailCount": 15,
+    "verticalFt": 394,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "mont-ripley-ski-area",
+    "name": "Mont Ripley Ski Area",
+    "country": "US",
+    "region": "MI",
+    "locality": "Hancock",
+    "website": "https://www.mtu.edu/mont-ripley/",
+    "statsUrl": "https://www.mtu.edu/mont-ripley/about/",
+    "reportUrl": "https://www.mtu.edu/mont-ripley/about/snow-report/",
+    "acres": 112,
+    "liftCount": 4,
+    "trailCount": 24,
+    "verticalFt": 440,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "mont-sainte-anne",
     "name": "Mont-Sainte-Anne",
     "aliases": [
@@ -2544,9 +4854,47 @@
     "locality": "Sutton",
     "website": "https://montsutton.com/en/",
     "statsUrl": "https://montsutton.com/en/technical-sheet/",
+    "reportUrl": "https://montsutton.com/en/conditions/",
     "acres": 230,
+    "liftCount": 10,
     "trailCount": 60,
-    "verticalFt": 1509
+    "verticalFt": 1509,
+    "nightSkiing": false,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://montsutton.com/avantages-aux-membres/"
+    ]
+  },
+  {
+    "id": "montage-mountain",
+    "name": "Montage Mountain",
+    "aliases": [
+      "Montage Mountain Ski Area"
+    ],
+    "country": "US",
+    "region": "PA",
+    "locality": "Scranton PA",
+    "website": "https://www.montagemountainresorts.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/montage-mountain",
+    "liftCount": 7,
+    "trailCount": 27,
+    "verticalFt": 1000,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "montana-snowbowl",
+    "name": "Montana Snowbowl",
+    "country": "US",
+    "region": "MT",
+    "locality": "Missoula",
+    "website": "https://www.montanasnowbowl.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/montana-snowbowl",
+    "liftCount": 6,
+    "trailCount": 68,
+    "verticalFt": 2600,
+    "nightSkiing": false,
+    "terrainParks": false
   },
   {
     "id": "monte-bondone",
@@ -2580,7 +4928,8 @@
     "id": "moose-mountain-ski-resort",
     "name": "Moose Mountain Ski Resort",
     "aliases": [
-      "Alaska"
+      "Alaska",
+      "Moose Mountain"
     ],
     "country": "US",
     "region": "AK",
@@ -2588,7 +4937,28 @@
     "website": "https://shredthemoose.com/",
     "statsUrl": "https://shredthemoose.com/",
     "acres": 750,
-    "verticalFt": 1300
+    "liftCount": 1,
+    "trailCount": 42,
+    "verticalFt": 1300,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "mount-baldy-ski-area",
+    "name": "Mount Baldy Ski Area",
+    "aliases": [
+      "Mount Baldy"
+    ],
+    "country": "CA",
+    "region": "ON",
+    "locality": "Thunder Bay",
+    "website": "https://www.skimountbaldy.ca",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/mount-baldy-ski-area",
+    "liftCount": 3,
+    "trailCount": 12,
+    "verticalFt": 476,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "mount-bohemia",
@@ -2610,6 +4980,61 @@
       "https://www.mtbohemia.com/tickets-passes/",
       "https://www.mtbohemia.com/directions/"
     ]
+  },
+  {
+    "id": "mount-cain",
+    "name": "Mount Cain",
+    "aliases": [
+      "Mount Cain Alpine Park"
+    ],
+    "country": "CA",
+    "region": "BC",
+    "locality": "Port McNeill",
+    "website": "https://www.mountcain.com/",
+    "statsUrl": "https://www.mountcain.com/mountain-stats/",
+    "reportUrl": "https://www.mountcain.com/weather/",
+    "liftCount": 3,
+    "trailCount": 21,
+    "baseFt": 3904,
+    "summitFt": 5315,
+    "verticalFt": 1411,
+    "nightSkiing": false,
+    "terrainParks": false,
+    "seasonWindow": "Early December to early April"
+  },
+  {
+    "id": "mount-kato",
+    "name": "Mount Kato",
+    "aliases": [
+      "Mount Kato Ski Area"
+    ],
+    "country": "US",
+    "region": "MN",
+    "locality": "Mankato",
+    "website": "https://mountkato.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/mount-kato",
+    "liftCount": 10,
+    "trailCount": 19,
+    "verticalFt": 240,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "mount-racey-ski-resort",
+    "name": "Mount Racey Ski Resort",
+    "aliases": [
+      "マウントレースイスキー場",
+      "Mount Racey"
+    ],
+    "country": "JP",
+    "locality": "Yubari",
+    "website": "https://yubari-resort.co.jp/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/mount-racey-ski-resort",
+    "liftCount": 4,
+    "trailCount": 18,
+    "verticalFt": 1326,
+    "nightSkiing": false,
+    "terrainParks": true
   },
   {
     "id": "mount-snow",
@@ -2637,14 +5062,58 @@
     "id": "mount-washington-alpine-resort",
     "name": "Mount Washington Alpine Resort",
     "aliases": [
-      "British Columbia"
+      "British Columbia",
+      "Mt. Washington"
     ],
     "country": "CA",
     "region": "BC",
     "locality": "Comox Valley",
+    "skiing": "both",
     "website": "https://www.mountwashington.ca",
     "statsUrl": "https://www.mountwashington.ca/play/alpine-skiing/",
-    "acres": 1700
+    "reportUrl": "https://www.mountwashington.ca/the-mountain/snow-report/",
+    "acres": 1700,
+    "liftCount": 11,
+    "trailCount": 60,
+    "trailCountQualifier": "lower-bound",
+    "verticalFt": 1657,
+    "nightSkiing": true,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://www.mountwashington.ca/the-mountain/about-us/",
+      "https://www.mountwashington.ca/purchase/gold-pass-perks-26-27/"
+    ]
+  },
+  {
+    "id": "mountain-high",
+    "name": "Mountain High",
+    "country": "US",
+    "region": "CA",
+    "locality": "Wrightwood",
+    "website": "https://www.mthigh.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/mountain-high",
+    "liftCount": 14,
+    "trailCount": 50,
+    "verticalFt": 1600,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "mt-abram",
+    "name": "Mt. Abram",
+    "aliases": [
+      "Mount Abram"
+    ],
+    "country": "US",
+    "region": "ME",
+    "locality": "Greenwood",
+    "website": "https://www.mtabram.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/mt-abram",
+    "liftCount": 4,
+    "trailCount": 43,
+    "verticalFt": 1050,
+    "nightSkiing": false,
+    "terrainParks": false
   },
   {
     "id": "mt-bachelor",
@@ -2703,6 +5172,37 @@
     "liftCount": 19
   },
   {
+    "id": "mt-eyak",
+    "name": "Mt Eyak",
+    "aliases": [
+      "Mount Eyak Ski Area"
+    ],
+    "country": "US",
+    "region": "AK",
+    "locality": "Cordova",
+    "website": "https://www.mteyak.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/mt-eyak",
+    "liftCount": 2,
+    "trailCount": 10,
+    "verticalFt": 1200,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "mt-holiday",
+    "name": "Mt. Holiday",
+    "country": "US",
+    "region": "MI",
+    "locality": "Traverse City",
+    "website": "https://mt-holiday.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/mt-holiday",
+    "liftCount": 4,
+    "trailCount": 12,
+    "verticalFt": 200,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "mt-hood-meadows",
     "name": "Mt. Hood Meadows",
     "aliases": [
@@ -2712,10 +5212,19 @@
     "country": "US",
     "region": "OR",
     "locality": "Mount Hood",
+    "skiing": "both",
     "website": "https://www.skihood.com/",
     "statsUrl": "https://cms.skihood.com/uploads/Trail_Map_20x17_2024_25_d5af51e683.pdf",
     "reportUrl": "https://cloudserv.skihood.com/",
-    "acres": 2150
+    "acres": 2150,
+    "liftCount": 11,
+    "trailCount": 142,
+    "verticalFt": 1939,
+    "nightSkiing": true,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://www.skihood.com/explore/indy-pass"
+    ]
   },
   {
     "id": "mt-hood-skibowl",
@@ -2758,6 +5267,20 @@
     "seasonWindow": "Jun 11 – Oct 10, 2027 (planned)"
   },
   {
+    "id": "mt-la-crosse",
+    "name": "Mt La Crosse",
+    "country": "US",
+    "region": "WI",
+    "locality": "La Crosse",
+    "website": "https://www.mtlacrosse.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/mt-la-crosse",
+    "liftCount": 4,
+    "trailCount": 20,
+    "verticalFt": 516,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "mt-norquay",
     "name": "Mt. Norquay",
     "aliases": [
@@ -2771,22 +5294,43 @@
     "website": "https://www.banffnorquay.com/"
   },
   {
+    "id": "mt-pisgah",
+    "name": "Mt. Pisgah",
+    "aliases": [
+      "Mount Pisgah Ski Center"
+    ],
+    "country": "US",
+    "region": "NY",
+    "locality": "Saranac Lake",
+    "website": "https://saranaclakeny.gov/mount-pisgah/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/mt-pisgah",
+    "liftCount": 1,
+    "trailCount": 7,
+    "verticalFt": 325,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "mt-shasta-ski-park",
     "name": "Mt. Shasta Ski Park",
     "aliases": [
-      "California"
+      "California",
+      "Mt. Shasta"
     ],
     "country": "US",
     "region": "CA",
     "locality": "Mount Shasta",
+    "skiing": "both",
     "website": "https://www.skipark.com/",
     "statsUrl": "https://www.skipark.com/winter/trail-map-stats",
+    "reportUrl": "https://www.skipark.com/winter/conditions",
     "acres": 635,
     "liftCount": 6,
     "trailCount": 38,
     "baseFt": 5500,
     "verticalFt": 2036,
-    "nightSkiing": true
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "mt-spokane-ski-snowboard-park",
@@ -2824,6 +5368,56 @@
     "seasonWindow": "Dec 19, 2026 – Apr 4, 2027 (planned)"
   },
   {
+    "id": "mt-van-hoevenberg",
+    "name": "Mt Van Hoevenberg",
+    "aliases": [
+      "Mount Van Hoevenberg"
+    ],
+    "country": "US",
+    "region": "NY",
+    "locality": "Lake Placid",
+    "skiing": "cross-country",
+    "website": "https://mtvanhoevenberg.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/mt-van-hoevenberg",
+    "reportUrl": "https://mtvanhoevenberg.com/daily-update/",
+    "trailCount": 28,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "muica-snow-resort",
+    "name": "Muica Snow Resort",
+    "aliases": [
+      "ムイカスノーリゾート"
+    ],
+    "country": "JP",
+    "locality": "Minamiuonuma",
+    "website": "https://www.muikamachi.com/ski/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/muica-snow-resort",
+    "liftCount": 4,
+    "trailCount": 12,
+    "verticalFt": 1312,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "murray-ridge-ski-area",
+    "name": "Murray Ridge Ski Area",
+    "aliases": [
+      "Murray Ridge"
+    ],
+    "country": "CA",
+    "region": "BC",
+    "locality": "Fort St. James",
+    "website": "https://www.murrayridge.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/murray-ridge-ski-area",
+    "liftCount": 2,
+    "trailCount": 23,
+    "verticalFt": 1675,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
     "id": "myoko-suginohara-ski-resort",
     "name": "Myoko Suginohara Ski Resort",
     "aliases": [
@@ -2855,6 +5449,23 @@
     "website": "https://www.skinakiska.com"
   },
   {
+    "id": "nayoro-piyashiri-ski-resort",
+    "name": "Nayoro Piyashiri Ski Resort",
+    "aliases": [
+      "ピヤシリスキー場",
+      "Nayoro Piyashiri"
+    ],
+    "country": "JP",
+    "locality": "Nayoro, Hokkaido",
+    "website": "https://www.nayoro.co.jp/piyashiri/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/nayoro-piyashiri-ski-resort",
+    "liftCount": 3,
+    "trailCount": 12,
+    "verticalFt": 1578,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
     "id": "nekoma-mountain",
     "name": "Nekoma Mountain",
     "aliases": [
@@ -2866,6 +5477,22 @@
     "country": "JP",
     "locality": "Bandai",
     "website": "https://www.nekoma.co.jp/"
+  },
+  {
+    "id": "nelson-nordic-ski-club",
+    "name": "Nelson Nordic Ski Club",
+    "aliases": [
+      "Nelson Nordic"
+    ],
+    "country": "CA",
+    "region": "BC",
+    "locality": "Nelson",
+    "skiing": "cross-country",
+    "website": "https://www.nelsonnordicski.ca/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/nelson-nordic-ski-club",
+    "trailCount": 15,
+    "nightSkiing": true,
+    "terrainParks": false
   },
   {
     "id": "nendaz",
@@ -2880,6 +5507,39 @@
     "locality": "Haute-Nendaz",
     "website": "https://www.nendaz.ch/en/Z13484/ski-area",
     "reportUrl": "https://verbier4vallees.ch/en/useful-information/live-information-winter"
+  },
+  {
+    "id": "nickel-plate-cross-country-ski-club",
+    "name": "Nickel Plate Cross Country Ski Club",
+    "aliases": [
+      "Nickel Plate Cross-Country Ski Trails Recreation Site"
+    ],
+    "country": "CA",
+    "region": "BC",
+    "locality": "Hedley",
+    "skiing": "cross-country",
+    "website": "https://nickelplatenordic.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/nickel-plate-cross-country-ski-club",
+    "trailCount": 28,
+    "verticalFt": 495,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "ninox-snow-park",
+    "name": "Ninox Snow Park",
+    "aliases": [
+      "ニノックススノーパーク"
+    ],
+    "country": "JP",
+    "locality": "Shibata, Niigata",
+    "website": "https://www.ninox.co.jp/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/ninox-snow-park",
+    "liftCount": 2,
+    "trailCount": 2,
+    "verticalFt": 709,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "niseko-united",
@@ -2911,6 +5571,59 @@
     "website": "https://www.nordicmountain.com/"
   },
   {
+    "id": "norefjell-ski-resort",
+    "name": "Norefjell Ski Resort",
+    "aliases": [
+      "Norefjell"
+    ],
+    "country": "NO",
+    "locality": "Noresund",
+    "website": "https://www.norefjell.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/norefjell-ski-resort",
+    "liftCount": 15,
+    "trailCount": 30,
+    "verticalFt": 3313,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "north-cascade-heli",
+    "name": "North Cascade Heli",
+    "country": "US",
+    "region": "WA",
+    "locality": "Mazama",
+    "skiing": "heli-skiing",
+    "website": "https://www.heli-ski.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/north-cascade-heli",
+    "trailCount": 100,
+    "verticalFt": 5000,
+    "nightSkiing": false,
+    "terrainParks": false,
+    "additionalSources": [
+      "https://heli-ski.com/contact/directions"
+    ]
+  },
+  {
+    "id": "northern-maine-community-trails",
+    "name": "Northern Maine Community Trails",
+    "aliases": [
+      "Nordic Heritage Outdoor Center",
+      "Nordic Heritage Center"
+    ],
+    "country": "US",
+    "region": "ME",
+    "locality": "Presque Isle",
+    "skiing": "cross-country",
+    "website": "https://www.nmctrails.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/northern-maine-community-trails",
+    "trailCount": 16,
+    "nightSkiing": true,
+    "terrainParks": false,
+    "additionalSources": [
+      "https://www.nmctrails.org/visit"
+    ]
+  },
+  {
     "id": "northstar-california-resort",
     "name": "Northstar California Resort",
     "aliases": [
@@ -2934,6 +5647,23 @@
     ]
   },
   {
+    "id": "norway-mountain",
+    "name": "Norway Mountain",
+    "aliases": [
+      "Norway Mountain Ski Resort"
+    ],
+    "country": "US",
+    "region": "MI",
+    "locality": "Norway",
+    "website": "https://www.norwaymountain.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/norway-mountain",
+    "liftCount": 6,
+    "trailCount": 17,
+    "verticalFt": 500,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
     "id": "nub-s-nob",
     "name": "Nub's Nob",
     "aliases": [
@@ -2944,7 +5674,90 @@
     "locality": "Harbor Springs",
     "website": "https://www.nubsnob.com/",
     "statsUrl": "https://www.nubsnob.com/who-we-are/",
-    "acres": 248
+    "acres": 248,
+    "liftCount": 10,
+    "trailCount": 53,
+    "verticalFt": 425,
+    "nightSkiing": true,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://shop.nubsnob.com/tickets"
+    ]
+  },
+  {
+    "id": "nutt-hill",
+    "name": "Nutt Hill",
+    "country": "US",
+    "region": "WI",
+    "locality": "Plymouth",
+    "website": "https://nutthillwinterpark.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/nutt-hill",
+    "liftCount": 1,
+    "trailCount": 2,
+    "verticalFt": 120,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "oak-hill-outdoor-center",
+    "name": "Oak Hill Outdoor Center",
+    "country": "US",
+    "region": "NH",
+    "locality": "Hanover",
+    "skiing": "cross-country",
+    "website": "https://www.oakhilloutdoorcenter.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/oak-hill-outdoor-center",
+    "trailCount": 12,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
+    "id": "ober-mountain",
+    "name": "Ober Mountain",
+    "country": "US",
+    "region": "TN",
+    "locality": "Gatlinburg",
+    "website": "https://obermountain.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/ober-mountain",
+    "liftCount": 3,
+    "trailCount": 10,
+    "verticalFt": 660,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "oberstdorf-kleinwalsertal-bergbahnen",
+    "name": "Oberstdorf Kleinwalsertal Bergbahnen",
+    "aliases": [
+      "Kleinwalsertal-Oberstdorf",
+      "Kleinwalsertal",
+      "Oberstdorf",
+      "Fellhorn",
+      "Kanzelwand",
+      "Ifen"
+    ],
+    "country": "AT",
+    "locality": "Riezlern",
+    "website": "https://www.kleinwalsertal.com",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/oberstdorf-kleinwalsertal-bergbahnen",
+    "liftCount": 48,
+    "trailCount": 70,
+    "verticalFt": 4632,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "obertauern",
+    "name": "Obertauern",
+    "country": "AT",
+    "locality": "Obertauern, Salzburg",
+    "website": "https://www.obertauern.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/obertauern",
+    "liftCount": 26,
+    "trailCount": 76,
+    "verticalFt": 2241,
+    "nightSkiing": true,
+    "terrainParks": false
   },
   {
     "id": "okemo-mountain-resort",
@@ -2957,6 +5770,72 @@
     "region": "VT",
     "locality": "Ludlow",
     "website": "https://www.okemo.com"
+  },
+  {
+    "id": "okunakayama-kogen",
+    "name": "Okunakayama Kogen",
+    "aliases": [
+      "奥中山高原スキー場",
+      "Okunakayamakogen Ski Area"
+    ],
+    "country": "JP",
+    "locality": "Morioka",
+    "website": "https://www.okunakayamakogen.jp/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/okunakayama-kogen",
+    "liftCount": 5,
+    "trailCount": 11,
+    "verticalFt": 1273,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "onikoube-ski-resort",
+    "name": "Onikoube Ski Resort",
+    "aliases": [
+      "オニコウベスキー場",
+      "Onikobe Ski Area"
+    ],
+    "country": "JP",
+    "locality": "Ōsaki, Miyagi",
+    "website": "https://www.onikoube.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/onikoube-ski-resort",
+    "liftCount": 7,
+    "trailCount": 9,
+    "verticalFt": 2345,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "oppdal",
+    "name": "Oppdal",
+    "aliases": [
+      "Oppdal Skisenter"
+    ],
+    "country": "NO",
+    "locality": "Oppdal",
+    "website": "https://www.oppdalskisenter.no/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/oppdal",
+    "liftCount": 14,
+    "trailCount": 35,
+    "verticalFt": 2444,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "orcieres-merlette-1850",
+    "name": "Orcières Merlette 1850",
+    "aliases": [
+      "Orcières Merlette"
+    ],
+    "country": "FR",
+    "locality": "Orcières",
+    "website": "https://orcieres.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/orcieres-merlette-1850",
+    "liftCount": 26,
+    "trailCount": 61,
+    "verticalFt": 2870,
+    "nightSkiing": false,
+    "terrainParks": true
   },
   {
     "id": "ordino-arcalis",
@@ -2995,6 +5874,22 @@
     "statsUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening",
     "reportUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening/orelle",
     "seasonWindow": "Nov 21, 2026 – May 2, 2027 (planned)"
+  },
+  {
+    "id": "osceola-tug-hill-xc-ski-center",
+    "name": "Osceola Tug Hill XC Ski Center",
+    "aliases": [
+      "Osceola Tug Hill XC Center"
+    ],
+    "country": "US",
+    "region": "NY",
+    "locality": "Camden",
+    "skiing": "cross-country",
+    "website": "https://www.uxcski.com",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/osceola-tug-hill-xc-ski-center",
+    "trailCount": 18,
+    "nightSkiing": false,
+    "terrainParks": false
   },
   {
     "id": "paganella-ski",
@@ -3043,6 +5938,23 @@
         "Black": 4
       }
     }
+  },
+  {
+    "id": "palcall-tsumagoi-resort",
+    "name": "Palcall Tsumagoi Resort",
+    "aliases": [
+      "パルコール嬬恋リゾート スキー & ホテル",
+      "Palcall Tsumagoi Resort Ski & Hotel"
+    ],
+    "country": "JP",
+    "locality": "Tsumagoi, Gunma",
+    "website": "https://tsumagoiskiresort.life/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/palcall-tsumagoi-resort",
+    "liftCount": 5,
+    "trailCount": 22,
+    "verticalFt": 2395,
+    "nightSkiing": false,
+    "terrainParks": true
   },
   {
     "id": "palisades-tahoe",
@@ -3132,6 +6044,23 @@
     ]
   },
   {
+    "id": "pass-powderkeg",
+    "name": "Pass Powderkeg",
+    "aliases": [
+      "Pass Powderkeg ski"
+    ],
+    "country": "CA",
+    "region": "AB",
+    "locality": "Crowsnest Pass",
+    "website": "https://www.passpowderkeg.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/pass-powderkeg",
+    "liftCount": 3,
+    "trailCount": 27,
+    "verticalFt": 985,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "pats-peak",
     "name": "Pats Peak",
     "aliases": [
@@ -3147,7 +6076,78 @@
     "baseFt": 690,
     "summitFt": 1460,
     "verticalFt": 770,
-    "nightSkiing": true
+    "nightSkiing": true,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://www.patspeak.com/plan-your-visit/planning-tools/indy-pass/"
+    ]
+  },
+  {
+    "id": "paul-bunyan-ski-hill",
+    "name": "Paul Bunyan Ski Hill",
+    "aliases": [
+      "Paul Bunyan"
+    ],
+    "country": "US",
+    "region": "WI",
+    "locality": "Lakewood",
+    "website": "https://skipaulbunyan.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/paul-bunyan-ski-hill",
+    "liftCount": 6,
+    "trailCount": 14,
+    "verticalFt": 150,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
+    "id": "paul-smiths-college-visitor-interpretive-center",
+    "name": "Paul Smith's College Visitor Interpretive Center",
+    "aliases": [
+      "Paul Smith VIC"
+    ],
+    "country": "US",
+    "region": "NY",
+    "locality": "Paul Smiths",
+    "skiing": "cross-country",
+    "website": "https://www.paulsmithsvic.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/paul-smiths-college-visitor-interpretive-center",
+    "trailCount": 16,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "pebble-creek-ski-area",
+    "name": "Pebble Creek Ski Area",
+    "aliases": [
+      "Pebble Creek"
+    ],
+    "country": "US",
+    "region": "ID",
+    "locality": "Inkom",
+    "website": "https://www.pebblecreekskiarea.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/pebble-creek-ski-area",
+    "liftCount": 4,
+    "trailCount": 51,
+    "verticalFt": 2200,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "peek-n-peak",
+    "name": "Peek ‘n Peak",
+    "aliases": [
+      "Peek'n Peak Ski Area"
+    ],
+    "country": "US",
+    "region": "NY",
+    "locality": "Clymer",
+    "website": "https://pknpk.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/peek-n-peak",
+    "liftCount": 9,
+    "trailCount": 27,
+    "verticalFt": 400,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "pejo-3000",
@@ -3191,6 +6191,36 @@
     }
   },
   {
+    "id": "petzen",
+    "name": "Petzen",
+    "aliases": [
+      "Skigebiet Petzen"
+    ],
+    "country": "AT",
+    "locality": "Carinthia",
+    "website": "https://www.petzen.net/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/petzen",
+    "liftCount": 7,
+    "trailCount": 21,
+    "verticalFt": 4295,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "phoenix-mountain",
+    "name": "Phoenix Mountain",
+    "country": "CA",
+    "region": "BC",
+    "locality": "Grand Forks",
+    "website": "https://skiphoenix.ca/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/phoenix-mountain",
+    "liftCount": 2,
+    "trailCount": 22,
+    "verticalFt": 705,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "pico-mountain",
     "name": "Pico Mountain",
     "aliases": [
@@ -3228,11 +6258,36 @@
     "name": "Pila",
     "aliases": [
       "Valle d’Aosta",
-      "Aosta Valley"
+      "Aosta Valley",
+      "Pila ski"
     ],
     "country": "IT",
     "locality": "Gressan",
-    "website": "https://www.pila.it/"
+    "website": "https://www.pila.it/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/pila",
+    "reportUrl": "https://pila.it/en/real-time/slopes-and-lifts-opening/",
+    "liftCount": 14,
+    "trailCount": 30,
+    "verticalFt": 3097,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "pine-mountain",
+    "name": "Pine Mountain",
+    "aliases": [
+      "Pine Mountain Ski Hill"
+    ],
+    "country": "US",
+    "region": "MI",
+    "locality": "Iron Mountain",
+    "website": "https://www.pinemountainresort.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/pine-mountain",
+    "liftCount": 4,
+    "trailCount": 35,
+    "verticalFt": 364,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "pinzolo",
@@ -3248,6 +6303,80 @@
     "reportUrl": "https://www.ski.it/en/info-live/lift-status"
   },
   {
+    "id": "pippu-ski-resort",
+    "name": "Pippu Ski Resort",
+    "aliases": [
+      "ぴっぷスキー場",
+      "Pippu Ski Slopes",
+      "ぴっぷすきーじょう",
+      "Pippu SukĪjō"
+    ],
+    "country": "JP",
+    "locality": "Asahikawa",
+    "website": "https://www.town.pippu.hokkaido.jp/ski/top.html",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/pippu-ski-resort",
+    "liftCount": 3,
+    "trailCount": 9,
+    "verticalFt": 1053,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "pitztal-glacier",
+    "name": "Pitztal Glacier",
+    "aliases": [
+      "Pitztaler Gletscher"
+    ],
+    "country": "AT",
+    "locality": "Mittelberg",
+    "website": "https://www.pitztaler-gletscher.at/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/pitztal-glacier",
+    "liftCount": 13,
+    "trailCount": 28,
+    "verticalFt": 8498,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "pizol",
+    "name": "Pizol",
+    "country": "CH",
+    "locality": "Bad Ragaz",
+    "website": "https://pizol.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/pizol",
+    "liftCount": 12,
+    "trailCount": 36,
+    "verticalFt": 7726,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "plain-valley-ski-trails",
+    "name": "Plain Valley Ski Trails",
+    "country": "US",
+    "region": "WA",
+    "locality": "Leavenworth",
+    "skiing": "cross-country",
+    "website": "https://www.skiplain.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/plain-valley-ski-trails",
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "pomerelle-mountain-resort",
+    "name": "Pomerelle Mountain Resort",
+    "country": "US",
+    "region": "ID",
+    "locality": "Burley",
+    "website": "https://www.pomerelle-mtn.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/pomerelle-mountain-resort",
+    "liftCount": 3,
+    "trailCount": 22,
+    "verticalFt": 998,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "pontedilegno-tonale",
     "name": "Pontedilegno-Tonale",
     "aliases": [
@@ -3259,6 +6388,69 @@
     "country": "IT",
     "locality": "Passo del Tonale",
     "website": "https://www.pontedilegnotonale.com/"
+  },
+  {
+    "id": "portes-du-soleil",
+    "name": "Portes du Soleil",
+    "aliases": [
+      "Les Portes du Soleil",
+      "France",
+      "Switzerland",
+      "Avoriaz",
+      "Morzine",
+      "Les Gets",
+      "Châtel",
+      "Champéry",
+      "Les Crosets",
+      "Morgins",
+      "La Chapelle d’Abondance",
+      "Abondance",
+      "Montriond",
+      "Saint-Jean-d’Aulps",
+      "Torgon",
+      "Val-d’Illiez"
+    ],
+    "country": "FR",
+    "locality": "French–Swiss Alps",
+    "website": "https://www.portesdusoleil.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/portes-du-soleil",
+    "liftCount": 208,
+    "trailCount": 307,
+    "verticalFt": 5118,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "powder-ridge",
+    "name": "Powder Ridge",
+    "country": "US",
+    "region": "MN",
+    "locality": "Kimball",
+    "website": "https://powderridge.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/powder-ridge",
+    "liftCount": 6,
+    "trailCount": 13,
+    "verticalFt": 300,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "powder-ridge-connecticut",
+    "name": "Powder Ridge Mountain Park (Connecticut)",
+    "aliases": [
+      "Powder Ridge",
+      "Powder Ridge Ski Area"
+    ],
+    "country": "US",
+    "region": "CT",
+    "locality": "Middlefield",
+    "website": "https://powderridgepark.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/powder-ridge-0",
+    "liftCount": 8,
+    "trailCount": 17,
+    "verticalFt": 550,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "powderhorn-mountain-resort",
@@ -3274,7 +6466,11 @@
     "statsUrl": "https://www.powderhorn.com/tickets-4-packs/",
     "reportUrl": "https://www.powderhorn.com/conditions/",
     "acres": 1600,
-    "verticalFt": 1650
+    "liftCount": 5,
+    "trailCount": 40,
+    "verticalFt": 1650,
+    "nightSkiing": false,
+    "terrainParks": true
   },
   {
     "id": "purgatory-resort",
@@ -3290,15 +6486,100 @@
     "acres": 1635
   },
   {
+    "id": "pyha-ski-resort",
+    "name": "Pyhä Ski Resort",
+    "country": "FI",
+    "locality": "Pelkosenniemi",
+    "website": "https://pyha.fi/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/pyha-ski-resort",
+    "reportUrl": "https://www.pyha.fi/en/skiresort/slopes",
+    "liftCount": 9,
+    "trailCount": 15,
+    "verticalFt": 768,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "quarry-road-trails",
+    "name": "Quarry Road Trails",
+    "country": "US",
+    "region": "ME",
+    "locality": "Waterville",
+    "skiing": "cross-country",
+    "website": "https://quarryroad.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/quarry-road-trails",
+    "trailCount": 22,
+    "verticalFt": 270,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
     "id": "ragged-mountain-resort",
     "name": "Ragged Mountain Resort",
     "aliases": [
-      "New Hampshire"
+      "New Hampshire",
+      "Ragged Mountain"
     ],
     "country": "US",
     "region": "NH",
     "locality": "Danbury",
-    "website": "https://www.raggedmountainresort.com/"
+    "website": "https://www.raggedmountainresort.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/ragged-mountain",
+    "liftCount": 5,
+    "trailCount": 57,
+    "verticalFt": 1250,
+    "nightSkiing": false,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://www.raggedmountainresort.com/all-tickets/"
+    ]
+  },
+  {
+    "id": "rangeley-lakes-trail-center",
+    "name": "Rangeley Lakes Trail Center",
+    "aliases": [
+      "Rangeley Lakes Trails Center"
+    ],
+    "country": "US",
+    "region": "ME",
+    "locality": "Rangeley",
+    "skiing": "cross-country",
+    "website": "https://rangeleylakestrailscenter.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/rangeley-lakes-trail-center",
+    "trailCount": 35,
+    "verticalFt": 400,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "rauriser-hochalmbahnen",
+    "name": "Rauriser-Hochalmbahnen",
+    "aliases": [
+      "Raurisertal"
+    ],
+    "country": "AT",
+    "locality": "Rauris",
+    "website": "https://www.hochalmbahnen.at/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/rauriser-hochalmbahnen",
+    "liftCount": 10,
+    "trailCount": 14,
+    "verticalFt": 4019,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "red-lodge-mountain",
+    "name": "Red Lodge Mountain",
+    "country": "US",
+    "region": "MT",
+    "locality": "Red Lodge",
+    "website": "https://www.redlodgemountain.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/red-lodge-mountain",
+    "liftCount": 8,
+    "trailCount": 70,
+    "verticalFt": 2400,
+    "nightSkiing": false,
+    "terrainParks": true
   },
   {
     "id": "red-mountain-resort",
@@ -3356,6 +6637,35 @@
     ]
   },
   {
+    "id": "rikert-nordic-center",
+    "name": "Rikert Nordic Center",
+    "aliases": [
+      "Rikert Outdoor Center"
+    ],
+    "country": "US",
+    "region": "VT",
+    "locality": "Ripton",
+    "skiing": "cross-country",
+    "website": "https://www.rikertoutdoor.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/rikert-nordic-center",
+    "trailCount": 35,
+    "verticalFt": 350,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "riksgransen",
+    "name": "Riksgränsen",
+    "country": "SE",
+    "locality": "Riksgränsen",
+    "website": "https://riksgransen.se/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/riksgransen",
+    "liftCount": 6,
+    "verticalFt": 1276,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
     "id": "rio-pusteria-bressanone",
     "name": "Rio Pusteria / Bressanone",
     "aliases": [
@@ -3384,6 +6694,24 @@
     "region": "PA",
     "locality": "Lewisberry",
     "website": "https://www.roundtopmountainresort.com/"
+  },
+  {
+    "id": "ruka-ski-resort",
+    "name": "Ruka Ski Resort",
+    "aliases": [
+      "Rukatunturi",
+      "Ruka"
+    ],
+    "country": "FI",
+    "locality": "Kuusamo",
+    "website": "https://www.ruka.fi",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/ruka-ski-resort",
+    "reportUrl": "https://www.ruka.fi/en/rinteet",
+    "liftCount": 23,
+    "trailCount": 42,
+    "verticalFt": 659,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "rusutsu-resort",
@@ -3416,8 +6744,14 @@
     "statsUrl": "https://www.saddlebackmaine.com/the-stats/",
     "acres": 600,
     "acresQualifier": "lower-bound",
+    "liftCount": 6,
     "trailCount": 68,
-    "verticalFt": 2000
+    "verticalFt": 2000,
+    "nightSkiing": false,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://www.saddlebackmaine.com/lift-tickets/"
+    ]
   },
   {
     "id": "saint-martin-de-belleville",
@@ -3464,6 +6798,23 @@
     "acres": 300
   },
   {
+    "id": "saskadena-six-ski-area",
+    "name": "Saskadena Six Ski Area",
+    "aliases": [
+      "Saskadena Six"
+    ],
+    "country": "US",
+    "region": "VT",
+    "locality": "Woodstock",
+    "website": "https://www.saskadenasix.com",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/saskadena-six-ski-area",
+    "liftCount": 3,
+    "trailCount": 28,
+    "verticalFt": 650,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
     "id": "sasquatch-mountain-resort",
     "name": "Sasquatch Mountain Resort",
     "aliases": [
@@ -3472,7 +6823,16 @@
     "country": "CA",
     "region": "BC",
     "locality": "Agassiz",
-    "website": "https://sasquatchmountain.ca/"
+    "website": "https://sasquatchmountain.ca/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/sasquatch-mountain-resort",
+    "liftCount": 4,
+    "trailCount": 36,
+    "verticalFt": 1200,
+    "nightSkiing": true,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://sasquatchmountain.ca/indy-pass/"
+    ]
   },
   {
     "id": "schmittenhoehe",
@@ -3498,7 +6858,16 @@
     "country": "US",
     "region": "MI",
     "locality": "Bellaire",
-    "website": "https://www.shantycreek.com/"
+    "website": "https://www.shantycreek.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/schuss-mountain-at-shanty-creek",
+    "liftCount": 7,
+    "trailCount": 42,
+    "verticalFt": 450,
+    "nightSkiing": true,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://www.shantycreek.com/ski/lift-tickets-season-passes/indy-pass/"
+    ]
   },
   {
     "id": "schweitzer-mountain-resort",
@@ -3510,6 +6879,20 @@
     "region": "ID",
     "locality": "Sandpoint",
     "website": "https://www.schweitzer.com/"
+  },
+  {
+    "id": "scotts-cobble-nordic-center",
+    "name": "Scotts Cobble Nordic Center",
+    "country": "US",
+    "region": "NY",
+    "locality": "Lake Placid",
+    "skiing": "cross-country",
+    "website": "https://www.scottscobblenordic.com/home",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/scotts-cobble-nordic-center",
+    "reportUrl": "https://www.scottscobblenordic.com/home",
+    "trailCount": 10,
+    "nightSkiing": true,
+    "terrainParks": false
   },
   {
     "id": "see",
@@ -3535,6 +6918,37 @@
     "website": "https://www.7springs.com/"
   },
   {
+    "id": "shames-mountain",
+    "name": "Shames Mountain",
+    "country": "CA",
+    "region": "BC",
+    "locality": "Terrace",
+    "website": "https://mymountaincoop.ca/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/shames-mountain",
+    "liftCount": 3,
+    "trailCount": 30,
+    "verticalFt": 1600,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "shawnee-mountain-ski-area",
+    "name": "Shawnee Mountain Ski Area",
+    "aliases": [
+      "Shawnee Mountain"
+    ],
+    "country": "US",
+    "region": "PA",
+    "locality": "East Stroudsburg",
+    "website": "https://www.shawneemt.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/shawnee-mountain-ski-area",
+    "liftCount": 11,
+    "trailCount": 23,
+    "verticalFt": 700,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "shiga-kogen-mountain-resort",
     "name": "Shiga Kogen Mountain Resort",
     "aliases": [
@@ -3553,6 +6967,40 @@
     "nightSkiing": true
   },
   {
+    "id": "shimokura",
+    "name": "Shimokura",
+    "aliases": [
+      "八幡平リゾート",
+      "Hachimantai Resort Shimokura Ski area"
+    ],
+    "country": "JP",
+    "locality": "Hachimantai",
+    "website": "https://www.hachimantai.co.jp",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/shimokura",
+    "liftCount": 3,
+    "trailCount": 7,
+    "verticalFt": 1804,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
+    "id": "showdown-montana",
+    "name": "Showdown Montana",
+    "aliases": [
+      "Showdown"
+    ],
+    "country": "US",
+    "region": "MT",
+    "locality": "Neihart",
+    "website": "https://www.showdownmontana.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/showdown-montana",
+    "liftCount": 4,
+    "trailCount": 40,
+    "verticalFt": 1400,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "sierra-at-tahoe-ski-resort",
     "name": "Sierra-at-Tahoe Ski Resort",
     "aliases": [
@@ -3567,15 +7015,21 @@
     "id": "silver-mountain-resort",
     "name": "Silver Mountain Resort",
     "aliases": [
-      "Idaho"
+      "Idaho",
+      "Silver Mountain"
     ],
     "country": "US",
     "region": "ID",
     "locality": "Kellogg",
     "website": "https://silvermt.com/",
     "statsUrl": "https://silvermt.com/",
+    "reportUrl": "https://silvermt.com/snow-report/",
     "acres": 1600,
-    "trailCount": 77
+    "liftCount": 7,
+    "trailCount": 77,
+    "verticalFt": 2200,
+    "nightSkiing": false,
+    "terrainParks": true
   },
   {
     "id": "silverstar-mountain-resort",
@@ -3639,6 +7093,34 @@
     "trailCount": 44
   },
   {
+    "id": "skaneateles-ski-club",
+    "name": "Skaneateles Ski Club",
+    "country": "US",
+    "region": "NY",
+    "locality": "Syracuse",
+    "website": "https://www.skiskan.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/skaneateles-ski-club",
+    "liftCount": 3,
+    "trailCount": 7,
+    "verticalFt": 330,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
+    "id": "skeetawk",
+    "name": "Skeetawk",
+    "country": "US",
+    "region": "AK",
+    "locality": "Palmer",
+    "website": "https://skeetawk.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/skeetawk",
+    "liftCount": 2,
+    "trailCount": 12,
+    "verticalFt": 1236,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "ski-apache",
     "name": "Ski Apache",
     "aliases": [
@@ -3653,6 +7135,23 @@
     "acres": 750
   },
   {
+    "id": "ski-big-bear",
+    "name": "Ski Big Bear",
+    "aliases": [
+      "Big Bear Ski Resort"
+    ],
+    "country": "US",
+    "region": "PA",
+    "locality": "Lackawaxen",
+    "website": "https://www.ski-bigbear.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/ski-big-bear",
+    "liftCount": 7,
+    "trailCount": 18,
+    "verticalFt": 650,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "ski-butternut",
     "name": "Ski Butternut",
     "aliases": [
@@ -3662,6 +7161,37 @@
     "region": "MA",
     "locality": "Great Barrington",
     "website": "https://skibutternut.com/"
+  },
+  {
+    "id": "ski-land",
+    "name": "Ski Land",
+    "aliases": [
+      "Ski Land (Mt Aurora)"
+    ],
+    "country": "US",
+    "region": "AK",
+    "locality": "Fairbanks",
+    "website": "https://skilandfairbanks.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/ski-land",
+    "liftCount": 2,
+    "trailCount": 58,
+    "verticalFt": 1027,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "ski-saint-bruno",
+    "name": "Ski Saint-Bruno",
+    "country": "CA",
+    "region": "QC",
+    "locality": "St-Bruno",
+    "website": "https://skisaintbruno.ca/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/ski-saint-bruno",
+    "liftCount": 9,
+    "trailCount": 18,
+    "verticalFt": 427,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "ski-santa-fe",
@@ -3678,6 +7208,40 @@
     "acres": 660
   },
   {
+    "id": "ski-sawmill",
+    "name": "Ski Sawmill",
+    "aliases": [
+      "Ski Sawmill Family Resort"
+    ],
+    "country": "US",
+    "region": "PA",
+    "locality": "Morris",
+    "website": "https://skisawmill.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/ski-sawmill",
+    "liftCount": 5,
+    "trailCount": 13,
+    "verticalFt": 515,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "ski-vallee-bleue",
+    "name": "Ski Vallée Bleue",
+    "aliases": [
+      "Vallée Bleue"
+    ],
+    "country": "CA",
+    "region": "QC",
+    "locality": "Val-David",
+    "website": "https://www.valleebleue.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/ski-vallee-bleue",
+    "liftCount": 3,
+    "trailCount": 52,
+    "verticalFt": 350,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
     "id": "skicircus-saalbach",
     "name": "Skicircus Saalbach Hinterglemm Leogang Fieberbrunn",
     "aliases": [
@@ -3690,6 +7254,68 @@
     "reportUrl": "https://www.saalbach.com/en/live-info/lifts-and-pistes"
   },
   {
+    "id": "skigebiet-heiligenblut-grossglockner",
+    "name": "Skigebiet Heiligenblut-Großglockner",
+    "aliases": [
+      "Großglockner Heiligenblut"
+    ],
+    "country": "AT",
+    "locality": "Carinthia",
+    "website": "https://www.heiligenblut.at/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/skigebiet-heiligenblut-grossglockner",
+    "liftCount": 11,
+    "trailCount": 13,
+    "verticalFt": 4274,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "skiwelt",
+    "name": "SkiWelt",
+    "aliases": [
+      "SkiWelt Wilder Kaiser - Brixental"
+    ],
+    "country": "AT",
+    "locality": "Söll",
+    "website": "https://www.skiwelt.at/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/skiwelt",
+    "liftCount": 83,
+    "trailCount": 279,
+    "verticalFt": 4098,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "sleepy-hollow",
+    "name": "Sleepy Hollow",
+    "aliases": [
+      "Sleepy Hollow Inn"
+    ],
+    "country": "US",
+    "region": "VT",
+    "locality": "Huntington",
+    "skiing": "cross-country",
+    "website": "https://www.skisleepyhollow.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/sleepy-hollow",
+    "trailCount": 30,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
+    "id": "smokey-mountain-ski-club",
+    "name": "Smokey Mountain Ski Club",
+    "country": "CA",
+    "region": "NL",
+    "locality": "Labrador City",
+    "website": "https://skismokey.ca/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/smokey-mountain-ski-club",
+    "liftCount": 4,
+    "trailCount": 23,
+    "verticalFt": 960,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "smugglers-notch-resort",
     "name": "Smugglers' Notch Resort",
     "aliases": [
@@ -3698,7 +7324,17 @@
     "country": "US",
     "region": "VT",
     "locality": "Jeffersonville",
-    "website": "https://www.smuggs.com/"
+    "website": "https://www.smuggs.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/smugglers-notch-resort",
+    "reportUrl": "https://www.smuggs.com/conditions/winter-report/",
+    "liftCount": 8,
+    "trailCount": 78,
+    "verticalFt": 2610,
+    "nightSkiing": false,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://vermontbiz.com/news/2026/september/08/smugglers-notch-resort-joins-indy-pass"
+    ]
   },
   {
     "id": "snow-creek",
@@ -3715,7 +7351,8 @@
     "id": "snow-king-mountain",
     "name": "Snow King Mountain",
     "aliases": [
-      "Wyoming"
+      "Wyoming",
+      "Snow King Mountain Resort"
     ],
     "country": "US",
     "region": "WY",
@@ -3723,8 +7360,43 @@
     "website": "https://snowkingmountain.com/",
     "statsUrl": "https://snowkingmountain.com/mountain/terrain-statistics/",
     "acres": 500,
+    "liftCount": 8,
+    "trailCount": 46,
     "summitFt": 7808,
-    "verticalFt": 1571
+    "verticalFt": 1571,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "snow-resort-the-cupid-of-romance",
+    "name": "Snow Resort The Cupid of Romance",
+    "aliases": [
+      "スノーリゾート ロマンスの神様",
+      "The Cupid of Romance"
+    ],
+    "country": "JP",
+    "locality": "Kijimadaira, Nagano",
+    "website": "https://iiyama-makinoiri.snowpark.jp/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/snow-resort-the-cupid-of-romance",
+    "liftCount": 6,
+    "trailCount": 10,
+    "verticalFt": 2505,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "snow-ridge",
+    "name": "Snow Ridge",
+    "country": "US",
+    "region": "NY",
+    "locality": "Turin",
+    "website": "https://snowridge.com",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/snow-ridge",
+    "liftCount": 5,
+    "trailCount": 33,
+    "verticalFt": 500,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "snow-summit",
@@ -3831,6 +7503,27 @@
     "website": "https://www.snowshoemtn.com/"
   },
   {
+    "id": "snowstar",
+    "name": "Snowstar",
+    "aliases": [
+      "Ski Snowstar"
+    ],
+    "country": "US",
+    "region": "IL",
+    "locality": "Andalusia",
+    "website": "https://www.skisnowstar.com/",
+    "statsUrl": "https://www.skisnowstar.com/",
+    "reportUrl": "https://skisnowstar.com/weather.html",
+    "liftCount": 6,
+    "trailCount": 15,
+    "verticalFt": 262,
+    "nightSkiing": true,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://www.indyskipass.com/our-resorts/snowstar"
+    ]
+  },
+  {
     "id": "snowy-range-ski-area",
     "name": "Snowy Range Ski Area",
     "aliases": [
@@ -3869,12 +7562,22 @@
     "id": "soldier-mountain-ski-area",
     "name": "Soldier Mountain Ski Area",
     "aliases": [
-      "Idaho"
+      "Idaho",
+      "Soldier Mountain"
     ],
     "country": "US",
     "region": "ID",
     "locality": "Fairfield",
-    "website": "https://soldiermountain.com"
+    "website": "https://soldiermountain.com",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/soldier-mountain",
+    "liftCount": 3,
+    "trailCount": 35,
+    "verticalFt": 1421,
+    "nightSkiing": false,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://soldiermountain.com/restrictions-policies/"
+    ]
   },
   {
     "id": "solitude-mountain-resort",
@@ -3886,6 +7589,20 @@
     "region": "UT",
     "locality": "Solitude",
     "website": "https://solitudemountain.com/"
+  },
+  {
+    "id": "sovereign-lake-nordic-club",
+    "name": "Sovereign Lake Nordic Club",
+    "country": "CA",
+    "region": "BC",
+    "locality": "Vernon",
+    "skiing": "cross-country",
+    "website": "https://www.sovereignlake.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/sovereign-lake-nordic-club",
+    "trailCount": 30,
+    "verticalFt": 560,
+    "nightSkiing": true,
+    "terrainParks": false
   },
   {
     "id": "spieljoch",
@@ -3907,7 +7624,35 @@
     "country": "US",
     "region": "MN",
     "locality": "Duluth",
-    "website": "https://spiritmt.com/winter"
+    "skiing": "both",
+    "website": "https://spiritmt.com/winter",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/spirit-mountain",
+    "reportUrl": "https://spiritmt.com/winter/snow-report/",
+    "liftCount": 7,
+    "trailCount": 22,
+    "verticalFt": 700,
+    "nightSkiing": true,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://spiritmt.com/winter/downhill/"
+    ]
+  },
+  {
+    "id": "spring-mountain-adventures",
+    "name": "Spring Mountain Adventures",
+    "aliases": [
+      "Spring Mountain Ski Area"
+    ],
+    "country": "US",
+    "region": "PA",
+    "locality": "Schwenksville",
+    "website": "https://springmountainadventures.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/spring-mountain-adventures",
+    "liftCount": 6,
+    "trailCount": 9,
+    "verticalFt": 450,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "st-anton-am-arlberg",
@@ -3936,6 +7681,19 @@
     "reportUrl": "https://www.skiarlberg.at/en/live-info"
   },
   {
+    "id": "st-johann-in-tirol",
+    "name": "St Johann in Tirol",
+    "country": "AT",
+    "locality": "St. Johann in Tirol",
+    "website": "https://www.bergbahnen-stjohann.at/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/st-johann-in-tirol",
+    "liftCount": 11,
+    "trailCount": 19,
+    "verticalFt": 3100,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
     "id": "station-touristique-stoneham",
     "name": "Station touristique Stoneham",
     "aliases": [
@@ -3957,6 +7715,37 @@
     "region": "CO",
     "locality": "Steamboat Springs",
     "website": "https://www.steamboat.com/"
+  },
+  {
+    "id": "steamboat-ski-touring-center",
+    "name": "Steamboat Ski Touring Center",
+    "country": "US",
+    "region": "CO",
+    "locality": "Steamboat Springs",
+    "skiing": "cross-country",
+    "website": "https://nordicski.net/steamboat-ski-touring-center/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/steamboat-ski-touring-center",
+    "reportUrl": "https://nordicski.net/steamboat-ski-touring-center/",
+    "trailCount": 7,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "steinplatte",
+    "name": "Steinplatte",
+    "aliases": [
+      "Skigebiet Steinplatte Winklmoosalm",
+      "Winklmoosalm",
+      "Waidring"
+    ],
+    "country": "AT",
+    "locality": "Waidring",
+    "website": "https://www.steinplatte.tirol/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/steinplatte",
+    "liftCount": 16,
+    "verticalFt": 3674,
+    "nightSkiing": false,
+    "terrainParks": true
   },
   {
     "id": "stevens-pass",
@@ -3990,6 +7779,38 @@
     ]
   },
   {
+    "id": "stoke-mountain",
+    "name": "Stoke Mountain",
+    "country": "US",
+    "region": "WA",
+    "locality": "Tukwila",
+    "skiing": "indoor",
+    "website": "https://www.stokemountain.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/stoke-mountain",
+    "liftCount": 1,
+    "trailCount": 15,
+    "verticalFt": 24,
+    "nightSkiing": true,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://www.stokemountain.com/faq"
+    ]
+  },
+  {
+    "id": "stoten-i-salen",
+    "name": "Stöten i Sälen",
+    "country": "SE",
+    "locality": "Sälen",
+    "website": "https://www.stoten.se/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/stoten-i-salen",
+    "reportUrl": "https://www.stoten.se/en/slopes-weather/",
+    "liftCount": 23,
+    "trailCount": 53,
+    "verticalFt": 1329,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
     "id": "stowe",
     "name": "Stowe Mountain Resort",
     "aliases": [
@@ -4019,6 +7840,22 @@
     "additionalSources": [
       "https://www.stowe.com/explore-the-resort/about-the-resort/guest-services"
     ]
+  },
+  {
+    "id": "stranda-ski-resort",
+    "name": "Stranda Ski Resort",
+    "aliases": [
+      "Strandafjellet"
+    ],
+    "country": "NO",
+    "locality": "Stranda",
+    "website": "https://strandafjellet.no/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/stranda-ski-resort",
+    "liftCount": 7,
+    "trailCount": 20,
+    "verticalFt": 2296,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "stratton-mountain-resort",
@@ -4153,6 +7990,20 @@
     "website": "https://www.sunvalley.com/"
   },
   {
+    "id": "sunburst-ski-area",
+    "name": "Sunburst Ski Area",
+    "country": "US",
+    "region": "WI",
+    "locality": "Kewaskum",
+    "website": "https://skisunburst.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/sunburst-ski-area",
+    "liftCount": 9,
+    "trailCount": 11,
+    "verticalFt": 196,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "sunday-river",
     "name": "Sunday River",
     "aliases": [
@@ -4162,6 +8013,54 @@
     "region": "ME",
     "locality": "Newry",
     "website": "https://www.sundayriver.com/"
+  },
+  {
+    "id": "sundown-mountain",
+    "name": "Sundown Mountain",
+    "aliases": [
+      "Sundown Mountain Resort"
+    ],
+    "country": "US",
+    "region": "IA",
+    "locality": "Dubuque",
+    "website": "https://sundownmtn.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/sundown-mountain",
+    "liftCount": 6,
+    "trailCount": 21,
+    "verticalFt": 475,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "sunlight-mountain-resort",
+    "name": "Sunlight Mountain Resort",
+    "country": "US",
+    "region": "CO",
+    "locality": "Glenwood Springs",
+    "website": "https://sunlightmtn.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/sunlight-mountain-resort",
+    "liftCount": 3,
+    "trailCount": 72,
+    "verticalFt": 2010,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "swain-resort",
+    "name": "Swain Resort",
+    "aliases": [
+      "Swain Ski & Snowboard Resort"
+    ],
+    "country": "US",
+    "region": "NY",
+    "locality": "Swain",
+    "website": "https://www.swain.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/swain-resort",
+    "liftCount": 5,
+    "trailCount": 35,
+    "verticalFt": 650,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "tahoe-donner-downhill-ski-resort",
@@ -4178,10 +8077,28 @@
     "acres": 120
   },
   {
+    "id": "takasu-snow-park",
+    "name": "Takasu Snow Park",
+    "aliases": [
+      "高鷲スノーパーク"
+    ],
+    "country": "JP",
+    "locality": "Gujo",
+    "website": "https://www.takasu.gr.jp/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/takasu-snow-park",
+    "reportUrl": "https://www.takasu.gr.jp/condition/",
+    "liftCount": 4,
+    "trailCount": 13,
+    "verticalFt": 1968,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
     "id": "tamarack-resort",
     "name": "Tamarack Resort",
     "aliases": [
-      "Idaho"
+      "Idaho",
+      "Tamarack Mountain Resort"
     ],
     "country": "US",
     "region": "ID",
@@ -4190,7 +8107,11 @@
     "statsUrl": "https://tamarackidaho.com/wp-content/uploads/2026/04/Tamarack-Resort-Winter-Fact-Sheet-2026-3.pdf",
     "reportUrl": "https://tamarackidaho.com/the-mountain/snow-report",
     "acres": 1610,
-    "verticalFt": 2800
+    "liftCount": 7,
+    "trailCount": 57,
+    "verticalFt": 2800,
+    "nightSkiing": false,
+    "terrainParks": true
   },
   {
     "id": "taos-ski-valley",
@@ -4202,6 +8123,39 @@
     "region": "NM",
     "locality": "Taos Ski Valley",
     "website": "https://www.skitaos.com/"
+  },
+  {
+    "id": "tazawako",
+    "name": "Tazawako",
+    "aliases": [
+      "たざわ湖スキー場",
+      "Tazawako Ski Resort"
+    ],
+    "country": "JP",
+    "locality": "Semboku, Akita",
+    "website": "https://www.tazawako-ski.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/tazawako",
+    "liftCount": 6,
+    "trailCount": 13,
+    "verticalFt": 1995,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "telemark-nordic-center",
+    "name": "Telemark Nordic Center",
+    "aliases": [
+      "Telemark Cross-Country Ski Trails Recreation Site"
+    ],
+    "country": "CA",
+    "region": "BC",
+    "locality": "Kelowna",
+    "skiing": "cross-country",
+    "website": "https://telemarknordic.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/telemark-nordic-center",
+    "trailCount": 30,
+    "nightSkiing": true,
+    "terrainParks": false
   },
   {
     "id": "telluride-ski-resort",
@@ -4216,6 +8170,40 @@
     "website": "https://tellurideskiresort.com"
   },
   {
+    "id": "tenney-mountain",
+    "name": "Tenney Mountain",
+    "aliases": [
+      "Tenney Mountain Resort"
+    ],
+    "country": "US",
+    "region": "NH",
+    "locality": "Plymouth",
+    "website": "https://www.skitenney.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/tenney-mountain",
+    "liftCount": 4,
+    "trailCount": 53,
+    "verticalFt": 1500,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "terry-peak",
+    "name": "Terry Peak",
+    "aliases": [
+      "Terry Peak Ski Area"
+    ],
+    "country": "US",
+    "region": "SD",
+    "locality": "Lead",
+    "website": "https://terrypeak.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/terry-peak",
+    "liftCount": 5,
+    "trailCount": 30,
+    "verticalFt": 1100,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
     "id": "the-highlands-at-harbor-springs",
     "name": "The Highlands at Harbor Springs",
     "aliases": [
@@ -4226,6 +8214,22 @@
     "region": "MI",
     "locality": "Harbor Springs",
     "website": "https://www.highlandsharborsprings.com/"
+  },
+  {
+    "id": "the-loppet",
+    "name": "The Loppet",
+    "aliases": [
+      "Theodore Wirth: Loppet Trails"
+    ],
+    "country": "US",
+    "region": "MN",
+    "locality": "Minneapolis",
+    "skiing": "cross-country",
+    "website": "https://www.loppet.org/tt/trails/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/the-loppet",
+    "trailCount": 16,
+    "nightSkiing": true,
+    "terrainParks": false
   },
   {
     "id": "the-remarkables",
@@ -4272,6 +8276,20 @@
     "verticalFt": 2205
   },
   {
+    "id": "thrill-hills",
+    "name": "Thrill Hills",
+    "country": "US",
+    "region": "ND",
+    "locality": "Fort Ransom",
+    "website": "https://www.skibearsden.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/thrill-hills",
+    "liftCount": 3,
+    "trailCount": 10,
+    "verticalFt": 290,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
     "id": "thyon",
     "name": "Thyon",
     "aliases": [
@@ -4296,6 +8314,86 @@
     "website": "https://www.timberlinelodge.com/",
     "statsUrl": "https://timberlinelodge.com/things-to-do/skiing-snowboarding/",
     "acres": 1685
+  },
+  {
+    "id": "titus-mountain",
+    "name": "Titus Mountain",
+    "country": "US",
+    "region": "NY",
+    "locality": "Malone",
+    "website": "https://www.titusmountain.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/titus-mountain",
+    "liftCount": 9,
+    "trailCount": 53,
+    "verticalFt": 1200,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "togakushi-ski-resort",
+    "name": "Togakushi Ski Resort",
+    "aliases": [
+      "戸隠スキー場",
+      "Togakushi Ski Area"
+    ],
+    "country": "JP",
+    "locality": "Nagano",
+    "website": "https://www.togakusi.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/togakushi-ski-resort",
+    "liftCount": 7,
+    "trailCount": 19,
+    "verticalFt": 1732,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "togari-onsen-snow-resort",
+    "name": "Togari Onsen Snow Resort",
+    "aliases": [
+      "戸狩温泉スキー場",
+      "Togari Onsen Ski Resort"
+    ],
+    "country": "JP",
+    "locality": "Nagano",
+    "website": "https://www.togari.jp/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/togari-onsen-snow-resort",
+    "liftCount": 4,
+    "trailCount": 16,
+    "verticalFt": 2133,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "trapp-family-lodge",
+    "name": "Trapp Family Lodge",
+    "country": "US",
+    "region": "VT",
+    "locality": "Stowe",
+    "skiing": "cross-country",
+    "website": "https://www.trappfamily.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/trapp-family-lodge",
+    "trailCount": 24,
+    "verticalFt": 800,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "treetops-resort",
+    "name": "Treetops Resort",
+    "aliases": [
+      "Treetops Sylvan Resort"
+    ],
+    "country": "US",
+    "region": "MI",
+    "locality": "Gaylord",
+    "skiing": "both",
+    "website": "https://www.treetops.com/winter-getaway/skiing/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/treetops-resort",
+    "liftCount": 5,
+    "trailCount": 25,
+    "verticalFt": 225,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "tremblant",
@@ -4330,12 +8428,38 @@
     "id": "trollhaugen-ski-area",
     "name": "Trollhaugen Ski Area",
     "aliases": [
-      "Wisconsin"
+      "Wisconsin",
+      "Trollhaugen"
     ],
     "country": "US",
     "region": "WI",
     "locality": "Dresser",
-    "website": "https://www.trollhaugen.com/"
+    "website": "https://www.trollhaugen.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/trollhaugen",
+    "liftCount": 8,
+    "trailCount": 30,
+    "verticalFt": 280,
+    "nightSkiing": true,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://trollhaugen.com/hours-and-rates/"
+    ]
+  },
+  {
+    "id": "tschiertschen-chur",
+    "name": "Tschiertschen - Chur",
+    "aliases": [
+      "Tschiertschen"
+    ],
+    "country": "CH",
+    "locality": "Tschiertschen",
+    "website": "https://www.bbtschiertschen.ch/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/tschiertschen-chur",
+    "liftCount": 4,
+    "trailCount": 12,
+    "verticalFt": 3382,
+    "nightSkiing": false,
+    "terrainParks": true
   },
   {
     "id": "tsugaike-mountain-resort",
@@ -4365,6 +8489,51 @@
         "Advanced": 20
       }
     }
+  },
+  {
+    "id": "turpin-meadow-ranch",
+    "name": "Turpin Meadow Ranch",
+    "country": "US",
+    "region": "WY",
+    "locality": "Moran",
+    "skiing": "cross-country",
+    "website": "https://www.turpinmeadowranch.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/turpin-meadow-ranch",
+    "trailCount": 7,
+    "verticalFt": 600,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
+    "id": "tussey-mountain",
+    "name": "Tussey Mountain",
+    "country": "US",
+    "region": "PA",
+    "locality": "State College",
+    "website": "https://www.tusseymountain.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/tussey-mountain",
+    "liftCount": 5,
+    "trailCount": 8,
+    "verticalFt": 500,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "tyrol-basin-ski-and-snowboard",
+    "name": "Tyrol Basin Ski and Snowboard",
+    "aliases": [
+      "Tyrol Basin Ski And Snowboard Area"
+    ],
+    "country": "US",
+    "region": "WI",
+    "locality": "Mt. Horeb",
+    "website": "https://www.tyrolbasin.com",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/tyrol-basin-ski-and-snowboard",
+    "liftCount": 7,
+    "trailCount": 24,
+    "verticalFt": 300,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "vail-mountain",
@@ -4427,6 +8596,20 @@
     "seasonWindow": "Nov 28, 2026 – Apr 4, 2027 (planned)"
   },
   {
+    "id": "val-direne",
+    "name": "Val d'Irène",
+    "country": "CA",
+    "region": "QC",
+    "locality": "Sainte-Irène",
+    "website": "https://valdi.ski/en/home.html",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/val-direne",
+    "liftCount": 3,
+    "trailCount": 35,
+    "verticalFt": 898,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
     "id": "val-gardena-alpe-di-siusi",
     "name": "Val Gardena / Alpe di Siusi",
     "aliases": [
@@ -4487,6 +8670,23 @@
     "reportUrl": "https://verbier4vallees.ch/en/useful-information/live-information-winter"
   },
   {
+    "id": "veterans-memorial-recreation-area",
+    "name": "Veterans Memorial Recreation Area",
+    "aliases": [
+      "Veterans Memorial Ski Area"
+    ],
+    "country": "US",
+    "region": "NH",
+    "locality": "Franklin",
+    "website": "https://www.skithevets.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/veterans-memorial-recreation-area",
+    "liftCount": 3,
+    "trailCount": 54,
+    "verticalFt": 230,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
     "id": "veysonnaz",
     "name": "Veysonnaz",
     "aliases": [
@@ -4498,6 +8698,38 @@
     "locality": "Veysonnaz",
     "website": "https://www.veysonnaz.ch/en/Z13696/ski-area",
     "reportUrl": "https://verbier4vallees.ch/en/useful-information/live-information-winter"
+  },
+  {
+    "id": "washigatake-ski-resort",
+    "name": "Washigatake Ski Resort",
+    "aliases": [
+      "鷲ヶ岳スキー場",
+      "Washigatake Ski Area"
+    ],
+    "country": "JP",
+    "locality": "Gujo",
+    "website": "https://ski.washigatake.jp/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/washigatake-ski-resort",
+    "liftCount": 4,
+    "trailCount": 13,
+    "verticalFt": 1444,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "waterville-valley-resort",
+    "name": "Waterville Valley Resort",
+    "country": "US",
+    "region": "NH",
+    "locality": "Waterville Valley",
+    "skiing": "both",
+    "website": "https://www.waterville.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/waterville-valley-resort",
+    "liftCount": 10,
+    "trailCount": 62,
+    "verticalFt": 2020,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "welch-village",
@@ -4518,12 +8750,22 @@
     "id": "west-mountain-ski-resort",
     "name": "West Mountain Ski Resort",
     "aliases": [
-      "New York"
+      "New York",
+      "West Mountain"
     ],
     "country": "US",
     "region": "NY",
     "locality": "Queensbury",
-    "website": "https://westmountain.com/"
+    "website": "https://westmountain.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/west-mountain",
+    "liftCount": 6,
+    "trailCount": 35,
+    "verticalFt": 1000,
+    "nightSkiing": true,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://westmountain.com/indypass/"
+    ]
   },
   {
     "id": "whaleback",
@@ -4544,6 +8786,7 @@
     "summitFt": 1800,
     "verticalFt": 700,
     "nightSkiing": true,
+    "terrainParks": true,
     "grades": {
       "unit": "percent",
       "values": {
@@ -4590,10 +8833,27 @@
     ]
   },
   {
+    "id": "white-grass-ski-touring",
+    "name": "White Grass Ski Touring",
+    "aliases": [
+      "White Grass Ski Touring Center"
+    ],
+    "country": "US",
+    "region": "WV",
+    "locality": "Davis",
+    "skiing": "cross-country",
+    "website": "https://whitegrass.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/white-grass-ski-touring",
+    "verticalFt": 1200,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
     "id": "white-pass-ski-area",
     "name": "White Pass Ski Area",
     "aliases": [
-      "Washington"
+      "Washington",
+      "White Pass"
     ],
     "country": "US",
     "region": "WA",
@@ -4601,7 +8861,58 @@
     "website": "https://www.skiwhitepass.com",
     "statsUrl": "https://skiwhitepass.com/the-mountain/hours-and-lifts",
     "acres": 1402,
-    "nightSkiing": true
+    "liftCount": 8,
+    "trailCount": 45,
+    "verticalFt": 2050,
+    "nightSkiing": true,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://skiwhitepass.com/the-mountain/indypass"
+    ]
+  },
+  {
+    "id": "white-pine-resort",
+    "name": "White Pine Resort",
+    "country": "US",
+    "region": "WY",
+    "locality": "Pinedale",
+    "website": "https://whitepinewyoming.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/white-pine-resort",
+    "liftCount": 2,
+    "trailCount": 27,
+    "verticalFt": 1100,
+    "nightSkiing": false,
+    "terrainParks": true
+  },
+  {
+    "id": "white-pine-touring-nordic-center",
+    "name": "White Pine Touring Nordic Center",
+    "country": "US",
+    "region": "UT",
+    "locality": "Park City",
+    "skiing": "cross-country",
+    "website": "https://whitepinetouring.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/white-pine-touring-nordic-center",
+    "trailCount": 5,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
+    "id": "whitecap-mountains-resort",
+    "name": "Whitecap Mountains Resort",
+    "aliases": [
+      "Whitecap Mountain"
+    ],
+    "country": "US",
+    "region": "WI",
+    "locality": "Upson",
+    "website": "https://whitecapresort.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/whitecap-mountains-resort",
+    "liftCount": 7,
+    "trailCount": 48,
+    "verticalFt": 400,
+    "nightSkiing": false,
+    "terrainParks": false
   },
   {
     "id": "whiteface",
@@ -4623,6 +8934,8 @@
     "summitFt": 4867,
     "verticalFt": 3430,
     "highestLiftTerminalFt": 4386,
+    "nightSkiing": false,
+    "terrainParks": true,
     "grades": {
       "unit": "percent",
       "values": {
@@ -4632,6 +8945,34 @@
       },
       "of": "terrain"
     }
+  },
+  {
+    "id": "whitehorse-nordic-centre",
+    "name": "Whitehorse Nordic Centre",
+    "country": "CA",
+    "region": "YT",
+    "locality": "Whitehorse",
+    "skiing": "cross-country",
+    "website": "https://www.whitehorsenordiccentre.ca/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/whitehorse-nordic-centre",
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
+    "id": "whitepia-takasu",
+    "name": "WhitePIA Takasu",
+    "aliases": [
+      "ホワイトピアたかす"
+    ],
+    "country": "JP",
+    "locality": "Gujo",
+    "website": "https://www.whitepia.jp/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/whitepia-takasu",
+    "liftCount": 4,
+    "trailCount": 13,
+    "verticalFt": 1509,
+    "nightSkiing": false,
+    "terrainParks": true
   },
   {
     "id": "whitetail-resort",
@@ -4667,6 +9008,23 @@
     "website": "https://www.skiwildcat.com/"
   },
   {
+    "id": "williams-lake-cross-country-ski-club",
+    "name": "Williams Lake Cross Country Ski Club",
+    "aliases": [
+      "Bull Mountain Ski Trail Recreation Site"
+    ],
+    "country": "CA",
+    "region": "BC",
+    "locality": "Williams Lake",
+    "skiing": "cross-country",
+    "website": "https://www.williamslakecrosscountryskiclub.ca/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/williams-lake-cross-country-ski-club",
+    "trailCount": 30,
+    "verticalFt": 410,
+    "nightSkiing": true,
+    "terrainParks": false
+  },
+  {
     "id": "wilmot-mountain",
     "name": "Wilmot Mountain",
     "aliases": [
@@ -4689,11 +9047,29 @@
     "website": "https://www.winterparkresort.com"
   },
   {
+    "id": "winter4kids",
+    "name": "Winter4Kids",
+    "aliases": [
+      "National Winter Activity Center"
+    ],
+    "country": "US",
+    "region": "NJ",
+    "locality": "Vernon",
+    "website": "https://winter4kids.org/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/winter4kids",
+    "liftCount": 4,
+    "trailCount": 7,
+    "verticalFt": 620,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
     "id": "wintergreen-resort",
     "name": "Wintergreen Resort",
     "aliases": [
       "Virginia",
-      "Wintergreen Ski Resort"
+      "Wintergreen Ski Resort",
+      "Wintergreen"
     ],
     "country": "US",
     "region": "VA",
@@ -4701,13 +9077,32 @@
     "website": "https://www.wintergreenresort.com",
     "statsUrl": "https://www.wintergreenresort.com/safety-stats/",
     "acres": 129,
-    "liftCount": 5
+    "liftCount": 5,
+    "trailCount": 26,
+    "verticalFt": 1003,
+    "nightSkiing": true,
+    "terrainParks": true
+  },
+  {
+    "id": "winterplace-ski-resort",
+    "name": "Winterplace Ski Resort",
+    "country": "US",
+    "region": "WV",
+    "locality": "Flat Top",
+    "website": "https://www.winterplace.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/winterplace-ski-resort",
+    "liftCount": 10,
+    "trailCount": 27,
+    "verticalFt": 603,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "wisp-resort",
     "name": "Wisp Resort",
     "aliases": [
-      "Maryland"
+      "Maryland",
+      "Wisp"
     ],
     "country": "US",
     "region": "MD",
@@ -4715,7 +9110,12 @@
     "website": "https://www.wispresort.com/",
     "statsUrl": "https://www.wispresort.com/about-wisp/",
     "reportUrl": "https://www.wispresort.com/mountain-report-cams/",
-    "acres": 132
+    "acres": 132,
+    "liftCount": 13,
+    "trailCount": 33,
+    "verticalFt": 700,
+    "nightSkiing": true,
+    "terrainParks": true
   },
   {
     "id": "wolf-creek-ski-area",
@@ -4735,6 +9135,19 @@
     "verticalFt": 1604
   },
   {
+    "id": "woodstock-nordic-center",
+    "name": "Woodstock Nordic Center",
+    "country": "US",
+    "region": "VT",
+    "locality": "Woodstock",
+    "skiing": "cross-country",
+    "website": "https://www.woodstockinn.com/do/things-to-do/woodstock-nordic-center",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/woodstock-nordic-center",
+    "verticalFt": 570,
+    "nightSkiing": false,
+    "terrainParks": false
+  },
+  {
     "id": "yunding-snow-park",
     "name": "Yunding Snow Park",
     "aliases": [
@@ -4746,6 +9159,23 @@
     "country": "CN",
     "locality": "Chongli",
     "website": "https://www.secretgardenresorts.com/"
+  },
+  {
+    "id": "yuzawa-nakazato-snow-resort",
+    "name": "Yuzawa Nakazato Snow Resort",
+    "aliases": [
+      "湯沢中里スキーリゾート",
+      "Yuzawa Nakazato Ski Resort"
+    ],
+    "country": "JP",
+    "locality": "Yuzawa",
+    "website": "https://www.yuzawa-nakazato.com/winter/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/yuzawa-nakazato-snow-resort",
+    "liftCount": 6,
+    "trailCount": 16,
+    "verticalFt": 800,
+    "nightSkiing": false,
+    "terrainParks": false
   },
   {
     "id": "zao-onsen-ski-resort",

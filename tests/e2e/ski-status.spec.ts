@@ -110,6 +110,40 @@ test('shows separate Epic badges and table rows for the Hakuba Valley resorts', 
     await renderer.dispose();
 });
 
+test('filters worldwide Indy memberships and discounts on the map and table', async ({ page }) => {
+    await prepare(page);
+    const renderer = await captureMap(page);
+    const region = page.getByLabel('Region', { exact: true });
+    const pass = page.getByLabel('Pass', { exact: true });
+    const table = page.getByRole('region', { name: 'Ski area comparison table' });
+
+    await region.selectOption({ label: 'Finland' });
+    await pass.selectOption('indy');
+    await page.getByLabel('Color by', { exact: true }).selectOption('pass');
+    await expect(table.locator('tbody tr')).toHaveCount(3);
+    await expect.poll(() => renderer.evaluate(map => {
+        const layer = 'ski-status-pass-badges';
+        if (!map.getLayer(layer)) return [];
+        return [...new Set(map.queryRenderedFeatures({ layers: [layer] })
+            .filter(feature => feature.properties.passBadge === 'indy')
+            .map(feature => feature.properties.areaId))].sort();
+    })).toEqual(['levi-ski-resort', 'pyha-ski-resort', 'ruka-ski-resort']);
+
+    await region.selectOption('');
+    await pass.selectOption({ label: 'Indy discounts' });
+    await expect(table.locator('tbody tr')).toHaveCount(5);
+    await table.getByRole('button', { name: 'North Cascade Heli', exact: true }).click();
+    const details = page.getByRole('region', { name: 'North Cascade Heli', exact: true });
+    await expect(details.getByText('Heli-skiing', { exact: true })).toBeVisible();
+    await expect(details.getByRole('link', { name: 'Indy (discount only)', exact: true }))
+        .toHaveAttribute('href', 'https://www.indyskipass.com/our-resorts/north-cascade-heli');
+    await expect.poll(() => renderer.evaluate(map => {
+        const source = map.getSource<GeoJSONSource>('ski-areas');
+        return source?.getData().then(data => data.type === 'FeatureCollection' ? data.features.length : 0);
+    })).toBe(5);
+    await renderer.dispose();
+});
+
 test('in-view results follow pan and zoom and support filters and sorting', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await prepare(page);

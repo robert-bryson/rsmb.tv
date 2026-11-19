@@ -17,6 +17,7 @@ const httpsUrl = z.string().trim().refine(value => {
 const amount = z.number().nonnegative();
 const count = z.int().nonnegative();
 const minimumSkiableAcres = 100;
+const skiingSchema = z.enum(['downhill', 'cross-country', 'both', 'heli-skiing', 'indoor']);
 const mountainStats = {
     acres: amount.optional(),
     acresQualifier: z.literal('lower-bound').optional(),
@@ -30,6 +31,7 @@ const mountainStats = {
     lowestLiftTerminalFt: z.number().optional(),
     nightSkiing: z.boolean().optional(),
     nightAcres: amount.optional(),
+    terrainParks: z.boolean().optional(),
     seasonWindow: label.optional(),
     grades: z.strictObject({
         unit: z.enum(['count', 'percent']),
@@ -46,6 +48,7 @@ const areaSchema = z.strictObject({
     region: z.string().regex(/^[A-Z]{2}(?:\/[A-Z]{2})?$/).optional(),
     country: z.string().regex(/^[A-Z]{2}$/),
     locality: label,
+    skiing: skiingSchema.default('downhill'),
     website: httpsUrl,
     statsUrl: httpsUrl.optional(),
     reportUrl: httpsUrl.optional(),
@@ -123,8 +126,8 @@ export function readSkiCatalog(areaInput: unknown, locationInput: unknown, passI
         if (!location) throw new Error(`No map point for ${area.id}`);
         const areaPasses = memberships.get(area.id) ?? [];
         if (!area.statsUrl && statisticKeys.some(key => area[key] !== undefined)) throw new Error(`No mountain statistics source for ${area.id}`);
-        if ((area.acres ?? 0) < minimumSkiableAcres && !areaPasses.some(pass => pass.access === 'included' || pass.access === 'listed')) {
-            throw new Error(`Ski area ${area.id} requires ${minimumSkiableAcres} skiable acres, included pass access, or an official pass listing`);
+        if ((area.acres ?? 0) < minimumSkiableAcres && areaPasses.length === 0) {
+            throw new Error(`Ski area ${area.id} requires ${minimumSkiableAcres} skiable acres or an official pass listing`);
         }
         if ((area.acresQualifier && area.acres === undefined) || (area.trailCountQualifier && area.trailCount === undefined)) {
             throw new Error(`Lower bound for ${area.id} requires a reported value`);

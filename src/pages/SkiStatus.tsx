@@ -3,9 +3,10 @@ import { ErrorBoundary } from '../components/ErrorBoundary';
 import { IntentLink } from '../components/IntentLink';
 import { MapSkipLink } from '../components/MapSkipLink';
 import {
-    filterSkiAreas, readPassFilter, readSkiResultsView, readSkiSort, skiRegionOptions, skiResultsViews, sortSkiAreas, type SkiResultsView, type SkiSort, type SkiUnits,
+    filterSkiAreas, passFilterFamily, passFilterOptions, readPassFilter, readSkiResultsView, readSkiSort, skiRegionOptions, skiResultsViews, sortSkiAreas,
+    type SkiResultsView, type SkiSort, type SkiUnits,
 } from '../features/ski-status/browse';
-import { locationAttribution, locationLicense, passNames, passSeason, skiAreas } from '../features/ski-status/catalog';
+import { locationAttribution, locationLicense, passSeason, skiAreas } from '../features/ski-status/catalog';
 import { markerLegend, markerModes, passBadgeTextColor, readMarkerMode } from '../features/ski-status/mapAppearance';
 import { SkiAreaDetails } from '../features/ski-status/SkiAreaDetails';
 import { SkiAreaTable } from '../features/ski-status/SkiAreaTable';
@@ -55,6 +56,7 @@ export default function SkiStatus() {
     const regionParam = searchParams.get('region') ?? '';
     const region = regionValues.has(regionParam) ? regionParam : '';
     const pass = readPassFilter(searchParams);
+    const passFamily = pass && passFilterFamily(pass);
     const night = searchParams.get('night') === '1';
     const inView = searchParams.get('inView') === '1';
     const sort = readSkiSort(searchParams);
@@ -80,7 +82,7 @@ export default function SkiStatus() {
 
     function setSort(key: SkiSort['key']) {
         const direction = sort.key === key ? (sort.direction === 'asc' ? 'desc' : 'asc')
-            : key === 'name' || key === 'region' ? 'asc' : 'desc';
+            : key === 'name' || key === 'region' || key === 'skiing' ? 'asc' : 'desc';
         setParam('sort', `${key}:${direction}`);
     }
 
@@ -136,10 +138,10 @@ export default function SkiStatus() {
                     </div>
                     <div className={filterClass}>
                         <label htmlFor="ski-pass" className="flex items-center gap-1.5">
-                            {pass && <SkiPassIcon family={pass} />}Pass
+                            {passFamily && <SkiPassIcon family={passFamily} />}Pass
                         </label>
                         <select id="ski-pass" value={pass ?? ''} onChange={event => setParam('pass', event.target.value)} className={inputClass}>
-                            <option value="">All ski areas</option>{Object.entries(passNames).map(([key, name]) => <option key={key} value={key}>{name}</option>)}
+                            <option value="">All ski areas</option>{Object.entries(passFilterOptions).map(([key, name]) => <option key={key} value={key}>{name}</option>)}
                         </select>
                     </div>
                     <div className={filterClass}>
@@ -204,7 +206,7 @@ export default function SkiStatus() {
                 </ul>}
                 <div className="min-h-0 flex-1">
                     {(showMap || mapOpened) && <ErrorBoundary fallback={<MapMessage failed />}><Suspense fallback={<MapMessage />}>
-                        <SkiStatusMap areas={areas} selected={selected} colors={colors} preferredPass={pass} terrain={terrain} visible={showMap} inView={inView}
+                        <SkiStatusMap areas={areas} selected={selected} colors={colors} preferredPass={passFamily} terrain={terrain} visible={showMap} inView={inView}
                             onVisibleAreasChange={updateVisibleAreas} onSelect={selectArea} />
                     </Suspense></ErrorBoundary>}
                 </div>

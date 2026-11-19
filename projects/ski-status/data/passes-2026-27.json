@@ -12,7 +12,7 @@
       "areaId": "49-north-mountain-resort",
       "family": "indy",
       "access": "included",
-      "source": "https://www.ski49n.com/promotions-perks/details/indy-pass-49"
+      "source": "https://www.indyskipass.com/our-resorts/49-degrees-north"
     },
     {
       "areaId": "afton-alps",
@@ -69,6 +69,12 @@
       "source": "https://www.alyeskaresort.com/ikon-pass/"
     },
     {
+      "areaId": "amihari-onsen-ski-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/amihari-onsen-ski-resort"
+    },
+    {
       "areaId": "andermatt-gemsstock",
       "family": "epic",
       "access": "included",
@@ -79,6 +85,30 @@
       "family": "epic",
       "access": "included",
       "source": "https://www.epicpass.com/regions/europe/switzerland/andermatt-sedrun-disentis.aspx"
+    },
+    {
+      "areaId": "andes-tower-hills",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/andes-tower-hills"
+    },
+    {
+      "areaId": "antelope-butte",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/antelope-butte"
+    },
+    {
+      "areaId": "aomori-spring-ski-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/aomori-spring-ski-resort"
+    },
+    {
+      "areaId": "apex-mountain-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/apex-mountain-resort"
     },
     {
       "areaId": "appi-resort",
@@ -103,6 +133,12 @@
       "family": "ikon",
       "access": "included",
       "source": "https://www.arapahoebasin.com/als-blog/passes-on-sale-march-12/"
+    },
+    {
+      "areaId": "arctic-valley",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/arctic-valley"
     },
     {
       "areaId": "aspen-highlands",
@@ -135,6 +171,18 @@
       "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
+      "areaId": "bad-kleinkirchheim",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/bad-kleinkirchheim"
+    },
+    {
+      "areaId": "baldy-mountain-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/baldy-mountain-resort"
+    },
+    {
       "areaId": "balme-vallorcine",
       "family": "ikon",
       "access": "included",
@@ -153,10 +201,40 @@
       "source": "https://mountaincollective.com/resorts/"
     },
     {
+      "areaId": "baqueira-beret",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/baqueiraberet"
+    },
+    {
+      "areaId": "bear-basin-nordic-center",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/bear-basin-nordic-center"
+    },
+    {
+      "areaId": "bear-creek",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/bear-creek"
+    },
+    {
       "areaId": "bear-mountain",
       "family": "ikon",
       "access": "included",
       "source": "https://www.bigbearmountainresort.com/employment/~/link.aspx?_id=06F9EB759AA6405D88BA264751583959&_z=z"
+    },
+    {
+      "areaId": "bear-valley-adventure-company",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/bear-valley-adventure-company"
+    },
+    {
+      "areaId": "bear-valley-mountain-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/bear-valley-mountain-resort"
     },
     {
       "areaId": "beaver-creek-resort",
@@ -165,22 +243,70 @@
       "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
+      "areaId": "beaver-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/beaver-mountain"
+    },
+    {
       "areaId": "beidahu-ski-resort",
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/compare-benefits"
     },
     {
+      "areaId": "beito-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/beito-resort"
+    },
+    {
+      "areaId": "belleayre-mountain",
+      "family": "indy",
+      "access": "discount",
+      "source": "https://www.indyskipass.com/our-resorts/belleayre-mountain"
+    },
+    {
+      "areaId": "bergbahnen-hohsaas",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/bergbahnen-hohsaas"
+    },
+    {
       "areaId": "berkshire-east-ski-resort",
       "family": "indy",
       "access": "included",
-      "source": "https://berkshireeast.com/winter/indy-pass"
+      "source": "https://www.indyskipass.com/our-resorts/berkshire-east-mountain-resort"
+    },
+    {
+      "areaId": "bethel-village-trails",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/bethel-village-trails"
     },
     {
       "areaId": "big-boulder",
       "family": "epic",
       "access": "included",
       "source": "https://www.epicpass.com/pass-results/college.aspx"
+    },
+    {
+      "areaId": "big-moose",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/big-moose"
+    },
+    {
+      "areaId": "big-powderhorn",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/big-powderhorn"
+    },
+    {
+      "areaId": "big-rock-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/big-rock-mountain"
     },
     {
       "areaId": "big-sky-resort",
@@ -193,6 +319,42 @@
       "family": "mountain-collective",
       "access": "included",
       "source": "https://www.bigskyresort.com/partners"
+    },
+    {
+      "areaId": "big-white-ski-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/big-white-ski-resort"
+    },
+    {
+      "areaId": "bjorkliden",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/bjorkliden"
+    },
+    {
+      "areaId": "black-jack-cross-country-ski-club",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/black-jack-cross-country-ski-club"
+    },
+    {
+      "areaId": "black-mountain-of-maine",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/black-mountain-of-maine"
+    },
+    {
+      "areaId": "black-mountain-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/black-mountain-ski-area"
+    },
+    {
+      "areaId": "blue-knob-all-season-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/blue-knob-all-season-resort"
     },
     {
       "areaId": "blue-mountain-resort",
@@ -210,19 +372,31 @@
       "areaId": "bluewood",
       "family": "indy",
       "access": "included",
-      "source": "https://bluewood.com/indy-pass-at-bluewood"
+      "source": "https://www.indyskipass.com/our-resorts/ski-bluewood"
     },
     {
       "areaId": "bolton-valley-resort",
       "family": "indy",
       "access": "included",
-      "source": "https://www.boltonvalley.com/winter/tickets-passes/indy-pass/"
+      "source": "https://www.indyskipass.com/our-resorts/bolton-valley-resort"
     },
     {
       "areaId": "boston-mills",
       "family": "epic",
       "access": "included",
       "source": "https://www.epicpass.com/pass-results/college.aspx"
+    },
+    {
+      "areaId": "bottineau-winter-park",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/bottineau-winter-park"
+    },
+    {
+      "areaId": "bousquet-mountain-0",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/bousquet-mountain-0"
     },
     {
       "areaId": "boyne-mountain",
@@ -267,10 +441,16 @@
       "source": "https://www.bromontmontagne.com/en/mountain_collective_en/"
     },
     {
+      "areaId": "bruce-mound-winter-sports-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/bruce-mound-winter-sports-area"
+    },
+    {
       "areaId": "brundage-mountain-resort",
       "family": "indy",
       "access": "included",
-      "source": "https://brundage.com/indypassvisitors/"
+      "source": "https://www.indyskipass.com/our-resorts/brundage-mountain-resort"
     },
     {
       "areaId": "bruson",
@@ -279,16 +459,28 @@
       "source": "https://www.epicpass.com/regions/europe/switzerland/verbier-4-vallees.aspx"
     },
     {
+      "areaId": "bryce-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/bryce-resort"
+    },
+    {
       "areaId": "buck-hill",
       "family": "ikon",
       "access": "included",
       "source": "https://www.lutsen.com/ikon-pass"
     },
     {
+      "areaId": "buffalo-ski-club",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/buffalo-ski-club"
+    },
+    {
       "areaId": "burke-mountain-resort",
       "family": "indy",
       "access": "included",
-      "source": "https://www.skiburke.com/component/content/category/the-mountain"
+      "source": "https://www.indyskipass.com/our-resorts/burke-mountain"
     },
     {
       "areaId": "buttermilk",
@@ -309,34 +501,100 @@
       "source": "https://www.alterramtn.co/en/news/ikon-pass-expands-further-into-japan-and-china-for-winter-2627"
     },
     {
+      "areaId": "calabogie-peaks-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/calabogie-peaks-resort"
+    },
+    {
+      "areaId": "caledonia-nordic-ski-club",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/caledonia-nordic-ski-club"
+    },
+    {
+      "areaId": "camden-snow-bowl",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/camden-snow-bowl"
+    },
+    {
       "areaId": "camelback-mountain-resort",
       "family": "ikon",
       "access": "included",
       "source": "https://www.camelbackresort.com/ikon-pass-faqs"
     },
     {
+      "areaId": "camp-10-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/camp-10-ski-area"
+    },
+    {
       "areaId": "camp-fortune",
       "family": "indy",
       "access": "included",
-      "source": "https://campfortune.com/en/indy-pass/"
+      "source": "https://www.indyskipass.com/our-resorts/camp-fortune"
+    },
+    {
+      "areaId": "canaan-valley",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/canaan-valley"
+    },
+    {
+      "areaId": "canmore-ski-village",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/canmore-ski-village"
     },
     {
       "areaId": "cannon-mountain",
       "family": "indy",
       "access": "included",
-      "source": "https://www.cannonmt.com/indy-pass"
+      "source": "https://www.indyskipass.com/our-resorts/cannon-mountain"
+    },
+    {
+      "areaId": "carters-xc-ski-center",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/carters-xc-ski-center"
     },
     {
       "areaId": "castle-mountain-resort",
       "family": "indy",
       "access": "included",
-      "source": "https://www.skicastle.ca/indypass/"
+      "source": "https://www.indyskipass.com/our-resorts/castle-mountain-resort"
+    },
+    {
+      "areaId": "cataloochee-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/cataloochee-ski-area"
     },
     {
       "areaId": "catamount-mountain-resort",
       "family": "indy",
       "access": "included",
-      "source": "https://catamountski.com/winter/tickets-passes/indy-pass-reservations"
+      "source": "https://www.indyskipass.com/our-resorts/catamount-mountain-resort"
+    },
+    {
+      "areaId": "catamount-outdoor-family-center",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/catamount-outdoor-family-center"
+    },
+    {
+      "areaId": "cazenovia-ski-club",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/cazenovia-ski-club"
+    },
+    {
+      "areaId": "centre-vorlage",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/centre-vorlage"
     },
     {
       "areaId": "cervino-ski-paradise",
@@ -345,10 +603,46 @@
       "source": "https://www.ikonpass.com/en/destinations/valle-daosta"
     },
     {
+      "areaId": "cherry-peak",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/cherry-peak"
+    },
+    {
+      "areaId": "chestnut-mountain-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/chestnut-mountain-resort"
+    },
+    {
+      "areaId": "china-peak",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/china-peak"
+    },
+    {
+      "areaId": "christie-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/christie-mountain"
+    },
+    {
       "areaId": "civetta",
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/destinations/dolomiti-superski"
+    },
+    {
+      "areaId": "coffee-mill-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/coffee-mill-ski-area"
+    },
+    {
+      "areaId": "cooper-spur-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/cooper-spur-ski-area"
     },
     {
       "areaId": "copper-mountain",
@@ -361,6 +655,12 @@
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/destinations/coronet-peak-remarkables-mt-hutt"
+    },
+    {
+      "areaId": "corralco-resort-de-montana",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/corralco-resort-de-montana"
     },
     {
       "areaId": "cortina-d-ampezzo",
@@ -411,6 +711,12 @@
       "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
+      "areaId": "crosscut-mountain-sports-center",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/crosscut-mountain-sports-center"
+    },
+    {
       "areaId": "crotched-mountain",
       "family": "epic",
       "access": "included",
@@ -426,7 +732,7 @@
       "areaId": "crystal-mountain-mi",
       "family": "indy",
       "access": "included",
-      "source": "https://www.crystalmountain.com/ski/season-passes/season-pass-perks"
+      "source": "https://www.indyskipass.com/our-resorts/crystal-mountain"
     },
     {
       "areaId": "crystal-ridge",
@@ -435,10 +741,28 @@
       "source": "https://www.alterramtn.co/en/news/deer-valley-now-3-days-on-ikon-base-pass-for-winter-2627"
     },
     {
+      "areaId": "cuchara",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/cuchara"
+    },
+    {
+      "areaId": "cupid-valley",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/cupid-valley"
+    },
+    {
       "areaId": "cypress-mountain",
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "dartmouth-skiway",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/dartmouth-skiway"
     },
     {
       "areaId": "deer-valley-resort",
@@ -447,10 +771,28 @@
       "source": "https://www.deervalley.com/media-room/110926-ikon-base-pass"
     },
     {
+      "areaId": "destination-owls-head",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/destination-owls-head"
+    },
+    {
+      "areaId": "detroit-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/detroit-mountain"
+    },
+    {
       "areaId": "devil-s-head-resort",
       "family": "ikon",
       "access": "included",
       "source": "https://www.lutsen.com/ikon-pass"
+    },
+    {
+      "areaId": "devils-thumb-ranch",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/devils-thumb-ranch"
     },
     {
       "areaId": "diavolezza-lagalb",
@@ -465,16 +807,94 @@
       "source": "https://www.epicpass.com/regions/europe/switzerland/andermatt-sedrun-disentis.aspx"
     },
     {
+      "areaId": "dodge-ridge",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/dodge-ridge"
+    },
+    {
+      "areaId": "dog-creek-lodge-nordic-center",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/dog-creek-lodge-nordic-center"
+    },
+    {
+      "areaId": "domaine-skiable-des-contamines",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/domaine-skiable-des-contamines"
+    },
+    {
+      "areaId": "donner-ski-ranch",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/donner-ski-ranch"
+    },
+    {
+      "areaId": "dry-hill-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/dry-hill-ski-area"
+    },
+    {
+      "areaId": "dynaland",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/dynaland"
+    },
+    {
+      "areaId": "eagle-point",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/eagle-point"
+    },
+    {
       "areaId": "eaglecrest-ski-area",
       "family": "indy",
       "access": "included",
-      "source": "https://skieaglecrest.com/visit/"
+      "source": "https://www.indyskipass.com/our-resorts/eaglecrest"
+    },
+    {
+      "areaId": "eastman-cross-country",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/eastman-cross-country"
+    },
+    {
+      "areaId": "echo-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/echo-mountain"
     },
     {
       "areaId": "eldora-mountain-resort",
       "family": "ikon",
       "access": "included",
       "source": "https://www.eldora.com/ikon-pass/"
+    },
+    {
+      "areaId": "elm-creek-park-reserve",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/elm-creek-park-reserve"
+    },
+    {
+      "areaId": "enchanted-forest-xc",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/enchanted-forest-xc"
+    },
+    {
+      "areaId": "engstligenalp",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/engstligenalp"
+    },
+    {
+      "areaId": "fairmont-hot-springs",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/fairmont-hot-springs"
     },
     {
       "areaId": "falls-creek",
@@ -495,6 +915,24 @@
       "source": "https://www.epicpass.com/regions/europe/italy/skirama-dolomiti.aspx"
     },
     {
+      "areaId": "fort-kent-outdoor-center",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/fort-kent-outdoor-center"
+    },
+    {
+      "areaId": "franconia-village-xc-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/franconia-village-xc-ski-area"
+    },
+    {
+      "areaId": "frost-fire-park",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/frost-fire-park"
+    },
+    {
       "areaId": "furano-ski-resort",
       "family": "ikon",
       "access": "included",
@@ -507,10 +945,52 @@
       "source": "https://www.ikonpass.com/en/destinations"
     },
     {
+      "areaId": "garnet-hill-xc",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/garnet-hill-xc"
+    },
+    {
+      "areaId": "geto-kogen",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/geto-kogen"
+    },
+    {
       "areaId": "giants-ridge",
       "family": "ikon",
       "access": "included",
       "source": "https://www.alterramtn.co/en/news/two-weeks-left-to-grab-an-ikon-pass-at-its-current-lowest-spring-prices"
+    },
+    {
+      "areaId": "glencoe-mountain-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/glencoe-mountain-resort"
+    },
+    {
+      "areaId": "glenshee-ski-centre",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/glenshee-ski-centre"
+    },
+    {
+      "areaId": "gore-mountain",
+      "family": "indy",
+      "access": "discount",
+      "source": "https://www.indyskipass.com/our-resorts/gore-mountain"
+    },
+    {
+      "areaId": "gore-mountain-nordic-center",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/this-is-indy/news/whiteface-gore-and-belleayre-join-allied-program-as-indy-pass-announces-15-additional-resorts-for"
+    },
+    {
+      "areaId": "granby-ranch",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/granby-ranch"
     },
     {
       "areaId": "grand-targhee-resort",
@@ -537,16 +1017,34 @@
       "source": "https://www.lutsen.com/ikon-pass"
     },
     {
+      "areaId": "great-bear-ski-valley",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/great-bear-ski-valley"
+    },
+    {
+      "areaId": "great-glen-trails-outdoor-center",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/great-glen-trails-outdoor-center"
+    },
+    {
       "areaId": "greek-peak-mountain-resort",
       "family": "indy",
       "access": "included",
-      "source": "https://www.greekpeak.net/ski-ride/indy-pass/"
+      "source": "https://www.indyskipass.com/our-resorts/greek-peak-mountain-resort"
     },
     {
       "areaId": "grouse-mountain",
       "family": "ikon",
       "access": "included",
       "source": "https://www.alterramtn.co/en/news/2627-ikon-pass-goes-on-sale-march-12-with-new-benefits-new-offers-and-new-discounts"
+    },
+    {
+      "areaId": "hafjell",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/hafjell"
     },
     {
       "areaId": "hakuba-47",
@@ -591,6 +1089,24 @@
       "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx"
     },
     {
+      "areaId": "hardwood-ski-and-bike",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/hardwood-ski-and-bike"
+    },
+    {
+      "areaId": "hatley-pointe",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/hatley-pointe"
+    },
+    {
+      "areaId": "haymaker-nordic-center",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/haymaker-nordic-center"
+    },
+    {
       "areaId": "heavenly",
       "family": "epic",
       "access": "included",
@@ -609,10 +1125,28 @@
       "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
+      "areaId": "high-point-xc-ski-center",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/high-point-xc-ski-center"
+    },
+    {
+      "areaId": "hilltop-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/hilltop-ski-area"
+    },
+    {
       "areaId": "hintertux-glacier",
       "family": "epic",
       "access": "included",
       "source": "https://www.epicpass.com/regions/europe/austria/zillertal.aspx"
+    },
+    {
+      "areaId": "hirugano-kogen-ski-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/hirugano-kogen-ski-resort"
     },
     {
       "areaId": "hochfuegen-hochzillertal",
@@ -621,10 +1155,34 @@
       "source": "https://www.epicpass.com/regions/europe/austria/zillertal.aspx"
     },
     {
+      "areaId": "hochzeiger-bergbahnen-pitztal-ag",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/hochzeiger-bergbahnen-pitztal-ag"
+    },
+    {
+      "areaId": "hockley-valley-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/hockley-valley-resort"
+    },
+    {
+      "areaId": "hodaigi-mountain-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/hodaigi-mountain-resort"
+    },
+    {
+      "areaId": "homestake-lodge",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/homestake-lodge"
+    },
+    {
       "areaId": "hoodoo-ski-area",
       "family": "indy",
       "access": "included",
-      "source": "https://skihoodoo.com/rates/indy-pass/"
+      "source": "https://www.indyskipass.com/our-resorts/hoodoo"
     },
     {
       "areaId": "hotham",
@@ -633,10 +1191,52 @@
       "source": "https://www.epicpass.com/regions/australia.aspx"
     },
     {
+      "areaId": "howelsen-hill",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/howelsen-hill"
+    },
+    {
+      "areaId": "hudson-bay-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/hudson-bay-mountain"
+    },
+    {
+      "areaId": "huff-hills-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/huff-hills-ski-area"
+    },
+    {
+      "areaId": "hunt-hollow-ski-club",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/hunt-hollow-ski-club"
+    },
+    {
       "areaId": "hunter-mountain",
       "family": "epic",
       "access": "included",
       "source": "https://www.epicpass.com/pass-results/college.aspx"
+    },
+    {
+      "areaId": "hurricane-ridge",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/hurricane-ridge"
+    },
+    {
+      "areaId": "hyland-hills",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/hyland-hills"
+    },
+    {
+      "areaId": "innsbruck-region",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/innsbruck-region"
     },
     {
       "areaId": "ischgl-samnaun",
@@ -663,10 +1263,16 @@
       "source": "https://www.jacksonhole.com/the-mountain-collective"
     },
     {
+      "areaId": "jackson-xc",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/jackson-xc"
+    },
+    {
       "areaId": "jay-peak-resort",
       "family": "indy",
       "access": "included",
-      "source": "https://jaypeakresort.com/resort/partnerships-and-sponsors"
+      "source": "https://www.indyskipass.com/our-resorts/jay-peak-resort"
     },
     {
       "areaId": "jigatake",
@@ -687,6 +1293,18 @@
       "source": "https://www.junemountain.com/plan-your-trip/season-passes"
     },
     {
+      "areaId": "kamui-ski-links",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/kamui-ski-links"
+    },
+    {
+      "areaId": "kandatsu-snow-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/kandatsu-snow-resort"
+    },
+    {
       "areaId": "kappl",
       "family": "ikon",
       "access": "listed",
@@ -697,6 +1315,24 @@
       "family": "epic",
       "access": "included",
       "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx"
+    },
+    {
+      "areaId": "kaunertal-glacier",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/kaunertal-glacier"
+    },
+    {
+      "areaId": "kelly-canyon",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/kelly-canyon"
+    },
+    {
+      "areaId": "kendall-mountain-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/kendall-mountain-ski-area"
     },
     {
       "areaId": "keystone-resort",
@@ -723,6 +1359,18 @@
       "source": "https://www.epicpass.com/regions/canada/rcr.aspx"
     },
     {
+      "areaId": "kimberley-nordic-club",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/kimberley-nordic-club"
+    },
+    {
+      "areaId": "king-pine",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/king-pine"
+    },
+    {
       "areaId": "kirkwood-mountain-resort",
       "family": "epic",
       "access": "included",
@@ -745,6 +1393,18 @@
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/destinations/dolomiti-superski"
+    },
+    {
+      "areaId": "krvavec-ski-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/the-krvavec-ski-resort"
+    },
+    {
+      "areaId": "kvitfjell",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/kvitfjell"
     },
     {
       "areaId": "la-thuile-espace-san-bernardo",
@@ -795,10 +1455,28 @@
       "source": "https://mountaincollective.com/resorts/"
     },
     {
+      "areaId": "le-relais",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/le-relais"
+    },
+    {
+      "areaId": "leavenworth-winter-sports-club",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/leavenworth-winter-sports-club"
+    },
+    {
       "areaId": "lech-am-arlberg",
       "family": "epic",
       "access": "included",
       "source": "https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx"
+    },
+    {
+      "areaId": "les-7-laux",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/les-7-laux"
     },
     {
       "areaId": "les-houches",
@@ -813,16 +1491,40 @@
       "source": "https://www.epicpass.com/regions/europe/france/les-3-vallees.aspx"
     },
     {
+      "areaId": "leukerbad-torrent-ski-resort-gemmi-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/leukerbad-torrent-ski-resort-gemmi-resort"
+    },
+    {
+      "areaId": "levi-ski-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/levi-finland"
+    },
+    {
       "areaId": "liberty-mountain-resort",
       "family": "epic",
       "access": "included",
       "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
+      "areaId": "little-ski-hill",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/little-ski-hill"
+    },
+    {
       "areaId": "little-switzerland",
       "family": "ikon",
       "access": "included",
       "source": "https://www.alterramtn.co/en/news/deer-valley-now-3-days-on-ikon-base-pass-for-winter-2627"
+    },
+    {
+      "areaId": "loch-lomond",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/loch-lomond"
     },
     {
       "areaId": "loon-mountain-resort",
@@ -834,13 +1536,25 @@
       "areaId": "lost-trail",
       "family": "indy",
       "access": "included",
-      "source": "https://losttrail.com/indypass/"
+      "source": "https://www.indyskipass.com/our-resorts/lost-trail-powder-mountain"
+    },
+    {
+      "areaId": "lost-valley",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/lost-valley"
+    },
+    {
+      "areaId": "loup-loup-ski-bowl",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/loup-loup-ski-bowl"
     },
     {
       "areaId": "loveland-ski-area",
       "family": "indy",
       "access": "included",
-      "source": "https://skiloveland.com/indypass/"
+      "source": "https://www.indyskipass.com/our-resorts/loveland-ski-area"
     },
     {
       "areaId": "lutsen-mountains",
@@ -867,10 +1581,28 @@
       "source": "https://www.epicpass.com/regions/europe/italy/skirama-dolomiti.aspx"
     },
     {
+      "areaId": "magic-mountain-idaho",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/magic-mountain-idaho"
+    },
+    {
       "areaId": "magic-mountain-ski-area",
       "family": "indy",
       "access": "included",
-      "source": "https://www.magicmtn.com/lift-ticket-info"
+      "source": "https://www.indyskipass.com/our-resorts/magic-mountain"
+    },
+    {
+      "areaId": "maiko-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/maiko-resort"
+    },
+    {
+      "areaId": "mala-upa",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/mala-upa"
     },
     {
       "areaId": "mammoth-mountain",
@@ -879,16 +1611,70 @@
       "source": "https://www.ikonpass.com/en/compare-benefits"
     },
     {
+      "areaId": "manning-park",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/manning-park"
+    },
+    {
+      "areaId": "manning-park-xc",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/manning-park-xc"
+    },
+    {
+      "areaId": "maple-ski-ridge",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/maple-ski-ridge"
+    },
+    {
+      "areaId": "maplelag-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/maplelag-resort"
+    },
+    {
+      "areaId": "marble-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/marble-mountain"
+    },
+    {
       "areaId": "marmot-basin",
       "family": "mountain-collective",
       "access": "included",
       "source": "https://www.skimarmot.com/tickets-passes/mountain-collective/"
     },
     {
+      "areaId": "marquette-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/marquette-mountain"
+    },
+    {
+      "areaId": "massanutten-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/massanutten-resort"
+    },
+    {
+      "areaId": "massif-du-sud",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/massif-du-sud"
+    },
+    {
       "areaId": "mayrhofen",
       "family": "epic",
       "access": "included",
       "source": "https://www.epicpass.com/regions/europe/austria/zillertal.aspx"
+    },
+    {
+      "areaId": "mcintyre-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/mcintyre-ski-area"
     },
     {
       "areaId": "megeve",
@@ -906,13 +1692,49 @@
       "areaId": "middlebury-snowbowl",
       "family": "indy",
       "access": "included",
-      "source": "https://middleburysnowbowl.com/lift-tickets/"
+      "source": "https://www.indyskipass.com/our-resorts/middlebury-snowbowl"
+    },
+    {
+      "areaId": "minocqua-winter-park",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/minocqua-winter-park"
+    },
+    {
+      "areaId": "mohawk-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/mohawk-mountain"
     },
     {
       "areaId": "mona-yongpyong",
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "mont-edouard",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/mont-edouard"
+    },
+    {
+      "areaId": "mont-kanasuta",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/mont-kanasuta"
+    },
+    {
+      "areaId": "mont-rigaud",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/mont-rigaud"
+    },
+    {
+      "areaId": "mont-ripley-ski-area",
+      "family": "indy",
+      "access": "discount",
+      "source": "https://www.indyskipass.com/our-resorts/mont-ripley-ski-area"
     },
     {
       "areaId": "mont-sainte-anne",
@@ -924,7 +1746,19 @@
       "areaId": "mont-sutton",
       "family": "indy",
       "access": "included",
-      "source": "https://montsutton.com/avantages-aux-membres/"
+      "source": "https://www.indyskipass.com/our-resorts/mont-sutton"
+    },
+    {
+      "areaId": "montage-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/montage-mountain"
+    },
+    {
+      "areaId": "montana-snowbowl",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/montana-snowbowl"
     },
     {
       "areaId": "monte-bondone",
@@ -937,6 +1771,36 @@
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/destinations/valle-daosta"
+    },
+    {
+      "areaId": "moose-mountain-ski-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/moose-mountain"
+    },
+    {
+      "areaId": "mount-baldy-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/mount-baldy-ski-area"
+    },
+    {
+      "areaId": "mount-cain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/mount-cain"
+    },
+    {
+      "areaId": "mount-kato",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/mount-kato"
+    },
+    {
+      "areaId": "mount-racey-ski-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/mount-racey-ski-resort"
     },
     {
       "areaId": "mount-snow",
@@ -954,7 +1818,19 @@
       "areaId": "mount-washington-alpine-resort",
       "family": "indy",
       "access": "included",
-      "source": "https://www.mountwashington.ca/purchase/gold-pass-perks-26-27/"
+      "source": "https://www.indyskipass.com/our-resorts/mt-washington"
+    },
+    {
+      "areaId": "mountain-high",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/mountain-high"
+    },
+    {
+      "areaId": "mt-abram",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/mt-abram"
     },
     {
       "areaId": "mt-bachelor",
@@ -975,10 +1851,22 @@
       "source": "https://www.ikonpass.com/en/destinations/mt-buller/"
     },
     {
+      "areaId": "mt-eyak",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/mt-eyak"
+    },
+    {
+      "areaId": "mt-holiday",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/mt-holiday"
+    },
+    {
       "areaId": "mt-hood-meadows",
       "family": "indy",
       "access": "included",
-      "source": "https://www.skihood.com/explore/indy-pass"
+      "source": "https://www.indyskipass.com/our-resorts/mt-hood-meadows"
     },
     {
       "areaId": "mt-hutt",
@@ -987,16 +1875,52 @@
       "source": "https://www.ikonpass.com/destinations/coronet-peak-remarkables-mt-hutt"
     },
     {
+      "areaId": "mt-la-crosse",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/mt-la-crosse"
+    },
+    {
       "areaId": "mt-norquay",
       "family": "ikon",
       "access": "included",
       "source": "https://www.skibig3.com/season-passes/ikon-pass/"
     },
     {
+      "areaId": "mt-pisgah",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/mt-pisgah"
+    },
+    {
+      "areaId": "mt-shasta-ski-park",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/mt-shasta"
+    },
+    {
       "areaId": "mt-t",
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "mt-van-hoevenberg",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/mt-van-hoevenberg"
+    },
+    {
+      "areaId": "muica-snow-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/muica-snow-resort"
+    },
+    {
+      "areaId": "murray-ridge-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/murray-ridge-ski-area"
     },
     {
       "areaId": "myoko-suginohara-ski-resort",
@@ -1011,16 +1935,40 @@
       "source": "https://www.epicpass.com/regions/canada/rcr.aspx"
     },
     {
+      "areaId": "nayoro-piyashiri-ski-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/nayoro-piyashiri-ski-resort"
+    },
+    {
       "areaId": "nekoma-mountain",
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/compare-benefits"
     },
     {
+      "areaId": "nelson-nordic-ski-club",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/nelson-nordic-ski-club"
+    },
+    {
       "areaId": "nendaz",
       "family": "epic",
       "access": "included",
       "source": "https://www.epicpass.com/regions/europe/switzerland/verbier-4-vallees.aspx"
+    },
+    {
+      "areaId": "nickel-plate-cross-country-ski-club",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/nickel-plate-cross-country-ski-club"
+    },
+    {
+      "areaId": "ninox-snow-park",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/ninox-snow-park"
     },
     {
       "areaId": "niseko-united",
@@ -1035,22 +1983,100 @@
       "source": "https://www.alterramtn.co/en/news/deer-valley-now-3-days-on-ikon-base-pass-for-winter-2627"
     },
     {
+      "areaId": "norefjell-ski-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/norefjell-ski-resort"
+    },
+    {
+      "areaId": "north-cascade-heli",
+      "family": "indy",
+      "access": "discount",
+      "source": "https://www.indyskipass.com/our-resorts/north-cascade-heli"
+    },
+    {
+      "areaId": "northern-maine-community-trails",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/northern-maine-community-trails"
+    },
+    {
       "areaId": "northstar-california-resort",
       "family": "epic",
       "access": "included",
       "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
+      "areaId": "norway-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/norway-mountain"
+    },
+    {
       "areaId": "nub-s-nob",
       "family": "indy",
       "access": "included",
-      "source": "https://shop.nubsnob.com/tickets"
+      "source": "https://www.indyskipass.com/our-resorts/nubs-nob-0"
+    },
+    {
+      "areaId": "nutt-hill",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/nutt-hill"
+    },
+    {
+      "areaId": "oak-hill-outdoor-center",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/oak-hill-outdoor-center"
+    },
+    {
+      "areaId": "ober-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/ober-mountain"
+    },
+    {
+      "areaId": "oberstdorf-kleinwalsertal-bergbahnen",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/oberstdorf-kleinwalsertal-bergbahnen"
+    },
+    {
+      "areaId": "obertauern",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/obertauern"
     },
     {
       "areaId": "okemo-mountain-resort",
       "family": "epic",
       "access": "included",
       "source": "https://www.epicpass.com/pass-results/college.aspx"
+    },
+    {
+      "areaId": "okunakayama-kogen",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/okunakayama-kogen"
+    },
+    {
+      "areaId": "onikoube-ski-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/onikoube-ski-resort"
+    },
+    {
+      "areaId": "oppdal",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/oppdal"
+    },
+    {
+      "areaId": "orcieres-merlette-1850",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/orcieres-merlette-1850"
     },
     {
       "areaId": "ordino-arcalis",
@@ -1065,6 +2091,12 @@
       "source": "https://www.epicpass.com/regions/europe/france/les-3-vallees.aspx"
     },
     {
+      "areaId": "osceola-tug-hill-xc-ski-center",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/osceola-tug-hill-xc-ski-center"
+    },
+    {
       "areaId": "paganella-ski",
       "family": "epic",
       "access": "included",
@@ -1075,6 +2107,12 @@
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/destinations/grandvalira-resorts-andorra"
+    },
+    {
+      "areaId": "palcall-tsumagoi-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/palcall-tsumagoi-resort"
     },
     {
       "areaId": "palisades-tahoe",
@@ -1107,10 +2145,40 @@
       "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
+      "areaId": "pass-powderkeg",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/pass-powderkeg"
+    },
+    {
       "areaId": "pats-peak",
       "family": "indy",
       "access": "included",
-      "source": "https://www.patspeak.com/plan-your-visit/planning-tools/indy-pass/"
+      "source": "https://www.indyskipass.com/our-resorts/pats-peak"
+    },
+    {
+      "areaId": "paul-bunyan-ski-hill",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/paul-bunyan-ski-hill"
+    },
+    {
+      "areaId": "paul-smiths-college-visitor-interpretive-center",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/paul-smiths-college-visitor-interpretive-center"
+    },
+    {
+      "areaId": "pebble-creek-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/pebble-creek-ski-area"
+    },
+    {
+      "areaId": "peek-n-peak",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/peek-n-peak"
     },
     {
       "areaId": "pejo-3000",
@@ -1125,6 +2193,18 @@
       "source": "https://www.epicpass.com/regions/australia.aspx"
     },
     {
+      "areaId": "petzen",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/petzen"
+    },
+    {
+      "areaId": "phoenix-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/phoenix-mountain"
+    },
+    {
       "areaId": "pico-mountain",
       "family": "ikon",
       "access": "included",
@@ -1137,10 +2217,52 @@
       "source": "https://www.ikonpass.com/en/destinations/valle-daosta"
     },
     {
+      "areaId": "pila",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/pila"
+    },
+    {
+      "areaId": "pine-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/pine-mountain"
+    },
+    {
       "areaId": "pinzolo",
       "family": "epic",
       "access": "included",
       "source": "https://www.epicpass.com/regions/europe/italy/skirama-dolomiti.aspx"
+    },
+    {
+      "areaId": "pippu-ski-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/pippu-ski-resort"
+    },
+    {
+      "areaId": "pitztal-glacier",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/pitztal-glacier"
+    },
+    {
+      "areaId": "pizol",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/pizol"
+    },
+    {
+      "areaId": "plain-valley-ski-trails",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/plain-valley-ski-trails"
+    },
+    {
+      "areaId": "pomerelle-mountain-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/pomerelle-mountain-resort"
     },
     {
       "areaId": "pontedilegno-tonale",
@@ -1149,10 +2271,64 @@
       "source": "https://www.epicpass.com/regions/europe/italy/skirama-dolomiti.aspx"
     },
     {
+      "areaId": "portes-du-soleil",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/portes-du-soleil"
+    },
+    {
+      "areaId": "powder-ridge",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/powder-ridge"
+    },
+    {
+      "areaId": "powder-ridge-connecticut",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/powder-ridge-0"
+    },
+    {
+      "areaId": "powderhorn-mountain-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/powderhorn"
+    },
+    {
+      "areaId": "pyha-ski-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/pyha-ski-resort"
+    },
+    {
+      "areaId": "quarry-road-trails",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/quarry-road-trails"
+    },
+    {
       "areaId": "ragged-mountain-resort",
       "family": "indy",
       "access": "included",
-      "source": "https://www.raggedmountainresort.com/all-tickets/"
+      "source": "https://www.indyskipass.com/our-resorts/ragged-mountain"
+    },
+    {
+      "areaId": "rangeley-lakes-trail-center",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/rangeley-lakes-trail-center"
+    },
+    {
+      "areaId": "rauriser-hochalmbahnen",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/rauriser-hochalmbahnen"
+    },
+    {
+      "areaId": "red-lodge-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/red-lodge-mountain"
     },
     {
       "areaId": "red-mountain-resort",
@@ -1173,6 +2349,18 @@
       "source": "https://www.revelstokemountainresort.com/tickets-passes/mountain-collective/"
     },
     {
+      "areaId": "rikert-nordic-center",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/rikert-nordic-center"
+    },
+    {
+      "areaId": "riksgransen",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/riksgransen"
+    },
+    {
       "areaId": "rio-pusteria-bressanone",
       "family": "ikon",
       "access": "included",
@@ -1185,6 +2373,12 @@
       "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
+      "areaId": "ruka-ski-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/ruka-ski-resort"
+    },
+    {
       "areaId": "rusutsu-resort",
       "family": "epic",
       "access": "included",
@@ -1194,7 +2388,7 @@
       "areaId": "saddleback",
       "family": "indy",
       "access": "included",
-      "source": "https://www.saddlebackmaine.com/lift-tickets/"
+      "source": "https://www.indyskipass.com/our-resorts/saddleback-mountain"
     },
     {
       "areaId": "saint-martin-de-belleville",
@@ -1209,10 +2403,16 @@
       "source": "https://www.ikonpass.com/en/destinations/dolomiti-superski"
     },
     {
+      "areaId": "saskadena-six-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/saskadena-six-ski-area"
+    },
+    {
       "areaId": "sasquatch-mountain-resort",
       "family": "indy",
       "access": "included",
-      "source": "https://sasquatchmountain.ca/indy-pass/"
+      "source": "https://www.indyskipass.com/our-resorts/sasquatch-mountain-resort"
     },
     {
       "areaId": "schmittenhoehe",
@@ -1224,13 +2424,19 @@
       "areaId": "schuss-mountain-at-shanty-creek",
       "family": "indy",
       "access": "included",
-      "source": "https://www.shantycreek.com/ski/lift-tickets-season-passes/indy-pass/"
+      "source": "https://www.indyskipass.com/our-resorts/schuss-mountain-at-shanty-creek"
     },
     {
       "areaId": "schweitzer-mountain-resort",
       "family": "ikon",
       "access": "included",
       "source": "https://www.schweitzer.com/-/media/schweitzer/pdfs-and-maps/press/schweitzer-newsrelease-springpass2627.pdf?hash=A805B39FC043336A24514526E60DAB1F&rev=630537fab3a049e0be8c57315042ea03"
+    },
+    {
+      "areaId": "scotts-cobble-nordic-center",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/scotts-cobble-nordic-center"
     },
     {
       "areaId": "see",
@@ -1245,16 +2451,46 @@
       "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
+      "areaId": "shames-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/shames-mountain"
+    },
+    {
+      "areaId": "shawnee-mountain-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/shawnee-mountain-ski-area"
+    },
+    {
       "areaId": "shiga-kogen-mountain-resort",
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/compare-benefits"
     },
     {
+      "areaId": "shimokura",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/shimokura"
+    },
+    {
+      "areaId": "showdown-montana",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/showdown-montana"
+    },
+    {
       "areaId": "sierra-at-tahoe-ski-resort",
       "family": "ikon",
       "access": "included",
       "source": "https://sierraattahoe.com/ikon-pass/"
+    },
+    {
+      "areaId": "silver-mountain-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/silver-mountain"
     },
     {
       "areaId": "silverstar-mountain-resort",
@@ -1269,10 +2505,52 @@
       "source": "https://www.epicpass.com/regions/europe/austria/silvretta-montafon.aspx"
     },
     {
+      "areaId": "skaneateles-ski-club",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/skaneateles-ski-club"
+    },
+    {
+      "areaId": "skeetawk",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/skeetawk"
+    },
+    {
+      "areaId": "ski-big-bear",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/ski-big-bear"
+    },
+    {
       "areaId": "ski-butternut",
       "family": "ikon",
       "access": "included",
       "source": "https://www.alterramtn.co/en/news/2627-ikon-pass-goes-on-sale-march-12-with-new-benefits-new-offers-and-new-discounts"
+    },
+    {
+      "areaId": "ski-land",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/ski-land"
+    },
+    {
+      "areaId": "ski-saint-bruno",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/ski-saint-bruno"
+    },
+    {
+      "areaId": "ski-sawmill",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/ski-sawmill"
+    },
+    {
+      "areaId": "ski-vallee-bleue",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/ski-vallee-bleue"
     },
     {
       "areaId": "skicircus-saalbach",
@@ -1281,16 +2559,58 @@
       "source": "https://www.epicpass.com/regions/europe/austria/alpin-card-resorts.aspx"
     },
     {
+      "areaId": "skigebiet-heiligenblut-grossglockner",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/skigebiet-heiligenblut-grossglockner"
+    },
+    {
+      "areaId": "skiwelt",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/skiwelt"
+    },
+    {
+      "areaId": "sleepy-hollow",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/sleepy-hollow"
+    },
+    {
+      "areaId": "smokey-mountain-ski-club",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/smokey-mountain-ski-club"
+    },
+    {
       "areaId": "smugglers-notch-resort",
       "family": "indy",
       "access": "included",
-      "source": "https://vermontbiz.com/news/2026/september/08/smugglers-notch-resort-joins-indy-pass"
+      "source": "https://www.indyskipass.com/our-resorts/smugglers-notch-resort"
     },
     {
       "areaId": "snow-creek",
       "family": "epic",
       "access": "included",
       "source": "https://www.epicpass.com/pass-results/college.aspx"
+    },
+    {
+      "areaId": "snow-king-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/snow-king-mountain-resort"
+    },
+    {
+      "areaId": "snow-resort-the-cupid-of-romance",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/snow-resort-the-cupid-of-romance"
+    },
+    {
+      "areaId": "snow-ridge",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/snow-ridge"
     },
     {
       "areaId": "snow-summit",
@@ -1359,6 +2679,12 @@
       "source": "https://www.snowshoemtn.com/plan-your-trip/lift-tickets-season-pass/ikon-pass"
     },
     {
+      "areaId": "snowstar",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/snowstar"
+    },
+    {
       "areaId": "snowy-range-ski-area",
       "family": "ikon",
       "access": "included",
@@ -1374,13 +2700,19 @@
       "areaId": "soldier-mountain-ski-area",
       "family": "indy",
       "access": "included",
-      "source": "https://soldiermountain.com/restrictions-policies/"
+      "source": "https://www.indyskipass.com/our-resorts/soldier-mountain"
     },
     {
       "areaId": "solitude-mountain-resort",
       "family": "ikon",
       "access": "included",
       "source": "https://blog.solitudemountain.com/2026/ambers-updates-solitude-opens-for-the-26-27-winter-season/"
+    },
+    {
+      "areaId": "sovereign-lake-nordic-club",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/sovereign-lake-nordic-club"
     },
     {
       "areaId": "spieljoch",
@@ -1392,7 +2724,13 @@
       "areaId": "spirit-mountain",
       "family": "indy",
       "access": "included",
-      "source": "https://spiritmt.com/winter/downhill/"
+      "source": "https://www.indyskipass.com/our-resorts/spirit-mountain"
+    },
+    {
+      "areaId": "spring-mountain-adventures",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/spring-mountain-adventures"
     },
     {
       "areaId": "st-anton-am-arlberg",
@@ -1407,6 +2745,12 @@
       "source": "https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx"
     },
     {
+      "areaId": "st-johann-in-tirol",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/st-johann-in-tirol"
+    },
+    {
       "areaId": "station-touristique-stoneham",
       "family": "epic",
       "access": "included",
@@ -1419,16 +2763,46 @@
       "source": "https://www.steamboat.com/plan-your-trip/lift-tickets-ski-pass/ikon-pass"
     },
     {
+      "areaId": "steamboat-ski-touring-center",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/steamboat-ski-touring-center"
+    },
+    {
+      "areaId": "steinplatte",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/steinplatte"
+    },
+    {
       "areaId": "stevens-pass",
       "family": "epic",
       "access": "included",
       "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
+      "areaId": "stoke-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/stoke-mountain"
+    },
+    {
+      "areaId": "stoten-i-salen",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/stoten-i-salen"
+    },
+    {
       "areaId": "stowe",
       "family": "epic",
       "access": "included",
       "source": "https://www.epicpass.com/pass-results/college.aspx"
+    },
+    {
+      "areaId": "stranda-ski-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/stranda-ski-resort"
     },
     {
       "areaId": "stratton-mountain-resort",
@@ -1503,6 +2877,12 @@
       "source": "https://www.sunvalley.com/Tickets-Passes/Mountain-Collective"
     },
     {
+      "areaId": "sunburst-ski-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/sunburst-ski-area"
+    },
+    {
       "areaId": "sunday-river",
       "family": "ikon",
       "access": "included",
@@ -1515,10 +2895,40 @@
       "source": "https://www.sundayriver.com/mountain-collective"
     },
     {
+      "areaId": "sundown-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/sundown-mountain"
+    },
+    {
+      "areaId": "sunlight-mountain-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/sunlight-mountain-resort"
+    },
+    {
+      "areaId": "swain-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/swain-resort"
+    },
+    {
+      "areaId": "takasu-snow-park",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/takasu-snow-park"
+    },
+    {
       "areaId": "tamarack-resort",
       "family": "ikon",
       "access": "included",
       "source": "https://tamarackidaho.com/ikon-faq"
+    },
+    {
+      "areaId": "tamarack-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/tamarack-mountain-resort"
     },
     {
       "areaId": "taos-ski-valley",
@@ -1533,16 +2943,46 @@
       "source": "https://www.skitaos.com/winter-activities-pre-arrival"
     },
     {
+      "areaId": "tazawako",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/tazawako"
+    },
+    {
+      "areaId": "telemark-nordic-center",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/telemark-nordic-center"
+    },
+    {
       "areaId": "telluride-ski-resort",
       "family": "epic",
       "access": "included",
       "source": "https://tellurideskiresort.com/epic/"
     },
     {
+      "areaId": "tenney-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/tenney-mountain"
+    },
+    {
+      "areaId": "terry-peak",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/terry-peak"
+    },
+    {
       "areaId": "the-highlands-at-harbor-springs",
       "family": "ikon",
       "access": "included",
       "source": "https://www.boynemountain.com/ikon-pass"
+    },
+    {
+      "areaId": "the-loppet",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/the-loppet"
     },
     {
       "areaId": "the-remarkables",
@@ -1563,10 +3003,46 @@
       "source": "https://www.ikonpass.com/en/destinations/thredbo/"
     },
     {
+      "areaId": "thrill-hills",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/thrill-hills"
+    },
+    {
       "areaId": "thyon",
       "family": "epic",
       "access": "included",
       "source": "https://www.epicpass.com/regions/europe/switzerland/verbier-4-vallees.aspx"
+    },
+    {
+      "areaId": "titus-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/titus-mountain"
+    },
+    {
+      "areaId": "togakushi-ski-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/togakushi-ski-resort"
+    },
+    {
+      "areaId": "togari-onsen-snow-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/togari-onsen-snow-resort"
+    },
+    {
+      "areaId": "trapp-family-lodge",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/trapp-family-lodge"
+    },
+    {
+      "areaId": "treetops-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/treetops-resort"
     },
     {
       "areaId": "tremblant",
@@ -1578,13 +3054,37 @@
       "areaId": "trollhaugen-ski-area",
       "family": "indy",
       "access": "included",
-      "source": "https://trollhaugen.com/hours-and-rates/"
+      "source": "https://www.indyskipass.com/our-resorts/trollhaugen"
+    },
+    {
+      "areaId": "tschiertschen-chur",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/tschiertschen-chur"
     },
     {
       "areaId": "tsugaike-mountain-resort",
       "family": "epic",
       "access": "included",
       "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx"
+    },
+    {
+      "areaId": "turpin-meadow-ranch",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/turpin-meadow-ranch"
+    },
+    {
+      "areaId": "tussey-mountain",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/tussey-mountain"
+    },
+    {
+      "areaId": "tyrol-basin-ski-and-snowboard",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/tyrol-basin-ski-and-snowboard"
     },
     {
       "areaId": "vail-mountain",
@@ -1603,6 +3103,12 @@
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/destinations/dolomiti-superski"
+    },
+    {
+      "areaId": "val-direne",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/val-direne"
     },
     {
       "areaId": "val-gardena-alpe-di-siusi",
@@ -1629,16 +3135,34 @@
       "source": "https://www.epicpass.com/regions/europe/switzerland/verbier-4-vallees.aspx"
     },
     {
+      "areaId": "veterans-memorial-recreation-area",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/veterans-memorial-recreation-area"
+    },
+    {
       "areaId": "veysonnaz",
       "family": "epic",
       "access": "included",
       "source": "https://www.epicpass.com/regions/europe/switzerland/verbier-4-vallees.aspx"
     },
     {
+      "areaId": "washigatake-ski-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/washigatake-ski-resort"
+    },
+    {
+      "areaId": "waterville-valley-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/waterville-valley-resort"
+    },
+    {
       "areaId": "west-mountain-ski-resort",
       "family": "indy",
       "access": "included",
-      "source": "https://westmountain.com/indypass/"
+      "source": "https://www.indyskipass.com/our-resorts/west-mountain"
     },
     {
       "areaId": "whaleback",
@@ -1653,10 +3177,34 @@
       "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
+      "areaId": "white-grass-ski-touring",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/white-grass-ski-touring"
+    },
+    {
       "areaId": "white-pass-ski-area",
       "family": "indy",
       "access": "included",
-      "source": "https://skiwhitepass.com/the-mountain/indypass"
+      "source": "https://www.indyskipass.com/our-resorts/white-pass"
+    },
+    {
+      "areaId": "white-pine-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/white-pine-resort"
+    },
+    {
+      "areaId": "white-pine-touring-nordic-center",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/white-pine-touring-nordic-center"
+    },
+    {
+      "areaId": "whitecap-mountains-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/whitecap-mountains-resort"
     },
     {
       "areaId": "whiteface",
@@ -1669,6 +3217,18 @@
       "family": "mountain-collective",
       "access": "included",
       "source": "https://whiteface.com/seasonpasses/"
+    },
+    {
+      "areaId": "whitehorse-nordic-centre",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/whitehorse-nordic-centre"
+    },
+    {
+      "areaId": "whitepia-takasu",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/whitepia-takasu"
     },
     {
       "areaId": "whitetail-resort",
@@ -1689,6 +3249,12 @@
       "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
+      "areaId": "williams-lake-cross-country-ski-club",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/williams-lake-cross-country-ski-club"
+    },
+    {
       "areaId": "wilmot-mountain",
       "family": "epic",
       "access": "included",
@@ -1701,10 +3267,46 @@
       "source": "https://www.winterparkresort.com/plan-your-trip/lift-tickets-ski-pass"
     },
     {
+      "areaId": "winter4kids",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/winter4kids"
+    },
+    {
+      "areaId": "wintergreen-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/wintergreen"
+    },
+    {
+      "areaId": "winterplace-ski-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/winterplace-ski-resort"
+    },
+    {
+      "areaId": "wisp-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/wisp"
+    },
+    {
+      "areaId": "woodstock-nordic-center",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/woodstock-nordic-center"
+    },
+    {
       "areaId": "yunding-snow-park",
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "yuzawa-nakazato-snow-resort",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/yuzawa-nakazato-snow-resort"
     },
     {
       "areaId": "zao-onsen-ski-resort",

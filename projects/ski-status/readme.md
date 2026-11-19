@@ -2,7 +2,7 @@
 
 November 19, 2026
 
-ski-status is a personal map and table for downhill ski areas in North America and worldwide Ikon and Epic destinations. Use it to compare mountain statistics and find ski areas on your pass.
+ski-status is a personal map and table for North American ski areas and worldwide Ikon, Epic, and Indy destinations. Use it to compare mountain statistics and find areas on your pass.
 
 The catalog includes links to official conditions reports. Pass filters show access by family for the listed season. See the [release tasks](TODO.md).
 
@@ -16,8 +16,9 @@ Open `/projects/ski-status/map`. Select **Map**, **Split**, or **Table** at the 
 
 On a wide screen, the page starts in **Split**. On a narrow screen, it starts in **Table**.
 
-- Search by ski area, alternative name, town, or country.
+- Search by ski area, alternative name, town, country, or skiing type. Search for **cross-country** to find Nordic centers and areas that offer both types of skiing.
 - Use **Region** to select a country, state, or province. You can also filter by pass family or night skiing. On a narrow screen, select **Filters** to see these controls.
+- Select **Indy** for included access. Select **Indy discounts** for Alpine Allied discounts and the North Cascade Heli offer.
 - Turn on **In map view** beside the results count to limit the table to the map area.
 - Select a column header to change the sort order.
 - Select a dot or table row to show the area details. Use the area name below the filters to go to its details. Zoom in to separate nearby dots.
@@ -35,7 +36,7 @@ When **Table** hides the map on a narrow screen, the table uses the last visible
 
 The default map shows one cyan dot per ski area. Use **Color by** to show pass access, skiable area, vertical drop, summit elevation, or highest lift terminal. The legend shows ranges in your selected units. Gray marks an unknown value. A gold outline shows the selected area.
 
-With **Pass access** selected, the map shows a brand icon for each area with included lift access. The icons grow as you zoom in. A yellow **+** marks an area with access on more than one pass. Use the pass filter to choose which icon appears on a multi-pass badge. Select an area to see all its passes.
+With **Pass access** selected, the map shows a brand icon for each area with included access. The icons grow as you zoom in. A yellow **+** marks an area with access on more than one pass. Use the pass filter to choose which icon appears on a multi-pass badge. Select an area to see all its passes.
 
 An orange dot marks discount-only access. A gray dot marks an area with no pass access on file. The legend shows which brand each icon represents.
 
@@ -56,17 +57,17 @@ CARTO publishes Dark Matter, Voyager, and Positron. MapTiler offers a separate W
 
 ## Catalog
 
-On November 19, 2026, the catalog had 305 ski areas in 13 countries. It had 167 in the United States, 30 in Canada, and 108 in other countries. It included 126 areas with Ikon lift access and 98 with Epic lift access. It had 106 acreage figures and 132 links to official conditions reports.
+On November 19, 2026, the catalog had 561 areas in 20 countries. It had 319 in the United States, 66 in Canada, and 176 in other countries. It included 126 areas with Ikon access, 98 with Epic access, and 298 with included Indy access. It had 113 acreage figures and 171 links to conditions reports.
 
 | File | Use |
 | --- | --- |
 | [Area statistics](data/areas.json) | Resort sites, published mountain statistics, and official report links. Empty fields display as unknown. |
-| [Area locations](data/locations.json) | Points from the November 16 OpenSkiData build and from OpenStreetMap lift stations. Each point has source links. The file includes ODbL attribution. |
-| [Pass memberships](data/passes-2026-27.json) | Family access for the 2026/27 season. The details show discounts and listings with unconfirmed access. The pass filter includes areas with lift access. Each entry links to a source. |
+| [Area locations](data/locations.json) | Points from the November 16 OpenSkiData build and additional OpenStreetMap features. Each point has source links. The file includes ODbL attribution. |
+| [Pass memberships](data/passes-2026-27.json) | Family access for the 2026/27 season. The details show discounts and listings with unconfirmed access. Each entry links to a source. |
 
 Use the same area ID in the three files. Add one point for each area. Add at most one membership for each area and pass family. Use the country code for each area. Add a state or province code where this code is in use in the catalog.
 
-Cite an operator source for the mountain statistics in each record. Use absolute HTTPS URLs without usernames or passwords. The catalog checks for duplicate IDs, missing references, and conflicting values. It requires location attribution and a pass season that ends the next year. [Catalog validation](../../src/features/ski-status/catalog.ts)
+Cite the operator or pass provider for published statistics. Keep the source of the pass rules with the membership. Use absolute HTTPS URLs without usernames or passwords. The catalog checks for duplicate IDs, missing references, and conflicting values. It requires location attribution and a pass season that ends the next year. [Catalog validation](../../src/features/ski-status/catalog.ts)
 
 ### Ikon destinations
 
@@ -80,6 +81,14 @@ The catalog covers the 26/27 Epic Pass list. It includes 44 North American areas
 
 The three Australian resorts have access in the 2027 winter season. Select **Epic** in an area's details to read the current terms. Partners can share a day limit. Ski Arlberg also requires a stay booked directly with a lodging partner. [Australia access](https://www.epicpass.com/regions/australia.aspx), [Ski Arlberg access](https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx)
 
+### Indy destinations
+
+The catalog covers all 302 cards from the November 19 roster, plus the Gore Mountain Nordic Center. It includes 69 destinations outside the United States and Canada. The 303 records have 298 included memberships and five discounts. [Indy resort roster](https://www.indyskipass.com/our-resorts), [Indy November additions](https://www.indyskipass.com/this-is-indy/news/whiteface-gore-and-belleayre-join-allied-program-as-indy-pass-announces-15-additional-resorts-for)
+
+Gore has a pin for downhill discounts and a separate pin for included Nordic access. The Manning Park Nordic Centre and the downhill resort also have separate pins. Groups such as Innsbruck Region and Portes du Soleil have one representative pin and searchable member names. Each group link gives the shared day limits and redemption rules. [Innsbruck access](https://www.indyskipass.com/our-resorts/innsbruck-region), [Portes du Soleil access](https://www.indyskipass.com/our-resorts/portes-du-soleil)
+
+The catalog uses the published roster figures for vertical drop, lifts, trail count, night skiing, and terrain parks. Use the operator's figures when the operator gives a more precise value for the same area. Leave fields empty when the source gives no comparable figure. The **Skiing** column identifies Nordic, mixed, heli-skiing, and indoor venues. The night skiing field describes the venue. Open the pass link to check which sessions it covers. [Indy access rules](https://www.indyskipass.com/this-is-indy/how-it-works), [North Cascade Heli discount](https://www.indyskipass.com/our-resorts/north-cascade-heli), [Stoke Mountain profile](https://www.indyskipass.com/our-resorts/stoke-mountain)
+
 ## Local checks
 
 Install the repository dependencies. Run `npm run dev` to start Vite. Open `/projects/ski-status/map` on the local server.
@@ -90,7 +99,7 @@ Run the catalog, table, and marker tests.
 npx vitest run src/test/skiStatus.test.ts
 ```
 
-Run the browser tests. They check world map fit, country filters, pass icons, view changes, and error recovery.
+Run the browser tests. They check world map fit, country filters, pass icons, Indy discounts, view changes, and error recovery.
 
 ```bash
 npm run test:e2e -- tests/e2e/ski-status.spec.ts --project=chromium
@@ -98,9 +107,9 @@ npm run test:e2e -- tests/e2e/ski-status.spec.ts --project=chromium
 
 ## First release
 
-Include active, public, lift-served downhill areas. In North America, include areas with at least 100 published skiable acres or included lift access on Ikon, Epic, Indy, or Mountain Collective. Include the official Ikon and Epic destinations worldwide. Record unconfirmed lift access on its own. Keep eligible areas visible in the off-season. [Ikon destination map](https://www.ikonpass.com/en/destinations), [Epic Pass list](https://www.epicpass.com/pass-results/college.aspx)
+In North America, include active public downhill areas with at least 100 published skiable acres. Include official pass destinations, including worldwide destinations for Ikon, Epic, and Indy. Record the type of access for each pass. Keep eligible areas visible in the off-season. [Ikon destination map](https://www.ikonpass.com/en/destinations), [Epic Pass list](https://www.epicpass.com/pass-results/college.aspx), [Indy resort roster](https://www.indyskipass.com/our-resorts)
 
-Whaleback has 86 skiable acres and qualifies through Indy lift access. Show Indy Allied discounts on areas that qualify. Use skiable acreage for the threshold. Resort property acreage can include lodging and terrain outside the ski area. [Indy Whaleback profile](https://www.indyskipass.com/our-resorts/whaleback-mountain), [Indy Allied terms](https://www.indyskipass.com/this-is-indy/news/whiteface-gore-and-belleayre-join-allied-program-as-indy-pass-announces-15-additional-resorts-for), [Monterreal property description](https://www.monterreal.com/)
+Whaleback has 86 skiable acres and qualifies through Indy lift access. Use skiable acreage for the threshold. Resort property acreage can include lodging and terrain outside the ski area. [Indy Whaleback profile](https://www.indyskipass.com/our-resorts/whaleback-mountain), [Monterreal property description](https://www.monterreal.com/)
 
 ### Map and table
 
@@ -114,7 +123,7 @@ Whaleback has 86 skiable acres and qualifies through Indy lift access. Show Indy
 
 | Field | Definition |
 | --- | --- |
-| Area identity | Store the official name, website, ID, region, country, and time zone. Keep former names for search. Place the point near public lift access. |
+| Area identity | Store the official name, website, ID, region, country, and time zone. Keep former names for search. Place the point near a base, trailhead, or visitor entrance. |
 | Skiable acres | Use the operator's published skiable area. Record which mountains or terrain the figure covers. |
 | Lifts | Use the operator's total for the same area. Include surface lifts. Record the counts by lift type when available. |
 | Elevation and vertical | Store the highest and lowest lift terminal elevations. Use their difference for lift elevation range. Keep the operator's skiable vertical. |

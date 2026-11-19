@@ -1,8 +1,23 @@
 import { containsPoint, type TooltipPoint, type TooltipRect } from '../../maps/screenGeometry';
 import { normalizeSearch } from '../../utils/search';
-import { passFamilySchema, type PassFamily, type SkiArea } from './catalog';
+import { passFamilySchema, passNames, type PassFamily, type SkiArea } from './catalog';
 
 export type SkiUnits = 'imperial' | 'metric';
+type PassFilter = PassFamily | 'indy-discounts';
+
+export const passFilterOptions: Record<PassFilter, string> = { ...passNames, 'indy-discounts': 'Indy discounts' };
+
+export function passFilterFamily(pass: PassFilter): PassFamily {
+    return pass === 'indy-discounts' ? 'indy' : pass;
+}
+
+const skiingLabels: Record<SkiArea['skiing'], string> = {
+    downhill: 'Downhill',
+    'cross-country': 'Cross-country',
+    both: 'Downhill and cross-country',
+    'heli-skiing': 'Heli-skiing',
+    indoor: 'Indoor training',
+};
 
 export const skiResultsViews = [
     { id: 'map', label: 'Map' },
@@ -19,12 +34,14 @@ export function readSkiResultsView(params: URLSearchParams, wide: boolean): SkiR
 export const columns = [
     { key: 'name', label: 'Ski area' },
     { key: 'region', label: 'Region' },
+    { key: 'skiing', label: 'Skiing' },
     { key: 'acres', label: 'Skiable area' },
     { key: 'verticalFt', label: 'Vertical' },
     { key: 'liftCount', label: 'Lifts' },
     { key: 'trailCount', label: 'Trails' },
     { key: 'nightSkiing', label: 'Night skiing' },
     { key: 'nightAcres', label: 'Night area' },
+    { key: 'terrainParks', label: 'Terrain parks' },
     { key: 'baseFt', label: 'Base' },
     { key: 'summitFt', label: 'Summit' },
     { key: 'lowestLiftTerminalFt', label: 'Lowest lift terminal' },
@@ -40,8 +57,9 @@ export function readSkiSort(params: URLSearchParams): SkiSort {
     return { key: column?.key ?? 'name', direction: column && direction === 'desc' ? 'desc' : 'asc' };
 }
 
-export function readPassFilter(params: URLSearchParams): PassFamily | undefined {
-    return passFamilySchema.safeParse(params.get('pass')).data;
+export function readPassFilter(params: URLSearchParams): PassFilter | undefined {
+    const pass = params.get('pass');
+    return pass === 'indy-discounts' ? pass : passFamilySchema.safeParse(pass).data;
 }
 
 const countryNames = new Intl.DisplayNames('en', { type: 'region' });
@@ -65,15 +83,19 @@ export function skiRegionOptions(areas: readonly SkiArea[]) {
     return { countries: countries.sort((first, second) => first.label.localeCompare(second.label)), regions };
 }
 
-export function filterSkiAreas(areas: readonly SkiArea[], query: string, region: string, pass?: PassFamily, night?: boolean) {
+export function filterSkiAreas(areas: readonly SkiArea[], query: string, region: string, pass?: PassFilter, night?: boolean) {
     const words = normalizeSearch(query).split(' ').filter(Boolean);
     const country = region.startsWith(countryPrefix) ? region.slice(countryPrefix.length) : '';
+    const family = pass && passFilterFamily(pass);
+    const access = pass === 'indy-discounts' ? 'discount' : 'included';
     return areas.filter(area => {
         if (country ? area.country !== country : region && !area.region?.split('/').includes(region)) return false;
-        if (pass && !area.passes.some(membership => membership.family === pass && membership.access === 'included')) return false;
+        if (family && !area.passes.some(membership => membership.family === family && membership.access === access)) return false;
         if (night && area.nightSkiing !== true) return false;
         if (!words.length) return true;
-        const searchable = normalizeSearch([area.name, area.locality, area.region, area.country, countryName(area.country), ...(area.aliases ?? [])].join(' '));
+        const searchable = normalizeSearch([
+            area.name, area.locality, area.region, area.country, countryName(area.country), skiingLabels[area.skiing], ...(area.aliases ?? []),
+        ].join(' '));
         return words.every(word => searchable.includes(word));
     });
 }
@@ -92,10 +114,16 @@ export function skiAreaIdsInViewport(
 
 const collator = new Intl.Collator('en', { sensitivity: 'base', numeric: true });
 
+function skiStat(area: SkiArea, key: ColumnKey) {
+    if (key === 'region') return regionName(area);
+    if (key === 'skiing') return skiingLabels[area.skiing];
+    return area[key];
+}
+
 export function sortSkiAreas(areas: readonly SkiArea[], sort: SkiSort) {
     return [...areas].sort((first, second) => {
-        const a = sort.key === 'region' ? regionName(first) : first[sort.key];
-        const b = sort.key === 'region' ? regionName(second) : second[sort.key];
+        const a = skiStat(first, sort.key);
+        const b = skiStat(second, sort.key);
         if (a === undefined && b !== undefined) return 1;
         if (b === undefined && a !== undefined) return -1;
         const comparison = typeof a === 'string' && typeof b === 'string' ? collator.compare(a, b)
@@ -118,8 +146,7 @@ export function formatElevation(feet: number, units: SkiUnits) {
 }
 
 export function formatSkiStat(area: SkiArea, key: ColumnKey, units: SkiUnits): string | undefined {
-    if (key === 'region') return regionName(area);
-    const value = area[key];
+    const value = skiStat(area, key);
     if (value === undefined) return;
     if (typeof value === 'string') return value;
     if (typeof value === 'boolean') return value ? 'Yes' : 'No';
