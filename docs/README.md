@@ -48,6 +48,7 @@ An alt description states the visible content. A caption can supply other inform
 | [Temperature map](temperature-map.md) | Maintain record markers, units, selections, and map regression tests |
 | [Tornado Tracks](../projects/tornado-tracks/readme.md) | Sync tornado data and check map behavior |
 | [Pins of Inaccessibility](../projects/pins-of-inaccessibility/readme.md) | Generate global and U.S. pins, validate location details, and check publication |
+| [Piste Pins project plan](../projects/piste-pins/readme.md) | Review ski area coverage, pass rules, conditions sources, and the implementation sequence |
 | [Ride Ledger design](../projects/ride-ledger/readme.md) | Review the proposed application and open decisions |
 
 ## Reviews

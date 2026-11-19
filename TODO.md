@@ -23,6 +23,7 @@ Hosted checks require a deployed build. Device checks require the named physical
 | Later engineering work | [Build and maintenance](#build-and-maintenance), [Tornado Tracks](#tornado-tracks), and [dashboard checks](#dashboard-checks) | Local implementation and regression tests |
 | Infrastructure changes | [Infrastructure](#infrastructure) | AWS or Google Admin access |
 | Content additions | [Project content](#project-content) | Reviewed content and assets |
+| Ski area explorer | [Piste Pins pilot](#piste-pins-pilot) | Area statistics, pass rules, and operations sources |
 | Application planning | [Ride Ledger prerequisites](#ride-ledger-prerequisites) | Owner decisions and synthetic fixtures |
 
 ## Next release checks
@@ -215,6 +216,10 @@ Preserve passing publication checks when changing build scripts.
   The current gallery uses the loaded compact panel. See the [presentation review](docs/reviews/2026-11-15-project-presentation-refresh.md#capture-views).
 
 Track pending stories in [Content publication](#content-publication). Do not add duplicate story tasks here.
+
+## Piste Pins pilot
+
+- [ ] Review the first 25 ski areas against the inclusion rule and verify their sources. Use the [pilot acceptance checks](projects/piste-pins/readme.md#implementation-sequence-and-acceptance-checks).
 
 ## Ride Ledger prerequisites
 
