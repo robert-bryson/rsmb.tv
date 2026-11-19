@@ -6,7 +6,7 @@ const linkClass = 'inline-flex min-h-11 items-center text-cyan-300 underline dec
 export function SkiAreaDetails({ area, units, onClose }: { area: SkiArea; units: SkiUnits; onClose: () => void }) {
     const stats = columns.slice(2).map(({ key, label }) => ({ label, value: formatSkiStat(area, key, units) }));
     const region = area.region.replace('/', ' / ');
-    return <section id="ski-area-details" tabIndex={-1} aria-labelledby="ski-area-name" className="rounded-xl border border-zinc-800 bg-zinc-950 p-4">
+    return <section id="ski-area-details" tabIndex={-1} aria-labelledby="ski-area-name" className="bg-zinc-950 px-3 py-2">
         <div className="flex flex-wrap items-start justify-between gap-2">
             <div>
                 <h2 id="ski-area-name" className="text-xl font-semibold text-zinc-100">{area.name}</h2>
@@ -20,7 +20,7 @@ export function SkiAreaDetails({ area, units, onClose }: { area: SkiArea; units:
             {area.statsUrl && <a className={linkClass} href={area.statsUrl}>Mountain stats source</a>}
             {area.additionalSources?.map((url, index) => <a key={url} className={linkClass} href={url}>Additional source {index + 1}</a>)}
         </div>
-        <dl className="grid grid-cols-2 gap-3 border-t border-zinc-800 pt-3 text-sm sm:grid-cols-3 xl:grid-cols-6">
+        <dl className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,7rem),1fr))] gap-3 border-t border-zinc-800 pt-3 text-sm">
             {stats.map(({ label, value }) => <div key={label}>
                 <dt className="text-zinc-400">{label}</dt>
                 <dd className="mt-0.5 tabular-nums text-zinc-100">{value ?? 'Unknown'}</dd>

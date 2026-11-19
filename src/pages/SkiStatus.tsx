@@ -1,15 +1,16 @@
-import { lazy, Suspense, useMemo, useRef } from 'react';
+import { lazy, Suspense, useMemo, useRef, useState } from 'react';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { IntentLink } from '../components/IntentLink';
 import { MapSkipLink } from '../components/MapSkipLink';
-import { filterSkiAreas, readPassFilter, readSkiSort, sortSkiAreas, type SkiSort, type SkiUnits } from '../features/ski-status/browse';
+import {
+    filterSkiAreas, readPassFilter, readSkiResultsView, readSkiSort, skiResultsViews, sortSkiAreas, type SkiResultsView, type SkiSort, type SkiUnits,
+} from '../features/ski-status/browse';
 import { locationAttribution, locationLicense, passNames, passSeason, skiAreas } from '../features/ski-status/catalog';
 import { markerLegend, markerModes, readMarkerMode } from '../features/ski-status/mapAppearance';
 import { SkiAreaDetails } from '../features/ski-status/SkiAreaDetails';
 import { SkiAreaTable } from '../features/ski-status/SkiAreaTable';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { usePageMetadata } from '../hooks/usePageMetadata';
-import { usePanelFullscreen } from '../hooks/usePanelFullscreen';
 import { usePersistedState } from '../hooks/usePersistedState';
 import { useSearchQuery } from '../hooks/useSearchQuery';
 import { MAPLIBRE_STYLESHEET, moduleLoader } from '../navigation/moduleLoader';
@@ -18,20 +19,13 @@ import locationDownload from '../../projects/ski-status/data/locations.json?url'
 
 const SkiStatusMap = lazy(moduleLoader(() => import('../features/ski-status/SkiStatusMap'), MAPLIBRE_STYLESHEET));
 const regions = [...new Set(skiAreas.flatMap(area => area.region.split('/')))].sort();
-const inputClass = 'min-h-11 w-full min-w-0 rounded-md border border-zinc-700 bg-zinc-950 px-3 text-base text-zinc-100 focus-visible:border-cyan-300 focus-visible:outline-1 focus-visible:outline-cyan-300';
-const panelClass = 'min-w-0 overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950';
-type ResultsPanel = 'map' | 'table';
-
-function FullscreenButton({ panel, expanded, onToggle }: {
-    panel: ResultsPanel;
-    expanded: ResultsPanel | null;
-    onToggle: (panel: ResultsPanel, button: HTMLButtonElement) => void;
-}) {
-    const active = expanded === panel;
-    return <button type="button" aria-label={active ? `Exit ${panel} full screen` : `Expand ${panel} to full screen`} aria-pressed={active}
-        className="ml-auto min-h-11 shrink-0 px-2 text-sm text-cyan-300 underline underline-offset-4 hover:text-cyan-100"
-        onClick={event => onToggle(panel, event.currentTarget)}>{active ? 'Exit full screen' : 'Full screen'}</button>;
-}
+const inputClass = 'min-h-11 w-full min-w-0 rounded-md border border-zinc-700 bg-zinc-950 px-2.5 text-base text-zinc-100 focus-visible:border-cyan-300 focus-visible:outline-1 focus-visible:outline-cyan-300';
+const filterClass = 'grid min-w-0 gap-1 text-xs text-zinc-300';
+const layouts: Record<SkiResultsView, string> = {
+    map: 'grid-rows-[minmax(14rem,1fr)_auto] lg:grid-cols-[clamp(16rem,24vw,24rem)_minmax(0,1fr)]',
+    split: 'grid-rows-[minmax(17rem,1fr)_minmax(17rem,1fr)] lg:grid-cols-2',
+    table: 'grid-rows-[minmax(14rem,1fr)] lg:grid-cols-[minmax(0,1fr)_clamp(16rem,24vw,24rem)]',
+};
 
 function MapMessage({ failed = false }: { failed?: boolean }) {
     return <div className="grid h-full place-items-center p-5 text-center text-sm text-zinc-300" role={failed ? 'alert' : 'status'}>
@@ -44,11 +38,17 @@ function MapMessage({ failed = false }: { failed?: boolean }) {
 export default function SkiStatus() {
     usePageMetadata(staticPageMetadata('/projects/ski-status/map'));
     const { query, updateQuery, commitQuery, searchParams, updateParams } = useSearchQuery();
-    const { container, expanded, fullscreenButton, toggleFullscreen } = usePanelFullscreen<ResultsPanel>();
     const [storedUnits, setUnits] = usePersistedState<SkiUnits>('ski-status-units', 'imperial');
     const units = storedUnits === 'metric' ? 'metric' : 'imperial';
-    const smallScreen = useMediaQuery('(max-width: 1023px)');
-    const mobileMap = searchParams.get('view') === 'map';
+    const wide = useMediaQuery('(min-width: 64rem)');
+    const view = readSkiResultsView(searchParams, wide);
+    const showMap = wide || view !== 'table';
+    const showTable = wide || view !== 'map';
+    const [mapOpened, setMapOpened] = useState(showMap);
+    const [filtersOpen, setFiltersOpen] = useState(false);
+    // Load the map when first visible. Keep its camera and renderer between views.
+    if (showMap && !mapOpened) setMapOpened(true);
+
     const regionParam = searchParams.get('region') ?? '';
     const region = regions.includes(regionParam) ? regionParam : '';
     const pass = readPassFilter(searchParams);
@@ -62,7 +62,7 @@ export default function SkiStatus() {
     const selected = areas.find(area => area.id === selectedId);
     const sorted = useMemo(() => sortSkiAreas(areas, { key: sort.key, direction: sort.direction }), [areas, sort.key, sort.direction]);
     const selectedButton = useRef<HTMLButtonElement>(null);
-    const mapViewButton = useRef<HTMLButtonElement>(null);
+    const mapButton = useRef<HTMLButtonElement>(null);
     const searchInput = useRef<HTMLInputElement>(null);
 
     function setParam(key: string, value?: string) {
@@ -83,119 +83,111 @@ export default function SkiStatus() {
     }
 
     function closeDetails() {
-        const row = expanded === 'map' ? null : selectedButton.current;
-        const fallback = expanded ? fullscreenButton.current : mapViewButton.current ?? searchInput.current;
-        (row ?? fallback)?.focus();
+        const target = showTable ? selectedButton.current : mapButton.current;
+        (target ?? searchInput.current)?.focus();
         setParam('area');
     }
 
     const hasFilters = Boolean(query || region || pass || night);
-    return <main ref={container} data-fullscreen-panel={expanded ?? undefined} className="h-full w-full overflow-y-auto bg-zinc-950 text-zinc-100">
-        {!expanded && <MapSkipLink targetId="ski-area-search" />}
-        <div className={`mx-auto space-y-3 p-3 sm:p-5 ${expanded ? 'h-full' : 'max-w-[112rem]'}`}>
-          <div className={expanded ? 'flex min-h-full flex-col gap-3' : 'space-y-3'}>
-            <header className={expanded ? 'hidden' : 'grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-zinc-800 pb-2'}>
-                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                    <h1 className="text-2xl font-semibold tracking-tight">ski-status</h1>
-                    <p className="text-sm text-zinc-400">{passSeason} pass season</p>
+    return <main data-results-view={view} className="flex h-full min-w-0 flex-col overflow-hidden bg-zinc-950 text-zinc-100">
+        <MapSkipLink targetId="ski-area-search" />
+        <header className="max-h-[50dvh] shrink-0 overflow-y-auto border-b border-zinc-800">
+            <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 px-3 py-2 sm:px-4">
+                <div className="flex items-center gap-2 sm:gap-4">
+                    <IntentLink to="/projects" className="inline-flex min-h-11 items-center text-xs text-zinc-300 underline underline-offset-4 hover:text-cyan-300">Projects</IntentLink>
+                    <h1 className="text-xl font-semibold tracking-tight">ski-status</h1>
+                    <p className="hidden text-xs text-zinc-400 sm:block">{passSeason} pass season</p>
                 </div>
-                <IntentLink to="/projects" className="inline-flex min-h-11 items-center text-sm text-zinc-300 underline underline-offset-4 hover:text-cyan-300">Projects</IntentLink>
-            </header>
-            <section aria-label="Ski area filters" className={expanded ? 'hidden' : 'grid grid-cols-2 items-end gap-3 sm:flex sm:flex-wrap'}>
-                <label className="col-span-2 grid min-w-0 gap-1 text-sm text-zinc-300 sm:min-w-48 sm:flex-1">Search areas
+                <div role="group" aria-label="Results view" className="flex rounded-lg border border-zinc-700 p-0.5">
+                    {skiResultsViews.map(({ id, label }) => <button key={id} type="button" ref={id === 'map' ? mapButton : undefined}
+                        aria-pressed={view === id} onClick={() => { if (view !== id) setParam('view', id); }}
+                        className={`min-h-10 rounded-md px-2.5 text-sm font-medium focus-visible:outline-2 focus-visible:outline-cyan-300 sm:px-4 ${view === id ? 'bg-cyan-950 text-cyan-100' : 'text-zinc-300 hover:bg-zinc-900 hover:text-white'}`}>
+                        {label}
+                    </button>)}
+                </div>
+            </div>
+            <section aria-label="Ski area filters" className="flex flex-wrap items-end gap-2 px-3 pb-2 sm:gap-x-3 sm:px-4">
+                <label className={`${filterClass} min-w-36 flex-1 sm:min-w-48`}>
+                    <span className="sr-only sm:not-sr-only">Search areas</span>
                     <input ref={searchInput} type="search" id="ski-area-search" value={query} onChange={event => updateQuery(event.target.value)} onBlur={commitQuery}
-                        onKeyDown={event => { if (event.key === 'Enter') commitQuery(); }} placeholder="Name or location" className={inputClass} />
+                        onKeyDown={event => { if (event.key === 'Enter') commitQuery(); }} placeholder="Search by name or place" className={inputClass} />
                 </label>
-                <div className="grid min-w-0 gap-1 text-sm text-zinc-300">
-                    <label htmlFor="ski-region">Region</label>
-                    <select id="ski-region" value={region} onChange={event => setParam('region', event.target.value)} className={inputClass}>
-                        <option value="">All regions</option>{regions.map(code => <option key={code} value={code}>{code}</option>)}
-                    </select>
+                <button type="button" aria-expanded={filtersOpen} aria-controls="ski-filter-options" onClick={() => setFiltersOpen(open => !open)}
+                    className="min-h-11 rounded-md border border-zinc-700 px-3 text-sm text-zinc-200 hover:border-cyan-300 sm:hidden">Filters</button>
+                <div id="ski-filter-options" className={`${filtersOpen ? 'grid' : 'hidden'} w-full grid-cols-2 flex-wrap items-end gap-2 sm:flex sm:w-auto sm:gap-x-3`}>
+                    <div className={filterClass}>
+                        <label htmlFor="ski-region">Region</label>
+                        <select id="ski-region" value={region} onChange={event => setParam('region', event.target.value)} className={inputClass}>
+                            <option value="">All regions</option>{regions.map(code => <option key={code} value={code}>{code}</option>)}
+                        </select>
+                    </div>
+                    <div className={filterClass}>
+                        <label htmlFor="ski-pass">Pass</label>
+                        <select id="ski-pass" value={pass ?? ''} onChange={event => setParam('pass', event.target.value)} className={inputClass}>
+                            <option value="">All ski areas</option>{Object.entries(passNames).map(([key, name]) => <option key={key} value={key}>{name}</option>)}
+                        </select>
+                    </div>
+                    <div className={filterClass}>
+                        <label htmlFor="ski-units">Units</label>
+                        <select id="ski-units" value={units} onChange={event => setUnits(event.target.value === 'metric' ? 'metric' : 'imperial')} className={inputClass}>
+                            <option value="imperial">Acres / feet</option><option value="metric">Hectares / meters</option>
+                        </select>
+                    </div>
+                    <label className="flex min-h-11 items-center gap-2 text-sm text-zinc-300">
+                        <input type="checkbox" checked={night} onChange={event => setParam('night', event.target.checked ? '1' : undefined)}
+                            className="size-4 accent-cyan-400" /> Night skiing
+                    </label>
                 </div>
-                <div className="grid min-w-0 gap-1 text-sm text-zinc-300">
-                    <label htmlFor="ski-pass">Pass</label>
-                    <select id="ski-pass" value={pass ?? ''} onChange={event => setParam('pass', event.target.value)} className={inputClass}>
-                        <option value="">All ski areas</option>{Object.entries(passNames).map(([key, name]) => <option key={key} value={key}>{name}</option>)}
-                    </select>
-                </div>
-                <div className="grid min-w-0 gap-1 text-sm text-zinc-300">
-                    <label htmlFor="ski-units">Units</label>
-                    <select id="ski-units" value={units} onChange={event => setUnits(event.target.value === 'metric' ? 'metric' : 'imperial')} className={inputClass}>
-                        <option value="imperial">Acres / feet</option><option value="metric">Hectares / meters</option>
-                    </select>
-                </div>
-                <label className="flex min-h-11 items-center gap-2 text-sm text-zinc-300">
-                    <input type="checkbox" checked={night} onChange={event => setParam('night', event.target.checked ? '1' : undefined)}
-                        className="size-4 accent-cyan-400" /> Night skiing
-                </label>
             </section>
-            <div className="flex min-h-11 flex-wrap items-center justify-between gap-2 text-sm">
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                    <p aria-live="polite" className="tabular-nums text-zinc-300">{areas.length} of {skiAreas.length} ski areas</p>
-                    {hasFilters && !expanded && <button type="button" onClick={() => updateParams(params => {
-                        for (const key of ['q', 'region', 'pass', 'night']) params.delete(key);
-                    })} className="min-h-11 text-cyan-300 underline underline-offset-4">Clear filters</button>}
-                    {selected && <a href="#ski-area-details" aria-label={`${selected.name} details`}
-                        className="inline-flex min-h-11 items-center text-cyan-300 underline underline-offset-4">{expanded ? selected.name : 'Details'}</a>}
+            <div className="flex min-h-8 flex-wrap items-center gap-x-4 px-3 pb-1 text-xs sm:px-4">
+                <p aria-live="polite" className="tabular-nums text-zinc-300">{areas.length} of {skiAreas.length} ski areas</p>
+                {hasFilters && <button type="button" onClick={() => updateParams(params => {
+                    for (const key of ['q', 'region', 'pass', 'night']) params.delete(key);
+                })} className="min-h-8 text-cyan-300 underline underline-offset-4">Clear filters</button>}
+                {selected && <a href="#ski-area-details" aria-label={`${selected.name} details`}
+                    className="inline-flex min-h-8 items-center text-cyan-300 underline underline-offset-4">{selected.name}</a>}
+            </div>
+        </header>
+        <div className={`grid min-h-0 flex-1 gap-px overflow-auto bg-zinc-800 lg:grid-rows-[minmax(0,1fr)] ${layouts[view]}`}>
+            <section aria-label="Ski area statistics" className={`min-h-0 min-w-0 flex-col bg-zinc-950 ${showTable || selected ? 'flex' : 'hidden'} ${view === 'map' ? 'max-lg:order-last' : ''}`}>
+                <div className={showTable ? 'min-h-0 flex-1' : 'hidden'}>
+                    <SkiAreaTable areas={sorted} units={units} sort={sort} selected={selected} compact={view === 'map'}
+                        selectedButtonRef={selectedButton} onSort={setSort} onSelect={selectArea} />
                 </div>
-                {smallScreen && !expanded && <div role="group" aria-label="Results view" className="flex rounded-md border border-zinc-700">
-                    {(['Table', 'Map'] as const).map(view => {
-                        const active = mobileMap === (view === 'Map');
-                        return <button key={view} type="button" ref={view === 'Map' ? mapViewButton : undefined} aria-pressed={active}
-                            onClick={() => setParam('view', view === 'Map' ? 'map' : undefined)}
-                            className={`min-h-11 px-3 ${active ? 'bg-cyan-950 text-cyan-100' : 'text-zinc-300 hover:text-white'}`}>{view}</button>;
-                    })}
+                {selected && <div key={selected.id} className={`shrink-0 overflow-y-auto border-t border-zinc-700 ${showTable ? 'max-h-[min(42%,20rem)]' : 'max-h-[32dvh]'}`}>
+                    <SkiAreaDetails area={selected} units={units} onClose={closeDetails} />
                 </div>}
-            </div>
-            <div className={expanded ? 'flex min-h-80 flex-1' : 'grid gap-3 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]'}>
-                {(!smallScreen || mobileMap || expanded === 'map') && <section
-                    className={expanded === 'table' ? 'hidden' : `${panelClass} flex flex-col ${expanded ? 'min-h-0 flex-1' : 'h-[min(60dvh,38rem)] min-h-88'}`}
-                    aria-label="Map of ski areas">
-                    <div className="flex flex-wrap items-center gap-x-3 border-b border-zinc-800 px-2 py-1 text-sm text-zinc-300">
-                        <div className="flex min-w-0 items-center gap-2">
-                            <label htmlFor="ski-marker-color">Color by</label>
-                            <select id="ski-marker-color" value={colors} onChange={event => setParam('color', event.target.value === 'default' ? undefined : event.target.value)}
-                                className="min-h-11 min-w-0 rounded-md border border-zinc-700 bg-zinc-950 px-2 text-base text-zinc-100">
-                                {Object.entries(markerModes).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-                            </select>
-                        </div>
-                        <label className="flex min-h-11 items-center gap-2" title="Shows shaded elevation at zoom 8 and closer">
-                            <input type="checkbox" checked={terrain} onChange={event => setParam('terrain', event.target.checked ? '1' : undefined)}
-                                className="size-4 accent-cyan-400" /> Terrain relief
-                        </label>
-                        <FullscreenButton panel="map" expanded={expanded} onToggle={toggleFullscreen} />
+            </section>
+            <section aria-label="Map of ski areas" className={`${showMap ? 'flex' : 'hidden'} min-h-0 min-w-0 flex-col bg-zinc-950`}>
+                <div className="flex flex-wrap items-center gap-x-3 border-b border-zinc-800 px-2 text-sm text-zinc-300">
+                    <div className="flex min-w-0 items-center gap-2 py-1">
+                        <label htmlFor="ski-marker-color" className="shrink-0">Color by</label>
+                        <select id="ski-marker-color" value={colors} onChange={event => setParam('color', event.target.value === 'default' ? undefined : event.target.value)} className={inputClass}>
+                            {Object.entries(markerModes).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                        </select>
                     </div>
-                    {legend.length > 0 && <ul aria-label="Resort dot legend" className="flex flex-wrap gap-x-3 gap-y-1 border-b border-zinc-800 px-3 py-2 text-xs text-zinc-300">
-                        {legend.map(({ color, label }) => <li key={label} className="flex items-center gap-1.5">
-                            <span aria-hidden="true" className="size-2.5 rounded-full" style={{ backgroundColor: color }} />{label}
-                        </li>)}
-                    </ul>}
-                    <div className="min-h-0 flex-1">
-                        <ErrorBoundary fallback={<MapMessage failed />}><Suspense fallback={<MapMessage />}>
-                            <SkiStatusMap areas={areas} selected={selected} colors={colors} terrain={terrain} onSelect={selectArea} />
-                        </Suspense></ErrorBoundary>
-                    </div>
-                </section>}
-                {(!smallScreen || !mobileMap || expanded === 'table') && <section
-                    className={expanded === 'map' ? 'hidden' : `${panelClass} flex flex-col ${expanded ? 'min-h-0 flex-1' : 'lg:h-[min(60dvh,38rem)] lg:min-h-88'}`}
-                    aria-label="Ski area statistics">
-                    <div className="flex border-b border-zinc-800 px-2 py-1">
-                        <FullscreenButton panel="table" expanded={expanded} onToggle={toggleFullscreen} />
-                    </div>
-                    <div className="min-h-0 flex-1">
-                        <SkiAreaTable areas={sorted} units={units} sort={sort} selected={selected} expanded={expanded === 'table'}
-                            selectedButtonRef={selectedButton} onSort={setSort} onSelect={selectArea} />
-                    </div>
-                </section>}
-            </div>
-          </div>
-            {selected && <SkiAreaDetails area={selected} units={units} onClose={closeDetails} />}
-            <footer className="flex flex-wrap gap-x-2 text-xs leading-6 text-zinc-400">
-                <span>Locations</span>
-                {Object.entries(locationAttribution).map(([name, url]) => <a key={name} href={url} className="underline underline-offset-2 hover:text-zinc-200">{name}</a>)}
-                <a href={locationDownload} download="ski-status-locations.json" className="underline underline-offset-2 hover:text-zinc-200">Marker data</a>
-                <a href={locationLicense} className="underline underline-offset-2 hover:text-zinc-200">ODbL</a>
-            </footer>
+                    <label className="flex min-h-11 items-center gap-2" title="Shows shaded elevation at zoom 8 and closer">
+                        <input type="checkbox" checked={terrain} onChange={event => setParam('terrain', event.target.checked ? '1' : undefined)}
+                            className="size-4 accent-cyan-400" /> Terrain relief
+                    </label>
+                </div>
+                {legend.length > 0 && <ul aria-label="Resort dot legend" className="flex flex-wrap gap-x-3 gap-y-1 border-b border-zinc-800 px-3 py-2 text-xs text-zinc-300">
+                    {legend.map(({ color, label }) => <li key={label} className="flex items-center gap-1.5">
+                        <span aria-hidden="true" className="size-2.5 rounded-full" style={{ backgroundColor: color }} />{label}
+                    </li>)}
+                </ul>}
+                <div className="min-h-0 flex-1">
+                    {(showMap || mapOpened) && <ErrorBoundary fallback={<MapMessage failed />}><Suspense fallback={<MapMessage />}>
+                        <SkiStatusMap areas={areas} selected={selected} colors={colors} terrain={terrain} onSelect={selectArea} />
+                    </Suspense></ErrorBoundary>}
+                </div>
+            </section>
         </div>
+        <footer className="flex shrink-0 flex-wrap gap-x-2 border-t border-zinc-800 px-3 text-xs leading-5 text-zinc-400 sm:px-4 sm:leading-6">
+            <span>Locations</span>
+            {Object.entries(locationAttribution).map(([name, url]) => <a key={name} href={url} className="underline underline-offset-2 hover:text-zinc-200">{name}</a>)}
+            <a href={locationDownload} download="ski-status-locations.json" className="underline underline-offset-2 hover:text-zinc-200">Marker data</a>
+            <a href={locationLicense} className="underline underline-offset-2 hover:text-zinc-200">ODbL</a>
+        </footer>
     </main>;
 }

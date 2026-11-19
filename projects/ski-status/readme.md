@@ -6,16 +6,21 @@ ski-status is a personal map and comparison table for North American downhill sk
 
 ## Use ski-status
 
-Open `/projects/ski-status/map`. The desktop view shows the map beside the table. On a phone, select **Map** or **Table**.
+Open `/projects/ski-status/map`. Use **Map**, **Split**, or **Table** at the top of the page. Each view keeps your filters, sort order, and selected area.
+
+- **Map** gives the map most of the space. On a wide screen, use the list beside it to select an area.
+- **Split** gives both panes equal space on a wide screen. On a narrow screen, scroll between the table and map.
+- **Table** gives the comparison table most of the space. On a wide screen, the map stays beside it. On a narrow screen, use **Filters** to see more search options.
+
+On a wide screen, the page starts in **Split**. On a narrow screen, it starts in **Table**.
 
 - Search by ski area, alternative name, town, or country.
 - Filter by region, pass family, or night skiing.
 - Select a column header to change the sort order.
-- Select a dot or table row to show the area details. Zoom in to separate nearby dots.
-- Select **Full screen** in the map or table toolbar. Press Escape or select **Exit full screen** to return to the previous layout. Both views keep the current filters.
+- Select a dot or table row to show the area details. Use the area name below the filters to go to its details. Zoom in to separate nearby dots.
 - Select **Official conditions** where available to open the operator's report. Each area also has a link to its website.
 
-The URL stores the search text, filters, sort order, selection, phone view, and map colors and relief settings. The browser stores your unit preference. The table remains available when the basemap or map renderer fails.
+The URL stores the search text, filters, sort order, selected area, view, and map settings. The browser stores your unit preference. The table remains available when the basemap or map renderer fails.
 
 ### Map display
 

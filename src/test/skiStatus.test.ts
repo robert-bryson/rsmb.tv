@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { filterSkiAreas, formatArea, formatSkiStat, readPassFilter, readSkiSort, sortSkiAreas } from '../features/ski-status/browse';
+import { filterSkiAreas, formatArea, formatSkiStat, readPassFilter, readSkiResultsView, readSkiSort, sortSkiAreas } from '../features/ski-status/browse';
 import { readSkiCatalog, skiAreas } from '../features/ski-status/catalog';
 import { markerColor, markerLegend, readMarkerMode } from '../features/ski-status/mapAppearance';
 
@@ -58,6 +58,16 @@ describe('ski-status catalog validation', () => {
 });
 
 describe('ski-status catalog and browse', () => {
+    it('uses a responsive default view and honors links to each explicit view', () => {
+        expect(readSkiResultsView(new URLSearchParams(), true)).toBe('split');
+        expect(readSkiResultsView(new URLSearchParams('view=unknown'), false)).toBe('table');
+        for (const view of ['map', 'split', 'table']) {
+            const params = new URLSearchParams({ view });
+            expect(readSkiResultsView(params, true)).toBe(view);
+            expect(readSkiResultsView(params, false)).toBe(view);
+        }
+    });
+
     it('maps each eligible area once and keeps split base data under one resort', () => {
         expect(skiAreas.length).toBeGreaterThanOrEqual(197);
         expect(new Set(skiAreas.map(area => area.id)).size).toBe(skiAreas.length);

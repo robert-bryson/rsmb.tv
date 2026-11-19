@@ -46,7 +46,7 @@ export const projects: Project[] = [
     lastUpdated: '2026-11-19',
     changelog: [{ date: '2026-11', notes: [
       'Expanded the ski area catalog to 197 areas',
-      'Added full screen map and table views, resort dot colors, and terrain relief',
+      'Added Map, Split, and Table views, resort dot colors, and terrain relief',
     ] }],
   },
   {

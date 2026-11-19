@@ -3,6 +3,18 @@ import { passFamilySchema, type PassFamily, type SkiArea } from './catalog';
 
 export type SkiUnits = 'imperial' | 'metric';
 
+export const skiResultsViews = [
+    { id: 'map', label: 'Map' },
+    { id: 'split', label: 'Split' },
+    { id: 'table', label: 'Table' },
+] as const;
+export type SkiResultsView = typeof skiResultsViews[number]['id'];
+
+export function readSkiResultsView(params: URLSearchParams, wide: boolean): SkiResultsView {
+    const view = params.get('view');
+    return skiResultsViews.find(({ id }) => id === view)?.id ?? (wide ? 'split' : 'table');
+}
+
 export const columns = [
     { key: 'name', label: 'Ski area' },
     { key: 'region', label: 'Region' },
