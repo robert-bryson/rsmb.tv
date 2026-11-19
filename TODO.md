@@ -225,7 +225,7 @@ Track pending stories in [Content publication](#content-publication). Do not add
 - [ ] Add pass products and access rules for each local ski date. Test day limits, shared days, blackout dates, and reservations. [Pass rules](projects/ski-status/readme.md#pass-access-by-product-and-date)
 - [ ] Add resort reports and forecasts from sources that permit reuse. Include lift and trail status, hours, and grooming data where available. Measure coverage and report age. [Conditions pilot](projects/ski-status/readme.md#sources-and-pilot)
 - [ ] Add dot colors for open, limited, closed, and unknown when the app can check report age. [Map and table](projects/ski-status/readme.md#map-and-table)
-- [ ] Add column settings and a map bounds filter. Add CSV export for data that permits export. [Map and table](projects/ski-status/readme.md#map-and-table)
+- [ ] Add column settings. Add CSV export for data that permits export. [Map and table](projects/ski-status/readme.md#map-and-table)
 
 ### Version 2
 

@@ -47,6 +47,7 @@ export const projects: Project[] = [
     changelog: [{ date: '2026-11', notes: [
       'Expanded the ski area catalog to 197 areas',
       'Added Map, Split, and Table views, resort dot colors, and terrain relief',
+      'Added an In map view filter for the comparison table',
     ] }],
   },
   {

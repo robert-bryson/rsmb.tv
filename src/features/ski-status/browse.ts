@@ -1,3 +1,4 @@
+import { containsPoint, type TooltipPoint, type TooltipRect } from '../../maps/screenGeometry';
 import { normalizeSearch } from '../../utils/search';
 import { passFamilySchema, type PassFamily, type SkiArea } from './catalog';
 
@@ -55,6 +56,18 @@ export function filterSkiAreas(areas: readonly SkiArea[], query: string, region:
         const searchable = normalizeSearch([area.name, area.locality, area.region, area.country, countryNames.of(area.country), ...(area.aliases ?? [])].join(' '));
         return words.every(word => searchable.includes(word));
     });
+}
+
+export function skiAreaIdsInViewport(
+    areas: readonly SkiArea[],
+    viewport: TooltipRect,
+    project: (coordinates: SkiArea['location']['coordinates']) => TooltipPoint,
+): ReadonlySet<string> {
+    const ids = new Set<string>();
+    for (const area of areas) {
+        if (containsPoint(viewport, project(area.location.coordinates))) ids.add(area.id);
+    }
+    return ids;
 }
 
 const collator = new Intl.Collator('en', { sensitivity: 'base', numeric: true });

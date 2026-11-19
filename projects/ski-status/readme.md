@@ -18,15 +18,20 @@ On a wide screen, the page starts in **Split**. On a narrow screen, it starts in
 
 - Search by ski area, alternative name, town, or country.
 - Filter by region, pass family, or night skiing. On a narrow screen, select **Filters** to see these controls.
+- Turn on **In map view** beside the results count to limit the table to the map area.
 - Select a column header to change the sort order.
 - Select a dot or table row to show the area details. Use the area name below the filters to go to its details. Zoom in to separate nearby dots.
 - Select **Official conditions** where available to open the operator's report. Each area also has a link to its website.
 
 The URL stores the search text, filters, sort order, selected area, view, and map settings. The browser stores your unit preference.
 
-The map keeps its position when you change views. If you change the filters, the map fits the results when it is visible and no area is selected. If the background fails, select **Retry background**. The table stays available during map failures.
+The map keeps its position when you change views. With **In map view** off, filter changes fit the results when the map is visible and no area is selected. If the background fails, select **Retry background**. The table stays available during map failures.
 
 ### Map display
+
+With **In map view** on, the table and count update after you pan or zoom. They also update when the map pane changes size. An area is in view when the center of its dot is within the map. Change the other filters or sort the table to compare areas in view. These changes keep the map at its current position. Select **Fit all results** to see all areas that match the other filters.
+
+When **Table** hides the map on a narrow screen, the table uses the last visible map area. Before the map opens, the table uses the other filters. Open **Map** to set the area. If you pan away from the selected area, its details stay open.
 
 The default map shows one cyan dot per ski area. Use **Color by** to show pass access, skiable area, vertical drop, summit elevation, or highest lift terminal. The legend shows ranges in your selected units. Gray marks an unknown value. A gold outline shows the selected area.
 
@@ -77,7 +82,7 @@ Whaleback has 86 skiable acres and qualifies through Indy lift access. Show Indy
 - Add filters for pass product, ski date, and operating status.
 - Color dots by operating status after the app can check report age. Use gray when the latest report is unavailable or stale.
 - Add separate columns for measured snow and forecast snow. Compare each field in common units. Put unknown values last in both directions.
-- Group columns by mountain statistics, conditions, and season dates. Save the column settings on the device. Use **In map view** to limit results to the map bounds.
+- Group columns by mountain statistics, conditions, and season dates. Save the column settings on the device.
 - Export filtered rows as CSV where licenses permit it. Include units, report times, and source links.
 
 ### Comparable mountain statistics

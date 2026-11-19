@@ -8,13 +8,14 @@ interface Props {
     sort: SkiSort;
     selected?: SkiArea;
     compact: boolean;
+    inView: boolean;
     selectedButtonRef: Ref<HTMLButtonElement>;
     onSort: (key: SkiSort['key']) => void;
     onSelect: (id: string) => void;
 }
 
-export function SkiAreaTable({ areas, units, sort, selected, compact, selectedButtonRef, onSort, onSelect }: Props) {
-    if (!areas.length) return <p className="p-4 text-zinc-300">No ski areas match these filters.</p>;
+export function SkiAreaTable({ areas, units, sort, selected, compact, inView, selectedButtonRef, onSort, onSelect }: Props) {
+    if (!areas.length) return <p className="p-4 text-zinc-300">{inView ? 'No matching ski areas in this map view.' : 'No ski areas match these filters.'}</p>;
 
     const secondary = sort.key === 'name' ? 'acres' : sort.key;
     const visibleColumns = compact ? columns.filter(({ key }) => key === 'name' || key === secondary) : columns;

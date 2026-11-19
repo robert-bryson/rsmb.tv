@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { filterSkiAreas, formatArea, formatSkiStat, readPassFilter, readSkiResultsView, readSkiSort, sortSkiAreas } from '../features/ski-status/browse';
+import { filterSkiAreas, formatArea, formatSkiStat, readPassFilter, readSkiResultsView, readSkiSort, skiAreaIdsInViewport, sortSkiAreas } from '../features/ski-status/browse';
 import { readSkiCatalog, skiAreas } from '../features/ski-status/catalog';
 import { markerColor, markerLegend, readMarkerMode } from '../features/ski-status/mapAppearance';
 
@@ -107,6 +107,17 @@ describe('ski-status catalog and browse', () => {
         const canada = filterSkiAreas(skiAreas, 'Canada', '');
         expect(canada.length).toBeGreaterThanOrEqual(30);
         expect(canada.every(area => area.country === 'CA')).toBe(true);
+    });
+
+    it('keeps dots whose projected centers are inside or on the edges of the map', () => {
+        const viewport = { left: 0, top: 0, right: 320, bottom: 180 };
+        const centers: [number, number][] = [[0, 0], [320, 180], [160, 90], [-1, 1], [321, 1], [1, -1], [1, 181]];
+        const areas = centers.map((coordinates, index) => {
+            const area = skiAreas[index];
+            return { ...area, location: { ...area.location, coordinates } };
+        });
+        const visible = skiAreaIdsInViewport(areas, viewport, ([x, y]) => ({ x, y }));
+        expect([...visible]).toEqual(areas.slice(0, 3).map(area => area.id));
     });
 
     it('requires a known yes for night skiing and ignores invalid pass or sort parameters', () => {

@@ -46,6 +46,7 @@ export default function SkiStatus() {
     const showTable = wide || view !== 'map';
     const [mapOpened, setMapOpened] = useState(showMap);
     const [filtersOpen, setFiltersOpen] = useState(false);
+    const [visibleAreaIds, setVisibleAreaIds] = useState<ReadonlySet<string>>();
     // Load the map when first visible. Keep its camera and renderer between views.
     if (showMap && !mapOpened) setMapOpened(true);
 
@@ -53,6 +54,7 @@ export default function SkiStatus() {
     const region = regions.includes(regionParam) ? regionParam : '';
     const pass = readPassFilter(searchParams);
     const night = searchParams.get('night') === '1';
+    const inView = searchParams.get('inView') === '1';
     const sort = readSkiSort(searchParams);
     const selectedId = searchParams.get('area');
     const colors = readMarkerMode(searchParams.get('color'));
@@ -60,7 +62,9 @@ export default function SkiStatus() {
     const legend = markerLegend(colors, units);
     const areas = useMemo(() => filterSkiAreas(skiAreas, query, region, pass, night), [query, region, pass, night]);
     const selected = areas.find(area => area.id === selectedId);
-    const sorted = useMemo(() => sortSkiAreas(areas, { key: sort.key, direction: sort.direction }), [areas, sort.key, sort.direction]);
+    const viewportIds = inView ? visibleAreaIds : undefined;
+    const tableAreas = useMemo(() => viewportIds ? areas.filter(area => viewportIds.has(area.id)) : areas, [areas, viewportIds]);
+    const sorted = useMemo(() => sortSkiAreas(tableAreas, { key: sort.key, direction: sort.direction }), [tableAreas, sort.key, sort.direction]);
     const selectedButton = useRef<HTMLButtonElement>(null);
     const mapButton = useRef<HTMLButtonElement>(null);
     const searchInput = useRef<HTMLInputElement>(null);
@@ -82,13 +86,18 @@ export default function SkiStatus() {
         setParam('area', id);
     }
 
+    function updateVisibleAreas(ids: ReadonlySet<string>) {
+        setVisibleAreaIds(previous => previous && previous.size === ids.size && [...ids].every(id => previous.has(id)) ? previous : ids);
+    }
+
     function closeDetails() {
         const target = showTable ? selectedButton.current : mapButton.current;
         (target ?? searchInput.current)?.focus();
         setParam('area');
     }
 
-    const hasFilters = Boolean(query || region || pass || night);
+    const hasFilters = Boolean(query || region || pass || night || inView);
+    const needsMapView = inView && !viewportIds;
     return <main data-results-view={view} className="flex h-full min-w-0 flex-col overflow-hidden bg-zinc-950 text-zinc-100">
         <MapSkipLink targetId="ski-area-search" />
         <header className="max-h-[50dvh] shrink-0 overflow-y-auto border-b border-zinc-800">
@@ -140,18 +149,26 @@ export default function SkiStatus() {
                 </div>
             </section>
             <div className="flex min-h-8 flex-wrap items-center gap-x-4 px-3 pb-1 text-xs sm:px-4">
-                <p aria-live="polite" className="tabular-nums text-zinc-300">{areas.length} of {skiAreas.length} ski areas</p>
+                <p aria-live="polite" className="tabular-nums text-zinc-300">{tableAreas.length} of {skiAreas.length} ski areas</p>
+                <label className="inline-flex min-h-8 items-center gap-2 text-sm text-zinc-300">
+                    <input type="checkbox" checked={inView} onChange={event => setParam('inView', event.target.checked ? '1' : undefined)}
+                        aria-describedby={needsMapView ? 'ski-view-hint' : undefined} className="size-4 accent-cyan-400" /> In map view
+                </label>
                 {hasFilters && <button type="button" onClick={() => updateParams(params => {
-                    for (const key of ['q', 'region', 'pass', 'night']) params.delete(key);
+                    for (const key of ['q', 'region', 'pass', 'night', 'inView']) params.delete(key);
                 })} className="min-h-8 text-cyan-300 underline underline-offset-4">Clear filters</button>}
+                {needsMapView && <span id="ski-view-hint" className="text-zinc-400">
+                    {showMap ? 'Waiting for a map view.' : 'Open Map to set the area.'}
+                </span>}
                 {selected && <a href="#ski-area-details" aria-label={`${selected.name} details`}
                     className="inline-flex min-h-8 items-center text-cyan-300 underline underline-offset-4">{selected.name}</a>}
+                {selected && viewportIds && !viewportIds.has(selected.id) && <span className="text-zinc-400">Selected area is outside the map view.</span>}
             </div>
         </header>
         <div className={`grid min-h-0 flex-1 gap-px overflow-auto bg-zinc-800 lg:grid-rows-[minmax(0,1fr)] ${layouts[view]}`}>
             <section aria-label="Ski area statistics" className={`min-h-0 min-w-0 flex-col bg-zinc-950 ${showTable || selected ? 'flex' : 'hidden'} ${view === 'map' ? 'max-lg:order-last' : ''}`}>
                 <div className={showTable ? 'min-h-0 flex-1' : 'hidden'}>
-                    <SkiAreaTable areas={sorted} units={units} sort={sort} selected={selected} compact={view === 'map'}
+                    <SkiAreaTable areas={sorted} units={units} sort={sort} selected={selected} compact={view === 'map'} inView={Boolean(viewportIds)}
                         selectedButtonRef={selectedButton} onSort={setSort} onSelect={selectArea} />
                 </div>
                 {selected && <div key={selected.id} className={`shrink-0 overflow-y-auto border-t border-zinc-700 ${showTable ? 'max-h-[min(42%,20rem)]' : 'max-h-[32dvh]'}`}>
@@ -178,7 +195,8 @@ export default function SkiStatus() {
                 </ul>}
                 <div className="min-h-0 flex-1">
                     {(showMap || mapOpened) && <ErrorBoundary fallback={<MapMessage failed />}><Suspense fallback={<MapMessage />}>
-                        <SkiStatusMap areas={areas} selected={selected} colors={colors} terrain={terrain} visible={showMap} onSelect={selectArea} />
+                        <SkiStatusMap areas={areas} selected={selected} colors={colors} terrain={terrain} visible={showMap} inView={inView}
+                            onVisibleAreasChange={updateVisibleAreas} onSelect={selectArea} />
                     </Suspense></ErrorBoundary>}
                 </div>
             </section>
