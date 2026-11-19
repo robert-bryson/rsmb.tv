@@ -38,7 +38,7 @@ export const projects: Project[] = [
     slug: 'ski-status',
     title: 'ski-status',
     category: 'maps',
-    description: 'Compare North American ski areas on a map and in a sortable table. Filter by location, pass, and night skiing, and open official mountain reports.',
+    description: 'Compare North American ski areas and Ikon destinations worldwide. Filter the map and table by location, pass, and night skiing, and open official mountain reports.',
     tech: ['React', 'TypeScript', 'MapLibre GL', 'GeoJSON'],
     applicationCategory: 'TravelApplication',
     demoUrl: '/projects/ski-status/map',
@@ -49,6 +49,7 @@ export const projects: Project[] = [
       'Added Map, Split, and Table views, resort dot colors, and terrain relief',
       'Added an In map view filter for the comparison table',
       'Added larger pass icons and compact multi-pass badges',
+      'Added worldwide Ikon destinations and country filters',
     ] }],
   },
   {

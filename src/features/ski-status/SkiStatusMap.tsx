@@ -4,7 +4,7 @@ import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { cartoRasterStyle, cartoVectorStyleUrl } from '../../maps/cartoBasemaps';
 import * as maplibre from '../../maps/maplibre';
 import { recoverBasemap, type BasemapState } from '../../maps/recoverBasemap';
-import { distanceSquared, type TooltipPoint } from '../../maps/screenGeometry';
+import { clamp, distanceSquared, type TooltipPoint } from '../../maps/screenGeometry';
 import { skiAreaIdsInViewport } from './browse';
 import { passFamilySchema, skiAreas, type PassFamily, type SkiArea } from './catalog';
 import { markerAppearance, multiplePassColor, passBadgeId, passBadgeSize, passBadgeTextColor, type MarkerMode } from './mapAppearance';
@@ -22,7 +22,16 @@ const markerLayers = [selectedLayer, pointLayer, passBadgeLayer, selectedPassBad
 const terrainSource = 'ski-terrain-dem';
 const terrainLayer = 'ski-terrain-relief';
 const pointZoom = 9;
+const minZoom = -2;
+const maxZoom = 16;
+const mercatorLimit = new maplibre.MercatorCoordinate(0, 0).toLngLat().lat;
 const providerStyle = () => cartoVectorStyleUrl('dark-matter');
+
+const constrainCamera: maplibre.TransformConstrainFunction = (center, zoom) => ({
+    // The world can be smaller than the viewport when a narrow map fits all resorts.
+    center: new maplibre.LngLat(clamp(center.lng, -180, 180), clamp(center.lat, -mercatorLimit, mercatorLimit)),
+    zoom: clamp(zoom, minZoom, maxZoom),
+});
 
 interface Props {
     areas: readonly SkiArea[];
@@ -276,7 +285,7 @@ export default function SkiStatusMap({ areas, selected, colors, preferredPass, t
             try {
                 instance = new maplibre.Map({
                     container: container.current, style: providerStyle(), center: [-100, 44], zoom: 2.7,
-                    minZoom: 1, maxZoom: 16, renderWorldCopies: false, dragRotate: false, pitchWithRotate: false,
+                    minZoom, maxZoom, transformConstrain: constrainCamera, renderWorldCopies: false, dragRotate: false, pitchWithRotate: false,
                 });
             } catch {
                 setFailed(true);

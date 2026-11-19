@@ -1,5 +1,23 @@
 [
   {
+    "id": "3-zinnen-dolomites",
+    "name": "3 Zinnen Dolomites",
+    "aliases": [
+      "Dolomiti Superski",
+      "3 Peaks Dolomites",
+      "3 Cime Dolomiti",
+      "Sexten"
+    ],
+    "country": "IT",
+    "locality": "Sesto",
+    "website": "https://www.dreizinnen.com/en/",
+    "statsUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "reportUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "liftCount": 30,
+    "trailCount": 79,
+    "seasonWindow": "Nov 28, 2026 – Apr 4, 2027 (planned)"
+  },
+  {
     "id": "49-north-mountain-resort",
     "name": "49° North Mountain Resort",
     "aliases": [
@@ -22,10 +40,28 @@
     "website": "https://www.aftonalps.com/"
   },
   {
+    "id": "alpe-lusia-san-pellegrino",
+    "name": "Alpe Lusia / San Pellegrino",
+    "aliases": [
+      "Dolomiti Superski",
+      "Falcade",
+      "Passo San Pellegrino"
+    ],
+    "country": "IT",
+    "locality": "Moena",
+    "website": "https://www.alpelusia.it/",
+    "statsUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "reportUrl": "https://www.dolomitisuperski.com/en/live-info/lifts/alpe-lusia-and-san-pellegrino",
+    "liftCount": 23,
+    "trailCount": 84,
+    "seasonWindow": "Nov 28, 2026 – Apr 4, 2027 (planned)"
+  },
+  {
     "id": "alpental",
     "name": "Alpental",
     "aliases": [
-      "Washington"
+      "Washington",
+      "The Summit at Snoqualmie"
     ],
     "country": "US",
     "region": "WA",
@@ -67,6 +103,25 @@
     ]
   },
   {
+    "id": "alta-badia",
+    "name": "Alta Badia",
+    "aliases": [
+      "Dolomiti Superski",
+      "San Cassiano",
+      "La Villa",
+      "Colfosco",
+      "Badia"
+    ],
+    "country": "IT",
+    "locality": "Corvara",
+    "website": "https://www.altabadia.org/en",
+    "statsUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "reportUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "liftCount": 54,
+    "trailCount": 117,
+    "seasonWindow": "Dec 4, 2026 – Apr 4, 2027 (planned)"
+  },
+  {
     "id": "alyeska-resort",
     "name": "Alyeska Resort",
     "aliases": [
@@ -89,6 +144,59 @@
     "website": "https://www.angelfireresort.com/",
     "statsUrl": "https://www.angelfireresort.com/activities/winter-activities/skiing-and-snowboarding/mountain-stats/",
     "acres": 627
+  },
+  {
+    "id": "appi-resort",
+    "name": "APPI Resort",
+    "aliases": [
+      "Appi Kogen",
+      "安比高原",
+      "Iwate"
+    ],
+    "country": "JP",
+    "locality": "Hachimantai",
+    "website": "https://www.appi.co.jp/en/",
+    "statsUrl": "https://www.appi.co.jp/snow-mountain-resort/course/",
+    "reportUrl": "https://www.appi.co.jp/snow-mountain-resort/info/",
+    "liftCount": 6,
+    "trailCount": 21,
+    "baseFt": 2034,
+    "summitFt": 4357,
+    "verticalFt": 2323,
+    "seasonWindow": "Dec 5, 2026 – May 5, 2027 (planned)"
+  },
+  {
+    "id": "arabba-marmolada",
+    "name": "Arabba / Marmolada",
+    "aliases": [
+      "Dolomiti Superski",
+      "Malga Ciapela"
+    ],
+    "country": "IT",
+    "locality": "Arabba",
+    "website": "https://www.arabba.it/en/",
+    "statsUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "reportUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "liftCount": 23,
+    "trailCount": 67,
+    "seasonWindow": "Dec 4, 2026 – Apr 18, 2027 (planned)"
+  },
+  {
+    "id": "arai-mountain-resort",
+    "name": "Arai Mountain Resort",
+    "aliases": [
+      "Arai Snow Resort",
+      "Lotte Arai",
+      "アライスノーリゾート",
+      "Niigata"
+    ],
+    "country": "JP",
+    "locality": "Myōkō",
+    "website": "https://www.lottehotel.com/arai-resort/en",
+    "statsUrl": "https://app.lottehotel.com/arai-resort/en/snow-season",
+    "reportUrl": "https://app.lottehotel.com/arai-resort/en/snow-season",
+    "acres": 528.8055163397339,
+    "trailCount": 14
   },
   {
     "id": "arapahoe-basin",
@@ -122,7 +230,8 @@
     "id": "aspen-highlands",
     "name": "Aspen Highlands",
     "aliases": [
-      "Colorado"
+      "Colorado",
+      "Aspen Snowmass"
     ],
     "country": "US",
     "region": "CO",
@@ -133,7 +242,8 @@
     "id": "aspen-mountain",
     "name": "Aspen Mountain",
     "aliases": [
-      "Colorado"
+      "Colorado",
+      "Aspen Snowmass"
     ],
     "country": "US",
     "region": "CO",
@@ -152,11 +262,25 @@
     "website": "https://www.attitash.com/"
   },
   {
+    "id": "balme-vallorcine",
+    "name": "Balme – Le Tour / Vallorcine",
+    "aliases": [
+      "Chamonix Mont-Blanc Valley",
+      "Haute-Savoie",
+      "Domaine de Balme"
+    ],
+    "country": "FR",
+    "locality": "Le Tour",
+    "website": "https://domaineschamonix.montblancnaturalresort.com/en/acces-et-plans/balme",
+    "reportUrl": "https://en.chamonix.com/infos-live"
+  },
+  {
     "id": "banff-sunshine",
     "name": "Banff Sunshine Village",
     "aliases": [
       "Alberta",
-      "British Columbia"
+      "British Columbia",
+      "SkiBig3"
     ],
     "country": "CA",
     "region": "AB",
@@ -177,7 +301,8 @@
     "id": "bear-mountain",
     "name": "Bear Mountain",
     "aliases": [
-      "California"
+      "California",
+      "Big Bear Mountain Resort"
     ],
     "country": "US",
     "region": "CA",
@@ -205,6 +330,25 @@
     "verticalFt": 3340,
     "additionalSources": [
       "https://news.vailresorts.com/BCandCBOpening2024"
+    ]
+  },
+  {
+    "id": "beidahu-ski-resort",
+    "name": "Beidahu Ski Resort",
+    "aliases": [
+      "北大湖滑雪度假区",
+      "Beida Lake"
+    ],
+    "country": "CN",
+    "locality": "Jilin",
+    "website": "https://en.beidahu.com/",
+    "statsUrl": "https://www.beidahu.com/Home.html",
+    "acres": 679.5397990347047,
+    "liftCount": 20,
+    "trailCount": 74,
+    "verticalFt": 2854,
+    "additionalSources": [
+      "https://en.beidahu.com/about/7.html"
     ]
   },
   {
@@ -411,6 +555,20 @@
     "liftCount": 9
   },
   {
+    "id": "brevent-flegere",
+    "name": "Brévent / Flégère",
+    "aliases": [
+      "Chamonix Mont-Blanc Valley",
+      "Haute-Savoie",
+      "La Flégère",
+      "Le Brévent"
+    ],
+    "country": "FR",
+    "locality": "Chamonix-Mont-Blanc",
+    "website": "https://domaineschamonix.montblancnaturalresort.com/en/acces-et-plans/brevent",
+    "reportUrl": "https://en.chamonix.com/infos-live"
+  },
+  {
     "id": "bridger-bowl",
     "name": "Bridger Bowl",
     "aliases": [
@@ -514,7 +672,8 @@
     "id": "buttermilk",
     "name": "Buttermilk",
     "aliases": [
-      "Colorado"
+      "Colorado",
+      "Aspen Snowmass"
     ],
     "country": "US",
     "region": "CO",
@@ -593,6 +752,38 @@
     "website": "https://www.catamountski.com/"
   },
   {
+    "id": "cervino-ski-paradise",
+    "name": "Cervino Ski Paradise",
+    "aliases": [
+      "Valle d’Aosta",
+      "Aosta Valley",
+      "Cervinia",
+      "Valtournenche"
+    ],
+    "country": "IT",
+    "locality": "Breuil-Cervinia",
+    "website": "https://cervinia.it/en/",
+    "reportUrl": "https://cervinia.it/impianti/"
+  },
+  {
+    "id": "civetta",
+    "name": "Civetta",
+    "aliases": [
+      "Dolomiti Superski",
+      "Alleghe",
+      "Zoldo Alto",
+      "Selva di Cadore"
+    ],
+    "country": "IT",
+    "locality": "Val di Zoldo",
+    "website": "https://www.skicivetta.com/",
+    "statsUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "reportUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "liftCount": 22,
+    "trailCount": 63,
+    "seasonWindow": "Nov 28, 2026 – Mar 29, 2027 (planned)"
+  },
+  {
     "id": "cooper",
     "name": "Cooper",
     "aliases": [
@@ -621,6 +812,82 @@
     "region": "CO",
     "locality": "Copper Mountain",
     "website": "https://www.coppercolorado.com/"
+  },
+  {
+    "id": "coronet-peak",
+    "name": "Coronet Peak",
+    "aliases": [
+      "NZSki",
+      "Otago"
+    ],
+    "country": "NZ",
+    "locality": "Queenstown",
+    "website": "https://www.coronetpeak.co.nz/",
+    "statsUrl": "https://www.coronetpeak.co.nz/mountain-info",
+    "reportUrl": "https://www.coronetpeak.co.nz/weather-report",
+    "acres": 691.895068108063,
+    "acresQualifier": "lower-bound",
+    "liftCount": 7,
+    "trailCount": 41,
+    "verticalFt": 1516,
+    "highestLiftTerminalFt": 5410,
+    "nightSkiing": true,
+    "seasonWindow": "May 29 – Oct 3, 2027 (planned)"
+  },
+  {
+    "id": "cortina-d-ampezzo",
+    "name": "Cortina d’Ampezzo",
+    "aliases": [
+      "Dolomiti Superski",
+      "Tofane",
+      "Faloria",
+      "Cristallo",
+      "Lagazuoi"
+    ],
+    "country": "IT",
+    "locality": "Cortina d’Ampezzo",
+    "website": "https://cortina.dolomiti.org/en/winter/what-to-do/activities/skiing-and-snowboarding/",
+    "statsUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "reportUrl": "https://www.dolomitisuperski.com/en/live-info/lifts/cortina-d-ampezzo",
+    "liftCount": 33,
+    "trailCount": 101,
+    "seasonWindow": "Nov 28, 2026 – May 2, 2027 (planned)"
+  },
+  {
+    "id": "corvatsch",
+    "name": "St. Moritz – Corvatsch",
+    "aliases": [
+      "Saint Moritz",
+      "Engadin",
+      "Furtschellas"
+    ],
+    "country": "CH",
+    "locality": "Silvaplana",
+    "website": "https://www.corvatsch-diavolezza.ch/en/",
+    "reportUrl": "https://www.corvatsch-diavolezza.ch/en/current-news/facilities-and-slopes"
+  },
+  {
+    "id": "corviglia",
+    "name": "St. Moritz – Corviglia",
+    "aliases": [
+      "Saint Moritz",
+      "Engadin",
+      "Piz Nair"
+    ],
+    "country": "CH",
+    "locality": "St. Moritz",
+    "website": "https://www.mountains.ch/en/"
+  },
+  {
+    "id": "courmayeur-mont-blanc",
+    "name": "Courmayeur Mont Blanc",
+    "aliases": [
+      "Valle d’Aosta",
+      "Aosta Valley"
+    ],
+    "country": "IT",
+    "locality": "Courmayeur",
+    "website": "https://www.courmayeur-montblanc.com/"
   },
   {
     "id": "cranmore-mountain-resort",
@@ -678,7 +945,8 @@
     "id": "crystal-mountain",
     "name": "Crystal Mountain",
     "aliases": [
-      "Washington"
+      "Washington",
+      "Crystal Mountain Resort"
     ],
     "country": "US",
     "region": "WA",
@@ -773,6 +1041,18 @@
     "verticalFt": 500
   },
   {
+    "id": "diavolezza-lagalb",
+    "name": "St. Moritz – Diavolezza / Lagalb",
+    "aliases": [
+      "Saint Moritz",
+      "Engadin"
+    ],
+    "country": "CH",
+    "locality": "Pontresina",
+    "website": "https://www.corvatsch-diavolezza.ch/en/",
+    "reportUrl": "https://www.corvatsch-diavolezza.ch/en/current-news/facilities-and-slopes"
+  },
+  {
     "id": "eaglecrest-ski-area",
     "name": "Eaglecrest Ski Area",
     "aliases": [
@@ -824,6 +1104,35 @@
     "website": "https://www.skifernie.com"
   },
   {
+    "id": "furano-ski-resort",
+    "name": "Furano Ski Resort",
+    "aliases": [
+      "Hokkaido",
+      "Kitanomine",
+      "富良野スキー場"
+    ],
+    "country": "JP",
+    "locality": "Furano",
+    "website": "https://www.princehotels.com/en/ski/furano/",
+    "statsUrl": "https://www.princehotels.com/en/ski/furano/",
+    "reportUrl": "https://furapuri.com/ski/",
+    "baseFt": 771,
+    "summitFt": 3524,
+    "verticalFt": 2753
+  },
+  {
+    "id": "galtuer",
+    "name": "Galtür",
+    "aliases": [
+      "Silvapark",
+      "Galtuer"
+    ],
+    "country": "AT",
+    "locality": "Galtür",
+    "website": "https://www.galtuer.com/en",
+    "reportUrl": "https://www.galtuer.com/en/bergbahnen-galtuer/facilities/open-lifts-facilities"
+  },
+  {
     "id": "giants-ridge",
     "name": "Giants Ridge",
     "aliases": [
@@ -847,11 +1156,52 @@
     "website": "https://www.grandtarghee.com/"
   },
   {
+    "id": "grands-montets",
+    "name": "Grands Montets",
+    "aliases": [
+      "Chamonix Mont-Blanc Valley",
+      "Haute-Savoie"
+    ],
+    "country": "FR",
+    "locality": "Argentière",
+    "website": "https://domaineschamonix.montblancnaturalresort.com/en/acces-et-plans/grands-montets",
+    "reportUrl": "https://en.chamonix.com/infos-live"
+  },
+  {
+    "id": "grandvalira",
+    "name": "Grandvalira",
+    "aliases": [
+      "Grandvalira Resorts Andorra",
+      "Soldeu",
+      "El Tarter",
+      "Grau Roig",
+      "Canillo",
+      "Encamp"
+    ],
+    "country": "AD",
+    "locality": "Pas de la Casa",
+    "website": "https://www.grandvalira.com/en",
+    "statsUrl": "https://www.grandvalira.com/es/estacion/estado-pistas",
+    "reportUrl": "https://www.grandvalira.com/es/estacion/estado-pistas",
+    "liftCount": 73,
+    "trailCount": 142,
+    "grades": {
+      "unit": "count",
+      "values": {
+        "Green": 23,
+        "Blue": 53,
+        "Red": 46,
+        "Black": 20
+      }
+    }
+  },
+  {
     "id": "granite-peak",
     "name": "Granite Peak",
     "aliases": [
       "Wisconsin",
-      "Granite Peak Ski Area"
+      "Granite Peak Ski Area",
+      "Granite Peak Resort"
     ],
     "country": "US",
     "region": "WI",
@@ -1025,6 +1375,21 @@
     "website": "https://www.huntermtn.com"
   },
   {
+    "id": "ischgl-samnaun",
+    "name": "Ischgl / Samnaun",
+    "aliases": [
+      "Silvretta Arena",
+      "Tyrol",
+      "Samnaun, Switzerland"
+    ],
+    "country": "AT",
+    "locality": "Ischgl",
+    "website": "https://www.ischgl.com/en",
+    "statsUrl": "https://www.ischgl.com/en/winter/operating-times-prices/ski-network-tickets/ikon-pass",
+    "reportUrl": "https://www.ischgl.com/en/winter/silvretta-arena/open-facilities",
+    "seasonWindow": "Nov 26, 2026 – May 2, 2027 (planned)"
+  },
+  {
     "id": "jack-frost-mountain",
     "name": "Jack Frost Mountain",
     "aliases": [
@@ -1087,6 +1452,17 @@
     "region": "CA",
     "locality": "June Lake",
     "website": "https://www.junemountain.com/"
+  },
+  {
+    "id": "kappl",
+    "name": "Kappl",
+    "aliases": [
+      "Skischaukel Kappl & See",
+      "Paznaun"
+    ],
+    "country": "AT",
+    "locality": "Kappl",
+    "website": "https://www.kappl.com/en"
   },
   {
     "id": "keystone-resort",
@@ -1154,7 +1530,8 @@
     "id": "killington",
     "name": "Killington Resort",
     "aliases": [
-      "Vermont"
+      "Vermont",
+      "Killington - Pico"
     ],
     "country": "US",
     "region": "VT",
@@ -1212,10 +1589,56 @@
     ]
   },
   {
+    "id": "kitzbuehel",
+    "name": "Kitzbühel",
+    "aliases": [
+      "KitzSki",
+      "Kitzbuehel",
+      "Kitzbuhel",
+      "Kirchberg",
+      "Mittersill",
+      "Tyrol"
+    ],
+    "country": "AT",
+    "locality": "Kitzbühel",
+    "website": "https://www.kitzski.at/en/"
+  },
+  {
+    "id": "kronplatz",
+    "name": "Kronplatz / Plan de Corones",
+    "aliases": [
+      "Dolomiti Superski",
+      "San Vigilio",
+      "Reischach"
+    ],
+    "country": "IT",
+    "locality": "Riscone",
+    "website": "https://www.kronplatz.com/",
+    "statsUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "reportUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "liftCount": 31,
+    "trailCount": 82,
+    "seasonWindow": "Nov 28, 2026 – Apr 11, 2027 (planned)"
+  },
+  {
+    "id": "la-thuile-espace-san-bernardo",
+    "name": "La Thuile – Espace San Bernardo",
+    "aliases": [
+      "Valle d’Aosta",
+      "Aosta Valley",
+      "La Rosière"
+    ],
+    "country": "IT",
+    "locality": "La Thuile",
+    "website": "https://www.lathuile.it/en/",
+    "reportUrl": "https://www.lathuile.it/en/en_webcam"
+  },
+  {
     "id": "lake-louise",
     "name": "Lake Louise Ski Resort",
     "aliases": [
-      "Alberta"
+      "Alberta",
+      "SkiBig3"
     ],
     "country": "CA",
     "region": "AB",
@@ -1242,6 +1665,18 @@
     "additionalSources": [
       "https://www.skibig3.com/ski/resorts/lake-louise/"
     ]
+  },
+  {
+    "id": "lake-songhua-resort",
+    "name": "Lake Songhua Resort",
+    "aliases": [
+      "Songhua Lake Ski Resort",
+      "Vanke Songhua Lake",
+      "松花湖滑雪场"
+    ],
+    "country": "CN",
+    "locality": "Jilin",
+    "website": "https://www.seibuprince.com/lake-songhua-ski-resort"
   },
   {
     "id": "laurel-mountain",
@@ -1276,6 +1711,18 @@
     "additionalSources": [
       "https://www.lemassif.com/en"
     ]
+  },
+  {
+    "id": "les-houches",
+    "name": "Les Houches – Saint-Gervais",
+    "aliases": [
+      "Chamonix Mont-Blanc Valley",
+      "Haute-Savoie"
+    ],
+    "country": "FR",
+    "locality": "Les Houches",
+    "website": "https://www.leshouches.com/",
+    "reportUrl": "https://en.chamonix.com/infos-live"
   },
   {
     "id": "liberty-mountain-resort",
@@ -1363,6 +1810,22 @@
     "website": "https://www.skimadriver.com/"
   },
   {
+    "id": "madarao-mountain-resort",
+    "name": "Madarao Mountain Resort",
+    "aliases": [
+      "Madarao Kogen",
+      "斑尾高原",
+      "Nagano",
+      "Niigata"
+    ],
+    "country": "JP",
+    "locality": "Iiyama",
+    "website": "https://www.madarao.jp/",
+    "statsUrl": "https://www.madarao.jp/information/14065",
+    "nightSkiing": true,
+    "seasonWindow": "Dec 12, 2026 – Mar 28, 2027 (planned)"
+  },
+  {
     "id": "magic-mountain-ski-area",
     "name": "Magic Mountain Ski Area",
     "aliases": [
@@ -1434,6 +1897,17 @@
     "website": "https://www.skimarmot.com"
   },
   {
+    "id": "megeve",
+    "name": "Megève Ski Area",
+    "aliases": [
+      "Évasion Mont-Blanc",
+      "Haute-Savoie"
+    ],
+    "country": "FR",
+    "locality": "Megève",
+    "website": "https://www.megeve.com/"
+  },
+  {
     "id": "middlebury-snowbowl",
     "name": "Middlebury Snowbowl",
     "aliases": [
@@ -1444,6 +1918,22 @@
     "region": "VT",
     "locality": "Hancock",
     "website": "https://www.middleburysnowbowl.com/"
+  },
+  {
+    "id": "mona-yongpyong",
+    "name": "Mona Yongpyong",
+    "aliases": [
+      "Yongpyong Resort",
+      "용평리조트",
+      "Gangwon"
+    ],
+    "country": "KR",
+    "locality": "Pyeongchang",
+    "website": "https://www.yongpyong.co.kr/",
+    "statsUrl": "https://yongpyong.co.kr/kor/skiNboard/introduce.do",
+    "acres": 272.66818607456213,
+    "liftCount": 16,
+    "trailCount": 28
   },
   {
     "id": "monarch-mountain",
@@ -1488,6 +1978,20 @@
     "acres": 230,
     "trailCount": 60,
     "verticalFt": 1509
+  },
+  {
+    "id": "monterosa-ski",
+    "name": "Monterosa Ski",
+    "aliases": [
+      "Valle d’Aosta",
+      "Aosta Valley",
+      "Champoluc",
+      "Alagna Valsesia",
+      "Staffal"
+    ],
+    "country": "IT",
+    "locality": "Gressoney-La-Trinité",
+    "website": "https://monterosaski.eu/en"
   },
   {
     "id": "moose-mountain-ski-resort",
@@ -1601,6 +2105,21 @@
     "website": "https://www.mtbrighton.com/"
   },
   {
+    "id": "mt-buller",
+    "name": "Mt Buller",
+    "aliases": [
+      "Victoria"
+    ],
+    "country": "AU",
+    "locality": "Mount Buller",
+    "website": "https://www.mtbuller.com.au/",
+    "statsUrl": "https://www.mtbuller.com.au/winter/resort-info/about-mt-buller",
+    "reportUrl": "https://www.mtbuller.com.au/daily-report",
+    "acres": 741.3161444014961,
+    "acresQualifier": "lower-bound",
+    "liftCount": 19
+  },
+  {
     "id": "mt-hood-meadows",
     "name": "Mt. Hood Meadows",
     "aliases": [
@@ -1636,11 +2155,32 @@
     "nightSkiing": true
   },
   {
+    "id": "mt-hutt",
+    "name": "Mt Hutt",
+    "aliases": [
+      "Mount Hutt",
+      "NZSki",
+      "Canterbury"
+    ],
+    "country": "NZ",
+    "locality": "Methven",
+    "website": "https://www.mthutt.co.nz/",
+    "statsUrl": "https://www.mthutt.co.nz/mountain-info",
+    "reportUrl": "https://www.mthutt.co.nz/weather-report",
+    "acres": 901.9346423551535,
+    "acresQualifier": "lower-bound",
+    "liftCount": 5,
+    "verticalFt": 2241,
+    "highestLiftTerminalFt": 6844,
+    "seasonWindow": "Jun 11 – Oct 10, 2027 (planned)"
+  },
+  {
     "id": "mt-norquay",
     "name": "Mt. Norquay",
     "aliases": [
       "Alberta",
-      "Mt Norquay"
+      "Mt Norquay",
+      "SkiBig3"
     ],
     "country": "CA",
     "region": "AB",
@@ -1685,6 +2225,40 @@
     "nightSkiing": true
   },
   {
+    "id": "mt-t",
+    "name": "Mt.T by Hoshino Resorts",
+    "aliases": [
+      "Mt T",
+      "Tanigawadake Tenjindaira",
+      "谷川岳天神平",
+      "Gunma"
+    ],
+    "country": "JP",
+    "locality": "Minakami",
+    "website": "https://tanigawadake-joch.com/en/mt-t/",
+    "statsUrl": "https://tanigawadake-joch.com/en/information/20261116/",
+    "reportUrl": "https://tanigawadake-joch.com/en/mt-t/conditions/",
+    "seasonWindow": "Dec 19, 2026 – Apr 4, 2027 (planned)"
+  },
+  {
+    "id": "myoko-suginohara-ski-resort",
+    "name": "Myoko Suginohara Ski Resort",
+    "aliases": [
+      "妙高杉ノ原",
+      "Niigata"
+    ],
+    "country": "JP",
+    "locality": "Myōkō",
+    "website": "https://www.princehotels.co.jp/ski/myoko/",
+    "statsUrl": "https://www.princehotels.co.jp/ski/myoko/",
+    "reportUrl": "https://www.princehotels.co.jp/ski/myoko/",
+    "acres": 222.3948433204488,
+    "liftCount": 5,
+    "trailCount": 16,
+    "verticalFt": 3688,
+    "seasonWindow": "Dec 19, 2026 – Mar 28, 2027 (planned)"
+  },
+  {
     "id": "nakiska-ski-area",
     "name": "Nakiska Ski Area",
     "aliases": [
@@ -1695,6 +2269,37 @@
     "region": "AB",
     "locality": "Kananaskis Village",
     "website": "https://www.skinakiska.com"
+  },
+  {
+    "id": "nekoma-mountain",
+    "name": "Nekoma Mountain",
+    "aliases": [
+      "Alts Bandai",
+      "Hoshino Resorts Nekoma Mountain",
+      "猫魔",
+      "Fukushima"
+    ],
+    "country": "JP",
+    "locality": "Bandai",
+    "website": "https://www.nekoma.co.jp/"
+  },
+  {
+    "id": "niseko-united",
+    "name": "Niseko United",
+    "aliases": [
+      "Hokkaido",
+      "Niseko Annupuri",
+      "Niseko Village",
+      "Grand Hirafu",
+      "Hanazono",
+      "ニセコユナイテッド"
+    ],
+    "country": "JP",
+    "locality": "Kutchan",
+    "website": "https://www.niseko.ne.jp/en/",
+    "statsUrl": "https://www.niseko.ne.jp/en/map/village/",
+    "reportUrl": "https://www.niseko.ne.jp/en/niseko-lift-status/",
+    "nightSkiing": true
   },
   {
     "id": "nordic-mountain",
@@ -1756,6 +2361,29 @@
     "website": "https://www.okemo.com"
   },
   {
+    "id": "ordino-arcalis",
+    "name": "Ordino Arcalís",
+    "aliases": [
+      "Grandvalira Resorts Andorra"
+    ],
+    "country": "AD",
+    "locality": "Ordino",
+    "website": "https://www.ordinoarcalis.com/en",
+    "statsUrl": "https://www.ordinoarcalis.com/en/resort/open-slopes",
+    "reportUrl": "https://www.ordinoarcalis.com/en/resort/open-slopes",
+    "liftCount": 16,
+    "trailCount": 27,
+    "grades": {
+      "unit": "count",
+      "values": {
+        "Green": 8,
+        "Blue": 6,
+        "Red": 11,
+        "Black": 2
+      }
+    }
+  },
+  {
     "id": "pajarito-mountain",
     "name": "Pajarito Mountain",
     "aliases": [
@@ -1767,6 +2395,30 @@
     "website": "https://www.pajarito.ski/",
     "statsUrl": "https://www.pajarito.ski/mountain-stats/",
     "acres": 280
+  },
+  {
+    "id": "pal-arinsal",
+    "name": "Pal Arinsal",
+    "aliases": [
+      "Grandvalira Resorts Andorra",
+      "Vallnord"
+    ],
+    "country": "AD",
+    "locality": "La Massana",
+    "website": "https://www.palarinsal.com/en",
+    "statsUrl": "https://www.palarinsal.com/en/resort/snow-report",
+    "reportUrl": "https://www.palarinsal.com/en/resort/snow-report",
+    "liftCount": 25,
+    "trailCount": 47,
+    "grades": {
+      "unit": "count",
+      "values": {
+        "Green": 7,
+        "Blue": 19,
+        "Red": 17,
+        "Black": 4
+      }
+    }
   },
   {
     "id": "palisades-tahoe",
@@ -1877,7 +2529,8 @@
     "id": "pico-mountain",
     "name": "Pico Mountain",
     "aliases": [
-      "Vermont"
+      "Vermont",
+      "Killington - Pico"
     ],
     "country": "US",
     "region": "VT",
@@ -1904,6 +2557,17 @@
       "https://picomountain.com/opening-day",
       "https://picomountain.com/transportation-parking-and-shuttles"
     ]
+  },
+  {
+    "id": "pila",
+    "name": "Pila",
+    "aliases": [
+      "Valle d’Aosta",
+      "Aosta Valley"
+    ],
+    "country": "IT",
+    "locality": "Gressan",
+    "website": "https://www.pila.it/"
   },
   {
     "id": "powderhorn-mountain-resort",
@@ -2001,6 +2665,25 @@
     ]
   },
   {
+    "id": "rio-pusteria-bressanone",
+    "name": "Rio Pusteria / Bressanone",
+    "aliases": [
+      "Dolomiti Superski",
+      "Gitschberg Jochtal",
+      "Plose",
+      "Brixen",
+      "Meransen"
+    ],
+    "country": "IT",
+    "locality": "Maranza",
+    "website": "https://www.gitschberg-jochtal.com/",
+    "statsUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "reportUrl": "https://www.dolomitisuperski.com/en/live-info/lifts/gitschberg-jochtal-brixen",
+    "liftCount": 26,
+    "trailCount": 100,
+    "seasonWindow": "Dec 4, 2026 – Apr 4, 2027 (planned)"
+  },
+  {
     "id": "roundtop-mountain-resort",
     "name": "Roundtop Mountain Resort",
     "aliases": [
@@ -2027,6 +2710,22 @@
     "acresQualifier": "lower-bound",
     "trailCount": 68,
     "verticalFt": 2000
+  },
+  {
+    "id": "san-martino-rolle-pass",
+    "name": "San Martino di Castrozza / Rolle Pass",
+    "aliases": [
+      "Dolomiti Superski",
+      "Passo Rolle"
+    ],
+    "country": "IT",
+    "locality": "San Martino di Castrozza",
+    "website": "https://www.sanmartino.com/",
+    "statsUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "reportUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "liftCount": 24,
+    "trailCount": 45,
+    "seasonWindow": "Nov 28, 2026 – Apr 4, 2027 (planned)"
   },
   {
     "id": "sandia-peak-ski-area",
@@ -2076,6 +2775,18 @@
     "website": "https://www.schweitzer.com/"
   },
   {
+    "id": "see",
+    "name": "See",
+    "aliases": [
+      "Skischaukel Kappl & See",
+      "Paznaun",
+      "Medrigalm"
+    ],
+    "country": "AT",
+    "locality": "See",
+    "website": "https://www.see.at/en"
+  },
+  {
     "id": "seven-springs-mountain-resort",
     "name": "Seven Springs Mountain Resort",
     "aliases": [
@@ -2085,6 +2796,24 @@
     "region": "PA",
     "locality": "Seven Springs",
     "website": "https://www.7springs.com/"
+  },
+  {
+    "id": "shiga-kogen-mountain-resort",
+    "name": "Shiga Kogen Mountain Resort",
+    "aliases": [
+      "志賀高原",
+      "Nagano",
+      "Ichinose",
+      "Okushiga",
+      "Yokoteyama",
+      "Kumanoyu"
+    ],
+    "country": "JP",
+    "locality": "Yamanouchi",
+    "website": "https://www.shigakogen.gr.jp/english/index.html",
+    "statsUrl": "https://www.shigakogen.gr.jp/english/topics/shigakogen-ski-infomation.html",
+    "reportUrl": "https://www.shigakogen.gr.jp/english/lift_information/",
+    "nightSkiing": true
   },
   {
     "id": "sierra-at-tahoe-ski-resort",
@@ -2236,7 +2965,8 @@
     "id": "snow-summit",
     "name": "Snow Summit",
     "aliases": [
-      "California"
+      "California",
+      "Big Bear Mountain Resort"
     ],
     "country": "US",
     "region": "CA",
@@ -2663,6 +3393,24 @@
     "website": "https://www.highlandsharborsprings.com/"
   },
   {
+    "id": "the-remarkables",
+    "name": "The Remarkables",
+    "aliases": [
+      "NZSki",
+      "Otago"
+    ],
+    "country": "NZ",
+    "locality": "Queenstown",
+    "website": "https://www.theremarkables.co.nz/",
+    "statsUrl": "https://www.theremarkables.co.nz/mountain-info",
+    "reportUrl": "https://www.theremarkables.co.nz/weather-report",
+    "acres": 1109.5031627875724,
+    "acresQualifier": "lower-bound",
+    "trailCount": 26,
+    "highestLiftTerminalFt": 6529,
+    "seasonWindow": "Jun 19 – Oct 10, 2027 (planned)"
+  },
+  {
     "id": "the-summit-at-snoqualmie",
     "name": "The Summit at Snoqualmie",
     "aliases": [
@@ -2673,6 +3421,20 @@
     "region": "WA",
     "locality": "Snoqualmie Pass",
     "website": "https://summitatsnoqualmie.com/"
+  },
+  {
+    "id": "thredbo",
+    "name": "Thredbo",
+    "aliases": [
+      "New South Wales"
+    ],
+    "country": "AU",
+    "locality": "Thredbo Village",
+    "website": "https://www.thredbo.com.au/",
+    "statsUrl": "https://www.ikonpass.com/en/destinations/thredbo/",
+    "reportUrl": "https://www.thredbo.com.au/weather/weather-report",
+    "acres": 1186,
+    "verticalFt": 2205
   },
   {
     "id": "timberline-lodge-ski-area",
@@ -2749,6 +3511,75 @@
     "additionalSources": [
       "https://news.vailresorts.com/VailWinter2024"
     ]
+  },
+  {
+    "id": "val-di-fassa-carezza",
+    "name": "Val di Fassa / Carezza",
+    "aliases": [
+      "Dolomiti Superski",
+      "Vigo di Fassa",
+      "Catinaccio",
+      "Karersee"
+    ],
+    "country": "IT",
+    "locality": "Canazei",
+    "website": "https://www.fassa.com/en",
+    "statsUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "reportUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "liftCount": 49,
+    "trailCount": 61,
+    "seasonWindow": "Dec 4, 2026 – Apr 4, 2027 (planned)"
+  },
+  {
+    "id": "val-di-fiemme-obereggen",
+    "name": "Val di Fiemme / Obereggen",
+    "aliases": [
+      "Dolomiti Superski",
+      "Latemar",
+      "Alpe Cermis",
+      "Bellamonte",
+      "Passo Lavazè"
+    ],
+    "country": "IT",
+    "locality": "Pampeago",
+    "website": "https://www.latemar.it/en/",
+    "statsUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "reportUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "liftCount": 46,
+    "trailCount": 100,
+    "seasonWindow": "Nov 28, 2026 – Apr 4, 2027 (planned)"
+  },
+  {
+    "id": "val-gardena-alpe-di-siusi",
+    "name": "Val Gardena / Alpe di Siusi",
+    "aliases": [
+      "Dolomiti Superski",
+      "Gröden",
+      "Gherdëina",
+      "Seiser Alm"
+    ],
+    "country": "IT",
+    "locality": "Selva di Val Gardena",
+    "website": "https://www.valgardena.it/en/",
+    "statsUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "reportUrl": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "liftCount": 78,
+    "trailCount": 129,
+    "seasonWindow": "Dec 4, 2026 – Apr 4, 2027 (planned)"
+  },
+  {
+    "id": "valle-nevado",
+    "name": "Valle Nevado",
+    "aliases": [
+      "Región Metropolitana",
+      "Santiago"
+    ],
+    "country": "CL",
+    "locality": "Lo Barnechea",
+    "website": "https://www.vallenevado.com/en/",
+    "statsUrl": "https://www.vallenevado.com/en/frequently-asked-questions/",
+    "reportUrl": "https://www.vallenevado.com/en/mountain-report/",
+    "seasonWindow": "Usually June to October"
   },
   {
     "id": "welch-village",
@@ -2984,5 +3815,41 @@
     "baseFt": 10300,
     "summitFt": 11904,
     "verticalFt": 1604
+  },
+  {
+    "id": "yunding-snow-park",
+    "name": "Yunding Snow Park",
+    "aliases": [
+      "Genting Snow Park",
+      "Secret Garden",
+      "云顶滑雪公园",
+      "Hebei"
+    ],
+    "country": "CN",
+    "locality": "Chongli",
+    "website": "https://www.secretgardenresorts.com/"
+  },
+  {
+    "id": "zao-onsen-ski-resort",
+    "name": "Zao Onsen Ski Resort",
+    "aliases": [
+      "Zaō Onsen",
+      "蔵王温泉"
+    ],
+    "country": "JP",
+    "locality": "Yamagata",
+    "website": "https://www.zao-ski.or.jp/"
+  },
+  {
+    "id": "zermatt-matterhorn",
+    "name": "Zermatt Matterhorn",
+    "aliases": [
+      "Matterhorn Ski Paradise",
+      "Valais"
+    ],
+    "country": "CH",
+    "locality": "Zermatt",
+    "website": "https://www.matterhornparadise.ch/en",
+    "reportUrl": "https://www.matterhornparadise.ch/en/information/lifts-and-pistes"
   }
 ]

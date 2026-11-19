@@ -43,7 +43,7 @@ const areaSchema = z.strictObject({
     id,
     name: label,
     aliases: z.array(label).optional(),
-    region: z.string().regex(/^[A-Z]{2}(?:\/[A-Z]{2})?$/),
+    region: z.string().regex(/^[A-Z]{2}(?:\/[A-Z]{2})?$/).optional(),
     country: z.string().regex(/^[A-Z]{2}$/),
     locality: label,
     website: httpsUrl,
@@ -78,7 +78,7 @@ const passesSchema = z.strictObject({
     memberships: z.array(z.strictObject({
         areaId: id,
         family: passFamilySchema,
-        access: z.enum(['included', 'discount']),
+        access: z.enum(['included', 'discount', 'listed']),
         source: httpsUrl,
     })),
 });
@@ -123,8 +123,8 @@ export function readSkiCatalog(areaInput: unknown, locationInput: unknown, passI
         if (!location) throw new Error(`No map point for ${area.id}`);
         const areaPasses = memberships.get(area.id) ?? [];
         if (!area.statsUrl && statisticKeys.some(key => area[key] !== undefined)) throw new Error(`No mountain statistics source for ${area.id}`);
-        if ((area.acres ?? 0) < minimumSkiableAcres && !areaPasses.some(pass => pass.access === 'included')) {
-            throw new Error(`Ski area ${area.id} requires ${minimumSkiableAcres} skiable acres or included pass access`);
+        if ((area.acres ?? 0) < minimumSkiableAcres && !areaPasses.some(pass => pass.access === 'included' || pass.access === 'listed')) {
+            throw new Error(`Ski area ${area.id} requires ${minimumSkiableAcres} skiable acres, included pass access, or an official pass listing`);
         }
         if ((area.acresQualifier && area.acres === undefined) || (area.trailCountQualifier && area.trailCount === undefined)) {
             throw new Error(`Lower bound for ${area.id} requires a reported value`);

@@ -44,6 +44,49 @@ async function captureMap(page: Page, { phone = false, state = 'ready' }: { phon
     return renderer;
 }
 
+test('fits worldwide resorts on a phone and shows Ikon badges for a selected country', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 780 });
+    await prepare(page);
+    const renderer = await captureMap(page, { phone: true });
+    await expect.poll(() => renderer.evaluate(map => {
+        const points = map.queryRenderedFeatures({ layers: ['ski-area-points'] });
+        return [...new Set(points.map(feature => feature.properties.areaId))].length;
+    })).toBe(locations.locations.length);
+
+    const filters = page.getByRole('button', { name: 'Filters', exact: true });
+    await filters.click();
+    await page.getByLabel('Region', { exact: true }).selectOption({ label: 'New Zealand' });
+    await page.getByLabel('Pass', { exact: true }).selectOption('ikon');
+    await filters.click();
+    await page.getByLabel('Color by', { exact: true }).selectOption('pass');
+    await expect.poll(() => renderer.evaluate(map => {
+        if (!map.getLayer('ski-status-pass-badges')) return [];
+        const points = map.queryRenderedFeatures({ layers: ['ski-status-pass-badges'] });
+        return [...new Set(points.map(feature => feature.properties.areaId))].sort();
+    })).toEqual(['coronet-peak', 'mt-hutt', 'the-remarkables']);
+
+    await page.getByRole('button', { name: 'Table', exact: true }).click();
+    const table = page.getByRole('region', { name: 'Ski area comparison table' });
+    await expect(table.locator('tbody tr')).toHaveCount(3);
+    await table.getByRole('button', { name: 'Mt Hutt', exact: true }).click();
+    await expect(page.getByText('Methven, New Zealand', { exact: true })).toBeVisible();
+    await renderer.dispose();
+});
+
+test('keeps listed Ikon destinations visible until the included-access filter is selected', async ({ page }) => {
+    await prepare(page);
+    await page.goto(`${path}?view=table&region=country%3AAT&area=kappl`);
+    const details = page.getByRole('region', { name: 'Kappl', exact: true });
+    await expect(details.getByRole('link', { name: 'Ikon (lift access unconfirmed)', exact: true })).toBeVisible();
+    const table = page.getByRole('region', { name: 'Ski area comparison table' });
+    await expect(table.getByRole('button', { name: 'See', exact: true })).toBeVisible();
+
+    await page.getByLabel('Pass', { exact: true }).selectOption('ikon');
+    await expect(details).toHaveCount(0);
+    await expect(table.getByRole('button', { name: 'See', exact: true })).toHaveCount(0);
+    await expect(table.getByRole('button', { name: 'Ischgl / Samnaun', exact: true })).toBeVisible();
+});
+
 test('in-view results follow pan and zoom and support filters and sorting', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await prepare(page);

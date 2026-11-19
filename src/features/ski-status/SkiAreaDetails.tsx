@@ -1,17 +1,17 @@
-import { columns, formatSkiStat, type SkiUnits } from './browse';
+import { columns, formatSkiLocation, formatSkiStat, type SkiUnits } from './browse';
 import { passNames, passSeason, type SkiArea } from './catalog';
 import { SkiPassIcon } from './SkiPassIcon';
 
 const linkClass = 'inline-flex min-h-11 items-center text-cyan-300 underline decoration-cyan-700 underline-offset-4 hover:text-cyan-100';
+const passAccessNotes = { included: '', discount: ' (discount only)', listed: ' (lift access unconfirmed)' };
 
 export function SkiAreaDetails({ area, units, onClose }: { area: SkiArea; units: SkiUnits; onClose: () => void }) {
     const stats = columns.slice(2).map(({ key, label }) => ({ label, value: formatSkiStat(area, key, units) }));
-    const region = area.region.replace('/', ' / ');
     return <section id="ski-area-details" tabIndex={-1} aria-labelledby="ski-area-name" className="bg-zinc-950 px-3 py-2">
         <div className="flex flex-wrap items-start justify-between gap-2">
             <div>
                 <h2 id="ski-area-name" className="text-xl font-semibold text-zinc-100">{area.name}</h2>
-                <p className="text-sm text-zinc-300">{area.locality}, {region}</p>
+                <p className="text-sm text-zinc-300">{formatSkiLocation(area)}</p>
             </div>
             <button type="button" onClick={onClose} className="min-h-11 px-2 text-sm text-zinc-300 underline underline-offset-4 hover:text-white">Close details</button>
         </div>
@@ -41,7 +41,7 @@ export function SkiAreaDetails({ area, units, onClose }: { area: SkiArea; units:
             <h3 className="text-sm font-medium text-zinc-200">{passSeason} pass access</h3>
             <ul className="flex flex-wrap gap-x-5 text-sm">{area.passes.map(pass => <li key={pass.family}>
                 <a className={`${linkClass} gap-2`} href={pass.source}>
-                    <SkiPassIcon family={pass.family} />{passNames[pass.family]}{pass.access === 'discount' ? ' (discount only)' : ''}
+                    <SkiPassIcon family={pass.family} />{passNames[pass.family]}{passAccessNotes[pass.access]}
                 </a>
             </li>)}</ul>
         </div>}

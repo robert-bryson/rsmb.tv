@@ -3,6 +3,12 @@
   "checkedOn": "2026-11-19",
   "memberships": [
     {
+      "areaId": "3-zinnen-dolomites",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/dolomiti-superski"
+    },
+    {
       "areaId": "49-north-mountain-resort",
       "family": "indy",
       "access": "included",
@@ -13,6 +19,12 @@
       "family": "epic",
       "access": "included",
       "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "alpe-lusia-san-pellegrino",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/dolomiti-superski"
     },
     {
       "areaId": "alpental",
@@ -39,10 +51,34 @@
       "source": "https://mountaincollective.com/resorts/"
     },
     {
+      "areaId": "alta-badia",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/dolomiti-superski"
+    },
+    {
       "areaId": "alyeska-resort",
       "family": "ikon",
       "access": "included",
       "source": "https://www.alyeskaresort.com/ikon-pass/"
+    },
+    {
+      "areaId": "appi-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "arabba-marmolada",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/dolomiti-superski"
+    },
+    {
+      "areaId": "arai-mountain-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
     },
     {
       "areaId": "arapahoe-basin",
@@ -81,6 +117,12 @@
       "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
     },
     {
+      "areaId": "balme-vallorcine",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/chamonix-mont-blanc-valley"
+    },
+    {
       "areaId": "banff-sunshine",
       "family": "ikon",
       "access": "included",
@@ -103,6 +145,12 @@
       "family": "epic",
       "access": "included",
       "source": "https://investors.vailresorts.com/news-releases/news-release-details/how-save-your-ski-season-epic-passes-go-sale-december-6"
+    },
+    {
+      "areaId": "beidahu-ski-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
     },
     {
       "areaId": "berkshire-east-ski-resort",
@@ -175,6 +223,12 @@
       "family": "epic",
       "access": "included",
       "source": "https://investors.vailresorts.com/news-releases/news-release-details/how-save-your-ski-season-epic-passes-go-sale-december-6"
+    },
+    {
+      "areaId": "brevent-flegere",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/chamonix-mont-blanc-valley"
     },
     {
       "areaId": "brighton-resort",
@@ -255,10 +309,52 @@
       "source": "https://catamountski.com/winter/tickets-passes/indy-pass-reservations"
     },
     {
+      "areaId": "cervino-ski-paradise",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/valle-daosta"
+    },
+    {
+      "areaId": "civetta",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/dolomiti-superski"
+    },
+    {
       "areaId": "copper-mountain",
       "family": "ikon",
       "access": "included",
       "source": "https://www.coppercolorado.com/tickets-passes/season-passes/ikon-pass/?season=summer"
+    },
+    {
+      "areaId": "coronet-peak",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/destinations/coronet-peak-remarkables-mt-hutt"
+    },
+    {
+      "areaId": "cortina-d-ampezzo",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/dolomiti-superski"
+    },
+    {
+      "areaId": "corvatsch",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/saint-moritz"
+    },
+    {
+      "areaId": "corviglia",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/saint-moritz"
+    },
+    {
+      "areaId": "courmayeur-mont-blanc",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/valle-daosta"
     },
     {
       "areaId": "cranmore-mountain-resort",
@@ -315,6 +411,12 @@
       "source": "https://www.lutsen.com/ikon-pass"
     },
     {
+      "areaId": "diavolezza-lagalb",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/saint-moritz"
+    },
+    {
       "areaId": "eaglecrest-ski-area",
       "family": "indy",
       "access": "included",
@@ -333,6 +435,18 @@
       "source": "https://skircr.zohodesk.com/portal/en/kb/articles/which-resorts-of-the-canadian-rockies-mountains-are-included-on-the-epic-pass-and-epic-day-pass"
     },
     {
+      "areaId": "furano-ski-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "galtuer",
+      "family": "ikon",
+      "access": "listed",
+      "source": "https://www.ikonpass.com/en/destinations"
+    },
+    {
       "areaId": "giants-ridge",
       "family": "ikon",
       "access": "included",
@@ -343,6 +457,18 @@
       "family": "mountain-collective",
       "access": "included",
       "source": "https://www.grandtarghee.com/tickets-passes/season-passes/mountain-collective-pass"
+    },
+    {
+      "areaId": "grands-montets",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/chamonix-mont-blanc-valley"
+    },
+    {
+      "areaId": "grandvalira",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/grandvalira-resorts-andorra"
     },
     {
       "areaId": "granite-peak",
@@ -393,6 +519,12 @@
       "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
     },
     {
+      "areaId": "ischgl-samnaun",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ischgl.com/en/winter/operating-times-prices/ski-network-tickets/ikon-pass"
+    },
+    {
       "areaId": "jack-frost-mountain",
       "family": "epic",
       "access": "included",
@@ -429,6 +561,12 @@
       "source": "https://www.junemountain.com/plan-your-trip/season-passes"
     },
     {
+      "areaId": "kappl",
+      "family": "ikon",
+      "access": "listed",
+      "source": "https://www.ikonpass.com/en/destinations"
+    },
+    {
       "areaId": "keystone-resort",
       "family": "epic",
       "access": "included",
@@ -459,6 +597,24 @@
       "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
     },
     {
+      "areaId": "kitzbuehel",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "kronplatz",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/dolomiti-superski"
+    },
+    {
+      "areaId": "la-thuile-espace-san-bernardo",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/valle-daosta"
+    },
+    {
       "areaId": "lake-louise",
       "family": "ikon",
       "access": "included",
@@ -469,6 +625,12 @@
       "family": "mountain-collective",
       "access": "included",
       "source": "https://mountaincollective.com/resorts/"
+    },
+    {
+      "areaId": "lake-songhua-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/lake-songhua-resort"
     },
     {
       "areaId": "laurel-mountain",
@@ -487,6 +649,12 @@
       "family": "mountain-collective",
       "access": "included",
       "source": "https://mountaincollective.com/resorts/"
+    },
+    {
+      "areaId": "les-houches",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/chamonix-mont-blanc-valley"
     },
     {
       "areaId": "liberty-mountain-resort",
@@ -531,6 +699,12 @@
       "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
     },
     {
+      "areaId": "madarao-mountain-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
       "areaId": "magic-mountain-ski-area",
       "family": "indy",
       "access": "included",
@@ -549,10 +723,22 @@
       "source": "https://www.skimarmot.com/tickets-passes/mountain-collective/"
     },
     {
+      "areaId": "megeve",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://forfait.megeve.com/hiver/en/ikon-pass/"
+    },
+    {
       "areaId": "middlebury-snowbowl",
       "family": "indy",
       "access": "included",
       "source": "https://middleburysnowbowl.com/lift-tickets/"
+    },
+    {
+      "areaId": "mona-yongpyong",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
     },
     {
       "areaId": "mont-sainte-anne",
@@ -565,6 +751,12 @@
       "family": "indy",
       "access": "included",
       "source": "https://montsutton.com/avantages-aux-membres/"
+    },
+    {
+      "areaId": "monterosa-ski",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/valle-daosta"
     },
     {
       "areaId": "mount-snow",
@@ -597,10 +789,22 @@
       "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
     },
     {
+      "areaId": "mt-buller",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/mt-buller/"
+    },
+    {
       "areaId": "mt-hood-meadows",
       "family": "indy",
       "access": "included",
       "source": "https://www.skihood.com/explore/indy-pass"
+    },
+    {
+      "areaId": "mt-hutt",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/destinations/coronet-peak-remarkables-mt-hutt"
     },
     {
       "areaId": "mt-norquay",
@@ -609,10 +813,34 @@
       "source": "https://www.skibig3.com/season-passes/ikon-pass/"
     },
     {
+      "areaId": "mt-t",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "myoko-suginohara-ski-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
       "areaId": "nakiska-ski-area",
       "family": "epic",
       "access": "included",
       "source": "https://skircr.zohodesk.com/portal/en/kb/articles/which-resorts-of-the-canadian-rockies-mountains-are-included-on-the-epic-pass-and-epic-day-pass"
+    },
+    {
+      "areaId": "nekoma-mountain",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "niseko-united",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
     },
     {
       "areaId": "nordic-mountain",
@@ -637,6 +865,18 @@
       "family": "epic",
       "access": "included",
       "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "ordino-arcalis",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/grandvalira-resorts-andorra"
+    },
+    {
+      "areaId": "pal-arinsal",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/grandvalira-resorts-andorra"
     },
     {
       "areaId": "palisades-tahoe",
@@ -681,6 +921,12 @@
       "source": "https://www.ikonpass.com/en/compare-benefits"
     },
     {
+      "areaId": "pila",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/valle-daosta"
+    },
+    {
       "areaId": "ragged-mountain-resort",
       "family": "indy",
       "access": "included",
@@ -705,6 +951,12 @@
       "source": "https://www.revelstokemountainresort.com/tickets-passes/mountain-collective/"
     },
     {
+      "areaId": "rio-pusteria-bressanone",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/dolomiti-superski"
+    },
+    {
       "areaId": "roundtop-mountain-resort",
       "family": "epic",
       "access": "included",
@@ -715,6 +967,12 @@
       "family": "indy",
       "access": "included",
       "source": "https://www.saddlebackmaine.com/lift-tickets/"
+    },
+    {
+      "areaId": "san-martino-rolle-pass",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/dolomiti-superski"
     },
     {
       "areaId": "sasquatch-mountain-resort",
@@ -735,10 +993,22 @@
       "source": "https://www.schweitzer.com/-/media/schweitzer/pdfs-and-maps/press/schweitzer-newsrelease-springpass2627.pdf?hash=A805B39FC043336A24514526E60DAB1F&rev=630537fab3a049e0be8c57315042ea03"
     },
     {
+      "areaId": "see",
+      "family": "ikon",
+      "access": "listed",
+      "source": "https://www.ikonpass.com/en/destinations"
+    },
+    {
       "areaId": "seven-springs-mountain-resort",
       "family": "epic",
       "access": "included",
       "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+    },
+    {
+      "areaId": "shiga-kogen-mountain-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
     },
     {
       "areaId": "sierra-at-tahoe-ski-resort",
@@ -993,10 +1263,22 @@
       "source": "https://www.boynemountain.com/ikon-pass"
     },
     {
+      "areaId": "the-remarkables",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/destinations/coronet-peak-remarkables-mt-hutt"
+    },
+    {
       "areaId": "the-summit-at-snoqualmie",
       "family": "ikon",
       "access": "included",
       "source": "https://www.summitatsnoqualmie.com/season-passes/ikon-pass"
+    },
+    {
+      "areaId": "thredbo",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/thredbo/"
     },
     {
       "areaId": "tremblant",
@@ -1015,6 +1297,30 @@
       "family": "epic",
       "access": "included",
       "source": "https://investors.vailresorts.com/news-releases/news-release-details/how-save-your-ski-season-epic-passes-go-sale-december-6"
+    },
+    {
+      "areaId": "val-di-fassa-carezza",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/dolomiti-superski"
+    },
+    {
+      "areaId": "val-di-fiemme-obereggen",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/dolomiti-superski"
+    },
+    {
+      "areaId": "val-gardena-alpe-di-siusi",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/destinations/dolomiti-superski"
+    },
+    {
+      "areaId": "valle-nevado",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
     },
     {
       "areaId": "west-mountain-ski-resort",
@@ -1081,6 +1387,24 @@
       "family": "ikon",
       "access": "included",
       "source": "https://www.winterparkresort.com/plan-your-trip/lift-tickets-ski-pass"
+    },
+    {
+      "areaId": "yunding-snow-park",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "zao-onsen-ski-resort",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "zermatt-matterhorn",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
     }
   ]
 }

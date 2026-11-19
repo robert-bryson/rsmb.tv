@@ -58,7 +58,7 @@ export function markerAppearance(area: SkiArea, mode: MarkerMode, preferredPass?
     if (mode === 'pass') {
         const included = passFamilySchema.options.filter(family =>
             area.passes.some(pass => pass.family === family && pass.access === 'included'));
-        if (!included.length) return { color: area.passes.length ? discountOnly.color : noRecordedPass.color };
+        if (!included.length) return { color: area.passes.some(pass => pass.access === 'discount') ? discountOnly.color : noRecordedPass.color };
 
         const primary = preferredPass && included.includes(preferredPass) ? preferredPass : included[0];
         const multiple = included.length > 1;

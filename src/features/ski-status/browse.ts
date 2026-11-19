@@ -45,15 +45,35 @@ export function readPassFilter(params: URLSearchParams): PassFamily | undefined 
 }
 
 const countryNames = new Intl.DisplayNames('en', { type: 'region' });
+const countryPrefix = 'country:';
+
+function countryName(country: string) {
+    return countryNames.of(country) ?? country;
+}
+
+function regionName(area: SkiArea) {
+    return area.region ?? countryName(area.country);
+}
+
+export function formatSkiLocation(area: SkiArea) {
+    return `${area.locality}, ${regionName(area).replace('/', ' / ')}`;
+}
+
+export function skiRegionOptions(areas: readonly SkiArea[]) {
+    const countries = [...new Set(areas.map(area => area.country))].map(code => ({ value: `${countryPrefix}${code}`, label: countryName(code) }));
+    const regions = [...new Set(areas.flatMap(area => area.region?.split('/') ?? []))].sort();
+    return { countries: countries.sort((first, second) => first.label.localeCompare(second.label)), regions };
+}
 
 export function filterSkiAreas(areas: readonly SkiArea[], query: string, region: string, pass?: PassFamily, night?: boolean) {
     const words = normalizeSearch(query).split(' ').filter(Boolean);
+    const country = region.startsWith(countryPrefix) ? region.slice(countryPrefix.length) : '';
     return areas.filter(area => {
-        if (region && !area.region.split('/').includes(region)) return false;
+        if (country ? area.country !== country : region && !area.region?.split('/').includes(region)) return false;
         if (pass && !area.passes.some(membership => membership.family === pass && membership.access === 'included')) return false;
         if (night && area.nightSkiing !== true) return false;
         if (!words.length) return true;
-        const searchable = normalizeSearch([area.name, area.locality, area.region, area.country, countryNames.of(area.country), ...(area.aliases ?? [])].join(' '));
+        const searchable = normalizeSearch([area.name, area.locality, area.region, area.country, countryName(area.country), ...(area.aliases ?? [])].join(' '));
         return words.every(word => searchable.includes(word));
     });
 }
@@ -74,8 +94,8 @@ const collator = new Intl.Collator('en', { sensitivity: 'base', numeric: true })
 
 export function sortSkiAreas(areas: readonly SkiArea[], sort: SkiSort) {
     return [...areas].sort((first, second) => {
-        const a = first[sort.key];
-        const b = second[sort.key];
+        const a = sort.key === 'region' ? regionName(first) : first[sort.key];
+        const b = sort.key === 'region' ? regionName(second) : second[sort.key];
         if (a === undefined && b !== undefined) return 1;
         if (b === undefined && a !== undefined) return -1;
         const comparison = typeof a === 'string' && typeof b === 'string' ? collator.compare(a, b)
@@ -98,6 +118,7 @@ export function formatElevation(feet: number, units: SkiUnits) {
 }
 
 export function formatSkiStat(area: SkiArea, key: ColumnKey, units: SkiUnits): string | undefined {
+    if (key === 'region') return regionName(area);
     const value = area[key];
     if (value === undefined) return;
     if (typeof value === 'string') return value;

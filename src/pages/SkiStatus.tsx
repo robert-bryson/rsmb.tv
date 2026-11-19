@@ -3,7 +3,7 @@ import { ErrorBoundary } from '../components/ErrorBoundary';
 import { IntentLink } from '../components/IntentLink';
 import { MapSkipLink } from '../components/MapSkipLink';
 import {
-    filterSkiAreas, readPassFilter, readSkiResultsView, readSkiSort, skiResultsViews, sortSkiAreas, type SkiResultsView, type SkiSort, type SkiUnits,
+    filterSkiAreas, readPassFilter, readSkiResultsView, readSkiSort, skiRegionOptions, skiResultsViews, sortSkiAreas, type SkiResultsView, type SkiSort, type SkiUnits,
 } from '../features/ski-status/browse';
 import { locationAttribution, locationLicense, passNames, passSeason, skiAreas } from '../features/ski-status/catalog';
 import { markerLegend, markerModes, passBadgeTextColor, readMarkerMode } from '../features/ski-status/mapAppearance';
@@ -19,7 +19,8 @@ import { staticPageMetadata } from '../utils/pageMetadata';
 import locationDownload from '../../projects/ski-status/data/locations.json?url';
 
 const SkiStatusMap = lazy(moduleLoader(() => import('../features/ski-status/SkiStatusMap'), MAPLIBRE_STYLESHEET));
-const regions = [...new Set(skiAreas.flatMap(area => area.region.split('/')))].sort();
+const { countries, regions } = skiRegionOptions(skiAreas);
+const regionValues = new Set([...regions, ...countries.map(({ value }) => value)]);
 const inputClass = 'min-h-11 w-full min-w-0 rounded-md border border-zinc-700 bg-zinc-950 px-2.5 text-base text-zinc-100 focus-visible:border-cyan-300 focus-visible:outline-1 focus-visible:outline-cyan-300';
 const filterClass = 'grid min-w-0 gap-1 text-xs text-zinc-300';
 const layouts: Record<SkiResultsView, string> = {
@@ -52,7 +53,7 @@ export default function SkiStatus() {
     if (showMap && !mapOpened) setMapOpened(true);
 
     const regionParam = searchParams.get('region') ?? '';
-    const region = regions.includes(regionParam) ? regionParam : '';
+    const region = regionValues.has(regionParam) ? regionParam : '';
     const pass = readPassFilter(searchParams);
     const night = searchParams.get('night') === '1';
     const inView = searchParams.get('inView') === '1';
@@ -128,7 +129,9 @@ export default function SkiStatus() {
                     <div className={filterClass}>
                         <label htmlFor="ski-region">Region</label>
                         <select id="ski-region" value={region} onChange={event => setParam('region', event.target.value)} className={inputClass}>
-                            <option value="">All regions</option>{regions.map(code => <option key={code} value={code}>{code}</option>)}
+                            <option value="">All regions</option>
+                            <optgroup label="Countries">{countries.map(({ value, label }) => <option key={value} value={value}>{label}</option>)}</optgroup>
+                            <optgroup label="States and provinces">{regions.map(code => <option key={code} value={code}>{code}</option>)}</optgroup>
                         </select>
                     </div>
                     <div className={filterClass}>

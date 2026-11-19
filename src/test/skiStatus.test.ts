@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { filterSkiAreas, formatArea, formatSkiStat, readPassFilter, readSkiResultsView, readSkiSort, skiAreaIdsInViewport, sortSkiAreas } from '../features/ski-status/browse';
+import { filterSkiAreas, formatArea, formatSkiLocation, formatSkiStat, readPassFilter, readSkiResultsView, readSkiSort, skiAreaIdsInViewport, skiRegionOptions, sortSkiAreas } from '../features/ski-status/browse';
 import { readSkiCatalog, skiAreas } from '../features/ski-status/catalog';
 import { markerAppearance, markerLegend, readMarkerMode } from '../features/ski-status/mapAppearance';
 
@@ -30,11 +30,12 @@ describe('ski-status catalog validation', () => {
             .toThrow('Duplicate indy membership for test-mountain');
     });
 
-    it('applies the acreage floor unless the resort has included access', () => {
+    it('applies the acreage floor unless the resort has included access or an official pass listing', () => {
         const smallArea = { ...area, acres: 99 };
         expect(readSkiCatalog([smallArea], locations, passes).areas[0]?.id).toBe(area.id);
+        expect(readSkiCatalog([smallArea], locations, { ...passes, memberships: [{ ...membership, access: 'listed' }] }).areas[0]?.id).toBe(area.id);
         expect(() => readSkiCatalog([smallArea], locations, { ...passes, memberships: [{ ...membership, access: 'discount' }] }))
-            .toThrow('requires 100 skiable acres or included pass access');
+            .toThrow('requires 100 skiable acres');
         expect(readSkiCatalog([area], locations, { ...passes, memberships: [] }).areas[0]?.passes).toEqual([]);
     });
 
@@ -91,7 +92,7 @@ describe('ski-status catalog and browse', () => {
         expect(skiAreas.length).toBeGreaterThanOrEqual(197);
         expect(new Set(skiAreas.map(area => area.id)).size).toBe(skiAreas.length);
         expect(new Set(skiAreas.map(area => area.location.coordinates.join(','))).size).toBe(skiAreas.length);
-        expect(skiAreas.every(area => (area.acres ?? 0) >= 100 || area.passes.some(pass => pass.access === 'included'))).toBe(true);
+        expect(skiAreas.every(area => (area.acres ?? 0) >= 100 || area.passes.some(pass => pass.access !== 'discount'))).toBe(true);
         expect(filterSkiAreas(skiAreas, 'alpine meadows', '').map(area => area.id)).toEqual(['palisades-tahoe']);
     });
 
@@ -107,6 +108,18 @@ describe('ski-status catalog and browse', () => {
         const canada = filterSkiAreas(skiAreas, 'Canada', '');
         expect(canada.length).toBeGreaterThanOrEqual(30);
         expect(canada.every(area => area.country === 'CA')).toBe(true);
+    });
+
+    it('distinguishes countries from overlapping state codes in filters and displays international locations', () => {
+        const { countries, regions } = skiRegionOptions(skiAreas);
+        expect(countries).toContainEqual({ value: 'country:CA', label: 'Canada' });
+        expect(regions).toContain('CA');
+        expect(filterSkiAreas(skiAreas, 'mammoth', 'CA').map(area => area.id)).toContain('mammoth-mountain');
+        expect(filterSkiAreas(skiAreas, 'mammoth', 'country:CA')).toEqual([]);
+        const found = filterSkiAreas(skiAreas, 'new zealand mt hutt', 'country:NZ', 'ikon');
+        expect(found.map(area => area.id)).toEqual(['mt-hutt']);
+        expect(formatSkiStat(found[0], 'region', 'metric')).toBe('New Zealand');
+        expect(formatSkiLocation(found[0])).toBe('Methven, New Zealand');
     });
 
     it('keeps dots whose projected centers are inside or on the edges of the map', () => {
@@ -156,6 +169,45 @@ describe('ski-status catalog and browse', () => {
         const rows = [{ ...skiAreas[0], name: 'Ski 2', region: 'VT' }, { ...skiAreas[1], name: 'Ski 10', region: 'CA' }];
         expect(sortSkiAreas(rows, { key: 'name', direction: 'desc' })).toEqual([rows[1], rows[0]]);
         expect(sortSkiAreas(rows, { key: 'region', direction: 'asc' })).toEqual([rows[1], rows[0]]);
+    });
+});
+
+describe('2026/27 Ikon destination coverage', () => {
+    it.each([
+        ['AD', ['grandvalira', 'ordino-arcalis', 'pal-arinsal']],
+        ['AT', ['ischgl-samnaun', 'kitzbuehel']],
+        ['AU', ['mt-buller', 'thredbo']],
+        ['CH', ['corvatsch', 'corviglia', 'diavolezza-lagalb', 'zermatt-matterhorn']],
+        ['CL', ['valle-nevado']],
+        ['CN', ['beidahu-ski-resort', 'lake-songhua-resort', 'yunding-snow-park']],
+        ['FR', ['balme-vallorcine', 'brevent-flegere', 'grands-montets', 'les-houches', 'megeve']],
+        ['IT', ['3-zinnen-dolomites', 'alpe-lusia-san-pellegrino', 'alta-badia', 'arabba-marmolada', 'cervino-ski-paradise', 'civetta',
+            'cortina-d-ampezzo', 'courmayeur-mont-blanc', 'kronplatz', 'la-thuile-espace-san-bernardo', 'monterosa-ski', 'pila',
+            'rio-pusteria-bressanone', 'san-martino-rolle-pass', 'val-di-fassa-carezza', 'val-di-fiemme-obereggen', 'val-gardena-alpe-di-siusi']],
+        ['JP', ['appi-resort', 'arai-mountain-resort', 'furano-ski-resort', 'madarao-mountain-resort', 'mt-t',
+            'myoko-suginohara-ski-resort', 'nekoma-mountain', 'niseko-united', 'shiga-kogen-mountain-resort', 'zao-onsen-ski-resort']],
+        ['KR', ['mona-yongpyong']],
+        ['NZ', ['coronet-peak', 'mt-hutt', 'the-remarkables']],
+    ] as const)('includes the confirmed Ikon areas in %s', (code, ids) => {
+        expect(filterSkiAreas(skiAreas, '', `country:${code}`, 'ikon').map(area => area.id)).toEqual(expect.arrayContaining([...ids]));
+    });
+
+    it.each([
+        ['Aspen Snowmass', 4], ['Big Bear Mountain Resort', 2], ['Chamonix Mont-Blanc Valley', 4],
+        ['Dolomiti Superski', 12], ['Grandvalira Resorts Andorra', 3], ['Killington - Pico', 2],
+        ['SkiBig3', 3], ['St. Moritz', 3], ['Valle d’Aosta', 5],
+    ] as const)('finds all entries for %s by its destination name', (name, count) => {
+        expect(filterSkiAreas(skiAreas, name, '', 'ikon')).toHaveLength(count);
+    });
+
+    it('keeps the listed Austrian areas without advertising lift access', () => {
+        const austrianAreas = filterSkiAreas(skiAreas, '', 'country:AT');
+        const onlyListed = austrianAreas.filter(area => area.passes.some(pass => pass.family === 'ikon' && pass.access === 'listed'));
+        expect(onlyListed.map(area => area.id)).toEqual(['galtuer', 'kappl', 'see']);
+        expect(filterSkiAreas(onlyListed, '', '', 'ikon')).toEqual([]);
+        for (const area of onlyListed) {
+            expect(markerAppearance(area, 'pass')).toEqual(markerAppearance({ ...area, passes: [] }, 'pass'));
+        }
     });
 });
 
