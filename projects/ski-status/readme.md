@@ -1,17 +1,8 @@
-# Piste Pins project plan
+# ski-status project plan
 
 November 19, 2026
 
-Piste Pins is a personal map and comparison table for North American downhill ski areas. Use it to find where a specific pass works, see what is open, and compare mountains. Open directly to the map and table.
-
-## Name
-
-**Piste Pins** is the working title. It pairs a ski run with a map marker and works for both the resort map and future run maps. Use `piste-pins` as the project slug.
-
-| Alternative | Fit |
-| --- | --- |
-| **Corduroy Compass** | A ski term for freshly groomed snow. It fits a tool that will also show mountain access routes. |
-| **Groomer Grid** | Puts the sortable comparison table front and center. |
+ski-status is a personal map and comparison table for North American downhill ski areas. Use it to find where a specific pass works, see what is open, and compare mountains. Open directly to the map and table.
 
 ## First release
 
@@ -72,7 +63,7 @@ The CSV has SHA-256 `9c5a372b8d02aedd281fd387c581c16f48915d89abacec7eba0faa53726
 
 ### Similar tools
 
-PisteFinder already offers pass filters and terrain comparisons based on mapped features. OnTheSnow offers pass-based snow reports, forecasts, and webcams. For Piste Pins, prioritize exact pass rules for a chosen ski date and one sortable table with mountain statistics and timestamped reports. [PisteFinder](https://pistefinder.com/), [OnTheSnow app](https://www.onthesnow.com/news/mobile/)
+PisteFinder already offers pass filters and terrain comparisons based on mapped features. OnTheSnow offers pass-based snow reports, forecasts, and webcams. For ski-status, prioritize exact pass rules for a chosen ski date and one sortable table with mountain statistics and timestamped reports. [PisteFinder](https://pistefinder.com/), [OnTheSnow app](https://www.onthesnow.com/news/mobile/)
 
 ## Pass access by product and date
 
@@ -113,7 +104,7 @@ On November 19, SnoCountry's Vermont demo returned Bolton Valley, Bromley, and B
 
 ## Repository and hosting design
 
-Use the existing React, TypeScript, Vite, and MapLibre stack. Follow ADV Atlas's direct-to-map route pattern with `/projects/piste-pins/map` and a redirect from `/projects/piste-pins`. Keep ingestion under `projects/piste-pins/` and UI code under `src/features/piste-pins/`. Reuse the shared CARTO basemap configuration and map recovery behavior. [CARTO basemap configuration](../../docs/carto-basemaps.md), [Existing project routes](../../src/App.tsx)
+Use the existing React, TypeScript, Vite, and MapLibre stack. Follow ADV Atlas's direct-to-map route pattern with `/projects/ski-status/map` and a redirect from `/projects/ski-status`. Keep ingestion under `projects/ski-status/` and UI code under `src/features/ski-status/`. Reuse the shared CARTO basemap configuration and map recovery behavior. [CARTO basemap configuration](../../docs/carto-basemaps.md), [Existing project routes](../../src/App.tsx)
 
 Use a GeoJSON source for clustered points and typed JSON for table data. Join static facts, pass rules, reported operations, and forecast snapshots by the local area ID. A single filter result drives the map and table.
 
@@ -129,7 +120,7 @@ flowchart LR
     H --> I
 ```
 
-Use scheduled jobs for feeds and manual updates for reviewed rules. Publish validated JSON to `data.rsmb.tv` through the existing S3 and CloudFront pattern. Scope publisher permissions to the Piste Pins prefix. Keep any partner keys in the scheduled job. [Repository geospatial delivery review](../../docs/reviews/2026-11-13-geospatial-delivery-research.md#reusing-s3-and-cloudfront), [GitHub OIDC setup](../../docs/github-actions-oidc.md)
+Use scheduled jobs for feeds and manual updates for reviewed rules. Publish validated JSON to `data.rsmb.tv` through the existing S3 and CloudFront pattern. Scope publisher permissions to the `ski-status` prefix. Keep any partner keys in the scheduled job. [Repository geospatial delivery review](../../docs/reviews/2026-11-13-geospatial-delivery-research.md#reusing-s3-and-cloudfront), [GitHub OIDC setup](../../docs/github-actions-oidc.md)
 
 Publish catalog and pass files by revision. Refresh weather and operations on their own schedules. Upload each snapshot before updating its manifest. Include schema version, compatible catalog revision, coverage, and timestamps. Keep the last valid snapshot available if a source fails or delivers an invalid response. Serialize manifest writes and retain the previous manifest for rollback.
 
