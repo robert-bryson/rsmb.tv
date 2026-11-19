@@ -2,7 +2,7 @@
 
 November 19, 2026
 
-ski-status is a personal map and table for downhill ski areas in North America and Ikon destinations worldwide. Use it to compare mountain statistics and find ski areas on your pass.
+ski-status is a personal map and table for downhill ski areas in North America and worldwide Ikon and Epic destinations. Use it to compare mountain statistics and find ski areas on your pass.
 
 The catalog includes links to official conditions reports. Pass filters show access by family for the listed season. See the [release tasks](TODO.md).
 
@@ -56,12 +56,12 @@ CARTO publishes Dark Matter, Voyager, and Positron. MapTiler offers a separate W
 
 ## Catalog
 
-On November 19, 2026, the catalog had 251 ski areas in 13 countries. It had 167 in the United States, 30 in Canada, and 54 in other countries. It included 126 areas with lift access on at least one Ikon product, 92 acreage figures, and 87 links to official conditions reports.
+On November 19, 2026, the catalog had 305 ski areas in 13 countries. It had 167 in the United States, 30 in Canada, and 108 in other countries. It included 126 areas with Ikon lift access and 98 with Epic lift access. It had 106 acreage figures and 132 links to official conditions reports.
 
 | File | Use |
 | --- | --- |
 | [Area statistics](data/areas.json) | Resort sites, published mountain statistics, and official report links. Empty fields display as unknown. |
-| [Area locations](data/locations.json) | Points from the November 16 OpenSkiData build. The Cervino and Zermatt points use lift bases from OpenStreetMap. Each point has source links. The file includes ODbL attribution. |
+| [Area locations](data/locations.json) | Points from the November 16 OpenSkiData build and from OpenStreetMap lift stations. Each point has source links. The file includes ODbL attribution. |
 | [Pass memberships](data/passes-2026-27.json) | Family access for the 2026/27 season. The details show discounts and listings with unconfirmed access. The pass filter includes areas with lift access. Each entry links to a source. |
 
 Use the same area ID in the three files. Add one point for each area. Add at most one membership for each area and pass family. Use the country code for each area. Add a state or province code where this code is in use in the catalog.
@@ -73,6 +73,12 @@ Cite an operator source for the mountain statistics in each record. Use absolute
 The catalog covers the 26/27 Ikon destination list, including Europe, Asia, Oceania, and Chile. It uses separate points for the three NZSki areas, the three Grandvalira areas, and the five Valle d’Aosta areas. Each of the 12 Dolomiti Superski regions has one point. Search by group name, such as **Dolomiti Superski** or **SkiBig3**, to find its areas. The pass links give shared limits and product rules. [Ikon destination map](https://www.ikonpass.com/en/destinations), [Ikon access comparison](https://www.ikonpass.com/en/compare-benefits)
 
 The Ikon map lists Kappl, See, and Galtür without access details. Find them in the full catalog under **Austria**. Their details show **Lift access unconfirmed**. The Ikon filter shows the confirmed Ischgl / Samnaun and Kitzbühel areas. [Ikon destination map](https://www.ikonpass.com/en/destinations), [Ischgl / Samnaun access](https://www.ischgl.com/en/winter/operating-times-prices/ski-network-tickets/ikon-pass)
+
+### Epic destinations
+
+The catalog covers the 26/27 Epic Pass list. It includes 44 North American areas and 54 areas in Europe, Japan, and Australia. The map has a pin for each of the 36 named European partners. Brides-les-Bains uses the Olympe gondola base. Search by group name to see its ski areas. For example, **Hakuba Valley** finds ten areas in Japan. [Epic Pass list](https://www.epicpass.com/pass-results/college.aspx), [European partners](https://www.epicpass.com/regions/europe.aspx), [Hakuba Valley](https://www.epicpass.com/regions/japan/hakuba-valley.aspx)
+
+The three Australian resorts have access in the 2027 winter season. Select **Epic** in an area's details to read the current terms. Partners can share a day limit. Ski Arlberg also requires a stay booked directly with a lodging partner. [Australia access](https://www.epicpass.com/regions/australia.aspx), [Ski Arlberg access](https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx)
 
 ## Local checks
 
@@ -92,7 +98,7 @@ npm run test:e2e -- tests/e2e/ski-status.spec.ts --project=chromium
 
 ## First release
 
-Include active, public, lift-served downhill areas. In North America, include areas with at least 100 published skiable acres or included lift access on Ikon, Epic, Indy, or Mountain Collective. Include the areas in the official Ikon destination list worldwide. Record unconfirmed lift access on its own. Keep eligible areas visible in the off-season. [Ikon destination map](https://www.ikonpass.com/en/destinations), [Visit Nuuk ski area](https://visitnuuk.com/providers/skiliften/), [Monterreal](https://www.monterreal.com/)
+Include active, public, lift-served downhill areas. In North America, include areas with at least 100 published skiable acres or included lift access on Ikon, Epic, Indy, or Mountain Collective. Include the official Ikon and Epic destinations worldwide. Record unconfirmed lift access on its own. Keep eligible areas visible in the off-season. [Ikon destination map](https://www.ikonpass.com/en/destinations), [Epic Pass list](https://www.epicpass.com/pass-results/college.aspx)
 
 Whaleback has 86 skiable acres and qualifies through Indy lift access. Show Indy Allied discounts on areas that qualify. Use skiable acreage for the threshold. Resort property acreage can include lodging and terrain outside the ski area. [Indy Whaleback profile](https://www.indyskipass.com/our-resorts/whaleback-mountain), [Indy Allied terms](https://www.indyskipass.com/this-is-indy/news/whiteface-gore-and-belleayre-join-allied-program-as-indy-pass-announces-15-additional-resorts-for), [Monterreal property description](https://www.monterreal.com/)
 
@@ -143,7 +149,7 @@ The CSV has SHA-256 `9c5a372b8d02aedd281fd387c581c16f48915d89abacec7eba0faa53726
 1. Import names, points, source IDs, and candidate websites from a versioned OpenSkiData file. Use regional directories to find missing areas. Check directory terms before you collect source data. [OpenSkiData downloads](https://www.openskidata.org/#downloads), [NSAA inventory by state](https://nsaa.org/NSAA/About/Media/Industry_Stats/NSAA/About/Media/Industry_Stats.aspx), [Canadian Ski Council directory](https://www.skicanada.org/ski-area-list/), [Québec ski area directory](https://maneige.ski/en/stations-et-conditions/)
 2. Match by source ID or a verified name and location. Assign a stable local ID for links, reports, and visits. OpenSkiData feature IDs can change between builds. [OpenSkiData feature IDs](https://www.openskidata.org/#whats-in-the-data)
 3. Review uncertain matches. Group bases when the operator publishes combined statistics. Palisades Tahoe publishes combined resort statistics. Keep independently operated areas separate if they share a pass allowance. [Palisades Tahoe statistics](https://www.palisadestahoe.com/footer/mountain-statistics), [Ikon access comparison](https://www.ikonpass.com/en/compare-benefits)
-4. Verify eligibility with operator acreage, a current source for included access, or an official Ikon destination listing. Record the reason and source. Keep other unresolved areas in the review list. Remove duplicate, closed, and private areas from the release catalog. [Indy Pass website terms](https://www.indyskipass.com/website-terms-of-use)
+4. Verify eligibility with operator acreage, a current source for included access, or an official pass destination listing. Record the reason and source. Keep other unresolved areas in the review list. Remove duplicate, closed, and private areas from the release catalog. [Indy Pass website terms](https://www.indyskipass.com/website-terms-of-use)
 5. Add operator statistics for each eligible area. Record the source URL, verification date, and scope. Label mapped lift terminal estimates. Use operator statistics for the official trail count. [OpenSkiData data definitions](https://www.openskidata.org/#whats-in-the-data)
 6. Count resolved and unresolved candidates by region. Measure coverage for acres, elevations, grades, night acres, and dates. Skibowl reports total acres and the number of lit runs. Keep night skiable acres unknown until you find a source. [Skibowl statistics](https://skibowl.com/about-winter/stats/)
 

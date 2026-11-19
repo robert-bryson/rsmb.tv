@@ -87,6 +87,29 @@ test('keeps listed Ikon destinations visible until the included-access filter is
     await expect(table.getByRole('button', { name: 'Ischgl / Samnaun', exact: true })).toBeVisible();
 });
 
+test('shows separate Epic badges and table rows for the Hakuba Valley resorts', async ({ page }) => {
+    await prepare(page);
+    const renderer = await captureMap(page);
+    await page.getByLabel('Region', { exact: true }).selectOption({ label: 'Japan' });
+    await page.getByLabel('Pass', { exact: true }).selectOption('epic');
+    await page.getByRole('searchbox', { name: 'Search areas' }).fill('Hakuba Valley');
+    await page.getByLabel('Color by', { exact: true }).selectOption('pass');
+
+    await expect.poll(() => renderer.evaluate(map => {
+        if (!map.getLayer('ski-status-pass-badges')) return 0;
+        const features = map.queryRenderedFeatures({ layers: ['ski-status-pass-badges'] });
+        return new Set(features.filter(feature => feature.properties.passBadge === 'epic')
+            .map(feature => feature.properties.areaId)).size;
+    })).toBe(10);
+    const table = page.getByRole('region', { name: 'Ski area comparison table' });
+    await expect(table.locator('tbody tr')).toHaveCount(10);
+    await table.getByRole('button', { name: 'Hakuba Happo-One', exact: true }).click();
+    const details = page.getByRole('region', { name: 'Hakuba Happo-One', exact: true });
+    await expect(details.getByRole('link', { name: 'Epic', exact: true })).toHaveAttribute('href',
+        'https://www.epicpass.com/regions/japan/hakuba-valley.aspx');
+    await renderer.dispose();
+});
+
 test('in-view results follow pan and zoom and support filters and sorting', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await prepare(page);

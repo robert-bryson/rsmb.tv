@@ -44,6 +44,17 @@
       ]
     },
     {
+      "id": "alpe-cimbra",
+      "coordinates": [
+        11.209817,
+        45.89429
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/336229660",
+        "https://www.skimap.org/SkiAreas/view/4227"
+      ]
+    },
+    {
       "id": "alpe-lusia-san-pellegrino",
       "coordinates": [
         11.692403,
@@ -107,6 +118,27 @@
       "upstream": [
         "https://www.openstreetmap.org/way/934351306",
         "https://www.skimap.org/SkiAreas/view/552"
+      ]
+    },
+    {
+      "id": "andermatt-gemsstock",
+      "coordinates": [
+        8.602325,
+        46.624671
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/601136179"
+      ]
+    },
+    {
+      "id": "andermatt-sedrun",
+      "coordinates": [
+        8.64469,
+        46.652773
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/601136048",
+        "https://www.skimap.org/SkiAreas/view/1014"
       ]
     },
     {
@@ -426,6 +458,17 @@
       ]
     },
     {
+      "id": "brides-les-bains",
+      "coordinates": [
+        6.5657205,
+        45.4504866
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/node/556895268",
+        "https://www.openstreetmap.org/way/1231054490"
+      ]
+    },
+    {
       "id": "bridger-bowl",
       "coordinates": [
         -110.91226,
@@ -479,6 +522,17 @@
       "upstream": [
         "https://www.openstreetmap.org/way/1472725361",
         "https://www.skimap.org/SkiAreas/view/483"
+      ]
+    },
+    {
+      "id": "bruson",
+      "coordinates": [
+        7.1963975,
+        46.0603915
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/node/13366241720",
+        "https://www.openstreetmap.org/way/217973825"
       ]
     },
     {
@@ -675,6 +729,16 @@
       ]
     },
     {
+      "id": "courchevel",
+      "coordinates": [
+        6.631874,
+        45.403282
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/21355703"
+      ]
+    },
+    {
       "id": "courmayeur-mont-blanc",
       "coordinates": [
         6.939037,
@@ -694,6 +758,17 @@
       "upstream": [
         "https://www.openstreetmap.org/way/334089267",
         "https://www.skimap.org/SkiAreas/view/344"
+      ]
+    },
+    {
+      "id": "crans-montana",
+      "coordinates": [
+        7.494414,
+        46.33183
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/3162703",
+        "https://www.skimap.org/SkiAreas/view/991"
       ]
     },
     {
@@ -796,6 +871,16 @@
       ]
     },
     {
+      "id": "disentis",
+      "coordinates": [
+        8.806391,
+        46.703328
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/9052056"
+      ]
+    },
+    {
       "id": "eaglecrest-ski-area",
       "coordinates": [
         -134.508659,
@@ -829,6 +914,17 @@
       ]
     },
     {
+      "id": "falls-creek",
+      "coordinates": [
+        147.276095,
+        -36.870164
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1210011762",
+        "https://www.skimap.org/SkiAreas/view/1164"
+      ]
+    },
+    {
       "id": "fernie-alpine-resort",
       "coordinates": [
         -115.102212,
@@ -837,6 +933,16 @@
       "upstream": [
         "https://www.openstreetmap.org/way/1388612283",
         "https://www.skimap.org/SkiAreas/view/30"
+      ]
+    },
+    {
+      "id": "folgarida-marilleva",
+      "coordinates": [
+        10.834664,
+        46.296308
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/540714398"
       ]
     },
     {
@@ -963,6 +1069,82 @@
       ]
     },
     {
+      "id": "hakuba-47",
+      "coordinates": [
+        137.822904,
+        36.676465
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/771665619",
+        "https://www.skimap.org/SkiAreas/view/1598"
+      ]
+    },
+    {
+      "id": "hakuba-cortina",
+      "coordinates": [
+        137.883892,
+        36.780338
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/773558919",
+        "https://www.skimap.org/SkiAreas/view/1599"
+      ]
+    },
+    {
+      "id": "hakuba-goryu",
+      "coordinates": [
+        137.826781,
+        36.664447
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/771665618"
+      ]
+    },
+    {
+      "id": "hakuba-happo-one",
+      "coordinates": [
+        137.826654,
+        36.70401
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/771668333",
+        "https://www.skimap.org/SkiAreas/view/1601"
+      ]
+    },
+    {
+      "id": "hakuba-iwatake",
+      "coordinates": [
+        137.845738,
+        36.724627
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/773558921",
+        "https://www.skimap.org/SkiAreas/view/1603"
+      ]
+    },
+    {
+      "id": "hakuba-norikura-onsen",
+      "coordinates": [
+        137.86791,
+        36.76876
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/546849385",
+        "https://www.skimap.org/SkiAreas/view/1605"
+      ]
+    },
+    {
+      "id": "hakuba-sanosaka",
+      "coordinates": [
+        137.838298,
+        36.62217
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/936978931",
+        "https://www.skimap.org/SkiAreas/view/1674"
+      ]
+    },
+    {
       "id": "heavenly",
       "coordinates": [
         -119.910798,
@@ -996,6 +1178,28 @@
       ]
     },
     {
+      "id": "hintertux-glacier",
+      "coordinates": [
+        11.664875,
+        47.087759
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/539199305",
+        "https://www.skimap.org/SkiAreas/view/644"
+      ]
+    },
+    {
+      "id": "hochfuegen-hochzillertal",
+      "coordinates": [
+        11.817512,
+        47.262216
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/5675207",
+        "https://www.skimap.org/SkiAreas/view/12306"
+      ]
+    },
+    {
       "id": "homewood-mountain-resort",
       "coordinates": [
         -120.166393,
@@ -1015,6 +1219,17 @@
       "upstream": [
         "https://www.openstreetmap.org/way/1260579139",
         "https://www.skimap.org/SkiAreas/view/268"
+      ]
+    },
+    {
+      "id": "hotham",
+      "coordinates": [
+        147.148592,
+        -36.979976
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1225428207",
+        "https://www.skimap.org/SkiAreas/view/1169"
       ]
     },
     {
@@ -1073,6 +1288,17 @@
       ]
     },
     {
+      "id": "jigatake",
+      "coordinates": [
+        137.799495,
+        36.560592
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/324162841",
+        "https://www.skimap.org/SkiAreas/view/1614"
+      ]
+    },
+    {
       "id": "jiminy-peak-mountain-resort",
       "coordinates": [
         -73.286252,
@@ -1103,6 +1329,17 @@
       "upstream": [
         "https://www.openstreetmap.org/way/539400827",
         "https://www.skimap.org/SkiAreas/view/16431"
+      ]
+    },
+    {
+      "id": "kashimayari",
+      "coordinates": [
+        137.825873,
+        36.600302
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/936980547",
+        "https://www.skimap.org/SkiAreas/view/1675"
       ]
     },
     {
@@ -1173,6 +1410,17 @@
       ]
     },
     {
+      "id": "kitzsteinhorn",
+      "coordinates": [
+        12.695755,
+        47.218195
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/14346576",
+        "https://www.skimap.org/SkiAreas/view/614"
+      ]
+    },
+    {
       "id": "kronplatz",
       "coordinates": [
         11.943829,
@@ -1192,6 +1440,17 @@
       "upstream": [
         "https://www.openstreetmap.org/relation/5752851",
         "https://www.skimap.org/SkiAreas/view/762"
+      ]
+    },
+    {
+      "id": "la-tzoumaz",
+      "coordinates": [
+        7.2331108,
+        46.144813
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/node/316315926",
+        "https://www.openstreetmap.org/way/28770030"
       ]
     },
     {
@@ -1239,6 +1498,17 @@
       ]
     },
     {
+      "id": "lech-am-arlberg",
+      "coordinates": [
+        10.1424258,
+        47.2079848
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/node/285898460",
+        "https://www.openstreetmap.org/way/105896648"
+      ]
+    },
+    {
       "id": "les-houches",
       "coordinates": [
         6.748412,
@@ -1247,6 +1517,16 @@
       "upstream": [
         "https://www.openstreetmap.org/relation/5993393",
         "https://www.skimap.org/SkiAreas/view/818"
+      ]
+    },
+    {
+      "id": "les-menuires",
+      "coordinates": [
+        6.539116,
+        45.332187
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/3962219"
       ]
     },
     {
@@ -1338,6 +1618,17 @@
       ]
     },
     {
+      "id": "madonna-di-campiglio",
+      "coordinates": [
+        10.835163,
+        46.236156
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/540714397",
+        "https://www.skimap.org/SkiAreas/view/2073"
+      ]
+    },
+    {
       "id": "magic-mountain-ski-area",
       "coordinates": [
         -72.766333,
@@ -1382,6 +1673,17 @@
       ]
     },
     {
+      "id": "mayrhofen",
+      "coordinates": [
+        11.793236,
+        47.17189
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/539196496",
+        "https://www.skimap.org/SkiAreas/view/634"
+      ]
+    },
+    {
       "id": "megeve",
       "coordinates": [
         6.65944,
@@ -1390,6 +1692,17 @@
       "upstream": [
         "https://www.openstreetmap.org/relation/5993424",
         "https://www.skimap.org/SkiAreas/view/821"
+      ]
+    },
+    {
+      "id": "meribel",
+      "coordinates": [
+        6.576252,
+        45.375937
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/21355704",
+        "https://www.skimap.org/SkiAreas/view/1079"
       ]
     },
     {
@@ -1444,6 +1757,17 @@
       ],
       "upstream": [
         "https://www.skimap.org/SkiAreas/view/90"
+      ]
+    },
+    {
+      "id": "monte-bondone",
+      "coordinates": [
+        11.057644,
+        46.038534
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/336234488",
+        "https://www.skimap.org/SkiAreas/view/2076"
       ]
     },
     {
@@ -1667,6 +1991,17 @@
       ]
     },
     {
+      "id": "nendaz",
+      "coordinates": [
+        7.2911752,
+        46.1798229
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/node/13352480891",
+        "https://www.openstreetmap.org/way/29289978"
+      ]
+    },
+    {
       "id": "niseko-united",
       "coordinates": [
         140.677275,
@@ -1729,6 +2064,27 @@
       ],
       "upstream": [
         "https://www.openstreetmap.org/relation/4638282"
+      ]
+    },
+    {
+      "id": "orelle",
+      "coordinates": [
+        6.577336,
+        45.254178
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/19751525"
+      ]
+    },
+    {
+      "id": "paganella-ski",
+      "coordinates": [
+        11.030806,
+        46.15595
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/336236243",
+        "https://www.skimap.org/SkiAreas/view/4225"
       ]
     },
     {
@@ -1812,6 +2168,29 @@
       ]
     },
     {
+      "id": "pejo-3000",
+      "coordinates": [
+        10.655138,
+        46.372647
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/542233865",
+        "https://www.skimap.org/SkiAreas/view/4233"
+      ]
+    },
+    {
+      "id": "perisher",
+      "coordinates": [
+        148.399353,
+        -36.395235
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/178133225",
+        "https://www.skimap.org/SkiAreas/view/1172",
+        "https://www.skimap.org/SkiAreas/view/1173"
+      ]
+    },
+    {
       "id": "pico-mountain",
       "coordinates": [
         -72.840606,
@@ -1831,6 +2210,27 @@
       "upstream": [
         "https://www.openstreetmap.org/relation/3545279",
         "https://www.skimap.org/SkiAreas/view/2086"
+      ]
+    },
+    {
+      "id": "pinzolo",
+      "coordinates": [
+        10.790024,
+        46.171384
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/540714830"
+      ]
+    },
+    {
+      "id": "pontedilegno-tonale",
+      "coordinates": [
+        10.551131,
+        46.255966
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/542235880",
+        "https://www.skimap.org/SkiAreas/view/2085"
       ]
     },
     {
@@ -1921,6 +2321,17 @@
       ]
     },
     {
+      "id": "rusutsu-resort",
+      "coordinates": [
+        140.914789,
+        42.733649
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/1081650975",
+        "https://www.skimap.org/SkiAreas/view/1322"
+      ]
+    },
+    {
       "id": "saddleback",
       "coordinates": [
         -70.524375,
@@ -1929,6 +2340,17 @@
       "upstream": [
         "https://www.openstreetmap.org/way/255571392",
         "https://www.skimap.org/SkiAreas/view/446"
+      ]
+    },
+    {
+      "id": "saint-martin-de-belleville",
+      "coordinates": [
+        6.5045641,
+        45.3767064
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/node/270329832",
+        "https://www.openstreetmap.org/way/24877621"
       ]
     },
     {
@@ -1962,6 +2384,17 @@
       "upstream": [
         "https://www.openstreetmap.org/way/476842734",
         "https://www.skimap.org/SkiAreas/view/56"
+      ]
+    },
+    {
+      "id": "schmittenhoehe",
+      "coordinates": [
+        12.760973,
+        47.325945
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/319914086",
+        "https://www.skimap.org/SkiAreas/view/19253"
       ]
     },
     {
@@ -2062,6 +2495,17 @@
       ]
     },
     {
+      "id": "silvretta-montafon",
+      "coordinates": [
+        9.970298,
+        47.041601
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/539421257",
+        "https://www.skimap.org/SkiAreas/view/2709"
+      ]
+    },
+    {
       "id": "sipapu-ski-summer-resort",
       "coordinates": [
         -105.55122,
@@ -2103,6 +2547,17 @@
       "upstream": [
         "https://www.openstreetmap.org/relation/14934032",
         "https://www.skimap.org/SkiAreas/view/335"
+      ]
+    },
+    {
+      "id": "skicircus-saalbach",
+      "coordinates": [
+        12.650167,
+        47.414769
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/342018770",
+        "https://www.skimap.org/SkiAreas/view/606"
       ]
     },
     {
@@ -2240,6 +2695,17 @@
       ]
     },
     {
+      "id": "soelden",
+      "coordinates": [
+        10.977045,
+        46.953704
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/15961562",
+        "https://www.skimap.org/SkiAreas/view/635"
+      ]
+    },
+    {
       "id": "soldier-mountain-ski-area",
       "coordinates": [
         -114.838282,
@@ -2262,6 +2728,16 @@
       ]
     },
     {
+      "id": "spieljoch",
+      "coordinates": [
+        11.813412,
+        47.330926
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/585748317"
+      ]
+    },
+    {
       "id": "spirit-mountain",
       "coordinates": [
         -92.214063,
@@ -2270,6 +2746,28 @@
       "upstream": [
         "https://www.openstreetmap.org/relation/18019724",
         "https://www.skimap.org/SkiAreas/view/383"
+      ]
+    },
+    {
+      "id": "st-anton-am-arlberg",
+      "coordinates": [
+        10.2629731,
+        47.128138
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/node/327308648",
+        "https://www.openstreetmap.org/way/29710303"
+      ]
+    },
+    {
+      "id": "st-christoph-am-arlberg",
+      "coordinates": [
+        10.2142547,
+        47.1277909
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/node/327334448",
+        "https://www.openstreetmap.org/way/29712600"
       ]
     },
     {
@@ -2326,6 +2824,17 @@
         "https://www.openstreetmap.org/way/1367311040",
         "https://www.openstreetmap.org/way/682228180",
         "https://www.skimap.org/SkiAreas/view/213"
+      ]
+    },
+    {
+      "id": "stuben-am-arlberg",
+      "coordinates": [
+        10.1599886,
+        47.1377399
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/node/249417956",
+        "https://www.openstreetmap.org/way/23102910"
       ]
     },
     {
@@ -2507,6 +3016,17 @@
       ]
     },
     {
+      "id": "thyon",
+      "coordinates": [
+        7.3834167,
+        46.1829735
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/node/346675300",
+        "https://www.openstreetmap.org/way/1239563613"
+      ]
+    },
+    {
       "id": "timberline-lodge-ski-area",
       "coordinates": [
         -121.71667,
@@ -2536,6 +3056,17 @@
       ],
       "upstream": [
         "https://www.skimap.org/SkiAreas/view/159"
+      ]
+    },
+    {
+      "id": "tsugaike-mountain-resort",
+      "coordinates": [
+        137.851537,
+        36.756543
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/773558920",
+        "https://www.skimap.org/SkiAreas/view/1680"
       ]
     },
     {
@@ -2588,6 +3119,16 @@
       ]
     },
     {
+      "id": "val-thorens",
+      "coordinates": [
+        6.576324,
+        45.290379
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/relation/3962222"
+      ]
+    },
+    {
       "id": "valle-nevado",
       "coordinates": [
         -70.249992,
@@ -2596,6 +3137,28 @@
       "upstream": [
         "https://www.openstreetmap.org/relation/3917252",
         "https://www.skimap.org/SkiAreas/view/1144"
+      ]
+    },
+    {
+      "id": "verbier",
+      "coordinates": [
+        7.2337866,
+        46.0934749
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/node/250155144",
+        "https://www.openstreetmap.org/way/23154713"
+      ]
+    },
+    {
+      "id": "veysonnaz",
+      "coordinates": [
+        7.3429929,
+        46.1955269
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/node/3415179933",
+        "https://www.openstreetmap.org/way/6272955"
       ]
     },
     {
@@ -2786,6 +3349,28 @@
         "https://www.openstreetmap.org/way/903540909",
         "https://www.openstreetmap.org/way/540681046",
         "https://www.skimap.org/SkiAreas/view/987"
+      ]
+    },
+    {
+      "id": "zillertal-arena",
+      "coordinates": [
+        12.046052,
+        47.24459
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/way/539189765",
+        "https://www.skimap.org/SkiAreas/view/643"
+      ]
+    },
+    {
+      "id": "zuers-am-arlberg",
+      "coordinates": [
+        10.1645554,
+        47.1681046
+      ],
+      "upstream": [
+        "https://www.openstreetmap.org/node/325116003",
+        "https://www.openstreetmap.org/way/458106193"
       ]
     }
   ]

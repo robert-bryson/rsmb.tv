@@ -18,7 +18,13 @@
       "areaId": "afton-alps",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
+    },
+    {
+      "areaId": "alpe-cimbra",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/italy/skirama-dolomiti.aspx"
     },
     {
       "areaId": "alpe-lusia-san-pellegrino",
@@ -36,7 +42,7 @@
       "areaId": "alpine-valley",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "alta",
@@ -61,6 +67,18 @@
       "family": "ikon",
       "access": "included",
       "source": "https://www.alyeskaresort.com/ikon-pass/"
+    },
+    {
+      "areaId": "andermatt-gemsstock",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/switzerland/andermatt-sedrun-disentis.aspx"
+    },
+    {
+      "areaId": "andermatt-sedrun",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/switzerland/andermatt-sedrun-disentis.aspx"
     },
     {
       "areaId": "appi-resort",
@@ -114,7 +132,7 @@
       "areaId": "attitash-mountain-resort",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "balme-vallorcine",
@@ -144,7 +162,7 @@
       "areaId": "beaver-creek-resort",
       "family": "epic",
       "access": "included",
-      "source": "https://investors.vailresorts.com/news-releases/news-release-details/how-save-your-ski-season-epic-passes-go-sale-december-6"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "beidahu-ski-resort",
@@ -162,7 +180,7 @@
       "areaId": "big-boulder",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "big-sky-resort",
@@ -204,7 +222,7 @@
       "areaId": "boston-mills",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "boyne-mountain",
@@ -216,19 +234,25 @@
       "areaId": "brandywine",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "breckenridge-ski-resort",
       "family": "epic",
       "access": "included",
-      "source": "https://investors.vailresorts.com/news-releases/news-release-details/how-save-your-ski-season-epic-passes-go-sale-december-6"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "brevent-flegere",
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/destinations/chamonix-mont-blanc-valley"
+    },
+    {
+      "areaId": "brides-les-bains",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/france/les-3-vallees.aspx"
     },
     {
       "areaId": "brighton-resort",
@@ -247,6 +271,12 @@
       "family": "indy",
       "access": "included",
       "source": "https://brundage.com/indypassvisitors/"
+    },
+    {
+      "areaId": "bruson",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/switzerland/verbier-4-vallees.aspx"
     },
     {
       "areaId": "buck-hill",
@@ -351,6 +381,12 @@
       "source": "https://www.ikonpass.com/en/destinations/saint-moritz"
     },
     {
+      "areaId": "courchevel",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/france/les-3-vallees.aspx"
+    },
+    {
       "areaId": "courmayeur-mont-blanc",
       "family": "ikon",
       "access": "included",
@@ -363,16 +399,22 @@
       "source": "https://cranmore.com/news/cranmore-mountain-becomes-bonus-mountain-on-ikon-pass"
     },
     {
+      "areaId": "crans-montana",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/switzerland/crans-montana.aspx"
+    },
+    {
       "areaId": "crested-butte-mountain-resort",
       "family": "epic",
       "access": "included",
-      "source": "https://investors.vailresorts.com/news-releases/news-release-details/how-save-your-ski-season-epic-passes-go-sale-december-6"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "crotched-mountain",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "crystal-mountain",
@@ -417,6 +459,12 @@
       "source": "https://www.ikonpass.com/en/destinations/saint-moritz"
     },
     {
+      "areaId": "disentis",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/switzerland/andermatt-sedrun-disentis.aspx"
+    },
+    {
       "areaId": "eaglecrest-ski-area",
       "family": "indy",
       "access": "included",
@@ -429,10 +477,22 @@
       "source": "https://www.eldora.com/ikon-pass/"
     },
     {
+      "areaId": "falls-creek",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/australia.aspx"
+    },
+    {
       "areaId": "fernie-alpine-resort",
       "family": "epic",
       "access": "included",
-      "source": "https://skircr.zohodesk.com/portal/en/kb/articles/which-resorts-of-the-canadian-rockies-mountains-are-included-on-the-epic-pass-and-epic-day-pass"
+      "source": "https://www.epicpass.com/regions/canada/rcr.aspx"
+    },
+    {
+      "areaId": "folgarida-marilleva",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/italy/skirama-dolomiti.aspx"
     },
     {
       "areaId": "furano-ski-resort",
@@ -489,22 +549,76 @@
       "source": "https://www.alterramtn.co/en/news/2627-ikon-pass-goes-on-sale-march-12-with-new-benefits-new-offers-and-new-discounts"
     },
     {
+      "areaId": "hakuba-47",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx"
+    },
+    {
+      "areaId": "hakuba-cortina",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx"
+    },
+    {
+      "areaId": "hakuba-goryu",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx"
+    },
+    {
+      "areaId": "hakuba-happo-one",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx"
+    },
+    {
+      "areaId": "hakuba-iwatake",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx"
+    },
+    {
+      "areaId": "hakuba-norikura-onsen",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx"
+    },
+    {
+      "areaId": "hakuba-sanosaka",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx"
+    },
+    {
       "areaId": "heavenly",
       "family": "epic",
       "access": "included",
-      "source": "https://www.epicpass.com/regions/destination.aspx"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "hidden-valley-resort",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "hidden-valley-ski-resort",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
+    },
+    {
+      "areaId": "hintertux-glacier",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/austria/zillertal.aspx"
+    },
+    {
+      "areaId": "hochfuegen-hochzillertal",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/austria/zillertal.aspx"
     },
     {
       "areaId": "hoodoo-ski-area",
@@ -513,10 +627,16 @@
       "source": "https://skihoodoo.com/rates/indy-pass/"
     },
     {
+      "areaId": "hotham",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/australia.aspx"
+    },
+    {
       "areaId": "hunter-mountain",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "ischgl-samnaun",
@@ -528,7 +648,7 @@
       "areaId": "jack-frost-mountain",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "jackson-hole-mountain-resort",
@@ -549,6 +669,12 @@
       "source": "https://jaypeakresort.com/resort/partnerships-and-sponsors"
     },
     {
+      "areaId": "jigatake",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx"
+    },
+    {
       "areaId": "jiminy-peak-mountain-resort",
       "family": "ikon",
       "access": "included",
@@ -567,16 +693,22 @@
       "source": "https://www.ikonpass.com/en/destinations"
     },
     {
+      "areaId": "kashimayari",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx"
+    },
+    {
       "areaId": "keystone-resort",
       "family": "epic",
       "access": "included",
-      "source": "https://investors.vailresorts.com/news-releases/news-release-details/how-save-your-ski-season-epic-passes-go-sale-december-6"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "kicking-horse",
       "family": "epic",
       "access": "included",
-      "source": "https://skircr.zohodesk.com/portal/en/kb/articles/which-resorts-of-the-canadian-rockies-mountains-are-included-on-the-epic-pass-and-epic-day-pass"
+      "source": "https://www.epicpass.com/regions/canada/rcr.aspx"
     },
     {
       "areaId": "killington",
@@ -588,19 +720,25 @@
       "areaId": "kimberley-alpine-resort",
       "family": "epic",
       "access": "included",
-      "source": "https://skircr.zohodesk.com/portal/en/kb/articles/which-resorts-of-the-canadian-rockies-mountains-are-included-on-the-epic-pass-and-epic-day-pass"
+      "source": "https://www.epicpass.com/regions/canada/rcr.aspx"
     },
     {
       "areaId": "kirkwood-mountain-resort",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "kitzbuehel",
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "kitzsteinhorn",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/austria/alpin-card-resorts.aspx"
     },
     {
       "areaId": "kronplatz",
@@ -613,6 +751,12 @@
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/destinations/valle-daosta"
+    },
+    {
+      "areaId": "la-tzoumaz",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/switzerland/verbier-4-vallees.aspx"
     },
     {
       "areaId": "lake-louise",
@@ -636,7 +780,7 @@
       "areaId": "laurel-mountain",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "le-massif",
@@ -651,16 +795,28 @@
       "source": "https://mountaincollective.com/resorts/"
     },
     {
+      "areaId": "lech-am-arlberg",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx"
+    },
+    {
       "areaId": "les-houches",
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/destinations/chamonix-mont-blanc-valley"
     },
     {
+      "areaId": "les-menuires",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/france/les-3-vallees.aspx"
+    },
+    {
       "areaId": "liberty-mountain-resort",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "little-switzerland",
@@ -696,13 +852,19 @@
       "areaId": "mad-river-mountain",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "madarao-mountain-resort",
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "madonna-di-campiglio",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/italy/skirama-dolomiti.aspx"
     },
     {
       "areaId": "magic-mountain-ski-area",
@@ -723,10 +885,22 @@
       "source": "https://www.skimarmot.com/tickets-passes/mountain-collective/"
     },
     {
+      "areaId": "mayrhofen",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/austria/zillertal.aspx"
+    },
+    {
       "areaId": "megeve",
       "family": "ikon",
       "access": "included",
       "source": "https://forfait.megeve.com/hiver/en/ikon-pass/"
+    },
+    {
+      "areaId": "meribel",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/france/les-3-vallees.aspx"
     },
     {
       "areaId": "middlebury-snowbowl",
@@ -744,13 +918,19 @@
       "areaId": "mont-sainte-anne",
       "family": "epic",
       "access": "included",
-      "source": "https://mont-sainte-anne.com/en/epic-pass/"
+      "source": "https://www.epicpass.com/regions/canada/rcr.aspx"
     },
     {
       "areaId": "mont-sutton",
       "family": "indy",
       "access": "included",
       "source": "https://montsutton.com/avantages-aux-membres/"
+    },
+    {
+      "areaId": "monte-bondone",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/italy/skirama-dolomiti.aspx"
     },
     {
       "areaId": "monterosa-ski",
@@ -762,13 +942,13 @@
       "areaId": "mount-snow",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "mount-sunapee",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "mount-washington-alpine-resort",
@@ -786,7 +966,7 @@
       "areaId": "mt-brighton",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "mt-buller",
@@ -828,13 +1008,19 @@
       "areaId": "nakiska-ski-area",
       "family": "epic",
       "access": "included",
-      "source": "https://skircr.zohodesk.com/portal/en/kb/articles/which-resorts-of-the-canadian-rockies-mountains-are-included-on-the-epic-pass-and-epic-day-pass"
+      "source": "https://www.epicpass.com/regions/canada/rcr.aspx"
     },
     {
       "areaId": "nekoma-mountain",
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "nendaz",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/switzerland/verbier-4-vallees.aspx"
     },
     {
       "areaId": "niseko-united",
@@ -852,7 +1038,7 @@
       "areaId": "northstar-california-resort",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "nub-s-nob",
@@ -864,13 +1050,25 @@
       "areaId": "okemo-mountain-resort",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "ordino-arcalis",
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/destinations/grandvalira-resorts-andorra"
+    },
+    {
+      "areaId": "orelle",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/france/les-3-vallees.aspx"
+    },
+    {
+      "areaId": "paganella-ski",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/italy/skirama-dolomiti.aspx"
     },
     {
       "areaId": "pal-arinsal",
@@ -900,19 +1098,31 @@
       "areaId": "paoli-peaks",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "park-city-mountain",
       "family": "epic",
       "access": "included",
-      "source": "https://www.epicpass.com/regions/destination.aspx"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "pats-peak",
       "family": "indy",
       "access": "included",
       "source": "https://www.patspeak.com/plan-your-visit/planning-tools/indy-pass/"
+    },
+    {
+      "areaId": "pejo-3000",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/italy/skirama-dolomiti.aspx"
+    },
+    {
+      "areaId": "perisher",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/australia.aspx"
     },
     {
       "areaId": "pico-mountain",
@@ -925,6 +1135,18 @@
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/destinations/valle-daosta"
+    },
+    {
+      "areaId": "pinzolo",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/italy/skirama-dolomiti.aspx"
+    },
+    {
+      "areaId": "pontedilegno-tonale",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/italy/skirama-dolomiti.aspx"
     },
     {
       "areaId": "ragged-mountain-resort",
@@ -960,13 +1182,25 @@
       "areaId": "roundtop-mountain-resort",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
+    },
+    {
+      "areaId": "rusutsu-resort",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/japan/rusutsu-resort.aspx"
     },
     {
       "areaId": "saddleback",
       "family": "indy",
       "access": "included",
       "source": "https://www.saddlebackmaine.com/lift-tickets/"
+    },
+    {
+      "areaId": "saint-martin-de-belleville",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/france/les-3-vallees.aspx"
     },
     {
       "areaId": "san-martino-rolle-pass",
@@ -979,6 +1213,12 @@
       "family": "indy",
       "access": "included",
       "source": "https://sasquatchmountain.ca/indy-pass/"
+    },
+    {
+      "areaId": "schmittenhoehe",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/austria/alpin-card-resorts.aspx"
     },
     {
       "areaId": "schuss-mountain-at-shanty-creek",
@@ -1002,7 +1242,7 @@
       "areaId": "seven-springs-mountain-resort",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "shiga-kogen-mountain-resort",
@@ -1023,10 +1263,22 @@
       "source": "https://www.alterramtn.co/en/news/two-weeks-left-to-grab-an-ikon-pass-at-its-current-lowest-spring-prices"
     },
     {
+      "areaId": "silvretta-montafon",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/austria/silvretta-montafon.aspx"
+    },
+    {
       "areaId": "ski-butternut",
       "family": "ikon",
       "access": "included",
       "source": "https://www.alterramtn.co/en/news/2627-ikon-pass-goes-on-sale-march-12-with-new-benefits-new-offers-and-new-discounts"
+    },
+    {
+      "areaId": "skicircus-saalbach",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/austria/alpin-card-resorts.aspx"
     },
     {
       "areaId": "smugglers-notch-resort",
@@ -1038,7 +1290,7 @@
       "areaId": "snow-creek",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "snow-summit",
@@ -1113,6 +1365,12 @@
       "source": "https://www.alterramtn.co/en/news/ikon-pass-expands-further-into-japan-and-china-for-winter-2627"
     },
     {
+      "areaId": "soelden",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/austria/soelden.aspx"
+    },
+    {
       "areaId": "soldier-mountain-ski-area",
       "family": "indy",
       "access": "included",
@@ -1125,16 +1383,34 @@
       "source": "https://blog.solitudemountain.com/2026/ambers-updates-solitude-opens-for-the-26-27-winter-season/"
     },
     {
+      "areaId": "spieljoch",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/austria/zillertal.aspx"
+    },
+    {
       "areaId": "spirit-mountain",
       "family": "indy",
       "access": "included",
       "source": "https://spiritmt.com/winter/downhill/"
     },
     {
+      "areaId": "st-anton-am-arlberg",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx"
+    },
+    {
+      "areaId": "st-christoph-am-arlberg",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx"
+    },
+    {
       "areaId": "station-touristique-stoneham",
       "family": "epic",
       "access": "included",
-      "source": "https://skircr.zohodesk.com/portal/en/kb/articles/which-resorts-of-the-canadian-rockies-mountains-are-included-on-the-epic-pass-and-epic-day-pass"
+      "source": "https://www.epicpass.com/regions/canada/rcr.aspx"
     },
     {
       "areaId": "steamboat-ski-resort",
@@ -1146,19 +1422,25 @@
       "areaId": "stevens-pass",
       "family": "epic",
       "access": "included",
-      "source": "https://www.epicpass.com/regions/destination.aspx"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "stowe",
       "family": "epic",
       "access": "included",
-      "source": "https://www.epicpass.com/regions/destination.aspx"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "stratton-mountain-resort",
       "family": "ikon",
       "access": "included",
       "source": "https://www.stratton.com/plan-your-trip/deals-and-packages/ikon-deals"
+    },
+    {
+      "areaId": "stuben-am-arlberg",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx"
     },
     {
       "areaId": "sugar-bowl-resort",
@@ -1281,6 +1563,12 @@
       "source": "https://www.ikonpass.com/en/destinations/thredbo/"
     },
     {
+      "areaId": "thyon",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/switzerland/verbier-4-vallees.aspx"
+    },
+    {
       "areaId": "tremblant",
       "family": "ikon",
       "access": "included",
@@ -1293,10 +1581,16 @@
       "source": "https://trollhaugen.com/hours-and-rates/"
     },
     {
+      "areaId": "tsugaike-mountain-resort",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/japan/hakuba-valley.aspx"
+    },
+    {
       "areaId": "vail-mountain",
       "family": "epic",
       "access": "included",
-      "source": "https://investors.vailresorts.com/news-releases/news-release-details/how-save-your-ski-season-epic-passes-go-sale-december-6"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "val-di-fassa-carezza",
@@ -1317,10 +1611,28 @@
       "source": "https://www.ikonpass.com/en/destinations/dolomiti-superski"
     },
     {
+      "areaId": "val-thorens",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/france/les-3-vallees.aspx"
+    },
+    {
       "areaId": "valle-nevado",
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "verbier",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/switzerland/verbier-4-vallees.aspx"
+    },
+    {
+      "areaId": "veysonnaz",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/switzerland/verbier-4-vallees.aspx"
     },
     {
       "areaId": "west-mountain-ski-resort",
@@ -1338,7 +1650,7 @@
       "areaId": "whistler-blackcomb",
       "family": "epic",
       "access": "included",
-      "source": "https://www.epicpass.com/regions/destination.aspx"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "white-pass-ski-area",
@@ -1362,7 +1674,7 @@
       "areaId": "whitetail-resort",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "wild-mountain",
@@ -1374,13 +1686,13 @@
       "areaId": "wildcat-mountain",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "wilmot-mountain",
       "family": "epic",
       "access": "included",
-      "source": "https://www.sec.gov/Archives/edgar/data/812011/000081201126000049/mtn-20260731.htm"
+      "source": "https://www.epicpass.com/pass-results/college.aspx"
     },
     {
       "areaId": "winter-park-resort",
@@ -1405,6 +1717,18 @@
       "family": "ikon",
       "access": "included",
       "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "zillertal-arena",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/austria/zillertal.aspx"
+    },
+    {
+      "areaId": "zuers-am-arlberg",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/europe/austria/ski-arlberg.aspx"
     }
   ]
 }

@@ -40,6 +40,18 @@
     "website": "https://www.aftonalps.com/"
   },
   {
+    "id": "alpe-cimbra",
+    "name": "Alpe Cimbra – Folgaria / Lavarone",
+    "aliases": [
+      "Skirama Dolomiti",
+      "Ski Center Lavarone",
+      "Fiorentini"
+    ],
+    "country": "IT",
+    "locality": "Folgaria",
+    "website": "https://www.alpecimbra.it/"
+  },
+  {
     "id": "alpe-lusia-san-pellegrino",
     "name": "Alpe Lusia / San Pellegrino",
     "aliases": [
@@ -131,6 +143,36 @@
     "region": "AK",
     "locality": "Girdwood",
     "website": "https://www.alyeskaresort.com/"
+  },
+  {
+    "id": "andermatt-gemsstock",
+    "name": "Andermatt – Gemsstock",
+    "aliases": [
+      "Andermatt-Sedrun-Disentis",
+      "Uri"
+    ],
+    "country": "CH",
+    "locality": "Andermatt",
+    "website": "https://www.andermatt-sedrun-disentis.ch/en/service-providers/bergbahn-andermattsedrun-sport-ag-gemsstock",
+    "statsUrl": "https://www.andermatt-sedrun-disentis.ch/en/service-providers/bergbahn-andermattsedrun-sport-ag-gemsstock",
+    "reportUrl": "https://live.andermatt-sedrun-disentis.ch/",
+    "highestLiftTerminalFt": 9718
+  },
+  {
+    "id": "andermatt-sedrun",
+    "name": "Andermatt – Sedrun",
+    "aliases": [
+      "Andermatt-Sedrun-Disentis",
+      "SkiArena Andermatt Sedrun",
+      "Gütsch",
+      "Nätschen",
+      "Oberalp",
+      "Dieni"
+    ],
+    "country": "CH",
+    "locality": "Andermatt / Sedrun",
+    "website": "https://www.andermatt-sedrun-disentis.ch/en",
+    "reportUrl": "https://live.andermatt-sedrun-disentis.ch/"
   },
   {
     "id": "angel-fire-resort",
@@ -569,6 +611,22 @@
     "reportUrl": "https://en.chamonix.com/infos-live"
   },
   {
+    "id": "brides-les-bains",
+    "name": "Brides-les-Bains",
+    "aliases": [
+      "Les 3 Vallées",
+      "Les Trois Vallées",
+      "Savoie",
+      "Olympe gondola"
+    ],
+    "country": "FR",
+    "locality": "Brides-les-Bains",
+    "website": "https://www.les3vallees.com/en/resort/brides-les-bains",
+    "statsUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening",
+    "reportUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening/brides-les-bains",
+    "seasonWindow": "Dec 5, 2026 – Apr 9, 2027 (planned)"
+  },
+  {
     "id": "bridger-bowl",
     "name": "Bridger Bowl",
     "aliases": [
@@ -645,6 +703,19 @@
     "baseFt": 5882,
     "summitFt": 7803,
     "verticalFt": 1921
+  },
+  {
+    "id": "bruson",
+    "name": "Bruson",
+    "aliases": [
+      "Verbier 4 Vallées",
+      "Moay",
+      "Valais"
+    ],
+    "country": "CH",
+    "locality": "Mayens de Bruson",
+    "website": "https://www.verbier.ch/destination/bruson/",
+    "reportUrl": "https://verbier4vallees.ch/en/useful-information/live-information-winter"
   },
   {
     "id": "buck-hill",
@@ -879,6 +950,24 @@
     "website": "https://www.mountains.ch/en/"
   },
   {
+    "id": "courchevel",
+    "name": "Courchevel",
+    "aliases": [
+      "Les 3 Vallées",
+      "Les Trois Vallées",
+      "Savoie",
+      "La Tania",
+      "Courchevel Moriond",
+      "Courchevel Le Praz"
+    ],
+    "country": "FR",
+    "locality": "Courchevel",
+    "website": "https://www.les3vallees.com/en/resort/courchevel",
+    "statsUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening",
+    "reportUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening/courchevel",
+    "seasonWindow": "Dec 4, 2026 – Apr 18, 2027 (planned)"
+  },
+  {
     "id": "courmayeur-mont-blanc",
     "name": "Courmayeur Mont Blanc",
     "aliases": [
@@ -899,6 +988,23 @@
     "region": "NH",
     "locality": "North Conway",
     "website": "https://www.cranmore.com/"
+  },
+  {
+    "id": "crans-montana",
+    "name": "Crans-Montana Mountain Resort",
+    "aliases": [
+      "Valais",
+      "Plaine Morte"
+    ],
+    "country": "CH",
+    "locality": "Crans-Montana",
+    "website": "https://www.crans-montana.ch/en/",
+    "statsUrl": "https://www.epicpass.com/regions/europe/switzerland/crans-montana.aspx",
+    "reportUrl": "https://www.crans-montana.ch/en/ski_lifts/ski_piste_update_and_cable_cars",
+    "liftCount": 24,
+    "trailCount": 61,
+    "baseFt": 4905,
+    "summitFt": 10423
   },
   {
     "id": "crested-butte-mountain-resort",
@@ -1053,6 +1159,19 @@
     "reportUrl": "https://www.corvatsch-diavolezza.ch/en/current-news/facilities-and-slopes"
   },
   {
+    "id": "disentis",
+    "name": "Disentis 3000",
+    "aliases": [
+      "Andermatt-Sedrun-Disentis",
+      "Caischavedra",
+      "Graubünden"
+    ],
+    "country": "CH",
+    "locality": "Disentis / Mustér",
+    "website": "https://www.andermatt-sedrun-disentis.ch/en",
+    "reportUrl": "https://live.andermatt-sedrun-disentis.ch/"
+  },
+  {
     "id": "eaglecrest-ski-area",
     "name": "Eaglecrest Ski Area",
     "aliases": [
@@ -1093,15 +1212,46 @@
     "trailCount": 27
   },
   {
+    "id": "falls-creek",
+    "name": "Falls Creek",
+    "aliases": [
+      "Victoria"
+    ],
+    "country": "AU",
+    "locality": "Falls Creek",
+    "website": "https://www.skifalls.com.au/",
+    "statsUrl": "https://www.fallscreek.com.au/winter-activities/skiing-snowboarding/",
+    "reportUrl": "https://www.skifalls.com.au/discover-falls-creek/conditions-maps/snow-weather-report",
+    "acres": 1111.974216602244,
+    "liftCount": 15,
+    "trailCount": 90
+  },
+  {
     "id": "fernie-alpine-resort",
     "name": "Fernie Alpine Resort",
     "aliases": [
-      "British Columbia"
+      "British Columbia",
+      "Resorts of the Canadian Rockies"
     ],
     "country": "CA",
     "region": "BC",
     "locality": "Fernie",
     "website": "https://www.skifernie.com"
+  },
+  {
+    "id": "folgarida-marilleva",
+    "name": "Folgarida-Marilleva",
+    "aliases": [
+      "Skirama Dolomiti",
+      "Val di Sole"
+    ],
+    "country": "IT",
+    "locality": "Commezzadura",
+    "website": "https://www.ski.it/en",
+    "statsUrl": "https://www.epicpass.com/regions/europe/italy/skirama-dolomiti.aspx",
+    "reportUrl": "https://www.ski.it/en/info-live/lift-status",
+    "liftCount": 25,
+    "trailCount": 36
   },
   {
     "id": "furano-ski-resort",
@@ -1283,6 +1433,208 @@
     "nightSkiing": true
   },
   {
+    "id": "hakuba-47",
+    "name": "Hakuba 47 Winter Sports Park",
+    "aliases": [
+      "Hakuba Valley",
+      "Nagano",
+      "Hakuba47 Mountain Resort",
+      "白馬47"
+    ],
+    "country": "JP",
+    "locality": "Hakuba",
+    "website": "https://hakuba47.co.jp/en/",
+    "statsUrl": "https://www.hakubavalley.com/en/ski_resort_info_en/#detail_hakuba47_en",
+    "reportUrl": "https://www.hakubavalley.com/en/weather_en/",
+    "acres": 79.07372206949292,
+    "liftCount": 7,
+    "trailCount": 8,
+    "baseFt": 2690,
+    "summitFt": 5295,
+    "verticalFt": 2605,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 40,
+        "Advanced": 30
+      }
+    }
+  },
+  {
+    "id": "hakuba-cortina",
+    "name": "Hakuba Cortina Snow Resort",
+    "aliases": [
+      "Hakuba Valley",
+      "Nagano",
+      "白馬コルチナ"
+    ],
+    "country": "JP",
+    "locality": "Otari",
+    "website": "https://www.hgp.co.jp/cortina/ski/",
+    "statsUrl": "https://www.hakubavalley.com/en/ski_resort_info_en/#detail_cortina_en",
+    "reportUrl": "https://www.hakubavalley.com/en/weather_en/",
+    "acres": 123.55269073358268,
+    "liftCount": 6,
+    "trailCount": 16,
+    "baseFt": 2861,
+    "summitFt": 4600,
+    "verticalFt": 1739,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 40,
+        "Intermediate": 30,
+        "Advanced": 30
+      }
+    }
+  },
+  {
+    "id": "hakuba-goryu",
+    "name": "Hakuba Goryu",
+    "aliases": [
+      "Hakuba Valley",
+      "Nagano",
+      "ABLE Hakuba Goryu",
+      "Hakuba Goryu Snow Resort",
+      "白馬五竜"
+    ],
+    "country": "JP",
+    "locality": "Hakuba",
+    "website": "https://www.hakubagoryu.jp/en/?season=winter",
+    "statsUrl": "https://www.hakubavalley.com/en/ski_resort_info_en/#detail_goryu_en",
+    "reportUrl": "https://www.hakubavalley.com/en/weather_en/",
+    "acres": 296.5264577605984,
+    "liftCount": 12,
+    "trailCount": 15,
+    "baseFt": 2461,
+    "summitFt": 5499,
+    "verticalFt": 3038,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 35,
+        "Intermediate": 40,
+        "Advanced": 25
+      }
+    }
+  },
+  {
+    "id": "hakuba-happo-one",
+    "name": "Hakuba Happo-One",
+    "aliases": [
+      "Hakuba Valley",
+      "Nagano",
+      "Hakuba Happo-One Snow Resort",
+      "白馬八方尾根"
+    ],
+    "country": "JP",
+    "locality": "Hakuba",
+    "website": "https://www.happo-one.jp/en/",
+    "statsUrl": "https://www.hakubavalley.com/en/ski_resort_info_en/#detail_happo_en",
+    "reportUrl": "https://www.hakubavalley.com/en/weather_en/",
+    "acres": 543.6318392277637,
+    "liftCount": 23,
+    "trailCount": 16,
+    "baseFt": 2493,
+    "summitFt": 6007,
+    "verticalFt": 3514,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 50,
+        "Advanced": 20
+      }
+    }
+  },
+  {
+    "id": "hakuba-iwatake",
+    "name": "Hakuba Iwatake Snow Field",
+    "aliases": [
+      "Hakuba Valley",
+      "Nagano",
+      "白馬岩岳"
+    ],
+    "country": "JP",
+    "locality": "Hakuba",
+    "website": "https://iwatake-mountain-resort.com/",
+    "statsUrl": "https://www.hakubavalley.com/en/ski_resort_info_en/#detail_iwatake_en",
+    "reportUrl": "https://www.hakubavalley.com/en/weather_en/",
+    "acres": 308.8817268339567,
+    "liftCount": 9,
+    "trailCount": 13,
+    "baseFt": 2461,
+    "summitFt": 4229,
+    "verticalFt": 1768,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 50,
+        "Advanced": 20
+      }
+    }
+  },
+  {
+    "id": "hakuba-norikura-onsen",
+    "name": "Hakuba Norikura Onsen Snow Resort",
+    "aliases": [
+      "Hakuba Valley",
+      "Nagano",
+      "Hakuba Norikura",
+      "白馬乗鞍スキー場"
+    ],
+    "country": "JP",
+    "locality": "Otari",
+    "website": "https://www.hakunori.com/en/",
+    "statsUrl": "https://www.hakubavalley.com/en/ski_resort_info_en/#detail_norikura_en",
+    "reportUrl": "https://www.hakubavalley.com/en/weather_en/",
+    "acres": 123.55269073358268,
+    "liftCount": 9,
+    "trailCount": 14,
+    "baseFt": 2625,
+    "summitFt": 5243,
+    "verticalFt": 2618,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 40,
+        "Advanced": 30
+      }
+    }
+  },
+  {
+    "id": "hakuba-sanosaka",
+    "name": "White Resort Hakuba Sanosaka",
+    "aliases": [
+      "Hakuba Valley",
+      "Nagano",
+      "Hakuba Sanosaka Snow Resort",
+      "白馬さのさか"
+    ],
+    "country": "JP",
+    "locality": "Hakuba",
+    "website": "https://sanosaka.jp/",
+    "statsUrl": "https://www.hakubavalley.com/en/ski_resort_info_en/#detail_sanosaka_en",
+    "reportUrl": "https://www.hakubavalley.com/en/weather_en/",
+    "acres": 98.84215258686615,
+    "liftCount": 4,
+    "trailCount": 10,
+    "baseFt": 2428,
+    "summitFt": 3937,
+    "verticalFt": 1509,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 40,
+        "Intermediate": 40,
+        "Advanced": 20
+      }
+    }
+  },
+  {
     "id": "heavenly",
     "name": "Heavenly Mountain Resort",
     "aliases": [
@@ -1337,6 +1689,31 @@
     "website": "https://www.hiddenvalleyski.com/"
   },
   {
+    "id": "hintertux-glacier",
+    "name": "Hintertux Glacier",
+    "aliases": [
+      "Zillertal",
+      "Tyrol",
+      "Hintertuxer Gletscher"
+    ],
+    "country": "AT",
+    "locality": "Hintertux",
+    "website": "https://www.hintertuxergletscher.at/en/"
+  },
+  {
+    "id": "hochfuegen-hochzillertal",
+    "name": "Hochfügen-Hochzillertal",
+    "aliases": [
+      "Zillertal",
+      "Tyrol",
+      "Hochfuegen",
+      "SKi-optimal"
+    ],
+    "country": "AT",
+    "locality": "Kaltenbach / Hochfügen",
+    "website": "https://www.hochzillertal.com/"
+  },
+  {
     "id": "homewood-mountain-resort",
     "name": "Homewood Mountain Resort",
     "aliases": [
@@ -1362,6 +1739,35 @@
     "region": "OR",
     "locality": "Sisters",
     "website": "https://skihoodoo.com/"
+  },
+  {
+    "id": "hotham",
+    "name": "Hotham Alpine Resort",
+    "aliases": [
+      "Mount Hotham",
+      "Mt Hotham",
+      "Victoria"
+    ],
+    "country": "AU",
+    "locality": "Hotham Heights",
+    "website": "https://www.mthotham.com.au/",
+    "statsUrl": "https://www.mthotham.com.au/resort/explore/mountain-info",
+    "reportUrl": "https://www.mthotham.com.au/mountain/conditions/snow-reports",
+    "acres": 790.7372206949292,
+    "baseFt": 4757,
+    "summitFt": 6106,
+    "verticalFt": 1296,
+    "highestLiftTerminalFt": 6053,
+    "nightSkiing": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 40,
+        "Advanced": 40
+      }
+    }
   },
   {
     "id": "hunter-mountain",
@@ -1431,6 +1837,35 @@
     "verticalFt": 2122
   },
   {
+    "id": "jigatake",
+    "name": "Jigatake Snow Resort",
+    "aliases": [
+      "Hakuba Valley",
+      "Nagano",
+      "Jiigatake",
+      "爺ガ岳スキー場"
+    ],
+    "country": "JP",
+    "locality": "Ōmachi",
+    "website": "https://jiigatake.com/",
+    "statsUrl": "https://www.hakubavalley.com/en/ski_resort_info_en/#detail_jiigatake_en",
+    "reportUrl": "https://www.hakubavalley.com/en/weather_en/",
+    "acres": 74.1316144401496,
+    "liftCount": 4,
+    "trailCount": 7,
+    "baseFt": 3084,
+    "summitFt": 3937,
+    "verticalFt": 853,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 70,
+        "Intermediate": 30,
+        "Advanced": 0
+      }
+    }
+  },
+  {
     "id": "jiminy-peak-mountain-resort",
     "name": "Jiminy Peak Mountain Resort",
     "aliases": [
@@ -1463,6 +1898,35 @@
     "country": "AT",
     "locality": "Kappl",
     "website": "https://www.kappl.com/en"
+  },
+  {
+    "id": "kashimayari",
+    "name": "Kashimayari Snow Resort",
+    "aliases": [
+      "Hakuba Valley",
+      "Nagano",
+      "Kashimayari Ski Resort Family Park",
+      "鹿島槍スキー場"
+    ],
+    "country": "JP",
+    "locality": "Ōmachi",
+    "website": "https://www.kashimayari.net/snow/",
+    "statsUrl": "https://www.hakubavalley.com/en/ski_resort_info_en/#detail_kashimayari_en",
+    "reportUrl": "https://www.hakubavalley.com/en/weather_en/",
+    "acres": 168.03165939767246,
+    "liftCount": 5,
+    "trailCount": 12,
+    "baseFt": 2723,
+    "summitFt": 4331,
+    "verticalFt": 1608,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 33,
+        "Intermediate": 50,
+        "Advanced": 17
+      }
+    }
   },
   {
     "id": "keystone-resort",
@@ -1501,7 +1965,8 @@
     "name": "Kicking Horse Mountain Resort",
     "aliases": [
       "British Columbia",
-      "Kicking Horse Resort"
+      "Kicking Horse Resort",
+      "Resorts of the Canadian Rockies"
     ],
     "country": "CA",
     "region": "BC",
@@ -1559,7 +2024,8 @@
     "id": "kimberley-alpine-resort",
     "name": "Kimberley Alpine Resort",
     "aliases": [
-      "British Columbia"
+      "British Columbia",
+      "Resorts of the Canadian Rockies"
     ],
     "country": "CA",
     "region": "BC",
@@ -1604,6 +2070,20 @@
     "website": "https://www.kitzski.at/en/"
   },
   {
+    "id": "kitzsteinhorn",
+    "name": "Kitzsteinhorn / Maiskogel",
+    "aliases": [
+      "Saalbach & Zell am See-Kaprun",
+      "ALPIN CARD",
+      "Kaprun",
+      "Kitzsteinhorn Glacier"
+    ],
+    "country": "AT",
+    "locality": "Kaprun",
+    "website": "https://www.kitzsteinhorn.at/en",
+    "reportUrl": "https://www.kitzsteinhorn.at/en/service/information/hours-of-operation"
+  },
+  {
     "id": "kronplatz",
     "name": "Kronplatz / Plan de Corones",
     "aliases": [
@@ -1632,6 +2112,21 @@
     "locality": "La Thuile",
     "website": "https://www.lathuile.it/en/",
     "reportUrl": "https://www.lathuile.it/en/en_webcam"
+  },
+  {
+    "id": "la-tzoumaz",
+    "name": "La Tzoumaz",
+    "aliases": [
+      "Verbier 4 Vallées",
+      "Savoleyres",
+      "Valais"
+    ],
+    "country": "CH",
+    "locality": "La Tzoumaz",
+    "website": "https://verbier4vallees.ch/en/",
+    "statsUrl": "https://www.epicpass.com/regions/europe/switzerland/verbier-4-vallees.aspx",
+    "reportUrl": "https://verbier4vallees.ch/en/useful-information/live-information-winter",
+    "trailCount": 13
   },
   {
     "id": "lake-louise",
@@ -1713,6 +2208,19 @@
     ]
   },
   {
+    "id": "lech-am-arlberg",
+    "name": "Lech am Arlberg",
+    "aliases": [
+      "Ski Arlberg",
+      "Oberlech",
+      "Rüfikopf"
+    ],
+    "country": "AT",
+    "locality": "Lech am Arlberg",
+    "website": "https://www.skiarlberg.at/en",
+    "reportUrl": "https://www.skiarlberg.at/en/live-info"
+  },
+  {
     "id": "les-houches",
     "name": "Les Houches – Saint-Gervais",
     "aliases": [
@@ -1723,6 +2231,21 @@
     "locality": "Les Houches",
     "website": "https://www.leshouches.com/",
     "reportUrl": "https://en.chamonix.com/infos-live"
+  },
+  {
+    "id": "les-menuires",
+    "name": "Les Menuires",
+    "aliases": [
+      "Les 3 Vallées",
+      "Les Trois Vallées",
+      "Savoie"
+    ],
+    "country": "FR",
+    "locality": "Les Belleville",
+    "website": "https://www.les3vallees.com/en/resort/les-menuires",
+    "statsUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening",
+    "reportUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening/les-menuires",
+    "seasonWindow": "Dec 5, 2026 – Apr 18, 2027 (planned)"
   },
   {
     "id": "liberty-mountain-resort",
@@ -1826,6 +2349,21 @@
     "seasonWindow": "Dec 12, 2026 – Mar 28, 2027 (planned)"
   },
   {
+    "id": "madonna-di-campiglio",
+    "name": "Madonna di Campiglio",
+    "aliases": [
+      "Skirama Dolomiti",
+      "Campiglio Dolomiti di Brenta"
+    ],
+    "country": "IT",
+    "locality": "Madonna di Campiglio",
+    "website": "https://www.ski.it/en",
+    "statsUrl": "https://www.epicpass.com/regions/europe/italy/skirama-dolomiti.aspx",
+    "reportUrl": "https://www.ski.it/en/info-live/lift-status",
+    "liftCount": 20,
+    "trailCount": 41
+  },
+  {
     "id": "magic-mountain-ski-area",
     "name": "Magic Mountain Ski Area",
     "aliases": [
@@ -1897,6 +2435,20 @@
     "website": "https://www.skimarmot.com"
   },
   {
+    "id": "mayrhofen",
+    "name": "Mayrhofen / Hippach",
+    "aliases": [
+      "Zillertal",
+      "Tyrol",
+      "Penken",
+      "Ahorn",
+      "Horberg"
+    ],
+    "country": "AT",
+    "locality": "Mayrhofen",
+    "website": "https://www.mayrhofner-bergbahnen.com/"
+  },
+  {
     "id": "megeve",
     "name": "Megève Ski Area",
     "aliases": [
@@ -1906,6 +2458,22 @@
     "country": "FR",
     "locality": "Megève",
     "website": "https://www.megeve.com/"
+  },
+  {
+    "id": "meribel",
+    "name": "Méribel",
+    "aliases": [
+      "Les 3 Vallées",
+      "Les Trois Vallées",
+      "Savoie",
+      "Méribel-Mottaret"
+    ],
+    "country": "FR",
+    "locality": "Les Allues",
+    "website": "https://www.les3vallees.com/en/resort/meribel",
+    "statsUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening",
+    "reportUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening/meribel",
+    "seasonWindow": "Dec 5, 2026 – Apr 18, 2027 (planned)"
   },
   {
     "id": "middlebury-snowbowl",
@@ -1957,7 +2525,8 @@
     "id": "mont-sainte-anne",
     "name": "Mont-Sainte-Anne",
     "aliases": [
-      "Quebec"
+      "Quebec",
+      "Resorts of the Canadian Rockies"
     ],
     "country": "CA",
     "region": "QC",
@@ -1978,6 +2547,20 @@
     "acres": 230,
     "trailCount": 60,
     "verticalFt": 1509
+  },
+  {
+    "id": "monte-bondone",
+    "name": "Monte Bondone",
+    "aliases": [
+      "Skirama Dolomiti",
+      "Trento"
+    ],
+    "country": "IT",
+    "locality": "Vason",
+    "website": "https://www.skimontebondone.it/",
+    "statsUrl": "https://www.epicpass.com/regions/europe/italy/skirama-dolomiti.aspx",
+    "acres": 172.97376702701575,
+    "trailCount": 21
   },
   {
     "id": "monterosa-ski",
@@ -2263,7 +2846,8 @@
     "name": "Nakiska Ski Area",
     "aliases": [
       "Alberta",
-      "Nakiska"
+      "Nakiska",
+      "Resorts of the Canadian Rockies"
     ],
     "country": "CA",
     "region": "AB",
@@ -2282,6 +2866,20 @@
     "country": "JP",
     "locality": "Bandai",
     "website": "https://www.nekoma.co.jp/"
+  },
+  {
+    "id": "nendaz",
+    "name": "Nendaz",
+    "aliases": [
+      "Verbier 4 Vallées",
+      "Tracouet",
+      "Siviez",
+      "Valais"
+    ],
+    "country": "CH",
+    "locality": "Haute-Nendaz",
+    "website": "https://www.nendaz.ch/en/Z13484/ski-area",
+    "reportUrl": "https://verbier4vallees.ch/en/useful-information/live-information-winter"
   },
   {
     "id": "niseko-united",
@@ -2382,6 +2980,32 @@
         "Black": 2
       }
     }
+  },
+  {
+    "id": "orelle",
+    "name": "Orelle",
+    "aliases": [
+      "Les 3 Vallées",
+      "Les Trois Vallées",
+      "Savoie"
+    ],
+    "country": "FR",
+    "locality": "Orelle",
+    "website": "https://www.les3vallees.com/en/resort/orelle",
+    "statsUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening",
+    "reportUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening/orelle",
+    "seasonWindow": "Nov 21, 2026 – May 2, 2027 (planned)"
+  },
+  {
+    "id": "paganella-ski",
+    "name": "Paganella Ski",
+    "aliases": [
+      "Skirama Dolomiti",
+      "Fai della Paganella"
+    ],
+    "country": "IT",
+    "locality": "Andalo",
+    "website": "https://www.paganella.net/"
   },
   {
     "id": "pajarito-mountain",
@@ -2526,6 +3150,47 @@
     "nightSkiing": true
   },
   {
+    "id": "pejo-3000",
+    "name": "Pejo 3000",
+    "aliases": [
+      "Skirama Dolomiti",
+      "Pejo3000",
+      "Val di Sole"
+    ],
+    "country": "IT",
+    "locality": "Peio Fonti",
+    "website": "https://www.skipejo.it/"
+  },
+  {
+    "id": "perisher",
+    "name": "Perisher",
+    "aliases": [
+      "Smiggin Holes",
+      "Blue Cow",
+      "Guthega",
+      "New South Wales"
+    ],
+    "country": "AU",
+    "locality": "Perisher Valley",
+    "website": "https://www.perisher.com.au/",
+    "statsUrl": "https://www.perisher.com.au/resort-info/mountain-operations/resort-stats",
+    "reportUrl": "https://www.perisher.com.au/reports-cams/reports/snow-report",
+    "acres": 3076,
+    "liftCount": 45,
+    "verticalFt": 1165,
+    "highestLiftTerminalFt": 6699,
+    "lowestLiftTerminalFt": 5266,
+    "nightSkiing": true,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 22,
+        "Intermediate": 60,
+        "Advanced": 18
+      }
+    }
+  },
+  {
     "id": "pico-mountain",
     "name": "Pico Mountain",
     "aliases": [
@@ -2568,6 +3233,32 @@
     "country": "IT",
     "locality": "Gressan",
     "website": "https://www.pila.it/"
+  },
+  {
+    "id": "pinzolo",
+    "name": "Pinzolo",
+    "aliases": [
+      "Skirama Dolomiti",
+      "Doss del Sabion",
+      "Val Rendena"
+    ],
+    "country": "IT",
+    "locality": "Pinzolo",
+    "website": "https://www.ski.it/en",
+    "reportUrl": "https://www.ski.it/en/info-live/lift-status"
+  },
+  {
+    "id": "pontedilegno-tonale",
+    "name": "Pontedilegno-Tonale",
+    "aliases": [
+      "Skirama Dolomiti",
+      "Ponte di Legno",
+      "Presena Glacier",
+      "Temù"
+    ],
+    "country": "IT",
+    "locality": "Passo del Tonale",
+    "website": "https://www.pontedilegnotonale.com/"
   },
   {
     "id": "powderhorn-mountain-resort",
@@ -2695,6 +3386,23 @@
     "website": "https://www.roundtopmountainresort.com/"
   },
   {
+    "id": "rusutsu-resort",
+    "name": "Rusutsu Resort",
+    "aliases": [
+      "Hokkaido",
+      "ルスツリゾート",
+      "Mt. Isola"
+    ],
+    "country": "JP",
+    "locality": "Rusutsu",
+    "website": "https://rusutsu.com/en/",
+    "statsUrl": "https://rusutsu.com/wp-content/uploads/trailmap_en-1.pdf",
+    "reportUrl": "https://rusutsu.com/en/lift-and-trail-status/",
+    "liftCount": 18,
+    "trailCount": 37,
+    "nightSkiing": true
+  },
+  {
     "id": "saddleback",
     "name": "Saddleback",
     "aliases": [
@@ -2710,6 +3418,21 @@
     "acresQualifier": "lower-bound",
     "trailCount": 68,
     "verticalFt": 2000
+  },
+  {
+    "id": "saint-martin-de-belleville",
+    "name": "Saint-Martin-de-Belleville",
+    "aliases": [
+      "Les 3 Vallées",
+      "Les Trois Vallées",
+      "Savoie"
+    ],
+    "country": "FR",
+    "locality": "Les Belleville",
+    "website": "https://www.les3vallees.com/en/resort/saint-martin-de-belleville",
+    "statsUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening",
+    "reportUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening/saint-martin-de-belleville",
+    "seasonWindow": "Dec 12, 2026 – Apr 18, 2027 (planned)"
   },
   {
     "id": "san-martino-rolle-pass",
@@ -2750,6 +3473,20 @@
     "region": "BC",
     "locality": "Agassiz",
     "website": "https://sasquatchmountain.ca/"
+  },
+  {
+    "id": "schmittenhoehe",
+    "name": "Schmittenhöhe",
+    "aliases": [
+      "Saalbach & Zell am See-Kaprun",
+      "ALPIN CARD",
+      "Zell am See",
+      "Schmittenhoehe"
+    ],
+    "country": "AT",
+    "locality": "Zell am See",
+    "website": "https://www.schmitten.at/en",
+    "reportUrl": "https://www.schmitten.at/en/Winter-on-the-mountain/Skiing/Open-slopes-facilities"
   },
   {
     "id": "schuss-mountain-at-shanty-creek",
@@ -2869,6 +3606,22 @@
     "liftCount": 1
   },
   {
+    "id": "silvretta-montafon",
+    "name": "Silvretta Montafon",
+    "aliases": [
+      "Hochjoch",
+      "Nova",
+      "Vorarlberg"
+    ],
+    "country": "AT",
+    "locality": "Schruns / Gaschurn",
+    "website": "https://www.silvretta-montafon.at/en",
+    "statsUrl": "https://www.epicpass.com/regions/europe/austria/silvretta-montafon.aspx",
+    "reportUrl": "https://www.silvretta-montafon.at/en/info-service/lift-info",
+    "liftCount": 35,
+    "summitFt": 7927
+  },
+  {
     "id": "sipapu-ski-summer-resort",
     "name": "Sipapu Ski & Summer Resort",
     "aliases": [
@@ -2923,6 +3676,18 @@
     "website": "https://www.skisantafe.com/",
     "statsUrl": "https://www.skisantafe.com/our-story/about",
     "acres": 660
+  },
+  {
+    "id": "skicircus-saalbach",
+    "name": "Skicircus Saalbach Hinterglemm Leogang Fieberbrunn",
+    "aliases": [
+      "Saalbach & Zell am See-Kaprun",
+      "ALPIN CARD"
+    ],
+    "country": "AT",
+    "locality": "Saalbach",
+    "website": "https://www.saalbach.com/en",
+    "reportUrl": "https://www.saalbach.com/en/live-info/lifts-and-pistes"
   },
   {
     "id": "smugglers-notch-resort",
@@ -3081,6 +3846,26 @@
     "verticalFt": 990
   },
   {
+    "id": "soelden",
+    "name": "Sölden",
+    "aliases": [
+      "Soelden",
+      "Solden",
+      "Ötztal",
+      "Giggijoch",
+      "Gaislachkogl",
+      "Rettenbach",
+      "Tiefenbach"
+    ],
+    "country": "AT",
+    "locality": "Sölden",
+    "website": "https://www.soelden.com/en",
+    "statsUrl": "https://www.epicpass.com/regions/europe/austria/soelden.aspx",
+    "reportUrl": "https://www.soelden.com/en/live-information/ski-resort-news",
+    "liftCount": 31,
+    "summitFt": 10950
+  },
+  {
     "id": "soldier-mountain-ski-area",
     "name": "Soldier Mountain Ski Area",
     "aliases": [
@@ -3103,6 +3888,17 @@
     "website": "https://solitudemountain.com/"
   },
   {
+    "id": "spieljoch",
+    "name": "Spieljoch",
+    "aliases": [
+      "Zillertal",
+      "Tyrol"
+    ],
+    "country": "AT",
+    "locality": "Fügen",
+    "website": "https://www.spieljochbahn.at/"
+  },
+  {
     "id": "spirit-mountain",
     "name": "Spirit Mountain",
     "aliases": [
@@ -3114,10 +3910,37 @@
     "website": "https://spiritmt.com/winter"
   },
   {
+    "id": "st-anton-am-arlberg",
+    "name": "St. Anton am Arlberg",
+    "aliases": [
+      "Ski Arlberg",
+      "Sankt Anton",
+      "Galzig",
+      "Rendl"
+    ],
+    "country": "AT",
+    "locality": "St. Anton am Arlberg",
+    "website": "https://www.skiarlberg.at/en",
+    "reportUrl": "https://www.skiarlberg.at/en/live-info"
+  },
+  {
+    "id": "st-christoph-am-arlberg",
+    "name": "St. Christoph am Arlberg",
+    "aliases": [
+      "Ski Arlberg",
+      "Sankt Christoph"
+    ],
+    "country": "AT",
+    "locality": "St. Christoph am Arlberg",
+    "website": "https://www.skiarlberg.at/en",
+    "reportUrl": "https://www.skiarlberg.at/en/live-info"
+  },
+  {
     "id": "station-touristique-stoneham",
     "name": "Station touristique Stoneham",
     "aliases": [
-      "Quebec"
+      "Quebec",
+      "Resorts of the Canadian Rockies"
     ],
     "country": "CA",
     "region": "QC",
@@ -3207,6 +4030,18 @@
     "region": "VT",
     "locality": "Stratton",
     "website": "https://www.stratton.com/"
+  },
+  {
+    "id": "stuben-am-arlberg",
+    "name": "Stuben am Arlberg",
+    "aliases": [
+      "Ski Arlberg",
+      "Albona"
+    ],
+    "country": "AT",
+    "locality": "Stuben am Arlberg",
+    "website": "https://www.skiarlberg.at/en",
+    "reportUrl": "https://www.skiarlberg.at/en/live-info"
   },
   {
     "id": "sugar-bowl-resort",
@@ -3437,6 +4272,19 @@
     "verticalFt": 2205
   },
   {
+    "id": "thyon",
+    "name": "Thyon",
+    "aliases": [
+      "Verbier 4 Vallées",
+      "Thyon 2000",
+      "Valais"
+    ],
+    "country": "CH",
+    "locality": "Les Collons",
+    "website": "https://www.thyon.ch/",
+    "reportUrl": "https://verbier4vallees.ch/en/useful-information/live-information-winter"
+  },
+  {
     "id": "timberline-lodge-ski-area",
     "name": "Timberline Lodge Ski Area",
     "aliases": [
@@ -3488,6 +4336,35 @@
     "region": "WI",
     "locality": "Dresser",
     "website": "https://www.trollhaugen.com/"
+  },
+  {
+    "id": "tsugaike-mountain-resort",
+    "name": "Tsugaike Mountain Resort",
+    "aliases": [
+      "Hakuba Valley",
+      "Nagano",
+      "Tsugaike Kogen",
+      "栂池高原"
+    ],
+    "country": "JP",
+    "locality": "Otari",
+    "website": "https://www.tsugaike.gr.jp/",
+    "statsUrl": "https://www.hakubavalley.com/en/ski_resort_info_en/#detail_tsugaike_en",
+    "reportUrl": "https://www.hakubavalley.com/en/weather_en/",
+    "acres": 484.3265476756441,
+    "liftCount": 14,
+    "trailCount": 11,
+    "baseFt": 2625,
+    "summitFt": 5591,
+    "verticalFt": 2966,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 50,
+        "Intermediate": 30,
+        "Advanced": 20
+      }
+    }
   },
   {
     "id": "vail-mountain",
@@ -3568,6 +4445,21 @@
     "seasonWindow": "Dec 4, 2026 – Apr 4, 2027 (planned)"
   },
   {
+    "id": "val-thorens",
+    "name": "Val Thorens",
+    "aliases": [
+      "Les 3 Vallées",
+      "Les Trois Vallées",
+      "Savoie"
+    ],
+    "country": "FR",
+    "locality": "Les Belleville",
+    "website": "https://www.les3vallees.com/en/resort/val-thorens",
+    "statsUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening",
+    "reportUrl": "https://www.les3vallees.com/en/live/lifts-and-trails-opening/val-thorens",
+    "seasonWindow": "Nov 21, 2026 – May 2, 2027 (planned)"
+  },
+  {
     "id": "valle-nevado",
     "name": "Valle Nevado",
     "aliases": [
@@ -3580,6 +4472,32 @@
     "statsUrl": "https://www.vallenevado.com/en/frequently-asked-questions/",
     "reportUrl": "https://www.vallenevado.com/en/mountain-report/",
     "seasonWindow": "Usually June to October"
+  },
+  {
+    "id": "verbier",
+    "name": "Verbier",
+    "aliases": [
+      "Verbier 4 Vallées",
+      "Médran",
+      "Valais"
+    ],
+    "country": "CH",
+    "locality": "Verbier",
+    "website": "https://verbier4vallees.ch/en/",
+    "reportUrl": "https://verbier4vallees.ch/en/useful-information/live-information-winter"
+  },
+  {
+    "id": "veysonnaz",
+    "name": "Veysonnaz",
+    "aliases": [
+      "Verbier 4 Vallées",
+      "Piste de l’Ours",
+      "Valais"
+    ],
+    "country": "CH",
+    "locality": "Veysonnaz",
+    "website": "https://www.veysonnaz.ch/en/Z13696/ski-area",
+    "reportUrl": "https://verbier4vallees.ch/en/useful-information/live-information-winter"
   },
   {
     "id": "welch-village",
@@ -3851,5 +4769,33 @@
     "locality": "Zermatt",
     "website": "https://www.matterhornparadise.ch/en",
     "reportUrl": "https://www.matterhornparadise.ch/en/information/lifts-and-pistes"
+  },
+  {
+    "id": "zillertal-arena",
+    "name": "Zillertal Arena",
+    "aliases": [
+      "Zillertal",
+      "Tyrol",
+      "Gerlos",
+      "Königsleiten",
+      "Hochkrimml"
+    ],
+    "country": "AT",
+    "locality": "Zell am Ziller",
+    "website": "https://www.zillertalarena.com/en/",
+    "reportUrl": "https://www.zillertalarena.com/en/winter/ski-area/operating-hours/"
+  },
+  {
+    "id": "zuers-am-arlberg",
+    "name": "Zürs am Arlberg",
+    "aliases": [
+      "Ski Arlberg",
+      "Zuers",
+      "Trittkopf"
+    ],
+    "country": "AT",
+    "locality": "Zürs am Arlberg",
+    "website": "https://www.skiarlberg.at/en",
+    "reportUrl": "https://www.skiarlberg.at/en/live-info"
   }
 ]

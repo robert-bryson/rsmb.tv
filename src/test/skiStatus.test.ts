@@ -211,6 +211,41 @@ describe('2026/27 Ikon destination coverage', () => {
     });
 });
 
+describe('2026/27 Epic destination coverage', () => {
+    it.each([
+        ['AU', ['falls-creek', 'hotham', 'perisher']],
+        ['AT', ['hintertux-glacier', 'hochfuegen-hochzillertal', 'kitzsteinhorn', 'lech-am-arlberg', 'mayrhofen',
+            'schmittenhoehe', 'silvretta-montafon', 'skicircus-saalbach', 'soelden', 'spieljoch', 'st-anton-am-arlberg',
+            'st-christoph-am-arlberg', 'stuben-am-arlberg', 'zillertal-arena', 'zuers-am-arlberg']],
+        ['CA', ['fernie-alpine-resort', 'kicking-horse', 'kimberley-alpine-resort', 'mont-sainte-anne', 'nakiska-ski-area',
+            'station-touristique-stoneham', 'whistler-blackcomb']],
+        ['CH', ['andermatt-gemsstock', 'andermatt-sedrun', 'bruson', 'crans-montana', 'disentis', 'la-tzoumaz', 'nendaz',
+            'thyon', 'verbier', 'veysonnaz']],
+        ['FR', ['brides-les-bains', 'courchevel', 'les-menuires', 'meribel', 'orelle', 'saint-martin-de-belleville', 'val-thorens']],
+        ['IT', ['alpe-cimbra', 'folgarida-marilleva', 'madonna-di-campiglio', 'monte-bondone', 'paganella-ski',
+            'pejo-3000', 'pinzolo', 'pontedilegno-tonale']],
+        ['JP', ['hakuba-47', 'hakuba-cortina', 'hakuba-goryu', 'hakuba-happo-one', 'hakuba-iwatake', 'hakuba-norikura-onsen',
+            'hakuba-sanosaka', 'jigatake', 'kashimayari', 'rusutsu-resort', 'tsugaike-mountain-resort']],
+        ['US', ['afton-alps', 'alpine-valley', 'attitash-mountain-resort', 'beaver-creek-resort', 'big-boulder', 'boston-mills',
+            'brandywine', 'breckenridge-ski-resort', 'crested-butte-mountain-resort', 'crotched-mountain', 'heavenly',
+            'hidden-valley-resort', 'hidden-valley-ski-resort', 'hunter-mountain', 'jack-frost-mountain', 'keystone-resort',
+            'kirkwood-mountain-resort', 'laurel-mountain', 'liberty-mountain-resort', 'mad-river-mountain', 'mount-snow',
+            'mount-sunapee', 'mt-brighton', 'northstar-california-resort', 'okemo-mountain-resort', 'paoli-peaks',
+            'park-city-mountain', 'roundtop-mountain-resort', 'seven-springs-mountain-resort', 'snow-creek', 'stevens-pass',
+            'stowe', 'telluride-ski-resort', 'vail-mountain', 'whitetail-resort', 'wildcat-mountain', 'wilmot-mountain']],
+    ] as const)('includes the named Epic areas in %s', (code, ids) => {
+        expect(filterSkiAreas(skiAreas, '', `country:${code}`, 'epic').map(area => area.id)).toEqual(expect.arrayContaining([...ids]));
+    });
+
+    it.each([
+        ['Andermatt-Sedrun-Disentis', 3], ['Hakuba Valley', 10], ['Les Trois Vallées', 7],
+        ['Resorts of the Canadian Rockies', 6], ['Saalbach & Zell am See-Kaprun', 3], ['Ski Arlberg', 5],
+        ['Skirama Dolomiti', 8], ['Verbier 4 Vallées', 6], ['Zillertal', 5],
+    ] as const)('finds all Epic entries for %s by group name', (name, count) => {
+        expect(filterSkiAreas(skiAreas, name, '', 'epic')).toHaveLength(count);
+    });
+});
+
 describe('ski-status marker colors', () => {
     it('distinguishes included passes, multiple passes, and discount-only access', () => {
         const legend = markerLegend('pass', 'imperial');
