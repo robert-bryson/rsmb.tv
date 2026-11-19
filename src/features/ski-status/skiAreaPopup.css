@@ -1,0 +1,15 @@
+.ski-area-popup .maplibregl-popup-content {
+    background: var(--color-zinc-900);
+    color: var(--color-zinc-100);
+    border: 1px solid var(--color-zinc-700);
+    border-radius: 0.5rem;
+    padding: 0.625rem 0.75rem;
+    box-shadow: 0 4px 16px #0008;
+}
+
+.ski-area-popup-hover .maplibregl-popup-content { pointer-events: none; }
+.ski-area-popup-selected { z-index: 1; }
+.ski-area-popup[class*="maplibregl-popup-anchor-top"] .maplibregl-popup-tip { border-bottom-color: var(--color-zinc-900); }
+.ski-area-popup[class*="maplibregl-popup-anchor-bottom"] .maplibregl-popup-tip { border-top-color: var(--color-zinc-900); }
+.ski-area-popup.maplibregl-popup-anchor-left .maplibregl-popup-tip { border-right-color: var(--color-zinc-900); }
+.ski-area-popup.maplibregl-popup-anchor-right .maplibregl-popup-tip { border-left-color: var(--color-zinc-900); }

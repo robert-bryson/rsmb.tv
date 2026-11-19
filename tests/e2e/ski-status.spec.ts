@@ -323,6 +323,111 @@ test('centers the resort selected while the background style is being retried', 
     await renderer.dispose();
 });
 
+async function findWhaleback(page: Page, renderer: Awaited<ReturnType<typeof captureMap>>) {
+    const search = page.getByRole('searchbox', { name: 'Search areas' });
+    await search.fill('whaleback');
+    await search.press('Enter');
+    await expect.poll(() => renderer.evaluate(map => {
+        if (!map.loaded() || map.isMoving()) return false;
+        return map.queryRenderedFeatures({ layers: ['ski-area-points'] })
+            .some(feature => feature.properties.areaId === 'whaleback');
+    })).toBe(true);
+    const coordinates = locations.locations.find(location => location.id === 'whaleback')!.coordinates as [number, number];
+    return renderer.evaluate((map, point) => {
+        const { x, y } = map.project(point);
+        return { x, y };
+    }, coordinates);
+}
+
+test('previews a resort on hover and clears the selection on a blank map click', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await prepare(page);
+    const renderer = await captureMap(page);
+    await page.getByLabel('Color by', { exact: true }).selectOption('pass');
+    const position = await findWhaleback(page, renderer);
+    await expect.poll(() => renderer.evaluate(map => map.getLayer('ski-status-pass-badges')
+        && map.queryRenderedFeatures({ layers: ['ski-status-pass-badges'] }).some(feature => feature.properties.areaId === 'whaleback'))).toBe(true);
+    const canvas = page.getByTestId('ski-status-map').locator('canvas');
+    const background = { x: 24, y: (await canvas.boundingBox())!.height / 2 };
+    const details = page.getByRole('region', { name: 'Whaleback Mountain', exact: true });
+    const popup = page.getByRole('region', { name: 'Whaleback Mountain map popup', exact: true });
+    const tooltip = page.getByRole('tooltip');
+
+    await canvas.hover({ position });
+    await expect(tooltip).toContainText('Whaleback Mountain');
+    await expect(tooltip).toContainText('Enfield, NH');
+    await expect(details).toHaveCount(0);
+    await expect(popup).toHaveCount(0);
+    await canvas.hover({ position: background });
+    await expect(tooltip).toHaveCount(0);
+
+    const iconEdge = { x: position.x + 9, y: position.y };
+    await canvas.hover({ position: iconEdge });
+    await expect(tooltip).toContainText('Whaleback Mountain');
+    await canvas.click({ position: iconEdge });
+    await expect(popup).toBeVisible();
+    await expect(popup).toContainText('86 ac');
+    await expect(details).toBeVisible();
+    await expect(tooltip).toHaveCount(0);
+    await popup.getByRole('link', { name: 'View resort details' }).click();
+    await expect(page).toHaveURL(/#ski-area-details$/);
+    await renderer.evaluate(map => { map.panBy([40, 20], { duration: 0 }); });
+    await expect(popup).toBeVisible();
+    await expect.poll(() => renderer.evaluate(map => !map.isMoving())).toBe(true);
+    const camera = await renderer.evaluate(map => ({ center: map.getCenter().toArray(), zoom: map.getZoom() }));
+
+    await canvas.click({ position: background });
+    await expect(popup).toHaveCount(0);
+    await expect(details).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Whaleback Mountain', exact: true })).toHaveAttribute('aria-pressed', 'false');
+    expect(Object.fromEntries(new URL(page.url()).searchParams)).toEqual({ q: 'whaleback', color: 'pass' });
+    expect(await renderer.evaluate(map => ({ center: map.getCenter().toArray(), zoom: map.getZoom() }))).toEqual(camera);
+
+    await page.goBack();
+    await expect(popup).toBeVisible();
+    await popup.getByRole('button', { name: 'Close resort popup' }).press('Escape');
+    await expect(popup).toHaveCount(0);
+    await expect(canvas).toBeFocused();
+    await renderer.dispose();
+});
+
+test.describe('ski-status on touch screens', () => {
+    test.use({ hasTouch: true, viewport: { width: 320, height: 680 } });
+
+    test('opens a selected popup on tap and dismisses it with a tap away or its close button', async ({ page }) => {
+        await prepare(page);
+        const renderer = await captureMap(page, { phone: true });
+        await page.getByLabel('Color by', { exact: true }).selectOption('pass');
+        const position = await findWhaleback(page, renderer);
+        const canvas = page.getByTestId('ski-status-map').locator('canvas');
+        const popup = page.getByRole('region', { name: 'Whaleback Mountain map popup', exact: true });
+        await canvas.tap({ position });
+        await expect(popup).toBeVisible();
+        const title = popup.getByText('Whaleback Mountain', { exact: true });
+        await expect.poll(() => title.evaluate(node => {
+            const panel = node.closest('.maplibregl-popup-content')!.getBoundingClientRect();
+            const map = node.closest('[data-testid="ski-status-map"]')!.getBoundingClientRect();
+            const bounds = node.getBoundingClientRect();
+            const target = document.elementFromPoint(bounds.left + 2, bounds.top + bounds.height / 2);
+            return panel.top >= map.top && panel.bottom <= map.bottom && node.contains(target);
+        })).toBe(true);
+        await expect(page.getByRole('tooltip')).toHaveCount(0);
+        await expect(page).toHaveURL(/area=whaleback/);
+        await title.tap();
+        await expect(popup).toBeVisible();
+
+        await canvas.tap({ position: { x: 20, y: (await canvas.boundingBox())!.height / 2 } });
+        await expect(popup).toHaveCount(0);
+        await expect(page).not.toHaveURL(/area=whaleback/);
+
+        await canvas.tap({ position });
+        await popup.getByRole('button', { name: 'Close resort popup' }).tap();
+        await expect(popup).toHaveCount(0);
+        await expect(page).not.toHaveURL(/area=whaleback/);
+        await renderer.dispose();
+    });
+});
+
 test('selects the closest ski area where two markers overlap', async ({ page }) => {
     await prepare(page);
     const renderer = await captureMap(page);
@@ -444,6 +549,8 @@ test('switches between all desktop layouts and keeps the camera, filters, sort, 
     await page.getByLabel('Region', { exact: true }).selectOption('UT');
     await page.getByRole('button', { name: 'Vertical', exact: true }).click();
     await selection.click();
+    const popup = page.getByRole('region', { name: 'Alta Ski Area map popup', exact: true });
+    await expect(popup).toBeVisible();
     await expect.poll(() => renderer.evaluate(map => map.loaded() && !map.isMoving())).toBe(true);
     const splitMapWidth = (await map.boundingBox())!.width;
     const splitTableWidth = (await table.boundingBox())!.width;
@@ -480,6 +587,7 @@ test('switches between all desktop layouts and keeps the camera, filters, sort, 
     await page.getByRole('link', { name: 'Alta Ski Area details' }).click();
     await page.getByRole('button', { name: 'Close details' }).click();
     await expect(selection).toBeFocused();
+    await expect(popup).toHaveCount(0);
     await renderer.dispose();
 });
 
@@ -555,6 +663,7 @@ test('opens each phone layout with the same results when the basemap fails', asy
     await expect(page.getByRole('heading', { name: 'Whaleback Mountain', exact: true })).toBeVisible();
     const map = page.getByTestId('ski-status-map');
     await expect(map).toHaveAttribute('data-map-state', 'degraded', { timeout: 20_000 });
+    await expect(page.getByRole('region', { name: 'Whaleback Mountain map popup', exact: true })).toBeVisible();
     const renderer = await map.elementHandle();
     const table = page.getByRole('region', { name: 'Ski area comparison table' });
     await splitView.click();

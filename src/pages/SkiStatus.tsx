@@ -25,8 +25,8 @@ const regionValues = new Set([...regions, ...countries.map(({ value }) => value)
 const inputClass = 'min-h-11 w-full min-w-0 rounded-md border border-zinc-700 bg-zinc-950 px-2.5 text-base text-zinc-100 focus-visible:border-cyan-300 focus-visible:outline-1 focus-visible:outline-cyan-300';
 const filterClass = 'grid min-w-0 gap-1 text-xs text-zinc-300';
 const layouts: Record<SkiResultsView, string> = {
-    map: 'grid-rows-[minmax(14rem,1fr)_auto] lg:grid-cols-[clamp(16rem,24vw,24rem)_minmax(0,1fr)]',
-    split: 'grid-rows-[minmax(17rem,1fr)_minmax(17rem,1fr)] lg:grid-cols-2',
+    map: 'grid-rows-[minmax(min-content,1fr)_auto] lg:grid-cols-[clamp(16rem,24vw,24rem)_minmax(0,1fr)]',
+    split: 'grid-rows-[minmax(17rem,1fr)_minmax(min-content,1fr)] lg:grid-cols-2',
     table: 'grid-rows-[minmax(14rem,1fr)] lg:grid-cols-[minmax(0,1fr)_clamp(16rem,24vw,24rem)]',
 };
 
@@ -66,6 +66,7 @@ export default function SkiStatus() {
     const legend = markerLegend(colors, units, pass === 'indy-discounts');
     const areas = useMemo(() => filterSkiAreas(skiAreas, query, region, pass, night), [query, region, pass, night]);
     const selected = areas.find(area => area.id === selectedId);
+    const mapMinimum = selected ? 'min-h-min' : view === 'map' ? 'min-h-56' : 'min-h-68';
     const viewportIds = inView ? visibleAreaIds : undefined;
     const tableAreas = useMemo(() => viewportIds ? areas.filter(area => viewportIds.has(area.id)) : areas, [areas, viewportIds]);
     const sorted = useMemo(() => sortSkiAreas(tableAreas, { key: sort.key, direction: sort.direction }), [tableAreas, sort.key, sort.direction]);
@@ -86,7 +87,7 @@ export default function SkiStatus() {
         setParam('sort', `${key}:${direction}`);
     }
 
-    function selectArea(id: string) {
+    function selectArea(id?: string) {
         setParam('area', id);
     }
 
@@ -183,7 +184,7 @@ export default function SkiStatus() {
                     <SkiAreaDetails area={selected} units={units} onClose={closeDetails} />
                 </div>}
             </section>
-            <section aria-label="Map of ski areas" className={`${showMap ? 'flex' : 'hidden'} min-h-0 min-w-0 flex-col bg-zinc-950`}>
+            <section aria-label="Map of ski areas" className={`${showMap ? 'flex' : 'hidden'} ${mapMinimum} min-w-0 flex-col bg-zinc-950 lg:min-h-0`}>
                 <div className="flex flex-wrap items-center gap-x-3 border-b border-zinc-800 px-2 text-sm text-zinc-300">
                     <div className="flex min-w-0 items-center gap-2 py-1">
                         <label htmlFor="ski-marker-color" className="shrink-0">Color by</label>
@@ -204,9 +205,9 @@ export default function SkiStatus() {
                             : <span aria-hidden="true" className="size-2.5 rounded-full" style={{ backgroundColor: color }} />}{label}
                     </li>)}
                 </ul>}
-                <div className="min-h-0 flex-1">
+                <div className={`flex-1 ${selected ? 'min-h-96 lg:min-h-0' : 'min-h-0'}`}>
                     {(showMap || mapOpened) && <ErrorBoundary fallback={<MapMessage failed />}><Suspense fallback={<MapMessage />}>
-                        <SkiStatusMap areas={areas} selected={selected} colors={colors} passFilter={pass} terrain={terrain} visible={showMap} inView={inView}
+                        <SkiStatusMap areas={areas} selected={selected} colors={colors} passFilter={pass} terrain={terrain} visible={showMap} inView={inView} units={units}
                             onVisibleAreasChange={updateVisibleAreas} onSelect={selectArea} />
                     </Suspense></ErrorBoundary>}
                 </div>

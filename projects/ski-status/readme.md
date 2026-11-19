@@ -21,7 +21,10 @@ On a wide screen, the page starts in **Split**. On a narrow screen, it starts in
 - Select **Indy** for included access. Select **Indy discounts** for Alpine Allied discounts and the North Cascade Heli offer.
 - Turn on **In map view** beside the results count to limit the table to the map area.
 - Select a column header to change the sort order.
-- Select a dot or table row to show the area details. Use the area name below the filters to go to its details. Zoom in to separate nearby dots.
+- Hover over a dot to see the area name and location. Zoom in to separate nearby dots.
+- Click or tap a dot to select the area and open its map popup. Select a table row to open the same popup when the map is visible.
+- Use **View resort details** in the popup or select the area name below the filters. On a narrow screen, the full details are below the map.
+- Click or tap empty map space to clear the selection. You can also use the popup close button or press Escape with focus in the map.
 - Select **Official conditions** to open the operator's report. If the resort publishes conditions on its main page, use **Resort website and conditions**.
 
 The URL stores the search text, filters, sort order, selected area, view, and map settings. The browser stores your unit preference.
@@ -99,7 +102,7 @@ Run the unit tests for the catalog, table, details, and markers.
 npx vitest run src/test/skiStatus.test.ts src/test/skiStatusComponents.test.tsx
 ```
 
-Run the browser tests. They check map fit, shared areas, pass colors, view changes, and error recovery.
+Run the browser tests. They check map fit, shared areas, pass colors, popups, view changes, and error recovery.
 
 ```bash
 npm run test:e2e -- tests/e2e/ski-status.spec.ts --project=chromium

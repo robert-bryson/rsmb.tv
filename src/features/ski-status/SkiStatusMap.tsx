@@ -5,11 +5,13 @@ import { cartoRasterStyle, cartoVectorStyleUrl } from '../../maps/cartoBasemaps'
 import * as maplibre from '../../maps/maplibre';
 import { recoverBasemap, type BasemapState } from '../../maps/recoverBasemap';
 import { clamp, distanceSquared, type TooltipPoint } from '../../maps/screenGeometry';
-import { skiAreaIdsInViewport, type PassFilter } from './browse';
+import { skiAreaIdsInViewport, type PassFilter, type SkiUnits } from './browse';
 import { passFamilySchema, skiAreas, type SkiArea } from './catalog';
 import { markerAppearance, multiplePassColor, passBadgeId, passBadgeSize, passBadgeTextColor, type MarkerMode } from './mapAppearance';
 import { passIconUrls } from './passIcons';
+import { SkiAreaPopup } from './SkiAreaPopup';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import './skiAreaPopup.css';
 
 const sourceId = 'ski-areas';
 const pointLayer = 'ski-area-points';
@@ -41,8 +43,9 @@ interface Props {
     terrain: boolean;
     visible: boolean;
     inView: boolean;
+    units: SkiUnits;
     onVisibleAreasChange: (ids: ReadonlySet<string>) => void;
-    onSelect: (id: string) => void;
+    onSelect: (id?: string) => void;
 }
 
 function fitAreas(map: maplibre.Map, areas: readonly SkiArea[], duration: number) {
@@ -183,31 +186,28 @@ function syncTerrain(map: maplibre.Map, enabled: boolean) {
     }, firstLabel?.id ?? pointLayer);
 }
 
-function closestArea(map: maplibre.Map, point: TooltipPoint, areas: readonly SkiArea[]) {
+function closestArea(map: maplibre.Map, point: TooltipPoint, areas: ReadonlyMap<string, SkiArea>, padding = 0) {
     const layers = markerLayers.filter(layer => map.getLayer(layer));
     if (!layers.length) return;
 
-    // Allow a tap next to the circle. Use distance instead of layer order when circles overlap.
-    const padding = 10;
-    const features = map.queryRenderedFeatures([
+    const features = map.queryRenderedFeatures(padding ? [
         [point.x - padding, point.y - padding], [point.x + padding, point.y + padding],
-    ], { layers });
-    let nearest: string | undefined;
+    ] : [point.x, point.y], { layers });
+    let nearest: SkiArea | undefined;
     let nearestDistance = Infinity;
     for (const feature of features) {
-        if (feature.geometry.type !== 'Point') continue;
-        const center = feature.geometry.coordinates as [number, number];
-        const distance = distanceSquared(point, map.project(center));
+        const id: unknown = feature.properties.areaId;
+        const area = typeof id === 'string' ? areas.get(id) : undefined;
+        if (!area) continue;
+        const distance = distanceSquared(point, map.project(area.location.coordinates));
         if (distance >= nearestDistance) continue;
-        const areaId: unknown = feature.properties.areaId;
-        if (typeof areaId !== 'string' || !areas.some(area => area.id === areaId)) continue;
-        nearest = areaId;
+        nearest = area;
         nearestDistance = distance;
     }
     return nearest;
 }
 
-export default function SkiStatusMap({ areas, selected, colors, passFilter, terrain, visible, inView, onVisibleAreasChange, onSelect }: Props) {
+export default function SkiStatusMap({ areas, selected, colors, passFilter, terrain, visible, inView, units, onVisibleAreasChange, onSelect }: Props) {
     const container = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibre.Map | null>(null);
     const recoveryRef = useRef<ReturnType<typeof recoverBasemap> | null>(null);
@@ -218,8 +218,10 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
     const [ready, setReady] = useState(false);
     const [failed, setFailed] = useState(false);
     const [terrainUnavailable, setTerrainUnavailable] = useState(false);
+    const [hovered, setHovered] = useState<SkiArea>();
     const reducedMotion = useReducedMotion();
     const duration = reducedMotion ? 0 : 280;
+    const areasById = useMemo(() => new Map(areas.map(area => [area.id, area])), [areas]);
     const points = useMemo<FeatureCollection<Point>>(() => ({
         type: 'FeatureCollection',
         features: areas.map(area => ({
@@ -227,7 +229,7 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
             geometry: { type: 'Point', coordinates: area.location.coordinates },
         })),
     }), [areas, colors, passFilter]);
-    const current = useEffectEvent(() => ({ areas, points, selected, colors, terrain }));
+    const current = useEffectEvent(() => ({ areasById, points, selected, colors, terrain }));
     const selectArea = useEffectEvent(onSelect);
     const syncPassBadges = useEffectEvent((map: maplibre.Map) => {
         if (colors !== 'pass' || !map.getSource(sourceId) || map.getLayer(passBadgeLayer)) return;
@@ -293,6 +295,12 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
             }
             map = instance;
             mapRef.current = instance;
+            const canvas = instance.getCanvas();
+            const updateHover = (area?: SkiArea) => {
+                canvas.style.cursor = area ? 'pointer' : '';
+                setHovered(area);
+            };
+            const clearHover = () => updateHover();
             instance.addControl(new maplibre.NavigationControl({ showCompass: false }), 'top-right');
             recoveryRef.current = recoverBasemap(instance, {
                 dataSources: new Set([sourceId, terrainSource]), providerStyle, neutralStyle: () => cartoRasterStyle('dark', ''),
@@ -301,6 +309,7 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
                 if (state !== 'ready') setReady(false);
             });
             instance.on('style.load', () => {
+                clearHover();
                 const data = current();
                 if (!instance.getSource(sourceId)) addAreaLayers(instance, data.points);
                 highlightArea(instance, data.selected);
@@ -311,9 +320,11 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
                 queueViewport();
             });
             instance.on('resize', () => {
+                clearHover();
                 syncCamera(instance);
                 queueViewport();
             });
+            instance.on('movestart', clearHover);
             instance.on('moveend', queueViewport);
             instance.on('sourcedata', event => {
                 if (event.sourceId === sourceId && event.isSourceLoaded) setReady(true);
@@ -325,12 +336,15 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
                 if ('sourceId' in event && event.sourceId === terrainSource) setTerrainUnavailable(true);
                 else if (/webgl|context|worker/i.test(event.error?.message ?? '')) setFailed(true);
             });
-            instance.on('mouseenter', markerLayers, () => { instance.getCanvas().style.cursor = 'pointer'; });
-            instance.on('mouseleave', markerLayers, () => { instance.getCanvas().style.cursor = ''; });
+            instance.on('mousemove', event => {
+                if (!instance.isMoving()) updateHover(closestArea(instance, event.point, current().areasById));
+            });
+            instance.on('mouseout', clearHover);
             instance.on('click', event => {
                 if (!instance.getSource(sourceId) || !instance.isSourceLoaded(sourceId)) return;
-                const id = closestArea(instance, event.point, current().areas);
-                if (id) selectArea(id);
+                clearHover();
+                const touch = 'pointerType' in event.originalEvent && event.originalEvent.pointerType === 'touch';
+                selectArea(closestArea(instance, event.point, current().areasById, touch ? 10 : 0)?.id);
             });
         });
         return () => {
@@ -366,22 +380,39 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
         highlightArea(map, selected);
     }, [colors, selected]);
 
+    function closePopup() {
+        setHovered(undefined);
+        mapRef.current?.getCanvas().focus({ preventScroll: true });
+        onSelect();
+    }
+
     const state = failed ? 'error' : !ready || basemap === 'loading' ? 'loading' : basemap === 'unavailable' ? 'degraded' : 'ready';
-    return <div className="relative h-full min-h-0">
+    const showPopups = visible && ready && !failed;
+    const fitLabel = inView ? 'Fit all results' : 'Fit results';
+    return <div className="relative h-full min-h-0" onKeyDown={event => {
+        if (event.key !== 'Escape' || (!selected && !hovered)) return;
+        event.preventDefault();
+        if (selected) closePopup();
+        else setHovered(undefined);
+    }}>
         <div ref={container} className="h-full w-full" data-testid="ski-status-map"
             data-map-state={state} />
-        {ready && !failed && <button type="button" disabled={!areas.length} onClick={() => {
+        {showPopups && hovered && hovered.id !== selected?.id && areasById.has(hovered.id)
+            && <SkiAreaPopup area={hovered} mapRef={mapRef} />}
+        {showPopups && selected && <SkiAreaPopup area={selected} mapRef={mapRef} units={units} onClose={closePopup} />}
+        {ready && !failed && <button type="button" disabled={!areas.length} aria-label={fitLabel} onClick={() => {
             if (mapRef.current) fitAreas(mapRef.current, areas, duration);
         }}
-            className="absolute left-2 top-2 min-h-11 rounded-md border border-zinc-600 bg-zinc-950/95 px-3 text-sm text-zinc-100 hover:border-cyan-300 disabled:opacity-50">
-            {inView ? 'Fit all results' : 'Fit results'}
+            className="absolute left-2 top-2 z-2 min-h-11 min-w-11 rounded-md border border-zinc-600 bg-zinc-950/95 px-3 text-sm text-zinc-100 hover:border-cyan-300 disabled:opacity-50">
+            {selected && <span className="sm:hidden">Fit</span>}
+            <span className={selected ? 'hidden sm:inline' : undefined}>{fitLabel}</span>
         </button>}
         {state === 'ready' && terrain && terrainUnavailable && <p role="status"
-            className="absolute bottom-9 left-2 w-fit max-w-[calc(100%-1rem)] rounded-md border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100">
+            className="absolute bottom-9 left-2 z-2 w-fit max-w-[calc(100%-1rem)] rounded-md border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100">
             Terrain relief unavailable.
         </p>}
         {state !== 'ready' && <div
-            className="absolute bottom-9 left-2 right-2 w-fit max-w-[calc(100%-1rem)] rounded-md border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
+            className="absolute bottom-9 left-2 right-2 z-2 w-fit max-w-[calc(100%-1rem)] rounded-md border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
             role={failed ? 'alert' : 'status'}>
             {failed ? <>Map unavailable. <button type="button" className="min-h-9 text-cyan-300 underline" onClick={() => {
                 setReady(false);
