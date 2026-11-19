@@ -230,7 +230,7 @@ Track pending stories in [Content publication](#content-publication). Do not add
 ### Catalog maintenance
 
 - [ ] Check each pass roster at the start of the season. Verify included access and discounts. Check the countries that each shared area covers. [Catalog rules](projects/ski-status/readme.md#build-the-catalog)
-- [ ] Fill missing statistics and conditions links from operator sources. Check the units and terrain that each figure covers. Publish field coverage. [Mountain statistics](projects/ski-status/readme.md#comparable-mountain-statistics)
+- [ ] Fill missing published statistics and conditions links. Start with lift terminal elevations, night skiable acres, and season dates. Check the units and terrain that each figure covers. Update the field counts. [Mountain statistics](projects/ski-status/readme.md#comparable-mountain-statistics)
 
 ### Version 2
 

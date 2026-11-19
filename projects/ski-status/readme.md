@@ -17,8 +17,9 @@ Open `/projects/ski-status/map`. Select **Map**, **Split**, or **Table** at the 
 On a wide screen, the page starts in **Split**. On a narrow screen, it starts in **Table**.
 
 - Search by ski area, alternative name, town, country, or skiing type. Search for **cross-country** to find Nordic centers and areas that offer both types of skiing.
-- Use **Region** to select a country, state, or province. A shared ski area appears under each country that it covers. On a narrow screen, select **Filters** to see the region, pass, and night skiing controls.
+- Use **Region** to select a country, state, or province. A shared ski area appears under each country that it covers. On a narrow screen, select **Filters** to open the filter controls.
 - Select **Indy** for included access. Select **Indy discounts** for Alpine Allied discounts and the North Cascade Heli offer.
+- Use **Skiing type** to filter the map and table. **Conventional downhill** includes outdoor lift-served areas that also offer Nordic trails. **Cross-country only** selects Nordic-only areas. **Specialty skiing** shows the Nordic-only, indoor, heli-skiing, cat-skiing, ski touring, dry slope, and lift-served freeride areas together. Select a single type to narrow the results.
 - Turn on **In map view** beside the results count to limit the table to the visible side of the globe.
 - Select a column header to change the sort order.
 - Hover over a dot to see the area name and location. Zoom in to separate nearby dots.
@@ -62,17 +63,21 @@ CARTO publishes Dark Matter, Voyager, and Positron. MapTiler offers a separate W
 
 ## Catalog
 
-On November 19, 2026, the catalog had 561 map points in 20 countries. It had 319 points in the United States, 66 in Canada, and 176 in other countries. The country filter also includes Germany through shared areas. The catalog had 126 areas with Ikon access, 98 with Epic access, and 298 with included Indy access. It had 113 acreage figures and 173 conditions links.
+On November 19, 2026, the catalog had 565 map points in 20 countries. It had 323 points in the United States, 66 in Canada, and 176 in other countries. The country filter also includes Germany through shared areas. The catalog had 126 areas with Ikon access, 98 with Epic access, and 298 with included Indy access.
+
+Each area has a published fact or a mapped terrain value. The catalog has at least one published fact for 493 areas and mapped terrain values for 519 areas. It has 169 skiable acreage figures, 376 published lift counts, 417 published trail counts, and 216 conditions links. The mapped data adds lift counts, downhill and Nordic trail lengths, and terrain elevations.
 
 | File | Use |
 | --- | --- |
 | [Area statistics](data/areas.json) | Resort sites, published mountain statistics, and official report links. Empty fields display as unknown. |
-| [Area locations](data/locations.json) | Points from the November 16 OpenSkiData build and additional OpenStreetMap features. Each point has source links. The file includes ODbL attribution. |
+| [Locations and mapped terrain](data/locations.json) | Points and mapped values from the November 16 OpenSkiData build. The file also includes points from OpenStreetMap and operator directions. Each record has source links and the file has ODbL attribution. |
 | [Pass memberships](data/passes-2026-27.json) | Family access for the 2026/27 season. The details show discounts and listings with unconfirmed access. Each entry links to a source. |
 
 Use the same area ID in the three files. Add one point per area and one membership per pass family. Put the country of the representative point in `country`. Put verified additional countries of a shared area in `otherCountries`. Add state or province codes to North American areas that use them.
 
 Use the operator's statistics when the source names the terrain or equipment that the figures cover. Keep the source of the pass rules with the membership. Use absolute HTTPS source links. The catalog checks IDs, references, statistics, and the format of geographic codes. It checks the location attribution and the pass season. [Catalog validation](../../src/features/ski-status/catalog.ts)
+
+Use the **Mapped** columns for OpenSkiData figures. The elevation range covers mapped terrain. The **Base**, **Summit**, and lift terminal columns show published elevations for those locations. Published lift and trail counts have their own columns. Each area with mapped figures links to the source in its details. [OpenSkiData dataset and license](https://www.openskidata.org/#license)
 
 ### Ikon destinations
 
@@ -92,7 +97,7 @@ The catalog covers all 302 cards from the November 19 roster, plus the Gore Moun
 
 Gore has a pin for downhill discounts and a separate pin for included Nordic access. Manning Park also has separate downhill and Nordic pins. Use the group link for shared day limits and redemption rules. Portes du Soleil appears under France and Switzerland. Oberstdorf Kleinwalsertal and Steinplatte appear under Austria and Germany. Each group has one representative pin. [Innsbruck access](https://www.indyskipass.com/our-resorts/innsbruck-region), [Portes du Soleil access](https://www.indyskipass.com/our-resorts/portes-du-soleil), [Oberstdorf and Kleinwalsertal ski areas](https://www.ok-bergbahnen.com/en/skigebiete/), [Steinplatte ski area](https://www.steinplatte.tirol/en/steinplatte-winklmoosalm-ski-area-in-winter.html)
 
-The catalog uses the published roster figures for vertical drop, lifts, trail count, night skiing, and terrain parks. Use the operator's figures when the operator gives a more precise value for the same area. Leave fields empty when the source gives no comparable figure. The **Skiing** column identifies Nordic, mixed, heli-skiing, and indoor venues. The night skiing field describes the venue. Open the pass link to check which sessions it covers. [Indy access rules](https://www.indyskipass.com/this-is-indy/how-it-works), [North Cascade Heli discount](https://www.indyskipass.com/our-resorts/north-cascade-heli), [Stoke Mountain profile](https://www.indyskipass.com/our-resorts/stoke-mountain)
+The catalog uses the published roster figures for vertical drop, lifts, trail count, night skiing, and terrain parks. Use the operator's figures when the operator gives a more precise value for the same area. Leave fields empty when the source gives no comparable figure. The **Skiing** and **Night skiing** columns describe the venue. Open the pass link to check which activities and sessions it covers. [Indy access rules](https://www.indyskipass.com/this-is-indy/how-it-works), [North Cascade Heli discount](https://www.indyskipass.com/our-resorts/north-cascade-heli), [Stoke Mountain profile](https://www.indyskipass.com/our-resorts/stoke-mountain)
 
 ## Local checks
 
@@ -104,7 +109,7 @@ Run the unit tests for the catalog, table, details, and markers.
 npx vitest run src/test/skiStatus.test.ts src/test/skiStatusComponents.test.tsx
 ```
 
-Run the browser tests. They check globe fit, visible results, pass colors, popups, view changes, and error recovery.
+Run the browser tests. They check globe fit, the skiing type filter, visible results, pass colors, popups, view changes, and error recovery.
 
 ```bash
 npm run test:e2e -- tests/e2e/ski-status.spec.ts --project=chromium
@@ -112,7 +117,7 @@ npm run test:e2e -- tests/e2e/ski-status.spec.ts --project=chromium
 
 ## First release
 
-In North America, include active public downhill areas with at least 100 published skiable acres. Include official pass destinations, including worldwide destinations for Ikon, Epic, and Indy. Record the type of access for each pass. Keep eligible areas visible in the off-season. [Ikon destination map](https://www.ikonpass.com/en/destinations), [Epic Pass list](https://www.epicpass.com/pass-results/college.aspx), [Indy resort roster](https://www.indyskipass.com/our-resorts)
+In North America, include active public conventional downhill areas with at least 100 published skiable acres. Include official pass destinations, including worldwide destinations for Ikon, Epic, and Indy. Add specialty venues when an operator or managing organization documents the activity. Record the type of access for each pass. Keep eligible areas visible in the off-season. [Ikon destination map](https://www.ikonpass.com/en/destinations), [Epic Pass list](https://www.epicpass.com/pass-results/college.aspx), [Indy resort roster](https://www.indyskipass.com/our-resorts)
 
 Whaleback has 86 skiable acres and qualifies through Indy lift access. Use skiable acreage for the threshold. Resort property acreage can include lodging and terrain outside the ski area. [Indy Whaleback profile](https://www.indyskipass.com/our-resorts/whaleback-mountain), [Monterreal property description](https://www.monterreal.com/)
 
@@ -130,10 +135,12 @@ Whaleback has 86 skiable acres and qualifies through Indy lift access. Use skiab
 | --- | --- |
 | Area identity | Store the official name, website, ID, region, country, and time zone. Keep former names for search. Place the point near a base, trailhead, or visitor entrance. |
 | Skiable acres | Use the operator's published skiable area. Record which mountains or terrain the figure covers. |
+| Guided terrain | Use the published area of the terrain that the heli-ski or cat-ski operator serves. Record it in **Guided terrain**. |
 | Lifts | Use the operator's total for the same area. Include surface lifts. Record the counts by lift type when available. |
 | Elevation and vertical | Store the highest and lowest lift terminal elevations in their own fields. Use the operator's drop for skiable vertical. If the operator gives only the elevations, calculate the range for the same skiable area. |
 | Trails | Store the total and the number for each published grade. Keep the original basis for percentages such as trail count or terrain area. |
-| Night skiing | Store yes, no, or unknown. Show night skiable acres when the operator publishes them. Track scheduled night operations in the conditions report. |
+| Trail length | Record the published lengths of downhill and Nordic trails in their own fields. Use miles or kilometers in the app. |
+| Night skiing | Store yes, no, or unknown. Show night skiable acres when the operator publishes them. Keep a published lower bound, such as `200+` acres. Track scheduled night operations in the conditions report. |
 | Season dates | Keep planned and actual dates. Use the median of up to five completed seasons for each typical date. Verify at least three actual opening or closing dates for each median. |
 
 Store values in common units. Keep the original unit and source. Display acres, feet, and inches by default. Offer metric units.
@@ -158,12 +165,14 @@ The audit counts candidates before the acreage and pass checks. A named row can 
 
 The CSV has SHA-256 `9c5a372b8d02aedd281fd387c581c16f48915d89abacec7eba0faa53726a9df5`.
 
+Use the same CSV for the mapped terrain values and the existing points. Match one operating row by its upstream source URL and coordinates. Check that the row covers the ski area. Leave the field empty when one row combines multiple areas that the catalog lists on their own. Use the downhill and Nordic lengths that apply to the venue. Keep the terrain source URL in `mappedTerrain`. [OpenSkiData statistics and source IDs](https://www.openskidata.org/#whats-in-the-data)
+
 ### Build the catalog
 
 1. Import names, points, source IDs, and candidate websites from a versioned OpenSkiData file. Use regional directories to find missing areas. Check directory terms before you collect source data. [OpenSkiData downloads](https://www.openskidata.org/#downloads), [NSAA inventory by state](https://nsaa.org/NSAA/About/Media/Industry_Stats/NSAA/About/Media/Industry_Stats.aspx), [Canadian Ski Council directory](https://www.skicanada.org/ski-area-list/), [Québec ski area directory](https://maneige.ski/en/stations-et-conditions/)
 2. Match by source ID or a verified name and location. Assign a stable local ID for links, reports, and visits. OpenSkiData feature IDs can change between builds. [OpenSkiData feature IDs](https://www.openskidata.org/#whats-in-the-data)
 3. Review uncertain matches. Group bases when the operator publishes combined statistics. Palisades Tahoe publishes combined resort statistics. Keep independently operated areas separate if they share a pass allowance. [Palisades Tahoe statistics](https://www.palisadestahoe.com/footer/mountain-statistics), [Ikon access comparison](https://www.ikonpass.com/en/compare-benefits)
-4. Use operator acreage or an official pass listing to verify eligibility. Record the reason and source. List unresolved areas. Check for duplicate, closed, and private areas before release. [Indy Pass website terms](https://www.indyskipass.com/website-terms-of-use)
+4. Verify eligibility with operator acreage, an official pass listing, or a source for the specialty venue. Record the reason and source. List unresolved areas. Check for duplicate, closed, and private areas before release. [Indy Pass website terms](https://www.indyskipass.com/website-terms-of-use)
 5. Add operator statistics for each eligible area. Record the source, date, and scope of the figures. Use map data to check large differences. Verify the figure with the operator before changing the record. [OpenSkiData data definitions](https://www.openskidata.org/#whats-in-the-data)
 6. Count resolved and unresolved candidates by region. Measure coverage for acres, elevations, grades, night acres, and dates. Skibowl reports total acres and the number of lit runs. Keep night skiable acres unknown until you find a source. [Skibowl statistics](https://skibowl.com/about-winter/stats/)
 

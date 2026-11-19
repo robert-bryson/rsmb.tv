@@ -48,8 +48,9 @@ describe('ski-status area details', () => {
 
         const details = screen.getByRole('region', { name: 'Whaleback Mountain' });
         const links = within(details).getAllByRole('link');
-        expect(links.map(link => link.getAttribute('href'))).toEqual([area.website, more, source]);
+        expect(links.map(link => link.getAttribute('href'))).toEqual([area.website, area.location.mappedTerrain?.source, more, source]);
         expect(within(details).getByRole('link', { name: 'Resort website and conditions' })).toHaveAttribute('href', area.website);
+        expect(within(details).getByRole('link', { name: 'OpenSkiMap terrain' })).toHaveAttribute('href', area.location.mappedTerrain?.source);
         expect(within(details).getByRole('link', { name: 'Indy' })).toHaveAttribute('href', source);
         expect(within(details).getByText('30%')).toBeVisible();
         fireEvent.click(within(details).getByRole('button', { name: 'Close details' }));

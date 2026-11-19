@@ -127,6 +127,49 @@ test('keeps listed Ikon destinations visible until the included-access filter is
     await expect(table.getByRole('button', { name: 'Ischgl / Samnaun', exact: true })).toBeVisible();
 });
 
+test('filters skiing types in the table and the map source', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await prepare(page);
+    const renderer = await captureMap(page);
+    const table = page.getByRole('region', { name: 'Ski area comparison table' });
+    const skiing = page.getByLabel('Skiing type', { exact: true });
+    const mapIds = () => renderer.evaluate(async map => {
+        const data = await map.getSource<GeoJSONSource>('ski-areas')?.getData();
+        return data?.type === 'FeatureCollection' ? data.features.map(feature => feature.id).sort() : [];
+    });
+
+    await skiing.selectOption('indoor');
+    await expect(page).toHaveURL(/skiing=indoor/);
+    await expect(table.locator('tbody tr')).toHaveCount(2);
+    await expect(table.getByRole('button', { name: 'Big SNOW American Dream', exact: true })).toBeVisible();
+    await expect.poll(mapIds).toEqual(['big-snow-american-dream', 'stoke-mountain']);
+
+    await skiing.selectOption('specialty');
+    await page.getByLabel('Pass', { exact: true }).selectOption('indy-discounts');
+    await expect(table.locator('tbody tr')).toHaveCount(1);
+    await expect(table.getByRole('button', { name: 'North Cascade Heli', exact: true })).toBeVisible();
+    await expect.poll(mapIds).toEqual(['north-cascade-heli']);
+
+    await page.getByRole('button', { name: 'Clear filters', exact: true }).click();
+    await expect(skiing).toHaveValue('');
+    await expect(page).not.toHaveURL(/skiing=/);
+    await expect.poll(async () => (await mapIds()).length).toBe(locations.locations.length);
+    await renderer.dispose();
+});
+
+test('loads and clears a skiing-type filter in the phone table', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 780 });
+    await prepare(page);
+    await page.goto(`${path}?view=table&skiing=cross-country&region=BC`);
+    const table = page.getByRole('region', { name: 'Ski area comparison table' });
+    await expect(table.getByRole('button', { name: 'Manning Park Nordic Centre', exact: true })).toBeVisible();
+    await expect(table.getByRole('button', { name: 'Manning Park', exact: true })).toHaveCount(0);
+    await page.getByRole('button', { name: 'Filters', exact: true }).click();
+    await expect(page.getByLabel('Skiing type', { exact: true })).toHaveValue('cross-country');
+    await page.getByRole('button', { name: 'Clear filters', exact: true }).click();
+    await expect(page.getByLabel('Skiing type', { exact: true })).toHaveValue('');
+});
+
 test('shows separate Epic badges and table rows for the Hakuba Valley resorts', async ({ page }) => {
     await prepare(page);
     const renderer = await captureMap(page);

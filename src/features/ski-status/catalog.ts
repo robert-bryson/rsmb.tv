@@ -18,13 +18,24 @@ const httpsUrl = z.string().trim().refine(value => {
 const amount = z.number().nonnegative();
 const count = z.int().nonnegative();
 const minimumSkiableAcres = 100;
-const skiingSchema = z.enum(['downhill', 'cross-country', 'both', 'heli-skiing', 'indoor']);
+export const skiingSchema = z.enum([
+    'downhill', 'both', 'cross-country', 'indoor', 'heli-skiing', 'cat-skiing', 'ski-touring', 'dry-slope', 'freeride',
+]);
+export type Skiing = z.infer<typeof skiingSchema>;
+
+export function isSpecialtySkiing(skiing: Skiing) {
+    return skiing !== 'downhill' && skiing !== 'both';
+}
+
 const mountainStats = {
     acres: amount.optional(),
     acresQualifier: z.literal('lower-bound').optional(),
+    guidedTerrainAcres: amount.optional(),
     liftCount: count.optional(),
     trailCount: count.optional(),
     trailCountQualifier: z.literal('lower-bound').optional(),
+    downhillKm: z.number().positive().optional(),
+    nordicKm: z.number().positive().optional(),
     baseFt: z.number().optional(),
     summitFt: z.number().optional(),
     verticalFt: amount.optional(),
@@ -32,6 +43,7 @@ const mountainStats = {
     lowestLiftTerminalFt: z.number().optional(),
     nightSkiing: z.boolean().optional(),
     nightAcres: amount.optional(),
+    nightAcresQualifier: z.literal('lower-bound').optional(),
     terrainParks: z.boolean().optional(),
     seasonWindow: label.optional(),
     grades: z.strictObject({
@@ -58,6 +70,14 @@ const areaSchema = z.strictObject({
     additionalSources: z.array(httpsUrl).optional(),
 });
 
+const mappedTerrainSchema = z.strictObject({
+    source: httpsUrl,
+    lifts: z.int().positive().optional(),
+    downhillKm: z.number().positive().optional(),
+    nordicKm: z.number().positive().optional(),
+    elevationM: z.tuple([z.number(), z.number()]).refine(([low, high]) => low < high, 'Use an increasing elevation range').optional(),
+}).refine(({ lifts, downhillKm, nordicKm, elevationM }) => lifts || downhillKm || nordicKm || elevationM, 'Add a mapped terrain value');
+
 const locationsSchema = z.strictObject({
     source: httpsUrl,
     buildTime: z.iso.datetime(),
@@ -67,6 +87,7 @@ const locationsSchema = z.strictObject({
         id,
         coordinates: z.tuple([z.number().min(-180).max(180), z.number().min(-90).max(90)]),
         upstream: z.array(httpsUrl).min(1),
+        mappedTerrain: mappedTerrainSchema.optional(),
     })),
 });
 
@@ -131,10 +152,12 @@ export function readSkiCatalog(areaInput: unknown, locationInput: unknown, passI
             throw new Error(`Duplicate country for ${area.id}`);
         }
         if (!area.statsUrl && statisticKeys.some(key => area[key] !== undefined)) throw new Error(`No mountain statistics source for ${area.id}`);
-        if ((area.acres ?? 0) < minimumSkiableAcres && areaPasses.length === 0) {
-            throw new Error(`Ski area ${area.id} requires ${minimumSkiableAcres} skiable acres or an official pass listing`);
+        const documentedSpecialty = isSpecialtySkiing(area.skiing) && area.statsUrl;
+        if ((area.acres ?? 0) < minimumSkiableAcres && areaPasses.length === 0 && !documentedSpecialty) {
+            throw new Error(`Ski area ${area.id} requires ${minimumSkiableAcres} skiable acres, an official pass listing, or a specialty source`);
         }
-        if ((area.acresQualifier && area.acres === undefined) || (area.trailCountQualifier && area.trailCount === undefined)) {
+        if ((area.acresQualifier && area.acres === undefined) || (area.trailCountQualifier && area.trailCount === undefined)
+            || (area.nightAcresQualifier && area.nightAcres === undefined)) {
             throw new Error(`Lower bound for ${area.id} requires a reported value`);
         }
         if (area.nightSkiing === false && (area.nightAcres ?? 0) > 0) throw new Error(`Conflicting night skiing values for ${area.id}`);

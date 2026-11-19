@@ -3,7 +3,8 @@ import { ErrorBoundary } from '../components/ErrorBoundary';
 import { IntentLink } from '../components/IntentLink';
 import { MapSkipLink } from '../components/MapSkipLink';
 import {
-    filterSkiAreas, passFilterFamily, passFilterOptions, readPassFilter, readSkiResultsView, readSkiSort, skiRegionOptions, skiResultsViews, sortSkiAreas,
+    filterSkiAreas, passFilterFamily, passFilterOptions, readPassFilter, readSkiingFilter, readSkiResultsView, readSkiSort,
+    skiingFilterOptions, skiRegionOptions, skiResultsViews, sortSkiAreas,
     type SkiResultsView, type SkiSort, type SkiUnits,
 } from '../features/ski-status/browse';
 import { locationAttribution, locationLicense, passSeason, skiAreas } from '../features/ski-status/catalog';
@@ -57,6 +58,7 @@ export default function SkiStatus() {
     const region = regionValues.has(regionParam) ? regionParam : '';
     const pass = readPassFilter(searchParams);
     const passFamily = pass && passFilterFamily(pass);
+    const skiing = readSkiingFilter(searchParams);
     const night = searchParams.get('night') === '1';
     const inView = searchParams.get('inView') === '1';
     const sort = readSkiSort(searchParams);
@@ -64,7 +66,7 @@ export default function SkiStatus() {
     const colors = readMarkerMode(searchParams.get('color'));
     const terrain = searchParams.get('terrain') === '1';
     const legend = markerLegend(colors, units, pass === 'indy-discounts');
-    const areas = useMemo(() => filterSkiAreas(skiAreas, query, region, pass, night), [query, region, pass, night]);
+    const areas = useMemo(() => filterSkiAreas(skiAreas, { query, region, pass, night, skiing }), [query, region, pass, night, skiing]);
     const selected = areas.find(area => area.id === selectedId);
     const mapMinimum = selected ? 'min-h-min' : view === 'map' ? 'min-h-56' : 'min-h-68';
     const viewportIds = inView ? visibleAreaIds : undefined;
@@ -101,7 +103,7 @@ export default function SkiStatus() {
         setParam('area');
     }
 
-    const hasFilters = Boolean(query || region || pass || night || inView);
+    const hasFilters = Boolean(query || region || pass || skiing || night || inView);
     const needsMapView = inView && !viewportIds;
     return <main data-results-view={view} className="flex h-full min-w-0 flex-col overflow-hidden bg-zinc-950 text-zinc-100">
         <MapSkipLink targetId="ski-area-search" />
@@ -146,6 +148,13 @@ export default function SkiStatus() {
                         </select>
                     </div>
                     <div className={filterClass}>
+                        <label htmlFor="ski-type">Skiing type</label>
+                        <select id="ski-type" value={skiing ?? ''} onChange={event => setParam('skiing', event.target.value)} className={inputClass}>
+                            <option value="">All skiing types</option>
+                            {Object.entries(skiingFilterOptions).map(([value, name]) => <option key={value} value={value}>{name}</option>)}
+                        </select>
+                    </div>
+                    <div className={filterClass}>
                         <label htmlFor="ski-units">Units</label>
                         <select id="ski-units" value={units} onChange={event => setUnits(event.target.value === 'metric' ? 'metric' : 'imperial')} className={inputClass}>
                             <option value="imperial">Acres / feet</option><option value="metric">Hectares / meters</option>
@@ -164,7 +173,7 @@ export default function SkiStatus() {
                         aria-describedby={needsMapView ? 'ski-view-hint' : undefined} className="size-4 accent-cyan-400" /> In map view
                 </label>
                 {hasFilters && <button type="button" onClick={() => updateParams(params => {
-                    for (const key of ['q', 'region', 'pass', 'night', 'inView']) params.delete(key);
+                    for (const key of ['q', 'region', 'pass', 'skiing', 'night', 'inView']) params.delete(key);
                 })} className="min-h-8 text-cyan-300 underline underline-offset-4">Clear filters</button>}
                 {needsMapView && <span id="ski-view-hint" className="text-zinc-400">
                     {showMap ? 'Waiting for a map view.' : 'Open Map to set the area.'}
@@ -214,7 +223,7 @@ export default function SkiStatus() {
             </section>
         </div>
         <footer className="flex shrink-0 flex-wrap gap-x-2 border-t border-zinc-800 px-3 text-xs leading-5 text-zinc-400 sm:px-4 sm:leading-6">
-            <span>Locations</span>
+            <span>Locations and terrain</span>
             {Object.entries(locationAttribution).map(([name, url]) => <a key={name} href={url} className="underline underline-offset-2 hover:text-zinc-200">{name}</a>)}
             <a href={locationDownload} download="ski-status-locations.json" className="underline underline-offset-2 hover:text-zinc-200">Marker data</a>
             <a href={locationLicense} className="underline underline-offset-2 hover:text-zinc-200">ODbL</a>

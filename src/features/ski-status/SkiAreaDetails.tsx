@@ -16,6 +16,7 @@ function detailSourceLinks(area: SkiArea) {
     addLink(area.website, area.website === area.reportUrl ? 'Resort website and conditions' : 'Resort website');
     addLink(area.reportUrl, 'Official conditions');
     addLink(area.statsUrl, 'Mountain stats source');
+    addLink(area.location.mappedTerrain?.source, 'OpenSkiMap terrain');
     let extra = 0;
     for (const url of area.additionalSources ?? []) {
         if (seen.has(url)) continue;
@@ -25,7 +26,10 @@ function detailSourceLinks(area: SkiArea) {
 }
 
 export function SkiAreaDetails({ area, units, onClose }: { area: SkiArea; units: SkiUnits; onClose: () => void }) {
-    const stats = columns.slice(2).map(({ key, label }) => ({ label, value: formatSkiStat(area, key, units) }));
+    const stats = columns.slice(2).flatMap(({ key, label }) => {
+        const value = formatSkiStat(area, key, units);
+        return value === undefined && key.startsWith('mapped') ? [] : [{ label, value }];
+    });
     return <section id="ski-area-details" tabIndex={-1} aria-labelledby="ski-area-name" className="bg-zinc-950 px-3 py-2">
         <div className="flex flex-wrap items-start justify-between gap-2">
             <div>

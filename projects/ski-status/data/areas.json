@@ -62,7 +62,25 @@
     "country": "US",
     "region": "MN",
     "locality": "Hastings",
-    "website": "https://www.aftonalps.com/"
+    "website": "https://www.aftonalps.com/",
+    "acres": 300,
+    "liftCount": 17,
+    "trailCount": 50,
+    "baseFt": 350,
+    "summitFt": 700,
+    "verticalFt": 350,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 25,
+        "Intermediate": 50,
+        "Advanced": 25
+      }
+    },
+    "statsUrl": "https://www.aftonalps.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.aftonalps.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "alpe-cimbra",
@@ -103,7 +121,11 @@
     "country": "US",
     "region": "WA",
     "locality": "Snoqualmie Pass",
-    "website": "https://summitatsnoqualmie.com/"
+    "website": "https://summitatsnoqualmie.com/",
+    "acres": 825,
+    "verticalFt": 2290,
+    "statsUrl": "https://www.summitatsnoqualmie.com/alpental",
+    "reportUrl": "https://www.summitatsnoqualmie.com/alpental/mountain-report"
   },
   {
     "id": "alpine-valley",
@@ -114,7 +136,26 @@
     "country": "US",
     "region": "OH",
     "locality": "Chesterland",
-    "website": "https://www.alpinevalleyohio.com/"
+    "website": "https://www.alpinevalleyohio.com/",
+    "acres": 72,
+    "liftCount": 5,
+    "trailCount": 9,
+    "baseFt": 1260,
+    "summitFt": 1500,
+    "verticalFt": 240,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 22,
+        "Intermediate": 45,
+        "Advanced": 33
+      }
+    },
+    "nightSkiing": true,
+    "statsUrl": "https://www.alpinevalleyohio.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.alpinevalleyohio.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "alta",
@@ -136,8 +177,10 @@
     "seasonWindow": "November–April",
     "additionalSources": [
       "https://mountaincollective.com/resort/alta/",
-      "https://www.alta.com/stories/trail-running-at-alta"
-    ]
+      "https://www.alta.com/stories/trail-running-at-alta",
+      "https://www.skiutah.com/members/alta/"
+    ],
+    "summitFt": 11068
   },
   {
     "id": "alta-badia",
@@ -350,7 +393,13 @@
     "country": "US",
     "region": "CO",
     "locality": "Dillon",
-    "website": "https://www.arapahoebasin.com/"
+    "website": "https://www.arapahoebasin.com/",
+    "acres": 1428,
+    "trailCount": 147,
+    "summitFt": 13050,
+    "baseFt": 10800,
+    "verticalFt": 2250,
+    "statsUrl": "https://www.coloradoski.com/resorts/arapahoe-basin/"
   },
   {
     "id": "arctic-valley",
@@ -396,7 +445,15 @@
     "country": "US",
     "region": "CO",
     "locality": "Aspen",
-    "website": "https://www.aspensnowmass.com/four-mountains/aspen-highlands"
+    "website": "https://www.aspensnowmass.com/four-mountains/aspen-highlands",
+    "acres": 1040,
+    "liftCount": 5,
+    "trailCount": 144,
+    "baseFt": 8040,
+    "summitFt": 12392,
+    "verticalFt": 3635,
+    "statsUrl": "https://www.aspensnowmass.com/-/media/aspen-snowmass/documents/pdfs/25-26/aspen-snowmass-mountain-stats.pdf",
+    "reportUrl": "https://www.aspensnowmass.com/four-mountains/aspen-highlands/lift-status"
   },
   {
     "id": "aspen-mountain",
@@ -408,7 +465,15 @@
     "country": "US",
     "region": "CO",
     "locality": "Aspen",
-    "website": "https://www.aspensnowmass.com/four-mountains/aspen-mountain"
+    "website": "https://www.aspensnowmass.com/four-mountains/aspen-mountain",
+    "acres": 906,
+    "liftCount": 8,
+    "trailCount": 127,
+    "baseFt": 7945,
+    "summitFt": 11262,
+    "verticalFt": 3317,
+    "statsUrl": "https://www.aspensnowmass.com/-/media/aspen-snowmass/documents/pdfs/25-26/aspen-snowmass-mountain-stats.pdf",
+    "reportUrl": "https://www.aspensnowmass.com/four-mountains/aspen-mountain/lift-status"
   },
   {
     "id": "attitash-mountain-resort",
@@ -419,7 +484,26 @@
     "country": "US",
     "region": "NH",
     "locality": "Bartlett",
-    "website": "https://www.attitash.com/"
+    "website": "https://www.attitash.com/",
+    "acres": 311,
+    "acresQualifier": "lower-bound",
+    "liftCount": 8,
+    "trailCount": 76,
+    "baseFt": 600,
+    "summitFt": 2350,
+    "verticalFt": 1750,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 29,
+        "Intermediate": 44,
+        "Advanced": 27
+      }
+    },
+    "statsUrl": "https://www.attitash.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.attitash.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "bad-kleinkirchheim",
@@ -547,7 +631,24 @@
     "country": "US",
     "region": "CA",
     "locality": "Big Bear Lake",
-    "website": "https://www.bigbearmountainresort.com/"
+    "website": "https://www.bigbearmountainresort.com/",
+    "acres": 198,
+    "trailCount": 26,
+    "baseFt": 7140,
+    "summitFt": 8805,
+    "verticalFt": 1665,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner/Low Intermediate": 30,
+        "Intermediate": 40,
+        "Advanced/Expert": 30
+      }
+    },
+    "statsUrl": "https://www.bigbearmountainresort.com/our-mountains",
+    "reportUrl": "https://www.bigbearmountainresort.com/mountain-information"
   },
   {
     "id": "bear-valley-adventure-company",
@@ -602,7 +703,18 @@
     "verticalFt": 3340,
     "additionalSources": [
       "https://news.vailresorts.com/BCandCBOpening2024"
-    ]
+    ],
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 28,
+        "Intermediate": 38,
+        "Advanced": 34
+      }
+    },
+    "skiing": "both"
   },
   {
     "id": "beaver-mountain",
@@ -616,7 +728,14 @@
     "trailCount": 48,
     "verticalFt": 1700,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 828,
+    "acresQualifier": "lower-bound",
+    "baseFt": 7100,
+    "summitFt": 8800,
+    "additionalSources": [
+      "https://www.skiutah.com/members/beaver-mountain/"
+    ]
   },
   {
     "id": "beidahu-ski-resort",
@@ -747,7 +866,24 @@
     "country": "US",
     "region": "PA",
     "locality": "Lake Harmony",
-    "website": "https://jfbb.com/"
+    "website": "https://jfbb.com/",
+    "liftCount": 7,
+    "trailCount": 19,
+    "baseFt": 1700,
+    "summitFt": 2175,
+    "verticalFt": 475,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 37,
+        "Intermediate": 19,
+        "Advanced": 44
+      }
+    },
+    "statsUrl": "https://www.jfbb.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.jfbb.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "big-moose",
@@ -806,7 +942,45 @@
     "country": "US",
     "region": "MT",
     "locality": "Big Sky",
-    "website": "https://bigskyresort.com"
+    "website": "https://bigskyresort.com",
+    "acres": 5850,
+    "liftCount": 40,
+    "trailCount": 320,
+    "baseFt": 7400,
+    "summitFt": 11166,
+    "verticalFt": 4350,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 21,
+        "Intermediate": 15,
+        "Advanced-Intermediate": 14,
+        "Advanced": 31,
+        "Expert": 11,
+        "Extreme": 8
+      }
+    },
+    "statsUrl": "https://www.bigskyresort.com/mountain-info",
+    "reportUrl": "https://www.bigskyresort.com/current-conditions"
+  },
+  {
+    "id": "big-snow-american-dream",
+    "name": "Big SNOW American Dream",
+    "country": "US",
+    "region": "NJ",
+    "locality": "East Rutherford",
+    "skiing": "indoor",
+    "website": "https://www.bigsnowamericandream.com/",
+    "acres": 4,
+    "liftCount": 4,
+    "verticalFt": 160,
+    "seasonWindow": "Year-round",
+    "statsUrl": "https://www.bigsnowamericandream.com/press-room/",
+    "terrainParks": true,
+    "additionalSources": [
+      "https://www.bigsnowamericandream.com/park-map/"
+    ]
   },
   {
     "id": "big-white-ski-resort",
@@ -972,7 +1146,11 @@
     "statsUrl": "https://bogusbasin.org/your-mountain/maps-statistics/",
     "acres": 2600,
     "liftCount": 10,
-    "trailCount": 88
+    "trailCount": 88,
+    "verticalFt": 1800,
+    "additionalSources": [
+      "https://www.skiidaho.us/compare"
+    ]
   },
   {
     "id": "bolton-valley-resort",
@@ -1005,7 +1183,8 @@
     "country": "US",
     "region": "OH",
     "locality": "Peninsula",
-    "website": "https://www.bmbw.com/"
+    "website": "https://www.bmbw.com/",
+    "reportUrl": "https://www.bmbw.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "bottineau-winter-park",
@@ -1056,7 +1235,8 @@
     "country": "US",
     "region": "OH",
     "locality": "Sagamore Hills",
-    "website": "https://www.bmbw.com/"
+    "website": "https://www.bmbw.com/",
+    "reportUrl": "https://www.bmbw.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "breckenridge-ski-resort",
@@ -1090,7 +1270,8 @@
     "additionalSources": [
       "https://www.breckenridge.com/-/aemasset/sitecore/breckenridge/maps/20250219_BR_winter-trail_map_001.pdf",
       "https://www.breckenridge.com/travel-guide/high-alpine-breck.aspx"
-    ]
+    ],
+    "terrainParks": true
   },
   {
     "id": "bretton-woods",
@@ -1161,7 +1342,23 @@
     "country": "US",
     "region": "UT",
     "locality": "Brighton",
-    "website": "https://brightonresort.com/"
+    "website": "https://brightonresort.com/",
+    "acres": 1050,
+    "verticalFt": 1875,
+    "statsUrl": "https://www.brightonresort.com/",
+    "reportUrl": "https://www.brightonresort.com/conditions",
+    "nightSkiing": true,
+    "nightAcres": 200,
+    "nightAcresQualifier": "lower-bound",
+    "terrainParks": true,
+    "additionalSources": [
+      "https://www.brightonresort.com/winter-operations/night-riding",
+      "https://www.skiutah.com/members/brighton/"
+    ],
+    "liftCount": 9,
+    "trailCount": 77,
+    "baseFt": 8755,
+    "summitFt": 10500
   },
   {
     "id": "bristol-mountain",
@@ -1245,7 +1442,9 @@
     "country": "CH",
     "locality": "Mayens de Bruson",
     "website": "https://www.verbier.ch/destination/bruson/",
-    "reportUrl": "https://verbier4vallees.ch/en/useful-information/live-information-winter"
+    "reportUrl": "https://verbier4vallees.ch/en/useful-information/live-information-winter",
+    "seasonWindow": "From Dec 12, 2026 (planned)",
+    "statsUrl": "https://verbier4vallees.ch/en/useful-information/news/dates-to-note_news_2074437"
   },
   {
     "id": "bryce-resort",
@@ -1317,7 +1516,15 @@
     "country": "US",
     "region": "CO",
     "locality": "Aspen",
-    "website": "https://www.aspensnowmass.com/four-mountains/buttermilk"
+    "website": "https://www.aspensnowmass.com/four-mountains/buttermilk",
+    "acres": 470,
+    "liftCount": 8,
+    "trailCount": 44,
+    "baseFt": 7870,
+    "summitFt": 9900,
+    "verticalFt": 2030,
+    "statsUrl": "https://www.aspensnowmass.com/-/media/aspen-snowmass/documents/pdfs/25-26/aspen-snowmass-mountain-stats.pdf",
+    "reportUrl": "https://www.aspensnowmass.com/four-mountains/buttermilk/lift-status"
   },
   {
     "id": "caberfae-peaks",
@@ -1518,6 +1725,23 @@
     ]
   },
   {
+    "id": "cat-ski-mount-bailey",
+    "name": "Cat Ski Mt. Bailey",
+    "country": "US",
+    "region": "OR",
+    "locality": "Diamond Lake",
+    "skiing": "cat-skiing",
+    "website": "https://diamondlake.net/winter-recreation/cat-ski-mt-bailey/",
+    "guidedTerrainAcres": 6000,
+    "baseFt": 5363,
+    "summitFt": 8363,
+    "verticalFt": 3000,
+    "liftCount": 0,
+    "nightSkiing": false,
+    "statsUrl": "https://www.skioregon.org/ski-areas/cat-ski-mt-bailey/",
+    "reportUrl": "https://diamondlake.net/the-resort/conditions/"
+  },
+  {
     "id": "cataloochee-ski-area",
     "name": "Cataloochee Ski Area",
     "country": "US",
@@ -1607,7 +1831,9 @@
     "country": "IT",
     "locality": "Breuil-Cervinia",
     "website": "https://cervinia.it/en/",
-    "reportUrl": "https://cervinia.it/impianti/"
+    "reportUrl": "https://cervinia.it/impianti/",
+    "seasonWindow": "Oct 24, 2026 – May 2, 2027 (planned)",
+    "statsUrl": "https://www.cervinia.it/impianti"
   },
   {
     "id": "cherry-peak",
@@ -1756,7 +1982,14 @@
     "country": "US",
     "region": "CO",
     "locality": "Copper Mountain",
-    "website": "https://www.coppercolorado.com/"
+    "website": "https://www.coppercolorado.com/",
+    "acres": 2538,
+    "trailCount": 157,
+    "summitFt": 12441,
+    "baseFt": 9712,
+    "verticalFt": 2729,
+    "terrainParks": true,
+    "statsUrl": "https://www.coloradoski.com/resorts/copper-mountain/"
   },
   {
     "id": "coronet-peak",
@@ -1953,7 +2186,26 @@
     "country": "US",
     "region": "NH",
     "locality": "Bennington",
-    "website": "https://www.crotchedmtn.com/"
+    "website": "https://www.crotchedmtn.com/",
+    "acres": 100,
+    "liftCount": 5,
+    "trailCount": 25,
+    "baseFt": 1050,
+    "summitFt": 2066,
+    "verticalFt": 1016,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 28,
+        "Intermediate": 40,
+        "Advanced": 32
+      }
+    },
+    "nightSkiing": true,
+    "statsUrl": "https://www.crotchedmtn.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.crotchedmtn.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "crystal-mountain",
@@ -2091,7 +2343,15 @@
     "country": "US",
     "region": "UT",
     "locality": "Park City",
-    "website": "https://www.deervalley.com/"
+    "website": "https://www.deervalley.com/",
+    "acres": 4500,
+    "acresQualifier": "lower-bound",
+    "liftCount": 31,
+    "trailCount": 202,
+    "baseFt": 6450,
+    "summitFt": 9570,
+    "verticalFt": 3120,
+    "statsUrl": "https://www.skiutah.com/members/deer-valley/"
   },
   {
     "id": "destination-owls-head",
@@ -2259,6 +2519,17 @@
     "terrainParks": true
   },
   {
+    "id": "dutch-hill-recreation-area",
+    "name": "Dutch Hill Recreation Area",
+    "country": "US",
+    "region": "VT",
+    "locality": "Readsboro",
+    "skiing": "ski-touring",
+    "website": "https://www.dhash4vt.org/",
+    "liftCount": 0,
+    "statsUrl": "https://catamounttrail.org/bc-zones/bc-zones/dutch-hill-recreation-area-dhash/"
+  },
+  {
     "id": "dynaland",
     "name": "Dynaland",
     "aliases": [
@@ -2287,7 +2558,14 @@
     "trailCount": 40,
     "verticalFt": 1500,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 650,
+    "acresQualifier": "lower-bound",
+    "baseFt": 9100,
+    "summitFt": 10500,
+    "additionalSources": [
+      "https://www.skiutah.com/members/eagle-point/"
+    ]
   },
   {
     "id": "eaglecrest-ski-area",
@@ -2336,7 +2614,13 @@
     "trailCount": 8,
     "verticalFt": 600,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 60,
+    "summitFt": 10650,
+    "baseFt": 10050,
+    "additionalSources": [
+      "https://www.coloradoski.com/resorts/echo-mountain/"
+    ]
   },
   {
     "id": "eldora-mountain-resort",
@@ -2348,7 +2632,14 @@
     "country": "US",
     "region": "CO",
     "locality": "Nederland",
-    "website": "https://www.eldora.com/"
+    "website": "https://www.eldora.com/",
+    "acres": 680,
+    "trailCount": 61,
+    "summitFt": 10600,
+    "baseFt": 9200,
+    "verticalFt": 1400,
+    "terrainParks": true,
+    "statsUrl": "https://www.coloradoski.com/resorts/eldora/"
   },
   {
     "id": "elk-mountain",
@@ -2452,7 +2743,30 @@
     "country": "CA",
     "region": "BC",
     "locality": "Fernie",
-    "website": "https://www.skifernie.com"
+    "website": "https://www.skifernie.com",
+    "skiing": "both",
+    "acres": 2500,
+    "acresQualifier": "lower-bound",
+    "liftCount": 10,
+    "trailCount": 145,
+    "baseFt": 3450,
+    "summitFt": 7000,
+    "verticalFt": 3550,
+    "nordicKm": 14,
+    "seasonWindow": "Early December to mid-April",
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Novice": 13,
+        "Intermediate": 30,
+        "Advanced": 32,
+        "Expert": 21,
+        "Extreme": 4
+      }
+    },
+    "statsUrl": "https://skifernie.com/discover-fernie/mountain-stats/",
+    "reportUrl": "https://skifernie.com/conditions/snow-report/"
   },
   {
     "id": "folgarida-marilleva",
@@ -2675,7 +2989,12 @@
     "country": "US",
     "region": "WY",
     "locality": "Alta",
-    "website": "https://www.grandtarghee.com/"
+    "website": "https://www.grandtarghee.com/",
+    "acres": 2602,
+    "liftCount": 6,
+    "trailCount": 95,
+    "verticalFt": 2270,
+    "statsUrl": "https://www.skiidaho.us/compare"
   },
   {
     "id": "grands-montets",
@@ -3130,8 +3449,10 @@
       }
     },
     "additionalSources": [
-      "https://www.skiheavenly.com/explore-the-resort/experience-heavenly/tahoetrifecta.aspx"
-    ]
+      "https://www.skiheavenly.com/explore-the-resort/experience-heavenly/tahoetrifecta.aspx",
+      "https://www.skiheavenly.com/the-mountain/about-the-mountain/mountain-info.aspx"
+    ],
+    "terrainParks": true
   },
   {
     "id": "hidden-valley-resort",
@@ -3142,7 +3463,26 @@
     "country": "US",
     "region": "PA",
     "locality": "Hidden Valley",
-    "website": "https://www.hiddenvalleyresort.com/"
+    "website": "https://www.hiddenvalleyresort.com/",
+    "acres": 110,
+    "liftCount": 8,
+    "trailCount": 26,
+    "baseFt": 2405,
+    "summitFt": 2875,
+    "verticalFt": 470,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 28,
+        "Intermediate": 41,
+        "Advanced": 31
+      }
+    },
+    "nightSkiing": true,
+    "statsUrl": "https://www.hiddenvalleyresort.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.hiddenvalleyresort.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "hidden-valley-ski-resort",
@@ -3154,7 +3494,25 @@
     "country": "US",
     "region": "MO",
     "locality": "Wildwood",
-    "website": "https://www.hiddenvalleyski.com/"
+    "website": "https://www.hiddenvalleyski.com/",
+    "acres": 65,
+    "liftCount": 10,
+    "trailCount": 13,
+    "summitFt": 860,
+    "verticalFt": 320,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 31,
+        "Intermediate": 46,
+        "Advanced": 23
+      }
+    },
+    "nightSkiing": true,
+    "statsUrl": "https://www.hiddenvalleyski.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.hiddenvalleyski.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "high-point-xc-ski-center",
@@ -3427,7 +3785,25 @@
     "country": "US",
     "region": "NY",
     "locality": "Hunter",
-    "website": "https://www.huntermtn.com"
+    "website": "https://www.huntermtn.com",
+    "acres": 320,
+    "liftCount": 13,
+    "trailCount": 67,
+    "baseFt": 1600,
+    "summitFt": 3200,
+    "verticalFt": 1600,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 25,
+        "Intermediate": 30,
+        "Advanced": 45
+      }
+    },
+    "statsUrl": "https://www.huntermtn.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.huntermtn.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "hurricane-ridge",
@@ -3515,7 +3891,24 @@
     "country": "US",
     "region": "PA",
     "locality": "Blakeslee",
-    "website": "https://jfbb.com"
+    "website": "https://jfbb.com",
+    "liftCount": 9,
+    "trailCount": 20,
+    "baseFt": 1400,
+    "summitFt": 2000,
+    "verticalFt": 600,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 21,
+        "Intermediate": 37,
+        "Advanced": 42
+      }
+    },
+    "statsUrl": "https://www.jfbb.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.jfbb.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "jackson-hole-mountain-resort",
@@ -3723,7 +4116,11 @@
     "trailCount": 27,
     "verticalFt": 1200,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 778,
+    "additionalSources": [
+      "https://www.skiidaho.us/compare"
+    ]
   },
   {
     "id": "kendall-mountain-ski-area",
@@ -3844,7 +4241,24 @@
     "country": "CA",
     "region": "BC",
     "locality": "Kimberley",
-    "website": "https://www.skikimberley.com"
+    "website": "https://www.skikimberley.com",
+    "acres": 1800,
+    "liftCount": 5,
+    "baseFt": 4035,
+    "summitFt": 6500,
+    "verticalFt": 2465,
+    "seasonWindow": "Early December to mid-April",
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 42,
+        "Advanced": 38
+      }
+    },
+    "statsUrl": "https://skikimberley.com/discover-kimberley/mountain-stats/",
+    "reportUrl": "https://skikimberley.com/conditions/snow-report/"
   },
   {
     "id": "kimberley-nordic-club",
@@ -3896,7 +4310,17 @@
     "verticalFt": 2000,
     "additionalSources": [
       "https://news.vailresorts.com/Kirkwood-Mountain-Resort-2024-25-Winter-Tip-Sheet"
-    ]
+    ],
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 12,
+        "Intermediate": 30,
+        "Advanced": 38,
+        "Expert": 20
+      }
+    }
   },
   {
     "id": "kitzbuehel",
@@ -3984,7 +4408,11 @@
     "country": "IT",
     "locality": "La Thuile",
     "website": "https://www.lathuile.it/en/",
-    "reportUrl": "https://www.lathuile.it/en/en_webcam"
+    "reportUrl": "https://www.lathuile.it/en/en_webcam",
+    "downhillKm": 156,
+    "trailCount": 83,
+    "liftCount": 37,
+    "statsUrl": "https://www.lathuile.it/en/the-area"
   },
   {
     "id": "la-tzoumaz",
@@ -4056,7 +4484,16 @@
     "country": "US",
     "region": "PA",
     "locality": "Boswell",
-    "website": "https://www.laurelmountainski.com/"
+    "website": "https://www.laurelmountainski.com/",
+    "acres": 70,
+    "liftCount": 1,
+    "trailCount": 19,
+    "baseFt": 2005,
+    "summitFt": 2766,
+    "verticalFt": 761,
+    "nightSkiing": true,
+    "statsUrl": "https://www.laurelmountainski.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.laurelmountainski.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "le-massif",
@@ -4126,7 +4563,9 @@
     "country": "AT",
     "locality": "Lech am Arlberg",
     "website": "https://www.skiarlberg.at/en",
-    "reportUrl": "https://www.skiarlberg.at/en/live-info"
+    "reportUrl": "https://www.skiarlberg.at/en/live-info",
+    "seasonWindow": "From Dec 2, 2026 (planned)",
+    "statsUrl": "https://www.skiarlberg.at/en/winter/season-start"
   },
   {
     "id": "les-7-laux",
@@ -4212,7 +4651,36 @@
     "country": "US",
     "region": "PA",
     "locality": "Carroll Valley",
-    "website": "https://www.libertymountainresort.com/"
+    "website": "https://www.libertymountainresort.com/",
+    "acres": 100,
+    "liftCount": 8,
+    "trailCount": 16,
+    "baseFt": 570,
+    "summitFt": 1190,
+    "verticalFt": 620,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 35,
+        "Intermediate": 40,
+        "Advanced": 25
+      }
+    },
+    "statsUrl": "https://www.libertymountainresort.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.libertymountainresort.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
+  },
+  {
+    "id": "liberty-mountain-snowflex-centre",
+    "name": "Liberty Mountain Snowflex Centre",
+    "country": "US",
+    "region": "VA",
+    "locality": "Lynchburg",
+    "skiing": "dry-slope",
+    "website": "https://www.liberty.edu/campusrec/snowflex/",
+    "seasonWindow": "Year-round",
+    "statsUrl": "https://www.liberty.edu/campusrec/snowflex/"
   },
   {
     "id": "little-ski-hill",
@@ -4226,7 +4694,11 @@
     "trailCount": 14,
     "verticalFt": 374,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 50,
+    "additionalSources": [
+      "https://www.skiidaho.us/compare"
+    ]
   },
   {
     "id": "little-switzerland",
@@ -4363,7 +4835,25 @@
     "country": "US",
     "region": "OH",
     "locality": "Zanesfield",
-    "website": "https://www.skimadriver.com/"
+    "website": "https://www.skimadriver.com/",
+    "acres": 144,
+    "liftCount": 9,
+    "trailCount": 16,
+    "summitFt": 1460,
+    "verticalFt": 300,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 46,
+        "Intermediate": 38,
+        "Advanced": 16
+      }
+    },
+    "nightSkiing": true,
+    "statsUrl": "https://www.skimadriver.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.skimadriver.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "madarao-mountain-resort",
@@ -4412,7 +4902,11 @@
     "trailCount": 22,
     "verticalFt": 800,
     "nightSkiing": false,
-    "terrainParks": false
+    "terrainParks": false,
+    "acres": 120,
+    "additionalSources": [
+      "https://www.skiidaho.us/compare"
+    ]
   },
   {
     "id": "magic-mountain-ski-area",
@@ -4773,7 +5267,11 @@
     "trailCount": 80,
     "baseFt": 10727,
     "summitFt": 11952,
-    "verticalFt": 1225
+    "verticalFt": 1225,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://www.coloradoski.com/resorts/monarch/"
+    ]
   },
   {
     "id": "mont-edouard",
@@ -4843,7 +5341,21 @@
     "country": "CA",
     "region": "QC",
     "locality": "Beaupré",
-    "website": "https://mont-sainte-anne.com/en/"
+    "website": "https://mont-sainte-anne.com/en/",
+    "acres": 547,
+    "trailCount": 71,
+    "downhillKm": 73,
+    "summitFt": 2625,
+    "verticalFt": 2050,
+    "liftCount": 9,
+    "nightSkiing": true,
+    "seasonWindow": "Late November to mid-April",
+    "statsUrl": "https://mont-sainte-anne.com/en/mont-sainte-anne-mountain-statistics/",
+    "skiing": "both",
+    "nordicKm": 184,
+    "additionalSources": [
+      "https://mont-sainte-anne.com/en/xc-skiing-trail-map/"
+    ]
   },
   {
     "id": "mont-sutton",
@@ -5047,7 +5559,25 @@
     "country": "US",
     "region": "VT",
     "locality": "West Dover",
-    "website": "https://www.mountsnow.com/"
+    "website": "https://www.mountsnow.com/",
+    "acres": 601,
+    "liftCount": 18,
+    "trailCount": 86,
+    "baseFt": 1900,
+    "summitFt": 3600,
+    "verticalFt": 1700,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 16,
+        "Intermediate": 66,
+        "Advanced": 18
+      }
+    },
+    "statsUrl": "https://www.mountsnow.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.mountsnow.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "mount-sunapee",
@@ -5058,7 +5588,25 @@
     "country": "US",
     "region": "NH",
     "locality": "Newbury",
-    "website": "https://www.mountsunapee.com/"
+    "website": "https://www.mountsunapee.com/",
+    "acres": 233,
+    "liftCount": 8,
+    "trailCount": 67,
+    "baseFt": 1233,
+    "summitFt": 2743,
+    "verticalFt": 1510,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 29,
+        "Intermediate": 47,
+        "Advanced": 24
+      }
+    },
+    "statsUrl": "https://www.mountsunapee.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.mountsunapee.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "mount-washington-alpine-resort",
@@ -5156,7 +5704,25 @@
     "country": "US",
     "region": "MI",
     "locality": "Brighton",
-    "website": "https://www.mtbrighton.com/"
+    "website": "https://www.mtbrighton.com/",
+    "acres": 130,
+    "liftCount": 12,
+    "trailCount": 24,
+    "baseFt": 1100,
+    "summitFt": 1330,
+    "verticalFt": 230,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 40,
+        "Advanced": 30
+      }
+    },
+    "statsUrl": "https://www.mtbrighton.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.mtbrighton.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "mt-buller",
@@ -5448,7 +6014,16 @@
     "country": "CA",
     "region": "AB",
     "locality": "Kananaskis Village",
-    "website": "https://www.skinakiska.com"
+    "website": "https://www.skinakiska.com",
+    "acres": 1021,
+    "trailCount": 71,
+    "liftCount": 6,
+    "baseFt": 5003,
+    "summitFt": 7415,
+    "verticalFt": 2412,
+    "highestLiftTerminalFt": 7415,
+    "seasonWindow": "Early November to mid-April",
+    "statsUrl": "https://skinakiska.com/discover-nakiska/mountain-stats/"
   },
   {
     "id": "nayoro-piyashiri-ski-resort",
@@ -5508,7 +6083,9 @@
     "country": "CH",
     "locality": "Haute-Nendaz",
     "website": "https://www.nendaz.ch/en/Z13484/ski-area",
-    "reportUrl": "https://verbier4vallees.ch/en/useful-information/live-information-winter"
+    "reportUrl": "https://verbier4vallees.ch/en/useful-information/live-information-winter",
+    "seasonWindow": "Tracouet Dec 19, 2026 – Apr 11, 2027 (planned)",
+    "statsUrl": "https://www.nendaz.ch/en/Z13927/winter-lifts-schedule"
   },
   {
     "id": "nickel-plate-cross-country-ski-club",
@@ -5603,7 +6180,9 @@
     "terrainParks": false,
     "additionalSources": [
       "https://heli-ski.com/contact/directions"
-    ]
+    ],
+    "guidedTerrainAcres": 300000,
+    "reportUrl": "https://www.heli-ski.com/weather-conditions"
   },
   {
     "id": "northern-maine-community-trails",
@@ -5646,7 +6225,17 @@
     "verticalFt": 2280,
     "additionalSources": [
       "https://news.vailresorts.com/Northstar-California-2024-25-Winter-Tip-Sheet"
-    ]
+    ],
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 13,
+        "Intermediate": 60,
+        "Advanced": 27
+      }
+    }
   },
   {
     "id": "norway-mountain",
@@ -5774,7 +6363,25 @@
     "country": "US",
     "region": "VT",
     "locality": "Ludlow",
-    "website": "https://www.okemo.com"
+    "website": "https://www.okemo.com",
+    "acres": 667,
+    "liftCount": 20,
+    "trailCount": 123,
+    "baseFt": 1144,
+    "summitFt": 3344,
+    "verticalFt": 2200,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 33,
+        "Intermediate": 37,
+        "Advanced": 30
+      }
+    },
+    "statsUrl": "https://www.okemo.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.okemo.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "okunakayama-kogen",
@@ -6013,7 +6620,25 @@
     "country": "US",
     "region": "IN",
     "locality": "Paoli",
-    "website": "https://www.paolipeaks.com/"
+    "website": "https://www.paolipeaks.com/",
+    "liftCount": 8,
+    "trailCount": 15,
+    "baseFt": 600,
+    "summitFt": 900,
+    "verticalFt": 300,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 25,
+        "Intermediate": 55,
+        "Advanced": 20
+      }
+    },
+    "nightSkiing": true,
+    "statsUrl": "https://www.paolipeaks.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.paolipeaks.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "park-city-mountain",
@@ -6046,7 +6671,8 @@
     },
     "additionalSources": [
       "https://www.parkcitymountain.com/-/aemasset/sitecore/park-city/maps/20251114_PC_winter-trail_map_001.pdf"
-    ]
+    ],
+    "terrainParks": true
   },
   {
     "id": "pass-powderkeg",
@@ -6135,7 +6761,11 @@
     "trailCount": 51,
     "verticalFt": 2200,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 1100,
+    "additionalSources": [
+      "https://www.skiidaho.us/compare"
+    ]
   },
   {
     "id": "peek-n-peak",
@@ -6386,7 +7016,11 @@
     "trailCount": 22,
     "verticalFt": 998,
     "nightSkiing": true,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 500,
+    "additionalSources": [
+      "https://www.skiidaho.us/compare"
+    ]
   },
   {
     "id": "pontedilegno-tonale",
@@ -6483,7 +7117,12 @@
     "trailCount": 40,
     "verticalFt": 1650,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "summitFt": 9850,
+    "baseFt": 8200,
+    "additionalSources": [
+      "https://www.coloradoski.com/resorts/powderhorn/"
+    ]
   },
   {
     "id": "purgatory-resort",
@@ -6496,7 +7135,15 @@
     "locality": "Durango",
     "website": "https://www.purgatory.ski/",
     "statsUrl": "https://www.purgatory.ski/wp-content/uploads/sites/2/2024/10/Purgatory-Winter-2024-25-Press-Kit-v10.10.24.pdf",
-    "acres": 1635
+    "acres": 1635,
+    "trailCount": 105,
+    "summitFt": 10822,
+    "baseFt": 8793,
+    "verticalFt": 2029,
+    "terrainParks": true,
+    "additionalSources": [
+      "https://www.coloradoski.com/resorts/purgatory-resort/"
+    ]
   },
   {
     "id": "pyha-ski-resort",
@@ -6518,13 +7165,19 @@
     "country": "US",
     "region": "ME",
     "locality": "Waterville",
-    "skiing": "cross-country",
+    "skiing": "both",
     "website": "https://quarryroad.org/",
     "statsUrl": "https://www.indyskipass.com/our-resorts/quarry-road-trails",
     "trailCount": 22,
     "verticalFt": 270,
     "nightSkiing": true,
-    "terrainParks": false
+    "terrainParks": false,
+    "liftCount": 1,
+    "nordicKm": 13.3,
+    "additionalSources": [
+      "https://quarryroad.org/winter-activities"
+    ],
+    "reportUrl": "https://quarryroad.org/conditions"
   },
   {
     "id": "ragged-mountain-resort",
@@ -6706,7 +7359,24 @@
     "country": "US",
     "region": "PA",
     "locality": "Lewisberry",
-    "website": "https://www.roundtopmountainresort.com/"
+    "website": "https://www.skiroundtop.com/",
+    "baseFt": 735,
+    "summitFt": 1335,
+    "verticalFt": 600,
+    "liftCount": 9,
+    "trailCount": 21,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 19,
+        "Intermediate": 24,
+        "Advanced": 57
+      }
+    },
+    "statsUrl": "https://www.skiroundtop.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.skiroundtop.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "ruka-ski-resort",
@@ -6891,7 +7561,17 @@
     "country": "US",
     "region": "ID",
     "locality": "Sandpoint",
-    "website": "https://www.schweitzer.com/"
+    "website": "https://www.schweitzer.com/",
+    "skiing": "both",
+    "acres": 2900,
+    "liftCount": 10,
+    "trailCount": 92,
+    "nordicKm": 32,
+    "statsUrl": "https://www.schweitzer.com/discover-schweitzer/stats-and-info",
+    "verticalFt": 2400,
+    "additionalSources": [
+      "https://www.skiidaho.us/compare"
+    ]
   },
   {
     "id": "scotts-cobble-nordic-center",
@@ -6928,7 +7608,26 @@
     "country": "US",
     "region": "PA",
     "locality": "Seven Springs",
-    "website": "https://www.7springs.com/"
+    "website": "https://www.7springs.com/",
+    "acres": 285,
+    "liftCount": 10,
+    "trailCount": 33,
+    "baseFt": 2240,
+    "summitFt": 2994,
+    "verticalFt": 754,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 34,
+        "Intermediate": 44,
+        "Advanced": 22
+      }
+    },
+    "nightSkiing": true,
+    "statsUrl": "https://www.7springs.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.7springs.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "shames-mountain",
@@ -7068,9 +7767,17 @@
     "region": "CO",
     "locality": "Silverton",
     "website": "https://silvertonmountain.com/",
-    "statsUrl": "https://silvertonmountain.com/experience/unguided/",
+    "statsUrl": "https://silvertonmountain.com/mountain/stats/",
     "acres": 1819,
-    "liftCount": 1
+    "liftCount": 1,
+    "skiing": "freeride",
+    "baseFt": 10400,
+    "summitFt": 13487,
+    "highestLiftTerminalFt": 12300,
+    "additionalSources": [
+      "https://silvertonmountain.com/experience/unguided/"
+    ],
+    "reportUrl": "https://silvertonmountain.com/mountain/snow-report/"
   },
   {
     "id": "silvretta-montafon",
@@ -7359,7 +8066,25 @@
     "country": "US",
     "region": "MO",
     "locality": "Weston",
-    "website": "https://skisnowcreek.com/"
+    "website": "https://skisnowcreek.com/",
+    "acres": 25,
+    "liftCount": 5,
+    "trailCount": 14,
+    "baseFt": 800,
+    "summitFt": 1100,
+    "verticalFt": 300,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 21,
+        "Intermediate": 71,
+        "Advanced": 8
+      }
+    },
+    "statsUrl": "https://www.skisnowcreek.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.skisnowcreek.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "snow-king-mountain",
@@ -7422,7 +8147,24 @@
     "country": "US",
     "region": "CA",
     "locality": "Big Bear Lake",
-    "website": "https://www.bigbearmountainresort.com/"
+    "website": "https://www.bigbearmountainresort.com/",
+    "acres": 240,
+    "trailCount": 33,
+    "baseFt": 7000,
+    "summitFt": 8200,
+    "verticalFt": 1200,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner/Low Intermediate": 35,
+        "Intermediate": 40,
+        "Advanced/Expert": 25
+      }
+    },
+    "statsUrl": "https://www.bigbearmountainresort.com/our-mountains",
+    "reportUrl": "https://www.bigbearmountainresort.com/mountain-information"
   },
   {
     "id": "snow-valley-mountain-resort",
@@ -7433,7 +8175,24 @@
     "country": "US",
     "region": "CA",
     "locality": "Running Springs",
-    "website": "https://www.bigbearmountainresort.com/"
+    "website": "https://www.bigbearmountainresort.com/",
+    "acres": 240,
+    "trailCount": 32,
+    "baseFt": 6800,
+    "summitFt": 7841,
+    "verticalFt": 1041,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 14,
+        "Intermediate": 45,
+        "Advanced": 41
+      }
+    },
+    "statsUrl": "https://www.bigbearmountainresort.com/our-mountains",
+    "reportUrl": "https://www.bigbearmountainresort.com/mountain-information"
   },
   {
     "id": "snowbasin-resort",
@@ -7444,7 +8203,15 @@
     "country": "US",
     "region": "UT",
     "locality": "Huntsville",
-    "website": "https://www.snowbasin.com/"
+    "website": "https://www.snowbasin.com/",
+    "acres": 3000,
+    "acresQualifier": "lower-bound",
+    "liftCount": 13,
+    "trailCount": 115,
+    "baseFt": 6316,
+    "summitFt": 9570,
+    "verticalFt": 3254,
+    "statsUrl": "https://www.skiutah.com/members/snowbasin/"
   },
   {
     "id": "snowbird",
@@ -7466,8 +8233,10 @@
     "seasonWindow": "November–May",
     "additionalSources": [
       "https://www.snowbird.com/activities-events/summer-activities/tram/",
-      "https://www.ikonpass.com/en/destinations/snowbird"
-    ]
+      "https://www.ikonpass.com/en/destinations/snowbird",
+      "https://www.skiutah.com/members/snowbird/"
+    ],
+    "baseFt": 7760
   },
   {
     "id": "snowmass",
@@ -7479,7 +8248,16 @@
     "country": "US",
     "region": "CO",
     "locality": "Snowmass Village",
-    "website": "https://www.aspensnowmass.com/four-mountains/snowmass"
+    "website": "https://www.aspensnowmass.com/four-mountains/snowmass",
+    "acres": 3342,
+    "liftCount": 20,
+    "trailCount": 98,
+    "baseFt": 8110,
+    "summitFt": 12510,
+    "verticalFt": 4440,
+    "statsUrl": "https://www.aspensnowmass.com/-/media/aspen-snowmass/documents/pdfs/25-26/aspen-snowmass-mountain-stats.pdf",
+    "reportUrl": "https://www.aspensnowmass.com/four-mountains/snowmass/lift-status",
+    "seasonWindow": "Nov 26, 2026 – Apr 11, 2027 (planned)"
   },
   {
     "id": "snowriver-mountain-resort-black-river-basin",
@@ -7590,8 +8368,10 @@
     "nightSkiing": false,
     "terrainParks": true,
     "additionalSources": [
-      "https://soldiermountain.com/restrictions-policies/"
-    ]
+      "https://soldiermountain.com/restrictions-policies/",
+      "https://www.skiidaho.us/compare"
+    ],
+    "acres": 1150
   },
   {
     "id": "solitude-mountain-resort",
@@ -7602,7 +8382,15 @@
     "country": "US",
     "region": "UT",
     "locality": "Solitude",
-    "website": "https://solitudemountain.com/"
+    "website": "https://solitudemountain.com/",
+    "acres": 1200,
+    "acresQualifier": "lower-bound",
+    "liftCount": 8,
+    "trailCount": 82,
+    "baseFt": 7994,
+    "summitFt": 10488,
+    "verticalFt": 2494,
+    "statsUrl": "https://www.skiutah.com/members/solitude/"
   },
   {
     "id": "sovereign-lake-nordic-club",
@@ -7680,7 +8468,9 @@
     "country": "AT",
     "locality": "St. Anton am Arlberg",
     "website": "https://www.skiarlberg.at/en",
-    "reportUrl": "https://www.skiarlberg.at/en/live-info"
+    "reportUrl": "https://www.skiarlberg.at/en/live-info",
+    "seasonWindow": "From Dec 2, 2026 (planned)",
+    "statsUrl": "https://www.skiarlberg.at/en/winter/season-start"
   },
   {
     "id": "st-christoph-am-arlberg",
@@ -7692,7 +8482,9 @@
     "country": "AT",
     "locality": "St. Christoph am Arlberg",
     "website": "https://www.skiarlberg.at/en",
-    "reportUrl": "https://www.skiarlberg.at/en/live-info"
+    "reportUrl": "https://www.skiarlberg.at/en/live-info",
+    "seasonWindow": "From Dec 2, 2026 (planned)",
+    "statsUrl": "https://www.skiarlberg.at/en/winter/season-start"
   },
   {
     "id": "st-johann-in-tirol",
@@ -7717,7 +8509,26 @@
     "country": "CA",
     "region": "QC",
     "locality": "Stoneham-et-Tewkesbury",
-    "website": "https://www.ski-stoneham.com"
+    "website": "https://www.ski-stoneham.com",
+    "acres": 335.6,
+    "baseFt": 814,
+    "summitFt": 1946,
+    "verticalFt": 1132,
+    "trailCount": 43,
+    "liftCount": 6,
+    "nightSkiing": true,
+    "grades": {
+      "unit": "count",
+      "of": "trails",
+      "values": {
+        "Beginner": 8,
+        "Intermediate": 11,
+        "Advanced": 17,
+        "Expert": 7
+      }
+    },
+    "statsUrl": "https://ski-stoneham.com/en/skiing-riding/mountain-stats/",
+    "reportUrl": "https://ski-stoneham.com/en/skiing-riding/snow-report/snow-conditions/"
   },
   {
     "id": "steamboat-ski-resort",
@@ -7728,7 +8539,13 @@
     "country": "US",
     "region": "CO",
     "locality": "Steamboat Springs",
-    "website": "https://www.steamboat.com/"
+    "website": "https://www.steamboat.com/",
+    "acres": 3741,
+    "trailCount": 184,
+    "summitFt": 10568,
+    "baseFt": 6900,
+    "verticalFt": 3668,
+    "statsUrl": "https://www.coloradoski.com/resorts/steamboat/"
   },
   {
     "id": "steamboat-ski-touring-center",
@@ -7793,11 +8610,16 @@
     },
     "additionalSources": [
       "https://www.stevenspass.com/-/aemasset/sitecore/stevens-pass/maps/winter-2024-2025/20241115_SV_winter-trail_map_001.pdf"
-    ]
+    ],
+    "terrainParks": true,
+    "skiing": "both"
   },
   {
     "id": "stoke-mountain",
     "name": "Stoke Mountain",
+    "aliases": [
+      "Indoor training"
+    ],
     "country": "US",
     "region": "WA",
     "locality": "Tukwila",
@@ -7856,7 +8678,9 @@
     },
     "additionalSources": [
       "https://www.stowe.com/explore-the-resort/about-the-resort/guest-services"
-    ]
+    ],
+    "terrainParks": true,
+    "skiing": "both"
   },
   {
     "id": "stranda-ski-resort",
@@ -7895,7 +8719,9 @@
     "country": "AT",
     "locality": "Stuben am Arlberg",
     "website": "https://www.skiarlberg.at/en",
-    "reportUrl": "https://www.skiarlberg.at/en/live-info"
+    "reportUrl": "https://www.skiarlberg.at/en/live-info",
+    "seasonWindow": "From Dec 2, 2026 (planned)",
+    "statsUrl": "https://www.skiarlberg.at/en/winter/season-start"
   },
   {
     "id": "sugar-bowl-resort",
@@ -8060,7 +8886,13 @@
     "trailCount": 72,
     "verticalFt": 2010,
     "nightSkiing": false,
-    "terrainParks": true
+    "terrainParks": true,
+    "acres": 730,
+    "summitFt": 9895,
+    "baseFt": 7885,
+    "additionalSources": [
+      "https://www.coloradoski.com/resorts/sunlight/"
+    ]
   },
   {
     "id": "swain-resort",
@@ -8184,7 +9016,14 @@
     "country": "US",
     "region": "CO",
     "locality": "Telluride",
-    "website": "https://tellurideskiresort.com"
+    "website": "https://tellurideskiresort.com",
+    "acres": 2100,
+    "trailCount": 148,
+    "summitFt": 13150,
+    "baseFt": 8750,
+    "verticalFt": 4400,
+    "terrainParks": true,
+    "statsUrl": "https://www.coloradoski.com/resorts/telluride/"
   },
   {
     "id": "tenney-mountain",
@@ -8276,7 +9115,13 @@
     "country": "US",
     "region": "WA",
     "locality": "Snoqualmie Pass",
-    "website": "https://summitatsnoqualmie.com/"
+    "website": "https://summitatsnoqualmie.com/",
+    "liftCount": 19,
+    "trailCount": 64,
+    "terrainParks": true,
+    "skiing": "both",
+    "statsUrl": "https://www.summitatsnoqualmie.com/mountain-report",
+    "reportUrl": "https://www.summitatsnoqualmie.com/mountain-report"
   },
   {
     "id": "thredbo",
@@ -8317,7 +9162,9 @@
     "country": "CH",
     "locality": "Les Collons",
     "website": "https://www.thyon.ch/",
-    "reportUrl": "https://verbier4vallees.ch/en/useful-information/live-information-winter"
+    "reportUrl": "https://verbier4vallees.ch/en/useful-information/live-information-winter",
+    "seasonWindow": "Full network from Dec 12, 2026 (planned)",
+    "statsUrl": "https://verbier4vallees.ch/en/useful-information/news/dates-to-note_news_2074437"
   },
   {
     "id": "timberline-lodge-ski-area",
@@ -8573,7 +9420,16 @@
     "verticalFt": 3450,
     "additionalSources": [
       "https://news.vailresorts.com/VailWinter2024"
-    ]
+    ],
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 18,
+        "Intermediate": 29,
+        "Advanced": 53
+      }
+    }
   },
   {
     "id": "val-di-fassa-carezza",
@@ -8684,7 +9540,9 @@
     "country": "CH",
     "locality": "Verbier",
     "website": "https://verbier4vallees.ch/en/",
-    "reportUrl": "https://verbier4vallees.ch/en/useful-information/live-information-winter"
+    "reportUrl": "https://verbier4vallees.ch/en/useful-information/live-information-winter",
+    "seasonWindow": "Weekends from Nov 7, 2026. Daily from Nov 28, 2026 (planned)",
+    "statsUrl": "https://verbier4vallees.ch/en/useful-information/news/dates-to-note_news_2074437"
   },
   {
     "id": "veterans-memorial-recreation-area",
@@ -8714,7 +9572,9 @@
     "country": "CH",
     "locality": "Veysonnaz",
     "website": "https://www.veysonnaz.ch/en/Z13696/ski-area",
-    "reportUrl": "https://verbier4vallees.ch/en/useful-information/live-information-winter"
+    "reportUrl": "https://verbier4vallees.ch/en/useful-information/live-information-winter",
+    "seasonWindow": "Full network from Dec 12, 2026 (planned)",
+    "statsUrl": "https://verbier4vallees.ch/en/useful-information/news/dates-to-note_news_2074437"
   },
   {
     "id": "washigatake-ski-resort",
@@ -8847,7 +9707,9 @@
     },
     "additionalSources": [
       "https://www.whistlerblackcomb.com/-/aemasset/sitecore/whistler-blackcomb/maps/winter-2025-2026/20251023_WB_winter-trail_map_001.pdf"
-    ]
+    ],
+    "highestLiftTerminalFt": 7497,
+    "terrainParks": true
   },
   {
     "id": "white-grass-ski-touring",
@@ -9000,7 +9862,26 @@
     "country": "US",
     "region": "PA",
     "locality": "Mercersburg",
-    "website": "https://www.skiwhitetail.com/"
+    "website": "https://www.skiwhitetail.com/",
+    "acres": 120,
+    "liftCount": 9,
+    "trailCount": 23,
+    "baseFt": 865,
+    "summitFt": 1800,
+    "verticalFt": 935,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 26,
+        "Intermediate": 48,
+        "Advanced": 26
+      }
+    },
+    "nightSkiing": true,
+    "statsUrl": "https://www.skiwhitetail.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.skiwhitetail.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "wild-mountain",
@@ -9022,7 +9903,24 @@
     "country": "US",
     "region": "NH",
     "locality": "Pinkham Notch",
-    "website": "https://www.skiwildcat.com/"
+    "website": "https://www.skiwildcat.com/",
+    "acres": 225,
+    "liftCount": 5,
+    "trailCount": 48,
+    "baseFt": 1950,
+    "summitFt": 4062,
+    "verticalFt": 2112,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 47,
+        "Advanced": 33
+      }
+    },
+    "statsUrl": "https://www.skiwildcat.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.skiwildcat.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "williams-lake-cross-country-ski-club",
@@ -9050,7 +9948,25 @@
     "country": "US",
     "region": "WI",
     "locality": "Wilmot",
-    "website": "https://www.wilmotmountain.com/"
+    "website": "https://www.wilmotmountain.com/",
+    "acres": 120,
+    "liftCount": 10,
+    "trailCount": 25,
+    "baseFt": 770,
+    "summitFt": 960,
+    "verticalFt": 190,
+    "terrainParks": true,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 36,
+        "Intermediate": 32,
+        "Advanced": 32
+      }
+    },
+    "statsUrl": "https://www.wilmotmountain.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.wilmotmountain.com/the-mountain/mountain-conditions/lift-and-terrain-status.aspx"
   },
   {
     "id": "winter-park-resort",
@@ -9061,7 +9977,14 @@
     "country": "US",
     "region": "CO",
     "locality": "Winter Park",
-    "website": "https://www.winterparkresort.com"
+    "website": "https://www.winterparkresort.com",
+    "acres": 3081,
+    "trailCount": 143,
+    "summitFt": 12060,
+    "baseFt": 9000,
+    "verticalFt": 3060,
+    "terrainParks": true,
+    "statsUrl": "https://www.coloradoski.com/resorts/winter-park/"
   },
   {
     "id": "winter4kids",
@@ -9215,7 +10138,9 @@
     "country": "CH",
     "locality": "Zermatt",
     "website": "https://www.matterhornparadise.ch/en",
-    "reportUrl": "https://www.matterhornparadise.ch/en/information/lifts-and-pistes"
+    "reportUrl": "https://www.matterhornparadise.ch/en/information/lifts-and-pistes",
+    "seasonWindow": "Year-round glacier skiing",
+    "statsUrl": "https://www.matterhornparadise.ch/en/experience/skiing"
   },
   {
     "id": "zillertal-arena",
@@ -9243,6 +10168,8 @@
     "country": "AT",
     "locality": "Zürs am Arlberg",
     "website": "https://www.skiarlberg.at/en",
-    "reportUrl": "https://www.skiarlberg.at/en/live-info"
+    "reportUrl": "https://www.skiarlberg.at/en/live-info",
+    "seasonWindow": "From Dec 2, 2026 (planned)",
+    "statsUrl": "https://www.skiarlberg.at/en/winter/season-start"
   }
 ]
