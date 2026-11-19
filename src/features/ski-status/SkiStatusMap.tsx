@@ -4,6 +4,7 @@ import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { cartoRasterStyle, cartoVectorStyleUrl } from '../../maps/cartoBasemaps';
 import * as maplibre from '../../maps/maplibre';
 import { recoverBasemap, type BasemapState } from '../../maps/recoverBasemap';
+import { distanceSquared, type TooltipPoint } from '../../maps/screenGeometry';
 import type { SkiArea } from './catalog';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -33,7 +34,7 @@ function highlightArea(map: maplibre.Map, area?: SkiArea) {
 
 function addAreaLayers(map: maplibre.Map, data: FeatureCollection<Point>) {
     map.addSource(sourceId, {
-        type: 'geojson', data, cluster: true, clusterMaxZoom: 8, clusterRadius: 34,
+        type: 'geojson', data, cluster: true, clusterMaxZoom: pointZoom - 1, clusterRadius: 34,
         attribution: '<a href="https://www.openskidata.org/">OpenSkiData</a> · <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>',
     });
     map.addLayer({
@@ -55,10 +56,37 @@ function addAreaLayers(map: maplibre.Map, data: FeatureCollection<Point>) {
     });
 }
 
+function closestMarker(map: maplibre.Map, point: TooltipPoint, areas: readonly SkiArea[]) {
+    const layers = [selectedLayer, pointLayer, clusterLayer].filter(layer => map.getLayer(layer));
+    if (!layers.length) return;
+
+    // Allow a tap next to the circle. Use distance instead of layer order when circles overlap.
+    const padding = 10;
+    const features = map.queryRenderedFeatures([
+        [point.x - padding, point.y - padding], [point.x + padding, point.y + padding],
+    ], { layers });
+    let nearest: { areaId: string } | { clusterId: number; center: [number, number] } | undefined;
+    let nearestDistance = Infinity;
+    for (const feature of features) {
+        if (feature.geometry.type !== 'Point') continue;
+        const center = feature.geometry.coordinates as [number, number];
+        const distance = distanceSquared(point, map.project(center));
+        if (distance >= nearestDistance) continue;
+        const areaId: unknown = feature.properties.areaId;
+        const clusterId: unknown = feature.properties.cluster_id;
+        if (typeof areaId === 'string' && areas.some(area => area.id === areaId)) nearest = { areaId };
+        else if (typeof clusterId === 'number') nearest = { clusterId, center };
+        else continue;
+        nearestDistance = distance;
+    }
+    return nearest;
+}
+
 export default function SkiStatusMap({ areas, selected, onSelect }: Props) {
     const container = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibre.Map | null>(null);
     const recoveryRef = useRef<ReturnType<typeof recoverBasemap> | null>(null);
+    const cameraRevision = useRef(0);
     const [attempt, setAttempt] = useState(0);
     const [basemap, setBasemap] = useState<BasemapState>('loading');
     const [ready, setReady] = useState(false);
@@ -77,7 +105,7 @@ export default function SkiStatusMap({ areas, selected, onSelect }: Props) {
 
     useEffect(() => {
         let map: maplibre.Map | undefined;
-        let disposed = false;
+        let active = true;
         let fitted = false;
         const frame = requestAnimationFrame(() => {
             if (!container.current) return;
@@ -96,17 +124,23 @@ export default function SkiStatusMap({ areas, selected, onSelect }: Props) {
             instance.addControl(new maplibre.NavigationControl({ showCompass: false }), 'top-right');
             recoveryRef.current = recoverBasemap(instance, {
                 dataSources: new Set([sourceId]), providerStyle, neutralStyle: () => cartoRasterStyle('dark', ''),
-            }, setBasemap);
+            }, state => {
+                setBasemap(state);
+                if (state !== 'ready') setReady(false);
+            });
             instance.on('style.load', () => {
+                cameraRevision.current++;
                 const data = current();
-                addAreaLayers(instance, data.points);
+                if (!instance.getSource(sourceId)) addAreaLayers(instance, data.points);
                 highlightArea(instance, data.selected);
                 if (!fitted) {
                     if (data.selected) instance.jumpTo({ center: data.selected.location.coordinates, zoom: pointZoom });
                     else fitAreas(instance, data.areas, 0);
                     fitted = true;
                 }
-                setReady(true);
+            });
+            instance.on('sourcedata', event => {
+                if (event.sourceId === sourceId && event.isSourceLoaded) setReady(true);
             });
             instance.on('webglcontextlost', () => setFailed(true));
             instance.on('webglcontextrestored', () => setFailed(false));
@@ -117,28 +151,27 @@ export default function SkiStatusMap({ areas, selected, onSelect }: Props) {
                 instance.on('mouseenter', layer, () => { instance.getCanvas().style.cursor = 'pointer'; });
                 instance.on('mouseleave', layer, () => { instance.getCanvas().style.cursor = ''; });
             }
+            instance.on('movestart', () => { cameraRevision.current++; });
             instance.on('click', event => {
-                const layers = [selectedLayer, pointLayer, clusterLayer].filter(layer => instance.getLayer(layer));
-                if (!layers.length) return;
-                const [feature] = instance.queryRenderedFeatures(event.point, { layers });
-                if (typeof feature?.properties.areaId === 'string') {
-                    selectArea(feature.properties.areaId);
+                const revision = ++cameraRevision.current;
+                const source = instance.getSource<maplibre.GeoJSONSource>(sourceId);
+                if (!source || !instance.isSourceLoaded(sourceId)) return;
+                const marker = closestMarker(instance, event.point, current().areas);
+                if (!marker) return;
+                if ('areaId' in marker) {
+                    selectArea(marker.areaId);
                     return;
                 }
-                const source = instance.getSource<maplibre.GeoJSONSource>(sourceId);
-                const clusterId: unknown = feature?.properties.cluster_id;
-                if (!source || typeof clusterId !== 'number' || feature.geometry.type !== 'Point') return;
-                const { points, duration } = current();
-                const center = feature.geometry.coordinates as [number, number];
-                void source.getClusterExpansionZoom(clusterId).then(zoom => {
-                    if (!disposed && current().points === points && instance.getSource(sourceId) === source) {
-                        instance.easeTo({ center, zoom, duration });
+                void source.getClusterExpansionZoom(marker.clusterId).then(zoom => {
+                    // A later click, movement, selection, or data change takes precedence.
+                    if (active && revision === cameraRevision.current && instance.getSource(sourceId) === source) {
+                        instance.easeTo({ center: marker.center, zoom, duration: current().duration });
                     }
                 }).catch(() => { /* A filter can replace the clicked cluster before the worker replies. */ });
             });
         });
         return () => {
-            disposed = true;
+            active = false;
             cancelAnimationFrame(frame);
             recoveryRef.current?.dispose();
             recoveryRef.current = null;
@@ -148,6 +181,7 @@ export default function SkiStatusMap({ areas, selected, onSelect }: Props) {
     }, [attempt]);
 
     useEffect(() => {
+        cameraRevision.current++;
         const map = mapRef.current;
         const source = map?.getSource<maplibre.GeoJSONSource>(sourceId);
         if (!map || !source) return;
@@ -157,20 +191,25 @@ export default function SkiStatusMap({ areas, selected, onSelect }: Props) {
     }, [areas, points]);
 
     useEffect(() => {
+        cameraRevision.current++;
         const map = mapRef.current;
         if (!map?.getLayer(selectedLayer)) return;
         highlightArea(map, selected);
         if (selected) map.easeTo({ center: selected.location.coordinates, zoom: Math.max(pointZoom, map.getZoom()), duration: current().duration });
     }, [selected]);
 
+    const state = failed ? 'error' : !ready || basemap === 'loading' ? 'loading' : basemap === 'unavailable' ? 'degraded' : 'ready';
     return <div className="relative h-full min-h-0">
         <div ref={container} className="h-full w-full" data-testid="ski-status-map"
-            data-map-state={failed ? 'error' : !ready ? 'loading' : basemap === 'unavailable' ? 'degraded' : 'ready'} />
-        {ready && !failed && <button type="button" disabled={!areas.length} onClick={() => { if (mapRef.current) fitAreas(mapRef.current, areas, duration); }}
+            data-map-state={state} />
+        {ready && !failed && <button type="button" disabled={!areas.length} onClick={() => {
+            cameraRevision.current++;
+            if (mapRef.current) fitAreas(mapRef.current, areas, duration);
+        }}
             className="absolute left-2 top-2 min-h-11 rounded-md border border-zinc-600 bg-zinc-950/95 px-3 text-sm text-zinc-100 hover:border-cyan-300 disabled:opacity-50">
             Fit results
         </button>}
-        {(!ready || basemap === 'unavailable' || failed) && <div
+        {state !== 'ready' && <div
             className="absolute bottom-9 left-2 right-2 w-fit max-w-[calc(100%-1rem)] rounded-md border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
             role={failed ? 'alert' : 'status'}>
             {failed ? <>Map unavailable. <button type="button" className="min-h-9 text-cyan-300 underline" onClick={() => {
@@ -178,7 +217,7 @@ export default function SkiStatusMap({ areas, selected, onSelect }: Props) {
                 setBasemap('loading');
                 setFailed(false);
                 setAttempt(value => value + 1);
-            }}>Retry map</button></> : basemap === 'unavailable' ? <>Background unavailable. <button type="button" className="min-h-9 text-cyan-300 underline"
+            }}>Retry map</button></> : state === 'degraded' ? <>Background unavailable. <button type="button" className="min-h-9 text-cyan-300 underline"
                 onClick={() => recoveryRef.current?.retry()}>Retry background</button></> : 'Loading map…'}
         </div>}
     </div>;

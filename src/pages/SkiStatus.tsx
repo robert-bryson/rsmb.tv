@@ -1,4 +1,4 @@
-import { lazy, Suspense, useMemo } from 'react';
+import { lazy, Suspense, useMemo, useRef } from 'react';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { IntentLink } from '../components/IntentLink';
 import { MapSkipLink } from '../components/MapSkipLink';
@@ -43,6 +43,9 @@ export default function SkiStatus() {
     const areas = useMemo(() => filterSkiAreas(skiAreas, query, region, pass, night), [query, region, pass, night]);
     const selected = areas.find(area => area.id === selectedId);
     const sorted = useMemo(() => sortSkiAreas(areas, { key: sort.key, direction: sort.direction }), [areas, sort.key, sort.direction]);
+    const selectedButton = useRef<HTMLButtonElement>(null);
+    const mapViewButton = useRef<HTMLButtonElement>(null);
+    const searchInput = useRef<HTMLInputElement>(null);
 
     function setParam(key: string, value?: string) {
         updateParams(params => {
@@ -61,6 +64,11 @@ export default function SkiStatus() {
         setParam('area', id);
     }
 
+    function closeDetails() {
+        (selectedButton.current ?? mapViewButton.current ?? searchInput.current)?.focus();
+        setParam('area');
+    }
+
     const hasFilters = Boolean(query || region || pass || night);
     return <main className="h-full w-full overflow-y-auto bg-zinc-950 text-zinc-100">
         <MapSkipLink targetId="ski-area-search" />
@@ -74,7 +82,7 @@ export default function SkiStatus() {
             </header>
             <section aria-label="Ski area filters" className="grid grid-cols-2 items-end gap-3 sm:flex sm:flex-wrap">
                 <label className="col-span-2 grid min-w-0 gap-1 text-sm text-zinc-300 sm:min-w-48 sm:flex-1">Search areas
-                    <input type="search" id="ski-area-search" value={query} onChange={event => updateQuery(event.target.value)} onBlur={commitQuery}
+                    <input ref={searchInput} type="search" id="ski-area-search" value={query} onChange={event => updateQuery(event.target.value)} onBlur={commitQuery}
                         onKeyDown={event => { if (event.key === 'Enter') commitQuery(); }} placeholder="Name or location" className={inputClass} />
                 </label>
                 <div className="grid min-w-0 gap-1 text-sm text-zinc-300">
@@ -112,7 +120,8 @@ export default function SkiStatus() {
                 {smallScreen && <div role="group" aria-label="Results view" className="flex rounded-md border border-zinc-700">
                     {(['Table', 'Map'] as const).map(view => {
                         const active = mobileMap === (view === 'Map');
-                        return <button key={view} type="button" aria-pressed={active} onClick={() => setParam('view', view === 'Map' ? 'map' : undefined)}
+                        return <button key={view} type="button" ref={view === 'Map' ? mapViewButton : undefined} aria-pressed={active}
+                            onClick={() => setParam('view', view === 'Map' ? 'map' : undefined)}
                             className={`min-h-11 px-3 ${active ? 'bg-cyan-950 text-cyan-100' : 'text-zinc-300 hover:text-white'}`}>{view}</button>;
                     })}
                 </div>}
@@ -124,10 +133,10 @@ export default function SkiStatus() {
                     </Suspense></ErrorBoundary>
                 </section>}
                 {(!smallScreen || !mobileMap) && <section className={`${panelClass} lg:h-[min(53dvh,34rem)] lg:min-h-[20rem]`} aria-label="Ski area statistics">
-                    <SkiAreaTable areas={sorted} units={units} sort={sort} selected={selected} onSort={setSort} onSelect={selectArea} />
+                    <SkiAreaTable areas={sorted} units={units} sort={sort} selected={selected} selectedButtonRef={selectedButton} onSort={setSort} onSelect={selectArea} />
                 </section>}
             </div>
-            {selected && <SkiAreaDetails area={selected} units={units} onClose={() => setParam('area')} />}
+            {selected && <SkiAreaDetails area={selected} units={units} onClose={closeDetails} />}
             <footer className="flex flex-wrap gap-x-2 text-xs leading-6 text-zinc-400">
                 <span>Locations</span>
                 {Object.entries(locationAttribution).map(([name, url]) => <a key={name} href={url} className="underline underline-offset-2 hover:text-zinc-200">{name}</a>)}

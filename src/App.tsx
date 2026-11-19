@@ -8,6 +8,7 @@ import { ScrollToTop } from './components/ScrollToTop';
 import { SearchMatch } from './components/SearchMatch';
 import { RouteOrientation } from './components/RouteOrientation';
 import { MapPerformance } from './components/MapPerformance';
+import siteAliases from './content/siteAliases.json';
 import { canonicalPathname } from './utils/siteMetadata';
 import { Home } from './pages/Home';
 
@@ -52,7 +53,7 @@ function ProjectMapRedirect({ to }: { to: string }) {
 }
 
 export function AdvAtlasRedirect() {
-  return <ProjectMapRedirect to="/projects/adv-atlas/map" />;
+  return <ProjectMapRedirect to={siteAliases['/projects/adv-atlas']} />;
 }
 
 function LoadingFallback() {
@@ -94,7 +95,7 @@ function AppRoutes() {
       <Route path="/projects" element={<Projects />} />
       <Route path="/projects/adv-atlas" element={<AdvAtlasRedirect />} />
       <Route path="/projects/adv-atlas/map" element={<AdvAtlas />} />
-      <Route path="/projects/ski-status" element={<ProjectMapRedirect to="/projects/ski-status/map" />} />
+      <Route path="/projects/ski-status" element={<ProjectMapRedirect to={siteAliases['/projects/ski-status']} />} />
       <Route path="/projects/ski-status/map" element={<SkiStatus />} />
       <Route path="/projects/pins-of-inaccessibility" element={<PinsOfInaccessibilityAbout />} />
       <Route path="/projects/pins-of-inaccessibility/map" element={<PinsOfInaccessibility />} />

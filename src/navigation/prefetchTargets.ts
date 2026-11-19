@@ -1,5 +1,6 @@
 import { canonicalPathname } from '../utils/siteMetadata';
 import { getPostBySlug } from '../content/posts';
+import siteAliases from '../content/siteAliases.json';
 import { pageLoaders, type PageLoaderKey } from './pageLoaders';
 import { temperatureDataView } from '../features/temperatures/temperatureDataView';
 
@@ -13,13 +14,7 @@ export interface PrefetchTarget {
     search: string;
 }
 
-const aliases: Record<string, string> = {
-    '/blog': '/posts', '/trips': '/posts',
-    '/projects/adv-atlas': '/projects/adv-atlas/map',
-    '/projects/ski-status': '/projects/ski-status/map',
-    '/projects/motorcycle-trips': '/projects/adv-atlas/map',
-    '/projects/motorcycle-trips/map': '/projects/adv-atlas/map',
-};
+const aliases: Partial<Record<string, string>> = siteAliases;
 const maps: Record<string, PrefetchTarget['map']> = {
     '/projects/flights/map': 'flights', '/projects/temperature-records/map': 'temperatures',
     '/projects/tornado-tracks/map': 'tornadoes', '/projects/adv-atlas/map': 'atlas',

@@ -1,6 +1,54 @@
 import { describe, expect, it } from 'vitest';
-import { filterSkiAreas, formatSkiStat, readSkiSort, sortSkiAreas } from '../features/ski-status/browse';
-import { skiAreas } from '../features/ski-status/catalog';
+import { filterSkiAreas, formatSkiStat, readPassFilter, readSkiSort, sortSkiAreas } from '../features/ski-status/browse';
+import { readSkiCatalog, skiAreas } from '../features/ski-status/catalog';
+
+const area = {
+    id: 'test-mountain', name: 'Test Mountain', country: 'US', region: 'WA', locality: 'Test Town', acres: 100,
+    website: 'https://example.org/', statsUrl: 'https://example.org/stats', reportUrl: 'https://example.org/conditions',
+};
+const point = { id: area.id, coordinates: [-121, 47], upstream: ['https://example.org/open-data'] };
+const locations = {
+    source: 'https://example.org/locations.csv', buildTime: '2026-11-16T01:43:51.452Z',
+    license: 'https://example.org/license', attribution: { 'Test data': 'https://example.org/data' }, locations: [point],
+};
+const membership = { areaId: area.id, family: 'indy', access: 'included', source: 'https://example.org/pass' };
+const passes = { season: '2026/27', checkedOn: '2026-11-19', memberships: [membership] };
+
+describe('ski-status catalog validation', () => {
+    it('rejects duplicate, missing, and orphan area coordinates', () => {
+        expect(() => readSkiCatalog([area, area], locations, passes)).toThrow('Duplicate ski area ID test-mountain');
+        expect(() => readSkiCatalog([area], { ...locations, locations: [point, point] }, passes)).toThrow('Duplicate map point ID test-mountain');
+        expect(() => readSkiCatalog([area], { ...locations, locations: [] }, passes)).toThrow('No map point for test-mountain');
+        expect(() => readSkiCatalog([area], { ...locations, locations: [{ ...point, id: 'unknown' }] }, passes)).toThrow('Map point has no ski area unknown');
+    });
+
+    it('rejects missing area references and duplicate pass family rows', () => {
+        expect(() => readSkiCatalog([area], locations, { ...passes, memberships: [{ ...membership, areaId: 'unknown' }] }))
+            .toThrow('Pass membership has no ski area unknown');
+        expect(() => readSkiCatalog([area], locations, { ...passes, memberships: [membership, { ...membership, access: 'discount' }] }))
+            .toThrow('Duplicate indy membership for test-mountain');
+    });
+
+    it('applies the acreage floor unless the resort has included access', () => {
+        const smallArea = { ...area, acres: 99 };
+        expect(readSkiCatalog([smallArea], locations, passes).areas[0]?.id).toBe(area.id);
+        expect(() => readSkiCatalog([smallArea], locations, { ...passes, memberships: [{ ...membership, access: 'discount' }] }))
+            .toThrow('requires 100 skiable acres or included pass access');
+        expect(readSkiCatalog([area], locations, { ...passes, memberships: [] }).areas[0]?.passes).toEqual([]);
+    });
+
+    it.each([
+        [{ trailCountQualifier: 'lower-bound' }, /Lower bound.*reported value/],
+        [{ highestLiftTerminalFt: 3_000, lowestLiftTerminalFt: 3_100 }, /Inverted lift terminal/],
+        [{ nightSkiing: false, nightAcres: 20 }, /Conflicting night skiing/],
+        [{ grades: { unit: 'count', values: { Expert: 0.5 } } }, /Use whole trail counts/],
+        [{ grades: { unit: 'percent', values: { Expert: 101 } } }, /percentages from 0 to 100/],
+        [{ reportUrl: 'https://test:example@example.org/conditions' }, /Source URLs must not contain credentials/],
+        [{ reportUrl: 'http://example.org/conditions' }, /Invalid URL/],
+    ])('rejects invalid area fields %j', (field, reason) => {
+        expect(() => readSkiCatalog([{ ...area, ...field }], locations, passes)).toThrow(reason);
+    });
+});
 
 describe('ski-status pilot', () => {
     it('maps each eligible area once and keeps split base data under one resort', () => {
@@ -16,6 +64,30 @@ describe('ski-status pilot', () => {
         expect(filterSkiAreas(skiAreas, 'whiteface', '')[0]?.passes).toMatchObject([{ family: 'indy', access: 'discount' }]);
         expect(filterSkiAreas(skiAreas, 'quebec le massif', 'QC', 'mountain-collective').map(area => area.id)).toEqual(['le-massif']);
         expect(filterSkiAreas(skiAreas, 'heavenly', 'NV', 'epic').map(area => area.id)).toEqual(['heavenly']);
+    });
+
+    it('finds ski areas by full country name', () => {
+        const canada = filterSkiAreas(skiAreas, 'Canada', '');
+        expect(canada).toHaveLength(8);
+        expect(canada.every(area => area.country === 'CA')).toBe(true);
+    });
+
+    it('requires a known yes for night skiing and ignores invalid pass or sort parameters', () => {
+        const nightAreas = filterSkiAreas(skiAreas, '', '', undefined, true);
+        expect(nightAreas.length).toBeGreaterThan(0);
+        expect(nightAreas.every(area => area.nightSkiing === true)).toBe(true);
+        expect(readPassFilter(new URLSearchParams('pass=indy'))).toBe('indy');
+        expect(readPassFilter(new URLSearchParams('pass=invalid'))).toBeUndefined();
+        expect(readSkiSort(new URLSearchParams('sort=acres:desc'))).toEqual({ key: 'acres', direction: 'desc' });
+    });
+
+    it('formats lower bounds, elevations, and night availability in both unit settings', () => {
+        const peak = skiAreas.find(area => area.id === 'granite-peak')!;
+        expect(formatSkiStat(peak, 'name', 'metric')).toBe('Granite Peak');
+        expect(formatSkiStat(peak, 'acres', 'imperial')).toBe('200+ ac');
+        expect(formatSkiStat(peak, 'acres', 'metric')).toBe('80.9+ ha');
+        expect(formatSkiStat({ ...peak, verticalFt: 1000 }, 'verticalFt', 'metric')).toBe('305 m');
+        expect(formatSkiStat({ ...peak, nightSkiing: false }, 'nightSkiing', 'metric')).toBe('No');
     });
 
     it('sorts a reported zero ahead of unknown values in either direction and preserves lower bounds', () => {

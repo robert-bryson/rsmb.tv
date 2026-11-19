@@ -23,7 +23,7 @@ Hosted checks require a deployed build. Device checks require the named physical
 | Later engineering work | [Build and maintenance](#build-and-maintenance), [Tornado Tracks](#tornado-tracks), and [dashboard checks](#dashboard-checks) | Local implementation and regression tests |
 | Infrastructure changes | [Infrastructure](#infrastructure) | AWS or Google Admin access |
 | Content additions | [Project content](#project-content) | Reviewed content and assets |
-| Ski area explorer | [ski-status pilot](#ski-status-pilot) | Pass product rules and operations sources |
+| Before the ski-status release | [ski-status](#ski-status) | Verified area records, pass rules, and report sources |
 | Application planning | [Ride Ledger prerequisites](#ride-ledger-prerequisites) | Owner decisions and synthetic fixtures |
 
 ## Next release checks
@@ -217,10 +217,20 @@ Preserve passing publication checks when changing build scripts.
 
 Track pending stories in [Content publication](#content-publication). Do not add duplicate story tasks here.
 
-## ski-status pilot
+## ski-status
 
-- [ ] Add exact pass products and date-specific access to the pilot. Use the [pass rules and acceptance checks](projects/ski-status/readme.md#implementation-sequence-and-acceptance-checks).
-- [ ] Measure reported conditions coverage across the pilot and add scheduled updates for permitted sources. Use the [conditions pilot](projects/ski-status/readme.md#sources-and-pilot).
+### First release
+
+- [ ] Review the remaining area candidates by region. Record the result for each candidate. Publish coverage by field. [Catalog rules](projects/ski-status/readme.md#build-the-catalog)
+- [ ] Add exact pass products and access by local ski date. Test day limits, shared days, blackout dates, and reservations. [Pass rules](projects/ski-status/readme.md#pass-access-by-product-and-date)
+- [ ] Publish forecasts and scheduled resort reports from permitted sources. Measure coverage and report age. [Conditions pilot](projects/ski-status/readme.md#sources-and-pilot)
+- [ ] Finish the comparison controls. Add column settings, the map bounds filter, and CSV export for permitted data. [Map and table](projects/ski-status/readme.md#map-and-table)
+
+### Version 2
+
+- [ ] Show named runs, lifts, and terminals at resort zoom. [Runs and lifts](projects/ski-status/readme.md#runs-and-lifts-at-resort-zoom)
+- [ ] Show road restrictions and camera links for the selected resort base. [Access routes and webcams](projects/ski-status/readme.md#access-routes-and-webcams)
+- [ ] Add device-local visits, a visited filter, and a backup format. [Visited areas](projects/ski-status/readme.md#visited-areas)
 
 ## Ride Ledger prerequisites
 

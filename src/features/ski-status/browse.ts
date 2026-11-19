@@ -31,13 +31,16 @@ export function readPassFilter(params: URLSearchParams): PassFamily | undefined 
     return passFamilySchema.safeParse(params.get('pass')).data;
 }
 
+const countryNames = new Intl.DisplayNames('en', { type: 'region' });
+
 export function filterSkiAreas(areas: readonly SkiArea[], query: string, region: string, pass?: PassFamily, night?: boolean) {
     const words = normalizeSearch(query).split(' ').filter(Boolean);
     return areas.filter(area => {
         if (region && !area.region.split('/').includes(region)) return false;
         if (pass && !area.passes.some(membership => membership.family === pass && membership.access === 'included')) return false;
         if (night && area.nightSkiing !== true) return false;
-        const searchable = normalizeSearch([area.name, area.locality, area.region, area.country, ...(area.aliases ?? [])].join(' '));
+        if (!words.length) return true;
+        const searchable = normalizeSearch([area.name, area.locality, area.region, area.country, countryNames.of(area.country), ...(area.aliases ?? [])].join(' '));
         return words.every(word => searchable.includes(word));
     });
 }
