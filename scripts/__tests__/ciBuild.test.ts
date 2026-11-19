@@ -24,7 +24,8 @@ it('builds the CI bundle from a clean checkout without generated blog content', 
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'rsmb-ci-build-test-'));
     const generatedContent = [path.join(repoRoot, 'src/content/posts.json'), path.join(repoRoot, 'src/content/blog')];
     try {
-        for (const entry of ['index.html', 'package.json', 'vite.config.ts', 'src', 'shared', 'scripts', 'tests/fixtures/trip-content']) {
+        for (const entry of ['index.html', 'package.json', 'vite.config.ts', 'src', 'shared', 'scripts',
+            'projects/ski-status/data', 'tests/fixtures/trip-content']) {
             fs.cpSync(path.join(repoRoot, entry), path.join(root, entry), {
                 recursive: true,
                 filter: source => !generatedContent.includes(source),
@@ -48,9 +49,11 @@ it('builds the CI bundle from a clean checkout without generated blog content', 
         expect(result.status, result.stdout + result.stderr).toBe(0);
         const tripHtml = fs.readFileSync(path.join(root, 'dist/trips/coastal-test.html'), 'utf8');
         const postHtml = fs.readFileSync(path.join(root, 'dist/blog/reading-test.html'), 'utf8');
+        const skiHtml = fs.readFileSync(path.join(root, 'dist/projects/ski-status/map.html'), 'utf8');
         expect(tripHtml).toContain('<title>Coastal test trip — rsmb</title>');
         expect(tripHtml).toContain('rel="canonical" href="https://rsmb.tv/trips/coastal-test"');
         expect(postHtml).toContain('<title>Reading test — rsmb</title>');
+        expect(skiHtml).toContain('rel="canonical" href="https://rsmb.tv/projects/ski-status/map"');
         const htmlFiles = fs.readdirSync(path.join(root, 'dist'), { recursive: true }).filter(filename => filename.endsWith('.html'));
         for (const filename of htmlFiles) {
             expect(fs.readFileSync(path.join(root, 'dist', filename), 'utf8'), filename).not.toContain('noindex');

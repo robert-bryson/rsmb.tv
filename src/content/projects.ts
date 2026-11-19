@@ -35,6 +35,18 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    slug: 'ski-status',
+    title: 'ski-status',
+    category: 'maps',
+    description: 'Compare North American ski areas on a map and in a sortable table. Filter by location, pass, and night skiing, and open official mountain reports.',
+    tech: ['React', 'TypeScript', 'MapLibre GL', 'GeoJSON'],
+    applicationCategory: 'TravelApplication',
+    demoUrl: '/projects/ski-status/map',
+    year: 2026,
+    lastUpdated: '2026-11-19',
+    changelog: [{ date: '2026-11', notes: ['Added the 25-area pilot map, comparison table, and pass filters'] }],
+  },
+  {
     slug: 'pins-of-inaccessibility',
     title: 'Pins of Inaccessibility',
     category: 'maps',

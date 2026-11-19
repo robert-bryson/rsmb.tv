@@ -31,6 +31,7 @@ const Aborg = lazy(pageLoaders['/projects/aborg']);
 const Parc = lazy(pageLoaders['/projects/parc']);
 const StatusDashboard = lazy(pageLoaders['/projects/status-dashboard']);
 const AdvAtlas = lazy(pageLoaders['/projects/adv-atlas/map']);
+const SkiStatus = lazy(pageLoaders['/projects/ski-status/map']);
 const PinsOfInaccessibilityAbout = lazy(pageLoaders['/projects/pins-of-inaccessibility']);
 const PinsOfInaccessibility = lazy(pageLoaders['/projects/pins-of-inaccessibility/map']);
 
@@ -45,9 +46,13 @@ export function LegacyPostsRedirect({ type }: { type: 'writing' | 'trips' }) {
   return <Navigate to={{ pathname: '/posts', search: nextSearchParams.toString(), hash }} state={state} replace />;
 }
 
-export function AdvAtlasRedirect() {
+function ProjectMapRedirect({ to }: { to: string }) {
   const { search, hash, state } = useLocation();
-  return <Navigate to={{ pathname: '/projects/adv-atlas/map', search, hash }} state={state} replace />;
+  return <Navigate to={{ pathname: to, search, hash }} state={state} replace />;
+}
+
+export function AdvAtlasRedirect() {
+  return <ProjectMapRedirect to="/projects/adv-atlas/map" />;
 }
 
 function LoadingFallback() {
@@ -89,6 +94,8 @@ function AppRoutes() {
       <Route path="/projects" element={<Projects />} />
       <Route path="/projects/adv-atlas" element={<AdvAtlasRedirect />} />
       <Route path="/projects/adv-atlas/map" element={<AdvAtlas />} />
+      <Route path="/projects/ski-status" element={<ProjectMapRedirect to="/projects/ski-status/map" />} />
+      <Route path="/projects/ski-status/map" element={<SkiStatus />} />
       <Route path="/projects/pins-of-inaccessibility" element={<PinsOfInaccessibilityAbout />} />
       <Route path="/projects/pins-of-inaccessibility/map" element={<PinsOfInaccessibility />} />
       <Route path="/projects/motorcycle-trips" element={<AdvAtlasRedirect />} />

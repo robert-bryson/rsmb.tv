@@ -16,6 +16,7 @@ export interface PrefetchTarget {
 const aliases: Record<string, string> = {
     '/blog': '/posts', '/trips': '/posts',
     '/projects/adv-atlas': '/projects/adv-atlas/map',
+    '/projects/ski-status': '/projects/ski-status/map',
     '/projects/motorcycle-trips': '/projects/adv-atlas/map',
     '/projects/motorcycle-trips/map': '/projects/adv-atlas/map',
 };

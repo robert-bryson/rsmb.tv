@@ -1,0 +1,186 @@
+{
+  "season": "2026/27",
+  "checkedOn": "2026-11-19",
+  "memberships": [
+    {
+      "areaId": "alta",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "alta",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://mountaincollective.com/resorts/"
+    },
+    {
+      "areaId": "banff-sunshine",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "banff-sunshine",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://mountaincollective.com/resorts/"
+    },
+    {
+      "areaId": "crystal-mountain",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "cypress-mountain",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "granite-peak",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "heavenly",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/destination.aspx"
+    },
+    {
+      "areaId": "kicking-horse",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/canada/rcr.aspx"
+    },
+    {
+      "areaId": "killington",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "lake-louise",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "lake-louise",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://mountaincollective.com/resorts/"
+    },
+    {
+      "areaId": "le-massif",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "le-massif",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://mountaincollective.com/resorts/"
+    },
+    {
+      "areaId": "mammoth-mountain",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "palisades-tahoe",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "park-city-mountain",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/destination.aspx"
+    },
+    {
+      "areaId": "pico-mountain",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "revelstoke",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "revelstoke",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://mountaincollective.com/resorts/"
+    },
+    {
+      "areaId": "snowbird",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "snowbird",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://mountaincollective.com/resorts/"
+    },
+    {
+      "areaId": "stevens-pass",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/destination.aspx"
+    },
+    {
+      "areaId": "stowe",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/destination.aspx"
+    },
+    {
+      "areaId": "sugarloaf",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "sugarloaf",
+      "family": "mountain-collective",
+      "access": "included",
+      "source": "https://mountaincollective.com/resorts/"
+    },
+    {
+      "areaId": "tremblant",
+      "family": "ikon",
+      "access": "included",
+      "source": "https://www.ikonpass.com/en/compare-benefits"
+    },
+    {
+      "areaId": "whaleback",
+      "family": "indy",
+      "access": "included",
+      "source": "https://www.indyskipass.com/our-resorts/whaleback-mountain"
+    },
+    {
+      "areaId": "whistler-blackcomb",
+      "family": "epic",
+      "access": "included",
+      "source": "https://www.epicpass.com/regions/destination.aspx"
+    },
+    {
+      "areaId": "whiteface",
+      "family": "indy",
+      "access": "discount",
+      "source": "https://www.indyskipass.com/our-resorts/whiteface-mountain"
+    }
+  ]
+}

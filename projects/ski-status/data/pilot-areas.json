@@ -1,0 +1,710 @@
+[
+  {
+    "id": "alta",
+    "name": "Alta Ski Area",
+    "aliases": [
+      "Utah"
+    ],
+    "country": "US",
+    "region": "UT",
+    "locality": "Alta",
+    "website": "https://www.alta.com/",
+    "statsUrl": "https://www.alta.com/ikon",
+    "reportUrl": "https://www.alta.com/lift-terrain-status",
+    "acres": 2614,
+    "liftCount": 6,
+    "trailCount": 118,
+    "baseFt": 8530,
+    "verticalFt": 2538,
+    "seasonWindow": "November–April",
+    "additionalSources": [
+      "https://mountaincollective.com/resort/alta/",
+      "https://www.alta.com/stories/trail-running-at-alta"
+    ]
+  },
+  {
+    "id": "banff-sunshine",
+    "name": "Banff Sunshine Village",
+    "aliases": [
+      "Alberta",
+      "British Columbia"
+    ],
+    "country": "CA",
+    "region": "AB",
+    "locality": "Banff",
+    "website": "https://www.skibanff.com/",
+    "statsUrl": "https://www.skibig3.com/ski/resorts/banff-sunshine/",
+    "reportUrl": "https://www.skibanff.com/the-mountain/mountain-report/current-conditions",
+    "acres": 3358,
+    "liftCount": 12,
+    "baseFt": 5440,
+    "summitFt": 8954,
+    "seasonWindow": "November–May",
+    "additionalSources": [
+      "https://www.skibanff.com/the-mountain/lifts-terrain/trail-maps"
+    ]
+  },
+  {
+    "id": "crystal-mountain",
+    "name": "Crystal Mountain",
+    "aliases": [
+      "Washington"
+    ],
+    "country": "US",
+    "region": "WA",
+    "locality": "Enumclaw",
+    "website": "https://www.crystalmountainresort.com/",
+    "statsUrl": "https://www.crystalmountainresort.com/media/mountain-stats-and-facts",
+    "reportUrl": "https://www.crystalmountainresort.com/the-mountain/mountain-report-and-webcams",
+    "acres": 2600,
+    "liftCount": 11,
+    "trailCount": 85,
+    "baseFt": 4400,
+    "summitFt": 6872,
+    "nightSkiing": true,
+    "additionalSources": [
+      "https://blog.crystalmountainresort.com/whats-new-at-crystal-mountain-for-the-26-27-season/"
+    ]
+  },
+  {
+    "id": "cypress-mountain",
+    "name": "Cypress Mountain",
+    "aliases": [
+      "British Columbia"
+    ],
+    "country": "CA",
+    "region": "BC",
+    "locality": "West Vancouver",
+    "website": "https://www.cypressmountain.com/",
+    "statsUrl": "https://www.cypressmountain.com/trail-maps-and-stats",
+    "reportUrl": "https://www.cypressmountain.com/mountain-report",
+    "acres": 600,
+    "liftCount": 7,
+    "trailCount": 61,
+    "baseFt": 3000,
+    "summitFt": 4720,
+    "verticalFt": 2010,
+    "nightSkiing": true,
+    "seasonWindow": "Opens mid-November",
+    "additionalSources": [
+      "https://www.cypressmountain.com/visitors-guide"
+    ]
+  },
+  {
+    "id": "granite-peak",
+    "name": "Granite Peak",
+    "aliases": [
+      "Wisconsin"
+    ],
+    "country": "US",
+    "region": "WI",
+    "locality": "Wausau",
+    "website": "https://www.skigranitepeak.com/",
+    "statsUrl": "https://www.skigranitepeak.com/mountain-info/trail-map-mountain-stats",
+    "reportUrl": "https://www.skigranitepeak.com/mountain-info/mountain-report",
+    "acres": 200,
+    "acresQualifier": "lower-bound",
+    "liftCount": 7,
+    "trailCount": 67,
+    "baseFt": 1242,
+    "summitFt": 1942,
+    "verticalFt": 700,
+    "nightSkiing": true,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 25,
+        "Intermediate": 40,
+        "Advanced": 25,
+        "Expert": 10
+      }
+    },
+    "additionalSources": [
+      "https://www.skigranitepeak.com/discover/winter-at-granite-peak",
+      "https://www.skigranitepeak.com/mountain-info/arrival-guide"
+    ]
+  },
+  {
+    "id": "heavenly",
+    "name": "Heavenly Mountain Resort",
+    "aliases": [
+      "California",
+      "Nevada"
+    ],
+    "country": "US",
+    "region": "CA/NV",
+    "locality": "South Lake Tahoe",
+    "website": "https://www.skiheavenly.com/",
+    "statsUrl": "https://www.skiheavenly.com/the-mountain/about-the-mountain/mountain-info",
+    "reportUrl": "https://www.skiheavenly.com/the-mountain/mountain-conditions/snow-and-weather-report.aspx",
+    "acres": 4800,
+    "liftCount": 28,
+    "trailCount": 111,
+    "baseFt": 6657,
+    "summitFt": 10067,
+    "verticalFt": 3500,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 15,
+        "Intermediate": 53,
+        "Advanced": 32
+      }
+    },
+    "additionalSources": [
+      "https://www.skiheavenly.com/explore-the-resort/experience-heavenly/tahoetrifecta.aspx"
+    ]
+  },
+  {
+    "id": "kicking-horse",
+    "name": "Kicking Horse Mountain Resort",
+    "aliases": [
+      "British Columbia"
+    ],
+    "country": "CA",
+    "region": "BC",
+    "locality": "Golden",
+    "website": "https://kickinghorseresort.com/",
+    "statsUrl": "https://kickinghorseresort.com/discover-kickinghorse/mountain-stats/",
+    "reportUrl": "https://kickinghorseresort.com/conditions/snow-report/",
+    "acres": 3486,
+    "liftCount": 5,
+    "trailCount": 120,
+    "trailCountQualifier": "lower-bound",
+    "baseFt": 3900,
+    "summitFt": 8218,
+    "verticalFt": 4314,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 20,
+        "Intermediate": 20,
+        "Advanced": 45,
+        "Expert": 15
+      }
+    }
+  },
+  {
+    "id": "killington",
+    "name": "Killington Resort",
+    "aliases": [
+      "Vermont"
+    ],
+    "country": "US",
+    "region": "VT",
+    "locality": "Killington",
+    "website": "https://killington.com/",
+    "statsUrl": "https://killington.com/mountain-stats",
+    "reportUrl": "https://killington.com/mountain-report",
+    "acres": 1509,
+    "liftCount": 19,
+    "trailCount": 155,
+    "baseFt": 1165,
+    "summitFt": 4241,
+    "verticalFt": 3050,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Easier": 17,
+        "More difficult": 40,
+        "Most and extremely difficult": 43
+      },
+      "of": "trails"
+    }
+  },
+  {
+    "id": "lake-louise",
+    "name": "Lake Louise Ski Resort",
+    "aliases": [
+      "Alberta"
+    ],
+    "country": "CA",
+    "region": "AB",
+    "locality": "Lake Louise",
+    "website": "https://www.skilouise.com/",
+    "statsUrl": "https://www.skilouise.com/explore-winter/winter-ski-ride/mountain-stats/",
+    "reportUrl": "https://www.skilouise.com/snow-conditions/",
+    "acres": 4200,
+    "liftCount": 13,
+    "trailCount": 171,
+    "baseFt": 5400,
+    "summitFt": 8650,
+    "verticalFt": 3250,
+    "seasonWindow": "November–May",
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Beginner": 25,
+        "Intermediate": 45,
+        "Advanced": 30
+      }
+    },
+    "additionalSources": [
+      "https://www.skibig3.com/ski/resorts/lake-louise/"
+    ]
+  },
+  {
+    "id": "le-massif",
+    "name": "Le Massif de Charlevoix",
+    "aliases": [
+      "Le Massif",
+      "Petit-Rivière-Saint-François",
+      "Quebec"
+    ],
+    "country": "CA",
+    "region": "QC",
+    "locality": "Petite-Rivière-Saint-François",
+    "website": "https://www.lemassif.com/en",
+    "statsUrl": "https://www.lemassif.com/en/activities-events/charlevoix-attractions/charlevoix-ski",
+    "reportUrl": "https://www.lemassif.com/en/the-mountain/winter/lifts-trails-grooming",
+    "acres": 406.3,
+    "liftCount": 8,
+    "trailCount": 53,
+    "verticalFt": 2526,
+    "additionalSources": [
+      "https://www.lemassif.com/en"
+    ]
+  },
+  {
+    "id": "mammoth-mountain",
+    "name": "Mammoth Mountain",
+    "aliases": [
+      "California"
+    ],
+    "country": "US",
+    "region": "CA",
+    "locality": "Mammoth Lakes",
+    "website": "https://www.mammothmountain.com/",
+    "statsUrl": "https://www.mammothmountain.com/on-the-mountain/winter-trail-map",
+    "reportUrl": "https://www.mammothmountain.com/on-the-mountain/mountain-report",
+    "acres": 3500,
+    "liftCount": 25,
+    "trailCount": 180,
+    "baseFt": 7953,
+    "summitFt": 11053,
+    "verticalFt": 3100,
+    "seasonWindow": "November–June",
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Easiest": 13,
+        "Slightly Difficult": 29,
+        "Difficult": 19,
+        "Very Difficult": 24,
+        "Extremely Difficult": 15
+      }
+    },
+    "additionalSources": [
+      "https://www.mammothmountain.com/things-to-do/activities/skiing-and-snowboarding"
+    ]
+  },
+  {
+    "id": "mount-bohemia",
+    "name": "Mount Bohemia",
+    "aliases": [
+      "Michigan"
+    ],
+    "country": "US",
+    "region": "MI",
+    "locality": "Lac La Belle",
+    "website": "https://www.mtbohemia.com/",
+    "statsUrl": "https://www.mtbohemia.com/about/",
+    "reportUrl": "https://www.mtbohemia.com/current-conditions/",
+    "acres": 585,
+    "liftCount": 2,
+    "verticalFt": 900,
+    "nightSkiing": true,
+    "additionalSources": [
+      "https://www.mtbohemia.com/tickets-passes/",
+      "https://www.mtbohemia.com/directions/"
+    ]
+  },
+  {
+    "id": "mt-hood-skibowl",
+    "name": "Mt. Hood Skibowl",
+    "aliases": [
+      "Mount Hood Ski Bowl",
+      "Oregon"
+    ],
+    "country": "US",
+    "region": "OR",
+    "locality": "Government Camp",
+    "website": "https://skibowl.com/",
+    "statsUrl": "https://skibowl.com/about-winter/stats/",
+    "reportUrl": "https://skibowl.com/winter-condition-and-lift-status/",
+    "acres": 960,
+    "trailCount": 69,
+    "baseFt": 3650,
+    "summitFt": 5027,
+    "verticalFt": 1500,
+    "nightSkiing": true
+  },
+  {
+    "id": "palisades-tahoe",
+    "name": "Palisades Tahoe",
+    "aliases": [
+      "Alpine Meadows",
+      "Olympic Valley",
+      "Squaw Valley",
+      "California"
+    ],
+    "country": "US",
+    "region": "CA",
+    "locality": "Olympic Valley",
+    "website": "https://www.palisadestahoe.com/",
+    "statsUrl": "https://www.palisadestahoe.com/footer/mountain-statistics",
+    "reportUrl": "https://www.palisadestahoe.com/mountain-information/mountain-report",
+    "acres": 6000,
+    "liftCount": 39,
+    "trailCount": 288,
+    "baseFt": 6200,
+    "summitFt": 9050,
+    "verticalFt": 2850,
+    "seasonWindow": "November–May",
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 25,
+        "Intermediate": 43,
+        "Advanced": 24,
+        "Expert": 9
+      }
+    }
+  },
+  {
+    "id": "park-city-mountain",
+    "name": "Park City Mountain",
+    "aliases": [
+      "Canyons Village",
+      "Park City Mountain Resort",
+      "Utah"
+    ],
+    "country": "US",
+    "region": "UT",
+    "locality": "Park City",
+    "website": "https://www.parkcitymountain.com/",
+    "statsUrl": "https://www.parkcitymountain.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.parkcitymountain.com/the-mountain/mountain-conditions/weather-report.aspx",
+    "acres": 7300,
+    "liftCount": 41,
+    "trailCount": 330,
+    "trailCountQualifier": "lower-bound",
+    "baseFt": 6800,
+    "summitFt": 10026,
+    "verticalFt": 3226,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 8,
+        "Intermediate": 42,
+        "Advanced": 50
+      }
+    },
+    "additionalSources": [
+      "https://www.parkcitymountain.com/-/aemasset/sitecore/park-city/maps/20251114_PC_winter-trail_map_001.pdf"
+    ]
+  },
+  {
+    "id": "pico-mountain",
+    "name": "Pico Mountain",
+    "aliases": [
+      "Vermont"
+    ],
+    "country": "US",
+    "region": "VT",
+    "locality": "Mendon",
+    "website": "https://picomountain.com/",
+    "statsUrl": "https://picomountain.com/mountain-stats",
+    "reportUrl": "https://picomountain.com/mountain-report",
+    "acres": 468,
+    "liftCount": 7,
+    "trailCount": 58,
+    "baseFt": 2000,
+    "summitFt": 3967,
+    "verticalFt": 1967,
+    "grades": {
+      "unit": "count",
+      "values": {
+        "Easier": 10,
+        "More difficult": 26,
+        "Most difficult": 21
+      },
+      "of": "trails"
+    },
+    "additionalSources": [
+      "https://picomountain.com/opening-day",
+      "https://picomountain.com/transportation-parking-and-shuttles"
+    ]
+  },
+  {
+    "id": "revelstoke",
+    "name": "Revelstoke Mountain Resort",
+    "aliases": [
+      "British Columbia"
+    ],
+    "country": "CA",
+    "region": "BC",
+    "locality": "Revelstoke",
+    "website": "https://www.revelstokemountainresort.com/",
+    "statsUrl": "https://www.revelstokemountainresort.com/mountain/mountain-stats/",
+    "reportUrl": "https://www.revelstokemountainresort.com/mountain/conditions/snow-report/",
+    "acres": 3121,
+    "liftCount": 6,
+    "trailCount": 75,
+    "baseFt": 1679,
+    "summitFt": 7677,
+    "verticalFt": 5620,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Green": 12,
+        "Intermediate": 43,
+        "Advanced": 45
+      }
+    },
+    "additionalSources": [
+      "https://www.revelstokemountainresort.com/site/assets/files/2840/revelstoke-mountain-resort-map-winter-25-26.pdf"
+    ]
+  },
+  {
+    "id": "snowbird",
+    "name": "Snowbird",
+    "aliases": [
+      "Utah"
+    ],
+    "country": "US",
+    "region": "UT",
+    "locality": "Snowbird",
+    "website": "https://www.snowbird.com/",
+    "statsUrl": "https://mountaincollective.com/resort/snowbird/",
+    "reportUrl": "https://www.snowbird.com/the-mountain/mountain-report/current-conditions-weather/",
+    "acres": 2500,
+    "liftCount": 14,
+    "trailCount": 140,
+    "summitFt": 11000,
+    "verticalFt": 3240,
+    "seasonWindow": "November–May",
+    "additionalSources": [
+      "https://www.snowbird.com/activities-events/summer-activities/tram/",
+      "https://www.ikonpass.com/en/destinations/snowbird"
+    ]
+  },
+  {
+    "id": "stevens-pass",
+    "name": "Stevens Pass",
+    "aliases": [
+      "Washington"
+    ],
+    "country": "US",
+    "region": "WA",
+    "locality": "Skykomish",
+    "website": "https://www.stevenspass.com/",
+    "statsUrl": "https://www.stevenspass.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.stevenspass.com/the-mountain/mountain-conditions/weather-report.aspx",
+    "acres": 1125,
+    "liftCount": 13,
+    "trailCount": 52,
+    "baseFt": 4061,
+    "summitFt": 5845,
+    "verticalFt": 1800,
+    "nightSkiing": true,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 11,
+        "Intermediate": 54,
+        "Advanced": 35
+      }
+    },
+    "additionalSources": [
+      "https://www.stevenspass.com/-/aemasset/sitecore/stevens-pass/maps/winter-2024-2025/20241115_SV_winter-trail_map_001.pdf"
+    ]
+  },
+  {
+    "id": "stowe",
+    "name": "Stowe Mountain Resort",
+    "aliases": [
+      "Vermont"
+    ],
+    "country": "US",
+    "region": "VT",
+    "locality": "Stowe",
+    "website": "https://www.stowe.com/",
+    "statsUrl": "https://www.stowe.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.stowe.com/the-mountain/mountain-conditions/terrain-and-lift-status",
+    "acres": 485,
+    "liftCount": 12,
+    "trailCount": 116,
+    "baseFt": 1280,
+    "summitFt": 4395,
+    "verticalFt": 2160,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 16,
+        "Intermediate": 55,
+        "Expert": 29
+      },
+      "of": "trails"
+    },
+    "additionalSources": [
+      "https://www.stowe.com/explore-the-resort/about-the-resort/guest-services"
+    ]
+  },
+  {
+    "id": "sugarloaf",
+    "name": "Sugarloaf",
+    "aliases": [
+      "Maine"
+    ],
+    "country": "US",
+    "region": "ME",
+    "locality": "Carrabassett Valley",
+    "website": "https://www.sugarloaf.com/",
+    "statsUrl": "https://www.sugarloaf.com/media-room",
+    "reportUrl": "https://www.sugarloaf.com/mountain-report",
+    "acres": 1360,
+    "liftCount": 15,
+    "trailCount": 176,
+    "baseFt": 1417,
+    "summitFt": 4237,
+    "verticalFt": 2820,
+    "seasonWindow": "November to early May",
+    "grades": {
+      "unit": "count",
+      "values": {
+        "Green circle": 38,
+        "Blue square": 54,
+        "Black diamond": 42,
+        "Double black diamond": 36
+      },
+      "of": "trails"
+    },
+    "additionalSources": [
+      "https://www.sugarloaf.com/mountain-info"
+    ]
+  },
+  {
+    "id": "tremblant",
+    "name": "Tremblant",
+    "aliases": [
+      "Mont-Tremblant",
+      "Station Mont Tremblant",
+      "Quebec"
+    ],
+    "country": "CA",
+    "region": "QC",
+    "locality": "Mont-Tremblant",
+    "website": "https://www.tremblant.ca/",
+    "statsUrl": "https://www.tremblant.ca/mountain-village/mountain-info/tremblant-statistics",
+    "reportUrl": "https://www.tremblant.ca/mountain-village/mountain-report",
+    "acres": 763.16,
+    "liftCount": 15,
+    "trailCount": 103,
+    "summitFt": 2871,
+    "verticalFt": 2116,
+    "grades": {
+      "unit": "count",
+      "of": "trails",
+      "values": {
+        "Easy": 23,
+        "Difficult": 31,
+        "Very difficult and extreme": 49
+      }
+    }
+  },
+  {
+    "id": "whaleback",
+    "name": "Whaleback Mountain",
+    "aliases": [
+      "New Hampshire"
+    ],
+    "country": "US",
+    "region": "NH",
+    "locality": "Enfield",
+    "website": "https://www.whaleback.com/",
+    "statsUrl": "https://www.indyskipass.com/our-resorts/whaleback-mountain",
+    "reportUrl": "https://www.whaleback.com/trail-report",
+    "acres": 86,
+    "liftCount": 4,
+    "trailCount": 31,
+    "baseFt": 1100,
+    "summitFt": 1800,
+    "verticalFt": 700,
+    "nightSkiing": true,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 30,
+        "Intermediate": 35,
+        "Advanced": 35
+      }
+    },
+    "additionalSources": [
+      "https://www.whaleback.com/night-skiing"
+    ]
+  },
+  {
+    "id": "whistler-blackcomb",
+    "name": "Whistler Blackcomb",
+    "aliases": [
+      "British Columbia"
+    ],
+    "country": "CA",
+    "region": "BC",
+    "locality": "Whistler",
+    "website": "https://www.whistlerblackcomb.com/",
+    "statsUrl": "https://www.whistlerblackcomb.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "reportUrl": "https://www.whistlerblackcomb.com/the-mountain/mountain-conditions/snow-and-weather-report.aspx",
+    "acres": 8171,
+    "liftCount": 34,
+    "trailCount": 200,
+    "trailCountQualifier": "lower-bound",
+    "baseFt": 2214,
+    "summitFt": 8019,
+    "verticalFt": 5280,
+    "grades": {
+      "unit": "percent",
+      "of": "terrain",
+      "values": {
+        "Easiest": 20,
+        "More difficult": 35,
+        "Most difficult": 25,
+        "Experts only": 20
+      }
+    },
+    "additionalSources": [
+      "https://www.whistlerblackcomb.com/-/aemasset/sitecore/whistler-blackcomb/maps/winter-2025-2026/20251023_WB_winter-trail_map_001.pdf"
+    ]
+  },
+  {
+    "id": "whiteface",
+    "name": "Whiteface Mountain",
+    "aliases": [
+      "New York"
+    ],
+    "country": "US",
+    "region": "NY",
+    "locality": "Wilmington",
+    "website": "https://whiteface.com/",
+    "statsUrl": "https://whiteface.com/mountain/mountain-stats/",
+    "reportUrl": "https://whiteface.com/mountain/conditions/",
+    "acres": 299,
+    "liftCount": 11,
+    "trailCount": 97,
+    "baseFt": 1220,
+    "summitFt": 4867,
+    "verticalFt": 3430,
+    "highestLiftTerminalFt": 4386,
+    "grades": {
+      "unit": "percent",
+      "values": {
+        "Beginner": 26,
+        "Intermediate": 42,
+        "Expert": 32
+      },
+      "of": "terrain"
+    }
+  }
+]

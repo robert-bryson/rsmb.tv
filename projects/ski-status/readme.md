@@ -4,6 +4,18 @@ November 19, 2026
 
 ski-status is a personal map and comparison table for North American downhill ski areas. Use it to find where a specific pass works, see what is open, and compare mountains. Open directly to the map and table.
 
+## Pilot catalog
+
+Open `/projects/ski-status/map` from the project directory. The pilot contains 25 ski areas in the United States and Canada. Filter by region, pass family, and night skiing. Select a map marker or table row for source links and the operator's conditions report.
+
+| File | Use |
+| --- | --- |
+| [Area statistics](data/pilot-areas.json) | Published mountain facts and report links checked on November 19, 2026. Missing fields display as unknown. |
+| [Area locations](data/pilot-locations.json) | Representative points from the November 16 OpenSkiData build. The point records carry source identifiers and ODbL attribution. |
+| [Pass memberships](data/passes-2026-27.json) | Verified 2026/27 family access for the pilot. Discount-only partners appear in the details and stay outside the included-access filter. |
+
+Use the same area ID across the three files. Palisades Tahoe uses one marker and keeps both base-area sources. Sort published lower bounds by their stated minimum. Their displayed values retain the plus sign. Reports open on the operator's site during the pilot.
+
 ## First release
 
 Include active, public, lift-served downhill areas with **at least 100 published skiable acres or included lift access on a supported pass**. Apply the same rule throughout North America, including Alaska, Mexico, and Greenland. Start with Ikon, Epic, Indy, and Mountain Collective. Consider Powder Alliance next. Keep eligible areas visible in their off-season. [Powder Alliance eligibility](https://www.powderalliance.com/), [Visit Nuuk ski area](https://visitnuuk.com/providers/skiliften/), [Monterreal](https://www.monterreal.com/)

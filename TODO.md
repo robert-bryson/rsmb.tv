@@ -23,7 +23,7 @@ Hosted checks require a deployed build. Device checks require the named physical
 | Later engineering work | [Build and maintenance](#build-and-maintenance), [Tornado Tracks](#tornado-tracks), and [dashboard checks](#dashboard-checks) | Local implementation and regression tests |
 | Infrastructure changes | [Infrastructure](#infrastructure) | AWS or Google Admin access |
 | Content additions | [Project content](#project-content) | Reviewed content and assets |
-| Ski area explorer | [ski-status pilot](#ski-status-pilot) | Area statistics, pass rules, and operations sources |
+| Ski area explorer | [ski-status pilot](#ski-status-pilot) | Pass product rules and operations sources |
 | Application planning | [Ride Ledger prerequisites](#ride-ledger-prerequisites) | Owner decisions and synthetic fixtures |
 
 ## Next release checks
@@ -219,7 +219,8 @@ Track pending stories in [Content publication](#content-publication). Do not add
 
 ## ski-status pilot
 
-- [ ] Review the first 25 ski areas against the inclusion rule and verify their sources. Use the [pilot acceptance checks](projects/ski-status/readme.md#implementation-sequence-and-acceptance-checks).
+- [ ] Add exact pass products and date-specific access to the pilot. Use the [pass rules and acceptance checks](projects/ski-status/readme.md#implementation-sequence-and-acceptance-checks).
+- [ ] Measure reported conditions coverage across the pilot and add scheduled updates for permitted sources. Use the [conditions pilot](projects/ski-status/readme.md#sources-and-pilot).
 
 ## Ride Ledger prerequisites
 

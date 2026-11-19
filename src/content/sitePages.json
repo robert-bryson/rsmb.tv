@@ -25,6 +25,12 @@
     "image": "/og/adv-atlas.png",
     "operatingSystem": "Web"
   },
+  "/projects/ski-status/map": {
+    "title": "ski-status",
+    "description": "Compare North American ski areas by skiable terrain, vertical, lifts, trails, night skiing, and pass access.",
+    "image": "/og/projects.png",
+    "operatingSystem": "Web"
+  },
   "/projects/pins-of-inaccessibility": {
     "title": "Pins of Inaccessibility",
     "description": "Explore global interior pins and detailed U.S. counties on a 3D globe. Compare boundary distances, navigate geographic levels, and view terrain and nearby places.",

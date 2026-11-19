@@ -19,7 +19,7 @@ vi.mock('react-router-dom', async importOriginal => {
 });
 
 function Harness() {
-    const { query, updateQuery, commitQuery, clearFilters, returnUrl } = useSearchQuery();
+    const { query, updateQuery, commitQuery, updateParams, clearFilters, returnUrl } = useSearchQuery();
     const location = useLocation();
     const navigate = useNavigate();
     const [saved, setSaved] = useState({ url: '', state: null as unknown });
@@ -30,6 +30,7 @@ function Harness() {
         <span data-testid="state">{JSON.stringify(location.state)}</span>
         <button onClick={clearFilters}>Clear filters</button>
         <button onClick={commitQuery}>Commit search</button>
+        <button onClick={() => updateParams(params => params.set('region', 'VT'))}>Filter Vermont</button>
         <button onClick={() => navigate('/projects?q=external', { replace: true, state: location.state })}>Replace with context</button>
         <button onClick={() => navigate('/projects?q=external', { state: location.state })}>Push with context</button>
         <button onClick={() => setSaved({ url: location.pathname + location.search, state: location.state })}>Save entry</button>
@@ -56,6 +57,16 @@ beforeEach(() => { vi.useFakeTimers(); deferredWrites.length = 0; });
 afterEach(() => { vi.clearAllTimers(); vi.useRealTimers(); });
 
 describe('search write ownership review regressions', () => {
+    it('commits the draft with a filter change before the search timer fires', () => {
+        openSearch();
+        fireEvent.change(screen.getByRole('textbox', { name: 'Search' }), { target: { value: 'pico' } });
+        fireEvent.click(screen.getByRole('button', { name: 'Filter Vermont' }));
+        expect(deferredWrites).toHaveLength(1);
+        commitNextWrite();
+        expect(deferredWrites).toHaveLength(0);
+        expect(screen.getByTestId('url')).toHaveTextContent('/projects?category=maps&q=pico&region=VT');
+    });
+
     it('keeps urgent input and return links ahead of delayed router commits', () => {
         openSearch({ context: 'saved-list', restoreScroll: true, siteSearchQuery: 'maps' });
         const input = screen.getByRole('textbox', { name: 'Search' });

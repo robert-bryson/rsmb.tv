@@ -108,7 +108,7 @@ export function staticPageMetadata(pathname: string, posts: PostMetadata[] = [])
         if (pathname === projectPath) {
             jsonLd = { ...context, ...application, description, mainEntityOfPage: { '@type': 'WebPage', '@id': url } };
         } else {
-            if (slug !== 'adv-atlas') trail.push({ name: project.title, url: absoluteUrl(projectPath) });
+            if (projectPath in sitePages) trail.push({ name: project.title, url: absoluteUrl(projectPath) });
             jsonLd = { ...common, '@type': 'WebPage', name: pathname.endsWith('/map') ? `${project.title} Map` : title, mainEntity: application };
         }
     }

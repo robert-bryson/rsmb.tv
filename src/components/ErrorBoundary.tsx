@@ -6,6 +6,7 @@ import { captureAnalyticsException, trackAnalyticsEvent } from '../utils/analyti
 
 interface Props {
     children: ReactNode;
+    fallback?: ReactNode;
 }
 
 interface State {
@@ -27,6 +28,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
     render() {
         if (this.state.hasError) {
+            if (this.props.fallback !== undefined) return this.props.fallback;
             return (
                 <div role="alert" data-testid="page-error" className="flex flex-col items-center justify-center min-h-[50vh] p-8 text-center">
                     <h1 className="text-2xl font-bold text-zinc-200 mb-2">Something went wrong</h1>

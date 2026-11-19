@@ -89,6 +89,14 @@ export function useSearchQuery() {
         writeParams(pending.params, true);
     }
 
+    function updateParams(update: (params: URLSearchParams) => void) {
+        const params = new URLSearchParams(searchParams);
+        update(params);
+        if (params.toString() === searchParams.toString()) return;
+        cancelPendingQuery(pendingQuery);
+        writeParams(params, false);
+    }
+
     function clearFilters() {
         commitQuery();
         writeParams(new URLSearchParams(), false);
@@ -96,5 +104,5 @@ export function useSearchQuery() {
 
     const returnSearch = withSearchQuery(searchParams, query).toString();
     const returnUrl = `${location.pathname}${returnSearch ? `?${returnSearch}` : ''}`;
-    return { query, updateQuery, commitQuery, clearFilters, searchParams, returnUrl };
+    return { query, updateQuery, commitQuery, updateParams, clearFilters, searchParams, returnUrl };
 }
