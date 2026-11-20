@@ -3,7 +3,7 @@
 
 import argparse
 from collections import defaultdict
-from contextlib import closing
+from contextlib import closing, contextmanager
 from datetime import datetime
 import hashlib
 from html import escape
@@ -11,9 +11,11 @@ import json
 import os
 from pathlib import Path
 import re
+from shutil import copy2
 import sqlite3
 import subprocess
 from tempfile import TemporaryDirectory
+from unicodedata import normalize
 from urllib.parse import urlsplit
 
 DATA = Path(__file__).resolve().parents[1] / 'data'
@@ -64,7 +66,20 @@ def validate_snapshot(path, metadata):
 
 
 def format_attribution(credits):
-    return ' · '.join(f'<a href="{escape(url)}">{escape(name, quote=False)}</a>' for name, url in credits.items())
+    links = []
+    for name, url in credits.items():
+        error = f'Attribution for {name} requires an HTTPS URL without credentials.'
+        if not isinstance(url, str) or re.search(r'[\s\x00-\x1f\x7f\\]', url):
+            raise ValueError(error)
+        try:
+            parsed = urlsplit(url)
+            valid_port = parsed.port != 0
+        except ValueError as cause:
+            raise ValueError(error) from cause
+        if parsed.scheme != 'https' or not parsed.hostname or parsed.username is not None or not valid_port:
+            raise ValueError(error)
+        links.append(f'<a href="{escape(url)}">{escape(name, quote=False)}</a>')
+    return ' · '.join(links)
 
 
 def values(field):
@@ -130,6 +145,48 @@ def find_areas(db, areas, locations):
         if len(candidates) == 1:
             matched[next(iter(candidates))].add(area['id'])
     return matched
+
+
+def add_mapped_trail_counts(path, locations, build_time):
+    if locations['buildTime'] != build_time:
+        return False
+
+    destinations = defaultdict(list)
+    for record in locations['locations']:
+        mapped = record.get('mappedTerrain')
+        if mapped:
+            source = re.fullmatch(r'https://openskimap\.org/\?obj=([a-f0-9]{40})', mapped['source'])
+            if source:
+                destinations[source[1]].append(mapped)
+
+    names = defaultdict(set)
+    with closing(sqlite3.connect(f'{path.resolve().as_uri()}?mode=ro', uri=True)) as connection:
+        for table in FEATURE_LAYERS['runs']:
+            rows = connection.execute(f'''
+                SELECT name, uses, ski_area_ids FROM "{table}"
+                WHERE status = 'operating' AND name IS NOT NULL AND ski_area_ids IS NOT NULL
+            ''')
+            for name, uses, area_ids in rows:
+                name = normalize('NFC', ' '.join(name.split()).casefold())
+                if not name:
+                    continue
+                activities = values(uses) & {'downhill', 'nordic'}
+                for area_id in values(area_ids) & destinations.keys():
+                    for activity in activities:
+                        names[area_id, activity].add(name)
+
+    changed = False
+    for area_id, records in destinations.items():
+        for mapped in records:
+            for activity, field in [('downhill', 'namedDownhillRuns'), ('nordic', 'namedNordicTrails')]:
+                count = len(names[area_id, activity]) if mapped.get(f'{activity}Km') else 0
+                if mapped.get(field, 0) != count:
+                    changed = True
+                    if count:
+                        mapped[field] = count
+                    else:
+                        mapped.pop(field, None)
+    return changed
 
 
 def write_tiles(db, matched, areas, work, attribution):
@@ -200,6 +257,42 @@ def sha256(path):
     return checksum.hexdigest()
 
 
+@contextmanager
+def lock_output(directory):
+    lock = directory / 'resort-terrain.pid.lock'
+    try:
+        descriptor = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+    except FileExistsError as error:
+        raise RuntimeError(f'A resort terrain build is already running: {lock}') from error
+    try:
+        with os.fdopen(descriptor, 'w', encoding='ascii') as stream:
+            stream.write(f'{os.getpid()}\n')
+        yield
+    finally:
+        lock.unlink()
+
+
+def publish_outputs(outputs, directory):
+    """Replace staged files and restore the previous outputs if a replacement fails."""
+    replacements = [(output, directory / output.name, output.with_suffix(output.suffix + '.previous')) for output in outputs]
+    for _, target, backup in replacements:
+        if target.exists():
+            copy2(target, backup)
+    try:
+        for output, target, _ in replacements:
+            os.replace(output, target)
+    except (OSError, KeyboardInterrupt):
+        for output, target, backup in reversed(replacements):
+            # A successful rename consumes the staged file.
+            if output.exists():
+                continue
+            if backup.exists():
+                os.replace(backup, target)
+            else:
+                target.unlink(missing_ok=True)
+        raise
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('geopackage', type=Path)
@@ -211,20 +304,23 @@ def main():
     except (OSError, ValueError, KeyError, TypeError, AttributeError, sqlite3.DatabaseError) as error:
         parser.error(f'Invalid OpenSkiData snapshot. {error}')
 
-    from osgeo import ogr
+    with lock_output(DATA), TemporaryDirectory(prefix='resort-terrain-', dir=DATA) as temporary:
+        locations = read_json(DATA / 'locations.json')
+        areas = {area['id']: area for area in read_json(DATA / 'areas.json')}
+        try:
+            attribution = format_attribution({**locations['attribution'], 'ODbL': locations['license']})
+        except (KeyError, TypeError, ValueError) as error:
+            parser.error(f'Invalid terrain attribution. {error}')
 
-    db = ogr.Open(str(args.geopackage))
-    if db is None:
-        raise SystemExit('Cannot read the OpenSkiData GeoPackage.')
-    locations = read_json(DATA / 'locations.json')
-    areas = {area['id']: area for area in read_json(DATA / 'areas.json')}
-    matched = find_areas(db, areas, locations['locations'])
-    if not matched:
-        raise SystemExit('No OpenSkiData areas match the catalog.')
-    credits = {**locations['attribution'], 'ODbL': locations['license']}
-    attribution = format_attribution(credits)
+        from osgeo import ogr
 
-    with TemporaryDirectory(prefix='resort-terrain-', dir=DATA) as temporary:
+        db = ogr.Open(str(args.geopackage))
+        if db is None:
+            raise SystemExit('Cannot read the OpenSkiData GeoPackage.')
+        matched = find_areas(db, areas, locations['locations'])
+        if not matched:
+            raise SystemExit('No OpenSkiData areas match the catalog.')
+
         work = Path(temporary)
         archive, by_area, counts = write_tiles(db, matched, areas, work, attribution)
         manifest = {
@@ -234,8 +330,12 @@ def main():
         }
         index = work / 'resort-terrain.json'
         index.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-        os.replace(archive, DATA / archive.name)
-        os.replace(index, DATA / index.name)
+        outputs = [archive]
+        if add_mapped_trail_counts(args.geopackage, locations, manifest['buildTime']):
+            location_index = work / 'locations.json'
+            location_index.write_text(json.dumps(locations, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+            outputs.append(location_index)
+        publish_outputs([*outputs, index], DATA)
     print(f'{len(by_area)} catalog areas, {counts}')
 
 

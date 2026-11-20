@@ -875,6 +875,27 @@ test('reports loading until the basemap tiles finish', async ({ page }) => {
     await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
 });
 
+test('offers a map retry when marker data fails and keeps the selected area', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await prepare(page);
+    const renderer = await captureMap(page);
+    const map = page.getByTestId('ski-status-map');
+    await page.getByRole('searchbox', { name: 'Search areas' }).fill('whaleback');
+    await page.getByRole('button', { name: 'Whaleback Mountain', exact: true }).click();
+
+    await renderer.evaluate(map => {
+        map.fire('error', { sourceId: 'ski-areas', error: new Error('Resort point data unavailable') });
+    });
+    await expect(map).toHaveAttribute('data-map-state', 'error');
+    await expect(page.getByRole('region', { name: 'Whaleback Mountain', exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Retry background' })).toHaveCount(0);
+    await page.getByRole('button', { name: 'Retry map' }).click();
+    await expect(map).toHaveAttribute('data-map-state', 'ready');
+    await expect(page.getByRole('region', { name: 'Whaleback Mountain map popup', exact: true })).toBeVisible();
+    await expect(page.getByRole('searchbox', { name: 'Search areas' })).toHaveValue('whaleback');
+    await renderer.dispose();
+});
+
 test('opens each phone layout with the same results when the basemap fails', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 680 });
     await prepare(page, null);

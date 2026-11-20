@@ -63,6 +63,23 @@ describe('ski-status catalog validation', () => {
         expect(() => result({ source, elevationM: [620, 410] })).toThrow('Use an increasing elevation range');
     });
 
+    it('validates field-level sources against the published stats', () => {
+        const source = { source: 'https://example.org/map.pdf', checkedOn: '2026-11-19', fields: ['acres'] };
+        const result = (statSources: object[]) => readSkiCatalog([{ ...area, statSources }], locations, passes);
+        expect(result([source]).areas[0]?.statSources).toEqual([source]);
+        expect(() => result([{ ...source, fields: ['summitFt'] }])).toThrow('Source for missing summitFt');
+        expect(() => result([source, source])).toThrow('Duplicate source for acres');
+    });
+
+    it('accepts complete field citations in place of a general mountain statistics source', () => {
+        const source = { source: 'https://example.org/map.pdf', checkedOn: '2026-11-19', fields: ['acres'] };
+        const citedArea = { ...area, acres: 4, skiing: 'indoor', statsUrl: undefined, statSources: [source] };
+        const noPass = { ...passes, memberships: [] };
+        expect(readSkiCatalog([citedArea], locations, noPass).areas[0]?.statSources).toEqual([source]);
+        expect(() => readSkiCatalog([{ ...citedArea, liftCount: 0 }], locations, noPass))
+            .toThrow(/No mountain statistics source.*liftCount/);
+    });
+
     it.each([
         [{ statsUrl: undefined }, /No mountain statistics source/],
         [{ name: '   ' }, /Too small/],
@@ -217,6 +234,8 @@ describe('ski-status catalog and browse', () => {
         expect(formatSkiStat(afton, 'mappedDownhillKm', 'metric')).toBe('13 km');
         expect(formatSkiStat(afton, 'mappedDownhillKm', 'imperial')).toBe('8.1 mi');
         expect(formatSkiStat(afton, 'mappedHighM', 'imperial')).toBe('1,017 ft');
+        expect(formatSkiStat(afton, 'mappedElevationSpanM', 'metric')).toBe('97 m');
+        expect(formatSkiStat(afton, 'mappedNamedDownhillRuns', 'imperial')).toBe('39');
         expect(formatSkiStat(bigSnow, 'verticalFt', 'imperial')).toBe('160 ft');
         expect(formatSkiStat(bigSnow, 'mappedLowM', 'metric')).toBeUndefined();
         expect(formatSkiStat(brighton, 'nightAcres', 'metric')).toBe('80.9+ ha');

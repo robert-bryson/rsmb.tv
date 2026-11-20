@@ -219,20 +219,25 @@ Track pending stories in [Content publication](#content-publication). Do not add
 
 ## ski-status
 
-### First release
+### Release checks
 
-- [ ] Check the ski terrain archive on the hosted preview. Verify byte ranges and render the detail layers near Heavenly. [Release checks](projects/ski-status/readme.md#release-checks)
-- [ ] Review the remaining North American areas by region. Record the source and decision for each area. List unresolved areas. [Catalog rules](projects/ski-status/readme.md#build-the-catalog)
+- [ ] Verify the ski terrain archive on the hosted preview. Check the `206` response, the `Content-Range` header, and the bytes. Confirm that Heavenly shows runs and lifts at resort zoom. [Release checks](projects/ski-status/readme.md#release-checks)
+- [ ] Review the eligibility of the remaining North American areas by region. Record the source and decision for each area. List unresolved areas. [Catalog rules](projects/ski-status/readme.md#build-the-catalog)
+
+### Catalog maintenance
+
+- [ ] Fill missing acreage, vertical drop, lift count, trail count, base elevation, and summit elevation for downhill areas. Check the units and scope of each figure. Record the source and date. Update the field counts. [Mountain statistics](projects/ski-status/readme.md#comparable-mountain-statistics)
+- [ ] Fill gaps in lift terminal elevations, night skiable acres, and season windows. Add a field citation for each value. [Mountain statistics](projects/ski-status/readme.md#comparable-mountain-statistics)
+- [ ] Add missing official conditions links. Check that each link opens a current report for that area. [Catalog files](projects/ski-status/readme.md#catalog)
+- [ ] Check each pass roster at the start of the season. Verify included access and discounts. Check the countries that each shared area covers. [Pass rules](projects/ski-status/readme.md#pass-access-by-product-and-date)
+- [ ] Review areas with missing or shared coverage after each terrain update. Record the source for each manual match. [Runs and lifts](projects/ski-status/readme.md#runs-and-lifts-at-resort-zoom)
+
+### First release features
+
 - [ ] Add rules by pass product and local ski date. Test day limits, shared days, blackout dates, and reservations. [Pass rules](projects/ski-status/readme.md#pass-access-by-product-and-date)
 - [ ] Add resort reports and forecasts from sources that permit reuse. Measure field coverage and report age. [Conditions pilot](projects/ski-status/readme.md#sources-and-pilot)
 - [ ] Add operating status colors after the app can check report age. [Map and table](projects/ski-status/readme.md#map-and-table)
 - [ ] Add column settings and CSV export. Verify the data license for export. [Map and table](projects/ski-status/readme.md#map-and-table)
-
-### Catalog maintenance
-
-- [ ] Check each pass roster at the start of the season. Verify included access and discounts. Check the countries that each shared area covers. [Catalog rules](projects/ski-status/readme.md#build-the-catalog)
-- [ ] Fill missing published statistics and conditions links. Start with lift terminal elevations, night skiable acres, and season dates. Check the units and terrain that each figure covers. Update the field counts. [Mountain statistics](projects/ski-status/readme.md#comparable-mountain-statistics)
-- [ ] Review ski areas with missing or shared map coverage after each terrain update. Record any manual matches and the source for each match. [Runs and lifts](projects/ski-status/readme.md#runs-and-lifts-at-resort-zoom)
 
 ### Version 2
 

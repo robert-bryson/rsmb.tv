@@ -24,6 +24,7 @@
         "source": "https://openskimap.org/?obj=c443cc1044843c9e8087e6c40fe118eb8d8fa18b",
         "lifts": 22,
         "downhillKm": 62,
+        "namedDownhillRuns": 63,
         "elevationM": [
           1135,
           2221
@@ -44,6 +45,7 @@
         "source": "https://openskimap.org/?obj=714edf91084f6337747764d63aa21f3381be33e2",
         "lifts": 7,
         "downhillKm": 52,
+        "namedDownhillRuns": 80,
         "elevationM": [
           1190,
           1756
@@ -64,6 +66,7 @@
         "source": "https://openskimap.org/?obj=37f4ea452662caed6a34272742ddce97f1a4734a",
         "lifts": 20,
         "downhillKm": 13,
+        "namedDownhillRuns": 39,
         "elevationM": [
           213,
           310
@@ -84,6 +87,7 @@
         "source": "https://openskimap.org/?obj=712f8e147bed9e60894d62fb3dad2619ac81966a",
         "lifts": 32,
         "downhillKm": 46,
+        "namedDownhillRuns": 43,
         "elevationM": [
           1182,
           1811
@@ -114,6 +118,7 @@
         "source": "https://openskimap.org/?obj=012af6135e558d614d71a2af51f3b2a0f8fcf158",
         "lifts": 6,
         "downhillKm": 14,
+        "namedDownhillRuns": 31,
         "elevationM": [
           958,
           1659
@@ -134,6 +139,7 @@
         "source": "https://openskimap.org/?obj=209437aa417a69f51e4b5c8b4f7b96e7d1d816c0",
         "lifts": 5,
         "downhillKm": 3,
+        "namedDownhillRuns": 9,
         "elevationM": [
           340,
           410
@@ -155,6 +161,7 @@
         "source": "https://openskimap.org/?obj=317407e2fb14035f61d6d927530f04e42b3a277b",
         "lifts": 11,
         "downhillKm": 77,
+        "namedDownhillRuns": 114,
         "elevationM": [
           2602,
           3217
@@ -175,6 +182,7 @@
         "source": "https://openskimap.org/?obj=04d84a3789b94eba19ce3c951fece8117d931c03",
         "lifts": 59,
         "downhillKm": 127,
+        "namedDownhillRuns": 127,
         "elevationM": [
           1341,
           2526
@@ -195,6 +203,7 @@
         "source": "https://openskimap.org/?obj=aacaa8c57fc9318da09e9d03947887fa1c4d1ee1",
         "lifts": 7,
         "downhillKm": 30,
+        "namedDownhillRuns": 68,
         "elevationM": [
           80,
           837
@@ -215,6 +224,7 @@
         "source": "https://openskimap.org/?obj=1f9e24e6c637609b0f42742006ebff26ecf75b2d",
         "lifts": 5,
         "downhillKm": 8,
+        "namedDownhillRuns": 1,
         "elevationM": [
           764,
           1324
@@ -234,6 +244,7 @@
         "source": "https://openskimap.org/?obj=989d5aae8c00edda3ff072decccdba8c17251be0",
         "lifts": 8,
         "downhillKm": 18,
+        "namedDownhillRuns": 21,
         "elevationM": [
           1437,
           2958
@@ -254,6 +265,7 @@
         "source": "https://openskimap.org/?obj=79c0a83a43fb28c85dd99af59db0b39659473142",
         "lifts": 18,
         "downhillKm": 45,
+        "namedDownhillRuns": 51,
         "elevationM": [
           1437,
           2595
@@ -275,6 +287,8 @@
         "lifts": 5,
         "downhillKm": 5,
         "nordicKm": 14,
+        "namedDownhillRuns": 16,
+        "namedNordicTrails": 8,
         "elevationM": [
           428,
           493
@@ -295,6 +309,7 @@
         "source": "https://openskimap.org/?obj=34ac08b56aded0d8451d6ca515d06a2f6dbb0b59",
         "lifts": 8,
         "downhillKm": 53,
+        "namedDownhillRuns": 83,
         "elevationM": [
           2618,
           3256
@@ -315,6 +330,7 @@
         "source": "https://openskimap.org/?obj=10f9e2368b6a3bccf932b35063bbb01f5cf5f9a3",
         "lifts": 3,
         "downhillKm": 6,
+        "namedDownhillRuns": 18,
         "elevationM": [
           2566,
           2855
@@ -335,6 +351,7 @@
         "source": "https://openskimap.org/?obj=e0494e78dbf7a68f9f2df5e72370b0797b4f282c",
         "lifts": 4,
         "downhillKm": 19,
+        "namedDownhillRuns": 21,
         "elevationM": [
           396,
           916
@@ -355,6 +372,7 @@
         "source": "https://openskimap.org/?obj=5f1f624e6535fdea28612a24b96567a8cf82fa15",
         "lifts": 4,
         "downhillKm": 48,
+        "namedDownhillRuns": 60,
         "elevationM": [
           1606,
           2173
@@ -375,6 +393,7 @@
         "source": "https://openskimap.org/?obj=a1014f93cfa79a80399253712be268ff44b50a0e",
         "lifts": 8,
         "downhillKm": 31,
+        "namedDownhillRuns": 19,
         "elevationM": [
           628,
           1269
@@ -406,6 +425,7 @@
         "source": "https://openskimap.org/?obj=9d8adf255be42c6d09ad8dcb5c19ff34fa0f5908",
         "lifts": 5,
         "downhillKm": 13,
+        "namedDownhillRuns": 10,
         "elevationM": [
           369,
           1278
@@ -426,6 +446,7 @@
         "source": "https://openskimap.org/?obj=1e281ff389476a82150ad7ef7be5f1ea48edd5e5",
         "lifts": 9,
         "downhillKm": 49,
+        "namedDownhillRuns": 109,
         "elevationM": [
           3289,
           3803
@@ -446,6 +467,7 @@
         "source": "https://openskimap.org/?obj=28f11df51cf3800a3fe86da47247893af7283859",
         "lifts": 3,
         "downhillKm": 10,
+        "namedDownhillRuns": 18,
         "elevationM": [
           772,
           1192
@@ -465,6 +487,7 @@
         "source": "https://openskimap.org/?obj=87b7df0dbae2a407504e46e102d8256f84fc81c1",
         "lifts": 4,
         "downhillKm": 9,
+        "namedDownhillRuns": 16,
         "elevationM": [
           430,
           536
@@ -485,6 +508,7 @@
         "source": "https://openskimap.org/?obj=0469463129ab65721499780f98a6394662564f32",
         "lifts": 6,
         "downhillKm": 43,
+        "namedDownhillRuns": 67,
         "elevationM": [
           2466,
           3527
@@ -505,6 +529,7 @@
         "source": "https://openskimap.org/?obj=2a2d5ad1138c3aac0abe644e073bee96589412d4",
         "lifts": 6,
         "downhillKm": 59,
+        "namedDownhillRuns": 123,
         "elevationM": [
           2426,
           3431
@@ -525,6 +550,7 @@
         "source": "https://openskimap.org/?obj=513237f93d127ca8e5cdbcd527ac3c99cef7c6ed",
         "lifts": 8,
         "downhillKm": 39,
+        "namedDownhillRuns": 72,
         "elevationM": [
           190,
           695
@@ -544,6 +570,7 @@
         "source": "https://openskimap.org/?obj=b0a93ffd62df6dae4750a71875f77e24250d4169",
         "lifts": 27,
         "downhillKm": 68,
+        "namedDownhillRuns": 46,
         "elevationM": [
           1012,
           2037
@@ -563,6 +590,7 @@
         "source": "https://openskimap.org/?obj=eb636736e58ffb00dd988a59ea0a428e541fc6b2",
         "lifts": 3,
         "downhillKm": 27,
+        "namedDownhillRuns": 37,
         "elevationM": [
           1732,
           2119
@@ -583,6 +611,7 @@
         "source": "https://openskimap.org/?obj=3f17bde187966cb8ca14255520bda39eb25e5baa",
         "lifts": 9,
         "downhillKm": 31,
+        "namedDownhillRuns": 28,
         "elevationM": [
           1262,
           2252
@@ -603,6 +632,7 @@
         "source": "https://openskimap.org/?obj=7df6d649ccd61056844b92208038a03c0d6c6091",
         "lifts": 14,
         "downhillKm": 77,
+        "namedDownhillRuns": 117,
         "elevationM": [
           1661,
           2686
@@ -623,6 +653,7 @@
         "source": "https://openskimap.org/?obj=125d02338620dc079d5d635595a099370161bf83",
         "lifts": 36,
         "downhillKm": 154,
+        "namedDownhillRuns": 126,
         "elevationM": [
           1504,
           2600
@@ -641,6 +672,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=cdfa4472dc5dfd3a903263b6303ce73f8d19c90f",
         "nordicKm": 22,
+        "namedNordicTrails": 13,
         "elevationM": [
           1628,
           1698
@@ -661,6 +693,7 @@
         "source": "https://openskimap.org/?obj=3078e997deb12b6686a9f0db8a3865acd3c0b733",
         "lifts": 6,
         "downhillKm": 7,
+        "namedDownhillRuns": 20,
         "elevationM": [
           207,
           350
@@ -681,6 +714,7 @@
         "source": "https://openskimap.org/?obj=78bac1237b378a398d712ba2cc962ddf9d1c6479",
         "lifts": 11,
         "downhillKm": 13,
+        "namedDownhillRuns": 25,
         "elevationM": [
           2177,
           2680
@@ -699,6 +733,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=f6272b0d671f95cf42a64d9ad5fb78906c96ea3c",
         "nordicKm": 42,
+        "namedNordicTrails": 46,
         "elevationM": [
           2055,
           2301
@@ -719,6 +754,7 @@
         "source": "https://openskimap.org/?obj=f357cc18ead38a393c55cf27921fe05913dc33e1",
         "lifts": 9,
         "downhillKm": 36,
+        "namedDownhillRuns": 60,
         "elevationM": [
           2024,
           2586
@@ -738,6 +774,7 @@
         "source": "https://openskimap.org/?obj=1185f0916cf0cbf03f6b75c9d1449b86afb1516d",
         "lifts": 25,
         "downhillKm": 167,
+        "namedDownhillRuns": 155,
         "elevationM": [
           2259,
           3484
@@ -758,6 +795,7 @@
         "source": "https://openskimap.org/?obj=c3bb5fd130638c068edb6cd5198a50f113be4425",
         "lifts": 6,
         "downhillKm": 31,
+        "namedDownhillRuns": 45,
         "elevationM": [
           2181,
           2670
@@ -778,6 +816,7 @@
         "source": "https://openskimap.org/?obj=1de6206a0bf70c0499d14cff30a1db68d3b89a1f",
         "lifts": 18,
         "downhillKm": 54,
+        "namedDownhillRuns": 42,
         "elevationM": [
           506,
           1395
@@ -798,6 +837,7 @@
         "source": "https://openskimap.org/?obj=63a16704ef88cc64ec56bf3c96af61911ababfff",
         "lifts": 6,
         "downhillKm": 11,
+        "namedDownhillRuns": 19,
         "elevationM": [
           901,
           1099
@@ -819,6 +859,7 @@
         "source": "https://openskimap.org/?obj=f16be64558f5124a26f4797260671c96ad2fde8b",
         "lifts": 8,
         "downhillKm": 33,
+        "namedDownhillRuns": 47,
         "elevationM": [
           626,
           1045
@@ -838,6 +879,7 @@
         "source": "https://openskimap.org/?obj=8556f7c962b73f8cca10ac4ef41b9e40a5d5ae23",
         "lifts": 6,
         "downhillKm": 21,
+        "namedDownhillRuns": 16,
         "elevationM": [
           1553,
           3142
@@ -858,6 +900,7 @@
         "source": "https://openskimap.org/?obj=67e7df96a02813bdeb573bf9e852ab856505192e",
         "lifts": 6,
         "downhillKm": 19,
+        "namedDownhillRuns": 38,
         "elevationM": [
           180,
           466
@@ -877,6 +920,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=8659c9c96ddb74d90cbb78ed8d86dd0306106630",
         "nordicKm": 37,
+        "namedNordicTrails": 39,
         "elevationM": [
           193,
           370
@@ -897,6 +941,7 @@
         "source": "https://openskimap.org/?obj=d80406be9f977e44ccd65c57449b9ec22da23855",
         "lifts": 7,
         "downhillKm": 6,
+        "namedDownhillRuns": 18,
         "elevationM": [
           550,
           663
@@ -917,6 +962,7 @@
         "source": "https://openskimap.org/?obj=01a2c20b6b73ef0dfd7aab4197302672ba34ef0c",
         "lifts": 2,
         "downhillKm": 15,
+        "namedDownhillRuns": 22,
         "elevationM": [
           404,
           580
@@ -937,6 +983,7 @@
         "source": "https://openskimap.org/?obj=8c33304ed70a4ebdf6fe537e495e8d48c83cb58b",
         "lifts": 10,
         "downhillKm": 13,
+        "namedDownhillRuns": 40,
         "elevationM": [
           370,
           498
@@ -957,6 +1004,7 @@
         "source": "https://openskimap.org/?obj=ebca2bf5e94a323dbf7032c08f0cc1a6bde2fb60",
         "lifts": 4,
         "downhillKm": 11,
+        "namedDownhillRuns": 33,
         "elevationM": [
           201,
           487
@@ -977,6 +1025,7 @@
         "source": "https://openskimap.org/?obj=d4086b2e9d44022ca27bde811816b5a4fc859c87",
         "lifts": 45,
         "downhillKm": 236,
+        "namedDownhillRuns": 286,
         "elevationM": [
           2078,
           3402
@@ -1008,6 +1057,7 @@
         "source": "https://openskimap.org/?obj=f3592759a147841bcd9a939f6ce75e8ecf30433c",
         "lifts": 16,
         "downhillKm": 96,
+        "namedDownhillRuns": 101,
         "elevationM": [
           1512,
           2271
@@ -1028,6 +1078,7 @@
         "source": "https://openskimap.org/?obj=f09b2df684ab0fac8edae2fe546f7cada93f72b8",
         "lifts": 5,
         "downhillKm": 11,
+        "namedDownhillRuns": 14,
         "elevationM": [
           424,
           933
@@ -1046,6 +1097,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=f81db99b1f6592fad9b213a19fca979d3f8fee77",
         "nordicKm": 53,
+        "namedNordicTrails": 58,
         "elevationM": [
           1062,
           1513
@@ -1066,6 +1118,7 @@
         "source": "https://openskimap.org/?obj=3e195ef86e8d0357faac23bea3775f9af661d8d5",
         "lifts": 3,
         "downhillKm": 13,
+        "namedDownhillRuns": 21,
         "elevationM": [
           297,
           615
@@ -1086,6 +1139,7 @@
         "source": "https://openskimap.org/?obj=79a1ebea9bb231f8530b4764afc74ab3ef061c24",
         "lifts": 5,
         "downhillKm": 16,
+        "namedDownhillRuns": 58,
         "elevationM": [
           375,
           685
@@ -1106,6 +1160,7 @@
         "source": "https://openskimap.org/?obj=bb999437b96b0531dd23d01aff6bf9462cf94e3c",
         "lifts": 5,
         "downhillKm": 10,
+        "namedDownhillRuns": 23,
         "elevationM": [
           653,
           960
@@ -1126,6 +1181,7 @@
         "source": "https://openskimap.org/?obj=4bca16dce4783e4eab06c9a39ee02168c67ca488",
         "lifts": 15,
         "downhillKm": 18,
+        "namedDownhillRuns": 34,
         "elevationM": [
           141,
           469
@@ -1146,6 +1202,7 @@
         "source": "https://openskimap.org/?obj=c5f70b639b76f6496d08a74e0691d5d71836cb4d",
         "lifts": 13,
         "downhillKm": 30,
+        "namedDownhillRuns": 44,
         "elevationM": [
           231,
           451
@@ -1166,6 +1223,7 @@
         "source": "https://openskimap.org/?obj=9de44d36058588b0bb8da99912b97a5c3f388191",
         "lifts": 4,
         "downhillKm": 17,
+        "namedDownhillRuns": 27,
         "elevationM": [
           1386,
           1728
@@ -1186,6 +1244,7 @@
         "source": "https://openskimap.org/?obj=f0fca4018306a921928ebc2f04cfd1ac82ba1ef2",
         "lifts": 11,
         "downhillKm": 59,
+        "namedDownhillRuns": 81,
         "elevationM": [
           1758,
           2304
@@ -1206,6 +1265,7 @@
         "source": "https://openskimap.org/?obj=185277c7c66ee582fb01243753ecfe25aa3ea215",
         "lifts": 6,
         "downhillKm": 31,
+        "namedDownhillRuns": 71,
         "elevationM": [
           475,
           950
@@ -1226,6 +1286,7 @@
         "source": "https://openskimap.org/?obj=cd7f28de9a4b85aff0761e9af449c5e6c9626168",
         "lifts": 7,
         "downhillKm": 2,
+        "namedDownhillRuns": 7,
         "elevationM": [
           202,
           264
@@ -1245,6 +1306,7 @@
         "source": "https://openskimap.org/?obj=1a93522062fa2f33fa7a694c8389abecbe18815e",
         "lifts": 6,
         "downhillKm": 2,
+        "namedDownhillRuns": 7,
         "elevationM": [
           692,
           747
@@ -1265,6 +1327,7 @@
         "source": "https://openskimap.org/?obj=031a23bc9ebb837beed75b7c4237a2d966bb1684",
         "lifts": 4,
         "downhillKm": 5,
+        "namedDownhillRuns": 18,
         "elevationM": [
           337,
           548
@@ -1285,6 +1348,7 @@
         "source": "https://openskimap.org/?obj=449aa402eafd646e49025b6afbcd4962c77096e3",
         "lifts": 10,
         "downhillKm": 25,
+        "namedDownhillRuns": 58,
         "elevationM": [
           217,
           352
@@ -1305,6 +1369,7 @@
         "source": "https://openskimap.org/?obj=abc97db78f6238663faf95a23b1bce2f4f6bf1c6",
         "lifts": 9,
         "downhillKm": 2,
+        "namedDownhillRuns": 9,
         "elevationM": [
           200,
           254
@@ -1324,6 +1389,7 @@
         "source": "https://openskimap.org/?obj=27206747b07d41c64659c2ffd8753c554127752d",
         "lifts": 35,
         "downhillKm": 113,
+        "namedDownhillRuns": 127,
         "elevationM": [
           2918,
           3913
@@ -1344,6 +1410,7 @@
         "source": "https://openskimap.org/?obj=92fcb6dd76ddb1d1b1374e2d308a6f4939d46817",
         "lifts": 9,
         "downhillKm": 41,
+        "namedDownhillRuns": 75,
         "elevationM": [
           487,
           912
@@ -1364,6 +1431,7 @@
         "source": "https://openskimap.org/?obj=c2fba992cc1711880d5f8d8ffa661f71eab950cf",
         "lifts": 18,
         "downhillKm": 41,
+        "namedDownhillRuns": 37,
         "elevationM": [
           1047,
           2486
@@ -1396,6 +1464,7 @@
         "source": "https://openskimap.org/?obj=fef67ddf6ff39f1d90e8b4152933479fe7258284",
         "lifts": 12,
         "downhillKm": 42,
+        "namedDownhillRuns": 55,
         "elevationM": [
           1865,
           2457
@@ -1416,6 +1485,7 @@
         "source": "https://openskimap.org/?obj=ab2b5807422f8a412c013e32e73b521f76a65d98",
         "lifts": 8,
         "downhillKm": 47,
+        "namedDownhillRuns": 63,
         "elevationM": [
           2666,
           3185
@@ -1436,6 +1506,7 @@
         "source": "https://openskimap.org/?obj=69a316b32d68d678d82b8614d9c6b9e51e06cae9",
         "lifts": 6,
         "downhillKm": 19,
+        "namedDownhillRuns": 38,
         "elevationM": [
           307,
           656
@@ -1456,6 +1527,7 @@
         "source": "https://openskimap.org/?obj=a87ccf8c2949bc2ea5db0cf94c7c95fa6da0c874",
         "lifts": 11,
         "downhillKm": 46,
+        "namedDownhillRuns": 85,
         "elevationM": [
           183,
           547
@@ -1476,6 +1548,7 @@
         "source": "https://openskimap.org/?obj=54680712c4fb637352edec617e99b708be94d052",
         "lifts": 6,
         "downhillKm": 2,
+        "namedDownhillRuns": 8,
         "elevationM": [
           307,
           401
@@ -1496,6 +1569,7 @@
         "source": "https://openskimap.org/?obj=9173efad0a9aad95e9b478bb91a640ea237d284f",
         "lifts": 6,
         "downhillKm": 49,
+        "namedDownhillRuns": 77,
         "elevationM": [
           1792,
           2318
@@ -1527,6 +1601,7 @@
         "source": "https://openskimap.org/?obj=03e8538093aa18eebbfc0cc34aea9e72737a5567",
         "lifts": 6,
         "downhillKm": 4,
+        "namedDownhillRuns": 12,
         "elevationM": [
           383,
           515
@@ -1547,6 +1622,7 @@
         "source": "https://openskimap.org/?obj=ae0e274a9fc96243d875dc6157c6608e5ed56a84",
         "lifts": 12,
         "downhillKm": 3,
+        "namedDownhillRuns": 13,
         "elevationM": [
           291,
           368
@@ -1567,6 +1643,7 @@
         "source": "https://openskimap.org/?obj=1b3cf146441575653e9139beba2f246baa5a1ee8",
         "lifts": 6,
         "downhillKm": 13,
+        "namedDownhillRuns": 34,
         "elevationM": [
           308,
           452
@@ -1587,6 +1664,7 @@
         "source": "https://openskimap.org/?obj=78dff31bfb6ad8ca4aff38c381f44a301e7e765b",
         "lifts": 5,
         "downhillKm": 30,
+        "namedDownhillRuns": 43,
         "elevationM": [
           371,
           977
@@ -1607,6 +1685,7 @@
         "source": "https://openskimap.org/?obj=aecc514c89c8ea9a6b3b8bac5e7468ef23917b60",
         "lifts": 8,
         "downhillKm": 40,
+        "namedDownhillRuns": 43,
         "elevationM": [
           2402,
           3012
@@ -1627,6 +1706,7 @@
         "source": "https://openskimap.org/?obj=be947d2fd75d6b470d4425f7e30387c11447c0e4",
         "lifts": 5,
         "downhillKm": 7,
+        "namedDownhillRuns": 20,
         "elevationM": [
           357,
           465
@@ -1647,6 +1727,7 @@
         "source": "https://openskimap.org/?obj=f6950418728474f314474e4a9f083b8928636181",
         "lifts": 3,
         "downhillKm": 14,
+        "namedDownhillRuns": 20,
         "elevationM": [
           158,
           372
@@ -1666,6 +1747,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=d89da2f5ed32cf08d470f64f2c335a8d8ea69b12",
         "nordicKm": 51,
+        "namedNordicTrails": 54,
         "elevationM": [
           604,
           742
@@ -1686,6 +1768,7 @@
         "source": "https://openskimap.org/?obj=217767f4b5f73eb3d4c1ab7f5084952516bf912e",
         "lifts": 4,
         "downhillKm": 9,
+        "namedDownhillRuns": 15,
         "elevationM": [
           73,
           326
@@ -1707,6 +1790,7 @@
         "source": "https://openskimap.org/?obj=f34b05b63db9dcbcc7e3ba106a82072ec6a197f9",
         "lifts": 15,
         "downhillKm": 15,
+        "namedDownhillRuns": 35,
         "elevationM": [
           378,
           623
@@ -1747,6 +1831,7 @@
         "source": "https://openskimap.org/?obj=99d183d639efdd0bbec46e0d9acf125ad46d6bdb",
         "lifts": 7,
         "downhillKm": 10,
+        "namedDownhillRuns": 23,
         "elevationM": [
           171,
           352
@@ -1767,6 +1852,7 @@
         "source": "https://openskimap.org/?obj=aae8e9bd7f7b8221f855873cd973e4efce368dea",
         "lifts": 3,
         "downhillKm": 9,
+        "namedDownhillRuns": 22,
         "elevationM": [
           1046,
           1302
@@ -1787,6 +1873,7 @@
         "source": "https://openskimap.org/?obj=5c741ffb667ae43a6d26d369c3d276872fdeaf69",
         "lifts": 2,
         "downhillKm": 4,
+        "namedDownhillRuns": 7,
         "elevationM": [
           216,
           450
@@ -1807,6 +1894,7 @@
         "source": "https://openskimap.org/?obj=fc60aa0866f0d633caaf1891d089663d53d43ab4",
         "lifts": 9,
         "downhillKm": 39,
+        "namedDownhillRuns": 88,
         "elevationM": [
           574,
           1231
@@ -1846,6 +1934,7 @@
         "source": "https://openskimap.org/?obj=578c669494c02e675c7ad8d418a14acc5d7d6f68",
         "lifts": 7,
         "downhillKm": 55,
+        "namedDownhillRuns": 101,
         "elevationM": [
           1409,
           2259
@@ -1876,6 +1965,7 @@
         "source": "https://openskimap.org/?obj=652698804287694a17b8250681e7a5080e4f4f4d",
         "lifts": 5,
         "downhillKm": 4,
+        "namedDownhillRuns": 16,
         "elevationM": [
           1362,
           1583
@@ -1896,6 +1986,7 @@
         "source": "https://openskimap.org/?obj=cb083bf97c150cb981c781367693cfc615b98d51",
         "lifts": 7,
         "downhillKm": 17,
+        "namedDownhillRuns": 40,
         "elevationM": [
           283,
           576
@@ -1925,6 +2016,7 @@
         "source": "https://openskimap.org/?obj=0575eec7c7053baf19513b47ffce202a3f246f73",
         "lifts": 3,
         "downhillKm": 3,
+        "namedDownhillRuns": 11,
         "elevationM": [
           290,
           436
@@ -1945,6 +2037,7 @@
         "source": "https://openskimap.org/?obj=fe2866748ad2d4d5363fc65ebf6d1a0f5395cd53",
         "lifts": 4,
         "downhillKm": 7,
+        "namedDownhillRuns": 16,
         "elevationM": [
           112,
           243
@@ -1976,6 +2069,7 @@
         "source": "https://openskimap.org/?obj=42f02a37e6d5cf0a434b48baefa3745574a5067f",
         "lifts": 4,
         "downhillKm": 11,
+        "namedDownhillRuns": 31,
         "elevationM": [
           1764,
           2132
@@ -1996,6 +2090,7 @@
         "source": "https://openskimap.org/?obj=0616e43c11b30eff017588df1476d152509dd952",
         "lifts": 8,
         "downhillKm": 5,
+        "namedDownhillRuns": 20,
         "elevationM": [
           184,
           309
@@ -2016,6 +2111,7 @@
         "source": "https://openskimap.org/?obj=9e118f4eb36fb34e987c7a3ddd7f2d976b6a7443",
         "lifts": 11,
         "downhillKm": 35,
+        "namedDownhillRuns": 52,
         "elevationM": [
           2143,
           2630
@@ -2035,6 +2131,7 @@
         "source": "https://openskimap.org/?obj=c502761d70a50d4fefeb3ccf6214a3179e465bb8",
         "lifts": 5,
         "downhillKm": 6,
+        "namedDownhillRuns": 23,
         "elevationM": [
           397,
           502
@@ -2055,6 +2152,7 @@
         "source": "https://openskimap.org/?obj=00e3880c19b3ca1bb412d2274d3c15bf4a2598f9",
         "lifts": 27,
         "downhillKm": 53,
+        "namedDownhillRuns": 60,
         "elevationM": [
           984,
           2078
@@ -2074,6 +2172,7 @@
         "source": "https://openskimap.org/?obj=4698a2814f1374dddd210b42649757ebf99ede87",
         "lifts": 3,
         "downhillKm": 4,
+        "namedDownhillRuns": 12,
         "elevationM": [
           229,
           352
@@ -2094,6 +2193,7 @@
         "source": "https://openskimap.org/?obj=caf0bd6c118f5974144ef382d4a267f5aefb2366",
         "lifts": 5,
         "downhillKm": 32,
+        "namedDownhillRuns": 47,
         "elevationM": [
           3226,
           3579
@@ -2113,6 +2213,7 @@
         "source": "https://openskimap.org/?obj=5e705498886c5c3b9698153a72f06a1ce7cb034a",
         "lifts": 1,
         "downhillKm": 3,
+        "namedDownhillRuns": 9,
         "elevationM": [
           1204,
           1293
@@ -2133,6 +2234,7 @@
         "source": "https://openskimap.org/?obj=0bab3102857cf4c7243d3db844c283a24413fa28",
         "lifts": 23,
         "downhillKm": 115,
+        "namedDownhillRuns": 147,
         "elevationM": [
           2959,
           3756
@@ -2153,6 +2255,7 @@
         "source": "https://openskimap.org/?obj=8d51d2e1d9edbc3ea557af7bf0ebaba02c7f7ef8",
         "lifts": 8,
         "downhillKm": 23,
+        "namedDownhillRuns": 37,
         "elevationM": [
           1167,
           1613
@@ -2173,6 +2276,7 @@
         "source": "https://openskimap.org/?obj=9aee4431102b1627a8858024851c278685391aca",
         "lifts": 8,
         "downhillKm": 26,
+        "namedDownhillRuns": 30,
         "elevationM": [
           1529,
           2392
@@ -2196,6 +2300,7 @@
         "source": "https://openskimap.org/?obj=02196b1e0dd473176e265318bc9c06e22df53ace",
         "lifts": 39,
         "downhillKm": 113,
+        "namedDownhillRuns": 104,
         "elevationM": [
           859,
           2739
@@ -2217,6 +2322,7 @@
         "source": "https://openskimap.org/?obj=13756027a3c85c2f3e1b8742865baa4f2469a277",
         "lifts": 15,
         "downhillKm": 40,
+        "namedDownhillRuns": 31,
         "elevationM": [
           1799,
           3296
@@ -2237,6 +2343,7 @@
         "source": "https://openskimap.org/?obj=f9beaf4e37ef88b422b9ee4aa2ae9224f10afd02",
         "lifts": 49,
         "downhillKm": 68,
+        "namedDownhillRuns": 38,
         "elevationM": [
           1733,
           3021
@@ -2256,6 +2363,7 @@
         "source": "https://openskimap.org/?obj=23365b5cea5dad5b58d9ffc5506ff573f96cb70b",
         "lifts": 59,
         "downhillKm": 151,
+        "namedDownhillRuns": 123,
         "elevationM": [
           1258,
           2695
@@ -2276,6 +2384,7 @@
         "source": "https://openskimap.org/?obj=f93e740601821a663803ec50529854339b744b27",
         "lifts": 24,
         "downhillKm": 43,
+        "namedDownhillRuns": 32,
         "elevationM": [
           1204,
           2749
@@ -2296,6 +2405,7 @@
         "source": "https://openskimap.org/?obj=0ca8f9b88fbe461e372112f839f21ba8d01e27af",
         "lifts": 8,
         "downhillKm": 24,
+        "namedDownhillRuns": 55,
         "elevationM": [
           166,
           510
@@ -2316,6 +2426,7 @@
         "source": "https://openskimap.org/?obj=7764d597cda909bb1bc7fd66a07bbfa6bb8ab695",
         "lifts": 24,
         "downhillKm": 74,
+        "namedDownhillRuns": 57,
         "elevationM": [
           1427,
           2872
@@ -2336,6 +2447,7 @@
         "source": "https://openskimap.org/?obj=c7ba44969ddc615ea94968125fc96d9b584c388f",
         "lifts": 15,
         "downhillKm": 56,
+        "namedDownhillRuns": 95,
         "elevationM": [
           2783,
           3488
@@ -2366,6 +2478,7 @@
         "source": "https://openskimap.org/?obj=414efa2c476272bdab8a3fa83688a01a1b3b3600",
         "lifts": 5,
         "downhillKm": 9,
+        "namedDownhillRuns": 22,
         "elevationM": [
           316,
           584
@@ -2386,6 +2499,7 @@
         "source": "https://openskimap.org/?obj=89f555b5b8a62c0c002adaa796997b635f38e6da",
         "lifts": 11,
         "downhillKm": 39,
+        "namedDownhillRuns": 84,
         "elevationM": [
           1344,
           2072
@@ -2406,6 +2520,7 @@
         "source": "https://openskimap.org/?obj=ab5c2ccfc1422ef1a91107df398e4978671a445f",
         "lifts": 8,
         "downhillKm": 16,
+        "namedDownhillRuns": 50,
         "elevationM": [
           242,
           345
@@ -2425,6 +2540,7 @@
         "source": "https://openskimap.org/?obj=fd6a32313b8b32860378ba3b94dcc5037ec2e06c",
         "lifts": 6,
         "downhillKm": 1,
+        "namedDownhillRuns": 6,
         "elevationM": [
           214,
           282
@@ -2445,6 +2561,7 @@
         "source": "https://openskimap.org/?obj=c926104036fbc68ab48437c3df843c92650ab967",
         "lifts": 1,
         "downhillKm": 16,
+        "namedDownhillRuns": 31,
         "elevationM": [
           2823,
           2903
@@ -2465,6 +2582,7 @@
         "source": "https://openskimap.org/?obj=478e51619873590eebcaf4ac02d10f75a3460524",
         "lifts": 3,
         "downhillKm": 3,
+        "namedDownhillRuns": 2,
         "elevationM": [
           431,
           721
@@ -2485,6 +2603,7 @@
         "source": "https://openskimap.org/?obj=7599cb6e98e206b310f1be3d95fe1e27fa08f307",
         "lifts": 7,
         "downhillKm": 27,
+        "namedDownhillRuns": 50,
         "elevationM": [
           824,
           1426
@@ -2505,6 +2624,7 @@
         "source": "https://openskimap.org/?obj=85d62e305294135550ef07bdfbb7094ec1d9862c",
         "lifts": 4,
         "downhillKm": 16,
+        "namedDownhillRuns": 26,
         "elevationM": [
           280,
           580
@@ -2526,6 +2646,7 @@
         "source": "https://openskimap.org/?obj=b7a200210f3dac1b9a5ca7b71429e6205c8c413e",
         "lifts": 37,
         "downhillKm": 189,
+        "namedDownhillRuns": 227,
         "elevationM": [
           1964,
           2912
@@ -2546,6 +2667,7 @@
         "source": "https://openskimap.org/?obj=bf2acdeaa2a1f3d3bd04ac406819c73b6165a33c",
         "lifts": 6,
         "downhillKm": 17,
+        "namedDownhillRuns": 31,
         "elevationM": [
           238,
           712
@@ -2566,6 +2688,7 @@
         "source": "https://openskimap.org/?obj=7291db4e62e14b70ce9d3feb274a8b787c78a882",
         "lifts": 4,
         "downhillKm": 4,
+        "namedDownhillRuns": 16,
         "elevationM": [
           439,
           499
@@ -2586,6 +2709,7 @@
         "source": "https://openskimap.org/?obj=d00cf562520aafc18cc988e8d4b0f7c53e4f63b0",
         "lifts": 8,
         "downhillKm": 10,
+        "namedDownhillRuns": 17,
         "elevationM": [
           283,
           434
@@ -2604,6 +2728,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=055a4d3847727b47309396be1adfd69c07c0cb00",
         "nordicKm": 60,
+        "namedNordicTrails": 39,
         "elevationM": [
           2579,
           2866
@@ -2624,6 +2749,7 @@
         "source": "https://openskimap.org/?obj=b46b8286189d83f14e1d35e75381a2f4ac231f9b",
         "lifts": 7,
         "downhillKm": 19,
+        "namedDownhillRuns": 8,
         "elevationM": [
           2084,
           3003
@@ -2643,6 +2769,7 @@
         "source": "https://openskimap.org/?obj=d49fb763370f4ddb93f355430d537911de694958",
         "lifts": 11,
         "downhillKm": 29,
+        "namedDownhillRuns": 22,
         "elevationM": [
           1223,
           2770
@@ -2663,6 +2790,7 @@
         "source": "https://openskimap.org/?obj=162525ff9a2a65810a602b74f338303d1bb9ea38",
         "lifts": 11,
         "downhillKm": 34,
+        "namedDownhillRuns": 63,
         "elevationM": [
           2002,
           2482
@@ -2681,6 +2809,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=0c7c9155dfe042bf502bc73bab45c2c454260536",
         "nordicKm": 24,
+        "namedNordicTrails": 25,
         "elevationM": [
           979,
           1122
@@ -2701,6 +2830,7 @@
         "source": "https://openskimap.org/?obj=10f2ef5a778b65fdea26f0662b08e83c8b979356",
         "lifts": 25,
         "downhillKm": 58,
+        "namedDownhillRuns": 42,
         "elevationM": [
           1158,
           2444
@@ -2721,6 +2851,7 @@
         "source": "https://openskimap.org/?obj=84db3d46c08242d898d537d328001c23e2a47df8",
         "lifts": 8,
         "downhillKm": 18,
+        "namedDownhillRuns": 46,
         "elevationM": [
           2145,
           2364
@@ -2741,6 +2872,7 @@
         "source": "https://openskimap.org/?obj=3fb23f87d6ef57e78baa11cce0d3bf8945e945d4",
         "lifts": 4,
         "downhillKm": 3,
+        "namedDownhillRuns": 10,
         "elevationM": [
           214,
           301
@@ -2771,6 +2903,7 @@
         "source": "https://openskimap.org/?obj=37743c0eb90f720f91c5b52ca96a60ad4e6fa4f0",
         "lifts": 5,
         "downhillKm": 13,
+        "namedDownhillRuns": 17,
         "elevationM": [
           984,
           1425
@@ -2791,6 +2924,7 @@
         "source": "https://openskimap.org/?obj=72510c18b4eb758d0daab8290bda044c27c5405f",
         "lifts": 5,
         "downhillKm": 24,
+        "namedDownhillRuns": 38,
         "elevationM": [
           2843,
           3222
@@ -2811,6 +2945,7 @@
         "source": "https://openskimap.org/?obj=2820cb0c70bf04efad30d45b4e2f15538927bdd9",
         "lifts": 3,
         "downhillKm": 17,
+        "namedDownhillRuns": 36,
         "elevationM": [
           350,
           788
@@ -2831,6 +2966,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=ec071f791dba6b05be39c6b7f85663b0d6f03d33",
         "nordicKm": 22,
+        "namedNordicTrails": 19,
         "elevationM": [
           312,
           368
@@ -2851,6 +2987,7 @@
         "source": "https://openskimap.org/?obj=8a520d95771de3f652a03bdfd44e003b8d8b506a",
         "lifts": 2,
         "downhillKm": 4,
+        "namedDownhillRuns": 7,
         "elevationM": [
           3067,
           3249
@@ -2871,6 +3008,7 @@
         "source": "https://openskimap.org/?obj=a2909bf21b379e545b5be4f1dbe9b6c334e9e41c",
         "lifts": 10,
         "downhillKm": 30,
+        "namedDownhillRuns": 54,
         "elevationM": [
           2821,
           3232
@@ -2891,6 +3029,7 @@
         "source": "https://openskimap.org/?obj=6be6628be711e925f71a19ff354cdd0acc2e9220",
         "lifts": 7,
         "downhillKm": 16,
+        "namedDownhillRuns": 31,
         "elevationM": [
           535,
           812
@@ -2933,6 +3072,7 @@
         "source": "https://openskimap.org/?obj=74b11097056348d4cf78c158c5ecec65a67ed4c6",
         "lifts": 8,
         "downhillKm": 11,
+        "namedDownhillRuns": 11,
         "elevationM": [
           1946,
           2354
@@ -2953,6 +3093,7 @@
         "source": "https://openskimap.org/?obj=2d18333956794a17b18acdc7c2bbafe63e79ab1b",
         "lifts": 3,
         "downhillKm": 13,
+        "namedDownhillRuns": 13,
         "elevationM": [
           1216,
           1477
@@ -2973,6 +3114,7 @@
         "source": "https://openskimap.org/?obj=a280690db943a1192a5e92c81707f6ab19b037ec",
         "lifts": 14,
         "downhillKm": 40,
+        "namedDownhillRuns": 69,
         "elevationM": [
           1507,
           1774
@@ -2993,6 +3135,7 @@
         "source": "https://openskimap.org/?obj=ecea3ea316650e534c05c56dca021977818dc214",
         "lifts": 10,
         "downhillKm": 82,
+        "namedDownhillRuns": 102,
         "elevationM": [
           1059,
           2097
@@ -3012,6 +3155,7 @@
         "source": "https://openskimap.org/?obj=29b30f99e12f6399919a7bbd34ab3ad948bf6ede",
         "lifts": 27,
         "downhillKm": 41,
+        "namedDownhillRuns": 41,
         "elevationM": [
           1290,
           2167
@@ -3032,6 +3176,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=c85b62f28d8d23fd0fd05a879d1f2051e661cd2f",
         "nordicKm": 23,
+        "namedNordicTrails": 25,
         "elevationM": [
           167,
           307
@@ -3051,6 +3196,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=a9cd6b77176c3ccaba30bbe8f8344b9e9148117b",
         "nordicKm": 24,
+        "namedNordicTrails": 19,
         "elevationM": [
           288,
           470
@@ -3071,6 +3217,7 @@
         "source": "https://openskimap.org/?obj=eff00078aeb870520d245b8206c0eec0c842c092",
         "lifts": 3,
         "downhillKm": 3,
+        "namedDownhillRuns": 9,
         "elevationM": [
           335,
           438
@@ -3091,6 +3238,7 @@
         "source": "https://openskimap.org/?obj=e197429644be3ecdfd0d5ef7fb5703a1b2754a22",
         "lifts": 10,
         "downhillKm": 26,
+        "namedDownhillRuns": 23,
         "elevationM": [
           235,
           1064
@@ -3112,6 +3260,7 @@
         "source": "https://openskimap.org/?obj=0f17e89de28821511c59e184dd520b7d6aea6a51",
         "lifts": 9,
         "downhillKm": 27,
+        "namedDownhillRuns": 1,
         "elevationM": [
           1628,
           2295
@@ -3142,6 +3291,7 @@
         "source": "https://openskimap.org/?obj=f1abda339137027416ba37a0de3d2801246ef9a6",
         "lifts": 5,
         "downhillKm": 13,
+        "namedDownhillRuns": 13,
         "elevationM": [
           636,
           1063
@@ -3162,6 +3312,7 @@
         "source": "https://openskimap.org/?obj=d34550723433e7a5960a8c0c70717987b13f5368",
         "lifts": 8,
         "downhillKm": 12,
+        "namedDownhillRuns": 35,
         "elevationM": [
           431,
           562
@@ -3182,6 +3333,7 @@
         "source": "https://openskimap.org/?obj=fafa43aac37c73502229a75ea9bd44ad2c66dcba",
         "lifts": 9,
         "downhillKm": 13,
+        "namedDownhillRuns": 23,
         "elevationM": [
           374,
           1079
@@ -3202,6 +3354,7 @@
         "source": "https://openskimap.org/?obj=92ec4cdfb514f61000d0f4c9344fc1484d452901",
         "lifts": 22,
         "downhillKm": 22,
+        "namedDownhillRuns": 12,
         "elevationM": [
           635,
           1028
@@ -3223,6 +3376,7 @@
         "source": "https://openskimap.org/?obj=e1f84d1db6400792fab6a62ebce29f661bc4a128",
         "lifts": 14,
         "downhillKm": 61,
+        "namedDownhillRuns": 103,
         "elevationM": [
           321,
           1092
@@ -3254,6 +3408,8 @@
         "lifts": 6,
         "downhillKm": 24,
         "nordicKm": 11,
+        "namedDownhillRuns": 39,
+        "namedNordicTrails": 7,
         "elevationM": [
           2540,
           2795
@@ -3274,6 +3430,7 @@
         "source": "https://openskimap.org/?obj=84ddf46f67c0fca577dc969188dc189f1c7a040f",
         "lifts": 6,
         "downhillKm": 56,
+        "namedDownhillRuns": 65,
         "elevationM": [
           2318,
           2999
@@ -3294,6 +3451,7 @@
         "source": "https://openskimap.org/?obj=529fcab6ce37f59505fcbd53b7904688bc4b635f",
         "lifts": 9,
         "downhillKm": 26,
+        "namedDownhillRuns": 23,
         "elevationM": [
           1234,
           2768
@@ -3314,6 +3472,7 @@
         "source": "https://openskimap.org/?obj=de4f884c40976fe9d18c23d0bab174c1d6b79218",
         "lifts": 53,
         "downhillKm": 136,
+        "namedDownhillRuns": 122,
         "elevationM": [
           1674,
           2619
@@ -3334,6 +3493,7 @@
         "source": "https://openskimap.org/?obj=462af6084a39a9d577327662f54101082cade2f7",
         "lifts": 7,
         "downhillKm": 20,
+        "namedDownhillRuns": 53,
         "elevationM": [
           372,
           573
@@ -3353,6 +3513,7 @@
         "source": "https://openskimap.org/?obj=809a4c2de36f03cff92fbad4c790974fae0b9e78",
         "lifts": 3,
         "downhillKm": 2,
+        "namedDownhillRuns": 14,
         "elevationM": [
           412,
           462
@@ -3373,6 +3534,7 @@
         "source": "https://openskimap.org/?obj=30c18ba69d27fcd201067270535c9e43075a79e3",
         "lifts": 6,
         "downhillKm": 45,
+        "namedDownhillRuns": 107,
         "elevationM": [
           1769,
           2194
@@ -3392,6 +3554,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=cf493f822dae9636a6c74212c7b676d891047358",
         "nordicKm": 14,
+        "namedNordicTrails": 28,
         "elevationM": [
           465,
           538
@@ -3412,6 +3575,7 @@
         "source": "https://openskimap.org/?obj=7562c396d81596d2faea3f12adbb2ca323603642",
         "lifts": 9,
         "downhillKm": 21,
+        "namedDownhillRuns": 38,
         "elevationM": [
           384,
           636
@@ -3432,6 +3596,7 @@
         "source": "https://openskimap.org/?obj=167ec497e42bcb658ecaa281e3569050cc073b65",
         "lifts": 8,
         "downhillKm": 16,
+        "namedDownhillRuns": 36,
         "elevationM": [
           872,
           1228
@@ -3453,6 +3618,7 @@
         "source": "https://openskimap.org/?obj=cefd1da1b8fdb384a00984e693f0726d403ddbf1",
         "lifts": 6,
         "downhillKm": 26,
+        "namedDownhillRuns": 50,
         "elevationM": [
           287,
           684
@@ -3473,6 +3639,7 @@
         "source": "https://openskimap.org/?obj=58c88c13884c54c2d81a7d45f8afd901a66cace0",
         "lifts": 17,
         "downhillKm": 39,
+        "namedDownhillRuns": 24,
         "elevationM": [
           192,
           1058
@@ -3513,6 +3680,7 @@
         "source": "https://openskimap.org/?obj=b602362c1e045f1cdc1c5aa731c1ee2224205518",
         "lifts": 6,
         "downhillKm": 12,
+        "namedDownhillRuns": 15,
         "elevationM": [
           808,
           1391
@@ -3552,6 +3720,7 @@
         "source": "https://openskimap.org/?obj=2badaaea50fcf2640ddea5311798bbd7e2c17b7c",
         "lifts": 22,
         "downhillKm": 30,
+        "namedDownhillRuns": 24,
         "elevationM": [
           751,
           1827
@@ -3572,6 +3741,7 @@
         "source": "https://openskimap.org/?obj=18cba9125586b2701f80908d351556655f8f6c80",
         "lifts": 9,
         "downhillKm": 20,
+        "namedDownhillRuns": 7,
         "elevationM": [
           746,
           1283
@@ -3592,6 +3762,7 @@
         "source": "https://openskimap.org/?obj=9e9a84ef97c366ed523b405845fa42051c9d578d",
         "lifts": 9,
         "downhillKm": 11,
+        "namedDownhillRuns": 11,
         "elevationM": [
           809,
           1278
@@ -3612,6 +3783,7 @@
         "source": "https://openskimap.org/?obj=ece5006c66d60ddde5df1f6ccf9d2f6a3e8bcb52",
         "lifts": 4,
         "downhillKm": 5,
+        "namedDownhillRuns": 6,
         "elevationM": [
           791,
           1146
@@ -3630,6 +3802,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=12575967ebf9588932e386a5a43c2b8320a62ef0",
         "nordicKm": 39,
+        "namedNordicTrails": 43,
         "elevationM": [
           310,
           374
@@ -3650,6 +3823,7 @@
         "source": "https://openskimap.org/?obj=a067d2fb98def060789478950c0589f624cbfc5d",
         "lifts": 4,
         "downhillKm": 5,
+        "namedDownhillRuns": 20,
         "elevationM": [
           1203,
           1398
@@ -3680,6 +3854,7 @@
         "source": "https://openskimap.org/?obj=3f61859b47be735a77df9b1b9e102edbeb529286",
         "lifts": 27,
         "downhillKm": 85,
+        "namedDownhillRuns": 103,
         "elevationM": [
           2025,
           3037
@@ -3700,6 +3875,7 @@
         "source": "https://openskimap.org/?obj=04a5001a288a997399f4bca3661a2ee0d26e17e3",
         "lifts": 7,
         "downhillKm": 11,
+        "namedDownhillRuns": 28,
         "elevationM": [
           733,
           882
@@ -3720,6 +3896,7 @@
         "source": "https://openskimap.org/?obj=05913b1b97919918fed5906bd52fa995e42a2acf",
         "lifts": 8,
         "downhillKm": 4,
+        "namedDownhillRuns": 13,
         "elevationM": [
           171,
           260
@@ -3750,6 +3927,7 @@
         "source": "https://openskimap.org/?obj=774b18efe7a402bcde03e8f5071d3bd0043d9e84",
         "lifts": 2,
         "downhillKm": 4,
+        "namedDownhillRuns": 12,
         "elevationM": [
           148,
           238
@@ -3770,6 +3948,7 @@
         "source": "https://openskimap.org/?obj=fd2502303c53c45c2a6c5dd332f5105bb3c95179",
         "lifts": 23,
         "downhillKm": 49,
+        "namedDownhillRuns": 23,
         "elevationM": [
           1500,
           3245
@@ -3790,6 +3969,7 @@
         "source": "https://openskimap.org/?obj=480cfebb3173d2206cd0a52595d0e76eec07ef50",
         "lifts": 3,
         "downhillKm": 5,
+        "namedDownhillRuns": 8,
         "elevationM": [
           868,
           1025
@@ -3810,6 +3990,7 @@
         "source": "https://openskimap.org/?obj=99cef648d8c6f7231b60448092fb29de26069d0f",
         "lifts": 35,
         "downhillKm": 82,
+        "namedDownhillRuns": 40,
         "elevationM": [
           553,
           2374
@@ -3830,6 +4011,7 @@
         "source": "https://openskimap.org/?obj=f3b4e79c767462bfb7b253fd94d2840cc52d7e1a",
         "lifts": 9,
         "downhillKm": 35,
+        "namedDownhillRuns": 18,
         "elevationM": [
           1467,
           2483
@@ -3850,6 +4032,7 @@
         "source": "https://openskimap.org/?obj=c734de639710750e1b338f9d173779f6224e56a2",
         "lifts": 4,
         "downhillKm": 3,
+        "namedDownhillRuns": 15,
         "elevationM": [
           332,
           398
@@ -3870,6 +4053,7 @@
         "source": "https://openskimap.org/?obj=e68137ff7e6ad28d28c8260d2a455171182224b1",
         "lifts": 7,
         "downhillKm": 12,
+        "namedDownhillRuns": 15,
         "elevationM": [
           831,
           1384
@@ -3889,6 +4073,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=132ae07fabba3970e777a36cd94c77df3988922e",
         "nordicKm": 27,
+        "namedNordicTrails": 27,
         "elevationM": [
           1859,
           1985
@@ -3920,6 +4105,7 @@
         "source": "https://openskimap.org/?obj=acd006bbb7f5cc2bb54086eb2f4ff8475af88e28",
         "lifts": 6,
         "downhillKm": 20,
+        "namedDownhillRuns": 39,
         "elevationM": [
           1427,
           1728
@@ -3940,6 +4126,7 @@
         "source": "https://openskimap.org/?obj=aea2abf24d2ee29ac2721b3053ab816c21bb39ae",
         "lifts": 14,
         "downhillKm": 36,
+        "namedDownhillRuns": 87,
         "elevationM": [
           1449,
           1856
@@ -3961,6 +4148,8 @@
         "lifts": 4,
         "downhillKm": 7,
         "nordicKm": 15,
+        "namedDownhillRuns": 14,
+        "namedNordicTrails": 12,
         "elevationM": [
           2048,
           2186
@@ -3981,6 +4170,7 @@
         "source": "https://openskimap.org/?obj=3bb5825af05cc8cbb080ac4209e4d37b3e4c0452",
         "lifts": 4,
         "downhillKm": 43,
+        "namedDownhillRuns": 38,
         "elevationM": [
           1143,
           1670
@@ -4001,6 +4191,7 @@
         "source": "https://openskimap.org/?obj=42d033204c78068e53d11d5473da35e2f068c3fb",
         "lifts": 4,
         "downhillKm": 6,
+        "namedDownhillRuns": 18,
         "elevationM": [
           565,
           669
@@ -4021,6 +4212,7 @@
         "source": "https://openskimap.org/?obj=7aea477834febc46e7505d1bc249d8824b9b2b13",
         "lifts": 3,
         "downhillKm": 7,
+        "namedDownhillRuns": 20,
         "elevationM": [
           345,
           592
@@ -4041,6 +4233,7 @@
         "source": "https://openskimap.org/?obj=0220b9172bf819d9b5fbd07c2f2218a8cfabb864",
         "lifts": 10,
         "downhillKm": 27,
+        "namedDownhillRuns": 49,
         "elevationM": [
           502,
           969
@@ -4060,6 +4253,7 @@
         "source": "https://openskimap.org/?obj=bf82f552ab48d4702e6bdad8a1e127618388e99c",
         "lifts": 3,
         "downhillKm": 2,
+        "namedDownhillRuns": 6,
         "elevationM": [
           1485,
           1660
@@ -4080,6 +4274,7 @@
         "source": "https://openskimap.org/?obj=a4b2e6e563a17bc1740865e14b41af17782f3354",
         "lifts": 7,
         "downhillKm": 2,
+        "namedDownhillRuns": 11,
         "elevationM": [
           258,
           310
@@ -4111,6 +4306,7 @@
         "source": "https://openskimap.org/?obj=7c2f2690d339d9df6f820e7c6e596a9b0ba3dce5",
         "lifts": 46,
         "downhillKm": 163,
+        "namedDownhillRuns": 90,
         "elevationM": [
           1352,
           2868
@@ -4131,6 +4327,7 @@
         "source": "https://openskimap.org/?obj=4fbb65912b802e995555462c3a3952bce5cce852",
         "lifts": 7,
         "downhillKm": 9,
+        "namedDownhillRuns": 21,
         "elevationM": [
           444,
           603
@@ -4151,6 +4348,7 @@
         "source": "https://openskimap.org/?obj=2b812055300b5107fc2ffed8f5ae27a4c4f94f0a",
         "lifts": 17,
         "downhillKm": 78,
+        "namedDownhillRuns": 95,
         "elevationM": [
           1929,
           3169
@@ -4170,6 +4368,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=30f63e61aae207b5095b913042b63511e00e4145",
         "nordicKm": 106,
+        "namedNordicTrails": 52,
         "elevationM": [
           228,
           1211
@@ -4191,6 +4390,8 @@
         "lifts": 9,
         "downhillKm": 41,
         "nordicKm": 19,
+        "namedDownhillRuns": 69,
+        "namedNordicTrails": 19,
         "elevationM": [
           560,
           1166
@@ -4211,6 +4412,7 @@
         "source": "https://openskimap.org/?obj=a49c1598156961b75dba1bdd98423521965cfe64",
         "lifts": 5,
         "downhillKm": 5,
+        "namedDownhillRuns": 5,
         "elevationM": [
           919,
           1178
@@ -4231,6 +4433,7 @@
         "source": "https://openskimap.org/?obj=c72edda705173b26fcdc210933239a43de5fc7b9",
         "lifts": 8,
         "downhillKm": 17,
+        "namedDownhillRuns": 40,
         "elevationM": [
           383,
           724
@@ -4251,6 +4454,7 @@
         "source": "https://openskimap.org/?obj=1f94daed2b308fa325be064eebc82535fcc3861b",
         "lifts": 7,
         "downhillKm": 27,
+        "namedDownhillRuns": 29,
         "elevationM": [
           2309,
           3089
@@ -4271,6 +4475,7 @@
         "source": "https://openskimap.org/?obj=0e314e146549ce5cb2ba2514fa6b0630757aa0f6",
         "lifts": 6,
         "downhillKm": 18,
+        "namedDownhillRuns": 15,
         "elevationM": [
           146,
           732
@@ -4291,6 +4496,7 @@
         "source": "https://openskimap.org/?obj=04c79ac88a7f8a3980dcffa7e5d1933dc2862e2f",
         "lifts": 6,
         "downhillKm": 11,
+        "namedDownhillRuns": 16,
         "elevationM": [
           469,
           969
@@ -4311,6 +4517,7 @@
         "source": "https://openskimap.org/?obj=5b89c3ba88e8c1263685a34ee3ddeea390a37874",
         "lifts": 12,
         "downhillKm": 30,
+        "namedDownhillRuns": 35,
         "elevationM": [
           1173,
           2639
@@ -4331,6 +4538,7 @@
         "source": "https://openskimap.org/?obj=351e73f443295e581a711c45d697a82006f24352",
         "lifts": 5,
         "downhillKm": 9,
+        "namedDownhillRuns": 11,
         "elevationM": [
           842,
           1333
@@ -4350,6 +4558,7 @@
         "source": "https://openskimap.org/?obj=1bba0722fca7212bd8f83bb2be93a17087299287",
         "lifts": 9,
         "downhillKm": 31,
+        "namedDownhillRuns": 35,
         "elevationM": [
           2175,
           3107
@@ -4370,6 +4579,7 @@
         "source": "https://openskimap.org/?obj=404f9961432a5c4db64c85b97591e6bbe7c7f8fc",
         "lifts": 4,
         "downhillKm": 24,
+        "namedDownhillRuns": 42,
         "elevationM": [
           1770,
           2037
@@ -4390,6 +4600,7 @@
         "source": "https://openskimap.org/?obj=e5f4b1bcc8fd4f5b7eb5d83f200efe20530a0a88",
         "lifts": 1,
         "downhillKm": 2,
+        "namedDownhillRuns": 8,
         "elevationM": [
           2835,
           2904
@@ -4410,6 +4621,7 @@
         "source": "https://openskimap.org/?obj=7d855b81e131f7cb7bdbc7b55e47a18d3ccb5e67",
         "lifts": 20,
         "downhillKm": 119,
+        "namedDownhillRuns": 139,
         "elevationM": [
           2829,
           3742
@@ -4430,6 +4642,7 @@
         "source": "https://openskimap.org/?obj=64e116daf22181604ec3123222b9e6757d0d6ebb",
         "lifts": 5,
         "downhillKm": 46,
+        "namedDownhillRuns": 39,
         "elevationM": [
           1262,
           2424
@@ -4450,6 +4663,7 @@
         "source": "https://openskimap.org/?obj=ac774efde21231d04a2cd3a7b6cfd380dfcb4bef",
         "lifts": 22,
         "downhillKm": 107,
+        "namedDownhillRuns": 136,
         "elevationM": [
           354,
           1262
@@ -4471,6 +4685,7 @@
         "source": "https://openskimap.org/?obj=14471d68a332d98392513ac010a190fe8d0ed3f4",
         "lifts": 5,
         "downhillKm": 60,
+        "namedDownhillRuns": 61,
         "elevationM": [
           1235,
           1904
@@ -4501,6 +4716,7 @@
         "source": "https://openskimap.org/?obj=686d876607619cc6e0181728511173270b7429c8",
         "lifts": 5,
         "downhillKm": 6,
+        "namedDownhillRuns": 15,
         "elevationM": [
           143,
           241
@@ -4521,6 +4737,7 @@
         "source": "https://openskimap.org/?obj=718db266e6e9ec76a5003a404aec69a657b3ab33",
         "lifts": 13,
         "downhillKm": 41,
+        "namedDownhillRuns": 58,
         "elevationM": [
           2382,
           2884
@@ -4541,6 +4758,7 @@
         "source": "https://openskimap.org/?obj=1eeb56a80185ff1dff644357f9f747842d0f620c",
         "lifts": 63,
         "downhillKm": 186,
+        "namedDownhillRuns": 89,
         "elevationM": [
           762,
           1993
@@ -4561,6 +4779,7 @@
         "source": "https://openskimap.org/?obj=bc0361849d0e6e33ef5d9cd035522200a3125df1",
         "lifts": 22,
         "downhillKm": 46,
+        "namedDownhillRuns": 21,
         "elevationM": [
           765,
           3024
@@ -4581,6 +4800,7 @@
         "source": "https://openskimap.org/?obj=0295b1657f53d93d0eb1fd692993c0d2909d6d73",
         "lifts": 26,
         "downhillKm": 76,
+        "namedDownhillRuns": 45,
         "elevationM": [
           925,
           2273
@@ -4601,6 +4821,7 @@
         "source": "https://openskimap.org/?obj=1c25cf660c84f21364c1905e7eb788e3789ccfbd",
         "lifts": 13,
         "downhillKm": 16,
+        "namedDownhillRuns": 24,
         "elevationM": [
           1474,
           1963
@@ -4621,6 +4842,7 @@
         "source": "https://openskimap.org/?obj=701abcf5a82c654d69e2984d3f65003e3aff6230",
         "lifts": 14,
         "downhillKm": 38,
+        "namedDownhillRuns": 35,
         "elevationM": [
           184,
           1038
@@ -4663,6 +4885,7 @@
         "source": "https://openskimap.org/?obj=a29f5a7e7e0f4ce37aa98e1335aa75d994b791f8",
         "lifts": 13,
         "downhillKm": 81,
+        "namedDownhillRuns": 108,
         "elevationM": [
           1647,
           2643
@@ -4683,6 +4906,7 @@
         "source": "https://openskimap.org/?obj=a61289e1a39b5908befa9e06cadb0c036a7e38b9",
         "lifts": 15,
         "downhillKm": 37,
+        "namedDownhillRuns": 48,
         "elevationM": [
           320,
           910
@@ -4703,6 +4927,7 @@
         "source": "https://openskimap.org/?obj=c4e2d22a88c1e1bf40138fece3f03c1b6fcda84b",
         "lifts": 2,
         "downhillKm": 6,
+        "namedDownhillRuns": 19,
         "elevationM": [
           611,
           843
@@ -4723,6 +4948,7 @@
         "source": "https://openskimap.org/?obj=ef6c8dc160b9330d799cf95bf76ae29b58d33c5c",
         "lifts": 9,
         "downhillKm": 51,
+        "namedDownhillRuns": 58,
         "elevationM": [
           37,
           792
@@ -4743,6 +4969,7 @@
         "source": "https://openskimap.org/?obj=4ed8e1c251b61aa53aa56d61f9bd2b2ad57db8d2",
         "lifts": 7,
         "downhillKm": 16,
+        "namedDownhillRuns": 30,
         "elevationM": [
           205,
           427
@@ -4794,6 +5021,7 @@
         "source": "https://openskimap.org/?obj=c349bb235a74def4c527ddf3fdb200ce99c18fe2",
         "lifts": 23,
         "downhillKm": 55,
+        "namedDownhillRuns": 37,
         "elevationM": [
           1333,
           2372
@@ -4814,6 +5042,7 @@
         "source": "https://openskimap.org/?obj=ea9dfe26da36c33e8cf007b22b628c153ac69ab4",
         "lifts": 27,
         "downhillKm": 36,
+        "namedDownhillRuns": 42,
         "elevationM": [
           978,
           1887
@@ -4833,6 +5062,7 @@
         "source": "https://openskimap.org/?obj=075db540453d13b0e660135085f40523940b95ba",
         "lifts": 33,
         "downhillKm": 120,
+        "namedDownhillRuns": 79,
         "elevationM": [
           1386,
           2838
@@ -4853,6 +5083,7 @@
         "source": "https://openskimap.org/?obj=cecc6336ead1c4d3fd9e805c04004885f10e32f2",
         "lifts": 8,
         "downhillKm": 24,
+        "namedDownhillRuns": 22,
         "elevationM": [
           1387,
           2596
@@ -4872,6 +5103,7 @@
         "source": "https://openskimap.org/?obj=6ff3d800655f463f2ea8d24980630b01000c8c49",
         "lifts": 27,
         "downhillKm": 50,
+        "namedDownhillRuns": 9,
         "elevationM": [
           197,
           530
@@ -4892,6 +5124,7 @@
         "source": "https://openskimap.org/?obj=6fab99ca0f48e48b41acc39f35e85a4cc88c672a",
         "lifts": 8,
         "downhillKm": 9,
+        "namedDownhillRuns": 20,
         "elevationM": [
           178,
           354
@@ -4922,6 +5155,7 @@
         "source": "https://openskimap.org/?obj=495dcdfe0af083de093aae64616588ed36e8ca87",
         "lifts": 1,
         "downhillKm": 3,
+        "namedDownhillRuns": 10,
         "elevationM": [
           1581,
           1702
@@ -4941,6 +5175,7 @@
         "source": "https://openskimap.org/?obj=29f8e0b5cfd5534d2250b9a8060db8a3fa86c632",
         "lifts": 8,
         "downhillKm": 4,
+        "namedDownhillRuns": 20,
         "elevationM": [
           328,
           376
@@ -4961,6 +5196,7 @@
         "source": "https://openskimap.org/?obj=5795ddd47e05fd5a3d36ff4d9f8ae27b95c3efe1",
         "lifts": 3,
         "downhillKm": 8,
+        "namedDownhillRuns": 19,
         "elevationM": [
           251,
           431
@@ -4981,6 +5217,7 @@
         "source": "https://openskimap.org/?obj=84db66751dfc13969441d94cb66617193fe7407d",
         "lifts": 12,
         "downhillKm": 46,
+        "namedDownhillRuns": 70,
         "elevationM": [
           262,
           929
@@ -5001,6 +5238,7 @@
         "source": "https://openskimap.org/?obj=4451d38d77aaff6785c0c786ef45e58f1729e0be",
         "lifts": 8,
         "downhillKm": 36,
+        "namedDownhillRuns": 50,
         "elevationM": [
           1960,
           2495
@@ -5021,6 +5259,7 @@
         "source": "https://openskimap.org/?obj=d6a722d4a7962b1014b2c3ba86fe813a9e423162",
         "lifts": 3,
         "downhillKm": 6,
+        "namedDownhillRuns": 22,
         "elevationM": [
           77,
           148
@@ -5041,6 +5280,7 @@
         "source": "https://openskimap.org/?obj=6f2e7781d5e962a308f9cb0261b09b937ffc06cc",
         "lifts": 3,
         "downhillKm": 10,
+        "namedDownhillRuns": 14,
         "elevationM": [
           1237,
           1611
@@ -5073,6 +5313,7 @@
         "source": "https://openskimap.org/?obj=952dd7481a7a4aa784a4c61a385afa70238836a3",
         "lifts": 8,
         "downhillKm": 27,
+        "namedDownhillRuns": 63,
         "elevationM": [
           276,
           512
@@ -5093,6 +5334,7 @@
         "source": "https://openskimap.org/?obj=305c84e41152110f9e0e01dc6cc33932fc1579b7",
         "lifts": 11,
         "downhillKm": 4,
+        "namedDownhillRuns": 10,
         "elevationM": [
           356,
           443
@@ -5113,6 +5355,7 @@
         "source": "https://openskimap.org/?obj=b7e060a1861cfe2b1eadc171cebdc5d145178d5b",
         "lifts": 9,
         "downhillKm": 17,
+        "namedDownhillRuns": 19,
         "elevationM": [
           918,
           1339
@@ -5133,6 +5376,7 @@
         "source": "https://openskimap.org/?obj=fd830ae87b04dcc7ab252d9b7f21cb21029dd61f",
         "lifts": 20,
         "downhillKm": 57,
+        "namedDownhillRuns": 51,
         "elevationM": [
           1513,
           2511
@@ -5153,6 +5397,7 @@
         "source": "https://openskimap.org/?obj=26eda109442576aa257d97624b341a941867f96e",
         "lifts": 3,
         "downhillKm": 9,
+        "namedDownhillRuns": 22,
         "elevationM": [
           2055,
           2244
@@ -5173,6 +5418,7 @@
         "source": "https://openskimap.org/?obj=b46091ab4d973392d23af15f0bd86f684c91bae2",
         "lifts": 6,
         "downhillKm": 12,
+        "namedDownhillRuns": 16,
         "elevationM": [
           420,
           869
@@ -5193,6 +5439,7 @@
         "source": "https://openskimap.org/?obj=0758851e7566cebfd9801159688e5c39562cb46e",
         "lifts": 10,
         "downhillKm": 18,
+        "namedDownhillRuns": 9,
         "elevationM": [
           258,
           911
@@ -5213,6 +5460,7 @@
         "source": "https://openskimap.org/?obj=08d4ac312d1e23ecbec6df4238207d4fe15f4ce3",
         "lifts": 8,
         "downhillKm": 5,
+        "namedDownhillRuns": 5,
         "elevationM": [
           982,
           1241
@@ -5233,6 +5481,7 @@
         "source": "https://openskimap.org/?obj=ba4944ecd2e640acedf666287f228427b607680e",
         "lifts": 28,
         "downhillKm": 86,
+        "namedDownhillRuns": 115,
         "elevationM": [
           2457,
           3360
@@ -5253,6 +5502,7 @@
         "source": "https://openskimap.org/?obj=c9f7365319aa26d62a211024a89021514dd7f64f",
         "lifts": 5,
         "downhillKm": 20,
+        "namedDownhillRuns": 36,
         "elevationM": [
           1359,
           1789
@@ -5283,6 +5533,7 @@
         "source": "https://openskimap.org/?obj=d2a1487e12b6070aa90b7b76966675e9498fe0e3",
         "lifts": 4,
         "downhillKm": 3,
+        "namedDownhillRuns": 12,
         "elevationM": [
           163,
           247
@@ -5302,6 +5553,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=147d84117d26ed6dfa3f48670298ac984b7dcc56",
         "nordicKm": 46,
+        "namedNordicTrails": 21,
         "elevationM": [
           446,
           481
@@ -5322,6 +5574,7 @@
         "source": "https://openskimap.org/?obj=3cd3dae98351a0c8d84257d5263926e5d557b028",
         "lifts": 3,
         "downhillKm": 21,
+        "namedDownhillRuns": 36,
         "elevationM": [
           19,
           468
@@ -5342,6 +5595,7 @@
         "source": "https://openskimap.org/?obj=5e819ebcf0e2f7b4cee8123304ed019d6eff2e59",
         "lifts": 6,
         "downhillKm": 37,
+        "namedDownhillRuns": 68,
         "elevationM": [
           1724,
           2504
@@ -5361,6 +5615,7 @@
         "source": "https://openskimap.org/?obj=f218c6daf69d83a994d908c198b7d651ca105994",
         "lifts": 4,
         "downhillKm": 10,
+        "namedDownhillRuns": 24,
         "elevationM": [
           237,
           397
@@ -5381,6 +5636,7 @@
         "source": "https://openskimap.org/?obj=08bcd7a173c04efe03440e2dde2cb71e48c06bf8",
         "lifts": 9,
         "downhillKm": 9,
+        "namedDownhillRuns": 21,
         "elevationM": [
           539,
           863
@@ -5401,6 +5657,7 @@
         "source": "https://openskimap.org/?obj=7ac7509f0329dd89bb3912b2456e3178a52f2e8b",
         "lifts": 2,
         "downhillKm": 23,
+        "namedDownhillRuns": 25,
         "elevationM": [
           521,
           900
@@ -5421,6 +5678,7 @@
         "source": "https://openskimap.org/?obj=0e7ba1fd10a2afbc6e188d1f9936f843cc665583",
         "lifts": 54,
         "downhillKm": 113,
+        "namedDownhillRuns": 66,
         "elevationM": [
           616,
           2468
@@ -5441,6 +5699,7 @@
         "source": "https://openskimap.org/?obj=e7bdf3f0770b5330ef22f507b3c5b445550bd296",
         "lifts": 5,
         "downhillKm": 2,
+        "namedDownhillRuns": 12,
         "elevationM": [
           107,
           156
@@ -5461,6 +5720,7 @@
         "source": "https://openskimap.org/?obj=97a14cedc5b0e781e9bd9857df1426b9376c7462",
         "lifts": 55,
         "downhillKm": 141,
+        "namedDownhillRuns": 95,
         "elevationM": [
           820,
           2371
@@ -5481,6 +5741,7 @@
         "source": "https://openskimap.org/?obj=e13d9d82f727b3101571e54b9aeeb900a8286337",
         "lifts": 46,
         "downhillKm": 142,
+        "namedDownhillRuns": 82,
         "elevationM": [
           1132,
           2920
@@ -5501,6 +5762,7 @@
         "source": "https://openskimap.org/?obj=0589077799a0fce5af4bc382569b143114eafd5f",
         "lifts": 4,
         "downhillKm": 16,
+        "namedDownhillRuns": 23,
         "elevationM": [
           521,
           811
@@ -5519,6 +5781,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=684ba9171b779c2c6669da066fb0596cb03668f1",
         "nordicKm": 81,
+        "namedNordicTrails": 36,
         "elevationM": [
           472,
           528
@@ -5539,6 +5802,7 @@
         "source": "https://openskimap.org/?obj=6092f3086c206feb2645543b0e5283b23754e8b8",
         "lifts": 7,
         "downhillKm": 7,
+        "namedDownhillRuns": 25,
         "elevationM": [
           279,
           456
@@ -5559,6 +5823,7 @@
         "source": "https://openskimap.org/?obj=eeba070400ae4c5176b1736be9d42afb9457068e",
         "lifts": 12,
         "downhillKm": 22,
+        "namedDownhillRuns": 23,
         "elevationM": [
           760,
           1424
@@ -5579,6 +5844,7 @@
         "source": "https://openskimap.org/?obj=cbf5bcc5f265cec9368d353e2ab6ecb6c9e41a4c",
         "lifts": 9,
         "downhillKm": 37,
+        "namedDownhillRuns": 69,
         "elevationM": [
           3260,
           3598
@@ -5599,6 +5865,7 @@
         "source": "https://openskimap.org/?obj=376ba1fb724275ccb68f0e6871c6fd0c9cfe97c0",
         "lifts": 2,
         "downhillKm": 19,
+        "namedDownhillRuns": 26,
         "elevationM": [
           182,
           629
@@ -5619,6 +5886,7 @@
         "source": "https://openskimap.org/?obj=381c03a5b99ba84aec5abd3c81d01ee1d3b49e10",
         "lifts": 2,
         "downhillKm": 7,
+        "namedDownhillRuns": 14,
         "elevationM": [
           327,
           471
@@ -5639,6 +5907,7 @@
         "source": "https://openskimap.org/?obj=a960ae1969b583612b9bc118612c69c83bdbfb0b",
         "lifts": 3,
         "downhillKm": 6,
+        "namedDownhillRuns": 7,
         "elevationM": [
           58,
           167
@@ -5659,6 +5928,7 @@
         "source": "https://openskimap.org/?obj=af975d2da6cc5807757e938661e9894ae228718d",
         "lifts": 4,
         "downhillKm": 5,
+        "namedDownhillRuns": 17,
         "elevationM": [
           198,
           329
@@ -5679,6 +5949,7 @@
         "source": "https://openskimap.org/?obj=3785c88c5ad57290cf36584e82109a458c554a54",
         "lifts": 9,
         "downhillKm": 58,
+        "namedDownhillRuns": 56,
         "elevationM": [
           178,
           803
@@ -5698,6 +5969,7 @@
         "source": "https://openskimap.org/?obj=67b5c6852f920dd04961d91ab13aa83a9b47c255",
         "lifts": 9,
         "downhillKm": 38,
+        "namedDownhillRuns": 55,
         "elevationM": [
           397,
           852
@@ -5718,6 +5990,7 @@
         "source": "https://openskimap.org/?obj=a81d1a654cb6d27a2c57ab333b861e73cab51385",
         "lifts": 6,
         "downhillKm": 10,
+        "namedDownhillRuns": 23,
         "elevationM": [
           287,
           591
@@ -5738,6 +6011,7 @@
         "source": "https://openskimap.org/?obj=1899d3be7b756dfaa8181c0c6970de5c6e3062b7",
         "lifts": 6,
         "downhillKm": 43,
+        "namedDownhillRuns": 57,
         "elevationM": [
           1522,
           2296
@@ -5758,6 +6032,7 @@
         "source": "https://openskimap.org/?obj=aeb21ce1142007da7831ecfa92e398ced3f4db59",
         "lifts": 4,
         "downhillKm": 12,
+        "namedDownhillRuns": 14,
         "elevationM": [
           1184,
           2087
@@ -5778,6 +6053,7 @@
         "source": "https://openskimap.org/?obj=5ffd86e2374dc98261a846de36bfc510ab758dfc",
         "lifts": 37,
         "downhillKm": 72,
+        "namedDownhillRuns": 51,
         "elevationM": [
           1207,
           3030
@@ -5797,6 +6073,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=0e999cea74830082f85c3fc7548b3248c9dce9cb",
         "downhillKm": 34,
+        "namedDownhillRuns": 42,
         "elevationM": [
           206,
           605
@@ -5816,6 +6093,7 @@
         "source": "https://openskimap.org/?obj=6743030235c4f2386928e0951479efd836730cf4",
         "lifts": 3,
         "downhillKm": 5,
+        "namedDownhillRuns": 10,
         "elevationM": [
           348,
           489
@@ -5836,6 +6114,7 @@
         "source": "https://openskimap.org/?obj=a37017470cb8131978ddea78ff1b46a02bd5985a",
         "lifts": 2,
         "downhillKm": 9,
+        "namedDownhillRuns": 18,
         "elevationM": [
           198,
           443
@@ -5856,6 +6135,7 @@
         "source": "https://openskimap.org/?obj=5781906d75af0ee28842b5a04b4515f37079aa5d",
         "lifts": 3,
         "downhillKm": 14,
+        "namedDownhillRuns": 21,
         "elevationM": [
           1190,
           1616
@@ -5876,6 +6156,7 @@
         "source": "https://openskimap.org/?obj=d1be1aa1d5386c2876dfd032af576492a7714a8d",
         "lifts": 10,
         "downhillKm": 5,
+        "namedDownhillRuns": 23,
         "elevationM": [
           240,
           308
@@ -5896,6 +6177,7 @@
         "source": "https://openskimap.org/?obj=e5e2e92ad96673a731e4718706b0173baae63eca",
         "lifts": 3,
         "downhillKm": 11,
+        "namedDownhillRuns": 2,
         "elevationM": [
           298,
           699
@@ -5916,6 +6198,7 @@
         "source": "https://openskimap.org/?obj=74dd4473e21693f4e2d2fdfb66ed5eee9493d4cc",
         "lifts": 19,
         "downhillKm": 61,
+        "namedDownhillRuns": 86,
         "elevationM": [
           591,
           1093
@@ -5936,6 +6219,7 @@
         "source": "https://openskimap.org/?obj=8107ea0d4b45b275d05b6566e2cf37be111e1ff7",
         "lifts": 10,
         "downhillKm": 31,
+        "namedDownhillRuns": 63,
         "elevationM": [
           384,
           827
@@ -5956,6 +6240,7 @@
         "source": "https://openskimap.org/?obj=26d2df5f88caa4a30012e6c865526ce3040b6388",
         "lifts": 10,
         "downhillKm": 61,
+        "namedDownhillRuns": 98,
         "elevationM": [
           1081,
           1569
@@ -5977,6 +6262,7 @@
         "source": "https://openskimap.org/?obj=d7cc8768ea056dd9a46d954ce7d03d433288ba8a",
         "lifts": 12,
         "downhillKm": 19,
+        "namedDownhillRuns": 37,
         "elevationM": [
           2008,
           2494
@@ -5997,6 +6283,7 @@
         "source": "https://openskimap.org/?obj=5e39ee03c92ff9381445a5956d47332e8182cddc",
         "lifts": 5,
         "downhillKm": 18,
+        "namedDownhillRuns": 44,
         "elevationM": [
           290,
           606
@@ -6017,6 +6304,7 @@
         "source": "https://openskimap.org/?obj=df0ebcea3daf2a4ad2c46e99f043d37d57cf1b9b",
         "lifts": 15,
         "downhillKm": 95,
+        "namedDownhillRuns": 96,
         "elevationM": [
           1738,
           2724
@@ -6037,6 +6325,7 @@
         "source": "https://openskimap.org/?obj=d272da6efb174a96c70b157b6c4cf370f8d5da87",
         "lifts": 10,
         "downhillKm": 23,
+        "namedDownhillRuns": 30,
         "elevationM": [
           1106,
           1556
@@ -6057,6 +6346,7 @@
         "source": "https://openskimap.org/?obj=eb22337964133d173cab93b1b85b22a41b27b611",
         "lifts": 12,
         "downhillKm": 5,
+        "namedDownhillRuns": 19,
         "elevationM": [
           286,
           340
@@ -6077,6 +6367,7 @@
         "source": "https://openskimap.org/?obj=fa08874099e7e3e2ae78ebd0e5a4c842d080d7e9",
         "lifts": 21,
         "downhillKm": 47,
+        "namedDownhillRuns": 83,
         "elevationM": [
           1388,
           1777
@@ -6097,6 +6388,7 @@
         "source": "https://openskimap.org/?obj=28098c43579d6e0b939ab6daad2f6c62c7206faf",
         "lifts": 2,
         "downhillKm": 6,
+        "namedDownhillRuns": 13,
         "elevationM": [
           124,
           375
@@ -6133,6 +6425,8 @@
         "lifts": 11,
         "downhillKm": 57,
         "nordicKm": 3,
+        "namedDownhillRuns": 85,
+        "namedNordicTrails": 2,
         "elevationM": [
           1380,
           2226
@@ -6153,6 +6447,7 @@
         "source": "https://openskimap.org/?obj=4edeb68c1b51b4fce1d7289cf145de7e1b7b70cc",
         "lifts": 9,
         "downhillKm": 26,
+        "namedDownhillRuns": 59,
         "elevationM": [
           1113,
           1528
@@ -6173,6 +6468,7 @@
         "source": "https://openskimap.org/?obj=560383c6cf8f8eb3ae9967b20246bb74a9792f07",
         "lifts": 5,
         "downhillKm": 14,
+        "namedDownhillRuns": 22,
         "elevationM": [
           1419,
           2065
@@ -6193,6 +6489,7 @@
         "source": "https://openskimap.org/?obj=5361bf97f76459a12d2ce4e0495bde3422873ded",
         "lifts": 4,
         "downhillKm": 5,
+        "namedDownhillRuns": 19,
         "elevationM": [
           224,
           357
@@ -6213,6 +6510,7 @@
         "source": "https://openskimap.org/?obj=aedc10b0b4b20c17f083be799be906cc5fdb41ac",
         "lifts": 7,
         "downhillKm": 25,
+        "namedDownhillRuns": 56,
         "elevationM": [
           1632,
           2093
@@ -6233,6 +6531,7 @@
         "source": "https://openskimap.org/?obj=8fd506ce399d0940c37c1c7e173e55bfc00b54ed",
         "lifts": 2,
         "downhillKm": 2,
+        "namedDownhillRuns": 7,
         "elevationM": [
           540,
           624
@@ -6253,6 +6552,7 @@
         "source": "https://openskimap.org/?obj=d02d16e39611d48a0421991064355899bce16402",
         "lifts": 6,
         "downhillKm": 29,
+        "namedDownhillRuns": 32,
         "elevationM": [
           1666,
           2298
@@ -6273,6 +6573,7 @@
         "source": "https://openskimap.org/?obj=8e5e9380d0d0cc2fb2476b4df89e04ac0da644c7",
         "lifts": 8,
         "downhillKm": 36,
+        "namedDownhillRuns": 60,
         "elevationM": [
           1181,
           1783
@@ -6311,6 +6612,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=e71581bb6ee9da10327ead775200fc95d0c28df5",
         "nordicKm": 61,
+        "namedNordicTrails": 43,
         "elevationM": [
           575,
           757
@@ -6351,6 +6653,7 @@
         "source": "https://openskimap.org/?obj=0bc4ad9d89288c5016a8912a92c174ec7a079800",
         "lifts": 2,
         "downhillKm": 26,
+        "namedDownhillRuns": 23,
         "elevationM": [
           897,
           1404
@@ -6371,6 +6674,7 @@
         "source": "https://openskimap.org/?obj=f80221da7a00e37b111e00be1d0432db5887d89f",
         "lifts": 5,
         "downhillKm": 21,
+        "namedDownhillRuns": 15,
         "elevationM": [
           739,
           1857
@@ -6391,6 +6695,7 @@
         "source": "https://openskimap.org/?obj=629f41736fe9e223bb92ecae332e0d736721da14",
         "lifts": 7,
         "downhillKm": 27,
+        "namedDownhillRuns": 49,
         "elevationM": [
           1500,
           2266
@@ -6431,6 +6736,7 @@
         "source": "https://openskimap.org/?obj=e8cdffc42141b9eb5c6721dc02e895c9aad3df7f",
         "lifts": 13,
         "downhillKm": 23,
+        "namedDownhillRuns": 35,
         "elevationM": [
           736,
           1335
@@ -6449,6 +6755,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=7518ed85292cadae5c2f4a2775b4c03fca81a52e",
         "nordicKm": 28,
+        "namedNordicTrails": 21,
         "elevationM": [
           884,
           1224
@@ -6479,6 +6786,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=f8ae2c86df00e57b14705f245ebee4d90451a609",
         "nordicKm": 43,
+        "namedNordicTrails": 32,
         "elevationM": [
           1744,
           1947
@@ -6519,6 +6827,7 @@
         "source": "https://openskimap.org/?obj=7467b4b92b34f135e5a3258eee64b992f39c95f0",
         "lifts": 29,
         "downhillKm": 59,
+        "namedDownhillRuns": 88,
         "elevationM": [
           257,
           1176
@@ -6539,6 +6848,7 @@
         "source": "https://openskimap.org/?obj=9c2b06be97c298fc9532c5372a123f8892325473",
         "lifts": 7,
         "downhillKm": 5,
+        "namedDownhillRuns": 12,
         "elevationM": [
           277,
           345
@@ -6579,6 +6889,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=8eaedef917afb3b97954f1b46e574fa46cf8af5a",
         "nordicKm": 39,
+        "namedNordicTrails": 16,
         "elevationM": [
           204,
           321
@@ -6599,6 +6910,7 @@
         "source": "https://openskimap.org/?obj=717fe0e81e226ce0361fb10dc24e9f863eeda6ba",
         "lifts": 20,
         "downhillKm": 83,
+        "namedDownhillRuns": 91,
         "elevationM": [
           1921,
           2625
@@ -6619,6 +6931,7 @@
         "source": "https://openskimap.org/?obj=7b6ee646dc06c70700f9953eb0a2bc32d6fe54df",
         "lifts": 5,
         "downhillKm": 8,
+        "namedDownhillRuns": 17,
         "elevationM": [
           308,
           402
@@ -6639,6 +6952,7 @@
         "source": "https://openskimap.org/?obj=f6ebfb21468c867abadc111c469ac78676f49933",
         "lifts": 9,
         "downhillKm": 15,
+        "namedDownhillRuns": 40,
         "elevationM": [
           280,
           403
@@ -6659,6 +6973,7 @@
         "source": "https://openskimap.org/?obj=ca9f9488116ec374c4c93dfed92bb509e5065af3",
         "lifts": 1,
         "downhillKm": 1,
+        "namedDownhillRuns": 3,
         "elevationM": [
           273,
           309
@@ -6678,6 +6993,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=99d0eec8314ee425270657e31097f7d9288336a4",
         "nordicKm": 30,
+        "namedNordicTrails": 45,
         "elevationM": [
           123,
           278
@@ -6698,6 +7014,7 @@
         "source": "https://openskimap.org/?obj=0c5660d4eef0f04e94747339f8514016002ef02f",
         "lifts": 7,
         "downhillKm": 3,
+        "namedDownhillRuns": 9,
         "elevationM": [
           807,
           977
@@ -6718,6 +7035,7 @@
         "source": "https://openskimap.org/?obj=95d07bbe7b52066bdd3653541ed114ac6d24ca93",
         "lifts": 52,
         "downhillKm": 108,
+        "namedDownhillRuns": 88,
         "elevationM": [
           823,
           2213
@@ -6738,6 +7056,7 @@
         "source": "https://openskimap.org/?obj=b28af962323890eb2dc4f2705ed7b6893d894add",
         "lifts": 28,
         "downhillKm": 87,
+        "namedDownhillRuns": 65,
         "elevationM": [
           1628,
           2297
@@ -6758,6 +7077,7 @@
         "source": "https://openskimap.org/?obj=f6908eabbb258d109d1b4c9f86f83620dcd69380",
         "lifts": 21,
         "downhillKm": 70,
+        "namedDownhillRuns": 112,
         "elevationM": [
           353,
           1012
@@ -6798,6 +7118,7 @@
         "source": "https://openskimap.org/?obj=83a6164e59bd3fea70cb9f943c010e02cf239e85",
         "lifts": 6,
         "downhillKm": 5,
+        "namedDownhillRuns": 8,
         "elevationM": [
           361,
           1038
@@ -6818,6 +7139,7 @@
         "source": "https://openskimap.org/?obj=d3f67900a5233a1437babd4f804a78820fb839ba",
         "lifts": 15,
         "downhillKm": 41,
+        "namedDownhillRuns": 26,
         "elevationM": [
           585,
           1327
@@ -6838,6 +7160,7 @@
         "source": "https://openskimap.org/?obj=293ceddf2ced898a483558519740f4f0dee9225f",
         "lifts": 26,
         "downhillKm": 49,
+        "namedDownhillRuns": 40,
         "elevationM": [
           1826,
           2731
@@ -6857,6 +7180,7 @@
         "source": "https://openskimap.org/?obj=066c4b2d821452980329ab1a2fd4aee2d6251231",
         "lifts": 11,
         "downhillKm": 27,
+        "namedDownhillRuns": 25,
         "elevationM": [
           1943,
           2626
@@ -6876,6 +7200,7 @@
         "source": "https://openskimap.org/?obj=13ba869607d22e177654c6366ae9dc746b8db0f2",
         "lifts": 6,
         "downhillKm": 23,
+        "namedDownhillRuns": 13,
         "elevationM": [
           2338,
           3221
@@ -6896,6 +7221,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=3095292bea837187d42e06569d540a40a8a57368",
         "nordicKm": 10,
+        "namedNordicTrails": 19,
         "elevationM": [
           324,
           397
@@ -6916,6 +7242,7 @@
         "source": "https://openskimap.org/?obj=64aee63c9ac051c8e37df33f4bc3e5549876880d",
         "lifts": 16,
         "downhillKm": 34,
+        "namedDownhillRuns": 28,
         "elevationM": [
           1025,
           2124
@@ -6936,6 +7263,7 @@
         "source": "https://openskimap.org/?obj=6113e90989ba3b057fdba6366e2e48ada9428ecc",
         "lifts": 6,
         "downhillKm": 34,
+        "namedDownhillRuns": 42,
         "elevationM": [
           2736,
           3179
@@ -6956,6 +7284,7 @@
         "source": "https://openskimap.org/?obj=5ecb06388006e4740e7ce8234e26d036ce85edb7",
         "lifts": 31,
         "downhillKm": 39,
+        "namedDownhillRuns": 42,
         "elevationM": [
           1554,
           2494
@@ -7011,6 +7340,7 @@
         "source": "https://openskimap.org/?obj=7f0f9748509826cf58fa1961ee12560933bbf7ab",
         "lifts": 10,
         "downhillKm": 75,
+        "namedDownhillRuns": 86,
         "elevationM": [
           1152,
           2368
@@ -7030,6 +7360,7 @@
         "source": "https://openskimap.org/?obj=a3712cf80065932887fd5e1c84ea6a51c02a2e99",
         "lifts": 6,
         "downhillKm": 4,
+        "namedDownhillRuns": 13,
         "elevationM": [
           165,
           251
@@ -7050,6 +7381,7 @@
         "source": "https://openskimap.org/?obj=3dad9d62b112c018cb658fd1eb49bcd41c96f257",
         "lifts": 43,
         "downhillKm": 256,
+        "namedDownhillRuns": 328,
         "elevationM": [
           2101,
           3041
@@ -7070,6 +7402,7 @@
         "source": "https://openskimap.org/?obj=fc6a6f31424898eb563b75f685889f5fa00587af",
         "lifts": 3,
         "downhillKm": 9,
+        "namedDownhillRuns": 25,
         "elevationM": [
           1292,
           1587
@@ -7090,6 +7423,7 @@
         "source": "https://openskimap.org/?obj=e43e8b6f95fd0fa7b449d11bdd0aa0df2a18915a",
         "lifts": 11,
         "downhillKm": 14,
+        "namedDownhillRuns": 29,
         "elevationM": [
           180,
           409
@@ -7109,6 +7443,7 @@
         "source": "https://openskimap.org/?obj=03cb8154c75418bb8fa6d8302927baf5f7797fbd",
         "lifts": 6,
         "downhillKm": 3,
+        "namedDownhillRuns": 9,
         "elevationM": [
           379,
           417
@@ -7127,6 +7462,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=278771b240dafd647fbc1d53e4e234003b032cdc",
         "nordicKm": 32,
+        "namedNordicTrails": 39,
         "elevationM": [
           495,
           574
@@ -7147,6 +7483,7 @@
         "source": "https://openskimap.org/?obj=d6ccc4b24a3ff6253ea1439cf75e74bdf5f80579",
         "lifts": 3,
         "downhillKm": 24,
+        "namedDownhillRuns": 51,
         "elevationM": [
           1945,
           2594
@@ -7167,6 +7504,7 @@
         "source": "https://openskimap.org/?obj=4a70580006db14f084698eb63dc4db03e220ecda",
         "lifts": 10,
         "downhillKm": 9,
+        "namedDownhillRuns": 25,
         "elevationM": [
           431,
           535
@@ -7187,6 +7525,7 @@
         "source": "https://openskimap.org/?obj=d2e1e84c6527c29dc0f4fbd22c9f7fd34bd61480",
         "lifts": 6,
         "downhillKm": 17,
+        "namedDownhillRuns": 12,
         "elevationM": [
           1406,
           2982
@@ -7208,6 +7547,7 @@
         "source": "https://openskimap.org/?obj=562a20a601646b66731b356f79d1bcdd26a6e280",
         "lifts": 45,
         "downhillKm": 83,
+        "namedDownhillRuns": 103,
         "elevationM": [
           1604,
           2037
@@ -7228,6 +7568,7 @@
         "source": "https://openskimap.org/?obj=a654d2ce9e67040e03edcb1b31c8df2abb5100b3",
         "lifts": 5,
         "downhillKm": 11,
+        "namedDownhillRuns": 5,
         "elevationM": [
           634,
           1904
@@ -7248,6 +7589,7 @@
         "source": "https://openskimap.org/?obj=206531d25c87671bf4c2705b9c8f968a4d35ed94",
         "lifts": 2,
         "downhillKm": 9,
+        "namedDownhillRuns": 16,
         "elevationM": [
           1265,
           1479
@@ -7268,6 +7610,7 @@
         "source": "https://openskimap.org/?obj=5263141e47dd13bf5e7529ecdeb1d1f61aecb0ae",
         "lifts": 7,
         "downhillKm": 31,
+        "namedDownhillRuns": 51,
         "elevationM": [
           610,
           1199
@@ -7288,6 +7631,7 @@
         "source": "https://openskimap.org/?obj=80f1b9fb69d6d58d8c0211a019de956673e86a18",
         "lifts": 16,
         "downhillKm": 56,
+        "namedDownhillRuns": 45,
         "elevationM": [
           1533,
           2723
@@ -7308,6 +7652,7 @@
         "source": "https://openskimap.org/?obj=e9e53434c85990c4832361e9d821f667cffa64f0",
         "lifts": 4,
         "downhillKm": 7,
+        "namedDownhillRuns": 26,
         "elevationM": [
           351,
           464
@@ -7327,6 +7672,7 @@
         "source": "https://openskimap.org/?obj=6bce0c5b4378d80172a8f1e44252244e65530be2",
         "lifts": 13,
         "downhillKm": 21,
+        "namedDownhillRuns": 20,
         "elevationM": [
           850,
           2097
@@ -7347,6 +7693,7 @@
         "source": "https://openskimap.org/?obj=fe23db84534ccedbe5862c2a6b96bfb659da061c",
         "lifts": 4,
         "downhillKm": 10,
+        "namedDownhillRuns": 11,
         "elevationM": [
           245,
           559
@@ -7367,6 +7714,7 @@
         "source": "https://openskimap.org/?obj=f1ae030e9b17ac258bb0eb30a0f769106518dfcd",
         "lifts": 7,
         "downhillKm": 32,
+        "namedDownhillRuns": 5,
         "elevationM": [
           1728,
           3424
@@ -7387,6 +7735,7 @@
         "source": "https://openskimap.org/?obj=3c30eddac708122c98a1ad904d7a67fc8499b342",
         "lifts": 14,
         "downhillKm": 40,
+        "namedDownhillRuns": 31,
         "elevationM": [
           513,
           2250
@@ -7417,6 +7766,7 @@
         "source": "https://openskimap.org/?obj=14ec9ceb98c4ce0cdc13b6fc73ab12fe20c95a1f",
         "lifts": 3,
         "downhillKm": 21,
+        "namedDownhillRuns": 33,
         "elevationM": [
           2352,
           2640
@@ -7437,6 +7787,7 @@
         "source": "https://openskimap.org/?obj=bffad13dcc96a8c292c819dc670726b0be3a7f5d",
         "lifts": 29,
         "downhillKm": 56,
+        "namedDownhillRuns": 43,
         "elevationM": [
           1120,
           2993
@@ -7459,6 +7810,7 @@
         "source": "https://openskimap.org/?obj=70b5c16a6a584808d97c9084dd340e4c8605acdb",
         "lifts": 194,
         "downhillKm": 406,
+        "namedDownhillRuns": 358,
         "elevationM": [
           920,
           2250
@@ -7479,6 +7831,7 @@
         "source": "https://openskimap.org/?obj=9bc8daa5cc36d1e4282e4c2a5d037456d2cef475",
         "lifts": 6,
         "downhillKm": 4,
+        "namedDownhillRuns": 13,
         "elevationM": [
           355,
           430
@@ -7499,6 +7852,7 @@
         "source": "https://openskimap.org/?obj=fac42701c8f1addc2ed860fcdfd84ef6ee0cab75",
         "lifts": 8,
         "downhillKm": 5,
+        "namedDownhillRuns": 10,
         "elevationM": [
           117,
           243
@@ -7519,6 +7873,7 @@
         "source": "https://openskimap.org/?obj=ad4b81c2172308bc79a3d488e3908f5663a3059e",
         "lifts": 5,
         "downhillKm": 37,
+        "namedDownhillRuns": 48,
         "elevationM": [
           2494,
           2997
@@ -7539,6 +7894,7 @@
         "source": "https://openskimap.org/?obj=66ebd7d72089d0697f49126b4fe6bfadbb08f9e0",
         "lifts": 14,
         "downhillKm": 68,
+        "namedDownhillRuns": 81,
         "elevationM": [
           2696,
           3291
@@ -7559,6 +7915,7 @@
         "source": "https://openskimap.org/?obj=cebc149497e19ddc3d8c80e732466fe3bfd43cc6",
         "lifts": 4,
         "downhillKm": 13,
+        "namedDownhillRuns": 14,
         "elevationM": [
           195,
           375
@@ -7579,6 +7936,7 @@
         "source": "https://openskimap.org/?obj=09a2064b83c2b28a8cf907c92038b5aaee06049f",
         "lifts": 1,
         "nordicKm": 7,
+        "namedNordicTrails": 8,
         "elevationM": [
           36,
           59
@@ -7599,6 +7957,7 @@
         "source": "https://openskimap.org/?obj=79a1940e13ccae5bf38fb38169f1a70236b06eec",
         "lifts": 5,
         "downhillKm": 18,
+        "namedDownhillRuns": 30,
         "elevationM": [
           337,
           673
@@ -7618,6 +7977,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=f8feca4d0a294e5e8f329e34f9a0ec1a216352ee",
         "nordicKm": 36,
+        "namedNordicTrails": 39,
         "elevationM": [
           533,
           684
@@ -7638,6 +7998,7 @@
         "source": "https://openskimap.org/?obj=1586f10a5ae9a8f4707455ef38cb72a1bee343e6",
         "lifts": 12,
         "downhillKm": 19,
+        "namedDownhillRuns": 14,
         "elevationM": [
           927,
           2171
@@ -7658,6 +8019,7 @@
         "source": "https://openskimap.org/?obj=c67f75462733dca449d070942e082a1c1a7d0689",
         "lifts": 7,
         "downhillKm": 33,
+        "namedDownhillRuns": 52,
         "elevationM": [
           2161,
           2858
@@ -7678,6 +8040,7 @@
         "source": "https://openskimap.org/?obj=d43bd0f16a1d4436ace9396379fcdfa999dd8033",
         "lifts": 8,
         "downhillKm": 69,
+        "namedDownhillRuns": 86,
         "elevationM": [
           1155,
           2037
@@ -7697,6 +8060,7 @@
         "source": "https://openskimap.org/?obj=bf6afe86945513e83720c59303658436be745f18",
         "lifts": 7,
         "downhillKm": 29,
+        "namedDownhillRuns": 69,
         "elevationM": [
           2635,
           3132
@@ -7717,6 +8081,7 @@
         "source": "https://openskimap.org/?obj=f2df72ab0a583e1183c56c0a84810bf686d2eb9c",
         "lifts": 7,
         "downhillKm": 84,
+        "namedDownhillRuns": 61,
         "elevationM": [
           514,
           2224
@@ -7736,6 +8101,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=93aa621ace80d654158a2f60b5576b7cf7a88073",
         "nordicKm": 39,
+        "namedNordicTrails": 49,
         "elevationM": [
           404,
           565
@@ -7756,6 +8122,7 @@
         "source": "https://openskimap.org/?obj=b457f7e14191ebb120ac33a540b1edc7cd554186",
         "lifts": 6,
         "downhillKm": 13,
+        "namedDownhillRuns": 15,
         "elevationM": [
           516,
           900
@@ -7776,6 +8143,7 @@
         "source": "https://openskimap.org/?obj=6ff57b9fc9073c238cb59e44b5b24b6b0aba269d",
         "lifts": 14,
         "downhillKm": 27,
+        "namedDownhillRuns": 24,
         "elevationM": [
           1305,
           2497
@@ -7796,6 +8164,7 @@
         "source": "https://openskimap.org/?obj=67139981d789d29cdb4da8f3c4818ab3b10e579e",
         "lifts": 9,
         "downhillKm": 7,
+        "namedDownhillRuns": 20,
         "elevationM": [
           235,
           411
@@ -7816,6 +8185,7 @@
         "source": "https://openskimap.org/?obj=9ebf3503311da1c2e8d04a89c04e678a0d347367",
         "lifts": 24,
         "downhillKm": 25,
+        "namedDownhillRuns": 32,
         "elevationM": [
           286,
           494
@@ -7836,6 +8206,7 @@
         "source": "https://openskimap.org/?obj=24ee51415a84a991406320a88bd1bd2e7aa81030",
         "lifts": 18,
         "downhillKm": 31,
+        "namedDownhillRuns": 27,
         "elevationM": [
           422,
           988
@@ -7856,6 +8227,7 @@
         "source": "https://openskimap.org/?obj=02977acc39c35bef4a956c76fe455121d13c25eb",
         "lifts": 5,
         "downhillKm": 36,
+        "namedDownhillRuns": 56,
         "elevationM": [
           655,
           1218
@@ -7887,6 +8259,7 @@
         "source": "https://openskimap.org/?obj=11b4273361f22eb084db41a3270d66fe1db2e7c1",
         "lifts": 22,
         "downhillKm": 43,
+        "namedDownhillRuns": 36,
         "elevationM": [
           1402,
           2351
@@ -7907,6 +8280,7 @@
         "source": "https://openskimap.org/?obj=c3bdf2365be8731aa6cb20ce76de31e246dfab57",
         "lifts": 6,
         "downhillKm": 25,
+        "namedDownhillRuns": 65,
         "elevationM": [
           2646,
           3133
@@ -7927,6 +8301,7 @@
         "source": "https://openskimap.org/?obj=8966d0ea45002cbef23efd6b912df21d0e428822",
         "lifts": 3,
         "downhillKm": 10,
+        "namedDownhillRuns": 26,
         "elevationM": [
           223,
           412
@@ -7947,6 +8322,7 @@
         "source": "https://openskimap.org/?obj=b38f30d1d386190b96087ad975d4ffc0e912d43b",
         "lifts": 5,
         "downhillKm": 18,
+        "namedDownhillRuns": 35,
         "elevationM": [
           975,
           1316
@@ -7967,6 +8343,7 @@
         "source": "https://openskimap.org/?obj=6ecf3eac97891cee8e38aa2e836e878db6ebe5a3",
         "lifts": 27,
         "downhillKm": 59,
+        "namedDownhillRuns": 35,
         "elevationM": [
           758,
           1963
@@ -7986,6 +8363,7 @@
         "source": "https://openskimap.org/?obj=76780a114df4eeaee0fb37d7f1e5a5f3bdfdb04d",
         "lifts": 8,
         "downhillKm": 9,
+        "namedDownhillRuns": 35,
         "elevationM": [
           253,
           356
@@ -8007,6 +8385,8 @@
         "lifts": 10,
         "downhillKm": 74,
         "nordicKm": 23,
+        "namedDownhillRuns": 90,
+        "namedNordicTrails": 17,
         "elevationM": [
           1221,
           1949
@@ -8037,6 +8417,7 @@
         "source": "https://openskimap.org/?obj=fb20868f99b43dbfe8cf7195c47619680ac21f37",
         "lifts": 9,
         "downhillKm": 33,
+        "namedDownhillRuns": 35,
         "elevationM": [
           1037,
           2567
@@ -8057,6 +8438,7 @@
         "source": "https://openskimap.org/?obj=58ebc9836ec25e4498e8608b3a078c918ed1ce69",
         "lifts": 16,
         "downhillKm": 26,
+        "namedDownhillRuns": 38,
         "elevationM": [
           688,
           914
@@ -8077,6 +8459,7 @@
         "source": "https://openskimap.org/?obj=ea6d832bbf3fd251ce0f1666eb52dd44d673f014",
         "lifts": 3,
         "downhillKm": 19,
+        "namedDownhillRuns": 27,
         "elevationM": [
           715,
           1161
@@ -8097,6 +8480,7 @@
         "source": "https://openskimap.org/?obj=355c556419de6098b79e1a9f6b714c000068a8fe",
         "lifts": 10,
         "downhillKm": 10,
+        "namedDownhillRuns": 25,
         "elevationM": [
           145,
           349
@@ -8147,6 +8531,7 @@
         "source": "https://openskimap.org/?obj=fbff3ec1a04b26ff94e1f1356e35767dfdf1594e",
         "lifts": 4,
         "downhillKm": 26,
+        "namedDownhillRuns": 35,
         "elevationM": [
           2095,
           2496
@@ -8167,6 +8552,7 @@
         "source": "https://openskimap.org/?obj=0558a46359e12971010ba1ba17046a6bf304e6af",
         "lifts": 13,
         "downhillKm": 27,
+        "namedDownhillRuns": 40,
         "elevationM": [
           2030,
           2693
@@ -8187,6 +8573,7 @@
         "source": "https://openskimap.org/?obj=d25d32a3fc9e2109feb7a784cd62e354fbb866c6",
         "lifts": 7,
         "downhillKm": 38,
+        "namedDownhillRuns": 64,
         "elevationM": [
           1272,
           1904
@@ -8207,6 +8594,7 @@
         "source": "https://openskimap.org/?obj=ca99961abe8fc871ad3abe87479e4dbb2875d978",
         "lifts": 11,
         "downhillKm": 111,
+        "namedDownhillRuns": 141,
         "elevationM": [
           1146,
           1886
@@ -8227,6 +8615,7 @@
         "source": "https://openskimap.org/?obj=c1e3e5942014417c1872f2bf705b955779841e78",
         "lifts": 1,
         "downhillKm": 1,
+        "namedDownhillRuns": 1,
         "elevationM": [
           3143,
           3345
@@ -8247,6 +8636,7 @@
         "source": "https://openskimap.org/?obj=e61adbd637839187e907618f82887995b324f482",
         "lifts": 37,
         "downhillKm": 102,
+        "namedDownhillRuns": 75,
         "elevationM": [
           689,
           2421
@@ -8267,6 +8657,7 @@
         "source": "https://openskimap.org/?obj=66934016f836f00b8955a87aedd5b2713603fdf2",
         "lifts": 6,
         "downhillKm": 13,
+        "namedDownhillRuns": 31,
         "elevationM": [
           2498,
           2821
@@ -8286,6 +8677,7 @@
         "source": "https://openskimap.org/?obj=db3f3218e439bdba07b25aedcdc9087403d764e6",
         "lifts": 3,
         "downhillKm": 2,
+        "namedDownhillRuns": 7,
         "elevationM": [
           245,
           338
@@ -8306,6 +8698,7 @@
         "source": "https://openskimap.org/?obj=8db20608e6e0a34c6724767d3428317d35b616cc",
         "lifts": 1,
         "downhillKm": 3,
+        "namedDownhillRuns": 12,
         "elevationM": [
           443,
           529
@@ -8326,6 +8719,7 @@
         "source": "https://openskimap.org/?obj=b22870e1f4c5dbd701d3dd68d25d90c67de968d6",
         "lifts": 9,
         "downhillKm": 31,
+        "namedDownhillRuns": 44,
         "elevationM": [
           2943,
           3490
@@ -8346,6 +8740,7 @@
         "source": "https://openskimap.org/?obj=7adf49bcc5e9f369b1749003582b14effa4010c0",
         "lifts": 6,
         "downhillKm": 5,
+        "namedDownhillRuns": 16,
         "elevationM": [
           214,
           391
@@ -8366,6 +8761,7 @@
         "source": "https://openskimap.org/?obj=693e9c8d76f05e298edc758bb6c41d7879498a1f",
         "lifts": 10,
         "downhillKm": 12,
+        "namedDownhillRuns": 20,
         "elevationM": [
           253,
           538
@@ -8385,6 +8781,7 @@
         "source": "https://openskimap.org/?obj=1d81c666cbb4d02aa6aaf8dce16062587864ed52",
         "lifts": 1,
         "downhillKm": 21,
+        "namedDownhillRuns": 43,
         "elevationM": [
           433,
           752
@@ -8405,6 +8802,7 @@
         "source": "https://openskimap.org/?obj=b6a4ea696c3ce7ff680fcb2878b769de28c9e155",
         "lifts": 7,
         "downhillKm": 6,
+        "namedDownhillRuns": 15,
         "elevationM": [
           46,
           181
@@ -8425,6 +8823,7 @@
         "source": "https://openskimap.org/?obj=7ba787e59e18c7270741425fea002c1f18d20ab3",
         "lifts": 7,
         "downhillKm": 29,
+        "namedDownhillRuns": 68,
         "elevationM": [
           3151,
           3686
@@ -8445,6 +8844,7 @@
         "source": "https://openskimap.org/?obj=b444752fcee1a3ce5745eb664c06e157ac98f52b",
         "lifts": 5,
         "downhillKm": 6,
+        "namedDownhillRuns": 11,
         "elevationM": [
           513,
           622
@@ -8465,6 +8865,7 @@
         "source": "https://openskimap.org/?obj=78688106352077e2f6ad2f2a55e1be73e5380f1e",
         "lifts": 3,
         "downhillKm": 8,
+        "namedDownhillRuns": 21,
         "elevationM": [
           317,
           415
@@ -8485,6 +8886,7 @@
         "source": "https://openskimap.org/?obj=180faeea32aba7b22fbe1438b0a3a82f6a2a4ad8",
         "lifts": 83,
         "downhillKm": 267,
+        "namedDownhillRuns": 155,
         "elevationM": [
           795,
           2090
@@ -8505,6 +8907,7 @@
         "source": "https://openskimap.org/?obj=0e26601b28e950ea854b8e85adb5aa0a51ecc97f",
         "lifts": 13,
         "downhillKm": 24,
+        "namedDownhillRuns": 16,
         "elevationM": [
           1235,
           2905
@@ -8525,6 +8928,7 @@
         "source": "https://openskimap.org/?obj=37ee9c6ba5b44864ba844f804938a8b815f8b717",
         "lifts": 80,
         "downhillKm": 238,
+        "namedDownhillRuns": 186,
         "elevationM": [
           609,
           1865
@@ -8544,6 +8948,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=f1e06fe09cf08aee30274dd5c07f508e055eb934",
         "nordicKm": 26,
+        "namedNordicTrails": 26,
         "elevationM": [
           230,
           448
@@ -8563,6 +8968,7 @@
         "source": "https://openskimap.org/?obj=5f049fa511ae919e1b009c8419f71067cf63427c",
         "lifts": 4,
         "downhillKm": 10,
+        "namedDownhillRuns": 25,
         "elevationM": [
           588,
           786
@@ -8583,6 +8989,7 @@
         "source": "https://openskimap.org/?obj=4e33ba5d0c4bb24ebff1c1270b9d8ec5f86f3f92",
         "lifts": 9,
         "downhillKm": 49,
+        "namedDownhillRuns": 80,
         "elevationM": [
           340,
           1112
@@ -8603,6 +9010,7 @@
         "source": "https://openskimap.org/?obj=88471079dc1586673396596c0f03e3c66ad128ba",
         "lifts": 6,
         "downhillKm": 2,
+        "namedDownhillRuns": 12,
         "elevationM": [
           251,
           331
@@ -8623,6 +9031,7 @@
         "source": "https://openskimap.org/?obj=c47e4e0cea10faf86129192a93cfe5136543c1da",
         "lifts": 9,
         "downhillKm": 18,
+        "namedDownhillRuns": 28,
         "elevationM": [
           1902,
           2416
@@ -8644,6 +9053,7 @@
         "source": "https://openskimap.org/?obj=cb23e2679d722d6411b1d93cb7f64bd24b6ed669",
         "lifts": 5,
         "downhillKm": 8,
+        "namedDownhillRuns": 9,
         "elevationM": [
           476,
           861
@@ -8663,6 +9073,7 @@
         "source": "https://openskimap.org/?obj=f30d1166d286a1c7eb53ac281736bfb0f7695f45",
         "lifts": 6,
         "downhillKm": 10,
+        "namedDownhillRuns": 22,
         "elevationM": [
           398,
           538
@@ -8683,6 +9094,7 @@
         "source": "https://openskimap.org/?obj=553e5c0881466894501e5f56ab41ba951300fc75",
         "lifts": 15,
         "downhillKm": 20,
+        "namedDownhillRuns": 30,
         "elevationM": [
           2122,
           2494
@@ -8703,6 +9115,7 @@
         "source": "https://openskimap.org/?obj=11f2099ea10957844765b5bea3bbb1f13fd592b7",
         "lifts": 13,
         "downhillKm": 13,
+        "namedDownhillRuns": 28,
         "elevationM": [
           2050,
           2388
@@ -8723,6 +9136,7 @@
         "source": "https://openskimap.org/?obj=423504a1fa53bcfbe5bf956f0cd48c12868c7f06",
         "lifts": 13,
         "downhillKm": 86,
+        "namedDownhillRuns": 114,
         "elevationM": [
           1939,
           2835
@@ -8743,6 +9157,7 @@
         "source": "https://openskimap.org/?obj=8cbbb46cdace32e91492bfe6abd8014ed16328e6",
         "lifts": 14,
         "downhillKm": 97,
+        "namedDownhillRuns": 167,
         "elevationM": [
           2365,
           3340
@@ -8764,6 +9179,7 @@
         "source": "https://openskimap.org/?obj=03b56bd47b26c384d82474a2fb4b3fbc3a0c4a31",
         "lifts": 19,
         "downhillKm": 120,
+        "namedDownhillRuns": 93,
         "elevationM": [
           2474,
           3815
@@ -8784,6 +9200,7 @@
         "source": "https://openskimap.org/?obj=459353fc5b6623087d5b8d3b7025fbbf270644f9",
         "lifts": 5,
         "downhillKm": 10,
+        "namedDownhillRuns": 20,
         "elevationM": [
           366,
           493
@@ -8804,6 +9221,7 @@
         "source": "https://openskimap.org/?obj=f2b439be0d3871653a7185642c5b80ecede02cb1",
         "lifts": 6,
         "downhillKm": 15,
+        "namedDownhillRuns": 30,
         "elevationM": [
           368,
           531
@@ -8825,6 +9243,7 @@
         "source": "https://openskimap.org/?obj=1facaf3d92da6719b1c7aa95f763fbeda72222b3",
         "lifts": 13,
         "downhillKm": 31,
+        "namedDownhillRuns": 58,
         "elevationM": [
           994,
           1470
@@ -8855,6 +9274,7 @@
         "source": "https://openskimap.org/?obj=a02a76c30b32706348f0d6c0853c124abd4c8baa",
         "lifts": 5,
         "downhillKm": 19,
+        "namedDownhillRuns": 35,
         "elevationM": [
           2674,
           2939
@@ -8875,6 +9295,7 @@
         "source": "https://openskimap.org/?obj=78e5f98d8527df7216b08962f372659abcd4f711",
         "lifts": 39,
         "downhillKm": 107,
+        "namedDownhillRuns": 63,
         "elevationM": [
           1346,
           3247
@@ -8895,6 +9316,7 @@
         "source": "https://openskimap.org/?obj=6b5d7d129610235541aade75781befaa8dd22622",
         "lifts": 3,
         "downhillKm": 22,
+        "namedDownhillRuns": 36,
         "elevationM": [
           1763,
           2188
@@ -8915,6 +9337,7 @@
         "source": "https://openskimap.org/?obj=b40e925163e2330550f940711b8571409fafb3a4",
         "lifts": 9,
         "downhillKm": 37,
+        "namedDownhillRuns": 54,
         "elevationM": [
           2439,
           3051
@@ -8934,6 +9357,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=9c120eb5a09cdd577d6309f13cd79e43ce0e63a3",
         "nordicKm": 52,
+        "namedNordicTrails": 137,
         "elevationM": [
           1540,
           1861
@@ -8953,6 +9377,7 @@
         "source": "https://openskimap.org/?obj=69931ad5166c6a605bdbc8cb48fde87b78117576",
         "lifts": 11,
         "downhillKm": 16,
+        "namedDownhillRuns": 10,
         "elevationM": [
           640,
           2049
@@ -8974,6 +9399,8 @@
         "lifts": 8,
         "downhillKm": 9,
         "nordicKm": 7,
+        "namedDownhillRuns": 20,
+        "namedNordicTrails": 13,
         "elevationM": [
           219,
           392
@@ -8994,6 +9421,7 @@
         "source": "https://openskimap.org/?obj=47d1fa18b3f1d3f92c6388cac59dd919c8d20784",
         "lifts": 5,
         "downhillKm": 3,
+        "namedDownhillRuns": 7,
         "elevationM": [
           51,
           155
@@ -9036,6 +9464,7 @@
         "source": "https://openskimap.org/?obj=7bbe4370de755694437795af4d89234c73ed73d4",
         "lifts": 13,
         "downhillKm": 34,
+        "namedDownhillRuns": 28,
         "elevationM": [
           666,
           1601
@@ -9056,6 +9485,7 @@
         "source": "https://openskimap.org/?obj=baa17f751db10c008667bd32ac5a284689e8e857",
         "lifts": 6,
         "downhillKm": 29,
+        "namedDownhillRuns": 37,
         "elevationM": [
           250,
           594
@@ -9076,6 +9506,7 @@
         "source": "https://openskimap.org/?obj=5267096488ef4504f32f94de066e28cd88b7830e",
         "lifts": 24,
         "downhillKm": 118,
+        "namedDownhillRuns": 184,
         "elevationM": [
           2102,
           3213
@@ -9108,6 +9539,7 @@
         "source": "https://openskimap.org/?obj=337c8cd2d65a8c5457b0ed96d99891837d17af68",
         "lifts": 16,
         "downhillKm": 37,
+        "namedDownhillRuns": 6,
         "elevationM": [
           768,
           1853
@@ -9128,6 +9560,7 @@
         "source": "https://openskimap.org/?obj=53a4f73effb0655bdb69989c1fb297c8206d04dc",
         "lifts": 14,
         "downhillKm": 30,
+        "namedDownhillRuns": 42,
         "elevationM": [
           1166,
           1727
@@ -9158,6 +9591,7 @@
         "source": "https://openskimap.org/?obj=7b9ebd11b0f34b0ff27595dacf4573ef0e1dfec4",
         "lifts": 26,
         "downhillKm": 36,
+        "namedDownhillRuns": 48,
         "elevationM": [
           439,
           835
@@ -9178,6 +9612,7 @@
         "source": "https://openskimap.org/?obj=1688ce1f44c0112805d9755f31a8e82283162cfb",
         "lifts": 12,
         "downhillKm": 67,
+        "namedDownhillRuns": 119,
         "elevationM": [
           400,
           1112
@@ -9219,6 +9654,7 @@
         "source": "https://openskimap.org/?obj=29d4f3257670a7a1101c27d7df60cb103d5dcd6c",
         "lifts": 17,
         "downhillKm": 72,
+        "namedDownhillRuns": 105,
         "elevationM": [
           607,
           1183
@@ -9250,6 +9686,7 @@
         "source": "https://openskimap.org/?obj=fa95641c38a689ebebd96aa62b6ee049115fbeee",
         "lifts": 13,
         "downhillKm": 38,
+        "namedDownhillRuns": 85,
         "elevationM": [
           2108,
           2550
@@ -9270,6 +9707,7 @@
         "source": "https://openskimap.org/?obj=125edf155ba3fa26990fab722fd3487b85667346",
         "lifts": 8,
         "downhillKm": 8,
+        "namedDownhillRuns": 20,
         "elevationM": [
           1238,
           1595
@@ -9290,6 +9728,7 @@
         "source": "https://openskimap.org/?obj=51088afbd7eaf31cf6e677c0b2b6e3ca621754ba",
         "lifts": 18,
         "downhillKm": 80,
+        "namedDownhillRuns": 131,
         "elevationM": [
           461,
           1238
@@ -9310,6 +9749,7 @@
         "source": "https://openskimap.org/?obj=ba6f009c039cdf1008684fbf790a3fef14ec068a",
         "lifts": 15,
         "downhillKm": 76,
+        "namedDownhillRuns": 123,
         "elevationM": [
           425,
           1269
@@ -9330,6 +9770,7 @@
         "source": "https://openskimap.org/?obj=9f1d79969a331ae7d0969bf41f5d4910c7d07a0d",
         "lifts": 13,
         "downhillKm": 156,
+        "namedDownhillRuns": 176,
         "elevationM": [
           1200,
           2087
@@ -9350,6 +9791,7 @@
         "source": "https://openskimap.org/?obj=b9ec1edd75823059c063c7c7b2a4078cf82542ab",
         "lifts": 12,
         "downhillKm": 79,
+        "namedDownhillRuns": 92,
         "elevationM": [
           1756,
           2780
@@ -9370,6 +9812,7 @@
         "source": "https://openskimap.org/?obj=1c76331ece5818c80d76890bc674c6687e89474d",
         "lifts": 5,
         "downhillKm": 13,
+        "namedDownhillRuns": 22,
         "elevationM": [
           1813,
           2002
@@ -9390,6 +9833,7 @@
         "source": "https://openskimap.org/?obj=8427c5944ae2f43d6bd0d412933c04162cbe3180",
         "lifts": 11,
         "downhillKm": 2,
+        "namedDownhillRuns": 11,
         "elevationM": [
           296,
           356
@@ -9410,6 +9854,7 @@
         "source": "https://openskimap.org/?obj=54bceeb62ccd2209e50b8dc7e06b8daa1727ce34",
         "lifts": 20,
         "downhillKm": 86,
+        "namedDownhillRuns": 130,
         "elevationM": [
           249,
           955
@@ -9430,6 +9875,7 @@
         "source": "https://openskimap.org/?obj=fe0cf62c2877f98925dfdf45434f8577509b6686",
         "lifts": 6,
         "downhillKm": 3,
+        "namedDownhillRuns": 16,
         "elevationM": [
           220,
           351
@@ -9450,6 +9896,7 @@
         "source": "https://openskimap.org/?obj=c4431109a3fd5c562c509e2320a86c169aed0dd7",
         "lifts": 3,
         "downhillKm": 37,
+        "namedDownhillRuns": 73,
         "elevationM": [
           2480,
           3002
@@ -9469,6 +9916,7 @@
         "source": "https://openskimap.org/?obj=b0b9519425df4d4c587f76eec37e302360d9603c",
         "lifts": 5,
         "downhillKm": 12,
+        "namedDownhillRuns": 35,
         "elevationM": [
           403,
           568
@@ -9489,6 +9937,7 @@
         "source": "https://openskimap.org/?obj=56b34c711784c9925910bc1cbc710d08eff8c152",
         "lifts": 5,
         "downhillKm": 9,
+        "namedDownhillRuns": 17,
         "elevationM": [
           2070,
           2219
@@ -9509,6 +9958,7 @@
         "source": "https://openskimap.org/?obj=4ee3f352a5b853868ea8270abd9c5f9643f15b5a",
         "lifts": 4,
         "downhillKm": 17,
+        "namedDownhillRuns": 13,
         "elevationM": [
           966,
           1520
@@ -9529,6 +9979,7 @@
         "source": "https://openskimap.org/?obj=063937ba03fcc9ee00d5a60da62d664623841eec",
         "lifts": 7,
         "downhillKm": 58,
+        "namedDownhillRuns": 68,
         "elevationM": [
           1488,
           2328
@@ -9549,6 +10000,7 @@
         "source": "https://openskimap.org/?obj=8faa21d51bf5725e795c0972acbe92178a458347",
         "lifts": 14,
         "downhillKm": 43,
+        "namedDownhillRuns": 65,
         "elevationM": [
           2850,
           3603
@@ -9569,6 +10021,7 @@
         "source": "https://openskimap.org/?obj=c602257d6161adbcd8f1e18ed4e3ae037ac9327b",
         "lifts": 6,
         "downhillKm": 11,
+        "namedDownhillRuns": 12,
         "elevationM": [
           577,
           1173
@@ -9589,6 +10042,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=77eaa53b4f2f2abae95c4315db1f5508b1c35549",
         "nordicKm": 48,
+        "namedNordicTrails": 22,
         "elevationM": [
           963,
           1379
@@ -9609,6 +10063,7 @@
         "source": "https://openskimap.org/?obj=c036edc54d4fe7d4c6f93de5b9f3dcaff34a5a64",
         "lifts": 20,
         "downhillKm": 101,
+        "namedDownhillRuns": 102,
         "elevationM": [
           2662,
           3812
@@ -9629,6 +10084,7 @@
         "source": "https://openskimap.org/?obj=7d26be88853e89f3377b2050201f439ebe390a0d",
         "lifts": 4,
         "downhillKm": 20,
+        "namedDownhillRuns": 39,
         "elevationM": [
           225,
           653
@@ -9649,6 +10105,7 @@
         "source": "https://openskimap.org/?obj=64cba5151b6bd43dc67c6be33fdea3d63576b4ef",
         "lifts": 5,
         "downhillKm": 15,
+        "namedDownhillRuns": 26,
         "elevationM": [
           1804,
           2129
@@ -9669,6 +10126,7 @@
         "source": "https://openskimap.org/?obj=d70a38efa1745a52727cf449eb7a657610ebab1c",
         "lifts": 7,
         "downhillKm": 22,
+        "namedDownhillRuns": 47,
         "elevationM": [
           240,
           401
@@ -9688,6 +10146,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=46bdb6eb515b84ce1cd62f723463f3a304ff09e7",
         "nordicKm": 27,
+        "namedNordicTrails": 35,
         "elevationM": [
           249,
           295
@@ -9708,6 +10167,7 @@
         "source": "https://openskimap.org/?obj=976d9a75995718d0e06985401b49091331695b48",
         "lifts": 7,
         "downhillKm": 16,
+        "namedDownhillRuns": 23,
         "elevationM": [
           1607,
           1986
@@ -9731,6 +10191,8 @@
         "lifts": 20,
         "downhillKm": 43,
         "nordicKm": 120,
+        "namedDownhillRuns": 69,
+        "namedNordicTrails": 63,
         "elevationM": [
           800,
           1183
@@ -9751,6 +10213,7 @@
         "source": "https://openskimap.org/?obj=d02b7dc18ab40ddd76c8e4d9882f8451121e479f",
         "lifts": 15,
         "downhillKm": 55,
+        "namedDownhillRuns": 78,
         "elevationM": [
           1365,
           2036
@@ -9802,6 +10265,7 @@
         "source": "https://openskimap.org/?obj=482cba0a21d6f161d1e96582ae9274b1fb0f6740",
         "lifts": 12,
         "downhillKm": 53,
+        "namedDownhillRuns": 50,
         "elevationM": [
           1214,
           2586
@@ -9822,6 +10286,7 @@
         "source": "https://openskimap.org/?obj=30bdb26aafeede97f796dd60b7fd2c735c4eb778",
         "lifts": 9,
         "downhillKm": 22,
+        "namedDownhillRuns": 38,
         "elevationM": [
           320,
           609
@@ -9842,6 +10307,7 @@
         "source": "https://openskimap.org/?obj=ddb30131027e2ed35f6d5740bb6bdfba7074bcbd",
         "lifts": 7,
         "downhillKm": 16,
+        "namedDownhillRuns": 19,
         "elevationM": [
           1222,
           1741
@@ -9881,6 +10347,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=08370c4e4f0fd8cf251fc212d1e6e3fa3bda5c99",
         "nordicKm": 71,
+        "namedNordicTrails": 58,
         "elevationM": [
           252,
           847
@@ -9900,6 +10367,7 @@
         "source": "https://openskimap.org/?obj=1cd85cf7418531a245f8e534a389c566f57a1126",
         "lifts": 4,
         "downhillKm": 5,
+        "namedDownhillRuns": 20,
         "elevationM": [
           340,
           408
@@ -9920,6 +10388,7 @@
         "source": "https://openskimap.org/?obj=b7cad93e857de92335debf15f4d0bfe9a04f4d1b",
         "lifts": 12,
         "downhillKm": 78,
+        "namedDownhillRuns": 103,
         "elevationM": [
           257,
           873
@@ -9939,6 +10408,7 @@
         "source": "https://openskimap.org/?obj=d1118f723cb1ffdace02c494efb80f6790c65ee0",
         "lifts": 9,
         "downhillKm": 7,
+        "namedDownhillRuns": 26,
         "elevationM": [
           290,
           362
@@ -9959,6 +10429,7 @@
         "source": "https://openskimap.org/?obj=d5e7592301c0a122ea8e807a2659d29a7e21beee",
         "lifts": 5,
         "downhillKm": 20,
+        "namedDownhillRuns": 13,
         "elevationM": [
           1355,
           2378
@@ -9979,6 +10450,7 @@
         "source": "https://openskimap.org/?obj=0cbcc6a3e3481cdc6750911f4cfe7c412563905f",
         "lifts": 15,
         "downhillKm": 34,
+        "namedDownhillRuns": 12,
         "elevationM": [
           803,
           1707
@@ -10008,6 +10480,7 @@
         "source": "https://openskimap.org/?obj=fd00fdefb3462da486a46ffe87a05820428c206d",
         "lifts": 4,
         "downhillKm": 4,
+        "namedDownhillRuns": 14,
         "elevationM": [
           403,
           552
@@ -10028,6 +10501,7 @@
         "source": "https://openskimap.org/?obj=4ca587625d3329fde74b813a842bac400b05e5b2",
         "lifts": 5,
         "downhillKm": 4,
+        "namedDownhillRuns": 17,
         "elevationM": [
           266,
           346
@@ -10048,6 +10522,7 @@
         "source": "https://openskimap.org/?obj=88a22ba23468cf120025366ef40f004c9043546e",
         "lifts": 32,
         "downhillKm": 215,
+        "namedDownhillRuns": 209,
         "elevationM": [
           2452,
           3526
@@ -10072,6 +10547,7 @@
         "source": "https://openskimap.org/?obj=e615b3d384f0063fb20af785b477a97fdce907bc",
         "lifts": 37,
         "downhillKm": 78,
+        "namedDownhillRuns": 69,
         "elevationM": [
           1331,
           2435
@@ -10103,6 +10579,7 @@
         "source": "https://openskimap.org/?obj=f925374f52ee352c407a54b9a5f14f8f3f35696a",
         "lifts": 2,
         "downhillKm": 15,
+        "namedDownhillRuns": 22,
         "elevationM": [
           444,
           689
@@ -10124,6 +10601,7 @@
         "source": "https://openskimap.org/?obj=fca6e2a27977f0cdca3016e8e9c4a9a643d53f2b",
         "lifts": 79,
         "downhillKm": 118,
+        "namedDownhillRuns": 120,
         "elevationM": [
           1258,
           2507
@@ -10143,6 +10621,7 @@
         "source": "https://openskimap.org/?obj=b66cd0bd82cf0860c0b65dbe7ba26066f8463554",
         "lifts": 27,
         "downhillKm": 115,
+        "namedDownhillRuns": 84,
         "elevationM": [
           1822,
           3175
@@ -10163,6 +10642,7 @@
         "source": "https://openskimap.org/?obj=5599f5c55105bf3996fec9a4e6f309e1a79e421d",
         "lifts": 17,
         "downhillKm": 47,
+        "namedDownhillRuns": 37,
         "elevationM": [
           2858,
           3675
@@ -10194,6 +10674,7 @@
         "source": "https://openskimap.org/?obj=6e484493acae09d7e2f5cbc717ef37e76a07fa8b",
         "lifts": 3,
         "downhillKm": 2,
+        "namedDownhillRuns": 15,
         "elevationM": [
           236,
           306
@@ -10225,6 +10706,7 @@
         "source": "https://openskimap.org/?obj=323af836e78ff3f811fa43a5de343e67c998f576",
         "lifts": 5,
         "downhillKm": 10,
+        "namedDownhillRuns": 6,
         "elevationM": [
           902,
           1347
@@ -10245,6 +10727,7 @@
         "source": "https://openskimap.org/?obj=48eb377ddfe9e682fba0d64818a5d9a082a33117",
         "lifts": 10,
         "downhillKm": 31,
+        "namedDownhillRuns": 69,
         "elevationM": [
           556,
           1163
@@ -10265,6 +10748,7 @@
         "source": "https://openskimap.org/?obj=e0c315dfc3d1759447815000e3dd57b01b5e04d4",
         "lifts": 10,
         "downhillKm": 14,
+        "namedDownhillRuns": 45,
         "elevationM": [
           216,
           315
@@ -10285,6 +10769,7 @@
         "source": "https://openskimap.org/?obj=9aa9eb2e7e4946a91f4fef6e021de4cc353742df",
         "lifts": 6,
         "downhillKm": 9,
+        "namedDownhillRuns": 23,
         "elevationM": [
           134,
           439
@@ -10305,6 +10790,7 @@
         "source": "https://openskimap.org/?obj=c8c26f11a3b39a1171cc899d67435d90c997e76e",
         "lifts": 5,
         "downhillKm": 8,
+        "namedDownhillRuns": 22,
         "elevationM": [
           348,
           545
@@ -10325,6 +10811,7 @@
         "source": "https://openskimap.org/?obj=19291bcc85a3b6bda5a0817e6a20bf8b8b71a5c0",
         "lifts": 36,
         "downhillKm": 299,
+        "namedDownhillRuns": 420,
         "elevationM": [
           653,
           2259
@@ -10344,6 +10831,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=b0f0c3de2df186fe1fe8258c30d3792d0e307159",
         "nordicKm": 3,
+        "namedNordicTrails": 3,
         "elevationM": [
           988,
           1021
@@ -10364,6 +10852,7 @@
         "source": "https://openskimap.org/?obj=da6da566549a988c9265ac7bc387e2c7fb59bd56",
         "lifts": 8,
         "downhillKm": 36,
+        "namedDownhillRuns": 50,
         "elevationM": [
           1367,
           1987
@@ -10384,6 +10873,7 @@
         "source": "https://openskimap.org/?obj=09b32bd37bdd1181ae2e1b4b9460352b593d798c",
         "lifts": 3,
         "downhillKm": 13,
+        "namedDownhillRuns": 25,
         "elevationM": [
           2571,
           2845
@@ -10402,6 +10892,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=f2acd51cb5848050d13deed37b650929da3cb5b8",
         "nordicKm": 30,
+        "namedNordicTrails": 11,
         "elevationM": [
           1969,
           2126
@@ -10422,6 +10913,7 @@
         "source": "https://openskimap.org/?obj=b7094d426187b8c49a991c61e46248870ad31d1c",
         "lifts": 6,
         "downhillKm": 19,
+        "namedDownhillRuns": 42,
         "elevationM": [
           442,
           541
@@ -10442,6 +10934,7 @@
         "source": "https://openskimap.org/?obj=d8b3d7d48706c9ce19bd6ba147c156ae89574ad8",
         "lifts": 11,
         "downhillKm": 37,
+        "namedDownhillRuns": 85,
         "elevationM": [
           372,
           1333
@@ -10461,6 +10954,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=a94d60aad2cf320fe7c8101929696934d9d9fa40",
         "nordicKm": 94,
+        "namedNordicTrails": 65,
         "elevationM": [
           716,
           1221
@@ -10481,6 +10975,7 @@
         "source": "https://openskimap.org/?obj=ad3bc44d99f395ecf777763169d4926de3e0b76e",
         "lifts": 4,
         "downhillKm": 9,
+        "namedDownhillRuns": 13,
         "elevationM": [
           1066,
           1394
@@ -10501,6 +10996,7 @@
         "source": "https://openskimap.org/?obj=97655053adc3665312bf8601a0a73ac25fc9bb38",
         "lifts": 8,
         "downhillKm": 11,
+        "namedDownhillRuns": 23,
         "elevationM": [
           261,
           543
@@ -10521,6 +11017,7 @@
         "source": "https://openskimap.org/?obj=1befbcd1d42a0dab3c38d749a0dbed538d3b6071",
         "lifts": 9,
         "downhillKm": 6,
+        "namedDownhillRuns": 17,
         "elevationM": [
           237,
           319
@@ -10541,6 +11038,7 @@
         "source": "https://openskimap.org/?obj=0df6f2636ac79f4cfabf19a4d6954d6b8e00d01a",
         "lifts": 4,
         "downhillKm": 26,
+        "namedDownhillRuns": 47,
         "elevationM": [
           593,
           1211
@@ -10560,6 +11058,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=7d919aae9d1944ee99921c2f385b77e9ac0984f9",
         "nordicKm": 25,
+        "namedNordicTrails": 23,
         "elevationM": [
           866,
           1052
@@ -10581,6 +11080,7 @@
         "source": "https://openskimap.org/?obj=5a1a80c1675044a1264bf0701081f570067d0251",
         "lifts": 13,
         "downhillKm": 5,
+        "namedDownhillRuns": 22,
         "elevationM": [
           232,
           291
@@ -10601,6 +11101,7 @@
         "source": "https://openskimap.org/?obj=eac3283b22abc1d56081b11e2c4867209961f982",
         "lifts": 25,
         "downhillKm": 112,
+        "namedDownhillRuns": 138,
         "elevationM": [
           2771,
           3654
@@ -10636,6 +11137,7 @@
         "source": "https://openskimap.org/?obj=f5682086c3b44e006c6a9e21c553a662f538add8",
         "lifts": 9,
         "downhillKm": 9,
+        "namedDownhillRuns": 23,
         "elevationM": [
           765,
           1067
@@ -10656,6 +11158,7 @@
         "source": "https://openskimap.org/?obj=8cd0e5b9f5a6086fe6eb0135c29784435808d163",
         "lifts": 10,
         "downhillKm": 9,
+        "namedDownhillRuns": 25,
         "elevationM": [
           924,
           1082
@@ -10676,6 +11179,7 @@
         "source": "https://openskimap.org/?obj=474eb18d133632b436ad8ef5adb04b1087dd8d0b",
         "lifts": 12,
         "downhillKm": 16,
+        "namedDownhillRuns": 32,
         "elevationM": [
           751,
           944
@@ -10696,6 +11200,7 @@
         "source": "https://openskimap.org/?obj=0509d7d69847b7f5da4850cc299a909099d5382f",
         "lifts": 11,
         "downhillKm": 50,
+        "namedDownhillRuns": 102,
         "elevationM": [
           3128,
           3585
@@ -10715,6 +11220,7 @@
       "mappedTerrain": {
         "source": "https://openskimap.org/?obj=75e997683d13f82ff066bc409da65985b4c89186",
         "nordicKm": 22,
+        "namedNordicTrails": 22,
         "elevationM": [
           213,
           364
@@ -10735,6 +11241,7 @@
         "source": "https://openskimap.org/?obj=25d31b46a111dd776d81cee73adfc2a5e35aaae5",
         "lifts": 7,
         "downhillKm": 28,
+        "namedDownhillRuns": 37,
         "elevationM": [
           1655,
           2103
@@ -10755,6 +11262,7 @@
         "source": "https://openskimap.org/?obj=6783f692191d824dcc9adb5731488f9bbeeeb11d",
         "lifts": 10,
         "downhillKm": 6,
+        "namedDownhillRuns": 7,
         "elevationM": [
           464,
           698
@@ -10775,6 +11283,7 @@
         "source": "https://openskimap.org/?obj=7cfdd8ccb96dd792c0ee2357d28a9fd44c7d19c9",
         "lifts": 35,
         "downhillKm": 39,
+        "namedDownhillRuns": 17,
         "elevationM": [
           792,
           1661
@@ -10808,6 +11317,7 @@
         "source": "https://openskimap.org/?obj=bbbfaa27816f58cfdfecc5b692b0ee59dde891f5",
         "lifts": 54,
         "downhillKm": 123,
+        "namedDownhillRuns": 82,
         "elevationM": [
           572,
           2501

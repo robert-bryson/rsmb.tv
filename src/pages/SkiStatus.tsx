@@ -1,4 +1,4 @@
-import { lazy, Suspense, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { IntentLink } from '../components/IntentLink';
 import { MapSkipLink } from '../components/MapSkipLink';
@@ -32,6 +32,26 @@ const layouts: Record<SkiResultsView, string> = {
     table: 'grid-rows-[minmax(14rem,1fr)] lg:grid-cols-[minmax(0,1fr)_clamp(16rem,24vw,24rem)]',
 };
 
+const emptyViewport = () => undefined;
+
+function createViewportStore() {
+    let visibleIds: ReadonlySet<string> | undefined;
+    const listeners = new Set<() => void>();
+    return {
+        getSnapshot: () => visibleIds,
+        subscribe(listener: () => void) {
+            listeners.add(listener);
+            return () => { listeners.delete(listener); };
+        },
+        update(ids: ReadonlySet<string>) {
+            const previous = visibleIds;
+            if (previous && previous.size === ids.size && [...ids].every(id => previous.has(id))) return;
+            visibleIds = ids;
+            for (const listener of listeners) listener();
+        },
+    };
+}
+
 function MapMessage({ failed = false }: { failed?: boolean }) {
     return <div className="grid h-full place-items-center p-5 text-center text-sm text-zinc-300" role={failed ? 'alert' : 'status'}>
         {failed ? <div><p>Map unavailable. Browse areas in the table.</p>
@@ -51,7 +71,7 @@ export default function SkiStatus() {
     const showTable = wide || view !== 'map';
     const [mapOpened, setMapOpened] = useState(showMap);
     const [filtersOpen, setFiltersOpen] = useState(false);
-    const [visibleAreaIds, setVisibleAreaIds] = useState<ReadonlySet<string>>();
+    const [viewport] = useState(createViewportStore);
     // Load the map when first visible. Keep its camera and renderer between views.
     if (showMap && !mapOpened) setMapOpened(true);
 
@@ -71,7 +91,8 @@ export default function SkiStatus() {
     const areas = useMemo(() => filterSkiAreas(skiAreas, { query, region, pass, night, skiing }), [query, region, pass, night, skiing]);
     const selected = areas.find(area => area.id === selectedId);
     const mapMinimum = selected ? 'min-h-min' : view === 'map' ? 'min-h-56' : 'min-h-68';
-    const viewportIds = inView ? visibleAreaIds : undefined;
+    // Save the latest view without updating the table until it uses the viewport filter.
+    const viewportIds = useSyncExternalStore(viewport.subscribe, inView ? viewport.getSnapshot : emptyViewport, emptyViewport);
     const tableAreas = useMemo(() => viewportIds ? areas.filter(area => viewportIds.has(area.id)) : areas, [areas, viewportIds]);
     const sorted = useMemo(() => sortSkiAreas(tableAreas, { key: sort.key, direction: sort.direction }), [tableAreas, sort.key, sort.direction]);
     const selectedButton = useRef<HTMLButtonElement>(null);
@@ -93,10 +114,6 @@ export default function SkiStatus() {
 
     function selectArea(id?: string) {
         setParam('area', id);
-    }
-
-    function updateVisibleAreas(ids: ReadonlySet<string>) {
-        setVisibleAreaIds(previous => previous && previous.size === ids.size && [...ids].every(id => previous.has(id)) ? previous : ids);
     }
 
     function closeDetails() {
@@ -223,7 +240,7 @@ export default function SkiStatus() {
                 <div className={`flex-1 ${selected ? 'min-h-96 lg:min-h-0' : 'min-h-0'}`}>
                     {(showMap || mapOpened) && <ErrorBoundary fallback={<MapMessage failed />}><Suspense fallback={<MapMessage />}>
                         <SkiStatusMap areas={areas} selected={selected} colors={colors} passFilter={pass} terrain={terrain} visible={showMap} inView={inView} units={units}
-                            resortTerrain={resortTerrain} onVisibleAreasChange={updateVisibleAreas} onSelect={selectArea} />
+                            resortTerrain={resortTerrain} onVisibleAreasChange={viewport.update} onSelect={selectArea} />
                     </Suspense></ErrorBoundary>}
                 </div>
             </section>

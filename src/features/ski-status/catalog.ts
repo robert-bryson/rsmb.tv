@@ -54,6 +54,12 @@ const mountainStats = {
         grades.unit === 'percent' ? value <= 100 : Number.isInteger(value)), 'Use whole trail counts or percentages from 0 to 100').optional(),
 };
 const statisticKeys = Object.keys(mountainStats) as (keyof typeof mountainStats)[];
+const statisticSourceSchema = z.strictObject({
+    source: httpsUrl,
+    checkedOn: z.iso.date(),
+    fields: z.array(z.enum(statisticKeys)).min(1),
+    note: label.optional(),
+});
 const areaSchema = z.strictObject({
     id,
     name: label,
@@ -67,6 +73,7 @@ const areaSchema = z.strictObject({
     statsUrl: httpsUrl.optional(),
     reportUrl: httpsUrl.optional(),
     ...mountainStats,
+    statSources: z.array(statisticSourceSchema).optional(),
     additionalSources: z.array(httpsUrl).optional(),
 });
 
@@ -75,8 +82,11 @@ const mappedTerrainSchema = z.strictObject({
     lifts: z.int().positive().optional(),
     downhillKm: z.number().positive().optional(),
     nordicKm: z.number().positive().optional(),
+    namedDownhillRuns: z.int().positive().optional(),
+    namedNordicTrails: z.int().positive().optional(),
     elevationM: z.tuple([z.number(), z.number()]).refine(([low, high]) => low < high, 'Use an increasing elevation range').optional(),
-}).refine(({ lifts, downhillKm, nordicKm, elevationM }) => lifts || downhillKm || nordicKm || elevationM, 'Add a mapped terrain value');
+}).refine(({ lifts, downhillKm, nordicKm, namedDownhillRuns, namedNordicTrails, elevationM }) =>
+    lifts || downhillKm || nordicKm || namedDownhillRuns || namedNordicTrails || elevationM, 'Add a mapped terrain value');
 
 const locationsSchema = z.strictObject({
     source: httpsUrl,
@@ -151,8 +161,17 @@ export function readSkiCatalog(areaInput: unknown, locationInput: unknown, passI
         if (area.otherCountries && new Set([area.country, ...area.otherCountries]).size !== area.otherCountries.length + 1) {
             throw new Error(`Duplicate country for ${area.id}`);
         }
-        if (!area.statsUrl && statisticKeys.some(key => area[key] !== undefined)) throw new Error(`No mountain statistics source for ${area.id}`);
-        const documentedSpecialty = isSpecialtySkiing(area.skiing) && area.statsUrl;
+        const sourcedFields = new Set<keyof typeof mountainStats>();
+        for (const { fields } of area.statSources ?? []) {
+            for (const field of fields) {
+                if (area[field] === undefined) throw new Error(`Source for missing ${field} on ${area.id}`);
+                if (sourcedFields.has(field)) throw new Error(`Duplicate source for ${field} on ${area.id}`);
+                sourcedFields.add(field);
+            }
+        }
+        const unsourcedField = !area.statsUrl && statisticKeys.find(key => area[key] !== undefined && !sourcedFields.has(key));
+        if (unsourcedField) throw new Error(`No mountain statistics source for ${area.id} (${unsourcedField})`);
+        const documentedSpecialty = isSpecialtySkiing(area.skiing) && (area.statsUrl || sourcedFields.size > 0);
         if ((area.acres ?? 0) < minimumSkiableAcres && areaPasses.length === 0 && !documentedSpecialty) {
             throw new Error(`Ski area ${area.id} requires ${minimumSkiableAcres} skiable acres, an official pass listing, or a specialty source`);
         }

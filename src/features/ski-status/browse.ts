@@ -79,8 +79,11 @@ export const columns = [
     { key: 'mappedLifts', label: 'Mapped lifts' },
     { key: 'mappedDownhillKm', label: 'Mapped downhill' },
     { key: 'mappedNordicKm', label: 'Mapped Nordic' },
+    { key: 'mappedNamedDownhillRuns', label: 'Mapped downhill names' },
+    { key: 'mappedNamedNordicTrails', label: 'Mapped Nordic names' },
     { key: 'mappedLowM', label: 'Mapped low point' },
     { key: 'mappedHighM', label: 'Mapped high point' },
+    { key: 'mappedElevationSpanM', label: 'Mapped elevation span' },
 ] as const;
 
 type ColumnKey = typeof columns[number]['key'];
@@ -189,8 +192,11 @@ function skiStat(area: SkiArea, key: ColumnKey) {
     if (key === 'mappedLifts') return mapped?.lifts;
     if (key === 'mappedDownhillKm') return mapped?.downhillKm;
     if (key === 'mappedNordicKm') return mapped?.nordicKm;
+    if (key === 'mappedNamedDownhillRuns') return mapped?.namedDownhillRuns;
+    if (key === 'mappedNamedNordicTrails') return mapped?.namedNordicTrails;
     if (key === 'mappedLowM') return mapped?.elevationM?.[0];
     if (key === 'mappedHighM') return mapped?.elevationM?.[1];
+    if (key === 'mappedElevationSpanM') return mapped?.elevationM && mapped.elevationM[1] - mapped.elevationM[0];
     return area[key];
 }
 
@@ -229,7 +235,7 @@ export function formatSkiStat(area: SkiArea, key: ColumnKey, units: SkiUnits): s
     if (key === 'nightAcres') return formatArea(value, units, area.nightAcresQualifier === 'lower-bound');
     if (key === 'guidedTerrainAcres') return formatArea(value, units);
     if (key.endsWith('Ft')) return formatElevation(value, units);
-    if (key === 'mappedLowM' || key === 'mappedHighM') return formatElevation(value / metersPerFoot, units);
+    if (key.endsWith('M')) return formatElevation(value / metersPerFoot, units);
     if (key.endsWith('Km')) {
         return units === 'metric' ? `${decimal.format(value)} km` : `${decimal.format(value / 1.609344)} mi`;
     }

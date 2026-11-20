@@ -234,7 +234,8 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
     const [attempt, setAttempt] = useState(0);
     const [basemap, setBasemap] = useState<BasemapState>('loading');
     const [ready, setReady] = useState(false);
-    const [failed, setFailed] = useState(false);
+    const [rendererFailed, setRendererFailed] = useState(false);
+    const [markersFailed, setMarkersFailed] = useState(false);
     const [terrainUnavailable, setTerrainUnavailable] = useState(false);
     const [resortTerrainUnavailable, setResortTerrainUnavailable] = useState(false);
     const [mapZoom, setMapZoom] = useState(1);
@@ -318,7 +319,7 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
                     minZoom, maxZoom, dragRotate: false, pitchWithRotate: false,
                 });
             } catch {
-                setFailed(true);
+                setRendererFailed(true);
                 return;
             }
             map = instance;
@@ -390,12 +391,14 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
                 if (event.sourceId === terrainSource && event.isSourceLoaded && event.sourceDataType === 'content') setTerrainUnavailable(false);
                 if (event.sourceId === resortTerrainSource && event.isSourceLoaded && event.sourceDataType === 'content') setResortTerrainUnavailable(false);
             });
-            instance.on('webglcontextlost', () => setFailed(true));
-            instance.on('webglcontextrestored', () => setFailed(false));
+            instance.on('webglcontextlost', () => setRendererFailed(true));
+            instance.on('webglcontextrestored', () => setRendererFailed(false));
             instance.on('error', event => {
-                if ('sourceId' in event && event.sourceId === terrainSource) setTerrainUnavailable(true);
-                else if ('sourceId' in event && event.sourceId === resortTerrainSource) setResortTerrainUnavailable(true);
-                else if (/webgl|context|worker/i.test(event.error?.message ?? '')) setFailed(true);
+                const failedSource = 'sourceId' in event ? event.sourceId : undefined;
+                if (failedSource === sourceId) setMarkersFailed(true);
+                else if (failedSource === terrainSource) setTerrainUnavailable(true);
+                else if (failedSource === resortTerrainSource) setResortTerrainUnavailable(true);
+                else if (/webgl|context|worker/i.test(event.error?.message ?? '')) setRendererFailed(true);
             });
             instance.on('mousemove', event => {
                 if (instance.isMoving()) return;
@@ -469,6 +472,7 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
         syncResortTerrain(map, pointLayer, terrainGroups, true);
     }
 
+    const failed = rendererFailed || markersFailed;
     const state = failed ? 'error' : !ready || basemap === 'loading' ? 'loading' : basemap === 'unavailable' ? 'degraded' : 'ready';
     const showPopups = visible && ready && !failed;
     const showReliefError = showPopups && terrain && terrainUnavailable && mapZoom >= reliefMinZoom;
@@ -496,10 +500,11 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
         {(state !== 'ready' || showReliefError || showSkiTerrainError) && <div
             className="absolute bottom-9 left-2 right-2 z-2 w-fit max-w-[calc(100%-1rem)] rounded-md border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
             role={failed ? 'alert' : 'status'}>
-            {failed && <p>Map unavailable. <button type="button" className="min-h-9 text-cyan-300 underline" onClick={() => {
+            {failed && <p>{markersFailed && !rendererFailed ? 'Resort markers unavailable.' : 'Map unavailable.'} <button type="button" className="min-h-9 text-cyan-300 underline" onClick={() => {
                 setReady(false);
                 setBasemap('loading');
-                setFailed(false);
+                setRendererFailed(false);
+                setMarkersFailed(false);
                 setAttempt(value => value + 1);
             }}>Retry map</button></p>}
             {state === 'loading' && <p>Loading map…</p>}

@@ -91,4 +91,31 @@ describe('ski-status area details', () => {
         fireEvent.click(within(details).getByRole('button', { name: 'Close details' }));
         expect(onClose).toHaveBeenCalledOnce();
     });
+
+    it('shows the source, check date, and scope for published counts, season, and difficulty', () => {
+        const area = skiAreas.find(area => area.id === 'whaleback')!;
+        const source = 'https://example.org/mountain-facts';
+        const note = 'The trail count includes the learning area.';
+        render(<SkiAreaDetails units="imperial" onClose={vi.fn()} area={{
+            ...area, statsUrl: source, trailCount: 30, seasonWindow: 'December to March',
+            statSources: [{ source, checkedOn: '2026-11-19', fields: ['trailCount', 'seasonWindow', 'grades'], note }],
+        }} />);
+
+        const disclosure = screen.getByText('Published statistic sources');
+        fireEvent.click(disclosure);
+        const sources = within(disclosure.closest('details')!);
+        expect(sources.getByRole('link', { name: 'Trails, Published season window, Published difficulty' })).toHaveAttribute('href', source);
+        expect(sources.getByText('2026-11-19', { selector: 'time' })).toHaveAttribute('datetime', '2026-11-19');
+        expect(sources.getByText(note)).toBeVisible();
+        expect(screen.queryByRole('link', { name: 'Mountain stats source' })).toBeNull();
+    });
+
+    it('keeps the official conditions link when the same URL documents pass access', () => {
+        const area = skiAreas.find(area => area.id === 'whaleback')!;
+        const reportUrl = area.passes[0].source;
+        render(<SkiAreaDetails area={{ ...area, reportUrl }} units="imperial" onClose={vi.fn()} />);
+
+        expect(screen.getByRole('link', { name: 'Official conditions' })).toHaveAttribute('href', reportUrl);
+        expect(screen.getByRole('link', { name: 'Indy' })).toHaveAttribute('href', reportUrl);
+    });
 });
