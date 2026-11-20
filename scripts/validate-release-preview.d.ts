@@ -6,6 +6,7 @@ export interface ReleaseValidationReport {
     checkedAt: string;
     routes: string[];
     images: number;
+    skiTerrainRanges: number;
     errors: string[];
 }
 

@@ -221,7 +221,7 @@ Track pending stories in [Content publication](#content-publication). Do not add
 
 ### Release checks
 
-- [ ] Verify the ski terrain archive on the hosted preview. Check the `206` response, the `Content-Range` header, and the bytes. Confirm that Heavenly shows runs and lifts at resort zoom. [Release checks](projects/ski-status/readme.md#release-checks)
+- [ ] Verify ski terrain when the first ski-status build reaches the hosted preview. Check the release report for verified archive ranges and the Heavenly route. [Release checks](projects/ski-status/readme.md#release-checks)
 - [ ] Review the eligibility of the remaining North American areas by region. Record the source and decision for each area. List unresolved areas. [Catalog rules](projects/ski-status/readme.md#build-the-catalog)
 
 ### Catalog maintenance

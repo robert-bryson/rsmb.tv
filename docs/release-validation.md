@@ -15,12 +15,13 @@ If CI fails, the release job is skipped and the previous deployment remains avai
 The validator checks:
 
 - The exact full commit ID and Amplify job identity in `deployment.json`, before and after validation.
-- Direct visits to the homepage, About, Posts, Projects, Flights, recent temperatures, state temperatures, county temperatures, and Tornado Tracks.
+- Direct visits to the homepage, About, Posts, Projects, Flights, recent temperatures, state temperatures, county temperatures, Tornado Tracks, and ski-status.
 - JavaScript, CSS, JSON, GeoJSON, and image response types. An HTML fallback at an asset URL fails the release.
 - Configured first-party response headers from `customHttp.yml`, including security policy and path-specific cache rules, on documents and requested assets.
 - Decoding every responsive project-preview image, including AVIF and WebP variants.
 - Temperature schemas and version 2 monthly thresholds, flight route/airport schemas, matching tornado annual summary/index contracts, and requested yearly tornado geometry.
 - Application errors, failed required requests, map worker errors, and usable Flights, temperature, and tornado map startup.
+- Ski terrain delivery and rendering at Heavenly. The validator checks `206` and `Content-Range` on archive requests. It compares each response with the matching bytes in the checked-in archive. The browser opens tooltips for Heavenly Gondola and Cloud 9. The report records the number of verified responses in `skiTerrainRanges`.
 
 The validator disables browser HTTP caching so header checks inspect network responses.
 Chromium can omit HSTS when it reuses a cached worker response. A repeated-worker regression runs without fixture interception, which would otherwise hide this behavior.

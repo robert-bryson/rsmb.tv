@@ -309,7 +309,7 @@ Use the [task list](TODO.md) to track remaining work. Verify the changes before 
 
 | Work | Acceptance check |
 | --- | --- |
-| Ski terrain | Check the archive on the hosted preview. Verify that a byte range request returns HTTP `206`, the expected `Content-Range`, and the original bytes. Check that Heavenly shows runs and lifts at resort zoom. [PMTiles delivery](https://docs.protomaps.com/pmtiles/cloud-storage) |
+| Ski terrain | Run the release validator on the hosted preview for the candidate revision. It checks for `206`, the expected `Content-Range`, and the original bytes. It opens a lift and run tooltip at Heavenly. Check that `skiTerrainRanges` is greater than zero in the report. [Release validator](../../docs/release-validation.md), [PMTiles delivery](https://docs.protomaps.com/pmtiles/cloud-storage) |
 | Pass products | Test shared days, reservations, excluded products, blackout dates, and discount partners. Match each included partner or record why it is outside scope. |
 | Conditions pilot | Measure report age and field coverage for a week. Compare values with operator reports. Test failed updates, stale reports, unknown values, zero values, and partial openings. |
 | First release | Verify the source and eligibility of each area. Check links. Verify the source and time of each report. Publish counts of recent reports and coverage by field. |

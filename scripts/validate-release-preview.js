@@ -9,6 +9,7 @@ import { parseTornadoAnnualSummary, parseTornadoTrendIndex } from '../shared/tor
 import { flightsSchema, visitedAirportsSchema } from '../shared/flightSchemas.ts';
 import { assertDeploymentIdentity, assertReleaseURL, RELEASE_ROUTES } from './release-proof.js';
 import { assertHostingHeaders } from './release-headers.js';
+import { SKI_TERRAIN_ROUTE, skiTerrainArchivePath, verifyRenderedSkiTerrain, verifySkiTerrainResponse } from './release-ski-terrain.ts';
 
 export { assertDeploymentIdentity } from './release-proof.js';
 
@@ -21,6 +22,7 @@ const assetTypes = {
     '.avif': /^image\/avif$/, '.webp': /^image\/webp$/, '.png': /^image\/png$/,
     '.jpg': /^image\/jpeg$/, '.jpeg': /^image\/jpeg$/, '.svg': /^image\/svg\+xml$/,
     '.woff': /^(?:font\/woff|application\/font-woff)$/, '.woff2': /^font\/woff2$/,
+    '.pmtiles': /^(?:application\/(?:octet-stream|(?:vnd\.|x-)pmtiles)|binary\/octet-stream)$/,
 };
 
 export function assertAssetType(url, contentType) {
@@ -47,7 +49,7 @@ export function assertReleaseData(payloads) {
 
 const requiredPayload = /^(recentRecords|stateRecords|countyRecords|annual-summary|trend-index)\.json$|^(flights|visitedAirports)\.geojson$/;
 const tornadoGeometry = /\/(tracks|track-points)\/\d{4}\.geojson$/;
-const assetExtension = /\.(?:m?js|css|json|geojson|avif|webp|png|jpe?g|svg|woff2?)$/;
+const assetExtension = /\.(?:m?js|css|json|geojson|avif|webp|png|jpe?g|svg|woff2?|pmtiles)$/;
 const headings = new Map([['/', "Hi, I'm Robby"], ['/about', 'About'], ['/posts', 'Posts'], ['/projects', 'Projects']]);
 
 export function assertTornadoGeometry(data, pathname) {
@@ -68,7 +70,7 @@ export function assertTornadoGeometry(data, pathname) {
 /** Validate an actual hosted preview, including its response policy and workers. */
 export async function validateReleasePreview({ baseURL, revision, jobId, browser, outputPath, timeoutMs = 30_000 }) {
     const base = assertReleaseURL(baseURL, { originOnly: true });
-    const report = { baseURL: base.origin, revision, checkedAt: new Date().toISOString(), routes: [], images: 0, errors: [] };
+    const report = { baseURL: base.origin, revision, checkedAt: new Date().toISOString(), routes: [], images: 0, skiTerrainRanges: 0, errors: [] };
     const payloads = new Map();
     const inspections = [];
     let activeBrowser = browser;
@@ -77,8 +79,10 @@ export async function validateReleasePreview({ baseURL, revision, jobId, browser
     let failure;
     let annualURL;
     let tornadoTrackResponses = 0;
+    let skiTerrainArchive;
     const failOnErrors = () => { if (report.errors.length) throw new Error(report.errors.join('\n')); };
-    const relevantURL = url => url.origin === base.origin || requiredPayload.test(path.basename(url.pathname)) || tornadoGeometry.test(url.pathname);
+    const relevantURL = url => url.origin === base.origin || requiredPayload.test(path.basename(url.pathname))
+        || tornadoGeometry.test(url.pathname) || skiTerrainArchivePath.test(url.pathname);
     try {
         activeBrowser ??= await chromium.launch();
         context = await activeBrowser.newContext({ serviceWorkers: 'block' });
@@ -111,6 +115,11 @@ export async function validateReleasePreview({ baseURL, revision, jobId, browser
                 } else if (tornadoGeometry.test(url.pathname)) {
                     assertTornadoGeometry(await response.json(), url.pathname);
                     if (url.pathname.includes('/tracks/')) tornadoTrackResponses++;
+                } else if (skiTerrainArchivePath.test(url.pathname)) {
+                    if (!firstParty) throw new Error(`Ski terrain archive must use the preview origin: ${url.href}`);
+                    skiTerrainArchive ??= fs.readFile(path.join(root, 'projects/ski-status/data/resort-terrain.pmtiles'));
+                    await verifySkiTerrainResponse(response, await skiTerrainArchive);
+                    report.skiTerrainRanges++;
                 }
             })().catch(error => report.errors.push(error.message)));
         });
@@ -128,6 +137,10 @@ export async function validateReleasePreview({ baseURL, revision, jobId, browser
         }
         await verifyRevision();
         for (const route of RELEASE_ROUTES) {
+            if (route === SKI_TERRAIN_ROUTE) {
+                await page.setViewportSize({ width: 1280, height: 900 });
+                await page.emulateMedia({ reducedMotion: 'reduce' });
+            }
             const response = await page.goto(new URL(route, base).href, { waitUntil: 'networkidle', timeout: timeoutMs });
             if (!response?.ok()) throw new Error(`Route ${route}: HTTP ${response?.status()}`);
             await Promise.all(inspections);
@@ -139,6 +152,15 @@ export async function validateReleasePreview({ baseURL, revision, jobId, browser
                 if (route.startsWith('/projects/temperature-records/map')) await page.locator('[data-testid="temperature-map"][data-map-state="ready"]').waitFor({ state: 'visible' });
                 if (route.startsWith('/projects/tornado-tracks/map')) await page.locator('[data-testid="tornado-map"][data-map-state="ready"]').waitFor({ state: 'visible' });
             } catch (cause) { throw new Error(`Route did not become ready: ${route}. ${report.errors.join('\n')}`, { cause }); }
+            if (route === SKI_TERRAIN_ROUTE) {
+                try {
+                    await verifyRenderedSkiTerrain(page, timeoutMs);
+                } finally {
+                    await Promise.all(inspections);
+                    failOnErrors();
+                }
+                if (!report.skiTerrainRanges) throw new Error('Preview did not serve any ski terrain byte ranges.');
+            }
             report.routes.push(route);
         }
         await Promise.all(inspections);

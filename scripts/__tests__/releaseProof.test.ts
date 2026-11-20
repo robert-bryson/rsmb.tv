@@ -8,7 +8,7 @@ import { releaseAmplify, waitForBuild } from '../release-amplify.js';
 const revision = 'a'.repeat(40);
 const baseURL = 'https://release-preview.example.amplifyapp.com';
 const now = Date.parse('2026-11-05T12:00:00Z');
-const report = () => ({ revision, baseURL, routes: [...RELEASE_ROUTES], images: 58, errors: [] });
+const report = () => ({ revision, baseURL, routes: [...RELEASE_ROUTES], images: 58, skiTerrainRanges: 2, errors: [] });
 const proof = () => createValidationProof(report(), '0001', now);
 
 describe('release validation proofs', () => {
@@ -23,7 +23,9 @@ describe('release validation proofs', () => {
         const value = proof();
         expect(value).toMatchObject({ version: 1, status: 'passed', revision, previewJobId: '1', previewOrigin: baseURL });
         expect(value.reportSha256).toMatch(/^[a-f0-9]{64}$/);
-        for (const bad of [{ ...report(), errors: ['error'] }, { ...report(), routes: ['/'] }, { ...report(), routes: Array(9).fill('/') }, { ...report(), images: 0 }]) {
+        for (const patch of [{ errors: ['error'] }, { routes: ['/'] }, { routes: RELEASE_ROUTES.map(() => '/') }, { images: 0 },
+            { skiTerrainRanges: 0 }, { skiTerrainRanges: undefined }]) {
+            const bad = { ...report(), ...patch };
             expect(() => createValidationProof(bad, '1', now)).toThrow('successful validation');
         }
     });

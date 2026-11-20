@@ -6,6 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateReleasePreview, type ReleaseValidationReport } from '../../scripts/validate-release-preview.js';
 import { expectedHostingHeaders } from '../../scripts/release-headers.js';
+import { SKI_TERRAIN_ROUTE } from '../../scripts/release-ski-terrain.ts';
 import { makeAirport, makeFlight } from '../../src/test/helpers/flights';
 import { flightsSchema, visitedAirportsSchema } from '../../shared/flightSchemas';
 import { recentRecordsSchema, stateRecordsSchema, countyRecordsSchema } from '../../shared/temperatureSchemas';
@@ -18,10 +19,13 @@ const previewRegistry = readFileSync(new URL('../../src/content/project-previews
 const previewPaths = new Set(previewRegistry.match(/\/images\/previews\/[^" ,]+/g));
 const corruptPreview = [...previewPaths].find(pathname => pathname.endsWith('.avif'))!;
 const trackURL = 'https://data.rsmb.tv/tornadoes/tracks/2025.geojson';
+const skiTerrainURL = '/assets/resort-terrain-fixture.pmtiles';
+const skiTerrainArchive = readFileSync(new URL('../../projects/ski-status/data/resort-terrain.pmtiles', import.meta.url));
 const routes = ['/', '/about', '/posts', '/projects', '/projects/flights/map?stats=0',
     '/projects/temperature-records/map', '/projects/temperature-records/map?view=state',
-    '/projects/temperature-records/map?view=county', '/projects/tornado-tracks/map'];
-type Failure = 'aborted-css' | 'aborted-worker' | 'track-http' | 'csp' | 'cache' | 'image' | 'about' | 'deployment' | 'map-console';
+    '/projects/temperature-records/map?view=county', '/projects/tornado-tracks/map', SKI_TERRAIN_ROUTE];
+type Failure = 'aborted-css' | 'aborted-worker' | 'track-http' | 'csp' | 'cache' | 'image' | 'about' | 'deployment' | 'map-console'
+    | 'terrain-full' | 'terrain-range' | 'terrain-bytes' | 'terrain-run' | 'terrain-no-requests';
 
 const flights = flightsSchema.parse({ type: 'FeatureCollection', features: [{ type: 'Feature',
     geometry: { type: 'LineString', coordinates: [[-122.31, 47.45], [-118.41, 33.94]] }, properties: makeFlight(),
@@ -78,6 +82,28 @@ if (location.pathname === '/projects/flights/map') {
         ready();
         if (main.dataset.failure === 'map-console') console.error('MapLibre error: fixture context failure');
     });
+} else if (location.pathname === '/projects/ski-status/map') {
+    ready();
+    const map = document.querySelector('[data-map-state]');
+    map.innerHTML = '<button type="button">Zoom in</button><label><input type="checkbox">Ski terrain</label>'
+        + '<canvas class="maplibregl-canvas" width="680" height="400"></canvas><output></output>';
+    let zoomClicks = 0;
+    let terrainLoaded = false;
+    map.querySelector('button').onclick = () => zoomClicks++;
+    map.querySelector('input').onchange = async () => {
+        if (main.dataset.failure !== 'terrain-no-requests') {
+            await Promise.all(['bytes=0-127', 'bytes=5200000-5200127'].map(range =>
+                fetch('${skiTerrainURL}', { cache: 'no-store', headers: { Range: range } }).then(response => response.arrayBuffer())));
+        }
+        terrainLoaded = true;
+    };
+    const canvas = map.querySelector('canvas');
+    const tooltip = map.querySelector('output');
+    canvas.onmousemove = event => {
+        if (!terrainLoaded || zoomClicks !== 4) return;
+        if (event.offsetX < canvas.width / 2) tooltip.textContent = 'Heavenly Gondola · gondola';
+        else tooltip.textContent = main.dataset.failure === 'terrain-run' ? '' : 'Cloud 9 · Ski run · intermediate';
+    };
 }
 `;
 
@@ -104,6 +130,17 @@ async function startPreview(failure?: Failure, localOnly = false) {
             body = "postMessage('ready');"; contentType = 'application/javascript';
         } else if (pathname === '/assets/site.css') {
             body = 'body { margin: 16px; color: #223344; } [data-map-state] { min-height: 32px; }'; contentType = 'text/css';
+        } else if (pathname === skiTerrainURL) {
+            const range = /^bytes=(\d+)-(\d+)$/.exec(request.headers.range ?? '');
+            if (!range) { response.writeHead(400, headers).end('Range required'); return; }
+            const start = Number(range[1]);
+            const end = Number(range[2]);
+            const status = failure === 'terrain-full' ? 200 : 206;
+            const bytes = status === 200 ? skiTerrainArchive : Buffer.from(skiTerrainArchive.subarray(start, end + 1));
+            if (failure === 'terrain-bytes') bytes[0] ^= 1;
+            if (status === 206) headers['content-range'] = `bytes ${start}-${end}/${skiTerrainArchive.length + Number(failure === 'terrain-range')}`;
+            response.writeHead(status, { 'content-type': 'application/octet-stream', ...headers }).end(bytes);
+            return;
         } else if (pathname.startsWith('/images/previews/')) {
             body = failure === 'image' && pathname === corruptPreview ? Buffer.from('Corrupted image fixture')
                 : await fs.readFile(path.join(publicDirectory, pathname));
@@ -112,7 +149,11 @@ async function startPreview(failure?: Failure, localOnly = false) {
         } else if (routes.some(route => new URL(route, 'http://fixture.invalid').pathname === pathname)) {
             const heading = failure === 'about' && pathname === '/about' ? undefined
                 : new Map([['/', "Hi, I'm Robby"], ['/about', 'About'], ['/posts', 'Posts'], ['/projects', 'Projects']]).get(pathname);
-            const map = pathname.includes('temperature-records') ? 'temperature-map' : pathname.includes('tornado-tracks') ? 'tornado-map' : null;
+            const maps = new Map([
+                ['/projects/temperature-records/map', 'temperature-map'], ['/projects/tornado-tracks/map', 'tornado-map'],
+                ['/projects/ski-status/map', 'ski-status-map'],
+            ]);
+            const map = maps.get(pathname);
             body = `<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="/assets/site.css"><script src="/assets/application.js" defer></script></head><body><main data-failure="${failure ?? ''}">${heading ? `<h1>${heading}</h1>` : ''}${map ? `<div data-testid="${map}" data-map-state="loading">Loading map</div>` : ''}</main></body></html>`;
             contentType = 'text/html; charset=utf-8';
         } else {
@@ -174,6 +215,7 @@ test('validates all direct routes, real responsive images, and published data in
     expect(report.routes).toEqual(routes);
     expect(report.errors).toEqual([]);
     expect(report.images).toBe(previewPaths.size);
+    expect(report.skiTerrainRanges).toBe(2);
     expect(servedPreviews).toEqual(previewPaths);
     expect(externalRequests).toContain(trackURL);
     const saved: ReleaseValidationReport = JSON.parse(await fs.readFile(testInfo.outputPath('release-validation.json'), 'utf8'));
@@ -202,6 +244,11 @@ for (const [description, failure, diagnostic] of [
     ['an HTTP 200 About page that never renders its heading', 'about', /Route did not become ready: \/about/i],
     ['a stale deployed revision', 'deployment', /Deployed revision does not match/i],
     ['a handled MapLibre renderer error', 'map-console', /MapLibre error: fixture context failure/i],
+    ['a full ski terrain archive response to a range request', 'terrain-full', /Ski terrain expected HTTP 206/i],
+    ['an incorrect ski terrain Content-Range', 'terrain-range', /Wrong ski terrain Content-Range/i],
+    ['incorrect ski terrain payload bytes', 'terrain-bytes', /Ski terrain bytes differ/i],
+    ['a missing rendered Heavenly run', 'terrain-run', /Heavenly terrain did not render Cloud 9/i],
+    ['a ski map without terrain range requests', 'terrain-no-requests', /did not serve any ski terrain byte ranges/i],
 ] as const) {
     test(`rejects ${description} and saves the diagnostic`, async ({ browser }, testInfo) => {
         await expect(validateFixture(browser, testInfo, failure)).rejects.toThrow(diagnostic);

@@ -1,6 +1,8 @@
-import { expect, test, type Page } from '@playwright/test';
+import { readFile } from 'node:fs/promises';
+import { expect, test, type Page, type Response } from '@playwright/test';
 import type { GeoJSONSource, Map as MapLibreMap, StyleSpecification } from 'maplibre-gl';
 import locations from '../../projects/ski-status/data/locations.json' with { type: 'json' };
+import { SKI_TERRAIN_ROUTE, skiTerrainArchivePath, verifyRenderedSkiTerrain, verifySkiTerrainResponse } from '../../scripts/release-ski-terrain.ts';
 
 const path = '/projects/ski-status/map';
 const styleUrl = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json*';
@@ -786,6 +788,22 @@ test('loads and filters resort terrain by zoom and pass using byte ranges', asyn
     await renderer.evaluate(map => { map.jumpTo({ zoom: 10 }); });
     await expect.poll(counts).toEqual([0, 0, 0, 0]);
     await renderer.dispose();
+});
+
+test('validates the hosted check against real Heavenly terrain', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await prepare(page);
+    const archive = await readFile(new URL('../../projects/ski-status/data/resort-terrain.pmtiles', import.meta.url));
+    const ranges: Response[] = [];
+    page.on('response', response => {
+        const url = new URL(response.url());
+        if (skiTerrainArchivePath.test(url.pathname) && !url.searchParams.has('import')) ranges.push(response);
+    });
+
+    await page.goto(SKI_TERRAIN_ROUTE);
+    await verifyRenderedSkiTerrain(page, 10_000);
+    expect(ranges.length).toBeGreaterThan(1);
+    await Promise.all(ranges.map(response => verifySkiTerrainResponse(response, archive)));
 });
 
 test('keeps the basemap and resort dots available if the terrain archive fails', async ({ page }) => {

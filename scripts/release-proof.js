@@ -3,10 +3,15 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import { SKI_TERRAIN_ROUTE } from './release-ski-terrain.ts';
 
 export const VALIDATION_BASE_URL = 'https://data.rsmb.tv/release-validations/';
 const MAX_PROOF_AGE_MS = 24 * 60 * 60 * 1000;
-export const RELEASE_ROUTES = ['/', '/about', '/posts', '/projects', '/projects/flights/map?stats=0', '/projects/temperature-records/map', '/projects/temperature-records/map?view=state', '/projects/temperature-records/map?view=county', '/projects/tornado-tracks/map'];
+export const RELEASE_ROUTES = [
+    '/', '/about', '/posts', '/projects', '/projects/flights/map?stats=0', '/projects/temperature-records/map',
+    '/projects/temperature-records/map?view=state', '/projects/temperature-records/map?view=county',
+    '/projects/tornado-tracks/map', SKI_TERRAIN_ROUTE,
+];
 
 export function assertReleaseURL(value, { originOnly = false } = {}) {
     const url = new URL(value);
@@ -42,7 +47,8 @@ export function createValidationProof(report, jobId, now = Date.now()) {
     assertRevision(report?.revision);
     if (!Array.isArray(report.errors) || report.errors.length || !Array.isArray(report.routes) || report.routes.length !== RELEASE_ROUTES.length
         || RELEASE_ROUTES.some(route => !report.routes.includes(route))
-        || !Number.isSafeInteger(report.images) || report.images < 1) throw new Error('A successful validation report is required.');
+        || !Number.isSafeInteger(report.images) || report.images < 1
+        || !Number.isSafeInteger(report.skiTerrainRanges) || report.skiTerrainRanges < 1) throw new Error('A successful validation report is required.');
     return {
         version: 1, status: 'passed', revision: report.revision, previewJobId: normalizeJobId(jobId),
         previewOrigin: assertReleaseURL(report.baseURL, { originOnly: true }).origin, validatedAt: new Date(now).toISOString(),
