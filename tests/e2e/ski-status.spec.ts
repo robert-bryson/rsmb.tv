@@ -74,6 +74,100 @@ test('filters by pass and local date, keeps column choices, and exports the comp
     expect(csv).not.toContain('Alta Ski Area');
 });
 
+test('finds current ski operations, shows reported terrain by name, and expires the daily reports', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await prepare(page);
+    await page.clock.setFixedTime(new Date('2026-11-20T18:00:00Z'));
+    await page.goto(`${path}?view=table&status=open`);
+    const table = page.getByRole('region', { name: 'Ski area comparison table' });
+    await expect(table.locator('tbody tr')).toHaveCount(5);
+    await expect(table.getByRole('row', { name: /Mt\. Norquay/ }).getByRole('cell', { name: '2 / 80' })).toBeVisible();
+    const lakeLouise = table.getByRole('row', { name: /Lake Louise/ });
+    await expect(lakeLouise.getByRole('cell', { name: '4 / Unknown' })).toBeVisible();
+    await lakeLouise.getByRole('button', { name: 'Lake Louise Ski Resort', exact: true }).click();
+    await page.getByText('Reported lifts and trails (6)', { exact: true }).click();
+    const terrain = page.getByRole('table', { name: 'Reported lift and trail status' });
+    await expect(terrain.getByRole('row', { name: 'Grizzly Gondola Lift Open' })).toBeVisible();
+    await expect(terrain.getByRole('row', { name: 'Deer Run Trail Open' })).toBeVisible();
+
+    await page.getByRole('combobox', { name: 'Operating status' }).selectOption('closed');
+    await expect(table.locator('tbody tr')).toHaveCount(1);
+    await expect(table.getByRole('button', { name: 'Telluride Ski Resort', exact: true })).toBeVisible();
+
+    await page.clock.setFixedTime(new Date('2026-11-21T08:00:00Z'));
+    await page.reload();
+    await expect(page.getByText('No ski areas match these filters.')).toBeVisible();
+    await expect(page.getByText('0 areas with current status')).toBeVisible();
+});
+
+test('uses a fresh daily feed for named terrain and shows when the resort measured temperature', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await prepare(page);
+    const generatedAt = '2026-11-20T17:45:00Z';
+    const measuredAt = '2026-11-20T11:20:44-06:00';
+    const body = JSON.stringify({ version: 1, generatedAt, reports: [{
+        areaId: 'lake-louise', status: 'limited', retrievedAt: generatedAt, reportedOn: '2026-11-20',
+        validThrough: '2026-11-20T23:59:59.999-06:00',
+        source: { name: 'Lake Louise Ski Resort', url: 'https://www.skilouise.com/snow-conditions/', exportable: false },
+        lifts: { open: 4, total: 13 }, trails: { open: 6, total: 171 },
+        temperature: { valueC: -11, location: 'Paradise-Top', measuredAt },
+        terrain: { items: [
+            { id: 'lift:1', name: 'Summit Chair', kind: 'lift', status: 'closed' },
+            { id: 'trail:1', name: 'Wiwaxy', kind: 'trail', status: 'open' },
+        ] },
+    }] });
+    const file = `reports-${createHash('sha256').update(body).digest('hex')}.json`;
+    await page.route('https://data.rsmb.tv/ski-status/**', route => {
+        const headers = { 'access-control-allow-origin': '*' };
+        if (route.request().url().endsWith(file)) return route.fulfill({ body, headers });
+        return route.fulfill({ json: { version: 1, updatedAt: generatedAt, catalogRevision: 'a'.repeat(64), reports: file }, headers });
+    });
+    await page.clock.setFixedTime(new Date('2026-11-20T18:00:00Z'));
+    await page.goto(`${path}?view=table&status=open&q=lake%20louise`);
+    const table = page.getByRole('region', { name: 'Ski area comparison table' });
+    await expect(table.getByRole('cell', { name: '6 / 171', exact: true })).toBeVisible();
+    await table.getByRole('button', { name: 'Lake Louise Ski Resort', exact: true }).click();
+    const details = page.getByRole('region', { name: 'Conditions summary' });
+    const observation = details.getByText('Measured temperature', { exact: false });
+    await expect(observation).toContainText('Paradise-Top');
+    await expect(observation.locator('time')).toHaveAttribute('datetime', measuredAt);
+    await details.getByText('Reported lifts and trails (2)', { exact: true }).click();
+    const terrain = details.getByRole('table', { name: 'Reported lift and trail status' });
+    await expect(terrain.locator('tbody tr').first()).toContainText('Wiwaxy');
+});
+
+test('shows historical season evidence and filters a typical season by month', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await prepare(page);
+    await page.goto(`${path}?view=table&q=killington&seasonMonth=11`);
+    const table = page.getByRole('region', { name: 'Ski area comparison table' });
+    const killington = table.getByRole('button', { name: 'Killington Resort', exact: true });
+    await expect(table.getByRole('cell', { name: 'Nov 12', exact: true })).toBeVisible();
+    await killington.click();
+    const seasons = page.getByRole('region', { name: 'Season dates' });
+    await expect(seasons).toContainText('Median of 5 seasons through 2025/26');
+    await seasons.getByText('Opening and closing history', { exact: true }).click();
+    await expect(seasons.getByRole('row', { name: /2025\/26/ })).toContainText('2026-05-25');
+
+    await page.getByRole('combobox', { name: 'Typical season in' }).selectOption('8');
+    await expect(page.getByText('No ski areas match these filters.')).toBeVisible();
+    await expect(page).toHaveURL(/seasonMonth=8/);
+});
+
+test('labels past terrain counts and removes an elapsed opening date', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await prepare(page);
+    await page.clock.setFixedTime(new Date('2026-12-06T07:00:00Z'));
+    await page.goto(`${path}?view=table&q=telluride`);
+    const table = page.getByRole('region', { name: 'Ski area comparison table' });
+    await expect(table.getByRole('cell', { name: '0 / 149 (stale)', exact: true })).toBeVisible();
+    await expect(table.getByText('2026-12-05', { exact: true })).toHaveCount(0);
+    await table.getByRole('button', { name: 'Telluride Ski Resort', exact: true }).click();
+    const seasons = page.getByRole('region', { name: 'Season dates' });
+    await expect(seasons.getByText('2027-04-04', { exact: true })).toBeVisible();
+    await expect(seasons.getByText('2026-12-05', { exact: true })).toHaveCount(0);
+});
+
 test('applies the Indy Add-On home area across reloads and clears it when the product changes', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await prepare(page);

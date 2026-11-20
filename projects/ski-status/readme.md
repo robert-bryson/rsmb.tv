@@ -19,6 +19,8 @@ On a wide screen, the page starts in **Split**. On a narrow screen, it starts in
 - Select **Indy** for included access. Select **Indy discounts** for Alpine Allied discounts and the North Cascade Heli offer.
 - Select a **Pass product** to see verified access on a **Ski date**. A blank date uses today at each ski area.
 - Select your **Home ski area** for an Indy Add-On. The results exclude this area.
+- Set **Operating status** to **Open for skiing** to find areas with a current report of full or limited skiing. Check open lifts, trails, and acres in the table.
+- Select a month under **Typical season in** to find areas with a usual ski season in that month. Open the area details for the sources and recorded dates.
 - Select **Conventional downhill** to include outdoor lift-served areas that also have Nordic trails. Select **Cross-country only** to find Nordic centers. Select **Specialty skiing** to include Nordic-only areas and other types such as indoor skiing.
 - Turn on **In map view** to limit the table to areas inside the map pane.
 - Select a column header to change the sort order.
@@ -109,6 +111,8 @@ Mapped terrain values cover 536 areas. [First-release data review](../../docs/re
 | [Resort terrain index](data/resort-terrain.json) and [PMTiles archive](data/resort-terrain.pmtiles) | Footprints, runs, lifts, and lift stations for 550 areas. The index records source and archive checksums and shared terrain groups. |
 | [Pass memberships](data/passes-2026-27.json) | Family access for the 2026/27 season. The details show discounts and listings with unconfirmed access. Each entry links to a source. |
 | [Pass products](data/pass-rules/) | Verified product rules by family, season, resort, and local date. |
+| [Season dates](data/seasons.json) | Actual first and last ski days, planned dates, and published recurring windows. |
+| [Checked operator reports](data/conditions/operator-reports.json) | Dated operations, open terrain counts, and some named lifts and runs. |
 
 Use the same area ID in the area, location, and pass records. Add one point per area. Add one membership per pass family.
 Put the map point's country in `country`. Put other verified countries that the same area covers in `otherCountries`. Add the state or province code where applicable. [Catalog validation](../../src/features/ski-status/catalog.ts)
@@ -184,7 +188,7 @@ The Python tests check the importer and candidate review. They require no GDAL o
 ```bash
 npx vitest run src/test/skiStatus*.test.* src/test/skiResortTerrainMap.test.ts \
   scripts/__tests__/skiResortTerrain.test.ts scripts/__tests__/releaseSkiTerrain.test.ts \
-  scripts/__tests__/syncSkiStatus.test.ts
+  scripts/__tests__/syncSkiStatus.test.ts scripts/__tests__/lakeLouiseConditions.test.ts
 npm run test:ski-terrain
 ```
 
@@ -280,6 +284,33 @@ Review the pass lists at the start of each season. Check for changes each week. 
 
 ## Current conditions
 
+### Operating status and terrain
+
+Use **Open for skiing** to find areas with a current open or limited report. **Closed** includes temporary and seasonal closures.
+Some operators report the day's operations before the lifts start. Use the operator's link to check hours and changes.
+The table uses totals from the same report as the open counts. It labels stale counts and percentages. It also labels values with an unknown age.
+
+Open **Reported lifts and trails** in the area details. The list starts with the items that the source reports as open.
+The collector reads public CC0 records from Dolomiti Superski. It covers Alta Badia, Val Gardena / Alpe di Siusi, and 3 Zinnen Dolomites.
+Each of these records has its own date and time. The app labels older records as stale. Counts for the full area keep their own source and scope. [Open Data Hub lift dataset](https://databrowser.opendatahub.com/dataset-overview/ad42b408-e5eb-412b-8b0a-f7e8e9dab2b7), [Content API metadata](https://docs.opendatahub.com/use-data/content-api/reference/)
+
+On November 20, 2026, five of the six checked areas reported limited skiing. Telluride reported zero open runs before its December 5 planned opening.
+Each checked report expires at the end of its local ski day. Alberta uses UTC−06:00 from November 1, 2026. [Checked reports and sources](data/conditions/operator-reports.json), [Alberta Time](https://www.alberta.ca/albertas-new-time-system-abt), [Telluride schedule](https://tellurideskiresort.com/ski/)
+
+### Opening and closing dates
+
+The season file has 159 records of actual dates across 25 areas. It has plans for 54 areas. The app has typical dates or months for 23 areas. Thirteen records include terrain or conditions from opening day. [Season dates and sources](data/seasons.json)
+
+Use operator records or reports to confirm the first and last lift-served ski days. Record the confirmed dates. Leave an unconfirmed date empty. Record passholder previews and breaks in daily operation. [Blue Mountain Ontario records](https://www.bluemountain.ca/mountain/opening-day), [SkiBig3 season recap](https://www.skibig3.com/blog/23-24-ski-big3-season-recap-shredding-through-the-highlights/), [Killington records](https://killington.com/hours), [Loveland records](https://skiloveland.com/openingclosingdates/), [Alta recap](https://www.alta.com/stories/2024-25-season-recap), [Peak Resorts 2019 filing](https://www.sec.gov/Archives/edgar/data/1517401/000155837019005982/skis-20190430x10k.htm)
+
+The app calculates the median from up to five complete seasons. It uses the five years before the check date. With fewer than three complete seasons, it uses the operator's usual season window when available.
+The month filter includes the first and last months of that window. Those months can include limited or weekend-only skiing.
+
+The app shows remaining planned dates in the area's time zone. A recorded opening clears the opening plan for that season. A recorded closing removes its remaining plan.
+A current operator report can give a new planned opening date. CSV export includes this date only when the operator permits export.
+
+Opening-day figures apply to the day in the record. Use daily records to compare how much terrain usually opens later in the season. [Season calendar design](#season-conditions-calendar)
+
 ### Sources and pilot
 
 | Source | What it can supply | How to use it |
@@ -291,21 +322,22 @@ Review the pass lists at the start of each season. Check for changes each week. 
 
 On November 19, the SnoCountry demo returned Bolton Valley, Bromley, and Burke. Each report had a time and an opening status. Base depth, recent snowfall, and open lift, trail, and acre counts were empty. Measure field coverage and report age during winter operation. [SnoCountry public example and field definitions](https://feeds.snocountry.net/)
 
-The pilot covers Alta Badia, Val Gardena / Alpe di Siusi, and 3 Zinnen Dolomites. Open Data Hub and LTS supply resort report fields. Open-Meteo supplies forecasts for one base location per area.
-The app uses separate timestamps for operations and snow measurements. It shows gray when the provider supplies only a measurement date. [Open Data Hub dataset](https://databrowser.opendatahub.com/dataset-overview/f15d894a-b77f-43cf-a802-e1590fc38068), [Open-Meteo forecast API](https://open-meteo.com/en/docs), [Pilot measurements](../../docs/reviews/2026-11-20-ski-status-first-release-work.md#conditions-pilot)
+The pilot covers Lake Louise and the three Dolomiti Superski areas above. Open-Meteo supplies forecasts for one base location per area. [Lake Louise base coordinates](https://publications.gc.ca/collections/collection_2025/pc/R64-571-2024-eng.pdf), [Open-Meteo forecast API](https://open-meteo.com/en/docs)
+
+The Lake Louise XML lists daily operations and named terrain. The collector compares the open counts with the named records. It uses the verified local ski day for the operations report. Snow and temperature keep their measurement dates. The XML generation time changes on each request. The report has a ski date with no exact report age. The app marks Lake Louise data as display-only. [Lake Louise feed](https://api.skilouise.com/docs/MTN-XML.php), [Snow report method](https://www.skilouise.com/things-to-do/how-we-report-snowfall-mountain-conditions/)
+
+Open Data Hub and LTS supply the Dolomiti Superski resort counts and snow data. The collector can update named terrain during a failure of the resort report. The app uses gray markers when the resort report has no verified time or ski day. [Open Data Hub dataset](https://databrowser.opendatahub.com/dataset-overview/f15d894a-b77f-43cf-a802-e1590fc38068), [Pilot measurements](../../docs/reviews/2026-11-20-ski-status-first-release-work.md#conditions-pilot)
 
 ### Report and forecast rules
 
 - Store operating status with each report. Use open, limited, temporarily closed, season closed, or unknown. Store hours and planned opening dates when the operator publishes them.
 - Show open and total lifts, trails, and acres when the operator reports them. Calculate percentages from counts with the same scope and time.
 - Keep the snow depth unit, range, and measurement location. Show the reporting period for new snow. Show forecast snow in its own column. Show reported zeros as zero.
-- Store the source report time and the retrieval time. Calculate report age from the source report time. Mark pilot reports older than 24 hours as stale.
+- Store the source report time and the retrieval time. Calculate age from the source report time. For a date-only report, collect the report during that ski day.
+- Keep an observed temperature with the station and measurement time. Show this reading separately from the forecast.
+- Mark pilot reports older than 24 hours as stale. End daily status at the local ski-day deadline when the report has one.
 - Keep the last report and date visible when a refresh fails. Show gray markers when the report age or status is unknown.
 - Show base forecasts for the next 24 hours of complete hourly data. Sum snowfall over the period. Show the highest hourly precipitation probability. Hide expired forecasts. [Open-Meteo hourly variables](https://open-meteo.com/en/docs)
-
-For future season history, record the first and last days of public lift access in the area's time zone.
-Use the median of up to five completed seasons for each typical date. Verify at least three actual dates for each median.
-Compare dates in winter season order across the year boundary. Use the published season window when fewer than three dates are available.
 
 ## Repository and hosting design
 
@@ -335,29 +367,41 @@ Verify each feed's terms for storage, display, and export. Limit automatic OpenS
 
 ### Conditions publication
 
-Run the collector locally to check both feeds. It saves files under `.cache/ski-status/` and prints coverage counts. Use `--directory` to select another path.
+Run the collector. It saves reports and forecasts under `.cache/ski-status/`. It also prints the coverage counts.
 
 ```bash
 node --import tsx/esm projects/ski-status/scripts/sync-conditions.ts --forecasts
+VITE_SKI_CONDITIONS_LOCAL=1 npm run dev
 ```
 
-The collector uses a local lock file to prevent two jobs from writing to the same directory. If a job leaves `conditions.pid.lock`, check that the process has stopped before you remove the file.
+The development flag tells the app to read the default cache path. Run the collector again to update the files. Use `--directory` to test a different collection path.
 
-The workflow uses `AWS_SKI_STATUS_SYNC_ROLE_ARN` on `main`. It publishes reports hourly and forecasts every six hours. The role can read and write the `ski-status/` prefix. [Sync workflow](../../.github/workflows/sync-ski-status.yml), [OIDC setup](../../docs/github-actions-oidc.md#deploy-and-switch)
+The collector locks the local directory during a write. If a job leaves `conditions.pid.lock`, check that the process stopped. Then remove the lock file.
 
-The collector uploads each new snapshot before it replaces `manifest.json`. The S3 ETag identifies the manifest content that the collector read. The collector uses this value to make the replacement conditional. A concurrent update causes the write to fail. Retry from the current manifest. [S3 conditional writes](https://docs.aws.amazon.com/AmazonS3/latest/userguide/conditional-writes.html)
+The workflow runs on `main` when `AWS_SKI_STATUS_SYNC_ROLE_ARN` is set. It collects reports hourly. It collects forecasts every six hours. The role can read and write the `ski-status/` prefix. [Sync workflow](../../.github/workflows/sync-ski-status.yml), [OIDC setup](../../docs/github-actions-oidc.md#deploy-and-switch)
 
-The manifest lists snapshot files by SHA-256 checksum. The app checks the manifest every five minutes. It reads changed files and verifies their checksums. It keeps the last valid data when a fetch or check fails. The app uses the packaged pilot data when it has no live copy.
+The collector saves the snapshots and history entry before it attempts to replace `manifest.json`. If the archive write fails, the active manifest stays in use.
+The collector uses the S3 ETag to check for a concurrent update. If the ETag changes, retry with the current manifest. [S3 conditional writes](https://docs.aws.amazon.com/AmazonS3/latest/userguide/conditional-writes.html)
 
-The collector preserves rows with failed provider requests. The manifest gives report age and field coverage. Each successful publication writes an observation under `history/YYYY-MM-DD/`. Compare the received counts with the total counts to detect retained rows.
+The manifest identifies snapshot files by SHA-256 checksum. The app checks the manifest every five minutes. It reads each changed file. It verifies the checksum before it uses the file. If a check fails, the app keeps the last valid snapshot. The app uses the packaged data until it has a live snapshot.
+
+The collector keeps the previous data when a provider request fails. It can keep a verified resort status and update a separate terrain report. The manifest counts areas with a current known status. It also gives known report ages and field coverage.
+
+Find archive entries under `history/YYYY-MM-DD/`. The new entry names contain a UTC timestamp and the SHA-256 checksum. Older entries have timestamp-only names. Each entry lists the snapshots from one collection. A concurrent update can leave a valid archive entry while the active manifest points to a different collection.
 
 #### Restore a previous manifest
 
-1. Read the active `manifest.json` from S3. Record its ETag.
-2. Get the file named by `previousManifest`. Check its SHA-256 checksum against its name.
-3. Set the recovered manifest's `updatedAt` to a UTC time later than the active value.
-4. Upload it to `ski-status/manifest.json` with the recorded ETag in `--if-match`. Set its cache lifetime to 60 seconds.
-5. Check the restored snapshot references on the data site. Open ski-status and verify the report dates. If the upload conflicts, start with the new active manifest.
+1. Read the active `manifest.json` from S3.
+2. Record its ETag.
+3. Get the file that `previousManifest` names.
+4. Compare its SHA-256 checksum with its file name.
+5. Set the recovered manifest's `updatedAt` to a UTC time after the active value.
+6. Set a cache lifetime of 60 seconds in the upload request.
+7. Upload it to `ski-status/manifest.json` with the recorded ETag in `--if-match`.
+8. Check the restored snapshot links on the data site.
+9. Check the report dates in the app.
+
+If the upload conflicts, start again with the current manifest.
 
 ## Release checks
 
@@ -371,6 +415,24 @@ Use the [task list](TODO.md) to track remaining work. Verify the changes before 
 | First release | Verify the source and eligibility of each area. Check links. Verify the source and time of each report. Publish counts of recent reports and coverage by field. |
 
 ## Version 2
+
+### Season conditions calendar
+
+Show a season calendar by local ski date. Compare the chance of an area being open with the share of trails, lifts, or acres usually open.
+Use the calendar to compare early, midseason, and spring trips. Show base depth, new snow, and temperature beside terrain coverage.
+
+| Measure | Input and display |
+| --- | --- |
+| Opening and closing | Use actual season boundaries. Show isolated opening days and later periods of daily or weekend operation when the operator supplies them. |
+| Operating status | Use one verified ski-day observation at a consistent local time. Show the number of seasons and ski days with observations. |
+| Terrain available | Show median shares and ranges for lifts, trails, and acres. Use matching numerator and denominator scopes. Track changes to the terrain inventory. |
+| Snow and temperature | Keep base depth and snowfall with their measurement location and period. Keep temperature with its station and time. Label weather estimates with their model and elevation. |
+| Named lifts and trails | Keep stable provider identifiers. Compare availability only where the source reports enough ski days for that feature. |
+
+Keep the original report time, local ski date, time zone, provider, and retrieval time. Use the history entries to find the archived snapshots.
+Remove repeat observations before aggregation. Keep an unknown day empty. Count closed days only when a report confirms closure.
+Start with resorts that have at least three seasons of comparable records for each period shown. Show the sample size for each result.
+Test warm early seasons with limited terrain, full winter operations, and spring schedules with gaps.
 
 ### Resort conditions and 5-day forecast
 

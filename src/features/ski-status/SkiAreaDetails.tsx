@@ -1,8 +1,9 @@
-import { conditionColumns, mountainColumns, formatElevation, formatSkiLocation, formatSkiStat, type SkiUnits } from './browse';
+import { conditionColumns, mountainColumns, formatElevation, formatSkiLocation, formatSkiStat, formatTemperature, type SkiUnits } from './browse';
 import { passNames, passSeason, type SkiArea } from './catalog';
-import { areaForecast, localReportTime, reportAgeHours, type Conditions } from './conditions';
+import { areaForecast, localReportTime, reportAgeHours, terrainStatusText, type Conditions, type ResortReport } from './conditions';
 import { accessLabels, evaluatePass, type PassProduct } from './passRules';
 import { SkiPassIcon } from './SkiPassIcon';
+import { SkiSeasonDetails } from './SkiSeasonDetails';
 
 const linkClass = 'inline-flex min-h-11 items-center text-cyan-300 underline decoration-cyan-700 underline-offset-4 hover:text-cyan-100';
 const passAccessNotes = { included: '', discount: ' (discount only)', listed: ' (lift access unconfirmed)' };
@@ -48,12 +49,41 @@ interface Props {
     homeAreaId?: string;
 }
 
+function ReportedTerrain({ report, area, now }: { report: ResortReport; area: SkiArea; now: number }) {
+    if (!report.terrain) return null;
+    const { items, source } = report.terrain;
+    const sortedItems = [...items].sort((a, b) => Number(b.status === 'open') - Number(a.status === 'open'));
+    return <details className="mt-2 border-t border-zinc-800">
+        <summary className="min-h-11 cursor-pointer py-3 text-zinc-200 hover:text-cyan-300">Reported lifts and trails ({items.length})</summary>
+        {source && <a href={source.url} className={linkClass}>{source.name} terrain records</a>}
+        <div className="max-h-52 overflow-auto">
+            <table className="w-full text-left text-xs">
+                <caption className="sr-only">Reported lift and trail status</caption>
+                <thead className="sticky top-0 bg-zinc-950 text-zinc-400"><tr>
+                    <th scope="col" className="py-1 font-medium">Name</th>
+                    <th scope="col" className="py-1 font-medium">Type</th>
+                    <th scope="col" className="py-1 font-medium">Status</th>
+                    {source && <th scope="col" className="py-1 font-medium">Record time</th>}
+                </tr></thead>
+                <tbody>{sortedItems.map(item => <tr key={item.id} className="border-t border-zinc-800">
+                    <th className="py-1 pr-2 font-medium" scope="row">{item.name}</th>
+                    <td className="py-1 pr-2">{item.kind === 'lift' ? 'Lift' : 'Trail'}</td>
+                    <td className="py-1 pr-2">{terrainStatusText(item, report, now)}</td>
+                    {source && <td className="py-1">{item.updatedAt
+                        ? <time dateTime={item.updatedAt}>{localReportTime(item.updatedAt, area)}</time> : 'Unknown'}</td>}
+                </tr>)}</tbody>
+            </table>
+        </div>
+    </details>;
+}
+
 export function SkiAreaDetails({ area, units, onClose, conditions, product, skiDate, homeAreaId }: Props) {
     const stats = detailColumns.flatMap(({ key, label }) => {
         const value = formatSkiStat(area, key, units);
         return value === undefined && key.startsWith('mapped') ? [] : [{ key, label, value }];
     });
     const report = conditions?.reports.get(area.id);
+    const temperature = report?.temperature;
     const forecast = areaForecast(conditions, area.id);
     const age = reportAgeHours(report, conditions?.now ?? 0);
     const access = product && conditions && evaluatePass(product, area, conditions.now, skiDate, homeAreaId);
@@ -75,6 +105,10 @@ export function SkiAreaDetails({ area, units, onClose, conditions, product, skiD
             </p>}
             {report?.snowLocation && <p>Snow measurement at {report.snowLocation}{report.snowReportedOn &&
                 <> · <time dateTime={report.snowReportedOn}>{report.snowReportedOn}</time></>}</p>}
+            {temperature && <p>
+                Measured temperature {formatTemperature(temperature.valueC, units)} at {temperature.location}{' · '}
+                <time dateTime={temperature.measuredAt}>{localReportTime(temperature.measuredAt, area)}</time>
+            </p>}
             {report?.closedOn && <p>Season closed <time dateTime={report.closedOn}>{report.closedOn}</time></p>}
             {report?.hours && <p>{report.hours}</p>}
             {report?.nightOpen !== undefined && <p>Night operations {report.nightOpen ? 'open' : 'closed'}</p>}
@@ -91,7 +125,9 @@ export function SkiAreaDetails({ area, units, onClose, conditions, product, skiD
                     return value !== undefined && <div key={key}><dt className="text-zinc-400">{label}</dt><dd>{value}</dd></div>;
                 })}
             </dl>
+            {report?.terrain && conditions && <ReportedTerrain report={report} area={area} now={conditions.now} />}
         </section>}
+        <SkiSeasonDetails area={area} units={units} now={conditions?.now} />
         <div className="flex flex-wrap gap-x-5 text-sm">
             {detailSourceLinks(area).map(({ url, label }) => <a key={url} className={linkClass} href={url}>{label}</a>)}
         </div>

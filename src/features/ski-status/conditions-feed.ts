@@ -3,7 +3,9 @@ import {
     type ConditionsManifest, type ForecastSnapshot, type ReportSnapshot,
 } from './conditions';
 
-const baseUrl = 'https://data.rsmb.tv/ski-status/';
+const baseUrl = import.meta.env.DEV && import.meta.env.VITE_SKI_CONDITIONS_LOCAL === '1'
+    ? new URL('/.cache/ski-status/', window.location.origin).href
+    : 'https://data.rsmb.tv/ski-status/';
 
 type Snapshot<T> = { file: string; data: T };
 export type ConditionsFeed = {

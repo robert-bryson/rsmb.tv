@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { passFamilySchema, skiAreas, type SkiArea } from './catalog';
+import { localSkiDate } from './localSkiDate';
 import { httpsUrl, passSeasonId, skiId } from './schemas';
 
 const date = z.iso.date();
@@ -100,16 +101,7 @@ export function readPassRules(inputs: readonly unknown[], areas: readonly SkiAre
 const files = import.meta.glob('../../../projects/ski-status/data/pass-rules/*.json', { eager: true, import: 'default' });
 export const passProducts = readPassRules(Object.values(files), skiAreas);
 
-const formatters = new Map<string, Intl.DateTimeFormat>();
-export function localSkiDate(now: number, timeZone: string) {
-    let formatter = formatters.get(timeZone);
-    if (!formatter) {
-        formatter = new Intl.DateTimeFormat('en-CA', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit' });
-        formatters.set(timeZone, formatter);
-    }
-    const parts = formatter.formatToParts(now);
-    return ['year', 'month', 'day'].map(type => parts.find(part => part.type === type)?.value).join('-');
-}
+export { localSkiDate };
 
 export function readSkiDate(value: string | null) {
     return date.safeParse(value).data;

@@ -1,0 +1,282 @@
+{
+  "version": 1,
+  "generatedAt": "2026-11-20T17:38:00Z",
+  "reports": [
+    {
+      "areaId": "banff-sunshine",
+      "source": {
+        "name": "Banff Sunshine Village",
+        "url": "https://www.skibanff.com/the-mountain/mountain-report/current-conditions",
+        "exportable": false
+      },
+      "retrievedAt": "2026-11-20T17:05:00Z",
+      "reportedAt": "2026-11-20T08:44:00-06:00",
+      "status": "limited",
+      "validThrough": "2026-11-20T23:59:59.999-06:00",
+      "baseCm": 38,
+      "snowLocation": "Upper mountain",
+      "lifts": {
+        "open": 3
+      },
+      "terrain": {
+        "items": [
+          {
+            "id": "lift-1",
+            "name": "Gondola",
+            "kind": "lift",
+            "status": "open"
+          },
+          {
+            "id": "lift-2",
+            "name": "Strawberry Express",
+            "kind": "lift",
+            "status": "open"
+          },
+          {
+            "id": "lift-3",
+            "name": "Mitey Mite Conveyor",
+            "kind": "lift",
+            "status": "open"
+          },
+          {
+            "id": "trail-1",
+            "name": "Dell Valley",
+            "kind": "trail",
+            "status": "open"
+          }
+        ]
+      }
+    },
+    {
+      "areaId": "killington",
+      "source": {
+        "name": "Killington",
+        "url": "https://killington.com/mountain-report",
+        "exportable": false
+      },
+      "retrievedAt": "2026-11-20T17:05:00Z",
+      "reportedAt": "2026-11-20T10:18:00-05:00",
+      "status": "limited",
+      "validThrough": "2026-11-20T23:59:59.999-05:00",
+      "lifts": {
+        "open": 2,
+        "total": 19
+      },
+      "trails": {
+        "open": 3,
+        "total": 155
+      },
+      "terrain": {
+        "items": [
+          {
+            "id": "lift-1",
+            "name": "K-1 Gondola",
+            "kind": "lift",
+            "status": "open"
+          },
+          {
+            "id": "lift-2",
+            "name": "North Ridge Quad",
+            "kind": "lift",
+            "status": "open"
+          }
+        ]
+      }
+    },
+    {
+      "areaId": "lake-louise",
+      "source": {
+        "name": "Lake Louise Ski Resort",
+        "url": "https://www.skilouise.com/snow-conditions/",
+        "exportable": false
+      },
+      "retrievedAt": "2026-11-20T17:05:00Z",
+      "reportedAt": "2026-11-20T05:10:00-06:00",
+      "status": "limited",
+      "validThrough": "2026-11-20T23:59:59.999-06:00",
+      "lifts": {
+        "open": 4
+      },
+      "trails": {
+        "open": 6
+      },
+      "baseCm": 28,
+      "snowLocation": "Upper mountain",
+      "snowfallCm": 0,
+      "snowfallHours": 24,
+      "terrain": {
+        "items": [
+          {
+            "id": "lift-1",
+            "name": "Grizzly Gondola",
+            "kind": "lift",
+            "status": "open"
+          },
+          {
+            "id": "lift-2",
+            "name": "Glacier Chair",
+            "kind": "lift",
+            "status": "open"
+          },
+          {
+            "id": "lift-3",
+            "name": "Juniper Chair",
+            "kind": "lift",
+            "status": "open"
+          },
+          {
+            "id": "lift-4",
+            "name": "Magic Carpet",
+            "kind": "lift",
+            "status": "open"
+          },
+          {
+            "id": "trail-1",
+            "name": "Deer Run",
+            "kind": "trail",
+            "status": "open"
+          },
+          {
+            "id": "trail-2",
+            "name": "Lower Flight",
+            "kind": "trail",
+            "status": "open"
+          }
+        ]
+      }
+    },
+    {
+      "areaId": "loveland-ski-area",
+      "source": {
+        "name": "Loveland Ski Area",
+        "url": "https://skiloveland.com/snow-report/",
+        "exportable": false
+      },
+      "retrievedAt": "2026-11-20T17:05:00Z",
+      "reportedAt": "2026-11-20T06:00:00-07:00",
+      "status": "limited",
+      "validThrough": "2026-11-20T23:59:59.999-07:00",
+      "lifts": {
+        "open": 3,
+        "total": 10
+      },
+      "trails": {
+        "open": 2,
+        "total": 94
+      },
+      "acres": {
+        "open": 48,
+        "total": 1800
+      },
+      "baseCm": 45.72,
+      "snowLocation": "Mid-mountain",
+      "snowfallCm": 0,
+      "snowfallHours": 24
+    },
+    {
+      "areaId": "mt-norquay",
+      "source": {
+        "name": "Mt. Norquay",
+        "url": "https://banffnorquay.com/conditions/",
+        "exportable": false
+      },
+      "retrievedAt": "2026-11-20T17:38:00Z",
+      "reportedOn": "2026-11-20",
+      "status": "limited",
+      "validThrough": "2026-11-20T23:59:59.999-06:00",
+      "lifts": {
+        "open": 2,
+        "total": 6
+      },
+      "trails": {
+        "open": 2,
+        "total": 80
+      },
+      "baseCm": [
+        30,
+        35
+      ],
+      "snowLocation": "Lower and upper mountain",
+      "hours": "9:30 am to 4:30 pm",
+      "terrain": {
+        "items": [
+          {
+            "id": "lift-1",
+            "name": "Sundance Carpet",
+            "kind": "lift",
+            "status": "open"
+          },
+          {
+            "id": "lift-2",
+            "name": "Cascade Chair",
+            "kind": "lift",
+            "status": "open"
+          },
+          {
+            "id": "lift-3",
+            "name": "North American Chair",
+            "kind": "lift",
+            "status": "closed"
+          },
+          {
+            "id": "lift-4",
+            "name": "Spirit Chair",
+            "kind": "lift",
+            "status": "closed"
+          },
+          {
+            "id": "lift-5",
+            "name": "Mystic Chair",
+            "kind": "lift",
+            "status": "closed"
+          },
+          {
+            "id": "lift-6",
+            "name": "Rundle Carpet",
+            "kind": "lift",
+            "status": "closed"
+          },
+          {
+            "id": "trail-1",
+            "name": "Sundance",
+            "kind": "trail",
+            "status": "open"
+          },
+          {
+            "id": "trail-2",
+            "name": "Cascade",
+            "kind": "trail",
+            "status": "open"
+          }
+        ]
+      }
+    },
+    {
+      "areaId": "telluride-ski-resort",
+      "source": {
+        "name": "Telluride Ski Resort",
+        "url": "https://tellurideskiresort.com/snow-report-scrape/",
+        "exportable": false
+      },
+      "retrievedAt": "2026-11-20T17:05:00Z",
+      "status": "season-closed",
+      "validThrough": "2026-11-20T23:59:59.999-07:00",
+      "trails": {
+        "open": 0,
+        "total": 149
+      },
+      "opensOn": "2026-12-05",
+      "terrain": {
+        "items": [
+          {
+            "id": "lift-1",
+            "name": "Apex Lift",
+            "kind": "lift",
+            "status": "closed"
+          }
+        ]
+      },
+      "reportedOn": "2026-11-20"
+    }
+  ]
+}

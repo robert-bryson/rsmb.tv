@@ -1,0 +1,1966 @@
+{
+  "version": 1,
+  "checkedOn": "2026-11-20",
+  "sources": {
+    "3-zinnen-dolomites": "https://www.dolomitisuperski.com/en/live-info/lifts",
+    "alta": "https://www.alta.com/ikon",
+    "alta-2021": "https://www.alta.com/stories/2021-22-season-recap",
+    "alta-2022": "https://www.alta.com/stories/rolling-in-the-deep",
+    "alta-2023": "https://www.alta.com/stories/2023-24-season-recap",
+    "alta-2024": "https://www.alta.com/stories/2024-25-season-recap",
+    "alta-2025": "https://www.alta.com/stories/best-worst-season",
+    "alta-opening-2026": "https://www.alta.com/events",
+    "andermatt-sedrun": "https://www.andermatt-sedrun-disentis.ch/andermatt/en/stories/operating-hours",
+    "appi-resort": "https://www.appi.co.jp/snow-mountain-resort/course/",
+    "arizona-snowbowl": "https://www.snowbowl.ski/the-mountain/mountain-information/",
+    "banff-sunshine": "https://www.skibig3.com/ski/resorts/banff-sunshine/",
+    "big-sky-operating-dates": "https://www.bigskyresort.com/season-passes",
+    "big-snow-american-dream": "https://www.bigsnowamericandream.com/press-room/",
+    "blue-mountain-ontario": "https://www.bluemountain.ca/mountain/opening-day",
+    "bosques-de-monterreal": "https://www.gob.mx/sectur/articulos/arteaga-coahuila",
+    "brides-les-bains": "https://www.les3vallees.com/en/live/lifts-and-trails-opening",
+    "bruson": "https://verbier4vallees.ch/en/useful-information/news/dates-to-note_news_2074437",
+    "cervino-ski-paradise": "https://www.cervinia.it/impianti",
+    "coronet-peak": "https://www.coronetpeak.co.nz/mountain-info",
+    "coronet-peak-first-timer-guide": "https://www.coronetpeak.co.nz/first-timer-guide",
+    "fernie-alpine-resort": "https://skifernie.com/discover-fernie/mountain-stats/",
+    "homewood": "https://skihomewood.com/",
+    "hurricane-ridge": "https://www.nps.gov/olym/planyourvisit/hurricane-ridge-in-winter.htm",
+    "ischgl-samnaun": "https://www.ischgl.com/en/winter/operating-times-prices/ski-network-tickets/ikon-pass",
+    "killington-2026": "https://killington.com/press-releases/killington-resort-receives-positive-snow-control-for-audi-fis-ski-world-cup-races-on-november-28-29",
+    "killington-hours": "https://killington.com/hours",
+    "kimberley-alpine-resort": "https://skikimberley.com/discover-kimberley/mountain-stats/",
+    "lake-louise": "https://www.skilouise.com/explore-winter/winter-ski-ride/mountain-stats/",
+    "lake-louise-2024-closing": "https://lamp10.skilouise.com/conditions/skilouise.pdf",
+    "lake-louise-2024-opening": "https://globalnews.ca/news/10852753/ski-season-rocky-mountains-2024/",
+    "lake-louise-2025-opening": "https://www.skibig3.com/blog/lake-louise-ski-resort-opening-day/",
+    "lake-louise-2026": "https://www.skilouise.com/things-to-do/were-opening-early-on-november-1/",
+    "lech-am-arlberg": "https://www.skiarlberg.at/en/winter/season-start",
+    "liberty-mountain-snowflex-centre": "https://www.liberty.edu/campusrec/snowflex/",
+    "loveland-opening-reports": "https://skiloveland.com/press-releases/",
+    "loveland-season-history": "https://skiloveland.com/openingclosingdates/",
+    "loveland-terrain-updates": "https://skiloveland.com/snowmaking/",
+    "madarao-mountain-resort": "https://www.madarao.jp/information/14065",
+    "mammoth-mountain": "https://www.mammothmountain.com/on-the-mountain/winter-trail-map",
+    "mont-sainte-anne": "https://mont-sainte-anne.com/en/mont-sainte-anne-mountain-statistics/",
+    "monterosa-ski": "https://monterosaski.eu/en/experiences/monterosa-ski-opening-dates-winter-29318",
+    "mount-cain": "https://www.mountcain.com/mountain-stats/",
+    "mt-hutt": "https://www.mthutt.co.nz/mountain-info",
+    "mt-t": "https://tanigawadake-joch.com/en/information/20261116/",
+    "myoko-suginohara-ski-resort": "https://www.princehotels.co.jp/ski/myoko/",
+    "nakiska-ski-area": "https://skinakiska.com/discover-nakiska/mountain-stats/",
+    "nendaz": "https://www.nendaz.ch/en/Z13927/winter-lifts-schedule",
+    "norquay-2024-opening": "https://www.skibig3.com/blog/mt-norquay-ski-resort-opens-for-the-24-25/",
+    "norquay-2025-opening": "https://www.skibig3.com/blog-mount-norquay-kicks-off-its-100th-season-on-november-8th-/blog-mount-norquay-kicks-off-its-100th-season-on-november-8th-/",
+    "norquay-2026-opening": "https://www.skibig3.com/blog/mt-norquay-welcomes-skiers-back-for-the-2627-season/",
+    "palisades-tahoe": "https://www.palisadestahoe.com/footer/mountain-statistics",
+    "panorama-mountain-resort": "https://www.panoramaresort.com/public/while-you-are-here/mountain-stats",
+    "peak-resorts-2016": "https://www.sec.gov/Archives/edgar/data/1517401/000155837016000072/skis-20160430x10k.htm",
+    "peak-resorts-2019": "https://www.sec.gov/Archives/edgar/data/1517401/000155837019005982/skis-20190430x10k.htm",
+    "ski-santa-fe": "https://www.skisantafe.com/our-story/about",
+    "ski-utah-opening-dates": "https://www.skiutah.com/blog/authors/yeti/utah-ski-resort-opening-dates",
+    "skibig3-2023-closing": "https://www.skibig3.com/blog/23-24-ski-big3-season-recap-shredding-through-the-highlights/",
+    "skibig3-2023-opening": "https://www.skibig3.com/blog/mt-norquay-lake-louise-launch-the-23-24-winter-ski-season/",
+    "skibig3-2025-closing": "https://www.skibig3.com/blog/closing-dates-and-what-to-expect-this-month-at-ski-big3-/",
+    "snowbird": "https://mountaincollective.com/resort/snowbird/",
+    "snowmass": "https://www.aspensnowmass.com/-/media/aspen-snowmass/documents/pdfs/25-26/aspen-snowmass-mountain-stats.pdf",
+    "sugarloaf": "https://www.sugarloaf.com/media-room",
+    "sun-peaks-resort": "https://www.sunpeaksresort.com/ski-ride/the-mountain/trail-maps-stats",
+    "sunshine-2023-opening": "https://www.snowseekers.ca/story/new-openings-sunshine-opens-strawberry-marmot-basin-nov-16-bc-next",
+    "sunshine-2024-closing": "https://www.linkedin.com/posts/sunshine-village-ski-%26-snowboard-resort_thats-a-wrap-on-another-incredible-season-activity-7331363338125303809-5Qbw",
+    "sunshine-2024-opening": "https://www.skibig3.com/blog/banff-sunshine-opens-on-for-2425/",
+    "sunshine-2025-opening": "https://www.skibig3.com/blog/banff-sunshine-opening-day/",
+    "sunshine-2026-opening": "https://playcanmore.com/banff-ski-conditions-this-week/",
+    "telluride-winter-schedule": "https://tellurideskiresort.com/ski/",
+    "the-remarkables": "https://www.theremarkables.co.nz/mountain-info",
+    "valle-nevado": "https://www.vallenevado.com/en/frequently-asked-questions/",
+    "whistler-winter-hours": "https://www.whistlerblackcomb.com/explore-the-resort/about-the-resort/hours-of-operation.aspx",
+    "zermatt-matterhorn": "https://www.matterhornparadise.ch/en/experience/skiing"
+  },
+  "areas": [
+    {
+      "areaId": "3-zinnen-dolomites",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-28",
+          "closesOn": "2027-04-04",
+          "source": "3-zinnen-dolomites"
+        }
+      ]
+    },
+    {
+      "areaId": "alpe-lusia-san-pellegrino",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-28",
+          "closesOn": "2027-04-04",
+          "source": "3-zinnen-dolomites"
+        }
+      ]
+    },
+    {
+      "areaId": "alpine-valley",
+      "actual": [
+        {
+          "season": "2018/19",
+          "opensOn": "2018-12-19",
+          "closesOn": "2019-03-10",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2017/18",
+          "opensOn": "2017-12-09",
+          "closesOn": "2018-02-18",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2016/17",
+          "opensOn": "2016-12-11",
+          "closesOn": "2017-03-17",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2015/16",
+          "opensOn": "2016-01-03",
+          "closesOn": "2016-03-06",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2014/15",
+          "opensOn": "2014-12-30",
+          "closesOn": "2015-03-22",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2012/13",
+          "opensOn": "2012-12-30",
+          "closesOn": "2013-03-03",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2013/14",
+          "opensOn": "2013-12-28",
+          "closesOn": "2014-03-16",
+          "source": "peak-resorts-2016"
+        }
+      ]
+    },
+    {
+      "areaId": "alta",
+      "recurring": {
+        "opensIn": 11,
+        "closesIn": 4,
+        "source": "alta",
+        "note": "November–April"
+      },
+      "actual": [
+        {
+          "season": "2025/26",
+          "opensOn": "2025-12-07",
+          "closesOn": "2026-04-26",
+          "source": "alta-2025",
+          "openingTerrain": {
+            "lifts": 2
+          }
+        },
+        {
+          "season": "2024/25",
+          "opensOn": "2024-11-22",
+          "closesOn": "2025-04-20",
+          "source": "alta-2024",
+          "openingTerrain": {
+            "lifts": 2,
+            "baseCm": 58.42
+          }
+        },
+        {
+          "season": "2023/24",
+          "opensOn": "2023-11-25",
+          "closesOn": "2024-04-21",
+          "source": "alta-2023"
+        },
+        {
+          "season": "2022/23",
+          "opensOn": "2022-11-18",
+          "closesOn": "2023-04-23",
+          "source": "alta-2022"
+        },
+        {
+          "season": "2021/22",
+          "opensOn": "2021-11-27",
+          "closesOn": "2022-04-24",
+          "source": "alta-2021"
+        }
+      ],
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-25",
+          "source": "alta-opening-2026"
+        }
+      ]
+    },
+    {
+      "areaId": "alta-badia",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-04",
+          "closesOn": "2027-04-04",
+          "source": "3-zinnen-dolomites"
+        }
+      ]
+    },
+    {
+      "areaId": "andermatt-sedrun",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-12",
+          "closesOn": "2027-04-04",
+          "source": "andermatt-sedrun"
+        }
+      ]
+    },
+    {
+      "areaId": "appi-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-05",
+          "closesOn": "2027-05-05",
+          "source": "appi-resort"
+        }
+      ]
+    },
+    {
+      "areaId": "arabba-marmolada",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-04",
+          "closesOn": "2027-04-18",
+          "source": "3-zinnen-dolomites"
+        }
+      ]
+    },
+    {
+      "areaId": "arizona-snowbowl",
+      "recurring": {
+        "opensIn": 11,
+        "closesIn": 5,
+        "source": "arizona-snowbowl",
+        "note": "Mid-November to May"
+      }
+    },
+    {
+      "areaId": "attitash-mountain-resort",
+      "actual": [
+        {
+          "season": "2018/19",
+          "opensOn": "2018-12-08",
+          "closesOn": "2019-04-07",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2017/18",
+          "opensOn": "2017-12-15",
+          "closesOn": "2018-04-08",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2016/17",
+          "opensOn": "2016-12-26",
+          "closesOn": "2017-04-20",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2015/16",
+          "opensOn": "2015-12-26",
+          "closesOn": "2016-03-27",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2014/15",
+          "opensOn": "2014-12-06",
+          "closesOn": "2015-04-05",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2011/12",
+          "opensOn": "2011-11-25",
+          "closesOn": "2012-03-25",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2012/13",
+          "opensOn": "2012-12-07",
+          "closesOn": "2013-04-11",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2013/14",
+          "opensOn": "2013-12-07",
+          "closesOn": "2014-04-06",
+          "source": "peak-resorts-2016"
+        }
+      ]
+    },
+    {
+      "areaId": "banff-sunshine",
+      "recurring": {
+        "opensIn": 11,
+        "closesIn": 5,
+        "source": "banff-sunshine",
+        "note": "November–May"
+      },
+      "actual": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-07",
+          "source": "sunshine-2026-opening",
+          "openingTerrain": {
+            "lifts": 1
+          },
+          "note": "The learning carpet and a hike-up rail park opened. The gondola carried skiers to the upper village."
+        },
+        {
+          "season": "2025/26",
+          "opensOn": "2025-11-02",
+          "closesOn": "2026-05-18",
+          "source": "sunshine-2025-opening",
+          "closingSource": "skibig3-2025-closing",
+          "openingTerrain": {
+            "lifts": 2
+          },
+          "note": "Strawberry Express and the learning conveyor opened. The lift count covers downhill terrain."
+        },
+        {
+          "season": "2024/25",
+          "opensOn": "2024-11-08",
+          "closesOn": "2025-05-19",
+          "source": "sunshine-2024-opening",
+          "closingSource": "sunshine-2024-closing",
+          "openingTerrain": {
+            "lifts": 2
+          },
+          "note": "Strawberry Express and the learning carpet opened. The gondola carried skiers to the upper village."
+        },
+        {
+          "season": "2023/24",
+          "opensOn": "2023-11-11",
+          "closesOn": "2024-05-20",
+          "source": "sunshine-2023-opening",
+          "closingSource": "skibig3-2023-closing",
+          "note": "A limited preview opened on November 11. The first downhill chair opened on November 13."
+        }
+      ]
+    },
+    {
+      "areaId": "big-boulder",
+      "actual": [
+        {
+          "season": "2018/19",
+          "opensOn": "2018-11-16",
+          "closesOn": "2019-04-07",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2017/18",
+          "opensOn": "2017-11-11",
+          "closesOn": "2018-04-08",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2016/17",
+          "opensOn": "2016-11-25",
+          "closesOn": "2017-04-09",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2015/16",
+          "opensOn": "2016-01-02",
+          "closesOn": "2016-03-27",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2014/15",
+          "opensOn": "2014-11-20",
+          "closesOn": "2015-04-19",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2011/12",
+          "opensOn": "2011-12-11",
+          "closesOn": "2012-03-24",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2012/13",
+          "opensOn": "2012-11-28",
+          "closesOn": "2013-04-20",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2013/14",
+          "opensOn": "2013-11-14",
+          "closesOn": "2014-04-06",
+          "source": "peak-resorts-2016"
+        }
+      ]
+    },
+    {
+      "areaId": "big-sky-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-25",
+          "closesOn": "2027-04-25",
+          "source": "big-sky-operating-dates",
+          "note": "Daily operations through April 11. April 16–18 and 23–25 are planned bonus days."
+        }
+      ]
+    },
+    {
+      "areaId": "big-snow-american-dream",
+      "recurring": {
+        "opensIn": 1,
+        "closesIn": 12,
+        "source": "big-snow-american-dream",
+        "note": "Year-round"
+      }
+    },
+    {
+      "areaId": "blue-mountain-resort-on",
+      "actual": [
+        {
+          "season": "2025/26",
+          "opensOn": "2025-12-09",
+          "closesOn": "2026-04-22",
+          "source": "blue-mountain-ontario"
+        },
+        {
+          "season": "2024/25",
+          "opensOn": "2024-12-07",
+          "closesOn": "2025-04-21",
+          "source": "blue-mountain-ontario",
+          "note": "An ice storm caused 13 days of closure late in the season."
+        },
+        {
+          "season": "2023/24",
+          "opensOn": "2023-12-07",
+          "closesOn": "2024-04-07",
+          "source": "blue-mountain-ontario",
+          "note": "The area closed for four midweek days late in the season."
+        },
+        {
+          "season": "2022/23",
+          "opensOn": "2022-12-15",
+          "closesOn": "2023-04-14",
+          "source": "blue-mountain-ontario"
+        },
+        {
+          "season": "2021/22",
+          "opensOn": "2021-12-10",
+          "closesOn": "2022-04-18",
+          "source": "blue-mountain-ontario"
+        },
+        {
+          "season": "2020/21",
+          "opensOn": "2020-12-19",
+          "closesOn": "2021-04-02",
+          "source": "blue-mountain-ontario",
+          "note": "COVID-19 public health rules limited operation."
+        },
+        {
+          "season": "2019/20",
+          "opensOn": "2019-11-15",
+          "closesOn": "2020-03-14",
+          "source": "blue-mountain-ontario",
+          "note": "The area closed for nine midweek days early in the season."
+        },
+        {
+          "season": "2018/19",
+          "opensOn": "2018-11-30",
+          "closesOn": "2019-04-21",
+          "source": "blue-mountain-ontario"
+        },
+        {
+          "season": "2017/18",
+          "opensOn": "2017-12-12",
+          "closesOn": "2018-04-30",
+          "source": "blue-mountain-ontario"
+        }
+      ],
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-10",
+          "source": "blue-mountain-ontario"
+        }
+      ]
+    },
+    {
+      "areaId": "bosques-de-monterreal",
+      "recurring": {
+        "opensIn": 1,
+        "closesIn": 12,
+        "source": "bosques-de-monterreal",
+        "note": "Year-round"
+      }
+    },
+    {
+      "areaId": "boston-mills",
+      "actual": [
+        {
+          "season": "2018/19",
+          "opensOn": "2018-12-19",
+          "closesOn": "2019-03-23",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2017/18",
+          "opensOn": "2017-12-09",
+          "closesOn": "2018-03-26",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2016/17",
+          "opensOn": "2016-12-16",
+          "closesOn": "2017-03-19",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2015/16",
+          "opensOn": "2016-01-04",
+          "closesOn": "2016-03-08",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2014/15",
+          "opensOn": "2015-01-01",
+          "closesOn": "2015-03-22",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2011/12",
+          "opensOn": "2011-12-17",
+          "closesOn": "2012-03-10",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2012/13",
+          "opensOn": "2012-12-28",
+          "closesOn": "2013-03-10",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2013/14",
+          "opensOn": "2013-11-29",
+          "closesOn": "2014-03-16",
+          "source": "peak-resorts-2016"
+        }
+      ]
+    },
+    {
+      "areaId": "brandywine",
+      "actual": [
+        {
+          "season": "2018/19",
+          "opensOn": "2018-12-19",
+          "closesOn": "2019-03-23",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2017/18",
+          "opensOn": "2017-12-09",
+          "closesOn": "2018-03-26",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2016/17",
+          "opensOn": "2016-12-16",
+          "closesOn": "2017-03-05",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2015/16",
+          "opensOn": "2016-01-05",
+          "closesOn": "2016-03-11",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2014/15",
+          "opensOn": "2015-01-02",
+          "closesOn": "2015-04-01",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2011/12",
+          "opensOn": "2011-12-30",
+          "closesOn": "2012-03-04",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2012/13",
+          "opensOn": "2012-12-29",
+          "closesOn": "2013-03-30",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2013/14",
+          "opensOn": "2013-12-14",
+          "closesOn": "2014-03-16",
+          "source": "peak-resorts-2016"
+        }
+      ]
+    },
+    {
+      "areaId": "brides-les-bains",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-05",
+          "closesOn": "2027-04-09",
+          "source": "brides-les-bains"
+        }
+      ]
+    },
+    {
+      "areaId": "brighton-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-24",
+          "source": "ski-utah-opening-dates"
+        }
+      ]
+    },
+    {
+      "areaId": "bruson",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-12",
+          "source": "bruson"
+        }
+      ]
+    },
+    {
+      "areaId": "cervino-ski-paradise",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-10-24",
+          "closesOn": "2027-05-02",
+          "source": "cervino-ski-paradise"
+        }
+      ]
+    },
+    {
+      "areaId": "civetta",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-28",
+          "closesOn": "2027-03-29",
+          "source": "3-zinnen-dolomites"
+        }
+      ]
+    },
+    {
+      "areaId": "coronet-peak",
+      "planned": [
+        {
+          "season": "2027",
+          "opensOn": "2027-05-29",
+          "closesOn": "2027-10-03",
+          "source": "coronet-peak",
+          "note": "Limited early skiing starts May 29. The operator schedules the full season from June 18."
+        }
+      ],
+      "recurring": {
+        "opensIn": 6,
+        "closesIn": 10,
+        "source": "coronet-peak-first-timer-guide",
+        "note": "June to early October"
+      }
+    },
+    {
+      "areaId": "cortina-d-ampezzo",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-28",
+          "closesOn": "2027-05-02",
+          "source": "3-zinnen-dolomites"
+        }
+      ]
+    },
+    {
+      "areaId": "courchevel",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-04",
+          "closesOn": "2027-04-18",
+          "source": "brides-les-bains"
+        }
+      ]
+    },
+    {
+      "areaId": "crotched-mountain",
+      "actual": [
+        {
+          "season": "2018/19",
+          "opensOn": "2018-12-08",
+          "closesOn": "2019-03-30",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2017/18",
+          "opensOn": "2017-12-15",
+          "closesOn": "2018-04-01",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2016/17",
+          "opensOn": "2016-12-10",
+          "closesOn": "2017-04-09",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2015/16",
+          "opensOn": "2015-12-29",
+          "closesOn": "2016-03-20",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2014/15",
+          "opensOn": "2014-11-28",
+          "closesOn": "2015-04-05",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2011/12",
+          "opensOn": "2011-12-17",
+          "closesOn": "2012-03-18",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2012/13",
+          "opensOn": "2012-12-01",
+          "closesOn": "2013-04-07",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2013/14",
+          "opensOn": "2013-11-30",
+          "closesOn": "2014-03-30",
+          "source": "peak-resorts-2016"
+        }
+      ]
+    },
+    {
+      "areaId": "fernie-alpine-resort",
+      "recurring": {
+        "opensIn": 12,
+        "closesIn": 4,
+        "source": "fernie-alpine-resort",
+        "note": "Early December to mid-April"
+      }
+    },
+    {
+      "areaId": "hidden-valley-ski-resort",
+      "actual": [
+        {
+          "season": "2018/19",
+          "opensOn": "2018-12-21",
+          "closesOn": "2019-03-17",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2017/18",
+          "opensOn": "2017-12-15",
+          "closesOn": "2018-03-04",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2016/17",
+          "opensOn": "2016-12-10",
+          "closesOn": "2017-02-20",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2015/16",
+          "opensOn": "2016-01-10",
+          "closesOn": "2016-03-06",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2014/15",
+          "opensOn": "2015-01-02",
+          "closesOn": "2015-03-08",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2011/12",
+          "opensOn": "2012-01-04",
+          "closesOn": "2012-02-26",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2012/13",
+          "opensOn": "2012-12-23",
+          "closesOn": "2013-03-17",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2013/14",
+          "opensOn": "2013-12-14",
+          "closesOn": "2014-03-15",
+          "source": "peak-resorts-2016"
+        }
+      ]
+    },
+    {
+      "areaId": "homewood-mountain-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-11",
+          "source": "homewood"
+        }
+      ],
+      "actual": [
+        {
+          "season": "2025/26",
+          "closesOn": "2026-03-17",
+          "source": "homewood"
+        }
+      ]
+    },
+    {
+      "areaId": "hunter-mountain",
+      "actual": [
+        {
+          "season": "2018/19",
+          "opensOn": "2018-11-17",
+          "closesOn": "2019-04-07",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2017/18",
+          "opensOn": "2017-11-21",
+          "closesOn": "2018-04-14",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2016/17",
+          "opensOn": "2016-11-25",
+          "closesOn": "2017-04-09",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2015/16",
+          "opensOn": "2015-12-13",
+          "closesOn": "2016-03-27",
+          "source": "peak-resorts-2019"
+        }
+      ]
+    },
+    {
+      "areaId": "hurricane-ridge",
+      "recurring": {
+        "opensIn": 11,
+        "closesIn": 3,
+        "source": "hurricane-ridge",
+        "note": "Late November to the end of March"
+      }
+    },
+    {
+      "areaId": "ischgl-samnaun",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-26",
+          "closesOn": "2027-05-02",
+          "source": "ischgl-samnaun"
+        }
+      ]
+    },
+    {
+      "areaId": "jack-frost-mountain",
+      "actual": [
+        {
+          "season": "2018/19",
+          "opensOn": "2018-11-16",
+          "closesOn": "2019-03-29",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2017/18",
+          "opensOn": "2017-11-11",
+          "closesOn": "2018-04-01",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2016/17",
+          "opensOn": "2016-12-10",
+          "closesOn": "2017-03-19",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2015/16",
+          "opensOn": "2015-12-26",
+          "closesOn": "2016-03-13",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2014/15",
+          "opensOn": "2014-12-12",
+          "closesOn": "2015-03-29",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2011/12",
+          "opensOn": "2011-12-17",
+          "closesOn": "2012-03-11",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2012/13",
+          "opensOn": "2012-12-22",
+          "closesOn": "2013-03-31",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2013/14",
+          "opensOn": "2013-12-07",
+          "closesOn": "2014-03-23",
+          "source": "peak-resorts-2016"
+        }
+      ]
+    },
+    {
+      "areaId": "killington",
+      "actual": [
+        {
+          "season": "2025/26",
+          "opensOn": "2025-11-12",
+          "closesOn": "2026-05-25",
+          "source": "killington-hours"
+        },
+        {
+          "season": "2024/25",
+          "opensOn": "2024-11-14",
+          "closesOn": "2025-05-11",
+          "source": "killington-hours"
+        },
+        {
+          "season": "2023/24",
+          "opensOn": "2023-11-03",
+          "closesOn": "2024-06-01",
+          "source": "killington-hours"
+        },
+        {
+          "season": "2022/23",
+          "opensOn": "2022-11-17",
+          "closesOn": "2023-06-01",
+          "source": "killington-hours"
+        },
+        {
+          "season": "2021/22",
+          "opensOn": "2021-11-05",
+          "closesOn": "2022-06-04",
+          "source": "killington-hours"
+        },
+        {
+          "season": "2020/21",
+          "opensOn": "2020-11-20",
+          "closesOn": "2021-05-16",
+          "source": "killington-hours"
+        },
+        {
+          "season": "2019/20",
+          "opensOn": "2019-11-03",
+          "closesOn": "2020-03-14",
+          "source": "killington-hours",
+          "note": "The operator closed early during the COVID-19 pandemic."
+        },
+        {
+          "season": "2018/19",
+          "opensOn": "2018-10-19",
+          "closesOn": "2019-06-02",
+          "source": "killington-hours"
+        },
+        {
+          "season": "2017/18",
+          "opensOn": "2017-11-08",
+          "closesOn": "2018-05-26",
+          "source": "killington-hours"
+        },
+        {
+          "season": "2016/17",
+          "opensOn": "2016-10-25",
+          "closesOn": "2017-06-01",
+          "source": "killington-hours"
+        },
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-17",
+          "source": "killington-2026",
+          "note": "Passholders had access November 17. General public access began November 18."
+        }
+      ]
+    },
+    {
+      "areaId": "kimberley-alpine-resort",
+      "recurring": {
+        "opensIn": 12,
+        "closesIn": 4,
+        "source": "kimberley-alpine-resort",
+        "note": "Early December to mid-April"
+      }
+    },
+    {
+      "areaId": "kronplatz",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-28",
+          "closesOn": "2027-04-11",
+          "source": "3-zinnen-dolomites"
+        }
+      ]
+    },
+    {
+      "areaId": "lake-louise",
+      "recurring": {
+        "opensIn": 11,
+        "closesIn": 5,
+        "source": "lake-louise",
+        "note": "November–May"
+      },
+      "actual": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-01",
+          "source": "lake-louise-2026",
+          "openingTerrain": {
+            "lifts": 1,
+            "trails": 1
+          },
+          "note": "Counts cover Juniper Express and Easy Street. The operator also reported two small terrain parks."
+        },
+        {
+          "season": "2025/26",
+          "opensOn": "2025-11-04",
+          "closesOn": "2026-05-03",
+          "source": "lake-louise-2025-opening",
+          "closingSource": "skibig3-2025-closing",
+          "openingTerrain": {
+            "lifts": 2,
+            "trails": 1
+          },
+          "note": "Juniper Express and the learning-area carpet ran. Easy Street and two terrain parks opened."
+        },
+        {
+          "season": "2024/25",
+          "opensOn": "2024-11-05",
+          "closesOn": "2025-05-04",
+          "source": "lake-louise-2024-opening",
+          "closingSource": "lake-louise-2024-closing"
+        },
+        {
+          "season": "2023/24",
+          "opensOn": "2023-11-03",
+          "closesOn": "2024-05-05",
+          "source": "skibig3-2023-opening",
+          "closingSource": "skibig3-2023-closing",
+          "openingTerrain": {
+            "lifts": 1
+          },
+          "note": "Glacier Express served Wiwaxy, Bald Eagle, and parts of Easy Street."
+        }
+      ]
+    },
+    {
+      "areaId": "lech-am-arlberg",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-02",
+          "source": "lech-am-arlberg"
+        }
+      ]
+    },
+    {
+      "areaId": "les-menuires",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-05",
+          "closesOn": "2027-04-18",
+          "source": "brides-les-bains"
+        }
+      ]
+    },
+    {
+      "areaId": "liberty-mountain-resort",
+      "actual": [
+        {
+          "season": "2018/19",
+          "opensOn": "2018-12-23",
+          "closesOn": "2019-03-24",
+          "source": "peak-resorts-2019"
+        }
+      ]
+    },
+    {
+      "areaId": "liberty-mountain-snowflex-centre",
+      "recurring": {
+        "opensIn": 1,
+        "closesIn": 12,
+        "source": "liberty-mountain-snowflex-centre",
+        "note": "Year-round"
+      }
+    },
+    {
+      "areaId": "loveland-ski-area",
+      "actual": [
+        {
+          "season": "2025/26",
+          "opensOn": "2025-11-08",
+          "closesOn": "2026-04-26",
+          "source": "loveland-opening-reports",
+          "closingSource": "loveland-season-history",
+          "openingTerrain": {
+            "lifts": 1,
+            "trails": 3
+          },
+          "note": "The opening-day release confirms 2025. The history table shows a different year for the opening."
+        },
+        {
+          "season": "2024/25",
+          "opensOn": "2024-11-09",
+          "closesOn": "2025-05-11",
+          "source": "loveland-season-history"
+        },
+        {
+          "season": "2023/24",
+          "opensOn": "2023-11-10",
+          "closesOn": "2024-05-12",
+          "source": "loveland-season-history"
+        },
+        {
+          "season": "2022/23",
+          "opensOn": "2022-11-03",
+          "closesOn": "2023-05-07",
+          "source": "loveland-season-history"
+        },
+        {
+          "season": "2021/22",
+          "opensOn": "2021-10-30",
+          "closesOn": "2022-05-08",
+          "source": "loveland-season-history"
+        },
+        {
+          "season": "2020/21",
+          "opensOn": "2020-11-11",
+          "closesOn": "2021-05-09",
+          "source": "loveland-season-history"
+        },
+        {
+          "season": "2019/20",
+          "opensOn": "2019-10-25",
+          "closesOn": "2020-03-14",
+          "source": "loveland-season-history",
+          "note": "The operator closed early during the COVID-19 pandemic."
+        },
+        {
+          "season": "2018/19",
+          "opensOn": "2018-10-20",
+          "closesOn": "2019-05-05",
+          "source": "loveland-season-history"
+        },
+        {
+          "season": "2017/18",
+          "opensOn": "2017-10-20",
+          "closesOn": "2018-05-06",
+          "source": "loveland-season-history"
+        },
+        {
+          "season": "2016/17",
+          "opensOn": "2016-11-10",
+          "closesOn": "2017-05-07",
+          "source": "loveland-season-history"
+        },
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-07",
+          "source": "loveland-terrain-updates",
+          "openingTerrain": {
+            "lifts": 1,
+            "trails": 3
+          }
+        }
+      ]
+    },
+    {
+      "areaId": "mad-river-mountain",
+      "actual": [
+        {
+          "season": "2018/19",
+          "opensOn": "2018-12-19",
+          "closesOn": "2019-03-24",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2017/18",
+          "opensOn": "2017-12-09",
+          "closesOn": "2018-03-25",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2016/17",
+          "opensOn": "2016-12-16",
+          "closesOn": "2017-03-19",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2015/16",
+          "opensOn": "2016-01-02",
+          "closesOn": "2016-03-08",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2014/15",
+          "opensOn": "2014-12-20",
+          "closesOn": "2015-03-22",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2011/12",
+          "opensOn": "2011-12-17",
+          "closesOn": "2012-03-11",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2012/13",
+          "opensOn": "2012-12-23",
+          "closesOn": "2013-03-17",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2013/14",
+          "opensOn": "2013-11-30",
+          "closesOn": "2014-03-16",
+          "source": "peak-resorts-2016"
+        }
+      ]
+    },
+    {
+      "areaId": "madarao-mountain-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-12",
+          "closesOn": "2027-03-28",
+          "source": "madarao-mountain-resort"
+        }
+      ]
+    },
+    {
+      "areaId": "mammoth-mountain",
+      "recurring": {
+        "opensIn": 11,
+        "closesIn": 6,
+        "source": "mammoth-mountain",
+        "note": "November–June"
+      }
+    },
+    {
+      "areaId": "meribel",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-05",
+          "closesOn": "2027-04-18",
+          "source": "brides-les-bains"
+        }
+      ]
+    },
+    {
+      "areaId": "mont-sainte-anne",
+      "recurring": {
+        "opensIn": 11,
+        "closesIn": 4,
+        "source": "mont-sainte-anne",
+        "note": "Late November to mid-April"
+      }
+    },
+    {
+      "areaId": "monterosa-ski",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-28",
+          "closesOn": "2027-04-11",
+          "source": "monterosa-ski"
+        }
+      ]
+    },
+    {
+      "areaId": "mount-cain",
+      "recurring": {
+        "opensIn": 12,
+        "closesIn": 4,
+        "source": "mount-cain",
+        "note": "Early December to early April"
+      }
+    },
+    {
+      "areaId": "mount-snow",
+      "actual": [
+        {
+          "season": "2018/19",
+          "opensOn": "2018-10-27",
+          "closesOn": "2019-04-14",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2017/18",
+          "opensOn": "2017-11-11",
+          "closesOn": "2018-04-22",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2016/17",
+          "opensOn": "2016-11-23",
+          "closesOn": "2017-04-16",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2015/16",
+          "opensOn": "2015-11-26",
+          "closesOn": "2016-04-03",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2014/15",
+          "opensOn": "2014-11-21",
+          "closesOn": "2015-04-19",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2011/12",
+          "opensOn": "2011-12-10",
+          "closesOn": "2012-03-25",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2012/13",
+          "opensOn": "2012-11-22",
+          "closesOn": "2013-04-21",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2013/14",
+          "opensOn": "2013-11-15",
+          "closesOn": "2014-04-13",
+          "source": "peak-resorts-2016"
+        }
+      ]
+    },
+    {
+      "areaId": "mt-hutt",
+      "planned": [
+        {
+          "season": "2027",
+          "opensOn": "2027-06-11",
+          "closesOn": "2027-10-10",
+          "source": "mt-hutt"
+        }
+      ]
+    },
+    {
+      "areaId": "mt-norquay",
+      "actual": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-06",
+          "source": "norquay-2026-opening",
+          "openingTerrain": {
+            "lifts": 2,
+            "trails": 2
+          },
+          "note": "Cascade Chair and Sundance Carpet served the Cascade and Sundance runs."
+        },
+        {
+          "season": "2025/26",
+          "opensOn": "2025-11-08",
+          "source": "norquay-2025-opening",
+          "openingTerrain": {
+            "lifts": 2
+          },
+          "note": "Cascade Chair and Sundance Carpet opened. The area paused from November 10 to 14 before daily operations."
+        },
+        {
+          "season": "2024/25",
+          "opensOn": "2024-11-16",
+          "source": "norquay-2024-opening",
+          "note": "The operator reported Cascade Chair and the Cascade run on opening day."
+        },
+        {
+          "season": "2023/24",
+          "opensOn": "2023-11-03",
+          "closesOn": "2024-04-21",
+          "source": "skibig3-2023-opening",
+          "closingSource": "skibig3-2023-closing",
+          "openingTerrain": {
+            "lifts": 2
+          },
+          "note": "Cascade Chair and Sundance Carpet opened."
+        }
+      ]
+    },
+    {
+      "areaId": "mt-t",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-19",
+          "closesOn": "2027-04-04",
+          "source": "mt-t"
+        }
+      ]
+    },
+    {
+      "areaId": "myoko-suginohara-ski-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-19",
+          "closesOn": "2027-03-28",
+          "source": "myoko-suginohara-ski-resort"
+        }
+      ]
+    },
+    {
+      "areaId": "nakiska-ski-area",
+      "recurring": {
+        "opensIn": 11,
+        "closesIn": 4,
+        "source": "nakiska-ski-area",
+        "note": "Early November to mid-April"
+      }
+    },
+    {
+      "areaId": "nendaz",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-19",
+          "closesOn": "2027-04-11",
+          "source": "nendaz",
+          "note": "Tracouet sector."
+        }
+      ]
+    },
+    {
+      "areaId": "orelle",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-21",
+          "closesOn": "2027-05-02",
+          "source": "brides-les-bains"
+        }
+      ]
+    },
+    {
+      "areaId": "palisades-tahoe",
+      "recurring": {
+        "opensIn": 11,
+        "closesIn": 5,
+        "source": "palisades-tahoe",
+        "note": "November–May"
+      }
+    },
+    {
+      "areaId": "panorama-mountain-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-04",
+          "closesOn": "2027-04-11",
+          "source": "panorama-mountain-resort"
+        }
+      ]
+    },
+    {
+      "areaId": "paoli-peaks",
+      "actual": [
+        {
+          "season": "2018/19",
+          "opensOn": "2019-01-12",
+          "closesOn": "2019-03-10",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2017/18",
+          "opensOn": "2017-12-15",
+          "closesOn": "2018-02-19",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2016/17",
+          "opensOn": "2016-12-16",
+          "closesOn": "2017-02-20",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2015/16",
+          "opensOn": "2016-01-04",
+          "closesOn": "2016-03-06",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2014/15",
+          "opensOn": "2014-12-31",
+          "closesOn": "2015-03-08",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2011/12",
+          "opensOn": "2012-01-03",
+          "closesOn": "2012-03-04",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2012/13",
+          "opensOn": "2012-12-23",
+          "closesOn": "2013-03-10",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2013/14",
+          "opensOn": "2013-12-14",
+          "closesOn": "2014-03-09",
+          "source": "peak-resorts-2016"
+        }
+      ]
+    },
+    {
+      "areaId": "powder-mountain",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-11",
+          "source": "ski-utah-opening-dates"
+        }
+      ]
+    },
+    {
+      "areaId": "rio-pusteria-bressanone",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-04",
+          "closesOn": "2027-04-04",
+          "source": "3-zinnen-dolomites"
+        }
+      ]
+    },
+    {
+      "areaId": "roundtop-mountain-resort",
+      "actual": [
+        {
+          "season": "2018/19",
+          "opensOn": "2018-12-23",
+          "closesOn": "2019-03-24",
+          "source": "peak-resorts-2019"
+        }
+      ]
+    },
+    {
+      "areaId": "saint-martin-de-belleville",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-12",
+          "closesOn": "2027-04-18",
+          "source": "brides-les-bains"
+        }
+      ]
+    },
+    {
+      "areaId": "san-martino-rolle-pass",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-28",
+          "closesOn": "2027-04-04",
+          "source": "3-zinnen-dolomites"
+        }
+      ]
+    },
+    {
+      "areaId": "ski-santa-fe",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-26",
+          "closesOn": "2027-04-04",
+          "source": "ski-santa-fe"
+        }
+      ]
+    },
+    {
+      "areaId": "snow-creek",
+      "actual": [
+        {
+          "season": "2018/19",
+          "opensOn": "2018-12-22",
+          "closesOn": "2019-03-17",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2017/18",
+          "opensOn": "2017-12-26",
+          "closesOn": "2018-03-11",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2016/17",
+          "opensOn": "2016-12-16",
+          "closesOn": "2017-03-05",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2015/16",
+          "opensOn": "2015-12-31",
+          "closesOn": "2016-03-06",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2014/15",
+          "opensOn": "2014-12-31",
+          "closesOn": "2015-03-08",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2011/12",
+          "opensOn": "2011-12-17",
+          "closesOn": "2012-03-04",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2012/13",
+          "opensOn": "2012-12-22",
+          "closesOn": "2013-03-17",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2013/14",
+          "opensOn": "2013-12-14",
+          "closesOn": "2014-03-09",
+          "source": "peak-resorts-2016"
+        }
+      ]
+    },
+    {
+      "areaId": "snowbasin-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-27",
+          "source": "ski-utah-opening-dates"
+        }
+      ]
+    },
+    {
+      "areaId": "snowbird",
+      "recurring": {
+        "opensIn": 11,
+        "closesIn": 5,
+        "source": "snowbird",
+        "note": "November–May"
+      },
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-27",
+          "source": "ski-utah-opening-dates"
+        }
+      ]
+    },
+    {
+      "areaId": "snowmass",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-26",
+          "closesOn": "2027-04-11",
+          "source": "snowmass"
+        }
+      ]
+    },
+    {
+      "areaId": "st-anton-am-arlberg",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-02",
+          "source": "lech-am-arlberg"
+        }
+      ]
+    },
+    {
+      "areaId": "st-christoph-am-arlberg",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-02",
+          "source": "lech-am-arlberg"
+        }
+      ]
+    },
+    {
+      "areaId": "stuben-am-arlberg",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-02",
+          "source": "lech-am-arlberg"
+        }
+      ]
+    },
+    {
+      "areaId": "sugarloaf",
+      "recurring": {
+        "opensIn": 11,
+        "closesIn": 5,
+        "source": "sugarloaf",
+        "note": "November to early May"
+      }
+    },
+    {
+      "areaId": "sun-peaks-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-26",
+          "closesOn": "2027-04-04",
+          "source": "sun-peaks-resort"
+        }
+      ]
+    },
+    {
+      "areaId": "telluride-ski-resort",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-05",
+          "closesOn": "2027-04-04",
+          "source": "telluride-winter-schedule"
+        }
+      ]
+    },
+    {
+      "areaId": "the-remarkables",
+      "planned": [
+        {
+          "season": "2027",
+          "opensOn": "2027-06-19",
+          "closesOn": "2027-10-10",
+          "source": "the-remarkables"
+        }
+      ]
+    },
+    {
+      "areaId": "thyon",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-12",
+          "source": "bruson",
+          "note": "Full network schedule."
+        }
+      ]
+    },
+    {
+      "areaId": "val-di-fassa-carezza",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-04",
+          "closesOn": "2027-04-04",
+          "source": "3-zinnen-dolomites"
+        }
+      ]
+    },
+    {
+      "areaId": "val-di-fiemme-obereggen",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-28",
+          "closesOn": "2027-04-04",
+          "source": "3-zinnen-dolomites"
+        }
+      ]
+    },
+    {
+      "areaId": "val-gardena-alpe-di-siusi",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-04",
+          "closesOn": "2027-04-04",
+          "source": "3-zinnen-dolomites"
+        }
+      ]
+    },
+    {
+      "areaId": "val-thorens",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-21",
+          "closesOn": "2027-05-02",
+          "source": "brides-les-bains"
+        }
+      ]
+    },
+    {
+      "areaId": "valle-nevado",
+      "recurring": {
+        "opensIn": 6,
+        "closesIn": 10,
+        "source": "valle-nevado",
+        "note": "Usually June to October"
+      }
+    },
+    {
+      "areaId": "verbier",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-28",
+          "source": "bruson",
+          "note": "Weekend skiing begins 2026-11-07. Daily skiing begins on the listed date."
+        }
+      ]
+    },
+    {
+      "areaId": "veysonnaz",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-12",
+          "source": "bruson",
+          "note": "Full network schedule."
+        }
+      ]
+    },
+    {
+      "areaId": "whistler-blackcomb",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-11-20",
+          "closesOn": "2027-05-16",
+          "source": "whistler-winter-hours",
+          "note": "Blackcomb dates. Whistler Mountain is scheduled for November 25 through April 18."
+        }
+      ]
+    },
+    {
+      "areaId": "whitetail-resort",
+      "actual": [
+        {
+          "season": "2018/19",
+          "opensOn": "2018-12-23",
+          "closesOn": "2019-03-17",
+          "source": "peak-resorts-2019"
+        }
+      ]
+    },
+    {
+      "areaId": "wildcat-mountain",
+      "actual": [
+        {
+          "season": "2018/19",
+          "opensOn": "2018-10-27",
+          "closesOn": "2019-04-28",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2017/18",
+          "opensOn": "2017-11-11",
+          "closesOn": "2018-04-22",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2016/17",
+          "opensOn": "2016-11-24",
+          "closesOn": "2017-04-29",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2015/16",
+          "opensOn": "2015-11-26",
+          "closesOn": "2016-04-24",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2014/15",
+          "opensOn": "2014-11-09",
+          "closesOn": "2015-04-30",
+          "source": "peak-resorts-2019"
+        },
+        {
+          "season": "2011/12",
+          "opensOn": "2011-12-18",
+          "closesOn": "2012-04-15",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2012/13",
+          "opensOn": "2012-11-22",
+          "closesOn": "2013-04-21",
+          "source": "peak-resorts-2016"
+        },
+        {
+          "season": "2013/14",
+          "opensOn": "2013-11-28",
+          "closesOn": "2014-04-27",
+          "source": "peak-resorts-2016"
+        }
+      ]
+    },
+    {
+      "areaId": "zermatt-matterhorn",
+      "recurring": {
+        "opensIn": 1,
+        "closesIn": 12,
+        "source": "zermatt-matterhorn",
+        "note": "Year-round glacier skiing"
+      }
+    },
+    {
+      "areaId": "zuers-am-arlberg",
+      "planned": [
+        {
+          "season": "2026/27",
+          "opensOn": "2026-12-02",
+          "source": "lech-am-arlberg"
+        }
+      ]
+    }
+  ]
+}

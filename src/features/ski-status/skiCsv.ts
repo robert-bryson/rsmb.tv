@@ -1,4 +1,4 @@
-import { conditionColumns, formatSkiStat, visibleSkiColumns, type ColumnKey, type SkiUnits } from './browse';
+import { conditionColumns, formatSkiStat, plannedOpening, visibleSkiColumns, type ColumnKey, type SkiUnits } from './browse';
 import { locationAttribution, locationLicense, type SkiArea } from './catalog';
 import { areaForecast, type Conditions } from './conditions';
 
@@ -17,9 +17,9 @@ function exportSource(area: SkiArea, key: ColumnKey, conditions?: Conditions) {
         return mapped && { url: mapped.source, license: locationLicense };
     }
     if (liveFields.has(key)) {
-        const entry = key.startsWith('forecast') ? areaForecast(conditions, area.id) : conditions?.reports.get(area.id);
-        if (entry?.source.exportable) return entry.source;
-        return;
+        const source = key === 'opensOn' ? plannedOpening(area, conditions)?.source
+            : key.startsWith('forecast') ? areaForecast(conditions, area.id)?.source : conditions?.reports.get(area.id)?.source;
+        return source?.exportable ? source : undefined;
     }
     const source = area.statSources?.find(citation => citation.fields.some(field => field === key) && citation.exportLicense);
     if (source) return { url: source.source, license: source.exportLicense };

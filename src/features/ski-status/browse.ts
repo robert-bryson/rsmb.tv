@@ -1,8 +1,12 @@
 import { containsPoint, type TooltipPoint, type TooltipRect } from '../../maps/screenGeometry';
 import { normalizeSearch } from '../../utils/search';
 import { isSpecialtySkiing, passFamilySchema, passNames, skiingSchema, type PassFamily, type SkiArea, type Skiing } from './catalog';
-import { areaForecast, openPercent, reportStatus, reportStatusText, statusLabels, type Conditions } from './conditions';
+import {
+    areaForecast, isFreshReport, matchesOperatingStatus, openPercent, reportAgeLabel, reportStatus, reportStatusText, statusLabels,
+    type Conditions, type ResortReport, type StatusFilter,
+} from './conditions';
 import { evaluatePass, matchesPassProduct, type PassProduct } from './passRules';
+import { includesSeasonMonth, seasonCalendar, seasonViewDate, upcomingSeasonPlan } from './seasons';
 
 export type SkiUnits = 'imperial' | 'metric';
 export type PassFilter = PassFamily | 'indy-discounts';
@@ -102,17 +106,27 @@ export const conditionColumns = [
     { key: 'forecastPrecipitation', label: 'Peak hourly precipitation chance' },
 ] as const;
 
-const seasonColumns = [{ key: 'seasonWindow', label: 'Season window' }, { key: 'opensOn', label: 'Planned opening' }] as const;
+const seasonColumns = [
+    { key: 'typicalOpening', label: 'Typical opening' },
+    { key: 'typicalClosing', label: 'Typical closing' },
+    { key: 'opensOn', label: 'Planned opening' },
+    { key: 'plannedClosing', label: 'Planned closing' },
+    { key: 'seasonWindow', label: 'Published season window' },
+] as const;
 export const columnGroups = [
     { label: 'Mountain statistics', columns: mountainColumns.slice(1) },
     { label: 'Conditions', columns: conditionColumns },
     { label: 'Season dates', columns: seasonColumns },
 ] as const;
-export const columns = [...mountainColumns, ...conditionColumns, ...seasonColumns] as const;
+const [nameColumn, regionColumn, ...additionalMountainColumns] = mountainColumns;
+export const columns = [nameColumn, regionColumn, ...conditionColumns, ...seasonColumns, ...additionalMountainColumns] as const;
 export type ColumnKey = typeof columns[number]['key'];
 export type SkiSort = { key: ColumnKey; direction: 'asc' | 'desc' };
 
-export const defaultSkiColumns: ColumnKey[] = [...mountainColumns.map(({ key }) => key), 'operatingStatus', 'measuredSnow', 'forecastSnow', 'seasonWindow'];
+export const defaultSkiColumns: ColumnKey[] = [
+    ...mountainColumns.map(({ key }) => key), 'operatingStatus', 'reportLifts', 'reportTrails', 'trailsOpenPct', 'acresOpenPct',
+    'measuredSnow', 'forecastSnow', 'typicalOpening', 'typicalClosing', 'opensOn', 'plannedClosing', 'seasonWindow',
+];
 
 export function visibleSkiColumns(preference: unknown) {
     const keys = Array.isArray(preference) ? preference : defaultSkiColumns;
@@ -163,9 +177,13 @@ interface SkiAreaFilters {
     night?: boolean;
     skiing?: SkiingFilter;
     product?: { pass: PassProduct; date?: string; now: number; homeAreaId?: string };
+    operations?: { filter: StatusFilter; reports: Conditions['reports']; now: number };
+    seasonMonth?: number;
 }
 
-export function filterSkiAreas(areas: readonly SkiArea[], { query = '', region = '', pass, night, skiing, product }: SkiAreaFilters = {}) {
+export function filterSkiAreas(areas: readonly SkiArea[], {
+    query = '', region = '', pass, night, skiing, product, operations, seasonMonth,
+}: SkiAreaFilters = {}) {
     const words = normalizeSearch(query).split(' ').filter(Boolean);
     const country = region.startsWith(countryPrefix) ? region.slice(countryPrefix.length) : '';
     return areas.filter(area => {
@@ -176,6 +194,8 @@ export function filterSkiAreas(areas: readonly SkiArea[], { query = '', region =
         } else if (pass && !area.passes.some(membership => matchesPassFilter(membership, pass))) return false;
         if (night && area.nightSkiing !== true) return false;
         if (skiing && !matchesSkiingFilter(area.skiing, skiing)) return false;
+        if (operations && !matchesOperatingStatus(operations.reports.get(area.id), operations.now, operations.filter)) return false;
+        if (seasonMonth && !includesSeasonMonth(seasonCalendar.byArea.get(area.id)?.typical, seasonMonth)) return false;
         if (!words.length) return true;
         const countries = areaCountries(area);
         const searchable = normalizeSearch([
@@ -219,6 +239,18 @@ export function skiAreaBounds(areas: readonly SkiArea[]): [number, number, numbe
 
 const collator = new Intl.Collator('en', { sensitivity: 'base', numeric: true });
 
+export function plannedOpening(area: SkiArea, conditions?: Conditions) {
+    const report = conditions?.reports.get(area.id);
+    const seasons = seasonCalendar.byArea.get(area.id);
+    if (!report?.opensOn && !seasons?.planned.length) return;
+    const date = seasonViewDate(area, conditions?.now);
+    if (conditions && report?.opensOn && report.opensOn >= date && isFreshReport(report, conditions.now)) {
+        return { date: report.opensOn, source: report.source };
+    }
+    const plan = upcomingSeasonPlan(seasons, date);
+    if (plan?.opensOn) return { date: plan.opensOn };
+}
+
 function skiStat(area: SkiArea, key: ColumnKey, conditions?: Conditions) {
     if (key === 'region') return regionName(area);
     if (key === 'skiing') return skiingLabels[area.skiing];
@@ -246,7 +278,16 @@ function skiStat(area: SkiArea, key: ColumnKey, conditions?: Conditions) {
     if (key === 'acresOpenPct') return openPercent(report?.acres);
     if (key === 'baseSnow') return Array.isArray(report?.baseCm) ? report.baseCm[0] : report?.baseCm;
     if (key === 'measuredSnow') return Array.isArray(report?.snowfallCm) ? report.snowfallCm[0] : report?.snowfallCm;
-    if (key === 'opensOn') return report?.opensOn;
+    if (key === 'opensOn') return plannedOpening(area, conditions)?.date;
+    if (key === 'plannedClosing') {
+        const seasons = seasonCalendar.byArea.get(area.id);
+        if (seasons?.planned.length) return upcomingSeasonPlan(seasons, seasonViewDate(area, conditions?.now))?.closesOn;
+        return;
+    }
+    if (key === 'typicalOpening' || key === 'typicalClosing') {
+        const typical = seasonCalendar.byArea.get(area.id)?.typical;
+        return key === 'typicalOpening' ? typical?.openingRank : typical?.closingRank;
+    }
     return area[key];
 }
 
@@ -276,26 +317,39 @@ export function formatElevation(feet: number, units: SkiUnits) {
     return units === 'metric' ? `${integer.format(feet * metersPerFoot)} m` : `${integer.format(feet)} ft`;
 }
 
-function snowDepth(cm: number | [number, number], units: SkiUnits) {
+export function formatSnowDepth(cm: number | [number, number], units: SkiUnits) {
     const format = (value: number) => decimal.format(units === 'metric' ? value : value / 2.54);
     const value = Array.isArray(cm) ? cm.map(format).join('–') : format(cm);
     return `${value} ${units === 'metric' ? 'cm' : 'in'}`;
 }
 
+export function formatTemperature(celsius: number, units: SkiUnits) {
+    return units === 'metric' ? `${integer.format(celsius)} °C` : `${integer.format(celsius * 1.8 + 32)} °F`;
+}
+
+function formatReportedTerrain(value: string, report: ResortReport | undefined, now: number) {
+    const age = report && reportAgeLabel(report, now);
+    return age ? `${value} (${age})` : value;
+}
+
 export function formatSkiStat(area: SkiArea, key: ColumnKey, units: SkiUnits, conditions?: Conditions): string | undefined {
     const report = conditions?.reports.get(area.id);
     if (key === 'operatingStatus') return reportStatusText(report, conditions?.now ?? 0);
-    if (key === 'baseSnow' && report?.baseCm !== undefined) return snowDepth(report.baseCm, units);
+    if (key === 'typicalOpening' || key === 'typicalClosing') {
+        const typical = seasonCalendar.byArea.get(area.id)?.typical;
+        return key === 'typicalOpening' ? typical?.opening : typical?.closing;
+    }
+    if (key === 'baseSnow' && report?.baseCm !== undefined) return formatSnowDepth(report.baseCm, units);
     if (key === 'measuredSnow' && report?.snowfallCm !== undefined) {
         const period = report.snowfallHours ? `${report.snowfallHours} h` : report.snowfallOn;
-        return `${snowDepth(report.snowfallCm, units)} · ${period}`;
+        return `${formatSnowDepth(report.snowfallCm, units)} · ${period}`;
     }
     if (key === 'reportAcres' || key === 'reportLifts' || key === 'reportTrails') {
         const counts = key === 'reportLifts' ? report?.lifts : key === 'reportTrails' ? report?.trails : report?.acres;
         if (!counts) return;
         const format = (value: number | undefined) => value === undefined ? 'Unknown' :
             key === 'reportAcres' ? formatArea(value, units) : integer.format(value);
-        return `${format(counts.open)} / ${format(counts.total)}`;
+        return formatReportedTerrain(`${format(counts.open)} / ${format(counts.total)}`, report, conditions?.now ?? 0);
     }
     const value = skiStat(area, key, conditions);
     if (value === undefined) return;
@@ -304,9 +358,12 @@ export function formatSkiStat(area: SkiArea, key: ColumnKey, units: SkiUnits, co
     if (key === 'acres') return formatArea(value, units, area.acresQualifier === 'lower-bound');
     if (key === 'nightAcres') return formatArea(value, units, area.nightAcresQualifier === 'lower-bound');
     if (key === 'guidedTerrainAcres') return formatArea(value, units);
-    if (key === 'forecastSnow') return snowDepth(value, units);
-    if (key === 'forecastTemperature') return units === 'metric' ? `${integer.format(value)} °C` : `${integer.format(value * 1.8 + 32)} °F`;
-    if (key === 'forecastPrecipitation' || key.endsWith('Pct')) return `${decimal.format(value)}%`;
+    if (key === 'forecastSnow') return formatSnowDepth(value, units);
+    if (key === 'forecastTemperature') return formatTemperature(value, units);
+    if (key === 'trailsOpenPct' || key === 'acresOpenPct') {
+        return formatReportedTerrain(`${decimal.format(value)}%`, report, conditions?.now ?? 0);
+    }
+    if (key === 'forecastPrecipitation') return `${decimal.format(value)}%`;
     if (key.endsWith('Ft')) return formatElevation(value, units);
     if (key.endsWith('M')) return formatElevation(value / metersPerFoot, units);
     if (key.endsWith('Km')) {

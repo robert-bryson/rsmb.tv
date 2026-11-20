@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import {
-    conditionsFileDigest, conditionsManifestSchema, forecastSnapshotSchema, reportAgeHours, reportSnapshotSchema,
+    conditionsFileDigest, conditionsManifestSchema, forecastSnapshotSchema, mergeResortReports, reportAgeHours, reportSnapshotSchema, reportStatus,
     type BaseForecast, type ResortReport,
 } from '../../../src/features/ski-status/conditions.ts';
 import { manifestName, type ConditionsStore } from './conditions-store.ts';
@@ -10,7 +10,7 @@ type PublicationOptions<T extends PilotArea> = {
     areas: readonly T[];
     catalogRevision: string;
     refreshForecasts: boolean;
-    fetchReport: (area: T) => Promise<ResortReport>;
+    fetchReport: (area: T, previous: ResortReport | undefined) => Promise<ResortReport>;
     fetchForecast: (area: T) => Promise<BaseForecast>;
     warn: (message: string) => void;
     now?: () => number;
@@ -36,11 +36,11 @@ async function readSnapshot<T extends { generatedAt: string }>(
 }
 
 async function updateRows<T extends PilotArea, Row extends PilotArea>(
-    areas: readonly T[], previous: Row[], fetchRow: (area: T) => Promise<Row>, warn: (message: string) => void,
+    areas: readonly T[], previous: Row[], fetchRow: (area: T, previous: Row | undefined) => Promise<Row>, warn: (message: string) => void,
 ) {
     const lookup = new Set(areas.map(area => area.areaId));
     const rows = new Map(previous.filter(row => lookup.has(row.areaId)).map(row => [row.areaId, row]));
-    const results = await Promise.allSettled(areas.map(area => fetchRow(area)));
+    const results = await Promise.allSettled(areas.map(async area => fetchRow(area, rows.get(area.areaId))));
     let received = 0;
     for (const [index, result] of results.entries()) {
         const { areaId } = areas[index];
@@ -62,53 +62,64 @@ async function writeVersion(store: ConditionsStore, prefix: string, body: Buffer
     return file;
 }
 
-const reportFields: (keyof ResortReport)[] = ['status', 'lifts', 'trails', 'acres', 'baseCm', 'snowfallCm', 'nightOpen', 'opensOn'];
+const reportFields: (keyof ResortReport)[] = [
+    'status', 'lifts', 'trails', 'acres', 'baseCm', 'snowfallCm', 'temperature', 'nightOpen', 'opensOn', 'terrain',
+];
 
 export async function publishConditions<T extends PilotArea>(store: ConditionsStore, {
     areas, catalogRevision, refreshForecasts, fetchReport, fetchForecast, warn, now = Date.now,
 }: PublicationOptions<T>) {
     const previousObject = await store.read(manifestName);
     const previous = previousObject && conditionsManifestSchema.parse(decode(previousObject.body));
-    const oldReports = await readSnapshot(store, previous?.reports, previous?.updatedAt, reportSnapshotSchema.parse, warn);
-    const oldForecasts = await readSnapshot(store, previous?.forecasts, previous?.updatedAt, forecastSnapshotSchema.parse, warn);
+    const [oldReports, oldForecasts] = await Promise.all([
+        readSnapshot(store, previous?.reports, previous?.updatedAt, reportSnapshotSchema.parse, warn),
+        readSnapshot(store, previous?.forecasts, previous?.updatedAt, forecastSnapshotSchema.parse, warn),
+    ]);
+    const areaIds = new Set(areas.map(area => area.areaId));
+    const previousReports = oldReports?.data.reports ?? [];
+    const previousForecasts = oldForecasts?.data.forecasts ?? [];
+    const retainedForecasts = previousForecasts.filter(row => areaIds.has(row.areaId));
     const [reports, forecasts] = await Promise.all([
-        updateRows(areas, oldReports?.data.reports ?? [], fetchReport, warn),
-        refreshForecasts || !oldForecasts?.data.forecasts.length
-            ? updateRows(areas, oldForecasts?.data.forecasts ?? [], fetchForecast, warn)
-            : { rows: oldForecasts.data.forecasts, received: 0 },
+        updateRows(areas, previousReports, fetchReport, warn),
+        refreshForecasts || !retainedForecasts.length
+            ? updateRows(areas, retainedForecasts, fetchForecast, warn)
+            : { rows: retainedForecasts, received: 0 },
     ]);
     if (!reports.received && !forecasts.received) throw Error('No valid ski conditions updates received');
-
     const observedAt = now();
+    const reportsByArea = new Map(previousReports.map(report => [report.areaId, report]));
+    const reportRows = reports.rows.map(next => {
+        const prior = reportsByArea.get(next.areaId);
+        return prior ? mergeResortReports(prior, next, observedAt) : next;
+    });
     const manifestTime = previous ? Math.max(observedAt, Date.parse(previous.updatedAt) + 1) : observedAt;
     const updatedAt = new Date(manifestTime).toISOString();
-    const reportAges = reports.rows.flatMap(report => {
+    const reportAges = reportRows.flatMap(report => {
         const age = reportAgeHours(report, observedAt);
-        return age === undefined ? [] : [{ id: report.areaId, age, recent: age <= (report.freshHours ?? 24) }];
+        return age === undefined ? [] : [{ id: report.areaId, age }];
     });
     const coverage = {
-        areas: areas.length, reports: reports.rows.length, recentReports: reportAges.filter(report => report.recent).length,
+        areas: areas.length, reports: reportRows.length,
+        recentReports: reportRows.filter(report => reportStatus(report, observedAt) !== 'unknown').length,
         reportAgesHours: Object.fromEntries(reportAges.map(({ id, age }) => [id, Math.round(age * 10) / 10])),
-        reportFields: Object.fromEntries(reportFields.map(field => [field, reports.rows.filter(report =>
+        reportFields: Object.fromEntries(reportFields.map(field => [field, reportRows.filter(report =>
             field === 'status' ? report.status !== 'unknown' : report[field] !== undefined).length])),
         forecasts: forecasts.rows.filter(forecast => Date.parse(forecast.endsAt) > observedAt).length,
     };
 
-    const reportsData = reportSnapshotSchema.parse({ version: 1, generatedAt: updatedAt, reports: reports.rows });
+    const reportsData = reportSnapshotSchema.parse({ version: 1, generatedAt: updatedAt, reports: reportRows });
     const forecastsData = forecastSnapshotSchema.parse({ version: 1, generatedAt: updatedAt, forecasts: forecasts.rows });
+    const reportsChanged = reports.received > 0 || reportRows.length !== previousReports.length;
+    const forecastsChanged = forecasts.received > 0 || forecasts.rows.length !== previousForecasts.length;
     const manifest = conditionsManifestSchema.parse({
         version: 1, updatedAt, catalogRevision, coverage,
-        reports: reports.received ? await writeVersion(store, 'reports', serialize(reportsData)) : oldReports?.file,
-        forecasts: forecasts.received ? await writeVersion(store, 'forecasts', serialize(forecastsData)) : oldForecasts?.file,
+        reports: reportsChanged ? await writeVersion(store, 'reports', serialize(reportsData)) : oldReports?.file,
+        forecasts: forecastsChanged ? await writeVersion(store, 'forecasts', serialize(forecastsData)) : oldForecasts?.file,
         previousManifest: previousObject && await writeVersion(store, 'manifest', previousObject.body),
     });
-    await store.commit(serialize(manifest), previousObject);
     const received = { reports: reports.received, forecasts: forecasts.received };
-    const historyFile = `history/${updatedAt.slice(0, 10)}/${updatedAt.replaceAll(':', '-')}.json`;
-    try {
-        await store.write(historyFile, serialize({ updatedAt, coverage, received }));
-    } catch (error) {
-        throw Error(`Published the ski conditions manifest but could not write ${historyFile}`, { cause: error });
-    }
+    const historyPrefix = `history/${updatedAt.slice(0, 10)}/${updatedAt.replaceAll(':', '-')}`;
+    await writeVersion(store, historyPrefix, serialize({ ...manifest, received }));
+    await store.commit(serialize(manifest), previousObject);
     return { manifest, coverage, received };
 }
