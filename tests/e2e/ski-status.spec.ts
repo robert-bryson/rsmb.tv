@@ -727,6 +727,34 @@ test('loads terrain only when enabled and zoomed in, with CARTO underneath', asy
     await renderer.dispose();
 });
 
+test('clears an old terrain relief error when a fresh source loads', async ({ page }) => {
+    await prepare(page);
+    let unavailable = true;
+    let recoveredTiles = 0;
+    await page.route('https://tiles.mapterhorn.com/**', route => {
+        const headers = { 'access-control-allow-origin': '*' };
+        if (unavailable) return route.fulfill({ status: 503, headers, body: 'Terrain unavailable' });
+        recoveredTiles++;
+        return route.fulfill({ headers, contentType: 'image/png', body: tile });
+    });
+    const renderer = await captureMap(page);
+    await renderer.evaluate(map => { map.jumpTo({ center: [-111.635515, 40.573361], zoom: 10 }); });
+    const relief = page.getByRole('checkbox', { name: 'Terrain relief' });
+    const error = page.getByText('Terrain relief unavailable.', { exact: true });
+    await relief.check();
+    await expect(error).toBeVisible();
+    await relief.uncheck();
+    await expect.poll(() => renderer.evaluate(map => Boolean(map.getSource('ski-terrain-dem')))).toBe(false);
+
+    unavailable = false;
+    await relief.check();
+    await expect.poll(() => recoveredTiles).toBeGreaterThan(0);
+    await expect.poll(() => renderer.evaluate(map => map.isSourceLoaded('ski-terrain-dem'))).toBe(true);
+    await expect(error).toBeHidden();
+    await expect(page.getByTestId('ski-status-map')).toHaveAttribute('data-map-state', 'ready');
+    await renderer.dispose();
+});
+
 test('loads and filters resort terrain by zoom and pass using byte ranges', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await prepare(page);
@@ -907,8 +935,9 @@ test('offers a map retry when marker data fails and keeps the selected area', as
     await expect(map).toHaveAttribute('data-map-state', 'error');
     await expect(page.getByRole('region', { name: 'Whaleback Mountain', exact: true })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Retry background' })).toHaveCount(0);
-    await page.getByRole('button', { name: 'Retry map' }).click();
+    await page.getByRole('button', { name: 'Retry map' }).press('Enter');
     await expect(map).toHaveAttribute('data-map-state', 'ready');
+    await expect(map.locator('.maplibregl-canvas')).toBeFocused();
     await expect(page.getByRole('region', { name: 'Whaleback Mountain map popup', exact: true })).toBeVisible();
     await expect(page.getByRole('searchbox', { name: 'Search areas' })).toHaveValue('whaleback');
     await renderer.dispose();

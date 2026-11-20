@@ -1,9 +1,11 @@
-import type { Page, Response } from '@playwright/test';
+import type { Page, Request, Response } from '@playwright/test';
 
 export const SKI_TERRAIN_ROUTE = '/projects/ski-status/map?q=heavenly&view=map&skiTerrain=0';
 export const skiTerrainArchivePath = /\/resort-terrain(?:-[\w-]+)?\.pmtiles$/;
 
-export async function verifySkiTerrainResponse(response: Response, archive: Buffer) {
+type RangeResponse = Pick<Response, 'status' | 'headers' | 'body'> & { request(): Pick<Request, 'headers'> };
+
+export async function verifySkiTerrainResponse(response: RangeResponse, archive: Buffer) {
     const range = response.request().headers().range;
     const match = /^bytes=(\d+)-(\d+)$/.exec(range ?? '');
     if (!match || response.status() !== 206) {

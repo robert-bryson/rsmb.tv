@@ -6,10 +6,11 @@ import { assertDeploymentIdentity, assertValidationProof, assertReleaseURL, asse
 export async function verifyPreviewRevision(baseURL, revision, fetchImpl = fetch, { validationBaseURL = process.env.RELEASE_VALIDATION_BASE_URL || VALIDATION_BASE_URL, now = Date.now() } = {}) {
     assertRevision(revision);
     const base = assertReleaseURL(baseURL, { originOnly: true });
+    const request = url => fetchImpl(url, { cache: 'no-store', redirect: 'manual', signal: AbortSignal.timeout(30_000) });
     const url = new URL('/deployment.json', base);
     url.searchParams.set('candidate', revision);
     url.searchParams.set('t', String(Date.now()));
-    const response = await fetchImpl(url, { cache: 'no-store', signal: AbortSignal.timeout(30_000) });
+    const response = await request(url);
     if (!response.ok) throw new Error(`Preview identity HTTP ${response.status}`);
     const deployment = await response.json();
     if (deployment.commitId !== revision || !deployment.jobId) throw new Error('Production revision has no matching deployed preview.');
@@ -17,7 +18,7 @@ export async function verifyPreviewRevision(baseURL, revision, fetchImpl = fetch
     const validationBase = assertReleaseURL(validationBaseURL);
     if (!validationBase.pathname.endsWith('/')) validationBase.pathname += '/';
     const proofURL = new URL(validationProofKey(revision, jobId), validationBase);
-    const proofResponse = await fetchImpl(proofURL, { cache: 'no-store', signal: AbortSignal.timeout(30_000) });
+    const proofResponse = await request(proofURL);
     if (!proofResponse.ok) throw new Error(`Preview validation proof HTTP ${proofResponse.status}`);
     assertValidationProof(await proofResponse.json(), { revision, jobId, previewOrigin: baseURL, now });
     return { revision, jobId };

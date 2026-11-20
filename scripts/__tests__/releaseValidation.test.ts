@@ -68,7 +68,7 @@ describe('hosted release validation', () => {
         expect(() => assertDeploymentIdentity({ commitId: revision }, revision)).toThrow('does not match');
         assertDeploymentIdentity({ commitId: revision, jobId: '1' }, revision);
         assertDeploymentIdentity({ commitId: revision, jobId: '0000000001' }, revision, '1');
-        expect(() => assertDeploymentIdentity({ commitId: revision, jobId: '1' }, revision, '2')).toThrow('older build');
+        expect(() => assertDeploymentIdentity({ commitId: revision, jobId: '1' }, revision, '2')).toThrow('Expected 2, received 1');
     });
     it('prevents a newer main commit from passing the production build guard', async () => {
         const fetchImpl = vi.fn().mockResolvedValue(new Response(JSON.stringify({ commitId: revision, jobId: '1' })));

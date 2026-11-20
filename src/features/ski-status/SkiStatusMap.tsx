@@ -325,6 +325,7 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
             map = instance;
             mapRef.current = instance;
             const canvas = instance.getCanvas();
+            if (document.activeElement === instance.getContainer()) canvas.focus({ preventScroll: true });
             const terrainPopup = new maplibre.Popup({
                 closeButton: false, closeOnClick: false, closeOnMove: true, focusAfterOpen: false, offset: 9,
                 className: 'ski-area-popup ski-area-popup-hover', maxWidth: '15rem',
@@ -388,7 +389,8 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
             instance.on('projectiontransition', queueViewport);
             instance.on('sourcedata', event => {
                 if (event.sourceId === sourceId && event.isSourceLoaded) setReady(true);
-                if (event.sourceId === terrainSource && event.isSourceLoaded && event.sourceDataType === 'content') setTerrainUnavailable(false);
+                // A new relief source emits metadata before its tiles can fail again.
+                if (event.sourceId === terrainSource && event.sourceDataType === 'metadata') setTerrainUnavailable(false);
                 if (event.sourceId === resortTerrainSource && event.isSourceLoaded && event.sourceDataType === 'content') setResortTerrainUnavailable(false);
             });
             instance.on('webglcontextlost', () => setRendererFailed(true));
@@ -464,6 +466,15 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
         onSelect();
     }
 
+    function retryMap() {
+        container.current?.focus({ preventScroll: true });
+        setReady(false);
+        setBasemap('loading');
+        setRendererFailed(false);
+        setMarkersFailed(false);
+        setAttempt(value => value + 1);
+    }
+
     function retrySkiTerrain() {
         const map = mapRef.current;
         if (!map) return;
@@ -485,7 +496,7 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
         if (selected) closePopup();
         else setHovered(undefined);
     }}>
-        <div ref={container} className="h-full w-full" data-testid="ski-status-map"
+        <div ref={container} tabIndex={-1} className="h-full w-full" data-testid="ski-status-map"
             data-map-state={state} />
         {showPopups && hovered && hovered.id !== selected?.id && areasById.has(hovered.id)
             && <SkiAreaPopup area={hovered} mapRef={mapRef} />}
@@ -500,13 +511,8 @@ export default function SkiStatusMap({ areas, selected, colors, passFilter, terr
         {(state !== 'ready' || showReliefError || showSkiTerrainError) && <div
             className="absolute bottom-9 left-2 right-2 z-2 w-fit max-w-[calc(100%-1rem)] rounded-md border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
             role={failed ? 'alert' : 'status'}>
-            {failed && <p>{markersFailed && !rendererFailed ? 'Resort markers unavailable.' : 'Map unavailable.'} <button type="button" className="min-h-9 text-cyan-300 underline" onClick={() => {
-                setReady(false);
-                setBasemap('loading');
-                setRendererFailed(false);
-                setMarkersFailed(false);
-                setAttempt(value => value + 1);
-            }}>Retry map</button></p>}
+            {failed && <p>{markersFailed && !rendererFailed ? 'Resort markers unavailable.' : 'Map unavailable.'} <button type="button"
+                className="min-h-9 text-cyan-300 underline" onClick={retryMap}>Retry map</button></p>}
             {state === 'loading' && <p>Loading map…</p>}
             {state === 'degraded' && <p>Background unavailable. <button type="button" className="min-h-9 text-cyan-300 underline"
                 onClick={() => recoveryRef.current?.retry()}>Retry background</button></p>}

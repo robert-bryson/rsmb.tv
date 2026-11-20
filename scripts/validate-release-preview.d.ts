@@ -3,6 +3,7 @@ import type { Browser } from '@playwright/test';
 export interface ReleaseValidationReport {
     baseURL: string;
     revision: string;
+    previewJobId?: string;
     checkedAt: string;
     routes: string[];
     images: number;

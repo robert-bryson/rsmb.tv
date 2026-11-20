@@ -70,7 +70,8 @@ export function assertTornadoGeometry(data, pathname) {
 /** Validate an actual hosted preview, including its response policy and workers. */
 export async function validateReleasePreview({ baseURL, revision, jobId, browser, outputPath, timeoutMs = 30_000 }) {
     const base = assertReleaseURL(baseURL, { originOnly: true });
-    const report = { baseURL: base.origin, revision, checkedAt: new Date().toISOString(), routes: [], images: 0, skiTerrainRanges: 0, errors: [] };
+    const report = { baseURL: base.origin, revision, previewJobId: undefined, checkedAt: new Date().toISOString(),
+        routes: [], images: 0, skiTerrainRanges: 0, errors: [] };
     const payloads = new Map();
     const inspections = [];
     let activeBrowser = browser;
@@ -123,8 +124,8 @@ export async function validateReleasePreview({ baseURL, revision, jobId, browser
                 }
             })().catch(error => report.errors.push(error.message)));
         });
-        async function getJSON(url) {
-            const response = await context.request.get(url, { headers: { 'cache-control': 'no-cache' }, timeout: timeoutMs });
+        async function getJSON(url, { maxRedirects } = {}) {
+            const response = await context.request.get(url, { headers: { 'cache-control': 'no-cache' }, timeout: timeoutMs, maxRedirects });
             if (!response.ok()) throw new Error(`HTTP ${response.status()} from ${url}`);
             assertAssetType(response.url(), response.headers()['content-type'] ?? '');
             if (new URL(response.url()).origin === base.origin) assertHostingHeaders(response.url(), response.headers());
@@ -133,7 +134,8 @@ export async function validateReleasePreview({ baseURL, revision, jobId, browser
         async function verifyRevision() {
             const url = new URL('/deployment.json', base);
             url.search = new URLSearchParams({ revision, t: String(Date.now()) }).toString();
-            assertDeploymentIdentity(await getJSON(url.href), revision, jobId);
+            const deployment = await getJSON(url.href, { maxRedirects: 0 });
+            report.previewJobId = assertDeploymentIdentity(deployment, revision, report.previewJobId ?? jobId);
         }
         await verifyRevision();
         for (const route of RELEASE_ROUTES) {

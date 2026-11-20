@@ -23,7 +23,7 @@ Hosted checks require a deployed build. Device checks require the named physical
 | Later engineering work | [Build and maintenance](#build-and-maintenance), [Tornado Tracks](#tornado-tracks), and [dashboard checks](#dashboard-checks) | Local implementation and regression tests |
 | Infrastructure changes | [Infrastructure](#infrastructure) | AWS or Google Admin access |
 | Content additions | [Project content](#project-content) | Reviewed content and assets |
-| Before the ski-status release | [ski-status](#ski-status) | Verified area records, pass rules, and report sources |
+| Before the ski-status release | [ski-status](#ski-status) | Hosted preview, verified area records, pass rules, and report sources |
 | Application planning | [Ride Ledger prerequisites](#ride-ledger-prerequisites) | Owner decisions and synthetic fixtures |
 
 ## Next release checks
@@ -221,7 +221,7 @@ Track pending stories in [Content publication](#content-publication). Do not add
 
 ### Release checks
 
-- [ ] Verify ski terrain when the first ski-status build reaches the hosted preview. Check the release report for verified archive ranges and the Heavenly route. [Release checks](projects/ski-status/readme.md#release-checks)
+- [ ] Verify ski terrain on the first hosted preview that includes ski-status. Match the report to the Amplify job and candidate revision. Check the archive ranges and Heavenly route in the report. [Release checks](projects/ski-status/readme.md#release-checks)
 - [ ] Review the eligibility of the remaining North American areas by region. Record the source and decision for each area. List unresolved areas. [Catalog rules](projects/ski-status/readme.md#build-the-catalog)
 
 ### Catalog maintenance

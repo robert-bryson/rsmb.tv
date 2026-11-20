@@ -25,6 +25,7 @@ const routes = ['/', '/about', '/posts', '/projects', '/projects/flights/map?sta
     '/projects/temperature-records/map', '/projects/temperature-records/map?view=state',
     '/projects/temperature-records/map?view=county', '/projects/tornado-tracks/map', SKI_TERRAIN_ROUTE];
 type Failure = 'aborted-css' | 'aborted-worker' | 'track-http' | 'csp' | 'cache' | 'image' | 'about' | 'deployment' | 'map-console'
+    | 'deployment-redirect' | 'deployment-job-changed'
     | 'terrain-full' | 'terrain-range' | 'terrain-bytes' | 'terrain-run' | 'terrain-no-requests';
 
 const flights = flightsSchema.parse({ type: 'FeatureCollection', features: [{ type: 'Feature',
@@ -110,6 +111,7 @@ if (location.pathname === '/projects/flights/map') {
 async function startPreview(failure?: Failure, localOnly = false) {
     const servedPreviews = new Set<string>();
     const requests: string[] = [];
+    let deploymentReads = 0;
     async function respond(request: IncomingMessage, response: ServerResponse) {
         const pathname = new URL(request.url ?? '/', 'http://fixture.invalid').pathname;
         requests.push(pathname);
@@ -120,8 +122,16 @@ async function startPreview(failure?: Failure, localOnly = false) {
         if (failure === 'cache' && pathname === '/assets/application.js') headers['cache-control'] = 'public, max-age=0';
         let body: string | Buffer;
         let contentType: string;
-        if (pathname === '/deployment.json') {
-            body = JSON.stringify({ commitId: failure === 'deployment' ? 'b'.repeat(40) : revision, jobId }); contentType = 'application/json';
+        if (pathname === '/deployment.json' && failure === 'deployment-redirect') {
+            response.writeHead(302, { ...headers, location: '/alternate-deployment.json' }).end();
+            return;
+        } else if (pathname === '/deployment.json' || pathname === '/alternate-deployment.json') {
+            deploymentReads++;
+            body = JSON.stringify({
+                commitId: failure === 'deployment' ? 'b'.repeat(40) : revision,
+                jobId: failure === 'deployment-job-changed' && deploymentReads > 1 ? '43' : jobId,
+            });
+            contentType = 'application/json';
         } else if (payloads.has(pathname)) {
             body = JSON.stringify(payloads.get(pathname)); contentType = 'application/json';
         } else if (pathname === '/assets/application.js') {
@@ -201,7 +211,8 @@ async function validateFixture(browser: Browser, testInfo: TestInfo, failure?: F
         };
     } });
     try {
-        const report = await validateReleasePreview({ baseURL: preview.origin, revision, jobId, browser: wrappedBrowser,
+        const report = await validateReleasePreview({ baseURL: preview.origin, revision,
+            jobId: failure === 'deployment-job-changed' ? undefined : jobId, browser: wrappedBrowser,
             outputPath: testInfo.outputPath('release-validation.json'), timeoutMs: 2_000 });
         return { report, servedPreviews: preview.servedPreviews, externalRequests, requests: preview.requests };
     } finally {
@@ -214,6 +225,7 @@ test('validates all direct routes, real responsive images, and published data in
     const { report, servedPreviews, externalRequests } = await validateFixture(browser, testInfo);
     expect(report.routes).toEqual(routes);
     expect(report.errors).toEqual([]);
+    expect(report.previewJobId).toBe(jobId);
     expect(report.images).toBe(previewPaths.size);
     expect(report.skiTerrainRanges).toBe(2);
     expect(servedPreviews).toEqual(previewPaths);
@@ -243,6 +255,8 @@ for (const [description, failure, diagnostic] of [
     ['corrupt responsive image bytes served with the correct MIME type', 'image', /Image cannot decode:.*\.avif/i],
     ['an HTTP 200 About page that never renders its heading', 'about', /Route did not become ready: \/about/i],
     ['a stale deployed revision', 'deployment', /Deployed revision does not match/i],
+    ['a redirected deployment record', 'deployment-redirect', /HTTP 302.*deployment\.json/i],
+    ['a manual validation that spans two jobs of the same revision', 'deployment-job-changed', /Preview deployment job.*42.*43/i],
     ['a handled MapLibre renderer error', 'map-console', /MapLibre error: fixture context failure/i],
     ['a full ski terrain archive response to a range request', 'terrain-full', /Ski terrain expected HTTP 206/i],
     ['an incorrect ski terrain Content-Range', 'terrain-range', /Wrong ski terrain Content-Range/i],

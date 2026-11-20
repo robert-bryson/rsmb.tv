@@ -34,7 +34,10 @@ export function assertDeploymentIdentity(deployment, revision, jobId) {
     assertRevision(revision);
     if (deployment?.commitId !== revision || !deployment?.jobId) throw new Error(`Deployed revision does not match ${revision}.`);
     const deployedJobId = normalizeJobId(deployment.jobId);
-    if (jobId !== undefined && deployedJobId !== normalizeJobId(jobId)) throw new Error('Preview is serving an older build of this revision.');
+    if (jobId !== undefined) {
+        const expectedJobId = normalizeJobId(jobId);
+        if (deployedJobId !== expectedJobId) throw new Error(`Preview deployment job mismatch. Expected ${expectedJobId}, received ${deployedJobId}.`);
+    }
     return deployedJobId;
 }
 
@@ -45,12 +48,14 @@ export function validationProofKey(revision, jobId) {
 
 export function createValidationProof(report, jobId, now = Date.now()) {
     assertRevision(report?.revision);
-    if (!Array.isArray(report.errors) || report.errors.length || !Array.isArray(report.routes) || report.routes.length !== RELEASE_ROUTES.length
+    const previewJobId = normalizeJobId(jobId);
+    if (report.previewJobId !== previewJobId || !Array.isArray(report.errors) || report.errors.length
+        || !Array.isArray(report.routes) || report.routes.length !== RELEASE_ROUTES.length
         || RELEASE_ROUTES.some(route => !report.routes.includes(route))
         || !Number.isSafeInteger(report.images) || report.images < 1
         || !Number.isSafeInteger(report.skiTerrainRanges) || report.skiTerrainRanges < 1) throw new Error('A successful validation report is required.');
     return {
-        version: 1, status: 'passed', revision: report.revision, previewJobId: normalizeJobId(jobId),
+        version: 1, status: 'passed', revision: report.revision, previewJobId,
         previewOrigin: assertReleaseURL(report.baseURL, { originOnly: true }).origin, validatedAt: new Date(now).toISOString(),
         reportSha256: createHash('sha256').update(JSON.stringify(report)).digest('hex'),
     };

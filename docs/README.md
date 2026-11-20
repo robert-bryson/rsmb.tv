@@ -58,6 +58,7 @@ An older finding can be corrected by a later change.
 
 | Date | Report |
 | --- | --- |
+| 2026-11-20 | [ski-status release identity and map recovery review](reviews/2026-11-20-ski-status-release-and-map-review.md) |
 | 2026-11-20 | [ski-status data, map recovery, and terrain publication review](reviews/2026-11-20-ski-status-data-and-recovery-review.md) |
 | 2026-11-19 | [ski-status catalog, layout, and terrain review](reviews/2026-11-19-ski-status-expansion-review.md) |
 | 2026-11-19 | [ski-status pilot review](reviews/2026-11-19-ski-status-quality-review.md) |

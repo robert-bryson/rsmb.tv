@@ -8,7 +8,7 @@ import { releaseAmplify, waitForBuild } from '../release-amplify.js';
 const revision = 'a'.repeat(40);
 const baseURL = 'https://release-preview.example.amplifyapp.com';
 const now = Date.parse('2026-11-05T12:00:00Z');
-const report = () => ({ revision, baseURL, routes: [...RELEASE_ROUTES], images: 58, skiTerrainRanges: 2, errors: [] });
+const report = () => ({ revision, baseURL, previewJobId: '1', routes: [...RELEASE_ROUTES], images: 58, skiTerrainRanges: 2, errors: [] });
 const proof = () => createValidationProof(report(), '0001', now);
 
 describe('release validation proofs', () => {
@@ -24,7 +24,7 @@ describe('release validation proofs', () => {
         expect(value).toMatchObject({ version: 1, status: 'passed', revision, previewJobId: '1', previewOrigin: baseURL });
         expect(value.reportSha256).toMatch(/^[a-f0-9]{64}$/);
         for (const patch of [{ errors: ['error'] }, { routes: ['/'] }, { routes: RELEASE_ROUTES.map(() => '/') }, { images: 0 },
-            { skiTerrainRanges: 0 }, { skiTerrainRanges: undefined }]) {
+            { skiTerrainRanges: 0 }, { skiTerrainRanges: undefined }, { previewJobId: '2' }, { previewJobId: undefined }]) {
             const bad = { ...report(), ...patch };
             expect(() => createValidationProof(bad, '1', now)).toThrow('successful validation');
         }
@@ -74,6 +74,18 @@ describe('release validation proofs', () => {
             .mockResolvedValueOnce(new Response(JSON.stringify({ commitId: revision, jobId: '2' })))
             .mockResolvedValueOnce(new Response(JSON.stringify(proof())));
         await expect(verifyPreviewRevision(baseURL, revision, mismatch, { now })).rejects.toThrow('validation proof');
+    });
+
+    it.each([
+        ['/deployment.json', 'Preview identity HTTP 302'],
+        [`/proofs/${revision}/1.json`, 'Preview validation proof HTTP 302'],
+    ])('rejects redirects when reading %s', async (pathname, message) => {
+        const fetchImpl = vi.fn(async (url: URL, options: RequestInit) => {
+            if (url.pathname === pathname && options.redirect === 'manual') return Response.redirect('https://other.example/copy.json');
+            return new Response(JSON.stringify(url.pathname === '/deployment.json' ? { commitId: revision, jobId: '1' } : proof()));
+        });
+        await expect(verifyPreviewRevision(baseURL, revision, fetchImpl, { now, validationBaseURL: 'https://data.example/proofs' }))
+            .rejects.toThrow(message);
     });
 });
 
